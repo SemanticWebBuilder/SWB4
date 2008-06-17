@@ -21,9 +21,9 @@ import java.util.Set;
  */
 public final class ConfigurationListURI
 {
+
     public static final String COMMENT = "List of URI";
     public static final String CONFIGURATION = "org.semanticwb.openoffice.configuration.ConfigurationListURL";
-
     /**
      * List of UserConfigurations
      */
@@ -32,7 +32,7 @@ public final class ConfigurationListURI
 
     public ConfigurationListURI()
     {
-        path = System.getProperty(CONFIGURATION,"urilist.xml");
+        path = System.getProperty(CONFIGURATION, "urilist.xml");
         load();
     }
 
@@ -88,7 +88,7 @@ public final class ConfigurationListURI
                     String login = this.userConfigurations.get(key).getLogin();
                     properties.setProperty(key.toString(), login);
                 }
-                properties.storeToXML(os,COMMENT, "UTF-8");
+                properties.storeToXML(os, COMMENT, "UTF-8");
                 os.close();
             }
             catch (FileNotFoundException fnfe)
@@ -101,7 +101,7 @@ public final class ConfigurationListURI
             }
         }
     }
-    
+
     private void load()
     {
 
@@ -113,13 +113,13 @@ public final class ConfigurationListURI
                 FileInputStream in = new FileInputStream(fileconfig);
                 Properties properties = new Properties();
                 properties.load(in);
-                Set<String> keys = properties.stringPropertyNames();
-                for (String key : keys)
+                Set keys = properties.keySet();
+                for (Object key : keys)
                 {
                     try
                     {
-                        String login = properties.getProperty(key);
-                        URI uri = new URI(key);
+                        String login = properties.getProperty(path).toString();
+                        URI uri = new URI(key.toString());
                         this.userConfigurations.put(uri, new UserConguration(uri, login));
                     }
                     catch (URISyntaxException ex)

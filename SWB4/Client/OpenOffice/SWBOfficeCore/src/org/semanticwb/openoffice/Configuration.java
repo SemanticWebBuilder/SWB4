@@ -90,11 +90,11 @@ public final class Configuration
                 FileInputStream in = new FileInputStream(fileconfig);
                 Properties properties = new Properties();
                 properties.load(in);
-                Set<String> keys = properties.stringPropertyNames();
-                for (String key : keys)
+                Set keys = properties.keySet();
+                for (Object key : keys)
                 {
-                    String value = properties.getProperty(key);
-                    this.userConfigurations.put(key, value);
+                    String value = properties.getProperty(path).toString();
+                    this.userConfigurations.put(key.toString(), value);
                 }
                 in.close();
             }
