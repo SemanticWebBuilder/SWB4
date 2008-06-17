@@ -113,13 +113,13 @@ public final class ConfigurationListURI
                 FileInputStream in = new FileInputStream(fileconfig);
                 Properties properties = new Properties();
                 properties.load(in);
-                Set keys = properties.keySet();
-                for (Object key : keys)
+                Set<String> keys = properties.stringPropertyNames();
+                for (String key : keys)
                 {
                     try
                     {
-                        String login = properties.getProperty(path).toString();
-                        URI uri = new URI(key.toString());
+                        String login = properties.getProperty(path);
+                        URI uri = new URI(key);
                         this.userConfigurations.put(uri, new UserConguration(uri, login));
                     }
                     catch (URISyntaxException ex)
