@@ -1,0 +1,499 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:name="Addons" oor:package="org.openoffice.Office">
+    <node oor:name="AddonUI">
+        <node oor:name="OfficeMenuBar">
+            <node oor:name="org.semanticwb.impress.addon.wb4impressaddon" oor:op="replace">
+                <prop oor:name="Title" oor:type="xs:string">
+                    <value/>
+                    <value xml:lang="es">Semantic WebBuilder Impress</value>
+                    <value xml:lang="en">Semantic WebBuilder Impress</value>
+                </prop>
+                <prop oor:name="Target" oor:type="xs:string">
+                    <value>_self</value>
+                </prop>
+                <prop oor:name="ImageIdentifier" oor:type="xs:string">
+                    <value/>
+                </prop>
+                <node oor:name="Submenu">
+                    <node oor:name="m1" oor:op="replace">
+                        <prop oor:name="URL" oor:type="xs:string">
+                            <value/>
+                        </prop>
+                        <prop oor:name="ImageIdentifier" oor:type="xs:string">
+                            <value/>
+                        </prop>
+                        <prop oor:name="Target" oor:type="xs:string">
+                            <value>_self</value>
+                        </prop>
+                        <prop oor:name="Title" oor:type="xs:string">
+                            <value/>
+                            <value xml:lang="en">Contenido</value>
+                            <value xml:lang="es">Contenido</value>
+                        </prop>
+                        <node oor:name="Submenu">                            
+                            <node oor:name="m10" oor:op="replace">
+                                <prop oor:name="URL" oor:type="xs:string">
+                                    <value>org.semanticwb.impress.addon.wb4impressaddon:publish</value>
+                                </prop>
+                                <prop oor:name="ImageIdentifier" oor:type="xs:string">
+                                    <value/>
+                                </prop>
+                                <prop oor:name="Target" oor:type="xs:string">
+                                    <value>_self</value>
+                                </prop>
+                                <prop oor:name="Context" oor:type="xs:string">
+                                    <value>com.sun.star.presentation.PresentationDocument</value>
+                                </prop>
+                                <prop oor:name="Title" oor:type="xs:string">
+                                    <value/>
+                                    <value xml:lang="en">Publish content</value>
+                                    <value xml:lang="es">Publicar contenido</value>
+                                </prop>
+                            </node>
+                            <node oor:name="m11" oor:op="replace">
+                                <prop oor:name="URL" oor:type="xs:string">
+                                    <value>org.semanticwb.impress.addon.wb4impressaddon:open</value>
+                                </prop>
+                                <prop oor:name="ImageIdentifier" oor:type="xs:string">
+                                    <value/>
+                                </prop>
+                                <prop oor:name="Target" oor:type="xs:string">
+                                    <value>_self</value>
+                                </prop>
+                                <prop oor:name="Context" oor:type="xs:string">
+                                    <value>com.sun.star.presentation.PresentationDocument</value>
+                                </prop>
+                                <prop oor:name="Title" oor:type="xs:string">
+                                    <value/>
+                                    <value xml:lang="en">Open content</value>
+                                    <value xml:lang="es">Abrir contenido</value>
+                                </prop>
+                            </node>                            
+                            <node oor:name="m12" oor:op="replace">
+                                <prop oor:name="URL" oor:type="xs:string">
+                                    <value>org.semanticwb.impress.addon.wb4impressaddon:view</value>
+                                </prop>
+                                <prop oor:name="ImageIdentifier" oor:type="xs:string">
+                                    <value/>
+                                </prop>
+                                <prop oor:name="Target" oor:type="xs:string">
+                                    <value>_self</value>
+                                </prop>
+                                <prop oor:name="Context" oor:type="xs:string">
+                                    <value>com.sun.star.presentation.PresentationDocument</value>
+                                </prop>
+                                <prop oor:name="Title" oor:type="xs:string">
+                                    <value/>
+                                    <value xml:lang="en">View content</value>
+                                    <value xml:lang="es">Ver contenido</value>
+                                </prop>
+                            </node>
+                            <node oor:name="m13" oor:op="replace">
+                                <prop oor:name="URL" oor:type="xs:string">
+                                    <value>org.semanticwb.impress.addon.wb4impressaddon:information</value>
+                                </prop>
+                                <prop oor:name="ImageIdentifier" oor:type="xs:string">
+                                    <value/>
+                                </prop>
+                                <prop oor:name="Target" oor:type="xs:string">
+                                    <value>_self</value>
+                                </prop>
+                                <prop oor:name="Context" oor:type="xs:string">
+                                    <value>com.sun.star.presentation.PresentationDocument</value>
+                                </prop>
+                                <prop oor:name="Title" oor:type="xs:string">
+                                    <value/>
+                                    <value xml:lang="en">Content information</value>
+                                    <value xml:lang="es">Información del contenido</value>
+                                </prop>
+                            </node>
+                            <node oor:name="m14" oor:op="replace">
+                                <prop oor:name="URL" oor:type="xs:string">
+                                    <value>private:separator</value>
+                                </prop>
+                                <prop oor:name="Context" oor:type="xs:string">
+                                    <value>com.sun.star.presentation.PresentationDocument</value>
+                                </prop>
+                            </node>
+                            <node oor:name="m15" oor:op="replace">
+                                <prop oor:name="URL" oor:type="xs:string">
+                                    <value>org.semanticwb.impress.addon.wb4impressaddon:delete</value>
+                                </prop>
+                                <prop oor:name="ImageIdentifier" oor:type="xs:string">
+                                    <value/>
+                                </prop>
+                                <prop oor:name="Target" oor:type="xs:string">
+                                    <value>_self</value>
+                                </prop>
+                                <prop oor:name="Context" oor:type="xs:string">
+                                    <value>com.sun.star.presentation.PresentationDocument</value>
+                                </prop>
+                                <prop oor:name="Title" oor:type="xs:string">
+                                    <value/>
+                                    <value xml:lang="en">Delete content</value>
+                                    <value xml:lang="es">Borrar contenido</value>
+                                </prop>
+                            </node>
+                            <node oor:name="m16" oor:op="replace">
+                                <prop oor:name="URL" oor:type="xs:string">
+                                    <value>private:separator</value>
+                                </prop>
+                                <prop oor:name="Context" oor:type="xs:string">
+                                    <value>com.sun.star.presentation.PresentationDocument</value>
+                                </prop>
+                            </node>
+                            <node oor:name="m17" oor:op="replace">
+                                <prop oor:name="URL" oor:type="xs:string">
+                                    <value>org.semanticwb.impress.addon.wb4impressaddon:rules</value>
+                                </prop>
+                                <prop oor:name="ImageIdentifier" oor:type="xs:string">
+                                    <value/>
+                                </prop>
+                                <prop oor:name="Target" oor:type="xs:string">
+                                    <value>_self</value>
+                                </prop>
+                                <prop oor:name="Context" oor:type="xs:string">
+                                    <value>com.sun.star.presentation.PresentationDocument</value>
+                                </prop>
+                                <prop oor:name="Title" oor:type="xs:string">
+                                    <value/>
+                                    <value xml:lang="en">Add rules</value>
+                                    <value xml:lang="es">Agregar reglas</value>
+                                </prop>
+                            </node>
+                            <node oor:name="m18" oor:op="replace">
+                                <prop oor:name="URL" oor:type="xs:string">
+                                    <value>private:separator</value>
+                                </prop>
+                                <prop oor:name="Context" oor:type="xs:string">
+                                    <value>com.sun.star.presentation.PresentationDocument</value>
+                                </prop>
+                            </node>
+                            <node oor:name="m19" oor:op="replace">
+                                <prop oor:name="URL" oor:type="xs:string">
+                                    <value>org.semanticwb.impress.addon.wb4impressaddon:deleteAssociation</value>
+                                </prop>
+                                <prop oor:name="ImageIdentifier" oor:type="xs:string">
+                                    <value/>
+                                </prop>
+                                <prop oor:name="Target" oor:type="xs:string">
+                                    <value>_self</value>
+                                </prop>
+                                <prop oor:name="Context" oor:type="xs:string">
+                                    <value>com.sun.star.presentation.PresentationDocument</value>
+                                </prop>
+                                <prop oor:name="Title" oor:type="xs:string">
+                                    <value/>
+                                    <value xml:lang="en">Delete association</value>
+                                    <value xml:lang="es">Borrar Asociación</value>
+                                </prop>
+                            </node>
+                            <node oor:name="m20" oor:op="replace">
+                                <prop oor:name="URL" oor:type="xs:string">
+                                    <value>private:separator</value>
+                                </prop>
+                                <prop oor:name="Context" oor:type="xs:string">
+                                    <value>com.sun.star.presentation.PresentationDocument</value>
+                                </prop>
+                            </node>
+                            <node oor:name="m21" oor:op="replace">
+                                <prop oor:name="URL" oor:type="xs:string">
+                                    <value>org.semanticwb.impress.addon.wb4impressaddon:addLink</value>
+                                </prop>
+                                <prop oor:name="ImageIdentifier" oor:type="xs:string">
+                                    <value/>
+                                </prop>
+                                <prop oor:name="Target" oor:type="xs:string">
+                                    <value>_self</value>
+                                </prop>
+                                <prop oor:name="Context" oor:type="xs:string">
+                                    <value>com.sun.star.presentation.PresentationDocument</value>
+                                </prop>
+                                <prop oor:name="Title" oor:type="xs:string">
+                                    <value/>
+                                    <value xml:lang="en">Add link to web page</value>
+                                    <value xml:lang="es">Agregar una liga a una página</value>
+                                </prop>
+                            </node>
+                        </node>
+                    </node>                    
+                    
+                    <node oor:name="m2" oor:op="replace">
+                        <prop oor:name="URL" oor:type="xs:string">
+                            <value/>
+                        </prop>
+                        <prop oor:name="ImageIdentifier" oor:type="xs:string">
+                            <value/>
+                        </prop>
+                        <prop oor:name="Target" oor:type="xs:string">
+                            <value>_self</value>
+                        </prop>
+                        <prop oor:name="Title" oor:type="xs:string">
+                            <value/>
+                            <value xml:lang="es">Herramientas</value>
+                            <value xml:lang="en">Tools</value>
+                        </prop>
+                        <node oor:name="Submenu">
+                            <node oor:name="m3" oor:op="replace">
+                                <prop oor:name="URL" oor:type="xs:string">
+                                    <value>org.semanticwb.impress.addon.wb4impressaddon:createSection</value>
+                                </prop>
+                                <prop oor:name="ImageIdentifier" oor:type="xs:string">
+                                    <value/>
+                                </prop>
+                                <prop oor:name="Target" oor:type="xs:string">
+                                    <value>_self</value>
+                                </prop>
+                                <prop oor:name="Context" oor:type="xs:string">
+                                    <value>com.sun.star.presentation.PresentationDocument</value>
+                                </prop>
+                                <prop oor:name="Title" oor:type="xs:string">
+                                    <value/>
+                                    <value xml:lang="en">Create a web page</value>
+                                    <value xml:lang="es">Crear una página web</value>
+                                </prop>
+                            </node>
+                            <node oor:name="m4" oor:op="replace">
+                                <prop oor:name="URL" oor:type="xs:string">
+                                    <value>private:separator</value>
+                                </prop>
+                                <prop oor:name="Context" oor:type="xs:string">
+                                    <value>com.sun.star.presentation.PresentationDocument</value>
+                                </prop>
+                            </node>
+                            <node oor:name="m5" oor:op="replace">
+                                <prop oor:name="URL" oor:type="xs:string">
+                                    <value>org.semanticwb.impress.addon.wb4impressaddon:closeSession</value>
+                                </prop>
+                                <prop oor:name="ImageIdentifier" oor:type="xs:string">
+                                    <value/>
+                                </prop>
+                                <prop oor:name="Target" oor:type="xs:string">
+                                    <value>_self</value>
+                                </prop>
+                                <prop oor:name="Context" oor:type="xs:string">
+                                    <value>com.sun.star.presentation.PresentationDocument</value>
+                                </prop>
+                                <prop oor:name="Title" oor:type="xs:string">
+                                    <value/>
+                                    <value xml:lang="en">Close Sessión Sessión</value>
+                                    <value xml:lang="es">Cerrar Sessión</value>
+                                </prop>
+                            </node> 
+                            <node oor:name="m6" oor:op="replace">
+                                <prop oor:name="URL" oor:type="xs:string">
+                                    <value>private:separator</value>
+                                </prop>
+                                <prop oor:name="Context" oor:type="xs:string">
+                                    <value>com.sun.star.presentation.PresentationDocument</value>
+                                </prop>
+                            </node>
+                            <node oor:name="m7" oor:op="replace">
+                                <prop oor:name="URL" oor:type="xs:string">
+                                    <value>org.semanticwb.impress.addon.wb4impressaddon:changePassword</value>
+                                </prop>
+                                <prop oor:name="ImageIdentifier" oor:type="xs:string">
+                                    <value/>
+                                </prop>
+                                <prop oor:name="Target" oor:type="xs:string">
+                                    <value>_self</value>
+                                </prop>
+                                <prop oor:name="Context" oor:type="xs:string">
+                                    <value>com.sun.star.presentation.PresentationDocument</value>
+                                </prop>
+                                <prop oor:name="Title" oor:type="xs:string">
+                                    <value/>
+                                    <value xml:lang="en">Change password</value>
+                                    <value xml:lang="es">Cambiar password</value>
+                                </prop>
+                            </node>
+                        </node>
+                    </node>              
+                    
+                    <node oor:name="m8" oor:op="replace">
+                        <prop oor:name="URL" oor:type="xs:string">
+                            <value/>
+                        </prop>
+                        <prop oor:name="ImageIdentifier" oor:type="xs:string">
+                            <value/>
+                        </prop>
+                        <prop oor:name="Target" oor:type="xs:string">
+                            <value>_self</value>
+                        </prop>
+                        <prop oor:name="Title" oor:type="xs:string">
+                            <value/>
+                            <value xml:lang="en">Help</value>
+                            <value xml:lang="es">Ayuda</value>
+                        </prop>
+                        <node oor:name="Submenu">
+                            <node oor:name="m9" oor:op="replace">
+                                <prop oor:name="URL" oor:type="xs:string">
+                                    <value>org.semanticwb.impress.addon.wb4impressaddon:help</value>
+                                </prop>
+                                <prop oor:name="ImageIdentifier" oor:type="xs:string">
+                                    <value/>
+                                </prop>
+                                <prop oor:name="Target" oor:type="xs:string">
+                                    <value>_self</value>
+                                </prop>
+                                <prop oor:name="Context" oor:type="xs:string">
+                                    <value>com.sun.star.presentation.PresentationDocument</value>
+                                </prop>
+                                <prop oor:name="Title" oor:type="xs:string">
+                                    <value/>
+                                    <value xml:lang="en">Help</value>
+                                    <value xml:lang="es">Ayuda</value>
+                                </prop>
+                            </node>
+                            <node oor:name="m10" oor:op="replace">
+                                <prop oor:name="URL" oor:type="xs:string">
+                                    <value>org.semanticwb.impress.addon.wb4impressaddon:about</value>
+                                </prop>
+                                <prop oor:name="ImageIdentifier" oor:type="xs:string">
+                                    <value/>
+                                </prop>
+                                <prop oor:name="Target" oor:type="xs:string">
+                                    <value>_self</value>
+                                </prop>
+                                <prop oor:name="Context" oor:type="xs:string">
+                                    <value>com.sun.star.presentation.PresentationDocument</value>
+                                </prop>
+                                <prop oor:name="Title" oor:type="xs:string">
+                                    <value/>
+                                    <value xml:lang="en">About ...</value>
+                                    <value xml:lang="es">Acerca de ...</value>
+                                </prop>
+                            </node>
+                        </node>
+                    </node>
+                    
+                    
+                </node>
+            </node>
+        </node>
+        
+        <node oor:name="Images">
+            <node oor:name="org.semanticwb.impress.addon.wb4impressaddon.publish.images" oor:op="replace">
+                <prop oor:name="URL" oor:type="xs:string">
+                    <value>org.semanticwb.impress.addon.wb4impressaddon:publish</value>
+                </prop>
+                <node oor:name="UserDefinedImages">
+                    <prop oor:name="ImageSmallURL">
+                        <value/>
+                    </prop>
+                </node>
+            </node>
+            <node oor:name="org.semanticwb.impress.addon.wb4impressaddon.open.images" oor:op="replace">
+                <prop oor:name="URL" oor:type="xs:string">
+                    <value>org.semanticwb.impress.addon.wb4impressaddon:open</value>
+                </prop>
+                <node oor:name="UserDefinedImages">
+                    <prop oor:name="ImageSmallURL">
+                        <value/>
+                    </prop>
+                </node>
+            </node>
+            <node oor:name="org.semanticwb.impress.addon.wb4impressaddon.delete.images" oor:op="replace">
+                <prop oor:name="URL" oor:type="xs:string">
+                    <value>org.semanticwb.impress.addon.wb4impressaddon:delete</value>
+                </prop>
+                <node oor:name="UserDefinedImages">
+                    <prop oor:name="ImageSmallURL">
+                        <value/>
+                    </prop>
+                </node>
+            </node>
+            <node oor:name="org.semanticwb.impress.addon.wb4impressaddon.view.images" oor:op="replace">
+                <prop oor:name="URL" oor:type="xs:string">
+                    <value>org.semanticwb.impress.addon.wb4impressaddon:view</value>
+                </prop>
+                <node oor:name="UserDefinedImages">
+                    <prop oor:name="ImageSmallURL">
+                        <value/>
+                    </prop>
+                </node>
+            </node>
+            <node oor:name="org.semanticwb.impress.addon.wb4impressaddon.information.images" oor:op="replace">
+                <prop oor:name="URL" oor:type="xs:string">
+                    <value>org.semanticwb.impress.addon.wb4impressaddon:information</value>
+                </prop>
+                <node oor:name="UserDefinedImages">
+                    <prop oor:name="ImageSmallURL">
+                        <value/>
+                    </prop>
+                </node>
+            </node>
+            <node oor:name="org.semanticwb.impress.addon.wb4impressaddon.rules.images" oor:op="replace">
+                <prop oor:name="URL" oor:type="xs:string">
+                    <value>org.semanticwb.impress.addon.wb4impressaddon:rules</value>
+                </prop>
+                <node oor:name="UserDefinedImages">
+                    <prop oor:name="ImageSmallURL">
+                        <value/>
+                    </prop>
+                </node>
+            </node>
+            <node oor:name="org.semanticwb.impress.addon.wb4impressaddon.deleteassociation.images" oor:op="replace">
+                <prop oor:name="URL" oor:type="xs:string">
+                    <value>org.semanticwb.impress.addon.wb4impressaddon:deleteAssociation</value>
+                </prop>
+                <node oor:name="UserDefinedImages">
+                    <prop oor:name="ImageSmallURL">
+                        <value/>
+                    </prop>
+                </node>
+            </node>
+            <node oor:name="org.semanticwb.impress.addon.wb4impressaddon.addlink.images" oor:op="replace">
+                <prop oor:name="URL" oor:type="xs:string">
+                    <value>org.semanticwb.impress.addon.wb4impressaddon:addLink</value>
+                </prop>
+                <node oor:name="UserDefinedImages">
+                    <prop oor:name="ImageSmallURL">
+                        <value/>
+                    </prop>
+                </node>
+            </node>
+            <node oor:name="org.semanticwb.impress.addon.wb4impressaddon.createsection.images" oor:op="replace">
+                <prop oor:name="URL" oor:type="xs:string">
+                    <value>org.semanticwb.impress.addon.wb4impressaddon:createSection</value>
+                </prop>
+                <node oor:name="UserDefinedImages">
+                    <prop oor:name="ImageSmallURL">
+                        <value/>
+                    </prop>
+                </node>
+            </node>
+            <node oor:name="org.semanticwb.impress.addon.wb4impressaddon.changepassword.images" oor:op="replace">
+                <prop oor:name="URL" oor:type="xs:string">
+                    <value>org.semanticwb.impress.addon.wb4impressaddon:changePassword</value>
+                </prop>
+                <node oor:name="UserDefinedImages">
+                    <prop oor:name="ImageSmallURL">
+                        <value/>
+                    </prop>
+                </node>
+            </node>
+            <node oor:name="org.semanticwb.impress.addon.wb4impressaddon.help.images" oor:op="replace">
+                <prop oor:name="URL" oor:type="xs:string">
+                    <value>org.semanticwb.impress.addon.wb4impressaddon:help</value>
+                </prop>
+                <node oor:name="UserDefinedImages">
+                    <prop oor:name="ImageSmallURL">
+                        <value/>
+                    </prop>
+                </node>
+            </node>
+            <node oor:name="org.semanticwb.impress.addon.wb4impressaddon.about.images" oor:op="replace">
+                <prop oor:name="URL" oor:type="xs:string">
+                    <value>org.semanticwb.impress.addon.wb4impressaddon:about</value>
+                </prop>
+                <node oor:name="UserDefinedImages">
+                    <prop oor:name="ImageSmallURL">
+                        <value/>
+                    </prop>
+                </node>
+            </node>
+        </node>
+    </node>
+</oor:component-data>
