@@ -17,7 +17,7 @@ public class WordFileFilter extends FileFilter
     public boolean accept(File f)
     {
         boolean result=true;
-        if(f.isDirectory())
+        if(!f.isDirectory())
         {
             result=f.getName().endsWith(".dot");
         }
