@@ -109,8 +109,7 @@ public class NumericPlainDocument extends FixedLengthPlainDocument
     public void insertString(int offset, String str, AttributeSet a)
             throws BadLocationException
     {
-        if (!(str == null || str.length() == 0))
-        
+        if (!(str == null || str.length() == 0))        
         {
             Content content = getContent();
             int length = content.length();
@@ -139,12 +138,7 @@ public class NumericPlainDocument extends FixedLengthPlainDocument
                     String suffix;
                     int suffixLength;
                     int prefixLength;
-                    gotNegative=gotPositive == true && gotNegative == true ? false : true;
-                    /*if (gotPositive == true && gotNegative == true)
-                    {
-                        gotNegative = false;                        
-                    }*/
-
+                    gotNegative=gotPositive == true && gotNegative == true ? false : true;                
                     if (gotPositive == true)
                     {
                         suffix = positiveSuffix;
