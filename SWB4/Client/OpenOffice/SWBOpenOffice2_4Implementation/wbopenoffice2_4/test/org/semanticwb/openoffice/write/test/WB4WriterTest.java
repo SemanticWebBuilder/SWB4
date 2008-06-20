@@ -42,7 +42,7 @@ public class WB4WriterTest
     XComponentContext xContext;
     XComponent xCompDest = null;
     XDesktop oDesktop = null;
-    File sUrlDestiny = new File("c:/temp/demo.odt");
+    File sUrlDestiny = new File("c:/temp/demopub.odt");
     File tempDir = new File("c:/temp/demo/");
 
     public WB4WriterTest()
@@ -135,7 +135,7 @@ public class WB4WriterTest
     }
 
     @Test
-    //@Ignore
+    @Ignore    
     public void getLocalPathTest()
     {
         try
@@ -152,7 +152,7 @@ public class WB4WriterTest
     }
 
     @Test
-    //@Ignore
+    @Ignore
     public void getCustomPropertiesTest()
     {
         try
@@ -172,7 +172,7 @@ public class WB4WriterTest
     }
 
     @Test
-    //@Ignore
+    @Ignore
     public void getDocumentTypeTest()
     {
         try
@@ -187,8 +187,8 @@ public class WB4WriterTest
         }
     }
 
-    @Test  
-    //@Ignore
+    @Test
+    @Ignore
     public void saveAsHTMLTest()
     {
         try
@@ -204,7 +204,7 @@ public class WB4WriterTest
     }
 
     @Test
-    //@Ignore
+    @Ignore
     public void saveTest()
     {
         try
@@ -219,7 +219,7 @@ public class WB4WriterTest
     }
 
     @Test
-    //@Ignore
+    @Ignore
     public void saveAsSaveDocumentFormatHTMLTest()
     {
         try
@@ -235,7 +235,7 @@ public class WB4WriterTest
     }
 
     @Test
-    //@Ignore
+    @Ignore
     public void saveCustomPropertiesTest()
     {
         try
@@ -253,7 +253,7 @@ public class WB4WriterTest
     }
 
     @Test
-    //@Ignore
+    @Ignore
     public void SaveHtmlPrepareAndGetFilesTest()
     {
         try
@@ -270,7 +270,7 @@ public class WB4WriterTest
     }
 
     @Test
-    //@Ignore
+    @Ignore
     public void getZipFileTest()
     {
         try
@@ -286,7 +286,7 @@ public class WB4WriterTest
     }
 
     @Test
-    ////@Ignore
+    @Ignore
     public void publishTest()
     {
         try
@@ -301,7 +301,7 @@ public class WB4WriterTest
     }
 
     @Test
-    //@Ignore
+    @Ignore
     public void openTest()
     {
         WB4Application writer = new WB4Application(this.xContext);
@@ -310,7 +310,7 @@ public class WB4WriterTest
     }
 
     @Test
-    //@Ignore
+    @Ignore
     public void openDocumentTest()
     {
 
@@ -326,12 +326,26 @@ public class WB4WriterTest
 
     }
 
+    @Test    
+    public void getAttachtmentsTest()
+    {
+        try
+        {
+            WB4Writer writer = new WB4Writer(this.xContext);
+            List<File> attachments=writer.getAttachtments();
+            Assert.assertEquals(attachments.size(),2);
+        }
+        catch (WBException wbe)
+        {
+            Assert.fail(wbe.getMessage());
+        }
+    }
+
     @Test(expected = WBException.class)
-    //@Ignore
+    @Ignore
     public void openDocumentExceptionTest() throws WBException
     {
         WB4Application writer = new WB4Application(this.xContext);
         writer.open(new File("c:\\demo.doc"));
-    }    
-    
+    }
 }
