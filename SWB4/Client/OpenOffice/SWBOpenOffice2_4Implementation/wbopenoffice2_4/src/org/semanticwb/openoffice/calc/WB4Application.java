@@ -30,6 +30,8 @@ import org.semanticwb.openoffice.WBOfficeException;
  */
 public class WB4Application extends OfficeApplication
 {
+    private static final
+    String SCHEMA_FILE = "file:///";
 
     private final XComponentContext m_xContext;
 
@@ -83,7 +85,7 @@ public class WB4Application extends OfficeApplication
             // Obtener interfaz XComponentLoader del XDesktop   
             XComponentLoader xCompLoader = (XComponentLoader) UnoRuntime.queryInterface(com.sun.star.frame.XComponentLoader.class, oDesktop);
             PropertyValue[] loadProps = new PropertyValue[0];
-            String url = "file:///" + file.getPath().replace('\\', '/');
+            String url = SCHEMA_FILE + file.getPath().replace('\\', '/');
             xCompLoader.loadComponentFromURL(url, "_blank", 0, loadProps);
             return new WB4Calc(m_xContext);
         }
