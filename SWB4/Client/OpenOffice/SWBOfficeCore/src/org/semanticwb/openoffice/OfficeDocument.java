@@ -10,6 +10,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -55,6 +57,46 @@ public abstract class OfficeDocument
 
     public abstract void prepareHtmlFileToSend(File htmlFile);
 
+    protected static List<File> addLink(URI uri)
+    {
+        List<File> attachments = new ArrayList<File>();
+
+        File file = new File(uri.getPath());
+        if (file.exists())
+        {
+            attachments.add(file);
+        }
+        return attachments;
+    }
+
+    protected List<File> addLink(String path)
+    {
+        List<File> attachments = new ArrayList<File>();
+        try
+        {
+            URI uri = new URI(path).normalize();
+            if (uri.getScheme().equalsIgnoreCase("file"))
+            {
+                if (uri.isAbsolute())
+                {
+                    attachments.addAll(addLink(uri));
+                }
+                else
+                {
+                    URI base = new URI(this.getLocalPath().getPath());
+                    URI resolved = base.resolve(uri);
+                    attachments.addAll(addLink(resolved));
+                }
+            }
+        }
+        catch (URISyntaxException use)
+        {
+        }
+        catch (WBException wbe)
+        {
+        }
+        return attachments;
+    }
     public final void deleteTemporalDirectory(File dir)
     {
         File[] files = dir.listFiles();
