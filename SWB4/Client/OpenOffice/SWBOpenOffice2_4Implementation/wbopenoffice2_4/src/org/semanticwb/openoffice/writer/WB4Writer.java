@@ -5,6 +5,7 @@
 package org.semanticwb.openoffice.writer;
 
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.XPropertySet;
 import com.sun.star.document.XDocumentInfo;
 import com.sun.star.document.XDocumentInfoSupplier;
 import com.sun.star.frame.XDesktop;
@@ -12,16 +13,22 @@ import com.sun.star.frame.XStorable;
 import com.sun.star.io.IOException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiComponentFactory;
+import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextDocument;
+import com.sun.star.text.XTextRange;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.util.XModifiable;
+import com.sun.star.util.XPropertyReplace;
+import com.sun.star.util.XSearchDescriptor;
+import com.sun.star.util.XSearchable;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.semanticwb.openoffice.DocumentType;
+import org.semanticwb.openoffice.ErrorLog;
 import org.semanticwb.openoffice.OfficeDocument;
 import org.semanticwb.openoffice.SaveDocumentFormat;
 import org.semanticwb.openoffice.WBAlertException;
@@ -48,6 +55,7 @@ public class WB4Writer extends OfficeDocument
      */
     public static final String HTML_EXTENSION = ".html";
     private static final String FILTER_NAME = "FilterName";
+    private static final String HYPERLINK_VALUE = "HyperLinkURL";
     private static final String OVERWRITE = "Overwrite";
     private static final String SCHEMA_FILE = "file:///";
     /**
@@ -112,7 +120,33 @@ public class WB4Writer extends OfficeDocument
     public List<File> getAttachtments()
     {
         List<File> attachments = new ArrayList<File>();
-        // TODO:
+        try
+        {            
+            XSearchable xSearchable = (XSearchable) UnoRuntime.queryInterface(XSearchable.class, this.document);
+            XSearchDescriptor xUrlSearchDesc = xSearchable.createSearchDescriptor();
+
+            PropertyValue[] aSearchArgs = new PropertyValue[1];
+            aSearchArgs[0] = new PropertyValue();
+            aSearchArgs[0].Name = HYPERLINK_VALUE;
+
+            XPropertyReplace xPropSear = (XPropertyReplace) UnoRuntime.queryInterface(XPropertyReplace.class, xUrlSearchDesc);
+            xPropSear.setSearchAttributes(aSearchArgs);
+            xPropSear.setValueSearch(false);
+            Object linkResult = xSearchable.findFirst(xUrlSearchDesc);
+            while (linkResult != null)
+            {
+                XTextRange xTextRange = (XTextRange) UnoRuntime.queryInterface(XTextRange.class, linkResult);
+                XTextCursor xTextCursor = xTextRange.getText().createTextCursorByRange(xTextRange);
+                XPropertySet xPropSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xTextCursor);
+                Object hiperlink = xPropSet.getPropertyValue(HYPERLINK_VALUE);
+                attachments.addAll(this.addLink(hiperlink.toString()));
+                linkResult = xSearchable.findNext(xTextRange.getEnd(), xUrlSearchDesc);
+            }
+        }
+        catch (Exception upe)
+        {
+            ErrorLog.log(upe);
+        }
         return attachments;
     }
 
