@@ -5,6 +5,8 @@
 package org.semanticwb.openoffice.calc;
 
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.XEnumeration;
 import com.sun.star.document.XDocumentInfo;
 import com.sun.star.document.XDocumentInfoSupplier;
 import com.sun.star.frame.XDesktop;
@@ -14,14 +16,18 @@ import com.sun.star.io.IOException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.sheet.*;
+import com.sun.star.table.XCell;
+import com.sun.star.text.XTextFieldsSupplier;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.util.XModifiable;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.semanticwb.openoffice.DocumentType;
+import org.semanticwb.openoffice.ErrorLog;
 import org.semanticwb.openoffice.OfficeDocument;
 import org.semanticwb.openoffice.SaveDocumentFormat;
 import org.semanticwb.openoffice.WBAlertException;
@@ -43,10 +49,11 @@ public class WB4Calc extends OfficeDocument
     private static final String OVERRIDE_OPTION = "Overwrite";
     private static final String SCHEMA_FILE = "file:///";    
     private final XComponent document;
+    
 
     public WB4Calc(XComponent document) throws WBOfficeException
-    {        
-        this.document = document;
+    {
+        this.document = document;        
     }
 
     public WB4Calc(XComponentContext m_xContext) throws WBOfficeException
@@ -74,7 +81,45 @@ public class WB4Calc extends OfficeDocument
     @Override
     public final List<File> getAttachtments()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        List<File> attachments = new ArrayList<File>();
+        try
+        {
+            XSpreadsheetDocument xSpreadsheetDocument = (XSpreadsheetDocument) UnoRuntime.queryInterface(XSpreadsheetDocument.class, this.document);            
+            XSpreadsheets xSpreadsheets = xSpreadsheetDocument.getSheets();
+            for (String name : xSpreadsheets.getElementNames())
+            {
+                Object obSpreadsheet = xSpreadsheets.getByName(name);
+                XSpreadsheet sheet = (XSpreadsheet) UnoRuntime.queryInterface(XSpreadsheet.class, obSpreadsheet);
+                XCellRangesQuery xRangesQuery = (XCellRangesQuery) UnoRuntime.queryInterface(XCellRangesQuery.class, sheet);
+                XSheetCellRanges xCellRanges = xRangesQuery.queryContentCells((short) (CellFlags.VALUE | CellFlags.STRING));
+                XEnumeration cells = xCellRanges.getCells().createEnumeration();
+                while (cells.hasMoreElements())
+                {
+                    Object ocell = cells.nextElement();
+                    XCell xcell = (XCell) UnoRuntime.queryInterface(XCell.class, ocell);
+                    XTextFieldsSupplier xTextFieldsSupplier = (XTextFieldsSupplier) UnoRuntime.queryInterface(XTextFieldsSupplier.class, xcell);
+                    XEnumeration textFields = xTextFieldsSupplier.getTextFields().createEnumeration();
+                    while (textFields.hasMoreElements())
+                    {
+                        Object textField1 = textFields.nextElement();
+                        if (textField1 != null)
+                        {
+                            XPropertySet xps = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, textField1);
+                            if (xps != null)
+                            {
+                                String path = xps.getPropertyValue("URL").toString();
+                                attachments.addAll(this.addLink(path));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception upe)
+        {
+            ErrorLog.log(upe);
+        }
+        return attachments;
     }
 
     @Override
@@ -181,13 +226,13 @@ public class WB4Calc extends OfficeDocument
         switch (format)
         {
             case HTML:
-                result= this.saveAsHtml(dir);
+                result = this.saveAsHtml(dir);
                 break;
             case OFFICE_2003:
-                result= saveAsOffice2003(dir);
+                result = saveAsOffice2003(dir);
                 break;
             default:
-                result=saveAsOpenOffice(dir);                
+                result = saveAsOpenOffice(dir);
         }
         return result;
     }
