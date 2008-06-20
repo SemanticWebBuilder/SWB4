@@ -5,22 +5,37 @@
 package org.semanticwb.openoffice.impress;
 
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.UnknownPropertyException;
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.NoSuchElementException;
+import com.sun.star.container.XEnumeration;
+import com.sun.star.container.XEnumerationAccess;
 import com.sun.star.document.XDocumentInfo;
 import com.sun.star.document.XDocumentInfoSupplier;
+import com.sun.star.drawing.XDrawPage;
+import com.sun.star.drawing.XDrawPages;
+import com.sun.star.drawing.XDrawPagesSupplier;
+import com.sun.star.drawing.XShape;
+import com.sun.star.drawing.XShapes;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XModel;
 import com.sun.star.frame.XStorable;
 import com.sun.star.io.IOException;
+import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiComponentFactory;
+import com.sun.star.text.XTextField;
+import com.sun.star.text.XTextRange;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.util.XModifiable;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.semanticwb.openoffice.DocumentType;
+import org.semanticwb.openoffice.ErrorLog;
 import org.semanticwb.openoffice.OfficeDocument;
 import org.semanticwb.openoffice.SaveDocumentFormat;
 import org.semanticwb.openoffice.WBAlertException;
@@ -71,10 +86,90 @@ public class WB4Impress extends OfficeDocument
         return "2.4";
     }
 
+    private static int getDrawPageCount(XComponent xComponent)
+    {
+        XDrawPagesSupplier xDrawPagesSupplier =
+                (XDrawPagesSupplier) UnoRuntime.queryInterface(
+                XDrawPagesSupplier.class, xComponent);
+        XDrawPages xDrawPages = xDrawPagesSupplier.getDrawPages();
+        return xDrawPages.getCount();
+    }
+
+    private static XDrawPage getDrawPageByIndex(XComponent xComponent, int nIndex)
+            throws com.sun.star.lang.IndexOutOfBoundsException,
+            WrappedTargetException
+    {
+        XDrawPagesSupplier xDrawPagesSupplier =
+                (XDrawPagesSupplier) UnoRuntime.queryInterface(
+                XDrawPagesSupplier.class, xComponent);
+        XDrawPages xDrawPages = xDrawPagesSupplier.getDrawPages();
+        return (XDrawPage) UnoRuntime.queryInterface(XDrawPage.class, xDrawPages.getByIndex(nIndex));
+    }
+
+    private List<File> getAttachtments(XShape xShape)
+            throws NoSuchElementException,UnknownPropertyException,WrappedTargetException
+    {
+        List<File> attachments = new ArrayList<File>();
+        XTextRange textRange = (XTextRange) UnoRuntime.queryInterface(XTextRange.class, xShape);
+        XEnumerationAccess xParaEA = (XEnumerationAccess) UnoRuntime.queryInterface(XEnumerationAccess.class, textRange);
+        XEnumeration xParaEnum = xParaEA.createEnumeration();
+        while (xParaEnum.hasMoreElements())
+        {
+            Object aPortionObj = xParaEnum.nextElement();
+            XEnumerationAccess xPortionEA = (XEnumerationAccess) UnoRuntime.queryInterface(XEnumerationAccess.class, aPortionObj);
+            XEnumeration xPortionEnum = xPortionEA.createEnumeration();
+            while (xPortionEnum.hasMoreElements())
+            {
+                XTextRange xRange = (XTextRange) UnoRuntime.queryInterface(com.sun.star.text.XTextRange.class, xPortionEnum.nextElement());
+                XPropertySet xPropSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xRange);
+                Object oTextfield = xPropSet.getPropertyValue("TextField");
+                XTextField xTextField = (XTextField) UnoRuntime.queryInterface(XTextField.class, oTextfield);
+                if (xTextField != null)
+                {
+                    xPropSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xTextField);
+                    String path = xPropSet.getPropertyValue("URL").toString();
+                    attachments.addAll(this.addLink(path));
+                }
+            }
+        }
+        return attachments;
+    }
+
+    private List<File> getAttachtments(XDrawPage xDrawPage)
+            throws com.sun.star.lang.IndexOutOfBoundsException,
+            NoSuchElementException, WrappedTargetException,
+            UnknownPropertyException
+    {
+        List<File> attachments = new ArrayList<File>();
+        XShapes xShapes = (XShapes) UnoRuntime.queryInterface(XShapes.class, xDrawPage);
+        int shapes = xShapes.getCount();
+        for (int iShape = 0; iShape < shapes; iShape++)
+        {
+            Object oShape = xShapes.getByIndex(iShape);
+            XShape xShape = (XShape) UnoRuntime.queryInterface(XShape.class, oShape);
+            attachments.addAll(this.getAttachtments(xShape));
+        }
+        return attachments;
+    }
+
     @Override
     public final List<File> getAttachtments()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        List<File> attachments = new ArrayList<File>();
+        int pages = getDrawPageCount(document);
+        for (int i = 0; i < pages; i++)
+        {
+            try
+            {
+                XDrawPage xDrawPage = getDrawPageByIndex(document, i);
+                attachments.addAll(getAttachtments(xDrawPage));
+            }
+            catch (Exception iobe)
+            {
+                ErrorLog.log(iobe);
+            }
+        }
+        return attachments;
     }
 
     @Override
