@@ -22,6 +22,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.semanticwb.openoffice.DocumentType;
 import org.semanticwb.openoffice.SaveDocumentFormat;
@@ -134,7 +135,7 @@ public class WB4CalcTest
     }
 
     @Test
-    //@Ignore
+    @Ignore
     public void getLocalPathTest()
     {
         try
@@ -151,7 +152,7 @@ public class WB4CalcTest
     }
 
     @Test
-    // @Ignore
+    @Ignore
     public void getCustomPropertiesTest()
     {
         try
@@ -171,7 +172,7 @@ public class WB4CalcTest
     }
 
     @Test
-    // @Ignore
+    @Ignore
     public void getDocumentTypeTest()
     {
         try
@@ -187,6 +188,7 @@ public class WB4CalcTest
     }
 
     @Test
+    @Ignore
     public void saveAsHTMLTest()
     {
         try
@@ -202,7 +204,7 @@ public class WB4CalcTest
     }
 
     @Test
-    // @Ignore
+    @Ignore
     public void saveTest()
     {
         try
@@ -217,7 +219,7 @@ public class WB4CalcTest
     }
 
     @Test
-    // @Ignore
+    @Ignore
     public void saveAsSaveDocumentFormatHTMLTest()
     {
         try
@@ -233,7 +235,7 @@ public class WB4CalcTest
     }
 
     @Test
-    // @Ignore
+    @Ignore
     public void saveCustomPropertiesTest()
     {
         try
@@ -251,7 +253,7 @@ public class WB4CalcTest
     }
 
     @Test
-    // @Ignore
+    @Ignore
     public void SaveHtmlPrepareAndGetFilesTest()
     {
         try
@@ -268,7 +270,7 @@ public class WB4CalcTest
     }
 
     @Test
-    // @Ignore
+    @Ignore
     public void getZipFileTest()
     {
         try
@@ -276,6 +278,20 @@ public class WB4CalcTest
             WB4Calc writer = new WB4Calc(this.xContext);
             byte[] zip = writer.getZipFile();
             Assert.assertEquals(zip.length, 67744);
+        }
+        catch (WBException wbe)
+        {
+            Assert.fail(wbe.getMessage());
+        }
+    }
+    @Test
+    public void getAttachtmentsTest()
+    {
+        try
+        {
+            WB4Calc writer = new WB4Calc(this.xContext);
+            List<File> attachments = writer.getAttachtments();
+            Assert.assertEquals(5, attachments.size());
         }
         catch (WBException wbe)
         {
