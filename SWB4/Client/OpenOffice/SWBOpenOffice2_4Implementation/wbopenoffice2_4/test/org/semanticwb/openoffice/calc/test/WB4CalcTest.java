@@ -252,16 +252,15 @@ public class WB4CalcTest
         }
     }
 
-    @Test
-    @Ignore
+    @Test    
     public void SaveHtmlPrepareAndGetFilesTest()
     {
         try
         {
             WB4Calc writer = new WB4Calc(this.xContext);
             String guid = writer.getGuid();
-            List<File> files = writer.saveHtmlPrepareAndGetFiles(guid);
-            Assert.assertEquals(files.size(), 3);
+            File file = writer.saveHtmlPrepareAndGetFiles(guid);
+            Assert.assertEquals(file.exists(),true);
         }
         catch (WBException wbe)
         {
@@ -269,22 +268,9 @@ public class WB4CalcTest
         }
     }
 
+    
     @Test
     @Ignore
-    public void getZipFileTest()
-    {
-        try
-        {
-            WB4Calc writer = new WB4Calc(this.xContext);
-            byte[] zip = writer.getZipFile();
-            Assert.assertEquals(zip.length, 67744);
-        }
-        catch (WBException wbe)
-        {
-            Assert.fail(wbe.getMessage());
-        }
-    }
-    @Test
     public void getAllAttachmentsTest()
     {
         try
