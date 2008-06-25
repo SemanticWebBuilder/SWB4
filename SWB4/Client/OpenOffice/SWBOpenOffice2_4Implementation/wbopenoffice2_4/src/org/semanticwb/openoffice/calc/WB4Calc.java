@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import org.semanticwb.openoffice.DocumentType;
 import org.semanticwb.openoffice.ErrorLog;
+import org.semanticwb.openoffice.NoHasLocationException;
 import org.semanticwb.openoffice.OfficeDocument;
 import org.semanticwb.openoffice.SaveDocumentFormat;
 import org.semanticwb.openoffice.WBAlertException;
@@ -41,23 +42,33 @@ import org.semanticwb.openoffice.WBOfficeException;
 public class WB4Calc extends OfficeDocument
 {
 
-    public static final String OPENOFFICE_EXTENSION = ".ods";
-    public static final String EXCEL_EXTENSION = ".xls";
-    public static final String HTML_EXTENSION = ".html";
+    private static final String OPENOFFICE_EXTENSION = ".ods";
+    private static final String EXCEL_EXTENSION = ".xls";
+    private static final String HTML_EXTENSION = ".html";
     private static final String ERROR_NO_SAVE = "No se puede almacenar el documento";
     private static final String FILTER_NAME = "FilterName";
     private static final String OVERRIDE_OPTION = "Overwrite";
-    private static final String SCHEMA_FILE = "file:///";    
+    private static final String SCHEMA_FILE = "file:///";
     private final XComponent document;
-    
 
-    public WB4Calc(XComponent document) throws WBOfficeException
+    /**
+     * Create a representation of a Calc Document
+     * @param document Representation of a Calc Document
+     * @see XComponent
+     */
+    public WB4Calc(XComponent document)
     {
-        this.document = document;        
+        this.document = document;
     }
 
+    /**
+     * Create a representation of a Calc Document
+     * @param m_xContext Context of Calc Application
+     * @throws org.semanticwb.openoffice.WBOfficeException If the Desktop can not be used
+     * @see XComponentContext
+     */
     public WB4Calc(XComponentContext m_xContext) throws WBOfficeException
-    {        
+    {
         XMultiComponentFactory serviceManager = m_xContext.getServiceManager();
         try
         {
@@ -72,21 +83,67 @@ public class WB4Calc extends OfficeDocument
         }
     }
 
+    /**
+     * Gets the Application version string, allways returns 2.4
+     * @return Application version String      
+     */
     @Override
     public final String getApplicationVersion()
     {
         return "2.4";
     }
 
-    @Override
-    public final List<File> getAttachtments()
+    /**
+     * Gets all the files that contains a cell
+     * @param xcell the XCell to search the files
+     * @return List of files found
+     * @throws org.semanticwb.openoffice.NoHasLocationException The document has not be saved before
+     * @see XCell
+     */
+    public final List<File> getAttachments(XCell xcell) throws NoHasLocationException
     {
         List<File> attachments = new ArrayList<File>();
-        try
+        XTextFieldsSupplier xTextFieldsSupplier = (XTextFieldsSupplier) UnoRuntime.queryInterface(XTextFieldsSupplier.class, xcell);
+        XEnumeration textFields = xTextFieldsSupplier.getTextFields().createEnumeration();
+        while (textFields.hasMoreElements())
         {
-            XSpreadsheetDocument xSpreadsheetDocument = (XSpreadsheetDocument) UnoRuntime.queryInterface(XSpreadsheetDocument.class, this.document);            
-            XSpreadsheets xSpreadsheets = xSpreadsheetDocument.getSheets();
-            for (String name : xSpreadsheets.getElementNames())
+            try
+            {
+                Object textField1 = textFields.nextElement();
+                if (textField1 != null)
+                {
+                    XPropertySet xps = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, textField1);
+                    if (xps != null)
+                    {
+                        String path = xps.getPropertyValue("URL").toString();
+                        attachments.addAll(this.addLink(path));
+                    }
+                }
+            }
+            catch (com.sun.star.uno.Exception nse)
+            {
+                ErrorLog.log(nse);
+            }
+        }
+        return attachments;
+    }
+
+    /**
+     * Gets all the files in the document
+     * @return List of files in the document
+     * @throws org.semanticwb.openoffice.NoHasLocationException The document has not saved before     * 
+     */
+    @Override
+    public final List<File> getAllAttachments() throws NoHasLocationException
+    {
+
+        List<File> attachments = new ArrayList<File>();
+
+        XSpreadsheetDocument xSpreadsheetDocument = (XSpreadsheetDocument) UnoRuntime.queryInterface(XSpreadsheetDocument.class, this.document);
+        XSpreadsheets xSpreadsheets = xSpreadsheetDocument.getSheets();
+        for (String name : xSpreadsheets.getElementNames())
+        {
+            try
             {
                 Object obSpreadsheet = xSpreadsheets.getByName(name);
                 XSpreadsheet sheet = (XSpreadsheet) UnoRuntime.queryInterface(XSpreadsheet.class, obSpreadsheet);
@@ -97,51 +154,26 @@ public class WB4Calc extends OfficeDocument
                 {
                     Object ocell = cells.nextElement();
                     XCell xcell = (XCell) UnoRuntime.queryInterface(XCell.class, ocell);
-                    XTextFieldsSupplier xTextFieldsSupplier = (XTextFieldsSupplier) UnoRuntime.queryInterface(XTextFieldsSupplier.class, xcell);
-                    XEnumeration textFields = xTextFieldsSupplier.getTextFields().createEnumeration();
-                    while (textFields.hasMoreElements())
-                    {
-                        Object textField1 = textFields.nextElement();
-                        if (textField1 != null)
-                        {
-                            XPropertySet xps = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, textField1);
-                            if (xps != null)
-                            {
-                                String path = xps.getPropertyValue("URL").toString();
-                                attachments.addAll(this.addLink(path));
-                            }
-                        }
-                    }
+                    attachments.addAll(getAttachments(xcell));
                 }
             }
-        }
-        catch (Exception upe)
-        {
-            ErrorLog.log(upe);
+            catch (com.sun.star.uno.Exception upe)
+            {
+                ErrorLog.log(upe);
+            }
         }
         return attachments;
     }
 
+    /**
+     * Gets al the custom properties of the document
+     * @return A Map of custum properties
+     * @throws org.semanticwb.openoffice.WBException If the list of properties are more that four
+     */
     @Override
     public final Map<String, String> getCustomProperties() throws WBException
     {
         HashMap<String, String> properties = new HashMap<String, String>();
-        /*for (Property property : this.getProperties().getPropertySetInfo().getProperties())
-        {
-        try
-        {
-        String value = this.getProperties().getPropertyValue(property.Name).toString();
-        properties.put(property.Name, value);
-        }
-        catch (UnknownPropertyException upe)
-        {
-        throw new WBOfficeException("No se puede actualizar la información asociada a la publicación del contenido", upe);
-        }
-        catch (WrappedTargetException wte)
-        {
-        throw new WBOfficeException("No se puede actualizar la información asociada a la publicación del contenido", wte);
-        }
-        }*/
         XSpreadsheetDocument xtd =
                 (XSpreadsheetDocument) UnoRuntime.queryInterface(XSpreadsheetDocument.class, this.document);
 
@@ -165,14 +197,24 @@ public class WB4Calc extends OfficeDocument
         return properties;
     }
 
+    /**
+     * Gets the type of document
+     * @return DocumentType.Excel
+     * @see DocumentType
+     */
     @Override
     public final DocumentType getDocumentType()
     {
         return DocumentType.EXCEL;
     }
 
+    /**
+     * Gets the path of the fisical document
+     * @return A File with the fisical path of the document
+     * @throws org.semanticwb.openoffice.NoHasLocationException If the document has not been saved
+     */
     @Override
-    public final File getLocalPath() throws WBException
+    public final File getLocalPath() throws NoHasLocationException
     {
         XModel xtd = (XModel) UnoRuntime.queryInterface(XModel.class, this.document);
         XStorable xStorable = (XStorable) UnoRuntime.queryInterface(XStorable.class, document);
@@ -187,11 +229,14 @@ public class WB4Calc extends OfficeDocument
         }
         else
         {
-            throw new WBAlertException("El documento no ha sido almacenado todavía");
+            throw new NoHasLocationException();
         }
-
     }
 
+    /**
+     * Save the document
+     * @throws org.semanticwb.openoffice.WBException If the document has not been saved before
+     */
     @Override
     public final void save() throws WBException
     {
@@ -219,6 +264,14 @@ public class WB4Calc extends OfficeDocument
         }
     }
 
+    /**
+     * Save the document in selected a format
+     * @param dir The path of the file
+     * @param format The SaveDocumentFormat to use
+     * @return a File with the full path of the new document
+     * @throws org.semanticwb.openoffice.WBException If the document can not be saved
+     * @throws IllegalArgumentException If the parameter is a file, must be a directory
+     */
     @Override
     public final File saveAs(File dir, SaveDocumentFormat format) throws WBException
     {
@@ -236,9 +289,19 @@ public class WB4Calc extends OfficeDocument
         }
         return result;
     }
-
+    /**
+     * Save the couemnt in Open Office format (.ods)
+     * @param dir The directory to save the document
+     * @return the full path of the new document
+     * @throws org.semanticwb.openoffice.WBException If the document can not be saved
+     * @throws IllegalArgumentException If the parameter is a file, must be a directory
+     */
     private File saveAsOpenOffice(File dir) throws WBException
     {
+        if(dir.isFile())
+        {
+            throw new IllegalArgumentException();
+        }
         try
         {
             File docFile = this.getLocalPath();
@@ -281,9 +344,19 @@ public class WB4Calc extends OfficeDocument
             throw new WBOfficeException(ERROR_NO_SAVE, ioe);
         }
     }
-
+    /**
+     * Save the document in Office 2003 format
+     * @param dir File Path directory to save the cocument
+     * @return The full path of the new file
+     * @throws org.semanticwb.openoffice.WBException
+     * @throws IllegalArgumentException If the parameter is a file
+     */
     private File saveAsOffice2003(File dir) throws WBException
     {
+        if(dir.isFile())
+        {
+            throw new IllegalArgumentException();
+        }
         try
         {
             File docFile = this.getLocalPath();
@@ -327,9 +400,19 @@ public class WB4Calc extends OfficeDocument
         }
     }
 
+    /**
+     * Save the document in default format
+     * @param file The full path of the file, overwrite the document if exists
+     * @throws org.semanticwb.openoffice.WBException If can not be saved
+     * @throws IllegalArgumentException If the path is a directory
+     */
     @Override
     public void save(File file) throws WBException
     {
+        if (file.isDirectory())
+        {
+            throw new IllegalArgumentException();
+        }
         try
         {
             PropertyValue[] storeProps = new PropertyValue[2];
@@ -351,17 +434,23 @@ public class WB4Calc extends OfficeDocument
         }
     }
 
+    /**
+     * Save the document in Html format
+     * @param dir Directory to save the document
+     * @return The full path of the document
+     * @throws org.semanticwb.openoffice.WBException If the document can not be saved
+     * @throws IllegalArgumentException If the File is a file and not a directory
+     */
     @Override
     public final File saveAsHtml(File dir) throws WBException
     {
-
+        if (dir.isFile())
+        {
+            throw new IllegalArgumentException();
+        }
         try
         {
-            File docFile = this.getLocalPath();
-            if (!(docFile.getName().endsWith(OPENOFFICE_EXTENSION) || docFile.getName().endsWith(EXCEL_EXTENSION)))
-            {
-                throw new WBAlertException("El documento debe estar en formato de Open Office Calc(" + OPENOFFICE_EXTENSION + ")  o Excel 2000/XP/2003/2007 (" + EXCEL_EXTENSION + ")");
-            }
+            File docFile = this.getLocalPath();            
             File HTMLfile;
             if (docFile.getName().endsWith(OPENOFFICE_EXTENSION))
             {
@@ -415,10 +504,13 @@ public class WB4Calc extends OfficeDocument
             throw new WBOfficeException(ERROR_NO_SAVE, ioe);
 
         }
-
-
     }
 
+    /**
+     * Save the properties in custom properties in the document
+     * @param properties Properties to save
+     * @throws org.semanticwb.openoffice.WBException if the properties are more than four
+     */
     @Override
     public final void saveCustomProperties(Map<String, String> properties) throws WBException
     {
@@ -446,29 +538,54 @@ public class WB4Calc extends OfficeDocument
         this.save();
     }
 
+    /**
+     * Prepare the html to be published
+     * @param htmlFile The full path of the Html document exported by the application
+     * @throws IllegalArgumentException If the path is a directory
+     */
     public final void prepareHtmlFileToSend(File htmlFile)
     {
+        if (htmlFile.isDirectory())
+        {
+            throw new IllegalArgumentException();
+        }
     // TODO: Falta implementar    
     }
 
+    /**
+     * Gets is the document is new, it means that the document has not been saved before
+     * @return True if the document is new, false otherwise
+     */
     public boolean isNewDocument()
     {
         XStorable xStorable = (XStorable) UnoRuntime.queryInterface(XStorable.class, document);
         return !xStorable.hasLocation();
     }
 
+    /**
+     * Gets if the document is readonly or not
+     * @return True if the document is readonly or not
+     */
     public boolean isReadOnly()
     {
         XStorable xStorable = (XStorable) UnoRuntime.queryInterface(XStorable.class, document);
         return xStorable.isReadonly();
     }
 
+    /**
+     * Gets if the document has been modified and can be saves
+     * @return True if the document has been modified, false otherwise
+     */
     public boolean isModified()
     {
         XModifiable xModified = (XModifiable) UnoRuntime.queryInterface(XModifiable.class, document);
         return xModified.isModified();
     }
 
+    /**
+     * Gets the Default extension used by the application
+     * @return A string with the default extension, allways returns .ods
+     */
     public String getDefaultExtension()
     {
         return OPENOFFICE_EXTENSION;
