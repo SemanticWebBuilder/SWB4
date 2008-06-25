@@ -1,0 +1,32 @@
+<html>
+<head>
+<link id=Main-File rel=Main-File href="[file]">
+<link rel=Preview href=preview.wmf>
+<![if !ppt]><script src=script.js></script><script>
+<!--
+var gNavLoaded = gOtlNavLoaded = gOtlLoaded = false;
+function Load()
+{
+	str=unescape(document.location.hash),idx=str.indexOf('#')
+	if(idx>=0) str=str.substr(1);
+	if(str) PPTSld.location.replace(escape(str));
+}
+//-->
+</script>
+<![endif]>
+</head>
+
+
+<frameset rows="*,25" border=0>
+ <frameset cols="25%,*" onload="Load()" id=PPTHorizAdjust framespacing=1 frameborder=1>
+  <frame src=outline.html title="Esquema" name=PPTOtl>
+  <frame src=img0.html title="Diapositiva" name=PPTSld>
+ </frameset>
+ <frameset cols="25%,*" framespacing=1>
+  <frame src=outline.html title="Barra
+de exploraci&oacuote;n de esquemas" name=PPTOtlNav scrolling=no noresize>
+  <frame src=outline.html title="Barra
+de exploraci&oacuote;n de diapositivas" name=PPTNav scrolling=no noresize>
+ </frameset>
+</frameset>
+</html>
