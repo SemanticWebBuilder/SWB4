@@ -940,6 +940,8 @@ public class WB4Impress extends OfficeDocument
                 ErrorLog.log(ex);
             }
         }
+        subSquema=subSquema.replace("<h2>", "");
+        subSquema=subSquema.replace("</h2>", "");
         return subSquema;
     }
 
