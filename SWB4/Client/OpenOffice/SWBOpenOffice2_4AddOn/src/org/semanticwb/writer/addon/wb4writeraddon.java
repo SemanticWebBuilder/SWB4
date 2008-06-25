@@ -10,7 +10,7 @@ import javax.swing.JOptionPane;
 import org.semanticwb.openoffice.OfficeDocument;
 import org.semanticwb.openoffice.OfficeDocumentHelper;
 import org.semanticwb.openoffice.WBOfficeException;
-import org.semanticwb.openoffice.writer.WB4Application;
+import org.semanticwb.openoffice.writer.WB4WriterApplication;
 import org.semanticwb.openoffice.writer.WB4Writer;
 
 
@@ -208,7 +208,7 @@ public final class wb4writeraddon extends WeakBase
             }
             if (aURL.Path.compareTo("open") == 0)
             {
-                WB4Application application = new WB4Application(this.m_xContext);
+                WB4WriterApplication application = new WB4WriterApplication(this.m_xContext);
                 OfficeDocumentHelper.open(application);
                 return;
             }
