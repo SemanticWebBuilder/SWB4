@@ -13,6 +13,7 @@ import org.netbeans.spi.wizard.WizardException;
 import org.netbeans.spi.wizard.WizardPage.WizardResultProducer;
 import org.semanticwb.openoffice.ui.wizard.SummaryPublish;
 
+
 /**
  *
  * @author victor.lorenzana
@@ -36,7 +37,7 @@ public class PublishResultProducer implements WizardResultProducer
             try
             {
                 progress.setProgress("Preparando documento para publicar", 0, 2);
-                byte[] zipFile = document.getZipFile();
+                //byte[] zipFile = document.getZipFile();
                 progress.setProgress("Publicando Documento", 1, 2);
                 Thread.currentThread().sleep(1000);
                 progress.setProgress("Publicando Documento", 1, 2);
@@ -51,7 +52,7 @@ public class PublishResultProducer implements WizardResultProducer
                 Summary summary=Summary.create(new SummaryPublish(),null);               
                 progress.finished(summary);
             }
-            catch (WBOfficeException e)
+            /*catch (WBOfficeException e)
             {                
                 progress.failed(e.getMessage(), false);
             }
@@ -62,7 +63,7 @@ public class PublishResultProducer implements WizardResultProducer
             catch (WBException e)
             {
                 progress.failed(e.getMessage(), false);
-            }
+            }*/
             catch (Exception e)
             {
                 progress.failed(e.getMessage(), false);
