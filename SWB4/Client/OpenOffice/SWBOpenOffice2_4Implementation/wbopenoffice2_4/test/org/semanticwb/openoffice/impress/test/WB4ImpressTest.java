@@ -226,7 +226,7 @@ public class WB4ImpressTest
         try
         {
             WB4Impress writer = new WB4Impress(this.xContext);
-            File actual = writer.saveAs(tempDir, SaveDocumentFormat.HTML);
+            File actual=writer.saveAs(tempDir, SaveDocumentFormat.HTML);            
             Assert.assertTrue(actual.exists());
         }
         catch (WBException wbe)
@@ -253,46 +253,30 @@ public class WB4ImpressTest
         }
     }
 
-    @Test
-    @Ignore
+    @Test    
     public void SaveHtmlPrepareAndGetFilesTest()
     {
         try
         {
             WB4Impress writer = new WB4Impress(this.xContext);
             String guid = writer.getGuid();
-            List<File> files = writer.saveHtmlPrepareAndGetFiles(guid);
-            Assert.assertEquals(files.size(), 3);
+            File file = writer.saveHtmlPrepareAndGetFiles(guid);
+            Assert.assertEquals(file.exists(), 3);
         }
         catch (WBException wbe)
         {
             Assert.fail(wbe.getMessage());
         }
     }
-
+   
     @Test
     @Ignore
-    public void getZipFileTest()
+    public void getAllAttachmentsTest()
     {
         try
         {
             WB4Impress writer = new WB4Impress(this.xContext);
-            byte[] zip = writer.getZipFile();
-            Assert.assertEquals(zip.length, 77015);
-        }
-        catch (WBException wbe)
-        {
-            Assert.fail(wbe.getMessage());
-        }
-    }
-
-    @Test
-    public void getAttachtmentsTest()
-    {
-        try
-        {
-            WB4Impress writer = new WB4Impress(this.xContext);
-            List<File> attachments = writer.getAttachtments();
+            List<File> attachments = writer.getAllAttachments();
             Assert.assertEquals(2,attachments.size());
         }
         catch (WBException wbe)
