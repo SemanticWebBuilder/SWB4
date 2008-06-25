@@ -82,7 +82,7 @@ public class WB4Impress extends OfficeDocument
             StringBuilder builder = new StringBuilder();
             while (read != -1)
             {
-                String temp = new String(buffer, 0, read);
+                String temp = new String(buffer, 0, read, "UTF-8");
                 builder.append(temp);
                 read = in.read(buffer);
             }
@@ -141,13 +141,13 @@ public class WB4Impress extends OfficeDocument
             din.readFully(imageButtons);
             in.close();
 
-            StringBuilder scriptBuilder=new StringBuilder();
+            StringBuilder scriptBuilder = new StringBuilder();
             in = WB4Impress.class.getResourceAsStream("script.js");
-            
+
             read = in.read(buffer);
             while (read != -1)
             {
-                scriptBuilder.append(new String(buffer,0,read,"UTF-8"));                
+                scriptBuilder.append(new String(buffer, 0, read, "UTF-8"));
                 read = in.read(buffer);
             }
             in.close();
@@ -770,7 +770,7 @@ public class WB4Impress extends OfficeDocument
                     content.append("</head> <body onclick=\"DocumentOnClick()\" onresize=\"_RSW()\" onload=\"LoadSld()\"");
                     content.append("onkeypress=\"_KPH()\">");
                     content.append("<div id=SlideObj class=sld>");
-                    content.append("<center><img src=\"img"+  number +".jpg\"></center></div></body></html>");
+                    content.append("<center><img src=\"img" + number + ".jpg\"></center></div></body></html>");
                     FileOutputStream out = new FileOutputStream(file);
                     out.write(content.toString().getBytes());
                     out.close();
