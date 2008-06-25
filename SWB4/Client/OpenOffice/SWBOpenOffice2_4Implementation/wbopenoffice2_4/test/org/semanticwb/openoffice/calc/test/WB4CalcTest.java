@@ -194,7 +194,7 @@ public class WB4CalcTest
         try
         {
             WB4Calc writer = new WB4Calc(this.xContext);
-            File actual = writer.saveAsHtml(tempDir);
+            File actual=writer.saveAsHtml(tempDir);
             Assert.assertTrue(actual.exists());
         }
         catch (WBException wbe)
@@ -225,7 +225,7 @@ public class WB4CalcTest
         try
         {
             WB4Calc writer = new WB4Calc(this.xContext);
-            File actual = writer.saveAs(tempDir, SaveDocumentFormat.HTML);
+            File actual=writer.saveAs(tempDir, SaveDocumentFormat.HTML);
             Assert.assertTrue(actual.exists());
         }
         catch (WBException wbe)
@@ -285,12 +285,12 @@ public class WB4CalcTest
         }
     }
     @Test
-    public void getAttachtmentsTest()
+    public void getAllAttachmentsTest()
     {
         try
         {
             WB4Calc writer = new WB4Calc(this.xContext);
-            List<File> attachments = writer.getAttachtments();
+            List<File> attachments = writer.getAllAttachments();
             Assert.assertEquals(5, attachments.size());
         }
         catch (WBException wbe)
