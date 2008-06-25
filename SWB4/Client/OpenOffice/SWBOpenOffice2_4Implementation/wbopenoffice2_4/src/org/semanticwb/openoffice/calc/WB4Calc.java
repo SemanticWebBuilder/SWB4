@@ -22,6 +22,9 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.util.XModifiable;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +37,7 @@ import org.semanticwb.openoffice.SaveDocumentFormat;
 import org.semanticwb.openoffice.WBAlertException;
 import org.semanticwb.openoffice.WBException;
 import org.semanticwb.openoffice.WBOfficeException;
+import org.semanticwb.openoffice.impress.WB4Impress;
 
 /**
  * Class to wrap a Open Office Calc Document
@@ -50,6 +54,31 @@ public class WB4Calc extends OfficeDocument
     private static final String OVERRIDE_OPTION = "Overwrite";
     private static final String SCHEMA_FILE = "file:///";
     private final XComponent document;
+    private static String tabstrip;
+
+    static
+    {
+        try
+        {
+            byte[] buffer = new byte[2048];
+            InputStream in = WB4Calc.class.getResourceAsStream("tabstrip.htm");
+
+            int read = in.read(buffer);
+            StringBuilder builder = new StringBuilder();
+            while (read != -1)
+            {
+                String temp = new String(buffer, 0, read, "UTF-8");
+                builder.append(temp);
+                read = in.read(buffer);
+            }
+            in.close();
+            tabstrip = builder.toString();
+        }
+        catch (java.io.IOException ioe)
+        {
+            ErrorLog.log(ioe);
+        }
+    }
 
     /**
      * Create a representation of a Calc Document
@@ -289,6 +318,7 @@ public class WB4Calc extends OfficeDocument
         }
         return result;
     }
+
     /**
      * Save the couemnt in Open Office format (.ods)
      * @param dir The directory to save the document
@@ -298,7 +328,7 @@ public class WB4Calc extends OfficeDocument
      */
     private File saveAsOpenOffice(File dir) throws WBException
     {
-        if(dir.isFile())
+        if (dir.isFile())
         {
             throw new IllegalArgumentException();
         }
@@ -344,6 +374,7 @@ public class WB4Calc extends OfficeDocument
             throw new WBOfficeException(ERROR_NO_SAVE, ioe);
         }
     }
+
     /**
      * Save the document in Office 2003 format
      * @param dir File Path directory to save the cocument
@@ -353,7 +384,7 @@ public class WB4Calc extends OfficeDocument
      */
     private File saveAsOffice2003(File dir) throws WBException
     {
-        if(dir.isFile())
+        if (dir.isFile())
         {
             throw new IllegalArgumentException();
         }
@@ -450,7 +481,7 @@ public class WB4Calc extends OfficeDocument
         }
         try
         {
-            File docFile = this.getLocalPath();            
+            File docFile = this.getLocalPath();
             File HTMLfile;
             if (docFile.getName().endsWith(OPENOFFICE_EXTENSION))
             {
@@ -549,7 +580,88 @@ public class WB4Calc extends OfficeDocument
         {
             throw new IllegalArgumentException();
         }
+        List<String> sheets=createSheets(htmlFile);
+        createTabStrip(htmlFile.getParentFile(),sheets);
     // TODO: Falta implementar    
+    }
+    private void createTabStrip(File dir,List<String> sheets)
+    {
+        StringBuilder sheetstable=new StringBuilder(tabstrip);
+        
+        for(String sheetName : sheets)
+        {
+            String td="<td bgcolor=\"#FFFFFF\" nowrap><b><small><small>&nbsp;<a href=\"sheet001.htm\" target=\"frSheet\"><font face=\"Arial\" color=\"#000000\">Hoja1</font></a>&nbsp;</small></small></b></td>";
+        }
+        try
+        {
+            File tabStrip=new File(dir.getPath()+"/tabscrip.htm");
+            FileOutputStream out = new FileOutputStream(tabStrip);
+            out.write(sheetstable.toString().getBytes());
+            out.close();
+        }
+        catch (Exception ex)
+        {
+            ErrorLog.log(ex);
+        }
+    }
+    private void saveTable(String table, File dir, int iSheet,String name)
+    {        
+        File sheet = new File(dir.getPath() + "/" + name + ".html");        
+        try
+        {
+            FileOutputStream out = new FileOutputStream(sheet);
+            out.write(table.getBytes());
+            out.close();
+        }
+        catch (Exception ex)
+        {
+            ErrorLog.log(ex);
+        }
+    }
+
+    private List<String> createSheets(File htmlFile)
+    {
+        List<String> sheets=new ArrayList<String>();
+        try
+        {
+            byte[] buffer = new byte[2048];
+            InputStream in = new FileInputStream(htmlFile);
+
+            int read = in.read(buffer);
+            StringBuilder builder = new StringBuilder();
+            while (read != -1)
+            {
+                String temp = new String(buffer, 0, read);
+                builder.append(temp);
+                read = in.read(buffer);
+            }
+            in.close();
+            int iSheet = 0;
+            int posInit = 0;
+            while (posInit >= 0)
+            {
+                posInit = builder.indexOf("<A NAME=",posInit);
+                if (posInit != -1)
+                {
+                    posInit = builder.indexOf("<TABLE", posInit + 9);
+                    if (posInit != -1)
+                    {
+                        int posFin = builder.indexOf("</TABLE>", posInit);
+                        String table = builder.substring(posInit, posFin + 8);
+                        String name = "sheet" + iSheet;
+                        saveTable(table, htmlFile.getParentFile(), iSheet,name);
+                        sheets.add(name);
+                        iSheet++;
+                    }
+                }
+                posInit = builder.indexOf("<A NAME=",posInit);
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorLog.log(ex);
+        }
+        return sheets;
     }
 
     /**
