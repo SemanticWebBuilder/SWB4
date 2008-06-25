@@ -9,7 +9,8 @@
                 if(!str) str = "img0.html";
                 PPTSld.location.replace(MHTMLPrefix+escape(str));
             }
-            function Unload() {
+            function Unload() 
+            {
                 if ( document.body.PPTSldFrameset != null )
                     document.body.PPTSldFrameset.frames[1].document.body.resume();
             }
@@ -18,6 +19,5 @@
     </head>    
     <frameset rows="*" frameborder=0 onload="Load()" onunload="Unload()">
         <frame name=PPTSld>
-    </frameset>
-    
+    </frameset>    
 </html>
