@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import org.semanticwb.openoffice.DocumentType;
 import org.semanticwb.openoffice.ErrorLog;
+import org.semanticwb.openoffice.NoHasLocationException;
 import org.semanticwb.openoffice.OfficeDocument;
 import org.semanticwb.openoffice.SaveDocumentFormat;
 import org.semanticwb.openoffice.WBAlertException;
@@ -45,15 +46,15 @@ public class WB4Writer extends OfficeDocument
     /**
      * The default Open Office Extension OPENOFFICE_EXTENSION=".odt"
      */
-    public static final String OPENOFFICE_EXTENSION = ".odt";
+    private static final String OPENOFFICE_EXTENSION = ".odt";
     /**
      * The xtension to a Word Document in format XP/2000/2003 WORD_EXTENSION=".doc"
      */
-    public static final String WORD_EXTENSION = ".doc";
+    private static final String WORD_EXTENSION = ".doc";
     /**
      * The extension of a HTML Document HTML_EXTENSION=".html"
      */
-    public static final String HTML_EXTENSION = ".html";
+    private static final String HTML_EXTENSION = ".html";
     private static final String FILTER_NAME = "FilterName";
     private static final String HYPERLINK_VALUE = "HyperLinkURL";
     private static final String OVERWRITE = "Overwrite";
@@ -63,20 +64,24 @@ public class WB4Writer extends OfficeDocument
      */
     private final XComponent document;
 
-    public WB4Writer(XComponent document) throws WBOfficeException
+    /**
+     * Create a representation of a Writer Document
+     * @param document Representation of a Writer Document
+     * @see XComponent
+     */
+    public WB4Writer(XComponent document)
     {
         this.document = document;
     }
 
     /**
-     * Contructor to obtain the current document
-     * @param m_xContext Conext to the Office Application
-     * @throws org.wb.WBOfficeException Error if there is not current document or the Desktop can not be obtained
+     * Create a representation of a Writer Document
+     * @param m_xContext Context of Writer Application
+     * @throws org.semanticwb.openoffice.WBOfficeException If the Desktop can not be used
+     * @see XComponentContext
      */
     public WB4Writer(XComponentContext m_xContext) throws WBOfficeException
     {
-
-
         XMultiComponentFactory serviceManager = m_xContext.getServiceManager();
         try
         {
@@ -91,19 +96,9 @@ public class WB4Writer extends OfficeDocument
         }
     }
 
-    /*public XPropertySet getProperties()
-    {
-    XTextDocument xtd =
-    (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, this.document);
-    XDocumentInfoSupplier xdis =
-    (XDocumentInfoSupplier) UnoRuntime.queryInterface(XDocumentInfoSupplier.class, xtd);
-    XDocumentInfo xdi = xdis.getDocumentInfo();        
-    XPropertySet xps = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xdi);        
-    return xps;
-    }*/
     /**
-     *  Gets the Application Version of Open Office
-     * @return The version of Open Office Application     * 
+     * Gets the Application version string, allways returns 2.4
+     * @return Application version String     * 
      */
     @Override
     public String getApplicationVersion()
@@ -113,15 +108,16 @@ public class WB4Writer extends OfficeDocument
     }
 
     /**
-     * Gets the files in the actual document
-     * @return List of Files in the actual document
+     * Gets all the files in the document
+     * @return List of files in the document
+     * @throws org.semanticwb.openoffice.NoHasLocationException The document has not saved before
      */
     @Override
-    public List<File> getAttachtments()
+    public final List<File> getAllAttachments() throws NoHasLocationException
     {
         List<File> attachments = new ArrayList<File>();
         try
-        {            
+        {
             XSearchable xSearchable = (XSearchable) UnoRuntime.queryInterface(XSearchable.class, this.document);
             XSearchDescriptor xUrlSearchDesc = xSearchable.createSearchDescriptor();
 
@@ -135,25 +131,34 @@ public class WB4Writer extends OfficeDocument
             Object linkResult = xSearchable.findFirst(xUrlSearchDesc);
             while (linkResult != null)
             {
-                XTextRange xTextRange = (XTextRange) UnoRuntime.queryInterface(XTextRange.class, linkResult);
-                XTextCursor xTextCursor = xTextRange.getText().createTextCursorByRange(xTextRange);
-                XPropertySet xPropSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xTextCursor);
-                Object hiperlink = xPropSet.getPropertyValue(HYPERLINK_VALUE);
-                attachments.addAll(this.addLink(hiperlink.toString()));
-                linkResult = xSearchable.findNext(xTextRange.getEnd(), xUrlSearchDesc);
+                try
+                {
+                    XTextRange xTextRange = (XTextRange) UnoRuntime.queryInterface(XTextRange.class, linkResult);
+                    XTextCursor xTextCursor = xTextRange.getText().createTextCursorByRange(xTextRange);
+                    XPropertySet xPropSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xTextCursor);
+                    Object hiperlink = xPropSet.getPropertyValue(HYPERLINK_VALUE);
+                    attachments.addAll(this.addLink(hiperlink.toString()));
+                    linkResult = xSearchable.findNext(xTextRange.getEnd(), xUrlSearchDesc);
+                }
+                catch (com.sun.star.uno.Exception ukpe)
+                {
+                    ErrorLog.log(ukpe);
+                }
+
             }
         }
-        catch (Exception upe)
+        catch (com.sun.star.uno.Exception ukpe)
         {
-            ErrorLog.log(upe);
+            ErrorLog.log(ukpe);
         }
+
         return attachments;
     }
 
     /**
-     * Gets the Custom Properties of a Open Office Document (called User Information)
-     * @return A Map with the CustomProperties
-     * @throws org.wb.WBException In case of number of properties are more than 4
+     * Gets al the custom properties of the document
+     * @return A Map of custum properties
+     * @throws org.semanticwb.openoffice.WBException If the list of properties are more that four
      */
     @Override
     public Map<String, String> getCustomProperties() throws WBException
@@ -182,8 +187,8 @@ public class WB4Writer extends OfficeDocument
     }
 
     /**
-     * Gets the type of Open Office document
-     * @return Returns always DocumentType.WORD
+     * Gets the type of document
+     * @return DocumentType.WORD
      * @see DocumentType
      */
     @Override
@@ -192,13 +197,13 @@ public class WB4Writer extends OfficeDocument
         return DocumentType.WORD;
     }
 
-    /**
-     * Gets the path to the Open Document file
-     * @return A File with the path to the current Open Office Document
-     * @throws org.wb.WBException If is not possible to get the path
+   /**
+     * Gets the path of the fisical document
+     * @return A File with the fisical path of the document
+     * @throws org.semanticwb.openoffice.NoHasLocationException If the document has not been saved
      */
     @Override
-    public File getLocalPath() throws WBException
+    public File getLocalPath() throws NoHasLocationException
     {
 
         XTextDocument xtd = (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, this.document);
@@ -214,13 +219,13 @@ public class WB4Writer extends OfficeDocument
         }
         else
         {
-            throw new WBAlertException("El documento no ha sido almacenado todavía");
+            throw new NoHasLocationException();
         }
     }
 
     /**
-     * Save the current document
-     * @throws org.wb.WBException In case the document is read only
+     * Save the document
+     * @throws org.semanticwb.openoffice.WBException If the document has not been saved before
      */
     @Override
     public void save() throws WBException
@@ -249,9 +254,19 @@ public class WB4Writer extends OfficeDocument
         }
     }
 
+    /**
+     * Save the document in default format
+     * @param file The full path of the file, overwrite the document if exists
+     * @throws org.semanticwb.openoffice.WBException If can not be saved
+     * @throws IllegalArgumentException If the path is a directory
+     */
     @Override
     public void save(File file) throws WBException
     {
+        if (file.isDirectory())
+        {
+            throw new IllegalArgumentException();
+        }
         try
         {
             PropertyValue[] storeProps = new PropertyValue[2];
@@ -273,13 +288,13 @@ public class WB4Writer extends OfficeDocument
         }
     }
 
-    /**
-     * Save the document with a format
-     * @param dir Directory to save
-     * @param format Format to use
-     * @return The new path of the file
-     * @throws org.wb.WBException If the format is not supported
-     * @see SaveDocumentFormat
+     /**
+     * Save the document in selected a format
+     * @param dir The path of the file
+     * @param format The SaveDocumentFormat to use
+     * @return a File with the full path of the new document
+     * @throws org.semanticwb.openoffice.WBException If the document can not be saved
+     * @throws IllegalArgumentException If the parameter is a file, must be a directory
      */
     @Override
     public File saveAs(File dir, SaveDocumentFormat format) throws WBException
@@ -299,8 +314,19 @@ public class WB4Writer extends OfficeDocument
         return result;
     }
 
+    /**
+     * Save the couemnt in Open Office format (.ods)
+     * @param dir The directory to save the document
+     * @return the full path of the new document
+     * @throws org.semanticwb.openoffice.WBException If the document can not be saved
+     * @throws IllegalArgumentException If the parameter is a file, must be a directory
+     */
     private File saveAsOpenOffice(File dir) throws WBException
     {
+        if(dir.isFile())
+        {
+            throw new IllegalArgumentException();
+        }
         try
         {
             File docFile = this.getLocalPath();
@@ -344,8 +370,19 @@ public class WB4Writer extends OfficeDocument
         }
     }
 
+    /**
+     * Save the document in Office 2003 format
+     * @param dir File Path directory to save the cocument
+     * @return The full path of the new file
+     * @throws org.semanticwb.openoffice.WBException
+     * @throws IllegalArgumentException If the parameter is a file
+     */
     private File saveAsOffice2003(File dir) throws WBException
     {
+        if(dir.isFile())
+        {
+            throw new IllegalArgumentException();
+        }
         try
         {
             File docFile = this.getLocalPath();
@@ -390,21 +427,22 @@ public class WB4Writer extends OfficeDocument
     }
 
     /**
-     * Save the document in HTML format
-     * @param dir Directory to save
-     * @return The new path of the file
-     * @throws org.wb.WBException If is nor possible to save the document
+     * Save the document in Html format
+     * @param dir Directory to save the document
+     * @return The full path of the document
+     * @throws org.semanticwb.openoffice.WBException If the document can not be saved
+     * @throws IllegalArgumentException If the File is a file and not a directory
      */
     @Override
     public File saveAsHtml(File dir) throws WBException
     {
+        if (dir.isFile())
+        {
+            throw new IllegalArgumentException();
+        }
         try
         {
-            File docFile = this.getLocalPath();
-            if (!(docFile.getName().endsWith(OPENOFFICE_EXTENSION) || docFile.getName().endsWith(".doc")))
-            {
-                throw new WBAlertException("El documento debe estar en formato de Open Office Writer (" + OPENOFFICE_EXTENSION + ")  o Word 2000/XP/2003/2007 con extensión (" + WORD_EXTENSION + ")");
-            }
+            File docFile = this.getLocalPath();           
             File HTMLfile;
             if (docFile.getName().endsWith(OPENOFFICE_EXTENSION))
             {
@@ -441,8 +479,6 @@ public class WB4Writer extends OfficeDocument
             storeProps[1] = new PropertyValue();
             storeProps[1].Name = OVERWRITE;
             storeProps[1].Value = true;
-
-
             XStorable xStorable = (XStorable) UnoRuntime.queryInterface(XStorable.class, document);
             if (!dir.exists())
             {
@@ -459,9 +495,9 @@ public class WB4Writer extends OfficeDocument
     }
 
     /**
-     * Save the custom properties to the Office Document
-     * @param properties Properties to Save
-     * @throws org.wb.WBException If is not posible to save the doument or the properties are more that 4
+     * Save the properties in custom properties in the document
+     * @param properties Properties to save
+     * @throws org.semanticwb.openoffice.WBException if the properties are more than four
      */
     @Override
     public void saveCustomProperties(Map<String, String> properties) throws WBException
@@ -491,32 +527,53 @@ public class WB4Writer extends OfficeDocument
     }
 
     /**
-     * Prepare a HTML document to be published
-     * @param htmlFile Path to the HTML file (This file must be generated by OpenOffice Writer)
+     * Prepare the html to be published
+     * @param htmlFile The full path of the Html document exported by the application
+     * @throws IllegalArgumentException If the path is a directory
      */
     public final void prepareHtmlFileToSend(File htmlFile)
     {
+        if (htmlFile.isDirectory())
+        {
+            throw new IllegalArgumentException();
+        }
     // TODO: Falta implementar    
     }
 
+    /**
+     * Gets is the document is new, it means that the document has not been saved before
+     * @return True if the document is new, false otherwise
+     */
     public boolean isNewDocument()
     {
         XStorable xStorable = (XStorable) UnoRuntime.queryInterface(XStorable.class, document);
         return !xStorable.hasLocation();
     }
 
+    /**
+     * Gets if the document is readonly or not
+     * @return True if the document is readonly or not
+     */
     public boolean isReadOnly()
     {
         XStorable xStorable = (XStorable) UnoRuntime.queryInterface(XStorable.class, document);
         return xStorable.isReadonly();
     }
 
+    /**
+     * Gets if the document has been modified and can be saves
+     * @return True if the document has been modified, false otherwise
+     */
     public boolean isModified()
     {
         XModifiable xModified = (XModifiable) UnoRuntime.queryInterface(XModifiable.class, document);
         return xModified.isModified();
     }
 
+    /**
+     * Gets the Default extension used by the application
+     * @return A string with the default extension, allways returns .odt
+     */
     public String getDefaultExtension()
     {
         return OPENOFFICE_EXTENSION;
