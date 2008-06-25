@@ -261,7 +261,7 @@ public class WB4ImpressTest
             WB4Impress writer = new WB4Impress(this.xContext);
             String guid = writer.getGuid();
             File file = writer.saveHtmlPrepareAndGetFiles(guid);
-            Assert.assertEquals(file.exists(), 3);
+            Assert.assertEquals(file.exists(), true);
         }
         catch (WBException wbe)
         {
