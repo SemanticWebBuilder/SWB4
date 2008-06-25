@@ -1,43 +1,42 @@
 <html>
-<head>
-<meta http-equiv=expires content=0>
-<![if !ppt]><script>
-<!--
-	var ver = 0, appVer = navigator.appVersion, msie = appVer.indexOf( "MSIE " )
-	var msieWin31 = (appVer.indexOf( "Windows 3.1" ) >= 0), isMac = (appVer.indexOf("Macintosh") >= 0)
-	if( msie >= 0 )
-		ver = parseFloat( appVer.substring( msie+5, appVer.indexOf ( ";", msie ) ) )
-	else
-		ver = parseInt( appVer )
-	browserSupported=0
-	if( !isMac && ver >= 4 && msie >= 0 ) {
-		browserSupported=1
-		window.location.replace( 'frame.html'+document.location.hash )
-	}
-//-->
-</script>
-<![endif]>
-</head>
-
-<body>
-<script><!--
-
-if( browserSupported )
-	document.writeln('<div style="visibility:hidden">');
-
-//--></script><font face=Arial size=2><b>
-
-<p>Esta presentaci&oacute;n contiene elementos que su explorador no puede mostrar
-correctamente.</p>
-
-<p>Si desea continuar, haga clic <a href="frame.html">aqu&iacute;</a>.</p>
-
-</b></font><script><!--
-
-if( browserSupported )
-	document.writeln('</div>');
-
+    <head>
+        <meta http-equiv=expires content=0>
+        <![if !ppt]><script>
+            <!--
+            var ver = 0, appVer = navigator.appVersion, msie = appVer.indexOf( "MSIE " )
+            var msieWin31 = (appVer.indexOf( "Windows 3.1" ) >= 0), isMac = (appVer.indexOf("Macintosh") >= 0)
+            if( msie >= 0 )
+                ver = parseFloat( appVer.substring( msie+5, appVer.indexOf ( ";", msie ) ) )
+            else
+                ver = parseInt( appVer )
+            browserSupported=0
+            if( !isMac && ver >= 4 && msie >= 0 ) {
+                browserSupported=1
+                window.location.replace( 'frame.html'+document.location.hash )
+            }
+            //-->
+        </script>
+        <![endif]>
+    </head>
+    
+    <body>
+        <script><!--
+            
+            if( browserSupported )
+                document.writeln('<div style="visibility:hidden">');
+            
+            //-->
+        </script>
+        <p>Esta presentaci&oacute;n contiene elementos que su explorador no puede mostrar
+        correctamente.</p>
+        <p>Si desea continuar, haga clic <a href="frame.html">aqu&iacute;</a>.</p>
+        <script>
+            <!--
+            
+            if( browserSupported )
+                document.writeln('</div>');
+            
 //--></script>
-</body>
-
+    </body>
+    
 </html>
