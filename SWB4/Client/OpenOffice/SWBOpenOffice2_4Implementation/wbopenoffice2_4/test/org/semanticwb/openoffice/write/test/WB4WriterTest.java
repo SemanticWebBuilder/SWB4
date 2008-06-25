@@ -28,7 +28,7 @@ import org.semanticwb.openoffice.DocumentType;
 import org.semanticwb.openoffice.OfficeDocumentHelper;
 import org.semanticwb.openoffice.SaveDocumentFormat;
 import org.semanticwb.openoffice.WBException;
-import org.semanticwb.openoffice.writer.WB4Application;
+import org.semanticwb.openoffice.writer.WB4WriterApplication;
 import org.semanticwb.openoffice.writer.WB4Writer;
 import static org.junit.Assert.*;
 
@@ -225,7 +225,7 @@ public class WB4WriterTest
         try
         {
             WB4Writer writer = new WB4Writer(this.xContext);
-            File actual = writer.saveAs(tempDir, SaveDocumentFormat.HTML);
+            File actual=writer.saveAs(tempDir, SaveDocumentFormat.HTML);
             Assert.assertTrue(actual.exists());
         }
         catch (WBException wbe)
@@ -304,7 +304,7 @@ public class WB4WriterTest
     @Ignore
     public void openTest()
     {
-        WB4Application writer = new WB4Application(this.xContext);
+        WB4WriterApplication writer = new WB4WriterApplication(this.xContext);
         OfficeDocumentHelper.open(writer);
 
     }
@@ -314,7 +314,7 @@ public class WB4WriterTest
     public void openDocumentTest()
     {
 
-        WB4Application writer = new WB4Application(this.xContext);
+        WB4WriterApplication writer = new WB4WriterApplication(this.xContext);
         try
         {
             writer.open(sUrlDestiny);
@@ -327,12 +327,12 @@ public class WB4WriterTest
     }
 
     @Test    
-    public void getAttachtmentsTest()
+    public void getAllAttachmentsTest()
     {
         try
         {
             WB4Writer writer = new WB4Writer(this.xContext);
-            List<File> attachments=writer.getAttachtments();
+            List<File> attachments=writer.getAllAttachments();
             Assert.assertEquals(attachments.size(),2);
         }
         catch (WBException wbe)
@@ -345,7 +345,7 @@ public class WB4WriterTest
     @Ignore
     public void openDocumentExceptionTest() throws WBException
     {
-        WB4Application writer = new WB4Application(this.xContext);
+        WB4WriterApplication writer = new WB4WriterApplication(this.xContext);
         writer.open(new File("c:\\demo.doc"));
     }
 }
