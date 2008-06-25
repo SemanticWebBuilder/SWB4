@@ -141,22 +141,17 @@ public class WB4Impress extends OfficeDocument
             din.readFully(imageButtons);
             in.close();
 
-
+            StringBuilder scriptBuilder=new StringBuilder();
             in = WB4Impress.class.getResourceAsStream("script.js");
-            total = 0;
+            
             read = in.read(buffer);
             while (read != -1)
             {
-                total += read;
+                scriptBuilder.append(new String(buffer,0,read,"UTF-8"));                
                 read = in.read(buffer);
             }
             in.close();
-            script = new byte[total];
-
-            in = WB4Impress.class.getResourceAsStream("script.js");
-            din = new DataInputStream(in);
-            din.readFully(script);
-            in.close();
+            script = scriptBuilder.toString().getBytes();
 
         }
         catch (java.io.IOException ioe)
@@ -768,9 +763,16 @@ public class WB4Impress extends OfficeDocument
                 String number = file.getName().substring(posInit + 3, posEnd);
                 try
                 {
-                    String content = "<html><body><center><img src=\"img" + number + ".jpg\"></center></body></html>";
+                    StringBuilder content = new StringBuilder("<html><head><script src=script.js></script>\r\n");
+                    content.append("<script><!--\r\n");
+                    content.append("if( !IsNts() ) Redirect( \"PPTSld\" );\r\n");
+                    content.append("//--></script>\r\n");
+                    content.append("</head> <body onclick=\"DocumentOnClick()\" onresize=\"_RSW()\" onload=\"LoadSld()\"");
+                    content.append("onkeypress=\"_KPH()\">");
+                    content.append("<div id=SlideObj class=sld>");
+                    content.append("<center><img src=\"img"+  number +".jpg\"></center></div></body></html>");
                     FileOutputStream out = new FileOutputStream(file);
-                    out.write(content.getBytes());
+                    out.write(content.toString().getBytes());
                     out.close();
                 }
                 catch (Exception ex)
@@ -897,17 +899,19 @@ public class WB4Impress extends OfficeDocument
         }
         return titles;
     }
+
     private String corrigeSubEsquema(String subSquema)
     {
-        String target=" target=\"PPTSld\" ";
-        int posInit=subSquema.indexOf("<a");
-        if(posInit!=-1)
+        String target = " target=\"PPTSld\" ";
+        int posInit = subSquema.indexOf("<a");
+        if (posInit != -1)
         {
-            subSquema=subSquema.substring(0,posInit+2)+target+subSquema.substring(posInit+2);
+            subSquema = subSquema.substring(0, posInit + 2) + target + subSquema.substring(posInit + 2);
         }
         return subSquema;
-        
+
     }
+
     private String getSubSquema(int iSlide, File htmlfile)
     {
         File dir = htmlfile.getParentFile();
@@ -923,25 +927,25 @@ public class WB4Impress extends OfficeDocument
                 StringBuilder content = new StringBuilder();
                 while (read != -1)
                 {
-                    content.append(new String(buffer, 0, read,"UTF-8"));
+                    content.append(new String(buffer, 0, read, "UTF-8"));
                     read = in.read(buffer);
                 }
                 in.close();
-                int posInit=content.indexOf("<ul>");
-                int posFin=content.indexOf("</ul>");
-                if(posInit!=-1 && posFin!=-1)
-                {                    
-                    subSquema=content.substring(posInit,posFin+5);
+                int posInit = content.indexOf("<ul>");
+                int posFin = content.indexOf("</ul>");
+                if (posInit != -1 && posFin != -1)
+                {
+                    subSquema = content.substring(posInit, posFin + 5);
                 }
-                subSquema=corrigeSubEsquema(subSquema);
+                subSquema = corrigeSubEsquema(subSquema);
             }
             catch (Exception ex)
             {
                 ErrorLog.log(ex);
             }
         }
-        subSquema=subSquema.replace("<h2>", "");
-        subSquema=subSquema.replace("</h2>", "");
+        subSquema = subSquema.replace("<h2>", "");
+        subSquema = subSquema.replace("</h2>", "");
         return subSquema;
     }
 

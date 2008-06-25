@@ -1,6 +1,3 @@
-// Cuantos slides tiene la presentación
-//var gMainDoc=new Array(new hrefList("img0.html",1,-1,1),new hrefList("img1.html",1,-1,1),new hrefList("img2.html",1,-1,1),new hrefList("img4.html",1,-1,1));
-
 function LoadSld()
 {
 	var sld=GetObj("SlideObj")
@@ -9,7 +6,7 @@ function LoadSld()
 		return
 	}
 	if( MakeNotesVis() ) return
-	runAnimations = _InitAnimations();
+	//runAnimations = _InitAnimations();
 	if( IsWin("PPTSld") )
 		parent.SldUpdated(GetSldId())
 	g_origSz=parseInt(SlideObj.style.fontSize)
@@ -20,7 +17,7 @@ function LoadSld()
 		InitHLinkArray()
 	if( g_scaleInFrame||(IsWin("PPTSld") && parent.IsFullScrMode() ) )
 		document.body.scroll="no"
-	_RSW()
+	//_RSW()
 	if( IsWin("PPTSld") && parent.IsFullScrMode() )
 		FullScrInit();
 	
@@ -213,7 +210,7 @@ var g_showAnimation = g_supportsPPTHTML && SupportsPPTAnimation() && ( (window.n
 var g_animUseRuntime = false;
 var g_animItemsToHide, g_animInteractiveItems, g_animSlideTime;
 var g_animMainSequence = null;
-var ENDSHOW_MESG="Fin de la presentaci�n, haga clic para salir.", SCREEN_MODE="Frames", gIsEndShow=0, NUM_VIS_SLDS=3, SCRIPT_HREF="script.js", FULLSCR_HREF="fullscreen.html";
+var ENDSHOW_MESG="Fin de la presentación, haga clic para salir.", SCREEN_MODE="Frames", gIsEndShow=0, NUM_VIS_SLDS=3, SCRIPT_HREF="script.js", FULLSCR_HREF="fullscreen.html";
 var gCurSld = gPrevSld = 1, g_offset = 0, gNtsOpen = gHasNts = gOtlTxtExp = 0, gHasNarration = 0, gOtlOpen = true
 window.gPPTHTML=SupportsPPTHTML()
 
@@ -758,7 +755,7 @@ gBtnArr["nb_otlTxtBorder"] = gBtnArr["nb_otlTxt"]= new ImgBtn( "nb_otlTxt","nb_o
 gBtnArr["nb_ntsBorder"].m_flagId= "nb_nts"
 gBtnArr["nb_ntsBorder"].SetFlag = NtsBtnSetFlag
 gBtnArr["nb_otlTxt"].ChangeIcon= GetOtlTxtState
-var sNext="Siguiente",sPrev="Anterior",sEnd="Fin de la presentaci�n",sFont="Arial",sArrow="Flecha",sFreeform="Forma libre",sRect="Rect�ngulo",sOval="�valo"
+var sNext="Siguiente",sPrev="Anterior",sEnd="Fin de la presentación",sFont="Arial",sArrow="Flecha",sFreeform="Forma libre",sRect="Rect�ngulo",sOval="�valo"
 function ShowMenu()
 {
 	BuildMenu();
