@@ -4,12 +4,9 @@
  */
 package org.semanticwb.openoffice;
 
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -17,8 +14,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 /**
  * An Office documents is an abstraction of a document that can be published
@@ -27,7 +22,7 @@ import java.util.zip.ZipOutputStream;
 public abstract class OfficeDocument
 {
 
-    private final static int BUFFER_SIZE = 1024;
+    //private final static int BUFFER_SIZE = 1024;
 
     /**
      * Gets the Application Version
