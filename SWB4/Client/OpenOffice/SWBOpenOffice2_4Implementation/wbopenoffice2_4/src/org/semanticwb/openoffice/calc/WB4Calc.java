@@ -39,6 +39,9 @@ import org.semanticwb.openoffice.WBOfficeException;
 import static org.semanticwb.openoffice.util.FileUtil.saveContent;
 import static org.semanticwb.openoffice.util.FileUtil.loadResourceAsString;
 import static org.semanticwb.openoffice.util.FileUtil.loadFileAsString;
+import static org.semanticwb.openoffice.util.FileUtil.getExtension;
+import static org.semanticwb.openoffice.util.FileUtil.getPathURL;
+import static org.semanticwb.openoffice.util.FileUtil.getFileFromURL;
 
 /**
  * Class to wrap a Open Office Calc Document
@@ -47,20 +50,26 @@ import static org.semanticwb.openoffice.util.FileUtil.loadFileAsString;
 public class WB4Calc extends OfficeDocument
 {
 
+    private static final String CALC_FORMAT = "Calc8";
+    private static final String DESKTOP_NOT_FOUND = "The desktop was not found";
+    private static final String DESKTOP_PATH = "com.sun.star.frame.Desktop";
+    private static final String HTML_EXPORT_FORMAT = "HTML (StarCalc)";
+    private static final String INDEXOFBOUNDERROR = "There was an error getting custom properties";
+    private static final String ERROR_DOCUMENT_READ_ONLY = "The document is read only";
+    private static final String OFFICE97_FORMAT = "MS Excel 97";
     private static final String OPENOFFICE_EXTENSION = ".ods";
     private static final String EXCEL_EXTENSION = ".xls";
     private static final String HTML_EXTENSION = ".html";
-    private static final String ERROR_NO_SAVE = "No se puede almacenar el documento";
+    private static final String ERROR_NO_SAVE = "The document can not be saved";
     private static final String FILTER_NAME = "FilterName";
     private static final String OVERRIDE_OPTION = "Overwrite";
-    private static final String SCHEMA_FILE = "file:///";
     private static final String tabstrip;
     private static final NumberFormat formatter = new DecimalFormat("000");
     private final XComponent document;
 
     static
-    {        
-        tabstrip=loadResourceAsString(WB4Calc.class,"tabstrip.htm");        
+    {
+        tabstrip = loadResourceAsString(WB4Calc.class, "tabstrip.htm");
     }
 
     /**
@@ -85,13 +94,13 @@ public class WB4Calc extends OfficeDocument
         try
         {
             Object desktop = serviceManager.createInstanceWithContext(
-                    "com.sun.star.frame.Desktop", m_xContext);
+                    DESKTOP_PATH, m_xContext);
             XDesktop xdesktop = (XDesktop) UnoRuntime.queryInterface(XDesktop.class, desktop);
             document = xdesktop.getCurrentComponent();
         }
         catch (com.sun.star.uno.Exception e)
         {
-            throw new WBOfficeException("Error al obtener el escritorio de Open Office", e);
+            throw new WBOfficeException(DESKTOP_NOT_FOUND, e);
         }
     }
 
@@ -203,7 +212,7 @@ public class WB4Calc extends OfficeDocument
             }
             catch (com.sun.star.lang.ArrayIndexOutOfBoundsException aibe)
             {
-                throw new WBOfficeException("No se puede actualizar la información asociada a la publicación del contenido", aibe);
+                throw new WBOfficeException(INDEXOFBOUNDERROR, aibe);
             }
         }
         return properties;
@@ -232,12 +241,7 @@ public class WB4Calc extends OfficeDocument
         XStorable xStorable = (XStorable) UnoRuntime.queryInterface(XStorable.class, document);
         if (xStorable.hasLocation())
         {
-            String path = xtd.getURL();
-            if (path.startsWith(SCHEMA_FILE))
-            {
-                path = path.substring(8);
-            }
-            return new File(path);
+            return getFileFromURL(xtd.getURL());
         }
         else
         {
@@ -264,7 +268,7 @@ public class WB4Calc extends OfficeDocument
                 }
                 else
                 {
-                    throw new WBAlertException("No se puede almacenar el documento por que es de sólo lectura");
+                    throw new WBAlertException(ERROR_DOCUMENT_READ_ONLY);
                 }
             }
 
@@ -318,12 +322,7 @@ public class WB4Calc extends OfficeDocument
         try
         {
             File docFile = this.getLocalPath();
-            int index = docFile.getName().lastIndexOf(".");
-            String extension = null;
-            if (index != -1)
-            {
-                extension = docFile.getName().substring(index);
-            }
+            String extension = getExtension(docFile);
             String name = null;
             if (extension == null)
             {
@@ -334,11 +333,11 @@ public class WB4Calc extends OfficeDocument
                 name = docFile.getName().replace(extension, OPENOFFICE_EXTENSION);
             }
             // guarda el documento en .doc en directorio Temporal
-            File DocFile = new File(dir.getPath() + File.separator + name);
+            File DocFile = new File(dir.getPath() + File.separatorChar + name);
             PropertyValue[] storeProps = new PropertyValue[2];
             storeProps[0] = new PropertyValue();
             storeProps[0].Name = FILTER_NAME;
-            storeProps[0].Value = "Calc8";
+            storeProps[0].Value = CALC_FORMAT;
 
             storeProps[1] = new PropertyValue();
             storeProps[1].Name = OVERRIDE_OPTION;
@@ -348,7 +347,8 @@ public class WB4Calc extends OfficeDocument
             {
                 dir.mkdirs();
             }
-            String url = SCHEMA_FILE + DocFile.getPath().replace('\\', '/');
+
+            String url = getPathURL(DocFile);
             xStorable.storeToURL(url, storeProps);
             return DocFile;
         }
@@ -374,12 +374,7 @@ public class WB4Calc extends OfficeDocument
         try
         {
             File docFile = this.getLocalPath();
-            int index = docFile.getName().lastIndexOf(".");
-            String extension = null;
-            if (index != -1)
-            {
-                extension = docFile.getName().substring(index);
-            }
+            String extension = getExtension(docFile);
             String name = null;
             if (extension == null)
             {
@@ -390,11 +385,11 @@ public class WB4Calc extends OfficeDocument
                 name = docFile.getName().replace(extension, EXCEL_EXTENSION);
             }
             // guarda el documento en .doc en directorio Temporal
-            File DocFile = new File(dir.getPath() + File.separator + name);
+            File DocFile = new File(dir.getPath() + File.separatorChar + name);
             PropertyValue[] storeProps = new PropertyValue[2];
             storeProps[0] = new PropertyValue();
             storeProps[0].Name = FILTER_NAME;
-            storeProps[0].Value = "MS Excel 97";
+            storeProps[0].Value = OFFICE97_FORMAT;
 
             storeProps[1] = new PropertyValue();
             storeProps[1].Name = OVERRIDE_OPTION;
@@ -404,7 +399,7 @@ public class WB4Calc extends OfficeDocument
             {
                 dir.mkdirs();
             }
-            String url = SCHEMA_FILE + DocFile.getPath().replace('\\', '/');
+            String url = getPathURL(DocFile);
             xStorable.storeToURL(url, storeProps);
             return DocFile;
         }
@@ -439,12 +434,12 @@ public class WB4Calc extends OfficeDocument
             storeProps[1].Value = true;
 
             XStorable xStorable = (XStorable) UnoRuntime.queryInterface(XStorable.class, document);
-            String url = SCHEMA_FILE + file.getPath().replace('\\', '/');
+            String url = getPathURL(file);
             xStorable.storeAsURL(url, storeProps);
         }
         catch (IOException wbe)
         {
-            throw new WBOfficeException("No se puede gardar el documento", wbe);
+            throw new WBOfficeException(ERROR_NO_SAVE, wbe);
         }
     }
 
@@ -468,14 +463,14 @@ public class WB4Calc extends OfficeDocument
             File HTMLfile;
             if (docFile.getName().endsWith(OPENOFFICE_EXTENSION))
             {
-                HTMLfile = new File(dir.getPath() + File.separator + docFile.getName().replace(OPENOFFICE_EXTENSION, HTML_EXTENSION));
+                HTMLfile = new File(dir.getPath() + File.separatorChar + docFile.getName().replace(OPENOFFICE_EXTENSION, HTML_EXTENSION));
                 String name = docFile.getName().replace(OPENOFFICE_EXTENSION, EXCEL_EXTENSION);
                 // guarda el documento en .doc en directorio Temporal
-                File DocFile = new File(dir.getPath() + File.separator + name);
+                File DocFile = new File(dir.getPath() + File.separatorChar + name);
                 PropertyValue[] storeProps = new PropertyValue[2];
                 storeProps[0] = new PropertyValue();
                 storeProps[0].Name = FILTER_NAME;
-                storeProps[0].Value = "MS Excel 97";
+                storeProps[0].Value = OFFICE97_FORMAT;
 
                 storeProps[1] = new PropertyValue();
                 storeProps[1].Name = OVERRIDE_OPTION;
@@ -486,18 +481,18 @@ public class WB4Calc extends OfficeDocument
                 {
                     dir.mkdirs();
                 }
-                String url = SCHEMA_FILE + DocFile.getPath().replace('\\', '/');
+                String url = getPathURL(DocFile);
                 xStorable.storeToURL(url, storeProps);
             }
             else
             {
-                HTMLfile = new File(dir.getPath() + File.separator + docFile.getName().replace(EXCEL_EXTENSION, HTML_EXTENSION));
+                HTMLfile = new File(dir.getPath() + File.separatorChar + docFile.getName().replace(EXCEL_EXTENSION, HTML_EXTENSION));
             }
 
             PropertyValue[] storeProps = new PropertyValue[2];
             storeProps[0] = new PropertyValue();
             storeProps[0].Name = FILTER_NAME;
-            storeProps[0].Value = "HTML (StarCalc)";
+            storeProps[0].Value = HTML_EXPORT_FORMAT;
 
             storeProps[1] = new PropertyValue();
             storeProps[1].Name = OVERRIDE_OPTION;
@@ -509,7 +504,7 @@ public class WB4Calc extends OfficeDocument
             {
                 dir.mkdirs();
             }
-            String url = SCHEMA_FILE + HTMLfile.getPath().replace('\\', '/');
+            String url = getPathURL(HTMLfile);
             xStorable.storeToURL(url, storeProps);
             return HTMLfile;
         }
@@ -545,7 +540,7 @@ public class WB4Calc extends OfficeDocument
             }
             catch (com.sun.star.lang.ArrayIndexOutOfBoundsException aibe)
             {
-                throw new WBOfficeException("No se puede actualizar la información asociada a la publicación del contenido", aibe);
+                throw new WBOfficeException(INDEXOFBOUNDERROR, aibe);
             }
             index++;
         }
@@ -586,7 +581,7 @@ public class WB4Calc extends OfficeDocument
 
     private void createTabStrip(File dir, Map<String, String> sheets, String filecontentName)
     {
-        File tabStrip = new File(dir.getPath() + "/tabstrip.html");
+        File tabStrip = new File(dir.getPath() + File.separatorChar + "tabstrip.html");
         StringBuilder sheetstable = new StringBuilder();
         for (String sheetTitle : sheets.keySet())
         {
@@ -595,13 +590,13 @@ public class WB4Calc extends OfficeDocument
         }
         String tabStripFinal = tabstrip.replace("[file]", filecontentName);
         tabStripFinal = tabStripFinal.replace("[sheetstable]", sheetstable.toString());
-        saveContent(tabStripFinal, tabStrip);        
+        saveContent(tabStripFinal, tabStrip);
     }
 
     private void saveTable(String table, File dir, String name)
     {
-        File sheet = new File(dir.getPath() + "/" + name + ".html");
-        saveContent(table, sheet);        
+        File sheet = new File(dir.getPath() + File.separatorChar + name + HTML_EXTENSION);
+        saveContent(table, sheet);
     }
 
     private Map<String, String> createSheets(File htmlFile)
@@ -611,7 +606,7 @@ public class WB4Calc extends OfficeDocument
         Map<String, String> sheets = new HashMap<String, String>();
         try
         {
-            String builder=loadFileAsString(htmlFile);            
+            String builder = loadFileAsString(htmlFile);
             int iSheet = 0;
             int posInit = 0;
             while (posInit >= 0)
