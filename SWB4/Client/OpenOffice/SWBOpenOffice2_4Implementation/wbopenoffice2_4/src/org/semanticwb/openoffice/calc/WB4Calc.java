@@ -54,19 +54,20 @@ public class WB4Calc extends OfficeDocument
     private static final String FILTER_NAME = "FilterName";
     private static final String OVERRIDE_OPTION = "Overwrite";
     private static final String SCHEMA_FILE = "file:///";
-    private final XComponent document;
-    private static String tabstrip = "";
+    private static final String tabstrip;
     private static final NumberFormat formatter = new DecimalFormat("000");
+    private final XComponent document;
 
     static
     {
+        StringBuilder builder = new StringBuilder();
         try
         {
             byte[] buffer = new byte[2048];
             InputStream in = WB4Calc.class.getResourceAsStream("tabstrip.htm");
 
             int read = in.read(buffer);
-            StringBuilder builder = new StringBuilder();
+
             while (read != -1)
             {
                 String temp = new String(buffer, 0, read, "UTF-8");
@@ -74,12 +75,12 @@ public class WB4Calc extends OfficeDocument
                 read = in.read(buffer);
             }
             in.close();
-            tabstrip = builder.toString();
         }
         catch (java.io.IOException ioe)
         {
             ErrorLog.log(ioe);
         }
+        tabstrip = builder.toString();
     }
 
     /**
@@ -582,7 +583,7 @@ public class WB4Calc extends OfficeDocument
         {
             throw new IllegalArgumentException();
         }
-        Map<String,String> sheets = createSheets(htmlFile);
+        Map<String, String> sheets = createSheets(htmlFile);
         createTabStrip(htmlFile.getParentFile(), sheets, htmlFile.getName());
         changeContentToViewTabStrip(htmlFile);
     // TODO: Falta implementar    
@@ -590,13 +591,13 @@ public class WB4Calc extends OfficeDocument
 
     private void changeContentToViewTabStrip(File htmlFile)
     {
-        StringBuilder content = new StringBuilder("<html>\r\n");        
+        StringBuilder content = new StringBuilder("<html>\r\n");
         content.append("<frameset rows=\"*,39\" border=0 width=0 frameborder=no framespacing=0>\r\n");
         content.append("<frame src=\"sheet000.html\" name=\"frSheet\">\r\n");
         content.append("<frame src=\"tabstrip.html\" name=\"frTabs\" marginwidth=0 marginheight=0>\r\n");
         content.append("<noframes>\r\n");
         content.append("<body>\r\n");
-        content.append("<p>Esta página utiliza marcos que su explorador no admite.</p>\r\n");        
+        content.append("<p>Esta página utiliza marcos que su explorador no admite.</p>\r\n");
         content.append("</body></noframes>\r\n");
         content.append("</frameset>\r\n");
         content.append("</html>\r\n");
@@ -613,14 +614,14 @@ public class WB4Calc extends OfficeDocument
 
     }
 
-    private void createTabStrip(File dir, Map<String,String> sheets, String filecontentName)
+    private void createTabStrip(File dir, Map<String, String> sheets, String filecontentName)
     {
         File tabStrip = new File(dir.getPath() + "/tabstrip.html");
-        StringBuilder sheetstable = new StringBuilder();        
+        StringBuilder sheetstable = new StringBuilder();
         for (String sheetTitle : sheets.keySet())
         {
-            String sheetName=sheets.get(sheetTitle);
-            sheetstable.append("<td bgcolor=\"#FFFFFF\" nowrap><b><small><small>&nbsp;<a href=\"" + sheetName + ".html\" target=\"frSheet\"><font face=\"Arial\" color=\"#000000\">"+sheetTitle+"</font></a>&nbsp;</small></small></b></td>\r\n");
+            String sheetName = sheets.get(sheetTitle);
+            sheetstable.append("<td bgcolor=\"#FFFFFF\" nowrap><b><small><small>&nbsp;<a href=\"" + sheetName + ".html\" target=\"frSheet\"><font face=\"Arial\" color=\"#000000\">" + sheetTitle + "</font></a>&nbsp;</small></small></b></td>\r\n");
         }
         String tabStripFinal = tabstrip.replace("[file]", filecontentName);
         tabStripFinal = tabStripFinal.replace("[sheetstable]", sheetstable.toString());
@@ -650,12 +651,12 @@ public class WB4Calc extends OfficeDocument
             ErrorLog.log(ex);
         }
     }
-    
-    private Map<String,String> createSheets(File htmlFile)
+
+    private Map<String, String> createSheets(File htmlFile)
     {
         XSpreadsheetDocument xSpreadsheetDocument = (XSpreadsheetDocument) UnoRuntime.queryInterface(XSpreadsheetDocument.class, this.document);
         XSpreadsheets xSpreadsheets = xSpreadsheetDocument.getSheets();
-        Map<String,String> sheets = new HashMap<String,String>();
+        Map<String, String> sheets = new HashMap<String, String>();
         try
         {
             byte[] buffer = new byte[2048];
@@ -684,8 +685,8 @@ public class WB4Calc extends OfficeDocument
                         String table = builder.substring(posInit, posFin + 8);
                         String name = "sheet" + formatter.format(iSheet);
                         saveTable(table, htmlFile.getParentFile(), name);
-                        String title=xSpreadsheets.getElementNames()[iSheet];
-                        sheets.put(title,name);
+                        String title = xSpreadsheets.getElementNames()[iSheet];
+                        sheets.put(title, name);
                         iSheet++;
                     }
                 }
