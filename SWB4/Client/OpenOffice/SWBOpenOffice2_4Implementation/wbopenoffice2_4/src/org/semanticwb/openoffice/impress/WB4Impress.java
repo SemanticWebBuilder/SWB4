@@ -62,102 +62,86 @@ public class WB4Impress extends OfficeDocument
     private static final String FILTER_NAME = "FilterName";
     private static final String OVERWRITE = "Overwrite";
     private static final String SCHEMA_FILE = "file:///";
-    //private final XComponentContext m_xContext;
+    private static final String frameContentHTML;
+    private static final String ContentHTML;
+    private static final String fullscreenHTML;
+    private static final String outline;    
+    private static final byte[] script;
+    
     private final XComponent document;
-    private static String frameContentHTML;
-    private static String ContentHTML;
-    private static String fullscreenHTML;
-    private static String outline;
-    private static byte[] imageButtons;
-    private static byte[] script;
 
     static
     {
+        StringBuilder frameContentHTMLBuilder = new StringBuilder();
+        StringBuilder outlineBuilder=new StringBuilder();
+        StringBuilder contentBuilder = new StringBuilder();
+        StringBuilder fullscreenHTMLBuilder= new StringBuilder();
+        StringBuilder scriptBuilder = new StringBuilder();
         try
         {
             byte[] buffer = new byte[2048];
             InputStream in = WB4Impress.class.getResourceAsStream("frame.html");
 
             int read = in.read(buffer);
-            StringBuilder builder = new StringBuilder();
+
             while (read != -1)
             {
                 String temp = new String(buffer, 0, read, "UTF-8");
-                builder.append(temp);
+                frameContentHTMLBuilder.append(temp);
                 read = in.read(buffer);
             }
             in.close();
-            frameContentHTML = builder.toString();
 
             in = WB4Impress.class.getResourceAsStream("outline.html");
-            read = in.read(buffer);
-            builder = new StringBuilder();
+            read = in.read(buffer);            
             while (read != -1)
             {
                 String temp = new String(buffer, 0, read);
-                builder.append(temp);
+                outlineBuilder.append(temp);
                 read = in.read(buffer);
             }
-            in.close();
-            outline = builder.toString();
+            in.close();            
 
             in = WB4Impress.class.getResourceAsStream("content.html");
-            read = in.read(buffer);
-            builder = new StringBuilder();
+            read = in.read(buffer);            
             while (read != -1)
             {
                 String temp = new String(buffer, 0, read);
-                builder.append(temp);
+                contentBuilder.append(temp);
                 read = in.read(buffer);
             }
-            in.close();
-            ContentHTML = builder.toString();
+            in.close();            
 
             in = WB4Impress.class.getResourceAsStream("fullscreen.html");
             read = in.read(buffer);
-            builder = new StringBuilder();
+            fullscreenHTMLBuilder = new StringBuilder();
             while (read != -1)
             {
                 String temp = new String(buffer, 0, read);
-                builder.append(temp);
+                fullscreenHTMLBuilder.append(temp);
                 read = in.read(buffer);
             }
-            in.close();
-            fullscreenHTML = builder.toString();
+            in.close();            
 
-            in = WB4Impress.class.getResourceAsStream("buttons.gif");
-            int total = 0;
-            read = in.read(buffer);
-            while (read != -1)
-            {
-                total += read;
-                read = in.read(buffer);
-            }
-            in.close();
-            imageButtons = new byte[total];
-
-            in = WB4Impress.class.getResourceAsStream("buttons.gif");
-            DataInputStream din = new DataInputStream(in);
-            din.readFully(imageButtons);
-            in.close();
-
-            StringBuilder scriptBuilder = new StringBuilder();
             in = WB4Impress.class.getResourceAsStream("script.js");
-
             read = in.read(buffer);
             while (read != -1)
             {
                 scriptBuilder.append(new String(buffer, 0, read, "UTF-8"));
                 read = in.read(buffer);
             }
-            in.close();
-            script = scriptBuilder.toString().getBytes();
+            in.close();            
 
         }
         catch (java.io.IOException ioe)
         {
             ErrorLog.log(ioe);
         }
+        script = scriptBuilder.toString().getBytes();
+        frameContentHTML = frameContentHTMLBuilder.toString();
+        outline = outlineBuilder.toString();
+        fullscreenHTML = fullscreenHTMLBuilder.toString();
+        ContentHTML = contentBuilder.toString();
     }
 
     /**
@@ -867,8 +851,16 @@ public class WB4Impress extends OfficeDocument
         File buttons = new File(dir.getPath() + "/" + "buttons.gif");
         try
         {
+            byte[] buffer=new byte[2048];
             FileOutputStream out = new FileOutputStream(buttons);
-            out.write(imageButtons);
+            InputStream in = WB4Impress.class.getResourceAsStream("buttons.gif");
+            int read=in.read(buffer);
+            while(read!=-1)
+            {
+                out.write(buffer,0,read);
+                read=in.read(buffer);
+            }
+            in.close();
             out.close();
         }
         catch (FileNotFoundException fnfe)
