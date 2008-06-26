@@ -260,8 +260,8 @@ public class WB4WriterTest
         {
             WB4Writer writer = new WB4Writer(this.xContext);
             String guid = writer.getGuid();
-            List<File> files = writer.saveHtmlPrepareAndGetFiles(guid);
-            Assert.assertEquals(files.size(), 3);
+            File file = writer.saveHtmlPrepareAndGetFiles(guid);
+            Assert.assertEquals(file.exists(), true);
         }
         catch (WBException wbe)
         {
@@ -269,7 +269,7 @@ public class WB4WriterTest
         }
     }
 
-    @Test
+    /*@Test
     @Ignore
     public void getZipFileTest()
     {
@@ -283,7 +283,7 @@ public class WB4WriterTest
         {
             Assert.fail(wbe.getMessage());
         }
-    }
+    }*/
 
     @Test
     @Ignore
