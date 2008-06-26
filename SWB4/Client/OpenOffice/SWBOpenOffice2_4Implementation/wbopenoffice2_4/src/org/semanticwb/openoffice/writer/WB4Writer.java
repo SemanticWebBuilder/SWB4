@@ -197,7 +197,7 @@ public class WB4Writer extends OfficeDocument
         return DocumentType.WORD;
     }
 
-   /**
+    /**
      * Gets the path of the fisical document
      * @return A File with the fisical path of the document
      * @throws org.semanticwb.openoffice.NoHasLocationException If the document has not been saved
@@ -288,7 +288,7 @@ public class WB4Writer extends OfficeDocument
         }
     }
 
-     /**
+    /**
      * Save the document in selected a format
      * @param dir The path of the file
      * @param format The SaveDocumentFormat to use
@@ -323,7 +323,7 @@ public class WB4Writer extends OfficeDocument
      */
     private File saveAsOpenOffice(File dir) throws WBException
     {
-        if(dir.isFile())
+        if (dir.isFile())
         {
             throw new IllegalArgumentException();
         }
@@ -379,7 +379,7 @@ public class WB4Writer extends OfficeDocument
      */
     private File saveAsOffice2003(File dir) throws WBException
     {
-        if(dir.isFile())
+        if (dir.isFile())
         {
             throw new IllegalArgumentException();
         }
@@ -442,7 +442,7 @@ public class WB4Writer extends OfficeDocument
         }
         try
         {
-            File docFile = this.getLocalPath();           
+            File docFile = this.getLocalPath();
             File HTMLfile;
             if (docFile.getName().endsWith(OPENOFFICE_EXTENSION))
             {
