@@ -5,7 +5,6 @@
 package org.semanticwb.openoffice.calc;
 
 import org.semanticwb.openoffice.*;
-import org.semanticwb.openoffice.calc.*;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.container.NoSuchElementException;
 import com.sun.star.container.XEnumeration;
@@ -20,10 +19,7 @@ import com.sun.star.uno.XComponentContext;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import org.semanticwb.openoffice.OfficeApplication;
-import org.semanticwb.openoffice.OfficeDocument;
-import org.semanticwb.openoffice.WBException;
-import org.semanticwb.openoffice.WBOfficeException;
+
 
 /**
  * 

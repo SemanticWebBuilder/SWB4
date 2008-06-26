@@ -628,7 +628,7 @@ public class WB4Calc extends OfficeDocument
         try
         {
             FileOutputStream out = new FileOutputStream(tabStrip);
-            out.write(tabStripFinal.toString().getBytes());
+            out.write(tabStripFinal.getBytes());
             out.close();
         }
         catch (Exception ex)

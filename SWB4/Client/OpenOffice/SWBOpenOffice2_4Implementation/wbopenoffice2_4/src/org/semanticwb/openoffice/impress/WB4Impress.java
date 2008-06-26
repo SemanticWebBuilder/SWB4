@@ -29,10 +29,8 @@ import com.sun.star.text.XTextRange;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.util.XModifiable;
-import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -65,17 +63,16 @@ public class WB4Impress extends OfficeDocument
     private static final String frameContentHTML;
     private static final String ContentHTML;
     private static final String fullscreenHTML;
-    private static final String outline;    
+    private static final String outline;
     private static final byte[] script;
-    
     private final XComponent document;
 
     static
     {
         StringBuilder frameContentHTMLBuilder = new StringBuilder();
-        StringBuilder outlineBuilder=new StringBuilder();
+        StringBuilder outlineBuilder = new StringBuilder();
         StringBuilder contentBuilder = new StringBuilder();
-        StringBuilder fullscreenHTMLBuilder= new StringBuilder();
+        StringBuilder fullscreenHTMLBuilder = new StringBuilder();
         StringBuilder scriptBuilder = new StringBuilder();
         try
         {
@@ -93,24 +90,24 @@ public class WB4Impress extends OfficeDocument
             in.close();
 
             in = WB4Impress.class.getResourceAsStream("outline.html");
-            read = in.read(buffer);            
+            read = in.read(buffer);
             while (read != -1)
             {
                 String temp = new String(buffer, 0, read);
                 outlineBuilder.append(temp);
                 read = in.read(buffer);
             }
-            in.close();            
+            in.close();
 
             in = WB4Impress.class.getResourceAsStream("content.html");
-            read = in.read(buffer);            
+            read = in.read(buffer);
             while (read != -1)
             {
                 String temp = new String(buffer, 0, read);
                 contentBuilder.append(temp);
                 read = in.read(buffer);
             }
-            in.close();            
+            in.close();
 
             in = WB4Impress.class.getResourceAsStream("fullscreen.html");
             read = in.read(buffer);
@@ -121,7 +118,7 @@ public class WB4Impress extends OfficeDocument
                 fullscreenHTMLBuilder.append(temp);
                 read = in.read(buffer);
             }
-            in.close();            
+            in.close();
 
             in = WB4Impress.class.getResourceAsStream("script.js");
             read = in.read(buffer);
@@ -130,7 +127,7 @@ public class WB4Impress extends OfficeDocument
                 scriptBuilder.append(new String(buffer, 0, read, "UTF-8"));
                 read = in.read(buffer);
             }
-            in.close();            
+            in.close();
 
         }
         catch (java.io.IOException ioe)
@@ -740,10 +737,10 @@ public class WB4Impress extends OfficeDocument
     {
         for (File file : this.getFiles(dir))
         {
-            if (file.getName().startsWith("img") && file.getName().endsWith(".html"))
+            if (file.getName().startsWith("img") && file.getName().endsWith(HTML_EXTENSION))
             {
                 int posInit = file.getName().indexOf("img");
-                int posEnd = file.getName().indexOf(".html");
+                int posEnd = file.getName().indexOf(HTML_EXTENSION);
                 String number = file.getName().substring(posInit + 3, posEnd);
                 try
                 {
@@ -778,7 +775,7 @@ public class WB4Impress extends OfficeDocument
         }
         catch (Exception e)
         {
-
+            ErrorLog.log(e);
         }
     }
 
@@ -792,7 +789,7 @@ public class WB4Impress extends OfficeDocument
         StringBuilder builder = new StringBuilder("var gMainDoc=new Array(");
         for (File file : files)
         {
-            if (file.getName().startsWith("img") && file.getName().endsWith(".html"))
+            if (file.getName().startsWith("img") && file.getName().endsWith(HTML_EXTENSION))
             {
                 builder.append("new hrefList(\"" + file.getName() + "\",1,-1,1),");
             }
@@ -811,12 +808,9 @@ public class WB4Impress extends OfficeDocument
             out.flush();
             out.close();
         }
-        catch (FileNotFoundException fnfe)
+        catch (Exception ex)
         {
-
-        }
-        catch (java.io.IOException fnfe)
-        {
+            ErrorLog.log(ex);
         }
     }
 
@@ -833,12 +827,9 @@ public class WB4Impress extends OfficeDocument
             out.write(fullscreenHTML.getBytes());
             out.close();
         }
-        catch (FileNotFoundException fnfe)
+        catch (Exception ex)
         {
-
-        }
-        catch (java.io.IOException fnfe)
-        {
+            ErrorLog.log(ex);
         }
     }
 
@@ -851,24 +842,21 @@ public class WB4Impress extends OfficeDocument
         File buttons = new File(dir.getPath() + "/" + "buttons.gif");
         try
         {
-            byte[] buffer=new byte[2048];
+            byte[] buffer = new byte[2048];
             FileOutputStream out = new FileOutputStream(buttons);
             InputStream in = WB4Impress.class.getResourceAsStream("buttons.gif");
-            int read=in.read(buffer);
-            while(read!=-1)
+            int read = in.read(buffer);
+            while (read != -1)
             {
-                out.write(buffer,0,read);
-                read=in.read(buffer);
+                out.write(buffer, 0, read);
+                read = in.read(buffer);
             }
             in.close();
             out.close();
         }
-        catch (FileNotFoundException fnfe)
+        catch (Exception ex)
         {
-
-        }
-        catch (java.io.IOException fnfe)
-        {
+            ErrorLog.log(ex);
         }
     }
 
@@ -886,7 +874,7 @@ public class WB4Impress extends OfficeDocument
             }
             catch (com.sun.star.uno.Exception ex)
             {
-
+                ErrorLog.log(ex);
             }
         }
         return titles;
@@ -908,7 +896,7 @@ public class WB4Impress extends OfficeDocument
     {
         File dir = htmlfile.getParentFile();
         String subSquema = "";
-        File textSquema = new File(dir.getPath() + "/text" + iSlide + ".html");
+        File textSquema = new File(dir.getPath() + "/text" + iSlide + HTML_EXTENSION);
         if (textSquema.exists())
         {
             try
@@ -977,8 +965,9 @@ public class WB4Impress extends OfficeDocument
             out.close();
             in.close();
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
+            ErrorLog.log(ex);
         }
     }
 
@@ -1007,12 +996,9 @@ public class WB4Impress extends OfficeDocument
                 out.write(newOutLine.getBytes());
                 out.close();
             }
-            catch (FileNotFoundException fnfe)
+            catch (Exception ex)
             {
-
-            }
-            catch (java.io.IOException fnfe)
-            {
+                ErrorLog.log(ex);
             }
         }
 
@@ -1025,34 +1011,19 @@ public class WB4Impress extends OfficeDocument
         if (htmlFile.isDirectory())
         {
             throw new IllegalArgumentException();
-        }
-
-        String fileName = htmlFile.getName();
-        int posInit = frameContentHTML.indexOf("[file]");
-        if (posInit != -1)
+        }        
+        String htmlFrame = frameContentHTML.replace("[file]", htmlFile.getName());
+        byte[] framecont = htmlFrame.getBytes();
+        File frameFile = new File(htmlFile.getParentFile().getPath() + "/" + "frame.html");        
+        try
         {
-            String htmlFrame = frameContentHTML.substring(0, posInit) + fileName + frameContentHTML.substring(posInit + 6);
-            byte[] framecont = htmlFrame.getBytes();
-            File frameFile = new File(htmlFile.getParentFile().getPath() + "/" + "frame.html");
-            if (frameFile.exists())
-            {
-                frameFile.delete();
-            }
-
-            try
-            {
-                FileOutputStream out = new FileOutputStream(frameFile);
-                out.write(framecont);
-                out.close();
-            }
-            catch (FileNotFoundException fnfe)
-            {
-
-            }
-            catch (java.io.IOException fnfe)
-            {
-            }
-
+            FileOutputStream out = new FileOutputStream(frameFile);
+            out.write(framecont);
+            out.close();
+        }
+        catch (Exception ex)
+        {
+            ErrorLog.log(ex);
         }
     }
 
