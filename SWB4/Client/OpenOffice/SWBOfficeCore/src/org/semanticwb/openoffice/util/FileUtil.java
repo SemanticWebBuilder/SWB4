@@ -19,11 +19,38 @@ import org.semanticwb.openoffice.ErrorLog;
 public final class FileUtil
 {
 
+    private static final String SCHEMA_FILE = "file:///";
     private static byte[] buffer = new byte[2048];
 
     private FileUtil()
     {
 
+    }
+
+    public static File getFileFromURL(String path)
+    {
+        if (path.startsWith(SCHEMA_FILE))
+        {
+            path = path.substring(8);
+        }
+        return new File(path);
+    }
+
+    public static String getPathURL(File file)
+    {
+        String url = SCHEMA_FILE + file.getAbsolutePath().replace(File.separatorChar, '/');
+        return url;
+    }
+
+    public static String getExtension(File file)
+    {
+        String extension = null;
+        int index = file.getName().lastIndexOf(".");
+        if (index != -1)
+        {
+            extension = file.getName().substring(index);
+        }
+        return extension;
     }
 
     public static String loadFileAsString(File file)
@@ -67,11 +94,13 @@ public final class FileUtil
         }
         return builder.toString();
     }
-    public static void saveContent(Class clazz, String resource,File file)
+
+    public static void saveContent(Class clazz, String resource, File file)
     {
-        InputStream in=clazz.getResourceAsStream(resource);
+        InputStream in = clazz.getResourceAsStream(resource);
         saveContent(in, file);
     }
+
     public static void saveContent(StringBuilder content, File file)
     {
         saveContent(content.toString(), file);
@@ -81,8 +110,9 @@ public final class FileUtil
     {
         saveContent(content.getBytes(), file);
     }
+
     public static void copyFile(File attachment, File dir)
-    {   
+    {
         File newFile = new File(dir.getPath() + "/" + attachment.getName());
         if (!newFile.exists())
         {
