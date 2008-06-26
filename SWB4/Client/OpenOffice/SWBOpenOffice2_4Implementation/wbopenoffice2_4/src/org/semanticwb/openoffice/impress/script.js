@@ -6,7 +6,7 @@ function LoadSld()
 		return
 	}
 	if( MakeNotesVis() ) return
-	//runAnimations = _InitAnimations();
+	runAnimations = _InitAnimations();
 	if( IsWin("PPTSld") )
 		parent.SldUpdated(GetSldId())
 	g_origSz=parseInt(SlideObj.style.fontSize)
