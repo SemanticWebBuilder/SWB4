@@ -45,6 +45,9 @@ import org.semanticwb.openoffice.WBOfficeException;
 import static org.semanticwb.openoffice.util.FileUtil.saveContent;
 import static org.semanticwb.openoffice.util.FileUtil.loadResourceAsString;
 import static org.semanticwb.openoffice.util.FileUtil.loadFileAsString;
+import static org.semanticwb.openoffice.util.FileUtil.getExtension;
+import static org.semanticwb.openoffice.util.FileUtil.getFileFromURL;
+import static org.semanticwb.openoffice.util.FileUtil.getPathURL;
 
 /**
  * Class to Wrap a Open Office Impress Document
@@ -53,13 +56,22 @@ import static org.semanticwb.openoffice.util.FileUtil.loadFileAsString;
 public class WB4Impress extends OfficeDocument
 {
 
-    private static final String ERROR_NO_SAVE = "No se puede almacenar el documento";
+    private static final String OVERRIDE_OPTION = "Overwrite";
+    private static final String APPLICATION_VERSION = "2.4";
+    private static final String DESKTOP_PATH = "com.sun.star.frame.Desktop";
+    private static final String ERROR_DESKTOP_NOT_FOUND = "The desktop was not found";
+    private static final String HTML_EXPORT_FORMAT = "impress_html_Export";
+    private static final String IMPRESS_FORMAT = "Impress8";
+    private static final String INDEXOFBOUNDERROR = "There was an error getting custom properties";
+    private static final String ERROR_DOCUMENT_READ_ONLY = "The document is read only";
+    private static final String ERROR_NO_SAVE = "The document can not be saved";
     private static final String OPENOFFICE_EXTENSION = ".odp";
+    private static final String POWERPOINT_97_FORMAT = "MS PowerPoint 97";
     private static final String PPT_EXTENSION = ".ppt";
     private static final String HTML_EXTENSION = ".html";
     private static final String FILTER_NAME = "FilterName";
     private static final String OVERWRITE = "Overwrite";
-    private static final String SCHEMA_FILE = "file:///";
+    private static final String SLIDE_PREFIX = "img";
     private static final String frameContentHTML;
     private static final String ContentHTML;
     private static final String fullscreenHTML;
@@ -73,7 +85,7 @@ public class WB4Impress extends OfficeDocument
         outline = loadResourceAsString(WB4Impress.class, "outline.html");
         ContentHTML = loadResourceAsString(WB4Impress.class, "content.html");
         fullscreenHTML = loadResourceAsString(WB4Impress.class, "fullscreen.html");
-        script=loadResourceAsString(WB4Impress.class, "script.js");
+        script = loadResourceAsString(WB4Impress.class, "script.js");
     }
 
     /**
@@ -98,13 +110,13 @@ public class WB4Impress extends OfficeDocument
         try
         {
             Object desktop = serviceManager.createInstanceWithContext(
-                    "com.sun.star.frame.Desktop", m_xContext);
+                    DESKTOP_PATH, m_xContext);
             XDesktop xdesktop = (XDesktop) UnoRuntime.queryInterface(XDesktop.class, desktop);
             document = xdesktop.getCurrentComponent();
         }
         catch (com.sun.star.uno.Exception e)
         {
-            throw new WBOfficeException("Error al obtener el escritorio de Open Office", e);
+            throw new WBOfficeException(ERROR_DESKTOP_NOT_FOUND, e);
         }
     }
 
@@ -115,7 +127,7 @@ public class WB4Impress extends OfficeDocument
     @Override
     public final String getApplicationVersion()
     {
-        return "2.4";
+        return APPLICATION_VERSION;
     }
 
     /**
@@ -273,13 +285,9 @@ public class WB4Impress extends OfficeDocument
 
         XDocumentInfoSupplier xdis =
                 (XDocumentInfoSupplier) UnoRuntime.queryInterface(XDocumentInfoSupplier.class, document);
-
         XDocumentInfo xdi = xdis.getDocumentInfo();
         short index = xdi.getUserFieldCount();
-
-        for (short i = 0;
-                i < index;
-                i++)
+        for (short i = 0; i < index; i++)
         {
             try
             {
@@ -289,7 +297,7 @@ public class WB4Impress extends OfficeDocument
             }
             catch (com.sun.star.lang.ArrayIndexOutOfBoundsException aibe)
             {
-                throw new WBOfficeException("No se puede actualizar la información asociada a la publicación del contenido", aibe);
+                throw new WBOfficeException(INDEXOFBOUNDERROR, aibe);
             }
         }
         return properties;
@@ -320,12 +328,7 @@ public class WB4Impress extends OfficeDocument
         XStorable xStorable = (XStorable) UnoRuntime.queryInterface(XStorable.class, document);
         if (xStorable.hasLocation())
         {
-            String path = xtd.getURL();
-            if (path.startsWith(SCHEMA_FILE))
-            {
-                path = path.substring(8);
-            }
-            return new File(path);
+            return getFileFromURL(xtd.getURL());
         }
         else
         {
@@ -343,11 +346,6 @@ public class WB4Impress extends OfficeDocument
         try
         {
             XModifiable xModified = (XModifiable) UnoRuntime.queryInterface(XModifiable.class, document);
-
-
-
-
-
             if (xModified.isModified())
             {
                 XStorable xStorable = (XStorable) UnoRuntime.queryInterface(XStorable.class, document);
@@ -357,7 +355,7 @@ public class WB4Impress extends OfficeDocument
                 }
                 else
                 {
-                    throw new WBAlertException("No se puede almacenar el documento por que es de sólo lectura");
+                    throw new WBAlertException(ERROR_DOCUMENT_READ_ONLY);
                 }
             }
         }
@@ -412,13 +410,7 @@ public class WB4Impress extends OfficeDocument
         try
         {
             File docFile = this.getLocalPath();
-            int index = docFile.getName().lastIndexOf(".");
-            String extension = null;
-            if (index != -1)
-            {
-                extension = docFile.getName().substring(index);
-            }
-
+            String extension = getExtension(docFile);
             String name = null;
             if (extension == null)
             {
@@ -428,11 +420,11 @@ public class WB4Impress extends OfficeDocument
             {
                 name = docFile.getName().replace(extension, OPENOFFICE_EXTENSION);
             }
-            File DocFile = new File(dir.getPath() + File.separator + name);
+            File DocFile = new File(dir.getPath() + File.separatorChar + name);
             PropertyValue[] storeProps = new PropertyValue[2];
             storeProps[0] = new PropertyValue();
             storeProps[0].Name = FILTER_NAME;
-            storeProps[0].Value = "Impress8";
+            storeProps[0].Value = IMPRESS_FORMAT;
 
             storeProps[1] = new PropertyValue();
             storeProps[1].Name = OVERWRITE;
@@ -442,7 +434,7 @@ public class WB4Impress extends OfficeDocument
             {
                 dir.mkdirs();
             }
-            String url = SCHEMA_FILE + DocFile.getPath().replace('\\', '/');
+            String url = getPathURL(DocFile);
 
             xStorable.storeToURL(url, storeProps);
             return DocFile;
@@ -470,13 +462,7 @@ public class WB4Impress extends OfficeDocument
         try
         {
             File docFile = this.getLocalPath();
-            int index = docFile.getName().lastIndexOf(".");
-            String extension = null;
-            if (index != -1)
-            {
-                extension = docFile.getName().substring(index);
-            }
-
+            String extension = getExtension(docFile);
             String name = null;
             if (extension == null)
             {
@@ -487,11 +473,11 @@ public class WB4Impress extends OfficeDocument
                 name = docFile.getName().replace(extension, PPT_EXTENSION);
             }
 // guarda el documento en .doc en directorio Temporal
-            File DocFile = new File(dir.getPath() + File.separator + name);
+            File DocFile = new File(dir.getPath() + File.separatorChar + name);
             PropertyValue[] storeProps = new PropertyValue[2];
             storeProps[0] = new PropertyValue();
             storeProps[0].Name = FILTER_NAME;
-            storeProps[0].Value = "MS PowerPoint 97";
+            storeProps[0].Value = POWERPOINT_97_FORMAT;
 
             storeProps[1] = new PropertyValue();
             storeProps[1].Name = OVERWRITE;
@@ -501,7 +487,7 @@ public class WB4Impress extends OfficeDocument
             {
                 dir.mkdirs();
             }
-            String url = SCHEMA_FILE + DocFile.getPath().replace('\\', '/');
+            String url = getPathURL(DocFile);
             xStorable.storeToURL(url, storeProps);
             return DocFile;
         }
@@ -526,20 +512,20 @@ public class WB4Impress extends OfficeDocument
             PropertyValue[] storeProps = new PropertyValue[2];
             storeProps[0] = new PropertyValue();
             storeProps[0].Name = FILTER_NAME;
-            storeProps[0].Value = "Impress8";
+            storeProps[0].Value = IMPRESS_FORMAT;
 
             storeProps[1] = new PropertyValue();
             storeProps[1].Name = OVERWRITE;
             storeProps[1].Value = true;
 
             XStorable xStorable = (XStorable) UnoRuntime.queryInterface(XStorable.class, document);
-            String url = SCHEMA_FILE + file.getPath().replace('\\', '/');
+            String url = getPathURL(file);
 
             xStorable.storeAsURL(url, storeProps);
         }
         catch (IOException wbe)
         {
-            throw new WBOfficeException("No se puede gardar el documento", wbe);
+            throw new WBOfficeException(ERROR_NO_SAVE, wbe);
         }
 
     }
@@ -560,14 +546,14 @@ public class WB4Impress extends OfficeDocument
             File HTMLfile;
             if (docFile.getName().endsWith(OPENOFFICE_EXTENSION))
             {
-                HTMLfile = new File(dir.getPath() + File.separator + docFile.getName().replace(OPENOFFICE_EXTENSION, HTML_EXTENSION));
+                HTMLfile = new File(dir.getPath() + File.separatorChar + docFile.getName().replace(OPENOFFICE_EXTENSION, HTML_EXTENSION));
                 String name = docFile.getName().replace(OPENOFFICE_EXTENSION, PPT_EXTENSION);
                 // guarda el documento en .doc en directorio Temporal
-                File DocFile = new File(dir.getPath() + File.separator + name);
+                File DocFile = new File(dir.getPath() + File.separatorChar + name);
                 PropertyValue[] storeProps = new PropertyValue[2];
                 storeProps[0] = new PropertyValue();
                 storeProps[0].Name = FILTER_NAME;
-                storeProps[0].Value = "MS PowerPoint 97";
+                storeProps[0].Value = POWERPOINT_97_FORMAT;
 
                 storeProps[1] = new PropertyValue();
                 storeProps[1].Name = OVERWRITE;
@@ -577,21 +563,21 @@ public class WB4Impress extends OfficeDocument
                 {
                     dir.mkdirs();
                 }
-                String url = SCHEMA_FILE + DocFile.getPath().replace('\\', '/');
+                String url = getPathURL(DocFile);
                 xStorable.storeToURL(url, storeProps);
             }
             else
             {
-                HTMLfile = new File(dir.getPath() + File.separator + docFile.getName().replace(PPT_EXTENSION, HTML_EXTENSION));
+                HTMLfile = new File(dir.getPath() + File.separatorChar + docFile.getName().replace(PPT_EXTENSION, HTML_EXTENSION));
             }
 
             PropertyValue[] storeProps = new PropertyValue[2];
             storeProps[0] = new PropertyValue();
             storeProps[0].Name = FILTER_NAME;
-            storeProps[0].Value = "impress_html_Export";
+            storeProps[0].Value = HTML_EXPORT_FORMAT;
 
             storeProps[1] = new PropertyValue();
-            storeProps[1].Name = "Hidden";
+            storeProps[1].Name = OVERRIDE_OPTION;
             storeProps[1].Value = true;
 
             XStorable xStorable = (XStorable) UnoRuntime.queryInterface(XStorable.class, document);
@@ -599,7 +585,7 @@ public class WB4Impress extends OfficeDocument
             {
                 dir.mkdirs();
             }
-            String url = SCHEMA_FILE + HTMLfile.getPath().replace('\\', '/');
+            String url = getPathURL(HTMLfile);
             xStorable.storeToURL(url, storeProps);
             return HTMLfile;
 
@@ -637,7 +623,7 @@ public class WB4Impress extends OfficeDocument
             }
             catch (com.sun.star.lang.ArrayIndexOutOfBoundsException aibe)
             {
-                throw new WBOfficeException("No se puede actualizar la información asociada a la publicación del contenido", aibe);
+                throw new WBOfficeException(INDEXOFBOUNDERROR, aibe);
             }
             index++;
         }
@@ -672,9 +658,9 @@ public class WB4Impress extends OfficeDocument
     {
         for (File file : this.getFiles(dir))
         {
-            if (file.getName().startsWith("img") && file.getName().endsWith(HTML_EXTENSION))
+            if (file.getName().startsWith(SLIDE_PREFIX) && file.getName().endsWith(HTML_EXTENSION))
             {
-                int posInit = file.getName().indexOf("img");
+                int posInit = file.getName().indexOf(SLIDE_PREFIX);
                 int posEnd = file.getName().indexOf(HTML_EXTENSION);
                 String number = file.getName().substring(posInit + 3, posEnd);
                 try
@@ -708,7 +694,7 @@ public class WB4Impress extends OfficeDocument
         StringBuilder builder = new StringBuilder("var gMainDoc=new Array(");
         for (File file : files)
         {
-            if (file.getName().startsWith("img") && file.getName().endsWith(HTML_EXTENSION))
+            if (file.getName().startsWith(SLIDE_PREFIX) && file.getName().endsWith(HTML_EXTENSION))
             {
                 builder.append("new hrefList(\"" + file.getName() + "\",1,-1,1),");
             }
@@ -718,7 +704,7 @@ public class WB4Impress extends OfficeDocument
             builder.deleteCharAt(builder.length() - 1);
         }
         builder.append(");\r\n");
-        File scriptFile = new File(dir.getPath() + "/" + "script.js");
+        File scriptFile = new File(dir.getPath() + File.separatorChar + "script.js");
         saveContent(script, scriptFile);
     }
 
@@ -728,7 +714,7 @@ public class WB4Impress extends OfficeDocument
         {
             throw new IllegalArgumentException();
         }
-        File fullscreen = new File(dir.getPath() + "/" + "fullscreen.html");
+        File fullscreen = new File(dir.getPath() + File.separatorChar + "fullscreen.html");
         saveContent(fullscreenHTML, fullscreen);
     }
 
@@ -738,8 +724,8 @@ public class WB4Impress extends OfficeDocument
         {
             throw new IllegalArgumentException();
         }
-        File buttons = new File(dir.getPath() + "/" + "buttons.gif");
-        saveContent(WB4Impress.class, "buttons.gif",buttons);        
+        File buttons = new File(dir.getPath() + File.separatorChar + "buttons.gif");
+        saveContent(WB4Impress.class, "buttons.gif", buttons);
     }
 
     private List<String> getSlidesTitles()
@@ -777,12 +763,12 @@ public class WB4Impress extends OfficeDocument
     {
         File dir = htmlfile.getParentFile();
         String subSquema = "";
-        File textSquema = new File(dir.getPath() + "/text" + iSlide + HTML_EXTENSION);
+        File textSquema = new File(dir.getPath() + File.separatorChar + "text" + iSlide + HTML_EXTENSION);
         if (textSquema.exists())
         {
             try
             {
-                String content=loadFileAsString(textSquema);
+                String content = loadFileAsString(textSquema);
                 int posInit = content.indexOf("<ul>");
                 int posFin = content.indexOf("</ul>");
                 if (posInit != -1 && posFin != -1)
@@ -823,7 +809,7 @@ public class WB4Impress extends OfficeDocument
     {
         try
         {
-            File img0 = new File(htmlFile.getParent() + "/img0.html");
+            File img0 = new File(htmlFile.getParent() + File.separatorChar + "img0.html");
             saveContent(htmlFile, img0);
         }
         catch (Exception ex)
@@ -840,7 +826,7 @@ public class WB4Impress extends OfficeDocument
             throw new IllegalArgumentException();
         }
 
-        File outlineFile = new File(htmlFile.getParentFile().getPath() + "/" + "outline.html");
+        File outlineFile = new File(htmlFile.getParentFile().getPath() + File.separatorChar + "outline.html");
         if (outlineFile.exists())
         {
             outlineFile.delete();
@@ -857,7 +843,7 @@ public class WB4Impress extends OfficeDocument
         }
         String htmlFrame = frameContentHTML.replace("[file]", htmlFile.getName());
         byte[] framecont = htmlFrame.getBytes();
-        File frameFile = new File(htmlFile.getParentFile().getPath() + "/" + "frame.html");
+        File frameFile = new File(htmlFile.getParentFile().getPath() + File.separatorChar + "frame.html");
         saveContent(framecont, frameFile);
     }
 

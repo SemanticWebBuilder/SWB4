@@ -35,6 +35,9 @@ import org.semanticwb.openoffice.SaveDocumentFormat;
 import org.semanticwb.openoffice.WBAlertException;
 import org.semanticwb.openoffice.WBException;
 import org.semanticwb.openoffice.WBOfficeException;
+import static org.semanticwb.openoffice.util.FileUtil.getExtension;
+import static org.semanticwb.openoffice.util.FileUtil.getFileFromURL;
+import static org.semanticwb.openoffice.util.FileUtil.getPathURL;
 
 /**
  * Class to Wrap an Open Office Writer Document
@@ -43,10 +46,17 @@ import org.semanticwb.openoffice.WBOfficeException;
 public class WB4Writer extends OfficeDocument
 {
 
+    private static final String HTML_EXPORT_FORMAT = "HTML (StarWriter)";
+    private static final String OFFICE97_FORMAT = "MS Word 97";
+    private static final String DESKTOP_NOT_FOUND = "Error al obtener el escritorio de Open Office";
+    private static final String DESKTOP_PATH = "com.sun.star.frame.Desktop";
+    private static final String INDEXOFBOUNDERROR = "There was an error getting custom properties";
+    private static final String ERROR_DOCUMENT_READ_ONLY = "The document is read only";
     /**
      * The default Open Office Extension OPENOFFICE_EXTENSION=".odt"
      */
     private static final String OPENOFFICE_EXTENSION = ".odt";
+    private static final String ERROR_NO_SAVE = "The document can not be saved";
     /**
      * The xtension to a Word Document in format XP/2000/2003 WORD_EXTENSION=".doc"
      */
@@ -58,7 +68,7 @@ public class WB4Writer extends OfficeDocument
     private static final String FILTER_NAME = "FilterName";
     private static final String HYPERLINK_VALUE = "HyperLinkURL";
     private static final String OVERWRITE = "Overwrite";
-    private static final String SCHEMA_FILE = "file:///";
+    private static final String WRITER_FORMAT = "Writer8";
     /**
      * The Open Office Writer Document that Wraps
      */
@@ -86,13 +96,13 @@ public class WB4Writer extends OfficeDocument
         try
         {
             Object desktop = serviceManager.createInstanceWithContext(
-                    "com.sun.star.frame.Desktop", m_xContext);
+                    DESKTOP_PATH, m_xContext);
             XDesktop xdesktop = (XDesktop) UnoRuntime.queryInterface(XDesktop.class, desktop);
             document = xdesktop.getCurrentComponent();
         }
         catch (com.sun.star.uno.Exception e)
         {
-            throw new WBOfficeException("Error al obtener el escritorio de Open Office", e);
+            throw new WBOfficeException(DESKTOP_NOT_FOUND, e);
         }
     }
 
@@ -180,7 +190,7 @@ public class WB4Writer extends OfficeDocument
             }
             catch (com.sun.star.lang.ArrayIndexOutOfBoundsException aibe)
             {
-                throw new WBOfficeException("No se puede actualizar la información asociada a la publicación del contenido", aibe);
+                throw new WBOfficeException(INDEXOFBOUNDERROR, aibe);
             }
         }
         return properties;
@@ -210,12 +220,7 @@ public class WB4Writer extends OfficeDocument
         XStorable xStorable = (XStorable) UnoRuntime.queryInterface(XStorable.class, document);
         if (xStorable.hasLocation())
         {
-            String path = xtd.getURL();
-            if (path.startsWith(SCHEMA_FILE))
-            {
-                path = path.substring(8);
-            }
-            return new File(path);
+            return getFileFromURL(xtd.getURL());
         }
         else
         {
@@ -242,14 +247,14 @@ public class WB4Writer extends OfficeDocument
                 }
                 else
                 {
-                    throw new WBAlertException("No se puede almacenar el documento por que es de sólo lectura");
+                    throw new WBAlertException(ERROR_DOCUMENT_READ_ONLY);
                 }
             }
 
         }
         catch (IOException ioe)
         {
-            throw new WBOfficeException("No se puede almacenar el documento : save", ioe);
+            throw new WBOfficeException(ERROR_NO_SAVE, ioe);
 
         }
     }
@@ -272,19 +277,19 @@ public class WB4Writer extends OfficeDocument
             PropertyValue[] storeProps = new PropertyValue[2];
             storeProps[0] = new PropertyValue();
             storeProps[0].Name = FILTER_NAME;
-            storeProps[0].Value = "Writer8";
+            storeProps[0].Value = WRITER_FORMAT;
 
             storeProps[1] = new PropertyValue();
             storeProps[1].Name = OVERWRITE;
             storeProps[1].Value = true;
 
             XStorable xStorable = (XStorable) UnoRuntime.queryInterface(XStorable.class, document);
-            String url = SCHEMA_FILE + file.getPath().replace('\\', '/');
+            String url = getPathURL(file);
             xStorable.storeAsURL(url, storeProps);
         }
         catch (IOException wbe)
         {
-            throw new WBOfficeException("No se puede guardar el documento", wbe);
+            throw new WBOfficeException(ERROR_NO_SAVE, wbe);
         }
     }
 
@@ -330,12 +335,7 @@ public class WB4Writer extends OfficeDocument
         try
         {
             File docFile = this.getLocalPath();
-            int index = docFile.getName().lastIndexOf(".");
-            String extension = null;
-            if (index != -1)
-            {
-                extension = docFile.getName().substring(index);
-            }
+            String extension = getExtension(docFile);
             String name = null;
             if (extension == null)
             {
@@ -346,11 +346,11 @@ public class WB4Writer extends OfficeDocument
                 name = docFile.getName().replace(extension, OPENOFFICE_EXTENSION);
             }
             // guarda el documento en .doc en directorio Temporal            
-            File DocFile = new File(dir.getPath() + File.separator + name);
+            File DocFile = new File(dir.getPath() + File.separatorChar + name);
             PropertyValue[] storeProps = new PropertyValue[2];
             storeProps[0] = new PropertyValue();
             storeProps[0].Name = FILTER_NAME;
-            storeProps[0].Value = "Writer8";
+            storeProps[0].Value = WRITER_FORMAT;
 
             storeProps[1] = new PropertyValue();
             storeProps[1].Name = OVERWRITE;
@@ -360,13 +360,13 @@ public class WB4Writer extends OfficeDocument
             {
                 dir.mkdirs();
             }
-            String url = SCHEMA_FILE + DocFile.getPath().replace('\\', '/');
+            String url = getPathURL(DocFile);
             xStorable.storeToURL(url, storeProps);
             return DocFile;
         }
         catch (IOException ioe)
         {
-            throw new WBOfficeException("No se puede almacenar el documento : saveAsOpenOffice", ioe);
+            throw new WBOfficeException(ERROR_NO_SAVE, ioe);
         }
     }
 
@@ -386,12 +386,7 @@ public class WB4Writer extends OfficeDocument
         try
         {
             File docFile = this.getLocalPath();
-            int index = docFile.getName().lastIndexOf(".");
-            String extension = null;
-            if (index != -1)
-            {
-                extension = docFile.getName().substring(index);
-            }
+            String extension = getExtension(docFile);
             String name = null;
             if (extension == null)
             {
@@ -402,11 +397,11 @@ public class WB4Writer extends OfficeDocument
                 name = docFile.getName().replace(extension, WORD_EXTENSION);
             }
             // guarda el documento en .doc en directorio Temporal
-            File DocFile = new File(dir.getPath() + File.separator + name);
+            File DocFile = new File(dir.getPath() + File.separatorChar + name);
             PropertyValue[] storeProps = new PropertyValue[2];
             storeProps[0] = new PropertyValue();
             storeProps[0].Name = FILTER_NAME;
-            storeProps[0].Value = "MS Word 97";
+            storeProps[0].Value = OFFICE97_FORMAT;
 
             storeProps[1] = new PropertyValue();
             storeProps[1].Name = OVERWRITE;
@@ -416,13 +411,13 @@ public class WB4Writer extends OfficeDocument
             {
                 dir.mkdirs();
             }
-            String url = SCHEMA_FILE + DocFile.getPath().replace('\\', '/');
+            String url = getPathURL(DocFile);
             xStorable.storeToURL(url, storeProps);
             return DocFile;
         }
         catch (IOException ioe)
         {
-            throw new WBOfficeException("No se puede almacenar el documento : saveAsOffice2003", ioe);
+            throw new WBOfficeException(ERROR_NO_SAVE, ioe);
         }
     }
 
@@ -446,14 +441,14 @@ public class WB4Writer extends OfficeDocument
             File HTMLfile;
             if (docFile.getName().endsWith(OPENOFFICE_EXTENSION))
             {
-                HTMLfile = new File(dir.getPath() + File.separator + docFile.getName().replace(OPENOFFICE_EXTENSION, HTML_EXTENSION));
+                HTMLfile = new File(dir.getPath() + File.separatorChar + docFile.getName().replace(OPENOFFICE_EXTENSION, HTML_EXTENSION));
                 String name = docFile.getName().replace(OPENOFFICE_EXTENSION, WORD_EXTENSION);
                 // guarda el documento en .doc en directorio Temporal
-                File DocFile = new File(dir.getPath() + File.separator + name);
+                File DocFile = new File(dir.getPath() + File.separatorChar + name);
                 PropertyValue[] storeProps = new PropertyValue[2];
                 storeProps[0] = new PropertyValue();
                 storeProps[0].Name = FILTER_NAME;
-                storeProps[0].Value = "MS Word 97";
+                storeProps[0].Value = OFFICE97_FORMAT;
 
                 storeProps[1] = new PropertyValue();
                 storeProps[1].Name = OVERWRITE;
@@ -463,18 +458,18 @@ public class WB4Writer extends OfficeDocument
                 {
                     dir.mkdirs();
                 }
-                String url = SCHEMA_FILE + DocFile.getPath().replace('\\', '/');
+                String url = getPathURL(DocFile);
                 xStorable.storeToURL(url, storeProps);
             }
             else
             {
-                HTMLfile = new File(dir.getPath() + File.separator + docFile.getName().replace(WORD_EXTENSION, HTML_EXTENSION));
+                HTMLfile = new File(dir.getPath() + File.separatorChar + docFile.getName().replace(WORD_EXTENSION, HTML_EXTENSION));
             }
 
             PropertyValue[] storeProps = new PropertyValue[2];
             storeProps[0] = new PropertyValue();
             storeProps[0].Name = FILTER_NAME;
-            storeProps[0].Value = "HTML (StarWriter)";
+            storeProps[0].Value = HTML_EXPORT_FORMAT;
 
             storeProps[1] = new PropertyValue();
             storeProps[1].Name = OVERWRITE;
@@ -484,13 +479,13 @@ public class WB4Writer extends OfficeDocument
             {
                 dir.mkdirs();
             }
-            String url = SCHEMA_FILE + HTMLfile.getPath().replace('\\', '/');
+            String url = getPathURL(HTMLfile);
             xStorable.storeToURL(url, storeProps);
             return HTMLfile;
         }
         catch (IOException ioe)
         {
-            throw new WBOfficeException("No se puede almacenar el documento : saveAsHTML", ioe);
+            throw new WBOfficeException(ERROR_NO_SAVE, ioe);
         }
     }
 
@@ -519,7 +514,7 @@ public class WB4Writer extends OfficeDocument
             }
             catch (com.sun.star.lang.ArrayIndexOutOfBoundsException aibe)
             {
-                throw new WBOfficeException("No se puede actualizar la información asociada a la publicación del contenido", aibe);
+                throw new WBOfficeException(INDEXOFBOUNDERROR, aibe);
             }
             index++;
         }
