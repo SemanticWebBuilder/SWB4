@@ -30,9 +30,6 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.util.XModifiable;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -45,6 +42,9 @@ import org.semanticwb.openoffice.SaveDocumentFormat;
 import org.semanticwb.openoffice.WBAlertException;
 import org.semanticwb.openoffice.WBException;
 import org.semanticwb.openoffice.WBOfficeException;
+import static org.semanticwb.openoffice.util.FileUtil.saveContent;
+import static org.semanticwb.openoffice.util.FileUtil.loadResourceAsString;
+import static org.semanticwb.openoffice.util.FileUtil.loadFileAsString;
 
 /**
  * Class to Wrap a Open Office Impress Document
@@ -64,81 +64,16 @@ public class WB4Impress extends OfficeDocument
     private static final String ContentHTML;
     private static final String fullscreenHTML;
     private static final String outline;
-    private static final byte[] script;
+    private static final String script;
     private final XComponent document;
 
     static
     {
-        StringBuilder frameContentHTMLBuilder = new StringBuilder();
-        StringBuilder outlineBuilder = new StringBuilder();
-        StringBuilder contentBuilder = new StringBuilder();
-        StringBuilder fullscreenHTMLBuilder = new StringBuilder();
-        StringBuilder scriptBuilder = new StringBuilder();
-        try
-        {
-            byte[] buffer = new byte[2048];
-            InputStream in = WB4Impress.class.getResourceAsStream("frame.html");
-
-            int read = in.read(buffer);
-
-            while (read != -1)
-            {
-                String temp = new String(buffer, 0, read, "UTF-8");
-                frameContentHTMLBuilder.append(temp);
-                read = in.read(buffer);
-            }
-            in.close();
-
-            in = WB4Impress.class.getResourceAsStream("outline.html");
-            read = in.read(buffer);
-            while (read != -1)
-            {
-                String temp = new String(buffer, 0, read);
-                outlineBuilder.append(temp);
-                read = in.read(buffer);
-            }
-            in.close();
-
-            in = WB4Impress.class.getResourceAsStream("content.html");
-            read = in.read(buffer);
-            while (read != -1)
-            {
-                String temp = new String(buffer, 0, read);
-                contentBuilder.append(temp);
-                read = in.read(buffer);
-            }
-            in.close();
-
-            in = WB4Impress.class.getResourceAsStream("fullscreen.html");
-            read = in.read(buffer);
-            fullscreenHTMLBuilder = new StringBuilder();
-            while (read != -1)
-            {
-                String temp = new String(buffer, 0, read);
-                fullscreenHTMLBuilder.append(temp);
-                read = in.read(buffer);
-            }
-            in.close();
-
-            in = WB4Impress.class.getResourceAsStream("script.js");
-            read = in.read(buffer);
-            while (read != -1)
-            {
-                scriptBuilder.append(new String(buffer, 0, read, "UTF-8"));
-                read = in.read(buffer);
-            }
-            in.close();
-
-        }
-        catch (java.io.IOException ioe)
-        {
-            ErrorLog.log(ioe);
-        }
-        script = scriptBuilder.toString().getBytes();
-        frameContentHTML = frameContentHTMLBuilder.toString();
-        outline = outlineBuilder.toString();
-        fullscreenHTML = fullscreenHTMLBuilder.toString();
-        ContentHTML = contentBuilder.toString();
+        frameContentHTML = loadResourceAsString(WB4Impress.class, "frame.html");
+        outline = loadResourceAsString(WB4Impress.class, "outline.html");
+        ContentHTML = loadResourceAsString(WB4Impress.class, "content.html");
+        fullscreenHTML = loadResourceAsString(WB4Impress.class, "fullscreen.html");
+        script=loadResourceAsString(WB4Impress.class, "script.js");
     }
 
     /**
@@ -721,11 +656,11 @@ public class WB4Impress extends OfficeDocument
             throw new IllegalArgumentException();
         }
         saveContentasImg0(htmlFile);
-        changeContent(htmlFile);
+        saveContent(ContentHTML, htmlFile);
         createFrameFile(htmlFile);
         saveButtons(htmlFile.getParentFile());
         appendTextToScript(htmlFile.getParentFile());
-        creatOutline(htmlFile);
+        createOutline(htmlFile);
         saveFullScreen(htmlFile.getParentFile());
         changeSlides(htmlFile.getParentFile());
 
@@ -752,9 +687,7 @@ public class WB4Impress extends OfficeDocument
                     content.append("onkeypress=\"_KPH()\">");
                     content.append("<div id=SlideObj class=sld>");
                     content.append("<center><img src=\"img" + number + ".jpg\"></center></div></body></html>");
-                    FileOutputStream out = new FileOutputStream(file);
-                    out.write(content.toString().getBytes());
-                    out.close();
+                    saveContent(content, file);
                 }
                 catch (Exception ex)
                 {
@@ -762,20 +695,6 @@ public class WB4Impress extends OfficeDocument
                 }
             }
 
-        }
-    }
-
-    private void changeContent(File htmlFile)
-    {
-        try
-        {
-            FileOutputStream out = new FileOutputStream(htmlFile);
-            out.write(ContentHTML.getBytes());
-            out.close();
-        }
-        catch (Exception e)
-        {
-            ErrorLog.log(e);
         }
     }
 
@@ -800,18 +719,7 @@ public class WB4Impress extends OfficeDocument
         }
         builder.append(");\r\n");
         File scriptFile = new File(dir.getPath() + "/" + "script.js");
-        try
-        {
-            FileOutputStream out = new FileOutputStream(scriptFile);
-            out.write(builder.toString().getBytes());
-            out.write(script);
-            out.flush();
-            out.close();
-        }
-        catch (Exception ex)
-        {
-            ErrorLog.log(ex);
-        }
+        saveContent(script, scriptFile);
     }
 
     private void saveFullScreen(File dir)
@@ -821,16 +729,7 @@ public class WB4Impress extends OfficeDocument
             throw new IllegalArgumentException();
         }
         File fullscreen = new File(dir.getPath() + "/" + "fullscreen.html");
-        try
-        {
-            FileOutputStream out = new FileOutputStream(fullscreen);
-            out.write(fullscreenHTML.getBytes());
-            out.close();
-        }
-        catch (Exception ex)
-        {
-            ErrorLog.log(ex);
-        }
+        saveContent(fullscreenHTML, fullscreen);
     }
 
     private void saveButtons(File dir)
@@ -840,27 +739,10 @@ public class WB4Impress extends OfficeDocument
             throw new IllegalArgumentException();
         }
         File buttons = new File(dir.getPath() + "/" + "buttons.gif");
-        try
-        {
-            byte[] buffer = new byte[2048];
-            FileOutputStream out = new FileOutputStream(buttons);
-            InputStream in = WB4Impress.class.getResourceAsStream("buttons.gif");
-            int read = in.read(buffer);
-            while (read != -1)
-            {
-                out.write(buffer, 0, read);
-                read = in.read(buffer);
-            }
-            in.close();
-            out.close();
-        }
-        catch (Exception ex)
-        {
-            ErrorLog.log(ex);
-        }
+        saveContent(WB4Impress.class, "buttons.gif",buttons);        
     }
 
-    private List<String> getTitles()
+    private List<String> getSlidesTitles()
     {
         ArrayList<String> titles = new ArrayList<String>();
         int pages = getDrawPageCount(document);
@@ -880,7 +762,7 @@ public class WB4Impress extends OfficeDocument
         return titles;
     }
 
-    private String corrigeSubEsquema(String subSquema)
+    private String fixSubEsquema(String subSquema)
     {
         String target = " target=\"PPTSld\" ";
         int posInit = subSquema.indexOf("<a");
@@ -889,7 +771,6 @@ public class WB4Impress extends OfficeDocument
             subSquema = subSquema.substring(0, posInit + 2) + target + subSquema.substring(posInit + 2);
         }
         return subSquema;
-
     }
 
     private String getSubSquema(int iSlide, File htmlfile)
@@ -901,23 +782,14 @@ public class WB4Impress extends OfficeDocument
         {
             try
             {
-                FileInputStream in = new FileInputStream(textSquema);
-                byte[] buffer = new byte[2048];
-                int read = in.read(buffer);
-                StringBuilder content = new StringBuilder();
-                while (read != -1)
-                {
-                    content.append(new String(buffer, 0, read, "UTF-8"));
-                    read = in.read(buffer);
-                }
-                in.close();
+                String content=loadFileAsString(textSquema);
                 int posInit = content.indexOf("<ul>");
                 int posFin = content.indexOf("</ul>");
                 if (posInit != -1 && posFin != -1)
                 {
                     subSquema = content.substring(posInit, posFin + 5);
                 }
-                subSquema = corrigeSubEsquema(subSquema);
+                subSquema = fixSubEsquema(subSquema);
             }
             catch (Exception ex)
             {
@@ -933,14 +805,13 @@ public class WB4Impress extends OfficeDocument
     {
         StringBuilder esquema = new StringBuilder("");
         int i = 0;
-        for (String title : this.getTitles())
+        for (String title : this.getSlidesTitles())
         {
             esquema.append("<tr onmouseover=\"Over(this)\" onmouseout=\"Out(this)\" onclick=\"Follow(this)\"\r\n");
             esquema.append("style='cursor:hand'><td align=right valign=top><div class=sldNum><font size=2>" + (i + 1) + "</font></div></td><td width=\"100%\">\r\n");
             esquema.append("<div id=PPTP" + (i + 1) + " class=PTxt><font size=2><a href=\"javascript:GoToSld('img" + i + ".html');\" id=PPTL" + (i + 1) + ">" + title + "</a></font></div>\r\n");
             esquema.append("<div id=PPTC" + (i + 1) + " class=CTxt style='display:none'><font size=2>\r\n");
             String subSquema = getSubSquema(i, htmlfile);
-            //esquema.append("<ul><li>Demo</li></ul>");
             esquema.append(subSquema);
             esquema.append("</font></div></td></tr>\r\n");
             i++;
@@ -952,18 +823,8 @@ public class WB4Impress extends OfficeDocument
     {
         try
         {
-            byte[] buffer = new byte[1024];
-            FileInputStream in = new FileInputStream(htmlFile);
             File img0 = new File(htmlFile.getParent() + "/img0.html");
-            FileOutputStream out = new FileOutputStream(img0);
-            int read = in.read(buffer);
-            while (read != -1)
-            {
-                out.write(buffer, 0, read);
-                read = in.read(buffer);
-            }
-            out.close();
-            in.close();
+            saveContent(htmlFile, img0);
         }
         catch (Exception ex)
         {
@@ -971,7 +832,7 @@ public class WB4Impress extends OfficeDocument
         }
     }
 
-    private void creatOutline(File htmlFile)
+    private void createOutline(File htmlFile)
     {
         String esquema = getSquema(htmlFile);
         if (htmlFile.isDirectory())
@@ -984,47 +845,20 @@ public class WB4Impress extends OfficeDocument
         {
             outlineFile.delete();
         }
-
-        int posInit = outline.indexOf("[esquema]");
-        if (posInit != -1)
-        {
-            try
-            {
-                FileOutputStream out = new FileOutputStream(outlineFile);
-                String newOutLine =
-                        outline.substring(0, posInit) + esquema + outline.substring(posInit + 9);
-                out.write(newOutLine.getBytes());
-                out.close();
-            }
-            catch (Exception ex)
-            {
-                ErrorLog.log(ex);
-            }
-        }
-
-
+        String newOutLine = outline.replace("[esquema]", esquema);
+        saveContent(newOutLine, outlineFile);
     }
 
     private void createFrameFile(File htmlFile)
     {
-
         if (htmlFile.isDirectory())
         {
             throw new IllegalArgumentException();
-        }        
+        }
         String htmlFrame = frameContentHTML.replace("[file]", htmlFile.getName());
         byte[] framecont = htmlFrame.getBytes();
-        File frameFile = new File(htmlFile.getParentFile().getPath() + "/" + "frame.html");        
-        try
-        {
-            FileOutputStream out = new FileOutputStream(frameFile);
-            out.write(framecont);
-            out.close();
-        }
-        catch (Exception ex)
-        {
-            ErrorLog.log(ex);
-        }
+        File frameFile = new File(htmlFile.getParentFile().getPath() + "/" + "frame.html");
+        saveContent(framecont, frameFile);
     }
 
     /**
@@ -1034,16 +868,6 @@ public class WB4Impress extends OfficeDocument
     public boolean isNewDocument()
     {
         XStorable xStorable = (XStorable) UnoRuntime.queryInterface(XStorable.class, document);
-
-
-
-
-
-
-
-
-
-
         return !xStorable.hasLocation();
     }
 
@@ -1054,16 +878,6 @@ public class WB4Impress extends OfficeDocument
     public boolean isReadOnly()
     {
         XStorable xStorable = (XStorable) UnoRuntime.queryInterface(XStorable.class, document);
-
-
-
-
-
-
-
-
-
-
         return xStorable.isReadonly();
     }
 
@@ -1074,16 +888,6 @@ public class WB4Impress extends OfficeDocument
     public boolean isModified()
     {
         XModifiable xModified = (XModifiable) UnoRuntime.queryInterface(XModifiable.class, document);
-
-
-
-
-
-
-
-
-
-
         return xModified.isModified();
     }
 
