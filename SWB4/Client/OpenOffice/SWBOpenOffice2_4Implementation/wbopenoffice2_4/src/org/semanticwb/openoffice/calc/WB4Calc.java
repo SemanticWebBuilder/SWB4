@@ -22,9 +22,6 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.util.XModifiable;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -39,6 +36,9 @@ import org.semanticwb.openoffice.SaveDocumentFormat;
 import org.semanticwb.openoffice.WBAlertException;
 import org.semanticwb.openoffice.WBException;
 import org.semanticwb.openoffice.WBOfficeException;
+import static org.semanticwb.openoffice.util.FileUtil.saveContent;
+import static org.semanticwb.openoffice.util.FileUtil.loadResourceAsString;
+import static org.semanticwb.openoffice.util.FileUtil.loadFileAsString;
 
 /**
  * Class to wrap a Open Office Calc Document
@@ -59,28 +59,8 @@ public class WB4Calc extends OfficeDocument
     private final XComponent document;
 
     static
-    {
-        StringBuilder builder = new StringBuilder();
-        try
-        {
-            byte[] buffer = new byte[2048];
-            InputStream in = WB4Calc.class.getResourceAsStream("tabstrip.htm");
-
-            int read = in.read(buffer);
-
-            while (read != -1)
-            {
-                String temp = new String(buffer, 0, read, "UTF-8");
-                builder.append(temp);
-                read = in.read(buffer);
-            }
-            in.close();
-        }
-        catch (java.io.IOException ioe)
-        {
-            ErrorLog.log(ioe);
-        }
-        tabstrip = builder.toString();
+    {        
+        tabstrip=loadResourceAsString(WB4Calc.class,"tabstrip.htm");        
     }
 
     /**
@@ -132,7 +112,7 @@ public class WB4Calc extends OfficeDocument
      * @throws org.semanticwb.openoffice.NoHasLocationException The document has not be saved before
      * @see XCell
      */
-    public final List<File> getAttachments(XCell xcell) throws NoHasLocationException
+    private final List<File> getAttachments(XCell xcell) throws NoHasLocationException
     {
         List<File> attachments = new ArrayList<File>();
         XTextFieldsSupplier xTextFieldsSupplier = (XTextFieldsSupplier) UnoRuntime.queryInterface(XTextFieldsSupplier.class, xcell);
@@ -601,17 +581,7 @@ public class WB4Calc extends OfficeDocument
         content.append("</body></noframes>\r\n");
         content.append("</frameset>\r\n");
         content.append("</html>\r\n");
-        try
-        {
-            FileOutputStream out = new FileOutputStream(htmlFile);
-            out.write(content.toString().getBytes());
-            out.close();
-        }
-        catch (Exception ex)
-        {
-            ErrorLog.log(ex);
-        }
-
+        saveContent(content, htmlFile);
     }
 
     private void createTabStrip(File dir, Map<String, String> sheets, String filecontentName)
@@ -625,31 +595,13 @@ public class WB4Calc extends OfficeDocument
         }
         String tabStripFinal = tabstrip.replace("[file]", filecontentName);
         tabStripFinal = tabStripFinal.replace("[sheetstable]", sheetstable.toString());
-        try
-        {
-            FileOutputStream out = new FileOutputStream(tabStrip);
-            out.write(tabStripFinal.getBytes());
-            out.close();
-        }
-        catch (Exception ex)
-        {
-            ErrorLog.log(ex);
-        }
+        saveContent(tabStripFinal, tabStrip);        
     }
 
     private void saveTable(String table, File dir, String name)
     {
         File sheet = new File(dir.getPath() + "/" + name + ".html");
-        try
-        {
-            FileOutputStream out = new FileOutputStream(sheet);
-            out.write(table.getBytes());
-            out.close();
-        }
-        catch (Exception ex)
-        {
-            ErrorLog.log(ex);
-        }
+        saveContent(table, sheet);        
     }
 
     private Map<String, String> createSheets(File htmlFile)
@@ -659,18 +611,7 @@ public class WB4Calc extends OfficeDocument
         Map<String, String> sheets = new HashMap<String, String>();
         try
         {
-            byte[] buffer = new byte[2048];
-            InputStream in = new FileInputStream(htmlFile);
-
-            int read = in.read(buffer);
-            StringBuilder builder = new StringBuilder();
-            while (read != -1)
-            {
-                String temp = new String(buffer, 0, read);
-                builder.append(temp);
-                read = in.read(buffer);
-            }
-            in.close();
+            String builder=loadFileAsString(htmlFile);            
             int iSheet = 0;
             int posInit = 0;
             while (posInit >= 0)
