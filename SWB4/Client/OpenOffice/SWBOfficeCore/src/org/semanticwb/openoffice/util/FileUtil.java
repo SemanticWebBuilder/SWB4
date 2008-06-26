@@ -33,12 +33,21 @@ public final class FileUtil
         {
             path = path.substring(8);
         }
+        if(path.indexOf('\\')!=-1)
+        {
+            path=path.replace('\\', '/');
+        }
         return new File(path);
     }
 
     public static String getPathURL(File file)
     {
-        String url = SCHEMA_FILE + file.getAbsolutePath().replace(File.separatorChar, '/');
+        String path=file.getAbsolutePath();
+        if(File.separatorChar!='/')
+        {
+            path=path.replace(File.separatorChar, '/');
+        }
+        String url = SCHEMA_FILE + path;
         return url;
     }
 
