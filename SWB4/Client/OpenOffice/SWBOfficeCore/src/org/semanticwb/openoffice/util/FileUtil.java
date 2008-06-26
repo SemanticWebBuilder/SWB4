@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import org.semanticwb.openoffice.ErrorLog;
 
@@ -17,9 +18,59 @@ import org.semanticwb.openoffice.ErrorLog;
  */
 public final class FileUtil
 {
+
+    private static byte[] buffer = new byte[2048];
+
     private FileUtil()
     {
-        
+
+    }
+
+    public static String loadFileAsString(File file)
+    {
+        StringBuilder builder = new StringBuilder();
+        try
+        {
+            FileInputStream in = new FileInputStream(file);
+            int read = in.read(buffer);
+            while (read != -1)
+            {
+                builder.append(new String(buffer, 0, read, "UTF-8"));
+                read = in.read(buffer);
+            }
+            in.close();
+        }
+        catch (Exception fnfe)
+        {
+            ErrorLog.log(fnfe);
+        }
+        return builder.toString();
+    }
+
+    public static String loadResourceAsString(Class clazz, String resource)
+    {
+        StringBuilder builder = new StringBuilder();
+        try
+        {
+            InputStream in = clazz.getResourceAsStream(resource);
+            int read = in.read(buffer);
+            while (read != -1)
+            {
+                builder.append(new String(buffer, 0, read, "UTF-8"));
+                read = in.read(buffer);
+            }
+            in.close();
+        }
+        catch (IOException ioe)
+        {
+            ErrorLog.log(ioe);
+        }
+        return builder.toString();
+    }
+    public static void saveContent(Class clazz, String resource,File file)
+    {
+        InputStream in=clazz.getResourceAsStream(resource);
+        saveContent(in, file);
     }
     public static void saveContent(StringBuilder content, File file)
     {
@@ -29,6 +80,30 @@ public final class FileUtil
     public static void saveContent(String content, File file)
     {
         saveContent(content.getBytes(), file);
+    }
+    public static void copyFile(File attachment, File dir)
+    {   
+        File newFile = new File(dir.getPath() + "/" + attachment.getName());
+        if (!newFile.exists())
+        {
+            try
+            {
+                FileInputStream in = new FileInputStream(attachment);
+                FileOutputStream out = new FileOutputStream(newFile);
+                int read = in.read(buffer);
+                while (read != -1)
+                {
+                    out.write(buffer, 0, read);
+                    read = in.read(buffer);
+                }
+                in.close();
+                out.close();
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.log(ex);
+            }
+        }
     }
 
     public static void saveContent(File target, File dest)
@@ -48,7 +123,7 @@ public final class FileUtil
     {
         try
         {
-            byte[] buffer = new byte[2048];
+
             FileOutputStream out = new FileOutputStream(file);
             int read = in.read(buffer);
             while (read != -1)
