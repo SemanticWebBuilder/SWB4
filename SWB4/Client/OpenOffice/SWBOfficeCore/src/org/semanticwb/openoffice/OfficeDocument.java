@@ -5,8 +5,6 @@
 package org.semanticwb.openoffice;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -14,6 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import static org.semanticwb.openoffice.util.FileUtil.copyFile;
 
 /**
  * An Office documents is an abstraction of a document that can be published
@@ -203,31 +202,7 @@ public abstract class OfficeDocument
         return file;
     }
 
-    private void copyFile(File attachment, File dir)
-    {
-        byte[] buffer = new byte[2048];
-        File newFile = new File(dir.getPath() + "/" + attachment.getName());
-        if (!newFile.exists())
-        {
-            try
-            {
-                FileInputStream in = new FileInputStream(attachment);
-                FileOutputStream out = new FileOutputStream(newFile);
-                int read = in.read(buffer);
-                while (read != -1)
-                {
-                    out.write(buffer, 0, read);
-                    read = in.read(buffer);
-                }
-                in.close();
-                out.close();
-            }
-            catch (Exception ex)
-            {
-                ErrorLog.log(ex);
-            }
-        }
-    }
+    
 
 
     /*public byte[] getZipFile() throws WBException
