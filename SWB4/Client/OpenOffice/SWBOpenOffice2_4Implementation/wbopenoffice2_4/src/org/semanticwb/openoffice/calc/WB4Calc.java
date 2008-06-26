@@ -25,6 +25,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,7 +39,6 @@ import org.semanticwb.openoffice.SaveDocumentFormat;
 import org.semanticwb.openoffice.WBAlertException;
 import org.semanticwb.openoffice.WBException;
 import org.semanticwb.openoffice.WBOfficeException;
-import org.semanticwb.openoffice.impress.WB4Impress;
 
 /**
  * Class to wrap a Open Office Calc Document
@@ -54,7 +55,8 @@ public class WB4Calc extends OfficeDocument
     private static final String OVERRIDE_OPTION = "Overwrite";
     private static final String SCHEMA_FILE = "file:///";
     private final XComponent document;
-    private static String tabstrip;
+    private static String tabstrip = "";
+    private static final NumberFormat formatter = new DecimalFormat("000");
 
     static
     {
@@ -580,23 +582,52 @@ public class WB4Calc extends OfficeDocument
         {
             throw new IllegalArgumentException();
         }
-        List<String> sheets=createSheets(htmlFile);
-        createTabStrip(htmlFile.getParentFile(),sheets);
+        Map<String,String> sheets = createSheets(htmlFile);
+        createTabStrip(htmlFile.getParentFile(), sheets, htmlFile.getName());
+        changeContentToViewTabStrip(htmlFile);
     // TODO: Falta implementar    
     }
-    private void createTabStrip(File dir,List<String> sheets)
+
+    private void changeContentToViewTabStrip(File htmlFile)
     {
-        StringBuilder sheetstable=new StringBuilder(tabstrip);
-        
-        for(String sheetName : sheets)
-        {
-            String td="<td bgcolor=\"#FFFFFF\" nowrap><b><small><small>&nbsp;<a href=\"sheet001.htm\" target=\"frSheet\"><font face=\"Arial\" color=\"#000000\">Hoja1</font></a>&nbsp;</small></small></b></td>";
-        }
+        StringBuilder content = new StringBuilder("<html>\r\n");        
+        content.append("<frameset rows=\"*,39\" border=0 width=0 frameborder=no framespacing=0>\r\n");
+        content.append("<frame src=\"sheet000.html\" name=\"frSheet\">\r\n");
+        content.append("<frame src=\"tabstrip.html\" name=\"frTabs\" marginwidth=0 marginheight=0>\r\n");
+        content.append("<noframes>\r\n");
+        content.append("<body>\r\n");
+        content.append("<p>Esta página utiliza marcos que su explorador no admite.</p>\r\n");        
+        content.append("</body></noframes>\r\n");
+        content.append("</frameset>\r\n");
+        content.append("</html>\r\n");
         try
         {
-            File tabStrip=new File(dir.getPath()+"/tabscrip.htm");
+            FileOutputStream out = new FileOutputStream(htmlFile);
+            out.write(content.toString().getBytes());
+            out.close();
+        }
+        catch (Exception ex)
+        {
+            ErrorLog.log(ex);
+        }
+
+    }
+
+    private void createTabStrip(File dir, Map<String,String> sheets, String filecontentName)
+    {
+        File tabStrip = new File(dir.getPath() + "/tabstrip.html");
+        StringBuilder sheetstable = new StringBuilder();        
+        for (String sheetTitle : sheets.keySet())
+        {
+            String sheetName=sheets.get(sheetTitle);
+            sheetstable.append("<td bgcolor=\"#FFFFFF\" nowrap><b><small><small>&nbsp;<a href=\"" + sheetName + ".html\" target=\"frSheet\"><font face=\"Arial\" color=\"#000000\">"+sheetTitle+"</font></a>&nbsp;</small></small></b></td>\r\n");
+        }
+        String tabStripFinal = tabstrip.replace("[file]", filecontentName);
+        tabStripFinal = tabStripFinal.replace("[sheetstable]", sheetstable.toString());
+        try
+        {
             FileOutputStream out = new FileOutputStream(tabStrip);
-            out.write(sheetstable.toString().getBytes());
+            out.write(tabStripFinal.toString().getBytes());
             out.close();
         }
         catch (Exception ex)
@@ -604,9 +635,10 @@ public class WB4Calc extends OfficeDocument
             ErrorLog.log(ex);
         }
     }
-    private void saveTable(String table, File dir, int iSheet,String name)
-    {        
-        File sheet = new File(dir.getPath() + "/" + name + ".html");        
+
+    private void saveTable(String table, File dir, String name)
+    {
+        File sheet = new File(dir.getPath() + "/" + name + ".html");
         try
         {
             FileOutputStream out = new FileOutputStream(sheet);
@@ -618,10 +650,12 @@ public class WB4Calc extends OfficeDocument
             ErrorLog.log(ex);
         }
     }
-
-    private List<String> createSheets(File htmlFile)
+    
+    private Map<String,String> createSheets(File htmlFile)
     {
-        List<String> sheets=new ArrayList<String>();
+        XSpreadsheetDocument xSpreadsheetDocument = (XSpreadsheetDocument) UnoRuntime.queryInterface(XSpreadsheetDocument.class, this.document);
+        XSpreadsheets xSpreadsheets = xSpreadsheetDocument.getSheets();
+        Map<String,String> sheets = new HashMap<String,String>();
         try
         {
             byte[] buffer = new byte[2048];
@@ -640,7 +674,7 @@ public class WB4Calc extends OfficeDocument
             int posInit = 0;
             while (posInit >= 0)
             {
-                posInit = builder.indexOf("<A NAME=",posInit);
+                posInit = builder.indexOf("<A NAME=", posInit);
                 if (posInit != -1)
                 {
                     posInit = builder.indexOf("<TABLE", posInit + 9);
@@ -648,13 +682,14 @@ public class WB4Calc extends OfficeDocument
                     {
                         int posFin = builder.indexOf("</TABLE>", posInit);
                         String table = builder.substring(posInit, posFin + 8);
-                        String name = "sheet" + iSheet;
-                        saveTable(table, htmlFile.getParentFile(), iSheet,name);
-                        sheets.add(name);
+                        String name = "sheet" + formatter.format(iSheet);
+                        saveTable(table, htmlFile.getParentFile(), name);
+                        String title=xSpreadsheets.getElementNames()[iSheet];
+                        sheets.put(title,name);
                         iSheet++;
                     }
                 }
-                posInit = builder.indexOf("<A NAME=",posInit);
+                posInit = builder.indexOf("<A NAME=", posInit);
             }
         }
         catch (Exception ex)
