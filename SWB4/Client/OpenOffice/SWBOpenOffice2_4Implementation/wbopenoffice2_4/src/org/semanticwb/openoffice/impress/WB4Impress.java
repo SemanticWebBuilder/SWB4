@@ -704,8 +704,9 @@ public class WB4Impress extends OfficeDocument
             builder.deleteCharAt(builder.length() - 1);
         }
         builder.append(");\r\n");
+        builder.append(script);
         File scriptFile = new File(dir.getPath() + File.separatorChar + "script.js");
-        saveContent(script, scriptFile);
+        saveContent(builder, scriptFile);
     }
 
     private void saveFullScreen(File dir)
@@ -832,6 +833,7 @@ public class WB4Impress extends OfficeDocument
             outlineFile.delete();
         }
         String newOutLine = outline.replace("[esquema]", esquema);
+        newOutLine=newOutLine.replace("[file]", htmlFile.getName());
         saveContent(newOutLine, outlineFile);
     }
 
