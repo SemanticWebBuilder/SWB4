@@ -49,7 +49,7 @@ public class WB4CalcApplicationTest
     public void setUp()
     {
         try
-        {
+        {           
             xContext = Bootstrap.bootstrap();
 
 
