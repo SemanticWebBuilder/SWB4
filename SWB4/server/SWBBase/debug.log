@@ -1,4 +1,0 @@
-[Time: 2008-06-03 22:09:19,671] [Thread: main] [Level: INFO]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@8965fb: display name [org.springframework.context.support.ClassPathXmlApplicationContext@8965fb]; startup date [Tue Jun 03 22:09:19 CDT 2008]; root of context hierarchy
-[Time: 2008-06-03 22:09:19,703] [Thread: main] [Level: DEBUG]Class [org.apache.commons.collections.map.CaseInsensitiveMap] or one of its dependencies is not present: java.lang.ClassNotFoundException: org.apache.commons.collections.map.CaseInsensitiveMap
-[Time: 2008-06-03 22:09:19,734] [Thread: main] [Level: DEBUG]Class [edu.emory.mathcs.backport.java.util.concurrent.ConcurrentHashMap] or one of its dependencies is not present: java.lang.ClassNotFoundException: edu.emory.mathcs.backport.java.util.concurrent.ConcurrentHashMap
-[Time: 2008-06-03 22:09:19,765] [Thread: main] [Level: INFO]Loading XML bean definitions from class path resource [springService.xml]
