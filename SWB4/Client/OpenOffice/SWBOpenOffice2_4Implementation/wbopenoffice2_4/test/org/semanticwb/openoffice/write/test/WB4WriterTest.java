@@ -252,8 +252,7 @@ public class WB4WriterTest
         }
     }
 
-    @Test
-    @Ignore
+    @Test    
     public void SaveHtmlPrepareAndGetFilesTest()
     {
         try
@@ -327,6 +326,7 @@ public class WB4WriterTest
     }
 
     @Test    
+    @Ignore
     public void getAllAttachmentsTest()
     {
         try
