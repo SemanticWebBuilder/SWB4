@@ -89,7 +89,7 @@ public final class Configuration
             {
                 FileInputStream in = new FileInputStream(fileconfig);
                 Properties properties = new Properties();
-                properties.load(in);
+                properties.loadFromXML(in);
                 Set<String> keys = properties.stringPropertyNames();
                 for (String key : keys)
                 {
