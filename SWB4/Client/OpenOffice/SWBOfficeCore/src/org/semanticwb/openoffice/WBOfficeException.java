@@ -19,4 +19,8 @@ public class WBOfficeException extends WBException
     {
         super(message, cause);
     }
+    public WBOfficeException(String message)
+    {
+        super(message);
+    }
 }
