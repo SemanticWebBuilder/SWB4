@@ -3,64 +3,66 @@
  *
  * Created on 3 de junio de 2008, 10:28 AM
  */
-
 package org.semanticwb.openoffice.ui.dialogs;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashSet;
+import javax.swing.JOptionPane;
 import org.semanticwb.openoffice.*;
 
 /**
  *
  * @author  victor.lorenzana
  */
-public class DialogLogin extends javax.swing.JDialog {
-    
-    private boolean canceled=true;
-    private UserInfo userInfo;    
+public class DialogLogin extends javax.swing.JDialog
+{
+
+    private boolean canceled = true;
+    private UserInfo userInfo;
     private URI url;
-    private String loggin,password;
-    HashSet<URI> urls;
+    private String loggin,  password;
+    ConfigurationListURI configurationListURI;
+
     /** Creates new form DialogLogin */
-    public DialogLogin(java.awt.Frame parent, boolean modal,HashSet<URI> urls) {
+    public DialogLogin(java.awt.Frame parent, boolean modal, ConfigurationListURI configurationListURI)
+    {
         super(parent, modal);
-        this.urls=urls;
+        this.configurationListURI = configurationListURI;
         initComponents();
         this.jComboBoxWebAddress.removeAllItems();
-        for(URI urlToAdd : urls)
+        for (URI uri : configurationListURI.getAddresses())
         {
-            this.jComboBoxWebAddress.addItem(urlToAdd);
+            this.jComboBoxWebAddress.addItem(uri);
         }
-        
-        
+
     }
+
     public boolean isCanceled()
     {
         return canceled;
     }
-    
-    public HashSet<URI> getSelectionURL()
-    {
-        return urls;
-    }
-    
+
     public String getLogin()
     {
         return loggin;
     }
+
     public String getPassword()
     {
         return password;
     }
+
     public UserInfo getUserInfo()
     {
         return userInfo;
     }
+
     public URI getURI()
     {
-        return url;    
+        return url;
     }
-    
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -101,9 +103,16 @@ public class DialogLogin extends javax.swing.JDialog {
 
         jLabelWebAddress.setText("Dirección Web:");
 
+        jComboBoxWebAddress.setEditable(true);
         jComboBoxWebAddress.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBoxWebAddress.setAutoscrolls(true);
         jComboBoxWebAddress.setName("WebAddress"); // NOI18N
         jComboBoxWebAddress.setNextFocusableComponent(jTextFieldClave);
+        jComboBoxWebAddress.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxWebAddressActionPerformed(evt);
+            }
+        });
 
         jButtonAvanced.setText("Avanzado");
         jButtonAvanced.addActionListener(new java.awt.event.ActionListener() {
@@ -175,40 +184,69 @@ public class DialogLogin extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
     private void jButtonAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAcceptActionPerformed
+        if (this.jComboBoxWebAddress.getSelectedItem() == null)
+        {
+            JOptionPane.showMessageDialog(null, "Debe indicar una dirección Web", this.getTitle(), JOptionPane.ERROR_MESSAGE);
+            this.jComboBoxWebAddress.requestFocus();
+            return;
+        }
+        String sUri = this.jComboBoxWebAddress.getSelectedItem().toString();
+        try
+        {
+            URI uri = new URI(sUri);
+            if (this.jTextFieldClave.getText().isEmpty())
+            {
+                JOptionPane.showMessageDialog(null, "Debe indicar la clave de acceso", this.getTitle(), JOptionPane.ERROR_MESSAGE);
+                this.jTextFieldClave.requestFocus();
+                return;
+            }
+            if (this.jPassword.getPassword().length == 0)
+            {
+                JOptionPane.showMessageDialog(null, "Debe indicar la contraseña de acceso", this.getTitle(), JOptionPane.ERROR_MESSAGE);
+                this.jPassword.requestFocus();
+                return;
+            }
+            configurationListURI.addUserConfiguration(uri, this.jTextFieldClave.getText());
+        }
+        catch (URISyntaxException use)
+        {
+            JOptionPane.showMessageDialog(null, "La dirección Web no es válida", this.getTitle(), JOptionPane.ERROR_MESSAGE);
+            this.jComboBoxWebAddress.requestFocus();
+            return;
+        }
+
         this.setVisible(false);
-        this.canceled=false;
-        // TODO: Agregar logica de acceso
+        this.canceled = false;
+    // TODO: Agregar logica de acceso
     }//GEN-LAST:event_jButtonAcceptActionPerformed
 
     private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelActionPerformed
         this.setVisible(false);
-        this.canceled=true;
+        this.canceled = true;
     }//GEN-LAST:event_jButtonCancelActionPerformed
 
     private void jButtonAvancedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAvancedActionPerformed
-        // TODO add your handling code here:
+    // TODO add your handling code here:
     }//GEN-LAST:event_jButtonAvancedActionPerformed
-    
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                HashSet<URI> urls=new HashSet<URI>();
-                DialogLogin dialog = new DialogLogin(new javax.swing.JFrame(), true,urls);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
+
+    private void jComboBoxWebAddressActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxWebAddressActionPerformed
+        if (this.jComboBoxWebAddress.getSelectedItem() != null)
+        {
+            String sUri = this.jComboBoxWebAddress.getSelectedItem().toString();
+            try
+            {
+                URI uri = new URI(sUri);
+                String login=configurationListURI.getLogin(uri);
+                this.jTextFieldClave.setText(login);
             }
-        });
-    }
-    
+            catch (URISyntaxException use)
+            {
+
+            }
+        }
+    }//GEN-LAST:event_jComboBoxWebAddressActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAccept;
     private javax.swing.JButton jButtonAvanced;
@@ -221,5 +259,4 @@ public class DialogLogin extends javax.swing.JDialog {
     private javax.swing.JPasswordField jPassword;
     private javax.swing.JTextField jTextFieldClave;
     // End of variables declaration//GEN-END:variables
-    
 }
