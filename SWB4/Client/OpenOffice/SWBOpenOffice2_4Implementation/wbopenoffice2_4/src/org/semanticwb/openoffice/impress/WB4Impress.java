@@ -55,7 +55,7 @@ import static org.semanticwb.openoffice.util.FileUtil.getPathURL;
  */
 public class WB4Impress extends OfficeDocument
 {
-
+    private static final String ERROR_DOCUMENT_NOT_FOUND = "There is not a document active in the desktop";
     private static final String OVERRIDE_OPTION = "Overwrite";
     private static final String APPLICATION_VERSION = "2.4";
     private static final String DESKTOP_PATH = "com.sun.star.frame.Desktop";
@@ -113,6 +113,10 @@ public class WB4Impress extends OfficeDocument
                     DESKTOP_PATH, m_xContext);
             XDesktop xdesktop = (XDesktop) UnoRuntime.queryInterface(XDesktop.class, desktop);
             document = xdesktop.getCurrentComponent();
+            if(document==null)
+            {
+                throw new WBOfficeException(ERROR_DOCUMENT_NOT_FOUND);
+            }
         }
         catch (com.sun.star.uno.Exception e)
         {
