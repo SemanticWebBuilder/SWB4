@@ -28,8 +28,7 @@ public final class ConfigurationListURI
      * List of UserConfigurations
      */
     private HashMap<URI, UserConguration> userConfigurations = new HashMap<URI, UserConguration>();
-    private String path;
-
+    private String path;    
     public ConfigurationListURI()
     {
         path = System.getProperty(CONFIGURATION, "urilist.xml");
@@ -112,13 +111,13 @@ public final class ConfigurationListURI
             {
                 FileInputStream in = new FileInputStream(fileconfig);
                 Properties properties = new Properties();
-                properties.load(in);
+                properties.loadFromXML(in);
                 Set<String> keys = properties.stringPropertyNames();
                 for (String key : keys)
                 {
                     try
                     {
-                        String login = properties.getProperty(path);
+                        String login = properties.getProperty(key);
                         URI uri = new URI(key);
                         this.userConfigurations.put(uri, new UserConguration(uri, login));
                     }
