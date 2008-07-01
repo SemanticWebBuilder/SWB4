@@ -49,7 +49,7 @@ import static org.semanticwb.openoffice.util.FileUtil.getFileFromURL;
  */
 public class WB4Calc extends OfficeDocument
 {
-
+    private static final String ERROR_DOCUMENT_NOT_FOUND = "There is not a document active in the desktop";
     private static final String CALC_FORMAT = "Calc8";
     private static final String DESKTOP_NOT_FOUND = "The desktop was not found";
     private static final String DESKTOP_PATH = "com.sun.star.frame.Desktop";
@@ -95,8 +95,12 @@ public class WB4Calc extends OfficeDocument
         {
             Object desktop = serviceManager.createInstanceWithContext(
                     DESKTOP_PATH, m_xContext);
-            XDesktop xdesktop = (XDesktop) UnoRuntime.queryInterface(XDesktop.class, desktop);
+            XDesktop xdesktop = (XDesktop) UnoRuntime.queryInterface(XDesktop.class, desktop);            
             document = xdesktop.getCurrentComponent();
+            if(document==null)
+            {
+                throw new WBOfficeException(ERROR_DOCUMENT_NOT_FOUND);
+            }
         }
         catch (com.sun.star.uno.Exception e)
         {
