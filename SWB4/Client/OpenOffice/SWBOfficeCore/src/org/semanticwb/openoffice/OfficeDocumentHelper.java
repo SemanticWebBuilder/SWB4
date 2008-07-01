@@ -187,7 +187,7 @@ public final class OfficeDocumentHelper
 
     private final static void login()
     {
-        HashSet<URI> urls = new HashSet<URI>();
+       /* HashSet<URI> urls = new HashSet<URI>();
         DialogLogin frmlogin = new DialogLogin(new javax.swing.JFrame(), true, urls);
         frmlogin.setLocationRelativeTo(null);
         frmlogin.setVisible(true);
@@ -196,7 +196,7 @@ public final class OfficeDocumentHelper
             URI url = frmlogin.getURI();
             String login = frmlogin.getLogin();
             String password = frmlogin.getPassword();
-        }
+        }*/
     }
 
     public final static void logout()
