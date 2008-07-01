@@ -45,7 +45,7 @@ import static org.semanticwb.openoffice.util.FileUtil.getPathURL;
  */
 public class WB4Writer extends OfficeDocument
 {
-
+    private static final String ERROR_DOCUMENT_NOT_FOUND = "There is not a document active in the desktop";
     private static final String HTML_EXPORT_FORMAT = "HTML (StarWriter)";
     private static final String OFFICE97_FORMAT = "MS Word 97";
     private static final String DESKTOP_NOT_FOUND = "Error al obtener el escritorio de Open Office";
@@ -99,6 +99,10 @@ public class WB4Writer extends OfficeDocument
                     DESKTOP_PATH, m_xContext);
             XDesktop xdesktop = (XDesktop) UnoRuntime.queryInterface(XDesktop.class, desktop);
             document = xdesktop.getCurrentComponent();
+            if(document==null)
+            {
+                throw new WBOfficeException(ERROR_DOCUMENT_NOT_FOUND);
+            }
         }
         catch (com.sun.star.uno.Exception e)
         {
