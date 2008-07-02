@@ -50,7 +50,7 @@ public class WB4Writer extends OfficeDocument
     private static final String OFFICE97_FORMAT = "MS Word 97";
     private static final String DESKTOP_NOT_FOUND = "Error al obtener el escritorio de Open Office";
     private static final String DESKTOP_PATH = "com.sun.star.frame.Desktop";
-    private static final String INDEXOFBOUNDERROR = "There was an error getting custom properties";
+    private static final String INDEXOFBOUNDERROR = "There was an error saving custom properties";
     private static final String ERROR_DOCUMENT_READ_ONLY = "The document is read only";
     /**
      * The default Open Office Extension OPENOFFICE_EXTENSION=".odt"
@@ -124,7 +124,7 @@ public class WB4Writer extends OfficeDocument
     /**
      * Gets all the files in the document
      * @return List of files in the document
-     * @throws org.semanticwb.openoffice.NoHasLocationException The document has not saved before
+     * @throws org.semanticwb.openoffice.NoHasLocationException The document has not saved before, and the document has hyperlinks relatives to the document.
      */
     @Override
     public final List<File> getAllAttachments() throws NoHasLocationException
@@ -175,16 +175,15 @@ public class WB4Writer extends OfficeDocument
      * @throws org.semanticwb.openoffice.WBException If the list of properties are more that four
      */
     @Override
-    public Map<String, String> getCustomProperties() throws WBException
+    public Map<String, String> getCustomProperties()
     {
         HashMap<String, String> properties = new HashMap<String, String>();
         XTextDocument xtd =
                 (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, this.document);
         XDocumentInfoSupplier xdis =
                 (XDocumentInfoSupplier) UnoRuntime.queryInterface(XDocumentInfoSupplier.class, xtd);
-        XDocumentInfo xdi = xdis.getDocumentInfo();
-        short index = xdi.getUserFieldCount();
-        for (short i = 0; i < index; i++)
+        XDocumentInfo xdi = xdis.getDocumentInfo();        
+        for (short i = 0; i < xdi.getUserFieldCount(); i++)
         {
             try
             {
@@ -193,8 +192,8 @@ public class WB4Writer extends OfficeDocument
                 properties.put(name, value);
             }
             catch (com.sun.star.lang.ArrayIndexOutOfBoundsException aibe)
-            {
-                throw new WBOfficeException(INDEXOFBOUNDERROR, aibe);
+            {                
+                ErrorLog.log(aibe);
             }
         }
         return properties;
