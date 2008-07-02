@@ -55,6 +55,8 @@ import static org.semanticwb.openoffice.util.FileUtil.getPathURL;
  */
 public class WB4Impress extends OfficeDocument
 {
+    private static final String ERROR_DOCUMENT_NOT_MODIFIED = "The document has not been modified";
+    private static final String ERROR_DOCUMENT_NOT_SAVED_BEFORE = "The document has not been saved before";
     private static final String ERROR_DOCUMENT_NOT_FOUND = "There is not a document active in the desktop";
     private static final String OVERRIDE_OPTION = "Overwrite";
     private static final String APPLICATION_VERSION = "2.4";
@@ -341,7 +343,7 @@ public class WB4Impress extends OfficeDocument
 
     /**
      * Save the document
-     * @throws org.semanticwb.openoffice.WBException If the document has not been saved before
+     * @throws org.semanticwb.openoffice.WBException If the document has not been saved before, if the document has not been modified, or if the document is read only
      */
     @Override
     public final void save() throws WBException
@@ -352,14 +354,25 @@ public class WB4Impress extends OfficeDocument
             if (xModified.isModified())
             {
                 XStorable xStorable = (XStorable) UnoRuntime.queryInterface(XStorable.class, document);
-                if (!xStorable.isReadonly())
+                if (xStorable.hasLocation())
                 {
-                    xStorable.store();
+                    if (!xStorable.isReadonly())
+                    {
+                        xStorable.store();
+                    }
+                    else
+                    {
+                        throw new WBAlertException(ERROR_DOCUMENT_READ_ONLY);
+                    }
                 }
                 else
                 {
-                    throw new WBAlertException(ERROR_DOCUMENT_READ_ONLY);
+                    throw new WBAlertException(ERROR_DOCUMENT_NOT_SAVED_BEFORE);
                 }
+            }
+            else
+            {
+                throw new WBAlertException(ERROR_DOCUMENT_NOT_MODIFIED);
             }
         }
         catch (IOException ioe)
@@ -367,7 +380,6 @@ public class WB4Impress extends OfficeDocument
             throw new WBOfficeException(ERROR_NO_SAVE, ioe);
 
         }
-
     }
 
     /**
