@@ -49,10 +49,13 @@ import static org.semanticwb.openoffice.util.FileUtil.getFileFromURL;
  */
 public class WB4Calc extends OfficeDocument
 {
+
     private static final String ERROR_DOCUMENT_NOT_FOUND = "There is not a document active in the desktop";
     private static final String CALC_FORMAT = "Calc8";
     private static final String DESKTOP_NOT_FOUND = "The desktop was not found";
     private static final String DESKTOP_PATH = "com.sun.star.frame.Desktop";
+    private static final String ERROR_DOCUMENT_NOT_MODIFIED = "The document has not been modified";
+    private static final String ERROR_DOCUMENT_NOT_SAVED_BEFORE = "The document has not been saved before";
     private static final String HTML_EXPORT_FORMAT = "HTML (StarCalc)";
     private static final String INDEXOFBOUNDERROR = "There was an error saving custom properties";
     private static final String ERROR_DOCUMENT_READ_ONLY = "The document is read only";
@@ -95,9 +98,9 @@ public class WB4Calc extends OfficeDocument
         {
             Object desktop = serviceManager.createInstanceWithContext(
                     DESKTOP_PATH, m_xContext);
-            XDesktop xdesktop = (XDesktop) UnoRuntime.queryInterface(XDesktop.class, desktop);            
+            XDesktop xdesktop = (XDesktop) UnoRuntime.queryInterface(XDesktop.class, desktop);
             document = xdesktop.getCurrentComponent();
-            if(document==null)
+            if (document == null)
             {
                 throw new WBOfficeException(ERROR_DOCUMENT_NOT_FOUND);
             }
@@ -160,7 +163,7 @@ public class WB4Calc extends OfficeDocument
      */
     @Override
     public final List<File> getAllAttachments() throws NoHasLocationException
-    {   
+    {
         List<File> attachments = new ArrayList<File>();
         XSpreadsheetDocument xSpreadsheetDocument = (XSpreadsheetDocument) UnoRuntime.queryInterface(XSpreadsheetDocument.class, this.document);
         XSpreadsheets xSpreadsheets = xSpreadsheetDocument.getSheets();
@@ -202,7 +205,7 @@ public class WB4Calc extends OfficeDocument
 
         XDocumentInfoSupplier xdis =
                 (XDocumentInfoSupplier) UnoRuntime.queryInterface(XDocumentInfoSupplier.class, xtd);
-        XDocumentInfo xdi = xdis.getDocumentInfo();        
+        XDocumentInfo xdi = xdis.getDocumentInfo();
         for (short i = 0; i < xdi.getUserFieldCount(); i++)
         {
             try
@@ -212,7 +215,7 @@ public class WB4Calc extends OfficeDocument
                 properties.put(name, value);
             }
             catch (com.sun.star.lang.ArrayIndexOutOfBoundsException aibe)
-            {                
+            {
                 ErrorLog.log(aibe);
             }
         }
@@ -252,7 +255,7 @@ public class WB4Calc extends OfficeDocument
 
     /**
      * Save the document
-     * @throws org.semanticwb.openoffice.WBException If the document has not been saved before
+     * @throws org.semanticwb.openoffice.WBException If the document has not been saved before, if the document has not been modified, or if the document is read only
      */
     @Override
     public final void save() throws WBException
@@ -263,16 +266,26 @@ public class WB4Calc extends OfficeDocument
             if (xModified.isModified())
             {
                 XStorable xStorable = (XStorable) UnoRuntime.queryInterface(XStorable.class, document);
-                if (!xStorable.isReadonly())
+                if (xStorable.hasLocation())
                 {
-                    xStorable.store();
+                    if (!xStorable.isReadonly())
+                    {
+                        xStorable.store();
+                    }
+                    else
+                    {
+                        throw new WBAlertException(ERROR_DOCUMENT_READ_ONLY);
+                    }
                 }
                 else
                 {
-                    throw new WBAlertException(ERROR_DOCUMENT_READ_ONLY);
+                    throw new WBAlertException(ERROR_DOCUMENT_NOT_SAVED_BEFORE);
                 }
             }
-
+            else
+            {
+                throw new WBAlertException(ERROR_DOCUMENT_NOT_MODIFIED);
+            }
         }
         catch (IOException ioe)
         {
