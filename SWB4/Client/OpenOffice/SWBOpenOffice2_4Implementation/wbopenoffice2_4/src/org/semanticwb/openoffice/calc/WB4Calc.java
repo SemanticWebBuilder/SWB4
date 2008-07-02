@@ -54,7 +54,7 @@ public class WB4Calc extends OfficeDocument
     private static final String DESKTOP_NOT_FOUND = "The desktop was not found";
     private static final String DESKTOP_PATH = "com.sun.star.frame.Desktop";
     private static final String HTML_EXPORT_FORMAT = "HTML (StarCalc)";
-    private static final String INDEXOFBOUNDERROR = "There was an error getting custom properties";
+    private static final String INDEXOFBOUNDERROR = "There was an error saving custom properties";
     private static final String ERROR_DOCUMENT_READ_ONLY = "The document is read only";
     private static final String OFFICE97_FORMAT = "MS Excel 97";
     private static final String OPENOFFICE_EXTENSION = ".ods";
@@ -156,14 +156,12 @@ public class WB4Calc extends OfficeDocument
     /**
      * Gets all the files in the document
      * @return List of files in the document
-     * @throws org.semanticwb.openoffice.NoHasLocationException The document has not saved before     * 
+     * @throws org.semanticwb.openoffice.NoHasLocationException The document has not saved before, and the document has hyperlinks relatives to the document
      */
     @Override
     public final List<File> getAllAttachments() throws NoHasLocationException
-    {
-
+    {   
         List<File> attachments = new ArrayList<File>();
-
         XSpreadsheetDocument xSpreadsheetDocument = (XSpreadsheetDocument) UnoRuntime.queryInterface(XSpreadsheetDocument.class, this.document);
         XSpreadsheets xSpreadsheets = xSpreadsheetDocument.getSheets();
         for (String name : xSpreadsheets.getElementNames())
@@ -196,7 +194,7 @@ public class WB4Calc extends OfficeDocument
      * @throws org.semanticwb.openoffice.WBException If the list of properties are more that four
      */
     @Override
-    public final Map<String, String> getCustomProperties() throws WBException
+    public final Map<String, String> getCustomProperties()
     {
         HashMap<String, String> properties = new HashMap<String, String>();
         XSpreadsheetDocument xtd =
@@ -204,9 +202,8 @@ public class WB4Calc extends OfficeDocument
 
         XDocumentInfoSupplier xdis =
                 (XDocumentInfoSupplier) UnoRuntime.queryInterface(XDocumentInfoSupplier.class, xtd);
-        XDocumentInfo xdi = xdis.getDocumentInfo();
-        short index = xdi.getUserFieldCount();
-        for (short i = 0; i < index; i++)
+        XDocumentInfo xdi = xdis.getDocumentInfo();        
+        for (short i = 0; i < xdi.getUserFieldCount(); i++)
         {
             try
             {
@@ -215,8 +212,8 @@ public class WB4Calc extends OfficeDocument
                 properties.put(name, value);
             }
             catch (com.sun.star.lang.ArrayIndexOutOfBoundsException aibe)
-            {
-                throw new WBOfficeException(INDEXOFBOUNDERROR, aibe);
+            {                
+                ErrorLog.log(aibe);
             }
         }
         return properties;
