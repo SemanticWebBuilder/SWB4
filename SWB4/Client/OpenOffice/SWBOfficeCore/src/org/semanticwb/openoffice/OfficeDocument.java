@@ -66,7 +66,7 @@ public abstract class OfficeDocument
      * @return A Map of custum properties
      * @throws org.semanticwb.openoffice.WBException If the list of properties are more that four
      */
-    public abstract Map<String, String> getCustomProperties() throws WBException;
+    public abstract Map<String, String> getCustomProperties();
 
     /**
      * Save the properties in custom properties in the document
