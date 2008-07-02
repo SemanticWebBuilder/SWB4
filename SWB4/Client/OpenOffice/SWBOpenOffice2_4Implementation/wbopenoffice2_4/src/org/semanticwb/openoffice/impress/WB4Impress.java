@@ -62,7 +62,7 @@ public class WB4Impress extends OfficeDocument
     private static final String ERROR_DESKTOP_NOT_FOUND = "The desktop was not found";
     private static final String HTML_EXPORT_FORMAT = "impress_html_Export";
     private static final String IMPRESS_FORMAT = "Impress8";
-    private static final String INDEXOFBOUNDERROR = "There was an error getting custom properties";
+    private static final String INDEXOFBOUNDERROR = "There was an error saving custom properties";
     private static final String ERROR_DOCUMENT_READ_ONLY = "The document is read only";
     private static final String ERROR_NO_SAVE = "The document can not be saved";
     private static final String OPENOFFICE_EXTENSION = ".odp";
@@ -254,7 +254,7 @@ public class WB4Impress extends OfficeDocument
     /**
      * Gets all the files in the document
      * @return List of files in the document
-     * @throws org.semanticwb.openoffice.NoHasLocationException The document has not saved before
+     * @throws org.semanticwb.openoffice.NoHasLocationException The document has not saved before, and the document has hyperlinks relatives to the document
      */
     @Override
     public final List<File> getAllAttachments()
@@ -283,15 +283,14 @@ public class WB4Impress extends OfficeDocument
      * @throws org.semanticwb.openoffice.WBException If the list of properties are more that four
      */
     @Override
-    public final Map<String, String> getCustomProperties() throws WBException
+    public final Map<String, String> getCustomProperties() 
     {
         HashMap<String, String> properties = new HashMap<String, String>();
 
         XDocumentInfoSupplier xdis =
                 (XDocumentInfoSupplier) UnoRuntime.queryInterface(XDocumentInfoSupplier.class, document);
-        XDocumentInfo xdi = xdis.getDocumentInfo();
-        short index = xdi.getUserFieldCount();
-        for (short i = 0; i < index; i++)
+        XDocumentInfo xdi = xdis.getDocumentInfo();        
+        for (short i = 0; i < xdi.getUserFieldCount(); i++)
         {
             try
             {
@@ -300,8 +299,8 @@ public class WB4Impress extends OfficeDocument
                 properties.put(name, value);
             }
             catch (com.sun.star.lang.ArrayIndexOutOfBoundsException aibe)
-            {
-                throw new WBOfficeException(INDEXOFBOUNDERROR, aibe);
+            {                
+                ErrorLog.log(aibe);
             }
         }
         return properties;
