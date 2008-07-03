@@ -555,6 +555,10 @@ public class WB4Impress extends OfficeDocument
     @Override
     public final File saveAsHtml(File dir) throws WBException
     {
+        if (dir.isFile())
+        {
+            throw new IllegalArgumentException();
+        }
         try
         {
             File docFile = this.getLocalPath();
