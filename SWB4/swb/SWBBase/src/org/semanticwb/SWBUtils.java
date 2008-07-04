@@ -13,6 +13,7 @@ import java.util.Enumeration;
 import java.util.Properties;
 import org.apache.log4j.PropertyConfigurator;
 import org.semanticwb.base.db.DBConnectionManager;
+import org.semanticwb.base.db.DBConnectionPool;
 import org.semanticwb.base.util.imp.Logger4jImpl;
 
 /**
@@ -338,7 +339,7 @@ public class SWBUtils
         /** Return a enumeration of DBConnectionPool
          * @return Return a enumeration of DBConnectionPool
         */    
-        public static Enumeration getPools()
+        public static Enumeration<DBConnectionPool> getPools()
         {
             return getConnectionManager().getPools().elements();
         }
@@ -429,6 +430,16 @@ public class SWBUtils
                 log.error("Not Database Found...", e);
             }
             return ret;
+        }   
+        
+        public static int getConnections(String poolName)
+        {
+            return getConnectionManager().getConnections(poolName);
+        }
+        
+        public static int getFreeConnections(String poolName)
+        {
+            return getConnectionManager().getFreeConnections(poolName);
         }        
     }
    
