@@ -9,6 +9,8 @@ import java.sql.ResultSet;
 import java.util.Properties;
 import javax.servlet.ServletContext;
 import org.semanticwb.base.util.SWBProperties;
+import org.semanticwb.platform.SWBMonitor;
+import org.semanticwb.platform.SemanticMgr;
 
 /**
  *
@@ -22,11 +24,14 @@ public class SWBContext
     private static Properties props=null;
     private String contextPath="/";
 
-    private ServletContext servletContext=null;
+    private static ServletContext servletContext=null;
 
-    private boolean haveDB=false;
-    private boolean haveDBTables=false;
+    private static boolean haveDB=false;
+    private static boolean haveDBTables=false;
     
+    private static SWBMonitor monitor=null;
+    private static SemanticMgr semanticMgr=null;
+
     /**
      * 
      */
@@ -65,17 +70,18 @@ public class SWBContext
             {
                 log.info("Database: "+SWBUtils.DB.getDatabaseName());
                 haveDB=true;
-                PreparedStatement sr=con.prepareStatement("select * from wbcounter");
-                try
-                {
-                    ResultSet rs=sr.executeQuery();
-                    if(rs!=null)
-                    {
+                //Si no existen las tablas, se crean automaticamente
+//                PreparedStatement sr=con.prepareStatement("select * from swb_counter");
+//                try
+//                {
+//                    ResultSet rs=sr.executeQuery();
+//                    if(rs!=null)
+//                    {
                         haveDBTables=true;
-                        rs.close();
-                    }
-                }catch(Exception noe){log.debug("Table wbcounter not found...",noe);}
-                sr.close();
+//                        rs.close();
+//                    }
+//                }catch(Exception noe){log.debug("Table wbcounter not found...",noe);}
+//                sr.close();
                 con.close();
             }
             
@@ -88,11 +94,24 @@ public class SWBContext
             {
                 log.warn("Default SemanticWebBuilder database tables not found...");
                 return;
-            }            
+            }           
+            
+            try
+            {
+                System.setProperty("sun.net.client.defaultConnectTimeout", getEnv("swb/defaultConnectTimeout","5000"));
+                System.setProperty("sun.net.client.defaultReadTimeout", getEnv("swb/defaultReadTimeout","30000"));
+            }catch(Exception e)
+            {
+                System.err.println("Error seting defaultConnectTimeout, defaultReadTimeout");            
+            }                
 
-
-            Timestamp initime = null;
-
+            
+            monitor=new SWBMonitor();
+            monitor.init(this);
+            semanticMgr=new SemanticMgr();
+            semanticMgr.init(this);
+            
+//            Timestamp initime = null;
 //            util.log(com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "log_WBLoader_Init_InstanceConfiguration") + util.getEnv("wb/clientServer"), true);
 //            cpus = getNumProcessors();
 //            util.log(com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "log_WBLoader_Init_ProcessorNumber") + cpus, true);
@@ -195,7 +214,7 @@ public class SWBContext
      * Getter for property haveDB.
      * @return Value of property haveDB.
      */
-    public boolean haveDB()
+    public static boolean haveDB()
     {
         return haveDB;
     }
@@ -204,7 +223,7 @@ public class SWBContext
      * Getter for property haveDBTables.
      * @return Value of property haveDBTables.
      */
-    public boolean haveDBTables()
+    public static boolean haveDBTables()
     {
         return haveDBTables;
     }    
@@ -282,8 +301,18 @@ public class SWBContext
         return obj;
     }   
     
-    public ServletContext getServletContext() {
+    public static ServletContext getServletContext() 
+    {
         return servletContext;
     }    
 
+    public static SWBMonitor getMonitor() 
+    {
+        return monitor;
+    }    
+
+    public static SemanticMgr getSemanticMgr() 
+    {
+        return semanticMgr;
+    }    
 }
