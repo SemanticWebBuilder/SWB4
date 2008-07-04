@@ -45,6 +45,42 @@
                     <file>${file.reference.mysql-connector-java-5.0.3-bin.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
+                <library files="1">
+                    <file>${file.reference.arq.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library files="1">
+                    <file>${file.reference.iri.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library files="1">
+                    <file>${file.reference.jena.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library files="1">
+                    <file>${file.reference.lucene-core-2.2.0.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library files="1">
+                    <file>${file.reference.xercesImpl.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library files="1">
+                    <file>${file.reference.xml-apis.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library files="1">
+                    <file>${reference.SWBTripleStore.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library files="1">
+                    <file>${reference.SWBAdmin.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library files="1">
+                    <file>${file.reference.icu4j_3_4.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
             </web-module-libraries>
             <web-module-additional-libraries/>
             <source-roots>
@@ -56,6 +92,14 @@
         </data>
         <references xmlns="http://www.netbeans.org/ns/ant-project-references/1">
             <reference>
+                <foreign-project>SWBAdmin</foreign-project>
+                <artifact-type>jar</artifact-type>
+                <script>build.xml</script>
+                <target>jar</target>
+                <clean-target>clean</clean-target>
+                <id>jar</id>
+            </reference>
+            <reference>
                 <foreign-project>SWBBase</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
@@ -65,6 +109,14 @@
             </reference>
             <reference>
                 <foreign-project>SWBPlatform</foreign-project>
+                <artifact-type>jar</artifact-type>
+                <script>build.xml</script>
+                <target>jar</target>
+                <clean-target>clean</clean-target>
+                <id>jar</id>
+            </reference>
+            <reference>
+                <foreign-project>SWBTripleStore</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
                 <target>jar</target>
