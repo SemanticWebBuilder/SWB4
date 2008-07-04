@@ -5,7 +5,7 @@
     <description>Semantic Web Builder 4.0</description>
     <filter>
         <filter-name>VirtualHostFilter</filter-name>
-        <filter-class>org.semanticwb.platform.servlet.SWBVirtualHostFilter</filter-class>
+        <filter-class>org.semanticwb.servlet.SWBVirtualHostFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>VirtualHostFilter</filter-name>

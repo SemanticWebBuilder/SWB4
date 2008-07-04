@@ -2,7 +2,7 @@
 <%@page pageEncoding="UTF-8"%>
 
 <%
-  org.semanticwb.util.SWBUtils.getLogger(this.getClass()).debug("hola");
+  org.semanticwb.SWBUtils.getLogger(this.getClass()).debug("hola");
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
