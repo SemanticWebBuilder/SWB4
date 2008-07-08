@@ -2,19 +2,36 @@
 package org.semanticwb;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.util.Enumeration;
 import java.util.Properties;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Templates;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 import org.apache.log4j.PropertyConfigurator;
 import org.semanticwb.base.db.DBConnectionManager;
 import org.semanticwb.base.db.DBConnectionPool;
 import org.semanticwb.base.util.imp.Logger4jImpl;
+import org.w3c.dom.DOMException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.xml.sax.InputSource;
 
 /**
  *
@@ -317,7 +334,235 @@ public class SWBUtils
      */
     public static class XML
     {
+        private static DocumentBuilderFactory dbf = null;
+        private static TransformerFactory tFactory = null;
         
+        static 
+        {
+            init();
+        }
+        
+        private static void init()
+        {
+            try
+            {
+                dbf = DocumentBuilderFactory.newInstance();
+                dbf.setNamespaceAware(true);
+                dbf.setIgnoringElementContentWhitespace(true);
+                //db=dbf.newDocumentBuilder();
+            } catch (Exception e)
+            {
+                log.error("Error getting DocumentBuilderFactory...", e);
+            }
+
+            try
+            {
+                tFactory = TransformerFactory.newInstance();
+            } catch (Exception e)
+            {
+                log.error("Error getting TransformerFactory...", e);
+            }            
+        }
+        
+        /**
+         *Crea un objeto String a partir de un objeto Document con cierta codificación especificada y 
+         * teniendo la posibilidad de identar la salida, la identación que se tiene especificada en el método es 2.
+         * @param dom
+         * @param encode
+         * @param ident
+         * @return  */
+        public String domToXml(Document dom, String encode, boolean ident)
+        {
+            ByteArrayOutputStream sw = new java.io.ByteArrayOutputStream();
+            OutputStreamWriter osw = null;
+            try
+            {
+                osw = new java.io.OutputStreamWriter(sw, encode);
+                StreamResult streamResult = new StreamResult(osw);
+                //TransformerFactory tFactory = TransformerFactory.newInstance();
+                Transformer transformer=null;
+                synchronized(tFactory)
+                {
+                    transformer = tFactory.newTransformer();
+                }
+                transformer.setOutputProperty(OutputKeys.ENCODING, encode);
+                if (ident)
+                {
+                    transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+                    try
+                    {
+                        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+                    }catch(Exception noe){/*No soportado en algunos xerses*/}
+                }
+                transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+                transformer.transform(new DOMSource(dom), streamResult);
+            } catch (Exception e)
+            {
+                log.error(e);
+            }
+            return sw.toString();
+        }
+
+        /**
+         * Crea un objeto String a partir de un objeto Document con codificación UTF-8 y sin identación.
+         * @param dom
+         * @return  */
+        public String domToXml(Document dom)
+        {
+            return domToXml(dom, "UTF-8", false);
+        }
+
+        /**
+         * Crea un objeto String a partir de un objeto Document con codificación UTF-8 y teniendo la posibilidad de
+         * identar la salida, la identación que se tiene especificada en el método es 2.
+         * @param dom
+         * @param ident
+         * @return  */
+        public String domToXml(Document dom, boolean ident)
+        {
+            return domToXml(dom, "UTF-8", ident);
+        }
+
+        /**
+         * Crea una copia exacta de un objeto Document
+         * Creates an exactly copy of Document object
+         * @param dom
+         * @throws org.w3c.dom.DOMException
+         * @return  */
+        public Document copyDom(Document dom) throws SWBException
+        {
+            Document n = getNewDocument();
+            if (dom != null && dom.hasChildNodes())
+            {
+                Node node = n.importNode(dom.getFirstChild(), true);
+                n.appendChild(node);
+            }
+            return n;
+        }
+
+        /**
+         * Crea un objeto Document a partir de un objeto String.
+         * Creates a document object in base of String object
+         * @param xml
+         * @return  */
+        public Document xmlToDom(String xml)
+        {
+            if(xml==null || xml.length()==0)return null;
+            Document dom = null;
+            try
+            {
+                ByteArrayInputStream sr = new java.io.ByteArrayInputStream(xml.getBytes());
+                dom=xmlToDom(sr);
+            } catch (Exception e)
+            {
+                log.error(e);
+            }
+            return dom;
+        }
+
+        /**
+         * Crea un objeto Document a partir de un objeto InputStream.
+         * Creates a document object in base of InputStream object
+         * @param xml
+         * @return  */
+        public Document xmlToDom(InputStream xml)
+        {
+            Document dom = null;
+            try
+            {        
+                dom=xmlToDom(new InputSource(xml));
+                //xml.close();
+            } catch (Exception e)
+            {
+                log.error(e);
+            }            
+            return dom;
+        }
+
+        /**
+         * Crea un objeto Document a partir de un objeto InputSource.
+         * Creates a document object in base of InputSource object
+         * @param xml
+         * @return  */
+        public Document xmlToDom(InputSource xml)
+        {
+            //DocumentBuilderFactory dbf=null;
+            DocumentBuilder db = null;
+            Document dom = null;
+            try
+            {
+                //dbf=DocumentBuilderFactory.newInstance();
+                synchronized(dbf)
+                {
+                    db = dbf.newDocumentBuilder();
+                }
+                if (xml != null)
+                {
+                    dom = db.parse(xml);
+                    try
+                    {
+                        dom = copyDom(dom);
+                    } catch (Exception e)
+                    {
+                    }
+                }
+            } catch (Exception e)
+            {
+                log.error(e);
+            }
+            return dom;
+        }
+
+        /**
+         * Crea un nuevo objeto Document.
+         * Creates a new object document
+         * @throws com.infotec.appfw.exception.AFException
+         * @return  */
+        public Document getNewDocument()throws SWBException
+        {
+            DocumentBuilder db = null;
+            Document dom=null;
+            try
+            {
+                synchronized(dbf)
+                {
+                    db = dbf.newDocumentBuilder();
+                }
+                dom = db.newDocument();
+            }catch(Exception e)
+            {
+                log.error(e);
+                throw new SWBException("Error getting new XML Document",e);
+            }
+            return dom;
+        }
+
+
+        /**
+         * Carga un objeto InputStream de un xslt para ser utilizado como plantilla.
+         * @param stream
+         * @throws javax.xml.transform.TransformerConfigurationException
+         * @return  */
+        public Templates loadTemplateXSLT(InputStream stream) throws TransformerConfigurationException
+        {
+            TransformerFactory transFact = TransformerFactory.newInstance();
+            return transFact.newTemplates(new StreamSource(stream));
+        }
+
+        /**
+         * Transforma un objeto Document con un Template (xslt) especificado, 
+         * regresando un objeto String con dicha transformación y listo para ser desplegado.
+         * @param tpl
+         * @param doc
+         * @throws javax.xml.transform.TransformerException
+         * @return  */
+        public String transformDom(Templates tpl, Document doc) throws TransformerException
+        {
+            ByteArrayOutputStream sw = new java.io.ByteArrayOutputStream();
+            Transformer trans = tpl.newTransformer();
+            trans.transform(new DOMSource(doc), new StreamResult(sw));
+            return sw.toString();
+        }        
     }
     
     /**
