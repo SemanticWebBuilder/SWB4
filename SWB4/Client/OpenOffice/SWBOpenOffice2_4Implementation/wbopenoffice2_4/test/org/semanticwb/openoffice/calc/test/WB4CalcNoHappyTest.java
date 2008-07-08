@@ -1,6 +1,8 @@
 
 package org.semanticwb.openoffice.calc.test;
 
+
+
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.comp.helper.Bootstrap;
 import com.sun.star.comp.helper.BootstrapException;
@@ -28,6 +30,7 @@ import org.semanticwb.openoffice.NoHasLocationException;
 import org.semanticwb.openoffice.SaveDocumentFormat;
 import org.semanticwb.openoffice.WBException;
 import org.semanticwb.openoffice.WBOfficeException;
+import org.semanticwb.openoffice.calc.WB4Calc;
 import org.semanticwb.openoffice.impress.WB4Impress;
 
 
@@ -116,6 +119,24 @@ public class WB4CalcNoHappyTest {
         dir.delete();
     }
     
+    
+    
+    @Test(expected=NoHasLocationException.class)
+    @Ignore
+    public void getLocalPathTest()
+    {
+        try{
+            WB4Calc writer = new WB4Calc(this.xContext);
+            File actual = writer.getLocalPath();
+            File expected = sUrlDestiny;
+            Assert.assertEquals(actual, expected);
+        }               
+        catch (Exception wbe)
+        {
+            Assert.fail(wbe.getMessage());
+        }
+    }
+
     
     
     
