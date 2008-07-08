@@ -199,32 +199,33 @@ public class WB4WriterNoHappyTest {
     }
 
     @Test(expected = java.lang.IllegalArgumentException.class)//the path is a path file
-    @Ignore
+    //@Ignore
     public void saveAsSaveDocumentFormatHTMLTest() throws IllegalArgumentException, WBException {
         
         try {
             XComponentLoader xCompLoader = (XComponentLoader) UnoRuntime.queryInterface(com.sun.star.frame.XComponentLoader.class, oDesktop);
             PropertyValue[] loadProps = new PropertyValue[0];
-            String url = "file:///" + "c:/NegativeTest/PruebaSave.odt";
+            String url = "file:///c:/NegativeTest/TestSave.odt";
             xCompDest = xCompLoader.loadComponentFromURL(url, "_blank", 0, loadProps);
             
         } catch (com.sun.star.uno.Exception ioe) {
             fail(ioe.getMessage());
         }
         
-        WB4Writer writer = new WB4Writer(xCompDest);
-        File actual = writer.saveAs(new File("c:/NegativeTest/PruebaSave.odt"), SaveDocumentFormat.HTML);
-      
+        
+            WB4Writer writer = new WB4Writer(xCompDest);
+            File actual = writer.saveAs(new File("c:/temp/demopub.odt"), SaveDocumentFormat.HTML);
+        
     }
   
     @Test(expected = WBException.class)//Document can not be saved, the file is read only
-    @Ignore
+    //@Ignore 
     public void saveAsSaveDocumentFormatHTMLTest2() throws IllegalArgumentException, WBException {
         
         try {
             XComponentLoader xCompLoader = (XComponentLoader) UnoRuntime.queryInterface(com.sun.star.frame.XComponentLoader.class, oDesktop);
             PropertyValue[] loadProps = new PropertyValue[0];
-            String url = "file:///" + "c:/NegativeTest/PruebaSave.odt";
+            String url = "file:///c:/NegativeTest/TestSave.odt";
             xCompDest = xCompLoader.loadComponentFromURL(url, "_blank", 0, loadProps);
             
         } catch (com.sun.star.uno.Exception ioe) {
