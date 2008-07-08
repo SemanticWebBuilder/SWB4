@@ -40,10 +40,10 @@ import org.xml.sax.InputSource;
 
 public class SWBUtils
 {
+    private static Logger log=getLogger(SWBUtils.class);
+
     static private SWBUtils instance;
     private static String applicationPath = "";
-    
-    private static Logger log=getLogger(SWBUtils.class);
     
     private static int bufferSize=8192;    
     
@@ -334,21 +334,40 @@ public class SWBUtils
      */
     public static class XML
     {
-        private static DocumentBuilderFactory dbf = null;
-        private static TransformerFactory tFactory = null;
+        private static XML m_xml=null;
         
-        static 
+        private DocumentBuilderFactory m_dbf = null;
+        private TransformerFactory m_tFactory = null;
+        
+        private static XML getInstance()
         {
-            init();
+            if(m_xml==null)
+            {
+                m_xml=new XML();
+            }
+            return m_xml;
         }
         
-        private static void init()
+        public static DocumentBuilderFactory getDocumentBuilderFactory()
+        {
+            XML xml=getInstance();
+            return xml.m_dbf;
+        }
+        
+       public static TransformerFactory getTransformerFactory()
+        {
+            XML xml=getInstance();
+            return xml.m_tFactory;
+        }        
+        
+        
+        private XML()
         {
             try
             {
-                dbf = DocumentBuilderFactory.newInstance();
-                dbf.setNamespaceAware(true);
-                dbf.setIgnoringElementContentWhitespace(true);
+                m_dbf = DocumentBuilderFactory.newInstance();
+                m_dbf.setNamespaceAware(true);
+                m_dbf.setIgnoringElementContentWhitespace(true);
                 //db=dbf.newDocumentBuilder();
             } catch (Exception e)
             {
@@ -357,7 +376,7 @@ public class SWBUtils
 
             try
             {
-                tFactory = TransformerFactory.newInstance();
+                m_tFactory = TransformerFactory.newInstance();
             } catch (Exception e)
             {
                 log.error("Error getting TransformerFactory...", e);
@@ -371,7 +390,7 @@ public class SWBUtils
          * @param encode
          * @param ident
          * @return  */
-        public String domToXml(Document dom, String encode, boolean ident)
+        public static String domToXml(Document dom, String encode, boolean ident)
         {
             ByteArrayOutputStream sw = new java.io.ByteArrayOutputStream();
             OutputStreamWriter osw = null;
@@ -379,7 +398,7 @@ public class SWBUtils
             {
                 osw = new java.io.OutputStreamWriter(sw, encode);
                 StreamResult streamResult = new StreamResult(osw);
-                //TransformerFactory tFactory = TransformerFactory.newInstance();
+                TransformerFactory tFactory = getTransformerFactory();
                 Transformer transformer=null;
                 synchronized(tFactory)
                 {
@@ -407,7 +426,7 @@ public class SWBUtils
          * Crea un objeto String a partir de un objeto Document con codificación UTF-8 y sin identación.
          * @param dom
          * @return  */
-        public String domToXml(Document dom)
+        public static String domToXml(Document dom)
         {
             return domToXml(dom, "UTF-8", false);
         }
@@ -418,7 +437,7 @@ public class SWBUtils
          * @param dom
          * @param ident
          * @return  */
-        public String domToXml(Document dom, boolean ident)
+        public static String domToXml(Document dom, boolean ident)
         {
             return domToXml(dom, "UTF-8", ident);
         }
@@ -429,7 +448,7 @@ public class SWBUtils
          * @param dom
          * @throws org.w3c.dom.DOMException
          * @return  */
-        public Document copyDom(Document dom) throws SWBException
+        public static Document copyDom(Document dom) throws SWBException
         {
             Document n = getNewDocument();
             if (dom != null && dom.hasChildNodes())
@@ -445,7 +464,7 @@ public class SWBUtils
          * Creates a document object in base of String object
          * @param xml
          * @return  */
-        public Document xmlToDom(String xml)
+        public static Document xmlToDom(String xml)
         {
             if(xml==null || xml.length()==0)return null;
             Document dom = null;
@@ -465,7 +484,7 @@ public class SWBUtils
          * Creates a document object in base of InputStream object
          * @param xml
          * @return  */
-        public Document xmlToDom(InputStream xml)
+        public static Document xmlToDom(InputStream xml)
         {
             Document dom = null;
             try
@@ -484,14 +503,14 @@ public class SWBUtils
          * Creates a document object in base of InputSource object
          * @param xml
          * @return  */
-        public Document xmlToDom(InputSource xml)
+        public static Document xmlToDom(InputSource xml)
         {
-            //DocumentBuilderFactory dbf=null;
+            DocumentBuilderFactory dbf=null;
             DocumentBuilder db = null;
             Document dom = null;
             try
             {
-                //dbf=DocumentBuilderFactory.newInstance();
+                dbf=getDocumentBuilderFactory();
                 synchronized(dbf)
                 {
                     db = dbf.newDocumentBuilder();
@@ -518,8 +537,9 @@ public class SWBUtils
          * Creates a new object document
          * @throws com.infotec.appfw.exception.AFException
          * @return  */
-        public Document getNewDocument()throws SWBException
+        public static Document getNewDocument()throws SWBException
         {
+            DocumentBuilderFactory dbf = getDocumentBuilderFactory();
             DocumentBuilder db = null;
             Document dom=null;
             try
@@ -543,7 +563,7 @@ public class SWBUtils
          * @param stream
          * @throws javax.xml.transform.TransformerConfigurationException
          * @return  */
-        public Templates loadTemplateXSLT(InputStream stream) throws TransformerConfigurationException
+        public static Templates loadTemplateXSLT(InputStream stream) throws TransformerConfigurationException
         {
             TransformerFactory transFact = TransformerFactory.newInstance();
             return transFact.newTemplates(new StreamSource(stream));
@@ -556,7 +576,7 @@ public class SWBUtils
          * @param doc
          * @throws javax.xml.transform.TransformerException
          * @return  */
-        public String transformDom(Templates tpl, Document doc) throws TransformerException
+        public static String transformDom(Templates tpl, Document doc) throws TransformerException
         {
             ByteArrayOutputStream sw = new java.io.ByteArrayOutputStream();
             Transformer trans = tpl.newTransformer();
