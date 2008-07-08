@@ -175,7 +175,7 @@ import org.semanticwb.openoffice.impress.WB4Impress;
     }
     
     @Test(expected=java.lang.IllegalArgumentException.class)//is not a directory is a file
-    @Ignore
+  //  @Ignore
     public void saveAsHTMLTest() throws IOException, IllegalArgumentException
     {
         
