@@ -530,6 +530,8 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
         <copy-ear-war file="${file.reference.spring.jar}" propname="included.lib.file.reference.spring.jar.X"/>
         <basename file="${reference.SWBPlatform.jar}" property="included.lib.reference.SWBPlatform.jar"/>
         <copy-ear-war file="${reference.SWBPlatform.jar}" propname="included.lib.reference.SWBPlatform.jar.X"/>
+        <basename file="${file.reference.classes12.jar}" property="included.lib.file.reference.classes12.jar"/>
+        <copy-ear-war file="${file.reference.classes12.jar}" propname="included.lib.file.reference.classes12.jar.X"/>
         <basename file="${file.reference.hsqldb.jar}" property="included.lib.file.reference.hsqldb.jar"/>
         <copy-ear-war file="${file.reference.hsqldb.jar}" propname="included.lib.file.reference.hsqldb.jar.X"/>
         <basename file="${file.reference.informix.jar}" property="included.lib.file.reference.informix.jar"/>
@@ -554,9 +556,11 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
         <copy-ear-war file="${reference.SWBAdmin.jar}" propname="included.lib.reference.SWBAdmin.jar.X"/>
         <basename file="${file.reference.icu4j_3_4.jar}" property="included.lib.file.reference.icu4j_3_4.jar"/>
         <copy-ear-war file="${file.reference.icu4j_3_4.jar}" propname="included.lib.file.reference.icu4j_3_4.jar.X"/>
+        <basename file="${file.reference.hibernate3.jar}" property="included.lib.file.reference.hibernate3.jar"/>
+        <copy-ear-war file="${file.reference.hibernate3.jar}" propname="included.lib.file.reference.hibernate3.jar.X"/>
         <mkdir dir="${build.web.dir}/META-INF"/>
         <manifest file="${build.web.dir}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Class-Path" value="${included.lib.reference.SWBBase.jar} ${included.lib.file.reference.commons-logging.jar} ${included.lib.file.reference.log4j-1.2.15.jar} ${included.lib.file.reference.spring.jar} ${included.lib.reference.SWBPlatform.jar} ${included.lib.file.reference.hsqldb.jar} ${included.lib.file.reference.informix.jar} ${included.lib.file.reference.mysql-connector-java-5.0.3-bin.jar} ${included.lib.file.reference.arq.jar} ${included.lib.file.reference.iri.jar} ${included.lib.file.reference.jena.jar} ${included.lib.file.reference.lucene-core-2.2.0.jar} ${included.lib.file.reference.xercesImpl.jar} ${included.lib.file.reference.xml-apis.jar} ${included.lib.reference.SWBTripleStore.jar} ${included.lib.reference.SWBAdmin.jar} ${included.lib.file.reference.icu4j_3_4.jar} "/>
+            <attribute name="Class-Path" value="${included.lib.reference.SWBBase.jar} ${included.lib.file.reference.commons-logging.jar} ${included.lib.file.reference.log4j-1.2.15.jar} ${included.lib.file.reference.spring.jar} ${included.lib.reference.SWBPlatform.jar} ${included.lib.file.reference.classes12.jar} ${included.lib.file.reference.hsqldb.jar} ${included.lib.file.reference.informix.jar} ${included.lib.file.reference.mysql-connector-java-5.0.3-bin.jar} ${included.lib.file.reference.arq.jar} ${included.lib.file.reference.iri.jar} ${included.lib.file.reference.jena.jar} ${included.lib.file.reference.lucene-core-2.2.0.jar} ${included.lib.file.reference.xercesImpl.jar} ${included.lib.file.reference.xml-apis.jar} ${included.lib.reference.SWBTripleStore.jar} ${included.lib.reference.SWBAdmin.jar} ${included.lib.file.reference.icu4j_3_4.jar} ${included.lib.file.reference.hibernate3.jar} "/>
         </manifest>
         <delete dir="${dist.ear.dir}/temp"/>
     </target>
@@ -566,6 +570,7 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
         <copy file="${file.reference.log4j-1.2.15.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copy file="${file.reference.spring.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copy file="${reference.SWBPlatform.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copy file="${file.reference.classes12.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copy file="${file.reference.hsqldb.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copy file="${file.reference.informix.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copy file="${file.reference.mysql-connector-java-5.0.3-bin.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
@@ -578,6 +583,7 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
         <copy file="${reference.SWBTripleStore.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copy file="${reference.SWBAdmin.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copy file="${file.reference.icu4j_3_4.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copy file="${file.reference.hibernate3.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
     </target>
     <target depends="init,compile,compile-jsps,-pre-dist,library-inclusion-in-manifest" name="do-ear-dist">
         <dirname file="${dist.ear.war}" property="dist.jar.dir"/>
