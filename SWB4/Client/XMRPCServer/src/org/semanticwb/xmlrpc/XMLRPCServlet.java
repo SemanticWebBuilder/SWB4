@@ -35,7 +35,7 @@ import org.jdom.xpath.XPath;
 public class XMLRPCServlet extends HttpServlet
 {
 
-    private static SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("yyyyMMdd'T'HH:mm:ss");
+    private static SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -161,7 +161,7 @@ public class XMLRPCServlet extends HttpServlet
                 {
                     if (obj instanceof Date)
                     {
-                        type = "dateTime.iso8601";
+                        type = "dateTime.iso8601";                        
                         svalue = iso8601dateFormat.format((Date) obj);
                     }
                     else
@@ -252,8 +252,9 @@ public class XMLRPCServlet extends HttpServlet
         {
             XmlRpcObject xmlRpcObject = (XmlRpcObject) objToExecute;
             xmlRpcObject.setParts(parts);
-        }
+        }                
         return methodToFind.invoke(objToExecute, parameters);
+        
     }
 
     private Object getParameter(Element eType) throws ParseException
@@ -273,8 +274,8 @@ public class XMLRPCServlet extends HttpServlet
             else
             {
                 if (name.equalsIgnoreCase("dateTime.iso8601"))
-                {
-                    String dateTime=eType.getText();                    
+                {                    
+                    String dateTime=eType.getText();                                        
                     res = iso8601dateFormat.parse(dateTime);
                 }
                 else
@@ -339,7 +340,7 @@ public class XMLRPCServlet extends HttpServlet
     }
 
     private Document getDocument(byte[] document) throws JDOMException, IOException
-    {
+    {        
         ByteArrayInputStream in = new ByteArrayInputStream(document);
         SAXBuilder builder = new SAXBuilder();
         return builder.build(in);
