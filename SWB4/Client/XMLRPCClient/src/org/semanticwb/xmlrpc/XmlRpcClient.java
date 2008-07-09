@@ -52,15 +52,15 @@ public class XmlRpcClient<T>
 
     public T execute(String methodName, Object[] parameters, List<Attachment> attachments) throws XmlRpcException
     {
-        for(Attachment attachment : attachments)
+        for (Attachment attachment : attachments)
         {
-            if(attachment.getFile().isDirectory())
+            if (attachment.getFile().isDirectory())
             {
-                throw new XmlRpcException("The attachment '"+ attachment.getName() +"' is a directory");
+                throw new XmlRpcException("The attachment '" + attachment.getName() + "' is a directory");
             }
-            if(!attachment.getFile().exists())
+            if (!attachment.getFile().exists())
             {
-                throw new XmlRpcException("The attachment '"+ attachment.getName() +"' does not exist");
+                throw new XmlRpcException("The attachment '" + attachment.getName() + "' does not exist");
             }
         }
         Document requestDoc = getXmlRpcDocument(methodName, parameters);
@@ -77,11 +77,11 @@ public class XmlRpcClient<T>
             {
                 try
                 {
-                    Element eName = (Element) XPath.selectSingleNode(requestDocument, "/methodResponse/fault/value/struct/member/name[1]");
+                    Element eName = (Element) XPath.selectSingleNode(requestDocument, "/methodResponse/fault/value/struct/member[2]/name");                   
                     if (eName.getText().equals("faultString"))
                     {
-                        Element stringValue = (Element) XPath.selectSingleNode(requestDocument, "/methodResponse/fault/value/struct/member/name[1]/value/string");
-                        throw new XmlRpcException(stringValue.getText());
+                        Element eValue = (Element) XPath.selectSingleNode(requestDocument, "/methodResponse/fault/value/struct/member[2]/value/string");
+                        throw new XmlRpcException(eValue.getText());
                     }
                     throw new XmlRpcException("XMLRPC response was not found");
                 }
@@ -93,7 +93,7 @@ public class XmlRpcClient<T>
             else
             {
                 return getParameter(param);
-                
+
             }
         }
         catch (JDOMException jde)
@@ -215,7 +215,7 @@ public class XmlRpcClient<T>
     private void sendFile(File file, String name, OutputStream out) throws IOException
     {
         String newBoundary = "--" + boundary + "\r\n";
-        String contentDisposition = "Content-Disposition: form-data; name=\"" + name + "\"; filename=\"" + file.getName() + "\"\r\n\r\n";                
+        String contentDisposition = "Content-Disposition: form-data; name=\"" + name + "\"; filename=\"" + file.getName() + "\"\r\n\r\n";
         out.write(newBoundary.getBytes());
         out.write(contentDisposition.getBytes());
         FileInputStream in = new FileInputStream(file);
@@ -361,7 +361,7 @@ public class XmlRpcClient<T>
     public Document getXmlRpcDocument(
             String pMethodName, Object[] pParams) throws XmlRpcException
     {
-        Document doc = new Document();        
+        Document doc = new Document();
         Element methodCall = new Element("methodCall");
         Element methodName = new Element("methodName");
         methodName.setText(pMethodName);
