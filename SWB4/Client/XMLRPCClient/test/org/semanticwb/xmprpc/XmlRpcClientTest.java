@@ -103,8 +103,7 @@ public class XmlRpcClientTest
         }
     }
     
-    @Test    
-    @Ignore
+    @Test        
     public void executeTestWithAttachments()
     {
         try
@@ -112,7 +111,7 @@ public class XmlRpcClientTest
             XmlRpcClientConfig config = new XmlRpcClientConfig();
             config.setServerURI(new URI("http://localhost:8084/TestRPC/GatewayOffice"));
             XmlRpcClient<String> client = new XmlRpcClient<String>(config);
-            Object[] params = {4, -220.4, "Demo", new Date(), true};            
+            Object[] params = {4, -220.4, "Demo αινσϊ", new Date(), true};            
             List<Attachment> attachments=new ArrayList<Attachment>();
             attachments.add(new Attachment(new File("C:\\temp\\demo.ppt"),"content"));
             StringBuilder builder=new StringBuilder();
@@ -130,6 +129,7 @@ public class XmlRpcClientTest
     }
     
     @Test    
+    @Ignore
     public void executeTestWithAttachmentsAndNotMethod()
     {
         try
@@ -137,7 +137,7 @@ public class XmlRpcClientTest
             XmlRpcClientConfig config = new XmlRpcClientConfig();
             config.setServerURI(new URI("http://localhost:8084/TestRPC/GatewayOffice"));
             XmlRpcClient<String> client = new XmlRpcClient<String>(config);
-            Object[] params = {4, -220.4, "Demo", new Date(), true};            
+            Object[] params = {4, -220.4, "Demo αινσϊ", new Date(), true};            
             List<Attachment> attachments=new ArrayList<Attachment>();
             attachments.add(new Attachment(new File("C:\\temp\\demo.ppt"),"content"));
             StringBuilder builder=new StringBuilder();
