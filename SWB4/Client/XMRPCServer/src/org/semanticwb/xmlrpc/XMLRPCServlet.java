@@ -6,6 +6,8 @@ package org.semanticwb.xmlrpc;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.ParseException;
@@ -90,7 +92,7 @@ public class XMLRPCServlet extends HttpServlet
                 Document docResponse = this.getException(jde);
                 sendResponse(response, docResponse);
             }
-            catch (IOException ioeSendResponse)
+            catch (Exception ex)
             {
 
             }
@@ -102,7 +104,7 @@ public class XMLRPCServlet extends HttpServlet
                 Document docResponse = this.getException(ioe);
                 sendResponse(response, docResponse);
             }
-            catch (IOException ioeSendResponse)
+            catch (Exception ioeSendResponse)
             {
 
             }
@@ -325,17 +327,15 @@ public class XMLRPCServlet extends HttpServlet
         return methodName.getText();
     }
 
-    private Document getException(Exception e)
+    private Document getException(Exception e) throws JDOMException,IOException
     {
-        Document doc = new Document();
-        Element root = new Element("methodResponse");
-        doc.setRootElement(root);
-        root.addContent("<fault><value><struct><member><name>faultCode</name>" +
-                "<value><int>4</int></value></member><member><name>faultString</name>" +
-                "<value><string>" + e.getMessage() + "</string></value></member></struct>" +
-                "</value></fault>");
-
-        return doc;
+        String xmlString="<?xml version=\"1.0\" encoding=\"utf-8\"?><methodResponse><fault><value><struct><member><name>faultCode</name>" +
+                "<value><int>"+ e.hashCode() +"</int></value></member><member><name>faultString</name>" +
+                "<value><string>" + e.toString() + "</string></value></member></struct>" +
+                "</value></fault></methodResponse>";
+        Reader stringReader=new StringReader(xmlString);
+        SAXBuilder builder=new SAXBuilder();
+        return builder.build(stringReader);
     }
 
     private Document getDocument(byte[] document) throws JDOMException, IOException
