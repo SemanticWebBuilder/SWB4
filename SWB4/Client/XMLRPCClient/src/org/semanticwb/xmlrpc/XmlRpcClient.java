@@ -8,6 +8,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.util.List;
 import java.io.*;
+import java.text.DateFormatSymbols;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,10 +29,10 @@ public class XmlRpcClient<T>
 {
 
     private static String boundary = "gc0p4Jq0M2Yt08jU534c0p";
-    private static SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("yyyyMMdd'T'HH:mm:ss");
+    private static SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
     private XmlRpcClientConfig config;
     public XmlRpcClient(XmlRpcClientConfig config)
-    {
+    {     
         this.config = config;
     }
     
@@ -65,10 +67,17 @@ public class XmlRpcClient<T>
         }
         Document requestDoc = getXmlRpcDocument(methodName, parameters);
         Document responseDoc = request(requestDoc, attachments);
-        return deserialize(responseDoc);
+        try
+        {
+            return deserialize(responseDoc);
+        }
+        catch(ParseException pe)
+        {
+            throw new XmlRpcException(pe.getMessage(),pe);
+        }
     }
 
-    private T deserialize(Document requestDocument) throws XmlRpcException
+    private T deserialize(Document requestDocument) throws XmlRpcException,ParseException
     {
         try
         {
@@ -129,7 +138,7 @@ public class XmlRpcClient<T>
 
     }
 
-    private Object getValue(Element type) throws XmlRpcException
+    private Object getValue(Element type) throws XmlRpcException,ParseException
     {
         Object result = null;
         String sType = type.getName();
@@ -159,7 +168,8 @@ public class XmlRpcClient<T>
                     {
                         if (sType.equals("dateTime.iso8601"))
                         {
-                            result = new Date(type.getText());
+                            String date=type.getText();
+                            result = iso8601dateFormat.parse(date);
                         }
                         else
                         {
@@ -172,7 +182,7 @@ public class XmlRpcClient<T>
         return result;
     }
 
-    private T getParameter(Element param) throws XmlRpcException
+    private T getParameter(Element param) throws XmlRpcException,ParseException
     {
         Iterator values = param.getDescendants();
         while (values.hasNext())
@@ -262,6 +272,7 @@ public class XmlRpcClient<T>
                 sendFile(file, name, out);
             }
             writeEnd(out);
+            out.close();
             InputStream in = connection.getInputStream();
             Document doc = getDocument(in);
             in.close();
