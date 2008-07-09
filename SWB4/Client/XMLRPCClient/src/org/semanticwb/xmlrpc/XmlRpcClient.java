@@ -9,6 +9,7 @@ import java.net.MalformedURLException;
 import java.util.List;
 import java.io.*;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import org.jdom.Document;
@@ -27,12 +28,12 @@ public class XmlRpcClient<T>
 
     private static String boundary = "gc0p4Jq0M2Yt08jU534c0p";
     private static SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("yyyyMMdd'T'HH:mm:ss");
-
+    private XmlRpcClientConfig config;
     public XmlRpcClient(XmlRpcClientConfig config)
     {
         this.config = config;
     }
-    private XmlRpcClientConfig config;
+    
 
     public void setConfig(XmlRpcClientConfig config)
     {
@@ -46,8 +47,7 @@ public class XmlRpcClient<T>
 
     public T execute(String method, Object[] parameters) throws XmlRpcException
     {
-        T t = null;
-        return t;
+        return execute(method, parameters, new ArrayList<Attachment>());
     }
 
     public T execute(String methodName, Object[] parameters, List<Attachment> attachments) throws XmlRpcException
@@ -258,7 +258,7 @@ public class XmlRpcClient<T>
             for (Attachment attachment : attachments)
             {
                 File file = attachment.getFile();
-                String name = attachment.name;
+                String name = attachment.getName();
                 sendFile(file, name, out);
             }
             writeEnd(out);
@@ -292,7 +292,7 @@ public class XmlRpcClient<T>
 
     }
 
-    public void addParameter(Element param, Object obj) throws XmlRpcException
+    private void addParameter(Element param, Object obj) throws XmlRpcException
     {
         Element value = new Element("value");
         String type = "string";
@@ -344,7 +344,7 @@ public class XmlRpcClient<T>
         param.addContent(value);
     }
 
-    public void addParameters(Element params, Object[] pParams) throws XmlRpcException
+    private void addParameters(Element params, Object[] pParams) throws XmlRpcException
     {
         for (Object obj : pParams)
         {
@@ -358,7 +358,7 @@ public class XmlRpcClient<T>
         }
     }
 
-    public Document getXmlRpcDocument(
+    private Document getXmlRpcDocument(
             String pMethodName, Object[] pParams) throws XmlRpcException
     {
         Document doc = new Document();
