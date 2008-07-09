@@ -54,28 +54,7 @@ public class XmlRpcClientTest
     {
     }
 
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
-    //
-    @Test
-    @Ignore
-    public void getXmlRpcDocumentTest()
-    {
-        try
-        {
-            XmlRpcClientConfig config = new XmlRpcClientConfig();
-            config.setServerURI(new URI("http://localhost:8080"));
-            XmlRpcClient<String> client = new XmlRpcClient<String>(config);
-            Object[] params = {4, -220.4, "Demo", new Date(), true};
-            Document document = client.getXmlRpcDocument("demo", params);
-            XMLOutputter out = new XMLOutputter();
-            out.output(document, System.out);            
-        }
-        catch (Exception e)
-        {
-            fail(e.getMessage());
-        }
-    }
+       
     
     @Test
     @Ignore
