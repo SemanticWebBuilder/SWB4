@@ -12,8 +12,8 @@ import java.io.File;
  * @author victor.lorenzana
  */
 public class Attachment {
-    private File file;
-    String name;
+    private final File file;
+    private final String name;
     public Attachment(File file,String name)
     {
         this.file=file;
