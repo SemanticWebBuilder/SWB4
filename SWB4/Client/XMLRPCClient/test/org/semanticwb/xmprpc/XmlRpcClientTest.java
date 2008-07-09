@@ -104,6 +104,7 @@ public class XmlRpcClientTest
     }
     
     @Test    
+    @Ignore
     public void executeTestWithAttachments()
     {
         try
@@ -120,6 +121,31 @@ public class XmlRpcClientTest
                 builder.append(obj);
             }
             String res=client.execute("Demo.add",params,attachments);
+            Assert.assertEquals(res, builder.toString());        
+        }
+        catch (Exception e)
+        {
+            fail(e.getMessage());
+        }
+    }
+    
+    @Test    
+    public void executeTestWithAttachmentsAndNotMethod()
+    {
+        try
+        {
+            XmlRpcClientConfig config = new XmlRpcClientConfig();
+            config.setServerURI(new URI("http://localhost:8084/TestRPC/GatewayOffice"));
+            XmlRpcClient<String> client = new XmlRpcClient<String>(config);
+            Object[] params = {4, -220.4, "Demo", new Date(), true};            
+            List<Attachment> attachments=new ArrayList<Attachment>();
+            attachments.add(new Attachment(new File("C:\\temp\\demo.ppt"),"content"));
+            StringBuilder builder=new StringBuilder();
+            for(Object obj : params)
+            {
+                builder.append(obj);
+            }
+            String res=client.execute("Demo.hi",params,attachments);
             Assert.assertEquals(res, builder.toString());        
         }
         catch (Exception e)
