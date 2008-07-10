@@ -8,6 +8,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.util.List;
 import java.io.*;
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -65,6 +66,7 @@ public class XmlRpcClient<T>
             }
         }
         Document requestDoc = getXmlRpcDocument(methodName, parameters);
+        showDocDebug(requestDoc);
         Document responseDoc = request(requestDoc, attachments);
         try
         {
@@ -73,6 +75,18 @@ public class XmlRpcClient<T>
         catch ( ParseException pe )
         {
             throw new XmlRpcException(pe.getMessage(), pe);
+        }
+    }
+
+    private void showDocDebug(Document requestDoc)
+    {
+        try
+        {
+            XMLOutputter outp = new XMLOutputter();
+            outp.output(requestDoc, System.out);
+        }
+        catch ( Exception e )
+        {
         }
     }
 
@@ -145,37 +159,35 @@ public class XmlRpcClient<T>
         {
             result = type.getText();
         }
+        else if ( sType.equals("i4") || sType.equals("int") )
+        {
+            result = Integer.parseInt(type.getText());
+        }
+        else if ( sType.equals("boolean") )
+        {
+            result = type.getText().equals("1") ? true : false;
+        }
+        else if ( sType.equals("float") )
+        {
+            result = Float.parseFloat(type.getText());
+        }
+        else if ( sType.equals("double") )
+        {
+            result = Double.parseDouble(type.getText());
+        }
+        else if ( sType.equals("dateTime.iso8601") )
+        {
+            String date = type.getText();
+            result = iso8601dateFormat.parse(date);
+        }
         else
         {
-            if ( sType.equals("i4") || sType.equals("int") )
-            {
-                result = Integer.parseInt(type.getText());
-            }
-            else if ( sType.equals("boolean") )
-            {
-                result = type.getText().equals("1") ? true : false;
-            }
-            else if ( sType.equals("float") )
-            {
-                result = Float.parseFloat(type.getText());
-            }
-            else if ( sType.equals("double") )
-            {
-                result = Double.parseDouble(type.getText());
-            }
-            else if ( sType.equals("dateTime.iso8601") )
-            {
-                String date = type.getText();
-                result = iso8601dateFormat.parse(date);
-            }
-            else
-            {
-                throw new XmlRpcException("It was not posible to get teh value for " + type.getText());
-            }
-
-
-
+            throw new XmlRpcException("It was not posible to get teh value for " + type.getText());
         }
+
+
+
+
         return result;
     }
 
@@ -303,6 +315,7 @@ public class XmlRpcClient<T>
     private void addParameter(Element param, Object obj) throws XmlRpcException
     {
         Element value = new Element("value");
+        param.addContent(value);
         String type = "string";
         String svalue = "";
         if ( obj instanceof Integer )
@@ -325,24 +338,47 @@ public class XmlRpcClient<T>
             type = "dateTime.iso8601";
             svalue = iso8601dateFormat.format(( Date ) obj);
         }
-        else if ( obj instanceof Float)
+        else if ( obj instanceof Float )
         {
             type = "float";
             svalue = obj.toString();
         }
-        else if ( obj instanceof Double)
+        else if ( obj instanceof Double )
         {
             type = "double";
             svalue = obj.toString();
         }
+        else if ( obj.getClass().isArray() )
+        {
+            type = "array";
+            svalue = null;
+            Element elementType = new Element(type);
+            value.setContent(elementType);
+            addArray(obj, elementType);
+        }
         else
         {
-            throw new XmlRpcException("This kind of convertion is not possible");
+            throw new XmlRpcException("This Type is not supported");
         }
-        Element elementType = new Element(type);
-        elementType.setText(svalue);
-        value.setContent(elementType);
-        param.addContent(value);
+        if ( svalue != null )
+        {
+            Element elementType = new Element(type);
+            elementType.setText(svalue);
+            value.setContent(elementType);
+        }
+        
+    }
+
+    private void addArray(Object obj, Element elementType) throws XmlRpcException
+    {
+        Element data = new Element("data");
+        elementType.addContent(data);
+        int len = Array.getLength(obj);
+        for ( int i = 0; i < len; i++ )
+        {
+            Object value = Array.get(obj, i);
+            addParameter(data, value);
+        }
     }
 
     private void addParameters(Element params, Object[] pParams) throws XmlRpcException
