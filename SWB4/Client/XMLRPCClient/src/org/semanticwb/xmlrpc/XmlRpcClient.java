@@ -8,7 +8,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.util.List;
 import java.io.*;
-import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,11 +30,11 @@ public class XmlRpcClient<T>
     private static String boundary = "gc0p4Jq0M2Yt08jU534c0p";
     private static SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
     private XmlRpcClientConfig config;
+
     public XmlRpcClient(XmlRpcClientConfig config)
-    {     
+    {
         this.config = config;
     }
-    
 
     public void setConfig(XmlRpcClientConfig config)
     {
@@ -54,13 +53,13 @@ public class XmlRpcClient<T>
 
     public T execute(String methodName, Object[] parameters, List<Attachment> attachments) throws XmlRpcException
     {
-        for (Attachment attachment : attachments)
+        for ( Attachment attachment : attachments )
         {
-            if (attachment.getFile().isDirectory())
+            if ( attachment.getFile().isDirectory() )
             {
                 throw new XmlRpcException("The attachment '" + attachment.getName() + "' is a directory");
             }
-            if (!attachment.getFile().exists())
+            if ( !attachment.getFile().exists() )
             {
                 throw new XmlRpcException("The attachment '" + attachment.getName() + "' does not exist");
             }
@@ -71,30 +70,30 @@ public class XmlRpcClient<T>
         {
             return deserialize(responseDoc);
         }
-        catch(ParseException pe)
+        catch ( ParseException pe )
         {
-            throw new XmlRpcException(pe.getMessage(),pe);
+            throw new XmlRpcException(pe.getMessage(), pe);
         }
     }
 
-    private T deserialize(Document requestDocument) throws XmlRpcException,ParseException
+    private T deserialize(Document requestDocument) throws XmlRpcException, ParseException
     {
         try
         {
-            Element param = (Element) XPath.selectSingleNode(requestDocument, "/methodResponse/params/param");
-            if (param == null)
+            Element param = ( Element ) XPath.selectSingleNode(requestDocument, "/methodResponse/params/param");
+            if ( param == null )
             {
                 try
                 {
-                    Element eName = (Element) XPath.selectSingleNode(requestDocument, "/methodResponse/fault/value/struct/member[2]/name");                   
-                    if (eName.getText().equals("faultString"))
+                    Element eName = ( Element ) XPath.selectSingleNode(requestDocument, "/methodResponse/fault/value/struct/member[2]/name");
+                    if ( eName.getText().equals("faultString") )
                     {
-                        Element eValue = (Element) XPath.selectSingleNode(requestDocument, "/methodResponse/fault/value/struct/member[2]/value/string");
+                        Element eValue = ( Element ) XPath.selectSingleNode(requestDocument, "/methodResponse/fault/value/struct/member[2]/value/string");
                         throw new XmlRpcException(eValue.getText());
                     }
                     throw new XmlRpcException("XMLRPC response was not found");
                 }
-                catch (JDOMException jde2)
+                catch ( JDOMException jde2 )
                 {
                     throw new XmlRpcException("XMLRPC response was not found");
                 }
@@ -105,19 +104,19 @@ public class XmlRpcClient<T>
 
             }
         }
-        catch (JDOMException jde)
+        catch ( JDOMException jde )
         {
             try
             {
-                Element eName = (Element) XPath.selectSingleNode(requestDocument, "/methodResponse/fault/value/struct/member/name[1]");
-                if (eName.getText().equals("faultString"))
+                Element eName = ( Element ) XPath.selectSingleNode(requestDocument, "/methodResponse/fault/value/struct/member/name[1]");
+                if ( eName.getText().equals("faultString") )
                 {
-                    Element stringValue = (Element) XPath.selectSingleNode(requestDocument, "/methodResponse/fault/value/struct/member/name[1]/value/string");
+                    Element stringValue = ( Element ) XPath.selectSingleNode(requestDocument, "/methodResponse/fault/value/struct/member/name[1]/value/string");
                     throw new XmlRpcException(stringValue.getText());
                 }
                 throw new XmlRpcException("XMLRPC response was not found");
             }
-            catch (JDOMException jde2)
+            catch ( JDOMException jde2 )
             {
                 throw new XmlRpcException("XMLRPC response was not found");
             }
@@ -128,72 +127,70 @@ public class XmlRpcClient<T>
     {
         try
         {
-            T t = (T) value;
+            T t = ( T ) value;
             return t;
         }
-        catch (ClassCastException cle)
+        catch ( ClassCastException cle )
         {
             throw new XmlRpcException("It was not posible to convert the value to the type", cle);
         }
 
     }
 
-    private Object getValue(Element type) throws XmlRpcException,ParseException
+    private Object getValue(Element type) throws XmlRpcException, ParseException
     {
         Object result = null;
         String sType = type.getName();
-        if (sType.equals("string"))
+        if ( sType.equals("string") )
         {
             result = type.getText();
         }
         else
         {
-            if (sType.equals("i4") || sType.equals("int"))
+            if ( sType.equals("i4") || sType.equals("int") )
             {
                 result = Integer.parseInt(type.getText());
             }
+            else if ( sType.equals("boolean") )
+            {
+                result = type.getText().equals("1") ? true : false;
+            }
+            else if ( sType.equals("float") )
+            {
+                result = Float.parseFloat(type.getText());
+            }
+            else if ( sType.equals("double") )
+            {
+                result = Double.parseDouble(type.getText());
+            }
+            else if ( sType.equals("dateTime.iso8601") )
+            {
+                String date = type.getText();
+                result = iso8601dateFormat.parse(date);
+            }
             else
             {
-                if (sType.equals("boolean"))
-                {
-                    result = type.getText().equals("1") ? true : false;
-                }
-                else
-                {
-                    if (sType.equals("double"))
-                    {
-                        result = Double.parseDouble(type.getText());
-                    }
-                    else
-                    {
-                        if (sType.equals("dateTime.iso8601"))
-                        {
-                            String date=type.getText();
-                            result = iso8601dateFormat.parse(date);
-                        }
-                        else
-                        {
-                            throw new XmlRpcException("It was not posible to get teh value for " + type.getText());
-                        }
-                    }
-                }
+                throw new XmlRpcException("It was not posible to get teh value for " + type.getText());
             }
+
+
+
         }
         return result;
     }
 
-    private T getParameter(Element param) throws XmlRpcException,ParseException
+    private T getParameter(Element param) throws XmlRpcException, ParseException
     {
         Iterator values = param.getDescendants();
         while (values.hasNext())
         {
-            Element elementValue = (Element) values.next();
-            if (elementValue.getName().equals("value"))
+            Element elementValue = ( Element ) values.next();
+            if ( elementValue.getName().equals("value") )
             {
                 Iterator types = elementValue.getDescendants();
                 while (types.hasNext())
                 {
-                    Element type = (Element) types.next();
+                    Element type = ( Element ) types.next();
                     Object value = getValue(type);
                     return convert(value);
                 }
@@ -209,7 +206,7 @@ public class XmlRpcClient<T>
         {
             return builder.build(in);
         }
-        catch (Exception jde)
+        catch ( Exception jde )
         {
             throw new XmlRpcException("It was not possible to contruct the document from the InputStream");
         }
@@ -260,12 +257,12 @@ public class XmlRpcClient<T>
         OutputStream out = null;
         try
         {
-            HttpURLConnection connection = (HttpURLConnection) config.getServerURI().toURL().openConnection();
+            HttpURLConnection connection = ( HttpURLConnection ) config.getServerURI().toURL().openConnection();
             connection.setDoOutput(true);
             connection.setDoInput(true);
             out = sendHeaders(connection);
             sendXmlDocumentPart(requestDoc, out);
-            for (Attachment attachment : attachments)
+            for ( Attachment attachment : attachments )
             {
                 File file = attachment.getFile();
                 String name = attachment.getName();
@@ -278,23 +275,23 @@ public class XmlRpcClient<T>
             in.close();
             return doc;
         }
-        catch (MalformedURLException mfe)
+        catch ( MalformedURLException mfe )
         {
             throw new XmlRpcException(mfe);
         }
-        catch (IOException ioe)
+        catch ( IOException ioe )
         {
             throw new XmlRpcException(ioe);
         }
         finally
         {
-            if (out != null)
+            if ( out != null )
             {
                 try
                 {
                     out.close();
                 }
-                catch (IOException ioe)
+                catch ( IOException ioe )
                 {
                     throw new XmlRpcException(ioe);
                 }
@@ -308,46 +305,39 @@ public class XmlRpcClient<T>
         Element value = new Element("value");
         String type = "string";
         String svalue = "";
-        if (obj instanceof Integer)
+        if ( obj instanceof Integer )
         {
             type = "i4";
             svalue = obj.toString();
         }
+        else if ( obj instanceof String )
+        {
+            type = "string";
+            svalue = obj.toString();
+        }
+        else if ( obj instanceof Boolean )
+        {
+            type = "boolean";
+            svalue = (( Boolean ) obj).booleanValue() ? "1" : "0";
+        }
+        else if ( obj instanceof Date )
+        {
+            type = "dateTime.iso8601";
+            svalue = iso8601dateFormat.format(( Date ) obj);
+        }
+        else if ( obj instanceof Float)
+        {
+            type = "float";
+            svalue = obj.toString();
+        }
+        else if ( obj instanceof Double)
+        {
+            type = "double";
+            svalue = obj.toString();
+        }
         else
         {
-            if (obj instanceof String)
-            {
-                type = "string";
-                svalue = obj.toString();
-            }
-            else
-            {
-                if (obj instanceof Boolean)
-                {
-                    type = "boolean";
-                    svalue = ((Boolean) obj).booleanValue() ? "1" : "0";
-                }
-                else
-                {
-                    if (obj instanceof Date)
-                    {
-                        type = "dateTime.iso8601";
-                        svalue = iso8601dateFormat.format((Date) obj);
-                    }
-                    else
-                    {
-                        if (obj instanceof Double || obj instanceof Float)
-                        {
-                            type = "double";
-                            svalue = obj.toString();
-                        }
-                        else
-                        {
-                            throw new XmlRpcException("This kind of convertion is not possible");
-                        }
-                    }
-                }
-            }
+            throw new XmlRpcException("This kind of convertion is not possible");
         }
         Element elementType = new Element(type);
         elementType.setText(svalue);
@@ -357,15 +347,14 @@ public class XmlRpcClient<T>
 
     private void addParameters(Element params, Object[] pParams) throws XmlRpcException
     {
-        for (Object obj : pParams)
+        for ( Object obj : pParams )
         {
-            if (obj != null)
+            if ( obj != null )
             {
                 Element param = new Element("param");
                 addParameter(param, obj);
                 params.addContent(param);
             }
-
         }
     }
 
