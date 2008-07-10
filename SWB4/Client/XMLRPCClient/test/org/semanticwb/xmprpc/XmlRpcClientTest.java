@@ -65,7 +65,8 @@ public class XmlRpcClientTest
             XmlRpcClientConfig config = new XmlRpcClientConfig();
             config.setServerURI(new URI("http://localhost:8084/TestRPC/GatewayOffice"));
             XmlRpcClient<String> client = new XmlRpcClient<String>(config);
-            Object[] params = {4, -220.4, "Demo", new Date(), true};            
+            int[] array={4,5,6};
+            Object[] params = {4, -220.4, "Demo", new Date(), true,array};            
             List<Attachment> attachments=new ArrayList<Attachment>();
             StringBuilder builder=new StringBuilder();
             for(Object obj : params)
@@ -90,7 +91,8 @@ public class XmlRpcClientTest
             XmlRpcClientConfig config = new XmlRpcClientConfig();
             config.setServerURI(new URI("http://localhost:8084/TestRPC/GatewayOffice"));
             XmlRpcClient<String> client = new XmlRpcClient<String>(config);
-            Object[] params = {4, -220.4, "Demo αινσϊ", new Date(), true};            
+            int[] array={4,5,6};
+            Object[] params = {4, -220.4, "Demo", new Date(), true,array};              
             List<Attachment> attachments=new ArrayList<Attachment>();
             attachments.add(new Attachment(new File("C:\\temp\\demo.ppt"),"content"));
             StringBuilder builder=new StringBuilder();
