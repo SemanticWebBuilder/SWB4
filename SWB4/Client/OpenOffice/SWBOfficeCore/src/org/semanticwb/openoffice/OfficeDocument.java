@@ -142,7 +142,7 @@ public abstract class OfficeDocument
                 }
                 else
                 {
-                    URI base = new URI(this.getLocalPath().getPath());
+                    URI base = new URI("file:///"+this.getLocalPath().getPath());
                     URI resolved = base.resolve(uri);
                     attachments.add(getFile(resolved));
                 }
