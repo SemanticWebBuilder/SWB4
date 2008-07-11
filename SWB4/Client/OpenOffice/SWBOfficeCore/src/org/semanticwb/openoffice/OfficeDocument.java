@@ -133,8 +133,8 @@ public abstract class OfficeDocument
         List<File> attachments = new ArrayList<File>();
         try
         {
-            URI uri = new URI(path).normalize();
-            if (uri.getScheme().equalsIgnoreCase("file"))
+            URI uri = new URI(path);
+            if (uri.getScheme().equalsIgnoreCase("file") || uri.getScheme()==null)
             {
                 if (uri.isAbsolute())
                 {
