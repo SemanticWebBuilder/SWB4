@@ -35,43 +35,47 @@ public class GenericDB {
     static final String DB_SYBASE = "SYBASE"; //
     static final String DB_DB2 = "DB2";
     
-    static final String SQL_ARRAY = "ARRAY";
-    static final String SQL_TEXT = "TEXT";
+    //static final String SQL_ARRAY = "ARRAY";
+    //static final String SQL_TEXT = "TEXT";
     static final String SQL_CHAR = "CHAR";
     static final String SQL_VARCHAR = "VARCHAR";
-    static final String SQL_LONGVARCHAR = "LONGVARCHAR";
+    //static final String SQL_LONGVARCHAR = "LONGVARCHAR";
     static final String SQL_NUMERIC = "NUMERIC";
-    static final String SQL_DECIMAL = "DECIMAL";
+    //static final String SQL_DECIMAL = "DECIMAL";
     static final String SQL_BIT = "BIT";
     static final String SQL_BLOB = "BLOB";
-    static final String SQL_TINYINT = "TINYINT";
+    //static final String SQL_TINYINT = "TINYINT";
     static final String SQL_SMALLINT = "SMALLINT";
     static final String SQL_INTEGER = "INTEGER";
-    static final String SQL_BIGINT = "BIGINT";
-    static final String SQL_REAL = "REAL";
+    //static final String SQL_BIGINT = "BIGINT";
+    //static final String SQL_REAL = "REAL";
     static final String SQL_FLOAT = "FLOAT";
     static final String SQL_DOUBLE = "DOUBLE";
-    static final String SQL_BINARY = "BINARY";
-    static final String SQL_VARBINARY = "VARBINARY";
-    static final String SQL_LONGVARBINARY = "LONGVARBINARY";
+    //static final String SQL_BINARY = "BINARY";
+    //static final String SQL_VARBINARY = "VARBINARY";
+    //static final String SQL_LONGVARBINARY = "LONGVARBINARY";
     static final String SQL_DATE = "DATE";
     static final String SQL_TIME = "TIME";
     static final String SQL_TIMESTAMP = "TIMESTAMP";
-    static final String SQL_BOOLEAN = "BOOLEAN";
+    //static final String SQL_BOOLEAN = "BOOLEAN";
     static final String SQL_CLOB = "CLOB";
-    static final String SQL_DATALINK = "DATALINK";
-    static final String SQL_DISTINCT = "DISTINCT";
-    static final String SQL_JAVA_OBJECT = "JAVA_OBJECT";
-    static final String SQL_NULL = "NULL";
-    static final String SQL_OTHER = "OTHER";
-    static final String SQL_REF = "REF";
-    static final String SQL_STRUCT = "STRUCT";
+    //static final String SQL_DATALINK = "DATALINK";
+    //static final String SQL_DISTINCT = "DISTINCT";
+    //static final String SQL_JAVA_OBJECT = "JAVA_OBJECT";
+    //static final String SQL_NULL = "NULL";
+    //static final String SQL_OTHER = "OTHER";
+    //static final String SQL_REF = "REF";
+    //static final String SQL_STRUCT = "STRUCT";
     
     private static final String PK = "PRIMARYKEY_INI";
     private static final String COLUMN = "COLUMN";
     private static final String INDTYPE = "INDEX_TYPE";
     private static final String INDORDER = "INDEX_ORDER";
     private static final String PRIMARYKEY = "#COLUMN_NAME#";
+    private static final String FK = "ALTER TABLE #TABLE_NAME# ADD CONSTRAINT #CNAME# ";
+    private static final String FOREIGNKEY = "FOREIGN KEY ( ";
+    private static final String FK_COLUMN = "#COLUMN_NAME#";
+    private static final String FK_REFERENCE = "REFERENCES #TABLE_NAME# ( ";
     private static final String INDEX_INI = "CREATE #INDEX_TYPE# INDEX #INDEX_NAME# ON #TABLE_NAME# ( ";
     private static final String INDEX = "#COLUMN_NAME# #ORDER#";
     
@@ -231,10 +235,12 @@ public class GenericDB {
         }
         final String eleFin = "); ";
         Document dom = SWBUtils.XML.xmlToDom(strXML);
+
         if (dom != null) {
 
             DialectFactory dialectF = new DialectFactory();
             Dialect dialect = dialectF.buildDialect(getDBDialect(DBName));
+
             Element root = dom.getDocumentElement();
             NodeList tbEle = root.getElementsByTagName("table");
             if (tbEle != null && tbEle.getLength() > 0) {
@@ -248,6 +254,7 @@ public class GenericDB {
                             String colSyntax = getColumnSyntax(DBName, COLUMN);
                             String tmpCol = "";
                             String comilla = "";
+                            boolean haveCLOB = false;
                             for (int j = 0; j < colEle.getLength(); j++) {
                                 Element col = (Element) colEle.item(j);
                                 tmpCol = colSyntax;
@@ -264,23 +271,245 @@ public class GenericDB {
                                     tmpCol = tmpCol.replaceAll("#SIGNED#", "");
                                 }
 
-                                tmpVal = col.getAttribute("type");
-                                
-                                
-                                
-                                String tmpSize = col.getAttribute("size");  // para el tipo de datos correspondiente dependiendo el tama�o.
+                                tmpVal = col.getAttribute("type").trim().toUpperCase();
+
+                                String tmpSize = col.getAttribute("size");  // para el tipo de datos correspondiente dependiendo el tama?o.
+                                //System.out.println("Entró: "+tmpCol);
+                                //System.out.println("Tipo: "+tmpVal);
                                 if (tmpVal != null && tmpSize != null && tmpSize.trim().length() > 0) //&&col.getAttribute("size")!=null
                                 {
-                                    //System.out.println("Entro a "+tmpVal+","+col.getAttribute("size")+""+tmpCol);
-                                    tmpCol = tmpCol.replaceAll("#TYPE#", dialect.getTypeName(getSQLType(tmpVal), Integer.parseInt(col.getAttribute("size")), 0, 0));
-                                    if (tmpVal.equals("VARCHAR") || tmpVal.equals("CHAR")) {
+                                    int codigo = 0;
+                                    String tipocol = "";
+                                    if(DBName.equals(DB_INFORMIX))
+                                    {
+                                         if(tmpVal.equals(SQL_CLOB)&&!haveCLOB)
+                                        {
+                                            tipocol = "clob";
+                                            tmpCol = tmpCol.replaceAll("#TYPE#", tipocol);
+                                            //System.out.println("codigo: "+codigo+", tipo: "+tipocol);
+                                        } else if(tmpVal.equals(SQL_CLOB)&&haveCLOB)
+                                        {
+                                            tipocol = "text in table";
+                                            tmpCol = tmpCol.replaceAll("#TYPE#", tipocol);
+                                            //System.out.println("codigo: "+codigo+", tipo: "+tipocol);
+                                        } else if(tmpVal.equals(SQL_BLOB))
+                                        {
+                                            tipocol = "blob";
+                                            tmpCol = tmpCol.replaceAll("#TYPE#", tipocol);
+                                            //System.out.println("codigo: "+codigo+", tipo: "+tipocol);
+                                        }
+                                        else 
+                                        {
+                                            codigo = getSQLType(tmpVal);
+                                            tipocol = dialect.getTypeName(codigo);
+                                            tmpCol = tmpCol.replaceAll("#TYPE#", dialect.getTypeName(getSQLType(tmpVal), Integer.parseInt(col.getAttribute("size")), 0, 0));
+                                            //System.out.println("codigo: "+codigo+", tipo: "+tipocol);
+                                        }
+                                    }
+                                    else if(DBName.equals(DB_SYBASE))
+                                    {
+                                        if(tmpVal.equals(SQL_CLOB)&&haveCLOB)
+                                        {
+                                            //tmpCol = tmpCol.replaceAll("#TYPE#", dialect.getTypeName(getSQLType(SQL_VARCHAR), 4000, 0, 0));
+                                            tmpCol = tmpCol.replaceAll("#TYPE#", dialect.getTypeName(getSQLType(SQL_VARCHAR), Integer.parseInt(col.getAttribute("size")), 0, 0));
+                                            //System.out.println("codigo: "+codigo+", tipo: "+tipocol);
+                                        }
+                                        else
+                                        {
+                                            codigo = getSQLType(tmpVal);
+                                            tipocol = dialect.getTypeName(codigo);
+                                            tmpCol = tmpCol.replaceAll("#TYPE#", dialect.getTypeName(getSQLType(tmpVal), Integer.parseInt(col.getAttribute("size")), 0, 0));
+                                            //System.out.println("codigo: "+codigo+", tipo: "+tipocol);
+                                        }
+                                    }
+                                    else if(DBName.equals(DB_POINTBASE))
+                                    {
+                                         if(tmpVal.equals(SQL_CLOB)&&!haveCLOB)
+                                        {
+                                            tipocol = "clob";
+                                            tmpCol = tmpCol.replaceAll("#TYPE#", tipocol);
+                                            //System.out.println("codigo: "+codigo+", tipo: "+tipocol);
+                                        } else if(tmpVal.equals(SQL_CLOB)&&haveCLOB)
+                                        {
+                                            codigo = getSQLType(SQL_VARCHAR);
+                                            tipocol = dialect.getTypeName(codigo);
+                                            tmpCol = tmpCol.replaceAll("#TYPE#", dialect.getTypeName(getSQLType(SQL_VARCHAR), 4000, 0, 0));
+                                            //System.out.println("codigo: "+codigo+", tipo: "+tipocol);
+                                        } else if(tmpVal.equals(SQL_BLOB))
+                                        {
+                                            tipocol = "blob";
+                                            tmpCol = tmpCol.replaceAll("#TYPE#", tipocol);
+                                            //System.out.println("codigo: "+codigo+", tipo: "+tipocol);
+                                        }
+                                        else
+                                        {
+                                            codigo = getSQLType(tmpVal);
+                                            tipocol = dialect.getTypeName(codigo);
+                                            tmpCol = tmpCol.replaceAll("#TYPE#", dialect.getTypeName(getSQLType(tmpVal), Integer.parseInt(col.getAttribute("size")), 0, 0));
+                                            //System.out.println("codigo: "+codigo+", tipo: "+tipocol);
+                                        }
+                                    }
+                                    else if(DBName.equals(DB_ORACLE))
+                                    {
+                                        if(tmpVal.equals(SQL_CLOB)&&haveCLOB)
+                                        {
+                                            codigo = getSQLType(SQL_VARCHAR);
+                                            tipocol = dialect.getTypeName(codigo);
+                                            tmpCol = tmpCol.replaceAll("#TYPE#", dialect.getTypeName(getSQLType(SQL_VARCHAR), 4000, 0, 0));
+                                            //System.out.println("codigo: "+codigo+", tipo: "+tipocol);
+                                        } 
+                                        else
+                                        {
+//                                            codigo = getSQLType(tmpVal);
+//                                            tipocol = dialect.getTypeName(codigo);
+                                            tmpCol = tmpCol.replaceAll("#TYPE#", dialect.getTypeName(getSQLType(tmpVal), Integer.parseInt(col.getAttribute("size")), 0, 0));
+                                            //System.out.println("codigo: "+codigo+", tipo: "+tipocol);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        tmpCol = tmpCol.replaceAll("#TYPE#", dialect.getTypeName(getSQLType(tmpVal), Integer.parseInt(col.getAttribute("size")), 0, 0));
+                                    }
+                                    if (tmpVal.equals(SQL_VARCHAR) || tmpVal.equals(SQL_CHAR)) {
                                         comilla = "'";
                                     }
                                 } else if (tmpVal != null && ((tmpSize != null && tmpSize.trim().length() == 0) || (col.getAttribute("size") == null))) {
-                                    tmpCol = tmpCol.replaceAll("#TYPE#", dialect.getTypeName(getSQLType(tmpVal)));
-                                    if (tmpVal.equals("VARCHAR") || tmpVal.equals("CHAR")) {
+                                    
+                                    int codigo = 0;
+                                    String tipocol = "";
+                                    if(DBName.equals(DB_INFORMIX))
+                                    {
+                                        if(tmpVal.equals(SQL_CHAR))
+                                        {
+                                            codigo = getSQLType(tmpVal);
+                                            tmpCol = tmpCol.replaceAll("#TYPE#", dialect.getTypeName(getSQLType(tmpVal), 1, 0, 0));
+                                            //System.out.println("codigo: "+codigo+", tipo: "+tipocol);
+                                        } 
+                                        else if(tmpVal.equals(SQL_CLOB)&&!haveCLOB)
+                                        {
+                                            tipocol = "clob";
+                                            tmpCol = tmpCol.replaceAll("#TYPE#", tipocol);
+                                            //System.out.println("codigo: "+codigo+", tipo: "+tipocol);
+                                        } else if(tmpVal.equals(SQL_CLOB)&&haveCLOB)
+                                        {
+                                            tipocol = "text in table";
+                                            tmpCol = tmpCol.replaceAll("#TYPE#", tipocol);
+                                            //System.out.println("codigo: "+codigo+", tipo: "+tipocol);
+                                        }else if(tmpVal.equals(SQL_BLOB))
+                                        {
+                                            tipocol = "blob";
+                                            tmpCol = tmpCol.replaceAll("#TYPE#", tipocol);
+                                            //System.out.println("codigo: "+codigo+", tipo: "+tipocol);
+                                        }
+                                        else
+                                        {
+                                            codigo = getSQLType(tmpVal);
+                                            tipocol = dialect.getTypeName(codigo);
+                                            tmpCol = tmpCol.replaceAll("#TYPE#", tipocol);
+                                            //System.out.println("codigo: "+codigo+", tipo: "+tipocol);
+                                        }
+                                    }
+                                    else if(DBName.equals(DB_SYBASE))
+                                    {
+                                        if(tmpVal.equals(SQL_CLOB)&&haveCLOB)
+                                        {
+                                            tmpCol = tmpCol.replaceAll("#TYPE#", dialect.getTypeName(getSQLType(SQL_VARCHAR), 4000, 0, 0));
+                                            //System.out.println("codigo: "+codigo+", tipo: "+tipocol);
+                                        }
+                                        else
+                                        {
+                                            codigo = getSQLType(tmpVal);
+                                            tipocol = dialect.getTypeName(codigo);
+                                            tmpCol = tmpCol.replaceAll("#TYPE#", tipocol);
+                                            //System.out.println("codigo: "+codigo+", tipo: "+tipocol);
+                                        }
+                                    }
+                                    else if(DBName.equals(DB_DB2))
+                                    {
+                                        if(tmpVal.equals(SQL_VARCHAR))
+                                        {
+                                            codigo = getSQLType(tmpVal);
+                                            tipocol = dialect.getTypeName(codigo);
+                                            tmpCol = tmpCol.replaceAll("#TYPE#", dialect.getTypeName(getSQLType(tmpVal), 4000, 0, 0));
+                                            //System.out.println("codigo: "+codigo+", tipo: "+tipocol);
+                                        }
+                                        else if(tmpVal.equals(SQL_CLOB))
+                                        {
+                                            codigo = getSQLType(tmpVal);
+                                            tipocol = dialect.getTypeName(codigo);
+                                            tmpCol = tmpCol.replaceAll("#TYPE#", dialect.getTypeName(getSQLType(tmpVal), 4000, 0, 0));
+                                            //System.out.println("codigo: "+codigo+", tipo: "+tipocol);
+                                        } else if(tmpVal.equals(SQL_BLOB))
+                                        {
+                                            codigo = getSQLType(tmpVal);
+                                            tipocol = dialect.getTypeName(codigo);
+                                            tmpCol = tmpCol.replaceAll("#TYPE#", dialect.getTypeName(getSQLType(tmpVal), 4000, 0, 0));
+                                            //System.out.println("codigo: "+codigo+", tipo: "+tipocol);
+                                        }
+                                        else
+                                        {
+                                            codigo = getSQLType(tmpVal);
+                                            tipocol = dialect.getTypeName(codigo);
+                                            tmpCol = tmpCol.replaceAll("#TYPE#", tipocol);
+                                            //System.out.println("codigo: "+codigo+", tipo: "+tipocol);
+                                        }
+                                    }
+                                    else if(DBName.equals(DB_POINTBASE))
+                                    {
+                                         if(tmpVal.equals(SQL_CLOB)&&!haveCLOB)
+                                        {
+                                            tipocol = "clob";
+                                            tmpCol = tmpCol.replaceAll("#TYPE#", tipocol);
+                                            //System.out.println("codigo: "+codigo+", tipo: "+tipocol);
+                                        } else if(tmpVal.equals(SQL_CLOB)&&haveCLOB)
+                                        {
+                                            codigo = getSQLType(SQL_VARCHAR);
+                                            tipocol = dialect.getTypeName(codigo);
+                                            tmpCol = tmpCol.replaceAll("#TYPE#", dialect.getTypeName(getSQLType("VARCHAR"), 4000, 0, 0));
+                                            //System.out.println("codigo: "+codigo+", tipo: "+tipocol);
+                                        } else if(tmpVal.equals(SQL_BLOB))
+                                        {
+                                            tipocol = "blob";
+                                            tmpCol = tmpCol.replaceAll("#TYPE#", tipocol);
+                                            //System.out.println("codigo: "+codigo+", tipo: "+tipocol);
+                                        }
+                                        else
+                                        {
+                                            codigo = getSQLType(tmpVal);
+                                            tipocol = dialect.getTypeName(codigo);
+                                            tmpCol = tmpCol.replaceAll("#TYPE#", tipocol);
+                                            //System.out.println("codigo: "+codigo+", tipo: "+tipocol);
+                                        }
+                                    }
+                                    else if(DBName.equals(DB_ORACLE))
+                                    {
+                                        if(tmpVal.equals(SQL_CLOB)&&haveCLOB)
+                                        {
+                                            codigo = getSQLType(SQL_VARCHAR);
+                                            tipocol = dialect.getTypeName(codigo);
+                                            tmpCol = tmpCol.replaceAll("#TYPE#", dialect.getTypeName(getSQLType("VARCHAR"), 4000, 0, 0));
+                                            //System.out.println("codigo: "+codigo+", tipo: "+tipocol);
+                                        } 
+                                        else
+                                        {
+                                            codigo = getSQLType(tmpVal);
+                                            tipocol = dialect.getTypeName(codigo);
+                                            tmpCol = tmpCol.replaceAll("#TYPE#", tipocol);
+                                            //System.out.println("codigo: "+codigo+", tipo: "+tipocol);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        codigo = getSQLType(tmpVal);
+                                        tipocol = dialect.getTypeName(codigo);
+                                        tmpCol = tmpCol.replaceAll("#TYPE#", tipocol);
+                                        //System.out.println("codigo: "+codigo+", tipo: "+tipocol);
+                                    }
+                                        
+                                    if (tmpVal.equals(SQL_VARCHAR) || tmpVal.equals(SQL_CHAR)) {
                                         comilla = "'";
                                     }
+                                    //System.out.println("Salida: "+tmpCol);
                                 }
                                 if (col.getAttribute("acceptNulls") != null && col.getAttribute("acceptNulls").toLowerCase().equals("false")) {
                                     tmpCol = tmpCol.replaceAll("#NULL#", "NOT NULL");
@@ -299,6 +528,11 @@ public class GenericDB {
                                 if ((j+1) < colEle.getLength()) {
                                     strBuff.append(","+LFCR);
                                 }
+                                if(tmpVal.equals(SQL_CLOB)&&(DBName.equals(DB_ORACLE)||DBName.equals(DB_SYBASE)||DBName.equals(DB_INFORMIX)||DBName.equals(DB_POINTBASE)))
+                                {
+                                    haveCLOB=true;
+                                }
+                                //System.out.println("Tiene un CLOB:"+haveCLOB);
                             }
                         }
                         // Cerrando tabla
@@ -349,7 +583,7 @@ public class GenericDB {
                     }
                 }
             }
-
+            
             // INDICES
             NodeList tbIND = root.getElementsByTagName("index");
             if (tbIND != null && tbIND.getLength() > 0) {
@@ -426,11 +660,111 @@ public class GenericDB {
                     }
                 }
             }
+            // FOREIGN KEY  ---- FK = "ALTER TABLE #TABLE_NAME# ADD CONSTRAINT #CNAME# ";
+            NodeList tbFK = root.getElementsByTagName("foreignkey");
+            if (tbFK != null && tbFK.getLength() > 0) {
+                for (int i = 0; i < tbFK.getLength(); i++) {
+                    Element ele = (Element) tbFK.item(i);
+                    if (ele.getNodeName().equals("foreignkey")) {
+                        String tbname = ele.getAttribute("table");
+                        String colINISyntax = FK;
+                        if (null != tbname) {
+                            colINISyntax = colINISyntax.replaceAll("#TABLE_NAME#", tbname);
+                            colINISyntax = colINISyntax.replaceAll("#CNAME#", tbname + "_fk" + i);
+                            strBuff.append(colINISyntax+LFCR);
 
+                            NodeList columnsEle = ele.getElementsByTagName("columns");
+                            if(columnsEle !=null && columnsEle.getLength() > 0)
+                            {
+                                strBuff.append(FOREIGNKEY+LFCR);
+                                Element eleColumns = (Element) columnsEle.item(0);
+                                NodeList colEle = eleColumns.getElementsByTagName("column");
+                                if (colEle != null && colEle.getLength() > 0) {
+                                    String colSyntax = FK_COLUMN;
+                                    String tmpCol = "";
+                                    for (int j = 0; j < colEle.getLength(); j++) {
+                                        Element col = (Element) colEle.item(j);
+                                        tmpCol = colSyntax;
+                                        String tmpVal = col.getAttribute("id");
+
+                                        if (tmpVal != null) {
+                                            tmpCol = tmpCol.replaceAll("#COLUMN_NAME#", tmpVal);
+                                        }
+                                        else
+                                        {
+                                            tmpCol = tmpCol.replaceAll("#COLUMN_NAME#", "");
+                                        }
+
+                                        strBuff.append(tmpCol);
+                                        if ((j+1) < colEle.getLength()) {
+                                            strBuff.append(","+LFCR);
+                                        }
+                                    }
+                                    strBuff.append(") ");
+                                }
+                            }
+                            
+                            NodeList refEle = ele.getElementsByTagName("reference");
+                            if(refEle !=null && refEle.getLength() > 0)
+                            {
+                                for (int j = 0; j < refEle.getLength(); j++) 
+                                {
+                                    Element eleRef = (Element) refEle.item(i);
+                                    tbname = eleRef.getAttribute("table");
+                                    String refINISyntax = FK_REFERENCE;
+                                    if (null != tbname) 
+                                    {
+                                        refINISyntax = refINISyntax.replaceAll("#TABLE_NAME#", tbname);
+                                        strBuff.append(refINISyntax+LFCR);
+                                        NodeList colsEle = eleRef.getElementsByTagName("columns");
+                                        if(colsEle !=null && colsEle.getLength() > 0)
+                                        {
+//                                            for (int x = 0; x < colsEle.getLength(); x++) 
+//                                            {
+                                                Element eleCols = (Element) colsEle.item(0);
+                                                NodeList colEle = eleCols.getElementsByTagName("column");
+                                                if (colEle != null && colEle.getLength() > 0) 
+                                                {
+                                                    String colSyntax = FK_COLUMN;
+                                                    String tmpCol = "";
+                                                    for (int k = 0; k < colEle.getLength(); k++) {
+                                                        Element col = (Element) colEle.item(k);
+                                                        tmpCol = colSyntax;
+                                                        String tmpVal = col.getAttribute("id");
+                                                        if (tmpVal != null) 
+                                                        {
+                                                            tmpCol = tmpCol.replaceAll("#COLUMN_NAME#", tmpVal);
+                                                        }
+                                                        else
+                                                        {
+                                                            tmpCol = tmpCol.replaceAll("#COLUMN_NAME#", "");
+                                                        }
+                                                        strBuff.append(tmpCol);
+                                                        if ((k+1) < colEle.getLength()) 
+                                                        {
+                                                            strBuff.append(","+LFCR);
+                                                        }
+                                                    }
+                                                }
+//                                            }
+                                           strBuff.append(")");
+                                        }
+                                    }
+                                }
+                            }                        
+                            // Cerrando alter add foreign key
+                            strBuff.append(";"+LFCR+LFCR);
+                        }
+                    }
+                }
+            }
+            
+            
         }
         return strBuff.toString();
-
     }
+    
+    
     
     public HashMap getDialects()
     {
@@ -460,35 +794,36 @@ public class GenericDB {
     {
         hmSQLType = new HashMap();
 
-        hmSQLType.put(SQL_ARRAY, Integer.toString(java.sql.Types.ARRAY));
-        hmSQLType.put(SQL_BIGINT, Integer.toString(java.sql.Types.BIGINT));
-        hmSQLType.put(SQL_BINARY, Integer.toString(java.sql.Types.BINARY));
+        //hmSQLType.put(SQL_ARRAY, Integer.toString(java.sql.Types.ARRAY));
+        //hmSQLType.put(SQL_BIGINT, Integer.toString(java.sql.Types.BIGINT));
+        //hmSQLType.put(SQL_BINARY, Integer.toString(java.sql.Types.BINARY));
         hmSQLType.put(SQL_BIT, Integer.toString(java.sql.Types.BIT));
         hmSQLType.put(SQL_BLOB, Integer.toString(java.sql.Types.BLOB));
-        hmSQLType.put(SQL_BOOLEAN, Integer.toString(java.sql.Types.BOOLEAN)); 
+        //hmSQLType.put(SQL_BOOLEAN, Integer.toString(java.sql.Types.BOOLEAN)); 
         hmSQLType.put(SQL_CHAR, Integer.toString(java.sql.Types.CHAR));
         hmSQLType.put(SQL_CLOB, Integer.toString(java.sql.Types.CLOB));
-        hmSQLType.put(SQL_DATALINK, Integer.toString(java.sql.Types.DATALINK));
+        //hmSQLType.put(SQL_DATALINK, Integer.toString(java.sql.Types.DATALINK));
         hmSQLType.put(SQL_DATE, Integer.toString(java.sql.Types.DATE));
-        hmSQLType.put(SQL_DECIMAL, Integer.toString(java.sql.Types.DECIMAL));
-        hmSQLType.put(SQL_DISTINCT, Integer.toString(java.sql.Types.DISTINCT));
+        //hmSQLType.put(SQL_DECIMAL, Integer.toString(java.sql.Types.DECIMAL));
+        //hmSQLType.put(SQL_DISTINCT, Integer.toString(java.sql.Types.DISTINCT));
         hmSQLType.put(SQL_DOUBLE, Integer.toString(java.sql.Types.DOUBLE));
         hmSQLType.put(SQL_FLOAT, Integer.toString(java.sql.Types.FLOAT));
         hmSQLType.put(SQL_INTEGER, Integer.toString(java.sql.Types.INTEGER));
-        hmSQLType.put(SQL_JAVA_OBJECT, Integer.toString(java.sql.Types.JAVA_OBJECT));
-        hmSQLType.put(SQL_LONGVARBINARY, Integer.toString(java.sql.Types.LONGVARBINARY));
-        hmSQLType.put(SQL_LONGVARCHAR, Integer.toString(java.sql.Types.LONGVARCHAR));
-        hmSQLType.put(SQL_NULL, Integer.toString(java.sql.Types.NULL));
+        //hmSQLType.put(SQL_JAVA_OBJECT, Integer.toString(java.sql.Types.JAVA_OBJECT));
+        //hmSQLType.put(SQL_LONGVARBINARY, Integer.toString(java.sql.Types.LONGVARBINARY));
+        //hmSQLType.put(SQL_LONGVARCHAR, Integer.toString(java.sql.Types.LONGVARCHAR));
+        //hmSQLType.put(SQL_NULL, Integer.toString(java.sql.Types.NULL));
         hmSQLType.put(SQL_NUMERIC, Integer.toString(java.sql.Types.NUMERIC));
-        hmSQLType.put(SQL_OTHER, Integer.toString(java.sql.Types.OTHER));
-        hmSQLType.put(SQL_REAL, Integer.toString(java.sql.Types.REAL));
-        hmSQLType.put(SQL_REF, Integer.toString(java.sql.Types.REF));
+        //hmSQLType.put(SQL_OTHER, Integer.toString(java.sql.Types.OTHER));
+        //hmSQLType.put(SQL_REAL, Integer.toString(java.sql.Types.REAL));
+        //hmSQLType.put(SQL_REF, Integer.toString(java.sql.Types.REF));
         hmSQLType.put(SQL_SMALLINT, Integer.toString(java.sql.Types.SMALLINT));
-        hmSQLType.put(SQL_STRUCT, Integer.toString(java.sql.Types.STRUCT));
+        //hmSQLType.put(SQL_STRUCT, Integer.toString(java.sql.Types.STRUCT));
+        //hmSQLType.put(SQL_TEXT, Integer.toString(java.sql.Types.LONGVARCHAR));
         hmSQLType.put(SQL_TIME, Integer.toString(java.sql.Types.TIME));
         hmSQLType.put(SQL_TIMESTAMP, Integer.toString(java.sql.Types.TIMESTAMP));
-        hmSQLType.put(SQL_TINYINT, Integer.toString(java.sql.Types.TINYINT));
-        hmSQLType.put(SQL_VARBINARY, Integer.toString(java.sql.Types.VARBINARY));
+        //hmSQLType.put(SQL_TINYINT, Integer.toString(java.sql.Types.TINYINT));
+        //hmSQLType.put(SQL_VARBINARY, Integer.toString(java.sql.Types.VARBINARY));
         hmSQLType.put(SQL_VARCHAR, Integer.toString(java.sql.Types.VARCHAR));
     }
     
