@@ -134,7 +134,7 @@ public abstract class OfficeDocument
         try
         {
             URI uri = new URI(path);
-            if (uri.getScheme().equalsIgnoreCase("file") || uri.getScheme()==null)
+            if (uri.getScheme()==null || uri.getScheme().equalsIgnoreCase("file"))
             {
                 if (uri.isAbsolute())
                 {
