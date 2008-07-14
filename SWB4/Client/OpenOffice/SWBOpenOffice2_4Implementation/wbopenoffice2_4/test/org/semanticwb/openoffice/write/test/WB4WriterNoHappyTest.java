@@ -5,18 +5,15 @@ import com.sun.star.comp.helper.Bootstrap;
 import com.sun.star.comp.helper.BootstrapException;
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.frame.XDesktop;
-import com.sun.star.io.IOException;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiComponentFactory;
+import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import junit.framework.Assert;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -31,7 +28,6 @@ import org.semanticwb.openoffice.SaveDocumentFormat;
 import org.semanticwb.openoffice.WBException;
 import org.semanticwb.openoffice.WBException;
 import org.semanticwb.openoffice.WBException;
-import org.semanticwb.openoffice.WBOfficeException;
 import org.semanticwb.openoffice.writer.WB4Writer;
 import org.semanticwb.openoffice.writer.WB4WriterApplication;
 import static org.junit.Assert.*;
@@ -82,7 +78,7 @@ public class WB4WriterNoHappyTest {
             e.printStackTrace(System.out);
         } catch (BootstrapException be) {
             be.printStackTrace(System.out);
-        } catch (Exception e) {
+        } catch (java.lang.Exception e) {
             e.printStackTrace(System.out);
         }
     }
@@ -95,27 +91,11 @@ public class WB4WriterNoHappyTest {
         oDesktop.terminate();
         xCompDest = null;
         oDesktop = null;
-        DeleteTemporalDirectory(this.tempDir);
-
     }
 
-    public void DeleteTemporalDirectory(File dir) {
-        File[] files = dir.listFiles();
-        if (files != null) {
-            for (File file : files) {
-                if (file.isFile()) {
-                    file.delete();
-                } else {
-                    DeleteTemporalDirectory(file);
-                    file.delete();
-                }
-            }
-        }
-        dir.delete();
-    }
 
     @Test(expected = NoHasLocationException.class)
-    
+    @Ignore
     public void getLocalPathTest() throws WBException {
 
         try {
@@ -133,20 +113,8 @@ public class WB4WriterNoHappyTest {
         }
 
     }
-/*  borrado 
-    @Test(expected = WBException.class)
-    public void getCustomPropertiesTest() throws WBException {
 
-        WB4Writer writer = new WB4Writer(this.xContext);
-        
-       
-        
-        Map<String, String> properties = writer.getCustomProperties();
-      
-    // Assert.assertEquals(properties.size(), 4);
-
-    }
-*/
+    
     //document has not save before
     @Test(expected = WBException.class)
     @Ignore
@@ -199,7 +167,7 @@ public class WB4WriterNoHappyTest {
     }
 
     @Test(expected = java.lang.IllegalArgumentException.class)//the path is a path file
-    //@Ignore
+    @Ignore
     public void saveAsSaveDocumentFormatHTMLTest() throws IllegalArgumentException, WBException {
         
         try {
@@ -219,7 +187,7 @@ public class WB4WriterNoHappyTest {
     }
   
     @Test(expected = WBException.class)//Document can not be saved, the file is read only
-    //@Ignore 
+    @Ignore 
     public void saveAsSaveDocumentFormatHTMLTest2() throws IllegalArgumentException, WBException {
         
         try {
@@ -241,7 +209,6 @@ public class WB4WriterNoHappyTest {
     
     @Test(expected = WBException.class)
     @Ignore
-
     public void saveCustomPropertiesTest() throws WBException {
        
         WB4Writer writer = new WB4Writer(this.xContext);
@@ -317,6 +284,8 @@ public class WB4WriterNoHappyTest {
         WB4WriterApplication writer = new WB4WriterApplication(this.xContext);
         writer.open(new File("c:\\demo.doc"));
     }
+    
+    
 }
   
     
