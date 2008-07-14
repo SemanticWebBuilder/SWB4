@@ -95,23 +95,16 @@ public class WB4WriterNoHappyTest {
 
 
     @Test(expected = NoHasLocationException.class)
-    @Ignore
+    
     public void getLocalPathTest() throws WBException {
 
-        try {
-            XComponentLoader xCompLoader = (XComponentLoader) UnoRuntime.queryInterface(com.sun.star.frame.XComponentLoader.class, oDesktop);
-            PropertyValue[] loadProps = new PropertyValue[0];
-            String url = "private:factory/swriter";
-            xCompDest = xCompLoader.loadComponentFromURL(url, "_blank", 0, loadProps);
+            
+            xCompDest = getNewDocument();
             
             WB4Writer writer = new WB4Writer(xCompDest);
             File actual = writer.getLocalPath();
             
-        } catch (com.sun.star.uno.Exception ioe) {
-            fail(ioe.getMessage());
         
-        }
-
     }
 
     
@@ -120,27 +113,13 @@ public class WB4WriterNoHappyTest {
     @Ignore
     public void saveTest() throws WBException{
 
-   try {
-            XComponentLoader xCompLoader = (XComponentLoader) UnoRuntime.queryInterface(com.sun.star.frame.XComponentLoader.class, oDesktop);
-            PropertyValue[] loadProps = new PropertyValue[0];
-            String url = "private:factory/swriter";
-            xCompDest = xCompLoader.loadComponentFromURL(url, "_blank", 0, loadProps);
+         xCompDest = getNewDocument();
             
-           WB4Writer writer = new WB4Writer(xCompDest);
+         WB4Writer writer = new WB4Writer(xCompDest);
           if(writer.isNewDocument()){
                writer.save();
-              // fail("Deberia Haber Fallado");
-          }
+           }
         
-         
-           
-            
-        } catch (com.sun.star.uno.Exception ioe) {
-            fail(ioe.getMessage());
-        
-        }
-       
-
     }
     
     @Test(expected=WBException.class)//File not is new & has not been modified 
@@ -284,6 +263,59 @@ public class WB4WriterNoHappyTest {
         WB4WriterApplication writer = new WB4WriterApplication(this.xContext);
         writer.open(new File("c:\\demo.doc"));
     }
+    
+    /**
+     * Get the XComponent of a new document 
+     * @return XComponent
+     * @throws com.sun.star.uno.Exception
+     */
+    public XComponent getNewDocument(){
+        
+        XComponent XComp=null;
+        
+        
+         try {
+            XComponentLoader xCompLoader = (XComponentLoader) UnoRuntime.queryInterface(com.sun.star.frame.XComponentLoader.class, oDesktop);
+            PropertyValue[] loadProps = new PropertyValue[0];
+            
+            XComp = xCompLoader.loadComponentFromURL("private:factory/swriter", "_blank", 0, loadProps);
+            
+        } catch (com.sun.star.uno.Exception ioe) {
+            fail(ioe.getMessage());
+        
+        }
+        
+        return (XComp);
+        
+    }
+    
+    
+    /**
+     * Get the XComponent of a existent domcument 
+     * @param String - the path of a Open Office document to Open
+     * @return XComponent
+     * @throws com.sun.star.uno.Exception
+     */
+    
+    public XComponent getDocument(String path){
+        
+        XComponent XComp=null;
+        
+         try {
+            XComponentLoader xCompLoader = (XComponentLoader) UnoRuntime.queryInterface(com.sun.star.frame.XComponentLoader.class, oDesktop);
+            PropertyValue[] loadProps = new PropertyValue[0];
+            
+            XComp = xCompLoader.loadComponentFromURL(path, "_blank", 0, loadProps);
+            
+        } catch (com.sun.star.uno.Exception ioe) {
+            fail(ioe.getMessage());
+        
+        }
+        
+        return XComp;
+        
+    }
+    
     
     
 }
