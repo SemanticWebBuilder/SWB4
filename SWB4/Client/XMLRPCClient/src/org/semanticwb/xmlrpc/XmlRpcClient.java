@@ -9,17 +9,23 @@ import java.net.MalformedURLException;
 import java.util.List;
 import java.io.*;
 import java.lang.reflect.Array;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
+import java.net.Proxy.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 import org.jdom.xpath.XPath;
+import static org.semanticwb.xmlrpc.Base64.encode;
 
 /**
  *
@@ -27,7 +33,7 @@ import org.jdom.xpath.XPath;
  */
 public class XmlRpcClient<T>
 {
-
+    private Map<String,List<String>> responseProperties=new HashMap<String,List<String>>();
     private static String boundary = "gc0p4Jq0M2Yt08jU534c0p";
     private static SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
     private XmlRpcClientConfig config;
@@ -46,7 +52,10 @@ public class XmlRpcClient<T>
     {
         return config;
     }
-
+    public Map<String,List<String>> getResponseProperties()
+    {
+        return responseProperties;
+    }
     public T execute(String method, Object[] parameters) throws XmlRpcException
     {
         return execute(method, parameters, new ArrayList<Attachment>());
@@ -263,13 +272,32 @@ public class XmlRpcClient<T>
         String newBoundary = "\r\n--" + boundary + "\r\n";
         out.write(newBoundary.getBytes());
     }
-
+    private String getUserPassWordEncoded()
+    {        
+        String userPassword=config.getUserName()+":"+config.getPassword();
+        String encoded=new String(encode(userPassword.getBytes()));
+        return encoded;
+    }
     private Document request(Document requestDoc, List<Attachment> attachments) throws XmlRpcException
     {
         OutputStream out = null;
         try
-        {
-            HttpURLConnection connection = ( HttpURLConnection ) config.getServerURI().toURL().openConnection();
+        {    
+            Proxy proxy;
+            if(config.usesProxyServer())
+            {
+                proxy=new Proxy(Type.HTTP, new InetSocketAddress(config.proxyServer().toString(), config.getProxyPort()));
+            }
+            else
+            {
+                proxy=Proxy.NO_PROXY;            
+            }
+            HttpURLConnection connection = ( HttpURLConnection ) config.getServerURI().toURL().openConnection(proxy);            
+            if(config.hasUserPassWord())
+            {
+                connection.setRequestProperty("Authorization", "Basic "+getUserPassWordEncoded());
+            }
+            connection.setRequestMethod("POST");
             connection.setDoOutput(true);
             connection.setDoInput(true);
             out = sendHeaders(connection);
@@ -283,8 +311,9 @@ public class XmlRpcClient<T>
             writeEnd(out);
             out.close();
             InputStream in = connection.getInputStream();
-            Document doc = getDocument(in);
-            in.close();
+            Document doc = getDocument(in);            
+            this.responseProperties=connection.getHeaderFields();
+            in.close();            
             return doc;
         }
         catch ( MalformedURLException mfe )
