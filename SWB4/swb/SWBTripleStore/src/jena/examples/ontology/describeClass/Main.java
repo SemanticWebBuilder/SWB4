@@ -28,6 +28,9 @@ import java.util.Iterator;
 
 import com.hp.hpl.jena.ontology.*;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.rdf.model.StmtIterator;
 
 
 /**
@@ -73,31 +76,37 @@ public class Main {
 //                                            "file:E:/programming/proys/swb4/swb/SWBTripleStore/src/food.owl" );
 
         m.getDocumentManager().addAltEntry( "http://www.semanticwebbuilder.org/swb4/ontology",
-                                            "file:E:/programming/proys/swb4/swb/SWBTripleStore/src/swb.owl" );
+                                            "file:E:/programming/proys/swb4/swb/web/WEB-INF/owl/swb.owl" );
         
         // read the source document
         m.read( source );
 
-        DescribeClass dc = new DescribeClass();
-
-        if (args.length >= 2) {
-            // we have a named class to describe
-            OntClass c = m.getOntClass( args[1] );
-            dc.describeClass( System.out, c );
-        }
-        else {
-            for (Iterator i = m.listClasses();  i.hasNext(); ) {
-                // now list the classes
-                dc.describeClass( System.out, (OntClass) i.next() );
-            }
-
-//            for (Iterator i = m.listObjectProperties();  i.hasNext(); ) {
+//        DescribeClass dc = new DescribeClass();
+//
+//        if (args.length >= 2) {
+//            // we have a named class to describe
+//            OntClass c = m.getOntClass( args[1] );
+//            dc.describeClass( System.out, c );
+//        }
+//        else {
+//            for (Iterator i = m.listClasses();  i.hasNext(); ) {
 //                // now list the classes
-//                System.out.print( "  is a ObjectPropertie " );
-//                Object obj=i.next();
-//                System.out.println(obj);
+//                dc.describeClass( System.out, (OntClass) i.next() );
 //            }
+//        }
+        
+        String uri=m.getNsPrefixURI("swb");
+        Resource res=m.getResource(uri+"WebPage_1");
+        System.out.println(res);
+        StmtIterator it=res.listProperties();
+        while(it.hasNext())
+        {
+            Statement stm=it.nextStatement();
+            System.out.println("-->"+stm);
         }
+        Statement stm=res.getProperty(m.getProperty("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"));
+        if(stm!=null)System.out.println("Class:"+stm.getResource().getURI());
+        
     }
 
 
