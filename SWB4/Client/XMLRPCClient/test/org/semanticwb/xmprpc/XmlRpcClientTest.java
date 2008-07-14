@@ -9,8 +9,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import org.jdom.Document;
-import org.jdom.output.XMLOutputter;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -62,8 +60,7 @@ public class XmlRpcClientTest
     {
         try
         {
-            XmlRpcClientConfig config = new XmlRpcClientConfig();
-            config.setServerURI(new URI("http://localhost:8084/TestRPC/GatewayOffice"));
+            XmlRpcClientConfig config = new XmlRpcClientConfig(new URI("http://localhost:8084/TestRPC/GatewayOffice"));            
             XmlRpcClient<String> client = new XmlRpcClient<String>(config);
             int[] array={4,5,6};
             Object[] params = {4, -220.4, "Demo", new Date(), true,array};            
@@ -88,8 +85,7 @@ public class XmlRpcClientTest
     {
         try
         {
-            XmlRpcClientConfig config = new XmlRpcClientConfig();
-            config.setServerURI(new URI("http://localhost:8084/TestRPC/GatewayOffice"));
+            XmlRpcClientConfig config = new XmlRpcClientConfig(new URI("http://localhost:8084/TestRPC/GatewayOffice"),"victor","Lorenzana");            
             XmlRpcClient<String> client = new XmlRpcClient<String>(config);
             int[] array={4,5,6};
             Object[] params = {4, -220.4, "Demo", new Date(), true,array};              
@@ -115,8 +111,7 @@ public class XmlRpcClientTest
     {
         try
         {
-            XmlRpcClientConfig config = new XmlRpcClientConfig();
-            config.setServerURI(new URI("http://localhost:8084/TestRPC/GatewayOffice"));
+            XmlRpcClientConfig config = new XmlRpcClientConfig(new URI("http://localhost:8084/TestRPC/GatewayOffice"));            
             XmlRpcClient<String> client = new XmlRpcClient<String>(config);
             Object[] params = {4, -220.4, "Demo αινσϊ", new Date(), true};            
             List<Attachment> attachments=new ArrayList<Attachment>();
