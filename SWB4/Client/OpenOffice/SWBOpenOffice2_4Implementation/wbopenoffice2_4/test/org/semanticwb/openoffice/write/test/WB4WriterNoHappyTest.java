@@ -97,18 +97,22 @@ public class WB4WriterNoHappyTest {
     @Test(expected = NoHasLocationException.class)
     
     public void getLocalPathTest() throws WBException {
-
-            
+    
             xCompDest = getNewDocument();
             
             WB4Writer writer = new WB4Writer(xCompDest);
             File actual = writer.getLocalPath();
-            
-        
+       
     }
 
     
-    //document has not save before
+    
+    /**
+     * Testing: save()
+     * Case: save a document when document has not save before
+     * 
+     * @throws org.semanticwb.openoffice.WBException
+     */
     @Test(expected = WBException.class)
     @Ignore
     public void saveTest() throws WBException{
@@ -126,22 +130,12 @@ public class WB4WriterNoHappyTest {
     @Ignore 
     public void saveTest2()throws WBException{
         
-        try {
-            XComponentLoader xCompLoader = (XComponentLoader) UnoRuntime.queryInterface(com.sun.star.frame.XComponentLoader.class, oDesktop);
-            PropertyValue[] loadProps = new PropertyValue[0];
-            String url = "file:///" + "c:/NegativeTest/PruebaSave.odt";
-            xCompDest = xCompLoader.loadComponentFromURL(url, "_blank", 0, loadProps);
-            
-           WB4Writer writer = new WB4Writer(xCompDest);
-          if(!writer.isNewDocument()){
-               writer.save();
-              // fail("Deberia Haber Fallado");
-          }
-            
-        } catch (com.sun.star.uno.Exception ioe) {
-            fail(ioe.getMessage());
         
-        }
+        xCompDest=getDocument("file:///c:/NegativeTest/PruebaSave.odt");
+        
+        WB4Writer writer = new WB4Writer(xCompDest);
+        if(!writer.isNewDocument())
+            writer.save();
         
     }
 
@@ -149,35 +143,28 @@ public class WB4WriterNoHappyTest {
     @Ignore
     public void saveAsSaveDocumentFormatHTMLTest() throws IllegalArgumentException, WBException {
         
-        try {
-            XComponentLoader xCompLoader = (XComponentLoader) UnoRuntime.queryInterface(com.sun.star.frame.XComponentLoader.class, oDesktop);
-            PropertyValue[] loadProps = new PropertyValue[0];
-            String url = "file:///c:/NegativeTest/TestSave.odt";
-            xCompDest = xCompLoader.loadComponentFromURL(url, "_blank", 0, loadProps);
-            
-        } catch (com.sun.star.uno.Exception ioe) {
-            fail(ioe.getMessage());
-        }
-        
-        
-            WB4Writer writer = new WB4Writer(xCompDest);
-            File actual = writer.saveAs(new File("c:/temp/demopub.odt"), SaveDocumentFormat.HTML);
+          
+          xCompDest = getDocument("file:///c:/NegativeTest/TestSave.odt");
+                
+          WB4Writer writer = new WB4Writer(xCompDest);
+          File actual = writer.saveAs(new File("c:/temp/demopub.odt"), SaveDocumentFormat.HTML);
         
     }
   
-    @Test(expected = WBException.class)//Document can not be saved, the file is read only
+    
+    /**
+     * Testing: saveAs  
+     * case 1: Document can not be saved, the file is read only
+     * The test is successful if return a WBException
+     * @throws com.sun.star.lang.IllegalArgumentException
+     * @throws org.semanticwb.openoffice.WBException
+     */
+    @Test(expected = WBException.class)
     @Ignore 
     public void saveAsSaveDocumentFormatHTMLTest2() throws IllegalArgumentException, WBException {
         
-        try {
-            XComponentLoader xCompLoader = (XComponentLoader) UnoRuntime.queryInterface(com.sun.star.frame.XComponentLoader.class, oDesktop);
-            PropertyValue[] loadProps = new PropertyValue[0];
-            String url = "file:///c:/NegativeTest/TestSave.odt";
-            xCompDest = xCompLoader.loadComponentFromURL(url, "_blank", 0, loadProps);
             
-        } catch (com.sun.star.uno.Exception ioe) {
-            fail(ioe.getMessage());
-        }
+        xCompDest = getDocument("file:///c:/NegativeTest/TestSave.odt");
         
         WB4Writer writer = new WB4Writer(xCompDest);
         File actual = writer.saveAs(new File("C:/NegativeTest/ReadOnly"), SaveDocumentFormat.HTML);
@@ -185,12 +172,18 @@ public class WB4WriterNoHappyTest {
     }
     
     
-    
+    /**
+     * testing: saveCustomProperties
+     * Case: try insert more than 4 properties  
+     * @throws org.semanticwb.openoffice.WBException
+     */
     @Test(expected = WBException.class)
     @Ignore
     public void saveCustomPropertiesTest() throws WBException {
        
-        WB4Writer writer = new WB4Writer(this.xContext);
+        xCompDest=getNewDocument();
+        
+        WB4Writer writer = new WB4Writer(xCompDest);
         HashMap<String, String> properties = new HashMap<String, String>();
         properties.put("id1", "11");
         properties.put("tp2", "2Hola");
@@ -200,14 +193,14 @@ public class WB4WriterNoHappyTest {
         properties.put("tp6", "6Hola");
 
         writer.saveCustomProperties(properties);
-        fail("Error no debia llegar aqui");
-      
         
     }
 
     @Test(expected = WBException.class)
     @Ignore
     public void SaveHtmlPrepareAndGetFilesTest() throws WBException {
+        
+        
         WB4Writer writer = new WB4Writer(this.xContext);
         String guid = writer.getGuid();
         File file = writer.saveHtmlPrepareAndGetFiles(guid);
