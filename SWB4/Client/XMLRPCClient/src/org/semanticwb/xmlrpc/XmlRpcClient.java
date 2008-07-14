@@ -75,7 +75,7 @@ public class XmlRpcClient<T>
             }
         }
         Document requestDoc = getXmlRpcDocument(methodName, parameters);
-        showDocDebug(requestDoc);
+        //showDocDebug(requestDoc);
         Document responseDoc = request(requestDoc, attachments);
         try
         {
@@ -87,7 +87,7 @@ public class XmlRpcClient<T>
         }
     }
 
-    private void showDocDebug(Document requestDoc)
+    /*private void showDocDebug(Document requestDoc)
     {
         try
         {
@@ -97,7 +97,7 @@ public class XmlRpcClient<T>
         catch ( Exception e )
         {
         }
-    }
+    }*/
 
     private T deserialize(Document requestDocument) throws XmlRpcException, ParseException
     {
