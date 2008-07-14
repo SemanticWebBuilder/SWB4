@@ -29,14 +29,17 @@ import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 import org.jdom.xpath.XPath;
+import static org.semanticwb.xmlrpc.Base64.decode;
 
 /**
  *
  * @author victor.lorenzana
  */
-public class XMLRPCServlet extends HttpServlet
+public abstract class XMLRPCServlet extends HttpServlet
 {
 
+    private static String realm = "Secure Area";
+    private static String prefixBasic = "Basic ";
     private static SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
     @Override
@@ -44,6 +47,31 @@ public class XMLRPCServlet extends HttpServlet
     {
         try
         {
+            String authorization = request.getHeader("Authorization");
+            if ( authorization == null || authorization.equals("") )
+            {
+                response.setHeader("WWW-Authenticate", prefixBasic + "realm=\"" + realm + "\"");
+                response.setStatus(response.SC_UNAUTHORIZED);
+                return;
+            }
+            else
+            {
+                if(authorization.startsWith(prefixBasic))
+                {
+                    String userpassEncoded = authorization.substring(6);                   
+                    String userpassDecoded = new String(decode(userpassEncoded));
+                    String pUserName = getUserName(userpassDecoded);
+                    String pPassword = getPassword(userpassDecoded);
+                    if ( !this.isAuthenticate(pUserName, pPassword) )
+                    {
+                        response.sendError(response.SC_FORBIDDEN);
+                    }
+                }
+                else
+                {
+                    response.sendError(response.SC_FORBIDDEN);
+                }
+            }
             Document xmlrpcDocument;
             List<Part> parts = new ArrayList<Part>();
             if ( isMultipart(request) )
@@ -114,6 +142,30 @@ public class XMLRPCServlet extends HttpServlet
 
     }
 
+    private String getUserName(String userpassDecoded) throws IOException
+    {
+        String userName = "";
+        String[] values = userpassDecoded.split(":");
+        userName = values[0];
+        return userName;
+    }
+
+    private String getPassword(String userpassDecoded) throws IOException
+    {
+        String password = "";
+        String[] values = userpassDecoded.split(":");
+        password = values[1];
+        return password;
+    }
+
+    /**
+     * This method is for athentication of the user, using basic authentication
+     * @param pUserName User to authenticate
+     * @param pPassword Password to autenticate
+     * @return true if the user is athenticate, false otherwise
+     */
+    public abstract boolean isAuthenticate(String pUserName, String pPassword);
+
     private void sendResponse(ServletResponse response, Document docResponse) throws IOException
     {
         ServletOutputStream out = response.getOutputStream();
@@ -170,7 +222,7 @@ public class XMLRPCServlet extends HttpServlet
             type = "double";
             svalue = obj.toString();
         }
-         else if ( obj.getClass().isArray() )
+        else if ( obj.getClass().isArray() )
         {
             type = "array";
             svalue = null;
@@ -187,8 +239,9 @@ public class XMLRPCServlet extends HttpServlet
             Element elementType = new Element(type);
             elementType.setText(svalue);
             value.setContent(elementType);
-        }        
+        }
     }
+
     private void addArray(Object obj, Element elementType) throws XmlRpcException
     {
         Element data = new Element("data");
@@ -239,7 +292,7 @@ public class XMLRPCServlet extends HttpServlet
             else if ( parameters[i].getClass() == Boolean.class )
             {
                 classToReturn[i] = boolean.class;
-            }              
+            }
             else
             {
                 classToReturn[i] = parameters[i].getClass();
@@ -247,7 +300,7 @@ public class XMLRPCServlet extends HttpServlet
         }
         return classToReturn;
     }
-    
+
     private String getClassFullPath(String objectName) throws ClassNotFoundException
     {
         String classFullPath = System.getProperty("org.semanticwb.xmlrpc." + objectName, null);
@@ -330,13 +383,13 @@ public class XMLRPCServlet extends HttpServlet
         for ( Object objValue : listValues )
         {
             Element eValue = ( Element ) objValue;
-            Iterator itValues=eValue.getDescendants();
-            while(itValues.hasNext())
-            {                
-                Object child=itValues.next();
-                if(child instanceof Element)
+            Iterator itValues = eValue.getDescendants();
+            while (itValues.hasNext())
+            {
+                Object child = itValues.next();
+                if ( child instanceof Element )
                 {
-                    Element eType=(Element)child;
+                    Element eType = ( Element ) child;
                     arrayToReturn[i] = this.getParameter(eType);
                 }
             }
