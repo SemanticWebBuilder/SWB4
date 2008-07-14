@@ -10,7 +10,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBContext;
 import org.semanticwb.SWBUtils;
 
 /**
@@ -29,6 +28,6 @@ public class Login implements InternalServlet
     public void doProcess(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
         response.getWriter().print("Hello Login");
-        SWBContext.getSemanticMgr().getAdminModel().createResource(SWBContext.getSemanticMgr().getOntology().getResource("http://www.semanticwebbuilder.org/swb4/ontology#WebPage"));
+        //SWBContext.getSemanticMgr().getAdminModel().createResource(SWBContext.getSemanticMgr().getOntology().getResource("http://www.semanticwebbuilder.org/swb4/ontology#WebPage"));
     }        
 }
