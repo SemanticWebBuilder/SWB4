@@ -5,10 +5,17 @@
 
 package org.semanticwb.model;
 
+import com.hp.hpl.jena.rdf.model.Resource;
+
 /**
  *
  * @author Jei
  */
-public class WebSite extends Topic {
+public class WebSite extends Topic 
+{
+    public WebSite(Resource res)
+    {
+        super(res);
+    }
 
 }
