@@ -36,10 +36,10 @@
             }
         }
         
-        TopicIterator tpit=tpc.listInstances();
+        Iterator<Topic> tpit=tpc.listInstances();
         while(tpit.hasNext())
         {
-            Topic tp=tpit.nextTopic();
+            Topic tp=tpit.next();
             out.println("---->Instance:"+tp.getName());
             out.println("------>Prop_deleted:"+tp.getProperty(mgr.getVocabulary().getTopicProperty(SWBVocabulary.URI+"deleted")));
         }        
