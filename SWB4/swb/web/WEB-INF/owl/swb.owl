@@ -8,9 +8,9 @@
     xmlns:swb="http://www.semanticwebbuilder.org/swb4/ontology#"
   xml:base="http://www.semanticwebbuilder.org/swb4/ontology">
   <owl:Ontology rdf:about="">
-    <rdfs:comment>SemanticWebBuilder Ontology</rdfs:comment>
-    <rdfs:comment>SemanticWebBuilder Default Ontology</rdfs:comment>
     <rdfs:label>Wine Ontology</rdfs:label>
+    <rdfs:comment>SemanticWebBuilder Default Ontology</rdfs:comment>
+    <rdfs:comment>SemanticWebBuilder Ontology</rdfs:comment>
   </owl:Ontology>
   <owl:Class rdf:ID="WebSiteable">
     <rdfs:subClassOf>
@@ -19,10 +19,10 @@
   </owl:Class>
   <owl:Class rdf:ID="Content">
     <rdfs:subClassOf>
-      <owl:Class rdf:ID="Versionable"/>
+      <owl:Class rdf:ID="Resource"/>
     </rdfs:subClassOf>
     <rdfs:subClassOf>
-      <owl:Class rdf:ID="Resource"/>
+      <owl:Class rdf:ID="Versionable"/>
     </rdfs:subClassOf>
   </owl:Class>
   <owl:Class rdf:ID="Roleable">
@@ -32,29 +32,29 @@
   </owl:Class>
   <owl:Class rdf:ID="Device">
     <rdfs:subClassOf>
-      <owl:Class rdf:ID="Valueable"/>
+      <owl:Class rdf:ID="SWBClass"/>
     </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#WebSiteable"/>
     <rdfs:subClassOf>
       <owl:Class rdf:ID="Descriptiveable"/>
     </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#WebSiteable"/>
     <rdfs:subClassOf>
-      <owl:Class rdf:ID="SWBClass"/>
+      <owl:Class rdf:ID="Valueable"/>
     </rdfs:subClassOf>
   </owl:Class>
   <owl:Class rdf:ID="Permission">
-    <rdfs:subClassOf rdf:resource="#WebSiteable"/>
     <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="#WebSiteable"/>
   </owl:Class>
   <owl:Class rdf:ID="Community">
-    <rdfs:subClassOf rdf:resource="#WebSiteable"/>
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="Statusable"/>
-    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#SWBClass"/>
     <rdfs:subClassOf>
       <owl:Class rdf:about="#Descriptiveable"/>
     </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Statusable"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#WebSiteable"/>
   </owl:Class>
   <owl:Class rdf:ID="TemplateRefable">
     <rdfs:subClassOf>
@@ -62,16 +62,16 @@
     </rdfs:subClassOf>
   </owl:Class>
   <owl:Class rdf:ID="WebSite">
+    <rdfs:subClassOf rdf:resource="#SWBClass"/>
     <rdfs:subClassOf>
-      <owl:Class rdf:about="#Descriptiveable"/>
+      <owl:Class rdf:about="#Statusable"/>
     </rdfs:subClassOf>
     <rdfs:subClassOf>
       <owl:Class rdf:ID="Deleteable"/>
     </rdfs:subClassOf>
     <rdfs:subClassOf>
-      <owl:Class rdf:about="#Statusable"/>
+      <owl:Class rdf:about="#Descriptiveable"/>
     </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#SWBClass"/>
   </owl:Class>
   <owl:Class rdf:ID="Application">
     <rdfs:subClassOf>
@@ -84,33 +84,33 @@
     </rdfs:subClassOf>
   </owl:Class>
   <owl:Class rdf:ID="PFlow">
+    <rdfs:subClassOf rdf:resource="#SWBClass"/>
     <rdfs:subClassOf>
-      <owl:Class rdf:ID="Groupable"/>
+      <owl:Class rdf:about="#Descriptiveable"/>
     </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#WebSiteable"/>
     <rdfs:subClassOf>
-      <owl:Class rdf:about="#Deleteable"/>
+      <owl:Class rdf:about="#Statusable"/>
     </rdfs:subClassOf>
     <rdfs:subClassOf>
       <owl:Class rdf:about="#Versionable"/>
     </rdfs:subClassOf>
     <rdfs:subClassOf>
-      <owl:Class rdf:about="#Statusable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Descriptiveable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#SWBClass"/>
-  </owl:Class>
-  <owl:Class rdf:ID="ipFilter">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Valueable"/>
+      <owl:Class rdf:about="#Deleteable"/>
     </rdfs:subClassOf>
     <rdfs:subClassOf rdf:resource="#WebSiteable"/>
     <rdfs:subClassOf>
+      <owl:Class rdf:ID="Groupable"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="ipFilter">
+    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <rdfs:subClassOf>
       <owl:Class rdf:about="#Statusable"/>
     </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="#WebSiteable"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Valueable"/>
+    </rdfs:subClassOf>
   </owl:Class>
   <owl:Class rdf:ID="WebPageable">
     <rdfs:subClassOf>
@@ -133,74 +133,74 @@
     </rdfs:subClassOf>
   </owl:Class>
   <owl:Class rdf:ID="Rule">
-    <rdfs:subClassOf rdf:resource="#WebSiteable"/>
+    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Groupable"/>
+    </rdfs:subClassOf>
     <rdfs:subClassOf>
       <owl:Class rdf:about="#Versionable"/>
     </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Groupable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
-    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="#WebSiteable"/>
   </owl:Class>
   <owl:Class rdf:ID="Camp">
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="Calendarable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#WebSiteable"/>
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="Ruleable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#Roleable"/>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Deleteable"/>
-    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
     <rdfs:subClassOf>
       <owl:Class rdf:about="#Statusable"/>
     </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
-    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Deleteable"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#Roleable"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Ruleable"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#WebSiteable"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Calendarable"/>
+    </rdfs:subClassOf>
   </owl:Class>
   <owl:Class rdf:ID="Role">
-    <rdfs:subClassOf rdf:resource="#WebSiteable"/>
+    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
     <rdfs:subClassOf>
       <owl:Class rdf:about="#Groupable"/>
     </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
-    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="#WebSiteable"/>
   </owl:Class>
   <owl:Class rdf:ID="RoleRef">
+    <rdfs:subClassOf rdf:resource="#Roleable"/>
     <rdfs:subClassOf>
       <owl:Class rdf:ID="Reference"/>
     </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#Roleable"/>
   </owl:Class>
   <owl:Class rdf:ID="RDFModel">
+    <rdfs:subClassOf rdf:resource="#SWBClass"/>
     <rdfs:subClassOf>
       <owl:Class rdf:about="#Valueable"/>
     </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#SWBClass"/>
   </owl:Class>
   <owl:Class rdf:ID="ResourceRef">
     <rdfs:subClassOf>
-      <owl:Class rdf:ID="Priorityable"/>
+      <owl:Class rdf:about="#Reference"/>
     </rdfs:subClassOf>
     <rdfs:subClassOf>
       <owl:Class rdf:ID="Resourceable"/>
     </rdfs:subClassOf>
     <rdfs:subClassOf>
-      <owl:Class rdf:about="#Reference"/>
+      <owl:Class rdf:ID="Priorityable"/>
     </rdfs:subClassOf>
   </owl:Class>
   <owl:Class rdf:ID="User">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Statusable"/>
-    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="#Roleable"/>
     <rdfs:subClassOf>
       <owl:Class rdf:about="#Groupable"/>
     </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#Roleable"/>
-    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Statusable"/>
+    </rdfs:subClassOf>
   </owl:Class>
   <owl:Class rdf:about="#Ruleable">
     <rdfs:subClassOf>
@@ -208,12 +208,12 @@
     </rdfs:subClassOf>
   </owl:Class>
   <owl:Class rdf:ID="ObjectGroup">
-    <rdfs:subClassOf rdf:resource="#WebSiteable"/>
-    <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="#SWBClass"/>
     <rdfs:subClassOf>
       <owl:Class rdf:about="#Groupable"/>
     </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="#WebSiteable"/>
   </owl:Class>
   <owl:Class rdf:about="#WebPage">
     <rdfs:subClassOf>
@@ -240,12 +240,12 @@
     <rdfs:subClassOf rdf:resource="#WebSiteable"/>
   </owl:Class>
   <owl:Class rdf:ID="Language">
+    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="#WebSiteable"/>
     <rdfs:subClassOf>
       <owl:Class rdf:about="#Valueable"/>
     </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#WebSiteable"/>
-    <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
-    <rdfs:subClassOf rdf:resource="#SWBClass"/>
   </owl:Class>
   <owl:Class rdf:about="#Deleteable">
     <rdfs:subClassOf>
@@ -279,15 +279,15 @@
     </rdfs:subClassOf>
   </owl:Class>
   <owl:Class rdf:ID="Dns">
-    <rdfs:subClassOf rdf:resource="#Valueable"/>
-    <rdfs:subClassOf rdf:resource="#WebPageable"/>
-    <rdfs:subClassOf rdf:resource="#WebSiteable"/>
-    <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
     <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="#WebSiteable"/>
+    <rdfs:subClassOf rdf:resource="#WebPageable"/>
+    <rdfs:subClassOf rdf:resource="#Valueable"/>
   </owl:Class>
   <owl:Class rdf:ID="VersionInfo">
-    <rdfs:subClassOf rdf:resource="#Valueable"/>
     <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="#Valueable"/>
   </owl:Class>
   <owl:Class rdf:about="#Resource">
     <rdfs:subClassOf rdf:resource="#WebSiteable"/>
@@ -316,12 +316,12 @@
     </rdfs:subClassOf>
   </owl:Class>
   <owl:Class rdf:ID="Calendar">
-    <rdfs:subClassOf rdf:resource="#WebSiteable"/>
+    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
     <rdfs:subClassOf>
       <owl:Class rdf:about="#Statusable"/>
     </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
-    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="#WebSiteable"/>
   </owl:Class>
   <owl:Class rdf:about="#Localeable">
     <rdfs:subClassOf>
@@ -329,16 +329,16 @@
     </rdfs:subClassOf>
   </owl:Class>
   <owl:Class rdf:ID="RuleRef">
-    <rdfs:subClassOf rdf:resource="#Ruleable"/>
     <rdfs:subClassOf>
       <owl:Class rdf:about="#Reference"/>
     </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#Ruleable"/>
   </owl:Class>
   <owl:Class rdf:about="#Reference">
+    <rdfs:subClassOf rdf:resource="#SWBClass"/>
     <rdfs:subClassOf>
       <owl:Class rdf:about="#Statusable"/>
     </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#SWBClass"/>
   </owl:Class>
   <owl:Class rdf:about="#Statusable">
     <rdfs:subClassOf>
@@ -349,14 +349,14 @@
     <rdfs:subClassOf rdf:resource="#SWBClass"/>
   </owl:Class>
   <owl:Class rdf:ID="ResourceType">
-    <rdfs:subClassOf rdf:resource="#WebSiteable"/>
-    <rdfs:subClassOf rdf:resource="#Groupable"/>
     <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="#Groupable"/>
+    <rdfs:subClassOf rdf:resource="#WebSiteable"/>
   </owl:Class>
   <owl:Class rdf:ID="TemplateRef">
-    <rdfs:subClassOf rdf:resource="#Priorityable"/>
-    <rdfs:subClassOf rdf:resource="#Templateable"/>
     <rdfs:subClassOf rdf:resource="#Reference"/>
+    <rdfs:subClassOf rdf:resource="#Templateable"/>
+    <rdfs:subClassOf rdf:resource="#Priorityable"/>
   </owl:Class>
   <owl:Class rdf:about="#Resourceable">
     <rdfs:subClassOf>
@@ -383,152 +383,158 @@
     <rdfs:subClassOf rdf:resource="#Statusable"/>
     <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
     <rdfs:subClassOf rdf:resource="#Versionable"/>
-    <rdfs:subClassOf rdf:resource="#Localeable"/>
     <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="#Localeable"/>
     <rdfs:subClassOf rdf:resource="#Calendarable"/>
   </owl:Class>
   <owl:Class rdf:about="#SWBInterface">
     <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
   </owl:Class>
   <owl:ObjectProperty rdf:ID="hasRole">
-    <rdfs:domain rdf:resource="#Roleable"/>
     <rdfs:range rdf:resource="#Role"/>
+    <rdfs:domain rdf:resource="#Roleable"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasRule">
-    <rdfs:domain rdf:resource="#Ruleable"/>
     <rdfs:range rdf:resource="#Rule"/>
+    <rdfs:domain rdf:resource="#Ruleable"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="userModified">
-    <rdfs:range rdf:resource="#User"/>
     <rdfs:domain rdf:resource="#Descriptiveable"/>
+    <rdfs:range rdf:resource="#User"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasHome">
-    <rdfs:range rdf:resource="#HomePage"/>
     <rdfs:domain rdf:resource="#WebSite"/>
+    <rdfs:range rdf:resource="#HomePage"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasTemplateRef">
+    <rdfs:domain rdf:resource="#TemplateRefable"/>
+    <rdfs:range rdf:resource="#TemplateRef"/>
     <rdfs:subPropertyOf>
       <owl:ObjectProperty rdf:ID="hasReference"/>
     </rdfs:subPropertyOf>
-    <rdfs:range rdf:resource="#TemplateRef"/>
-    <rdfs:domain rdf:resource="#TemplateRefable"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="userCreated">
-    <rdfs:range rdf:resource="#User"/>
     <rdfs:domain rdf:resource="#Descriptiveable"/>
+    <rdfs:range rdf:resource="#User"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasResource">
-    <rdfs:domain rdf:resource="#Resourceable"/>
     <rdfs:range rdf:resource="#Resource"/>
+    <rdfs:domain rdf:resource="#Resourceable"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasWebPage">
-    <rdfs:range rdf:resource="#WebPage"/>
     <rdfs:domain rdf:resource="#WebPageable"/>
+    <rdfs:range rdf:resource="#WebPage"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="lastVersion">
-    <rdfs:range rdf:resource="#VersionInfo"/>
     <rdfs:domain rdf:resource="#Versionable"/>
+    <rdfs:range rdf:resource="#VersionInfo"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="isChildOf">
-    <rdfs:range rdf:resource="#WebPage"/>
     <rdfs:domain rdf:resource="#WebPage"/>
+    <rdfs:range rdf:resource="#WebPage"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="nextVersion">
-    <rdfs:range rdf:resource="#VersionInfo"/>
     <rdfs:domain rdf:resource="#VersionInfo"/>
+    <rdfs:range rdf:resource="#VersionInfo"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasCalendar">
-    <rdfs:range rdf:resource="#Calendar"/>
     <rdfs:domain rdf:resource="#Calendarable"/>
+    <rdfs:range rdf:resource="#Calendar"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasResourceRef">
-    <rdfs:subPropertyOf rdf:resource="#hasReference"/>
-    <rdfs:range rdf:resource="#ResourceRef"/>
     <rdfs:domain rdf:resource="#ResourceRefable"/>
+    <rdfs:range rdf:resource="#ResourceRef"/>
+    <rdfs:subPropertyOf rdf:resource="#hasReference"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasGroup">
-    <rdfs:range rdf:resource="#ObjectGroup"/>
     <rdfs:domain rdf:resource="#Groupable"/>
+    <rdfs:range rdf:resource="#ObjectGroup"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasGroupType">
-    <rdfs:domain rdf:resource="#ObjectGroup"/>
     <rdfs:range rdf:resource="#Groupable"/>
+    <rdfs:domain rdf:resource="#ObjectGroup"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="useLanguage">
-    <rdfs:range rdf:resource="#Language"/>
     <rdfs:domain rdf:resource="#Localeable"/>
+    <rdfs:range rdf:resource="#Language"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasUserReposotory">
-    <rdfs:range rdf:resource="#UserRepository"/>
     <rdfs:domain rdf:resource="#User"/>
+    <rdfs:range rdf:resource="#UserRepository"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasRuleRef">
-    <rdfs:subPropertyOf rdf:resource="#hasReference"/>
-    <rdfs:range rdf:resource="#RuleRef"/>
     <rdfs:domain rdf:resource="#RuleRefable"/>
+    <rdfs:range rdf:resource="#RuleRef"/>
+    <rdfs:subPropertyOf rdf:resource="#hasReference"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasRoleRef">
-    <rdfs:subPropertyOf rdf:resource="#hasReference"/>
-    <rdfs:range rdf:resource="#RoleRef"/>
     <rdfs:domain rdf:resource="#RoleRefable"/>
+    <rdfs:range rdf:resource="#RoleRef"/>
+    <rdfs:subPropertyOf rdf:resource="#hasReference"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="actualVersion">
-    <rdfs:range rdf:resource="#VersionInfo"/>
     <rdfs:domain rdf:resource="#Versionable"/>
+    <rdfs:range rdf:resource="#VersionInfo"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasTemplate">
-    <rdfs:domain rdf:resource="#Templateable"/>
     <rdfs:range rdf:resource="#Template"/>
+    <rdfs:domain rdf:resource="#Templateable"/>
   </owl:ObjectProperty>
   <owl:DatatypeProperty rdf:ID="description">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#Descriptiveable"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="title">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#Descriptiveable"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="deleted">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     <rdfs:domain rdf:resource="#Deleteable"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="versionComment">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#VersionInfo"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="priority">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <rdfs:domain rdf:resource="#Priorityable"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="versionCreated">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
     <rdfs:domain rdf:resource="#VersionInfo"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="created">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
     <rdfs:domain rdf:resource="#Descriptiveable"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="updated">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
     <rdfs:domain rdf:resource="#Descriptiveable"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="value">
-    <rdfs:domain rdf:resource="#Valueable"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Valueable"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="status">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <rdfs:domain rdf:resource="#Statusable"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
   </owl:DatatypeProperty>
   <owl:TransitiveProperty rdf:ID="useWebSite">
-    <rdfs:range rdf:resource="#WebSite"/>
     <rdfs:domain rdf:resource="#WebSiteable"/>
+    <rdfs:range rdf:resource="#WebSite"/>
   </owl:TransitiveProperty>
+  <swb:TemplateRef rdf:ID="TemplateRef_1">
+    <swb:hasTemplate>
+      <swb:Template rdf:ID="Template_1"/>
+    </swb:hasTemplate>
+  </swb:TemplateRef>
   <swb:WebPage rdf:ID="WebPage_1">
-    <swb:created rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime"
-    >2008-07-17T20:11:41.906</swb:created>
+    <swb:hasTemplateRef rdf:resource="#TemplateRef_1"/>
     <swb:deleted rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:deleted>
+    <swb:created rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime"
+    >2008-07-17T20:11:41.906</swb:created>
   </swb:WebPage>
   <swb:HomePage rdf:ID="HomePage_1">
     <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
