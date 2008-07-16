@@ -36,7 +36,7 @@ public class SemanticMgr implements SWBContextObject
 {
     private static Logger log = SWBUtils.getLogger(SemanticMgr.class);
 
-    public final static String SWB_OWL_PATH="/WEB-INF/owl/swb.owl";
+    public final static String SWB_OWL_PATH=SWBContext.getEnv("swb","/WEB-INF/owl/swb.owl");
     public final static String SWBSystem="SWBSystem";
     public final static String SWBAdmin="SWBAdmin";
     
