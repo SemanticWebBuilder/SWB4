@@ -81,19 +81,19 @@ public class Main {
         // read the source document
         m.read( source );
 
-//        DescribeClass dc = new DescribeClass();
-//
-//        if (args.length >= 2) {
-//            // we have a named class to describe
-//            OntClass c = m.getOntClass( args[1] );
-//            dc.describeClass( System.out, c );
-//        }
-//        else {
-//            for (Iterator i = m.listClasses();  i.hasNext(); ) {
-//                // now list the classes
-//                dc.describeClass( System.out, (OntClass) i.next() );
-//            }
-//        }
+        DescribeClass dc = new DescribeClass();
+
+        if (args.length >= 2) {
+            // we have a named class to describe
+            OntClass c = m.getOntClass( args[1] );
+            dc.describeClass( System.out, c );
+        }
+        else {
+            for (Iterator i = m.listClasses();  i.hasNext(); ) {
+                // now list the classes
+                dc.describeClass( System.out, (OntClass) i.next() );
+            }
+        }
         
         String uri=m.getNsPrefixURI("swb");
         Resource res=m.getResource(uri+"WebPage_1");
