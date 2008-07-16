@@ -252,7 +252,7 @@ public class WB4WriterTest
         }
     }
 
-    @Test    
+    /*@Test    
     public void SaveHtmlPrepareAndGetFilesTest()
     {
         try
@@ -266,7 +266,7 @@ public class WB4WriterTest
         {
             Assert.fail(wbe.getMessage());
         }
-    }
+    }*/
 
     /*@Test
     @Ignore
