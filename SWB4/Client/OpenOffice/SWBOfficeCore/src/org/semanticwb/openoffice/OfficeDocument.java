@@ -4,7 +4,12 @@
  */
 package org.semanticwb.openoffice;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -12,6 +17,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 import static org.semanticwb.openoffice.util.FileUtil.copyFile;
 
 /**
@@ -22,7 +29,6 @@ public abstract class OfficeDocument
 {
 
     //private final static int BUFFER_SIZE = 1024;
-
     /**
      * Gets the Application Version
      * @return String with the number of version
@@ -105,9 +111,9 @@ public abstract class OfficeDocument
     public Set<File> getMisssingAttachtments() throws NoHasLocationException
     {
         Set<File> attachments = new HashSet<File>();
-        for (File file : this.getAllAttachments())
+        for ( File file : this.getAllAttachments() )
         {
-            if (file.exists())
+            if ( file.exists() )
             {
                 attachments.add(file);
             }
@@ -118,9 +124,9 @@ public abstract class OfficeDocument
     public Set<File> getNotMissingAttachtments() throws NoHasLocationException
     {
         Set<File> attachments = new HashSet<File>();
-        for (File file : this.getAllAttachments())
+        for ( File file : this.getAllAttachments() )
         {
-            if (file.exists())
+            if ( file.exists() )
             {
                 attachments.add(file);
             }
@@ -134,21 +140,21 @@ public abstract class OfficeDocument
         try
         {
             URI uri = new URI(path);
-            if (uri.getScheme()==null || uri.getScheme().equalsIgnoreCase("file"))
+            if ( uri.getScheme() == null || uri.getScheme().equalsIgnoreCase("file") )
             {
-                if (uri.isAbsolute())
+                if ( uri.isAbsolute() )
                 {
                     attachments.add(getFile(uri));
                 }
                 else
                 {
-                    URI base = new URI("file:///"+this.getLocalPath().getPath().replace('\\', '/'));
+                    URI base = new URI("file:///" + this.getLocalPath().getPath().replace('\\', '/'));
                     URI resolved = base.resolve(uri);
                     attachments.add(getFile(resolved));
                 }
             }
         }
-        catch (URISyntaxException use)
+        catch ( URISyntaxException use )
         {
             ErrorLog.log(use);
         }
@@ -159,11 +165,11 @@ public abstract class OfficeDocument
     public final void deleteTemporalDirectory(File dir)
     {
         File[] files = dir.listFiles();
-        if (files != null)
+        if ( files != null )
         {
-            for (File file : files)
+            for ( File file : files )
             {
-                if (file.isFile())
+                if ( file.isFile() )
                 {
                     file.delete();
                 }
@@ -185,16 +191,26 @@ public abstract class OfficeDocument
 
     }
 
-    public String getGuid()
+    /**
+     * 
+     * @return
+     */
+    private String getGuid()
     {
         String guid = java.util.UUID.randomUUID().toString().replace('-', '_');
         return guid;
     }
 
-    public final File saveHtmlPrepareAndGetFiles(String guid) throws WBException
+    /**
+     * 
+     * @param guid
+     * @return
+     * @throws org.semanticwb.openoffice.WBException
+     */
+    private final File saveHtmlPrepareAndGetFiles(String guid) throws WBException
     {
         File file = this.saveOnGuidDirectoryAsHtml(guid);
-        for (File attatchment : this.getNotMissingAttachtments())
+        for ( File attatchment : this.getNotMissingAttachtments() )
         {
             copyFile(attatchment, file.getParentFile());
         }
@@ -202,66 +218,54 @@ public abstract class OfficeDocument
         return file;
     }
 
-    
+    public File getZipFile() throws WBException
+    {
+        File tempotalDir = null;
+        File tempotalZipFile = null;
+        try
+        {
+            String guid = getGuid();
+            File fileHtml = saveHtmlPrepareAndGetFiles(guid);
+            tempotalDir = fileHtml.getParentFile();            
+            tempotalZipFile=new File(tempotalDir.getPath()+File.separatorChar+guid+".zip");
+            FileOutputStream fout = new FileOutputStream(tempotalZipFile);
+            ZipOutputStream zipFile = new ZipOutputStream(fout);
+            BufferedInputStream origin = null;
+            int BUFFER_SIZE=2048;
+            byte[] data = new byte[BUFFER_SIZE];
+            for ( File file : getFiles(tempotalDir) )
+            {
+                ZipEntry entry = new ZipEntry(file.getName());
+                zipFile.putNextEntry(entry);
+                FileInputStream fi = new FileInputStream(file);
+                origin = new BufferedInputStream(fi, BUFFER_SIZE);
+                int count;
+                while ((count = origin.read(data, 0, BUFFER_SIZE)) != -1)
+                {
+                    zipFile.write(data, 0, count);
+                }
+                // Close the source file
+                origin.close();
+                fi.close();
+            }
+            zipFile.close();
+            fout.close();
+            FileInputStream fin = new FileInputStream(tempotalZipFile);
+            byte[] zip = new byte[( int ) tempotalZipFile.length()];
+            fin.read(zip);
+            fin.close();
+            return tempotalZipFile;
+        }
+        catch ( FileNotFoundException fnfe )
+        {
+            throw new WBException("No se puede crear el archivo zip", fnfe);
+        }
+        catch ( IOException ioe )
+        {
+            throw new WBException("No se puede crear el archivo zip", ioe);
+        }        
+    }
 
-
-    /*public byte[] getZipFile() throws WBException
-    {
-    File tempotalFile = null;
-    File tempotalZipFile = null;
-    try
-    {
-    String guid = getGuid();
-    List<File> files = saveHtmlPrepareAndGetFiles(guid);
-    tempotalFile = new File(this.getLocalPath().getParentFile().getPath() + File.separator + guid);
-    tempotalZipFile = new File(this.getLocalPath().getParentFile().getPath() + File.separator + guid + ".zip");
-    FileOutputStream fout = new FileOutputStream(tempotalZipFile);
-    ZipOutputStream zipFile = new ZipOutputStream(fout);
-    BufferedInputStream origin = null;
-    byte[] data = new byte[BUFFER_SIZE];
-    for (File file : files)
-    {
-    ZipEntry entry = new ZipEntry(file.getName());
-    zipFile.putNextEntry(entry);
-    FileInputStream fi = new FileInputStream(file);
-    origin = new BufferedInputStream(fi, BUFFER_SIZE);
-    int count;
-    while ((count = origin.read(data, 0, BUFFER_SIZE)) != -1)
-    {
-    zipFile.write(data, 0, count);
-    }
-    // Close the source file
-    origin.close();
-    fi.close();
-    }
-    zipFile.close();
-    fout.close();
-    FileInputStream fin = new FileInputStream(tempotalZipFile);
-    byte[] zip = new byte[(int) tempotalZipFile.length()];
-    fin.read(zip);
-    fin.close();
-    return zip;
-    }
-    catch (FileNotFoundException fnfe)
-    {
-    throw new WBException("No se puede crear el archivo zip", fnfe);
-    }
-    catch (IOException ioe)
-    {
-    throw new WBException("No se puede crear el archivo zip", ioe);
-    }
-    finally
-    {
-    if (tempotalZipFile != null)
-    {
-    tempotalZipFile.delete();
-    }
-    if (tempotalFile != null)
-    {
-    this.deleteTemporalDirectory(tempotalFile);
-    }
-    }
-    }*/
     /**
      * Gets the files en a directory
      * @param dir Directory to search
@@ -270,9 +274,9 @@ public abstract class OfficeDocument
     protected final List<File> getFiles(File dir)
     {
         ArrayList<File> attachments = new ArrayList<File>();
-        for (File file : dir.listFiles())
+        for ( File file : dir.listFiles() )
         {
-            if (file.isFile())
+            if ( file.isFile() )
             {
                 attachments.add(file);
             }
