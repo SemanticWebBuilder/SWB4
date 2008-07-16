@@ -12,14 +12,11 @@ import com.sun.star.io.IOException;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiComponentFactory;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import junit.framework.Assert;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -27,7 +24,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.semanticwb.openoffice.DocumentType;
 import org.semanticwb.openoffice.NoHasLocationException;
 import org.semanticwb.openoffice.SaveDocumentFormat;
 import org.semanticwb.openoffice.WBException;
@@ -45,13 +41,9 @@ public class WB4CalcNoHappyTest {
     
 
     private XComponentContext xContext;
-    private XComponent xCompDest = null;
-    private XComponent xCompSrc = null;
+    private XComponent xCompDest = null;   
     private XDesktop oDesktop = null;
     private File sUrlDestiny = new File("C:/NegativeTest/PruebaSave.odp");
-    
-    private File tempDir = new File("C:/NegativeTest/");
-
     
     
     @BeforeClass
@@ -74,7 +66,7 @@ public class WB4CalcNoHappyTest {
             Object oRawDesktop = xMCF.createInstanceWithContext("com.sun.star.frame.Desktop", xContext);
             oDesktop = (XDesktop) UnoRuntime.queryInterface(XDesktop.class, oRawDesktop);
             
-        }        catch (com.sun.star.uno.Exception e){
+        }catch (com.sun.star.uno.Exception e){
             e.printStackTrace(System.out);
         }
         catch (BootstrapException be){
@@ -123,7 +115,7 @@ public class WB4CalcNoHappyTest {
      */
     @Test(expected=java.lang.IllegalArgumentException.class)
     @Ignore
-    public void saveAsHTMLTest()throws IllegalArgumentException, WBException, IOException{
+    public void saveAsHTML_PathIsAFileTest()throws IllegalArgumentException, WBException, IOException{
         
         String path="C:/NegativeTest/Document.ods";
         String url = "file:///c:/NegativeTest/TestSave.ods";
@@ -143,7 +135,7 @@ public class WB4CalcNoHappyTest {
      */
     @Test(expected=WBException.class)
     @Ignore
-    public void saveAsHTMLTest2()throws IllegalArgumentException, WBException{
+    public void saveAsHTML_DocReadOnlyTest()throws IllegalArgumentException, WBException{
 
         String url = "file:///c:/NegativeTest/TestSave.ods";
         xCompDest =getDocument(url);
@@ -164,7 +156,7 @@ public class WB4CalcNoHappyTest {
     
      @Test(expected=WBException.class)
      @Ignore
-     public void saveTest1() throws WBException, IOException, IllegalArgumentException{
+     public void save_IsANewDocTest() throws WBException, IOException, IllegalArgumentException{
            
         xCompDest = getNewDocument();
         
@@ -181,10 +173,9 @@ public class WB4CalcNoHappyTest {
      * @throws org.semanticwb.openoffice.WBException
      */
     
-     
      @Test(expected=WBException.class)
      @Ignore
-     public void saveTest2() throws WBException, IOException, IllegalArgumentException{
+     public void save_DocumentNoModifyTest() throws WBException, IOException, IllegalArgumentException{
            
         String url = "file:///C:/NegativeTest/TestSave.ods";
         xCompDest = getDocument(url);
@@ -204,7 +195,7 @@ public class WB4CalcNoHappyTest {
      
     @Test(expected=WBException.class)
     @Ignore
-    public void saveTest3() throws WBException, IOException, IllegalArgumentException{
+    public void save_DocReadOnlyTest() throws WBException, IOException, IllegalArgumentException{
            
         String url = "file:///C:/NegativeTest/ReadOnly/TestSave.ods";
         xCompDest = getDocument(url);
@@ -224,7 +215,7 @@ public class WB4CalcNoHappyTest {
      */
     @Test(expected=java.lang.IllegalArgumentException.class)//the parameter is a file
     @Ignore
-    public void saveAsSaveDocumentFormatHTMLTest1() throws  WBException,  IllegalArgumentException{
+    public void saveAsSaveDocumentFormatHTML_PathIsAFileTest() throws  WBException,  IllegalArgumentException{
 
         String url = "file:///C:/NegativeTest/TestSave.ods";
         xCompDest = getDocument(url);
@@ -243,7 +234,7 @@ public class WB4CalcNoHappyTest {
     
     @Test(expected=WBException.class)
     @Ignore
-    public void saveAsSaveDocumentFormatHTMLTest2() throws WBOfficeException, WBException, IOException, IllegalArgumentException{
+    public void saveAsSaveDocumentFormatHTML_ReadOnlyTest() throws WBOfficeException, WBException, IOException, IllegalArgumentException{
 
         String url = "file:///C:/NegativeTest/TestSave.ods";
         xCompDest = getDocument(url);
