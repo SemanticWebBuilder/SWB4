@@ -25,16 +25,16 @@ public class Vocabulary extends SWBVocabulary
     public void init()
     {
         //Classes
-        RDFModel=getTopicClass("RDFModel");
-        User=getTopicClass("User");
-        Template=getTopicClass("Template");
-        Topic=getTopicClass("Topic");
-        WebPage=getTopicClass("WebPage");
-        WebSite=getTopicClass("WebSite");
+        RDFModel=getTopicClass(URI+"RDFModel");
+        User=getTopicClass(URI+"User");
+        Template=getTopicClass(URI+"Template");
+        Topic=getTopicClass(URI+"Topic");
+        WebPage=getTopicClass(URI+"WebPage");
+        WebSite=getTopicClass(URI+"WebSite");
         //Interfaces
         
         //Properties
-        value=getTopicProperty("value");
+        value=getTopicProperty(URI+"value");
     }    
 
 }

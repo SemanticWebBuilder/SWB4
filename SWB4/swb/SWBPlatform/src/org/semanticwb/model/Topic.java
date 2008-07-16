@@ -12,6 +12,7 @@ import com.hp.hpl.jena.rdf.model.Statement;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.SWBContext;
+import org.semanticwb.platform.SWBVocabulary;
 
 /**
  *
@@ -38,15 +39,19 @@ public class Topic
         return m_res.getURI();
     }
     
+    public String getName()
+    {
+        return m_res.getLocalName();
+    }    
     
     public TopicClass getTopicClass()
     {
-        Statement stm=m_res.getProperty(m_res.getModel().getProperty(SWBContext.getSemanticMgr().getVocabulary().RDF_TYPE));
+        Statement stm=m_res.getProperty(m_res.getModel().getProperty(SWBVocabulary.RDF_TYPE));
         if(stm!=null)
         {
             try
             {
-                return new TopicClass(stm.getResource().getURI());
+                return SWBContext.getSemanticMgr().getVocabulary().getTopicClass(stm.getResource().getURI());
             }catch(Exception e){log.error(e);}
         }
         return null;
@@ -107,5 +112,29 @@ public class Topic
         }
         return ret;
     }    
+    
+    public Resource getRDFResource()
+    {
+        return m_res;
+    }
+    
+    @Override
+    public String toString()
+    {
+        return m_res.toString();
+    }
+
+    @Override
+    public int hashCode() 
+    {
+        return m_res.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) 
+    {
+        return hashCode()==obj.hashCode();
+    }
+   
     
 }
