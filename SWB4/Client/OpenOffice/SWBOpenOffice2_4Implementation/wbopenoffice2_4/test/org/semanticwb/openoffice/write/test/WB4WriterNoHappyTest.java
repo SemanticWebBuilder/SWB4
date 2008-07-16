@@ -23,7 +23,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.semanticwb.openoffice.NoHasLocationException;
 import org.semanticwb.openoffice.NoHasLocationException;
-import org.semanticwb.openoffice.OfficeDocumentHelper;
 import org.semanticwb.openoffice.SaveDocumentFormat;
 import org.semanticwb.openoffice.WBException;
 import org.semanticwb.openoffice.WBException;
@@ -105,7 +104,7 @@ public class WB4WriterNoHappyTest {
             xCompDest = getNewDocument();
             
             WB4Writer writer = new WB4Writer(xCompDest);
-            File actual = writer.getLocalPath();
+            writer.getLocalPath();
        
     }
 
@@ -119,7 +118,7 @@ public class WB4WriterNoHappyTest {
      */
     @Test(expected = WBException.class)
     @Ignore
-    public void saveTest() throws WBException{
+    public void save_NeverSavedDocTest() throws WBException{
 
          xCompDest = getNewDocument();
             
@@ -138,7 +137,7 @@ public class WB4WriterNoHappyTest {
      */
     @Test(expected=WBException.class) 
     @Ignore 
-    public void saveTest2()throws WBException{
+    public void save_DocNoModifyTest()throws WBException{
         
         
         xCompDest=getDocument("file:///c:/NegativeTest/PruebaSave.odt");
@@ -160,7 +159,7 @@ public class WB4WriterNoHappyTest {
     
     @Test(expected = java.lang.IllegalArgumentException.class)
     @Ignore
-    public void saveAsSaveDocumentFormatHTMLTest1() throws IllegalArgumentException, WBException {
+    public void saveAsSaveDocumentFormatHTML_FileAsParameterTest() throws IllegalArgumentException, WBException {
         
           
           xCompDest = getDocument("file:///c:/NegativeTest/TestSave.odt");
@@ -181,7 +180,7 @@ public class WB4WriterNoHappyTest {
      */
     @Test(expected = WBException.class)
     @Ignore 
-    public void saveAsSaveDocumentFormatHTMLTest2() throws IllegalArgumentException, WBException {
+    public void saveAsSaveDocumentFormatHTML_ReadOnlyTest() throws IllegalArgumentException, WBException {
         
             
         xCompDest = getDocument("file:///c:/NegativeTest/TestSave.odt");
