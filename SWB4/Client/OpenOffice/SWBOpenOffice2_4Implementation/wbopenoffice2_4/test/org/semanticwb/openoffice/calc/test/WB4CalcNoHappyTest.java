@@ -44,8 +44,7 @@ import org.semanticwb.openoffice.impress.WB4Impress;
  */
 public class WB4CalcNoHappyTest {
     
-    private XComponentLoader xCompLoader=null;
-    private PropertyValue[] loadProps;
+
     private XComponentContext xContext;
     private XComponent xCompDest = null;
     private XComponent xCompSrc = null;
@@ -75,19 +74,8 @@ public class WB4CalcNoHappyTest {
             // Obtener la ventana principal (Desktop) de OpenOffice   
             Object oRawDesktop = xMCF.createInstanceWithContext("com.sun.star.frame.Desktop", xContext);
             oDesktop = (XDesktop) UnoRuntime.queryInterface(XDesktop.class, oRawDesktop);
-            // Obtener interfaz XComponentLoader del XDesktop   
-            xCompLoader = (XComponentLoader) UnoRuntime.queryInterface(com.sun.star.frame.XComponentLoader.class, oDesktop);
-            // Definir URL del fichero a cargar (de destino, o sea, el que recogera las nuevas diapositivas   
-
-            // Cargar el documento en una nueva ventana oculta del XDesktop   
-          //  loadProps = new PropertyValue[0];
-            /*loadProps[0] = new PropertyValue();
-            loadProps[0].Name = "Hidden";
-            loadProps[0].Value = new Boolean(false);*/
-           // String url = "file:///" + sUrlDestiny.getPath().replace('\\', '/');
-           // xCompDest = xCompLoader.loadComponentFromURL(url, "_blank", 0, loadProps);
-        }
-        catch (com.sun.star.uno.Exception e){
+            
+        }        catch (com.sun.star.uno.Exception e){
             e.printStackTrace(System.out);
         }
         catch (BootstrapException be){
@@ -106,89 +94,60 @@ public class WB4CalcNoHappyTest {
         oDesktop = null;
     //    DeleteTemporalDirectory(this.tempDir);
     }
-/*    
-    public void DeleteTemporalDirectory(File dir){
-        File[] files = dir.listFiles();
-        if (files != null)
-        {
-            for (File file : files)
-            {
-                if (file.isFile())
-                {
-                    file.delete();
-                }
-                else
-                {
-                    DeleteTemporalDirectory(file);
-                    file.delete();
-                }
-            }
-        }
-        dir.delete();
-    }
-    
-  */  
     
     @Test(expected=NoHasLocationException.class)
 
+    
+     /**
+     * Testing: getLocalPath() 
+     * class: WB4Calc
+     * Case: try to get the path of document when the document no has been saved
+     * The test is successful if return a NoHasLocationException
+     * @throws org.semanticwb.openoffice.WBException
+     */
     public void getLocalPathTest() throws WBOfficeException, NoHasLocationException {
-        try{
-            String url = "private:factory/scalc";
-            xCompDest = xCompLoader.loadComponentFromURL(url, "_blank", 0, loadProps);
-        }               
-        catch (Exception wbe){
-            Assert.fail(wbe.getMessage());
-        }
+        
+            
+        xCompDest = getNewDocument();
         
         WB4Calc write =new WB4Calc(xContext);
         write.getLocalPath();
         
     }
     
-    /*deleted
-    @Test
-    @Ignore
-    public void getCustomPropertiesTest(){
-        try{
-            WB4Calc writer = new WB4Calc(this.xContext);
-            Map<String, String> properties = writer.getCustomProperties();
-            for (String prop : properties.keySet())
-            {
-                System.out.println(prop + "=" + properties.get(prop));
-            }
-            Assert.assertEquals(properties.size(), 4);
-        }
-        catch (WBException wbe){
-            Assert.fail(wbe.getMessage());
-        }
-    }
-
-    */
-    
-    @Test(expected=java.lang.IllegalArgumentException.class)//the path is a file
+    /**
+     * Testing: saveAsHtml()
+     * class: WB4Calc
+     * Case 1: try to save the document in html format, the path is a file,when should be a directory
+     * The test is successful if return a com.sun.star.lang.IllegalArgumentException
+     * @throws com.sun.star.lang.IllegalArgumentException
+     */
+    @Test(expected=java.lang.IllegalArgumentException.class)
     @Ignore
     public void saveAsHTMLTest()throws IllegalArgumentException, WBException, IOException{
         
+        String path="C:/NegativeTest/Document.ods";
         String url = "file:///c:/NegativeTest/TestSave.ods";
-        xCompDest = xCompLoader.loadComponentFromURL(url, "_blank", 0, loadProps);
-        
-        try{
+        xCompDest =getDocument(url);
             WB4Calc writer = new WB4Calc(xContext);
-            File actual=writer.saveAsHtml(new File("C:/NegativeTest/Document.ods"));
-            
-        }
-        catch(WBOfficeException WBE){
-            
-        
-        }
+            File actual=writer.saveAsHtml(new File(path));
+         
     }
     
-    @Test(expected=WBException.class)//if cant be saved
+    
+    /**
+     * Testing: saveAsHtml()
+     * class: WB4Calc
+     * Case 2: try to save the a document, the document can not be seved, it is read only
+     * The test is successful if return a org.semanticwb.openoffice.WBException 
+     * @throws org.semanticwb.openoffice.WBException
+     */
+    @Test(expected=WBException.class)
     @Ignore
-    public void saveAsHTMLTest2()throws IllegalArgumentException, WBException, IOException{
+    public void saveAsHTMLTest2()throws IllegalArgumentException, WBException{
 
         String url = "file:///c:/NegativeTest/TestSave.ods";
-        xCompDest = xCompLoader.loadComponentFromURL(url, "_blank", 0, loadProps);
+        xCompDest =getDocument(url);
 
         WB4Calc writer = new WB4Calc(xContext);
         File actual=writer.saveAsHtml(new File("C:/NegativeTest/ReadOnly"));
@@ -196,61 +155,99 @@ public class WB4CalcNoHappyTest {
         
     }
     
-     @Test(expected=WBException.class)//the document never has been save
+     /**
+     * Testing: save()
+     * class: WB4Calc
+     * Case 1: the document can not be seved, it a new document (never has been save before)
+     * The test is successful if return a org.semanticwb.openoffice.WBException 
+     * @throws org.semanticwb.openoffice.WBException
+     */
+    
+     @Test(expected=WBException.class)
      @Ignore
      public void saveTest1() throws WBException, IOException, IllegalArgumentException{
            
-        String url = "private:factory/scalc";
-        xCompDest = xCompLoader.loadComponentFromURL(url, "_blank", 0, loadProps);
-      
+        xCompDest = getNewDocument();
+        
         WB4Calc writer = new WB4Calc(this.xContext);
         writer.save();
       
     }
      
-     @Test(expected=WBException.class)//the document never has been modified
+     /**
+     * Testing: save()
+     * class: WB4Calc
+     * Case 2: the document can not be seved, the document has not been modified
+     * The test is successful if return a org.semanticwb.openoffice.WBException 
+     * @throws org.semanticwb.openoffice.WBException
+     */
+    
+     
+     @Test(expected=WBException.class)
      @Ignore
      public void saveTest2() throws WBException, IOException, IllegalArgumentException{
            
         String url = "file:///C:/NegativeTest/TestSave.ods";
-        xCompDest = xCompLoader.loadComponentFromURL(url, "_blank", 0, loadProps);
-      
+        xCompDest = getDocument(url);
+        
         WB4Calc writer = new WB4Calc(xContext);
         writer.save();
       
     }
      
-    @Test(expected=WBException.class)//the document is read only
+    /**
+     * Testing: save()
+     * class: WB4Calc
+     * Case 3: the document can not be seved, the document is read only
+     * The test is successful if return a org.semanticwb.openoffice.WBException 
+     * @throws org.semanticwb.openoffice.WBException
+     */ 
+     
+    @Test(expected=WBException.class)
     @Ignore
     public void saveTest3() throws WBException, IOException, IllegalArgumentException{
            
         String url = "file:///C:/NegativeTest/ReadOnly/TestSave.ods";
-        xCompDest = xCompLoader.loadComponentFromURL(url, "_blank", 0, loadProps);
-      
+        xCompDest = getDocument(url);
+        
         WB4Calc writer = new WB4Calc(xContext);
         writer.save();
       
     }
-     
+    
+    
+    /**
+     * Testing:saveAs()
+     * Case 1: the function receive a directory ,but should receive a file
+     * The test is successful if return a java.lang.IllegalArgumentException 
+     * @throws org.semanticwb.openoffice.WBException
+     * @throws com.sun.star.lang.IllegalArgumentException
+     */
     @Test(expected=java.lang.IllegalArgumentException.class)//the parameter is a file
     @Ignore
-    public void saveAsSaveDocumentFormatHTMLTest1() throws WBOfficeException, WBException, IOException, IllegalArgumentException{
+    public void saveAsSaveDocumentFormatHTMLTest1() throws  WBException,  IllegalArgumentException{
 
         String url = "file:///C:/NegativeTest/TestSave.ods";
-        xCompDest = xCompLoader.loadComponentFromURL(url, "_blank", 0, loadProps);
-      
+        xCompDest = getDocument(url);
         
         WB4Calc writer = new WB4Calc(this.xContext);
         File actual=writer.saveAs(new File("C:/NegativeTest/TestSave.ods"), SaveDocumentFormat.HTML);
         
     }
+    /**
+     * Testing:saveAs()
+     * Case 2: the document can not saved, it is read only
+     * The test is successful if return a WBException
+     * @throws org.semanticwb.openoffice.WBException
+     * @throws com.sun.star.lang.IllegalArgumentException
+     */
     
-    @Test(expected=WBException.class)//the documetn can not be saved
+    @Test(expected=WBException.class)
     @Ignore
     public void saveAsSaveDocumentFormatHTMLTest2() throws WBOfficeException, WBException, IOException, IllegalArgumentException{
 
         String url = "file:///C:/NegativeTest/TestSave.ods";
-        xCompDest = xCompLoader.loadComponentFromURL(url, "_blank", 0, loadProps);
+        xCompDest = getDocument(url);
       
         
         WB4Calc writer = new WB4Calc(this.xContext);
@@ -258,9 +255,18 @@ public class WB4CalcNoHappyTest {
         
     }
     
+    
+    /**
+     * Testing:saveCustomProperties(Map<String, String> properties)
+     * Case: the Map have 6 properties, shouldn't be more than 4
+     * The test is successful if return a WBException
+     * @throws org.semanticwb.openoffice.WBException
+     */
     @Test(expected=WBException.class)
     @Ignore
-    public void saveCustomPropertiesTest() throws WBException, WBException{
+    public void saveCustomPropertiesTest() throws WBException{
+        
+        
         
         WB4Calc writer = new WB4Calc(xContext);
         HashMap<String, String> properties = new HashMap<String, String>();
@@ -274,23 +280,27 @@ public class WB4CalcNoHappyTest {
 
     }
     
-    
-     @Test(expected=NoHasLocationException.class)
-    //@Ignore
-    public void doCellSamples() throws RuntimeException, Exception{
+    /**
+     * Testing: getAllAttachments();
+     * Case: A relative link used to inert at the new document,the function trying get the Attachments
+     * The test is successful if return a NoHasLocationException
+     * @throws java.lang.RuntimeException
+     * @throws java.lang.Exception
+     */
+    @Test(expected=NoHasLocationException.class)
+    @Ignore
+    public void getAllAttachmentsTest() throws RuntimeException, Exception,NoHasLocationException{
       
       
         
-         org.semanticwb.openoffice.write.test.SpreadsheetDocHelper X=
+         org.semanticwb.openoffice.write.test.SpreadsheetDocHelper UtilX=
                 new org.semanticwb.openoffice.write.test.SpreadsheetDocHelper(new String[0],xContext); 
         
-        System.out.println( "\n*** Samples for service sheet.SheetCell ***\n" );
-        com.sun.star.sheet.XSpreadsheet xSheet = X.getSpreadsheet( 0 );
+        com.sun.star.sheet.XSpreadsheet xSheet = UtilX.getSpreadsheet( 0 );
         com.sun.star.table.XCell xCell = null;
         com.sun.star.beans.XPropertySet xPropSet = null;
         String aText;
-  //      prepareRange( xSheet, "A1:C7", "Cells and Cell Ranges" );
-//
+
         // --- Get cell B3 by position - (column, row) ---
         xCell = xSheet.getCellByPosition( 1, 2 );  
         
@@ -306,7 +316,7 @@ public class WB4CalcNoHappyTest {
 
         // create a hyperlink
         com.sun.star.lang.XMultiServiceFactory xServiceMan = (com.sun.star.lang.XMultiServiceFactory)
-            UnoRuntime.queryInterface( com.sun.star.lang.XMultiServiceFactory.class, X.getDocument() );
+            UnoRuntime.queryInterface( com.sun.star.lang.XMultiServiceFactory.class, UtilX.getDocument() );
         Object aHyperlinkObj = xServiceMan.createInstance( "com.sun.star.text.TextField.URL" );
         xPropSet = (com.sun.star.beans.XPropertySet)
             UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, aHyperlinkObj );
@@ -321,22 +331,65 @@ public class WB4CalcNoHappyTest {
        WB4Calc writer = new WB4Calc(xContext);
        List<File> links=writer.getAllAttachments();
        
-       X.closeDocument();
+       UtilX.closeDocument();
        
     
         
     }
 
     
-   
+     /**
+     * Get the XComponent of a existent domcument 
+     * @param String - the path of a Open Office document to Open
+     * @return XComponent
+     * @throws com.sun.star.uno.Exception
+     */
+        public XComponent getNewDocument(){
+        
+        XComponent XComp=null;
+        
+        
+         try {
+            XComponentLoader xCompLoader = (XComponentLoader) UnoRuntime.queryInterface(com.sun.star.frame.XComponentLoader.class, oDesktop);
+            PropertyValue[] loadProps = new PropertyValue[0];
+            
+            XComp = xCompLoader.loadComponentFromURL("private:factory/swriter", "_blank", 0, loadProps);
+            
+        } catch (com.sun.star.uno.Exception ioe) {
+            Assert.fail(ioe.getMessage());
+        
+        }
+        
+        return (XComp);
+        
+    }
     
     
+    /**
+     * Get the XComponent of a existent domcument 
+     * @param String - the path of a Open Office document to Open
+     * @return XComponent
+     * @throws com.sun.star.uno.Exception
+     */
     
+    public XComponent getDocument(String path){
+        
+        XComponent XComp=null;
+        
+         try {
+            XComponentLoader xCompLoader = (XComponentLoader) UnoRuntime.queryInterface(com.sun.star.frame.XComponentLoader.class, oDesktop);
+            PropertyValue[] loadProps = new PropertyValue[0];
+            
+            XComp = xCompLoader.loadComponentFromURL(path, "_blank", 0, loadProps);
+            
+        } catch (com.sun.star.uno.Exception ioe) {
+            Assert.fail(ioe.getMessage());
+        
+        }
+        
+        return XComp;
+        
+    }
     
-    
-    
-    
-    
-    
-
+     
 }
