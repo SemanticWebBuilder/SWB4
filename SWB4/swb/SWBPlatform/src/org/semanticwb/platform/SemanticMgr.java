@@ -86,7 +86,11 @@ public class SemanticMgr implements SWBContextObject
             Iterator<TopicProperty> tppit=tpc.listProperties();
             while(tppit.hasNext())
             {
-                ((SWBVocabulary)(vocabulary)).addTopicProperty(tppit.next());
+                TopicProperty tpp=tppit.next();
+                if(tpc.equals(tpp.getDomainClass()))
+                {
+                    ((SWBVocabulary)(vocabulary)).addTopicProperty(tpp);
+                }
             }
         }
         vocabulary.init();

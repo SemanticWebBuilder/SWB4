@@ -17,10 +17,26 @@ import org.semanticwb.model.TopicProperty;
 public class SWBVocabulary 
 {
     //RDF
-    public final String RDF_URI="http://www.w3.org/1999/02/22-rdf-syntax-ns#";
-    public final String RDF_TYPE=RDF_URI+"type";
+    public static final String RDF_URI="http://www.w3.org/1999/02/22-rdf-syntax-ns#";
+    public static final String RDF_TYPE=RDF_URI+"type";
+    
+    public static final String RDFS_URI="http://www.w3.org/2000/01/rdf-schema#";
+    public static final String RDFS_DOMAIN=RDFS_URI+"domain";
+    public static final String RDFS_RANGE=RDFS_URI+"range";
+    public static final String RDFS_SUBPROPERTYOF=RDFS_URI+"subPropertyOf";
+    
+    public static final String XMLS_URI="http://www.w3.org/2001/XMLSchema#";
+    public static final String XMLS_DATETIME=XMLS_URI+"dateTime";
+    public static final String XMLS_BOOLEAN=XMLS_URI+"boolean";
+    public static final String XMLS_STRING=XMLS_URI+"string";
+    public static final String XMLS_INT=XMLS_URI+"int";
+            
+    public static final String OWL_URI="http://www.w3.org/2002/07/owl#";
+    public static final String OWL_DATATYPEPROPERTY=OWL_URI+"DatatypeProperty";
+    public static final String OWL_OBJECTPROPERTY=OWL_URI+"ObjectProperty";
+        
     //General
-    public final String URI="http://www.semanticwebbuilder.org/swb4/ontology#";
+    public static final String URI="http://www.semanticwebbuilder.org/swb4/ontology#";
     
     public HashMap<String, TopicClass> classes;
     public HashMap<String, TopicProperty> properties;
