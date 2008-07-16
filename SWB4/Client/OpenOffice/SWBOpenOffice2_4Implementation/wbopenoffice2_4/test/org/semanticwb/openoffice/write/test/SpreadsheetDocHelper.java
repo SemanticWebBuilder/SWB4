@@ -342,26 +342,7 @@ public class SpreadsheetDocHelper
         return aStr;
     }
 
-// ________________________________________________________________
 
-    // Connect to a running office that is accepting connections.
-    private void connect()
-    {
-        if (mxRemoteContext == null && mxRemoteServiceManager == null) {
-            try {
-                // First step: get the remote office component context
-                mxRemoteContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
-                System.out.println("Connected to a running office ...");
-                    
-                mxRemoteServiceManager = mxRemoteContext.getServiceManager();
-            }
-            catch( Exception e) {
-                System.err.println("ERROR: can't get a component context from a running office ...");
-                e.printStackTrace();
-                System.exit(1);
-            }            
-        }
-    }
 
     /** Creates an empty spreadsheet document.
         @return  The XSpreadsheetDocument interface of the document. */
