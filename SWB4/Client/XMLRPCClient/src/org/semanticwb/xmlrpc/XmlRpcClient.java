@@ -26,6 +26,7 @@ import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 import org.jdom.xpath.XPath;
 import static org.semanticwb.xmlrpc.Base64.encode;
+import static java.net.HttpURLConnection.*;
 
 /**
  *
@@ -33,7 +34,8 @@ import static org.semanticwb.xmlrpc.Base64.encode;
  */
 public class XmlRpcClient<T>
 {
-    private Map<String,List<String>> responseProperties=new HashMap<String,List<String>>();
+
+    private Map<String, List<String>> responseProperties = new HashMap<String, List<String>>();
     private static String boundary = "gc0p4Jq0M2Yt08jU534c0p";
     private static SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
     private XmlRpcClientConfig config;
@@ -52,16 +54,18 @@ public class XmlRpcClient<T>
     {
         return config;
     }
-    public Map<String,List<String>> getResponseProperties()
+
+    public Map<String, List<String>> getResponseProperties()
     {
         return responseProperties;
     }
-    public T execute(String method, Object[] parameters) throws XmlRpcException
+
+    public T execute(String method, Object[] parameters) throws XmlRpcException, HttpException
     {
         return execute(method, parameters, new ArrayList<Attachment>());
     }
 
-    public T execute(String methodName, Object[] parameters, List<Attachment> attachments) throws XmlRpcException
+    public T execute(String methodName, Object[] parameters, List<Attachment> attachments) throws XmlRpcException, HttpException
     {
         for ( Attachment attachment : attachments )
         {
@@ -89,16 +93,15 @@ public class XmlRpcClient<T>
 
     /*private void showDocDebug(Document requestDoc)
     {
-        try
-        {
-            XMLOutputter outp = new XMLOutputter();
-            outp.output(requestDoc, System.out);
-        }
-        catch ( Exception e )
-        {
-        }
+    try
+    {
+    XMLOutputter outp = new XMLOutputter();
+    outp.output(requestDoc, System.out);
+    }
+    catch ( Exception e )
+    {
+    }
     }*/
-
     private T deserialize(Document requestDocument) throws XmlRpcException, ParseException
     {
         try
@@ -272,30 +275,33 @@ public class XmlRpcClient<T>
         String newBoundary = "\r\n--" + boundary + "\r\n";
         out.write(newBoundary.getBytes());
     }
+
     private String getUserPassWordEncoded()
-    {        
-        String userPassword=config.getUserName()+":"+config.getPassword();
-        String encoded=new String(encode(userPassword.getBytes()));
+    {
+        String userPassword = config.getUserName() + ":" + config.getPassword();
+        String encoded = new String(encode(userPassword.getBytes()));
         return encoded;
     }
-    private Document request(Document requestDoc, List<Attachment> attachments) throws XmlRpcException
+
+    private Document request(Document requestDoc, List<Attachment> attachments) throws XmlRpcException, HttpException
     {
         OutputStream out = null;
         try
-        {    
+        {
             Proxy proxy;
-            if(config.usesProxyServer())
+            if ( config.usesProxyServer() )
             {
-                proxy=new Proxy(Type.HTTP, new InetSocketAddress(config.proxyServer().toString(), config.getProxyPort()));
+                proxy = new Proxy(Type.HTTP, new InetSocketAddress(config.proxyServer().toString(), config.getProxyPort()));
             }
             else
             {
-                proxy=Proxy.NO_PROXY;            
+                proxy = Proxy.NO_PROXY;
             }
-            HttpURLConnection connection = ( HttpURLConnection ) config.getServerURI().toURL().openConnection(proxy);            
-            if(config.hasUserPassWord())
+            HttpURLConnection connection = ( HttpURLConnection ) config.getServerURI().toURL().openConnection(proxy);
+            HttpURLConnection.setFollowRedirects(true);
+            if ( config.hasUserPassWord() )
             {
-                connection.setRequestProperty("Authorization", "Basic "+getUserPassWordEncoded());
+                connection.setRequestProperty("Authorization", "Basic " + getUserPassWordEncoded());
             }
             connection.setRequestMethod("POST");
             connection.setDoOutput(true);
@@ -310,11 +316,19 @@ public class XmlRpcClient<T>
             }
             writeEnd(out);
             out.close();
-            InputStream in = connection.getInputStream();
-            Document doc = getDocument(in);            
-            this.responseProperties=connection.getHeaderFields();
-            in.close();            
-            return doc;
+            int responseCode = connection.getResponseCode();
+            String contentType = connection.getHeaderField("Content-Type");
+            InputStream error = connection.getErrorStream();
+            switch ( responseCode )
+            {
+                case HTTP_OK:
+                    this.responseProperties = connection.getHeaderFields();
+                    return getResponse(connection.getInputStream(),contentType);
+                case HTTP_NOT_FOUND:
+                    throw new HttpException("The path " + connection.getURL() + " was not found", HTTP_NOT_FOUND, getDetail(error, contentType));
+                default:
+                    throw new HttpException(connection.getResponseMessage(), HTTP_NOT_FOUND, getDetail(error, contentType));
+            }
         }
         catch ( MalformedURLException mfe )
         {
@@ -338,7 +352,73 @@ public class XmlRpcClient<T>
                 }
             }
         }
+    }
 
+    private String getDetail(InputStream in, String contentType)
+    {
+        StringBuilder sb = new StringBuilder();
+
+        String charSet = "utf-8";
+        if ( contentType != null )
+        {
+            int posInit = contentType.indexOf("charset=");
+            if ( posInit != -1 )
+            {
+                charSet = contentType.substring(posInit + 8);
+            }
+        }
+        try
+        {
+
+            byte[] buffer = new byte[2048];
+            int read = in.read(buffer);
+            while (read != -1)
+            {
+                sb.append(new String(buffer, 0, read, charSet));
+                read = in.read(buffer);
+            }
+        }
+        catch ( IOException ioe )
+        {
+
+        }
+        finally
+        {
+            if ( in != null )
+            {
+                try
+                {
+                    in.close();
+                }
+                catch ( IOException ioe )
+                {
+
+                }
+            }
+        }
+        return sb.toString();
+    }
+
+    private Document getResponse(InputStream in,String contentType) throws XmlRpcException
+    {
+        if(contentType==null)
+        {
+            throw new XmlRpcException("The content-Type is not valid");
+        }
+        if(!contentType.startsWith("text/xml"))
+        {
+            throw new XmlRpcException("The content-Type is not text/xml");
+        }
+        Document doc = getDocument(in);
+        try
+        {
+            in.close();
+        }
+        catch ( IOException ioe )
+        {
+            throw new XmlRpcException("Error getting the response document",ioe);
+        }
+        return doc;
     }
 
     private void addParameter(Element param, Object obj) throws XmlRpcException
@@ -395,7 +475,7 @@ public class XmlRpcClient<T>
             elementType.setText(svalue);
             value.setContent(elementType);
         }
-        
+
     }
 
     private void addArray(Object obj, Element elementType) throws XmlRpcException
