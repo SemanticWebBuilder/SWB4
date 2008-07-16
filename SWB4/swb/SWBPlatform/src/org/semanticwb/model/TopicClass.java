@@ -81,5 +81,32 @@ public class TopicClass
         return m_props.values().iterator();
     }
     
+    public OntClass getOntClass()
+    {
+        return m_class;
+    }
+    
+    @Override
+    public String toString()
+    {
+        return m_class.toString();
+    }
+
+    @Override
+    public int hashCode() 
+    {
+        return m_class.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) 
+    {
+        boolean ret=false;
+        if(obj!=null)
+        {
+            ret=(hashCode()==obj.hashCode());
+        }
+        return ret;
+    }    
     
 }
