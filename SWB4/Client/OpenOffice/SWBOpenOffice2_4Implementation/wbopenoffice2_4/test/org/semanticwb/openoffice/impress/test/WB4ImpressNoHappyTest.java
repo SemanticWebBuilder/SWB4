@@ -30,7 +30,7 @@ import org.semanticwb.openoffice.WBOfficeException;
 import org.semanticwb.openoffice.impress.WB4Impress;
 /**
  *
- * @author krystel.montero
+ * @author  Edgar Chavarria
  */public class WB4ImpressNoHappyTest{
 
     private XComponentContext xContext;
@@ -38,8 +38,7 @@ import org.semanticwb.openoffice.impress.WB4Impress;
     private XComponent xCompSrc = null;
     private XDesktop oDesktop = null;
     private File sUrlDestiny = new File("C:/NegativeTest/PruebaSave.odp");
-    private File tempDir = new File("C:/NegativeTest/");
-
+    
 
     @BeforeClass
     public static void setUpClass() throws Exception
@@ -104,190 +103,155 @@ import org.semanticwb.openoffice.impress.WB4Impress;
         oDesktop.terminate();
         xCompDest = null;
         oDesktop = null;
-        DeleteTemporalDirectory(this.tempDir);
+        
     }
 
-    public void DeleteTemporalDirectory(File dir)
-    {
-        File[] files = dir.listFiles();
-        if (files != null)
-        {
-            for (File file : files)
-            {
-                if (file.isFile())
-                {
-                    file.delete();
-                }
-                else
-                {
-                    DeleteTemporalDirectory(file);
-                    file.delete();
-                }
-            }
-        }
-        dir.delete();
-    }
-    
-    @Test(expected=WBException.class)
+     /**
+     * Testing: getLocalPath() 
+     * class: WB4Impress
+     * Case: try to get the path of document when the document no has been saved
+     * The test is successful if return  NoHasLocationException
+     * @throws org.semanticwb.openoffice.WBException
+     */
+    @Test(expected=NoHasLocationException.class)
     @Ignore
-    public void getLocalPathTest()throws NoHasLocationException, WBOfficeException{
+    public void getLocalPathTest()throws NoHasLocationException{
       
-        try {
-            XComponentLoader xCompLoader = (XComponentLoader) UnoRuntime.queryInterface(com.sun.star.frame.XComponentLoader.class, oDesktop);
-            PropertyValue[] loadProps = new PropertyValue[0];
-            String url = "private:factory/swriter";
-            xCompDest = xCompLoader.loadComponentFromURL(url, "_blank", 0, loadProps);
-           
-        } catch (com.sun.star.uno.Exception ioe) {
-            Assert.fail(ioe.getMessage());
-        
-        }
+        xCompDest = getNewDocument();
         
         WB4Impress writer = new WB4Impress(xCompDest);
         File actual = writer.getLocalPath();
         
     }
-    /* borrado 
-    @Test(expected=WBException.class)
-    public void getCustomPropertiesTest()throws WBException{
-       
-        WB4Impress writer = new WB4Impress(this.xContext);
-        Map<String, String> properties = writer.getCustomProperties();
-       
-        
-    }
-
-    */
-
-    @Test
-    @Ignore
-    public void getDocumentTypeTest() throws WBOfficeException
-    {
-        
-            XComponent document=null; 
-            WB4Impress writer = new WB4Impress(document);
-            writer=null;
-            DocumentType actual = writer.getDocumentType();
-            
-            
-            Assert.fail(actual.name());
-            
-    }
     
-    @Test(expected=java.lang.IllegalArgumentException.class)//is not a directory is a file
-  //  @Ignore
-    public void saveAsHTMLTest() throws IOException, IllegalArgumentException
-    {
-        
-        try
-        {
-            
-            XComponentLoader xCompLoader = (XComponentLoader) UnoRuntime.queryInterface(com.sun.star.frame.XComponentLoader.class, oDesktop);
-            PropertyValue[] loadProps = new PropertyValue[0];
-            String url = "file:///c:/NegativeTest/PruebaSave.odp";
-            xCompDest = xCompLoader.loadComponentFromURL(url, "_blank", 0, loadProps);
-            
-           
-            WB4Impress writer = new WB4Impress(xContext);
-            File actual = writer.saveAsHtml(new File("c:/NegativeTest/PruebaSave.odp"));
-            
-            Assert.assertTrue(actual.exists());
-        }
-        catch (WBException wbe)
-        {
-            //Assert.fail(wbe.getMessage());
-        }
-    }
-    
-    
-    @Test(expected=WBException.class)//the file cant be saved
-    @Ignore
-      public void saveAsHTMLTest2()throws WBException{
-        
-        try {
-            XComponentLoader xCompLoader = (XComponentLoader) UnoRuntime.queryInterface(com.sun.star.frame.XComponentLoader.class, oDesktop);
-            PropertyValue[] loadProps = new PropertyValue[0];
-            String url = "file:///c:/NegativeTest/PruebaSave.odp";
-            xCompDest = xCompLoader.loadComponentFromURL(url, "_blank", 0, loadProps);
-            
-            WB4Impress writer = new WB4Impress(xContext);
-            File actual = writer.saveAsHtml(new File("c:/NegativeTest/"));
-            
-            Assert.fail("Error: Deberia Fallar");
-          
-            
-        } catch (com.sun.star.uno.Exception ioe) {
-            Assert.fail(ioe.getMessage());
-        
-        }
-        
-    }
-    
-    
-    @Test(expected=WBException.class)
-    @Ignore
-    //test1 case: the document never has been saved 
-    public void saveTest1() throws IOException, IllegalArgumentException, WBOfficeException, WBException {
-       
-        XComponentLoader xCompLoader = (XComponentLoader) UnoRuntime.queryInterface(com.sun.star.frame.XComponentLoader.class, oDesktop);
-        PropertyValue[] loadProps = new PropertyValue[0];
-        String url = "private:factory/swriter";
-        xCompDest = xCompLoader.loadComponentFromURL(url, "_blank", 0, loadProps);
-
-        WB4Impress writer = new WB4Impress(xContext);
-        writer.save();
-        
-    }
-    
-    
-    @Test(expected=WBException.class)
-    @Ignore
-    //test1 case: the document has not been modified 
-    public void saveTest2() throws IOException, IllegalArgumentException, WBOfficeException, WBException {
-       
-        XComponentLoader xCompLoader = (XComponentLoader) UnoRuntime.queryInterface(com.sun.star.frame.XComponentLoader.class, oDesktop);
-        PropertyValue[] loadProps = new PropertyValue[0];
-        String url = "file:///c:/NegativeTest/PruebaSave.odp";
-        xCompDest = xCompLoader.loadComponentFromURL(url, "_blank", 0, loadProps);
-       
-        WB4Impress writer = new WB4Impress(xContext);
-        writer.save();
-        
-    }
-    
-    
+    /**
+     * Testing:saveAsHtml(File dir)
+     * class: WB4Impress
+     * Case 1:Try to save a impress document as Html document
+     * The parameter received is a file,the function should received a directory
+     * The test is successful if return java.lang.IllegalArgumentException
+     * @throws org.semanticwb.openoffice.WBException
+     * @throws java.lang.IllegalArgumentException
+     */
+ 
     @Test(expected=java.lang.IllegalArgumentException.class)
     @Ignore
-    //case 1: the path is a File
-    public void saveAsSaveDocumentFormatHTMLTest1() throws IOException, 
-            IllegalArgumentException, WBOfficeException, WBException{
+    public void saveAsHTMLTest1() throws WBException,IllegalArgumentException  
+    {    
+            String url = "file:///c:/NegativeTest/PruebaSave.odp";
+            xCompDest = getDocument(url);
+           
+            
+            WB4Impress writer = new WB4Impress(xCompDest);
+            File actual = writer.saveAsHtml(new File("c:/NegativeTest/PruebaSave.odp"));
+            
+            
+    }
+    
+    
+     /**
+     * Testing:saveAsHtml(File dir)
+     * Class: WB4Impress
+     * Case 2:Try to save a impress document as Html document
+     * the document already exist and is read only
+     * The test is successful if return org.semanticwb.openoffice.WBException
+     * @throws org.semanticwb.openoffice.WBException
+     * @throws java.lang.IllegalArgumentException
+     */
+    
+    @Test(expected=WBException.class)
+    @Ignore
+      public void saveAsHTMLTest2()throws WBException,IllegalArgumentException{
+        
+            String url = "file:///c:/NegativeTest/PruebaSave.odp";
+            xCompDest = getDocument(url);
+            
+            WB4Impress writer = new WB4Impress(xCompDest);
+            File actual = writer.saveAsHtml(new File("c:/NegativeTest/"));
+            
        
-        XComponentLoader xCompLoader = (XComponentLoader) UnoRuntime.queryInterface(com.sun.star.frame.XComponentLoader.class, oDesktop);
-        PropertyValue[] loadProps = new PropertyValue[0];
+        
+    }
+    
+    /**
+     * Testing: save();
+     * Class: WB4Impress
+     * case 1: try to save a never has been document
+     * The test is successful if return org.semanticwb.openoffice.WBException 
+     * @throws org.semanticwb.openoffice.WBException
+     */
+    @Test(expected=WBException.class)
+    @Ignore
+    
+    public void saveTest1() throws WBException {
+       
+        xCompDest = getNewDocument();
+        
+        WB4Impress writer = new WB4Impress(xContext);
+        writer.save();
+        
+    }
+    
+    
+    /**
+     * Testing: save();
+     * Class: WB4Impress
+     * case 2: try to save a document, the document does save before and
+     * the document no has  been modified
+     * The test is successful if return org.semanticwb.openoffice.WBException 
+     * @throws org.semanticwb.openoffice.WBException
+     */
+    
+    @Test(expected=WBException.class)
+    @Ignore
+    public void saveTest2() throws IOException, IllegalArgumentException, WBOfficeException, WBException {
+       
         String url = "file:///c:/NegativeTest/PruebaSave.odp";
-        xCompDest = xCompLoader.loadComponentFromURL(url, "_blank", 0, loadProps);
-
-
-
+        xCompDest = getDocument(url);
+        
+        WB4Impress writer = new WB4Impress(xContext);
+        writer.save();
+        
+    }
+    
+    /**
+     * Testing: File saveAs(File dir, SaveDocumentFormat format)
+     * class: WB4Impress
+     * Case 1:try to save a document as HTML document
+     * the function received a file, but need a directory as parameter
+     * The test is successful if return java.lang.IllegalArgumentException
+     * @throws org.semanticwb.openoffice.WBOfficeException
+     * @throws org.semanticwb.openoffice.WBException
+     */
+    @Test(expected=java.lang.IllegalArgumentException.class)
+    @Ignore
+    public void saveAsSaveDocumentFormatHTMLTest1() throws WBOfficeException, WBException {
+       
+        String url = "file:///c:/NegativeTest/PruebaSave.odp";
+        xCompDest =getDocument(url);
+        
         WB4Impress writer = new WB4Impress(xContext);
         File actual=writer.saveAs(new File("c:/NegativeTest/PruebaSave.odp"), SaveDocumentFormat.HTML);            
         
     }
     
-    
+    /**
+     * Testing: File saveAs(File dir, SaveDocumentFormat format)
+     * class: WB4Impress
+     * Case 2:try to save a impress document as HTML document
+     * the document already exist and is read only 
+     * The test is successful if return WBException
+     * @throws org.semanticwb.openoffice.WBOfficeException
+     * @throws org.semanticwb.openoffice.WBException
+     */
 
+    
     @Test(expected=WBException.class)
     @Ignore
-    //case 2: the docuemet can not be saved, is read only
-    public void saveAsSaveDocumentFormatHTMLTest2() throws IOException, 
-            IllegalArgumentException, WBOfficeException, WBException{
+    public void saveAsSaveDocumentFormatHTMLTest2() throws WBOfficeException, WBException  {
        
-        XComponentLoader xCompLoader = (XComponentLoader) UnoRuntime.queryInterface(com.sun.star.frame.XComponentLoader.class, oDesktop);
-        PropertyValue[] loadProps = new PropertyValue[0];
         String url = "file:///c:/NegativeTest/PruebaSave.odp";
-        xCompDest = xCompLoader.loadComponentFromURL(url, "_blank", 0, loadProps);
-
-
+        xCompDest = getDocument(url);
 
         WB4Impress writer = new WB4Impress(xContext);
         File actual=writer.saveAs(new File("c:/NegativeTest/"), SaveDocumentFormat.HTML);            
@@ -296,13 +260,18 @@ import org.semanticwb.openoffice.impress.WB4Impress;
     
     
     
-    
+    /**
+     * Testing:saveCustomProperties(Map<String, String> properties)
+     * Case: try to insert more than 4 properties
+     * The test is successful if return WBException
+     * @throws org.semanticwb.openoffice.WBException
+     */
     
     @Test(expected=WBException.class)
     @Ignore
     public void saveCustomPropertiesTest()throws WBException{
         try{
-            WB4Impress writer = new WB4Impress(this.xContext);
+            WB4Impress writer = new WB4Impress(xContext);
             HashMap<String, String> properties = new HashMap<String, String>();
             properties.put("id", "1");
             properties.put("tp", "Hola");
@@ -317,20 +286,57 @@ import org.semanticwb.openoffice.impress.WB4Impress;
         }
     }
     
+    /**
+     * Get the XComponent of a new document 
+     * @return XComponent
+     * @throws com.sun.star.uno.Exception
+     */
+    public XComponent getNewDocument(){
+        
+        XComponent XComp=null;
+        
+        
+         try {
+            XComponentLoader xCompLoader = (XComponentLoader) UnoRuntime.queryInterface(com.sun.star.frame.XComponentLoader.class, oDesktop);
+            PropertyValue[] loadProps = new PropertyValue[0];
+            
+            XComp = xCompLoader.loadComponentFromURL("private:factory/swriter", "_blank", 0, loadProps);
+            
+        } catch (com.sun.star.uno.Exception ioe) {
+            Assert.fail(ioe.getMessage());
+        
+        }
+        
+        return (XComp);
+        
+    }
     
     
+    /**
+     * Get the XComponent of a existent domcument 
+     * @param String - the path of a Open Office document to Open
+     * @return XComponent
+     * @throws com.sun.star.uno.Exception
+     */
     
-    
-    
-    
-    
-    
-    
-    
-
-    
-    
-    
+    public XComponent getDocument(String path){
+        
+        XComponent XComp=null;
+        
+         try {
+            XComponentLoader xCompLoader = (XComponentLoader) UnoRuntime.queryInterface(com.sun.star.frame.XComponentLoader.class, oDesktop);
+            PropertyValue[] loadProps = new PropertyValue[0];
+            
+            XComp = xCompLoader.loadComponentFromURL(path, "_blank", 0, loadProps);
+            
+        } catch (com.sun.star.uno.Exception ioe) {
+            Assert.fail(ioe.getMessage());
+        
+        }
+        
+        return XComp;
+        
+    }
     
     
     
