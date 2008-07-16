@@ -168,6 +168,7 @@ public abstract class XMLRPCServlet extends HttpServlet
 
     private void sendResponse(ServletResponse response, Document docResponse) throws IOException
     {
+        response.setContentType("text/xml");
         ServletOutputStream out = response.getOutputStream();
         XMLOutputter xMLOutputter = new XMLOutputter();
         xMLOutputter.output(docResponse, out);
@@ -181,15 +182,16 @@ public abstract class XMLRPCServlet extends HttpServlet
         Element methodResponse = new Element("methodResponse");
         doc.setRootElement(methodResponse);
         Element params = new Element("params");
-        Object[] pParams = {value};
-        addParameters(params, pParams);
         methodResponse.addContent(params);
+        Object[] pParams = {value};
+        addParameters(params, pParams);        
         return doc;
     }
 
     public void addParameter(Element param, Object obj) throws XmlRpcException
     {
         Element value = new Element("value");
+        param.addContent(value);
         String type = "string";
         String svalue = "";
         if ( obj instanceof Integer )
@@ -237,8 +239,9 @@ public abstract class XMLRPCServlet extends HttpServlet
         if ( svalue != null )
         {
             Element elementType = new Element(type);
-            elementType.setText(svalue);
             value.setContent(elementType);
+            elementType.setText(svalue);
+            
         }
     }
 
