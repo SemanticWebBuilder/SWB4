@@ -34,7 +34,7 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author krystel.montero
+ * @author  Edgar Chavarria
  */
 public class WB4WriterNoHappyTest {
 
@@ -42,9 +42,7 @@ public class WB4WriterNoHappyTest {
     XComponent xCompDest = null;
     XDesktop oDesktop = null;
     File sUrlDestiny = new File("c:/temp/demopub.odt");
-    File tempDir = new File("c:/temp/demo/");
-    
-
+  
   
     @BeforeClass
     public static void setUpClass() throws Exception {
@@ -94,8 +92,14 @@ public class WB4WriterNoHappyTest {
     }
 
 
+    /**
+     * Testing: getLocalPath() 
+     * Case: try to get the path of a ducument no has been saved
+     * The test is successful if return a NoHasLocationException
+     * @throws org.semanticwb.openoffice.WBException
+     */
     @Test(expected = NoHasLocationException.class)
-    
+    @Ignore
     public void getLocalPathTest() throws WBException {
     
             xCompDest = getNewDocument();
@@ -109,8 +113,8 @@ public class WB4WriterNoHappyTest {
     
     /**
      * Testing: save()
-     * Case: save a document when document has not save before
-     * 
+     * Case 1: try to save a document when the document never has been saved
+     * The test is successful if return WBException
      * @throws org.semanticwb.openoffice.WBException
      */
     @Test(expected = WBException.class)
@@ -126,7 +130,13 @@ public class WB4WriterNoHappyTest {
         
     }
     
-    @Test(expected=WBException.class)//File not is new & has not been modified 
+    /**
+     * Testing: save()
+     * Case 2: try to save a document when it has save before & has not been modified
+     * The test is successful if return WBException
+     * @throws org.semanticwb.openoffice.WBException
+     */
+    @Test(expected=WBException.class) 
     @Ignore 
     public void saveTest2()throws WBException{
         
@@ -139,9 +149,18 @@ public class WB4WriterNoHappyTest {
         
     }
 
-    @Test(expected = java.lang.IllegalArgumentException.class)//the path is a path file
+    /**
+     * Testing: saveAs();
+     * Case 1: try to save a document with a type format determined(HTML)
+     * the function receives the path of a file ,but the path should be directory 
+     * The test is successful if return java.lang.IllegalArgumentException 
+     * @throws com.sun.star.lang.IllegalArgumentException
+     * @throws WBException
+    */
+    
+    @Test(expected = java.lang.IllegalArgumentException.class)
     @Ignore
-    public void saveAsSaveDocumentFormatHTMLTest() throws IllegalArgumentException, WBException {
+    public void saveAsSaveDocumentFormatHTMLTest1() throws IllegalArgumentException, WBException {
         
           
           xCompDest = getDocument("file:///c:/NegativeTest/TestSave.odt");
@@ -153,11 +172,12 @@ public class WB4WriterNoHappyTest {
   
     
     /**
-     * Testing: saveAs  
-     * case 1: Document can not be saved, the file is read only
+     * Testing: saveAs();  
+     * case 2: try to save a document already exist
+     * Document can not be saved, the file is read only
      * The test is successful if return a WBException
-     * @throws com.sun.star.lang.IllegalArgumentException
      * @throws org.semanticwb.openoffice.WBException
+     * @throws com.sun.star.lang.IllegalArgumentException
      */
     @Test(expected = WBException.class)
     @Ignore 
@@ -173,8 +193,9 @@ public class WB4WriterNoHappyTest {
     
     
     /**
-     * testing: saveCustomProperties
-     * Case: try insert more than 4 properties  
+     * testing: saveCustomProperties()
+     * Case: try insert more than 4 properties, the maximun is 4  
+     * The test is successful if return a WBException
      * @throws org.semanticwb.openoffice.WBException
      */
     @Test(expected = WBException.class)
@@ -196,33 +217,12 @@ public class WB4WriterNoHappyTest {
         
     }
 
-    @Test(expected = WBException.class)
-    @Ignore
-    public void SaveHtmlPrepareAndGetFilesTest() throws WBException {
-        
-        
-        WB4Writer writer = new WB4Writer(this.xContext);
-        String guid = writer.getGuid();
-        File file = writer.saveHtmlPrepareAndGetFiles(guid);
 
-    }
-
-    @Test()
-    @Ignore
-    public void publishTest() throws WBException {
-        WB4Writer writer = new WB4Writer(this.xContext);
-        OfficeDocumentHelper.publish(writer);
-
-    }
-
-    @Test(expected = NoClassDefFoundError.class)
-    @Ignore
-    public void openTest() {
-        WB4WriterApplication writer = new WB4WriterApplication(this.xContext);
-        OfficeDocumentHelper.open(writer);
-
-    }
-
+    /**
+     * Testing: open()
+     * Case: the document can not be opened,the function receives a domuent absent
+     * @throws org.semanticwb.openoffice.WBException
+     */
     @Test(expected = WBException.class)
     @Ignore
     public void openDocumentTest() throws WBException {
@@ -231,6 +231,7 @@ public class WB4WriterNoHappyTest {
 
     }
 
+   
     @Test(expected = NoHasLocationException.class)
     @Ignore
     public void getAllAttachmentsTest() throws NoHasLocationException {
@@ -250,12 +251,6 @@ public class WB4WriterNoHappyTest {
 
     }
 
-    @Test(expected = WBException.class)
-    @Ignore
-    public void openDocumentExceptionTest() throws WBException {
-        WB4WriterApplication writer = new WB4WriterApplication(this.xContext);
-        writer.open(new File("c:\\demo.doc"));
-    }
     
     /**
      * Get the XComponent of a new document 
