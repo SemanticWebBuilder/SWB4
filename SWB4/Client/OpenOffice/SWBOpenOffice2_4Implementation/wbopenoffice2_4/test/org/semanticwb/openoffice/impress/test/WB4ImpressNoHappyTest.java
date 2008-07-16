@@ -13,8 +13,6 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import java.io.File;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import junit.framework.Assert;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -22,7 +20,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.semanticwb.openoffice.DocumentType;
 import org.semanticwb.openoffice.NoHasLocationException;
 import org.semanticwb.openoffice.SaveDocumentFormat;
 import org.semanticwb.openoffice.WBException;
@@ -34,8 +31,7 @@ import org.semanticwb.openoffice.impress.WB4Impress;
  */public class WB4ImpressNoHappyTest{
 
     private XComponentContext xContext;
-    private XComponent xCompDest = null;
-    private XComponent xCompSrc = null;
+    private XComponent xCompDest = null;  
     private XDesktop oDesktop = null;
     private File sUrlDestiny = new File("C:/NegativeTest/PruebaSave.odp");
     
@@ -71,13 +67,7 @@ import org.semanticwb.openoffice.impress.WB4Impress;
             // Definir URL del fichero a cargar (de destino, o sea, el que recogera las nuevas diapositivas   
 
 
-            // Cargar el documento en una nueva ventana oculta del XDesktop   
-            PropertyValue[] loadProps = new PropertyValue[0];
-            /*loadProps[0] = new PropertyValue();
-            loadProps[0].Name = "Hidden";
-            loadProps[0].Value = new Boolean(false);*/
-            String url = "file:///" + sUrlDestiny.getPath().replace('\\', '/');
-            xCompDest = xCompLoader.loadComponentFromURL(url, "_blank", 0, loadProps);
+            
 
         }
         catch (com.sun.star.uno.Exception e)
@@ -120,7 +110,7 @@ import org.semanticwb.openoffice.impress.WB4Impress;
         xCompDest = getNewDocument();
         
         WB4Impress writer = new WB4Impress(xCompDest);
-        File actual = writer.getLocalPath();
+        writer.getLocalPath();
         
     }
     
@@ -136,7 +126,7 @@ import org.semanticwb.openoffice.impress.WB4Impress;
  
     @Test(expected=java.lang.IllegalArgumentException.class)
     @Ignore
-    public void saveAsHTMLTest1() throws WBException,IllegalArgumentException  
+    public void saveAsHTML_PathIsFileTest() throws WBException,IllegalArgumentException  
     {    
             String url = "file:///c:/NegativeTest/PruebaSave.odp";
             xCompDest = getDocument(url);
@@ -161,7 +151,7 @@ import org.semanticwb.openoffice.impress.WB4Impress;
     
     @Test(expected=WBException.class)
     @Ignore
-      public void saveAsHTMLTest2()throws WBException,IllegalArgumentException{
+      public void saveAsHTML_ReadOnlyTest()throws WBException,IllegalArgumentException{
         
             String url = "file:///c:/NegativeTest/PruebaSave.odp";
             xCompDest = getDocument(url);
@@ -183,7 +173,7 @@ import org.semanticwb.openoffice.impress.WB4Impress;
     @Test(expected=WBException.class)
     @Ignore
     
-    public void saveTest1() throws WBException {
+    public void save_DocNeverSavedTest() throws WBException {
        
         xCompDest = getNewDocument();
         
@@ -204,7 +194,7 @@ import org.semanticwb.openoffice.impress.WB4Impress;
     
     @Test(expected=WBException.class)
     @Ignore
-    public void saveTest2() throws IOException, IllegalArgumentException, WBOfficeException, WBException {
+    public void saveTest_DocNoModify() throws IOException, IllegalArgumentException, WBOfficeException, WBException {
        
         String url = "file:///c:/NegativeTest/PruebaSave.odp";
         xCompDest = getDocument(url);
@@ -225,13 +215,13 @@ import org.semanticwb.openoffice.impress.WB4Impress;
      */
     @Test(expected=java.lang.IllegalArgumentException.class)
     @Ignore
-    public void saveAsSaveDocumentFormatHTMLTest1() throws WBOfficeException, WBException {
+    public void saveAsSaveDocumentFormatHTML_PathIsAFileTest() throws WBOfficeException, WBException {
        
         String url = "file:///c:/NegativeTest/PruebaSave.odp";
         xCompDest =getDocument(url);
         
         WB4Impress writer = new WB4Impress(xContext);
-        File actual=writer.saveAs(new File("c:/NegativeTest/PruebaSave.odp"), SaveDocumentFormat.HTML);            
+        writer.saveAs(new File("c:/NegativeTest/PruebaSave.odp"), SaveDocumentFormat.HTML);            
         
     }
     
@@ -248,7 +238,7 @@ import org.semanticwb.openoffice.impress.WB4Impress;
     
     @Test(expected=WBException.class)
     @Ignore
-    public void saveAsSaveDocumentFormatHTMLTest2() throws WBOfficeException, WBException  {
+    public void saveAsSaveDocumentFormatHTMLTest_DocIsReadOnlyTest() throws WBOfficeException, WBException  {
        
         String url = "file:///c:/NegativeTest/PruebaSave.odp";
         xCompDest = getDocument(url);
