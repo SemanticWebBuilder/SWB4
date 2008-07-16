@@ -34,13 +34,12 @@ import org.semanticwb.openoffice.WBException;
 import org.semanticwb.openoffice.WBOfficeException;
 import org.semanticwb.openoffice.calc.WB4Calc;
 import org.semanticwb.openoffice.calc.WB4Calc;
-import org.semanticwb.openoffice.impress.WB4Impress;
 
 
 
 /**
  *
- * @author Edgar Chavrria
+ * @author Edgar Chavarria
  */
 public class WB4CalcNoHappyTest {
     
@@ -353,7 +352,7 @@ public class WB4CalcNoHappyTest {
             XComponentLoader xCompLoader = (XComponentLoader) UnoRuntime.queryInterface(com.sun.star.frame.XComponentLoader.class, oDesktop);
             PropertyValue[] loadProps = new PropertyValue[0];
             
-            XComp = xCompLoader.loadComponentFromURL("private:factory/swriter", "_blank", 0, loadProps);
+            XComp = xCompLoader.loadComponentFromURL("private:factory/scalc", "_blank", 0, loadProps);
             
         } catch (com.sun.star.uno.Exception ioe) {
             Assert.fail(ioe.getMessage());
