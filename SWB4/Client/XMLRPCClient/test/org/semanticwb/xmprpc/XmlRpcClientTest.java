@@ -6,6 +6,7 @@ package org.semanticwb.xmprpc;
 
 import java.io.File;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,8 +18,10 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.semanticwb.xmlrpc.Attachment;
+import org.semanticwb.xmlrpc.HttpException;
 import org.semanticwb.xmlrpc.XmlRpcClient;
 import org.semanticwb.xmlrpc.XmlRpcClientConfig;
+import org.semanticwb.xmlrpc.XmlRpcException;
 import static org.junit.Assert.*;
 
 /**
@@ -52,79 +55,135 @@ public class XmlRpcClientTest
     {
     }
 
-       
-    
     @Test
-    @Ignore
     public void executeTest()
     {
         try
         {
-            XmlRpcClientConfig config = new XmlRpcClientConfig(new URI("http://localhost:8084/TestRPC/GatewayOffice"));            
+            XmlRpcClientConfig config = new XmlRpcClientConfig(new URI("http://localhost:8084/TestRPC/GatewayOffice"), "v", "h");
             XmlRpcClient<String> client = new XmlRpcClient<String>(config);
-            int[] array={4,5,6};
-            Object[] params = {4, -220.4, "Demo", new Date(), true,array};            
-            List<Attachment> attachments=new ArrayList<Attachment>();
-            StringBuilder builder=new StringBuilder();
-            for(Object obj : params)
+            Object[] params = {4, -220.4, "Demo", new Date(), true};
+            List<Attachment> attachments = new ArrayList<Attachment>();
+            StringBuilder builder = new StringBuilder();
+            for ( Object obj : params )
             {
                 builder.append(obj);
             }
-            String res=client.execute("Demo.add",params,attachments);
-            Assert.assertEquals(res, builder.toString()); 
-                    
+            String res = client.execute("Demo.add", params, attachments);
+            Assert.assertEquals(res, builder.toString());
+
         }
-        catch (Exception e)
+        catch ( Exception e )
         {
             fail(e.getMessage());
         }
     }
-    
-    @Test        
+
+    @Test(expected=HttpException.class)
+    public void executeTestWithOutPassword() throws HttpException
+    {
+        try
+        {
+            XmlRpcClientConfig config = new XmlRpcClientConfig(new URI("http://localhost:8084/TestRPC/GatewayOffice"));
+            XmlRpcClient<String> client = new XmlRpcClient<String>(config);
+            Object[] params = {4, -220.4, "Demo", new Date(), true};
+            List<Attachment> attachments = new ArrayList<Attachment>();
+            StringBuilder builder = new StringBuilder();
+            for ( Object obj : params )
+            {
+                builder.append(obj);
+            }
+            String res = client.execute("Demo.add", params, attachments);
+            Assert.assertEquals(res, builder.toString());
+
+        }
+        catch (URISyntaxException e )
+        {
+            fail(e.getMessage());
+        }
+        catch (XmlRpcException e )
+        {
+            fail(e.getMessage());
+        }
+    }
+
+    @Test
     public void executeTestWithAttachments()
     {
         try
         {
-            XmlRpcClientConfig config = new XmlRpcClientConfig(new URI("http://localhost:8084/TestRPC/GatewayOffice"),"victor","Lorenzana");            
+            XmlRpcClientConfig config = new XmlRpcClientConfig(new URI("http://localhost:8084/TestRPC/GatewayOffice"), "victor", "Lorenzana");
             XmlRpcClient<String> client = new XmlRpcClient<String>(config);
-            int[] array={4,5,6};
-            Object[] params = {4, -220.4, "Demo", new Date(), true,array};              
-            List<Attachment> attachments=new ArrayList<Attachment>();
-            attachments.add(new Attachment(new File("C:\\temp\\demo.ppt"),"content"));
-            StringBuilder builder=new StringBuilder();
-            for(Object obj : params)
+            int[] array = {4, 5, 6};
+            Object[] params = {4, -220.4, "Demo", new Date(), true};
+            List<Attachment> attachments = new ArrayList<Attachment>();
+            attachments.add(new Attachment(new File("C:\\temp\\demo.ppt"), "content"));
+            StringBuilder builder = new StringBuilder();
+            for ( Object obj : params )
             {
                 builder.append(obj);
             }
-            String res=client.execute("Demo.add",params,attachments);
-            Assert.assertEquals(res, builder.toString());        
+            String res = client.execute("Demo.add", params, attachments);
+            Assert.assertEquals(res, builder.toString());
         }
-        catch (Exception e)
+        catch ( Exception e )
         {
             fail(e.getMessage());
         }
     }
-    
-    @Test    
-    @Ignore
-    public void executeTestWithAttachmentsAndNotMethod()
+
+    @Test(expected = HttpException.class)
+    public void executeTestWithAttachmentsWithNoCorrectPath() throws HttpException
     {
         try
         {
-            XmlRpcClientConfig config = new XmlRpcClientConfig(new URI("http://localhost:8084/TestRPC/GatewayOffice"));            
+            XmlRpcClientConfig config = new XmlRpcClientConfig(new URI("http://localhost:8084/TestRPC/GatewayOffice2"), "victor", "Lorenzana");
             XmlRpcClient<String> client = new XmlRpcClient<String>(config);
-            Object[] params = {4, -220.4, "Demo αινσϊ", new Date(), true};            
-            List<Attachment> attachments=new ArrayList<Attachment>();
-            attachments.add(new Attachment(new File("C:\\temp\\demo.ppt"),"content"));
-            StringBuilder builder=new StringBuilder();
-            for(Object obj : params)
+            int[] array = {4, 5, 6};
+            Object[] params = {4, -220.4, "Demo", new Date(), true, array};
+            List<Attachment> attachments = new ArrayList<Attachment>();
+            attachments.add(new Attachment(new File("C:\\temp\\demo.ppt"), "content"));
+            StringBuilder builder = new StringBuilder();
+            for ( Object obj : params )
             {
                 builder.append(obj);
             }
-            String res=client.execute("Demo.hi",params,attachments);
-            Assert.assertEquals(res, builder.toString());        
+            String res = client.execute("Demo.add", params, attachments);
+            Assert.assertEquals(res, builder.toString());
         }
-        catch (Exception e)
+        catch ( XmlRpcException e )
+        {
+            fail(e.getMessage());
+        }
+        catch ( URISyntaxException e )
+        {
+            fail(e.getMessage());
+        }
+    }
+
+    @Test(expected = XmlRpcException.class)
+    public void executeTestWithAttachmentsAndNotMethod() throws XmlRpcException
+    {
+        try
+        {
+            XmlRpcClientConfig config = new XmlRpcClientConfig(new URI("http://localhost:8084/TestRPC/GatewayOffice"), "victor", "lorenzana");
+            XmlRpcClient<String> client = new XmlRpcClient<String>(config);
+            Object[] params = {4, -220.4, "Demo αινσϊ", new Date(), true, 5};
+            List<Attachment> attachments = new ArrayList<Attachment>();
+            attachments.add(new Attachment(new File("C:\\temp\\demo.ppt"), "content"));
+            StringBuilder builder = new StringBuilder();
+            for ( Object obj : params )
+            {
+                builder.append(obj);
+            }
+            String res = client.execute("Demo.hi", params, attachments);
+            Assert.assertEquals(res, builder.toString());
+        }
+        catch ( HttpException e )
+        {
+            fail(e.getMessage());
+        }
+        catch ( URISyntaxException e )
         {
             fail(e.getMessage());
         }
