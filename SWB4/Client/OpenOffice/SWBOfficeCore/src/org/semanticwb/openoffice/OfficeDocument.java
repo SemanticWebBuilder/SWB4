@@ -249,11 +249,7 @@ public abstract class OfficeDocument
                 fi.close();
             }
             zipFile.close();
-            fout.close();
-            FileInputStream fin = new FileInputStream(tempotalZipFile);
-            byte[] zip = new byte[( int ) tempotalZipFile.length()];
-            fin.read(zip);
-            fin.close();
+            fout.close();                        
             return tempotalZipFile;
         }
         catch ( FileNotFoundException fnfe )
