@@ -100,7 +100,7 @@ public class Topic
     public String getProperty(TopicProperty prop)
     {
         return getProperty(prop,null);
-    }    
+    }
     
     public String getProperty(TopicProperty prop, String defValue)
     {
@@ -111,7 +111,87 @@ public class Topic
             ret=stm.getString();
         }
         return ret;
-    }    
+    }
+    
+    public int getIntProperty(TopicProperty prop)
+    {
+        return getIntProperty(prop,0);
+    }
+    
+    public int getIntProperty(TopicProperty prop, int defValue)
+    {
+        int ret=defValue;
+        Statement stm=m_res.getProperty(prop.getRDFProperty());
+        if(stm!=null)
+        {
+            ret=stm.getInt();
+        }
+        return ret;
+    }   
+    
+    public long getLongProperty(TopicProperty prop)
+    {    
+        return getLongProperty(prop,0L);
+    }
+    
+    public long getLongProperty(TopicProperty prop, long defValue)
+    {
+        long ret=defValue;
+        Statement stm=m_res.getProperty(prop.getRDFProperty());
+        if(stm!=null)
+        {
+            ret=stm.getLong();
+        }
+        return ret;
+    }      
+
+    public float getFloatProperty(TopicProperty prop)
+    {
+        return getFloatProperty(prop, 0F);
+    }
+    
+    public float getFloatProperty(TopicProperty prop, float defValue)
+    {
+        float ret=defValue;
+        Statement stm=m_res.getProperty(prop.getRDFProperty());
+        if(stm!=null)
+        {
+            ret=stm.getFloat();
+        }
+        return ret;
+    }   
+    
+    public double getDoubleProperty(TopicProperty prop)
+    {
+        return getDoubleProperty(prop, 0D);
+    }   
+    
+    public double getDoubleProperty(TopicProperty prop, double defValue)
+    {
+        double ret=defValue;
+        Statement stm=m_res.getProperty(prop.getRDFProperty());
+        if(stm!=null)
+        {
+            ret=stm.getDouble();
+        }
+        return ret;
+    }     
+    
+    public boolean getBooleanProperty(TopicProperty prop)
+    {
+        return getBooleanProperty(prop, false);
+    }   
+    
+    public boolean getBooleanProperty(TopicProperty prop, boolean defValue)
+    {
+        boolean ret=defValue;
+        Statement stm=m_res.getProperty(prop.getRDFProperty());
+        if(stm!=null)
+        {
+            ret=stm.getBoolean();
+        }
+        return ret;
+    }        
     
     public Resource getRDFResource()
     {
