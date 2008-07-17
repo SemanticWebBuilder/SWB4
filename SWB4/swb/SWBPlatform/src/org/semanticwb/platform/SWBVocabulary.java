@@ -30,6 +30,12 @@ public class SWBVocabulary
     public static final String XMLS_BOOLEAN=XMLS_URI+"boolean";
     public static final String XMLS_STRING=XMLS_URI+"string";
     public static final String XMLS_INT=XMLS_URI+"int";
+    public static final String XMLS_FLOAT=XMLS_URI+"float";
+    public static final String XMLS_DOUBLE=XMLS_URI+"double";
+    public static final String XMLS_LONG=XMLS_URI+"long";
+    public static final String XMLS_SHORT=XMLS_URI+"sort";
+    public static final String XMLS_BYTE=XMLS_URI+"byte";
+    
             
     public static final String OWL_URI="http://www.w3.org/2002/07/owl#";
     public static final String OWL_DATATYPEPROPERTY=OWL_URI+"DatatypeProperty";
