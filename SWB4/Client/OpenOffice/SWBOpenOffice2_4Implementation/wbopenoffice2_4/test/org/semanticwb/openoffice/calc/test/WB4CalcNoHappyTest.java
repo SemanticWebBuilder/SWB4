@@ -86,8 +86,7 @@ public class WB4CalcNoHappyTest {
     //    DeleteTemporalDirectory(this.tempDir);
     }
     
-    @Test(expected=NoHasLocationException.class)
-
+    
     
      /**
      * Testing: getLocalPath() 
@@ -96,6 +95,8 @@ public class WB4CalcNoHappyTest {
      * The test is successful if return a NoHasLocationException
      * @throws org.semanticwb.openoffice.WBException
      */
+    @Test(expected=NoHasLocationException.class)
+    @Ignore
     public void getLocalPathTest() throws WBOfficeException, NoHasLocationException {
         
             
