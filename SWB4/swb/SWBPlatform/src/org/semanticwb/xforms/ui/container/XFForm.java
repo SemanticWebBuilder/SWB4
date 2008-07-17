@@ -15,6 +15,7 @@ import org.semanticwb.xforms.lib.WBXformsContainer;
 public class XFForm extends WBXformsContainer
 {
     
+    @Override
     public String show(){
         return getXform();
     }
@@ -23,13 +24,14 @@ public class XFForm extends WBXformsContainer
        super.add(obj);
     }
     
-    
+    @Override
     public String getXml() {
         StringBuffer strb=new StringBuffer();
         strb.append(show());
         return strb.toString();
     }
     
+    @Override
     public String getXmlBind() {
         return showBinds();
     }

@@ -6,19 +6,20 @@
 
 package org.semanticwb.xforms.ui;
 
-import java.sql.Array;
-import org.w3c.dom.*;
-import org.semanticwb.xforms.lib.XformsBaseImp;
 import org.semanticwb.xforms.drop.RDFElement;
 import java.util.*;
 import org.semanticwb.xforms.lib.WBXformsContainer;
 import org.semanticwb.xforms.ui.container.*;
+import org.semanticwb.SWBUtils;
+import org.semanticwb.Logger;
 
 /**
  *
  * @author  jorge.jimenez
  */
 public class XFCaseSwitch extends WBXformsContainer {
+    
+    private static Logger log=SWBUtils.getLogger(XFCaseSwitch.class);
     
     protected RDFElement rdfElement=null;
     protected String value=null;
@@ -50,19 +51,23 @@ public class XFCaseSwitch extends WBXformsContainer {
     
     
     public void setRDFAttributes(){
-        if(rdfElement.getId()!=null) id=rdfElement.getId();
-        if(rdfElement.isSelected()!=false) isselected=rdfElement.isSelected();
+        if(rdfElement.getId()!=null) {
+            id=rdfElement.getId();
+        }
+        if(rdfElement.isSelected()!=false) {
+            isselected=rdfElement.isSelected();
+        }
         
         //Checa si el elemento (grupo) tiene subelementos
         if(rdfElement.getElements().size()>0) {
             Iterator itElements=rdfElement.getElements().iterator();
             while(itElements.hasNext()) {
-                RDFElement rdfElement=(RDFElement)itElements.next();
-                if(rdfElement.getType()!=null && rdfElement.getType().equalsIgnoreCase("TRIGGER")) {
-                    XFTrigger xftriggger = new XFTrigger(rdfElement);
+                RDFElement rdfElementIT=(RDFElement)itElements.next();
+                if(rdfElementIT.getType()!=null && rdfElementIT.getType().equalsIgnoreCase("TRIGGER")) {
+                    XFTrigger xftriggger = new XFTrigger(rdfElementIT);
                     this.add(xftriggger);
-                }else if(rdfElement.getType()!=null && rdfElement.getType().equalsIgnoreCase("GROUP")) {
-                    XFGroup xfgroup = new XFGroup(rdfElement,instanceElements);
+                }else if(rdfElementIT.getType()!=null && rdfElementIT.getType().equalsIgnoreCase("GROUP")) {
+                    XFGroup xfgroup = new XFGroup(rdfElementIT,instanceElements);
                     this.add(xfgroup);
                 }
             }
@@ -70,6 +75,7 @@ public class XFCaseSwitch extends WBXformsContainer {
         
     }
     
+    @Override
     public String getXml() {
         StringBuffer strbXml=new StringBuffer();
         try {
@@ -84,14 +90,16 @@ public class XFCaseSwitch extends WBXformsContainer {
             
             strbXml.append("</case>");
         }
-        catch(Exception e) {com.infotec.appfw.util.AFUtils.log(e); }
+        catch(Exception e) {log.error(e); }
         return strbXml.toString();
     }
     
+    @Override
     public String getXmlBind() {
         return showBinds();
     }
     
+    @Override
     public void setXml(String xml) {
         this.xml=xml;
     }
