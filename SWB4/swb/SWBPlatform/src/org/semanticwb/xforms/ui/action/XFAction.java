@@ -6,13 +6,11 @@
 
 package org.semanticwb.xforms.ui.action;
 
-import java.sql.Array;
-import org.w3c.dom.*;
-import org.semanticwb.xforms.lib.XformsBaseImp;
 import org.semanticwb.xforms.drop.RDFElement;
-import org.semanticwb.xforms.ui.*;
 import org.semanticwb.xforms.lib.WBXformsContainer;
 import java.util.*;
+import org.semanticwb.SWBUtils;
+import org.semanticwb.Logger;
 
 /**
  *
@@ -20,6 +18,7 @@ import java.util.*;
  */
 public class XFAction extends WBXformsContainer
 {
+    private static Logger log=SWBUtils.getLogger(XFAction.class);
     protected RDFElement rdfElement=null;
     protected HashMap instanceElements=new HashMap();
     
@@ -41,24 +40,29 @@ public class XFAction extends WBXformsContainer
    
     
     public void setRDFAttributes(){
-        if(rdfElement.getId()!=null) id=rdfElement.getId();
-        if(rdfElement.getSType()!=null) subType=rdfElement.getSType();
+        if(rdfElement.getId()!=null) {
+            id=rdfElement.getId();
+        }
+        if(rdfElement.getSType()!=null) {
+            subType=rdfElement.getSType();
+        }
         
         if(rdfElement.getElements().size()>0) {
             Iterator itElements=rdfElement.getElements().iterator();
             while(itElements.hasNext()) {
-                RDFElement rdfElement=(RDFElement)itElements.next();
-                if(rdfElement.getType()!=null && rdfElement.getType().equalsIgnoreCase("BUTTON")) {
-                    XFButton xfButton = new XFButton(rdfElement);
+                RDFElement rdfElementIT=(RDFElement)itElements.next();
+                if(rdfElementIT.getType()!=null && rdfElementIT.getType().equalsIgnoreCase("BUTTON")) {
+                    XFButton xfButton = new XFButton(rdfElementIT);
                     this.add(xfButton);
-                }else if(rdfElement.getType()!=null && rdfElement.getType().equalsIgnoreCase("TOGGLE")) {
-                    XFToggle xfToggle = new XFToggle(rdfElement);
+                }else if(rdfElementIT.getType()!=null && rdfElementIT.getType().equalsIgnoreCase("TOGGLE")) {
+                    XFToggle xfToggle = new XFToggle(rdfElementIT);
                     this.add(xfToggle);
                 }
             }
         }
     }
     
+    @Override
     public String getXml() 
     {
         StringBuffer strbXml=new StringBuffer();
@@ -75,10 +79,11 @@ public class XFAction extends WBXformsContainer
             
             strbXml.append("</action>");
         }
-        catch(Exception e) {com.infotec.appfw.util.AFUtils.log(e); }
+        catch(Exception e) {log.error(e); }
         return strbXml.toString();
     }
     
+    @Override
     public void setXml(String xml) {
         this.xml=xml;
     }
