@@ -436,8 +436,8 @@ public class PoolConnection implements java.sql.Connection
         return idle_time;
     }
     
-//********************************* JAVA 1.5    
-
+//********************************* JAVA 1.6   
+/*
     public Clob createClob() throws SQLException {
         return con.createClob();
     }
@@ -489,7 +489,7 @@ public class PoolConnection implements java.sql.Connection
     public boolean isWrapperFor(Class<?> iface) throws SQLException {
         return con.isWrapperFor(iface);
     }
-    
+*/    
    
 //*/
 }
