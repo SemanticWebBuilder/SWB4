@@ -6,16 +6,18 @@
 
 package org.semanticwb.xforms.ui;
 
-import java.sql.Array;
-import org.w3c.dom.*;
 import org.semanticwb.xforms.lib.XformsBaseImp;
 import org.semanticwb.xforms.drop.RDFElement;
+import org.semanticwb.SWBUtils;
+import org.semanticwb.Logger;
 
 /**
  *
  * @author  jorge.jimenez
  */
 public class XFItemSelect extends XformsBaseImp {
+    
+    private static Logger log=SWBUtils.getLogger(XFItemSelect.class);
     
     protected RDFElement rdfElement=null;
     
@@ -40,12 +42,19 @@ public class XFItemSelect extends XformsBaseImp {
     
     
     public void setRDFAttributes(){
-        if(rdfElement.getId()!=null) id=rdfElement.getId();
-        if(rdfElement.getLabel()!=null) label=rdfElement.getLabel();
-        if(rdfElement.getValue()!=null) value=rdfElement.getValue();
+        if(rdfElement.getId()!=null) {
+            id=rdfElement.getId();
+        }
+        if(rdfElement.getLabel()!=null) {
+            label=rdfElement.getLabel();
+        }
+        if(rdfElement.getValue()!=null) {
+            value=rdfElement.getValue();
+        }
         
     }
     
+    @Override
     public String getXml() {
         StringBuffer strbXml=new StringBuffer();
         try {
@@ -63,10 +72,11 @@ public class XFItemSelect extends XformsBaseImp {
             }
             strbXml.append("</item>");
         }
-        catch(Exception e) {com.infotec.appfw.util.AFUtils.log(e); }
+        catch(Exception e) {log.error(e); }
         return strbXml.toString();
     }
     
+    @Override
     public void setXml(String xml) {
         this.xml=xml;
     }
