@@ -33,7 +33,7 @@ public class SWBVocabulary
     public static final String XMLS_FLOAT=XMLS_URI+"float";
     public static final String XMLS_DOUBLE=XMLS_URI+"double";
     public static final String XMLS_LONG=XMLS_URI+"long";
-    public static final String XMLS_SHORT=XMLS_URI+"sort";
+    public static final String XMLS_SHORT=XMLS_URI+"short";
     public static final String XMLS_BYTE=XMLS_URI+"byte";
     
             
