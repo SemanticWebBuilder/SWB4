@@ -47,15 +47,16 @@ public abstract class WBXformsContainer extends XformsBaseImp
         StringBuffer strb = new StringBuffer();
         Iterator iobj = formelements.iterator();
         do {
-            if(!iobj.hasNext())
+            if(!iobj.hasNext()){
                 break;
+            }
             Object obj = iobj.next();
             if(obj instanceof XformsBase) {
                 XformsBase wbXformE = (XformsBase)obj;
-                String xmlBind=wbXformE.getXmlBind();
-                if(xmlBind!=null && xmlBind.trim().length()>0)
+                String xmlBindL=wbXformE.getXmlBind();
+                if(xmlBindL!=null && xmlBindL.trim().length()>0)
                 {
-                    strb.append(xmlBind);
+                    strb.append(xmlBindL);
                 }
             }
         } while(true);
