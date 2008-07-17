@@ -151,13 +151,13 @@ import org.semanticwb.openoffice.impress.WB4Impress;
     
     @Test(expected=WBException.class)
     @Ignore
-      public void saveAsHTML_ReadOnlyTest()throws WBException,IllegalArgumentException{
+    public void saveAsHTML_ReadOnlyTest()throws WBException,IllegalArgumentException{
         
             String url = "file:///c:/NegativeTest/PruebaSave.odp";
             xCompDest = getDocument(url);
             
             WB4Impress writer = new WB4Impress(xCompDest);
-            File actual = writer.saveAsHtml(new File("c:/NegativeTest/"));
+            File actual = writer.saveAsHtml(new File("c:/NegativeTest/ImpressReadOnly"));
             
        
         
@@ -244,7 +244,7 @@ import org.semanticwb.openoffice.impress.WB4Impress;
         xCompDest = getDocument(url);
 
         WB4Impress writer = new WB4Impress(xContext);
-        File actual=writer.saveAs(new File("c:/NegativeTest/"), SaveDocumentFormat.HTML);            
+        File actual=writer.saveAs(new File("c:/NegativeTest/Impress/saveAsSaveDocumentFormatHTMLTest_DocIsReadOnlyTest"), SaveDocumentFormat.HTML);            
         
     }
     
