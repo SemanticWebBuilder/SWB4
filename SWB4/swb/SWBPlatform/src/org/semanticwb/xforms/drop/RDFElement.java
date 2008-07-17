@@ -53,6 +53,12 @@ public class RDFElement {
     private boolean selected=false;
     private String cssclass=null;
     
+    //Range
+    protected int start=0;
+    protected int end=0;
+    protected int step=0;
+    
+    
     //Para agregar elementos dentro de un elemento-contenedor (ej. group)
     private ArrayList elements=new ArrayList();
     
@@ -149,7 +155,19 @@ public class RDFElement {
     public void setCssClass(String cssclass) {
         this.cssclass=cssclass;
     }
-   
+    
+    public void setStart(int start){
+        this.start=start;
+    }
+    
+    public void setEnd(int end){
+        this.end=end;
+    }
+    
+    public void setStep(int step){
+        this.step=step;
+    }
+    
     //gets
     
     public String getType() {
@@ -242,6 +260,18 @@ public class RDFElement {
     
     public String getCssClass() {
         return cssclass;
+    }
+    
+    public int getStart(){
+        return start;
+    }
+    
+    public int getEnd(){
+        return end;
+    }
+    
+    public int getStep(){
+        return step;
     }
     
 }
