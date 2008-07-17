@@ -284,8 +284,7 @@ public class WB4CalcNoHappyTest {
       
       
         
-         org.semanticwb.openoffice.write.test.SpreadsheetDocHelper UtilX=
-                new org.semanticwb.openoffice.write.test.SpreadsheetDocHelper(new String[0],xContext); 
+        Util UtilX=new Util(new String[0],xContext); 
         
         com.sun.star.sheet.XSpreadsheet xSheet = UtilX.getSpreadsheet( 0 );
         com.sun.star.table.XCell xCell = null;
