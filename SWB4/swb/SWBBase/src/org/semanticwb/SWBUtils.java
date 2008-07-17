@@ -11,6 +11,9 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.Properties;
 import javax.xml.parsers.DocumentBuilder;
@@ -156,6 +159,8 @@ public class SWBUtils
      */
     public static class TEXT
     {
+        private static SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'.'SSS");            
+        
         //version 1.3
         /**
          * Remplaza en una cadena (str) las coincidencias encontradas (match) con otra cadena (replace).
@@ -177,7 +182,17 @@ public class SWBUtils
                 i=str.indexOf(match,y);
             }
             return str;
-        }       
+        }      
+        
+        public static String iso8601DateFormat(Date date)
+        {
+            return iso8601dateFormat.format(date);
+        }
+        
+        public static Date iso8601DateParse(String date) throws ParseException
+        {
+            return iso8601dateFormat.parse(date);
+        }
     }
     
     /**
