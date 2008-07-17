@@ -88,6 +88,13 @@ public class Topic
         return this;
     }
     
+    public Topic removeProperty(TopicProperty prop)
+    {
+        Property iprop=prop.getRDFProperty();
+        m_res.removeAll(iprop);
+        return this;
+    }    
+    
     /**
      * Regresa valor de la Propiedad especificada
      * @param prop
@@ -139,7 +146,27 @@ public class Topic
             ret=stm.getLong();
         }
         return ret;
-    }      
+    }    
+    
+    /**
+     * Asigna la propiedad con el valor especificado
+     * @param prop Propiedad a modificar
+     * @param value Valor a asignar
+     * @return Topic para cascada
+     */
+    public Topic setLongProperty(TopicProperty prop, long value)
+    {
+        Property iprop=prop.getRDFProperty();
+        Statement stm=m_res.getProperty(iprop);
+        if(stm!=null)
+        {
+            stm.changeLiteralObject(value);
+        }else
+        {
+            m_res.addLiteral(iprop, value);
+        }
+        return this;
+    }     
 
     public float getFloatProperty(TopicProperty prop)
     {
@@ -157,6 +184,26 @@ public class Topic
         return ret;
     }   
     
+    /**
+     * Asigna la propiedad con el valor especificado
+     * @param prop Propiedad a modificar
+     * @param value Valor a asignar
+     * @return Topic para cascada
+     */
+    public Topic setFloatProperty(TopicProperty prop, float value)
+    {
+        Property iprop=prop.getRDFProperty();
+        Statement stm=m_res.getProperty(iprop);
+        if(stm!=null)
+        {
+            stm.changeLiteralObject(value);
+        }else
+        {
+            m_res.addLiteral(iprop, value);
+        }
+        return this;
+    }     
+    
     public double getDoubleProperty(TopicProperty prop)
     {
         return getDoubleProperty(prop, 0D);
@@ -171,7 +218,27 @@ public class Topic
             ret=stm.getDouble();
         }
         return ret;
-    }     
+    }    
+    
+    /**
+     * Asigna la propiedad con el valor especificado
+     * @param prop Propiedad a modificar
+     * @param value Valor a asignar
+     * @return Topic para cascada
+     */
+    public Topic setDoubleProperty(TopicProperty prop, double value)
+    {
+        Property iprop=prop.getRDFProperty();
+        Statement stm=m_res.getProperty(iprop);
+        if(stm!=null)
+        {
+            stm.changeLiteralObject(value);
+        }else
+        {
+            m_res.addLiteral(iprop, value);
+        }
+        return this;
+    }       
     
     public boolean getBooleanProperty(TopicProperty prop)
     {
@@ -187,7 +254,27 @@ public class Topic
             ret=stm.getBoolean();
         }
         return ret;
-    }      
+    }     
+    
+    /**
+     * Asigna la propiedad con el valor especificado
+     * @param prop Propiedad a modificar
+     * @param value Valor a asignar
+     * @return Topic para cascada
+     */
+    public Topic setBooleanProperty(TopicProperty prop, boolean value)
+    {
+        Property iprop=prop.getRDFProperty();
+        Statement stm=m_res.getProperty(iprop);
+        if(stm!=null)
+        {
+            stm.changeLiteralObject(value);
+        }else
+        {
+            m_res.addLiteral(iprop, value);
+        }
+        return this;
+    }     
     
     public Date getDateProperty(TopicProperty prop)
     {
@@ -206,6 +293,26 @@ public class Topic
             }catch(Exception e){log.error(e);}
         }
         return ret;
+    }    
+    
+    /**
+     * Asigna la propiedad con el valor especificado
+     * @param prop Propiedad a modificar
+     * @param value Valor a asignar
+     * @return Topic para cascada
+     */
+    public Topic setDateProperty(TopicProperty prop, Date value)
+    {
+        Property iprop=prop.getRDFProperty();
+        Statement stm=m_res.getProperty(iprop);
+        if(stm!=null)
+        {
+            stm.changeObject(SWBUtils.TEXT.iso8601DateFormat(value));
+        }else
+        {
+            m_res.addProperty(iprop, SWBUtils.TEXT.iso8601DateFormat(value));
+        }
+        return this;
     }      
     
     public Resource getRDFResource()
