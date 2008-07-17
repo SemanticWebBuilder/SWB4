@@ -48,7 +48,7 @@ public class SemanticMgr implements SWBContextObject
 
     private IDBConnection conn;
     
-    private Vocabulary vocabulary;
+    private SWBVocabulary vocabulary;
 
     public void init(SWBContext context) 
     {
@@ -77,33 +77,33 @@ public class SemanticMgr implements SWBContextObject
         m_ontology.addSubModel(m_system);
         
         //Create Vocabulary
-        vocabulary=new Vocabulary();
+        vocabulary=new SWBVocabulary();
         TopicClassIterator tpcit=new TopicClassIterator(m_ontology.listClasses());
         while(tpcit.hasNext())
         {
             TopicClass tpc=tpcit.nextTopicClass();
-            ((SWBVocabulary)(vocabulary)).addTopicClass(tpc);
+            vocabulary.addTopicClass(tpc);
             Iterator<TopicProperty> tppit=tpc.listProperties();
             while(tppit.hasNext())
             {
                 TopicProperty tpp=tppit.next();
                 if(tpc.equals(tpp.getDomainClass()))
                 {
-                    ((SWBVocabulary)(vocabulary)).addTopicProperty(tpp);
+                    vocabulary.addTopicProperty(tpp);
                 }
             }
         }
         vocabulary.init();
         
-        //LoadModels
-        TopicClass cls=getVocabulary().RDFModel;
-        TopicIterator tpit=cls.listInstances();
-        while(tpit.hasNext())
-        {
-            Topic tp=tpit.nextTopic();
-            String value=tp.getProperty(getVocabulary().value);
-            log.debug("Model value:"+value);
-        }
+//        //LoadModels
+//        TopicClass cls=getVocabulary().RDFModel;
+//        TopicIterator tpit=cls.listInstances();
+//        while(tpit.hasNext())
+//        {
+//            Topic tp=tpit.nextTopic();
+//            String value=tp.getProperty(getVocabulary().value);
+//            log.debug("Model value:"+value);
+//        }
         
         
 //        ontoModel.loadImports();
@@ -232,7 +232,7 @@ public class SemanticMgr implements SWBContextObject
         return tpcls;
     }
     
-    public Vocabulary getVocabulary() {
+    public SWBVocabulary getVocabulary() {
         return vocabulary;
     }
 }
