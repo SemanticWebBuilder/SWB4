@@ -10,7 +10,7 @@ import org.w3c.dom.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.semanticwb.xforms.lib.WBXformsContainer;
-import com.infotec.appfw.util.AFUtils;
+
 import java.util.*;
 import org.semanticwb.xforms.drop.RDFElement;
 import org.semanticwb.xforms.ui.*;
