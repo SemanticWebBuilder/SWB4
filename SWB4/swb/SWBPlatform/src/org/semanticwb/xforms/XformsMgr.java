@@ -9,19 +9,24 @@ package org.semanticwb.xforms;
 import org.w3c.dom.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import org.semanticwb.xforms.lib.WBXformsContainer;
-
+import org.semanticwb.SWBUtils;
+import org.semanticwb.Logger;
 import java.util.*;
 import org.semanticwb.xforms.drop.RDFElement;
 import org.semanticwb.xforms.ui.*;
 import org.semanticwb.xforms.ui.container.*;
+import org.semanticwb.xforms.lib.*;
+import com.arthurdo.parser.*;
+import java.io.ByteArrayInputStream;
 
 /**
  *
  * @author  jorge.jimenez
  */
-public class XformsMgr extends WBXformsContainer {
+public class XformsMgr extends WBXformsContainer 
+{
     
+    private static Logger log=SWBUtils.getLogger(XformsMgr.class);
     ArrayList rdfElements;
     Object RDFElement;
     String xmlInit;
@@ -47,7 +52,7 @@ public class XformsMgr extends WBXformsContainer {
     private Document finalXmlForm(String xmlElements,String xmlBinds) {
         Document dom=null;
         try {
-            dom=com.infotec.appfw.util.AFUtils.getInstance().getNewDocument();
+            dom=SWBUtils.XML.getNewDocument();
             Element root = null;
             root=dom.createElement("html");
             root.setAttribute("xmlns:xforms","http://www.w3.org/2002/xforms");
@@ -83,80 +88,110 @@ public class XformsMgr extends WBXformsContainer {
             createInstanceElements(dom,dataChild);
             
             xmlBinds="<data>"+xmlBinds+"</data>";
-            add2Node(modelChild,AFUtils.getInstance().XmltoDom(xmlBinds));
+            add2Node(modelChild,SWBUtils.XML.xmlToDom(xmlBinds));
             
             Element bodyChild=dom.createElement("body");
             root.appendChild(bodyChild);
             
             xmlElements="<data>"+xmlElements+"</data>";
             
-            add2Node(bodyChild,AFUtils.getInstance().XmltoDom(xmlElements));
-            dom=putPrefix(dom);
+            add2Node(bodyChild,SWBUtils.XML.xmlToDom(xmlElements));
+            
+            dom=putPrefix2(dom);
         } catch(Exception e) {
-            AFUtils.log(e);
+            log.error(e);
         }
         return dom;
     }
     
-    private Document putPrefix(Document dom) {
-        String xml=AFUtils.getInstance().DomtoXml(dom);
-        xml=xml.replaceAll("<html", "<html xmlns=\"http://www.w3.org/1999/xhtml\"");
+    private Document putPrefix2(Document dom) {
+        String xml=SWBUtils.XML.domToXml(dom);
+        
+        HtmlTag tag = new HtmlTag();
+        StringBuffer ret = new StringBuffer();
+        try{
+            HtmlStreamTokenizer tok = new HtmlStreamTokenizer(new ByteArrayInputStream(xml.getBytes()));
+            while (tok.nextToken() != HtmlStreamTokenizer.TT_EOF) {
+                int ttype = tok.getTokenType();
+                if (ttype == HtmlStreamTokenizer.TT_TAG || ttype == HtmlStreamTokenizer.TT_COMMENT) 
+                {
+                    if(ttype==HtmlStreamTokenizer.TT_COMMENT && tok.getRawString().equals("<!-- -->")) {
+                        continue;
+                    }
+                    tok.parseTag(tok.getStringValue(), tag);
+
+                    if (tok.getRawString().toLowerCase().startsWith("<!--[if")) {
+                        continue;
+                    }
+                    if ((tag.getTagString().toLowerCase().equals("input")
+                    || tag.getTagString().toLowerCase().equals("label")
+                    || tag.getTagString().toLowerCase().equals("alert")
+                    || tag.getTagString().toLowerCase().equals("hint")
+                    || tag.getTagString().toLowerCase().equals("trigger")
+                    || tag.getTagString().toLowerCase().equals("action")
+                    || tag.getTagString().toLowerCase().equals("submit")
+                    || tag.getTagString().toLowerCase().equals("bind")
+                    || tag.getTagString().toLowerCase().equals("send")
+                    || tag.getTagString().toLowerCase().equals("group")
+                    || tag.getTagString().toLowerCase().equals("upload")
+                    || tag.getTagString().toLowerCase().equals("secret")
+                    || tag.getTagString().toLowerCase().equals("select")
+                    || tag.getTagString().toLowerCase().equals("select1")
+                    
+                    || tag.getTagString().toLowerCase().equals("switch")
+                    || tag.getTagString().toLowerCase().equals("case")
+                    || tag.getTagString().toLowerCase().equals("trigger")
+                    || tag.getTagString().toLowerCase().equals("action"))
+                    
+                    || tag.getTagString().toLowerCase().equals("item")
+                    || tag.getTagString().toLowerCase().equals("value")
+                    || tag.getTagString().toLowerCase().equals("toggle")
+                    || tag.getTagString().toLowerCase().equals("range")
+                    || tag.getTagString().toLowerCase().equals("textarea")
+                    || tag.getTagString().toLowerCase().equals("output")
+                    && !tok.getRawString().startsWith("<!--"))
+                    {
+                        if (!tag.isEndTag()) 
+                        {
+                            ret.append("<xforms:");
+                            ret.append(tag.getTagString());
+                            ret.append(" ");
+                            Enumeration en = tag.getParamNames();
+                            String name = "";
+                            String value = "";
+                            while (en.hasMoreElements())
+                            {
+                                name = (String) en.nextElement();
+                                value = tag.getParam(name);
+                                ret.append(name);
+                                ret.append("=\"");
+                                ret.append(value);
+                                ret.append("\" ");
+                            }
+                            if(tag.isEmpty())
+                            {
+                                ret.append("/");
+                            }
+                            ret.append(">");
+                        }else{
+                            ret.append("</xforms:");
+                            ret.append(tag.getTagString());
+                            ret.append(">");
+                        }
+                    }else{
+                        ret.append(tok.getRawString());
+                    }
+                }else if (ttype == HtmlStreamTokenizer.TT_TEXT)
+                {
+                    ret.append(tok.getRawString());
+                }
+            }
+        }catch(Exception e){
+            log.error(e);
+        }
+        xml=ret.toString().replaceAll("<html", "<html xmlns=\"http://www.w3.org/1999/xhtml\"");
         xml=xml.replaceAll("id=\"wb-instance\">", "id=\"wb-instance\" xmlns=\"\">");
-        xml=xml.replaceAll("<input", "<xforms:input");
-        xml=xml.replaceAll("</input>", "</xforms:input>");
-        xml=xml.replaceAll("<label", "<xforms:label");
-        xml=xml.replaceAll("</label>", "</xforms:label>");
-        xml=xml.replaceAll("<alert", "<xforms:alert");
-        xml=xml.replaceAll("</alert>", "</xforms:alert>");
-        xml=xml.replaceAll("<hint", "<xforms:hint");
-        xml=xml.replaceAll("</hint>", "</xforms:hint>");
-        xml=xml.replaceAll("<trigger", "<xforms:trigger");
-        xml=xml.replaceAll("</trigger>", "</xforms:trigger>");
-        xml=xml.replaceAll("<action", "<xforms:action");
-        xml=xml.replaceAll("</action>", "</xforms:action>");
-        xml=xml.replaceAll("<submit", "<xforms:submit");
-        xml=xml.replaceAll("</submit>", "</xforms:submit>");
-        xml=xml.replaceAll("<send", "<xforms:send");
-        xml=xml.replaceAll("</send>", "</xforms:send>");
-        xml=xml.replaceAll("<bind", "<xforms:bind");
-        xml=xml.replaceAll("</bind>", "</xforms:bind>");
-        xml=xml.replaceAll("<group", "<xforms:group");
-        xml=xml.replaceAll("</group>", "</xforms:group>");
-        xml=xml.replaceAll("<upload", "<xforms:upload");
-        xml=xml.replaceAll("</upload>", "</xforms:upload>");
-        xml=xml.replaceAll("<secret", "<xforms:secret");
-        xml=xml.replaceAll("</secret>", "</xforms:secret>");
-        xml=xml.replaceAll("<select", "<xforms:select");
-        xml=xml.replaceAll("</select>", "</xforms:select>");
-        xml=xml.replaceAll("</select1>", "</xforms:select1>");
-        
-        xml=xml.replaceAll("<switch", "<xforms:switch");
-        xml=xml.replaceAll("</switch>", "</xforms:switch>");        
-        xml=xml.replaceAll("<case", "<xforms:case");
-        xml=xml.replaceAll("</case>", "</xforms:case>");
-        xml=xml.replaceAll("<trigger", "<xforms:trigger");
-        xml=xml.replaceAll("</trigger>", "</xforms:trigger>");
-        xml=xml.replaceAll("<action", "<xforms:action");
-        xml=xml.replaceAll("</action>", "</xforms:action>");
-        
-        
-        xml=xml.replaceAll("<item", "<xforms:item");
-        xml=xml.replaceAll("</item>", "</xforms:item>");
-        
-        xml=xml.replaceAll("<value", "<xforms:value");
-        xml=xml.replaceAll("</value>", "</xforms:value>");
-        
-        xml=xml.replaceAll("<toggle", "<xforms:toggle");
-        xml=xml.replaceAll("</toggle>", "</xforms:toggle>");
-        
-        //TextArea
-        xml=xml.replaceAll("<textarea", "<xforms:textarea");
-        xml=xml.replaceAll("</textarea>", "</xforms:textarea>");
-        
-        xml=xml.replaceAll("<output", "<xforms:output");
-        xml=xml.replaceAll("</output>", "</xforms:output>");
-        
-        dom=AFUtils.getInstance().XmltoDom(xml);
+        dom=SWBUtils.XML.xmlToDom(xml);
         return dom;
     }
     
@@ -167,21 +202,21 @@ public class XformsMgr extends WBXformsContainer {
                 node.appendChild(node.getOwnerDocument().importNode(nNodes.item(i),true));
             }
         }catch(Exception e){
-            AFUtils.log(e);
+            log.error(e);
         }
     }
     
     private void createInstanceElements(Document dom,Node dataChild) {
-            Iterator itElements=instanceElements.keySet().iterator();    
-            while(itElements.hasNext()){
-                String idElement=(String)itElements.next();
-                String idElementValue=(String)instanceElements.get(idElement);
-                Element xfEleChild=dom.createElement(idElement);
-                if(idElementValue!=null){
-                    xfEleChild.appendChild(dom.createTextNode(idElementValue));
-                }
-                dataChild.appendChild(xfEleChild);
+        Iterator itElements=instanceElements.keySet().iterator();
+        while(itElements.hasNext()){
+            String idElement=(String)itElements.next();
+            String idElementValue=(String)instanceElements.get(idElement);
+            Element xfEleChild=dom.createElement(idElement);
+            if(idElementValue!=null){
+                xfEleChild.appendChild(dom.createTextNode(idElementValue));
             }
+            dataChild.appendChild(xfEleChild);
+        }
     }
     
     private void createXformDoc() {
@@ -218,6 +253,10 @@ public class XformsMgr extends WBXformsContainer {
             }else if(rdfElement.getType()!=null && rdfElement.getType().equalsIgnoreCase("SWITCH")) {
                 XFSwitch xfswitch = new XFSwitch(rdfElement,instanceElements);
                 XFform.add(xfswitch);
+            }else if(rdfElement.getType()!=null && rdfElement.getType().equalsIgnoreCase("RANGE")) {
+                XFRange xfrange = new XFRange(rdfElement);
+                instanceElements.put(xfrange.getId(),xfrange.getValue());
+                XFform.add(xfrange);
             }else if(rdfElement.getType()!=null && rdfElement.getType().equalsIgnoreCase("SUBMIT")) {
                 XFButton xfsubmit = new XFButton(rdfElement);
                 XFform.add(xfsubmit);
