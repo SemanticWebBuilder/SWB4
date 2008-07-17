@@ -252,22 +252,24 @@ public class CodeGenerator
     {
         StringBuilder javaClassContent = new StringBuilder();
         javaClassContent.append("package "+ m_Package +";\r\n\r\n");
-        javaClassContent.append("import org.semanticwb.platform.SWBVocabulary;\r\n");
+        javaClassContent.append("import org.semanticwb.SWBContext;\r\n");                
+        javaClassContent.append("import org.semanticwb.platform.SWBVocabulary;\r\n");                
         javaClassContent.append("import org.semanticwb.model.TopicClass;\r\n");
-        javaClassContent.append("import org.semanticwb.model.TopicProperty;\r\n\r\n");
-        javaClassContent.append("public class Vocabulary extends SWBVocabulary\r\n");
+        javaClassContent.append("import org.semanticwb.model.TopicProperty;\r\n");        
+        javaClassContent.append("import static org.semanticwb.platform.SWBVocabulary.URI;\r\n\r\n");                
+        javaClassContent.append("public class Vocabulary\r\n");
         javaClassContent.append("{\r\n");
-        javaClassContent.append("\r\n\r\n// Classes\r\n");
+        javaClassContent.append("\r\n\r\n    //Classes\r\n");
         SemanticMgr mgr = SWBContext.getSemanticMgr();
         Iterator<TopicClass> tpcit = mgr.getVocabulary().listTopicClasses();
         while (tpcit.hasNext())
         {
             TopicClass tpc = tpcit.next();
-            javaClassContent.append("    public TopicClass " + tpc.getName() + ";\r\n");
+            javaClassContent.append("    public static final TopicClass " + tpc.getName() + ";\r\n");
         }
 
         
-        javaClassContent.append("\r\n\r\n\r\n//Properties\r\n");
+        javaClassContent.append("\r\n\r\n\r\n    //Properties\r\n");
         HashSet<String> properties=new HashSet<String>();
         tpcit = mgr.getVocabulary().listTopicClasses();
         while (tpcit.hasNext())
@@ -280,25 +282,26 @@ public class CodeGenerator
                 if(!properties.contains(tpp.getName()))
                 {
                     properties.add(tpp.getName());
-                    javaClassContent.append("    public TopicProperty " + tpp.getName() + ";\r\n");
+                    javaClassContent.append("    public static final TopicProperty " + tpp.getName() + ";\r\n");
                 }
             }
         }
-
-        
-        javaClassContent.append("    @Override\r\n");
-        javaClassContent.append("    public void init()\r\n");
-        javaClassContent.append("    {\r\n");
-        javaClassContent.append("\r\n\r\n        // Classes\r\n");
+        javaClassContent.append("\r\n\r\n");        
+        //javaClassContent.append("    @Override\r\n");
+        javaClassContent.append("    static\r\n");
+        javaClassContent.append("    {\r\n\r\n");
+        javaClassContent.append("         SWBVocabulary vocabulary=SWBContext.getSemanticMgr().getVocabulary();\r\n");
+        javaClassContent.append("        // Classes\r\n");
         tpcit = mgr.getVocabulary().listTopicClasses();
         while (tpcit.hasNext())
         {
             TopicClass tpc = tpcit.next();
-            javaClassContent.append("        "+ tpc.getName() +"=getTopicClass(URI+\""+ tpc.getName() +"\");\r\n");
+            javaClassContent.append("        "+ tpc.getName() +"=vocabulary.getTopicClass(URI+\""+ tpc.getName() +"\");\r\n");
         }
                 
         javaClassContent.append("\r\n\r\n\r\n        //Properties\r\n");
         tpcit = mgr.getVocabulary().listTopicClasses();
+        properties=new HashSet<String>();
         while (tpcit.hasNext())
         {
             TopicClass tpc = tpcit.next();
@@ -306,7 +309,11 @@ public class CodeGenerator
             while (tppit.hasNext())
             {
                 TopicProperty tpp = tppit.next();
-                javaClassContent.append("        "+ tpp.getName() +"=getTopicProperty(URI+\""+tpp.getName()+"\");\r\n");
+                if(!properties.contains(tpp.getName()))
+                {
+                    properties.add(tpp.getName());
+                    javaClassContent.append("        "+ tpp.getName() +"=vocabulary.getTopicProperty(URI+\""+tpp.getName()+"\");\r\n");
+                }
             }
         }
         javaClassContent.append("    }\r\n");
