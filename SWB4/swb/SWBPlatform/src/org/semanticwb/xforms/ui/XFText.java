@@ -6,10 +6,10 @@
 
 package org.semanticwb.xforms.ui;
 
-import java.sql.Array;
-import org.w3c.dom.*;
 import org.semanticwb.xforms.lib.XformsBaseImp;
 import org.semanticwb.xforms.drop.RDFElement;
+import org.semanticwb.SWBUtils;
+import org.semanticwb.Logger;
 
 /**
  *
@@ -17,6 +17,8 @@ import org.semanticwb.xforms.drop.RDFElement;
  */
 public class XFText extends XformsBaseImp
 {
+    private static Logger log=SWBUtils.getLogger(XFText.class);
+            
     protected String value=null;
     protected int size=-1;
     protected int maxlength=-1;
@@ -132,19 +134,40 @@ public class XFText extends XformsBaseImp
     }
     
     public void setRDFAttributes(){
-        if(rdfElement.getId()!=null) id=rdfElement.getId();
-        if(rdfElement.getLabel()!=null) label=rdfElement.getLabel();
-        if(rdfElement.getSize()>0) size=rdfElement.getSize();
-        if(rdfElement.getMaxLength()>0) maxlength=rdfElement.getMaxLength();
+        if(rdfElement.getId()!=null) {
+            id=rdfElement.getId();
+        }
+        if(rdfElement.getLabel()!=null) {
+            label=rdfElement.getLabel();
+        }
+        if(rdfElement.getSize()>0) {
+            size=rdfElement.getSize();
+        }
+        if(rdfElement.getMaxLength()>0) {
+            maxlength=rdfElement.getMaxLength();
+        }
         isrequired=rdfElement.isRequired();
-        if(rdfElement.getSType()!=null) subType=rdfElement.getSType();
-        if(rdfElement.getConstraint()!=null) constraint=rdfElement.getConstraint();
-        if(rdfElement.getHelp()!=null) help=rdfElement.getHelp();
-        if(rdfElement.getValue()!=null) value=rdfElement.getValue();         
-        if(rdfElement.getAlert()!=null) alert=rdfElement.getAlert();
-        if(rdfElement.getHint()!=null) hint=rdfElement.getHint();
+        if(rdfElement.getSType()!=null) {
+            subType=rdfElement.getSType();
+        }
+        if(rdfElement.getConstraint()!=null) {
+            constraint=rdfElement.getConstraint();
+        }
+        if(rdfElement.getHelp()!=null) {
+            help=rdfElement.getHelp();
+        }
+        if(rdfElement.getValue()!=null) {
+            value=rdfElement.getValue();
+        }         
+        if(rdfElement.getAlert()!=null) {
+            alert=rdfElement.getAlert();
+        }
+        if(rdfElement.getHint()!=null) {
+            hint=rdfElement.getHint();
+        }
     }
     
+   @Override 
    public String getXmlBind() 
     {
         StringBuffer strbXml=new StringBuffer();
@@ -162,6 +185,7 @@ public class XFText extends XformsBaseImp
         return strbXml.toString();
     }    
     
+    @Override
     public String getXml() 
     {
         StringBuffer strbXml=new StringBuffer();
@@ -188,10 +212,11 @@ public class XFText extends XformsBaseImp
             }
             strbXml.append("</input>");
         }
-        catch(Exception e) {com.infotec.appfw.util.AFUtils.log(e); }
+        catch(Exception e) { log.error(e);}
         return strbXml.toString();
     }
     
+    @Override
     public void setXml(String xml) {
         this.xml=xml;
     }

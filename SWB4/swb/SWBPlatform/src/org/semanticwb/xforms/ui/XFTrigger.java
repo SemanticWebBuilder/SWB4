@@ -6,22 +6,22 @@
 
 package org.semanticwb.xforms.ui;
 
-import java.sql.Array;
-import org.w3c.dom.*;
-import org.semanticwb.xforms.lib.XformsBaseImp;
+
 import org.semanticwb.xforms.drop.RDFElement;
 import org.semanticwb.xforms.lib.WBXformsContainer;
 import java.util.*;
-import org.semanticwb.xforms.ui.*;
-import org.semanticwb.xforms.ui.container.*;
 import org.semanticwb.xforms.ui.action.*;
+import org.semanticwb.SWBUtils;
+import org.semanticwb.Logger;
 
 /**
  *
  * @author  jorge.jimenez
  */
-public class XFTrigger extends WBXformsContainer {
-    
+public class XFTrigger extends WBXformsContainer 
+{
+
+    private static Logger log=SWBUtils.getLogger(XFTrigger.class);
     protected String appearance=null;    
     protected RDFElement rdfElement=null;
     
@@ -51,23 +51,30 @@ public class XFTrigger extends WBXformsContainer {
     }
     
     public void setRDFAttributes(){
-        if(rdfElement.getId()!=null) id=rdfElement.getId();
-        if(rdfElement.getLabel()!=null) label=rdfElement.getLabel();
-        if(rdfElement.getAppearance()!=null) appearance=rdfElement.getAppearance();
+        if(rdfElement.getId()!=null) {
+            id=rdfElement.getId();
+        }
+        if(rdfElement.getLabel()!=null) {
+            label=rdfElement.getLabel();
+        }
+        if(rdfElement.getAppearance()!=null) {
+            appearance=rdfElement.getAppearance();
+        }
         
         //Checa si el elemento (grupo) tiene subelementos
         if(rdfElement.getElements().size()>0) {
             Iterator itElements=rdfElement.getElements().iterator();
             while(itElements.hasNext()) {
-                RDFElement rdfElement=(RDFElement)itElements.next();
-                if(rdfElement.getType()!=null && rdfElement.getType().equalsIgnoreCase("ACTION")) {
-                    XFAction xfaction = new XFAction(rdfElement);
+                RDFElement rdfElementIT=(RDFElement)itElements.next();
+                if(rdfElementIT.getType()!=null && rdfElementIT.getType().equalsIgnoreCase("ACTION")) {
+                    XFAction xfaction = new XFAction(rdfElementIT);
                     this.add(xfaction);
                 }
             }
         }
     }
     
+    @Override
     public String getXml() {
         StringBuffer strbXml=new StringBuffer();
         try {
@@ -97,14 +104,16 @@ public class XFTrigger extends WBXformsContainer {
             strbXml.append(this.show());
             strbXml.append("</trigger>");
         }
-        catch(Exception e) {com.infotec.appfw.util.AFUtils.log(e); }
+        catch(Exception e) {log.error(e); }
         return strbXml.toString();
     }
     
+    @Override
     public String getXmlBind() {
         return showBinds();
     }
     
+    @Override
     public void setXml(String xml) {
         this.xml=xml;
     }

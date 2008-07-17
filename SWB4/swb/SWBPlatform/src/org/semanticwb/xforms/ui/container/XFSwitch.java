@@ -6,21 +6,21 @@
 
 package org.semanticwb.xforms.ui.container;
 
-import java.sql.Array;
-import org.w3c.dom.*;
-import org.semanticwb.xforms.lib.XformsBaseImp;
 import org.semanticwb.xforms.drop.RDFElement;
 import org.semanticwb.xforms.lib.WBXformsContainer;
 import java.util.*;
 import org.semanticwb.xforms.ui.*;
-import org.semanticwb.xforms.ui.container.*;
+import org.semanticwb.SWBUtils;
+import org.semanticwb.Logger;
 
 /**
  *
  * @author  jorge.jimenez
  */
-public class XFSwitch extends WBXformsContainer {
+public class XFSwitch extends WBXformsContainer 
+{
     
+    private static Logger log=SWBUtils.getLogger(XFSwitch.class);
     protected String appearance=null;
     protected String cssclass=null;
     protected RDFElement rdfElement=null;
@@ -58,28 +58,39 @@ public class XFSwitch extends WBXformsContainer {
     }
     
     public void setRDFAttributes(){
-        if(rdfElement.getId()!=null) id=rdfElement.getId();
-        if(rdfElement.getLabel()!=null) label=rdfElement.getLabel();
-        if(rdfElement.getAppearance()!=null) appearance=rdfElement.getAppearance();
-        if(rdfElement.getCssClass()!=null) cssclass=rdfElement.getCssClass();
-        if(rdfElement.getSType()!=null) subType=rdfElement.getSType();
+        if(rdfElement.getId()!=null) {
+            id=rdfElement.getId();
+        }
+        if(rdfElement.getLabel()!=null) {
+            label=rdfElement.getLabel();
+        }
+        if(rdfElement.getAppearance()!=null) {
+            appearance=rdfElement.getAppearance();
+        }
+        if(rdfElement.getCssClass()!=null) {
+            cssclass=rdfElement.getCssClass();
+        }
+        if(rdfElement.getSType()!=null) {
+            subType=rdfElement.getSType();
+        }
         
         //Checa si el elemento (grupo) tiene subelementos
         if(rdfElement.getElements().size()>0) {
             Iterator itElements=rdfElement.getElements().iterator();
             while(itElements.hasNext()) {
-                RDFElement rdfElement=(RDFElement)itElements.next();
-                if(rdfElement.getType()!=null && rdfElement.getType().equalsIgnoreCase("CASE")) {
-                    XFCaseSwitch xfcaseswitch = new XFCaseSwitch(rdfElement,instanceElements);
+                RDFElement rdfElementIT=(RDFElement)itElements.next();
+                if(rdfElementIT.getType()!=null && rdfElementIT.getType().equalsIgnoreCase("CASE")) {
+                    XFCaseSwitch xfcaseswitch = new XFCaseSwitch(rdfElementIT,instanceElements);
                     this.add(xfcaseswitch);
-                }else if(rdfElement.getType()!=null && rdfElement.getType().equalsIgnoreCase("GROUP")) {
-                    XFGroup xfgroup = new XFGroup(rdfElement,instanceElements);
+                }else if(rdfElementIT.getType()!=null && rdfElementIT.getType().equalsIgnoreCase("GROUP")) {
+                    XFGroup xfgroup = new XFGroup(rdfElementIT,instanceElements);
                     this.add(xfgroup);
                 }
             }
         }
     }
     
+    @Override
     public String getXml() {
         StringBuffer strbXml=new StringBuffer();
         try {
@@ -110,14 +121,16 @@ public class XFSwitch extends WBXformsContainer {
             strbXml.append("</switch>");
             
         }
-        catch(Exception e) {com.infotec.appfw.util.AFUtils.log(e); }
+        catch(Exception e) {log.error(e); }
         return strbXml.toString();
     }
     
+    @Override
     public String getXmlBind() {
         return showBinds();
     }
     
+    @Override
     public void setXml(String xml) {
         this.xml=xml;
     }

@@ -6,10 +6,10 @@
 
 package org.semanticwb.xforms.ui;
 
-import java.sql.Array;
-import org.w3c.dom.*;
 import org.semanticwb.xforms.lib.XformsBaseImp;
 import org.semanticwb.xforms.drop.RDFElement;
+import org.semanticwb.SWBUtils;
+import org.semanticwb.Logger;
 
 /**
  *
@@ -17,6 +17,8 @@ import org.semanticwb.xforms.drop.RDFElement;
  */
 public class XFOutput extends XformsBaseImp
 {
+    private static Logger log=SWBUtils.getLogger(XFOutput.class);
+    
     protected String value=null;
     protected String mediatype=null;    
     protected RDFElement rdfElement=null;
@@ -47,13 +49,24 @@ public class XFOutput extends XformsBaseImp
     }
     
     public void setRDFAttributes(){
-        if(rdfElement.getId()!=null) id=rdfElement.getId();
-        if(rdfElement.getLabel()!=null) label=rdfElement.getLabel();
-        if(rdfElement.getSType()!=null) subType=rdfElement.getSType();
-        if(rdfElement.getHint()!=null) hint=rdfElement.getHint();
-        if(rdfElement.getValue()!=null) value=rdfElement.getValue();
+        if(rdfElement.getId()!=null) {
+            id=rdfElement.getId();
+        }
+        if(rdfElement.getLabel()!=null) {
+            label=rdfElement.getLabel();
+        }
+        if(rdfElement.getSType()!=null) {
+            subType=rdfElement.getSType();
+        }
+        if(rdfElement.getHint()!=null) {
+            hint=rdfElement.getHint();
+        }
+        if(rdfElement.getValue()!=null) {
+            value=rdfElement.getValue();
+        }
     }
-    
+   
+   @Override
    public String getXmlBind() 
     {
         StringBuffer strbXml=new StringBuffer();
@@ -68,6 +81,7 @@ public class XFOutput extends XformsBaseImp
         return strbXml.toString();
     }    
     
+   @Override
     public String getXml() 
     {
         StringBuffer strbXml=new StringBuffer();
@@ -85,10 +99,11 @@ public class XFOutput extends XformsBaseImp
            
             strbXml.append("</output>");
         }
-        catch(Exception e) {com.infotec.appfw.util.AFUtils.log(e); }
+        catch(Exception e) {log.error(e); }
         return strbXml.toString();
     }
     
+   @Override
     public void setXml(String xml) {
         this.xml=xml;
     }

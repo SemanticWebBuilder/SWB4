@@ -6,10 +6,10 @@
 
 package org.semanticwb.xforms.ui;
 
-import java.sql.Array;
-import org.w3c.dom.*;
 import org.semanticwb.xforms.lib.XformsBaseImp;
 import org.semanticwb.xforms.drop.RDFElement;
+import org.semanticwb.SWBUtils;
+import org.semanticwb.Logger;
 
 /**
  *
@@ -17,6 +17,8 @@ import org.semanticwb.xforms.drop.RDFElement;
  */
 public class XFTextArea extends XformsBaseImp 
 {
+    
+    private static Logger log=SWBUtils.getLogger(XFTextArea.class);
     private String accesskey=null;
     private int cols=-1;
     private int rows=-1;
@@ -130,24 +132,49 @@ public class XFTextArea extends XformsBaseImp
     }
     
     public void setRDFAttributes(){
-        if(rdfElement.getId()!=null) id=rdfElement.getId();
-        if(rdfElement.getLabel()!=null) label=rdfElement.getLabel();
+        if(rdfElement.getId()!=null) {
+            id=rdfElement.getId();
+        }
+        if(rdfElement.getLabel()!=null) {
+            label=rdfElement.getLabel();
+        }
         isrequired=rdfElement.isRequired();
-        if(rdfElement.getSType()!=null) subType=rdfElement.getSType();
-        if(rdfElement.getConstraint()!=null) constraint=rdfElement.getConstraint();
-        if(rdfElement.getHelp()!=null) help=rdfElement.getHelp();
+        if(rdfElement.getSType()!=null) {
+            subType=rdfElement.getSType();
+        }
+        if(rdfElement.getConstraint()!=null) {
+            constraint=rdfElement.getConstraint();
+        }
+        if(rdfElement.getHelp()!=null) {
+            help=rdfElement.getHelp();
+        }
         incremental=rdfElement.isIncremental();
-        if(rdfElement.getCols()>0) cols=rdfElement.getCols();
-        if(rdfElement.getRows()>0) rows=rdfElement.getRows();
-        if(rdfElement.getWrap()!=null) wrap=rdfElement.getWrap();
-        if(rdfElement.getMediatype()!=null) mediatype=rdfElement.getMediatype();
-        if(rdfElement.getValue()!=null) value=rdfElement.getValue();
+        if(rdfElement.getCols()>0) {
+            cols=rdfElement.getCols();
+        }
+        if(rdfElement.getRows()>0) {
+            rows=rdfElement.getRows();
+        }
+        if(rdfElement.getWrap()!=null) {
+            wrap=rdfElement.getWrap();
+        }
+        if(rdfElement.getMediatype()!=null) {
+            mediatype=rdfElement.getMediatype();
+        }
+        if(rdfElement.getValue()!=null) {
+            value=rdfElement.getValue();
+        }
        
         
-        if(rdfElement.getAlert()!=null) alert=rdfElement.getAlert();
-        if(rdfElement.getHint()!=null) hint=rdfElement.getHint();
+        if(rdfElement.getAlert()!=null) {
+            alert=rdfElement.getAlert();
+        }
+        if(rdfElement.getHint()!=null) {
+            hint=rdfElement.getHint();
+        }
     }
     
+    @Override
     public String getXmlBind() {
         StringBuffer strbXml=new StringBuffer();
         strbXml.append("<bind id=\"bind_"+id+"\" nodeset=\""+id+"\"");
@@ -164,6 +191,7 @@ public class XFTextArea extends XformsBaseImp
         return strbXml.toString();
     }
     
+    @Override
     public String getXml() {
         StringBuffer strbXml=new StringBuffer();
         try {
@@ -213,10 +241,11 @@ public class XFTextArea extends XformsBaseImp
             }
             strbXml.append("</textarea>");
         }
-        catch(Exception e) {com.infotec.appfw.util.AFUtils.log(e); }
+        catch(Exception e) {log.error(e); }
         return strbXml.toString();
     }
     
+    @Override
     public void setXml(String xml) {
         this.xml=xml;
     }
