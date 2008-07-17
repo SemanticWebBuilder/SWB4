@@ -40,7 +40,7 @@ public class WB4WriterNoHappyTest {
     XComponentContext xContext;
     XComponent xCompDest = null;
     XDesktop oDesktop = null;
-    File sUrlDestiny = new File("c:/temp/demopub.odt");
+    File sUrlDestiny = new File("C:/Test.odt");
   
   
     @BeforeClass
@@ -82,7 +82,7 @@ public class WB4WriterNoHappyTest {
 
     @After
     public void tearDown() {
-//      xCompDest.dispose();
+      //xCompDest.dispose();
 
         //  Opcionalmente, cerrar el ejecutable de OpenOffice (solo si no vamos a extraer nada mas)   
         oDesktop.terminate();
@@ -162,10 +162,10 @@ public class WB4WriterNoHappyTest {
     public void saveAsSaveDocumentFormatHTML_FileAsParameterTest() throws IllegalArgumentException, WBException {
         
           
-          xCompDest = getDocument("file:///c:/NegativeTest/TestSave.odt");
+          xCompDest = getDocument("file:///c:/NegativeTest/PruebaSave.odt");
                 
           WB4Writer writer = new WB4Writer(xCompDest);
-          File actual = writer.saveAs(new File("c:/temp/demopub.odt"), SaveDocumentFormat.HTML);
+          File actual = writer.saveAs(new File("C:/NegativeTest/PruebaSave.odt"), SaveDocumentFormat.HTML);
         
     }
   
@@ -186,7 +186,7 @@ public class WB4WriterNoHappyTest {
         xCompDest = getDocument("file:///c:/NegativeTest/TestSave.odt");
         
         WB4Writer writer = new WB4Writer(xCompDest);
-        File actual = writer.saveAs(new File("C:/NegativeTest/ReadOnly"), SaveDocumentFormat.HTML);
+        writer.saveAs(new File("C:/NegativeTest/Writer/ReadOnly"), SaveDocumentFormat.HTML);
       
     }
     
@@ -225,31 +225,15 @@ public class WB4WriterNoHappyTest {
     @Test(expected = WBException.class)
     @Ignore
     public void openDocumentTest() throws WBException {
-        WB4WriterApplication writer = new WB4WriterApplication(this.xContext);
+        
+        
+        WB4WriterApplication writer = new WB4WriterApplication(xContext);
         writer.open(sUrlDestiny);
 
     }
 
    
-    @Test(expected = NoHasLocationException.class)
-    @Ignore
-    public void getAllAttachmentsTest() throws NoHasLocationException {
-        try {
-            XComponentLoader xCompLoader = (XComponentLoader) UnoRuntime.queryInterface(com.sun.star.frame.XComponentLoader.class, oDesktop);
-            PropertyValue[] loadProps = new PropertyValue[0];
-            String url = "private:factory/swriter";
-            xCompDest = xCompLoader.loadComponentFromURL(url, "_blank", 0, loadProps);
-            WB4Writer writer = new WB4Writer(xCompDest);
-            List<File> attachments = writer.getAllAttachments();
-        } catch (NoHasLocationException e) {
-            throw e;
-
-        } catch (Exception e) {
-            Assert.fail(e.getMessage());
-        }
-
-    }
-
+   
     
     /**
      * Get the XComponent of a new document 
