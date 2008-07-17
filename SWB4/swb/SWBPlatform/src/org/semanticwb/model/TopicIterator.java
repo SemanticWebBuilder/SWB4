@@ -6,6 +6,7 @@
 package org.semanticwb.model;
 
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.Statement;
 import java.util.Iterator;
 
 /**
@@ -36,12 +37,20 @@ public class TopicIterator implements Iterator
 
     public Object next()
     {
-        return new Topic((Resource)it.next());
+        Object obj=it.next();
+        if(obj instanceof Resource)
+        {
+            return new Topic((Resource)obj);
+        }else if(obj instanceof Statement)
+        {
+            return new Topic(((Statement)obj).getResource());
+        }
+        throw new AssertionError("No type found...");
     }
     
     public Topic nextTopic() 
     {
-        return new Topic((Resource)it.next());
+        return (Topic)next();
     }
 
     public void remove()

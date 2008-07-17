@@ -61,12 +61,12 @@ public class TopicClass
         return m_class.getLabel(lang);
     }
 
-    public TopicIterator listInstances()
+    public Iterator<Topic> listInstances()
     {
         return listInstances(false);
     }
     
-    public TopicIterator listInstances(boolean direct)
+    public Iterator<Topic> listInstances(boolean direct)
     {
         return new TopicIterator(m_class.listInstances(direct));
     }

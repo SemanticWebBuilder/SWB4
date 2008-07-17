@@ -4,7 +4,9 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.rdf.model.StmtIterator;
 import java.util.Date;
+import java.util.Iterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.SWBContext;
@@ -314,6 +316,32 @@ public class Topic
         }
         return this;
     }      
+    
+    public Topic addObjectProperty(TopicProperty prop, Topic topic)
+    {
+        Property iprop=prop.getRDFProperty();
+        m_res.addProperty(iprop, topic.getRDFResource());
+        return this;
+    }    
+    
+    public Topic removeObjectProperty(TopicProperty prop, Topic topic)
+    {
+        StmtIterator it=m_res.listProperties(prop.getRDFProperty());
+        while(it.hasNext())
+        {
+            Statement stmt=it.nextStatement();
+            if(topic.getRDFResource().equals(stmt.getResource()))
+            {
+                stmt.remove();
+            }
+        }
+        return this;
+    }    
+    
+    public Iterator<Topic> listObjectProperties(TopicProperty prop)
+    {
+        return new TopicIterator(m_res.listProperties(prop.getRDFProperty()));
+    }
     
     public Resource getRDFResource()
     {
