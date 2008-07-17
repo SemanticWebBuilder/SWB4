@@ -6,10 +6,10 @@
 
 package org.semanticwb.xforms.ui.action;
 
-import java.sql.Array;
-import org.w3c.dom.*;
 import org.semanticwb.xforms.lib.XformsBaseImp;
 import org.semanticwb.xforms.drop.RDFElement;
+import org.semanticwb.SWBUtils;
+import org.semanticwb.Logger;
 
 /**
  *
@@ -17,6 +17,7 @@ import org.semanticwb.xforms.drop.RDFElement;
  */
 public class XFToggle extends XformsBaseImp {
     
+    private static Logger log=SWBUtils.getLogger(XFToggle.class);
     protected String actionCase=null;
     protected RDFElement rdfElement=null;
     
@@ -30,10 +31,15 @@ public class XFToggle extends XformsBaseImp {
     // Gets    
     
     public void setRDFAttributes(){
-        if(rdfElement.getId()!=null) id=rdfElement.getId();
-        if(rdfElement.getActionCase()!=null) actionCase=rdfElement.getActionCase();
+        if(rdfElement.getId()!=null) {
+            id=rdfElement.getId();
+        }
+        if(rdfElement.getActionCase()!=null) {
+            actionCase=rdfElement.getActionCase();
+        }
     }
     
+    @Override
     public String getXml() {
         StringBuffer strbXml=new StringBuffer();
         try {
@@ -50,10 +56,11 @@ public class XFToggle extends XformsBaseImp {
             strbXml.append("/>");
             
         }
-        catch(Exception e) {com.infotec.appfw.util.AFUtils.log(e); }
+        catch(Exception e) {log.error(e); }
         return strbXml.toString();
     }
     
+    @Override
     public void setXml(String xml) {
         this.xml=xml;
     }

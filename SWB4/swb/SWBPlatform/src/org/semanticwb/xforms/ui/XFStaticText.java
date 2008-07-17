@@ -6,10 +6,12 @@
 
 package org.semanticwb.xforms.ui;
 
-import java.sql.Array;
-import org.w3c.dom.*;
+
 import org.semanticwb.xforms.lib.XformsBaseImp;
 import org.semanticwb.xforms.drop.RDFElement;
+import org.semanticwb.SWBUtils;
+import org.semanticwb.Logger;
+
 
 /**
  *
@@ -17,6 +19,8 @@ import org.semanticwb.xforms.drop.RDFElement;
  */
 public class XFStaticText extends XformsBaseImp
 {
+    
+    private static Logger log=SWBUtils.getLogger(XFStaticText.class);
     protected String value=null;
     
     protected RDFElement rdfElement=null;
@@ -41,9 +45,12 @@ public class XFStaticText extends XformsBaseImp
     }
         
     public void setRDFAttributes(){
-        if(rdfElement.getValue()!=null) value=rdfElement.getValue();         
+        if(rdfElement.getValue()!=null) {
+            value=rdfElement.getValue();
+        }         
     }
   
+    @Override
     public String getXml() 
     {
         StringBuffer strbXml=new StringBuffer();
@@ -54,10 +61,11 @@ public class XFStaticText extends XformsBaseImp
             
             strbXml.append("]]>");
         }
-        catch(Exception e) {com.infotec.appfw.util.AFUtils.log(e); }
+        catch(Exception e) {log.error(e); }
         return strbXml.toString();
     }
     
+    @Override
     public void setXml(String xml) {
         this.xml=xml;
     }
