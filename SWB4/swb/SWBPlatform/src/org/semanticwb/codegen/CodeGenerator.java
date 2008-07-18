@@ -11,7 +11,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Locale;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBContext;
 import org.semanticwb.SWBUtils;
@@ -104,8 +103,10 @@ public class CodeGenerator
             javaClassContent.append("\r\n");
         }
         javaClassContent.append("import java.util.Date;\r\n");
-        javaClassContent.append("import org.semanticwb.SWBContext;\r\n");
-        javaClassContent.append("import org.semanticwb.model.Topic;\r\n");
+        if(!this.m_Package.equals("org.semanticwb.model"))
+        {
+            javaClassContent.append("import org.semanticwb.model.Topic;\r\n");
+        }
         javaClassContent.append("import com.hp.hpl.jena.rdf.model.Resource;\r\n");
         javaClassContent.append("import java.util.Collection;\r\n");
         javaClassContent.append("\r\n");
@@ -141,14 +142,12 @@ public class CodeGenerator
                     try
                     {
                         URI uri = new URI(tpp.getRangeClass().getURI());
-                        String objectName=uri.getFragment();
-                        /*if(objectName.startsWith("has"))
-                        {
-                            objectName=objectName.substring(3);
-                        }*/
+                        String objectName=uri.getFragment();                       
                         objectName = toUpperCase(objectName);
-                        javaClassContent.append("    public Collection<"+ objectName +"> list" + objectName + "()\r\n");
+                        javaClassContent.append("    public GenericIterator<"+ objectName +"> list" + objectName + "()\r\n");
                         javaClassContent.append("    {\r\n");
+                        javaClassContent.append("        StmtIterator stit=getRDFResource().listProperties(Vocabulary."+ tpp.getName() +".getRDFProperty());");
+                        javaClassContent.append("        new GenericIterator<"+objectName+">("+objectName+".class, stit);");
                         javaClassContent.append("    }\r\n");
                         
                         
@@ -162,7 +161,7 @@ public class CodeGenerator
     
                         javaClassContent.append("    public "+objectName+" get"+objectName+"()\r\n");
                         javaClassContent.append("    {\r\n");
-                        javaClassContent.append("        return getProperty(SWBContext.getSemanticMgr().getVocabulary()." + tpp.getName() + ");\r\n");
+                        javaClassContent.append("        return getProperty(Vocabulary." + tpp.getName() + ");\r\n");
                         javaClassContent.append("    }\r\n");
     
                     }
@@ -179,26 +178,62 @@ public class CodeGenerator
                     URI uri = new URI(tpp.getRangeDataType().getURI());
                     String type = "void";
                     String prefix = "get";
+                    String getMethod="getProperty";
+                    String setMethod="setProperty";
                     if ( uri.getFragment().equals("string") )
                     {
                         type = "String";
-                    }
+                        getMethod="getProperty";
+                        setMethod="setProperty";
+                    }                    
                     else if ( uri.getFragment().equals("int") )
                     {
                         type = "int";
+                        getMethod="getIntProperty";
+                        setMethod="setLongProperty";
                     }
-                    else if ( uri.getFragment().equals("int") )
+                    else if ( uri.getFragment().equals("float") )
                     {
-                        type = "int";
+                        type = "float";
+                        getMethod="getFloatProperty";
+                        setMethod="setFloatProperty";
+                    }
+                    else if ( uri.getFragment().equals("double") )
+                    {
+                        type = "double";
+                        getMethod="getDoubleProperty";
+                        setMethod="setDoubleProperty";
+                    }
+                    else if ( uri.getFragment().equals("long") )
+                    {
+                        type = "long";
+                        getMethod="getLongProperty";
+                        setMethod="setLongProperty";
+                    }
+                    else if ( uri.getFragment().equals("byte") )
+                    {
+                        type = "byte";
+                        getMethod="getByteProperty";
+                        setMethod="setByteProperty";
+                    }
+                    else if ( uri.getFragment().equals("short") )
+                    {                        
+                        type = "short";
+                        getMethod="getShortProperty";
+                        setMethod="setShortProperty";
                     }
                     else if ( uri.getFragment().equals("boolean") )
                     {
                         type = "boolean";
                         prefix = "is";
+                        getMethod="getBooleanProperty";
+                        setMethod="setBooleanProperty";
                     }
                     else if ( uri.getFragment().equals("dateTime") )
                     {
                         type = "Date";
+                        getMethod="getDateProperty";
+                        setMethod="setDateProperty";
                     }
                     else
                     {
@@ -208,12 +243,13 @@ public class CodeGenerator
 
                     javaClassContent.append("    public " + type + " " + prefix + methodName + "()\r\n");
                     javaClassContent.append("    {\r\n");
-                    javaClassContent.append("        return getProperty(SWBContext.getSemanticMgr().getVocabulary()." + tpp.getName() + ");\r\n");
+                    javaClassContent.append("        return "+getMethod+"(Vocabulary." + tpp.getName() + ");\r\n");
                     javaClassContent.append("    }\r\n");
 
-                    javaClassContent.append("    public WebPage set" + methodName + "(" + type + " " + tpp.getName() + ")\r\n");
+                    javaClassContent.append("    public "+tpc.getName() +" set" + methodName + "(" + type + " " + tpp.getName() + ")\r\n");
                     javaClassContent.append("    {\r\n");
-                    javaClassContent.append("        setProperty(SWBContext.getSemanticMgr().getVocabulary()." + tpp.getName() + ", " + tpp.getName() + ");\r\n");
+                    javaClassContent.append("        "+setMethod+"(Vocabulary." + tpp.getName() + ", " + tpp.getName() + ");\r\n");
+                    javaClassContent.append("        return this;\r\n");
                     javaClassContent.append("    }\r\n");
                 //out.println("-->DataTypeProp:" + tpp.getName() + "\t" + tpp.getRangeDataType());
                 }
