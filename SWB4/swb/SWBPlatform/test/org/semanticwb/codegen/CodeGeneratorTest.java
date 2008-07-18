@@ -54,7 +54,7 @@ public class CodeGeneratorTest
         try
         {
             File dir = new File("C:\\temp\\WBObjectTest\\src");
-            String sPakage = "com.demo.infotec";
+            String sPakage = "org.semanticwb.model";
             CodeGenerator codeGeneration = new CodeGenerator(dir, sPakage);
             codeGeneration.generateCode();
         }
