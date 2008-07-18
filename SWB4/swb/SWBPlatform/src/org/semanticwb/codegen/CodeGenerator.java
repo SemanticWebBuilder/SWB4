@@ -151,24 +151,24 @@ public class CodeGenerator
                             javaClassContent.append("    public GenericIterator<" + objectName + "> list" + objectName + "()\r\n");
                             javaClassContent.append("    {\r\n");
                             javaClassContent.append("        StmtIterator stit=getRDFResource().listProperties(Vocabulary." + tpp.getName() + ".getRDFProperty());\r\n");
-                            javaClassContent.append("        return new GenericIterator<" + m_Package+"."+objectName + ">(" + m_Package+"."+objectName + ".class, stit);\r\n");
+                            javaClassContent.append("        return new GenericIterator<" + m_Package + "." + objectName + ">(" + m_Package + "." + objectName + ".class, stit);\r\n");
                             javaClassContent.append("    }\r\n");
 
 
-                            javaClassContent.append("    public void add" + objectName + "(" + m_Package+"."+objectName + " " + objectName.toLowerCase() + ")\r\n");
+                            javaClassContent.append("    public void add" + objectName + "(" + m_Package + "." + objectName + " " + objectName.toLowerCase() + ")\r\n");
                             javaClassContent.append("    {\r\n");
-                            javaClassContent.append("        addObjectProperty(Vocabulary."+tpp.getName()+", "+objectName.toLowerCase()+");\r\n");
+                            javaClassContent.append("        addObjectProperty(Vocabulary." + tpp.getName() + ", " + objectName.toLowerCase() + ");\r\n");
                             javaClassContent.append("    }\r\n");
 
                             javaClassContent.append("    public void removeAll" + objectName + "()\r\n");
                             javaClassContent.append("    {\r\n");
-                            javaClassContent.append("        getRDFResource().removeAll(Vocabulary."+tpp.getName()+".getRDFProperty());\r\n");
+                            javaClassContent.append("        getRDFResource().removeAll(Vocabulary." + tpp.getName() + ".getRDFProperty());\r\n");
                             javaClassContent.append("    }\r\n");
 
                             javaClassContent.append("    public " + objectName + " get" + objectName + "()\r\n");
                             javaClassContent.append("    {\r\n");
                             javaClassContent.append("         StmtIterator stit=getRDFResource().listProperties(Vocabulary." + tpp.getName() + ".getRDFProperty());\r\n");
-                            javaClassContent.append("         GenericIterator<" + m_Package+"."+objectName + "> it=new GenericIterator<" + m_Package+"."+objectName + ">(" + objectName + ".class, stit);\r\n");
+                            javaClassContent.append("         GenericIterator<" + m_Package + "." + objectName + "> it=new GenericIterator<" + m_Package + "." + objectName + ">(" + objectName + ".class, stit);\r\n");
                             javaClassContent.append("         return it.next();\r\n");
                             javaClassContent.append("    }\r\n");
                         }
@@ -260,7 +260,7 @@ public class CodeGenerator
                     javaClassContent.append("        " + setMethod + "(Vocabulary." + tpp.getName() + ", " + tpp.getName() + ");\r\n");
                     javaClassContent.append("        return this;\r\n");
                     javaClassContent.append("    }\r\n");
-                //out.println("-->DataTypeProp:" + tpp.getName() + "\t" + tpp.getRangeDataType());
+                
                 }
                 catch ( URISyntaxException usie )
                 {
