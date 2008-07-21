@@ -22,6 +22,7 @@ public class XFStaticText extends XformsBaseImp
     
     private static Logger log=SWBUtils.getLogger(XFStaticText.class);
     protected String value=null;
+    protected boolean isInhead=false;
     
     protected RDFElement rdfElement=null;
    
@@ -37,17 +38,26 @@ public class XFStaticText extends XformsBaseImp
         this.value=value;
     }
     
+    public void setisInhead(boolean isInhead){
+        this.isInhead=isInhead;
+    }
+    
     // Gets
     
     public String getValue()
     {
         return value;
     }
-        
+    
+    public boolean isInhead(){
+        return isInhead;
+    }
+    
     public void setRDFAttributes(){
         if(rdfElement.getValue()!=null) {
-            value=rdfElement.getValue();
-        }         
+            value=rdfElement.getValue();            
+        }       
+        isInhead=rdfElement.isInhead();
     }
   
     @Override
