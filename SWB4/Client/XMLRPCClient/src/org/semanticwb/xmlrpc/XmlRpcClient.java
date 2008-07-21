@@ -117,7 +117,7 @@ public class XmlRpcClient<T>
                         Element eValue = ( Element ) XPath.selectSingleNode(requestDocument, "/methodResponse/fault/value/struct/member[2]/value/string");
                         throw new XmlRpcException(eValue.getText());
                     }
-                    throw new XmlRpcException("XMLRPC response was not found");
+                    throw new XmlRpcException("The faultString tag was not found");
                 }
                 catch ( JDOMException jde2 )
                 {
@@ -354,7 +354,7 @@ public class XmlRpcClient<T>
         }
     }
 
-    private String getDetail(InputStream in, String contentType)
+    private String getDetail(InputStream in, String contentType) throws XmlRpcException
     {
         StringBuilder sb = new StringBuilder();
 
@@ -380,7 +380,7 @@ public class XmlRpcClient<T>
         }
         catch ( IOException ioe )
         {
-
+            throw new XmlRpcException("Error gettting the detail of response",ioe);
         }
         finally
         {
@@ -392,7 +392,7 @@ public class XmlRpcClient<T>
                 }
                 catch ( IOException ioe )
                 {
-
+                    throw new XmlRpcException("Error closing conexión in the detail of response",ioe);
                 }
             }
         }

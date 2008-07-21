@@ -43,11 +43,16 @@ public class XmlRpcClientConfig {
     
     public boolean hasUserPassWord()
     {
+        boolean hasUserPassWord=false;
         if(this.userName==null || password==null)
         {
-            return false;
+            hasUserPassWord=false;
         }
-        return true;
+        else
+        {
+            hasUserPassWord=true;
+        }
+        return hasUserPassWord;
     }
     public String getUserName()
     {
@@ -59,11 +64,16 @@ public class XmlRpcClientConfig {
     }
     public boolean usesProxyServer()
     {
+        boolean usesProxyServer=false;
         if(this.proxyServer()==null || proxyPort==0)
         {
-            return false;
+            usesProxyServer= false;
         }
-        return true;
+        else
+        {
+            usesProxyServer=true;
+        }
+        return usesProxyServer;
     }
     public URI proxyServer()
     {
