@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.semanticwb.SWBContext;
+import org.semanticwb.SWBUtils;
 import static org.junit.Assert.*;
 
 /**
@@ -53,8 +54,9 @@ public class CodeGeneratorTest
     {
         try
         {
-            File dir = new File("C:\\temp\\WBObjectTest\\src");
-            String sPakage = "org.semanticwb.model";
+            String path=getClass().getResource("/").getPath();
+            File dir = new File(path+"../../src");
+            String sPakage = "org.semanticwb.autogen";
             CodeGenerator codeGeneration = new CodeGenerator(dir, sPakage);
             codeGeneration.generateCode();
         }
