@@ -92,7 +92,7 @@ public class TopicClass
     public boolean isSuperClass(TopicClass cls)
     {
         boolean ret=false;
-        ExtendedIterator it=m_class.listSubClasses();
+        ExtendedIterator it=m_class.listSubClasses(false);
         while(it.hasNext())
         {
             OntClass cl=(OntClass)it.next();
@@ -107,7 +107,7 @@ public class TopicClass
     public boolean isSubClass(TopicClass cls)
     {
         boolean ret=false;
-        ExtendedIterator it=m_class.listSuperClasses();
+        ExtendedIterator it=m_class.listSuperClasses(false);
         while(it.hasNext())
         {
             OntClass cl=(OntClass)it.next();
@@ -164,12 +164,12 @@ public class TopicClass
     
     public boolean isSWBClass()
     {
-        return isSubClass(SWBContext.getSemanticMgr().getVocabulary().getTopicClass(SWBVocabulary.SWBClass));
+        return isSubClass(SWBContext.getSemanticMgr().getVocabulary().SWBClass);
     }
     
     public boolean isSWBInterface()
     {
-        return isSubClass(SWBContext.getSemanticMgr().getVocabulary().getTopicClass(SWBVocabulary.SWBInterface));
+        return isSubClass(SWBContext.getSemanticMgr().getVocabulary().SWBInterface);
     }
     
 }
