@@ -58,6 +58,9 @@ public class RDFElement {
     protected int end=0;
     protected int step=0;
     
+    //StaticText
+    protected boolean isInhead=false;
+    
     
     //Para agregar elementos dentro de un elemento-contenedor (ej. group)
     private ArrayList elements=new ArrayList();
@@ -168,6 +171,10 @@ public class RDFElement {
         this.step=step;
     }
     
+    public void setisInhead(boolean isInhead){
+        this.isInhead=isInhead;
+    }
+    
     //gets
     
     public String getType() {
@@ -272,6 +279,10 @@ public class RDFElement {
     
     public int getStep(){
         return step;
+    }
+    
+    public boolean isInhead(){
+        return isInhead;
     }
     
 }
