@@ -45,7 +45,7 @@ public class SWBVocabulary
     public static final String URI="http://www.semanticwebbuilder.org/swb4/ontology#";
 
     public static final String SWBClass=URI+"SWBClass";
-    public static final String SWBInterface=URI+"SWBClass";
+    public static final String SWBInterface=URI+"SWBInterface";
     
     public HashMap<String, TopicClass> classes;
     public HashMap<String, TopicProperty> properties;
