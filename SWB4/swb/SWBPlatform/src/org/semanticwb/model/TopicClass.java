@@ -12,6 +12,7 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 import java.util.HashMap;
 import java.util.Iterator;
 import org.semanticwb.*;
+import org.semanticwb.platform.SWBVocabulary;
 
 /**
  *
@@ -160,5 +161,15 @@ public class TopicClass
         }
         return ret;
     }    
+    
+    public boolean isSWBClass()
+    {
+        return isSubClass(SWBContext.getSemanticMgr().getVocabulary().getTopicClass(SWBVocabulary.SWBClass));
+    }
+    
+    public boolean isSWBInterface()
+    {
+        return isSubClass(SWBContext.getSemanticMgr().getVocabulary().getTopicClass(SWBVocabulary.SWBInterface));
+    }
     
 }
