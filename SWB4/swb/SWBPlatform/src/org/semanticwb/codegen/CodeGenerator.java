@@ -87,7 +87,54 @@ public class CodeGenerator
             throw new CodeGeneratorException("The File " + file.getPath() + " was not possible to create", ioe);
         }
     }
+ 
 
+    private static String toUpperCase(String data)
+    {
+        String letter = data.substring(0, 1);
+        return letter.toUpperCase() + data.substring(1);
+    }
+    public void generateCode() throws CodeGeneratorException
+    {
+        if ( m_Directory.exists() && m_Directory.isFile() )
+        {
+            throw new CodeGeneratorException("The path " + m_Directory.getPath() + " is not a directory");
+        }
+        if ( !m_Directory.exists() )
+        {
+            if ( !m_Directory.mkdirs() )
+            {
+                throw new CodeGeneratorException("The path " + m_Directory.getPath() + " was not possible to create");
+            }
+        }
+        SemanticMgr mgr = SWBContext.getSemanticMgr();
+        Iterator<TopicClass> tpcit = mgr.getVocabulary().listTopicClasses();
+        while (tpcit.hasNext())
+        {
+            TopicClass tpc = tpcit.next(); 
+            if(tpc.isSWBInterface())
+            {
+                //createInterface(tpc);
+                System.out.println("tpc: "+tpc.toString()+" isSWBInterface: "+tpc.isSWBInterface());
+            }
+            else if(tpc.isSWBClass())
+            {
+                System.out.println("tpc: "+tpc.toString()+" isSWBClass: "+tpc.isSWBClass());
+                //createClass(tpc);
+            }
+            
+        }
+        createVocabulary();
+    }
+    private static String getInterfaces(TopicClass tpc)
+    {
+        StringBuilder interfaces=new StringBuilder();        
+        if(interfaces.length()>0)
+        {
+            interfaces.insert(0, "extends ");
+        }
+        return interfaces.toString();
+    }
     private void createClass(TopicClass tpc) throws CodeGeneratorException
     {
         if ( m_Package == null )
@@ -106,31 +153,189 @@ public class CodeGenerator
         {
             javaClassContent.append("import org.semanticwb.model.Topic;\r\n");
         }
+        
         //javaClassContent.append("import com.hp.hpl.jena.rdf.model.Resource;\r\n");
         javaClassContent.append("import com.hp.hpl.jena.rdf.model.StmtIterator;\r\n");
         javaClassContent.append("import org.semanticwb.model.GenericIterator;\r\n");
         //javaClassContent.append("import java.util.Collection;\r\n");
         javaClassContent.append("\r\n");
-        javaClassContent.append("public class " + tpc.getName() + " extends Topic\r\n");
+        javaClassContent.append("public class " + tpc.getName() + " extends Topic "+  getInterfaces(tpc) +"\r\n");
         javaClassContent.append("{\r\n");
         javaClassContent.append("    public " + tpc.getName() + "(com.hp.hpl.jena.rdf.model.Resource res)\r\n");
         javaClassContent.append("    {\r\n");
         javaClassContent.append("        super(res);\r\n");
         javaClassContent.append("    }\r\n");
-        insertProperties(tpc, javaClassContent);
+        insertPropertiesToClass(tpc, javaClassContent);
         javaClassContent.append("}\r\n");
         File fileClass = new File(dir.getPath() + File.separatorChar + tpc.getName() + ".java");
         saveFile(fileClass, javaClassContent.toString());
 
     }
-
-    private static String toUpperCase(String data)
+    private void createInterface(TopicClass tpc) throws CodeGeneratorException
     {
-        String letter = data.substring(0, 1);
-        return letter.toUpperCase() + data.substring(1);
+        if ( m_Package == null )
+        {
+            m_Package = getPackage(tpc);
+        }
+        File dir = createPackage();
+        StringBuilder javaClassContent = new StringBuilder();
+        if ( !m_Package.equals("") )
+        {
+            javaClassContent.append("package " + m_Package + ";\r\n");
+            javaClassContent.append("\r\n");
+        }
+        javaClassContent.append("import org.semanticwb.model.GenericIterator;\r\n");
+        javaClassContent.append("import java.util.Date;\r\n");
+        javaClassContent.append("public interface " + tpc.getName() + " \r\n");
+        javaClassContent.append("{\r\n");
+        insertPropertiesToInterface(tpc, javaClassContent);
+        javaClassContent.append("}\r\n");
+        File fileClass = new File(dir.getPath() + File.separatorChar + tpc.getName() + ".java");
+        saveFile(fileClass, javaClassContent.toString());
     }
 
-    private void insertProperties(TopicClass tpc, StringBuilder javaClassContent)
+    
+    private void insertPropertiesToInterface(TopicClass tpc, StringBuilder javaClassContent)
+    {
+        Iterator<TopicProperty> tppit = tpc.listProperties();
+        HashSet<String> methods = new HashSet<String>();
+        while (tppit.hasNext())
+        {
+            TopicProperty tpp = tppit.next();
+            if ( tpp.isObjectProperty() )
+            {
+                if ( tpp.getRangeClass() != null && tpp.getRangeClass().getURI() != null )
+                {
+                    try
+                    {
+                        URI uri = new URI(tpp.getRangeClass().getURI());
+                        String objectName = uri.getFragment();
+                        objectName = toUpperCase(objectName);
+                        if ( !methods.contains(objectName) )
+                        {
+                            methods.add(objectName);
+                            javaClassContent.append("    public GenericIterator<" + objectName + "> list" + objectName + "();\r\n");
+                            /*javaClassContent.append("    {\r\n");
+                            javaClassContent.append("        StmtIterator stit=getRDFResource().listProperties(Vocabulary." + tpp.getName() + ".getRDFProperty());\r\n");
+                            javaClassContent.append("        return new GenericIterator<" + m_Package + "." + objectName + ">(" + m_Package + "." + objectName + ".class, stit);\r\n");
+                            javaClassContent.append("    }\r\n");*/
+
+
+                            javaClassContent.append("    public void add" + objectName + "(" + m_Package + "." + objectName + " " + objectName.toLowerCase() + ");\r\n");
+                            /*javaClassContent.append("    {\r\n");
+                            javaClassContent.append("        addObjectProperty(Vocabulary." + tpp.getName() + ", " + objectName.toLowerCase() + ");\r\n");
+                            javaClassContent.append("    }\r\n");*/
+
+                            javaClassContent.append("    public void removeAll" + objectName + "();\r\n");
+                            /*javaClassContent.append("    {\r\n");
+                            javaClassContent.append("        getRDFResource().removeAll(Vocabulary." + tpp.getName() + ".getRDFProperty());\r\n");
+                            javaClassContent.append("    }\r\n");*/
+
+                            javaClassContent.append("    public " + objectName + " get" + objectName + "();\r\n");
+                            /*javaClassContent.append("    {\r\n");
+                            javaClassContent.append("         StmtIterator stit=getRDFResource().listProperties(Vocabulary." + tpp.getName() + ".getRDFProperty());\r\n");
+                            javaClassContent.append("         GenericIterator<" + m_Package + "." + objectName + "> it=new GenericIterator<" + m_Package + "." + objectName + ">(" + objectName + ".class, stit);\r\n");
+                            javaClassContent.append("         return it.next();\r\n");
+                            javaClassContent.append("    }\r\n");*/
+                        }
+
+                    }
+                    catch ( URISyntaxException usie )
+                    {
+                        log.error(usie);
+                    }
+                }
+            }
+            else if ( tpp.isDataTypeProperty() )
+            {
+                try
+                {
+                    URI uri = new URI(tpp.getRangeDataType().getURI());
+                    String type = "void";
+                    String prefix = "get";
+                    String getMethod = "getProperty";
+                    String setMethod = "setProperty";
+                    if ( uri.getFragment().equals("string") )
+                    {
+                        type = "String";
+                        getMethod = "getProperty";
+                        setMethod = "setProperty";
+                    }
+                    else if ( uri.getFragment().equals("int") )
+                    {
+                        type = "int";
+                        getMethod = "getIntProperty";
+                        setMethod = "setLongProperty";
+                    }
+                    else if ( uri.getFragment().equals("float") )
+                    {
+                        type = "float";
+                        getMethod = "getFloatProperty";
+                        setMethod = "setFloatProperty";
+                    }
+                    else if ( uri.getFragment().equals("double") )
+                    {
+                        type = "double";
+                        getMethod = "getDoubleProperty";
+                        setMethod = "setDoubleProperty";
+                    }
+                    else if ( uri.getFragment().equals("long") )
+                    {
+                        type = "long";
+                        getMethod = "getLongProperty";
+                        setMethod = "setLongProperty";
+                    }
+                    else if ( uri.getFragment().equals("byte") )
+                    {
+                        type = "byte";
+                        getMethod = "getByteProperty";
+                        setMethod = "setByteProperty";
+                    }
+                    else if ( uri.getFragment().equals("short") )
+                    {
+                        type = "short";
+                        getMethod = "getShortProperty";
+                        setMethod = "setShortProperty";
+                    }
+                    else if ( uri.getFragment().equals("boolean") )
+                    {
+                        type = "boolean";
+                        prefix = "is";
+                        getMethod = "getBooleanProperty";
+                        setMethod = "setBooleanProperty";
+                    }
+                    else if ( uri.getFragment().equals("dateTime") )
+                    {
+                        type = "Date";
+                        getMethod = "getDateProperty";
+                        setMethod = "setDateProperty";
+                    }
+                    else
+                    {
+                        type = "void";
+                    }
+                    String methodName = toUpperCase(tpp.getName());
+
+                    javaClassContent.append("    public " + type + " " + prefix + methodName + "();\r\n");
+                    /*javaClassContent.append("    {\r\n");
+                    javaClassContent.append("        return " + getMethod + "(Vocabulary." + tpp.getName() + ");\r\n");
+                    javaClassContent.append("    }\r\n");*/
+
+                    javaClassContent.append("    public " + tpc.getName() + " set" + methodName + "(" + type + " " + tpp.getName() + ");\r\n");
+                    /*javaClassContent.append("    {\r\n");
+                    javaClassContent.append("        " + setMethod + "(Vocabulary." + tpp.getName() + ", " + tpp.getName() + ");\r\n");
+                    javaClassContent.append("        return this;\r\n");
+                    javaClassContent.append("    }\r\n");*/
+                
+                }
+                catch ( URISyntaxException usie )
+                {
+                    log.error(usie);
+                }
+            }
+        }
+    }
+    private void insertPropertiesToClass(TopicClass tpc, StringBuilder javaClassContent)
     {
         Iterator<TopicProperty> tppit = tpc.listProperties();
         HashSet<String> methods = new HashSet<String>();
@@ -270,30 +475,6 @@ public class CodeGenerator
             }
         }
     }
-
-    public void generateCode() throws CodeGeneratorException
-    {
-        if ( m_Directory.exists() && m_Directory.isFile() )
-        {
-            throw new CodeGeneratorException("The path " + m_Directory.getPath() + " is not a directory");
-        }
-        if ( !m_Directory.exists() )
-        {
-            if ( !m_Directory.mkdirs() )
-            {
-                throw new CodeGeneratorException("The path " + m_Directory.getPath() + " was not possible to create");
-            }
-        }
-        SemanticMgr mgr = SWBContext.getSemanticMgr();
-        Iterator<TopicClass> tpcit = mgr.getVocabulary().listTopicClasses();
-        while (tpcit.hasNext())
-        {
-            TopicClass tpc = tpcit.next();
-            createClass(tpc);
-        }
-        createVocabulary();
-    }
-
     private void createVocabulary() throws CodeGeneratorException
     {
         StringBuilder javaClassContent = new StringBuilder();
@@ -362,11 +543,11 @@ public class CodeGenerator
                 }
             }
         }
-        javaClassContent.append("    }\r\n");
-
+        javaClassContent.append("    }\r\n");        
         javaClassContent.append("}\r\n");
         File dir = createPackage();
         File fileClass = new File(dir.getPath() + File.separatorChar + "Vocabulary.java");
         saveFile(fileClass, javaClassContent.toString());
     }
+    
 }
