@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 //import javax.servlet.http.HttpServletResponse;
 public class WBFileUpload
 {
+    private static final
+    String CONTENT = "content";
 
     String sessid = null;
 
@@ -86,7 +88,7 @@ public class WBFileUpload
                 if (obj instanceof Hashtable)
                 {
                     Hashtable hashtable = (Hashtable) obj;
-                    obj = hashtable.get("content");
+                    obj = hashtable.get(CONTENT);
                     byte abyte0[] = (byte[]) obj;
                     ret = abyte0;
                 }
@@ -131,7 +133,7 @@ public class WBFileUpload
                 if (obj instanceof Hashtable)
                 {
                     Hashtable hashtable = (Hashtable) obj;
-                    obj = hashtable.get("content");
+                    obj = hashtable.get(CONTENT);
                     byte abyte0[] = (byte[]) obj;
                     String s3 = (String) hashtable.get("filename");
                     if (s3 != null)
@@ -180,7 +182,7 @@ public class WBFileUpload
                 if (obj instanceof Hashtable)
                 {
                     Hashtable hashtable = (Hashtable) obj;
-                    obj = hashtable.get("content");
+                    obj = hashtable.get(CONTENT);
                     byte abyte0[] = (byte[]) obj;
                     String s4 = (String) hashtable.get("filename");
                     if (s4 != null)
@@ -229,7 +231,7 @@ public class WBFileUpload
                 if (obj instanceof Hashtable)
                 {
                     Hashtable hashtable = (Hashtable) obj;
-                    obj = hashtable.get("content");
+                    obj = hashtable.get(CONTENT);
                     byte abyte0[] = (byte[]) obj;
                     String s3 = (String) hashtable.get("filename");
                     if (s3 != null)
@@ -278,7 +280,7 @@ public class WBFileUpload
                 if (obj instanceof Hashtable)
                 {
                     Hashtable hashtable = (Hashtable) obj;
-                    obj = hashtable.get("content");
+                    obj = hashtable.get(CONTENT);
                     byte abyte0[] = (byte[]) obj;
                     String s3 = (String) hashtable.get("filename");
                     if (s3 != null)
@@ -460,7 +462,7 @@ public class WBFileUpload
                 s7 = null;
                 s8 = null;
                 bytearrayoutputstream = new ByteArrayOutputStream();
-                Object obj = null;
+                //Object obj = null;
                 int j = servletinputstream.readLine(abyte0, 0, abyte0.length);
                 if (j == -1)
                 {
@@ -541,7 +543,7 @@ public class WBFileUpload
                 return hashtable;
             }
             s3 = new String(abyte0, 0, 0, k);
-            CParameter cparameter = FindParemeter(s9.trim());
+            CParameter cparameter = FindParameter(s9.trim());
             if (cparameter != null)
             {
                 cparameter.Valor.add(s3);
@@ -639,10 +641,10 @@ public class WBFileUpload
                     s8 = "application/octet-stream";
                 }
                 hashtable1.put("content-type", s8);
-                hashtable1.put("content", bytearrayoutputstream.toByteArray());
+                hashtable1.put(CONTENT, bytearrayoutputstream.toByteArray());
                 hashtable.put(s9, hashtable1);
             }
-            if (FindParemeter(cparameter.parametro.trim()) == null)
+            if (FindParameter(cparameter.parametro.trim()) == null)
             {
                 parametros.add(cparameter);
             }
@@ -653,31 +655,33 @@ public class WBFileUpload
 
     }
 
-    private CParameter FindParemeter(String parameter)
+    private CParameter FindParameter(String parameter)
     {
+        CParameter findParameter=null;
         for (int i = 0; i < parametros.size(); i++)
         {
             CParameter cparameter = (CParameter) parametros.elementAt(i);
             if (cparameter.parametro.trim().equals(parameter))
             {
-                return cparameter;
+                findParameter=cparameter;
             }
         }
-        return null;
+        return findParameter;
     }
 
     private boolean CheckValue(CParameter cParameter, String value)
     {
+        boolean checkValue=false;
         Iterator values = cParameter.Valor.iterator();
         while (values.hasNext())
         {
             String svalue = (String) values.next();
             if (svalue.trim().equalsIgnoreCase(value.trim()))
             {
-                return true;
+                checkValue= true;
             }
         }
-        return false;
+        return checkValue;
     }
 
     /** Getter for property sessid.

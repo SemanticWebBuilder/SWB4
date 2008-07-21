@@ -111,11 +111,12 @@ public abstract class XMLRPCServlet extends HttpServlet
                 }
                 catch ( IOException ioeSendResponse )
                 {
-
+                    Document docResponse = this.getException(ioeSendResponse);
+                    sendResponse(response, docResponse);
                 }
             }
         }
-        catch ( JDOMException jde )
+        catch ( Exception jde )
         {
             try
             {
@@ -124,21 +125,9 @@ public abstract class XMLRPCServlet extends HttpServlet
             }
             catch ( Exception ex )
             {
-
+                 
             }
-        }
-        catch ( IOException ioe )
-        {
-            try
-            {
-                Document docResponse = this.getException(ioe);
-                sendResponse(response, docResponse);
-            }
-            catch ( Exception ioeSendResponse )
-            {
-
-            }
-        }
+        }        
 
     }
 
@@ -456,10 +445,11 @@ public abstract class XMLRPCServlet extends HttpServlet
 
     private boolean isMultipart(HttpServletRequest request)
     {
+        boolean isMultipart=false;
         if ( request.getContentType().indexOf("multipart/form-data") != -1 )
         {
-            return true;
+            isMultipart=true;
         }
-        return false;
+        return isMultipart;
     }
 }
