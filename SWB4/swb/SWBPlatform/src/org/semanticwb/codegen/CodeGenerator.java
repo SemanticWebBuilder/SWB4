@@ -108,7 +108,8 @@ public class CodeGenerator
         }
         //javaClassContent.append("import com.hp.hpl.jena.rdf.model.Resource;\r\n");
         javaClassContent.append("import com.hp.hpl.jena.rdf.model.StmtIterator;\r\n");
-        javaClassContent.append("import java.util.Collection;\r\n");
+        javaClassContent.append("import org.semanticwb.model.GenericIterator;\r\n");
+        //javaClassContent.append("import java.util.Collection;\r\n");
         javaClassContent.append("\r\n");
         javaClassContent.append("public class " + tpc.getName() + " extends Topic\r\n");
         javaClassContent.append("{\r\n");
