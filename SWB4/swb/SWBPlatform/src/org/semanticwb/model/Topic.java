@@ -365,5 +365,17 @@ public class Topic
     {
         return hashCode()==obj.hashCode();
     }
+    
+    public boolean instanceOf(TopicClass cls)
+    {
+        boolean ret=false;
+        TopicClass cl=getTopicClass();
+        if(cl!=null && (cl.equals(cls) || cl.isSubClass(cls)))
+        {
+            ret=true;
+        }
+        return ret;
+    }    
+    
 }
 

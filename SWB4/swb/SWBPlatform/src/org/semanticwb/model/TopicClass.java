@@ -12,7 +12,6 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 import java.util.HashMap;
 import java.util.Iterator;
 import org.semanticwb.*;
-import org.semanticwb.platform.SWBVocabulary;
 
 /**
  *
@@ -107,7 +106,7 @@ public class TopicClass
     public boolean isSubClass(TopicClass cls)
     {
         boolean ret=false;
-        ExtendedIterator it=m_class.listSuperClasses(false);
+        Iterator it=m_class.listSuperClasses(false);
         while(it.hasNext())
         {
             OntClass cl=(OntClass)it.next();

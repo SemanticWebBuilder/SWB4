@@ -73,7 +73,7 @@ public class SemanticMgr implements SWBContextObject
         debugModel(swbSquema);
         
         //Create Omtology
-        m_ontology = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, swbSquema);
+        m_ontology = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM_RDFS_INF, swbSquema);
         m_ontology.addSubModel(m_system);
         
         //Create Vocabulary
