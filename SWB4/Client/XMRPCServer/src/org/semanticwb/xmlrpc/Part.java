@@ -3,8 +3,6 @@
  * and open the template in the editor.
  */
 package org.semanticwb.xmlrpc;
-
-import java.util.Hashtable;
 /**
  *
  * @author victor.lorenzana
