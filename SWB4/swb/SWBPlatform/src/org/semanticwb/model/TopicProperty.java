@@ -101,6 +101,11 @@ public class TopicProperty
         return ret;          
     }
     
+    public int getCardinality()
+    {
+        return 0;//m_prop.
+    }
+    
     public boolean isObjectProperty()
     {
         boolean ret=false;
