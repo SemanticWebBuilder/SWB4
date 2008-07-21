@@ -8,6 +8,7 @@ package org.semanticwb.model;
 import com.hp.hpl.jena.ontology.OntClass;
 
 import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 import java.util.HashMap;
 import java.util.Iterator;
 import org.semanticwb.*;
@@ -85,6 +86,57 @@ public class TopicClass
     {
         return m_class;
     }
+    
+    
+    public boolean isSuperClass(TopicClass cls)
+    {
+        boolean ret=false;
+        ExtendedIterator it=m_class.listSubClasses();
+        while(it.hasNext())
+        {
+            OntClass cl=(OntClass)it.next();
+            if(cl.equals(cls.getOntClass()))
+            {
+                ret=true;
+            }
+        }
+        return ret;
+    }    
+    
+    public boolean isSubClass(TopicClass cls)
+    {
+        boolean ret=false;
+        ExtendedIterator it=m_class.listSuperClasses();
+        while(it.hasNext())
+        {
+            OntClass cl=(OntClass)it.next();
+            if(cl.equals(cls.getOntClass()))
+            {
+                ret=true;
+            }
+        }
+        return ret;
+    }
+
+    public Iterator<TopicClass> listSubClasses()
+    {
+        return listSubClasses(false);
+    }
+    
+    public Iterator<TopicClass> listSubClasses(boolean direct)
+    {
+        return new TopicClassIterator(m_class.listSubClasses(direct));
+    }    
+    
+    public Iterator<TopicClass> listSuperClasses()
+    {
+        return listSuperClasses(false);
+    }
+    
+    public Iterator<TopicClass> listSuperClasses(boolean direct)
+    {
+        return new TopicClassIterator(m_class.listSuperClasses(direct));
+    }     
     
     @Override
     public String toString()
