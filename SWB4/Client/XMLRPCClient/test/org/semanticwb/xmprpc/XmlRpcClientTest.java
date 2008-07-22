@@ -58,6 +58,27 @@ public class XmlRpcClientTest
     }
 
     @Test
+    public void executeTestWithProxyAndAttachments()
+    {
+        try
+        {                        
+            IDemo obj = XmlRpcProxyFactory.newInstance(IDemo.class);
+            obj.setUri(new URI("http://localhost:8084/TestRPC/GatewayOffice"));            
+            obj.setUser("v");
+            obj.setPassword("h");
+            obj.addAttachment(new Attachment(new File("C:\\temp\\demo.ppt"), "content"));
+            String res=obj.add(5, 5.5, "a", new Date(), false);            
+            Assert.assertNotNull(res);
+            System.out.println(res);
+        }
+        catch ( Exception e )
+        {
+            fail(e.getMessage());
+        }
+
+    }
+    @Test
+    @Ignore
     public void executeTestWithProxy()
     {
         try
