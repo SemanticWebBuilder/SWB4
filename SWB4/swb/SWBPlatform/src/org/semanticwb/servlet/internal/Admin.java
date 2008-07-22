@@ -31,7 +31,7 @@ public class Admin implements InternalServlet
     {
         PrintWriter out=response.getWriter();
         out.print("Hello Admin");
-        SWBContext.getSemanticMgr().debugClasses(SWBContext.getSemanticMgr().getOntology());
+        //SWBContext.getSemanticMgr().debugClasses(SWBContext.getSemanticMgr().getOntology());
         
     }
 
