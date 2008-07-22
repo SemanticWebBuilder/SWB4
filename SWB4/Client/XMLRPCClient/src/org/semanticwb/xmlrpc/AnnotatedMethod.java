@@ -12,7 +12,7 @@ import java.lang.reflect.Method;
  *
  * @author victor.lorenzana
  */
-public interface AnnotatedMethod {
+interface AnnotatedMethod {
 	/**
 	 * @return the annotated class where the method is declared.
 	 */
