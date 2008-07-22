@@ -39,7 +39,14 @@ public class XmlRpcClientConfig {
         this.userName=user;
         this.password=password;
     }
-    
+    public void setUserName(String userName)
+    {
+        this.userName=userName;
+    }
+    public void setPassword(String password)
+    {
+        this.password=password;
+    }   
     
     public boolean hasUserPassWord()
     {
