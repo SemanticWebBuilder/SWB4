@@ -343,6 +343,26 @@ public class Topic
         return new TopicIterator(m_res.listProperties(prop.getRDFProperty()));
     }
     
+    public Topic getObjectProperty(TopicProperty prop)
+    {
+        return getObjectProperty(prop,null);
+    }
+    
+    public Topic getObjectProperty(TopicProperty prop, Topic defValue)
+    {
+        Topic ret=defValue;
+        Statement stm=m_res.getProperty(prop.getRDFProperty());
+        if(stm!=null)
+        {
+            try
+            {
+                ret=new Topic(stm.getResource());
+            }catch(Exception e){log.error(e);}
+        }
+        return ret;
+    }    
+    
+    
     public Resource getRDFResource()
     {
         return m_res;
