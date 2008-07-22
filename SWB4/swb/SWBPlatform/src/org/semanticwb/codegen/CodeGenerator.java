@@ -168,10 +168,15 @@ public class CodeGenerator
             m_Package = getPackage(tpc);
         }
         File dir = createPackage();
+        dir=new File(dir.getPath()+File.separatorChar+"base");
+        if(!dir.exists())
+        {
+            dir.mkdirs();
+        }
         StringBuilder javaClassContent = new StringBuilder();
         if ( !m_Package.equals("") )
         {
-            javaClassContent.append("package " + m_Package + ";" + ENTER);
+            javaClassContent.append("package " + m_Package + ".base;" + ENTER);
             javaClassContent.append("" + ENTER);
         }
         javaClassContent.append("import java.util.Date;" + ENTER);
@@ -179,12 +184,13 @@ public class CodeGenerator
         {
             javaClassContent.append("import org.semanticwb.model.Topic;" + ENTER);
         }
+        javaClassContent.append("import "+m_Package+".*;" + ENTER);
         javaClassContent.append("import com.hp.hpl.jena.rdf.model.StmtIterator;" + ENTER);
         javaClassContent.append("import org.semanticwb.model.GenericIterator;" + ENTER);
         javaClassContent.append(ENTER);
         javaClassContent.append("public class " + tpc.getName() + "Base extends Topic " + getInterfaces(tpc) + "" + ENTER);
         javaClassContent.append("{" + ENTER);
-        javaClassContent.append(PUBLIC + tpc.getName() + "(com.hp.hpl.jena.rdf.model.Resource res)" + ENTER);
+        javaClassContent.append(PUBLIC + tpc.getName() + "Base(com.hp.hpl.jena.rdf.model.Resource res)" + ENTER);
         javaClassContent.append(OPEN_BLOCK + ENTER);
         javaClassContent.append("        super(res);" + ENTER);
         javaClassContent.append(CLOSE_BLOCK + ENTER);
@@ -210,14 +216,8 @@ public class CodeGenerator
             {
                 javaClassContent.append("package " + m_Package + ";" + ENTER);
                 javaClassContent.append("" + ENTER);
-            }
-            //javaClassContent.append("import java.util.Date;" + ENTER);
-            //if ( !this.m_Package.equals("org.semanticwb.model") )
-            //{
-            //    javaClassContent.append("import org.semanticwb.model.Topic;" + ENTER);
-            //}
-            //javaClassContent.append("import com.hp.hpl.jena.rdf.model.StmtIterator;" + ENTER);
-            //javaClassContent.append("import org.semanticwb.model.GenericIterator;" + ENTER);
+            }           
+            javaClassContent.append("import "+m_Package+".base.*;" + ENTER);
             javaClassContent.append(ENTER);
             javaClassContent.append("public class " + tpc.getName() + " extends " + tpc.getName() + "Base " + ENTER);
             javaClassContent.append("{" + ENTER);
@@ -343,7 +343,7 @@ public class CodeGenerator
                     }
                     String methodName = toUpperCase(tpp.getName());
                     javaClassContent.append(PUBLIC + type + " " + prefix + methodName + END_OF_METHOD + ENTER);
-                    javaClassContent.append(PUBLIC + tpc.getName() + " set" + methodName + "(" + type + " " + tpp.getName() + ");" + ENTER);
+                    javaClassContent.append(PUBLIC + " void set" + methodName + "(" + type + " " + tpp.getName() + ");" + ENTER);
                 }
                 catch ( URISyntaxException usie )
                 {
@@ -479,10 +479,10 @@ public class CodeGenerator
                     javaClassContent.append("        return " + getMethod + "(Vocabulary." + tpp.getName() + ");" + ENTER);
                     javaClassContent.append(CLOSE_BLOCK + ENTER);
 
-                    javaClassContent.append(PUBLIC + tpc.getName() + " set" + methodName + "(" + type + " " + tpp.getName() + ")" + ENTER);
+                    javaClassContent.append(PUBLIC + " void set" + methodName + "(" + type + " " + tpp.getName() + ")" + ENTER);
                     javaClassContent.append(OPEN_BLOCK + ENTER);
                     javaClassContent.append("        " + setMethod + "(Vocabulary." + tpp.getName() + ", " + tpp.getName() + ");" + ENTER);
-                    javaClassContent.append("        return this;" + ENTER);
+                    //javaClassContent.append("        return this;" + ENTER);
                     javaClassContent.append(CLOSE_BLOCK + ENTER);
 
                 }
