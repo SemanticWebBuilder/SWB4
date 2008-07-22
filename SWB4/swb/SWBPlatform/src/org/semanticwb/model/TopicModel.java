@@ -7,6 +7,7 @@ package org.semanticwb.model;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
+import org.semanticwb.platform.SWBVocabulary;
 
 /**
  *
@@ -15,18 +16,24 @@ import com.hp.hpl.jena.rdf.model.Resource;
 public class TopicModel 
 {
     private Model m_model;
-    
-    public TopicModel(Model model)
+    private String m_name;
+
+    public TopicModel(String name, Model model)
     {
         this.m_model=model;
+        this.m_name=name;
         init();
     }
     
-    public void init()
+    private void init()
     {
         
     }
 
+    public String getName() {
+        return m_name;
+    }
+    
     public Topic getTopic(String uri)
     {
         Topic ret=null;
@@ -35,5 +42,10 @@ public class TopicModel
         return ret;
     }
     
-    
+    public Topic createTopic(String uri, TopicClass cls)
+    {
+        Resource res=m_model.createResource(uri);
+        res.addProperty(m_model.getProperty(SWBVocabulary.RDF_TYPE), cls.getURI());
+        return new Topic(res);
+    }    
 }
