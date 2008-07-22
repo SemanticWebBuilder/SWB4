@@ -21,7 +21,6 @@ import java.util.Set;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBContext;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.*;
 
 /**
  *
