@@ -122,8 +122,10 @@ public class XmlRpcProxyFactory implements java.lang.reflect.InvocationHandler, 
                 }
             }
             XmlRpcClientConfig config = new XmlRpcClientConfig(this.Uri);
+            config.setPassword(password);
+            config.setUserName(user);
             XmlRpcClient<Object> xmlclient = new XmlRpcClient<Object>(config);
-            ObjectToreturn = xmlclient.execute(methodName, args);
+            ObjectToreturn = xmlclient.execute(methodName, args,this.attachments);
         }
         return ObjectToreturn;
     }
