@@ -65,7 +65,9 @@ public class XmlRpcClientTest
             obj.setUri(new URI("http://localhost:8084/TestRPC/GatewayOffice"));            
             obj.setUser("v");
             obj.setPassword("h");
-            String res=obj.add(5, 5.5, "a", new Date(), false);
+            String res=obj.add(5, 5.5, "a", new Date(), false);            
+            Assert.assertNotNull(res);
+            System.out.println(res);
         }
         catch ( Exception e )
         {
