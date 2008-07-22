@@ -44,7 +44,7 @@ public class SemanticMgr implements SWBContextObject
     
     private OntModel m_ontology;
     private Model m_system;
-    private HashMap <String,Model>m_models=null;
+    private HashMap <String,TopicModel>m_models=null;
 
     private IDBConnection conn;
     
@@ -64,13 +64,13 @@ public class SemanticMgr implements SWBContextObject
         //load SWBSystem Model
         log.debug("Loading DBModel:"+"SWBSystem");
         m_system=loadDBModel("SWBSystem");
-        debugModel(m_system);
+//        debugModel(m_system);
 
         //Load Ontology from file
         String swbowl="file:"+SWBUtils.getApplicationPath()+SWB_OWL_PATH;
         log.debug("Loading Model:"+swbowl);
         Model swbSquema=loadModel(swbowl);
-        debugModel(swbSquema);
+//        debugModel(swbSquema);
         
         //Create Omtology
         m_ontology = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM_RDFS_INF, swbSquema);
@@ -95,16 +95,17 @@ public class SemanticMgr implements SWBContextObject
         }
         vocabulary.init();
         
-//        //LoadModels
-//        TopicClass cls=getVocabulary().RDFModel;
-//        TopicIterator tpit=cls.listInstances();
-//        while(tpit.hasNext())
-//        {
-//            Topic tp=tpit.nextTopic();
-//            String value=tp.getProperty(getVocabulary().value);
-//            log.debug("Model value:"+value);
-//        }
-        
+        //LoadModels
+        TopicClass cls=getVocabulary().getTopicClass(SWBVocabulary.SWB_CLASS_SWBModel);
+        Iterator<Topic> tpit=cls.listInstances();
+        while(tpit.hasNext())
+        {
+            Topic tp=tpit.next();
+            String value=tp.getProperty(getVocabulary().getTopicProperty(SWBVocabulary.SWB_PROP_VALUE));
+            log.debug("Loading Model:"+value);
+            Model m=loadDBModel(value);
+            m_models.put(value, new TopicModel(value, m));
+        }
         
 //        ontoModel.loadImports();
 //        ontoModel.getDocumentManager().addAltEntry(source,"file:"+SWBUtils.getApplicationPath()+"/WEB-INF/owl/swb.owl" );
@@ -134,50 +135,50 @@ public class SemanticMgr implements SWBContextObject
     }
     
     
-    public void debugClasses(OntModel model)
-    {
-        log.debug("**************************** debugClasses ********************************");
-        for (Iterator i = model.listClasses();  i.hasNext(); ) {
-            // now list the classes
-            OntClass cls=(OntClass)i.next();
-            log.debug("cls:"+cls.getLocalName());
-            ExtendedIterator it=cls.listInstances();
-            while(it.hasNext())
-            {
-                log.trace("-->inst:"+it.next());
-            }
-            
-            log.debug("  is a Declared Propertie of " );
-            for (Iterator it2 = cls.listDeclaredProperties(false); it2.hasNext();) 
-            {
-                Property prop=(Property)it2.next();
-                log.trace("---->prop:"+prop);
-            }            
-        }        
-    }
+//    public void debugClasses(OntModel model)
+//    {
+//        log.debug("**************************** debugClasses ********************************");
+//        for (Iterator i = model.listClasses();  i.hasNext(); ) {
+//            // now list the classes
+//            OntClass cls=(OntClass)i.next();
+//            log.debug("cls:"+cls.getLocalName());
+//            ExtendedIterator it=cls.listInstances();
+//            while(it.hasNext())
+//            {
+//                log.trace("-->inst:"+it.next());
+//            }
+//            
+//            log.debug("  is a Declared Propertie of " );
+//            for (Iterator it2 = cls.listDeclaredProperties(false); it2.hasNext();) 
+//            {
+//                Property prop=(Property)it2.next();
+//                log.trace("---->prop:"+prop);
+//            }            
+//        }        
+//    }
     
-    public void debugResource(Resource res)
-    {
-        log.debug("**************************** debugModel ********************************");
-        StmtIterator i = res.listProperties();
-        while(i.hasNext()) 
-        {
-            Statement stm=i.nextStatement();
-            log.trace("stmt:"+stm.getSubject()+" "+stm.getPredicate()+" "+stm.getObject());
-        }        
-    }    
+//    public void debugResource(Resource res)
+//    {
+//        log.debug("**************************** debugModel ********************************");
+//        StmtIterator i = res.listProperties();
+//        while(i.hasNext()) 
+//        {
+//            Statement stm=i.nextStatement();
+//            log.trace("stmt:"+stm.getSubject()+" "+stm.getPredicate()+" "+stm.getObject());
+//        }        
+//    }    
+//    
     
-    
-    public void debugModel(Model model)
-    {
-        log.debug("**************************** debugModel ********************************");
-        StmtIterator i = model.listStatements();
-        while(i.hasNext()) 
-        {
-            Statement stm=i.nextStatement();
-            log.trace("stmt:"+stm.getSubject()+" "+stm.getPredicate()+" "+stm.getObject());
-        }        
-    }    
+//    public void debugModel(Model model)
+//    {
+//        log.debug("**************************** debugModel ********************************");
+//        StmtIterator i = model.listStatements();
+//        while(i.hasNext()) 
+//        {
+//            Statement stm=i.nextStatement();
+//            log.trace("stmt:"+stm.getSubject()+" "+stm.getPredicate()+" "+stm.getObject());
+//        }        
+//    }    
     
     
     
@@ -195,12 +196,12 @@ public class SemanticMgr implements SWBContextObject
         }
     }
     
-    public Set<Entry<String, Model>> getModels()
+    public Set<Entry<String, TopicModel>> getModels()
     {
         return m_models.entrySet();
     }
     
-    public Model getModel(String name)
+    public TopicModel getModel(String name)
     {
         return m_models.get(name);
     }
@@ -221,16 +222,16 @@ public class SemanticMgr implements SWBContextObject
         return m_ontology.getOntClass(uri);
     }
     
-    public TopicClass getTopicClass(String uri)
-    {
-        OntClass cls=getOntClass(uri);
-        TopicClass tpcls=null;
-        if(cls!=null)
-        {
-            tpcls=new TopicClass(cls);
-        }
-        return tpcls;
-    }
+//    public TopicClass getTopicClass(String uri)
+//    {
+//        OntClass cls=m_ontology.getOntClass(uri);
+//        TopicClass tpcls=null;
+//        if(cls!=null)
+//        {
+//            tpcls=new TopicClass(cls);
+//        }
+//        return tpcls;
+//    }
     
     public SWBVocabulary getVocabulary() {
         return vocabulary;
