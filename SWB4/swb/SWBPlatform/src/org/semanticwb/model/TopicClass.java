@@ -21,6 +21,8 @@ public class TopicClass
 {
     private OntClass m_class;
     private HashMap<String,TopicProperty> m_props;
+    private boolean isSWBClass=false;
+    private boolean isSWBInterface=false;
     
     public TopicClass(OntClass oclass)
     {
@@ -45,6 +47,10 @@ public class TopicClass
             TopicProperty p=new TopicProperty(prop);
             m_props.put( p.getName(), p);
         }
+        
+        isSWBClass = isSubClass(SWBContext.getSemanticMgr().getVocabulary().SWBClass);
+        isSWBInterface = !isSWBClass && isSubClass(SWBContext.getSemanticMgr().getVocabulary().SWBInterface);
+               
     }
     
     public String getName()
@@ -98,6 +104,7 @@ public class TopicClass
             if(cl.equals(cls.getOntClass()))
             {
                 ret=true;
+                break;
             }
         }
         return ret;
@@ -113,6 +120,7 @@ public class TopicClass
             if(cl.equals(cls.getOntClass()))
             {
                 ret=true;
+                break;
             }
         }
         return ret;
@@ -163,12 +171,12 @@ public class TopicClass
     
     public boolean isSWBClass()
     {
-        return isSubClass(SWBContext.getSemanticMgr().getVocabulary().SWBClass);
+        return isSWBClass;
     }
     
     public boolean isSWBInterface()
     {
-        return isSubClass(SWBContext.getSemanticMgr().getVocabulary().SWBInterface);
+        return isSWBInterface;
     }
     
 }

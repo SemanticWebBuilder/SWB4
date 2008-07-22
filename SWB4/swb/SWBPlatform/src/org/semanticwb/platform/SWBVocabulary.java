@@ -46,6 +46,7 @@ public class SWBVocabulary
 
     public TopicClass SWBClass;
     public TopicClass SWBInterface;
+    public TopicClass SWBModel;
     
     public HashMap<String, TopicClass> classes;
     public HashMap<String, TopicProperty> properties;
@@ -61,6 +62,7 @@ public class SWBVocabulary
     {
         SWBClass=getTopicClass(URI+"SWBClass");
         SWBInterface=getTopicClass(URI+"SWBInterface");
+        SWBModel=getTopicClass(URI+"SWBModel");
     }
     
     void addTopicClass(TopicClass tpc)
