@@ -88,13 +88,13 @@ public class XmlRpcProxyFactory implements java.lang.reflect.InvocationHandler, 
         }
         else if ( m.getName().equals("setUser") )
         {
-            String user = ( String ) args[0];
-            this.setUser(user);
+            String pUser = ( String ) args[0];
+            this.setUser(pUser);
         }
         else if ( m.getName().equals("setPassword") )
         {
-            String password = ( String ) args[0];
-            this.setPassword(password);
+            String pPassword = ( String ) args[0];
+            this.setPassword(pPassword);
         }
         else if ( m.getName().equals("getUser") )
         {
