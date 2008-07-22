@@ -23,6 +23,7 @@ import org.semanticwb.xmlrpc.HttpException;
 import org.semanticwb.xmlrpc.XmlRpcClient;
 import org.semanticwb.xmlrpc.XmlRpcClientConfig;
 import org.semanticwb.xmlrpc.XmlRpcException;
+import org.junit.*;
 import static org.junit.Assert.*;
 
 /**
