@@ -16,7 +16,7 @@ import org.semanticwb.platform.SWBVocabulary;
  *
  * @author Javier Solis Gonzalez
  */
-public class Topic 
+public class Topic
 {
     private static Logger log = SWBUtils.getLogger(Topic.class);
     
