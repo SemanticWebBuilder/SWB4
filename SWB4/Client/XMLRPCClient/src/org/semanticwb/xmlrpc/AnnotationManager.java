@@ -12,7 +12,7 @@ import java.util.Map;
  *
  * @author victor.lorenzana
  */
-public class AnnotationManager {
+class AnnotationManager {
 private static Map<Class <?>, AnnotatedClass> classToAnnotatedMap =
 		new HashMap<Class<?>, AnnotatedClass>();
 	

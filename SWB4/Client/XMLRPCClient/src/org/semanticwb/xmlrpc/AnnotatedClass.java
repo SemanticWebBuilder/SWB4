@@ -12,7 +12,7 @@ import java.lang.reflect.Method;
  *
  * @author victor.lorenzana
  */
-public interface AnnotatedClass {
+interface AnnotatedClass {
 	/**
 	 * @return the class which inherited annotations are calculated. 
 	 */
