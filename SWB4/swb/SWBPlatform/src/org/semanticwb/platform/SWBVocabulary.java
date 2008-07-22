@@ -7,8 +7,6 @@ package org.semanticwb.platform;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import org.semanticwb.model.TopicClass;
-import org.semanticwb.model.TopicProperty;
 
 /**
  *
