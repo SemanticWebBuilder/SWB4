@@ -454,7 +454,7 @@ public abstract class XMLRPCServlet extends HttpServlet
         }
         return isMultipart;
     }
-    public static void addListObjects(String objectnName,Class clazz)
+    public static void addMappingType(String objectnName,Class clazz)
     {        
         System.setProperty(PREFIX_PROPERTY_PATH+objectnName,clazz.getName());
     }
