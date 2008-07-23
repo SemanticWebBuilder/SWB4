@@ -15,10 +15,27 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+import org.netbeans.spi.wizard.Wizard;
+import org.netbeans.spi.wizard.WizardPage;
+import org.semanticwb.openoffice.ui.dialogs.DialogAddLink;
+import org.semanticwb.openoffice.ui.dialogs.DialogContentInformation;
+import org.semanticwb.openoffice.ui.dialogs.DialogHistory;
+import org.semanticwb.openoffice.ui.dialogs.DialogSaveDocument;
+import org.semanticwb.openoffice.ui.wizard.PagContenido;
+import org.semanticwb.openoffice.ui.wizard.SelectPage;
+import org.semanticwb.openoffice.ui.wizard.SelectTypeToShow;
+import org.semanticwb.openoffice.ui.wizard.TitleAndDescription;
+import org.semanticwb.openoffice.util.ExcelFileFilter;
+import org.semanticwb.openoffice.util.PPTFileFilter;
+import org.semanticwb.openoffice.util.WordFileFilter;
 import static org.semanticwb.openoffice.util.FileUtil.copyFile;
 
 /**
@@ -26,9 +43,22 @@ import static org.semanticwb.openoffice.util.FileUtil.copyFile;
  * @author victor.lorenzana
  */
 public abstract class OfficeDocument
-{
-
-    //private final static int BUFFER_SIZE = 1024;
+{    
+    static
+    {
+        Locale.setDefault(new Locale("es"));
+        try
+        {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        }
+        catch (Exception ue)
+        {
+            // No debe hacer nada
+            System.out.println(ue.getMessage());
+        }
+    }
+    private static final String TITLE = "Asistente de publicación";
+    
     /**
      * Gets the Application Version
      * @return String with the number of version
@@ -160,6 +190,43 @@ public abstract class OfficeDocument
         }
 
         return attachments;
+    }
+    public final void delete()
+    {
+
+    }
+    public final void deleteAssociation()
+    {
+        /*try
+        {
+        HashMap<String, String> properties = new HashMap<String, String>();
+        document.saveCustomProperties(properties);
+        }
+        catch (WBAlertException wba)
+        {
+        }
+        catch (WBOfficeException wboe)
+        {
+        }
+        catch (WBException wbe)
+        {
+        }*/
+    }
+    public final void showDocumentInSite()
+    {
+
+    }
+    public final void showChanges()
+    {
+        DialogHistory dialog = new DialogHistory(new javax.swing.JFrame(), true);
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
+    }
+    public final static void showDocumentInfo()
+    {
+        DialogContentInformation dialog = new DialogContentInformation(new javax.swing.JFrame(), true);
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
     }
 
     public final void deleteTemporalDirectory(File dir)
@@ -296,5 +363,110 @@ public abstract class OfficeDocument
     public final boolean isPublicated()
     {
         return false;
+    }
+    private final boolean showSaveDialog(OfficeDocument document)
+    {
+        boolean result = false;
+        DialogSaveDocument fileChooser = new DialogSaveDocument(new JFrame(), true);
+        if (document.getDocumentType() == DocumentType.WORD)
+        {
+            fileChooser.setFileFilter(new WordFileFilter());
+        }
+        if (document.getDocumentType() == DocumentType.PPT)
+        {
+            fileChooser.setFileFilter(new PPTFileFilter());
+        }
+        if (document.getDocumentType() == DocumentType.EXCEL)
+        {
+            fileChooser.setFileFilter(new ExcelFileFilter());
+        }
+        fileChooser.setVisible(true);
+        boolean isCanceled = fileChooser.isCanceled();
+        if (!isCanceled)
+        {
+            File file = fileChooser.getSelectedFile();
+            saveDocument(file);
+        }
+        return result;
+    }
+    public final void publish()
+    {
+        if (isReadOnly())
+        {
+            JOptionPane.showMessageDialog(null, "El documento es de sólo lectura, por lo cuál no puede ser publicado", TITLE, JOptionPane.ERROR_MESSAGE);
+        }
+        else
+        {
+            boolean canbepublished = false;
+            if (isNewDocument())
+            {
+                canbepublished = showSaveDialog(this);
+            }
+            else
+            {
+                canbepublished = true;
+            }
+            if (canbepublished)
+            {
+                PublishResultProducer resultProducer = new PublishResultProducer(this);
+                Class[] clazz;
+                switch (getDocumentType())
+                {
+                    case WORD:
+                        clazz = new Class[]{TitleAndDescription.class, SelectPage.class, PagContenido.class, SelectTypeToShow.class};
+                        break;
+                    case EXCEL:
+                        clazz = new Class[]{TitleAndDescription.class, SelectPage.class, PagContenido.class};
+                        break;
+                    case PPT:
+                        clazz = new Class[]{TitleAndDescription.class, SelectPage.class, PagContenido.class};
+                        break;
+                    default:
+                        clazz = new Class[]{TitleAndDescription.class, SelectPage.class};
+                        break;
+
+                }
+                Wizard wiz = WizardPage.createWizard(TITLE, clazz, resultProducer);
+                wiz.show();
+            }
+        }
+    }
+    private final boolean saveDocument(File file)
+    {
+        boolean result = false;
+        if (getDocumentType() == DocumentType.WORD)
+        {
+            if (!file.getName().endsWith(getDefaultExtension()))
+            {
+                file = new File(file.getPath() + getDefaultExtension());
+            }
+        }
+        if (file.exists())
+        {
+            int resultOption = JOptionPane.showConfirmDialog(null, "El archivo ya existe, ¿Desea sobre escribir?", TITLE, JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION);
+            if (resultOption != JOptionPane.NO_OPTION)
+            {
+                try
+                {
+                    save(file);
+                    result = true;
+                }
+                catch (WBException wbe)
+                {
+                    JOptionPane.showMessageDialog(null, wbe.getMessage(), TITLE, JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+        return result;
+    }
+    public final void addRule()
+    {
+
+    }
+    public final void addLink()
+    {
+        DialogAddLink dialog = new DialogAddLink(new javax.swing.JFrame(), true);
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
     }
 }
