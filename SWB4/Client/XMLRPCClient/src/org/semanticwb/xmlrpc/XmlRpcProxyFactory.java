@@ -134,7 +134,7 @@ public class XmlRpcProxyFactory implements java.lang.reflect.InvocationHandler, 
         }
         else if ( m.getName().equals("getProxyAddress") )
         {            
-            this.getProxyAddress();
+            ObjectToreturn = this.getProxyAddress();
         }
         else if ( m.getName().equals("setProxyAddress") )
         {
@@ -143,7 +143,7 @@ public class XmlRpcProxyFactory implements java.lang.reflect.InvocationHandler, 
         }
         else if ( m.getName().equals("getProxyPort") )
         {
-            return this.getProxyPort();
+            ObjectToreturn = this.getProxyPort();
         }
         else if ( m.getName().equals("setProxyPort") )
         {
