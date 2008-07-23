@@ -550,7 +550,7 @@ public class SWBUtils {
             trans.transform(new DOMSource(doc), new StreamResult(sw));
             return sw.toString();
         }
-/*
+
         public boolean xmlVerifier(org.xml.sax.InputSource schema, org.xml.sax.InputSource xml) {
             return xmlVerifier(null, schema, null, xml);
         }
@@ -606,6 +606,9 @@ public class SWBUtils {
                 return bOk;
             }
             
+            
+            
+            
             org.iso_relax.verifier.VerifierFactory factory = new com.sun.msv.verifier.jarv.TheFactoryImpl();            
             
             org.iso_relax.verifier.Schema schema = null;
@@ -654,7 +657,16 @@ public class SWBUtils {
         public boolean xmlVerifierByURL(String sysid, String schema, String xml) {
             return xmlVerifierImpl(sysid, schema, xml);
         }
- */
+        
+        /**
+         * An error handler implementation that doesn't report any error.
+         */
+        private static final org.xml.sax.ErrorHandler silentErrorHandler = new org.xml.sax.ErrorHandler() {
+                public void fatalError( org.xml.sax.SAXParseException e ) {}
+                public void error( org.xml.sax.SAXParseException e ) {}
+                public void warning( org.xml.sax.SAXParseException e ) {}
+        };
+ 
     }
 
     /**
