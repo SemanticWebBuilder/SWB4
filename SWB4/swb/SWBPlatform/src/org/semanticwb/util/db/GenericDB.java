@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.StringTokenizer;
 import org.hibernate.dialect.*;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBContext;
+import org.semanticwb.SWBInstance;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -158,7 +158,7 @@ public class GenericDB {
                 tmp_conn = null;
                 if(poolname==null)
                 {
-                    tmp_conn = (String) SWBContext.getEnv("wb/db/nameconn","wb");
+                    tmp_conn = (String) SWBInstance.getEnv("wb/db/nameconn","wb");
                 }
                 else
                 {
