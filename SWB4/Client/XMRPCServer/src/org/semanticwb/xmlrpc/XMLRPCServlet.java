@@ -37,6 +37,8 @@ import static org.semanticwb.xmlrpc.Base64.decode;
  */
 public abstract class XMLRPCServlet extends HttpServlet
 {
+    private static final
+    String PREFIX_PROPERTY_PATH = "org.semanticwb.xmlrpc.";
 
     private static String realm = "Secure Area";
     private static String prefixBasic = "Basic ";
@@ -295,7 +297,7 @@ public abstract class XMLRPCServlet extends HttpServlet
 
     private String getClassFullPath(String objectName) throws ClassNotFoundException
     {
-        String classFullPath = System.getProperty("org.semanticwb.xmlrpc." + objectName, null);
+        String classFullPath = System.getProperty(PREFIX_PROPERTY_PATH + objectName, null);
         if ( classFullPath == null )
         {
             throw new ClassNotFoundException("The class for he Object Name: " + objectName + " was not found");
@@ -452,8 +454,8 @@ public abstract class XMLRPCServlet extends HttpServlet
         }
         return isMultipart;
     }
-    public static void addListObjects(String object,Class clazz)
-    {
-        System.setProperty("org.semanticwb.xmlrpc."+"Demo",clazz.getName());
+    public static void addListObjects(String objectnName,Class clazz)
+    {        
+        System.setProperty(PREFIX_PROPERTY_PATH+objectnName,clazz.getName());
     }
 }
