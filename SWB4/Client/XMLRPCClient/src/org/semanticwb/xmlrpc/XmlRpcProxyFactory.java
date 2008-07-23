@@ -148,7 +148,7 @@ public class XmlRpcProxyFactory implements java.lang.reflect.InvocationHandler, 
         else if ( m.getName().equals("setProxyPort") )
         {
             Integer pProxyPort = ( Integer ) args[0];
-            this.setProxyPort(proxyPort);
+            this.setProxyPort(pProxyPort);
         }
         else
         {
