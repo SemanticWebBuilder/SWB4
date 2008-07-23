@@ -13,6 +13,8 @@ public class WBFileUpload
 {
     private static final
     String CONTENT = "content";
+    private static final
+    String FILENAME = "filename";
 
     String sessid = null;
 
@@ -135,7 +137,7 @@ public class WBFileUpload
                     Hashtable hashtable = (Hashtable) obj;
                     obj = hashtable.get(CONTENT);
                     byte abyte0[] = (byte[]) obj;
-                    String s3 = (String) hashtable.get("filename");
+                    String s3 = (String) hashtable.get(FILENAME);
                     if (s3 != null)
                     {
                         int i = s3.lastIndexOf("\\");
@@ -184,7 +186,7 @@ public class WBFileUpload
                     Hashtable hashtable = (Hashtable) obj;
                     obj = hashtable.get(CONTENT);
                     byte abyte0[] = (byte[]) obj;
-                    String s4 = (String) hashtable.get("filename");
+                    String s4 = (String) hashtable.get(FILENAME);
                     if (s4 != null)
                     {
                         int i = s4.lastIndexOf("\\");
@@ -233,7 +235,7 @@ public class WBFileUpload
                     Hashtable hashtable = (Hashtable) obj;
                     obj = hashtable.get(CONTENT);
                     byte abyte0[] = (byte[]) obj;
-                    String s3 = (String) hashtable.get("filename");
+                    String s3 = (String) hashtable.get(FILENAME);
                     if (s3 != null)
                     {
                         int i = s3.lastIndexOf("\\");
@@ -282,7 +284,7 @@ public class WBFileUpload
                     Hashtable hashtable = (Hashtable) obj;
                     obj = hashtable.get(CONTENT);
                     byte abyte0[] = (byte[]) obj;
-                    String s3 = (String) hashtable.get("filename");
+                    String s3 = (String) hashtable.get(FILENAME);
                     if (s3 != null)
                     {
                         int i = s3.lastIndexOf("\\");
@@ -334,7 +336,7 @@ public class WBFileUpload
                 if (obj instanceof Hashtable)
                 {
                     Hashtable hashtable = (Hashtable) obj;
-                    String s2 = (String) hashtable.get("filename");
+                    String s2 = (String) hashtable.get(FILENAME);
                     if (s2 == null)
                     {
                         return null;
@@ -635,7 +637,7 @@ public class WBFileUpload
             {
                 Hashtable hashtable1 = new Hashtable(4);
                 hashtable1.put("name", s9);
-                hashtable1.put("filename", s7);
+                hashtable1.put( FILENAME,s7);
                 if (s8 == null)
                 {
                     s8 = "application/octet-stream";
