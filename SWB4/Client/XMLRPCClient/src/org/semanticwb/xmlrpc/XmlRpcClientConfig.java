@@ -12,30 +12,30 @@ import java.net.URI;
  * @author victor.lorenzana
  */
 public class XmlRpcClientConfig {
-    private URI ServerURI;
+    private URI webAddress;
     private URI proxyServer;
     private int proxyPort;
     private String userName;
     private String password;
-    public XmlRpcClientConfig(URI ServerURI)
+    public XmlRpcClientConfig(URI webAddress)
     {
-        this.ServerURI=ServerURI;
+        this.webAddress=webAddress;
     }
-    public XmlRpcClientConfig(URI ServerURI,URI proxyServer,int proxyPort)
+    public XmlRpcClientConfig(URI webAddress,URI proxyServer,int proxyPort)
     {
-        this(ServerURI);
+        this(webAddress);
         this.proxyServer=proxyServer;
         this.proxyPort=proxyPort;
     }
-    public XmlRpcClientConfig(URI ServerURI,URI proxyServer,int proxyPort,String user,String password)
+    public XmlRpcClientConfig(URI webAddress,URI proxyServer,int proxyPort,String user,String password)
     {
-        this(ServerURI,proxyServer,proxyPort);
+        this(webAddress,proxyServer,proxyPort);
         this.userName=user;
         this.password=password;
     }
-    public XmlRpcClientConfig(URI ServerURI,String user,String password)
+    public XmlRpcClientConfig(URI webAddress,String user,String password)
     {        
-        this(ServerURI);
+        this(webAddress);
         this.userName=user;
         this.password=password;
     }
@@ -72,7 +72,7 @@ public class XmlRpcClientConfig {
     public boolean usesProxyServer()
     {
         boolean usesProxyServer=false;
-        if(this.proxyServer()==null || proxyPort==0)
+        if(this.getProxyServer()==null || proxyPort==0)
         {
             usesProxyServer= false;
         }
@@ -82,7 +82,7 @@ public class XmlRpcClientConfig {
         }
         return usesProxyServer;
     }
-    public URI proxyServer()
+    public URI getProxyServer()
     {
         return proxyServer;    
     }
@@ -90,12 +90,20 @@ public class XmlRpcClientConfig {
     {
         return proxyPort;    
     }
-    public URI getServerURI()
+    public void setProxyServer(URI proxyServer)
     {
-        return ServerURI;
+        this.proxyServer=proxyServer;
     }
-    public void setServerURI(URI ServerURI)
+    public void setProxyPort(int proxyPort)
     {
-        this.ServerURI=ServerURI;
+        this.proxyPort=proxyPort;
+    }
+    public URI getWebAddress()
+    {
+        return webAddress;
+    }
+    public void setWebAddress(URI ServerURI)
+    {
+        this.webAddress=ServerURI;
     }
 }
