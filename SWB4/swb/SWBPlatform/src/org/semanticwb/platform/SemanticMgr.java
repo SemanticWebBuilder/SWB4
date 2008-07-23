@@ -19,32 +19,32 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Set;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBContext;
+import org.semanticwb.SWBInstance;
 import org.semanticwb.SWBUtils;
 
 /**
  *
  * @author Jei
  */
-public class SemanticMgr implements SWBContextObject
+public class SemanticMgr implements SWBInstanceObject
 {
     private static Logger log = SWBUtils.getLogger(SemanticMgr.class);
 
-    public final static String SWB_OWL_PATH=SWBContext.getEnv("swb/ontologyFile","/WEB-INF/owl/swb.owl");
+    public final static String SWB_OWL_PATH=SWBInstance.getEnv("swb/ontologyFile","/WEB-INF/owl/swb.owl");
     public final static String SWBSystem="SWBSystem";
     public final static String SWBAdmin="SWBAdmin";
     
-    private SWBContext m_context;
+    private SWBInstance m_context;
     
-    private OntModel m_ontology;
-    private Model m_system;
+    private SemanticOntology m_ontology;
+    private SemanticModel m_system;
     private HashMap <String,SemanticModel>m_models=null;
 
     private IDBConnection conn;
     
     private SemanticVocabulary vocabulary;
 
-    public void init(SWBContext context) 
+    public void init(SWBInstance context) 
     {
         log.event("SemanticMgr initialized...");
         this.m_context=context;
@@ -57,7 +57,7 @@ public class SemanticMgr implements SWBContextObject
         
         //load SWBSystem Model
         log.debug("Loading DBModel:"+"SWBSystem");
-        m_system=loadDBModel("SWBSystem");
+        m_system=new SemanticModel("SWBSystem",loadDBModel("SWBSystem"));
 //        debugModel(m_system);
 
         //Load Ontology from file
@@ -67,12 +67,12 @@ public class SemanticMgr implements SWBContextObject
 //        debugModel(swbSquema);
         
         //Create Omtology
-        m_ontology = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM_RDFS_INF, swbSquema);
-        m_ontology.addSubModel(m_system);
+        m_ontology = new SemanticOntology("SWB",ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM_RDFS_INF, swbSquema));
+        m_ontology.getRDFOntModel().addSubModel(m_system.getRDFModel());
         
         //Create Vocabulary
         vocabulary=new SemanticVocabulary();
-        SemanticClassIterator tpcit=new SemanticClassIterator(m_ontology.listClasses());
+        SemanticClassIterator tpcit=new SemanticClassIterator(m_ontology.getRDFOntModel().listClasses());
         while(tpcit.hasNext())
         {
             SemanticClass tpc=tpcit.nextSemanticClass();
@@ -201,19 +201,19 @@ public class SemanticMgr implements SWBContextObject
     }
     
     
-    public OntModel getOntology() 
+    public SemanticOntology getOntology() 
     {
         return m_ontology;
     }
     
-    public Model getSystemModel() 
+    public SemanticModel getSystemModel() 
     {
         return m_system;
     }
     
     public OntClass getOntClass(String uri)
     {
-        return m_ontology.getOntClass(uri);
+        return m_ontology.getRDFOntModel().getOntClass(uri);
     }
     
 //    public SemanticClass getSemanticClass(String uri)

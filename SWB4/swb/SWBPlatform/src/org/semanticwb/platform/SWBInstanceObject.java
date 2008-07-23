@@ -5,15 +5,13 @@
 
 package org.semanticwb.platform;
 
-import com.hp.hpl.jena.ontology.OntModel;
+import org.semanticwb.SWBInstance;
 
 /**
  *
  * @author Jei
  */
-public class SemanticOntoModel
+public interface SWBInstanceObject 
 {
-    public SemanticOntoModel(String name, OntModel model)
-    {
-    }
+    public void init(SWBInstance context);
 }

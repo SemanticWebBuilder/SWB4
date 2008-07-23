@@ -1,6 +1,6 @@
 package org.semanticwb.model;
 
-import org.semanticwb.SWBContext;
+import org.semanticwb.SWBInstance;
 import org.semanticwb.platform.SemanticVocabulary;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticProperty;
@@ -100,7 +100,7 @@ public class Vocabulary
 
     static
     {
-         SemanticVocabulary vocabulary=SWBContext.getSemanticMgr().getVocabulary();
+         SemanticVocabulary vocabulary=SWBInstance.getSemanticMgr().getVocabulary();
         // Classes
         User=vocabulary.getSemanticClass(URI+"User");
         Calendar=vocabulary.getSemanticClass(URI+"Calendar");

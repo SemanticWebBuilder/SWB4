@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.Iterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.SWBContext;
+import org.semanticwb.SWBInstance;
 
 /**
  *
@@ -48,7 +48,7 @@ public class SemanticObject
         {
             try
             {
-                return SWBContext.getSemanticMgr().getVocabulary().getSemanticClass(stm.getResource().getURI());
+                return SWBInstance.getSemanticMgr().getVocabulary().getSemanticClass(stm.getResource().getURI());
             }catch(Exception e){log.error(e);}
         }
         return null;
