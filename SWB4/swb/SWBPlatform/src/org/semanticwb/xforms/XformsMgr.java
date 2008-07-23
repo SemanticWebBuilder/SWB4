@@ -7,17 +7,16 @@
 package org.semanticwb.xforms;
 
 import org.w3c.dom.*;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import org.semanticwb.SWBUtils;
-import org.semanticwb.Logger;
+import org.semanticwb.xforms.lib.WBXformsContainer;
 import java.util.*;
 import org.semanticwb.xforms.drop.RDFElement;
 import org.semanticwb.xforms.ui.*;
 import org.semanticwb.xforms.ui.container.*;
-import org.semanticwb.xforms.lib.*;
 import com.arthurdo.parser.*;
 import java.io.ByteArrayInputStream;
+import org.semanticwb.SWBUtils;
+import org.semanticwb.Logger;
+
 
 /**
  *
@@ -25,12 +24,13 @@ import java.io.ByteArrayInputStream;
  */
 public class XformsMgr extends WBXformsContainer 
 {
+    private static Logger log=SWBUtils.getLogger(XFText.class);
     
-    private static Logger log=SWBUtils.getLogger(XformsMgr.class);
     ArrayList rdfElements;
     Object RDFElement;
     String xmlInit;
     HashMap instanceElements;
+    protected String head=null;
     
     /** Creates a new instance of XformsMgr */
     public XformsMgr() {
@@ -68,6 +68,8 @@ public class XformsMgr extends WBXformsContainer
             Element modelChild=dom.createElement("xforms:model");
             modelChild.setAttribute("id","wb-model");
             headChild.appendChild(modelChild);
+            
+            add2Node(headChild,SWBUtils.XML.xmlToDom("<script>"+head+"</script>"));            
             
             Element submissionChild=dom.createElement("xforms:submission");
             submissionChild.setAttribute("id","wb-save");
@@ -257,7 +259,15 @@ public class XformsMgr extends WBXformsContainer
                 XFRange xfrange = new XFRange(rdfElement);
                 instanceElements.put(xfrange.getId(),xfrange.getValue());
                 XFform.add(xfrange);
-            }else if(rdfElement.getType()!=null && rdfElement.getType().equalsIgnoreCase("SUBMIT")) {
+            }else if(rdfElement.getType()!=null && rdfElement.getType().equalsIgnoreCase("STATICTEXT")) {
+                XFStaticText xfstaticText = new XFStaticText(rdfElement);
+                if(!xfstaticText.isInhead()){
+                    XFform.add(xfstaticText);
+                }else{
+                    head=xfstaticText.getXml();
+                }
+           }
+            else if(rdfElement.getType()!=null && rdfElement.getType().equalsIgnoreCase("SUBMIT")) {
                 XFButton xfsubmit = new XFButton(rdfElement);
                 XFform.add(xfsubmit);
             }
