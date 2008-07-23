@@ -32,7 +32,7 @@ public class SemanticClass
     
     public SemanticClass(String classuri) throws SWBException
     {
-        this.m_class=SWBContext.getSemanticMgr().getOntClass(classuri);
+        this.m_class=SWBInstance.getSemanticMgr().getOntClass(classuri);
         if(this.m_class==null) throw new SWBException("OntClass Not Found");
         init();
     }
@@ -169,7 +169,7 @@ public class SemanticClass
     {
         if(m_isSWBClass==null)
         {
-            m_isSWBClass = Boolean.valueOf(isSubClass(SWBContext.getSemanticMgr().getVocabulary().SWBClass));    
+            m_isSWBClass = Boolean.valueOf(isSubClass(SWBInstance.getSemanticMgr().getVocabulary().SWBClass));    
         }
         return m_isSWBClass.booleanValue();
     }
@@ -178,7 +178,7 @@ public class SemanticClass
     {
         if(m_isSWBInterface==null)
         {
-            m_isSWBInterface = Boolean.valueOf(!isSWBClass() && isSubClass(SWBContext.getSemanticMgr().getVocabulary().SWBInterface));    
+            m_isSWBInterface = Boolean.valueOf(!isSWBClass() && isSubClass(SWBInstance.getSemanticMgr().getVocabulary().SWBInterface));    
         }
         return m_isSWBInterface.booleanValue();
     }

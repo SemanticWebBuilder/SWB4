@@ -8,7 +8,7 @@ package org.semanticwb.platform;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
-import org.semanticwb.SWBContext;
+import org.semanticwb.SWBInstance;
 
 /**
  *
@@ -62,7 +62,7 @@ public class SemanticProperty
         Statement stm=m_prop.getProperty(m_prop.getModel().getProperty(SemanticVocabulary.RDFS_DOMAIN));
         if(stm!=null)
         {
-            ret=SWBContext.getSemanticMgr().getVocabulary().getSemanticClass(stm.getResource().getURI());
+            ret=SWBInstance.getSemanticMgr().getVocabulary().getSemanticClass(stm.getResource().getURI());
         }
         return ret;    
     }
@@ -73,7 +73,7 @@ public class SemanticProperty
         Statement stm=m_prop.getProperty(m_prop.getModel().getProperty(SemanticVocabulary.RDFS_RANGE));
         if(stm!=null)
         {
-            ret=SWBContext.getSemanticMgr().getVocabulary().getSemanticClass(stm.getResource().getURI());
+            ret=SWBInstance.getSemanticMgr().getVocabulary().getSemanticClass(stm.getResource().getURI());
         }
         return ret;    
     }
