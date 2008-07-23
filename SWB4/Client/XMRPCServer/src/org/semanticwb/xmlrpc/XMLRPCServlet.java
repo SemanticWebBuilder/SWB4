@@ -98,7 +98,7 @@ public abstract class XMLRPCServlet extends HttpServlet
             try
             {
                 Object[] parameters = deserialize(xmlrpcDocument);
-                Object objResponse = execute(getCallMethod(xmlrpcDocument), parameters, parts);
+                Object objResponse = execute(getMethodName(xmlrpcDocument), parameters, parts);
                 Document docResponse = this.serialize(objResponse);
                 sendResponse(response, docResponse);
             }
@@ -407,7 +407,7 @@ public abstract class XMLRPCServlet extends HttpServlet
         return parameters.toArray();
     }
 
-    private String getCallMethod(Document document) throws XmlRpcException, JDOMException
+    private String getMethodName(Document document) throws XmlRpcException, JDOMException
     {
         Element methodName = ( Element ) XPath.selectSingleNode(document.getRootElement(), "/methodCall/methodName");
         if ( methodName == null )
@@ -451,5 +451,9 @@ public abstract class XMLRPCServlet extends HttpServlet
             isMultipart=true;
         }
         return isMultipart;
+    }
+    public static void addListObjects(String object,Class clazz)
+    {
+        System.setProperty("org.semanticwb.xmlrpc."+"Demo",clazz.getName());
     }
 }
