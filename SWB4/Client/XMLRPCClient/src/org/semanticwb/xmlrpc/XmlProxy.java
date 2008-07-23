@@ -13,8 +13,8 @@ import java.net.URI;
  */
 public interface XmlProxy
 {
-    public URI getUri();
-    public void setUri(URI uri);
+    public URI getWebAddress();
+    public void setWebAddress(URI uri);
     
     public String getUser();
     public void setUser(String user);
@@ -24,5 +24,11 @@ public interface XmlProxy
     
     public void addAttachment(Attachment attachment);
     public void clearAttachments();
+    
+    public URI getProxyAddress();
+    public void setProxyAddress(URI proxyAddress);
+    
+    public int getProxyPort();
+    public void setProxyPort(int port);
     
 }

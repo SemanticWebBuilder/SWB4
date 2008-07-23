@@ -17,16 +17,17 @@ import java.util.List;
 public class XmlRpcProxyFactory implements java.lang.reflect.InvocationHandler, XmlProxy
 {
 
-    List<Attachment> attachments = new ArrayList<Attachment>();
+    private List<Attachment> attachments = new ArrayList<Attachment>();
     private URI Uri;
     private String user,  password;
-
-    public URI getUri()
+    private URI proxyAddress;
+    private int proxyPort;
+    public URI getWebAddress()
     {
         return Uri;
     }
 
-    public void setUri(URI uri)
+    public void setWebAddress(URI uri)
     {
         this.Uri = uri;
     }
@@ -49,6 +50,23 @@ public class XmlRpcProxyFactory implements java.lang.reflect.InvocationHandler, 
     public void setPassword(String password)
     {
         this.password = password;
+    }
+    public URI getProxyAddress()
+    {
+        return proxyAddress;
+    }
+    public void setProxyAddress(URI proxyAddress)
+    {
+        this.proxyAddress=proxyAddress;
+    }
+    
+    public int getProxyPort()
+    {
+        return proxyPort;
+    }
+    public void setProxyPort(int proxyPort)
+    {
+        this.proxyPort=proxyPort;
     }
 
     public void addAttachment(Attachment attachment)
@@ -84,7 +102,7 @@ public class XmlRpcProxyFactory implements java.lang.reflect.InvocationHandler, 
         else if ( m.getName().equals("setUri") )
         {
             URI uri = ( URI ) args[0];
-            this.setUri(uri);
+            this.setWebAddress(uri);
         }
         else if ( m.getName().equals("setUser") )
         {
@@ -114,6 +132,24 @@ public class XmlRpcProxyFactory implements java.lang.reflect.InvocationHandler, 
         {
             this.clearAttachments();
         }
+        else if ( m.getName().equals("getProxyAddress") )
+        {            
+            this.getProxyAddress();
+        }
+        else if ( m.getName().equals("setProxyAddress") )
+        {
+            URI pProxyAddress = ( URI ) args[0];
+            this.setProxyAddress(pProxyAddress);
+        }
+        else if ( m.getName().equals("getProxyPort") )
+        {
+            return this.getProxyPort();
+        }
+        else if ( m.getName().equals("setProxyPort") )
+        {
+            Integer pProxyPort = ( Integer ) args[0];
+            this.setProxyPort(proxyPort);
+        }
         else
         {
             String methodName = m.getClass().getName() + "." + m.getName();
@@ -130,6 +166,8 @@ public class XmlRpcProxyFactory implements java.lang.reflect.InvocationHandler, 
             XmlRpcClientConfig config = new XmlRpcClientConfig(this.Uri);
             config.setPassword(password);
             config.setUserName(user);
+            config.setProxyServer(this.getProxyAddress());
+            config.setProxyPort(this.getProxyPort());
             XmlRpcClient<Object> xmlclient = new XmlRpcClient<Object>(config);
             ObjectToreturn = xmlclient.execute(methodName, args, this.attachments);
         }

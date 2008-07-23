@@ -291,13 +291,13 @@ public class XmlRpcClient<T>
             Proxy proxy;
             if ( config.usesProxyServer() )
             {
-                proxy = new Proxy(Type.HTTP, new InetSocketAddress(config.proxyServer().toString(), config.getProxyPort()));
+                proxy = new Proxy(Type.HTTP, new InetSocketAddress(config.getProxyServer().toString(), config.getProxyPort()));
             }
             else
             {
                 proxy = Proxy.NO_PROXY;
             }
-            HttpURLConnection connection = ( HttpURLConnection ) config.getServerURI().toURL().openConnection(proxy);
+            HttpURLConnection connection = ( HttpURLConnection ) config.getWebAddress().toURL().openConnection(proxy);
             HttpURLConnection.setFollowRedirects(true);
             if ( config.hasUserPassWord() )
             {
