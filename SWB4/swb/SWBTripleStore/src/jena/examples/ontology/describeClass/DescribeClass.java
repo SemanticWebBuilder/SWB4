@@ -86,14 +86,14 @@ public class DescribeClass {
         out.println();
 
         // sub-classes
-        for (Iterator i = cls.listSuperClasses( true ); i.hasNext(); ) {
+        for (Iterator i = cls.listSuperClasses( false ); i.hasNext(); ) {
             out.print( "  is a sub-class of " );
             renderClassDescription( out, (OntClass) i.next() );
             out.println();
         }
 
         // super-classes
-        for (Iterator i = cls.listSubClasses( true ); i.hasNext(); ) {
+        for (Iterator i = cls.listSubClasses( false ); i.hasNext(); ) {
             out.print( "  is a super-class of " );
             renderClassDescription( out, (OntClass) i.next() );
             out.println();
