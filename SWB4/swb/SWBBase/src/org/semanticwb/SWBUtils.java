@@ -34,6 +34,7 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
+import java.util.jar.JarFile;
 
 /**
  *
@@ -331,6 +332,7 @@ public class SWBUtils {
                 }
             } while (true);
         }
+        
     }
 
     /**
@@ -645,7 +647,7 @@ public class SWBUtils {
             return bOk;
         }
 
-        public boolean xmlVerifierByURL(String schema, String xml) {
+        public boolean xmlVerifier(String schema, String xml) {
             return xmlVerifierByURL(null, schema, xml);
         }
 
