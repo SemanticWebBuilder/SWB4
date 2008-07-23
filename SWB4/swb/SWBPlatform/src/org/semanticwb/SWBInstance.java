@@ -2,6 +2,7 @@
 package org.semanticwb;
 
 import java.io.InputStream;
+import java.lang.reflect.Method;
 import java.security.Timestamp;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -106,10 +107,14 @@ public class SWBInstance
             }                
 
             
-            monitor=new SWBMonitor();
-            monitor.init(this);
+            
             semanticMgr=new SemanticMgr();
             semanticMgr.init(this);
+            
+            createInstance("org.semanticwb.model.SWBContext");
+            
+            monitor=new SWBMonitor();
+            monitor.init(this);
             
 //            Timestamp initime = null;
 //            util.log(com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "log_WBLoader_Init_InstanceConfiguration") + util.getEnv("wb/clientServer"), true);
@@ -239,6 +244,21 @@ public class SWBInstance
             instance.servletContext=servletContext;
         }
         return instance;
+    }
+    
+    
+    private void createInstance(String clsname)
+    {
+        try
+        {
+            Class cls = Class.forName(clsname);
+            Method createInstance = cls.getMethod("createInstance", (Class[])null);
+            createInstance.invoke(null, (Object[])null);
+        }catch(Exception e)
+        {
+            log.error("Error initializing "+clsname+"..");
+        }
+        
     }
 
     /*
