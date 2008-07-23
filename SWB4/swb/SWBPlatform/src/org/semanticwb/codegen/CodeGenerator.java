@@ -374,24 +374,24 @@ public class CodeGenerator
                             methods.add(objectName);
                             javaClassContent.append("    public SemanticIterator<" + m_Package + "." + objectName + "> list" + objectName + "()" + ENTER);
                             javaClassContent.append(OPEN_BLOCK + ENTER);
-                            javaClassContent.append("        StmtIterator stit=getRDFResource().listProperties(Vocabulary." + tpp.getName() + ".getRDFProperty());" + ENTER);
+                            javaClassContent.append("        StmtIterator stit=getRDFResource().listProperties(SWBContext.getVocabulary()." + tpp.getName() + ".getRDFProperty());" + ENTER);
                             javaClassContent.append("        return new SemanticIterator<" + m_Package + "." + objectName + ">(" + m_Package + "." + objectName + ".class, stit);" + ENTER);
                             javaClassContent.append(CLOSE_BLOCK + ENTER);
 
 
                             javaClassContent.append("    public void add" + objectName + "(" + m_Package + "." + objectName + " " + objectName.toLowerCase() + ")" + ENTER);
                             javaClassContent.append(OPEN_BLOCK + ENTER);
-                            javaClassContent.append("        addObjectProperty(Vocabulary." + tpp.getName() + ", " + objectName.toLowerCase() + ");" + ENTER);
+                            javaClassContent.append("        addObjectProperty(SWBContext.getVocabulary()." + tpp.getName() + ", " + objectName.toLowerCase() + ");" + ENTER);
                             javaClassContent.append(CLOSE_BLOCK + ENTER);
 
                             javaClassContent.append("    public void removeAll" + objectName + "()" + ENTER);
                             javaClassContent.append(OPEN_BLOCK + ENTER);
-                            javaClassContent.append("        getRDFResource().removeAll(Vocabulary." + tpp.getName() + ".getRDFProperty());" + ENTER);
+                            javaClassContent.append("        getRDFResource().removeAll(SWBContext.getVocabulary()." + tpp.getName() + ".getRDFProperty());" + ENTER);
                             javaClassContent.append(CLOSE_BLOCK + ENTER);
 
                             javaClassContent.append(PUBLIC + objectName + " get" + objectName + "()" + ENTER);
                             javaClassContent.append(OPEN_BLOCK + ENTER);
-                            javaClassContent.append("         StmtIterator stit=getRDFResource().listProperties(Vocabulary." + tpp.getName() + ".getRDFProperty());" + ENTER);
+                            javaClassContent.append("         StmtIterator stit=getRDFResource().listProperties(SWBContext.getVocabulary()." + tpp.getName() + ".getRDFProperty());" + ENTER);
                             javaClassContent.append("         SemanticIterator<" + m_Package + "." + objectName + "> it=new SemanticIterator<" + m_Package + "." + objectName + ">(" + objectName + ".class, stit);" + ENTER);
                             javaClassContent.append("         return it.next();" + ENTER);
                             javaClassContent.append(CLOSE_BLOCK + ENTER);
@@ -476,12 +476,12 @@ public class CodeGenerator
 
                     javaClassContent.append(PUBLIC + type + " " + prefix + methodName + "()" + ENTER);
                     javaClassContent.append(OPEN_BLOCK + ENTER);
-                    javaClassContent.append("        return " + getMethod + "(Vocabulary." + tpp.getName() + ");" + ENTER);
+                    javaClassContent.append("        return " + getMethod + "(SWBContext.getVocabulary()." + tpp.getName() + ");" + ENTER);
                     javaClassContent.append(CLOSE_BLOCK + ENTER);
 
                     javaClassContent.append(PUBLIC + "void set" + methodName + "(" + type + " " + tpp.getName() + ")" + ENTER);
                     javaClassContent.append(OPEN_BLOCK + ENTER);
-                    javaClassContent.append("        " + setMethod + "(Vocabulary." + tpp.getName() + ", " + tpp.getName() + ");" + ENTER);
+                    javaClassContent.append("        " + setMethod + "(SWBContext.getVocabulary()." + tpp.getName() + ", " + tpp.getName() + ");" + ENTER);
                     //javaClassContent.append("        return this;" + ENTER);
                     javaClassContent.append(CLOSE_BLOCK + ENTER);
 
@@ -503,7 +503,7 @@ public class CodeGenerator
         javaClassContent.append("import org.semanticwb.platform.SemanticClass;" + ENTER);
         javaClassContent.append("import org.semanticwb.platform.SemanticProperty;" + ENTER);
         javaClassContent.append("import static org.semanticwb.platform.SemanticVocabulary.URI;\r\n" + ENTER);
-        javaClassContent.append("public class Vocabulary" + ENTER);
+        javaClassContent.append("public class SWBVocabulary" + ENTER);
         javaClassContent.append("{" + ENTER);
         javaClassContent.append("\r\n\r\n    //Classes" + ENTER);
         SemanticMgr mgr = SWBInstance.getSemanticMgr();
@@ -511,7 +511,7 @@ public class CodeGenerator
         while (tpcit.hasNext())
         {
             SemanticClass tpc = tpcit.next();
-            javaClassContent.append("    public static final SemanticClass " + tpc.getName() + ";" + ENTER);
+            javaClassContent.append("    public final SemanticClass " + tpc.getName() + ";" + ENTER);
         }
 
 
@@ -534,7 +534,7 @@ public class CodeGenerator
         }
         javaClassContent.append("\r\n" + ENTER);
         //javaClassContent.append("    @Override"+ENTER);
-        javaClassContent.append("    static" + ENTER);
+        javaClassContent.append("    public SWBVocabulary()" + ENTER);
         javaClassContent.append("    {\r\n" + ENTER);
         javaClassContent.append("         SemanticVocabulary vocabulary=SWBInstance.getSemanticMgr().getVocabulary();" + ENTER);
         javaClassContent.append("        // Classes" + ENTER);
@@ -565,7 +565,7 @@ public class CodeGenerator
         javaClassContent.append(CLOSE_BLOCK + ENTER);
         javaClassContent.append("}" + ENTER);
         File dir = createPackage();
-        File fileClass = new File(dir.getPath() + File.separatorChar + "Vocabulary.java");
+        File fileClass = new File(dir.getPath() + File.separatorChar + "SWBVocabulary.java");
         saveFile(fileClass, javaClassContent.toString());
     }
 }
