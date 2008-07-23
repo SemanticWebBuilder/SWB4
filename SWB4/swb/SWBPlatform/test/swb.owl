@@ -175,12 +175,6 @@
     </rdfs:subClassOf>
     <rdfs:subClassOf rdf:resource="#Roleable"/>
   </owl:Class>
-  <owl:Class rdf:ID="RDFModel">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Valueable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#SWBClass"/>
-  </owl:Class>
   <owl:Class rdf:ID="ResourceRef">
     <rdfs:subClassOf>
       <owl:Class rdf:ID="Priorityable"/>
@@ -358,13 +352,13 @@
     <rdfs:subClassOf rdf:resource="#Templateable"/>
     <rdfs:subClassOf rdf:resource="#Reference"/>
   </owl:Class>
+  <owl:Class rdf:ID="System">
+    <rdfs:subClassOf rdf:resource="#Resource"/>
+  </owl:Class>
   <owl:Class rdf:about="#Resourceable">
     <rdfs:subClassOf>
       <owl:Class rdf:about="#SWBInterface"/>
     </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="System">
-    <rdfs:subClassOf rdf:resource="#Resource"/>
   </owl:Class>
   <owl:Class rdf:about="#Calendarable">
     <rdfs:subClassOf>
@@ -389,6 +383,10 @@
   </owl:Class>
   <owl:Class rdf:about="#SWBInterface">
     <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </owl:Class>
+  <owl:Class rdf:ID="SWBModel">
+    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="#Valueable"/>
   </owl:Class>
   <owl:ObjectProperty rdf:ID="hasRole">
     <rdfs:domain rdf:resource="#Roleable"/>
@@ -520,32 +518,11 @@
     <rdfs:range rdf:resource="#WebSite"/>
     <rdfs:domain rdf:resource="#WebSiteable"/>
   </owl:TransitiveProperty>
-  <swb:TemplateRef rdf:ID="TemplateRef_1">
-    <swb:hasTemplate>
-      <swb:Template rdf:ID="Template_1"/>
-    </swb:hasTemplate>
-  </swb:TemplateRef>
   <owl:Restriction>
     <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger"
     >1</owl:cardinality>
     <owl:onProperty rdf:resource="#userModified"/>
   </owl:Restriction>
-  <swb:WebPage rdf:ID="WebPage_1">
-    <swb:created rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime"
-    >2008-07-17T20:11:41.906</swb:created>
-    <swb:deleted rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:deleted>
-    <swb:hasTemplateRef rdf:resource="#TemplateRef_1"/>
-  </swb:WebPage>
-  <swb:ObjectGroup rdf:ID="ObjectGroup_1"/>
-  <swb:HomePage rdf:ID="HomePage_1">
-    <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Home</swb:title>
-  </swb:HomePage>
-  <swb:RDFModel rdf:ID="RDFModel_1">
-    <swb:value rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >http://www.sep.gob.mx</swb:value>
-  </swb:RDFModel>
 </rdf:RDF>
 
 <!-- Created with TopBraid Composer -->

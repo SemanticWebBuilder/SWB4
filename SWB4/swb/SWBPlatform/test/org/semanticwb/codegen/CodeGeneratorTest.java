@@ -55,7 +55,7 @@ public class CodeGeneratorTest
         {
             String path=getClass().getResource("/").getPath().replaceAll("%20", " ");
             File dir = new File(path+"../../src");
-            String sPakage = "org.semanticwb.autogen";
+            String sPakage = "org.semanticwb.model";
             CodeGenerator codeGeneration = new CodeGenerator(dir, sPakage);
             codeGeneration.generateCode();
         }
