@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.ServletInputStream;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.ServletResponse;
@@ -454,8 +455,16 @@ public abstract class XMLRPCServlet extends HttpServlet
         }
         return isMultipart;
     }
-    public static void addMappingType(String objectnName,Class clazz)
+    public static void addMappingType(String objectName,Class clazz)
     {        
-        System.setProperty(PREFIX_PROPERTY_PATH+objectnName,clazz.getName());
+        System.setProperty(PREFIX_PROPERTY_PATH+objectName,clazz.getName());
+    }
+    public static void addMappingType(Map<String,Class> mapType)
+    {        
+        for(String objectName: mapType.keySet())
+        {
+            Class clazz=mapType.get(objectName);
+            addMappingType(objectName,clazz);
+        }
     }
 }
