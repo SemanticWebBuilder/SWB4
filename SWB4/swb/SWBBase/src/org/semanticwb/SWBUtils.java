@@ -595,7 +595,7 @@ public class SWBUtils {
             return bOk;
         }
 
-        public boolean xmlVerifierImpl(String sysid, Object objschema, Object objxml) {
+        private boolean xmlVerifierImpl(String sysid, Object objschema, Object objxml) {
             boolean bOk = false;
             if (objschema == null || objxml == null) {
                 if (objschema == null) {
@@ -605,12 +605,7 @@ public class SWBUtils {
                 }
                 return bOk;
             }
-            
-            
-            
-            
             org.iso_relax.verifier.VerifierFactory factory = new com.sun.msv.verifier.jarv.TheFactoryImpl();            
-            
             org.iso_relax.verifier.Schema schema = null;
             try {
                 if (objschema instanceof java.io.File) {
