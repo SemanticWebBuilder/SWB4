@@ -53,15 +53,19 @@ public class XmlRpcClientTest
     {
     }
 
+    
+    
     @Test
-    public void executeTestWithProxyAndAttachments()
+    public void executeTestWithProxy()
     {
         try
         {    
-            IDemo obj = XmlRpcProxyFactory.newInstance(IDemo.class);
+            IDemo obj = XmlRpcProxyFactory.newInstance(IDemo.class,new URI("http://localhost:8084/TestRPC/GatewayOffice"));
             obj.setWebAddress(new URI("http://localhost:8084/TestRPC/GatewayOffice"));            
             obj.setUser("v");
-            obj.setPassword("h");            
+            obj.setPassword("h");
+            obj.setProxyAddress(new URI("http://localhost:8084/TestRPC/GatewayOffice"));
+            obj.setProxyPort(8080);
             obj.addAttachment(new Attachment(new File("C:\\temp\\demo.ppt"), "content"));
             String res=obj.add(5, 5.5, "a", new Date(), false);            
             Assert.assertNotNull(res);
@@ -77,11 +81,12 @@ public class XmlRpcClientTest
 
     }
     @Test    
-    public void executeTestWithProxy()
+    @Ignore
+    public void executeTest()
     {
         try
         {                        
-            IDemo obj = XmlRpcProxyFactory.newInstance(IDemo.class);
+            IDemo obj = XmlRpcProxyFactory.newInstance(IDemo.class,new URI("http://localhost:8084/TestRPC/GatewayOffice"));
             obj.setWebAddress(new URI("http://localhost:8084/TestRPC/GatewayOffice"));                        
             obj.setUser("v");
             obj.setPassword("h");
@@ -98,11 +103,12 @@ public class XmlRpcClientTest
     
 
     @Test(expected = HttpException.class)    
+    @Ignore
     public void executeTestWithOutPassword() throws HttpException
     {
         try
         {
-            IDemo obj = XmlRpcProxyFactory.newInstance(IDemo.class);
+            IDemo obj = XmlRpcProxyFactory.newInstance(IDemo.class,new URI("http://localhost:8084/TestRPC/GatewayOffice"));
             obj.setWebAddress(new URI("http://localhost:8084/TestRPC/GatewayOffice"));
             String res=obj.add(4, -220.4, "Demo", new Date(), true);            
             Assert.assertNotNull(res);
@@ -117,12 +123,13 @@ public class XmlRpcClientTest
         }  
     }
 
-    @Test    
+    @Test
+    @Ignore
     public void executeTestWithAttachments()
     {
         try
         {
-            IDemo obj = XmlRpcProxyFactory.newInstance(IDemo.class);
+            IDemo obj = XmlRpcProxyFactory.newInstance(IDemo.class,new URI("http://localhost:8084/TestRPC/GatewayOffice"));
             obj.setWebAddress(new URI("http://localhost:8084/TestRPC/GatewayOffice"));
             obj.setUser("v");
             obj.setPassword("h");
@@ -137,12 +144,12 @@ public class XmlRpcClientTest
     }
 
     @Test(expected = HttpException.class)
-    
+    @Ignore
     public void executeTestWithAttachmentsWithNoCorrectPath() throws HttpException
     {
         try
         {
-            IDemo obj = XmlRpcProxyFactory.newInstance(IDemo.class);
+            IDemo obj = XmlRpcProxyFactory.newInstance(IDemo.class,new URI("http://localhost:8084/TestRPC/GatewayOffice"));
             obj.setWebAddress(new URI("http://localhost:8084/TestRPC/GatewayOffice2"));
             obj.setUser("v");
             obj.setPassword("h");
@@ -162,11 +169,12 @@ public class XmlRpcClientTest
     }
 
     @Test(expected = HttpException.class)    
+    @Ignore
     public void executeTestWithAttachmentsAndNotMethod() throws HttpException
     {
         try
         {
-            IDemo obj = XmlRpcProxyFactory.newInstance(IDemo.class);
+            IDemo obj = XmlRpcProxyFactory.newInstance(IDemo.class,new URI("http://localhost:8084/TestRPC/GatewayOffice"));
             obj.setWebAddress(new URI("http://localhost:8084/TestRPC/GatewayOffice2"));
             obj.setUser("v");
             obj.setPassword("h");
