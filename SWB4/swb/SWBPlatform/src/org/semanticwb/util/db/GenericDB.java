@@ -4,6 +4,7 @@
  */
 package org.semanticwb.util.db;
 
+import java.io.FileInputStream;
 import org.semanticwb.SWBUtils;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -134,7 +135,7 @@ public class GenericDB {
         if (null != dom) {
             try 
             {
-                retSQL = getSQLScript(XML, dbname);       
+                retSQL = getSchema(XML, dbname);       
             } 
             catch (Exception e) {
                 log.error("Error al generar el SCRIPT SQL. GenericDB.getSQLScript()",e);
@@ -227,9 +228,27 @@ public class GenericDB {
         return (String) hmDialect.get(DBName.toUpperCase());
     }
     
-    public String getSchema(String strXML, String DBName) {
+    private boolean validateXML(String xml)
+    {
+        boolean bOk=false;
+        String schema=null;
+        try { 
+            //schema = com.infotec.appfw.util.AFUtils.getInstance().readInputStream(WBUtils.getInstance().getAdminFileStream("/wbadmin/schema/GenericDB.xsd")); 
+            schema = SWBUtils.IO.readInputStream(new FileInputStream("/xsds/GenericDB.xsd")); 
+        } 
+        catch(Exception e) { return bOk; }
+        //if (schema != null && xml !=null) bOk=com.infotec.wb.admin.admresources.util.WBAdmResourceUtils.getInstance().xmlVerifier(schema, xml);
+        if (schema != null && xml !=null) bOk=SWBUtils.XML.xmlVerifier(schema, xml);
+        return bOk;
+    }
+    
+    public String getSchema(String strXML, String DBName) throws Exception {
         StringBuffer strBuff = new StringBuffer();
         String LFCR = " ";
+        
+        if(!validateXML(strXML))
+          throw new Exception("Error en la definición del XML de la base de datos. GenericDB.getSchema()");
+        
         if (DBName == null) {
             return null;
         }
