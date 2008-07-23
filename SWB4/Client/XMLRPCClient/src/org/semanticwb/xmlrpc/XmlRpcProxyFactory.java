@@ -95,11 +95,11 @@ public class XmlRpcProxyFactory implements java.lang.reflect.InvocationHandler, 
             throws Throwable
     {
         Object ObjectToreturn = null;
-        if ( m.getName().equals("getUri") )
+        if ( m.getName().equals("getWebAddress") )
         {
             ObjectToreturn = this.Uri;
         }
-        else if ( m.getName().equals("setUri") )
+        else if ( m.getName().equals("setWebAddress") )
         {
             URI uri = ( URI ) args[0];
             this.setWebAddress(uri);
@@ -152,7 +152,7 @@ public class XmlRpcProxyFactory implements java.lang.reflect.InvocationHandler, 
         }
         else
         {
-            String methodName = m.getClass().getName() + "." + m.getName();
+            String methodName = m.getDeclaringClass().getName() + "." + m.getName();
             AnnotatedClass annotatedClass = AnnotationManager.getAnnotatedClass(m.getDeclaringClass());
             if ( annotatedClass != null )
             {
