@@ -38,8 +38,8 @@ import static org.semanticwb.xmlrpc.Base64.decode;
  */
 public abstract class XMLRPCServlet extends HttpServlet
 {
-    private static final
-    String PREFIX_PROPERTY_PATH = "org.semanticwb.xmlrpc.";
+    private static final String PREFIX_PROPERTY_PATH = "org.semanticwb.xmlrpc.";
+    private static final String XMLRPC_DOCUMENT = "xmlrpc";
 
     private static String realm = "Secure Area";
     private static String prefixBasic = "Basic ";
@@ -83,14 +83,14 @@ public abstract class XMLRPCServlet extends HttpServlet
                 upload.getFiles(request);
                 for ( String name : upload.getFileNames() )
                 {
-                    if ( !name.equals("xmlrpc") )
+                    if ( !name.equals(XMLRPC_DOCUMENT) )
                     {
                         byte[] content = upload.getFileData(name);
                         Part part = new Part(content, name, upload.getFileName(name));
                         parts.add(part);
                     }
                 }
-                xmlrpcDocument = getDocument(upload.getFileData("xmlrpc"));
+                xmlrpcDocument = getDocument(upload.getFileData(XMLRPC_DOCUMENT));
             }
             else
             {
