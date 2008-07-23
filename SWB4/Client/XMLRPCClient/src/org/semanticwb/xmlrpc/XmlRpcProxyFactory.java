@@ -152,7 +152,7 @@ public class XmlRpcProxyFactory implements java.lang.reflect.InvocationHandler, 
         }
         else
         {
-            String methodName = m.getDeclaringClass().getName() + "." + m.getName();
+            String methodName = m.getDeclaringClass().getSimpleName() + "." + m.getName();
             AnnotatedClass annotatedClass = AnnotationManager.getAnnotatedClass(m.getDeclaringClass());
             if ( annotatedClass != null )
             {
