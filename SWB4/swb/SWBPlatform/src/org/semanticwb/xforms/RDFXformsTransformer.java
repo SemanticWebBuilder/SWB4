@@ -5,8 +5,8 @@
 
 package org.semanticwb.xforms;
 
-import org.semanticwb.model.*;
-import java.util.Iterator;
+import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.platform.SemanticClass;
 
 /**
  *
@@ -14,7 +14,7 @@ import java.util.Iterator;
  */
 public class RDFXformsTransformer {
 
-    public void setInstance(TopicClass tpc, Topic tpi)
+    public void setInstance(SemanticClass tpc, SemanticObject tpi)
     {
         
     }

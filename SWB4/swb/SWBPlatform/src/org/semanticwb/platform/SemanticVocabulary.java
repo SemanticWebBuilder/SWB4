@@ -12,7 +12,7 @@ import java.util.Iterator;
  *
  * @author Jei
  */
-public class SWBVocabulary 
+public class SemanticVocabulary 
 {
     //RDF
     public static final String RDF_URI="http://www.w3.org/1999/02/22-rdf-syntax-ns#";
@@ -42,17 +42,17 @@ public class SWBVocabulary
     //General
     public static final String URI="http://www.semanticwebbuilder.org/swb4/ontology#";
 
-    public TopicClass SWBClass;
-    public TopicClass SWBInterface;
+    public SemanticClass SWBClass;
+    public SemanticClass SWBInterface;
     public static final String SWB_CLASS_SWBModel=URI+"SWBModel";
     public static final String SWB_PROP_VALUE=URI+"value";
 
     
-    public HashMap<String, TopicClass> classes;
-    public HashMap<String, TopicProperty> properties;
+    public HashMap<String, SemanticClass> classes;
+    public HashMap<String, SemanticProperty> properties;
     
     
-    public SWBVocabulary()
+    public SemanticVocabulary()
     {
         classes=new HashMap();
         properties=new HashMap();
@@ -60,26 +60,26 @@ public class SWBVocabulary
     
     public void init()
     {
-        SWBClass=getTopicClass(URI+"SWBClass");
-        SWBInterface=getTopicClass(URI+"SWBInterface");
+        SWBClass=getSemanticClass(URI+"SWBClass");
+        SWBInterface=getSemanticClass(URI+"SWBInterface");
     }
     
-    void addTopicClass(TopicClass tpc)
+    void addSemanticClass(SemanticClass tpc)
     {
         classes.put(tpc.getURI(), tpc);
     }
     
-    public Iterator<TopicClass> listTopicClasses()
+    public Iterator<SemanticClass> listSemanticClasses()
     {
         return classes.values().iterator();
     }
     
-    public TopicClass getTopicClass(String uri)
+    public SemanticClass getSemanticClass(String uri)
     {
         return classes.get(uri);
     }
     
-    void addTopicProperty(TopicProperty tpp)
+    void addSemanticProperty(SemanticProperty tpp)
     {
         if(!properties.containsKey(tpp.getURI()))
         {
@@ -87,12 +87,12 @@ public class SWBVocabulary
         }
     }
     
-    public Iterator<TopicProperty> listTopicProperties()
+    public Iterator<SemanticProperty> listSemanticProperties()
     {
         return properties.values().iterator();
     }
     
-    public TopicProperty getTopicProperty(String uri)
+    public SemanticProperty getSemanticProperty(String uri)
     {
         return properties.get(uri);
     }    

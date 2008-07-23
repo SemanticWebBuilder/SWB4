@@ -5,18 +5,18 @@
 
 package org.semanticwb.platform;
 
-import com.hp.hpl.jena.ontology.OntClass;
+import com.hp.hpl.jena.rdf.model.Property;
 import java.util.Iterator;
 
 /**
  *
  * @author Jei
  */
-public class TopicClassIterator implements Iterator
+public class SemanticPropertyIterator implements Iterator
 {
     Iterator it;
     
-    public TopicClassIterator(Iterator it)
+    public SemanticPropertyIterator(Iterator it)
     {
         this.it=it;
     }
@@ -28,12 +28,12 @@ public class TopicClassIterator implements Iterator
 
     public Object next()
     {
-        return new TopicClass((OntClass)it.next());
+        return new SemanticProperty((Property)it.next());
     }
     
-    public TopicClass nextTopicClass() 
+    public SemanticProperty nextSemanticProperty() 
     {
-        return new TopicClass((OntClass)it.next());
+        return new SemanticProperty((Property)it.next());
     }
 
     public void remove()

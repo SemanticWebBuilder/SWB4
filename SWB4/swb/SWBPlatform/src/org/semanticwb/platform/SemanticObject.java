@@ -15,18 +15,18 @@ import org.semanticwb.SWBContext;
  *
  * @author Javier Solis Gonzalez
  */
-public class Topic
+public class SemanticObject
 {
-    private static Logger log = SWBUtils.getLogger(Topic.class);
+    private static Logger log = SWBUtils.getLogger(SemanticObject.class);
     
     Resource m_res=null;
     
-    public Topic(String uri, Model model)
+    public SemanticObject(String uri, Model model)
     {
         m_res=model.createResource(uri);
     }
     
-    public Topic(Resource res)
+    public SemanticObject(Resource res)
     {
         this.m_res=res;
     }
@@ -41,21 +41,21 @@ public class Topic
         return m_res.getLocalName();
     }    
     
-    public TopicClass getTopicClass()
+    public SemanticClass getSemanticClass()
     {
-        Statement stm=m_res.getProperty(m_res.getModel().getProperty(SWBVocabulary.RDF_TYPE));
+        Statement stm=m_res.getProperty(m_res.getModel().getProperty(SemanticVocabulary.RDF_TYPE));
         if(stm!=null)
         {
             try
             {
-                return SWBContext.getSemanticMgr().getVocabulary().getTopicClass(stm.getResource().getURI());
+                return SWBContext.getSemanticMgr().getVocabulary().getSemanticClass(stm.getResource().getURI());
             }catch(Exception e){log.error(e);}
         }
         return null;
     }
     
     /**
-     * Regresa el Modelo de del Topico
+     * Regresa el Modelo de del SemanticObject
      * @return
      */
     public Model getModel()
@@ -67,9 +67,9 @@ public class Topic
      * Asigna la propiedad con el valor especificado
      * @param prop Propiedad a modificar
      * @param value Valor a asignar
-     * @return Topic para cascada
+     * @return SemanticObject para cascada
      */
-    public Topic setProperty(TopicProperty prop, String value)
+    public SemanticObject setProperty(SemanticProperty prop, String value)
     {
         Property iprop=prop.getRDFProperty();
         if(value==null)
@@ -89,7 +89,7 @@ public class Topic
         return this;
     }
     
-    public Topic removeProperty(TopicProperty prop)
+    public SemanticObject removeProperty(SemanticProperty prop)
     {
         Property iprop=prop.getRDFProperty();
         m_res.removeAll(iprop);
@@ -101,12 +101,12 @@ public class Topic
      * @param prop
      * @return valor de la propiedad, si no existe la propiedad regresa null
      */
-    public String getProperty(TopicProperty prop)
+    public String getProperty(SemanticProperty prop)
     {
         return getProperty(prop,null);
     }
     
-    public String getProperty(TopicProperty prop, String defValue)
+    public String getProperty(SemanticProperty prop, String defValue)
     {
         String ret=defValue;
         Statement stm=m_res.getProperty(prop.getRDFProperty());
@@ -117,12 +117,12 @@ public class Topic
         return ret;
     }
     
-    public int getIntProperty(TopicProperty prop)
+    public int getIntProperty(SemanticProperty prop)
     {
         return getIntProperty(prop,0);
     }
     
-    public int getIntProperty(TopicProperty prop, int defValue)
+    public int getIntProperty(SemanticProperty prop, int defValue)
     {
         int ret=defValue;
         Statement stm=m_res.getProperty(prop.getRDFProperty());
@@ -133,12 +133,12 @@ public class Topic
         return ret;
     }   
     
-    public long getLongProperty(TopicProperty prop)
+    public long getLongProperty(SemanticProperty prop)
     {    
         return getLongProperty(prop,0L);
     }
     
-    public long getLongProperty(TopicProperty prop, long defValue)
+    public long getLongProperty(SemanticProperty prop, long defValue)
     {
         long ret=defValue;
         Statement stm=m_res.getProperty(prop.getRDFProperty());
@@ -153,9 +153,9 @@ public class Topic
      * Asigna la propiedad con el valor especificado
      * @param prop Propiedad a modificar
      * @param value Valor a asignar
-     * @return Topic para cascada
+     * @return SemanticObject para cascada
      */
-    public Topic setLongProperty(TopicProperty prop, long value)
+    public SemanticObject setLongProperty(SemanticProperty prop, long value)
     {
         Property iprop=prop.getRDFProperty();
         Statement stm=m_res.getProperty(iprop);
@@ -169,12 +169,12 @@ public class Topic
         return this;
     }     
 
-    public float getFloatProperty(TopicProperty prop)
+    public float getFloatProperty(SemanticProperty prop)
     {
         return getFloatProperty(prop, 0F);
     }
     
-    public float getFloatProperty(TopicProperty prop, float defValue)
+    public float getFloatProperty(SemanticProperty prop, float defValue)
     {
         float ret=defValue;
         Statement stm=m_res.getProperty(prop.getRDFProperty());
@@ -189,9 +189,9 @@ public class Topic
      * Asigna la propiedad con el valor especificado
      * @param prop Propiedad a modificar
      * @param value Valor a asignar
-     * @return Topic para cascada
+     * @return SemanticObject para cascada
      */
-    public Topic setFloatProperty(TopicProperty prop, float value)
+    public SemanticObject setFloatProperty(SemanticProperty prop, float value)
     {
         Property iprop=prop.getRDFProperty();
         Statement stm=m_res.getProperty(iprop);
@@ -205,12 +205,12 @@ public class Topic
         return this;
     }     
     
-    public double getDoubleProperty(TopicProperty prop)
+    public double getDoubleProperty(SemanticProperty prop)
     {
         return getDoubleProperty(prop, 0D);
     }   
     
-    public double getDoubleProperty(TopicProperty prop, double defValue)
+    public double getDoubleProperty(SemanticProperty prop, double defValue)
     {
         double ret=defValue;
         Statement stm=m_res.getProperty(prop.getRDFProperty());
@@ -225,9 +225,9 @@ public class Topic
      * Asigna la propiedad con el valor especificado
      * @param prop Propiedad a modificar
      * @param value Valor a asignar
-     * @return Topic para cascada
+     * @return SemanticObject para cascada
      */
-    public Topic setDoubleProperty(TopicProperty prop, double value)
+    public SemanticObject setDoubleProperty(SemanticProperty prop, double value)
     {
         Property iprop=prop.getRDFProperty();
         Statement stm=m_res.getProperty(iprop);
@@ -241,12 +241,12 @@ public class Topic
         return this;
     }       
     
-    public boolean getBooleanProperty(TopicProperty prop)
+    public boolean getBooleanProperty(SemanticProperty prop)
     {
         return getBooleanProperty(prop, false);
     }   
     
-    public boolean getBooleanProperty(TopicProperty prop, boolean defValue)
+    public boolean getBooleanProperty(SemanticProperty prop, boolean defValue)
     {
         boolean ret=defValue;
         Statement stm=m_res.getProperty(prop.getRDFProperty());
@@ -261,9 +261,9 @@ public class Topic
      * Asigna la propiedad con el valor especificado
      * @param prop Propiedad a modificar
      * @param value Valor a asignar
-     * @return Topic para cascada
+     * @return SemanticObject para cascada
      */
-    public Topic setBooleanProperty(TopicProperty prop, boolean value)
+    public SemanticObject setBooleanProperty(SemanticProperty prop, boolean value)
     {
         Property iprop=prop.getRDFProperty();
         Statement stm=m_res.getProperty(iprop);
@@ -277,12 +277,12 @@ public class Topic
         return this;
     }     
     
-    public Date getDateProperty(TopicProperty prop)
+    public Date getDateProperty(SemanticProperty prop)
     {
         return getDateProperty(prop, null);
     }   
     
-    public Date getDateProperty(TopicProperty prop, Date defValue)
+    public Date getDateProperty(SemanticProperty prop, Date defValue)
     {
         Date ret=defValue;
         Statement stm=m_res.getProperty(prop.getRDFProperty());
@@ -300,9 +300,9 @@ public class Topic
      * Asigna la propiedad con el valor especificado
      * @param prop Propiedad a modificar
      * @param value Valor a asignar
-     * @return Topic para cascada
+     * @return SemanticObject para cascada
      */
-    public Topic setDateProperty(TopicProperty prop, Date value)
+    public SemanticObject setDateProperty(SemanticProperty prop, Date value)
     {
         Property iprop=prop.getRDFProperty();
         Statement stm=m_res.getProperty(iprop);
@@ -316,20 +316,20 @@ public class Topic
         return this;
     }      
     
-    public Topic addObjectProperty(TopicProperty prop, Topic topic)
+    public SemanticObject addObjectProperty(SemanticProperty prop, SemanticObject object)
     {
         Property iprop=prop.getRDFProperty();
-        m_res.addProperty(iprop, topic.getRDFResource());
+        m_res.addProperty(iprop, object.getRDFResource());
         return this;
     }    
     
-    public Topic removeObjectProperty(TopicProperty prop, Topic topic)
+    public SemanticObject removeObjectProperty(SemanticProperty prop, SemanticObject object)
     {
         StmtIterator it=m_res.listProperties(prop.getRDFProperty());
         while(it.hasNext())
         {
             Statement stmt=it.nextStatement();
-            if(topic.getRDFResource().equals(stmt.getResource()))
+            if(object.getRDFResource().equals(stmt.getResource()))
             {
                 stmt.remove();
             }
@@ -337,25 +337,25 @@ public class Topic
         return this;
     }    
     
-    public Iterator<Topic> listObjectProperties(TopicProperty prop)
+    public Iterator<SemanticObject> listObjectProperties(SemanticProperty prop)
     {
-        return new TopicIterator(m_res.listProperties(prop.getRDFProperty()));
+        return new SemanticObjectIterator(m_res.listProperties(prop.getRDFProperty()));
     }
     
-    public Topic getObjectProperty(TopicProperty prop)
+    public SemanticObject getObjectProperty(SemanticProperty prop)
     {
         return getObjectProperty(prop,null);
     }
     
-    public Topic getObjectProperty(TopicProperty prop, Topic defValue)
+    public SemanticObject getObjectProperty(SemanticProperty prop, SemanticObject defValue)
     {
-        Topic ret=defValue;
+        SemanticObject ret=defValue;
         Statement stm=m_res.getProperty(prop.getRDFProperty());
         if(stm!=null)
         {
             try
             {
-                ret=new Topic(stm.getResource());
+                ret=new SemanticObject(stm.getResource());
             }catch(Exception e){log.error(e);}
         }
         return ret;
@@ -385,10 +385,10 @@ public class Topic
         return hashCode()==obj.hashCode();
     }
     
-    public boolean instanceOf(TopicClass cls)
+    public boolean instanceOf(SemanticClass cls)
     {
         boolean ret=false;
-        TopicClass cl=getTopicClass();
+        SemanticClass cl=getSemanticClass();
         if(cl!=null && (cl.equals(cls) || cl.isSubClass(cls)))
         {
             ret=true;

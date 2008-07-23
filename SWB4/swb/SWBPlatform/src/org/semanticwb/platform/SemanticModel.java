@@ -12,12 +12,12 @@ import com.hp.hpl.jena.rdf.model.Resource;
  *
  * @author Jei
  */
-public class TopicModel 
+public class SemanticModel 
 {
     private Model m_model;
     private String m_name;
 
-    public TopicModel(String name, Model model)
+    public SemanticModel(String name, Model model)
     {
         this.m_model=model;
         this.m_name=name;
@@ -33,18 +33,18 @@ public class TopicModel
         return m_name;
     }
     
-    public Topic getTopic(String uri)
+    public SemanticObject getSemanticObject(String uri)
     {
-        Topic ret=null;
+        SemanticObject ret=null;
         Resource res=m_model.getResource(uri);
-        if(res!=null)ret=new Topic(res);
+        if(res!=null)ret=new SemanticObject(res);
         return ret;
     }
     
-    public Topic createTopic(String uri, TopicClass cls)
+    public SemanticObject createSemanticObject(String uri, SemanticClass cls)
     {
         Resource res=m_model.createResource(uri);
-        res.addProperty(m_model.getProperty(SWBVocabulary.RDF_TYPE), cls.getURI());
-        return new Topic(res);
+        res.addProperty(m_model.getProperty(SemanticVocabulary.RDF_TYPE), cls.getURI());
+        return new SemanticObject(res);
     }    
 }
