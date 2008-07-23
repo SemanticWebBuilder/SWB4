@@ -18,18 +18,18 @@ public class XmlRpcProxyFactory implements java.lang.reflect.InvocationHandler, 
 {
 
     private List<Attachment> attachments = new ArrayList<Attachment>();
-    private URI Uri;
+    private URI webAddress;
     private String user,  password;
     private URI proxyAddress;
     private int proxyPort;
     public URI getWebAddress()
     {
-        return Uri;
+        return webAddress;
     }
 
     public void setWebAddress(URI uri)
     {
-        this.Uri = uri;
+        this.webAddress = uri;
     }
 
     public String getUser()
@@ -79,15 +79,19 @@ public class XmlRpcProxyFactory implements java.lang.reflect.InvocationHandler, 
         this.attachments.clear();
     }
 
-    public static <T> T newInstance(java.lang.Class<? extends XmlProxy> clazz)
+    public static <T> T newInstance(java.lang.Class<? extends XmlProxy> clazz,URI webAddress)
     {
+        if(webAddress==null)
+        {
+            throw new IllegalArgumentException("The WebAddress can not be null");
+        }
         Class[] interfaces = {clazz};
-        Object obj = Proxy.newProxyInstance(clazz.getClassLoader(), interfaces, new XmlRpcProxyFactory());
+        Object obj = Proxy.newProxyInstance(clazz.getClassLoader(), interfaces, new XmlRpcProxyFactory(webAddress));
         return ( T ) obj;
     }
-    private XmlRpcProxyFactory()
+    private XmlRpcProxyFactory(URI webAddress)
     {
-
+        this.webAddress=webAddress;
     }
 
     public Object invoke(Object proxy, Method m, Object[] args)
@@ -96,7 +100,7 @@ public class XmlRpcProxyFactory implements java.lang.reflect.InvocationHandler, 
         Object ObjectToreturn = null;
         if ( m.getName().equals("getWebAddress") &&  args.length==0)
         {
-            ObjectToreturn = this.Uri;
+            ObjectToreturn = this.webAddress;
         }
         else if ( m.getName().equals("setWebAddress") &&  args.length==1 && args[0] instanceof URI)
         {
@@ -162,7 +166,7 @@ public class XmlRpcProxyFactory implements java.lang.reflect.InvocationHandler, 
                     methodName = xmlRpcMethod.methodName();
                 }
             }
-            XmlRpcClientConfig config = new XmlRpcClientConfig(this.Uri);
+            XmlRpcClientConfig config = new XmlRpcClientConfig(this.webAddress);
             config.setPassword(password);
             config.setUserName(user);
             config.setProxyServer(this.getProxyAddress());
