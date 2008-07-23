@@ -12,7 +12,7 @@ import java.net.URISyntaxException;
 import java.util.HashSet;
 import java.util.Iterator;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBContext;
+import org.semanticwb.SWBInstance;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticClass;
@@ -121,7 +121,7 @@ public class CodeGenerator
                 throw new CodeGeneratorException("The path " + m_Directory.getPath() + " was not possible to create");
             }
         }
-        SemanticMgr mgr = SWBContext.getSemanticMgr();
+        SemanticMgr mgr = SWBInstance.getSemanticMgr();
         Iterator<SemanticClass> tpcit = mgr.getVocabulary().listSemanticClasses();
         while (tpcit.hasNext())
         {
@@ -498,7 +498,7 @@ public class CodeGenerator
     {
         StringBuilder javaClassContent = new StringBuilder();
         javaClassContent.append("package " + m_Package + ";\r\n" + ENTER);
-        javaClassContent.append("import org.semanticwb.SWBContext;" + ENTER);
+        javaClassContent.append("import org.semanticwb.SWBInstance;" + ENTER);
         javaClassContent.append("import org.semanticwb.platform.SemanticVocabulary;" + ENTER);
         javaClassContent.append("import org.semanticwb.platform.SemanticClass;" + ENTER);
         javaClassContent.append("import org.semanticwb.platform.SemanticProperty;" + ENTER);
@@ -506,7 +506,7 @@ public class CodeGenerator
         javaClassContent.append("public class Vocabulary" + ENTER);
         javaClassContent.append("{" + ENTER);
         javaClassContent.append("\r\n\r\n    //Classes" + ENTER);
-        SemanticMgr mgr = SWBContext.getSemanticMgr();
+        SemanticMgr mgr = SWBInstance.getSemanticMgr();
         Iterator<SemanticClass> tpcit = mgr.getVocabulary().listSemanticClasses();
         while (tpcit.hasNext())
         {
@@ -536,7 +536,7 @@ public class CodeGenerator
         //javaClassContent.append("    @Override"+ENTER);
         javaClassContent.append("    static" + ENTER);
         javaClassContent.append("    {\r\n" + ENTER);
-        javaClassContent.append("         SemanticVocabulary vocabulary=SWBContext.getSemanticMgr().getVocabulary();" + ENTER);
+        javaClassContent.append("         SemanticVocabulary vocabulary=SWBInstance.getSemanticMgr().getVocabulary();" + ENTER);
         javaClassContent.append("        // Classes" + ENTER);
         tpcit = mgr.getVocabulary().listSemanticClasses();
         while (tpcit.hasNext())
