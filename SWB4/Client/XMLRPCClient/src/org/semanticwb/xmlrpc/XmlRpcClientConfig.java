@@ -11,7 +11,7 @@ import java.net.URI;
  *
  * @author victor.lorenzana
  */
-public class XmlRpcClientConfig {
+class XmlRpcClientConfig {
     private URI webAddress;
     private URI proxyServer;
     private int proxyPort;

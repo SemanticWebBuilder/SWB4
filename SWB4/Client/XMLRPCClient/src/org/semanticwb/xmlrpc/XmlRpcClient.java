@@ -32,7 +32,7 @@ import static java.net.HttpURLConnection.*;
  *
  * @author victor.lorenzana
  */
-public class XmlRpcClient<T>
+class XmlRpcClient<T>
 {
 
     private Map<String, List<String>> responseProperties = new HashMap<String, List<String>>();
