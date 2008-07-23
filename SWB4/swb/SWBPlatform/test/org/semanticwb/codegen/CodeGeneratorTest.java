@@ -10,7 +10,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.semanticwb.SWBContext;
+import org.semanticwb.SWBInstance;
 import static org.junit.Assert.*;
 
 /**
@@ -27,7 +27,7 @@ public class CodeGeneratorTest
     @BeforeClass
     public static void setUpClass() throws Exception
     {
-        SWBContext.createInstance(null);
+        SWBInstance.createInstance(null);
     }
 
     @AfterClass
