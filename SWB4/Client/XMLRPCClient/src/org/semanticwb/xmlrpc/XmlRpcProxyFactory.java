@@ -79,13 +79,12 @@ public class XmlRpcProxyFactory implements java.lang.reflect.InvocationHandler, 
         this.attachments.clear();
     }
 
-    public static <T> T newInstance(java.lang.Class<T> clazz)
+    public static <T> T newInstance(java.lang.Class<? extends XmlProxy> clazz)
     {
         Class[] interfaces = {clazz};
         Object obj = Proxy.newProxyInstance(clazz.getClassLoader(), interfaces, new XmlRpcProxyFactory());
         return ( T ) obj;
     }
-
     private XmlRpcProxyFactory()
     {
 
