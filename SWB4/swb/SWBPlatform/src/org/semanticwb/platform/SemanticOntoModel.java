@@ -11,9 +11,9 @@ import com.hp.hpl.jena.ontology.OntModel;
  *
  * @author Jei
  */
-public class TopicOntoModel
+public class SemanticOntoModel
 {
-    public TopicOntoModel(String name, OntModel model)
+    public SemanticOntoModel(String name, OntModel model)
     {
     }
 }

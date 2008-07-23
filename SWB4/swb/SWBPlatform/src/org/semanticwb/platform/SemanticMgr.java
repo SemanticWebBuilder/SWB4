@@ -38,11 +38,11 @@ public class SemanticMgr implements SWBContextObject
     
     private OntModel m_ontology;
     private Model m_system;
-    private HashMap <String,TopicModel>m_models=null;
+    private HashMap <String,SemanticModel>m_models=null;
 
     private IDBConnection conn;
     
-    private SWBVocabulary vocabulary;
+    private SemanticVocabulary vocabulary;
 
     public void init(SWBContext context) 
     {
@@ -71,34 +71,34 @@ public class SemanticMgr implements SWBContextObject
         m_ontology.addSubModel(m_system);
         
         //Create Vocabulary
-        vocabulary=new SWBVocabulary();
-        TopicClassIterator tpcit=new TopicClassIterator(m_ontology.listClasses());
+        vocabulary=new SemanticVocabulary();
+        SemanticClassIterator tpcit=new SemanticClassIterator(m_ontology.listClasses());
         while(tpcit.hasNext())
         {
-            TopicClass tpc=tpcit.nextTopicClass();
-            vocabulary.addTopicClass(tpc);
-            Iterator<TopicProperty> tppit=tpc.listProperties();
+            SemanticClass tpc=tpcit.nextSemanticClass();
+            vocabulary.addSemanticClass(tpc);
+            Iterator<SemanticProperty> tppit=tpc.listProperties();
             while(tppit.hasNext())
             {
-                TopicProperty tpp=tppit.next();
+                SemanticProperty tpp=tppit.next();
                 if(tpc.equals(tpp.getDomainClass()))
                 {
-                    vocabulary.addTopicProperty(tpp);
+                    vocabulary.addSemanticProperty(tpp);
                 }
             }
         }
         vocabulary.init();
         
         //LoadModels
-        TopicClass cls=getVocabulary().getTopicClass(SWBVocabulary.SWB_CLASS_SWBModel);
-        Iterator<Topic> tpit=cls.listInstances();
+        SemanticClass cls=getVocabulary().getSemanticClass(SemanticVocabulary.SWB_CLASS_SWBModel);
+        Iterator<SemanticObject> tpit=cls.listInstances();
         while(tpit.hasNext())
         {
-            Topic tp=tpit.next();
-            String value=tp.getProperty(getVocabulary().getTopicProperty(SWBVocabulary.SWB_PROP_VALUE));
+            SemanticObject tp=tpit.next();
+            String value=tp.getProperty(getVocabulary().getSemanticProperty(SemanticVocabulary.SWB_PROP_VALUE));
             log.debug("Loading Model:"+value);
             Model m=loadDBModel(value);
-            m_models.put(value, new TopicModel(value, m));
+            m_models.put(value, new SemanticModel(value, m));
         }
         
 //        ontoModel.loadImports();
@@ -190,12 +190,12 @@ public class SemanticMgr implements SWBContextObject
         }
     }
     
-    public Set<Entry<String, TopicModel>> getModels()
+    public Set<Entry<String, SemanticModel>> getModels()
     {
         return m_models.entrySet();
     }
     
-    public TopicModel getModel(String name)
+    public SemanticModel getModel(String name)
     {
         return m_models.get(name);
     }
@@ -216,18 +216,18 @@ public class SemanticMgr implements SWBContextObject
         return m_ontology.getOntClass(uri);
     }
     
-//    public TopicClass getTopicClass(String uri)
+//    public SemanticClass getSemanticClass(String uri)
 //    {
 //        OntClass cls=m_ontology.getOntClass(uri);
-//        TopicClass tpcls=null;
+//        SemanticClass tpcls=null;
 //        if(cls!=null)
 //        {
-//            tpcls=new TopicClass(cls);
+//            tpcls=new SemanticClass(cls);
 //        }
 //        return tpcls;
 //    }
     
-    public SWBVocabulary getVocabulary() {
+    public SemanticVocabulary getVocabulary() {
         return vocabulary;
     }
 }

@@ -14,11 +14,11 @@ import org.semanticwb.SWBContext;
  *
  * @author Jei
  */
-public class TopicProperty 
+public class SemanticProperty 
 {
     Property m_prop;
     
-    public TopicProperty(Property prop)
+    public SemanticProperty(Property prop)
     {
         this.m_prop=prop;
     }
@@ -56,35 +56,35 @@ public class TopicProperty
         return hashCode()==obj.hashCode();
     }       
     
-    public TopicClass getDomainClass()
+    public SemanticClass getDomainClass()
     {
-        TopicClass ret=null;
-        Statement stm=m_prop.getProperty(m_prop.getModel().getProperty(SWBVocabulary.RDFS_DOMAIN));
+        SemanticClass ret=null;
+        Statement stm=m_prop.getProperty(m_prop.getModel().getProperty(SemanticVocabulary.RDFS_DOMAIN));
         if(stm!=null)
         {
-            ret=SWBContext.getSemanticMgr().getVocabulary().getTopicClass(stm.getResource().getURI());
+            ret=SWBContext.getSemanticMgr().getVocabulary().getSemanticClass(stm.getResource().getURI());
         }
         return ret;    
     }
     
-    public TopicClass getRangeClass()
+    public SemanticClass getRangeClass()
     {
-        TopicClass ret=null;
-        Statement stm=m_prop.getProperty(m_prop.getModel().getProperty(SWBVocabulary.RDFS_RANGE));
+        SemanticClass ret=null;
+        Statement stm=m_prop.getProperty(m_prop.getModel().getProperty(SemanticVocabulary.RDFS_RANGE));
         if(stm!=null)
         {
-            ret=SWBContext.getSemanticMgr().getVocabulary().getTopicClass(stm.getResource().getURI());
+            ret=SWBContext.getSemanticMgr().getVocabulary().getSemanticClass(stm.getResource().getURI());
         }
         return ret;    
     }
     
-    public Topic getRangeDataType()
+    public SemanticObject getRangeDataType()
     {
-        Topic ret=null;
-        Statement stm=m_prop.getProperty(m_prop.getModel().getProperty(SWBVocabulary.RDFS_RANGE));
+        SemanticObject ret=null;
+        Statement stm=m_prop.getProperty(m_prop.getModel().getProperty(SemanticVocabulary.RDFS_RANGE));
         if(stm!=null)
         {
-            ret=new Topic(stm.getResource());
+            ret=new SemanticObject(stm.getResource());
         }
         return ret;    
     }    
@@ -92,7 +92,7 @@ public class TopicProperty
     public Resource getRange()
     {
         Resource ret=null;
-        Statement stm=m_prop.getProperty(m_prop.getModel().getProperty(SWBVocabulary.RDFS_RANGE));
+        Statement stm=m_prop.getProperty(m_prop.getModel().getProperty(SemanticVocabulary.RDFS_RANGE));
         if(stm!=null)
         {
             ret=stm.getResource();
@@ -108,10 +108,10 @@ public class TopicProperty
     public boolean isObjectProperty()
     {
         boolean ret=false;
-        Statement stm=m_prop.getProperty(m_prop.getModel().getProperty(SWBVocabulary.RDF_TYPE));
+        Statement stm=m_prop.getProperty(m_prop.getModel().getProperty(SemanticVocabulary.RDF_TYPE));
         if(stm!=null)
         {
-            ret=SWBVocabulary.OWL_OBJECTPROPERTY.equals(stm.getResource().getURI());
+            ret=SemanticVocabulary.OWL_OBJECTPROPERTY.equals(stm.getResource().getURI());
         }
         return ret;      
     }
@@ -119,10 +119,10 @@ public class TopicProperty
     public boolean isDataTypeProperty()
     {
         boolean ret=false;
-        Statement stm=m_prop.getProperty(m_prop.getModel().getProperty(SWBVocabulary.RDF_TYPE));
+        Statement stm=m_prop.getProperty(m_prop.getModel().getProperty(SemanticVocabulary.RDF_TYPE));
         if(stm!=null)
         {
-            ret=SWBVocabulary.OWL_DATATYPEPROPERTY.equals(stm.getResource().getURI());
+            ret=SemanticVocabulary.OWL_DATATYPEPROPERTY.equals(stm.getResource().getURI());
         }
         return ret;
     }

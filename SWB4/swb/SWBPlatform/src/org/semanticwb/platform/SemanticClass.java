@@ -17,20 +17,20 @@ import org.semanticwb.*;
  *
  * @author Jei
  */
-public class TopicClass 
+public class SemanticClass 
 {
     private OntClass m_class;
-    private HashMap<String,TopicProperty> m_props;
+    private HashMap<String,SemanticProperty> m_props;
     private Boolean m_isSWBClass=null;
     private Boolean m_isSWBInterface=null;
     
-    public TopicClass(OntClass oclass)
+    public SemanticClass(OntClass oclass)
     {
         this.m_class=oclass;
         init();
     }
     
-    public TopicClass(String classuri) throws SWBException
+    public SemanticClass(String classuri) throws SWBException
     {
         this.m_class=SWBContext.getSemanticMgr().getOntClass(classuri);
         if(this.m_class==null) throw new SWBException("OntClass Not Found");
@@ -44,7 +44,7 @@ public class TopicClass
         for (Iterator i = m_class.listDeclaredProperties(false); i.hasNext(); ) 
         {
             Property prop=(Property)i.next();
-            TopicProperty p=new TopicProperty(prop);
+            SemanticProperty p=new SemanticProperty(prop);
             m_props.put( p.getName(), p);
         }
     }
@@ -64,22 +64,22 @@ public class TopicClass
         return m_class.getLabel(lang);
     }
 
-    public Iterator<Topic> listInstances()
+    public Iterator<SemanticObject> listInstances()
     {
         return listInstances(false);
     }
     
-    public Iterator<Topic> listInstances(boolean direct)
+    public Iterator<SemanticObject> listInstances(boolean direct)
     {
-        return new TopicIterator(m_class.listInstances(direct));
+        return new SemanticObjectIterator(m_class.listInstances(direct));
     }
     
-    public TopicProperty getProperty(String name)
+    public SemanticProperty getProperty(String name)
     {
         return m_props.get(name);
     }
     
-    public Iterator<TopicProperty> listProperties()
+    public Iterator<SemanticProperty> listProperties()
     {
         return m_props.values().iterator();
     }
@@ -90,7 +90,7 @@ public class TopicClass
     }
     
     
-    public boolean isSuperClass(TopicClass cls)
+    public boolean isSuperClass(SemanticClass cls)
     {
         boolean ret=false;
         ExtendedIterator it=m_class.listSubClasses(false);
@@ -106,7 +106,7 @@ public class TopicClass
         return ret;
     }    
     
-    public boolean isSubClass(TopicClass cls)
+    public boolean isSubClass(SemanticClass cls)
     {
         boolean ret=false;
         Iterator it=m_class.listSuperClasses(false);
@@ -122,24 +122,24 @@ public class TopicClass
         return ret;
     }
 
-    public Iterator<TopicClass> listSubClasses()
+    public Iterator<SemanticClass> listSubClasses()
     {
         return listSubClasses(false);
     }
     
-    public Iterator<TopicClass> listSubClasses(boolean direct)
+    public Iterator<SemanticClass> listSubClasses(boolean direct)
     {
-        return new TopicClassIterator(m_class.listSubClasses(direct));
+        return new SemanticClassIterator(m_class.listSubClasses(direct));
     }    
     
-    public Iterator<TopicClass> listSuperClasses()
+    public Iterator<SemanticClass> listSuperClasses()
     {
         return listSuperClasses(false);
     }
     
-    public Iterator<TopicClass> listSuperClasses(boolean direct)
+    public Iterator<SemanticClass> listSuperClasses(boolean direct)
     {
-        return new TopicClassIterator(m_class.listSuperClasses(direct));
+        return new SemanticClassIterator(m_class.listSuperClasses(direct));
     }     
     
     @Override

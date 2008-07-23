@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package org.semanticwb.platform;
 
@@ -14,13 +10,13 @@ import java.util.Iterator;
  *
  * @author victor.lorenzana
  */
-public class GenericIterator<T extends Topic> implements Iterator
+public class SemanticIterator<T extends SemanticObject>
 {
     private Class clazz;
     private Iterator iterator;
     private Constructor constructor;
             
-    public GenericIterator(Class clazz,Iterator iterator)
+    public SemanticIterator(Class clazz,Iterator iterator)
     {
         this.clazz=clazz;
         this.iterator=iterator;
