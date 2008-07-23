@@ -553,11 +553,11 @@ public class SWBUtils {
             return sw.toString();
         }
 
-        public boolean xmlVerifier(org.xml.sax.InputSource schema, org.xml.sax.InputSource xml) {
+        public static boolean xmlVerifier(org.xml.sax.InputSource schema, org.xml.sax.InputSource xml) {
             return xmlVerifier(null, schema, null, xml);
         }
 
-        public boolean xmlVerifier(String idschema, org.xml.sax.InputSource schema, String idxml, org.xml.sax.InputSource xml) {
+        public static boolean xmlVerifier(String idschema, org.xml.sax.InputSource schema, String idxml, org.xml.sax.InputSource xml) {
             boolean bOk = false;
             if (schema == null || xml == null) {
                 if (schema == null) {
@@ -578,11 +578,11 @@ public class SWBUtils {
             return bOk;
         }
 
-        public boolean xmlVerifier(java.io.InputStream schema, java.io.InputStream xml) {
+        public static boolean xmlVerifier(java.io.InputStream schema, java.io.InputStream xml) {
             return xmlVerifier(null, schema, xml);
         }
 
-        public boolean xmlVerifier(String idschema, java.io.InputStream schema, java.io.InputStream xml) {
+        public static boolean xmlVerifier(String idschema, java.io.InputStream schema, java.io.InputStream xml) {
             boolean bOk = false;
             if (schema == null || xml == null) {
                 if (schema == null) {
@@ -597,7 +597,7 @@ public class SWBUtils {
             return bOk;
         }
 
-        private boolean xmlVerifierImpl(String sysid, Object objschema, Object objxml) {
+        private static boolean xmlVerifierImpl(String sysid, Object objschema, Object objxml) {
             boolean bOk = false;
             if (objschema == null || objxml == null) {
                 if (objschema == null) {
@@ -647,11 +647,11 @@ public class SWBUtils {
             return bOk;
         }
 
-        public boolean xmlVerifier(String schema, String xml) {
+        public static boolean xmlVerifier(String schema, String xml) {
             return xmlVerifierByURL(null, schema, xml);
         }
 
-        public boolean xmlVerifierByURL(String sysid, String schema, String xml) {
+        public static boolean xmlVerifierByURL(String sysid, String schema, String xml) {
             return xmlVerifierImpl(sysid, schema, xml);
         }
         
