@@ -61,11 +61,11 @@ public class XmlRpcClientTest
     public void executeTestWithProxyAndAttachments()
     {
         try
-        {                        
+        {    
             IDemo obj = XmlRpcProxyFactory.newInstance(IDemo.class);
-            obj.setUri(new URI("http://localhost:8084/TestRPC/GatewayOffice"));            
+            obj.setWebAddress(new URI("http://localhost:8084/TestRPC/GatewayOffice"));            
             obj.setUser("v");
-            obj.setPassword("h");
+            obj.setPassword("h");            
             obj.addAttachment(new Attachment(new File("C:\\temp\\demo.ppt"), "content"));
             String res=obj.add(5, 5.5, "a", new Date(), false);            
             Assert.assertNotNull(res);
@@ -73,7 +73,10 @@ public class XmlRpcClientTest
         }
         catch ( Exception e )
         {
-            fail(e.getMessage());
+            if(e!=null && e.getMessage()!=null)
+            {    
+                fail(e.getMessage());
+            }
         }
 
     }
@@ -84,7 +87,7 @@ public class XmlRpcClientTest
         try
         {                        
             IDemo obj = XmlRpcProxyFactory.newInstance(IDemo.class);
-            obj.setUri(new URI("http://localhost:8084/TestRPC/GatewayOffice"));            
+            obj.setWebAddress(new URI("http://localhost:8084/TestRPC/GatewayOffice"));                        
             obj.setUser("v");
             obj.setPassword("h");
             String res=obj.add(5, 5.5, "a", new Date(), false);            
