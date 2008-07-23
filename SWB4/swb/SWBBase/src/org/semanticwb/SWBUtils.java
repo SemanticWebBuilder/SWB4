@@ -533,7 +533,7 @@ public class SWBUtils {
          * @throws javax.xml.transform.TransformerConfigurationException
          * @return  */
         public static Templates loadTemplateXSLT(InputStream stream) throws TransformerConfigurationException {
-            TransformerFactory transFact = TransformerFactory.newInstance();
+            TransformerFactory transFact = getTransformerFactory();
             return transFact.newTemplates(new StreamSource(stream));
         }
 
@@ -550,7 +550,7 @@ public class SWBUtils {
             trans.transform(new DOMSource(doc), new StreamResult(sw));
             return sw.toString();
         }
-
+/*
         public boolean xmlVerifier(org.xml.sax.InputSource schema, org.xml.sax.InputSource xml) {
             return xmlVerifier(null, schema, null, xml);
         }
@@ -654,6 +654,7 @@ public class SWBUtils {
         public boolean xmlVerifierByURL(String sysid, String schema, String xml) {
             return xmlVerifierImpl(sysid, schema, xml);
         }
+ */
     }
 
     /**
