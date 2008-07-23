@@ -94,57 +94,57 @@ public class XmlRpcProxyFactory implements java.lang.reflect.InvocationHandler, 
             throws Throwable
     {
         Object ObjectToreturn = null;
-        if ( m.getName().equals("getWebAddress") )
+        if ( m.getName().equals("getWebAddress") &&  args.length==0)
         {
             ObjectToreturn = this.Uri;
         }
-        else if ( m.getName().equals("setWebAddress") )
+        else if ( m.getName().equals("setWebAddress") &&  args.length==1 && args[0] instanceof URI)
         {
             URI uri = ( URI ) args[0];
             this.setWebAddress(uri);
         }
-        else if ( m.getName().equals("setUser") )
+        else if ( m.getName().equals("setUser") &&  args.length==1 && args[0] instanceof String)
         {
             String pUser = ( String ) args[0];
             this.setUser(pUser);
         }
-        else if ( m.getName().equals("setPassword") )
+        else if ( m.getName().equals("setPassword") &&  args.length==1 && args[0] instanceof String )
         {
             String pPassword = ( String ) args[0];
             this.setPassword(pPassword);
         }
-        else if ( m.getName().equals("getUser") )
+        else if ( m.getName().equals("getUser") &&  args.length==0)
         {
             ObjectToreturn = this.getUser();
         }
-        else if ( m.getName().equals("getPassword") )
+        else if ( m.getName().equals("getPassword") &&  args.length==0)
         {
             ObjectToreturn = this.getPassword();
         }
-        else if ( m.getName().equals("addAttachment") )
+        else if ( m.getName().equals("addAttachment") &&  args.length==1 && args[0] instanceof Attachment)
         {
             Attachment attachment = ( Attachment ) args[0];
             this.addAttachment(attachment);
 
         }
-        else if ( m.getName().equals("clearAttachments") )
+        else if ( m.getName().equals("clearAttachments") &&  args.length==0)
         {
             this.clearAttachments();
         }
-        else if ( m.getName().equals("getProxyAddress") )
+        else if ( m.getName().equals("getProxyAddress") &&  args.length==0)
         {            
             ObjectToreturn = this.getProxyAddress();
         }
-        else if ( m.getName().equals("setProxyAddress") )
+        else if ( m.getName().equals("setProxyAddress") &&  args.length==1 && args[0] instanceof URI)
         {
             URI pProxyAddress = ( URI ) args[0];
             this.setProxyAddress(pProxyAddress);
         }
-        else if ( m.getName().equals("getProxyPort") )
+        else if ( m.getName().equals("getProxyPort") &&  args.length==0)
         {
             ObjectToreturn = this.getProxyPort();
         }
-        else if ( m.getName().equals("setProxyPort") )
+        else if ( m.getName().equals("setProxyPort") &&  args.length==1 && args[0] instanceof Integer)
         {
             Integer pProxyPort = ( Integer ) args[0];
             this.setProxyPort(pProxyPort);
