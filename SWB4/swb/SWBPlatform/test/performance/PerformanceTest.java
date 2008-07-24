@@ -5,7 +5,6 @@ package performance;
  * and open the template in the editor.
  */
 
-import java.util.Iterator;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -14,10 +13,7 @@ import org.junit.Test;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBInstance;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Vocabulary;
-import org.semanticwb.model.WebPage;
 import org.semanticwb.platform.SemanticModel;
-import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
 
 /**
@@ -65,7 +61,7 @@ public class PerformanceTest
         for(int x=0;x<30000;x++)
         {
             //model.createSemanticObject("name"+x, Vocabulary.WebPage);
-            WebPage page=new WebPage(model.getRDFModel().getResource("name"+x));
+            //WebPage page=new WebPage(model.getRDFModel().getResource("name"+x));
             //page.setStatus(1);
             //int stat=page.getStatus();
             //log.debug(stat);
