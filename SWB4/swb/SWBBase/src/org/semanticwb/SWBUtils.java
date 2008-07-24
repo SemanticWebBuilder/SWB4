@@ -93,11 +93,11 @@ public class SWBUtils {
 
     //default Logger
     private static void initLogger() {
-        String log_conf = "log4j.rootLogger=debug, stdout" + "\n" +
+        String log_conf = "log4j.rootLogger=info, stdout" + "\n" +
                 "log4j.appender.stdout=org.apache.log4j.ConsoleAppender" + "\n" +
                 "log4j.appender.stdout.layout=org.apache.log4j.PatternLayout" + "\n" +
                 "log4j.appender.stdout.layout.ConversionPattern=%d %p - %m%n" + "\n" +
-                "log4j.logger.org.semanticwb=INFO";
+                "log4j.logger.org.semanticwb=debug";
         try {
             Properties proper = new Properties();
             proper.load(IO.getStreamFromString(log_conf));
