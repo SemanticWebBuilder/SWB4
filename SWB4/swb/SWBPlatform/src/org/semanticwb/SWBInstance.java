@@ -40,7 +40,7 @@ public class SWBInstance
     
     private SWBInstance()
     {
-        log.event("Initialize Semantic WebBuilder Context...");
+        log.event("Initialize Semantic WebBuilder Instance...");
         init();
     }
     
@@ -211,7 +211,7 @@ public class SWBInstance
 //            util.log(com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "log_WBLoader_Init_WbInicializing"), true);
         } catch (Throwable e)
         {
-            log.error("Error loading SemanticWebBuilder Context...", e);
+            log.error("Error loading SemanticWebBuilder Instance...", e);
         }
     }
     
