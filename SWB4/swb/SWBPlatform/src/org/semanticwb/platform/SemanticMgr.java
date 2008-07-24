@@ -76,14 +76,18 @@ public class SemanticMgr implements SWBInstanceObject
         while(tpcit.hasNext())
         {
             SemanticClass tpc=tpcit.nextSemanticClass();
-            vocabulary.addSemanticClass(tpc);
-            Iterator<SemanticProperty> tppit=tpc.listProperties();
-            while(tppit.hasNext())
+            if(tpc!=null && tpc.getName()!=null)
             {
-                SemanticProperty tpp=tppit.next();
-                if(tpc.equals(tpp.getDomainClass()))
+                log.trace("Registering SemanticClass:"+tpc);
+                vocabulary.addSemanticClass(tpc);
+                Iterator<SemanticProperty> tppit=tpc.listProperties();
+                while(tppit.hasNext())
                 {
-                    vocabulary.addSemanticProperty(tpp);
+                    SemanticProperty tpp=tppit.next();
+                    if(tpc.equals(tpp.getDomainClass()))
+                    {
+                        vocabulary.addSemanticProperty(tpp);
+                    }
                 }
             }
         }
