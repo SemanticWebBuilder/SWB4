@@ -30,11 +30,13 @@ import org.apache.log4j.PropertyConfigurator;
 import org.semanticwb.base.db.DBConnectionManager;
 import org.semanticwb.base.db.DBConnectionPool;
 import org.semanticwb.base.util.imp.Logger4jImpl;
-import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
-import java.util.jar.JarFile;
+import java.io.File;
+import java.io.FileOutputStream;
+//import org.semanticwb.base.util.MailMessage;
+import org.apache.commons.mail.*;
 
 /**
  *
@@ -47,7 +49,8 @@ public class SWBUtils {
     private static String applicationPath = "";
     private static int bufferSize = 8192;
     private static boolean initLogger = false;
-    
+    private static String smtpserver = null;
+
     /** Creates new utils */
     private SWBUtils() {
         log.event("SemanticWebBuilder Base Starting...");
@@ -103,7 +106,6 @@ public class SWBUtils {
             proper.load(IO.getStreamFromString(log_conf));
             PropertyConfigurator.configure(proper);
         } catch (Exception e) {
-            System.out.println("Error: To configure Logger...");
             e.printStackTrace();
         }
         //org.apache.log4j.Logger.getLogger("org.semanticwb").setLevel(Level.TRACE);
@@ -138,6 +140,14 @@ public class SWBUtils {
             initLogger();
         }
         return new Logger4jImpl(org.apache.log4j.Logger.getLogger(cls));
+    }
+
+    public static void setSMTPServer(String smtpserver) {
+        smtpserver = smtpserver;
+    }
+
+    public static String getSMTPServer() {
+        return smtpserver;
     }
 
     /**
@@ -177,6 +187,43 @@ public class SWBUtils {
 
         public static Date iso8601DateParse(String date) throws ParseException {
             return iso8601dateFormat.parse(date);
+        }
+
+        /**
+         * Le pone a un objeto String el tipo de codificación especificado por parámetro.
+         * @param data
+         * @param enc
+         * @throws java.io.UnsupportedEncodingException
+         * @throws java.io.IOException
+         * @return  */
+        public static String encode(String data, String enc) throws java.io.UnsupportedEncodingException, java.io.IOException {
+            ByteArrayOutputStream sw = new java.io.ByteArrayOutputStream();
+            OutputStreamWriter out = new OutputStreamWriter(sw, enc);
+            out.write(data);
+            out.flush();
+            return new String(sw.toByteArray());
+        }
+
+        /**
+         * Decodifica un objeto String poniéndole cierta codificación.
+         * @param data
+         * @param enc
+         * @throws java.io.UnsupportedEncodingException
+         * @throws java.io.IOException
+         * @return  */
+        public static String decode(String data, String enc) throws java.io.UnsupportedEncodingException, java.io.IOException {
+            ByteArrayInputStream sw = new ByteArrayInputStream(data.getBytes());
+            InputStreamReader in = new InputStreamReader(sw, enc);
+
+            StringBuffer ret = new StringBuffer(data.length());
+
+            char[] bfile = new char[bufferSize];
+            int x;
+            while ((x = in.read(bfile, 0, bufferSize)) > -1) {
+                ret.append(new String(bfile, 0, x));
+            }
+            in.close();
+            return ret.toString();
         }
     }
 
@@ -255,8 +302,7 @@ public class SWBUtils {
             in.close();
             return buf.toString();
         }
-        
-      
+
         /**
          * Regresa un objeto String codificado resultante de un objeto InputStream
          * y un tipo de codificación.
@@ -332,7 +378,316 @@ public class SWBUtils {
                 }
             } while (true);
         }
-        
+        // Elimina directorios completos
+        public static boolean removeDirectory(String path) {
+            try {
+                File dir = new File(path);
+                if (dir != null && dir.exists()) {
+                    File[] listado = dir.listFiles();
+                    for (int i = 0; i < listado.length; i++) {
+                        if (listado[i].isFile()) {
+                            listado[i].delete();
+                        }
+                        if (listado[i].isDirectory()) {
+                            path = listado[i].getPath();
+                            boolean flag = removeDirectory(path);
+                            if (flag) {
+                                listado[i].delete();
+                            }
+                        }
+                    }
+                }
+                if (dir.delete()) {
+                    return true;
+                }
+            } catch (Exception e) {
+            }
+            return false;
+        }
+
+        public static String getFileFromPath(String path) {
+            StringBuffer ret = new StringBuffer(8192);
+            try {
+                InputStream file = null;
+                file = new FileInputStream(path);
+                byte[] bfile = new byte[8192];
+                int x;
+                while ((x = file.read(bfile, 0, 8192)) > -1) {
+                    ret.append(new String(bfile, 0, x));
+                }
+                file.close();
+            } catch (Exception e) {
+            }
+            return ret.toString();
+        }
+
+        /**
+         * Crea un directorio con el nombre de ruta especificada
+         */
+        public static boolean createDirectory(String path) {
+            try {
+                File f = new File(path);
+                if (!f.exists()) {
+                    f.mkdirs();
+                }
+                return true;
+            } catch (Exception e) {
+                log.error(e);
+            }
+            return false;
+        }
+
+        /**
+         * Copia una estructura de directorios completa
+         * Copy a complete fyle system path
+         * @param source path to copy
+         * @param target path where the fyle system in the source parameter will be copied
+         * @return if the source was copied
+         */
+        public static boolean copyStructure(String source, String target) {
+            try {
+                copy(source, target, false, "", "");
+                return true;
+            } catch (Exception e) {
+                log.error(e);
+            }
+            return false;
+        }
+
+        /**
+         * Copia una estructura de directorios completa
+         * Copy a complete fyle system path
+         * @param source path to copy
+         * @param target path where the fyle system in the source parameter will be copied
+         * @param ChangePath indicates if the target files will be parsed
+         * @param sourcePath Indicates a path string in the source files to be changed (parsed)
+         * @param targetPath Indicates the path string to be included in the target files in place of source path
+         * @return if the source directory was copied succefully
+         */
+        public static boolean copyStructure(String source, String target, boolean ChangePath, String sourcePath, String targetPath) {
+            try {
+                File ftarget = new File(target);
+                if (!ftarget.exists()) {
+                    ftarget.mkdirs();
+                }
+                File dir = new File(source);
+                if (dir != null && dir.exists() && dir.isDirectory()) {
+                    File[] listado = dir.listFiles();
+                    for (int i = 0; i < listado.length; i++) {
+                        try {
+                            if (listado[i].isFile()) {
+                                File targetFile = new File(target + listado[i].getName());
+                                if (targetFile.length() == 0) {
+                                    copy(source + listado[i].getName(), target + listado[i].getName(), ChangePath, sourcePath, targetPath);
+                                }
+                            }
+                            if (listado[i].isDirectory()) {
+                                String newpath = listado[i].getPath();
+                                File f = new File(target + listado[i].getName());
+                                f.mkdirs();
+                                boolean flag = copyStructure(newpath + "/", target + listado[i].getName() + "/", ChangePath, sourcePath, targetPath);
+                                if (flag) {
+                                    listado[i].delete();
+                                }
+                            }
+                        } catch (Exception e) {
+                            log.error(e);
+                            return false;
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                log.error(e);
+                return false;
+            }
+            return true;
+        }
+
+        /**
+         * Copia un archivo a otro directorio
+         * Copy a fyle to an other directory
+         * @param source_name File to copy
+         * @param dest_name path where the fyle will be copied
+         * @param ChangePath indicates if the target files will be parsed
+         * @param sourcePath Indicates a path string in the source files to be changed (parsed)
+         * @param targetPath Indicates the path string to be included in the target files in place of source path
+         */
+        public static void copy(String source_name, String dest_name, boolean ChangePath, String sourcePath, String targetPath) throws IOException {
+            File source_file = new File(source_name);
+            File destination_file = new File(dest_name);
+            FileInputStream source = null;
+            java.io.FileOutputStream destination = null;
+            try {
+                source = new FileInputStream(source_file);
+                destination = new FileOutputStream(destination_file);
+                if (ChangePath && (source_file.getName().endsWith(".htm") || source_file.getName().endsWith(".html") || source_file.getName().endsWith(".html.orig") || source_file.getName().endsWith(".htm.orig"))) {
+                    String content = readInputStream(source);
+                    content = content.replaceAll(sourcePath, targetPath);
+                    copyStream(getStreamFromString(content), destination);
+                } else {
+                    copyStream(source, destination);
+                }
+            } catch (Exception e) {
+                log.error(e);
+            } finally {
+                if (source != null) {
+                    try {
+                        source.close();
+                    } catch (IOException e) {
+                    }
+                }
+                if (destination != null) {
+                    try {
+                        destination.close();
+                    } catch (IOException e) {
+                    }
+                }
+            }
+        }
+
+        /**
+         * Envía correos electrónicos, como parámetros recibe el correo electrónico de quien lo envía, 
+         * el o los correos de destino, el o los correos a los cuales se les desea enviar copia, 
+         * el o los correos a los cuales se les desean enviar el correo con bcc (blind carbon copy), el asunto, 
+         * el content-type en el que se enviara el correo, número de prioridad  y el cuerpo del correo.
+         * * Sent the email message.
+         * @param fromEmail Sender Email address
+         * @param toEmail Email address to send the message
+         * @param ccEmail CC email addresses to send the message
+         * @param bccEmail BCCemail addresses to send the message
+         * @param subject Subject of the email message
+         * @param contentType ContentType of the email message
+         * @param priority Priprity of the message (number)
+         * @param data Text of the email message
+         * @return A true value if the message was succesfully sent.
+         */
+        public static String sendSimpleMail(String fromEmail, String toEmail, String ccEmail, String bccEmail,
+                String subject, String contentType, int priority, String data) {
+            try {
+                System.out.println("Entra a sendSimpleMail-1");
+                SimpleEmail email = new SimpleEmail();
+                email.setHostName("webmail.infotec.com.mx");
+                email.addTo(toEmail, "");
+                email.setFrom(fromEmail, "Jorge Jiménez");
+                email.setSubject(subject);
+                email.setMsg(data);
+                System.out.println("Entra a sendSimpleMail-2");
+                return email.send();
+            } catch (Exception e) {
+                log.error(e);
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        /*
+        public static boolean sendEmail(String fromEmail, String toEmail, String ccEmail, String bccEmail,
+        String subject, String contentType, int priority, String data) {
+        try {
+        sun.net.smtp.SmtpClient sm = new sun.net.smtp.SmtpClient(smtpserver);
+        sm.from(fromEmail);
+        sm.to(toEmail);
+        if (ccEmail != null) {
+        sm.to(ccEmail);
+        }
+        if (bccEmail != null) {
+        sm.to(bccEmail);
+        }
+        java.io.PrintStream msg = sm.startMessage();
+        msg.println("From: " + fromEmail);
+        msg.println("To: " + toEmail);	   // Note dont use + for Performance
+        if (ccEmail != null) {
+        msg.println("CC: " + ccEmail);
+        }
+        //if(bccEmail!=null)msg.println("BCC: "+bccEmail);
+        msg.println("Subject: " + subject);
+        if (priority > 0) {
+        msg.println("X-Priority: " + priority);
+        }
+        if (contentType != null) {
+        msg.println("Content-Type: " + contentType);
+        }
+        //msg.println("X-MSMail-Priority: high");
+        msg.println();
+        msg.println(data);
+        msg.println();
+        sm.closeServer();
+        return true;
+        } catch (Exception e) {
+        log.error(e);
+        }
+        return false;
+        }
+         * */
+        /** Envía un mensaje electrónico en un objeto MailMessage.
+         * Send a email message in a MailMessage object.
+         *
+         * Envio de correo ejemplo:
+         * 
+         *  MailMessage mm = new MailMessage();
+         *  mm.setFrom(new EmailAddress(from));
+         *  mm.setSubject("Prueba envio de documento");
+         *  mm.addTo("email@webbuilder.com.mx");
+         *  mm.addTo("another.email@webbuilder.com.mx");
+         *  mm.addHtml("<html><body>Envio de docto html.</body></html>","Envio de docto html en formato de texto");
+         * // Agregando documento al mensaje.
+         *  mm.addAttachment(WBUtils.getInstance().getFileFromWorkPath2(filename),"500.html");
+         *  AFUtils.sendEmail(mm);
+         * 
+         * @param message MailMessage object to send.
+         * @return A true value if the email was succesfully sent.
+         */
+        /*
+        public static boolean sendEmail(MailMessage message) {
+        try {
+        message.sendMessage(smtpserver);
+        return true;
+        } catch (Exception e) {
+        log.error(e);
+        }
+        return false;
+        }*/
+        /** 
+         * Envía un mensaje electrónico en un objeto MailMessagen background.
+         * Send a email message in a MailMessage object in background.
+         *
+         * Envio de correo ejemplo:
+         * 
+         *  MailMessage mm = new MailMessage();
+         *  mm.setFrom(new EmailAddress(from));
+         *  mm.setSubject("Prueba envio de documento");
+         *  mm.addTo("email@webbuilder.com.mx");
+         *  mm.addTo("another.email@webbuilder.com.mx");
+         *  mm.addHtml("<html><body>Envio de docto html.</body></html>","Envio de docto html en formato de texto");
+         * // Agregando documento al mensaje.
+         *  mm.addAttachment(WBUtils.getInstance().getFileFromWorkPath2(filename),"500.html");
+         *  AFUtils.sendEmail(mm);
+         *
+         * @param message MailMessage object to send.
+         */
+        /*
+        public static void sendBGEmail(MailMessage message) {
+        getInstance().mailsender.addMessage(message);
+        }*/
+        /**
+         * Envia un correo en BackGround, es decir no espera a enviar el correo.
+         * Sent the email in background, it doesn´t wait to send the message.
+         * 
+         * @param fromEmail Sender Email address
+         * @param toEmail Email address to send the message
+         * @param ccEmail CC email addresses to send the message
+         * @param bccEmail BCCemail addresses to send the message
+         * @param subject Subject of the email message
+         * @param contentType ContentType of the email message
+         * @param priority Priprity of the message (number)
+         * @param data Text of the email message
+         */
+        /*
+        public static void sendBGEmail(String fromEmail, String toEmail, String ccEmail, String bccEmail,
+        String subject, String contentType, int priority, String data) {
+        getInstance().mailsender.addEmail(new AFMailData(fromEmail, toEmail, ccEmail, bccEmail, subject, contentType, priority, data));
+        }
+         **/
     }
 
     /**
@@ -563,7 +918,7 @@ public class SWBUtils {
                 if (schema == null) {
                     log.error("Error WBAdmResourceUtils.XMLVerifier(): Schema source is null.");
                 } else {
-                   log.event("Error WBAdmResourceUtils.XMLVerifier(): The input document source is null.");
+                    log.event("Error WBAdmResourceUtils.XMLVerifier(): The input document source is null.");
                 }
                 return bOk;
             }
@@ -607,7 +962,7 @@ public class SWBUtils {
                 }
                 return bOk;
             }
-            org.iso_relax.verifier.VerifierFactory factory = new com.sun.msv.verifier.jarv.TheFactoryImpl();            
+            org.iso_relax.verifier.VerifierFactory factory = new com.sun.msv.verifier.jarv.TheFactoryImpl();
             org.iso_relax.verifier.Schema schema = null;
             try {
                 if (objschema instanceof java.io.File) {
@@ -637,9 +992,9 @@ public class SWBUtils {
                         bOk = verifier.verify((java.lang.String) objxml);
                     }
                 } catch (org.iso_relax.verifier.VerifierConfigurationException e) {
-                    log.error("Error WBAdmResourceUtils.XMLVerifier(): Unable to create a new verifier.",e);
+                    log.error("Error WBAdmResourceUtils.XMLVerifier(): Unable to create a new verifier.", e);
                 } catch (org.xml.sax.SAXException e) {
-                    log.event("Error WBAdmResourceUtils.XMLVerifier(): The input document is not wellformed.",e);
+                    log.event("Error WBAdmResourceUtils.XMLVerifier(): The input document is not wellformed.", e);
                 }
             } catch (Exception e) {
                 log.event("Error WBAdmResourceUtils.XMLVerifier(): Unable to parse the schema file.", e);
@@ -654,16 +1009,75 @@ public class SWBUtils {
         public static boolean xmlVerifierByURL(String sysid, String schema, String xml) {
             return xmlVerifierImpl(sysid, schema, xml);
         }
-        
+
+        /**
+         * Comvierte un Node a Document
+         * Todo: Meter en AFUtils
+         */
+        public static Document node2Document(Node node) throws SWBException {
+            // ensure xerces dom
+            if (node instanceof org.apache.xerces.dom.DocumentImpl) {
+                return (Document) node;
+            }
+            Document document = getNewDocument();
+            if (node instanceof Document) {
+                node = ((Document) node).getDocumentElement();
+            }
+            document.appendChild(document.importNode(node, true));
+            return document;
+        }
+
+        /**
+         * Obtiene el contenido del objeto Document como xml y 
+         * lo envía a un archivo especificado (serialización) con codificación UTF-8 e identación de 2.
+         * @param dom
+         * @param file  */
+        public void DomtoFile(Document dom, String file) {
+            domtoFile(dom, file, "UTF-8");
+        }
+
+        /**
+         * Obtiene el contenido del objeto Document como xml y 
+         * lo envía a un archivo especificado (serialización) bajo cierta codificación que se especifique e identación de 2.
+         * @param dom
+         * @param file
+         * @param encode  */
+        public static void domtoFile(Document dom, String file, String encode) {
+            java.io.FileOutputStream osw = null;
+            try {
+                osw = new FileOutputStream(new java.io.File(file));
+                StreamResult streamResult = new StreamResult(osw);
+
+                Transformer transformer = null;
+                TransformerFactory tFactory = getTransformerFactory();
+                synchronized (tFactory) {
+                    transformer = tFactory.newTransformer();
+                }
+                transformer.setOutputProperty(OutputKeys.ENCODING, encode);
+                transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+                transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+                transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+                transformer.transform(new DOMSource(dom), streamResult);
+                osw.flush();
+                osw.close();
+            } catch (Exception e) {
+                log.error(e);
+            }
+        }
         /**
          * An error handler implementation that doesn't report any error.
          */
         private static final org.xml.sax.ErrorHandler silentErrorHandler = new org.xml.sax.ErrorHandler() {
-                public void fatalError( org.xml.sax.SAXParseException e ) {}
-                public void error( org.xml.sax.SAXParseException e ) {}
-                public void warning( org.xml.sax.SAXParseException e ) {}
+
+            public void fatalError(org.xml.sax.SAXParseException e) {
+            }
+
+            public void error(org.xml.sax.SAXParseException e) {
+            }
+
+            public void warning(org.xml.sax.SAXParseException e) {
+            }
         };
- 
     }
 
     /**
