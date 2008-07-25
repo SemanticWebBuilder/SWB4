@@ -8,7 +8,7 @@ package org.semanticwb.platform;
 import com.hp.hpl.jena.ontology.OntClass;
 
 import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.util.iterator.ExtendedIterator;
+import com.hp.hpl.jena.rdf.model.Resource;
 import java.util.HashMap;
 import java.util.Iterator;
 import org.semanticwb.*;
@@ -92,18 +92,7 @@ public class SemanticClass
     
     public boolean isSuperClass(SemanticClass cls)
     {
-        boolean ret=false;
-        ExtendedIterator it=m_class.listSubClasses(false);
-        while(it.hasNext())
-        {
-            OntClass cl=(OntClass)it.next();
-            if(cl.equals(cls.getOntClass()))
-            {
-                ret=true;
-                break;
-            }
-        }
-        return ret;
+        return cls.isSubClass(this);
     }    
     
     public boolean isSubClass(SemanticClass cls)
@@ -169,7 +158,15 @@ public class SemanticClass
     {
         if(m_isSWBClass==null)
         {
-            m_isSWBClass = Boolean.valueOf(isSubClass(SWBInstance.getSemanticMgr().getVocabulary().SWBClass));    
+            m_isSWBClass=false;
+            for (Iterator i = m_class.listRDFTypes(false); i.hasNext(); ) 
+            {
+                Resource res=(Resource)i.next();
+                if(res.getURI().equals(SemanticVocabulary.SWB_CLASS))
+                {
+                    m_isSWBClass = true;
+                }
+            }        
         }
         return m_isSWBClass.booleanValue();
     }
@@ -178,7 +175,15 @@ public class SemanticClass
     {
         if(m_isSWBInterface==null)
         {
-            m_isSWBInterface = Boolean.valueOf(!isSWBClass() && isSubClass(SWBInstance.getSemanticMgr().getVocabulary().SWBInterface));    
+            m_isSWBInterface=false;
+            for (Iterator i = m_class.listRDFTypes(false); i.hasNext(); ) 
+            {
+                Resource res=(Resource)i.next();
+                if(res.getURI().equals(SemanticVocabulary.SWB_INTERFACE))
+                {
+                    m_isSWBClass = true;
+                }
+            }     
         }
         return m_isSWBInterface.booleanValue();
     }

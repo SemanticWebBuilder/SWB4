@@ -42,10 +42,11 @@ public class SemanticVocabulary
     //General
     public static final String URI="http://www.semanticwebbuilder.org/swb4/ontology#";
 
-    public SemanticClass SWBClass;
-    public SemanticClass SWBInterface;
-    public static final String SWB_CLASS_SWBModel=URI+"SWBModel";
+    public static final String SWB_CLASS=URI+"Class";
+    public static final String SWB_INTERFACE=URI+"Interface";
+    public static final String SWB_CLASS_SWBMODEL=URI+"SWBModel";
     public static final String SWB_PROP_VALUE=URI+"value";
+    public static final String SWB_ANNOT_CLASSNAME=URI+"className";
 
     
     public HashMap<String, SemanticClass> classes;
@@ -60,8 +61,8 @@ public class SemanticVocabulary
     
     public void init()
     {
-        SWBClass=getSemanticClass(URI+"SWBClass");
-        SWBInterface=getSemanticClass(URI+"SWBInterface");
+        //SWBClass=getSemanticClass(URI+"SWBClass");
+        //SWBInterface=getSemanticClass(URI+"SWBInterface");
     }
     
     void addSemanticClass(SemanticClass tpc)
