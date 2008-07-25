@@ -34,9 +34,19 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-//import org.semanticwb.base.util.MailMessage;
-import org.apache.commons.mail.*;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
+import org.apache.commons.mail.HtmlEmail;
+import org.apache.commons.mail.EmailAttachment;
+import java.util.Collection;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.StringTokenizer;
+import org.semanticwb.base.util.SWBMailSender;
+import org.semanticwb.base.util.SWBMail;
+import org.w3c.dom.Element;
 
 /**
  *
@@ -143,7 +153,7 @@ public class SWBUtils {
     }
 
     public static void setSMTPServer(String smtpserver) {
-        smtpserver = smtpserver;
+        getInstance().smtpserver = smtpserver;
     }
 
     public static String getSMTPServer() {
@@ -224,6 +234,125 @@ public class SWBUtils {
             }
             in.close();
             return ret.toString();
+        }
+
+        /**
+         * Convierte un string a una cadena de caracteres en donde la primera letra despues de cada separacion
+         * con cualquiera de los caracteres ' ',.,- y _ , sera convertida a mayuscula
+         *
+         * @param str String a convertir
+         * @return
+         */
+        public static String toUpperCaseFL(String str) {
+            boolean b = true;
+            String ret = "";
+            for (int x = 0; x < str.length(); x++) {
+                char c = str.charAt(x);
+                if (b) {
+                    ret += Character.toUpperCase(c);
+                    b = false;
+                } else {
+                    ret += c;
+                }
+                if (c == ' ' || c == '.' || c == '-' || c == '_') {
+                    b = true;
+                }
+            }
+            return ret;
+        }
+
+        /**
+         *  Reemplaza caracteres acentuados y espacios en blanco.
+         *  caracteres adicionales son eliminados.
+         *
+         * @param txt String a remplazar
+         * @param replaceSpaces Si se desea que se remplacen caracteres acentuados
+         * @return
+         */
+        public static String replaceSpecialCharacters(String txt, boolean replaceSpaces) {
+            StringBuffer ret = new StringBuffer();
+            String aux = txt;
+            //aux = aux.toLowerCase();
+            aux = aux.replace('Á', 'A');
+            aux = aux.replace('Ä', 'A');
+            aux = aux.replace('Å', 'A');
+            aux = aux.replace('Â', 'A');
+            aux = aux.replace('À', 'A');
+            aux = aux.replace('Ã', 'A');
+
+            aux = aux.replace('É', 'E');
+            aux = aux.replace('Ê', 'E');
+            aux = aux.replace('È', 'E');
+            aux = aux.replace('Ë', 'E');
+
+            aux = aux.replace('Í', 'I');
+            aux = aux.replace('Î', 'I');
+            aux = aux.replace('Ï', 'I');
+            aux = aux.replace('Ì', 'I');
+
+            aux = aux.replace('Ó', 'O');
+            aux = aux.replace('Ö', 'O');
+            aux = aux.replace('Ô', 'O');
+            aux = aux.replace('Ò', 'O');
+            aux = aux.replace('Õ', 'O');
+
+            aux = aux.replace('Ú', 'U');
+            aux = aux.replace('Ü', 'U');
+            aux = aux.replace('Û', 'U');
+            aux = aux.replace('Ù', 'U');
+
+            aux = aux.replace('Ñ', 'N');
+
+
+            aux = aux.replace('Ç', 'C');
+            aux = aux.replace('Ý', 'Y');
+
+            aux = aux.replace('á', 'a');
+            aux = aux.replace('à', 'a');
+            aux = aux.replace('ã', 'a');
+            aux = aux.replace('â', 'a');
+            aux = aux.replace('ä', 'a');
+            aux = aux.replace('å', 'a');
+
+            aux = aux.replace('é', 'e');
+            aux = aux.replace('è', 'e');
+            aux = aux.replace('ê', 'e');
+            aux = aux.replace('ë', 'e');
+
+            aux = aux.replace('í', 'i');
+            aux = aux.replace('ì', 'i');
+            aux = aux.replace('î', 'i');
+            aux = aux.replace('ï', 'i');
+
+            aux = aux.replace('ó', 'o');
+            aux = aux.replace('ò', 'o');
+            aux = aux.replace('ô', 'o');
+            aux = aux.replace('ö', 'o');
+            aux = aux.replace('õ', 'o');
+
+            aux = aux.replace('ú', 'u');
+            aux = aux.replace('ù', 'u');
+            aux = aux.replace('ü', 'u');
+            aux = aux.replace('û', 'u');
+
+            aux = aux.replace('ñ', 'n');
+
+            aux = aux.replace('ç', 'c');
+            aux = aux.replace('ÿ', 'y');
+            aux = aux.replace('ý', 'y');
+
+            if (replaceSpaces) {
+                aux = aux.replace(' ', '_');
+            }
+            int l = aux.length();
+            for (int x = 0; x < l; x++) {
+                char ch = aux.charAt(x);
+                if ((ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || ch == '_') {
+                    ret.append(ch);
+                }
+            }
+            aux = ret.toString();
+            return aux;
         }
     }
 
@@ -546,148 +675,117 @@ public class SWBUtils {
         }
 
         /**
-         * Envía correos electrónicos, como parámetros recibe el correo electrónico de quien lo envía, 
-         * el o los correos de destino, el o los correos a los cuales se les desea enviar copia, 
-         * el o los correos a los cuales se les desean enviar el correo con bcc (blind carbon copy), el asunto, 
-         * el content-type en el que se enviara el correo, número de prioridad  y el cuerpo del correo.
-         * * Sent the email message.
-         * @param fromEmail Sender Email address
-         * @param toEmail Email address to send the message
-         * @param ccEmail CC email addresses to send the message
-         * @param bccEmail BCCemail addresses to send the message
-         * @param subject Subject of the email message
-         * @param contentType ContentType of the email message
-         * @param priority Priprity of the message (number)
-         * @param data Text of the email message
-         * @return A true value if the message was succesfully sent.
+         *  Deserializa y decodifica una objeto (de String Hexadecimal a objeto)
          */
-        public static String sendSimpleMail(String fromEmail, String toEmail, String ccEmail, String bccEmail,
-                String subject, String contentType, int priority, String data) {
+        public static Object decodeObject(String txt) throws IOException, ClassNotFoundException {
+            byte arr[] = new byte[txt.length() / 2];
+            for (int x = 0; x < txt.length(); x += 2) {
+                String val = txt.substring(x, x + 2);
+                int v = Integer.decode("0x" + val).intValue();
+                if (v > 127) {
+                    v = v - 256;
+                }
+                arr[x / 2] = (byte) (v);
+            }
+            java.io.ObjectInputStream s = new java.io.ObjectInputStream(new ByteArrayInputStream(arr));
+            Object obj = s.readObject();
+            return obj;
+        }
+
+        /**
+         *  Serializa y codifica una objeto a Hexadecimal
+         */
+        public static String encodeObject(Object obj) throws IOException {
+            ByteArrayOutputStream f = new ByteArrayOutputStream();
+            ObjectOutput s = new ObjectOutputStream(f);
+            s.writeObject(obj);
+            s.flush();
+            s.close();
+            byte arr[] = f.toByteArray();
+            String hex = "";
+            for (int x = 0; x < arr.length; x++) {
+                int v = arr[x];
+                if (v < 0) {
+                    v = 256 + v;
+                }
+                String val = Integer.toHexString(v);
+                if (val.length() == 1) {
+                    val = "0" + val;
+                }
+                hex += val;
+            }
+            return hex;
+        }
+    }
+
+    /**
+     * specialiced email class
+     * Jorge Jiménez
+     */
+    public static class EMAIL {
+
+        /**
+         * 
+         * @param fromEmail Address which send the email
+         * @param fromName  Name who send the email
+         * @param address   Collection of addresses to send the email
+         * @param ccEmail   Collection of addresses to send the email as copy
+         * @param bccEmail  Collection of addresses to send the email as bgCopy
+         * @param subject   Subject of email
+         * @param data      Email Body Text Data
+         * @param contentType HTML sends the body in html format, else it will be send in text format
+         * @param login     Login for SMTP server authentication
+         * @param password  password for SMTP server authentication
+         * @return
+         */
+        public static String sendMail(String fromEmail, String fromName, Collection address, Collection ccEmail, Collection bccEmail,
+                String subject, String contentType, String data, String login, String password, ArrayList<EmailAttachment> attachments) {
             try {
-                System.out.println("Entra a sendSimpleMail-1");
-                SimpleEmail email = new SimpleEmail();
-                email.setHostName("webmail.infotec.com.mx");
-                email.addTo(toEmail, "");
-                email.setFrom(fromEmail, "Jorge Jiménez");
+                HtmlEmail email = new HtmlEmail();
+
+                Iterator itAttaches = attachments.iterator();
+                while (itAttaches.hasNext()) {
+                    EmailAttachment attchment = (EmailAttachment) itAttaches.next();
+                    email.attach(attchment);
+                }
+
+                email.setHostName(smtpserver);
+                email.setFrom(fromEmail, fromName);
+                email.setTo(address);
+                if (ccEmail != null) {
+                    email.setCc(ccEmail);
+                }
+                if (bccEmail != null) {
+                    email.setBcc(bccEmail);
+                }
                 email.setSubject(subject);
-                email.setMsg(data);
-                System.out.println("Entra a sendSimpleMail-2");
+
+                if (contentType.equalsIgnoreCase("HTML")) {
+                    email.setHtmlMsg(data); // set the html message
+                } else {
+                    email.setMsg(data);
+                }
+
+                if (login != null && password != null) {
+                    email.setAuthentication(login, password);
+                }
                 return email.send();
             } catch (Exception e) {
                 log.error(e);
-                e.printStackTrace();
             }
             return null;
         }
 
-        /*
-        public static boolean sendEmail(String fromEmail, String toEmail, String ccEmail, String bccEmail,
-        String subject, String contentType, int priority, String data) {
-        try {
-        sun.net.smtp.SmtpClient sm = new sun.net.smtp.SmtpClient(smtpserver);
-        sm.from(fromEmail);
-        sm.to(toEmail);
-        if (ccEmail != null) {
-        sm.to(ccEmail);
-        }
-        if (bccEmail != null) {
-        sm.to(bccEmail);
-        }
-        java.io.PrintStream msg = sm.startMessage();
-        msg.println("From: " + fromEmail);
-        msg.println("To: " + toEmail);	   // Note dont use + for Performance
-        if (ccEmail != null) {
-        msg.println("CC: " + ccEmail);
-        }
-        //if(bccEmail!=null)msg.println("BCC: "+bccEmail);
-        msg.println("Subject: " + subject);
-        if (priority > 0) {
-        msg.println("X-Priority: " + priority);
-        }
-        if (contentType != null) {
-        msg.println("Content-Type: " + contentType);
-        }
-        //msg.println("X-MSMail-Priority: high");
-        msg.println();
-        msg.println(data);
-        msg.println();
-        sm.closeServer();
-        return true;
-        } catch (Exception e) {
-        log.error(e);
-        }
-        return false;
-        }
-         * */
-        /** Envía un mensaje electrónico en un objeto MailMessage.
-         * Send a email message in a MailMessage object.
-         *
-         * Envio de correo ejemplo:
-         * 
-         *  MailMessage mm = new MailMessage();
-         *  mm.setFrom(new EmailAddress(from));
-         *  mm.setSubject("Prueba envio de documento");
-         *  mm.addTo("email@webbuilder.com.mx");
-         *  mm.addTo("another.email@webbuilder.com.mx");
-         *  mm.addHtml("<html><body>Envio de docto html.</body></html>","Envio de docto html en formato de texto");
-         * // Agregando documento al mensaje.
-         *  mm.addAttachment(WBUtils.getInstance().getFileFromWorkPath2(filename),"500.html");
-         *  AFUtils.sendEmail(mm);
-         * 
-         * @param message MailMessage object to send.
-         * @return A true value if the email was succesfully sent.
-         */
-        /*
-        public static boolean sendEmail(MailMessage message) {
-        try {
-        message.sendMessage(smtpserver);
-        return true;
-        } catch (Exception e) {
-        log.error(e);
-        }
-        return false;
-        }*/
-        /** 
-         * Envía un mensaje electrónico en un objeto MailMessagen background.
-         * Send a email message in a MailMessage object in background.
-         *
-         * Envio de correo ejemplo:
-         * 
-         *  MailMessage mm = new MailMessage();
-         *  mm.setFrom(new EmailAddress(from));
-         *  mm.setSubject("Prueba envio de documento");
-         *  mm.addTo("email@webbuilder.com.mx");
-         *  mm.addTo("another.email@webbuilder.com.mx");
-         *  mm.addHtml("<html><body>Envio de docto html.</body></html>","Envio de docto html en formato de texto");
-         * // Agregando documento al mensaje.
-         *  mm.addAttachment(WBUtils.getInstance().getFileFromWorkPath2(filename),"500.html");
-         *  AFUtils.sendEmail(mm);
-         *
-         * @param message MailMessage object to send.
-         */
-        /*
-        public static void sendBGEmail(MailMessage message) {
-        getInstance().mailsender.addMessage(message);
-        }*/
         /**
-         * Envia un correo en BackGround, es decir no espera a enviar el correo.
-         * Sent the email in background, it doesn´t wait to send the message.
          * 
-         * @param fromEmail Sender Email address
-         * @param toEmail Email address to send the message
-         * @param ccEmail CC email addresses to send the message
-         * @param bccEmail BCCemail addresses to send the message
-         * @param subject Subject of the email message
-         * @param contentType ContentType of the email message
-         * @param priority Priprity of the message (number)
-         * @param data Text of the email message
+         * @param message class
+         * @throws java.net.SocketException
          */
-        /*
-        public static void sendBGEmail(String fromEmail, String toEmail, String ccEmail, String bccEmail,
-        String subject, String contentType, int priority, String data) {
-        getInstance().mailsender.addEmail(new AFMailData(fromEmail, toEmail, ccEmail, bccEmail, subject, contentType, priority, data));
+        public static void sendBGEmail(SWBMail message) throws java.net.SocketException {
+            SWBMailSender swbMailSender = new SWBMailSender();
+            swbMailSender.addEMail(message);
+            swbMailSender.run();
         }
-         **/
     }
 
     /**
@@ -1032,7 +1130,7 @@ public class SWBUtils {
          * lo envía a un archivo especificado (serialización) con codificación UTF-8 e identación de 2.
          * @param dom
          * @param file  */
-        public void DomtoFile(Document dom, String file) {
+        public static void DomtoFile(Document dom, String file) {
             domtoFile(dom, file, "UTF-8");
         }
 
@@ -1078,6 +1176,110 @@ public class SWBUtils {
             public void warning(org.xml.sax.SAXParseException e) {
             }
         };
+
+        /**
+         * 
+         * @param str Remplaza caracteres especiales en un xml
+         * @return
+         */
+        static public String replaceXMLChars(String str) {
+            if (str == null) {
+                return null;
+            }
+            StringBuffer ret = new StringBuffer();
+
+            // split tokens
+            StringTokenizer tokenizer = new StringTokenizer(str, " \t@%^&()-+=|\\{}[].;\"<>", true);
+            while (tokenizer.hasMoreTokens()) {
+                // next token
+                String token = tokenizer.nextToken();
+
+                // replace '\t' by the content of "tabulation"
+                if (token.startsWith("\t")) {
+                    ret.append("    ");
+                    continue;
+                }
+
+                // replace '<' by '&lt;'
+                if (token.startsWith("<")) {
+                    ret.append("&lt;");
+                    continue;
+                }
+
+                // replace '>' by '&gt;'
+                if (token.startsWith(">")) {
+                    ret.append("&gt;");
+                    continue;
+                }
+
+                // replace '&' by '&amp;'
+                if (token.startsWith("&")) {
+                    ret.append("&amp;");
+                    continue;
+                }
+                ret.append(token);
+            }
+            return ret.toString();
+
+        }
+
+        /**
+         * Creates a node as child of other one
+         * @param ele Node pather
+         * @param name Node name to create
+         * @return a new Element (Node)
+         */
+        static public Element appendChild(Element ele, String name) {
+            Document doc = ele.getOwnerDocument();
+            Element e = doc.createElement(name);
+            ele.appendChild(e);
+            return e;
+        }
+        /**
+         * Creates a node as child of other one and assign a value to it
+         * @param ele Node pather
+         * @param name Node name to create
+         * @param value Node Value to create
+         * @return a new Element (Node)
+         */
+        static public Element appendChild(Element ele, String name, String value) {
+            Document doc = ele.getOwnerDocument();
+            Element e = doc.createElement(name);
+            e.appendChild(doc.createTextNode(value));
+            ele.appendChild(e);
+            return e;
+        }
+    }
+
+    /**
+     * 
+     * @param file file to read
+     * @return array
+     * @throws java.io.FileNotFoundException
+     * @throws java.io.IOException
+     */
+    public static byte[] readFile(File file) throws FileNotFoundException, IOException {
+        if (!file.exists()) {
+            throw new FileNotFoundException("File Not Found...");
+        }
+        FileInputStream in = new FileInputStream(file);
+        if (in == null) {
+            throw new FileNotFoundException("File Not Found...");
+        }
+
+        int len = (int) file.length();
+
+        byte[] bfile = new byte[len];
+        int x = 0;
+        int y = 0;
+        while ((x = in.read(bfile, y, len - y)) > -1) {
+            y += x;
+            if (y == len) {
+                break;
+            }
+        }
+        in.close();
+        return bfile;
     }
 
     /**
