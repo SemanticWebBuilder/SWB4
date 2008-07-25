@@ -152,10 +152,18 @@ public class SWBUtils {
         return new Logger4jImpl(org.apache.log4j.Logger.getLogger(cls));
     }
 
+    /**
+     * Setter for property smtpserver
+     * @param smtpserver 
+     */
     public static void setSMTPServer(String smtpserver) {
         getInstance().smtpserver = smtpserver;
     }
 
+    /**
+     * Getter for property smtpserver
+     * @param smtpserver 
+     */
     public static String getSMTPServer() {
         return smtpserver;
     }
@@ -575,7 +583,7 @@ public class SWBUtils {
          */
         public static boolean copyStructure(String source, String target) {
             try {
-                copy(source, target, false, "", "");
+                copyStructure(source, target, false, "", "");
                 return true;
             } catch (Exception e) {
                 log.error(e);
@@ -715,6 +723,37 @@ public class SWBUtils {
                 hex += val;
             }
             return hex;
+        }
+
+        /**
+         * 
+         * @param file file to read
+         * @return array
+         * @throws java.io.FileNotFoundException
+         * @throws java.io.IOException
+         */
+        public static byte[] readFile(File file) throws FileNotFoundException, IOException {
+            if (!file.exists()) {
+                throw new FileNotFoundException("File Not Found...");
+            }
+            FileInputStream in = new FileInputStream(file);
+            if (in == null) {
+                throw new FileNotFoundException("File Not Found...");
+            }
+
+            int len = (int) file.length();
+
+            byte[] bfile = new byte[len];
+            int x = 0;
+            int y = 0;
+            while ((x = in.read(bfile, y, len - y)) > -1) {
+                y += x;
+                if (y == len) {
+                    break;
+                }
+            }
+            in.close();
+            return bfile;
         }
     }
 
@@ -1235,6 +1274,7 @@ public class SWBUtils {
             ele.appendChild(e);
             return e;
         }
+
         /**
          * Creates a node as child of other one and assign a value to it
          * @param ele Node pather
@@ -1249,37 +1289,6 @@ public class SWBUtils {
             ele.appendChild(e);
             return e;
         }
-    }
-
-    /**
-     * 
-     * @param file file to read
-     * @return array
-     * @throws java.io.FileNotFoundException
-     * @throws java.io.IOException
-     */
-    public static byte[] readFile(File file) throws FileNotFoundException, IOException {
-        if (!file.exists()) {
-            throw new FileNotFoundException("File Not Found...");
-        }
-        FileInputStream in = new FileInputStream(file);
-        if (in == null) {
-            throw new FileNotFoundException("File Not Found...");
-        }
-
-        int len = (int) file.length();
-
-        byte[] bfile = new byte[len];
-        int x = 0;
-        int y = 0;
-        while ((x = in.read(bfile, y, len - y)) > -1) {
-            y += x;
-            if (y == len) {
-                break;
-            }
-        }
-        in.close();
-        return bfile;
     }
 
     /**

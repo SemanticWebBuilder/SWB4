@@ -38,6 +38,16 @@ public class SWBUtilsTest {
     }
 
     @Test
+    public void testCreateInstance() {
+        System.out.println("createInstance(");
+        Object obj1 = SWBUtils.getInstance();
+        Object obj2 = SWBUtils.getInstance();
+        if (obj1 == obj2) {
+            System.out.println("Success");
+        }
+    }
+
+    @Test
     public void testRemoveDirectory() {
         System.out.println("RemoveDirectory(");
         String path = "C:/prueba";
@@ -66,8 +76,10 @@ public class SWBUtilsTest {
     @Test
     public void testCopyStructure() {
         System.out.println("copyStructure");
-        String path1 = "C:/Archivos de programa/Apache Software Foundation/Tomcat 5.5/webapps/wb3/prueba/";
-        String path2 = "C:/Archivos de programa/Apache Software Foundation/Tomcat 5.5/webapps/wb3/prueba1/";
+        //String path1 = "C:/Archivos de programa/Apache Software Foundation/Tomcat 5.5/webapps/SWB4/swb/SWBBase/src/org/semanticwb/prueba";
+        //String path2 = "C:/Archivos de programa/Apache Software Foundation/Tomcat 5.5/webapps/SWB4/swb/SWBBase/src/org/semanticwb/prueba1";
+        String path1 = "C:/prueba/";
+        String path2 = "C:/prueba1/";
         boolean result = SWBUtils.IO.copyStructure(path1, path2);
         System.out.println("result:" + result);
     }
@@ -116,7 +128,7 @@ public class SWBUtilsTest {
         String text = "Jorge JimÃ©nez niÃ±o";
         try {
             String result = SWBUtils.TEXT.decode(text, "UTF-8");
-            System.out.println("result2:" + result);
+            System.out.println("result:" + result);
         } catch (Exception e) {
         }
     }
@@ -142,9 +154,10 @@ public class SWBUtilsTest {
             attach.setName("Prueba Jorge Name");
             ArrayList<org.apache.commons.mail.EmailAttachment> aListAttachments = new ArrayList();
             aListAttachments.add(attach);
-
+            
+            SWBUtils.setSMTPServer("webmail.infotec.com.mx");
             String result = SWBUtils.EMAIL.sendMail("webbuilder@infotec.com.mx", "Jorge Jiménez", aAddress, null, null, "Prueba de Envío2", "text", "Esta es mi prueba2", null, null, aListAttachments);
-            System.out.println("result2:" + result);
+            System.out.println("result:" + result);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -182,6 +195,7 @@ public class SWBUtilsTest {
             swbMail.setFromName("Jorge");
             swbMail.setFromEmail("george@infotec.com.mx");
 
+            SWBUtils.setSMTPServer("webmail.infotec.com.mx");
             SWBUtils.EMAIL.sendBGEmail(swbMail);
 
         } catch (Exception e) {
@@ -225,6 +239,82 @@ public class SWBUtilsTest {
 
             swbMail.sendMail();
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testToUpperCaseFL() {
+        System.out.println("toUpperCaseFL");
+        String text = "jorge JimÃ©nez-niÃ±o_hola.mundo";
+        try {
+            String result = SWBUtils.TEXT.toUpperCaseFL(text);
+            System.out.println("result:" + result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testReplaceSpecialCharacters() {
+        System.out.println("replaceSpecialCharacters");
+        String text = "jorge JimÃ©nez-niÃ±o_hola.mundo";
+        try {
+            String result = SWBUtils.TEXT.replaceSpecialCharacters(text, true);
+            System.out.println("result:" + result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testReplaceXMLChars() {
+        System.out.println("replaceXMLChars");
+        String text = "<resource><name>Jorge Jimenez & yo mismo</name></resource>";
+        try {
+            String result = SWBUtils.XML.replaceXMLChars(text);
+            System.out.println("result:" + result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testAppendChild() {
+        System.out.println("appendChild");
+        try {
+            Document dom = SWBUtils.XML.getNewDocument();
+            Element eleRes = dom.createElement("resource");
+            dom.appendChild(eleRes);
+            Element eleName = SWBUtils.XML.appendChild(eleRes, "name");
+            System.out.println("result:" + eleName.getTagName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testAppendChild2() {
+        System.out.println("appendChild");
+        try {
+            Document dom = SWBUtils.XML.getNewDocument();
+            Element eleRes = dom.createElement("resource");
+            dom.appendChild(eleRes);
+            Element eleName = SWBUtils.XML.appendChild(eleRes, "name", "Jorge Jiménez");
+            System.out.println("result:" + eleName.getTagName() + ",value:" + eleName.getFirstChild().getNodeValue());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testReadFile() {
+        System.out.println("readFile");
+        try {
+            java.io.File file = new java.io.File("c:/prueba/prueba.txt");
+            byte[] bfile = SWBUtils.IO.readFile(file);
+            System.out.println("result:" + new String(bfile));
         } catch (Exception e) {
             e.printStackTrace();
         }
