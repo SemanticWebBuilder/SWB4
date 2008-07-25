@@ -27,9 +27,6 @@ public class SWBContext
         vocabulary=new SWBVocabulary();
     }
   
-    /** Create Instance.
-     * @param servletContext 
-     * @return  SWBContext*/
     static public synchronized SWBContext createInstance()
     {
         if (instance == null)
@@ -44,5 +41,9 @@ public class SWBContext
         return vocabulary;
     }
 
+//    public static User getUser(String uri)
+//    {
+//        
+//    }
 
 }
