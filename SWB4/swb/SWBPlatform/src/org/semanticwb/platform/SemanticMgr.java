@@ -8,7 +8,6 @@ package org.semanticwb.platform;
 import com.hp.hpl.jena.db.DBConnection;
 import com.hp.hpl.jena.db.IDBConnection;
 import com.hp.hpl.jena.ontology.OntClass;
-import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.ModelMaker;
@@ -94,7 +93,7 @@ public class SemanticMgr implements SWBInstanceObject
         vocabulary.init();
         
         //LoadModels
-        SemanticClass cls=getVocabulary().getSemanticClass(SemanticVocabulary.SWB_CLASS_SWBModel);
+        SemanticClass cls=getVocabulary().getSemanticClass(SemanticVocabulary.SWB_CLASS_SWBMODEL);
         Iterator<SemanticObject> tpit=cls.listInstances();
         while(tpit.hasNext())
         {
