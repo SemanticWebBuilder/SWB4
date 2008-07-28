@@ -63,7 +63,7 @@ public class TitleAndDescription extends WizardPage
         }
         else
         {
-            map.put(TITLE, this.jLabelName.getText().trim());
+            map.put(TITLE, this.jTextFieldName.getText().trim());
             map.put(DESCRIPTION, this.jTextAreaDescription.getText().trim());
             result=WizardPanelNavResult.PROCEED;
         }
