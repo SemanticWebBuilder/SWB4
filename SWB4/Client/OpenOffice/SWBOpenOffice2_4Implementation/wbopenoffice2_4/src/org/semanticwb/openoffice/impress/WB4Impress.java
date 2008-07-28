@@ -98,6 +98,7 @@ public class WB4Impress extends OfficeDocument
     public WB4Impress(XComponent document)
     {
         this.document = document;
+        setupDocument();
     }
 
     /**
@@ -124,6 +125,7 @@ public class WB4Impress extends OfficeDocument
         {
             throw new WBOfficeException(ERROR_DESKTOP_NOT_FOUND, e);
         }
+        setupDocument();
     }
 
     /**

@@ -84,6 +84,7 @@ public class WB4Writer extends OfficeDocument
     public WB4Writer(XComponent document)
     {
         this.document = document;
+        setupDocument();
     }
 
     /**
@@ -110,6 +111,7 @@ public class WB4Writer extends OfficeDocument
         {
             throw new WBOfficeException(DESKTOP_NOT_FOUND, e);
         }
+        setupDocument();
     }
 
     /**

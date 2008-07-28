@@ -73,8 +73,7 @@ public class WB4Calc extends OfficeDocument
     static
     {
         tabstrip = loadResourceAsString(WB4Calc.class, "tabstrip.htm");
-    }
-
+    }    
     /**
      * Create a representation of a Calc Document
      * @param document Representation of a Calc Document
@@ -83,6 +82,7 @@ public class WB4Calc extends OfficeDocument
     public WB4Calc(XComponent document)
     {
         this.document = document;
+        setupDocument();
     }
 
     /**
@@ -99,7 +99,7 @@ public class WB4Calc extends OfficeDocument
             Object desktop = serviceManager.createInstanceWithContext(
                     DESKTOP_PATH, m_xContext);
             XDesktop xdesktop = (XDesktop) UnoRuntime.queryInterface(XDesktop.class, desktop);
-            document = xdesktop.getCurrentComponent();
+            document = xdesktop.getCurrentComponent();            
             if (document == null)
             {
                 throw new WBOfficeException(ERROR_DOCUMENT_NOT_FOUND);
@@ -108,7 +108,8 @@ public class WB4Calc extends OfficeDocument
         catch (com.sun.star.uno.Exception e)
         {
             throw new WBOfficeException(DESKTOP_NOT_FOUND, e);
-        }
+        } 
+        setupDocument();
     }
 
     /**
