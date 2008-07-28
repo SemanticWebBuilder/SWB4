@@ -8,7 +8,9 @@ import org.semanticwb.xmlrpc.XmlRpcProxyFactory;
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -52,12 +54,12 @@ public class XmlRpcClientTest
     public void tearDown()
     {
     }
-
-    
+  
     
     @Test
     public void executeTestWithProxy()
     {
+              
         try
         {    
             IDemo obj = XmlRpcProxyFactory.newInstance(IDemo.class,new URI("http://localhost:8084/TestRPC/GatewayOffice"));
