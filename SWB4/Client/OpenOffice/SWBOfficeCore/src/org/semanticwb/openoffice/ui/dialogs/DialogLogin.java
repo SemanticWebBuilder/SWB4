@@ -20,7 +20,7 @@ public class DialogLogin extends javax.swing.JDialog
     private int numTry = 0;
     private boolean canceled = true;
     private UserInfo userInfo;
-    private URI url;
+    private URI webAddress;
     private String loggin,  password;
     ConfigurationListURI configurationListURI = new ConfigurationListURI();
 
@@ -57,9 +57,9 @@ public class DialogLogin extends javax.swing.JDialog
         return userInfo;
     }
 
-    public URI getURI()
+    public URI getWebAddress()
     {
-        return url;
+        return webAddress;
     }
 
     /** This method is called from within the constructor to
@@ -211,13 +211,14 @@ public class DialogLogin extends javax.swing.JDialog
                     return;
                 }
                 configurationListURI.addUserConfiguration(uri, this.jTextFieldClave.getText());
+                this.webAddress=uri;
             }
             catch ( URISyntaxException use )
             {
                 JOptionPane.showMessageDialog(null, "La dirección Web no es válida", this.getTitle(), JOptionPane.ERROR_MESSAGE);
                 this.jComboBoxWebAddress.requestFocus();
                 return;
-            }
+            }            
             this.setVisible(false);
             this.canceled = false;
         }
