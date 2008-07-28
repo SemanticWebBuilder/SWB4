@@ -156,12 +156,11 @@ public abstract class OfficeApplication
         frmlogin.setLocationRelativeTo(null);
         frmlogin.setVisible(true);
         if ( !frmlogin.isCanceled() )
-        {
-            URI uri = frmlogin.getURI();
+        {            
             String login = frmlogin.getLogin();
             String password = frmlogin.getPassword();
             userInfo = new UserInfo(password, login);
-            webAddress = uri;
+            webAddress =  frmlogin.getWebAddress();
             logOn = true;
         }
         else
@@ -171,7 +170,7 @@ public abstract class OfficeApplication
         return logOn;
     }
 
-    private static boolean tryLogin()
+    public static boolean tryLogin()
     {
         boolean tryLogin=false;
         if ( userInfo == null || webAddress == null )
