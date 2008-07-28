@@ -46,7 +46,7 @@ public class PublishResultProducer implements WizardResultProducer
                 openOfficeDocument.addAttachment(new Attachment(zipFile, zipFile.getName()));                                
                 String title=wizardData.get("title").toString();
                 String description=wizardData.get("description").toString();
-                String path=wizardData.get("path").toString();
+                String path=wizardData.get("path").toString();                
                 int contentID=openOfficeDocument.publish(title, description, path);
                 document.SaveContentId(contentID);
                 Summary summary=Summary.create(new SummaryPublish(),null);               
