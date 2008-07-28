@@ -5,13 +5,16 @@
 package org.semanticwb.openoffice;
 
 import java.awt.EventQueue;
+import java.io.File;
 import java.util.Map;
 import org.netbeans.spi.wizard.DeferredWizardResult;
 import org.netbeans.spi.wizard.ResultProgressHandle;
 import org.netbeans.spi.wizard.Summary;
 import org.netbeans.spi.wizard.WizardException;
 import org.netbeans.spi.wizard.WizardPage.WizardResultProducer;
+import org.semanticwb.openoffice.interfaces.IOpenOfficeDocument;
 import org.semanticwb.openoffice.ui.wizard.SummaryPublish;
+import org.semanticwb.xmlrpc.Attachment;
 
 
 /**
@@ -37,33 +40,18 @@ public class PublishResultProducer implements WizardResultProducer
             try
             {
                 progress.setProgress("Preparando documento para publicar", 0, 2);
-                //byte[] zipFile = document.getZipFile();
+                File zipFile=document.createZipFile();                                
                 progress.setProgress("Publicando Documento", 1, 2);
-                Thread.currentThread().sleep(1000);
-                progress.setProgress("Publicando Documento", 1, 2);
-                /*progress.setProgress("Doing something", 1, 3);
-                //doSomethingElseExpensive(wizardData);
-                Thread.currentThread().sleep(1000);
-                progress.setProgress("Doing something", 2, 3);
-                //Object finalResult = doAnotherExpensiveThing(wizardData);
-                Thread.currentThread().sleep(1000);
-                //progress.finish(null);
-                Summary summary=Summary.create(new DemoSummary(),null);                */
+                IOpenOfficeDocument openOfficeDocument=document.getOfficeDocumentProxy();
+                openOfficeDocument.addAttachment(new Attachment(zipFile, zipFile.getName()));                                
+                String title=wizardData.get("title").toString();
+                String description=wizardData.get("description").toString();
+                String path=wizardData.get("path").toString();
+                int contentID=openOfficeDocument.publish(title, description, path);
+                document.SaveContentId(contentID);
                 Summary summary=Summary.create(new SummaryPublish(),null);               
                 progress.finished(summary);
-            }
-            /*catch (WBOfficeException e)
-            {                
-                progress.failed(e.getMessage(), false);
-            }
-            catch (WBAlertException e)
-            {
-                progress.failed(e.getMessage(), false);
-            }
-            catch (WBException e)
-            {
-                progress.failed(e.getMessage(), false);
-            }*/
+            }           
             catch (Exception e)
             {
                 progress.failed(e.getMessage(), false);
