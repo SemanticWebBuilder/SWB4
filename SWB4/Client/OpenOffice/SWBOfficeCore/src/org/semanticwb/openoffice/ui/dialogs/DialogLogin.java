@@ -7,7 +7,6 @@ package org.semanticwb.openoffice.ui.dialogs;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.HashSet;
 import javax.swing.JOptionPane;
 import org.semanticwb.openoffice.*;
 
@@ -18,20 +17,20 @@ import org.semanticwb.openoffice.*;
 public class DialogLogin extends javax.swing.JDialog
 {
 
+    private int numTry = 0;
     private boolean canceled = true;
     private UserInfo userInfo;
     private URI url;
     private String loggin,  password;
-    ConfigurationListURI configurationListURI;
+    ConfigurationListURI configurationListURI = new ConfigurationListURI();
 
     /** Creates new form DialogLogin */
-    public DialogLogin(java.awt.Frame parent, boolean modal, ConfigurationListURI configurationListURI)
+    public DialogLogin(java.awt.Frame parent, boolean modal)
     {
         super(parent, modal);
-        this.configurationListURI = configurationListURI;
         initComponents();
         this.jComboBoxWebAddress.removeAllItems();
-        for (URI uri : configurationListURI.getAddresses())
+        for ( URI uri : configurationListURI.getAddresses() )
         {
             this.jComboBoxWebAddress.addItem(uri);
         }
@@ -185,39 +184,48 @@ public class DialogLogin extends javax.swing.JDialog
         pack();
     }// </editor-fold>//GEN-END:initComponents
     private void jButtonAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAcceptActionPerformed
-        if (this.jComboBoxWebAddress.getSelectedItem() == null)
-        {
-            JOptionPane.showMessageDialog(null, "Debe indicar una dirección Web", this.getTitle(), JOptionPane.ERROR_MESSAGE);
-            this.jComboBoxWebAddress.requestFocus();
-            return;
-        }
-        String sUri = this.jComboBoxWebAddress.getSelectedItem().toString();
-        try
-        {
-            URI uri = new URI(sUri);
-            if (this.jTextFieldClave.getText().isEmpty())
-            {
-                JOptionPane.showMessageDialog(null, "Debe indicar la clave de acceso", this.getTitle(), JOptionPane.ERROR_MESSAGE);
-                this.jTextFieldClave.requestFocus();
-                return;
-            }
-            if (this.jPassword.getPassword().length == 0)
-            {
-                JOptionPane.showMessageDialog(null, "Debe indicar la contraseña de acceso", this.getTitle(), JOptionPane.ERROR_MESSAGE);
-                this.jPassword.requestFocus();
-                return;
-            }
-            configurationListURI.addUserConfiguration(uri, this.jTextFieldClave.getText());
-        }
-        catch (URISyntaxException use)
-        {
-            JOptionPane.showMessageDialog(null, "La dirección Web no es válida", this.getTitle(), JOptionPane.ERROR_MESSAGE);
-            this.jComboBoxWebAddress.requestFocus();
-            return;
-        }
 
-        this.setVisible(false);
-        this.canceled = false;
+        numTry++;
+        if ( numTry < 3 )
+        {
+            if ( this.jComboBoxWebAddress.getSelectedItem() == null )
+            {
+                JOptionPane.showMessageDialog(null, "Debe indicar una dirección Web", this.getTitle(), JOptionPane.ERROR_MESSAGE);
+                this.jComboBoxWebAddress.requestFocus();
+                return;
+            }
+            String sUri = this.jComboBoxWebAddress.getSelectedItem().toString();
+            try
+            {
+                URI uri = new URI(sUri);
+                if ( this.jTextFieldClave.getText().isEmpty() )
+                {
+                    JOptionPane.showMessageDialog(null, "Debe indicar la clave de acceso", this.getTitle(), JOptionPane.ERROR_MESSAGE);
+                    this.jTextFieldClave.requestFocus();
+                    return;
+                }
+                if ( this.jPassword.getPassword().length == 0 )
+                {
+                    JOptionPane.showMessageDialog(null, "Debe indicar la contraseña de acceso", this.getTitle(), JOptionPane.ERROR_MESSAGE);
+                    this.jPassword.requestFocus();
+                    return;
+                }
+                configurationListURI.addUserConfiguration(uri, this.jTextFieldClave.getText());
+            }
+            catch ( URISyntaxException use )
+            {
+                JOptionPane.showMessageDialog(null, "La dirección Web no es válida", this.getTitle(), JOptionPane.ERROR_MESSAGE);
+                this.jComboBoxWebAddress.requestFocus();
+                return;
+            }
+            this.setVisible(false);
+            this.canceled = false;
+        }
+        else
+        {
+            this.setVisible(false);
+            this.canceled = true;
+        }
     // TODO: Agregar logica de acceso
     }//GEN-LAST:event_jButtonAcceptActionPerformed
 
@@ -231,18 +239,18 @@ public class DialogLogin extends javax.swing.JDialog
     }//GEN-LAST:event_jButtonAvancedActionPerformed
 
     private void jComboBoxWebAddressActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxWebAddressActionPerformed
-        if (this.jComboBoxWebAddress.getSelectedItem() != null)
+        if ( this.jComboBoxWebAddress.getSelectedItem() != null )
         {
             String sUri = this.jComboBoxWebAddress.getSelectedItem().toString();
             try
             {
                 URI uri = new URI(sUri);
-                String login=configurationListURI.getLogin(uri);
+                String login = configurationListURI.getLogin(uri);
                 this.jTextFieldClave.setText(login);
             }
-            catch (URISyntaxException use)
+            catch ( URISyntaxException use )
             {
-
+                JOptionPane.showMessageDialog(this, "Error al escribir la dirección web",this.getTitle(),JOptionPane.ERROR);
             }
         }
     }//GEN-LAST:event_jComboBoxWebAddressActionPerformed
