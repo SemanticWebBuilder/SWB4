@@ -38,7 +38,7 @@ public class SelectPage extends WizardPage {
         }
         else
         {
-            map.put("path", this.jTreePages.getSelectionPath());
+            map.put("path", this.jTreePages.getSelectionPath().toString());
             result=WizardPanelNavResult.PROCEED;
         }
         return result;
