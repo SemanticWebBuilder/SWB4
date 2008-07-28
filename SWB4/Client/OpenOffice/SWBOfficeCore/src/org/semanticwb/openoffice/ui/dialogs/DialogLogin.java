@@ -18,10 +18,9 @@ public class DialogLogin extends javax.swing.JDialog
 {
 
     private int numTry = 0;
-    private boolean canceled = true;
-    private UserInfo userInfo;
+    private boolean canceled = true;    
     private URI webAddress;
-    private String loggin,  password;
+    private String login,  password;
     ConfigurationListURI configurationListURI = new ConfigurationListURI();
 
     /** Creates new form DialogLogin */
@@ -44,19 +43,13 @@ public class DialogLogin extends javax.swing.JDialog
 
     public String getLogin()
     {
-        return loggin;
+        return login;
     }
 
     public String getPassword()
     {
         return password;
     }
-
-    public UserInfo getUserInfo()
-    {
-        return userInfo;
-    }
-
     public URI getWebAddress()
     {
         return webAddress;
@@ -212,6 +205,8 @@ public class DialogLogin extends javax.swing.JDialog
                 }
                 configurationListURI.addUserConfiguration(uri, this.jTextFieldClave.getText());
                 this.webAddress=uri;
+                this.login=this.jTextFieldClave.getText();
+                this.password=new String(this.jPassword.getPassword());
             }
             catch ( URISyntaxException use )
             {
