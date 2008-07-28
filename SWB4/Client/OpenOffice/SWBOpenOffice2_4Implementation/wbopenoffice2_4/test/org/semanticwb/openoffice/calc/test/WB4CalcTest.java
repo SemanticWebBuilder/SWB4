@@ -24,7 +24,10 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.semanticwb.openoffice.Configuration;
+import org.semanticwb.openoffice.ConfigurationListURI;
 import org.semanticwb.openoffice.DocumentType;
+import org.semanticwb.openoffice.ErrorLog;
 import org.semanticwb.openoffice.SaveDocumentFormat;
 import org.semanticwb.openoffice.WBException;
 import org.semanticwb.openoffice.calc.WB4Calc;
@@ -51,6 +54,9 @@ public class WB4CalcTest
     @BeforeClass
     public static void setUpClass() throws Exception
     {
+        System.setProperty(ConfigurationListURI.CONFIGURATION, "c:\\temp\\list.xml");
+        System.setProperty(Configuration.CONFIGURATION, "c:\\temp\\config.xml");
+        System.setProperty(ErrorLog.CONFIGURATION, "c:\\temp");
     }
 
     @AfterClass
@@ -278,6 +284,20 @@ public class WB4CalcTest
             WB4Calc writer = new WB4Calc(this.xContext);
             List<File> attachments = writer.getAllAttachments();
             Assert.assertEquals(5, attachments.size());
+        }
+        catch (WBException wbe)
+        {
+            Assert.fail(wbe.getMessage());
+        }
+    }
+    
+    @Test    
+    public void publishTest()
+    {
+        try
+        {
+            WB4Calc writer = new WB4Calc(this.xContext);            
+            writer.publish();            
         }
         catch (WBException wbe)
         {
