@@ -25,7 +25,6 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.semanticwb.openoffice.DocumentType;
-import org.semanticwb.openoffice.OfficeDocumentHelper;
 import org.semanticwb.openoffice.SaveDocumentFormat;
 import org.semanticwb.openoffice.WBException;
 import org.semanticwb.openoffice.writer.WB4WriterApplication;
@@ -291,7 +290,7 @@ public class WB4WriterTest
         try
         {
             WB4Writer writer = new WB4Writer(this.xContext);
-            OfficeDocumentHelper.publish(writer);
+            writer.publish();
         }
         catch (WBException wbe)
         {
@@ -304,7 +303,7 @@ public class WB4WriterTest
     public void openTest()
     {
         WB4WriterApplication writer = new WB4WriterApplication(this.xContext);
-        OfficeDocumentHelper.open(writer);
+        writer.open();
 
     }
 
