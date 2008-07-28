@@ -177,6 +177,7 @@ public class SWBUtils {
         //version 1.3
         /**
          * Remplaza en una cadena (str) las coincidencias encontradas (match) con otra cadena (replace).
+         * Raplace match words in a String object
          * @param str 
          * @param match
          * @param replace
@@ -209,6 +210,7 @@ public class SWBUtils {
 
         /**
          * Le pone a un objeto String el tipo de codificación especificado por parámetro.
+         * Encodes a String object
          * @param data
          * @param enc
          * @throws java.io.UnsupportedEncodingException
@@ -224,6 +226,7 @@ public class SWBUtils {
 
         /**
          * Decodifica un objeto String poniéndole cierta codificación.
+         * Decodes a string object
          * @param data
          * @param enc
          * @throws java.io.UnsupportedEncodingException
@@ -248,6 +251,8 @@ public class SWBUtils {
          * Convierte un string a una cadena de caracteres en donde la primera letra despues de cada separacion
          * con cualquiera de los caracteres ' ',.,- y _ , sera convertida a mayuscula
          *
+         * Converts to UpperCase the firts letter in a word 
+         * 
          * @param str String a convertir
          * @return
          */
@@ -272,6 +277,7 @@ public class SWBUtils {
         /**
          *  Reemplaza caracteres acentuados y espacios en blanco.
          *  caracteres adicionales son eliminados.
+         *  Replace special characters and blank spaces
          *
          * @param txt String a remplazar
          * @param replaceSpaces Si se desea que se remplacen caracteres acentuados
@@ -386,7 +392,9 @@ public class SWBUtils {
 
         /**
          *  Copia el InputStream al OutputStream y al final cierra los streams
-         *
+         * 
+         *  Copy a InputStream to OutputStream
+         * 
          * @param in 
          * @param out 
          * @throws IOException
@@ -397,6 +405,7 @@ public class SWBUtils {
 
         /**
          *  Copia el InputStream al OutputStream y al final cierra los streams
+         *  Copy a InputStream to OutputStream
          * @param in 
          * @param out
          * @param bufferSize 
@@ -421,6 +430,7 @@ public class SWBUtils {
 
         /**
          * Regresa un objeto String resultante de un objeto InputStream
+         * Returns a String object as a result of InputStream Object
          * @param in 
          * @return
          * @throws IOException 
@@ -471,6 +481,9 @@ public class SWBUtils {
 
         /**
          * Normaliza rutas, sustituyendo  el carácter “\” por el carácter “/” y eliminando rutas relativas.
+         * 
+         * Normalice path, replace the "\" character by “/” and remove relative paths
+         * 
          * @param path
          * @return 
          */
@@ -515,7 +528,11 @@ public class SWBUtils {
                 }
             } while (true);
         }
-        // Elimina directorios completos
+
+        /**
+         * Elimina directorios completos
+         * Remove complete directories
+         */
         public static boolean removeDirectory(String path) {
             try {
                 File dir = new File(path);
@@ -542,6 +559,11 @@ public class SWBUtils {
             return false;
         }
 
+        /**
+         * Return a file from a path
+         * @param path
+         * @return
+         */
         public static String getFileFromPath(String path) {
             StringBuffer ret = new StringBuffer(8192);
             try {
@@ -560,6 +582,9 @@ public class SWBUtils {
 
         /**
          * Crea un directorio con el nombre de ruta especificada
+         * Creates a directory with specified path name
+         * @param path
+         * @return
          */
         public static boolean createDirectory(String path) {
             try {
@@ -765,6 +790,8 @@ public class SWBUtils {
 
         /**
          * 
+         * Send an email
+         * 
          * @param fromEmail Address which send the email
          * @param fromName  Name who send the email
          * @param address   Collection of addresses to send the email
@@ -816,7 +843,7 @@ public class SWBUtils {
         }
 
         /**
-         * 
+         * Sends an email in background
          * @param message class
          * @throws java.net.SocketException
          */
@@ -1037,7 +1064,8 @@ public class SWBUtils {
          * @param tpl
          * @param doc
          * @throws javax.xml.transform.TransformerException
-         * @return  */
+         * @return  a String object ready to be displayed
+         */
         public static String transformDom(Templates tpl, Document doc) throws TransformerException {
             ByteArrayOutputStream sw = new java.io.ByteArrayOutputStream();
             Transformer trans = tpl.newTransformer();
@@ -1089,6 +1117,16 @@ public class SWBUtils {
             return bOk;
         }
 
+        /**
+         * Transforma un objeto Document con un Template (xslt) especificado, 
+         * regresando un objeto String con dicha transformación y listo para ser desplegado.
+         * 
+         * Transforms a Document object with specified template (xslt)
+         * @param sysid
+         * @param objschema
+         * @param objxml
+         * @return a String object ready to be displayed
+         */
         private static boolean xmlVerifierImpl(String sysid, Object objschema, Object objxml) {
             boolean bOk = false;
             if (objschema == null || objxml == null) {
@@ -1149,6 +1187,7 @@ public class SWBUtils {
 
         /**
          * Comvierte un Node a Document
+         * Converts Node to Document object
          * Todo: Meter en AFUtils
          */
         public static Document node2Document(Node node) throws SWBException {
@@ -1176,9 +1215,13 @@ public class SWBUtils {
         /**
          * Obtiene el contenido del objeto Document como xml y 
          * lo envía a un archivo especificado (serialización) bajo cierta codificación que se especifique e identación de 2.
+         * 
+         * Serialize a document object
+         * 
          * @param dom
          * @param file
-         * @param encode  */
+         * @param encode  
+         */
         public static void domtoFile(Document dom, String file, String encode) {
             java.io.FileOutputStream osw = null;
             try {
@@ -1217,7 +1260,7 @@ public class SWBUtils {
         };
 
         /**
-         * 
+         * Replace special characters in xml String
          * @param str Remplaza caracteres especiales en un xml
          * @return
          */
