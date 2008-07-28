@@ -11,7 +11,8 @@ import java.util.Locale;
 import javax.swing.UIManager;
 import org.netbeans.spi.wizard.Wizard;
 import org.netbeans.spi.wizard.WizardPage;
-import org.semanticwb.office.interfaces.IOfficeApplication;
+import org.semanticwb.openoffice.interfaces.IOpenOfficeApplication;
+import org.semanticwb.openoffice.interfaces.IOpenOfficeDocument;
 import org.semanticwb.openoffice.ui.dialogs.DialogAbout;
 import org.semanticwb.openoffice.ui.dialogs.DialogChangePassword;
 import org.semanticwb.openoffice.ui.dialogs.DialogLogin;
@@ -26,8 +27,11 @@ import org.semanticwb.xmlrpc.XmlRpcProxyFactory;
  */
 public abstract class OfficeApplication
 {
-    public static UserInfo user=null;
-    public static IOfficeApplication proxyApplication=null;
+
+    private static MenuListener menuListener;
+    private static UserInfo userInfo = null;
+    private static URI webAddress = null;
+
     static
     {
         Locale.setDefault(new Locale("es"));
@@ -39,6 +43,23 @@ public abstract class OfficeApplication
         {
             // No debe hacer nada
             System.out.println(ue.getMessage());
+        }
+    }
+
+    public void setMenuListener(MenuListener menuListener)
+    {
+        OfficeApplication.menuListener = menuListener;
+    }
+
+    protected OfficeApplication()
+    {
+        if ( OfficeApplication.tryLogin() )
+        {
+            IOpenOfficeApplication officeApplication = XmlRpcProxyFactory.newInstance(IOpenOfficeApplication.class, webAddress);
+            if ( officeApplication.isValidVersion("1.0") && menuListener != null )
+            {
+                menuListener.onLogin();
+            }
         }
     }
 
@@ -82,10 +103,56 @@ public abstract class OfficeApplication
         dialog.setVisible(true);
     }
 
-    private final static boolean login()
+    public static URI getWebAddress() throws WBException
     {
-        ConfigurationListURI config=new ConfigurationListURI();        
-        DialogLogin frmlogin = new DialogLogin(new javax.swing.JFrame(), true, config);
+
+        if ( webAddress == null )
+        {
+            if ( !tryLogin() )
+            {
+                throw new WBException("The user can be logged");
+            }
+        }
+        return webAddress;
+    }
+
+    public static int setupDocument(String contentId)
+    {
+        int contentIdToReturn = Integer.MIN_VALUE;
+        if ( contentId != null && OfficeApplication.tryLogin() )
+        {
+            try
+            {
+                IOpenOfficeDocument document = XmlRpcProxyFactory.newInstance(IOpenOfficeDocument.class, OfficeApplication.getWebAddress());
+                document.setWebAddress(OfficeApplication.getWebAddress());
+                try
+                {                    
+                    if ( document.exists(Integer.parseInt(contentId)) )
+                    {
+                        contentIdToReturn = Integer.parseInt(contentId);
+                    }
+                }
+                catch ( NumberFormatException nfe )
+                {
+                    ErrorLog.log(nfe);
+                }
+            }
+            catch ( WBException e )
+            {
+                ErrorLog.log(e);
+            }
+        }
+        return contentIdToReturn;
+    }
+    /*public static MenuListener getMenuListener()
+    {
+    return menuListener;
+    }*/
+
+    private final static boolean logOn()
+    {
+        boolean logOn=false;
+        DialogLogin frmlogin = new DialogLogin(new javax.swing.JFrame(), true);
         frmlogin.setLocationRelativeTo(null);
         frmlogin.setVisible(true);
         if ( !frmlogin.isCanceled() )
@@ -93,15 +160,47 @@ public abstract class OfficeApplication
             URI uri = frmlogin.getURI();
             String login = frmlogin.getLogin();
             String password = frmlogin.getPassword();
-            user=new UserInfo(password, login);            
-            return true;
+            userInfo = new UserInfo(password, login);
+            webAddress = uri;
+            logOn = true;
         }
-        return false;
+        else
+        {
+            logOff();
+        }
+        return logOn;
     }
 
-    public final static void logout()
+    private static boolean tryLogin()
     {
-        user=null;
-        proxyApplication=null;
+        boolean tryLogin=false;
+        if ( userInfo == null || webAddress == null )
+        {
+            logOn();
+            if ( userInfo == null || webAddress == null )
+            {
+                logOff();
+                tryLogin=false;
+            }
+            else
+            {
+                tryLogin=true;
+            }
+        }
+        else
+        {
+            tryLogin=true;
+        }
+        return tryLogin;
+    }
+
+    public final static void logOff()
+    {
+        userInfo = null;
+        webAddress = null;
+        if ( menuListener != null )
+        {
+            menuListener.onLogout();
+        }
     }
 }
