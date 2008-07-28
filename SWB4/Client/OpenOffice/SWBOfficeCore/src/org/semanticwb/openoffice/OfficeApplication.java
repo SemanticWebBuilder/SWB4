@@ -31,7 +31,7 @@ public abstract class OfficeApplication
     private static MenuListener menuListener;
     private static UserInfo userInfo = null;
     private static URI webAddress = null;
-
+    private static IOpenOfficeDocument document;
     static
     {
         Locale.setDefault(new Locale("es"));
@@ -45,7 +45,16 @@ public abstract class OfficeApplication
             System.out.println(ue.getMessage());
         }
     }
-
+    public static IOpenOfficeDocument getOfficeDocumentProxy() throws WBException
+    {
+        if ( document == null )
+        {            
+            document = XmlRpcProxyFactory.newInstance(IOpenOfficeDocument.class, OfficeApplication.getWebAddress());
+            document.setUser(OfficeApplication.userInfo.getLogin());
+            document.setPassword(OfficeApplication.userInfo.getPassword());
+        }
+        return document;
+    }
     public void setMenuListener(MenuListener menuListener)
     {
         OfficeApplication.menuListener = menuListener;
