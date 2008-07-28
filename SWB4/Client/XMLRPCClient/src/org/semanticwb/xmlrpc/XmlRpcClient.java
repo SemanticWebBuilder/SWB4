@@ -348,7 +348,8 @@ class XmlRpcClient<T>
                 }
                 catch ( IOException ioe )
                 {
-                    throw new XmlRpcException(ioe);
+                    // Revisar
+                    //throw new XmlRpcException(ioe);
                 }
             }
         }
