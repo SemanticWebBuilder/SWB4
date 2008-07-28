@@ -42,6 +42,7 @@ import org.semanticwb.xmlrpc.Attachment;
 import org.semanticwb.xmlrpc.XmlRpcProxyFactory;
 import static org.semanticwb.openoffice.util.FileUtil.copyFile;
 import static java.lang.Integer.MIN_VALUE;
+
 /**
  * An Office documents is an abstraction of a document that can be published
  * @author victor.lorenzana
@@ -53,6 +54,7 @@ public abstract class OfficeDocument
     private static final String CONTENT_ID_NAME = "contentID";
     // By default the content is not published
     private int contentID = MIN_VALUE;
+
     static
     {
         Locale.setDefault(new Locale("es"));
@@ -66,18 +68,17 @@ public abstract class OfficeDocument
             System.out.println(ue.getMessage());
         }
     }
-    
+
     protected OfficeDocument()
     {
-        
+
     }
+
     protected final void setupDocument()
     {
         String contentId = this.getCustomProperties().get(CONTENT_ID_NAME);
         contentID = OfficeApplication.setupDocument(contentId);
     }
-
-    
     private static final String TITLE = "Asistente de publicación";
 
     /**
@@ -389,14 +390,14 @@ public abstract class OfficeDocument
      */
     public final boolean isPublicated()
     {
-        boolean isPublicated=false;
+        boolean isPublicated = false;
         if ( this.contentID == MIN_VALUE )
         {
-            isPublicated=false;
+            isPublicated = false;
         }
         else
         {
-            isPublicated=true;
+            isPublicated = true;
         }
         return isPublicated;
     }
@@ -435,55 +436,58 @@ public abstract class OfficeDocument
         }
         else
         {
-            boolean canbepublished = false;
-            if ( isNewDocument() )
+            if ( OfficeApplication.tryLogin() )
             {
-                canbepublished = showSaveDialog(this);
-            }
-            else
-            {
-                canbepublished = true;
-            }
-
-            if ( canbepublished )
-            {
-                if ( isPublicated() )
+                boolean canbepublished = false;
+                if ( isNewDocument() )
                 {
-                    try
-                    {
-                        if(isModified())
-                        {
-                            save();
-                        }
-                        updateContent();
-                    }
-                    catch ( WBException e )
-                    {
-                        JOptionPane.showMessageDialog(null, e.getMessage(),TITLE,JOptionPane.ERROR_MESSAGE);
-                    }
+                    canbepublished = showSaveDialog(this);
                 }
                 else
                 {
-                    PublishResultProducer resultProducer = new PublishResultProducer(this);
-                    Class[] clazz;
-                    switch ( getDocumentType() )
-                    {
-                        case WORD:
-                            clazz = new Class[]{TitleAndDescription.class, SelectPage.class, PagContenido.class, SelectTypeToShow.class};
-                            break;
-                        case EXCEL:
-                            clazz = new Class[]{TitleAndDescription.class, SelectPage.class, PagContenido.class};
-                            break;
-                        case PPT:
-                            clazz = new Class[]{TitleAndDescription.class, SelectPage.class, PagContenido.class};
-                            break;
-                        default:
-                            clazz = new Class[]{TitleAndDescription.class, SelectPage.class};
-                            break;
+                    canbepublished = true;
+                }
 
+                if ( canbepublished )
+                {
+                    if ( isPublicated() )
+                    {
+                        try
+                        {
+                            if ( isModified() )
+                            {
+                                save();
+                            }
+                            updateContent();
+                        }
+                        catch ( WBException e )
+                        {
+                            JOptionPane.showMessageDialog(null, e.getMessage(), TITLE, JOptionPane.ERROR_MESSAGE);
+                        }
                     }
-                    Wizard wiz = WizardPage.createWizard(TITLE, clazz, resultProducer);
-                    wiz.show();
+                    else
+                    {
+                        PublishResultProducer resultProducer = new PublishResultProducer(this);
+                        Class[] clazz;
+                        switch ( getDocumentType() )
+                        {
+                            case WORD:
+                                clazz = new Class[]{TitleAndDescription.class, SelectPage.class, PagContenido.class, SelectTypeToShow.class};
+                                break;
+                            case EXCEL:
+                                clazz = new Class[]{TitleAndDescription.class, SelectPage.class, PagContenido.class};
+                                break;
+                            case PPT:
+                                clazz = new Class[]{TitleAndDescription.class, SelectPage.class, PagContenido.class};
+                                break;
+                            default:
+                                clazz = new Class[]{TitleAndDescription.class, SelectPage.class};
+                                break;
+
+                        }
+                        Wizard wiz = WizardPage.createWizard(TITLE, clazz, resultProducer);
+                        wiz.show();
+                    }
                 }
             }
         }
@@ -493,11 +497,12 @@ public abstract class OfficeDocument
     {
         if ( document == null )
         {
-            URI webAddress=OfficeApplication.getWebAddress();
+            URI webAddress = OfficeApplication.getWebAddress();
             document = XmlRpcProxyFactory.newInstance(IOpenOfficeDocument.class, webAddress);
         }
         return document;
     }
+
     void SaveContentId(int contentId) throws WBException
     {
         this.contentID = contentId;
@@ -505,6 +510,7 @@ public abstract class OfficeDocument
         values.put(CONTENT_ID_NAME, String.valueOf(contentId));
         saveCustomProperties(values);
     }
+
     private final boolean saveDocument(File file)
     {
         boolean result = false;
