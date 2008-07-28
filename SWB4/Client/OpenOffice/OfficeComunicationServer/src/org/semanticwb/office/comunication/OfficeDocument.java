@@ -18,35 +18,43 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     {
         return 0;
     }    
-    public String getPath()
+    public void updateContent(int contentId)
+    {
+    
+    }
+    public String getPath(int contentID)
     {        
         return "/";
     }
-    public void setTitle(String title)
+    public boolean exists(int contentId)
+    {
+        return true;
+    }
+    public void setTitle(int contentID,String title)
     {
             
     }
-    public void setDescription(String description)
+    public void setDescription(int contentID,String description)
     {
             
     }
-    public void setPath(String path)
+    public void setPath(int contentID,String path)
     {        
     
     }
     public void sendToAuthorize()
     {        
         
-    }
-    public void setActive(boolean active)
+    }    
+    public void setActive(int contentID,boolean active)
     {        
     
     }
-    public boolean getActive()
+    public boolean getActive(int contentID)
     {
         return false;
     }
-    public void delete()
+    public void delete(int contentID)
     {
         
     }
