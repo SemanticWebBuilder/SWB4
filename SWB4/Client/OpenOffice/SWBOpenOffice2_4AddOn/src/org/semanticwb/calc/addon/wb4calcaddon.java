@@ -8,7 +8,6 @@ import com.sun.star.registry.XRegistryKey;
 import com.sun.star.lib.uno.helper.WeakBase;
 import javax.swing.JOptionPane;
 import org.semanticwb.openoffice.OfficeDocument;
-import org.semanticwb.openoffice.OfficeDocumentHelper;
 import org.semanticwb.openoffice.WBOfficeException;
 import org.semanticwb.openoffice.calc.WB4Calc;
 import org.semanticwb.openoffice.writer.WB4WriterApplication;
@@ -178,7 +177,7 @@ public final class wb4calcaddon extends WeakBase
                 try
                 {
                     OfficeDocument document = new WB4Calc(this.m_xContext);
-                    OfficeDocumentHelper.publish(document);
+                    document.publish();                    
                 }
                 catch (WBOfficeException wboe)
                 {
@@ -190,7 +189,7 @@ public final class wb4calcaddon extends WeakBase
             if (aURL.Path.compareTo("open") == 0)
             {
                 WB4WriterApplication application = new WB4WriterApplication(this.m_xContext);
-                OfficeDocumentHelper.open(application);
+                application.open();                
                 return;
             }
             if (aURL.Path.compareTo("delete") == 0)
@@ -230,7 +229,8 @@ public final class wb4calcaddon extends WeakBase
             }
             if (aURL.Path.compareTo("changePassword") == 0)
             {
-                OfficeDocumentHelper.changePassword();
+                WB4WriterApplication application = new WB4WriterApplication(this.m_xContext);
+                application.changePassword();
                 return;
             }
             if (aURL.Path.compareTo("help") == 0)
