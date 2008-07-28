@@ -39,7 +39,6 @@ import org.semanticwb.openoffice.util.ExcelFileFilter;
 import org.semanticwb.openoffice.util.PPTFileFilter;
 import org.semanticwb.openoffice.util.WordFileFilter;
 import org.semanticwb.xmlrpc.Attachment;
-import org.semanticwb.xmlrpc.XmlRpcProxyFactory;
 import static org.semanticwb.openoffice.util.FileUtil.copyFile;
 import static java.lang.Integer.MIN_VALUE;
 
@@ -49,8 +48,7 @@ import static java.lang.Integer.MIN_VALUE;
  */
 public abstract class OfficeDocument
 {
-
-    private IOpenOfficeDocument document;
+    
     private static final String CONTENT_ID_NAME = "contentID";
     // By default the content is not published
     private int contentID = MIN_VALUE;
@@ -69,6 +67,10 @@ public abstract class OfficeDocument
         }
     }
 
+    public final IOpenOfficeDocument getOfficeDocumentProxy() throws WBException
+    {
+        return OfficeApplication.getOfficeDocumentProxy();
+    }
     protected OfficeDocument()
     {
 
@@ -491,17 +493,7 @@ public abstract class OfficeDocument
                 }
             }
         }
-    }
-
-    IOpenOfficeDocument getOfficeDocumentProxy() throws WBException
-    {
-        if ( document == null )
-        {
-            URI webAddress = OfficeApplication.getWebAddress();
-            document = XmlRpcProxyFactory.newInstance(IOpenOfficeDocument.class, webAddress);
-        }
-        return document;
-    }
+    }  
 
     void SaveContentId(int contentId) throws WBException
     {
