@@ -127,18 +127,18 @@ public abstract class OfficeApplication
 
     public static int setupDocument(String contentId)
     {
-        int contentIdToReturn = Integer.MIN_VALUE;
-        if ( contentId != null && OfficeApplication.tryLogin() )
-        {
+        int contentIdToReturn = Integer.MIN_VALUE;        
+        if ( contentId != null  && !contentId.trim().equals("") && OfficeApplication.tryLogin() )
+        {            
             try
             {
-                IOpenOfficeDocument document = XmlRpcProxyFactory.newInstance(IOpenOfficeDocument.class, OfficeApplication.getWebAddress());
-                document.setWebAddress(OfficeApplication.getWebAddress());
+                int id=Integer.parseInt(contentId);
+                document=getOfficeDocumentProxy();                
                 try
                 {                    
-                    if ( document.exists(Integer.parseInt(contentId)) )
+                    if ( document.exists(id) )
                     {
-                        contentIdToReturn = Integer.parseInt(contentId);
+                        contentIdToReturn = id;
                     }
                 }
                 catch ( NumberFormatException nfe )
