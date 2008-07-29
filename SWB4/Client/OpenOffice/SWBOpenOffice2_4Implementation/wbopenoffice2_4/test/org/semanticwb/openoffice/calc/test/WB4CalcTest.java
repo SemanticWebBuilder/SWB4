@@ -291,8 +291,7 @@ public class WB4CalcTest
         }
     }
     
-    @Test    
-    @Ignore
+    @Test        
     public void publishTest()
     {
         try
@@ -305,7 +304,8 @@ public class WB4CalcTest
             Assert.fail(wbe.getMessage());
         }
     }
-    @Test    
+    @Test   
+    @Ignore
     public void createZipFileTest()
     {
         try
