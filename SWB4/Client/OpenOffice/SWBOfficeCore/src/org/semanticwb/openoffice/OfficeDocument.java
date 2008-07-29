@@ -328,7 +328,7 @@ public abstract class OfficeDocument
             String guid = getGuid();
             File fileHtml = saveHtmlPrepareAndGetFiles(guid);
             tempotalDir = fileHtml.getParentFile();
-            tempotalZipFile = new File(tempotalDir.getPath() + File.separatorChar + guid + ".zip");
+            tempotalZipFile = new File(tempotalDir.getParentFile().getPath() + File.separatorChar + guid + ".zip");
             FileOutputStream fout = new FileOutputStream(tempotalZipFile);
             ZipOutputStream zipFile = new ZipOutputStream(fout);
             BufferedInputStream origin = null;
@@ -351,6 +351,7 @@ public abstract class OfficeDocument
             }
             zipFile.close();
             fout.close();
+            deleteTemporalDirectory(tempotalDir);
             return tempotalZipFile;
         }
         catch ( FileNotFoundException fnfe )
