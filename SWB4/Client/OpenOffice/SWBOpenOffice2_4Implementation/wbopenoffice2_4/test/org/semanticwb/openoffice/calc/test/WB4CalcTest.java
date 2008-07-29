@@ -292,6 +292,7 @@ public class WB4CalcTest
     }
     
     @Test    
+    @Ignore
     public void publishTest()
     {
         try
@@ -304,4 +305,21 @@ public class WB4CalcTest
             Assert.fail(wbe.getMessage());
         }
     }
+    @Test    
+    public void createZipFileTest()
+    {
+        try
+        {
+            WB4Calc writer = new WB4Calc(this.xContext);            
+            File zipFile=writer.createZipFile();          
+            Assert.assertTrue(zipFile.exists());
+            zipFile.delete();
+        }
+        catch (WBException wbe)
+        {
+            Assert.fail(wbe.getMessage());
+        }
+    }
+    
+    
 }
