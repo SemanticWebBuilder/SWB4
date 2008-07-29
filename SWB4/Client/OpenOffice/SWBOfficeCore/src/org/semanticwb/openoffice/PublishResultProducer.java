@@ -49,6 +49,7 @@ public class PublishResultProducer implements WizardResultProducer
                 String path=wizardData.get("path").toString();                
                 int contentID=openOfficeDocument.publish(title, description, path);
                 document.SaveContentId(contentID);
+                document.deleteTemporalDirectory(zipFile.getParentFile());                
                 Summary summary=Summary.create(new SummaryPublish(),null);               
                 progress.finished(summary);
             }           
