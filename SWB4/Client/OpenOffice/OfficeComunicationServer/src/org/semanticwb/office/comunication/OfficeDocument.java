@@ -16,7 +16,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 {
     public int publish(String title,String description,String path)
     {
-        return 0;
+        return -1;
     }    
     public void updateContent(int contentId)
     {
@@ -28,7 +28,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     }
     public boolean exists(int contentId)
     {
-        return true;
+        return false;
     }
     public void setTitle(int contentID,String title)
     {
