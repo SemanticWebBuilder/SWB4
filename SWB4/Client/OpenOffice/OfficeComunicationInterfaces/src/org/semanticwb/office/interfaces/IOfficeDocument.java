@@ -25,9 +25,12 @@ public interface IOfficeDocument
     public void setPath(int contentID,String path);
     @XmlRpcMethod(methodName="OfficeDocument.setActive")
     public void setActive(int contentID,boolean active);
-    @XmlRpcMethod(methodName="OfficeDocument.setActive")
+    @XmlRpcMethod(methodName="OfficeDocument.getActive")
     public boolean getActive(int contentID);
+    @XmlRpcMethod(methodName="OfficeDocument.delete")
     public void delete(int contentID);
+    @XmlRpcMethod(methodName="OfficeDocument.exists")
     public boolean exists(int contentId);
+    @XmlRpcMethod(methodName="OfficeDocument.updateContent")
     void updateContent(int contentId);
 }
