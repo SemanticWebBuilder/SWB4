@@ -8,6 +8,7 @@ import java.io.File;
 import java.net.URI;
 import java.util.List;
 import java.util.Locale;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import org.netbeans.spi.wizard.Wizard;
 import org.netbeans.spi.wizard.WizardPage;
@@ -125,7 +126,7 @@ public abstract class OfficeApplication
         return webAddress;
     }
 
-    public static int setupDocument(String contentId)
+    public static int setupDocument(String contentId) 
     {
         int contentIdToReturn = Integer.MIN_VALUE;        
         if ( contentId != null  && !contentId.trim().equals("") && OfficeApplication.tryLogin() )
@@ -139,6 +140,11 @@ public abstract class OfficeApplication
                     if ( document.exists(id) )
                     {
                         contentIdToReturn = id;
+                    }
+                    else
+                    {
+                        // el contenido no existe en el sitio pero indica que ya tiene un identificador
+                        JOptionPane.showMessageDialog(null, "El contenido parace haberse publicado en un sitio web.\r\nAl sitio donde se está intentando conectar, indica que este contenido no existe.\r\nSi desea continuar se perdra esta información, de lo contrario, cierre este documento.","Verificación de contenido en sitio web",JOptionPane.WARNING_MESSAGE);                                                                        
                     }
                 }
                 catch ( NumberFormatException nfe )
