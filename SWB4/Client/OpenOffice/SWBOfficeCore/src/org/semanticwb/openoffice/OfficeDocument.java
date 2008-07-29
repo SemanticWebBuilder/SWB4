@@ -258,7 +258,7 @@ public abstract class OfficeDocument
         dialog.setVisible(true);
     }
 
-    public final void deleteTemporalDirectory(File dir)
+    final void deleteTemporalDirectory(File dir)
     {
         File[] files = dir.listFiles();
         if ( files != null )
