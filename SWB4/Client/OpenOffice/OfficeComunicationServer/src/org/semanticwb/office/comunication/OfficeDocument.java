@@ -14,7 +14,7 @@ import org.semanticwb.xmlrpc.XmlRpcObject;
  */
 public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 {
-    public int publish(String title,String description,String path)
+    public int publish(String title,String description,String path,String type)
     {
         return -1;
     }    
