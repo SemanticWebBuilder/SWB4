@@ -14,7 +14,7 @@ import org.semanticwb.xmlrpc.XmlRpcMethod;
 public interface IOfficeDocument
 {
     @XmlRpcMethod(methodName="OfficeDocument.publish")
-    public int publish(String title,String description,String path);
+    public int publish(String title,String description,String path,String type);
     @XmlRpcMethod(methodName="OfficeDocument.getPath")
     public String getPath(int contentID);
     @XmlRpcMethod(methodName="OfficeDocument.setTitle")
@@ -32,5 +32,5 @@ public interface IOfficeDocument
     @XmlRpcMethod(methodName="OfficeDocument.exists")
     public boolean exists(int contentId);
     @XmlRpcMethod(methodName="OfficeDocument.updateContent")
-    void updateContent(int contentId);
+    void updateContent(int contentId);    
 }
