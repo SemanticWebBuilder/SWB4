@@ -559,6 +559,7 @@ public abstract class OfficeDocument
         File zipFile = this.createZipFile();
         getOfficeDocumentProxy().addAttachment(new Attachment(zipFile, zipFile.getName()));
         getOfficeDocumentProxy().updateContent(this.contentID);
+        deleteTemporalDirectory(zipFile.getParentFile());
     }
 
     public final void addRule()
