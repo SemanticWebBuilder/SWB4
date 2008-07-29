@@ -15,6 +15,14 @@
         </data>
         <references xmlns="http://www.netbeans.org/ns/ant-project-references/1">
             <reference>
+                <foreign-project>OfficeComunicationInterfaces</foreign-project>
+                <artifact-type>jar</artifact-type>
+                <script>build.xml</script>
+                <target>jar</target>
+                <clean-target>clean</clean-target>
+                <id>jar</id>
+            </reference>
+            <reference>
                 <foreign-project>SWBOfficeCore</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
@@ -23,7 +31,15 @@
                 <id>jar</id>
             </reference>
             <reference>
-                <foreign-project>SWBOfficeCore-1</foreign-project>
+                <foreign-project>XMLRPCClient</foreign-project>
+                <artifact-type>jar</artifact-type>
+                <script>build.xml</script>
+                <target>jar</target>
+                <clean-target>clean</clean-target>
+                <id>jar</id>
+            </reference>
+            <reference>
+                <foreign-project>XMLRPCCommon</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
                 <target>jar</target>
