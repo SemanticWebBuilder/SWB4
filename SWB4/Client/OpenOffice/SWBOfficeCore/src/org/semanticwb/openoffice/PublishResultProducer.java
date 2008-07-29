@@ -37,10 +37,11 @@ public class PublishResultProducer implements WizardResultProducer
         public void start(Map wizardData, ResultProgressHandle progress)
         {
             assert !EventQueue.isDispatchThread();
+            File zipFile=null;
             try
             {
                 progress.setProgress("Preparando documento para publicar", 0, 2);
-                File zipFile=document.createZipFile();                                
+                zipFile=document.createZipFile();                                
                 progress.setProgress("Publicando Documento", 1, 2);
                 IOpenOfficeDocument openOfficeDocument=document.getOfficeDocumentProxy();
                 openOfficeDocument.addAttachment(new Attachment(zipFile, zipFile.getName()));                                
@@ -48,14 +49,20 @@ public class PublishResultProducer implements WizardResultProducer
                 String description=wizardData.get("description").toString();
                 String path=wizardData.get("path").toString();                
                 int contentID=openOfficeDocument.publish(title, description, path);
-                document.SaveContentId(contentID);
-                document.deleteTemporalDirectory(zipFile.getParentFile());                
+                document.SaveContentId(contentID);                
                 Summary summary=Summary.create(new SummaryPublish(),null);               
                 progress.finished(summary);
             }           
             catch (Exception e)
             {
                 progress.failed(e.getMessage(), false);
+            }
+            finally
+            {                
+                if(zipFile!=null && zipFile.exists())
+                {
+                    document.deleteTemporalDirectory(zipFile.getParentFile());                
+                }
             }
         }
     }

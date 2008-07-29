@@ -79,7 +79,7 @@ public abstract class OfficeDocument
     protected final void setupDocument()
     {
         String contentId = this.getCustomProperties().get(CONTENT_ID_NAME);
-        contentID = OfficeApplication.setupDocument(contentId);
+        contentID = OfficeApplication.setupDocument(contentId);        
     }
     private static final String TITLE = "Asistente de publicación";
 
@@ -558,8 +558,21 @@ public abstract class OfficeDocument
     {
         File zipFile = this.createZipFile();
         getOfficeDocumentProxy().addAttachment(new Attachment(zipFile, zipFile.getName()));
-        getOfficeDocumentProxy().updateContent(this.contentID);
-        deleteTemporalDirectory(zipFile.getParentFile());
+        try
+        {
+            getOfficeDocumentProxy().updateContent(this.contentID);
+        }
+        catch(WBException e)
+        {
+            throw e;
+        }
+        finally
+        {
+            if(zipFile!=null && zipFile.exists())
+            {
+                deleteTemporalDirectory(zipFile.getParentFile());
+            }
+        }
     }
 
     public final void addRule()
