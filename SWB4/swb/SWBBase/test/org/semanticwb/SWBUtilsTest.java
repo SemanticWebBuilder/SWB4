@@ -4,13 +4,14 @@
  */
 package org.semanticwb;
 
+import javax.xml.xpath.XPathConstants;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import java.util.ArrayList;
 import org.w3c.dom.*;
+import java.util.*;
 
 /**
  *
@@ -154,7 +155,7 @@ public class SWBUtilsTest {
             attach.setName("Prueba Jorge Name");
             ArrayList<org.apache.commons.mail.EmailAttachment> aListAttachments = new ArrayList();
             aListAttachments.add(attach);
-            
+
             SWBUtils.setSMTPServer("webmail.infotec.com.mx");
             String result = SWBUtils.EMAIL.sendMail("webbuilder@infotec.com.mx", "Jorge Jiménez", aAddress, null, null, "Prueba de Envío2", "text", "Esta es mi prueba2", null, null, aListAttachments);
             System.out.println("result:" + result);
@@ -319,4 +320,22 @@ public class SWBUtilsTest {
             e.printStackTrace();
         }
     }
+
+    
+    @Test
+    public void testXpathEval() {
+        System.out.println("testXpath2");
+        try {
+              Node node = (Node)SWBUtils.XML.getXpathEval("//@last", new org.xml.sax.InputSource("foo.xml"), XPathConstants.NODE);
+              Document dom = node.getOwnerDocument();
+              System.out.println("dom:" + SWBUtils.XML.domToXml(dom));
+            //String result = (String)SWBUtils.XML.getXpathEval("//@last", new org.xml.sax.InputSource("foo.xml"), XPathConstants.STRING);
+            //System.out.println("result:" + result);     
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    
+    
 }
