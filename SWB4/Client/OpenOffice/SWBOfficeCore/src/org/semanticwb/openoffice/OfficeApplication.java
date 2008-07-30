@@ -33,6 +33,7 @@ public abstract class OfficeApplication
     private static UserInfo userInfo = null;
     private static URI webAddress = null;
     private static IOpenOfficeDocument document;
+
     static
     {
         Locale.setDefault(new Locale("es"));
@@ -46,16 +47,18 @@ public abstract class OfficeApplication
             System.out.println(ue.getMessage());
         }
     }
+
     public static IOpenOfficeDocument getOfficeDocumentProxy() throws WBException
     {
         if ( document == null )
-        {            
+        {
             document = XmlRpcProxyFactory.newInstance(IOpenOfficeDocument.class, OfficeApplication.getWebAddress());
             document.setUser(OfficeApplication.userInfo.getLogin());
             document.setPassword(OfficeApplication.userInfo.getPassword());
         }
         return document;
     }
+
     public void setMenuListener(MenuListener menuListener)
     {
         OfficeApplication.menuListener = menuListener;
@@ -63,12 +66,24 @@ public abstract class OfficeApplication
 
     protected OfficeApplication()
     {
+
+    }
+
+    private void verifyVersion()
+    {
         if ( OfficeApplication.tryLogin() )
         {
             IOpenOfficeApplication officeApplication = XmlRpcProxyFactory.newInstance(IOpenOfficeApplication.class, webAddress);
-            if ( officeApplication.isValidVersion("1.0") && menuListener != null )
+            try
             {
-                menuListener.onLogin();
+                if ( officeApplication.isValidVersion("1.0") && menuListener != null )
+                {
+                    menuListener.onLogin();
+                }
+            }
+            catch ( Exception e )
+            {
+                JOptionPane.showMessageDialog(null, e.getMessage(), "Verificación de versión de publicación", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -126,17 +141,17 @@ public abstract class OfficeApplication
         return webAddress;
     }
 
-    public static int setupDocument(String contentId) 
+    static int setupDocument(String contentId) throws Exception
     {
-        int contentIdToReturn = Integer.MIN_VALUE;        
-        if ( contentId != null  && !contentId.trim().equals("") && OfficeApplication.tryLogin() )
-        {            
+        int contentIdToReturn = Integer.MIN_VALUE;
+        if ( contentId != null && !contentId.trim().equals("") && OfficeApplication.tryLogin() )
+        {
             try
             {
-                int id=Integer.parseInt(contentId);
-                document=getOfficeDocumentProxy();                
+                int id = Integer.parseInt(contentId);
+                document = getOfficeDocumentProxy();
                 try
-                {                    
+                {
                     if ( document.exists(id) )
                     {
                         contentIdToReturn = id;
@@ -144,7 +159,7 @@ public abstract class OfficeApplication
                     else
                     {
                         // el contenido no existe en el sitio pero indica que ya tiene un identificador
-                        JOptionPane.showMessageDialog(null, "El contenido parace haberse publicado en un sitio web.\r\nAl sitio donde se está intentando conectar, indica que este contenido no existe.\r\nSi desea continuar se perdra esta información, de lo contrario, cierre este documento.","Verificación de contenido en sitio web",JOptionPane.WARNING_MESSAGE);                                                                        
+                        JOptionPane.showMessageDialog(null, "El contenido parace haberse publicado en un sitio web.\r\nAl sitio donde se está intentando conectar, indica que este contenido no existe.\r\nSi desea continuar se perdra esta información, de lo contrario, cierre este documento.", "Verificación de contenido en sitio web", JOptionPane.WARNING_MESSAGE);
                     }
                 }
                 catch ( NumberFormatException nfe )
@@ -166,16 +181,16 @@ public abstract class OfficeApplication
 
     private final static boolean logOn()
     {
-        boolean logOn=false;
+        boolean logOn = false;
         DialogLogin frmlogin = new DialogLogin(new javax.swing.JFrame(), true);
         frmlogin.setLocationRelativeTo(null);
         frmlogin.setVisible(true);
         if ( !frmlogin.isCanceled() )
-        {            
+        {
             String login = frmlogin.getLogin();
             String password = frmlogin.getPassword();
             userInfo = new UserInfo(password, login);
-            webAddress =  frmlogin.getWebAddress();
+            webAddress = frmlogin.getWebAddress();
             logOn = true;
         }
         else
@@ -187,23 +202,23 @@ public abstract class OfficeApplication
 
     public static boolean tryLogin()
     {
-        boolean tryLogin=false;
+        boolean tryLogin = false;
         if ( userInfo == null || webAddress == null )
         {
             logOn();
             if ( userInfo == null || webAddress == null )
             {
                 logOff();
-                tryLogin=false;
+                tryLogin = false;
             }
             else
             {
-                tryLogin=true;
+                tryLogin = true;
             }
         }
         else
         {
-            tryLogin=true;
+            tryLogin = true;
         }
         return tryLogin;
     }

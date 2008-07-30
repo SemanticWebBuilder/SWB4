@@ -39,6 +39,8 @@ import org.semanticwb.openoffice.util.ExcelFileFilter;
 import org.semanticwb.openoffice.util.PPTFileFilter;
 import org.semanticwb.openoffice.util.WordFileFilter;
 import org.semanticwb.xmlrpc.Attachment;
+import org.semanticwb.xmlrpc.HttpException;
+import org.semanticwb.xmlrpc.XmlRpcException;
 import static org.semanticwb.openoffice.util.FileUtil.copyFile;
 import static java.lang.Integer.MIN_VALUE;
 
@@ -48,7 +50,7 @@ import static java.lang.Integer.MIN_VALUE;
  */
 public abstract class OfficeDocument
 {
-    
+
     private static final String CONTENT_ID_NAME = "contentID";
     // By default the content is not published
     private int contentID = MIN_VALUE;
@@ -71,15 +73,16 @@ public abstract class OfficeDocument
     {
         return OfficeApplication.getOfficeDocumentProxy();
     }
+
     protected OfficeDocument()
     {
 
     }
 
-    protected final void setupDocument()
+    private final void setupDocument() throws Exception
     {
         String contentId = this.getCustomProperties().get(CONTENT_ID_NAME);
-        contentID = OfficeApplication.setupDocument(contentId);        
+        contentID = OfficeApplication.setupDocument(contentId);
     }
     private static final String TITLE = "Asistente de publicación";
 
@@ -441,60 +444,86 @@ public abstract class OfficeDocument
         {
             if ( OfficeApplication.tryLogin() )
             {
-                boolean canbepublished = false;
-                if ( isNewDocument() )
+                try
                 {
-                    canbepublished = showSaveDialog(this);
-                }
-                else
-                {
-                    canbepublished = true;
-                }
-
-                if ( canbepublished )
-                {
-                    if ( isPublicated() )
+                    setupDocument();
+                    boolean canbepublished = false;
+                    if ( isNewDocument() )
                     {
-                        try
-                        {
-                            if ( isModified() )
-                            {
-                                save();
-                            }
-                            updateContent();
-                        }
-                        catch ( WBException e )
-                        {
-                            JOptionPane.showMessageDialog(null, e.getMessage(), TITLE, JOptionPane.ERROR_MESSAGE);
-                        }
+                        canbepublished = showSaveDialog(this);
                     }
                     else
                     {
-                        PublishResultProducer resultProducer = new PublishResultProducer(this);
-                        Class[] clazz;
-                        switch ( getDocumentType() )
-                        {
-                            case WORD:
-                                clazz = new Class[]{TitleAndDescription.class, SelectPage.class, PagContenido.class, SelectTypeToShow.class};
-                                break;
-                            case EXCEL:
-                                clazz = new Class[]{TitleAndDescription.class, SelectPage.class, PagContenido.class};
-                                break;
-                            case PPT:
-                                clazz = new Class[]{TitleAndDescription.class, SelectPage.class, PagContenido.class};
-                                break;
-                            default:
-                                clazz = new Class[]{TitleAndDescription.class, SelectPage.class};
-                                break;
-
-                        }
-                        Wizard wiz = WizardPage.createWizard(TITLE, clazz, resultProducer);
-                        wiz.show();
+                        canbepublished = true;
                     }
+                    if ( canbepublished )
+                    {
+                        if ( isPublicated() )
+                        {
+                            try
+                            {
+                                if ( isModified() )
+                                {
+                                    save();
+                                }
+                                try
+                                {
+                                    updateContent();
+                                }
+                                catch ( Exception e )
+                                {
+                                    JOptionPane.showMessageDialog(null, "No se puede actualizar el contenido la causa es: "+e.getMessage(), TITLE, JOptionPane.ERROR_MESSAGE);
+                                    ErrorLog.log(e);
+                                }
+                            }
+                            catch ( WBException e )
+                            {
+                                JOptionPane.showMessageDialog(null, e.getMessage(), TITLE, JOptionPane.ERROR_MESSAGE);
+                                ErrorLog.log(e);
+                            }
+                        }
+                        else
+                        {
+                            PublishResultProducer resultProducer = new PublishResultProducer(this);
+                            Class[] clazz;
+                            switch ( getDocumentType() )
+                            {
+                                case WORD:
+                                    clazz = new Class[]{TitleAndDescription.class, SelectPage.class, PagContenido.class, SelectTypeToShow.class};
+                                    break;
+                                case EXCEL:
+                                    clazz = new Class[]{TitleAndDescription.class, SelectPage.class, PagContenido.class};
+                                    break;
+                                case PPT:
+                                    clazz = new Class[]{TitleAndDescription.class, SelectPage.class, PagContenido.class};
+                                    break;
+                                default:
+                                    clazz = new Class[]{TitleAndDescription.class, SelectPage.class};
+                                    break;
+
+                            }
+                            Wizard wiz = WizardPage.createWizard(TITLE, clazz, resultProducer);
+                            wiz.show();
+                        }
+                    }
+                }
+                catch ( XmlRpcException e )
+                {
+                    JOptionPane.showMessageDialog(null, "No se puede verificar la existencia del contenido en el sitio, la causa es:\r\n" + e.getLocalizedMessage(), "Verificación de contenido en sitio web", JOptionPane.WARNING_MESSAGE);                    
+                    ErrorLog.log(e);
+                }
+                catch ( HttpException e )
+                {
+                    JOptionPane.showMessageDialog(null, "No se puede verificar la existencia del contenido en el sitio, la causa es:\r\n" + e.getLocalizedMessage(), "Verificación de contenido en sitio web", JOptionPane.WARNING_MESSAGE);                    
+                    ErrorLog.log(e);
+                }
+                catch ( Exception e )
+                {
+                    ErrorLog.log(e);
                 }
             }
         }
-    }  
+    }
 
     void SaveContentId(int contentId) throws WBException
     {
@@ -533,29 +562,28 @@ public abstract class OfficeDocument
         return result;
     }
 
-    private void changeActive(boolean active) throws WBException
+    /*private void changeActive(boolean active) throws WBException
     {
-        File zipFile = this.createZipFile();
-        getOfficeDocumentProxy().addAttachment(new Attachment(zipFile, zipFile.getName()));
-        getOfficeDocumentProxy().setActive(this.contentID, active);
-    }
+    File zipFile = this.createZipFile();
+    getOfficeDocumentProxy().addAttachment(new Attachment(zipFile, zipFile.getName()));
+    getOfficeDocumentProxy().setActive(this.contentID, active);
+    }*/
 
-    private boolean isActive() throws WBException
+    /*private boolean isActive() throws WBException
     {
-        return getOfficeDocumentProxy().getActive(this.contentID);
-    }
+    return getOfficeDocumentProxy().getActive(this.contentID);
+    }*/
 
-    private void changeDescription(String description) throws WBException
+    /*private void changeDescription(String description) throws WBException
     {
-        getOfficeDocumentProxy().setDescription(this.contentID, description);
-    }
+    getOfficeDocumentProxy().setDescription(this.contentID, description);
+    }*/
 
-    private void changeTitle(String title) throws WBException
-    {
-        getOfficeDocumentProxy().setTitle(this.contentID, title);
-    }
-
-    private void updateContent() throws WBException
+    /*private void changeTitle(String title) throws WBException
+    {        
+    getOfficeDocumentProxy().setTitle(this.contentID, title);
+    }*/
+    private void updateContent() throws Exception
     {
         File zipFile = this.createZipFile();
         getOfficeDocumentProxy().addAttachment(new Attachment(zipFile, zipFile.getName()));
@@ -563,13 +591,13 @@ public abstract class OfficeDocument
         {
             getOfficeDocumentProxy().updateContent(this.contentID);
         }
-        catch(WBException e)
+        catch ( Exception e )
         {
             throw e;
         }
         finally
         {
-            if(zipFile!=null && zipFile.exists())
+            if ( zipFile != null && zipFile.exists() )
             {
                 deleteTemporalDirectory(zipFile.getParentFile());
             }
