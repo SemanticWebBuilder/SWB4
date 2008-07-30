@@ -55,7 +55,7 @@ public abstract class OfficeApplication
         {
             document = XmlRpcProxyFactory.newInstance(IOpenOfficeDocument.class, OfficeApplication.getWebAddress());
             document.setUser(OfficeApplication.userInfo.getLogin());
-            document.setPassword(OfficeApplication.userInfo.getPassword());
+            document.setPassword(OfficeApplication.userInfo.getPassword());            
             String proxyServer = new Configuration().get(Configuration.PROXY_SERVER);
             String proxyPort = new Configuration().get(Configuration.PROXY_PORT);
             if ( proxyServer == null )

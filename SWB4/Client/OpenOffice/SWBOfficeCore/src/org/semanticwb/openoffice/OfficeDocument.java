@@ -50,7 +50,8 @@ import static java.lang.Integer.MIN_VALUE;
  */
 public abstract class OfficeDocument
 {
-
+    private static final String TITLE = "Asistente de publicación";
+    
     private static final String CONTENT_ID_NAME = "contentID";
     // By default the content is not published
     private int contentID = MIN_VALUE;
@@ -79,12 +80,39 @@ public abstract class OfficeDocument
 
     }
 
-    private final void setupDocument() throws Exception
+    private final boolean setupDocument()
     {
+        boolean setupDocument=false;
         String contentId = this.getCustomProperties().get(CONTENT_ID_NAME);
-        contentID = OfficeApplication.setupDocument(contentId);
+        try
+        {
+            contentID = OfficeApplication.setupDocument(contentId);
+            setupDocument=true;
+        }
+        catch ( XmlRpcException e )
+        {
+            JOptionPane.showMessageDialog(null,
+                    "No se puede verificar la existencia del contenido en el sitio, la causa es:\r\n" + e.getLocalizedMessage(),
+                    "Verificación de contenido", JOptionPane.WARNING_MESSAGE);
+            ErrorLog.log(e);
+        }
+        catch ( HttpException e )
+        {
+            JOptionPane.showMessageDialog(null,
+                    "No se puede verificar la existencia del contenido en el sitio, la causa es:\r\n" + e.getLocalizedMessage(),
+                    "Verificación de contenido", JOptionPane.WARNING_MESSAGE);
+            ErrorLog.log(e);
+        }
+        catch ( Exception e )
+        {
+            JOptionPane.showMessageDialog(null,
+                    e.getLocalizedMessage(),
+                    "Verificación de contenido", JOptionPane.WARNING_MESSAGE);
+            ErrorLog.log(e);
+        }
+        return setupDocument;
     }
-    private static final String TITLE = "Asistente de publicación";
+    
 
     /**
      * Gets the Application Version
@@ -442,85 +470,68 @@ public abstract class OfficeDocument
         }
         else
         {
-            if ( OfficeApplication.tryLogin() )
+            if ( OfficeApplication.tryLogin() && setupDocument() )
             {
-                try
+
+
+                boolean canbepublished = false;
+                if ( isNewDocument() )
                 {
-                    setupDocument();
-                    boolean canbepublished = false;
-                    if ( isNewDocument() )
+                    canbepublished = showSaveDialog(this);
+                }
+                else
+                {
+                    canbepublished = true;
+                }
+                if ( canbepublished )
+                {
+                    if ( isPublicated() )
                     {
-                        canbepublished = showSaveDialog(this);
-                    }
-                    else
-                    {
-                        canbepublished = true;
-                    }
-                    if ( canbepublished )
-                    {
-                        if ( isPublicated() )
+                        try
                         {
+                            if ( isModified() )
+                            {
+                                save();
+                            }
                             try
                             {
-                                if ( isModified() )
-                                {
-                                    save();
-                                }
-                                try
-                                {
-                                    updateContent();
-                                }
-                                catch ( Exception e )
-                                {
-                                    JOptionPane.showMessageDialog(null, "No se puede actualizar el contenido la causa es: "+e.getMessage(), TITLE, JOptionPane.ERROR_MESSAGE);
-                                    ErrorLog.log(e);
-                                }
+                                updateContent();
                             }
-                            catch ( WBException e )
+                            catch ( Exception e )
                             {
-                                JOptionPane.showMessageDialog(null, e.getMessage(), TITLE, JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "No se puede actualizar el contenido la causa es: " + e.getMessage(), TITLE, JOptionPane.ERROR_MESSAGE);
                                 ErrorLog.log(e);
                             }
                         }
-                        else
+                        catch ( WBException e )
                         {
-                            PublishResultProducer resultProducer = new PublishResultProducer(this);
-                            Class[] clazz;
-                            switch ( getDocumentType() )
-                            {
-                                case WORD:
-                                    clazz = new Class[]{TitleAndDescription.class, SelectPage.class, PagContenido.class, SelectTypeToShow.class};
-                                    break;
-                                case EXCEL:
-                                    clazz = new Class[]{TitleAndDescription.class, SelectPage.class, PagContenido.class};
-                                    break;
-                                case PPT:
-                                    clazz = new Class[]{TitleAndDescription.class, SelectPage.class, PagContenido.class};
-                                    break;
-                                default:
-                                    clazz = new Class[]{TitleAndDescription.class, SelectPage.class};
-                                    break;
-
-                            }
-                            Wizard wiz = WizardPage.createWizard(TITLE, clazz, resultProducer);
-                            wiz.show();
+                            JOptionPane.showMessageDialog(null, e.getMessage(), TITLE, JOptionPane.ERROR_MESSAGE);
+                            ErrorLog.log(e);
                         }
                     }
-                }
-                catch ( XmlRpcException e )
-                {
-                    JOptionPane.showMessageDialog(null, "No se puede verificar la existencia del contenido en el sitio, la causa es:\r\n" + e.getLocalizedMessage(), "Verificación de contenido en sitio web", JOptionPane.WARNING_MESSAGE);                    
-                    ErrorLog.log(e);
-                }
-                catch ( HttpException e )
-                {
-                    JOptionPane.showMessageDialog(null, "No se puede verificar la existencia del contenido en el sitio, la causa es:\r\n" + e.getLocalizedMessage(), "Verificación de contenido en sitio web", JOptionPane.WARNING_MESSAGE);                    
-                    ErrorLog.log(e);
-                }
-                catch ( Exception e )
-                {
-                    JOptionPane.showMessageDialog(null, e.getLocalizedMessage(), "Verificación de contenido en sitio web.", JOptionPane.WARNING_MESSAGE);                    
-                    ErrorLog.log(e);
+                    else
+                    {
+                        PublishResultProducer resultProducer = new PublishResultProducer(this);
+                        Class[] clazz;
+                        switch ( getDocumentType() )
+                        {
+                            case WORD:
+                                clazz = new Class[]{TitleAndDescription.class, SelectPage.class, PagContenido.class, SelectTypeToShow.class};
+                                break;
+                            case EXCEL:
+                                clazz = new Class[]{TitleAndDescription.class, SelectPage.class, PagContenido.class};
+                                break;
+                            case PPT:
+                                clazz = new Class[]{TitleAndDescription.class, SelectPage.class, PagContenido.class};
+                                break;
+                            default:
+                                clazz = new Class[]{TitleAndDescription.class, SelectPage.class};
+                                break;
+
+                            }
+                        Wizard wiz = WizardPage.createWizard(TITLE, clazz, resultProducer);
+                        wiz.show();
+                    }
                 }
             }
         }
