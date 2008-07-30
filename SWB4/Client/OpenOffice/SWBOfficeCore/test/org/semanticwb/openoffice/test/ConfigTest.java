@@ -36,7 +36,7 @@ public class ConfigTest
     public static void setUpClass() throws Exception
     {
         System.setProperty(ConfigurationListURI.CONFIGURATION, "c:\\temp\\list.xml");
-        System.setProperty(Configuration.CONFIGURATION, "c:\\temp\\config.xml");
+        System.setProperty(Configuration.CONFIGURATION_PROPERTY_NAME, "c:\\temp\\config.xml");
         System.setProperty(ErrorLog.CONFIGURATION, "c:\\temp");
     }
 
@@ -49,7 +49,7 @@ public class ConfigTest
     public void setUp()
     {
         fileConfigList = new File(System.getProperty(ConfigurationListURI.CONFIGURATION));
-        fileConfig = new File(System.getProperty(Configuration.CONFIGURATION));
+        fileConfig = new File(System.getProperty(Configuration.CONFIGURATION_PROPERTY_NAME));
     }
 
     /**
@@ -102,7 +102,7 @@ public class ConfigTest
         Configuration config = new Configuration();
         config.add("Language", "es");
         config.add(ConfigurationListURI.CONFIGURATION, "1");
-        config.add(Configuration.CONFIGURATION, "2");
+        config.add(Configuration.CONFIGURATION_PROPERTY_NAME, "2");
         Assert.assertEquals(config.getKeys().length, 3);
     }
 

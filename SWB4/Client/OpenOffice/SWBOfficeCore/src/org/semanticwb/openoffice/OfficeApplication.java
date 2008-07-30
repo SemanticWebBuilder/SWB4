@@ -6,6 +6,7 @@ package org.semanticwb.openoffice;
 
 import java.io.File;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Locale;
 import javax.swing.JOptionPane;
@@ -55,6 +56,34 @@ public abstract class OfficeApplication
             document = XmlRpcProxyFactory.newInstance(IOpenOfficeDocument.class, OfficeApplication.getWebAddress());
             document.setUser(OfficeApplication.userInfo.getLogin());
             document.setPassword(OfficeApplication.userInfo.getPassword());
+            String proxyServer = new Configuration().get(Configuration.PROXY_SERVER);
+            String proxyPort = new Configuration().get(Configuration.PROXY_PORT);
+            if ( proxyServer == null )
+            {
+                proxyServer = "";
+            }
+            if ( proxyPort == null )
+            {
+                proxyServer = "";
+            }
+            if ( !proxyServer.equals("") && !proxyPort.equals("") )
+            {
+                try
+                {
+                    document.setProxyAddress(new URI(proxyServer));
+                    document.setProxyPort(Integer.parseInt(proxyPort));
+                }
+                catch ( URISyntaxException e )
+                {
+                    String message = "Error trying to get the proxy server, delete the file " + new Configuration().getPath() + " or fix it.";                    
+                    throw new WBException(message, e);
+                }
+                catch ( NumberFormatException e )
+                {
+                    String message = "Error trying to get the proxy port, delete the file " + new Configuration().getPath() + " or fix it.";                    
+                    throw new WBException(message, e);
+                }
+            }
         }
         return document;
     }
@@ -146,31 +175,25 @@ public abstract class OfficeApplication
         int contentIdToReturn = Integer.MIN_VALUE;
         if ( contentId != null && !contentId.trim().equals("") && OfficeApplication.tryLogin() )
         {
+            int id = Integer.parseInt(contentId);
+            document = getOfficeDocumentProxy();
             try
             {
-                int id = Integer.parseInt(contentId);
-                document = getOfficeDocumentProxy();
-                try
+                if ( document.exists(id) )
                 {
-                    if ( document.exists(id) )
-                    {
-                        contentIdToReturn = id;
-                    }
-                    else
-                    {
-                        // el contenido no existe en el sitio pero indica que ya tiene un identificador
-                        JOptionPane.showMessageDialog(null, "El contenido parace haberse publicado en un sitio web.\r\nAl sitio donde se está intentando conectar, indica que este contenido no existe.\r\nSi desea continuar se perdra esta información, de lo contrario, cierre este documento.", "Verificación de contenido en sitio web", JOptionPane.WARNING_MESSAGE);
-                    }
+                    contentIdToReturn = id;
                 }
-                catch ( NumberFormatException nfe )
+                else
                 {
-                    ErrorLog.log(nfe);
+                    // el contenido no existe en el sitio pero indica que ya tiene un identificador
+                    JOptionPane.showMessageDialog(null, "El contenido parace haberse publicado en un sitio web.\r\nAl sitio donde se está intentando conectar, indica que este contenido no existe.\r\nSi desea continuar se perdra esta información, de lo contrario, cierre este documento.", "Verificación de contenido en sitio web", JOptionPane.WARNING_MESSAGE);
                 }
             }
-            catch ( WBException e )
+            catch ( NumberFormatException nfe )
             {
-                ErrorLog.log(e);
+                ErrorLog.log(nfe);
             }
+
         }
         return contentIdToReturn;
     }

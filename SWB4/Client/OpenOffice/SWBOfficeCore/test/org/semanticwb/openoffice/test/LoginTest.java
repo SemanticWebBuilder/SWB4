@@ -31,7 +31,7 @@ public class LoginTest
     public static void setUpClass() throws Exception
     {
         System.setProperty(ConfigurationListURI.CONFIGURATION, "c:\\temp\\list.xml");
-        System.setProperty(Configuration.CONFIGURATION, "c:\\temp\\config.xml");
+        System.setProperty(Configuration.CONFIGURATION_PROPERTY_NAME, "c:\\temp\\config.xml");
         System.setProperty(ErrorLog.CONFIGURATION, "c:\\temp");
     }
 

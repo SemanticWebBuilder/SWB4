@@ -7,6 +7,7 @@ package org.semanticwb.openoffice.ui.dialogs;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import org.semanticwb.openoffice.*;
 
@@ -231,7 +232,9 @@ public class DialogLogin extends javax.swing.JDialog
     }//GEN-LAST:event_jButtonCancelActionPerformed
 
     private void jButtonAvancedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAvancedActionPerformed
-    // TODO add your handling code here:
+        DialogConfigProxy dialogConfigProxy=new DialogConfigProxy(new JFrame(),true);
+        dialogConfigProxy.setLocationRelativeTo(this);
+        dialogConfigProxy.setVisible(true);
     }//GEN-LAST:event_jButtonAvancedActionPerformed
 
     private void jComboBoxWebAddressActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxWebAddressActionPerformed
@@ -240,9 +243,8 @@ public class DialogLogin extends javax.swing.JDialog
             String sUri = this.jComboBoxWebAddress.getSelectedItem().toString();
             try
             {
-                URI uri = new URI(sUri);
-                String login = configurationListURI.getLogin(uri);
-                this.jTextFieldClave.setText(login);
+                URI uri = new URI(sUri);                
+                this.jTextFieldClave.setText(configurationListURI.getLogin(uri));
             }
             catch ( URISyntaxException use )
             {
