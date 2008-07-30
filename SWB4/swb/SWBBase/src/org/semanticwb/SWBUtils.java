@@ -1352,7 +1352,15 @@ public class SWBUtils {
             ele.appendChild(e);
             return e;
         }
-
+        
+        /**
+         * Eval a xpath expression in an input source
+         * @param expression xpath xpression
+         * @param input input to eval
+         * @param resultType Object type to return
+         * @return a specified object QName according to XPathConstants object, ej. XPathConstants.NODE)
+         * @throws javax.xml.xpath.XPathExpressionException
+         */
         public static Object getXpathEval(String expression, InputSource input, QName resultType) throws javax.xml.xpath.XPathExpressionException
         {
                 XPath xpathObj = getXPathObject();
