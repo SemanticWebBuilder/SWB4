@@ -10,6 +10,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -91,17 +92,36 @@ public abstract class OfficeDocument
         }
         catch ( XmlRpcException e )
         {
-            JOptionPane.showMessageDialog(null,
-                    "No se puede verificar la existencia del contenido en el sitio, la causa es:\r\n" + e.getLocalizedMessage(),
-                    "Verificación de contenido", JOptionPane.WARNING_MESSAGE);
-            ErrorLog.log(e);
+            if(e.getCause()!=null && e.getCause() instanceof ConnectException)
+            {
+                JOptionPane.showMessageDialog(null,
+                        "No se puede verificar la existencia del contenido en el sitio, al paracer el sitio al que intenta conectarse no esta disponible.",
+                        "Verificación de contenido", JOptionPane.WARNING_MESSAGE);
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null,
+                        "No se puede verificar la existencia del contenido en el sitio, la causa es:\r\n" + e.getLocalizedMessage(),
+                        "Verificación de contenido", JOptionPane.WARNING_MESSAGE);
+            }
+            ErrorLog.log(e);            
         }
         catch ( HttpException e )
         {
-            JOptionPane.showMessageDialog(null,
-                    "No se puede verificar la existencia del contenido en el sitio, la causa es:\r\n" + e.getLocalizedMessage(),
-                    "Verificación de contenido", JOptionPane.WARNING_MESSAGE);
-            ErrorLog.log(e);
+            if(e.getCode()==404)
+            {
+                JOptionPane.showMessageDialog(null,
+                        "No se puede verificar la existencia del contenido en el sitio, al paracer el sitio al que intenta conectarse no tiene habilitada la función de publicación de contenidos.",
+                        "Verificación de contenido", JOptionPane.WARNING_MESSAGE);
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null,
+                        "No se puede verificar la existencia del contenido en el sitio, la causa es:\r\n" + e.getLocalizedMessage(),
+                        "Verificación de contenido", JOptionPane.WARNING_MESSAGE);
+            
+            }
+            ErrorLog.log(e);            
         }
         catch ( Exception e )
         {
@@ -472,8 +492,6 @@ public abstract class OfficeDocument
         {
             if ( OfficeApplication.tryLogin() && setupDocument() )
             {
-
-
                 boolean canbepublished = false;
                 if ( isNewDocument() )
                 {
