@@ -34,6 +34,21 @@ public class DialogLogin extends javax.swing.JDialog
         {
             this.jComboBoxWebAddress.addItem(uri);
         }
+        if(this.jComboBoxWebAddress.getSelectedItem()==null)
+        {
+            this.jComboBoxWebAddress.requestFocus();
+        }
+        else
+        {
+            if(this.jTextFieldClave.getText().equals(""))
+            {
+                this.jTextFieldClave.requestFocus();
+            }
+            else
+            {
+                this.jPassword.requestFocus();
+            }
+        }
 
     }
 
@@ -73,9 +88,11 @@ public class DialogLogin extends javax.swing.JDialog
         jTextFieldClave = new javax.swing.JTextField();
         jLabelPassword = new javax.swing.JLabel();
         jPassword = new javax.swing.JPasswordField();
-        jCheckBoxSaveConfiguration = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Acceso a servicio de publicación");
+        setLocationByPlatform(true);
+        setModal(true);
         setResizable(false);
 
         jButtonCancel.setText("Cancelar");
@@ -122,8 +139,6 @@ public class DialogLogin extends javax.swing.JDialog
 
         jPassword.setNextFocusableComponent(jButtonAccept);
 
-        jCheckBoxSaveConfiguration.setText("Guardar Configuración");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -131,13 +146,6 @@ public class DialogLogin extends javax.swing.JDialog
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jCheckBoxSaveConfiguration)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButtonAvanced)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 134, Short.MAX_VALUE)
-                        .addComponent(jButtonCancel)
-                        .addGap(5, 5, 5)
-                        .addComponent(jButtonAccept))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabelPassword)
@@ -147,13 +155,22 @@ public class DialogLogin extends javax.swing.JDialog
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jTextFieldClave, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
                             .addComponent(jPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
-                            .addComponent(jComboBoxWebAddress, javax.swing.GroupLayout.Alignment.TRAILING, 0, 251, Short.MAX_VALUE))))
+                            .addComponent(jComboBoxWebAddress, javax.swing.GroupLayout.Alignment.TRAILING, 0, 251, Short.MAX_VALUE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jButtonAvanced, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(75, 75, 75)
+                        .addComponent(jButtonCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButtonAccept, javax.swing.GroupLayout.DEFAULT_SIZE, 89, Short.MAX_VALUE)))
                 .addContainerGap())
         );
+
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButtonAvanced, jButtonCancel});
+
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(25, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelWebAddress)
                     .addComponent(jComboBoxWebAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -165,15 +182,15 @@ public class DialogLogin extends javax.swing.JDialog
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelPassword)
                     .addComponent(jPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
-                .addComponent(jCheckBoxSaveConfiguration)
-                .addGap(18, 18, 18)
+                .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonCancel)
-                    .addComponent(jButtonAccept)
+                    .addComponent(jButtonAccept, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
+                    .addComponent(jButtonCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonAvanced))
-                .addContainerGap())
+                .addGap(16, 16, 16))
         );
+
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jButtonAvanced, jButtonCancel});
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -257,7 +274,6 @@ public class DialogLogin extends javax.swing.JDialog
     private javax.swing.JButton jButtonAccept;
     private javax.swing.JButton jButtonAvanced;
     private javax.swing.JButton jButtonCancel;
-    private javax.swing.JCheckBox jCheckBoxSaveConfiguration;
     private javax.swing.JComboBox jComboBoxWebAddress;
     private javax.swing.JLabel jLabelClave;
     private javax.swing.JLabel jLabelPassword;
