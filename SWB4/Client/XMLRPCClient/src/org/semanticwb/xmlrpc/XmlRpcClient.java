@@ -333,7 +333,7 @@ class XmlRpcClient<T>
         catch ( MalformedURLException mfe )
         {
             throw new XmlRpcException(mfe);
-        }
+        }        
         catch ( IOException ioe )
         {
             throw new XmlRpcException(ioe);
