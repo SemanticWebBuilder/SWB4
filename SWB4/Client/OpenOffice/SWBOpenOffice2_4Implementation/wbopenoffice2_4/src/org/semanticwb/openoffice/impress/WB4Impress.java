@@ -123,8 +123,7 @@ public class WB4Impress extends OfficeDocument
         catch (com.sun.star.uno.Exception e)
         {
             throw new WBOfficeException(ERROR_DESKTOP_NOT_FOUND, e);
-        }
-        setupDocument();
+        }        
     }
 
     /**

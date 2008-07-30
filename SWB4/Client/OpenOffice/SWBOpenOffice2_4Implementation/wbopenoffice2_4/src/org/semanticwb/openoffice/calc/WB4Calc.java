@@ -107,8 +107,7 @@ public class WB4Calc extends OfficeDocument
         catch (com.sun.star.uno.Exception e)
         {
             throw new WBOfficeException(DESKTOP_NOT_FOUND, e);
-        } 
-        setupDocument();
+        }         
     }
 
     /**
