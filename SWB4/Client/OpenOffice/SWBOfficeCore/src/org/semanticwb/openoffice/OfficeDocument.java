@@ -96,7 +96,7 @@ public abstract class OfficeDocument
             {
                 JOptionPane.showMessageDialog(null,
                         "No se puede verificar la existencia del contenido en el sitio, al paracer el sitio al que intenta conectarse no esta disponible.",
-                        "Verificación de contenido", JOptionPane.WARNING_MESSAGE);
+                        "Verificación de contenido", JOptionPane.WARNING_MESSAGE);                
             }
             else
             {
@@ -112,13 +112,13 @@ public abstract class OfficeDocument
             {
                 JOptionPane.showMessageDialog(null,
                         "No se puede verificar la existencia del contenido en el sitio, al paracer el sitio al que intenta conectarse no tiene habilitada la función de publicación de contenidos.",
-                        "Verificación de contenido", JOptionPane.WARNING_MESSAGE);
+                        "Verificación de contenido", JOptionPane.ERROR_MESSAGE);
             }
             else
             {
                 JOptionPane.showMessageDialog(null,
                         "No se puede verificar la existencia del contenido en el sitio, la causa es:\r\n" + e.getLocalizedMessage(),
-                        "Verificación de contenido", JOptionPane.WARNING_MESSAGE);
+                        "Verificación de contenido", JOptionPane.ERROR_MESSAGE);
             
             }
             ErrorLog.log(e);            
@@ -127,7 +127,7 @@ public abstract class OfficeDocument
         {
             JOptionPane.showMessageDialog(null,
                     e.getLocalizedMessage(),
-                    "Verificación de contenido", JOptionPane.WARNING_MESSAGE);
+                    "Verificación de contenido", JOptionPane.ERROR_MESSAGE);
             ErrorLog.log(e);
         }
         return setupDocument;

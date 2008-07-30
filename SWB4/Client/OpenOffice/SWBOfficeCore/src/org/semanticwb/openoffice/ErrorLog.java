@@ -10,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import org.semanticwb.openoffice.ui.dialogs.DialogError;
 
 /**
  *
@@ -43,7 +44,7 @@ public class ErrorLog
         {
             fout = new FileOutputStream(fileLog);
         }
-        catch (FileNotFoundException fnfe)
+        catch ( FileNotFoundException fnfe )
         {
             fnfe.printStackTrace(System.out);
         }
@@ -52,6 +53,14 @@ public class ErrorLog
     protected void finalize() throws Throwable
     {
         fout.close();
+    }
+
+    public static void show(Exception e,String title)
+    {
+        DialogError error = new DialogError(new javax.swing.JFrame("Error"), true, e);
+        error.setTitle(title);
+        error.setLocationRelativeTo(null);
+        error.setVisible(true);
     }
 
     public static void log(String message)
@@ -78,7 +87,7 @@ public class ErrorLog
             fout.flush();
 
         }
-        catch (IOException ioe)
+        catch ( IOException ioe )
         {
             ioe.printStackTrace(System.out);
         }
@@ -87,11 +96,11 @@ public class ErrorLog
     private void saveMessage(Throwable exception)
     {
         this.saveMessage(exception.getMessage());
-        for (StackTraceElement element : exception.getStackTrace())
+        for ( StackTraceElement element : exception.getStackTrace() )
         {
             this.saveMessage(element.toString());
         }
-        if (exception.getCause() != null)
+        if ( exception.getCause() != null )
         {
             this.saveMessage(exception.getCause());
         }
