@@ -29,8 +29,13 @@ public final class Configuration
     private String path;
 
     public Configuration()
-    {
+    {        
         path = System.getProperty(CONFIGURATION_PROPERTY_NAME, "wb4config.xml");
+        File fileconfig = new File(path);   
+        String errorPath=fileconfig.getParentFile().getPath();
+        System.setProperty(ErrorLog.CONFIGURATION,errorPath);
+        String listxml=fileconfig.getParentFile().getPath()+File.separatorChar+"list.xml";
+        System.setProperty(ConfigurationListURI.CONFIGURATION,listxml);
         load();
     }
 
