@@ -97,8 +97,7 @@ public class WB4Impress extends OfficeDocument
      */
     public WB4Impress(XComponent document)
     {
-        this.document = document;
-        setupDocument();
+        this.document = document;        
     }
 
     /**

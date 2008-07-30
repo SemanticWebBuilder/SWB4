@@ -83,8 +83,7 @@ public class WB4Writer extends OfficeDocument
      */
     public WB4Writer(XComponent document)
     {
-        this.document = document;
-        setupDocument();
+        this.document = document;        
     }
 
     /**

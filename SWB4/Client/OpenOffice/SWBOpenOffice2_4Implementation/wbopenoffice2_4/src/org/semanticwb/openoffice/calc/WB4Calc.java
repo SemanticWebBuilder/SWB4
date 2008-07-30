@@ -81,8 +81,7 @@ public class WB4Calc extends OfficeDocument
      */
     public WB4Calc(XComponent document)
     {
-        this.document = document;
-        setupDocument();
+        this.document = document;        
     }
 
     /**
