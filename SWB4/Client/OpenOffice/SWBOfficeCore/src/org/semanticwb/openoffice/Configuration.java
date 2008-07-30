@@ -93,7 +93,7 @@ public final class Configuration
                 Set<String> keys = properties.stringPropertyNames();
                 for (String key : keys)
                 {
-                    String value = properties.getProperty(path);
+                    String value = properties.getProperty(key);
                     this.userConfigurations.put(key.toString(), value);
                 }
                 in.close();
