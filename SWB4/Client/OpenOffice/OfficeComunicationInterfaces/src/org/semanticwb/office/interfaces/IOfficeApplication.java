@@ -11,5 +11,5 @@ package org.semanticwb.office.interfaces;
  */
 public interface IOfficeApplication {
     public static String version="0.1";
-    public boolean isValidVersion(String version);            
+    public boolean isValidVersion(String version) throws Exception;           
 }
