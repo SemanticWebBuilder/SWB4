@@ -7,17 +7,19 @@ package org.semanticwb.openoffice.ui.dialogs;
 
 import java.text.DecimalFormat;
 import javax.swing.JOptionPane;
+import org.semanticwb.openoffice.Configuration;
 import org.semanticwb.openoffice.util.FixedLengthPlainDocument;
 import org.semanticwb.openoffice.util.NumericPlainDocument;
-
+import static org.semanticwb.openoffice.Configuration.PROXY_PORT;
+import static org.semanticwb.openoffice.Configuration.PROXY_SERVER;
 /**
  *
  * @author  victor.lorenzana
  */
 public class DialogConfigProxy extends javax.swing.JDialog
 {
-
-    private boolean isCanceled = true;
+    
+    Configuration configuration=new Configuration();
 
     /** Creates new form DialogConfigProxy */
     public DialogConfigProxy(java.awt.Frame parent, boolean modal)
@@ -26,11 +28,32 @@ public class DialogConfigProxy extends javax.swing.JDialog
         initComponents();
         jTextFieldPort.setDocument(new NumericPlainDocument(4, new DecimalFormat("####")));
         jTextFieldServer.setDocument(new FixedLengthPlainDocument(255));
-    }
-
-    public boolean isCanceled()
-    {
-        return isCanceled;
+        String proxyServer=configuration.get(PROXY_SERVER);
+        String proxyPort=configuration.get(PROXY_PORT);
+        if(proxyServer==null)
+        {
+            proxyServer="";
+        }
+        if(proxyPort==null)
+        {
+            proxyServer="";
+        }            
+        if(proxyServer.equals("") || proxyPort.equals(""))
+        {
+            proxyServer="";
+            proxyServer="";
+            this.jCheckBoxUsesServerProxy.setSelected(false);
+            jTextFieldServer.setEnabled(false);
+            jTextFieldPort.setEnabled(false);
+        }
+        else
+        {
+            this.jCheckBoxUsesServerProxy.setSelected(true);
+            jTextFieldServer.setEnabled(true);
+            jTextFieldPort.setEnabled(true);
+        }
+        jTextFieldServer.setText(proxyServer);
+        jTextFieldPort.setText(proxyPort);
     }
 
     public boolean usesProxyServer()
@@ -83,6 +106,11 @@ public class DialogConfigProxy extends javax.swing.JDialog
         setTitle("Configuración Proxy");
 
         jCheckBoxUsesServerProxy.setText("Usa Servidor Proxy ");
+        jCheckBoxUsesServerProxy.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxUsesServerProxyActionPerformed(evt);
+            }
+        });
 
         jPanelProxy.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Configuración", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.ABOVE_TOP));
 
@@ -90,7 +118,10 @@ public class DialogConfigProxy extends javax.swing.JDialog
 
         jLabelPort.setText("Puerto");
 
+        jTextFieldServer.setEnabled(false);
+
         jTextFieldPort.setText("8080");
+        jTextFieldPort.setEnabled(false);
 
         javax.swing.GroupLayout jPanelProxyLayout = new javax.swing.GroupLayout(jPanelProxy);
         jPanelProxy.setLayout(jPanelProxyLayout);
@@ -173,8 +204,7 @@ public class DialogConfigProxy extends javax.swing.JDialog
         pack();
     }// </editor-fold>//GEN-END:initComponents
     private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelActionPerformed
-        isCanceled = true;
-        this.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_jButtonCancelActionPerformed
 
     private void jButtonAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAcceptActionPerformed
@@ -191,36 +221,33 @@ public class DialogConfigProxy extends javax.swing.JDialog
                 this.jTextFieldPort.requestFocus();                
             }
             else
-            {                
-                isCanceled = false;
-                this.setVisible(true);
+            {   
+                configuration.add(PROXY_SERVER,this.jTextFieldServer.getText().trim());
+                configuration.add(PROXY_PORT,this.jTextFieldPort.getText().trim());
+                this.setVisible(false);
             }
-        }        
+        } 
+        else
+        {
+            configuration.add(PROXY_SERVER,"");
+            configuration.add(PROXY_PORT,"");
+            this.setVisible(false);
+        }
     }//GEN-LAST:event_jButtonAcceptActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[])
-    {
-        java.awt.EventQueue.invokeLater(new Runnable()
+    private void jCheckBoxUsesServerProxyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxUsesServerProxyActionPerformed
+        if(this.jCheckBoxUsesServerProxy.isSelected())
         {
-
-            public void run()
-            {
-                DialogConfigProxy dialog = new DialogConfigProxy(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter()
-                {
-
-                    public void windowClosing(java.awt.event.WindowEvent e)
-                    {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
+            jTextFieldPort.setEnabled(true);
+            jTextFieldServer.setEnabled(true);
+        }
+        else
+        {
+            jTextFieldPort.setEnabled(false);
+            jTextFieldServer.setEnabled(false);
+        }
+    }//GEN-LAST:event_jCheckBoxUsesServerProxyActionPerformed
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAccept;
     private javax.swing.JButton jButtonCancel;

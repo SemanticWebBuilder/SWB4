@@ -66,6 +66,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Usa Servidor Proxy "/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBoxUsesServerProxyActionPerformed"/>
+      </Events>
     </Component>
     <Container class="javax.swing.JPanel" name="jPanelProxy">
       <Properties>
@@ -127,10 +130,14 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="jTextFieldServer">
+          <Properties>
+            <Property name="enabled" type="boolean" value="false"/>
+          </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="jTextFieldPort">
           <Properties>
             <Property name="text" type="java.lang.String" value="8080"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
       </SubComponents>

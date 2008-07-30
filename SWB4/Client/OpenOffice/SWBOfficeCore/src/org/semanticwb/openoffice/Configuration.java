@@ -20,14 +20,17 @@ import java.util.Set;
 public final class Configuration
 {
 
-    public static final String COMMENT = "List of configurations of Semantic Webbuilder 4.0";
-    public static final String CONFIGURATION = "org.semanticwb.openoffice.configuration.Configuration";
+    public static final String PROXY_PORT = "ProxyPort";
+    public static final String PROXY_SERVER = "ProxyServer";
+    
+    private static final String COMMENT = "List of configurations of Semantic Webbuilder 4.0";
+    public static final String CONFIGURATION_PROPERTY_NAME = "org.semanticwb.openoffice.configuration.Configuration";
     private HashMap<String, String> userConfigurations = new HashMap<String, String>();
     private String path;
 
     public Configuration()
     {
-        path = System.getProperty(CONFIGURATION, "wb4config.xml");
+        path = System.getProperty(CONFIGURATION_PROPERTY_NAME, "wb4config.xml");
         load();
     }
 
@@ -78,7 +81,10 @@ public final class Configuration
             }
         }
     }
-
+    public String getPath()
+    {
+        return path;
+    }
     private void load()
     {
 

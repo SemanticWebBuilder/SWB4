@@ -519,6 +519,7 @@ public abstract class OfficeDocument
                 }
                 catch ( Exception e )
                 {
+                    JOptionPane.showMessageDialog(null, e.getLocalizedMessage(), "Verificación de contenido en sitio web.", JOptionPane.WARNING_MESSAGE);                    
                     ErrorLog.log(e);
                 }
             }
