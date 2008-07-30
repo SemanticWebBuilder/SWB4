@@ -44,6 +44,10 @@ import java.util.Collection;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.StringTokenizer;
+import javax.xml.namespace.QName;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 import org.semanticwb.base.util.SWBMailSender;
 import org.semanticwb.base.util.SWBMail;
 import org.w3c.dom.Element;
@@ -861,7 +865,19 @@ public class SWBUtils {
 
         private static XML m_xml = null;
         private DocumentBuilderFactory m_dbf = null;
-        private TransformerFactory m_tFactory = null;
+        private TransformerFactory m_tFactory = null;        // 1. Instantiate an XPathFactory.
+        private XPathFactory xpath_factory = null;
+        private XPath xpathObj = null;
+
+        public static XPathFactory getXPathFactory() {
+            XML xml = getInstance();
+            return xml.xpath_factory;
+        }
+
+        public static XPath getXPathObject() {
+            XML xml = getInstance();
+            return xml.xpathObj;
+        }
 
         private static XML getInstance() {
             if (m_xml == null) {
@@ -885,7 +901,11 @@ public class SWBUtils {
                 m_dbf = DocumentBuilderFactory.newInstance();
                 m_dbf.setNamespaceAware(true);
                 m_dbf.setIgnoringElementContentWhitespace(true);
-            //db=dbf.newDocumentBuilder();
+                //db=dbf.newDocumentBuilder();
+                //xpath
+                xpath_factory = javax.xml.xpath.XPathFactory.newInstance();
+                xpathObj = xpath_factory.newXPath();
+
             } catch (Exception e) {
                 log.error("Error getting DocumentBuilderFactory...", e);
             }
@@ -1331,6 +1351,13 @@ public class SWBUtils {
             e.appendChild(doc.createTextNode(value));
             ele.appendChild(e);
             return e;
+        }
+
+        public static Object getXpathEval(String expression, InputSource input, QName resultType) throws javax.xml.xpath.XPathExpressionException
+        {
+                XPath xpathObj = getXPathObject();
+                javax.xml.xpath.XPathExpression xpathExpression = xpathObj.compile(expression);
+                return xpathExpression.evaluate(input, resultType);
         }
     }
 
