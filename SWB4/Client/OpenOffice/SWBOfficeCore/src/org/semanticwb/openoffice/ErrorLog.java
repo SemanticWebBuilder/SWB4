@@ -36,6 +36,7 @@ public class ErrorLog
 
     private ErrorLog()
     {
+        new Configuration();
         String path = System.getProperty(CONFIGURATION, ".");
         String name = dateFormatLog.format(cal.getTime());
         fileLog = new File(path + File.separator + name);

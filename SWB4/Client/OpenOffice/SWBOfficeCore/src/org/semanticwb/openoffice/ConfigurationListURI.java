@@ -31,7 +31,8 @@ public final class ConfigurationListURI
     private String path;    
     public ConfigurationListURI()
     {
-        path = System.getProperty(CONFIGURATION, "urilist.xml");
+        new Configuration();
+        path = System.getProperty(CONFIGURATION, "list.xml");
         load();
     }
 
