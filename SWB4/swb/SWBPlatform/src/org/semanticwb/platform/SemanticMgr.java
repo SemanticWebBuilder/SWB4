@@ -37,9 +37,11 @@ public class SemanticMgr implements SWBInstanceObject
     
     private SemanticOntology m_ontology;
     private SemanticModel m_system;
+    private SemanticModel m_schema;
     private HashMap <String,SemanticModel>m_models=null;
 
     private IDBConnection conn;
+    private ModelMaker maker;
     
     private SemanticVocabulary vocabulary;
 
@@ -53,21 +55,23 @@ public class SemanticMgr implements SWBInstanceObject
         // Create database connection
         conn = new DBConnection(SWBUtils.DB.getDefaultConnection(), SWBUtils.DB.getDatabaseName());
         conn.getDriver().setTableNamePrefix("swb_");
+        maker = ModelFactory.createModelRDBMaker(conn);
         
         //load SWBSystem Model
         log.debug("Loading DBModel:"+"SWBSystem");
-        m_system=new SemanticModel("SWBSystem",loadDBModel("SWBSystem"));
+        m_system=new SemanticModel("SWBSystem",loadRDFDBModel("SWBSystem"));
 //        debugModel(m_system);
 
         //Load Ontology from file
         String swbowl="file:"+SWBUtils.getApplicationPath()+SWB_OWL_PATH;
         log.debug("Loading Model:"+swbowl);
-        Model swbSquema=loadModel(swbowl);
+        m_schema=new SemanticModel("SWBSchema",loadRDFFileModel(swbowl));
 //        debugModel(swbSquema);
         
         //Create Omtology
-        m_ontology = new SemanticOntology("SWB",ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM_RDFS_INF, swbSquema));
-        m_ontology.getRDFOntModel().addSubModel(m_system.getRDFModel());
+        m_ontology = new SemanticOntology("SWB",ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM,m_schema.getRDFModel()));
+        //m_ontology.addSubModel(m_schema,false);
+        m_ontology.addSubModel(m_system,false);
         
         //Create Vocabulary
         vocabulary=new SemanticVocabulary();
@@ -77,7 +81,7 @@ public class SemanticMgr implements SWBInstanceObject
             SemanticClass tpc=tpcit.nextSemanticClass();
             if(tpc!=null && tpc.getName()!=null)
             {
-                log.trace("Registering SemanticClass:"+tpc);
+                log.trace("Registering SemanticClass:"+tpc+" --> "+tpc.getClassName());
                 vocabulary.addSemanticClass(tpc);
                 Iterator<SemanticProperty> tppit=tpc.listProperties();
                 while(tppit.hasNext())
@@ -92,17 +96,6 @@ public class SemanticMgr implements SWBInstanceObject
         }
         vocabulary.init();
         
-        //LoadModels
-        SemanticClass cls=getVocabulary().getSemanticClass(SemanticVocabulary.SWB_CLASS_SWBMODEL);
-        Iterator<SemanticObject> tpit=cls.listInstances();
-        while(tpit.hasNext())
-        {
-            SemanticObject tp=tpit.next();
-            String value=tp.getProperty(getVocabulary().getSemanticProperty(SemanticVocabulary.SWB_PROP_VALUE));
-            log.debug("Loading Model:"+value);
-            Model m=loadDBModel(value);
-            m_models.put(value, new SemanticModel(value, m));
-        }
         
 //        ontoModel.loadImports();
 //        ontoModel.getDocumentManager().addAltEntry(source,"file:"+SWBUtils.getApplicationPath()+"/WEB-INF/owl/swb.owl" );
@@ -117,16 +110,17 @@ public class SemanticMgr implements SWBInstanceObject
         //debugClasses(ontoModel);
         //debugModel(ontoModel);
 
+        loadDBModels();
+        m_ontology.rebind();
     }
     
-    private Model loadModel(String path)
+    private Model loadRDFFileModel(String path)
     {
         return FileManager.get().loadModel(path);
     }
     
-    private Model loadDBModel(String name)
+    private Model loadRDFDBModel(String name)
     {
-        ModelMaker maker = ModelFactory.createModelRDBMaker(conn);
         // create or open the default model
         return maker.openModel(name);
     }
@@ -203,31 +197,50 @@ public class SemanticMgr implements SWBInstanceObject
         return m_models.get(name);
     }
     
+    public void loadDBModels()
+    {
+        //LoadModels
+        log.debug("loadDBModels");
+        Iterator tpit=maker.listModels();
+        while(tpit.hasNext())
+        {
+            String name=(String)tpit.next();
+            log.trace("LoadingModel:"+name);
+            loadDBModel(name);
+        }    
+    }
+    
+    /**
+     * Load a Model, if the model don't exist, it will be created 
+     * @param name
+     * @return
+     */
+    public SemanticModel loadDBModel(String name)
+    {
+        SemanticModel m=new SemanticModel(name, loadRDFDBModel(name));
+        m_models.put(name, m);
+        m_ontology.addSubModel(m,false);
+        return m;
+    }    
     
     public SemanticOntology getOntology() 
     {
         return m_ontology;
     }
     
+    public SemanticModel getSchemaModel() 
+    {
+        return m_schema;
+    }    
+    
     public SemanticModel getSystemModel() 
     {
         return m_system;
     }
     
-    public OntClass getOntClass(String uri)
-    {
-        return m_ontology.getRDFOntModel().getOntClass(uri);
-    }
-    
-//    public SemanticClass getSemanticClass(String uri)
+//    public OntClass getOntClass(String uri)
 //    {
-//        OntClass cls=m_ontology.getOntClass(uri);
-//        SemanticClass tpcls=null;
-//        if(cls!=null)
-//        {
-//            tpcls=new SemanticClass(cls);
-//        }
-//        return tpcls;
+//        return m_ontology.getRDFOntModel().getOntClass(uri);
 //    }
     
     public SemanticVocabulary getVocabulary() {

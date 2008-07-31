@@ -10,62 +10,110 @@ import java.util.Iterator;
  *
  * @author victor.lorenzana
  */
-public class SemanticIterator<T extends SemanticObject>
+public class SemanticIterator<T extends SemanticObject> implements Iterator
 {
-    private Class clazz;
+    private SemanticClass scls;
+    private Class cls;
     private Iterator iterator;
     private Constructor constructor;
             
-    public SemanticIterator(Class clazz,Iterator iterator)
+    public SemanticIterator(SemanticClass cls,Iterator iterator)
     {
-        this.clazz=clazz;
+        this.scls=cls;
+        this.iterator=iterator;
+//        try
+//        {
+//            constructor=clazz.getDeclaredConstructor(Resource.class);
+//        }
+//        catch(NoSuchMethodException nsme)
+//        {
+//            new IllegalArgumentException(nsme);
+//        }
+    }
+    
+    public SemanticIterator(Class cls,Iterator iterator)
+    {
+        this.cls=cls;
         this.iterator=iterator;
         try
         {
-            constructor=clazz.getDeclaredConstructor(Resource.class);
+            constructor=cls.getDeclaredConstructor(Resource.class);
         }
         catch(NoSuchMethodException nsme)
         {
             new IllegalArgumentException(nsme);
         }
-
-    }
+    }    
+    
     public void remove()
     {
-    
+        iterator.remove();
     }
+    
     public boolean hasNext() 
     {
         return iterator.hasNext();
     }
+    
     public T next() 
     {        
         Object obj=iterator.next();
-        if(obj instanceof Statement)
+        if(scls!=null)
         {
-            try
+            if(obj instanceof Statement)
             {
-                return (T)constructor.newInstance(((Statement)obj).getResource());
+                try
+                {
+                    return (T)scls.newInstance(((Statement)obj).getResource());
+                }
+                catch(Exception ie)
+                {
+                    throw new AssertionError(ie.getMessage());        
+                }
             }
-            catch(Exception ie)
+            else if(obj instanceof Resource)
             {
-                throw new AssertionError(ie.getMessage());        
+                try
+                {
+                    return (T)scls.newInstance((Resource)obj);
+                }
+                catch(Exception ie)
+                {
+                    throw new AssertionError(ie.getMessage());        
+                }
             }
+            else
+            {
+                throw new AssertionError("No type found...");        
+            }        
+        }else
+        {
+            if(obj instanceof Statement)
+            {
+                try
+                {
+                    return (T)constructor.newInstance(((Statement)obj).getResource());
+                }
+                catch(Exception ie)
+                {
+                    throw new AssertionError(ie.getMessage());        
+                }
+            }
+            else if(obj instanceof Resource)
+            {
+                try
+                {
+                    return (T)constructor.newInstance((Resource)obj);
+                }
+                catch(Exception ie)
+                {
+                    throw new AssertionError(ie.getMessage());        
+                }
+            }
+            else
+            {
+                throw new AssertionError("No type found...");        
+            }              
         }
-        else if(obj instanceof Resource)
-        {
-            try
-            {
-                return (T)constructor.newInstance((Resource)obj);
-            }
-            catch(Exception ie)
-            {
-                throw new AssertionError(ie.getMessage());        
-            }
-        }
-        else
-        {
-            throw new AssertionError("No type found...");        
-        }        
     }
 }

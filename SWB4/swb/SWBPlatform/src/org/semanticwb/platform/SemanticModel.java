@@ -7,6 +7,8 @@ package org.semanticwb.platform;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.Statement;
+import org.semanticwb.SWBInstance;
 
 /**
  *
@@ -38,18 +40,55 @@ public class SemanticModel
         return m_model;
     }
     
-    public SemanticObject getSemanticObject(String uri)
+    public SemanticClass getSemanticObjectClass(Resource res)
     {
-        SemanticObject ret=null;
+        Statement stm=res.getRequiredProperty(res.getModel().getProperty(SemanticVocabulary.RDF_TYPE));
+        if(stm!=null)
+        {
+            return SWBInstance.getSemanticMgr().getVocabulary().getSemanticClass(stm.getResource().getURI());
+        }
+        return null;
+    }    
+    
+    public SemanticClass getSemanticObjectClass(String uri)
+    {
         Resource res=m_model.getResource(uri);
-        if(res!=null)ret=new SemanticObject(res);
-        return ret;
+        return getSemanticObjectClass(res);
     }
     
-    public SemanticObject createSemanticObject(String uri, SemanticClass cls)
+    public <T extends SemanticObject> T getSemanticObject(String uri)
+    {
+        Resource res=m_model.getResource(uri);
+        SemanticClass cl=getSemanticObjectClass(res);
+        return (T)cl.newInstance(res);
+//        SemanticObject ret=null;
+//        Resource res=m_model.getResource(uri);
+//        if(res!=null)ret=new SemanticObject(res);
+//        return ret;
+    }
+    
+    public <T extends SemanticObject> T createSemanticObject(String uri, SemanticClass cls)
     {
         Resource res=m_model.createResource(uri);
-        res.addProperty(m_model.getProperty(SemanticVocabulary.RDF_TYPE), cls.getURI());
-        return new SemanticObject(res);
-    }    
+        res.addProperty(m_model.getProperty(SemanticVocabulary.RDF_TYPE), cls.getOntClass());
+        return (T)cls.newInstance(res);
+    }
+    
+    public void removeSemanticObject(String uri)
+    {
+        Resource res=m_model.getResource(uri);
+        if(res!=null)
+        {
+            m_model.remove(res,null,null);
+        }
+    }  
+    
+    public void removeSemanticObject(SemanticObject obj)
+    {
+        Resource res=obj.getRDFResource();
+        if(res!=null)
+        {
+            m_model.remove(res,null,null);
+        }
+    }      
 }
