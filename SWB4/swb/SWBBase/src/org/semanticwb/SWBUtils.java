@@ -114,7 +114,7 @@ public class SWBUtils {
                 "log4j.appender.stdout=org.apache.log4j.ConsoleAppender" + "\n" +
                 "log4j.appender.stdout.layout=org.apache.log4j.PatternLayout" + "\n" +
                 "log4j.appender.stdout.layout.ConversionPattern=%d %p - %m%n" + "\n" +
-                "log4j.logger.org.semanticwb=debug";
+                "log4j.logger.org.semanticwb=trace";
         try {
             Properties proper = new Properties();
             proper.load(IO.getStreamFromString(log_conf));
