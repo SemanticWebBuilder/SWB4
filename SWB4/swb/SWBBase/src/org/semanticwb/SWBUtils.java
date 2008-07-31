@@ -161,7 +161,7 @@ public class SWBUtils {
      * @param smtpserver 
      */
     public static void setSMTPServer(String smtpserver) {
-        getInstance().smtpserver = smtpserver;
+        SWBUtils.smtpserver = smtpserver;
     }
 
     /**
