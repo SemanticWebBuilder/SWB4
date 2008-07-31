@@ -14,7 +14,9 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBInstance;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.platform.SemanticModel;
+import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
+import org.semanticwb.platform.SemanticVocabulary;
 
 /**
  *
@@ -55,19 +57,24 @@ public class PerformanceTest
     @Test
     public void test()
     {
+        long time=System.currentTimeMillis();
+        
         SemanticModel model=SWBInstance.getSemanticMgr().getSystemModel();
         SemanticOntology ontology=SWBInstance.getSemanticMgr().getOntology();
-        long time=System.currentTimeMillis();
-        for(int x=0;x<30000;x++)
+        SemanticVocabulary voc=SWBInstance.getSemanticMgr().getVocabulary();
+        System.out.println("Time:"+(System.currentTimeMillis()-time));
+        time=System.currentTimeMillis();
+        for(int x=0;x<30;x++)
         {
             //model.createSemanticObject("name"+x, Vocabulary.WebPage);
-            //WebPage page=new WebPage(model.getRDFModel().getResource("name"+x));
+            SemanticObject obj=ontology.getSemanticObject("name"+x);
+            System.out.println("obj:"+obj.getClass());
             //page.setStatus(1);
-            //int stat=page.getStatus();
+            //int stat=obj.getIntProperty(voc.getSemanticProperty(voc.URI+"status"));
             //log.debug(stat);
             //page.setDescription("Description");
             //SemanticObject obj=ontology.getSemanticObject("name"+x);
-            //log.debug(obj.toString());
+            //System.out.println("x:"+stat);
         }
         
 //        Iterator<SemanticObject> it=Vocabulary.WebPage.listInstances();
@@ -77,6 +84,6 @@ public class PerformanceTest
 //            log.debug(obj.toString());
 //        }
         
-        log.debug("Time:"+(System.currentTimeMillis()-time));
+        System.out.println("Time:"+(System.currentTimeMillis()-time));
     }
 }
