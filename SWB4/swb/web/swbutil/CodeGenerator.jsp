@@ -17,31 +17,31 @@
     <h1>Code Generator</h1>
     <pre>
 <%
-    SemanticMgr mgr=SWBContext.getSemanticMgr();
-    Iterator<TopicClass> tpcit=mgr.getVocabulary().listTopicClasses();
+    SemanticMgr mgr=SWBInstance.getSemanticMgr();
+    Iterator<SemanticClass> tpcit=mgr.getVocabulary().listSemanticClasses();
     while(tpcit.hasNext())
     {
-        TopicClass tpc=tpcit.next();
+        SemanticClass tpc=tpcit.next();
         out.println("Class:"+tpc.getName()+"\t");
-        Iterator<TopicProperty> tppit=tpc.listProperties();
+        Iterator<SemanticProperty> tppit=tpc.listProperties();
         while(tppit.hasNext())
         {
-            TopicProperty tpp=tppit.next();
+            SemanticProperty tpp=tppit.next();
             if(tpp.isObjectProperty())
             {
-                out.println("-->ObejctProp:"+tpp.getName()+"\t"+tpp.getRangeClass());
+                out.println("-->ObjectProp:"+tpp.getName()+"\t"+tpp.getRangeClass());
             }else if(tpp.isDataTypeProperty())
             {
                 out.println("-->DataTypeProp:"+tpp.getName()+"\t"+tpp.getRangeDataType());
             }
         }
         
-        Iterator<Topic> tpit=tpc.listInstances();
+        Iterator<SemanticObject> tpit=tpc.listInstances();
         while(tpit.hasNext())
         {
-            Topic tp=tpit.next();
+            SemanticObject tp=tpit.next();
             out.println("---->Instance:"+tp.getName());
-            out.println("------>Prop_deleted:"+tp.getProperty(mgr.getVocabulary().getTopicProperty(SWBVocabulary.URI+"deleted")));
+            //out.println("------>Prop_deleted:"+tp.getProperty(mgr.getVocabulary().getSemanticProperty(SemanticVocabulary.URI+"deleted")));
         }        
         
     }
