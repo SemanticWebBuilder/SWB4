@@ -8,521 +8,608 @@
     xmlns:swb="http://www.semanticwebbuilder.org/swb4/ontology#"
   xml:base="http://www.semanticwebbuilder.org/swb4/ontology">
   <owl:Ontology rdf:about="">
-    <rdfs:comment>SemanticWebBuilder Ontology</rdfs:comment>
-    <rdfs:comment>SemanticWebBuilder Default Ontology</rdfs:comment>
     <rdfs:label>Wine Ontology</rdfs:label>
+    <rdfs:comment>SemanticWebBuilder Default Ontology</rdfs:comment>
+    <rdfs:comment>SemanticWebBuilder Ontology</rdfs:comment>
   </owl:Ontology>
+  <rdfs:Class rdf:ID="SWBInterface"/>
+  <rdfs:Class rdf:ID="Class">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdfs:Class>
+  <rdfs:Class rdf:ID="SWBClass"/>
+  <rdfs:Class rdf:ID="Interface">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdfs:Class>
   <owl:Class rdf:ID="WebSiteable">
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="SWBInterface"/>
-    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model.WebSiteable</swb:className>
+    <rdf:type rdf:resource="#Interface"/>
   </owl:Class>
-  <owl:Class rdf:ID="Content">
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="Versionable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="Resource"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="Roleable">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#SWBInterface"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="Device">
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="Valueable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#WebSiteable"/>
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="Descriptiveable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="SWBClass"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="Permission">
-    <rdfs:subClassOf rdf:resource="#WebSiteable"/>
-    <rdfs:subClassOf rdf:resource="#SWBClass"/>
-  </owl:Class>
-  <owl:Class rdf:ID="Community">
-    <rdfs:subClassOf rdf:resource="#WebSiteable"/>
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="Statusable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Descriptiveable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#SWBClass"/>
-  </owl:Class>
-  <owl:Class rdf:ID="TemplateRefable">
+  <owl:Class rdf:ID="RuleRefable">
     <rdfs:subClassOf>
       <owl:Class rdf:ID="Referensable"/>
     </rdfs:subClassOf>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model.RuleRefable</swb:className>
+    <rdf:type rdf:resource="#Interface"/>
   </owl:Class>
-  <owl:Class rdf:ID="WebSite">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Descriptiveable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="Deleteable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Statusable"/>
-    </rdfs:subClassOf>
+  <owl:Class rdf:ID="Groupable">
+    <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model.Groupeable</swb:className>
+    <rdf:type rdf:resource="#Interface"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Device">
     <rdfs:subClassOf rdf:resource="#SWBClass"/>
-  </owl:Class>
-  <owl:Class rdf:ID="Application">
     <rdfs:subClassOf>
-      <owl:Class rdf:about="#Resource"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:about="#Referensable">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#SWBInterface"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="PFlow">
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="Groupable"/>
+      <owl:Class rdf:ID="Descriptiveable"/>
     </rdfs:subClassOf>
     <rdfs:subClassOf rdf:resource="#WebSiteable"/>
     <rdfs:subClassOf>
-      <owl:Class rdf:about="#Deleteable"/>
+      <owl:Class rdf:ID="Valueable"/>
     </rdfs:subClassOf>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model.Device</swb:className>
+    <rdf:type rdf:resource="#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="TemplateRefable">
     <rdfs:subClassOf>
-      <owl:Class rdf:about="#Versionable"/>
+      <owl:Class rdf:about="#Referensable"/>
     </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Statusable"/>
-    </rdfs:subClassOf>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model.TemplateRefable</swb:className>
+    <rdf:type rdf:resource="#Interface"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Community">
+    <rdfs:subClassOf rdf:resource="#SWBClass"/>
     <rdfs:subClassOf>
       <owl:Class rdf:about="#Descriptiveable"/>
     </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Statusable"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#WebSiteable"/>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model.Community</swb:className>
+    <rdf:type rdf:resource="#Class"/>
   </owl:Class>
-  <owl:Class rdf:ID="ipFilter">
+  <owl:Class rdf:ID="Dns">
+    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Descriptiveable"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#WebSiteable"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="WebPageable"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Valueable"/>
+    </rdfs:subClassOf>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model.Dns</swb:className>
+    <rdf:type rdf:resource="#Class"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Referensable">
+    <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model.Referensable</swb:className>
+    <rdf:type rdf:resource="#Interface"/>
+  </owl:Class>
+  <owl:Class rdf:ID="PFlow">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Descriptiveable"/>
+    </rdfs:subClassOf>
+    <rdf:type rdf:resource="#Class"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Statusable"/>
+    </rdfs:subClassOf>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model.PFlow</swb:className>
+    <rdfs:subClassOf rdf:resource="#Groupable"/>
+    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="#WebSiteable"/>
+    <rdfs:subClassOf>
+      <swb:Interface rdf:ID="Deleteable">
+        <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+        <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >org.semanticwb.model.Deleteable</swb:className>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Interface>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Versionable"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#Versionable">
+    <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model.Versionable</swb:className>
+    <rdf:type rdf:resource="#Interface"/>
+  </owl:Class>
+  <owl:Class rdf:about="#WebPageable">
+    <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model.WebPageable</swb:className>
+    <rdf:type rdf:resource="#Interface"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Portletable">
+    <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model.Portletable</swb:className>
+    <rdf:type rdf:resource="#Interface"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Descriptiveable">
+    <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model.Descriptiveable</swb:className>
+    <rdf:type rdf:resource="#Interface"/>
+  </owl:Class>
+  <owl:Class rdf:ID="RuleRef">
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model.Ruleref</swb:className>
+    <rdfs:subClassOf>
+      <swb:Class rdf:ID="Reference">
+        <rdfs:subClassOf rdf:resource="#SWBClass"/>
+        <rdfs:subClassOf>
+          <owl:Class rdf:about="#Statusable"/>
+        </rdfs:subClassOf>
+        <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >org.semanticwb.model.Reference</swb:className>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Ruleable"/>
+    </rdfs:subClassOf>
+    <rdf:type rdf:resource="#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="PortletRef">
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model.PortletRef</swb:className>
+    <rdfs:subClassOf rdf:resource="#Reference"/>
+    <rdfs:subClassOf rdf:resource="#Portletable"/>
+    <rdfs:subClassOf>
+      <swb:Interface rdf:ID="Priorityable">
+        <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+        <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >org.semanticwb.model.Priorityable</swb:className>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Interface>
+    </rdfs:subClassOf>
+    <rdf:type rdf:resource="#Class"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Statusable">
+    <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model.Statusable</swb:className>
+    <rdf:type rdf:resource="#Interface"/>
+  </owl:Class>
+  <owl:Class rdf:ID="HomePage">
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model.HomePage</swb:className>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="WebPage"/>
+    </rdfs:subClassOf>
+    <rdf:type rdf:resource="#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="TemplateRef">
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model.TemplateRef</swb:className>
+    <rdfs:subClassOf rdf:resource="#Reference"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Templateable"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#Priorityable"/>
+    <rdf:type rdf:resource="#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="PortletRefable">
+    <rdfs:subClassOf rdf:resource="#Referensable"/>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model.PortletRefable</swb:className>
+    <rdf:type rdf:resource="#Interface"/>
+  </owl:Class>
+  <owl:Class rdf:ID="RoleRef">
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model.RoleRef</swb:className>
+    <rdfs:subClassOf>
+      <swb:Interface rdf:ID="Roleable">
+        <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+        <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >org.semanticwb.model.Roleable</swb:className>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Interface>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#Reference"/>
+    <rdf:type rdf:resource="#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="RoleRefable">
+    <rdfs:subClassOf rdf:resource="#Referensable"/>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model.RoleRefable</swb:className>
+    <rdf:type rdf:resource="#Interface"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Ruleable">
+    <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model.Ruleable</swb:className>
+    <rdf:type rdf:resource="#Interface"/>
+  </owl:Class>
+  <owl:Class rdf:ID="ContentPortlet">
+    <rdfs:subClassOf rdf:resource="#Versionable"/>
+    <rdfs:subClassOf>
+      <swb:Class rdf:ID="Portlet">
+        <rdfs:subClassOf>
+          <swb:Interface rdf:ID="Calendarable">
+            <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+            <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >org.semanticwb.model.Calendarable</swb:className>
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+          </swb:Interface>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf rdf:resource="#WebSiteable"/>
+        <rdfs:subClassOf>
+          <swb:Interface rdf:ID="Localeable">
+            <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+            <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >org.semanticwb.model.Localeable</swb:className>
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+          </swb:Interface>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf rdf:resource="#RuleRefable"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+        <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >org.semanticwb.model.Portlet</swb:className>
+        <rdfs:subClassOf rdf:resource="#RoleRefable"/>
+        <rdfs:subClassOf rdf:resource="#Statusable"/>
+        <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
+        <rdfs:subClassOf rdf:resource="#SWBClass"/>
+        <rdfs:subClassOf rdf:resource="#Priorityable"/>
+        <rdfs:subClassOf rdf:resource="#Deleteable"/>
+        <rdfs:subClassOf rdf:resource="#Groupable"/>
+      </swb:Class>
+    </rdfs:subClassOf>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model.ContentPortlet</swb:className>
+    <rdf:type rdf:resource="#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="ObjectGroup">
+    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="#Groupable"/>
+    <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="#WebSiteable"/>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model.ObjectGroup</swb:className>
+    <rdf:type rdf:resource="#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="IPFilter">
     <rdfs:subClassOf>
       <owl:Class rdf:about="#Valueable"/>
     </rdfs:subClassOf>
     <rdfs:subClassOf rdf:resource="#WebSiteable"/>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Statusable"/>
-    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#Statusable"/>
     <rdfs:subClassOf rdf:resource="#SWBClass"/>
-  </owl:Class>
-  <owl:Class rdf:ID="WebPageable">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#SWBInterface"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:about="#Descriptiveable">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#SWBInterface"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="Strategy">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Resource"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="HomePage">
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="WebPage"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="Rule">
-    <rdfs:subClassOf rdf:resource="#WebSiteable"/>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Versionable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Groupable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
-    <rdfs:subClassOf rdf:resource="#SWBClass"/>
-  </owl:Class>
-  <owl:Class rdf:ID="Camp">
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="Calendarable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#WebSiteable"/>
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="Ruleable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#Roleable"/>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Deleteable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Statusable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
-    <rdfs:subClassOf rdf:resource="#SWBClass"/>
-  </owl:Class>
-  <owl:Class rdf:ID="Role">
-    <rdfs:subClassOf rdf:resource="#WebSiteable"/>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Groupable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
-    <rdfs:subClassOf rdf:resource="#SWBClass"/>
-  </owl:Class>
-  <owl:Class rdf:ID="RoleRef">
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="Reference"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#Roleable"/>
-  </owl:Class>
-  <owl:Class rdf:ID="ResourceRef">
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="Priorityable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="Resourceable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Reference"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="User">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Statusable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Groupable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#Roleable"/>
-    <rdfs:subClassOf rdf:resource="#SWBClass"/>
-  </owl:Class>
-  <owl:Class rdf:about="#Ruleable">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#SWBInterface"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="ObjectGroup">
-    <rdfs:subClassOf rdf:resource="#WebSiteable"/>
-    <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Groupable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model.IPFilter</swb:className>
+    <rdf:type rdf:resource="#Class"/>
   </owl:Class>
   <owl:Class rdf:about="#WebPage">
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="RoleRefable"/>
-    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#RoleRefable"/>
+    <rdf:type rdf:resource="#Class"/>
     <rdfs:subClassOf rdf:resource="#SWBClass"/>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Calendarable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="ResourceRefable"/>
-    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#Calendarable"/>
     <rdfs:subClassOf rdf:resource="#TemplateRefable"/>
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="RuleRefable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Deleteable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Statusable"/>
-    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#RuleRefable"/>
+    <rdfs:subClassOf rdf:resource="#PortletRefable"/>
+    <rdfs:subClassOf rdf:resource="#Deleteable"/>
+    <rdfs:subClassOf rdf:resource="#Statusable"/>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model.WebPage</swb:className>
     <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
     <rdfs:subClassOf rdf:resource="#WebSiteable"/>
   </owl:Class>
   <owl:Class rdf:ID="Language">
+    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="#WebSiteable"/>
     <rdfs:subClassOf>
       <owl:Class rdf:about="#Valueable"/>
     </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#WebSiteable"/>
-    <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
-    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model.Language</swb:className>
+    <rdf:type rdf:resource="#Class"/>
   </owl:Class>
-  <owl:Class rdf:about="#Deleteable">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#SWBInterface"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="Templateable">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#SWBInterface"/>
-    </rdfs:subClassOf>
+  <owl:Class rdf:about="#Templateable">
+    <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model.Templateable</swb:className>
+    <rdf:type rdf:resource="#Interface"/>
   </owl:Class>
   <owl:Class rdf:about="#Valueable">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#SWBInterface"/>
-    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model.Valueable</swb:className>
+    <rdf:type rdf:resource="#Interface"/>
   </owl:Class>
-  <owl:Class rdf:about="#ResourceRefable">
-    <rdfs:subClassOf rdf:resource="#Referensable"/>
-  </owl:Class>
-  <owl:Class rdf:about="#RuleRefable">
-    <rdfs:subClassOf rdf:resource="#Referensable"/>
-  </owl:Class>
-  <owl:Class rdf:about="#Groupable">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#SWBInterface"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:about="#Priorityable">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#SWBInterface"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="Dns">
-    <rdfs:subClassOf rdf:resource="#Valueable"/>
-    <rdfs:subClassOf rdf:resource="#WebPageable"/>
-    <rdfs:subClassOf rdf:resource="#WebSiteable"/>
-    <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
-    <rdfs:subClassOf rdf:resource="#SWBClass"/>
-  </owl:Class>
-  <owl:Class rdf:ID="VersionInfo">
-    <rdfs:subClassOf rdf:resource="#Valueable"/>
-    <rdfs:subClassOf rdf:resource="#SWBClass"/>
-  </owl:Class>
-  <owl:Class rdf:about="#Resource">
-    <rdfs:subClassOf rdf:resource="#WebSiteable"/>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Statusable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#Deleteable"/>
-    <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
-    <rdfs:subClassOf rdf:resource="#Groupable"/>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Calendarable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#RoleRefable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#Priorityable"/>
-    <rdfs:subClassOf rdf:resource="#RuleRefable"/>
-    <rdfs:subClassOf rdf:resource="#SWBClass"/>
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="Localeable"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:about="#Versionable">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#SWBInterface"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="Calendar">
-    <rdfs:subClassOf rdf:resource="#WebSiteable"/>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Statusable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
-    <rdfs:subClassOf rdf:resource="#SWBClass"/>
-  </owl:Class>
-  <owl:Class rdf:about="#Localeable">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#SWBInterface"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="RuleRef">
-    <rdfs:subClassOf rdf:resource="#Ruleable"/>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Reference"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:about="#Reference">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Statusable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#SWBClass"/>
-  </owl:Class>
-  <owl:Class rdf:about="#Statusable">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#SWBInterface"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="UserRepository">
-    <rdfs:subClassOf rdf:resource="#SWBClass"/>
-  </owl:Class>
-  <owl:Class rdf:ID="ResourceType">
-    <rdfs:subClassOf rdf:resource="#WebSiteable"/>
-    <rdfs:subClassOf rdf:resource="#Groupable"/>
-    <rdfs:subClassOf rdf:resource="#SWBClass"/>
-  </owl:Class>
-  <owl:Class rdf:ID="TemplateRef">
-    <rdfs:subClassOf rdf:resource="#Priorityable"/>
-    <rdfs:subClassOf rdf:resource="#Templateable"/>
-    <rdfs:subClassOf rdf:resource="#Reference"/>
-  </owl:Class>
-  <owl:Class rdf:ID="System">
-    <rdfs:subClassOf rdf:resource="#Resource"/>
-  </owl:Class>
-  <owl:Class rdf:about="#Resourceable">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#SWBInterface"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:about="#Calendarable">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#SWBInterface"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:about="#RoleRefable">
-    <rdfs:subClassOf rdf:resource="#Referensable"/>
-  </owl:Class>
-  <owl:Class rdf:ID="Template">
-    <rdfs:subClassOf rdf:resource="#Groupable"/>
-    <rdfs:subClassOf rdf:resource="#WebSiteable"/>
-    <rdfs:subClassOf rdf:resource="#RuleRefable"/>
-    <rdfs:subClassOf rdf:resource="#Deleteable"/>
-    <rdfs:subClassOf rdf:resource="#RoleRefable"/>
-    <rdfs:subClassOf rdf:resource="#Statusable"/>
-    <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
-    <rdfs:subClassOf rdf:resource="#Versionable"/>
-    <rdfs:subClassOf rdf:resource="#Localeable"/>
-    <rdfs:subClassOf rdf:resource="#SWBClass"/>
-    <rdfs:subClassOf rdf:resource="#Calendarable"/>
-  </owl:Class>
-  <owl:Class rdf:about="#SWBInterface">
-    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
-  </owl:Class>
-  <owl:Class rdf:ID="SWBModel">
-    <rdfs:subClassOf rdf:resource="#SWBClass"/>
-    <rdfs:subClassOf rdf:resource="#Valueable"/>
-  </owl:Class>
+  <owl:ObjectProperty rdf:ID="hasPortlet">
+    <rdfs:range rdf:resource="#Portlet"/>
+    <rdfs:domain rdf:resource="#Portletable"/>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasRole">
+    <rdfs:range>
+      <swb:Class rdf:ID="Role">
+        <rdfs:subClassOf rdf:resource="#SWBClass"/>
+        <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
+        <rdfs:subClassOf rdf:resource="#Groupable"/>
+        <rdfs:subClassOf rdf:resource="#WebSiteable"/>
+        <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >org.semanticwb.model.Role</swb:className>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
     <rdfs:domain rdf:resource="#Roleable"/>
-    <rdfs:range rdf:resource="#Role"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasRule">
+    <rdfs:range>
+      <swb:Class rdf:ID="Rule">
+        <rdfs:subClassOf rdf:resource="#SWBClass"/>
+        <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
+        <rdfs:subClassOf rdf:resource="#Groupable"/>
+        <rdfs:subClassOf rdf:resource="#Versionable"/>
+        <rdfs:subClassOf rdf:resource="#WebSiteable"/>
+        <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >org.semanticwb.model.Rule</swb:className>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
     <rdfs:domain rdf:resource="#Ruleable"/>
-    <rdfs:range rdf:resource="#Rule"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="userModified">
-    <rdfs:range rdf:resource="#User"/>
     <rdfs:domain rdf:resource="#Descriptiveable"/>
+    <rdfs:range>
+      <swb:Class rdf:ID="User">
+        <rdfs:subClassOf rdf:resource="#SWBClass"/>
+        <rdfs:subClassOf rdf:resource="#Roleable"/>
+        <rdfs:subClassOf rdf:resource="#Groupable"/>
+        <rdfs:subClassOf rdf:resource="#Statusable"/>
+        <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >org.semanticwb.model.User</swb:className>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasHome">
+    <rdfs:domain>
+      <swb:Class rdf:ID="WebSite">
+        <rdfs:subClassOf rdf:resource="#SWBClass"/>
+        <rdfs:subClassOf rdf:resource="#Statusable"/>
+        <rdfs:subClassOf rdf:resource="#Deleteable"/>
+        <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
+        <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >org.semanticwb.model.WebSite</swb:className>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:domain>
     <rdfs:range rdf:resource="#HomePage"/>
-    <rdfs:domain rdf:resource="#WebSite"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasTemplateRef">
+    <rdfs:domain rdf:resource="#TemplateRefable"/>
+    <rdfs:range rdf:resource="#TemplateRef"/>
     <rdfs:subPropertyOf>
       <owl:ObjectProperty rdf:ID="hasReference"/>
     </rdfs:subPropertyOf>
-    <rdfs:range rdf:resource="#TemplateRef"/>
-    <rdfs:domain rdf:resource="#TemplateRefable"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="userCreated">
-    <rdfs:range rdf:resource="#User"/>
     <rdfs:domain rdf:resource="#Descriptiveable"/>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="hasResource">
-    <rdfs:domain rdf:resource="#Resourceable"/>
-    <rdfs:range rdf:resource="#Resource"/>
+    <rdfs:range rdf:resource="#User"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasWebPage">
-    <rdfs:range rdf:resource="#WebPage"/>
     <rdfs:domain rdf:resource="#WebPageable"/>
+    <rdfs:range rdf:resource="#WebPage"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="lastVersion">
-    <rdfs:range rdf:resource="#VersionInfo"/>
     <rdfs:domain rdf:resource="#Versionable"/>
+    <rdfs:range>
+      <swb:Class rdf:ID="VersionInfo">
+        <rdfs:subClassOf rdf:resource="#SWBClass"/>
+        <rdfs:subClassOf rdf:resource="#Valueable"/>
+        <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >org.semanticwb.model.VersionInfo</swb:className>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="isChildOf">
-    <rdfs:range rdf:resource="#WebPage"/>
     <rdfs:domain rdf:resource="#WebPage"/>
+    <rdfs:range rdf:resource="#WebPage"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="nextVersion">
-    <rdfs:range rdf:resource="#VersionInfo"/>
     <rdfs:domain rdf:resource="#VersionInfo"/>
+    <rdfs:range rdf:resource="#VersionInfo"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasCalendar">
-    <rdfs:range rdf:resource="#Calendar"/>
     <rdfs:domain rdf:resource="#Calendarable"/>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="hasResourceRef">
-    <rdfs:subPropertyOf rdf:resource="#hasReference"/>
-    <rdfs:range rdf:resource="#ResourceRef"/>
-    <rdfs:domain rdf:resource="#ResourceRefable"/>
+    <rdfs:range>
+      <swb:Class rdf:ID="Calendar">
+        <rdfs:comment>Object Calendar</rdfs:comment>
+        <rdfs:label>Calendar</rdfs:label>
+        <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >org.semanticwb.model.Calendar</swb:className>
+        <rdfs:subClassOf rdf:resource="#Statusable"/>
+        <rdfs:subClassOf rdf:resource="#WebSiteable"/>
+        <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
+        <rdfs:subClassOf rdf:resource="#SWBClass"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasGroup">
-    <rdfs:range rdf:resource="#ObjectGroup"/>
     <rdfs:domain rdf:resource="#Groupable"/>
+    <rdfs:range rdf:resource="#ObjectGroup"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="useLanguage">
-    <rdfs:range rdf:resource="#Language"/>
     <rdfs:domain rdf:resource="#Localeable"/>
+    <rdfs:range rdf:resource="#Language"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasUserReposotory">
-    <rdfs:range rdf:resource="#UserRepository"/>
     <rdfs:domain rdf:resource="#User"/>
+    <rdfs:range>
+      <swb:Class rdf:ID="UserRepository">
+        <rdfs:subClassOf rdf:resource="#SWBClass"/>
+        <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >org.semanticwb.model.UserRepository</swb:className>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasRuleRef">
-    <rdfs:subPropertyOf rdf:resource="#hasReference"/>
-    <rdfs:range rdf:resource="#RuleRef"/>
     <rdfs:domain rdf:resource="#RuleRefable"/>
+    <rdfs:range rdf:resource="#RuleRef"/>
+    <rdfs:subPropertyOf rdf:resource="#hasReference"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasRoleRef">
-    <rdfs:subPropertyOf rdf:resource="#hasReference"/>
-    <rdfs:range rdf:resource="#RoleRef"/>
     <rdfs:domain rdf:resource="#RoleRefable"/>
+    <rdfs:range rdf:resource="#RoleRef"/>
+    <rdfs:subPropertyOf rdf:resource="#hasReference"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="actualVersion">
-    <rdfs:range rdf:resource="#VersionInfo"/>
     <rdfs:domain rdf:resource="#Versionable"/>
+    <rdfs:range rdf:resource="#VersionInfo"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasTemplate">
+    <rdfs:range>
+      <swb:Class rdf:ID="Template">
+        <rdfs:subClassOf rdf:resource="#Groupable"/>
+        <rdfs:subClassOf rdf:resource="#WebSiteable"/>
+        <rdfs:subClassOf rdf:resource="#RuleRefable"/>
+        <rdfs:subClassOf rdf:resource="#Deleteable"/>
+        <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >org.semanticwb.model.Template</swb:className>
+        <rdfs:subClassOf rdf:resource="#RoleRefable"/>
+        <rdfs:subClassOf rdf:resource="#Statusable"/>
+        <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
+        <rdfs:subClassOf rdf:resource="#Versionable"/>
+        <rdfs:subClassOf rdf:resource="#Localeable"/>
+        <rdfs:subClassOf rdf:resource="#SWBClass"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+        <rdfs:subClassOf rdf:resource="#Calendarable"/>
+      </swb:Class>
+    </rdfs:range>
     <rdfs:domain rdf:resource="#Templateable"/>
-    <rdfs:range rdf:resource="#Template"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasPortletRef">
+    <rdfs:domain rdf:resource="#PortletRefable"/>
+    <rdfs:range rdf:resource="#PortletRef"/>
+    <rdfs:subPropertyOf rdf:resource="#hasReference"/>
   </owl:ObjectProperty>
   <owl:DatatypeProperty rdf:ID="description">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#Descriptiveable"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="title">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#Descriptiveable"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="deleted">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     <rdfs:domain rdf:resource="#Deleteable"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="versionComment">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#VersionInfo"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="priority">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <rdfs:domain rdf:resource="#Priorityable"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="versionCreated">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
     <rdfs:domain rdf:resource="#VersionInfo"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="created">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
     <rdfs:domain rdf:resource="#Descriptiveable"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="updated">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
     <rdfs:domain rdf:resource="#Descriptiveable"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="value">
-    <rdfs:domain rdf:resource="#Valueable"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Valueable"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="status">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <rdfs:domain rdf:resource="#Statusable"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
   </owl:DatatypeProperty>
   <owl:TransitiveProperty rdf:ID="useWebSite">
-    <rdfs:range rdf:resource="#WebSite"/>
     <rdfs:domain rdf:resource="#WebSiteable"/>
+    <rdfs:range rdf:resource="#WebSite"/>
   </owl:TransitiveProperty>
-  <owl:Restriction>
-    <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger"
-    >1</owl:cardinality>
-    <owl:onProperty rdf:resource="#userModified"/>
-  </owl:Restriction>
+  <swb:Class rdf:ID="Permission">
+    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="#WebSiteable"/>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model.Permission</swb:className>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
+  <owl:AnnotationProperty rdf:ID="className">
+    <rdfs:comment>Name of the Java Class to be generated</rdfs:comment>
+    <rdfs:label>className</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </owl:AnnotationProperty>
+  <swb:WebPage rdf:ID="WebPage_1">
+    <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Pagina desde TopBraid</swb:title>
+  </swb:WebPage>
+  <swb:Class rdf:ID="Camp">
+    <rdfs:subClassOf rdf:resource="#WebSiteable"/>
+    <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="#Deleteable"/>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model.Camp</swb:className>
+    <rdfs:subClassOf rdf:resource="#Calendarable"/>
+    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="#Ruleable"/>
+    <rdfs:subClassOf rdf:resource="#Roleable"/>
+    <rdfs:subClassOf rdf:resource="#Statusable"/>
+  </swb:Class>
+  <swb:Class rdf:ID="StrategyPortlet">
+    <rdfs:subClassOf rdf:resource="#Portlet"/>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model.StrategyPortlet</swb:className>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
+  <swb:Class rdf:ID="PortletType">
+    <rdfs:subClassOf rdf:resource="#WebSiteable"/>
+    <rdfs:subClassOf rdf:resource="#Groupable"/>
+    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model.PortletType</swb:className>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
+  <swb:Class rdf:ID="SystemPortlet">
+    <rdfs:subClassOf rdf:resource="#Portlet"/>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model.SystemPortlet</swb:className>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
+  <swb:Class rdf:ID="ApplicationPortlet">
+    <rdfs:subClassOf rdf:resource="#Portlet"/>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model.ApplicationPortlet</swb:className>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
+  <swb:Class rdf:ID="SWBModel">
+    <rdfs:subClassOf rdf:resource="#Valueable"/>
+    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model.SWBModel</swb:className>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
 </rdf:RDF>
 
 <!-- Created with TopBraid Composer -->
