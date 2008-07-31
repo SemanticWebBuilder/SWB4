@@ -9,6 +9,7 @@ import com.hp.hpl.jena.ontology.OntClass;
 
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
+import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Iterator;
 import org.semanticwb.*;
@@ -19,10 +20,15 @@ import org.semanticwb.*;
  */
 public class SemanticClass 
 {
+    private static Logger log=SWBUtils.getLogger(SemanticClass.class);
+    
     private OntClass m_class;
     private HashMap<String,SemanticProperty> m_props;
     private Boolean m_isSWBClass=null;
     private Boolean m_isSWBInterface=null;
+    private String className=null;
+    private Class cls=null;
+    private Constructor constructor=null;
     
     public SemanticClass(OntClass oclass)
     {
@@ -32,7 +38,7 @@ public class SemanticClass
     
     public SemanticClass(String classuri) throws SWBException
     {
-        this.m_class=SWBInstance.getSemanticMgr().getOntClass(classuri);
+        this.m_class=SWBInstance.getSemanticMgr().getOntology().getRDFOntModel().getOntClass(classuri);
         if(this.m_class==null) throw new SWBException("OntClass Not Found");
         init();
     }
@@ -54,6 +60,67 @@ public class SemanticClass
         return m_class.getLocalName();
     }
     
+    public String getClassName()
+    {
+        if(className==null)
+        {
+            Property prop=m_class.getModel().getProperty(SemanticVocabulary.SWB_ANNOT_CLASSNAME);
+            //System.out.println("Class:"+m_class+" ->"+className);
+            className=m_class.getRequiredProperty(prop).getString();
+            //System.out.println("Class:"+m_class+" ->"+className);
+            if(className==null)className=SemanticObject.class.getName();
+        }
+        log.trace("getClassName:"+className);
+        return className;
+    }    
+    
+    public Constructor getConstructor()
+    {
+        if(constructor==null)
+        {
+            try
+            {
+                constructor=getObjectClass().getDeclaredConstructor(Resource.class);
+            }
+            catch(NoSuchMethodException nsme)
+            {
+                new IllegalArgumentException(nsme);
+            }        
+        }
+        return constructor;
+        
+    }
+    
+    public <T extends SemanticObject> T newInstance(String uri)
+    {
+        Resource res=m_class.getModel().getResource(uri);
+        return (T)newInstance(res);
+    }
+    
+    public <T extends SemanticObject> T newInstance(Resource res)
+    {
+        try
+        {
+            return (T)getConstructor().newInstance(res);
+        }
+        catch(Exception ie)
+        {
+            throw new AssertionError(ie.getMessage());        
+        }        
+    }    
+    
+    public Class getObjectClass()
+    {
+        if(cls==null)
+        {
+            try
+            {
+                cls=Class.forName(getClassName());
+            }catch(Exception e){log.error(e);}
+        }
+        return cls;
+    }
+    
     public String getURI()
     {
         return m_class.getURI();
@@ -64,14 +131,14 @@ public class SemanticClass
         return m_class.getLabel(lang);
     }
 
-    public Iterator<SemanticObject> listInstances()
+    public Iterator listInstances()
     {
         return listInstances(false);
     }
     
-    public Iterator<SemanticObject> listInstances(boolean direct)
+    public Iterator listInstances(boolean direct)
     {
-        return new SemanticObjectIterator(m_class.listInstances(direct));
+        return new SemanticIterator(this,m_class.listInstances(direct));
     }
     
     public SemanticProperty getProperty(String name)
