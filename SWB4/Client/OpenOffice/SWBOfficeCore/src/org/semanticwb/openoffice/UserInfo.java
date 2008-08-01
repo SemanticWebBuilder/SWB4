@@ -39,16 +39,8 @@ public final class UserInfo
     {
         return password;
     }
-    void changePassword(String newPassword,String oldPassword)
+    void changePassword(String newPassword)
     {
-        this.password=newPassword;
-        /*if(!oldPassword.equals(password))
-        {
-            // muestra mensaje de error
-        }
-        else
-        {
-            // cambia el password        
-        }*/
+        this.password=newPassword;       
     }
 }

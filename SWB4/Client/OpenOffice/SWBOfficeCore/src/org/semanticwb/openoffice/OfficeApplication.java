@@ -34,6 +34,7 @@ public abstract class OfficeApplication
     private static UserInfo userInfo = null;
     private static URI webAddress = null;
     private static IOpenOfficeDocument document;
+    private static IOpenOfficeApplication application;
 
     static
     {
@@ -49,13 +50,13 @@ public abstract class OfficeApplication
         }
     }
 
-    public static IOpenOfficeDocument getOfficeDocumentProxy() throws WBException
+    public static IOpenOfficeApplication getOfficeApplicationProxy() throws WBException
     {
-        if ( document == null )
+        if ( application == null )
         {
-            document = XmlRpcProxyFactory.newInstance(IOpenOfficeDocument.class, OfficeApplication.getWebAddress());
-            document.setUser(OfficeApplication.userInfo.getLogin());
-            document.setPassword(OfficeApplication.userInfo.getPassword());            
+            application = XmlRpcProxyFactory.newInstance(IOpenOfficeApplication.class, OfficeApplication.getWebAddress());
+            application.setUser(OfficeApplication.userInfo.getLogin());
+            application.setPassword(OfficeApplication.userInfo.getPassword());
             String proxyServer = new Configuration().get(Configuration.PROXY_SERVER);
             String proxyPort = new Configuration().get(Configuration.PROXY_PORT);
             if ( proxyServer == null )
@@ -70,19 +71,79 @@ public abstract class OfficeApplication
             {
                 try
                 {
-                    document.setProxyAddress(new URI(proxyServer));
-                    document.setProxyPort(Integer.parseInt(proxyPort));
+                    application.setProxyAddress(new URI(proxyServer));
+                    application.setProxyPort(Integer.parseInt(proxyPort));
                 }
                 catch ( URISyntaxException e )
                 {
-                    String message = "Error trying to get the proxy server, delete the file " + new Configuration().getPath() + " or fix it.";                    
+                    String message = "Error trying to get the proxy server, delete the file " + new Configuration().getPath() + " or fix it.";
                     throw new WBException(message, e);
                 }
                 catch ( NumberFormatException e )
                 {
-                    String message = "Error trying to get the proxy port, delete the file " + new Configuration().getPath() + " or fix it.";                    
+                    String message = "Error trying to get the proxy port, delete the file " + new Configuration().getPath() + " or fix it.";
                     throw new WBException(message, e);
                 }
+            }
+            try
+            {
+                if ( !application.isValidVersion(IOpenOfficeApplication.version) )
+                {
+                    throw new WBException("La versión entre la aplicación de publicación y el sitio no es compatible");
+                }
+            }
+            catch ( Exception e )
+            {
+                throw new WBException("Error al tratar de verificar compatibilidad de versiones entre el publicador y el servidor", e);
+            }
+        }
+        return application;
+    }
+
+    public static IOpenOfficeDocument getOfficeDocumentProxy() throws WBException
+    {
+        if ( document == null )
+        {
+            try
+            {
+                if ( getOfficeApplicationProxy().isValidVersion(IOpenOfficeApplication.version) )
+                {
+                    document = XmlRpcProxyFactory.newInstance(IOpenOfficeDocument.class, OfficeApplication.getWebAddress());
+                    document.setUser(OfficeApplication.userInfo.getLogin());
+                    document.setPassword(OfficeApplication.userInfo.getPassword());
+                    String proxyServer = new Configuration().get(Configuration.PROXY_SERVER);
+                    String proxyPort = new Configuration().get(Configuration.PROXY_PORT);
+                    if ( proxyServer == null )
+                    {
+                        proxyServer = "";
+                    }
+                    if ( proxyPort == null )
+                    {
+                        proxyServer = "";
+                    }
+                    if ( !proxyServer.equals("") && !proxyPort.equals("") )
+                    {
+                        try
+                        {
+                            document.setProxyAddress(new URI(proxyServer));
+                            document.setProxyPort(Integer.parseInt(proxyPort));
+                        }
+                        catch ( URISyntaxException e )
+                        {
+                            String message = "Error trying to get the proxy server, delete the file " + new Configuration().getPath() + " or fix it.";
+                            throw new WBException(message, e);
+                        }
+                        catch ( NumberFormatException e )
+                        {
+                            String message = "Error trying to get the proxy port, delete the file " + new Configuration().getPath() + " or fix it.";
+                            throw new WBException(message, e);
+                        }
+                    }
+                }
+            }
+            catch ( Exception e )
+            {
+                throw new WBException("No se puede validar la compatibilidad de versiones", e);
             }
         }
         return document;
@@ -105,7 +166,7 @@ public abstract class OfficeApplication
             IOpenOfficeApplication officeApplication = XmlRpcProxyFactory.newInstance(IOpenOfficeApplication.class, webAddress);
             try
             {
-                if ( officeApplication.isValidVersion("1.0") && menuListener != null )
+                if ( officeApplication.isValidVersion(IOpenOfficeApplication.version) && menuListener != null )
                 {
                     menuListener.onLogin();
                 }
@@ -134,12 +195,32 @@ public abstract class OfficeApplication
 
     public final void changePassword()
     {
-        DialogChangePassword dialog = new DialogChangePassword(new javax.swing.JFrame(), true);
-        dialog.setLocationRelativeTo(null);
-        dialog.setVisible(true);
-    /*if (!dialog.isCanceled())
+        if ( OfficeApplication.tryLogin() )
+        {
+            DialogChangePassword dialog = new DialogChangePassword(new javax.swing.JFrame(), true);
+            dialog.setLocationRelativeTo(null);
+            dialog.setVisible(true);
+            if ( !dialog.isCanceled() )
+            {
+                try
+                {
+                    getOfficeApplicationProxy().changePassword(dialog.getNewPassword());
+                    userInfo.changePassword(dialog.getNewPassword());
+                }
+                catch ( Exception e )
+                {
+                    JOptionPane.showMessageDialog(null, e.getLocalizedMessage(), "Cambiar contraseña", JOptionPane.ERROR);
+                }
+            }
+        }
+    }
+
+    public final void createPage()
     {
-    }*/
+        if ( tryLogin() )
+        {
+
+        }
     }
 
     public final void open()
