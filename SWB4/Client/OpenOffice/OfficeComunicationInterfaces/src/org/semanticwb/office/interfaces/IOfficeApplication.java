@@ -5,11 +5,21 @@
 
 package org.semanticwb.office.interfaces;
 
+import org.semanticwb.xmlrpc.XmlRpcMethod;
+
 /**
  *
  * @author victor.lorenzana
  */
 public interface IOfficeApplication {
-    public static String version="0.1";
-    public boolean isValidVersion(String version) throws Exception;           
+    public static double version=0.1;
+    @XmlRpcMethod(methodName="OfficeApplication.isValidVersion") 
+    public boolean isValidVersion(double version) throws Exception;
+    @XmlRpcMethod(methodName="OfficeApplication.changePassword") 
+    public void changePassword(String newPassword) throws Exception; 
+    @XmlRpcMethod(methodName="OfficeApplication.createPage") 
+    public void createPage(String title,String id,String description) throws Exception; 
+    @XmlRpcMethod(methodName="OfficeApplication.existPage")
+    public boolean existPage(String id) throws Exception; 
+        
 }
