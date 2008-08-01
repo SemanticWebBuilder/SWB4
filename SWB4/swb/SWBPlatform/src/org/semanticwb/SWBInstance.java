@@ -3,15 +3,12 @@ package org.semanticwb;
 
 import java.io.InputStream;
 import java.lang.reflect.Method;
-import java.security.Timestamp;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.Properties;
 import javax.servlet.ServletContext;
-import org.semanticwb.base.util.SWBProperties;
 import org.semanticwb.platform.SWBMonitor;
 import org.semanticwb.platform.SemanticMgr;
+import org.semanticwb.base.util.SWBProperties;
 
 /**
  *
