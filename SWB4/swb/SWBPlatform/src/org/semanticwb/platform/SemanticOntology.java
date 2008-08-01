@@ -68,20 +68,18 @@ public class SemanticOntology
     }
     
     
-    public <T extends SemanticObject> T getSemanticObject(String uri)
+    public SemanticObject getSemanticObject(String uri)
     {
-        SemanticObject ret=null;
         Resource res=m_ontology.getResource(uri);
         SemanticClass cl=getSemanticObjectClass(res);
-        return (T)cl.newInstance(res);        
+        return cl.newInstance(res);        
 //        if(res!=null)ret=new SemanticObject(res);
 //        return (T)ret;
     }    
     
-    public <T extends SemanticObject> T getSemanticObject(String uri, SemanticClass cls)
+    public SemanticObject getSemanticObject(String uri, SemanticClass cls)
     {
-        SemanticObject ret=null;
         Resource res=m_ontology.getResource(uri);
-        return (T)cls.newInstance(res);        
+        return cls.newInstance(res);        
     }     
 }
