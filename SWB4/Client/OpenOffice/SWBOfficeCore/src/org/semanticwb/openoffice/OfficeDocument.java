@@ -645,4 +645,5 @@ public abstract class OfficeDocument
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
     }
+    
 }
