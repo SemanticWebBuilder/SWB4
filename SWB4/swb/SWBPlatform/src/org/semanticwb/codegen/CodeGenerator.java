@@ -128,18 +128,20 @@ public class CodeGenerator
             SemanticClass tpc = tpcit.next();
             if ( tpc.isSWBInterface() )
             {
-                System.out.println("tpc: "+tpc.toString()+" isSWBInterface: "+tpc.isSWBInterface());
+                System.out.println("tpc: " + tpc.toString() + " isSWBInterface: " + tpc.isSWBInterface());
                 createInterface(tpc);
             }
             else if ( tpc.isSWBClass() )
             {
-                System.out.println("tpc: "+tpc.toString()+" isSWBClass: "+tpc.isSWBClass());
+                System.out.println("tpc: " + tpc.toString() + " isSWBClass: " + tpc.isSWBClass());
                 createClassBase(tpc);
             }
 
         }
         System.out.println("Creating Vocabulary");
         createVocabulary();
+        createSWBContextBase();
+        createSWBContext();
     }
 
     private static String getInterfaces(SemanticClass tpc)
@@ -162,6 +164,139 @@ public class CodeGenerator
         return interfaces.toString();
     }
 
+    private void createSWBContext() throws CodeGeneratorException
+    {
+        // si existe no debe reemplazarlo
+        String ClassName = "SWBContext";
+        File dir = createPackage();
+        dir = new File(dir.getPath() + File.separatorChar);
+        File fileClass = new File(dir.getPath() + File.separatorChar + ClassName + ".java");
+        if ( !fileClass.exists() )
+        {
+            StringBuilder javaClassContent = new StringBuilder();
+            if ( !m_Package.equals("") )
+            {
+                javaClassContent.append("package " + m_Package + ";" + ENTER);
+                javaClassContent.append("" + ENTER);
+            }
+            javaClassContent.append("import org.semanticwb.Logger;" + ENTER);
+            javaClassContent.append("import org.semanticwb.SWBUtils;" + ENTER);
+            javaClassContent.append("import org.semanticwb.model.base.SWBContextBase;" + ENTER + ENTER);
+            javaClassContent.append("public class SWBContext extends SWBContextBase" + ENTER);
+            javaClassContent.append("{" + ENTER);
+
+            javaClassContent.append("    private static Logger log=SWBUtils.getLogger(SWBContext.class);" + ENTER);
+            javaClassContent.append("    private static SWBContext instance=null;" + ENTER);
+
+            javaClassContent.append("    static public synchronized SWBContext createInstance()" + ENTER);
+            javaClassContent.append("    {" + ENTER);
+            javaClassContent.append("        if (instance == null)" + ENTER);
+            javaClassContent.append("        {" + ENTER);
+            javaClassContent.append("            instance = new SWBContext();" + ENTER);
+            javaClassContent.append("        }" + ENTER);
+            javaClassContent.append("        return instance;" + ENTER);
+            javaClassContent.append("    }" + ENTER);
+
+            javaClassContent.append("    private SWBContext()" + ENTER);
+            javaClassContent.append("    {" + ENTER);
+            javaClassContent.append("        log.event(\"Initialize Semantic WebBuilder Context...\");" + ENTER);
+            javaClassContent.append("    }" + ENTER);
+
+            javaClassContent.append("}");
+            saveFile(fileClass, javaClassContent.toString());
+        }
+    }
+
+    private void createSWBContextBase() throws CodeGeneratorException
+    {
+        // Debe reemplazarlo siempre
+        String ClassName = "SWBContextBase";
+        File dir = createPackage();
+        dir = new File(dir.getPath() + File.separatorChar + "base");
+        StringBuilder javaClassContent = new StringBuilder();
+        File fileClass = new File(dir.getPath() + File.separatorChar + ClassName + ".java");
+        if ( !m_Package.equals("") )
+        {
+            javaClassContent.append("package " + m_Package + ".base;" + ENTER);
+            javaClassContent.append("" + ENTER);
+        }
+        javaClassContent.append("import java.util.Iterator;" + ENTER);
+        javaClassContent.append("import org.semanticwb.model.*;" + ENTER);
+        javaClassContent.append("import org.semanticwb.SWBInstance;" + ENTER);
+        javaClassContent.append("import org.semanticwb.platform.SemanticMgr;" + ENTER);
+        javaClassContent.append("import org.semanticwb.platform.SemanticModel;" + ENTER);
+        javaClassContent.append("import org.semanticwb.platform.SemanticObject;" + ENTER);
+
+        javaClassContent.append("public class SWBContextBase" + ENTER);
+        javaClassContent.append("{" + ENTER);
+
+        javaClassContent.append("   private static SWBVocabulary vocabulary=new SWBVocabulary();" + ENTER);
+        javaClassContent.append("   private static SemanticMgr mgr=SWBInstance.getSemanticMgr();" + ENTER);
+
+        javaClassContent.append("    public static SWBVocabulary getVocabulary()" + ENTER);
+        javaClassContent.append("    {" + ENTER);
+        javaClassContent.append("        return vocabulary;" + ENTER);
+        javaClassContent.append("    }" + ENTER);
+
+
+        javaClassContent.append("    public static void removeObject(String uri)" + ENTER);
+        javaClassContent.append("    {" + ENTER);
+        javaClassContent.append("         removeObject(mgr.getOntology().getSemanticObject(uri));" + ENTER);
+        javaClassContent.append("    }" + ENTER);
+
+        javaClassContent.append("   public static void removeObject(SemanticObject obj)" + ENTER);
+        javaClassContent.append("   {" + ENTER);
+        javaClassContent.append("       if(obj!=null)" + ENTER);
+        javaClassContent.append("       {" + ENTER);
+        javaClassContent.append("           mgr.getOntology().getRDFOntModel().remove(obj.getRDFResource(), null, null);" + ENTER);
+        javaClassContent.append("       }" + ENTER);
+        javaClassContent.append("   }" + ENTER);
+
+
+
+        SemanticMgr mgr = SWBInstance.getSemanticMgr();
+        Iterator<SemanticClass> tpcit = mgr.getVocabulary().listSemanticClasses();
+        while (tpcit.hasNext())
+        {
+            SemanticClass tpc = tpcit.next();
+            javaClassContent.append("    public static " + tpc.getName() + " get" + tpc.getName() + "(String uri)" + ENTER);
+            javaClassContent.append("    {" + ENTER);
+            javaClassContent.append("        return (" + tpc.getName() + ")mgr.getOntology().getSemanticObject(uri,vocabulary." + tpc.getName() + ");" + ENTER);
+            javaClassContent.append("    }" + ENTER);
+
+            javaClassContent.append("    public static " + tpc.getName() + " create" + tpc.getName() + "(SemanticModel model, String uri)" + ENTER);
+            javaClassContent.append("    {" + ENTER);
+            javaClassContent.append("        return (" + tpc.getName() + ")model.createSemanticObject(uri, vocabulary." + tpc.getName() + ");" + ENTER);
+            javaClassContent.append("    }" + ENTER);
+
+            javaClassContent.append("    public static Iterator<org.semanticwb.model." + tpc.getName() + "> list" + tpc.getName() + "s()" + ENTER);
+            javaClassContent.append("    {" + ENTER);
+            javaClassContent.append("        return (Iterator<org.semanticwb.model." + tpc.getName() + ">)vocabulary." + tpc.getName() + ".listInstances();" + ENTER);
+            javaClassContent.append("    }" + ENTER);
+        }
+
+        /*public static User getUser(String uri)
+        {
+        return (User)mgr.getOntology().getSemanticObject(uri,vocabulary.WebPage);
+        }
+        public static User createUser(SemanticModel model, String uri)
+        {
+        return (User)model.createSemanticObject(uri, vocabulary.User);
+        }
+        public static Iterator<org.semanticwb.model.User> listUsers()
+        {
+        return (Iterator<org.semanticwb.model.User>)vocabulary.User.listInstances();
+        }*/
+
+
+
+
+
+        javaClassContent.append("}" + ENTER);
+
+        saveFile(fileClass, javaClassContent.toString());
+    }
+
     private void createClassBase(SemanticClass tpc) throws CodeGeneratorException
     {
         if ( m_Package == null )
@@ -169,8 +304,8 @@ public class CodeGenerator
             m_Package = getPackage(tpc);
         }
         File dir = createPackage();
-        dir=new File(dir.getPath()+File.separatorChar+"base");
-        if(!dir.exists())
+        dir = new File(dir.getPath() + File.separatorChar + "base");
+        if ( !dir.exists() )
         {
             dir.mkdirs();
         }
@@ -183,15 +318,15 @@ public class CodeGenerator
         javaClassContent.append("import java.util.Date;" + ENTER);
 //        if ( !this.m_Package.equals("org.semanticwb.model") )
 //        {
-            javaClassContent.append("import org.semanticwb.platform.SemanticObject;" + ENTER);
+        javaClassContent.append("import org.semanticwb.platform.SemanticObject;" + ENTER);
 //        }
-        javaClassContent.append("import "+m_Package+".*;" + ENTER);
+        javaClassContent.append("import " + m_Package + ".*;" + ENTER);
         javaClassContent.append("import com.hp.hpl.jena.rdf.model.StmtIterator;" + ENTER);
         javaClassContent.append("import org.semanticwb.platform.SemanticIterator;" + ENTER);
         javaClassContent.append(ENTER);
         javaClassContent.append("public class " + tpc.getName() + "Base extends SemanticObject " + getInterfaces(tpc) + "" + ENTER);
         javaClassContent.append("{" + ENTER);
-        javaClassContent.append("    SWBVocabulary vocabulary=SWBContext.getVocabulary();"+ENTER);
+        javaClassContent.append("    SWBVocabulary vocabulary=SWBContext.getVocabulary();" + ENTER);
         javaClassContent.append(ENTER);
         javaClassContent.append(PUBLIC + tpc.getName() + "Base(com.hp.hpl.jena.rdf.model.Resource res)" + ENTER);
         javaClassContent.append(OPEN_BLOCK + ENTER);
@@ -219,8 +354,8 @@ public class CodeGenerator
             {
                 javaClassContent.append("package " + m_Package + ";" + ENTER);
                 javaClassContent.append("" + ENTER);
-            }           
-            javaClassContent.append("import "+m_Package+".base.*;" + ENTER);
+            }
+            javaClassContent.append("import " + m_Package + ".base.*;" + ENTER);
             javaClassContent.append(ENTER);
             javaClassContent.append("public class " + tpc.getName() + " extends " + tpc.getName() + "Base " + ENTER);
             javaClassContent.append("{" + ENTER);
@@ -370,39 +505,74 @@ public class CodeGenerator
                     try
                     {
                         URI uri = new URI(tpp.getRangeClass().getURI());
-                        String objectName = uri.getFragment();
+                        String objectName = tpp.getName();
                         objectName = toUpperCase(objectName);
+                        String valueToReturn = uri.getFragment();
                         if ( !methods.contains(objectName) )
                         {
                             methods.add(objectName);
-                            javaClassContent.append(ENTER);
-                            javaClassContent.append("    public SemanticIterator<" + m_Package + "." + objectName + "> list" + objectName + "()" + ENTER);
-                            javaClassContent.append(OPEN_BLOCK + ENTER);
-                            javaClassContent.append("        StmtIterator stit=getRDFResource().listProperties(vocabulary." + tpp.getName() + ".getRDFProperty());" + ENTER);
-                            javaClassContent.append("        return new SemanticIterator<" + m_Package + "." + objectName + ">(" + m_Package + "." + objectName + ".class, stit);" + ENTER);
-                            javaClassContent.append(CLOSE_BLOCK + ENTER);
+                            if ( objectName.toLowerCase().startsWith("has") )
+                            {
+                                // son varios
+                                objectName=objectName.substring(3);
+                                javaClassContent.append(ENTER);
+                                javaClassContent.append("    public SemanticIterator<" + m_Package + "." + valueToReturn + "> list" + objectName + "()" + ENTER);
+                                javaClassContent.append(OPEN_BLOCK + ENTER);
+                                javaClassContent.append("        StmtIterator stit=getRDFResource().listProperties(vocabulary." + tpp.getName() + ".getRDFProperty());" + ENTER);
+                                javaClassContent.append("        return new SemanticIterator<" + m_Package + "." + valueToReturn + ">(" + m_Package + "." + valueToReturn + ".class, stit);" + ENTER);
+                                javaClassContent.append(CLOSE_BLOCK + ENTER);
 
-                            javaClassContent.append(ENTER);
-                            javaClassContent.append("    public void add" + objectName + "(" + m_Package + "." + objectName + " " + objectName.toLowerCase() + ")" + ENTER);
-                            javaClassContent.append(OPEN_BLOCK + ENTER);
-                            javaClassContent.append("        addObjectProperty(vocabulary." + tpp.getName() + ", " + objectName.toLowerCase() + ");" + ENTER);
-                            javaClassContent.append(CLOSE_BLOCK + ENTER);
+                                javaClassContent.append(ENTER);
+                                javaClassContent.append("    public void add" + objectName + "(" + m_Package + "." + valueToReturn + " " + valueToReturn.toLowerCase() + ")" + ENTER);
+                                javaClassContent.append(OPEN_BLOCK + ENTER);
+                                javaClassContent.append("        addObjectProperty(vocabulary." + tpp.getName() + ", " + valueToReturn.toLowerCase() + ");" + ENTER);
+                                javaClassContent.append(CLOSE_BLOCK + ENTER);
 
-                            javaClassContent.append(ENTER);
-                            javaClassContent.append("    public void removeAll" + objectName + "()" + ENTER);
-                            javaClassContent.append(OPEN_BLOCK + ENTER);
-                            javaClassContent.append("        getRDFResource().removeAll(vocabulary." + tpp.getName() + ".getRDFProperty());" + ENTER);
-                            javaClassContent.append(CLOSE_BLOCK + ENTER);
+                                javaClassContent.append(ENTER);
+                                javaClassContent.append("    public void removeAll" + objectName + "()" + ENTER);
+                                javaClassContent.append(OPEN_BLOCK + ENTER);
+                                javaClassContent.append("        getRDFResource().removeAll(vocabulary." + tpp.getName() + ".getRDFProperty());" + ENTER);
+                                javaClassContent.append(CLOSE_BLOCK + ENTER);
 
-                            javaClassContent.append(ENTER);
-                            javaClassContent.append(PUBLIC + objectName + " get" + objectName + "()" + ENTER);
-                            javaClassContent.append(OPEN_BLOCK + ENTER);
-                            javaClassContent.append("         StmtIterator stit=getRDFResource().listProperties(vocabulary." + tpp.getName() + ".getRDFProperty());" + ENTER);
-                            javaClassContent.append("         SemanticIterator<" + m_Package + "." + objectName + "> it=new SemanticIterator<" + m_Package + "." + objectName + ">(" + objectName + ".class, stit);" + ENTER);
-                            javaClassContent.append("         return it.next();" + ENTER);
-                            javaClassContent.append(CLOSE_BLOCK + ENTER);
+                                javaClassContent.append(ENTER);
+                                javaClassContent.append(PUBLIC + valueToReturn + " get" + objectName + "()" + ENTER);
+                                javaClassContent.append(OPEN_BLOCK + ENTER);
+                                javaClassContent.append("         StmtIterator stit=getRDFResource().listProperties(vocabulary." + tpp.getName() + ".getRDFProperty());" + ENTER);
+                                javaClassContent.append("         SemanticIterator<" + m_Package + "." + valueToReturn + "> it=new SemanticIterator<" + m_Package + "." + valueToReturn + ">(" + valueToReturn + ".class, stit);" + ENTER);
+                                javaClassContent.append("         return it.next();" + ENTER);
+                                javaClassContent.append(CLOSE_BLOCK + ENTER);
+                            }
+                            else
+                            {
+                                // es uno
+                                /*javaClassContent.append(ENTER);
+                                javaClassContent.append("    public SemanticIterator<" + m_Package + "." + valueToReturn + "> list" + objectName + "()" + ENTER);
+                                javaClassContent.append(OPEN_BLOCK + ENTER);
+                                javaClassContent.append("        StmtIterator stit=getRDFResource().listProperties(vocabulary." + tpp.getName() + ".getRDFProperty());" + ENTER);
+                                javaClassContent.append("        return new SemanticIterator<" + m_Package + "." + valueToReturn + ">(" + m_Package + "." + valueToReturn + ".class, stit);" + ENTER);
+                                javaClassContent.append(CLOSE_BLOCK + ENTER);*/
+
+                                javaClassContent.append(ENTER);
+                                javaClassContent.append("    public void add" + objectName + "(" + m_Package + "." + valueToReturn + " " + valueToReturn.toLowerCase() + ")" + ENTER);
+                                javaClassContent.append(OPEN_BLOCK + ENTER);
+                                javaClassContent.append("        addObjectProperty(vocabulary." + tpp.getName() + ", " + valueToReturn.toLowerCase() + ");" + ENTER);
+                                javaClassContent.append(CLOSE_BLOCK + ENTER);
+
+                                javaClassContent.append(ENTER);
+                                javaClassContent.append("    public void remove" + objectName + "()" + ENTER);
+                                javaClassContent.append(OPEN_BLOCK + ENTER);
+                                javaClassContent.append("        getRDFResource().removeAll(vocabulary." + tpp.getName() + ".getRDFProperty());" + ENTER);
+                                javaClassContent.append(CLOSE_BLOCK + ENTER);
+
+                                javaClassContent.append(ENTER);
+                                javaClassContent.append(PUBLIC + valueToReturn + " get" + objectName + "()" + ENTER);
+                                javaClassContent.append(OPEN_BLOCK + ENTER);
+                                javaClassContent.append("         StmtIterator stit=getRDFResource().listProperties(vocabulary." + tpp.getName() + ".getRDFProperty());" + ENTER);
+                                javaClassContent.append("         SemanticIterator<" + m_Package + "." + valueToReturn + "> it=new SemanticIterator<" + m_Package + "." + valueToReturn + ">(" + valueToReturn + ".class, stit);" + ENTER);
+                                javaClassContent.append("         return it.next();" + ENTER);
+                                javaClassContent.append(CLOSE_BLOCK + ENTER);
+                            }
                         }
-
                     }
                     catch ( URISyntaxException usie )
                     {
@@ -519,7 +689,7 @@ public class CodeGenerator
         while (tpcit.hasNext())
         {
             SemanticClass tpc = tpcit.next();
-            System.out.println("tpc:"+tpc);
+            System.out.println("tpc:" + tpc);
             javaClassContent.append("    public final SemanticClass " + tpc.getName() + ";" + ENTER);
         }
 
