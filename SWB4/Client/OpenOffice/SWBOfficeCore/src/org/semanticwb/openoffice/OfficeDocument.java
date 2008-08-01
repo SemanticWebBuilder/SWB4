@@ -96,14 +96,15 @@ public abstract class OfficeDocument
             {
                 JOptionPane.showMessageDialog(null,
                         "No se puede verificar la existencia del contenido en el sitio, al paracer el sitio al que intenta conectarse no esta disponible.",
-                        "Verificación de contenido", JOptionPane.WARNING_MESSAGE);                
+                        "Verificación de contenido", JOptionPane.WARNING_MESSAGE);                                
             }
             else
             {
                 JOptionPane.showMessageDialog(null,
                         "No se puede verificar la existencia del contenido en el sitio, la causa es:\r\n" + e.getLocalizedMessage(),
-                        "Verificación de contenido", JOptionPane.WARNING_MESSAGE);
+                        "Verificación de contenido", JOptionPane.WARNING_MESSAGE);                
             }
+            OfficeApplication.logOff();
             ErrorLog.log(e);            
         }
         catch ( HttpException e )
@@ -113,14 +114,16 @@ public abstract class OfficeDocument
                 JOptionPane.showMessageDialog(null,
                         "No se puede verificar la existencia del contenido en el sitio, al paracer el sitio al que intenta conectarse no tiene habilitada la función de publicación de contenidos.",
                         "Verificación de contenido", JOptionPane.ERROR_MESSAGE);
+                
             }
             else
             {
                 JOptionPane.showMessageDialog(null,
                         "No se puede verificar la existencia del contenido en el sitio, la causa es:\r\n" + e.getLocalizedMessage(),
-                        "Verificación de contenido", JOptionPane.ERROR_MESSAGE);
+                        "Verificación de contenido", JOptionPane.ERROR_MESSAGE);                
             
             }
+            OfficeApplication.logOff();
             ErrorLog.log(e);            
         }
         catch ( Exception e )
@@ -129,6 +132,7 @@ public abstract class OfficeDocument
                     e.getLocalizedMessage(),
                     "Verificación de contenido", JOptionPane.ERROR_MESSAGE);
             ErrorLog.log(e);
+            OfficeApplication.logOff();
         }
         return setupDocument;
     }
