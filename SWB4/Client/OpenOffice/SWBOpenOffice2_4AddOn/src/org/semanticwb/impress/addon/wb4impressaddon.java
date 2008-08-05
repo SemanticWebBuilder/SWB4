@@ -8,11 +8,11 @@ import com.sun.star.registry.XRegistryKey;
 import com.sun.star.lib.uno.helper.WeakBase;
 import javax.swing.JOptionPane;
 import org.semanticwb.openoffice.OfficeDocument;
-import org.semanticwb.openoffice.OfficeDocumentHelper;
+import org.semanticwb.openoffice.WBException;
 import org.semanticwb.openoffice.WBOfficeException;
 import org.semanticwb.openoffice.impress.WB4Impress;
-import org.semanticwb.openoffice.writer.WB4WriterApplication;
-import org.semanticwb.openoffice.writer.WB4Writer;
+import org.semanticwb.openoffice.impress.WB4ImpressApplication;
+
 
 public final class wb4impressaddon extends WeakBase
         implements com.sun.star.lang.XServiceInfo,
@@ -88,7 +88,7 @@ public final class wb4impressaddon extends WeakBase
         if (aURL.Protocol.compareTo("org.semanticwb.impress.addon.wb4impressaddon:") == 0)
         {
             if (aURL.Path.compareTo("publish") == 0)
-            {
+            {                
                 return this;
             }
             if (aURL.Path.compareTo("open") == 0)
@@ -97,7 +97,18 @@ public final class wb4impressaddon extends WeakBase
             }
             if (aURL.Path.compareTo("delete") == 0)
             {
-                return this;
+                try
+                {
+                    WB4Impress document=new WB4Impress(this.m_xContext);
+                    if(document.isPublicated())
+                    {
+                        return this;
+                    }
+                }
+                catch(WBException wbe)
+                {
+                    
+                }
             }
             if (aURL.Path.compareTo("view") == 0)
             {
@@ -113,7 +124,18 @@ public final class wb4impressaddon extends WeakBase
             }
             if (aURL.Path.compareTo("deleteAssociation") == 0)
             {
-                return this;
+                try
+                {
+                    WB4Impress document=new WB4Impress(this.m_xContext);
+                    if(document.isPublicated())
+                    {
+                        return this;
+                    }
+                }
+                catch(WBException wbe)
+                {
+                    
+                }
             }
             if (aURL.Path.compareTo("addLink") == 0)
             {
@@ -125,7 +147,10 @@ public final class wb4impressaddon extends WeakBase
             }
             if (aURL.Path.compareTo("changePassword") == 0)
             {
-                return this;
+                if(WB4ImpressApplication.isLogged())
+                {
+                    return this;
+                }                                
             }
             if (aURL.Path.compareTo("help") == 0)
             {
@@ -137,7 +162,10 @@ public final class wb4impressaddon extends WeakBase
             }
             if (aURL.Path.compareTo("closeSession") == 0)
             {
-                return this;
+                if(WB4ImpressApplication.isLogged())
+                {
+                    return this;
+                }                
             }
         }
         return null;
@@ -178,12 +206,11 @@ public final class wb4impressaddon extends WeakBase
         if (aURL.Protocol.compareTo("org.semanticwb.impress.addon.wb4impressaddon:") == 0)
         {
             if (aURL.Path.compareTo("publish") == 0)
-            {
-                //System.setProperty("WizardDisplayer.default", "org.semanticwb.util.WBWizardDisplayerImpl");
+            {                
                 try
                 {                   
                     OfficeDocument document = new WB4Impress(this.m_xContext);
-                    OfficeDocumentHelper.publish(document);
+                    document.publish();
                 }
                 catch (WBOfficeException wboe)
                 {
@@ -194,13 +221,22 @@ public final class wb4impressaddon extends WeakBase
             }
             if (aURL.Path.compareTo("open") == 0)
             {
-                WB4WriterApplication application = new WB4WriterApplication(this.m_xContext);
-                OfficeDocumentHelper.open(application);
+                WB4ImpressApplication application = new WB4ImpressApplication(this.m_xContext);
+                application.open();
                 return;
             }
             if (aURL.Path.compareTo("delete") == 0)
             {
                 // add your own code here
+                 try
+                {                   
+                    OfficeDocument document = new WB4Impress(this.m_xContext);
+                    document.delete();
+                }
+                catch (WBOfficeException wboe)
+                {
+                    JOptionPane.showMessageDialog(null, "Publicación de contenido", wboe.getMessage(), JOptionPane.ERROR_MESSAGE);
+                }
                 return;
             }
             if (aURL.Path.compareTo("view") == 0)
@@ -231,11 +267,12 @@ public final class wb4impressaddon extends WeakBase
             if (aURL.Path.compareTo("createSection") == 0)
             {
                 // add your own code here
+                WB4ImpressApplication.createPage();
                 return;
             }
             if (aURL.Path.compareTo("changePassword") == 0)
             {
-                OfficeDocumentHelper.changePassword();
+                WB4ImpressApplication.changePassword();
                 return;
             }
             if (aURL.Path.compareTo("help") == 0)
@@ -245,15 +282,14 @@ public final class wb4impressaddon extends WeakBase
             }
             if (aURL.Path.compareTo("about") == 0)
             {
-                // add your own code here
+                WB4ImpressApplication.showAbout();
                 return;
             }
             if (aURL.Path.compareTo("closeSession") == 0)
             {
-                // add your own code here
+                WB4ImpressApplication.closeSession();
                 return;
             }
-
         }
     }
 

@@ -6,10 +6,8 @@ import com.sun.star.lib.uno.helper.Factory;
 import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.registry.XRegistryKey;
 import com.sun.star.lib.uno.helper.WeakBase;
-import javax.swing.JOptionPane;
 import org.semanticwb.openoffice.OfficeDocument;
-import org.semanticwb.openoffice.OfficeDocumentHelper;
-import org.semanticwb.openoffice.WBOfficeException;
+import org.semanticwb.openoffice.WBException;
 import org.semanticwb.openoffice.writer.WB4WriterApplication;
 import org.semanticwb.openoffice.writer.WB4Writer;
 
@@ -183,18 +181,7 @@ public final class wb4writeraddon extends WeakBase
         }
     }
 
-    private void publish()
-    {
-        try
-        {
-            OfficeDocument document = new WB4Writer(this.m_xContext);
-            OfficeDocumentHelper.publish(document);
-        }
-        catch (WBOfficeException wboe)
-        {
-            JOptionPane.showMessageDialog(null, "Publicación de contenido", wboe.getMessage(), JOptionPane.ERROR_MESSAGE);
-        }
-    }
+    
     // com.sun.star.frame.XDispatch:
     public void dispatch(com.sun.star.util.URL aURL,
             com.sun.star.beans.PropertyValue[] aArguments)
@@ -203,18 +190,34 @@ public final class wb4writeraddon extends WeakBase
         {
             if (aURL.Path.compareTo("publish") == 0)
             {
-                this.publish();
+                try
+                {
+                    OfficeDocument document = new WB4Writer(this.m_xContext);
+                    document.publish();
+                }
+                catch(WBException wbe)
+                {
+                    
+                }
                 return;
             }
             if (aURL.Path.compareTo("open") == 0)
             {
                 WB4WriterApplication application = new WB4WriterApplication(this.m_xContext);
-                OfficeDocumentHelper.open(application);
+                application.open();
                 return;
             }
             if (aURL.Path.compareTo("delete") == 0)
             {
-                // add your own code here
+                try
+                {
+                    OfficeDocument document = new WB4Writer(this.m_xContext);
+                    document.delete();
+                }
+                catch(WBException wbe)
+                {
+                    
+                }
                 return;
             }
             if (aURL.Path.compareTo("view") == 0)
@@ -249,7 +252,7 @@ public final class wb4writeraddon extends WeakBase
             }
             if (aURL.Path.compareTo("changePassword") == 0)
             {
-                OfficeDocumentHelper.changePassword();
+                
                 return;
             }
             if (aURL.Path.compareTo("help") == 0)
@@ -264,6 +267,7 @@ public final class wb4writeraddon extends WeakBase
             }
             if (aURL.Path.compareTo("closeSession") == 0)
             {
+                
                 // add your own code here
                 return;
             }
