@@ -38,9 +38,9 @@ import static org.semanticwb.xmlrpc.Base64.decode;
  */
 public abstract class XMLRPCServlet extends HttpServlet
 {
+
     private static final String PREFIX_PROPERTY_PATH = "org.semanticwb.xmlrpc.";
     private static final String XMLRPC_DOCUMENT = "xmlrpc";
-
     private static String realm = "Secure Area";
     private static String prefixBasic = "Basic ";
     private static SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
@@ -50,6 +50,8 @@ public abstract class XMLRPCServlet extends HttpServlet
     {
         try
         {
+            String pUserName = null;
+            String pPassword = null;
             String authorization = request.getHeader("Authorization");
             if ( authorization == null || authorization.equals("") )
             {
@@ -59,12 +61,12 @@ public abstract class XMLRPCServlet extends HttpServlet
             }
             else
             {
-                if(authorization.startsWith(prefixBasic))
+                if ( authorization.startsWith(prefixBasic) )
                 {
-                    String userpassEncoded = authorization.substring(6);                   
+                    String userpassEncoded = authorization.substring(6);
                     String userpassDecoded = new String(decode(userpassEncoded));
-                    String pUserName = getUserName(userpassDecoded);
-                    String pPassword = getPassword(userpassDecoded);
+                    pUserName = getUserName(userpassDecoded);
+                    pPassword = getPassword(userpassDecoded);
                     if ( !this.isAuthenticate(pUserName, pPassword) )
                     {
                         response.sendError(response.SC_FORBIDDEN);
@@ -97,13 +99,15 @@ public abstract class XMLRPCServlet extends HttpServlet
                 xmlrpcDocument = getDocument(request);
             }
 
-
             try
             {
-                Object[] parameters = deserialize(xmlrpcDocument);
-                Object objResponse = execute(getMethodName(xmlrpcDocument), parameters, parts);
-                Document docResponse = this.serialize(objResponse);
-                sendResponse(response, docResponse);
+                if ( pUserName != null && pPassword != null )
+                {
+                    Object[] parameters = deserialize(xmlrpcDocument);
+                    Object objResponse = execute(getMethodName(xmlrpcDocument), parameters, parts, pUserName, pPassword);
+                    Document docResponse = this.serialize(objResponse);
+                    sendResponse(response, docResponse);
+                }
             }
             catch ( Exception cne )
             {
@@ -130,10 +134,19 @@ public abstract class XMLRPCServlet extends HttpServlet
             {
                 // No se puede hacer nada, no puede seralizar la respuesta, debe guardar el error en el log
                 // TODO:
-                ex.printStackTrace(System.out);                
+                ex.printStackTrace(System.out);
             }
-        }        
+        }
 
+    }
+
+    protected void setupObject(Object objToExecute, List<Part> parts, String user, String password) throws Exception
+    {
+        if ( objToExecute instanceof XmlRpcObject )
+        {
+            XmlRpcObject xmlRpcObject = ( XmlRpcObject ) objToExecute;
+            xmlRpcObject.setParts(parts);
+        }
     }
 
     private String getUserName(String userpassDecoded) throws IOException
@@ -178,7 +191,7 @@ public abstract class XMLRPCServlet extends HttpServlet
         Element params = new Element("params");
         methodResponse.addContent(params);
         Object[] pParams = {value};
-        addParameters(params, pParams);        
+        addParameters(params, pParams);
         return doc;
     }
 
@@ -235,7 +248,7 @@ public abstract class XMLRPCServlet extends HttpServlet
             Element elementType = new Element(type);
             value.setContent(elementType);
             elementType.setText(svalue);
-            
+
         }
     }
 
@@ -308,7 +321,7 @@ public abstract class XMLRPCServlet extends HttpServlet
         return classFullPath;
     }
 
-    private Object execute(String pCallMethod, Object[] parameters, List<Part> parts) throws ClassNotFoundException, XmlRpcException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException
+    private Object execute(String pCallMethod, Object[] parameters, List<Part> parts, String user, String password) throws ClassNotFoundException, XmlRpcException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException
     {
         String[] values = pCallMethod.split("\\.");
         if ( values.length != 2 )
@@ -322,13 +335,21 @@ public abstract class XMLRPCServlet extends HttpServlet
         Class[] parameterTypes = getParameterTypes(parameters);
         Method methodToFind = clazz.getMethod(methodName, parameterTypes);
         Object objToExecute = clazz.newInstance();
-        if ( objToExecute instanceof XmlRpcObject )
+        try
         {
-            XmlRpcObject xmlRpcObject = ( XmlRpcObject ) objToExecute;
-            xmlRpcObject.setParts(parts);
+            setupObject(objToExecute, parts, user, password);
         }
-        return methodToFind.invoke(objToExecute, parameters);
+        catch(Exception e)
+        {
+            throw new XmlRpcException("The opject can not be inizialited into the method setupObject, cause: "+e.getLocalizedMessage(),e);
+        }
+        Object objectToReturn=methodToFind.invoke(objToExecute, parameters);
+        return objectToReturn;
 
+    }
+    protected void afterExecute(Object objToExecute)
+    {
+        
     }
 
     private Object getParameter(Element eType) throws ParseException, JDOMException
@@ -450,23 +471,25 @@ public abstract class XMLRPCServlet extends HttpServlet
 
     private boolean isMultipart(HttpServletRequest request)
     {
-        boolean isMultipart=false;
+        boolean isMultipart = false;
         if ( request.getContentType().indexOf("multipart/form-data") != -1 )
         {
-            isMultipart=true;
+            isMultipart = true;
         }
         return isMultipart;
     }
-    public static void addMappingType(String objectName,Class clazz)
-    {        
-        System.setProperty(PREFIX_PROPERTY_PATH+objectName,clazz.getName());
+
+    public static void addMappingType(String objectName, Class clazz)
+    {
+        System.setProperty(PREFIX_PROPERTY_PATH + objectName, clazz.getName());
     }
-    public static void addMappingType(Map<String,Class> mapType)
-    {        
-        for(String objectName: mapType.keySet())
+
+    public static void addMappingType(Map<String, Class> mapType)
+    {
+        for ( String objectName : mapType.keySet() )
         {
-            Class clazz=mapType.get(objectName);
-            addMappingType(objectName,clazz);
+            Class clazz = mapType.get(objectName);
+            addMappingType(objectName, clazz);
         }
     }
 }
