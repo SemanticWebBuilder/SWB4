@@ -91,21 +91,27 @@ public class DescribeClass {
             renderClassDescription( out, (OntClass) i.next() );
             out.println();
         }
-
-        // super-classes
-        for (Iterator i = cls.listSubClasses( false ); i.hasNext(); ) {
-            out.print( "  is a super-class of " );
-            renderClassDescription( out, (OntClass) i.next() );
-            out.println();
-        }
+//
+//        // super-classes
+//        for (Iterator i = cls.listSubClasses( false ); i.hasNext(); ) {
+//            out.print( "  is a super-class of " );
+//            renderClassDescription( out, (OntClass) i.next() );
+//            out.println();
+//        }
+//        
+//        // properties
+//        for (Iterator i = cls.listDeclaredProperties(false); i.hasNext(); ) {
+//            out.print( "  is a Declared Propertie of " );
+//            Object obj=i.next();
+//            out.println(obj);
+//        }
         
-        // super-classes
-        for (Iterator i = cls.listDeclaredProperties(false); i.hasNext(); ) {
-            out.print( "  is a Declared Propertie of " );
+        // instanceof
+        for (Iterator i = cls.listRDFTypes(true); i.hasNext(); ) {
+            out.print( "  is a instance of  " );
             Object obj=i.next();
             out.println(obj);
-            out.println();
-        }
+        }        
         
     }
 
