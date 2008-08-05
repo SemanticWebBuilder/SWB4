@@ -12,9 +12,9 @@ import java.util.List;
  * @author victor.lorenzana
  */
 public class XmlRpcObject {
-    protected List<Part> parts;
+    protected List<Part> parts;    
     public void setParts(List<Part> parts)
     {
         this.parts=parts;
-    }
+    }    
 }
