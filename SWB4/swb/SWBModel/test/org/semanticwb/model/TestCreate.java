@@ -10,7 +10,6 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBInstance;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.platform.SemanticModel;
-import org.semanticwb.platform.SemanticOntology;
 
 /**
  *
