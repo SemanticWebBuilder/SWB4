@@ -140,7 +140,7 @@ public abstract class XMLRPCServlet extends HttpServlet
 
     }
 
-    protected void setupObject(Object objToExecute, List<Part> parts, String user, String password) throws Exception
+    protected void beforeExecute(Object objToExecute, List<Part> parts, String user, String password) throws Exception
     {
         if ( objToExecute instanceof XmlRpcObject )
         {
@@ -337,13 +337,14 @@ public abstract class XMLRPCServlet extends HttpServlet
         Object objToExecute = clazz.newInstance();
         try
         {
-            setupObject(objToExecute, parts, user, password);
+            beforeExecute(objToExecute, parts, user, password);
         }
         catch(Exception e)
         {
             throw new XmlRpcException("The opject can not be inizialited into the method setupObject, cause: "+e.getLocalizedMessage(),e);
         }
         Object objectToReturn=methodToFind.invoke(objToExecute, parameters);
+        afterExecute(objToExecute);
         return objectToReturn;
 
     }
