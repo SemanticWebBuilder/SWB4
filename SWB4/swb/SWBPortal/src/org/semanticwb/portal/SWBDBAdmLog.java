@@ -7,8 +7,6 @@ package org.semanticwb.portal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.Logger;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Iterator;
 import org.semanticwb.SWBInstance;
 
 /**
