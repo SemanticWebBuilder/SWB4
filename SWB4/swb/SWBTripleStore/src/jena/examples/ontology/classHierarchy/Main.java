@@ -54,7 +54,7 @@ public class Main {
     //////////////////////////////////
 
     public static void main( String[] args ) {
-        OntModel m = ModelFactory.createOntologyModel( OntModelSpec.OWL_MEM, null );
+        OntModel m = ModelFactory.createOntologyModel( OntModelSpec.OWL_MEM_RDFS_INF, null );
 
         // we have a local copy of the wine ontology
         //m.getDocumentManager().addAltEntry( "http://www.w3.org/2001/sw/WebOnt/guide-src/wine",
@@ -62,7 +62,7 @@ public class Main {
         //m.getDocumentManager().addAltEntry( "http://www.w3.org/2001/sw/WebOnt/guide-src/food",
         //                                    "file:E:/programming/proys/swb4/swb/SWBTripleStore/src/food.owl" );
         m.getDocumentManager().addAltEntry( "http://www.semanticwebbuilder.org/swb4/ontology",
-                                            "file:E:/programming/proys/swb4/swb/SWBTripleStore/src/swb.owl" );
+                                            "file:E:/programming/proys/swb4/swb/web/WEB-INF/owl/swb.owl" );
 
         //m.read( "http://www.w3.org/2001/sw/WebOnt/guide-src/wine" );
         m.read( "http://www.semanticwebbuilder.org/swb4/ontology" );

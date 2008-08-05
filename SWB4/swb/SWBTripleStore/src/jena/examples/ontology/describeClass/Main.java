@@ -66,7 +66,7 @@ public class Main {
         boolean isDAML = source.endsWith( ".daml" );
 
         OntModel m = ModelFactory.createOntologyModel(
-                        isDAML ? OntModelSpec.DAML_MEM : OntModelSpec.OWL_MEM_RDFS_INF, null
+                        isDAML ? OntModelSpec.DAML_MEM : OntModelSpec.OWL_MEM, null
                      );
 
         // we have a local copy of the wine ontology
@@ -95,17 +95,17 @@ public class Main {
             }
         }
         
-        String uri=m.getNsPrefixURI("swb");
-        Resource res=m.getResource(uri+"WebPage_1");
-        System.out.println(res);
-        StmtIterator it=res.listProperties();
-        while(it.hasNext())
-        {
-            Statement stm=it.nextStatement();
-            System.out.println("-->"+stm);
-        }
-        Statement stm=res.getProperty(m.getProperty("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"));
-        if(stm!=null)System.out.println("Class:"+stm.getResource().getURI());
+//        String uri=m.getNsPrefixURI("swb");
+//        Resource res=m.getResource(uri+"WebPage_1");
+//        System.out.println(res);
+//        StmtIterator it=res.listProperties();
+//        while(it.hasNext())
+//        {
+//            Statement stm=it.nextStatement();
+//            System.out.println("-->"+stm);
+//        }
+//        Statement stm=res.getProperty(m.getProperty("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"));
+//        if(stm!=null)System.out.println("Class:"+stm.getResource().getURI());
         
     }
 
