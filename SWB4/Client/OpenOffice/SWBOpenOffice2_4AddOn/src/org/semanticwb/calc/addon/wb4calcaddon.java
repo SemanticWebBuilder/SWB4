@@ -8,9 +8,10 @@ import com.sun.star.registry.XRegistryKey;
 import com.sun.star.lib.uno.helper.WeakBase;
 import javax.swing.JOptionPane;
 import org.semanticwb.openoffice.OfficeDocument;
+import org.semanticwb.openoffice.WBException;
 import org.semanticwb.openoffice.WBOfficeException;
 import org.semanticwb.openoffice.calc.WB4Calc;
-import org.semanticwb.openoffice.writer.WB4WriterApplication;
+import org.semanticwb.openoffice.calc.WB4CalcApplication;
 
 public final class wb4calcaddon extends WeakBase
         implements com.sun.star.lang.XServiceInfo,
@@ -91,7 +92,22 @@ public final class wb4calcaddon extends WeakBase
             }
             if (aURL.Path.compareTo("delete") == 0)
             {
-                return this;
+                try
+                {
+                    WB4Calc document=new WB4Calc(this.m_xContext);
+                    if(document.isPublicated())
+                    {
+                        return this;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+                catch(WBException wbe)
+                {
+                    return null;                
+                }
             }
             if (aURL.Path.compareTo("view") == 0)
             {
@@ -188,7 +204,7 @@ public final class wb4calcaddon extends WeakBase
             }
             if (aURL.Path.compareTo("open") == 0)
             {
-                WB4WriterApplication application = new WB4WriterApplication(this.m_xContext);
+                WB4CalcApplication application = new WB4CalcApplication(this.m_xContext);
                 application.open();                
                 return;
             }
@@ -229,8 +245,7 @@ public final class wb4calcaddon extends WeakBase
             }
             if (aURL.Path.compareTo("changePassword") == 0)
             {
-                WB4WriterApplication application = new WB4WriterApplication(this.m_xContext);
-                application.changePassword();
+                WB4CalcApplication.changePassword();
                 return;
             }
             if (aURL.Path.compareTo("help") == 0)
@@ -240,12 +255,12 @@ public final class wb4calcaddon extends WeakBase
             }
             if (aURL.Path.compareTo("about") == 0)
             {
-                // add your own code here
+                WB4CalcApplication.showAbout();
                 return;
             }
             if (aURL.Path.compareTo("closeSession") == 0)
             {
-                // add your own code here
+                WB4CalcApplication.closeSession();
                 return;
             }
 
