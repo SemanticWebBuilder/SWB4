@@ -311,6 +311,7 @@ is divided into following sections:
                 ===================
             -->
     <target depends="init" name="deps-jar" unless="no.deps">
+        <ant antfile="${project.SWBAdmin}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.SWBBase}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.SWBModel}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.SWBPlatform}/build.xml" inheritall="false" target="jar"/>
@@ -622,6 +623,7 @@ is divided into following sections:
                 ===============
             -->
     <target depends="init" name="deps-clean" unless="no.deps">
+        <ant antfile="${project.SWBAdmin}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBBase}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBModel}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBPlatform}/build.xml" inheritall="false" target="clean"/>
