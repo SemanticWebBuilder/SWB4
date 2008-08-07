@@ -247,7 +247,7 @@ class XmlRpcClient<T>
 
     private void sendFile(File file, String name, OutputStream out) throws IOException
     {
-        String newBoundary = "--" + boundary + "\r\n";
+        String newBoundary = "\r\n--" + boundary + "\r\n";
         String contentDisposition = "Content-Disposition: form-data; name=\"" + name + "\"; filename=\"" + file.getName() + "\"\r\n\r\n";
         out.write(newBoundary.getBytes());
         out.write(contentDisposition.getBytes());
@@ -261,6 +261,11 @@ class XmlRpcClient<T>
         }
         in.close();
     }
+    private void writeEnd(OutputStream out) throws IOException
+    {
+        String newBoundary = "\r\n--" + boundary + "\r\n";
+        out.write(newBoundary.getBytes());
+    }
 
     private void sendXmlDocumentPart(Document requestDoc, OutputStream out) throws IOException
     {
@@ -271,12 +276,7 @@ class XmlRpcClient<T>
         XMLOutputter outp = new XMLOutputter();
         outp.output(requestDoc, out);
     }
-
-    private void writeEnd(OutputStream out) throws IOException
-    {
-        String newBoundary = "\r\n--" + boundary + "\r\n";
-        out.write(newBoundary.getBytes());
-    }
+    
 
     private String getUserPassWordEncoded()
     {
