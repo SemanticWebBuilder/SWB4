@@ -531,7 +531,13 @@ public class CodeGenerator
                                 javaClassContent.append(ENTER);
                                 javaClassContent.append("    public void removeAll" + objectName + "()" + ENTER);
                                 javaClassContent.append(OPEN_BLOCK + ENTER);
-                                javaClassContent.append("        getRDFResource().removeAll(vocabulary." + tpp.getName() + ".getRDFProperty());" + ENTER);
+                                javaClassContent.append("        removeProperty(vocabulary." + tpp.getName() + ".getRDFProperty());" + ENTER);
+                                javaClassContent.append(CLOSE_BLOCK + ENTER);
+                                
+                                javaClassContent.append(ENTER);
+                                javaClassContent.append("    public void remove" + objectName + "("+ m_Package + "." + valueToReturn + " " + valueToReturn.toLowerCase()+")" + ENTER);
+                                javaClassContent.append(OPEN_BLOCK + ENTER);
+                                javaClassContent.append("        removeObjectProperty(vocabulary." + tpp.getName() + ".getRDFProperty(),"+ valueToReturn.toLowerCase() +");" + ENTER);
                                 javaClassContent.append(CLOSE_BLOCK + ENTER);
 
                                 javaClassContent.append(ENTER);
@@ -544,16 +550,9 @@ public class CodeGenerator
                             }
                             else
                             {
-                                // es uno
-                                /*javaClassContent.append(ENTER);
-                                javaClassContent.append("    public SemanticIterator<" + m_Package + "." + valueToReturn + "> list" + objectName + "()" + ENTER);
-                                javaClassContent.append(OPEN_BLOCK + ENTER);
-                                javaClassContent.append("        StmtIterator stit=getRDFResource().listProperties(vocabulary." + tpp.getName() + ".getRDFProperty());" + ENTER);
-                                javaClassContent.append("        return new SemanticIterator<" + m_Package + "." + valueToReturn + ">(" + m_Package + "." + valueToReturn + ".class, stit);" + ENTER);
-                                javaClassContent.append(CLOSE_BLOCK + ENTER);*/
-
+                                
                                 javaClassContent.append(ENTER);
-                                javaClassContent.append("    public void add" + objectName + "(" + m_Package + "." + valueToReturn + " " + valueToReturn.toLowerCase() + ")" + ENTER);
+                                javaClassContent.append("    public void set" + objectName + "(" + m_Package + "." + valueToReturn + " " + valueToReturn.toLowerCase() + ")" + ENTER);
                                 javaClassContent.append(OPEN_BLOCK + ENTER);
                                 javaClassContent.append("        addObjectProperty(vocabulary." + tpp.getName() + ", " + valueToReturn.toLowerCase() + ");" + ENTER);
                                 javaClassContent.append(CLOSE_BLOCK + ENTER);
@@ -561,7 +560,7 @@ public class CodeGenerator
                                 javaClassContent.append(ENTER);
                                 javaClassContent.append("    public void remove" + objectName + "()" + ENTER);
                                 javaClassContent.append(OPEN_BLOCK + ENTER);
-                                javaClassContent.append("        getRDFResource().removeAll(vocabulary." + tpp.getName() + ".getRDFProperty());" + ENTER);
+                                javaClassContent.append("        removeProperty(vocabulary." + tpp.getName() + ".getRDFProperty());" + ENTER);
                                 javaClassContent.append(CLOSE_BLOCK + ENTER);
 
                                 javaClassContent.append(ENTER);
