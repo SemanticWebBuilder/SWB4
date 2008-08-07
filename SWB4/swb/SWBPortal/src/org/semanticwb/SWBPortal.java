@@ -1,5 +1,6 @@
 package org.semanticwb;
 
+import org.semanticwb.model.IPFilter;
 import org.semanticwb.portal.services.*;
 
 public class SWBPortal 
@@ -31,6 +32,24 @@ public class SWBPortal
     {
         WebPageSrv webPageSrv=new WebPageSrv();
         return webPageSrv;
+    } 
+    
+    public static DeviceSrv getDeviceSrv()
+    {
+        DeviceSrv deviceSrv=new DeviceSrv();
+        return deviceSrv;
+    } 
+    
+    public static DnsSrv getDnsSrv()
+    {
+        DnsSrv dnsSrv=new DnsSrv();
+        return dnsSrv;
+    } 
+    
+    public static IPFilterSrv getIPFilterSrv()
+    {
+        IPFilterSrv ipFilterSrv=new IPFilterSrv();
+        return ipFilterSrv;
     } 
     
 }
