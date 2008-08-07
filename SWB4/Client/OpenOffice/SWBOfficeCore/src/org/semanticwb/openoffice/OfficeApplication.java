@@ -193,7 +193,7 @@ public abstract class OfficeApplication
      */
     public abstract List<OfficeDocument> getDocuments() throws WBException;
 
-    public final void changePassword()
+    public static final void changePassword()
     {
         if ( OfficeApplication.tryLogin() )
         {
@@ -215,7 +215,7 @@ public abstract class OfficeApplication
         }
     }
 
-    public final void createPage()
+    public static final void createPage()
     {
         if ( tryLogin() )
         {
@@ -231,7 +231,7 @@ public abstract class OfficeApplication
         wiz.show();
     }
 
-    public final void showAbout()
+    public static final void showAbout()
     {
         DialogAbout dialog = new DialogAbout(new javax.swing.JFrame(), true);
         dialog.setLocationRelativeTo(null);
@@ -251,18 +251,17 @@ public abstract class OfficeApplication
         return webAddress;
     }
 
-    static int setupDocument(String contentId) throws Exception
+    static String setupDocument(String contentId) throws Exception
     {
-        int contentIdToReturn = Integer.MIN_VALUE;
+        String contentIdToReturn = null;
         if ( contentId != null && !contentId.trim().equals("") && OfficeApplication.tryLogin() )
-        {
-            int id = Integer.parseInt(contentId);
+        {            
             document = getOfficeDocumentProxy();
             try
             {
-                if ( document.exists(id) )
+                if ( document.exists(contentId) )
                 {
-                    contentIdToReturn = id;
+                    contentIdToReturn = contentId;
                 }
                 else
                 {
@@ -326,7 +325,18 @@ public abstract class OfficeApplication
         }
         return tryLogin;
     }
-
+    public static final boolean isLogged()
+    {
+        if(userInfo==null)
+        {
+            return false;
+        }
+        return true;
+    }
+    public static final void closeSession()
+    {
+        
+    }
     public final static void logOff()
     {
         userInfo = null;

@@ -55,7 +55,7 @@ public abstract class OfficeDocument
     
     private static final String CONTENT_ID_NAME = "contentID";
     // By default the content is not published
-    private int contentID = MIN_VALUE;
+    private String contentID = null;
 
     static
     {
@@ -449,7 +449,7 @@ public abstract class OfficeDocument
     public final boolean isPublicated()
     {
         boolean isPublicated = false;
-        if ( this.contentID == MIN_VALUE )
+        if ( this.contentID == null )
         {
             isPublicated = false;
         }
@@ -559,11 +559,11 @@ public abstract class OfficeDocument
         }
     }
 
-    void SaveContentId(int contentId) throws WBException
+    void SaveContentId(String contentId) throws WBException
     {
         this.contentID = contentId;
         HashMap<String, String> values = new HashMap<String, String>();
-        values.put(CONTENT_ID_NAME, String.valueOf(contentId));
+        values.put(CONTENT_ID_NAME, contentId);
         saveCustomProperties(values);
     }
 
