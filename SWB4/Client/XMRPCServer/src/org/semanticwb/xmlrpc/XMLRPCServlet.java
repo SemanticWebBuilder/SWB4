@@ -15,9 +15,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javax.servlet.ServletInputStream;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.ServletResponse;
@@ -78,7 +80,7 @@ public abstract class XMLRPCServlet extends HttpServlet
                 }
             }
             Document xmlrpcDocument;
-            List<Part> parts = new ArrayList<Part>();
+            Set<Part> parts = new HashSet<Part>();
             if ( isMultipart(request) )
             {
                 WBFileUpload upload = new WBFileUpload();
@@ -140,7 +142,7 @@ public abstract class XMLRPCServlet extends HttpServlet
 
     }
 
-    protected void beforeExecute(Object objToExecute, List<Part> parts, String user, String password) throws Exception
+    protected void beforeExecute(Object objToExecute, Set<Part> parts, String user, String password) throws Exception
     {
         if ( objToExecute instanceof XmlRpcObject )
         {
@@ -321,7 +323,7 @@ public abstract class XMLRPCServlet extends HttpServlet
         return classFullPath;
     }
 
-    private Object execute(String pCallMethod, Object[] parameters, List<Part> parts, String user, String password) throws ClassNotFoundException, XmlRpcException, InstantiationException, IllegalAccessException, NoSuchMethodException
+    private Object execute(String pCallMethod, Object[] parameters, Set<Part> parts, String user, String password) throws ClassNotFoundException, XmlRpcException, InstantiationException, IllegalAccessException, NoSuchMethodException
     {
         String[] values = pCallMethod.split("\\.");
         if ( values.length != 2 )
