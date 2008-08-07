@@ -17,8 +17,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -62,10 +64,10 @@ class XmlRpcClient<T>
 
     public T execute(String method, Object[] parameters) throws XmlRpcException, HttpException
     {
-        return execute(method, parameters, new ArrayList<Attachment>());
+        return execute(method, parameters, new HashSet<Attachment>());
     }
 
-    public T execute(String methodName, Object[] parameters, List<Attachment> attachments) throws XmlRpcException, HttpException
+    public T execute(String methodName, Object[] parameters, Set<Attachment> attachments) throws XmlRpcException, HttpException
     {
         for ( Attachment attachment : attachments )
         {
@@ -283,7 +285,7 @@ class XmlRpcClient<T>
         return encoded;
     }
 
-    private Document request(Document requestDoc, List<Attachment> attachments) throws XmlRpcException, HttpException
+    private Document request(Document requestDoc, Set<Attachment> attachments) throws XmlRpcException, HttpException
     {
         OutputStream out = null;
         try
