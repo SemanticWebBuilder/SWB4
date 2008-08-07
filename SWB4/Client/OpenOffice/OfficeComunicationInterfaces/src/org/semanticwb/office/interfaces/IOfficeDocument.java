@@ -14,23 +14,23 @@ import org.semanticwb.xmlrpc.XmlRpcMethod;
 public interface IOfficeDocument
 {
     @XmlRpcMethod(methodName="OfficeDocument.publish") 
-    public int publish(String title,String description,String path,String type) throws Exception;
+    public String publish(String title,String description,String categoryID,String type) throws Exception;
     @XmlRpcMethod(methodName="OfficeDocument.getPath")
-    public String getPath(int contentID) throws Exception;
+    public String getPath(String contentID) throws Exception;
     @XmlRpcMethod(methodName="OfficeDocument.setTitle")
-    public void setTitle(int contentID,String title) throws Exception;
+    public void setTitle(String contentID,String title) throws Exception;
     @XmlRpcMethod(methodName="OfficeDocument.setDescription")
-    public void setDescription(int contentID,String description) throws Exception;
+    public void setDescription(String contentID,String description) throws Exception;
     @XmlRpcMethod(methodName="OfficeDocument.setPath")
-    public void setPath(int contentID,String path) throws Exception;
+    public void setPath(String contentID,String path) throws Exception;
     @XmlRpcMethod(methodName="OfficeDocument.setActive")
-    public void setActive(int contentID,boolean active) throws Exception;
+    public void setActive(String contentID,boolean active) throws Exception;
     @XmlRpcMethod(methodName="OfficeDocument.getActive")
-    public boolean getActive(int contentID) throws Exception;
+    public boolean getActive(String contentID) throws Exception;
     @XmlRpcMethod(methodName="OfficeDocument.delete")
-    public void delete(int contentID) throws Exception;
+    public void delete(String contentID) throws Exception;
     @XmlRpcMethod(methodName="OfficeDocument.exists")
-    public boolean exists(int contentId) throws Exception;
+    public boolean exists(String contentId) throws Exception;
     @XmlRpcMethod(methodName="OfficeDocument.updateContent")
-    void updateContent(int contentId) throws Exception; 
+    void updateContent(String contentId) throws Exception; 
 }
