@@ -20,6 +20,8 @@ public interface IOfficeApplication {
     @XmlRpcMethod(methodName="OfficeApplication.createPage") 
     public void createPage(String title,String id,String description) throws Exception; 
     @XmlRpcMethod(methodName="OfficeApplication.existPage")
-    public boolean existPage(String id) throws Exception; 
+    public boolean existsPage(String id) throws Exception; 
+    @XmlRpcMethod(methodName="OfficeApplication.createCategory")
+    public String createCategory(String id,String description) throws Exception; 
         
 }
