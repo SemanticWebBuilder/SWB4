@@ -19,6 +19,11 @@ public class Attachment {
         this.file=file;
         this.name=name;
     }
+    public Attachment(File file)
+    {
+        this.file=file;
+        this.name=file.getName();
+    }
     public File getFile()
     {
         return file;
