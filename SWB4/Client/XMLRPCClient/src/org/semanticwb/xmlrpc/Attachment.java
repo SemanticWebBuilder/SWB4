@@ -32,4 +32,24 @@ public class Attachment {
     {
         return name;    
     }
+    @Override
+    public String toString()
+    {
+        this.hashCode();
+        return this.name;        
+    }
+    @Override
+    public int hashCode()
+    {
+        return this.name.hashCode();
+    }
+    @Override
+    public boolean equals(Object obj)
+    {
+        if(obj instanceof Attachment)
+        {
+            return ((Attachment)obj).name.equals(this.name);
+        }
+        return false;
+    }
 }

@@ -7,8 +7,7 @@ package org.semanticwb.xmlrpc;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 
 /**
  *
@@ -17,7 +16,7 @@ import java.util.List;
 public class XmlRpcProxyFactory implements java.lang.reflect.InvocationHandler, XmlProxy
 {
 
-    private List<Attachment> attachments = new ArrayList<Attachment>();
+    private HashSet<Attachment> attachments = new HashSet<Attachment>();
     private URI webAddress;
     private String user,  password;
     private URI proxyAddress;
