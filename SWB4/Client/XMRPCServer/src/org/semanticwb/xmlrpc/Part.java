@@ -30,5 +30,25 @@ public class Part
     {
        return content;
     }
+    @Override
+    public String toString()
+    {
+        this.hashCode();
+        return this.name;        
+    }
+    @Override
+    public int hashCode()
+    {
+        return this.name.hashCode();
+    }
+    @Override
+    public boolean equals(Object obj)
+    {
+        if(obj instanceof Part)
+        {
+            return ((Part)obj).name.equals(this.name);
+        }
+        return false;
+    }
     
 }

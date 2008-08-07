@@ -5,15 +5,15 @@
 
 package org.semanticwb.xmlrpc;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  *
  * @author victor.lorenzana
  */
 public class XmlRpcObject {
-    protected List<Part> parts;    
-    public void setParts(List<Part> parts)
+    protected Set<Part> parts;    
+    public void setParts(Set<Part> parts)
     {
         this.parts=parts;
     }    
