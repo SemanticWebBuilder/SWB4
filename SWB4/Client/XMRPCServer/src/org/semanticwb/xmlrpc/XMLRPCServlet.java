@@ -321,7 +321,7 @@ public abstract class XMLRPCServlet extends HttpServlet
         return classFullPath;
     }
 
-    private Object execute(String pCallMethod, Object[] parameters, List<Part> parts, String user, String password) throws ClassNotFoundException, XmlRpcException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException
+    private Object execute(String pCallMethod, Object[] parameters, List<Part> parts, String user, String password) throws ClassNotFoundException, XmlRpcException, InstantiationException, IllegalAccessException, NoSuchMethodException
     {
         String[] values = pCallMethod.split("\\.");
         if ( values.length != 2 )
@@ -339,18 +339,27 @@ public abstract class XMLRPCServlet extends HttpServlet
         {
             beforeExecute(objToExecute, parts, user, password);
         }
-        catch(Exception e)
+        catch ( Exception e )
         {
-            throw new XmlRpcException("The opject can not be inizialited into the method setupObject, cause: "+e.getLocalizedMessage(),e);
+            throw new XmlRpcException("The opject can not be inizialited into the method setupObject, cause: " + e.getLocalizedMessage(), e);
         }
-        Object objectToReturn=methodToFind.invoke(objToExecute, parameters);
-        afterExecute(objToExecute);
-        return objectToReturn;
+        try
+        {
+            Object objectToReturn = methodToFind.invoke(objToExecute, parameters);
+            afterExecute(objToExecute);
+            return objectToReturn;
+        }
+        catch ( InvocationTargetException inte )
+        {
+            throw new XmlRpcException(inte.getTargetException().getLocalizedMessage(), inte.getTargetException());
+        }
+
 
     }
+
     protected void afterExecute(Object objToExecute)
     {
-        
+
     }
 
     private Object getParameter(Element eType) throws ParseException, JDOMException
@@ -446,10 +455,25 @@ public abstract class XMLRPCServlet extends HttpServlet
 
     private Document getException(Exception e) throws JDOMException, IOException
     {
+        StringBuilder messageError = new StringBuilder(e.getLocalizedMessage() + "\r\n");
+        for ( StackTraceElement element : e.getStackTrace() )
+        {
+            messageError.append(element.toString() + "\r\n");
+        }
+        if ( e.getCause() != null )
+        {
+            messageError.append(" cause: \r\n");
+            messageError.append(e.getCause().getLocalizedMessage() + "\r\n");
+            for ( StackTraceElement element : e.getCause().getStackTrace() )
+            {
+                messageError.append(element.toString() + "\r\n");
+            }
+        }
         String xmlString = "<?xml version=\"1.0\" encoding=\"utf-8\"?><methodResponse><fault><value><struct><member><name>faultCode</name>" +
                 "<value><int>" + e.hashCode() + "</int></value></member><member><name>faultString</name>" +
-                "<value><string>" + e.toString() + "</string></value></member></struct>" +
+                "<value><string>" + messageError + "</string></value></member></struct>" +
                 "</value></fault></methodResponse>";
+
         Reader stringReader = new StringReader(xmlString);
         SAXBuilder builder = new SAXBuilder();
         return builder.build(stringReader);
