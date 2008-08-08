@@ -531,13 +531,13 @@ public class CodeGenerator
                                 javaClassContent.append(ENTER);
                                 javaClassContent.append("    public void removeAll" + objectName + "()" + ENTER);
                                 javaClassContent.append(OPEN_BLOCK + ENTER);
-                                javaClassContent.append("        removeProperty(vocabulary." + tpp.getName() + ".getRDFProperty());" + ENTER);
+                                javaClassContent.append("        removeProperty(vocabulary." + tpp.getName() + ");" + ENTER);
                                 javaClassContent.append(CLOSE_BLOCK + ENTER);
                                 
                                 javaClassContent.append(ENTER);
                                 javaClassContent.append("    public void remove" + objectName + "("+ m_Package + "." + valueToReturn + " " + valueToReturn.toLowerCase()+")" + ENTER);
                                 javaClassContent.append(OPEN_BLOCK + ENTER);
-                                javaClassContent.append("        removeObjectProperty(vocabulary." + tpp.getName() + ".getRDFProperty(),"+ valueToReturn.toLowerCase() +");" + ENTER);
+                                javaClassContent.append("        removeObjectProperty(vocabulary." + tpp.getName() + ","+ valueToReturn.toLowerCase() +");" + ENTER);
                                 javaClassContent.append(CLOSE_BLOCK + ENTER);
 
                                 javaClassContent.append(ENTER);
@@ -560,7 +560,7 @@ public class CodeGenerator
                                 javaClassContent.append(ENTER);
                                 javaClassContent.append("    public void remove" + objectName + "()" + ENTER);
                                 javaClassContent.append(OPEN_BLOCK + ENTER);
-                                javaClassContent.append("        removeProperty(vocabulary." + tpp.getName() + ".getRDFProperty());" + ENTER);
+                                javaClassContent.append("        removeProperty(vocabulary." + tpp.getName() + ");" + ENTER);
                                 javaClassContent.append(CLOSE_BLOCK + ENTER);
 
                                 javaClassContent.append(ENTER);
