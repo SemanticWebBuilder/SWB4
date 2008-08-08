@@ -259,20 +259,23 @@ public class CodeGenerator
         while (tpcit.hasNext())
         {
             SemanticClass tpc = tpcit.next();
-            javaClassContent.append("    public static " + tpc.getName() + " get" + tpc.getName() + "(String uri)" + ENTER);
-            javaClassContent.append("    {" + ENTER);
-            javaClassContent.append("        return (" + tpc.getName() + ")mgr.getOntology().getSemanticObject(uri,vocabulary." + tpc.getName() + ");" + ENTER);
-            javaClassContent.append("    }" + ENTER);
+            if ( tpc.isSWBClass() )
+            {
+                javaClassContent.append("    public static " + tpc.getName() + " get" + tpc.getName() + "(String uri)" + ENTER);
+                javaClassContent.append("    {" + ENTER);
+                javaClassContent.append("        return (" + tpc.getName() + ")mgr.getOntology().getSemanticObject(uri,vocabulary." + tpc.getName() + ");" + ENTER);
+                javaClassContent.append("    }" + ENTER);
 
-            javaClassContent.append("    public static " + tpc.getName() + " create" + tpc.getName() + "(SemanticModel model, String uri)" + ENTER);
-            javaClassContent.append("    {" + ENTER);
-            javaClassContent.append("        return (" + tpc.getName() + ")model.createSemanticObject(uri, vocabulary." + tpc.getName() + ");" + ENTER);
-            javaClassContent.append("    }" + ENTER);
+                javaClassContent.append("    public static " + tpc.getName() + " create" + tpc.getName() + "(SemanticModel model, String uri)" + ENTER);
+                javaClassContent.append("    {" + ENTER);
+                javaClassContent.append("        return (" + tpc.getName() + ")model.createSemanticObject(uri, vocabulary." + tpc.getName() + ");" + ENTER);
+                javaClassContent.append("    }" + ENTER);
 
-            javaClassContent.append("    public static Iterator<org.semanticwb.model." + tpc.getName() + "> list" + tpc.getName() + "s()" + ENTER);
-            javaClassContent.append("    {" + ENTER);
-            javaClassContent.append("        return (Iterator<org.semanticwb.model." + tpc.getName() + ">)vocabulary." + tpc.getName() + ".listInstances();" + ENTER);
-            javaClassContent.append("    }" + ENTER);
+                javaClassContent.append("    public static Iterator<org.semanticwb.model." + tpc.getName() + "> list" + tpc.getName() + "s()" + ENTER);
+                javaClassContent.append("    {" + ENTER);
+                javaClassContent.append("        return (Iterator<org.semanticwb.model." + tpc.getName() + ">)vocabulary." + tpc.getName() + ".listInstances();" + ENTER);
+                javaClassContent.append("    }" + ENTER);
+            }
         }
 
         /*public static User getUser(String uri)
@@ -514,7 +517,7 @@ public class CodeGenerator
                             if ( objectName.toLowerCase().startsWith("has") )
                             {
                                 // son varios
-                                objectName=objectName.substring(3);
+                                objectName = objectName.substring(3);
                                 javaClassContent.append(ENTER);
                                 javaClassContent.append("    public SemanticIterator<" + m_Package + "." + valueToReturn + "> list" + objectName + "()" + ENTER);
                                 javaClassContent.append(OPEN_BLOCK + ENTER);
@@ -533,11 +536,11 @@ public class CodeGenerator
                                 javaClassContent.append(OPEN_BLOCK + ENTER);
                                 javaClassContent.append("        removeProperty(vocabulary." + tpp.getName() + ");" + ENTER);
                                 javaClassContent.append(CLOSE_BLOCK + ENTER);
-                                
+
                                 javaClassContent.append(ENTER);
-                                javaClassContent.append("    public void remove" + objectName + "("+ m_Package + "." + valueToReturn + " " + valueToReturn.toLowerCase()+")" + ENTER);
+                                javaClassContent.append("    public void remove" + objectName + "(" + m_Package + "." + valueToReturn + " " + valueToReturn.toLowerCase() + ")" + ENTER);
                                 javaClassContent.append(OPEN_BLOCK + ENTER);
-                                javaClassContent.append("        removeObjectProperty(vocabulary." + tpp.getName() + ","+ valueToReturn.toLowerCase() +");" + ENTER);
+                                javaClassContent.append("        removeObjectProperty(vocabulary." + tpp.getName() + "," + valueToReturn.toLowerCase() + ");" + ENTER);
                                 javaClassContent.append(CLOSE_BLOCK + ENTER);
 
                                 javaClassContent.append(ENTER);
@@ -550,7 +553,7 @@ public class CodeGenerator
                             }
                             else
                             {
-                                
+
                                 javaClassContent.append(ENTER);
                                 javaClassContent.append("    public void set" + objectName + "(" + m_Package + "." + valueToReturn + " " + valueToReturn.toLowerCase() + ")" + ENTER);
                                 javaClassContent.append(OPEN_BLOCK + ENTER);
