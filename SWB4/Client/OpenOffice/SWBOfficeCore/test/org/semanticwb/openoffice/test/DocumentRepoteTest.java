@@ -94,10 +94,20 @@ public class DocumentRepoteTest {
             IOpenOfficeDocument document = XmlRpcProxyFactory.newInstance(IOpenOfficeDocument.class, new URI("http://localhost:8084/TestRPC/GatewayOffice"));
             document.setUser("victor");
             document.setPassword("victor");
-            document.addAttachment(new Attachment(new File("c:\\temp\\demo.doc")));
+            document.addAttachment(new Attachment(new File("c:\\temp\\demo.doc")));            
             String id1=document.publish("demo publication 'a'a'a'a++++", "description", categoryID, "WORD");            
             document.addAttachment(new Attachment(new File("c:\\temp\\demo.doc")));
-            document.updateContent(id1);            
+            document.addAttachment(new Attachment(new File("c:\\temp\\demo.odp")));
+            String version=document.updateContent(id1);            
+            
+            document.addAttachment(new Attachment(new File("c:\\temp\\demo.doc")));
+            document.addAttachment(new Attachment(new File("c:\\temp\\demo.odp")));
+            version=document.updateContent(id1);            
+            
+            document.addAttachment(new Attachment(new File("c:\\temp\\demo.doc")));
+            document.addAttachment(new Attachment(new File("c:\\temp\\demo.odp")));
+            version=document.updateContent(id1);            
+            
             System.out.println(id1);
         }
         catch(URISyntaxException ure)
