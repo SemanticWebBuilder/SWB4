@@ -259,22 +259,25 @@ public class CodeGenerator
         while (tpcit.hasNext())
         {
             SemanticClass tpc = tpcit.next();
+            javaClassContent.append("    public static " + tpc.getName() + " get" + tpc.getName() + "(String uri)" + ENTER);
+            javaClassContent.append("    {" + ENTER);
+            javaClassContent.append("        return (" + tpc.getName() + ")mgr.getOntology().getSemanticObject(uri,vocabulary." + tpc.getName() + ");" + ENTER);
+            javaClassContent.append("    }" + ENTER);
+
+            javaClassContent.append("    public static Iterator<org.semanticwb.model." + tpc.getName() + "> list" + tpc.getName() + "s()" + ENTER);
+            javaClassContent.append("    {" + ENTER);
+            javaClassContent.append("        return (Iterator<org.semanticwb.model." + tpc.getName() + ">)vocabulary." + tpc.getName() + ".listInstances();" + ENTER);
+            javaClassContent.append("    }" + ENTER);
+            
             if ( tpc.isSWBClass() )
             {
-                javaClassContent.append("    public static " + tpc.getName() + " get" + tpc.getName() + "(String uri)" + ENTER);
-                javaClassContent.append("    {" + ENTER);
-                javaClassContent.append("        return (" + tpc.getName() + ")mgr.getOntology().getSemanticObject(uri,vocabulary." + tpc.getName() + ");" + ENTER);
-                javaClassContent.append("    }" + ENTER);
 
                 javaClassContent.append("    public static " + tpc.getName() + " create" + tpc.getName() + "(SemanticModel model, String uri)" + ENTER);
                 javaClassContent.append("    {" + ENTER);
                 javaClassContent.append("        return (" + tpc.getName() + ")model.createSemanticObject(uri, vocabulary." + tpc.getName() + ");" + ENTER);
                 javaClassContent.append("    }" + ENTER);
 
-                javaClassContent.append("    public static Iterator<org.semanticwb.model." + tpc.getName() + "> list" + tpc.getName() + "s()" + ENTER);
-                javaClassContent.append("    {" + ENTER);
-                javaClassContent.append("        return (Iterator<org.semanticwb.model." + tpc.getName() + ">)vocabulary." + tpc.getName() + ".listInstances();" + ENTER);
-                javaClassContent.append("    }" + ENTER);
+
             }
         }
 
