@@ -32,5 +32,5 @@ public interface IOfficeDocument
     @XmlRpcMethod(methodName="OfficeDocument.exists")
     public boolean exists(String contentId) throws Exception;
     @XmlRpcMethod(methodName="OfficeDocument.updateContent")
-    void updateContent(String contentId) throws Exception; 
+    public String updateContent(String contentId) throws Exception; 
 }
