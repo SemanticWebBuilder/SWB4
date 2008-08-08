@@ -58,6 +58,11 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument, Rep
                 newNode.setProperty("cm:title", title);
                 newNode.setProperty("cm:type", type);
                 newNode.setProperty("cm:description", description);
+                Node nodeContents=newNode.addNode("Contents","nt:folder");
+                nodeContents.addMixin("mix:versionable");
+                nodeContents.addMixin("mix:lockable");
+                nodeContents.addMixin("mix:referenceable");
+                nodeContents.checkout();
                 for ( Part part : parts )
                 {
                     MimeTable mt = MimeTable.getDefaultTable();
@@ -67,20 +72,19 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument, Rep
                         mimeType = "application/octet-stream";
                     }
 
-                    Node nodePart = newNode.addNode(part.getName(), "nt:file");
+                    Node nodePart = nodeContents.addNode(part.getName(), "nt:file");
                     Node resNode = nodePart.addNode("jcr:content", "nt:resource");
                     resNode.setProperty("jcr:mimeType", mimeType);
                     resNode.setProperty("jcr:encoding", "");
                     InputStream in = new ByteArrayInputStream(part.getContent());
                     resNode.setProperty("jcr:data", in);
+                    in.close();
                     Calendar lastModified = Calendar.getInstance();
                     lastModified.setTimeInMillis(System.currentTimeMillis());
-                    resNode.setProperty("jcr:lastModified", lastModified);
-                    nodePart.save();
-                    resNode.save();
-                    nodePart.save();                
+                    resNode.setProperty("jcr:lastModified", lastModified);                                   
                 }
                 session.save();
+                nodeContents.checkin();                
                 newNode.checkin();
                 return newNode.getUUID();
             }
@@ -115,12 +119,12 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument, Rep
         }
     }
 
-    public void updateContent(String contentId) throws Exception
+    public String updateContent(String contentId) throws Exception
     {
 
         try
         {
-            Node node = session.getNodeByUUID(contentId);
+            Node node = session.getNodeByUUID(contentId);            
             if ( !node.isLocked() )
             {
                 node.lock(false, true); // blocks the node
@@ -129,10 +133,11 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument, Rep
             {
                 throw new Exception("El contenido esta bloqueado");
             }
-
             if ( !node.isCheckedOut() )
             {
                 node.checkout();
+                Node nodeContents=node.getNode("Contents");
+                nodeContents.checkout();
                 try
                 {
                     for ( Part part : parts )
@@ -142,35 +147,42 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument, Rep
                         if ( mimeType == null )
                         {
                             mimeType = "application/octet-stream";
-                        }
-
-                        Node nodePart = node.getNode(part.getName());
+                        }                                                 
+                        Node nodePart = nodeContents.getNode(part.getName());
                         Node resNode = nodePart.getNode("jcr:content");
+                        
                         resNode.setProperty("jcr:mimeType", mimeType);
-                        resNode.setProperty("jcr:encoding", "");
-                        InputStream in = new ByteArrayInputStream(part.getContent());
-                        resNode.setProperty("jcr:data", in);
+                        resNode.setProperty("jcr:encoding", "");                        
+                        InputStream in = new ByteArrayInputStream(part.getContent());                        
+                        resNode.getProperty("jcr:data").setValue(in);                        
                         Calendar lastModified = Calendar.getInstance();
                         lastModified.setTimeInMillis(System.currentTimeMillis());
-                        resNode.setProperty("jcr:lastModified", lastModified);
-                        resNode.save();
-                        nodePart.save();
+                        resNode.setProperty("jcr:lastModified", lastModified);                       
                     }
                     session.save();
                 }
                 catch ( Exception e )
                 {
+                    e.printStackTrace(System.out);
                     throw e;
                 }
                 finally
-                {
+                {                    
                     Version version = node.checkin();
-                    VersionIterator it = version.getVersionHistory().getAllVersions();
-                    while (it.hasNext())
+                    
+                    System.out.println("exportSystemView");
+                    session.exportSystemView(node.getPath(), System.out, true, false);
+                    System.out.println("");                    
+                    session.save();                    
+                    //node.getVersionHistory().addVersionLabel(version.getName(), label, true);
+                    return version.getName();
+                    /*System.out.println(version.getName());
+                    VersionIterator it=node.getVersionHistory().getAllVersions();
+                    while(it.hasNext())
                     {
-                        Version versionh = it.nextVersion();
-                        Calendar cal = versionh.getCreated();
-                    }
+                        Version oldversion=it.nextVersion();
+                        System.out.println(oldversion.getName());
+                    }*/
                 }
             }
             else
