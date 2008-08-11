@@ -18,11 +18,13 @@ public class SemanticModel
 {
     private Model m_model;
     private String m_name;
+    private String m_nameSpace;
 
     public SemanticModel(String name, Model model)
     {
         this.m_model=model;
         this.m_name=name;
+        this.m_nameSpace=m_model.getNsPrefixURI(m_name);
         init();
     }
     
@@ -56,22 +58,22 @@ public class SemanticModel
         return getSemanticObjectClass(res);
     }
     
-    public <T extends SemanticObject> T getSemanticObject(String uri)
+    public SemanticObject getSemanticObject(String uri)
     {
         Resource res=m_model.getResource(uri);
         SemanticClass cl=getSemanticObjectClass(res);
-        return (T)cl.newInstance(res);
+        return cl.newInstance(res);
 //        SemanticObject ret=null;
 //        Resource res=m_model.getResource(uri);
 //        if(res!=null)ret=new SemanticObject(res);
 //        return ret;
     }
     
-    public <T extends SemanticObject> T createSemanticObject(String uri, SemanticClass cls)
+    public SemanticObject createSemanticObject(String uri, SemanticClass cls)
     {
         Resource res=m_model.createResource(uri);
         res.addProperty(m_model.getProperty(SemanticVocabulary.RDF_TYPE), cls.getOntClass());
-        return (T)cls.newInstance(res);
+        return cls.newInstance(res);
     }
     
     public void removeSemanticObject(String uri)
@@ -91,4 +93,8 @@ public class SemanticModel
             m_model.remove(res,null,null);
         }
     }      
+    
+    public String getNameSpace() {
+        return m_nameSpace;
+    }    
 }

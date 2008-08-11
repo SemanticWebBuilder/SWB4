@@ -9,6 +9,7 @@ import com.hp.hpl.jena.ontology.OntClass;
 
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.shared.PropertyNotFoundException;
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -26,9 +27,10 @@ public class SemanticClass
     private HashMap<String,SemanticProperty> m_props;
     private Boolean m_isSWBClass=null;
     private Boolean m_isSWBInterface=null;
-    private String className=null;
-    private Class cls=null;
-    private Constructor constructor=null;
+    private String m_className=null;
+    private Boolean m_autogenId=null;
+    private Class m_cls=null;
+    private Constructor m_constructor=null;
     
     public SemanticClass(OntClass oclass)
     {
@@ -62,32 +64,50 @@ public class SemanticClass
     
     public String getClassName()
     {
-        if(className==null)
+        if(m_className==null)
         {
             Property prop=m_class.getModel().getProperty(SemanticVocabulary.SWB_ANNOT_CLASSNAME);
             //System.out.println("Class:"+m_class+" ->"+className);
-            className=m_class.getRequiredProperty(prop).getString();
+            m_className=m_class.getRequiredProperty(prop).getString();
             //System.out.println("Class:"+m_class+" ->"+className);
-            if(className==null)className=SemanticObject.class.getName();
+            if(m_className==null)m_className=SemanticObject.class.getName();
         }
-        log.trace("getClassName:"+className);
-        return className;
-    }    
+        log.trace("getClassName:"+m_className);
+        return m_className;
+    }   
+    
+    public boolean isAutogenId()
+    {
+        if(m_autogenId==null)
+        {
+            Property prop=m_class.getModel().getProperty(SemanticVocabulary.SWB_ANNOT_AUTOGENID);
+            //System.out.println("Class:"+m_class+" ->"+className);
+            try
+            {
+                m_autogenId=m_class.getRequiredProperty(prop).getBoolean();
+            }catch(PropertyNotFoundException noe)
+            {
+                m_autogenId=false;
+            }
+        }
+        log.trace("isAutogenId:"+m_autogenId);
+        return m_autogenId;
+    }
     
     public Constructor getConstructor()
     {
-        if(constructor==null)
+        if(m_constructor==null)
         {
             try
             {
-                constructor=getObjectClass().getDeclaredConstructor(Resource.class);
+                m_constructor=getObjectClass().getDeclaredConstructor(Resource.class);
             }
             catch(NoSuchMethodException nsme)
             {
                 new IllegalArgumentException(nsme);
             }        
         }
-        return constructor;
+        return m_constructor;
         
     }
     
@@ -111,14 +131,14 @@ public class SemanticClass
     
     public Class getObjectClass()
     {
-        if(cls==null)
+        if(m_cls==null)
         {
             try
             {
-                cls=Class.forName(getClassName());
+                m_cls=Class.forName(getClassName());
             }catch(Exception e){log.error(e);}
         }
-        return cls;
+        return m_cls;
     }
     
     public String getURI()

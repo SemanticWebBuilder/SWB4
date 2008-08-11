@@ -197,7 +197,7 @@ public class SemanticMgr implements SWBInstanceObject
         return m_models.get(name);
     }
     
-    public void loadDBModels()
+    private void loadDBModels()
     {
         //LoadModels
         log.debug("loadDBModels");
@@ -215,13 +215,21 @@ public class SemanticMgr implements SWBInstanceObject
      * @param name
      * @return
      */
-    public SemanticModel loadDBModel(String name)
+    private SemanticModel loadDBModel(String name)
     {
         SemanticModel m=new SemanticModel(name, loadRDFDBModel(name));
         m_models.put(name, m);
         m_ontology.addSubModel(m,false);
         return m;
     }    
+    
+    public SemanticModel createModel(String name, String nameSpace)
+    {
+        SemanticModel ret=loadDBModel(name);
+        Model model=ret.getRDFModel();
+        model.setNsPrefix(name, nameSpace);
+        return ret;
+    }
     
     public SemanticOntology getOntology() 
     {
