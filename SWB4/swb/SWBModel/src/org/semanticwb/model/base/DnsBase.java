@@ -25,14 +25,14 @@ public class DnsBase extends SemanticObject
         setDateProperty(vocabulary.created, created);
     }
 
-    public void addUserModified(org.semanticwb.model.User user)
+    public void setUserModified(org.semanticwb.model.User user)
     {
         addObjectProperty(vocabulary.userModified, user);
     }
 
     public void removeUserModified()
     {
-        getRDFResource().removeAll(vocabulary.userModified.getRDFProperty());
+        removeProperty(vocabulary.userModified);
     }
 
     public User getUserModified()
@@ -85,7 +85,12 @@ public class DnsBase extends SemanticObject
 
     public void removeAllWebPage()
     {
-        getRDFResource().removeAll(vocabulary.hasWebPage.getRDFProperty());
+        removeProperty(vocabulary.hasWebPage);
+    }
+
+    public void removeWebPage(org.semanticwb.model.WebPage webpage)
+    {
+        removeObjectProperty(vocabulary.hasWebPage,webpage);
     }
 
     public WebPage getWebPage()
@@ -95,14 +100,14 @@ public class DnsBase extends SemanticObject
          return it.next();
     }
 
-    public void addUserCreated(org.semanticwb.model.User user)
+    public void setUserCreated(org.semanticwb.model.User user)
     {
         addObjectProperty(vocabulary.userCreated, user);
     }
 
     public void removeUserCreated()
     {
-        getRDFResource().removeAll(vocabulary.userCreated.getRDFProperty());
+        removeProperty(vocabulary.userCreated);
     }
 
     public User getUserCreated()

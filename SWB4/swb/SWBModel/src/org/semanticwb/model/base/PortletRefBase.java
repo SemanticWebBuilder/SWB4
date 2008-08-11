@@ -15,6 +15,23 @@ public class PortletRefBase extends SemanticObject
         super(res);
     }
 
+    public void setPortlet(org.semanticwb.model.Portlet portlet)
+    {
+        addObjectProperty(vocabulary.portlet, portlet);
+    }
+
+    public void removePortlet()
+    {
+        removeProperty(vocabulary.portlet);
+    }
+
+    public Portlet getPortlet()
+    {
+         StmtIterator stit=getRDFResource().listProperties(vocabulary.portlet.getRDFProperty());
+         SemanticIterator<org.semanticwb.model.Portlet> it=new SemanticIterator<org.semanticwb.model.Portlet>(Portlet.class, stit);
+         return it.next();
+    }
+
     public int getStatus()
     {
         return getIntProperty(vocabulary.status);
@@ -33,28 +50,5 @@ public class PortletRefBase extends SemanticObject
     public void setPriority(int priority)
     {
         setLongProperty(vocabulary.priority, priority);
-    }
-
-    public SemanticIterator<org.semanticwb.model.Portlet> listPortlet()
-    {
-        StmtIterator stit=getRDFResource().listProperties(vocabulary.hasPortlet.getRDFProperty());
-        return new SemanticIterator<org.semanticwb.model.Portlet>(org.semanticwb.model.Portlet.class, stit);
-    }
-
-    public void addPortlet(org.semanticwb.model.Portlet portlet)
-    {
-        addObjectProperty(vocabulary.hasPortlet, portlet);
-    }
-
-    public void removeAllPortlet()
-    {
-        getRDFResource().removeAll(vocabulary.hasPortlet.getRDFProperty());
-    }
-
-    public Portlet getPortlet()
-    {
-         StmtIterator stit=getRDFResource().listProperties(vocabulary.hasPortlet.getRDFProperty());
-         SemanticIterator<org.semanticwb.model.Portlet> it=new SemanticIterator<org.semanticwb.model.Portlet>(Portlet.class, stit);
-         return it.next();
     }
 }

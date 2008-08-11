@@ -28,7 +28,12 @@ public class PortletableBase extends SemanticObject
 
     public void removeAllPortlet()
     {
-        getRDFResource().removeAll(vocabulary.hasPortlet.getRDFProperty());
+        removeProperty(vocabulary.hasPortlet);
+    }
+
+    public void removePortlet(org.semanticwb.model.Portlet portlet)
+    {
+        removeObjectProperty(vocabulary.hasPortlet,portlet);
     }
 
     public Portlet getPortlet()

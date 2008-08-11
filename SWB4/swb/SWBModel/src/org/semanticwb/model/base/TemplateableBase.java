@@ -28,7 +28,12 @@ public class TemplateableBase extends SemanticObject
 
     public void removeAllTemplate()
     {
-        getRDFResource().removeAll(vocabulary.hasTemplate.getRDFProperty());
+        removeProperty(vocabulary.hasTemplate);
+    }
+
+    public void removeTemplate(org.semanticwb.model.Template template)
+    {
+        removeObjectProperty(vocabulary.hasTemplate,template);
     }
 
     public Template getTemplate()

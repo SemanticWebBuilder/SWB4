@@ -45,14 +45,14 @@ public class CampBase extends SemanticObject
         setProperty(vocabulary.title, title);
     }
 
-    public void addUserCreated(org.semanticwb.model.User user)
+    public void setUserCreated(org.semanticwb.model.User user)
     {
         addObjectProperty(vocabulary.userCreated, user);
     }
 
     public void removeUserCreated()
     {
-        getRDFResource().removeAll(vocabulary.userCreated.getRDFProperty());
+        removeProperty(vocabulary.userCreated);
     }
 
     public User getUserCreated()
@@ -82,14 +82,14 @@ public class CampBase extends SemanticObject
         setDateProperty(vocabulary.updated, updated);
     }
 
-    public void addUserModified(org.semanticwb.model.User user)
+    public void setUserModified(org.semanticwb.model.User user)
     {
         addObjectProperty(vocabulary.userModified, user);
     }
 
     public void removeUserModified()
     {
-        getRDFResource().removeAll(vocabulary.userModified.getRDFProperty());
+        removeProperty(vocabulary.userModified);
     }
 
     public User getUserModified()
@@ -112,7 +112,12 @@ public class CampBase extends SemanticObject
 
     public void removeAllCalendar()
     {
-        getRDFResource().removeAll(vocabulary.hasCalendar.getRDFProperty());
+        removeProperty(vocabulary.hasCalendar);
+    }
+
+    public void removeCalendar(org.semanticwb.model.Calendar calendar)
+    {
+        removeObjectProperty(vocabulary.hasCalendar,calendar);
     }
 
     public Calendar getCalendar()
@@ -135,7 +140,12 @@ public class CampBase extends SemanticObject
 
     public void removeAllRole()
     {
-        getRDFResource().removeAll(vocabulary.hasRole.getRDFProperty());
+        removeProperty(vocabulary.hasRole);
+    }
+
+    public void removeRole(org.semanticwb.model.Role role)
+    {
+        removeObjectProperty(vocabulary.hasRole,role);
     }
 
     public Role getRole()
@@ -168,7 +178,12 @@ public class CampBase extends SemanticObject
 
     public void removeAllRule()
     {
-        getRDFResource().removeAll(vocabulary.hasRule.getRDFProperty());
+        removeProperty(vocabulary.hasRule);
+    }
+
+    public void removeRule(org.semanticwb.model.Rule rule)
+    {
+        removeObjectProperty(vocabulary.hasRule,rule);
     }
 
     public Rule getRule()

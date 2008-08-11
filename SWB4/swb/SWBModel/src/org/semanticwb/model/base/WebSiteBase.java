@@ -35,14 +35,14 @@ public class WebSiteBase extends SemanticObject
         setBooleanProperty(vocabulary.deleted, deleted);
     }
 
-    public void addUserModified(org.semanticwb.model.User user)
+    public void setUserModified(org.semanticwb.model.User user)
     {
         addObjectProperty(vocabulary.userModified, user);
     }
 
     public void removeUserModified()
     {
-        getRDFResource().removeAll(vocabulary.userModified.getRDFProperty());
+        removeProperty(vocabulary.userModified);
     }
 
     public User getUserModified()
@@ -65,7 +65,12 @@ public class WebSiteBase extends SemanticObject
 
     public void removeAllHome()
     {
-        getRDFResource().removeAll(vocabulary.hasHome.getRDFProperty());
+        removeProperty(vocabulary.hasHome);
+    }
+
+    public void removeHome(org.semanticwb.model.HomePage homepage)
+    {
+        removeObjectProperty(vocabulary.hasHome,homepage);
     }
 
     public HomePage getHome()
@@ -95,14 +100,14 @@ public class WebSiteBase extends SemanticObject
         setProperty(vocabulary.description, description);
     }
 
-    public void addUserCreated(org.semanticwb.model.User user)
+    public void setUserCreated(org.semanticwb.model.User user)
     {
         addObjectProperty(vocabulary.userCreated, user);
     }
 
     public void removeUserCreated()
     {
-        getRDFResource().removeAll(vocabulary.userCreated.getRDFProperty());
+        removeProperty(vocabulary.userCreated);
     }
 
     public User getUserCreated()

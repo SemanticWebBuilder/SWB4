@@ -15,25 +15,19 @@ public class TemplateRefBase extends SemanticObject
         super(res);
     }
 
-    public SemanticIterator<org.semanticwb.model.Template> listTemplate()
+    public void setTemplate(org.semanticwb.model.Template template)
     {
-        StmtIterator stit=getRDFResource().listProperties(vocabulary.hasTemplate.getRDFProperty());
-        return new SemanticIterator<org.semanticwb.model.Template>(org.semanticwb.model.Template.class, stit);
+        addObjectProperty(vocabulary.template, template);
     }
 
-    public void addTemplate(org.semanticwb.model.Template template)
+    public void removeTemplate()
     {
-        addObjectProperty(vocabulary.hasTemplate, template);
-    }
-
-    public void removeAllTemplate()
-    {
-        getRDFResource().removeAll(vocabulary.hasTemplate.getRDFProperty());
+        removeProperty(vocabulary.template);
     }
 
     public Template getTemplate()
     {
-         StmtIterator stit=getRDFResource().listProperties(vocabulary.hasTemplate.getRDFProperty());
+         StmtIterator stit=getRDFResource().listProperties(vocabulary.template.getRDFProperty());
          SemanticIterator<org.semanticwb.model.Template> it=new SemanticIterator<org.semanticwb.model.Template>(Template.class, stit);
          return it.next();
     }

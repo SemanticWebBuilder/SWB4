@@ -28,7 +28,12 @@ public class WebPageableBase extends SemanticObject
 
     public void removeAllWebPage()
     {
-        getRDFResource().removeAll(vocabulary.hasWebPage.getRDFProperty());
+        removeProperty(vocabulary.hasWebPage);
+    }
+
+    public void removeWebPage(org.semanticwb.model.WebPage webpage)
+    {
+        removeObjectProperty(vocabulary.hasWebPage,webpage);
     }
 
     public WebPage getWebPage()

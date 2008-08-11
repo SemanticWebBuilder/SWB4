@@ -26,7 +26,6 @@ public class SWBVocabulary
     public final SemanticClass IPFilter;
     public final SemanticClass PFlow;
     public final SemanticClass ApplicationPortlet;
-    public final SemanticClass SWBModel;
     public final SemanticClass RuleRefable;
     public final SemanticClass Valueable;
     public final SemanticClass Calendarable;
@@ -73,31 +72,36 @@ public class SWBVocabulary
     public final SemanticProperty hasReference;
     public final SemanticProperty created;
     public final SemanticProperty userModified;
-    public final SemanticProperty useWebSite;
     public final SemanticProperty title;
+    public final SemanticProperty webSite;
     public final SemanticProperty description;
     public final SemanticProperty userCreated;
     public final SemanticProperty updated;
     public final SemanticProperty hasRoleRef;
     public final SemanticProperty deleted;
-    public final SemanticProperty useLanguage;
     public final SemanticProperty actualVersion;
+    public final SemanticProperty language;
     public final SemanticProperty lastVersion;
     public final SemanticProperty hasRuleRef;
     public final SemanticProperty hasCalendar;
     public final SemanticProperty priority;
+    public final SemanticProperty template;
     public final SemanticProperty hasTemplate;
     public final SemanticProperty hasPortletRef;
     public final SemanticProperty hasTemplateRef;
     public final SemanticProperty isChildOf;
     public final SemanticProperty hasRule;
     public final SemanticProperty value;
+    public final SemanticProperty rule;
     public final SemanticProperty hasWebPage;
     public final SemanticProperty hasPortlet;
     public final SemanticProperty nextVersion;
+    public final SemanticProperty previousVersion;
     public final SemanticProperty versionComment;
     public final SemanticProperty versionCreated;
+    public final SemanticProperty role;
     public final SemanticProperty hasHome;
+    public final SemanticProperty portlet;
 
 
     public SWBVocabulary()
@@ -120,7 +124,6 @@ public class SWBVocabulary
         IPFilter=vocabulary.getSemanticClass(URI+"IPFilter");
         PFlow=vocabulary.getSemanticClass(URI+"PFlow");
         ApplicationPortlet=vocabulary.getSemanticClass(URI+"ApplicationPortlet");
-        SWBModel=vocabulary.getSemanticClass(URI+"SWBModel");
         RuleRefable=vocabulary.getSemanticClass(URI+"RuleRefable");
         Valueable=vocabulary.getSemanticClass(URI+"Valueable");
         Calendarable=vocabulary.getSemanticClass(URI+"Calendarable");
@@ -167,30 +170,35 @@ public class SWBVocabulary
         hasReference=vocabulary.getSemanticProperty(URI+"hasReference");
         created=vocabulary.getSemanticProperty(URI+"created");
         userModified=vocabulary.getSemanticProperty(URI+"userModified");
-        useWebSite=vocabulary.getSemanticProperty(URI+"useWebSite");
         title=vocabulary.getSemanticProperty(URI+"title");
+        webSite=vocabulary.getSemanticProperty(URI+"webSite");
         description=vocabulary.getSemanticProperty(URI+"description");
         userCreated=vocabulary.getSemanticProperty(URI+"userCreated");
         updated=vocabulary.getSemanticProperty(URI+"updated");
         hasRoleRef=vocabulary.getSemanticProperty(URI+"hasRoleRef");
         deleted=vocabulary.getSemanticProperty(URI+"deleted");
-        useLanguage=vocabulary.getSemanticProperty(URI+"useLanguage");
         actualVersion=vocabulary.getSemanticProperty(URI+"actualVersion");
+        language=vocabulary.getSemanticProperty(URI+"language");
         lastVersion=vocabulary.getSemanticProperty(URI+"lastVersion");
         hasRuleRef=vocabulary.getSemanticProperty(URI+"hasRuleRef");
         hasCalendar=vocabulary.getSemanticProperty(URI+"hasCalendar");
         priority=vocabulary.getSemanticProperty(URI+"priority");
+        template=vocabulary.getSemanticProperty(URI+"template");
         hasTemplate=vocabulary.getSemanticProperty(URI+"hasTemplate");
         hasPortletRef=vocabulary.getSemanticProperty(URI+"hasPortletRef");
         hasTemplateRef=vocabulary.getSemanticProperty(URI+"hasTemplateRef");
         isChildOf=vocabulary.getSemanticProperty(URI+"isChildOf");
         hasRule=vocabulary.getSemanticProperty(URI+"hasRule");
         value=vocabulary.getSemanticProperty(URI+"value");
+        rule=vocabulary.getSemanticProperty(URI+"rule");
         hasWebPage=vocabulary.getSemanticProperty(URI+"hasWebPage");
         hasPortlet=vocabulary.getSemanticProperty(URI+"hasPortlet");
         nextVersion=vocabulary.getSemanticProperty(URI+"nextVersion");
+        previousVersion=vocabulary.getSemanticProperty(URI+"previousVersion");
         versionComment=vocabulary.getSemanticProperty(URI+"versionComment");
         versionCreated=vocabulary.getSemanticProperty(URI+"versionCreated");
+        role=vocabulary.getSemanticProperty(URI+"role");
         hasHome=vocabulary.getSemanticProperty(URI+"hasHome");
+        portlet=vocabulary.getSemanticProperty(URI+"portlet");
     }
 }

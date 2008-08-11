@@ -8,30 +8,36 @@ import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
 public class SWBContextBase
 {
-   private static SWBVocabulary vocabulary=new SWBVocabulary();
-   private static SemanticMgr mgr=SWBInstance.getSemanticMgr();
+    private static SWBVocabulary vocabulary=new SWBVocabulary();
+    private static SemanticMgr mgr=SWBInstance.getSemanticMgr();
     public static SWBVocabulary getVocabulary()
     {
         return vocabulary;
     }
     public static void removeObject(String uri)
     {
-         removeObject(mgr.getOntology().getSemanticObject(uri));
+        removeObject(mgr.getOntology().getSemanticObject(uri));
     }
-   public static void removeObject(SemanticObject obj)
-   {
-       if(obj!=null)
-       {
-           mgr.getOntology().getRDFOntModel().remove(obj.getRDFResource(), null, null);
-       }
-   }
+    public static void removeObject(SemanticObject obj)
+    {
+        if(obj!=null)
+        {
+            mgr.getOntology().getRDFOntModel().remove(obj.getRDFResource(), null, null);
+        }
+    }
     public static User getUser(String uri)
     {
         return (User)mgr.getOntology().getSemanticObject(uri,vocabulary.User);
     }
-    public static User createUser(SemanticModel model, String uri)
+    public static User createUser(SemanticModel model, String id)
     {
-        return (User)model.createSemanticObject(uri, vocabulary.User);
+        return (User)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.User.getName()+"#"
+                +id, vocabulary.User);
+    }
+    public static User createUser(SemanticModel model)
+    {
+        return (User)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.User.getName()+"#"
+                +SWBInstance.getCounterValue(model.getName()+"/"+vocabulary.User.getName()), vocabulary.User);
     }
     public static Iterator<org.semanticwb.model.User> listUsers()
     {
@@ -41,9 +47,15 @@ public class SWBContextBase
     {
         return (Calendar)mgr.getOntology().getSemanticObject(uri,vocabulary.Calendar);
     }
-    public static Calendar createCalendar(SemanticModel model, String uri)
+    public static Calendar createCalendar(SemanticModel model, String id)
     {
-        return (Calendar)model.createSemanticObject(uri, vocabulary.Calendar);
+        return (Calendar)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.Calendar.getName()+"#"
+                +id, vocabulary.Calendar);
+    }
+    public static Calendar createCalendar(SemanticModel model)
+    {
+        return (Calendar)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.Calendar.getName()+"#"
+                +SWBInstance.getCounterValue(model.getName()+"/"+vocabulary.Calendar.getName()), vocabulary.Calendar);
     }
     public static Iterator<org.semanticwb.model.Calendar> listCalendars()
     {
@@ -53,9 +65,10 @@ public class SWBContextBase
     {
         return (Community)mgr.getOntology().getSemanticObject(uri,vocabulary.Community);
     }
-    public static Community createCommunity(SemanticModel model, String uri)
+    public static Community createCommunity(SemanticModel model, String id)
     {
-        return (Community)model.createSemanticObject(uri, vocabulary.Community);
+        return (Community)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.Community.getName()+"#"
+                +id, vocabulary.Community);
     }
     public static Iterator<org.semanticwb.model.Community> listCommunitys()
     {
@@ -65,9 +78,15 @@ public class SWBContextBase
     {
         return (ContentPortlet)mgr.getOntology().getSemanticObject(uri,vocabulary.ContentPortlet);
     }
-    public static ContentPortlet createContentPortlet(SemanticModel model, String uri)
+    public static ContentPortlet createContentPortlet(SemanticModel model, String id)
     {
-        return (ContentPortlet)model.createSemanticObject(uri, vocabulary.ContentPortlet);
+        return (ContentPortlet)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.ContentPortlet.getName()+"#"
+                +id, vocabulary.ContentPortlet);
+    }
+    public static ContentPortlet createContentPortlet(SemanticModel model)
+    {
+        return (ContentPortlet)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.ContentPortlet.getName()+"#"
+                +SWBInstance.getCounterValue(model.getName()+"/"+vocabulary.ContentPortlet.getName()), vocabulary.ContentPortlet);
     }
     public static Iterator<org.semanticwb.model.ContentPortlet> listContentPortlets()
     {
@@ -77,9 +96,15 @@ public class SWBContextBase
     {
         return (TemplateRef)mgr.getOntology().getSemanticObject(uri,vocabulary.TemplateRef);
     }
-    public static TemplateRef createTemplateRef(SemanticModel model, String uri)
+    public static TemplateRef createTemplateRef(SemanticModel model, String id)
     {
-        return (TemplateRef)model.createSemanticObject(uri, vocabulary.TemplateRef);
+        return (TemplateRef)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.TemplateRef.getName()+"#"
+                +id, vocabulary.TemplateRef);
+    }
+    public static TemplateRef createTemplateRef(SemanticModel model)
+    {
+        return (TemplateRef)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.TemplateRef.getName()+"#"
+                +SWBInstance.getCounterValue(model.getName()+"/"+vocabulary.TemplateRef.getName()), vocabulary.TemplateRef);
     }
     public static Iterator<org.semanticwb.model.TemplateRef> listTemplateRefs()
     {
@@ -89,9 +114,10 @@ public class SWBContextBase
     {
         return (Templateable)mgr.getOntology().getSemanticObject(uri,vocabulary.Templateable);
     }
-    public static Templateable createTemplateable(SemanticModel model, String uri)
+    public static Templateable createTemplateable(SemanticModel model, String id)
     {
-        return (Templateable)model.createSemanticObject(uri, vocabulary.Templateable);
+        return (Templateable)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.Templateable.getName()+"#"
+                +id, vocabulary.Templateable);
     }
     public static Iterator<org.semanticwb.model.Templateable> listTemplateables()
     {
@@ -101,9 +127,10 @@ public class SWBContextBase
     {
         return (Deleteable)mgr.getOntology().getSemanticObject(uri,vocabulary.Deleteable);
     }
-    public static Deleteable createDeleteable(SemanticModel model, String uri)
+    public static Deleteable createDeleteable(SemanticModel model, String id)
     {
-        return (Deleteable)model.createSemanticObject(uri, vocabulary.Deleteable);
+        return (Deleteable)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.Deleteable.getName()+"#"
+                +id, vocabulary.Deleteable);
     }
     public static Iterator<org.semanticwb.model.Deleteable> listDeleteables()
     {
@@ -113,9 +140,15 @@ public class SWBContextBase
     {
         return (Reference)mgr.getOntology().getSemanticObject(uri,vocabulary.Reference);
     }
-    public static Reference createReference(SemanticModel model, String uri)
+    public static Reference createReference(SemanticModel model, String id)
     {
-        return (Reference)model.createSemanticObject(uri, vocabulary.Reference);
+        return (Reference)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.Reference.getName()+"#"
+                +id, vocabulary.Reference);
+    }
+    public static Reference createReference(SemanticModel model)
+    {
+        return (Reference)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.Reference.getName()+"#"
+                +SWBInstance.getCounterValue(model.getName()+"/"+vocabulary.Reference.getName()), vocabulary.Reference);
     }
     public static Iterator<org.semanticwb.model.Reference> listReferences()
     {
@@ -125,9 +158,10 @@ public class SWBContextBase
     {
         return (Roleable)mgr.getOntology().getSemanticObject(uri,vocabulary.Roleable);
     }
-    public static Roleable createRoleable(SemanticModel model, String uri)
+    public static Roleable createRoleable(SemanticModel model, String id)
     {
-        return (Roleable)model.createSemanticObject(uri, vocabulary.Roleable);
+        return (Roleable)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.Roleable.getName()+"#"
+                +id, vocabulary.Roleable);
     }
     public static Iterator<org.semanticwb.model.Roleable> listRoleables()
     {
@@ -137,9 +171,10 @@ public class SWBContextBase
     {
         return (HomePage)mgr.getOntology().getSemanticObject(uri,vocabulary.HomePage);
     }
-    public static HomePage createHomePage(SemanticModel model, String uri)
+    public static HomePage createHomePage(SemanticModel model, String id)
     {
-        return (HomePage)model.createSemanticObject(uri, vocabulary.HomePage);
+        return (HomePage)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.HomePage.getName()+"#"
+                +id, vocabulary.HomePage);
     }
     public static Iterator<org.semanticwb.model.HomePage> listHomePages()
     {
@@ -149,9 +184,10 @@ public class SWBContextBase
     {
         return (RoleRefable)mgr.getOntology().getSemanticObject(uri,vocabulary.RoleRefable);
     }
-    public static RoleRefable createRoleRefable(SemanticModel model, String uri)
+    public static RoleRefable createRoleRefable(SemanticModel model, String id)
     {
-        return (RoleRefable)model.createSemanticObject(uri, vocabulary.RoleRefable);
+        return (RoleRefable)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.RoleRefable.getName()+"#"
+                +id, vocabulary.RoleRefable);
     }
     public static Iterator<org.semanticwb.model.RoleRefable> listRoleRefables()
     {
@@ -161,9 +197,10 @@ public class SWBContextBase
     {
         return (Ruleable)mgr.getOntology().getSemanticObject(uri,vocabulary.Ruleable);
     }
-    public static Ruleable createRuleable(SemanticModel model, String uri)
+    public static Ruleable createRuleable(SemanticModel model, String id)
     {
-        return (Ruleable)model.createSemanticObject(uri, vocabulary.Ruleable);
+        return (Ruleable)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.Ruleable.getName()+"#"
+                +id, vocabulary.Ruleable);
     }
     public static Iterator<org.semanticwb.model.Ruleable> listRuleables()
     {
@@ -173,9 +210,15 @@ public class SWBContextBase
     {
         return (IPFilter)mgr.getOntology().getSemanticObject(uri,vocabulary.IPFilter);
     }
-    public static IPFilter createIPFilter(SemanticModel model, String uri)
+    public static IPFilter createIPFilter(SemanticModel model, String id)
     {
-        return (IPFilter)model.createSemanticObject(uri, vocabulary.IPFilter);
+        return (IPFilter)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.IPFilter.getName()+"#"
+                +id, vocabulary.IPFilter);
+    }
+    public static IPFilter createIPFilter(SemanticModel model)
+    {
+        return (IPFilter)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.IPFilter.getName()+"#"
+                +SWBInstance.getCounterValue(model.getName()+"/"+vocabulary.IPFilter.getName()), vocabulary.IPFilter);
     }
     public static Iterator<org.semanticwb.model.IPFilter> listIPFilters()
     {
@@ -185,9 +228,15 @@ public class SWBContextBase
     {
         return (PFlow)mgr.getOntology().getSemanticObject(uri,vocabulary.PFlow);
     }
-    public static PFlow createPFlow(SemanticModel model, String uri)
+    public static PFlow createPFlow(SemanticModel model, String id)
     {
-        return (PFlow)model.createSemanticObject(uri, vocabulary.PFlow);
+        return (PFlow)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.PFlow.getName()+"#"
+                +id, vocabulary.PFlow);
+    }
+    public static PFlow createPFlow(SemanticModel model)
+    {
+        return (PFlow)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.PFlow.getName()+"#"
+                +SWBInstance.getCounterValue(model.getName()+"/"+vocabulary.PFlow.getName()), vocabulary.PFlow);
     }
     public static Iterator<org.semanticwb.model.PFlow> listPFlows()
     {
@@ -197,33 +246,28 @@ public class SWBContextBase
     {
         return (ApplicationPortlet)mgr.getOntology().getSemanticObject(uri,vocabulary.ApplicationPortlet);
     }
-    public static ApplicationPortlet createApplicationPortlet(SemanticModel model, String uri)
+    public static ApplicationPortlet createApplicationPortlet(SemanticModel model, String id)
     {
-        return (ApplicationPortlet)model.createSemanticObject(uri, vocabulary.ApplicationPortlet);
+        return (ApplicationPortlet)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.ApplicationPortlet.getName()+"#"
+                +id, vocabulary.ApplicationPortlet);
+    }
+    public static ApplicationPortlet createApplicationPortlet(SemanticModel model)
+    {
+        return (ApplicationPortlet)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.ApplicationPortlet.getName()+"#"
+                +SWBInstance.getCounterValue(model.getName()+"/"+vocabulary.ApplicationPortlet.getName()), vocabulary.ApplicationPortlet);
     }
     public static Iterator<org.semanticwb.model.ApplicationPortlet> listApplicationPortlets()
     {
         return (Iterator<org.semanticwb.model.ApplicationPortlet>)vocabulary.ApplicationPortlet.listInstances();
     }
-    public static SWBModel getSWBModel(String uri)
-    {
-        return (SWBModel)mgr.getOntology().getSemanticObject(uri,vocabulary.SWBModel);
-    }
-    public static SWBModel createSWBModel(SemanticModel model, String uri)
-    {
-        return (SWBModel)model.createSemanticObject(uri, vocabulary.SWBModel);
-    }
-    public static Iterator<org.semanticwb.model.SWBModel> listSWBModels()
-    {
-        return (Iterator<org.semanticwb.model.SWBModel>)vocabulary.SWBModel.listInstances();
-    }
     public static RuleRefable getRuleRefable(String uri)
     {
         return (RuleRefable)mgr.getOntology().getSemanticObject(uri,vocabulary.RuleRefable);
     }
-    public static RuleRefable createRuleRefable(SemanticModel model, String uri)
+    public static RuleRefable createRuleRefable(SemanticModel model, String id)
     {
-        return (RuleRefable)model.createSemanticObject(uri, vocabulary.RuleRefable);
+        return (RuleRefable)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.RuleRefable.getName()+"#"
+                +id, vocabulary.RuleRefable);
     }
     public static Iterator<org.semanticwb.model.RuleRefable> listRuleRefables()
     {
@@ -233,9 +277,10 @@ public class SWBContextBase
     {
         return (Valueable)mgr.getOntology().getSemanticObject(uri,vocabulary.Valueable);
     }
-    public static Valueable createValueable(SemanticModel model, String uri)
+    public static Valueable createValueable(SemanticModel model, String id)
     {
-        return (Valueable)model.createSemanticObject(uri, vocabulary.Valueable);
+        return (Valueable)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.Valueable.getName()+"#"
+                +id, vocabulary.Valueable);
     }
     public static Iterator<org.semanticwb.model.Valueable> listValueables()
     {
@@ -245,9 +290,10 @@ public class SWBContextBase
     {
         return (Calendarable)mgr.getOntology().getSemanticObject(uri,vocabulary.Calendarable);
     }
-    public static Calendarable createCalendarable(SemanticModel model, String uri)
+    public static Calendarable createCalendarable(SemanticModel model, String id)
     {
-        return (Calendarable)model.createSemanticObject(uri, vocabulary.Calendarable);
+        return (Calendarable)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.Calendarable.getName()+"#"
+                +id, vocabulary.Calendarable);
     }
     public static Iterator<org.semanticwb.model.Calendarable> listCalendarables()
     {
@@ -257,9 +303,10 @@ public class SWBContextBase
     {
         return (PortletRefable)mgr.getOntology().getSemanticObject(uri,vocabulary.PortletRefable);
     }
-    public static PortletRefable createPortletRefable(SemanticModel model, String uri)
+    public static PortletRefable createPortletRefable(SemanticModel model, String id)
     {
-        return (PortletRefable)model.createSemanticObject(uri, vocabulary.PortletRefable);
+        return (PortletRefable)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.PortletRefable.getName()+"#"
+                +id, vocabulary.PortletRefable);
     }
     public static Iterator<org.semanticwb.model.PortletRefable> listPortletRefables()
     {
@@ -269,9 +316,10 @@ public class SWBContextBase
     {
         return (Permission)mgr.getOntology().getSemanticObject(uri,vocabulary.Permission);
     }
-    public static Permission createPermission(SemanticModel model, String uri)
+    public static Permission createPermission(SemanticModel model, String id)
     {
-        return (Permission)model.createSemanticObject(uri, vocabulary.Permission);
+        return (Permission)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.Permission.getName()+"#"
+                +id, vocabulary.Permission);
     }
     public static Iterator<org.semanticwb.model.Permission> listPermissions()
     {
@@ -281,9 +329,10 @@ public class SWBContextBase
     {
         return (TemplateRefable)mgr.getOntology().getSemanticObject(uri,vocabulary.TemplateRefable);
     }
-    public static TemplateRefable createTemplateRefable(SemanticModel model, String uri)
+    public static TemplateRefable createTemplateRefable(SemanticModel model, String id)
     {
-        return (TemplateRefable)model.createSemanticObject(uri, vocabulary.TemplateRefable);
+        return (TemplateRefable)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.TemplateRefable.getName()+"#"
+                +id, vocabulary.TemplateRefable);
     }
     public static Iterator<org.semanticwb.model.TemplateRefable> listTemplateRefables()
     {
@@ -293,9 +342,10 @@ public class SWBContextBase
     {
         return (WebSiteable)mgr.getOntology().getSemanticObject(uri,vocabulary.WebSiteable);
     }
-    public static WebSiteable createWebSiteable(SemanticModel model, String uri)
+    public static WebSiteable createWebSiteable(SemanticModel model, String id)
     {
-        return (WebSiteable)model.createSemanticObject(uri, vocabulary.WebSiteable);
+        return (WebSiteable)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.WebSiteable.getName()+"#"
+                +id, vocabulary.WebSiteable);
     }
     public static Iterator<org.semanticwb.model.WebSiteable> listWebSiteables()
     {
@@ -305,9 +355,15 @@ public class SWBContextBase
     {
         return (RuleRef)mgr.getOntology().getSemanticObject(uri,vocabulary.RuleRef);
     }
-    public static RuleRef createRuleRef(SemanticModel model, String uri)
+    public static RuleRef createRuleRef(SemanticModel model, String id)
     {
-        return (RuleRef)model.createSemanticObject(uri, vocabulary.RuleRef);
+        return (RuleRef)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.RuleRef.getName()+"#"
+                +id, vocabulary.RuleRef);
+    }
+    public static RuleRef createRuleRef(SemanticModel model)
+    {
+        return (RuleRef)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.RuleRef.getName()+"#"
+                +SWBInstance.getCounterValue(model.getName()+"/"+vocabulary.RuleRef.getName()), vocabulary.RuleRef);
     }
     public static Iterator<org.semanticwb.model.RuleRef> listRuleRefs()
     {
@@ -317,9 +373,15 @@ public class SWBContextBase
     {
         return (StrategyPortlet)mgr.getOntology().getSemanticObject(uri,vocabulary.StrategyPortlet);
     }
-    public static StrategyPortlet createStrategyPortlet(SemanticModel model, String uri)
+    public static StrategyPortlet createStrategyPortlet(SemanticModel model, String id)
     {
-        return (StrategyPortlet)model.createSemanticObject(uri, vocabulary.StrategyPortlet);
+        return (StrategyPortlet)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.StrategyPortlet.getName()+"#"
+                +id, vocabulary.StrategyPortlet);
+    }
+    public static StrategyPortlet createStrategyPortlet(SemanticModel model)
+    {
+        return (StrategyPortlet)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.StrategyPortlet.getName()+"#"
+                +SWBInstance.getCounterValue(model.getName()+"/"+vocabulary.StrategyPortlet.getName()), vocabulary.StrategyPortlet);
     }
     public static Iterator<org.semanticwb.model.StrategyPortlet> listStrategyPortlets()
     {
@@ -329,9 +391,10 @@ public class SWBContextBase
     {
         return (Referensable)mgr.getOntology().getSemanticObject(uri,vocabulary.Referensable);
     }
-    public static Referensable createReferensable(SemanticModel model, String uri)
+    public static Referensable createReferensable(SemanticModel model, String id)
     {
-        return (Referensable)model.createSemanticObject(uri, vocabulary.Referensable);
+        return (Referensable)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.Referensable.getName()+"#"
+                +id, vocabulary.Referensable);
     }
     public static Iterator<org.semanticwb.model.Referensable> listReferensables()
     {
@@ -341,9 +404,10 @@ public class SWBContextBase
     {
         return (Groupable)mgr.getOntology().getSemanticObject(uri,vocabulary.Groupable);
     }
-    public static Groupable createGroupable(SemanticModel model, String uri)
+    public static Groupable createGroupable(SemanticModel model, String id)
     {
-        return (Groupable)model.createSemanticObject(uri, vocabulary.Groupable);
+        return (Groupable)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.Groupable.getName()+"#"
+                +id, vocabulary.Groupable);
     }
     public static Iterator<org.semanticwb.model.Groupable> listGroupables()
     {
@@ -353,9 +417,15 @@ public class SWBContextBase
     {
         return (Device)mgr.getOntology().getSemanticObject(uri,vocabulary.Device);
     }
-    public static Device createDevice(SemanticModel model, String uri)
+    public static Device createDevice(SemanticModel model, String id)
     {
-        return (Device)model.createSemanticObject(uri, vocabulary.Device);
+        return (Device)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.Device.getName()+"#"
+                +id, vocabulary.Device);
+    }
+    public static Device createDevice(SemanticModel model)
+    {
+        return (Device)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.Device.getName()+"#"
+                +SWBInstance.getCounterValue(model.getName()+"/"+vocabulary.Device.getName()), vocabulary.Device);
     }
     public static Iterator<org.semanticwb.model.Device> listDevices()
     {
@@ -365,9 +435,15 @@ public class SWBContextBase
     {
         return (SystemPortlet)mgr.getOntology().getSemanticObject(uri,vocabulary.SystemPortlet);
     }
-    public static SystemPortlet createSystemPortlet(SemanticModel model, String uri)
+    public static SystemPortlet createSystemPortlet(SemanticModel model, String id)
     {
-        return (SystemPortlet)model.createSemanticObject(uri, vocabulary.SystemPortlet);
+        return (SystemPortlet)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.SystemPortlet.getName()+"#"
+                +id, vocabulary.SystemPortlet);
+    }
+    public static SystemPortlet createSystemPortlet(SemanticModel model)
+    {
+        return (SystemPortlet)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.SystemPortlet.getName()+"#"
+                +SWBInstance.getCounterValue(model.getName()+"/"+vocabulary.SystemPortlet.getName()), vocabulary.SystemPortlet);
     }
     public static Iterator<org.semanticwb.model.SystemPortlet> listSystemPortlets()
     {
@@ -377,9 +453,10 @@ public class SWBContextBase
     {
         return (Localeable)mgr.getOntology().getSemanticObject(uri,vocabulary.Localeable);
     }
-    public static Localeable createLocaleable(SemanticModel model, String uri)
+    public static Localeable createLocaleable(SemanticModel model, String id)
     {
-        return (Localeable)model.createSemanticObject(uri, vocabulary.Localeable);
+        return (Localeable)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.Localeable.getName()+"#"
+                +id, vocabulary.Localeable);
     }
     public static Iterator<org.semanticwb.model.Localeable> listLocaleables()
     {
@@ -389,9 +466,15 @@ public class SWBContextBase
     {
         return (Camp)mgr.getOntology().getSemanticObject(uri,vocabulary.Camp);
     }
-    public static Camp createCamp(SemanticModel model, String uri)
+    public static Camp createCamp(SemanticModel model, String id)
     {
-        return (Camp)model.createSemanticObject(uri, vocabulary.Camp);
+        return (Camp)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.Camp.getName()+"#"
+                +id, vocabulary.Camp);
+    }
+    public static Camp createCamp(SemanticModel model)
+    {
+        return (Camp)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.Camp.getName()+"#"
+                +SWBInstance.getCounterValue(model.getName()+"/"+vocabulary.Camp.getName()), vocabulary.Camp);
     }
     public static Iterator<org.semanticwb.model.Camp> listCamps()
     {
@@ -401,9 +484,15 @@ public class SWBContextBase
     {
         return (Dns)mgr.getOntology().getSemanticObject(uri,vocabulary.Dns);
     }
-    public static Dns createDns(SemanticModel model, String uri)
+    public static Dns createDns(SemanticModel model, String id)
     {
-        return (Dns)model.createSemanticObject(uri, vocabulary.Dns);
+        return (Dns)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.Dns.getName()+"#"
+                +id, vocabulary.Dns);
+    }
+    public static Dns createDns(SemanticModel model)
+    {
+        return (Dns)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.Dns.getName()+"#"
+                +SWBInstance.getCounterValue(model.getName()+"/"+vocabulary.Dns.getName()), vocabulary.Dns);
     }
     public static Iterator<org.semanticwb.model.Dns> listDnss()
     {
@@ -413,9 +502,10 @@ public class SWBContextBase
     {
         return (Portletable)mgr.getOntology().getSemanticObject(uri,vocabulary.Portletable);
     }
-    public static Portletable createPortletable(SemanticModel model, String uri)
+    public static Portletable createPortletable(SemanticModel model, String id)
     {
-        return (Portletable)model.createSemanticObject(uri, vocabulary.Portletable);
+        return (Portletable)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.Portletable.getName()+"#"
+                +id, vocabulary.Portletable);
     }
     public static Iterator<org.semanticwb.model.Portletable> listPortletables()
     {
@@ -425,9 +515,10 @@ public class SWBContextBase
     {
         return (UserRepository)mgr.getOntology().getSemanticObject(uri,vocabulary.UserRepository);
     }
-    public static UserRepository createUserRepository(SemanticModel model, String uri)
+    public static UserRepository createUserRepository(SemanticModel model, String id)
     {
-        return (UserRepository)model.createSemanticObject(uri, vocabulary.UserRepository);
+        return (UserRepository)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.UserRepository.getName()+"#"
+                +id, vocabulary.UserRepository);
     }
     public static Iterator<org.semanticwb.model.UserRepository> listUserRepositorys()
     {
@@ -437,9 +528,15 @@ public class SWBContextBase
     {
         return (Template)mgr.getOntology().getSemanticObject(uri,vocabulary.Template);
     }
-    public static Template createTemplate(SemanticModel model, String uri)
+    public static Template createTemplate(SemanticModel model, String id)
     {
-        return (Template)model.createSemanticObject(uri, vocabulary.Template);
+        return (Template)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.Template.getName()+"#"
+                +id, vocabulary.Template);
+    }
+    public static Template createTemplate(SemanticModel model)
+    {
+        return (Template)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.Template.getName()+"#"
+                +SWBInstance.getCounterValue(model.getName()+"/"+vocabulary.Template.getName()), vocabulary.Template);
     }
     public static Iterator<org.semanticwb.model.Template> listTemplates()
     {
@@ -449,9 +546,10 @@ public class SWBContextBase
     {
         return (Priorityable)mgr.getOntology().getSemanticObject(uri,vocabulary.Priorityable);
     }
-    public static Priorityable createPriorityable(SemanticModel model, String uri)
+    public static Priorityable createPriorityable(SemanticModel model, String id)
     {
-        return (Priorityable)model.createSemanticObject(uri, vocabulary.Priorityable);
+        return (Priorityable)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.Priorityable.getName()+"#"
+                +id, vocabulary.Priorityable);
     }
     public static Iterator<org.semanticwb.model.Priorityable> listPriorityables()
     {
@@ -461,9 +559,15 @@ public class SWBContextBase
     {
         return (Role)mgr.getOntology().getSemanticObject(uri,vocabulary.Role);
     }
-    public static Role createRole(SemanticModel model, String uri)
+    public static Role createRole(SemanticModel model, String id)
     {
-        return (Role)model.createSemanticObject(uri, vocabulary.Role);
+        return (Role)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.Role.getName()+"#"
+                +id, vocabulary.Role);
+    }
+    public static Role createRole(SemanticModel model)
+    {
+        return (Role)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.Role.getName()+"#"
+                +SWBInstance.getCounterValue(model.getName()+"/"+vocabulary.Role.getName()), vocabulary.Role);
     }
     public static Iterator<org.semanticwb.model.Role> listRoles()
     {
@@ -473,9 +577,15 @@ public class SWBContextBase
     {
         return (VersionInfo)mgr.getOntology().getSemanticObject(uri,vocabulary.VersionInfo);
     }
-    public static VersionInfo createVersionInfo(SemanticModel model, String uri)
+    public static VersionInfo createVersionInfo(SemanticModel model, String id)
     {
-        return (VersionInfo)model.createSemanticObject(uri, vocabulary.VersionInfo);
+        return (VersionInfo)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.VersionInfo.getName()+"#"
+                +id, vocabulary.VersionInfo);
+    }
+    public static VersionInfo createVersionInfo(SemanticModel model)
+    {
+        return (VersionInfo)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.VersionInfo.getName()+"#"
+                +SWBInstance.getCounterValue(model.getName()+"/"+vocabulary.VersionInfo.getName()), vocabulary.VersionInfo);
     }
     public static Iterator<org.semanticwb.model.VersionInfo> listVersionInfos()
     {
@@ -485,9 +595,15 @@ public class SWBContextBase
     {
         return (Portlet)mgr.getOntology().getSemanticObject(uri,vocabulary.Portlet);
     }
-    public static Portlet createPortlet(SemanticModel model, String uri)
+    public static Portlet createPortlet(SemanticModel model, String id)
     {
-        return (Portlet)model.createSemanticObject(uri, vocabulary.Portlet);
+        return (Portlet)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.Portlet.getName()+"#"
+                +id, vocabulary.Portlet);
+    }
+    public static Portlet createPortlet(SemanticModel model)
+    {
+        return (Portlet)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.Portlet.getName()+"#"
+                +SWBInstance.getCounterValue(model.getName()+"/"+vocabulary.Portlet.getName()), vocabulary.Portlet);
     }
     public static Iterator<org.semanticwb.model.Portlet> listPortlets()
     {
@@ -497,9 +613,10 @@ public class SWBContextBase
     {
         return (Descriptiveable)mgr.getOntology().getSemanticObject(uri,vocabulary.Descriptiveable);
     }
-    public static Descriptiveable createDescriptiveable(SemanticModel model, String uri)
+    public static Descriptiveable createDescriptiveable(SemanticModel model, String id)
     {
-        return (Descriptiveable)model.createSemanticObject(uri, vocabulary.Descriptiveable);
+        return (Descriptiveable)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.Descriptiveable.getName()+"#"
+                +id, vocabulary.Descriptiveable);
     }
     public static Iterator<org.semanticwb.model.Descriptiveable> listDescriptiveables()
     {
@@ -509,9 +626,10 @@ public class SWBContextBase
     {
         return (Versionable)mgr.getOntology().getSemanticObject(uri,vocabulary.Versionable);
     }
-    public static Versionable createVersionable(SemanticModel model, String uri)
+    public static Versionable createVersionable(SemanticModel model, String id)
     {
-        return (Versionable)model.createSemanticObject(uri, vocabulary.Versionable);
+        return (Versionable)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.Versionable.getName()+"#"
+                +id, vocabulary.Versionable);
     }
     public static Iterator<org.semanticwb.model.Versionable> listVersionables()
     {
@@ -521,9 +639,15 @@ public class SWBContextBase
     {
         return (RoleRef)mgr.getOntology().getSemanticObject(uri,vocabulary.RoleRef);
     }
-    public static RoleRef createRoleRef(SemanticModel model, String uri)
+    public static RoleRef createRoleRef(SemanticModel model, String id)
     {
-        return (RoleRef)model.createSemanticObject(uri, vocabulary.RoleRef);
+        return (RoleRef)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.RoleRef.getName()+"#"
+                +id, vocabulary.RoleRef);
+    }
+    public static RoleRef createRoleRef(SemanticModel model)
+    {
+        return (RoleRef)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.RoleRef.getName()+"#"
+                +SWBInstance.getCounterValue(model.getName()+"/"+vocabulary.RoleRef.getName()), vocabulary.RoleRef);
     }
     public static Iterator<org.semanticwb.model.RoleRef> listRoleRefs()
     {
@@ -533,9 +657,15 @@ public class SWBContextBase
     {
         return (Rule)mgr.getOntology().getSemanticObject(uri,vocabulary.Rule);
     }
-    public static Rule createRule(SemanticModel model, String uri)
+    public static Rule createRule(SemanticModel model, String id)
     {
-        return (Rule)model.createSemanticObject(uri, vocabulary.Rule);
+        return (Rule)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.Rule.getName()+"#"
+                +id, vocabulary.Rule);
+    }
+    public static Rule createRule(SemanticModel model)
+    {
+        return (Rule)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.Rule.getName()+"#"
+                +SWBInstance.getCounterValue(model.getName()+"/"+vocabulary.Rule.getName()), vocabulary.Rule);
     }
     public static Iterator<org.semanticwb.model.Rule> listRules()
     {
@@ -545,9 +675,10 @@ public class SWBContextBase
     {
         return (Statusable)mgr.getOntology().getSemanticObject(uri,vocabulary.Statusable);
     }
-    public static Statusable createStatusable(SemanticModel model, String uri)
+    public static Statusable createStatusable(SemanticModel model, String id)
     {
-        return (Statusable)model.createSemanticObject(uri, vocabulary.Statusable);
+        return (Statusable)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.Statusable.getName()+"#"
+                +id, vocabulary.Statusable);
     }
     public static Iterator<org.semanticwb.model.Statusable> listStatusables()
     {
@@ -557,9 +688,10 @@ public class SWBContextBase
     {
         return (WebPage)mgr.getOntology().getSemanticObject(uri,vocabulary.WebPage);
     }
-    public static WebPage createWebPage(SemanticModel model, String uri)
+    public static WebPage createWebPage(SemanticModel model, String id)
     {
-        return (WebPage)model.createSemanticObject(uri, vocabulary.WebPage);
+        return (WebPage)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.WebPage.getName()+"#"
+                +id, vocabulary.WebPage);
     }
     public static Iterator<org.semanticwb.model.WebPage> listWebPages()
     {
@@ -569,9 +701,10 @@ public class SWBContextBase
     {
         return (WebPageable)mgr.getOntology().getSemanticObject(uri,vocabulary.WebPageable);
     }
-    public static WebPageable createWebPageable(SemanticModel model, String uri)
+    public static WebPageable createWebPageable(SemanticModel model, String id)
     {
-        return (WebPageable)model.createSemanticObject(uri, vocabulary.WebPageable);
+        return (WebPageable)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.WebPageable.getName()+"#"
+                +id, vocabulary.WebPageable);
     }
     public static Iterator<org.semanticwb.model.WebPageable> listWebPageables()
     {
@@ -581,9 +714,10 @@ public class SWBContextBase
     {
         return (WebSite)mgr.getOntology().getSemanticObject(uri,vocabulary.WebSite);
     }
-    public static WebSite createWebSite(SemanticModel model, String uri)
+    public static WebSite createWebSite(SemanticModel model, String id)
     {
-        return (WebSite)model.createSemanticObject(uri, vocabulary.WebSite);
+        return (WebSite)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.WebSite.getName()+"#"
+                +id, vocabulary.WebSite);
     }
     public static Iterator<org.semanticwb.model.WebSite> listWebSites()
     {
@@ -593,9 +727,15 @@ public class SWBContextBase
     {
         return (ObjectGroup)mgr.getOntology().getSemanticObject(uri,vocabulary.ObjectGroup);
     }
-    public static ObjectGroup createObjectGroup(SemanticModel model, String uri)
+    public static ObjectGroup createObjectGroup(SemanticModel model, String id)
     {
-        return (ObjectGroup)model.createSemanticObject(uri, vocabulary.ObjectGroup);
+        return (ObjectGroup)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.ObjectGroup.getName()+"#"
+                +id, vocabulary.ObjectGroup);
+    }
+    public static ObjectGroup createObjectGroup(SemanticModel model)
+    {
+        return (ObjectGroup)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.ObjectGroup.getName()+"#"
+                +SWBInstance.getCounterValue(model.getName()+"/"+vocabulary.ObjectGroup.getName()), vocabulary.ObjectGroup);
     }
     public static Iterator<org.semanticwb.model.ObjectGroup> listObjectGroups()
     {
@@ -605,9 +745,10 @@ public class SWBContextBase
     {
         return (Language)mgr.getOntology().getSemanticObject(uri,vocabulary.Language);
     }
-    public static Language createLanguage(SemanticModel model, String uri)
+    public static Language createLanguage(SemanticModel model, String id)
     {
-        return (Language)model.createSemanticObject(uri, vocabulary.Language);
+        return (Language)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.Language.getName()+"#"
+                +id, vocabulary.Language);
     }
     public static Iterator<org.semanticwb.model.Language> listLanguages()
     {
@@ -617,9 +758,15 @@ public class SWBContextBase
     {
         return (PortletRef)mgr.getOntology().getSemanticObject(uri,vocabulary.PortletRef);
     }
-    public static PortletRef createPortletRef(SemanticModel model, String uri)
+    public static PortletRef createPortletRef(SemanticModel model, String id)
     {
-        return (PortletRef)model.createSemanticObject(uri, vocabulary.PortletRef);
+        return (PortletRef)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.PortletRef.getName()+"#"
+                +id, vocabulary.PortletRef);
+    }
+    public static PortletRef createPortletRef(SemanticModel model)
+    {
+        return (PortletRef)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.PortletRef.getName()+"#"
+                +SWBInstance.getCounterValue(model.getName()+"/"+vocabulary.PortletRef.getName()), vocabulary.PortletRef);
     }
     public static Iterator<org.semanticwb.model.PortletRef> listPortletRefs()
     {
@@ -629,9 +776,15 @@ public class SWBContextBase
     {
         return (PortletType)mgr.getOntology().getSemanticObject(uri,vocabulary.PortletType);
     }
-    public static PortletType createPortletType(SemanticModel model, String uri)
+    public static PortletType createPortletType(SemanticModel model, String id)
     {
-        return (PortletType)model.createSemanticObject(uri, vocabulary.PortletType);
+        return (PortletType)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.PortletType.getName()+"#"
+                +id, vocabulary.PortletType);
+    }
+    public static PortletType createPortletType(SemanticModel model)
+    {
+        return (PortletType)model.createSemanticObject(model.getNameSpace()+"/"+vocabulary.PortletType.getName()+"#"
+                +SWBInstance.getCounterValue(model.getName()+"/"+vocabulary.PortletType.getName()), vocabulary.PortletType);
     }
     public static Iterator<org.semanticwb.model.PortletType> listPortletTypes()
     {

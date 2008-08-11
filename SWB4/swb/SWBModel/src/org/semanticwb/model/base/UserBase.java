@@ -15,14 +15,14 @@ public class UserBase extends SemanticObject
         super(res);
     }
 
-    public void addUserReposotory(org.semanticwb.model.UserRepository userrepository)
+    public void setUserReposotory(org.semanticwb.model.UserRepository userrepository)
     {
         addObjectProperty(vocabulary.userReposotory, userrepository);
     }
 
     public void removeUserReposotory()
     {
-        getRDFResource().removeAll(vocabulary.userReposotory.getRDFProperty());
+        removeProperty(vocabulary.userReposotory);
     }
 
     public UserRepository getUserReposotory()
@@ -45,7 +45,12 @@ public class UserBase extends SemanticObject
 
     public void removeAllRole()
     {
-        getRDFResource().removeAll(vocabulary.hasRole.getRDFProperty());
+        removeProperty(vocabulary.hasRole);
+    }
+
+    public void removeRole(org.semanticwb.model.Role role)
+    {
+        removeObjectProperty(vocabulary.hasRole,role);
     }
 
     public Role getRole()
@@ -68,7 +73,12 @@ public class UserBase extends SemanticObject
 
     public void removeAllGroup()
     {
-        getRDFResource().removeAll(vocabulary.hasGroup.getRDFProperty());
+        removeProperty(vocabulary.hasGroup);
+    }
+
+    public void removeGroup(org.semanticwb.model.ObjectGroup objectgroup)
+    {
+        removeObjectProperty(vocabulary.hasGroup,objectgroup);
     }
 
     public ObjectGroup getGroup()

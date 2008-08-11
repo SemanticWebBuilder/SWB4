@@ -28,7 +28,12 @@ public class TemplateRefableBase extends SemanticObject
 
     public void removeAllTemplateRef()
     {
-        getRDFResource().removeAll(vocabulary.hasTemplateRef.getRDFProperty());
+        removeProperty(vocabulary.hasTemplateRef);
+    }
+
+    public void removeTemplateRef(org.semanticwb.model.TemplateRef templateref)
+    {
+        removeObjectProperty(vocabulary.hasTemplateRef,templateref);
     }
 
     public TemplateRef getTemplateRef()

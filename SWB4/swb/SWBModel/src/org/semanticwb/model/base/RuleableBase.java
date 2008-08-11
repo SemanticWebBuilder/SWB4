@@ -28,7 +28,12 @@ public class RuleableBase extends SemanticObject
 
     public void removeAllRule()
     {
-        getRDFResource().removeAll(vocabulary.hasRule.getRDFProperty());
+        removeProperty(vocabulary.hasRule);
+    }
+
+    public void removeRule(org.semanticwb.model.Rule rule)
+    {
+        removeObjectProperty(vocabulary.hasRule,rule);
     }
 
     public Rule getRule()

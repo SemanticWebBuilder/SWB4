@@ -15,19 +15,19 @@ public class LocaleableBase extends SemanticObject
         super(res);
     }
 
-    public void addUseLanguage(org.semanticwb.model.Language language)
+    public void setLanguage(org.semanticwb.model.Language language)
     {
-        addObjectProperty(vocabulary.useLanguage, language);
+        addObjectProperty(vocabulary.language, language);
     }
 
-    public void removeUseLanguage()
+    public void removeLanguage()
     {
-        getRDFResource().removeAll(vocabulary.useLanguage.getRDFProperty());
+        removeProperty(vocabulary.language);
     }
 
-    public Language getUseLanguage()
+    public Language getLanguage()
     {
-         StmtIterator stit=getRDFResource().listProperties(vocabulary.useLanguage.getRDFProperty());
+         StmtIterator stit=getRDFResource().listProperties(vocabulary.language.getRDFProperty());
          SemanticIterator<org.semanticwb.model.Language> it=new SemanticIterator<org.semanticwb.model.Language>(Language.class, stit);
          return it.next();
     }

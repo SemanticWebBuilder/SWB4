@@ -28,7 +28,12 @@ public class RoleableBase extends SemanticObject
 
     public void removeAllRole()
     {
-        getRDFResource().removeAll(vocabulary.hasRole.getRDFProperty());
+        removeProperty(vocabulary.hasRole);
+    }
+
+    public void removeRole(org.semanticwb.model.Role role)
+    {
+        removeObjectProperty(vocabulary.hasRole,role);
     }
 
     public Role getRole()

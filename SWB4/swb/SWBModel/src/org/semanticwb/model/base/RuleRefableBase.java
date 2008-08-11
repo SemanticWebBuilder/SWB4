@@ -28,7 +28,12 @@ public class RuleRefableBase extends SemanticObject
 
     public void removeAllRuleRef()
     {
-        getRDFResource().removeAll(vocabulary.hasRuleRef.getRDFProperty());
+        removeProperty(vocabulary.hasRuleRef);
+    }
+
+    public void removeRuleRef(org.semanticwb.model.RuleRef ruleref)
+    {
+        removeObjectProperty(vocabulary.hasRuleRef,ruleref);
     }
 
     public RuleRef getRuleRef()

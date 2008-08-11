@@ -15,6 +15,23 @@ public class RuleRefBase extends SemanticObject
         super(res);
     }
 
+    public void setRule(org.semanticwb.model.Rule rule)
+    {
+        addObjectProperty(vocabulary.rule, rule);
+    }
+
+    public void removeRule()
+    {
+        removeProperty(vocabulary.rule);
+    }
+
+    public Rule getRule()
+    {
+         StmtIterator stit=getRDFResource().listProperties(vocabulary.rule.getRDFProperty());
+         SemanticIterator<org.semanticwb.model.Rule> it=new SemanticIterator<org.semanticwb.model.Rule>(Rule.class, stit);
+         return it.next();
+    }
+
     public int getStatus()
     {
         return getIntProperty(vocabulary.status);
@@ -23,28 +40,5 @@ public class RuleRefBase extends SemanticObject
     public void setStatus(int status)
     {
         setLongProperty(vocabulary.status, status);
-    }
-
-    public SemanticIterator<org.semanticwb.model.Rule> listRule()
-    {
-        StmtIterator stit=getRDFResource().listProperties(vocabulary.hasRule.getRDFProperty());
-        return new SemanticIterator<org.semanticwb.model.Rule>(org.semanticwb.model.Rule.class, stit);
-    }
-
-    public void addRule(org.semanticwb.model.Rule rule)
-    {
-        addObjectProperty(vocabulary.hasRule, rule);
-    }
-
-    public void removeAllRule()
-    {
-        getRDFResource().removeAll(vocabulary.hasRule.getRDFProperty());
-    }
-
-    public Rule getRule()
-    {
-         StmtIterator stit=getRDFResource().listProperties(vocabulary.hasRule.getRDFProperty());
-         SemanticIterator<org.semanticwb.model.Rule> it=new SemanticIterator<org.semanticwb.model.Rule>(Rule.class, stit);
-         return it.next();
     }
 }

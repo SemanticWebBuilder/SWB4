@@ -28,7 +28,12 @@ public class SystemPortletBase extends SemanticObject
 
     public void removeAllRoleRef()
     {
-        getRDFResource().removeAll(vocabulary.hasRoleRef.getRDFProperty());
+        removeProperty(vocabulary.hasRoleRef);
+    }
+
+    public void removeRoleRef(org.semanticwb.model.RoleRef roleref)
+    {
+        removeObjectProperty(vocabulary.hasRoleRef,roleref);
     }
 
     public RoleRef getRoleRef()
@@ -58,23 +63,6 @@ public class SystemPortletBase extends SemanticObject
         setDateProperty(vocabulary.created, created);
     }
 
-    public void addUseLanguage(org.semanticwb.model.Language language)
-    {
-        addObjectProperty(vocabulary.useLanguage, language);
-    }
-
-    public void removeUseLanguage()
-    {
-        getRDFResource().removeAll(vocabulary.useLanguage.getRDFProperty());
-    }
-
-    public Language getUseLanguage()
-    {
-         StmtIterator stit=getRDFResource().listProperties(vocabulary.useLanguage.getRDFProperty());
-         SemanticIterator<org.semanticwb.model.Language> it=new SemanticIterator<org.semanticwb.model.Language>(Language.class, stit);
-         return it.next();
-    }
-
     public String getTitle()
     {
         return getProperty(vocabulary.title);
@@ -85,14 +73,14 @@ public class SystemPortletBase extends SemanticObject
         setProperty(vocabulary.title, title);
     }
 
-    public void addUserCreated(org.semanticwb.model.User user)
+    public void setUserCreated(org.semanticwb.model.User user)
     {
         addObjectProperty(vocabulary.userCreated, user);
     }
 
     public void removeUserCreated()
     {
-        getRDFResource().removeAll(vocabulary.userCreated.getRDFProperty());
+        removeProperty(vocabulary.userCreated);
     }
 
     public User getUserCreated()
@@ -112,6 +100,23 @@ public class SystemPortletBase extends SemanticObject
         setLongProperty(vocabulary.status, status);
     }
 
+    public void setLanguage(org.semanticwb.model.Language language)
+    {
+        addObjectProperty(vocabulary.language, language);
+    }
+
+    public void removeLanguage()
+    {
+        removeProperty(vocabulary.language);
+    }
+
+    public Language getLanguage()
+    {
+         StmtIterator stit=getRDFResource().listProperties(vocabulary.language.getRDFProperty());
+         SemanticIterator<org.semanticwb.model.Language> it=new SemanticIterator<org.semanticwb.model.Language>(Language.class, stit);
+         return it.next();
+    }
+
     public Date getUpdated()
     {
         return getDateProperty(vocabulary.updated);
@@ -122,14 +127,14 @@ public class SystemPortletBase extends SemanticObject
         setDateProperty(vocabulary.updated, updated);
     }
 
-    public void addUserModified(org.semanticwb.model.User user)
+    public void setUserModified(org.semanticwb.model.User user)
     {
         addObjectProperty(vocabulary.userModified, user);
     }
 
     public void removeUserModified()
     {
-        getRDFResource().removeAll(vocabulary.userModified.getRDFProperty());
+        removeProperty(vocabulary.userModified);
     }
 
     public User getUserModified()
@@ -152,7 +157,12 @@ public class SystemPortletBase extends SemanticObject
 
     public void removeAllRuleRef()
     {
-        getRDFResource().removeAll(vocabulary.hasRuleRef.getRDFProperty());
+        removeProperty(vocabulary.hasRuleRef);
+    }
+
+    public void removeRuleRef(org.semanticwb.model.RuleRef ruleref)
+    {
+        removeObjectProperty(vocabulary.hasRuleRef,ruleref);
     }
 
     public RuleRef getRuleRef()
@@ -175,7 +185,12 @@ public class SystemPortletBase extends SemanticObject
 
     public void removeAllCalendar()
     {
-        getRDFResource().removeAll(vocabulary.hasCalendar.getRDFProperty());
+        removeProperty(vocabulary.hasCalendar);
+    }
+
+    public void removeCalendar(org.semanticwb.model.Calendar calendar)
+    {
+        removeObjectProperty(vocabulary.hasCalendar,calendar);
     }
 
     public Calendar getCalendar()
@@ -208,7 +223,12 @@ public class SystemPortletBase extends SemanticObject
 
     public void removeAllGroup()
     {
-        getRDFResource().removeAll(vocabulary.hasGroup.getRDFProperty());
+        removeProperty(vocabulary.hasGroup);
+    }
+
+    public void removeGroup(org.semanticwb.model.ObjectGroup objectgroup)
+    {
+        removeObjectProperty(vocabulary.hasGroup,objectgroup);
     }
 
     public ObjectGroup getGroup()

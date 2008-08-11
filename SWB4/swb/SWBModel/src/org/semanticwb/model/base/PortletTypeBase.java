@@ -28,7 +28,12 @@ public class PortletTypeBase extends SemanticObject
 
     public void removeAllGroup()
     {
-        getRDFResource().removeAll(vocabulary.hasGroup.getRDFProperty());
+        removeProperty(vocabulary.hasGroup);
+    }
+
+    public void removeGroup(org.semanticwb.model.ObjectGroup objectgroup)
+    {
+        removeObjectProperty(vocabulary.hasGroup,objectgroup);
     }
 
     public ObjectGroup getGroup()
