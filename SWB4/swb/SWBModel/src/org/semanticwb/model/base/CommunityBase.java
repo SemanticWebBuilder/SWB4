@@ -25,14 +25,14 @@ public class CommunityBase extends SemanticObject
         setDateProperty(vocabulary.created, created);
     }
 
-    public void addUserModified(org.semanticwb.model.User user)
+    public void setUserModified(org.semanticwb.model.User user)
     {
         addObjectProperty(vocabulary.userModified, user);
     }
 
     public void removeUserModified()
     {
-        getRDFResource().removeAll(vocabulary.userModified.getRDFProperty());
+        removeProperty(vocabulary.userModified);
     }
 
     public User getUserModified()
@@ -62,14 +62,14 @@ public class CommunityBase extends SemanticObject
         setProperty(vocabulary.description, description);
     }
 
-    public void addUserCreated(org.semanticwb.model.User user)
+    public void setUserCreated(org.semanticwb.model.User user)
     {
         addObjectProperty(vocabulary.userCreated, user);
     }
 
     public void removeUserCreated()
     {
-        getRDFResource().removeAll(vocabulary.userCreated.getRDFProperty());
+        removeProperty(vocabulary.userCreated);
     }
 
     public User getUserCreated()

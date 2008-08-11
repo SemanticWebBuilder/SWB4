@@ -15,14 +15,14 @@ public class RuleBase extends SemanticObject
         super(res);
     }
 
-    public void addLastVersion(org.semanticwb.model.VersionInfo versioninfo)
+    public void setLastVersion(org.semanticwb.model.VersionInfo versioninfo)
     {
         addObjectProperty(vocabulary.lastVersion, versioninfo);
     }
 
     public void removeLastVersion()
     {
-        getRDFResource().removeAll(vocabulary.lastVersion.getRDFProperty());
+        removeProperty(vocabulary.lastVersion);
     }
 
     public VersionInfo getLastVersion()
@@ -42,14 +42,14 @@ public class RuleBase extends SemanticObject
         setDateProperty(vocabulary.created, created);
     }
 
-    public void addUserModified(org.semanticwb.model.User user)
+    public void setUserModified(org.semanticwb.model.User user)
     {
         addObjectProperty(vocabulary.userModified, user);
     }
 
     public void removeUserModified()
     {
-        getRDFResource().removeAll(vocabulary.userModified.getRDFProperty());
+        removeProperty(vocabulary.userModified);
     }
 
     public User getUserModified()
@@ -69,14 +69,14 @@ public class RuleBase extends SemanticObject
         setProperty(vocabulary.title, title);
     }
 
-    public void addActualVersion(org.semanticwb.model.VersionInfo versioninfo)
+    public void setActualVersion(org.semanticwb.model.VersionInfo versioninfo)
     {
         addObjectProperty(vocabulary.actualVersion, versioninfo);
     }
 
     public void removeActualVersion()
     {
-        getRDFResource().removeAll(vocabulary.actualVersion.getRDFProperty());
+        removeProperty(vocabulary.actualVersion);
     }
 
     public VersionInfo getActualVersion()
@@ -109,7 +109,12 @@ public class RuleBase extends SemanticObject
 
     public void removeAllGroup()
     {
-        getRDFResource().removeAll(vocabulary.hasGroup.getRDFProperty());
+        removeProperty(vocabulary.hasGroup);
+    }
+
+    public void removeGroup(org.semanticwb.model.ObjectGroup objectgroup)
+    {
+        removeObjectProperty(vocabulary.hasGroup,objectgroup);
     }
 
     public ObjectGroup getGroup()
@@ -119,14 +124,14 @@ public class RuleBase extends SemanticObject
          return it.next();
     }
 
-    public void addUserCreated(org.semanticwb.model.User user)
+    public void setUserCreated(org.semanticwb.model.User user)
     {
         addObjectProperty(vocabulary.userCreated, user);
     }
 
     public void removeUserCreated()
     {
-        getRDFResource().removeAll(vocabulary.userCreated.getRDFProperty());
+        removeProperty(vocabulary.userCreated);
     }
 
     public User getUserCreated()

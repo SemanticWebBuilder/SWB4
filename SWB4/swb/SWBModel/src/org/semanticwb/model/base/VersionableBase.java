@@ -15,14 +15,14 @@ public class VersionableBase extends SemanticObject
         super(res);
     }
 
-    public void addLastVersion(org.semanticwb.model.VersionInfo versioninfo)
+    public void setLastVersion(org.semanticwb.model.VersionInfo versioninfo)
     {
         addObjectProperty(vocabulary.lastVersion, versioninfo);
     }
 
     public void removeLastVersion()
     {
-        getRDFResource().removeAll(vocabulary.lastVersion.getRDFProperty());
+        removeProperty(vocabulary.lastVersion);
     }
 
     public VersionInfo getLastVersion()
@@ -32,14 +32,14 @@ public class VersionableBase extends SemanticObject
          return it.next();
     }
 
-    public void addActualVersion(org.semanticwb.model.VersionInfo versioninfo)
+    public void setActualVersion(org.semanticwb.model.VersionInfo versioninfo)
     {
         addObjectProperty(vocabulary.actualVersion, versioninfo);
     }
 
     public void removeActualVersion()
     {
-        getRDFResource().removeAll(vocabulary.actualVersion.getRDFProperty());
+        removeProperty(vocabulary.actualVersion);
     }
 
     public VersionInfo getActualVersion()

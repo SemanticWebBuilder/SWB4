@@ -28,7 +28,12 @@ public class CalendarableBase extends SemanticObject
 
     public void removeAllCalendar()
     {
-        getRDFResource().removeAll(vocabulary.hasCalendar.getRDFProperty());
+        removeProperty(vocabulary.hasCalendar);
+    }
+
+    public void removeCalendar(org.semanticwb.model.Calendar calendar)
+    {
+        removeObjectProperty(vocabulary.hasCalendar,calendar);
     }
 
     public Calendar getCalendar()

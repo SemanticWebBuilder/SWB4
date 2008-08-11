@@ -15,25 +15,19 @@ public class RoleRefBase extends SemanticObject
         super(res);
     }
 
-    public SemanticIterator<org.semanticwb.model.Role> listRole()
+    public void setRole(org.semanticwb.model.Role role)
     {
-        StmtIterator stit=getRDFResource().listProperties(vocabulary.hasRole.getRDFProperty());
-        return new SemanticIterator<org.semanticwb.model.Role>(org.semanticwb.model.Role.class, stit);
+        addObjectProperty(vocabulary.role, role);
     }
 
-    public void addRole(org.semanticwb.model.Role role)
+    public void removeRole()
     {
-        addObjectProperty(vocabulary.hasRole, role);
-    }
-
-    public void removeAllRole()
-    {
-        getRDFResource().removeAll(vocabulary.hasRole.getRDFProperty());
+        removeProperty(vocabulary.role);
     }
 
     public Role getRole()
     {
-         StmtIterator stit=getRDFResource().listProperties(vocabulary.hasRole.getRDFProperty());
+         StmtIterator stit=getRDFResource().listProperties(vocabulary.role.getRDFProperty());
          SemanticIterator<org.semanticwb.model.Role> it=new SemanticIterator<org.semanticwb.model.Role>(Role.class, stit);
          return it.next();
     }

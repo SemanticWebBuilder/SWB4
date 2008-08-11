@@ -28,7 +28,12 @@ public class HomePageBase extends SemanticObject
 
     public void removeAllRoleRef()
     {
-        getRDFResource().removeAll(vocabulary.hasRoleRef.getRDFProperty());
+        removeProperty(vocabulary.hasRoleRef);
+    }
+
+    public void removeRoleRef(org.semanticwb.model.RoleRef roleref)
+    {
+        removeObjectProperty(vocabulary.hasRoleRef,roleref);
     }
 
     public RoleRef getRoleRef()
@@ -68,14 +73,14 @@ public class HomePageBase extends SemanticObject
         setProperty(vocabulary.title, title);
     }
 
-    public void addUserCreated(org.semanticwb.model.User user)
+    public void setUserCreated(org.semanticwb.model.User user)
     {
         addObjectProperty(vocabulary.userCreated, user);
     }
 
     public void removeUserCreated()
     {
-        getRDFResource().removeAll(vocabulary.userCreated.getRDFProperty());
+        removeProperty(vocabulary.userCreated);
     }
 
     public User getUserCreated()
@@ -98,7 +103,12 @@ public class HomePageBase extends SemanticObject
 
     public void removeAllPortletRef()
     {
-        getRDFResource().removeAll(vocabulary.hasPortletRef.getRDFProperty());
+        removeProperty(vocabulary.hasPortletRef);
+    }
+
+    public void removePortletRef(org.semanticwb.model.PortletRef portletref)
+    {
+        removeObjectProperty(vocabulary.hasPortletRef,portletref);
     }
 
     public PortletRef getPortletRef()
@@ -128,14 +138,14 @@ public class HomePageBase extends SemanticObject
         setDateProperty(vocabulary.updated, updated);
     }
 
-    public void addUserModified(org.semanticwb.model.User user)
+    public void setUserModified(org.semanticwb.model.User user)
     {
         addObjectProperty(vocabulary.userModified, user);
     }
 
     public void removeUserModified()
     {
-        getRDFResource().removeAll(vocabulary.userModified.getRDFProperty());
+        removeProperty(vocabulary.userModified);
     }
 
     public User getUserModified()
@@ -158,7 +168,12 @@ public class HomePageBase extends SemanticObject
 
     public void removeAllTemplateRef()
     {
-        getRDFResource().removeAll(vocabulary.hasTemplateRef.getRDFProperty());
+        removeProperty(vocabulary.hasTemplateRef);
+    }
+
+    public void removeTemplateRef(org.semanticwb.model.TemplateRef templateref)
+    {
+        removeObjectProperty(vocabulary.hasTemplateRef,templateref);
     }
 
     public TemplateRef getTemplateRef()
@@ -181,7 +196,12 @@ public class HomePageBase extends SemanticObject
 
     public void removeAllRuleRef()
     {
-        getRDFResource().removeAll(vocabulary.hasRuleRef.getRDFProperty());
+        removeProperty(vocabulary.hasRuleRef);
+    }
+
+    public void removeRuleRef(org.semanticwb.model.RuleRef ruleref)
+    {
+        removeObjectProperty(vocabulary.hasRuleRef,ruleref);
     }
 
     public RuleRef getRuleRef()
@@ -204,7 +224,12 @@ public class HomePageBase extends SemanticObject
 
     public void removeAllCalendar()
     {
-        getRDFResource().removeAll(vocabulary.hasCalendar.getRDFProperty());
+        removeProperty(vocabulary.hasCalendar);
+    }
+
+    public void removeCalendar(org.semanticwb.model.Calendar calendar)
+    {
+        removeObjectProperty(vocabulary.hasCalendar,calendar);
     }
 
     public Calendar getCalendar()
@@ -224,14 +249,14 @@ public class HomePageBase extends SemanticObject
         setProperty(vocabulary.description, description);
     }
 
-    public void addIsChildOf(org.semanticwb.model.WebPage webpage)
+    public void setIsChildOf(org.semanticwb.model.WebPage webpage)
     {
         addObjectProperty(vocabulary.isChildOf, webpage);
     }
 
     public void removeIsChildOf()
     {
-        getRDFResource().removeAll(vocabulary.isChildOf.getRDFProperty());
+        removeProperty(vocabulary.isChildOf);
     }
 
     public WebPage getIsChildOf()

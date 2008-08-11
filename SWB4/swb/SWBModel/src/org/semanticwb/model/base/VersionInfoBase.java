@@ -15,14 +15,14 @@ public class VersionInfoBase extends SemanticObject
         super(res);
     }
 
-    public void addNextVersion(org.semanticwb.model.VersionInfo versioninfo)
+    public void setNextVersion(org.semanticwb.model.VersionInfo versioninfo)
     {
         addObjectProperty(vocabulary.nextVersion, versioninfo);
     }
 
     public void removeNextVersion()
     {
-        getRDFResource().removeAll(vocabulary.nextVersion.getRDFProperty());
+        removeProperty(vocabulary.nextVersion);
     }
 
     public VersionInfo getNextVersion()
@@ -40,6 +40,23 @@ public class VersionInfoBase extends SemanticObject
     public void setValue(String value)
     {
         setProperty(vocabulary.value, value);
+    }
+
+    public void setPreviousVersion(org.semanticwb.model.VersionInfo versioninfo)
+    {
+        addObjectProperty(vocabulary.previousVersion, versioninfo);
+    }
+
+    public void removePreviousVersion()
+    {
+        removeProperty(vocabulary.previousVersion);
+    }
+
+    public VersionInfo getPreviousVersion()
+    {
+         StmtIterator stit=getRDFResource().listProperties(vocabulary.previousVersion.getRDFProperty());
+         SemanticIterator<org.semanticwb.model.VersionInfo> it=new SemanticIterator<org.semanticwb.model.VersionInfo>(VersionInfo.class, stit);
+         return it.next();
     }
 
     public String getVersionComment()
