@@ -1,14 +1,21 @@
 
 package org.semanticwb;
 
+import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.rdf.model.StmtIterator;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.Properties;
 import javax.servlet.ServletContext;
 import org.semanticwb.platform.SWBMonitor;
 import org.semanticwb.platform.SemanticMgr;
 import org.semanticwb.base.util.SWBProperties;
+import org.semanticwb.platform.SemanticModel;
 
 /**
  *
@@ -78,7 +85,7 @@ public class SWBInstance
                         haveDBTables=true;
 //                        rs.close();
 //                    }
-//                }catch(Exception noe){log.debug("Table wbcounter not found...",noe);}
+//                }catch(Exception noe){log.debug("Table swbcounter not found...",noe);}
 //                sr.close();
                 con.close();
             }
@@ -332,4 +339,166 @@ public class SWBInstance
     {
         return semanticMgr;
     }    
+    
+    /**
+     * Regresa contador en base a la cadena <i>name</i>, sin incrementar el valor del mismo
+     */
+    public static synchronized long getCounterValue(String name)
+    {
+        SemanticModel model=getSemanticMgr().getSystemModel();
+        Resource res=model.getRDFModel().createResource(name);
+        Property prop=model.getRDFModel().createProperty("swb:count");
+        StmtIterator it=model.getRDFModel().listStatements(res, prop, (String)null);
+        if(it.hasNext())
+        {
+            Statement stmt=it.nextStatement();
+            return stmt.getLong();
+        }
+        return 0;
+//        Statement stmt=model.getRDFModel().createStatement(res, prop, res)
+//        
+//        
+//        long ret=0;
+//        Connection con=SWBUtils.DB.getDefaultConnection();
+//        if (con != null)
+//        {
+//            try
+//            {
+//                PreparedStatement pst = con.prepareStatement("select countvalue from swbcounter where name=?");
+//                pst.setString(1,name);
+//                ResultSet rs = pst.executeQuery();
+//                if(rs.next()) ret=rs.getLong("countvalue");
+//                rs.close();
+//                pst.close();
+//                con.close();
+//            }catch(Exception e){
+//                log.error(e);
+//            }
+//        }
+//        return ret;
+    }
+    
+    /**
+     * Asigna el valor <i>val</a> al contador de nombre <i>name</i>
+     */
+    public static synchronized void setCounterValue(String name, long val)
+    {
+        SemanticModel model=getSemanticMgr().getSystemModel();
+        Resource res=model.getRDFModel().createResource(name);
+        Property prop=model.getRDFModel().createProperty("swb:count");
+        StmtIterator it=model.getRDFModel().listStatements(res, prop, (String)null);
+        if(it.hasNext())
+        {
+            Statement stmt=it.nextStatement();
+            stmt.changeLiteralObject(val);
+        }else
+        {
+            Statement stmt=model.getRDFModel().createLiteralStatement(res, prop, val);
+            model.getRDFModel().add(stmt);
+        }
+        
+//        long ret=0;
+//        Connection con=SWBUtils.DB.getDefaultConnection();
+//        if (con != null)
+//        {
+//            try
+//            {
+//                PreparedStatement pst = con.prepareStatement("select countvalue from swbcounter where name=?");
+//                pst.setString(1,name);
+//                ResultSet rs = pst.executeQuery();
+//                if(rs.next())
+//                {
+//                    ret=rs.getLong("countvalue");
+//                    PreparedStatement pst2 = con.prepareStatement("UPDATE swbcounter SET countvalue=? WHERE name=?");
+//                    pst2.setLong(1,val);
+//                    pst2.setString(2,name);
+//                    pst2.executeUpdate();
+//                    pst2.close();                    
+//                }else
+//                {
+//                    PreparedStatement pst2 = con.prepareStatement("INSERT INTO swbcounter (name, countvalue) VALUES (?, ?)");
+//                    pst2.setString(1,name);
+//                    pst2.setLong(2,val);
+//                    pst2.executeUpdate();
+//                    pst2.close();                    
+//                }
+//                rs.close();
+//                pst.close();
+//                con.close();
+//            }catch(Exception e){
+//                log.error(e);
+//                throw new SWBException("Error seting counter "+name,e);
+//            }
+//        }        
+    }
+    
+    
+    /**
+     * Regresa contador en base a la cadena <i>name</i>, e incrementa el valor en uno
+     */
+    public static synchronized long getCounter(String name)
+    {
+        long ret=getCounterValue(name);
+        ret++;
+        setCounterValue(name, ret);
+//        Connection con=SWBUtils.DB.getDefaultConnection();
+//        if (con != null)
+//        {
+//            try
+//            {
+//                PreparedStatement pst = con.prepareStatement("select countvalue from swbcounter where name=?");
+//                pst.setString(1,name);
+//                ResultSet rs = pst.executeQuery();
+//                if(rs.next())
+//                {
+//                    ret=rs.getLong("countvalue");
+//                    ret++;
+//                    PreparedStatement pst2 = con.prepareStatement("UPDATE swbcounter SET countvalue=? WHERE name=?");
+//                    pst2.setLong(1,ret);
+//                    pst2.setString(2,name);
+//                    pst2.executeUpdate();
+//                    pst2.close();                    
+//                }else
+//                {
+//                    ret++;
+//                    PreparedStatement pst2 = con.prepareStatement("INSERT INTO swbcounter (name, countvalue) VALUES (?, ?)");
+//                    pst2.setString(1,name);
+//                    pst2.setLong(2,ret);
+//                    pst2.executeUpdate();
+//                    pst2.close();                    
+//                }
+//                rs.close();
+//                pst.close();
+//                con.close();
+//            }catch(Exception e){
+//                AFUtils.log(e);
+//                throw new AFException("Error geting counter "+name,"DBCounter.getCounter",e);
+//            }
+//        }
+        return ret;
+    }
+    
+    public static synchronized void deleteCounterValue(String name)
+    {
+        SemanticModel model=getSemanticMgr().getSystemModel();
+        Resource res=model.getRDFModel().createResource(name);
+        Property prop=model.getRDFModel().createProperty("swb:count");
+        model.getRDFModel().remove(res, prop, null);
+//        Connection con=AFUtils.getDBConnection((String) com.infotec.appfw.util.AFUtils.getInstance().getEnv("wb/db/nameconn"),"DBCounter");
+//        if (con != null)
+//        {
+//            try
+//            {
+//                PreparedStatement pst = con.prepareStatement("DELETE FROM swbcounter WHERE name=?");
+//                pst.setString(1,name);
+//                pst.executeUpdate();
+//                pst.close();
+//                con.close();
+//            }catch(Exception e){
+//                AFUtils.log(e);
+//            }
+//        }
+
+    }
+    
 }
