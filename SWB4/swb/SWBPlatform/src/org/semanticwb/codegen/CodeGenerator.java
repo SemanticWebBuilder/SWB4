@@ -230,8 +230,8 @@ public class CodeGenerator
         javaClassContent.append("public class SWBContextBase" + ENTER);
         javaClassContent.append("{" + ENTER);
 
-        javaClassContent.append("   private static SWBVocabulary vocabulary=new SWBVocabulary();" + ENTER);
-        javaClassContent.append("   private static SemanticMgr mgr=SWBInstance.getSemanticMgr();" + ENTER);
+        javaClassContent.append("    private static SWBVocabulary vocabulary=new SWBVocabulary();" + ENTER);
+        javaClassContent.append("    private static SemanticMgr mgr=SWBInstance.getSemanticMgr();" + ENTER);
 
         javaClassContent.append("    public static SWBVocabulary getVocabulary()" + ENTER);
         javaClassContent.append("    {" + ENTER);
@@ -241,16 +241,16 @@ public class CodeGenerator
 
         javaClassContent.append("    public static void removeObject(String uri)" + ENTER);
         javaClassContent.append("    {" + ENTER);
-        javaClassContent.append("         removeObject(mgr.getOntology().getSemanticObject(uri));" + ENTER);
+        javaClassContent.append("        removeObject(mgr.getOntology().getSemanticObject(uri));" + ENTER);
         javaClassContent.append("    }" + ENTER);
 
-        javaClassContent.append("   public static void removeObject(SemanticObject obj)" + ENTER);
-        javaClassContent.append("   {" + ENTER);
-        javaClassContent.append("       if(obj!=null)" + ENTER);
-        javaClassContent.append("       {" + ENTER);
-        javaClassContent.append("           mgr.getOntology().getRDFOntModel().remove(obj.getRDFResource(), null, null);" + ENTER);
-        javaClassContent.append("       }" + ENTER);
-        javaClassContent.append("   }" + ENTER);
+        javaClassContent.append("    public static void removeObject(SemanticObject obj)" + ENTER);
+        javaClassContent.append("    {" + ENTER);
+        javaClassContent.append("        if(obj!=null)" + ENTER);
+        javaClassContent.append("        {" + ENTER);
+        javaClassContent.append("            mgr.getOntology().getRDFOntModel().remove(obj.getRDFResource(), null, null);" + ENTER);
+        javaClassContent.append("        }" + ENTER);
+        javaClassContent.append("    }" + ENTER);
 
 
 
@@ -263,6 +263,26 @@ public class CodeGenerator
             javaClassContent.append("    {" + ENTER);
             javaClassContent.append("        return (" + tpc.getName() + ")mgr.getOntology().getSemanticObject(uri,vocabulary." + tpc.getName() + ");" + ENTER);
             javaClassContent.append("    }" + ENTER);
+
+//            javaClassContent.append("    public static " + tpc.getName() + " create" + tpc.getName() + "(SemanticModel model, String uri)" + ENTER);
+//            javaClassContent.append("    {" + ENTER);
+//            javaClassContent.append("        return (" + tpc.getName() + ")model.createSemanticObject(uri, vocabulary." + tpc.getName() + ");" + ENTER);
+//            javaClassContent.append("    }" + ENTER);
+
+            javaClassContent.append("    public static " + tpc.getName() + " create" + tpc.getName() + "(SemanticModel model, String id)" + ENTER);
+            javaClassContent.append("    {" + ENTER);
+            javaClassContent.append("        return (" + tpc.getName() + ")model.createSemanticObject(model.getNameSpace()+\"/\"+vocabulary." + tpc.getName() + ".getName()+\"#\"" + ENTER);
+            javaClassContent.append("                +id, vocabulary." + tpc.getName() + ");" + ENTER);
+            javaClassContent.append("    }" + ENTER);
+
+            if(tpc.isAutogenId())
+            {
+                javaClassContent.append("    public static " + tpc.getName() + " create" + tpc.getName() + "(SemanticModel model)" + ENTER);
+                javaClassContent.append("    {" + ENTER);
+                javaClassContent.append("        return (" + tpc.getName() + ")model.createSemanticObject(model.getNameSpace()+\"/\"+vocabulary." + tpc.getName() + ".getName()+\"#\"" + ENTER);
+                javaClassContent.append("                +SWBInstance.getCounterValue(model.getName()+\"/\"+vocabulary." + tpc.getName() + ".getName()), vocabulary." + tpc.getName() + ");" + ENTER);
+                javaClassContent.append("    }" + ENTER);
+            }
 
             javaClassContent.append("    public static Iterator<org.semanticwb.model." + tpc.getName() + "> list" + tpc.getName() + "s()" + ENTER);
             javaClassContent.append("    {" + ENTER);
