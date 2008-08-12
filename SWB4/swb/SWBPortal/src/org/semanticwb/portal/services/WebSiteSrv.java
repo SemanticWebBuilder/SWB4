@@ -4,7 +4,6 @@
  */
 package org.semanticwb.portal.services;
 
-import org.semanticwb.SWBInstance;
 import org.semanticwb.model.*;
 import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.portal.SWBDBAdmLog;
@@ -20,19 +19,19 @@ public class WebSiteSrv {
 
     private static Logger log = SWBUtils.getLogger(WebSiteSrv.class);
 
-    public WebSite createWebSite(String model, String uri, String title, String homeTitle, User user) throws SWBException {
+    public WebSite createWebSite(SemanticModel model, String siteUri, String homeUri, String title, String homeTitle, User user) throws SWBException {
         //creación de modelo
-        //SemanticModel semModel=SWBInstance.getSemanticMgr().loadDBModel("system");
-        SemanticModel semModel = SWBInstance.getSemanticMgr().getSystemModel();
-
-        WebSite website = SWBContext.createWebSite(semModel, uri);
-        HomePage hpage = SWBContext.createHomePage(semModel, uri);
+        //SemanticModel model=SWBInstance.getSemanticMgr().loadDBModel("system");
+        
+        WebSite website = SWBContext.createWebSite(model, siteUri);
+        HomePage hpage = SWBContext.createHomePage(model, homeUri);
         hpage.setTitle(homeTitle);
         website.addHome(hpage);
-        website.addUserCreated(user);
+        
+        website.setUserCreated(user);
 
         //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog("user", "create", website.getURI(), uri, "Create WebSite", null);
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog("user", "create", website.getURI(), website.getURI(), "Create WebSite", null);
         try {
             swbAdmLog.create();
         } catch (Exception e) {
@@ -41,11 +40,11 @@ public class WebSiteSrv {
         return website;
     }
 
-    public boolean removeWebSite(String uri) throws SWBException {
-        SWBContext.removeObject(uri);
+    public boolean removeWebSite(WebSite website) throws SWBException {
+        SWBContext.removeObject(website.getURI());
 
         //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog("user", "remove", uri, uri, "Remove WebSite", null);
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog("user", "remove", website.getURI(), website.getURI(), "Remove WebSite", null);
          try{
             swbAdmLog.create();
         }catch(Exception e){
@@ -54,9 +53,8 @@ public class WebSiteSrv {
         return true;
     }
 
-    public boolean updateWebSite(String uri, String description, String home, String language, String title, boolean deleted, int status, String repository) throws SWBException {
-        WebSite webSite = SWBContext.getWebSite(uri);
-
+    public boolean updateWebSite(WebSite webSite, String description, String home, String language, String title, boolean deleted, int status, String repository) throws SWBException {
+        
         if (title != null) {
             webSite.setTitle(title);
         }
@@ -67,7 +65,7 @@ public class WebSiteSrv {
         webSite.setStatus(status);
 
         //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog("user", "update", uri, uri, "Update WebSite", null);
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog("user", "update", webSite.getURI(), webSite.getURI(), "Update WebSite", null);
         try{
             swbAdmLog.create();
         }catch(Exception e){
@@ -76,17 +74,16 @@ public class WebSiteSrv {
         return true;
     }
 
-    public boolean setStatusWebSite(String uri, int status) throws SWBException {
-        WebSite webSite = SWBContext.getWebSite(uri);
-
+    public boolean setStatusWebSite(WebSite webSite, int status) throws SWBException {
+        
         webSite.setStatus(status);
         
         //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog("user", "status", uri, uri, "change WebSite Status", null);
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog("user", "status", webSite.getURI(), webSite.getURI(), "update WebSite Status", null);
         try{
             swbAdmLog.create();
         }catch(Exception e){
-             throw new SWBException("Error changing status to WebSite",e);
+             throw new SWBException("Error updating status to WebSite",e);
         }
         return true;
     }
