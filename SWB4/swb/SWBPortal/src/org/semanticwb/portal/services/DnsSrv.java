@@ -22,16 +22,32 @@ public class DnsSrv {
 
     private static Logger log = SWBUtils.getLogger(WebSiteSrv.class);
 
-    public Dns createDNS(String modelUri, String uri, String title, String description, String value, User user) throws SWBException {
+    public Dns createDNS(SemanticModel model, String title, String description, String value, User user) throws SWBException {
         Dns dns = null;
-        SemanticModel model = SWBInstance.getSemanticMgr().loadDBModel(modelUri);
-        dns = SWBContext.createDns(model, uri);
+        dns = SWBContext.createDns(model);
         dns.setTitle(title);
         dns.setDescription(description);
         dns.setValue(value);
 
         //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getName(), "create", uri, uri, "create DNS", null);
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getName(), "create", dns.getURI(), dns.getURI(), "create DNS", null);
+        try {
+            swbAdmLog.create();
+        } catch (Exception e) {
+            throw new SWBException("Error creating dns", e);
+        }
+        return dns;
+    }
+    
+    public Dns createDNS(SemanticModel model, String dnsUri, String title, String description, String value, User user) throws SWBException {
+        Dns dns = null;
+        dns = SWBContext.createDns(model, dnsUri);
+        dns.setTitle(title);
+        dns.setDescription(description);
+        dns.setValue(value);
+
+        //logeo
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getName(), "create", dns.getURI(), dns.getURI(), "create DNS", null);
         try {
             swbAdmLog.create();
         } catch (Exception e) {
@@ -40,26 +56,23 @@ public class DnsSrv {
         return dns;
     }
 
-    public boolean removeDNS(String dnsUri, User user) throws SWBException {
+    public boolean removeDNS(Dns dns, User user) throws SWBException {
         boolean deleted = false;
-        SWBContext.removeObject(dnsUri);
+        SWBContext.removeObject(dns.getURI());
         deleted = true;
         //logeo.creat
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getName(), "remove", dnsUri, dnsUri, "remove DNS", null);
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getName(), "remove", dns.getURI(), dns.getURI(), "remove DNS", null);
         try {
             swbAdmLog.create();
         } catch (Exception e) {
-            throw new SWBException("Error removing dns:" + dnsUri, e);
+            throw new SWBException("Error removing dns:" + dns.getURI(), e);
         }
         return deleted;
     }
 
-    public boolean updateDNS(String modelUri, String uri, String title, String description, String value, User user) throws SWBException {
+    public boolean updateDNS(SemanticModel model, Dns dns, String title, String description, String value, User user) throws SWBException {
         boolean updated = false;
-        Dns dns = null;
-        SemanticModel model = SWBInstance.getSemanticMgr().loadDBModel(modelUri);
-        dns = SWBContext.getDns(uri);
-
+        
         if (title != null) {
             dns.setTitle(title);
         }
@@ -71,11 +84,11 @@ public class DnsSrv {
         }
         updated = true;
         //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getName(), "create", uri, uri, "create DNS", null);
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getName(), "update", dns.getURI(), dns.getURI(), "update DNS", null);
         try {
             swbAdmLog.create();
         } catch (Exception e) {
-            throw new SWBException("Error adding template to WebPage", e);
+            throw new SWBException("Error updating Dns", e);
         }
         return updated;
     }

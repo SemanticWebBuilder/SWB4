@@ -17,15 +17,15 @@ import org.semanticwb.portal.SWBDBAdmLog;
  * @author jorge.jimenez
  */
 public class RoleSrv {
-    public Role createRule(String modelUri, String uri, String title, String description, User user) throws SWBException
+    
+    public Role createRule(SemanticModel model, String title, String description, User user) throws SWBException
     {
-        SemanticModel model = SWBInstance.getSemanticMgr().loadDBModel(modelUri);
-        Role role = SWBContext.createRole(model, uri);
+        Role role = SWBContext.createRole(model);
         role.setTitle(title);
         role.setDescription(description);
 
         //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getName(), "create", uri, uri, "create Role", null);
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getName(), "create", role.getURI(), role.getURI(), "create Role", null);
         try {
             swbAdmLog.create();
         } catch (Exception e) {
@@ -35,14 +35,31 @@ public class RoleSrv {
 
     }
     
-    public boolean removeRole(String uri, User user) throws SWBException
+    public Role createRule(SemanticModel model, String roleUri, String title, String description, User user) throws SWBException
+    {
+        Role role = SWBContext.createRole(model, roleUri);
+        role.setTitle(title);
+        role.setDescription(description);
+
+        //logeo
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getName(), "create", role.getURI(), role.getURI(), "create Role", null);
+        try {
+            swbAdmLog.create();
+        } catch (Exception e) {
+            throw new SWBException("Error creating role", e);
+        }
+        return role;
+
+    }
+    
+    public boolean removeRole(Role role, User user) throws SWBException
     {
         boolean deleted=false;
-        SWBContext.removeObject(uri);
+        SWBContext.removeObject(role.getURI());
         deleted=true;
 
         //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getName(), "create", uri, uri, "remove Role", null);
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getName(), "create", role.getURI(), role.getURI(), "remove Role", null);
         try {
             swbAdmLog.create();
         } catch (Exception e) {

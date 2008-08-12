@@ -19,18 +19,18 @@ import org.semanticwb.portal.SWBDBAdmLog;
  */
 public class DeviceSrv 
 {
-    public Device createDevice(String modelUri, String uri, String title, String description, String value, User user) throws SWBException 
+    
+    public Device createDevice(SemanticModel model , String title, String description, String value, User user) throws SWBException 
     {
    
         Device device = null;
-        SemanticModel model = SWBInstance.getSemanticMgr().loadDBModel(modelUri);
-        device = SWBContext.createDevice(model, uri);
+        device = SWBContext.createDevice(model);
         device.setTitle(title);
         device.setDescription(description);
         device.setValue(value);
 
         //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getName(), "create", uri, uri, "create device", null);
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getName(), "create", device.getURI(), device.getURI(), "create device", null);
         try {
             swbAdmLog.create();
         } catch (Exception e) {
@@ -39,26 +39,43 @@ public class DeviceSrv
         return device;
     }
     
-    public boolean removeDNS(String dnsDevice, User user) throws SWBException {
-        boolean deleted = false;
-        SWBContext.removeObject(dnsDevice);
-        deleted = true;
-        //logeo.creat
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getName(), "remove", dnsDevice, dnsDevice, "remove Device", null);
+    
+    public Device createDevice(SemanticModel model, String deviceUri, String title, String description, String value, User user) throws SWBException 
+    {
+   
+        Device device = null;
+        device = SWBContext.createDevice(model, deviceUri);
+        device.setTitle(title);
+        device.setDescription(description);
+        device.setValue(value);
+
+        //logeo
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getName(), "create", device.getURI(), device.getURI(), "create device", null);
         try {
             swbAdmLog.create();
         } catch (Exception e) {
-            throw new SWBException("Error removing device:" + dnsDevice, e);
+            throw new SWBException("Error creating device", e);
+        }
+        return device;
+    }
+    
+    public boolean removeDNS(Device device , User user) throws SWBException {
+        boolean deleted = false;
+        SWBContext.removeObject(device.getURI());
+        deleted = true;
+        //logeo.creat
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getName(), "remove", device.getURI(), device.getURI(), "remove Device", null);
+        try {
+            swbAdmLog.create();
+        } catch (Exception e) {
+            throw new SWBException("Error removing device:" + device.getURI(), e);
         }
         return deleted;
     }
     
-    public boolean updateDevice(String modelUri, String uri, String title, String description, String value, User user) throws SWBException {
+    public boolean updateDevice(Device device, String uri, String title, String description, String value, User user) throws SWBException {
         boolean updated = false;
-        Device device = null;
-        SemanticModel model = SWBInstance.getSemanticMgr().loadDBModel(modelUri);
-        device = SWBContext.getDevice(uri);
-
+        
         if (title != null) {
             device.setTitle(title);
         }
@@ -70,7 +87,7 @@ public class DeviceSrv
         }
         updated = true;
         //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getName(), "update", uri, uri, "update Device", null);
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getName(), "update", device.getURI(), device.getURI(), "update Device", null);
         try {
             swbAdmLog.create();
         } catch (Exception e) {
