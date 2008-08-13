@@ -318,7 +318,7 @@ public abstract class XMLRPCServlet extends HttpServlet
         String classFullPath = System.getProperty(PREFIX_PROPERTY_PATH + objectName, null);
         if ( classFullPath == null )
         {
-            throw new ClassNotFoundException("The class for he Object Name: " + objectName + " was not found");
+            throw new ClassNotFoundException("The class for the Object Name: " + objectName + " was not found");
         }
         return classFullPath;
     }
