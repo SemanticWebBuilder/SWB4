@@ -238,7 +238,7 @@ public class SemanticMgr implements SWBInstanceObject
         model.setNsPrefix(name, nameSpace);
         return ret;
     }
-    
+     
     public void removeModel(String name)
     {
         SemanticModel model=m_models.get(name);
