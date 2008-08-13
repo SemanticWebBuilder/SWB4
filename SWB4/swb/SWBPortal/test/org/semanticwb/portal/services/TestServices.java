@@ -6,6 +6,7 @@
 package org.semanticwb.portal.services;
 
 import org.junit.*;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.portal.SWBDBAdmLog;
 
 
@@ -41,14 +42,28 @@ public class TestServices {
          System.out.println("CreateSite-4");
          System.out.println("Entra a createWebSite-4");
          */
-         SWBDBAdmLog swbAdmLog=new SWBDBAdmLog("user","create","www.infotec.com.mx",uri,"description",null);
+        /*
+         SWBDBAdmLog swbAdmLog=new SWBDBAdmLog("user","create","www.jorge.com.mx","uri",SWBUtils.IO.getLocaleString(SWBUtils.LOCALE_SERVICES, "create_website"),null);
          System.out.println("Entra a createWebSite-5");
          try{
             swbAdmLog.create();
          }catch(Exception e){
              e.printStackTrace();
-         }
-         
+         }*/
+        //org.semanticwb.SWBPortal.createInstance().getSWBServices().
+         /*
+        System.out.println("CreateSite-1");
+        //SemanticModel model=SWBInstance.getSemanticMgr().getSystemModel();
+        SemanticModel model=SWBInstance.getSemanticMgr().getModel("SWBSystem");
+        try{
+            System.out.println("CreateSite-2");
+            SWBServices.WebSiteSrv.createWebSite(model, "www.jorge.com", "homeUri", "titulo", "home");
+            System.out.println("CreateSite-3");
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+         */
+        
          System.out.println("Entra a createWebSite-6");
          //return website;
         
