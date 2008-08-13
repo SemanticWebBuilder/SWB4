@@ -516,7 +516,10 @@ class XmlRpcClient<T>
         methodCall.addContent(methodName);
         doc.setRootElement(methodCall);
         Element params = new Element("params");
-        addParameters(params, pParams);
+        if(pParams!=null)
+        {
+            addParameters(params, pParams);
+        }
         methodCall.addContent(params);
         return doc;
     }
