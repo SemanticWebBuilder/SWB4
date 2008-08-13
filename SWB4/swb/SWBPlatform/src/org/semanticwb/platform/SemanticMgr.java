@@ -39,6 +39,7 @@ public class SemanticMgr implements SWBInstanceObject
     private SemanticModel m_system;
     private SemanticModel m_schema;
     private HashMap <String,SemanticModel>m_models=null;
+    private HashMap <Model,SemanticModel>m_imodels=null;
 
     private IDBConnection conn;
     private ModelMaker maker;
@@ -51,6 +52,7 @@ public class SemanticMgr implements SWBInstanceObject
         this.m_context=context;
         
         m_models=new HashMap();
+        m_imodels=new HashMap();
         
         // Create database connection
         conn = new DBConnection(SWBUtils.DB.getDefaultConnection(), SWBUtils.DB.getDatabaseName());
@@ -196,6 +198,11 @@ public class SemanticMgr implements SWBInstanceObject
     {
         return m_models.get(name);
     }
+
+    public SemanticModel getModel(Model model)
+    {
+        return m_imodels.get(model);
+    }
     
     private void loadDBModels()
     {
@@ -219,6 +226,7 @@ public class SemanticMgr implements SWBInstanceObject
     {
         SemanticModel m=new SemanticModel(name, loadRDFDBModel(name));
         m_models.put(name, m);
+        m_imodels.put(m.getRDFModel(), m);
         m_ontology.addSubModel(m,false);
         return m;
     }    
@@ -230,6 +238,15 @@ public class SemanticMgr implements SWBInstanceObject
         model.setNsPrefix(name, nameSpace);
         return ret;
     }
+    
+    public void removeModel(String name)
+    {
+        SemanticModel model=m_models.get(name);
+        m_models.remove(name);
+        m_imodels.remove(model.getRDFModel());                
+        maker.removeModel(name);
+    }
+        
     
     public SemanticOntology getOntology() 
     {
