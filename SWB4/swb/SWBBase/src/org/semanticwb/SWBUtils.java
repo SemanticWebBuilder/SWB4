@@ -46,6 +46,7 @@ import org.apache.commons.mail.EmailAttachment;
 import java.util.Collection;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.StringTokenizer;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -74,6 +75,8 @@ public class SWBUtils {
     private static int bufferSize = 8192;
     private static boolean initLogger = false;
     private static String smtpserver = null;
+    private static Locale locale = Locale.ENGLISH;
+    public static String LOCALE_SERVICES = null;
 
     /** Creates new utils */
     private SWBUtils() {
@@ -104,6 +107,7 @@ public class SWBUtils {
      * Inicializa SWBUtils
      */
     private void init() {
+        LOCALE_SERVICES = "locale_services";
     }
 
     /*
@@ -795,9 +799,7 @@ public class SWBUtils {
             return bfile;
         }
 
-        public static Iterator<FileItem> fileUpload(javax.servlet.http.HttpServletRequest request, String path2Save) 
-        {
-            boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+        public static Iterator<FileItem> fileUpload(javax.servlet.http.HttpServletRequest request, String path2Save) {
             DiskFileItemFactory factory = new DiskFileItemFactory();
             ServletFileUpload fu = new ServletFileUpload(factory);
             java.util.List items = null;
@@ -815,759 +817,782 @@ public class SWBUtils {
                     FileItem item = (FileItem) iter.next();
                     if (!item.isFormField()) { //Si No es un campo de forma comun, es un campo tipo file, grabarlo
                         File fichero = new File(path2Save + item.getName());
-                        try{
+                        try {
                             item.write(fichero);
-                        }catch(Exception e){
+                        } catch (Exception e) {
                             log.error(e);
                         }
                     }
                 }
                 return iter;
             }
-            return  null;
+            return null;
+        }
+
+        public static String getLocaleString(String Bundle, String key) {
+            return getLocaleString(Bundle, key, locale);
+        }
+
+        public static String getLocaleString(String Bundle, String key, Locale locale) {
+            return getLocaleString(Bundle, key, locale, null);
+        }
+
+        public static String getLocaleString(String Bundle, String key, Locale locale, ClassLoader loader) {
+            String cad = "";
+            try {
+                if (loader == null) {
+                    cad = java.util.ResourceBundle.getBundle(Bundle, locale).getString(key);
+                } else {
+                    cad = java.util.ResourceBundle.getBundle(Bundle, locale, loader).getString(key);
+                }
+                System.out.println("cad:" + cad);
+            } catch (Exception e) {
+                log.error("Error while looking for properties key", e);
+                return "";
+            }
+            return cad;
         }
     }
 
+    /**
+     * specialiced email class
+     * Jorge Jiménez
+     */
+    public static class EMAIL {
 
         /**
-         * specialiced email class
-         * Jorge Jiménez
+         * 
+         * Send an email
+         * 
+         * @param fromEmail Address which send the email
+         * @param fromName  Name who send the email
+         * @param address   Collection of addresses to send the email
+         * @param ccEmail   Collection of addresses to send the email as copy
+         * @param bccEmail  Collection of addresses to send the email as bgCopy
+         * @param subject   Subject of email
+         * @param data      Email Body Text Data
+         * @param contentType HTML sends the body in html format, else it will be send in text format
+         * @param login     Login for SMTP server authentication
+         * @param password  password for SMTP server authentication
+         * @return
          */
-        public static class EMAIL {
+        public static String sendMail(String fromEmail, String fromName, Collection address, Collection ccEmail, Collection bccEmail,
+                String subject, String contentType, String data, String login, String password, ArrayList<EmailAttachment> attachments) {
+            try {
+                HtmlEmail email = new HtmlEmail();
 
-            /**
-             * 
-             * Send an email
-             * 
-             * @param fromEmail Address which send the email
-             * @param fromName  Name who send the email
-             * @param address   Collection of addresses to send the email
-             * @param ccEmail   Collection of addresses to send the email as copy
-             * @param bccEmail  Collection of addresses to send the email as bgCopy
-             * @param subject   Subject of email
-             * @param data      Email Body Text Data
-             * @param contentType HTML sends the body in html format, else it will be send in text format
-             * @param login     Login for SMTP server authentication
-             * @param password  password for SMTP server authentication
-             * @return
-             */
-            public static String sendMail(String fromEmail, String fromName, Collection address, Collection ccEmail, Collection bccEmail,
-                    String subject, String contentType, String data, String login, String password, ArrayList<EmailAttachment> attachments) {
-                try {
-                    HtmlEmail email = new HtmlEmail();
-
-                    Iterator itAttaches = attachments.iterator();
-                    while (itAttaches.hasNext()) {
-                        EmailAttachment attchment = (EmailAttachment) itAttaches.next();
-                        email.attach(attchment);
-                    }
-
-                    email.setHostName(smtpserver);
-                    email.setFrom(fromEmail, fromName);
-                    email.setTo(address);
-                    if (ccEmail != null) {
-                        email.setCc(ccEmail);
-                    }
-                    if (bccEmail != null) {
-                        email.setBcc(bccEmail);
-                    }
-                    email.setSubject(subject);
-
-                    if (contentType.equalsIgnoreCase("HTML")) {
-                        email.setHtmlMsg(data); // set the html message
-                    } else {
-                        email.setMsg(data);
-                    }
-
-                    if (login != null && password != null) {
-                        email.setAuthentication(login, password);
-                    }
-                    return email.send();
-                } catch (Exception e) {
-                    log.error(e);
+                Iterator itAttaches = attachments.iterator();
+                while (itAttaches.hasNext()) {
+                    EmailAttachment attchment = (EmailAttachment) itAttaches.next();
+                    email.attach(attchment);
                 }
+
+                email.setHostName(smtpserver);
+                email.setFrom(fromEmail, fromName);
+                email.setTo(address);
+                if (ccEmail != null) {
+                    email.setCc(ccEmail);
+                }
+                if (bccEmail != null) {
+                    email.setBcc(bccEmail);
+                }
+                email.setSubject(subject);
+
+                if (contentType.equalsIgnoreCase("HTML")) {
+                    email.setHtmlMsg(data); // set the html message
+                } else {
+                    email.setMsg(data);
+                }
+
+                if (login != null && password != null) {
+                    email.setAuthentication(login, password);
+                }
+                return email.send();
+            } catch (Exception e) {
+                log.error(e);
+            }
+            return null;
+        }
+
+        /**
+         * Sends an email in background
+         * @param message class
+         * @throws java.net.SocketException
+         */
+        public static void sendBGEmail(SWBMail message) throws java.net.SocketException {
+            SWBMailSender swbMailSender = new SWBMailSender();
+            swbMailSender.addEMail(message);
+            swbMailSender.run();
+        }
+    }
+
+    /**
+     * 
+     */
+    public static class XML {
+
+        private static XML m_xml = null;
+        private DocumentBuilderFactory m_dbf = null;
+        private TransformerFactory m_tFactory = null;        // 1. Instantiate an XPathFactory.
+        private XPathFactory xpath_factory = null;
+        private XPath xpathObj = null;
+
+        public static XPathFactory getXPathFactory() {
+            XML xml = getInstance();
+            return xml.xpath_factory;
+        }
+
+        public static XPath getXPathObject() {
+            XML xml = getInstance();
+            return xml.xpathObj;
+        }
+
+        private static XML getInstance() {
+            if (m_xml == null) {
+                m_xml = new XML();
+            }
+            return m_xml;
+        }
+
+        public static DocumentBuilderFactory getDocumentBuilderFactory() {
+            XML xml = getInstance();
+            return xml.m_dbf;
+        }
+
+        public static TransformerFactory getTransformerFactory() {
+            XML xml = getInstance();
+            return xml.m_tFactory;
+        }
+
+        private XML() {
+            try {
+                m_dbf = DocumentBuilderFactory.newInstance();
+                m_dbf.setNamespaceAware(true);
+                m_dbf.setIgnoringElementContentWhitespace(true);
+                //db=dbf.newDocumentBuilder();
+                //xpath
+                xpath_factory = javax.xml.xpath.XPathFactory.newInstance();
+                xpathObj = xpath_factory.newXPath();
+
+            } catch (Exception e) {
+                log.error("Error getting DocumentBuilderFactory...", e);
+            }
+
+            try {
+                m_tFactory = TransformerFactory.newInstance();
+            } catch (Exception e) {
+                log.error("Error getting TransformerFactory...", e);
+            }
+        }
+
+        /**
+         *Crea un objeto String a partir de un objeto Document con cierta codificación especificada y 
+         * teniendo la posibilidad de identar la salida, la identación que se tiene especificada en el método es 2.
+         * @param dom
+         * @param encode
+         * @param ident
+         * @return  */
+        public static String domToXml(Document dom, String encode, boolean ident) {
+            ByteArrayOutputStream sw = new java.io.ByteArrayOutputStream();
+            OutputStreamWriter osw = null;
+            try {
+                osw = new java.io.OutputStreamWriter(sw, encode);
+                StreamResult streamResult = new StreamResult(osw);
+                TransformerFactory tFactory = getTransformerFactory();
+                Transformer transformer = null;
+                synchronized (tFactory) {
+                    transformer = tFactory.newTransformer();
+                }
+                transformer.setOutputProperty(OutputKeys.ENCODING, encode);
+                if (ident) {
+                    transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+                    try {
+                        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+                    } catch (Exception noe) {/*No soportado en algunos xerses*/
+
+                    }
+                }
+                transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+                transformer.transform(new DOMSource(dom), streamResult);
+            } catch (Exception e) {
+                log.error(e);
+            }
+            return sw.toString();
+        }
+
+        /**
+         * Crea un objeto String a partir de un objeto Document con codificación UTF-8 y sin identación.
+         * @param dom
+         * @return  */
+        public static String domToXml(Document dom) {
+            return domToXml(dom, "UTF-8", false);
+        }
+
+        /**
+         * Crea un objeto String a partir de un objeto Document con codificación UTF-8 y teniendo la posibilidad de
+         * identar la salida, la identación que se tiene especificada en el método es 2.
+         * @param dom
+         * @param ident
+         * @return  */
+        public static String domToXml(Document dom, boolean ident) {
+            return domToXml(dom, "UTF-8", ident);
+        }
+
+        /**
+         * Crea una copia exacta de un objeto Document
+         * Creates an exactly copy of Document object
+         * @param dom
+         * @throws org.w3c.dom.DOMException
+         * @return  */
+        public static Document copyDom(Document dom) throws SWBException {
+            Document n = getNewDocument();
+            if (dom != null && dom.hasChildNodes()) {
+                Node node = n.importNode(dom.getFirstChild(), true);
+                n.appendChild(node);
+            }
+            return n;
+        }
+
+        /**
+         * Crea un objeto Document a partir de un objeto String.
+         * Creates a document object in base of String object
+         * @param xml
+         * @return  */
+        public static Document xmlToDom(String xml) {
+            if (xml == null || xml.length() == 0) {
                 return null;
             }
-
-            /**
-             * Sends an email in background
-             * @param message class
-             * @throws java.net.SocketException
-             */
-            public static void sendBGEmail(SWBMail message) throws java.net.SocketException {
-                SWBMailSender swbMailSender = new SWBMailSender();
-                swbMailSender.addEMail(message);
-                swbMailSender.run();
+            Document dom = null;
+            try {
+                ByteArrayInputStream sr = new java.io.ByteArrayInputStream(xml.getBytes());
+                dom = xmlToDom(sr);
+            } catch (Exception e) {
+                log.error(e);
             }
+            return dom;
         }
 
         /**
-         * 
-         */
-        public static class XML {
-
-            private static XML m_xml = null;
-            private DocumentBuilderFactory m_dbf = null;
-            private TransformerFactory m_tFactory = null;        // 1. Instantiate an XPathFactory.
-            private XPathFactory xpath_factory = null;
-            private XPath xpathObj = null;
-
-            public static XPathFactory getXPathFactory() {
-                XML xml = getInstance();
-                return xml.xpath_factory;
+         * Crea un objeto Document a partir de un objeto InputStream.
+         * Creates a document object in base of InputStream object
+         * @param xml
+         * @return  */
+        public static Document xmlToDom(InputStream xml) {
+            Document dom = null;
+            try {
+                dom = xmlToDom(new InputSource(xml));
+            //xml.close();
+            } catch (Exception e) {
+                log.error(e);
             }
+            return dom;
+        }
 
-            public static XPath getXPathObject() {
-                XML xml = getInstance();
-                return xml.xpathObj;
-            }
-
-            private static XML getInstance() {
-                if (m_xml == null) {
-                    m_xml = new XML();
+        /**
+         * Crea un objeto Document a partir de un objeto InputSource.
+         * Creates a document object in base of InputSource object
+         * @param xml
+         * @return  */
+        public static Document xmlToDom(InputSource xml) {
+            DocumentBuilderFactory dbf = null;
+            DocumentBuilder db = null;
+            Document dom = null;
+            try {
+                dbf = getDocumentBuilderFactory();
+                synchronized (dbf) {
+                    db = dbf.newDocumentBuilder();
                 }
-                return m_xml;
-            }
-
-            public static DocumentBuilderFactory getDocumentBuilderFactory() {
-                XML xml = getInstance();
-                return xml.m_dbf;
-            }
-
-            public static TransformerFactory getTransformerFactory() {
-                XML xml = getInstance();
-                return xml.m_tFactory;
-            }
-
-            private XML() {
-                try {
-                    m_dbf = DocumentBuilderFactory.newInstance();
-                    m_dbf.setNamespaceAware(true);
-                    m_dbf.setIgnoringElementContentWhitespace(true);
-                    //db=dbf.newDocumentBuilder();
-                    //xpath
-                    xpath_factory = javax.xml.xpath.XPathFactory.newInstance();
-                    xpathObj = xpath_factory.newXPath();
-
-                } catch (Exception e) {
-                    log.error("Error getting DocumentBuilderFactory...", e);
-                }
-
-                try {
-                    m_tFactory = TransformerFactory.newInstance();
-                } catch (Exception e) {
-                    log.error("Error getting TransformerFactory...", e);
-                }
-            }
-
-            /**
-             *Crea un objeto String a partir de un objeto Document con cierta codificación especificada y 
-             * teniendo la posibilidad de identar la salida, la identación que se tiene especificada en el método es 2.
-             * @param dom
-             * @param encode
-             * @param ident
-             * @return  */
-            public static String domToXml(Document dom, String encode, boolean ident) {
-                ByteArrayOutputStream sw = new java.io.ByteArrayOutputStream();
-                OutputStreamWriter osw = null;
-                try {
-                    osw = new java.io.OutputStreamWriter(sw, encode);
-                    StreamResult streamResult = new StreamResult(osw);
-                    TransformerFactory tFactory = getTransformerFactory();
-                    Transformer transformer = null;
-                    synchronized (tFactory) {
-                        transformer = tFactory.newTransformer();
-                    }
-                    transformer.setOutputProperty(OutputKeys.ENCODING, encode);
-                    if (ident) {
-                        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-                        try {
-                            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-                        } catch (Exception noe) {/*No soportado en algunos xerses*/
-
-                        }
-                    }
-                    transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-                    transformer.transform(new DOMSource(dom), streamResult);
-                } catch (Exception e) {
-                    log.error(e);
-                }
-                return sw.toString();
-            }
-
-            /**
-             * Crea un objeto String a partir de un objeto Document con codificación UTF-8 y sin identación.
-             * @param dom
-             * @return  */
-            public static String domToXml(Document dom) {
-                return domToXml(dom, "UTF-8", false);
-            }
-
-            /**
-             * Crea un objeto String a partir de un objeto Document con codificación UTF-8 y teniendo la posibilidad de
-             * identar la salida, la identación que se tiene especificada en el método es 2.
-             * @param dom
-             * @param ident
-             * @return  */
-            public static String domToXml(Document dom, boolean ident) {
-                return domToXml(dom, "UTF-8", ident);
-            }
-
-            /**
-             * Crea una copia exacta de un objeto Document
-             * Creates an exactly copy of Document object
-             * @param dom
-             * @throws org.w3c.dom.DOMException
-             * @return  */
-            public static Document copyDom(Document dom) throws SWBException {
-                Document n = getNewDocument();
-                if (dom != null && dom.hasChildNodes()) {
-                    Node node = n.importNode(dom.getFirstChild(), true);
-                    n.appendChild(node);
-                }
-                return n;
-            }
-
-            /**
-             * Crea un objeto Document a partir de un objeto String.
-             * Creates a document object in base of String object
-             * @param xml
-             * @return  */
-            public static Document xmlToDom(String xml) {
-                if (xml == null || xml.length() == 0) {
-                    return null;
-                }
-                Document dom = null;
-                try {
-                    ByteArrayInputStream sr = new java.io.ByteArrayInputStream(xml.getBytes());
-                    dom = xmlToDom(sr);
-                } catch (Exception e) {
-                    log.error(e);
-                }
-                return dom;
-            }
-
-            /**
-             * Crea un objeto Document a partir de un objeto InputStream.
-             * Creates a document object in base of InputStream object
-             * @param xml
-             * @return  */
-            public static Document xmlToDom(InputStream xml) {
-                Document dom = null;
-                try {
-                    dom = xmlToDom(new InputSource(xml));
-                //xml.close();
-                } catch (Exception e) {
-                    log.error(e);
-                }
-                return dom;
-            }
-
-            /**
-             * Crea un objeto Document a partir de un objeto InputSource.
-             * Creates a document object in base of InputSource object
-             * @param xml
-             * @return  */
-            public static Document xmlToDom(InputSource xml) {
-                DocumentBuilderFactory dbf = null;
-                DocumentBuilder db = null;
-                Document dom = null;
-                try {
-                    dbf = getDocumentBuilderFactory();
-                    synchronized (dbf) {
-                        db = dbf.newDocumentBuilder();
-                    }
-                    if (xml != null) {
-                        dom = db.parse(xml);
-                        try {
-                            dom = copyDom(dom);
-                        } catch (Exception e) {
-                        }
-                    }
-                } catch (Exception e) {
-                    log.error(e);
-                }
-                return dom;
-            }
-
-            /**
-             * Crea un nuevo objeto Document.
-             * Creates a new object document
-             * @throws com.infotec.appfw.exception.AFException
-             * @return  */
-            public static Document getNewDocument() throws SWBException {
-                DocumentBuilderFactory dbf = getDocumentBuilderFactory();
-                DocumentBuilder db = null;
-                Document dom = null;
-                try {
-                    synchronized (dbf) {
-                        db = dbf.newDocumentBuilder();
-                    }
-                    dom = db.newDocument();
-                } catch (Exception e) {
-                    log.error(e);
-                    throw new SWBException("Error getting new XML Document", e);
-                }
-                return dom;
-            }
-
-            /**
-             * Carga un objeto InputStream de un xslt para ser utilizado como plantilla.
-             * @param stream
-             * @throws javax.xml.transform.TransformerConfigurationException
-             * @return  */
-            public static Templates loadTemplateXSLT(InputStream stream) throws TransformerConfigurationException {
-                TransformerFactory transFact = getTransformerFactory();
-                return transFact.newTemplates(new StreamSource(stream));
-            }
-
-            /**
-             * Transforma un objeto Document con un Template (xslt) especificado, 
-             * regresando un objeto String con dicha transformación y listo para ser desplegado.
-             * @param tpl
-             * @param doc
-             * @throws javax.xml.transform.TransformerException
-             * @return  a String object ready to be displayed
-             */
-            public static String transformDom(Templates tpl, Document doc) throws TransformerException {
-                ByteArrayOutputStream sw = new java.io.ByteArrayOutputStream();
-                Transformer trans = tpl.newTransformer();
-                trans.transform(new DOMSource(doc), new StreamResult(sw));
-                return sw.toString();
-            }
-
-            public static boolean xmlVerifier(org.xml.sax.InputSource schema, org.xml.sax.InputSource xml) {
-                return xmlVerifier(null, schema, null, xml);
-            }
-
-            public static boolean xmlVerifier(String idschema, org.xml.sax.InputSource schema, String idxml, org.xml.sax.InputSource xml) {
-                boolean bOk = false;
-                if (schema == null || xml == null) {
-                    if (schema == null) {
-                        log.error("Error WBAdmResourceUtils.XMLVerifier(): Schema source is null.");
-                    } else {
-                        log.event("Error WBAdmResourceUtils.XMLVerifier(): The input document source is null.");
-                    }
-                    return bOk;
-                }
-
-                if (idschema != null && !idschema.trim().equals("")) {
-                    schema.setSystemId(idschema);
-                }
-                if (idxml != null && !idxml.trim().equals("")) {
-                    xml.setSystemId(idxml);
-                }
-                bOk = xmlVerifierImpl(schema.getSystemId(), schema, xml);
-                return bOk;
-            }
-
-            public static boolean xmlVerifier(java.io.InputStream schema, java.io.InputStream xml) {
-                return xmlVerifier(null, schema, xml);
-            }
-
-            public static boolean xmlVerifier(String idschema, java.io.InputStream schema, java.io.InputStream xml) {
-                boolean bOk = false;
-                if (schema == null || xml == null) {
-                    if (schema == null) {
-                        log.error("Error WBAdmResourceUtils.XMLVerifier(): Schema stream is null.");
-                    } else {
-                        log.error("Error WBAdmResourceUtils.XMLVerifier(): The input document stream is null.");
-                    }
-                    return bOk;
-                }
-                org.xml.sax.InputSource inxml = new org.xml.sax.InputSource(xml);
-                bOk = xmlVerifierImpl(idschema, schema, inxml);
-                return bOk;
-            }
-
-            /**
-             * Transforma un objeto Document con un Template (xslt) especificado, 
-             * regresando un objeto String con dicha transformación y listo para ser desplegado.
-             * 
-             * Transforms a Document object with specified template (xslt)
-             * @param sysid
-             * @param objschema
-             * @param objxml
-             * @return a String object ready to be displayed
-             */
-            private static boolean xmlVerifierImpl(String sysid, Object objschema, Object objxml) {
-                boolean bOk = false;
-                if (objschema == null || objxml == null) {
-                    if (objschema == null) {
-                        log.error("Error WBAdmResourceUtils.XMLVerifier(): Schema is null.");
-                    } else {
-                        log.error("Error WBAdmResourceUtils.XMLVerifier(): The input document is null.");
-                    }
-                    return bOk;
-                }
-                org.iso_relax.verifier.VerifierFactory factory = new com.sun.msv.verifier.jarv.TheFactoryImpl();
-                org.iso_relax.verifier.Schema schema = null;
-                try {
-                    if (objschema instanceof java.io.File) {
-                        schema = factory.compileSchema((java.io.File) objschema);
-                    } else if (objschema instanceof org.xml.sax.InputSource) {
-                        schema = factory.compileSchema((org.xml.sax.InputSource) objschema);
-                    } else if (objschema instanceof java.io.InputStream) {
-                        if (sysid != null && !sysid.trim().equals("")) {
-                            schema = factory.compileSchema((java.io.InputStream) objschema, sysid);
-                        } else {
-                            schema = factory.compileSchema((java.io.InputStream) objschema);
-                        }
-                    } else if (objschema instanceof java.lang.String) {
-                        schema = factory.compileSchema((java.lang.String) objschema);
-                    }
+                if (xml != null) {
+                    dom = db.parse(xml);
                     try {
-                        org.iso_relax.verifier.Verifier verifier = schema.newVerifier();
-                        verifier.setErrorHandler(silentErrorHandler);
-
-                        if (objxml instanceof java.io.File) {
-                            bOk = verifier.verify((java.io.File) objxml);
-                        } else if (objxml instanceof org.xml.sax.InputSource) {
-                            bOk = verifier.verify((org.xml.sax.InputSource) objxml);
-                        } else if (objxml instanceof org.w3c.dom.Node) {
-                            bOk = verifier.verify((org.w3c.dom.Node) objxml);
-                        } else if (objxml instanceof java.lang.String) {
-                            bOk = verifier.verify((java.lang.String) objxml);
-                        }
-                    } catch (org.iso_relax.verifier.VerifierConfigurationException e) {
-                        log.error("Error WBAdmResourceUtils.XMLVerifier(): Unable to create a new verifier.", e);
-                    } catch (org.xml.sax.SAXException e) {
-                        log.event("Error WBAdmResourceUtils.XMLVerifier(): The input document is not wellformed.", e);
+                        dom = copyDom(dom);
+                    } catch (Exception e) {
                     }
-                } catch (Exception e) {
-                    log.event("Error WBAdmResourceUtils.XMLVerifier(): Unable to parse the schema file.", e);
+                }
+            } catch (Exception e) {
+                log.error(e);
+            }
+            return dom;
+        }
+
+        /**
+         * Crea un nuevo objeto Document.
+         * Creates a new object document
+         * @throws com.infotec.appfw.exception.AFException
+         * @return  */
+        public static Document getNewDocument() throws SWBException {
+            DocumentBuilderFactory dbf = getDocumentBuilderFactory();
+            DocumentBuilder db = null;
+            Document dom = null;
+            try {
+                synchronized (dbf) {
+                    db = dbf.newDocumentBuilder();
+                }
+                dom = db.newDocument();
+            } catch (Exception e) {
+                log.error(e);
+                throw new SWBException("Error getting new XML Document", e);
+            }
+            return dom;
+        }
+
+        /**
+         * Carga un objeto InputStream de un xslt para ser utilizado como plantilla.
+         * @param stream
+         * @throws javax.xml.transform.TransformerConfigurationException
+         * @return  */
+        public static Templates loadTemplateXSLT(InputStream stream) throws TransformerConfigurationException {
+            TransformerFactory transFact = getTransformerFactory();
+            return transFact.newTemplates(new StreamSource(stream));
+        }
+
+        /**
+         * Transforma un objeto Document con un Template (xslt) especificado, 
+         * regresando un objeto String con dicha transformación y listo para ser desplegado.
+         * @param tpl
+         * @param doc
+         * @throws javax.xml.transform.TransformerException
+         * @return  a String object ready to be displayed
+         */
+        public static String transformDom(Templates tpl, Document doc) throws TransformerException {
+            ByteArrayOutputStream sw = new java.io.ByteArrayOutputStream();
+            Transformer trans = tpl.newTransformer();
+            trans.transform(new DOMSource(doc), new StreamResult(sw));
+            return sw.toString();
+        }
+
+        public static boolean xmlVerifier(org.xml.sax.InputSource schema, org.xml.sax.InputSource xml) {
+            return xmlVerifier(null, schema, null, xml);
+        }
+
+        public static boolean xmlVerifier(String idschema, org.xml.sax.InputSource schema, String idxml, org.xml.sax.InputSource xml) {
+            boolean bOk = false;
+            if (schema == null || xml == null) {
+                if (schema == null) {
+                    log.error("Error WBAdmResourceUtils.XMLVerifier(): Schema source is null.");
+                } else {
+                    log.event("Error WBAdmResourceUtils.XMLVerifier(): The input document source is null.");
                 }
                 return bOk;
             }
 
-            public static boolean xmlVerifier(String schema, String xml) {
-                return xmlVerifierByURL(null, schema, xml);
+            if (idschema != null && !idschema.trim().equals("")) {
+                schema.setSystemId(idschema);
             }
-
-            public static boolean xmlVerifierByURL(String sysid, String schema, String xml) {
-                return xmlVerifierImpl(sysid, schema, xml);
+            if (idxml != null && !idxml.trim().equals("")) {
+                xml.setSystemId(idxml);
             }
+            bOk = xmlVerifierImpl(schema.getSystemId(), schema, xml);
+            return bOk;
+        }
 
-            /**
-             * Comvierte un Node a Document
-             * Converts Node to Document object
-             * Todo: Meter en AFUtils
-             */
-            public static Document node2Document(Node node) throws SWBException {
-                // ensure xerces dom
-                if (node instanceof org.apache.xerces.dom.DocumentImpl) {
-                    return (Document) node;
+        public static boolean xmlVerifier(java.io.InputStream schema, java.io.InputStream xml) {
+            return xmlVerifier(null, schema, xml);
+        }
+
+        public static boolean xmlVerifier(String idschema, java.io.InputStream schema, java.io.InputStream xml) {
+            boolean bOk = false;
+            if (schema == null || xml == null) {
+                if (schema == null) {
+                    log.error("Error WBAdmResourceUtils.XMLVerifier(): Schema stream is null.");
+                } else {
+                    log.error("Error WBAdmResourceUtils.XMLVerifier(): The input document stream is null.");
                 }
-                Document document = getNewDocument();
-                if (node instanceof Document) {
-                    node = ((Document) node).getDocumentElement();
+                return bOk;
+            }
+            org.xml.sax.InputSource inxml = new org.xml.sax.InputSource(xml);
+            bOk = xmlVerifierImpl(idschema, schema, inxml);
+            return bOk;
+        }
+
+        /**
+         * Transforma un objeto Document con un Template (xslt) especificado, 
+         * regresando un objeto String con dicha transformación y listo para ser desplegado.
+         * 
+         * Transforms a Document object with specified template (xslt)
+         * @param sysid
+         * @param objschema
+         * @param objxml
+         * @return a String object ready to be displayed
+         */
+        private static boolean xmlVerifierImpl(String sysid, Object objschema, Object objxml) {
+            boolean bOk = false;
+            if (objschema == null || objxml == null) {
+                if (objschema == null) {
+                    log.error("Error WBAdmResourceUtils.XMLVerifier(): Schema is null.");
+                } else {
+                    log.error("Error WBAdmResourceUtils.XMLVerifier(): The input document is null.");
                 }
-                document.appendChild(document.importNode(node, true));
-                return document;
+                return bOk;
             }
-
-            /**
-             * Obtiene el contenido del objeto Document como xml y 
-             * lo envía a un archivo especificado (serialización) con codificación UTF-8 e identación de 2.
-             * @param dom
-             * @param file  */
-            public static void DomtoFile(Document dom, String file) {
-                domtoFile(dom, file, "UTF-8");
-            }
-
-            /**
-             * Obtiene el contenido del objeto Document como xml y 
-             * lo envía a un archivo especificado (serialización) bajo cierta codificación que se especifique e identación de 2.
-             * 
-             * Serialize a document object
-             * 
-             * @param dom
-             * @param file
-             * @param encode  
-             */
-            public static void domtoFile(Document dom, String file, String encode) {
-                java.io.FileOutputStream osw = null;
+            org.iso_relax.verifier.VerifierFactory factory = new com.sun.msv.verifier.jarv.TheFactoryImpl();
+            org.iso_relax.verifier.Schema schema = null;
+            try {
+                if (objschema instanceof java.io.File) {
+                    schema = factory.compileSchema((java.io.File) objschema);
+                } else if (objschema instanceof org.xml.sax.InputSource) {
+                    schema = factory.compileSchema((org.xml.sax.InputSource) objschema);
+                } else if (objschema instanceof java.io.InputStream) {
+                    if (sysid != null && !sysid.trim().equals("")) {
+                        schema = factory.compileSchema((java.io.InputStream) objschema, sysid);
+                    } else {
+                        schema = factory.compileSchema((java.io.InputStream) objschema);
+                    }
+                } else if (objschema instanceof java.lang.String) {
+                    schema = factory.compileSchema((java.lang.String) objschema);
+                }
                 try {
-                    osw = new FileOutputStream(new java.io.File(file));
-                    StreamResult streamResult = new StreamResult(osw);
+                    org.iso_relax.verifier.Verifier verifier = schema.newVerifier();
+                    verifier.setErrorHandler(silentErrorHandler);
 
-                    Transformer transformer = null;
-                    TransformerFactory tFactory = getTransformerFactory();
-                    synchronized (tFactory) {
-                        transformer = tFactory.newTransformer();
+                    if (objxml instanceof java.io.File) {
+                        bOk = verifier.verify((java.io.File) objxml);
+                    } else if (objxml instanceof org.xml.sax.InputSource) {
+                        bOk = verifier.verify((org.xml.sax.InputSource) objxml);
+                    } else if (objxml instanceof org.w3c.dom.Node) {
+                        bOk = verifier.verify((org.w3c.dom.Node) objxml);
+                    } else if (objxml instanceof java.lang.String) {
+                        bOk = verifier.verify((java.lang.String) objxml);
                     }
-                    transformer.setOutputProperty(OutputKeys.ENCODING, encode);
-                    transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-                    transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-                    transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-                    transformer.transform(new DOMSource(dom), streamResult);
-                    osw.flush();
-                    osw.close();
-                } catch (Exception e) {
-                    log.error(e);
+                } catch (org.iso_relax.verifier.VerifierConfigurationException e) {
+                    log.error("Error WBAdmResourceUtils.XMLVerifier(): Unable to create a new verifier.", e);
+                } catch (org.xml.sax.SAXException e) {
+                    log.event("Error WBAdmResourceUtils.XMLVerifier(): The input document is not wellformed.", e);
                 }
+            } catch (Exception e) {
+                log.event("Error WBAdmResourceUtils.XMLVerifier(): Unable to parse the schema file.", e);
             }
-            /**
-             * An error handler implementation that doesn't report any error.
-             */
-            private static final org.xml.sax.ErrorHandler silentErrorHandler = new org.xml.sax.ErrorHandler() {
+            return bOk;
+        }
 
-                public void fatalError(org.xml.sax.SAXParseException e) {
-                }
+        public static boolean xmlVerifier(String schema, String xml) {
+            return xmlVerifierByURL(null, schema, xml);
+        }
 
-                public void error(org.xml.sax.SAXParseException e) {
-                }
+        public static boolean xmlVerifierByURL(String sysid, String schema, String xml) {
+            return xmlVerifierImpl(sysid, schema, xml);
+        }
 
-                public void warning(org.xml.sax.SAXParseException e) {
-                }
-            };
-
-            /**
-             * Replace special characters in xml String
-             * @param str Remplaza caracteres especiales en un xml
-             * @return
-             */
-            static public String replaceXMLChars(String str) {
-                if (str == null) {
-                    return null;
-                }
-                StringBuffer ret = new StringBuffer();
-
-                // split tokens
-                StringTokenizer tokenizer = new StringTokenizer(str, " \t@%^&()-+=|\\{}[].;\"<>", true);
-                while (tokenizer.hasMoreTokens()) {
-                    // next token
-                    String token = tokenizer.nextToken();
-
-                    // replace '\t' by the content of "tabulation"
-                    if (token.startsWith("\t")) {
-                        ret.append("    ");
-                        continue;
-                    }
-
-                    // replace '<' by '&lt;'
-                    if (token.startsWith("<")) {
-                        ret.append("&lt;");
-                        continue;
-                    }
-
-                    // replace '>' by '&gt;'
-                    if (token.startsWith(">")) {
-                        ret.append("&gt;");
-                        continue;
-                    }
-
-                    // replace '&' by '&amp;'
-                    if (token.startsWith("&")) {
-                        ret.append("&amp;");
-                        continue;
-                    }
-                    ret.append(token);
-                }
-                return ret.toString();
-
+        /**
+         * Comvierte un Node a Document
+         * Converts Node to Document object
+         * Todo: Meter en AFUtils
+         */
+        public static Document node2Document(Node node) throws SWBException {
+            // ensure xerces dom
+            if (node instanceof org.apache.xerces.dom.DocumentImpl) {
+                return (Document) node;
             }
-
-            /**
-             * Creates a node as child of other one
-             * @param ele Node pather
-             * @param name Node name to create
-             * @return a new Element (Node)
-             */
-            static public Element appendChild(Element ele, String name) {
-                Document doc = ele.getOwnerDocument();
-                Element e = doc.createElement(name);
-                ele.appendChild(e);
-                return e;
+            Document document = getNewDocument();
+            if (node instanceof Document) {
+                node = ((Document) node).getDocumentElement();
             }
+            document.appendChild(document.importNode(node, true));
+            return document;
+        }
 
-            /**
-             * Creates a node as child of other one and assign a value to it
-             * @param ele Node pather
-             * @param name Node name to create
-             * @param value Node Value to create
-             * @return a new Element (Node)
-             */
-            static public Element appendChild(Element ele, String name, String value) {
-                Document doc = ele.getOwnerDocument();
-                Element e = doc.createElement(name);
-                e.appendChild(doc.createTextNode(value));
-                ele.appendChild(e);
-                return e;
+        /**
+         * Obtiene el contenido del objeto Document como xml y 
+         * lo envía a un archivo especificado (serialización) con codificación UTF-8 e identación de 2.
+         * @param dom
+         * @param file  */
+        public static void DomtoFile(Document dom, String file) {
+            domtoFile(dom, file, "UTF-8");
+        }
+
+        /**
+         * Obtiene el contenido del objeto Document como xml y 
+         * lo envía a un archivo especificado (serialización) bajo cierta codificación que se especifique e identación de 2.
+         * 
+         * Serialize a document object
+         * 
+         * @param dom
+         * @param file
+         * @param encode  
+         */
+        public static void domtoFile(Document dom, String file, String encode) {
+            java.io.FileOutputStream osw = null;
+            try {
+                osw = new FileOutputStream(new java.io.File(file));
+                StreamResult streamResult = new StreamResult(osw);
+
+                Transformer transformer = null;
+                TransformerFactory tFactory = getTransformerFactory();
+                synchronized (tFactory) {
+                    transformer = tFactory.newTransformer();
+                }
+                transformer.setOutputProperty(OutputKeys.ENCODING, encode);
+                transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+                transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+                transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+                transformer.transform(new DOMSource(dom), streamResult);
+                osw.flush();
+                osw.close();
+            } catch (Exception e) {
+                log.error(e);
+            }
+        }
+        /**
+         * An error handler implementation that doesn't report any error.
+         */
+        private static final org.xml.sax.ErrorHandler silentErrorHandler = new org.xml.sax.ErrorHandler() {
+
+            public void fatalError(org.xml.sax.SAXParseException e) {
             }
 
-            /**
-             * Eval a xpath expression in an input source
-             * @param expression xpath xpression
-             * @param input input to eval
-             * @param resultType Object type to return
-             * @return a specified object QName according to XPathConstants object, ej. XPathConstants.NODE)
-             * @throws javax.xml.xpath.XPathExpressionException
-             */
-            public static Object getXpathEval(String expression, InputSource input, QName resultType) throws javax.xml.xpath.XPathExpressionException {
-                XPath xpathObj = getXPathObject();
-                javax.xml.xpath.XPathExpression xpathExpression = xpathObj.compile(expression);
-                return xpathExpression.evaluate(input, resultType);
+            public void error(org.xml.sax.SAXParseException e) {
             }
+
+            public void warning(org.xml.sax.SAXParseException e) {
+            }
+        };
+
+        /**
+         * Replace special characters in xml String
+         * @param str Remplaza caracteres especiales en un xml
+         * @return
+         */
+        static public String replaceXMLChars(String str) {
+            if (str == null) {
+                return null;
+            }
+            StringBuffer ret = new StringBuffer();
+
+            // split tokens
+            StringTokenizer tokenizer = new StringTokenizer(str, " \t@%^&()-+=|\\{}[].;\"<>", true);
+            while (tokenizer.hasMoreTokens()) {
+                // next token
+                String token = tokenizer.nextToken();
+
+                // replace '\t' by the content of "tabulation"
+                if (token.startsWith("\t")) {
+                    ret.append("    ");
+                    continue;
+                }
+
+                // replace '<' by '&lt;'
+                if (token.startsWith("<")) {
+                    ret.append("&lt;");
+                    continue;
+                }
+
+                // replace '>' by '&gt;'
+                if (token.startsWith(">")) {
+                    ret.append("&gt;");
+                    continue;
+                }
+
+                // replace '&' by '&amp;'
+                if (token.startsWith("&")) {
+                    ret.append("&amp;");
+                    continue;
+                }
+                ret.append(token);
+            }
+            return ret.toString();
+
+        }
+
+        /**
+         * Creates a node as child of other one
+         * @param ele Node pather
+         * @param name Node name to create
+         * @return a new Element (Node)
+         */
+        static public Element appendChild(Element ele, String name) {
+            Document doc = ele.getOwnerDocument();
+            Element e = doc.createElement(name);
+            ele.appendChild(e);
+            return e;
+        }
+
+        /**
+         * Creates a node as child of other one and assign a value to it
+         * @param ele Node pather
+         * @param name Node name to create
+         * @param value Node Value to create
+         * @return a new Element (Node)
+         */
+        static public Element appendChild(Element ele, String name, String value) {
+            Document doc = ele.getOwnerDocument();
+            Element e = doc.createElement(name);
+            e.appendChild(doc.createTextNode(value));
+            ele.appendChild(e);
+            return e;
+        }
+
+        /**
+         * Eval a xpath expression in an input source
+         * @param expression xpath xpression
+         * @param input input to eval
+         * @param resultType Object type to return
+         * @return a specified object QName according to XPathConstants object, ej. XPathConstants.NODE)
+         * @throws javax.xml.xpath.XPathExpressionException
+         */
+        public static Object getXpathEval(String expression, InputSource input, QName resultType) throws javax.xml.xpath.XPathExpressionException {
+            XPath xpathObj = getXPathObject();
+            javax.xml.xpath.XPathExpression xpathExpression = xpathObj.compile(expression);
+            return xpathExpression.evaluate(input, resultType);
+        }
+    }
+
+    /**
+     * 
+     */
+    public static class DB {
+
+        private static DBConnectionManager manager = null;
+        private static String defaultPoolName = "swb";
+
+        private static DBConnectionManager getConnectionManager() {
+            if (manager == null) {
+                manager = new DBConnectionManager();
+            }
+            return manager;
+        }
+
+        /** Return a enumeration of DBConnectionPool
+         * @return Return a enumeration of DBConnectionPool
+         */
+        public static Enumeration<DBConnectionPool> getPools() {
+            return getConnectionManager().getPools().elements();
         }
 
         /**
          * 
+         * @param poolName
          */
-        public static class DB {
+        public static void setDefaultPool(String poolName) {
+            defaultPoolName = poolName;
+        }
 
-            private static DBConnectionManager manager = null;
-            private static String defaultPoolName = "swb";
+        /** Getter for Connection form DBPool.
+         * @return Connection from DBPool.
+         * @param poolName 
+         */
+        public static Connection getNoPoolConnection(String poolName) {
+            return getConnectionManager().getNoPoolConnection(poolName);
+        }
 
-            private static DBConnectionManager getConnectionManager() {
-                if (manager == null) {
-                    manager = new DBConnectionManager();
+        /** Getter for Connection form DBPool.
+         * @param description 
+         * @return Connection from DBPool.
+         */
+        public static Connection getDefaultConnection(String description) {
+            return getConnection(defaultPoolName, description);
+        }
+
+        /** Getter for Connection form DBPool.
+         * @return Connection from DBPool.
+         */
+        public static Connection getDefaultConnection() {
+            return getConnection(defaultPoolName);
+        }
+
+        /** Getter for Connection form DBPool.
+         * @return Connection from DBPool.
+         * @param poolName 
+         * @param description 
+         */
+        public static Connection getConnection(String poolName, String description) {
+            return getConnectionManager().getConnection(poolName, description);
+        //return dbPool.getNoPoolConnection(name);
+        }
+
+        /** Getter for Connection form DBPool.
+         * @return Connection from DBPool.
+         * @param name  */
+        public static Connection getConnection(String name) {
+            return getConnectionManager().getConnection(name);
+        }
+
+        /** Nombre de base de datos.
+         * DataBase name
+         *  @return String nombre de la base de datos.
+         */
+        public static String getDatabaseName() {
+            return getDatabaseName(defaultPoolName);
+        }
+
+        /** Nombre de base de datos.
+         * DataBase name
+         *  @param poolName 
+         * @return String nombre de la base de datos.
+         */
+        public static String getDatabaseName(String poolName) {
+            String ret = null;
+            try {
+                Connection con = getConnectionManager().getConnection(poolName);
+                if (con != null) {
+                    java.sql.DatabaseMetaData md = con.getMetaData();
+                    ret = md.getDatabaseProductName();
+                    con.close();
                 }
-                return manager;
+            } catch (Exception e) {
+                log.error("Not Database Found...", e);
             }
+            return ret;
+        }
 
-            /** Return a enumeration of DBConnectionPool
-             * @return Return a enumeration of DBConnectionPool
-             */
-            public static Enumeration<DBConnectionPool> getPools() {
-                return getConnectionManager().getPools().elements();
-            }
+        public static int getConnections(String poolName) {
+            return getConnectionManager().getConnections(poolName);
+        }
 
-            /**
-             * 
-             * @param poolName
-             */
-            public static void setDefaultPool(String poolName) {
-                defaultPoolName = poolName;
-            }
+        public static int getFreeConnections(String poolName) {
+            return getConnectionManager().getFreeConnections(poolName);
+        }
 
-            /** Getter for Connection form DBPool.
-             * @return Connection from DBPool.
-             * @param poolName 
-             */
-            public static Connection getNoPoolConnection(String poolName) {
-                return getConnectionManager().getNoPoolConnection(poolName);
-            }
+        public static class CryptoWrapper {
 
-            /** Getter for Connection form DBPool.
-             * @param description 
-             * @return Connection from DBPool.
-             */
-            public static Connection getDefaultConnection(String description) {
-                return getConnection(defaultPoolName, description);
-            }
-
-            /** Getter for Connection form DBPool.
-             * @return Connection from DBPool.
-             */
-            public static Connection getDefaultConnection() {
-                return getConnection(defaultPoolName);
-            }
-
-            /** Getter for Connection form DBPool.
-             * @return Connection from DBPool.
-             * @param poolName 
-             * @param description 
-             */
-            public static Connection getConnection(String poolName, String description) {
-                return getConnectionManager().getConnection(poolName, description);
-            //return dbPool.getNoPoolConnection(name);
-            }
-
-            /** Getter for Connection form DBPool.
-             * @return Connection from DBPool.
-             * @param name  */
-            public static Connection getConnection(String name) {
-                return getConnectionManager().getConnection(name);
-            }
-
-            /** Nombre de base de datos.
-             * DataBase name
-             *  @return String nombre de la base de datos.
-             */
-            public static String getDatabaseName() {
-                return getDatabaseName(defaultPoolName);
-            }
-
-            /** Nombre de base de datos.
-             * DataBase name
-             *  @param poolName 
-             * @return String nombre de la base de datos.
-             */
-            public static String getDatabaseName(String poolName) {
-                String ret = null;
-                try {
-                    Connection con = getConnectionManager().getConnection(poolName);
-                    if (con != null) {
-                        java.sql.DatabaseMetaData md = con.getMetaData();
-                        ret = md.getDatabaseProductName();
-                        con.close();
-                    }
-                } catch (Exception e) {
-                    log.error("Not Database Found...", e);
+            public static String passwordDigest(String toEncode) throws NoSuchAlgorithmException {
+                if (toEncode.startsWith("{SHA-512}") ||
+                        toEncode.startsWith("{SHA}") ||
+                        toEncode.startsWith("{SSHA}") ||
+                        toEncode.startsWith("{CRYPT}") ||
+                        toEncode.startsWith("{SMD5}") ||
+                        toEncode.startsWith("{MD5}")) {
+                    return toEncode;
                 }
-                return ret;
+                MessageDigest messageDigest = MessageDigest.getInstance("SHA-512");
+                return "{SHA-512}" + new BASE64Encoder().encode(messageDigest.digest(toEncode.getBytes()));
             }
 
-            public static int getConnections(String poolName) {
-                return getConnectionManager().getConnections(poolName);
+            public static String comparablePassword(String toEncode) throws NoSuchAlgorithmException {
+                return comparablePassword(toEncode, "SHA-512");
             }
 
-            public static int getFreeConnections(String poolName) {
-                return getConnectionManager().getFreeConnections(poolName);
+            public static String comparablePassword(String toEncode, String digestAlgorithm) throws NoSuchAlgorithmException {
+                MessageDigest messageDigest = MessageDigest.getInstance(digestAlgorithm);
+                return "{" + digestAlgorithm + "}" + new BASE64Encoder().encode(messageDigest.digest(toEncode.getBytes()));
             }
-        }
-    
-    public static class CryptoWrapper{
-    
-        public static String passwordDigest(String toEncode) throws NoSuchAlgorithmException {
-            if (toEncode.startsWith("{SHA-512}")||
-                    toEncode.startsWith("{SHA}")||
-                    toEncode.startsWith("{SSHA}")||
-                    toEncode.startsWith("{CRYPT}")||
-                    toEncode.startsWith("{SMD5}")||
-                    toEncode.startsWith("{MD5}"))
-                return toEncode;
-            MessageDigest messageDigest = MessageDigest.getInstance("SHA-512");
-            return "{SHA-512}"+new BASE64Encoder().encode(messageDigest.digest(toEncode.getBytes())); 
-        }
-        
-        public static String comparablePassword(String toEncode) throws NoSuchAlgorithmException{
-            return comparablePassword(toEncode, "SHA-512");
-        }
-        
-        public static String comparablePassword(String toEncode, String digestAlgorithm) throws NoSuchAlgorithmException{
-            MessageDigest messageDigest = MessageDigest.getInstance(digestAlgorithm);
-            return "{"+digestAlgorithm+"}"+ new BASE64Encoder().encode(messageDigest.digest(toEncode.getBytes()));
-        }
-        
-        public static byte[] PBEAES128Cipher(String passPhrese, byte[] data) throws GeneralSecurityException{
-            byte[] key = new byte[16];
-            byte[] tmp = passPhrese.getBytes();
-            int pos = 0;
-            while (pos < 16) {
-                System.arraycopy(tmp, 0, key, pos, Math.min(16-pos, tmp.length));
-                pos += tmp.length;
+
+            public static byte[] PBEAES128Cipher(String passPhrese, byte[] data) throws GeneralSecurityException {
+                byte[] key = new byte[16];
+                byte[] tmp = passPhrese.getBytes();
+                int pos = 0;
+                while (pos < 16) {
+                    System.arraycopy(tmp, 0, key, pos, Math.min(16 - pos, tmp.length));
+                    pos += tmp.length;
+                }
+                SecretKey secretKey = new SecretKeySpec(key, "AES");
+                Cipher cipher = Cipher.getInstance("AES");
+                cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+                return cipher.doFinal(data);
             }
-            SecretKey secretKey = new SecretKeySpec(key,"AES");
-            Cipher cipher = Cipher.getInstance("AES");
-            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
-            return cipher.doFinal(data);
-        }
-        
-        public static byte[] PBEAES128Decipher(String passPhrese, byte[] data) throws GeneralSecurityException{
-            byte[] key = new byte[16];
-            byte[] tmp = passPhrese.getBytes();
-            int pos = 0;
-            while (pos < 16) {
-                System.arraycopy(tmp, 0, key, pos, Math.min(16-pos, tmp.length));
-                pos += tmp.length;
+
+            public static byte[] PBEAES128Decipher(String passPhrese, byte[] data) throws GeneralSecurityException {
+                byte[] key = new byte[16];
+                byte[] tmp = passPhrese.getBytes();
+                int pos = 0;
+                while (pos < 16) {
+                    System.arraycopy(tmp, 0, key, pos, Math.min(16 - pos, tmp.length));
+                    pos += tmp.length;
+                }
+                SecretKey secretKey = new SecretKeySpec(key, "AES");
+                Cipher cipher = Cipher.getInstance("AES");
+                cipher.init(Cipher.DECRYPT_MODE, secretKey);
+                return cipher.doFinal(data);
             }
-            SecretKey secretKey = new SecretKeySpec(key,"AES");
-            Cipher cipher = Cipher.getInstance("AES");
-            cipher.init(Cipher.DECRYPT_MODE, secretKey);
-            return cipher.doFinal(data);
         }
     }
 }
-
