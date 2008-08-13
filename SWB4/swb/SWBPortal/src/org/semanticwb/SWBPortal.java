@@ -1,7 +1,13 @@
 package org.semanticwb;
 
-import org.semanticwb.model.IPFilter;
-import org.semanticwb.portal.services.*;
+import org.semanticwb.portal.services.DnsSrv;
+import org.semanticwb.portal.services.IPFilterSrv;
+import org.semanticwb.portal.services.RoleSrv;
+import org.semanticwb.portal.services.RuleSrv;
+import org.semanticwb.portal.services.SWBServices;
+import org.semanticwb.portal.services.TemplateSrv;
+import org.semanticwb.portal.services.WebPageSrv;
+import org.semanticwb.portal.services.WebSiteSrv;
 
 public class SWBPortal 
 {
@@ -22,34 +28,44 @@ public class SWBPortal
         log.event("Initialize Semantic WebBuilder Portal...");
     }
     
-    public static WebSiteSrv getWebSiteSrv()
-    {
-        WebSiteSrv webSiteSrv=new WebSiteSrv();
-        return webSiteSrv;
-    }  
+    public SWBServices getSWBServices(){
+        SWBServices swbServices=new SWBServices();
+        return swbServices;
+    }
     
-    public static WebPageSrv getWebPageSrv()
-    {
-        WebPageSrv webPageSrv=new WebPageSrv();
-        return webPageSrv;
-    } 
-    
-    public static DeviceSrv getDeviceSrv()
-    {
-        DeviceSrv deviceSrv=new DeviceSrv();
-        return deviceSrv;
-    } 
-    
-    public static DnsSrv getDnsSrv()
-    {
+    public DnsSrv getDnsSrv(){
         DnsSrv dnsSrv=new DnsSrv();
         return dnsSrv;
-    } 
+    }
     
-    public static IPFilterSrv getIPFilterSrv()
-    {
-        IPFilterSrv ipFilterSrv=new IPFilterSrv();
-        return ipFilterSrv;
-    } 
+    public IPFilterSrv getIPFilterSrv(){
+        IPFilterSrv iPFilterSrv=new IPFilterSrv();
+        return iPFilterSrv;
+    }
+    
+    public RoleSrv getRoleSrv(){
+        RoleSrv roleSrv=new RoleSrv();
+        return roleSrv;
+    }
+    
+    public RuleSrv getRuleSrv(){
+        RuleSrv ruleSrv=new RuleSrv();
+        return ruleSrv;
+    }
+    
+    public TemplateSrv getTemplateSrv(){
+        TemplateSrv templateSrv=new TemplateSrv();
+        return templateSrv;
+    }
+    
+    public WebPageSrv getWebPageSrv(){
+        WebPageSrv webPageSrv=new WebPageSrv();
+        return webPageSrv;
+    }
+    
+    public WebSiteSrv getWebSiteSrv(){
+        WebSiteSrv webSiteSrv=new WebSiteSrv();
+        return webSiteSrv;
+    }
     
 }
