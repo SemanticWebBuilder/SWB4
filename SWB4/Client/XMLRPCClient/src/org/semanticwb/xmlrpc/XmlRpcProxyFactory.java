@@ -178,6 +178,10 @@ public class XmlRpcProxyFactory implements java.lang.reflect.InvocationHandler, 
                 config.setProxyServer(this.getProxyAddress());
                 config.setProxyPort(this.getProxyPort());
                 XmlRpcClient<Object> xmlclient = new XmlRpcClient<Object>(config);
+                if(this.attachments==null)
+                {
+                    attachments = new HashSet<Attachment>();
+                }
                 ObjectToreturn = xmlclient.execute(methodName, args, this.attachments);
             }
             catch ( Exception e )
