@@ -6,7 +6,6 @@
 package org.semanticwb.portal.services;
 
 import org.semanticwb.SWBException;
-import org.semanticwb.SWBInstance;
 import org.semanticwb.model.Device;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
@@ -30,7 +29,7 @@ public class DeviceSrv
         device.setValue(value);
 
         //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getName(), "create", device.getURI(), device.getURI(), "create device", null);
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", device.getURI(), device.getURI(), "create device", null);
         try {
             swbAdmLog.create();
         } catch (Exception e) {
@@ -50,27 +49,13 @@ public class DeviceSrv
         device.setValue(value);
 
         //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getName(), "create", device.getURI(), device.getURI(), "create device", null);
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", device.getURI(), device.getURI(), "create device", null);
         try {
             swbAdmLog.create();
         } catch (Exception e) {
             throw new SWBException("Error creating device", e);
         }
         return device;
-    }
-    
-    public boolean removeDNS(Device device , User user) throws SWBException {
-        boolean deleted = false;
-        SWBContext.removeObject(device.getURI());
-        deleted = true;
-        //logeo.creat
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getName(), "remove", device.getURI(), device.getURI(), "remove Device", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error removing device:" + device.getURI(), e);
-        }
-        return deleted;
     }
     
     public boolean updateDevice(Device device, String uri, String title, String description, String value, User user) throws SWBException {
@@ -87,7 +72,7 @@ public class DeviceSrv
         }
         updated = true;
         //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getName(), "update", device.getURI(), device.getURI(), "update Device", null);
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "update", device.getURI(), device.getURI(), "update Device", null);
         try {
             swbAdmLog.create();
         } catch (Exception e) {

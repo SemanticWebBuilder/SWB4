@@ -31,7 +31,7 @@ public class WebSiteSrv {
         website.setUserCreated(user);
 
         //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog("user", "create", website.getURI(), website.getURI(), "Create WebSite", null);
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", website.getURI(), website.getURI(), "Create WebSite", null);
         try {
             swbAdmLog.create();
         } catch (Exception e) {
@@ -40,11 +40,11 @@ public class WebSiteSrv {
         return website;
     }
 
-    public boolean removeWebSite(WebSite website) throws SWBException {
+    public boolean removeWebSite(WebSite website, User user) throws SWBException {
         SWBContext.removeObject(website.getURI());
 
         //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog("user", "remove", website.getURI(), website.getURI(), "Remove WebSite", null);
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "remove", website.getURI(), website.getURI(), "Remove WebSite", null);
          try{
             swbAdmLog.create();
         }catch(Exception e){
@@ -53,7 +53,7 @@ public class WebSiteSrv {
         return true;
     }
 
-    public boolean updateWebSite(WebSite webSite, String description, String home, String language, String title, boolean deleted, int status, String repository) throws SWBException {
+    public boolean updateWebSite(WebSite webSite, String description, String home, String language, String title, boolean deleted, int status, User user) throws SWBException {
         
         if (title != null) {
             webSite.setTitle(title);
@@ -63,9 +63,10 @@ public class WebSiteSrv {
             webSite.setDescription(description);
         }
         webSite.setStatus(status);
+        webSite.setUserModified(user);
 
         //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog("user", "update", webSite.getURI(), webSite.getURI(), "Update WebSite", null);
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "update", webSite.getURI(), webSite.getURI(), "Update WebSite", null);
         try{
             swbAdmLog.create();
         }catch(Exception e){
@@ -74,17 +75,4 @@ public class WebSiteSrv {
         return true;
     }
 
-    public boolean setStatusWebSite(WebSite webSite, int status) throws SWBException {
-        
-        webSite.setStatus(status);
-        
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog("user", "status", webSite.getURI(), webSite.getURI(), "update WebSite Status", null);
-        try{
-            swbAdmLog.create();
-        }catch(Exception e){
-             throw new SWBException("Error updating status to WebSite",e);
-        }
-        return true;
-    }
 }
