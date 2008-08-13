@@ -5,7 +5,6 @@
 package org.semanticwb.portal.services;
 
 import org.semanticwb.SWBException;
-import org.semanticwb.SWBInstance;
 import org.semanticwb.model.IPFilter;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
@@ -25,7 +24,7 @@ public class IPFilterSrv {
         ipFilter.setValue(value);
 
         //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getName(), "create", ipFilter.getURI(), ipFilter.getURI(), "create IPFilter", null);
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", ipFilter.getURI(), ipFilter.getURI(), "create IPFilter", null);
         try {
             swbAdmLog.create();
         } catch (Exception e) {
@@ -41,7 +40,7 @@ public class IPFilterSrv {
         ipFilter.setValue(value);
 
         //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getName(), "create", ipFilter.getURI(), ipFilter.getURI(), "create IPFilter", null);
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", ipFilter.getURI(), ipFilter.getURI(), "create IPFilter", null);
         try {
             swbAdmLog.create();
         } catch (Exception e) {
@@ -56,7 +55,7 @@ public class IPFilterSrv {
         SWBContext.removeObject(ipFilter.getURI());
         removed=true;
         //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getName(), "create", ipFilter.getURI(), ipFilter.getURI(), "create IPFilter", null);
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", ipFilter.getURI(), ipFilter.getURI(), "create IPFilter", null);
         try {
             swbAdmLog.create();
         } catch (Exception e) {
@@ -73,7 +72,7 @@ public class IPFilterSrv {
         }
         updated = true;
         //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getName(), "update", ipFilter.getURI(), ipFilter.getURI(), "update IPFilter", null);
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "update", ipFilter.getURI(), ipFilter.getURI(), "update IPFilter", null);
         try {
             swbAdmLog.create();
         } catch (Exception e) {

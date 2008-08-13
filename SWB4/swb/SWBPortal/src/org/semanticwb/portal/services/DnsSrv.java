@@ -30,7 +30,7 @@ public class DnsSrv {
         dns.setValue(value);
 
         //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getName(), "create", dns.getURI(), dns.getURI(), "create DNS", null);
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", dns.getURI(), dns.getURI(), "create DNS", null);
         try {
             swbAdmLog.create();
         } catch (Exception e) {
@@ -47,7 +47,7 @@ public class DnsSrv {
         dns.setValue(value);
 
         //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getName(), "create", dns.getURI(), dns.getURI(), "create DNS", null);
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", dns.getURI(), dns.getURI(), "create DNS", null);
         try {
             swbAdmLog.create();
         } catch (Exception e) {
@@ -61,7 +61,7 @@ public class DnsSrv {
         SWBContext.removeObject(dns.getURI());
         deleted = true;
         //logeo.creat
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getName(), "remove", dns.getURI(), dns.getURI(), "remove DNS", null);
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "remove", dns.getURI(), dns.getURI(), "remove DNS", null);
         try {
             swbAdmLog.create();
         } catch (Exception e) {
@@ -84,7 +84,7 @@ public class DnsSrv {
         }
         updated = true;
         //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getName(), "update", dns.getURI(), dns.getURI(), "update DNS", null);
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "update", dns.getURI(), dns.getURI(), "update DNS", null);
         try {
             swbAdmLog.create();
         } catch (Exception e) {

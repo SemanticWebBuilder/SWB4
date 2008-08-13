@@ -16,15 +16,14 @@ import org.semanticwb.portal.SWBDBAdmLog;
  * @author jorge.jimenez
  */
 public class RuleSrv {
-    
-    public Rule createRule(SemanticModel model, String title, String description, User user) throws SWBException
-    {
+
+    public Rule createRule(SemanticModel model, String title, String description, User user) throws SWBException {
         Rule rule = SWBContext.createRule(model);
         rule.setTitle(title);
         rule.setDescription(description);
 
         //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getName(), "create", rule.getURI(), rule.getURI(), "create Rule", null);
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", rule.getURI(), rule.getURI(), "create Rule", null);
         try {
             swbAdmLog.create();
         } catch (Exception e) {
@@ -34,14 +33,13 @@ public class RuleSrv {
 
     }
 
-    public Rule createRule(SemanticModel model, String ruleUri, String title, String description, User user) throws SWBException
-    {
+    public Rule createRule(SemanticModel model, String ruleUri, String title, String description, User user) throws SWBException {
         Rule rule = SWBContext.createRule(model, ruleUri);
         rule.setTitle(title);
         rule.setDescription(description);
 
         //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getName(), "create", rule.getURI(), rule.getURI(), "create Rule", null);
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", rule.getURI(), rule.getURI(), "create Rule", null);
         try {
             swbAdmLog.create();
         } catch (Exception e) {
@@ -50,15 +48,14 @@ public class RuleSrv {
         return rule;
 
     }
-    
-    public boolean removeRule(Rule rule, User user) throws SWBException
-    {
-        boolean deleted=false;
+
+    public boolean removeRule(Rule rule, User user) throws SWBException {
+        boolean deleted = false;
         SWBContext.removeObject(rule.getURI());
-        deleted=true;
+        deleted = true;
 
         //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getName(), "create", rule.getURI(), rule.getURI(), "remove Rule", null);
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", rule.getURI(), rule.getURI(), "remove Rule", null);
         try {
             swbAdmLog.create();
         } catch (Exception e) {
