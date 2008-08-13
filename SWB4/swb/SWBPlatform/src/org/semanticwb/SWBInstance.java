@@ -28,6 +28,7 @@ public class SWBInstance
     private static SWBInstance instance=null;
     private static Properties props=null;
     private String contextPath="/";
+    private static String workPath = "";
 
     private static ServletContext servletContext=null;
 
@@ -51,6 +52,8 @@ public class SWBInstance
     //Initialize context
     private void init()
     {
+        workPath = (String) getEnv("swb/workPath");
+        
         log.event("SemanticWebBuilder Version: " + version);
         log.event("Java Version: " + System.getProperty("java.runtime.version"));
         
@@ -217,6 +220,14 @@ public class SWBInstance
         {
             log.error("Error loading SemanticWebBuilder Instance...", e);
         }
+    }
+    
+    /** Getter for property workPath.
+     * @return Value of property workPath.
+     */
+    public static String getWorkPath()
+    {
+        return workPath;
     }
     
     /**
