@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -38,12 +39,17 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
+import java.security.GeneralSecurityException;
+import java.security.MessageDigest;
 import org.apache.commons.mail.HtmlEmail;
 import org.apache.commons.mail.EmailAttachment;
 import java.util.Collection;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.StringTokenizer;
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import javax.xml.namespace.QName;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathFactory;
@@ -54,6 +60,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.semanticwb.base.util.SWBMailSender;
 import org.semanticwb.base.util.SWBMail;
 import org.w3c.dom.Element;
+import sun.misc.BASE64Encoder;
 
 /**
  *
@@ -1510,5 +1517,57 @@ public class SWBUtils {
                 return getConnectionManager().getFreeConnections(poolName);
             }
         }
+    
+    public static class CryptoWrapper{
+    
+        public static String passwordDigest(String toEncode) throws NoSuchAlgorithmException {
+            if (toEncode.startsWith("{SHA-512}")||
+                    toEncode.startsWith("{SHA}")||
+                    toEncode.startsWith("{SSHA}")||
+                    toEncode.startsWith("{CRYPT}")||
+                    toEncode.startsWith("{SMD5}")||
+                    toEncode.startsWith("{MD5}"))
+                return toEncode;
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-512");
+            return "{SHA-512}"+new BASE64Encoder().encode(messageDigest.digest(toEncode.getBytes())); 
+        }
+        
+        public static String comparablePassword(String toEncode) throws NoSuchAlgorithmException{
+            return comparablePassword(toEncode, "SHA-512");
+        }
+        
+        public static String comparablePassword(String toEncode, String digestAlgorithm) throws NoSuchAlgorithmException{
+            MessageDigest messageDigest = MessageDigest.getInstance(digestAlgorithm);
+            return "{"+digestAlgorithm+"}"+ new BASE64Encoder().encode(messageDigest.digest(toEncode.getBytes()));
+        }
+        
+        public static byte[] PBEAES128Cipher(String passPhrese, byte[] data) throws GeneralSecurityException{
+            byte[] key = new byte[16];
+            byte[] tmp = passPhrese.getBytes();
+            int pos = 0;
+            while (pos < 16) {
+                System.arraycopy(tmp, 0, key, pos, Math.min(16-pos, tmp.length));
+                pos += tmp.length;
+            }
+            SecretKey secretKey = new SecretKeySpec(key,"AES");
+            Cipher cipher = Cipher.getInstance("AES");
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+            return cipher.doFinal(data);
+        }
+        
+        public static byte[] PBEAES128Decipher(String passPhrese, byte[] data) throws GeneralSecurityException{
+            byte[] key = new byte[16];
+            byte[] tmp = passPhrese.getBytes();
+            int pos = 0;
+            while (pos < 16) {
+                System.arraycopy(tmp, 0, key, pos, Math.min(16-pos, tmp.length));
+                pos += tmp.length;
+            }
+            SecretKey secretKey = new SecretKeySpec(key,"AES");
+            Cipher cipher = Cipher.getInstance("AES");
+            cipher.init(Cipher.DECRYPT_MODE, secretKey);
+            return cipher.doFinal(data);
+        }
     }
+}
 
