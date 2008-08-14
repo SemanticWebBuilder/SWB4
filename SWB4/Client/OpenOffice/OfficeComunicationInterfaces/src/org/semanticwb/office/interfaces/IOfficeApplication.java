@@ -22,6 +22,9 @@ public interface IOfficeApplication {
     @XmlRpcMethod(methodName="OfficeApplication.existPage")
     public boolean existsPage(String id) throws Exception; 
     @XmlRpcMethod(methodName="OfficeApplication.createCategory")
-    public String createCategory(String id,String description) throws Exception; 
-        
+    public String createCategory(String repositoryName,String id,String description) throws Exception; 
+    @XmlRpcMethod(methodName="OfficeApplication.getRepositories")
+    public String[] getRepositories() throws Exception;
+    @XmlRpcMethod(methodName="OfficeApplication.getCategories")
+    public String[] getCategories(String repositoryName) throws Exception;
 }
