@@ -1,28 +1,19 @@
 package org.semanticwb.model.base;
 
 import java.util.Date;
-import org.semanticwb.platform.SemanticObject;
+import java.util.Iterator;
 import org.semanticwb.model.*;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
-import org.semanticwb.platform.SemanticIterator;
+import com.hp.hpl.jena.rdf.model.*;
+import org.semanticwb.*;
+import org.semanticwb.platform.*;
 
-public class CampBase extends SemanticObject implements Statusable,Deleteable,Ruleable,Descriptiveable,WebSiteable,Calendarable,Roleable
+public class CampBase extends SemanticObject implements Statusable,Deleteable,Ruleable,Descriptiveable,Calendarable,Roleable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
     public CampBase(com.hp.hpl.jena.rdf.model.Resource res)
     {
         super(res);
-    }
-
-    public boolean isDeleted()
-    {
-        return getBooleanProperty(vocabulary.deleted);
-    }
-
-    public void setDeleted(boolean deleted)
-    {
-        setBooleanProperty(vocabulary.deleted, deleted);
     }
 
     public Date getCreated()
@@ -35,51 +26,14 @@ public class CampBase extends SemanticObject implements Statusable,Deleteable,Ru
         setDateProperty(vocabulary.created, created);
     }
 
-    public String getTitle()
+    public boolean isDeleted()
     {
-        return getProperty(vocabulary.title);
+        return getBooleanProperty(vocabulary.deleted);
     }
 
-    public void setTitle(String title)
+    public void setDeleted(boolean deleted)
     {
-        setProperty(vocabulary.title, title);
-    }
-
-    public void setUserCreated(org.semanticwb.model.User user)
-    {
-        addObjectProperty(vocabulary.userCreated, user);
-    }
-
-    public void removeUserCreated()
-    {
-        removeProperty(vocabulary.userCreated);
-    }
-
-    public User getUserCreated()
-    {
-         StmtIterator stit=getRDFResource().listProperties(vocabulary.userCreated.getRDFProperty());
-         SemanticIterator<org.semanticwb.model.User> it=new SemanticIterator<org.semanticwb.model.User>(User.class, stit);
-         return it.next();
-    }
-
-    public int getStatus()
-    {
-        return getIntProperty(vocabulary.status);
-    }
-
-    public void setStatus(int status)
-    {
-        setLongProperty(vocabulary.status, status);
-    }
-
-    public Date getUpdated()
-    {
-        return getDateProperty(vocabulary.updated);
-    }
-
-    public void setUpdated(Date updated)
-    {
-        setDateProperty(vocabulary.updated, updated);
+        setBooleanProperty(vocabulary.deleted, deleted);
     }
 
     public void setUserModified(org.semanticwb.model.User user)
@@ -127,6 +81,16 @@ public class CampBase extends SemanticObject implements Statusable,Deleteable,Ru
          return it.next();
     }
 
+    public String getTitle()
+    {
+        return getProperty(vocabulary.title);
+    }
+
+    public void setTitle(String title)
+    {
+        setProperty(vocabulary.title, title);
+    }
+
     public SemanticIterator<org.semanticwb.model.Role> listRole()
     {
         StmtIterator stit=getRDFResource().listProperties(vocabulary.hasRole.getRDFProperty());
@@ -163,6 +127,43 @@ public class CampBase extends SemanticObject implements Statusable,Deleteable,Ru
     public void setDescription(String description)
     {
         setProperty(vocabulary.description, description);
+    }
+
+    public void setUserCreated(org.semanticwb.model.User user)
+    {
+        addObjectProperty(vocabulary.userCreated, user);
+    }
+
+    public void removeUserCreated()
+    {
+        removeProperty(vocabulary.userCreated);
+    }
+
+    public User getUserCreated()
+    {
+         StmtIterator stit=getRDFResource().listProperties(vocabulary.userCreated.getRDFProperty());
+         SemanticIterator<org.semanticwb.model.User> it=new SemanticIterator<org.semanticwb.model.User>(User.class, stit);
+         return it.next();
+    }
+
+    public int getStatus()
+    {
+        return getIntProperty(vocabulary.status);
+    }
+
+    public void setStatus(int status)
+    {
+        setLongProperty(vocabulary.status, status);
+    }
+
+    public Date getUpdated()
+    {
+        return getDateProperty(vocabulary.updated);
+    }
+
+    public void setUpdated(Date updated)
+    {
+        setDateProperty(vocabulary.updated, updated);
     }
 
     public SemanticIterator<org.semanticwb.model.Rule> listRule()

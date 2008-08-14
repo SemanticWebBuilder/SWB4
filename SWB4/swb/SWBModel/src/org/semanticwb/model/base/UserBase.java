@@ -1,35 +1,19 @@
 package org.semanticwb.model.base;
 
 import java.util.Date;
-import org.semanticwb.platform.SemanticObject;
+import java.util.Iterator;
 import org.semanticwb.model.*;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
-import org.semanticwb.platform.SemanticIterator;
+import com.hp.hpl.jena.rdf.model.*;
+import org.semanticwb.*;
+import org.semanticwb.platform.*;
 
-public class UserBase extends SemanticObject implements Roleable,Groupable,Statusable
+public class UserBase extends SemanticObject implements Statusable,Groupable,Roleable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
     public UserBase(com.hp.hpl.jena.rdf.model.Resource res)
     {
         super(res);
-    }
-
-    public void setUserReposotory(org.semanticwb.model.UserRepository userrepository)
-    {
-        addObjectProperty(vocabulary.userReposotory, userrepository);
-    }
-
-    public void removeUserReposotory()
-    {
-        removeProperty(vocabulary.userReposotory);
-    }
-
-    public UserRepository getUserReposotory()
-    {
-         StmtIterator stit=getRDFResource().listProperties(vocabulary.userReposotory.getRDFProperty());
-         SemanticIterator<org.semanticwb.model.UserRepository> it=new SemanticIterator<org.semanticwb.model.UserRepository>(UserRepository.class, stit);
-         return it.next();
     }
 
     public SemanticIterator<org.semanticwb.model.Role> listRole()
