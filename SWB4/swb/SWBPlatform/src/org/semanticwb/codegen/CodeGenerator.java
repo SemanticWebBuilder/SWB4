@@ -131,7 +131,7 @@ public class CodeGenerator
                 System.out.println("tpc: " + tpc.toString() + " isSWBInterface: " + tpc.isSWBInterface());
                 createInterface(tpc);
             }
-            else if ( tpc.isSWBClass() )
+            else if ( tpc.isSWBClass() || tpc.isSWBModel())
             {
                 System.out.println("tpc: " + tpc.toString() + " isSWBClass: " + tpc.isSWBClass());
                 createClassBase(tpc);
@@ -239,85 +239,36 @@ public class CodeGenerator
         javaClassContent.append("    }" + ENTER);
 
 
-        javaClassContent.append("    public static void removeObject(String uri)" + ENTER);
-        javaClassContent.append("    {" + ENTER);
-        javaClassContent.append("        removeObject(mgr.getOntology().getSemanticObject(uri));" + ENTER);
-        javaClassContent.append("    }" + ENTER);
-
-        javaClassContent.append("    public static void removeObject(SemanticObject obj)" + ENTER);
-        javaClassContent.append("    {" + ENTER);
-        javaClassContent.append("        if(obj!=null)" + ENTER);
-        javaClassContent.append("        {" + ENTER);
-        javaClassContent.append("            mgr.getOntology().getRDFOntModel().remove(obj.getRDFResource(), null, null);" + ENTER);
-        javaClassContent.append("        }" + ENTER);
-        javaClassContent.append("    }" + ENTER);
-
-
-
         SemanticMgr mgr = SWBInstance.getSemanticMgr();
         Iterator<SemanticClass> tpcit = mgr.getVocabulary().listSemanticClasses();
         while (tpcit.hasNext())
         {
             SemanticClass tpc = tpcit.next();
-            javaClassContent.append("    public static " + tpc.getName() + " get" + tpc.getName() + "(String uri)" + ENTER);
-            javaClassContent.append("    {" + ENTER);
-            javaClassContent.append("        return (" + tpc.getName() + ")mgr.getOntology().getSemanticObject(uri,vocabulary." + tpc.getName() + ");" + ENTER);
-            javaClassContent.append("    }" + ENTER);
-
-//            javaClassContent.append("    public static " + tpc.getName() + " create" + tpc.getName() + "(SemanticModel model, String uri)" + ENTER);
-//            javaClassContent.append("    {" + ENTER);
-//            javaClassContent.append("        return (" + tpc.getName() + ")model.createSemanticObject(uri, vocabulary." + tpc.getName() + ");" + ENTER);
-//            javaClassContent.append("    }" + ENTER);
-
-            javaClassContent.append("    public static " + tpc.getName() + " create" + tpc.getName() + "(SemanticModel model, String id)" + ENTER);
-            javaClassContent.append("    {" + ENTER);
-            javaClassContent.append("        return (" + tpc.getName() + ")model.createSemanticObject(model.getNameSpace()+\"/\"+vocabulary." + tpc.getName() + ".getName()+\"#\"" + ENTER);
-            javaClassContent.append("                +id, vocabulary." + tpc.getName() + ");" + ENTER);
-            javaClassContent.append("    }" + ENTER);
-
-            if(tpc.isAutogenId())
+            if(tpc.isSWBModel())
             {
-                javaClassContent.append("    public static " + tpc.getName() + " create" + tpc.getName() + "(SemanticModel model)" + ENTER);
+                javaClassContent.append(ENTER);
+                javaClassContent.append("    public static " + tpc.getName() + " get" + tpc.getName() + "(String uri)" + ENTER);
                 javaClassContent.append("    {" + ENTER);
-                javaClassContent.append("        return (" + tpc.getName() + ")model.createSemanticObject(model.getNameSpace()+\"/\"+vocabulary." + tpc.getName() + ".getName()+\"#\"" + ENTER);
-                javaClassContent.append("                +SWBInstance.getCounterValue(model.getName()+\"/\"+vocabulary." + tpc.getName() + ".getName()), vocabulary." + tpc.getName() + ");" + ENTER);
+                javaClassContent.append("        return (" + tpc.getName() + ")mgr.getOntology().getSemanticObject(uri,vocabulary." + tpc.getName() + ");" + ENTER);
+                javaClassContent.append("    }" + ENTER);
+                javaClassContent.append(ENTER);
+                javaClassContent.append("    public static Iterator<org.semanticwb.model." + tpc.getName() + "> list" + tpc.getName() + "s()" + ENTER);
+                javaClassContent.append("    {" + ENTER);
+                javaClassContent.append("        return (Iterator<org.semanticwb.model." + tpc.getName() + ">)vocabulary." + tpc.getName() + ".listInstances();" + ENTER);
+                javaClassContent.append("    }" + ENTER);
+                javaClassContent.append(ENTER);
+                javaClassContent.append("    public static void remove" + tpc.getName() + "(String uri)" + ENTER);
+                javaClassContent.append("    {" + ENTER);
+                javaClassContent.append("        mgr.removeModel(uri);" + ENTER);
+                javaClassContent.append("    }" + ENTER);
+                javaClassContent.append(ENTER);
+                javaClassContent.append("    public static void create" + tpc.getName() + "(String name, String namespace)" + ENTER);
+                javaClassContent.append("    {" + ENTER);
+                javaClassContent.append("        SemanticModel model=mgr.createModel(name, namespace);" + ENTER);
+                javaClassContent.append("        model.createSemanticObject(name, vocabulary." + tpc.getName() + ");" + ENTER);
                 javaClassContent.append("    }" + ENTER);
             }
-
-            javaClassContent.append("    public static Iterator<org.semanticwb.model." + tpc.getName() + "> list" + tpc.getName() + "s()" + ENTER);
-            javaClassContent.append("    {" + ENTER);
-            javaClassContent.append("        return (Iterator<org.semanticwb.model." + tpc.getName() + ">)vocabulary." + tpc.getName() + ".listInstances();" + ENTER);
-            javaClassContent.append("    }" + ENTER);
-            
-            if ( tpc.isSWBClass() )
-            {
-
-                javaClassContent.append("    public static " + tpc.getName() + " create" + tpc.getName() + "(SemanticModel model, String uri)" + ENTER);
-                javaClassContent.append("    {" + ENTER);
-                javaClassContent.append("        return (" + tpc.getName() + ")model.createSemanticObject(uri, vocabulary." + tpc.getName() + ");" + ENTER);
-                javaClassContent.append("    }" + ENTER);
-
-
-            }
         }
-
-        /*public static User getUser(String uri)
-        {
-        return (User)mgr.getOntology().getSemanticObject(uri,vocabulary.WebPage);
-        }
-        public static User createUser(SemanticModel model, String uri)
-        {
-        return (User)model.createSemanticObject(uri, vocabulary.User);
-        }
-        public static Iterator<org.semanticwb.model.User> listUsers()
-        {
-        return (Iterator<org.semanticwb.model.User>)vocabulary.User.listInstances();
-        }*/
-
-
-
-
-
         javaClassContent.append("}" + ENTER);
 
         saveFile(fileClass, javaClassContent.toString());
@@ -341,14 +292,14 @@ public class CodeGenerator
             javaClassContent.append("package " + m_Package + ".base;" + ENTER);
             javaClassContent.append("" + ENTER);
         }
+        
         javaClassContent.append("import java.util.Date;" + ENTER);
-//        if ( !this.m_Package.equals("org.semanticwb.model") )
-//        {
-        javaClassContent.append("import org.semanticwb.platform.SemanticObject;" + ENTER);
-//        }
+        javaClassContent.append("import java.util.Iterator;" + ENTER);
         javaClassContent.append("import " + m_Package + ".*;" + ENTER);
-        javaClassContent.append("import com.hp.hpl.jena.rdf.model.StmtIterator;" + ENTER);
-        javaClassContent.append("import org.semanticwb.platform.SemanticIterator;" + ENTER);
+        javaClassContent.append("import com.hp.hpl.jena.rdf.model.*;" + ENTER);
+        javaClassContent.append("import org.semanticwb.*;" + ENTER);
+        javaClassContent.append("import org.semanticwb.platform.*;" + ENTER);
+
         javaClassContent.append(ENTER);
         javaClassContent.append("public class " + tpc.getName() + "Base extends SemanticObject " + getInterfaces(tpc) + "" + ENTER);
         javaClassContent.append("{" + ENTER);
@@ -359,6 +310,10 @@ public class CodeGenerator
         javaClassContent.append("        super(res);" + ENTER);
         javaClassContent.append(CLOSE_BLOCK + ENTER);
         insertPropertiesToClass(tpc, javaClassContent);
+        if(tpc.isSWBModel())
+        {
+            insertPropertiesToModel(tpc,javaClassContent);
+        }
         javaClassContent.append("}" + ENTER);
         File fileClass = new File(dir.getPath() + File.separatorChar + tpc.getName() + "Base.java");
         saveFile(fileClass, javaClassContent.toString());
@@ -432,18 +387,37 @@ public class CodeGenerator
                     try
                     {
                         URI uri = new URI(tpp.getRangeClass().getURI());
-                        String objectName = uri.getFragment();
+                        String objectName = tpp.getName();
                         objectName = toUpperCase(objectName);
+                        String valueToReturn = uri.getFragment();
                         if ( !methods.contains(objectName) )
                         {
                             methods.add(objectName);
-                            javaClassContent.append("    public SemanticIterator<" + m_Package + "." + objectName + "> list" + objectName + END_OF_METHOD + ENTER);
-                            javaClassContent.append("    public void add" + objectName + "(" + m_Package + "." + objectName + " " + objectName.toLowerCase() + ");" + ENTER);
-                            javaClassContent.append("    public void removeAll" + objectName + END_OF_METHOD + ENTER);
-                            javaClassContent.append(PUBLIC + objectName + " get" + objectName + END_OF_METHOD + ENTER);
-
+                            if ( objectName.toLowerCase().startsWith("has") )
+                            {
+                                // son varios
+                                objectName = objectName.substring(3);
+                                javaClassContent.append(ENTER);
+                                javaClassContent.append("    public SemanticIterator<" + m_Package + "." + valueToReturn + "> list" + objectName + "();" + ENTER);
+                                javaClassContent.append(ENTER);
+                                javaClassContent.append("    public void add" + objectName + "(" + m_Package + "." + valueToReturn + " " + valueToReturn.toLowerCase() + ");" + ENTER);
+                                javaClassContent.append(ENTER);
+                                javaClassContent.append("    public void removeAll" + objectName + "();" + ENTER);
+                                javaClassContent.append(ENTER);
+                                javaClassContent.append("    public void remove" + objectName + "(" + m_Package + "." + valueToReturn + " " + valueToReturn.toLowerCase() + ");" + ENTER);
+                                javaClassContent.append(ENTER);
+                                javaClassContent.append(PUBLIC + valueToReturn + " get" + objectName + "();" + ENTER);
+                            }
+                            else
+                            {
+                                javaClassContent.append(ENTER);
+                                javaClassContent.append("    public void set" + objectName + "(" + m_Package + "." + valueToReturn + " " + valueToReturn.toLowerCase() + ");" + ENTER);
+                                javaClassContent.append(ENTER);
+                                javaClassContent.append("    public void remove" + objectName + "();" + ENTER);
+                                javaClassContent.append(ENTER);
+                                javaClassContent.append(PUBLIC + valueToReturn + " get" + objectName + "();" + ENTER);
+                            }
                         }
-
                     }
                     catch ( URISyntaxException usie )
                     {
@@ -514,6 +488,43 @@ public class CodeGenerator
                     log.error(usie);
                 }
             }
+        }
+    }
+    
+    private void insertPropertiesToModel(SemanticClass tpcls, StringBuilder javaClassContent)
+    {
+        Iterator<SemanticClass> tpcit = tpcls.listModelClasses();
+        while (tpcit.hasNext())
+        {
+            SemanticClass tpc = tpcit.next();
+            
+            javaClassContent.append("    public " + tpc.getName() + " get" + tpc.getName() + "(String id)" + ENTER);
+            javaClassContent.append("    {" + ENTER);
+            javaClassContent.append("        return (" + tpc.getName() + ")getModel().getSemanticObject(getModel().getObjectUri(id,vocabulary." + tpc.getName() + "),vocabulary." + tpc.getName() + ");" + ENTER);
+            javaClassContent.append("    }" + ENTER);
+            javaClassContent.append(ENTER);
+            javaClassContent.append("    public Iterator<" + tpc.getName() + "> list" + tpc.getName() + "s()" + ENTER);
+            javaClassContent.append("    {" + ENTER);
+            javaClassContent.append("        Property rdf=getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);" + ENTER);
+            javaClassContent.append("        StmtIterator stit=getModel().getRDFModel().listStatements(null, rdf, vocabulary." + tpc.getName() + ".getOntClass());" + ENTER);
+            javaClassContent.append("        return new SemanticIterator<" + tpc.getName() + ">(" + tpc.getName() + ".class, stit);" + ENTER);
+            javaClassContent.append("    }" + ENTER);
+            javaClassContent.append(ENTER);
+            javaClassContent.append("    public " + tpc.getName() + " create" + tpc.getName() + "(String id)" + ENTER);
+            javaClassContent.append("    {" + ENTER);
+            javaClassContent.append("        return (" + tpc.getName() + ")getModel().createSemanticObject(getModel().getObjectUri(id, vocabulary." + tpc.getName() + "), vocabulary." + tpc.getName() + ");" + ENTER);
+            javaClassContent.append("    }" + ENTER);
+            javaClassContent.append(ENTER);
+            javaClassContent.append("    public " + tpc.getName() + " create" + tpc.getName() + "()" + ENTER);
+            javaClassContent.append("    {" + ENTER);
+            javaClassContent.append("        long id=SWBInstance.getCounterValue(getModel().getName()+\"/\"+vocabulary." + tpc.getName() + ".getName());" + ENTER);
+            javaClassContent.append("        return create" + tpc.getName() + "(\"\"+id);" + ENTER);
+            javaClassContent.append("    } " + ENTER);
+            javaClassContent.append(ENTER);
+            javaClassContent.append("    public void remove" + tpc.getName() + "(String id)" + ENTER);
+            javaClassContent.append("    {" + ENTER);
+            javaClassContent.append("        getModel().removeSemanticObject(getModel().getObjectUri(id,vocabulary." + tpc.getName() + "));" + ENTER);
+            javaClassContent.append("    }" + ENTER);
         }
     }
 

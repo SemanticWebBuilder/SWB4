@@ -13,6 +13,7 @@ import com.hp.hpl.jena.shared.PropertyNotFoundException;
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Vector;
 import org.semanticwb.*;
 
 /**
@@ -27,6 +28,7 @@ public class SemanticClass
     private HashMap<String,SemanticProperty> m_props;
     private Boolean m_isSWBClass=null;
     private Boolean m_isSWBInterface=null;
+    private Boolean m_isSWBModel=null;
     private String m_className=null;
     private Boolean m_autogenId=null;
     private Class m_cls=null;
@@ -92,6 +94,20 @@ public class SemanticClass
         }
         log.trace("isAutogenId:"+m_autogenId);
         return m_autogenId;
+    }
+    
+    public Iterator<SemanticClass> listModelClasses()
+    {
+        Iterator ret=null;
+        if(isSWBModel()==true)
+        {
+            Property prop=m_class.getModel().getProperty(SemanticVocabulary.SWB_PROP_HASCLASS);
+            ret=new SemanticClassIterator(m_class.listProperties(prop));
+        }else
+        {
+            ret=(new Vector()).iterator();
+        }
+        return ret;        
     }
     
     public Constructor getConstructor()
@@ -268,11 +284,28 @@ public class SemanticClass
                 Resource res=(Resource)i.next();
                 if(res.getURI().equals(SemanticVocabulary.SWB_INTERFACE))
                 {
-                    m_isSWBClass = true;
+                    m_isSWBInterface = true;
                 }
             }     
         }
         return m_isSWBInterface.booleanValue();
     }
+    
+    public boolean isSWBModel()
+    {
+        if(m_isSWBModel==null)
+        {
+            m_isSWBModel=false;
+            for (Iterator i = m_class.listRDFTypes(false); i.hasNext(); ) 
+            {
+                Resource res=(Resource)i.next();
+                if(res.getURI().equals(SemanticVocabulary.SWB_MODEL))
+                {
+                    m_isSWBModel = true;
+                }
+            }     
+        }
+        return m_isSWBModel.booleanValue();
+    }    
     
 }

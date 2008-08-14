@@ -68,7 +68,22 @@ public class SemanticModel
 //        if(res!=null)ret=new SemanticObject(res);
 //        return ret;
     }
-    
+
+    public SemanticObject getSemanticObject(String uri, SemanticClass cl)
+    {
+        SemanticObject ret=null;
+        Resource res=m_model.getResource(uri);
+        if(res!=null)
+        {
+            ret=cl.newInstance(res);
+        }
+        return ret;
+//        SemanticObject ret=null;
+//        Resource res=m_model.getResource(uri);
+//        if(res!=null)ret=new SemanticObject(res);
+//        return ret;
+    }
+
     public SemanticObject createSemanticObject(String uri, SemanticClass cls)
     {
         Resource res=m_model.createResource(uri);
@@ -97,4 +112,9 @@ public class SemanticModel
     public String getNameSpace() {
         return m_nameSpace;
     }    
+    
+    public String getObjectUri(String id, SemanticClass cls)
+    {
+        return getNameSpace()+"/"+cls.getName()+"#"+id;
+    }
 }
