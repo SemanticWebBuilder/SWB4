@@ -171,18 +171,18 @@ public class XmlRpcProxyFactory implements java.lang.reflect.InvocationHandler, 
                         XmlRpcMethod xmlRpcMethod = ( XmlRpcMethod ) annotatedMethod.getAnnotation(XmlRpcMethod.class);
                         methodName = xmlRpcMethod.methodName();
                     }
-                }
+                }                
                 XmlRpcClientConfig config = new XmlRpcClientConfig(this.webAddress);
                 config.setPassword(password);
                 config.setUserName(user);
                 config.setProxyServer(this.getProxyAddress());
-                config.setProxyPort(this.getProxyPort());
-                XmlRpcClient<Object> xmlclient = new XmlRpcClient<Object>(config);
+                config.setProxyPort(this.getProxyPort());                
+                XmlRpcClient xmlclient = new XmlRpcClient(config);
                 if(this.attachments==null)
                 {
                     attachments = new HashSet<Attachment>();
                 }
-                ObjectToreturn = xmlclient.execute(methodName, args, this.attachments);
+                ObjectToreturn = xmlclient.execute(m.getReturnType(),methodName, args, this.attachments);
             }
             catch ( Exception e )
             {

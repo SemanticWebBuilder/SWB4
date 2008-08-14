@@ -34,7 +34,7 @@ import static java.net.HttpURLConnection.*;
  *
  * @author victor.lorenzana
  */
-class XmlRpcClient<T>
+class XmlRpcClient
 {
 
     private Map<String, List<String>> responseProperties = new HashMap<String, List<String>>();
@@ -62,12 +62,7 @@ class XmlRpcClient<T>
         return responseProperties;
     }
 
-    public T execute(String method, Object[] parameters) throws XmlRpcException, HttpException
-    {
-        return execute(method, parameters, new HashSet<Attachment>());
-    }
-
-    public T execute(String methodName, Object[] parameters, Set<Attachment> attachments) throws XmlRpcException, HttpException
+    public <T> T execute(Class<T> clazz, String methodName, Object[] parameters, Set<Attachment> attachments) throws XmlRpcException, HttpException
     {
         for ( Attachment attachment : attachments )
         {
@@ -85,7 +80,7 @@ class XmlRpcClient<T>
         Document responseDoc = request(requestDoc, attachments);
         try
         {
-            return deserialize(responseDoc);
+            return deserialize(clazz, responseDoc);
         }
         catch ( ParseException pe )
         {
@@ -93,18 +88,7 @@ class XmlRpcClient<T>
         }
     }
 
-    /*private void showDocDebug(Document requestDoc)
-    {
-    try
-    {
-    XMLOutputter outp = new XMLOutputter();
-    outp.output(requestDoc, System.out);
-    }
-    catch ( Exception e )
-    {
-    }
-    }*/
-    private T deserialize(Document requestDocument) throws XmlRpcException, ParseException
+    private <T> T deserialize(java.lang.Class<T> clazz, Document requestDocument) throws XmlRpcException, ParseException
     {
         try
         {
@@ -128,7 +112,7 @@ class XmlRpcClient<T>
             }
             else
             {
-                return getParameter(param);
+                return getParameter(clazz, param);
 
             }
         }
@@ -150,62 +134,117 @@ class XmlRpcClient<T>
             }
         }
     }
-
-    private T convert(Object value) throws XmlRpcException
+    
+    private <T> T convertString(Class<T> clazz, String data) throws XmlRpcException
     {
-        try
+        if ( data.getClass().equals(clazz) )
         {
-            T t = ( T ) value;
-            return t;
+            return ( T ) data;
         }
-        catch ( ClassCastException cle )
-        {
-            throw new XmlRpcException("It was not posible to convert the value to the type", cle);
-        }
-
+        throw new XmlRpcException("The data can not be converted");
     }
 
-    private Object getValue(Element type) throws XmlRpcException, ParseException
+    private <T> T convertInteger(Class<T> clazz, int data)
     {
-        Object result = null;
+        return ( T ) new Integer(data);
+    }
+
+    private <T> T convertBoolean(Class<T> clazz, boolean data)
+    {
+        return ( T ) new Boolean(data);
+    }
+
+    private <T> T convertFloat(Class<T> clazz, float data)
+    {
+        return ( T ) new Float(data);
+    }
+
+    private <T> T convertDouble(Class<T> clazz, double data)
+    {
+        return ( T ) new Double(data);
+    }
+
+    private <T> T convertDate(Class<T> clazz, Date data) throws XmlRpcException
+    {
+        if ( data.getClass().equals(clazz) )
+        {
+            return ( T ) data;
+        }
+        throw new XmlRpcException("The data can not be converted");
+    }
+
+    private <T> T getValue(Class<T> clazz, Element type) throws XmlRpcException, ParseException, JDOMException
+    {
+        T result = null;
         String sType = type.getName();
         if ( sType.equals("string") )
         {
-            result = type.getText();
+            result = convertString(clazz, type.getText());
         }
         else if ( sType.equals("i4") || sType.equals("int") )
         {
-            result = Integer.parseInt(type.getText());
+            result = convertInteger(clazz, Integer.parseInt(type.getText()));
         }
         else if ( sType.equals("boolean") )
         {
-            result = type.getText().equals("1") ? true : false;
+            boolean tempres = type.getText().equals("1") ? true : false;
+            result = convertBoolean(clazz, tempres);
         }
         else if ( sType.equals("float") )
         {
-            result = Float.parseFloat(type.getText());
+            result = convertFloat(clazz, Float.parseFloat(type.getText()));
         }
         else if ( sType.equals("double") )
         {
-            result = Double.parseDouble(type.getText());
+            result = convertDouble(clazz, Double.parseDouble(type.getText()));
         }
         else if ( sType.equals("dateTime.iso8601") )
         {
             String date = type.getText();
-            result = iso8601dateFormat.parse(date);
+            result = convertDate(clazz, iso8601dateFormat.parse(date));
+        }
+        else if ( sType.equals("array") )
+        {
+            result = deserializeArray(clazz, type);
         }
         else
         {
-            throw new XmlRpcException("It was not posible to get teh value for " + type.getText());
+            throw new XmlRpcException("It was not posible to get the value for " + type.getText());
         }
-
-
-
-
         return result;
     }
 
-    private T getParameter(Element param) throws XmlRpcException, ParseException
+    private <T> T deserializeArray(Class<T> clazz, Element array) throws JDOMException, ParseException, XmlRpcException
+    {
+        if ( clazz.isArray() )
+        {           
+            
+            List listValues = XPath.selectNodes(array, "./data/value");            
+            Class componentType=clazz.getComponentType();
+            Object arrayToReturn=Array.newInstance(componentType, listValues.size());
+            int i = 0;
+            for ( Object objValue : listValues )
+            {
+                Element eValue = ( Element ) objValue;
+                Iterator itValues = eValue.getDescendants();
+                while (itValues.hasNext())
+                {
+                    Object child = itValues.next();
+                    if ( child instanceof Element )
+                    {
+                        Element eType = ( Element ) child;
+                        Object value=getValue(componentType, eType);
+                        Array.set(arrayToReturn, i, value);
+                    }
+                }
+                i++;
+            }           
+            return clazz.cast(arrayToReturn);
+        }
+        return null;
+    }
+
+    private <T> T getParameter(java.lang.Class<T> clazz, Element param) throws XmlRpcException, ParseException, JDOMException
     {
         Iterator values = param.getDescendants();
         while (values.hasNext())
@@ -217,8 +256,7 @@ class XmlRpcClient<T>
                 while (types.hasNext())
                 {
                     Element type = ( Element ) types.next();
-                    Object value = getValue(type);
-                    return convert(value);
+                    return getValue(clazz, type);
                 }
             }
         }
@@ -261,6 +299,7 @@ class XmlRpcClient<T>
         }
         in.close();
     }
+
     private void writeEnd(OutputStream out) throws IOException
     {
         String newBoundary = "\r\n--" + boundary + "\r\n";
@@ -276,7 +315,6 @@ class XmlRpcClient<T>
         XMLOutputter outp = new XMLOutputter();
         outp.output(requestDoc, out);
     }
-    
 
     private String getUserPassWordEncoded()
     {
@@ -325,7 +363,7 @@ class XmlRpcClient<T>
             {
                 case HTTP_OK:
                     this.responseProperties = connection.getHeaderFields();
-                    return getResponse(connection.getInputStream(),contentType);
+                    return getResponse(connection.getInputStream(), contentType);
                 case HTTP_NOT_FOUND:
                     throw new HttpException("The path " + connection.getURL() + " was not found", HTTP_NOT_FOUND, getDetail(error, contentType));
                 default:
@@ -335,7 +373,7 @@ class XmlRpcClient<T>
         catch ( MalformedURLException mfe )
         {
             throw new XmlRpcException(mfe);
-        }        
+        }
         catch ( IOException ioe )
         {
             throw new XmlRpcException(ioe);
@@ -350,8 +388,8 @@ class XmlRpcClient<T>
                 }
                 catch ( IOException ioe )
                 {
-                    // Revisar
-                    //throw new XmlRpcException(ioe);
+                // Revisar
+                //throw new XmlRpcException(ioe);
                 }
             }
         }
@@ -383,7 +421,7 @@ class XmlRpcClient<T>
         }
         catch ( IOException ioe )
         {
-            throw new XmlRpcException("Error gettting the detail of response",ioe);
+            throw new XmlRpcException("Error gettting the detail of response", ioe);
         }
         finally
         {
@@ -395,20 +433,20 @@ class XmlRpcClient<T>
                 }
                 catch ( IOException ioe )
                 {
-                    throw new XmlRpcException("Error closing conexión in the detail of response",ioe);
+                    throw new XmlRpcException("Error closing conexión in the detail of response", ioe);
                 }
             }
         }
         return sb.toString();
     }
 
-    private Document getResponse(InputStream in,String contentType) throws XmlRpcException
+    private Document getResponse(InputStream in, String contentType) throws XmlRpcException
     {
-        if(contentType==null)
+        if ( contentType == null )
         {
             throw new XmlRpcException("The content-Type is not valid");
         }
-        if(!contentType.startsWith("text/xml"))
+        if ( !contentType.startsWith("text/xml") )
         {
             throw new XmlRpcException("The content-Type is not text/xml");
         }
@@ -419,7 +457,7 @@ class XmlRpcClient<T>
         }
         catch ( IOException ioe )
         {
-            throw new XmlRpcException("Error getting the response document",ioe);
+            throw new XmlRpcException("Error getting the response document", ioe);
         }
         return doc;
     }
@@ -516,7 +554,7 @@ class XmlRpcClient<T>
         methodCall.addContent(methodName);
         doc.setRootElement(methodCall);
         Element params = new Element("params");
-        if(pParams!=null)
+        if ( pParams != null )
         {
             addParameters(params, pParams);
         }
