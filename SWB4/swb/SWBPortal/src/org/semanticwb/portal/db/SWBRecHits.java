@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.portal.services.SWBServices;
 
 /**
@@ -20,15 +19,15 @@ public class SWBRecHits
 {
     private static Logger log = SWBUtils.getLogger(SWBServices.class);
 
-    public Iterator getResGlobalHitsLog(SemanticModel model) {
+    public Iterator getResGlobalHitsLog(String webSite) {
         Iterator ret = new ArrayList().iterator();
         Connection con = SWBUtils.DB.getDefaultConnection("DBResHits.getResGlobalHitsLog()");
 
         if (con != null) {
             try {
-                String query = "select * from swb_reshits where model=? and type=0";
+                String query = "select * from swb_reshits where website=? and type=0";
                 PreparedStatement st = con.prepareStatement(query);
-                st.setString(1, model.getName());
+                st.setString(1, webSite);
                 ResultSet rs = st.executeQuery();
                 ret = new IterRecHits(con, st, rs);
             } catch (Exception e) {
@@ -41,25 +40,25 @@ public class SWBRecHits
     }
 
     /**
-     * @param topicmap
-     * @param idaux
+     * @param webSite
+     * @param object
      * @param type
      * @return  */
-    public Iterator getResHitsLog(String topicmap, String idaux, int type) {
+    public Iterator getResHitsLog(String webSite, String object, int type) {
         Iterator ret = new ArrayList().iterator();
         Connection con = SWBUtils.DB.getDefaultConnection("DBResHits.getResGlobalHitsLog()");
         if (con != null) {
             try {
-                String query = "select * from wbreshits where topicmap=? and type=?";
-                if (idaux != null) {
-                    query = query + " and idaux=?";
+                String query = "select * from swb_reshits where website=? and type=?";
+                if (object != null) {
+                    query = query + " and object=?";
                 }
                 query = query + " order by wbdate";
                 PreparedStatement st = con.prepareStatement(query);
-                st.setString(1, topicmap);
+                st.setString(1, webSite);
                 st.setInt(2, type);
-                if (idaux != null) {
-                    st.setString(3, idaux);
+                if (object != null) {
+                    st.setString(3, object);
                 }
                 ResultSet rs = st.executeQuery();
                 ret = new IterRecHits(con, st, rs);
@@ -73,17 +72,17 @@ public class SWBRecHits
     }
 
     /**
-     * @param topicmap
+     * @param webSite
      * @param type
      * @return  */
-    public Iterator getResHitsLog(String topicmap, int type) {
+    public Iterator getResHitsLog(String webSite, int type) {
         Iterator ret = new ArrayList().iterator();
         Connection con = SWBUtils.DB.getDefaultConnection("DBResHits.getResGlobalHitsLog()");
         if (con != null) {
             try {
-                String query = "select wbdate,topicmap,idaux, sum(hits) hits,type from wbreshits where topicmap=? and type=? group by idaux order by wbdate";
+                String query = "select wbdate,webSite,object, sum(hits) hits,type from swb_reshits where website=? and type=? group by object order by wbdate";
                 PreparedStatement st = con.prepareStatement(query);
-                st.setString(1, topicmap);
+                st.setString(1, webSite);
                 st.setInt(2, type);
                 ResultSet rs = st.executeQuery();
                 ret = new IterRecHits(con, st, rs);
@@ -97,14 +96,14 @@ public class SWBRecHits
     }
 
     /**
-     * @param topicmap
-     * @param idaux
+     * @param webSite
+     * @param object
      * @param type
      * @param year
      * @param month
      * @param day
      * @return  */
-    public Iterator getResHitsLog(String topicmap, String idaux, int type, int year, int month, int day) {
+    public Iterator getResHitsLog(String website, String object, int type, int year, int month, int day) {
         Timestamp fecha = null;
         Timestamp fecha2 = null;
         if (year > 0) {
@@ -129,26 +128,26 @@ public class SWBRecHits
             try {
                 String query = null;
                 PreparedStatement st = null;
-                if (idaux != null) {
+                if (object != null) {
                     if (year > 0 && month > 0 && day > 0) {
-                        query = "select * from wbreshits where topicmap=? and idaux=? and type=? and (wbdate=? or wbdate=?) order by wbdate";
+                        query = "select * from swb_reshits where website=? and object=? and type=? and (wbdate=? or wbdate=?) order by wbdate";
                     } else {
-                        query = "select * from wbreshits where topicmap=? and idaux=? and type=? and (wbdate>=? and wbdate<?) order by wbdate";
+                        query = "select * from swb_reshits where website=? and object=? and type=? and (wbdate>=? and wbdate<?) order by wbdate";
                     }
                     st = con.prepareStatement(query);
-                    st.setString(1, topicmap);
-                    st.setString(2, idaux);
+                    st.setString(1, website);
+                    st.setString(2, object);
                     st.setInt(3, type);
                     st.setTimestamp(4, fecha);
                     st.setTimestamp(5, fecha2);
                 } else {
                     if (year > 0 && month > 0 && day > 0) {
-                        query = "select * from wbreshits where topicmap=? and type=? and (wbdate=? or wbdate=?) order by wbdate";
+                        query = "select * from swb_reshits where website=? and type=? and (wbdate=? or wbdate=?) order by wbdate";
                     } else {
-                        query = "select * from wbreshits where topicmap=? and type=? and (wbdate>=? and wbdate<?) order by wbdate";
+                        query = "select * from swb_reshits where website=? and type=? and (wbdate>=? and wbdate<?) order by wbdate";
                     }
                     st = con.prepareStatement(query);
-                    st.setString(1, topicmap);
+                    st.setString(1, website);
                     st.setInt(2, type);
                     st.setTimestamp(3, fecha);
                     st.setTimestamp(4, fecha2);
@@ -167,8 +166,8 @@ public class SWBRecHits
     }
 
     /**
-     * @param topicmap
-     * @param idaux
+     * @param webSite   
+     * @param object
      * @param type
      * @param year1
      * @param month1
@@ -177,7 +176,7 @@ public class SWBRecHits
      * @param month2
      * @param day2
      * @return  */
-    public Iterator getResHitsLog(String topicmap, String idaux, int type, int year1, int month1, int day1, int year2, int month2, int day2) {
+    public Iterator getResHitsLog(String webSite, String object, int type, int year1, int month1, int day1, int year2, int month2, int day2) {
         Timestamp fecha = null;
         Timestamp fecha2 = null;
         fecha = new Timestamp(year1 - 1900, month1 - 1, day1, 00, 00, 00, 00);
@@ -186,18 +185,18 @@ public class SWBRecHits
         Connection con = SWBUtils.DB.getDefaultConnection("DBResHits.getResHitsLog()");
         if (con != null) {
             try {
-                String query = "select * from wbreshits where topicmap=? and type=? and (wbdate>=? and wbdate<=?)";
-                if (idaux != null) {
-                    query = query + " and idaux=?";
+                String query = "select * from swb_reshits where website=? and type=? and (wbdate>=? and wbdate<=?)";
+                if (object != null) {
+                    query = query + " and object=?";
                 }
                 query = query + " order by wbdate";
                 PreparedStatement st = con.prepareStatement(query);
-                st.setString(1, topicmap);
+                st.setString(1, webSite);
                 st.setInt(2, type);
                 st.setTimestamp(3, fecha);
                 st.setTimestamp(4, fecha2);
-                if (idaux != null) {
-                    st.setString(5, idaux);
+                if (object != null) {
+                    st.setString(5, object);
                 }
                 ResultSet rs = st.executeQuery();
                 ret = new IterRecHits(con, st, rs);
@@ -211,7 +210,7 @@ public class SWBRecHits
     }
 
     /**
-     * @param topicmap
+     * @param webSite
      * @param type
      * @param year1
      * @param month1
@@ -220,7 +219,7 @@ public class SWBRecHits
      * @param month2
      * @param day2
      * @return  */
-    public Iterator getResHitsLog(String topicmap, int type, int year1, int month1, int day1, int year2, int month2, int day2) {
+    public Iterator getResHitsLog(String website, int type, int year1, int month1, int day1, int year2, int month2, int day2) {
         Timestamp fecha = null;
         Timestamp fecha2 = null;
         fecha = new Timestamp(year1 - 1900, month1 - 1, day1, 00, 00, 00, 00);
@@ -229,9 +228,9 @@ public class SWBRecHits
         Connection con = SWBUtils.DB.getDefaultConnection("DBResHits.getResHitsLog()");
         if (con != null) {
             try {
-                String query = "select wbdate,topicmap,idaux, sum(hits) hits,type from wbreshits where topicmap=? and type=? and (wbdate>=? and wbdate<=?) group by idaux order by wbdate";
+                String query = "select wbdate,website,object, sum(hits) hits,type from swb_reshits where website=? and type=? and (wbdate>=? and wbdate<=?) group by object order by wbdate";
                 PreparedStatement st = con.prepareStatement(query);
-                st.setString(1, topicmap);
+                st.setString(1, website);
                 st.setInt(2, type);
                 st.setTimestamp(3, fecha);
                 st.setTimestamp(4, fecha2);
