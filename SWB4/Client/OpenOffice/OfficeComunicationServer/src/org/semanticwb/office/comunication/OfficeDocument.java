@@ -50,14 +50,19 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument, Rep
         Session session=repositories.get("wbrepository").login(new SimpleCredentials("", "".toCharArray()));
         return session;
     }
+    private Session openSession(String repositoryName) throws LoginException,RepositoryException
+    {
+        Session session=repositories.get(repositoryName).login(new SimpleCredentials("", "".toCharArray()));
+        return session;
+    }
    
 
-    public String publish(String title, String description, String categoryID, String type) throws Exception
+    public String publish(String title,String description,String repositoryName,String categoryID,String type) throws Exception
     {
         Session session=null;
         try
         {            
-            session=openSession();
+            session=openSession(repositoryName);
             Node categoryNode = session.getNodeByUUID(categoryID);
             if ( !categoryNode.isLocked() )
             {

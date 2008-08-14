@@ -85,7 +85,7 @@ public class OfficeApplication extends XmlRpcObject implements RepositorySupport
             while (nodeIterator.hasNext())
             {
                 Node categoryNode=nodeIterator.nextNode();
-                categories.add(categoryNode.getUUID()+","+categoryNode.getProperty("cm:title"));
+                categories.add(categoryNode.getUUID()+","+categoryNode.getProperty("cm:title").getString());
             }
             return categories.toArray(new String[categories.size()]);
         }      
