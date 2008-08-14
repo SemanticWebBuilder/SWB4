@@ -5,7 +5,8 @@
 
 package org.semanticwb.office.comunication;
 
-import javax.jcr.Session;
+import java.util.Map;
+import javax.jcr.Repository;
 
 
 /**
@@ -13,6 +14,9 @@ import javax.jcr.Session;
  * @author victor.lorenzana
  */
 public interface RepositorySupport {
-    public void setSession(Session session);
-    public void logout();
+    /*public void setSession(Session session);
+    public Session getSession();*/
+    
+    public void setRepositories(Map<String,Repository> repositories);
+    //public Session getSession();
 }
