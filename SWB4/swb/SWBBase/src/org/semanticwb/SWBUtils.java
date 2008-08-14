@@ -54,6 +54,7 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.xml.namespace.QName;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathFactory;
+import org.semanticwb.base.util.SFBase64;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -263,6 +264,16 @@ public class SWBUtils {
             }
             in.close();
             return ret.toString();
+        }
+        
+        public static String encodeBase64(String txt)
+        {
+            return SFBase64.encodeString(txt);
+        }
+        
+        public static String decodeBase64(String txt)
+        {
+            return SFBase64.decodeToString(txt);
         }
 
         /**
