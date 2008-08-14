@@ -1,12 +1,13 @@
 package org.semanticwb.model.base;
 
 import java.util.Date;
-import org.semanticwb.platform.SemanticObject;
+import java.util.Iterator;
 import org.semanticwb.model.*;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
-import org.semanticwb.platform.SemanticIterator;
+import com.hp.hpl.jena.rdf.model.*;
+import org.semanticwb.*;
+import org.semanticwb.platform.*;
 
-public class WebPageBase extends SemanticObject implements Descriptiveable,PortletRefable,TemplateRefable,Calendarable,RuleRefable,WebSiteable,RoleRefable,Deleteable,Statusable
+public class WebPageBase extends SemanticObject implements Descriptiveable,PortletRefable,TemplateRefable,Calendarable,RuleRefable,RoleRefable,Deleteable,Statusable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
