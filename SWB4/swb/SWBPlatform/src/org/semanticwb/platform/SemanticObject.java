@@ -20,15 +20,18 @@ public class SemanticObject
     private static Logger log = SWBUtils.getLogger(SemanticObject.class);
     
     Resource m_res=null;
+    SemanticModel m_model=null;
     
-    public SemanticObject(String uri, Model model)
+    public SemanticObject(String uri, SemanticModel model)
     {
-        m_res=model.createResource(uri);
+        m_res=model.getRDFModel().createResource(uri);
+        m_model=model;
     }
     
     public SemanticObject(Resource res)
     {
         this.m_res=res;
+        m_model=SWBInstance.getSemanticMgr().getModel(res.getModel());
     }
     
     public String getURI()
@@ -58,9 +61,9 @@ public class SemanticObject
      * Regresa el Modelo de del SemanticObject
      * @return
      */
-    public Model getModel()
+    public SemanticModel getModel()
     {
-        return m_res.getModel();
+        return m_model;
     }
     
     /**
