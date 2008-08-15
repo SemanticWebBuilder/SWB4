@@ -34,7 +34,7 @@ public class DialogAddLink extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         jButtonAccept = new javax.swing.JButton();
         jButtonCancel = new javax.swing.JButton();
-        selectPage1 = new org.semanticwb.openoffice.ui.wizard.SelectPage();
+        selectPage1 = new org.semanticwb.openoffice.ui.wizard.SelectCategory();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Insertar liga de una Página");
@@ -114,7 +114,7 @@ public class DialogAddLink extends javax.swing.JDialog {
     private javax.swing.JButton jButtonAccept;
     private javax.swing.JButton jButtonCancel;
     private javax.swing.JPanel jPanel1;
-    private org.semanticwb.openoffice.ui.wizard.SelectPage selectPage1;
+    private org.semanticwb.openoffice.ui.wizard.SelectCategory selectPage1;
     // End of variables declaration//GEN-END:variables
     
 }

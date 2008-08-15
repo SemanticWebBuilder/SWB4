@@ -44,11 +44,12 @@ public class PublishResultProducer implements WizardResultProducer
                 zipFile=document.createZipFile();                                
                 progress.setProgress("Publicando Documento", 1, 2);
                 IOpenOfficeDocument openOfficeDocument=document.getOfficeDocumentProxy();
-                openOfficeDocument.addAttachment(new Attachment(zipFile, zipFile.getName()));                                
+                openOfficeDocument.addAttachment(new Attachment(zipFile));                                
                 String title=wizardData.get("title").toString();
                 String description=wizardData.get("description").toString();
-                String path=wizardData.get("path").toString();                
-                String contentID=openOfficeDocument.publish(title, description, path,document.getDocumentType().toString());
+                String categoryID=wizardData.get("categoryID").toString();                
+                String repositoryName=wizardData.get("repositoryName").toString();                
+                String contentID=openOfficeDocument.publish(title, description,repositoryName,categoryID,document.getDocumentType().toString());
                 document.SaveContentId(contentID);                
                 Summary summary=Summary.create(new SummaryPublish(),null);               
                 progress.finished(summary);
