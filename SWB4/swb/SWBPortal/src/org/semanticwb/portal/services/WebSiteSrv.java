@@ -5,7 +5,6 @@
 package org.semanticwb.portal.services;
 
 import org.semanticwb.model.*;
-import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.portal.SWBDBAdmLog;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.Logger;
@@ -19,16 +18,14 @@ public class WebSiteSrv {
 
     private static Logger log = SWBUtils.getLogger(WebSiteSrv.class);
 
-    public WebSite createWebSite(SemanticModel model, String siteUri, String homeUri, String title, String homeTitle, User user) throws SWBException {
-        //creación de modelo
-        //SemanticModel model=SWBInstance.getSemanticMgr().loadDBModel("system");
+    public WebSite createWebSite(String name, String nsp, String homeTitle, User user) throws SWBException {
         
-        WebSite website = SWBContext.createWebSite(model, siteUri);
-        HomePage hpage = SWBContext.createHomePage(model, homeUri);
-        hpage.setTitle(homeTitle);
-        website.addHome(hpage);
+        WebSite website=SWBContext.createWebSite(name, nsp);
+        WebPage wp=website.createWebPage(homeTitle);
+        website.setHomePage(wp);
         
         website.setUserCreated(user);
+       
 
         //logeo
         SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", website.getURI(), website.getURI(), "Create WebSite", null);
@@ -40,11 +37,11 @@ public class WebSiteSrv {
         return website;
     }
 
-    public boolean removeWebSite(WebSite website, User user) throws SWBException {
-        SWBContext.removeObject(website.getURI());
-
+    public boolean removeWebSite(String uri, User user) throws SWBException {
+        SWBContext.removeWebSite(uri);
+        
         //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "remove", website.getURI(), website.getURI(), "Remove WebSite", null);
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "remove", uri, uri, "Remove WebSite", null);
          try{
             swbAdmLog.create();
         }catch(Exception e){
@@ -53,20 +50,18 @@ public class WebSiteSrv {
         return true;
     }
 
-    public boolean updateWebSite(WebSite webSite, String description, String home, String language, String title, boolean deleted, int status, User user) throws SWBException {
+    public boolean updateWebSite(WebSite webSite, String title, String description, User user) throws SWBException {
         
         if (title != null) {
             webSite.setTitle(title);
         }
-        webSite.setDeleted(deleted);
         if (description != null) {
             webSite.setDescription(description);
         }
-        webSite.setStatus(status);
         webSite.setUserModified(user);
 
         //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "update", webSite.getURI(), webSite.getURI(), "Update WebSite", null);
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "update", webSite.getName(), webSite.getName(), "Update WebSite", null);
         try{
             swbAdmLog.create();
         }catch(Exception e){

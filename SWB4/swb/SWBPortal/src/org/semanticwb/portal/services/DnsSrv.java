@@ -7,10 +7,9 @@ package org.semanticwb.portal.services;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
-import org.semanticwb.SWBInstance;
 import org.semanticwb.model.Dns;
-import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.portal.SWBDBAdmLog;
 
@@ -22,9 +21,9 @@ public class DnsSrv {
 
     private static Logger log = SWBUtils.getLogger(WebSiteSrv.class);
 
-    public Dns createDNS(SemanticModel model, String title, String description, String value, User user) throws SWBException {
+    public Dns createDNS(WebSite website, String title, String description, String value, User user) throws SWBException {
         Dns dns = null;
-        dns = SWBContext.createDns(model);
+        dns = website.createDns();
         dns.setTitle(title);
         dns.setDescription(description);
         dns.setValue(value);
@@ -39,9 +38,9 @@ public class DnsSrv {
         return dns;
     }
     
-    public Dns createDNS(SemanticModel model, String dnsUri, String title, String description, String value, User user) throws SWBException {
+    public Dns createDNS(WebSite website, String id, String title, String description, String value, User user) throws SWBException {
         Dns dns = null;
-        dns = SWBContext.createDns(model, dnsUri);
+        dns = website.createDns(id);
         dns.setTitle(title);
         dns.setDescription(description);
         dns.setValue(value);
@@ -56,21 +55,21 @@ public class DnsSrv {
         return dns;
     }
 
-    public boolean removeDNS(Dns dns, User user) throws SWBException {
+    public boolean removeDNS(WebSite website, String id, User user) throws SWBException {
         boolean deleted = false;
-        SWBContext.removeObject(dns.getURI());
+        website.removeDns(id);
         deleted = true;
         //logeo.creat
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "remove", dns.getURI(), dns.getURI(), "remove DNS", null);
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "remove", id, id, "remove DNS", null);
         try {
             swbAdmLog.create();
         } catch (Exception e) {
-            throw new SWBException("Error removing dns:" + dns.getURI(), e);
+            throw new SWBException("Error removing dns:" + id, e);
         }
         return deleted;
     }
 
-    public boolean updateDNS(SemanticModel model, Dns dns, String title, String description, String value, User user) throws SWBException {
+    public boolean updateDNS(Dns dns, String title, String description, String value, User user) throws SWBException {
         boolean updated = false;
         
         if (title != null) {

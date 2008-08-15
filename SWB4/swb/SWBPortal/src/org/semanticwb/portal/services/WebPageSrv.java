@@ -7,10 +7,9 @@ package org.semanticwb.portal.services;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
-import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
-import org.semanticwb.platform.SemanticModel;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.SWBDBAdmLog;
 
 /**
@@ -21,28 +20,28 @@ public class WebPageSrv {
 
     private static Logger log = SWBUtils.getLogger(WebSiteSrv.class);
 
-    public WebPage createWebPage(SemanticModel model, String uri, String title, WebPage childOf, User user) throws SWBException {
-        WebPage page = SWBContext.createWebPage(model, uri);
-        page.setTitle(title);
-        page.setIsChildOf(childOf);
-        page.setUserCreated(user);
+    public WebPage createWebPage(WebSite website, String title, WebPage childOf, User user) throws SWBException {
+        
+        WebPage wp=website.createWebPage(title);
+        wp.setIsChildOf(childOf);
+        wp.setUserCreated(user);
 
         //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", page.getURI(), page.getURI(), "create WebPage", null);
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", wp.getName(), wp.getURI(), "create WebPage", null);
         try {
             swbAdmLog.create();
         } catch (Exception e) {
             throw new SWBException("Error creating WebPage", e);
         }
 
-        return page;
+        return wp;
     }
 
-    public boolean removeWebPage(WebPage page, User user) throws SWBException {
-        SWBContext.removeObject(page.getURI());
+    public boolean removeWebPage(WebSite website, String id, User user) throws SWBException {
+        website.removeWebPage(id);
 
         //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "remove", page.getURI(), page.getURI(), "remove WebPage", null);
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "remove", id, id, "remove WebPage", null);
         try {
             swbAdmLog.create();
         } catch (Exception e) {
