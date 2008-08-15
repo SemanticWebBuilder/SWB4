@@ -9,6 +9,7 @@ import org.semanticwb.SWBException;
 import org.semanticwb.model.Device;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.portal.SWBDBAdmLog;
 
@@ -19,11 +20,11 @@ import org.semanticwb.portal.SWBDBAdmLog;
 public class DeviceSrv 
 {
     
-    public Device createDevice(SemanticModel model , String title, String description, String value, User user) throws SWBException 
+    public Device createDevice(WebSite website, String title, String description, String value, User user) throws SWBException 
     {
    
         Device device = null;
-        device = SWBContext.createDevice(model);
+        device = website.createDevice();
         device.setTitle(title);
         device.setDescription(description);
         device.setValue(value);
@@ -39,11 +40,11 @@ public class DeviceSrv
     }
     
     
-    public Device createDevice(SemanticModel model, String deviceUri, String title, String description, String value, User user) throws SWBException 
+    public Device createDevice(WebSite website, String id, String title, String description, String value, User user) throws SWBException 
     {
    
         Device device = null;
-        device = SWBContext.createDevice(model, deviceUri);
+        device = website.createDevice(id);
         device.setTitle(title);
         device.setDescription(description);
         device.setValue(value);
@@ -58,7 +59,7 @@ public class DeviceSrv
         return device;
     }
     
-    public boolean updateDevice(Device device, String uri, String title, String description, String value, User user) throws SWBException {
+    public boolean updateDevice(Device device, String title, String description, String value, User user) throws SWBException {
         boolean updated = false;
         
         if (title != null) {

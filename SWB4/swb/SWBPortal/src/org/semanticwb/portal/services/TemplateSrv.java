@@ -10,12 +10,11 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
 import org.semanticwb.SWBInstance;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.Template;
 import org.semanticwb.model.User;
-import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.model.ObjectGroup;
 import org.semanticwb.model.VersionInfo;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.SWBDBAdmLog;
 
 /**
@@ -26,15 +25,16 @@ public class TemplateSrv
 {
     private static Logger log = SWBUtils.getLogger(SWBUtils.class);
     
-    public Template createTemplate(SemanticModel model, String fileName, String content, HashMap attaches, String titulo, String description, ObjectGroup objectgroup, User user) throws SWBException {
-        Template template = SWBContext.createTemplate(model);
+    public Template createTemplate(WebSite website, String id, String fileName, String content, HashMap attaches, String titulo, String description, ObjectGroup objectgroup, User user) throws SWBException {
+        Template template=website.createTemplate(id);
+        
         template.setTitle(titulo);
         template.setDescription(description);
         template.addGroup(objectgroup);
         template.setStatus(1);
 
         //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", template.getURI(), template.getURI(), "create Template", null);
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", template.getName(), template.getURI(), "create Template", null);
         try {
             swbAdmLog.create();
         } catch (Exception e) {
@@ -44,15 +44,15 @@ public class TemplateSrv
         return template;
     }
     
-    public Template createTemplate(SemanticModel model, String templateUri, String fileName, String content, HashMap attaches, String titulo, String description, ObjectGroup objectgroup, User user) throws SWBException {
-        Template template = SWBContext.createTemplate(model, templateUri);
+    public Template createTemplate(WebSite website, String fileName, String content, HashMap attaches, String titulo, String description, ObjectGroup objectgroup, User user) throws SWBException {
+        Template template=website.createTemplate();
         template.setTitle(titulo);
         template.setDescription(description);
         template.addGroup(objectgroup);
         template.setStatus(1);
 
         //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", template.getURI(), template.getURI(), "create Template", null);
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", template.getName(), template.getURI(), "create Template", null);
         try {
             swbAdmLog.create();
         } catch (Exception e) {
@@ -62,13 +62,13 @@ public class TemplateSrv
         return template;
     }
 
-    public boolean removeTemplate(Template template,User user) throws SWBException {
+    public boolean removeTemplate(WebSite website, String id,User user) throws SWBException {
         boolean deleted = false;
-        SWBContext.removeObject(template.getURI());
+        website.removeTemplate(id);
         deleted = true;
 
         //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "remove", template.getURI(), template.getURI(), "remove Template", null);
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "remove", id, id, "remove Template", null);
         try {
             swbAdmLog.create();
         } catch (Exception e) {
@@ -78,11 +78,11 @@ public class TemplateSrv
         return deleted;
     }
     
-    public static boolean resetTemplates(SemanticModel model, Template template, User user) 
+    public static boolean resetTemplates(WebSite website, Template template, User user) 
         {
             try {
                 String rutawork = (String) SWBInstance.getWorkPath();
-                File dir = new File(rutawork + "/sites/" + "modelo" + "/templates/" + template.getURI());
+                File dir = new File(rutawork + "/sites/" + website.getName() + "/templates/" + template.getURI());
                 if (dir != null && dir.exists() && dir.isDirectory()) {
                     File listado[] = dir.listFiles();
                     for (int i = 0; i < listado.length; i++) {
@@ -104,7 +104,7 @@ public class TemplateSrv
                         b = SWBUtils.IO.copyStructure(ActualVDir.getPath() + "/", f.getPath() + "/", true, sSource, sTarget);
                     }
                     if (b) {
-                        VersionInfo verInfo = SWBContext.createVersionInfo(model);
+                        VersionInfo verInfo = website.createVersionInfo();
                         verInfo.setValue("1");
                         template.setActualVersion(verInfo);
                         template.setLastVersion(verInfo);

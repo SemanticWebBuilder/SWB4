@@ -6,9 +6,8 @@ package org.semanticwb.portal.services;
 
 import org.semanticwb.SWBException;
 import org.semanticwb.model.Rule;
-import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
-import org.semanticwb.platform.SemanticModel;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.SWBDBAdmLog;
 
 /**
@@ -17,8 +16,8 @@ import org.semanticwb.portal.SWBDBAdmLog;
  */
 public class RuleSrv {
 
-    public Rule createRule(SemanticModel model, String title, String description, User user) throws SWBException {
-        Rule rule = SWBContext.createRule(model);
+    public Rule createRule(WebSite website, String title, String description, User user) throws SWBException {
+        Rule rule = website.createRule();
         rule.setTitle(title);
         rule.setDescription(description);
 
@@ -33,8 +32,8 @@ public class RuleSrv {
 
     }
 
-    public Rule createRule(SemanticModel model, String ruleUri, String title, String description, User user) throws SWBException {
-        Rule rule = SWBContext.createRule(model, ruleUri);
+    public Rule createRule(WebSite website, String id, String title, String description, User user) throws SWBException {
+        Rule rule = website.createRule(id);
         rule.setTitle(title);
         rule.setDescription(description);
 
@@ -49,13 +48,13 @@ public class RuleSrv {
 
     }
 
-    public boolean removeRule(Rule rule, User user) throws SWBException {
+    public boolean removeRule(WebSite website, String id, User user) throws SWBException {
         boolean deleted = false;
-        SWBContext.removeObject(rule.getURI());
+        website.removeRule(id);
         deleted = true;
 
         //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", rule.getURI(), rule.getURI(), "remove Rule", null);
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", id, id, "remove Rule", null);
         try {
             swbAdmLog.create();
         } catch (Exception e) {
