@@ -9,6 +9,7 @@ import java.net.MalformedURLException;
 import java.util.List;
 import java.io.*;
 import java.lang.reflect.Array;
+import java.lang.reflect.Field;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.Proxy.Type;
@@ -134,7 +135,7 @@ class XmlRpcClient
             }
         }
     }
-    
+
     private <T> T convertString(Class<T> clazz, String data) throws XmlRpcException
     {
         if ( data.getClass().equals(clazz) )
@@ -207,38 +208,84 @@ class XmlRpcClient
         {
             result = deserializeArray(clazz, type);
         }
+        else if ( sType.equals("struct") )
+        {
+            result = deserializeStruct(clazz, type);
+        }
         else
         {
-            throw new XmlRpcException("It was not posible to get the value for " + type.getText());
+            throw new XmlRpcException("The type of data can not be deserialized type: " + sType);
         }
         return result;
+    }
+
+    private <T> T deserializeStruct(Class<T> clazz, Element struct) throws JDOMException, ParseException, XmlRpcException, XmlRpcException
+    {
+        List listMembers = XPath.selectNodes(struct, "./member");
+        try
+        {
+            T result = clazz.newInstance();
+            for ( Object objMember : listMembers )
+            {
+                Element eMember = ( Element ) objMember;
+                Element eName = ( Element ) XPath.selectSingleNode(eMember, "./name");
+                try
+                {
+                    Field field = clazz.getField(eName.getText());
+                    Element eValue = ( Element ) XPath.selectSingleNode(eMember, "./value");
+                    List childs = eValue.getChildren();
+                    for ( Object child : childs )
+                    {
+                        if ( child instanceof Element )
+                        {
+                            Element eType = ( Element ) child;
+                            Object value = getValue(field.getType(), eType);
+                            field.set(result, value);
+                        }
+                    }
+
+                }
+                catch ( NoSuchFieldException nsfe )
+                {
+                    throw new XmlRpcException("The clazz " + clazz.getName() + " does not contain the filed " + eName.getText(), nsfe);
+                }
+            }
+            return result;
+        }
+        catch ( InstantiationException ie )
+        {
+            throw new XmlRpcException("The clazz " + clazz.getName() + " can not be instancieded", ie);
+        }
+        catch ( IllegalAccessException ie )
+        {
+            throw new XmlRpcException("The clazz " + clazz.getName() + " can not be instancieded", ie);
+        }
     }
 
     private <T> T deserializeArray(Class<T> clazz, Element array) throws JDOMException, ParseException, XmlRpcException
     {
         if ( clazz.isArray() )
-        {           
-            
-            List listValues = XPath.selectNodes(array, "./data/value");            
-            Class componentType=clazz.getComponentType();
-            Object arrayToReturn=Array.newInstance(componentType, listValues.size());
+        {
+
+            List listValues = XPath.selectNodes(array, "./data/value");
+            Class componentType = clazz.getComponentType();
+            Object arrayToReturn = Array.newInstance(componentType, listValues.size());
             int i = 0;
             for ( Object objValue : listValues )
             {
                 Element eValue = ( Element ) objValue;
-                Iterator itValues = eValue.getDescendants();
-                while (itValues.hasNext())
+                List childs = eValue.getChildren();
+                for ( Object child : childs )
                 {
-                    Object child = itValues.next();
                     if ( child instanceof Element )
                     {
                         Element eType = ( Element ) child;
-                        Object value=getValue(componentType, eType);
+                        Object value = getValue(componentType, eType);
                         Array.set(arrayToReturn, i, value);
                     }
                 }
                 i++;
-            }           
+            }
             return clazz.cast(arrayToReturn);
         }
         return null;
