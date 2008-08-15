@@ -14,6 +14,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.semanticwb.office.interfaces.CategoryInfo;
 import org.semanticwb.openoffice.interfaces.IOpenOfficeApplication;
 import org.semanticwb.openoffice.interfaces.IOpenOfficeDocument;
 import org.semanticwb.xmlrpc.Attachment;
@@ -53,6 +54,54 @@ public class DocumentRepoteTest
 
     @Test
     @Ignore
+    public void getRepositoriesTest()
+    {
+        try
+        {
+            IOpenOfficeApplication application = XmlRpcProxyFactory.newInstance(IOpenOfficeApplication.class, new URI("http://localhost:8084/TestRPC/GatewayOffice"));
+            application.setUser("victor");
+            application.setPassword("victor");
+            String[] repNames=application.getRepositories();
+            for ( String repName :  repNames)
+            {
+                System.out.println(repName);
+            }
+            Assert.assertEquals(repNames.length, 1);
+        }
+        catch ( URISyntaxException ure )
+        {
+            Assert.fail(ure.getLocalizedMessage());
+        }
+        catch ( Exception e )
+        {
+            Assert.fail(e.getLocalizedMessage());
+        }
+
+    }
+    @Test    
+    public void getCategoriesTest()
+    {
+        try
+        {
+            IOpenOfficeApplication application = XmlRpcProxyFactory.newInstance(IOpenOfficeApplication.class, new URI("http://localhost:8084/TestRPC/GatewayOffice"));
+            application.setUser("victor");
+            application.setPassword("victor");
+            String[] repNames=application.getRepositories();
+            CategoryInfo[] catinfo=application.getCategories(repNames[0]);            
+            Assert.assertTrue(catinfo.length>0);
+        }
+        catch ( URISyntaxException ure )
+        {
+            Assert.fail(ure.getLocalizedMessage());
+        }
+        catch ( Exception e )
+        {
+            Assert.fail(e.getLocalizedMessage());
+        }
+
+    }
+    @Test
+    @Ignore
     public void publishTest()
     {
         try
@@ -79,34 +128,10 @@ public class DocumentRepoteTest
         }
     }
 
-    @Test
-    @Ignore
-    public void getRepositoriesTest()
-    {
-        try
-        {
-            IOpenOfficeApplication application = XmlRpcProxyFactory.newInstance(IOpenOfficeApplication.class, new URI("http://localhost:8084/TestRPC/GatewayOffice"));
-            application.setUser("victor");
-            application.setPassword("victor");
-            String[] repNames=application.getRepositories();
-            for ( String repName :  repNames)
-            {
-                System.out.println(repName);
-            }
-            Assert.assertEquals(repNames.length, 1);
-        }
-        catch ( URISyntaxException ure )
-        {
-            Assert.fail(ure.getLocalizedMessage());
-        }
-        catch ( Exception e )
-        {
-            Assert.fail(e.getLocalizedMessage());
-        }
-
-    }
+    
     
     @Test    
+    @Ignore
     public void createCategoryTest()
     {
         try
