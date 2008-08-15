@@ -262,10 +262,10 @@ public class CodeGenerator
                 javaClassContent.append("        mgr.removeModel(uri);" + ENTER);
                 javaClassContent.append("    }" + ENTER);
                 javaClassContent.append(ENTER);
-                javaClassContent.append("    public static void create" + tpc.getName() + "(String name, String namespace)" + ENTER);
+                javaClassContent.append("    public static " + tpc.getName() + " create" + tpc.getName() + "(String name, String namespace)" + ENTER);
                 javaClassContent.append("    {" + ENTER);
                 javaClassContent.append("        SemanticModel model=mgr.createModel(name, namespace);" + ENTER);
-                javaClassContent.append("        model.createSemanticObject(name, vocabulary." + tpc.getName() + ");" + ENTER);
+                javaClassContent.append("        return (" + tpc.getName() + ")model.createSemanticObject(name, vocabulary." + tpc.getName() + ");" + ENTER);
                 javaClassContent.append("    }" + ENTER);
             }
         }
