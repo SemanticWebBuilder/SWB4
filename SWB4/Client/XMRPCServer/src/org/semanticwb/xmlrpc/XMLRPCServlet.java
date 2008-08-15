@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.lang.reflect.Array;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.ParseException;
@@ -105,8 +106,11 @@ public abstract class XMLRPCServlet extends HttpServlet
             {
                 if ( pUserName != null && pPassword != null )
                 {
-                    Object[] parameters = deserialize(xmlrpcDocument);
-                    Object objResponse = execute(getMethodName(xmlrpcDocument), parameters, parts, pUserName, pPassword);
+                    String methodName = getMethodName(xmlrpcDocument);
+                    ArrayList<Method> methods = getMethods(methodName);
+                    Object[] parameters = deserialize(xmlrpcDocument, methods);
+                    Method method = getMethod(methodName, parameters, methods);
+                    Object objResponse = execute(method, parameters, parts, pUserName, pPassword);
                     Document docResponse = this.serialize(objResponse);
                     sendResponse(response, docResponse);
                 }
@@ -159,6 +163,17 @@ public abstract class XMLRPCServlet extends HttpServlet
         return userName;
     }
 
+    public Method getMethod(String methodName, Object[] parameters, ArrayList<Method> methods) throws NoSuchMethodException
+    {
+        switch ( methods.size() )
+        {
+            case 1:
+                return methods.get(0);
+            default:
+        }
+        throw new NoSuchMethodException("The method " + methodName + "was not found");
+    }
+
     private String getPassword(String userpassDecoded) throws IOException
     {
         String password = "";
@@ -176,7 +191,7 @@ public abstract class XMLRPCServlet extends HttpServlet
     public abstract boolean isAuthenticate(String pUserName, String pPassword);
 
     private void sendResponse(ServletResponse response, Document docResponse) throws IOException
-    {
+    {        
         response.setContentType("text/xml");
         ServletOutputStream out = response.getOutputStream();
         XMLOutputter xMLOutputter = new XMLOutputter();
@@ -243,7 +258,12 @@ public abstract class XMLRPCServlet extends HttpServlet
         }
         else
         {
-            throw new XmlRpcException("This kind of convertion is not possible");
+            //throw new XmlRpcException("This kind of convertion is not possible");
+            type = "struct";
+            svalue = null;
+            Element elementType = new Element(type);
+            value.setContent(elementType);
+            addStruct(obj, elementType);
         }
         if ( svalue != null )
         {
@@ -254,10 +274,34 @@ public abstract class XMLRPCServlet extends HttpServlet
         }
     }
 
-    private void addArray(Object obj, Element elementType) throws XmlRpcException
+    private void addStruct(Object obj, Element structElement) throws XmlRpcException
+    {
+        Class clazz = obj.getClass();
+        for ( Field field : clazz.getDeclaredFields() )
+        {
+            try
+            {
+                Element member = new Element("member");
+                Element name = new Element("name");
+                name.setText(field.getName());
+                member.addContent(name);
+                Element value = new Element("value");
+                addParameter(member, field.get(obj));
+                member.addContent(value);
+                structElement.addContent(member);
+            }
+            catch ( IllegalAccessException iae )
+            {
+                iae.printStackTrace(System.out);
+            }
+
+        }
+    }
+
+    private void addArray(Object obj, Element arrayElement) throws XmlRpcException
     {
         Element data = new Element("data");
-        elementType.addContent(data);
+        arrayElement.addContent(data);
         int len = Array.getLength(obj);
         for ( int i = 0; i < len; i++ )
         {
@@ -280,39 +324,6 @@ public abstract class XMLRPCServlet extends HttpServlet
         }
     }
 
-    private Class[] getParameterTypes(Object[] parameters)
-    {
-        Class[] classToReturn = new Class[parameters.length];
-        for ( int i = 0; i < parameters.length; i++ )
-        {
-            if ( parameters[i].getClass() == Integer.class )
-            {
-                classToReturn[i] = int.class;
-            }
-            else if ( parameters[i].getClass() == String.class )
-            {
-                classToReturn[i] = String.class;
-            }
-            else if ( parameters[i].getClass() == Double.class )
-            {
-                classToReturn[i] = double.class;
-            }
-            else if ( parameters[i].getClass() == Float.class )
-            {
-                classToReturn[i] = float.class;
-            }
-            else if ( parameters[i].getClass() == Boolean.class )
-            {
-                classToReturn[i] = boolean.class;
-            }
-            else
-            {
-                classToReturn[i] = parameters[i].getClass();
-            }
-        }
-        return classToReturn;
-    }
-
     private String getClassFullPath(String objectName) throws ClassNotFoundException
     {
         String classFullPath = System.getProperty(PREFIX_PROPERTY_PATH + objectName, null);
@@ -323,19 +334,9 @@ public abstract class XMLRPCServlet extends HttpServlet
         return classFullPath;
     }
 
-    private Object execute(String pCallMethod, Object[] parameters, Set<Part> parts, String user, String password) throws ClassNotFoundException, XmlRpcException, InstantiationException, IllegalAccessException, NoSuchMethodException
+    private Object execute(Method method, Object[] parameters, Set<Part> parts, String user, String password) throws ClassNotFoundException, XmlRpcException, InstantiationException, IllegalAccessException, NoSuchMethodException
     {
-        String[] values = pCallMethod.split("\\.");
-        if ( values.length != 2 )
-        {
-            throw new XmlRpcException("The callMethos is incorrect");
-        }
-        String objectName = values[0];
-        String methodName = values[1];
-        String classFullPath = getClassFullPath(objectName);
-        Class clazz = Class.forName(classFullPath);
-        Class[] parameterTypes = getParameterTypes(parameters);
-        Method methodToFind = clazz.getMethod(methodName, parameterTypes);
+        Class clazz = method.getDeclaringClass();
         Object objToExecute = clazz.newInstance();
         try
         {
@@ -347,7 +348,7 @@ public abstract class XMLRPCServlet extends HttpServlet
         }
         try
         {
-            Object objectToReturn = methodToFind.invoke(objToExecute, parameters);
+            Object objectToReturn = method.invoke(objToExecute, parameters);
             afterExecute(objToExecute);
             return objectToReturn;
         }
@@ -364,38 +365,80 @@ public abstract class XMLRPCServlet extends HttpServlet
 
     }
 
-    private Object getParameter(Element eType) throws ParseException, JDOMException
+    private <T> T convertString(Class<T> clazz, String data) throws XmlRpcException
     {
-        Object res = null;
+        if ( data.getClass().equals(clazz) )
+        {
+            return ( T ) data;
+        }
+        throw new XmlRpcException("The data can not be converted");
+    }
+
+    private <T> T convertInteger(Class<T> clazz, int data)
+    {
+        return ( T ) new Integer(data);
+    }
+
+    private <T> T convertBoolean(Class<T> clazz, boolean data)
+    {
+        return ( T ) new Boolean(data);
+    }
+
+    private <T> T convertFloat(Class<T> clazz, float data)
+    {
+        return ( T ) new Float(data);
+    }
+
+    private <T> T convertDouble(Class<T> clazz, double data)
+    {
+        return ( T ) new Double(data);
+    }
+
+    private <T> T convertDate(Class<T> clazz, Date data) throws XmlRpcException
+    {
+        if ( data.getClass().equals(clazz) )
+        {
+            return ( T ) data;
+        }
+        throw new XmlRpcException("The data can not be converted");
+    }
+
+    private <T> T getParameter(Class<T> clazz, Element eType) throws ParseException, JDOMException, XmlRpcException
+    {
+        T res = null;
         String name = eType.getName();
         if ( name.equalsIgnoreCase("i4") || name.equalsIgnoreCase("int") )
         {
-            res = Integer.parseInt(eType.getText());
+            res = convertInteger(clazz, Integer.parseInt(eType.getText()));
         }
         else if ( name.equalsIgnoreCase("boolean") )
         {
-            res = eType.getText().equals("1") ? true : false;
+            res = convertBoolean(clazz, eType.getText().equals("1") ? true : false);
         }
         else if ( name.equalsIgnoreCase("dateTime.iso8601") )
         {
             String dateTime = eType.getText();
-            res = iso8601dateFormat.parse(dateTime);
+            res = convertDate(clazz, iso8601dateFormat.parse(dateTime));
         }
         else if ( name.equalsIgnoreCase("float") )
         {
-            res = Float.parseFloat(eType.getText());
+            res = convertFloat(clazz, Float.parseFloat(eType.getText()));
         }
         else if ( name.equalsIgnoreCase("double") )
         {
-            res = Double.parseDouble(eType.getText());
+            res = convertDouble(clazz, Double.parseDouble(eType.getText()));
         }
         else if ( name.equalsIgnoreCase("string") )
         {
-            res = eType.getText();
+            res = convertString(clazz, eType.getText());
         }
         else if ( name.equalsIgnoreCase("array") )
         {
-            res = deserializeArray(eType);
+            res = deserializeArray(clazz, eType);
+        }
+        else if ( name.equalsIgnoreCase("struct") )
+        {
+            res = deserializeStruct(clazz, eType);
         }
         else
         {
@@ -405,54 +448,118 @@ public abstract class XMLRPCServlet extends HttpServlet
 
     }
 
-    private Object deserializeArray(Element array) throws JDOMException, ParseException
+    private <T> T deserializeStruct(Class<T> clazz, Element struct) throws JDOMException, ParseException
     {
-        List listValues = XPath.selectNodes(array, "./data/value");
-        Object[] arrayToReturn = new Object[listValues.size()];
-        int i = 0;
-        for ( Object objValue : listValues )
-        {
-            Element eValue = ( Element ) objValue;
-            Iterator itValues = eValue.getDescendants();
-            while (itValues.hasNext())
-            {
-                Object child = itValues.next();
-                if ( child instanceof Element )
-                {
-                    Element eType = ( Element ) child;
-                    arrayToReturn[i] = this.getParameter(eType);
-                }
-            }
-            i++;
-        }
-
-        return arrayToReturn;
+        List listValues = XPath.selectNodes(struct, "./member");
+        return null;
     }
 
-    private Object[] deserialize(Document document) throws JDOMException, ParseException
+    private <T> T deserializeArray(Class<T> clazz, Element array) throws JDOMException, ParseException, XmlRpcException
     {
-        ArrayList<Object> parameters = new ArrayList<Object>();
-        List values = XPath.selectNodes(document, "/methodCall/params/param/value");
-        for ( Object oElement : values )
+        if ( clazz.isArray() )
         {
-            Element eValue = ( Element ) oElement;
-            for ( Object objElementType : eValue.getChildren() )
+
+            List listValues = XPath.selectNodes(array, "./data/value");
+            Class componentType = clazz.getComponentType();
+            Object arrayToReturn = Array.newInstance(componentType, listValues.size());
+            int i = 0;
+            for ( Object objValue : listValues )
             {
-                Element eType = ( Element ) objElementType;
-                parameters.add(getParameter(eType));
+                Element eValue = ( Element ) objValue;
+                Iterator itValues = eValue.getDescendants();
+                while (itValues.hasNext())
+                {
+                    Object child = itValues.next();
+                    if ( child instanceof Element )
+                    {
+                        Element eType = ( Element ) child;
+                        Object value = getParameter(componentType, eType);
+                        Array.set(arrayToReturn, i, value);
+                    }
+                }
+                i++;
+            }
+            return clazz.cast(arrayToReturn);
+        }
+        return null;
+    }
+
+    private ArrayList<Method> selectMethodsWithSameNumberOfParameters(ArrayList<Method> methods, int parameters)
+    {
+        ArrayList<Method> newmethods = new ArrayList<Method>();
+        for ( Method m : methods )
+        {
+            if ( m.getParameterTypes().length == parameters )
+            {
+                newmethods.add(m);
+            }
+        }
+        return newmethods;
+    }
+
+    private Object[] deserialize(Document document, ArrayList<Method> methods) throws JDOMException, ParseException, XmlRpcException
+    {
+        ArrayList<Method> newMethods = new ArrayList<Method>();
+        ArrayList<Object> parameters = new ArrayList<Object>();
+        for ( Method method : methods )
+        {
+            try
+            {
+                List values = XPath.selectNodes(document, "/methodCall/params/param/value");
+                methods = selectMethodsWithSameNumberOfParameters(methods, values.size());
+                int iParameter = 0;
+                for ( Object oElement : values )
+                {
+                    Class expectedClass = method.getParameterTypes()[0];
+                    Element eValue = ( Element ) oElement;
+                    for ( Object objElementType : eValue.getChildren() )
+                    {
+                        Element eType = ( Element ) objElementType;
+                        parameters.add(getParameter(expectedClass, eType));
+                    }
+                    iParameter++;
+                }
+                newMethods.add(method);
+            }
+            catch ( Exception e )
+            {
+                parameters = new ArrayList<Object>();
+                break;
             }
         }
         return parameters.toArray();
     }
 
-    private String getMethodName(Document document) throws XmlRpcException, JDOMException
+    private String getMethodName(Document document) throws XmlRpcException, JDOMException, ClassNotFoundException
     {
-        Element methodName = ( Element ) XPath.selectSingleNode(document.getRootElement(), "/methodCall/methodName");
-        if ( methodName == null )
+        Element methodNameElement = ( Element ) XPath.selectSingleNode(document.getRootElement(), "/methodCall/methodName");
+        if ( methodNameElement == null )
         {
             throw new XmlRpcException("The methodName tag was not found");
         }
-        return methodName.getText();
+        return methodNameElement.getText();
+    }
+
+    private ArrayList<Method> getMethods(String pCallMethod) throws XmlRpcException, JDOMException, ClassNotFoundException
+    {
+        String[] values = pCallMethod.split("\\.");
+        if ( values.length != 2 )
+        {
+            throw new XmlRpcException("The callMethos is incorrect");
+        }
+        String objectName = values[0];
+        String methodName = values[1];
+        String classFullPath = getClassFullPath(objectName);
+        Class clazz = Class.forName(classFullPath);
+        ArrayList<Method> methods = new ArrayList<Method>();
+        for ( Method m : clazz.getMethods() )
+        {
+            if ( m.getName().equals(methodName) )
+            {
+                methods.add(m);
+            }
+        }
+        return methods;
     }
 
     private Document getException(Exception e) throws JDOMException, IOException
