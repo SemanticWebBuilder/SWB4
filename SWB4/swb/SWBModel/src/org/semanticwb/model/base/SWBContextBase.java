@@ -30,10 +30,10 @@ public class SWBContextBase
         mgr.removeModel(uri);
     }
 
-    public static void createUserRepository(String name, String namespace)
+    public static UserRepository createUserRepository(String name, String namespace)
     {
         SemanticModel model=mgr.createModel(name, namespace);
-        model.createSemanticObject(name, vocabulary.UserRepository);
+        return (UserRepository)model.createSemanticObject(name, vocabulary.UserRepository);
     }
 
     public static WebSite getWebSite(String uri)
@@ -51,9 +51,9 @@ public class SWBContextBase
         mgr.removeModel(uri);
     }
 
-    public static void createWebSite(String name, String namespace)
+    public static WebSite createWebSite(String name, String namespace)
     {
         SemanticModel model=mgr.createModel(name, namespace);
-        model.createSemanticObject(name, vocabulary.WebSite);
+        return (WebSite)model.createSemanticObject(name, vocabulary.WebSite);
     }
 }
