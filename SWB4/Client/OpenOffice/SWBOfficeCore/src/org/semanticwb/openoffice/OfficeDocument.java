@@ -33,7 +33,7 @@ import org.semanticwb.openoffice.ui.dialogs.DialogContentInformation;
 import org.semanticwb.openoffice.ui.dialogs.DialogHistory;
 import org.semanticwb.openoffice.ui.dialogs.DialogSaveDocument;
 import org.semanticwb.openoffice.ui.wizard.PagContenido;
-import org.semanticwb.openoffice.ui.wizard.SelectPage;
+import org.semanticwb.openoffice.ui.wizard.SelectCategory;
 import org.semanticwb.openoffice.ui.wizard.SelectTypeToShow;
 import org.semanticwb.openoffice.ui.wizard.TitleAndDescription;
 import org.semanticwb.openoffice.util.ExcelFileFilter;
@@ -538,16 +538,16 @@ public abstract class OfficeDocument
                         switch ( getDocumentType() )
                         {
                             case WORD:
-                                clazz = new Class[]{TitleAndDescription.class, SelectPage.class, PagContenido.class, SelectTypeToShow.class};
+                                clazz = new Class[]{TitleAndDescription.class, SelectCategory.class, PagContenido.class, SelectTypeToShow.class};
                                 break;
                             case EXCEL:
-                                clazz = new Class[]{TitleAndDescription.class, SelectPage.class, PagContenido.class};
+                                clazz = new Class[]{TitleAndDescription.class, SelectCategory.class, PagContenido.class};
                                 break;
                             case PPT:
-                                clazz = new Class[]{TitleAndDescription.class, SelectPage.class, PagContenido.class};
+                                clazz = new Class[]{TitleAndDescription.class, SelectCategory.class, PagContenido.class};
                                 break;
                             default:
-                                clazz = new Class[]{TitleAndDescription.class, SelectPage.class};
+                                clazz = new Class[]{TitleAndDescription.class, SelectCategory.class};
                                 break;
 
                             }

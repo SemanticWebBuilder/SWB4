@@ -65,8 +65,8 @@ public class DocumentRepoteTest
             document.setUser("victor");
             document.setPassword("victor");
             document.addAttachment(new Attachment(new File("c:\\temp\\demo.doc")));
-            String id1 = document.publish("demo publication 'a'a'a'a++++", "description", categoryID, "WORD");
-            String id2 = document.publish("demo publication 'a'a'a'a++++", "description", categoryID, "WORD");
+            String id1 = document.publish("demo publication 'a'a'a'a++++", "description",application.getRepositories()[0], categoryID, "WORD");
+            String id2 = document.publish("demo publication 'a'a'a'a++++", "description",application.getRepositories()[0], categoryID, "WORD");
             System.out.println(id1);
         }
         catch ( URISyntaxException ure )
@@ -149,7 +149,7 @@ public class DocumentRepoteTest
             document.setUser("victor");
             document.setPassword("victor");
             document.addAttachment(new Attachment(new File("c:\\temp\\demo.doc")));
-            String id1 = document.publish("demo publication 'a'a'a'a++++", "description", categoryID, "WORD");
+            String id1 = document.publish("demo publication 'a'a'a'a++++", "description", application.getRepositories()[0],categoryID, "WORD");
             document.addAttachment(new Attachment(new File("c:\\temp\\demo.doc")));
             document.addAttachment(new Attachment(new File("c:\\temp\\demo.odp")));
             String version = document.updateContent(id1);
