@@ -49,11 +49,12 @@ public class TestWebSite {
     @Test
     public void Test()
     {
-        String modelName="sep";
+        String name="sep";
         String nsp="http://www.sep.gob.mx";
-        SemanticModel model=SWBInstance.getSemanticMgr().createModel(modelName,nsp);
-        WebSite site=SWBContext.createWebSite(model,"sep");        
-        WebPage page=SWBContext.createWebPage(model,"home");
+        //WebSite website=SWBContext.createWebSite(name, nsp);
+        WebSite website=SWBContext.getWebSite(name);
+        WebPage wp=website.createWebPage("home");
+        website.setHomePage(wp);
     }
 
 }
