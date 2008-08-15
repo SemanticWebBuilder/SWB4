@@ -810,35 +810,35 @@ public class SWBUtils {
             return bfile;
         }
 
-        public static Iterator<FileItem> fileUpload(javax.servlet.http.HttpServletRequest request, String path2Save) {
-            DiskFileItemFactory factory = new DiskFileItemFactory();
-            ServletFileUpload fu = new ServletFileUpload(factory);
-            java.util.List items = null;
-            try {
-                items = fu.parseRequest(request);
-            } catch (FileUploadException e) {
-                e.printStackTrace();
-            }
-            if (items != null && path2Save == null) {
-                Iterator<FileItem> iter = items.iterator();
-                return iter;
-            } else if (items != null && path2Save == null) {
-                Iterator<FileItem> iter = items.iterator();
-                while (iter.hasNext()) {
-                    FileItem item = (FileItem) iter.next();
-                    if (!item.isFormField()) { //Si No es un campo de forma comun, es un campo tipo file, grabarlo
-                        File fichero = new File(path2Save + item.getName());
-                        try {
-                            item.write(fichero);
-                        } catch (Exception e) {
-                            log.error(e);
-                        }
-                    }
-                }
-                return iter;
-            }
-            return null;
-        }
+//        public static Iterator<FileItem> fileUpload(javax.servlet.http.HttpServletRequest request, String path2Save) {
+//            DiskFileItemFactory factory = new DiskFileItemFactory();
+//            ServletFileUpload fu = new ServletFileUpload(factory);
+//            java.util.List items = null;
+//            try {
+//                items = fu.parseRequest(request);
+//            } catch (FileUploadException e) {
+//                e.printStackTrace();
+//            }
+//            if (items != null && path2Save == null) {
+//                Iterator<FileItem> iter = items.iterator();
+//                return iter;
+//            } else if (items != null && path2Save == null) {
+//                Iterator<FileItem> iter = items.iterator();
+//                while (iter.hasNext()) {
+//                    FileItem item = (FileItem) iter.next();
+//                    if (!item.isFormField()) { //Si No es un campo de forma comun, es un campo tipo file, grabarlo
+//                        File fichero = new File(path2Save + item.getName());
+//                        try {
+//                            item.write(fichero);
+//                        } catch (Exception e) {
+//                            log.error(e);
+//                        }
+//                    }
+//                }
+//                return iter;
+//            }
+//            return null;
+//        }
 
         public static String getLocaleString(String Bundle, String key) {
             return getLocaleString(Bundle, key, locale);
