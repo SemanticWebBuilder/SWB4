@@ -66,7 +66,7 @@ public class Main {
         boolean isDAML = source.endsWith( ".daml" );
 
         OntModel m = ModelFactory.createOntologyModel(
-                        isDAML ? OntModelSpec.DAML_MEM : OntModelSpec.OWL_MEM, null
+                        isDAML ? OntModelSpec.DAML_MEM : OntModelSpec.OWL_MEM_RULE_INF, null
                      );
 
         // we have a local copy of the wine ontology
