@@ -29,6 +29,7 @@ import org.semanticwb.model.VersionInfo;
 import org.semanticwb.model.Versionable;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebPageable;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.SWBDBAdmLog;
 
 /**
@@ -184,8 +185,7 @@ public class SWBServices {
         return doAction;
     }
 
-    public boolean addDescription(Descriptiveable descriptiveable, String description, User user) throws SWBException
-    {
+    public boolean addDescription(Descriptiveable descriptiveable, String description, User user) throws SWBException {
         boolean doAction = false;
         descriptiveable.setDescription(description);
         doAction = true;
@@ -199,9 +199,8 @@ public class SWBServices {
         }
         return doAction;
     }
-    
-    public boolean groupable(Groupable groupable, ObjectGroup objectgroup, User user) throws SWBException
-    {
+
+    public boolean groupable(Groupable groupable, ObjectGroup objectgroup, User user) throws SWBException {
         boolean doAction = false;
         groupable.addGroup(objectgroup);
         doAction = true;
@@ -215,9 +214,8 @@ public class SWBServices {
         }
         return doAction;
     }
-    
-    public boolean localeable(Localeable localeable, Language language, User user) throws SWBException
-    {
+
+    public boolean localeable(Localeable localeable, Language language, User user) throws SWBException {
         boolean doAction = false;
         localeable.setLanguage(language);
         doAction = true;
@@ -231,9 +229,8 @@ public class SWBServices {
         }
         return doAction;
     }
-    
-     public boolean priorityable(Priorityable priorityable, int priority, User user) throws SWBException
-     {
+
+    public boolean priorityable(Priorityable priorityable, int priority, User user) throws SWBException {
         boolean doAction = false;
         priorityable.setPriority(priority);
         doAction = true;
@@ -247,10 +244,8 @@ public class SWBServices {
         }
         return doAction;
     }
-     
-     
-     public boolean setValue(Valueable valueable, String value, User user) throws SWBException
-     {
+
+    public boolean setValue(Valueable valueable, String value, User user) throws SWBException {
         boolean doAction = false;
         valueable.setValue(value);
         doAction = true;
@@ -264,9 +259,8 @@ public class SWBServices {
         }
         return doAction;
     }
-     
-     public boolean setVersion(Versionable versionable, VersionInfo versionInfo, User user) throws SWBException
-     {
+
+    public boolean setVersion(Versionable versionable, VersionInfo versionInfo, User user) throws SWBException {
         boolean doAction = false;
         versionable.setActualVersion(versionInfo);
         doAction = true;
@@ -280,9 +274,8 @@ public class SWBServices {
         }
         return doAction;
     }
-     
-    public boolean removeVersion(Versionable versionable, User user) throws SWBException
-    {
+
+    public boolean removeVersion(Versionable versionable, User user) throws SWBException {
         boolean doAction = false;
         versionable.removeActualVersion();
         doAction = true;
@@ -295,10 +288,9 @@ public class SWBServices {
             throw new SWBException("Error unAssining versionInfo", e);
         }
         return doAction;
-    } 
-    
-    public boolean addWebPage(WebPageable webPageable, WebPage webPage, User user) throws SWBException
-    {
+    }
+
+    public boolean addWebPage(WebPageable webPageable, WebPage webPage, User user) throws SWBException {
         boolean doAction = false;
         webPageable.addWebPage(webPage);
         doAction = true;
@@ -311,10 +303,9 @@ public class SWBServices {
             throw new SWBException("Error assining webPage", e);
         }
         return doAction;
-    } 
-    
-    public boolean removeWebPage(WebPageable webPageable, WebPage webPage, User user) throws SWBException
-    {
+    }
+
+    public boolean removeWebPage(WebPageable webPageable, WebPage webPage, User user) throws SWBException {
         boolean doAction = false;
         webPageable.removeWebPage(webPage);
         doAction = true;
@@ -327,6 +318,5 @@ public class SWBServices {
             throw new SWBException("Error UnAssining webPage", e);
         }
         return doAction;
-    } 
-  
+    }
 }
