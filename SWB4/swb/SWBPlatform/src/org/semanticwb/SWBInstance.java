@@ -138,10 +138,10 @@ public class SWBInstance
 //                AFUtils.log(e, com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_WBLoader_Init_versioneerror"), true);
 //            }
 //
-//            if (!"ignore".equals(util.getEnv("wb/security.auth.login.config","ignore"))) {
-//                System.setProperty("java.security.auth.login.config",util.getAppPath()+"/WEB-INF/classes"+util.getEnv("wb/security.auth.login.config","/wb_jaas.config"));
-//                util.log("Login Config:"+System.getProperty("java.security.auth.login.config"));
-//            }
+            if (!"ignore".equals(getEnv("swb/security.auth.login.config","ignore"))) {
+                System.setProperty("java.security.auth.login.config",SWBUtils.getApplicationPath()+"/WEB-INF/classes"+getEnv("swb/security.auth.login.config","/wb_jaas.config"));
+                log.info("Login Config:"+System.getProperty("java.security.auth.login.config"));
+            }
 //            String dbsync = util.getEnv("wb/DBSync","false");
 //
 //            if (wbutil.isClient() || dbsync.trim().equalsIgnoreCase("true"))
