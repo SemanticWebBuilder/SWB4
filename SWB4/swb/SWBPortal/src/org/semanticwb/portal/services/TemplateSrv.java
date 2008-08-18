@@ -14,8 +14,12 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Template;
 import org.semanticwb.model.User;
 import org.semanticwb.model.ObjectGroup;
+import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.TemplateRef;
 import org.semanticwb.model.VersionInfo;
+import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
+import org.semanticwb.platform.SemanticIterator;
 import org.semanticwb.portal.SWBDBAdmLog;
 
 /**
@@ -32,6 +36,40 @@ public class TemplateSrv {
         template.setDescription(description);
         template.addGroup(objectgroup);
         template.setStatus(1);
+        VersionInfo verInfo = website.createVersionInfo();
+        verInfo.setValue("1");
+        template.setActualVersion(verInfo);
+        template.setLastVersion(verInfo);
+
+        //TODO:Con que metodo le pongo el nombre del archivo al template, lo q antes hacía con:
+        //setFilename(filename);
+        //Ahora lo voy a poner con setProperty, si es así como creo un SemanticProperty
+
+        //TODO: Grabar el archivo en ruta de fileSystem q se decida
+        String title = website.getTitle();
+        //java.io.File dir = new File(WBUtils.getInstance().getWorkPath() +"/sites/"+title+ "/templates/" + RECID);
+//        dir.mkdir();
+//        dir = new File(WBUtils.getInstance().getWorkPath() + "/sites/"+title + "/templates/" + RECID + "/" + version);
+//        dir.mkdir();
+//        dir = new File(WBUtils.getInstance().getWorkPath() + "/sites/"+title+ "/templates/" + RECID + "/" + version + "/images");
+//        dir.mkdir();
+//        java.io.OutputStream Os = new FileOutputStream(
+//        WBUtils.getInstance().getWorkPath()  + "/sites/"+topicmap + "/title/" + RECID + "/" + version + "/" + filename);
+//        Os.write(content.getBytes());
+//        Os.flush();
+//        Os.close();
+
+        //TODO: Graba attaches
+        //Iterator itattaches=attaches.keySet().iterator();
+//        while(itattaches.hasNext()) {
+//            String attach=(String)itattaches.next();
+//            byte abyte[] = (byte[]) attaches.get(attach);
+//            Os = new FileOutputStream(WBUtils.getInstance().getWorkPath() + "/sites/"+title + "/templates/" + RECID + "/" + version + "/images/" + attach);
+//            Os.write(abyte,0,abyte.length);
+//            Os.flush();
+//            Os.close();
+//        }
+
 
         //logeo
         SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", template.getName(), template.getURI(), "create Template", null);
@@ -63,11 +101,50 @@ public class TemplateSrv {
         return template;
     }
 
-    public boolean removeTemplate(WebSite website, String id, User user) throws SWBException 
-    {
+    public boolean removeTemplate(WebSite website, String id, User user) throws SWBException {
         boolean deleted = false;
         website.removeTemplate(id);
         deleted = true;
+
+        //Elimina todas las referencias q pueden haber hacía el templete
+        Iterator<WebSite> itWebSites = SWBContext.listWebSites();
+        while (itWebSites.hasNext()) {
+            WebSite webSite = itWebSites.next();
+            Iterator<WebPage> itWebPages = webSite.listWebPages();
+            while (itWebPages.hasNext()) {
+                WebPage webPage = itWebPages.next();
+                SemanticIterator<TemplateRef> itTemplateRefs = webPage.listTemplateRef();
+                while (itTemplateRefs.hasNext()) {
+                    TemplateRef tplRef = itTemplateRefs.next();
+                    //TODO:Ver si me puede dar el puro id del template en un metodo para no comparar contra toda la Uri
+                    String data = tplRef.getTemplate().getURI();
+                    if (data != null && data.trim().length() > 0) {
+                        if (id.equals(data)) {
+                            webPage.removeTemplateRef(tplRef);
+                        }
+                    }
+                }
+            }
+        }
+
+        //TODO:Elimina el template de FileSystem
+        String title = website.getTitle();
+        String rutawork = (String) SWBInstance.getWorkPath();
+        File f = new File(rutawork + "/sites/" + title + "/templates/");
+        if (f.exists() && f.isDirectory()) {
+            f = new File(rutawork + "/sites/" + title + "/templates/" + id);
+            if (f.exists() && f.isDirectory()) {
+                try {
+                    String deldirectory = rutawork + "/sites/" + title + "/templates/" + id;
+                    boolean flag = SWBUtils.IO.removeDirectory(deldirectory);
+                    if (flag) {
+                        f.delete();
+                    }
+                } catch (Exception e) {
+                }
+            }
+        }
+
 
         //logeo
         SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "remove", id, id, "remove Template", null);
@@ -79,6 +156,49 @@ public class TemplateSrv {
 
         return deleted;
     }
+    
+    public boolean updateTemplate(Template template, String title, String description, String fileName, String content, HashMap attaches, User user)
+    {
+        VersionInfo verInfo=template.getLastVersion();
+        int version=Integer.parseInt(verInfo.getValue())+1;
+        verInfo.setValue(""+version);
+        template.setStatus(1);
+        template.setUserModified(user);
+        template.setLastVersion(verInfo);
+        template.setActualVersion(verInfo);
+        template.setTitle(title);
+        template.setDescription(description);
+        //TODO: Revisar como poner el fileName
+        
+        //Ver si existira un metodo que me regrese el id del template, no todo el uri, esto para formar la ruta en filesystem
+        //String id = template.getUri();
+        //TODO: Grabar el archivo en ruta de fileSystem q se decida
+        //String title = website.getTitle();
+        //java.io.File dir = new File(WBUtils.getInstance().getWorkPath() +"/sites/"+title+ "/templates/" + RECID);
+//        dir.mkdir();
+//        dir = new File(WBUtils.getInstance().getWorkPath() + "/sites/"+title + "/templates/" + RECID + "/" + version);
+//        dir.mkdir();
+//        dir = new File(WBUtils.getInstance().getWorkPath() + "/sites/"+title+ "/templates/" + RECID + "/" + version + "/images");
+//        dir.mkdir();
+//        java.io.OutputStream Os = new FileOutputStream(
+//        WBUtils.getInstance().getWorkPath()  + "/sites/"+topicmap + "/title/" + RECID + "/" + version + "/" + filename);
+//        Os.write(content.getBytes());
+//        Os.flush();
+//        Os.close();
+
+        //TODO: Graba attaches
+        //Iterator itattaches=attaches.keySet().iterator();
+//        while(itattaches.hasNext()) {
+//            String attach=(String)itattaches.next();
+//            byte abyte[] = (byte[]) attaches.get(attach);
+//            Os = new FileOutputStream(WBUtils.getInstance().getWorkPath() + "/sites/"+title + "/templates/" + RECID + "/" + version + "/images/" + attach);
+//            Os.write(abyte,0,abyte.length);
+//            Os.flush();
+//            Os.close();
+//        }
+       return true;
+    }
+    
 
     public static boolean resetTemplates(WebSite website, Template template, User user) {
         try {
@@ -127,21 +247,19 @@ public class TemplateSrv {
         return false;
     }
 
-    public boolean removeTemplateGroup(WebSite webSite, String id, User user) throws SWBException
-    {
-        boolean doAction=false;
+    public boolean removeTemplateGroup(WebSite webSite, String id, User user) throws SWBException {
+        boolean doAction = false;
         webSite.removeObjectGroup(id);
-        Iterator <Template> itTemplates=webSite.listTemplates();
-        while(itTemplates.hasNext()){
-            Template template=itTemplates.next();
+        Iterator<Template> itTemplates = webSite.listTemplates();
+        while (itTemplates.hasNext()) {
+            Template template = itTemplates.next();
             //TODO:Revisar que id me van a pasar aqui para ver si tengo q concatenarlo con algo para formar el uri
-            if(template.getGroup().getURI().equals(id))
-            {
+            if (template.getGroup().getURI().equals(id)) {
                 //Elimina el template
                 removeTemplate(webSite, template.getURI(), user);
             }
         }
-        doAction=true;
+        doAction = true;
         //logeo
         SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "remove", id, id, "remove Template Group", null);
         try {
