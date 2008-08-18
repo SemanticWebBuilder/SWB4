@@ -26,5 +26,5 @@ public interface IOfficeApplication {
     @XmlRpcMethod(methodName="OfficeApplication.getRepositories")
     public String[] getRepositories() throws Exception;
     @XmlRpcMethod(methodName="OfficeApplication.getCategories")
-    public String[] getCategories(String repositoryName) throws Exception;
+    public CategoryInfo[] getCategories(String repositoryName) throws Exception;
 }
