@@ -1,10 +1,14 @@
 package org.semanticwb;
 
+import org.semanticwb.portal.services.CalendarSrv;
 import org.semanticwb.portal.services.CampSrv;
+import org.semanticwb.portal.services.DeviceSrv;
 import org.semanticwb.portal.services.DnsSrv;
+import org.semanticwb.portal.services.GroupSrv;
 import org.semanticwb.portal.services.IPFilterSrv;
 import org.semanticwb.portal.services.LanguageSrv;
 import org.semanticwb.portal.services.PFlowSrv;
+import org.semanticwb.portal.services.ResourceSrv;
 import org.semanticwb.portal.services.RoleSrv;
 import org.semanticwb.portal.services.RuleSrv;
 import org.semanticwb.portal.services.SWBServices;
@@ -37,6 +41,26 @@ public class SWBPortal {
     public DnsSrv getDnsSrv() {
         DnsSrv dnsSrv = new DnsSrv();
         return dnsSrv;
+    }
+    
+    public DeviceSrv getDeviceSrv() {
+        DeviceSrv deviceSrv = new DeviceSrv();
+        return deviceSrv;
+    }
+    
+    public CalendarSrv getCalendarSrv() {
+        CalendarSrv calendarSrv = new CalendarSrv();
+        return calendarSrv;
+    }
+    
+    public GroupSrv getGrouprv() {
+        GroupSrv groupSrv = new GroupSrv();
+        return groupSrv;
+    }
+    
+    public ResourceSrv getResourcerv() {
+        ResourceSrv resSrv = new ResourceSrv();
+        return resSrv;
     }
 
     public IPFilterSrv getIPFilterSrv() {
