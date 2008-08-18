@@ -58,6 +58,9 @@ public class SWB4CallbackHandler implements CallbackHandler, Serializable {
         if ("BASIC".equalsIgnoreCase(authType)) {
             getBasicCredentials(callbacks);
         }
+        if ("FORM".equalsIgnoreCase(authType)) {
+            getFormCredentials(callbacks);
+        }
     }
 
     private void getBasicCredentials(Callback[] callbacks) {
@@ -86,18 +89,18 @@ public class SWB4CallbackHandler implements CallbackHandler, Serializable {
         }
     }
     
-    /**
-     * Construlle la solicitud para la autenticación Basica
-     * @param realm Sitio al que se ingresará
-     * @param response HttpServletResponse para enviar la respuesta
-     */
-    public static void basicChallenge(String realm, HttpServletResponse response){
-        StringBuffer header= new StringBuffer();
-		header.append("Basic realm=\"");
-		header.append(realm);
-		header.append("\"");
-		response.setHeader("WWW-Authenticate",header.toString());
-		response.setHeader("Cache-Control", "no-cache=\"Authorization\"");
-		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+    private void getFormCredentials(Callback[] callbacks){
+        String login = request.getParameter("_swb_username");
+        String password = request.getParameter("_swb_password");
+        for (int i = 0; i < callbacks.length; i++) {
+            if (callbacks[i] instanceof NameCallback) {
+                NameCallback nameCallback = (NameCallback) callbacks[i];
+                nameCallback.setName(login);
+
+            } else if (callbacks[i] instanceof PasswordCallback) {
+                PasswordCallback passwordCallback = (PasswordCallback) callbacks[i];
+                passwordCallback.setPassword(password==null?null:password.toCharArray());
+            }
+        }
     }
 }
