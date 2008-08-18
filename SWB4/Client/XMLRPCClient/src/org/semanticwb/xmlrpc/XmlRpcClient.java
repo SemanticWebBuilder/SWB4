@@ -15,10 +15,8 @@ import java.net.Proxy;
 import java.net.Proxy.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -142,27 +140,55 @@ class XmlRpcClient
         {
             return ( T ) data;
         }
-        throw new XmlRpcException("The data can not be converted");
+        throw new XmlRpcException("The data are incopatibles, can not be converted String to "+clazz.getName());
     }
 
-    private <T> T convertInteger(Class<T> clazz, int data)
+    private <T> T convertInteger(Class<T> clazz, int data) throws XmlRpcException
     {
-        return ( T ) new Integer(data);
+        if(clazz==Integer.class || clazz==int.class)
+        {
+            return ( T ) new Integer(data);
+        }
+        else
+        {
+            throw new XmlRpcException("The data are incopatibles, can not be converted int to "+clazz.getName());
+        }
     }
 
-    private <T> T convertBoolean(Class<T> clazz, boolean data)
+    private <T> T convertBoolean(Class<T> clazz, boolean data) throws XmlRpcException
     {
-        return ( T ) new Boolean(data);
+        if(clazz==Boolean.class || clazz==boolean.class)
+        {
+            return ( T ) new Boolean(data);
+        }
+        else
+        {
+            throw new XmlRpcException("The data are incopatibles, can not be converted boolean to "+clazz.getName());        
+        }
     }
 
-    private <T> T convertFloat(Class<T> clazz, float data)
+    private <T> T convertFloat(Class<T> clazz, float data) throws XmlRpcException
     {
-        return ( T ) new Float(data);
+        if(clazz==Float.class || clazz==float.class)
+        {
+            return ( T ) new Float(data);
+        }
+        else
+        {
+            throw new XmlRpcException("The data are incopatibles, can not be converted float to "+clazz.getName());        
+        }
     }
 
-    private <T> T convertDouble(Class<T> clazz, double data)
+    private <T> T convertDouble(Class<T> clazz, double data) throws XmlRpcException
     {
-        return ( T ) new Double(data);
+        if(clazz==Double.class || clazz==double.class)
+        {
+            return ( T ) new Double(data);
+        }
+        else
+        {
+            throw new XmlRpcException("The data are incopatibles, can not be converted double to "+clazz.getName());        
+        }
     }
 
     private <T> T convertDate(Class<T> clazz, Date data) throws XmlRpcException
@@ -171,7 +197,7 @@ class XmlRpcClient
         {
             return ( T ) data;
         }
-        throw new XmlRpcException("The data can not be converted");
+        throw new XmlRpcException("The data are incopatibles, can not be converted Date to "+clazz.getName());        
     }
 
     private <T> T getValue(Class<T> clazz, Element type) throws XmlRpcException, ParseException, JDOMException
@@ -288,7 +314,10 @@ class XmlRpcClient
             }
             return clazz.cast(arrayToReturn);
         }
-        return null;
+        else
+        {
+            throw new XmlRpcException("The value of return must be an array");
+        }        
     }
 
     private <T> T getParameter(java.lang.Class<T> clazz, Element param) throws XmlRpcException, ParseException, JDOMException
@@ -434,9 +463,8 @@ class XmlRpcClient
                     out.close();
                 }
                 catch ( IOException ioe )
-                {
-                // Revisar
-                //throw new XmlRpcException(ioe);
+                {                
+                    throw new XmlRpcException(ioe);
                 }
             }
         }
