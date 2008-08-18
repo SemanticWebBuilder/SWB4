@@ -42,22 +42,22 @@ public class SWBPortal {
         DnsSrv dnsSrv = new DnsSrv();
         return dnsSrv;
     }
-    
+
     public DeviceSrv getDeviceSrv() {
         DeviceSrv deviceSrv = new DeviceSrv();
         return deviceSrv;
     }
-    
+
     public CalendarSrv getCalendarSrv() {
         CalendarSrv calendarSrv = new CalendarSrv();
         return calendarSrv;
     }
-    
+
     public GroupSrv getGrouprv() {
         GroupSrv groupSrv = new GroupSrv();
         return groupSrv;
     }
-    
+
     public ResourceSrv getResourcerv() {
         ResourceSrv resSrv = new ResourceSrv();
         return resSrv;
