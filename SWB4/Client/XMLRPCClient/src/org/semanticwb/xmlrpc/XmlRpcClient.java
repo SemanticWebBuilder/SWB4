@@ -37,8 +37,7 @@ class XmlRpcClient
 {
 
     private Map<String, List<String>> responseProperties = new HashMap<String, List<String>>();
-    private static String boundary = "gc0p4Jq0M2Yt08jU534c0p";
-    private static SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+    private static String boundary = "gc0p4Jq0M2Yt08jU534c0p";    
     private XmlRpcClientConfig config;
 
     public XmlRpcClient(XmlRpcClientConfig config)
