@@ -1,0 +1,49 @@
+/*  An example node type definition */
+
+// The namespace declaration
+<swb = 'http://www.semanticwb.org.mx/model/content/1.0'>
+<cm = 'http://www.semanticwb.org.mx/model/content/1.0/cm'>
+<mix = 'http://www.jcp.org/jcr/mix/1.0'>
+<nt = 'http://www.jcp.org/jcr/nt/1.0'>
+
+[swb:categoryType] > nt:folder, mix:referenceable, mix:lockable
+orderable mixin
+- cm:title (string)
+= 'Sin titulo'
+primary mandatory
+- cm:description (string)
+= 'Sin descripción'
+mandatory
++ *
+multiple
+
+
+[swb:contentType] > nt:folder, mix:referenceable, mix:versionable, mix:lockable
+orderable mixin
+
+// Nodes of this node type have a property called 'swb:title' of type STRING
+- cm:title (string)
+
+// The default values for this
+= 'Sin título'
+primary mandatory version
+
+// Nodes of this node type have a property called 'swb:title' of type STRING
+- cm:type (string)
+
+// The default values for this
+= ''
+mandatory version
+
+- cm:part (string)
+= ''
+multiple version 
+
+- cm:description (string)
+
+// The default values for this
+= ''
+mandatory version
++* version
+
+

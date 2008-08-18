@@ -13,10 +13,8 @@ import javax.jcr.Repository;
  *
  * @author victor.lorenzana
  */
-public interface RepositorySupport {
-    /*public void setSession(Session session);
-    public Session getSession();*/
-    
-    public void setRepositories(Map<String,Repository> repositories);
-    //public Session getSession();
+public interface RepositorySupport 
+{       
+    public void setRepositories(Map<String,Repository> repositories);    
+    public boolean hasListOfRepositories();
 }
