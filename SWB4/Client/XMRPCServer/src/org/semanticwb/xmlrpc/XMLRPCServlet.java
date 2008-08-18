@@ -170,7 +170,7 @@ public abstract class XMLRPCServlet extends HttpServlet
         return userName;
     }
 
-    public static Method getMethod(String methodName, Object[] parameters, ArrayList<Method> methods) throws NoSuchMethodException
+    private static Method getMethod(String methodName, Object[] parameters, ArrayList<Method> methods) throws NoSuchMethodException
     {
         switch ( methods.size() )
         {
