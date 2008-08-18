@@ -53,7 +53,7 @@ public class CampSrv {
         return doAction;
     }
     
-    public boolean updateCamp(Camp camp, String title, String description, User user) throws SWBException
+    public boolean updateCamp(Camp camp, String title, String description, int status, User user) throws SWBException
     {
         boolean doAction=false;
         if(title!=null){
@@ -62,6 +62,9 @@ public class CampSrv {
         if(description!=null){
             camp.setDescription(description);
         }
+        
+        camp.setStatus(status);
+        
         doAction=true;
         //logeo
         SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "update", camp.getTitle(), camp.getURI(), "update Camp", null);
