@@ -16,5 +16,12 @@ public class XmlRpcObject {
     public void setParts(Set<Part> parts)
     {
         this.parts=parts;
-    }    
+    } 
+    public void clearParts()
+    {
+        if(this.parts!=null)
+        {
+            this.parts.clear();
+        }
+    } 
 }
