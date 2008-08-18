@@ -25,9 +25,8 @@ public class TemplateSrv
 {
     private static Logger log = SWBUtils.getLogger(SWBUtils.class);
     
-    public Template createTemplate(WebSite website, String id, String fileName, String content, HashMap attaches, String titulo, String description, ObjectGroup objectgroup, User user) throws SWBException {
-        Template template=website.createTemplate(id);
-        
+    public Template createTemplate(WebSite website, String fileName, String content, HashMap attaches, String titulo, String description, ObjectGroup objectgroup, User user) throws SWBException {
+        Template template=website.createTemplate();
         template.setTitle(titulo);
         template.setDescription(description);
         template.addGroup(objectgroup);
@@ -44,8 +43,9 @@ public class TemplateSrv
         return template;
     }
     
-    public Template createTemplate(WebSite website, String fileName, String content, HashMap attaches, String titulo, String description, ObjectGroup objectgroup, User user) throws SWBException {
-        Template template=website.createTemplate();
+    public Template createTemplate(WebSite website, String id, String fileName, String content, HashMap attaches, String titulo, String description, ObjectGroup objectgroup, User user) throws SWBException {
+        Template template=website.createTemplate(id);
+        
         template.setTitle(titulo);
         template.setDescription(description);
         template.addGroup(objectgroup);

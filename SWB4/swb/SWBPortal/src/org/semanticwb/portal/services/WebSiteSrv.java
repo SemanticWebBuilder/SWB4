@@ -59,7 +59,7 @@ public class WebSiteSrv {
             webSite.setDescription(description);
         }
         webSite.setUserModified(user);
-
+        
         //logeo
         SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "update", webSite.getName(), webSite.getName(), "Update WebSite", null);
         try{
