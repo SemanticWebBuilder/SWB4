@@ -46,10 +46,11 @@ public class Attachment {
     @Override
     public boolean equals(Object obj)
     {
+        boolean equals=false;
         if(obj instanceof Attachment)
         {
-            return ((Attachment)obj).name.equals(this.name);
+            equals=((Attachment)obj).name.equals(this.name);
         }
-        return false;
+        return equals;
     }
 }
