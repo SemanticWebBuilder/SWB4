@@ -10,7 +10,6 @@ import java.util.Calendar;
 import java.util.Map;
 import javax.jcr.ItemExistsException;
 import javax.jcr.ItemNotFoundException;
-import javax.jcr.LoginException;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.PathNotFoundException;
@@ -19,7 +18,6 @@ import javax.jcr.PropertyIterator;
 import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
-import javax.jcr.SimpleCredentials;
 import javax.jcr.Value;
 import javax.jcr.lock.LockException;
 import javax.jcr.version.Version;
@@ -34,35 +32,36 @@ import sun.net.www.MimeTable;
  */
 public class OfficeDocument extends XmlRpcObject implements IOfficeDocument, RepositorySupport
 {
+    private static final
+    String DEFAULT_MIME_TYPE = "application/octet-stream";
+    private static final
+    String MIX_VERSIONABLE = "mix:versionable";
 
-    Map<String,Repository> repositories;
+    private static Map<String,Repository> repositories;
 
-    public void setRepositories(Map<String,Repository> repositories)
+    public void setRepositories(Map<String, Repository> repositories)
     {
-        if ( repositories == null )
+        if ( repositories != null )
         {
-            throw new IllegalArgumentException("The session can be null");
+            throw new IllegalArgumentException("The repository list already exists");
         }
-        this.repositories = repositories;
+        OfficeDocument.repositories = repositories;
     }
-    private Session openSession() throws LoginException,RepositoryException
+    public boolean hasListOfRepositories()
     {
-        Session session=repositories.get("wbrepository").login(new SimpleCredentials("", "".toCharArray()));
-        return session;
+        boolean hasListOfRepositories=false;
+        if(repositories!=null)
+        {
+            hasListOfRepositories=true;
+        }
+        return hasListOfRepositories;
     }
-    private Session openSession(String repositoryName) throws LoginException,RepositoryException
-    {
-        Session session=repositories.get(repositoryName).login(new SimpleCredentials("", "".toCharArray()));
-        return session;
-    }
-   
-
     public String publish(String title,String description,String repositoryName,String categoryID,String type) throws Exception
     {
         Session session=null;
         try
         {            
-            session=openSession(repositoryName);
+            session=OfficeApplication.openSession(repositoryName);
             Node categoryNode = session.getNodeByUUID(categoryID);
             if ( !categoryNode.isLocked() )
             {
@@ -83,14 +82,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument, Rep
                     String mimeType = mt.getContentTypeFor(part.getName());
                     if ( mimeType == null )
                     {
-                        mimeType = "application/octet-stream";
+                        mimeType = DEFAULT_MIME_TYPE;
                     }
 
                     Node nodePart = contentNode.addNode(part.getName(), "nt:file");
-                    nodePart.addMixin("mix:versionable");
+                    nodePart.addMixin(MIX_VERSIONABLE);
                     nodePart.checkout();
                     Node resNode = nodePart.addNode("jcr:content", "nt:resource");
-                    resNode.addMixin("mix:versionable");
+                    resNode.addMixin(MIX_VERSIONABLE);
                     resNode.setProperty("jcr:mimeType", mimeType);
                     resNode.setProperty("jcr:encoding", "");
                     InputStream in = new ByteArrayInputStream(part.getContent());
@@ -170,7 +169,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument, Rep
         Session session=null;
         try
         {
-            session=openSession();
+            session=OfficeApplication.openSession();
             Node nodeContent = session.getNodeByUUID(contentId);
             if ( !nodeContent.isLocked() )
             {
@@ -193,7 +192,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument, Rep
                         String mimeType = mt.getContentTypeFor(part.getName());
                         if ( mimeType == null )
                         {
-                            mimeType = "application/octet-stream";
+                            mimeType = DEFAULT_MIME_TYPE;
                         }
                         Node nodePart = null;
                         try
@@ -216,10 +215,10 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument, Rep
                         catch ( PathNotFoundException pnfe )
                         {
                             nodePart = nodeContent.addNode(part.getName(), "nt:file");
-                            nodePart.addMixin("mix:versionable");
+                            nodePart.addMixin(MIX_VERSIONABLE);
                             nodePart.checkout();
                             Node resNode = nodePart.addNode("jcr:content", "nt:resource");
-                            resNode.addMixin("mix:versionable");
+                            resNode.addMixin(MIX_VERSIONABLE);
                             resNode.setProperty("jcr:mimeType", mimeType);
                             resNode.setProperty("jcr:encoding", "");
                             InputStream in = new ByteArrayInputStream(part.getContent());
@@ -293,16 +292,17 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument, Rep
 
     public boolean exists(String contentId) throws Exception
     {
+        boolean exists=false;
         Session session=null;
         try
         {
-            session=openSession();
+            session=OfficeApplication.openSession();            
             session.getNodeByUUID(contentId);
-            return true;
+            exists=true;
         }
         catch ( ItemNotFoundException pnfe )
         {
-            return false;
+            exists=false;
         }
         finally
         {
@@ -311,6 +311,8 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument, Rep
                 session.logout();
             }
         }
+        return exists;
+        
     }
 
     public void setTitle(String contentID, String title)
@@ -332,7 +334,10 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument, Rep
     {
 
     }
-
+    public void setPagination(String contentId) throws Exception
+    {
+        
+    }
     public void setActive(String contentID, boolean active)
     {
 
