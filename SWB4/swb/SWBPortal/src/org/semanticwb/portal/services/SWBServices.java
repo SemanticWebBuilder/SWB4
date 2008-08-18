@@ -104,8 +104,6 @@ public class SWBServices {
         return true;
     }
 
-    //TODO:-Las interfaces deberían de tener el método createTemplateRef, no solo los objetos, para q así no me tengan q
-    //pasar un WebSite o un WebPage los cuales a final de cuentas son de tipo TemplateRefable
     public boolean addTemplate(WebSite webSite, TemplateRefable templateRefable, Template template, User user) throws SWBException {
         boolean doAction = false;
         TemplateRef templateRef = webSite.createTemplateRef();
@@ -294,8 +292,25 @@ public class SWBServices {
         }
         return doAction;
     }
+    
+    public boolean removeGroup(WebSite webSite, String id, User user) throws SWBException
+    {
+        boolean doAction = false;
+        webSite.removeObjectGroup(id);
+        doAction=true;
+        
+        //logeo
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "remove", id, id, "remove Group", null);
+        try {
+            swbAdmLog.create();
+        } catch (Exception e) {
+            throw new SWBException("Error removing Group", e);
+        }
+        return doAction;
+    }
 
-    public boolean localeable(Localeable localeable, Language language, User user) throws SWBException {
+    public boolean localeable(Localeable localeable, Language language, User user) throws SWBException 
+    {
         boolean doAction = false;
         localeable.setLanguage(language);
         doAction = true;
