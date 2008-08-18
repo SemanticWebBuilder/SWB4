@@ -443,7 +443,7 @@ public abstract class XMLRPCServlet extends HttpServlet
 
     private <T> T convertDate(Class<T> clazz, Date data) throws XmlRpcException
     {
-        if ( data.getClass().equals(clazz) )
+        if ( clazz==data.getClass() )
         {
             return ( T ) data;
         }
