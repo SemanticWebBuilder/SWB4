@@ -17,6 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +43,7 @@ import static org.semanticwb.xmlrpc.Base64.decode;
 public abstract class XMLRPCServlet extends HttpServlet
 {
 
+    Hashtable<String, Object> cacheObjects = new Hashtable<String, Object>();
     private static final String PREFIX_PROPERTY_PATH = "org.semanticwb.xmlrpc.";
     private static final String XMLRPC_DOCUMENT = "xmlrpc";
     private static String realm = "Secure Area";
@@ -106,11 +108,13 @@ public abstract class XMLRPCServlet extends HttpServlet
             {
                 if ( pUserName != null && pPassword != null )
                 {
+
                     String methodName = getMethodName(xmlrpcDocument);
                     ArrayList<Method> methods = getMethods(methodName);
                     Object[] parameters = deserialize(xmlrpcDocument, methods);
                     Method method = getMethod(methodName, parameters, methods);
-                    Object objResponse = execute(method, parameters, parts, pUserName, pPassword);
+                    String objectName = method.getDeclaringClass().getName();
+                    Object objResponse = execute(objectName, method, parameters, parts, pUserName, pPassword);
                     Document docResponse = this.serialize(objResponse);
                     sendResponse(response, docResponse);
                 }
@@ -155,6 +159,15 @@ public abstract class XMLRPCServlet extends HttpServlet
         }
     }
 
+    protected void afterExecute(Object objToExecute)
+    {
+        if ( objToExecute instanceof XmlRpcObject )
+        {
+            XmlRpcObject xmlRpcObject = ( XmlRpcObject ) objToExecute;
+            xmlRpcObject.clearParts();
+        }
+    }
+
     private String getUserName(String userpassDecoded) throws IOException
     {
         String userName = "";
@@ -191,7 +204,7 @@ public abstract class XMLRPCServlet extends HttpServlet
     public abstract boolean isAuthenticate(String pUserName, String pPassword);
 
     private void sendResponse(ServletResponse response, Document docResponse) throws IOException
-    {        
+    {
         response.setContentType("text/xml");
         ServletOutputStream out = response.getOutputStream();
         XMLOutputter xMLOutputter = new XMLOutputter();
@@ -334,34 +347,38 @@ public abstract class XMLRPCServlet extends HttpServlet
         return classFullPath;
     }
 
-    private Object execute(Method method, Object[] parameters, Set<Part> parts, String user, String password) throws ClassNotFoundException, XmlRpcException, InstantiationException, IllegalAccessException, NoSuchMethodException
+    private Object execute(String objectName, Method method, Object[] parameters, Set<Part> parts, String user, String password) throws ClassNotFoundException, XmlRpcException, InstantiationException, IllegalAccessException, NoSuchMethodException
     {
         Class clazz = method.getDeclaringClass();
-        Object objToExecute = clazz.newInstance();
-        try
+
+        Object objToExecute = cacheObjects.get(objectName);
+        if ( objToExecute == null )
         {
-            beforeExecute(objToExecute, parts, user, password);
+            cacheObjects.put(objectName, clazz.newInstance());
+            objToExecute = cacheObjects.get(objectName);
         }
-        catch ( Exception e )
+        synchronized ( objToExecute )
         {
-            throw new XmlRpcException("The opject can not be inizialited into the method setupObject, cause: " + e.getLocalizedMessage(), e);
-        }
-        try
-        {
-            Object objectToReturn = method.invoke(objToExecute, parameters);
-            afterExecute(objToExecute);
-            return objectToReturn;
-        }
-        catch ( InvocationTargetException inte )
-        {
-            throw new XmlRpcException(inte.getTargetException().getLocalizedMessage(), inte.getTargetException());
+            try
+            {
+                beforeExecute(objToExecute, parts, user, password);
+            }
+            catch ( Exception e )
+            {
+                throw new XmlRpcException("The opject can not be inizialited into the method setupObject, cause: " + e.getLocalizedMessage(), e);
+            }
+            try
+            {
+                Object objectToReturn = method.invoke(objToExecute, parameters);
+                afterExecute(objToExecute);
+                return objectToReturn;
+            }
+            catch ( InvocationTargetException inte )
+            {
+                throw new XmlRpcException(inte.getTargetException().getLocalizedMessage(), inte.getTargetException());
+            }
         }
 
-
-    }
-
-    protected void afterExecute(Object objToExecute)
-    {
 
     }
 
