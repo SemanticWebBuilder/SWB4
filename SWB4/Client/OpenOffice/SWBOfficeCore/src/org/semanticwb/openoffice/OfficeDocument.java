@@ -43,7 +43,7 @@ import org.semanticwb.xmlrpc.Attachment;
 import org.semanticwb.xmlrpc.HttpException;
 import org.semanticwb.xmlrpc.XmlRpcException;
 import static org.semanticwb.openoffice.util.FileUtil.copyFile;
-import static java.lang.Integer.MIN_VALUE;
+
 
 /**
  * An Office documents is an abstraction of a document that can be published
@@ -54,6 +54,8 @@ public abstract class OfficeDocument
     private static final String TITLE = "Asistente de publicación";
     
     private static final String CONTENT_ID_NAME = "contentID";
+    private static final
+    String TITLE_VERIFY = "Verificación de contenido";
     // By default the content is not published
     private String contentID = null;
 
@@ -90,47 +92,42 @@ public abstract class OfficeDocument
             contentID = OfficeApplication.setupDocument(contentId);
             setupDocument=true;
         }
+
+
         catch ( XmlRpcException e )
         {
             if(e.getCause()!=null && e.getCause() instanceof ConnectException)
             {
                 JOptionPane.showMessageDialog(null,
-                        "No se puede verificar la existencia del contenido en el sitio, al paracer el sitio al que intenta conectarse no esta disponible.",
-                        "Verificación de contenido", JOptionPane.WARNING_MESSAGE);                                
+                        "No se puede verificar la existencia del contenido en el sitio, al paracer el sitio al que intenta conectarse no esta disponible.",TITLE_VERIFY, JOptionPane.WARNING_MESSAGE);                                
             }
             else
             {
                 JOptionPane.showMessageDialog(null,
-                        "No se puede verificar la existencia del contenido en el sitio, la causa es:\r\n" + e.getLocalizedMessage(),
-                        "Verificación de contenido", JOptionPane.WARNING_MESSAGE);                
+                        "No se puede verificar la existencia del contenido en el sitio, la causa es:\r\n" + e.getLocalizedMessage(),TITLE_VERIFY, JOptionPane.WARNING_MESSAGE);                
             }
             OfficeApplication.logOff();
             ErrorLog.log(e);            
-        }
-        catch ( HttpException e )
+        }        catch ( HttpException e )
         {
             if(e.getCode()==404)
             {
                 JOptionPane.showMessageDialog(null,
-                        "No se puede verificar la existencia del contenido en el sitio, al paracer el sitio al que intenta conectarse no tiene habilitada la función de publicación de contenidos.",
-                        "Verificación de contenido", JOptionPane.ERROR_MESSAGE);
+                        "No se puede verificar la existencia del contenido en el sitio, al paracer el sitio al que intenta conectarse no tiene habilitada la función de publicación de contenidos.",TITLE_VERIFY, JOptionPane.ERROR_MESSAGE);
                 
             }
             else
             {
                 JOptionPane.showMessageDialog(null,
-                        "No se puede verificar la existencia del contenido en el sitio, la causa es:\r\n" + e.getLocalizedMessage(),
-                        "Verificación de contenido", JOptionPane.ERROR_MESSAGE);                
+                        "No se puede verificar la existencia del contenido en el sitio, la causa es:\r\n" + e.getLocalizedMessage(),TITLE_VERIFY, JOptionPane.ERROR_MESSAGE);                
             
             }
             OfficeApplication.logOff();
             ErrorLog.log(e);            
-        }
-        catch ( Exception e )
+        }        catch ( Exception e )
         {
             JOptionPane.showMessageDialog(null,
-                    e.getLocalizedMessage(),
-                    "Verificación de contenido", JOptionPane.ERROR_MESSAGE);
+                    e.getLocalizedMessage(),TITLE_VERIFY, JOptionPane.ERROR_MESSAGE);
             ErrorLog.log(e);
             OfficeApplication.logOff();
         }
@@ -633,7 +630,7 @@ public abstract class OfficeDocument
         {
             if ( zipFile != null && zipFile.exists() )
             {
-                deleteTemporalDirectory(zipFile.getParentFile());
+                zipFile.delete();
             }
         }
     }

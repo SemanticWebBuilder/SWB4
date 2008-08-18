@@ -62,7 +62,7 @@ public class PublishResultProducer implements WizardResultProducer
             {                
                 if(zipFile!=null && zipFile.exists())
                 {
-                    document.deleteTemporalDirectory(zipFile.getParentFile());                
+                    zipFile.delete();
                 }
             }
         }
