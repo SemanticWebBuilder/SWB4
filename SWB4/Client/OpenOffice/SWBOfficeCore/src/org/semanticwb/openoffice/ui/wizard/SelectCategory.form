@@ -40,7 +40,7 @@
             <EventHandler event="valueChanged" listener="javax.swing.event.TreeSelectionListener" parameters="javax.swing.event.TreeSelectionEvent" handler="jTreeCategoryValueChanged"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new JTree(){&#xd;&#xa;      public String getToolTipText(MouseEvent evt) {&#xd;&#xa;&#x9;if (getRowForLocation(evt.getX(), evt.getY()) == -1) return null;    &#xd;&#xa;&#x9;TreePath curPath = getPathForLocation(evt.getX(), evt.getY());&#xd;&#xa;&#x9;return ((ToolTipTreeNode)curPath.getLastPathComponent()).getToolTipText();&#xd;&#xa;      }&#xd;&#xa;    };&#xd;&#xa;"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new JTree(){&#xd;&#xa;      public String getToolTipText(MouseEvent evt) &#xd;&#xa;      {&#xd;&#xa;            String value=null;&#xd;&#xa;            if (getRowForLocation(evt.getX(), evt.getY()) != -1)&#xd;&#xa;            {&#xd;&#xa;                TreePath curPath = getPathForLocation(evt.getX(), evt.getY());&#xd;&#xa;                value=((ToolTipTreeNode)curPath.getLastPathComponent()).getToolTipText();&#xd;&#xa;            }    &#xd;&#xa;            return value;&#x9;&#xd;&#xa;      }&#xd;&#xa;    };&#xd;&#xa;"/>
           </AuxValues>
         </Component>
       </SubComponents>

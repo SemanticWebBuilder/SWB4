@@ -100,10 +100,15 @@ public class SelectCategory extends WizardPage
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTreeCategory = new JTree(){
-            public String getToolTipText(MouseEvent evt) {
-                if (getRowForLocation(evt.getX(), evt.getY()) == -1) return null;    
-                TreePath curPath = getPathForLocation(evt.getX(), evt.getY());
-                return ((ToolTipTreeNode)curPath.getLastPathComponent()).getToolTipText();
+            public String getToolTipText(MouseEvent evt) 
+            {
+                String value=null;
+                if (getRowForLocation(evt.getX(), evt.getY()) != -1)
+                {
+                    TreePath curPath = getPathForLocation(evt.getX(), evt.getY());
+                    value=((ToolTipTreeNode)curPath.getLastPathComponent()).getToolTipText();
+                }    
+                return value;	
             }
         };
         ;
