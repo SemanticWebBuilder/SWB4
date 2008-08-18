@@ -25,7 +25,7 @@ public class WebSiteSrv {
         
         WebSite website=SWBContext.createWebSite(name, nsp);
         website.setTitle(title);
-        website.setDescription(description);    
+        website.setDescription(description);
         WebPage wp=website.createWebPage(homeTitle);
         wp.setDescription(homeDescription);
         website.setHomePage(wp);
