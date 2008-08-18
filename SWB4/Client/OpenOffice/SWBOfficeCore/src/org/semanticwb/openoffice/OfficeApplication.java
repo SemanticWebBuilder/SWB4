@@ -30,6 +30,7 @@ import org.semanticwb.xmlrpc.XmlRpcProxyFactory;
 public abstract class OfficeApplication
 {
 
+    private static final String DELETE_CONFIGURATION_ERROR = "Error trying to get the proxy server, delete the file ";
     private static MenuListener menuListener;
     private static UserInfo userInfo = null;
     private static URI webAddress = null;
@@ -76,12 +77,12 @@ public abstract class OfficeApplication
                 }
                 catch ( URISyntaxException e )
                 {
-                    String message = "Error trying to get the proxy server, delete the file " + new Configuration().getPath() + " or fix it.";
+                    String message = DELETE_CONFIGURATION_ERROR + new Configuration().getPath();
                     throw new WBException(message, e);
                 }
                 catch ( NumberFormatException e )
                 {
-                    String message = "Error trying to get the proxy port, delete the file " + new Configuration().getPath() + " or fix it.";
+                    String message = "Error trying to get the proxy port, delete the file " + new Configuration().getPath();
                     throw new WBException(message, e);
                 }
             }
@@ -100,6 +101,38 @@ public abstract class OfficeApplication
         return application;
     }
 
+    private static void setProxy() throws WBException
+    {
+        String proxyServer = new Configuration().get(Configuration.PROXY_SERVER);
+        String proxyPort = new Configuration().get(Configuration.PROXY_PORT);
+        if ( proxyServer == null )
+        {
+            proxyServer = "";
+        }
+        if ( proxyPort == null )
+        {
+            proxyServer = "";
+        }
+        if ( !proxyServer.equals("") && !proxyPort.equals("") )
+        {
+            try
+            {
+                document.setProxyAddress(new URI(proxyServer));
+                document.setProxyPort(Integer.parseInt(proxyPort));
+            }
+            catch ( URISyntaxException e )
+            {
+                String message = DELETE_CONFIGURATION_ERROR + new Configuration().getPath() + " or fix it.";
+                throw new WBException(message, e);
+            }
+            catch ( NumberFormatException e )
+            {
+                String message = "Error trying to get the proxy port, delete the file " + new Configuration().getPath() + " or fix it.";
+                throw new WBException(message, e);
+            }
+        }
+    }
+
     public static IOpenOfficeDocument getOfficeDocumentProxy() throws WBException
     {
         if ( document == null )
@@ -111,34 +144,7 @@ public abstract class OfficeApplication
                     document = XmlRpcProxyFactory.newInstance(IOpenOfficeDocument.class, OfficeApplication.getWebAddress());
                     document.setUser(OfficeApplication.userInfo.getLogin());
                     document.setPassword(OfficeApplication.userInfo.getPassword());
-                    String proxyServer = new Configuration().get(Configuration.PROXY_SERVER);
-                    String proxyPort = new Configuration().get(Configuration.PROXY_PORT);
-                    if ( proxyServer == null )
-                    {
-                        proxyServer = "";
-                    }
-                    if ( proxyPort == null )
-                    {
-                        proxyServer = "";
-                    }
-                    if ( !proxyServer.equals("") && !proxyPort.equals("") )
-                    {
-                        try
-                        {
-                            document.setProxyAddress(new URI(proxyServer));
-                            document.setProxyPort(Integer.parseInt(proxyPort));
-                        }
-                        catch ( URISyntaxException e )
-                        {
-                            String message = "Error trying to get the proxy server, delete the file " + new Configuration().getPath() + " or fix it.";
-                            throw new WBException(message, e);
-                        }
-                        catch ( NumberFormatException e )
-                        {
-                            String message = "Error trying to get the proxy port, delete the file " + new Configuration().getPath() + " or fix it.";
-                            throw new WBException(message, e);
-                        }
-                    }
+                    setProxy();
                 }
             }
             catch ( Exception e )
@@ -159,25 +165,24 @@ public abstract class OfficeApplication
 
     }
 
-    private void verifyVersion()
+    /*private void verifyVersion()
     {
-        if ( OfficeApplication.tryLogin() )
-        {
-            IOpenOfficeApplication officeApplication = XmlRpcProxyFactory.newInstance(IOpenOfficeApplication.class, webAddress);
-            try
-            {
-                if ( officeApplication.isValidVersion(IOpenOfficeApplication.version) && menuListener != null )
-                {
-                    menuListener.onLogin();
-                }
-            }
-            catch ( Exception e )
-            {
-                JOptionPane.showMessageDialog(null, e.getMessage(), "Verificación de versión de publicación", JOptionPane.ERROR_MESSAGE);
-            }
-        }
+    if ( OfficeApplication.tryLogin() )
+    {
+    IOpenOfficeApplication officeApplication = XmlRpcProxyFactory.newInstance(IOpenOfficeApplication.class, webAddress);
+    try
+    {
+    if ( officeApplication.isValidVersion(IOpenOfficeApplication.version) && menuListener != null )
+    {
+    menuListener.onLogin();
     }
-
+    }
+    catch ( Exception e )
+    {
+    JOptionPane.showMessageDialog(null, e.getMessage(), "Verificación de versión de publicación", JOptionPane.ERROR_MESSAGE);
+    }
+    }
+    }*/
     /**
      * Opens a document in a file path
      * @param file Path for the file
@@ -217,10 +222,7 @@ public abstract class OfficeApplication
 
     public static final void createPage()
     {
-        if ( tryLogin() )
-        {
 
-        }
     }
 
     public final void open()
@@ -255,7 +257,7 @@ public abstract class OfficeApplication
     {
         String contentIdToReturn = null;
         if ( contentId != null && !contentId.trim().equals("") && OfficeApplication.tryLogin() )
-        {            
+        {
             document = getOfficeDocumentProxy();
             try
             {
@@ -325,18 +327,22 @@ public abstract class OfficeApplication
         }
         return tryLogin;
     }
+
     public static final boolean isLogged()
     {
-        if(userInfo==null)
+        boolean isLogged = false;
+        if ( userInfo == null )
         {
-            return false;
+            isLogged = false;
         }
-        return true;
+        return isLogged;
     }
+
     public static final void closeSession()
     {
-        
+
     }
+
     public final static void logOff()
     {
         userInfo = null;

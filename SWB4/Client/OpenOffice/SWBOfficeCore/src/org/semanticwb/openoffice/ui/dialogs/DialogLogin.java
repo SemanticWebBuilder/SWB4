@@ -224,7 +224,7 @@ public class DialogLogin extends javax.swing.JDialog
                 configurationListURI.addUserConfiguration(uri, this.jTextFieldClave.getText());
                 this.webAddress=uri;
                 this.login=this.jTextFieldClave.getText();
-                this.password=new String(this.jPassword.getPassword());
+                this.password=this.jPassword.toString();
             }
             catch ( URISyntaxException use )
             {
