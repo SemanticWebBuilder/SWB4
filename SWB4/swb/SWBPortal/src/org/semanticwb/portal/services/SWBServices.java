@@ -254,61 +254,6 @@ public class SWBServices {
         return doAction;
     }
 
-    public boolean createGroup(WebSite webSite, String title, String description, User user) throws SWBException {
-        boolean doAction = false;
-        ObjectGroup objGroup = webSite.createObjectGroup();
-        objGroup.setTitle(title);
-        objGroup.setDescription(description);
-        objGroup.setUserCreated(user);
-        doAction = true;
-
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", objGroup.getTitle(), objGroup.getURI(), "create Group", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error creating Group", e);
-        }
-        return doAction;
-    }
-
-    public boolean updateGroup(ObjectGroup objectGroup, String title, String description, User user) throws SWBException {
-        boolean doAction = false;
-        if (title != null) {
-            objectGroup.setTitle(title);
-        }
-        if (description != null) {
-            objectGroup.setDescription(description);
-        }
-        objectGroup.setUserModified(user);
-        doAction = true;
-
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", objectGroup.getTitle(), objectGroup.getURI(), "update Group", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error updating Group", e);
-        }
-        return doAction;
-    }
-    
-    public boolean removeGroup(WebSite webSite, String id, User user) throws SWBException
-    {
-        boolean doAction = false;
-        webSite.removeObjectGroup(id);
-        doAction=true;
-        
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "remove", id, id, "remove Group", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error removing Group", e);
-        }
-        return doAction;
-    }
-
     public boolean localeable(Localeable localeable, Language language, User user) throws SWBException 
     {
         boolean doAction = false;
