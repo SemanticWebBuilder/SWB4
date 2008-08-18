@@ -4,6 +4,7 @@ import org.semanticwb.portal.services.CampSrv;
 import org.semanticwb.portal.services.DnsSrv;
 import org.semanticwb.portal.services.IPFilterSrv;
 import org.semanticwb.portal.services.LanguageSrv;
+import org.semanticwb.portal.services.PFlowSrv;
 import org.semanticwb.portal.services.RoleSrv;
 import org.semanticwb.portal.services.RuleSrv;
 import org.semanticwb.portal.services.SWBServices;
@@ -72,9 +73,14 @@ public class SWBPortal {
         LanguageSrv langSrv = new LanguageSrv();
         return langSrv;
     }
-    
+
     public CampSrv getCampSrv() {
         CampSrv campSrv = new CampSrv();
         return campSrv;
+    }
+
+    public PFlowSrv getPFlowSrv() {
+        PFlowSrv pFlowSrv = new PFlowSrv();
+        return pFlowSrv;
     }
 }
