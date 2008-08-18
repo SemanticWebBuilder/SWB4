@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBInstance;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.security.auth.SWB4CallbackHandler;
 
@@ -25,6 +26,7 @@ import org.semanticwb.security.auth.SWB4CallbackHandler;
 public class Login implements InternalServlet
 {
     static Logger log=SWBUtils.getLogger(Login.class);
+    static String authMethod = "FORM"; //"BASIC"
     
     //Constantes para primer implementación
     
@@ -40,7 +42,7 @@ public class Login implements InternalServlet
         CallbackHandler callbackHandler = (CallbackHandler) session.getAttribute("swb4-callback");
         if (null == callbackHandler){
             log.debug("New callbackHandler...");
-            callbackHandler = new SWB4CallbackHandler(request,response,"BASIC"); //TODO proveer otros métodos
+            callbackHandler = new SWB4CallbackHandler(request,response,authMethod); //TODO proveer otros métodos
             session.setAttribute("swb4-callback", callbackHandler);
         } else {
             ((SWB4CallbackHandler)callbackHandler).setRequest(request);
@@ -48,7 +50,10 @@ public class Login implements InternalServlet
         }
         if (null == subject){
             log.debug("New Subject...");
-            SWB4CallbackHandler.basicChallenge("Serch Web Builder 4.0", response);
+            if ("BASIC".equals(authMethod))
+                basicChallenge("Serch Web Builder 4.0", response);
+            if ("FORM".equals(authMethod))
+                formChallenge(request, response, "ErrMEssage", "Alert");
             subject = new Subject();
             session.setAttribute("swb4-subject", subject);
             return;
@@ -59,7 +64,11 @@ public class Login implements InternalServlet
             lc.login();
         } catch (LoginException ex) {
             log.error("Can't log User", ex);
-            SWB4CallbackHandler.basicChallenge("Serch Web Builder 4.0", response);
+            if ("BASIC".equals(authMethod))
+                basicChallenge("Serch Web Builder 4.0", response);
+            if ("FORM".equals(authMethod))
+                formChallenge(request, response, "ErrMEssage", "Alert");
+            subject = new Subject();
             return;
         }
        
@@ -67,4 +76,67 @@ public class Login implements InternalServlet
         response.getWriter().print("Hello Login, Authenticated User: "+subject.getPrincipals().iterator().next().getName());
         //SWBContext.getSemanticMgr().getAdminModel().createResource(SWBContext.getSemanticMgr().getOntology().getResource("http://www.semanticwebbuilder.org/swb4/ontology#WebPage"));
     }        
+    
+    private void basicChallenge(String realm, HttpServletResponse response){
+        StringBuffer header= new StringBuffer();
+		header.append("Basic realm=\"");
+		header.append(realm);
+		header.append("\"");
+		response.setHeader("WWW-Authenticate",header.toString());
+		response.setHeader("Cache-Control", "no-cache=\"Authorization\"");
+		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+    }
+    
+    private void formChallenge(HttpServletRequest request, HttpServletResponse response, String errorMessage, String alert) throws IOException{
+         String ruta = "/config/";
+      /*  if (request.getParameter("err") != null) {
+            if (user.isRegistered()) {
+                ruta += request.getParameter("err");
+            } else {
+                ruta += "login";
+            }
+        } else {
+        */    ruta += "login";
+       // }
+
+        ruta += ".html";
+        String login = null;
+        try {
+           // String rutaSite = "/sites/" + topic.getMap().getId() + ruta;
+            //try {
+
+              //  try { 
+              //      login = SWBUtils.IO.getFileFromPath(rutaSite + "." + "es" /*user.getLanguage()*/);
+                    //login = WBUtils.getInstance().getFileFromWorkPath2(rutaSite + "." + user.getLanguage());
+              //  } catch (Exception ignore) {
+                    //There is no file for Language, going after regular one
+              //  }
+              //  if (null == login) login = SWBUtils.IO.getFileFromPath(rutaSite);
+                //TODO
+                //login = WBUtils.getInstance().parseHTML(login, WBUtils.getInstance().getWebWorkPath() + "/sites/" + topic.getMap() + "/config/images/");
+                //login = login.replaceFirst("<WBVERSION>", WBLoader.getInstance().getCoreVersion());
+              //  login = login.replaceFirst("<ERRMESSAGE>", errorMessage);
+            //} catch (Exception e) {
+            ruta = SWBUtils.getApplicationPath()+"work"+ruta; 
+            System.out.println(ruta);
+                login = SWBUtils.IO.getFileFromPath(ruta);
+              //  login = WBUtils.getInstance().parseHTML(login, WBUtils.getInstance().getWebWorkPath() + "/config/images/");
+            //} 
+                
+        } catch (Exception e) {
+            log.error("Error to load login page...", e);
+        }
+
+        if (request.getParameter("err") != null) response.setStatus(403);
+        response.setContentType("text/html");
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Cache-Control", "no-cache");
+
+        java.io.PrintWriter out = response.getWriter();
+
+        out.print(login);
+        out.print(alert);
+        out.flush();
+        out.close();
+    }
 }
