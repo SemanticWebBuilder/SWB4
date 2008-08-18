@@ -92,7 +92,7 @@ public class SWBServices {
     public static boolean setStatus(Statusable statusable, int status, User user) throws SWBException {
 
         statusable.setStatus(status);
-        
+
         //logeo
         //TODO:Tienen q haber un metodo getUri del objeto statusable para así logearlo
         SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "status", statusable.toString(), statusable.toString(), "update Status", null);
@@ -106,15 +106,14 @@ public class SWBServices {
 
     //TODO:-Las interfaces deberían de tener el método createTemplateRef, no solo los objetos, para q así no me tengan q
     //pasar un WebSite o un WebPage los cuales a final de cuentas son de tipo TemplateRefable
-    public boolean addTemplate(WebSite webSite, TemplateRefable templateRefable, Template template, User user) throws SWBException 
-    {
+    public boolean addTemplate(WebSite webSite, TemplateRefable templateRefable, Template template, User user) throws SWBException {
         boolean doAction = false;
-        TemplateRef templateRef=webSite.createTemplateRef();
+        TemplateRef templateRef = webSite.createTemplateRef();
         templateRef.setTemplate(template);
         templateRef.setStatus(1);
-        
+
         templateRefable.addTemplateRef(templateRef);
-        doAction=true;
+        doAction = true;
         //logeo
         SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "assign", templateRefable.toString(), templateRefable.toString(), "Assign template", null);
         try {
@@ -126,21 +125,18 @@ public class SWBServices {
         return doAction;
     }
 
-    public boolean removeTemplateRef(TemplateRefable templateRefable, Template template, User user) throws SWBException 
-    {
+    public boolean removeTemplateRef(TemplateRefable templateRefable, Template template, User user) throws SWBException {
         boolean doAction = false;
-        SemanticIterator itTemplateRef=templateRefable.listTemplateRef();
-        while(itTemplateRef.hasNext())
-        {
-            TemplateRef tempRef=(TemplateRef)itTemplateRef.next();
-            if(tempRef.getTemplate().getURI().equals(template.getURI()))
-            {
+        SemanticIterator itTemplateRef = templateRefable.listTemplateRef();
+        while (itTemplateRef.hasNext()) {
+            TemplateRef tempRef = (TemplateRef) itTemplateRef.next();
+            if (tempRef.getTemplate().getURI().equals(template.getURI())) {
                 templateRefable.removeTemplateRef(tempRef);
-                doAction=true;
+                doAction = true;
                 break;
-            }        
+            }
         }
-     
+
         //logeo
         SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "unAssing", templateRefable.toString(), template.getURI(), "unAssing template", null);
         try {
@@ -152,11 +148,11 @@ public class SWBServices {
         return doAction;
     }
 
-    public boolean addRuleRef(WebSite webSite,RuleRefable ruleRefable, Rule rule, User user) throws SWBException {
+    public boolean addRuleRef(WebSite webSite, RuleRefable ruleRefable, Rule rule, User user) throws SWBException {
         boolean doAction = false;
-        RuleRef ruleRef=webSite.createRuleRef();
+        RuleRef ruleRef = webSite.createRuleRef();
         ruleRef.setRule(rule);
-        
+
         ruleRefable.addRuleRef(ruleRef);
         doAction = true;
         //logeo
@@ -169,21 +165,18 @@ public class SWBServices {
         return doAction;
     }
 
-    public boolean removeRuleRef(RuleRefable ruleRefable, Rule rule, User user) throws SWBException 
-    {
+    public boolean removeRuleRef(RuleRefable ruleRefable, Rule rule, User user) throws SWBException {
         boolean doAction = false;
-        SemanticIterator itRuleRef=ruleRefable.listRuleRef();        
-        while(itRuleRef.hasNext())
-        {
-            RuleRef ruleRef=(RuleRef)itRuleRef.next();
-            if(ruleRef.getRule().getURI().equals(rule.getURI()))
-            {
+        SemanticIterator itRuleRef = ruleRefable.listRuleRef();
+        while (itRuleRef.hasNext()) {
+            RuleRef ruleRef = (RuleRef) itRuleRef.next();
+            if (ruleRef.getRule().getURI().equals(rule.getURI())) {
                 ruleRefable.removeRuleRef(ruleRef);
-                doAction=true;
+                doAction = true;
                 break;
-            }        
+            }
         }
-     
+
         //logeo
         SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "unAssing", ruleRefable.toString(), rule.getURI(), "unAssing template", null);
         try {
@@ -195,11 +188,11 @@ public class SWBServices {
         return doAction;
     }
 
-    public boolean addRoleRef(WebSite webSite,RoleRefable roleRefable, Role role, User user) throws SWBException {
+    public boolean addRoleRef(WebSite webSite, RoleRefable roleRefable, Role role, User user) throws SWBException {
         boolean doAction = false;
-        RoleRef roleRef=webSite.createRoleRef();
+        RoleRef roleRef = webSite.createRoleRef();
         roleRef.setRole(role);
-        
+
         roleRefable.addRoleRef(roleRef);
         doAction = true;
         //logeo
@@ -214,16 +207,14 @@ public class SWBServices {
 
     public boolean removeRoleRef(RoleRefable roleRefable, Role role, User user) throws SWBException {
         boolean doAction = false;
-        SemanticIterator itRoleRef=roleRefable.listRoleRef();        
-        while(itRoleRef.hasNext())
-        {
-            RoleRef roleRef=(RoleRef)itRoleRef.next();
-            if(roleRef.getRole().getURI().equals(role.getURI()))
-            {
+        SemanticIterator itRoleRef = roleRefable.listRoleRef();
+        while (itRoleRef.hasNext()) {
+            RoleRef roleRef = (RoleRef) itRoleRef.next();
+            if (roleRef.getRole().getURI().equals(role.getURI())) {
                 roleRefable.removeRoleRef(roleRef);
-                doAction=true;
+                doAction = true;
                 break;
-            }        
+            }
         }
         //logeo
         SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "Unassign", roleRefable.toString(), role.getURI(), "assign role", null);
@@ -256,11 +247,50 @@ public class SWBServices {
         doAction = true;
 
         //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "assign", groupable.toString(), groupable.toString(), "assing description", null);
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "assign", groupable.toString(), objectgroup.getURI(), "assing Group", null);
         try {
             swbAdmLog.create();
         } catch (Exception e) {
-            throw new SWBException("Error assining description", e);
+            throw new SWBException("Error assining Group", e);
+        }
+        return doAction;
+    }
+
+    public boolean createGroup(WebSite webSite, String title, String description, User user) throws SWBException {
+        boolean doAction = false;
+        ObjectGroup objGroup = webSite.createObjectGroup();
+        objGroup.setTitle(title);
+        objGroup.setDescription(description);
+        objGroup.setUserCreated(user);
+        doAction = true;
+
+        //logeo
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", objGroup.getTitle(), objGroup.getURI(), "create Group", null);
+        try {
+            swbAdmLog.create();
+        } catch (Exception e) {
+            throw new SWBException("Error creating Group", e);
+        }
+        return doAction;
+    }
+
+    public boolean updateGroup(ObjectGroup objectGroup, String title, String description, User user) throws SWBException {
+        boolean doAction = false;
+        if (title != null) {
+            objectGroup.setTitle(title);
+        }
+        if (description != null) {
+            objectGroup.setDescription(description);
+        }
+        objectGroup.setUserModified(user);
+        doAction = true;
+
+        //logeo
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", objectGroup.getTitle(), objectGroup.getURI(), "update Group", null);
+        try {
+            swbAdmLog.create();
+        } catch (Exception e) {
+            throw new SWBException("Error updating Group", e);
         }
         return doAction;
     }
@@ -276,6 +306,24 @@ public class SWBServices {
             swbAdmLog.create();
         } catch (Exception e) {
             throw new SWBException("Error assining language", e);
+        }
+        return doAction;
+    }
+
+    public boolean createLanguage(WebSite webSite, String title, String description, User user) throws SWBException {
+        boolean doAction = false;
+        Language language = webSite.createLanguage();
+        language.setTitle(title);
+        language.setDescription(description);
+        language.setUserCreated(user);
+        doAction = true;
+
+        //logeo
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", language.getTitle(), language.getURI(), "create language", null);
+        try {
+            swbAdmLog.create();
+        } catch (Exception e) {
+            throw new SWBException("Error creating language", e);
         }
         return doAction;
     }
