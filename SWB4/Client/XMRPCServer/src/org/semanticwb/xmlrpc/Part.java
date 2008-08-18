@@ -44,11 +44,12 @@ public class Part
     @Override
     public boolean equals(Object obj)
     {
+        boolean equals=false;
         if(obj instanceof Part)
         {
-            return ((Part)obj).name.equals(this.name);
+            equals=((Part)obj).name.equals(this.name);
         }
-        return false;
+        return equals;
     }
     
 }
