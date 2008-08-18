@@ -55,13 +55,14 @@ public class CampSrv {
     
     public boolean updateCamp(Camp camp, String title, String description, User user) throws SWBException
     {
+        boolean doAction=false;
         if(title!=null){
             camp.setTitle(title);
         }
         if(description!=null){
             camp.setDescription(description);
         }
-         
+        doAction=true;
         //logeo
         SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "update", camp.getTitle(), camp.getURI(), "update Camp", null);
         try {
@@ -69,13 +70,14 @@ public class CampSrv {
         } catch (Exception e) {
             throw new SWBException("Error updating camp", e);
         }
+        return doAction;
     }
     
     public boolean removeCamp(WebSite website, String id, User user) throws SWBException        
     {
         boolean doAction=false;
         website.removeCamp(id);
-        
+        doAction=true;
          //logeo
         SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "remove", id, id, "remove Camp", null);
         try {
