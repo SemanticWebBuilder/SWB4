@@ -28,7 +28,7 @@ import org.jdom.output.XMLOutputter;
 import org.jdom.xpath.XPath;
 import static org.semanticwb.xmlrpc.Base64.encode;
 import static java.net.HttpURLConnection.*;
-
+import static org.semanticwb.xmlrpc.XmlRpcSerializer.*;
 /**
  *
  * @author victor.lorenzana
@@ -74,12 +74,11 @@ class XmlRpcClient
                 throw new XmlRpcException("The attachment '" + attachment.getName() + "' does not exist");
             }
         }
-        Document requestDoc = getXmlRpcDocument(methodName, parameters);
-        //showDocDebug(requestDoc);
+        Document requestDoc = serializeRequest(methodName, parameters);        
         Document responseDoc = request(requestDoc, attachments);
         try
         {
-            return deserialize(clazz, responseDoc);
+            return deserializeResponse(clazz, responseDoc);
         }
         catch ( ParseException pe )
         {
@@ -87,259 +86,7 @@ class XmlRpcClient
         }
     }
 
-    private <T> T deserialize(java.lang.Class<T> clazz, Document requestDocument) throws XmlRpcException, ParseException
-    {
-        try
-        {
-            Element param = ( Element ) XPath.selectSingleNode(requestDocument, "/methodResponse/params/param");
-            if ( param == null )
-            {
-                try
-                {
-                    Element eName = ( Element ) XPath.selectSingleNode(requestDocument, "/methodResponse/fault/value/struct/member[2]/name");
-                    if ( eName.getText().equals("faultString") )
-                    {
-                        Element eValue = ( Element ) XPath.selectSingleNode(requestDocument, "/methodResponse/fault/value/struct/member[2]/value/string");
-                        throw new XmlRpcException(eValue.getText());
-                    }
-                    throw new XmlRpcException("The faultString tag was not found");
-                }
-                catch ( JDOMException jde2 )
-                {
-                    throw new XmlRpcException("XMLRPC response was not found");
-                }
-            }
-            else
-            {
-                return getParameter(clazz, param);
-
-            }
-        }
-        catch ( JDOMException jde )
-        {
-            try
-            {
-                Element eName = ( Element ) XPath.selectSingleNode(requestDocument, "/methodResponse/fault/value/struct/member/name[1]");
-                if ( eName.getText().equals("faultString") )
-                {
-                    Element stringValue = ( Element ) XPath.selectSingleNode(requestDocument, "/methodResponse/fault/value/struct/member/name[1]/value/string");
-                    throw new XmlRpcException(stringValue.getText());
-                }
-                throw new XmlRpcException("XMLRPC response was not found");
-            }
-            catch ( JDOMException jde2 )
-            {
-                throw new XmlRpcException("XMLRPC response was not found");
-            }
-        }
-    }
-
-    private <T> T convertString(Class<T> clazz, String data) throws XmlRpcException
-    {
-        if ( data.getClass().equals(clazz) )
-        {
-            return ( T ) data;
-        }
-        throw new XmlRpcException("The data are incopatibles, can not be converted String to "+clazz.getName());
-    }
-
-    private <T> T convertInteger(Class<T> clazz, int data) throws XmlRpcException
-    {
-        if(clazz==Integer.class || clazz==int.class)
-        {
-            return ( T ) new Integer(data);
-        }
-        else
-        {
-            throw new XmlRpcException("The data are incopatibles, can not be converted int to "+clazz.getName());
-        }
-    }
-
-    private <T> T convertBoolean(Class<T> clazz, boolean data) throws XmlRpcException
-    {
-        if(clazz==Boolean.class || clazz==boolean.class)
-        {
-            return ( T ) new Boolean(data);
-        }
-        else
-        {
-            throw new XmlRpcException("The data are incopatibles, can not be converted boolean to "+clazz.getName());        
-        }
-    }
-
-    private <T> T convertFloat(Class<T> clazz, float data) throws XmlRpcException
-    {
-        if(clazz==Float.class || clazz==float.class)
-        {
-            return ( T ) new Float(data);
-        }
-        else
-        {
-            throw new XmlRpcException("The data are incopatibles, can not be converted float to "+clazz.getName());        
-        }
-    }
-
-    private <T> T convertDouble(Class<T> clazz, double data) throws XmlRpcException
-    {
-        if(clazz==Double.class || clazz==double.class)
-        {
-            return ( T ) new Double(data);
-        }
-        else
-        {
-            throw new XmlRpcException("The data are incopatibles, can not be converted double to "+clazz.getName());        
-        }
-    }
-
-    private <T> T convertDate(Class<T> clazz, Date data) throws XmlRpcException
-    {
-        if ( data.getClass().equals(clazz) )
-        {
-            return ( T ) data;
-        }
-        throw new XmlRpcException("The data are incopatibles, can not be converted Date to "+clazz.getName());        
-    }
-
-    private <T> T getValue(Class<T> clazz, Element type) throws XmlRpcException, ParseException, JDOMException
-    {
-        T result = null;
-        String sType = type.getName();
-        if ( sType.equals("string") )
-        {
-            result = convertString(clazz, type.getText());
-        }
-        else if ( sType.equals("i4") || sType.equals("int") )
-        {
-            result = convertInteger(clazz, Integer.parseInt(type.getText()));
-        }
-        else if ( sType.equals("boolean") )
-        {
-            boolean tempres = type.getText().equals("1") ? true : false;
-            result = convertBoolean(clazz, tempres);
-        }
-        else if ( sType.equals("float") )
-        {
-            result = convertFloat(clazz, Float.parseFloat(type.getText()));
-        }
-        else if ( sType.equals("double") )
-        {
-            result = convertDouble(clazz, Double.parseDouble(type.getText()));
-        }
-        else if ( sType.equals("dateTime.iso8601") )
-        {
-            String date = type.getText();
-            result = convertDate(clazz, iso8601dateFormat.parse(date));
-        }
-        else if ( sType.equals("array") )
-        {
-            result = deserializeArray(clazz, type);
-        }
-        else if ( sType.equals("struct") )
-        {
-            result = deserializeStruct(clazz, type);
-        }
-        else
-        {
-            throw new XmlRpcException("The type of data can not be deserialized type: " + sType);
-        }
-        return result;
-    }
-
-    private <T> T deserializeStruct(Class<T> clazz, Element struct) throws JDOMException, ParseException, XmlRpcException, XmlRpcException
-    {
-        List listMembers = XPath.selectNodes(struct, "./member");
-        try
-        {
-            T result = clazz.newInstance();
-            for ( Object objMember : listMembers )
-            {
-                Element eMember = ( Element ) objMember;
-                Element eName = ( Element ) XPath.selectSingleNode(eMember, "./name");
-                try
-                {
-                    Field field = clazz.getField(eName.getText());
-                    Element eValue = ( Element ) XPath.selectSingleNode(eMember, "./value");
-                    List childs = eValue.getChildren();
-                    for ( Object child : childs )
-                    {
-                        if ( child instanceof Element )
-                        {
-                            Element eType = ( Element ) child;
-                            Object value = getValue(field.getType(), eType);
-                            field.set(result, value);
-                        }
-                    }
-
-                }
-                catch ( NoSuchFieldException nsfe )
-                {
-                    throw new XmlRpcException("The clazz " + clazz.getName() + " does not contain the filed " + eName.getText(), nsfe);
-                }
-            }
-            return result;
-        }
-        catch ( InstantiationException ie )
-        {
-            throw new XmlRpcException("The clazz " + clazz.getName() + " can not be instancieded", ie);
-        }
-        catch ( IllegalAccessException ie )
-        {
-            throw new XmlRpcException("The clazz " + clazz.getName() + " can not be instancieded", ie);
-        }
-    }
-
-    private <T> T deserializeArray(Class<T> clazz, Element array) throws JDOMException, ParseException, XmlRpcException
-    {
-        if ( clazz.isArray() )
-        {
-
-            List listValues = XPath.selectNodes(array, "./data/value");
-            Class componentType = clazz.getComponentType();
-            Object arrayToReturn = Array.newInstance(componentType, listValues.size());
-            int i = 0;
-            for ( Object objValue : listValues )
-            {
-                Element eValue = ( Element ) objValue;
-                List childs = eValue.getChildren();
-                for ( Object child : childs )
-                {
-                    if ( child instanceof Element )
-                    {
-                        Element eType = ( Element ) child;
-                        Object value = getValue(componentType, eType);
-                        Array.set(arrayToReturn, i, value);
-                    }
-                }
-                i++;
-            }
-            return clazz.cast(arrayToReturn);
-        }
-        else
-        {
-            throw new XmlRpcException("The value of return must be an array");
-        }        
-    }
-
-    private <T> T getParameter(java.lang.Class<T> clazz, Element param) throws XmlRpcException, ParseException, JDOMException
-    {
-        Iterator values = param.getDescendants();
-        while (values.hasNext())
-        {
-            Element elementValue = ( Element ) values.next();
-            if ( elementValue.getName().equals("value") )
-            {
-                Iterator types = elementValue.getDescendants();
-                while (types.hasNext())
-                {
-                    Element type = ( Element ) types.next();
-                    return getValue(clazz, type);
-                }
-            }
-        }
-        throw new XmlRpcException("The tag value was not found");
-    }
-
-    private Document getDocument(InputStream in) throws XmlRpcException
+    private static Document getDocument(InputStream in) throws XmlRpcException
     {
         SAXBuilder builder = new SAXBuilder();
         try
@@ -352,14 +99,14 @@ class XmlRpcClient
         }
     }
 
-    private OutputStream sendHeaders(HttpURLConnection connection) throws IOException
+    private static OutputStream sendHeaders(HttpURLConnection connection) throws IOException
     {
         connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
         OutputStream out = connection.getOutputStream();
         return out;
     }
 
-    private void sendFile(File file, String name, OutputStream out) throws IOException
+    private static void sendFile(File file, String name, OutputStream out) throws IOException
     {
         String newBoundary = "\r\n--" + boundary + "\r\n";
         String contentDisposition = "Content-Disposition: form-data; name=\"" + name + "\"; filename=\"" + file.getName() + "\"\r\n\r\n";
@@ -376,13 +123,13 @@ class XmlRpcClient
         in.close();
     }
 
-    private void writeEnd(OutputStream out) throws IOException
+    private static void writeEnd(OutputStream out) throws IOException
     {
         String newBoundary = "\r\n--" + boundary + "\r\n";
         out.write(newBoundary.getBytes());
     }
 
-    private void sendXmlDocumentPart(Document requestDoc, OutputStream out) throws IOException
+    private static void sendXmlDocumentPart(Document requestDoc, OutputStream out) throws IOException
     {
         String newBoundary = "--" + boundary + "\r\n";
         String contentDisposition = "Content-Disposition: form-data; name=\"xmlrpc\"; filename=\"xmlrpc.xml\"\r\n\r\n";
@@ -470,7 +217,7 @@ class XmlRpcClient
         }
     }
 
-    private String getDetail(InputStream in, String contentType) throws XmlRpcException
+    private static String getDetail(InputStream in, String contentType) throws XmlRpcException
     {
         StringBuilder sb = new StringBuilder();
 
@@ -515,7 +262,7 @@ class XmlRpcClient
         return sb.toString();
     }
 
-    private Document getResponse(InputStream in, String contentType) throws XmlRpcException
+    private static Document getResponse(InputStream in, String contentType) throws XmlRpcException
     {
         if ( contentType == null )
         {
@@ -536,104 +283,6 @@ class XmlRpcClient
         }
         return doc;
     }
-
-    private void addParameter(Element param, Object obj) throws XmlRpcException
-    {
-        Element value = new Element("value");
-        param.addContent(value);
-        String type = "string";
-        String svalue = "";
-        if ( obj instanceof Integer )
-        {
-            type = "i4";
-            svalue = obj.toString();
-        }
-        else if ( obj instanceof String )
-        {
-            type = "string";
-            svalue = obj.toString();
-        }
-        else if ( obj instanceof Boolean )
-        {
-            type = "boolean";
-            svalue = (( Boolean ) obj).booleanValue() ? "1" : "0";
-        }
-        else if ( obj instanceof Date )
-        {
-            type = "dateTime.iso8601";
-            svalue = iso8601dateFormat.format(( Date ) obj);
-        }
-        else if ( obj instanceof Float )
-        {
-            type = "float";
-            svalue = obj.toString();
-        }
-        else if ( obj instanceof Double )
-        {
-            type = "double";
-            svalue = obj.toString();
-        }
-        else if ( obj.getClass().isArray() )
-        {
-            type = "array";
-            svalue = null;
-            Element elementType = new Element(type);
-            value.setContent(elementType);
-            addArray(obj, elementType);
-        }
-        else
-        {
-            throw new XmlRpcException("This Type is not supported");
-        }
-        if ( svalue != null )
-        {
-            Element elementType = new Element(type);
-            elementType.setText(svalue);
-            value.setContent(elementType);
-        }
-
-    }
-
-    private void addArray(Object obj, Element elementType) throws XmlRpcException
-    {
-        Element data = new Element("data");
-        elementType.addContent(data);
-        int len = Array.getLength(obj);
-        for ( int i = 0; i < len; i++ )
-        {
-            Object value = Array.get(obj, i);
-            addParameter(data, value);
-        }
-    }
-
-    private void addParameters(Element params, Object[] pParams) throws XmlRpcException
-    {
-        for ( Object obj : pParams )
-        {
-            if ( obj != null )
-            {
-                Element param = new Element("param");
-                addParameter(param, obj);
-                params.addContent(param);
-            }
-        }
-    }
-
-    private Document getXmlRpcDocument(
-            String pMethodName, Object[] pParams) throws XmlRpcException
-    {
-        Document doc = new Document();
-        Element methodCall = new Element("methodCall");
-        Element methodName = new Element("methodName");
-        methodName.setText(pMethodName);
-        methodCall.addContent(methodName);
-        doc.setRootElement(methodCall);
-        Element params = new Element("params");
-        if ( pParams != null )
-        {
-            addParameters(params, pParams);
-        }
-        methodCall.addContent(params);
-        return doc;
-    }
+    
+    
 }
