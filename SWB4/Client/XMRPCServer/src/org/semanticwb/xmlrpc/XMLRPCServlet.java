@@ -42,6 +42,8 @@ import static org.semanticwb.xmlrpc.Base64.decode;
  */
 public abstract class XMLRPCServlet extends HttpServlet
 {
+    private static final
+    String RETURN = "\r\n";
 
     Hashtable<String, Object> cacheObjects = new Hashtable<String, Object>();
     private static final String PREFIX_PROPERTY_PATH = "org.semanticwb.xmlrpc.";
@@ -384,31 +386,59 @@ public abstract class XMLRPCServlet extends HttpServlet
 
     private <T> T convertString(Class<T> clazz, String data) throws XmlRpcException
     {
-        if ( data.getClass().equals(clazz) )
+        if(clazz==String.class)
         {
             return ( T ) data;
         }
-        throw new XmlRpcException("The data can not be converted");
+        throw new XmlRpcException("The data are incopatibles, can not be converted String to "+clazz.getName());
     }
 
-    private <T> T convertInteger(Class<T> clazz, int data)
+    private <T> T convertInteger(Class<T> clazz, int data) throws XmlRpcException
     {
-        return ( T ) new Integer(data);
+        if(clazz==Integer.class || clazz==int.class)
+        {
+            return ( T ) new Integer(data);
+        }
+        else
+        {
+            throw new XmlRpcException("The data are incopatibles, can not be converted int to "+clazz.getName());
+        }
     }
 
-    private <T> T convertBoolean(Class<T> clazz, boolean data)
+    private <T> T convertBoolean(Class<T> clazz, boolean data) throws XmlRpcException
     {
-        return ( T ) new Boolean(data);
+        if(clazz==Boolean.class || clazz==boolean.class)
+        {
+            return ( T ) new Boolean(data);
+        }
+        else
+        {
+            throw new XmlRpcException("The data are incopatibles, can not be converted boolean to "+clazz.getName());
+        }
     }
 
-    private <T> T convertFloat(Class<T> clazz, float data)
+    private <T> T convertFloat(Class<T> clazz, float data) throws XmlRpcException
     {
-        return ( T ) new Float(data);
+        if(clazz==Float.class || clazz==float.class)
+        {
+            return ( T ) new Float(data);
+        }
+        else
+        {
+            throw new XmlRpcException("The data are incopatibles, can not be converted float to "+clazz.getName());
+        }
     }
 
-    private <T> T convertDouble(Class<T> clazz, double data)
+    private <T> T convertDouble(Class<T> clazz, double data) throws XmlRpcException
     {
-        return ( T ) new Double(data);
+        if(clazz==Double.class || clazz==double.class)
+        {
+            return ( T ) new Double(data);
+        }
+        else
+        {
+            throw new XmlRpcException("The data are incopatibles, can not be converted double to "+clazz.getName());
+        }
     }
 
     private <T> T convertDate(Class<T> clazz, Date data) throws XmlRpcException
@@ -417,7 +447,7 @@ public abstract class XMLRPCServlet extends HttpServlet
         {
             return ( T ) data;
         }
-        throw new XmlRpcException("The data can not be converted");
+        throw new XmlRpcException("The data are incopatibles, can not be converted Date to "+clazz.getName());
     }
 
     private <T> T getParameter(Class<T> clazz, Element eType) throws ParseException, JDOMException, XmlRpcException
@@ -453,10 +483,10 @@ public abstract class XMLRPCServlet extends HttpServlet
         {
             res = deserializeArray(clazz, eType);
         }
-        else if ( name.equalsIgnoreCase("struct") )
+        /*else if ( name.equalsIgnoreCase("struct") )
         {
             res = deserializeStruct(clazz, eType);
-        }
+        }*/
         else
         {
             res = null;
@@ -465,11 +495,11 @@ public abstract class XMLRPCServlet extends HttpServlet
 
     }
 
-    private <T> T deserializeStruct(Class<T> clazz, Element struct) throws JDOMException, ParseException
+    /*private <T> T deserializeStruct(Class<T> clazz, Element struct) throws JDOMException, ParseException
     {
         List listValues = XPath.selectNodes(struct, "./member");
         return null;
-    }
+    }*/
 
     private <T> T deserializeArray(Class<T> clazz, Element array) throws JDOMException, ParseException, XmlRpcException
     {
@@ -498,7 +528,10 @@ public abstract class XMLRPCServlet extends HttpServlet
             }
             return clazz.cast(arrayToReturn);
         }
-        return null;
+        else
+        {
+            throw new XmlRpcException("The value of return must be an array");
+        }        
     }
 
     private ArrayList<Method> selectMethodsWithSameNumberOfParameters(ArrayList<Method> methods, int parameters)
@@ -523,8 +556,7 @@ public abstract class XMLRPCServlet extends HttpServlet
             try
             {
                 List values = XPath.selectNodes(document, "/methodCall/params/param/value");
-                methods = selectMethodsWithSameNumberOfParameters(methods, values.size());
-                int iParameter = 0;
+                methods = selectMethodsWithSameNumberOfParameters(methods, values.size());                
                 for ( Object oElement : values )
                 {
                     Class expectedClass = method.getParameterTypes()[0];
@@ -533,8 +565,7 @@ public abstract class XMLRPCServlet extends HttpServlet
                     {
                         Element eType = ( Element ) objElementType;
                         parameters.add(getParameter(expectedClass, eType));
-                    }
-                    iParameter++;
+                    }                    
                 }
                 newMethods.add(method);
             }
@@ -581,18 +612,18 @@ public abstract class XMLRPCServlet extends HttpServlet
 
     private Document getException(Exception e) throws JDOMException, IOException
     {
-        StringBuilder messageError = new StringBuilder(e.getLocalizedMessage() + "\r\n");
+        StringBuilder messageError = new StringBuilder(e.getLocalizedMessage() + RETURN);
         for ( StackTraceElement element : e.getStackTrace() )
         {
-            messageError.append(element.toString() + "\r\n");
+            messageError.append(element.toString() + RETURN);
         }
         if ( e.getCause() != null )
         {
             messageError.append(" cause: \r\n");
-            messageError.append(e.getCause().getLocalizedMessage() + "\r\n");
+            messageError.append(e.getCause().getLocalizedMessage() + RETURN);
             for ( StackTraceElement element : e.getCause().getStackTrace() )
             {
-                messageError.append(element.toString() + "\r\n");
+                messageError.append(element.toString() + RETURN);
             }
         }
         String xmlString = "<?xml version=\"1.0\" encoding=\"utf-8\"?><methodResponse><fault><value><struct><member><name>faultCode</name>" +
