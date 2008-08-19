@@ -158,7 +158,6 @@ public class WebPageSrv {
     }
     
     
-    
     /*
     public boolean removeTemplateFromWebPage(SemanticModel model, WebPage page, Template template, User user) throws SWBException {
     SemanticIterator<TemplateRef> itTemplateRef = page.listTemplateRef();
