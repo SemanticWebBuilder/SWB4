@@ -17,13 +17,14 @@ import org.semanticwb.portal.SWBDBAdmLog;
  */
 public class CalendarSrv {
     
-    public boolean createCalendar(WebSite website, String title, String description, User user) throws SWBException
+    public boolean createCalendar(WebSite website, String title, String description, String xmlInterval, User user) throws SWBException
     {
         boolean doAction = false;
         Calendar cal=website.createCalendar();
         cal.setTitle(title);
         cal.setDescription(description);
         cal.setUserCreated(user);
+        
         doAction=true;
         
          //logeo
@@ -37,7 +38,7 @@ public class CalendarSrv {
     }
     
     
-    public boolean createCalendar(WebSite website, String id, String title, String description, User user) throws SWBException
+    public boolean createCalendar(WebSite website, String id, String title, String description, String xmlInterval, User user) throws SWBException
     {
         boolean doAction = false;
         Calendar cal=website.createCalendar(id);
@@ -68,6 +69,29 @@ public class CalendarSrv {
             swbAdmLog.create();
         } catch (Exception e) {
             throw new SWBException("Error removing Calendar", e);
+        }
+        return doAction;
+    }
+    
+    public boolean updateCalendar(WebSite website, String id, String title, String description, String xmlInterval, User user) throws SWBException
+    {
+        boolean doAction = false;
+        Calendar cal=website.createCalendar(id);
+        if(title!=null){
+            cal.setTitle(title);
+        }
+        if(description!=null){
+            cal.setDescription(description);
+        }
+        cal.setUserModified(user);
+        doAction=true;
+        
+         //logeo
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "update", cal.getName(), cal.getURI(), "update Calendar", null);
+        try {
+            swbAdmLog.create();
+        } catch (Exception e) {
+            throw new SWBException("Error updating Calendar", e);
         }
         return doAction;
     }
