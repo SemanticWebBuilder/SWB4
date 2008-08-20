@@ -146,14 +146,6 @@ public abstract class XMLRPCServlet extends HttpServlet
 
     
 
-    /**
-     * This method is for athentication of the user, using basic authentication
-     * @param pUserName User to authenticate
-     * @param pPassword Password to autenticate
-     * @return true if the user is athenticate, false otherwise
-     */
-    public abstract boolean isAuthenticate(String pUserName, String pPassword);
-
     private static void sendResponse(ServletResponse response, Document docResponse) throws IOException
     {
         response.setContentType("text/xml");
