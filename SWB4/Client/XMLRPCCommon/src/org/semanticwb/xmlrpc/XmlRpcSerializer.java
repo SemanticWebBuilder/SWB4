@@ -83,15 +83,17 @@ public class XmlRpcSerializer {
             {
                 List values = XPath.selectNodes(document, "/methodCall/params/param/value");
                 methods = selectMethodsWithSameNumberOfParameters(methods, values.size());                
+                int iParameter=0;
                 for ( Object oElement : values )
                 {
-                    Class expectedClass = method.getParameterTypes()[0];
+                    Class expectedClass = method.getParameterTypes()[iParameter];
                     Element eValue = ( Element ) oElement;
                     for ( Object objElementType : eValue.getChildren() )
                     {
                         Element eType = ( Element ) objElementType;
                         parameters.add(deserializeObject(expectedClass, eType));
-                    }                    
+                    }  
+                    iParameter++;
                 }
                 newMethods.add(method);
             }
