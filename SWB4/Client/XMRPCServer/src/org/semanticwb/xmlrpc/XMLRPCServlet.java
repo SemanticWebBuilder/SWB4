@@ -27,55 +27,25 @@ import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 import org.jdom.xpath.XPath;
-import static org.semanticwb.xmlrpc.Base64.decode;
 import static org.semanticwb.xmlrpc.XmlRpcSerializer.*;
+
 /**
  *
  * @author victor.lorenzana
  */
 public abstract class XMLRPCServlet extends HttpServlet
 {
-    private static final
-    String RETURN = "\r\n";
 
+    private static final String RETURN = "\r\n";
     private static Hashtable<String, Object> cacheObjects = new Hashtable<String, Object>();
     private static final String PREFIX_PROPERTY_PATH = "org.semanticwb.xmlrpc.";
-    private static final String XMLRPC_DOCUMENT = "xmlrpc";
-    private static String realm = "Secure Area";
-    private static String prefixBasic = "Basic ";    
-
+    private static final String XMLRPC_DOCUMENT = "xmlrpc";    
+    
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
     {
         try
-        {
-            String pUserName = null;
-            String pPassword = null;
-            String authorization = request.getHeader("Authorization");
-            if ( authorization == null || authorization.equals("") )
-            {
-                response.setHeader("WWW-Authenticate", prefixBasic + "realm=\"" + realm + "\"");
-                response.setStatus(response.SC_UNAUTHORIZED);
-                return;
-            }
-            else
-            {
-                if ( authorization.startsWith(prefixBasic) )
-                {
-                    String userpassEncoded = authorization.substring(6);
-                    String userpassDecoded = new String(decode(userpassEncoded));
-                    pUserName = getUserName(userpassDecoded);
-                    pPassword = getPassword(userpassDecoded);
-                    if ( !this.isAuthenticate(pUserName, pPassword) )
-                    {
-                        response.sendError(response.SC_FORBIDDEN);
-                    }
-                }
-                else
-                {
-                    response.sendError(response.SC_FORBIDDEN);
-                }
-            }
+        {            
             Document xmlrpcDocument;
             Set<Part> parts = new HashSet<Part>();
             if ( isMultipart(request) )
@@ -100,18 +70,17 @@ public abstract class XMLRPCServlet extends HttpServlet
 
             try
             {
-                if ( pUserName != null && pPassword != null )
-                {
+               
 
                     String methodName = getMethodName(xmlrpcDocument);
-                    ArrayList<Method> methods = getMethods(methodName);                                        
+                    ArrayList<Method> methods = getMethods(methodName);
                     Object[] parameters = deserializeRequest(xmlrpcDocument, methods);
                     Method method = getMethod(methodName, parameters, methods);
                     String objectName = method.getDeclaringClass().getName();
-                    Object objResponse = execute(objectName, method, parameters, parts, pUserName, pPassword);
+                    Object objResponse = execute(objectName, method, parameters, parts);
                     Document docResponse = serializeResponse(objResponse);
                     sendResponse(response, docResponse);
-                }
+                
             }
             catch ( Exception cne )
             {
@@ -144,7 +113,7 @@ public abstract class XMLRPCServlet extends HttpServlet
 
     }
 
-    protected void beforeExecute(Object objToExecute, Set<Part> parts, String user, String password) throws Exception
+    protected void beforeExecute(Object objToExecute, Set<Part> parts) throws Exception
     {
         if ( objToExecute instanceof XmlRpcObject )
         {
@@ -162,13 +131,7 @@ public abstract class XMLRPCServlet extends HttpServlet
         }
     }
 
-    private static String getUserName(String userpassDecoded) throws IOException
-    {
-        String userName = "";
-        String[] values = userpassDecoded.split(":");
-        userName = values[0];
-        return userName;
-    }
+    
 
     private static Method getMethod(String methodName, Object[] parameters, ArrayList<Method> methods) throws NoSuchMethodException
     {
@@ -181,13 +144,7 @@ public abstract class XMLRPCServlet extends HttpServlet
         throw new NoSuchMethodException("The method " + methodName + "was not found");
     }
 
-    private static String getPassword(String userpassDecoded) throws IOException
-    {
-        String password = "";
-        String[] values = userpassDecoded.split(":");
-        password = values[1];
-        return password;
-    }
+    
 
     /**
      * This method is for athentication of the user, using basic authentication
@@ -217,7 +174,7 @@ public abstract class XMLRPCServlet extends HttpServlet
         return classFullPath;
     }
 
-    private Object execute(String objectName, Method method, Object[] parameters, Set<Part> parts, String user, String password) throws ClassNotFoundException, XmlRpcException, InstantiationException, IllegalAccessException, NoSuchMethodException
+    private Object execute(String objectName, Method method, Object[] parameters, Set<Part> parts) throws ClassNotFoundException, XmlRpcException, InstantiationException, IllegalAccessException, NoSuchMethodException
     {
         Class clazz = method.getDeclaringClass();
 
@@ -231,7 +188,7 @@ public abstract class XMLRPCServlet extends HttpServlet
         {
             try
             {
-                beforeExecute(objToExecute, parts, user, password);
+                beforeExecute(objToExecute, parts);
             }
             catch ( Exception e )
             {
@@ -249,6 +206,7 @@ public abstract class XMLRPCServlet extends HttpServlet
             }
         }
     }
+
     private static String getMethodName(Document document) throws XmlRpcException, JDOMException, ClassNotFoundException
     {
         Element methodNameElement = ( Element ) XPath.selectSingleNode(document.getRootElement(), "/methodCall/methodName");
