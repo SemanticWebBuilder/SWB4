@@ -11,7 +11,6 @@ package org.semanticwb.base.util;
 import java.util.*;
 import org.apache.commons.mail.EmailAttachment;
 import javax.mail.internet.InternetAddress;
-import org.apache.commons.mail.HtmlEmail;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 
@@ -276,7 +275,7 @@ public class SWBMail
         return smtpserver;
     }
     
-
+    /*
     public String sendMail() {
         try {
             HtmlEmail email = new HtmlEmail();
@@ -313,4 +312,5 @@ public class SWBMail
         }
         return null;
     }
+     * */
 }
