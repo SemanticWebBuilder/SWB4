@@ -41,7 +41,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument, Rep
 
     public void setRepositories(Map<String, Repository> repositories)
     {
-        if ( repositories != null )
+        if ( OfficeDocument.repositories != null )
         {
             throw new IllegalArgumentException("The repository list already exists");
         }
