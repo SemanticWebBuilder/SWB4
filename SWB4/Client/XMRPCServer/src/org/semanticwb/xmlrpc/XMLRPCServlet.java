@@ -144,7 +144,7 @@ public abstract class XMLRPCServlet extends HttpServlet
 
     }
 
-    protected static void beforeExecute(Object objToExecute, Set<Part> parts, String user, String password) throws Exception
+    protected void beforeExecute(Object objToExecute, Set<Part> parts, String user, String password) throws Exception
     {
         if ( objToExecute instanceof XmlRpcObject )
         {
@@ -153,7 +153,7 @@ public abstract class XMLRPCServlet extends HttpServlet
         }
     }
 
-    protected static void afterExecute(Object objToExecute)
+    protected void afterExecute(Object objToExecute)
     {
         if ( objToExecute instanceof XmlRpcObject )
         {
@@ -217,7 +217,7 @@ public abstract class XMLRPCServlet extends HttpServlet
         return classFullPath;
     }
 
-    private static Object execute(String objectName, Method method, Object[] parameters, Set<Part> parts, String user, String password) throws ClassNotFoundException, XmlRpcException, InstantiationException, IllegalAccessException, NoSuchMethodException
+    private Object execute(String objectName, Method method, Object[] parameters, Set<Part> parts, String user, String password) throws ClassNotFoundException, XmlRpcException, InstantiationException, IllegalAccessException, NoSuchMethodException
     {
         Class clazz = method.getDeclaringClass();
 
