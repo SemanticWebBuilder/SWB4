@@ -20,6 +20,7 @@ public class SWBPortal {
 
     private static Logger log = SWBUtils.getLogger(SWBPortal.class);
     private static SWBPortal instance = null;
+    private static String workPath = "";
 
     static public synchronized SWBPortal createInstance() {
         System.out.println("Entra a createInstance");
@@ -31,6 +32,21 @@ public class SWBPortal {
 
     private SWBPortal() {
         log.event("Initialize Semantic WebBuilder Portal...");
+       init();
+    }
+    
+     //Initialize context
+    private void init()
+    {
+        workPath = (String) SWBInstance.getEnv("swb/workPath");
+    }
+    
+    /** Getter for property workPath.
+     * @return Value of property workPath.
+     */
+    public static String getWorkPath()
+    {
+        return workPath;
     }
 
     public SWBServices getSWBServices() {
