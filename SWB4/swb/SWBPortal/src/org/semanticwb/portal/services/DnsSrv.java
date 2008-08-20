@@ -10,7 +10,6 @@ import org.semanticwb.SWBException;
 import org.semanticwb.model.Dns;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
-import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.portal.SWBDBAdmLog;
 
 /**
