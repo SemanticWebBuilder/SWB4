@@ -66,11 +66,11 @@ public abstract class XMLRPCServlet extends HttpServlet
             else
             {
                 xmlrpcDocument = getDocument(request);
+                writeDocumentToConsole(xmlrpcDocument);
             }
 
             try
-            {
-               
+            {             
 
                     String methodName = getMethodName(xmlrpcDocument);
                     ArrayList<Method> methods = getMethods(methodName);
@@ -112,7 +112,18 @@ public abstract class XMLRPCServlet extends HttpServlet
         }
 
     }
-
+    private static void writeDocumentToConsole(Document document) 
+    {
+        try
+        {
+            XMLOutputter xMLOutputter = new XMLOutputter();
+            xMLOutputter.output(document, System.out);
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace(System.out);
+        }
+    }
     protected void beforeExecute(Object objToExecute, Set<Part> parts) throws Exception
     {
         if ( objToExecute instanceof XmlRpcObject )
