@@ -50,7 +50,7 @@ public class SWBMailSender extends java.lang.Thread
                         if(obj instanceof SWBMail)
                         {
                             SWBMail email = (SWBMail) obj;
-                            SWBUtils.setSMTPServer(email.getHostName());
+                            SWBUtils.EMAIL.setSMTPServer(email.getHostName());
                             SWBUtils.EMAIL.sendMail(email.getFromEmail(), email.getFromName(), email.getAddresses(), email.getCcEmail(), email.getBccEmail(),email.getSubject(), email.getContentType(), email.getData(), email.getLogin(), email.getPassword(), email.getAttachments());
                         }
                     } catch (Exception e)
