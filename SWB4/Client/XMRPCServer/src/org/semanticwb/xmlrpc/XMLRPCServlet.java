@@ -268,8 +268,9 @@ public abstract class XMLRPCServlet extends HttpServlet
     {
         ServletInputStream in = request.getInputStream();
         SAXBuilder builder = new SAXBuilder();
+        Document docToReturn=builder.build(in);
         in.close();
-        return builder.build(in);
+        return docToReturn;
     }
 
     private static boolean isMultipart(HttpServletRequest request)
