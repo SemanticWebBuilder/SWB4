@@ -54,11 +54,8 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.xml.namespace.QName;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathFactory;
+import org.apache.commons.mail.Email;
 import org.semanticwb.base.util.SFBase64;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.semanticwb.base.util.SWBMailSender;
 import org.semanticwb.base.util.SWBMail;
 import org.w3c.dom.Element;
@@ -75,7 +72,6 @@ public class SWBUtils {
     private static String applicationPath = "";
     private static int bufferSize = 8192;
     private static boolean initLogger = false;
-    private static String smtpserver = null;
     private static Locale locale = Locale.ENGLISH;
     public static String LOCALE_SERVICES = null;
 
@@ -84,12 +80,6 @@ public class SWBUtils {
         log.event("SemanticWebBuilder Base Starting...");
         log.event("AppicationPath: " + applicationPath);
         init();
-    }
-
-    /** Get Instance.
-     * @return  */
-    static public SWBUtils getInstance() {
-        return instance;
     }
 
     /** Get Instance.
@@ -172,29 +162,12 @@ public class SWBUtils {
     }
 
     /**
-     * Setter for property smtpserver
-     * @param smtpserver 
-     */
-    public static void setSMTPServer(String smtpserver) {
-        SWBUtils.smtpserver = smtpserver;
-    }
-
-    /**
-     * Getter for property smtpserver
-     * @param smtpserver 
-     */
-    public static String getSMTPServer() {
-        return smtpserver;
-    }
-
-    /**
      * 
      */
     public static class TEXT {
 
         private static SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'.'SSS");
         //version 1.3
-
         /**
          * Remplaza en una cadena (str) las coincidencias encontradas (match) con otra cadena (replace).
          * Raplace match words in a String object
@@ -869,6 +842,24 @@ public class SWBUtils {
      */
     public static class EMAIL {
 
+        private static String smtpserver = null;
+
+        /**
+         * Setter for property smtpserver
+         * @param smtpserver 
+         */
+        public static void setSMTPServer(String smtpserver) {
+            EMAIL.smtpserver = smtpserver;
+        }
+
+        /**
+         * Getter for property smtpserver
+         * @param smtpserver 
+         */
+        public static String getSMTPServer() {
+            return smtpserver;
+        }
+
         /**
          * 
          * Send an email
@@ -925,6 +916,85 @@ public class SWBUtils {
         }
 
         /**
+         * 
+         * Send an email
+         * 
+         * @param fromEmail Address which send the email
+         * @param fromName  Name who send the email
+         * @param address   Collection of addresses to send the email
+         * @param ccEmail   Collection of addresses to send the email as copy
+         * @param bccEmail  Collection of addresses to send the email as bgCopy
+         * @param subject   Subject of email
+         * @param data      Email Body Text Data
+         * @param contentType HTML sends the body in html format, else it will be send in text format
+         * @param login     Login for SMTP server authentication
+         * @param password  password for SMTP server authentication
+         * @return
+         */
+        public static String sendMail(SWBMail message) throws java.net.SocketException {
+            try {
+                HtmlEmail email = new HtmlEmail();
+
+                Iterator itAttaches = message.getAttachments().iterator();
+                while (itAttaches.hasNext()) {
+                    EmailAttachment attchment = (EmailAttachment) itAttaches.next();
+                    email.attach(attchment);
+                }
+
+                email.setHostName(smtpserver);
+                email.setFrom(message.getFromEmail(), message.getFromName());
+                email.setTo(message.getAddresses());
+                if (message.getCcEmail() != null) {
+                    email.setCc(message.getCcEmail());
+                }
+                if (message.getBccEmail() != null) {
+                    email.setBcc(message.getBccEmail());
+                }
+                email.setSubject(message.getSubject());
+
+                if (message.getContentType().equalsIgnoreCase("HTML")) {
+                    email.setHtmlMsg(message.getData()); // set the html message
+                } else {
+                    email.setMsg(message.getData());
+                }
+
+                if (message.getLogin() != null && message.getPassword() != null) {
+                    email.setAuthentication(message.getLogin(), message.getPassword());
+                }
+                return email.send();
+            } catch (Exception e) {
+                log.error(e);
+            }
+            return null;
+        }
+
+        
+        /**
+         * Sends an email in background
+         * @param message class
+         * @throws java.net.SocketException
+         */
+        public static void sendBGEmail(String fromEmail, String fromName, Collection address, Collection ccEmail, Collection bccEmail,
+                String subject, String contentType, String data, String login, String password, ArrayList<EmailAttachment> attachments) throws java.net.SocketException {
+            SWBMail message=new SWBMail();
+            message.setFromEmail(fromEmail);
+            message.setFromName(fromName);
+            message.setAddress((ArrayList)address);
+            message.setCcEmail(ccEmail);
+            message.setBccEmail(bccEmail);
+            message.setSubject(subject);
+            message.setContentType(contentType);
+            message.setData(data);
+            message.setLogin(login);
+            message.setPassword(password);
+            message.setAttachments(attachments);
+            
+            SWBMailSender swbMailSender = new SWBMailSender();
+            swbMailSender.addEMail(message);
+            swbMailSender.run();
+        }
+        
+        /**
          * Sends an email in background
          * @param message class
          * @throws java.net.SocketException
@@ -934,6 +1004,7 @@ public class SWBUtils {
             swbMailSender.addEMail(message);
             swbMailSender.run();
         }
+        
     }
 
     /**
@@ -944,7 +1015,6 @@ public class SWBUtils {
         private static XML m_xml = null;
         private DocumentBuilderFactory m_dbf = null;
         private TransformerFactory m_tFactory = null;        // 1. Instantiate an XPathFactory.
-
         private XPathFactory xpath_factory = null;
         private XPath xpathObj = null;
 
