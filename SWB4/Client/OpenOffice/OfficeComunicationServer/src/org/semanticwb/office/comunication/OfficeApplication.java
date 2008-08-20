@@ -36,10 +36,10 @@ import org.semanticwb.xmlrpc.XmlRpcObject;
 public class OfficeApplication extends XmlRpcObject implements RepositorySupport, IOfficeApplication
 {
 
-    private static final String CONTENT_MODE_PATH = "C:\\repositorio\\contentmodel.cnd";
-    public static final String URI_NODEDEF = "http://www.semanticwb.org.mx/model/content/1.0";
-    public static final String NODEDEF_PREFIX = "swb";
-    public static final String URI_CONTENT = "http://www.semanticwb.org.mx/model/content/1.0/cm";
+    private static final String CONTENT_MODEL_PATH = "C:\\repositorio\\contentmodel.cnd";
+    public static final String CONTENT_MODEL_URI = "http://www.semanticwb.org.mx/model/content/1.0";
+    public static final String CONTENT_MODEL_PREFIX = "swb";
+    public static final String CONTENT_URI = "http://www.semanticwb.org.mx/model/content/1.0/cm";
     public static final String CONTENT_PREFIX = "cm";
     private static Map<String, Repository> repositories;
     //private Session session;
@@ -64,7 +64,7 @@ public class OfficeApplication extends XmlRpcObject implements RepositorySupport
         boolean exists = false;
         for ( String uri : ws.getNamespaceRegistry().getURIs() )
         {
-            if ( uri.equals(URI_NODEDEF) )
+            if ( uri.equals(CONTENT_MODEL_URI) )
             {
                 exists = true;
                 break;
@@ -74,7 +74,7 @@ public class OfficeApplication extends XmlRpcObject implements RepositorySupport
         {
             try
             {
-                ws.getNamespaceRegistry().registerNamespace(NODEDEF_PREFIX, URI_NODEDEF);
+                ws.getNamespaceRegistry().registerNamespace(CONTENT_MODEL_PREFIX, CONTENT_MODEL_URI);
             }
             catch ( Exception e )
             {
@@ -84,7 +84,7 @@ public class OfficeApplication extends XmlRpcObject implements RepositorySupport
         exists = false;
         for ( String uri : ws.getNamespaceRegistry().getURIs() )
         {
-            if ( uri.equals(URI_CONTENT) )
+            if ( uri.equals(CONTENT_URI) )
             {
                 exists = true;
                 break;
@@ -94,7 +94,7 @@ public class OfficeApplication extends XmlRpcObject implements RepositorySupport
         {
             try
             {
-                ws.getNamespaceRegistry().registerNamespace(CONTENT_PREFIX, URI_CONTENT);
+                ws.getNamespaceRegistry().registerNamespace(CONTENT_PREFIX, CONTENT_URI);
             }
             catch ( Exception e )
             {
@@ -145,7 +145,7 @@ public class OfficeApplication extends XmlRpcObject implements RepositorySupport
         {
             Set<String> keys = repositories.keySet();
             Session session = repositories.get(keys.iterator().next()).login(new SimpleCredentials("", "".toCharArray()));
-            RegisterCustomNodeTypes(session.getWorkspace(), CONTENT_MODE_PATH);
+            RegisterCustomNodeTypes(session.getWorkspace(), CONTENT_MODEL_PATH);
             return session;
         }
         throw new Exception("There are not repositories");
@@ -158,7 +158,7 @@ public class OfficeApplication extends XmlRpcObject implements RepositorySupport
             throw new Exception("The repository " + repositoryName + " does not exist");
         }
         Session session = repositories.get(repositoryName).login(new SimpleCredentials("", "".toCharArray()));
-        RegisterCustomNodeTypes(session.getWorkspace(), CONTENT_MODE_PATH);
+        RegisterCustomNodeTypes(session.getWorkspace(), CONTENT_MODEL_PATH);
         return session;
     }
 
