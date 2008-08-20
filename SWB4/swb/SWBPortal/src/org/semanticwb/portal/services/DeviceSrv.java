@@ -7,10 +7,8 @@ package org.semanticwb.portal.services;
 
 import org.semanticwb.SWBException;
 import org.semanticwb.model.Device;
-import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
-import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.portal.SWBDBAdmLog;
 
 /**
