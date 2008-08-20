@@ -20,6 +20,7 @@ import org.semanticwb.SWBInstance;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
+import org.semanticwb.model.UserRepository;
 import org.semanticwb.platform.SemanticModel;
 
 /**
@@ -77,14 +78,17 @@ public class DBLoginModule implements LoginModule {
         if (!String.valueOf((char[])credential).equals(login + "08")) {
             throw new LoginException("Password Mistmatch");
         }
-        SemanticModel model = SWBInstance.getSemanticMgr().createModel("UsrRepDemo","www.semanticwb.org");
+        //SemanticModel model = SWBInstance.getSemanticMgr().createModel("UsrRepDemo","www.semanticwb.org");
 
         
         /*Resource res = (Resource) model.getRDFModel().createResource(login, 
         model.getRDFModel().createResource(SWBContext.getVocabulary().User.getURI()));*/
 
-        principal = (User) model.createSemanticObject(login, SWBContext.getVocabulary().User);
+        //principal = (User) model.createSemanticObject(login, SWBContext.getVocabulary().User);
 
+        UserRepository rep = SWBContext.createUserRepository("UserRep", "http://rep.infotec.com.mx");
+        principal = rep.createUser(login);
+        
         //End Fake Code
 
         loginflag = true;

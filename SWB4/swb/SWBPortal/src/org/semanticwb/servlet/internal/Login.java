@@ -17,6 +17,7 @@ import javax.servlet.http.HttpSession;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBInstance;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.SWBContext;
 import org.semanticwb.security.auth.SWB4CallbackHandler;
 
 /**
@@ -26,7 +27,7 @@ import org.semanticwb.security.auth.SWB4CallbackHandler;
 public class Login implements InternalServlet
 {
     static Logger log=SWBUtils.getLogger(Login.class);
-    static String authMethod = "FORM"; //"BASIC"
+    static String authMethod = "FORM"; //"BASIC" "FORM"
     
     //Constantes para primer implementación
     
@@ -98,7 +99,9 @@ public class Login implements InternalServlet
         } else {
         */    ruta += "login";
        // }
-
+       
+        
+        
         ruta += ".html";
         String login = null;
         try {
