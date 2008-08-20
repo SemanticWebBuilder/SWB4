@@ -13,6 +13,7 @@ import javax.security.auth.callback.PasswordCallback;
 import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.semanticwb.Logger;
 import org.semanticwb.SWBInstance;
 import org.semanticwb.SWBUtils;
 
@@ -21,6 +22,7 @@ import org.semanticwb.SWBUtils;
  * @author Sergio Martínez  sergio.martinez@acm.org
  */
 public class SWB4CallbackHandler implements CallbackHandler, Serializable {
+    private static Logger log = SWBUtils.getLogger(SWB4CallbackHandler.class);
 
     private HttpServletRequest request;
     private HttpServletResponse response;
@@ -55,6 +57,7 @@ public class SWB4CallbackHandler implements CallbackHandler, Serializable {
     }
 
     public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException {
+        log.trace("Tipo de Autenticacion: "+authType);
         if ("BASIC".equalsIgnoreCase(authType)) {
             getBasicCredentials(callbacks);
         }
@@ -90,8 +93,8 @@ public class SWB4CallbackHandler implements CallbackHandler, Serializable {
     }
     
     private void getFormCredentials(Callback[] callbacks){
-        String login = request.getParameter("_swb_username");
-        String password = request.getParameter("_swb_password");
+        String login = request.getParameter("_wb_username");
+        String password = request.getParameter("_wb_password");
         for (int i = 0; i < callbacks.length; i++) {
             if (callbacks[i] instanceof NameCallback) {
                 NameCallback nameCallback = (NameCallback) callbacks[i];
