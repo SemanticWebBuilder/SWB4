@@ -25,7 +25,7 @@ import static org.semanticwb.office.comunication.Base64.*;
  *
  * @author victor.lorenzana
  */
-public class OfficeServlet extends XMLRPCServlet
+public abstract class OfficeServlet extends XMLRPCServlet
 {
 
     private Hashtable<String, Repository> repositories = new Hashtable<String, Repository>();
@@ -135,10 +135,8 @@ public class OfficeServlet extends XMLRPCServlet
         super.doPost(request, response);
     }
 
-    public boolean isAuthenticate(String pUserName, String pPassword)
-    {
-        return true;
-    }
+    public abstract boolean isAuthenticate(String pUserName, String pPassword);
+    
 
     @Override
     protected void beforeExecute(Object objToExecute, Set<Part> parts) throws Exception
