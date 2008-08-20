@@ -141,7 +141,7 @@ public abstract class XMLRPCServlet extends HttpServlet
                 return methods.get(0);
             default:
         }
-        throw new NoSuchMethodException("The method " + methodName + "was not found");
+        throw new NoSuchMethodException("The method " + methodName + " was not found");
     }
 
     
