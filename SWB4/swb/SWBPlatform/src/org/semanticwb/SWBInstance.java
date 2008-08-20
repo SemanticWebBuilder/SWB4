@@ -8,8 +8,6 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.Properties;
 import javax.servlet.ServletContext;
 import org.semanticwb.platform.SWBMonitor;
@@ -28,8 +26,7 @@ public class SWBInstance
     private static SWBInstance instance=null;
     private static Properties props=null;
     private String contextPath="/";
-    private static String workPath = "";
-
+    
     private static ServletContext servletContext=null;
 
     private static boolean haveDB=false;
@@ -52,8 +49,6 @@ public class SWBInstance
     //Initialize context
     private void init()
     {
-        workPath = (String) getEnv("swb/workPath");
-        
         log.event("SemanticWebBuilder Version: " + version);
         log.event("Java Version: " + System.getProperty("java.runtime.version"));
         
@@ -222,13 +217,6 @@ public class SWBInstance
         }
     }
     
-    /** Getter for property workPath.
-     * @return Value of property workPath.
-     */
-    public static String getWorkPath()
-    {
-        return workPath;
-    }
     
     /**
      * Getter for property haveDB.
