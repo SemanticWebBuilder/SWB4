@@ -5,6 +5,7 @@
 package org.semanticwb.portal.services;
 
 import org.semanticwb.SWBException;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.model.ApplicationPortlet;
 import org.semanticwb.model.ContentPortlet;
 import org.semanticwb.model.StrategyPortlet;
@@ -26,13 +27,9 @@ public class ResourceSrv {
         cPortlet.setDescription(description);
         cPortlet.setUserCreated(user);
         doAction = true;
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", cPortlet.getName(), cPortlet.getURI(), "create language", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error creating language", e);
-        }
+        
+        SWBPortal.createInstance().log(user.getURI(), "create", cPortlet.getURI(), cPortlet.getURI(), "create cPortlet", null); 
+        
         return doAction;
     }
 

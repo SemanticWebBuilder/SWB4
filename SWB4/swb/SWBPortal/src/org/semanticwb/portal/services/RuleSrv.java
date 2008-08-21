@@ -5,10 +5,10 @@
 package org.semanticwb.portal.services;
 
 import org.semanticwb.SWBException;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.model.Rule;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
-import org.semanticwb.portal.SWBDBAdmLog;
 
 /**
  *
@@ -21,13 +21,8 @@ public class RuleSrv {
         rule.setTitle(title);
         rule.setDescription(description);
 
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", rule.getURI(), rule.getURI(), "create Rule", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error creating rule", e);
-        }
+        SWBPortal.createInstance().log(user.getURI(), "create", rule.getURI(), rule.getURI(), "create rule", null); 
+        
         return rule;
 
     }
@@ -37,13 +32,8 @@ public class RuleSrv {
         rule.setTitle(title);
         rule.setDescription(description);
 
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", rule.getURI(), rule.getURI(), "create Rule", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error creating rule", e);
-        }
+        SWBPortal.createInstance().log(user.getURI(), "create", rule.getURI(), rule.getURI(), "create rule", null); 
+        
         return rule;
 
     }
@@ -53,13 +43,8 @@ public class RuleSrv {
         website.removeRule(id);
         deleted = true;
 
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", id, id, "remove Rule", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error removing rule", e);
-        }
+       SWBPortal.createInstance().log(user.getURI(), "remove", id, id, "remove rule", null); 
+       
         return deleted;
 
     }

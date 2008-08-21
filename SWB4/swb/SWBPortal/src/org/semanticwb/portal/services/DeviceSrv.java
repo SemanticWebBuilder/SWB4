@@ -6,10 +6,10 @@
 package org.semanticwb.portal.services;
 
 import org.semanticwb.SWBException;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.model.Device;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
-import org.semanticwb.portal.SWBDBAdmLog;
 
 /**
  *
@@ -27,13 +27,8 @@ public class DeviceSrv
         device.setDescription(description);
         device.setValue(value);
 
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", device.getURI(), device.getURI(), "create device", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error creating device", e);
-        }
+        SWBPortal.createInstance().log(user.getURI(), "create", device.getURI(), device.getURI(), "create Device", null);
+       
         return device;
     }
     
@@ -47,13 +42,8 @@ public class DeviceSrv
         device.setDescription(description);
         device.setValue(value);
 
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", device.getURI(), device.getURI(), "create device", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error creating device", e);
-        }
+        SWBPortal.createInstance().log(user.getURI(), "create", device.getURI(), device.getURI(), "create Device", null);
+        
         return device;
     }
     
@@ -70,13 +60,9 @@ public class DeviceSrv
             device.setValue(value);
         }
         updated = true;
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "update", device.getURI(), device.getURI(), "update Device", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error updating device", e);
-        }
+       
+        SWBPortal.createInstance().log(user.getURI(), "update", device.getURI(), device.getURI(), "update Device", null);
+        
         return updated;
     }
     

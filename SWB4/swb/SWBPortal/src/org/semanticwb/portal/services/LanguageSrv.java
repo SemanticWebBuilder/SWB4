@@ -6,10 +6,10 @@
 package org.semanticwb.portal.services;
 
 import org.semanticwb.SWBException;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.model.Language;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
-import org.semanticwb.portal.SWBDBAdmLog;
 
 /**
  *
@@ -26,13 +26,9 @@ public class LanguageSrv {
         language.setValue(value);
         language.setDescription(description);
         doAction=true;
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", language.getName(), language.getURI(), "create language", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error creating language", e);
-        }
+        
+        SWBPortal.createInstance().log(user.getURI(), "create", language.getURI(), language.getURI(), "create language", null);
+        
         return doAction;
     }
     
@@ -45,13 +41,9 @@ public class LanguageSrv {
         language.setValue(value);
         language.setDescription(description);
         doAction=true;
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", language.getName(), language.getURI(), "create language", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error creating language", e);
-        }
+        
+        SWBPortal.createInstance().log(user.getURI(), "create", language.getURI(), language.getURI(), "create language", null);
+        
         return doAction;
     }
     
@@ -60,13 +52,9 @@ public class LanguageSrv {
         boolean doAction=false;
         website.removeLanguage(id);
         doAction=true;
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "remove", id, id, "remove language", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error removing language", e);
-        }
+        
+        SWBPortal.createInstance().log(user.getURI(), "remove", id, id, "remove language", null);
+        
         return doAction;
     }
     
@@ -86,13 +74,9 @@ public class LanguageSrv {
         }
         language.setUserModified(user);
         doAction=true;
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "update", language.getName(), language.getURI(), "update language", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error updating language", e);
-        }
+        
+        SWBPortal.createInstance().log(user.getURI(), "update", language.getURI(), language.getURI(), "update language", null);
+        
         return doAction;
     }
     

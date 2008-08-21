@@ -5,11 +5,10 @@
 package org.semanticwb.portal.services;
 
 import org.semanticwb.SWBException;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.model.IPFilter;
-import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
-import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.portal.SWBDBAdmLog;
 
 /**
@@ -24,13 +23,8 @@ public class IPFilterSrv {
         ipFilter.setStatus(1);
         ipFilter.setValue(value);
 
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", ipFilter.getName(), ipFilter.getURI(), "create IPFilter", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error creating IPFilter", e);
-        }
+        SWBPortal.createInstance().log(user.getURI(), "create", ipFilter.getURI(), ipFilter.getURI(), "create ipFilter", null);
+        
         return ipFilter;
     }
     
@@ -40,13 +34,8 @@ public class IPFilterSrv {
         ipFilter.setStatus(1);
         ipFilter.setValue(value);
 
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", ipFilter.getName(), ipFilter.getURI(), "create IPFilter", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error creating IPFilter", e);
-        }
+        SWBPortal.createInstance().log(user.getURI(), "create", ipFilter.getURI(), ipFilter.getURI(), "create ipFilter", null);
+        
         return ipFilter;
     }
 
@@ -55,13 +44,9 @@ public class IPFilterSrv {
         boolean removed=false;
         website.removeIPFilter(id);
         removed=true;
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "remove", id, id, "remove IPFilter", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error creating IPFilter", e);
-        }
+       
+        SWBPortal.createInstance().log(user.getURI(), "remove", id, id, "remove ipFilter", null);
+        
         return removed;
     }
     
@@ -72,13 +57,9 @@ public class IPFilterSrv {
             ipFilter.setValue(value);
         }
         updated = true;
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "update", ipFilter.getURI(), ipFilter.getURI(), "update IPFilter", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error updating IPFilter", e);
-        }
+        
+        SWBPortal.createInstance().log(user.getURI(), "update", ipFilter.getURI(), ipFilter.getURI(), "remove ipFilter", null);
+        
         return updated;
     }
     

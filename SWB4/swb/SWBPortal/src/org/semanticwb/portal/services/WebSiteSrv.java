@@ -6,11 +6,9 @@ package org.semanticwb.portal.services;
 
 import java.util.Iterator;
 import org.semanticwb.model.*;
-import org.semanticwb.portal.SWBDBAdmLog;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
-import org.semanticwb.SWBInstance;
 import org.semanticwb.SWBPortal;
 
 /**
@@ -33,13 +31,7 @@ public class WebSiteSrv {
         website.setUserCreated(user);
         
 
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", website.getURI(), website.getURI(), "Create WebSite", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error creating WebSite", e);
-        }
+        SWBPortal.createInstance().log(user.getURI(), "create", wp.getURI(), wp.getURI(), "create website", null); 
         return website;
     }
 
@@ -98,19 +90,14 @@ public class WebSiteSrv {
         //TODO: Eliminar tablas de metadatos
         
         //TODO:Eliminar ruta del sitio
-        SWBUtils.IO.removeDirectory(SWBInstance.getWorkPath()+"/sites/"+webSite.getTitle());
+        SWBUtils.IO.removeDirectory(SWBPortal.getWorkPath()+"/sites/"+webSite.getTitle());
         
         //TODO:Revisar q más se va ha borrar de BD (hits al sitio, etc)
         
         SWBContext.removeWebSite(uri);
         
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "remove", uri, uri, "Remove WebSite", null);
-         try{
-            swbAdmLog.create();
-        }catch(Exception e){
-             throw new SWBException("Error removing WebSite",e);
-        }
+        SWBPortal.createInstance().log(user.getURI(), "remove", uri, uri, "remove website", null); 
+        
         return true;
     }
 
@@ -124,13 +111,8 @@ public class WebSiteSrv {
         }
         webSite.setUserModified(user);
         
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "update", webSite.getName(), webSite.getName(), "Update WebSite", null);
-        try{
-            swbAdmLog.create();
-        }catch(Exception e){
-             throw new SWBException("Error updating WebSite",e);
-        }
+        SWBPortal.createInstance().log(user.getURI(), "update", webSite.getURI(), webSite.getURI(), "update website", null); 
+        
         return true;
     }
 

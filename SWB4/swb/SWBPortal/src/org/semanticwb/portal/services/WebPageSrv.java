@@ -7,6 +7,7 @@ package org.semanticwb.portal.services;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.model.Camp;
 import org.semanticwb.model.PFlow;
 import org.semanticwb.model.RoleRef;
@@ -16,7 +17,6 @@ import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticIterator;
-import org.semanticwb.portal.SWBDBAdmLog;
 
 /**
  *
@@ -34,13 +34,7 @@ public class WebPageSrv {
 
         wp.setUserCreated(user);
 
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", wp.getName(), wp.getURI(), "create WebPage", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error creating WebPage", e);
-        }
+        SWBPortal.createInstance().log(user.getURI(), "create", wp.getURI(), wp.getURI(), "create webpage", null); 
 
         return wp;
     }
@@ -49,13 +43,7 @@ public class WebPageSrv {
         //TODO:Revisar si este metodo elimina por completo la página o solo logicamente, debería ser x completo
         website.removeWebPage(id);
 
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "remove", id, id, "remove WebPage", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error removing WebPage", e);
-        }
+        SWBPortal.createInstance().log(user.getURI(), "remove", id, id, "remove webpage", null); 
 
         return true;        
     }
@@ -73,14 +61,8 @@ public class WebPageSrv {
         }
         doAction = true;
 
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "status", id, id, "change status TemplateRef2WebPage", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error changing Status TemplateRef to WebPage", e);
-        }
-
+        SWBPortal.createInstance().log(user.getURI(), "status", id, id, "change status TemplateRef2WebPage", null); 
+        
         return doAction;
     }
 
@@ -97,14 +79,8 @@ public class WebPageSrv {
         }
         doAction = true;
 
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "status", id, id, "change status RuleRef2WebPage", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error changing Status RuleRef to WebPage", e);
-        }
-
+        SWBPortal.createInstance().log(user.getURI(), "status", id, id, "change status RuleRef2WebPage", null); 
+        
         return doAction;
     }
     
@@ -122,14 +98,8 @@ public class WebPageSrv {
         }
         doAction = true;
 
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "status", id, id, "change status RoleRef2WebPage", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error changing Status RoleRef to WebPage", e);
-        }
-
+        SWBPortal.createInstance().log(user.getURI(), "status", id, id, "change status RoleRef2WebPage", null); 
+       
         return doAction;
     }
     
@@ -154,7 +124,7 @@ public class WebPageSrv {
     //TODO
     public boolean removeCamp2WebPage(WebSite website, WebPage webpage, Camp camp, User user)
     {
-        return true;
+                return true;
     }
     
     

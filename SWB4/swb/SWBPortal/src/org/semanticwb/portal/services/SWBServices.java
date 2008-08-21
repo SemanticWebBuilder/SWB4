@@ -6,6 +6,7 @@ package org.semanticwb.portal.services;
 
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Calendar;
 import org.semanticwb.model.Calendarable;
@@ -49,13 +50,8 @@ public class SWBServices {
         deleteable.setDeleted(deleted);
         doAction = true;
 
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "delete", deleteable.toString(), deleteable.toString(), "delete", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Delete", e);
-        }
+        SWBPortal.createInstance().log(user.getURI(), "delete", deleteable.toString(), deleteable.toString(), "delete", null); 
+        
         return doAction;
     }
 
@@ -64,13 +60,8 @@ public class SWBServices {
         calendarable.addCalendar(calendar);
         doAction = true;
 
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "assign", calendarable.toString(), calendarable.toString(), "assign calendar", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Assign calendar", e);
-        }
+       SWBPortal.createInstance().log(user.getURI(), "assign", calendarable.toString(), calendar.getURI(), "assign", null); 
+       
         return doAction;
     }
 
@@ -79,13 +70,8 @@ public class SWBServices {
         calendarable.removeCalendar(calendar);
         doAction = true;
 
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "Unassign", calendarable.toString(), calendarable.toString(), "unassign calendar", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("UnAssign calendar", e);
-        }
+        SWBPortal.createInstance().log(user.getURI(), "unAssign", calendarable.toString(), calendar.getURI(), "unAssign", null); 
+        
         return doAction;
     }
 
@@ -93,14 +79,8 @@ public class SWBServices {
 
         statusable.setStatus(status);
 
-        //logeo
-        //TODO:Tienen q haber un metodo getUri del objeto statusable para así logearlo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "status", statusable.toString(), statusable.toString(), "update Status", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error updating status", e);
-        }
+        SWBPortal.createInstance().log(user.getURI(), "status", statusable.toString(), statusable.toString(), "update status", null); 
+       
         return true;
     }
 
@@ -112,13 +92,8 @@ public class SWBServices {
 
         templateRefable.addTemplateRef(templateRef);
         doAction = true;
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "assign", templateRefable.toString(), templateRefable.toString(), "Assign template", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error adding template", e);
-        }
+       
+        SWBPortal.createInstance().log(user.getURI(), "assing", templateRefable.toString(), template.getURI(), "assing template", null); 
 
         return doAction;
     }
@@ -135,13 +110,7 @@ public class SWBServices {
             }
         }
 
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "unAssing", templateRefable.toString(), template.getURI(), "unAssing template", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error adding template", e);
-        }
+        SWBPortal.createInstance().log(user.getURI(), "UnAssing", templateRefable.toString(), template.getURI(), "UnAssing template", null); 
 
         return doAction;
     }
@@ -153,13 +122,9 @@ public class SWBServices {
 
         ruleRefable.addRuleRef(ruleRef);
         doAction = true;
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "assign", ruleRefable.toString(), ruleRefable.toString(), "assign rule", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error assigning rule", e);
-        }
+       
+        SWBPortal.createInstance().log(user.getURI(), "assing", ruleRefable.toString(), rule.getURI(), "assing rule", null); 
+        
         return doAction;
     }
 
@@ -175,13 +140,7 @@ public class SWBServices {
             }
         }
 
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "unAssing", ruleRefable.toString(), rule.getURI(), "unAssing template", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error adding template", e);
-        }
+        SWBPortal.createInstance().log(user.getURI(), "unAssing", ruleRefable.toString(), rule.getURI(), "UnAssing rule", null); 
 
         return doAction;
     }
@@ -193,13 +152,9 @@ public class SWBServices {
 
         roleRefable.addRoleRef(roleRef);
         doAction = true;
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "assign", roleRefable.toString(), role.getURI(), "assign role", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error assigning role", e);
-        }
+        
+        SWBPortal.createInstance().log(user.getURI(), "assing", roleRefable.toString(), role.getURI(), "assing role", null); 
+        
         return doAction;
     }
 
@@ -214,13 +169,9 @@ public class SWBServices {
                 break;
             }
         }
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "Unassign", roleRefable.toString(), role.getURI(), "assign role", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error unassigning role", e);
-        }
+       
+        SWBPortal.createInstance().log(user.getURI(), "unAssing", roleRefable.toString(), role.getURI(), "unAssing role", null); 
+        
         return doAction;
     }
 
@@ -229,13 +180,8 @@ public class SWBServices {
         descriptiveable.setDescription(description);
         doAction = true;
 
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "assign", descriptiveable.toString(), descriptiveable.toString(), "assing description", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error assining description", e);
-        }
+        SWBPortal.createInstance().log(user.getURI(), "assing", descriptiveable.toString(), description.toString(), "assing description", null); 
+        
         return doAction;
     }
 
@@ -244,13 +190,8 @@ public class SWBServices {
         groupable.addGroup(objectgroup);
         doAction = true;
 
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "assign", groupable.toString(), objectgroup.getURI(), "assing Group", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error assining Group", e);
-        }
+        SWBPortal.createInstance().log(user.getURI(), "assing", groupable.toString(), objectgroup.getURI(), "assing group", null); 
+       
         return doAction;
     }
 
@@ -260,13 +201,8 @@ public class SWBServices {
         localeable.setLanguage(language);
         doAction = true;
 
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "assign", localeable.toString(), localeable.toString(), "assing language", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error assining language", e);
-        }
+        SWBPortal.createInstance().log(user.getURI(), "assing", localeable.toString(), language.getURI(), "assing language", null); 
+        
         return doAction;
     }
 
@@ -278,13 +214,8 @@ public class SWBServices {
         language.setUserCreated(user);
         doAction = true;
 
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", language.getTitle(), language.getURI(), "create language", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error creating language", e);
-        }
+        SWBPortal.createInstance().log(user.getURI(), "create", language.toString(), language.getURI(), "create language", null); 
+        
         return doAction;
     }
 
@@ -293,13 +224,8 @@ public class SWBServices {
         priorityable.setPriority(priority);
         doAction = true;
 
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "assign", priorityable.toString(), priorityable.toString(), "assing priority", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error assining priority", e);
-        }
+        SWBPortal.createInstance().log(user.getURI(), "assign", priorityable.toString(), priorityable.toString(), "assign priority", null); 
+        
         return doAction;
     }
 
@@ -308,13 +234,8 @@ public class SWBServices {
         valueable.setValue(value);
         doAction = true;
 
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "assign", valueable.toString(), valueable.toString(), "assing value", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error assining value", e);
-        }
+        SWBPortal.createInstance().log(user.getURI(), "assign", valueable.toString(), valueable.toString(), "assign value", null); 
+       
         return doAction;
     }
 
@@ -323,13 +244,8 @@ public class SWBServices {
         versionable.setActualVersion(versionInfo);
         doAction = true;
 
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "assign", versionable.toString(), versionable.toString(), "assing versionInfo", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error assining versionInfo", e);
-        }
+        SWBPortal.createInstance().log(user.getURI(), "assign", versionable.toString(), versionable.toString(), "assign version", null); 
+        
         return doAction;
     }
 
@@ -338,13 +254,8 @@ public class SWBServices {
         versionable.removeActualVersion();
         doAction = true;
 
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "UnAssign", versionable.toString(), versionable.toString(), "UnAssing versionInfo", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error unAssining versionInfo", e);
-        }
+        SWBPortal.createInstance().log(user.getURI(), "unAssign", versionable.toString(), versionable.toString(), "unAssign version", null); 
+        
         return doAction;
     }
 
@@ -353,13 +264,8 @@ public class SWBServices {
         webPageable.addWebPage(webPage);
         doAction = true;
 
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "assign", webPageable.toString(), webPageable.toString(), "assing webPage", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error assining webPage", e);
-        }
+        SWBPortal.createInstance().log(user.getURI(), "assign", webPageable.toString(), webPage.getURI(), "assign webpage", null); 
+       
         return doAction;
     }
 
@@ -368,13 +274,8 @@ public class SWBServices {
         webPageable.removeWebPage(webPage);
         doAction = true;
 
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "unAssign", webPageable.toString(), webPageable.toString(), "UnAssing webPage", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error UnAssining webPage", e);
-        }
+        SWBPortal.createInstance().log(user.getURI(), "unAssign", webPageable.toString(), webPage.getURI(), "unAssign webpage", null); 
+        
         return doAction;
     }
 }
