@@ -27,9 +27,9 @@ import org.semanticwb.platform.SemanticModel;
  *
  * @author Sergio Martínez  (sergio.martinez@acm.org)
  */
-public class DBLoginModule implements LoginModule {
+public class TripeStoreLoginModule implements LoginModule {
 
-    static Logger log = SWBUtils.getLogger(DBLoginModule.class);
+    static Logger log = SWBUtils.getLogger(TripeStoreLoginModule.class);
     protected Subject subject;
     protected CallbackHandler callbackHandler;
     protected Map sharedState;
