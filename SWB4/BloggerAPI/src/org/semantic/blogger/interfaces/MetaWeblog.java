@@ -26,8 +26,8 @@ public interface MetaWeblog
     public Post getCategories(String blogid, String username, String password) throws Exception;
 
     @XmlRpcMethod(methodName = "Blogger.getRecentPosts")
-    public Post getRecentPosts(String blogid, String username, String password, int numberOfPosts) throws Exception;
+    public Post[] getRecentPosts(String blogid, String username, String password, int numberOfPosts) throws Exception;
 
     @XmlRpcMethod(methodName = "Blogger.getUsersBlogs")
-    public UserBlog[] getUsersBlogs(String appkey, String username, String password);
+    public UserBlog[] getUsersBlogs(String appkey, String username, String password) throws Exception;
 }
