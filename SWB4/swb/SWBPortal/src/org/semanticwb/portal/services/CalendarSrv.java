@@ -5,7 +5,10 @@
 
 package org.semanticwb.portal.services;
 
+import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
+import org.semanticwb.SWBPortal;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Calendar;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
@@ -15,7 +18,9 @@ import org.semanticwb.portal.SWBDBAdmLog;
  *
  * @author jorge.jimenez
  */
-public class CalendarSrv {
+public class CalendarSrv 
+{
+    private static Logger log = SWBUtils.getLogger(SWBPortal.class);
     
     public boolean createCalendar(WebSite website, String title, String description, String xmlInterval, User user) throws SWBException
     {
@@ -25,15 +30,10 @@ public class CalendarSrv {
         cal.setDescription(description);
         cal.setUserCreated(user);
         
+        SWBPortal.createInstance().log(user.getURI(), "Create", cal.getURI(), cal.getURI(), "Create Calendar", null);
+        
         doAction=true;
         
-         //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", cal.getName(), cal.getURI(), "create Calendar", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error creating Calendar", e);
-        }
         return doAction;
     }
     
@@ -47,13 +47,8 @@ public class CalendarSrv {
         cal.setUserCreated(user);
         doAction=true;
         
-         //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", cal.getName(), cal.getURI(), "create Calendar", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error creating Calendar", e);
-        }
+        SWBPortal.createInstance().log(user.getURI(), "Create", cal.getURI(), cal.getURI(), "Create Calendar", null);
+        
         return doAction;
     }
     
@@ -63,13 +58,8 @@ public class CalendarSrv {
         website.removeCalendar(id);
         doAction=true;
         
-         //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "remove", id, id, "remove Calendar", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error removing Calendar", e);
-        }
+        SWBPortal.createInstance().log(user.getURI(), "remove", id, id, "remove Calendar", null); 
+        
         return doAction;
     }
     
@@ -86,13 +76,9 @@ public class CalendarSrv {
         cal.setUserModified(user);
         doAction=true;
         
-         //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "update", cal.getName(), cal.getURI(), "update Calendar", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error updating Calendar", e);
-        }
+        SWBPortal.createInstance().log(user.getURI(), "update", cal.getURI(), cal.getURI(), "update Calendar", null);
+        
         return doAction;
     }
+    
 }

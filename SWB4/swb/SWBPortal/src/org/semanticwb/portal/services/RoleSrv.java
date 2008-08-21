@@ -6,10 +6,10 @@
 package org.semanticwb.portal.services;
 
 import org.semanticwb.SWBException;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.model.Role;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
-import org.semanticwb.portal.SWBDBAdmLog;
 /**
  *
  * @author jorge.jimenez
@@ -22,13 +22,8 @@ public class RoleSrv {
         role.setTitle(title);
         role.setDescription(description);
 
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", role.getName(), role.getURI(), "create Role", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error creating role", e);
-        }
+        SWBPortal.createInstance().log(user.getURI(), "create", role.getURI(), role.getURI(), "create role", null); 
+       
         return role;
 
     }
@@ -39,13 +34,8 @@ public class RoleSrv {
         role.setTitle(title);
         role.setDescription(description);
 
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", role.getName(), role.getURI(), "create Role", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error creating role", e);
-        }
+       SWBPortal.createInstance().log(user.getURI(), "create", role.getURI(), role.getURI(), "create role", null); 
+       
         return role;
 
     }
@@ -56,13 +46,8 @@ public class RoleSrv {
         userRep.removeRole(id);
         deleted=true;
 
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", id, id, "remove Role", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error removing role", e);
-        }
+       SWBPortal.createInstance().log(user.getURI(), "remove", id, id, "remove role", null); 
+        
         return deleted;
 
     }

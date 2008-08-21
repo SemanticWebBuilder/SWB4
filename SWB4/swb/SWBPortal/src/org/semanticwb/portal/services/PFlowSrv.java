@@ -6,10 +6,10 @@
 package org.semanticwb.portal.services;
 
 import org.semanticwb.SWBException;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.model.PFlow;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
-import org.semanticwb.portal.SWBDBAdmLog;
 
 /**
  *
@@ -27,13 +27,8 @@ public class PFlowSrv
         pflow.setUserCreated(user);
         doAction=true;
         
-         //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", pflow.getTitle(), pflow.getURI(), "create PFlow", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error creating PFlow", e);
-        }
+        SWBPortal.createInstance().log(user.getURI(), "create", pflow.getURI(), pflow.getURI(), "create pflow", null); 
+        
         return doAction;
     }
     
@@ -46,13 +41,8 @@ public class PFlowSrv
         pflow.setUserCreated(user);
         doAction=true;
         
-         //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", pflow.getTitle(), pflow.getURI(), "create PFlow", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error creating PFlow", e);
-        }
+        SWBPortal.createInstance().log(user.getURI(), "create", pflow.getURI(), pflow.getURI(), "create pflow", null); 
+        
         return doAction;
     }
     
@@ -70,13 +60,8 @@ public class PFlowSrv
         pflow.setUserModified(user);
         doAction=true;
         
-         //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "update", pflow.getTitle(), pflow.getURI(), "update PFlow", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error updatating PFlow", e);
-        }
+        SWBPortal.createInstance().log(user.getURI(), "update", pflow.getURI(), pflow.getURI(), "update pflow", null); 
+        
         return doAction;
     }
     
@@ -85,13 +70,9 @@ public class PFlowSrv
         boolean doAction=false;
         webSite.removePFlow(id);
         doAction=true;
-         //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "remove", id, id, "remove PFlow", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error removing PFlow", e);
-        }
+         
+        SWBPortal.createInstance().log(user.getURI(), "remove", id, id, "remove pflow", null); 
+        
         return doAction;
     }
 }

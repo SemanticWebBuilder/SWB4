@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
-import org.semanticwb.SWBInstance;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Template;
 import org.semanticwb.model.User;
@@ -20,7 +20,6 @@ import org.semanticwb.model.VersionInfo;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticIterator;
-import org.semanticwb.portal.SWBDBAdmLog;
 
 /**
  *
@@ -71,13 +70,7 @@ public class TemplateSrv {
 //        }
 
 
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", template.getName(), template.getURI(), "create Template", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error creating Template", e);
-        }
+        SWBPortal.createInstance().log(user.getURI(), "create", template.getURI(), template.getURI(), "create template", null); 
 
         return template;
     }
@@ -90,13 +83,7 @@ public class TemplateSrv {
         template.addGroup(objectgroup);
         template.setStatus(1);
 
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", template.getName(), template.getURI(), "create Template", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error creating Template", e);
-        }
+        SWBPortal.createInstance().log(user.getURI(), "create", template.getURI(), template.getURI(), "create template", null); 
 
         return template;
     }
@@ -129,7 +116,7 @@ public class TemplateSrv {
 
         //TODO:Elimina el template de FileSystem
         String title = website.getTitle();
-        String rutawork = (String) SWBInstance.getWorkPath();
+        String rutawork = (String) SWBPortal.getWorkPath();
         File f = new File(rutawork + "/sites/" + title + "/templates/");
         if (f.exists() && f.isDirectory()) {
             f = new File(rutawork + "/sites/" + title + "/templates/" + id);
@@ -146,13 +133,7 @@ public class TemplateSrv {
         }
 
 
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "remove", id, id, "remove Template", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error removing Template", e);
-        }
+        SWBPortal.createInstance().log(user.getURI(), "remove", id, id, "remove template", null); 
 
         return deleted;
     }
@@ -202,7 +183,7 @@ public class TemplateSrv {
 
     public static boolean resetTemplates(WebSite website, Template template, User user) {
         try {
-            String rutawork = (String) SWBInstance.getWorkPath();
+            String rutawork = (String) SWBPortal.getWorkPath();
             File dir = new File(rutawork + "/sites/" + website.getName() + "/templates/" + template.getURI());
             if (dir != null && dir.exists() && dir.isDirectory()) {
                 File listado[] = dir.listFiles();
@@ -230,13 +211,7 @@ public class TemplateSrv {
                     template.setActualVersion(verInfo);
                     template.setLastVersion(verInfo);
 
-                    //logeo
-                    SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "remove", template.getURI(), template.getURI(), "remove Template versions", null);
-                    try {
-                        swbAdmLog.create();
-                    } catch (Exception e) {
-                        throw new SWBException("Error removing Template versions", e);
-                    }
+                   SWBPortal.createInstance().log(user.getURI(), "update", template.getURI(), template.getURI(), "update template version", null); 
 
                     return true;
                 }
@@ -260,13 +235,9 @@ public class TemplateSrv {
             }
         }
         doAction = true;
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "remove", id, id, "remove Template Group", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error removing Template Group", e);
-        }
+        
+        SWBPortal.createInstance().log(user.getURI(), "remove", id, id, "remove template group", null); 
+        
         return doAction;
     }
 }

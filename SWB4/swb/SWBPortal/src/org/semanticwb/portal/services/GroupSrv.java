@@ -5,11 +5,10 @@
 package org.semanticwb.portal.services;
 
 import org.semanticwb.SWBException;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.model.ObjectGroup;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
-import org.semanticwb.platform.SemanticIterator;
-import org.semanticwb.portal.SWBDBAdmLog;
 
 /**
  *
@@ -26,13 +25,8 @@ public class GroupSrv
         objGroup.setUserCreated(user);
         doAction = true;
 
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", objGroup.getTitle(), objGroup.getURI(), "create Group", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error creating Group", e);
-        }
+        SWBPortal.createInstance().log(user.getURI(), "create", objGroup.getURI(), objGroup.getURI(), "create Group", null);
+        
         return doAction;
     }
 
@@ -47,13 +41,8 @@ public class GroupSrv
         objectGroup.setUserModified(user);
         doAction = true;
 
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "create", objectGroup.getTitle(), objectGroup.getURI(), "update Group", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error updating Group", e);
-        }
+        SWBPortal.createInstance().log(user.getURI(), "update", objectGroup.getURI(), objectGroup.getURI(), "update Group", null);
+        
         return doAction;
     }
 
@@ -74,13 +63,8 @@ public class GroupSrv
         webSite.removeObjectGroup(id);
         doAction = true;
 
-        //logeo
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(user.getURI(), "remove", id, id, "remove Group", null);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            throw new SWBException("Error removing Group", e);
-        }
+        SWBPortal.createInstance().log(user.getURI(), "remove", id, id, "remove Group", null);
+        
         return doAction;
     }
     
