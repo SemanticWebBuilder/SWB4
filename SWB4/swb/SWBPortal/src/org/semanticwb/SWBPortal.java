@@ -1,5 +1,7 @@
 package org.semanticwb;
 
+import java.sql.Timestamp;
+import org.semanticwb.portal.SWBDBAdmLog;
 import org.semanticwb.portal.services.CalendarSrv;
 import org.semanticwb.portal.services.CampSrv;
 import org.semanticwb.portal.services.DeviceSrv;
@@ -122,5 +124,24 @@ public class SWBPortal {
     public PFlowSrv getPFlowSrv() {
         PFlowSrv pFlowSrv = new PFlowSrv();
         return pFlowSrv;
+    }
+    
+    /**
+     * Logeo de acciones
+     * @param userID
+     * @param action
+     * @param uri
+     * @param object
+     * @param description
+     * @param date
+     */
+    public void log(String userID, String action, String uri, String object, String description, Timestamp date)
+    {
+        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(userID, action, uri, object, description, date);
+        try {
+            swbAdmLog.create();
+        } catch (Exception e) {
+            log.error(e);
+        }
     }
 }
