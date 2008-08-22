@@ -197,11 +197,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public WebPage getWebPage(String id)
     {
-        SemanticObject obj=getSemanticObject();
-        SemanticModel model=obj.getModel();
-        String uri=model.getObjectUri(id,vocabulary.WebPage);
-        System.out.println("Uri:"+uri);
-        return (WebPage)getSemanticObject().getModel().getGenericObject(uri,vocabulary.WebPage);
+        return (WebPage)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.WebPage),vocabulary.WebPage);
     }
 
     public Iterator<WebPage> listWebPages()
