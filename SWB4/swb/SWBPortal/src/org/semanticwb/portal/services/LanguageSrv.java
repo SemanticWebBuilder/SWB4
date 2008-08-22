@@ -21,7 +21,7 @@ public class LanguageSrv {
     {
         boolean doAction=false;
         Language language=website.createLanguage();
-        language.setUserCreated(user);
+        language.setCreator(user);
         language.setTitle(title);
         language.setValue(value);
         language.setDescription(description);
@@ -36,7 +36,7 @@ public class LanguageSrv {
     {
         boolean doAction=false;
         Language language=website.createLanguage(id);
-        language.setUserCreated(user);
+        language.setCreator(user);
         language.setTitle(title);
         language.setValue(value);
         language.setDescription(description);
@@ -72,7 +72,7 @@ public class LanguageSrv {
         if(value!=null){
             language.setValue(value);
         }
-        language.setUserModified(user);
+        language.setModifiedBy(user);
         doAction=true;
         
         SWBPortal.createInstance().log(user.getURI(), "update", language.getURI(), language.getURI(), "update language", null);

@@ -9,6 +9,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.model.Camp;
+import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.PFlow;
 import org.semanticwb.model.RoleRef;
 import org.semanticwb.model.RuleRef;
@@ -32,7 +33,7 @@ public class WebPageSrv {
         wp.setIsChildOf(childOf);
         //TODO: Revisar como pongo el scope y con que tags (En el metodo setProperty de WebPage)
 
-        wp.setUserCreated(user);
+        wp.setCreator(user);
 
         SWBPortal.createInstance().log(user.getURI(), "create", wp.getURI(), wp.getURI(), "create webpage", null); 
 
@@ -50,7 +51,7 @@ public class WebPageSrv {
 
     public boolean changeStatusTemplate2WebPage(WebPage webPage, String id, int status, User user) throws SWBException {
         boolean doAction = false;
-        SemanticIterator<TemplateRef> itTempRef = webPage.listTemplateRef();
+        GenericIterator<TemplateRef> itTempRef = webPage.listTemplateRef();
         while (itTempRef.hasNext()) {
             TemplateRef tplRef = itTempRef.next();
             //TODO:Revisar si el id que me pasan es una Uri completa
@@ -68,7 +69,7 @@ public class WebPageSrv {
 
     public boolean changeStatusRule2WebPage(WebPage webPage, String id, int status, User user) throws SWBException {
         boolean doAction = false;
-        SemanticIterator<RuleRef> itRuleRef = webPage.listRuleRef();
+        GenericIterator<RuleRef> itRuleRef = webPage.listRuleRef();
         while (itRuleRef.hasNext()) {
             RuleRef ruleRef = itRuleRef.next();
             //TODO:Revisar si el id que me pasan es una Uri completa
@@ -87,7 +88,7 @@ public class WebPageSrv {
     
     public boolean changeStatusRole2WebPage(WebPage webPage, String id, int status, User user) throws SWBException {
         boolean doAction = false;
-        SemanticIterator<RoleRef> itRoleRef = webPage.listRoleRef();
+        GenericIterator<RoleRef> itRoleRef = webPage.listRoleRef();
         while (itRoleRef.hasNext()) {
             RoleRef roleRef = itRoleRef.next();
             //TODO:Revisar si el id que me pasan es una Uri completa
