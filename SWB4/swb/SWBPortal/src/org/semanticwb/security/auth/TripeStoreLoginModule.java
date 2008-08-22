@@ -6,7 +6,10 @@ package org.semanticwb.security.auth;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.security.NoSuchAlgorithmException;
+import java.util.Date;
 import java.util.Map;
+import java.util.logging.Level;
 import javax.security.auth.Subject;
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
@@ -52,7 +55,6 @@ public class TripeStoreLoginModule implements LoginModule {
         }
 
         String login;
-        Object tmpCred;
         Callback[] callbacks = new Callback[2];
         callbacks[0] = new NameCallback("login");
         callbacks[1] = new PasswordCallback("password", false);
@@ -70,14 +72,29 @@ public class TripeStoreLoginModule implements LoginModule {
             throw new LoginException("UnsupportedCallbackException Error: " + ex.getMessage());
         }
 
-        //TODO implementar autenticación
-        //Fake Code
-        log.debug("Login: "+login);
-        log.debug("passw: "+String.valueOf((char[])credential));
-        log.debug("Comp: "+(String.valueOf((char[])credential).equals(login + "08")));
-        if (!String.valueOf((char[])credential).equals(login + "08")) {
-            throw new LoginException("Password Mistmatch");
+        principal = SWBContext.getUserRepository("swb_users").getUser(login); //TODO Checar lo del repositorio de usuarios
+        if (1!=principal.getStatus()) throw new LoginException("User innactive");
+        if (null==principal.getUsrPassword()) {
+            if (null!=credential) throw new LoginException("Password Mistmatch");
+        } else {
+            try {
+                if (!principal.getUsrPassword().equals(SWBUtils.CryptoWrapper.comparablePassword(new String((char[]) credential)))) {
+                    throw new LoginException("Password Mistmatch");
+                }
+            } catch (NoSuchAlgorithmException ex) {
+                    log.error("User: Can't set a crypted Password", ex);
+                    throw new LoginException("Digest Failed");
+            }
         }
+            
+        //FAKE CODE
+        //SWBUtils.CryptoWrapper.comparablePassword(new String(credential));
+        //log.debug("Login: "+login);
+        //log.debug("passw: "+String.valueOf((char[])credential));
+        //log.debug("Comp: "+(String.valueOf((char[])credential).equals(login + "08")));
+        //if (!String.valueOf((char[])credential).equals(login + "08")) {
+        //    throw new LoginException("Password Mistmatch");
+        //}
         //SemanticModel model = SWBInstance.getSemanticMgr().createModel("UsrRepDemo","www.semanticwb.org");
 
         
@@ -86,12 +103,13 @@ public class TripeStoreLoginModule implements LoginModule {
 
         //principal = (User) model.createSemanticObject(login, SWBContext.getVocabulary().User);
 
-        UserRepository rep = SWBContext.createUserRepository("UserRep", "http://rep.infotec.com.mx");
-        principal = rep.createUser(login);
+        //UserRepository rep = SWBContext.createUserRepository("swb_users", "http://rep.infotec.com.mx");
+        //principal = rep.createUser(login);
         
         //End Fake Code
 
         loginflag = true;
+        principal.setUsrLastLogin(new Date());
         return loginflag;
     }
 
