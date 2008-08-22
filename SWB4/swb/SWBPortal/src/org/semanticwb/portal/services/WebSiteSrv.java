@@ -28,7 +28,7 @@ public class WebSiteSrv {
         wp.setDescription(homeDescription);
         website.setHomePage(wp);
         
-        website.setUserCreated(user);
+        website.setCreator(user);
         
 
         SWBPortal.createInstance().log(user.getURI(), "create", wp.getURI(), wp.getURI(), "create website", null); 
@@ -109,7 +109,7 @@ public class WebSiteSrv {
         if (description != null) {
             webSite.setDescription(description);
         }
-        webSite.setUserModified(user);
+        webSite.setModifiedBy(user);
         
         SWBPortal.createInstance().log(user.getURI(), "update", webSite.getURI(), webSite.getURI(), "update website", null); 
         

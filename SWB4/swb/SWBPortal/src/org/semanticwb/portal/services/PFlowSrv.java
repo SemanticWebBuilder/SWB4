@@ -24,7 +24,7 @@ public class PFlowSrv
         PFlow pflow=webSite.createPFlow();
         pflow.setTitle(title);
         pflow.setDescription(description);
-        pflow.setUserCreated(user);
+        pflow.setCreator(user);
         doAction=true;
         
         SWBPortal.createInstance().log(user.getURI(), "create", pflow.getURI(), pflow.getURI(), "create pflow", null); 
@@ -38,7 +38,7 @@ public class PFlowSrv
         PFlow pflow=webSite.createPFlow(id);
         pflow.setTitle(title);
         pflow.setDescription(description);
-        pflow.setUserCreated(user);
+        pflow.setCreator(user);
         doAction=true;
         
         SWBPortal.createInstance().log(user.getURI(), "create", pflow.getURI(), pflow.getURI(), "create pflow", null); 
@@ -57,7 +57,7 @@ public class PFlowSrv
             pflow.setDescription(description);
         }
         
-        pflow.setUserModified(user);
+        pflow.setModifiedBy(user);
         doAction=true;
         
         SWBPortal.createInstance().log(user.getURI(), "update", pflow.getURI(), pflow.getURI(), "update pflow", null); 

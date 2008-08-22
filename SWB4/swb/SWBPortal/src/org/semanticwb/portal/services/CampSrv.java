@@ -10,7 +10,6 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.model.Camp;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
-import org.semanticwb.portal.SWBDBAdmLog;
 
 /**
  *
@@ -23,7 +22,7 @@ public class CampSrv {
         Camp camp=website.createCamp();
         camp.setTitle(title);
         camp.setDescription(description);
-        camp.setUserCreated(user);
+        camp.setCreator(user);
         
         SWBPortal.createInstance().log(user.getURI(), "create", camp.getURI(), camp.getURI(), "create Camp", null);
         
@@ -35,7 +34,7 @@ public class CampSrv {
         Camp camp=website.createCamp(id);
         camp.setTitle(title);
         camp.setDescription(description);
-        camp.setUserCreated(user);
+        camp.setCreator(user);
         
         SWBPortal.createInstance().log(user.getURI(), "create", camp.getURI(), camp.getURI(), "create Camp", null);
          

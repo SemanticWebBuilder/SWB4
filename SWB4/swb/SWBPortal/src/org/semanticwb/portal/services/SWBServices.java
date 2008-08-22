@@ -12,6 +12,7 @@ import org.semanticwb.model.Calendar;
 import org.semanticwb.model.Calendarable;
 import org.semanticwb.model.Deleteable;
 import org.semanticwb.model.Descriptiveable;
+import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.Groupable;
 import org.semanticwb.model.Language;
 import org.semanticwb.model.Localeable;
@@ -35,7 +36,6 @@ import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebPageable;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticIterator;
-import org.semanticwb.portal.SWBDBAdmLog;
 
 /**
  *
@@ -100,7 +100,7 @@ public class SWBServices {
 
     public boolean removeTemplateRef(TemplateRefable templateRefable, Template template, User user) throws SWBException {
         boolean doAction = false;
-        SemanticIterator itTemplateRef = templateRefable.listTemplateRef();
+        GenericIterator itTemplateRef = templateRefable.listTemplateRef();
         while (itTemplateRef.hasNext()) {
             TemplateRef tempRef = (TemplateRef) itTemplateRef.next();
             if (tempRef.getTemplate().getURI().equals(template.getURI())) {
@@ -130,7 +130,7 @@ public class SWBServices {
 
     public boolean removeRuleRef(RuleRefable ruleRefable, Rule rule, User user) throws SWBException {
         boolean doAction = false;
-        SemanticIterator itRuleRef = ruleRefable.listRuleRef();
+        GenericIterator itRuleRef = ruleRefable.listRuleRef();
         while (itRuleRef.hasNext()) {
             RuleRef ruleRef = (RuleRef) itRuleRef.next();
             if (ruleRef.getRule().getURI().equals(rule.getURI())) {
@@ -160,7 +160,7 @@ public class SWBServices {
 
     public boolean removeRoleRef(RoleRefable roleRefable, Role role, User user) throws SWBException {
         boolean doAction = false;
-        SemanticIterator itRoleRef = roleRefable.listRoleRef();
+        GenericIterator itRoleRef = roleRefable.listRoleRef();
         while (itRoleRef.hasNext()) {
             RoleRef roleRef = (RoleRef) itRoleRef.next();
             if (roleRef.getRole().getURI().equals(role.getURI())) {
@@ -211,7 +211,7 @@ public class SWBServices {
         Language language = webSite.createLanguage();
         language.setTitle(title);
         language.setDescription(description);
-        language.setUserCreated(user);
+        language.setCreator(user);
         doAction = true;
 
         SWBPortal.createInstance().log(user.getURI(), "create", language.toString(), language.getURI(), "create language", null); 

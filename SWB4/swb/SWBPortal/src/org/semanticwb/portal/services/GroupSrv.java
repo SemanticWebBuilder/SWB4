@@ -22,7 +22,7 @@ public class GroupSrv
         ObjectGroup objGroup = webSite.createObjectGroup();
         objGroup.setTitle(title);
         objGroup.setDescription(description);
-        objGroup.setUserCreated(user);
+        objGroup.setCreator(user);
         doAction = true;
 
         SWBPortal.createInstance().log(user.getURI(), "create", objGroup.getURI(), objGroup.getURI(), "create Group", null);
@@ -38,7 +38,7 @@ public class GroupSrv
         if (description != null) {
             objectGroup.setDescription(description);
         }
-        objectGroup.setUserModified(user);
+        objectGroup.setModifiedBy(user);
         doAction = true;
 
         SWBPortal.createInstance().log(user.getURI(), "update", objectGroup.getURI(), objectGroup.getURI(), "update Group", null);

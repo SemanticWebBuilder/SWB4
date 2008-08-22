@@ -9,7 +9,6 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.model.IPFilter;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
-import org.semanticwb.portal.SWBDBAdmLog;
 
 /**
  *

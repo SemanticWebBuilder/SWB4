@@ -12,7 +12,6 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Calendar;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
-import org.semanticwb.portal.SWBDBAdmLog;
 
 /**
  *
@@ -28,7 +27,7 @@ public class CalendarSrv
         Calendar cal=website.createCalendar();
         cal.setTitle(title);
         cal.setDescription(description);
-        cal.setUserCreated(user);
+        cal.setCreator(user);
         
         SWBPortal.createInstance().log(user.getURI(), "Create", cal.getURI(), cal.getURI(), "Create Calendar", null);
         
@@ -44,7 +43,7 @@ public class CalendarSrv
         Calendar cal=website.createCalendar(id);
         cal.setTitle(title);
         cal.setDescription(description);
-        cal.setUserCreated(user);
+        cal.setCreator(user);
         doAction=true;
         
         SWBPortal.createInstance().log(user.getURI(), "Create", cal.getURI(), cal.getURI(), "Create Calendar", null);
@@ -73,7 +72,7 @@ public class CalendarSrv
         if(description!=null){
             cal.setDescription(description);
         }
-        cal.setUserModified(user);
+        cal.setModifiedBy(user);
         doAction=true;
         
         SWBPortal.createInstance().log(user.getURI(), "update", cal.getURI(), cal.getURI(), "update Calendar", null);

@@ -11,6 +11,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.Template;
 import org.semanticwb.model.User;
 import org.semanticwb.model.ObjectGroup;
@@ -19,7 +20,6 @@ import org.semanticwb.model.TemplateRef;
 import org.semanticwb.model.VersionInfo;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
-import org.semanticwb.platform.SemanticIterator;
 
 /**
  *
@@ -100,7 +100,7 @@ public class TemplateSrv {
             Iterator<WebPage> itWebPages = webSite.listWebPages();
             while (itWebPages.hasNext()) {
                 WebPage webPage = itWebPages.next();
-                SemanticIterator<TemplateRef> itTemplateRefs = webPage.listTemplateRef();
+                GenericIterator<TemplateRef> itTemplateRefs = webPage.listTemplateRef();
                 while (itTemplateRefs.hasNext()) {
                     TemplateRef tplRef = itTemplateRefs.next();
                     //TODO:Ver si me puede dar el puro id del template en un metodo para no comparar contra toda la Uri
@@ -144,7 +144,7 @@ public class TemplateSrv {
         int version=Integer.parseInt(verInfo.getValue())+1;
         verInfo.setValue(""+version);
         template.setStatus(1);
-        template.setUserModified(user);
+        template.setModifiedBy(user);
         template.setLastVersion(verInfo);
         template.setActualVersion(verInfo);
         template.setTitle(title);
@@ -184,7 +184,7 @@ public class TemplateSrv {
     public static boolean resetTemplates(WebSite website, Template template, User user) {
         try {
             String rutawork = (String) SWBPortal.getWorkPath();
-            File dir = new File(rutawork + "/sites/" + website.getName() + "/templates/" + template.getURI());
+            File dir = new File(rutawork + "/sites/" + website.getId() + "/templates/" + template.getURI());
             if (dir != null && dir.exists() && dir.isDirectory()) {
                 File listado[] = dir.listFiles();
                 for (int i = 0; i < listado.length; i++) {
