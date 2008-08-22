@@ -23,7 +23,7 @@ public class SWBContextBase
 
     public static Iterator<org.semanticwb.model.UserRepository> listUserRepositorys()
     {
-        return vocabulary.UserRepository.listGenericInstances();
+        return (Iterator<org.semanticwb.model.UserRepository>)vocabulary.UserRepository.listGenericInstances();
     }
 
     public static void removeUserRepository(String uri)
@@ -40,13 +40,12 @@ public class SWBContextBase
     public static WebSite getWebSite(String uri)
     {
         SemanticObject obj=mgr.getOntology().getSemanticObject(uri);
-        if(obj==null)return null;
         return (WebSite)new WebSite(obj);
     }
 
     public static Iterator<org.semanticwb.model.WebSite> listWebSites()
     {
-        return vocabulary.WebSite.listGenericInstances();
+        return (Iterator<org.semanticwb.model.WebSite>)vocabulary.WebSite.listGenericInstances();
     }
 
     public static void removeWebSite(String uri)
