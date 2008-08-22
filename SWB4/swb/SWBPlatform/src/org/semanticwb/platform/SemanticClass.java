@@ -9,12 +9,18 @@ import com.hp.hpl.jena.ontology.OntClass;
 
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.shared.PropertyNotFoundException;
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Vector;
 import org.semanticwb.*;
+import org.semanticwb.model.GenericIterator;
+import org.semanticwb.model.GenericObject;
+import org.semanticwb.model.base.GenericObjectBase;
 
 /**
  *
@@ -51,6 +57,7 @@ public class SemanticClass
     {
         m_props=new HashMap();
         // super-classes
+        //System.out.println("m_class:"+m_class);
         for (Iterator i = m_class.listDeclaredProperties(false); i.hasNext(); ) 
         {
             Property prop=(Property)i.next();
@@ -96,6 +103,13 @@ public class SemanticClass
         return m_autogenId;
     }
     
+    
+    
+    /**
+     * Lista las clases relacionadas a esta clase del tipo modelo con la propiedad hasClass
+     * Solo si isSWBModel = true
+     * @return clases relacionadas a esta clase del tipo modelo con la propiedad hasClass
+     */
     public Iterator<SemanticClass> listModelClasses()
     {
         Iterator ret=null;
@@ -110,13 +124,32 @@ public class SemanticClass
         return ret;        
     }
     
+    public Iterator<SemanticClass> listOwnerModels()
+    {
+        ArrayList ret=new ArrayList();
+        if(isSWBModel()==false)
+        {
+            Property prop=m_class.getModel().getProperty(SemanticVocabulary.SWB_PROP_HASCLASS);
+            StmtIterator it=m_class.getModel().listStatements(null, prop, m_class);
+            //System.out.println("listOwnerModels:"+prop+"-"+m_class);
+            while(it.hasNext())
+            {
+                Statement stmt=it.nextStatement();
+                ret.add(SWBInstance.getSemanticMgr().getVocabulary().getSemanticClass(stmt.getSubject().getURI()));
+            }
+        }
+        return ret.iterator();        
+    }
+    
+    
     public Constructor getConstructor()
     {
         if(m_constructor==null)
         {
             try
             {
-                m_constructor=getObjectClass().getDeclaredConstructor(Resource.class);
+                //m_constructor=getObjectClass().getDeclaredConstructor(Resource.class);
+                m_constructor=getObjectClass().getDeclaredConstructor(SemanticObject.class);
             }
             catch(NoSuchMethodException nsme)
             {
@@ -127,23 +160,41 @@ public class SemanticClass
         
     }
     
-    public <T extends SemanticObject> T newInstance(String uri)
+    public SemanticObject newInstance(String uri)
     {
         Resource res=m_class.getModel().getResource(uri);
-        return (T)newInstance(res);
+        return newInstance(res);
     }
     
-    public <T extends SemanticObject> T newInstance(Resource res)
+    public SemanticObject newInstance(Resource res)
+    {
+//        try
+//        {
+            //return (SemanticObject)getConstructor().newInstance(res);
+            return new SemanticObject(res);
+//        }
+//        catch(Exception ie)
+//        {
+//            throw new AssertionError(ie.getMessage());        
+//        }        
+    }    
+    
+    public GenericObject newGenericInstance(Resource res)
+    {
+        return newGenericInstance(newInstance(res));
+    }     
+    
+    public GenericObject newGenericInstance(SemanticObject obj)
     {
         try
         {
-            return (T)getConstructor().newInstance(res);
+            return (GenericObject)getConstructor().newInstance(obj);
         }
         catch(Exception ie)
         {
             throw new AssertionError(ie.getMessage());        
         }        
-    }    
+    }       
     
     public Class getObjectClass()
     {
@@ -174,7 +225,18 @@ public class SemanticClass
     
     public Iterator listInstances(boolean direct)
     {
-        return new SemanticIterator(this,m_class.listInstances(direct));
+        //return new SemanticIterator(this,m_class.listInstances(direct));
+        return new SemanticObjectIterator(m_class.listInstances(direct));
+    }
+    
+    public Iterator listGenericInstances()
+    {
+        return listGenericInstances(false);
+    }
+    
+    public Iterator listGenericInstances(boolean direct)
+    {
+        return new GenericIterator(this,m_class.listInstances(direct));
     }
     
     public SemanticProperty getProperty(String name)

@@ -1,6 +1,5 @@
 package org.semanticwb.platform;
 
-import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
@@ -39,7 +38,7 @@ public class SemanticObject
         return m_res.getURI();
     }
     
-    public String getName()
+    public String getRDFName()
     {
         return m_res.getLocalName();
     }    
