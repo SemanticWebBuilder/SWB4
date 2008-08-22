@@ -10,7 +10,6 @@ import org.junit.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBInstance;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.platform.SemanticMgr;
 
 /**
  *
@@ -51,10 +50,11 @@ public class TestRead {
     @Test
     public void test()
     {
+        WebSite site=SWBContext.getWebSite("sep");
         long time=System.currentTimeMillis();
-        for(int x=0;x<10;x++)
+        for(int x=0;x<100;x++)
         {
-            WebPage page=SWBContext.getWebPage("Page"+x);
+            WebPage page=site.getWebPage("Page"+x);
             //WebPage page=(WebPage)SWBInstance.getSemanticMgr().getOntology().getSemanticObject("Page"+x);
             //WebPage page=SWBContext.getWebPage("Page"+x);
             //String title=page.getTitle();
@@ -63,7 +63,7 @@ public class TestRead {
         System.out.println("Time:"+(System.currentTimeMillis()-time));
         
         time=System.currentTimeMillis();
-        Iterator<WebPage> it=SWBContext.listWebPages();
+        Iterator<WebPage> it=site.listWebPages();
         while(it.hasNext())
         {
             WebPage page=it.next();
