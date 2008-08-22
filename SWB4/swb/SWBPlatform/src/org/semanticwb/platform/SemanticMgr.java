@@ -6,15 +6,19 @@
 package org.semanticwb.platform;
 
 import com.hp.hpl.jena.db.DBConnection;
+import com.hp.hpl.jena.db.GraphRDB;
 import com.hp.hpl.jena.db.IDBConnection;
-import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.ModelMaker;
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.util.FileManager;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import org.semanticwb.Logger;
@@ -39,7 +43,6 @@ public class SemanticMgr implements SWBInstanceObject
     private SemanticModel m_system;
     private SemanticModel m_schema;
     private HashMap <String,SemanticModel>m_models=null;
-    private HashMap <Model,SemanticModel>m_imodels=null;
 
     private IDBConnection conn;
     private ModelMaker maker;
@@ -52,7 +55,6 @@ public class SemanticMgr implements SWBInstanceObject
         this.m_context=context;
         
         m_models=new HashMap();
-        m_imodels=new HashMap();
         
         // Create database connection
         conn = new DBConnection(SWBUtils.DB.getDefaultConnection(), SWBUtils.DB.getDatabaseName());
@@ -201,7 +203,10 @@ public class SemanticMgr implements SWBInstanceObject
 
     public SemanticModel getModel(Model model)
     {
-        return m_imodels.get(model);
+        Map map=model.getNsPrefixMap();
+        String name=(String)map.keySet().iterator().next();
+        //System.out.println("name:"+name);
+        return m_models.get(name);
     }
     
     private void loadDBModels()
@@ -226,7 +231,7 @@ public class SemanticMgr implements SWBInstanceObject
     {
         SemanticModel m=new SemanticModel(name, loadRDFDBModel(name));
         m_models.put(name, m);
-        m_imodels.put(m.getRDFModel(), m);
+        //System.out.println("addModel:"+name+" hash:"+m.getRDFModel().toString());
         m_ontology.addSubModel(m,false);
         return m;
     }    
@@ -243,7 +248,6 @@ public class SemanticMgr implements SWBInstanceObject
     {
         SemanticModel model=m_models.get(name);
         m_models.remove(name);
-        m_imodels.remove(model.getRDFModel());                
         maker.removeModel(name);
     }
         

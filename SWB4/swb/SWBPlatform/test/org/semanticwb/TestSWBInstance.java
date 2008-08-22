@@ -47,9 +47,8 @@ public class TestSWBInstance {
     {
         long time=System.currentTimeMillis();
         
-        long x=SWBInstance.getCounter("admin/Template");
-        
-        System.out.println("Counter:"+x);
+        //long x=SWBInstance.getCounter("admin/Template");
+        //System.out.println("Counter:"+x);
         
         System.out.println("Time:"+(System.currentTimeMillis()-time));
     }
