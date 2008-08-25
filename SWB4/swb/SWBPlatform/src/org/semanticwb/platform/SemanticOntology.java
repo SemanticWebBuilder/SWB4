@@ -9,6 +9,7 @@ import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.model.GenericObject;
 
 /**
  *
@@ -88,9 +89,9 @@ public class SemanticOntology
         return ret;        
     }    
     
-    public SemanticObject getSemanticObject(String uri, SemanticClass cls)
+    public GenericObject getGenericObject(String uri, SemanticClass cls)
     {
         Resource res=m_ontology.getResource(uri);
-        return cls.newInstance(res);        
+        return cls.newGenericInstance(res);        
     }     
 }

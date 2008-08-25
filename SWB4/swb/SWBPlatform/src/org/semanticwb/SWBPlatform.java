@@ -499,5 +499,8 @@ public class SWBPlatform
 //        }
 
     }
-    
+
+    public String getVersion() {
+        return version;
+    }    
 }
