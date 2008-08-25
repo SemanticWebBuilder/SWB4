@@ -7,6 +7,9 @@ import org.semanticwb.model.base.SWBContextBase;
 public class SWBContext extends SWBContextBase
 {
     private static Logger log=SWBUtils.getLogger(SWBContext.class);
+    
+    public static String ADMINSITE="SWBADmin";
+    
     private static SWBContext instance=null;
     static public synchronized SWBContext createInstance()
     {
@@ -16,8 +19,14 @@ public class SWBContext extends SWBContextBase
         }
         return instance;
     }
+    
     private SWBContext()
     {
         log.event("Initialize Semantic WebBuilder Context...");
+    }
+    
+    public static WebSite getAdminWebSite()
+    {
+        return getWebSite(ADMINSITE);
     }
 }

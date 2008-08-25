@@ -7,7 +7,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class DnsBase extends GenericObjectBase implements Valueable,WebPageable,Descriptiveable
+public class DnsBase extends GenericObjectBase implements WebPageable,Descriptiveable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
@@ -68,16 +68,6 @@ public class DnsBase extends GenericObjectBase implements Valueable,WebPageable,
              ret=it.next();
          }
          return ret;
-    }
-
-    public String getValue()
-    {
-        return getSemanticObject().getProperty(vocabulary.value);
-    }
-
-    public void setValue(String value)
-    {
-        getSemanticObject().setProperty(vocabulary.value, value);
     }
 
     public String getTitle()
@@ -141,6 +131,16 @@ public class DnsBase extends GenericObjectBase implements Valueable,WebPageable,
     public void setUpdated(Date updated)
     {
         getSemanticObject().setDateProperty(vocabulary.updated, updated);
+    }
+
+    public boolean isDnsDefault()
+    {
+        return getSemanticObject().getBooleanProperty(vocabulary.dnsDefault);
+    }
+
+    public void setDnsDefault(boolean dnsDefault)
+    {
+        getSemanticObject().setBooleanProperty(vocabulary.dnsDefault, dnsDefault);
     }
 
     public WebSite getWebSite()
