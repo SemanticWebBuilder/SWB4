@@ -24,7 +24,7 @@ public class CampSrv {
         camp.setDescription(description);
         camp.setCreator(user);
         
-        SWBPortal.createInstance().log(user.getURI(), "create", camp.getURI(), camp.getURI(), "create Camp", null);
+        SWBPortal.log(user.getURI(), "create", camp.getURI(), camp.getURI(), "create Camp", null);
         
         return camp;
     }
@@ -36,7 +36,7 @@ public class CampSrv {
         camp.setDescription(description);
         camp.setCreator(user);
         
-        SWBPortal.createInstance().log(user.getURI(), "create", camp.getURI(), camp.getURI(), "create Camp", null);
+        SWBPortal.log(user.getURI(), "create", camp.getURI(), camp.getURI(), "create Camp", null);
          
         return camp;
     }
@@ -55,7 +55,7 @@ public class CampSrv {
         
         doAction=true;
         
-        SWBPortal.createInstance().log(user.getURI(), "update", camp.getURI(), camp.getURI(), "update Camp", null);
+        SWBPortal.log(user.getURI(), "update", camp.getURI(), camp.getURI(), "update Camp", null);
        
         return doAction;
     }
@@ -66,7 +66,7 @@ public class CampSrv {
         website.removeCamp(id);
         doAction=true;
         
-        SWBPortal.createInstance().log(user.getURI(), "update", id, id, "update Camp", null);
+        SWBPortal.log(user.getURI(), "update", id, id, "update Camp", null);
         
         return doAction;
     } 

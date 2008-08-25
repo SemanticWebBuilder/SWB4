@@ -29,7 +29,7 @@ public class CalendarSrv
         cal.setDescription(description);
         cal.setCreator(user);
         
-        SWBPortal.createInstance().log(user.getURI(), "Create", website.getURI(), cal.getURI(), "Create Calendar", null);
+        SWBPortal.log(user.getURI(), "Create", website.getURI(), cal.getURI(), "Create Calendar", null);
         
         doAction=true;
         
@@ -46,7 +46,7 @@ public class CalendarSrv
         cal.setCreator(user);
         doAction=true;
         
-        SWBPortal.createInstance().log(user.getURI(), "Create", cal.getURI(), cal.getURI(), "Create Calendar", null);
+        SWBPortal.log(user.getURI(), "Create", cal.getURI(), cal.getURI(), "Create Calendar", null);
         
         return doAction;
     }
@@ -57,7 +57,7 @@ public class CalendarSrv
         website.removeCalendar(id);
         doAction=true;
         
-        SWBPortal.createInstance().log(user.getURI(), "remove", id, id, "remove Calendar", null); 
+        SWBPortal.log(user.getURI(), "remove", id, id, "remove Calendar", null); 
         
         return doAction;
     }
@@ -75,7 +75,7 @@ public class CalendarSrv
         cal.setModifiedBy(user);
         doAction=true;
         
-        SWBPortal.createInstance().log(user.getURI(), "update", cal.getURI(), cal.getURI(), "update Calendar", null);
+        SWBPortal.log(user.getURI(), "update", cal.getURI(), cal.getURI(), "update Calendar", null);
         
         return doAction;
     }

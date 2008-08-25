@@ -21,7 +21,7 @@ public class RuleSrv {
         rule.setTitle(title);
         rule.setDescription(description);
 
-        SWBPortal.createInstance().log(user.getURI(), "create", rule.getURI(), rule.getURI(), "create rule", null); 
+        SWBPortal.log(user.getURI(), "create", rule.getURI(), rule.getURI(), "create rule", null); 
         
         return rule;
 
@@ -32,7 +32,7 @@ public class RuleSrv {
         rule.setTitle(title);
         rule.setDescription(description);
 
-        SWBPortal.createInstance().log(user.getURI(), "create", rule.getURI(), rule.getURI(), "create rule", null); 
+        SWBPortal.log(user.getURI(), "create", rule.getURI(), rule.getURI(), "create rule", null); 
         
         return rule;
 
@@ -43,7 +43,7 @@ public class RuleSrv {
         website.removeRule(id);
         deleted = true;
 
-       SWBPortal.createInstance().log(user.getURI(), "remove", id, id, "remove rule", null); 
+       SWBPortal.log(user.getURI(), "remove", id, id, "remove rule", null); 
        
         return deleted;
 

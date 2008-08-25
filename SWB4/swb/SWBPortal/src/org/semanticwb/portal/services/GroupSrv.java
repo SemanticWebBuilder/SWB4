@@ -26,7 +26,7 @@ public class GroupSrv
         objGroup.setCreator(user);
         doAction = true;
 
-        SWBPortal.createInstance().log(user.getURI(), "create", objGroup.getURI(), objGroup.getURI(), "create Group", null);
+        SWBPortal.log(user.getURI(), "create", objGroup.getURI(), objGroup.getURI(), "create Group", null);
         
         return doAction;
     }
@@ -42,7 +42,7 @@ public class GroupSrv
         objectGroup.setModifiedBy(user);
         doAction = true;
 
-        SWBPortal.createInstance().log(user.getURI(), "update", objectGroup.getURI(), objectGroup.getURI(), "update Group", null);
+        SWBPortal.log(user.getURI(), "update", objectGroup.getURI(), objectGroup.getURI(), "update Group", null);
         
         return doAction;
     }
@@ -64,7 +64,7 @@ public class GroupSrv
         webSite.removeObjectGroup(id);
         doAction = true;
 
-        SWBPortal.createInstance().log(user.getURI(), "remove", id, id, "remove Group", null);
+        SWBPortal.log(user.getURI(), "remove", id, id, "remove Group", null);
         
         return doAction;
     }

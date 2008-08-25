@@ -75,7 +75,7 @@ public class TemplateSrv {
 //        }
 
 
-        SWBPortal.createInstance().log(user.getURI(), "create", template.getURI(), template.getURI(), "create template", null); 
+        SWBPortal.log(user.getURI(), "create", template.getURI(), template.getURI(), "create template", null); 
 
         return template;
     }
@@ -88,7 +88,7 @@ public class TemplateSrv {
         template.addGroup(objectgroup);
         template.setStatus(1);
 
-        SWBPortal.createInstance().log(user.getURI(), "create", website.getURI(), template.getId(), "create template", null); 
+        SWBPortal.log(user.getURI(), "create", website.getURI(), template.getId(), "create template", null); 
 
         return template;
     }
@@ -137,7 +137,7 @@ public class TemplateSrv {
         }
 
 
-        SWBPortal.createInstance().log(user.getURI(), "remove", website.getURI(), id, "remove template", null); 
+        SWBPortal.log(user.getURI(), "remove", website.getURI(), id, "remove template", null); 
 
         return deleted;
     }
@@ -221,7 +221,7 @@ public class TemplateSrv {
                     template.setActualVersion(verInfo);
                     template.setLastVersion(verInfo);
 
-                   SWBPortal.createInstance().log(user.getURI(), "update", website.getURI(), template.getId(), "update template version", null); 
+                   SWBPortal.log(user.getURI(), "update", website.getURI(), template.getId(), "update template version", null); 
 
                     return true;
                 }
@@ -241,7 +241,7 @@ public class TemplateSrv {
         obj.removeAllGroup();
         webSite.removeObjectGroup(obj.getId());
         
-        SWBPortal.createInstance().log(user.getURI(), "remove", webSite.getURI(), id, "remove template group", null); 
+        SWBPortal.log(user.getURI(), "remove", webSite.getURI(), id, "remove template group", null); 
         
         return doAction;
     }
