@@ -142,10 +142,10 @@ public class MetaWeblogImp implements MetaWeblog, RepositorySupport
 
     public void setRepositories(Map<String, Repository> repositories)
     {
-        if ( MetaWeblogImp.repositories != null )
+        /*if ( MetaWeblogImp.repositories != null )
         {
-            throw new IllegalArgumentException("The repository list already exists");
-        }
+        throw new IllegalArgumentException("The repository list already exists");
+        }*/
         MetaWeblogImp.repositories = repositories;
     }
 
@@ -158,7 +158,7 @@ public class MetaWeblogImp implements MetaWeblog, RepositorySupport
         }
         return hasListOfRepositories;
     }
-    
+
     /**
      * Create a blog into the repository
      * @param name Name of the blog
@@ -260,7 +260,7 @@ public class MetaWeblogImp implements MetaWeblog, RepositorySupport
      * @throws java.lang.Exception
      */
     public Post[] getRecentPosts(String blogid, String username, String password, int numberOfPosts) throws Exception
-    {        
+    {
         ArrayList<Post> posts = new ArrayList<Post>();
         Session session = null;
         try
@@ -268,32 +268,25 @@ public class MetaWeblogImp implements MetaWeblog, RepositorySupport
             session = openSession(username, password);
             Node blogNode = session.getNodeByUUID(blogid);
             NodeIterator postNodes = blogNode.getNodes("post");
-            int numPost = 1;
             while (postNodes.hasNext())
             {
-                if ( numPost < numberOfPosts )
+                Node postNode = postNodes.nextNode();
+                Post value = new Post();
+                ArrayList<String> categories = new ArrayList<String>();
+                if ( postNode.hasProperty("blog:category") )
                 {
-                    Node postNode = postNodes.nextNode();
-                    Post value = new Post();
-                    ArrayList<String> categories = new ArrayList<String>();
                     for ( Value categoryValue : postNode.getProperty("blog:category").getValues() )
                     {
                         categories.add(categoryValue.getString());
                     }
-                    value.categories = categories.toArray(new String[categories.size()]);
-                    value.dateCreated = postNode.getProperty("blog:dateCreated").getDate().getTime();
-                    value.description = postNode.getProperty("blog:title").getString();
-                    value.postid = postNode.getUUID();
-                    value.title = postNode.getProperty("blog:description").getString();
-                    value.userid = postNode.getProperty("blog:userid").getString();
-                    posts.add(value);
-                    numPost++;
                 }
-                else
-                {
-                    break;
-                }
-
+                value.categories = categories.toArray(new String[categories.size()]);
+                value.dateCreated = postNode.getProperty("blog:dateCreated").getDate().getTime();
+                value.description = postNode.getProperty("blog:description").getString();
+                value.postid = postNode.getUUID();
+                value.title = postNode.getProperty("blog:title").getString();
+                value.userid = postNode.getProperty("blog:userid").getString();
+                posts.add(value);
             }
         }
         catch ( Exception ex )
@@ -307,13 +300,13 @@ public class MetaWeblogImp implements MetaWeblog, RepositorySupport
                 session.logout();
             }
         }
-        Post[] postsToReturn=posts.toArray(new Post[posts.size()]);
+        Post[] postsToReturn = posts.toArray(new Post[posts.size()]);
         Arrays.sort(postsToReturn);
-        if(postsToReturn.length>numberOfPosts)
+        if ( postsToReturn.length > numberOfPosts )
         {
-            Post[] temp=new Post[numberOfPosts];
+            Post[] temp = new Post[numberOfPosts];
             System.arraycopy(postsToReturn, 0, temp, 0, numberOfPosts);
-            postsToReturn=temp;            
+            postsToReturn = temp;
         }
         return postsToReturn;
     }
@@ -398,15 +391,18 @@ public class MetaWeblogImp implements MetaWeblog, RepositorySupport
             Node postNode = session.getNodeByUUID(postid);
             Post value = new Post();
             ArrayList<String> categories = new ArrayList<String>();
-            for ( Value categoryValue : postNode.getProperty("").getValues() )
+            if ( postNode.hasProperty("blog:category") )
             {
-                categories.add(categoryValue.getString());
+                for ( Value categoryValue : postNode.getProperty("blog:category").getValues() )
+                {
+                    categories.add(categoryValue.getString());
+                }
             }
             value.categories = categories.toArray(new String[categories.size()]);
             value.dateCreated = postNode.getProperty("blog:dateCreated").getDate().getTime();
-            value.description = postNode.getProperty("blog:title").getString();
+            value.description = postNode.getProperty("blog:description").getString();
             value.postid = postid;
-            value.title = postNode.getProperty("blog:description").getString();
+            value.title = postNode.getProperty("blog:title").getString();
             value.userid = postNode.getProperty("blog:userid").getString();
             return value;
         }
@@ -477,6 +473,7 @@ public class MetaWeblogImp implements MetaWeblog, RepositorySupport
             }
         }
     }
+
     /**
      * Create a Category into the blog repository
      * @param blogid The blog Id where the category is going to be created
@@ -531,6 +528,7 @@ public class MetaWeblogImp implements MetaWeblog, RepositorySupport
             }
         }
     }
+
     /**
      * Gets the categories created into the blog repository
      * @param blogid The BlogID of the repository
