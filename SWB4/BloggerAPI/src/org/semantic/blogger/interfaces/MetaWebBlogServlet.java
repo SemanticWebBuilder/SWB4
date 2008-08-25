@@ -59,10 +59,10 @@ public class MetaWebBlogServlet extends XMLRPCServlet {
         if ( objToExecute instanceof RepositorySupport )
         {
             RepositorySupport obj = ( RepositorySupport ) objToExecute;
-            if ( !obj.hasListOfRepositories() )
-            {
+            //if ( !obj.hasListOfRepositories() )
+            //{
                 obj.setRepositories(repositories);
-            }
+            //}
         }
     }
     @Override
