@@ -133,14 +133,26 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
         getSemanticObject().setLongProperty(vocabulary.status, status);
     }
 
-    public String getLanguage()
+    public void setLanguage(org.semanticwb.model.Language language)
     {
-        return getSemanticObject().getProperty(vocabulary.language);
+        getSemanticObject().addObjectProperty(vocabulary.language, language.getSemanticObject());
     }
 
-    public void setLanguage(String language)
+    public void removeLanguage()
     {
-        getSemanticObject().setProperty(vocabulary.language, language);
+        getSemanticObject().removeProperty(vocabulary.language);
+    }
+
+    public Language getLanguage()
+    {
+         Language ret=null;
+         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.language.getRDFProperty());
+         GenericIterator<org.semanticwb.model.Language> it=new GenericIterator<org.semanticwb.model.Language>(Language.class, stit);
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
     }
 
     public Date getUpdated()

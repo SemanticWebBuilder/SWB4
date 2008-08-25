@@ -9,4 +9,10 @@ public class WebSite extends WebSiteBase
     {
         super(base);
     }
+    
+    @Override
+    public Dns createDns(String uri)
+    {
+        return (Dns)getSemanticObject().getModel().createGenericObject(uri, SWBContext.getVocabulary().Dns);
+    }    
 }

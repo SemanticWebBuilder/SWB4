@@ -85,8 +85,8 @@ public class SWBVocabulary
     public final SemanticProperty deleted;
     public final SemanticProperty hasCalendar;
     public final SemanticProperty hasRule;
-    public final SemanticProperty value;
     public final SemanticProperty hasWebPage;
+    public final SemanticProperty dnsDefault;
     public final SemanticProperty hasPortlet;
     public final SemanticProperty hasTemplate;
     public final SemanticProperty template;
@@ -96,6 +96,7 @@ public class SWBVocabulary
     public final SemanticProperty lastVersion;
     public final SemanticProperty hasRuleRef;
     public final SemanticProperty nextVersion;
+    public final SemanticProperty value;
     public final SemanticProperty previousVersion;
     public final SemanticProperty versionComment;
     public final SemanticProperty versionCreated;
@@ -193,8 +194,8 @@ public class SWBVocabulary
         deleted=vocabulary.getSemanticProperty(URI+"deleted");
         hasCalendar=vocabulary.getSemanticProperty(URI+"hasCalendar");
         hasRule=vocabulary.getSemanticProperty(URI+"hasRule");
-        value=vocabulary.getSemanticProperty(URI+"value");
         hasWebPage=vocabulary.getSemanticProperty(URI+"hasWebPage");
+        dnsDefault=vocabulary.getSemanticProperty(URI+"dnsDefault");
         hasPortlet=vocabulary.getSemanticProperty(URI+"hasPortlet");
         hasTemplate=vocabulary.getSemanticProperty(URI+"hasTemplate");
         template=vocabulary.getSemanticProperty(URI+"template");
@@ -204,6 +205,7 @@ public class SWBVocabulary
         lastVersion=vocabulary.getSemanticProperty(URI+"lastVersion");
         hasRuleRef=vocabulary.getSemanticProperty(URI+"hasRuleRef");
         nextVersion=vocabulary.getSemanticProperty(URI+"nextVersion");
+        value=vocabulary.getSemanticProperty(URI+"value");
         previousVersion=vocabulary.getSemanticProperty(URI+"previousVersion");
         versionComment=vocabulary.getSemanticProperty(URI+"versionComment");
         versionCreated=vocabulary.getSemanticProperty(URI+"versionCreated");

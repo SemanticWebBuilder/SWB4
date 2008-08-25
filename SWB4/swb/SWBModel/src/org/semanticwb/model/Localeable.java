@@ -4,6 +4,10 @@ import org.semanticwb.model.GenericIterator;
 import java.util.Date;
 public interface Localeable extends GenericObject
 {
-    public String getLanguage();
-    public void setLanguage(String language);
+
+    public void setLanguage(org.semanticwb.model.Language language);
+
+    public void removeLanguage();
+
+    public Language getLanguage();
 }
