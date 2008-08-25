@@ -6,6 +6,7 @@ package org.semanticwb.blogger;
 
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -26,6 +27,7 @@ import org.apache.jackrabbit.core.nodetype.NodeTypeDef;
 import org.apache.jackrabbit.core.nodetype.NodeTypeManagerImpl;
 import org.apache.jackrabbit.core.nodetype.NodeTypeRegistry;
 import org.apache.jackrabbit.core.nodetype.compact.CompactNodeTypeDefReader;
+import org.semantic.blogger.interfaces.CategoryInfo;
 import org.semantic.blogger.interfaces.MetaWeblog;
 import org.semantic.blogger.interfaces.Post;
 import org.semantic.blogger.interfaces.RepositorySupport;
@@ -156,8 +158,55 @@ public class MetaWeblogImp implements MetaWeblog, RepositorySupport
         }
         return hasListOfRepositories;
     }
+    
+    /**
+     * Create a blog into the repository
+     * @param name Name of the blog
+     * @param url Url of the blog
+     * @param username User name to create the blog into de repository
+     * @param password Password for the user to create the blog into the repository
+     * @return The UUID created
+     * @throws java.lang.Exception
+     */
+    public String createBlog(String name, String url, String username, String password) throws Exception
+    {
+        Session session = null;
+        try
+        {
+            session = openSession(username, password);
+            Query query = session.getWorkspace().getQueryManager().createQuery("//blog[@blog:name='" + name + "']", Query.XPATH);
+            QueryResult result = query.execute();
+            NodeIterator nodeIterator = result.getNodes();
+            if ( nodeIterator.hasNext() )
+            {
+                return nodeIterator.nextNode().getUUID();
+            }
+            else
+            {
+                Node root = session.getRootNode();
+                Node blogNode = root.addNode("blog", "blognode:blogType");
+                blogNode.setProperty("blog:name", name);
+                blogNode.setProperty("blog:url", url);
+                session.save();
+                return blogNode.getUUID();
+            }
+        }
+        catch ( Exception ex )
+        {
+            throw ex;
+        }
+        finally
+        {
+            if ( session != null )
+            {
+                session.logout();
+            }
+        }
+
+    }
 
     /**
+     * 
      * Returns tthe blogs that an user can publish posts
      * @param appkey Is not used
      * @param username User
@@ -167,6 +216,7 @@ public class MetaWeblogImp implements MetaWeblog, RepositorySupport
      */
     public UserBlog[] getUsersBlogs(String appkey, String username, String password) throws Exception
     {
+        createBlog("Blog victor", "http://www.infotec.com.mx/victor", username, password);
         HashSet<UserBlog> blogs = new HashSet<UserBlog>();
         Session session = null;
         try
@@ -199,6 +249,7 @@ public class MetaWeblogImp implements MetaWeblog, RepositorySupport
         }
         return blogs.toArray(new UserBlog[blogs.size()]);
     }
+
     /**
      * Retrieves a list of posts that were created recently. The results are returned in descending chronolocial order with the most recent post first in the list.
      * @param blogid the Blog ID
@@ -209,8 +260,7 @@ public class MetaWeblogImp implements MetaWeblog, RepositorySupport
      * @throws java.lang.Exception
      */
     public Post[] getRecentPosts(String blogid, String username, String password, int numberOfPosts) throws Exception
-    {
-
+    {        
         ArrayList<Post> posts = new ArrayList<Post>();
         Session session = null;
         try
@@ -225,8 +275,8 @@ public class MetaWeblogImp implements MetaWeblog, RepositorySupport
                 {
                     Node postNode = postNodes.nextNode();
                     Post value = new Post();
-                    ArrayList<String> categories=new ArrayList<String>();
-                    for(Value categoryValue : postNode.getProperty("blog:category").getValues())
+                    ArrayList<String> categories = new ArrayList<String>();
+                    for ( Value categoryValue : postNode.getProperty("blog:category").getValues() )
                     {
                         categories.add(categoryValue.getString());
                     }
@@ -257,7 +307,25 @@ public class MetaWeblogImp implements MetaWeblog, RepositorySupport
                 session.logout();
             }
         }
-        return posts.toArray(new Post[posts.size()]);
+        Post[] postsToReturn=posts.toArray(new Post[posts.size()]);
+        Arrays.sort(postsToReturn);
+        if(postsToReturn.length>numberOfPosts)
+        {
+            Post[] temp=new Post[numberOfPosts];
+            System.arraycopy(postsToReturn, 0, temp, 0, numberOfPosts);
+            postsToReturn=temp;            
+        }
+        return postsToReturn;
+    }
+
+    private String getHtmlUrlForCategories(String blogid)
+    {
+        return "Http";
+    }
+
+    private String getRssUrlForCategories(String blogid)
+    {
+        return "Http";
     }
 
     /**
@@ -279,12 +347,24 @@ public class MetaWeblogImp implements MetaWeblog, RepositorySupport
             Node postNode = session.getNodeByUUID(postid);
             postNode.checkout();
             postNode.setProperty("blog:title", post.title);
-            postNode.setProperty("blog:userid", post.userid);
-            postNode.setProperty("blog:description", post.description);
-            for ( String category : post.categories )
+            if ( post.userid != null )
             {
-                postNode.setProperty("blog:category", category);
+                postNode.setProperty("blog:userid", post.userid);
             }
+            else
+            {
+                postNode.setProperty("blog:userid", userid);
+            }
+            postNode.setProperty("blog:description", post.description);
+            if ( post.categories != null )
+            {
+                postNode.setProperty("blog:category", post.categories);
+                for ( String category : post.categories )
+                {
+                    createCategory(postNode.getParent().getUUID(), category, category, userid, password);
+                }
+            }
+            session.save();
             postNode.checkin();
             return true;
         }
@@ -304,7 +384,7 @@ public class MetaWeblogImp implements MetaWeblog, RepositorySupport
     /**
      * Gets a post in the repository
      * @param postid ID of the post
-     * @param userid User ID
+     * @param userid User ID to access to the repository
      * @param password Password of the user
      * @return Th
      * @throws java.lang.Exception
@@ -317,7 +397,12 @@ public class MetaWeblogImp implements MetaWeblog, RepositorySupport
             session = openSession(userid, password);
             Node postNode = session.getNodeByUUID(postid);
             Post value = new Post();
-            value.categories = new String[]{"Michegas", "Mind Bombs", "Rest & Relaxation"};
+            ArrayList<String> categories = new ArrayList<String>();
+            for ( Value categoryValue : postNode.getProperty("").getValues() )
+            {
+                categories.add(categoryValue.getString());
+            }
+            value.categories = categories.toArray(new String[categories.size()]);
             value.dateCreated = postNode.getProperty("blog:dateCreated").getDate().getTime();
             value.description = postNode.getProperty("blog:title").getString();
             value.postid = postid;
@@ -337,6 +422,7 @@ public class MetaWeblogImp implements MetaWeblog, RepositorySupport
             }
         }
     }
+
     /**
      * Create a new post into a blog
      * @param blogid The blog ID
@@ -357,13 +443,26 @@ public class MetaWeblogImp implements MetaWeblog, RepositorySupport
             Node blogNode = session.getNodeByUUID(blogid);
             Node postNode = blogNode.addNode("post", "blognode:blogEntry");
             postNode.setProperty("blog:title", post.title);
-            postNode.setProperty("blog:userid", post.userid);
+            if ( post.userid != null )
+            {
+                postNode.setProperty("blog:userid", post.userid);
+            }
+            else
+            {
+                postNode.setProperty("blog:userid", userid);
+            }
             postNode.setProperty("blog:description", post.description);
             postNode.setProperty("blog:dateCreated", Calendar.getInstance());
-            for ( String category : post.categories )
+            if ( post.categories != null )
             {
-                postNode.setProperty("blog:category", category);
+                postNode.setProperty("blog:category", post.categories);
+                for ( String category : post.categories )
+                {
+                    createCategory(blogid, category, category, userid, password);
+                }
             }
+
+            session.save();
             return postNode.getUUID();
         }
         catch ( Exception ex )
@@ -378,9 +477,103 @@ public class MetaWeblogImp implements MetaWeblog, RepositorySupport
             }
         }
     }
-
-    public Post getCategories(String blogid, String username, String password) throws Exception
+    /**
+     * Create a Category into the blog repository
+     * @param blogid The blog Id where the category is going to be created
+     * @param name Name of the categoey
+     * @param description The description of the category
+     * @param username The UserName to access to the repository
+     * @param password The Password to access to the repository
+     * @return A CategoryInfo with the information created
+     * @throws java.lang.Exception
+     */
+    public CategoryInfo createCategory(String blogid, String name, String description, String username, String password) throws Exception
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        Session session = null;
+        try
+        {
+            session = openSession(username, password);
+            Query query = session.getWorkspace().getQueryManager().createQuery("//blog/category[blog:name='" + name + "']", Query.XPATH);
+            QueryResult result = query.execute();
+            NodeIterator nodeIterator = result.getNodes();
+            CategoryInfo category = new CategoryInfo();
+            Node categoryNode = null;
+            if ( nodeIterator.hasNext() )
+            {
+                categoryNode = nodeIterator.nextNode();
+            }
+            else
+            {
+                Node nodeBlog = session.getNodeByUUID(blogid);
+                categoryNode = nodeBlog.addNode("category", "blognode:categoryType");
+                categoryNode.setProperty("blog:name", name);
+                categoryNode.setProperty("blog:description", description);
+                categoryNode.setProperty("blog:htmlUrl", getHtmlUrlForCategories(blogid));
+                categoryNode.setProperty("blog:rssUrl", getRssUrlForCategories(blogid));
+                session.save();
+            }
+            category.categoryId = categoryNode.getUUID();
+            category.categoryName = categoryNode.getProperty("blog:name").getString();
+            category.description = categoryNode.getProperty("blog:description").getString();
+            category.htmlUrl = categoryNode.getProperty("blog:htmlUrl").getString();
+            category.rssUrl = categoryNode.getProperty("blog:rssUrl").getString();
+            return category;
+        }
+        catch ( Exception ex )
+        {
+            throw ex;
+        }
+        finally
+        {
+            if ( session != null )
+            {
+                session.logout();
+            }
+        }
+    }
+    /**
+     * Gets the categories created into the blog repository
+     * @param blogid The BlogID of the repository
+     * @param username The userName to access to repository
+     * @param password The password of the user to access to the repository
+     * @return An array of CategoryInfo, with the information about of the Categories
+     * @throws java.lang.Exception
+     */
+    public CategoryInfo[] getCategories(String blogid, String username, String password) throws Exception
+    {
+        createCategory(blogid, "Categoria 1", "description", username, password);
+        ArrayList<CategoryInfo> categories = new ArrayList<CategoryInfo>();
+        Session session = null;
+        try
+        {
+            session = openSession(username, password);
+            Query query = session.getWorkspace().getQueryManager().createQuery("//blog/category", Query.XPATH);
+            QueryResult result = query.execute();
+            NodeIterator nodeIterator = result.getNodes();
+            while (nodeIterator.hasNext())
+            {
+                Node categoryNode = nodeIterator.nextNode();
+                CategoryInfo category = new CategoryInfo();
+                category.categoryId = categoryNode.getUUID();
+                category.categoryName = categoryNode.getProperty("blog:name").getString();
+                category.description = categoryNode.getProperty("blog:description").getString();
+                category.htmlUrl = categoryNode.getProperty("blog:htmlUrl").getString();
+                category.rssUrl = categoryNode.getProperty("blog:rssUrl").getString();
+                categories.add(category);
+            }
+
+        }
+        catch ( Exception ex )
+        {
+            throw ex;
+        }
+        finally
+        {
+            if ( session != null )
+            {
+                session.logout();
+            }
+        }
+        return categories.toArray(new CategoryInfo[categories.size()]);
     }
 }
