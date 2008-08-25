@@ -195,7 +195,7 @@ public abstract class XMLRPCServlet extends HttpServlet
             }
             catch ( Exception e )
             {
-                throw new XmlRpcException("The opject can not be inizialited into the method setupObject, cause: " + e.getLocalizedMessage(), e);
+                throw new XmlRpcException("The object can not be inizialited into the method setupObject, cause: " + e.getLocalizedMessage(), e);
             }
             try
             {
