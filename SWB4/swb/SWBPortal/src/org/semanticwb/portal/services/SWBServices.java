@@ -35,7 +35,6 @@ import org.semanticwb.model.Versionable;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebPageable;
 import org.semanticwb.model.WebSite;
-import org.semanticwb.platform.SemanticIterator;
 
 /**
  *
@@ -197,13 +196,13 @@ public class SWBServices {
         return doAction;
     }
 
-    public boolean localeable(Localeable localeable, Language language, User user) throws SWBException 
+    public boolean localeable(Localeable localeable, String language, User user) throws SWBException 
     {
         boolean doAction = false;
         localeable.setLanguage(language);
         doAction = true;
 
-        SWBPortal.createInstance().log(user.getURI(), "assing", localeable.getURI(), language.getId(), "assing language", null); 
+        SWBPortal.createInstance().log(user.getURI(), "assing", localeable.getURI(), language, "assing language", null); 
         
         return doAction;
     }
