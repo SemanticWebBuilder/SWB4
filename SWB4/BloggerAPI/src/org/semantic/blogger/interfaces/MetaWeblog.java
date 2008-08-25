@@ -23,7 +23,7 @@ public interface MetaWeblog
     public Post getPost(String postid, String userid, String password) throws Exception;
 
     @XmlRpcMethod(methodName = "Blogger.getCategories")
-    public Post getCategories(String blogid, String username, String password) throws Exception;
+    public CategoryInfo[] getCategories(String blogid, String username, String password) throws Exception;
 
     @XmlRpcMethod(methodName = "Blogger.getRecentPosts")
     public Post[] getRecentPosts(String blogid, String username, String password, int numberOfPosts) throws Exception;

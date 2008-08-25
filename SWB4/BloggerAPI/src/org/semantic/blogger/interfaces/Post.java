@@ -11,7 +11,13 @@ import java.util.Date;
  *
  * @author victor.lorenzana
  */
-public class Post {
+public class Post implements Comparable<Post>
+{
+
+    public int compareTo(Post o)
+    {
+        return o.dateCreated.compareTo(this.dateCreated);
+    }
     public String title;
     public String link;
     public String description;
