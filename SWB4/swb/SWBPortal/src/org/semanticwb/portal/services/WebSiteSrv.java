@@ -19,7 +19,7 @@ public class WebSiteSrv {
 
     private static Logger log = SWBUtils.getLogger(WebSiteSrv.class);
 
-    public WebSite createWebSite(String name, String nsp, String title, String description, String language, UserRepository userrepository, String homeTitle, String homeDescription, User user) throws SWBException 
+    public WebSite createWebSite(String name, String nsp, String title, String description, Language language, UserRepository userrepository, String homeTitle, String homeDescription, User user) throws SWBException 
     {
 
         WebSite website = SWBContext.createWebSite(name, nsp);
@@ -46,7 +46,7 @@ public class WebSiteSrv {
         dir = new java.io.File(SWBPortal.getWorkPath() + "/sites/" + website.getId() + "/resources");
         dir.mkdirs();
 
-        SWBPortal.createInstance().log(user.getURI(), "create", website.getURI(), website.getId(), "create website", null);
+        SWBPortal.log(user.getURI(), "create", website.getURI(), website.getId(), "create website", null);
         return website;
     }
 
@@ -59,26 +59,26 @@ public class WebSiteSrv {
         while (itObjGroups.hasNext()) {
             ObjectGroup objGroup = itObjGroups.next();
             if(objGroup.getProperty("type")!=null && objGroup.getProperty("type").equalsIgnoreCase("tpl")){
-                SWBPortal.createInstance().getTemplateSrv().removeTemplateGroup(webSite, objGroup.getId(), user);
+                SWBPortal.getTemplateSrv().removeTemplateGroup(webSite, objGroup.getId(), user);
             }
         }
         //Elimina reglas
         Iterator<Rule> itRules = webSite.listRules();
         while (itRules.hasNext()) {
             Rule rule = itRules.next();
-            SWBPortal.createInstance().getRuleSrv().removeRule(webSite, rule.getId(), user);
+            SWBPortal.getRuleSrv().removeRule(webSite, rule.getId(), user);
         }
         //Elimina lenguages
         Iterator<Language> itLanguages = webSite.listLanguages();
         while (itLanguages.hasNext()) {
             Language lang = itLanguages.next();
-            SWBPortal.createInstance().getLanguageSrv().removeLanguage(webSite, lang.getId(), user);
+            SWBPortal.getLanguageSrv().removeLanguage(webSite, lang.getId(), user);
         }
         //Elimina Campañas
         Iterator<Camp> itCamps = webSite.listCamps();
         while (itCamps.hasNext()) {
             Camp camp = itCamps.next();
-            SWBPortal.createInstance().getCampSrv().removeCamp(webSite, camp.getId(), user);
+            SWBPortal.getCampSrv().removeCamp(webSite, camp.getId(), user);
         }
         //TODO:
         //Elimina recursos, ver si tengo q eliminar por cada tipo o lo puedo hacer todos juntos
@@ -98,13 +98,13 @@ public class WebSiteSrv {
         Iterator<PFlow> itPflow = webSite.listPFlows();
         while (itPflow.hasNext()) {
             PFlow pflow = itPflow.next();
-            SWBPortal.createInstance().getPFlowSrv().removePFlow(webSite, pflow.getId(), user);
+            SWBPortal.getPFlowSrv().removePFlow(webSite, pflow.getId(), user);
         }
         //Elimina filtros de IP
         Iterator<IPFilter> itIPFilters = webSite.listIPFilters();
         while (itIPFilters.hasNext()) {
             IPFilter ipFilter = itIPFilters.next();
-            SWBPortal.createInstance().getIPFilterSrv().removeIPFilter(webSite, ipFilter.getId(), user);
+            SWBPortal.getIPFilterSrv().removeIPFilter(webSite, ipFilter.getId(), user);
         }
 
         //TODO: Eliminar tablas de metadatos
@@ -116,7 +116,7 @@ public class WebSiteSrv {
 
         SWBContext.removeWebSite(uri);
 
-        SWBPortal.createInstance().log(user.getURI(), "remove", uri, uri, "remove website", null);
+        SWBPortal.log(user.getURI(), "remove", uri, uri, "remove website", null);
 
         return true;
     }
@@ -131,7 +131,7 @@ public class WebSiteSrv {
         }
         webSite.setModifiedBy(user);
 
-        SWBPortal.createInstance().log(user.getURI(), "update", webSite.getURI(), webSite.getId(), "update website", null);
+        SWBPortal.log(user.getURI(), "update", webSite.getURI(), webSite.getId(), "update website", null);
 
         return true;
     }
