@@ -274,6 +274,12 @@ public class XmlRpcSerializer {
         param.addContent(value);
         String type = "string";
         String svalue = "";
+        if(obj==null)
+        {
+            Element nil = new Element("nil");
+            value.addContent(nil);
+            return;
+        }
         if ( obj instanceof Integer )
         {
             type = "i4";
