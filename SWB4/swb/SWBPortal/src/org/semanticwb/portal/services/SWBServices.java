@@ -49,7 +49,7 @@ public class SWBServices {
         deleteable.setDeleted(deleted);
         doAction = true;
 
-        SWBPortal.createInstance().log(user.getURI(), "delete", deleteable.getURI(), deleteable.getId(), "delete", null); 
+        SWBPortal.log(user.getURI(), "delete", deleteable.getURI(), deleteable.getId(), "delete", null); 
         
         return doAction;
     }
@@ -59,7 +59,7 @@ public class SWBServices {
         calendarable.addCalendar(calendar);
         doAction = true;
 
-       SWBPortal.createInstance().log(user.getURI(), "assign", calendar.getWebSite().getURI(), calendar.getId(), "assign", null); 
+       SWBPortal.log(user.getURI(), "assign", calendar.getWebSite().getURI(), calendar.getId(), "assign", null); 
        
         return doAction;
     }
@@ -69,7 +69,7 @@ public class SWBServices {
         calendarable.removeCalendar(calendar);
         doAction = true;
 
-        SWBPortal.createInstance().log(user.getURI(), "unAssign", calendar.getWebSite().getId(), calendar.getId(), "unAssign", null); 
+        SWBPortal.log(user.getURI(), "unAssign", calendar.getWebSite().getId(), calendar.getId(), "unAssign", null); 
         
         return doAction;
     }
@@ -78,7 +78,7 @@ public class SWBServices {
 
         statusable.setStatus(status);
 
-        SWBPortal.createInstance().log(user.getURI(), "status", statusable.getURI(), statusable.getId(), "update status", null); 
+        SWBPortal.log(user.getURI(), "status", statusable.getURI(), statusable.getId(), "update status", null); 
        
         return true;
     }
@@ -93,7 +93,7 @@ public class SWBServices {
         templateRefable.addTemplateRef(templateRef);
         doAction = true;
        
-        SWBPortal.createInstance().log(user.getURI(), "assing", website.getURI(), template.getId(), "assing template", null); 
+        SWBPortal.log(user.getURI(), "assing", website.getURI(), template.getId(), "assing template", null); 
 
         return doAction;
     }
@@ -110,7 +110,7 @@ public class SWBServices {
             }
         }
 
-        SWBPortal.createInstance().log(user.getURI(), "UnAssing", templateRefable.toString(), template.getURI(), "UnAssing template", null); 
+        SWBPortal.log(user.getURI(), "UnAssing", templateRefable.toString(), template.getURI(), "UnAssing template", null); 
 
         return doAction;
     }
@@ -124,7 +124,7 @@ public class SWBServices {
         ruleRefable.addRuleRef(ruleRef);
         doAction = true;
        
-        SWBPortal.createInstance().log(user.getURI(), "assing", website.getURI(), rule.getId(), "assing rule", null); 
+        SWBPortal.log(user.getURI(), "assing", website.getURI(), rule.getId(), "assing rule", null); 
         
         return doAction;
     }
@@ -141,7 +141,7 @@ public class SWBServices {
             }
         }
 
-        SWBPortal.createInstance().log(user.getURI(), "unAssing", rule.getWebSite().getURI(), rule.getId(), "UnAssing rule", null); 
+        SWBPortal.log(user.getURI(), "unAssing", rule.getWebSite().getURI(), rule.getId(), "UnAssing rule", null); 
 
         return doAction;
     }
@@ -154,7 +154,7 @@ public class SWBServices {
         roleRefable.addRoleRef(roleRef);
         doAction = true;
         
-        SWBPortal.createInstance().log(user.getURI(), "assing", website.getURI(), role.getId(), "assing role", null); 
+        SWBPortal.log(user.getURI(), "assing", website.getURI(), role.getId(), "assing role", null); 
         
         return doAction;
     }
@@ -171,7 +171,7 @@ public class SWBServices {
             }
         }
        
-        SWBPortal.createInstance().log(user.getURI(), "unAssing", role.getURI(), role.getId(), "unAssing role", null); 
+        SWBPortal.log(user.getURI(), "unAssing", role.getURI(), role.getId(), "unAssing role", null); 
         
         return doAction;
     }
@@ -181,7 +181,7 @@ public class SWBServices {
         descriptiveable.setDescription(description);
         doAction = true;
 
-        SWBPortal.createInstance().log(user.getURI(), "assing", descriptiveable.getURI(), descriptiveable.getId(), "assing description", null); 
+        SWBPortal.log(user.getURI(), "assing", descriptiveable.getURI(), descriptiveable.getId(), "assing description", null); 
         
         return doAction;
     }
@@ -191,18 +191,18 @@ public class SWBServices {
         groupable.addGroup(objectgroup);
         doAction = true;
 
-        SWBPortal.createInstance().log(user.getURI(), "assing", objectgroup.getWebSite().getURI(), objectgroup.getId(), "assing group", null); 
+        SWBPortal.log(user.getURI(), "assing", objectgroup.getWebSite().getURI(), objectgroup.getId(), "assing group", null); 
        
         return doAction;
     }
 
-    public boolean localeable(Localeable localeable, String language, User user) throws SWBException 
+    public boolean localeable(Localeable localeable, Language language, User user) throws SWBException 
     {
         boolean doAction = false;
         localeable.setLanguage(language);
         doAction = true;
 
-        SWBPortal.createInstance().log(user.getURI(), "assing", localeable.getURI(), language, "assing language", null); 
+        SWBPortal.log(user.getURI(), "assing", localeable.getURI(), language.getId(), "assing language", null); 
         
         return doAction;
     }
@@ -215,7 +215,7 @@ public class SWBServices {
         language.setCreator(user);
         doAction = true;
 
-        SWBPortal.createInstance().log(user.getURI(), "create", webSite.getURI(), language.getId(), "create language", null); 
+        SWBPortal.log(user.getURI(), "create", webSite.getURI(), language.getId(), "create language", null); 
         
         return doAction;
     }
@@ -225,7 +225,7 @@ public class SWBServices {
         priorityable.setPriority(priority);
         doAction = true;
 
-        SWBPortal.createInstance().log(user.getURI(), "assign", priorityable.getURI(), priorityable.getId(), "assign priority", null); 
+        SWBPortal.log(user.getURI(), "assign", priorityable.getURI(), priorityable.getId(), "assign priority", null); 
         
         return doAction;
     }
@@ -235,7 +235,7 @@ public class SWBServices {
         valueable.setValue(value);
         doAction = true;
 
-        SWBPortal.createInstance().log(user.getURI(), "assign", valueable.getURI(), valueable.getId(), "assign value", null); 
+        SWBPortal.log(user.getURI(), "assign", valueable.getURI(), valueable.getId(), "assign value", null); 
        
         return doAction;
     }
@@ -245,7 +245,7 @@ public class SWBServices {
         versionable.setActualVersion(versionInfo);
         doAction = true;
 
-        SWBPortal.createInstance().log(user.getURI(), "assign", versionable.getURI(), versionable.getId(), "assign version", null); 
+        SWBPortal.log(user.getURI(), "assign", versionable.getURI(), versionable.getId(), "assign version", null); 
         
         return doAction;
     }
@@ -253,7 +253,7 @@ public class SWBServices {
     public boolean removeVersion(Versionable versionable, User user) throws SWBException 
     {
         versionable.removeActualVersion();
-        SWBPortal.createInstance().log(user.getURI(), "unAssign", versionable.getURI(), versionable.getId(), "unAssign version", null); 
+        SWBPortal.log(user.getURI(), "unAssign", versionable.getURI(), versionable.getId(), "unAssign version", null); 
         
         return true;
     }
@@ -263,7 +263,7 @@ public class SWBServices {
         webPageable.addWebPage(webPage);
         doAction = true;
 
-        SWBPortal.createInstance().log(user.getURI(), "assign", webPageable.getURI(), webPage.getId(), "assign webpage", null); 
+        SWBPortal.log(user.getURI(), "assign", webPageable.getURI(), webPage.getId(), "assign webpage", null); 
        
         return doAction;
     }
@@ -273,7 +273,7 @@ public class SWBServices {
         webPageable.removeWebPage(webPage);
         doAction = true;
 
-        SWBPortal.createInstance().log(user.getURI(), "unAssign", webPageable.getURI(), webPage.getId(), "unAssign webpage", null); 
+        SWBPortal.log(user.getURI(), "unAssign", webPageable.getURI(), webPage.getId(), "unAssign webpage", null); 
         
         return doAction;
     }
