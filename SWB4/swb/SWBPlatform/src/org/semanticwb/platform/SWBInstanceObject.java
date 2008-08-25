@@ -5,7 +5,7 @@
 
 package org.semanticwb.platform;
 
-import org.semanticwb.SWBInstance;
+import org.semanticwb.SWBPlatform;
 
 /**
  *
@@ -13,5 +13,5 @@ import org.semanticwb.SWBInstance;
  */
 public interface SWBInstanceObject 
 {
-    public void init(SWBInstance context);
+    public void init(SWBPlatform context);
 }

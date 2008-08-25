@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBInstance;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 
 /**
@@ -33,11 +33,11 @@ public class SemanticMgr implements SWBInstanceObject
 {
     private static Logger log = SWBUtils.getLogger(SemanticMgr.class);
 
-    public final static String SWB_OWL_PATH=SWBInstance.getEnv("swb/ontologyFile","/WEB-INF/owl/swb.owl");
+    public final static String SWB_OWL_PATH=SWBPlatform.getEnv("swb/ontologyFile","/WEB-INF/owl/swb.owl");
     public final static String SWBSystem="SWBSystem";
     public final static String SWBAdmin="SWBAdmin";
     
-    private SWBInstance m_context;
+    private SWBPlatform m_context;
     
     private SemanticOntology m_ontology;
     private SemanticModel m_system;
@@ -49,7 +49,7 @@ public class SemanticMgr implements SWBInstanceObject
     
     private SemanticVocabulary vocabulary;
 
-    public void init(SWBInstance context) 
+    public void init(SWBPlatform context) 
     {
         log.event("SemanticMgr initialized...");
         this.m_context=context;
@@ -203,9 +203,8 @@ public class SemanticMgr implements SWBInstanceObject
 
     public SemanticModel getModel(Model model)
     {
-        Map map=model.getNsPrefixMap();
-        String name=(String)map.keySet().iterator().next();
-        //System.out.println("name:"+name);
+        String name=model.getNsURIPrefix(SemanticVocabulary.URI+SemanticVocabulary.SWB_NS);
+        System.out.println("name:"+name);
         return m_models.get(name);
     }
     
@@ -240,7 +239,8 @@ public class SemanticMgr implements SWBInstanceObject
     {
         SemanticModel ret=loadDBModel(name);
         Model model=ret.getRDFModel();
-        model.setNsPrefix(name, nameSpace);
+        model.setNsPrefix(name+"_"+SemanticVocabulary.SWB_NS, nameSpace);
+        model.setNsPrefix(name, SemanticVocabulary.URI+SemanticVocabulary.SWB_NS);
         return ret;
     }
      

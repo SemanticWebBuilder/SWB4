@@ -11,7 +11,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBInstance;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
@@ -33,7 +33,7 @@ public class PerformanceTest
     @BeforeClass
     public static void setUpClass() throws Exception
     {
-        SWBInstance.createInstance(null);
+        SWBPlatform.createInstance(null);
     }
 
     @AfterClass
@@ -59,9 +59,9 @@ public class PerformanceTest
     {
         long time=System.currentTimeMillis();
         
-        SemanticModel model=SWBInstance.getSemanticMgr().getSystemModel();
-        SemanticOntology ontology=SWBInstance.getSemanticMgr().getOntology();
-        SemanticVocabulary voc=SWBInstance.getSemanticMgr().getVocabulary();
+        SemanticModel model=SWBPlatform.getSemanticMgr().getSystemModel();
+        SemanticOntology ontology=SWBPlatform.getSemanticMgr().getOntology();
+        SemanticVocabulary voc=SWBPlatform.getSemanticMgr().getVocabulary();
         System.out.println("Time:"+(System.currentTimeMillis()-time));
         time=System.currentTimeMillis();
         for(int x=0;x<30;x++)

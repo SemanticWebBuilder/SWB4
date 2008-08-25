@@ -8,7 +8,7 @@ package org.semanticwb.platform;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
-import org.semanticwb.SWBInstance;
+import org.semanticwb.SWBPlatform;
 
 /**
  *
@@ -51,30 +51,41 @@ public class SemanticOntology
         m_ontology.rebind();
     }
     
-    public SemanticClass getSemanticObjectClass(Resource res)
-    {
-        Statement stm=res.getProperty(res.getModel().getProperty(SemanticVocabulary.RDF_TYPE));
-        if(stm!=null)
-        {
-            return SWBInstance.getSemanticMgr().getVocabulary().getSemanticClass(stm.getObject().toString());
-        }
-        return null;
-    }    
-    
-    public SemanticClass getSemanticObjectClass(String uri)
-    {
-        Resource res=m_ontology.getResource(uri);
-        return getSemanticObjectClass(res);
-    }
+//    public SemanticClass getSemanticObjectClass(Resource res)
+//    {
+//        Statement stm=res.getProperty(res.getModel().getProperty(SemanticVocabulary.RDF_TYPE));
+//        if(stm!=null)
+//        {
+//            return SWBInstance.getSemanticMgr().getVocabulary().getSemanticClass(stm.getObject().toString());
+//        }
+//        return null;
+//    }    
+//    
+//    public SemanticClass getSemanticObjectClass(String uri)
+//    {
+//        Resource res=m_ontology.getResource(uri);
+//        return getSemanticObjectClass(res);
+//    }
     
     
     public SemanticObject getSemanticObject(String uri)
     {
+//        SemanticObject ret=null;
+//        Resource res=m_ontology.getResource(uri);
+//        if(res!=null)
+//        {
+//            System.out.println("Res:"+res.getURI());
+//            SemanticClass cl=getSemanticObjectClass(res);
+//            if(cl!=null)
+//            {
+//                ret=cl.newInstance(res);        
+//            }
+//        }
+//        return ret;
+        SemanticObject ret=null;
         Resource res=m_ontology.getResource(uri);
-        SemanticClass cl=getSemanticObjectClass(res);
-        return cl.newInstance(res);        
-//        if(res!=null)ret=new SemanticObject(res);
-//        return (T)ret;
+        if(m_ontology.containsResource(res))ret=new SemanticObject(res);
+        return ret;        
     }    
     
     public SemanticObject getSemanticObject(String uri, SemanticClass cls)

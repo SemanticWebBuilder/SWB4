@@ -20,7 +20,6 @@ import java.util.Vector;
 import org.semanticwb.*;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.GenericObject;
-import org.semanticwb.model.base.GenericObjectBase;
 
 /**
  *
@@ -48,7 +47,7 @@ public class SemanticClass
     
     public SemanticClass(String classuri) throws SWBException
     {
-        this.m_class=SWBInstance.getSemanticMgr().getOntology().getRDFOntModel().getOntClass(classuri);
+        this.m_class=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getOntClass(classuri);
         if(this.m_class==null) throw new SWBException("OntClass Not Found");
         init();
     }
@@ -57,11 +56,12 @@ public class SemanticClass
     {
         m_props=new HashMap();
         // super-classes
-        //System.out.println("m_class:"+m_class);
+        System.out.println("m_class:"+m_class);
         for (Iterator i = m_class.listDeclaredProperties(false); i.hasNext(); ) 
         {
             Property prop=(Property)i.next();
             SemanticProperty p=new SemanticProperty(prop);
+            System.out.println("p.getName():"+p.getName()+" "+p);
             m_props.put( p.getName(), p);
         }
     }
@@ -135,7 +135,7 @@ public class SemanticClass
             while(it.hasNext())
             {
                 Statement stmt=it.nextStatement();
-                ret.add(SWBInstance.getSemanticMgr().getVocabulary().getSemanticClass(stmt.getSubject().getURI()));
+                ret.add(SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(stmt.getSubject().getURI()));
             }
         }
         return ret.iterator();        

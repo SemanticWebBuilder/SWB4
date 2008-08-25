@@ -4,11 +4,12 @@ import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
+import com.hp.hpl.jena.rdf.model.impl.ResourceImpl;
 import java.util.Date;
 import java.util.Iterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.SWBInstance;
+import org.semanticwb.SWBPlatform;
 
 /**
  *
@@ -30,8 +31,17 @@ public class SemanticObject
     public SemanticObject(Resource res)
     {
         this.m_res=res;
-        m_model=SWBInstance.getSemanticMgr().getModel(res.getModel());
     }
+    
+    /**
+     * Contruye un SemanticObject nulo relacionado al Model
+     * 
+     * @param model
+     */
+    public SemanticObject(SemanticModel model)
+    {
+        m_model=model;
+    }    
     
     public String getURI()
     {
@@ -50,7 +60,7 @@ public class SemanticObject
         {
             try
             {
-                return SWBInstance.getSemanticMgr().getVocabulary().getSemanticClass(stm.getResource().getURI());
+                return SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(stm.getResource().getURI());
             }catch(Exception e){log.error(e);}
         }
         return null;
@@ -62,6 +72,10 @@ public class SemanticObject
      */
     public SemanticModel getModel()
     {
+        if(m_model==null)
+        {
+            m_model=SWBPlatform.getSemanticMgr().getModel(m_res.getModel());
+        }
         return m_model;
     }
     
