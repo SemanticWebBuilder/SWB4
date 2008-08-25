@@ -10,7 +10,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import org.semanticwb.SWBException;
-import org.semanticwb.SWBInstance;
+import org.semanticwb.SWBPlatform;
 
 /**
  *
@@ -25,7 +25,7 @@ public class SWBDBAdmLog {
     private String uri;
     private String description;
     private Timestamp date;
-    public String admlogEmail = SWBInstance.getEnv("wb/admlogEmail");
+    public String admlogEmail = SWBPlatform.getEnv("wb/admlogEmail");
 
     /** Creates new RecAdmLog */
     public SWBDBAdmLog() {
