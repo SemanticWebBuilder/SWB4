@@ -5,7 +5,7 @@ import org.junit.*;
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-import org.semanticwb.SWBInstance;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
@@ -25,7 +25,7 @@ public class TestWebSite {
     @BeforeClass
     public static void setUpClass() throws Exception
     {
-        SWBInstance.createInstance(null);
+        SWBPlatform.createInstance(null);
     }
 
     @AfterClass

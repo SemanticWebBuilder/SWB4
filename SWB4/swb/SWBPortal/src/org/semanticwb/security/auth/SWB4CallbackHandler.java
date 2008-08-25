@@ -14,7 +14,7 @@ import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBInstance;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 
 /**
@@ -31,7 +31,7 @@ public class SWB4CallbackHandler implements CallbackHandler, Serializable {
     public SWB4CallbackHandler() {
         this.request = null;
         this.response = null;
-        this.authType = (String) SWBInstance.getServletContext().getAttribute("authType");
+        this.authType = (String) SWBPlatform.getServletContext().getAttribute("authType");
     }
 
     public SWB4CallbackHandler(HttpServletRequest request, HttpServletResponse response, String authType) {

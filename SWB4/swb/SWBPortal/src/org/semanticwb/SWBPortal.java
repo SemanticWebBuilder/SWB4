@@ -40,7 +40,7 @@ public class SWBPortal {
      //Initialize context
     private void init()
     {
-        workPath = (String) SWBInstance.getEnv("swb/workPath");
+        workPath = (String) SWBPlatform.getEnv("swb/workPath");
     }
     
     /** Getter for property workPath.

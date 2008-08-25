@@ -12,7 +12,7 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import org.semanticwb.SWBInstance;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.servlet.internal.Admin;
@@ -28,7 +28,7 @@ import org.semanticwb.servlet.internal.Login;
 public class SWBVirtualHostFilter implements Filter
 {
     static Logger log=SWBUtils.getLogger(SWBVirtualHostFilter.class);    
-    private SWBInstance swbContext=null;
+    private SWBPlatform swbContext=null;
     
     private HashMap<String,InternalServlet> intServlets=new HashMap();
     
@@ -155,7 +155,7 @@ public class SWBVirtualHostFilter implements Filter
             log.event("Initializing VirtualHostFilter...");
             String prefix =  filterConfig.getServletContext().getRealPath("/");
             SWBUtils.createInstance(prefix);
-            swbContext=SWBInstance.createInstance(filterConfig.getServletContext());
+            swbContext=SWBPlatform.createInstance(filterConfig.getServletContext());
         }
         
         InternalServlet serv=new Distributor();
@@ -191,13 +191,13 @@ public class SWBVirtualHostFilter implements Filter
     private boolean validateDB(HttpServletResponse response) throws IOException
     {
         boolean ret=true;
-        if(!SWBInstance.haveDB())
+        if(!SWBPlatform.haveDB())
         {
             log.debug("SendError 500: Default SemanticWebBuilder database not found...");
             response.sendError(500, "Default WebBuilder database not found...");
             ret=false;
         }
-        if(!SWBInstance.haveDBTables())
+        if(!SWBPlatform.haveDBTables())
         {
             log.debug("SendError 500: Default SemanticWebBuilder database tables not found...");
             response.sendError(500, "Default WebBuilder database tables not found...");

@@ -10,7 +10,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBInstance;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 
 /**
@@ -28,10 +28,10 @@ public class Distributor implements InternalServlet
     public void init(ServletContext scontext) 
     {
         log.event("Distributor initialized...");
-        name = SWBInstance.getEnv("swb/distributor","swb");
-        agzip = SWBInstance.getEnv("swb/responseGZIPEncoding", "true").equalsIgnoreCase("true");
-        admin = SWBInstance.getEnv("swb/administration", "true").equalsIgnoreCase("true");
-        secure = SWBInstance.getEnv("swb/secureAdmin", "false").equalsIgnoreCase("true");
+        name = SWBPlatform.getEnv("swb/distributor","swb");
+        agzip = SWBPlatform.getEnv("swb/responseGZIPEncoding", "true").equalsIgnoreCase("true");
+        admin = SWBPlatform.getEnv("swb/administration", "true").equalsIgnoreCase("true");
+        secure = SWBPlatform.getEnv("swb/secureAdmin", "false").equalsIgnoreCase("true");
     }
     
     public void doProcess(HttpServletRequest request, HttpServletResponse response)throws IOException 
@@ -39,7 +39,7 @@ public class Distributor implements InternalServlet
         long time=System.currentTimeMillis();
         if(_doProcess(request, response))
         {
-            SWBInstance.getMonitor().addinstanceHit(System.currentTimeMillis()-time);
+            SWBPlatform.getMonitor().addinstanceHit(System.currentTimeMillis()-time);
         }
     }    
     
