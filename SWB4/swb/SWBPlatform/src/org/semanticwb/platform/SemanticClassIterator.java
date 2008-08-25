@@ -33,7 +33,7 @@ public class SemanticClassIterator implements Iterator
         Object obj=it.next();
         if(obj instanceof Statement)
         {
-            return SWBInstance.getSemanticMgr().getVocabulary().getSemanticClass(((Statement)obj).getResource().getURI());
+            return SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(((Statement)obj).getResource().getURI());
         }
         return new SemanticClass((OntClass)obj);
     }

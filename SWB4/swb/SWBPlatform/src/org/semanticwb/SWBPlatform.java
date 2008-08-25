@@ -20,10 +20,10 @@ import org.semanticwb.platform.SemanticModel;
  * @author  Javier Solis Gonzalez (jsolis@infotec.com.mx)
  */
 
-public class SWBInstance 
+public class SWBPlatform 
 {
-    private static Logger log=SWBUtils.getLogger(SWBInstance.class);
-    private static SWBInstance instance=null;
+    private static Logger log=SWBUtils.getLogger(SWBPlatform.class);
+    private static SWBPlatform instance=null;
     private static Properties props=null;
     private String contextPath="/";
     
@@ -40,7 +40,7 @@ public class SWBInstance
      */
     protected String version = "4.0.0.0";
     
-    private SWBInstance()
+    private SWBPlatform()
     {
         log.event("Initialize Semantic WebBuilder Instance...");
         init();
@@ -239,11 +239,11 @@ public class SWBInstance
     /** Create Instance.
      * @param servletContext 
      * @return  SWBContext*/
-    static public synchronized SWBInstance createInstance(ServletContext servletContext)
+    static public synchronized SWBPlatform createInstance(ServletContext servletContext)
     {
         if (instance == null)
         {
-            instance = new SWBInstance();
+            instance = new SWBPlatform();
             instance.servletContext=servletContext;
         }
         return instance;

@@ -12,7 +12,7 @@ import java.net.URISyntaxException;
 import java.util.HashSet;
 import java.util.Iterator;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBInstance;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticClass;
@@ -121,7 +121,7 @@ public class CodeGenerator
                 throw new CodeGeneratorException("The path " + m_Directory.getPath() + " was not possible to create");
             }
         }
-        SemanticMgr mgr = SWBInstance.getSemanticMgr();
+        SemanticMgr mgr = SWBPlatform.getSemanticMgr();
         Iterator<SemanticClass> tpcit = mgr.getVocabulary().listSemanticClasses();
         while (tpcit.hasNext())
         {
@@ -222,7 +222,7 @@ public class CodeGenerator
         }
         javaClassContent.append("import java.util.Iterator;" + ENTER);
         javaClassContent.append("import org.semanticwb.model.*;" + ENTER);
-        javaClassContent.append("import org.semanticwb.SWBInstance;" + ENTER);
+        javaClassContent.append("import org.semanticwb.SWBPlatform;" + ENTER);
         javaClassContent.append("import org.semanticwb.platform.SemanticMgr;" + ENTER);
         javaClassContent.append("import org.semanticwb.platform.SemanticModel;" + ENTER);
         javaClassContent.append("import org.semanticwb.platform.SemanticObject;" + ENTER);
@@ -231,7 +231,7 @@ public class CodeGenerator
         javaClassContent.append("{" + ENTER);
 
         javaClassContent.append("    private static SWBVocabulary vocabulary=new SWBVocabulary();" + ENTER);
-        javaClassContent.append("    private static SemanticMgr mgr=SWBInstance.getSemanticMgr();" + ENTER);
+        javaClassContent.append("    private static SemanticMgr mgr=SWBPlatform.getSemanticMgr();" + ENTER);
 
         javaClassContent.append("    public static SWBVocabulary getVocabulary()" + ENTER);
         javaClassContent.append("    {" + ENTER);
@@ -239,7 +239,7 @@ public class CodeGenerator
         javaClassContent.append("    }" + ENTER);
 
 
-        SemanticMgr mgr = SWBInstance.getSemanticMgr();
+        SemanticMgr mgr = SWBPlatform.getSemanticMgr();
         Iterator<SemanticClass> tpcit = mgr.getVocabulary().listSemanticClasses();
         while (tpcit.hasNext())
         {
@@ -249,9 +249,13 @@ public class CodeGenerator
                 javaClassContent.append(ENTER);
                 javaClassContent.append("    public static " + tpc.getName() + " get" + tpc.getName() + "(String uri)" + ENTER);
                 javaClassContent.append("    {" + ENTER);
-                //javaClassContent.append("        return (" + tpc.getName() + ")mgr.getOntology().getGenericObject(uri,vocabulary." + tpc.getName() + ");" + ENTER);
+                javaClassContent.append("        " + tpc.getName() + " ret=null;" + ENTER);
                 javaClassContent.append("        SemanticObject obj=mgr.getOntology().getSemanticObject(uri);" + ENTER);
-                javaClassContent.append("        return (" + tpc.getName() + ")new " + tpc.getName() + "(obj);" + ENTER);      
+                javaClassContent.append("        if(obj!=null)" + ENTER);
+                javaClassContent.append("        {" + ENTER);
+                javaClassContent.append("            ret=(" + tpc.getName() + ")new " + tpc.getName() + "(obj);" + ENTER);
+                javaClassContent.append("        }" + ENTER);
+                javaClassContent.append("        return ret;" + ENTER);               
                 javaClassContent.append("    }" + ENTER);
                 javaClassContent.append(ENTER);
                 javaClassContent.append("    public static Iterator<org.semanticwb.model." + tpc.getName() + "> list" + tpc.getName() + "s()" + ENTER);
@@ -540,7 +544,7 @@ public class CodeGenerator
             javaClassContent.append(ENTER);
             javaClassContent.append("    public " + tpc.getName() + " create" + tpc.getName() + "()" + ENTER);
             javaClassContent.append("    {" + ENTER);
-            javaClassContent.append("        long id=SWBInstance.getCounterValue(getSemanticObject().getModel().getName()+\"/\"+vocabulary." + tpc.getName() + ".getName());" + ENTER);
+            javaClassContent.append("        long id=SWBPlatform.getCounterValue(getSemanticObject().getModel().getName()+\"/\"+vocabulary." + tpc.getName() + ".getName());" + ENTER);
             javaClassContent.append("        return create" + tpc.getName() + "(\"\"+id);" + ENTER);
             javaClassContent.append("    } " + ENTER);
             javaClassContent.append(ENTER);
@@ -603,9 +607,14 @@ public class CodeGenerator
                                 javaClassContent.append(ENTER);
                                 javaClassContent.append(PUBLIC + valueToReturn + " get" + objectName + "()" + ENTER);
                                 javaClassContent.append(OPEN_BLOCK + ENTER);
+                                javaClassContent.append("         " + valueToReturn + " ret=null;" + ENTER);
                                 javaClassContent.append("         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary." + tpp.getName() + ".getRDFProperty());" + ENTER);
                                 javaClassContent.append("         GenericIterator<" + m_Package + "." + valueToReturn + "> it=new GenericIterator<" + m_Package + "." + valueToReturn + ">(" + valueToReturn + ".class, stit);" + ENTER);
-                                javaClassContent.append("         return it.next();" + ENTER);
+                                javaClassContent.append("         if(it.hasNext())" + ENTER);
+                                javaClassContent.append("         {" + ENTER);
+                                javaClassContent.append("             ret=it.next();" + ENTER);
+                                javaClassContent.append("         }" + ENTER);
+                                javaClassContent.append("         return ret;" + ENTER);
                                 javaClassContent.append(CLOSE_BLOCK + ENTER);
                             }
                             else
@@ -626,9 +635,14 @@ public class CodeGenerator
                                 javaClassContent.append(ENTER);
                                 javaClassContent.append(PUBLIC + valueToReturn + " get" + objectName + "()" + ENTER);
                                 javaClassContent.append(OPEN_BLOCK + ENTER);
+                                javaClassContent.append("         " + valueToReturn + " ret=null;" + ENTER);
                                 javaClassContent.append("         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary." + tpp.getName() + ".getRDFProperty());" + ENTER);
                                 javaClassContent.append("         GenericIterator<" + m_Package + "." + valueToReturn + "> it=new GenericIterator<" + m_Package + "." + valueToReturn + ">(" + valueToReturn + ".class, stit);" + ENTER);
-                                javaClassContent.append("         return it.next();" + ENTER);
+                                javaClassContent.append("         if(it.hasNext())" + ENTER);
+                                javaClassContent.append("         {" + ENTER);
+                                javaClassContent.append("             ret=it.next();" + ENTER);
+                                javaClassContent.append("         }" + ENTER);
+                                javaClassContent.append("         return ret;" + ENTER);
                                 javaClassContent.append(CLOSE_BLOCK + ENTER);
                             }
                         }
@@ -739,7 +753,7 @@ public class CodeGenerator
     {
         StringBuilder javaClassContent = new StringBuilder();
         javaClassContent.append("package " + m_Package + ";\r\n" + ENTER);
-        javaClassContent.append("import org.semanticwb.SWBInstance;" + ENTER);
+        javaClassContent.append("import org.semanticwb.SWBPlatform;" + ENTER);
         javaClassContent.append("import org.semanticwb.platform.SemanticVocabulary;" + ENTER);
         javaClassContent.append("import org.semanticwb.platform.SemanticClass;" + ENTER);
         javaClassContent.append("import org.semanticwb.platform.SemanticProperty;" + ENTER);
@@ -747,7 +761,7 @@ public class CodeGenerator
         javaClassContent.append("public class SWBVocabulary" + ENTER);
         javaClassContent.append("{" + ENTER);
         javaClassContent.append("\r\n\r\n    //Classes" + ENTER);
-        SemanticMgr mgr = SWBInstance.getSemanticMgr();
+        SemanticMgr mgr = SWBPlatform.getSemanticMgr();
         Iterator<SemanticClass> tpcit = mgr.getVocabulary().listSemanticClasses();
         while (tpcit.hasNext())
         {
@@ -778,7 +792,7 @@ public class CodeGenerator
         //javaClassContent.append("    @Override"+ENTER);
         javaClassContent.append("    public SWBVocabulary()" + ENTER);
         javaClassContent.append("    {\r\n" + ENTER);
-        javaClassContent.append("         SemanticVocabulary vocabulary=SWBInstance.getSemanticMgr().getVocabulary();" + ENTER);
+        javaClassContent.append("         SemanticVocabulary vocabulary=SWBPlatform.getSemanticMgr().getVocabulary();" + ENTER);
         javaClassContent.append("        // Classes" + ENTER);
         tpcit = mgr.getVocabulary().listSemanticClasses();
         while (tpcit.hasNext())

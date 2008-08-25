@@ -10,7 +10,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBInstance;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.db.DBConnectionPool;
 
@@ -28,13 +28,13 @@ public class SWBMonitor implements SWBInstanceObject
     private long instanceHits=0;
     private long instanceHitTime=15;
     
-    SWBInstance context;
+    SWBPlatform context;
     
     public SWBMonitor()
     {
     }
 
-    public void init(SWBInstance context)
+    public void init(SWBPlatform context)
     {
         this.context=context;
         vec=new Vector(max);

@@ -8,7 +8,7 @@ package org.semanticwb.platform;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
-import org.semanticwb.SWBInstance;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.GenericObject;
 
 /**
@@ -48,15 +48,20 @@ public class SemanticModel
         Statement stm=res.getRequiredProperty(res.getModel().getProperty(SemanticVocabulary.RDF_TYPE));
         if(stm!=null)
         {
-            return SWBInstance.getSemanticMgr().getVocabulary().getSemanticClass(stm.getResource().getURI());
+            return SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(stm.getResource().getURI());
         }
         return null;
     }    
     
     public SemanticClass getSemanticObjectClass(String uri)
     {
+        SemanticClass ret=null;
         Resource res=m_model.getResource(uri);
-        return getSemanticObjectClass(res);
+        if(res!=null)
+        {
+            ret=getSemanticObjectClass(res);
+        }
+        return ret;
     }
     
     public SemanticObject getSemanticObject(String uri)
@@ -66,7 +71,10 @@ public class SemanticModel
 //        return cl.newInstance(res);
         SemanticObject ret=null;
         Resource res=m_model.getResource(uri);
-        if(res!=null)ret=new SemanticObject(res);
+        if(m_model.containsResource(res))
+        {
+            ret=new SemanticObject(res);
+        }
         return ret;
     }
 
@@ -94,18 +102,36 @@ public class SemanticModel
     
     public GenericObject getGenericObject(String uri)
     {
+        GenericObject ret=null;
         SemanticClass cl=getSemanticObjectClass(uri);
-        return cl.newGenericInstance(getSemanticObject(uri));
+        SemanticObject obj=getSemanticObject(uri);
+        if(cl!=null && obj!=null)
+        {
+            ret=cl.newGenericInstance(obj);
+        }
+        return ret;
     }    
     
-    public GenericObject getGenericObject(String uri, SemanticClass cl)
+    public GenericObject getGenericObject(String uri, SemanticClass cls)
     {    
-        return cl.newGenericInstance(getSemanticObject(uri));
+        GenericObject ret=null;
+        SemanticObject obj=getSemanticObject(uri);
+        if(obj!=null)
+        {
+            ret=cls.newGenericInstance(obj);
+        }
+        return ret;
     }
     
     public GenericObject createGenericObject(String uri, SemanticClass cls)
     {
-        return cls.newGenericInstance(createSemanticObject(uri,cls));
+        GenericObject ret=null;
+        SemanticObject obj=createSemanticObject(uri,cls);
+        if(obj!=null)
+        {
+            ret=cls.newGenericInstance(obj);
+        }
+        return ret;
     }    
     
     public void removeSemanticObject(String uri)
@@ -135,7 +161,7 @@ public class SemanticModel
     {
         if(m_nameSpace==null)
         {
-            this.m_nameSpace=m_model.getNsPrefixURI(m_name);
+            this.m_nameSpace=m_model.getNsPrefixURI(m_name+"_"+SemanticVocabulary.SWB_NS);
         }
         return m_nameSpace;
     }    

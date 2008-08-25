@@ -21,7 +21,7 @@ public class TestSWBInstance {
     @BeforeClass
     public static void setUpClass() throws Exception
     {
-        SWBInstance.createInstance(null);
+        SWBPlatform.createInstance(null);
     }
 
     @AfterClass
@@ -47,7 +47,7 @@ public class TestSWBInstance {
     {
         long time=System.currentTimeMillis();
         
-        //long x=SWBInstance.getCounter("admin/Template");
+        //long x=SWBPlatform.getCounter("admin/Template");
         //System.out.println("Counter:"+x);
         
         System.out.println("Time:"+(System.currentTimeMillis()-time));
