@@ -27,7 +27,7 @@ public class DeviceSrv
         device.setDescription(description);
         device.setValue(value);
 
-        SWBPortal.createInstance().log(user.getURI(), "create", device.getURI(), device.getURI(), "create Device", null);
+        SWBPortal.log(user.getURI(), "create", device.getURI(), device.getURI(), "create Device", null);
        
         return device;
     }
@@ -42,7 +42,7 @@ public class DeviceSrv
         device.setDescription(description);
         device.setValue(value);
 
-        SWBPortal.createInstance().log(user.getURI(), "create", device.getURI(), device.getURI(), "create Device", null);
+        SWBPortal.log(user.getURI(), "create", device.getURI(), device.getURI(), "create Device", null);
         
         return device;
     }
@@ -61,7 +61,7 @@ public class DeviceSrv
         }
         updated = true;
        
-        SWBPortal.createInstance().log(user.getURI(), "update", device.getURI(), device.getURI(), "update Device", null);
+        SWBPortal.log(user.getURI(), "update", device.getURI(), device.getURI(), "update Device", null);
         
         return updated;
     }

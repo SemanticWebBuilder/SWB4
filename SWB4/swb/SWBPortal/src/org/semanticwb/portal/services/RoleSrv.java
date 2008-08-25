@@ -22,7 +22,7 @@ public class RoleSrv {
         role.setTitle(title);
         role.setDescription(description);
 
-        SWBPortal.createInstance().log(user.getURI(), "create", role.getURI(), role.getURI(), "create role", null); 
+        SWBPortal.log(user.getURI(), "create", role.getURI(), role.getURI(), "create role", null); 
        
         return role;
 
@@ -34,7 +34,7 @@ public class RoleSrv {
         role.setTitle(title);
         role.setDescription(description);
 
-       SWBPortal.createInstance().log(user.getURI(), "create", role.getURI(), role.getURI(), "create role", null); 
+       SWBPortal.log(user.getURI(), "create", role.getURI(), role.getURI(), "create role", null); 
        
         return role;
 
@@ -46,7 +46,7 @@ public class RoleSrv {
         userRep.removeRole(id);
         deleted=true;
 
-       SWBPortal.createInstance().log(user.getURI(), "remove", id, id, "remove role", null); 
+       SWBPortal.log(user.getURI(), "remove", id, id, "remove role", null); 
         
         return deleted;
 

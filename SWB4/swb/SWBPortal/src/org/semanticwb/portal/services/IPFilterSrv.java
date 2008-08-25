@@ -22,7 +22,7 @@ public class IPFilterSrv {
         ipFilter.setStatus(1);
         ipFilter.setValue(value);
 
-        SWBPortal.createInstance().log(user.getURI(), "create", ipFilter.getURI(), ipFilter.getURI(), "create ipFilter", null);
+        SWBPortal.log(user.getURI(), "create", ipFilter.getURI(), ipFilter.getURI(), "create ipFilter", null);
         
         return ipFilter;
     }
@@ -33,7 +33,7 @@ public class IPFilterSrv {
         ipFilter.setStatus(1);
         ipFilter.setValue(value);
 
-        SWBPortal.createInstance().log(user.getURI(), "create", ipFilter.getURI(), ipFilter.getURI(), "create ipFilter", null);
+        SWBPortal.log(user.getURI(), "create", ipFilter.getURI(), ipFilter.getURI(), "create ipFilter", null);
         
         return ipFilter;
     }
@@ -44,7 +44,7 @@ public class IPFilterSrv {
         website.removeIPFilter(id);
         removed=true;
        
-        SWBPortal.createInstance().log(user.getURI(), "remove", id, id, "remove ipFilter", null);
+        SWBPortal.log(user.getURI(), "remove", id, id, "remove ipFilter", null);
         
         return removed;
     }
@@ -57,7 +57,7 @@ public class IPFilterSrv {
         }
         updated = true;
         
-        SWBPortal.createInstance().log(user.getURI(), "update", ipFilter.getURI(), ipFilter.getURI(), "remove ipFilter", null);
+        SWBPortal.log(user.getURI(), "update", ipFilter.getURI(), ipFilter.getURI(), "remove ipFilter", null);
         
         return updated;
     }

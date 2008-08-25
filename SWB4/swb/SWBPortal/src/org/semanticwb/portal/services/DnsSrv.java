@@ -20,26 +20,26 @@ public class DnsSrv {
 
     private static Logger log = SWBUtils.getLogger(WebSiteSrv.class);
 
-    public Dns createDNS(WebSite website, String title, String description, String value, User user) throws SWBException {
+    public Dns createDNS(WebSite website, String title, String description, boolean isdefault, User user) throws SWBException {
         Dns dns = null;
         dns = website.createDns();
         dns.setTitle(title);
         dns.setDescription(description);
-        dns.setValue(value);
-
-        SWBPortal.createInstance().log(user.getURI(), "create", dns.getURI(), dns.getURI(), "create Dns", null);
+        dns.setDnsDefault(isdefault);
+        
+        SWBPortal.log(user.getURI(), "create", dns.getURI(), dns.getURI(), "create Dns", null);
         
         return dns;
     }
     
-    public Dns createDNS(WebSite website, String id, String title, String description, String value, User user) throws SWBException {
+    public Dns createDNS(WebSite website, String id, String title, String description,  boolean isdefault, User user) throws SWBException {
         Dns dns = null;
         dns = website.createDns(id);
         dns.setTitle(title);
         dns.setDescription(description);
-        dns.setValue(value);
+        dns.setDnsDefault(isdefault);
 
-        SWBPortal.createInstance().log(user.getURI(), "create", dns.getURI(), dns.getURI(), "create Dns", null);
+        SWBPortal.log(user.getURI(), "create", dns.getURI(), dns.getURI(), "create Dns", null);
         
         return dns;
     }
@@ -49,12 +49,12 @@ public class DnsSrv {
         website.removeDns(id);
         deleted = true;
         
-        SWBPortal.createInstance().log(user.getURI(), "remove", id, id, "remove Dns", null);
+        SWBPortal.log(user.getURI(), "remove", id, id, "remove Dns", null);
         
         return deleted;
     }
 
-    public boolean updateDNS(Dns dns, String title, String description, String value, User user) throws SWBException {
+    public boolean updateDNS(Dns dns, String title, String description, boolean isdefault,User user) throws SWBException {
         boolean updated = false;
         
         if (title != null) {
@@ -63,12 +63,11 @@ public class DnsSrv {
         if (description != null) {
             dns.setDescription(description);
         }
-        if (value != null) {
-            dns.setValue(value);
-        }
+        dns.setDnsDefault(isdefault);
+       
         updated = true;
        
-        SWBPortal.createInstance().log(user.getURI(), "update", dns.getURI(), dns.getURI(), "update Dns", null);
+        SWBPortal.log(user.getURI(), "update", dns.getURI(), dns.getURI(), "update Dns", null);
         
         return updated;
     }

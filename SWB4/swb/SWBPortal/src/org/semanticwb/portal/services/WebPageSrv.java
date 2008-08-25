@@ -33,7 +33,7 @@ public class WebPageSrv {
         //TODO: Revisar como pongo el scope y con que tags (En el metodo setProperty de WebPage)
         wp.setCreator(user);
 
-        SWBPortal.createInstance().log(user.getURI(), "create", wp.getURI(), wp.getURI(), "create webpage", null); 
+        SWBPortal.log(user.getURI(), "create", wp.getURI(), wp.getURI(), "create webpage", null); 
 
         return wp;
     }
@@ -44,7 +44,7 @@ public class WebPageSrv {
         WebPage webpage=website.getWebPage(id);
         //if(webpage.
                 
-        //SWBPortal.createInstance().log(user.getURI(), "remove", id, id, "remove webpage", null); 
+        //SWBPortal.log(user.getURI(), "remove", id, id, "remove webpage", null); 
 
         return true;        
     }
@@ -61,7 +61,7 @@ public class WebPageSrv {
         }
         doAction = true;
 
-        SWBPortal.createInstance().log(user.getURI(), "status", id, id, "change status TemplateRef2WebPage", null); 
+        SWBPortal.log(user.getURI(), "status", id, id, "change status TemplateRef2WebPage", null); 
         
         return doAction;
     }
@@ -79,7 +79,7 @@ public class WebPageSrv {
         }
         doAction = true;
 
-        SWBPortal.createInstance().log(user.getURI(), "status", id, id, "change status RuleRef2WebPage", null); 
+        SWBPortal.log(user.getURI(), "status", id, id, "change status RuleRef2WebPage", null); 
         
         return doAction;
     }
@@ -97,7 +97,7 @@ public class WebPageSrv {
         }
         doAction = true;
 
-        SWBPortal.createInstance().log(user.getURI(), "status", id, id, "change status RoleRef2WebPage", null); 
+        SWBPortal.log(user.getURI(), "status", id, id, "change status RoleRef2WebPage", null); 
        
         return doAction;
     }

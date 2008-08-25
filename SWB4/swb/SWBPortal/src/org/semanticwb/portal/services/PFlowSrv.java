@@ -27,7 +27,7 @@ public class PFlowSrv
         pflow.setCreator(user);
         doAction=true;
         
-        SWBPortal.createInstance().log(user.getURI(), "create", pflow.getURI(), pflow.getURI(), "create pflow", null); 
+        SWBPortal.log(user.getURI(), "create", pflow.getURI(), pflow.getURI(), "create pflow", null); 
         
         return doAction;
     }
@@ -41,7 +41,7 @@ public class PFlowSrv
         pflow.setCreator(user);
         doAction=true;
         
-        SWBPortal.createInstance().log(user.getURI(), "create", pflow.getURI(), pflow.getURI(), "create pflow", null); 
+        SWBPortal.log(user.getURI(), "create", pflow.getURI(), pflow.getURI(), "create pflow", null); 
         
         return doAction;
     }
@@ -60,7 +60,7 @@ public class PFlowSrv
         pflow.setModifiedBy(user);
         doAction=true;
         
-        SWBPortal.createInstance().log(user.getURI(), "update", pflow.getURI(), pflow.getURI(), "update pflow", null); 
+        SWBPortal.log(user.getURI(), "update", pflow.getURI(), pflow.getURI(), "update pflow", null); 
         
         return doAction;
     }
@@ -71,7 +71,7 @@ public class PFlowSrv
         webSite.removePFlow(id);
         doAction=true;
          
-        SWBPortal.createInstance().log(user.getURI(), "remove", id, id, "remove pflow", null); 
+        SWBPortal.log(user.getURI(), "remove", id, id, "remove pflow", null); 
         
         return doAction;
     }

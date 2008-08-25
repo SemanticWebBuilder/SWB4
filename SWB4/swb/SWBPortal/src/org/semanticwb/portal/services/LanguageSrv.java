@@ -27,7 +27,7 @@ public class LanguageSrv {
         language.setDescription(description);
         doAction=true;
         
-        SWBPortal.createInstance().log(user.getURI(), "create", language.getURI(), language.getURI(), "create language", null);
+        SWBPortal.log(user.getURI(), "create", language.getURI(), language.getURI(), "create language", null);
         
         return doAction;
     }
@@ -42,7 +42,7 @@ public class LanguageSrv {
         language.setDescription(description);
         doAction=true;
         
-        SWBPortal.createInstance().log(user.getURI(), "create", language.getURI(), language.getURI(), "create language", null);
+        SWBPortal.log(user.getURI(), "create", language.getURI(), language.getURI(), "create language", null);
         
         return doAction;
     }
@@ -53,7 +53,7 @@ public class LanguageSrv {
         website.removeLanguage(id);
         doAction=true;
         
-        SWBPortal.createInstance().log(user.getURI(), "remove", id, id, "remove language", null);
+        SWBPortal.log(user.getURI(), "remove", id, id, "remove language", null);
         
         return doAction;
     }
@@ -75,7 +75,7 @@ public class LanguageSrv {
         language.setModifiedBy(user);
         doAction=true;
         
-        SWBPortal.createInstance().log(user.getURI(), "update", language.getURI(), language.getURI(), "update language", null);
+        SWBPortal.log(user.getURI(), "update", language.getURI(), language.getURI(), "update language", null);
         
         return doAction;
     }
