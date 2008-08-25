@@ -38,9 +38,14 @@ public class UserRepositoryBase extends GenericObjectBase implements Descriptive
 
     public User getModifiedBy()
     {
+         User ret=null;
          StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.modifiedBy.getRDFProperty());
          GenericIterator<org.semanticwb.model.User> it=new GenericIterator<org.semanticwb.model.User>(User.class, stit);
-         return it.next();
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
     }
 
     public void setCreator(org.semanticwb.model.User user)
@@ -55,9 +60,14 @@ public class UserRepositoryBase extends GenericObjectBase implements Descriptive
 
     public User getCreator()
     {
+         User ret=null;
          StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.creator.getRDFProperty());
          GenericIterator<org.semanticwb.model.User> it=new GenericIterator<org.semanticwb.model.User>(User.class, stit);
-         return it.next();
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
     }
 
     public String getTitle()
@@ -90,32 +100,32 @@ public class UserRepositoryBase extends GenericObjectBase implements Descriptive
         getSemanticObject().setDateProperty(vocabulary.updated, updated);
     }
 
-    public User getUser(String id)
+    public Role getRole(String id)
     {
-        return (User)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.User),vocabulary.User);
+        return (Role)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.Role),vocabulary.Role);
     }
 
-    public Iterator<User> listUsers()
+    public Iterator<Role> listRoles()
     {
         Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
-        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.User.getOntClass());
-        return new GenericIterator<User>(User.class, stit);
+        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.Role.getOntClass());
+        return new GenericIterator<Role>(Role.class, stit);
     }
 
-    public User createUser(String id)
+    public Role createRole(String id)
     {
-        return (User)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, vocabulary.User), vocabulary.User);
+        return (Role)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, vocabulary.Role), vocabulary.Role);
     }
 
-    public User createUser()
+    public Role createRole()
     {
-        long id=SWBInstance.getCounterValue(getSemanticObject().getModel().getName()+"/"+vocabulary.User.getName());
-        return createUser(""+id);
+        long id=SWBPlatform.getCounterValue(getSemanticObject().getModel().getName()+"/"+vocabulary.Role.getName());
+        return createRole(""+id);
     } 
 
-    public void removeUser(String id)
+    public void removeRole(String id)
     {
-        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.User));
+        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.Role));
     }
 
     public ObjectGroup getObjectGroup(String id)
@@ -137,7 +147,7 @@ public class UserRepositoryBase extends GenericObjectBase implements Descriptive
 
     public ObjectGroup createObjectGroup()
     {
-        long id=SWBInstance.getCounterValue(getSemanticObject().getModel().getName()+"/"+vocabulary.ObjectGroup.getName());
+        long id=SWBPlatform.getCounterValue(getSemanticObject().getModel().getName()+"/"+vocabulary.ObjectGroup.getName());
         return createObjectGroup(""+id);
     } 
 
@@ -146,31 +156,31 @@ public class UserRepositoryBase extends GenericObjectBase implements Descriptive
         getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.ObjectGroup));
     }
 
-    public Role getRole(String id)
+    public User getUser(String id)
     {
-        return (Role)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.Role),vocabulary.Role);
+        return (User)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.User),vocabulary.User);
     }
 
-    public Iterator<Role> listRoles()
+    public Iterator<User> listUsers()
     {
         Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
-        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.Role.getOntClass());
-        return new GenericIterator<Role>(Role.class, stit);
+        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.User.getOntClass());
+        return new GenericIterator<User>(User.class, stit);
     }
 
-    public Role createRole(String id)
+    public User createUser(String id)
     {
-        return (Role)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, vocabulary.Role), vocabulary.Role);
+        return (User)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, vocabulary.User), vocabulary.User);
     }
 
-    public Role createRole()
+    public User createUser()
     {
-        long id=SWBInstance.getCounterValue(getSemanticObject().getModel().getName()+"/"+vocabulary.Role.getName());
-        return createRole(""+id);
+        long id=SWBPlatform.getCounterValue(getSemanticObject().getModel().getName()+"/"+vocabulary.User.getName());
+        return createUser(""+id);
     } 
 
-    public void removeRole(String id)
+    public void removeUser(String id)
     {
-        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.Role));
+        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.User));
     }
 }

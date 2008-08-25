@@ -1,6 +1,6 @@
 package org.semanticwb.model;
 
-import org.semanticwb.SWBInstance;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.platform.SemanticVocabulary;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticProperty;
@@ -117,7 +117,7 @@ public class SWBVocabulary
     public SWBVocabulary()
     {
 
-         SemanticVocabulary vocabulary=SWBInstance.getSemanticMgr().getVocabulary();
+         SemanticVocabulary vocabulary=SWBPlatform.getSemanticMgr().getVocabulary();
         // Classes
         User=vocabulary.getSemanticClass(URI+"User");
         Calendar=vocabulary.getSemanticClass(URI+"Calendar");

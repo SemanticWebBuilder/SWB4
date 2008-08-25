@@ -7,7 +7,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class DnsBase extends GenericObjectBase implements Descriptiveable,WebPageable,Valueable
+public class DnsBase extends GenericObjectBase implements Valueable,WebPageable,Descriptiveable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
@@ -38,9 +38,14 @@ public class DnsBase extends GenericObjectBase implements Descriptiveable,WebPag
 
     public User getModifiedBy()
     {
+         User ret=null;
          StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.modifiedBy.getRDFProperty());
          GenericIterator<org.semanticwb.model.User> it=new GenericIterator<org.semanticwb.model.User>(User.class, stit);
-         return it.next();
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
     }
 
     public void setCreator(org.semanticwb.model.User user)
@@ -55,9 +60,14 @@ public class DnsBase extends GenericObjectBase implements Descriptiveable,WebPag
 
     public User getCreator()
     {
+         User ret=null;
          StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.creator.getRDFProperty());
          GenericIterator<org.semanticwb.model.User> it=new GenericIterator<org.semanticwb.model.User>(User.class, stit);
-         return it.next();
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
     }
 
     public String getValue()
@@ -113,9 +123,14 @@ public class DnsBase extends GenericObjectBase implements Descriptiveable,WebPag
 
     public WebPage getWebPage()
     {
+         WebPage ret=null;
          StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasWebPage.getRDFProperty());
          GenericIterator<org.semanticwb.model.WebPage> it=new GenericIterator<org.semanticwb.model.WebPage>(WebPage.class, stit);
-         return it.next();
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
     }
 
     public Date getUpdated()

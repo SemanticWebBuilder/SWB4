@@ -7,7 +7,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class ObjectGroupBase extends GenericObjectBase implements Descriptiveable,Groupable
+public class ObjectGroupBase extends GenericObjectBase implements Groupable,Descriptiveable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
@@ -38,9 +38,14 @@ public class ObjectGroupBase extends GenericObjectBase implements Descriptiveabl
 
     public User getModifiedBy()
     {
+         User ret=null;
          StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.modifiedBy.getRDFProperty());
          GenericIterator<org.semanticwb.model.User> it=new GenericIterator<org.semanticwb.model.User>(User.class, stit);
-         return it.next();
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
     }
 
     public void setCreator(org.semanticwb.model.User user)
@@ -55,9 +60,14 @@ public class ObjectGroupBase extends GenericObjectBase implements Descriptiveabl
 
     public User getCreator()
     {
+         User ret=null;
          StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.creator.getRDFProperty());
          GenericIterator<org.semanticwb.model.User> it=new GenericIterator<org.semanticwb.model.User>(User.class, stit);
-         return it.next();
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
     }
 
     public String getTitle()
@@ -103,9 +113,14 @@ public class ObjectGroupBase extends GenericObjectBase implements Descriptiveabl
 
     public ObjectGroup getGroup()
     {
+         ObjectGroup ret=null;
          StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasGroup.getRDFProperty());
          GenericIterator<org.semanticwb.model.ObjectGroup> it=new GenericIterator<org.semanticwb.model.ObjectGroup>(ObjectGroup.class, stit);
-         return it.next();
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
     }
 
     public Date getUpdated()
@@ -118,13 +133,13 @@ public class ObjectGroupBase extends GenericObjectBase implements Descriptiveabl
         getSemanticObject().setDateProperty(vocabulary.updated, updated);
     }
 
-    public WebSite getWebSite()
-    {
-        return new WebSite(getSemanticObject().getModel().getModelObject());
-    }
-
     public UserRepository getUserRepository()
     {
         return new UserRepository(getSemanticObject().getModel().getModelObject());
+    }
+
+    public WebSite getWebSite()
+    {
+        return new WebSite(getSemanticObject().getModel().getModelObject());
     }
 }

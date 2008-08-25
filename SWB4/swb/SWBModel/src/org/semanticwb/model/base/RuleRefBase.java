@@ -28,9 +28,14 @@ public class RuleRefBase extends GenericObjectBase
 
     public Rule getRule()
     {
+         Rule ret=null;
          StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.rule.getRDFProperty());
          GenericIterator<org.semanticwb.model.Rule> it=new GenericIterator<org.semanticwb.model.Rule>(Rule.class, stit);
-         return it.next();
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
     }
 
     public int getStatus()

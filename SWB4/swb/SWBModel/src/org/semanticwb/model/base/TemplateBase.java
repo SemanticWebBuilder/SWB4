@@ -39,9 +39,14 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
 
     public RoleRef getRoleRef()
     {
+         RoleRef ret=null;
          StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasRoleRef.getRDFProperty());
          GenericIterator<org.semanticwb.model.RoleRef> it=new GenericIterator<org.semanticwb.model.RoleRef>(RoleRef.class, stit);
-         return it.next();
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
     }
 
     public boolean isDeleted()
@@ -76,9 +81,14 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
 
     public User getModifiedBy()
     {
+         User ret=null;
          StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.modifiedBy.getRDFProperty());
          GenericIterator<org.semanticwb.model.User> it=new GenericIterator<org.semanticwb.model.User>(User.class, stit);
-         return it.next();
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
     }
 
     public String getTitle()
@@ -103,9 +113,14 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
 
     public VersionInfo getActualVersion()
     {
+         VersionInfo ret=null;
          StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.actualVersion.getRDFProperty());
          GenericIterator<org.semanticwb.model.VersionInfo> it=new GenericIterator<org.semanticwb.model.VersionInfo>(VersionInfo.class, stit);
-         return it.next();
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
     }
 
     public int getStatus()
@@ -118,21 +133,14 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
         getSemanticObject().setLongProperty(vocabulary.status, status);
     }
 
-    public void setLanguage(org.semanticwb.model.Language language)
+    public String getLanguage()
     {
-        getSemanticObject().addObjectProperty(vocabulary.language, language.getSemanticObject());
+        return getSemanticObject().getProperty(vocabulary.language);
     }
 
-    public void removeLanguage()
+    public void setLanguage(String language)
     {
-        getSemanticObject().removeProperty(vocabulary.language);
-    }
-
-    public Language getLanguage()
-    {
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.language.getRDFProperty());
-         GenericIterator<org.semanticwb.model.Language> it=new GenericIterator<org.semanticwb.model.Language>(Language.class, stit);
-         return it.next();
+        getSemanticObject().setProperty(vocabulary.language, language);
     }
 
     public Date getUpdated()
@@ -157,9 +165,14 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
 
     public VersionInfo getLastVersion()
     {
+         VersionInfo ret=null;
          StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.lastVersion.getRDFProperty());
          GenericIterator<org.semanticwb.model.VersionInfo> it=new GenericIterator<org.semanticwb.model.VersionInfo>(VersionInfo.class, stit);
-         return it.next();
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
     }
 
     public GenericIterator<org.semanticwb.model.RuleRef> listRuleRef()
@@ -185,9 +198,14 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
 
     public RuleRef getRuleRef()
     {
+         RuleRef ret=null;
          StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasRuleRef.getRDFProperty());
          GenericIterator<org.semanticwb.model.RuleRef> it=new GenericIterator<org.semanticwb.model.RuleRef>(RuleRef.class, stit);
-         return it.next();
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
     }
 
     public void setCreator(org.semanticwb.model.User user)
@@ -202,9 +220,14 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
 
     public User getCreator()
     {
+         User ret=null;
          StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.creator.getRDFProperty());
          GenericIterator<org.semanticwb.model.User> it=new GenericIterator<org.semanticwb.model.User>(User.class, stit);
-         return it.next();
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
     }
 
     public GenericIterator<org.semanticwb.model.Calendar> listCalendar()
@@ -230,9 +253,14 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
 
     public Calendar getCalendar()
     {
+         Calendar ret=null;
          StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasCalendar.getRDFProperty());
          GenericIterator<org.semanticwb.model.Calendar> it=new GenericIterator<org.semanticwb.model.Calendar>(Calendar.class, stit);
-         return it.next();
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
     }
 
     public String getDescription()
@@ -268,9 +296,14 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
 
     public ObjectGroup getGroup()
     {
+         ObjectGroup ret=null;
          StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasGroup.getRDFProperty());
          GenericIterator<org.semanticwb.model.ObjectGroup> it=new GenericIterator<org.semanticwb.model.ObjectGroup>(ObjectGroup.class, stit);
-         return it.next();
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
     }
 
     public WebSite getWebSite()

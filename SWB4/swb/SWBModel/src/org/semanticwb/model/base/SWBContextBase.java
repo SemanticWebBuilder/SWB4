@@ -2,14 +2,14 @@ package org.semanticwb.model.base;
 
 import java.util.Iterator;
 import org.semanticwb.model.*;
-import org.semanticwb.SWBInstance;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.platform.SemanticMgr;
 import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
 public class SWBContextBase
 {
     private static SWBVocabulary vocabulary=new SWBVocabulary();
-    private static SemanticMgr mgr=SWBInstance.getSemanticMgr();
+    private static SemanticMgr mgr=SWBPlatform.getSemanticMgr();
     public static SWBVocabulary getVocabulary()
     {
         return vocabulary;
@@ -17,8 +17,13 @@ public class SWBContextBase
 
     public static UserRepository getUserRepository(String uri)
     {
+        UserRepository ret=null;
         SemanticObject obj=mgr.getOntology().getSemanticObject(uri);
-        return (UserRepository)new UserRepository(obj);
+        if(obj!=null)
+        {
+            ret=(UserRepository)new UserRepository(obj);
+        }
+        return ret;
     }
 
     public static Iterator<org.semanticwb.model.UserRepository> listUserRepositorys()
@@ -39,8 +44,13 @@ public class SWBContextBase
 
     public static WebSite getWebSite(String uri)
     {
+        WebSite ret=null;
         SemanticObject obj=mgr.getOntology().getSemanticObject(uri);
-        return (WebSite)new WebSite(obj);
+        if(obj!=null)
+        {
+            ret=(WebSite)new WebSite(obj);
+        }
+        return ret;
     }
 
     public static Iterator<org.semanticwb.model.WebSite> listWebSites()

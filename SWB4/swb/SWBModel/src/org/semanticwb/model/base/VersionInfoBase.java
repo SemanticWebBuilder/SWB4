@@ -28,9 +28,14 @@ public class VersionInfoBase extends GenericObjectBase implements Valueable
 
     public VersionInfo getNextVersion()
     {
+         VersionInfo ret=null;
          StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.nextVersion.getRDFProperty());
          GenericIterator<org.semanticwb.model.VersionInfo> it=new GenericIterator<org.semanticwb.model.VersionInfo>(VersionInfo.class, stit);
-         return it.next();
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
     }
 
     public String getValue()
@@ -55,9 +60,14 @@ public class VersionInfoBase extends GenericObjectBase implements Valueable
 
     public VersionInfo getPreviousVersion()
     {
+         VersionInfo ret=null;
          StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.previousVersion.getRDFProperty());
          GenericIterator<org.semanticwb.model.VersionInfo> it=new GenericIterator<org.semanticwb.model.VersionInfo>(VersionInfo.class, stit);
-         return it.next();
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
     }
 
     public String getVersionComment()

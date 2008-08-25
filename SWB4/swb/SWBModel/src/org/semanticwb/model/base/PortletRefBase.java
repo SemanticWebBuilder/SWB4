@@ -28,9 +28,14 @@ public class PortletRefBase extends GenericObjectBase implements Priorityable
 
     public Portlet getPortlet()
     {
+         Portlet ret=null;
          StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.portlet.getRDFProperty());
          GenericIterator<org.semanticwb.model.Portlet> it=new GenericIterator<org.semanticwb.model.Portlet>(Portlet.class, stit);
-         return it.next();
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
     }
 
     public int getStatus()

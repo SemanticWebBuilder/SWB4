@@ -28,9 +28,14 @@ public class RoleRefBase extends GenericObjectBase
 
     public Role getRole()
     {
+         Role ret=null;
          StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.role.getRDFProperty());
          GenericIterator<org.semanticwb.model.Role> it=new GenericIterator<org.semanticwb.model.Role>(Role.class, stit);
-         return it.next();
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
     }
 
     public int getStatus()
