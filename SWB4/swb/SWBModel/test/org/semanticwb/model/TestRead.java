@@ -8,7 +8,7 @@ package org.semanticwb.model;
 import java.util.Iterator;
 import org.junit.*;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBInstance;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 
 /**
@@ -26,7 +26,7 @@ public class TestRead {
     @BeforeClass
     public static void setUpClass() throws Exception
     {
-        SWBInstance.createInstance(null);
+        SWBPlatform.createInstance(null);
     }
 
     @AfterClass
@@ -52,13 +52,13 @@ public class TestRead {
     {
         WebSite site=SWBContext.getWebSite("sep");
         long time=System.currentTimeMillis();
-        for(int x=0;x<100;x++)
+        for(int x=0;x<1000;x++)
         {
             WebPage page=site.getWebPage("Page"+x);
             //WebPage page=(WebPage)SWBInstance.getSemanticMgr().getOntology().getSemanticObject("Page"+x);
             //WebPage page=SWBContext.getWebPage("Page"+x);
-            //String title=page.getTitle();
-            //System.out.println("Title:"+title);
+            String title=page.getTitle();
+            System.out.println("Title:"+title);
         }
         System.out.println("Time:"+(System.currentTimeMillis()-time));
         
@@ -67,8 +67,8 @@ public class TestRead {
         while(it.hasNext())
         {
             WebPage page=it.next();
-            //String title=page.getTitle();
-            //System.out.println("Title:"+title);
+            String title=page.getURI();
+            System.out.println("Title:"+title);
         }
         System.out.println("Time:"+(System.currentTimeMillis()-time));        
     }

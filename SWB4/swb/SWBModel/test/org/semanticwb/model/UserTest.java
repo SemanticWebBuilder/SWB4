@@ -11,7 +11,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.semanticwb.SWBInstance;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBContext;
 import static org.junit.Assert.*;
@@ -27,7 +27,7 @@ public class UserTest {
 
     @BeforeClass
     public static void setUpClass() throws Exception {
-        SWBInstance.createInstance(null);
+        SWBPlatform.createInstance(null);
     }
 
     @AfterClass
@@ -47,15 +47,23 @@ public class UserTest {
      */
     @Test
     public void testGetName() {
-        SWBContext contexto = SWBContext.createInstance();
         UserRepository repository = null;
-        try {
-        repository = contexto.getUserRepository("swb_users");
-        } catch (Exception ignore){} //TODO Revisar NPE cuando se le solicita un repositorio inexistente
-        if (null==repository) repository = contexto.createUserRepository("swb_users", "http://www.infotec.com.mx");
-        System.out.println("getName "+repository);
+        repository = SWBContext.getUserRepository("swb_users");
+        System.out.println("Repository0;"+repository);
+        if (null==repository) 
+        {
+            repository = SWBContext.createUserRepository("swb_users", "http://www.infotec.com.mx");
+        }
+        System.out.println("Repository2;"+repository);
+        System.out.println("Rep_SemObj:"+repository.getSemanticObject());
+        System.out.println("Rep_SemObj_Mod:"+repository.getSemanticObject().getModel());
+        System.out.println("Rep_SemObj_Mod_NS:"+repository.getSemanticObject().getModel().getNameSpace());
         
-        User instance = repository.createUser("serch");
+        
+        User instance = repository.getUser("serch");
+        //User instance = repository.createUser("serch");
+        System.out.println("User;"+instance+" "+instance.getSemanticObject());
+        
         instance.setCreated(new Date());
         instance.setStatus(1);
         instance.setUsrEmail("serch@infotec.com.mx");
@@ -65,7 +73,11 @@ public class UserTest {
         String result = instance.getName();
         instance.setUsrPassword("serch08");
         
-        assertEquals(expResult, result);
+        instance = repository.getUser("serch");
+        System.out.println("UsrEmail:"+instance.getUsrEmail());
+        System.out.println("UsrLastName:"+instance.getUsrLastName());
+        System.out.println("Language:"+instance.getLanguage());
+        
         // TODO review the generated test code and remove the default call to fail.
         //fail("The test case is a prototype.");
     }

@@ -28,9 +28,14 @@ public class TemplateRefBase extends GenericObjectBase implements Priorityable
 
     public Template getTemplate()
     {
+         Template ret=null;
          StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.template.getRDFProperty());
          GenericIterator<org.semanticwb.model.Template> it=new GenericIterator<org.semanticwb.model.Template>(Template.class, stit);
-         return it.next();
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
     }
 
     public int getStatus()

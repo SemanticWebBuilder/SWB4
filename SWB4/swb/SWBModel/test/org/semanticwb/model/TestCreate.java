@@ -7,7 +7,7 @@ package org.semanticwb.model;
 
 import org.junit.*;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBInstance;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 
 /**
@@ -25,7 +25,7 @@ public class TestCreate {
     @BeforeClass
     public static void setUpClass() throws Exception
     {
-        SWBInstance.createInstance(null);
+        SWBPlatform.createInstance(null);
     }
 
     @AfterClass
@@ -52,7 +52,7 @@ public class TestCreate {
         WebSite site=SWBContext.createWebSite("sep", "http://www.sep.gob.mx");
         
         long time=System.currentTimeMillis();
-        for(int x=0;x<100;x++)
+        for(int x=0;x<1000;x++)
         {
             WebPage page=site.createWebPage("Page"+x);
             page.setTitle("Pagina Numero "+x);
@@ -60,7 +60,7 @@ public class TestCreate {
         System.out.println("Time:"+(System.currentTimeMillis()-time));
         
         time=System.currentTimeMillis();
-        for(int x=0;x<100;x++)
+        for(int x=0;x<1000;x++)
         {
             WebPage page=site.getWebPage("Page"+x);
             String title=page.getTitle();

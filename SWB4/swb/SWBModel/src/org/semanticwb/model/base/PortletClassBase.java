@@ -39,9 +39,14 @@ public class PortletClassBase extends GenericObjectBase implements Groupable
 
     public ObjectGroup getGroup()
     {
+         ObjectGroup ret=null;
          StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasGroup.getRDFProperty());
          GenericIterator<org.semanticwb.model.ObjectGroup> it=new GenericIterator<org.semanticwb.model.ObjectGroup>(ObjectGroup.class, stit);
-         return it.next();
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
     }
 
     public WebSite getWebSite()

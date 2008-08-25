@@ -7,7 +7,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class RuleBase extends GenericObjectBase implements Descriptiveable,Groupable,Versionable
+public class RuleBase extends GenericObjectBase implements Versionable,Groupable,Descriptiveable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
@@ -38,9 +38,14 @@ public class RuleBase extends GenericObjectBase implements Descriptiveable,Group
 
     public VersionInfo getLastVersion()
     {
+         VersionInfo ret=null;
          StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.lastVersion.getRDFProperty());
          GenericIterator<org.semanticwb.model.VersionInfo> it=new GenericIterator<org.semanticwb.model.VersionInfo>(VersionInfo.class, stit);
-         return it.next();
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
     }
 
     public void setModifiedBy(org.semanticwb.model.User user)
@@ -55,9 +60,14 @@ public class RuleBase extends GenericObjectBase implements Descriptiveable,Group
 
     public User getModifiedBy()
     {
+         User ret=null;
          StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.modifiedBy.getRDFProperty());
          GenericIterator<org.semanticwb.model.User> it=new GenericIterator<org.semanticwb.model.User>(User.class, stit);
-         return it.next();
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
     }
 
     public void setCreator(org.semanticwb.model.User user)
@@ -72,9 +82,14 @@ public class RuleBase extends GenericObjectBase implements Descriptiveable,Group
 
     public User getCreator()
     {
+         User ret=null;
          StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.creator.getRDFProperty());
          GenericIterator<org.semanticwb.model.User> it=new GenericIterator<org.semanticwb.model.User>(User.class, stit);
-         return it.next();
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
     }
 
     public String getTitle()
@@ -99,9 +114,14 @@ public class RuleBase extends GenericObjectBase implements Descriptiveable,Group
 
     public VersionInfo getActualVersion()
     {
+         VersionInfo ret=null;
          StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.actualVersion.getRDFProperty());
          GenericIterator<org.semanticwb.model.VersionInfo> it=new GenericIterator<org.semanticwb.model.VersionInfo>(VersionInfo.class, stit);
-         return it.next();
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
     }
 
     public String getDescription()
@@ -137,9 +157,14 @@ public class RuleBase extends GenericObjectBase implements Descriptiveable,Group
 
     public ObjectGroup getGroup()
     {
+         ObjectGroup ret=null;
          StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasGroup.getRDFProperty());
          GenericIterator<org.semanticwb.model.ObjectGroup> it=new GenericIterator<org.semanticwb.model.ObjectGroup>(ObjectGroup.class, stit);
-         return it.next();
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
     }
 
     public Date getUpdated()

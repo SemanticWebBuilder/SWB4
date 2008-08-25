@@ -38,9 +38,14 @@ public class UserBase extends GenericObjectBase implements Statusable,Roleable,T
 
     public User getModifiedBy()
     {
+         User ret=null;
          StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.modifiedBy.getRDFProperty());
          GenericIterator<org.semanticwb.model.User> it=new GenericIterator<org.semanticwb.model.User>(User.class, stit);
-         return it.next();
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
     }
 
     public String getUsrSecondLastName()
@@ -83,21 +88,14 @@ public class UserBase extends GenericObjectBase implements Statusable,Roleable,T
         getSemanticObject().setProperty(vocabulary.usrFirstName, usrFirstName);
     }
 
-    public void setLanguage(org.semanticwb.model.Language language)
+    public String getLanguage()
     {
-        getSemanticObject().addObjectProperty(vocabulary.language, language.getSemanticObject());
+        return getSemanticObject().getProperty(vocabulary.language);
     }
 
-    public void removeLanguage()
+    public void setLanguage(String language)
     {
-        getSemanticObject().removeProperty(vocabulary.language);
-    }
-
-    public Language getLanguage()
-    {
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.language.getRDFProperty());
-         GenericIterator<org.semanticwb.model.Language> it=new GenericIterator<org.semanticwb.model.Language>(Language.class, stit);
-         return it.next();
+        getSemanticObject().setProperty(vocabulary.language, language);
     }
 
     public Date getUpdated()
@@ -132,9 +130,14 @@ public class UserBase extends GenericObjectBase implements Statusable,Roleable,T
 
     public User getCreator()
     {
+         User ret=null;
          StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.creator.getRDFProperty());
          GenericIterator<org.semanticwb.model.User> it=new GenericIterator<org.semanticwb.model.User>(User.class, stit);
-         return it.next();
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
     }
 
     public String getUsrLogin()
@@ -200,9 +203,14 @@ public class UserBase extends GenericObjectBase implements Statusable,Roleable,T
 
     public Role getRole()
     {
+         Role ret=null;
          StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasRole.getRDFProperty());
          GenericIterator<org.semanticwb.model.Role> it=new GenericIterator<org.semanticwb.model.Role>(Role.class, stit);
-         return it.next();
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
     }
 
     public int getUsrSecurityQuestion()
@@ -238,9 +246,14 @@ public class UserBase extends GenericObjectBase implements Statusable,Roleable,T
 
     public ObjectGroup getGroup()
     {
+         ObjectGroup ret=null;
          StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasGroup.getRDFProperty());
          GenericIterator<org.semanticwb.model.ObjectGroup> it=new GenericIterator<org.semanticwb.model.ObjectGroup>(ObjectGroup.class, stit);
-         return it.next();
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
     }
 
     public String getUsrSecurityAnswer()

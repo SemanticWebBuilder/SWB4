@@ -7,7 +7,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class CommunityBase extends GenericObjectBase implements Descriptiveable,Statusable
+public class CommunityBase extends GenericObjectBase implements Statusable,Descriptiveable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
@@ -38,9 +38,14 @@ public class CommunityBase extends GenericObjectBase implements Descriptiveable,
 
     public User getModifiedBy()
     {
+         User ret=null;
          StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.modifiedBy.getRDFProperty());
          GenericIterator<org.semanticwb.model.User> it=new GenericIterator<org.semanticwb.model.User>(User.class, stit);
-         return it.next();
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
     }
 
     public void setCreator(org.semanticwb.model.User user)
@@ -55,9 +60,14 @@ public class CommunityBase extends GenericObjectBase implements Descriptiveable,
 
     public User getCreator()
     {
+         User ret=null;
          StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.creator.getRDFProperty());
          GenericIterator<org.semanticwb.model.User> it=new GenericIterator<org.semanticwb.model.User>(User.class, stit);
-         return it.next();
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
     }
 
     public String getTitle()
