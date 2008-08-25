@@ -20,7 +20,7 @@ import java.util.Vector;
  *
  * @author Javier Solis Gonzalez
  */
-public class WBHttpServletRequestWrapper extends HttpServletRequestWrapper
+public class SWBHttpServletRequestWrapper extends HttpServletRequestWrapper
 {
     private boolean removeParameters=false;
     private boolean mergeParameters=false;
@@ -29,24 +29,24 @@ public class WBHttpServletRequestWrapper extends HttpServletRequestWrapper
     private String idtm;
     
     /** Creates a new instance of WBHttpServletRequestWrapper */
-    public WBHttpServletRequestWrapper(HttpServletRequest request)
+    public SWBHttpServletRequestWrapper(HttpServletRequest request)
     {
         super(request);
     }
     
     /** Creates a new instance of WBHttpServletRequestWrapper */
-    public WBHttpServletRequestWrapper(HttpServletRequest request, boolean removeParameters)
+    public SWBHttpServletRequestWrapper(HttpServletRequest request, boolean removeParameters)
     {
         super(request);
         this.removeParameters=removeParameters;
     }
     
-    public WBHttpServletRequestWrapper(HttpServletRequest request, String lang, String idtm, boolean removeParameters)
+    public SWBHttpServletRequestWrapper(HttpServletRequest request, String lang, String idtm, boolean removeParameters)
     {
         this(request, lang, idtm, removeParameters,false);
     }    
     
-    public WBHttpServletRequestWrapper(HttpServletRequest request, String lang, String idtm, boolean removeParameters, boolean mergeParameters)
+    public SWBHttpServletRequestWrapper(HttpServletRequest request, String lang, String idtm, boolean removeParameters, boolean mergeParameters)
     {
         super(request);
         this.removeParameters=removeParameters;
