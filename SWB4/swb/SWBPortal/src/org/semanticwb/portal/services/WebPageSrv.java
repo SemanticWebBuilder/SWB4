@@ -17,7 +17,6 @@ import org.semanticwb.model.TemplateRef;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
-import org.semanticwb.platform.SemanticIterator;
 
 /**
  *
@@ -32,7 +31,6 @@ public class WebPageSrv {
         WebPage wp = website.createWebPage(title);
         wp.setIsChildOf(childOf);
         //TODO: Revisar como pongo el scope y con que tags (En el metodo setProperty de WebPage)
-
         wp.setCreator(user);
 
         SWBPortal.createInstance().log(user.getURI(), "create", wp.getURI(), wp.getURI(), "create webpage", null); 
@@ -42,9 +40,11 @@ public class WebPageSrv {
 
     public boolean removeWebPage(WebSite website, String id, User user) throws SWBException {
         //TODO:Revisar si este metodo elimina por completo la página o solo logicamente, debería ser x completo
-        website.removeWebPage(id);
-
-        SWBPortal.createInstance().log(user.getURI(), "remove", id, id, "remove webpage", null); 
+        
+        WebPage webpage=website.getWebPage(id);
+        //if(webpage.
+                
+        //SWBPortal.createInstance().log(user.getURI(), "remove", id, id, "remove webpage", null); 
 
         return true;        
     }
@@ -54,8 +54,7 @@ public class WebPageSrv {
         GenericIterator<TemplateRef> itTempRef = webPage.listTemplateRef();
         while (itTempRef.hasNext()) {
             TemplateRef tplRef = itTempRef.next();
-            //TODO:Revisar si el id que me pasan es una Uri completa
-            if (tplRef.getURI().equals(id)) {
+            if (tplRef.getId().equals(id)) {
                 tplRef.setStatus(status);
                 break;
             }   
@@ -73,7 +72,7 @@ public class WebPageSrv {
         while (itRuleRef.hasNext()) {
             RuleRef ruleRef = itRuleRef.next();
             //TODO:Revisar si el id que me pasan es una Uri completa
-            if (ruleRef.getURI().equals(id)) {
+            if (ruleRef.getId().equals(id)) {
                 ruleRef.setStatus(status);
                 break;
             }
@@ -91,8 +90,7 @@ public class WebPageSrv {
         GenericIterator<RoleRef> itRoleRef = webPage.listRoleRef();
         while (itRoleRef.hasNext()) {
             RoleRef roleRef = itRoleRef.next();
-            //TODO:Revisar si el id que me pasan es una Uri completa
-            if (roleRef.getURI().equals(id)) {
+            if (roleRef.getId().equals(id)) {
                 roleRef.setStatus(status);
                 break;
             }

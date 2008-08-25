@@ -50,7 +50,7 @@ public class SWBServices {
         deleteable.setDeleted(deleted);
         doAction = true;
 
-        SWBPortal.createInstance().log(user.getURI(), "delete", deleteable.toString(), deleteable.toString(), "delete", null); 
+        SWBPortal.createInstance().log(user.getURI(), "delete", deleteable.getURI(), deleteable.getId(), "delete", null); 
         
         return doAction;
     }
@@ -60,7 +60,7 @@ public class SWBServices {
         calendarable.addCalendar(calendar);
         doAction = true;
 
-       SWBPortal.createInstance().log(user.getURI(), "assign", calendarable.toString(), calendar.getURI(), "assign", null); 
+       SWBPortal.createInstance().log(user.getURI(), "assign", calendar.getWebSite().getURI(), calendar.getId(), "assign", null); 
        
         return doAction;
     }
@@ -70,7 +70,7 @@ public class SWBServices {
         calendarable.removeCalendar(calendar);
         doAction = true;
 
-        SWBPortal.createInstance().log(user.getURI(), "unAssign", calendarable.toString(), calendar.getURI(), "unAssign", null); 
+        SWBPortal.createInstance().log(user.getURI(), "unAssign", calendar.getWebSite().getId(), calendar.getId(), "unAssign", null); 
         
         return doAction;
     }
@@ -79,21 +79,22 @@ public class SWBServices {
 
         statusable.setStatus(status);
 
-        SWBPortal.createInstance().log(user.getURI(), "status", statusable.toString(), statusable.toString(), "update status", null); 
+        SWBPortal.createInstance().log(user.getURI(), "status", statusable.getURI(), statusable.getId(), "update status", null); 
        
         return true;
     }
 
-    public boolean addTemplate(WebSite webSite, TemplateRefable templateRefable, Template template, User user) throws SWBException {
+    public boolean addTemplate(TemplateRefable templateRefable, Template template, User user) throws SWBException {
+        WebSite website=template.getWebSite();
         boolean doAction = false;
-        TemplateRef templateRef = webSite.createTemplateRef();
+        TemplateRef templateRef = website.createTemplateRef();
         templateRef.setTemplate(template);
         templateRef.setStatus(1);
 
         templateRefable.addTemplateRef(templateRef);
         doAction = true;
        
-        SWBPortal.createInstance().log(user.getURI(), "assing", templateRefable.toString(), template.getURI(), "assing template", null); 
+        SWBPortal.createInstance().log(user.getURI(), "assing", website.getURI(), template.getId(), "assing template", null); 
 
         return doAction;
     }
@@ -115,15 +116,16 @@ public class SWBServices {
         return doAction;
     }
 
-    public boolean addRuleRef(WebSite webSite, RuleRefable ruleRefable, Rule rule, User user) throws SWBException {
+    public boolean addRuleRef(RuleRefable ruleRefable, Rule rule, User user) throws SWBException {
+        WebSite website=rule.getWebSite();
         boolean doAction = false;
-        RuleRef ruleRef = webSite.createRuleRef();
+        RuleRef ruleRef = website.createRuleRef();
         ruleRef.setRule(rule);
 
         ruleRefable.addRuleRef(ruleRef);
         doAction = true;
        
-        SWBPortal.createInstance().log(user.getURI(), "assing", ruleRefable.toString(), rule.getURI(), "assing rule", null); 
+        SWBPortal.createInstance().log(user.getURI(), "assing", website.getURI(), rule.getId(), "assing rule", null); 
         
         return doAction;
     }
@@ -140,20 +142,20 @@ public class SWBServices {
             }
         }
 
-        SWBPortal.createInstance().log(user.getURI(), "unAssing", ruleRefable.toString(), rule.getURI(), "UnAssing rule", null); 
+        SWBPortal.createInstance().log(user.getURI(), "unAssing", rule.getWebSite().getURI(), rule.getId(), "UnAssing rule", null); 
 
         return doAction;
     }
 
-    public boolean addRoleRef(WebSite webSite, RoleRefable roleRefable, Role role, User user) throws SWBException {
+    public boolean addRoleRef(WebSite website, RoleRefable roleRefable, Role role, User user) throws SWBException {
         boolean doAction = false;
-        RoleRef roleRef = webSite.createRoleRef();
+        RoleRef roleRef = website.createRoleRef();
         roleRef.setRole(role);
 
         roleRefable.addRoleRef(roleRef);
         doAction = true;
         
-        SWBPortal.createInstance().log(user.getURI(), "assing", roleRefable.toString(), role.getURI(), "assing role", null); 
+        SWBPortal.createInstance().log(user.getURI(), "assing", website.getURI(), role.getId(), "assing role", null); 
         
         return doAction;
     }
@@ -170,7 +172,7 @@ public class SWBServices {
             }
         }
        
-        SWBPortal.createInstance().log(user.getURI(), "unAssing", roleRefable.toString(), role.getURI(), "unAssing role", null); 
+        SWBPortal.createInstance().log(user.getURI(), "unAssing", role.getURI(), role.getId(), "unAssing role", null); 
         
         return doAction;
     }
@@ -180,7 +182,7 @@ public class SWBServices {
         descriptiveable.setDescription(description);
         doAction = true;
 
-        SWBPortal.createInstance().log(user.getURI(), "assing", descriptiveable.toString(), description.toString(), "assing description", null); 
+        SWBPortal.createInstance().log(user.getURI(), "assing", descriptiveable.getURI(), descriptiveable.getId(), "assing description", null); 
         
         return doAction;
     }
@@ -190,7 +192,7 @@ public class SWBServices {
         groupable.addGroup(objectgroup);
         doAction = true;
 
-        SWBPortal.createInstance().log(user.getURI(), "assing", groupable.toString(), objectgroup.getURI(), "assing group", null); 
+        SWBPortal.createInstance().log(user.getURI(), "assing", objectgroup.getWebSite().getURI(), objectgroup.getId(), "assing group", null); 
        
         return doAction;
     }
@@ -201,7 +203,7 @@ public class SWBServices {
         localeable.setLanguage(language);
         doAction = true;
 
-        SWBPortal.createInstance().log(user.getURI(), "assing", localeable.toString(), language.getURI(), "assing language", null); 
+        SWBPortal.createInstance().log(user.getURI(), "assing", localeable.getURI(), language.getId(), "assing language", null); 
         
         return doAction;
     }
@@ -214,7 +216,7 @@ public class SWBServices {
         language.setCreator(user);
         doAction = true;
 
-        SWBPortal.createInstance().log(user.getURI(), "create", language.toString(), language.getURI(), "create language", null); 
+        SWBPortal.createInstance().log(user.getURI(), "create", webSite.getURI(), language.getId(), "create language", null); 
         
         return doAction;
     }
@@ -224,7 +226,7 @@ public class SWBServices {
         priorityable.setPriority(priority);
         doAction = true;
 
-        SWBPortal.createInstance().log(user.getURI(), "assign", priorityable.toString(), priorityable.toString(), "assign priority", null); 
+        SWBPortal.createInstance().log(user.getURI(), "assign", priorityable.getURI(), priorityable.getId(), "assign priority", null); 
         
         return doAction;
     }
@@ -234,7 +236,7 @@ public class SWBServices {
         valueable.setValue(value);
         doAction = true;
 
-        SWBPortal.createInstance().log(user.getURI(), "assign", valueable.toString(), valueable.toString(), "assign value", null); 
+        SWBPortal.createInstance().log(user.getURI(), "assign", valueable.getURI(), valueable.getId(), "assign value", null); 
        
         return doAction;
     }
@@ -244,19 +246,17 @@ public class SWBServices {
         versionable.setActualVersion(versionInfo);
         doAction = true;
 
-        SWBPortal.createInstance().log(user.getURI(), "assign", versionable.toString(), versionable.toString(), "assign version", null); 
+        SWBPortal.createInstance().log(user.getURI(), "assign", versionable.getURI(), versionable.getId(), "assign version", null); 
         
         return doAction;
     }
 
-    public boolean removeVersion(Versionable versionable, User user) throws SWBException {
-        boolean doAction = false;
+    public boolean removeVersion(Versionable versionable, User user) throws SWBException 
+    {
         versionable.removeActualVersion();
-        doAction = true;
-
-        SWBPortal.createInstance().log(user.getURI(), "unAssign", versionable.toString(), versionable.toString(), "unAssign version", null); 
+        SWBPortal.createInstance().log(user.getURI(), "unAssign", versionable.getURI(), versionable.getId(), "unAssign version", null); 
         
-        return doAction;
+        return true;
     }
 
     public boolean addWebPage(WebPageable webPageable, WebPage webPage, User user) throws SWBException {
@@ -264,7 +264,7 @@ public class SWBServices {
         webPageable.addWebPage(webPage);
         doAction = true;
 
-        SWBPortal.createInstance().log(user.getURI(), "assign", webPageable.toString(), webPage.getURI(), "assign webpage", null); 
+        SWBPortal.createInstance().log(user.getURI(), "assign", webPageable.getURI(), webPage.getId(), "assign webpage", null); 
        
         return doAction;
     }
@@ -274,7 +274,7 @@ public class SWBServices {
         webPageable.removeWebPage(webPage);
         doAction = true;
 
-        SWBPortal.createInstance().log(user.getURI(), "unAssign", webPageable.toString(), webPage.getURI(), "unAssign webpage", null); 
+        SWBPortal.createInstance().log(user.getURI(), "unAssign", webPageable.getURI(), webPage.getId(), "unAssign webpage", null); 
         
         return doAction;
     }

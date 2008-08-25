@@ -17,11 +17,12 @@ import org.semanticwb.model.WebSite;
 public class GroupSrv 
 {
 
-    public boolean createGroup(WebSite webSite, String title, String description, User user) throws SWBException {
+    public boolean createGroup(WebSite webSite, String title, String description, String type, User user) throws SWBException {
         boolean doAction = false;
         ObjectGroup objGroup = webSite.createObjectGroup();
         objGroup.setTitle(title);
         objGroup.setDescription(description);
+        objGroup.setProperty("type", type);
         objGroup.setCreator(user);
         doAction = true;
 

@@ -29,7 +29,7 @@ public class CalendarSrv
         cal.setDescription(description);
         cal.setCreator(user);
         
-        SWBPortal.createInstance().log(user.getURI(), "Create", cal.getURI(), cal.getURI(), "Create Calendar", null);
+        SWBPortal.createInstance().log(user.getURI(), "Create", website.getURI(), cal.getURI(), "Create Calendar", null);
         
         doAction=true;
         

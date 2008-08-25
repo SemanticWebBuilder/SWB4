@@ -5,6 +5,7 @@
 package org.semanticwb.portal.services;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import org.semanticwb.Logger;
@@ -45,18 +46,22 @@ public class TemplateSrv {
         //Ahora lo voy a poner con setProperty, si es así como creo un SemanticProperty
 
         //TODO: Grabar el archivo en ruta de fileSystem q se decida
-        String title = website.getTitle();
-        //java.io.File dir = new File(WBUtils.getInstance().getWorkPath() +"/sites/"+title+ "/templates/" + RECID);
-//        dir.mkdir();
-//        dir = new File(WBUtils.getInstance().getWorkPath() + "/sites/"+title + "/templates/" + RECID + "/" + version);
-//        dir.mkdir();
-//        dir = new File(WBUtils.getInstance().getWorkPath() + "/sites/"+title+ "/templates/" + RECID + "/" + version + "/images");
-//        dir.mkdir();
-//        java.io.OutputStream Os = new FileOutputStream(
-//        WBUtils.getInstance().getWorkPath()  + "/sites/"+topicmap + "/title/" + RECID + "/" + version + "/" + filename);
-//        Os.write(content.getBytes());
-//        Os.flush();
-//        Os.close();
+        String wsId = website.getId();
+        java.io.File dir = new File(SWBPortal.getWorkPath() +"/sites/"+wsId+ "/templates/" + template.getId());
+        dir.mkdir();
+        dir = new File(SWBPortal.getWorkPath() +"/sites/"+wsId+ "/templates/" + template.getId() + "/" + verInfo.getValue());
+        dir.mkdir();
+        dir = new File(SWBPortal.getWorkPath() + "/sites/"+wsId+ "/templates/" + template.getId() + "/" + verInfo.getValue() + "/images");
+        dir.mkdir();
+        try{
+            java.io.OutputStream Os = new FileOutputStream(
+            SWBPortal.getWorkPath()  + "/sites/"+wsId + "/title/" + template.getId() + "/" + verInfo.getValue() + "/" + fileName);
+            Os.write(content.getBytes());
+            Os.flush();
+            Os.close();
+        }catch(Exception e){
+            log.error(e);
+        }
 
         //TODO: Graba attaches
         //Iterator itattaches=attaches.keySet().iterator();
@@ -83,7 +88,7 @@ public class TemplateSrv {
         template.addGroup(objectgroup);
         template.setStatus(1);
 
-        SWBPortal.createInstance().log(user.getURI(), "create", template.getURI(), template.getURI(), "create template", null); 
+        SWBPortal.createInstance().log(user.getURI(), "create", website.getURI(), template.getId(), "create template", null); 
 
         return template;
     }
@@ -103,8 +108,7 @@ public class TemplateSrv {
                 GenericIterator<TemplateRef> itTemplateRefs = webPage.listTemplateRef();
                 while (itTemplateRefs.hasNext()) {
                     TemplateRef tplRef = itTemplateRefs.next();
-                    //TODO:Ver si me puede dar el puro id del template en un metodo para no comparar contra toda la Uri
-                    String data = tplRef.getTemplate().getURI();
+                    String data = tplRef.getTemplate().getId();
                     if (data != null && data.trim().length() > 0) {
                         if (id.equals(data)) {
                             webPage.removeTemplateRef(tplRef);
@@ -115,14 +119,14 @@ public class TemplateSrv {
         }
 
         //TODO:Elimina el template de FileSystem
-        String title = website.getTitle();
+        String wsId = website.getId();
         String rutawork = (String) SWBPortal.getWorkPath();
-        File f = new File(rutawork + "/sites/" + title + "/templates/");
+        File f = new File(rutawork + "/sites/" + wsId + "/templates/");
         if (f.exists() && f.isDirectory()) {
-            f = new File(rutawork + "/sites/" + title + "/templates/" + id);
+            f = new File(rutawork + "/sites/" + wsId + "/templates/" + id);
             if (f.exists() && f.isDirectory()) {
                 try {
-                    String deldirectory = rutawork + "/sites/" + title + "/templates/" + id;
+                    String deldirectory = rutawork + "/sites/" + wsId + "/templates/" + id;
                     boolean flag = SWBUtils.IO.removeDirectory(deldirectory);
                     if (flag) {
                         f.delete();
@@ -133,7 +137,7 @@ public class TemplateSrv {
         }
 
 
-        SWBPortal.createInstance().log(user.getURI(), "remove", id, id, "remove template", null); 
+        SWBPortal.createInstance().log(user.getURI(), "remove", website.getURI(), id, "remove template", null); 
 
         return deleted;
     }
@@ -151,32 +155,38 @@ public class TemplateSrv {
         template.setDescription(description);
         //TODO: Revisar como poner el fileName
         
-        //Ver si existira un metodo que me regrese el id del template, no todo el uri, esto para formar la ruta en filesystem
-        //String id = template.getUri();
-        //TODO: Grabar el archivo en ruta de fileSystem q se decida
-        //String title = website.getTitle();
-        //java.io.File dir = new File(WBUtils.getInstance().getWorkPath() +"/sites/"+title+ "/templates/" + RECID);
-//        dir.mkdir();
-//        dir = new File(WBUtils.getInstance().getWorkPath() + "/sites/"+title + "/templates/" + RECID + "/" + version);
-//        dir.mkdir();
-//        dir = new File(WBUtils.getInstance().getWorkPath() + "/sites/"+title+ "/templates/" + RECID + "/" + version + "/images");
-//        dir.mkdir();
-//        java.io.OutputStream Os = new FileOutputStream(
-//        WBUtils.getInstance().getWorkPath()  + "/sites/"+topicmap + "/title/" + RECID + "/" + version + "/" + filename);
-//        Os.write(content.getBytes());
-//        Os.flush();
-//        Os.close();
+        String id = template.getId();
+        String wsId = template.getWebSite().getId();
+        java.io.File dir = new File(SWBPortal.getWorkPath() +"/sites/"+wsId+ "/templates/" + id);
+        dir.mkdir();
+        dir = new File(SWBPortal.getWorkPath() +"/sites/"+wsId+ "/templates/" + id+ "/" + version);
+        dir.mkdir();
+        dir = new File(SWBPortal.getWorkPath() +"/sites/"+wsId+ "/templates/" + id+ "/" + version + "/images");
+        dir.mkdir();
+        try{
+            java.io.OutputStream Os = new FileOutputStream(
+            SWBPortal.getWorkPath() +"/sites/"+wsId+ "/templates/" + id+ "/" + version + "/" + fileName);
+            Os.write(content.getBytes());
+            Os.flush();
+            Os.close();
+        }catch(Exception e){
+            log.error(e);
+        }
 
         //TODO: Graba attaches
-        //Iterator itattaches=attaches.keySet().iterator();
-//        while(itattaches.hasNext()) {
-//            String attach=(String)itattaches.next();
-//            byte abyte[] = (byte[]) attaches.get(attach);
-//            Os = new FileOutputStream(WBUtils.getInstance().getWorkPath() + "/sites/"+title + "/templates/" + RECID + "/" + version + "/images/" + attach);
-//            Os.write(abyte,0,abyte.length);
-//            Os.flush();
-//            Os.close();
-//        }
+        Iterator itattaches=attaches.keySet().iterator();
+        while(itattaches.hasNext()) {
+            String attach=(String)itattaches.next();
+            byte abyte[] = (byte[]) attaches.get(attach);
+            try{
+                java.io.OutputStream Os = new FileOutputStream(SWBPortal.getWorkPath() +"/sites/"+wsId+ "/templates/" + id + "/" + version + "/images/" + attach);
+                Os.write(abyte,0,abyte.length);
+                Os.flush();
+                Os.close();
+            }catch(Exception e){
+                log.error(e);
+            }
+        }
        return true;
     }
     
@@ -184,7 +194,7 @@ public class TemplateSrv {
     public static boolean resetTemplates(WebSite website, Template template, User user) {
         try {
             String rutawork = (String) SWBPortal.getWorkPath();
-            File dir = new File(rutawork + "/sites/" + website.getId() + "/templates/" + template.getURI());
+            File dir = new File(rutawork + "/sites/" + website.getId() + "/templates/" + template.getId());
             if (dir != null && dir.exists() && dir.isDirectory()) {
                 File listado[] = dir.listFiles();
                 for (int i = 0; i < listado.length; i++) {
@@ -198,11 +208,11 @@ public class TemplateSrv {
                 boolean b = true;
                 String lastV = template.getActualVersion().getValue();
                 if (!lastV.equals("1")) {
-                    File ActualVDir = new File(rutawork + "/sites/" + "topicmap" + "/templates/" + "templateid" + "/" + lastV);
-                    File f = new File(rutawork + "/sites/" + "topicmap" + "/templates/" + "templateid" + "/1");
+                    File ActualVDir = new File(rutawork + "/sites/" + website.getId()+ "/templates/" + template.getId() + "/" + lastV);
+                    File f = new File(rutawork + "/sites/" + website.getId() + "/templates/" + template.getId() + "/1");
                     f.mkdir();
-                    String sSource = "sites/" + "topicmap" + "/templates/" + "templateid" + "/" + lastV;
-                    String sTarget = "sites/" + "topicmap" + "/templates/" + "templateid" + "/1";
+                    String sSource = "sites/" + website.getId() + "/templates/" + template.getId() + "/" + lastV;
+                    String sTarget = "sites/" + website.getId() + "/templates/" + template.getId() + "/1";
                     b = SWBUtils.IO.copyStructure(ActualVDir.getPath() + "/", f.getPath() + "/", true, sSource, sTarget);
                 }
                 if (b) {
@@ -211,33 +221,46 @@ public class TemplateSrv {
                     template.setActualVersion(verInfo);
                     template.setLastVersion(verInfo);
 
-                   SWBPortal.createInstance().log(user.getURI(), "update", template.getURI(), template.getURI(), "update template version", null); 
+                   SWBPortal.createInstance().log(user.getURI(), "update", website.getURI(), template.getId(), "update template version", null); 
 
                     return true;
                 }
             }
         } catch (Exception e) {
-            log.error("Error while removing template version width id:" + "templateid" + "-TemplateSrv:RemoveTemplateVersion", e);
+            log.error("Error while removing template version width id:" + template.getId() + "-TemplateSrv:RemoveTemplateVersion", e);
         }
         return false;
     }
 
     public boolean removeTemplateGroup(WebSite webSite, String id, User user) throws SWBException {
         boolean doAction = false;
-        webSite.removeObjectGroup(id);
-        Iterator<Template> itTemplates = webSite.listTemplates();
-        while (itTemplates.hasNext()) {
-            Template template = itTemplates.next();
-            //TODO:Revisar que id me van a pasar aqui para ver si tengo q concatenarlo con algo para formar el uri
-            if (template.getGroup().getURI().equals(id)) {
-                //Elimina el template
-                removeTemplate(webSite, template.getURI(), user);
-            }
-        }
+        ObjectGroup obj=webSite.getObjectGroup(id);
+        iteraRemoveGroup(obj,user);
         doAction = true;
         
-        SWBPortal.createInstance().log(user.getURI(), "remove", id, id, "remove template group", null); 
+        obj.removeAllGroup();
+        webSite.removeObjectGroup(obj.getId());
+        
+        SWBPortal.createInstance().log(user.getURI(), "remove", webSite.getURI(), id, "remove template group", null); 
         
         return doAction;
     }
+    
+    private void iteraRemoveGroup(ObjectGroup objGroup, User user) throws SWBException
+    {
+        Iterator<Template> itTemplates = objGroup.getWebSite().listTemplates();
+        while (itTemplates.hasNext()) {
+            Template template = itTemplates.next();
+            if (template.getGroup().getId().equals(objGroup.getId())) {
+                //Elimina el template
+                removeTemplate(objGroup.getWebSite(), template.getId(), user);
+            }
+        }
+        Iterator<ObjectGroup> itGroups=objGroup.listGroup();
+        while(itGroups.hasNext()){
+            ObjectGroup objGroup2=itGroups.next();
+            iteraRemoveGroup(objGroup2, user);
+        }
+    }
+    
 }
