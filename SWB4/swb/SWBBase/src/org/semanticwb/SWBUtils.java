@@ -54,7 +54,6 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.xml.namespace.QName;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathFactory;
-import org.apache.commons.mail.Email;
 import org.semanticwb.base.util.SFBase64;
 import org.semanticwb.base.util.SWBMailSender;
 import org.semanticwb.base.util.SWBMail;
