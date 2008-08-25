@@ -75,20 +75,17 @@
     <rdf:type rdf:resource="#Interface"/>
   </owl:Class>
   <owl:Class rdf:ID="Dns">
-    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >false</swb:autogenId>
     <rdfs:subClassOf>
       <owl:Class rdf:about="#Descriptiveable"/>
     </rdfs:subClassOf>
     <rdfs:subClassOf>
       <owl:Class rdf:ID="WebPageable"/>
     </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Valueable"/>
-    </rdfs:subClassOf>
     <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.model.Dns</swb:className>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="#SWBClass"/>
     <rdf:type rdf:resource="#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="WebSite">
@@ -525,13 +522,17 @@
     <rdfs:domain rdf:resource="#WebPageable"/>
     <rdfs:range rdf:resource="#WebPage"/>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="isChildOf">
-    <rdfs:domain rdf:resource="#WebPage"/>
-    <rdfs:range rdf:resource="#WebPage"/>
-  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="nextVersion">
     <rdfs:domain rdf:resource="#VersionInfo"/>
     <rdfs:range rdf:resource="#VersionInfo"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="language">
+    <rdfs:range rdf:resource="#Language"/>
+    <rdfs:domain rdf:resource="#Localeable"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="isChildOf">
+    <rdfs:domain rdf:resource="#WebPage"/>
+    <rdfs:range rdf:resource="#WebPage"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="userRepository">
     <rdfs:domain rdf:resource="#WebSite"/>
@@ -704,10 +705,6 @@
     <rdfs:domain rdf:resource="#User"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="language">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#Localeable"/>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="value">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#Valueable"/>
@@ -723,6 +720,10 @@
   <owl:DatatypeProperty rdf:ID="description">
     <rdfs:domain rdf:resource="#Descriptiveable"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="dnsDefault">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="#Dns"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="title">
     <rdfs:domain rdf:resource="#Descriptiveable"/>
