@@ -17,17 +17,17 @@ import org.semanticwb.SWBUtils;
  *
  * @author Javier Solis Gonzalez
  */
-public class WBHttpServletResponseWrapper extends HttpServletResponseWrapper
+public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
 {
-    static Logger log = SWBUtils.getLogger(WBHttpServletResponseWrapper.class);
+    static Logger log = SWBUtils.getLogger(SWBHttpServletResponseWrapper.class);
     
     ByteArrayOutputStream bout = new ByteArrayOutputStream(1024);
-    ServletOutputStream sout=new WBServletOutputStreamImp(bout);
+    ServletOutputStream sout=new SWBServletOutputStreamImp(bout);
     PrintWriter out = new PrintWriter(bout);    
     private String sendRedirect=null;    
     
     /** Creates a new instance of WBHttpServletResponseWrapper */
-    public WBHttpServletResponseWrapper(HttpServletResponse response)
+    public SWBHttpServletResponseWrapper(HttpServletResponse response)
     {
         super(response);
     }

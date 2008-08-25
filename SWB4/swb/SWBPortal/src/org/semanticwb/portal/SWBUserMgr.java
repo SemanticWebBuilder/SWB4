@@ -22,7 +22,7 @@ import org.semanticwb.platform.SemanticObject;
  *
  * @author Jei
  */
-public class SWBUserMgr implements SWBInstanceObject
+public class SWBUserMgr 
 {
     private Logger log = SWBUtils.getLogger(SWBUserMgr.class);
     private HashMap<String, SWBSessionObject> sessionobjects;
@@ -35,7 +35,7 @@ public class SWBUserMgr implements SWBInstanceObject
         
     }
     
-    public void init(SWBPlatform context) {
+    public void init() {
         log.event("Initializing SWBUserMgr...");
         sessionobjects=new HashMap<String, SWBSessionObject>();
         sessions=new HashMap<String, HttpSession>();
@@ -84,12 +84,12 @@ public class SWBUserMgr implements SWBInstanceObject
             
             ret=new User(new SemanticObject(site.getUserRepository().getSemanticObject().getModel()));
             sub.getPrincipals().add(ret);
-            ret.setLanguage(language);
+            ret.setLanguage(site.getLanguage(language));
             //TODO: validar dispositivo
             //ret.setDevice(XXX);
             ret.setIp(request.getRemoteAddr());
         }
         return ret;
     }
-    
+
 }

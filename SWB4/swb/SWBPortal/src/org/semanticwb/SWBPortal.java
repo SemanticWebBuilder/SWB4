@@ -1,7 +1,11 @@
 package org.semanticwb;
 
+import java.io.File;
 import java.sql.Timestamp;
+import org.semanticwb.base.util.URLEncoder;
+import org.semanticwb.platform.SWBInstanceObject;
 import org.semanticwb.portal.SWBDBAdmLog;
+import org.semanticwb.portal.SWBUserMgr;
 import org.semanticwb.portal.services.CalendarSrv;
 import org.semanticwb.portal.services.CampSrv;
 import org.semanticwb.portal.services.DeviceSrv;
@@ -23,6 +27,9 @@ public class SWBPortal {
     private static Logger log = SWBUtils.getLogger(SWBPortal.class);
     private static SWBPortal instance = null;
     private static String workPath = "";
+    private static String webWorkPath = "";
+    
+    private static SWBUserMgr usrMgr;
 
     static public synchronized SWBPortal createInstance() {
         System.out.println("Entra a createInstance");
@@ -40,7 +47,42 @@ public class SWBPortal {
      //Initialize context
     private void init()
     {
-        workPath = (String) SWBPlatform.getEnv("swb/workPath");
+        workPath = SWBPlatform.getEnv("swb/workPath");
+        
+        usrMgr=new SWBUserMgr();
+        usrMgr.init();
+        
+        try {
+            //TODO:revisar sincronizacion
+            //if (confCS.equalsIgnoreCase("Client")) remoteWorkPath = (String) AFUtils.getInstance().getEnv("wb/remoteWorkPath");
+
+            workPath = (String) SWBPlatform.getEnv("swb/workPath");
+            if (workPath.startsWith("file:")) 
+            {
+                workPath = (new File(workPath.substring(5))).toString();
+            } else if (workPath.startsWith("http://")) 
+            {
+                workPath = (URLEncoder.encode(workPath));
+            } else {
+                workPath = SWBUtils.getApplicationPath()+workPath;
+            }
+        } catch (Exception e) {
+            log.error("Can't read the context path...",e);
+            workPath = "";
+        }        
+        
+        try {
+            String webPath=SWBPlatform.getContextPath();
+            if (webPath.endsWith("/")) {
+                webWorkPath = webPath +SWBPlatform.getEnv("wb/webWorkPath").substring(1);
+            } else {
+                webWorkPath = webPath + SWBPlatform.getEnv("wb/webWorkPath");
+            }
+        } catch (Exception e) {
+            log.error("Can't read the context path...", e);
+            webWorkPath = "";
+        }           
+        
     }
     
     /** Getter for property workPath.
@@ -50,81 +92,96 @@ public class SWBPortal {
     {
         return workPath;
     }
+    
+    /** Getter for property workPath.
+     * @return Value of property workPath.
+     */
+    public static String getWebWorkPath()
+    {
+        return webWorkPath;
+    }    
 
-    public SWBServices getSWBServices() {
+    public static SWBServices getSWBServices() {
         SWBServices swbServices = new SWBServices();
         return swbServices;
     }
 
-    public DnsSrv getDnsSrv() {
+    public static DnsSrv getDnsSrv() {
         DnsSrv dnsSrv = new DnsSrv();
         return dnsSrv;
     }
 
-    public DeviceSrv getDeviceSrv() {
+    public static DeviceSrv getDeviceSrv() {
         DeviceSrv deviceSrv = new DeviceSrv();
         return deviceSrv;
     }
 
-    public CalendarSrv getCalendarSrv() {
+    public static CalendarSrv getCalendarSrv() {
         CalendarSrv calendarSrv = new CalendarSrv();
         return calendarSrv;
     }
 
-    public GroupSrv getGrouprv() {
+    public static GroupSrv getGrouprv() {
         GroupSrv groupSrv = new GroupSrv();
         return groupSrv;
     }
 
-    public ResourceSrv getResourcerv() {
+    public static ResourceSrv getResourcerv() {
         ResourceSrv resSrv = new ResourceSrv();
         return resSrv;
     }
 
-    public IPFilterSrv getIPFilterSrv() {
+    public static IPFilterSrv getIPFilterSrv() {
         IPFilterSrv iPFilterSrv = new IPFilterSrv();
         return iPFilterSrv;
     }
 
-    public RoleSrv getRoleSrv() {
+    public static RoleSrv getRoleSrv() {
         RoleSrv roleSrv = new RoleSrv();
         return roleSrv;
     }
 
-    public RuleSrv getRuleSrv() {
+    public static RuleSrv getRuleSrv() {
         RuleSrv ruleSrv = new RuleSrv();
         return ruleSrv;
     }
 
-    public TemplateSrv getTemplateSrv() {
+    public static TemplateSrv getTemplateSrv() {
         TemplateSrv templateSrv = new TemplateSrv();
         return templateSrv;
     }
 
-    public WebPageSrv getWebPageSrv() {
+    public static WebPageSrv getWebPageSrv() {
         WebPageSrv webPageSrv = new WebPageSrv();
         return webPageSrv;
     }
 
-    public WebSiteSrv getWebSiteSrv() {
+    public static WebSiteSrv getWebSiteSrv() {
         WebSiteSrv webSiteSrv = new WebSiteSrv();
         return webSiteSrv;
     }
 
-    public LanguageSrv getLanguageSrv() {
+    public static LanguageSrv getLanguageSrv() {
         LanguageSrv langSrv = new LanguageSrv();
         return langSrv;
     }
 
-    public CampSrv getCampSrv() {
+    public static CampSrv getCampSrv() {
         CampSrv campSrv = new CampSrv();
         return campSrv;
     }
 
-    public PFlowSrv getPFlowSrv() {
+    public static PFlowSrv getPFlowSrv() {
         PFlowSrv pFlowSrv = new PFlowSrv();
         return pFlowSrv;
     }
+    
+    
+    public static SWBUserMgr getUserMgr()
+    {
+        return usrMgr;
+    }
+    
     
     /**
      * Logeo de acciones
@@ -135,7 +192,7 @@ public class SWBPortal {
      * @param description
      * @param date
      */
-    public void log(String userID, String action, String uri, String object, String description, Timestamp date)
+    public static void log(String userID, String action, String uri, String object, String description, Timestamp date)
     {
         SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(userID, action, uri, object, description, date);
         try {
