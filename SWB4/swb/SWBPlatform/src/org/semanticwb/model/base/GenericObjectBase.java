@@ -5,6 +5,7 @@
 
 package org.semanticwb.model.base;
 
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
@@ -89,6 +90,16 @@ public class GenericObjectBase implements GenericObject
     public boolean equals(Object obj) 
     {
         return hashCode()==obj.hashCode();
+    }
+    
+    public String getWorkPath()
+    {
+        return SWBPlatform.getWorkPath()+"/"+getSemanticObject().getModel().getName()+getSemanticObject().getSemanticClass()+getId()+"/"+getId();
+    }
+
+    public String getWebWorkPath()
+    {
+        return SWBPlatform.getWebWorkPath()+"/"+getSemanticObject().getModel().getName()+getSemanticObject().getSemanticClass()+getId()+"/"+getId();
     }
 
 }

@@ -29,4 +29,8 @@ public interface GenericObject
     
     public GenericObject removeProperty(String prop);
 
+    public String getWorkPath();
+
+    public String getWebWorkPath();
+    
 }
