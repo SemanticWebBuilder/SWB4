@@ -26,8 +26,6 @@ public class SWBPortal {
 
     private static Logger log = SWBUtils.getLogger(SWBPortal.class);
     private static SWBPortal instance = null;
-    private static String workPath = "";
-    private static String webWorkPath = "";
     
     private static SWBUserMgr usrMgr;
 
@@ -47,59 +45,10 @@ public class SWBPortal {
      //Initialize context
     private void init()
     {
-        workPath = SWBPlatform.getEnv("swb/workPath");
         
         usrMgr=new SWBUserMgr();
         usrMgr.init();
-        
-        try {
-            //TODO:revisar sincronizacion
-            //if (confCS.equalsIgnoreCase("Client")) remoteWorkPath = (String) AFUtils.getInstance().getEnv("wb/remoteWorkPath");
-
-            workPath = (String) SWBPlatform.getEnv("swb/workPath");
-            if (workPath.startsWith("file:")) 
-            {
-                workPath = (new File(workPath.substring(5))).toString();
-            } else if (workPath.startsWith("http://")) 
-            {
-                workPath = (URLEncoder.encode(workPath));
-            } else {
-                workPath = SWBUtils.getApplicationPath()+workPath;
-            }
-        } catch (Exception e) {
-            log.error("Can't read the context path...",e);
-            workPath = "";
-        }        
-        
-        try {
-            String webPath=SWBPlatform.getContextPath();
-            if (webPath.endsWith("/")) {
-                webWorkPath = webPath +SWBPlatform.getEnv("wb/webWorkPath").substring(1);
-            } else {
-                webWorkPath = webPath + SWBPlatform.getEnv("wb/webWorkPath");
-            }
-        } catch (Exception e) {
-            log.error("Can't read the context path...", e);
-            webWorkPath = "";
-        }           
-        
     }
-    
-    /** Getter for property workPath.
-     * @return Value of property workPath.
-     */
-    public static String getWorkPath()
-    {
-        return workPath;
-    }
-    
-    /** Getter for property workPath.
-     * @return Value of property workPath.
-     */
-    public static String getWebWorkPath()
-    {
-        return webWorkPath;
-    }    
 
     public static SWBServices getSWBServices() {
         SWBServices swbServices = new SWBServices();
