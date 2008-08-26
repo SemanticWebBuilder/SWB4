@@ -409,14 +409,17 @@ public class CodeGenerator
                                 objectName = objectName.substring(3);
                                 javaClassContent.append(ENTER);
                                 javaClassContent.append("    public GenericIterator<" + m_Package + "." + valueToReturn + "> list" + objectName + "();" + ENTER);
-                                javaClassContent.append(ENTER);
-                                javaClassContent.append("    public void add" + objectName + "(" + m_Package + "." + valueToReturn + " " + valueToReturn.toLowerCase() + ");" + ENTER);
-                                javaClassContent.append(ENTER);
-                                javaClassContent.append("    public void removeAll" + objectName + "();" + ENTER);
-                                javaClassContent.append(ENTER);
-                                javaClassContent.append("    public void remove" + objectName + "(" + m_Package + "." + valueToReturn + " " + valueToReturn.toLowerCase() + ");" + ENTER);
-                                javaClassContent.append(ENTER);
-                                javaClassContent.append(PUBLIC + valueToReturn + " get" + objectName + "();" + ENTER);
+                                if(!tpp.hasInverse())
+                                {
+                                    javaClassContent.append(ENTER);
+                                    javaClassContent.append("    public void add" + objectName + "(" + m_Package + "." + valueToReturn + " " + valueToReturn.toLowerCase() + ");" + ENTER);
+                                    javaClassContent.append(ENTER);
+                                    javaClassContent.append("    public void removeAll" + objectName + "();" + ENTER);
+                                    javaClassContent.append(ENTER);
+                                    javaClassContent.append("    public void remove" + objectName + "(" + m_Package + "." + valueToReturn + " " + valueToReturn.toLowerCase() + ");" + ENTER);
+                                    javaClassContent.append(ENTER);
+                                    javaClassContent.append(PUBLIC + valueToReturn + " get" + objectName + "();" + ENTER);
+                                }
                             }
                             else
                             {
@@ -582,40 +585,50 @@ public class CodeGenerator
                                 javaClassContent.append(ENTER);
                                 javaClassContent.append("    public GenericIterator<" + m_Package + "." + valueToReturn + "> list" + objectName + "()" + ENTER);
                                 javaClassContent.append(OPEN_BLOCK + ENTER);
-                                javaClassContent.append("        StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary." + tpp.getName() + ".getRDFProperty());" + ENTER);
+                                if(!tpp.hasInverse())
+                                {                                
+                                    javaClassContent.append("        StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary." + tpp.getName() + ".getRDFProperty());" + ENTER);
+                                }else
+                                {
+                                    javaClassContent.append("        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, vocabulary." + tpp.getName() + ".getInverse().getRDFProperty(), getSemanticObject().getRDFResource());" + ENTER);
+                                    
+                                }
                                 javaClassContent.append("        return new GenericIterator<" + m_Package + "." + valueToReturn + ">(" + m_Package + "." + valueToReturn + ".class, stit);" + ENTER);
                                 javaClassContent.append(CLOSE_BLOCK + ENTER);
 
-                                javaClassContent.append(ENTER);
-                                javaClassContent.append("    public void add" + objectName + "(" + m_Package + "." + valueToReturn + " " + valueToReturn.toLowerCase() + ")" + ENTER);
-                                javaClassContent.append(OPEN_BLOCK + ENTER);
-                                javaClassContent.append("        getSemanticObject().addObjectProperty(vocabulary." + tpp.getName() + ", " + valueToReturn.toLowerCase() + ".getSemanticObject());" + ENTER);
-                                javaClassContent.append(CLOSE_BLOCK + ENTER);
+                                if(!tpp.hasInverse())
+                                {
+                                    javaClassContent.append(ENTER);
+                                    javaClassContent.append("    public void add" + objectName + "(" + m_Package + "." + valueToReturn + " " + valueToReturn.toLowerCase() + ")" + ENTER);
+                                    javaClassContent.append(OPEN_BLOCK + ENTER);
+                                    javaClassContent.append("        getSemanticObject().addObjectProperty(vocabulary." + tpp.getName() + ", " + valueToReturn.toLowerCase() + ".getSemanticObject());" + ENTER);
+                                    javaClassContent.append(CLOSE_BLOCK + ENTER);
 
-                                javaClassContent.append(ENTER);
-                                javaClassContent.append("    public void removeAll" + objectName + "()" + ENTER);
-                                javaClassContent.append(OPEN_BLOCK + ENTER);
-                                javaClassContent.append("        getSemanticObject().removeProperty(vocabulary." + tpp.getName() + ");" + ENTER);
-                                javaClassContent.append(CLOSE_BLOCK + ENTER);
+                                    javaClassContent.append(ENTER);
+                                    javaClassContent.append("    public void removeAll" + objectName + "()" + ENTER);
+                                    javaClassContent.append(OPEN_BLOCK + ENTER);
+                                    javaClassContent.append("        getSemanticObject().removeProperty(vocabulary." + tpp.getName() + ");" + ENTER);
+                                    javaClassContent.append(CLOSE_BLOCK + ENTER);
 
-                                javaClassContent.append(ENTER);
-                                javaClassContent.append("    public void remove" + objectName + "(" + m_Package + "." + valueToReturn + " " + valueToReturn.toLowerCase() + ")" + ENTER);
-                                javaClassContent.append(OPEN_BLOCK + ENTER);
-                                javaClassContent.append("        getSemanticObject().removeObjectProperty(vocabulary." + tpp.getName() + "," + valueToReturn.toLowerCase() + ".getSemanticObject());" + ENTER);
-                                javaClassContent.append(CLOSE_BLOCK + ENTER);
+                                    javaClassContent.append(ENTER);
+                                    javaClassContent.append("    public void remove" + objectName + "(" + m_Package + "." + valueToReturn + " " + valueToReturn.toLowerCase() + ")" + ENTER);
+                                    javaClassContent.append(OPEN_BLOCK + ENTER);
+                                    javaClassContent.append("        getSemanticObject().removeObjectProperty(vocabulary." + tpp.getName() + "," + valueToReturn.toLowerCase() + ".getSemanticObject());" + ENTER);
+                                    javaClassContent.append(CLOSE_BLOCK + ENTER);
 
-                                javaClassContent.append(ENTER);
-                                javaClassContent.append(PUBLIC + valueToReturn + " get" + objectName + "()" + ENTER);
-                                javaClassContent.append(OPEN_BLOCK + ENTER);
-                                javaClassContent.append("         " + valueToReturn + " ret=null;" + ENTER);
-                                javaClassContent.append("         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary." + tpp.getName() + ".getRDFProperty());" + ENTER);
-                                javaClassContent.append("         GenericIterator<" + m_Package + "." + valueToReturn + "> it=new GenericIterator<" + m_Package + "." + valueToReturn + ">(" + valueToReturn + ".class, stit);" + ENTER);
-                                javaClassContent.append("         if(it.hasNext())" + ENTER);
-                                javaClassContent.append("         {" + ENTER);
-                                javaClassContent.append("             ret=it.next();" + ENTER);
-                                javaClassContent.append("         }" + ENTER);
-                                javaClassContent.append("         return ret;" + ENTER);
-                                javaClassContent.append(CLOSE_BLOCK + ENTER);
+                                    javaClassContent.append(ENTER);
+                                    javaClassContent.append(PUBLIC + valueToReturn + " get" + objectName + "()" + ENTER);
+                                    javaClassContent.append(OPEN_BLOCK + ENTER);
+                                    javaClassContent.append("         " + valueToReturn + " ret=null;" + ENTER);
+                                    javaClassContent.append("         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary." + tpp.getName() + ".getRDFProperty());" + ENTER);
+                                    javaClassContent.append("         GenericIterator<" + m_Package + "." + valueToReturn + "> it=new GenericIterator<" + m_Package + "." + valueToReturn + ">(" + valueToReturn + ".class, stit);" + ENTER);
+                                    javaClassContent.append("         if(it.hasNext())" + ENTER);
+                                    javaClassContent.append("         {" + ENTER);
+                                    javaClassContent.append("             ret=it.next();" + ENTER);
+                                    javaClassContent.append("         }" + ENTER);
+                                    javaClassContent.append("         return ret;" + ENTER);
+                                    javaClassContent.append(CLOSE_BLOCK + ENTER);
+                                }
                             }
                             else
                             {

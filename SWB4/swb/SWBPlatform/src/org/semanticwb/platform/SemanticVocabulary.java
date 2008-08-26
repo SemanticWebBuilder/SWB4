@@ -66,6 +66,27 @@ public class SemanticVocabulary
     {
         //SWBClass=getSemanticClass(URI+"SWBClass");
         //SWBInterface=getSemanticClass(URI+"SWBInterface");
+        filterProperties();
+    }
+    
+    private void filterProperties()
+    {
+        System.out.println("filterProperties");
+        Iterator<SemanticClass> tpcit=listSemanticClasses();
+        while(tpcit.hasNext())
+        {
+            SemanticClass tpc=tpcit.next();
+            Iterator<SemanticProperty> tppit=tpc.listProperties();
+            while(tppit.hasNext())
+            {
+                SemanticProperty tpp=tppit.next();
+                //System.out.println("Prop:"+tpp+"\t"+tpp.getDomainClass()+"\t"+tpc+"\t"+tpc.isSubClass(tpp.getDomainClass()));
+                if(tpp.getDomainClass()==null || !(tpc.equals(tpp.getDomainClass())||tpc.isSubClass(tpp.getDomainClass())))
+                {
+                    tppit.remove();
+                }
+            }
+        }        
     }
     
     void addSemanticClass(SemanticClass tpc)

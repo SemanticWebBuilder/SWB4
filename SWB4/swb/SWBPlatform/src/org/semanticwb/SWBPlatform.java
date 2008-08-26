@@ -226,7 +226,7 @@ public class SWBPlatform
             //TODO:revisar sincronizacion
             //if (confCS.equalsIgnoreCase("Client")) remoteWorkPath = (String) AFUtils.getInstance().getEnv("wb/remoteWorkPath");
 
-            workPath = (String) SWBPlatform.getEnv("swb/workPath");
+            workPath = (String) SWBPlatform.getEnv("swb/workPath","/work");
             if (workPath.startsWith("file:")) 
             {
                 workPath = (new File(workPath.substring(5))).toString();
