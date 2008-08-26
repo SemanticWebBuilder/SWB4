@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericIterator;
@@ -47,15 +48,15 @@ public class TemplateSrv {
 
         //TODO: Grabar el archivo en ruta de fileSystem q se decida
         String wsId = website.getId();
-        java.io.File dir = new File(SWBPortal.getWorkPath() +"/sites/"+wsId+ "/templates/" + template.getId());
+        java.io.File dir = new File(SWBPlatform.getWorkPath() +"/sites/"+wsId+ "/templates/" + template.getId());
         dir.mkdir();
-        dir = new File(SWBPortal.getWorkPath() +"/sites/"+wsId+ "/templates/" + template.getId() + "/" + verInfo.getValue());
+        dir = new File(SWBPlatform.getWorkPath() +"/sites/"+wsId+ "/templates/" + template.getId() + "/" + verInfo.getValue());
         dir.mkdir();
-        dir = new File(SWBPortal.getWorkPath() + "/sites/"+wsId+ "/templates/" + template.getId() + "/" + verInfo.getValue() + "/images");
+        dir = new File(SWBPlatform.getWorkPath() + "/sites/"+wsId+ "/templates/" + template.getId() + "/" + verInfo.getValue() + "/images");
         dir.mkdir();
         try{
             java.io.OutputStream Os = new FileOutputStream(
-            SWBPortal.getWorkPath()  + "/sites/"+wsId + "/title/" + template.getId() + "/" + verInfo.getValue() + "/" + fileName);
+            SWBPlatform.getWorkPath()  + "/sites/"+wsId + "/title/" + template.getId() + "/" + verInfo.getValue() + "/" + fileName);
             Os.write(content.getBytes());
             Os.flush();
             Os.close();
@@ -120,7 +121,7 @@ public class TemplateSrv {
 
         //TODO:Elimina el template de FileSystem
         String wsId = website.getId();
-        String rutawork = (String) SWBPortal.getWorkPath();
+        String rutawork = (String) SWBPlatform.getWorkPath();
         File f = new File(rutawork + "/sites/" + wsId + "/templates/");
         if (f.exists() && f.isDirectory()) {
             f = new File(rutawork + "/sites/" + wsId + "/templates/" + id);
@@ -157,15 +158,15 @@ public class TemplateSrv {
         
         String id = template.getId();
         String wsId = template.getWebSite().getId();
-        java.io.File dir = new File(SWBPortal.getWorkPath() +"/sites/"+wsId+ "/templates/" + id);
+        java.io.File dir = new File(SWBPlatform.getWorkPath() +"/sites/"+wsId+ "/templates/" + id);
         dir.mkdir();
-        dir = new File(SWBPortal.getWorkPath() +"/sites/"+wsId+ "/templates/" + id+ "/" + version);
+        dir = new File(SWBPlatform.getWorkPath() +"/sites/"+wsId+ "/templates/" + id+ "/" + version);
         dir.mkdir();
-        dir = new File(SWBPortal.getWorkPath() +"/sites/"+wsId+ "/templates/" + id+ "/" + version + "/images");
+        dir = new File(SWBPlatform.getWorkPath() +"/sites/"+wsId+ "/templates/" + id+ "/" + version + "/images");
         dir.mkdir();
         try{
             java.io.OutputStream Os = new FileOutputStream(
-            SWBPortal.getWorkPath() +"/sites/"+wsId+ "/templates/" + id+ "/" + version + "/" + fileName);
+            SWBPlatform.getWorkPath() +"/sites/"+wsId+ "/templates/" + id+ "/" + version + "/" + fileName);
             Os.write(content.getBytes());
             Os.flush();
             Os.close();
@@ -179,7 +180,7 @@ public class TemplateSrv {
             String attach=(String)itattaches.next();
             byte abyte[] = (byte[]) attaches.get(attach);
             try{
-                java.io.OutputStream Os = new FileOutputStream(SWBPortal.getWorkPath() +"/sites/"+wsId+ "/templates/" + id + "/" + version + "/images/" + attach);
+                java.io.OutputStream Os = new FileOutputStream(SWBPlatform.getWorkPath() +"/sites/"+wsId+ "/templates/" + id + "/" + version + "/images/" + attach);
                 Os.write(abyte,0,abyte.length);
                 Os.flush();
                 Os.close();
@@ -193,7 +194,7 @@ public class TemplateSrv {
 
     public static boolean resetTemplates(WebSite website, Template template, User user) {
         try {
-            String rutawork = (String) SWBPortal.getWorkPath();
+            String rutawork = (String) SWBPlatform.getWorkPath();
             File dir = new File(rutawork + "/sites/" + website.getId() + "/templates/" + template.getId());
             if (dir != null && dir.exists() && dir.isDirectory()) {
                 File listado[] = dir.listFiles();

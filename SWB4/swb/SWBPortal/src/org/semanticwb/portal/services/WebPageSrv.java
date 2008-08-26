@@ -29,7 +29,7 @@ public class WebPageSrv {
     public WebPage createWebPage(WebSite website, String title, WebPage childOf, User user) throws SWBException {
 
         WebPage wp = website.createWebPage(title);
-        wp.setIsChildOf(childOf);
+        wp.addParentWebPage(childOf);
         //TODO: Revisar como pongo el scope y con que tags (En el metodo setProperty de WebPage)
         wp.setCreator(user);
 

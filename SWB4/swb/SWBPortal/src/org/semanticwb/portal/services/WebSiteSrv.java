@@ -9,6 +9,7 @@ import org.semanticwb.model.*;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 
 /**
@@ -41,9 +42,9 @@ public class WebSiteSrv {
         capSrv.createCamp(website, "default", "Grupo de templates default para sitio", user);
         capSrv.createCamp(website,"Priority","Priority",user);
 
-        java.io.File dir = new java.io.File(SWBPortal.getWorkPath() + "/sites/" + website.getId() + "/templates");
+        java.io.File dir = new java.io.File(SWBPlatform.getWorkPath() + "/sites/" + website.getId() + "/templates");
         dir.mkdirs();
-        dir = new java.io.File(SWBPortal.getWorkPath() + "/sites/" + website.getId() + "/resources");
+        dir = new java.io.File(SWBPlatform.getWorkPath() + "/sites/" + website.getId() + "/resources");
         dir.mkdirs();
 
         SWBPortal.log(user.getURI(), "create", website.getURI(), website.getId(), "create website", null);
@@ -110,7 +111,7 @@ public class WebSiteSrv {
         //TODO: Eliminar tablas de metadatos
 
         //TODO:Eliminar ruta del sitio
-        SWBUtils.IO.removeDirectory(SWBPortal.getWorkPath() + "/sites/" + webSite.getId());
+        SWBUtils.IO.removeDirectory(SWBPlatform.getWorkPath() + "/sites/" + webSite.getId());
 
         //TODO:Revisar q más se va ha borrar de BD (hits al sitio, etc)
 
