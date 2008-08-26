@@ -70,6 +70,16 @@ public class VersionInfoBase extends GenericObjectBase implements Valueable
          return ret;
     }
 
+    public String getVersionFile()
+    {
+        return getSemanticObject().getProperty(vocabulary.versionFile);
+    }
+
+    public void setVersionFile(String versionFile)
+    {
+        getSemanticObject().setProperty(vocabulary.versionFile, versionFile);
+    }
+
     public String getVersionComment()
     {
         return getSemanticObject().getProperty(vocabulary.versionComment);
@@ -88,6 +98,16 @@ public class VersionInfoBase extends GenericObjectBase implements Valueable
     public void setVersionCreated(Date versionCreated)
     {
         getSemanticObject().setDateProperty(vocabulary.versionCreated, versionCreated);
+    }
+
+    public int getVersionNumber()
+    {
+        return getSemanticObject().getIntProperty(vocabulary.versionNumber);
+    }
+
+    public void setVersionNumber(int versionNumber)
+    {
+        getSemanticObject().setLongProperty(vocabulary.versionNumber, versionNumber);
     }
 
     public WebSite getWebSite()
