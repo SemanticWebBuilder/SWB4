@@ -47,33 +47,36 @@ public class TemplateSrv {
         //Ahora lo voy a poner con setProperty, si es así como creo un SemanticProperty
 
         //TODO: Grabar el archivo en ruta de fileSystem q se decida
-        String wsId = website.getId();
-        java.io.File dir = new File(SWBPlatform.getWorkPath() +"/sites/"+wsId+ "/templates/" + template.getId());
+        java.io.File dir = new File(template.getWorkPath());
         dir.mkdir();
-        dir = new File(SWBPlatform.getWorkPath() +"/sites/"+wsId+ "/templates/" + template.getId() + "/" + verInfo.getValue());
+        dir = new File(template.getWorkPath() + "/" + verInfo.getValue());
         dir.mkdir();
-        dir = new File(SWBPlatform.getWorkPath() + "/sites/"+wsId+ "/templates/" + template.getId() + "/" + verInfo.getValue() + "/images");
+        dir = new File(template.getWorkPath() + "/" + verInfo.getValue() + "/images");
         dir.mkdir();
         try{
             java.io.OutputStream Os = new FileOutputStream(
-            SWBPlatform.getWorkPath()  + "/sites/"+wsId + "/title/" + template.getId() + "/" + verInfo.getValue() + "/" + fileName);
+            template.getWorkPath() + "/" + verInfo.getValue() + "/" + fileName);
             Os.write(content.getBytes());
             Os.flush();
             Os.close();
         }catch(Exception e){
-            log.error(e);
+            log.debug(e);
         }
 
         //TODO: Graba attaches
-        //Iterator itattaches=attaches.keySet().iterator();
-//        while(itattaches.hasNext()) {
-//            String attach=(String)itattaches.next();
-//            byte abyte[] = (byte[]) attaches.get(attach);
-//            Os = new FileOutputStream(WBUtils.getInstance().getWorkPath() + "/sites/"+title + "/templates/" + RECID + "/" + version + "/images/" + attach);
-//            Os.write(abyte,0,abyte.length);
-//            Os.flush();
-//            Os.close();
-//        }
+        Iterator itattaches=attaches.keySet().iterator();
+        while(itattaches.hasNext()) {
+            String attach=(String)itattaches.next();
+            byte abyte[] = (byte[]) attaches.get(attach);
+            try{
+                java.io.OutputStream Os = new FileOutputStream(template.getWorkPath() + "/" + verInfo.getValue() + "/images/" + attach);
+                Os.write(abyte,0,abyte.length);
+                Os.flush();
+                Os.close();
+            }catch(Exception e){
+                log.debug(e);
+            }
+        }
 
 
         SWBPortal.log(user.getURI(), "create", template.getURI(), template.getURI(), "create template", null); 
@@ -120,24 +123,19 @@ public class TemplateSrv {
         }
 
         //TODO:Elimina el template de FileSystem
-        String wsId = website.getId();
-        String rutawork = (String) SWBPlatform.getWorkPath();
-        File f = new File(rutawork + "/sites/" + wsId + "/templates/");
-        if (f.exists() && f.isDirectory()) {
-            f = new File(rutawork + "/sites/" + wsId + "/templates/" + id);
+        Template tpl=website.getTemplate(id);
+        File f = new File(tpl.getWorkPath());
             if (f.exists() && f.isDirectory()) {
                 try {
-                    String deldirectory = rutawork + "/sites/" + wsId + "/templates/" + id;
-                    boolean flag = SWBUtils.IO.removeDirectory(deldirectory);
+                    boolean flag = SWBUtils.IO.removeDirectory(tpl.getWorkPath());
                     if (flag) {
                         f.delete();
                     }
                 } catch (Exception e) {
+                    log.debug(e);
                 }
             }
-        }
-
-
+        
         SWBPortal.log(user.getURI(), "remove", website.getURI(), id, "remove template", null); 
 
         return deleted;
