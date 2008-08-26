@@ -7,7 +7,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class CampBase extends GenericObjectBase implements Statusable,Deleteable,Ruleable,Descriptiveable,Calendarable,Roleable,Traceable
+public class CampBase extends GenericObjectBase implements Statusable,Deleteable,Ruleable,Descriptiveable,Traceable,Calendarable,Roleable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 

@@ -7,7 +7,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class PFlowBase extends GenericObjectBase implements Deleteable,Groupable,Versionable,Statusable,Descriptiveable,Traceable
+public class PFlowBase extends GenericObjectBase implements Deleteable,Groupable,Versionable,Statusable,Traceable,Descriptiveable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 

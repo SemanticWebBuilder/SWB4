@@ -7,7 +7,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class WebPageBase extends GenericObjectBase implements Descriptiveable,PortletRefable,TemplateRefable,Indexable,Calendarable,RuleRefable,RoleRefable,Hiddenable,Deleteable,Statusable,Referensable,Traceable
+public class WebPageBase extends GenericObjectBase implements Descriptiveable,PortletRefable,TemplateRefable,Indexable,Calendarable,RuleRefable,RoleRefable,Hiddenable,Deleteable,Statusable,Traceable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
@@ -369,6 +369,12 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
     public void setDescription(String description)
     {
         getSemanticObject().setProperty(vocabulary.description, description);
+    }
+
+    public GenericIterator<org.semanticwb.model.WebPage> listChildWebPage()
+    {
+        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, vocabulary.hasChildWebPage.getInverse().getRDFProperty(), getSemanticObject().getRDFResource());
+        return new GenericIterator<org.semanticwb.model.WebPage>(org.semanticwb.model.WebPage.class, stit);
     }
 
     public WebSite getWebSite()

@@ -72,7 +72,6 @@ public class SWBVocabulary
     public final SemanticProperty language;
     public final SemanticProperty updated;
     public final SemanticProperty usrLastLogin;
-    public final SemanticProperty hasReference;
     public final SemanticProperty creator;
     public final SemanticProperty usrLogin;
     public final SemanticProperty usrPassword;
@@ -81,7 +80,6 @@ public class SWBVocabulary
     public final SemanticProperty hasRole;
     public final SemanticProperty usrSecurityQuestion;
     public final SemanticProperty hasGroup;
-    public final SemanticProperty hasChildWebPage;
     public final SemanticProperty usrSecurityAnswer;
     public final SemanticProperty title;
     public final SemanticProperty description;
@@ -101,8 +99,10 @@ public class SWBVocabulary
     public final SemanticProperty nextVersion;
     public final SemanticProperty value;
     public final SemanticProperty previousVersion;
+    public final SemanticProperty versionFile;
     public final SemanticProperty versionComment;
     public final SemanticProperty versionCreated;
+    public final SemanticProperty versionNumber;
     public final SemanticProperty index;
     public final SemanticProperty camp;
     public final SemanticProperty portletClass;
@@ -113,6 +113,7 @@ public class SWBVocabulary
     public final SemanticProperty hasPFlowRef;
     public final SemanticProperty hasParentWebPage;
     public final SemanticProperty hidden;
+    public final SemanticProperty hasChildWebPage;
     public final SemanticProperty homePage;
     public final SemanticProperty userRepository;
     public final SemanticProperty portlet;
@@ -186,7 +187,6 @@ public class SWBVocabulary
         language=vocabulary.getSemanticProperty(URI+"language");
         updated=vocabulary.getSemanticProperty(URI+"updated");
         usrLastLogin=vocabulary.getSemanticProperty(URI+"usrLastLogin");
-        hasReference=vocabulary.getSemanticProperty(URI+"hasReference");
         creator=vocabulary.getSemanticProperty(URI+"creator");
         usrLogin=vocabulary.getSemanticProperty(URI+"usrLogin");
         usrPassword=vocabulary.getSemanticProperty(URI+"usrPassword");
@@ -195,7 +195,6 @@ public class SWBVocabulary
         hasRole=vocabulary.getSemanticProperty(URI+"hasRole");
         usrSecurityQuestion=vocabulary.getSemanticProperty(URI+"usrSecurityQuestion");
         hasGroup=vocabulary.getSemanticProperty(URI+"hasGroup");
-        hasChildWebPage=vocabulary.getSemanticProperty(URI+"hasChildWebPage");
         usrSecurityAnswer=vocabulary.getSemanticProperty(URI+"usrSecurityAnswer");
         title=vocabulary.getSemanticProperty(URI+"title");
         description=vocabulary.getSemanticProperty(URI+"description");
@@ -215,8 +214,10 @@ public class SWBVocabulary
         nextVersion=vocabulary.getSemanticProperty(URI+"nextVersion");
         value=vocabulary.getSemanticProperty(URI+"value");
         previousVersion=vocabulary.getSemanticProperty(URI+"previousVersion");
+        versionFile=vocabulary.getSemanticProperty(URI+"versionFile");
         versionComment=vocabulary.getSemanticProperty(URI+"versionComment");
         versionCreated=vocabulary.getSemanticProperty(URI+"versionCreated");
+        versionNumber=vocabulary.getSemanticProperty(URI+"versionNumber");
         index=vocabulary.getSemanticProperty(URI+"index");
         camp=vocabulary.getSemanticProperty(URI+"camp");
         portletClass=vocabulary.getSemanticProperty(URI+"portletClass");
@@ -227,6 +228,7 @@ public class SWBVocabulary
         hasPFlowRef=vocabulary.getSemanticProperty(URI+"hasPFlowRef");
         hasParentWebPage=vocabulary.getSemanticProperty(URI+"hasParentWebPage");
         hidden=vocabulary.getSemanticProperty(URI+"hidden");
+        hasChildWebPage=vocabulary.getSemanticProperty(URI+"hasChildWebPage");
         homePage=vocabulary.getSemanticProperty(URI+"homePage");
         userRepository=vocabulary.getSemanticProperty(URI+"userRepository");
         portlet=vocabulary.getSemanticProperty(URI+"portlet");

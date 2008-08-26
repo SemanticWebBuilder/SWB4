@@ -7,7 +7,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class TemplateBase extends GenericObjectBase implements RoleRefable,Calendarable,Versionable,Statusable,Deleteable,Groupable,RuleRefable,Descriptiveable,Localeable,Referensable,Traceable
+public class TemplateBase extends GenericObjectBase implements RoleRefable,Calendarable,Versionable,Statusable,Deleteable,Traceable,Groupable,RuleRefable,Descriptiveable,Localeable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 

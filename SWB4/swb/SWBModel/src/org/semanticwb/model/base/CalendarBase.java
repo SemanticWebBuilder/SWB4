@@ -7,7 +7,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class CalendarBase extends GenericObjectBase implements Descriptiveable,Statusable,Traceable
+public class CalendarBase extends GenericObjectBase implements Traceable,Descriptiveable,Statusable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
