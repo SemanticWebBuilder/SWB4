@@ -43,7 +43,7 @@ public class SWBPlatform
     /**
      * 
      */
-    protected String version = "4.0.0.0";
+    protected static String version = "4.0.0.0";
     
     private SWBPlatform()
     {
@@ -553,7 +553,7 @@ public class SWBPlatform
 
     }
 
-    public String getVersion() {
+    public static String getVersion() {
         return version;
     }    
 }
