@@ -5,6 +5,7 @@ import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
+import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.sql.Connection;
@@ -13,6 +14,7 @@ import javax.servlet.ServletContext;
 import org.semanticwb.platform.SWBMonitor;
 import org.semanticwb.platform.SemanticMgr;
 import org.semanticwb.base.util.SWBProperties;
+import org.semanticwb.base.util.URLEncoder;
 import org.semanticwb.platform.SemanticModel;
 
 /**
@@ -26,6 +28,9 @@ public class SWBPlatform
     private static SWBPlatform instance=null;
     private static Properties props=null;
     private String contextPath="/";
+    private static String workPath = "";
+    private static String webWorkPath = "";
+    
     
     private static ServletContext servletContext=null;
 
@@ -215,6 +220,38 @@ public class SWBPlatform
         {
             log.error("Error loading SemanticWebBuilder Instance...", e);
         }
+        
+        workPath = SWBPlatform.getEnv("swb/workPath");
+        try {
+            //TODO:revisar sincronizacion
+            //if (confCS.equalsIgnoreCase("Client")) remoteWorkPath = (String) AFUtils.getInstance().getEnv("wb/remoteWorkPath");
+
+            workPath = (String) SWBPlatform.getEnv("swb/workPath");
+            if (workPath.startsWith("file:")) 
+            {
+                workPath = (new File(workPath.substring(5))).toString();
+            } else if (workPath.startsWith("http://")) 
+            {
+                workPath = (URLEncoder.encode(workPath));
+            } else {
+                workPath = SWBUtils.getApplicationPath()+workPath;
+            }
+        } catch (Exception e) {
+            log.error("Can't read the context path...",e);
+            workPath = "";
+        }        
+        
+        try {
+            String webPath=SWBPlatform.getContextPath();
+            if (webPath.endsWith("/")) {
+                webWorkPath = webPath +SWBPlatform.getEnv("wb/webWorkPath").substring(1);
+            } else {
+                webWorkPath = webPath + SWBPlatform.getEnv("wb/webWorkPath");
+            }
+        } catch (Exception e) {
+            log.error("Can't read the context path...", e);
+            webWorkPath = "";
+        }                 
     }
     
     
@@ -295,6 +332,22 @@ public class SWBPlatform
         log.event("ContextPath:"+contextPath);
         this.contextPath = contextPath;
     }
+    
+    /** Getter for property workPath.
+     * @return Value of property workPath.
+     */
+    public static String getWorkPath()
+    {
+        return workPath;
+    }
+    
+    /** Getter for property workPath.
+     * @return Value of property workPath.
+     */
+    public static String getWebWorkPath()
+    {
+        return webWorkPath;
+    }    
     
     /** Obtiene valor de variable de ambiente declarada en web.xml o web.properties.
      * @param name String nombre de la variable
