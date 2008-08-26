@@ -8,7 +8,8 @@ public class SWBContext extends SWBContextBase
 {
     private static Logger log=SWBUtils.getLogger(SWBContext.class);
     
-    public static String ADMINSITE="SWBADmin";
+    public static String WEBSITE_ADMIN="SWBAdmin";
+    public static String WEBSITE_GLOBAL="SWBGlobal";
     
     private static SWBContext instance=null;
     static public synchronized SWBContext createInstance()
@@ -27,6 +28,11 @@ public class SWBContext extends SWBContextBase
     
     public static WebSite getAdminWebSite()
     {
-        return getWebSite(ADMINSITE);
+        return getWebSite(WEBSITE_ADMIN);
     }
+    
+    public static WebSite getGlobalWebSite()
+    {
+        return getWebSite(WEBSITE_GLOBAL);
+    }    
 }

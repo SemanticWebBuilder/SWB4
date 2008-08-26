@@ -7,7 +7,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class RoleBase extends GenericObjectBase implements Groupable,Descriptiveable
+public class RoleBase extends GenericObjectBase implements Descriptiveable,Groupable,Traceable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 

@@ -7,13 +7,23 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class PortletBase extends GenericObjectBase implements Versionable,Groupable,Statusable,Descriptiveable,Calendarable,RuleRefable,RoleRefable,Priorityable,Deleteable,Localeable
+public class PortletBase extends GenericObjectBase implements Versionable,Indexable,Groupable,Statusable,Descriptiveable,Calendarable,RuleRefable,RoleRefable,Priorityable,Deleteable,Localeable,Referensable,Traceable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
     public PortletBase(SemanticObject base)
     {
         super(base);
+    }
+
+    public int getIndex()
+    {
+        return getSemanticObject().getIntProperty(vocabulary.index);
+    }
+
+    public void setIndex(int index)
+    {
+        getSemanticObject().setLongProperty(vocabulary.index, index);
     }
 
     public Date getCreated()

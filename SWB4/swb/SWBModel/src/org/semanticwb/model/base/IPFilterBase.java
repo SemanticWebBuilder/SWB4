@@ -7,7 +7,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class IPFilterBase extends GenericObjectBase implements Statusable,Valueable
+public class IPFilterBase extends GenericObjectBase implements Valueable,Statusable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 

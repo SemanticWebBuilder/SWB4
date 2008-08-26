@@ -7,23 +7,13 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class CampBase extends GenericObjectBase implements Statusable,Deleteable,Ruleable,Descriptiveable,Calendarable,Roleable
+public class CampBase extends GenericObjectBase implements Statusable,Deleteable,Ruleable,Descriptiveable,Calendarable,Roleable,Traceable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
     public CampBase(SemanticObject base)
     {
         super(base);
-    }
-
-    public Date getCreated()
-    {
-        return getSemanticObject().getDateProperty(vocabulary.created);
-    }
-
-    public void setCreated(Date created)
-    {
-        getSemanticObject().setDateProperty(vocabulary.created, created);
     }
 
     public boolean isDeleted()
@@ -34,6 +24,16 @@ public class CampBase extends GenericObjectBase implements Statusable,Deleteable
     public void setDeleted(boolean deleted)
     {
         getSemanticObject().setBooleanProperty(vocabulary.deleted, deleted);
+    }
+
+    public Date getCreated()
+    {
+        return getSemanticObject().getDateProperty(vocabulary.created);
+    }
+
+    public void setCreated(Date created)
+    {
+        getSemanticObject().setDateProperty(vocabulary.created, created);
     }
 
     public void setModifiedBy(org.semanticwb.model.User user)
@@ -56,6 +56,36 @@ public class CampBase extends GenericObjectBase implements Statusable,Deleteable
              ret=it.next();
          }
          return ret;
+    }
+
+    public String getTitle()
+    {
+        return getSemanticObject().getProperty(vocabulary.title);
+    }
+
+    public void setTitle(String title)
+    {
+        getSemanticObject().setProperty(vocabulary.title, title);
+    }
+
+    public int getStatus()
+    {
+        return getSemanticObject().getIntProperty(vocabulary.status);
+    }
+
+    public void setStatus(int status)
+    {
+        getSemanticObject().setLongProperty(vocabulary.status, status);
+    }
+
+    public Date getUpdated()
+    {
+        return getSemanticObject().getDateProperty(vocabulary.updated);
+    }
+
+    public void setUpdated(Date updated)
+    {
+        getSemanticObject().setDateProperty(vocabulary.updated, updated);
     }
 
     public void setCreator(org.semanticwb.model.User user)
@@ -113,16 +143,6 @@ public class CampBase extends GenericObjectBase implements Statusable,Deleteable
          return ret;
     }
 
-    public String getTitle()
-    {
-        return getSemanticObject().getProperty(vocabulary.title);
-    }
-
-    public void setTitle(String title)
-    {
-        getSemanticObject().setProperty(vocabulary.title, title);
-    }
-
     public GenericIterator<org.semanticwb.model.Role> listRole()
     {
         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasRole.getRDFProperty());
@@ -164,26 +184,6 @@ public class CampBase extends GenericObjectBase implements Statusable,Deleteable
     public void setDescription(String description)
     {
         getSemanticObject().setProperty(vocabulary.description, description);
-    }
-
-    public int getStatus()
-    {
-        return getSemanticObject().getIntProperty(vocabulary.status);
-    }
-
-    public void setStatus(int status)
-    {
-        getSemanticObject().setLongProperty(vocabulary.status, status);
-    }
-
-    public Date getUpdated()
-    {
-        return getSemanticObject().getDateProperty(vocabulary.updated);
-    }
-
-    public void setUpdated(Date updated)
-    {
-        getSemanticObject().setDateProperty(vocabulary.updated, updated);
     }
 
     public GenericIterator<org.semanticwb.model.Rule> listRule()

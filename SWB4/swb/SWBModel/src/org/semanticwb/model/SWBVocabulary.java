@@ -51,12 +51,14 @@ public class SWBVocabulary
     public final SemanticClass PortletRefable;
     public final SemanticClass Permission;
     public final SemanticClass PortletRef;
+    public final SemanticClass Indexable;
     public final SemanticClass TemplateRefable;
     public final SemanticClass PFlowRef;
     public final SemanticClass RuleRef;
     public final SemanticClass Referensable;
     public final SemanticClass Device;
     public final SemanticClass Groupable;
+    public final SemanticClass Hiddenable;
 
 
 
@@ -79,6 +81,7 @@ public class SWBVocabulary
     public final SemanticProperty hasRole;
     public final SemanticProperty usrSecurityQuestion;
     public final SemanticProperty hasGroup;
+    public final SemanticProperty hasChildWebPage;
     public final SemanticProperty usrSecurityAnswer;
     public final SemanticProperty title;
     public final SemanticProperty description;
@@ -100,6 +103,7 @@ public class SWBVocabulary
     public final SemanticProperty previousVersion;
     public final SemanticProperty versionComment;
     public final SemanticProperty versionCreated;
+    public final SemanticProperty index;
     public final SemanticProperty camp;
     public final SemanticProperty portletClass;
     public final SemanticProperty portletType;
@@ -107,7 +111,8 @@ public class SWBVocabulary
     public final SemanticProperty hasPortletRef;
     public final SemanticProperty hasTemplateRef;
     public final SemanticProperty hasPFlowRef;
-    public final SemanticProperty isChildOf;
+    public final SemanticProperty hasParentWebPage;
+    public final SemanticProperty hidden;
     public final SemanticProperty homePage;
     public final SemanticProperty userRepository;
     public final SemanticProperty portlet;
@@ -160,12 +165,14 @@ public class SWBVocabulary
         PortletRefable=vocabulary.getSemanticClass(URI+"PortletRefable");
         Permission=vocabulary.getSemanticClass(URI+"Permission");
         PortletRef=vocabulary.getSemanticClass(URI+"PortletRef");
+        Indexable=vocabulary.getSemanticClass(URI+"Indexable");
         TemplateRefable=vocabulary.getSemanticClass(URI+"TemplateRefable");
         PFlowRef=vocabulary.getSemanticClass(URI+"PFlowRef");
         RuleRef=vocabulary.getSemanticClass(URI+"RuleRef");
         Referensable=vocabulary.getSemanticClass(URI+"Referensable");
         Device=vocabulary.getSemanticClass(URI+"Device");
         Groupable=vocabulary.getSemanticClass(URI+"Groupable");
+        Hiddenable=vocabulary.getSemanticClass(URI+"Hiddenable");
 
 
 
@@ -188,6 +195,7 @@ public class SWBVocabulary
         hasRole=vocabulary.getSemanticProperty(URI+"hasRole");
         usrSecurityQuestion=vocabulary.getSemanticProperty(URI+"usrSecurityQuestion");
         hasGroup=vocabulary.getSemanticProperty(URI+"hasGroup");
+        hasChildWebPage=vocabulary.getSemanticProperty(URI+"hasChildWebPage");
         usrSecurityAnswer=vocabulary.getSemanticProperty(URI+"usrSecurityAnswer");
         title=vocabulary.getSemanticProperty(URI+"title");
         description=vocabulary.getSemanticProperty(URI+"description");
@@ -209,6 +217,7 @@ public class SWBVocabulary
         previousVersion=vocabulary.getSemanticProperty(URI+"previousVersion");
         versionComment=vocabulary.getSemanticProperty(URI+"versionComment");
         versionCreated=vocabulary.getSemanticProperty(URI+"versionCreated");
+        index=vocabulary.getSemanticProperty(URI+"index");
         camp=vocabulary.getSemanticProperty(URI+"camp");
         portletClass=vocabulary.getSemanticProperty(URI+"portletClass");
         portletType=vocabulary.getSemanticProperty(URI+"portletType");
@@ -216,7 +225,8 @@ public class SWBVocabulary
         hasPortletRef=vocabulary.getSemanticProperty(URI+"hasPortletRef");
         hasTemplateRef=vocabulary.getSemanticProperty(URI+"hasTemplateRef");
         hasPFlowRef=vocabulary.getSemanticProperty(URI+"hasPFlowRef");
-        isChildOf=vocabulary.getSemanticProperty(URI+"isChildOf");
+        hasParentWebPage=vocabulary.getSemanticProperty(URI+"hasParentWebPage");
+        hidden=vocabulary.getSemanticProperty(URI+"hidden");
         homePage=vocabulary.getSemanticProperty(URI+"homePage");
         userRepository=vocabulary.getSemanticProperty(URI+"userRepository");
         portlet=vocabulary.getSemanticProperty(URI+"portlet");

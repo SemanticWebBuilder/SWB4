@@ -7,7 +7,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class PFlowRefBase extends GenericObjectBase 
+public class PFlowRefBase extends GenericObjectBase implements Statusable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 

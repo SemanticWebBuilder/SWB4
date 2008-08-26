@@ -7,7 +7,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class WebSiteBase extends GenericObjectBase implements Deleteable,Localeable,Versionable,Statusable,Descriptiveable
+public class WebSiteBase extends GenericObjectBase implements Deleteable,Localeable,Versionable,Statusable,Descriptiveable,Traceable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
