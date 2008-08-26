@@ -111,7 +111,7 @@ public class WebSiteSrv {
         //TODO: Eliminar tablas de metadatos
 
         //TODO:Eliminar ruta del sitio
-        SWBUtils.IO.removeDirectory(SWBPlatform.getWorkPath() + "/sites/" + webSite.getId());
+        SWBUtils.IO.removeDirectory(webSite.getWorkPath());
 
         //TODO:Revisar q más se va ha borrar de BD (hits al sitio, etc)
 

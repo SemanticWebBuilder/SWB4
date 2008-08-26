@@ -14,6 +14,8 @@ import org.semanticwb.model.Deleteable;
 import org.semanticwb.model.Descriptiveable;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.Groupable;
+import org.semanticwb.model.Hiddenable;
+import org.semanticwb.model.Indexable;
 import org.semanticwb.model.Language;
 import org.semanticwb.model.Localeable;
 import org.semanticwb.model.ObjectGroup;
@@ -274,6 +276,27 @@ public class SWBServices {
         doAction = true;
 
         SWBPortal.log(user.getURI(), "unAssign", webPageable.getURI(), webPage.getId(), "unAssign webpage", null); 
+        
+        return doAction;
+    }
+    
+    
+    public boolean Hiddenable(Hiddenable hiddenable, int hidden, User user) throws SWBException {
+        boolean doAction = false;
+        hiddenable.setHidden(hidden);
+        doAction = true;
+
+        SWBPortal.log(user.getURI(), "hidden", hiddenable.getURI(), hiddenable.getId(), "hidden object", null); 
+        
+        return doAction;
+    }
+    
+    public boolean Indexable(Indexable indexable, int index, User user) throws SWBException {
+        boolean doAction = false;
+        indexable.setIndex(index);
+        doAction = true;
+
+        SWBPortal.log(user.getURI(), "index", indexable.getURI(), indexable.getId(), "index object", null); 
         
         return doAction;
     }
