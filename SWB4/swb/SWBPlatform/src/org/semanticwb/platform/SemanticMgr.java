@@ -73,7 +73,7 @@ public class SemanticMgr implements SWBInstanceObject
 //        debugModel(swbSquema);
         
         //Create Omtology
-        m_ontology = new SemanticOntology("SWB",ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM_RDFS_INF,m_schema.getRDFModel()));
+        m_ontology = new SemanticOntology("SWB",ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM,m_schema.getRDFModel()));
         //m_ontology.addSubModel(m_schema,false);
         m_ontology.addSubModel(m_system,false);
         
@@ -91,7 +91,7 @@ public class SemanticMgr implements SWBInstanceObject
                 while(tppit.hasNext())
                 {
                     SemanticProperty tpp=tppit.next();
-                    if(tpc.equals(tpp.getDomainClass()))
+                    //if(tpc.equals(tpp.getDomainClass()) || tpp.hasInverse())
                     {
                         vocabulary.addSemanticProperty(tpp);
                     }

@@ -5,6 +5,7 @@
 
 package org.semanticwb.platform;
 
+import com.hp.hpl.jena.ontology.OntProperty;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
@@ -16,11 +17,16 @@ import org.semanticwb.SWBPlatform;
  */
 public class SemanticProperty 
 {
-    Property m_prop;
+    OntProperty m_prop;
+    SemanticProperty m_inverse;
     
     public SemanticProperty(Property prop)
     {
-        this.m_prop=prop;
+        this.m_prop=(OntProperty)prop;
+        if(hasInverse())
+        {
+            m_inverse=new SemanticProperty(m_prop.getInverse());
+        }
     }
     
     public String getName()
@@ -33,7 +39,7 @@ public class SemanticProperty
         return m_prop.getURI();
     }
     
-    public Property getRDFProperty()
+    public OntProperty getRDFProperty()
     {
         return m_prop;
     }
@@ -58,6 +64,10 @@ public class SemanticProperty
     
     public SemanticClass getDomainClass()
     {
+        if(hasInverse())
+        {
+            return m_inverse.getRangeClass();
+        }
         SemanticClass ret=null;
         Statement stm=m_prop.getProperty(m_prop.getModel().getProperty(SemanticVocabulary.RDFS_DOMAIN));
         if(stm!=null)
@@ -69,6 +79,10 @@ public class SemanticProperty
     
     public SemanticClass getRangeClass()
     {
+        if(hasInverse())
+        {
+            return m_inverse.getDomainClass();
+        }        
         SemanticClass ret=null;
         Statement stm=m_prop.getProperty(m_prop.getModel().getProperty(SemanticVocabulary.RDFS_RANGE));
         if(stm!=null)
@@ -125,5 +139,15 @@ public class SemanticProperty
             ret=SemanticVocabulary.OWL_DATATYPEPROPERTY.equals(stm.getResource().getURI());
         }
         return ret;
+    }
+    
+    public boolean hasInverse()
+    {
+        return m_prop.hasInverse();
+    }
+    
+    public SemanticProperty getInverse()
+    {
+        return m_inverse;
     }
 }

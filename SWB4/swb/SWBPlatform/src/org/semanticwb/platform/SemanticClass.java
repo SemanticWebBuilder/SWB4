@@ -217,6 +217,16 @@ public class SemanticClass
     {
         return m_class.getLabel(lang);
     }
+    
+//    public boolean isSuperClass(SemanticClass cls)
+//    {
+//        return m_class.hasSuperClass(cls.getOntClass(),false);
+//    }
+//    
+//    public boolean isSubClass(SemanticClass cls)
+//    {
+//        return m_class.hasSubClass(cls.getOntClass(),false);
+//    }    
 
     public Iterator listInstances()
     {
