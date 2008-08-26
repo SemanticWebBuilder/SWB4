@@ -17,7 +17,21 @@
     <h1>Code Generator</h1>
     <pre>
 <%
-    SemanticMgr mgr=SWBInstance.getSemanticMgr();
+
+    out.println("hasParentWebPage");
+    SemanticProperty prop=SWBContext.getVocabulary().hasParentWebPage;
+    out.println("Prop"+prop);
+    //out.println("getInverse:"+prop.getRDFProperty().getInverse());
+    //out.println("getInverseOf"+prop.getRDFProperty().getInverseOf());
+    
+    out.println("hasChildWebPage");
+    prop=SWBContext.getVocabulary().hasChildWebPage;
+    out.println("Prop"+prop);
+    //out.println("getInverse:"+prop.getRDFProperty().getInverse());
+    //out.println("getInverseOf"+prop.getRDFProperty().getInverseOf());
+    
+
+    SemanticMgr mgr=SWBPlatform.getSemanticMgr();
     Iterator<SemanticClass> tpcit=mgr.getVocabulary().listSemanticClasses();
     while(tpcit.hasNext())
     {
@@ -29,21 +43,21 @@
             SemanticProperty tpp=tppit.next();
             if(tpp.isObjectProperty())
             {
-                out.println("-->ObjectProp:"+tpp.getName()+"\t"+tpp.getRangeClass());
+                out.println("-->ObjectProp:"+tpp.getName()+"\t"+tpp.getRangeClass()+"\t"+tpp.getDomainClass()+"\t"+tpp.getCardinality()+"\t"+tpp.getRDFProperty().getClass());
             }else if(tpp.isDataTypeProperty())
             {
                 out.println("-->DataTypeProp:"+tpp.getName()+"\t"+tpp.getRangeDataType());
             }
         }
-        
+/*        
         Iterator<SemanticObject> tpit=tpc.listInstances();
         while(tpit.hasNext())
         {
             SemanticObject tp=tpit.next();
-            out.println("---->Instance:"+tp.getName());
+            out.println("---->Instance:"+tp.getRDFName());
             //out.println("------>Prop_deleted:"+tp.getProperty(mgr.getVocabulary().getSemanticProperty(SemanticVocabulary.URI+"deleted")));
         }        
-        
+*/        
     }
 %>    
     </pre>
