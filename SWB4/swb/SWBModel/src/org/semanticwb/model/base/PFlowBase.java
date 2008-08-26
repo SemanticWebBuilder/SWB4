@@ -7,23 +7,13 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class PFlowBase extends GenericObjectBase implements Deleteable,Groupable,Versionable,Statusable,Descriptiveable
+public class PFlowBase extends GenericObjectBase implements Deleteable,Groupable,Versionable,Statusable,Descriptiveable,Traceable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
     public PFlowBase(SemanticObject base)
     {
         super(base);
-    }
-
-    public Date getCreated()
-    {
-        return getSemanticObject().getDateProperty(vocabulary.created);
-    }
-
-    public void setCreated(Date created)
-    {
-        getSemanticObject().setDateProperty(vocabulary.created, created);
     }
 
     public boolean isDeleted()
@@ -36,26 +26,14 @@ public class PFlowBase extends GenericObjectBase implements Deleteable,Groupable
         getSemanticObject().setBooleanProperty(vocabulary.deleted, deleted);
     }
 
-    public void setLastVersion(org.semanticwb.model.VersionInfo versioninfo)
+    public Date getCreated()
     {
-        getSemanticObject().addObjectProperty(vocabulary.lastVersion, versioninfo.getSemanticObject());
+        return getSemanticObject().getDateProperty(vocabulary.created);
     }
 
-    public void removeLastVersion()
+    public void setCreated(Date created)
     {
-        getSemanticObject().removeProperty(vocabulary.lastVersion);
-    }
-
-    public VersionInfo getLastVersion()
-    {
-         VersionInfo ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.lastVersion.getRDFProperty());
-         GenericIterator<org.semanticwb.model.VersionInfo> it=new GenericIterator<org.semanticwb.model.VersionInfo>(VersionInfo.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
+        getSemanticObject().setDateProperty(vocabulary.created, created);
     }
 
     public void setModifiedBy(org.semanticwb.model.User user)
@@ -72,28 +50,6 @@ public class PFlowBase extends GenericObjectBase implements Deleteable,Groupable
     {
          User ret=null;
          StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.modifiedBy.getRDFProperty());
-         GenericIterator<org.semanticwb.model.User> it=new GenericIterator<org.semanticwb.model.User>(User.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
-    }
-
-    public void setCreator(org.semanticwb.model.User user)
-    {
-        getSemanticObject().addObjectProperty(vocabulary.creator, user.getSemanticObject());
-    }
-
-    public void removeCreator()
-    {
-        getSemanticObject().removeProperty(vocabulary.creator);
-    }
-
-    public User getCreator()
-    {
-         User ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.creator.getRDFProperty());
          GenericIterator<org.semanticwb.model.User> it=new GenericIterator<org.semanticwb.model.User>(User.class, stit);
          if(it.hasNext())
          {
@@ -127,6 +83,70 @@ public class PFlowBase extends GenericObjectBase implements Deleteable,Groupable
          VersionInfo ret=null;
          StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.actualVersion.getRDFProperty());
          GenericIterator<org.semanticwb.model.VersionInfo> it=new GenericIterator<org.semanticwb.model.VersionInfo>(VersionInfo.class, stit);
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
+    }
+
+    public int getStatus()
+    {
+        return getSemanticObject().getIntProperty(vocabulary.status);
+    }
+
+    public void setStatus(int status)
+    {
+        getSemanticObject().setLongProperty(vocabulary.status, status);
+    }
+
+    public Date getUpdated()
+    {
+        return getSemanticObject().getDateProperty(vocabulary.updated);
+    }
+
+    public void setUpdated(Date updated)
+    {
+        getSemanticObject().setDateProperty(vocabulary.updated, updated);
+    }
+
+    public void setLastVersion(org.semanticwb.model.VersionInfo versioninfo)
+    {
+        getSemanticObject().addObjectProperty(vocabulary.lastVersion, versioninfo.getSemanticObject());
+    }
+
+    public void removeLastVersion()
+    {
+        getSemanticObject().removeProperty(vocabulary.lastVersion);
+    }
+
+    public VersionInfo getLastVersion()
+    {
+         VersionInfo ret=null;
+         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.lastVersion.getRDFProperty());
+         GenericIterator<org.semanticwb.model.VersionInfo> it=new GenericIterator<org.semanticwb.model.VersionInfo>(VersionInfo.class, stit);
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
+    }
+
+    public void setCreator(org.semanticwb.model.User user)
+    {
+        getSemanticObject().addObjectProperty(vocabulary.creator, user.getSemanticObject());
+    }
+
+    public void removeCreator()
+    {
+        getSemanticObject().removeProperty(vocabulary.creator);
+    }
+
+    public User getCreator()
+    {
+         User ret=null;
+         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.creator.getRDFProperty());
+         GenericIterator<org.semanticwb.model.User> it=new GenericIterator<org.semanticwb.model.User>(User.class, stit);
          if(it.hasNext())
          {
              ret=it.next();
@@ -175,26 +195,6 @@ public class PFlowBase extends GenericObjectBase implements Deleteable,Groupable
              ret=it.next();
          }
          return ret;
-    }
-
-    public int getStatus()
-    {
-        return getSemanticObject().getIntProperty(vocabulary.status);
-    }
-
-    public void setStatus(int status)
-    {
-        getSemanticObject().setLongProperty(vocabulary.status, status);
-    }
-
-    public Date getUpdated()
-    {
-        return getSemanticObject().getDateProperty(vocabulary.updated);
-    }
-
-    public void setUpdated(Date updated)
-    {
-        getSemanticObject().setDateProperty(vocabulary.updated, updated);
     }
 
     public WebSite getWebSite()

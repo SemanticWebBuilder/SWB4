@@ -7,7 +7,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class DeviceBase extends GenericObjectBase implements Valueable,Descriptiveable
+public class DeviceBase extends GenericObjectBase implements Descriptiveable,Valueable,Traceable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 

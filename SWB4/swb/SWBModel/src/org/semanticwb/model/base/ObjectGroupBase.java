@@ -7,7 +7,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class ObjectGroupBase extends GenericObjectBase implements Groupable,Descriptiveable
+public class ObjectGroupBase extends GenericObjectBase implements Descriptiveable,Groupable,Traceable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
@@ -133,13 +133,13 @@ public class ObjectGroupBase extends GenericObjectBase implements Groupable,Desc
         getSemanticObject().setDateProperty(vocabulary.updated, updated);
     }
 
-    public UserRepository getUserRepository()
-    {
-        return new UserRepository(getSemanticObject().getModel().getModelObject());
-    }
-
     public WebSite getWebSite()
     {
         return new WebSite(getSemanticObject().getModel().getModelObject());
+    }
+
+    public UserRepository getUserRepository()
+    {
+        return new UserRepository(getSemanticObject().getModel().getModelObject());
     }
 }

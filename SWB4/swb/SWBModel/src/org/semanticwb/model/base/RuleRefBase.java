@@ -7,7 +7,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class RuleRefBase extends GenericObjectBase 
+public class RuleRefBase extends GenericObjectBase implements Statusable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
