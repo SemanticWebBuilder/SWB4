@@ -26,18 +26,23 @@ import org.semanticwb.xmlrpc.XMLRPCServlet;
  */
 public class MetaWebBlogServlet extends XMLRPCServlet {
     
-    private Hashtable<String, Repository> repositories = new Hashtable<String, Repository>();
+    private static Hashtable<String, Repository> repositories = new Hashtable<String, Repository>();
+    private static File REPOSITORY_CONFIG = new File("C:\\repositorio\\wbrepository.xml");
+    private static String PATH_REPOSITORY = "C:\\repositorio\\";
+    private static String REPOSITORY_NAME = "wbrepository";
     @Override
     public void init() throws ServletException
     {
-        File fileConfig = new File("C:\\repositorio\\wbrepository.xml");
+        addRepository(REPOSITORY_CONFIG,PATH_REPOSITORY,REPOSITORY_NAME);
+        addMappingType("blogger", MetaWeblogImp.class);
+        addMappingType("metaWeblog", MetaWeblogImp.class);        
+    }    
+    public static void addRepository(File fileConfig, String path,String name)
+    {        
         try
         {
-            InputStream in = new FileInputStream(fileConfig);
-            RepositoryConfig repositoryConfig = RepositoryConfig.create(in, "C:\\repositorio\\");            
-            Repository rep = RepositoryImpl.create(repositoryConfig);
-            repositories.put("wbrepository", rep);
-
+            Repository rep=createRepository(fileConfig,path);            
+            repositories.put(name, rep);
         }
         catch ( RepositoryException ce )
         {
@@ -47,10 +52,14 @@ public class MetaWebBlogServlet extends XMLRPCServlet {
         {
             fnfe.printStackTrace(System.out);
         }
-        addMappingType("blogger", MetaWeblogImp.class);
-        addMappingType("metaWeblog", MetaWeblogImp.class);
-        
-    }    
+    }
+    private static Repository createRepository(File fileConfig, String path) throws RepositoryException, FileNotFoundException
+    {
+        InputStream in = new FileInputStream(fileConfig);
+        RepositoryConfig repositoryConfig = RepositoryConfig.create(in, PATH_REPOSITORY);
+        Repository rep = RepositoryImpl.create(repositoryConfig);
+        return rep;
+    }
     @Override
     protected void beforeExecute(Object objToExecute, Set<Part> parts) throws Exception
     {
