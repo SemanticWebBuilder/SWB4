@@ -4,10 +4,10 @@
  */
 package org.semanticwb.office.comunication;
 
+
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.Calendar;
-import java.util.Map;
 import javax.jcr.ItemExistsException;
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
@@ -15,51 +15,33 @@ import javax.jcr.NodeIterator;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.Property;
 import javax.jcr.PropertyIterator;
-import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.lock.LockException;
 import javax.jcr.version.Version;
 import org.semanticwb.office.interfaces.IOfficeDocument;
+import org.semanticwb.repository.RepositoryManager;
 import org.semanticwb.xmlrpc.Part;
 import org.semanticwb.xmlrpc.XmlRpcObject;
 import sun.net.www.MimeTable;
+
 
 /**
  *
  * @author victor.lorenzana
  */
-public class OfficeDocument extends XmlRpcObject implements IOfficeDocument, RepositorySupport
+public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 {
     private static final String DEFAULT_MIME_TYPE = "application/octet-stream";
     private static final String MIX_VERSIONABLE = "mix:versionable";
 
-    private static Map<String,Repository> repositories;
-
-    public void setRepositories(Map<String, Repository> repositories)
-    {
-        if ( OfficeDocument.repositories != null )
-        {
-            throw new IllegalArgumentException("The repository list already exists");
-        }
-        OfficeDocument.repositories = repositories;
-    }
-    public boolean hasListOfRepositories()
-    {
-        boolean hasListOfRepositories=false;
-        if(repositories!=null)
-        {
-            hasListOfRepositories=true;
-        }
-        return hasListOfRepositories;
-    }
     public String publish(String title,String description,String repositoryName,String categoryID,String type) throws Exception
     {        
         Session session=null;
         try
         {            
-            session=OfficeApplication.openSession(repositoryName,"","");
+            session=RepositoryManager.openSession(repositoryName,"","");
             Node categoryNode = session.getNodeByUUID(categoryID);
             if ( !categoryNode.isLocked() )
             {
@@ -167,7 +149,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument, Rep
         Session session=null;
         try
         {
-            session=OfficeApplication.openSession("","");
+            session=RepositoryManager.openSession("","","");
             Node nodeContent = session.getNodeByUUID(contentId);
             if ( !nodeContent.isLocked() )
             {
@@ -294,7 +276,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument, Rep
         Session session=null;
         try
         {
-            session=OfficeApplication.openSession("","");            
+            session=RepositoryManager.openSession("","","");            
             session.getNodeByUUID(contentId);
             exists=true;
         }
