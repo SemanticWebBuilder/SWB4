@@ -11,6 +11,8 @@ import java.util.Calendar;
 import java.util.HashSet;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.PathNotFoundException;
+import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.query.Query;
@@ -58,11 +60,16 @@ public final class MetaWeblogImp implements MetaWeblog
             e.printStackTrace(System.out);
         }
     }
-
+    /**
+     * Gets the Id for a blogId or postID
+     * @param key The key for a blogId or postID
+     * @return The Id for the post or blog
+     * @throws java.lang.Exception
+     */
     
-    private static String getID(String blogID) throws Exception
+    private static String getID(String key) throws Exception
     {
-        String[] values=blogID.split(ID_SEPARATOR);
+        String[] values=key.split(ID_SEPARATOR);
         if(values.length==2)
         {
             return values[1];
@@ -72,9 +79,15 @@ public final class MetaWeblogImp implements MetaWeblog
             throw new Exception("The format for the blogID or postID is invalid");
         }
     }
-    private static String getRepositoryName(String blogID) throws Exception
+    /**
+     * Gets the Repository Name inside the key
+     * @param key Key of the blog or post
+     * @return The RepositoryName
+     * @throws java.lang.Exception
+     */
+    private static String getRepositoryName(String key) throws Exception
     {
-        String[] values=blogID.split(ID_SEPARATOR);
+        String[] values=key.split(ID_SEPARATOR);
         if(values.length==2)
         {
             return values[0];
@@ -85,7 +98,13 @@ public final class MetaWeblogImp implements MetaWeblog
         }
     }
     
-
+    /**
+     * Remove a post into a repository
+     * @param postid The Id of the post
+     * @param username The userName to access to the repository
+     * @param password The password to access to the repository
+     * @throws java.lang.Exception
+     */
     
     public void removePost(String postid,String username,String password)  throws Exception
     {
@@ -111,6 +130,13 @@ public final class MetaWeblogImp implements MetaWeblog
             }
         }
     }
+    /**
+     * Remove a Blog
+     * @param blogid The blogID
+     * @param username The username to access to the repository
+     * @param password The password to access to the repository
+     * @throws java.lang.Exception
+     */
     public void removeBlog(String blogid,String username,String password) throws Exception
     {
         Session session = null;
@@ -139,6 +165,16 @@ public final class MetaWeblogImp implements MetaWeblog
             }
         }
     }    
+    /**
+     * Update a Blog
+     * @param repositoryName The repository of the blog
+     * @param name The name of the blog
+     * @param url The new Url
+     * @param username The userName to access to the repository
+     * @param password The password to access to the repository
+     * @return The ID of the Blog
+     * @throws java.lang.Exception
+     */
     public String updateBlog(String repositoryName, String name, String url, String username, String password) throws Exception
     {
         return createBlog(repositoryName,name,url,username,password);
@@ -198,10 +234,10 @@ public final class MetaWeblogImp implements MetaWeblog
 
     /**
      * 
-     * Returns tthe blogs that an user can publish posts
-     * @param appkey Is not used
-     * @param username User
-     * @param password //Password
+     * Returns the blogs that an user can publish posts
+     * @param appkey The appkey is not used
+     * @param username The UserName to access to the repository
+     * @param password The password to access to the repository
      * @return An array of blogs that the user can publish
      * @see UserBlog
      */
@@ -305,15 +341,29 @@ public final class MetaWeblogImp implements MetaWeblog
         }
         return postsToReturn;
     }
-
-    private String getHtmlUrlForCategories(String blogid)
+    /**
+     * Gets the URI to show the categories using Html
+     * @param blogNode The Node of the blog, that contains the categories
+     * @return A URI to show the categories, using Html
+     * @throws RepositoryException
+     */
+    private String getHtmlUrlForCategories(Node blogNode) throws RepositoryException
     {
-        return "Http";
+        String url=blogNode.getProperty(BLOG_URL).getString();
+        url+="/mode/categorieshtml";
+        return url;
     }
-
-    private String getRssUrlForCategories(String blogid)
-    {
-        return "Http";
+    /**
+     * Gets the URI to access to the categories using RSS
+     * @param blogNode The Node of the blog, that contains the categories
+     * @return A URI to show the categories, using RSS
+     * @throws RepositoryException
+     */
+    private String getRssUrlForCategories(Node blogNode) throws RepositoryException
+    {        
+        String url=blogNode.getProperty(BLOG_URL).getString();
+        url+="/mode/categoriesrss";
+        return url;
     }
 
     /**
@@ -506,8 +556,8 @@ public final class MetaWeblogImp implements MetaWeblog
                 categoryNode = nodeBlog.addNode("category", "blognode:categoryType");
                 categoryNode.setProperty(BLOG_NAME, name);
                 categoryNode.setProperty(BLOG_DESCRIPTION, description);
-                categoryNode.setProperty("blog:htmlUrl", getHtmlUrlForCategories(blogid));
-                categoryNode.setProperty("blog:rssUrl", getRssUrlForCategories(blogid));
+                categoryNode.setProperty("blog:htmlUrl", getHtmlUrlForCategories(nodeBlog));
+                categoryNode.setProperty("blog:rssUrl", getRssUrlForCategories(nodeBlog));
                 session.save();
             }
             category.categoryId = repositoryName+ID_SEPARATOR+categoryNode.getUUID();
