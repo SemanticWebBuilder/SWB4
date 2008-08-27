@@ -17,8 +17,6 @@ import org.apache.jackrabbit.core.RepositoryImpl;
 import org.apache.jackrabbit.core.config.RepositoryConfig;
 import org.semanticwb.xmlrpc.Part;
 import org.semanticwb.xmlrpc.XMLRPCServlet;
-import sun.net.www.MimeEntry;
-import sun.net.www.MimeTable;
 import static org.semanticwb.office.comunication.Base64.*;
 
 /**
@@ -55,10 +53,6 @@ public abstract class OfficeServlet extends XMLRPCServlet
         }
         addMappingType("OfficeDocument", OfficeDocument.class);
         addMappingType("OfficeApplication", OfficeApplication.class);
-        MimeEntry me = new MimeEntry("application/msword");
-        me.setExtensions(".doc,.docx");
-        MimeTable.getDefaultTable().add(me);
-
     }
 
     @Override
