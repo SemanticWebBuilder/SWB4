@@ -9,7 +9,7 @@ package org.semantic.blogger.interfaces;
  *
  * @author victor.lorenzana
  */
-public class UserBlog {
+public final class UserBlog {
     public String url;
     public boolean isAdmin;
     public String blogid;    

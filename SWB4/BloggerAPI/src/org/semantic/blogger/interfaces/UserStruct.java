@@ -9,7 +9,7 @@ package org.semantic.blogger.interfaces;
  *
  * @author victor.lorenzana
  */
-public class UserStruct {
+public final class UserStruct {
     public String nickname;
     public String userid;
     public String url;

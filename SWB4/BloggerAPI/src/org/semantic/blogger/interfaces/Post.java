@@ -11,7 +11,7 @@ import java.util.Date;
  *
  * @author victor.lorenzana
  */
-public class Post implements Comparable<Post>
+public final class Post implements Comparable<Post>
 {
 
     public int compareTo(Post o)

@@ -9,7 +9,7 @@ package org.semantic.blogger.interfaces;
  *
  * @author victor.lorenzana
  */
-public class CategoryInfo
+public final class CategoryInfo
 {
     public String htmlUrl;
     public String rssUrl;
