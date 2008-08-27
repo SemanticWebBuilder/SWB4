@@ -26,22 +26,26 @@ import static org.semanticwb.office.comunication.Base64.*;
 public abstract class OfficeServlet extends XMLRPCServlet
 {
 
-    private Hashtable<String, Repository> repositories = new Hashtable<String, Repository>();
-    private static String realm = "Secure Area";
-    private static String prefixBasic = "Basic ";
+    private static Hashtable<String, Repository> repositories = new Hashtable<String, Repository>();
+    private static String REALM = "Secure Area";
+    private static String PREFIX_BASIC = "Basic ";
+    private static File REPOSITORY_CONFIG = new File("C:\\repositorio\\wbrepository.xml");
+    private static String PATH_REPOSITORY = "C:\\repositorio\\";
+    private static String REPOSITORY_NAME = "wbrepository";
 
     @Override
     public void init() throws ServletException
     {
-
-        File fileConfig = new File("C:\\repositorio\\wbrepository.xml");
+        addRepository(REPOSITORY_CONFIG,PATH_REPOSITORY,REPOSITORY_NAME);
+        addMappingType("OfficeDocument", OfficeDocument.class);
+        addMappingType("OfficeApplication", OfficeApplication.class);
+    }
+    public static void addRepository(File fileConfig, String path,String name)
+    {        
         try
         {
-            InputStream in = new FileInputStream(fileConfig);
-            RepositoryConfig repositoryConfig = RepositoryConfig.create(in, "C:\\repositorio\\");
-            Repository rep = RepositoryImpl.create(repositoryConfig);
-            repositories.put("wbrepository", rep);
-
+            Repository rep=createRepository(fileConfig,path);            
+            repositories.put(name, rep);
         }
         catch ( RepositoryException ce )
         {
@@ -51,8 +55,13 @@ public abstract class OfficeServlet extends XMLRPCServlet
         {
             fnfe.printStackTrace(System.out);
         }
-        addMappingType("OfficeDocument", OfficeDocument.class);
-        addMappingType("OfficeApplication", OfficeApplication.class);
+    }
+    private static Repository createRepository(File fileConfig, String path) throws RepositoryException, FileNotFoundException
+    {
+        InputStream in = new FileInputStream(fileConfig);
+        RepositoryConfig repositoryConfig = RepositoryConfig.create(in, PATH_REPOSITORY);
+        Repository rep = RepositoryImpl.create(repositoryConfig);
+        return rep;
     }
 
     @Override
@@ -92,13 +101,13 @@ public abstract class OfficeServlet extends XMLRPCServlet
             String authorization = request.getHeader("Authorization");
             if ( authorization == null || authorization.equals("") )
             {
-                response.setHeader("WWW-Authenticate", prefixBasic + "realm=\"" + realm + "\"");
+                response.setHeader("WWW-Authenticate", PREFIX_BASIC + "realm=\"" + REALM + "\"");
                 response.setStatus(response.SC_UNAUTHORIZED);
                 return;
             }
             else
             {
-                if ( authorization.startsWith(prefixBasic) )
+                if ( authorization.startsWith(PREFIX_BASIC) )
                 {
                     String userpassEncoded = authorization.substring(6);
                     String userpassDecoded = new String(decode(userpassEncoded));
