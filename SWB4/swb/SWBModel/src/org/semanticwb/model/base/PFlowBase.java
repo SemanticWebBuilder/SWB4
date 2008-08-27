@@ -68,6 +68,16 @@ public class PFlowBase extends GenericObjectBase implements Deleteable,Groupable
         getSemanticObject().setProperty(vocabulary.title, title);
     }
 
+    public String getTitle(String lang)
+    {
+        return getSemanticObject().getProperty(vocabulary.title, lang);
+    }
+
+    public void setTitle(String title, String lang)
+    {
+        getSemanticObject().setProperty(vocabulary.title, title, lang);
+    }
+
     public void setActualVersion(org.semanticwb.model.VersionInfo versioninfo)
     {
         getSemanticObject().addObjectProperty(vocabulary.actualVersion, versioninfo.getSemanticObject());
@@ -162,6 +172,16 @@ public class PFlowBase extends GenericObjectBase implements Deleteable,Groupable
     public void setDescription(String description)
     {
         getSemanticObject().setProperty(vocabulary.description, description);
+    }
+
+    public String getDescription(String lang)
+    {
+        return getSemanticObject().getProperty(vocabulary.description, lang);
+    }
+
+    public void setDescription(String description, String lang)
+    {
+        getSemanticObject().setProperty(vocabulary.description, description, lang);
     }
 
     public GenericIterator<org.semanticwb.model.ObjectGroup> listGroup()
