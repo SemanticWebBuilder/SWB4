@@ -30,7 +30,7 @@ public class UserBlog {
         boolean equals=false;
         if(obj instanceof UserBlog)
         {
-            return ((UserBlog)obj).blogid.equals(this.blogid);
+            equals =((UserBlog)obj).blogid.equals(this.blogid);
         }
         return equals;
     }
