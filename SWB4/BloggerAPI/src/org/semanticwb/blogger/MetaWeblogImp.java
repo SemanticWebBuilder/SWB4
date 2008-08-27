@@ -39,19 +39,18 @@ import org.semantic.blogger.interfaces.UserBlog;
  */
 public class MetaWeblogImp implements MetaWeblog, RepositorySupport
 {
-    public static final  String BLOG_DESCRIPTION = "blog:description";
-    private static final String BLOG_CATEGORY = "blog:category";
-    private static final String BLOG_MODEL_PATH = "C:\\repositorio\\blogmodel.cnd";
-    public static final String BLOG_MODEL_URI = "http://www.semanticwb.org.mx/model/blog/1.0";
-    public static final String BLOG_MODEL_PREFIX = "blognode";
-    public static final String BLOG_URI = "http://www.semanticwb.org.mx/blog/1.0/";
     public static final String BLOG_PREFIX = "blog";
-    private static final
-    String BLOG_NAME = "blog:name";
-    private static final
-    String BLOG_TITLE = "blog:title";
-    private static final
-    String BLOG_USERID = "blog:userid";
+    
+    private static final String BLOG_MODEL_PATH = "C:\\repositorio\\blogmodel.cnd";
+    private static final String BLOG_MODEL_URI = "http://www.semanticwb.org.mx/model/blog/1.0";
+    private static final String BLOG_MODEL_PREFIX = "blognode";
+    private static final String BLOG_URI = "http://www.semanticwb.org.mx/blog/1.0/";
+    
+    public static final  String BLOG_DESCRIPTION = BLOG_PREFIX+":description";
+    private static final String BLOG_CATEGORY = BLOG_PREFIX+":category";
+    private static final String BLOG_NAME = BLOG_PREFIX+":name";
+    private static final String BLOG_TITLE = BLOG_PREFIX+":title";
+    private static final String BLOG_USERID = BLOG_PREFIX+":userid";
     private static Map<String, Repository> repositories;
 
     public static Session openSession(String user, String password) throws Exception
