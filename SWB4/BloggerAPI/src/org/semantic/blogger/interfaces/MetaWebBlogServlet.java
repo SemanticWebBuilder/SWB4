@@ -25,8 +25,7 @@ import org.semanticwb.xmlrpc.XMLRPCServlet;
  * @author victor.lorenzana
  */
 public class MetaWebBlogServlet extends XMLRPCServlet {
-
-    private static final String CONTENT_MODE_PATH = "C:\\repositorio\\contentmodel.cnd";
+    
     private Hashtable<String, Repository> repositories = new Hashtable<String, Repository>();
     @Override
     public void init() throws ServletException
