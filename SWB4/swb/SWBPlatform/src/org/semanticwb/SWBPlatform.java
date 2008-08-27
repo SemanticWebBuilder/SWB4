@@ -119,6 +119,7 @@ public class SWBPlatform
             semanticMgr.init(this);
             
             createInstance("org.semanticwb.model.SWBContext");
+            createInstance("org.semanticwb.SWBPortal");
             
             monitor=new SWBMonitor();
             monitor.init(this);

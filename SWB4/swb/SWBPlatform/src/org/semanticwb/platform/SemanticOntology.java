@@ -63,10 +63,9 @@ public class SemanticOntology
         }
         return ret;        
     }
-//    
-//    public GenericObject getGenericObject(String uri, SemanticClass cls)
-//    {
-//        Resource res=m_ontology.getResource(uri);
-//        return cls.newGenericInstance(res);        
-//    }
+    
+    public GenericObject getGenericObject(String uri, SemanticClass cls)
+    {
+        return cls.newGenericInstance(getSemanticObject(uri));        
+    }
 }

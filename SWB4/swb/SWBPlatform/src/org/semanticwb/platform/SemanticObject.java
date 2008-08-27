@@ -5,7 +5,9 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.rdf.model.impl.ResourceImpl;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
@@ -22,6 +24,11 @@ public class SemanticObject
     Resource m_res=null;
     SemanticModel m_model=null;
     
+    //Virtual properties
+    private SemanticClass m_virtclass=null;
+    private boolean m_virtual=false;
+    private HashMap m_virtprops;
+    
     public SemanticObject(String uri, SemanticModel model)
     {
         m_res=model.getRDFModel().createResource(uri);
@@ -33,28 +40,42 @@ public class SemanticObject
         this.m_res=res;
     }
     
+    public boolean isVirtual()
+    {
+        return m_virtual;
+    }
+    
     /**
-     * Contruye un SemanticObject nulo relacionado al Model
+     * Contruye un SemanticObject virtual relacionado al Model y al tipo de elemento
      * 
      * @param model
      */
-    public SemanticObject(SemanticModel model)
+    public SemanticObject(SemanticModel model, SemanticClass cls)
     {
         m_model=model;
+        m_virtclass=cls;
+        m_virtual=true;
+        m_virtprops=new HashMap();
     }    
     
     public String getURI()
     {
+        if(m_virtual)return null;
         return m_res.getURI();
     }
     
     public String getRDFName()
     {
+        if(m_virtual)return null;
         return m_res.getLocalName();
     }    
     
     public SemanticClass getSemanticClass()
     {
+        if(m_virtual)
+        {
+            return m_virtclass;
+        }        
         Statement stm=m_res.getProperty(m_res.getModel().getProperty(SemanticVocabulary.RDF_TYPE));
         if(stm!=null)
         {
@@ -87,6 +108,11 @@ public class SemanticObject
      */
     public SemanticObject setProperty(SemanticProperty prop, String value)
     {
+        if(m_virtual)
+        {
+            m_virtprops.put(prop.getURI(), value);
+            return this;
+        }
         Statement stm=m_res.getProperty(prop.getRDFProperty());
         if(stm!=null)
         {
@@ -106,6 +132,11 @@ public class SemanticObject
      */
     public SemanticObject setProperty(SemanticProperty prop, String value, String lang)
     {
+        if(m_virtual)
+        {
+            m_virtprops.put(prop.getURI()+"|"+lang, value);
+            return this;
+        }        
         Statement stm=getLocaleStatement(prop, lang);
         if(stm!=null)
         {
@@ -135,6 +166,12 @@ public class SemanticObject
     
     public SemanticObject removeProperty(SemanticProperty prop)
     {
+        if(m_virtual)
+        {
+            m_virtprops.remove(prop.getURI());
+            return this;
+        }        
+        if(m_res==null)return this;        
         Property iprop=prop.getRDFProperty();
         m_res.removeAll(iprop);
         return this;
@@ -142,7 +179,11 @@ public class SemanticObject
     
     public SemanticObject removeProperty(SemanticProperty prop, String lang)
     {
-        StmtIterator stit=m_res.listProperties(prop.getRDFProperty());
+        if(m_virtual)
+        {
+            m_virtprops.remove(prop.getURI()+"|"+lang);
+            return this;
+        }        StmtIterator stit=m_res.listProperties(prop.getRDFProperty());
         while(stit.hasNext())
         {
             Statement staux=stit.nextStatement();
@@ -166,6 +207,12 @@ public class SemanticObject
     
     public String getProperty(SemanticProperty prop, String defValue)
     {
+        if(m_virtual)
+        {
+            String ret=(String)m_virtprops.get(prop.getURI());
+            if(ret==null)ret=defValue;
+            return ret;
+        }        
         String ret=defValue;
         Statement stm=m_res.getProperty(prop.getRDFProperty());
         if(stm!=null)
@@ -177,6 +224,12 @@ public class SemanticObject
     
     public String getProperty(SemanticProperty prop, String defValue, String lang)
     {
+        if(m_virtual)
+        {
+            String ret=(String)m_virtprops.get(prop.getURI()+"|"+lang);
+            if(ret==null)ret=defValue;
+            return ret;
+        }        
         String ret=defValue;
         Statement stm=getLocaleStatement(prop, lang);
         if(stm!=null)
@@ -193,6 +246,12 @@ public class SemanticObject
     
     public int getIntProperty(SemanticProperty prop, int defValue)
     {
+        if(m_virtual)
+        {
+            Integer ret=(Integer)m_virtprops.get(prop.getURI());
+            if(ret==null)ret=defValue;
+            return ret;
+        }        
         int ret=defValue;
         Statement stm=m_res.getProperty(prop.getRDFProperty());
         if(stm!=null)
@@ -209,6 +268,12 @@ public class SemanticObject
     
     public long getLongProperty(SemanticProperty prop, long defValue)
     {
+        if(m_virtual)
+        {
+            Long ret=(Long)m_virtprops.get(prop.getURI());
+            if(ret==null)ret=defValue;
+            return ret;
+        }        
         long ret=defValue;
         Statement stm=m_res.getProperty(prop.getRDFProperty());
         if(stm!=null)
@@ -226,6 +291,11 @@ public class SemanticObject
      */
     public SemanticObject setLongProperty(SemanticProperty prop, long value)
     {
+        if(m_virtual)
+        {
+            m_virtprops.put(prop.getURI(), (Long)value);
+            return this;
+        }            
         Property iprop=prop.getRDFProperty();
         Statement stm=m_res.getProperty(iprop);
         if(stm!=null)
@@ -245,6 +315,12 @@ public class SemanticObject
     
     public float getFloatProperty(SemanticProperty prop, float defValue)
     {
+        if(m_virtual)
+        {
+            Float ret=(Float)m_virtprops.get(prop.getURI());
+            if(ret==null)ret=defValue;
+            return ret;
+        }        
         float ret=defValue;
         Statement stm=m_res.getProperty(prop.getRDFProperty());
         if(stm!=null)
@@ -262,6 +338,11 @@ public class SemanticObject
      */
     public SemanticObject setFloatProperty(SemanticProperty prop, float value)
     {
+        if(m_virtual)
+        {
+            m_virtprops.put(prop.getURI(), (Float)value);
+            return this;
+        }           
         Property iprop=prop.getRDFProperty();
         Statement stm=m_res.getProperty(iprop);
         if(stm!=null)
@@ -281,6 +362,12 @@ public class SemanticObject
     
     public double getDoubleProperty(SemanticProperty prop, double defValue)
     {
+        if(m_virtual)
+        {
+            Double ret=(Double)m_virtprops.get(prop.getURI());
+            if(ret==null)ret=defValue;
+            return ret;
+        }             
         double ret=defValue;
         Statement stm=m_res.getProperty(prop.getRDFProperty());
         if(stm!=null)
@@ -298,6 +385,11 @@ public class SemanticObject
      */
     public SemanticObject setDoubleProperty(SemanticProperty prop, double value)
     {
+        if(m_virtual)
+        {
+            m_virtprops.put(prop.getURI(), (Double)value);
+            return this;
+        }           
         Property iprop=prop.getRDFProperty();
         Statement stm=m_res.getProperty(iprop);
         if(stm!=null)
@@ -317,6 +409,12 @@ public class SemanticObject
     
     public boolean getBooleanProperty(SemanticProperty prop, boolean defValue)
     {
+        if(m_virtual)
+        {
+            Boolean ret=(Boolean)m_virtprops.get(prop.getURI());
+            if(ret==null)ret=defValue;
+            return ret;
+        }             
         boolean ret=defValue;
         Statement stm=m_res.getProperty(prop.getRDFProperty());
         if(stm!=null)
@@ -334,6 +432,11 @@ public class SemanticObject
      */
     public SemanticObject setBooleanProperty(SemanticProperty prop, boolean value)
     {
+        if(m_virtual)
+        {
+            m_virtprops.put(prop.getURI(), (Boolean)value);
+            return this;
+        }           
         Property iprop=prop.getRDFProperty();
         Statement stm=m_res.getProperty(iprop);
         if(stm!=null)
@@ -353,6 +456,12 @@ public class SemanticObject
     
     public Date getDateProperty(SemanticProperty prop, Date defValue)
     {
+        if(m_virtual)
+        {
+            Date ret=(Date)m_virtprops.get(prop.getURI());
+            if(ret==null)ret=defValue;
+            return ret;
+        }             
         Date ret=defValue;
         Statement stm=m_res.getProperty(prop.getRDFProperty());
         if(stm!=null)
@@ -373,6 +482,11 @@ public class SemanticObject
      */
     public SemanticObject setDateProperty(SemanticProperty prop, Date value)
     {
+        if(m_virtual)
+        {
+            m_virtprops.put(prop.getURI(), (Date)value);
+            return this;
+        }           
         Property iprop=prop.getRDFProperty();
         Statement stm=m_res.getProperty(iprop);
         if(stm!=null)
@@ -387,6 +501,17 @@ public class SemanticObject
     
     public SemanticObject addObjectProperty(SemanticProperty prop, SemanticObject object)
     {
+        if(m_virtual)
+        {
+            ArrayList list=(ArrayList)m_virtprops.get(prop.getURI());
+            if(list==null)
+            {
+                list=new ArrayList();
+                m_virtprops.put(prop.getURI(),list);
+            }
+            list.add(object);
+            return this;
+        }           
         Property iprop=prop.getRDFProperty();
         m_res.addProperty(iprop, object.getRDFResource());
         return this;
@@ -394,6 +519,15 @@ public class SemanticObject
     
     public SemanticObject removeObjectProperty(SemanticProperty prop, SemanticObject object)
     {
+        if(m_virtual)
+        {
+            ArrayList list=(ArrayList)m_virtprops.get(prop.getURI());
+            if(list!=null)
+            {
+                list.remove(object);
+            }
+            return this;
+        }          
         StmtIterator it=m_res.listProperties(prop.getRDFProperty());
         while(it.hasNext())
         {
@@ -408,6 +542,18 @@ public class SemanticObject
     
     public Iterator<SemanticObject> listObjectProperties(SemanticProperty prop)
     {
+        if(m_virtual)
+        {
+            ArrayList list=(ArrayList)m_virtprops.get(prop.getURI());
+            if(list!=null)
+            {
+                return list.iterator();
+            }
+            else
+            {
+                return new ArrayList().iterator();
+            }
+        }            
         return new SemanticObjectIterator(m_res.listProperties(prop.getRDFProperty()));
     }
     
@@ -418,6 +564,12 @@ public class SemanticObject
     
     public SemanticObject getObjectProperty(SemanticProperty prop, SemanticObject defValue)
     {
+        if(m_virtual)
+        {
+            SemanticObject ret=(SemanticObject)m_virtprops.get(prop.getURI());
+            if(ret==null)ret=defValue;
+            return ret;
+        }             
         SemanticObject ret=defValue;
         Statement stm=m_res.getProperty(prop.getRDFProperty());
         if(stm!=null)
@@ -433,18 +585,21 @@ public class SemanticObject
     
     public Resource getRDFResource()
     {
+        if(m_virtual)return null;
         return m_res;
     }
     
     @Override
     public String toString()
     {
+        if(m_virtual)return super.toString();
         return m_res.toString();
     }
 
     @Override
     public int hashCode() 
     {
+        if(m_virtual)return super.hashCode();
         return m_res.hashCode();
     }
 
