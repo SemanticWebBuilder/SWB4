@@ -111,6 +111,16 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
         getSemanticObject().setProperty(vocabulary.title, title);
     }
 
+    public String getTitle(String lang)
+    {
+        return getSemanticObject().getProperty(vocabulary.title, lang);
+    }
+
+    public void setTitle(String title, String lang)
+    {
+        getSemanticObject().setProperty(vocabulary.title, title, lang);
+    }
+
     public GenericIterator<org.semanticwb.model.PortletRef> listPortletRef()
     {
         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasPortletRef.getRDFProperty());
@@ -371,10 +381,20 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
         getSemanticObject().setProperty(vocabulary.description, description);
     }
 
+    public String getDescription(String lang)
+    {
+        return getSemanticObject().getProperty(vocabulary.description, lang);
+    }
+
+    public void setDescription(String description, String lang)
+    {
+        getSemanticObject().setProperty(vocabulary.description, description, lang);
+    }
+
     public GenericIterator<org.semanticwb.model.WebPage> listChildWebPage()
     {
         StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, vocabulary.hasChildWebPage.getInverse().getRDFProperty(), getSemanticObject().getRDFResource());
-        return new GenericIterator<org.semanticwb.model.WebPage>(org.semanticwb.model.WebPage.class, stit);
+        return new GenericIterator<org.semanticwb.model.WebPage>(org.semanticwb.model.WebPage.class, stit,true);
     }
 
     public WebSite getWebSite()
