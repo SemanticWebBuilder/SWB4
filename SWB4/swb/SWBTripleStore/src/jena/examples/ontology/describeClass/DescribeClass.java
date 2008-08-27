@@ -85,12 +85,12 @@ public class DescribeClass {
         renderClassDescription( out, cls );
         out.println();
 
-        // sub-classes
-        for (Iterator i = cls.listSuperClasses( false ); i.hasNext(); ) {
-            out.print( "  is a sub-class of " );
-            renderClassDescription( out, (OntClass) i.next() );
-            out.println();
-        }
+//        // sub-classes
+//        for (Iterator i = cls.listSuperClasses( false ); i.hasNext(); ) {
+//            out.print( "  is a sub-class of " );
+//            renderClassDescription( out, (OntClass) i.next() );
+//            out.println();
+//        }
 //
 //        // super-classes
 //        for (Iterator i = cls.listSubClasses( false ); i.hasNext(); ) {
@@ -99,12 +99,12 @@ public class DescribeClass {
 //            out.println();
 //        }
 //        
-//        // properties
-//        for (Iterator i = cls.listDeclaredProperties(false); i.hasNext(); ) {
-//            out.print( "  is a Declared Propertie of " );
-//            Object obj=i.next();
-//            out.println(obj);
-//        }
+        // properties
+        for (Iterator i = cls.listDeclaredProperties(false); i.hasNext(); ) {
+            out.print( "  is a Declared Propertie of " );
+            Object obj=i.next();
+            out.println(obj);
+        }
         
         // instanceof
         for (Iterator i = cls.listRDFTypes(true); i.hasNext(); ) {
