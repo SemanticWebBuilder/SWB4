@@ -86,10 +86,9 @@ public class SWBVocabulary
     public final SemanticProperty deleted;
     public final SemanticProperty hasCalendar;
     public final SemanticProperty hasRule;
-    public final SemanticProperty hasWebPage;
+    public final SemanticProperty webPage;
     public final SemanticProperty dnsDefault;
     public final SemanticProperty hasPortlet;
-    public final SemanticProperty hasTemplate;
     public final SemanticProperty template;
     public final SemanticProperty priority;
     public final SemanticProperty hasRoleRef;
@@ -201,10 +200,9 @@ public class SWBVocabulary
         deleted=vocabulary.getSemanticProperty(URI+"deleted");
         hasCalendar=vocabulary.getSemanticProperty(URI+"hasCalendar");
         hasRule=vocabulary.getSemanticProperty(URI+"hasRule");
-        hasWebPage=vocabulary.getSemanticProperty(URI+"hasWebPage");
+        webPage=vocabulary.getSemanticProperty(URI+"webPage");
         dnsDefault=vocabulary.getSemanticProperty(URI+"dnsDefault");
         hasPortlet=vocabulary.getSemanticProperty(URI+"hasPortlet");
-        hasTemplate=vocabulary.getSemanticProperty(URI+"hasTemplate");
         template=vocabulary.getSemanticProperty(URI+"template");
         priority=vocabulary.getSemanticProperty(URI+"priority");
         hasRoleRef=vocabulary.getSemanticProperty(URI+"hasRoleRef");

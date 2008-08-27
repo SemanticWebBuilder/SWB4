@@ -7,7 +7,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class TemplateRefBase extends GenericObjectBase implements Priorityable,Statusable
+public class TemplateRefBase extends GenericObjectBase implements Statusable,Priorityable,Templateable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 

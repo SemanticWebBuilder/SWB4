@@ -7,7 +7,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class CommunityBase extends GenericObjectBase implements Statusable,Descriptiveable,Traceable
+public class CommunityBase extends GenericObjectBase implements Traceable,Descriptiveable,Statusable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
