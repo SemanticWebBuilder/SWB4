@@ -39,7 +39,7 @@ import org.semantic.blogger.interfaces.UserBlog;
  */
 public class MetaWeblogImp implements MetaWeblog, RepositorySupport
 {
-    public static final String BLOG_PREFIX = "blog";
+    private static final String BLOG_PREFIX = "blog";
     
     private static final String BLOG_MODEL_PATH = "C:\\repositorio\\blogmodel.cnd";
     private static final String BLOG_MODEL_URI = "http://www.semanticwb.org.mx/model/blog/1.0";
