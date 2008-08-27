@@ -354,6 +354,9 @@
     <rdf:type rdf:resource="#Interface"/>
   </owl:Class>
   <owl:Class rdf:about="#RuleRef">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Statusable"/>
+    </rdfs:subClassOf>
     <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.model.Ruleref</swb:className>
     <rdfs:subClassOf>
@@ -374,6 +377,9 @@
     <rdf:type rdf:resource="#Class"/>
   </owl:Class>
   <owl:Class rdf:about="#PortletRef">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Statusable"/>
+    </rdfs:subClassOf>
     <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.model.PortletRef</swb:className>
     <rdfs:subClassOf rdf:resource="#Reference"/>
@@ -396,12 +402,14 @@
     <rdf:type rdf:resource="#Interface"/>
   </owl:Class>
   <owl:Class rdf:ID="PFlowRef">
+    <rdfs:subClassOf rdf:resource="#Statusable"/>
     <rdfs:subClassOf rdf:resource="#Reference"/>
     <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.model.PFlowRef</swb:className>
     <rdf:type rdf:resource="#Class"/>
   </owl:Class>
   <owl:Class rdf:about="#TemplateRef">
+    <rdfs:subClassOf rdf:resource="#Statusable"/>
     <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.model.TemplateRef</swb:className>
     <rdfs:subClassOf rdf:resource="#Reference"/>
@@ -426,6 +434,7 @@
     <rdf:type rdf:resource="#Interface"/>
   </owl:Class>
   <owl:Class rdf:about="#RoleRef">
+    <rdfs:subClassOf rdf:resource="#Statusable"/>
     <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.model.RoleRef</swb:className>
     <rdfs:subClassOf rdf:resource="#Reference"/>
@@ -727,6 +736,8 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="title">
+    <swb:localeable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:localeable>
     <rdfs:domain rdf:resource="#Descriptiveable"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
@@ -754,6 +765,10 @@
     <rdfs:domain rdf:resource="#User"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="localeable">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="updated">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
     <rdfs:domain rdf:resource="#Traceable"/>
@@ -779,6 +794,8 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="description">
+    <swb:localeable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:localeable>
     <rdfs:domain rdf:resource="#Descriptiveable"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
