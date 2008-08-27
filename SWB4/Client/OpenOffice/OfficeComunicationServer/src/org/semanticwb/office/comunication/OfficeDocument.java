@@ -32,10 +32,8 @@ import sun.net.www.MimeTable;
  */
 public class OfficeDocument extends XmlRpcObject implements IOfficeDocument, RepositorySupport
 {
-    private static final
-    String DEFAULT_MIME_TYPE = "application/octet-stream";
-    private static final
-    String MIX_VERSIONABLE = "mix:versionable";
+    private static final String DEFAULT_MIME_TYPE = "application/octet-stream";
+    private static final String MIX_VERSIONABLE = "mix:versionable";
 
     private static Map<String,Repository> repositories;
 
@@ -57,11 +55,11 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument, Rep
         return hasListOfRepositories;
     }
     public String publish(String title,String description,String repositoryName,String categoryID,String type) throws Exception
-    {
+    {        
         Session session=null;
         try
         {            
-            session=OfficeApplication.openSession(repositoryName);
+            session=OfficeApplication.openSession(repositoryName,"","");
             Node categoryNode = session.getNodeByUUID(categoryID);
             if ( !categoryNode.isLocked() )
             {
@@ -169,7 +167,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument, Rep
         Session session=null;
         try
         {
-            session=OfficeApplication.openSession();
+            session=OfficeApplication.openSession("","");
             Node nodeContent = session.getNodeByUUID(contentId);
             if ( !nodeContent.isLocked() )
             {
@@ -296,7 +294,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument, Rep
         Session session=null;
         try
         {
-            session=OfficeApplication.openSession();            
+            session=OfficeApplication.openSession("","");            
             session.getNodeByUUID(contentId);
             exists=true;
         }
@@ -323,12 +321,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument, Rep
     public void setDescription(String contentID, String description)
     {
 
-    }
-
-    public void setPath(String contentID, String path)
-    {
-
-    }
+    }   
 
     public void sendToAuthorize()
     {
