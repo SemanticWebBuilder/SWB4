@@ -351,7 +351,7 @@ public final class MetaWeblogImp implements MetaWeblog
                 postNode.setProperty(BLOG_CATEGORY, post.categories);
                 for ( String category : post.categories )
                 {
-                    createCategory(postNode.getParent().getUUID(), category, category, userid, password);
+                    createCategory(repositoryName,postNode.getParent().getUUID(), category, category, userid, password);
                 }
             }
             session.save();
@@ -455,10 +455,9 @@ public final class MetaWeblogImp implements MetaWeblog
                 postNode.setProperty(BLOG_CATEGORY, post.categories);
                 for ( String category : post.categories )
                 {
-                    createCategory(blogid, category, category, userid, password);
+                    createCategory(repositoryName,blogid, category, category, userid, password);
                 }
             }
-
             session.save();
             return repositoryName+ID_SEPARATOR+postNode.getUUID();
         }
@@ -485,13 +484,12 @@ public final class MetaWeblogImp implements MetaWeblog
      * @return A CategoryInfo with the information created
      * @throws java.lang.Exception
      */
-    public CategoryInfo createCategory(String blogid, String name, String description, String username, String password) throws Exception
+    public CategoryInfo createCategory(String repositoryName,String blogid, String name, String description, String username, String password) throws Exception
     {
         Session session = null;
         try
-        {
-            String repositoryName=getRepositoryName(blogid);
-            blogid=getID(blogid);
+        {        
+         
             session = RepositoryManager.openSession(repositoryName,username, password);
             Query query = session.getWorkspace().getQueryManager().createQuery("//blog/category[blog:name='" + name + "']", Query.XPATH);
             QueryResult result = query.execute();
