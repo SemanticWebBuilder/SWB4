@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
+import javax.servlet.ServletException;
 import javax.servlet.ServletInputStream;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.ServletResponse;
@@ -42,7 +43,7 @@ public abstract class XMLRPCServlet extends HttpServlet
     private static final String XMLRPC_DOCUMENT = "xmlrpc";    
     
     @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response)
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         try
         {            
@@ -75,7 +76,7 @@ public abstract class XMLRPCServlet extends HttpServlet
                     String methodName = getMethodName(xmlrpcDocument);
                     ArrayList<Method> methods = getMethods(methodName);
                     Object[] parameters = deserializeRequest(xmlrpcDocument, methods);
-                    Method method = getMethod(methodName, parameters, methods);
+                    Method method = getMethod(methodName,methods);
                     String objectName = method.getDeclaringClass().getName();
                     Object objResponse = execute(objectName, method, parameters, parts);
                     Document docResponse = serializeResponse(objResponse);
@@ -144,7 +145,7 @@ public abstract class XMLRPCServlet extends HttpServlet
 
     
 
-    private static Method getMethod(String methodName, Object[] parameters, ArrayList<Method> methods) throws NoSuchMethodException
+    private static Method getMethod(String methodName, ArrayList<Method> methods) throws NoSuchMethodException
     {
         switch ( methods.size() )
         {
