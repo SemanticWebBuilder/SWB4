@@ -36,7 +36,7 @@ public class Login implements InternalServlet
         log.event("Login initialized...");
     }    
 
-    public void doProcess(HttpServletRequest request, HttpServletResponse response) throws IOException
+    public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException
     {
         HttpSession session = request.getSession(true);
         Subject subject  = (Subject) session.getAttribute("swb4-subject");

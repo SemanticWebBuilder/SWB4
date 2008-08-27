@@ -18,5 +18,5 @@ public interface InternalServlet
 {
     public void init(ServletContext config);
     
-    public void doProcess(HttpServletRequest request, HttpServletResponse response) throws IOException;
+    public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException;
 }

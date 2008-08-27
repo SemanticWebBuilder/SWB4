@@ -17,7 +17,6 @@ import org.semanticwb.base.util.SFBase64;
 import org.semanticwb.model.Dns;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
-import org.semanticwb.model.UserRepository;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticClass;
@@ -78,11 +77,14 @@ public class DistributorParams
     private String device=null;
     
     /** Creates a new instance of DistributorParams */
-    public DistributorParams(HttpServletRequest request)
+    public DistributorParams(HttpServletRequest request, String uri)
     {
-        URIParams=_getURIParams(request);
+        URIParams=_getURIParams(request, uri);
+        System.out.println("URIParams"+URIParams);
         topic=_getTopic(request);
+        System.out.println("topic"+topic);
         virtTopic=_getVirtTopic();
+        System.out.println("virtTopic"+virtTopic);
         if(topic!=null)
         {
             filtered=_getFiltered(request);
@@ -90,29 +92,36 @@ public class DistributorParams
         {
             log.equals("WebPage not Found:"+request.getRequestURI()+" Ref:"+request.getHeader("Referer"));
         }
-        user=_getUser(request,topic.getWebSite());
+        if(topic==null)
+        {
+            user=_getUser(request,SWBContext.getGlobalWebSite());
+        }else
+        {
+            user=_getUser(request,topic.getWebSite());
+        }
+        System.out.println("user"+user);
         queryString=_getQueryString(request);
-        //System.out.println("queryString:"+queryString);
+        System.out.println("queryString:"+queryString);
     }
     
-    private ArrayList _getURIParams(HttpServletRequest request)
+    private ArrayList _getURIParams(HttpServletRequest request, String uri)
     {
         ArrayList arr=new ArrayList();
-        String serv=request.getServletPath();
-        String acont=request.getContextPath();
+//        String serv=request.getServletPath();
+//        String acont=request.getContextPath();
         boolean allAditionals=false;
-        int lcont=0;
-        if(acont!=null)
-        {
-            lcont=acont.length();
-            if(lcont==1)lcont=0;
-        }
-        String uri=request.getRequestURI().substring(lcont+serv.length());
+//        int lcont=0;
+//        if(acont!=null)
+//        {
+//            lcont=acont.length();
+//            if(lcont==1)lcont=0;
+//        }
+//        String uri=request.getRequestURI().substring(lcont+serv.length());
         
-        //System.out.println("URI:"+request.getRequestURI());
-        //System.out.println("serv:"+serv);
-        //System.out.println("uri:"+uri);
-        //System.out.println("context:"+request.getContextPath());
+//        System.out.println("URI:"+request.getRequestURI());
+//        System.out.println("serv:"+serv);
+        System.out.println("uri:"+uri);
+//        System.out.println("context:"+request.getContextPath());
         
         if(uri.indexOf('?')>-1)uri=uri.substring(0,uri.indexOf('?'));
         StringTokenizer st = new StringTokenizer(uri, "/;");
@@ -442,7 +451,7 @@ public class DistributorParams
     /**
      * Convierte un String a entero, si el estring es nulo o esta mal formado regresa el valor de defecto.
      */
-    public int getInt(String val, int defa)
+    private int getInt(String val, int defa)
     {
         if(val==null)return defa;
         try

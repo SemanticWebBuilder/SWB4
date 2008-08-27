@@ -13,6 +13,8 @@ import javax.servlet.http.HttpSession;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.SWBVocabulary;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SWBInstanceObject;
@@ -82,7 +84,7 @@ public class SWBUserMgr
             String language = request.getLocale().getLanguage().trim();
             //language=DBUser.getInstance(repository).getProperty("defaultLanguage",language);        
             
-            ret=new User(new SemanticObject(site.getUserRepository().getSemanticObject().getModel()));
+            ret=new User(new SemanticObject(site.getUserRepository().getSemanticObject().getModel(),SWBContext.getVocabulary().User));
             sub.getPrincipals().add(ret);
             ret.setLanguage(site.getLanguage(language));
             //TODO: validar dispositivo

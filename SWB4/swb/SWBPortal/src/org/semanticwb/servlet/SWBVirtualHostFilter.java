@@ -17,6 +17,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.servlet.internal.Admin;
 import org.semanticwb.servlet.internal.Distributor;
+import org.semanticwb.servlet.internal.DistributorParams;
 import org.semanticwb.servlet.internal.InternalServlet;
 import org.semanticwb.servlet.internal.Login;
 
@@ -111,7 +112,9 @@ public class SWBVirtualHostFilter implements Filter
             {
                 if(validateDB(_response))
                 {
-                    serv.doProcess(_request, _response);
+                    String auri=path.substring(iserv.length()+1);
+                    DistributorParams dparams=new DistributorParams(_request,auri);
+                    serv.doProcess(_request, _response, dparams);
                 }
             }else
             {
