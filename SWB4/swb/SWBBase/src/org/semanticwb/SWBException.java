@@ -6,8 +6,6 @@
 
 package org.semanticwb;
 
-import java.io.*;
-
 /**
  * SemanticWebBuilder Exception
  * @author Javier Solis Gonzalez
