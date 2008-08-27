@@ -18,11 +18,18 @@ public class GenericIterator<T extends GenericObject> implements Iterator
     private Class cls;
     private Iterator iterator;
     private Constructor constructor;
+    private boolean invert=false;
             
     public GenericIterator(SemanticClass cls,Iterator iterator)
     {
+        this(cls,iterator,false);
+    }
+    
+    public GenericIterator(SemanticClass cls,Iterator iterator, boolean invert)
+    {
         this.scls=cls;
         this.iterator=iterator;
+        this.invert=invert;
 //        try
 //        {
 //            constructor=clazz.getDeclaredConstructor(Resource.class);
@@ -31,12 +38,18 @@ public class GenericIterator<T extends GenericObject> implements Iterator
 //        {
 //            new IllegalArgumentException(nsme);
 //        }
-    }
+    }    
     
     public GenericIterator(Class cls,Iterator iterator)
     {
+        this(cls,iterator,false);
+    }    
+    
+    public GenericIterator(Class cls,Iterator iterator, boolean invert)
+    {
         this.cls=cls;
         this.iterator=iterator;
+        this.invert=invert;
         try
         {
             constructor=cls.getDeclaredConstructor(SemanticObject.class);
@@ -66,6 +79,10 @@ public class GenericIterator<T extends GenericObject> implements Iterator
             {
                 try
                 {
+                    if(invert)
+                    {
+                        return (T)scls.newGenericInstance(((Statement)obj).getSubject());
+                    }
                     return (T)scls.newGenericInstance(((Statement)obj).getResource());
                 }
                 catch(Exception ie)
@@ -94,6 +111,10 @@ public class GenericIterator<T extends GenericObject> implements Iterator
             {
                 try
                 {
+                    if(invert)
+                    {
+                        return (T)constructor.newInstance(new SemanticObject(((Statement)obj).getSubject()));
+                    }
                     return (T)constructor.newInstance(new SemanticObject(((Statement)obj).getResource()));
                 }
                 catch(Exception ie)

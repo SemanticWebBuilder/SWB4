@@ -44,6 +44,16 @@ public class SemanticProperty
         return m_prop;
     }
     
+    public boolean isLocaleable()
+    {
+        Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_LOCALEABLE));
+        if(st!=null)
+        {
+            return st.getBoolean();
+        }
+        return false;
+    }
+    
     @Override
     public String toString()
     {
@@ -116,7 +126,7 @@ public class SemanticProperty
     
     public int getCardinality()
     {
-        return 0;//m_prop.
+        return 0;
     }
     
     public boolean isObjectProperty()
