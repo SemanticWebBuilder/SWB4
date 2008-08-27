@@ -6,12 +6,16 @@
 package org.semanticwb.servlet.internal;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.User;
+import org.semanticwb.model.WebPage;
 
 /**
  *
@@ -34,46 +38,43 @@ public class Distributor implements InternalServlet
         secure = SWBPlatform.getEnv("swb/secureAdmin", "false").equalsIgnoreCase("true");
     }
     
-    public void doProcess(HttpServletRequest request, HttpServletResponse response)throws IOException 
+    public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams)throws IOException 
     {
         long time=System.currentTimeMillis();
-        if(_doProcess(request, response))
+        if(_doProcess(request, response, dparams))
         {
             SWBPlatform.getMonitor().addinstanceHit(System.currentTimeMillis()-time);
         }
     }    
     
-    public boolean _doProcess(HttpServletRequest request, HttpServletResponse response)throws IOException 
+    public boolean _doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams)throws IOException 
     {
         boolean ret=true;
         log.debug("Distributor->doProcess()");
         
-        //DistributorParams dparams = new DistributorParams(request);
-/*
-        WBUser user = dparams.getUser();
+        User user = dparams.getUser();
         ArrayList uri = dparams.getResourcesURI();
-        Topic topic = dparams.getTopic();
-        Topic vtopic = dparams.getVirtTopic();
+        WebPage topic = dparams.getTopic();
+        WebPage vtopic = dparams.getVirtTopic();
         int ipfilter = dparams.getFiltered();
         boolean onlyContent = dparams.isOnlyContent();
 
-        if (AFUtils.debug > 2) {
-            System.out.println("*********distributor**************");
-            System.out.println("email:" + user.getEmail());
-            System.out.println("session:" + request.getSession().getId());
-            System.out.println("isRegistered:" + user.isRegistered());
-            System.out.println("isloged:" + user.isLoged());
-            System.out.println("uri:" + request.getRequestURI());
-            System.out.println("servlet:" + request.getServletPath());
-            System.out.println("topic:" + topic);
-            System.out.println("virtTopic:" + vtopic);
-            System.out.println("ipfilter:" + ipfilter);
-            System.out.println("isSecure:" + request.isSecure());
-            System.out.println("*****************************");
-        }        
-        
-        */
-        
+        {
+            PrintWriter out=response.getWriter();
+            out.println("*********distributor**************");
+            out.println("email:" + user.getUsrEmail());
+            out.println("session:" + request.getSession().getId());
+            //out.println("isRegistered:" + user.isRegistered());
+            //out.println("isloged:" + user.isLoged());
+            out.println("uri:" + request.getRequestURI());
+            out.println("servlet:" + request.getServletPath());
+            out.println("topic:" + topic);
+            out.println("virtTopic:" + vtopic);
+            out.println("ipfilter:" + ipfilter);
+            out.println("isSecure:" + request.isSecure());
+            out.println("onlyContent:" + onlyContent);
+            out.println("*****************************");
+        }
         
         return ret;
     }

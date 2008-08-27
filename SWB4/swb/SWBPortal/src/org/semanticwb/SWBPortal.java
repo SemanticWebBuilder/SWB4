@@ -1,9 +1,7 @@
 package org.semanticwb;
 
-import java.io.File;
 import java.sql.Timestamp;
-import org.semanticwb.base.util.URLEncoder;
-import org.semanticwb.platform.SWBInstanceObject;
+import org.semanticwb.model.*;
 import org.semanticwb.portal.SWBDBAdmLog;
 import org.semanticwb.portal.SWBUserMgr;
 import org.semanticwb.portal.services.CalendarSrv;
@@ -45,6 +43,42 @@ public class SWBPortal {
      //Initialize context
     private void init()
     {
+        //Check for GlobalWebSite
+        WebSite site=SWBContext.getGlobalWebSite();
+        if(site==null)
+        {
+            log.event("Creating Global WebSite...");
+            site=SWBContext.createWebSite(SWBContext.WEBSITE_GLOBAL, "http://org.semanticwb.globalws");
+            site.setTitle("Global");
+            site.setDescription("Global WebSite");
+            //Crear lenguajes por defecto
+            Language lang=site.createLanguage("es");
+            lang.setTitle("Español", "es");
+            lang.setTitle("Spanish", "en");
+            lang=site.createLanguage("en");
+            lang.setTitle("Ingles", "es");
+            lang.setTitle("English", "en");
+            //Create HomePage
+            WebPage home=site.createWebPage("home");
+            site.setHomePage(home);
+            //Create DNS
+            Dns dns=site.createDns("localhost");
+            dns.setTitle("localhost");
+            dns.setDescription("DNS por default","es");
+            dns.setDescription("Default DNS","en");
+            dns.setDnsDefault(true);
+            dns.setWebPage(home);
+        }
+        //Check for GlobalWebSite
+        UserRepository urep=SWBContext.getDefaultRepository();
+        if(urep==null)
+        {
+            log.event("Creating Default User Repository...");
+            urep=SWBContext.createUserRepository(SWBContext.USERREPOSITORY_DEFAULT, "http://org.semanticwb.userrep");
+            urep.setTitle("Default UserRepository");
+            urep.setDescription("Default UserRpository");
+            site.setUserRepository(urep);
+        }
         
         usrMgr=new SWBUserMgr();
         usrMgr.init();

@@ -260,25 +260,25 @@ public class SWBServices {
         return true;
     }
 
-    public boolean addWebPage(WebPageable webPageable, WebPage webPage, User user) throws SWBException {
-        boolean doAction = false;
-        webPageable.addWebPage(webPage);
-        doAction = true;
-
-        SWBPortal.log(user.getURI(), "assign", webPageable.getURI(), webPage.getId(), "assign webpage", null); 
-       
-        return doAction;
-    }
-
-    public boolean removeWebPage(WebPageable webPageable, WebPage webPage, User user) throws SWBException {
-        boolean doAction = false;
-        webPageable.removeWebPage(webPage);
-        doAction = true;
-
-        SWBPortal.log(user.getURI(), "unAssign", webPageable.getURI(), webPage.getId(), "unAssign webpage", null); 
-        
-        return doAction;
-    }
+//    public boolean addWebPage(WebPageable webPageable, WebPage webPage, User user) throws SWBException {
+//        boolean doAction = false;
+//        webPageable.addWebPage(webPage);
+//        doAction = true;
+//
+//        SWBPortal.log(user.getURI(), "assign", webPageable.getURI(), webPage.getId(), "assign webpage", null); 
+//       
+//        return doAction;
+//    }
+//
+//    public boolean removeWebPage(WebPageable webPageable, WebPage webPage, User user) throws SWBException {
+//        boolean doAction = false;
+//        webPageable.removeWebPage(webPage);
+//        doAction = true;
+//
+//        SWBPortal.log(user.getURI(), "unAssign", webPageable.getURI(), webPage.getId(), "unAssign webpage", null); 
+//        
+//        return doAction;
+//    }
     
     
     public boolean Hiddenable(Hiddenable hiddenable, int hidden, User user) throws SWBException {

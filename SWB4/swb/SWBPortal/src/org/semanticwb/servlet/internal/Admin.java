@@ -27,7 +27,7 @@ public class Admin implements InternalServlet
         log.event("Admin initialized...");
     }    
     
-    public void doProcess(HttpServletRequest request, HttpServletResponse response) throws IOException
+    public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException
     {
         PrintWriter out=response.getWriter();
         out.print("Hello Admin");
