@@ -5,13 +5,9 @@ import java.util.Date;
 public interface WebPageable extends GenericObject
 {
 
-    public GenericIterator<org.semanticwb.model.WebPage> listWebPage();
+    public void setWebPage(org.semanticwb.model.WebPage webpage);
 
-    public void addWebPage(org.semanticwb.model.WebPage webpage);
-
-    public void removeAllWebPage();
-
-    public void removeWebPage(org.semanticwb.model.WebPage webpage);
+    public void removeWebPage();
 
     public WebPage getWebPage();
 }

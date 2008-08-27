@@ -10,6 +10,7 @@ public class SWBContext extends SWBContextBase
     
     public static String WEBSITE_ADMIN="SWBAdmin";
     public static String WEBSITE_GLOBAL="SWBGlobal";
+    public static String USERREPOSITORY_DEFAULT="urswb";
     
     private static SWBContext instance=null;
     static public synchronized SWBContext createInstance()
@@ -35,4 +36,9 @@ public class SWBContext extends SWBContextBase
     {
         return getWebSite(WEBSITE_GLOBAL);
     }    
+    
+    public static UserRepository getDefaultRepository()
+    {
+        return getUserRepository(USERREPOSITORY_DEFAULT);
+    }
 }

@@ -7,7 +7,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class DnsBase extends GenericObjectBase implements WebPageable,Descriptiveable,Traceable
+public class DnsBase extends GenericObjectBase implements Traceable,Descriptiveable,WebPageable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
@@ -90,6 +90,28 @@ public class DnsBase extends GenericObjectBase implements WebPageable,Descriptiv
         getSemanticObject().setProperty(vocabulary.title, title, lang);
     }
 
+    public void setWebPage(org.semanticwb.model.WebPage webpage)
+    {
+        getSemanticObject().addObjectProperty(vocabulary.webPage, webpage.getSemanticObject());
+    }
+
+    public void removeWebPage()
+    {
+        getSemanticObject().removeProperty(vocabulary.webPage);
+    }
+
+    public WebPage getWebPage()
+    {
+         WebPage ret=null;
+         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.webPage.getRDFProperty());
+         GenericIterator<org.semanticwb.model.WebPage> it=new GenericIterator<org.semanticwb.model.WebPage>(WebPage.class, stit);
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
+    }
+
     public String getDescription()
     {
         return getSemanticObject().getProperty(vocabulary.description);
@@ -108,39 +130,6 @@ public class DnsBase extends GenericObjectBase implements WebPageable,Descriptiv
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(vocabulary.description, description, lang);
-    }
-
-    public GenericIterator<org.semanticwb.model.WebPage> listWebPage()
-    {
-        StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasWebPage.getRDFProperty());
-        return new GenericIterator<org.semanticwb.model.WebPage>(org.semanticwb.model.WebPage.class, stit);
-    }
-
-    public void addWebPage(org.semanticwb.model.WebPage webpage)
-    {
-        getSemanticObject().addObjectProperty(vocabulary.hasWebPage, webpage.getSemanticObject());
-    }
-
-    public void removeAllWebPage()
-    {
-        getSemanticObject().removeProperty(vocabulary.hasWebPage);
-    }
-
-    public void removeWebPage(org.semanticwb.model.WebPage webpage)
-    {
-        getSemanticObject().removeObjectProperty(vocabulary.hasWebPage,webpage.getSemanticObject());
-    }
-
-    public WebPage getWebPage()
-    {
-         WebPage ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasWebPage.getRDFProperty());
-         GenericIterator<org.semanticwb.model.WebPage> it=new GenericIterator<org.semanticwb.model.WebPage>(WebPage.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
     }
 
     public Date getUpdated()
