@@ -54,14 +54,13 @@ public abstract class OfficeServlet extends XMLRPCServlet
             fnfe.printStackTrace(System.out);
         }
         addMappingType("OfficeDocument", OfficeDocument.class);
-        addMappingType("OfficeApplication", OfficeApplication.class);        
+        addMappingType("OfficeApplication", OfficeApplication.class);
         MimeEntry me = new MimeEntry("application/msword");
         me.setExtensions(".doc,.docx");
         MimeTable.getDefaultTable().add(me);
 
     }
-   
-    
+
     @Override
     protected void finalize() throws Throwable
     {
@@ -90,7 +89,7 @@ public abstract class OfficeServlet extends XMLRPCServlet
         return userName;
     }
 
-    private void checkSecurity(HttpServletRequest request, HttpServletResponse response)
+    private void checkSecurity(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
         try
         {
@@ -124,19 +123,20 @@ public abstract class OfficeServlet extends XMLRPCServlet
         }
         catch ( IOException ioe )
         {
-
+            throw ioe;
         }
+
     }
 
     @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response)
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         checkSecurity(request, response);
         super.doPost(request, response);
+
     }
 
     public abstract boolean isAuthenticate(String pUserName, String pPassword);
-    
 
     @Override
     protected void beforeExecute(Object objToExecute, Set<Part> parts) throws Exception

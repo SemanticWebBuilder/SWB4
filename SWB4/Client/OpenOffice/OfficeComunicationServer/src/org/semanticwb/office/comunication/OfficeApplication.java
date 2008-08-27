@@ -35,12 +35,15 @@ import org.semanticwb.xmlrpc.XmlRpcObject;
  */
 public class OfficeApplication extends XmlRpcObject implements RepositorySupport, IOfficeApplication
 {
+    
 
     private static final String CONTENT_MODEL_PATH = "C:\\repositorio\\contentmodel.cnd";
     public static final String CONTENT_MODEL_URI = "http://www.semanticwb.org.mx/model/content/1.0";
     public static final String CONTENT_MODEL_PREFIX = "swb";
     public static final String CONTENT_URI = "http://www.semanticwb.org.mx/model/content/1.0/cm";
     public static final String CONTENT_PREFIX = "cm";
+    private static final String CONTENT_TITE = CONTENT_PREFIX+":title";
+    private static final String CONTENT_DESCRIPTION = CONTENT_PREFIX+":description";
     private static Map<String, Repository> repositories;
     //private Session session;
     public boolean isValidVersion(double version)
@@ -139,25 +142,25 @@ public class OfficeApplication extends XmlRpcObject implements RepositorySupport
         }
     }
 
-    public static Session openSession() throws Exception
+    public static Session openSession(String userId,String password) throws Exception
     {
         if ( repositories.size() > 0 )
         {
             Set<String> keys = repositories.keySet();
-            Session session = repositories.get(keys.iterator().next()).login(new SimpleCredentials("", "".toCharArray()));
+            Session session = repositories.get(keys.iterator().next()).login(new SimpleCredentials(userId, password.toCharArray()));
             RegisterCustomNodeTypes(session.getWorkspace(), CONTENT_MODEL_PATH);
             return session;
         }
         throw new Exception("There are not repositories");
     }
 
-    public static Session openSession(String repositoryName) throws Exception
+    public static Session openSession(String repositoryName,String userId,String password) throws Exception
     {
         if ( repositories.get(repositoryName) == null )
         {
             throw new Exception("The repository " + repositoryName + " does not exist");
         }
-        Session session = repositories.get(repositoryName).login(new SimpleCredentials("", "".toCharArray()));
+        Session session = repositories.get(repositoryName).login(new SimpleCredentials(userId, password.toCharArray()));
         RegisterCustomNodeTypes(session.getWorkspace(), CONTENT_MODEL_PATH);
         return session;
     }
@@ -191,7 +194,7 @@ public class OfficeApplication extends XmlRpcObject implements RepositorySupport
         Session session = null;
         try
         {
-            session = openSession(repositoryName);
+            session = openSession(repositoryName,"","");
             ArrayList<String> contents = new ArrayList<String>();
             Node categoryNode = session.getNodeByUUID(categoryID);
             NodeIterator nodes = categoryNode.getNodes("Content");
@@ -206,7 +209,7 @@ public class OfficeApplication extends XmlRpcObject implements RepositorySupport
                     content.append(",");
                     content.append(versionContent.getName());
                     content.append(",");
-                    content.append(nodeContent.getProperty("cm:title").getString());
+                    content.append(nodeContent.getProperty(CONTENT_TITE).getString());
                     contents.add(content.toString());
                 }
             }
@@ -235,7 +238,7 @@ public class OfficeApplication extends XmlRpcObject implements RepositorySupport
         Session session = null;
         try
         {
-            session = openSession(repositoryName);
+            session = openSession(repositoryName,"","");
             ArrayList<CategoryInfo> categories = new ArrayList<CategoryInfo>();
             Query query = session.getWorkspace().getQueryManager().createQuery("//Category", Query.XPATH);
             QueryResult result = query.execute();
@@ -245,8 +248,8 @@ public class OfficeApplication extends XmlRpcObject implements RepositorySupport
                 Node categoryNode = nodeIterator.nextNode();
                 CategoryInfo categoryInfo = new CategoryInfo();
                 categoryInfo.UDDI = categoryNode.getUUID();
-                categoryInfo.title = categoryNode.getProperty("cm:title").getString();
-                categoryInfo.description = categoryNode.getProperty("cm:description").getString();
+                categoryInfo.title = categoryNode.getProperty(CONTENT_TITE).getString();
+                categoryInfo.description = categoryNode.getProperty(CONTENT_DESCRIPTION).getString();
                 categories.add(categoryInfo);
             }
             return categories.toArray(new CategoryInfo[categories.size()]);
@@ -270,7 +273,7 @@ public class OfficeApplication extends XmlRpcObject implements RepositorySupport
         Session session = null;
         try
         {
-            session = openSession(repositoryName);
+            session = openSession(repositoryName,"","");
             Query query = session.getWorkspace().getQueryManager().createQuery("//Category[@cm:title='" + title + "']", Query.XPATH);
             QueryResult result = query.execute();
             NodeIterator nodeIterator = result.getNodes();
@@ -282,8 +285,8 @@ public class OfficeApplication extends XmlRpcObject implements RepositorySupport
             {
                 Node root = session.getRootNode();
                 Node newNode = root.addNode("Category", "swb:categoryType");
-                newNode.setProperty("cm:title", title);
-                newNode.setProperty("cm:description", description);
+                newNode.setProperty( CONTENT_TITE,title);
+                newNode.setProperty( CONTENT_DESCRIPTION,description);
                 root.save();
                 UUID = newNode.getUUID();
             }
