@@ -26,7 +26,7 @@ import org.semanticwb.repository.RepositoryManager;
  *
  * @author victor.lorenzana
  */
-public class MetaWeblogImp implements MetaWeblog
+public final class MetaWeblogImp implements MetaWeblog
 {    
     private static final String BLOG_PREFIX = "blog";    
     private static final String BLOG_MODEL_URI = "http://www.semanticwb.org.mx/model/blog/1.0";
