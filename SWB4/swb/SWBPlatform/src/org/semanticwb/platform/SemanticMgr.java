@@ -43,6 +43,7 @@ public class SemanticMgr implements SWBInstanceObject
     private SemanticModel m_system;
     private SemanticModel m_schema;
     private HashMap <String,SemanticModel>m_models=null;
+    private HashMap <Model,SemanticModel>m_imodels=null;
 
     private IDBConnection conn;
     private ModelMaker maker;
@@ -55,6 +56,7 @@ public class SemanticMgr implements SWBInstanceObject
         this.m_context=context;
         
         m_models=new HashMap();
+        m_imodels=new HashMap();
         
         // Create database connection
         conn = new DBConnection(SWBUtils.DB.getDefaultConnection(), SWBUtils.DB.getDatabaseName());
@@ -203,9 +205,16 @@ public class SemanticMgr implements SWBInstanceObject
 
     public SemanticModel getModel(Model model)
     {
-        String name=model.getNsURIPrefix(SemanticVocabulary.URI+SemanticVocabulary.SWB_NS);
-        System.out.println("name:"+name);
-        return m_models.get(name);
+        SemanticModel ret=m_imodels.get(model);
+        if(ret==null)
+        {
+            //System.out.println("getModel1:"+model.hashCode());
+            String name=model.getNsURIPrefix(SemanticVocabulary.URI+SemanticVocabulary.SWB_NS);
+            //System.out.println("name:"+name);
+            //System.out.println("getModel2:"+m_models.get(name).getRDFModel().hashCode());
+            ret=m_models.get(name);
+        }
+        return ret;
     }
     
     private void loadDBModels()
@@ -230,6 +239,7 @@ public class SemanticMgr implements SWBInstanceObject
     {
         SemanticModel m=new SemanticModel(name, loadRDFDBModel(name));
         m_models.put(name, m);
+        m_imodels.put(m.getRDFModel(), m);
         //System.out.println("addModel:"+name+" hash:"+m.getRDFModel().toString());
         m_ontology.addSubModel(m,false);
         return m;
@@ -248,6 +258,7 @@ public class SemanticMgr implements SWBInstanceObject
     {
         SemanticModel model=m_models.get(name);
         m_models.remove(name);
+        m_imodels.remove(model.getRDFModel());
         maker.removeModel(name);
     }
         

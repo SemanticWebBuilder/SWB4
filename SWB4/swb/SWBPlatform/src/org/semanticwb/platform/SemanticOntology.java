@@ -43,7 +43,6 @@ public class SemanticOntology
     
     public void addSubModel(SemanticModel model, boolean rebind)
     {
-        //m_ontology.add(model.getRDFModel());
         m_ontology.addSubModel(model.getRDFModel(),rebind);
     }
     
@@ -52,46 +51,22 @@ public class SemanticOntology
         m_ontology.rebind();
     }
     
-//    public SemanticClass getSemanticObjectClass(Resource res)
-//    {
-//        Statement stm=res.getProperty(res.getModel().getProperty(SemanticVocabulary.RDF_TYPE));
-//        if(stm!=null)
-//        {
-//            return SWBInstance.getSemanticMgr().getVocabulary().getSemanticClass(stm.getObject().toString());
-//        }
-//        return null;
-//    }    
-//    
-//    public SemanticClass getSemanticObjectClass(String uri)
-//    {
-//        Resource res=m_ontology.getResource(uri);
-//        return getSemanticObjectClass(res);
-//    }
-    
-    
     public SemanticObject getSemanticObject(String uri)
     {
-//        SemanticObject ret=null;
-//        Resource res=m_ontology.getResource(uri);
-//        if(res!=null)
-//        {
-//            System.out.println("Res:"+res.getURI());
-//            SemanticClass cl=getSemanticObjectClass(res);
-//            if(cl!=null)
-//            {
-//                ret=cl.newInstance(res);        
-//            }
-//        }
-//        return ret;
         SemanticObject ret=null;
         Resource res=m_ontology.getResource(uri);
-        if(m_ontology.containsResource(res))ret=new SemanticObject(res);
+        if(m_ontology.containsResource(res))
+        {
+            ret=new SemanticObject(res);
+            //cambiar el modelo de la ontologia al de DB
+            ret=ret.getModel().getSemanticObject(uri);
+        }
         return ret;        
-    }    
-    
-    public GenericObject getGenericObject(String uri, SemanticClass cls)
-    {
-        Resource res=m_ontology.getResource(uri);
-        return cls.newGenericInstance(res);        
-    }     
+    }
+//    
+//    public GenericObject getGenericObject(String uri, SemanticClass cls)
+//    {
+//        Resource res=m_ontology.getResource(uri);
+//        return cls.newGenericInstance(res);        
+//    }
 }

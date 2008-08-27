@@ -495,6 +495,11 @@ public class CodeGenerator
                     String methodName = toUpperCase(tpp.getName());
                     javaClassContent.append(PUBLIC + type + " " + prefix + methodName + END_OF_METHOD + ENTER);
                     javaClassContent.append(PUBLIC + "void set" + methodName + "(" + type + " " + tpp.getName() + ");" + ENTER);
+                    if(tpp.isLocaleable())
+                    {
+                        javaClassContent.append(PUBLIC + type + " " + prefix + methodName + "(String lang);" + ENTER);
+                        javaClassContent.append(PUBLIC + "void set" + methodName + "(" + type + " " + tpp.getName() + ", String lang);" + ENTER);
+                    }
                 }
                 catch ( URISyntaxException usie )
                 {
@@ -588,12 +593,12 @@ public class CodeGenerator
                                 if(!tpp.hasInverse())
                                 {                                
                                     javaClassContent.append("        StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary." + tpp.getName() + ".getRDFProperty());" + ENTER);
+                                    javaClassContent.append("        return new GenericIterator<" + m_Package + "." + valueToReturn + ">(" + m_Package + "." + valueToReturn + ".class, stit);" + ENTER);
                                 }else
                                 {
                                     javaClassContent.append("        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, vocabulary." + tpp.getName() + ".getInverse().getRDFProperty(), getSemanticObject().getRDFResource());" + ENTER);
-                                    
+                                    javaClassContent.append("        return new GenericIterator<" + m_Package + "." + valueToReturn + ">(" + m_Package + "." + valueToReturn + ".class, stit,true);" + ENTER);
                                 }
-                                javaClassContent.append("        return new GenericIterator<" + m_Package + "." + valueToReturn + ">(" + m_Package + "." + valueToReturn + ".class, stit);" + ENTER);
                                 javaClassContent.append(CLOSE_BLOCK + ENTER);
 
                                 if(!tpp.hasInverse())
@@ -750,9 +755,22 @@ public class CodeGenerator
                     javaClassContent.append(PUBLIC + "void set" + methodName + "(" + type + " " + tpp.getName() + ")" + ENTER);
                     javaClassContent.append(OPEN_BLOCK + ENTER);
                     javaClassContent.append("        " + setMethod + "(vocabulary." + tpp.getName() + ", " + tpp.getName() + ");" + ENTER);
-                    //javaClassContent.append("        return this;" + ENTER);
                     javaClassContent.append(CLOSE_BLOCK + ENTER);
 
+                    if(tpp.isLocaleable())
+                    {
+                        javaClassContent.append(ENTER);
+                        javaClassContent.append(PUBLIC + type + " " + prefix + methodName + "(String lang)" + ENTER);
+                        javaClassContent.append(OPEN_BLOCK + ENTER);
+                        javaClassContent.append("        return " + getMethod + "(vocabulary." + tpp.getName() + ", lang);" + ENTER);
+                        javaClassContent.append(CLOSE_BLOCK + ENTER);
+
+                        javaClassContent.append(ENTER);
+                        javaClassContent.append(PUBLIC + "void set" + methodName + "(" + type + " " + tpp.getName() + ", String lang)" + ENTER);
+                        javaClassContent.append(OPEN_BLOCK + ENTER);
+                        javaClassContent.append("        " + setMethod + "(vocabulary." + tpp.getName() + ", " + tpp.getName() + ", lang);" + ENTER);
+                        javaClassContent.append(CLOSE_BLOCK + ENTER);
+                    }
                 }
                 catch ( URISyntaxException usie )
                 {

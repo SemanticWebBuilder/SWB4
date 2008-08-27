@@ -87,22 +87,50 @@ public class SemanticObject
      */
     public SemanticObject setProperty(SemanticProperty prop, String value)
     {
-        Property iprop=prop.getRDFProperty();
-        if(value==null)
+        Statement stm=m_res.getProperty(prop.getRDFProperty());
+        if(stm!=null)
         {
-            m_res.removeAll(iprop);
+            stm.changeObject(value);
         }else
         {
-            Statement stm=m_res.getProperty(iprop);
-            if(stm!=null)
-            {
-                stm.changeObject(value);
-            }else
-            {
-                m_res.addProperty(iprop, value);
-            }
+            m_res.addProperty(prop.getRDFProperty(), value);
         }
         return this;
+    }
+    
+    /**
+     * Asigna la propiedad con el valor especificado
+     * @param prop Propiedad a modificar
+     * @param value Valor a asignar
+     * @return SemanticObject para cascada
+     */
+    public SemanticObject setProperty(SemanticProperty prop, String value, String lang)
+    {
+        Statement stm=getLocaleStatement(prop, lang);
+        if(stm!=null)
+        {
+            stm.changeObject(value,lang);
+        }else
+        {
+            m_res.addProperty(prop.getRDFProperty(), value, lang);
+        }        
+        return this;
+    }    
+    
+    private Statement getLocaleStatement(SemanticProperty prop, String lang)
+    {
+        StmtIterator stit=m_res.listProperties(prop.getRDFProperty());
+        Statement st=null;
+        while(stit.hasNext())
+        {
+            Statement staux=stit.nextStatement();
+            if(staux.getLanguage().equals(lang))
+            {
+                st=staux;
+                break;
+            }
+        }       
+        return st;
     }
     
     public SemanticObject removeProperty(SemanticProperty prop)
@@ -111,6 +139,20 @@ public class SemanticObject
         m_res.removeAll(iprop);
         return this;
     }    
+    
+    public SemanticObject removeProperty(SemanticProperty prop, String lang)
+    {
+        StmtIterator stit=m_res.listProperties(prop.getRDFProperty());
+        while(stit.hasNext())
+        {
+            Statement staux=stit.nextStatement();
+            if(staux.getLanguage().equals(lang))
+            {
+                stit.remove();
+            }
+        }      
+        return this;
+    }     
     
     /**
      * Regresa valor de la Propiedad especificada
@@ -126,6 +168,17 @@ public class SemanticObject
     {
         String ret=defValue;
         Statement stm=m_res.getProperty(prop.getRDFProperty());
+        if(stm!=null)
+        {
+            ret=stm.getString();
+        }
+        return ret;
+    }
+    
+    public String getProperty(SemanticProperty prop, String defValue, String lang)
+    {
+        String ret=defValue;
+        Statement stm=getLocaleStatement(prop, lang);
         if(stm!=null)
         {
             ret=stm.getString();

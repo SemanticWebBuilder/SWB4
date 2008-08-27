@@ -47,6 +47,7 @@ public class SemanticVocabulary
     public static final String SWB_MODEL=URI+"Model";
     public static final String SWB_PROP_VALUE=URI+"value";
     public static final String SWB_PROP_HASCLASS=URI+"hasClass";
+    public static final String SWB_PROP_LOCALEABLE=URI+"localeable";
     public static final String SWB_ANNOT_CLASSNAME=URI+"className";
     public static final String SWB_ANNOT_AUTOGENID=URI+"autogenId";
     
@@ -71,7 +72,7 @@ public class SemanticVocabulary
     
     private void filterProperties()
     {
-        System.out.println("filterProperties");
+        //System.out.println("filterProperties");
         Iterator<SemanticClass> tpcit=listSemanticClasses();
         while(tpcit.hasNext())
         {
@@ -81,7 +82,7 @@ public class SemanticVocabulary
             {
                 SemanticProperty tpp=tppit.next();
                 //System.out.println("Prop:"+tpp+"\t"+tpp.getDomainClass()+"\t"+tpc+"\t"+tpc.isSubClass(tpp.getDomainClass()));
-                if(tpp.getDomainClass()==null || !(tpc.equals(tpp.getDomainClass())||tpc.isSubClass(tpp.getDomainClass())))
+                if(tpp.getDomainClass()==null || (tpp.hasInverse() && !(tpc.equals(tpp.getDomainClass())||tpc.isSubClass(tpp.getDomainClass()))))
                 {
                     tppit.remove();
                 }

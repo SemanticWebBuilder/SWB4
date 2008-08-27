@@ -56,12 +56,12 @@ public class SemanticClass
     {
         m_props=new HashMap();
         // super-classes
-        System.out.println("m_class:"+m_class);
+        //System.out.println("m_class:"+m_class);
         for (Iterator i = m_class.listDeclaredProperties(false); i.hasNext(); ) 
         {
             Property prop=(Property)i.next();
             SemanticProperty p=new SemanticProperty(prop);
-            System.out.println("p.getName():"+p.getName()+" "+p);
+            //System.out.println("p.getName():"+p.getName()+" "+p);
             m_props.put( p.getName(), p);
         }
     }
