@@ -269,7 +269,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public WebPage createWebPage()
     {
-        long id=SWBPlatform.getCounterValue(getSemanticObject().getModel().getName()+"/"+vocabulary.WebPage.getName());
+        long id=SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+vocabulary.WebPage.getName());
         return createWebPage(""+id);
     } 
 
@@ -297,7 +297,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public Calendar createCalendar()
     {
-        long id=SWBPlatform.getCounterValue(getSemanticObject().getModel().getName()+"/"+vocabulary.Calendar.getName());
+        long id=SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+vocabulary.Calendar.getName());
         return createCalendar(""+id);
     } 
 
@@ -325,7 +325,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public RuleRef createRuleRef()
     {
-        long id=SWBPlatform.getCounterValue(getSemanticObject().getModel().getName()+"/"+vocabulary.RuleRef.getName());
+        long id=SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+vocabulary.RuleRef.getName());
         return createRuleRef(""+id);
     } 
 
@@ -353,7 +353,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public ObjectGroup createObjectGroup()
     {
-        long id=SWBPlatform.getCounterValue(getSemanticObject().getModel().getName()+"/"+vocabulary.ObjectGroup.getName());
+        long id=SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+vocabulary.ObjectGroup.getName());
         return createObjectGroup(""+id);
     } 
 
@@ -381,7 +381,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public RoleRef createRoleRef()
     {
-        long id=SWBPlatform.getCounterValue(getSemanticObject().getModel().getName()+"/"+vocabulary.RoleRef.getName());
+        long id=SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+vocabulary.RoleRef.getName());
         return createRoleRef(""+id);
     } 
 
@@ -409,7 +409,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public Device createDevice()
     {
-        long id=SWBPlatform.getCounterValue(getSemanticObject().getModel().getName()+"/"+vocabulary.Device.getName());
+        long id=SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+vocabulary.Device.getName());
         return createDevice(""+id);
     } 
 
@@ -437,7 +437,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public Permission createPermission()
     {
-        long id=SWBPlatform.getCounterValue(getSemanticObject().getModel().getName()+"/"+vocabulary.Permission.getName());
+        long id=SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+vocabulary.Permission.getName());
         return createPermission(""+id);
     } 
 
@@ -465,7 +465,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public Template createTemplate()
     {
-        long id=SWBPlatform.getCounterValue(getSemanticObject().getModel().getName()+"/"+vocabulary.Template.getName());
+        long id=SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+vocabulary.Template.getName());
         return createTemplate(""+id);
     } 
 
@@ -493,7 +493,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public VersionInfo createVersionInfo()
     {
-        long id=SWBPlatform.getCounterValue(getSemanticObject().getModel().getName()+"/"+vocabulary.VersionInfo.getName());
+        long id=SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+vocabulary.VersionInfo.getName());
         return createVersionInfo(""+id);
     } 
 
@@ -521,7 +521,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public Community createCommunity()
     {
-        long id=SWBPlatform.getCounterValue(getSemanticObject().getModel().getName()+"/"+vocabulary.Community.getName());
+        long id=SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+vocabulary.Community.getName());
         return createCommunity(""+id);
     } 
 
@@ -549,7 +549,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public Language createLanguage()
     {
-        long id=SWBPlatform.getCounterValue(getSemanticObject().getModel().getName()+"/"+vocabulary.Language.getName());
+        long id=SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+vocabulary.Language.getName());
         return createLanguage(""+id);
     } 
 
@@ -577,7 +577,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public TemplateRef createTemplateRef()
     {
-        long id=SWBPlatform.getCounterValue(getSemanticObject().getModel().getName()+"/"+vocabulary.TemplateRef.getName());
+        long id=SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+vocabulary.TemplateRef.getName());
         return createTemplateRef(""+id);
     } 
 
@@ -605,7 +605,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public PortletRef createPortletRef()
     {
-        long id=SWBPlatform.getCounterValue(getSemanticObject().getModel().getName()+"/"+vocabulary.PortletRef.getName());
+        long id=SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+vocabulary.PortletRef.getName());
         return createPortletRef(""+id);
     } 
 
@@ -633,7 +633,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public IPFilter createIPFilter()
     {
-        long id=SWBPlatform.getCounterValue(getSemanticObject().getModel().getName()+"/"+vocabulary.IPFilter.getName());
+        long id=SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+vocabulary.IPFilter.getName());
         return createIPFilter(""+id);
     } 
 
@@ -661,7 +661,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public PortletClass createPortletClass()
     {
-        long id=SWBPlatform.getCounterValue(getSemanticObject().getModel().getName()+"/"+vocabulary.PortletClass.getName());
+        long id=SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+vocabulary.PortletClass.getName());
         return createPortletClass(""+id);
     } 
 
@@ -689,7 +689,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public Rule createRule()
     {
-        long id=SWBPlatform.getCounterValue(getSemanticObject().getModel().getName()+"/"+vocabulary.Rule.getName());
+        long id=SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+vocabulary.Rule.getName());
         return createRule(""+id);
     } 
 
@@ -717,7 +717,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public PFlow createPFlow()
     {
-        long id=SWBPlatform.getCounterValue(getSemanticObject().getModel().getName()+"/"+vocabulary.PFlow.getName());
+        long id=SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+vocabulary.PFlow.getName());
         return createPFlow(""+id);
     } 
 
@@ -745,7 +745,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public Camp createCamp()
     {
-        long id=SWBPlatform.getCounterValue(getSemanticObject().getModel().getName()+"/"+vocabulary.Camp.getName());
+        long id=SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+vocabulary.Camp.getName());
         return createCamp(""+id);
     } 
 
@@ -773,7 +773,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public Dns createDns()
     {
-        long id=SWBPlatform.getCounterValue(getSemanticObject().getModel().getName()+"/"+vocabulary.Dns.getName());
+        long id=SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+vocabulary.Dns.getName());
         return createDns(""+id);
     } 
 

@@ -18,10 +18,14 @@ public class SWBContextBase
     public static UserRepository getUserRepository(String uri)
     {
         UserRepository ret=null;
-        SemanticObject obj=mgr.getOntology().getSemanticObject(uri);
-        if(obj!=null)
+        SemanticModel model=mgr.getModel(uri);
+        if(model!=null)
         {
-            ret=(UserRepository)new UserRepository(obj);
+            SemanticObject obj=model.getSemanticObject(uri);
+            if(obj!=null)
+            {
+                ret=(UserRepository)new UserRepository(obj);
+            }
         }
         return ret;
     }
@@ -45,10 +49,14 @@ public class SWBContextBase
     public static WebSite getWebSite(String uri)
     {
         WebSite ret=null;
-        SemanticObject obj=mgr.getOntology().getSemanticObject(uri);
-        if(obj!=null)
+        SemanticModel model=mgr.getModel(uri);
+        if(model!=null)
         {
-            ret=(WebSite)new WebSite(obj);
+            SemanticObject obj=model.getSemanticObject(uri);
+            if(obj!=null)
+            {
+                ret=(WebSite)new WebSite(obj);
+            }
         }
         return ret;
     }
