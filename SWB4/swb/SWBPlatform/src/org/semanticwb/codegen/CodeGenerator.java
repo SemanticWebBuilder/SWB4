@@ -199,7 +199,7 @@ public class CodeGenerator
 
             javaClassContent.append("    private SWBContext()" + ENTER);
             javaClassContent.append("    {" + ENTER);
-            javaClassContent.append("        log.event(\"Initialize Semantic WebBuilder Context...\");" + ENTER);
+            javaClassContent.append("        log.event(\"Initializing SemanticWebBuilder Context...\");" + ENTER);
             javaClassContent.append("    }" + ENTER);
 
             javaClassContent.append("}");
@@ -250,12 +250,16 @@ public class CodeGenerator
                 javaClassContent.append("    public static " + tpc.getName() + " get" + tpc.getName() + "(String uri)" + ENTER);
                 javaClassContent.append("    {" + ENTER);
                 javaClassContent.append("        " + tpc.getName() + " ret=null;" + ENTER);
-                javaClassContent.append("        SemanticObject obj=mgr.getOntology().getSemanticObject(uri);" + ENTER);
-                javaClassContent.append("        if(obj!=null)" + ENTER);
+                javaClassContent.append("        SemanticModel model=mgr.getModel(uri);" + ENTER);
+                javaClassContent.append("        if(model!=null)" + ENTER);
                 javaClassContent.append("        {" + ENTER);
-                javaClassContent.append("            ret=(" + tpc.getName() + ")new " + tpc.getName() + "(obj);" + ENTER);
+                javaClassContent.append("            SemanticObject obj=model.getSemanticObject(uri);" + ENTER);
+                javaClassContent.append("            if(obj!=null)" + ENTER);
+                javaClassContent.append("            {" + ENTER);
+                javaClassContent.append("                ret=(" + tpc.getName() + ")new " + tpc.getName() + "(obj);" + ENTER);
+                javaClassContent.append("            }" + ENTER);
                 javaClassContent.append("        }" + ENTER);
-                javaClassContent.append("        return ret;" + ENTER);               
+                javaClassContent.append("        return ret;" + ENTER);
                 javaClassContent.append("    }" + ENTER);
                 javaClassContent.append(ENTER);
                 javaClassContent.append("    public static Iterator<org.semanticwb.model." + tpc.getName() + "> list" + tpc.getName() + "s()" + ENTER);
@@ -552,7 +556,7 @@ public class CodeGenerator
             javaClassContent.append(ENTER);
             javaClassContent.append("    public " + tpc.getName() + " create" + tpc.getName() + "()" + ENTER);
             javaClassContent.append("    {" + ENTER);
-            javaClassContent.append("        long id=SWBPlatform.getCounterValue(getSemanticObject().getModel().getName()+\"/\"+vocabulary." + tpc.getName() + ".getName());" + ENTER);
+            javaClassContent.append("        long id=SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+\"/\"+vocabulary." + tpc.getName() + ".getName());" + ENTER);
             javaClassContent.append("        return create" + tpc.getName() + "(\"\"+id);" + ENTER);
             javaClassContent.append("    } " + ENTER);
             javaClassContent.append(ENTER);

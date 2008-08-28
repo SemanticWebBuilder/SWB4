@@ -6,8 +6,8 @@
 package org.semanticwb.platform;
 
 import com.hp.hpl.jena.ontology.OntModel;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.Statement;
+import java.util.Iterator;
+import java.util.Map.Entry;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.GenericObject;
 
@@ -54,12 +54,13 @@ public class SemanticOntology
     public SemanticObject getSemanticObject(String uri)
     {
         SemanticObject ret=null;
-        Resource res=m_ontology.getResource(uri);
-        if(m_ontology.containsResource(res))
+        Iterator<Entry<String, SemanticModel>> it=SWBPlatform.getSemanticMgr().getModels().iterator();
+        while(it.hasNext())
         {
-            ret=new SemanticObject(res);
-            //cambiar el modelo de la ontologia al de DB
-            ret=ret.getModel().getSemanticObject(uri);
+            Entry<String, SemanticModel> ent=it.next();
+            SemanticModel model=ent.getValue();
+            ret=model.getSemanticObject(uri);
+            if(ret!=null)break;
         }
         return ret;        
     }

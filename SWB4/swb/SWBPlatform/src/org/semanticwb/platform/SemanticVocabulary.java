@@ -51,7 +51,7 @@ public class SemanticVocabulary
     public static final String SWB_ANNOT_CLASSNAME=URI+"className";
     public static final String SWB_ANNOT_AUTOGENID=URI+"autogenId";
     
-    public static final String SWB_NS="swbns";
+    //public static final String SWB_NS="swbns";
 
     public HashMap<String, SemanticClass> classes;
     public HashMap<String, SemanticProperty> properties;
