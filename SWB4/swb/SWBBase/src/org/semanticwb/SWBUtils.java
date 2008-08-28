@@ -76,8 +76,8 @@ public class SWBUtils {
 
     /** Creates new utils */
     private SWBUtils() {
-        log.event("SemanticWebBuilder Base Starting...");
-        log.event("AppicationPath: " + applicationPath);
+        log.event("Initializing SemanticWebBuilder Base...");
+        log.event("-->AppicationPath: " + applicationPath);
         init();
     }
 
