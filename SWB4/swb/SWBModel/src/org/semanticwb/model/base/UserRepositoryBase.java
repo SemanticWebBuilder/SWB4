@@ -139,7 +139,7 @@ public class UserRepositoryBase extends GenericObjectBase implements Descriptive
 
     public User createUser()
     {
-        long id=SWBPlatform.getCounterValue(getSemanticObject().getModel().getName()+"/"+vocabulary.User.getName());
+        long id=SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+vocabulary.User.getName());
         return createUser(""+id);
     } 
 
@@ -167,7 +167,7 @@ public class UserRepositoryBase extends GenericObjectBase implements Descriptive
 
     public ObjectGroup createObjectGroup()
     {
-        long id=SWBPlatform.getCounterValue(getSemanticObject().getModel().getName()+"/"+vocabulary.ObjectGroup.getName());
+        long id=SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+vocabulary.ObjectGroup.getName());
         return createObjectGroup(""+id);
     } 
 
@@ -195,7 +195,7 @@ public class UserRepositoryBase extends GenericObjectBase implements Descriptive
 
     public Role createRole()
     {
-        long id=SWBPlatform.getCounterValue(getSemanticObject().getModel().getName()+"/"+vocabulary.Role.getName());
+        long id=SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+vocabulary.Role.getName());
         return createRole(""+id);
     } 
 

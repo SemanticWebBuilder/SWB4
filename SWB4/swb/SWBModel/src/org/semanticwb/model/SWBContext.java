@@ -24,7 +24,7 @@ public class SWBContext extends SWBContextBase
     
     private SWBContext()
     {
-        log.event("Initialize Semantic WebBuilder Context...");
+        log.event("Initializing SemanticWebBuilder Context...");
     }
     
     public static WebSite getAdminWebSite()
