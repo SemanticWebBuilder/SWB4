@@ -15,6 +15,7 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.util.FileManager;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -52,7 +53,7 @@ public class SemanticMgr implements SWBInstanceObject
 
     public void init(SWBPlatform context) 
     {
-        log.event("SemanticMgr initialized...");
+        log.event("Initializing SemanticMgr...");
         this.m_context=context;
         
         m_models=new HashMap();
@@ -205,16 +206,7 @@ public class SemanticMgr implements SWBInstanceObject
 
     public SemanticModel getModel(Model model)
     {
-        SemanticModel ret=m_imodels.get(model);
-        if(ret==null)
-        {
-            //System.out.println("getModel1:"+model.hashCode());
-            String name=model.getNsURIPrefix(SemanticVocabulary.URI+SemanticVocabulary.SWB_NS);
-            //System.out.println("name:"+name);
-            //System.out.println("getModel2:"+m_models.get(name).getRDFModel().hashCode());
-            ret=m_models.get(name);
-        }
-        return ret;
+        return m_imodels.get(model);
     }
     
     private void loadDBModels()
@@ -249,8 +241,9 @@ public class SemanticMgr implements SWBInstanceObject
     {
         SemanticModel ret=loadDBModel(name);
         Model model=ret.getRDFModel();
-        model.setNsPrefix(name+"_"+SemanticVocabulary.SWB_NS, nameSpace);
-        model.setNsPrefix(name, SemanticVocabulary.URI+SemanticVocabulary.SWB_NS);
+//        model.setNsPrefix(name+"_"+SemanticVocabulary.SWB_NS, nameSpace);
+//        model.setNsPrefix(name, SemanticVocabulary.URI+SemanticVocabulary.SWB_NS);
+        model.setNsPrefix(name, nameSpace);
         return ret;
     }
      
@@ -286,4 +279,61 @@ public class SemanticMgr implements SWBInstanceObject
     public SemanticVocabulary getVocabulary() {
         return vocabulary;
     }
+    
+    /**
+     * Regresa contador en base a la cadena <i>name</i>, sin incrementar el valor del mismo
+     */
+    public synchronized long getCounterValue(String name)
+    {
+        SemanticModel model=getSystemModel();
+        Resource res=model.getRDFModel().createResource(name);
+        Property prop=model.getRDFModel().createProperty("swb:count");
+        StmtIterator it=model.getRDFModel().listStatements(res, prop, (String)null);
+        if(it.hasNext())
+        {
+            Statement stmt=it.nextStatement();
+            return stmt.getLong();
+        }
+        return 0;
+    }
+    
+    /**
+     * Asigna el valor <i>val</a> al contador de nombre <i>name</i>
+     */
+    public synchronized void setCounterValue(String name, long val)
+    {
+        SemanticModel model=getSystemModel();
+        Resource res=model.getRDFModel().createResource(name);
+        Property prop=model.getRDFModel().createProperty("swb:count");
+        StmtIterator it=model.getRDFModel().listStatements(res, prop, (String)null);
+        if(it.hasNext())
+        {
+            Statement stmt=it.nextStatement();
+            stmt.changeLiteralObject(val);
+        }else
+        {
+            Statement stmt=model.getRDFModel().createLiteralStatement(res, prop, val);
+            model.getRDFModel().add(stmt);
+        }
+    }
+    
+    
+    /**
+     * Regresa contador en base a la cadena <i>name</i>, e incrementa el valor en uno
+     */
+    public synchronized long getCounter(String name)
+    {
+        long ret=getCounterValue(name);
+        ret++;
+        setCounterValue(name, ret);
+        return ret;
+    }
+    
+    public synchronized void deleteCounterValue(String name)
+    {
+        SemanticModel model=getSystemModel();
+        Resource res=model.getRDFModel().createResource(name);
+        Property prop=model.getRDFModel().createProperty("swb:count");
+        model.getRDFModel().remove(res, prop, null);
+    }    
 }

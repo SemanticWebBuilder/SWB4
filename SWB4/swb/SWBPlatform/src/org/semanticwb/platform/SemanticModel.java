@@ -161,7 +161,7 @@ public class SemanticModel
     {
         if(m_nameSpace==null)
         {
-            this.m_nameSpace=m_model.getNsPrefixURI(m_name+"_"+SemanticVocabulary.SWB_NS);
+            this.m_nameSpace=m_model.getNsPrefixURI(m_name);
         }
         return m_nameSpace;
     }    

@@ -1,21 +1,15 @@
 
 package org.semanticwb;
 
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
 import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.util.Properties;
 import javax.servlet.ServletContext;
-import org.semanticwb.platform.SWBMonitor;
 import org.semanticwb.platform.SemanticMgr;
 import org.semanticwb.base.util.SWBProperties;
 import org.semanticwb.base.util.URLEncoder;
-import org.semanticwb.platform.SemanticModel;
 
 /**
  *
@@ -37,7 +31,7 @@ public class SWBPlatform
     private static boolean haveDB=false;
     private static boolean haveDBTables=false;
     
-    private static SWBMonitor monitor=null;
+
     private static SemanticMgr semanticMgr=null;
 
     /**
@@ -47,25 +41,26 @@ public class SWBPlatform
     
     private SWBPlatform()
     {
-        log.event("Initialize Semantic WebBuilder Instance...");
+        log.event("Initializing SemanticWebBuilder Platform...");
         init();
     }
     
     //Initialize context
     private void init()
     {
-        log.event("SemanticWebBuilder Version: " + version);
-        log.event("Java Version: " + System.getProperty("java.runtime.version"));
+        log.event("-->SemanticWebBuilder Version: " + version);
+        log.event("-->Java Version: " + System.getProperty("java.runtime.version"));
+        log.event("-->Java Memory: " + Runtime.getRuntime().totalMemory());
         
         InputStream in = getClass().getResourceAsStream("/web.properties");
         props = new SWBProperties();
         try
         {
             props.load(in);
-            log.info("File web.properties found...");
+            log.info("-->File web.properties found...");
         } catch (Exception e)
         {
-            log.warn("File web.properties not found...");
+            log.warn("-->File web.properties not found...");
         }        
         
         try
@@ -76,7 +71,7 @@ public class SWBPlatform
             Connection con=SWBUtils.DB.getDefaultConnection();
             if(con!=null)
             {
-                log.info("Database: "+SWBUtils.DB.getDatabaseName());
+                log.info("-->Database: "+SWBUtils.DB.getDatabaseName());
                 haveDB=true;
                 //Si no existen las tablas, se crean automaticamente
 //                PreparedStatement sr=con.prepareStatement("select * from swb_counter");
@@ -95,12 +90,12 @@ public class SWBPlatform
             
             if(!haveDB())
             {
-                log.warn("Default SemanticWebBuilder database not found...");
+                log.warn("-->Default SemanticWebBuilder database not found...");
                 return;
             }
             if(!haveDBTables())
             {
-                log.warn("Default SemanticWebBuilder database tables not found...");
+                log.warn("-->Default SemanticWebBuilder database tables not found...");
                 return;
             }           
             
@@ -110,7 +105,7 @@ public class SWBPlatform
                 System.setProperty("sun.net.client.defaultReadTimeout", getEnv("swb/defaultReadTimeout","30000"));
             }catch(Exception e)
             {
-                System.err.println("Error seting defaultConnectTimeout, defaultReadTimeout");            
+                log.error("Error seting defaultConnectTimeout, defaultReadTimeout");            
             }                
 
             
@@ -120,9 +115,6 @@ public class SWBPlatform
             
             createInstance("org.semanticwb.model.SWBContext");
             createInstance("org.semanticwb.SWBPortal");
-            
-            monitor=new SWBMonitor();
-            monitor.init(this);
             
 //            Timestamp initime = null;
 //            util.log(com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "log_WBLoader_Init_InstanceConfiguration") + util.getEnv("wb/clientServer"), true);
@@ -141,7 +133,7 @@ public class SWBPlatform
 //
             if (!"ignore".equals(getEnv("swb/security.auth.login.config","ignore"))) {
                 System.setProperty("java.security.auth.login.config",SWBUtils.getApplicationPath()+"/WEB-INF/classes"+getEnv("swb/security.auth.login.config","/wb_jaas.config"));
-                log.info("Login Config:"+System.getProperty("java.security.auth.login.config"));
+                log.info("-->Login Config:"+System.getProperty("java.security.auth.login.config"));
             }
 //            String dbsync = util.getEnv("wb/DBSync","false");
 //
@@ -282,7 +274,7 @@ public class SWBPlatform
         if (instance == null)
         {
             instance = new SWBPlatform();
-            instance.servletContext=servletContext;
+            SWBPlatform.servletContext=servletContext;
         }
         return instance;
     }
@@ -295,11 +287,13 @@ public class SWBPlatform
             Class cls = Class.forName(clsname);
             Method createInstance = cls.getMethod("createInstance", (Class[])null);
             createInstance.invoke(null, (Object[])null);
+        }catch(ClassNotFoundException e)
+        {
+            log.warn(clsname+" not found...");
         }catch(Exception e)
         {
-            log.error("Error initializing "+clsname+"..");
+            log.error("Error initializing "+clsname+"..",e);
         }
-        
     }
 
     /*
@@ -383,177 +377,11 @@ public class SWBPlatform
         return servletContext;
     }    
 
-    public static SWBMonitor getMonitor() 
-    {
-        return monitor;
-    }    
-
     public static SemanticMgr getSemanticMgr() 
     {
         return semanticMgr;
     }    
     
-    /**
-     * Regresa contador en base a la cadena <i>name</i>, sin incrementar el valor del mismo
-     */
-    public static synchronized long getCounterValue(String name)
-    {
-        SemanticModel model=getSemanticMgr().getSystemModel();
-        Resource res=model.getRDFModel().createResource(name);
-        Property prop=model.getRDFModel().createProperty("swb:count");
-        StmtIterator it=model.getRDFModel().listStatements(res, prop, (String)null);
-        if(it.hasNext())
-        {
-            Statement stmt=it.nextStatement();
-            return stmt.getLong();
-        }
-        return 0;
-//        Statement stmt=model.getRDFModel().createStatement(res, prop, res)
-//        
-//        
-//        long ret=0;
-//        Connection con=SWBUtils.DB.getDefaultConnection();
-//        if (con != null)
-//        {
-//            try
-//            {
-//                PreparedStatement pst = con.prepareStatement("select countvalue from swbcounter where name=?");
-//                pst.setString(1,name);
-//                ResultSet rs = pst.executeQuery();
-//                if(rs.next()) ret=rs.getLong("countvalue");
-//                rs.close();
-//                pst.close();
-//                con.close();
-//            }catch(Exception e){
-//                log.error(e);
-//            }
-//        }
-//        return ret;
-    }
-    
-    /**
-     * Asigna el valor <i>val</a> al contador de nombre <i>name</i>
-     */
-    public static synchronized void setCounterValue(String name, long val)
-    {
-        SemanticModel model=getSemanticMgr().getSystemModel();
-        Resource res=model.getRDFModel().createResource(name);
-        Property prop=model.getRDFModel().createProperty("swb:count");
-        StmtIterator it=model.getRDFModel().listStatements(res, prop, (String)null);
-        if(it.hasNext())
-        {
-            Statement stmt=it.nextStatement();
-            stmt.changeLiteralObject(val);
-        }else
-        {
-            Statement stmt=model.getRDFModel().createLiteralStatement(res, prop, val);
-            model.getRDFModel().add(stmt);
-        }
-        
-//        long ret=0;
-//        Connection con=SWBUtils.DB.getDefaultConnection();
-//        if (con != null)
-//        {
-//            try
-//            {
-//                PreparedStatement pst = con.prepareStatement("select countvalue from swbcounter where name=?");
-//                pst.setString(1,name);
-//                ResultSet rs = pst.executeQuery();
-//                if(rs.next())
-//                {
-//                    ret=rs.getLong("countvalue");
-//                    PreparedStatement pst2 = con.prepareStatement("UPDATE swbcounter SET countvalue=? WHERE name=?");
-//                    pst2.setLong(1,val);
-//                    pst2.setString(2,name);
-//                    pst2.executeUpdate();
-//                    pst2.close();                    
-//                }else
-//                {
-//                    PreparedStatement pst2 = con.prepareStatement("INSERT INTO swbcounter (name, countvalue) VALUES (?, ?)");
-//                    pst2.setString(1,name);
-//                    pst2.setLong(2,val);
-//                    pst2.executeUpdate();
-//                    pst2.close();                    
-//                }
-//                rs.close();
-//                pst.close();
-//                con.close();
-//            }catch(Exception e){
-//                log.error(e);
-//                throw new SWBException("Error seting counter "+name,e);
-//            }
-//        }        
-    }
-    
-    
-    /**
-     * Regresa contador en base a la cadena <i>name</i>, e incrementa el valor en uno
-     */
-    public static synchronized long getCounter(String name)
-    {
-        long ret=getCounterValue(name);
-        ret++;
-        setCounterValue(name, ret);
-//        Connection con=SWBUtils.DB.getDefaultConnection();
-//        if (con != null)
-//        {
-//            try
-//            {
-//                PreparedStatement pst = con.prepareStatement("select countvalue from swbcounter where name=?");
-//                pst.setString(1,name);
-//                ResultSet rs = pst.executeQuery();
-//                if(rs.next())
-//                {
-//                    ret=rs.getLong("countvalue");
-//                    ret++;
-//                    PreparedStatement pst2 = con.prepareStatement("UPDATE swbcounter SET countvalue=? WHERE name=?");
-//                    pst2.setLong(1,ret);
-//                    pst2.setString(2,name);
-//                    pst2.executeUpdate();
-//                    pst2.close();                    
-//                }else
-//                {
-//                    ret++;
-//                    PreparedStatement pst2 = con.prepareStatement("INSERT INTO swbcounter (name, countvalue) VALUES (?, ?)");
-//                    pst2.setString(1,name);
-//                    pst2.setLong(2,ret);
-//                    pst2.executeUpdate();
-//                    pst2.close();                    
-//                }
-//                rs.close();
-//                pst.close();
-//                con.close();
-//            }catch(Exception e){
-//                AFUtils.log(e);
-//                throw new AFException("Error geting counter "+name,"DBCounter.getCounter",e);
-//            }
-//        }
-        return ret;
-    }
-    
-    public static synchronized void deleteCounterValue(String name)
-    {
-        SemanticModel model=getSemanticMgr().getSystemModel();
-        Resource res=model.getRDFModel().createResource(name);
-        Property prop=model.getRDFModel().createProperty("swb:count");
-        model.getRDFModel().remove(res, prop, null);
-//        Connection con=AFUtils.getDBConnection((String) com.infotec.appfw.util.AFUtils.getInstance().getEnv("wb/db/nameconn"),"DBCounter");
-//        if (con != null)
-//        {
-//            try
-//            {
-//                PreparedStatement pst = con.prepareStatement("DELETE FROM swbcounter WHERE name=?");
-//                pst.setString(1,name);
-//                pst.executeUpdate();
-//                pst.close();
-//                con.close();
-//            }catch(Exception e){
-//                AFUtils.log(e);
-//            }
-//        }
-
-    }
-
     public static String getVersion() {
         return version;
     }    
