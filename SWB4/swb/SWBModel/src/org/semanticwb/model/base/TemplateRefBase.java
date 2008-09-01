@@ -7,13 +7,23 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class TemplateRefBase extends GenericObjectBase implements Statusable,Priorityable,Templateable
+public class TemplateRefBase extends GenericObjectBase implements Activeable,Priorityable,Templateable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
     public TemplateRefBase(SemanticObject base)
     {
         super(base);
+    }
+
+    public boolean isActive()
+    {
+        return getSemanticObject().getBooleanProperty(vocabulary.active);
+    }
+
+    public void setActive(boolean active)
+    {
+        getSemanticObject().setBooleanProperty(vocabulary.active, active);
     }
 
     public void setTemplate(org.semanticwb.model.Template template)
@@ -36,16 +46,6 @@ public class TemplateRefBase extends GenericObjectBase implements Statusable,Pri
              ret=it.next();
          }
          return ret;
-    }
-
-    public int getStatus()
-    {
-        return getSemanticObject().getIntProperty(vocabulary.status);
-    }
-
-    public void setStatus(int status)
-    {
-        getSemanticObject().setLongProperty(vocabulary.status, status);
     }
 
     public int getPriority()

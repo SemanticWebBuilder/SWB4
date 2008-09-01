@@ -7,13 +7,23 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class CampBase extends GenericObjectBase implements Statusable,Deleteable,Ruleable,Descriptiveable,Traceable,Calendarable,Roleable
+public class CampBase extends GenericObjectBase implements Activeable,Deleteable,Ruleable,Descriptiveable,Traceable,Calendarable,Roleable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
     public CampBase(SemanticObject base)
     {
         super(base);
+    }
+
+    public boolean isActive()
+    {
+        return getSemanticObject().getBooleanProperty(vocabulary.active);
+    }
+
+    public void setActive(boolean active)
+    {
+        getSemanticObject().setBooleanProperty(vocabulary.active, active);
     }
 
     public boolean isDeleted()
@@ -76,16 +86,6 @@ public class CampBase extends GenericObjectBase implements Statusable,Deleteable
     public void setTitle(String title, String lang)
     {
         getSemanticObject().setProperty(vocabulary.title, title, lang);
-    }
-
-    public int getStatus()
-    {
-        return getSemanticObject().getIntProperty(vocabulary.status);
-    }
-
-    public void setStatus(int status)
-    {
-        getSemanticObject().setLongProperty(vocabulary.status, status);
     }
 
     public Date getUpdated()

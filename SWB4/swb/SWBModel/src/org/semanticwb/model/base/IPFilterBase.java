@@ -7,13 +7,23 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class IPFilterBase extends GenericObjectBase implements Valueable,Statusable
+public class IPFilterBase extends GenericObjectBase implements Activeable,Valueable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
     public IPFilterBase(SemanticObject base)
     {
         super(base);
+    }
+
+    public boolean isActive()
+    {
+        return getSemanticObject().getBooleanProperty(vocabulary.active);
+    }
+
+    public void setActive(boolean active)
+    {
+        getSemanticObject().setBooleanProperty(vocabulary.active, active);
     }
 
     public String getValue()
@@ -24,16 +34,6 @@ public class IPFilterBase extends GenericObjectBase implements Valueable,Statusa
     public void setValue(String value)
     {
         getSemanticObject().setProperty(vocabulary.value, value);
-    }
-
-    public int getStatus()
-    {
-        return getSemanticObject().getIntProperty(vocabulary.status);
-    }
-
-    public void setStatus(int status)
-    {
-        getSemanticObject().setLongProperty(vocabulary.status, status);
     }
 
     public WebSite getWebSite()

@@ -7,13 +7,23 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class RuleRefBase extends GenericObjectBase implements Statusable
+public class RuleRefBase extends GenericObjectBase implements Activeable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
     public RuleRefBase(SemanticObject base)
     {
         super(base);
+    }
+
+    public boolean isActive()
+    {
+        return getSemanticObject().getBooleanProperty(vocabulary.active);
+    }
+
+    public void setActive(boolean active)
+    {
+        getSemanticObject().setBooleanProperty(vocabulary.active, active);
     }
 
     public void setRule(org.semanticwb.model.Rule rule)
@@ -36,16 +46,6 @@ public class RuleRefBase extends GenericObjectBase implements Statusable
              ret=it.next();
          }
          return ret;
-    }
-
-    public int getStatus()
-    {
-        return getSemanticObject().getIntProperty(vocabulary.status);
-    }
-
-    public void setStatus(int status)
-    {
-        getSemanticObject().setLongProperty(vocabulary.status, status);
     }
 
     public WebSite getWebSite()

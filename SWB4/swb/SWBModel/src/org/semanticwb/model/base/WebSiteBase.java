@@ -7,13 +7,23 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class WebSiteBase extends GenericObjectBase implements Deleteable,Localeable,Versionable,Statusable,Descriptiveable,Traceable
+public class WebSiteBase extends GenericObjectBase implements Deleteable,Localeable,Activeable,Versionable,Descriptiveable,Traceable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
     public WebSiteBase(SemanticObject base)
     {
         super(base);
+    }
+
+    public boolean isActive()
+    {
+        return getSemanticObject().getBooleanProperty(vocabulary.active);
+    }
+
+    public void setActive(boolean active)
+    {
+        getSemanticObject().setBooleanProperty(vocabulary.active, active);
     }
 
     public boolean isDeleted()
@@ -98,16 +108,6 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
              ret=it.next();
          }
          return ret;
-    }
-
-    public int getStatus()
-    {
-        return getSemanticObject().getIntProperty(vocabulary.status);
-    }
-
-    public void setStatus(int status)
-    {
-        getSemanticObject().setLongProperty(vocabulary.status, status);
     }
 
     public void setLanguage(org.semanticwb.model.Language language)
@@ -780,5 +780,61 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     public void removeDns(String id)
     {
         getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.Dns));
+    }
+
+    public Portlet getPortlet(String id)
+    {
+        return (Portlet)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.Portlet),vocabulary.Portlet);
+    }
+
+    public Iterator<Portlet> listPortlets()
+    {
+        Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
+        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.Portlet.getOntClass());
+        return new GenericIterator<Portlet>(Portlet.class, stit);
+    }
+
+    public Portlet createPortlet(String id)
+    {
+        return (Portlet)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, vocabulary.Portlet), vocabulary.Portlet);
+    }
+
+    public Portlet createPortlet()
+    {
+        long id=SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+vocabulary.Portlet.getName());
+        return createPortlet(""+id);
+    } 
+
+    public void removePortlet(String id)
+    {
+        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.Portlet));
+    }
+
+    public PFlowRef getPFlowRef(String id)
+    {
+        return (PFlowRef)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.PFlowRef),vocabulary.PFlowRef);
+    }
+
+    public Iterator<PFlowRef> listPFlowRefs()
+    {
+        Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
+        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.PFlowRef.getOntClass());
+        return new GenericIterator<PFlowRef>(PFlowRef.class, stit);
+    }
+
+    public PFlowRef createPFlowRef(String id)
+    {
+        return (PFlowRef)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, vocabulary.PFlowRef), vocabulary.PFlowRef);
+    }
+
+    public PFlowRef createPFlowRef()
+    {
+        long id=SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+vocabulary.PFlowRef.getName());
+        return createPFlowRef(""+id);
+    } 
+
+    public void removePFlowRef(String id)
+    {
+        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.PFlowRef));
     }
 }

@@ -7,13 +7,23 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class PFlowBase extends GenericObjectBase implements Deleteable,Groupable,Versionable,Statusable,Traceable,Descriptiveable
+public class PFlowBase extends GenericObjectBase implements Deleteable,Groupable,Versionable,Traceable,Descriptiveable,Activeable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
     public PFlowBase(SemanticObject base)
     {
         super(base);
+    }
+
+    public boolean isActive()
+    {
+        return getSemanticObject().getBooleanProperty(vocabulary.active);
+    }
+
+    public void setActive(boolean active)
+    {
+        getSemanticObject().setBooleanProperty(vocabulary.active, active);
     }
 
     public boolean isDeleted()
@@ -98,16 +108,6 @@ public class PFlowBase extends GenericObjectBase implements Deleteable,Groupable
              ret=it.next();
          }
          return ret;
-    }
-
-    public int getStatus()
-    {
-        return getSemanticObject().getIntProperty(vocabulary.status);
-    }
-
-    public void setStatus(int status)
-    {
-        getSemanticObject().setLongProperty(vocabulary.status, status);
     }
 
     public Date getUpdated()
