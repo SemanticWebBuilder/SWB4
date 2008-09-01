@@ -7,13 +7,23 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class PortletRefBase extends GenericObjectBase implements Statusable,Priorityable
+public class PortletRefBase extends GenericObjectBase implements Activeable,Priorityable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
     public PortletRefBase(SemanticObject base)
     {
         super(base);
+    }
+
+    public boolean isActive()
+    {
+        return getSemanticObject().getBooleanProperty(vocabulary.active);
+    }
+
+    public void setActive(boolean active)
+    {
+        getSemanticObject().setBooleanProperty(vocabulary.active, active);
     }
 
     public void setPortlet(org.semanticwb.model.Portlet portlet)
@@ -36,16 +46,6 @@ public class PortletRefBase extends GenericObjectBase implements Statusable,Prio
              ret=it.next();
          }
          return ret;
-    }
-
-    public int getStatus()
-    {
-        return getSemanticObject().getIntProperty(vocabulary.status);
-    }
-
-    public void setStatus(int status)
-    {
-        getSemanticObject().setLongProperty(vocabulary.status, status);
     }
 
     public int getPriority()

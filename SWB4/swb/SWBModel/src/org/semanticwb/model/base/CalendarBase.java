@@ -7,7 +7,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class CalendarBase extends GenericObjectBase implements Traceable,Descriptiveable,Statusable
+public class CalendarBase extends GenericObjectBase implements Traceable,Activeable,Descriptiveable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
@@ -24,6 +24,16 @@ public class CalendarBase extends GenericObjectBase implements Traceable,Descrip
     public void setCreated(Date created)
     {
         getSemanticObject().setDateProperty(vocabulary.created, created);
+    }
+
+    public boolean isActive()
+    {
+        return getSemanticObject().getBooleanProperty(vocabulary.active);
+    }
+
+    public void setActive(boolean active)
+    {
+        getSemanticObject().setBooleanProperty(vocabulary.active, active);
     }
 
     public void setModifiedBy(org.semanticwb.model.User user)
@@ -108,16 +118,6 @@ public class CalendarBase extends GenericObjectBase implements Traceable,Descrip
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(vocabulary.description, description, lang);
-    }
-
-    public int getStatus()
-    {
-        return getSemanticObject().getIntProperty(vocabulary.status);
-    }
-
-    public void setStatus(int status)
-    {
-        getSemanticObject().setLongProperty(vocabulary.status, status);
     }
 
     public Date getUpdated()

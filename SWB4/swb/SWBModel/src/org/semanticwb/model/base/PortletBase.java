@@ -7,23 +7,13 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class PortletBase extends GenericObjectBase implements Versionable,Indexable,Groupable,Statusable,Descriptiveable,Calendarable,RuleRefable,Traceable,RoleRefable,Priorityable,Deleteable,Localeable
+public class PortletBase extends GenericObjectBase implements Versionable,Indexable,Groupable,Descriptiveable,Viewable,Calendarable,Activeable,RuleRefable,Traceable,RoleRefable,Priorityable,Deleteable,Localeable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
     public PortletBase(SemanticObject base)
     {
         super(base);
-    }
-
-    public int getIndex()
-    {
-        return getSemanticObject().getIntProperty(vocabulary.index);
-    }
-
-    public void setIndex(int index)
-    {
-        getSemanticObject().setLongProperty(vocabulary.index, index);
     }
 
     public Date getCreated()
@@ -44,6 +34,16 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
     public void setDeleted(boolean deleted)
     {
         getSemanticObject().setBooleanProperty(vocabulary.deleted, deleted);
+    }
+
+    public boolean isActive()
+    {
+        return getSemanticObject().getBooleanProperty(vocabulary.active);
+    }
+
+    public void setActive(boolean active)
+    {
+        getSemanticObject().setBooleanProperty(vocabulary.active, active);
     }
 
     public GenericIterator<org.semanticwb.model.RoleRef> listRoleRef()
@@ -143,14 +143,24 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
          return ret;
     }
 
-    public int getStatus()
+    public int getViews()
     {
-        return getSemanticObject().getIntProperty(vocabulary.status);
+        return getSemanticObject().getIntProperty(vocabulary.views);
     }
 
-    public void setStatus(int status)
+    public void setViews(int views)
     {
-        getSemanticObject().setLongProperty(vocabulary.status, status);
+        getSemanticObject().setLongProperty(vocabulary.views, views);
+    }
+
+    public int getHits()
+    {
+        return getSemanticObject().getIntProperty(vocabulary.hits);
+    }
+
+    public void setHits(int hits)
+    {
+        getSemanticObject().setLongProperty(vocabulary.hits, hits);
     }
 
     public void setLanguage(org.semanticwb.model.Language language)
@@ -317,6 +327,16 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
          return ret;
     }
 
+    public boolean isIndexable()
+    {
+        return getSemanticObject().getBooleanProperty(vocabulary.indexable);
+    }
+
+    public void setIndexable(boolean indexable)
+    {
+        getSemanticObject().setBooleanProperty(vocabulary.indexable, indexable);
+    }
+
     public String getDescription()
     {
         return getSemanticObject().getProperty(vocabulary.description);
@@ -380,13 +400,8 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
         getSemanticObject().setLongProperty(vocabulary.priority, priority);
     }
 
-    public int getPortletType()
+    public WebSite getWebSite()
     {
-        return getSemanticObject().getIntProperty(vocabulary.portletType);
-    }
-
-    public void setPortletType(int portletType)
-    {
-        getSemanticObject().setLongProperty(vocabulary.portletType, portletType);
+        return new WebSite(getSemanticObject().getModel().getModelObject());
     }
 }

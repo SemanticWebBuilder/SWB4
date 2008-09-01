@@ -4,6 +4,6 @@ import org.semanticwb.model.GenericIterator;
 import java.util.Date;
 public interface Indexable extends GenericObject
 {
-    public int getIndex();
-    public void setIndex(int index);
+    public boolean isIndexable();
+    public void setIndexable(boolean indexable);
 }

@@ -7,13 +7,33 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class TemplateBase extends GenericObjectBase implements RoleRefable,Calendarable,Versionable,Statusable,Deleteable,Traceable,Groupable,RuleRefable,Descriptiveable,Localeable
+public class TemplateBase extends GenericObjectBase implements RoleRefable,Calendarable,Versionable,Activeable,Deleteable,Traceable,Groupable,RuleRefable,Descriptiveable,Localeable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
     public TemplateBase(SemanticObject base)
     {
         super(base);
+    }
+
+    public Date getCreated()
+    {
+        return getSemanticObject().getDateProperty(vocabulary.created);
+    }
+
+    public void setCreated(Date created)
+    {
+        getSemanticObject().setDateProperty(vocabulary.created, created);
+    }
+
+    public boolean isActive()
+    {
+        return getSemanticObject().getBooleanProperty(vocabulary.active);
+    }
+
+    public void setActive(boolean active)
+    {
+        getSemanticObject().setBooleanProperty(vocabulary.active, active);
     }
 
     public GenericIterator<org.semanticwb.model.RoleRef> listRoleRef()
@@ -57,16 +77,6 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
     public void setDeleted(boolean deleted)
     {
         getSemanticObject().setBooleanProperty(vocabulary.deleted, deleted);
-    }
-
-    public Date getCreated()
-    {
-        return getSemanticObject().getDateProperty(vocabulary.created);
-    }
-
-    public void setCreated(Date created)
-    {
-        getSemanticObject().setDateProperty(vocabulary.created, created);
     }
 
     public void setModifiedBy(org.semanticwb.model.User user)
@@ -131,16 +141,6 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
              ret=it.next();
          }
          return ret;
-    }
-
-    public int getStatus()
-    {
-        return getSemanticObject().getIntProperty(vocabulary.status);
-    }
-
-    public void setStatus(int status)
-    {
-        getSemanticObject().setLongProperty(vocabulary.status, status);
     }
 
     public void setLanguage(org.semanticwb.model.Language language)

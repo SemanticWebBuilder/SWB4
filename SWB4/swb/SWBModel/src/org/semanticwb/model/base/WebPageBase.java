@@ -7,7 +7,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class WebPageBase extends GenericObjectBase implements Descriptiveable,PortletRefable,TemplateRefable,Indexable,Calendarable,RuleRefable,RoleRefable,Hiddenable,Deleteable,Statusable,Traceable
+public class WebPageBase extends GenericObjectBase implements Descriptiveable,PortletRefable,TemplateRefable,Indexable,Calendarable,Viewable,Activeable,RuleRefable,RoleRefable,Hiddenable,Deleteable,Traceable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
@@ -16,14 +16,24 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
         super(base);
     }
 
-    public int getIndex()
+    public Date getCreated()
     {
-        return getSemanticObject().getIntProperty(vocabulary.index);
+        return getSemanticObject().getDateProperty(vocabulary.created);
     }
 
-    public void setIndex(int index)
+    public void setCreated(Date created)
     {
-        getSemanticObject().setLongProperty(vocabulary.index, index);
+        getSemanticObject().setDateProperty(vocabulary.created, created);
+    }
+
+    public boolean isActive()
+    {
+        return getSemanticObject().getBooleanProperty(vocabulary.active);
+    }
+
+    public void setActive(boolean active)
+    {
+        getSemanticObject().setBooleanProperty(vocabulary.active, active);
     }
 
     public GenericIterator<org.semanticwb.model.RoleRef> listRoleRef()
@@ -69,16 +79,6 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
         getSemanticObject().setBooleanProperty(vocabulary.deleted, deleted);
     }
 
-    public Date getCreated()
-    {
-        return getSemanticObject().getDateProperty(vocabulary.created);
-    }
-
-    public void setCreated(Date created)
-    {
-        getSemanticObject().setDateProperty(vocabulary.created, created);
-    }
-
     public void setModifiedBy(org.semanticwb.model.User user)
     {
         getSemanticObject().addObjectProperty(vocabulary.modifiedBy, user.getSemanticObject());
@@ -121,6 +121,16 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
         getSemanticObject().setProperty(vocabulary.title, title, lang);
     }
 
+    public int getViews()
+    {
+        return getSemanticObject().getIntProperty(vocabulary.views);
+    }
+
+    public void setViews(int views)
+    {
+        getSemanticObject().setLongProperty(vocabulary.views, views);
+    }
+
     public GenericIterator<org.semanticwb.model.PortletRef> listPortletRef()
     {
         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasPortletRef.getRDFProperty());
@@ -154,14 +164,14 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
          return ret;
     }
 
-    public int getStatus()
+    public int getHits()
     {
-        return getSemanticObject().getIntProperty(vocabulary.status);
+        return getSemanticObject().getIntProperty(vocabulary.hits);
     }
 
-    public void setStatus(int status)
+    public void setHits(int hits)
     {
-        getSemanticObject().setLongProperty(vocabulary.status, status);
+        getSemanticObject().setLongProperty(vocabulary.hits, hits);
     }
 
     public Date getUpdated()
@@ -361,14 +371,24 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
          return ret;
     }
 
-    public int getHidden()
+    public boolean isHidden()
     {
-        return getSemanticObject().getIntProperty(vocabulary.hidden);
+        return getSemanticObject().getBooleanProperty(vocabulary.hidden);
     }
 
-    public void setHidden(int hidden)
+    public void setHidden(boolean hidden)
     {
-        getSemanticObject().setLongProperty(vocabulary.hidden, hidden);
+        getSemanticObject().setBooleanProperty(vocabulary.hidden, hidden);
+    }
+
+    public boolean isIndexable()
+    {
+        return getSemanticObject().getBooleanProperty(vocabulary.indexable);
+    }
+
+    public void setIndexable(boolean indexable)
+    {
+        getSemanticObject().setBooleanProperty(vocabulary.indexable, indexable);
     }
 
     public String getDescription()

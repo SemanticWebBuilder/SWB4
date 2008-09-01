@@ -7,7 +7,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class PFlowRefBase extends GenericObjectBase implements Statusable
+public class PFlowRefBase extends GenericObjectBase implements Activeable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
@@ -16,13 +16,18 @@ public class PFlowRefBase extends GenericObjectBase implements Statusable
         super(base);
     }
 
-    public int getStatus()
+    public boolean isActive()
     {
-        return getSemanticObject().getIntProperty(vocabulary.status);
+        return getSemanticObject().getBooleanProperty(vocabulary.active);
     }
 
-    public void setStatus(int status)
+    public void setActive(boolean active)
     {
-        getSemanticObject().setLongProperty(vocabulary.status, status);
+        getSemanticObject().setBooleanProperty(vocabulary.active, active);
+    }
+
+    public WebSite getWebSite()
+    {
+        return new WebSite(getSemanticObject().getModel().getModelObject());
     }
 }

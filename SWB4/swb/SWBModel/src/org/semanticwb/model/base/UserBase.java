@@ -7,7 +7,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class UserBase extends GenericObjectBase implements Statusable,Roleable,Traceable,Localeable,Groupable
+public class UserBase extends GenericObjectBase implements Roleable,Traceable,Localeable,Groupable,Activeable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
@@ -24,6 +24,16 @@ public class UserBase extends GenericObjectBase implements Statusable,Roleable,T
     public void setCreated(Date created)
     {
         getSemanticObject().setDateProperty(vocabulary.created, created);
+    }
+
+    public boolean isActive()
+    {
+        return getSemanticObject().getBooleanProperty(vocabulary.active);
+    }
+
+    public void setActive(boolean active)
+    {
+        getSemanticObject().setBooleanProperty(vocabulary.active, active);
     }
 
     public void setModifiedBy(org.semanticwb.model.User user)
@@ -68,16 +78,6 @@ public class UserBase extends GenericObjectBase implements Statusable,Roleable,T
         getSemanticObject().setProperty(vocabulary.usrEmail, usrEmail);
     }
 
-    public int getStatus()
-    {
-        return getSemanticObject().getIntProperty(vocabulary.status);
-    }
-
-    public void setStatus(int status)
-    {
-        getSemanticObject().setLongProperty(vocabulary.status, status);
-    }
-
     public String getUsrFirstName()
     {
         return getSemanticObject().getProperty(vocabulary.usrFirstName);
@@ -86,6 +86,16 @@ public class UserBase extends GenericObjectBase implements Statusable,Roleable,T
     public void setUsrFirstName(String usrFirstName)
     {
         getSemanticObject().setProperty(vocabulary.usrFirstName, usrFirstName);
+    }
+
+    public Date getUsrLastLogin()
+    {
+        return getSemanticObject().getDateProperty(vocabulary.usrLastLogin);
+    }
+
+    public void setUsrLastLogin(Date usrLastLogin)
+    {
+        getSemanticObject().setDateProperty(vocabulary.usrLastLogin, usrLastLogin);
     }
 
     public void setLanguage(org.semanticwb.model.Language language)
@@ -118,16 +128,6 @@ public class UserBase extends GenericObjectBase implements Statusable,Roleable,T
     public void setUpdated(Date updated)
     {
         getSemanticObject().setDateProperty(vocabulary.updated, updated);
-    }
-
-    public Date getUsrLastLogin()
-    {
-        return getSemanticObject().getDateProperty(vocabulary.usrLastLogin);
-    }
-
-    public void setUsrLastLogin(Date usrLastLogin)
-    {
-        getSemanticObject().setDateProperty(vocabulary.usrLastLogin, usrLastLogin);
     }
 
     public void setCreator(org.semanticwb.model.User user)
