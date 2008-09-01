@@ -24,7 +24,7 @@ public class Admin implements InternalServlet
     
     public void init(ServletContext config) 
     {
-        log.event("Admin initialized...");
+        log.event("Initializing InternalServlet Admin...");
     }    
     
     public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException

@@ -3,6 +3,8 @@ package org.semanticwb;
 import java.sql.Timestamp;
 import org.semanticwb.model.*;
 import org.semanticwb.portal.SWBDBAdmLog;
+import org.semanticwb.portal.SWBMonitor;
+import org.semanticwb.portal.SWBResourceMgr;
 import org.semanticwb.portal.SWBUserMgr;
 import org.semanticwb.portal.services.CalendarSrv;
 import org.semanticwb.portal.services.CampSrv;
@@ -26,9 +28,11 @@ public class SWBPortal {
     private static SWBPortal instance = null;
     
     private static SWBUserMgr usrMgr;
+    private static SWBMonitor monitor=null;    
+    private static SWBResourceMgr resmgr=null;    
 
     static public synchronized SWBPortal createInstance() {
-        System.out.println("Entra a createInstance");
+        //System.out.println("Entra a createInstance");
         if (instance == null) {
             instance = new SWBPortal();
         }
@@ -36,7 +40,7 @@ public class SWBPortal {
     }
 
     private SWBPortal() {
-        log.event("Initialize Semantic WebBuilder Portal...");
+        log.event("Initializing SemanticWebBuilder Portal...");
        init();
     }
     
@@ -78,10 +82,22 @@ public class SWBPortal {
             urep.setTitle("Default UserRepository");
             urep.setDescription("Default UserRpository");
             site.setUserRepository(urep);
+            //Create User
+            User user=urep.createUser();
+            user.setUsrLogin("admin");
+            user.setUsrPassword("webbuilder");
+            user.setUsrEmail("admin@semanticwebbuilder.org");
+            user.setUsrFirstName("Admin");
         }
         
         usrMgr=new SWBUserMgr();
         usrMgr.init();
+        
+        monitor=new SWBMonitor();
+        monitor.init();        
+        
+        resmgr=new SWBResourceMgr();
+        resmgr.init();
     }
 
     public static SWBServices getSWBServices() {
@@ -165,6 +181,15 @@ public class SWBPortal {
         return usrMgr;
     }
     
+    public static SWBMonitor getMonitor() 
+    {
+        return monitor;
+    }   
+    
+    public static SWBResourceMgr getResourceMgr()
+    {
+        return resmgr;
+    }
     
     /**
      * Logeo de acciones
