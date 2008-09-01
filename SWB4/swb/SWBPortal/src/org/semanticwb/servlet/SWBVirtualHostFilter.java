@@ -29,7 +29,7 @@ import org.semanticwb.servlet.internal.Login;
 public class SWBVirtualHostFilter implements Filter
 {
     static Logger log=SWBUtils.getLogger(SWBVirtualHostFilter.class);    
-    private SWBPlatform swbContext=null;
+    private SWBPlatform swbPlatform=null;
     
     private HashMap<String,InternalServlet> intServlets=new HashMap();
     
@@ -61,7 +61,7 @@ public class SWBVirtualHostFilter implements Filter
         
         if(fistCall)
         {
-            swbContext.setContextPath(_request.getContextPath());
+            swbPlatform.setContextPath(_request.getContextPath());
             fistCall=false;
         }
         
@@ -152,13 +152,15 @@ public class SWBVirtualHostFilter implements Filter
      */
     public void init(FilterConfig filterConfig)
     {
+        log.event("************************************");
+        log.event("Initializing SemanticWebBuilder...");        
         this.filterConfig = filterConfig;
         if (filterConfig != null)
         {
             log.event("Initializing VirtualHostFilter...");
             String prefix =  filterConfig.getServletContext().getRealPath("/");
             SWBUtils.createInstance(prefix);
-            swbContext=SWBPlatform.createInstance(filterConfig.getServletContext());
+            swbPlatform=SWBPlatform.createInstance(filterConfig.getServletContext());
         }
         
         InternalServlet serv=new Distributor();
@@ -175,6 +177,8 @@ public class SWBVirtualHostFilter implements Filter
         intServlets.put("wbadmin", admin);
         intServlets.put("swbadmin", admin);
         admin.init(filterConfig.getServletContext());
+        log.event("SemanticWebBuilder started...");        
+        log.event("************************************");
     }
     
     /**

@@ -49,13 +49,13 @@ public class WebPageSrv {
         return true;        
     }
 
-    public boolean changeStatusTemplate2WebPage(WebPage webPage, String id, int status, User user) throws SWBException {
+    public boolean changeStatusTemplate2WebPage(WebPage webPage, String id, boolean active, User user) throws SWBException {
         boolean doAction = false;
         GenericIterator<TemplateRef> itTempRef = webPage.listTemplateRef();
         while (itTempRef.hasNext()) {
             TemplateRef tplRef = itTempRef.next();
             if (tplRef.getId().equals(id)) {
-                tplRef.setStatus(status);
+                tplRef.setActive(active);
                 break;
             }   
         }
@@ -66,14 +66,14 @@ public class WebPageSrv {
         return doAction;
     }
 
-    public boolean changeStatusRule2WebPage(WebPage webPage, String id, int status, User user) throws SWBException {
+    public boolean changeStatusRule2WebPage(WebPage webPage, String id, boolean active, User user) throws SWBException {
         boolean doAction = false;
         GenericIterator<RuleRef> itRuleRef = webPage.listRuleRef();
         while (itRuleRef.hasNext()) {
             RuleRef ruleRef = itRuleRef.next();
             //TODO:Revisar si el id que me pasan es una Uri completa
             if (ruleRef.getId().equals(id)) {
-                ruleRef.setStatus(status);
+                ruleRef.setActive(active);
                 break;
             }
         }
@@ -85,13 +85,13 @@ public class WebPageSrv {
     }
     
     
-    public boolean changeStatusRole2WebPage(WebPage webPage, String id, int status, User user) throws SWBException {
+    public boolean changeStatusRole2WebPage(WebPage webPage, String id, boolean active, User user) throws SWBException {
         boolean doAction = false;
         GenericIterator<RoleRef> itRoleRef = webPage.listRoleRef();
         while (itRoleRef.hasNext()) {
             RoleRef roleRef = itRoleRef.next();
             if (roleRef.getId().equals(id)) {
-                roleRef.setStatus(status);
+                roleRef.setActive(active);
                 break;
             }
         }

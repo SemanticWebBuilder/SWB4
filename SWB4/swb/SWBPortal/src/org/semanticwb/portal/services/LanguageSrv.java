@@ -17,13 +17,13 @@ import org.semanticwb.model.WebSite;
  */
 public class LanguageSrv {
 
-    public boolean createLanguage(WebSite website, String title, String description, String value, User user) throws SWBException        
+    
+    public boolean createLanguage(WebSite website, String lang, String title, String description,String value, User user) throws SWBException        
     {
         boolean doAction=false;
-        Language language=website.createLanguage();
+        Language language=website.createLanguage(lang);
         language.setCreator(user);
         language.setTitle(title);
-        language.setValue(value);
         language.setDescription(description);
         doAction=true;
         
@@ -32,33 +32,18 @@ public class LanguageSrv {
         return doAction;
     }
     
-    public boolean createLanguage(WebSite website, String id, String title, String description,String value, User user) throws SWBException        
+    public boolean removeLanguage(WebSite website, String lang, User user) throws SWBException        
     {
         boolean doAction=false;
-        Language language=website.createLanguage(id);
-        language.setCreator(user);
-        language.setTitle(title);
-        language.setValue(value);
-        language.setDescription(description);
+        website.removeLanguage(lang);
         doAction=true;
         
-        SWBPortal.log(user.getURI(), "create", language.getURI(), language.getURI(), "create language", null);
+        SWBPortal.log(user.getURI(), "remove", lang, lang, "remove language", null);
         
         return doAction;
     }
     
-    public boolean removeLanguage(WebSite website, String id, User user) throws SWBException        
-    {
-        boolean doAction=false;
-        website.removeLanguage(id);
-        doAction=true;
-        
-        SWBPortal.log(user.getURI(), "remove", id, id, "remove language", null);
-        
-        return doAction;
-    }
-    
-    public boolean updateLanguage(WebSite website, Language language, String title, String description, String value, User user) throws SWBException        
+    public boolean updateLanguage(WebSite website, Language language, String title, String description, User user) throws SWBException        
     {
         boolean doAction=false;
         if(title!=null){
@@ -69,9 +54,6 @@ public class LanguageSrv {
             language.setDescription(description);
         }
         
-        if(value!=null){
-            language.setValue(value);
-        }
         language.setModifiedBy(user);
         doAction=true;
         

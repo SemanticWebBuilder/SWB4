@@ -54,15 +54,15 @@ public class DistributorParams
     //String nombre = "wb2";
     
     private User user=null;
-    private WebPage topic=null;
-    private WebPage virtTopic=null;
+    private WebPage webpage=null;
+    private WebPage virtwebpage=null;
     private int filtered=-1;
     private ArrayList URIParams=null;
     
-    private String vtopicmap=null;
-    private String vtopic=null;
-    private String stopicmap=null;
-    private String stopic=null;
+    private String vmodel=null;
+    private String vwebpage=null;
+    private String smodel=null;
+    private String swebpage=null;
     private HashMap resparams=null;
     private ArrayList ordresparams=null;
     private HashMap adicparams=null;    
@@ -80,28 +80,28 @@ public class DistributorParams
     public DistributorParams(HttpServletRequest request, String uri)
     {
         URIParams=_getURIParams(request, uri);
-        System.out.println("URIParams"+URIParams);
-        topic=_getTopic(request);
-        System.out.println("topic"+topic);
-        virtTopic=_getVirtTopic();
-        System.out.println("virtTopic"+virtTopic);
-        if(topic!=null)
+        //System.out.println("URIParams"+URIParams);
+        webpage=_getWebPage(request);
+        //System.out.println("webpage"+webpage);
+        virtwebpage=_getVirtWebPage();
+        //System.out.println("virtwebpage"+virtwebpage);
+        if(webpage!=null)
         {
             filtered=_getFiltered(request);
         }else
         {
             log.equals("WebPage not Found:"+request.getRequestURI()+" Ref:"+request.getHeader("Referer"));
         }
-        if(topic==null)
+        if(webpage==null)
         {
             user=_getUser(request,SWBContext.getGlobalWebSite());
         }else
         {
-            user=_getUser(request,topic.getWebSite());
+            user=_getUser(request,webpage.getWebSite());
         }
-        System.out.println("user"+user);
+        //System.out.println("user"+user);
         queryString=_getQueryString(request);
-        System.out.println("queryString:"+queryString);
+        //System.out.println("queryString:"+queryString);
     }
     
     private ArrayList _getURIParams(HttpServletRequest request, String uri)
@@ -120,7 +120,7 @@ public class DistributorParams
         
 //        System.out.println("URI:"+request.getRequestURI());
 //        System.out.println("serv:"+serv);
-        System.out.println("uri:"+uri);
+//        System.out.println("uri:"+uri);
 //        System.out.println("context:"+request.getContextPath());
         
         if(uri.indexOf('?')>-1)uri=uri.substring(0,uri.indexOf('?'));
@@ -140,8 +140,8 @@ public class DistributorParams
             String tok=st.nextToken();
             arr.add(tok);
             
-            if(x==0)stopicmap=tok;
-            else if(x==1)stopic=tok;
+            if(x==0)smodel=tok;
+            else if(x==1)swebpage=tok;
             else if(allAditionals)adicaux.add(tok);
             else if(tok.equals(URLP_NUMBERID) || tok.equals(URLP_RENDERID) || tok.equals(URLP_ACTIONID))
             {
@@ -191,8 +191,8 @@ public class DistributorParams
                 }
             }else if(tok.equals(URLP_VTOPIC))
             {
-                if(st.hasMoreTokens())vtopicmap=st.nextToken();
-                if(st.hasMoreTokens())vtopic=st.nextToken();
+                if(st.hasMoreTokens())vmodel=st.nextToken();
+                if(st.hasMoreTokens())vwebpage=st.nextToken();
             }else if(tok.startsWith(URLP_PARAMKEY))
             {
                 String key=tok.substring(URLP_PARAMKEY.length());
@@ -291,22 +291,22 @@ public class DistributorParams
         return user;        
     }
     
-    private WebPage _getTopic(HttpServletRequest request)
+    private WebPage _getWebPage(HttpServletRequest request)
     {
-        WebPage topic=null;
+        WebPage webpage=null;
         //System.out.println("request:"+request);
-        //System.out.println("stopicmap:"+stopicmap);
-        if(stopicmap!=null)
+        //System.out.println("smodel:"+smodel);
+        if(smodel!=null)
         {
-            WebSite tm=SWBContext.getWebSite(stopicmap);
+            WebSite tm=SWBContext.getWebSite(smodel);
             if(tm!=null)
             {
-                if(stopic!=null)
+                if(swebpage!=null)
                 {
-                    topic=tm.getWebPage(stopic);
+                    webpage=tm.getWebPage(swebpage);
                 }else
                 {
-                    topic=tm.getHomePage();
+                    webpage=tm.getHomePage();
                 }
             }
         }else
@@ -328,37 +328,37 @@ public class DistributorParams
             //System.out.println("dns:"+dns);
             if (dns != null)
             {
-                topic=dns.getWebPage();
+                webpage=dns.getWebPage();
             }else
             {
-                topic=SWBContext.getAdminWebSite().getHomePage();
+                webpage=SWBContext.getAdminWebSite().getHomePage();
             }
-            stopicmap = topic.getWebSite().getId();
-            stopic = topic.getId();
+            smodel = webpage.getWebSite().getId();
+            swebpage = webpage.getId();
         }
-        //System.out.println("_getTopic:"+topic);
-        return topic;
+        //System.out.println("_getWebPage:"+webpage);
+        return webpage;
     }
     
-    private WebPage _getVirtTopic()
+    private WebPage _getVirtWebPage()
     {
-        WebPage topic=null;
-        if(vtopicmap!=null && vtopic!=null)
+        WebPage webpage=null;
+        if(vmodel!=null && vwebpage!=null)
         {
-            WebSite tm=SWBContext.getWebSite(vtopicmap);
+            WebSite tm=SWBContext.getWebSite(vmodel);
             if(tm!=null)
             {
-                topic=tm.getWebPage(vtopic);
+                webpage=tm.getWebPage(vwebpage);
             }
         }
-        return topic;
+        return webpage;
     }    
     
     private int _getFiltered(HttpServletRequest request)
     {
         //TODO:
 //        String ipuser = request.getRemoteAddr().toString();
-//        Iterator it = DBCatalogs.getInstance().getIpFilters(topic.getMap().getId()).values().iterator();
+//        Iterator it = DBCatalogs.getInstance().getIpFilters(webpage.getMap().getId()).values().iterator();
 //        while (it.hasNext())
 //        {
 //            RecIpFilter ip = (RecIpFilter) it.next();
@@ -384,41 +384,41 @@ public class DistributorParams
         return user;
     }
     
-    /** Getter for property topic.
-     * @return Value of property topic.
+    /** Getter for property webpage.
+     * @return Value of property webpage.
      *
      */
-    public WebPage getTopic()
+    public WebPage getWebPage()
     {
         //TODO: Filtros de Sitios
-//        if(topic==null)return null;
-//        if(topic.getMap()==TopicMgr.getInstance().getAdminTopicMap())
+//        if(webpage==null)return null;
+//        if(webpage.getMap()==TopicMgr.getInstance().getAdminTopicMap())
 //        {
-//            return topic;
+//            return webpage;
 //        }else
 //        {
-//            return AdmFilterMgr.getInstance().getTopicFiltered(topic, user);
+//            return AdmFilterMgr.getInstance().getTopicFiltered(webpage, user);
 //        }
-        return topic;
+        return webpage;
     } 
     
-    public void setTopic(WebPage topic)
+    public void setWebPage(WebPage webpage)
     {
-        this.topic=topic;
+        this.webpage=webpage;
     }
     
-    public WebPage getVirtTopic()
+    public WebPage getVirtWebPage()
     {
         //TODO: Filtros de Sitios        
-//        if(topic==null)return null;
-//        if(topic.getMap()==TopicMgr.getInstance().getAdminTopicMap())
+//        if(webpage==null)return null;
+//        if(webpage.getMap()==TopicMgr.getInstance().getAdminTopicMap())
 //        {
-//            return virtTopic;
+//            return virtwebpage;
 //        }else
 //        {
-//            return AdmFilterMgr.getInstance().getTopicFiltered(virtTopic, user);
+//            return AdmFilterMgr.getInstance().getTopicFiltered(virtwebpage, user);
 //        }
-        return virtTopic;
+        return virtwebpage;
     } 
     
     /**
@@ -448,18 +448,6 @@ public class DistributorParams
         return (ArrayList)adicparams.get(new Long(res));
     }    
     
-    /**
-     * Convierte un String a entero, si el estring es nulo o esta mal formado regresa el valor de defecto.
-     */
-    private int getInt(String val, int defa)
-    {
-        if(val==null)return defa;
-        try
-        {
-            return Integer.parseInt(val);
-        }catch(Exception e){return defa;}
-    }
-
     /** Getter for property accResource.
      * @return Value of property accResource.
      *
@@ -564,10 +552,10 @@ public class DistributorParams
         String tm=getResourceURIValue(resid,URLP_TOPICMAPID);
         if(tm==null)
         {
-            if(getVirtTopic()!=null)
-                tm=getVirtTopic().getWebSite().getId();
+            if(getVirtWebPage()!=null)
+                tm=getVirtWebPage().getWebSite().getId();
             else
-                tm=getTopic().getWebSite().getId();
+                tm=getWebPage().getWebSite().getId();
         }
         return tm;        
     }    
@@ -719,16 +707,16 @@ public class DistributorParams
         javax.servlet.http.HttpServletRequest req=request;
         if(getAccResourceID()>0 && rid!=getAccResourceID())
         {
-            req=new SWBHttpServletRequestWrapper(request,getUser().getLanguage().getId(),getTopic().getWebSite().getId(),true);
+            req=new SWBHttpServletRequestWrapper(request,getUser().getLanguage().getId(),getWebPage().getWebSite().getId(),true);
             addRequestParams(req,arr);
         }else if(rid==getAccResourceID())
         {
             if(arr==null)
             {
-                req=new SWBHttpServletRequestWrapper(request,getUser().getLanguage().getId(),getTopic().getWebSite().getId(),false);
+                req=new SWBHttpServletRequestWrapper(request,getUser().getLanguage().getId(),getWebPage().getWebSite().getId(),false);
             }else
             {
-                req=new SWBHttpServletRequestWrapper(request,getUser().getLanguage().getId(),getTopic().getWebSite().getId(),false,true);
+                req=new SWBHttpServletRequestWrapper(request,getUser().getLanguage().getId(),getWebPage().getWebSite().getId(),false,true);
                 addRequestParams(req,arr);
             }
         }

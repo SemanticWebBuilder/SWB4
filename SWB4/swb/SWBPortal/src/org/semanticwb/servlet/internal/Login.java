@@ -33,7 +33,7 @@ public class Login implements InternalServlet
     
     public void init(ServletContext config) 
     {
-        log.event("Login initialized...");
+        log.event("Initializing InternalServlet Login...");
     }    
 
     public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException

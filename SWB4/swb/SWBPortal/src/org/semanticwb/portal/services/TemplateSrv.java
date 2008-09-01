@@ -36,7 +36,7 @@ public class TemplateSrv {
         template.setTitle(titulo);
         template.setDescription(description);
         template.addGroup(objectgroup);
-        template.setStatus(1);
+        template.setActive(true);
         VersionInfo verInfo = website.createVersionInfo();
         verInfo.setValue("1");
         template.setActualVersion(verInfo);
@@ -90,7 +90,7 @@ public class TemplateSrv {
         template.setTitle(titulo);
         template.setDescription(description);
         template.addGroup(objectgroup);
-        template.setStatus(1);
+        template.setActive(true);
 
         SWBPortal.log(user.getURI(), "create", website.getURI(), template.getId(), "create template", null); 
 
@@ -146,7 +146,7 @@ public class TemplateSrv {
         VersionInfo verInfo=template.getLastVersion();
         int version=Integer.parseInt(verInfo.getValue())+1;
         verInfo.setValue(""+version);
-        template.setStatus(1);
+        template.setActive(true);
         template.setModifiedBy(user);
         template.setLastVersion(verInfo);
         template.setActualVersion(verInfo);

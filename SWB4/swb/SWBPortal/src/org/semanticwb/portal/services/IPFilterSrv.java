@@ -19,7 +19,7 @@ public class IPFilterSrv {
     public IPFilter createIPFilter(WebSite website, String value, User user) throws SWBException 
     {
         IPFilter ipFilter = website.createIPFilter();
-        ipFilter.setStatus(1);
+        ipFilter.setActive(true);
         ipFilter.setValue(value);
 
         SWBPortal.log(user.getURI(), "create", ipFilter.getURI(), ipFilter.getURI(), "create ipFilter", null);
@@ -30,7 +30,7 @@ public class IPFilterSrv {
     public IPFilter createIPFilter(WebSite website, String id, String filterUri, String value, User user) throws SWBException 
     {
         IPFilter ipFilter = website.createIPFilter(id);
-        ipFilter.setStatus(1);
+        ipFilter.setActive(true);
         ipFilter.setValue(value);
 
         SWBPortal.log(user.getURI(), "create", ipFilter.getURI(), ipFilter.getURI(), "create ipFilter", null);

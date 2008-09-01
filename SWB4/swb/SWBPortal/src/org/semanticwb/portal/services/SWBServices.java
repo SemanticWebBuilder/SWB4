@@ -8,6 +8,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.Activeable;
 import org.semanticwb.model.Calendar;
 import org.semanticwb.model.Calendarable;
 import org.semanticwb.model.Deleteable;
@@ -26,7 +27,6 @@ import org.semanticwb.model.RoleRefable;
 import org.semanticwb.model.Rule;
 import org.semanticwb.model.RuleRef;
 import org.semanticwb.model.RuleRefable;
-import org.semanticwb.model.Statusable;
 import org.semanticwb.model.Template;
 import org.semanticwb.model.TemplateRef;
 import org.semanticwb.model.TemplateRefable;
@@ -34,8 +34,6 @@ import org.semanticwb.model.User;
 import org.semanticwb.model.Valueable;
 import org.semanticwb.model.VersionInfo;
 import org.semanticwb.model.Versionable;
-import org.semanticwb.model.WebPage;
-import org.semanticwb.model.WebPageable;
 import org.semanticwb.model.WebSite;
 
 /**
@@ -76,11 +74,11 @@ public class SWBServices {
         return doAction;
     }
 
-    public static boolean setStatus(Statusable statusable, int status, User user) throws SWBException {
+    public static boolean setActive(Activeable activeable, boolean active, User user) throws SWBException {
 
-        statusable.setStatus(status);
+        activeable.setActive(active);
 
-        SWBPortal.log(user.getURI(), "status", statusable.getURI(), statusable.getId(), "update status", null); 
+        SWBPortal.log(user.getURI(), "status", activeable.getURI(), activeable.getId(), "update status", null); 
        
         return true;
     }
@@ -90,7 +88,7 @@ public class SWBServices {
         boolean doAction = false;
         TemplateRef templateRef = website.createTemplateRef();
         templateRef.setTemplate(template);
-        templateRef.setStatus(1);
+        templateRef.setActive(true);
 
         templateRefable.addTemplateRef(templateRef);
         doAction = true;
@@ -281,7 +279,7 @@ public class SWBServices {
 //    }
     
     
-    public boolean Hiddenable(Hiddenable hiddenable, int hidden, User user) throws SWBException {
+    public boolean Hiddenable(Hiddenable hiddenable, boolean hidden, User user) throws SWBException {
         boolean doAction = false;
         hiddenable.setHidden(hidden);
         doAction = true;
@@ -291,9 +289,9 @@ public class SWBServices {
         return doAction;
     }
     
-    public boolean Indexable(Indexable indexable, int index, User user) throws SWBException {
+    public boolean Indexable(Indexable indexable, boolean index, User user) throws SWBException {
         boolean doAction = false;
-        indexable.setIndex(index);
+        indexable.setIndexable(index);
         doAction = true;
 
         SWBPortal.log(user.getURI(), "index", indexable.getURI(), indexable.getId(), "index object", null); 

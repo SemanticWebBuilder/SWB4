@@ -41,7 +41,7 @@ public class CampSrv {
         return camp;
     }
     
-    public boolean updateCamp(Camp camp, String title, String description, int status, User user) throws SWBException
+    public boolean updateCamp(Camp camp, String title, String description, boolean active, User user) throws SWBException
     {
         boolean doAction=false;
         if(title!=null){
@@ -51,7 +51,7 @@ public class CampSrv {
             camp.setDescription(description);
         }
         
-        camp.setStatus(status);
+        camp.setActive(active);
         
         doAction=true;
         
