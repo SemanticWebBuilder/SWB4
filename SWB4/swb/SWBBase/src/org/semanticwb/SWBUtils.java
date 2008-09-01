@@ -54,6 +54,10 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.xml.namespace.QName;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathFactory;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.semanticwb.base.util.SFBase64;
 import org.semanticwb.base.util.SWBMailSender;
 import org.semanticwb.base.util.SWBMail;
@@ -199,6 +203,18 @@ public class SWBUtils {
         public static Date iso8601DateParse(String date) throws ParseException {
             return iso8601dateFormat.parse(date);
         }
+        
+        /**
+         * Convierte un String a entero, si el estring es nulo o esta mal formado regresa el valor de defecto.
+         */
+        public static int getInt(String val, int defa)
+        {
+            if(val==null)return defa;
+            try
+            {
+                return Integer.parseInt(val);
+            }catch(Exception e){return defa;}
+        }        
 
         /**
          * Le pone a un objeto String el tipo de codificación especificado por parámetro.
@@ -368,6 +384,38 @@ public class SWBUtils {
             aux = ret.toString();
             return aux;
         }
+        
+        public static String getLocaleString(String Bundle, String key) {
+            return getLocaleString(Bundle, key, locale);
+        }
+
+        public static String getLocaleString(String Bundle, String key, Locale locale) {
+            return getLocaleString(Bundle, key, locale, null);
+        }
+
+        public static String getLocaleString(String Bundle, String key, Locale locale, ClassLoader loader) {
+            String cad = "";
+            try {
+                if (loader == null) {
+                    cad = java.util.ResourceBundle.getBundle(Bundle, locale).getString(key);
+                } else {
+                    cad = java.util.ResourceBundle.getBundle(Bundle, locale, loader).getString(key);
+                }
+                System.out.println("cad:" + cad);
+            } catch (Exception e) {
+                log.error("Error while looking for properties key", e);
+                return "";
+            }
+            return cad;
+        }        
+        
+        /**
+         * Regresa el lenguaje con el que se este trabajando en la clase (SWBUtils).
+         */
+        public static Locale getLocale()
+        {
+            return locale;
+        }        
     }
 
     /**
@@ -781,57 +829,34 @@ public class SWBUtils {
             return bfile;
         }
 
-//        public static Iterator<FileItem> fileUpload(javax.servlet.http.HttpServletRequest request, String path2Save) {
-//            DiskFileItemFactory factory = new DiskFileItemFactory();
-//            ServletFileUpload fu = new ServletFileUpload(factory);
-//            java.util.List items = null;
-//            try {
-//                items = fu.parseRequest(request);
-//            } catch (FileUploadException e) {
-//                e.printStackTrace();
-//            }
-//            if (items != null && path2Save == null) {
-//                Iterator<FileItem> iter = items.iterator();
-//                return iter;
-//            } else if (items != null && path2Save == null) {
-//                Iterator<FileItem> iter = items.iterator();
-//                while (iter.hasNext()) {
-//                    FileItem item = (FileItem) iter.next();
-//                    if (!item.isFormField()) { //Si No es un campo de forma comun, es un campo tipo file, grabarlo
-//                        File fichero = new File(path2Save + item.getName());
-//                        try {
-//                            item.write(fichero);
-//                        } catch (Exception e) {
-//                            log.error(e);
-//                        }
-//                    }
-//                }
-//                return iter;
-//            }
-//            return null;
-//        }
-        public static String getLocaleString(String Bundle, String key) {
-            return getLocaleString(Bundle, key, locale);
-        }
-
-        public static String getLocaleString(String Bundle, String key, Locale locale) {
-            return getLocaleString(Bundle, key, locale, null);
-        }
-
-        public static String getLocaleString(String Bundle, String key, Locale locale, ClassLoader loader) {
-            String cad = "";
+        public static Iterator<FileItem> fileUpload(javax.servlet.http.HttpServletRequest request, String path2Save) {
+            DiskFileItemFactory factory = new DiskFileItemFactory();
+            ServletFileUpload fu = new ServletFileUpload(factory);
+            java.util.List items = null;
             try {
-                if (loader == null) {
-                    cad = java.util.ResourceBundle.getBundle(Bundle, locale).getString(key);
-                } else {
-                    cad = java.util.ResourceBundle.getBundle(Bundle, locale, loader).getString(key);
-                }
-                System.out.println("cad:" + cad);
-            } catch (Exception e) {
-                log.error("Error while looking for properties key", e);
-                return "";
+                items = fu.parseRequest(request);
+            } catch (FileUploadException e) {
+                e.printStackTrace();
             }
-            return cad;
+            if (items != null && path2Save == null) {
+                Iterator<FileItem> iter = items.iterator();
+                return iter;
+            } else if (items != null && path2Save == null) {
+                Iterator<FileItem> iter = items.iterator();
+                while (iter.hasNext()) {
+                    FileItem item = (FileItem) iter.next();
+                    if (!item.isFormField()) { //Si No es un campo de forma comun, es un campo tipo file, grabarlo
+                        File fichero = new File(path2Save + item.getName());
+                        try {
+                            item.write(fichero);
+                        } catch (Exception e) {
+                            log.error(e);
+                        }
+                    }
+                }
+                return iter;
+            }
+            return null;
         }
     }
 
