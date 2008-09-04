@@ -7,11 +7,11 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class CommunityBase extends GenericObjectBase implements Descriptiveable,Traceable,Activeable
+public class PortletSubTypeBase extends GenericObjectBase implements Descriptiveable,Traceable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
-    public CommunityBase(SemanticObject base)
+    public PortletSubTypeBase(SemanticObject base)
     {
         super(base);
     }
@@ -24,16 +24,6 @@ public class CommunityBase extends GenericObjectBase implements Descriptiveable,
     public void setCreated(Date created)
     {
         getSemanticObject().setDateProperty(vocabulary.created, created);
-    }
-
-    public boolean isActive()
-    {
-        return getSemanticObject().getBooleanProperty(vocabulary.active);
-    }
-
-    public void setActive(boolean active)
-    {
-        getSemanticObject().setBooleanProperty(vocabulary.active, active);
     }
 
     public void setModifiedBy(org.semanticwb.model.User user)
@@ -73,6 +63,28 @@ public class CommunityBase extends GenericObjectBase implements Descriptiveable,
          User ret=null;
          StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.creator.getRDFProperty());
          GenericIterator<org.semanticwb.model.User> it=new GenericIterator<org.semanticwb.model.User>(User.class, stit);
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
+    }
+
+    public void setPSTType(org.semanticwb.model.PortletType portlettype)
+    {
+        getSemanticObject().addObjectProperty(vocabulary.PSTType, portlettype.getSemanticObject());
+    }
+
+    public void removePSTType()
+    {
+        getSemanticObject().removeProperty(vocabulary.PSTType);
+    }
+
+    public PortletType getPSTType()
+    {
+         PortletType ret=null;
+         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.PSTType.getRDFProperty());
+         GenericIterator<org.semanticwb.model.PortletType> it=new GenericIterator<org.semanticwb.model.PortletType>(PortletType.class, stit);
          if(it.hasNext())
          {
              ret=it.next();

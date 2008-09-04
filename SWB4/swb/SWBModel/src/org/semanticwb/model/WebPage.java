@@ -1,16 +1,26 @@
 package org.semanticwb.model;
 
 import org.semanticwb.SWBPlatform;
-import org.semanticwb.SWBUtils;
 import org.semanticwb.model.base.*;
 import org.semanticwb.platform.SemanticObject;
 
 public class WebPage extends WebPageBase 
 {
+    private String siteid=null;
+     
     public WebPage(SemanticObject base)
     {
         super(base);
     }
+    
+    public String getWebSiteId()
+    {
+        if(siteid==null)
+        {
+            siteid=getWebSite().getId();
+        }
+        return siteid;
+    }     
     
     /**  Regresa el Url de la pagina
      *  Ejemplo: /wb2/jei/home

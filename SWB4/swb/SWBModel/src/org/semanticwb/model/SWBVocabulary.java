@@ -14,6 +14,7 @@ public class SWBVocabulary
     public final SemanticClass User;
     public final SemanticClass Calendar;
     public final SemanticClass Community;
+    public final SemanticClass PortletSubType;
     public final SemanticClass TemplateRef;
     public final SemanticClass Templateable;
     public final SemanticClass Deleteable;
@@ -39,6 +40,7 @@ public class SWBVocabulary
     public final SemanticClass Localeable;
     public final SemanticClass Camp;
     public final SemanticClass Dns;
+    public final SemanticClass TemplateGroup;
     public final SemanticClass Portletable;
     public final SemanticClass UserRepository;
     public final SemanticClass Template;
@@ -54,11 +56,11 @@ public class SWBVocabulary
     public final SemanticClass WebPage;
     public final SemanticClass WebPageable;
     public final SemanticClass WebSite;
-    public final SemanticClass PortletClass;
     public final SemanticClass ObjectGroup;
     public final SemanticClass Language;
     public final SemanticClass PortletRef;
     public final SemanticClass Indexable;
+    public final SemanticClass PortletType;
     public final SemanticClass Viewable;
 
 
@@ -84,6 +86,7 @@ public class SWBVocabulary
     public final SemanticProperty usrSecurityAnswer;
     public final SemanticProperty title;
     public final SemanticProperty description;
+    public final SemanticProperty PSTType;
     public final SemanticProperty template;
     public final SemanticProperty priority;
     public final SemanticProperty deleted;
@@ -101,7 +104,9 @@ public class SWBVocabulary
     public final SemanticProperty hidden;
     public final SemanticProperty webPage;
     public final SemanticProperty dnsDefault;
+    public final SemanticProperty hasGroupedTemplate;
     public final SemanticProperty hasPortlet;
+    public final SemanticProperty templateGroup;
     public final SemanticProperty nextVersion;
     public final SemanticProperty previousVersion;
     public final SemanticProperty versionFile;
@@ -109,21 +114,23 @@ public class SWBVocabulary
     public final SemanticProperty versionCreated;
     public final SemanticProperty versionNumber;
     public final SemanticProperty camp;
-    public final SemanticProperty views;
     public final SemanticProperty hits;
-    public final SemanticProperty portletClass;
     public final SemanticProperty indexable;
+    public final SemanticProperty views;
+    public final SemanticProperty portletSubType;
+    public final SemanticProperty portletType;
     public final SemanticProperty role;
     public final SemanticProperty hasPFlowRef;
     public final SemanticProperty hasParentWebPage;
     public final SemanticProperty hasChildWebPage;
     public final SemanticProperty homePage;
     public final SemanticProperty userRepository;
+    public final SemanticProperty portlet;
     public final SemanticProperty portletBundle;
     public final SemanticProperty portletCache;
     public final SemanticProperty portletClassName;
-    public final SemanticProperty portletType;
-    public final SemanticProperty portlet;
+    public final SemanticProperty portletMode;
+    public final SemanticProperty hasPTSubType;
 
 
     public SWBVocabulary()
@@ -134,6 +141,7 @@ public class SWBVocabulary
         User=vocabulary.getSemanticClass(URI+"User");
         Calendar=vocabulary.getSemanticClass(URI+"Calendar");
         Community=vocabulary.getSemanticClass(URI+"Community");
+        PortletSubType=vocabulary.getSemanticClass(URI+"PortletSubType");
         TemplateRef=vocabulary.getSemanticClass(URI+"TemplateRef");
         Templateable=vocabulary.getSemanticClass(URI+"Templateable");
         Deleteable=vocabulary.getSemanticClass(URI+"Deleteable");
@@ -159,6 +167,7 @@ public class SWBVocabulary
         Localeable=vocabulary.getSemanticClass(URI+"Localeable");
         Camp=vocabulary.getSemanticClass(URI+"Camp");
         Dns=vocabulary.getSemanticClass(URI+"Dns");
+        TemplateGroup=vocabulary.getSemanticClass(URI+"TemplateGroup");
         Portletable=vocabulary.getSemanticClass(URI+"Portletable");
         UserRepository=vocabulary.getSemanticClass(URI+"UserRepository");
         Template=vocabulary.getSemanticClass(URI+"Template");
@@ -174,11 +183,11 @@ public class SWBVocabulary
         WebPage=vocabulary.getSemanticClass(URI+"WebPage");
         WebPageable=vocabulary.getSemanticClass(URI+"WebPageable");
         WebSite=vocabulary.getSemanticClass(URI+"WebSite");
-        PortletClass=vocabulary.getSemanticClass(URI+"PortletClass");
         ObjectGroup=vocabulary.getSemanticClass(URI+"ObjectGroup");
         Language=vocabulary.getSemanticClass(URI+"Language");
         PortletRef=vocabulary.getSemanticClass(URI+"PortletRef");
         Indexable=vocabulary.getSemanticClass(URI+"Indexable");
+        PortletType=vocabulary.getSemanticClass(URI+"PortletType");
         Viewable=vocabulary.getSemanticClass(URI+"Viewable");
 
 
@@ -204,6 +213,7 @@ public class SWBVocabulary
         usrSecurityAnswer=vocabulary.getSemanticProperty(URI+"usrSecurityAnswer");
         title=vocabulary.getSemanticProperty(URI+"title");
         description=vocabulary.getSemanticProperty(URI+"description");
+        PSTType=vocabulary.getSemanticProperty(URI+"PSTType");
         template=vocabulary.getSemanticProperty(URI+"template");
         priority=vocabulary.getSemanticProperty(URI+"priority");
         deleted=vocabulary.getSemanticProperty(URI+"deleted");
@@ -221,7 +231,9 @@ public class SWBVocabulary
         hidden=vocabulary.getSemanticProperty(URI+"hidden");
         webPage=vocabulary.getSemanticProperty(URI+"webPage");
         dnsDefault=vocabulary.getSemanticProperty(URI+"dnsDefault");
+        hasGroupedTemplate=vocabulary.getSemanticProperty(URI+"hasGroupedTemplate");
         hasPortlet=vocabulary.getSemanticProperty(URI+"hasPortlet");
+        templateGroup=vocabulary.getSemanticProperty(URI+"templateGroup");
         nextVersion=vocabulary.getSemanticProperty(URI+"nextVersion");
         previousVersion=vocabulary.getSemanticProperty(URI+"previousVersion");
         versionFile=vocabulary.getSemanticProperty(URI+"versionFile");
@@ -229,20 +241,22 @@ public class SWBVocabulary
         versionCreated=vocabulary.getSemanticProperty(URI+"versionCreated");
         versionNumber=vocabulary.getSemanticProperty(URI+"versionNumber");
         camp=vocabulary.getSemanticProperty(URI+"camp");
-        views=vocabulary.getSemanticProperty(URI+"views");
         hits=vocabulary.getSemanticProperty(URI+"hits");
-        portletClass=vocabulary.getSemanticProperty(URI+"portletClass");
         indexable=vocabulary.getSemanticProperty(URI+"indexable");
+        views=vocabulary.getSemanticProperty(URI+"views");
+        portletSubType=vocabulary.getSemanticProperty(URI+"portletSubType");
+        portletType=vocabulary.getSemanticProperty(URI+"portletType");
         role=vocabulary.getSemanticProperty(URI+"role");
         hasPFlowRef=vocabulary.getSemanticProperty(URI+"hasPFlowRef");
         hasParentWebPage=vocabulary.getSemanticProperty(URI+"hasParentWebPage");
         hasChildWebPage=vocabulary.getSemanticProperty(URI+"hasChildWebPage");
         homePage=vocabulary.getSemanticProperty(URI+"homePage");
         userRepository=vocabulary.getSemanticProperty(URI+"userRepository");
+        portlet=vocabulary.getSemanticProperty(URI+"portlet");
         portletBundle=vocabulary.getSemanticProperty(URI+"portletBundle");
         portletCache=vocabulary.getSemanticProperty(URI+"portletCache");
         portletClassName=vocabulary.getSemanticProperty(URI+"portletClassName");
-        portletType=vocabulary.getSemanticProperty(URI+"portletType");
-        portlet=vocabulary.getSemanticProperty(URI+"portlet");
+        portletMode=vocabulary.getSemanticProperty(URI+"portletMode");
+        hasPTSubType=vocabulary.getSemanticProperty(URI+"hasPTSubType");
     }
 }

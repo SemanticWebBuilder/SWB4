@@ -7,7 +7,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class TemplateBase extends GenericObjectBase implements RoleRefable,Calendarable,Versionable,Activeable,Deleteable,Traceable,Groupable,RuleRefable,Descriptiveable,Localeable
+public class TemplateBase extends GenericObjectBase implements RoleRefable,Calendarable,Versionable,Activeable,Deleteable,Traceable,RuleRefable,Descriptiveable,Localeable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
@@ -119,6 +119,28 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
     public void setTitle(String title, String lang)
     {
         getSemanticObject().setProperty(vocabulary.title, title, lang);
+    }
+
+    public void setTemplateGroup(org.semanticwb.model.TemplateGroup templategroup)
+    {
+        getSemanticObject().addObjectProperty(vocabulary.templateGroup, templategroup.getSemanticObject());
+    }
+
+    public void removeTemplateGroup()
+    {
+        getSemanticObject().removeProperty(vocabulary.templateGroup);
+    }
+
+    public TemplateGroup getTemplateGroup()
+    {
+         TemplateGroup ret=null;
+         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.templateGroup.getRDFProperty());
+         GenericIterator<org.semanticwb.model.TemplateGroup> it=new GenericIterator<org.semanticwb.model.TemplateGroup>(TemplateGroup.class, stit);
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
     }
 
     public void setActualVersion(org.semanticwb.model.VersionInfo versioninfo)
@@ -303,39 +325,6 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(vocabulary.description, description, lang);
-    }
-
-    public GenericIterator<org.semanticwb.model.ObjectGroup> listGroup()
-    {
-        StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasGroup.getRDFProperty());
-        return new GenericIterator<org.semanticwb.model.ObjectGroup>(org.semanticwb.model.ObjectGroup.class, stit);
-    }
-
-    public void addGroup(org.semanticwb.model.ObjectGroup objectgroup)
-    {
-        getSemanticObject().addObjectProperty(vocabulary.hasGroup, objectgroup.getSemanticObject());
-    }
-
-    public void removeAllGroup()
-    {
-        getSemanticObject().removeProperty(vocabulary.hasGroup);
-    }
-
-    public void removeGroup(org.semanticwb.model.ObjectGroup objectgroup)
-    {
-        getSemanticObject().removeObjectProperty(vocabulary.hasGroup,objectgroup.getSemanticObject());
-    }
-
-    public ObjectGroup getGroup()
-    {
-         ObjectGroup ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasGroup.getRDFProperty());
-         GenericIterator<org.semanticwb.model.ObjectGroup> it=new GenericIterator<org.semanticwb.model.ObjectGroup>(ObjectGroup.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
     }
 
     public WebSite getWebSite()

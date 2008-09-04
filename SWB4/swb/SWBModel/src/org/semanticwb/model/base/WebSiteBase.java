@@ -16,6 +16,16 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
         super(base);
     }
 
+    public Date getCreated()
+    {
+        return getSemanticObject().getDateProperty(vocabulary.created);
+    }
+
+    public void setCreated(Date created)
+    {
+        getSemanticObject().setDateProperty(vocabulary.created, created);
+    }
+
     public boolean isActive()
     {
         return getSemanticObject().getBooleanProperty(vocabulary.active);
@@ -34,16 +44,6 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     public void setDeleted(boolean deleted)
     {
         getSemanticObject().setBooleanProperty(vocabulary.deleted, deleted);
-    }
-
-    public Date getCreated()
-    {
-        return getSemanticObject().getDateProperty(vocabulary.created);
-    }
-
-    public void setCreated(Date created)
-    {
-        getSemanticObject().setDateProperty(vocabulary.created, created);
     }
 
     public void setModifiedBy(org.semanticwb.model.User user)
@@ -390,6 +390,34 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
         getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.RoleRef));
     }
 
+    public PortletSubType getPortletSubType(String id)
+    {
+        return (PortletSubType)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.PortletSubType),vocabulary.PortletSubType);
+    }
+
+    public Iterator<PortletSubType> listPortletSubTypes()
+    {
+        Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
+        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.PortletSubType.getOntClass());
+        return new GenericIterator<PortletSubType>(PortletSubType.class, stit);
+    }
+
+    public PortletSubType createPortletSubType(String id)
+    {
+        return (PortletSubType)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, vocabulary.PortletSubType), vocabulary.PortletSubType);
+    }
+
+    public PortletSubType createPortletSubType()
+    {
+        long id=SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+vocabulary.PortletSubType.getName());
+        return createPortletSubType(""+id);
+    } 
+
+    public void removePortletSubType(String id)
+    {
+        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.PortletSubType));
+    }
+
     public Device getDevice(String id)
     {
         return (Device)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.Device),vocabulary.Device);
@@ -642,32 +670,32 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
         getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.IPFilter));
     }
 
-    public PortletClass getPortletClass(String id)
+    public TemplateGroup getTemplateGroup(String id)
     {
-        return (PortletClass)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.PortletClass),vocabulary.PortletClass);
+        return (TemplateGroup)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.TemplateGroup),vocabulary.TemplateGroup);
     }
 
-    public Iterator<PortletClass> listPortletClasss()
+    public Iterator<TemplateGroup> listTemplateGroups()
     {
         Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
-        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.PortletClass.getOntClass());
-        return new GenericIterator<PortletClass>(PortletClass.class, stit);
+        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.TemplateGroup.getOntClass());
+        return new GenericIterator<TemplateGroup>(TemplateGroup.class, stit);
     }
 
-    public PortletClass createPortletClass(String id)
+    public TemplateGroup createTemplateGroup(String id)
     {
-        return (PortletClass)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, vocabulary.PortletClass), vocabulary.PortletClass);
+        return (TemplateGroup)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, vocabulary.TemplateGroup), vocabulary.TemplateGroup);
     }
 
-    public PortletClass createPortletClass()
+    public TemplateGroup createTemplateGroup()
     {
-        long id=SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+vocabulary.PortletClass.getName());
-        return createPortletClass(""+id);
+        long id=SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+vocabulary.TemplateGroup.getName());
+        return createTemplateGroup(""+id);
     } 
 
-    public void removePortletClass(String id)
+    public void removeTemplateGroup(String id)
     {
-        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.PortletClass));
+        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.TemplateGroup));
     }
 
     public Rule getRule(String id)
@@ -752,6 +780,34 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     public void removeCamp(String id)
     {
         getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.Camp));
+    }
+
+    public PortletType getPortletType(String id)
+    {
+        return (PortletType)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.PortletType),vocabulary.PortletType);
+    }
+
+    public Iterator<PortletType> listPortletTypes()
+    {
+        Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
+        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.PortletType.getOntClass());
+        return new GenericIterator<PortletType>(PortletType.class, stit);
+    }
+
+    public PortletType createPortletType(String id)
+    {
+        return (PortletType)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, vocabulary.PortletType), vocabulary.PortletType);
+    }
+
+    public PortletType createPortletType()
+    {
+        long id=SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+vocabulary.PortletType.getName());
+        return createPortletType(""+id);
+    } 
+
+    public void removePortletType(String id)
+    {
+        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.PortletType));
     }
 
     public Dns getDns(String id)

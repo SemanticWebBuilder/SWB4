@@ -7,7 +7,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class RuleBase extends GenericObjectBase implements Traceable,Descriptiveable,Groupable,Versionable
+public class RuleBase extends GenericObjectBase implements Versionable,Groupable,Descriptiveable,Traceable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
@@ -26,28 +26,6 @@ public class RuleBase extends GenericObjectBase implements Traceable,Descriptive
         getSemanticObject().setDateProperty(vocabulary.created, created);
     }
 
-    public void setLastVersion(org.semanticwb.model.VersionInfo versioninfo)
-    {
-        getSemanticObject().addObjectProperty(vocabulary.lastVersion, versioninfo.getSemanticObject());
-    }
-
-    public void removeLastVersion()
-    {
-        getSemanticObject().removeProperty(vocabulary.lastVersion);
-    }
-
-    public VersionInfo getLastVersion()
-    {
-         VersionInfo ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.lastVersion.getRDFProperty());
-         GenericIterator<org.semanticwb.model.VersionInfo> it=new GenericIterator<org.semanticwb.model.VersionInfo>(VersionInfo.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
-    }
-
     public void setModifiedBy(org.semanticwb.model.User user)
     {
         getSemanticObject().addObjectProperty(vocabulary.modifiedBy, user.getSemanticObject());
@@ -62,28 +40,6 @@ public class RuleBase extends GenericObjectBase implements Traceable,Descriptive
     {
          User ret=null;
          StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.modifiedBy.getRDFProperty());
-         GenericIterator<org.semanticwb.model.User> it=new GenericIterator<org.semanticwb.model.User>(User.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
-    }
-
-    public void setCreator(org.semanticwb.model.User user)
-    {
-        getSemanticObject().addObjectProperty(vocabulary.creator, user.getSemanticObject());
-    }
-
-    public void removeCreator()
-    {
-        getSemanticObject().removeProperty(vocabulary.creator);
-    }
-
-    public User getCreator()
-    {
-         User ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.creator.getRDFProperty());
          GenericIterator<org.semanticwb.model.User> it=new GenericIterator<org.semanticwb.model.User>(User.class, stit);
          if(it.hasNext())
          {
@@ -127,6 +83,60 @@ public class RuleBase extends GenericObjectBase implements Traceable,Descriptive
          VersionInfo ret=null;
          StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.actualVersion.getRDFProperty());
          GenericIterator<org.semanticwb.model.VersionInfo> it=new GenericIterator<org.semanticwb.model.VersionInfo>(VersionInfo.class, stit);
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
+    }
+
+    public Date getUpdated()
+    {
+        return getSemanticObject().getDateProperty(vocabulary.updated);
+    }
+
+    public void setUpdated(Date updated)
+    {
+        getSemanticObject().setDateProperty(vocabulary.updated, updated);
+    }
+
+    public void setLastVersion(org.semanticwb.model.VersionInfo versioninfo)
+    {
+        getSemanticObject().addObjectProperty(vocabulary.lastVersion, versioninfo.getSemanticObject());
+    }
+
+    public void removeLastVersion()
+    {
+        getSemanticObject().removeProperty(vocabulary.lastVersion);
+    }
+
+    public VersionInfo getLastVersion()
+    {
+         VersionInfo ret=null;
+         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.lastVersion.getRDFProperty());
+         GenericIterator<org.semanticwb.model.VersionInfo> it=new GenericIterator<org.semanticwb.model.VersionInfo>(VersionInfo.class, stit);
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
+    }
+
+    public void setCreator(org.semanticwb.model.User user)
+    {
+        getSemanticObject().addObjectProperty(vocabulary.creator, user.getSemanticObject());
+    }
+
+    public void removeCreator()
+    {
+        getSemanticObject().removeProperty(vocabulary.creator);
+    }
+
+    public User getCreator()
+    {
+         User ret=null;
+         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.creator.getRDFProperty());
+         GenericIterator<org.semanticwb.model.User> it=new GenericIterator<org.semanticwb.model.User>(User.class, stit);
          if(it.hasNext())
          {
              ret=it.next();
@@ -185,16 +195,6 @@ public class RuleBase extends GenericObjectBase implements Traceable,Descriptive
              ret=it.next();
          }
          return ret;
-    }
-
-    public Date getUpdated()
-    {
-        return getSemanticObject().getDateProperty(vocabulary.updated);
-    }
-
-    public void setUpdated(Date updated)
-    {
-        getSemanticObject().setDateProperty(vocabulary.updated, updated);
     }
 
     public WebSite getWebSite()

@@ -7,11 +7,11 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class PortletClassBase extends GenericObjectBase implements Groupable,Descriptiveable,Traceable
+public class PortletTypeBase extends GenericObjectBase implements Descriptiveable,Traceable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
-    public PortletClassBase(SemanticObject base)
+    public PortletTypeBase(SemanticObject base)
     {
         super(base);
     }
@@ -108,6 +108,16 @@ public class PortletClassBase extends GenericObjectBase implements Groupable,Des
         getSemanticObject().setDateProperty(vocabulary.updated, updated);
     }
 
+    public int getPortletMode()
+    {
+        return getSemanticObject().getIntProperty(vocabulary.portletMode);
+    }
+
+    public void setPortletMode(int portletMode)
+    {
+        getSemanticObject().setLongProperty(vocabulary.portletMode, portletMode);
+    }
+
     public void setCreator(org.semanticwb.model.User user)
     {
         getSemanticObject().addObjectProperty(vocabulary.creator, user.getSemanticObject());
@@ -130,6 +140,12 @@ public class PortletClassBase extends GenericObjectBase implements Groupable,Des
          return ret;
     }
 
+    public GenericIterator<org.semanticwb.model.PortletSubType> listPTSubType()
+    {
+        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, vocabulary.hasPTSubType.getInverse().getRDFProperty(), getSemanticObject().getRDFResource());
+        return new GenericIterator<org.semanticwb.model.PortletSubType>(org.semanticwb.model.PortletSubType.class, stit,true);
+    }
+
     public String getDescription()
     {
         return getSemanticObject().getProperty(vocabulary.description);
@@ -148,49 +164,6 @@ public class PortletClassBase extends GenericObjectBase implements Groupable,Des
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(vocabulary.description, description, lang);
-    }
-
-    public GenericIterator<org.semanticwb.model.ObjectGroup> listGroup()
-    {
-        StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasGroup.getRDFProperty());
-        return new GenericIterator<org.semanticwb.model.ObjectGroup>(org.semanticwb.model.ObjectGroup.class, stit);
-    }
-
-    public void addGroup(org.semanticwb.model.ObjectGroup objectgroup)
-    {
-        getSemanticObject().addObjectProperty(vocabulary.hasGroup, objectgroup.getSemanticObject());
-    }
-
-    public void removeAllGroup()
-    {
-        getSemanticObject().removeProperty(vocabulary.hasGroup);
-    }
-
-    public void removeGroup(org.semanticwb.model.ObjectGroup objectgroup)
-    {
-        getSemanticObject().removeObjectProperty(vocabulary.hasGroup,objectgroup.getSemanticObject());
-    }
-
-    public ObjectGroup getGroup()
-    {
-         ObjectGroup ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasGroup.getRDFProperty());
-         GenericIterator<org.semanticwb.model.ObjectGroup> it=new GenericIterator<org.semanticwb.model.ObjectGroup>(ObjectGroup.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
-    }
-
-    public int getPortletType()
-    {
-        return getSemanticObject().getIntProperty(vocabulary.portletType);
-    }
-
-    public void setPortletType(int portletType)
-    {
-        getSemanticObject().setLongProperty(vocabulary.portletType, portletType);
     }
 
     public WebSite getWebSite()
