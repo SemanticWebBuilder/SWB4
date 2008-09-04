@@ -8,10 +8,13 @@ import org.junit.*;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.Dns;
 import org.semanticwb.model.Language;
+import org.semanticwb.model.PortletType;
+import org.semanticwb.model.Portlet;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.Template;
 import org.semanticwb.model.TemplateRef;
 import org.semanticwb.model.UserRepository;
+import org.semanticwb.model.User;
 import org.semanticwb.model.VersionInfo;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
@@ -53,8 +56,10 @@ public class TestWebSite {
     // The methods must be annotated with annotation @Test. For example:
     //
     @Test
-    public void Test()
+    public void Test1()
     {
+        if(SWBContext.getWebSite("sep")==null)
+        {
             WebSite site=SWBContext.createWebSite("sep", "http://www.sep.gob.mx");
             site.setTitle("Sep");
             site.setDescription("Sep WebSite");
@@ -74,9 +79,6 @@ public class TestWebSite {
             home.setActive(true);
             home.setTitle("Pagina Principal");
 
-//            WebSite site=SWBContext.getWebSite("sep");
-//            WebPage home=site.getHomePage();
-            
             //Set User Repository
             UserRepository urep=SWBContext.getDefaultRepository();
             site.setUserRepository(urep);
@@ -90,8 +92,6 @@ public class TestWebSite {
             tpl.setActive(true);
             tpl.setTitle("Platilla1");
             
-//            Template tpl=site.getTemplate("1");
-            
             VersionInfo version=site.createVersionInfo();
             version.setVersionNumber(1);
             version.setVersionFile("template.html");
@@ -104,7 +104,51 @@ public class TestWebSite {
             tplref.setPriority(3);
             
             home.addTemplateRef(tplref);
-
+        }
     }
+    
+    // TODO add test methods here.
+    // The methods must be annotated with annotation @Test. For example:
+    //
+    @Test
+    public void Test2()
+    {
+        WebSite site=SWBContext.getWebSite("sep");
+        WebPage home=site.getHomePage();
+        UserRepository urep=SWBContext.getDefaultRepository();
+        User user=urep.getUser("1");
+        Template tpl=site.getTemplate("1");
+        
+        if(site.getPortletType("Test")==null)
+        {
+            
+            PortletType ptype=site.createPortletType("Test");
+            ptype.setPortletClassName("org.semanticwb.portal.resources.Test");
+            ptype.setPortletBundle("org.semanticwb.portal.resources.Test");
+            ptype.setPortletMode(1);
+            ptype.setTitle("Recurso Test");
+                    
+            Portlet portlet=site.createPortlet();
+            portlet.setActive(true);
+            portlet.setCreator(user);
+            portlet.setPortletType(ptype);
+            portlet.setTitle("Test");
+        }
+    }
+    
+    
+    // TODO add test methods here.
+    // The methods must be annotated with annotation @Test. For example:
+    //
+    //@Test
+    public void Test3()
+    {
+            WebSite site=SWBContext.getWebSite("sep");
+            WebPage home=site.getHomePage();
+            UserRepository urep=SWBContext.getDefaultRepository();
+            Template tpl=site.getTemplate("1");
+    }
+    
+    
 
 }
