@@ -2,14 +2,20 @@
 package org.semanticwb;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.sql.Connection;
+import java.util.HashMap;
 import java.util.Properties;
 import javax.servlet.ServletContext;
 import org.semanticwb.platform.SemanticMgr;
 import org.semanticwb.base.util.SWBProperties;
 import org.semanticwb.base.util.URLEncoder;
+import org.semanticwb.util.JarFile;
 
 /**
  *
@@ -234,19 +240,7 @@ public class SWBPlatform
             workPath = "";
         }        
         
-        try {
-            String webPath=SWBPlatform.getContextPath();
-            if (webPath.endsWith("/")) {
-                webWorkPath = webPath +SWBPlatform.getEnv("wb/webWorkPath").substring(1);
-            } else {
-                webWorkPath = webPath + SWBPlatform.getEnv("wb/webWorkPath");
-            }
-        } catch (Exception e) {
-            log.error("Can't read the context path...", e);
-            webWorkPath = "";
-        }                 
     }
-    
     
     /**
      * Getter for property haveDB.
@@ -326,6 +320,17 @@ public class SWBPlatform
     {
         log.event("ContextPath:"+contextPath);
         this.contextPath = contextPath;
+        
+        try {
+            if (contextPath.endsWith("/")) {
+                webWorkPath = contextPath +SWBPlatform.getEnv("swb/webWorkPath").substring(1);
+            } else {
+                webWorkPath = contextPath + SWBPlatform.getEnv("swb/webWorkPath");
+            }
+        } catch (Exception e) {
+            log.error("Can't read the context path...", e);
+            webWorkPath = "";
+        }           
     }
     
     /** Getter for property workPath.
@@ -385,4 +390,138 @@ public class SWBPlatform
     public static String getVersion() {
         return version;
     }    
+    
+    
+    /**
+     * @param path
+     * @throws AFException
+     * @return  */
+    public static InputStream getFileFromWorkPath(String path) throws SWBException {
+        InputStream ret = null;
+        //TOTO:Impementar Replicacion de archivos
+        try {
+//            String confCS = (String) getEnv("swb/clientServer");
+//            
+//            if(confCS.equalsIgnoreCase("ClientFR")) {
+//                try {
+//                    ret = new FileInputStream(getWorkPath() + path);
+//                }catch(FileNotFoundException fnfe) {
+//                    //ret=getFileFromAdminWorkPath(path);
+//                    DownloadDirectory downdir=new DownloadDirectory(AFUtils.getEnv("wb/serverURL"),getWorkPath(),"workpath");
+//                    downdir.download(path);
+//                    ret = new FileInputStream(getWorkPath() + path);
+//                }
+//            }else if(confCS.equalsIgnoreCase("Client")) {
+//                ret=getFileFromAdminWorkPath(path);
+//            } else {
+                ret = new FileInputStream(getWorkPath() + path);
+//            }
+        } catch (Exception e) {
+            throw new SWBException(e.getMessage(), e);
+        }
+        return ret;
+    }
+    
+      //TOTO:Impementar Replicacion de archivos    
+//    public InputStream getFileFromAdminWorkPath(String path) throws MalformedURLException, IOException {
+//        InputStream ret = null;
+//        //String str = getRemoteWorkPath() + path;
+//        String servlet=DownloadDirectory.SERVDWN;
+//        String str = getEnv("swb/serverURL")+servlet+ "?workpath=" + path;
+//        
+//        str = str.substring(0, str.lastIndexOf("/") + 1) + com.infotec.appfw.util.URLEncoder.encode(str.substring(str.lastIndexOf("/") + 1));
+//        ret = new java.net.URL(str).openStream();
+//        return ret;
+//    }
+    
+    public static void writeFileToWorkPath(String path, InputStream in, String userid) throws SWBException {
+        //System.out.println("writeFileToWorkPath:"+path);
+        //TOTO:Impementar Replicacion de archivos        
+        try {
+//            String confCS = (String) AFUtils.getInstance().getEnv("wb/clientServer");
+//            
+//            //System.out.println("clientServer:"+confCS);
+//            if(confCS.equalsIgnoreCase("ClientFR")||confCS.equalsIgnoreCase("Client")) {
+//                String str = AFUtils.getEnv("wb/serverURL")+DownloadDirectory.SERVUP;
+//                URL url=new URL(str);
+//                //System.out.println("url:"+url);
+//                URLConnection urlconn=url.openConnection();
+//                //if(jsess!=null)urlconn.setRequestProperty("Cookie", "JSESSIONID="+jsess);
+//                urlconn.setRequestProperty("type","workpath");
+//                urlconn.setRequestProperty("path",path);
+//                urlconn.setRequestProperty("user",userid);
+//                urlconn.setDoOutput(true);
+//                AFUtils.copyStream(in,urlconn.getOutputStream());
+//                //System.out.println("copyStream");
+//                String ret=AFUtils.getInstance().readInputStream(urlconn.getInputStream());
+//                //System.out.println("ret:"+ret);
+//            }else {
+                File file=new File(getWorkPath() + path);
+                file.getParentFile().mkdirs();
+                FileOutputStream out=new FileOutputStream(file);
+                SWBUtils.IO.copyStream(in,out);
+//            }
+        } catch (Exception e) {
+            throw new SWBException(e.getMessage(), e);
+        }
+    }
+    
+    /**
+     * @param path
+     * @throws AFException
+     * @return  */
+    public static String readFileFromWorkPath(String path) throws IOException, SWBException {
+        return SWBUtils.IO.readInputStream(getFileFromWorkPath(path));
+    }
+    
+    /**
+     * @param path
+     * @param encode
+     * @throws AFException
+     * @return  */
+    public static InputStreamReader getFileFromWorkPath(String path, String encode) throws SWBException {
+        InputStreamReader ret = null;
+        try {
+            ret = new InputStreamReader(getFileFromWorkPath(path), encode);
+        } catch (Exception e) {
+            throw new SWBException(e.getMessage(),e);
+        }
+        return ret;
+    }
+    
+    /**
+     * @param path
+     * @param encode
+     * @throws AFException
+     * @return  */
+    public static String readFileFromWorkPath(String path, String encode) throws SWBException {
+        StringBuffer ret = new StringBuffer(SWBUtils.IO.getBufferSize());
+        try {
+            InputStreamReader file = getFileFromWorkPath(path, encode);
+            char[] bfile = new char[SWBUtils.IO.getBufferSize()];
+            int x;
+            while ((x = file.read(bfile, 0, SWBUtils.IO.getBufferSize())) > -1) {
+                ret.append(bfile, 0, x);
+            }
+            file.close();
+        } catch (Exception e) {
+            throw new SWBException(e.getMessage(), e);
+        }
+        return ret.toString();
+    }
+    
+//    /** La instancia de WB esta configurada como cliente?.
+//     * @return Value of property client.
+//     */
+//    public boolean isClient() {
+//        return client;
+//    }
+//    
+//    /** Getter for property remoteWorkPath.
+//     * @return Value of property remoteWorkPath.
+//     */
+//    public String getRemoteWorkPath() {
+//        return remoteWorkPath;
+//    }    
+    
 }

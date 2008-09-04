@@ -92,14 +92,15 @@ public class GenericObjectBase implements GenericObject
         return hashCode()==obj.hashCode();
     }
     
+    /**
+     * Regresa ruta de trabajo del objeto relativa al directorio work
+     * ejemplo: /sep/Template/1
+     *          /dominio/Objeto/id
+     * 
+     * @return String con la ruta relativa al directorio work
+     */
     public String getWorkPath()
     {
-        return SWBPlatform.getWorkPath()+"/"+getSemanticObject().getModel().getName()+getSemanticObject().getSemanticClass()+getId()+"/"+getId();
+        return "/"+getSemanticObject().getModel().getName()+"/"+getSemanticObject().getSemanticClass().getName()+"/"+getId();
     }
-
-    public String getWebWorkPath()
-    {
-        return SWBPlatform.getWebWorkPath()+"/"+getSemanticObject().getModel().getName()+getSemanticObject().getSemanticClass()+getId()+"/"+getId();
-    }
-
 }

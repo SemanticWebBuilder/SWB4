@@ -29,8 +29,12 @@ public interface GenericObject
     
     public GenericObject removeProperty(String prop);
 
+    /**
+     * Regresa ruta de trabajo del objeto relativa al directorio work
+     * ejemplo: /sep/Template/1
+     *          /dominio/Objeto/id
+     * 
+     * @return String con la ruta relativa al directorio work
+     */    
     public String getWorkPath();
-
-    public String getWebWorkPath();
-    
 }
