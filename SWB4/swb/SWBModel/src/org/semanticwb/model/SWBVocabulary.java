@@ -115,6 +115,7 @@ public class SWBVocabulary
     public final SemanticProperty versionNumber;
     public final SemanticProperty camp;
     public final SemanticProperty hits;
+    public final SemanticProperty portletWindow;
     public final SemanticProperty indexable;
     public final SemanticProperty views;
     public final SemanticProperty portletSubType;
@@ -242,6 +243,7 @@ public class SWBVocabulary
         versionNumber=vocabulary.getSemanticProperty(URI+"versionNumber");
         camp=vocabulary.getSemanticProperty(URI+"camp");
         hits=vocabulary.getSemanticProperty(URI+"hits");
+        portletWindow=vocabulary.getSemanticProperty(URI+"portletWindow");
         indexable=vocabulary.getSemanticProperty(URI+"indexable");
         views=vocabulary.getSemanticProperty(URI+"views");
         portletSubType=vocabulary.getSemanticProperty(URI+"portletSubType");
