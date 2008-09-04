@@ -7,11 +7,11 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class CommunityBase extends GenericObjectBase implements Descriptiveable,Traceable,Activeable
+public class TemplateGroupBase extends GenericObjectBase implements Descriptiveable,Traceable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
-    public CommunityBase(SemanticObject base)
+    public TemplateGroupBase(SemanticObject base)
     {
         super(base);
     }
@@ -24,16 +24,6 @@ public class CommunityBase extends GenericObjectBase implements Descriptiveable,
     public void setCreated(Date created)
     {
         getSemanticObject().setDateProperty(vocabulary.created, created);
-    }
-
-    public boolean isActive()
-    {
-        return getSemanticObject().getBooleanProperty(vocabulary.active);
-    }
-
-    public void setActive(boolean active)
-    {
-        getSemanticObject().setBooleanProperty(vocabulary.active, active);
     }
 
     public void setModifiedBy(org.semanticwb.model.User user)
@@ -128,6 +118,12 @@ public class CommunityBase extends GenericObjectBase implements Descriptiveable,
     public void setUpdated(Date updated)
     {
         getSemanticObject().setDateProperty(vocabulary.updated, updated);
+    }
+
+    public GenericIterator<org.semanticwb.model.Template> listGroupedTemplate()
+    {
+        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, vocabulary.hasGroupedTemplate.getInverse().getRDFProperty(), getSemanticObject().getRDFResource());
+        return new GenericIterator<org.semanticwb.model.Template>(org.semanticwb.model.Template.class, stit,true);
     }
 
     public WebSite getWebSite()

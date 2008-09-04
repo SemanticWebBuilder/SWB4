@@ -15,4 +15,10 @@ public class WebSite extends WebSiteBase
     {
         return (Dns)getSemanticObject().getModel().createGenericObject(uri, SWBContext.getVocabulary().Dns);
     }    
+
+    public Dns getDns(String id)
+    {
+        return (Dns)getSemanticObject().getModel().getGenericObject(id,SWBContext.getVocabulary().Dns);
+    }
+    
 }
