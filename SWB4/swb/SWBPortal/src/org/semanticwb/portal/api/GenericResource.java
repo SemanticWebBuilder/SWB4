@@ -76,62 +76,62 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
     /**
      * @param request
      * @param response
-     * @param paramsRequest
+     * @param paramRequest
      * @throws SWBException
      * @throws IOException
      */    
-    public void render(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBException, IOException
+    public void render(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBException, IOException
     {
-        if(!paramsRequest.WinState_MINIMIZED.equals(paramsRequest.getWindowState()))
+        if(!paramRequest.WinState_MINIMIZED.equals(paramRequest.getWindowState()))
         {
-            processRequest(request, response, paramsRequest);
+            processRequest(request, response, paramRequest);
         }
     }
     
     /**
      * @param request
      * @param response
-     * @param paramsRequest
+     * @param paramRequest
      * @throws SWBException
      * @throws IOException
      */    
-    public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBException, IOException
+    public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBException, IOException
     {
-        if(paramsRequest.getMode().equals(paramsRequest.Mode_VIEW))
+        if(paramRequest.getMode().equals(paramRequest.Mode_VIEW))
         {
-            doView(request,response,paramsRequest);
-        }else if(paramsRequest.getMode().equals(paramsRequest.Mode_EDIT))
+            doView(request,response,paramRequest);
+        }else if(paramRequest.getMode().equals(paramRequest.Mode_EDIT))
         {
-            doEdit(request,response,paramsRequest);
-        }else if(paramsRequest.getMode().equals(paramsRequest.Mode_HELP))
+            doEdit(request,response,paramRequest);
+        }else if(paramRequest.getMode().equals(paramRequest.Mode_HELP))
         {
-            doHelp(request,response,paramsRequest);
-        }else if(paramsRequest.getMode().equals(paramsRequest.Mode_ADMIN))
+            doHelp(request,response,paramRequest);
+        }else if(paramRequest.getMode().equals(paramRequest.Mode_ADMIN))
         {
-            doAdmin(request,response,paramsRequest);
-        }else if(paramsRequest.getMode().equals(paramsRequest.Mode_ADMHLP))
+            doAdmin(request,response,paramRequest);
+        }else if(paramRequest.getMode().equals(paramRequest.Mode_ADMHLP))
         {
-            doAdminHlp(request,response,paramsRequest);
-        }else if(paramsRequest.getMode().equals(paramsRequest.Mode_INDEX))
+            doAdminHlp(request,response,paramRequest);
+        }else if(paramRequest.getMode().equals(paramRequest.Mode_INDEX))
         {
-            doIndex(request,response,paramsRequest);
-        }else if(paramsRequest.getMode().equals(paramsRequest.Mode_XML))
+            doIndex(request,response,paramRequest);
+        }else if(paramRequest.getMode().equals(paramRequest.Mode_XML))
         {
-            doXML(request,response,paramsRequest);
+            doXML(request,response,paramRequest);
         }else 
         {
-            throw new SWBException("method not implemented - Mode:("+paramsRequest.getMode()+"), URL:("+request.getRequestURL()+"), Ref:("+request.getHeader("referer")+")");
+            throw new SWBException("method not implemented - Mode:("+paramRequest.getMode()+"), URL:("+request.getRequestURL()+"), Ref:("+request.getHeader("referer")+")");
         }
     }
     
     /**
      * @param request
      * @param response
-     * @param paramsRequest
+     * @param paramRequest
      * @throws SWBException
      * @throws IOException
      */    
-    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBException, IOException
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBException, IOException
     {
         throw new SWBException("method not implemented - doView");
     }
@@ -139,11 +139,11 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
     /**
      * @param request
      * @param response
-     * @param paramsRequest
+     * @param paramRequest
      * @throws SWBException
      * @throws IOException
      */    
-    public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBException, IOException
+    public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBException, IOException
     {
         throw new SWBException("method not implemented - doEdit");
     }
@@ -151,11 +151,11 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
     /**
      * @param request
      * @param response
-     * @param paramsRequest
+     * @param paramRequest
      * @throws SWBException
      * @throws IOException
      */    
-    public void doHelp(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBException, IOException
+    public void doHelp(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBException, IOException
     {
         throw new SWBException("method not implemented - doHelp");
     }
@@ -163,18 +163,18 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
     /**
      * @param request
      * @param response
-     * @param paramsRequest
+     * @param paramRequest
      * @throws SWBException
      * @throws IOException
      */    
-    public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBException, IOException
+    public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBException, IOException
     {
         java.io.PrintWriter out = response.getWriter();
         out.println("<div class=\"box\">");
         out.println("<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"5\">");
         out.println("<tr>");
         out.println("<td class=datos>");
-        out.println(SWBUtils.TEXT.getLocaleString("org.semanticwb.portal.resources.GenericResource", "msgNotAdmin",new Locale(paramsRequest.getUser().getLanguage().getId())));
+        out.println(SWBUtils.TEXT.getLocaleString("org.semanticwb.portal.resources.GenericResource", "msgNotAdmin",new Locale(paramRequest.getUser().getLanguage().getId())));
         out.println("</td>");
         out.println("</tr>");
         out.println("</table>");
@@ -184,11 +184,11 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
     /**
      * @param request
      * @param response
-     * @param paramsRequest
+     * @param paramRequest
      * @throws SWBException
      * @throws IOException
      */    
-    public void doAdminHlp(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBException, IOException
+    public void doAdminHlp(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBException, IOException
     {
         throw new SWBException("method not implemented - doAdminHlp");
     }
@@ -196,23 +196,23 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
     /**
      * @param request
      * @param response
-     * @param paramsRequest
+     * @param paramRequest
      * @throws SWBException
      * @throws IOException
      */    
-    public void doIndex(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBException, IOException
+    public void doIndex(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBException, IOException
     {
-        doView(request, response, paramsRequest);
+        doView(request, response, paramRequest);
     }
     
     /**
      * @param request
      * @param response
-     * @param paramsRequest
+     * @param paramRequest
      * @throws SWBException
      * @throws IOException
      */    
-    public void doXML(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBException, IOException
+    public void doXML(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBException, IOException
     {
         throw new SWBException("method not implemented - doXML");
     }
@@ -238,14 +238,14 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
      * by default this method will return null when the request have paramaters
      */
 
-    public String getResourceCacheID(HttpServletRequest request, SWBParamRequest paramsRequest) throws SWBException
+    public String getResourceCacheID(HttpServletRequest request, SWBParamRequest paramRequest) throws SWBException
     {
         if (request.getParameterNames().hasMoreElements())
         {
             return null;
         }else
         {
-            Portlet base=paramsRequest.getResourceBase();
+            Portlet base=paramRequest.getResourceBase();
             return SWBResourceCachedMgr.getKey(base);
         }
     }
