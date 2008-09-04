@@ -207,9 +207,9 @@ public class SWBServices {
         return doAction;
     }
 
-    public boolean createLanguage(WebSite webSite, String title, String description, User user) throws SWBException {
+    public boolean createLanguage(WebSite webSite, String lang, String title, String description, User user) throws SWBException {
         boolean doAction = false;
-        Language language = webSite.createLanguage();
+        Language language = webSite.createLanguage(lang);
         language.setTitle(title);
         language.setDescription(description);
         language.setCreator(user);

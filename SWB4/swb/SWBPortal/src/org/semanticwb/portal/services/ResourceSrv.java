@@ -15,9 +15,9 @@ import org.semanticwb.model.WebSite;
  */
 public class ResourceSrv {
 
-    public boolean createContentPortlet(WebSite website, String title, String description, User user) throws SWBException {
+    public boolean createContentPortlet(WebSite website, String name, String title, String description, User user) throws SWBException {
         boolean doAction = false;
-        PortletType portlet = website.createPortletType();
+        PortletType portlet = website.createPortletType(name);
 //        portlet.setTitle(title);
 //        portlet.setDescription(description);
 //        portlet.
