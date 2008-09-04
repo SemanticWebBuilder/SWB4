@@ -165,6 +165,16 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
          return ret;
     }
 
+    public boolean isPortletWindow()
+    {
+        return getSemanticObject().getBooleanProperty(vocabulary.portletWindow);
+    }
+
+    public void setPortletWindow(boolean portletWindow)
+    {
+        getSemanticObject().setBooleanProperty(vocabulary.portletWindow, portletWindow);
+    }
+
     public boolean isIndexable()
     {
         return getSemanticObject().getBooleanProperty(vocabulary.indexable);
