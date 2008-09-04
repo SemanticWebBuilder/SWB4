@@ -415,7 +415,33 @@ public class SWBUtils {
         public static Locale getLocale()
         {
             return locale;
-        }        
+        }       
+        
+        /**
+         * Regresa un arraylist de strings que fueron delimitados por un delimitador (regexp)
+         */
+        //version 1.4
+        public static ArrayList regExpSplit(String txt, String regexp)
+        {
+            int index = 0;
+            ArrayList matchList = new ArrayList();
+            java.util.regex.Matcher m = java.util.regex.Pattern.compile(regexp).matcher(txt);
+
+            while (m.find())
+            {
+                String match = txt.substring(index, m.start());
+                if (match.length() > 0) matchList.add(match);
+                match = txt.substring(m.start(), m.end());
+                if (match.length() > 0) matchList.add(match);
+                index = m.end();
+            }
+
+            String match = txt.substring(index, txt.length());
+            if (match.length() > 0) matchList.add(match);
+            return matchList;
+        }          
+        
+        
     }
 
     /**
@@ -425,6 +451,11 @@ public class SWBUtils {
         /*
          * Obtiene un objeto InputStream dado un objeto String.
          */
+        
+        public static int getBufferSize()
+        {
+            return bufferSize;
+        }
 
         /**
          * 
