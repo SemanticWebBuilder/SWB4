@@ -5,7 +5,7 @@
  * Created on 2 de junio de 2004, 01:50 PM
  */
 
-package org.semanticwb.portal.resources;
+package org.semanticwb.portal.api;
 
 import org.semanticwb.model.Portlet;
 import org.semanticwb.model.User;

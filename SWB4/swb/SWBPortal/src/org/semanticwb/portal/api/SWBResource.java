@@ -5,7 +5,7 @@
  * Created on 12 de mayo de 2004, 11:40 AM
  */
 
-package org.semanticwb.portal.resources;
+package org.semanticwb.portal.api;
 
 
 import javax.servlet.http.HttpServletRequest;

@@ -24,10 +24,10 @@ import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.TemplateImp;
-import org.semanticwb.portal.resources.SWBActionResponseImp;
-import org.semanticwb.portal.resources.SWBParamRequestImp;
-import org.semanticwb.portal.resources.SWBResourceModes;
-import org.semanticwb.portal.resources.SWBResource;
+import org.semanticwb.portal.api.SWBActionResponseImp;
+import org.semanticwb.portal.api.SWBParamRequestImp;
+import org.semanticwb.portal.api.SWBResourceModes;
+import org.semanticwb.portal.api.SWBResource;
 import org.semanticwb.servlet.SWBHttpServletResponseWrapper;
 
 /**

@@ -5,7 +5,7 @@
  * Created on 18 de febrero de 2005, 07:00 PM
  */
 
-package org.semanticwb.portal.resources;
+package org.semanticwb.portal.api;
 
 import java.util.Random;
 import javax.servlet.http.*;

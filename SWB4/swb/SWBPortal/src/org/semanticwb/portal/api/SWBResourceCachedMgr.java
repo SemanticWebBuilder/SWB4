@@ -4,7 +4,7 @@
  * Created on 5 de noviembre de 2002, 18:01
  */
 
-package org.semanticwb.portal.resources;
+package org.semanticwb.portal.api;
 
 import java.util.*;
 

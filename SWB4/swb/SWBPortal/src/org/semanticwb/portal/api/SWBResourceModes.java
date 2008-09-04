@@ -4,7 +4,7 @@
  * Created on 8 de junio de 2004, 05:57 PM
  */
 
-package org.semanticwb.portal.resources;
+package org.semanticwb.portal.api;
 
 /**
  * Interfase que define las constantes requeridas por WBPartameter

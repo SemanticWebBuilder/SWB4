@@ -5,7 +5,7 @@
  * Created on 8 de junio de 2004, 12:57 PM
  */
 
-package org.semanticwb.portal.resources;
+package org.semanticwb.portal.api;
 
 /**
  * Interfase que sirve para generar un URL valido por el portal para el recursos.

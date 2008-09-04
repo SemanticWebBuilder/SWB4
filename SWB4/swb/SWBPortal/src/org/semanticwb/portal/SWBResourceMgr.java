@@ -19,10 +19,10 @@ import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.Template;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
-import org.semanticwb.portal.resources.SWBParamRequest;
-import org.semanticwb.portal.resources.SWBResource;
-import org.semanticwb.portal.resources.SWBResourceCachedMgr;
-import org.semanticwb.portal.resources.SWBResourceTraceMgr;
+import org.semanticwb.portal.api.SWBParamRequest;
+import org.semanticwb.portal.api.SWBResource;
+import org.semanticwb.portal.api.SWBResourceCachedMgr;
+import org.semanticwb.portal.api.SWBResourceTraceMgr;
 import org.semanticwb.portal.util.SWBPriorityComparator;
 
 /**

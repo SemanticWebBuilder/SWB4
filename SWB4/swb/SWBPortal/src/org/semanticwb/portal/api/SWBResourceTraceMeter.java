@@ -6,7 +6,7 @@
  *
  */
 
-package org.semanticwb.portal.resources;
+package org.semanticwb.portal.api;
 
 /**
  *
