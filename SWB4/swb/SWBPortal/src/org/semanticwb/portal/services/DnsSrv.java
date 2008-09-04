@@ -20,18 +20,7 @@ public class DnsSrv {
 
     private static Logger log = SWBUtils.getLogger(WebSiteSrv.class);
 
-    public Dns createDNS(WebSite website, String title, String description, boolean isdefault, User user) throws SWBException {
-        Dns dns = null;
-        dns = website.createDns();
-        dns.setTitle(title);
-        dns.setDescription(description);
-        dns.setDnsDefault(isdefault);
-        
-        SWBPortal.log(user.getURI(), "create", dns.getURI(), dns.getURI(), "create Dns", null);
-        
-        return dns;
-    }
-    
+   
     public Dns createDNS(WebSite website, String id, String title, String description,  boolean isdefault, User user) throws SWBException {
         Dns dns = null;
         dns = website.createDns(id);
