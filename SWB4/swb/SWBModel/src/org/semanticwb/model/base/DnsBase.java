@@ -48,6 +48,36 @@ public class DnsBase extends GenericObjectBase implements Traceable,Descriptivea
          return ret;
     }
 
+    public String getTitle()
+    {
+        return getSemanticObject().getProperty(vocabulary.title);
+    }
+
+    public void setTitle(String title)
+    {
+        getSemanticObject().setProperty(vocabulary.title, title);
+    }
+
+    public String getTitle(String lang)
+    {
+        return getSemanticObject().getProperty(vocabulary.title, lang);
+    }
+
+    public void setTitle(String title, String lang)
+    {
+        getSemanticObject().setProperty(vocabulary.title, title, lang);
+    }
+
+    public Date getUpdated()
+    {
+        return getSemanticObject().getDateProperty(vocabulary.updated);
+    }
+
+    public void setUpdated(Date updated)
+    {
+        getSemanticObject().setDateProperty(vocabulary.updated, updated);
+    }
+
     public void setCreator(org.semanticwb.model.User user)
     {
         getSemanticObject().addObjectProperty(vocabulary.creator, user.getSemanticObject());
@@ -68,26 +98,6 @@ public class DnsBase extends GenericObjectBase implements Traceable,Descriptivea
              ret=it.next();
          }
          return ret;
-    }
-
-    public String getTitle()
-    {
-        return getSemanticObject().getProperty(vocabulary.title);
-    }
-
-    public void setTitle(String title)
-    {
-        getSemanticObject().setProperty(vocabulary.title, title);
-    }
-
-    public String getTitle(String lang)
-    {
-        return getSemanticObject().getProperty(vocabulary.title, lang);
-    }
-
-    public void setTitle(String title, String lang)
-    {
-        getSemanticObject().setProperty(vocabulary.title, title, lang);
     }
 
     public void setWebPage(org.semanticwb.model.WebPage webpage)
@@ -130,16 +140,6 @@ public class DnsBase extends GenericObjectBase implements Traceable,Descriptivea
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(vocabulary.description, description, lang);
-    }
-
-    public Date getUpdated()
-    {
-        return getSemanticObject().getDateProperty(vocabulary.updated);
-    }
-
-    public void setUpdated(Date updated)
-    {
-        getSemanticObject().setDateProperty(vocabulary.updated, updated);
     }
 
     public boolean isDnsDefault()

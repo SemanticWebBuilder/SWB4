@@ -78,14 +78,15 @@ public class SWBVocabulary
     public final SemanticProperty creator;
     public final SemanticProperty usrLogin;
     public final SemanticProperty usrPassword;
+    public final SemanticProperty hasRole;
     public final SemanticProperty usrLastName;
     public final SemanticProperty usrPasswordChanged;
-    public final SemanticProperty hasRole;
     public final SemanticProperty usrSecurityQuestion;
     public final SemanticProperty hasGroup;
     public final SemanticProperty usrSecurityAnswer;
     public final SemanticProperty title;
     public final SemanticProperty description;
+    public final SemanticProperty hasPSTPortlets;
     public final SemanticProperty PSTType;
     public final SemanticProperty template;
     public final SemanticProperty priority;
@@ -107,23 +108,25 @@ public class SWBVocabulary
     public final SemanticProperty hasGroupedTemplate;
     public final SemanticProperty hasPortlet;
     public final SemanticProperty templateGroup;
-    public final SemanticProperty nextVersion;
     public final SemanticProperty previousVersion;
-    public final SemanticProperty versionFile;
     public final SemanticProperty versionComment;
+    public final SemanticProperty versionFile;
+    public final SemanticProperty nextVersion;
     public final SemanticProperty versionCreated;
     public final SemanticProperty versionNumber;
+    public final SemanticProperty portletXML;
     public final SemanticProperty camp;
     public final SemanticProperty hits;
-    public final SemanticProperty portletWindow;
     public final SemanticProperty indexable;
+    public final SemanticProperty portletWindow;
+    public final SemanticProperty portletXMLConf;
     public final SemanticProperty views;
     public final SemanticProperty portletSubType;
     public final SemanticProperty portletType;
     public final SemanticProperty role;
+    public final SemanticProperty hasChildWebPage;
     public final SemanticProperty hasPFlowRef;
     public final SemanticProperty hasParentWebPage;
-    public final SemanticProperty hasChildWebPage;
     public final SemanticProperty homePage;
     public final SemanticProperty userRepository;
     public final SemanticProperty portlet;
@@ -132,6 +135,7 @@ public class SWBVocabulary
     public final SemanticProperty portletClassName;
     public final SemanticProperty portletMode;
     public final SemanticProperty hasPTSubType;
+    public final SemanticProperty hasPTPortlets;
 
 
     public SWBVocabulary()
@@ -206,14 +210,15 @@ public class SWBVocabulary
         creator=vocabulary.getSemanticProperty(URI+"creator");
         usrLogin=vocabulary.getSemanticProperty(URI+"usrLogin");
         usrPassword=vocabulary.getSemanticProperty(URI+"usrPassword");
+        hasRole=vocabulary.getSemanticProperty(URI+"hasRole");
         usrLastName=vocabulary.getSemanticProperty(URI+"usrLastName");
         usrPasswordChanged=vocabulary.getSemanticProperty(URI+"usrPasswordChanged");
-        hasRole=vocabulary.getSemanticProperty(URI+"hasRole");
         usrSecurityQuestion=vocabulary.getSemanticProperty(URI+"usrSecurityQuestion");
         hasGroup=vocabulary.getSemanticProperty(URI+"hasGroup");
         usrSecurityAnswer=vocabulary.getSemanticProperty(URI+"usrSecurityAnswer");
         title=vocabulary.getSemanticProperty(URI+"title");
         description=vocabulary.getSemanticProperty(URI+"description");
+        hasPSTPortlets=vocabulary.getSemanticProperty(URI+"hasPSTPortlets");
         PSTType=vocabulary.getSemanticProperty(URI+"PSTType");
         template=vocabulary.getSemanticProperty(URI+"template");
         priority=vocabulary.getSemanticProperty(URI+"priority");
@@ -235,23 +240,25 @@ public class SWBVocabulary
         hasGroupedTemplate=vocabulary.getSemanticProperty(URI+"hasGroupedTemplate");
         hasPortlet=vocabulary.getSemanticProperty(URI+"hasPortlet");
         templateGroup=vocabulary.getSemanticProperty(URI+"templateGroup");
-        nextVersion=vocabulary.getSemanticProperty(URI+"nextVersion");
         previousVersion=vocabulary.getSemanticProperty(URI+"previousVersion");
-        versionFile=vocabulary.getSemanticProperty(URI+"versionFile");
         versionComment=vocabulary.getSemanticProperty(URI+"versionComment");
+        versionFile=vocabulary.getSemanticProperty(URI+"versionFile");
+        nextVersion=vocabulary.getSemanticProperty(URI+"nextVersion");
         versionCreated=vocabulary.getSemanticProperty(URI+"versionCreated");
         versionNumber=vocabulary.getSemanticProperty(URI+"versionNumber");
+        portletXML=vocabulary.getSemanticProperty(URI+"portletXML");
         camp=vocabulary.getSemanticProperty(URI+"camp");
         hits=vocabulary.getSemanticProperty(URI+"hits");
-        portletWindow=vocabulary.getSemanticProperty(URI+"portletWindow");
         indexable=vocabulary.getSemanticProperty(URI+"indexable");
+        portletWindow=vocabulary.getSemanticProperty(URI+"portletWindow");
+        portletXMLConf=vocabulary.getSemanticProperty(URI+"portletXMLConf");
         views=vocabulary.getSemanticProperty(URI+"views");
         portletSubType=vocabulary.getSemanticProperty(URI+"portletSubType");
         portletType=vocabulary.getSemanticProperty(URI+"portletType");
         role=vocabulary.getSemanticProperty(URI+"role");
+        hasChildWebPage=vocabulary.getSemanticProperty(URI+"hasChildWebPage");
         hasPFlowRef=vocabulary.getSemanticProperty(URI+"hasPFlowRef");
         hasParentWebPage=vocabulary.getSemanticProperty(URI+"hasParentWebPage");
-        hasChildWebPage=vocabulary.getSemanticProperty(URI+"hasChildWebPage");
         homePage=vocabulary.getSemanticProperty(URI+"homePage");
         userRepository=vocabulary.getSemanticProperty(URI+"userRepository");
         portlet=vocabulary.getSemanticProperty(URI+"portlet");
@@ -260,5 +267,6 @@ public class SWBVocabulary
         portletClassName=vocabulary.getSemanticProperty(URI+"portletClassName");
         portletMode=vocabulary.getSemanticProperty(URI+"portletMode");
         hasPTSubType=vocabulary.getSemanticProperty(URI+"hasPTSubType");
+        hasPTPortlets=vocabulary.getSemanticProperty(URI+"hasPTPortlets");
     }
 }

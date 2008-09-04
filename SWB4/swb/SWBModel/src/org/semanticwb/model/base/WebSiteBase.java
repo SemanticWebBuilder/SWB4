@@ -26,16 +26,6 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
         getSemanticObject().setDateProperty(vocabulary.created, created);
     }
 
-    public boolean isActive()
-    {
-        return getSemanticObject().getBooleanProperty(vocabulary.active);
-    }
-
-    public void setActive(boolean active)
-    {
-        getSemanticObject().setBooleanProperty(vocabulary.active, active);
-    }
-
     public boolean isDeleted()
     {
         return getSemanticObject().getBooleanProperty(vocabulary.deleted);
@@ -44,6 +34,16 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     public void setDeleted(boolean deleted)
     {
         getSemanticObject().setBooleanProperty(vocabulary.deleted, deleted);
+    }
+
+    public boolean isActive()
+    {
+        return getSemanticObject().getBooleanProperty(vocabulary.active);
+    }
+
+    public void setActive(boolean active)
+    {
+        getSemanticObject().setBooleanProperty(vocabulary.active, active);
     }
 
     public void setModifiedBy(org.semanticwb.model.User user)

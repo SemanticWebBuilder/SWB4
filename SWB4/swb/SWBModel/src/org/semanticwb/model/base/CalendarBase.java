@@ -16,16 +16,6 @@ public class CalendarBase extends GenericObjectBase implements Traceable,Activea
         super(base);
     }
 
-    public Date getCreated()
-    {
-        return getSemanticObject().getDateProperty(vocabulary.created);
-    }
-
-    public void setCreated(Date created)
-    {
-        getSemanticObject().setDateProperty(vocabulary.created, created);
-    }
-
     public boolean isActive()
     {
         return getSemanticObject().getBooleanProperty(vocabulary.active);
@@ -34,6 +24,16 @@ public class CalendarBase extends GenericObjectBase implements Traceable,Activea
     public void setActive(boolean active)
     {
         getSemanticObject().setBooleanProperty(vocabulary.active, active);
+    }
+
+    public Date getCreated()
+    {
+        return getSemanticObject().getDateProperty(vocabulary.created);
+    }
+
+    public void setCreated(Date created)
+    {
+        getSemanticObject().setDateProperty(vocabulary.created, created);
     }
 
     public void setModifiedBy(org.semanticwb.model.User user)
@@ -50,28 +50,6 @@ public class CalendarBase extends GenericObjectBase implements Traceable,Activea
     {
          User ret=null;
          StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.modifiedBy.getRDFProperty());
-         GenericIterator<org.semanticwb.model.User> it=new GenericIterator<org.semanticwb.model.User>(User.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
-    }
-
-    public void setCreator(org.semanticwb.model.User user)
-    {
-        getSemanticObject().addObjectProperty(vocabulary.creator, user.getSemanticObject());
-    }
-
-    public void removeCreator()
-    {
-        getSemanticObject().removeProperty(vocabulary.creator);
-    }
-
-    public User getCreator()
-    {
-         User ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.creator.getRDFProperty());
          GenericIterator<org.semanticwb.model.User> it=new GenericIterator<org.semanticwb.model.User>(User.class, stit);
          if(it.hasNext())
          {
@@ -100,6 +78,38 @@ public class CalendarBase extends GenericObjectBase implements Traceable,Activea
         getSemanticObject().setProperty(vocabulary.title, title, lang);
     }
 
+    public Date getUpdated()
+    {
+        return getSemanticObject().getDateProperty(vocabulary.updated);
+    }
+
+    public void setUpdated(Date updated)
+    {
+        getSemanticObject().setDateProperty(vocabulary.updated, updated);
+    }
+
+    public void setCreator(org.semanticwb.model.User user)
+    {
+        getSemanticObject().addObjectProperty(vocabulary.creator, user.getSemanticObject());
+    }
+
+    public void removeCreator()
+    {
+        getSemanticObject().removeProperty(vocabulary.creator);
+    }
+
+    public User getCreator()
+    {
+         User ret=null;
+         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.creator.getRDFProperty());
+         GenericIterator<org.semanticwb.model.User> it=new GenericIterator<org.semanticwb.model.User>(User.class, stit);
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
+    }
+
     public String getDescription()
     {
         return getSemanticObject().getProperty(vocabulary.description);
@@ -118,16 +128,6 @@ public class CalendarBase extends GenericObjectBase implements Traceable,Activea
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(vocabulary.description, description, lang);
-    }
-
-    public Date getUpdated()
-    {
-        return getSemanticObject().getDateProperty(vocabulary.updated);
-    }
-
-    public void setUpdated(Date updated)
-    {
-        getSemanticObject().setDateProperty(vocabulary.updated, updated);
     }
 
     public WebSite getWebSite()

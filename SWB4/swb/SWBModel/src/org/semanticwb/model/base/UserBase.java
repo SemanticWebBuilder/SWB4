@@ -110,14 +110,17 @@ public class UserBase extends GenericObjectBase implements Roleable,Traceable,Lo
 
     public Language getLanguage()
     {
-         Language ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.language.getRDFProperty());
-         GenericIterator<org.semanticwb.model.Language> it=new GenericIterator<org.semanticwb.model.Language>(Language.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.language);
+         return (Language)vocabulary.Language.newGenericInstance(obj);
+//         
+//         Language ret=null;
+//         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.language.getRDFProperty());
+//         GenericIterator<org.semanticwb.model.Language> it=new GenericIterator<org.semanticwb.model.Language>(Language.class, stit);
+//         if(it.hasNext())
+//         {
+//             ret=it.next();
+//         }
+//         return ret;
     }
 
     public Date getUpdated()
@@ -172,26 +175,6 @@ public class UserBase extends GenericObjectBase implements Roleable,Traceable,Lo
         getSemanticObject().setProperty(vocabulary.usrPassword, usrPassword);
     }
 
-    public String getUsrLastName()
-    {
-        return getSemanticObject().getProperty(vocabulary.usrLastName);
-    }
-
-    public void setUsrLastName(String usrLastName)
-    {
-        getSemanticObject().setProperty(vocabulary.usrLastName, usrLastName);
-    }
-
-    public Date getUsrPasswordChanged()
-    {
-        return getSemanticObject().getDateProperty(vocabulary.usrPasswordChanged);
-    }
-
-    public void setUsrPasswordChanged(Date usrPasswordChanged)
-    {
-        getSemanticObject().setDateProperty(vocabulary.usrPasswordChanged, usrPasswordChanged);
-    }
-
     public GenericIterator<org.semanticwb.model.Role> listRole()
     {
         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasRole.getRDFProperty());
@@ -223,6 +206,26 @@ public class UserBase extends GenericObjectBase implements Roleable,Traceable,Lo
              ret=it.next();
          }
          return ret;
+    }
+
+    public String getUsrLastName()
+    {
+        return getSemanticObject().getProperty(vocabulary.usrLastName);
+    }
+
+    public void setUsrLastName(String usrLastName)
+    {
+        getSemanticObject().setProperty(vocabulary.usrLastName, usrLastName);
+    }
+
+    public Date getUsrPasswordChanged()
+    {
+        return getSemanticObject().getDateProperty(vocabulary.usrPasswordChanged);
+    }
+
+    public void setUsrPasswordChanged(Date usrPasswordChanged)
+    {
+        getSemanticObject().setDateProperty(vocabulary.usrPasswordChanged, usrPasswordChanged);
     }
 
     public int getUsrSecurityQuestion()
