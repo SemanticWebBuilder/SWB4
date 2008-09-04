@@ -48,48 +48,10 @@ public class PortletSubTypeBase extends GenericObjectBase implements Traceable,D
          return ret;
     }
 
-    public void setCreator(org.semanticwb.model.User user)
+    public GenericIterator<org.semanticwb.model.Portlet> listPortlets()
     {
-        getSemanticObject().addObjectProperty(vocabulary.creator, user.getSemanticObject());
-    }
-
-    public void removeCreator()
-    {
-        getSemanticObject().removeProperty(vocabulary.creator);
-    }
-
-    public User getCreator()
-    {
-         User ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.creator.getRDFProperty());
-         GenericIterator<org.semanticwb.model.User> it=new GenericIterator<org.semanticwb.model.User>(User.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
-    }
-
-    public void setPSTType(org.semanticwb.model.PortletType portlettype)
-    {
-        getSemanticObject().addObjectProperty(vocabulary.PSTType, portlettype.getSemanticObject());
-    }
-
-    public void removePSTType()
-    {
-        getSemanticObject().removeProperty(vocabulary.PSTType);
-    }
-
-    public PortletType getPSTType()
-    {
-         PortletType ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.PSTType.getRDFProperty());
-         GenericIterator<org.semanticwb.model.PortletType> it=new GenericIterator<org.semanticwb.model.PortletType>(PortletType.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
+        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, vocabulary.hasPSTPortlets.getInverse().getRDFProperty(), getSemanticObject().getRDFResource());
+        return new GenericIterator<org.semanticwb.model.Portlet>(org.semanticwb.model.Portlet.class, stit,true);
     }
 
     public String getTitle()
@@ -112,6 +74,60 @@ public class PortletSubTypeBase extends GenericObjectBase implements Traceable,D
         getSemanticObject().setProperty(vocabulary.title, title, lang);
     }
 
+    public Date getUpdated()
+    {
+        return getSemanticObject().getDateProperty(vocabulary.updated);
+    }
+
+    public void setUpdated(Date updated)
+    {
+        getSemanticObject().setDateProperty(vocabulary.updated, updated);
+    }
+
+    public void setType(org.semanticwb.model.PortletType portlettype)
+    {
+        getSemanticObject().addObjectProperty(vocabulary.PSTType, portlettype.getSemanticObject());
+    }
+
+    public void removeType()
+    {
+        getSemanticObject().removeProperty(vocabulary.PSTType);
+    }
+
+    public PortletType getType()
+    {
+         PortletType ret=null;
+         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.PSTType.getRDFProperty());
+         GenericIterator<org.semanticwb.model.PortletType> it=new GenericIterator<org.semanticwb.model.PortletType>(PortletType.class, stit);
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
+    }
+
+    public void setCreator(org.semanticwb.model.User user)
+    {
+        getSemanticObject().addObjectProperty(vocabulary.creator, user.getSemanticObject());
+    }
+
+    public void removeCreator()
+    {
+        getSemanticObject().removeProperty(vocabulary.creator);
+    }
+
+    public User getCreator()
+    {
+         User ret=null;
+         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.creator.getRDFProperty());
+         GenericIterator<org.semanticwb.model.User> it=new GenericIterator<org.semanticwb.model.User>(User.class, stit);
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
+    }
+
     public String getDescription()
     {
         return getSemanticObject().getProperty(vocabulary.description);
@@ -130,16 +146,6 @@ public class PortletSubTypeBase extends GenericObjectBase implements Traceable,D
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(vocabulary.description, description, lang);
-    }
-
-    public Date getUpdated()
-    {
-        return getSemanticObject().getDateProperty(vocabulary.updated);
-    }
-
-    public void setUpdated(Date updated)
-    {
-        getSemanticObject().setDateProperty(vocabulary.updated, updated);
     }
 
     public WebSite getWebSite()

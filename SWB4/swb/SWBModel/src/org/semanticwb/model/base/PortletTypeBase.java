@@ -140,7 +140,7 @@ public class PortletTypeBase extends GenericObjectBase implements Traceable,Desc
          return ret;
     }
 
-    public GenericIterator<org.semanticwb.model.PortletSubType> listPTSubType()
+    public GenericIterator<org.semanticwb.model.PortletSubType> listSubType()
     {
         StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, vocabulary.hasPTSubType.getInverse().getRDFProperty(), getSemanticObject().getRDFResource());
         return new GenericIterator<org.semanticwb.model.PortletSubType>(org.semanticwb.model.PortletSubType.class, stit,true);
@@ -164,6 +164,12 @@ public class PortletTypeBase extends GenericObjectBase implements Traceable,Desc
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(vocabulary.description, description, lang);
+    }
+
+    public GenericIterator<org.semanticwb.model.Portlet> listPortlets()
+    {
+        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, vocabulary.hasPTPortlets.getInverse().getRDFProperty(), getSemanticObject().getRDFResource());
+        return new GenericIterator<org.semanticwb.model.Portlet>(org.semanticwb.model.Portlet.class, stit,true);
     }
 
     public WebSite getWebSite()

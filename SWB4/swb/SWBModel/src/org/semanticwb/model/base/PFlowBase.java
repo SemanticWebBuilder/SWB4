@@ -16,6 +16,16 @@ public class PFlowBase extends GenericObjectBase implements Deleteable,Groupable
         super(base);
     }
 
+    public Date getCreated()
+    {
+        return getSemanticObject().getDateProperty(vocabulary.created);
+    }
+
+    public void setCreated(Date created)
+    {
+        getSemanticObject().setDateProperty(vocabulary.created, created);
+    }
+
     public boolean isActive()
     {
         return getSemanticObject().getBooleanProperty(vocabulary.active);
@@ -34,16 +44,6 @@ public class PFlowBase extends GenericObjectBase implements Deleteable,Groupable
     public void setDeleted(boolean deleted)
     {
         getSemanticObject().setBooleanProperty(vocabulary.deleted, deleted);
-    }
-
-    public Date getCreated()
-    {
-        return getSemanticObject().getDateProperty(vocabulary.created);
-    }
-
-    public void setCreated(Date created)
-    {
-        getSemanticObject().setDateProperty(vocabulary.created, created);
     }
 
     public void setModifiedBy(org.semanticwb.model.User user)

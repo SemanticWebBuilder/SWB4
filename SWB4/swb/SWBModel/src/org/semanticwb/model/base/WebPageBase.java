@@ -26,59 +26,6 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
         getSemanticObject().setDateProperty(vocabulary.created, created);
     }
 
-    public boolean isDeleted()
-    {
-        return getSemanticObject().getBooleanProperty(vocabulary.deleted);
-    }
-
-    public void setDeleted(boolean deleted)
-    {
-        getSemanticObject().setBooleanProperty(vocabulary.deleted, deleted);
-    }
-
-    public boolean isActive()
-    {
-        return getSemanticObject().getBooleanProperty(vocabulary.active);
-    }
-
-    public void setActive(boolean active)
-    {
-        getSemanticObject().setBooleanProperty(vocabulary.active, active);
-    }
-
-    public GenericIterator<org.semanticwb.model.RoleRef> listRoleRef()
-    {
-        StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasRoleRef.getRDFProperty());
-        return new GenericIterator<org.semanticwb.model.RoleRef>(org.semanticwb.model.RoleRef.class, stit);
-    }
-
-    public void addRoleRef(org.semanticwb.model.RoleRef roleref)
-    {
-        getSemanticObject().addObjectProperty(vocabulary.hasRoleRef, roleref.getSemanticObject());
-    }
-
-    public void removeAllRoleRef()
-    {
-        getSemanticObject().removeProperty(vocabulary.hasRoleRef);
-    }
-
-    public void removeRoleRef(org.semanticwb.model.RoleRef roleref)
-    {
-        getSemanticObject().removeObjectProperty(vocabulary.hasRoleRef,roleref.getSemanticObject());
-    }
-
-    public RoleRef getRoleRef()
-    {
-         RoleRef ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasRoleRef.getRDFProperty());
-         GenericIterator<org.semanticwb.model.RoleRef> it=new GenericIterator<org.semanticwb.model.RoleRef>(RoleRef.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
-    }
-
     public void setModifiedBy(org.semanticwb.model.User user)
     {
         getSemanticObject().addObjectProperty(vocabulary.modifiedBy, user.getSemanticObject());
@@ -119,6 +66,138 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
     public void setTitle(String title, String lang)
     {
         getSemanticObject().setProperty(vocabulary.title, title, lang);
+    }
+
+    public int getHits()
+    {
+        return getSemanticObject().getIntProperty(vocabulary.hits);
+    }
+
+    public void setHits(int hits)
+    {
+        getSemanticObject().setLongProperty(vocabulary.hits, hits);
+    }
+
+    public Date getUpdated()
+    {
+        return getSemanticObject().getDateProperty(vocabulary.updated);
+    }
+
+    public void setUpdated(Date updated)
+    {
+        getSemanticObject().setDateProperty(vocabulary.updated, updated);
+    }
+
+    public GenericIterator<org.semanticwb.model.Calendar> listCalendar()
+    {
+        StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasCalendar.getRDFProperty());
+        return new GenericIterator<org.semanticwb.model.Calendar>(org.semanticwb.model.Calendar.class, stit);
+    }
+
+    public void addCalendar(org.semanticwb.model.Calendar calendar)
+    {
+        getSemanticObject().addObjectProperty(vocabulary.hasCalendar, calendar.getSemanticObject());
+    }
+
+    public void removeAllCalendar()
+    {
+        getSemanticObject().removeProperty(vocabulary.hasCalendar);
+    }
+
+    public void removeCalendar(org.semanticwb.model.Calendar calendar)
+    {
+        getSemanticObject().removeObjectProperty(vocabulary.hasCalendar,calendar.getSemanticObject());
+    }
+
+    public Calendar getCalendar()
+    {
+         Calendar ret=null;
+         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasCalendar.getRDFProperty());
+         GenericIterator<org.semanticwb.model.Calendar> it=new GenericIterator<org.semanticwb.model.Calendar>(Calendar.class, stit);
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
+    }
+
+    public boolean isHidden()
+    {
+        return getSemanticObject().getBooleanProperty(vocabulary.hidden);
+    }
+
+    public void setHidden(boolean hidden)
+    {
+        getSemanticObject().setBooleanProperty(vocabulary.hidden, hidden);
+    }
+
+    public boolean isIndexable()
+    {
+        return getSemanticObject().getBooleanProperty(vocabulary.indexable);
+    }
+
+    public void setIndexable(boolean indexable)
+    {
+        getSemanticObject().setBooleanProperty(vocabulary.indexable, indexable);
+    }
+
+    public GenericIterator<org.semanticwb.model.WebPage> listChildWebPage()
+    {
+        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, vocabulary.hasChildWebPage.getInverse().getRDFProperty(), getSemanticObject().getRDFResource());
+        return new GenericIterator<org.semanticwb.model.WebPage>(org.semanticwb.model.WebPage.class, stit,true);
+    }
+
+    public GenericIterator<org.semanticwb.model.RoleRef> listRoleRef()
+    {
+        StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasRoleRef.getRDFProperty());
+        return new GenericIterator<org.semanticwb.model.RoleRef>(org.semanticwb.model.RoleRef.class, stit);
+    }
+
+    public void addRoleRef(org.semanticwb.model.RoleRef roleref)
+    {
+        getSemanticObject().addObjectProperty(vocabulary.hasRoleRef, roleref.getSemanticObject());
+    }
+
+    public void removeAllRoleRef()
+    {
+        getSemanticObject().removeProperty(vocabulary.hasRoleRef);
+    }
+
+    public void removeRoleRef(org.semanticwb.model.RoleRef roleref)
+    {
+        getSemanticObject().removeObjectProperty(vocabulary.hasRoleRef,roleref.getSemanticObject());
+    }
+
+    public RoleRef getRoleRef()
+    {
+         RoleRef ret=null;
+         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasRoleRef.getRDFProperty());
+         GenericIterator<org.semanticwb.model.RoleRef> it=new GenericIterator<org.semanticwb.model.RoleRef>(RoleRef.class, stit);
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
+    }
+
+    public boolean isActive()
+    {
+        return getSemanticObject().getBooleanProperty(vocabulary.active);
+    }
+
+    public void setActive(boolean active)
+    {
+        getSemanticObject().setBooleanProperty(vocabulary.active, active);
+    }
+
+    public boolean isDeleted()
+    {
+        return getSemanticObject().getBooleanProperty(vocabulary.deleted);
+    }
+
+    public void setDeleted(boolean deleted)
+    {
+        getSemanticObject().setBooleanProperty(vocabulary.deleted, deleted);
     }
 
     public int getViews()
@@ -162,26 +241,6 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
              ret=it.next();
          }
          return ret;
-    }
-
-    public int getHits()
-    {
-        return getSemanticObject().getIntProperty(vocabulary.hits);
-    }
-
-    public void setHits(int hits)
-    {
-        getSemanticObject().setLongProperty(vocabulary.hits, hits);
-    }
-
-    public Date getUpdated()
-    {
-        return getSemanticObject().getDateProperty(vocabulary.updated);
-    }
-
-    public void setUpdated(Date updated)
-    {
-        getSemanticObject().setDateProperty(vocabulary.updated, updated);
     }
 
     public GenericIterator<org.semanticwb.model.TemplateRef> listTemplateRef()
@@ -250,6 +309,28 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
          return ret;
     }
 
+    public void setCreator(org.semanticwb.model.User user)
+    {
+        getSemanticObject().addObjectProperty(vocabulary.creator, user.getSemanticObject());
+    }
+
+    public void removeCreator()
+    {
+        getSemanticObject().removeProperty(vocabulary.creator);
+    }
+
+    public User getCreator()
+    {
+         User ret=null;
+         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.creator.getRDFProperty());
+         GenericIterator<org.semanticwb.model.User> it=new GenericIterator<org.semanticwb.model.User>(User.class, stit);
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
+    }
+
     public GenericIterator<org.semanticwb.model.RuleRef> listRuleRef()
     {
         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasRuleRef.getRDFProperty());
@@ -276,61 +357,6 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
          RuleRef ret=null;
          StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasRuleRef.getRDFProperty());
          GenericIterator<org.semanticwb.model.RuleRef> it=new GenericIterator<org.semanticwb.model.RuleRef>(RuleRef.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
-    }
-
-    public void setCreator(org.semanticwb.model.User user)
-    {
-        getSemanticObject().addObjectProperty(vocabulary.creator, user.getSemanticObject());
-    }
-
-    public void removeCreator()
-    {
-        getSemanticObject().removeProperty(vocabulary.creator);
-    }
-
-    public User getCreator()
-    {
-         User ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.creator.getRDFProperty());
-         GenericIterator<org.semanticwb.model.User> it=new GenericIterator<org.semanticwb.model.User>(User.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
-    }
-
-    public GenericIterator<org.semanticwb.model.Calendar> listCalendar()
-    {
-        StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasCalendar.getRDFProperty());
-        return new GenericIterator<org.semanticwb.model.Calendar>(org.semanticwb.model.Calendar.class, stit);
-    }
-
-    public void addCalendar(org.semanticwb.model.Calendar calendar)
-    {
-        getSemanticObject().addObjectProperty(vocabulary.hasCalendar, calendar.getSemanticObject());
-    }
-
-    public void removeAllCalendar()
-    {
-        getSemanticObject().removeProperty(vocabulary.hasCalendar);
-    }
-
-    public void removeCalendar(org.semanticwb.model.Calendar calendar)
-    {
-        getSemanticObject().removeObjectProperty(vocabulary.hasCalendar,calendar.getSemanticObject());
-    }
-
-    public Calendar getCalendar()
-    {
-         Calendar ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasCalendar.getRDFProperty());
-         GenericIterator<org.semanticwb.model.Calendar> it=new GenericIterator<org.semanticwb.model.Calendar>(Calendar.class, stit);
          if(it.hasNext())
          {
              ret=it.next();
@@ -371,26 +397,6 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
          return ret;
     }
 
-    public boolean isHidden()
-    {
-        return getSemanticObject().getBooleanProperty(vocabulary.hidden);
-    }
-
-    public void setHidden(boolean hidden)
-    {
-        getSemanticObject().setBooleanProperty(vocabulary.hidden, hidden);
-    }
-
-    public boolean isIndexable()
-    {
-        return getSemanticObject().getBooleanProperty(vocabulary.indexable);
-    }
-
-    public void setIndexable(boolean indexable)
-    {
-        getSemanticObject().setBooleanProperty(vocabulary.indexable, indexable);
-    }
-
     public String getDescription()
     {
         return getSemanticObject().getProperty(vocabulary.description);
@@ -409,12 +415,6 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(vocabulary.description, description, lang);
-    }
-
-    public GenericIterator<org.semanticwb.model.WebPage> listChildWebPage()
-    {
-        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, vocabulary.hasChildWebPage.getInverse().getRDFProperty(), getSemanticObject().getRDFResource());
-        return new GenericIterator<org.semanticwb.model.WebPage>(org.semanticwb.model.WebPage.class, stit,true);
     }
 
     public WebSite getWebSite()

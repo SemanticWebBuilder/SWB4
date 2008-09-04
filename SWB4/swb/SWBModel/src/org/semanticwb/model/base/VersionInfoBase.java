@@ -16,28 +16,6 @@ public class VersionInfoBase extends GenericObjectBase implements Valueable
         super(base);
     }
 
-    public void setNextVersion(org.semanticwb.model.VersionInfo versioninfo)
-    {
-        getSemanticObject().addObjectProperty(vocabulary.nextVersion, versioninfo.getSemanticObject());
-    }
-
-    public void removeNextVersion()
-    {
-        getSemanticObject().removeProperty(vocabulary.nextVersion);
-    }
-
-    public VersionInfo getNextVersion()
-    {
-         VersionInfo ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.nextVersion.getRDFProperty());
-         GenericIterator<org.semanticwb.model.VersionInfo> it=new GenericIterator<org.semanticwb.model.VersionInfo>(VersionInfo.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
-    }
-
     public String getValue()
     {
         return getSemanticObject().getProperty(vocabulary.value);
@@ -70,6 +48,16 @@ public class VersionInfoBase extends GenericObjectBase implements Valueable
          return ret;
     }
 
+    public String getVersionComment()
+    {
+        return getSemanticObject().getProperty(vocabulary.versionComment);
+    }
+
+    public void setVersionComment(String versionComment)
+    {
+        getSemanticObject().setProperty(vocabulary.versionComment, versionComment);
+    }
+
     public String getVersionFile()
     {
         return getSemanticObject().getProperty(vocabulary.versionFile);
@@ -80,14 +68,26 @@ public class VersionInfoBase extends GenericObjectBase implements Valueable
         getSemanticObject().setProperty(vocabulary.versionFile, versionFile);
     }
 
-    public String getVersionComment()
+    public void setNextVersion(org.semanticwb.model.VersionInfo versioninfo)
     {
-        return getSemanticObject().getProperty(vocabulary.versionComment);
+        getSemanticObject().addObjectProperty(vocabulary.nextVersion, versioninfo.getSemanticObject());
     }
 
-    public void setVersionComment(String versionComment)
+    public void removeNextVersion()
     {
-        getSemanticObject().setProperty(vocabulary.versionComment, versionComment);
+        getSemanticObject().removeProperty(vocabulary.nextVersion);
+    }
+
+    public VersionInfo getNextVersion()
+    {
+         VersionInfo ret=null;
+         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.nextVersion.getRDFProperty());
+         GenericIterator<org.semanticwb.model.VersionInfo> it=new GenericIterator<org.semanticwb.model.VersionInfo>(VersionInfo.class, stit);
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
     }
 
     public Date getVersionCreated()

@@ -26,6 +26,16 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
         getSemanticObject().setDateProperty(vocabulary.created, created);
     }
 
+    public String getPortletXML()
+    {
+        return getSemanticObject().getProperty(vocabulary.portletXML);
+    }
+
+    public void setPortletXML(String portletXML)
+    {
+        getSemanticObject().setProperty(vocabulary.portletXML, portletXML);
+    }
+
     public void setModifiedBy(org.semanticwb.model.User user)
     {
         getSemanticObject().addObjectProperty(vocabulary.modifiedBy, user.getSemanticObject());
@@ -165,6 +175,16 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
          return ret;
     }
 
+    public boolean isIndexable()
+    {
+        return getSemanticObject().getBooleanProperty(vocabulary.indexable);
+    }
+
+    public void setIndexable(boolean indexable)
+    {
+        getSemanticObject().setBooleanProperty(vocabulary.indexable, indexable);
+    }
+
     public boolean isPortletWindow()
     {
         return getSemanticObject().getBooleanProperty(vocabulary.portletWindow);
@@ -175,14 +195,14 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
         getSemanticObject().setBooleanProperty(vocabulary.portletWindow, portletWindow);
     }
 
-    public boolean isIndexable()
+    public String getPortletXMLConf()
     {
-        return getSemanticObject().getBooleanProperty(vocabulary.indexable);
+        return getSemanticObject().getProperty(vocabulary.portletXMLConf);
     }
 
-    public void setIndexable(boolean indexable)
+    public void setPortletXMLConf(String portletXMLConf)
     {
-        getSemanticObject().setBooleanProperty(vocabulary.indexable, indexable);
+        getSemanticObject().setProperty(vocabulary.portletXMLConf, portletXMLConf);
     }
 
     public int getPriority()
@@ -280,28 +300,6 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
          return ret;
     }
 
-    public void setCreator(org.semanticwb.model.User user)
-    {
-        getSemanticObject().addObjectProperty(vocabulary.creator, user.getSemanticObject());
-    }
-
-    public void removeCreator()
-    {
-        getSemanticObject().removeProperty(vocabulary.creator);
-    }
-
-    public User getCreator()
-    {
-         User ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.creator.getRDFProperty());
-         GenericIterator<org.semanticwb.model.User> it=new GenericIterator<org.semanticwb.model.User>(User.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
-    }
-
     public GenericIterator<org.semanticwb.model.RuleRef> listRuleRef()
     {
         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasRuleRef.getRDFProperty());
@@ -328,6 +326,28 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
          RuleRef ret=null;
          StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasRuleRef.getRDFProperty());
          GenericIterator<org.semanticwb.model.RuleRef> it=new GenericIterator<org.semanticwb.model.RuleRef>(RuleRef.class, stit);
+         if(it.hasNext())
+         {
+             ret=it.next();
+         }
+         return ret;
+    }
+
+    public void setCreator(org.semanticwb.model.User user)
+    {
+        getSemanticObject().addObjectProperty(vocabulary.creator, user.getSemanticObject());
+    }
+
+    public void removeCreator()
+    {
+        getSemanticObject().removeProperty(vocabulary.creator);
+    }
+
+    public User getCreator()
+    {
+         User ret=null;
+         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.creator.getRDFProperty());
+         GenericIterator<org.semanticwb.model.User> it=new GenericIterator<org.semanticwb.model.User>(User.class, stit);
          if(it.hasNext())
          {
              ret=it.next();
