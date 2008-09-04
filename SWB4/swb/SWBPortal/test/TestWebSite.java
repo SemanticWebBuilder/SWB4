@@ -55,55 +55,55 @@ public class TestWebSite {
     @Test
     public void Test()
     {
-//            WebSite site=SWBContext.createWebSite("sep", "http://www.sep.gob.mx");
-//            site.setTitle("Sep");
-//            site.setDescription("Sep WebSite");
-//            site.setActive(true);
-//            
-//            //Crear lenguajes por defecto
-//            Language lang=site.createLanguage("es");
-//            lang.setTitle("Español", "es");
-//            lang.setTitle("Spanish", "en");
-//            lang=site.createLanguage("en");
-//            lang.setTitle("Ingles", "es");
-//            lang.setTitle("English", "en");
-//            
-//            //Create HomePage
-//            WebPage home=site.createWebPage("home");
-//            site.setHomePage(home);
-//            home.setActive(true);
-
-            WebSite site=SWBContext.getWebSite("sep");
-            WebPage home=site.getHomePage();
+            WebSite site=SWBContext.createWebSite("sep", "http://www.sep.gob.mx");
+            site.setTitle("Sep");
+            site.setDescription("Sep WebSite");
+            site.setActive(true);
+            
+            //Crear lenguajes por defecto
+            Language lang=site.createLanguage("es");
+            lang.setTitle("Español", "es");
+            lang.setTitle("Spanish", "en");
+            lang=site.createLanguage("en");
+            lang.setTitle("Ingles", "es");
+            lang.setTitle("English", "en");
+            
+            //Create HomePage
+            WebPage home=site.createWebPage("home");
+            site.setHomePage(home);
+            home.setActive(true);
             home.setTitle("Pagina Principal");
+
+//            WebSite site=SWBContext.getWebSite("sep");
+//            WebPage home=site.getHomePage();
             
             //Set User Repository
-//            UserRepository urep=SWBContext.getDefaultRepository();
-//            site.setUserRepository(urep);
+            UserRepository urep=SWBContext.getDefaultRepository();
+            site.setUserRepository(urep);
 
             //Create DNS
-//            WebSite global=SWBContext.getGlobalWebSite();
-//            Dns dns=global.getDns("localhost");
-//            dns.setWebPage(home);
+            WebSite global=SWBContext.getGlobalWebSite();
+            Dns dns=global.getDns("localhost");
+            dns.setWebPage(home);
 
-//            Template tpl=site.createTemplate();
-//            tpl.setActive(true);
-//            tpl.setTitle("Platilla1");
+            Template tpl=site.createTemplate();
+            tpl.setActive(true);
+            tpl.setTitle("Platilla1");
             
 //            Template tpl=site.getTemplate("1");
-//            
-//            VersionInfo version=site.createVersionInfo();
-//            version.setVersionNumber(1);
-//            version.setVersionFile("template.html");
-//            tpl.setActualVersion(version);
-//            tpl.setLastVersion(version);
             
-//            TemplateRef tplref=site.createTemplateRef();
-//            tplref.setTemplate(tpl);
-//            tplref.setActive(true);
-//            tplref.setPriority(3);
-//            
-//            home.addTemplateRef(tplref);
+            VersionInfo version=site.createVersionInfo();
+            version.setVersionNumber(1);
+            version.setVersionFile("template.html");
+            tpl.setActualVersion(version);
+            tpl.setLastVersion(version);
+            
+            TemplateRef tplref=site.createTemplateRef();
+            tplref.setTemplate(tpl);
+            tplref.setActive(true);
+            tplref.setPriority(3);
+            
+            home.addTemplateRef(tplref);
 
     }
 
