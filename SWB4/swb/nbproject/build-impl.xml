@@ -43,6 +43,36 @@
     </target>
     <target depends="-pre-init,-init-private,-init-user,-init-project,-init-macrodef-property" if="dist.ear.dir" name="-do-ear-init"/>
     <target depends="-pre-init,-init-private,-init-user,-init-project,-init-macrodef-property" name="-do-init">
+        <webproject1:property name="platform.home" value="platforms.${platform.active}.home"/>
+        <webproject1:property name="platform.bootcp" value="platforms.${platform.active}.bootclasspath"/>
+        <webproject1:property name="platform.compiler" value="platforms.${platform.active}.compile"/>
+        <webproject1:property name="platform.javac.tmp" value="platforms.${platform.active}.javac"/>
+        <condition property="platform.javac" value="${platform.home}/bin/javac">
+            <equals arg1="${platform.javac.tmp}" arg2="$${platforms.${platform.active}.javac}"/>
+        </condition>
+        <property name="platform.javac" value="${platform.javac.tmp}"/>
+        <webproject1:property name="platform.java.tmp" value="platforms.${platform.active}.java"/>
+        <condition property="platform.java" value="${platform.home}/bin/java">
+            <equals arg1="${platform.java.tmp}" arg2="$${platforms.${platform.active}.java}"/>
+        </condition>
+        <property name="platform.java" value="${platform.java.tmp}"/>
+        <webproject1:property name="platform.javadoc.tmp" value="platforms.${platform.active}.javadoc"/>
+        <condition property="platform.javadoc" value="${platform.home}/bin/javadoc">
+            <equals arg1="${platform.javadoc.tmp}" arg2="$${platforms.${platform.active}.javadoc}"/>
+        </condition>
+        <property name="platform.javadoc" value="${platform.javadoc.tmp}"/>
+        <fail unless="platform.home">Must set platform.home</fail>
+        <fail unless="platform.bootcp">Must set platform.bootcp</fail>
+        <fail unless="platform.java">Must set platform.java</fail>
+        <fail unless="platform.javac">Must set platform.javac</fail>
+        <fail if="platform.invalid">
+ The J2SE Platform is not correctly set up.
+ Your active platform is: ${platform.active}, but the corresponding property "platforms.${platform.active}.home" is not found in the project's properties files. 
+ Either open the project in the IDE and setup the Platform with the same name or add it manually.
+ For example like this:
+     ant -Duser.properties.file=&lt;path_to_property_file&gt; jar (where you put the property "platforms.${platform.active}.home" in a .properties file)
+  or ant -Dplatforms.${platform.active}.home=&lt;path_to_JDK_home&gt; jar (where no properties file is used) 
+  </fail>
         <condition property="have.tests">
             <or>
                 <available file="${test.src.dir}"/>
@@ -211,7 +241,7 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
             <attribute default="${javac.debug}" name="debug"/>
             <element name="customize" optional="true"/>
             <sequential>
-                <javac debug="@{debug}" deprecation="${javac.deprecation}" destdir="@{destdir}" encoding="${source.encoding}" includeantruntime="false" source="${javac.source}" srcdir="@{srcdir}" target="${javac.target}">
+                <javac debug="@{debug}" deprecation="${javac.deprecation}" destdir="@{destdir}" encoding="${source.encoding}" executable="${platform.javac}" fork="yes" includeantruntime="false" source="${javac.source}" srcdir="@{srcdir}" target="${javac.target}" tempdir="${java.io.tmpdir}">
                     <classpath>
                         <path path="@{classpath}"/>
                     </classpath>
@@ -225,7 +255,7 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
         <macrodef name="junit" uri="http://www.netbeans.org/ns/web-project/2">
             <attribute default="**/*Test.java" name="includes"/>
             <sequential>
-                <junit dir="${basedir}" errorproperty="tests.failed" failureproperty="tests.failed" fork="true" showoutput="true">
+                <junit dir="${basedir}" errorproperty="tests.failed" failureproperty="tests.failed" fork="true" jvm="${platform.java}" showoutput="true">
                     <batchtest todir="${build.test.results.dir}">
                         <fileset dir="${test.src.dir}" includes="@{includes}"/>
                     </batchtest>
@@ -247,7 +277,7 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
             <attribute default="${main.class}" name="classname"/>
             <element name="customize" optional="true"/>
             <sequential>
-                <java classname="@{classname}" fork="true">
+                <java classname="@{classname}" fork="true" jvm="${platform.java}">
                     <jvmarg line="${runmain.jvmargs}"/>
                     <classpath>
                         <path path="${debug.classpath}:${j2ee.platform.classpath}"/>
@@ -278,6 +308,9 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
                     <classpath>
                         <path path="@{classpath}"/>
                     </classpath>
+                    <bootclasspath>
+                        <path path="${platform.bootcp}"/>
+                    </bootclasspath>
                 </nbjpdastart>
             </sequential>
         </macrodef>
@@ -298,7 +331,9 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
         </macrodef>
     </target>
     <target name="-init-debug-args">
-        <property name="version-output" value="java version &quot;${ant.java.version}"/>
+        <exec executable="${platform.java}" outputproperty="version-output">
+            <arg value="-version"/>
+        </exec>
         <condition property="have-jdk-older-than-1.4">
             <or>
                 <contains string="${version-output}" substring="java version &quot;1.0"/>
@@ -318,7 +353,7 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
             <attribute default="${application.args.param}" name="args"/>
             <element name="customize" optional="true"/>
             <sequential>
-                <java classname="@{classname}" fork="true">
+                <java classname="@{classname}" fork="true" jvm="${platform.java}">
                     <jvmarg line="${debug-args-line}"/>
                     <jvmarg value="-Xrunjdwp:transport=dt_socket,address=${jpda.address}"/>
                     <jvmarg line="${runmain.jvmargs}"/>
@@ -592,6 +627,12 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
         <copy-ear-war file="${file.reference.xercesImpl.jar}" propname="included.lib.file.reference.xercesImpl.jar.X"/>
         <basename file="${file.reference.xml-apis.jar}" property="included.lib.file.reference.xml-apis.jar"/>
         <copy-ear-war file="${file.reference.xml-apis.jar}" propname="included.lib.file.reference.xml-apis.jar.X"/>
+        <basename file="${reference.SWBPortal.jar}" property="included.lib.reference.SWBPortal.jar"/>
+        <copy-ear-war file="${reference.SWBPortal.jar}" propname="included.lib.reference.SWBPortal.jar.X"/>
+        <basename file="${file.reference.commons-fileupload-1.2.1.jar}" property="included.lib.file.reference.commons-fileupload-1.2.1.jar"/>
+        <copy-ear-war file="${file.reference.commons-fileupload-1.2.1.jar}" propname="included.lib.file.reference.commons-fileupload-1.2.1.jar.X"/>
+        <basename file="${file.reference.arthurdo.jar}" property="included.lib.file.reference.arthurdo.jar"/>
+        <copy-ear-war file="${file.reference.arthurdo.jar}" propname="included.lib.file.reference.arthurdo.jar.X"/>
         <basename file="${libs.restapi.classpath}" property="included.lib.libs.restapi.classpath"/>
         <copy-ear-war file="${libs.restapi.classpath}" propname="included.lib.libs.restapi.classpath.X"/>
         <basename file="${libs.restlib.classpath.libfile.15}" property="included.lib.libs.restlib.classpath.15"/>
@@ -624,13 +665,9 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
         <copy-ear-war file="${libs.restlib.classpath.libfile.3}" propname="included.lib.libs.restlib.classpath.3.X"/>
         <copy-ear-war file="${libs.restlib.classpath.libfile.2}" propname="included.lib.libs.restlib.classpath.2.X"/>
         <copy-ear-war file="${libs.restlib.classpath.libfile.1}" propname="included.lib.libs.restlib.classpath.1.X"/>
-        <basename file="${reference.SWBPortal.jar}" property="included.lib.reference.SWBPortal.jar"/>
-        <copy-ear-war file="${reference.SWBPortal.jar}" propname="included.lib.reference.SWBPortal.jar.X"/>
-        <basename file="${file.reference.commons-fileupload-1.2.1.jar}" property="included.lib.file.reference.commons-fileupload-1.2.1.jar"/>
-        <copy-ear-war file="${file.reference.commons-fileupload-1.2.1.jar}" propname="included.lib.file.reference.commons-fileupload-1.2.1.jar.X"/>
         <mkdir dir="${build.web.dir}/META-INF"/>
         <manifest file="${build.web.dir}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Class-Path" value="${included.lib.reference.SWBBase.jar} ${included.lib.file.reference.commons-logging.jar} ${included.lib.file.reference.log4j-1.2.15.jar} ${included.lib.file.reference.spring.jar} ${included.lib.reference.SWBPlatform.jar} ${included.lib.file.reference.classes12.jar} ${included.lib.file.reference.hsqldb.jar} ${included.lib.file.reference.informix.jar} ${included.lib.file.reference.mysql-connector-java-5.0.3-bin.jar} ${included.lib.file.reference.arq.jar} ${included.lib.file.reference.iri.jar} ${included.lib.file.reference.jena.jar} ${included.lib.file.reference.lucene-core-2.2.0.jar} ${included.lib.file.reference.xercesImpl.jar} ${included.lib.file.reference.xml-apis.jar} ${included.lib.reference.SWBTripleStore.jar} ${included.lib.reference.SWBAdmin.jar} ${included.lib.file.reference.icu4j_3_4.jar} ${included.lib.file.reference.hibernate3.jar} ${included.lib.file.reference.arthurdo.jar} ${included.lib.file.reference.chiba-1.4.0.jar} ${included.lib.file.reference.chiba-web-2.2.0.jar} ${included.lib.file.reference.saxon-8.7.jar} ${included.lib.file.reference.saxon-dom-8.7.jar} ${included.lib.file.reference.isorelax.jar} ${included.lib.file.reference.msv.jar} ${included.lib.reference.SWBModel.jar} ${included.lib.file.reference.commons-email-1.1.jar} ${included.lib.file.reference.mail-1.3.3.jar} ${included.lib.file.reference.activation-1.0.2.jar} ${included.lib.file.reference.serializer.jar} ${included.lib.file.reference.xalan.jar} ${included.lib.file.reference.xercesImpl.jar} ${included.lib.file.reference.xml-apis.jar} ${included.lib.libs.restapi.classpath} ${included.lib.libs.restlib.classpath.1.X} ${included.lib.libs.restlib.classpath.2.X} ${included.lib.libs.restlib.classpath.3.X} ${included.lib.libs.restlib.classpath.4.X} ${included.lib.libs.restlib.classpath.5.X} ${included.lib.libs.restlib.classpath.6.X} ${included.lib.libs.restlib.classpath.7.X} ${included.lib.libs.restlib.classpath.8.X} ${included.lib.libs.restlib.classpath.9.X} ${included.lib.libs.restlib.classpath.10.X} ${included.lib.libs.restlib.classpath.11.X} ${included.lib.libs.restlib.classpath.12.X} ${included.lib.libs.restlib.classpath.13.X} ${included.lib.libs.restlib.classpath.14.X} ${included.lib.libs.restlib.classpath.15.X} ${included.lib.reference.SWBPortal.jar} ${included.lib.file.reference.commons-fileupload-1.2.1.jar} "/>
+            <attribute name="Class-Path" value="${included.lib.reference.SWBBase.jar} ${included.lib.file.reference.commons-logging.jar} ${included.lib.file.reference.log4j-1.2.15.jar} ${included.lib.file.reference.spring.jar} ${included.lib.reference.SWBPlatform.jar} ${included.lib.file.reference.classes12.jar} ${included.lib.file.reference.hsqldb.jar} ${included.lib.file.reference.informix.jar} ${included.lib.file.reference.mysql-connector-java-5.0.3-bin.jar} ${included.lib.file.reference.arq.jar} ${included.lib.file.reference.iri.jar} ${included.lib.file.reference.jena.jar} ${included.lib.file.reference.lucene-core-2.2.0.jar} ${included.lib.file.reference.xercesImpl.jar} ${included.lib.file.reference.xml-apis.jar} ${included.lib.reference.SWBTripleStore.jar} ${included.lib.reference.SWBAdmin.jar} ${included.lib.file.reference.icu4j_3_4.jar} ${included.lib.file.reference.hibernate3.jar} ${included.lib.file.reference.arthurdo.jar} ${included.lib.file.reference.chiba-1.4.0.jar} ${included.lib.file.reference.chiba-web-2.2.0.jar} ${included.lib.file.reference.saxon-8.7.jar} ${included.lib.file.reference.saxon-dom-8.7.jar} ${included.lib.file.reference.isorelax.jar} ${included.lib.file.reference.msv.jar} ${included.lib.reference.SWBModel.jar} ${included.lib.file.reference.commons-email-1.1.jar} ${included.lib.file.reference.mail-1.3.3.jar} ${included.lib.file.reference.activation-1.0.2.jar} ${included.lib.file.reference.serializer.jar} ${included.lib.file.reference.xalan.jar} ${included.lib.file.reference.xercesImpl.jar} ${included.lib.file.reference.xml-apis.jar} ${included.lib.reference.SWBPortal.jar} ${included.lib.file.reference.commons-fileupload-1.2.1.jar} ${included.lib.file.reference.arthurdo.jar} ${included.lib.libs.restapi.classpath} ${included.lib.libs.restlib.classpath.1.X} ${included.lib.libs.restlib.classpath.2.X} ${included.lib.libs.restlib.classpath.3.X} ${included.lib.libs.restlib.classpath.4.X} ${included.lib.libs.restlib.classpath.5.X} ${included.lib.libs.restlib.classpath.6.X} ${included.lib.libs.restlib.classpath.7.X} ${included.lib.libs.restlib.classpath.8.X} ${included.lib.libs.restlib.classpath.9.X} ${included.lib.libs.restlib.classpath.10.X} ${included.lib.libs.restlib.classpath.11.X} ${included.lib.libs.restlib.classpath.12.X} ${included.lib.libs.restlib.classpath.13.X} ${included.lib.libs.restlib.classpath.14.X} ${included.lib.libs.restlib.classpath.15.X} "/>
         </manifest>
         <delete dir="${dist.ear.dir}/temp"/>
     </target>
@@ -669,6 +706,9 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
         <copy file="${file.reference.xalan.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copy file="${file.reference.xercesImpl.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copy file="${file.reference.xml-apis.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copy file="${reference.SWBPortal.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copy file="${file.reference.commons-fileupload-1.2.1.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copy file="${file.reference.arthurdo.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copy file="${libs.restapi.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copy file="${libs.restlib.classpath.libfile.15}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copy file="${libs.restlib.classpath.libfile.14}" todir="${build.web.dir}/WEB-INF/lib"/>
@@ -685,8 +725,6 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
         <copy file="${libs.restlib.classpath.libfile.3}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copy file="${libs.restlib.classpath.libfile.2}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copy file="${libs.restlib.classpath.libfile.1}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${reference.SWBPortal.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.commons-fileupload-1.2.1.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
     </target>
     <target depends="init,compile,compile-jsps,-pre-dist,library-inclusion-in-manifest" name="do-ear-dist">
         <dirname file="${dist.ear.war}" property="dist.jar.dir"/>
@@ -825,6 +863,9 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
             <sourcepath>
                 <path path="${web.docbase.dir}:${ws.web.docbase.dirs}"/>
             </sourcepath>
+            <bootclasspath>
+                <path path="${platform.bootcp}"/>
+            </bootclasspath>
         </nbjpdaconnect>
     </target>
     <target if="do.display.browser.debug" name="debug-display-browser">
@@ -855,7 +896,7 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
             -->
     <target depends="init" name="javadoc-build">
         <mkdir dir="${dist.javadoc.dir}"/>
-        <javadoc additionalparam="${javadoc.additionalparam}" author="${javadoc.author}" charset="UTF-8" destdir="${dist.javadoc.dir}" docencoding="UTF-8" encoding="${javadoc.encoding.used}" failonerror="true" noindex="${javadoc.noindex}" nonavbar="${javadoc.nonavbar}" notree="${javadoc.notree}" private="${javadoc.private}" source="${javac.source}" splitindex="${javadoc.splitindex}" use="${javadoc.use}" useexternalfile="true" version="${javadoc.version}" windowtitle="${javadoc.windowtitle}">
+        <javadoc additionalparam="${javadoc.additionalparam}" author="${javadoc.author}" charset="UTF-8" destdir="${dist.javadoc.dir}" docencoding="UTF-8" encoding="${javadoc.encoding.used}" executable="${platform.javadoc}" failonerror="true" noindex="${javadoc.noindex}" nonavbar="${javadoc.nonavbar}" notree="${javadoc.notree}" private="${javadoc.private}" source="${javac.source}" splitindex="${javadoc.splitindex}" use="${javadoc.use}" useexternalfile="true" version="${javadoc.version}" windowtitle="${javadoc.windowtitle}">
             <classpath>
                 <path path="${javac.classpath}:${j2ee.platform.classpath}"/>
             </classpath>
