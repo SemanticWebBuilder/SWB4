@@ -67,7 +67,7 @@ public class DistributorParams
     private ArrayList ordresparams=null;
     private HashMap adicparams=null;    
     private HashMap accResource=null;
-    private long accResourceID=0;
+    private String accResourceID=null;
     private int accType=0;
     private String queryString=null;
     private HashMap internalQuery=null;
@@ -156,29 +156,29 @@ public class DistributorParams
                     
                     try
                     {
-                        Long v=new Long(val);
+                        //Long v=new Long(val);
 
                         aux=new HashMap();
                         aux.put(URLP_NUMBERID, val);
-                        ordresparams.add(v);
-                        resparams.put(v,aux);
+                        ordresparams.add(val);
+                        resparams.put(val,aux);
 
                         adicaux=new ArrayList();
-                        adicparams.put(v,adicaux);  
+                        adicparams.put(val,adicaux);  
                         
                         intqaux=new ArrayList();
-                        internalQuery.put(v,intqaux);  
+                        internalQuery.put(val,intqaux);  
 
                         if(tok.equals(URLP_RENDERID))
                         {
                             accResource=aux;
                             accType=ACC_TYPE_RENDER;
-                            accResourceID=v.longValue();
+                            accResourceID=val;
                         }else if(tok.equals(URLP_ACTIONID))
                         {
                             accResource=aux;
                             accType=ACC_TYPE_ACTION;
-                            accResourceID=v.longValue();
+                            accResourceID=val;
                         }
                     }catch(NumberFormatException ex){log.error("Malformed URL:"+request.getRequestURI());}
                 }
@@ -238,10 +238,10 @@ public class DistributorParams
     /**
      * regresa un congunto de parametros relacionados con el id de un recurso.
      */
-    public HashMap getResourceURI(long resid)
+    public HashMap getResourceURI(String resid)
     {
         if(resparams==null)return null;
-        return (HashMap)resparams.get(new Long(resid));
+        return (HashMap)resparams.get(resid);
     }
     
     /**
@@ -264,9 +264,9 @@ public class DistributorParams
     /*
      * regresa el valor de un parametro de un recurso.
      */
-    public String getResourceURIValue(long resid, String param)
+    public String getResourceURIValue(String resid, String param)
     {
-        HashMap map=(HashMap)resparams.get(new Long(resid));
+        HashMap map=(HashMap)resparams.get(resid);
         if(map!=null)
         {
             return (String)map.get(param);
@@ -443,9 +443,9 @@ public class DistributorParams
     /**
      * Regresa parametros adicionales o extendidos, no reconocidos como parametros del recurso.
      */
-    public ArrayList getExtURIResourceParams(long res)
+    public ArrayList getExtURIResourceParams(String res)
     {
-        return (ArrayList)adicparams.get(new Long(res));
+        return (ArrayList)adicparams.get(res);
     }    
     
     /** Getter for property accResource.
@@ -457,7 +457,7 @@ public class DistributorParams
         return accResource;
     }    
     
-    public long getAccResourceID()
+    public String getAccResourceID()
     {
         return accResourceID;
     }
@@ -480,16 +480,16 @@ public class DistributorParams
      * ejemplo:   /wb/Test/Test_testsuite/_rid/88/_mod/help/_nid/86/_mod/help
      * resultado: /_nid/88/_mod/help
      */
-    public String getNotAccResourceURI(long resid)
+    public String getNotAccResourceURI(String resid)
     {
         StringBuffer ret=new StringBuffer();
         Iterator it=getResourceIDs();
         while(it.hasNext())
         {
-            Long id=(Long)it.next();
-            if(id.longValue()!=resid)
+            String id=(String)it.next();
+            if(!id.equals(resid))
             {
-                HashMap params=getResourceURI(id.longValue());
+                HashMap params=getResourceURI(id);
                 
                 StringBuffer aux=new StringBuffer();
                 
@@ -504,7 +504,7 @@ public class DistributorParams
                 }
                 
                 //internal query
-                it2=getIntResourceQuery(id.longValue()).iterator();
+                it2=getIntResourceQuery(id).iterator();
                 while(it2.hasNext())
                 {
                     String pr=(String)it2.next();
@@ -520,14 +520,14 @@ public class DistributorParams
                 }
                 
                 //adic params
-                it2=getExtURIResourceParams(id.longValue()).iterator();
+                it2=getExtURIResourceParams(id).iterator();
                 while(it2.hasNext())
                 {
                     String pr=(String)it2.next();
                     aux.append("/"+pr);
                 }
                 
-                if(id.longValue()==getAccResourceID())
+                if(id.equals(getAccResourceID()))
                 {
                     if(queryString!=null)
                     {
@@ -547,7 +547,7 @@ public class DistributorParams
         return ret.toString();
     }
     
-    public String getResourceTMID(long resid)
+    public String getResourceTMID(String resid)
     {
         String tm=getResourceURIValue(resid,URLP_TOPICMAPID);
         if(tm==null)
@@ -664,9 +664,9 @@ public class DistributorParams
         return null;
     }
     
-    public ArrayList getIntResourceQuery(long resid)
+    public ArrayList getIntResourceQuery(String resid)
     {
-        return (ArrayList)internalQuery.get(new Long(resid));
+        return (ArrayList)internalQuery.get(resid);
     }
     
     private void addRequestParams(HttpServletRequest req, ArrayList arr)
@@ -701,15 +701,15 @@ public class DistributorParams
         }        
     }
     
-    public HttpServletRequest getInternalRequest(javax.servlet.http.HttpServletRequest request, long rid)
+    public HttpServletRequest getInternalRequest(javax.servlet.http.HttpServletRequest request, String rid)
     {
         ArrayList arr=getIntResourceQuery(rid);
         javax.servlet.http.HttpServletRequest req=request;
-        if(getAccResourceID()>0 && rid!=getAccResourceID())
+        if(getAccResourceID()!=null && !rid.equals(getAccResourceID()))
         {
             req=new SWBHttpServletRequestWrapper(request,getUser().getLanguage().getId(),getWebPage().getWebSite().getId(),true);
             addRequestParams(req,arr);
-        }else if(rid==getAccResourceID())
+        }else if(rid.equals(getAccResourceID()))
         {
             if(arr==null)
             {

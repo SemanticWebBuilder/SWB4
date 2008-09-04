@@ -39,8 +39,8 @@ public class SWBResourceTrace
         
         time = System.currentTimeMillis();
         id=time+resource.hashCode()+ran.nextInt();
-        description = resource.getPortletClass().getTitle()+": "+resource.getTitle();
-        type = resource.getPortletClass().getURI();
+        description = resource.getPortletType().getTitle()+": "+resource.getTitle();
+        type = resource.getPortletType().getURI();
         thread = Thread.currentThread();
     }
     

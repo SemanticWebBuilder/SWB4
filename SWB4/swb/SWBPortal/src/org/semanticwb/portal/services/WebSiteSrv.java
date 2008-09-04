@@ -60,7 +60,7 @@ public class WebSiteSrv {
         while (itObjGroups.hasNext()) {
             ObjectGroup objGroup = itObjGroups.next();
             if(objGroup.getProperty("type")!=null && objGroup.getProperty("type").equalsIgnoreCase("tpl")){
-                SWBPortal.getTemplateSrv().removeTemplateGroup(webSite, objGroup.getId(), user);
+                //SWBPortal.getTemplateSrv().removeTemplateGroup(webSite, objGroup.getId(), user);
             }
         }
         //Elimina reglas
@@ -85,9 +85,9 @@ public class WebSiteSrv {
         //Elimina recursos, ver si tengo q eliminar por cada tipo o lo puedo hacer todos juntos
         //Antes se mandaba llamar el metodo remove de cada recurso y ese sabía lo q hacia, ver si se hace lo mismo
         //para llamandolos de manera individual (ApplicationPortlet, SytemPortlet,etc)
-        Iterator <PortletClass> itPortlets=webSite.listPortletClasss();
+        Iterator <PortletType> itPortlets=webSite.listPortletTypes();
         while(itPortlets.hasNext()){
-            PortletClass pClass=itPortlets.next();
+            PortletType pClass=itPortlets.next();
             //Cuando exista un metodo a llamar en esta clase para remover todo lo del portlet, hacerlo.
         }
 

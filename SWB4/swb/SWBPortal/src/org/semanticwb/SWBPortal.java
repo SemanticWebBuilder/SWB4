@@ -1,10 +1,16 @@
 package org.semanticwb;
 
+import java.io.InputStream;
 import java.sql.Timestamp;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import org.semanticwb.model.*;
 import org.semanticwb.portal.SWBDBAdmLog;
 import org.semanticwb.portal.SWBMonitor;
 import org.semanticwb.portal.SWBResourceMgr;
+import org.semanticwb.portal.SWBTemplateMgr;
 import org.semanticwb.portal.SWBUserMgr;
 import org.semanticwb.portal.services.CalendarSrv;
 import org.semanticwb.portal.services.CampSrv;
@@ -21,16 +27,20 @@ import org.semanticwb.portal.services.SWBServices;
 import org.semanticwb.portal.services.TemplateSrv;
 import org.semanticwb.portal.services.WebPageSrv;
 import org.semanticwb.portal.services.WebSiteSrv;
+import org.semanticwb.util.JarFile;
 
 public class SWBPortal {
 
     private static Logger log = SWBUtils.getLogger(SWBPortal.class);
     private static SWBPortal instance = null;
     
+    private HashMap admFiles=new HashMap();    
+    
     private static SWBUserMgr usrMgr;
     private static SWBMonitor monitor=null;    
     private static SWBResourceMgr resmgr=null;    
-
+    private static SWBTemplateMgr templatemgr=null;        
+    
     static public synchronized SWBPortal createInstance() {
         //System.out.println("Entra a createInstance");
         if (instance == null) {
@@ -55,6 +65,7 @@ public class SWBPortal {
             site=SWBContext.createWebSite(SWBContext.WEBSITE_GLOBAL, "http://org.semanticwb.globalws");
             site.setTitle("Global");
             site.setDescription("Global WebSite");
+            site.setActive(true);
             //Crear lenguajes por defecto
             Language lang=site.createLanguage("es");
             lang.setTitle("Español", "es");
@@ -65,6 +76,7 @@ public class SWBPortal {
             //Create HomePage
             WebPage home=site.createWebPage("home");
             site.setHomePage(home);
+            home.setActive(true);
             //Create DNS
             Dns dns=site.createDns("localhost");
             dns.setTitle("localhost");
@@ -98,6 +110,29 @@ public class SWBPortal {
         
         resmgr=new SWBResourceMgr();
         resmgr.init();
+        
+        templatemgr=new SWBTemplateMgr();
+        templatemgr.init();        
+        
+        try {
+            log.debug("Loading admin Files from: /WEB-INF/lib/SWBAdmin.jar");
+            String zipPath=SWBUtils.getApplicationPath()+"/WEB-INF/lib/WBAdmin.jar";
+            ZipFile zf=new ZipFile(zipPath);
+            Enumeration e=zf.entries();
+            while (e.hasMoreElements()) {
+                ZipEntry ze=(ZipEntry)e.nextElement();
+                log.debug("/"+ze.getName()+", "+ze.getSize()+", "+ze.getTime());
+                admFiles.put("/"+ze.getName(),new JarFile(ze,zipPath));
+            }
+            zf.close();
+            log.event("-->Admin Files in Memory:\t"+admFiles.size());
+        }catch(Exception e) {
+            log.warn("Error loading files for Webbuilder Administration:"+SWBUtils.getApplicationPath()+"/WEB-INF/lib/WBAdmin.jar");
+        }            
+    }
+    public static String getDistributorPath()
+    {
+        return SWBPlatform.getContextPath()+"/"+SWBPlatform.getEnv("swb/distributor","swb");
     }
 
     public static SWBServices getSWBServices() {
@@ -191,6 +226,11 @@ public class SWBPortal {
         return resmgr;
     }
     
+    public static SWBTemplateMgr getTemplateMgr()
+    {
+        return templatemgr;
+    }    
+    
     /**
      * Logeo de acciones
      * @param userID
@@ -209,4 +249,17 @@ public class SWBPortal {
             log.error(e);
         }
     }
+    
+    public static JarFile getAdminFile(String path) {
+        JarFile f=(JarFile)instance.admFiles.get(path);
+        if(f==null)f=new JarFile(path);
+        return f;
+    }
+    
+    public static InputStream getAdminFileStream(String path) {
+        JarFile f=(JarFile)instance.admFiles.get(path);
+        if(f==null)f=new JarFile(path);
+        if(!f.exists())return null;
+        return f.getInputStream();
+    }    
 }

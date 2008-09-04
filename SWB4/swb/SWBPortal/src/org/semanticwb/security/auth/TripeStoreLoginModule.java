@@ -73,7 +73,7 @@ public class TripeStoreLoginModule implements LoginModule {
         }
 
         principal = SWBContext.getUserRepository("swb_users").getUser(login); //TODO Checar lo del repositorio de usuarios
-        if (1!=principal.getStatus()) throw new LoginException("User innactive");
+        if (!principal.isActive()) throw new LoginException("User innactive");
         if (null==principal.getUsrPassword()) {
             if (null!=credential) throw new LoginException("Password Mistmatch");
         } else {

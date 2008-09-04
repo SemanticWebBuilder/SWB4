@@ -14,14 +14,21 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBException;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.Template;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
+import org.semanticwb.portal.TemplateImp;
+import org.semanticwb.portal.resources.SWBActionResponseImp;
+import org.semanticwb.portal.resources.SWBParamRequestImp;
 import org.semanticwb.portal.resources.SWBResourceModes;
+import org.semanticwb.portal.resources.SWBResource;
+import org.semanticwb.servlet.SWBHttpServletResponseWrapper;
 
 /**
  *
@@ -58,6 +65,7 @@ public class Distributor implements InternalServlet
     
     public boolean _doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams)throws IOException 
     {
+        long tini=System.currentTimeMillis();
         boolean ret=true;
         log.debug("Distributor->doProcess()");
         
@@ -104,7 +112,7 @@ public class Distributor implements InternalServlet
             }        
         
 //            //TODO:cambiar por opcion en el topico needVirtualTopic            
-//            if (webpage != null && webpage.getWebSite() == admMap && vtopic == null) {
+//            if (webpage != null && webpage.getWebSite() == admMap && vwebpage == null) {
 //                if (inti_StatusTopic == webpage || webpage.isChildof(sys_Topics) || webpage.isChildof(sys_Contents) || webpage.isChildof(info_Topic))
 //                {
 //                    log.debug("Distributor: SendError 404");
@@ -156,7 +164,7 @@ public class Distributor implements InternalServlet
             if (dparams.getAccType() == DistributorParams.ACC_TYPE_RENDER) // es un recurso
             {
                 try {
-                    long rid = dparams.getAccResourceID();
+                    String rid = dparams.getAccResourceID();
                     HashMap resp = dparams.getResourceURI(rid);
                     int mto = SWBUtils.TEXT.getInt((String)resp.get(DistributorParams.URLP_METHOD), SWBResourceModes.Call_CONTENT);
                     String mdo = (String) resp.get(DistributorParams.URLP_MODE);
@@ -165,15 +173,17 @@ public class Distributor implements InternalServlet
                     String idtm = dparams.getAccResourceTMID();
                     String extParams=dparams.getNotAccResourceURI(rid);
 
-                    WBResource base = ResourceMgr.getInstance().getResource(idtm, rid);
-                    if (webpage.getWebSite() != TopicMgr.getInstance().getAdminTopicMap())
+                    SWBResource base = SWBPortal.getResourceMgr().getResource(idtm, rid);
+                    if (!webpage.getWebSite().equals(SWBContext.getAdminWebSite()))
                     {
                         if(base == null)
                         {
                             response.sendError(404, "No tiene permiso para accesar a la pagina " + request.getRequestURI() + ", (Control de IPs)... ");
                             log.debug("Distributor: SendError 404");
                             return false;
-                        }else if(!base.getResourceBase().haveAccess(user))
+                        }else 
+                            //TODO:Revisar seguridad
+                            //if(!base.getResourceBase().haveAccess(user))
                         {
                             if(request.getMethod().equalsIgnoreCase("POST"))
                             {
@@ -188,75 +198,74 @@ public class Distributor implements InternalServlet
                         }
                     }                    
 
-                    if (mto == WBResourceModes.Call_DIRECT) //call direct
+                    if (mto == SWBResourceModes.Call_DIRECT) //call direct
                     {
                         //TODO:Falta envio de log de accesos
-                        WBResource currResource = ResourceMgr.getInstance().getResource(idtm, rid);
-                        //WBResponse resp=new WBResponse(response);
-                        WBParamRequestImp resParams = new WBParamRequestImp(request, currResource.getResourceBase(), webpage, user);
+                        SWBResource currResource = SWBPortal.getResourceMgr().getResource(idtm, rid);
+                        //SWBResponse resp=new SWBResponse(response);
+                        SWBParamRequestImp resParams = new SWBParamRequestImp(request, currResource.getResourceBase(), webpage, user);
                         //resParams.setArguments(args);
                         resParams.setExtURIParams(extParams);
                         if (act != null) resParams.setAction(act);
                         resParams.setCallMethod(mto);
                         if (mdo != null) resParams.setMode(mdo);
                         if (wst != null) resParams.setWindowState(wst);
-                        if (vtopic != null) {
-                            resParams.setVirtualTopic(vtopic);
+                        if (vwebpage != null) {
+                            resParams.setVirtualTopic(vwebpage);
                         }
                         resParams.setOnlyContent(onlyContent);
-                        ResourceMgr.getInstance().getResourceTraceMgr().renderTraced(currResource, request, response, resParams);
-                        return System.currentTimeMillis()-tini;
-                    } else if (WBResourceModes.WinState_MAXIMIZED.equals(wst)) //WinState_MAXIMIZED
+                        SWBPortal.getResourceMgr().getResourceTraceMgr().renderTraced(currResource, request, response, resParams);
+                        return true;
+                    } else if (SWBResourceModes.WinState_MAXIMIZED.equals(wst)) //WinState_MAXIMIZED
                     {
-                        WBResponse res = new WBResponse(response);
-                        WBResource currResource = ResourceMgr.getInstance().getResource(idtm, rid);
-                        //WBResponse resp=new WBResponse(response);
-                        WBParamRequestImp resParams = new WBParamRequestImp(request, currResource.getResourceBase(), webpage, user);
+                        SWBHttpServletResponseWrapper res = new SWBHttpServletResponseWrapper(response);
+                        SWBResource currResource = SWBPortal.getResourceMgr().getResource(idtm, rid);
+                        //SWBResponse resp=new SWBResponse(response);
+                        SWBParamRequestImp resParams = new SWBParamRequestImp(request, currResource.getResourceBase(), webpage, user);
                         //resParams.setArguments(args);
                         resParams.setExtURIParams(extParams);
                         if (act != null) resParams.setAction(act);
                         resParams.setCallMethod(mto);
                         if (mdo != null) resParams.setMode(mdo);
                         if (wst != null) resParams.setWindowState(wst);
-                        if (vtopic != null) {
-                            resParams.setVirtualTopic(vtopic);
+                        if (vwebpage != null) {
+                            resParams.setVirtualTopic(vwebpage);
                         }
                         resParams.setOnlyContent(onlyContent);
-                        ResourceMgr.getInstance().getResourceTraceMgr().renderTraced(currResource, request, res, resParams);
+                        SWBPortal.getResourceMgr().getResourceTraceMgr().renderTraced(currResource, request, res, resParams);
                         content = res.toString();
                         if(res.isSendRedirect())
                         {
                             return false;
                         }
                     }
-                } catch (TemplateInterruptedException noe) {
-                    return false;
-                } catch (Throwable e) {
-                    AFUtils.log(e);
+                } catch (Throwable e) 
+                {
+                    log.error(e);
                     log.debug("Distributor: SendError 500");
-                    response.sendError(500, "No es posible procesar el requerimiento:" + request.getRequestURI());
-                    return System.currentTimeMillis()-tini;
+                    response.sendError(500, "Error to process request:" + request.getRequestURI());
+                    return false;
                 }
-            } else if (dparams.getAccType() == dparams.ACC_TYPE_ACTION) // process action
+            } else if (dparams.getAccType() == DistributorParams.ACC_TYPE_ACTION) // process action
             {
                 try {
-                    long rid = dparams.getAccResourceID();
+                    String rid = dparams.getAccResourceID();
                     String idtm = dparams.getAccResourceTMID();
                     HashMap resp = dparams.getResourceURI(rid);
-                    int mto = dparams.getInt((String) resp.get(dparams.URLP_METHOD), WBResourceModes.Call_CONTENT);
-                    String mdo = (String) resp.get(dparams.URLP_MODE);
-                    String wst = (String) resp.get(dparams.URLP_WINSTATE);
-                    String act = (String) resp.get(dparams.URLP_ACTION);
+                    int mto = SWBUtils.TEXT.getInt((String) resp.get(DistributorParams.URLP_METHOD), SWBResourceModes.Call_CONTENT);
+                    String mdo = (String) resp.get(DistributorParams.URLP_MODE);
+                    String wst = (String) resp.get(DistributorParams.URLP_WINSTATE);
+                    String act = (String) resp.get(DistributorParams.URLP_ACTION);
                     String extParams=dparams.getNotAccResourceURI(rid);
 
-                    WBResource currResource = ResourceMgr.getInstance().getResource(idtm, rid);
+                    SWBResource currResource = SWBPortal.getResourceMgr().getResource(idtm, rid);
                     if(currResource==null)
                     {
-                        AFUtils.log("Error al procesar el URL:"+request.getRequestURL());
+                        log.warn("Error al procesar el URL:"+request.getRequestURL());
                         response.sendError(404, "No se encontro:" + request.getRequestURI() + "<BR>");
                         return false;
                     }
-                    WBActionResponseImp resParams = new WBActionResponseImp(response);
+                    SWBActionResponseImp resParams = new SWBActionResponseImp(response);
                     if (act != null) resParams.setAction(act);
                     resParams.setExtURIParams(extParams);
                     resParams.setCallMethod(mto);
@@ -264,8 +273,8 @@ public class Distributor implements InternalServlet
                     if (wst != null) resParams.setWindowState(wst);
                     resParams.setResourceBase(currResource.getResourceBase());
                     resParams.setTopic(webpage);
-                    if (vtopic != null) {
-                        resParams.setVirtualTopic(vtopic);
+                    if (vwebpage != null) {
+                        resParams.setVirtualTopic(vwebpage);
                     }
                     resParams.setOnlyContent(onlyContent);
                     resParams.setUser(user);
@@ -275,37 +284,24 @@ public class Distributor implements InternalServlet
                     log.debug("SendRedirect:"+resParams.toString());
                     response.sendRedirect(resParams.toString());
                     log.debug("Exit Distributor");
-                    return System.currentTimeMillis()-tini;
+                    return true;
                 } catch (Throwable e) {
-                    AFUtils.log(e);
+                    log.error(e);
                     log.debug("Distributor: SendError 500");
                     response.sendError(500, "No es posible procesar el requerimiento:" + request.getRequestURI() + "<BR>" + e);
-                    return System.currentTimeMillis()-tini;
+                    return false;
                 }
             }
 
             try//Traer template y comprimir salida..
             {
-                Template currTemplate = null;
-                try {
-                    /*
-                     * El template Manager SIEMPRE devolverá un template, por lo que debemos definir el
-                     * caso especial en que no haya nada de nada para que devuelva un template que solo
-                     * tenga el tag de contenido.
-                     */
-                    currTemplate = tmpMngr.getTemplate(user, webpage);
-                    /*
-                     *
-                     *   En el remoto caso de que surja un error critico (por lo cual no se pueda
-                     * asignar templeates en este punto se suspende la ejecución, logueando el error
-                     * y disparando un mensaje de sitio en mantenimiento <--- Checar si los demás están de acuerdo en este particular
-                     *
-                     */
-                } catch (AFException e) {
-                    AFUtils.log("No se encontro template para la seccion:" + webpage.getId());
+                TemplateImp currTemplate = (TemplateImp)SWBPortal.getTemplateMgr().getTemplate(user, webpage);
+                if(currTemplate==null)
+                {
+                    log.warn("No se encontro template para la seccion:" + webpage.getId());
                     response.sendError(500, "La pagina " + request.getRequestURI() + " no esta disponible por el momento... ");
                     log.debug("Distributor: SendError 500");
-                    return System.currentTimeMillis()-tini;
+                    return false;
                 }
 
                 boolean gzip = false;
@@ -322,32 +318,30 @@ public class Distributor implements InternalServlet
                     }
                 }
 
-                WBHttpServletResponseWrapper res = new WBHttpServletResponseWrapper(response);
+                SWBHttpServletResponseWrapper res = new SWBHttpServletResponseWrapper(response);
                 try {
                     //System.out.println("DistributorImp->onlyContent:"+onlyContent);
                     PrintWriter out=res.getWriter();
                     //out.println("\n<!--Time: " + (System.currentTimeMillis() - tini) + "ms - " + webpage + "--> ");  //TODO encontrar una forma de configurar esto...
+                    //out.println("Muestra Plantilla:"+currTemplate);
                     if (ipfilter == -1) {
                         if (onlyContent) {
-                            Template.buildContents(request, res, out, dparams, true, content);
+                            currTemplate.buildContents(request, res, out, dparams, true, content);
                         } else {
                             currTemplate.build(request, res, out, user, webpage, true, content, dparams);
                         }
                     } else {
                         if (onlyContent) {
-                            Template.buildContents(request, res, out, dparams, false, content);
+                            currTemplate.buildContents(request, res, out, dparams, false, content);
                         } else {
                             currTemplate.build(request, res, out, user, webpage, false, content, dparams);
                         }
                     }
-                } catch (com.infotec.wb.exception.TemplateInterruptedException tie) {
-                    //if(gzip)garr.close();
-                    //return;
                 } catch (Exception e) {
-                    AFUtils.log(e, "Error al procesar template para la seccion:" + webpage.getId(), true);
+                    log.error("Error al procesar template para la seccion:" + webpage.getId(),e);
                     response.sendError(500, "La pagina " + request.getRequestURI() + " no esta disponible por el momento... ");
                     //if(gzip)garr.close();
-                    return System.currentTimeMillis()-tini;
+                    return false;
                 }
                 
 
@@ -371,7 +365,7 @@ public class Distributor implements InternalServlet
                 //out.println("\n<!--Time: " + (System.currentTimeMillis() - tini) + "ms - " + webpage + "--> ");  //TODO encontrar una forma de configurar esto...
                 out.print(res.toString());
                 long tfin = System.currentTimeMillis() - tini;
-                out.println("\n<!--Time: " + tfin + "ms - " + webpage + "--> ");  //TODO encontrar una forma de configurar esto...
+                out.println("\n<!--Time: " + tfin + "ms - " + webpage + "--> ");  //TODO: encontrar una forma de configurar esto...
 
                 //if (gzip)
                 {
@@ -379,12 +373,12 @@ public class Distributor implements InternalServlet
                     out.close();
                 }
             } catch (Exception e) {
-                AFUtils.log(e, "Traer template y comprimir salida...", true);
-                return System.currentTimeMillis()-tini;
+                log.error("Get template and compress output...",e);
+                return false;
             }
         } catch (Throwable e) 
         {
-            log.log(e);
+            log.error(e);
             return false;
         }
         return ret;

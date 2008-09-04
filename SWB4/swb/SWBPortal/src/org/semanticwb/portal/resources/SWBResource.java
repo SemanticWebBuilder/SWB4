@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.SWBException;
 import org.semanticwb.model.Portlet;
-import org.semanticwb.model.PortletClass;
+import org.semanticwb.model.PortletType;
 
 
 /** La interfaz WBResource es la que define los m�todos que una clase debe implementar
@@ -96,13 +96,13 @@ public interface SWBResource
      * M�todo que es llamado al momento de instalar el recurso en webbuilder
      * @param recobj informaci�n de base de datos de la definici�n del Recurso
      */
-    public void install(PortletClass portletClass) throws SWBException;
+    public void install(PortletType portletClass) throws SWBException;
 
     /**
      * M�todo que es llamado al momento de desinstalar el recurso en webbuilder
      * @param recobj informaci�n de base de datos de la definici�n del Recurso
      */
-    public void uninstall(PortletClass portletClass) throws SWBException;
+    public void uninstall(PortletType portletClass) throws SWBException;
     
     /**
      * Es llamado por el ResourceMgr para indicarle al recurso cuando 
