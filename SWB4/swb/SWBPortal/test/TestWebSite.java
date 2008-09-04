@@ -15,7 +15,7 @@ import org.semanticwb.model.UserRepository;
 import org.semanticwb.model.VersionInfo;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
-import org.semanticwb.platform.SemanticModel;
+
 
 /**
  *
