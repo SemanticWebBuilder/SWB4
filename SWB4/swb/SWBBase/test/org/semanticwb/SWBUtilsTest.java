@@ -41,11 +41,12 @@ public class SWBUtilsTest {
     @Test
     public void testCreateInstance() {
         System.out.println("createInstance(");
+        /*
         Object obj1 = SWBUtils.getInstance();
         Object obj2 = SWBUtils.getInstance();
         if (obj1 == obj2) {
             System.out.println("Success");
-        }
+        }*/
     }
 
     @Test
@@ -156,7 +157,7 @@ public class SWBUtilsTest {
             ArrayList<org.apache.commons.mail.EmailAttachment> aListAttachments = new ArrayList();
             aListAttachments.add(attach);
 
-            SWBUtils.setSMTPServer("webmail.infotec.com.mx");
+            SWBUtils.EMAIL.setSMTPServer("webmail.infotec.com.mx");
             String result = SWBUtils.EMAIL.sendMail("webbuilder@infotec.com.mx", "Jorge Jiménez", aAddress, null, null, "Prueba de Envío2", "text", "Esta es mi prueba2", null, null, aListAttachments);
             System.out.println("result:" + result);
         } catch (Exception e) {
@@ -196,7 +197,7 @@ public class SWBUtilsTest {
             swbMail.setFromName("Jorge");
             swbMail.setFromEmail("george@infotec.com.mx");
 
-            SWBUtils.setSMTPServer("webmail.infotec.com.mx");
+            SWBUtils.EMAIL.setSMTPServer("webmail.infotec.com.mx");
             SWBUtils.EMAIL.sendBGEmail(swbMail);
 
         } catch (Exception e) {
@@ -238,7 +239,7 @@ public class SWBUtilsTest {
 
             swbMail.setHostName("webmail.infotec.com.mx");
 
-            swbMail.sendMail();
+            //swbMail.sendMail();
 
         } catch (Exception e) {
             e.printStackTrace();
