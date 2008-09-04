@@ -5,7 +5,7 @@
  * Created on 22 de marzo de 2006, 06:30 PM
  */
 
-package org.semanticwb.portal.resources;
+package org.semanticwb.portal.api;
 
 import java.io.IOException;
 import java.io.PrintWriter;

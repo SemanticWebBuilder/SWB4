@@ -4,7 +4,7 @@
  * Created on 21 de marzo de 2005, 12:55 PM
  */
 
-package org.semanticwb.portal.resources;
+package org.semanticwb.portal.api;
 
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.SWBException;

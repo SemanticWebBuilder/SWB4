@@ -5,7 +5,7 @@
  * Created on 27 de enero de 2004, 19:22
  */
 
-package org.semanticwb.portal.resources;
+package org.semanticwb.portal.api;
 
 import java.util.*;
 import java.io.*;

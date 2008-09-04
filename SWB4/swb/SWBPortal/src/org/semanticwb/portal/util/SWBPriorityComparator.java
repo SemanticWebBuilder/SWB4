@@ -8,7 +8,7 @@
 package org.semanticwb.portal.util;
 
 import java.util.*;
-import org.semanticwb.portal.resources.SWBResource;
+import org.semanticwb.portal.api.SWBResource;
 
 /** objeto: compara la prioridad de dos recirsos
  * @author Javier Solis Gonzalez

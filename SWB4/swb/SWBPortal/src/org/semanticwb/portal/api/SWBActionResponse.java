@@ -5,7 +5,7 @@
  * Created on 2 de septiembre de 2003, 11:35
  */
 
-package org.semanticwb.portal.resources;
+package org.semanticwb.portal.api;
 
 import org.semanticwb.SWBException;
 
