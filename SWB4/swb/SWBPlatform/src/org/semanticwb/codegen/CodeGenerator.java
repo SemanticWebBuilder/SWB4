@@ -553,12 +553,15 @@ public class CodeGenerator
             javaClassContent.append("    {" + ENTER);
             javaClassContent.append("        return (" + tpc.getName() + ")getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, vocabulary." + tpc.getName() + "), vocabulary." + tpc.getName() + ");" + ENTER);
             javaClassContent.append("    }" + ENTER);
-            javaClassContent.append(ENTER);
-            javaClassContent.append("    public " + tpc.getName() + " create" + tpc.getName() + "()" + ENTER);
-            javaClassContent.append("    {" + ENTER);
-            javaClassContent.append("        long id=SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+\"/\"+vocabulary." + tpc.getName() + ".getName());" + ENTER);
-            javaClassContent.append("        return create" + tpc.getName() + "(\"\"+id);" + ENTER);
-            javaClassContent.append("    } " + ENTER);
+            if(tpc.isAutogenId())
+            {
+                javaClassContent.append(ENTER);
+                javaClassContent.append("    public " + tpc.getName() + " create" + tpc.getName() + "()" + ENTER);
+                javaClassContent.append("    {" + ENTER);
+                javaClassContent.append("        long id=SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+\"/\"+vocabulary." + tpc.getName() + ".getName());" + ENTER);
+                javaClassContent.append("        return create" + tpc.getName() + "(\"\"+id);" + ENTER);
+                javaClassContent.append("    } " + ENTER);
+            }
             javaClassContent.append(ENTER);
             javaClassContent.append("    public void remove" + tpc.getName() + "(String id)" + ENTER);
             javaClassContent.append("    {" + ENTER);
