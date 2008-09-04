@@ -62,11 +62,11 @@ public class SWBParamRequestImp implements SWBParamRequest
         this.locale=new Locale(user.getLanguage().getId());
         try
         {
-            this.bundle=resource.getPortletClass().getPortletBundle();
+            this.bundle=resource.getPortletType().getPortletBundle();
         }catch(Exception e){log.error(e);}
         try
         {
-            this.loader=(ClassLoader)SWBPortal.getResourceMgr().getResourceLoaders().get(resource.getPortletClass().getPortletClassName());
+            this.loader=(ClassLoader)SWBPortal.getResourceMgr().getResourceLoaders().get(resource.getPortletType().getPortletClassName());
         }catch(Exception e){log.error(e);}
     }
     
@@ -176,8 +176,8 @@ public class SWBParamRequestImp implements SWBParamRequest
         {
             if(resource!=null)
             {
-                this.bundle=resource.getPortletClass().getPortletBundle();
-                this.loader=(ClassLoader)SWBPortal.getResourceMgr().getResourceLoaders().get(resource.getPortletClass().getPortletClassName());
+                this.bundle=resource.getPortletType().getPortletBundle();
+                this.loader=(ClassLoader)SWBPortal.getResourceMgr().getResourceLoaders().get(resource.getPortletType().getPortletClassName());
             }
         }catch(Exception e){log.error(e);}
         this.resource=resource;

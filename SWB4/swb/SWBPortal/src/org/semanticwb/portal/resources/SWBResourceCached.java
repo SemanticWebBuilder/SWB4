@@ -14,7 +14,7 @@ import org.semanticwb.SWBException;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Portlet;
-import org.semanticwb.model.PortletClass;
+import org.semanticwb.model.PortletType;
 import org.semanticwb.servlet.SWBHttpServletResponseWrapper;
 
 
@@ -43,7 +43,7 @@ public class SWBResourceCached implements SWBResource, SWBResourceWindow
         this.resource = resource;
         try
         {
-            cachetime = resource.getResourceBase().getPortletClass().getPortletCache() * 1000;
+            cachetime = resource.getResourceBase().getPortletType().getPortletCache() * 1000;
         } catch (Exception e)
         {
             log.error(e);
@@ -150,7 +150,7 @@ public class SWBResourceCached implements SWBResource, SWBResourceWindow
     /** Metodo que es llamado al momento de instalar el recurso en webbuilder
      * @param recobj informaci�n de base de datos de la definici�n del Recurso
      */
-    public void install(PortletClass recobj) throws SWBException
+    public void install(PortletType recobj) throws SWBException
     {
         resource.install(recobj);
     }
@@ -158,7 +158,7 @@ public class SWBResourceCached implements SWBResource, SWBResourceWindow
     /** Metodo que es llamado al momento de desinstalar el recurso en webbuilder
      * @param recobj informaci�n de base de datos de la definici�n del Recurso
      */
-    public void uninstall(PortletClass recobj) throws SWBException
+    public void uninstall(PortletType recobj) throws SWBException
     {
         resource.uninstall(recobj);
     }

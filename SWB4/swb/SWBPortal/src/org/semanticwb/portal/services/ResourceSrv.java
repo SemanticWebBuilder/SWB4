@@ -5,7 +5,7 @@
 package org.semanticwb.portal.services;
 
 import org.semanticwb.SWBException;
-import org.semanticwb.model.PortletClass;
+import org.semanticwb.model.PortletType;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 
@@ -17,7 +17,7 @@ public class ResourceSrv {
 
     public boolean createContentPortlet(WebSite website, String title, String description, User user) throws SWBException {
         boolean doAction = false;
-        PortletClass portlet = website.createPortletClass();
+        PortletType portlet = website.createPortletType();
 //        portlet.setTitle(title);
 //        portlet.setDescription(description);
 //        portlet.

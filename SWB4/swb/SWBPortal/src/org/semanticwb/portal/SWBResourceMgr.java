@@ -5,18 +5,25 @@
 
 package org.semanticwb.portal;
 
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Portlet;
+import org.semanticwb.model.PortletRef;
 import org.semanticwb.model.SWBContext;
-import org.semanticwb.portal.SWBClassLoader;
+import org.semanticwb.model.Template;
+import org.semanticwb.model.User;
+import org.semanticwb.model.WebPage;
 import org.semanticwb.portal.resources.SWBParamRequest;
 import org.semanticwb.portal.resources.SWBResource;
 import org.semanticwb.portal.resources.SWBResourceCachedMgr;
 import org.semanticwb.portal.resources.SWBResourceTraceMgr;
+import org.semanticwb.portal.util.SWBPriorityComparator;
 
 /**
  *
@@ -71,6 +78,7 @@ public class SWBResourceMgr
             if(portlet!=null)
             {
                 res=createSWBResource(portlet);
+                map.put(id, res);
             }
         }
         return res;
@@ -87,6 +95,234 @@ public class SWBResourceMgr
             return res;
         }
     }    
+    
+    
+    /**
+     * @param user
+     * @param topic
+     * @param params
+     * @param tpl
+     * @return  */
+    public Iterator getContents(User user, WebPage topic, HashMap params, Template tpl)
+    {
+        Date today = new Date();
+        //today = new Date(today.getYear(), today.getMonth(), today.getDate());
+        TreeSet ret = new TreeSet(new SWBPriorityComparator(true));
+        Iterator<PortletRef> it = topic.listPortletRef();
+        while (it.hasNext())
+        {
+            PortletRef ref = it.next();
+            //System.out.println("Occ:"+occ.getResourceData());
+            Portlet portlet=ref.getPortlet();
+            SWBResource res = getResource(portlet.getWebSiteId(), portlet.getId());
+            if (res != null)
+            {
+                Portlet base = res.getResourceBase();
+                //TODO:CheckResource
+                //if (checkResource(base, user, 0, null, 0, today, topic))
+                {
+                    ret.add(res);
+                }
+            } else
+            {
+                log.warn("Error getContents:"+topic.getURI()+" user:"+user.getId());
+            }
+        }
+        return ret.iterator();
+    }    
+    
+    /**
+     * @param type
+     * @param user
+     * @param topic
+     * @param params
+     * @param tpl
+     * @return  */
+    public Iterator getResources(String type, User user, WebPage topic, HashMap params, Template tpl)
+    {
+        TreeSet ret = new TreeSet(new SWBPriorityComparator());
+        
+        System.out.print("getResource:");
+        System.out.print(" topic:"+topic.getTitle());
+        System.out.print(" name:"+params.get("name"));
+        System.out.print(" template:"+tpl.getId());
+        System.out.print(" templateMap:"+tpl.getWebSiteId());
+        System.out.print(" type:"+type);
+        System.out.print(" type:"+params.get("type"));
+        System.out.println(" stype:"+params.get("stype"));
+
+//        Date today = new Date();
+//        //today = new Date(today.getYear(), today.getMonth(), today.getDate());
+//
+//        
+//        //separar tipo de recurso
+//        int itype=0;
+//        String typemap=tpl.getWebSiteId();
+//        if(type != null)
+//        {
+//            try
+//            {
+//                if(type.indexOf("|")>-1)
+//                {
+//                    itype=Integer.parseInt(type.substring(0,type.indexOf('|')));
+//                    typemap=type.substring(type.indexOf('|')+1);
+//                }else
+//                {
+//                    itype=Integer.parseInt(type);
+//                }
+//            }catch(Exception e){log.error(e);}
+//        }        
+//        //System.out.println("itype:"+itype+" typemap:"+typemap);
+//        
+//        //separar subtypo de recurso
+//        int stype=0;
+//        String stypemap=tpl.getWebSiteId();
+//        String sstype = (String)params.get("stype");
+//        if(sstype != null)
+//        {
+//            try
+//            {
+//                if(sstype.indexOf("|")>-1)
+//                {
+//                    stype=Integer.parseInt(sstype.substring(0,sstype.indexOf('|')));
+//                    stypemap=sstype.substring(sstype.indexOf('|')+1);
+//                }else
+//                {
+//                    stype=Integer.parseInt(sstype);
+//                }
+//            }catch(Exception e){log.error(e);}
+//        }
+//        
+//        
+//
+//        String name = (String) params.get("name");
+//
+//        int camp = 0;
+//        if (name != null)
+//        {
+//            camp = CampMgr.getInstance().getCamp(topic, tpl, name.toLowerCase());
+//        }
+////        System.out.println("camp-->"+name+":"+camp);
+//        //OK_TODO: revisar recursos de global
+//        
+//        ArrayList tp=null;
+//        if(topic.getWebSiteId().equals(tpl.getWebSiteId()))
+//        {
+//            HashMap map=(HashMap)resourcesbase.get(topic.getWebSiteId());
+//            if(map!=null)
+//            {
+//                HashMap aux=((HashMap) map.get(type));
+//                if(aux!=null)tp=new ArrayList(aux.values());
+//            }
+//        }else
+//        {
+//            //System.out.println("map:"+map);
+//            HashMap map=(HashMap)resourcesbase.get(topic.getMap().getId());
+//            if(map!=null)
+//            {
+//                HashMap aux=((HashMap) map.get(""+itype+"|"+tpl.getTopicMapId()));
+//                if(aux!=null)tp=new ArrayList(aux.values());
+//            }
+//            
+//            map=(HashMap)resourcesbase.get(tpl.getTopicMapId());
+//            if(map!=null)
+//            {
+//                HashMap aux=((HashMap) map.get(""+itype));
+//                if(aux!=null)
+//                {
+//                    if(tp==null)tp=new ArrayList(aux.values());
+//                    else tp.addAll(aux.values());
+//                }
+//            }            
+//        }
+//        
+//        if(type.endsWith(TopicMgr.TM_GLOBAL))
+//        {
+//            HashMap mapg=(HashMap)resourcesbase.get(TopicMgr.TM_GLOBAL);
+//            if(mapg!=null)
+//            {
+//                HashMap aux=((HashMap)mapg.get(type.substring(0,type.indexOf('|'))));
+//                if(aux!=null)
+//                {
+//                    if(tp==null)tp=new ArrayList(aux.values());
+//                    else tp.addAll(aux.values());
+//                }
+//            }
+//        }
+//
+//        if (tp==null || tp.size()==0) return ret.iterator();
+//        Iterator en = tp.iterator();
+//        while (en.hasNext())
+//        {
+//            com.infotec.wb.core.Resource base = (Resource) en.next();
+//            //System.out.println("rec:"+base.getId()+" topicmap="+base.getTopicMapId() +" stype="+stype+" stypemap="+stypemap);
+//            if (checkResource(base, user, stype, stypemap, camp, today, topic))
+//            {
+//                WBResource wbr=getResource(base.getTopicMapId(),base.getId());
+//                //System.out.println("checkResource ok:"+wbr.getResourceBase().getId());
+//                if(wbr!=null)
+//                {
+//                    //if (base.isCached())
+//                    //{
+//                    //    ret.add(cache.getResource(wbr));
+//                    //}
+//                    //else
+//                    //{
+//                        ret.add(wbr);
+//                    //}
+//                }
+//            }
+//        }
+////        System.out.println("size:"+ret.size());
+        return ret.iterator();
+    }
+
+//    /**
+//     * @param base
+//     * @param user
+//     * @param stype
+//     * @param camp
+//     * @param today
+//     * @param topic
+//     * @return  */
+//    public boolean checkResource(Resource base, WBUser user, int stype,String stypemap, int camp, Date today, com.infotec.topicmaps.Topic topic)
+//    {
+//        //System.out.println("checkResource:"+base.getId()+" tmid:"+base.getTopicMapId()+" stype:"+stype+" stypemap:"+stypemap+" camp:"+camp+" topic:"+topic.getDisplayName());
+//        RuleMgr ruleMgr = RuleMgr.getInstance();
+//        if(stypemap==null)stypemap=base.getTopicMapId();
+//        boolean passrules = true;
+//        
+//        //System.out.println(""+base.getActive()+" == 1 && "+base.getDeleted()+" == 0");
+//        //System.out.println("&& (("+base.getSubType()+" == "+stype+" && ("+base.getSubType()+"==0 ||"+base.getSubTypeMap()+".equals("+stypemap+"))))");
+//        //System.out.println("&& ("+camp+" < 3 || "+base.getCamp()+" == "+camp+")");
+//        //System.out.println("&& ("+base.getMaxViews()+" == -1 || "+base.getMaxViews()+" > "+base.getViews()+")");
+//        //System.out.println("&& ("+base.getCamp()+" == 0 || "+DBCatalogs.getInstance().getCamp(base.getTopicMapId(),base.getCamp()).getActive()+" == 1)");
+//        
+//        if (base.getActive() == 1 && base.getDeleted() == 0
+//                //&& (stype == 0 || (base.getSubType() == stype && base.getSubTypeMap().equals(stypemap)))
+//                && ((base.getSubType() == stype && (base.getSubType()==0 ||base.getSubTypeMap().equals(stypemap))))
+//                && (camp < 3 || base.getCamp() == camp)
+//                && (base.getMaxViews() == -1 || base.getMaxViews() > base.getViews())
+//                && (base.getCamp() == 0 || DBCatalogs.getInstance().getCamp(base.getTopicMapId(),base.getCamp()).getActive() == 1)
+//        )
+//        {
+//
+//            if (!base.evalFilterMap(topic)) return false;
+//
+//            passrules=base.haveAccess(user);
+//            
+//            if (passrules == true && !intereval.eval(today, base)) passrules = false;
+//            //System.out.println("passrules:"+passrules);
+//            if (passrules)
+//            {
+//                base.refreshRandPriority();
+//                //System.out.println("priority:"+base.getRandPriority());
+//            }
+//        } else
+//            passrules = false;
+//        //System.out.println("checkResource:"+passrules);
+//        return passrules;
+//    }    
     
     
 //    /** Valida carga de Recursos de versiones anteriore
@@ -170,7 +406,7 @@ public class SWBResourceMgr
         try
         {
             log.debug("Loading Portlet:" + portlet.getURI());
-            String clsname = portlet.getPortletClass().getPortletClassName();
+            String clsname = portlet.getPortletType().getPortletClassName();
             Class cls = createSWBResourceClass(clsname);
 //            obj = (WBResource) convertOldWBResource(cls.newInstance(),base);
             obj=(SWBResource)cls.newInstance();

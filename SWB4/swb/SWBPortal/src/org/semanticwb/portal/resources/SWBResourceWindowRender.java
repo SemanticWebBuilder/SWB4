@@ -61,7 +61,7 @@ public class SWBResourceWindowRender
 //        out.println("	     <td align='right'>");
 //        out.println("	       <font face='arial' size='-3'>");
 
-        String id=paramsRequest.getResourceBase().getPortletClass().getId()+"_"+paramsRequest.getResourceBase().getId()+"_"+paramsRequest.getResourceBase().getWebSite().getId();
+        String id=paramsRequest.getResourceBase().getPortletType().getId()+"_"+paramsRequest.getResourceBase().getId()+"_"+paramsRequest.getResourceBase().getWebSite().getId();
         out.println("<div class=\"portlet\" id=\"portlet-window-"+id+"\">");
         out.println("  <div class=\"portlet-topper\">");
         out.println("    <span class=\"portlet-title\">"+title+"</span>");

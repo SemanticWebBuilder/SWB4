@@ -18,6 +18,7 @@ import org.semanticwb.model.Template;
 import org.semanticwb.model.User;
 import org.semanticwb.model.ObjectGroup;
 import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.TemplateGroup;
 import org.semanticwb.model.TemplateRef;
 import org.semanticwb.model.VersionInfo;
 import org.semanticwb.model.WebPage;
@@ -31,11 +32,11 @@ public class TemplateSrv {
 
     private static Logger log = SWBUtils.getLogger(SWBUtils.class);
 
-    public Template createTemplate(WebSite website, String fileName, String content, HashMap attaches, String titulo, String description, ObjectGroup objectgroup, User user) throws SWBException {
+    public Template createTemplate(WebSite website, String fileName, String content, HashMap attaches, String titulo, String description, TemplateGroup group, User user) throws SWBException {
         Template template = website.createTemplate();
         template.setTitle(titulo);
         template.setDescription(description);
-        template.addGroup(objectgroup);
+        template.setTemplateGroup(group);
         template.setActive(true);
         VersionInfo verInfo = website.createVersionInfo();
         verInfo.setValue("1");
@@ -84,12 +85,12 @@ public class TemplateSrv {
         return template;
     }
 
-    public Template createTemplate(WebSite website, String id, String fileName, String content, HashMap attaches, String titulo, String description, ObjectGroup objectgroup, User user) throws SWBException {
+    public Template createTemplate(WebSite website, String id, String fileName, String content, HashMap attaches, String titulo, String description, TemplateGroup group, User user) throws SWBException {
         Template template = website.createTemplate(id);
 
         template.setTitle(titulo);
         template.setDescription(description);
-        template.addGroup(objectgroup);
+        template.setTemplateGroup(group);
         template.setActive(true);
 
         SWBPortal.log(user.getURI(), "create", website.getURI(), template.getId(), "create template", null); 
@@ -231,35 +232,18 @@ public class TemplateSrv {
         return false;
     }
 
-    public boolean removeTemplateGroup(WebSite webSite, String id, User user) throws SWBException {
-        boolean doAction = false;
-        ObjectGroup obj=webSite.getObjectGroup(id);
-        iteraRemoveGroup(obj,user);
-        doAction = true;
-        
-        obj.removeAllGroup();
-        webSite.removeObjectGroup(obj.getId());
-        
-        SWBPortal.log(user.getURI(), "remove", webSite.getURI(), id, "remove template group", null); 
-        
-        return doAction;
-    }
+//    public boolean removeTemplateGroup(WebSite webSite, String id, User user) throws SWBException {
+//        boolean doAction = false;
+//        TemplateGroup obj=webSite.getTemplateGroup(id);
+//        doAction = true;
+//        
+//        obj.removeAllGroup();
+//        webSite.removeObjectGroup(obj.getId());
+//        
+//        SWBPortal.log(user.getURI(), "remove", webSite.getURI(), id, "remove template group", null); 
+//        
+//        return doAction;
+//    }
     
-    private void iteraRemoveGroup(ObjectGroup objGroup, User user) throws SWBException
-    {
-        Iterator<Template> itTemplates = objGroup.getWebSite().listTemplates();
-        while (itTemplates.hasNext()) {
-            Template template = itTemplates.next();
-            if (template.getGroup().getId().equals(objGroup.getId())) {
-                //Elimina el template
-                removeTemplate(objGroup.getWebSite(), template.getId(), user);
-            }
-        }
-        Iterator<ObjectGroup> itGroups=objGroup.listGroup();
-        while(itGroups.hasNext()){
-            ObjectGroup objGroup2=itGroups.next();
-            iteraRemoveGroup(objGroup2, user);
-        }
-    }
     
 }
