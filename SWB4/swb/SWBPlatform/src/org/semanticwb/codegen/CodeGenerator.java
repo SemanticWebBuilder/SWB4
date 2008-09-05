@@ -650,16 +650,13 @@ public class CodeGenerator
                             javaClassContent.append(ENTER);
                             javaClassContent.append(PUBLIC + valueToReturn + " get" + objectName + "()" + ENTER);
                             javaClassContent.append(OPEN_BLOCK + ENTER);
+                            javaClassContent.append("         "+valueToReturn+" ret=null;" + ENTER);
                             javaClassContent.append("         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary." + tpp.getName() + ");" + ENTER);
-                            javaClassContent.append("         return ("+valueToReturn+")vocabulary."+valueToReturn+".newGenericInstance(obj);" + ENTER);
-//                                javaClassContent.append("         " + valueToReturn + " ret=null;" + ENTER);
-//                                javaClassContent.append("         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary." + tpp.getName() + ".getRDFProperty());" + ENTER);
-//                                javaClassContent.append("         GenericIterator<" + m_Package + "." + valueToReturn + "> it=new GenericIterator<" + m_Package + "." + valueToReturn + ">(" + valueToReturn + ".class, stit);" + ENTER);
-//                                javaClassContent.append("         if(it.hasNext())" + ENTER);
-//                                javaClassContent.append("         {" + ENTER);
-//                                javaClassContent.append("             ret=it.next();" + ENTER);
-//                                javaClassContent.append("         }" + ENTER);
-//                                javaClassContent.append("         return ret;" + ENTER);
+                            javaClassContent.append("         if(obj!=null)" + ENTER);
+                            javaClassContent.append("         {" + ENTER);
+                            javaClassContent.append("             ret=("+valueToReturn+")vocabulary."+valueToReturn+".newGenericInstance(obj);" + ENTER);
+                            javaClassContent.append("         }" + ENTER);
+                            javaClassContent.append("         return ret;" + ENTER);                           
                             javaClassContent.append(CLOSE_BLOCK + ENTER);
                         }
                     }
