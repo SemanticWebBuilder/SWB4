@@ -563,8 +563,14 @@
     <rdf:type rdf:resource="#Class"/>
   </owl:Class>
   <owl:ObjectProperty rdf:ID="portletSubType">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasPSTPortlets"/>
+    </owl:inverseOf>
     <rdfs:domain rdf:resource="#Portlet"/>
     <rdfs:range rdf:resource="#PortletSubType"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasPSTPortlets">
+    <rdfs:label>hasPortlets</rdfs:label>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="previousVersion">
     <rdfs:range rdf:resource="#VersionInfo"/>
@@ -574,7 +580,11 @@
     <rdfs:domain rdf:resource="#Roleable"/>
     <rdfs:range rdf:resource="#Role"/>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasPTPortlets">
+    <rdfs:label>hasPortlets</rdfs:label>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="PSTType">
+    <rdfs:label>type</rdfs:label>
     <owl:inverseOf>
       <owl:ObjectProperty rdf:ID="hasPTSubType"/>
     </owl:inverseOf>
@@ -617,6 +627,9 @@
     <rdfs:subPropertyOf>
       <owl:ObjectProperty rdf:ID="hasReference"/>
     </rdfs:subPropertyOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasPTSubType">
+    <rdfs:label>hasSubType</rdfs:label>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasCalendar">
     <rdfs:range rdf:resource="#Calendar"/>
@@ -715,6 +728,7 @@
     <owl:inverseOf rdf:resource="#hasGroupedTemplate"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="portletType">
+    <owl:inverseOf rdf:resource="#hasPTPortlets"/>
     <rdfs:range rdf:resource="#PortletType"/>
     <rdfs:domain rdf:resource="#Portlet"/>
   </owl:ObjectProperty>
@@ -803,6 +817,11 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#User"/>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="portletXMLConf">
+    <rdfs:label>xmlConf</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Portlet"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="portletCache">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <rdfs:domain rdf:resource="#PortletType"/>
@@ -872,6 +891,11 @@
   <owl:DatatypeProperty rdf:ID="hits">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <rdfs:domain rdf:resource="#Viewable"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="portletXML">
+    <rdfs:label>xml</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Portlet"/>
   </owl:DatatypeProperty>
 </rdf:RDF>
 
