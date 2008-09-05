@@ -110,7 +110,7 @@ public class TemplateSrv {
             Iterator<WebPage> itWebPages = webSite.listWebPages();
             while (itWebPages.hasNext()) {
                 WebPage webPage = itWebPages.next();
-                GenericIterator<TemplateRef> itTemplateRefs = webPage.listTemplateRef();
+                GenericIterator<TemplateRef> itTemplateRefs = webPage.listTemplateRefs();
                 while (itTemplateRefs.hasNext()) {
                     TemplateRef tplRef = itTemplateRefs.next();
                     String data = tplRef.getTemplate().getId();

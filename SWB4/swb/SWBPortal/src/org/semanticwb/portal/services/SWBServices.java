@@ -100,7 +100,7 @@ public class SWBServices {
 
     public boolean removeTemplateRef(TemplateRefable templateRefable, Template template, User user) throws SWBException {
         boolean doAction = false;
-        GenericIterator itTemplateRef = templateRefable.listTemplateRef();
+        GenericIterator itTemplateRef = templateRefable.listTemplateRefs();
         while (itTemplateRef.hasNext()) {
             TemplateRef tempRef = (TemplateRef) itTemplateRef.next();
             if (tempRef.getTemplate().getURI().equals(template.getURI())) {
@@ -131,7 +131,7 @@ public class SWBServices {
 
     public boolean removeRuleRef(RuleRefable ruleRefable, Rule rule, User user) throws SWBException {
         boolean doAction = false;
-        GenericIterator itRuleRef = ruleRefable.listRuleRef();
+        GenericIterator itRuleRef = ruleRefable.listRuleRefs();
         while (itRuleRef.hasNext()) {
             RuleRef ruleRef = (RuleRef) itRuleRef.next();
             if (ruleRef.getRule().getURI().equals(rule.getURI())) {
@@ -161,7 +161,7 @@ public class SWBServices {
 
     public boolean removeRoleRef(RoleRefable roleRefable, Role role, User user) throws SWBException {
         boolean doAction = false;
-        GenericIterator itRoleRef = roleRefable.listRoleRef();
+        GenericIterator itRoleRef = roleRefable.listRoleRefs();
         while (itRoleRef.hasNext()) {
             RoleRef roleRef = (RoleRef) itRoleRef.next();
             if (roleRef.getRole().getURI().equals(role.getURI())) {

@@ -221,7 +221,7 @@ public class TemplateImp extends Template
                             }
                         } catch (Exception e)
                         {
-                            log.error("Error to parse Template:" + tag.getParam("type") + " ->Template:" + getTitle(),e);
+                            log.error("Error to parse Template:" + tag.getParam("type") + " ->Template:" + getTitle());
                         }
                     } else if (tag.getTagString().toLowerCase().equals("wbobject"))
                     {

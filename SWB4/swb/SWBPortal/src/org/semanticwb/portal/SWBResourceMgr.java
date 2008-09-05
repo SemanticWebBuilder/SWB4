@@ -109,7 +109,7 @@ public class SWBResourceMgr
         Date today = new Date();
         //today = new Date(today.getYear(), today.getMonth(), today.getDate());
         TreeSet ret = new TreeSet(new SWBPriorityComparator(true));
-        Iterator<PortletRef> it = topic.listPortletRef();
+        Iterator<PortletRef> it = topic.listPortletRefs();
         while (it.hasNext())
         {
             PortletRef ref = it.next();
