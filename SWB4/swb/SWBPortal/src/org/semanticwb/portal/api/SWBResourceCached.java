@@ -10,7 +10,6 @@ package org.semanticwb.portal.api;
 import javax.servlet.http.*;
 import java.io.*;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBException;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Portlet;
@@ -53,9 +52,9 @@ public class SWBResourceCached implements SWBResource, SWBResourceWindow
 
     /**
      *
-     * @throws SWBException
+     * @throws SWBResourceException
      */    
-    public void init() throws SWBException
+    public void init() throws SWBResourceException
     {
         resource.init();
     }
@@ -75,7 +74,7 @@ public class SWBResourceCached implements SWBResource, SWBResourceWindow
      * @throws IOException
      */    
     public void processAction(HttpServletRequest request, SWBActionResponse response)
-        throws SWBException, java.io.IOException
+        throws SWBResourceException, java.io.IOException
     {
         resource.processAction(request, response);
     }
@@ -89,7 +88,7 @@ public class SWBResourceCached implements SWBResource, SWBResourceWindow
      * @throws IOException
      */    
     public void render(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest)
-        throws SWBException, java.io.IOException
+        throws SWBResourceException, java.io.IOException
     {
         if(paramsRequest.getMode().equals(paramsRequest.Mode_VIEW))
         {        
@@ -141,7 +140,7 @@ public class SWBResourceCached implements SWBResource, SWBResourceWindow
     
     /** asigna la informacion de base de datos al recurso
      * @param base  */
-    public void setResourceBase(Portlet base) throws SWBException
+    public void setResourceBase(Portlet base) throws SWBResourceException
     {
         resource.setResourceBase(base);
         cache = null;
@@ -150,7 +149,7 @@ public class SWBResourceCached implements SWBResource, SWBResourceWindow
     /** Metodo que es llamado al momento de instalar el recurso en webbuilder
      * @param recobj informaci�n de base de datos de la definici�n del Recurso
      */
-    public void install(PortletType recobj) throws SWBException
+    public void install(PortletType recobj) throws SWBResourceException
     {
         resource.install(recobj);
     }
@@ -158,7 +157,7 @@ public class SWBResourceCached implements SWBResource, SWBResourceWindow
     /** Metodo que es llamado al momento de desinstalar el recurso en webbuilder
      * @param recobj informaci�n de base de datos de la definici�n del Recurso
      */
-    public void uninstall(PortletType recobj) throws SWBException
+    public void uninstall(PortletType recobj) throws SWBResourceException
     {
         resource.uninstall(recobj);
     }
@@ -168,7 +167,7 @@ public class SWBResourceCached implements SWBResource, SWBResourceWindow
         resource.destroy();
     }
 
-    public String[] getModes(HttpServletRequest request, SWBParamRequest paramRequest) throws SWBException, java.io.IOException
+    public String[] getModes(HttpServletRequest request, SWBParamRequest paramRequest) throws SWBResourceException, java.io.IOException
     {
         if(resource instanceof SWBResourceWindow)
         {
@@ -177,7 +176,7 @@ public class SWBResourceCached implements SWBResource, SWBResourceWindow
         return new String[]{paramRequest.Mode_VIEW};
     }
     
-    public String getTitle(HttpServletRequest request, SWBParamRequest paramRequest) throws SWBException, java.io.IOException
+    public String getTitle(HttpServletRequest request, SWBParamRequest paramRequest) throws SWBResourceException, java.io.IOException
     {
         if(resource instanceof SWBResourceWindow)
         {
@@ -186,7 +185,7 @@ public class SWBResourceCached implements SWBResource, SWBResourceWindow
         return paramRequest.getWindowTitle();
     }
     
-    public String[] getWindowStates(HttpServletRequest request, SWBParamRequest paramRequest) throws SWBException, java.io.IOException
+    public String[] getWindowStates(HttpServletRequest request, SWBParamRequest paramRequest) throws SWBResourceException, java.io.IOException
     {
         if(resource instanceof SWBResourceWindow)
         {
@@ -195,7 +194,7 @@ public class SWBResourceCached implements SWBResource, SWBResourceWindow
         return new String[]{paramRequest.WinState_MINIMIZED, paramRequest.WinState_NORMAL, paramRequest.WinState_MAXIMIZED};
     }
     
-    public boolean windowSupport(HttpServletRequest request, SWBParamRequest paramRequest) throws SWBException, java.io.IOException
+    public boolean windowSupport(HttpServletRequest request, SWBParamRequest paramRequest) throws SWBResourceException, java.io.IOException
     {
         if(resource instanceof SWBResourceWindow)
         {

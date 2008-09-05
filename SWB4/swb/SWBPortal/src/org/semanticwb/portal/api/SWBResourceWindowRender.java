@@ -12,7 +12,6 @@ import java.io.PrintWriter;
 import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.semanticwb.SWBException;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.servlet.SWBHttpServletResponseWrapper;
 
@@ -31,7 +30,7 @@ public class SWBResourceWindowRender
     }
     
     
-    public void render(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBException, IOException 
+    public void render(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException 
     {
         //System.out.println("id:"+paramsRequest.getResourceBase().getId()+" "+resource.getClass()+" "+(resource instanceof WBResourceWindow));
         if(resource instanceof SWBResourceWindow 
@@ -50,7 +49,7 @@ public class SWBResourceWindowRender
         }        
     }
     
-    public void window(HttpServletRequest request, String content, PrintWriter out, SWBParamRequest paramsRequest) throws SWBException, IOException
+    public void window(HttpServletRequest request, String content, PrintWriter out, SWBParamRequest paramsRequest) throws SWBResourceException, IOException
     {
         String title=((SWBResourceWindow)resource).getTitle(request, paramsRequest);
         

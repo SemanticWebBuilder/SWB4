@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Locale;
-import org.semanticwb.SWBException;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.PortletType;
 import org.semanticwb.model.Portlet;
@@ -48,7 +47,7 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
     }
     
     /**
-     * @throws SWBException
+     * @throws SWBResourceException
      */    
     public void init() throws SWBResourceException
     {
@@ -56,7 +55,7 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
     
     /**
      * @param recobj
-     * @throws SWBException
+     * @throws SWBResourceException
      */    
     public void install(PortletType recobj) throws SWBResourceException
     {
@@ -65,7 +64,7 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
     /**
      * @param request
      * @param response
-     * @throws SWBException
+     * @throws SWBResourceException
      * @throws IOException
      */    
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
@@ -77,7 +76,7 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
      * @param request
      * @param response
      * @param paramRequest
-     * @throws SWBException
+     * @throws SWBResourceException
      * @throws IOException
      */    
     public void render(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
@@ -92,7 +91,7 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
      * @param request
      * @param response
      * @param paramRequest
-     * @throws SWBException
+     * @throws SWBResourceException
      * @throws IOException
      */    
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
@@ -128,7 +127,7 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
      * @param request
      * @param response
      * @param paramRequest
-     * @throws SWBException
+     * @throws SWBResourceException
      * @throws IOException
      */    
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
@@ -140,7 +139,7 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
      * @param request
      * @param response
      * @param paramRequest
-     * @throws SWBException
+     * @throws SWBResourceException
      * @throws IOException
      */    
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
@@ -152,7 +151,7 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
      * @param request
      * @param response
      * @param paramRequest
-     * @throws SWBException
+     * @throws SWBResourceException
      * @throws IOException
      */    
     public void doHelp(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
@@ -164,7 +163,7 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
      * @param request
      * @param response
      * @param paramRequest
-     * @throws SWBException
+     * @throws SWBResourceException
      * @throws IOException
      */    
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
@@ -185,7 +184,7 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
      * @param request
      * @param response
      * @param paramRequest
-     * @throws SWBException
+     * @throws SWBResourceException
      * @throws IOException
      */    
     public void doAdminHlp(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
@@ -197,7 +196,7 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
      * @param request
      * @param response
      * @param paramRequest
-     * @throws SWBException
+     * @throws SWBResourceException
      * @throws IOException
      */    
     public void doIndex(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
@@ -209,7 +208,7 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
      * @param request
      * @param response
      * @param paramRequest
-     * @throws SWBException
+     * @throws SWBResourceException
      * @throws IOException
      */    
     public void doXML(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
@@ -219,7 +218,7 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
 
     /**
      * @param base
-     * @throws SWBException
+     * @throws SWBResourceException
      */    
     public void setResourceBase(Portlet base) throws SWBResourceException
     {
@@ -228,7 +227,7 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
     
     /**
      * @param recobj
-     * @throws SWBException
+     * @throws SWBResourceException
      */    
     public void uninstall(PortletType recobj) throws SWBResourceException
     {
@@ -264,17 +263,17 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
         return new String[]{paramRequest.Mode_VIEW};
     }
     
-    public String getTitle(HttpServletRequest request, SWBParamRequest paramRequest) throws SWBException, java.io.IOException
+    public String getTitle(HttpServletRequest request, SWBParamRequest paramRequest) throws SWBResourceException, java.io.IOException
     {
         return paramRequest.getWindowTitle();
     }
     
-    public String[] getWindowStates(HttpServletRequest request, SWBParamRequest paramRequest) throws SWBException, java.io.IOException
+    public String[] getWindowStates(HttpServletRequest request, SWBParamRequest paramRequest) throws SWBResourceException, java.io.IOException
     {
         return new String[]{paramRequest.WinState_MINIMIZED, paramRequest.WinState_NORMAL, paramRequest.WinState_MAXIMIZED};
     }
     
-    public boolean windowSupport(HttpServletRequest request, SWBParamRequest paramRequest) throws SWBException, java.io.IOException
+    public boolean windowSupport(HttpServletRequest request, SWBParamRequest paramRequest) throws SWBResourceException, java.io.IOException
     {
         //System.out.println("----> "+paramRequest.getResourceBase().getId()+" windowSupport:"+paramRequest.getResourceBase().getConfAttribute("portletWindow","0"));
         if(!paramRequest.getAdminTopic().getWebSiteId().equals(SWBContext.WEBSITE_ADMIN))

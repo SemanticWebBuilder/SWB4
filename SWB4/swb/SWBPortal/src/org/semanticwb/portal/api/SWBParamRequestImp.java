@@ -10,7 +10,6 @@ package org.semanticwb.portal.api;
 import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBException;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Portlet;
@@ -243,12 +242,12 @@ public class SWBParamRequestImp implements SWBParamRequest
         this.request = request;
     }
     
-    public String getLocaleString(String key) throws SWBException
+    public String getLocaleString(String key) throws SWBResourceException
     {
         return SWBUtils.TEXT.getLocaleString(bundle,key,locale,loader);
     }
     
-    public String getLocaleLogString(String key) throws SWBException
+    public String getLocaleLogString(String key) throws SWBResourceException
     {
         //System.out.println("bundle:"+bundle+" key:"+key+" loc:"+AFUtils.getLocale());
         return SWBUtils.TEXT.getLocaleString(bundle,key,SWBUtils.TEXT.getLocale());
