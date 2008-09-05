@@ -322,30 +322,19 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
          return (RuleRef)vocabulary.RuleRef.newGenericInstance(obj);
     }
 
-    public GenericIterator<org.semanticwb.model.WebPage> listParentWebPages()
+    public void setParent(org.semanticwb.model.WebPage webpage)
     {
-        StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasParentWebPage.getRDFProperty());
-        return new GenericIterator<org.semanticwb.model.WebPage>(org.semanticwb.model.WebPage.class, stit);
+        getSemanticObject().addObjectProperty(vocabulary.webPageParent, webpage.getSemanticObject());
     }
 
-    public void addParentWebPage(org.semanticwb.model.WebPage webpage)
+    public void removeParent()
     {
-        getSemanticObject().addObjectProperty(vocabulary.hasParentWebPage, webpage.getSemanticObject());
+        getSemanticObject().removeProperty(vocabulary.webPageParent);
     }
 
-    public void removeAllParentWebPage()
+    public WebPage getParent()
     {
-        getSemanticObject().removeProperty(vocabulary.hasParentWebPage);
-    }
-
-    public void removeParentWebPage(org.semanticwb.model.WebPage webpage)
-    {
-        getSemanticObject().removeObjectProperty(vocabulary.hasParentWebPage,webpage.getSemanticObject());
-    }
-
-    public WebPage getParentWebPage()
-    {
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasParentWebPage);
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.webPageParent);
          return (WebPage)vocabulary.WebPage.newGenericInstance(obj);
     }
 
@@ -367,6 +356,33 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(vocabulary.description, description, lang);
+    }
+
+    public GenericIterator<org.semanticwb.model.WebPage> listVirtualParents()
+    {
+        StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasVirtualWebPageParent.getRDFProperty());
+        return new GenericIterator<org.semanticwb.model.WebPage>(org.semanticwb.model.WebPage.class, stit);
+    }
+
+    public void addVirtualParent(org.semanticwb.model.WebPage webpage)
+    {
+        getSemanticObject().addObjectProperty(vocabulary.hasVirtualWebPageParent, webpage.getSemanticObject());
+    }
+
+    public void removeAllVirtualParent()
+    {
+        getSemanticObject().removeProperty(vocabulary.hasVirtualWebPageParent);
+    }
+
+    public void removeVirtualParent(org.semanticwb.model.WebPage webpage)
+    {
+        getSemanticObject().removeObjectProperty(vocabulary.hasVirtualWebPageParent,webpage.getSemanticObject());
+    }
+
+    public WebPage getVirtualParent()
+    {
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasVirtualWebPageParent);
+         return (WebPage)vocabulary.WebPage.newGenericInstance(obj);
     }
 
     public WebSite getWebSite()
