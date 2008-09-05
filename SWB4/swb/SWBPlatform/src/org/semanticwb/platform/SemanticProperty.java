@@ -34,6 +34,11 @@ public class SemanticProperty
         return m_prop.getLocalName();
     }
     
+    public String getLabel()
+    {
+        return m_prop.getLabel(null);
+    }
+    
     public String getURI()
     {
         return m_prop.getURI();

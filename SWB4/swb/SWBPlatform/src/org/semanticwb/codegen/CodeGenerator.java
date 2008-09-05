@@ -244,6 +244,7 @@ public class CodeGenerator
         while (tpcit.hasNext())
         {
             SemanticClass tpc = tpcit.next();
+            
             if(tpc.isSWBModel())
             {
                 javaClassContent.append(ENTER);
@@ -390,7 +391,7 @@ public class CodeGenerator
     private void insertPropertiesToInterface(SemanticClass tpc, StringBuilder javaClassContent)
     {
         Iterator<SemanticProperty> tppit = tpc.listProperties();
-        HashSet<String> methods = new HashSet<String>();
+//        HashSet<String> methods = new HashSet<String>();
         while (tppit.hasNext())
         {
             SemanticProperty tpp = tppit.next();
@@ -401,12 +402,13 @@ public class CodeGenerator
                     try
                     {
                         URI uri = new URI(tpp.getRangeClass().getURI());
-                        String objectName = tpp.getName();
+                        String objectName = tpp.getLabel();
+                        if(objectName==null)objectName=tpp.getName();
                         objectName = toUpperCase(objectName);
                         String valueToReturn = uri.getFragment();
-                        if ( !methods.contains(objectName) )
+//                        if ( !methods.contains(objectName) )
                         {
-                            methods.add(objectName);
+//                            methods.add(objectName);
                             if ( objectName.toLowerCase().startsWith("has") )
                             {
                                 // son varios
@@ -573,7 +575,7 @@ public class CodeGenerator
     private void insertPropertiesToClass(SemanticClass tpc, StringBuilder javaClassContent)
     {
         Iterator<SemanticProperty> tppit = tpc.listProperties();
-        HashSet<String> methods = new HashSet<String>();
+//        HashSet<String> methods = new HashSet<String>();
         while (tppit.hasNext())
         {
             SemanticProperty tpp = tppit.next();
@@ -584,12 +586,13 @@ public class CodeGenerator
                     try
                     {
                         URI uri = new URI(tpp.getRangeClass().getURI());
-                        String objectName = tpp.getName();
+                        String objectName = tpp.getLabel();
+                        if(objectName==null)objectName=tpp.getName();
                         objectName = toUpperCase(objectName);
                         String valueToReturn = uri.getFragment();
-                        if ( !methods.contains(objectName) )
+//                        if ( !methods.contains(objectName) )
                         {
-                            methods.add(objectName);
+//                            methods.add(objectName);
                             if ( objectName.toLowerCase().startsWith("has") )
                             {
                                 // son varios
@@ -807,7 +810,6 @@ public class CodeGenerator
             //System.out.println("tpc:" + tpc);
             javaClassContent.append("    public final SemanticClass " + tpc.getName() + ";" + ENTER);
         }
-
 
         javaClassContent.append("\r\n\r\n\r\n    //Properties" + ENTER);
         HashSet<String> properties = new HashSet<String>();

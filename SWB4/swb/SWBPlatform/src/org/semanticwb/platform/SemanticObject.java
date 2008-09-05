@@ -564,13 +564,16 @@ public class SemanticObject
     
     public SemanticObject getObjectProperty(SemanticProperty prop, SemanticObject defValue)
     {
+        SemanticObject ret=defValue;
         if(m_virtual)
         {
-            SemanticObject ret=(SemanticObject)m_virtprops.get(prop.getURI());
-            if(ret==null)ret=defValue;
+            ArrayList<SemanticObject> arr=((ArrayList)m_virtprops.get(prop.getURI()));
+            if(!arr.isEmpty())
+            {
+                ret=(SemanticObject)arr.get(0);
+            }
             return ret;
         }             
-        SemanticObject ret=defValue;
         Statement stm=m_res.getProperty(prop.getRDFProperty());
         if(stm!=null)
         {

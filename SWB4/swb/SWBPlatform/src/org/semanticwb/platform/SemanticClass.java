@@ -99,7 +99,7 @@ public class SemanticClass
                 m_autogenId=false;
             }
         }
-        log.trace("isAutogenId:"+m_autogenId);
+        //log.trace("isAutogenId:"+m_autogenId);
         return m_autogenId;
     }
     
