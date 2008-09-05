@@ -15,6 +15,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Portlet;
 import org.semanticwb.model.PortletRef;
+import org.semanticwb.model.PortletSubType;
 import org.semanticwb.model.PortletType;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.Template;
@@ -139,7 +140,7 @@ public class SWBResourceMgr
      * @param params
      * @param tpl
      * @return  */
-    public Iterator getResources(PortletType type, User user, WebPage topic, HashMap params, Template tpl)
+    public Iterator getResources(PortletType type, PortletSubType stype, User user, WebPage topic, HashMap params, Template tpl)
     {
         TreeSet ret = new TreeSet(new SWBPriorityComparator());
         
@@ -149,25 +150,27 @@ public class SWBResourceMgr
         System.out.print(" template:"+tpl.getId());
         System.out.print(" templateMap:"+tpl.getWebSiteId());
         System.out.print(" type:"+type);
-        System.out.print(" type:"+params.get("type"));
-        System.out.println(" stype:"+params.get("stype"));
+        System.out.print(" stype:"+stype);
+        System.out.println(" params:"+params);
         
-        Iterator<Portlet> it=type.listPortlets();
-        while(it.hasNext())
+        if(type!=null)
         {
-            Portlet base=it.next();
-            
-            //if (checkResource(base, user, stype, stypemap, camp, today, topic))
+            //TODO:check stype
+            Iterator<Portlet> it=type.listPortlets();
+            while(it.hasNext())
             {
-                SWBResource wbr=getResource(base.getWebSiteId(),base.getId());
-                //System.out.println("checkResource ok:"+wbr.getResourceBase().getId());
-                if(wbr!=null)
+                Portlet base=it.next();
+
+                //if (checkResource(base, user, stype, stypemap, camp, today, topic))
                 {
-                    ret.add(wbr);
+                    SWBResource wbr=getResource(base.getWebSiteId(),base.getId());
+                    //System.out.println("checkResource ok:"+wbr.getResourceBase().getId());
+                    if(wbr!=null)
+                    {
+                        ret.add(wbr);
+                    }
                 }
             }
-            
-            
         }
         
         

@@ -10,6 +10,7 @@ import org.semanticwb.model.Dns;
 import org.semanticwb.model.Language;
 import org.semanticwb.model.PortletType;
 import org.semanticwb.model.Portlet;
+import org.semanticwb.model.PortletRef;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.Template;
 import org.semanticwb.model.TemplateRef;
@@ -134,6 +135,45 @@ public class TestWebSite {
             portlet.setPortletType(ptype);
             portlet.setTitle("Test");
         }
+        
+        if(site.getPortletType("Banner")==null)
+        {
+            
+            PortletType ptype=site.createPortletType("Banner");
+            ptype.setPortletClassName("org.semanticwb.portal.resources.Banner");
+            ptype.setPortletBundle("org.semanticwb.portal.resources.Banner");
+            ptype.setPortletMode(1);
+            ptype.setTitle("Recurso Banner");
+                    
+            Portlet portlet=site.createPortlet();
+            portlet.setActive(true);
+            portlet.setCreator(user);
+            portlet.setPortletType(ptype);
+            portlet.setTitle("Banner");
+        }       
+        
+        if(site.getPortletType("HtmlContent")==null)
+        {
+            
+            PortletType ptype=site.createPortletType("HtmlContent");
+            ptype.setPortletClassName("org.semanticwb.portal.resources.HtmlContent");
+            ptype.setPortletBundle("org.semanticwb.portal.resources.HtmlContent");
+            ptype.setPortletMode(1);
+            ptype.setTitle("Recurso HtmlContent");
+                    
+            Portlet portlet=site.createPortlet();
+            portlet.setActive(true);
+            portlet.setCreator(user);
+            portlet.setPortletType(ptype);
+            portlet.setTitle("HtmlContent");
+            
+            PortletRef portletref=site.createPortletRef();
+            portletref.setActive(true);
+            portletref.setPortlet(portlet);
+            portletref.setPriority(3);
+            
+            home.addPortletRef(portletref);
+        }             
     }
     
     
