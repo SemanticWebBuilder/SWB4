@@ -51,7 +51,7 @@ public class WebPageSrv {
 
     public boolean changeStatusTemplate2WebPage(WebPage webPage, String id, boolean active, User user) throws SWBException {
         boolean doAction = false;
-        GenericIterator<TemplateRef> itTempRef = webPage.listTemplateRef();
+        GenericIterator<TemplateRef> itTempRef = webPage.listTemplateRefs();
         while (itTempRef.hasNext()) {
             TemplateRef tplRef = itTempRef.next();
             if (tplRef.getId().equals(id)) {
@@ -68,7 +68,7 @@ public class WebPageSrv {
 
     public boolean changeStatusRule2WebPage(WebPage webPage, String id, boolean active, User user) throws SWBException {
         boolean doAction = false;
-        GenericIterator<RuleRef> itRuleRef = webPage.listRuleRef();
+        GenericIterator<RuleRef> itRuleRef = webPage.listRuleRefs();
         while (itRuleRef.hasNext()) {
             RuleRef ruleRef = itRuleRef.next();
             //TODO:Revisar si el id que me pasan es una Uri completa
@@ -87,7 +87,7 @@ public class WebPageSrv {
     
     public boolean changeStatusRole2WebPage(WebPage webPage, String id, boolean active, User user) throws SWBException {
         boolean doAction = false;
-        GenericIterator<RoleRef> itRoleRef = webPage.listRoleRef();
+        GenericIterator<RoleRef> itRoleRef = webPage.listRoleRefs();
         while (itRoleRef.hasNext()) {
             RoleRef roleRef = itRoleRef.next();
             if (roleRef.getId().equals(id)) {
