@@ -38,14 +38,8 @@ public class ObjectGroupBase extends GenericObjectBase implements Traceable,Desc
 
     public User getModifiedBy()
     {
-         User ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.modifiedBy.getRDFProperty());
-         GenericIterator<org.semanticwb.model.User> it=new GenericIterator<org.semanticwb.model.User>(User.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.modifiedBy);
+         return (User)vocabulary.User.newGenericInstance(obj);
     }
 
     public String getTitle()
@@ -90,14 +84,8 @@ public class ObjectGroupBase extends GenericObjectBase implements Traceable,Desc
 
     public User getCreator()
     {
-         User ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.creator.getRDFProperty());
-         GenericIterator<org.semanticwb.model.User> it=new GenericIterator<org.semanticwb.model.User>(User.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.creator);
+         return (User)vocabulary.User.newGenericInstance(obj);
     }
 
     public String getDescription()
@@ -120,7 +108,7 @@ public class ObjectGroupBase extends GenericObjectBase implements Traceable,Desc
         getSemanticObject().setProperty(vocabulary.description, description, lang);
     }
 
-    public GenericIterator<org.semanticwb.model.ObjectGroup> listGroup()
+    public GenericIterator<org.semanticwb.model.ObjectGroup> listGroups()
     {
         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasGroup.getRDFProperty());
         return new GenericIterator<org.semanticwb.model.ObjectGroup>(org.semanticwb.model.ObjectGroup.class, stit);
@@ -143,14 +131,8 @@ public class ObjectGroupBase extends GenericObjectBase implements Traceable,Desc
 
     public ObjectGroup getGroup()
     {
-         ObjectGroup ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasGroup.getRDFProperty());
-         GenericIterator<org.semanticwb.model.ObjectGroup> it=new GenericIterator<org.semanticwb.model.ObjectGroup>(ObjectGroup.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasGroup);
+         return (ObjectGroup)vocabulary.ObjectGroup.newGenericInstance(obj);
     }
 
     public UserRepository getUserRepository()

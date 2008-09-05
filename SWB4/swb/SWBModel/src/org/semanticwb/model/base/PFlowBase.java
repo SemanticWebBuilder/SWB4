@@ -58,14 +58,8 @@ public class PFlowBase extends GenericObjectBase implements Deleteable,Groupable
 
     public User getModifiedBy()
     {
-         User ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.modifiedBy.getRDFProperty());
-         GenericIterator<org.semanticwb.model.User> it=new GenericIterator<org.semanticwb.model.User>(User.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.modifiedBy);
+         return (User)vocabulary.User.newGenericInstance(obj);
     }
 
     public String getTitle()
@@ -100,14 +94,8 @@ public class PFlowBase extends GenericObjectBase implements Deleteable,Groupable
 
     public VersionInfo getActualVersion()
     {
-         VersionInfo ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.actualVersion.getRDFProperty());
-         GenericIterator<org.semanticwb.model.VersionInfo> it=new GenericIterator<org.semanticwb.model.VersionInfo>(VersionInfo.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.actualVersion);
+         return (VersionInfo)vocabulary.VersionInfo.newGenericInstance(obj);
     }
 
     public Date getUpdated()
@@ -132,14 +120,8 @@ public class PFlowBase extends GenericObjectBase implements Deleteable,Groupable
 
     public VersionInfo getLastVersion()
     {
-         VersionInfo ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.lastVersion.getRDFProperty());
-         GenericIterator<org.semanticwb.model.VersionInfo> it=new GenericIterator<org.semanticwb.model.VersionInfo>(VersionInfo.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.lastVersion);
+         return (VersionInfo)vocabulary.VersionInfo.newGenericInstance(obj);
     }
 
     public void setCreator(org.semanticwb.model.User user)
@@ -154,14 +136,8 @@ public class PFlowBase extends GenericObjectBase implements Deleteable,Groupable
 
     public User getCreator()
     {
-         User ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.creator.getRDFProperty());
-         GenericIterator<org.semanticwb.model.User> it=new GenericIterator<org.semanticwb.model.User>(User.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.creator);
+         return (User)vocabulary.User.newGenericInstance(obj);
     }
 
     public String getDescription()
@@ -184,7 +160,7 @@ public class PFlowBase extends GenericObjectBase implements Deleteable,Groupable
         getSemanticObject().setProperty(vocabulary.description, description, lang);
     }
 
-    public GenericIterator<org.semanticwb.model.ObjectGroup> listGroup()
+    public GenericIterator<org.semanticwb.model.ObjectGroup> listGroups()
     {
         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasGroup.getRDFProperty());
         return new GenericIterator<org.semanticwb.model.ObjectGroup>(org.semanticwb.model.ObjectGroup.class, stit);
@@ -207,14 +183,8 @@ public class PFlowBase extends GenericObjectBase implements Deleteable,Groupable
 
     public ObjectGroup getGroup()
     {
-         ObjectGroup ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasGroup.getRDFProperty());
-         GenericIterator<org.semanticwb.model.ObjectGroup> it=new GenericIterator<org.semanticwb.model.ObjectGroup>(ObjectGroup.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasGroup);
+         return (ObjectGroup)vocabulary.ObjectGroup.newGenericInstance(obj);
     }
 
     public WebSite getWebSite()

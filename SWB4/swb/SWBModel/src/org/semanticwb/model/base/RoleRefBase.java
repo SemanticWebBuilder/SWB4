@@ -38,14 +38,8 @@ public class RoleRefBase extends GenericObjectBase implements Activeable
 
     public Role getRole()
     {
-         Role ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.role.getRDFProperty());
-         GenericIterator<org.semanticwb.model.Role> it=new GenericIterator<org.semanticwb.model.Role>(Role.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.role);
+         return (Role)vocabulary.Role.newGenericInstance(obj);
     }
 
     public WebSite getWebSite()

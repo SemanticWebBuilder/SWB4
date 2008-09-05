@@ -5,7 +5,7 @@ import java.util.Date;
 public interface Groupable extends GenericObject
 {
 
-    public GenericIterator<org.semanticwb.model.ObjectGroup> listGroup();
+    public GenericIterator<org.semanticwb.model.ObjectGroup> listGroups();
 
     public void addGroup(org.semanticwb.model.ObjectGroup objectgroup);
 

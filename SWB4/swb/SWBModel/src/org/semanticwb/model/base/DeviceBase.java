@@ -48,14 +48,8 @@ public class DeviceBase extends GenericObjectBase implements Traceable,Descripti
 
     public User getModifiedBy()
     {
-         User ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.modifiedBy.getRDFProperty());
-         GenericIterator<org.semanticwb.model.User> it=new GenericIterator<org.semanticwb.model.User>(User.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.modifiedBy);
+         return (User)vocabulary.User.newGenericInstance(obj);
     }
 
     public String getTitle()
@@ -100,14 +94,8 @@ public class DeviceBase extends GenericObjectBase implements Traceable,Descripti
 
     public User getCreator()
     {
-         User ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.creator.getRDFProperty());
-         GenericIterator<org.semanticwb.model.User> it=new GenericIterator<org.semanticwb.model.User>(User.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.creator);
+         return (User)vocabulary.User.newGenericInstance(obj);
     }
 
     public String getDescription()

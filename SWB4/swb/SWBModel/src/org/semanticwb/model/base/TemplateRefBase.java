@@ -38,14 +38,8 @@ public class TemplateRefBase extends GenericObjectBase implements Activeable,Pri
 
     public Template getTemplate()
     {
-         Template ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.template.getRDFProperty());
-         GenericIterator<org.semanticwb.model.Template> it=new GenericIterator<org.semanticwb.model.Template>(Template.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.template);
+         return (Template)vocabulary.Template.newGenericInstance(obj);
     }
 
     public int getPriority()

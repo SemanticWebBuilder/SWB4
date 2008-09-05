@@ -5,7 +5,7 @@ import java.util.Date;
 public interface Calendarable extends GenericObject
 {
 
-    public GenericIterator<org.semanticwb.model.Calendar> listCalendar();
+    public GenericIterator<org.semanticwb.model.Calendar> listCalendars();
 
     public void addCalendar(org.semanticwb.model.Calendar calendar);
 

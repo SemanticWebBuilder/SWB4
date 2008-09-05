@@ -58,14 +58,8 @@ public class CampBase extends GenericObjectBase implements Activeable,Deleteable
 
     public User getModifiedBy()
     {
-         User ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.modifiedBy.getRDFProperty());
-         GenericIterator<org.semanticwb.model.User> it=new GenericIterator<org.semanticwb.model.User>(User.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.modifiedBy);
+         return (User)vocabulary.User.newGenericInstance(obj);
     }
 
     public String getTitle()
@@ -110,17 +104,11 @@ public class CampBase extends GenericObjectBase implements Activeable,Deleteable
 
     public User getCreator()
     {
-         User ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.creator.getRDFProperty());
-         GenericIterator<org.semanticwb.model.User> it=new GenericIterator<org.semanticwb.model.User>(User.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.creator);
+         return (User)vocabulary.User.newGenericInstance(obj);
     }
 
-    public GenericIterator<org.semanticwb.model.Calendar> listCalendar()
+    public GenericIterator<org.semanticwb.model.Calendar> listCalendars()
     {
         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasCalendar.getRDFProperty());
         return new GenericIterator<org.semanticwb.model.Calendar>(org.semanticwb.model.Calendar.class, stit);
@@ -143,17 +131,11 @@ public class CampBase extends GenericObjectBase implements Activeable,Deleteable
 
     public Calendar getCalendar()
     {
-         Calendar ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasCalendar.getRDFProperty());
-         GenericIterator<org.semanticwb.model.Calendar> it=new GenericIterator<org.semanticwb.model.Calendar>(Calendar.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasCalendar);
+         return (Calendar)vocabulary.Calendar.newGenericInstance(obj);
     }
 
-    public GenericIterator<org.semanticwb.model.Role> listRole()
+    public GenericIterator<org.semanticwb.model.Role> listRoles()
     {
         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasRole.getRDFProperty());
         return new GenericIterator<org.semanticwb.model.Role>(org.semanticwb.model.Role.class, stit);
@@ -176,14 +158,8 @@ public class CampBase extends GenericObjectBase implements Activeable,Deleteable
 
     public Role getRole()
     {
-         Role ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasRole.getRDFProperty());
-         GenericIterator<org.semanticwb.model.Role> it=new GenericIterator<org.semanticwb.model.Role>(Role.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasRole);
+         return (Role)vocabulary.Role.newGenericInstance(obj);
     }
 
     public String getDescription()
@@ -206,7 +182,7 @@ public class CampBase extends GenericObjectBase implements Activeable,Deleteable
         getSemanticObject().setProperty(vocabulary.description, description, lang);
     }
 
-    public GenericIterator<org.semanticwb.model.Rule> listRule()
+    public GenericIterator<org.semanticwb.model.Rule> listRules()
     {
         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasRule.getRDFProperty());
         return new GenericIterator<org.semanticwb.model.Rule>(org.semanticwb.model.Rule.class, stit);
@@ -229,14 +205,8 @@ public class CampBase extends GenericObjectBase implements Activeable,Deleteable
 
     public Rule getRule()
     {
-         Rule ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasRule.getRDFProperty());
-         GenericIterator<org.semanticwb.model.Rule> it=new GenericIterator<org.semanticwb.model.Rule>(Rule.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasRule);
+         return (Rule)vocabulary.Rule.newGenericInstance(obj);
     }
 
     public WebSite getWebSite()

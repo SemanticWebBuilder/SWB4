@@ -38,14 +38,8 @@ public class RuleRefBase extends GenericObjectBase implements Activeable
 
     public Rule getRule()
     {
-         Rule ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.rule.getRDFProperty());
-         GenericIterator<org.semanticwb.model.Rule> it=new GenericIterator<org.semanticwb.model.Rule>(Rule.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.rule);
+         return (Rule)vocabulary.Rule.newGenericInstance(obj);
     }
 
     public WebSite getWebSite()

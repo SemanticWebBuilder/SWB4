@@ -5,7 +5,7 @@ import java.util.Date;
 public interface Portletable extends GenericObject
 {
 
-    public GenericIterator<org.semanticwb.model.Portlet> listPortlet();
+    public GenericIterator<org.semanticwb.model.Portlet> listPortlets();
 
     public void addPortlet(org.semanticwb.model.Portlet portlet);
 

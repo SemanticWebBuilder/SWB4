@@ -5,7 +5,7 @@ import java.util.Date;
 public interface RuleRefable extends GenericObject
 {
 
-    public GenericIterator<org.semanticwb.model.RuleRef> listRuleRef();
+    public GenericIterator<org.semanticwb.model.RuleRef> listRuleRefs();
 
     public void addRuleRef(org.semanticwb.model.RuleRef ruleref);
 

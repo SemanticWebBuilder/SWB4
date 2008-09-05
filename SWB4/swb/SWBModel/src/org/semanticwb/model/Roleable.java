@@ -5,7 +5,7 @@ import java.util.Date;
 public interface Roleable extends GenericObject
 {
 
-    public GenericIterator<org.semanticwb.model.Role> listRole();
+    public GenericIterator<org.semanticwb.model.Role> listRoles();
 
     public void addRole(org.semanticwb.model.Role role);
 
