@@ -146,11 +146,6 @@ public class TemplateImp extends Template
         return rt;
     }
     
-    private String getSubTypeId(String type, String stype)
-    {
-        PortletSubType rec=getSubType(type,stype);
-        return rec.getURI();
-    }    
 
     /**
      * @param filename
@@ -203,16 +198,11 @@ public class TemplateImp extends Template
                                 while (en.hasMoreElements())
                                 {
                                     String name = (String) en.nextElement();
-                                    if (name.toLowerCase().equals("stype"))
-                                    {
-                                        params.put(name.toLowerCase(), getSubTypeId(tag.getParam("type"),tag.getParam(name).toLowerCase()));
-                                    } else
-                                    {
-                                        params.put(name.toLowerCase(), tag.getParam(name));
-                                    }
+                                    params.put(name.toLowerCase(), tag.getParam(name));
                                 }
                                 PortletType type=getResourceType(tag.getParam("type"));
-                                Object args[] = {type, params};
+                                PortletSubType stype=getSubType(tag.getParam("type"),tag.getParam("stype"));
+                                Object args[] = {type, params, stype};
                                 parts.add(new SWBMethod(null, obj, args, this));
                                 //System.out.print(cls.getName()+":"+"getResources");
                             } else
@@ -221,7 +211,7 @@ public class TemplateImp extends Template
                             }
                         } catch (Exception e)
                         {
-                            log.error("Error to parse Template:" + tag.getParam("type") + " ->Template:" + getTitle());
+                            log.error("Error to parse Template:" + tag.getParam("type") + " ->Template:" + getTitle(),e);
                         }
                     } else if (tag.getTagString().toLowerCase().equals("wbobject"))
                     {
@@ -944,10 +934,11 @@ public class TemplateImp extends Template
                                         }
                                         if(savelog)
                                         {
-                                            resbuf.append("|");
-                                            if(!wbres.getResourceBase().getWebSiteId().equals(topic.getWebSiteId()))
-                                                resbuf.append("0");
-                                            resbuf.append(wbres.getResourceBase().getId());
+                                            //TODO:Implementar
+//                                            resbuf.append("|");
+//                                            if(!wbres.getResourceBase().getWebSiteId().equals(topic.getWebSiteId()))
+//                                                resbuf.append("0");
+//                                            resbuf.append(wbres.getResourceBase().getId());
                                         }
                                         first = false;
                                     }
