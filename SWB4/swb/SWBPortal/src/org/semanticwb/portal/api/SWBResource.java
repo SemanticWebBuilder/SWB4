@@ -10,7 +10,6 @@ package org.semanticwb.portal.api;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.semanticwb.SWBException;
 import org.semanticwb.model.Portlet;
 import org.semanticwb.model.PortletType;
 
@@ -27,13 +26,13 @@ public interface SWBResource
      * (es llamando cada que el recurso es modificado desde la administraci�n de WB)
      * @param base Objeto Portlet
      */
-    public void setResourceBase(Portlet base) throws SWBException;
+    public void setResourceBase(Portlet base) throws SWBResourceException;
 
     /** Es llamado cuando es cargado el recurso en memoria
      * (solo es llamado una vez)
      *
      */
-    public void init() throws SWBException;
+    public void init() throws SWBResourceException;
     
     /** Regresa el Objeto Portlet con la informaci�n base del recurso.
      * @return  Objeto Portlet
@@ -71,7 +70,7 @@ public interface SWBResource
      *           Si hay algun problema de I/O con el procesamiento de streams.
      */
     public void processAction(HttpServletRequest request, SWBActionResponse actionResponse)
-        throws SWBException, java.io.IOException;
+        throws SWBResourceException, java.io.IOException;
     
     /**
      * Este m�todo permite al recurso generar el contenido de la respuesta 
@@ -90,19 +89,19 @@ public interface SWBResource
      *             Si hay alg�n problema de I/O con el procesamiento de streams.
      */
     public void render(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest)
-        throws SWBException, java.io.IOException;
+        throws SWBResourceException, java.io.IOException;
     
     /**
      * M�todo que es llamado al momento de instalar el recurso en webbuilder
      * @param recobj informaci�n de base de datos de la definici�n del Recurso
      */
-    public void install(PortletType portletType) throws SWBException;
+    public void install(PortletType portletType) throws SWBResourceException;
 
     /**
      * M�todo que es llamado al momento de desinstalar el recurso en webbuilder
      * @param recobj informaci�n de base de datos de la definici�n del Recurso
      */
-    public void uninstall(PortletType portletType) throws SWBException;
+    public void uninstall(PortletType portletType) throws SWBResourceException;
     
     /**
      * Es llamado por el ResourceMgr para indicarle al recurso cuando 

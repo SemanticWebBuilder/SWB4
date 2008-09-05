@@ -15,6 +15,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Portlet;
 import org.semanticwb.model.PortletRef;
+import org.semanticwb.model.PortletType;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.Template;
 import org.semanticwb.model.User;
@@ -138,7 +139,7 @@ public class SWBResourceMgr
      * @param params
      * @param tpl
      * @return  */
-    public Iterator getResources(String type, User user, WebPage topic, HashMap params, Template tpl)
+    public Iterator getResources(PortletType type, User user, WebPage topic, HashMap params, Template tpl)
     {
         TreeSet ret = new TreeSet(new SWBPriorityComparator());
         
@@ -150,11 +151,32 @@ public class SWBResourceMgr
         System.out.print(" type:"+type);
         System.out.print(" type:"+params.get("type"));
         System.out.println(" stype:"+params.get("stype"));
-
+        
+        Iterator<Portlet> it=type.listPortlets();
+        while(it.hasNext())
+        {
+            Portlet base=it.next();
+            
+            //if (checkResource(base, user, stype, stypemap, camp, today, topic))
+            {
+                SWBResource wbr=getResource(base.getWebSiteId(),base.getId());
+                //System.out.println("checkResource ok:"+wbr.getResourceBase().getId());
+                if(wbr!=null)
+                {
+                    ret.add(wbr);
+                }
+            }
+            
+            
+        }
+        
+        
 //        Date today = new Date();
-//        //today = new Date(today.getYear(), today.getMonth(), today.getDate());
-//
-//        
+        //today = new Date(today.getYear(), today.getMonth(), today.getDate());
+
+        
+        
+        
 //        //separar tipo de recurso
 //        int itype=0;
 //        String typemap=tpl.getWebSiteId();
@@ -172,9 +194,9 @@ public class SWBResourceMgr
 //                }
 //            }catch(Exception e){log.error(e);}
 //        }        
-//        //System.out.println("itype:"+itype+" typemap:"+typemap);
-//        
-//        //separar subtypo de recurso
+        //System.out.println("itype:"+itype+" typemap:"+typemap);
+        
+        //separar subtypo de recurso
 //        int stype=0;
 //        String stypemap=tpl.getWebSiteId();
 //        String sstype = (String)params.get("stype");
@@ -198,12 +220,13 @@ public class SWBResourceMgr
 //        String name = (String) params.get("name");
 //
 //        int camp = 0;
+        //TODO:Implementar
 //        if (name != null)
 //        {
 //            camp = CampMgr.getInstance().getCamp(topic, tpl, name.toLowerCase());
 //        }
-////        System.out.println("camp-->"+name+":"+camp);
-//        //OK_TODO: revisar recursos de global
+//        System.out.println("camp-->"+name+":"+camp);
+        //OK_TODO: revisar recursos de global
 //        
 //        ArrayList tp=null;
 //        if(topic.getWebSiteId().equals(tpl.getWebSiteId()))
@@ -273,7 +296,7 @@ public class SWBResourceMgr
 //                }
 //            }
 //        }
-////        System.out.println("size:"+ret.size());
+//        System.out.println("size:"+ret.size());
         return ret.iterator();
     }
 
