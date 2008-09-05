@@ -134,16 +134,6 @@ public class TemplateImp extends Template
     }
     
     /*
-     * Regresa ID (numero) del recurso como string y concatena 
-     * typemap en el caso de no coincidir con el topicmap de la plantilla
-     */
-    public String getResourceTypeId(String type)
-    {
-        PortletType rec=getResourceType(type);
-        return rec.getURI();
-    }
-    
-    /*
      * Regresa ID (numero) del subtipo de recurso como string y concatena 
      * subtypemap en el caso de no coincidir con el topicmap de la plantilla
      */    
@@ -221,7 +211,7 @@ public class TemplateImp extends Template
                                         params.put(name.toLowerCase(), tag.getParam(name));
                                     }
                                 }
-                                String type=getResourceTypeId(tag.getParam("type"));
+                                PortletType type=getResourceType(tag.getParam("type"));
                                 Object args[] = {type, params};
                                 parts.add(new SWBMethod(null, obj, args, this));
                                 //System.out.print(cls.getName()+":"+"getResources");
@@ -231,7 +221,7 @@ public class TemplateImp extends Template
                             }
                         } catch (Exception e)
                         {
-                            log.error("Error to parse Template:" + tag.getParam("class") + " ->Template:" + getTitle());
+                            log.error("Error to parse Template:" + tag.getParam("type") + " ->Template:" + getTitle(),e);
                         }
                     } else if (tag.getTagString().toLowerCase().equals("wbobject"))
                     {
@@ -1025,10 +1015,11 @@ public class TemplateImp extends Template
                                     
                                     if (savelog)
                                     {
-                                        resbuf.append("|");
-                                        if(!wbres.getResourceBase().getWebSiteId().equals(topic.getWebSiteId()))
-                                            resbuf.append("0");
-                                        resbuf.append(wbres.getResourceBase().getId());
+                                        //TODO:Implementar
+//                                        resbuf.append("|");
+//                                        if(!wbres.getResourceBase().getWebSiteId().equals(topic.getWebSiteId()))
+//                                            resbuf.append("0");
+//                                        resbuf.append(wbres.getResourceBase().getId());
                                     }
                                 }
                                 if (it.hasNext()) antresrc.put(id, it);
@@ -1114,6 +1105,7 @@ public class TemplateImp extends Template
 
         if (savelog)
         {
+            //TODO:Implementar
 //            long tfin = System.currentTimeMillis() - tini;            
 //            WBMessageCenter.getInstance().sendMessage(logbuf.toString()+"|"+tfin+resbuf.toString());
         }

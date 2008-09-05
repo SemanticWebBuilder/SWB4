@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.PortletType;
 import org.semanticwb.model.Template;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
@@ -152,7 +153,7 @@ public class SWBMethod
         {
             try
             {
-                o = mgr.getResources((String)arguments[0], user, topic, (HashMap) arguments[1], tpl);
+                o = mgr.getResources((PortletType)arguments[0], user, topic, (HashMap) arguments[1], tpl);
             } catch (Exception e)
             {
                 log.error("Error invoking methos:"+arguments[0], e);
