@@ -598,51 +598,13 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
         <copy-ear-war file="${file.reference.commons-fileupload-1.2.1.jar}" propname="included.lib.file.reference.commons-fileupload-1.2.1.jar.X"/>
         <basename file="${file.reference.arthurdo.jar}" property="included.lib.file.reference.arthurdo.jar"/>
         <copy-ear-war file="${file.reference.arthurdo.jar}" propname="included.lib.file.reference.arthurdo.jar.X"/>
-        <basename file="${libs.restapi.classpath}" property="included.lib.libs.restapi.classpath"/>
-        <copy-ear-war file="${libs.restapi.classpath}" propname="included.lib.libs.restapi.classpath.X"/>
-        <basename file="${libs.restlib.classpath.libfile.18}" property="included.lib.libs.restlib.classpath.18"/>
-        <basename file="${libs.restlib.classpath.libfile.17}" property="included.lib.libs.restlib.classpath.17"/>
-        <basename file="${libs.restlib.classpath.libfile.16}" property="included.lib.libs.restlib.classpath.16"/>
-        <basename file="${libs.restlib.classpath.libfile.15}" property="included.lib.libs.restlib.classpath.15"/>
-        <basename file="${libs.restlib.classpath.libfile.14}" property="included.lib.libs.restlib.classpath.14"/>
-        <basename file="${libs.restlib.classpath.libfile.13}" property="included.lib.libs.restlib.classpath.13"/>
-        <basename file="${libs.restlib.classpath.libfile.12}" property="included.lib.libs.restlib.classpath.12"/>
-        <basename file="${libs.restlib.classpath.libfile.11}" property="included.lib.libs.restlib.classpath.11"/>
-        <basename file="${libs.restlib.classpath.libfile.10}" property="included.lib.libs.restlib.classpath.10"/>
-        <basename file="${libs.restlib.classpath.libfile.9}" property="included.lib.libs.restlib.classpath.9"/>
-        <basename file="${libs.restlib.classpath.libfile.8}" property="included.lib.libs.restlib.classpath.8"/>
-        <basename file="${libs.restlib.classpath.libfile.7}" property="included.lib.libs.restlib.classpath.7"/>
-        <basename file="${libs.restlib.classpath.libfile.6}" property="included.lib.libs.restlib.classpath.6"/>
-        <basename file="${libs.restlib.classpath.libfile.5}" property="included.lib.libs.restlib.classpath.5"/>
-        <basename file="${libs.restlib.classpath.libfile.4}" property="included.lib.libs.restlib.classpath.4"/>
-        <basename file="${libs.restlib.classpath.libfile.3}" property="included.lib.libs.restlib.classpath.3"/>
-        <basename file="${libs.restlib.classpath.libfile.2}" property="included.lib.libs.restlib.classpath.2"/>
-        <basename file="${libs.restlib.classpath.libfile.1}" property="included.lib.libs.restlib.classpath.1"/>
-        <copy-ear-war file="${libs.restlib.classpath.libfile.18}" propname="included.lib.libs.restlib.classpath.18.X"/>
-        <copy-ear-war file="${libs.restlib.classpath.libfile.17}" propname="included.lib.libs.restlib.classpath.17.X"/>
-        <copy-ear-war file="${libs.restlib.classpath.libfile.16}" propname="included.lib.libs.restlib.classpath.16.X"/>
-        <copy-ear-war file="${libs.restlib.classpath.libfile.15}" propname="included.lib.libs.restlib.classpath.15.X"/>
-        <copy-ear-war file="${libs.restlib.classpath.libfile.14}" propname="included.lib.libs.restlib.classpath.14.X"/>
-        <copy-ear-war file="${libs.restlib.classpath.libfile.13}" propname="included.lib.libs.restlib.classpath.13.X"/>
-        <copy-ear-war file="${libs.restlib.classpath.libfile.12}" propname="included.lib.libs.restlib.classpath.12.X"/>
-        <copy-ear-war file="${libs.restlib.classpath.libfile.11}" propname="included.lib.libs.restlib.classpath.11.X"/>
-        <copy-ear-war file="${libs.restlib.classpath.libfile.10}" propname="included.lib.libs.restlib.classpath.10.X"/>
-        <copy-ear-war file="${libs.restlib.classpath.libfile.9}" propname="included.lib.libs.restlib.classpath.9.X"/>
-        <copy-ear-war file="${libs.restlib.classpath.libfile.8}" propname="included.lib.libs.restlib.classpath.8.X"/>
-        <copy-ear-war file="${libs.restlib.classpath.libfile.7}" propname="included.lib.libs.restlib.classpath.7.X"/>
-        <copy-ear-war file="${libs.restlib.classpath.libfile.6}" propname="included.lib.libs.restlib.classpath.6.X"/>
-        <copy-ear-war file="${libs.restlib.classpath.libfile.5}" propname="included.lib.libs.restlib.classpath.5.X"/>
-        <copy-ear-war file="${libs.restlib.classpath.libfile.4}" propname="included.lib.libs.restlib.classpath.4.X"/>
-        <copy-ear-war file="${libs.restlib.classpath.libfile.3}" propname="included.lib.libs.restlib.classpath.3.X"/>
-        <copy-ear-war file="${libs.restlib.classpath.libfile.2}" propname="included.lib.libs.restlib.classpath.2.X"/>
-        <copy-ear-war file="${libs.restlib.classpath.libfile.1}" propname="included.lib.libs.restlib.classpath.1.X"/>
-        <basename file="${file.reference.chiba-1.4.0.jar-1}" property="included.lib.file.reference.chiba-1.4.0.jar-1"/>
-        <copy-ear-war file="${file.reference.chiba-1.4.0.jar-1}" propname="included.lib.file.reference.chiba-1.4.0.jar-1.X"/>
-        <basename file="${file.reference.chiba-web-2.2.0.jar-1}" property="included.lib.file.reference.chiba-web-2.2.0.jar-1"/>
-        <copy-ear-war file="${file.reference.chiba-web-2.2.0.jar-1}" propname="included.lib.file.reference.chiba-web-2.2.0.jar-1.X"/>
+        <basename file="${file.reference.chiba-1.4.0.jar}" property="included.lib.file.reference.chiba-1.4.0.jar"/>
+        <copy-ear-war file="${file.reference.chiba-1.4.0.jar}" propname="included.lib.file.reference.chiba-1.4.0.jar.X"/>
+        <basename file="${file.reference.chiba-web-2.2.0.jar}" property="included.lib.file.reference.chiba-web-2.2.0.jar"/>
+        <copy-ear-war file="${file.reference.chiba-web-2.2.0.jar}" propname="included.lib.file.reference.chiba-web-2.2.0.jar.X"/>
         <mkdir dir="${build.web.dir}/META-INF"/>
         <manifest file="${build.web.dir}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Class-Path" value="${included.lib.reference.SWBBase.jar} ${included.lib.file.reference.commons-logging.jar} ${included.lib.file.reference.log4j-1.2.15.jar} ${included.lib.file.reference.spring.jar} ${included.lib.reference.SWBPlatform.jar} ${included.lib.file.reference.classes12.jar} ${included.lib.file.reference.hsqldb.jar} ${included.lib.file.reference.informix.jar} ${included.lib.file.reference.mysql-connector-java-5.0.3-bin.jar} ${included.lib.file.reference.arq.jar} ${included.lib.file.reference.iri.jar} ${included.lib.file.reference.jena.jar} ${included.lib.file.reference.lucene-core-2.2.0.jar} ${included.lib.file.reference.xercesImpl.jar} ${included.lib.file.reference.xml-apis.jar} ${included.lib.reference.SWBTripleStore.jar} ${included.lib.reference.SWBAdmin.jar} ${included.lib.file.reference.icu4j_3_4.jar} ${included.lib.file.reference.hibernate3.jar} ${included.lib.file.reference.arthurdo.jar} ${included.lib.file.reference.chiba-1.4.0.jar} ${included.lib.file.reference.chiba-web-2.2.0.jar} ${included.lib.file.reference.saxon-8.7.jar} ${included.lib.file.reference.saxon-dom-8.7.jar} ${included.lib.file.reference.isorelax.jar} ${included.lib.file.reference.msv.jar} ${included.lib.reference.SWBModel.jar} ${included.lib.file.reference.commons-email-1.1.jar} ${included.lib.file.reference.mail-1.3.3.jar} ${included.lib.file.reference.activation-1.0.2.jar} ${included.lib.file.reference.serializer.jar} ${included.lib.file.reference.xalan.jar} ${included.lib.file.reference.xercesImpl.jar} ${included.lib.file.reference.xml-apis.jar} ${included.lib.reference.SWBPortal.jar} ${included.lib.file.reference.commons-fileupload-1.2.1.jar} ${included.lib.file.reference.arthurdo.jar} ${included.lib.libs.restapi.classpath} ${included.lib.libs.restlib.classpath.1.X} ${included.lib.libs.restlib.classpath.2.X} ${included.lib.libs.restlib.classpath.3.X} ${included.lib.libs.restlib.classpath.4.X} ${included.lib.libs.restlib.classpath.5.X} ${included.lib.libs.restlib.classpath.6.X} ${included.lib.libs.restlib.classpath.7.X} ${included.lib.libs.restlib.classpath.8.X} ${included.lib.libs.restlib.classpath.9.X} ${included.lib.libs.restlib.classpath.10.X} ${included.lib.libs.restlib.classpath.11.X} ${included.lib.libs.restlib.classpath.12.X} ${included.lib.libs.restlib.classpath.13.X} ${included.lib.libs.restlib.classpath.14.X} ${included.lib.libs.restlib.classpath.15.X} ${included.lib.libs.restlib.classpath.16.X} ${included.lib.libs.restlib.classpath.17.X} ${included.lib.libs.restlib.classpath.18.X} ${included.lib.file.reference.chiba-1.4.0.jar-1} ${included.lib.file.reference.chiba-web-2.2.0.jar-1} "/>
+            <attribute name="Class-Path" value="${included.lib.reference.SWBBase.jar} ${included.lib.file.reference.commons-logging.jar} ${included.lib.file.reference.log4j-1.2.15.jar} ${included.lib.file.reference.spring.jar} ${included.lib.reference.SWBPlatform.jar} ${included.lib.file.reference.classes12.jar} ${included.lib.file.reference.hsqldb.jar} ${included.lib.file.reference.informix.jar} ${included.lib.file.reference.mysql-connector-java-5.0.3-bin.jar} ${included.lib.file.reference.arq.jar} ${included.lib.file.reference.iri.jar} ${included.lib.file.reference.jena.jar} ${included.lib.file.reference.lucene-core-2.2.0.jar} ${included.lib.file.reference.xercesImpl.jar} ${included.lib.file.reference.xml-apis.jar} ${included.lib.reference.SWBTripleStore.jar} ${included.lib.reference.SWBAdmin.jar} ${included.lib.file.reference.icu4j_3_4.jar} ${included.lib.file.reference.hibernate3.jar} ${included.lib.file.reference.arthurdo.jar} ${included.lib.file.reference.chiba-1.4.0.jar} ${included.lib.file.reference.chiba-web-2.2.0.jar} ${included.lib.file.reference.saxon-8.7.jar} ${included.lib.file.reference.saxon-dom-8.7.jar} ${included.lib.file.reference.isorelax.jar} ${included.lib.file.reference.msv.jar} ${included.lib.reference.SWBModel.jar} ${included.lib.file.reference.commons-email-1.1.jar} ${included.lib.file.reference.mail-1.3.3.jar} ${included.lib.file.reference.activation-1.0.2.jar} ${included.lib.file.reference.serializer.jar} ${included.lib.file.reference.xalan.jar} ${included.lib.file.reference.xercesImpl.jar} ${included.lib.file.reference.xml-apis.jar} ${included.lib.reference.SWBPortal.jar} ${included.lib.file.reference.commons-fileupload-1.2.1.jar} ${included.lib.file.reference.arthurdo.jar} ${included.lib.file.reference.chiba-1.4.0.jar} ${included.lib.file.reference.chiba-web-2.2.0.jar} "/>
         </manifest>
         <delete dir="${dist.ear.dir}/temp"/>
     </target>
@@ -684,27 +646,8 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
         <copy file="${reference.SWBPortal.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copy file="${file.reference.commons-fileupload-1.2.1.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copy file="${file.reference.arthurdo.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${libs.restapi.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${libs.restlib.classpath.libfile.18}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${libs.restlib.classpath.libfile.17}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${libs.restlib.classpath.libfile.16}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${libs.restlib.classpath.libfile.15}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${libs.restlib.classpath.libfile.14}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${libs.restlib.classpath.libfile.13}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${libs.restlib.classpath.libfile.12}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${libs.restlib.classpath.libfile.11}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${libs.restlib.classpath.libfile.10}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${libs.restlib.classpath.libfile.9}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${libs.restlib.classpath.libfile.8}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${libs.restlib.classpath.libfile.7}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${libs.restlib.classpath.libfile.6}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${libs.restlib.classpath.libfile.5}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${libs.restlib.classpath.libfile.4}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${libs.restlib.classpath.libfile.3}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${libs.restlib.classpath.libfile.2}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${libs.restlib.classpath.libfile.1}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.chiba-1.4.0.jar-1}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.chiba-web-2.2.0.jar-1}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copy file="${file.reference.chiba-1.4.0.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copy file="${file.reference.chiba-web-2.2.0.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
     </target>
     <target depends="init,compile,compile-jsps,-pre-dist,library-inclusion-in-manifest" name="do-ear-dist">
         <dirname file="${dist.ear.war}" property="dist.jar.dir"/>
