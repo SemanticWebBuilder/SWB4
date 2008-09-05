@@ -38,8 +38,13 @@ public class ObjectGroupBase extends GenericObjectBase implements Traceable,Desc
 
     public User getModifiedBy()
     {
+         User ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.modifiedBy);
-         return (User)vocabulary.User.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(User)vocabulary.User.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public String getTitle()
@@ -84,8 +89,13 @@ public class ObjectGroupBase extends GenericObjectBase implements Traceable,Desc
 
     public User getCreator()
     {
+         User ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.creator);
-         return (User)vocabulary.User.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(User)vocabulary.User.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public String getDescription()
@@ -131,8 +141,13 @@ public class ObjectGroupBase extends GenericObjectBase implements Traceable,Desc
 
     public ObjectGroup getGroup()
     {
+         ObjectGroup ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasGroup);
-         return (ObjectGroup)vocabulary.ObjectGroup.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(ObjectGroup)vocabulary.ObjectGroup.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public UserRepository getUserRepository()

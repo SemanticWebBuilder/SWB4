@@ -38,8 +38,13 @@ public class LanguageBase extends GenericObjectBase implements Traceable,Descrip
 
     public User getModifiedBy()
     {
+         User ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.modifiedBy);
-         return (User)vocabulary.User.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(User)vocabulary.User.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public void setCreator(org.semanticwb.model.User user)
@@ -54,8 +59,13 @@ public class LanguageBase extends GenericObjectBase implements Traceable,Descrip
 
     public User getCreator()
     {
+         User ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.creator);
-         return (User)vocabulary.User.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(User)vocabulary.User.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public String getTitle()

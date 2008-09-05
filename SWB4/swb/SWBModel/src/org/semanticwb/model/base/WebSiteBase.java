@@ -58,8 +58,13 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public User getModifiedBy()
     {
+         User ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.modifiedBy);
-         return (User)vocabulary.User.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(User)vocabulary.User.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public String getTitle()
@@ -94,8 +99,13 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public VersionInfo getActualVersion()
     {
+         VersionInfo ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.actualVersion);
-         return (VersionInfo)vocabulary.VersionInfo.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(VersionInfo)vocabulary.VersionInfo.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public void setLanguage(org.semanticwb.model.Language language)
@@ -110,8 +120,13 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public Language getLanguage()
     {
+         Language ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.language);
-         return (Language)vocabulary.Language.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(Language)vocabulary.Language.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public Date getUpdated()
@@ -136,8 +151,13 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public VersionInfo getLastVersion()
     {
+         VersionInfo ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.lastVersion);
-         return (VersionInfo)vocabulary.VersionInfo.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(VersionInfo)vocabulary.VersionInfo.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public void setCreator(org.semanticwb.model.User user)
@@ -152,8 +172,13 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public User getCreator()
     {
+         User ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.creator);
-         return (User)vocabulary.User.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(User)vocabulary.User.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public void setHomePage(org.semanticwb.model.WebPage webpage)
@@ -168,8 +193,13 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public WebPage getHomePage()
     {
+         WebPage ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.homePage);
-         return (WebPage)vocabulary.WebPage.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(WebPage)vocabulary.WebPage.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public void setUserRepository(org.semanticwb.model.UserRepository userrepository)
@@ -184,8 +214,13 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public UserRepository getUserRepository()
     {
+         UserRepository ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.userRepository);
-         return (UserRepository)vocabulary.UserRepository.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(UserRepository)vocabulary.UserRepository.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public String getDescription()

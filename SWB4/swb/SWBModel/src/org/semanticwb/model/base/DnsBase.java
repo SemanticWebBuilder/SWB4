@@ -38,8 +38,13 @@ public class DnsBase extends GenericObjectBase implements Traceable,Descriptivea
 
     public User getModifiedBy()
     {
+         User ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.modifiedBy);
-         return (User)vocabulary.User.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(User)vocabulary.User.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public String getTitle()
@@ -84,8 +89,13 @@ public class DnsBase extends GenericObjectBase implements Traceable,Descriptivea
 
     public User getCreator()
     {
+         User ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.creator);
-         return (User)vocabulary.User.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(User)vocabulary.User.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public void setWebPage(org.semanticwb.model.WebPage webpage)
@@ -100,8 +110,13 @@ public class DnsBase extends GenericObjectBase implements Traceable,Descriptivea
 
     public WebPage getWebPage()
     {
+         WebPage ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.webPage);
-         return (WebPage)vocabulary.WebPage.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(WebPage)vocabulary.WebPage.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public String getDescription()

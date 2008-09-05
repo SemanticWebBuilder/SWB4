@@ -38,8 +38,13 @@ public class TemplateRefBase extends GenericObjectBase implements Activeable,Pri
 
     public Template getTemplate()
     {
+         Template ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.template);
-         return (Template)vocabulary.Template.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(Template)vocabulary.Template.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public int getPriority()

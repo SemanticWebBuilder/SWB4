@@ -38,8 +38,13 @@ public class RoleRefBase extends GenericObjectBase implements Activeable
 
     public Role getRole()
     {
+         Role ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.role);
-         return (Role)vocabulary.Role.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(Role)vocabulary.Role.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public WebSite getWebSite()

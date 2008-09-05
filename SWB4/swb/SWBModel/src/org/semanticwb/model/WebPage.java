@@ -242,6 +242,49 @@ public class WebPage extends WebPageBase
         return page.isChildof(this);
     }    
     
+    /** Regresa el nombre por defecto.
+     * @return String
+     * @deprecated Usar getTitle()
+     */
+    @Deprecated
+    public String getDisplayName()
+    {
+        return getTitle();
+    }    
     
+    /** Regresa el nombre por defecto, en base a un idioma.
+     * @param String Idioma
+     * @return String
+     * @deprecated 
+     */
+    @Deprecated
+    public String getDisplayName(String lang)
+    {
+        return getTitle(lang);
+    }    
+
+    /** Regresa el nombre por defecto, en base a un idioma que recibe como parametro
+     * con identificador "<B>language</B>".
+     *
+     * Ejemplo:
+     *    HashMap arg=new HashMap();
+     *    args.pur("language","es");
+     *    String name=topic.getDisplayName(args);
+     *
+     * Este metodo normalmente se utiliza en templates.
+     * parametros:
+     *      -   languege: idioma de despliege (ejemplo es, en, fr).
+     * @return String
+     * @param args HashMap, con paraetros del template
+     * ejemplo:
+     *    language=es
+     * @deprecated 
+     */
+    @Deprecated
+    public String getDisplayName(HashMap args)
+    {
+        Language language = (Language) args.get("language");
+        return getTitle(language.getId());
+    }    
     
 }

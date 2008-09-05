@@ -58,8 +58,13 @@ public class PFlowBase extends GenericObjectBase implements Deleteable,Groupable
 
     public User getModifiedBy()
     {
+         User ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.modifiedBy);
-         return (User)vocabulary.User.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(User)vocabulary.User.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public String getTitle()
@@ -94,8 +99,13 @@ public class PFlowBase extends GenericObjectBase implements Deleteable,Groupable
 
     public VersionInfo getActualVersion()
     {
+         VersionInfo ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.actualVersion);
-         return (VersionInfo)vocabulary.VersionInfo.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(VersionInfo)vocabulary.VersionInfo.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public Date getUpdated()
@@ -120,8 +130,13 @@ public class PFlowBase extends GenericObjectBase implements Deleteable,Groupable
 
     public VersionInfo getLastVersion()
     {
+         VersionInfo ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.lastVersion);
-         return (VersionInfo)vocabulary.VersionInfo.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(VersionInfo)vocabulary.VersionInfo.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public void setCreator(org.semanticwb.model.User user)
@@ -136,8 +151,13 @@ public class PFlowBase extends GenericObjectBase implements Deleteable,Groupable
 
     public User getCreator()
     {
+         User ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.creator);
-         return (User)vocabulary.User.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(User)vocabulary.User.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public String getDescription()
@@ -183,8 +203,13 @@ public class PFlowBase extends GenericObjectBase implements Deleteable,Groupable
 
     public ObjectGroup getGroup()
     {
+         ObjectGroup ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasGroup);
-         return (ObjectGroup)vocabulary.ObjectGroup.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(ObjectGroup)vocabulary.ObjectGroup.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public WebSite getWebSite()

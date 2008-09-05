@@ -48,8 +48,13 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
 
     public User getModifiedBy()
     {
+         User ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.modifiedBy);
-         return (User)vocabulary.User.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(User)vocabulary.User.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public String getTitle()
@@ -84,8 +89,13 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
 
     public VersionInfo getActualVersion()
     {
+         VersionInfo ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.actualVersion);
-         return (VersionInfo)vocabulary.VersionInfo.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(VersionInfo)vocabulary.VersionInfo.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public int getHits()
@@ -120,8 +130,13 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
 
     public VersionInfo getLastVersion()
     {
+         VersionInfo ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.lastVersion);
-         return (VersionInfo)vocabulary.VersionInfo.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(VersionInfo)vocabulary.VersionInfo.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public GenericIterator<org.semanticwb.model.Calendar> listCalendars()
@@ -147,8 +162,13 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
 
     public Calendar getCalendar()
     {
+         Calendar ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasCalendar);
-         return (Calendar)vocabulary.Calendar.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(Calendar)vocabulary.Calendar.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public boolean isIndexable()
@@ -214,8 +234,13 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
 
     public RoleRef getRoleRef()
     {
+         RoleRef ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasRoleRef);
-         return (RoleRef)vocabulary.RoleRef.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(RoleRef)vocabulary.RoleRef.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public boolean isActive()
@@ -260,8 +285,13 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
 
     public Language getLanguage()
     {
+         Language ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.language);
-         return (Language)vocabulary.Language.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(Language)vocabulary.Language.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public GenericIterator<org.semanticwb.model.RuleRef> listRuleRefs()
@@ -287,8 +317,13 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
 
     public RuleRef getRuleRef()
     {
+         RuleRef ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasRuleRef);
-         return (RuleRef)vocabulary.RuleRef.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(RuleRef)vocabulary.RuleRef.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public void setCreator(org.semanticwb.model.User user)
@@ -303,8 +338,13 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
 
     public User getCreator()
     {
+         User ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.creator);
-         return (User)vocabulary.User.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(User)vocabulary.User.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public void setPortletSubType(org.semanticwb.model.PortletSubType portletsubtype)
@@ -319,8 +359,13 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
 
     public PortletSubType getPortletSubType()
     {
+         PortletSubType ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.portletSubType);
-         return (PortletSubType)vocabulary.PortletSubType.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(PortletSubType)vocabulary.PortletSubType.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public String getDescription()
@@ -355,8 +400,13 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
 
     public PortletType getPortletType()
     {
+         PortletType ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.portletType);
-         return (PortletType)vocabulary.PortletType.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(PortletType)vocabulary.PortletType.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public WebSite getWebSite()

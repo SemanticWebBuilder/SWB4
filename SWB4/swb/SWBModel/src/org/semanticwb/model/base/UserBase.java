@@ -48,8 +48,13 @@ public class UserBase extends GenericObjectBase implements Roleable,Traceable,Lo
 
     public User getModifiedBy()
     {
+         User ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.modifiedBy);
-         return (User)vocabulary.User.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(User)vocabulary.User.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public String getUsrSecondLastName()
@@ -104,8 +109,13 @@ public class UserBase extends GenericObjectBase implements Roleable,Traceable,Lo
 
     public Language getLanguage()
     {
+         Language ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.language);
-         return (Language)vocabulary.Language.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(Language)vocabulary.Language.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public Date getUpdated()
@@ -130,8 +140,13 @@ public class UserBase extends GenericObjectBase implements Roleable,Traceable,Lo
 
     public User getCreator()
     {
+         User ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.creator);
-         return (User)vocabulary.User.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(User)vocabulary.User.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public String getUsrLogin()
@@ -177,8 +192,13 @@ public class UserBase extends GenericObjectBase implements Roleable,Traceable,Lo
 
     public Role getRole()
     {
+         Role ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasRole);
-         return (Role)vocabulary.Role.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(Role)vocabulary.Role.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public String getUsrLastName()
@@ -234,8 +254,13 @@ public class UserBase extends GenericObjectBase implements Roleable,Traceable,Lo
 
     public ObjectGroup getGroup()
     {
+         ObjectGroup ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasGroup);
-         return (ObjectGroup)vocabulary.ObjectGroup.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(ObjectGroup)vocabulary.ObjectGroup.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public String getUsrSecurityAnswer()

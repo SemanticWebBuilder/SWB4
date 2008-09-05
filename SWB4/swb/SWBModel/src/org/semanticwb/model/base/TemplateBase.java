@@ -69,8 +69,13 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
 
     public RoleRef getRoleRef()
     {
+         RoleRef ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasRoleRef);
-         return (RoleRef)vocabulary.RoleRef.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(RoleRef)vocabulary.RoleRef.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public void setModifiedBy(org.semanticwb.model.User user)
@@ -85,8 +90,13 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
 
     public User getModifiedBy()
     {
+         User ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.modifiedBy);
-         return (User)vocabulary.User.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(User)vocabulary.User.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public String getTitle()
@@ -121,8 +131,13 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
 
     public TemplateGroup getTemplateGroup()
     {
+         TemplateGroup ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.templateGroup);
-         return (TemplateGroup)vocabulary.TemplateGroup.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(TemplateGroup)vocabulary.TemplateGroup.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public void setActualVersion(org.semanticwb.model.VersionInfo versioninfo)
@@ -137,8 +152,13 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
 
     public VersionInfo getActualVersion()
     {
+         VersionInfo ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.actualVersion);
-         return (VersionInfo)vocabulary.VersionInfo.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(VersionInfo)vocabulary.VersionInfo.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public void setLanguage(org.semanticwb.model.Language language)
@@ -153,8 +173,13 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
 
     public Language getLanguage()
     {
+         Language ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.language);
-         return (Language)vocabulary.Language.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(Language)vocabulary.Language.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public Date getUpdated()
@@ -179,8 +204,13 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
 
     public VersionInfo getLastVersion()
     {
+         VersionInfo ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.lastVersion);
-         return (VersionInfo)vocabulary.VersionInfo.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(VersionInfo)vocabulary.VersionInfo.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public GenericIterator<org.semanticwb.model.RuleRef> listRuleRefs()
@@ -206,8 +236,13 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
 
     public RuleRef getRuleRef()
     {
+         RuleRef ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasRuleRef);
-         return (RuleRef)vocabulary.RuleRef.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(RuleRef)vocabulary.RuleRef.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public void setCreator(org.semanticwb.model.User user)
@@ -222,8 +257,13 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
 
     public User getCreator()
     {
+         User ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.creator);
-         return (User)vocabulary.User.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(User)vocabulary.User.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public GenericIterator<org.semanticwb.model.Calendar> listCalendars()
@@ -249,8 +289,13 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
 
     public Calendar getCalendar()
     {
+         Calendar ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasCalendar);
-         return (Calendar)vocabulary.Calendar.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(Calendar)vocabulary.Calendar.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public String getDescription()

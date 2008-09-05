@@ -38,8 +38,13 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
 
     public User getModifiedBy()
     {
+         User ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.modifiedBy);
-         return (User)vocabulary.User.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(User)vocabulary.User.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public String getTitle()
@@ -105,8 +110,13 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
 
     public Calendar getCalendar()
     {
+         Calendar ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasCalendar);
-         return (Calendar)vocabulary.Calendar.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(Calendar)vocabulary.Calendar.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public boolean isHidden()
@@ -137,8 +147,13 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
 
     public WebPage getChildWebPage()
     {
+         WebPage ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasChildWebPage);
-         return (WebPage)vocabulary.WebPage.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(WebPage)vocabulary.WebPage.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public GenericIterator<org.semanticwb.model.RoleRef> listRoleRefs()
@@ -164,8 +179,13 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
 
     public RoleRef getRoleRef()
     {
+         RoleRef ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasRoleRef);
-         return (RoleRef)vocabulary.RoleRef.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(RoleRef)vocabulary.RoleRef.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public boolean isActive()
@@ -221,8 +241,13 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
 
     public PortletRef getPortletRef()
     {
+         PortletRef ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasPortletRef);
-         return (PortletRef)vocabulary.PortletRef.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(PortletRef)vocabulary.PortletRef.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public GenericIterator<org.semanticwb.model.TemplateRef> listTemplateRefs()
@@ -248,8 +273,13 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
 
     public TemplateRef getTemplateRef()
     {
+         TemplateRef ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasTemplateRef);
-         return (TemplateRef)vocabulary.TemplateRef.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(TemplateRef)vocabulary.TemplateRef.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public GenericIterator<org.semanticwb.model.PFlowRef> listPFlowRefs()
@@ -275,8 +305,13 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
 
     public PFlowRef getPFlowRef()
     {
+         PFlowRef ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasPFlowRef);
-         return (PFlowRef)vocabulary.PFlowRef.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(PFlowRef)vocabulary.PFlowRef.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public void setCreator(org.semanticwb.model.User user)
@@ -291,8 +326,13 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
 
     public User getCreator()
     {
+         User ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.creator);
-         return (User)vocabulary.User.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(User)vocabulary.User.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public GenericIterator<org.semanticwb.model.RuleRef> listRuleRefs()
@@ -318,8 +358,13 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
 
     public RuleRef getRuleRef()
     {
+         RuleRef ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasRuleRef);
-         return (RuleRef)vocabulary.RuleRef.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(RuleRef)vocabulary.RuleRef.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public void setParent(org.semanticwb.model.WebPage webpage)
@@ -334,8 +379,13 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
 
     public WebPage getParent()
     {
+         WebPage ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.webPageParent);
-         return (WebPage)vocabulary.WebPage.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(WebPage)vocabulary.WebPage.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public String getDescription()
@@ -381,8 +431,13 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
 
     public WebPage getVirtualParent()
     {
+         WebPage ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasVirtualWebPageParent);
-         return (WebPage)vocabulary.WebPage.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(WebPage)vocabulary.WebPage.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public WebSite getWebSite()
