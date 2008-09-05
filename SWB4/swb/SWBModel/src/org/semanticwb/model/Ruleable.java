@@ -5,7 +5,7 @@ import java.util.Date;
 public interface Ruleable extends GenericObject
 {
 
-    public GenericIterator<org.semanticwb.model.Rule> listRule();
+    public GenericIterator<org.semanticwb.model.Rule> listRules();
 
     public void addRule(org.semanticwb.model.Rule rule);
 

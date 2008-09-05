@@ -5,7 +5,7 @@ import java.util.Date;
 public interface TemplateRefable extends GenericObject
 {
 
-    public GenericIterator<org.semanticwb.model.TemplateRef> listTemplateRef();
+    public GenericIterator<org.semanticwb.model.TemplateRef> listTemplateRefs();
 
     public void addTemplateRef(org.semanticwb.model.TemplateRef templateref);
 

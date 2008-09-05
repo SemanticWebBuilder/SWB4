@@ -38,14 +38,8 @@ public class PortletTypeBase extends GenericObjectBase implements Traceable,Desc
 
     public User getModifiedBy()
     {
-         User ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.modifiedBy.getRDFProperty());
-         GenericIterator<org.semanticwb.model.User> it=new GenericIterator<org.semanticwb.model.User>(User.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.modifiedBy);
+         return (User)vocabulary.User.newGenericInstance(obj);
     }
 
     public String getPortletBundle()
@@ -98,6 +92,18 @@ public class PortletTypeBase extends GenericObjectBase implements Traceable,Desc
         getSemanticObject().setProperty(vocabulary.portletClassName, portletClassName);
     }
 
+    public GenericIterator<org.semanticwb.model.Portlet> listPortlets()
+    {
+        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, vocabulary.hasPTPortlet.getInverse().getRDFProperty(), getSemanticObject().getRDFResource());
+        return new GenericIterator<org.semanticwb.model.Portlet>(org.semanticwb.model.Portlet.class, stit,true);
+    }
+
+    public Portlet getPortlet()
+    {
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasPTPortlet);
+         return (Portlet)vocabulary.Portlet.newGenericInstance(obj);
+    }
+
     public Date getUpdated()
     {
         return getSemanticObject().getDateProperty(vocabulary.updated);
@@ -130,20 +136,20 @@ public class PortletTypeBase extends GenericObjectBase implements Traceable,Desc
 
     public User getCreator()
     {
-         User ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.creator.getRDFProperty());
-         GenericIterator<org.semanticwb.model.User> it=new GenericIterator<org.semanticwb.model.User>(User.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.creator);
+         return (User)vocabulary.User.newGenericInstance(obj);
     }
 
-    public GenericIterator<org.semanticwb.model.PortletSubType> listSubType()
+    public GenericIterator<org.semanticwb.model.PortletSubType> listSubTypes()
     {
         StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, vocabulary.hasPTSubType.getInverse().getRDFProperty(), getSemanticObject().getRDFResource());
         return new GenericIterator<org.semanticwb.model.PortletSubType>(org.semanticwb.model.PortletSubType.class, stit,true);
+    }
+
+    public PortletSubType getSubType()
+    {
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasPTSubType);
+         return (PortletSubType)vocabulary.PortletSubType.newGenericInstance(obj);
     }
 
     public String getDescription()
@@ -164,12 +170,6 @@ public class PortletTypeBase extends GenericObjectBase implements Traceable,Desc
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(vocabulary.description, description, lang);
-    }
-
-    public GenericIterator<org.semanticwb.model.Portlet> listPortlets()
-    {
-        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, vocabulary.hasPTPortlets.getInverse().getRDFProperty(), getSemanticObject().getRDFResource());
-        return new GenericIterator<org.semanticwb.model.Portlet>(org.semanticwb.model.Portlet.class, stit,true);
     }
 
     public WebSite getWebSite()

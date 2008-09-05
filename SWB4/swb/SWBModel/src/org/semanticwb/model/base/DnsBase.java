@@ -38,14 +38,8 @@ public class DnsBase extends GenericObjectBase implements Traceable,Descriptivea
 
     public User getModifiedBy()
     {
-         User ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.modifiedBy.getRDFProperty());
-         GenericIterator<org.semanticwb.model.User> it=new GenericIterator<org.semanticwb.model.User>(User.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.modifiedBy);
+         return (User)vocabulary.User.newGenericInstance(obj);
     }
 
     public String getTitle()
@@ -90,14 +84,8 @@ public class DnsBase extends GenericObjectBase implements Traceable,Descriptivea
 
     public User getCreator()
     {
-         User ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.creator.getRDFProperty());
-         GenericIterator<org.semanticwb.model.User> it=new GenericIterator<org.semanticwb.model.User>(User.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.creator);
+         return (User)vocabulary.User.newGenericInstance(obj);
     }
 
     public void setWebPage(org.semanticwb.model.WebPage webpage)
@@ -112,14 +100,8 @@ public class DnsBase extends GenericObjectBase implements Traceable,Descriptivea
 
     public WebPage getWebPage()
     {
-         WebPage ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.webPage.getRDFProperty());
-         GenericIterator<org.semanticwb.model.WebPage> it=new GenericIterator<org.semanticwb.model.WebPage>(WebPage.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.webPage);
+         return (WebPage)vocabulary.WebPage.newGenericInstance(obj);
     }
 
     public String getDescription()

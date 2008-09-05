@@ -38,14 +38,8 @@ public class PortletRefBase extends GenericObjectBase implements Activeable,Prio
 
     public Portlet getPortlet()
     {
-         Portlet ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.portlet.getRDFProperty());
-         GenericIterator<org.semanticwb.model.Portlet> it=new GenericIterator<org.semanticwb.model.Portlet>(Portlet.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.portlet);
+         return (Portlet)vocabulary.Portlet.newGenericInstance(obj);
     }
 
     public int getPriority()

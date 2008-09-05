@@ -48,14 +48,8 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
 
     public User getModifiedBy()
     {
-         User ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.modifiedBy.getRDFProperty());
-         GenericIterator<org.semanticwb.model.User> it=new GenericIterator<org.semanticwb.model.User>(User.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.modifiedBy);
+         return (User)vocabulary.User.newGenericInstance(obj);
     }
 
     public String getTitle()
@@ -90,14 +84,8 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
 
     public VersionInfo getActualVersion()
     {
-         VersionInfo ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.actualVersion.getRDFProperty());
-         GenericIterator<org.semanticwb.model.VersionInfo> it=new GenericIterator<org.semanticwb.model.VersionInfo>(VersionInfo.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.actualVersion);
+         return (VersionInfo)vocabulary.VersionInfo.newGenericInstance(obj);
     }
 
     public int getHits()
@@ -132,17 +120,11 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
 
     public VersionInfo getLastVersion()
     {
-         VersionInfo ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.lastVersion.getRDFProperty());
-         GenericIterator<org.semanticwb.model.VersionInfo> it=new GenericIterator<org.semanticwb.model.VersionInfo>(VersionInfo.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.lastVersion);
+         return (VersionInfo)vocabulary.VersionInfo.newGenericInstance(obj);
     }
 
-    public GenericIterator<org.semanticwb.model.Calendar> listCalendar()
+    public GenericIterator<org.semanticwb.model.Calendar> listCalendars()
     {
         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasCalendar.getRDFProperty());
         return new GenericIterator<org.semanticwb.model.Calendar>(org.semanticwb.model.Calendar.class, stit);
@@ -165,14 +147,8 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
 
     public Calendar getCalendar()
     {
-         Calendar ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasCalendar.getRDFProperty());
-         GenericIterator<org.semanticwb.model.Calendar> it=new GenericIterator<org.semanticwb.model.Calendar>(Calendar.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasCalendar);
+         return (Calendar)vocabulary.Calendar.newGenericInstance(obj);
     }
 
     public boolean isIndexable()
@@ -215,7 +191,7 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
         getSemanticObject().setLongProperty(vocabulary.priority, priority);
     }
 
-    public GenericIterator<org.semanticwb.model.RoleRef> listRoleRef()
+    public GenericIterator<org.semanticwb.model.RoleRef> listRoleRefs()
     {
         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasRoleRef.getRDFProperty());
         return new GenericIterator<org.semanticwb.model.RoleRef>(org.semanticwb.model.RoleRef.class, stit);
@@ -238,14 +214,8 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
 
     public RoleRef getRoleRef()
     {
-         RoleRef ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasRoleRef.getRDFProperty());
-         GenericIterator<org.semanticwb.model.RoleRef> it=new GenericIterator<org.semanticwb.model.RoleRef>(RoleRef.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasRoleRef);
+         return (RoleRef)vocabulary.RoleRef.newGenericInstance(obj);
     }
 
     public boolean isActive()
@@ -290,17 +260,11 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
 
     public Language getLanguage()
     {
-         Language ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.language.getRDFProperty());
-         GenericIterator<org.semanticwb.model.Language> it=new GenericIterator<org.semanticwb.model.Language>(Language.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.language);
+         return (Language)vocabulary.Language.newGenericInstance(obj);
     }
 
-    public GenericIterator<org.semanticwb.model.RuleRef> listRuleRef()
+    public GenericIterator<org.semanticwb.model.RuleRef> listRuleRefs()
     {
         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasRuleRef.getRDFProperty());
         return new GenericIterator<org.semanticwb.model.RuleRef>(org.semanticwb.model.RuleRef.class, stit);
@@ -323,14 +287,8 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
 
     public RuleRef getRuleRef()
     {
-         RuleRef ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasRuleRef.getRDFProperty());
-         GenericIterator<org.semanticwb.model.RuleRef> it=new GenericIterator<org.semanticwb.model.RuleRef>(RuleRef.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasRuleRef);
+         return (RuleRef)vocabulary.RuleRef.newGenericInstance(obj);
     }
 
     public void setCreator(org.semanticwb.model.User user)
@@ -345,14 +303,8 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
 
     public User getCreator()
     {
-         User ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.creator.getRDFProperty());
-         GenericIterator<org.semanticwb.model.User> it=new GenericIterator<org.semanticwb.model.User>(User.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.creator);
+         return (User)vocabulary.User.newGenericInstance(obj);
     }
 
     public void setPortletSubType(org.semanticwb.model.PortletSubType portletsubtype)
@@ -367,14 +319,8 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
 
     public PortletSubType getPortletSubType()
     {
-         PortletSubType ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.portletSubType.getRDFProperty());
-         GenericIterator<org.semanticwb.model.PortletSubType> it=new GenericIterator<org.semanticwb.model.PortletSubType>(PortletSubType.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.portletSubType);
+         return (PortletSubType)vocabulary.PortletSubType.newGenericInstance(obj);
     }
 
     public String getDescription()
@@ -409,14 +355,8 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
 
     public PortletType getPortletType()
     {
-         PortletType ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.portletType.getRDFProperty());
-         GenericIterator<org.semanticwb.model.PortletType> it=new GenericIterator<org.semanticwb.model.PortletType>(PortletType.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.portletType);
+         return (PortletType)vocabulary.PortletType.newGenericInstance(obj);
     }
 
     public WebSite getWebSite()

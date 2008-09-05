@@ -58,14 +58,8 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public User getModifiedBy()
     {
-         User ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.modifiedBy.getRDFProperty());
-         GenericIterator<org.semanticwb.model.User> it=new GenericIterator<org.semanticwb.model.User>(User.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.modifiedBy);
+         return (User)vocabulary.User.newGenericInstance(obj);
     }
 
     public String getTitle()
@@ -100,14 +94,8 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public VersionInfo getActualVersion()
     {
-         VersionInfo ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.actualVersion.getRDFProperty());
-         GenericIterator<org.semanticwb.model.VersionInfo> it=new GenericIterator<org.semanticwb.model.VersionInfo>(VersionInfo.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.actualVersion);
+         return (VersionInfo)vocabulary.VersionInfo.newGenericInstance(obj);
     }
 
     public void setLanguage(org.semanticwb.model.Language language)
@@ -122,14 +110,8 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public Language getLanguage()
     {
-         Language ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.language.getRDFProperty());
-         GenericIterator<org.semanticwb.model.Language> it=new GenericIterator<org.semanticwb.model.Language>(Language.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.language);
+         return (Language)vocabulary.Language.newGenericInstance(obj);
     }
 
     public Date getUpdated()
@@ -154,14 +136,8 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public VersionInfo getLastVersion()
     {
-         VersionInfo ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.lastVersion.getRDFProperty());
-         GenericIterator<org.semanticwb.model.VersionInfo> it=new GenericIterator<org.semanticwb.model.VersionInfo>(VersionInfo.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.lastVersion);
+         return (VersionInfo)vocabulary.VersionInfo.newGenericInstance(obj);
     }
 
     public void setCreator(org.semanticwb.model.User user)
@@ -176,14 +152,8 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public User getCreator()
     {
-         User ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.creator.getRDFProperty());
-         GenericIterator<org.semanticwb.model.User> it=new GenericIterator<org.semanticwb.model.User>(User.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.creator);
+         return (User)vocabulary.User.newGenericInstance(obj);
     }
 
     public void setHomePage(org.semanticwb.model.WebPage webpage)
@@ -198,14 +168,8 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public WebPage getHomePage()
     {
-         WebPage ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.homePage.getRDFProperty());
-         GenericIterator<org.semanticwb.model.WebPage> it=new GenericIterator<org.semanticwb.model.WebPage>(WebPage.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.homePage);
+         return (WebPage)vocabulary.WebPage.newGenericInstance(obj);
     }
 
     public void setUserRepository(org.semanticwb.model.UserRepository userrepository)
@@ -220,14 +184,8 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public UserRepository getUserRepository()
     {
-         UserRepository ret=null;
-         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.userRepository.getRDFProperty());
-         GenericIterator<org.semanticwb.model.UserRepository> it=new GenericIterator<org.semanticwb.model.UserRepository>(UserRepository.class, stit);
-         if(it.hasNext())
-         {
-             ret=it.next();
-         }
-         return ret;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.userRepository);
+         return (UserRepository)vocabulary.UserRepository.newGenericInstance(obj);
     }
 
     public String getDescription()

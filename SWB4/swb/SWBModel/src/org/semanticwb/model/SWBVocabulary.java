@@ -133,9 +133,9 @@ public class SWBVocabulary
     public final SemanticProperty portletBundle;
     public final SemanticProperty portletCache;
     public final SemanticProperty portletClassName;
+    public final SemanticProperty hasPTPortlet;
     public final SemanticProperty portletMode;
     public final SemanticProperty hasPTSubType;
-    public final SemanticProperty hasPTPortlets;
 
 
     public SWBVocabulary()
@@ -265,8 +265,8 @@ public class SWBVocabulary
         portletBundle=vocabulary.getSemanticProperty(URI+"portletBundle");
         portletCache=vocabulary.getSemanticProperty(URI+"portletCache");
         portletClassName=vocabulary.getSemanticProperty(URI+"portletClassName");
+        hasPTPortlet=vocabulary.getSemanticProperty(URI+"hasPTPortlet");
         portletMode=vocabulary.getSemanticProperty(URI+"portletMode");
         hasPTSubType=vocabulary.getSemanticProperty(URI+"hasPTSubType");
-        hasPTPortlets=vocabulary.getSemanticProperty(URI+"hasPTPortlets");
     }
 }

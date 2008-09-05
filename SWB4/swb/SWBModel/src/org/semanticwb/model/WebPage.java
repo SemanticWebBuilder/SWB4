@@ -28,7 +28,7 @@ public class WebPage extends WebPageBase
      */
     public String getRealUrl()
     {
-        return SWBPlatform.getContextPath() + SWBPlatform.getEnv("swb/distributor","swb") + "/" + getWebSite().getId() + "/" + getId();
+        return SWBPlatform.getContextPath() + SWBPlatform.getEnv("swb/distributor","swb") + "/" + getWebSiteId() + "/" + getId();
     }    
     
     /**  Regresa el Url del topico
@@ -64,7 +64,26 @@ public class WebPage extends WebPageBase
 //            }
 //        }
         return getRealUrl();
-    }    
+    }
+    
+    public boolean isVisible()
+    {
+        return isActive() && !isDeleted() && !isHidden();
+    }
+    
+    /**  Regresa el Url del topico
+     *  Ejemplo: /wb2/jei/home
+     * @return String
+     */
+    public String getUrl(WebPage virtualtopic)
+    {
+        if(virtualtopic==null)return getUrl();
+        String ret=getRealUrl();
+        ret+="/"+"_vtp";                    //DistributorParams.URLP_VTOPIC;
+        ret+="/" + virtualtopic.getWebSiteId() + "/" + virtualtopic.getId();
+        return ret;
+    }     
+    
     
     
 }
