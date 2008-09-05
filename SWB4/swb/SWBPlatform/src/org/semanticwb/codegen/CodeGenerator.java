@@ -414,7 +414,7 @@ public class CodeGenerator
                                 // son varios
                                 objectName = objectName.substring(3);
                                 javaClassContent.append(ENTER);
-                                javaClassContent.append("    public GenericIterator<" + m_Package + "." + valueToReturn + "> list" + objectName + "();" + ENTER);
+                                javaClassContent.append("    public GenericIterator<" + m_Package + "." + valueToReturn + "> list" + objectName + "s();" + ENTER);
                                 if(!tpp.hasInverse())
                                 {
                                     javaClassContent.append(ENTER);
@@ -598,7 +598,7 @@ public class CodeGenerator
                                 // son varios
                                 objectName = objectName.substring(3);
                                 javaClassContent.append(ENTER);
-                                javaClassContent.append("    public GenericIterator<" + m_Package + "." + valueToReturn + "> list" + objectName + "()" + ENTER);
+                                javaClassContent.append("    public GenericIterator<" + m_Package + "." + valueToReturn + "> list" + objectName + "s()" + ENTER);
                                 javaClassContent.append(OPEN_BLOCK + ENTER);
                                 if(!tpp.hasInverse())
                                 {                                
@@ -630,24 +630,10 @@ public class CodeGenerator
                                     javaClassContent.append(OPEN_BLOCK + ENTER);
                                     javaClassContent.append("        getSemanticObject().removeObjectProperty(vocabulary." + tpp.getName() + "," + valueToReturn.toLowerCase() + ".getSemanticObject());" + ENTER);
                                     javaClassContent.append(CLOSE_BLOCK + ENTER);
-
-                                    javaClassContent.append(ENTER);
-                                    javaClassContent.append(PUBLIC + valueToReturn + " get" + objectName + "()" + ENTER);
-                                    javaClassContent.append(OPEN_BLOCK + ENTER);
-                                    javaClassContent.append("         " + valueToReturn + " ret=null;" + ENTER);
-                                    javaClassContent.append("         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary." + tpp.getName() + ".getRDFProperty());" + ENTER);
-                                    javaClassContent.append("         GenericIterator<" + m_Package + "." + valueToReturn + "> it=new GenericIterator<" + m_Package + "." + valueToReturn + ">(" + valueToReturn + ".class, stit);" + ENTER);
-                                    javaClassContent.append("         if(it.hasNext())" + ENTER);
-                                    javaClassContent.append("         {" + ENTER);
-                                    javaClassContent.append("             ret=it.next();" + ENTER);
-                                    javaClassContent.append("         }" + ENTER);
-                                    javaClassContent.append("         return ret;" + ENTER);
-                                    javaClassContent.append(CLOSE_BLOCK + ENTER);
                                 }
                             }
                             else
                             {
-
                                 javaClassContent.append(ENTER);
                                 javaClassContent.append("    public void set" + objectName + "(" + m_Package + "." + valueToReturn + " " + valueToReturn.toLowerCase() + ")" + ENTER);
                                 javaClassContent.append(OPEN_BLOCK + ENTER);
@@ -659,20 +645,22 @@ public class CodeGenerator
                                 javaClassContent.append(OPEN_BLOCK + ENTER);
                                 javaClassContent.append("        getSemanticObject().removeProperty(vocabulary." + tpp.getName() + ");" + ENTER);
                                 javaClassContent.append(CLOSE_BLOCK + ENTER);
-
-                                javaClassContent.append(ENTER);
-                                javaClassContent.append(PUBLIC + valueToReturn + " get" + objectName + "()" + ENTER);
-                                javaClassContent.append(OPEN_BLOCK + ENTER);
-                                javaClassContent.append("         " + valueToReturn + " ret=null;" + ENTER);
-                                javaClassContent.append("         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary." + tpp.getName() + ".getRDFProperty());" + ENTER);
-                                javaClassContent.append("         GenericIterator<" + m_Package + "." + valueToReturn + "> it=new GenericIterator<" + m_Package + "." + valueToReturn + ">(" + valueToReturn + ".class, stit);" + ENTER);
-                                javaClassContent.append("         if(it.hasNext())" + ENTER);
-                                javaClassContent.append("         {" + ENTER);
-                                javaClassContent.append("             ret=it.next();" + ENTER);
-                                javaClassContent.append("         }" + ENTER);
-                                javaClassContent.append("         return ret;" + ENTER);
-                                javaClassContent.append(CLOSE_BLOCK + ENTER);
                             }
+                            
+                            javaClassContent.append(ENTER);
+                            javaClassContent.append(PUBLIC + valueToReturn + " get" + objectName + "()" + ENTER);
+                            javaClassContent.append(OPEN_BLOCK + ENTER);
+                            javaClassContent.append("         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary." + tpp.getName() + ");" + ENTER);
+                            javaClassContent.append("         return ("+valueToReturn+")vocabulary."+valueToReturn+".newGenericInstance(obj);" + ENTER);
+//                                javaClassContent.append("         " + valueToReturn + " ret=null;" + ENTER);
+//                                javaClassContent.append("         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary." + tpp.getName() + ".getRDFProperty());" + ENTER);
+//                                javaClassContent.append("         GenericIterator<" + m_Package + "." + valueToReturn + "> it=new GenericIterator<" + m_Package + "." + valueToReturn + ">(" + valueToReturn + ".class, stit);" + ENTER);
+//                                javaClassContent.append("         if(it.hasNext())" + ENTER);
+//                                javaClassContent.append("         {" + ENTER);
+//                                javaClassContent.append("             ret=it.next();" + ENTER);
+//                                javaClassContent.append("         }" + ENTER);
+//                                javaClassContent.append("         return ret;" + ENTER);
+                            javaClassContent.append(CLOSE_BLOCK + ENTER);
                         }
                     }
                     catch ( URISyntaxException usie )
