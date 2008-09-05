@@ -38,8 +38,13 @@ public class TemplateGroupBase extends GenericObjectBase implements Traceable,De
 
     public User getModifiedBy()
     {
+         User ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.modifiedBy);
-         return (User)vocabulary.User.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(User)vocabulary.User.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public void setCreator(org.semanticwb.model.User user)
@@ -54,8 +59,13 @@ public class TemplateGroupBase extends GenericObjectBase implements Traceable,De
 
     public User getCreator()
     {
+         User ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.creator);
-         return (User)vocabulary.User.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(User)vocabulary.User.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public String getTitle()
@@ -116,8 +126,13 @@ public class TemplateGroupBase extends GenericObjectBase implements Traceable,De
 
     public Template getGroupedTemplate()
     {
+         Template ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasGroupedTemplate);
-         return (Template)vocabulary.Template.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(Template)vocabulary.Template.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public WebSite getWebSite()

@@ -38,8 +38,13 @@ public class PortletTypeBase extends GenericObjectBase implements Traceable,Desc
 
     public User getModifiedBy()
     {
+         User ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.modifiedBy);
-         return (User)vocabulary.User.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(User)vocabulary.User.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public String getPortletBundle()
@@ -100,8 +105,13 @@ public class PortletTypeBase extends GenericObjectBase implements Traceable,Desc
 
     public Portlet getPortlet()
     {
+         Portlet ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasPTPortlet);
-         return (Portlet)vocabulary.Portlet.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(Portlet)vocabulary.Portlet.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public Date getUpdated()
@@ -136,8 +146,13 @@ public class PortletTypeBase extends GenericObjectBase implements Traceable,Desc
 
     public User getCreator()
     {
+         User ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.creator);
-         return (User)vocabulary.User.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(User)vocabulary.User.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public GenericIterator<org.semanticwb.model.PortletSubType> listSubTypes()
@@ -148,8 +163,13 @@ public class PortletTypeBase extends GenericObjectBase implements Traceable,Desc
 
     public PortletSubType getSubType()
     {
+         PortletSubType ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasPTSubType);
-         return (PortletSubType)vocabulary.PortletSubType.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(PortletSubType)vocabulary.PortletSubType.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public String getDescription()

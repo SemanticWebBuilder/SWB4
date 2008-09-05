@@ -38,8 +38,13 @@ public class RuleRefBase extends GenericObjectBase implements Activeable
 
     public Rule getRule()
     {
+         Rule ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.rule);
-         return (Rule)vocabulary.Rule.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(Rule)vocabulary.Rule.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public WebSite getWebSite()

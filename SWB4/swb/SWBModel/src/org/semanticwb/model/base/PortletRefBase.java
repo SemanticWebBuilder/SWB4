@@ -38,8 +38,13 @@ public class PortletRefBase extends GenericObjectBase implements Activeable,Prio
 
     public Portlet getPortlet()
     {
+         Portlet ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.portlet);
-         return (Portlet)vocabulary.Portlet.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(Portlet)vocabulary.Portlet.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public int getPriority()

@@ -58,8 +58,13 @@ public class CampBase extends GenericObjectBase implements Activeable,Deleteable
 
     public User getModifiedBy()
     {
+         User ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.modifiedBy);
-         return (User)vocabulary.User.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(User)vocabulary.User.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public String getTitle()
@@ -104,8 +109,13 @@ public class CampBase extends GenericObjectBase implements Activeable,Deleteable
 
     public User getCreator()
     {
+         User ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.creator);
-         return (User)vocabulary.User.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(User)vocabulary.User.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public GenericIterator<org.semanticwb.model.Calendar> listCalendars()
@@ -131,8 +141,13 @@ public class CampBase extends GenericObjectBase implements Activeable,Deleteable
 
     public Calendar getCalendar()
     {
+         Calendar ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasCalendar);
-         return (Calendar)vocabulary.Calendar.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(Calendar)vocabulary.Calendar.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public GenericIterator<org.semanticwb.model.Role> listRoles()
@@ -158,8 +173,13 @@ public class CampBase extends GenericObjectBase implements Activeable,Deleteable
 
     public Role getRole()
     {
+         Role ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasRole);
-         return (Role)vocabulary.Role.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(Role)vocabulary.Role.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public String getDescription()
@@ -205,8 +225,13 @@ public class CampBase extends GenericObjectBase implements Activeable,Deleteable
 
     public Rule getRule()
     {
+         Rule ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasRule);
-         return (Rule)vocabulary.Rule.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(Rule)vocabulary.Rule.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public WebSite getWebSite()

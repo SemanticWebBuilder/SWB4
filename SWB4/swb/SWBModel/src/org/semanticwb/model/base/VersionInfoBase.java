@@ -38,8 +38,13 @@ public class VersionInfoBase extends GenericObjectBase implements Valueable
 
     public VersionInfo getPreviousVersion()
     {
+         VersionInfo ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.previousVersion);
-         return (VersionInfo)vocabulary.VersionInfo.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(VersionInfo)vocabulary.VersionInfo.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public String getVersionComment()
@@ -74,8 +79,13 @@ public class VersionInfoBase extends GenericObjectBase implements Valueable
 
     public VersionInfo getNextVersion()
     {
+         VersionInfo ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.nextVersion);
-         return (VersionInfo)vocabulary.VersionInfo.newGenericInstance(obj);
+         if(obj!=null)
+         {
+             ret=(VersionInfo)vocabulary.VersionInfo.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public Date getVersionCreated()
