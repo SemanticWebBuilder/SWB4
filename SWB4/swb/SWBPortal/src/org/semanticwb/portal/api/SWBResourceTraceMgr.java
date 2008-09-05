@@ -13,7 +13,6 @@ import java.io.*;
 import java.sql.Timestamp;
 import javax.servlet.http.*;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBException;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
@@ -92,7 +91,7 @@ public class SWBResourceTraceMgr extends TimerTask
         }
     }
     
-    public void renderTraced(SWBResource res, HttpServletRequest request, HttpServletResponse response, SWBParamRequest resReq ) throws SWBException, java.io.IOException
+    public void renderTraced(SWBResource res, HttpServletRequest request, HttpServletResponse response, SWBParamRequest resReq ) throws SWBResourceException, java.io.IOException
     {
         SWBResourceTrace trace = null;
         if(resourceTrace)
@@ -111,7 +110,7 @@ public class SWBResourceTraceMgr extends TimerTask
                 SWBResourceWindowRender resw=new SWBResourceWindowRender(res);
                 resw.render(request, response, resReq);
             }
-        } catch (SWBException e)
+        } catch (SWBResourceException e)
         {
             throw e;
         } catch (IOException e)

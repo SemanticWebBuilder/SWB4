@@ -8,7 +8,6 @@
 package org.semanticwb.portal.api;
 
 import java.util.*;
-import org.semanticwb.SWBException;
 
 /**
  * Intefase que extiende de WBParameter la cual contiene los objetos que son pasados
@@ -28,9 +27,9 @@ public interface SWBParamRequest extends SWBParameters
     
     public SWBResourceURL getRenderUrl();
     
-    public String getLocaleString(String key) throws SWBException;
+    public String getLocaleString(String key) throws SWBResourceException;
 
-    public String getLocaleLogString(String key) throws SWBException;
+    public String getLocaleLogString(String key) throws SWBResourceException;
     
     public java.lang.String getWindowTitle();
     

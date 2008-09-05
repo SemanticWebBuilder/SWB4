@@ -64,7 +64,7 @@ public interface SWBResource
      *                   el servlet request
      * @param   actionResponse
      *           WBActionResponse con los par�metros de WebBuilder(User, Topic, Action).
-     * @exception  SWBException
+     * @exception  SWBResourceException
      *           Si el recurso tiene alg�n problema con el procesamiento de la acci�n
      * @exception  IOException
      *           Si hay algun problema de I/O con el procesamiento de streams.
@@ -83,7 +83,7 @@ public interface SWBResource
      * @param   paramRequest
      *          WBParamRequest con los par�metros de WebBuilder (User, Topic, Action).
      *
-     * @exception  SWBException
+     * @exception  SWBResourceException
      *             Si el recurso tiene alg�n problema con la generaci�n de la respuesta.
      * @exception  IOException
      *             Si hay alg�n problema de I/O con el procesamiento de streams.

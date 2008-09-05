@@ -7,8 +7,6 @@
 
 package org.semanticwb.portal.api;
 
-import org.semanticwb.SWBException;
-
 
 /**
  * Interfase que da acceso al Response del recurso cuando es llamado por el
@@ -173,7 +171,7 @@ public interface SWBActionResponse extends SWBParameters
   
   public void setMode(String mode);
   
-  public String getLocaleString(String key) throws SWBException;
+  public String getLocaleString(String key) throws SWBResourceException;
 
-  public String getLocaleLogString(String key) throws SWBException;
+  public String getLocaleLogString(String key) throws SWBResourceException;
 }
