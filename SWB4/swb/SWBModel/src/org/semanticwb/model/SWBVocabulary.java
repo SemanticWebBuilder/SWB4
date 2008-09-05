@@ -126,7 +126,8 @@ public class SWBVocabulary
     public final SemanticProperty role;
     public final SemanticProperty hasChildWebPage;
     public final SemanticProperty hasPFlowRef;
-    public final SemanticProperty hasParentWebPage;
+    public final SemanticProperty webPageParent;
+    public final SemanticProperty hasVirtualWebPageParent;
     public final SemanticProperty homePage;
     public final SemanticProperty userRepository;
     public final SemanticProperty portlet;
@@ -258,7 +259,8 @@ public class SWBVocabulary
         role=vocabulary.getSemanticProperty(URI+"role");
         hasChildWebPage=vocabulary.getSemanticProperty(URI+"hasChildWebPage");
         hasPFlowRef=vocabulary.getSemanticProperty(URI+"hasPFlowRef");
-        hasParentWebPage=vocabulary.getSemanticProperty(URI+"hasParentWebPage");
+        webPageParent=vocabulary.getSemanticProperty(URI+"webPageParent");
+        hasVirtualWebPageParent=vocabulary.getSemanticProperty(URI+"hasVirtualWebPageParent");
         homePage=vocabulary.getSemanticProperty(URI+"homePage");
         userRepository=vocabulary.getSemanticProperty(URI+"userRepository");
         portlet=vocabulary.getSemanticProperty(URI+"portlet");
