@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.security.auth.SWB4CallbackHandler;
@@ -26,8 +27,10 @@ import org.semanticwb.security.auth.SWB4CallbackHandler;
  */
 public class Login implements InternalServlet
 {
-    static Logger log=SWBUtils.getLogger(Login.class);
-    static String authMethod = "FORM"; //"BASIC" "FORM"
+    private static Logger log=SWBUtils.getLogger(Login.class);
+    private static String authMethod = "BASIC"; //"BASIC" "FORM"
+    private static String VALSESS = "swb4-auto";
+    private static String CALLBACK = "swb4-callback";
     
     //Constantes para primer implementación
     
@@ -38,45 +41,49 @@ public class Login implements InternalServlet
 
     public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException
     {
+        
+        Subject subject  = SWBPortal.getUserMgr().getSubject(request);
         HttpSession session = request.getSession(true);
-        Subject subject  = (Subject) session.getAttribute("swb4-subject");
-        CallbackHandler callbackHandler = (CallbackHandler) session.getAttribute("swb4-callback");
+        String enAuto = (String) session.getAttribute(VALSESS);
+
+        CallbackHandler callbackHandler = (CallbackHandler) session.getAttribute(CALLBACK);
         if (null == callbackHandler){
             log.debug("New callbackHandler...");
             callbackHandler = new SWB4CallbackHandler(request,response,authMethod); //TODO proveer otros métodos
-            session.setAttribute("swb4-callback", callbackHandler);
+            session.setAttribute(CALLBACK, callbackHandler);
         } else {
             ((SWB4CallbackHandler)callbackHandler).setRequest(request);
             ((SWB4CallbackHandler)callbackHandler).setResponse(response);
         }
-        if (null == subject){
-            log.debug("New Subject...");
-            if ("BASIC".equals(authMethod))
-                basicChallenge("Serch Web Builder 4.0", response);
-            if ("FORM".equals(authMethod))
-                formChallenge(request, response, "ErrMEssage", "Alert");
-            subject = new Subject();
-            session.setAttribute("swb4-subject", subject);
+        if (null == enAuto){
+            log.debug("Starts new Authentication process...");
+            doResponse(request, response, dparams, "ErrMessage", "Alert");
+            session.setAttribute(VALSESS, "Working");
             return;
         }
         LoginContext lc;
         try {
-            lc = new LoginContext("swb4DBModule", subject, callbackHandler);
+            lc = new LoginContext("swb4DBModule", subject, callbackHandler); //TODO: Generar el contexto
             lc.login();
+            session.removeAttribute(VALSESS);
+            session.removeAttribute(CALLBACK);
         } catch (LoginException ex) {
             log.error("Can't log User", ex);
-            if ("BASIC".equals(authMethod))
-                basicChallenge("Serch Web Builder 4.0", response);
-            if ("FORM".equals(authMethod))
-                formChallenge(request, response, "ErrMEssage", "Alert");
-            subject = new Subject();
+            doResponse(request, response, dparams, "ErrMessage", "Alert");
             return;
         }
        
     
         response.getWriter().print("Hello Login, Authenticated User: "+subject.getPrincipals().iterator().next().getName());
-        //SWBContext.getSemanticMgr().getAdminModel().createResource(SWBContext.getSemanticMgr().getOntology().getResource("http://www.semanticwebbuilder.org/swb4/ontology#WebPage"));
     }        
+    
+    private void doResponse(HttpServletRequest request, HttpServletResponse response, DistributorParams distributorParams, String errorMessage, String alert) throws IOException{
+            if ("BASIC".equals(authMethod))
+                basicChallenge("Serch Web Builder 4.0", response);//TODO Asignar nombre de Realm
+            if ("FORM".equals(authMethod))
+                formChallenge(request, response, distributorParams, errorMessage, alert);
+
+    }
     
     private void basicChallenge(String realm, HttpServletResponse response){
         StringBuffer header= new StringBuffer();
@@ -88,7 +95,7 @@ public class Login implements InternalServlet
 		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     }
     
-    private void formChallenge(HttpServletRequest request, HttpServletResponse response, String errorMessage, String alert) throws IOException{
+    private void formChallenge(HttpServletRequest request, HttpServletResponse response, DistributorParams distributorParams, String errorMessage, String alert) throws IOException{
          String ruta = "/config/";
       /*  if (request.getParameter("err") != null) {
             if (user.isRegistered()) {
@@ -105,7 +112,13 @@ public class Login implements InternalServlet
         ruta += ".html";
         String login = null;
         try {
-           // String rutaSite = "/sites/" + topic.getMap().getId() + ruta;
+            
+            
+            String rutaSite = "/sites/" + distributorParams.getWebPage().getWebSite().getId() +"/"+ ruta;
+            login = SWBUtils.IO.getFileFromPath(rutaSite);
+            if ("".equals(login)){
+                login = SWBUtils.IO.getFileFromPath(ruta);
+            }
             //try {
 
               //  try { 
@@ -117,8 +130,8 @@ public class Login implements InternalServlet
               //  if (null == login) login = SWBUtils.IO.getFileFromPath(rutaSite);
                 //TODO
                 //login = WBUtils.getInstance().parseHTML(login, WBUtils.getInstance().getWebWorkPath() + "/sites/" + topic.getMap() + "/config/images/");
-                //login = login.replaceFirst("<WBVERSION>", WBLoader.getInstance().getCoreVersion());
-              //  login = login.replaceFirst("<ERRMESSAGE>", errorMessage);
+                login = login.replaceFirst("<WBVERSION>", SWBPlatform.getVersion());
+                login = login.replaceFirst("<ERRMESSAGE>", errorMessage);
             //} catch (Exception e) {
             ruta = SWBUtils.getApplicationPath()+"work"+ruta; 
             System.out.println(ruta);
