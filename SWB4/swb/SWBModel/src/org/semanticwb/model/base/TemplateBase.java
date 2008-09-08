@@ -80,7 +80,7 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
 
     public void setModifiedBy(org.semanticwb.model.User user)
     {
-        getSemanticObject().addObjectProperty(vocabulary.modifiedBy, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.modifiedBy, user.getSemanticObject());
     }
 
     public void removeModifiedBy()
@@ -121,7 +121,7 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
 
     public void setTemplateGroup(org.semanticwb.model.TemplateGroup templategroup)
     {
-        getSemanticObject().addObjectProperty(vocabulary.templateGroup, templategroup.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.templateGroup, templategroup.getSemanticObject());
     }
 
     public void removeTemplateGroup()
@@ -142,7 +142,7 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
 
     public void setActualVersion(org.semanticwb.model.VersionInfo versioninfo)
     {
-        getSemanticObject().addObjectProperty(vocabulary.actualVersion, versioninfo.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.actualVersion, versioninfo.getSemanticObject());
     }
 
     public void removeActualVersion()
@@ -163,7 +163,7 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
 
     public void setLanguage(org.semanticwb.model.Language language)
     {
-        getSemanticObject().addObjectProperty(vocabulary.language, language.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.language, language.getSemanticObject());
     }
 
     public void removeLanguage()
@@ -194,7 +194,7 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
 
     public void setLastVersion(org.semanticwb.model.VersionInfo versioninfo)
     {
-        getSemanticObject().addObjectProperty(vocabulary.lastVersion, versioninfo.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.lastVersion, versioninfo.getSemanticObject());
     }
 
     public void removeLastVersion()
@@ -247,7 +247,7 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
 
     public void setCreator(org.semanticwb.model.User user)
     {
-        getSemanticObject().addObjectProperty(vocabulary.creator, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.creator, user.getSemanticObject());
     }
 
     public void removeCreator()

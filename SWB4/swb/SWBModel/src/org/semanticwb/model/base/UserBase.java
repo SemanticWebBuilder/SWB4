@@ -38,7 +38,7 @@ public class UserBase extends GenericObjectBase implements Roleable,Traceable,Lo
 
     public void setModifiedBy(org.semanticwb.model.User user)
     {
-        getSemanticObject().addObjectProperty(vocabulary.modifiedBy, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.modifiedBy, user.getSemanticObject());
     }
 
     public void removeModifiedBy()
@@ -99,7 +99,7 @@ public class UserBase extends GenericObjectBase implements Roleable,Traceable,Lo
 
     public void setLanguage(org.semanticwb.model.Language language)
     {
-        getSemanticObject().addObjectProperty(vocabulary.language, language.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.language, language.getSemanticObject());
     }
 
     public void removeLanguage()
@@ -130,7 +130,7 @@ public class UserBase extends GenericObjectBase implements Roleable,Traceable,Lo
 
     public void setCreator(org.semanticwb.model.User user)
     {
-        getSemanticObject().addObjectProperty(vocabulary.creator, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.creator, user.getSemanticObject());
     }
 
     public void removeCreator()

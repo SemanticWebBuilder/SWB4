@@ -28,7 +28,7 @@ public class UserRepositoryBase extends GenericObjectBase implements Descriptive
 
     public void setModifiedBy(org.semanticwb.model.User user)
     {
-        getSemanticObject().addObjectProperty(vocabulary.modifiedBy, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.modifiedBy, user.getSemanticObject());
     }
 
     public void removeModifiedBy()
@@ -49,7 +49,7 @@ public class UserRepositoryBase extends GenericObjectBase implements Descriptive
 
     public void setCreator(org.semanticwb.model.User user)
     {
-        getSemanticObject().addObjectProperty(vocabulary.creator, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.creator, user.getSemanticObject());
     }
 
     public void removeCreator()
@@ -145,6 +145,10 @@ public class UserRepositoryBase extends GenericObjectBase implements Descriptive
     {
         getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.User));
     }
+    public boolean hasUser(String id)
+    {
+        return (getUser(id)!=null);
+    }
 
     public ObjectGroup getObjectGroup(String id)
     {
@@ -173,6 +177,10 @@ public class UserRepositoryBase extends GenericObjectBase implements Descriptive
     {
         getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.ObjectGroup));
     }
+    public boolean hasObjectGroup(String id)
+    {
+        return (getObjectGroup(id)!=null);
+    }
 
     public Role getRole(String id)
     {
@@ -200,5 +208,9 @@ public class UserRepositoryBase extends GenericObjectBase implements Descriptive
     public void removeRole(String id)
     {
         getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.Role));
+    }
+    public boolean hasRole(String id)
+    {
+        return (getRole(id)!=null);
     }
 }

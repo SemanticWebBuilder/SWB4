@@ -28,7 +28,7 @@ public class RuleRefBase extends GenericObjectBase implements Activeable
 
     public void setRule(org.semanticwb.model.Rule rule)
     {
-        getSemanticObject().addObjectProperty(vocabulary.rule, rule.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.rule, rule.getSemanticObject());
     }
 
     public void removeRule()

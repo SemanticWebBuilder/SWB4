@@ -7,7 +7,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class RuleBase extends GenericObjectBase implements Traceable,Descriptiveable,Groupable,Versionable
+public class RuleBase extends GenericObjectBase implements Versionable,Groupable,Descriptiveable,Traceable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
@@ -28,7 +28,7 @@ public class RuleBase extends GenericObjectBase implements Traceable,Descriptive
 
     public void setModifiedBy(org.semanticwb.model.User user)
     {
-        getSemanticObject().addObjectProperty(vocabulary.modifiedBy, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.modifiedBy, user.getSemanticObject());
     }
 
     public void removeModifiedBy()
@@ -69,7 +69,7 @@ public class RuleBase extends GenericObjectBase implements Traceable,Descriptive
 
     public void setActualVersion(org.semanticwb.model.VersionInfo versioninfo)
     {
-        getSemanticObject().addObjectProperty(vocabulary.actualVersion, versioninfo.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.actualVersion, versioninfo.getSemanticObject());
     }
 
     public void removeActualVersion()
@@ -100,7 +100,7 @@ public class RuleBase extends GenericObjectBase implements Traceable,Descriptive
 
     public void setLastVersion(org.semanticwb.model.VersionInfo versioninfo)
     {
-        getSemanticObject().addObjectProperty(vocabulary.lastVersion, versioninfo.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.lastVersion, versioninfo.getSemanticObject());
     }
 
     public void removeLastVersion()
@@ -121,7 +121,7 @@ public class RuleBase extends GenericObjectBase implements Traceable,Descriptive
 
     public void setCreator(org.semanticwb.model.User user)
     {
-        getSemanticObject().addObjectProperty(vocabulary.creator, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.creator, user.getSemanticObject());
     }
 
     public void removeCreator()

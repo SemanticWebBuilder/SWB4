@@ -48,7 +48,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public void setModifiedBy(org.semanticwb.model.User user)
     {
-        getSemanticObject().addObjectProperty(vocabulary.modifiedBy, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.modifiedBy, user.getSemanticObject());
     }
 
     public void removeModifiedBy()
@@ -89,7 +89,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public void setActualVersion(org.semanticwb.model.VersionInfo versioninfo)
     {
-        getSemanticObject().addObjectProperty(vocabulary.actualVersion, versioninfo.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.actualVersion, versioninfo.getSemanticObject());
     }
 
     public void removeActualVersion()
@@ -110,7 +110,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public void setLanguage(org.semanticwb.model.Language language)
     {
-        getSemanticObject().addObjectProperty(vocabulary.language, language.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.language, language.getSemanticObject());
     }
 
     public void removeLanguage()
@@ -141,7 +141,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public void setLastVersion(org.semanticwb.model.VersionInfo versioninfo)
     {
-        getSemanticObject().addObjectProperty(vocabulary.lastVersion, versioninfo.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.lastVersion, versioninfo.getSemanticObject());
     }
 
     public void removeLastVersion()
@@ -162,7 +162,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public void setCreator(org.semanticwb.model.User user)
     {
-        getSemanticObject().addObjectProperty(vocabulary.creator, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.creator, user.getSemanticObject());
     }
 
     public void removeCreator()
@@ -183,7 +183,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public void setHomePage(org.semanticwb.model.WebPage webpage)
     {
-        getSemanticObject().addObjectProperty(vocabulary.homePage, webpage.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.homePage, webpage.getSemanticObject());
     }
 
     public void removeHomePage()
@@ -204,7 +204,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public void setUserRepository(org.semanticwb.model.UserRepository userrepository)
     {
-        getSemanticObject().addObjectProperty(vocabulary.userRepository, userrepository.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.userRepository, userrepository.getSemanticObject());
     }
 
     public void removeUserRepository()
@@ -264,6 +264,10 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     {
         getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.WebPage));
     }
+    public boolean hasWebPage(String id)
+    {
+        return (getWebPage(id)!=null);
+    }
 
     public Calendar getCalendar(String id)
     {
@@ -291,6 +295,10 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     public void removeCalendar(String id)
     {
         getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.Calendar));
+    }
+    public boolean hasCalendar(String id)
+    {
+        return (getCalendar(id)!=null);
     }
 
     public RuleRef getRuleRef(String id)
@@ -320,6 +328,10 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     {
         getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.RuleRef));
     }
+    public boolean hasRuleRef(String id)
+    {
+        return (getRuleRef(id)!=null);
+    }
 
     public ObjectGroup getObjectGroup(String id)
     {
@@ -347,6 +359,10 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     public void removeObjectGroup(String id)
     {
         getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.ObjectGroup));
+    }
+    public boolean hasObjectGroup(String id)
+    {
+        return (getObjectGroup(id)!=null);
     }
 
     public RoleRef getRoleRef(String id)
@@ -376,6 +392,10 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     {
         getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.RoleRef));
     }
+    public boolean hasRoleRef(String id)
+    {
+        return (getRoleRef(id)!=null);
+    }
 
     public PortletSubType getPortletSubType(String id)
     {
@@ -397,6 +417,10 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     public void removePortletSubType(String id)
     {
         getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.PortletSubType));
+    }
+    public boolean hasPortletSubType(String id)
+    {
+        return (getPortletSubType(id)!=null);
     }
 
     public Device getDevice(String id)
@@ -426,6 +450,10 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     {
         getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.Device));
     }
+    public boolean hasDevice(String id)
+    {
+        return (getDevice(id)!=null);
+    }
 
     public Permission getPermission(String id)
     {
@@ -447,6 +475,10 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     public void removePermission(String id)
     {
         getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.Permission));
+    }
+    public boolean hasPermission(String id)
+    {
+        return (getPermission(id)!=null);
     }
 
     public Template getTemplate(String id)
@@ -476,6 +508,10 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     {
         getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.Template));
     }
+    public boolean hasTemplate(String id)
+    {
+        return (getTemplate(id)!=null);
+    }
 
     public VersionInfo getVersionInfo(String id)
     {
@@ -504,6 +540,10 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     {
         getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.VersionInfo));
     }
+    public boolean hasVersionInfo(String id)
+    {
+        return (getVersionInfo(id)!=null);
+    }
 
     public Community getCommunity(String id)
     {
@@ -526,6 +566,10 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     {
         getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.Community));
     }
+    public boolean hasCommunity(String id)
+    {
+        return (getCommunity(id)!=null);
+    }
 
     public Language getLanguage(String id)
     {
@@ -547,6 +591,10 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     public void removeLanguage(String id)
     {
         getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.Language));
+    }
+    public boolean hasLanguage(String id)
+    {
+        return (getLanguage(id)!=null);
     }
 
     public TemplateRef getTemplateRef(String id)
@@ -576,6 +624,10 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     {
         getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.TemplateRef));
     }
+    public boolean hasTemplateRef(String id)
+    {
+        return (getTemplateRef(id)!=null);
+    }
 
     public PortletRef getPortletRef(String id)
     {
@@ -603,6 +655,10 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     public void removePortletRef(String id)
     {
         getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.PortletRef));
+    }
+    public boolean hasPortletRef(String id)
+    {
+        return (getPortletRef(id)!=null);
     }
 
     public IPFilter getIPFilter(String id)
@@ -632,6 +688,10 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     {
         getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.IPFilter));
     }
+    public boolean hasIPFilter(String id)
+    {
+        return (getIPFilter(id)!=null);
+    }
 
     public TemplateGroup getTemplateGroup(String id)
     {
@@ -653,6 +713,10 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     public void removeTemplateGroup(String id)
     {
         getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.TemplateGroup));
+    }
+    public boolean hasTemplateGroup(String id)
+    {
+        return (getTemplateGroup(id)!=null);
     }
 
     public Rule getRule(String id)
@@ -682,6 +746,10 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     {
         getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.Rule));
     }
+    public boolean hasRule(String id)
+    {
+        return (getRule(id)!=null);
+    }
 
     public PFlow getPFlow(String id)
     {
@@ -709,6 +777,10 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     public void removePFlow(String id)
     {
         getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.PFlow));
+    }
+    public boolean hasPFlow(String id)
+    {
+        return (getPFlow(id)!=null);
     }
 
     public Camp getCamp(String id)
@@ -738,6 +810,10 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     {
         getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.Camp));
     }
+    public boolean hasCamp(String id)
+    {
+        return (getCamp(id)!=null);
+    }
 
     public PortletType getPortletType(String id)
     {
@@ -760,6 +836,10 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     {
         getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.PortletType));
     }
+    public boolean hasPortletType(String id)
+    {
+        return (getPortletType(id)!=null);
+    }
 
     public Dns getDns(String id)
     {
@@ -781,6 +861,10 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     public void removeDns(String id)
     {
         getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.Dns));
+    }
+    public boolean hasDns(String id)
+    {
+        return (getDns(id)!=null);
     }
 
     public Portlet getPortlet(String id)
@@ -810,6 +894,10 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     {
         getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.Portlet));
     }
+    public boolean hasPortlet(String id)
+    {
+        return (getPortlet(id)!=null);
+    }
 
     public PFlowRef getPFlowRef(String id)
     {
@@ -831,5 +919,9 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     public void removePFlowRef(String id)
     {
         getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.PFlowRef));
+    }
+    public boolean hasPFlowRef(String id)
+    {
+        return (getPFlowRef(id)!=null);
     }
 }

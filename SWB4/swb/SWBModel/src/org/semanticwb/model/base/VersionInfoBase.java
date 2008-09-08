@@ -28,7 +28,7 @@ public class VersionInfoBase extends GenericObjectBase implements Valueable
 
     public void setPreviousVersion(org.semanticwb.model.VersionInfo versioninfo)
     {
-        getSemanticObject().addObjectProperty(vocabulary.previousVersion, versioninfo.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.previousVersion, versioninfo.getSemanticObject());
     }
 
     public void removePreviousVersion()
@@ -69,7 +69,7 @@ public class VersionInfoBase extends GenericObjectBase implements Valueable
 
     public void setNextVersion(org.semanticwb.model.VersionInfo versioninfo)
     {
-        getSemanticObject().addObjectProperty(vocabulary.nextVersion, versioninfo.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.nextVersion, versioninfo.getSemanticObject());
     }
 
     public void removeNextVersion()

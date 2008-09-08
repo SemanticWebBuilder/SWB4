@@ -28,7 +28,7 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
 
     public void setModifiedBy(org.semanticwb.model.User user)
     {
-        getSemanticObject().addObjectProperty(vocabulary.modifiedBy, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.modifiedBy, user.getSemanticObject());
     }
 
     public void removeModifiedBy()
@@ -127,6 +127,16 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
     public void setHidden(boolean hidden)
     {
         getSemanticObject().setBooleanProperty(vocabulary.hidden, hidden);
+    }
+
+    public String getWebPageSortName()
+    {
+        return getSemanticObject().getProperty(vocabulary.webPageSortName);
+    }
+
+    public void setWebPageSortName(String webPageSortName)
+    {
+        getSemanticObject().setProperty(vocabulary.webPageSortName, webPageSortName);
     }
 
     public boolean isIndexable()
@@ -314,27 +324,6 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
          return ret;
     }
 
-    public void setCreator(org.semanticwb.model.User user)
-    {
-        getSemanticObject().addObjectProperty(vocabulary.creator, user.getSemanticObject());
-    }
-
-    public void removeCreator()
-    {
-        getSemanticObject().removeProperty(vocabulary.creator);
-    }
-
-    public User getCreator()
-    {
-         User ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.creator);
-         if(obj!=null)
-         {
-             ret=(User)vocabulary.User.newGenericInstance(obj);
-         }
-         return ret;
-    }
-
     public GenericIterator<org.semanticwb.model.RuleRef> listRuleRefs()
     {
         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasRuleRef.getRDFProperty());
@@ -367,9 +356,30 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
          return ret;
     }
 
+    public void setCreator(org.semanticwb.model.User user)
+    {
+        getSemanticObject().setObjectProperty(vocabulary.creator, user.getSemanticObject());
+    }
+
+    public void removeCreator()
+    {
+        getSemanticObject().removeProperty(vocabulary.creator);
+    }
+
+    public User getCreator()
+    {
+         User ret=null;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.creator);
+         if(obj!=null)
+         {
+             ret=(User)vocabulary.User.newGenericInstance(obj);
+         }
+         return ret;
+    }
+
     public void setParent(org.semanticwb.model.WebPage webpage)
     {
-        getSemanticObject().addObjectProperty(vocabulary.webPageParent, webpage.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.webPageParent, webpage.getSemanticObject());
     }
 
     public void removeParent()
