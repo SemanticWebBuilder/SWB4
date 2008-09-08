@@ -180,13 +180,20 @@ public class TestWebSite {
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     //
-    //@Test
+    @Test
     public void Test3()
     {
             WebSite site=SWBContext.getWebSite("sep");
             WebPage home=site.getHomePage();
             UserRepository urep=SWBContext.getDefaultRepository();
             Template tpl=site.getTemplate("1");
+            
+            for(int x=0;x<10000;x++)
+            {
+                WebPage page=site.createWebPage("page"+x);
+                page.setTitle("Pagina "+x);
+                page.setParent(home);
+            }
     }
     
     
