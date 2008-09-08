@@ -180,7 +180,7 @@ public class TestWebSite {
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     //
-    @Test
+    //@Test
     public void Test3()
     {
             WebSite site=SWBContext.getWebSite("sep");
