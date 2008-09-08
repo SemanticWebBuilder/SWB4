@@ -1,5 +1,5 @@
 <%
-  response.sendRedirect("/wb3");
+  response.sendRedirect("/swb");
   // <jsp:redirect page="/wb3"/>
 
 
