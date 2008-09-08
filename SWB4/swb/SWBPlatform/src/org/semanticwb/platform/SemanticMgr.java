@@ -78,7 +78,7 @@ public class SemanticMgr implements SWBInstanceObject
         //Create Omtology
         m_ontology = new SemanticOntology("SWB",ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM,m_schema.getRDFModel()));
         //m_ontology.addSubModel(m_schema,false);
-        m_ontology.addSubModel(m_system,false);
+//        m_ontology.addSubModel(m_system,false);
         
         //Create Vocabulary
         vocabulary=new SemanticVocabulary();
@@ -233,7 +233,7 @@ public class SemanticMgr implements SWBInstanceObject
         m_models.put(name, m);
         m_imodels.put(m.getRDFModel(), m);
         //System.out.println("addModel:"+name+" hash:"+m.getRDFModel().toString());
-        m_ontology.addSubModel(m,false);
+//        m_ontology.addSubModel(m,false);
         return m;
     }    
     

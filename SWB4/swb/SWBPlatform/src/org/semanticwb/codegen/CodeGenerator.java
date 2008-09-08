@@ -569,6 +569,11 @@ public class CodeGenerator
             javaClassContent.append("    {" + ENTER);
             javaClassContent.append("        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary." + tpc.getName() + "));" + ENTER);
             javaClassContent.append("    }" + ENTER);
+            
+            javaClassContent.append("    public boolean has" + tpc.getName() + "(String id)" + ENTER);
+            javaClassContent.append("    {" + ENTER);
+            javaClassContent.append("        return (get" + tpc.getName() + "(id)!=null);" + ENTER);
+            javaClassContent.append("    }" + ENTER);
         }
     }
 
@@ -637,7 +642,7 @@ public class CodeGenerator
                                 javaClassContent.append(ENTER);
                                 javaClassContent.append("    public void set" + objectName + "(" + m_Package + "." + valueToReturn + " " + valueToReturn.toLowerCase() + ")" + ENTER);
                                 javaClassContent.append(OPEN_BLOCK + ENTER);
-                                javaClassContent.append("        getSemanticObject().addObjectProperty(vocabulary." + tpp.getName() + ", " + valueToReturn.toLowerCase() + ".getSemanticObject());" + ENTER);
+                                javaClassContent.append("        getSemanticObject().setObjectProperty(vocabulary." + tpp.getName() + ", " + valueToReturn.toLowerCase() + ".getSemanticObject());" + ENTER);
                                 javaClassContent.append(CLOSE_BLOCK + ENTER);
 
                                 javaClassContent.append(ENTER);
