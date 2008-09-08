@@ -28,7 +28,7 @@ public class RoleRefBase extends GenericObjectBase implements Activeable
 
     public void setRole(org.semanticwb.model.Role role)
     {
-        getSemanticObject().addObjectProperty(vocabulary.role, role.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.role, role.getSemanticObject());
     }
 
     public void removeRole()

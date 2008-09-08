@@ -38,7 +38,7 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
 
     public void setModifiedBy(org.semanticwb.model.User user)
     {
-        getSemanticObject().addObjectProperty(vocabulary.modifiedBy, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.modifiedBy, user.getSemanticObject());
     }
 
     public void removeModifiedBy()
@@ -79,7 +79,7 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
 
     public void setActualVersion(org.semanticwb.model.VersionInfo versioninfo)
     {
-        getSemanticObject().addObjectProperty(vocabulary.actualVersion, versioninfo.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.actualVersion, versioninfo.getSemanticObject());
     }
 
     public void removeActualVersion()
@@ -120,7 +120,7 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
 
     public void setLastVersion(org.semanticwb.model.VersionInfo versioninfo)
     {
-        getSemanticObject().addObjectProperty(vocabulary.lastVersion, versioninfo.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.lastVersion, versioninfo.getSemanticObject());
     }
 
     public void removeLastVersion()
@@ -275,7 +275,7 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
 
     public void setLanguage(org.semanticwb.model.Language language)
     {
-        getSemanticObject().addObjectProperty(vocabulary.language, language.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.language, language.getSemanticObject());
     }
 
     public void removeLanguage()
@@ -328,7 +328,7 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
 
     public void setCreator(org.semanticwb.model.User user)
     {
-        getSemanticObject().addObjectProperty(vocabulary.creator, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.creator, user.getSemanticObject());
     }
 
     public void removeCreator()
@@ -349,7 +349,7 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
 
     public void setPortletSubType(org.semanticwb.model.PortletSubType portletsubtype)
     {
-        getSemanticObject().addObjectProperty(vocabulary.portletSubType, portletsubtype.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.portletSubType, portletsubtype.getSemanticObject());
     }
 
     public void removePortletSubType()
@@ -390,7 +390,7 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
 
     public void setPortletType(org.semanticwb.model.PortletType portlettype)
     {
-        getSemanticObject().addObjectProperty(vocabulary.portletType, portlettype.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.portletType, portlettype.getSemanticObject());
     }
 
     public void removePortletType()

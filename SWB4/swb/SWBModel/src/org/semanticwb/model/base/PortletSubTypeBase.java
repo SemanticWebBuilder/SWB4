@@ -7,7 +7,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class PortletSubTypeBase extends GenericObjectBase implements Traceable,Descriptiveable
+public class PortletSubTypeBase extends GenericObjectBase implements Descriptiveable,Traceable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
@@ -28,7 +28,7 @@ public class PortletSubTypeBase extends GenericObjectBase implements Traceable,D
 
     public void setModifiedBy(org.semanticwb.model.User user)
     {
-        getSemanticObject().addObjectProperty(vocabulary.modifiedBy, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.modifiedBy, user.getSemanticObject());
     }
 
     public void removeModifiedBy()
@@ -96,7 +96,7 @@ public class PortletSubTypeBase extends GenericObjectBase implements Traceable,D
 
     public void setType(org.semanticwb.model.PortletType portlettype)
     {
-        getSemanticObject().addObjectProperty(vocabulary.PSTType, portlettype.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.PSTType, portlettype.getSemanticObject());
     }
 
     public void removeType()
@@ -117,7 +117,7 @@ public class PortletSubTypeBase extends GenericObjectBase implements Traceable,D
 
     public void setCreator(org.semanticwb.model.User user)
     {
-        getSemanticObject().addObjectProperty(vocabulary.creator, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.creator, user.getSemanticObject());
     }
 
     public void removeCreator()

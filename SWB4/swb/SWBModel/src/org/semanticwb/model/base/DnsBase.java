@@ -7,7 +7,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class DnsBase extends GenericObjectBase implements Traceable,Descriptiveable,WebPageable
+public class DnsBase extends GenericObjectBase implements WebPageable,Descriptiveable,Traceable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
@@ -28,7 +28,7 @@ public class DnsBase extends GenericObjectBase implements Traceable,Descriptivea
 
     public void setModifiedBy(org.semanticwb.model.User user)
     {
-        getSemanticObject().addObjectProperty(vocabulary.modifiedBy, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.modifiedBy, user.getSemanticObject());
     }
 
     public void removeModifiedBy()
@@ -79,7 +79,7 @@ public class DnsBase extends GenericObjectBase implements Traceable,Descriptivea
 
     public void setCreator(org.semanticwb.model.User user)
     {
-        getSemanticObject().addObjectProperty(vocabulary.creator, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.creator, user.getSemanticObject());
     }
 
     public void removeCreator()
@@ -100,7 +100,7 @@ public class DnsBase extends GenericObjectBase implements Traceable,Descriptivea
 
     public void setWebPage(org.semanticwb.model.WebPage webpage)
     {
-        getSemanticObject().addObjectProperty(vocabulary.webPage, webpage.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.webPage, webpage.getSemanticObject());
     }
 
     public void removeWebPage()

@@ -124,6 +124,7 @@ public class SWBVocabulary
     public final SemanticProperty portletSubType;
     public final SemanticProperty portletType;
     public final SemanticProperty role;
+    public final SemanticProperty webPageSortName;
     public final SemanticProperty hasChildWebPage;
     public final SemanticProperty hasPFlowRef;
     public final SemanticProperty webPageParent;
@@ -257,6 +258,7 @@ public class SWBVocabulary
         portletSubType=vocabulary.getSemanticProperty(URI+"portletSubType");
         portletType=vocabulary.getSemanticProperty(URI+"portletType");
         role=vocabulary.getSemanticProperty(URI+"role");
+        webPageSortName=vocabulary.getSemanticProperty(URI+"webPageSortName");
         hasChildWebPage=vocabulary.getSemanticProperty(URI+"hasChildWebPage");
         hasPFlowRef=vocabulary.getSemanticProperty(URI+"hasPFlowRef");
         webPageParent=vocabulary.getSemanticProperty(URI+"webPageParent");

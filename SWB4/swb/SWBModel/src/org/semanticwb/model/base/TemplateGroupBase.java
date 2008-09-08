@@ -7,7 +7,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class TemplateGroupBase extends GenericObjectBase implements Traceable,Descriptiveable
+public class TemplateGroupBase extends GenericObjectBase implements Descriptiveable,Traceable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
@@ -28,7 +28,7 @@ public class TemplateGroupBase extends GenericObjectBase implements Traceable,De
 
     public void setModifiedBy(org.semanticwb.model.User user)
     {
-        getSemanticObject().addObjectProperty(vocabulary.modifiedBy, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.modifiedBy, user.getSemanticObject());
     }
 
     public void removeModifiedBy()
@@ -49,7 +49,7 @@ public class TemplateGroupBase extends GenericObjectBase implements Traceable,De
 
     public void setCreator(org.semanticwb.model.User user)
     {
-        getSemanticObject().addObjectProperty(vocabulary.creator, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.creator, user.getSemanticObject());
     }
 
     public void removeCreator()
