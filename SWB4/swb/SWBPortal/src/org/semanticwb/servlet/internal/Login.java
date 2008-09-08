@@ -63,7 +63,7 @@ public class Login implements InternalServlet
         }
         LoginContext lc;
         try {
-            lc = new LoginContext("swb4DBModule", subject, callbackHandler); //TODO: Generar el contexto
+            lc = new LoginContext("swb4TripleStoreModule", subject, callbackHandler); //TODO: Generar el contexto
             lc.login();
             session.removeAttribute(VALSESS);
             session.removeAttribute(CALLBACK);
