@@ -499,6 +499,32 @@ public class SemanticObject
         return this;
     }      
     
+    public SemanticObject setObjectProperty(SemanticProperty prop, SemanticObject object)
+    {
+        if(m_virtual)
+        {
+            ArrayList list=(ArrayList)m_virtprops.get(prop.getURI());
+            if(list==null)
+            {
+                list=new ArrayList();
+                m_virtprops.put(prop.getURI(),list);
+            }
+            list.clear();
+            list.add(object);
+            return this;
+        }           
+        Property iprop=prop.getRDFProperty();
+        Statement stm=m_res.getProperty(iprop);
+        if(stm!=null)
+        {
+            stm.changeObject(object.getRDFResource());
+        }else
+        {
+            m_res.addProperty(iprop, object.getRDFResource());
+        }
+        return this;        
+    }    
+    
     public SemanticObject addObjectProperty(SemanticProperty prop, SemanticObject object)
     {
         if(m_virtual)
