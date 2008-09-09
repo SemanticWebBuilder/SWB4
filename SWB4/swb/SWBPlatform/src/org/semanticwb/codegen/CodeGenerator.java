@@ -550,7 +550,7 @@ public class CodeGenerator
             javaClassContent.append("    {" + ENTER);
             javaClassContent.append("        Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);" + ENTER);
             javaClassContent.append("        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary." + tpc.getName() + ".getOntClass());" + ENTER);
-            javaClassContent.append("        return new GenericIterator<" + tpc.getName() + ">(" + tpc.getName() + ".class, stit);" + ENTER);
+            javaClassContent.append("        return new GenericIterator<" + tpc.getName() + ">(" + tpc.getName() + ".class, stit, true);" + ENTER);
             javaClassContent.append("    }" + ENTER);
             javaClassContent.append(ENTER);
             javaClassContent.append("    public " + tpc.getName() + " create" + tpc.getName() + "(String id)" + ENTER);

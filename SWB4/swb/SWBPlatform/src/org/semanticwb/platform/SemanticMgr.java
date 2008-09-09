@@ -83,10 +83,10 @@ public class SemanticMgr implements SWBInstanceObject
         //m_ontology.addSubModel(m_schema,false);
         m_ontology.addSubModel(m_system,false);
         
-//        //Agrega ontologia a los modelos
-//        SemanticModel ontModel=new SemanticModel("swb_ontology", m_ontology.getRDFOntModel());
-//        m_models.put("swb_ontology", ontModel);
-//        m_imodels.put(ontModel.getRDFModel(), ontModel);
+        //Agrega ontologia a los modelos
+        SemanticModel ontModel=new SemanticModel("swb_ontology", m_ontology.getRDFOntModel());
+        m_models.put("swb_ontology", ontModel);
+        m_imodels.put(ontModel.getRDFModel(), ontModel);
         
         //Create Vocabulary
         vocabulary=new SemanticVocabulary();

@@ -80,13 +80,16 @@ public class SemanticOntology
             {
                 Entry<String, SemanticModel> ent=it.next();
                 SemanticModel model=ent.getValue();
-                Resource res=model.getRDFModel().getResource(uri);
-                Property type=model.getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
-                if(model.getRDFModel().contains(res, type))
+                if(model.getRDFModel()!=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel())
                 {
-                    ret=res;
+                    Resource res=model.getRDFModel().getResource(uri);
+                    Property type=model.getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
+                    if(model.getRDFModel().contains(res, type))
+                    {
+                        ret=res;
+                    }
+                    if(ret!=null)break;
                 }
-                if(ret!=null)break;
             }
         }
         return ret;
