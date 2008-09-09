@@ -100,6 +100,7 @@ public class SWBPortal {
             user.setUsrPassword("webbuilder");
             user.setUsrEmail("admin@semanticwebbuilder.org");
             user.setUsrFirstName("Admin");
+            user.setActive(true);
         }
         
         usrMgr=new SWBUserMgr();
