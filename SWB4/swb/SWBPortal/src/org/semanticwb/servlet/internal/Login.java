@@ -49,7 +49,7 @@ public class Login implements InternalServlet
         CallbackHandler callbackHandler = (CallbackHandler) session.getAttribute(CALLBACK);
         if (null == callbackHandler){
             log.debug("New callbackHandler...");
-            callbackHandler = new SWB4CallbackHandler(request,response,authMethod); //TODO proveer otros métodos
+            callbackHandler = new SWB4CallbackHandler(request,response,authMethod, dparams); //TODO proveer otros métodos
             session.setAttribute(CALLBACK, callbackHandler);
         } else {
             ((SWB4CallbackHandler)callbackHandler).setRequest(request);
