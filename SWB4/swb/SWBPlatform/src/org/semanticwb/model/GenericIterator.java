@@ -77,33 +77,19 @@ public class GenericIterator<T extends GenericObject> implements Iterator
         {
             if(obj instanceof Statement)
             {
-                try
+                if(invert)
                 {
-                    if(invert)
-                    {
-                        return (T)scls.newGenericInstance(((Statement)obj).getSubject());
-                    }
-                    return (T)scls.newGenericInstance(((Statement)obj).getResource());
+                    return (T)scls.newGenericInstance(((Statement)obj).getSubject());
                 }
-                catch(Exception ie)
-                {
-                    throw new AssertionError(ie.getMessage());        
-                }
+                return (T)scls.newGenericInstance(((Statement)obj).getResource());
             }
             else if(obj instanceof Resource)
             {
-                try
-                {
-                    return (T)scls.newGenericInstance((Resource)obj);
-                }
-                catch(Exception ie)
-                {
-                    throw new AssertionError(ie.getMessage());        
-                }
+                return (T)scls.newGenericInstance((Resource)obj);
             }
             else
             {
-                throw new AssertionError("No type found...");        
+                throw new AssertionError("No type found...,"+obj);        
             }        
         }else
         {
