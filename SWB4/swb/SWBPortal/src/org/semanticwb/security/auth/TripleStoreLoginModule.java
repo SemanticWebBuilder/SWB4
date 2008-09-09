@@ -15,6 +15,8 @@ import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.NameCallback;
 import javax.security.auth.callback.PasswordCallback;
+import javax.security.auth.callback.TextInputCallback;
+import javax.security.auth.callback.TextOutputCallback;
 import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.security.auth.login.LoginException;
 import javax.security.auth.spi.LoginModule;
@@ -24,7 +26,9 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticModel;
+import org.semanticwb.servlet.internal.DistributorParams;
 
 /**
  *
@@ -40,6 +44,7 @@ public class TripleStoreLoginModule implements LoginModule {
     protected boolean loginflag = false;
     protected User principal = null;
     protected Object credential = null;
+    protected String website = null;
 
     public void initialize(Subject subject, CallbackHandler callbackHandler, Map<String, ?> sharedState, Map<String, ?> options) {
         this.subject = subject;
@@ -50,20 +55,23 @@ public class TripleStoreLoginModule implements LoginModule {
     }
 
     public boolean login() throws LoginException {
-        if (callbackHandler == null) {
-            throw new LoginException("No callbackHandler supplied");
+        if (callbackHandler == null && !(callbackHandler instanceof SWB4CallbackHandler)) {
+            throw new LoginException("No callbackHandler or not adecuate callbackHandler supplied");
         }
 
         String login;
-        Callback[] callbacks = new Callback[2];
+        Callback[] callbacks = new Callback[3];
         callbacks[0] = new NameCallback("login");
         callbacks[1] = new PasswordCallback("password", false);
+        callbacks[2] = new TextInputCallback("Site");
         try {
 
             callbackHandler.handle(callbacks);
             login = ((NameCallback) callbacks[0]).getName();
             credential = ((PasswordCallback) callbacks[1]).getPassword();
             ((PasswordCallback) callbacks[1]).clearPassword();
+            website = ((TextInputCallback)callbacks[2]).getText();
+            System.out.println("-- "+login+" -- "+website+" -- "+ new String((char[])credential));
         } catch (IOException ex) {
             log.error("IO Error Login a user", ex);
             throw new LoginException("IO Error: " + ex.getMessage());
@@ -71,8 +79,17 @@ public class TripleStoreLoginModule implements LoginModule {
             log.error("UnsupportedCallbackException Error Login a user", ex);
             throw new LoginException("UnsupportedCallbackException Error: " + ex.getMessage());
         }
-
-        principal = SWBContext.getUserRepository("swb_users").getUser(login); //TODO Checar lo del repositorio de usuarios
+        WebSite ws = SWBContext.getWebSite(website);
+        System.out.println(ws);
+        UserRepository ur = ws.getUserRepository();
+        ur = SWBContext.getUserRepository(ur.getId());
+        System.out.println(ur);
+        principal = ur.getUserByLogin(login); 
+        System.out.println("--"+principal);
+        //TODO Checar lo del repositorio de usuarios
+        if (null==principal) throw new LoginException("User inexistent");
+        
+        System.out.println(principal.getClass().getName());
         if (!principal.isActive()) throw new LoginException("User innactive");
         if (null==principal.getUsrPassword()) {
             if (null!=credential) throw new LoginException("Password Mistmatch");

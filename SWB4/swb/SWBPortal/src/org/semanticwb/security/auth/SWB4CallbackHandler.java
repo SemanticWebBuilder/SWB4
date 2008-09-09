@@ -10,34 +10,42 @@ import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.NameCallback;
 import javax.security.auth.callback.PasswordCallback;
+import javax.security.auth.callback.TextInputCallback;
 import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.SWBContext;
+import org.semanticwb.servlet.internal.DistributorParams;
 
 /**
  *
  * @author Sergio Martínez  sergio.martinez@acm.org
  */
 public class SWB4CallbackHandler implements CallbackHandler, Serializable {
-    private static Logger log = SWBUtils.getLogger(SWB4CallbackHandler.class);
 
+    private static Logger log = SWBUtils.getLogger(SWB4CallbackHandler.class);
     private HttpServletRequest request;
     private HttpServletResponse response;
     private String authType;
+    private DistributorParams dparams;
 
     public SWB4CallbackHandler() {
         this.request = null;
         this.response = null;
+        this.dparams = null;
         this.authType = (String) SWBPlatform.getServletContext().getAttribute("authType");
+        System.out.println("!!!Creado por defecto!!!");
     }
 
-    public SWB4CallbackHandler(HttpServletRequest request, HttpServletResponse response, String authType) {
+    public SWB4CallbackHandler(HttpServletRequest request, HttpServletResponse response, String authType, DistributorParams dparams) {
         this.request = request;
         this.response = response;
         this.authType = authType;
+        this.dparams = dparams;
+        System.out.println("Creado con sitio " + dparams.getWebPage().getWebSiteId());
     }
 
     public HttpServletRequest getRequest() {
@@ -46,6 +54,10 @@ public class SWB4CallbackHandler implements CallbackHandler, Serializable {
 
     public void setRequest(HttpServletRequest request) {
         this.request = request;
+        if (null == dparams) {
+            dparams = new DistributorParams(request, authType);
+        }
+        System.out.println("Se actualizo request " + dparams);
     }
 
     public HttpServletResponse getResponse() {
@@ -57,7 +69,7 @@ public class SWB4CallbackHandler implements CallbackHandler, Serializable {
     }
 
     public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException {
-        log.trace("Tipo de Autenticacion: "+authType);
+        log.trace("Tipo de Autenticacion: " + authType);
         if ("BASIC".equalsIgnoreCase(authType)) {
             getBasicCredentials(callbacks);
         }
@@ -88,11 +100,18 @@ public class SWB4CallbackHandler implements CallbackHandler, Serializable {
             } else if (callbacks[i] instanceof PasswordCallback) {
                 PasswordCallback passwordCallback = (PasswordCallback) callbacks[i];
                 passwordCallback.setPassword(password.toCharArray());
+            } else if (callbacks[i] instanceof TextInputCallback) {
+                TextInputCallback textInputCallback = (TextInputCallback) callbacks[i];
+                if (null != dparams) {
+                    textInputCallback.setText(dparams.getWebPage().getWebSiteId());
+                } else {
+                    textInputCallback.setText(SWBContext.getGlobalWebSite().getId());
+                }
             }
         }
     }
-    
-    private void getFormCredentials(Callback[] callbacks){
+
+    private void getFormCredentials(Callback[] callbacks) {
         String login = request.getParameter("_wb_username");
         String password = request.getParameter("_wb_password");
         for (int i = 0; i < callbacks.length; i++) {
@@ -102,7 +121,10 @@ public class SWB4CallbackHandler implements CallbackHandler, Serializable {
 
             } else if (callbacks[i] instanceof PasswordCallback) {
                 PasswordCallback passwordCallback = (PasswordCallback) callbacks[i];
-                passwordCallback.setPassword(password==null?null:password.toCharArray());
+                passwordCallback.setPassword(password == null ? null : password.toCharArray());
+            } else if (callbacks[i] instanceof TextInputCallback) {
+                TextInputCallback textInputCallback = (TextInputCallback) callbacks[i];
+                textInputCallback.setText(dparams.getWebPage().getWebSiteId());
             }
         }
     }
