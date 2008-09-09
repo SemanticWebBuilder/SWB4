@@ -287,4 +287,33 @@ public class WebPage extends WebPageBase
         return getTitle(language);
     }    
     
+    /**
+     * Lista templates activos y no borrados, si no existen en la pagina regresa las del padre
+     * 
+     * @return
+     */
+    public Iterator<TemplateRef> listConfigTemplateRefs()
+    {
+        boolean inherit=true;
+        ArrayList<TemplateRef> ret=new ArrayList();
+        Iterator<TemplateRef> it=listTemplateRefs();
+        while(it.hasNext())
+        {
+            TemplateRef ref=it.next();
+            if(ref.isActive())
+            {
+                ret.add(ref);
+            }
+        }
+        if(inherit && ret.size()==0)
+        {
+            WebPage parent=getParent();
+            if(parent!=null)
+            {
+                return parent.listConfigTemplateRefs();
+            }
+        }
+        return ret.iterator();
+    }
+    
 }
