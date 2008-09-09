@@ -57,6 +57,14 @@ public class SemanticObject
         return m_virtual;
     }
     
+    public void setRDFResource(Resource res)
+    {
+        this.m_model=null;
+        this.m_virtual=false;
+        this.m_res=res;
+        validateModel();
+    }
+    
     /**
      * Contruye un SemanticObject virtual relacionado al Model y al tipo de elemento
      * 
