@@ -252,7 +252,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     {
         Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
         StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.WebPage.getOntClass());
-        return new GenericIterator<WebPage>(WebPage.class, stit);
+        return new GenericIterator<WebPage>(WebPage.class, stit, true);
     }
 
     public WebPage createWebPage(String id)
@@ -278,7 +278,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     {
         Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
         StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.Calendar.getOntClass());
-        return new GenericIterator<Calendar>(Calendar.class, stit);
+        return new GenericIterator<Calendar>(Calendar.class, stit, true);
     }
 
     public Calendar createCalendar(String id)
@@ -310,7 +310,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     {
         Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
         StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.RuleRef.getOntClass());
-        return new GenericIterator<RuleRef>(RuleRef.class, stit);
+        return new GenericIterator<RuleRef>(RuleRef.class, stit, true);
     }
 
     public RuleRef createRuleRef(String id)
@@ -342,7 +342,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     {
         Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
         StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.ObjectGroup.getOntClass());
-        return new GenericIterator<ObjectGroup>(ObjectGroup.class, stit);
+        return new GenericIterator<ObjectGroup>(ObjectGroup.class, stit, true);
     }
 
     public ObjectGroup createObjectGroup(String id)
@@ -374,7 +374,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     {
         Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
         StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.RoleRef.getOntClass());
-        return new GenericIterator<RoleRef>(RoleRef.class, stit);
+        return new GenericIterator<RoleRef>(RoleRef.class, stit, true);
     }
 
     public RoleRef createRoleRef(String id)
@@ -406,7 +406,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     {
         Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
         StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.PortletSubType.getOntClass());
-        return new GenericIterator<PortletSubType>(PortletSubType.class, stit);
+        return new GenericIterator<PortletSubType>(PortletSubType.class, stit, true);
     }
 
     public PortletSubType createPortletSubType(String id)
@@ -432,7 +432,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     {
         Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
         StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.Device.getOntClass());
-        return new GenericIterator<Device>(Device.class, stit);
+        return new GenericIterator<Device>(Device.class, stit, true);
     }
 
     public Device createDevice(String id)
@@ -464,7 +464,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     {
         Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
         StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.Permission.getOntClass());
-        return new GenericIterator<Permission>(Permission.class, stit);
+        return new GenericIterator<Permission>(Permission.class, stit, true);
     }
 
     public Permission createPermission(String id)
@@ -490,7 +490,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     {
         Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
         StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.Template.getOntClass());
-        return new GenericIterator<Template>(Template.class, stit);
+        return new GenericIterator<Template>(Template.class, stit, true);
     }
 
     public Template createTemplate(String id)
@@ -522,7 +522,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     {
         Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
         StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.VersionInfo.getOntClass());
-        return new GenericIterator<VersionInfo>(VersionInfo.class, stit);
+        return new GenericIterator<VersionInfo>(VersionInfo.class, stit, true);
     }
 
     public VersionInfo createVersionInfo(String id)
@@ -554,7 +554,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     {
         Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
         StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.Community.getOntClass());
-        return new GenericIterator<Community>(Community.class, stit);
+        return new GenericIterator<Community>(Community.class, stit, true);
     }
 
     public Community createCommunity(String id)
@@ -580,7 +580,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     {
         Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
         StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.Language.getOntClass());
-        return new GenericIterator<Language>(Language.class, stit);
+        return new GenericIterator<Language>(Language.class, stit, true);
     }
 
     public Language createLanguage(String id)
@@ -606,7 +606,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     {
         Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
         StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.TemplateRef.getOntClass());
-        return new GenericIterator<TemplateRef>(TemplateRef.class, stit);
+        return new GenericIterator<TemplateRef>(TemplateRef.class, stit, true);
     }
 
     public TemplateRef createTemplateRef(String id)
@@ -638,7 +638,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     {
         Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
         StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.PortletRef.getOntClass());
-        return new GenericIterator<PortletRef>(PortletRef.class, stit);
+        return new GenericIterator<PortletRef>(PortletRef.class, stit, true);
     }
 
     public PortletRef createPortletRef(String id)
@@ -670,7 +670,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     {
         Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
         StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.IPFilter.getOntClass());
-        return new GenericIterator<IPFilter>(IPFilter.class, stit);
+        return new GenericIterator<IPFilter>(IPFilter.class, stit, true);
     }
 
     public IPFilter createIPFilter(String id)
@@ -702,7 +702,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     {
         Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
         StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.TemplateGroup.getOntClass());
-        return new GenericIterator<TemplateGroup>(TemplateGroup.class, stit);
+        return new GenericIterator<TemplateGroup>(TemplateGroup.class, stit, true);
     }
 
     public TemplateGroup createTemplateGroup(String id)
@@ -728,7 +728,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     {
         Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
         StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.Rule.getOntClass());
-        return new GenericIterator<Rule>(Rule.class, stit);
+        return new GenericIterator<Rule>(Rule.class, stit, true);
     }
 
     public Rule createRule(String id)
@@ -760,7 +760,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     {
         Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
         StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.PFlow.getOntClass());
-        return new GenericIterator<PFlow>(PFlow.class, stit);
+        return new GenericIterator<PFlow>(PFlow.class, stit, true);
     }
 
     public PFlow createPFlow(String id)
@@ -792,7 +792,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     {
         Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
         StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.Camp.getOntClass());
-        return new GenericIterator<Camp>(Camp.class, stit);
+        return new GenericIterator<Camp>(Camp.class, stit, true);
     }
 
     public Camp createCamp(String id)
@@ -824,7 +824,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     {
         Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
         StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.PortletType.getOntClass());
-        return new GenericIterator<PortletType>(PortletType.class, stit);
+        return new GenericIterator<PortletType>(PortletType.class, stit, true);
     }
 
     public PortletType createPortletType(String id)
@@ -850,7 +850,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     {
         Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
         StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.Dns.getOntClass());
-        return new GenericIterator<Dns>(Dns.class, stit);
+        return new GenericIterator<Dns>(Dns.class, stit, true);
     }
 
     public Dns createDns(String id)
@@ -876,7 +876,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     {
         Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
         StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.Portlet.getOntClass());
-        return new GenericIterator<Portlet>(Portlet.class, stit);
+        return new GenericIterator<Portlet>(Portlet.class, stit, true);
     }
 
     public Portlet createPortlet(String id)
@@ -908,7 +908,7 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     {
         Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
         StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.PFlowRef.getOntClass());
-        return new GenericIterator<PFlowRef>(PFlowRef.class, stit);
+        return new GenericIterator<PFlowRef>(PFlowRef.class, stit, true);
     }
 
     public PFlowRef createPFlowRef(String id)
