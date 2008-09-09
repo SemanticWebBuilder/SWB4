@@ -26,14 +26,14 @@ public class UserBase extends GenericObjectBase implements Roleable,Traceable,Lo
         getSemanticObject().setDateProperty(vocabulary.created, created);
     }
 
-    public boolean isActive()
+    public String getUsrSecondLastName()
     {
-        return getSemanticObject().getBooleanProperty(vocabulary.active);
+        return getSemanticObject().getProperty(vocabulary.usrSecondLastName);
     }
 
-    public void setActive(boolean active)
+    public void setUsrSecondLastName(String usrSecondLastName)
     {
-        getSemanticObject().setBooleanProperty(vocabulary.active, active);
+        getSemanticObject().setProperty(vocabulary.usrSecondLastName, usrSecondLastName);
     }
 
     public void setModifiedBy(org.semanticwb.model.User user)
@@ -57,16 +57,6 @@ public class UserBase extends GenericObjectBase implements Roleable,Traceable,Lo
          return ret;
     }
 
-    public String getUsrSecondLastName()
-    {
-        return getSemanticObject().getProperty(vocabulary.usrSecondLastName);
-    }
-
-    public void setUsrSecondLastName(String usrSecondLastName)
-    {
-        getSemanticObject().setProperty(vocabulary.usrSecondLastName, usrSecondLastName);
-    }
-
     public String getUsrEmail()
     {
         return getSemanticObject().getProperty(vocabulary.usrEmail);
@@ -75,6 +65,16 @@ public class UserBase extends GenericObjectBase implements Roleable,Traceable,Lo
     public void setUsrEmail(String usrEmail)
     {
         getSemanticObject().setProperty(vocabulary.usrEmail, usrEmail);
+    }
+
+    public Date getUpdated()
+    {
+        return getSemanticObject().getDateProperty(vocabulary.updated);
+    }
+
+    public void setUpdated(Date updated)
+    {
+        getSemanticObject().setDateProperty(vocabulary.updated, updated);
     }
 
     public String getUsrFirstName()
@@ -87,14 +87,66 @@ public class UserBase extends GenericObjectBase implements Roleable,Traceable,Lo
         getSemanticObject().setProperty(vocabulary.usrFirstName, usrFirstName);
     }
 
-    public Date getUsrLastLogin()
+    public Date getUsrPasswordChanged()
     {
-        return getSemanticObject().getDateProperty(vocabulary.usrLastLogin);
+        return getSemanticObject().getDateProperty(vocabulary.usrPasswordChanged);
     }
 
-    public void setUsrLastLogin(Date usrLastLogin)
+    public void setUsrPasswordChanged(Date usrPasswordChanged)
     {
-        getSemanticObject().setDateProperty(vocabulary.usrLastLogin, usrLastLogin);
+        getSemanticObject().setDateProperty(vocabulary.usrPasswordChanged, usrPasswordChanged);
+    }
+
+    public String getUsrLastName()
+    {
+        return getSemanticObject().getProperty(vocabulary.usrLastName);
+    }
+
+    public void setUsrLastName(String usrLastName)
+    {
+        getSemanticObject().setProperty(vocabulary.usrLastName, usrLastName);
+    }
+
+    public GenericIterator<org.semanticwb.model.ObjectGroup> listGroups()
+    {
+        StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasGroup.getRDFProperty());
+        return new GenericIterator<org.semanticwb.model.ObjectGroup>(org.semanticwb.model.ObjectGroup.class, stit);
+    }
+
+    public void addGroup(org.semanticwb.model.ObjectGroup objectgroup)
+    {
+        getSemanticObject().addObjectProperty(vocabulary.hasGroup, objectgroup.getSemanticObject());
+    }
+
+    public void removeAllGroup()
+    {
+        getSemanticObject().removeProperty(vocabulary.hasGroup);
+    }
+
+    public void removeGroup(org.semanticwb.model.ObjectGroup objectgroup)
+    {
+        getSemanticObject().removeObjectProperty(vocabulary.hasGroup,objectgroup.getSemanticObject());
+    }
+
+    public ObjectGroup getGroup()
+    {
+         ObjectGroup ret=null;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasGroup);
+         if(obj!=null)
+         {
+             ret=(ObjectGroup)vocabulary.ObjectGroup.newGenericInstance(obj);
+         }
+         return ret;
+    }
+
+    public boolean isActive()
+    {
+        return getSemanticObject().getBooleanProperty(vocabulary.active);
+    }
+
+    public void setActive(boolean active)
+    {
+        getSemanticObject().setBooleanProperty(vocabulary.active, active);
     }
 
     public void setLanguage(org.semanticwb.model.Language language)
@@ -118,14 +170,14 @@ public class UserBase extends GenericObjectBase implements Roleable,Traceable,Lo
          return ret;
     }
 
-    public Date getUpdated()
+    public Date getUsrLastLogin()
     {
-        return getSemanticObject().getDateProperty(vocabulary.updated);
+        return getSemanticObject().getDateProperty(vocabulary.usrLastLogin);
     }
 
-    public void setUpdated(Date updated)
+    public void setUsrLastLogin(Date usrLastLogin)
     {
-        getSemanticObject().setDateProperty(vocabulary.updated, updated);
+        getSemanticObject().setDateProperty(vocabulary.usrLastLogin, usrLastLogin);
     }
 
     public void setCreator(org.semanticwb.model.User user)
@@ -149,16 +201,6 @@ public class UserBase extends GenericObjectBase implements Roleable,Traceable,Lo
          return ret;
     }
 
-    public String getUsrLogin()
-    {
-        return getSemanticObject().getProperty(vocabulary.usrLogin);
-    }
-
-    public void setUsrLogin(String usrLogin)
-    {
-        getSemanticObject().setProperty(vocabulary.usrLogin, usrLogin);
-    }
-
     public String getUsrPassword()
     {
         return getSemanticObject().getProperty(vocabulary.usrPassword);
@@ -167,6 +209,16 @@ public class UserBase extends GenericObjectBase implements Roleable,Traceable,Lo
     public void setUsrPassword(String usrPassword)
     {
         getSemanticObject().setProperty(vocabulary.usrPassword, usrPassword);
+    }
+
+    public String getUsrLogin()
+    {
+        return getSemanticObject().getProperty(vocabulary.usrLogin);
+    }
+
+    public void setUsrLogin(String usrLogin)
+    {
+        getSemanticObject().setProperty(vocabulary.usrLogin, usrLogin);
     }
 
     public GenericIterator<org.semanticwb.model.Role> listRoles()
@@ -201,26 +253,6 @@ public class UserBase extends GenericObjectBase implements Roleable,Traceable,Lo
          return ret;
     }
 
-    public String getUsrLastName()
-    {
-        return getSemanticObject().getProperty(vocabulary.usrLastName);
-    }
-
-    public void setUsrLastName(String usrLastName)
-    {
-        getSemanticObject().setProperty(vocabulary.usrLastName, usrLastName);
-    }
-
-    public Date getUsrPasswordChanged()
-    {
-        return getSemanticObject().getDateProperty(vocabulary.usrPasswordChanged);
-    }
-
-    public void setUsrPasswordChanged(Date usrPasswordChanged)
-    {
-        getSemanticObject().setDateProperty(vocabulary.usrPasswordChanged, usrPasswordChanged);
-    }
-
     public int getUsrSecurityQuestion()
     {
         return getSemanticObject().getIntProperty(vocabulary.usrSecurityQuestion);
@@ -229,38 +261,6 @@ public class UserBase extends GenericObjectBase implements Roleable,Traceable,Lo
     public void setUsrSecurityQuestion(int usrSecurityQuestion)
     {
         getSemanticObject().setLongProperty(vocabulary.usrSecurityQuestion, usrSecurityQuestion);
-    }
-
-    public GenericIterator<org.semanticwb.model.ObjectGroup> listGroups()
-    {
-        StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasGroup.getRDFProperty());
-        return new GenericIterator<org.semanticwb.model.ObjectGroup>(org.semanticwb.model.ObjectGroup.class, stit);
-    }
-
-    public void addGroup(org.semanticwb.model.ObjectGroup objectgroup)
-    {
-        getSemanticObject().addObjectProperty(vocabulary.hasGroup, objectgroup.getSemanticObject());
-    }
-
-    public void removeAllGroup()
-    {
-        getSemanticObject().removeProperty(vocabulary.hasGroup);
-    }
-
-    public void removeGroup(org.semanticwb.model.ObjectGroup objectgroup)
-    {
-        getSemanticObject().removeObjectProperty(vocabulary.hasGroup,objectgroup.getSemanticObject());
-    }
-
-    public ObjectGroup getGroup()
-    {
-         ObjectGroup ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasGroup);
-         if(obj!=null)
-         {
-             ret=(ObjectGroup)vocabulary.ObjectGroup.newGenericInstance(obj);
-         }
-         return ret;
     }
 
     public String getUsrSecurityAnswer()

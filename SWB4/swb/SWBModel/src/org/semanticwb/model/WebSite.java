@@ -21,14 +21,14 @@ public class WebSite extends WebSiteBase
         return (Dns)getSemanticObject().getModel().getGenericObject(id,SWBContext.getVocabulary().Dns);
     }
 
-    @Override
-    public PortletType createPortletType(String id) {
-        return super.createPortletType(id.toLowerCase());
-    }
-
-    @Override
-    public PortletType getPortletType(String id) {
-        return super.getPortletType(id.toLowerCase());
-    }
+//    @Override
+//    public PortletType createPortletType(String id) {
+//        return super.createPortletType(id.toLowerCase());
+//    }
+//
+//    @Override
+//    public PortletType getPortletType(String id) {
+//        return super.getPortletType(id.toLowerCase());
+//    }
     
 }

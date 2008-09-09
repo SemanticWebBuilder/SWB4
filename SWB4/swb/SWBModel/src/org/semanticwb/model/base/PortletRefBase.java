@@ -7,7 +7,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class PortletRefBase extends GenericObjectBase implements Priorityable,Activeable
+public class PortletRefBase extends GenericObjectBase implements Activeable,Priorityable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 

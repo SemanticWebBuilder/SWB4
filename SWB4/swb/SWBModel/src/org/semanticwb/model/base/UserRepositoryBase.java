@@ -47,6 +47,36 @@ public class UserRepositoryBase extends GenericObjectBase implements Descriptive
          return ret;
     }
 
+    public String getTitle()
+    {
+        return getSemanticObject().getProperty(vocabulary.title);
+    }
+
+    public void setTitle(String title)
+    {
+        getSemanticObject().setProperty(vocabulary.title, title);
+    }
+
+    public String getTitle(String lang)
+    {
+        return getSemanticObject().getProperty(vocabulary.title, lang);
+    }
+
+    public void setTitle(String title, String lang)
+    {
+        getSemanticObject().setProperty(vocabulary.title, title, lang);
+    }
+
+    public Date getUpdated()
+    {
+        return getSemanticObject().getDateProperty(vocabulary.updated);
+    }
+
+    public void setUpdated(Date updated)
+    {
+        getSemanticObject().setDateProperty(vocabulary.updated, updated);
+    }
+
     public void setCreator(org.semanticwb.model.User user)
     {
         getSemanticObject().setObjectProperty(vocabulary.creator, user.getSemanticObject());
@@ -68,26 +98,6 @@ public class UserRepositoryBase extends GenericObjectBase implements Descriptive
          return ret;
     }
 
-    public String getTitle()
-    {
-        return getSemanticObject().getProperty(vocabulary.title);
-    }
-
-    public void setTitle(String title)
-    {
-        getSemanticObject().setProperty(vocabulary.title, title);
-    }
-
-    public String getTitle(String lang)
-    {
-        return getSemanticObject().getProperty(vocabulary.title, lang);
-    }
-
-    public void setTitle(String title, String lang)
-    {
-        getSemanticObject().setProperty(vocabulary.title, title, lang);
-    }
-
     public String getDescription()
     {
         return getSemanticObject().getProperty(vocabulary.description);
@@ -106,16 +116,6 @@ public class UserRepositoryBase extends GenericObjectBase implements Descriptive
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(vocabulary.description, description, lang);
-    }
-
-    public Date getUpdated()
-    {
-        return getSemanticObject().getDateProperty(vocabulary.updated);
-    }
-
-    public void setUpdated(Date updated)
-    {
-        getSemanticObject().setDateProperty(vocabulary.updated, updated);
     }
 
     public User getUser(String id)

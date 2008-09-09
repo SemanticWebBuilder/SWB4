@@ -26,16 +26,6 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
         getSemanticObject().setDateProperty(vocabulary.created, created);
     }
 
-    public String getPortletXML()
-    {
-        return getSemanticObject().getProperty(vocabulary.portletXML);
-    }
-
-    public void setPortletXML(String portletXML)
-    {
-        getSemanticObject().setProperty(vocabulary.portletXML, portletXML);
-    }
-
     public void setModifiedBy(org.semanticwb.model.User user)
     {
         getSemanticObject().setObjectProperty(vocabulary.modifiedBy, user.getSemanticObject());
@@ -55,6 +45,16 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
              ret=(User)vocabulary.User.newGenericInstance(obj);
          }
          return ret;
+    }
+
+    public String getPortletXML()
+    {
+        return getSemanticObject().getProperty(vocabulary.portletXML);
+    }
+
+    public void setPortletXML(String portletXML)
+    {
+        getSemanticObject().setProperty(vocabulary.portletXML, portletXML);
     }
 
     public String getTitle()
@@ -211,6 +211,16 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
         getSemanticObject().setLongProperty(vocabulary.priority, priority);
     }
 
+    public boolean isActive()
+    {
+        return getSemanticObject().getBooleanProperty(vocabulary.active);
+    }
+
+    public void setActive(boolean active)
+    {
+        getSemanticObject().setBooleanProperty(vocabulary.active, active);
+    }
+
     public GenericIterator<org.semanticwb.model.RoleRef> listRoleRefs()
     {
         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasRoleRef.getRDFProperty());
@@ -241,16 +251,6 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
              ret=(RoleRef)vocabulary.RoleRef.newGenericInstance(obj);
          }
          return ret;
-    }
-
-    public boolean isActive()
-    {
-        return getSemanticObject().getBooleanProperty(vocabulary.active);
-    }
-
-    public void setActive(boolean active)
-    {
-        getSemanticObject().setBooleanProperty(vocabulary.active, active);
     }
 
     public boolean isDeleted()
