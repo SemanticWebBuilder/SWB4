@@ -270,14 +270,16 @@ public class SWBPortal {
     public static ArrayList getAppLanguages()
     {
         ArrayList languages=new ArrayList();
-        Iterator<WebSite> itWs=SWBContext.listWebSites();
-        while(itWs.hasNext())
+        Iterator<WebSite> it=SWBContext.listWebSites();
+        while(it.hasNext())
         {
-            WebSite ws=itWs.next();
-            Iterator<Language> itLang=ws.listLanguages();
+            WebSite site=it.next();
+            System.out.println("site:"+site.getURI()+" "+site.getId());
+            Iterator<Language> itLang=site.listLanguages();
             while(itLang.hasNext())
             {
                 Language lang= itLang.next();
+                System.out.println("lang:"+lang.getURI()+" "+lang.getId());
                 if(!languages.contains(lang.getId())) {
                     languages.add(lang.getId());
                 }
