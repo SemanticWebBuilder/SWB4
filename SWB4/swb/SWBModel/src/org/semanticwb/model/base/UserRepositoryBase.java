@@ -127,7 +127,7 @@ public class UserRepositoryBase extends GenericObjectBase implements Descriptive
     {
         Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
         StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.User.getOntClass());
-        return new GenericIterator<User>(User.class, stit);
+        return new GenericIterator<User>(User.class, stit, true);
     }
 
     public User createUser(String id)
@@ -159,7 +159,7 @@ public class UserRepositoryBase extends GenericObjectBase implements Descriptive
     {
         Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
         StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.ObjectGroup.getOntClass());
-        return new GenericIterator<ObjectGroup>(ObjectGroup.class, stit);
+        return new GenericIterator<ObjectGroup>(ObjectGroup.class, stit, true);
     }
 
     public ObjectGroup createObjectGroup(String id)
@@ -191,7 +191,7 @@ public class UserRepositoryBase extends GenericObjectBase implements Descriptive
     {
         Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
         StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.Role.getOntClass());
-        return new GenericIterator<Role>(Role.class, stit);
+        return new GenericIterator<Role>(Role.class, stit, true);
     }
 
     public Role createRole(String id)
