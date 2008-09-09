@@ -1,5 +1,6 @@
 
 import com.hp.hpl.jena.ontology.OntResource;
+import java.util.Iterator;
 import org.junit.*;
 
 /*
@@ -181,20 +182,23 @@ public class TestWebSite {
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     //
-    //@Test
+    @Test
     public void Test3()
     {
-            WebSite site=SWBContext.getWebSite("sep");
-            WebPage home=site.getHomePage();
-            UserRepository urep=SWBContext.getDefaultRepository();
-            Template tpl=site.getTemplate("1");
-            
-            for(int x=0;x<10000;x++)
+        WebSite site=SWBContext.getWebSite("sep");
+        WebPage home=site.getHomePage();
+        UserRepository urep=site.getUserRepository();
+        Template tpl=site.getTemplate("1");
+
+        if(site.getWebPage("page0")==null)
+        {
+            for(int x=0;x<1000;x++)
             {
                 WebPage page=site.createWebPage("page"+x);
                 page.setTitle("Pagina "+x);
                 page.setParent(home);
             }
+        }
     }
     
     // TODO add test methods here.
@@ -203,42 +207,77 @@ public class TestWebSite {
     @Test
     public void Test4()
     {
+        WebSite site=SWBContext.getWebSite("sep");
+        WebPage home=site.getHomePage();
+        UserRepository urep=site.getUserRepository();
+        Template tpl=site.getTemplate("1");
+
+        User user=urep.getUserByLogin("admin");
+        System.out.println("User:"+user);
+
+        WebPage homeOnt=(WebPage)SWBPlatform.getSemanticMgr().getOntology().getGenericObject(home.getURI(), SWBContext.getVocabulary().WebPage);
+
+        System.out.println("home:"+home+" "+home.getTitle());
+        System.out.println("homeOnt:"+homeOnt+" "+homeOnt.getTitle());
+
+        home.setTitle("Prueba 1a");
+
+        System.out.println("home:"+home+" "+home.getTitle());
+        System.out.println("homeOnt:"+homeOnt+" "+homeOnt.getTitle());
+
+        home.setTitle("Prueba 1b");
+
+        System.out.println("home:"+home+" "+home.getTitle());
+        System.out.println("homeOnt:"+homeOnt+" "+homeOnt.getTitle());
+
+        homeOnt.setTitle("Prueba 2");
+
+        System.out.println("home:"+home+" "+home.getTitle());
+        System.out.println("homeOnt:"+homeOnt+" "+homeOnt.getTitle());
+
+        home.setTitle("Prueba 3");
+
+        System.out.println("home:"+home+" "+home.getTitle());
+        System.out.println("homeOnt:"+homeOnt+" "+homeOnt.getTitle());
+    }   
+    
+    // TODO add test methods here.
+    // The methods must be annotated with annotation @Test. For example:
+    //
+    @Test
+    public void Test5()
+    {
             WebSite site=SWBContext.getWebSite("sep");
             WebPage home=site.getHomePage();
-            UserRepository urep=SWBContext.getDefaultRepository();
+            UserRepository urep=site.getUserRepository();
             Template tpl=site.getTemplate("1");
             
-            User user=urep.getUserByLogin("admin");
-            System.out.println("User:"+user);
-
-            WebPage homeOnt=(WebPage)SWBPlatform.getSemanticMgr().getOntology().getGenericObject(home.getURI(), SWBContext.getVocabulary().WebPage);
-            
-            System.out.println("home:"+home+" "+home.getTitle());
-            System.out.println("homeOnt:"+homeOnt+" "+homeOnt.getTitle());
-            
-            home.setTitle("Prueba 1a");
-                   
-            System.out.println("home:"+home+" "+home.getTitle());
-            System.out.println("homeOnt:"+homeOnt+" "+homeOnt.getTitle());
-
-            home.setTitle("Prueba 1b");
-                   
-            System.out.println("home:"+home+" "+home.getTitle());
-            System.out.println("homeOnt:"+homeOnt+" "+homeOnt.getTitle());
-
-            homeOnt.setTitle("Prueba 2");
-            
-            System.out.println("home:"+home+" "+home.getTitle());
-            System.out.println("homeOnt:"+homeOnt+" "+homeOnt.getTitle());
-            
-            home.setTitle("Prueba 3");
-            
-            System.out.println("home:"+home+" "+home.getTitle());
-            System.out.println("homeOnt:"+homeOnt+" "+homeOnt.getTitle());
-            
-            
-    }    
+            for(int x=0;x<1000;x++)
+            {
+                WebPage page=site.getWebPage("page"+x);
+                //System.out.println(page.getTitle());
+            }
+    }       
     
+    // TODO add test methods here.
+    // The methods must be annotated with annotation @Test. For example:
+    //
+    @Test
+    public void Test6()
+    {
+            WebSite site=SWBContext.getWebSite("sep");
+            WebPage home=site.getHomePage();
+            UserRepository urep=site.getUserRepository();
+            Template tpl=site.getTemplate("1");
+            
+            Iterator<WebPage> it=home.listChilds();
+            while(it.hasNext())
+            {
+                WebPage page=it.next();
+                //System.out.println(page.getTitle());
+            }
+    }     
+      
     
 
 }
