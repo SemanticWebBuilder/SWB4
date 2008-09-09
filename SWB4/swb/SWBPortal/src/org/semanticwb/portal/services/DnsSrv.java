@@ -26,7 +26,7 @@ public class DnsSrv {
         dns = website.createDns(id);
         dns.setTitle(title);
         dns.setDescription(description);
-        dns.setDnsDefault(isdefault);
+        dns.setDefault(isdefault);
 
         SWBPortal.log(user.getURI(), "create", dns.getURI(), dns.getURI(), "create Dns", null);
         
@@ -52,7 +52,7 @@ public class DnsSrv {
         if (description != null) {
             dns.setDescription(description);
         }
-        dns.setDnsDefault(isdefault);
+        dns.setDefault(isdefault);
        
         updated = true;
        

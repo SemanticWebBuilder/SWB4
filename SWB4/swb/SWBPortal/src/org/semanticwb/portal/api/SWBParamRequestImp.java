@@ -58,7 +58,7 @@ public class SWBParamRequestImp implements SWBParamRequest
         this.adminTopic=topic;
         this.user=user;
         //this.userLevel=userLevel;
-        this.locale=new Locale(user.getLanguage().getId());
+        this.locale=new Locale(user.getLanguage());
         try
         {
             this.bundle=resource.getPortletType().getPortletBundle();
@@ -140,7 +140,7 @@ public class SWBParamRequestImp implements SWBParamRequest
 
     public void setUser(User user)
     {
-        if(user!=null)locale=new Locale(user.getLanguage().getId());
+        if(user!=null)locale=new Locale(user.getLanguage());
         this.user=user;
     }
     

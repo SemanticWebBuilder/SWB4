@@ -82,7 +82,7 @@ public class SWBPortal {
             dns.setTitle("localhost");
             dns.setDescription("DNS por default","es");
             dns.setDescription("Default DNS","en");
-            dns.setDnsDefault(true);
+            dns.setDefault(true);
             dns.setWebPage(home);
         }
         //Check for GlobalWebSite
@@ -100,6 +100,7 @@ public class SWBPortal {
             user.setUsrPassword("webbuilder");
             user.setUsrEmail("admin@semanticwebbuilder.org");
             user.setUsrFirstName("Admin");
+            user.setLanguage("es");
             user.setActive(true);
         }
         

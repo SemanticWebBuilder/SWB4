@@ -279,9 +279,9 @@ public class DistributorParams
         User user=SWBPortal.getUserMgr().getUser(request, site);
         if(lang!=null)
         {
-            if(!user.getLanguage().getId().equals(lang))
+            if(!user.getLanguage().equals(lang))
             {
-                user.setLanguage(site.getLanguage(lang));
+                user.setLanguage(site.getLanguage(lang).getId());
             }
         }
         if (device!=null) 
@@ -319,7 +319,7 @@ public class DistributorParams
                 while(it.hasNext())
                 {
                     Dns d=it.next();
-                    if(d.isDnsDefault())
+                    if(d.isDefault())
                     {
                         dns=d;
                     }
@@ -707,16 +707,16 @@ public class DistributorParams
         javax.servlet.http.HttpServletRequest req=request;
         if(getAccResourceID()!=null && !rid.equals(getAccResourceID()))
         {
-            req=new SWBHttpServletRequestWrapper(request,getUser().getLanguage().getId(),getWebPage().getWebSite().getId(),true);
+            req=new SWBHttpServletRequestWrapper(request,getUser().getLanguage(),getWebPage().getWebSite().getId(),true);
             addRequestParams(req,arr);
         }else if(rid.equals(getAccResourceID()))
         {
             if(arr==null)
             {
-                req=new SWBHttpServletRequestWrapper(request,getUser().getLanguage().getId(),getWebPage().getWebSite().getId(),false);
+                req=new SWBHttpServletRequestWrapper(request,getUser().getLanguage(),getWebPage().getWebSite().getId(),false);
             }else
             {
-                req=new SWBHttpServletRequestWrapper(request,getUser().getLanguage().getId(),getWebPage().getWebSite().getId(),false,true);
+                req=new SWBHttpServletRequestWrapper(request,getUser().getLanguage(),getWebPage().getWebSite().getId(),false,true);
                 addRequestParams(req,arr);
             }
         }

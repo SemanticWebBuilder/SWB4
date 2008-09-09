@@ -86,7 +86,7 @@ public class SWBUserMgr
             
             ret=new User(new SemanticObject(site.getUserRepository().getSemanticObject().getModel(),SWBContext.getVocabulary().User));
             sub.getPrincipals().add(ret);
-            ret.setLanguage(site.getLanguage(language));
+            ret.setLanguage(language);
             //TODO: validar dispositivo
             //ret.setDevice(XXX);
             ret.setIp(request.getRemoteAddr());

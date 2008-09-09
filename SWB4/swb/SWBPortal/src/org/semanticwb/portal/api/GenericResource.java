@@ -173,7 +173,7 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
         out.println("<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"5\">");
         out.println("<tr>");
         out.println("<td class=datos>");
-        out.println(SWBUtils.TEXT.getLocaleString("org.semanticwb.portal.resources.GenericResource", "msgNotAdmin",new Locale(paramRequest.getUser().getLanguage().getId())));
+        out.println(SWBUtils.TEXT.getLocaleString("org.semanticwb.portal.resources.GenericResource", "msgNotAdmin",new Locale(paramRequest.getUser().getLanguage())));
         out.println("</td>");
         out.println("</tr>");
         out.println("</table>");
