@@ -107,17 +107,6 @@ public class SemanticProperty
         return ret;    
     }
     
-    public SemanticObject getRangeDataType()
-    {
-        SemanticObject ret=null;
-        Statement stm=m_prop.getProperty(m_prop.getModel().getProperty(SemanticVocabulary.RDFS_RANGE));
-        if(stm!=null)
-        {
-            ret=new SemanticObject(stm.getResource());
-        }
-        return ret;    
-    }    
-    
     public Resource getRange()
     {
         Resource ret=null;

@@ -6,7 +6,6 @@
 package org.semanticwb.platform;
 
 import com.hp.hpl.jena.db.DBConnection;
-import com.hp.hpl.jena.db.GraphRDB;
 import com.hp.hpl.jena.db.IDBConnection;
 import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -19,7 +18,6 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.util.FileManager;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import org.semanticwb.Logger;
@@ -75,10 +73,20 @@ public class SemanticMgr implements SWBInstanceObject
         m_schema=new SemanticModel("SWBSchema",loadRDFFileModel(swbowl));
 //        debugModel(swbSquema);
         
+        OntModelSpec spec = OntModelSpec.OWL_MEM;
+//        OntModelSpec spec = new OntModelSpec( OntModelSpec.OWL_MEM );
+//        spec.setBaseModelMaker(maker);
+//        spec.setImportModelMaker(maker);
+        
         //Create Omtology
-        m_ontology = new SemanticOntology("SWB",ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM,m_schema.getRDFModel()));
+        m_ontology = new SemanticOntology("SWB",ModelFactory.createOntologyModel(spec,m_schema.getRDFModel()));
         //m_ontology.addSubModel(m_schema,false);
-//        m_ontology.addSubModel(m_system,false);
+        m_ontology.addSubModel(m_system,false);
+        
+//        //Agrega ontologia a los modelos
+//        SemanticModel ontModel=new SemanticModel("swb_ontology", m_ontology.getRDFOntModel());
+//        m_models.put("swb_ontology", ontModel);
+//        m_imodels.put(ontModel.getRDFModel(), ontModel);
         
         //Create Vocabulary
         vocabulary=new SemanticVocabulary();
@@ -233,7 +241,7 @@ public class SemanticMgr implements SWBInstanceObject
         m_models.put(name, m);
         m_imodels.put(m.getRDFModel(), m);
         //System.out.println("addModel:"+name+" hash:"+m.getRDFModel().toString());
-//        m_ontology.addSubModel(m,false);
+        m_ontology.addSubModel(m,false);
         return m;
     }    
     

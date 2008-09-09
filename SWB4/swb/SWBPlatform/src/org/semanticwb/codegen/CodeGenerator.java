@@ -448,7 +448,7 @@ public class CodeGenerator
             {
                 try
                 {
-                    URI uri = new URI(tpp.getRangeDataType().getURI());
+                    URI uri = new URI(tpp.getRange().getURI());
                     String type = TYPE_VOID;
                     String prefix = "get";
                     if ( uri.getFragment().equals("string") )
@@ -675,7 +675,7 @@ public class CodeGenerator
             {
                 try
                 {
-                    URI uri = new URI(tpp.getRangeDataType().getURI());
+                    URI uri = new URI(tpp.getRange().getURI());
                     String type = TYPE_VOID;
                     String prefix = "get";
                     String getMethod = "getProperty";
