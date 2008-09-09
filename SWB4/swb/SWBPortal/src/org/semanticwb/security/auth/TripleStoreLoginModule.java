@@ -84,7 +84,7 @@ public class TripleStoreLoginModule implements LoginModule {
         WebSite ws = SWBContext.getWebSite(website);
         System.out.println(ws);
         UserRepository ur = ws.getUserRepository();
-        ur = SWBContext.getUserRepository(ur.getId());
+        //ur = SWBContext.getUserRepository(ur.getId());
         System.out.println(ur);
         principal = ur.getUserByLogin(login); 
         System.out.println("--"+principal);
