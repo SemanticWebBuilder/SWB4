@@ -29,15 +29,27 @@ public class SemanticObject
     private boolean m_virtual=false;
     private HashMap m_virtprops;
     
-    public SemanticObject(String uri, SemanticModel model)
-    {
-        m_res=model.getRDFModel().createResource(uri);
-        m_model=model;
-    }
+//    public SemanticObject(String uri, SemanticModel model)
+//    {
+//        m_res=model.getRDFModel().createResource(uri);
+//        m_model=model;
+//    }
+    
     
     public SemanticObject(Resource res)
     {
         this.m_res=res;
+        validateModel();
+    }
+    
+    private void validateModel()
+    {
+        String ns=getModel().getNameSpace();
+        if(ns!=null && !m_res.getURI().startsWith(ns))
+        {
+            m_res=SWBPlatform.getSemanticMgr().getOntology().getResource(m_res.getURI());
+            m_model=null;
+        }
     }
     
     public boolean isVirtual()

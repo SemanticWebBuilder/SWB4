@@ -6,6 +6,9 @@
 package org.semanticwb.platform;
 
 import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.ontology.OntResource;
+import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.Resource;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import org.semanticwb.SWBPlatform;
@@ -51,17 +54,55 @@ public class SemanticOntology
         m_ontology.rebind();
     }
     
-    public SemanticObject getSemanticObject(String uri)
+    public Resource getResource(String uri)
     {
-        SemanticObject ret=null;
+        Resource ret=null;
         Iterator<Entry<String, SemanticModel>> it=SWBPlatform.getSemanticMgr().getModels().iterator();
         while(it.hasNext())
         {
             Entry<String, SemanticModel> ent=it.next();
             SemanticModel model=ent.getValue();
-            ret=model.getSemanticObject(uri);
-            if(ret!=null)break;
+            String ns=model.getNameSpace();
+            if(ns!=null && uri.startsWith(ns))
+            {
+                Resource res=model.getRDFModel().getResource(uri);
+                Property type=model.getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
+                if(model.getRDFModel().contains(res, type))
+                {
+                    ret=res;
+                }
+            }
         }
+        if(ret==null)
+        {
+            it=SWBPlatform.getSemanticMgr().getModels().iterator();
+            while(it.hasNext())
+            {
+                Entry<String, SemanticModel> ent=it.next();
+                SemanticModel model=ent.getValue();
+                Resource res=model.getRDFModel().getResource(uri);
+                Property type=model.getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
+                if(model.getRDFModel().contains(res, type))
+                {
+                    ret=res;
+                }
+                if(ret!=null)break;
+            }
+        }
+        return ret;
+    }
+    
+    public SemanticObject getSemanticObject(String uri)
+    {
+        SemanticObject ret=null;
+//        OntResource res=m_ontology.getOntResource(uri);
+//        if(m_ontology.containsResource(res))
+//        {
+//            ret=new SemanticObject(res);
+//        }
+//        return ret;        
+        Resource res=getResource(uri);
+        if(res!=null)ret=new SemanticObject(res);
         return ret;        
     }
     
