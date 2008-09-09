@@ -1,5 +1,6 @@
 
 import com.hp.hpl.jena.ontology.OntResource;
+import java.util.ArrayList;
 import java.util.Iterator;
 import org.junit.*;
 
@@ -8,6 +9,7 @@ import org.junit.*;
  * and open the template in the editor.
  */
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.model.Dns;
 import org.semanticwb.model.Language;
 import org.semanticwb.model.PortletType;
@@ -307,6 +309,9 @@ public class TestWebSite {
                 WebPage page=it.next();
                 //System.out.println(page.getTitle());
             }
+            
+            ArrayList arr=SWBPortal.getAppLanguages();
+            System.out.println(arr);
     }     
       
     
