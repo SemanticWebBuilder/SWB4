@@ -61,7 +61,7 @@ public class SWBTemplateMgr
 
 //        Date today = new Date();
         HashMap tplpri=new HashMap();
-        Iterator<TemplateRef> tpls = topic.listTemplateRefs();
+        Iterator<TemplateRef> tpls = topic.listConfigTemplateRefs();
         while (tpls.hasNext())
         {
             TemplateRef ref=tpls.next();
