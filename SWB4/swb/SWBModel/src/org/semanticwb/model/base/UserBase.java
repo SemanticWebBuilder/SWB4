@@ -7,7 +7,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class UserBase extends GenericObjectBase implements Roleable,Traceable,Localeable,Groupable,Activeable
+public class UserBase extends GenericObjectBase implements Groupable,Activeable,Traceable,Roleable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
@@ -87,6 +87,16 @@ public class UserBase extends GenericObjectBase implements Roleable,Traceable,Lo
         getSemanticObject().setProperty(vocabulary.usrFirstName, usrFirstName);
     }
 
+    public String getLanguage()
+    {
+        return getSemanticObject().getProperty(vocabulary.usrLanguage);
+    }
+
+    public void setLanguage(String usrLanguage)
+    {
+        getSemanticObject().setProperty(vocabulary.usrLanguage, usrLanguage);
+    }
+
     public Date getUsrPasswordChanged()
     {
         return getSemanticObject().getDateProperty(vocabulary.usrPasswordChanged);
@@ -147,27 +157,6 @@ public class UserBase extends GenericObjectBase implements Roleable,Traceable,Lo
     public void setActive(boolean active)
     {
         getSemanticObject().setBooleanProperty(vocabulary.active, active);
-    }
-
-    public void setLanguage(org.semanticwb.model.Language language)
-    {
-        getSemanticObject().setObjectProperty(vocabulary.language, language.getSemanticObject());
-    }
-
-    public void removeLanguage()
-    {
-        getSemanticObject().removeProperty(vocabulary.language);
-    }
-
-    public Language getLanguage()
-    {
-         Language ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.language);
-         if(obj!=null)
-         {
-             ret=(Language)vocabulary.Language.newGenericInstance(obj);
-         }
-         return ret;
     }
 
     public Date getUsrLastLogin()

@@ -47,12 +47,12 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
          return ret;
     }
 
-    public String getPortletXML()
+    public String getXml()
     {
         return getSemanticObject().getProperty(vocabulary.portletXML);
     }
 
-    public void setPortletXML(String portletXML)
+    public void setXml(String portletXML)
     {
         getSemanticObject().setProperty(vocabulary.portletXML, portletXML);
     }
@@ -191,12 +191,12 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
         getSemanticObject().setBooleanProperty(vocabulary.portletWindow, portletWindow);
     }
 
-    public String getPortletXMLConf()
+    public String getXmlConf()
     {
         return getSemanticObject().getProperty(vocabulary.portletXMLConf);
     }
 
-    public void setPortletXMLConf(String portletXMLConf)
+    public void setXmlConf(String portletXMLConf)
     {
         getSemanticObject().setProperty(vocabulary.portletXMLConf, portletXMLConf);
     }

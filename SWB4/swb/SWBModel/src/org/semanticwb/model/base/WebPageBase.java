@@ -139,12 +139,12 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
         getSemanticObject().setBooleanProperty(vocabulary.indexable, indexable);
     }
 
-    public String getWebPageSortName()
+    public String getSortName()
     {
         return getSemanticObject().getProperty(vocabulary.webPageSortName);
     }
 
-    public void setWebPageSortName(String webPageSortName)
+    public void setSortName(String webPageSortName)
     {
         getSemanticObject().setProperty(vocabulary.webPageSortName, webPageSortName);
     }

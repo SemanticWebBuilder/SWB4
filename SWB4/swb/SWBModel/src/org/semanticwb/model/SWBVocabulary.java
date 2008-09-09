@@ -72,11 +72,11 @@ public class SWBVocabulary
     public final SemanticProperty usrEmail;
     public final SemanticProperty updated;
     public final SemanticProperty usrFirstName;
+    public final SemanticProperty usrLanguage;
     public final SemanticProperty usrPasswordChanged;
     public final SemanticProperty usrLastName;
     public final SemanticProperty hasGroup;
     public final SemanticProperty active;
-    public final SemanticProperty language;
     public final SemanticProperty usrLastLogin;
     public final SemanticProperty creator;
     public final SemanticProperty usrPassword;
@@ -103,6 +103,7 @@ public class SWBVocabulary
     public final SemanticProperty pflow;
     public final SemanticProperty rule;
     public final SemanticProperty hidden;
+    public final SemanticProperty language;
     public final SemanticProperty webPage;
     public final SemanticProperty dnsDefault;
     public final SemanticProperty hasGroupedTemplate;
@@ -207,11 +208,11 @@ public class SWBVocabulary
         usrEmail=vocabulary.getSemanticProperty(URI+"usrEmail");
         updated=vocabulary.getSemanticProperty(URI+"updated");
         usrFirstName=vocabulary.getSemanticProperty(URI+"usrFirstName");
+        usrLanguage=vocabulary.getSemanticProperty(URI+"usrLanguage");
         usrPasswordChanged=vocabulary.getSemanticProperty(URI+"usrPasswordChanged");
         usrLastName=vocabulary.getSemanticProperty(URI+"usrLastName");
         hasGroup=vocabulary.getSemanticProperty(URI+"hasGroup");
         active=vocabulary.getSemanticProperty(URI+"active");
-        language=vocabulary.getSemanticProperty(URI+"language");
         usrLastLogin=vocabulary.getSemanticProperty(URI+"usrLastLogin");
         creator=vocabulary.getSemanticProperty(URI+"creator");
         usrPassword=vocabulary.getSemanticProperty(URI+"usrPassword");
@@ -238,6 +239,7 @@ public class SWBVocabulary
         pflow=vocabulary.getSemanticProperty(URI+"pflow");
         rule=vocabulary.getSemanticProperty(URI+"rule");
         hidden=vocabulary.getSemanticProperty(URI+"hidden");
+        language=vocabulary.getSemanticProperty(URI+"language");
         webPage=vocabulary.getSemanticProperty(URI+"webPage");
         dnsDefault=vocabulary.getSemanticProperty(URI+"dnsDefault");
         hasGroupedTemplate=vocabulary.getSemanticProperty(URI+"hasGroupedTemplate");
