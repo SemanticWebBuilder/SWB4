@@ -208,11 +208,26 @@ public class TestWebSite {
 
         if(site.getWebPage("page0")==null)
         {
-            for(int x=0;x<1000;x++)
+            for(int x=0;x<10;x++)
             {
                 WebPage page=site.createWebPage("page"+x);
                 page.setTitle("Pagina "+x);
                 page.setParent(home);
+                page.setActive(true);
+                for(int y=0;y<10;y++)
+                {
+                    WebPage child=site.createWebPage("page"+x+"_"+y);
+                    child.setTitle("Pagina "+x+" "+y);
+                    child.setParent(page);
+                    child.setActive(true);  
+                    for(int z=0;z<10;z++)
+                    {
+                        WebPage tchild=site.createWebPage("page"+x+"_"+y+"_"+z);
+                        tchild.setTitle("Pagina "+x+" "+y+" "+z);
+                        tchild.setParent(child);
+                        tchild.setActive(true);                    
+                    }                    
+                }
             }
         }
     }
@@ -268,7 +283,7 @@ public class TestWebSite {
             UserRepository urep=site.getUserRepository();
             Template tpl=site.getTemplate("1");
             
-            for(int x=0;x<1000;x++)
+            for(int x=0;x<10;x++)
             {
                 WebPage page=site.getWebPage("page"+x);
                 //System.out.println(page.getTitle());
