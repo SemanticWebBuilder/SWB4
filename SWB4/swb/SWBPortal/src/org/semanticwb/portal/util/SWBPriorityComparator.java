@@ -28,7 +28,7 @@ public class SWBPriorityComparator implements Comparator
     public SWBPriorityComparator(boolean content)
     {
         this.content=content;
-    }    
+    }
 
     /**
      * @param obj
