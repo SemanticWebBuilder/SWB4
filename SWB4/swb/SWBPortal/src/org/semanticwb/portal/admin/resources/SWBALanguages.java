@@ -8,9 +8,7 @@ package org.semanticwb.portal.admin.resources;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
@@ -27,7 +25,6 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
-import org.semanticwb.portal.services.LanguageSrv;
 
 
 /**
@@ -148,7 +145,6 @@ public class SWBALanguages extends GenericResource{
         String strLang=request.getParameter("id");
         String strLangName=request.getParameter("nom_idioma");
         User user = response.getUser();
-        LanguageSrv srvLang=new LanguageSrv();
         Language recLang=null;
         String iId="0";
         if (strWBAction!=null && strWBAction.equals("add")) {
@@ -174,12 +170,9 @@ public class SWBALanguages extends GenericResource{
                 Language lang = ws.getLanguage(strLang);
                 lang.setTitle(strLangName);
                 lang.setModifiedBy(user);
-                //if(srvLang.updateLanguage(strTm,strLang,strLangName,response.getUser().getId())) {
-                //recLang=SWBContext.getWebSite(strTm).getLanguage(strLang);
                 iId=lang.getId();
                 response.setRenderParameter("id",iId);
                 response.setRenderParameter("confirm","updated");
-                //}
             }
             catch(Exception e)
             {
@@ -189,7 +182,6 @@ public class SWBALanguages extends GenericResource{
         else if (strWBAction!=null && strWBAction.equals("remove")) {
             recLang=SWBContext.getWebSite(strTm).getLanguage(strLang);
             boolean isRemoved=false;
-            //if (srvLang.removeLanguage(strTm,recLang.getLang(),response.getUser().getId()))
             try{
                 WebSite ws = SWBContext.getWebSite(strTm);
                 ws.removeLanguage(recLang.getId());
@@ -203,14 +195,12 @@ public class SWBALanguages extends GenericResource{
             if (isRemoved) {
                 response.setRenderParameter("confirm","removed");
                 response.setRenderParameter("id",iId);
-                //response.setRenderParameter("status","true");
             }
             else {
                 response.setRenderParameter("lang",strLang);
                 response.setRenderParameter("tm",strTm);
                 response.setRenderParameter("confirm","notremoved");
             }
-
         }
         response.setRenderParameter("tm",strTm);
         response.setAction("view");
@@ -219,7 +209,6 @@ public class SWBALanguages extends GenericResource{
 
     private String hasAssociations(String strTm,String strLang,String strUser) {
         String strAss=null;
-        LanguageSrv srvLang=new LanguageSrv();
         Language recLang=SWBContext.getWebSite(strTm).getLanguage(strLang);
         
         //TODO: Falta implementar asociaciones de lenguajes
@@ -238,7 +227,6 @@ public class SWBALanguages extends GenericResource{
     private String getLanguageAssociations (HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException{
         PrintWriter out=response.getWriter();
         StringBuffer strBuff=new StringBuffer();
-        LanguageSrv langSrv=new LanguageSrv();
         String strTm=request.getParameter("tm");
         String strLang=request.getParameter("id");
         String strUser=paramRequest.getUser().getId();
@@ -248,8 +236,6 @@ public class SWBALanguages extends GenericResource{
         //HashMap hLangAss=langSrv.checkLanguageAssociations(strTm,recLang.getId(),strUser);
         HashMap hLangAss=new HashMap();
         Iterator itLangAss=hLangAss.keySet().iterator();
-       
-        
         
         out.println("<form name=\"Idioma\" method=\"post\" action=\"\" target=4> ");
         out.println("<div class=box>");
