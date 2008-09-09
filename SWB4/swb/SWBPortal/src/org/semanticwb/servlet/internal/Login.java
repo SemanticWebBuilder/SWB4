@@ -28,7 +28,7 @@ import org.semanticwb.security.auth.SWB4CallbackHandler;
 public class Login implements InternalServlet
 {
     private static Logger log=SWBUtils.getLogger(Login.class);
-    private static String authMethod = "BASIC"; //"BASIC" "FORM"
+    private static String authMethod = "FORM"; //"BASIC" "FORM"
     private static String VALSESS = "swb4-auto";
     private static String CALLBACK = "swb4-callback";
     
