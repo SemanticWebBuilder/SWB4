@@ -32,7 +32,7 @@ public class WebPage extends WebPageBase
      */
     public String getRealUrl()
     {
-        return SWBPlatform.getContextPath() + SWBPlatform.getEnv("swb/distributor","swb") + "/" + getWebSiteId() + "/" + getId();
+        return SWBPlatform.getContextPath() + "/" + SWBPlatform.getEnv("swb/distributor","swb") + "/" + getWebSiteId() + "/" + getId();
     }    
     
     /**  Regresa el Url del topico
