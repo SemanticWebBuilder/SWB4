@@ -795,6 +795,7 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="dnsDefault">
+    <rdfs:label>default</rdfs:label>
     <rdfs:domain rdf:resource="#Dns"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
   </owl:DatatypeProperty>
