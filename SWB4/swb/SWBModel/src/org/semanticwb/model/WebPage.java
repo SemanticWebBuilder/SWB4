@@ -283,8 +283,8 @@ public class WebPage extends WebPageBase
     @Deprecated
     public String getDisplayName(HashMap args)
     {
-        Language language = (Language) args.get("language");
-        return getTitle(language.getId());
+        String language = (String) args.get("language");
+        return getTitle(language);
     }    
     
 }
