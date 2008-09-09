@@ -208,7 +208,7 @@ public class SWBAWebSite extends GenericResource {
             out.println("<input type=\"hidden\" name=\"tmexist\" value=\"\">");
             
             
-            // Falta implementar
+            //TODO: Falta implementar IdGenerator
             //String homeidgen=SWBContext.getIdGenerator().getID(request.getParameter("hometitle"),request.getParameter("tmid"),false);
             String homeidgen=request.getParameter("wsdomain")+"#"+request.getParameter("hometitle")+"_"+request.getParameter("tmid");
             
@@ -257,7 +257,7 @@ public class SWBAWebSite extends GenericResource {
             out.println("<tr ><td width=\"150\" align=\"right\" class=\"datos\">"+paramRequest.getLocaleString("IndexMgsTm")+":</td><td class=\"valores\">");
             // P/Indexadores
             
-            ///////////////// Implementar cuando este ñisto los indexadores
+            //TODO: falta implementar  indexadores
 //            HashMap hIndexers=WBIndexMgr.getInstance().getIndexers();
 //            Iterator iIndexers=hIndexers.keySet().iterator();
             out.println("<select name=\"tmindexer\" class=\"campos\">");
@@ -371,8 +371,10 @@ public class SWBAWebSite extends GenericResource {
             out.println("<tr ><td width=\"150\" align=\"right\" class=\"datos\">"+paramRequest.getLocaleString("msgDescription")+":</td><td class=\"valores\"><textarea type=\"text\" class=\"campos\" name=\"description\" cols=\"20\" rows=\"5\">"+tm.getDescription()+"</textarea></td></tr>");
             out.println("<TR>");
             out.println("<TD width=\"150\" align=\"right\" valign=\"top\" class=\"datos\"> "+paramRequest.getLocaleString("msgHistory")+" </TD>");
+            //TODO: falta implementar dateFormat()
             //out.println("<TD class=\"valores\">"+paramRequest.getLocaleString("msgCreationDate")+":&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+SWBUtils.dateFormat(tm.getCreated()) +"<BR>");
             out.println("<TD class=\"valores\">"+paramRequest.getLocaleString("msgCreationDate")+":&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+tm.getCreated() +"<BR>");
+            //TODO: falta implementar dateFormat()
             //out.println(paramRequest.getLocaleString("msgModificationDate")+": "+ SWBUtils.dateFormat(tm.getUpdated())+"</TD>");
             out.println(paramRequest.getLocaleString("msgModificationDate")+": "+ tm.getUpdated()+"</TD>");
             out.println("</TR>");
@@ -407,7 +409,7 @@ public class SWBAWebSite extends GenericResource {
             out.println("<tr ><td width=\"150\" align=\"right\" class=\"datos\">"+paramRequest.getLocaleString("IndexMgsTm")+":</td><td class=\"valores\">");
             // P/Indexadores
             
-            // Implementar cunado exista Indexadores
+            //TODO: Implementar cuando esten listo los Indexadores
             
 //            HashMap hIndexers=WBIndexMgr.getInstance().getIndexers();
 //            WBIndexer wbtmIndexer=WBIndexMgr.getInstance().getTopicMapIndexer(tm.getId());
@@ -458,8 +460,10 @@ public class SWBAWebSite extends GenericResource {
             out.println("<tr ><td width=\"150\" align=\"right\" class=\"datos\">"+paramRequest.getLocaleString("msgDescription")+":</td><td class=\"valores\">"+tm.getDescription()+"</td></tr>");
             out.println("<TR>");
             out.println("<TD width=\"150\" align=\"right\" valign=\"top\" class=\"datos\"> "+paramRequest.getLocaleString("msgHistory")+" </TD>");
+            //TODO: falta implementar dateFormat()
             //out.println("<TD class=\"valores\">"+paramRequest.getLocaleString("msgCreationDate")+":&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+SWBUtils.dateFormat(tm.getCreated()) +"<BR>");
             out.println("<TD class=\"valores\">"+paramRequest.getLocaleString("msgCreationDate")+":&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+tm.getCreated() +"<BR>");
+            //TODO: falta implementar dateFormat()
             //out.println(paramRequest.getLocaleString("msgModificationDate")+": "+ SWBUtils.dateFormat(tm.getUpdated())+"</TD>");
             out.println(paramRequest.getLocaleString("msgModificationDate")+": "+ tm.getUpdated()+"</TD>");
             out.println("</TR>");
@@ -479,7 +483,7 @@ public class SWBAWebSite extends GenericResource {
             
             out.println("<tr ><td width=\"150\" align=\"right\" class=\"datos\">"+paramRequest.getLocaleString("IndexMgsTm")+":</td><td class=\"valores\">");
             // P/Indexador
-            // Implementar
+            //TODO: Implementar cuando esten Indexadores
             
 //            if(tm.getDbdata()!=null) out.println(tm.getDbdata().getIndexer());
             
@@ -499,7 +503,7 @@ public class SWBAWebSite extends GenericResource {
         if(accion==null) accion=request.getParameter("act");
         User user = response.getUser();
         try{
-            WebSiteSrv tmSrv=new WebSiteSrv();
+            //WebSiteSrv tmSrv=new WebSiteSrv();
             if(accion.equals("update")){
                 
                 WebSite ws = SWBContext.getWebSite(request.getParameter("tmid"));
