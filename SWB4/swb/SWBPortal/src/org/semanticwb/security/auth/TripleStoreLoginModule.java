@@ -134,6 +134,7 @@ public class TripleStoreLoginModule implements LoginModule {
         if (!loginflag) {
             return false;
         }
+        subject.getPrincipals().clear();
         subject.getPrincipals().add(principal);
         subject.getPrivateCredentials().add(credential);
         return loginflag;
