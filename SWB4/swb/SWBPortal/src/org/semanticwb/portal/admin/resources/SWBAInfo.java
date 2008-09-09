@@ -236,7 +236,7 @@ public class SWBAInfo extends GenericResource {
             title=recDns.getTitle();
             addTitle(title,out);
             addAttribute("Identificador",""+recDns.getId(),out);
-            if(recDns.isDnsDefault())
+            if(recDns.isDefault())
                 addAttribute("Por Defecto","Si",out);
             else
                 addAttribute("Por Defecto","No",out);
