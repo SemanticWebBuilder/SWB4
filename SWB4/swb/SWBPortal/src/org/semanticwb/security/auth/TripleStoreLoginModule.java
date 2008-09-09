@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Level;
 import javax.security.auth.Subject;
@@ -27,6 +28,7 @@ import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
 import org.semanticwb.model.WebSite;
+import org.semanticwb.model.base.UserBase;
 import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.servlet.internal.DistributorParams;
 
@@ -134,8 +136,14 @@ public class TripleStoreLoginModule implements LoginModule {
         if (!loginflag) {
             return false;
         }
-        subject.getPrincipals().clear();
-        subject.getPrincipals().add(principal);
+        Iterator it = subject.getPrincipals().iterator();
+        User tmp = null;
+        if (it.hasNext()) tmp = (User)it.next();
+        if (null!=tmp) {
+            tmp.getSemanticObject().setRDFResource(principal.getSemanticObject().getRDFResource());
+        } else {
+            subject.getPrincipals().add(principal);
+        }
         subject.getPrivateCredentials().add(credential);
         return loginflag;
     }
