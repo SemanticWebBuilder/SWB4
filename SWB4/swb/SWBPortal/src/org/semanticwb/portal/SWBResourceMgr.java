@@ -145,14 +145,14 @@ public class SWBResourceMgr
     {
         TreeSet ret = new TreeSet(new SWBPriorityComparator());
         
-        System.out.print("getResource:");
-        System.out.print(" topic:"+topic.getTitle());
-        System.out.print(" name:"+params.get("name"));
-        System.out.print(" template:"+tpl.getId());
-        System.out.print(" templateMap:"+tpl.getWebSiteId());
-        System.out.print(" type:"+type);
-        System.out.print(" stype:"+stype);
-        System.out.println(" params:"+params);
+        log.debug("getResource:");
+        log.debug(" -->topic:"+topic.getTitle());
+        log.debug("  -->name:"+params.get("name"));
+        log.debug("  -->template:"+tpl.getId());
+        log.debug("  -->templateMap:"+tpl.getWebSiteId());
+        log.debug("  -->type:"+type);
+        log.debug("  -->stype:"+stype);
+        log.debug("  -->params:"+params);
         
         if(type!=null)
         {
