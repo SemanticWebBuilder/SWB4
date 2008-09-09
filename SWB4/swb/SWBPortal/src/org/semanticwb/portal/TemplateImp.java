@@ -127,9 +127,9 @@ public class TemplateImp extends Template
     private PortletType getResourceType(String type)
     {
         //busca el tipo de recurso en el topicmap del template
-        PortletType rt=getWebSite().getPortletType(type.toLowerCase());
+        PortletType rt=getWebSite().getPortletType(type);
         //busca el tipo de recurso en el topicmap global
-        if(rt==null)rt=SWBContext.getGlobalWebSite().getPortletType(type.toLowerCase());
+        if(rt==null)rt=SWBContext.getGlobalWebSite().getPortletType(type);
         return rt;
     }
     
@@ -140,9 +140,9 @@ public class TemplateImp extends Template
     public PortletSubType getSubType(String type, String stype)
     {
         //busca el tipo de recurso en el topicmap del template
-        PortletSubType rt=getWebSite().getPortletSubType((type+"_"+stype).toLowerCase());
+        PortletSubType rt=getWebSite().getPortletSubType((type+"_"+stype));
         //busca el tipo de recurso en el topicmap global
-        if(rt==null)rt=SWBContext.getGlobalWebSite().getPortletSubType((type+"_"+stype).toLowerCase());
+        if(rt==null)rt=SWBContext.getGlobalWebSite().getPortletSubType((type+"_"+stype));
         return rt;
     }
     
