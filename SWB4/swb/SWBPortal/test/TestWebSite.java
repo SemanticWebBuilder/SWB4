@@ -154,6 +154,22 @@ public class TestWebSite {
             portlet.setTitle("Banner");
         }       
         
+        if(site.getPortletType("Menu")==null)
+        {
+            
+            PortletType ptype=site.createPortletType("Menu");
+            ptype.setPortletClassName("org.semanticwb.portal.resources.Menu");
+            ptype.setPortletBundle("org.semanticwb.portal.resources.Menu");
+            ptype.setPortletMode(1);
+            ptype.setTitle("Recurso Menu");
+                    
+            Portlet portlet=site.createPortlet();
+            portlet.setActive(true);
+            portlet.setCreator(user);
+            portlet.setPortletType(ptype);
+            portlet.setTitle("Menu");
+        }          
+        
         if(site.getPortletType("HtmlContent")==null)
         {
             
