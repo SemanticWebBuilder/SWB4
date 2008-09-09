@@ -115,9 +115,9 @@ public class Login implements InternalServlet
             
             
             String rutaSite = "/sites/" + distributorParams.getWebPage().getWebSite().getId() +"/"+ ruta;
-            login = SWBUtils.IO.getFileFromPath(rutaSite);
+            login = SWBPlatform.readFileFromWorkPath(rutaSite);
             if ("".equals(login)){
-                login = SWBUtils.IO.getFileFromPath(ruta);
+                login = SWBPlatform.readFileFromWorkPath(ruta);
             }
             //try {
 
