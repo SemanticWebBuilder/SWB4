@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBException;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
@@ -115,8 +116,12 @@ public class Login implements InternalServlet
             
             
             String rutaSite = "/sites/" + distributorParams.getWebPage().getWebSite().getId() +"/"+ ruta;
-            login = SWBPlatform.readFileFromWorkPath(rutaSite);
-            if ("".equals(login)){
+            try {
+                login = SWBPlatform.readFileFromWorkPath(rutaSite);
+            } catch (IOException iOException) {
+            } catch (SWBException sWBException) {
+            }
+            if (null==login || "".equals(login)){
                 login = SWBPlatform.readFileFromWorkPath(ruta);
             }
             //try {
