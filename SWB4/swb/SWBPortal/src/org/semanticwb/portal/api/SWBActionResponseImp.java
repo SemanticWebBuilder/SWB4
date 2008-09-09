@@ -358,7 +358,7 @@ public class SWBActionResponseImp implements SWBActionResponse
    */
   public void setUser(User user)
   {
-      if(user!=null)locale=new Locale(user.getLanguage().getId());
+      if(user!=null)locale=new Locale(user.getLanguage());
       this.user = user;
   }
   

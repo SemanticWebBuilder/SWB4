@@ -38,7 +38,7 @@ public class SWBResourceWindowRender
         )
         {
             //System.out.println("--> id:"+paramsRequest.getResourceBase().getId());
-            Locale locale=new Locale(paramsRequest.getUser().getLanguage().getId());
+            Locale locale=new Locale(paramsRequest.getUser().getLanguage());
             HttpServletResponse res=new SWBHttpServletResponseWrapper(response);
             resource.render(request, res, paramsRequest);
             String content=res.toString();                

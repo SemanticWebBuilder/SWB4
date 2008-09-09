@@ -195,7 +195,7 @@ public class SWBAWebPage extends GenericResource {
             out.println("        <TD width=\"150\" align=\"right\" valign=\"top\" class=\"datos\"> "+paramRequest.getLocaleString("msgZIndex")+" </TD>");
             out.println("        <TD class=\"valores\">");
             //String sort=tp.getSortName(null,false);
-            String sort=tp.getWebPageSortName();
+            String sort=tp.getSortName();
             if(sort==null)sort="";
             out.println(sort);
             out.println("        </TD>");
@@ -354,7 +354,7 @@ public class SWBAWebPage extends GenericResource {
             out.println("        <TD width=\"150\" align=\"right\" valign=\"top\" class=\"datos\"> "+paramRequest.getLocaleString("msgZIndex")+" </TD>");
             out.println("        <TD class=\"valores\">");
             //String sort=tp.getSortName(null,false);
-            String sort=tp.getWebPageSortName();
+            String sort=tp.getSortName();
             if(sort==null)sort="";
             out.println("          <INPUT name=\"sortname\" class=\"campos\" type=\"text\" value=\""+sort+"\" size=\"10\">");
             out.println("        </TD>");
@@ -670,7 +670,7 @@ public class SWBAWebPage extends GenericResource {
                 tp.setModifiedBy(user);
                 //tpSrv.setActiveIndexHidden(tp,istatus,iindexable,ihidden,response.getUser().getId());
                 
-                String tpsort=(tp.getWebPageSortName()!=null?tpsort=tp.getWebPageSortName():"");
+                String tpsort=(tp.getSortName()!=null?tpsort=tp.getSortName():"");
                 //TODO: Falta implementar
                 //String tpvirt="";if(tp.getSubjectIdentity()!=null)tpvirt=tp.getSubjectIdentity().toString();
                 String tpvirt="";

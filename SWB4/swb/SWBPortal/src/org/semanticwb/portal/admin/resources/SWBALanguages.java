@@ -405,11 +405,11 @@ public class SWBALanguages extends GenericResource{
             }
             if (strIdioma==null && wbAction.equals("add")){
                 Locale[] locales=Locale.getAvailableLocales();
-                java.util.TreeMap map=new java.util.TreeMap(java.text.Collator.getInstance(new Locale(paramsRequest.getUser().getLanguage().getId())));
+                java.util.TreeMap map=new java.util.TreeMap(java.text.Collator.getInstance(new Locale(paramsRequest.getUser().getLanguage())));
                 for (int i=0; i < locales.length; i++ ) {
                     Locale lc=locales[i];
                     if(lc.getCountry().length()==0)
-                        map.put(lc.getDisplayName(new Locale(paramsRequest.getUser().getLanguage().getId())), lc);
+                        map.put(lc.getDisplayName(new Locale(paramsRequest.getUser().getLanguage())), lc);
                 }
                 out.println("<tr align=\"center\" bgcolor=\"\"> ");
                 out.println("<td align=\"right\" class=\"datos\">"+paramsRequest.getLocaleString("msgListLang")+":</td> ");
@@ -420,7 +420,7 @@ public class SWBALanguages extends GenericResource{
                 {
                     Locale lc=(Locale)it.next();
                     if(lc.getCountry().length()==0)
-                        out.println(" <option value=\""+lc.getLanguage()+"\">"+lc.getDisplayName(new Locale(paramsRequest.getUser().getLanguage().getId()))+"</option> ");
+                        out.println(" <option value=\""+lc.getLanguage()+"\">"+lc.getDisplayName(new Locale(paramsRequest.getUser().getLanguage()))+"</option> ");
                 }
                 out.println("</select>");
                 out.println("</td> ");
