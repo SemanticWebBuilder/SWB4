@@ -2,8 +2,10 @@ package org.semanticwb;
 
 import java.io.InputStream;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import org.semanticwb.model.*;
@@ -264,4 +266,23 @@ public class SWBPortal {
         if(!f.exists())return null;
         return f.getInputStream();
     }    
+    
+    public static ArrayList getAppLanguages()
+    {
+        ArrayList languages=new ArrayList();
+        Iterator<WebSite> itWs=SWBContext.listWebSites();
+        while(itWs.hasNext())
+        {
+            WebSite ws=itWs.next();
+            Iterator<Language> itLang=ws.listLanguages();
+            while(itLang.hasNext())
+            {
+                Language lang= itLang.next();
+                if(!languages.contains(lang.getId())) {
+                    languages.add(lang.getId());
+                }
+            }
+        }    
+        return languages;
+    }
 }
