@@ -498,7 +498,9 @@ public class CodeGenerator
                     {
                         type = TYPE_VOID;
                     }
-                    String methodName = toUpperCase(tpp.getName());
+                    String label=tpp.getLabel();
+                    if(label==null)label=tpp.getName();
+                    String methodName = toUpperCase(label);
                     javaClassContent.append(PUBLIC + type + " " + prefix + methodName + END_OF_METHOD + ENTER);
                     javaClassContent.append(PUBLIC + "void set" + methodName + "(" + type + " " + tpp.getName() + ");" + ENTER);
                     if(tpp.isLocaleable())
@@ -743,7 +745,9 @@ public class CodeGenerator
                     getMethod="getSemanticObject()."+getMethod;
                     setMethod="getSemanticObject()."+setMethod;
                     
-                    String methodName = toUpperCase(tpp.getName());
+                    String label=tpp.getLabel();
+                    if(label==null)label=tpp.getName();
+                    String methodName = toUpperCase(label);
 
                     javaClassContent.append(ENTER);
                     javaClassContent.append(PUBLIC + type + " " + prefix + methodName + "()" + ENTER);
