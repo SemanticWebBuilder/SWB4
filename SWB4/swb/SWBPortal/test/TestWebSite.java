@@ -268,7 +268,7 @@ public class TestWebSite {
         System.out.println("home:"+home+" "+home.getTitle());
         System.out.println("homeOnt:"+homeOnt+" "+homeOnt.getTitle());
 
-        home.setTitle("Prueba 3");
+        home.setTitle("Home");
 
         System.out.println("home:"+home+" "+home.getTitle());
         System.out.println("homeOnt:"+homeOnt+" "+homeOnt.getTitle());
