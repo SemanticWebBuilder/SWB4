@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBException;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Portlet;
@@ -439,6 +440,7 @@ public class SWBResourceMgr
             if (obj != null)
             {
                 obj.setResourceBase(portlet);
+                if(obj.getResourceBase()==null)throw new SWBException(clsname+": if you override method setResourceBase, you have to invoke super.setResourceBase(base);");
                 obj.init();
                 
                 //HashMap basemap=(HashMap)resourcesbase.get(portlet.getTopicMapId());
@@ -509,6 +511,16 @@ public class SWBResourceMgr
     {
         return cache;
     }        
+    
+    /** Regresa el ClassLoader utilizado para cargar el tipo de recurso
+     * @param className nombre de la clase del recurso
+     * @return ClassLoader del recurso
+     *
+     */
+    public ClassLoader getResourceLoader(String className)
+    {
+        return resourceLoaders.get(className);
+    }    
     
     /** Getter for property resourceLoaders.
      * @return Value of property resourceLoaders.
