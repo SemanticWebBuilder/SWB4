@@ -138,9 +138,9 @@ public class Login implements InternalServlet
                 login = login.replaceFirst("<WBVERSION>", SWBPlatform.getVersion());
                 login = login.replaceFirst("<ERRMESSAGE>", errorMessage);
             //} catch (Exception e) {
-            ruta = SWBUtils.getApplicationPath()+"work"+ruta; 
-            System.out.println(ruta);
-                login = SWBUtils.IO.getFileFromPath(ruta);
+            //ruta = SWBUtils.getApplicationPath()+"work"+ruta; 
+            //System.out.println(ruta);
+              //  login = SWBUtils.IO.getFileFromPath(ruta);
               //  login = WBUtils.getInstance().parseHTML(login, WBUtils.getInstance().getWebWorkPath() + "/config/images/");
             //} 
                 

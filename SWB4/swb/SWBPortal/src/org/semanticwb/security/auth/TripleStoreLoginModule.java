@@ -73,7 +73,7 @@ public class TripleStoreLoginModule implements LoginModule {
             credential = ((PasswordCallback) callbacks[1]).getPassword();
             ((PasswordCallback) callbacks[1]).clearPassword();
             website = ((TextInputCallback)callbacks[2]).getText();
-            System.out.println("-- "+login+" -- "+website+" -- "+ new String((char[])credential));
+          //  System.out.println("-- "+login+" -- "+website+" -- "+ new String((char[])credential));
         } catch (IOException ex) {
             log.error("IO Error Login a user", ex);
             throw new LoginException("IO Error: " + ex.getMessage());
