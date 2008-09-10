@@ -29,9 +29,11 @@ import org.semanticwb.security.auth.SWB4CallbackHandler;
 public class Login implements InternalServlet
 {
     private static Logger log=SWBUtils.getLogger(Login.class);
+    //TODO llevar a configuración
     private static String authMethod = "FORM"; //"BASIC" "FORM"
     private static String VALSESS = "swb4-auto";
     private static String CALLBACK = "swb4-callback";
+    private static String realm = "Serch Web Builder 4.0";
     
     //Constantes para primer implementación
     
@@ -58,7 +60,7 @@ public class Login implements InternalServlet
         }
         if (null == enAuto){
             log.debug("Starts new Authentication process...");
-            doResponse(request, response, dparams, "ErrMessage", "Alert");
+            doResponse(request, response, dparams, "ErrMessage", "");
             session.setAttribute(VALSESS, "Working");
             return;
         }
@@ -80,7 +82,7 @@ public class Login implements InternalServlet
     
     private void doResponse(HttpServletRequest request, HttpServletResponse response, DistributorParams distributorParams, String errorMessage, String alert) throws IOException{
             if ("BASIC".equals(authMethod))
-                basicChallenge("Serch Web Builder 4.0", response);//TODO Asignar nombre de Realm
+                basicChallenge(realm, response);//TODO Asignar nombre de Realm
             if ("FORM".equals(authMethod))
                 formChallenge(request, response, distributorParams, errorMessage, alert);
 
