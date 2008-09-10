@@ -174,29 +174,30 @@ public class Distributor implements InternalServlet
                     String extParams=dparams.getNotAccResourceURI(rid);
 
                     SWBResource base = SWBPortal.getResourceMgr().getResource(idtm, rid);
-                    if (!webpage.getWebSite().equals(SWBContext.getAdminWebSite()))
-                    {
-                        if(base == null)
-                        {
-                            response.sendError(404, "No tiene permiso para accesar a la pagina " + request.getRequestURI() + ", (Control de IPs)... ");
-                            log.debug("Distributor: SendError 404");
-                            return false;
-                        }else 
-                            //TODO:Revisar seguridad
-                            //if(!base.getResourceBase().haveAccess(user))
-                        {
-                            if(request.getMethod().equalsIgnoreCase("POST"))
-                            {
-                                response.sendRedirect(webpage.getUrl());
-                                log.debug("Distributor: Resource "+base.getResourceBase().getId()+" restricted, send redirect to webpage:"+webpage.getUrl());
-                            }else
-                            {
-                                response.sendError(403, "No tiene permiso para accesar a la pagina " + request.getRequestURI() + ", (Control de IPs)... ");
-                                log.debug("Distributor: SendError 403");
-                            }
-                            return false;
-                        }
-                    }                    
+                    //TODO: Implementar
+//                    if (!webpage.getWebSite().equals(SWBContext.getAdminWebSite()))
+//                    {
+//                        if(base == null)
+//                        {
+//                            response.sendError(404, "No tiene permiso para accesar a la pagina " + request.getRequestURI() + ", (Control de IPs)... ");
+//                            log.debug("Distributor: SendError 404");
+//                            return false;
+//                        }else 
+//                            //TODO:Revisar seguridad
+//                            //if(!base.getResourceBase().haveAccess(user))
+//                        {
+//                            if(request.getMethod().equalsIgnoreCase("POST"))
+//                            {
+//                                response.sendRedirect(webpage.getUrl());
+//                                log.debug("Distributor: Resource "+base.getResourceBase().getId()+" restricted, send redirect to webpage:"+webpage.getUrl());
+//                            }else
+//                            {
+//                                response.sendError(403, "No tiene permiso para accesar a la pagina " + request.getRequestURI() + ", (Control de IPs)... ");
+//                                log.debug("Distributor: SendError 403");
+//                            }
+//                            return false;
+//                        }
+//                    }                    
 
                     if (mto == SWBResourceModes.Call_DIRECT) //call direct
                     {
