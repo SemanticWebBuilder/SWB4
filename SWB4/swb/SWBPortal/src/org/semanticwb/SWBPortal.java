@@ -274,12 +274,10 @@ public class SWBPortal {
         while(it.hasNext())
         {
             WebSite site=it.next();
-            System.out.println("site:"+site.getURI()+" "+site.getId());
             Iterator<Language> itLang=site.listLanguages();
             while(itLang.hasNext())
             {
                 Language lang= itLang.next();
-                System.out.println("lang:"+lang.getURI()+" "+lang.getId());
                 if(!languages.contains(lang.getId())) {
                     languages.add(lang.getId());
                 }
