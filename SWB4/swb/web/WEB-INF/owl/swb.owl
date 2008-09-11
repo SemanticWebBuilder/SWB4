@@ -30,6 +30,12 @@
     >org.semanticwb.model.Indexable</swb:className>
     <rdf:type rdf:resource="#Interface"/>
   </owl:Class>
+  <owl:Class rdf:ID="XMLable">
+    <rdf:type rdf:resource="#Interface"/>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model.XMLable</swb:className>
+    <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+  </owl:Class>
   <owl:Class rdf:ID="TemplateGroup">
     <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.model.TemplateGroup</swb:className>
@@ -141,20 +147,21 @@
     </swb:hasClass>
     <swb:hasClass>
       <swb:Class rdf:ID="Rule">
-        <rdfs:subClassOf rdf:resource="#Traceable"/>
-        <rdfs:subClassOf rdf:resource="#SWBClass"/>
         <rdfs:subClassOf>
           <owl:Class rdf:about="#Descriptiveable"/>
         </rdfs:subClassOf>
+        <rdfs:subClassOf rdf:resource="#SWBClass"/>
+        <rdfs:subClassOf rdf:resource="#XMLable"/>
         <rdfs:subClassOf rdf:resource="#Groupable"/>
+        <rdfs:subClassOf rdf:resource="#Traceable"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
         <rdfs:subClassOf>
           <owl:Class rdf:ID="Versionable"/>
         </rdfs:subClassOf>
         <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >org.semanticwb.model.Rule</swb:className>
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Class>
     </swb:hasClass>
     <swb:hasClass>
@@ -232,11 +239,14 @@
     </swb:hasClass>
     <swb:hasClass>
       <swb:Class rdf:ID="Permission">
+        <rdfs:subClassOf>
+          <owl:Class rdf:about="#Descriptiveable"/>
+        </rdfs:subClassOf>
         <rdfs:subClassOf rdf:resource="#SWBClass"/>
         <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >org.semanticwb.model.Permission</swb:className>
         <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >false</swb:autogenId>
+        >true</swb:autogenId>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Class>
     </swb:hasClass>
@@ -283,6 +293,14 @@
     <swb:hasClass>
       <swb:Class rdf:ID="Portlet">
         <rdfs:subClassOf rdf:resource="#Calendarable"/>
+        <rdfs:subClassOf>
+          <swb:Interface rdf:ID="XMLConfable">
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+            <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >org.semanticwb.model.XMLConfable</swb:className>
+            <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+          </swb:Interface>
+        </rdfs:subClassOf>
         <rdfs:subClassOf rdf:resource="#Localeable"/>
         <rdfs:subClassOf rdf:resource="#RuleRefable"/>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
@@ -308,6 +326,7 @@
         </rdfs:subClassOf>
         <rdfs:subClassOf rdf:resource="#SWBClass"/>
         <rdfs:subClassOf rdf:resource="#Traceable"/>
+        <rdfs:subClassOf rdf:resource="#XMLable"/>
         <rdfs:subClassOf>
           <owl:Class rdf:about="#Versionable"/>
         </rdfs:subClassOf>
@@ -372,6 +391,7 @@
     >org.semanticwb.model.PFlow</swb:className>
     <rdfs:subClassOf rdf:resource="#Activeable"/>
     <rdfs:subClassOf rdf:resource="#Groupable"/>
+    <rdfs:subClassOf rdf:resource="#XMLable"/>
     <rdfs:subClassOf rdf:resource="#SWBClass"/>
     <rdfs:subClassOf rdf:resource="#Deleteable"/>
     <rdfs:subClassOf>
@@ -692,6 +712,10 @@
     <rdfs:range rdf:resource="#PortletRef"/>
     <rdfs:subPropertyOf rdf:resource="#hasReference"/>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasPermission">
+    <rdfs:range rdf:resource="#Permission"/>
+    <rdfs:domain rdf:resource="#Role"/>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasPortlet">
     <rdfs:range rdf:resource="#Portlet"/>
     <rdfs:domain rdf:resource="#Portletable"/>
@@ -782,6 +806,10 @@
     <rdfs:domain rdf:resource="#User"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="xml">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#XMLable"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="portletWindow">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     <rdfs:domain rdf:resource="#Portlet"/>
@@ -845,11 +873,6 @@
     <rdfs:domain rdf:resource="#User"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="portletXMLConf">
-    <rdfs:domain rdf:resource="#Portlet"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:label>xmlConf</rdfs:label>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="portletCache">
     <rdfs:domain rdf:resource="#PortletType"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
@@ -879,13 +902,13 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#WebPage"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="usrPassword">
-    <rdfs:domain rdf:resource="#User"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="views">
     <rdfs:domain rdf:resource="#Viewable"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="usrPassword">
+    <rdfs:domain rdf:resource="#User"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="usrLanguage">
     <rdfs:label>language</rdfs:label>
@@ -914,6 +937,10 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <rdfs:domain rdf:resource="#VersionInfo"/>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="xmlConf">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#XMLConfable"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="priority">
     <rdfs:domain rdf:resource="#Priorityable"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
@@ -929,11 +956,6 @@
   <owl:DatatypeProperty rdf:ID="hits">
     <rdfs:domain rdf:resource="#Viewable"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="portletXML">
-    <rdfs:domain rdf:resource="#Portlet"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:label>xml</rdfs:label>
   </owl:DatatypeProperty>
   <owl:AnnotationProperty rdf:ID="className">
     <rdfs:comment>Name of the Java Class to be generated</rdfs:comment>
