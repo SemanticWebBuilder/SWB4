@@ -3,14 +3,77 @@
 <web-app>
     <display-name>SemWB4</display-name>
     <description>Semantic Web Builder 4.0</description>
+    <context-param>
+		<param-name>chiba.configfile</param-name>
+		<param-value>WEB-INF/chiba-config.xml</param-value>
+    </context-param>
+    
     <filter>
         <filter-name>VirtualHostFilter</filter-name>
         <filter-class>org.semanticwb.servlet.SWBVirtualHostFilter</filter-class>
+    </filter>
+    <!--TWB-->
+     <filter>
+            <filter-name>XFormsFilter</filter-name>                                                                                                                           	
+            <filter-class>org.chiba.web.filter.XFormsFilter</filter-class>
+        <init-param>
+            <param-name>scripted</param-name>
+            <param-value>true</param-value>
+        </init-param>
     </filter>
     <filter-mapping>
         <filter-name>VirtualHostFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+    <filter-mapping>
+            <filter-name>XFormsFilter</filter-name>
+            <url-pattern>/forms/*</url-pattern>
+    </filter-mapping>
+    <servlet>
+        <servlet-name>Flux</servlet-name>
+        <servlet-class>uk.ltd.getahead.dwr.DWRServlet</servlet-class>
+        <init-param>
+            <param-name>debug</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </servlet>
+    <servlet>
+        <servlet-name>FluxHelper</servlet-name>
+        <servlet-class>org.chiba.web.flux.FluxHelperServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>PlainHtml</servlet-name>
+        <servlet-class>org.chiba.web.servlet.PlainHtmlServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewServlet</servlet-name>
+        <servlet-class>org.chiba.web.servlet.ViewServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SubmissionResponse</servlet-name>
+        <servlet-class>org.chiba.web.servlet.SubmissionResponseServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Flux</servlet-name>
+        <url-pattern>/Flux/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FluxHelper</servlet-name>
+        <url-pattern>/FluxHelper/*</url-pattern>
+    </servlet-mapping>
+   <servlet-mapping>
+        <servlet-name>PlainHtml</servlet-name>
+        <url-pattern>/PlainHtml/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewServlet</servlet-name>
+        <url-pattern>/view</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SubmissionResponse</servlet-name>
+        <url-pattern>/SubmissionResponse</url-pattern>
+    </servlet-mapping>
+    <!--WB-->
     <session-config>
         <session-timeout>30</session-timeout>
     </session-config>
