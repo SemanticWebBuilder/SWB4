@@ -467,6 +467,11 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
         getSemanticObject().setProperty(vocabulary.description, description, lang);
     }
 
+    public void remove()
+    {
+        getSemanticObject().remove();
+    }
+
     public WebSite getWebSite()
     {
         return new WebSite(getSemanticObject().getModel().getModelObject());

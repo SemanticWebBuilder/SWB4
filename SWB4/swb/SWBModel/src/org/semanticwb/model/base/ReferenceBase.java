@@ -25,4 +25,9 @@ public class ReferenceBase extends GenericObjectBase implements Activeable
     {
         getSemanticObject().setBooleanProperty(vocabulary.active, active);
     }
+
+    public void remove()
+    {
+        getSemanticObject().remove();
+    }
 }

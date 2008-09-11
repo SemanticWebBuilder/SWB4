@@ -57,6 +57,11 @@ public class PortletRefBase extends GenericObjectBase implements Priorityable,Ac
         getSemanticObject().setLongProperty(vocabulary.priority, priority);
     }
 
+    public void remove()
+    {
+        getSemanticObject().remove();
+    }
+
     public WebSite getWebSite()
     {
         return new WebSite(getSemanticObject().getModel().getModelObject());

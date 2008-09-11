@@ -192,6 +192,11 @@ public class PortletTypeBase extends GenericObjectBase implements Descriptiveabl
         getSemanticObject().setProperty(vocabulary.description, description, lang);
     }
 
+    public void remove()
+    {
+        getSemanticObject().remove();
+    }
+
     public WebSite getWebSite()
     {
         return new WebSite(getSemanticObject().getModel().getModelObject());

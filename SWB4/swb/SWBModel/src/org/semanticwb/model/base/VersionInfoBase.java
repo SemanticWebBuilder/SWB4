@@ -108,6 +108,11 @@ public class VersionInfoBase extends GenericObjectBase implements Valueable
         getSemanticObject().setLongProperty(vocabulary.versionNumber, versionNumber);
     }
 
+    public void remove()
+    {
+        getSemanticObject().remove();
+    }
+
     public WebSite getWebSite()
     {
         return new WebSite(getSemanticObject().getModel().getModelObject());

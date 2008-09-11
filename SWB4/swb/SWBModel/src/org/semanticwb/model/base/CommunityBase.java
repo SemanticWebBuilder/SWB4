@@ -128,6 +128,11 @@ public class CommunityBase extends GenericObjectBase implements Descriptiveable,
         getSemanticObject().setProperty(vocabulary.description, description, lang);
     }
 
+    public void remove()
+    {
+        getSemanticObject().remove();
+    }
+
     public WebSite getWebSite()
     {
         return new WebSite(getSemanticObject().getModel().getModelObject());

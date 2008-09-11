@@ -149,6 +149,11 @@ public class DnsBase extends GenericObjectBase implements WebPageable,Descriptiv
         getSemanticObject().setBooleanProperty(vocabulary.dnsDefault, dnsDefault);
     }
 
+    public void remove()
+    {
+        getSemanticObject().remove();
+    }
+
     public WebSite getWebSite()
     {
         return new WebSite(getSemanticObject().getModel().getModelObject());

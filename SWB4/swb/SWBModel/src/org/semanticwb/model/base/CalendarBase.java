@@ -128,6 +128,11 @@ public class CalendarBase extends GenericObjectBase implements Traceable,Activea
         getSemanticObject().setProperty(vocabulary.description, description, lang);
     }
 
+    public void remove()
+    {
+        getSemanticObject().remove();
+    }
+
     public WebSite getWebSite()
     {
         return new WebSite(getSemanticObject().getModel().getModelObject());

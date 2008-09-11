@@ -150,6 +150,11 @@ public class ObjectGroupBase extends GenericObjectBase implements Groupable,Desc
          return ret;
     }
 
+    public void remove()
+    {
+        getSemanticObject().remove();
+    }
+
     public UserRepository getUserRepository()
     {
         return new UserRepository(getSemanticObject().getModel().getModelObject());

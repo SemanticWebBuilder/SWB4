@@ -26,6 +26,11 @@ public class PFlowRefBase extends GenericObjectBase implements Activeable
         getSemanticObject().setBooleanProperty(vocabulary.active, active);
     }
 
+    public void remove()
+    {
+        getSemanticObject().remove();
+    }
+
     public WebSite getWebSite()
     {
         return new WebSite(getSemanticObject().getModel().getModelObject());

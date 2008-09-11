@@ -182,6 +182,11 @@ public class RoleBase extends GenericObjectBase implements Groupable,Descriptive
          return ret;
     }
 
+    public void remove()
+    {
+        getSemanticObject().remove();
+    }
+
     public UserRepository getUserRepository()
     {
         return new UserRepository(getSemanticObject().getModel().getModelObject());
