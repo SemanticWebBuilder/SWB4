@@ -669,5 +669,10 @@ public class SemanticObject
         return ret;
     }    
     
+    public void remove()
+    {
+        getModel().removeSemanticObject(this);
+    }
+    
 }
 
