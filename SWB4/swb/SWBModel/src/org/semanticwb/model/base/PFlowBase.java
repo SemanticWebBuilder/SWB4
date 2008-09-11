@@ -7,7 +7,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class PFlowBase extends GenericObjectBase implements Deleteable,Groupable,Versionable,Traceable,Descriptiveable,Activeable
+public class PFlowBase extends GenericObjectBase implements Deleteable,Groupable,XMLable,Versionable,Traceable,Descriptiveable,Activeable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
@@ -26,16 +26,6 @@ public class PFlowBase extends GenericObjectBase implements Deleteable,Groupable
         getSemanticObject().setDateProperty(vocabulary.created, created);
     }
 
-    public boolean isActive()
-    {
-        return getSemanticObject().getBooleanProperty(vocabulary.active);
-    }
-
-    public void setActive(boolean active)
-    {
-        getSemanticObject().setBooleanProperty(vocabulary.active, active);
-    }
-
     public boolean isDeleted()
     {
         return getSemanticObject().getBooleanProperty(vocabulary.deleted);
@@ -44,6 +34,16 @@ public class PFlowBase extends GenericObjectBase implements Deleteable,Groupable
     public void setDeleted(boolean deleted)
     {
         getSemanticObject().setBooleanProperty(vocabulary.deleted, deleted);
+    }
+
+    public boolean isActive()
+    {
+        return getSemanticObject().getBooleanProperty(vocabulary.active);
+    }
+
+    public void setActive(boolean active)
+    {
+        getSemanticObject().setBooleanProperty(vocabulary.active, active);
     }
 
     public void setModifiedBy(org.semanticwb.model.User user)
@@ -106,6 +106,16 @@ public class PFlowBase extends GenericObjectBase implements Deleteable,Groupable
              ret=(VersionInfo)vocabulary.VersionInfo.newGenericInstance(obj);
          }
          return ret;
+    }
+
+    public String getXml()
+    {
+        return getSemanticObject().getProperty(vocabulary.xml);
+    }
+
+    public void setXml(String xml)
+    {
+        getSemanticObject().setProperty(vocabulary.xml, xml);
     }
 
     public Date getUpdated()

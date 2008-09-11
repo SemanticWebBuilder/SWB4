@@ -7,7 +7,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class PortletBase extends GenericObjectBase implements Versionable,Indexable,Descriptiveable,Viewable,Calendarable,Activeable,RuleRefable,Traceable,RoleRefable,Priorityable,Deleteable,Localeable
+public class PortletBase extends GenericObjectBase implements Versionable,Indexable,XMLable,XMLConfable,Descriptiveable,Viewable,Calendarable,Activeable,RuleRefable,Traceable,RoleRefable,Priorityable,Deleteable,Localeable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
@@ -45,16 +45,6 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
              ret=(User)vocabulary.User.newGenericInstance(obj);
          }
          return ret;
-    }
-
-    public String getXml()
-    {
-        return getSemanticObject().getProperty(vocabulary.portletXML);
-    }
-
-    public void setXml(String portletXML)
-    {
-        getSemanticObject().setProperty(vocabulary.portletXML, portletXML);
     }
 
     public String getTitle()
@@ -96,6 +86,16 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
              ret=(VersionInfo)vocabulary.VersionInfo.newGenericInstance(obj);
          }
          return ret;
+    }
+
+    public String getXml()
+    {
+        return getSemanticObject().getProperty(vocabulary.xml);
+    }
+
+    public void setXml(String xml)
+    {
+        getSemanticObject().setProperty(vocabulary.xml, xml);
     }
 
     public int getHits()
@@ -193,12 +193,12 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
 
     public String getXmlConf()
     {
-        return getSemanticObject().getProperty(vocabulary.portletXMLConf);
+        return getSemanticObject().getProperty(vocabulary.xmlConf);
     }
 
-    public void setXmlConf(String portletXMLConf)
+    public void setXmlConf(String xmlConf)
     {
-        getSemanticObject().setProperty(vocabulary.portletXMLConf, portletXMLConf);
+        getSemanticObject().setProperty(vocabulary.xmlConf, xmlConf);
     }
 
     public int getPriority()

@@ -472,6 +472,12 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
         return (Permission)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, vocabulary.Permission), vocabulary.Permission);
     }
 
+    public Permission createPermission()
+    {
+        long id=SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+vocabulary.Permission.getName());
+        return createPermission(""+id);
+    } 
+
     public void removePermission(String id)
     {
         getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.Permission));
