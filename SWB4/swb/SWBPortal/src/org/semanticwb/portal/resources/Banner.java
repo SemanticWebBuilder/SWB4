@@ -6,7 +6,6 @@
 package org.semanticwb.portal.resources;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.URL;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,20 +28,14 @@ public class Banner extends GenericResource
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
     {
         
-        PrintWriter out=response.getWriter();
-        out.println("Recurso Banner...");
-        
         StringBuffer ret = new StringBuffer("");
         Portlet base=getResourceBase();
-        System.out.println("base.getId():"+base.getId());
-        System.out.println("base.getWorkPath():"+base.getWorkPath());
-        System.out.println("TODA:"+ SWBPlatform.getWebWorkPath() + base.getWorkPath());
         try
         {
             String local=base.getProperty("local", "0").trim();
             if (local.equals("0"))
             {
-                String img = base.getProperty("img", "").trim();
+                String img = base.getProperty("img", "inf.jpg").trim();
                 if (!img.equals(""))
                 {
                     String wburl=paramRequest.getActionUrl().toString();                    
@@ -130,6 +123,8 @@ public class Banner extends GenericResource
         } 
         catch (Exception e) { log.error("Error in resource Banner while bringing HTML", e); }
         response.getWriter().print(ret.toString());
-        
     }
+    
+    
+    
 }
