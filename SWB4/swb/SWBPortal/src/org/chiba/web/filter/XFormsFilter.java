@@ -33,7 +33,6 @@ public class XFormsFilter implements Filter {
      * @see http://java.sun.com/j2ee/sdk_1.3/techdocs/api/javax/servlet/Filter.html#init(javax.servlet.FilterConfig)
      */
     public void init(FilterConfig filterConfig) throws ServletException {
-        System.out.println("ENTRA AL FILTRO HOY J");
         webFactory = new WebFactory();
         webFactory.setServletContext(filterConfig.getServletContext());
         try {
