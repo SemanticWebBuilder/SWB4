@@ -139,7 +139,8 @@ public class SemanticModel
         Resource res=m_model.getResource(uri);
         if(res!=null)
         {
-            m_model.remove(res,null,null);
+            m_model.removeAll(res,null,null);
+            m_model.removeAll(null,null,res);
         }
     }  
     
@@ -148,7 +149,8 @@ public class SemanticModel
         Resource res=obj.getRDFResource();
         if(res!=null)
         {
-            m_model.remove(res,null,null);
+            m_model.removeAll(res,null,null);
+            m_model.removeAll(null,null,res);
         }
     }     
     
