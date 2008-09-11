@@ -98,6 +98,38 @@ public class RoleBase extends GenericObjectBase implements Groupable,Descriptive
          return ret;
     }
 
+    public GenericIterator<org.semanticwb.model.Permission> listPermissions()
+    {
+        StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasPermission.getRDFProperty());
+        return new GenericIterator<org.semanticwb.model.Permission>(org.semanticwb.model.Permission.class, stit);
+    }
+
+    public void addPermission(org.semanticwb.model.Permission permission)
+    {
+        getSemanticObject().addObjectProperty(vocabulary.hasPermission, permission.getSemanticObject());
+    }
+
+    public void removeAllPermission()
+    {
+        getSemanticObject().removeProperty(vocabulary.hasPermission);
+    }
+
+    public void removePermission(org.semanticwb.model.Permission permission)
+    {
+        getSemanticObject().removeObjectProperty(vocabulary.hasPermission,permission.getSemanticObject());
+    }
+
+    public Permission getPermission()
+    {
+         Permission ret=null;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasPermission);
+         if(obj!=null)
+         {
+             ret=(Permission)vocabulary.Permission.newGenericInstance(obj);
+         }
+         return ret;
+    }
+
     public String getDescription()
     {
         return getSemanticObject().getProperty(vocabulary.description);

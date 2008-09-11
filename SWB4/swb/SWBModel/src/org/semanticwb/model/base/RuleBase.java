@@ -7,7 +7,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class RuleBase extends GenericObjectBase implements Versionable,Groupable,Descriptiveable,Traceable
+public class RuleBase extends GenericObjectBase implements Groupable,Traceable,XMLable,Descriptiveable,Versionable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
@@ -86,6 +86,16 @@ public class RuleBase extends GenericObjectBase implements Versionable,Groupable
              ret=(VersionInfo)vocabulary.VersionInfo.newGenericInstance(obj);
          }
          return ret;
+    }
+
+    public String getXml()
+    {
+        return getSemanticObject().getProperty(vocabulary.xml);
+    }
+
+    public void setXml(String xml)
+    {
+        getSemanticObject().setProperty(vocabulary.xml, xml);
     }
 
     public Date getUpdated()

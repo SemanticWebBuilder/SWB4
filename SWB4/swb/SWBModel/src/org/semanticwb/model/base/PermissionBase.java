@@ -7,13 +7,53 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class PermissionBase extends GenericObjectBase 
+public class PermissionBase extends GenericObjectBase implements Descriptiveable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
     public PermissionBase(SemanticObject base)
     {
         super(base);
+    }
+
+    public String getTitle()
+    {
+        return getSemanticObject().getProperty(vocabulary.title);
+    }
+
+    public void setTitle(String title)
+    {
+        getSemanticObject().setProperty(vocabulary.title, title);
+    }
+
+    public String getTitle(String lang)
+    {
+        return getSemanticObject().getProperty(vocabulary.title, lang);
+    }
+
+    public void setTitle(String title, String lang)
+    {
+        getSemanticObject().setProperty(vocabulary.title, title, lang);
+    }
+
+    public String getDescription()
+    {
+        return getSemanticObject().getProperty(vocabulary.description);
+    }
+
+    public void setDescription(String description)
+    {
+        getSemanticObject().setProperty(vocabulary.description, description);
+    }
+
+    public String getDescription(String lang)
+    {
+        return getSemanticObject().getProperty(vocabulary.description, lang);
+    }
+
+    public void setDescription(String description, String lang)
+    {
+        getSemanticObject().setProperty(vocabulary.description, description, lang);
     }
 
     public WebSite getWebSite()
