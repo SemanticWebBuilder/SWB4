@@ -17,15 +17,18 @@ import org.semanticwb.SWBPlatform;
  */
 public class SemanticProperty 
 {
-    OntProperty m_prop;
+    Property m_prop;
     SemanticProperty m_inverse;
     
     public SemanticProperty(Property prop)
     {
-        this.m_prop=(OntProperty)prop;
+        this.m_prop=prop;
         if(hasInverse())
         {
-            m_inverse=new SemanticProperty(m_prop.getInverse());
+            if(m_prop instanceof OntProperty)
+            {
+                m_inverse=new SemanticProperty(((OntProperty)m_prop).getInverse());
+            }
         }
     }
     
@@ -36,7 +39,12 @@ public class SemanticProperty
     
     public String getLabel()
     {
-        return m_prop.getLabel(null);
+        String ret=null;
+        if(m_prop instanceof OntProperty)
+        {
+            ret=((OntProperty)m_prop).getLabel(null);
+        }
+        return ret;
     }
     
     public String getURI()
@@ -44,7 +52,7 @@ public class SemanticProperty
         return m_prop.getURI();
     }
     
-    public OntProperty getRDFProperty()
+    public Property getRDFProperty()
     {
         return m_prop;
     }
@@ -147,7 +155,12 @@ public class SemanticProperty
     
     public boolean hasInverse()
     {
-        return m_prop.hasInverse();
+        boolean ret=false;
+        if(m_prop instanceof OntProperty)
+        {
+            ret=((OntProperty)m_prop).hasInverse();
+        }        
+        return ret;
     }
     
     public SemanticProperty getInverse()
