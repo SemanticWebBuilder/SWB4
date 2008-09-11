@@ -326,6 +326,11 @@ public class CodeGenerator
             insertPropertiesToModel(tpc,javaClassContent);
         }else
         {
+            javaClassContent.append(ENTER);
+            javaClassContent.append("    public void remove()" + ENTER);
+            javaClassContent.append("    {" + ENTER);
+            javaClassContent.append("        getSemanticObject().remove();" + ENTER);
+            javaClassContent.append("    }" + ENTER);            
             insertLinkToClass4Model(tpc,javaClassContent);
         }
         javaClassContent.append("}" + ENTER);
