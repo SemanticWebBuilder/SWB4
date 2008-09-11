@@ -36,6 +36,11 @@ public class IPFilterBase extends GenericObjectBase implements Valueable,Activea
         getSemanticObject().setProperty(vocabulary.value, value);
     }
 
+    public void remove()
+    {
+        getSemanticObject().remove();
+    }
+
     public WebSite getWebSite()
     {
         return new WebSite(getSemanticObject().getModel().getModelObject());

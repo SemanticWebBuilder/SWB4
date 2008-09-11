@@ -135,6 +135,11 @@ public class TemplateGroupBase extends GenericObjectBase implements Descriptivea
          return ret;
     }
 
+    public void remove()
+    {
+        getSemanticObject().remove();
+    }
+
     public WebSite getWebSite()
     {
         return new WebSite(getSemanticObject().getModel().getModelObject());

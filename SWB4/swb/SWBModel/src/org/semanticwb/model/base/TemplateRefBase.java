@@ -57,6 +57,11 @@ public class TemplateRefBase extends GenericObjectBase implements Templateable,P
         getSemanticObject().setLongProperty(vocabulary.priority, priority);
     }
 
+    public void remove()
+    {
+        getSemanticObject().remove();
+    }
+
     public WebSite getWebSite()
     {
         return new WebSite(getSemanticObject().getModel().getModelObject());

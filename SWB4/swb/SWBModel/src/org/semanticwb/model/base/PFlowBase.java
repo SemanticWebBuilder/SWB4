@@ -222,6 +222,11 @@ public class PFlowBase extends GenericObjectBase implements Deleteable,Groupable
          return ret;
     }
 
+    public void remove()
+    {
+        getSemanticObject().remove();
+    }
+
     public WebSite getWebSite()
     {
         return new WebSite(getSemanticObject().getModel().getModelObject());

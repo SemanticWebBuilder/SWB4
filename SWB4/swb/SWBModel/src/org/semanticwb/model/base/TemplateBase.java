@@ -318,6 +318,11 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
         getSemanticObject().setProperty(vocabulary.description, description, lang);
     }
 
+    public void remove()
+    {
+        getSemanticObject().remove();
+    }
+
     public WebSite getWebSite()
     {
         return new WebSite(getSemanticObject().getModel().getModelObject());

@@ -262,6 +262,11 @@ public class UserBase extends GenericObjectBase implements Groupable,Activeable,
         getSemanticObject().setProperty(vocabulary.usrSecurityAnswer, usrSecurityAnswer);
     }
 
+    public void remove()
+    {
+        getSemanticObject().remove();
+    }
+
     public UserRepository getUserRepository()
     {
         return new UserRepository(getSemanticObject().getModel().getModelObject());

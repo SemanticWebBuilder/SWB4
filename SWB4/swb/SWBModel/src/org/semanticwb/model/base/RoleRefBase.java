@@ -47,6 +47,11 @@ public class RoleRefBase extends GenericObjectBase implements Activeable
          return ret;
     }
 
+    public void remove()
+    {
+        getSemanticObject().remove();
+    }
+
     public WebSite getWebSite()
     {
         return new WebSite(getSemanticObject().getModel().getModelObject());

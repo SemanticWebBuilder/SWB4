@@ -234,6 +234,11 @@ public class CampBase extends GenericObjectBase implements Activeable,Deleteable
          return ret;
     }
 
+    public void remove()
+    {
+        getSemanticObject().remove();
+    }
+
     public WebSite getWebSite()
     {
         return new WebSite(getSemanticObject().getModel().getModelObject());

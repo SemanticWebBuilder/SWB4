@@ -202,6 +202,11 @@ public class RuleBase extends GenericObjectBase implements Groupable,Traceable,X
          return ret;
     }
 
+    public void remove()
+    {
+        getSemanticObject().remove();
+    }
+
     public WebSite getWebSite()
     {
         return new WebSite(getSemanticObject().getModel().getModelObject());

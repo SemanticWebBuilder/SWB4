@@ -409,6 +409,11 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
          return ret;
     }
 
+    public void remove()
+    {
+        getSemanticObject().remove();
+    }
+
     public WebSite getWebSite()
     {
         return new WebSite(getSemanticObject().getModel().getModelObject());
