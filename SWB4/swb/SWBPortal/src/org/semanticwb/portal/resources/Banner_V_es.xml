@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:xforms="http://www.w3.org/2002/xforms"
+    xmlns:ev="http://www.w3.org/2001/xml-events"    
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <head>
+        <title>Banner</title>
+        <xforms:model id="banner-model">
+            <xforms:submission id="save" action="{$wbRedirect}" method="post" replace="instance"/>
+            <xforms:instance id="C-2" xmlns="" src="{$wbInstance}"/>
+                <!--data>
+                    <name/>
+                </data>
+            </xforms:instance-->
+            <xforms:bind id="bind_txtLocal" nodeset="txtLocal" required="true()"/>
+        </xforms:model>
+    </head>
+    <body>
+        <xforms:group id="Banner-group" appearance="minimal">
+            <xforms:select1 bind="bind_txtLocal" appearance="full">
+                <xforms:label>Banner local o externo:</xforms:label>
+                <xforms:hint>Seleccione la presentación del Banner</xforms:hint>
+                <xforms:choices>
+                    <xforms:item>
+                        <xforms:label>Externo</xforms:label>
+                        <xforms:value>1</xforms:value>
+                    </xforms:item>
+                    <xforms:item>
+                        <xforms:label>Local</xforms:label>
+                        <xforms:value>0</xforms:value>
+                    </xforms:item>
+                </xforms:choices>
+            </xforms:select1>
+            
+            <xforms:group id="C-8" appearance="minimal">
+                <!--				<xforms:submit id="C-9" submission="debug">-->
+                <!--					<xforms:label id="C-10">Debug</xforms:label>-->
+                <!--				</xforms:submit>-->
+                <xforms:trigger>
+                    <xforms:label id="C-11">Grabar</xforms:label>
+                    <xforms:action id="C-12">
+                        <xforms:send submission="save"/>
+                    </xforms:action>
+                </xforms:trigger>
+                <xforms:trigger id="reset-btn">
+                    <xforms:label>Reset</xforms:label>
+                    <xforms:action>
+                        <xforms:reset id="reset"/>
+                    </xforms:action>
+                </xforms:trigger>
+            </xforms:group>
+        </xforms:group>
+    </body>
+</html>

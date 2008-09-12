@@ -5,25 +5,20 @@
 
 package org.semanticwb.portal.resources;
 
-import java.io.IOException;
-import java.net.URL;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
 import org.semanticwb.portal.api.*;
 
 /**
  *
  * @author Jei
  */
-public class Banner extends GenericResource
+public class Banner extends GenericXformsResource
 {
 
     private static Logger log = SWBUtils.getLogger(GenericXformsResource.class);
     
+    /*
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
     {
@@ -124,7 +119,7 @@ public class Banner extends GenericResource
         catch (Exception e) { log.error("Error in resource Banner while bringing HTML", e); }
         response.getWriter().print(ret.toString());
     }
-    
+    */
     
     
 }
