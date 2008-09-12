@@ -315,15 +315,7 @@ public class DistributorParams
             Dns dns=(Dns)SWBPlatform.getSemanticMgr().getOntology().getGenericObject(request.getServerName(), cls);
             if (dns == null)
             {
-                Iterator<Dns> it=cls.listGenericInstances();
-                while(it.hasNext())
-                {
-                    Dns d=it.next();
-                    if(d.isDefault())
-                    {
-                        dns=d;
-                    }
-                }
+                dns=SWBContext.getGlobalWebSite().getDefaultDns();
             }
             //System.out.println("dns:"+dns);
             if (dns != null)
