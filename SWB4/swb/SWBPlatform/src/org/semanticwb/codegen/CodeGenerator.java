@@ -330,7 +330,15 @@ public class CodeGenerator
             javaClassContent.append("    public void remove()" + ENTER);
             javaClassContent.append("    {" + ENTER);
             javaClassContent.append("        getSemanticObject().remove();" + ENTER);
-            javaClassContent.append("    }" + ENTER);            
+            javaClassContent.append("    }" + ENTER);     
+            
+            javaClassContent.append(ENTER);
+            javaClassContent.append("    public Iterator<GenericObject> listRelatedObjects()" + ENTER);
+            javaClassContent.append("    {" + ENTER);
+            javaClassContent.append("        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, null, getSemanticObject().getRDFResource());" + ENTER);
+            javaClassContent.append("        return new GenericIterator((SemanticClass)null, stit,true);" + ENTER);
+            javaClassContent.append("    }" + ENTER);
+            
             insertLinkToClass4Model(tpc,javaClassContent);
         }
         javaClassContent.append("}" + ENTER);

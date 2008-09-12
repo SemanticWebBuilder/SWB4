@@ -5,6 +5,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import java.lang.reflect.Constructor;
 import java.util.Iterator;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 
@@ -91,7 +92,7 @@ public class GenericIterator<T extends GenericObject> implements Iterator
             {
                 throw new AssertionError("No type found...,"+obj);        
             }        
-        }else
+        }else if(cls!=null)
         {
             if(obj instanceof Statement)
             {
@@ -123,6 +124,31 @@ public class GenericIterator<T extends GenericObject> implements Iterator
             {
                 throw new AssertionError("No type found...");        
             }              
+        }else
+        {
+            if(obj instanceof Statement)
+            {
+                Resource res=null;
+                if(invert)
+                {
+                    res=((Statement)obj).getSubject();
+                }else
+                {
+                    res=((Statement)obj).getResource();
+                }
+                SemanticClass sclss=SWBPlatform.getSemanticMgr().getOntology().getSemanticObjectClass(res);
+                return (T)sclss.newGenericInstance(res);
+            }
+            else if(obj instanceof Resource)
+            {
+                Resource res=(Resource)obj;
+                SemanticClass sclss=SWBPlatform.getSemanticMgr().getOntology().getSemanticObjectClass(res);
+                return (T)sclss.newGenericInstance((Resource)obj);
+            }
+            else
+            {
+                throw new AssertionError("No type found...,"+obj);        
+            }        
         }
     }
 }
