@@ -9,6 +9,7 @@ import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntResource;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.Statement;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import org.semanticwb.SWBPlatform;
@@ -94,6 +95,16 @@ public class SemanticOntology
         }
         return ret;
     }
+    
+    public SemanticClass getSemanticObjectClass(Resource res)
+    {
+        Statement stm=res.getRequiredProperty(res.getModel().getProperty(SemanticVocabulary.RDF_TYPE));
+        if(stm!=null)
+        {
+            return SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(stm.getResource().getURI());
+        }
+        return null;
+    }    
     
     public SemanticObject getSemanticObject(String uri)
     {
