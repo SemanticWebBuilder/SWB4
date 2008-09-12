@@ -61,6 +61,12 @@ public class PermissionBase extends GenericObjectBase implements Descriptiveable
         getSemanticObject().remove();
     }
 
+    public Iterator<GenericObject> listRelatedObjects()
+    {
+        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, null, getSemanticObject().getRDFResource());
+        return new GenericIterator((SemanticClass)null, stit,true);
+    }
+
     public WebSite getWebSite()
     {
         return new WebSite(getSemanticObject().getModel().getModelObject());
