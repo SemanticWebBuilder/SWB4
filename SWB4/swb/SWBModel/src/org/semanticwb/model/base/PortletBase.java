@@ -47,6 +47,27 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
          return ret;
     }
 
+    public void setCamp(org.semanticwb.model.Camp camp)
+    {
+        getSemanticObject().setObjectProperty(vocabulary.camp, camp.getSemanticObject());
+    }
+
+    public void removeCamp()
+    {
+        getSemanticObject().removeProperty(vocabulary.camp);
+    }
+
+    public Camp getCamp()
+    {
+         Camp ret=null;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.camp);
+         if(obj!=null)
+         {
+             ret=(Camp)vocabulary.Camp.newGenericInstance(obj);
+         }
+         return ret;
+    }
+
     public String getTitle()
     {
         return getSemanticObject().getProperty(vocabulary.title);

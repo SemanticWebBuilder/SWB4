@@ -26,6 +26,27 @@ public class PFlowRefBase extends GenericObjectBase implements Activeable
         getSemanticObject().setBooleanProperty(vocabulary.active, active);
     }
 
+    public void setPflow(org.semanticwb.model.PFlow pflow)
+    {
+        getSemanticObject().setObjectProperty(vocabulary.pflow, pflow.getSemanticObject());
+    }
+
+    public void removePflow()
+    {
+        getSemanticObject().removeProperty(vocabulary.pflow);
+    }
+
+    public PFlow getPflow()
+    {
+         PFlow ret=null;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.pflow);
+         if(obj!=null)
+         {
+             ret=(PFlow)vocabulary.PFlow.newGenericInstance(obj);
+         }
+         return ret;
+    }
+
     public void remove()
     {
         getSemanticObject().remove();
