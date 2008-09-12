@@ -155,6 +155,12 @@ public class ObjectGroupBase extends GenericObjectBase implements Traceable,Desc
         getSemanticObject().remove();
     }
 
+    public Iterator<GenericObject> listRelatedObjects()
+    {
+        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, null, getSemanticObject().getRDFResource());
+        return new GenericIterator((SemanticClass)null, stit,true);
+    }
+
     public UserRepository getUserRepository()
     {
         return new UserRepository(getSemanticObject().getModel().getModelObject());
