@@ -872,7 +872,7 @@ public class SWBUtils {
             if (items != null && path2Save == null) {
                 Iterator<FileItem> iter = items.iterator();
                 return iter;
-            } else if (items != null && path2Save == null) {
+            } else if (items != null && path2Save != null) {
                 Iterator<FileItem> iter = items.iterator();
                 while (iter.hasNext()) {
                     FileItem item = (FileItem) iter.next();
