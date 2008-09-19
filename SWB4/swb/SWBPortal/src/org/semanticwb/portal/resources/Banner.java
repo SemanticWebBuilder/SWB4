@@ -5,20 +5,67 @@
 
 package org.semanticwb.portal.resources;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.URL;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.Portlet;
 import org.semanticwb.portal.api.*;
 
 /**
  *
  * @author Jei
  */
-public class Banner extends GenericXformsResource
+public class Banner extends GenericResource
 {
 
     private static Logger log = SWBUtils.getLogger(GenericXformsResource.class);
     
     /*
+    @Override
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
+        System.out.println("Entra a doView de Banner-1");
+        String action=paramRequest.getAction();
+        if(action!=null && !action.equals("update")) {
+            System.out.println("Entra a doView de Banner-2");
+            super.doView(request, response, paramRequest);
+        }
+        else //Si es update
+        {
+            System.out.println("Entra a doView de Banner-3");
+            //lee datos enviados por post
+            StringBuffer buffer = new StringBuffer();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                buffer.append(line);
+                System.out.println("line:"+line);
+            }
+            Document dom=SWBUtils.XML.xmlToDom(buffer.toString());*/
+            /*
+            String siteId=dom.getElementsByTagName("siteId").item(0).getFirstChild().getNodeValue(); {
+                StringBuffer strb=new StringBuffer();
+                strb.append("<script language=\"JavaScript\">");
+                strb.append("  alert(\'El id del sitio ya existe..');");
+                strb.append("  document.forma.tmid.focus();");
+                strb.append("</script>");
+                response.getOutputStream().write(strb.toString().getBytes());
+            }
+             */
+    /*
+            request.setAttribute("instance","2");
+            String xformsFiles=getClass().getName()+"2";
+            //setData(request, response, paramRequest, xformsFiles, "add");
+       
+    }
+    */
+    
+    
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
     {
@@ -119,7 +166,7 @@ public class Banner extends GenericXformsResource
         catch (Exception e) { log.error("Error in resource Banner while bringing HTML", e); }
         response.getWriter().print(ret.toString());
     }
-    */
+   
     
     
 }
