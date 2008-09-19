@@ -13,6 +13,7 @@ public class SWBVocabulary
     //Classes
     public final SemanticClass User;
     public final SemanticClass Calendar;
+    public final SemanticClass Text;
     public final SemanticClass Community;
     public final SemanticClass PortletSubType;
     public final SemanticClass TemplateRef;
@@ -23,6 +24,7 @@ public class SWBVocabulary
     public final SemanticClass Traceable;
     public final SemanticClass RoleRefable;
     public final SemanticClass Ruleable;
+    public final SemanticClass TextArea;
     public final SemanticClass PFlow;
     public final SemanticClass IPFilter;
     public final SemanticClass RuleRefable;
@@ -34,9 +36,9 @@ public class SWBVocabulary
     public final SemanticClass PFlowRef;
     public final SemanticClass RuleRef;
     public final SemanticClass Referensable;
+    public final SemanticClass Device;
     public final SemanticClass Hiddenable;
     public final SemanticClass Groupable;
-    public final SemanticClass Device;
     public final SemanticClass Localeable;
     public final SemanticClass Camp;
     public final SemanticClass Dns;
@@ -44,8 +46,8 @@ public class SWBVocabulary
     public final SemanticClass UserRepository;
     public final SemanticClass Portletable;
     public final SemanticClass Template;
-    public final SemanticClass Priorityable;
     public final SemanticClass Role;
+    public final SemanticClass Priorityable;
     public final SemanticClass Activeable;
     public final SemanticClass VersionInfo;
     public final SemanticClass Portlet;
@@ -95,6 +97,7 @@ public class SWBVocabulary
     public final SemanticProperty deleted;
     public final SemanticProperty hasRoleRef;
     public final SemanticProperty hasRule;
+    public final SemanticProperty frmTextAreaRows;
     public final SemanticProperty actualVersion;
     public final SemanticProperty xml;
     public final SemanticProperty lastVersion;
@@ -117,7 +120,6 @@ public class SWBVocabulary
     public final SemanticProperty versionComment;
     public final SemanticProperty versionFile;
     public final SemanticProperty nextVersion;
-    public final SemanticProperty versionCreated;
     public final SemanticProperty versionNumber;
     public final SemanticProperty camp;
     public final SemanticProperty hits;
@@ -152,6 +154,7 @@ public class SWBVocabulary
         // Classes
         User=vocabulary.getSemanticClass(URI+"User");
         Calendar=vocabulary.getSemanticClass(URI+"Calendar");
+        Text=vocabulary.getSemanticClass(URI+"Text");
         Community=vocabulary.getSemanticClass(URI+"Community");
         PortletSubType=vocabulary.getSemanticClass(URI+"PortletSubType");
         TemplateRef=vocabulary.getSemanticClass(URI+"TemplateRef");
@@ -162,6 +165,7 @@ public class SWBVocabulary
         Traceable=vocabulary.getSemanticClass(URI+"Traceable");
         RoleRefable=vocabulary.getSemanticClass(URI+"RoleRefable");
         Ruleable=vocabulary.getSemanticClass(URI+"Ruleable");
+        TextArea=vocabulary.getSemanticClass(URI+"TextArea");
         PFlow=vocabulary.getSemanticClass(URI+"PFlow");
         IPFilter=vocabulary.getSemanticClass(URI+"IPFilter");
         RuleRefable=vocabulary.getSemanticClass(URI+"RuleRefable");
@@ -173,9 +177,9 @@ public class SWBVocabulary
         PFlowRef=vocabulary.getSemanticClass(URI+"PFlowRef");
         RuleRef=vocabulary.getSemanticClass(URI+"RuleRef");
         Referensable=vocabulary.getSemanticClass(URI+"Referensable");
+        Device=vocabulary.getSemanticClass(URI+"Device");
         Hiddenable=vocabulary.getSemanticClass(URI+"Hiddenable");
         Groupable=vocabulary.getSemanticClass(URI+"Groupable");
-        Device=vocabulary.getSemanticClass(URI+"Device");
         Localeable=vocabulary.getSemanticClass(URI+"Localeable");
         Camp=vocabulary.getSemanticClass(URI+"Camp");
         Dns=vocabulary.getSemanticClass(URI+"Dns");
@@ -183,8 +187,8 @@ public class SWBVocabulary
         UserRepository=vocabulary.getSemanticClass(URI+"UserRepository");
         Portletable=vocabulary.getSemanticClass(URI+"Portletable");
         Template=vocabulary.getSemanticClass(URI+"Template");
-        Priorityable=vocabulary.getSemanticClass(URI+"Priorityable");
         Role=vocabulary.getSemanticClass(URI+"Role");
+        Priorityable=vocabulary.getSemanticClass(URI+"Priorityable");
         Activeable=vocabulary.getSemanticClass(URI+"Activeable");
         VersionInfo=vocabulary.getSemanticClass(URI+"VersionInfo");
         Portlet=vocabulary.getSemanticClass(URI+"Portlet");
@@ -234,6 +238,7 @@ public class SWBVocabulary
         deleted=vocabulary.getSemanticProperty(URI+"deleted");
         hasRoleRef=vocabulary.getSemanticProperty(URI+"hasRoleRef");
         hasRule=vocabulary.getSemanticProperty(URI+"hasRule");
+        frmTextAreaRows=vocabulary.getSemanticProperty(URI+"frmTextAreaRows");
         actualVersion=vocabulary.getSemanticProperty(URI+"actualVersion");
         xml=vocabulary.getSemanticProperty(URI+"xml");
         lastVersion=vocabulary.getSemanticProperty(URI+"lastVersion");
@@ -256,7 +261,6 @@ public class SWBVocabulary
         versionComment=vocabulary.getSemanticProperty(URI+"versionComment");
         versionFile=vocabulary.getSemanticProperty(URI+"versionFile");
         nextVersion=vocabulary.getSemanticProperty(URI+"nextVersion");
-        versionCreated=vocabulary.getSemanticProperty(URI+"versionCreated");
         versionNumber=vocabulary.getSemanticProperty(URI+"versionNumber");
         camp=vocabulary.getSemanticProperty(URI+"camp");
         hits=vocabulary.getSemanticProperty(URI+"hits");

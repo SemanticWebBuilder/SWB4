@@ -67,8 +67,8 @@ public class PermissionBase extends GenericObjectBase implements Descriptiveable
         return new GenericIterator((SemanticClass)null, stit,true);
     }
 
-    public WebSite getWebSite()
+    public UserRepository getUserRepository()
     {
-        return new WebSite(getSemanticObject().getModel().getModelObject());
+        return new UserRepository(getSemanticObject().getModel().getModelObject());
     }
 }

@@ -455,38 +455,6 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
         return (getDevice(id)!=null);
     }
 
-    public Permission getPermission(String id)
-    {
-        return (Permission)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.Permission),vocabulary.Permission);
-    }
-
-    public Iterator<Permission> listPermissions()
-    {
-        Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
-        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.Permission.getOntClass());
-        return new GenericIterator<Permission>(Permission.class, stit, true);
-    }
-
-    public Permission createPermission(String id)
-    {
-        return (Permission)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, vocabulary.Permission), vocabulary.Permission);
-    }
-
-    public Permission createPermission()
-    {
-        long id=SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+vocabulary.Permission.getName());
-        return createPermission(""+id);
-    } 
-
-    public void removePermission(String id)
-    {
-        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.Permission));
-    }
-    public boolean hasPermission(String id)
-    {
-        return (getPermission(id)!=null);
-    }
-
     public Template getTemplate(String id)
     {
         return (Template)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.Template),vocabulary.Template);
