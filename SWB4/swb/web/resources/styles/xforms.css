@@ -1,0 +1,173 @@
+/* ***************************************************************************** */
+/* ************** XFORMS CSS STYLESHEET  ************* */
+/* this stylesheet uses table layout which may not be supported on all browsers. */
+/* ***************************************************************************** */
+
+/*********** GENERAL STUFF ***********/
+
+.inactive{
+    display:none;
+}
+
+#loading{
+    position:absolute;
+    z-index:1000;
+}
+.messagePane{
+    display:block;
+    position:fixed;
+    z-index:1000;
+}
+
+
+/* #################### GROUP STYLES #################### */
+/* xf:groups will be rendered as fieldsets and therefore            
+are styleable via this matcher or more specifically by their
+appearance class 'minimal-group|compact-group|full-group'. */
+
+
+/*********** group appearances ***********/
+.group div{
+    display:block;
+    clear:both;
+}
+.group label{
+    float:left;
+}
+.group .value{
+    display:inline;}
+
+.minimal-group div{
+    display:inline; }
+
+.compact-group div{
+    display:block;
+    float:left; }
+
+.compact-group div label{
+    display:block;
+}
+.compact-group div .value{
+    display:inline; }
+
+.compact-group .disabled{
+    display:none;}
+
+.full-group div{
+    display:block;
+    clear:both;}
+
+.full-group label{
+    float:left;}
+
+.full-group .value{
+    display:inline;}
+
+.full-group .disabled{
+    display:none;}
+
+.minimal-group label{
+    display:inline;}
+
+.minimal-group .disabled{
+    display:none;}
+
+/* #################### GENERAL XFORMS MIP AND COMMON-CHILD STYLES #################### */
+.alert {
+    position:absolute;}
+
+.invalid > .alert{
+    position:absolute;}
+
+.valid .alert {
+    display: none;}
+
+.invalid .alert {
+    display: inline;}
+
+.disabled iframe {
+    display:none;}
+
+.disabled label{
+    display:none;}
+
+.disabled .value{
+    display:none;}
+
+.disabled {
+    display:none;}
+
+.disabled .alert{
+    display:none;}
+
+.disabled .progressbar{
+    display:none;}
+
+.disabled .help-icon {
+   display:none;}
+
+.disabled span {
+    display:none;}
+/*********** styles character used for signaling 'required' (normally '*') ***********/
+
+.repeat .label .required-symbol{
+    display:inline;}
+
+.optional .required-symbol{
+    display:none;}
+
+.help-text{
+    position:absolute;
+    display:none;}
+
+/* #################### Repeat styles #################### */
+.repeat-prototype {
+    display: none;}
+
+.repeat-selector {
+    /*float: left;*/}
+
+.selector-prototype {
+    display: none;}
+
+.minimal-repeat{
+    display:block;}
+
+.minimal-repeat .repeat-item{
+    float:left;
+    clear:none;}
+
+.minimal-repeat .repeat-index{
+    float:left;
+    clear:none;}
+
+.compact-repeat td .disabled {
+    display:none;}
+/* #################### SWITCH STYLES #################### */
+
+.switch .selected-case {
+    display: inherit;}
+
+.switch .deselected-case {
+    display: none;}
+
+.full-switch .filler-tab {
+    overflow: hidden;}
+
+/* #################### CONTROL STYLES #################### */
+
+.refresh-button{
+    display:block;
+    float:right;}
+
+/*********** Range specific styles ***********/
+.rangelabel td{
+    background:transparent;}
+
+.rangesteps td img{
+    border:none;
+    display:block;}
+
+/*********** Upload specific styles ***********/
+.progressbar{
+    display:none;}
