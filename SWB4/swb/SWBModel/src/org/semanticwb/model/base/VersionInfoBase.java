@@ -7,13 +7,44 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class VersionInfoBase extends GenericObjectBase implements Valueable
+public class VersionInfoBase extends GenericObjectBase implements Valueable,Traceable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
     public VersionInfoBase(SemanticObject base)
     {
         super(base);
+    }
+
+    public Date getCreated()
+    {
+        return getSemanticObject().getDateProperty(vocabulary.created);
+    }
+
+    public void setCreated(Date created)
+    {
+        getSemanticObject().setDateProperty(vocabulary.created, created);
+    }
+
+    public void setModifiedBy(org.semanticwb.model.User user)
+    {
+        getSemanticObject().setObjectProperty(vocabulary.modifiedBy, user.getSemanticObject());
+    }
+
+    public void removeModifiedBy()
+    {
+        getSemanticObject().removeProperty(vocabulary.modifiedBy);
+    }
+
+    public User getModifiedBy()
+    {
+         User ret=null;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.modifiedBy);
+         if(obj!=null)
+         {
+             ret=(User)vocabulary.User.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public String getValue()
@@ -67,6 +98,16 @@ public class VersionInfoBase extends GenericObjectBase implements Valueable
         getSemanticObject().setProperty(vocabulary.versionFile, versionFile);
     }
 
+    public Date getUpdated()
+    {
+        return getSemanticObject().getDateProperty(vocabulary.updated);
+    }
+
+    public void setUpdated(Date updated)
+    {
+        getSemanticObject().setDateProperty(vocabulary.updated, updated);
+    }
+
     public void setNextVersion(org.semanticwb.model.VersionInfo versioninfo)
     {
         getSemanticObject().setObjectProperty(vocabulary.nextVersion, versioninfo.getSemanticObject());
@@ -88,14 +129,25 @@ public class VersionInfoBase extends GenericObjectBase implements Valueable
          return ret;
     }
 
-    public Date getVersionCreated()
+    public void setCreator(org.semanticwb.model.User user)
     {
-        return getSemanticObject().getDateProperty(vocabulary.versionCreated);
+        getSemanticObject().setObjectProperty(vocabulary.creator, user.getSemanticObject());
     }
 
-    public void setVersionCreated(Date versionCreated)
+    public void removeCreator()
     {
-        getSemanticObject().setDateProperty(vocabulary.versionCreated, versionCreated);
+        getSemanticObject().removeProperty(vocabulary.creator);
+    }
+
+    public User getCreator()
+    {
+         User ret=null;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.creator);
+         if(obj!=null)
+         {
+             ret=(User)vocabulary.User.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public int getVersionNumber()
