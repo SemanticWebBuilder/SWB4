@@ -156,18 +156,16 @@ public class GenericXformsResource extends GenericResource {
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        System.out.println("Entra a doView de GenericXforms-1");
         doMethod(request, response, paramRequest);
     }
 
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        System.out.println("Entra a doAdmin de GenericXforms-2");
         doMethod(request, response, paramRequest);
     }
 
-    private void doMethod(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
-        System.out.println("entra a doMethod");
+    private void doMethod(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException 
+    {
         String xml = null;
         request.setCharacterEncoding("UTF-8");
         org.chiba.web.servlet.WebUtil.nonCachingResponse(response);
