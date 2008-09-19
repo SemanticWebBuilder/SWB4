@@ -24,19 +24,16 @@ import org.w3c.dom.Document;
 public class HelloXforms extends GenericXformsResource
 {
     private static Logger log = SWBUtils.getLogger(GenericXformsResource.class);
-    
+ /*   
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        System.out.println("Entra a doView de HelloXforms-1");
         String action=paramRequest.getAction();
         if(action!=null && !action.equals("update")) {
-            System.out.println("Entra a doView de HelloXforms-2");
             super.doView(request, response, paramRequest);
         }
         else //Si es update
         {
-            System.out.println("Entra a doView de HelloXforms-3");
             //lee datos enviados por post
             StringBuffer buffer = new StringBuffer();
             BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
@@ -45,7 +42,7 @@ public class HelloXforms extends GenericXformsResource
                 buffer.append(line);
                 System.out.println("line:"+line);
             }
-            Document dom=SWBUtils.XML.xmlToDom(buffer.toString());
+            Document dom=SWBUtils.XML.xmlToDom(buffer.toString());*/
             /*
             String siteId=dom.getElementsByTagName("siteId").item(0).getFirstChild().getNodeValue(); {
                 StringBuffer strb=new StringBuffer();
@@ -55,13 +52,13 @@ public class HelloXforms extends GenericXformsResource
                 strb.append("</script>");
                 response.getOutputStream().write(strb.toString().getBytes());
             }
-             */
+             *//*
             request.setAttribute("instance","2");
             String xformsFiles=getClass().getName()+"2";
             setData(request, response, paramRequest, xformsFiles, "add");
         }
-    }
-    
+    }*/
+    /*
     public void setData(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest, String xformsFiles, String action) {
         //Carga archivo xml de formulario y lo agrega como atributo del request
         request.setAttribute("xformsDoc", SWBUtils.XML.xmlToDom(loadXform(getClass().getName(), xformsFiles, paramsRequest.getUser().getLanguage())));
@@ -75,7 +72,7 @@ public class HelloXforms extends GenericXformsResource
             log.error(e);
         }
     }
-    
+    */
     /**
      * Carga instancia, ya sea la de inicio o una ya grabada en BD del recurso en cuestión.
      */
