@@ -173,12 +173,13 @@ public class SWBVirtualHostFilter implements Filter
         intServlets.put("login", login);
         login.init(filterConfig.getServletContext());
 
-        InternalServlet admin=new Admin();
-        intServlets.put("wbadmin", admin);
-        intServlets.put("swbadmin", admin);
-        admin.init(filterConfig.getServletContext());
-        log.event("SemanticWebBuilder started...");        
-        log.event("************************************");
+        //TODO:Admin servlet
+//        InternalServlet admin=new Admin();
+//        intServlets.put("wbadmin", admin);
+//        intServlets.put("swbadmin", admin);
+//        admin.init(filterConfig.getServletContext());
+//        log.event("SemanticWebBuilder started...");        
+//        log.event("************************************");
     }
     
     /**
