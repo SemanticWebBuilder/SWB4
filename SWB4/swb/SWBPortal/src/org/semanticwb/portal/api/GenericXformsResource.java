@@ -325,9 +325,10 @@ public class GenericXformsResource extends GenericResource {
      */
     private Document toDocument(Node node) throws SWBResourceException, IOException {
         // ensure xerces dom
+        /*
         if (node instanceof org.apache.xerces.dom.DocumentImpl) {
             return (Document) node;
-        }
+        }*/
         Document document = getDocumentBuilder().newDocument();
         if (node instanceof Document) {
             node = ((Document) node).getDocumentElement();
@@ -341,7 +342,8 @@ public class GenericXformsResource extends GenericResource {
      */
     private DocumentBuilder getDocumentBuilder() throws SWBResourceException, IOException {
         // ensure xerces dom
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        //DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilderFactory factory = SWBUtils.XML.getDocumentBuilderFactory();
         try {
             factory.setNamespaceAware(true);
             factory.setValidating(false);
