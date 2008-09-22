@@ -123,8 +123,9 @@ public class SWBAIPFilter extends GenericResource {
                     if(rec.getWebSite().getId().equals(idtm))
                     {
                         sort=rec.getId();
+                        
                         //TODO: falta saber si el IPFilter tiene descripcion, IP y action
-//                        if (strOrder.equals("ip")) sort=rec.getValue(); //TODO: getIp() en donde esta este valor
+                        if (strOrder.equals("ip")) sort=rec.getValue(); 
 //                        else if (strOrder.equals("description"))  sort = rec.getDescription();
 //                        else if (strOrder.equals("action")) sort=String.valueOf(rec.getAction());
 //                        else if (strOrder.equals("lastupdate")) sort=String.valueOf(rec.getLastupdate());
@@ -136,8 +137,8 @@ public class SWBAIPFilter extends GenericResource {
                 else
                 {
                     sort=String.valueOf(rec.getId());
-                    //TODO: falta saber si IPFilter va tener IP, Description y action
-//                    if (strOrder.equals("ip")) sort=rec.getIp();
+                    //TODO: falta saber si IPFilter va tener Description y action
+                    if (strOrder.equals("ip")) sort=rec.getValue();
 //                    else if (strOrder.equals("description"))  sort=rec.getDescription();
 //                    else if (strOrder.equals("action")) sort=String.valueOf(rec.getAction());
 //                    else if (strOrder.equals("lastupdate")) sort=String.valueOf(rec.getLastupdate());
@@ -201,16 +202,13 @@ public class SWBAIPFilter extends GenericResource {
         if(row%2==0) bgcolor="#EFEDEC";
         sbRet.append("<tr class=\"valores\" bgcolor=\""+bgcolor+"\"> \n");
         sbRet.append("<td> \n");
-        //TODO: getIp()
-        //sbRet.append("<input type=\"radio\" name=\"id\" value=\""+rec.getId()+"\" title=\""+rec.getIp()+"\"> \n");
-        sbRet.append("<input type=\"radio\" name=\"id\" value=\""+rec.getId()+"\" title=\"IP-Title????\"> \n");
+        sbRet.append("<input type=\"radio\" name=\"id\" value=\""+rec.getValue()+"\" title=\""+rec.getValue()+"\"> \n");
         sbRet.append("</td> \n");
         sbRet.append("<td> \n");
         sbRet.append(rec.getId());
         sbRet.append("</td> \n");        
         sbRet.append("<td> \n");
-        //TODO: getIp()
-        //sbRet.append(rec.getIp());
+        sbRet.append(rec.getValue());
         sbRet.append("</td> \n");
         sbRet.append("<td> \n");
         //TODO: getDescription()
@@ -482,12 +480,8 @@ public class SWBAIPFilter extends GenericResource {
         SWBResourceURL urlResAct=paramsRequest.getActionUrl();
         String[] ip=null;
         //if(rec!=null && (rec.getIp()!=null && rec.getIp().matches("(((0)|([1-9]([0-9]){0,1})|(1([0-9]){2})|(2[0-4][0-9])|(25[0-5]))\\.){3}((0)|([1-9]([0-9]){0,1})|(1([0-9]){2})|(2[0-4][0-9])|(25[0-5]))$"))) 
-        //TODO: getIP()
-        //if(rec!=null && rec.getIp()!=null) 
         if(rec!=null && rec.getValue()!=null) 
         {
-            //TODO: getIP()
-            //ip=rec.getIp().split("\\.");
             ip=rec.getValue().split("\\.");
             //if(ip.length < 1) ip=new String[]{rec.getIp()};
         }
@@ -502,8 +496,6 @@ public class SWBAIPFilter extends GenericResource {
         sbRet.append("<input name=\"ip3\" type=\"text\" size=3 maxlength=3 dir=rtl value=\""+(ip!=null && ip.length > 2 ? ip[2] : "")+ "\">.\n");
         sbRet.append("<input name=\"ip4\" type=\"text\" size=3 maxlength=3 dir=rtl value=\""+(ip!=null && ip.length > 3 ? ip[3] : "")+ "\">\n");
         sbRet.append("<input name=\"ip\" type=\"hidden\"");
-        //TODO: getIP() de donde se va a obtener este valor????
-        //if(rec!=null && rec.getIp()!=null) sbRet.append(" value=\""+rec.getIp()+"\"");
         if(rec!=null && rec.getValue()!=null) sbRet.append(" value=\""+rec.getValue()+"\"");
         sbRet.append("></td> \n");
         sbRet.append("</tr> \n");
@@ -613,7 +605,7 @@ public class SWBAIPFilter extends GenericResource {
                 IPFilter rec=ws.createIPFilter();
                 //TODO: IPFilter Description, Action, IP, user, created, updated
 //                    rec.setDescription(description);
-//                    rec.setIP(ip);
+                    rec.setValue(ip);
 //                    rec.setAction(action);
 //                    rec.setCreator(user);
                 //IPFilter rec=srv.createIPFilter(idtm,ip,description,action,lastupdate,response.getUser().getId());
@@ -628,7 +620,7 @@ public class SWBAIPFilter extends GenericResource {
                 //if(srv.updateIPFilter(idtm,id,ip,description,action,lastupdate,response.getUser().getId())) 
                     //TODO: IPFilter Description, Action, IP, user, created, updated
 //                    rec.setDescription(description);
-//                    rec.setIP(ip);
+                    rec.setValue(ip);
 //                    rec.setAction(action);
 //                    rec.setModifiedBy(user);
                     msg=response.getLocaleString("msgOkUpdate")+" "+id+".";

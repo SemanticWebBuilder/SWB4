@@ -185,20 +185,18 @@ public class SWBADns extends GenericResource{
                 String strTopic=request.getParameter("reptp");
                 if(strSel==null){
                     if((act.equals("") || act.equals("edit"))){
-                        //tm=TopicMgr.getInstance().getTopicMap(rec.getTopicMap());
                         tm = SWBContext.getWebSite(strMap);
                         if(tm != null){
-                            tp=tm.getWebPage(strTopic);//Topic(rec.getTopic());
+                            tp=tm.getWebPage(strTopic);
                             b_exist = true;
                         }
                     }
                 }
                 else{
                     if(act.equals("") || act.equals("edit")){
-                        //tm=TopicMgr.getInstance().getTopicMap(strMap);
                         tm = SWBContext.getWebSite(strMap);
                         if(tm != null){
-                            tp=tm.getWebPage(strTopic);//tm.getTopic(strTopic);
+                            tp=tm.getWebPage(strTopic);
                             b_exist = true;
                         }
                     }
@@ -369,19 +367,13 @@ public class SWBADns extends GenericResource{
         String iIdDns="0";
         boolean iDefecto=false;
         try{
-            //DnsSrv srvDNS=new DnsSrv();
             if(request.getParameter("id")!=null && !request.getParameter("id").equals("")&& !request.getParameter("id").equals("null"))
                 iIdDns=request.getParameter("id");
-
             if (request.getParameter("defecto_dns")!=null && request.getParameter("defecto_dns").equals("on"))
                 iDefecto=true;
-
             if(act != null){
                 if(act.equals("add")){
-                    
-                    //Dns rec_def = DBCatalogs.getInstance().getDnsDefault();
                     Dns rec_def = SWBContext.getWebSite(strTmDNS).getDefaultDns();
-                    
                     ws.getDns(act).isDefault();
                     if(iDefecto){
                         //It is a default DNS
@@ -391,8 +383,6 @@ public class SWBADns extends GenericResource{
                                 rec.setDefault(iDefecto);
                                 rec.setWebPage(ws.getWebPage(strTpSel));
                                 rec.setCreator(response.getUser());
-                                
-                                //rec=srvDNS.createDns(strTmDNS,strDns,strTmSel,strTpSel,iDefecto,response.getUser().getId());
                                 response.setRenderParameter("confirm","added");
                                 response.setRenderParameter("id",rec.getId());
                             }
@@ -416,8 +406,6 @@ public class SWBADns extends GenericResource{
                             rec.setDefault(iDefecto);
                             rec.setWebPage(ws.getWebPage(strTpSel));
                             rec.setCreator(response.getUser());
-                            
-                            //rec=srvDNS.createDns(strTmDNS,strDns,strTmSel,strTpSel,iDefecto,response.getUser().getId());
                             response.setRenderParameter("confirm","added");
                             response.setRenderParameter("id",rec.getId());
                         }
@@ -427,7 +415,6 @@ public class SWBADns extends GenericResource{
                     }
                 }
                 if(act.equals("edit")) {
-                    //if (srvDNS.updateDns(strTmDNS,iIdDns,strTmSel,strDns,strTpSel,iDefecto,response.getUser().getId())) 
                     try
                     {
                         rec = ws.getDns(iIdDns);
@@ -444,7 +431,6 @@ public class SWBADns extends GenericResource{
                     }
                 }
                 if(act.equals("remove")) {
-                    //if (srvDNS.removeDns(strTmDNS,iIdDns,response.getUser().getId())) 
                     try
                     {
                         SWBContext.getWebSite(strTmDNS).removeDns(iIdDns);

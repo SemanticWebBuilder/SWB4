@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Language;
 import org.semanticwb.model.Portlet;
 import org.semanticwb.model.SWBContext;
@@ -33,8 +34,8 @@ import org.semanticwb.portal.api.SWBResourceURL;
  */
 public class SWBALanguages extends GenericResource{
     
-    public String strRscType="SWBALanguages";
     private Logger log=SWBUtils.getLogger(SWBALanguages.class);
+    public String strRscType=SWBALanguages.class.getName();
     Portlet base=null;
 
     
@@ -213,12 +214,14 @@ public class SWBALanguages extends GenericResource{
         
         //TODO: Falta implementar asociaciones de lenguajes
         //HashMap hLangAss=langSrv.checkLanguageAssociations(strTm,recLang.getId(),strUser);
-        HashMap hLangAss=new HashMap();
-        
-        if (!hLangAss.isEmpty()) {
-            Iterator itLangAss=hLangAss.keySet().iterator();
+        Iterator itLangAss=recLang.listRelatedObjects();
+        //HashMap hLangAss=new HashMap();
+        //
+        if (itLangAss.hasNext()) {
+            //Iterator itLangAss=hLangAss.keySet().iterator();
             while(itLangAss.hasNext()){
-                strAss=(String)itLangAss.next();
+                GenericObject obj = (GenericObject)itLangAss.next();
+                strAss=obj.getId();
             }
         }
         return strAss;
@@ -235,8 +238,9 @@ public class SWBALanguages extends GenericResource{
         //TODO: Falta implementar asociaciones de lenguajes
         //HashMap hLangAss=langSrv.checkLanguageAssociations(strTm,recLang.getId(),strUser);
         HashMap hLangAss=new HashMap();
-        Iterator itLangAss=hLangAss.keySet().iterator();
-        
+        //Iterator itLangAss=hLangAss.keySet().iterator();
+        Iterator itLangAss=recLang.listRelatedObjects();
+        //TODO: falta implementar
         out.println("<form name=\"Idioma\" method=\"post\" action=\"\" target=4> ");
         out.println("<div class=box>");
         out.println("<table width=\"100%\"  border=\"0\" cellpadding=\"10\" cellspacing=\"0\" bgcolor=\"#FFFFFF\">");

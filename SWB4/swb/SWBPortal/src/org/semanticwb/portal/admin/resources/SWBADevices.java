@@ -21,8 +21,6 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
-import org.semanticwb.portal.services.DeviceSrv;
-
 
 /**
  *
@@ -56,7 +54,6 @@ public class SWBADevices extends GenericResource {
      */    
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-        DeviceSrv srvDevice=new DeviceSrv();
         String act=request.getParameter("acc2");
         String iDev_Id="0";
         Device dev = null;
@@ -71,9 +68,7 @@ public class SWBADevices extends GenericResource {
             dev.setTitle(strName);
             dev.setDescription(strDesc);
             dev.setModifiedBy(user);
-            //TODO: si el strinf match se va almacenar de esta forma ????
             dev.setValue(strMatch);
-            //srvDevice.updateDevice(iDev_Id,strName,strDesc,strMatch,response.getUser().getId());
             response.setRenderParameter("confirm","updated");
         }
         if (act !=null && act.equals("add")) {
@@ -81,14 +76,12 @@ public class SWBADevices extends GenericResource {
             dev.setTitle(strName);
             dev.setDescription(strDesc);
             dev.setCreator(user);
-            //TODO: si el strinf match se va almacenar de esta forma ????
             dev.setValue(strMatch);
             iDev_Id=dev.getId();
             response.setRenderParameter("confirm","added");
         }
         if (act !=null && act.equals("remove")) {
             SWBContext.getGlobalWebSite().removeDevice(iDev_Id);
-            //srvDevice.removeDevice(iDev_Id,response.getUser().getId());
             response.setRenderParameter("confirm","removed");
             response.setRenderParameter("status","true");            
         }
@@ -98,7 +91,7 @@ public class SWBADevices extends GenericResource {
     }
 
     /** Método en donde se ejecuta el Java Script
-     * @param paramsRequest Objeto WBParamRequest
+     * @param paramsRequest Objeto SWBParamRequest
      * @param response Objeto HttpServletResponse
      * @throws IOException Excepción de Entrada/Salida
      */    
@@ -160,7 +153,7 @@ public class SWBADevices extends GenericResource {
     /** Método que genera la forma de vista al usuario
      * @param request Objeto HttpServletRequest
      * @param response Objeto HttpServletResponse
-     * @param paramsRequest Objeto WBParamRequest
+     * @param paramsRequest Objeto SWBParamRequest
      * @throws IOException Excepción de Entrada/Salida
      */    
 
@@ -219,9 +212,7 @@ public class SWBADevices extends GenericResource {
                     recDev = SWBContext.getGlobalWebSite().getDevice(devId);
                     strDevName=recDev.getTitle();
                     strDevDesc=recDev.getDescription();
-                    //TODO: getStrMatch(), preguntar en donde se va a guardar el StringMatc del dispositivo
-                    //strDevChain=recDev.getStrMatch();
-                    strDevChain=recDev.getValue();
+                    strDevChain=recDev.getValue(); //String Match
                     out.println("<input type=hidden name=txtDevice value=\""+devId+"\"> \n");
                 }
                 out.println("<tr bgcolor=\"\"> \n");

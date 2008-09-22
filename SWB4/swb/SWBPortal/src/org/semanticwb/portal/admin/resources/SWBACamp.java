@@ -29,7 +29,7 @@ import org.semanticwb.portal.api.SWBResourceException;
  */
 public class SWBACamp extends GenericResource {
 
-    public String strRscType="SWBACamp";
+    public String strRscType=SWBACamp.class.getName();
     private Logger log=SWBUtils.getLogger(SWBACamp.class);
     Portlet base=null;
  /** Creates a new instance of SWBACamp */

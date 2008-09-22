@@ -8,8 +8,6 @@ package org.semanticwb.portal.admin.resources;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
-import java.util.Iterator;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
@@ -26,7 +24,6 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBActionResponseImp;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
-//import org.semanticwb.portal.resources.SWBGenericPortlet;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.portal.services.WebPageSrv;
 
@@ -54,7 +51,7 @@ public class SWBAWebPage extends GenericResource {
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {    PrintWriter out=response.getWriter();
-        WebPageSrv tpsrv=new WebPageSrv();
+        //WebPageSrv tpsrv=new WebPageSrv();
         WebPage tp=paramRequest.getTopic();
         if(request.getParameter("tm")!=null && request.getParameter("tp")!=null) {
             WebSite tm=SWBContext.getWebSite(request.getParameter("tm"));
@@ -186,6 +183,7 @@ public class SWBAWebPage extends GenericResource {
             out.println("      </TR>");
             out.println("      <TR>");
             out.println("        <TD width=\"150\" align=\"right\" valign=\"top\" class=\"datos\"> "+paramRequest.getLocaleString("msgHostory")+" </TD>");
+            //TODO: dateFormat()
             //out.println("        <TD class=\"valores\">"+paramRequest.getLocaleString("msgCreationDate")+":&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+WBUtils.dateFormat(tp.getDbdata().getCreated()) +"<BR>");
             out.println("        <TD class=\"valores\">"+paramRequest.getLocaleString("msgCreationDate")+":&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+tp.getCreated() +"<BR>");
             //out.println("        "+paramRequest.getLocaleString("msgModificationDate")+": "+ SWBUtils.dateFormat(tp.getDbdata().getLastupdate())+"</TD>");
@@ -194,6 +192,7 @@ public class SWBAWebPage extends GenericResource {
             out.println("      <TR>");
             out.println("        <TD width=\"150\" align=\"right\" valign=\"top\" class=\"datos\"> "+paramRequest.getLocaleString("msgZIndex")+" </TD>");
             out.println("        <TD class=\"valores\">");
+            //TODO: getSortName con parámetros
             //String sort=tp.getSortName(null,false);
             String sort=tp.getSortName();
             if(sort==null)sort="";
@@ -353,6 +352,7 @@ public class SWBAWebPage extends GenericResource {
             out.println("      <TR>");
             out.println("        <TD width=\"150\" align=\"right\" valign=\"top\" class=\"datos\"> "+paramRequest.getLocaleString("msgZIndex")+" </TD>");
             out.println("        <TD class=\"valores\">");
+            //TODO: getSortName(null,false);
             //String sort=tp.getSortName(null,false);
             String sort=tp.getSortName();
             if(sort==null)sort="";
@@ -383,6 +383,7 @@ public class SWBAWebPage extends GenericResource {
             try {
                 //tpsrv.removeTopic(tp, 1, user.getId());
                 tm.removeWebPage(tp.getId());
+                tm.setModifiedBy(user);
                 //tpsrv.removeWebPage(tm, tp.getId(), user);
                 out.println("<script>wbTree_remove();</script>");
                 //out.println("<font face=\"Verdana\" size=\"1\">");
@@ -397,6 +398,7 @@ public class SWBAWebPage extends GenericResource {
         }else if(acc.equals("active")) {
             try {
                 tp.setActive(true);
+                tp.setModifiedBy(user);
                 //tpsrv.setActive(tp,1,user.getId());
                 out.println("<script>wbTree_reload();</script>");
                 //out.println("<font face=\"Verdana\" size=\"1\">");
@@ -468,6 +470,7 @@ public class SWBAWebPage extends GenericResource {
             SWBResourceURL urlResAct=paramRequest.getActionUrl();
             urlResAct.setParameter("act","createTp");
             String tpidgen="";
+            //TODO: getIdGenerator()
             //if(request.getParameter("tpname")!=null) tpidgen=TopicMgr.getInstance().getIdGenerator().getID(request.getParameter("tpname"),tm.getId(),false);
             if(request.getParameter("tpname")!=null) tpidgen=tm.getId()+"_"+request.getParameter("tpname");
             out.println("<FORM name=\"createTp\" action=\""+urlResAct.toString()+"\" class=\"box\">");
@@ -779,16 +782,12 @@ public class SWBAWebPage extends GenericResource {
             }
             else response.setAction("Notok");
         }
-        
-        
         response.setMode(response.Mode_VIEW);
         if(topic==null) {
             response.setRenderParameter("tp",tpid);
             response.setRenderParameter("tm",tmid);
         }
-        response.setRenderParameter("tree","reload");
-        
+        response.setRenderParameter("tree","reload");        
     }
-    
-    
+
 }
