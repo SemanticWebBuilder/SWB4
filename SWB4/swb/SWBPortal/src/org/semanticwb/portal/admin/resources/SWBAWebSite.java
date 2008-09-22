@@ -45,15 +45,18 @@ public class SWBAWebSite extends GenericResource {
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out=response.getWriter();
         User user = paramRequest.getUser();
-        WebSiteSrv tmSrv=new WebSiteSrv();
+        //WebSiteSrv tmSrv=new WebSiteSrv();
         if((request.getParameter("act")==null || (request.getParameter("act").equals("add")||request.getParameter("act").equals("edit"))) || request.getParameter("act").equals("add1")){
             doEdit(request,response,paramRequest);
         }
         if(request.getParameter("act")!=null&&request.getParameter("act").equals("remove") && request.getParameter("tm")!=null){
             try{
                 WebSite recTm=SWBContext.getWebSite(request.getParameter("tm"));
-                if(tmSrv.updateWebSite(recTm, null, null, user)) //tmSrv.updateTopicMap(recTm.getId(), null,null,null,null,1,recTm.getActive(),null,null,user.getId()))
+                
+                if(recTm!=null) //tmSrv.updateTopicMap(recTm.getId(), null,null,null,null,1,recTm.getActive(),null,null,user.getId()))
                 {
+                    recTm.setDeleted(true);
+                    recTm.setModifiedBy(user);
                     out.println("<script>wbTree_remove();</script>");
                     out.println(paramRequest.getLocaleString("msgTreeTopicMapDeletedID"));
                 }
@@ -70,7 +73,6 @@ public class SWBAWebSite extends GenericResource {
                 WebSite tm=SWBContext.getWebSite(request.getParameter("tm"));
                 tm.setActive(true);
                 tm.setModifiedBy(user);
-                //tmSrv.setActive(tm,1,user.getId());
                 out.println("<script>wbTree_reload();</script>");
                 out.println("<font face=\"Verdana\" size=\"1\">");
                 out.println(paramRequest.getLocaleString("msgTreeSiteActivated")+"...");
@@ -86,7 +88,6 @@ public class SWBAWebSite extends GenericResource {
                 WebSite tm=SWBContext.getWebSite(request.getParameter("tm"));
                 tm.setActive(false);
                 tm.setModifiedBy(user);
-                //tmSrv.setActive(tm,0,user.getId());
                 out.println("<script>wbTree_reload();</script>");
                 out.println("<font face=\"Verdana\" size=\"1\">");
                 out.println(paramRequest.getLocaleString("msgTreeSiteUnactivated")+"...");
@@ -380,7 +381,6 @@ public class SWBAWebSite extends GenericResource {
             out.println("</TR>");
             out.println("<tr ><td width=\"150\" align=\"right\" class=\"datos\">"+paramRequest.getLocaleString("msgLanguageDefect")+":</td><td class=\"valores\">");
             // P/languages
-            //Hashtable htLang=DBCatalogs.getInstance().getLanguages(tm.getId());
             Iterator<Language> iteraLang=tm.listLanguages();
             out.println("<select name=\"language\" class=\"campos\">");
             while(iteraLang.hasNext()){
