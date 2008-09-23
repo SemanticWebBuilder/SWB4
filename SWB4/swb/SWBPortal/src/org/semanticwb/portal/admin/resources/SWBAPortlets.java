@@ -49,7 +49,7 @@ public class SWBAPortlets extends GenericResource  {
         
         if(request.getParameter("WBAGotoTree")!=null) {
             Portlet res=SWBContext.getWebSite(request.getParameter("tm")).getPortlet(request.getParameter("id"));
-            String restype=res.getPortletType().getId();
+            int restype=res.getPortletType().getPortletMode();
             String tmtype="";
             if(!res.getWebSiteId().equals(request.getParameter("tm"))) {
                 tmtype="0"+res.getPortletType().getId()+".";
@@ -70,9 +70,9 @@ public class SWBAPortlets extends GenericResource  {
                 }
             }
             out.print("<script>");
-            if(restype.equals("2")){ // de tipo adversiting
+            if(restype==2){ // de tipo adversiting
                 out.print("wbTree_executeAction('gotopath."+request.getParameter("tm")+".advresources."+tmtype+tmstype+request.getParameter("id")+"');");
-            }else if(restype.equals("3")){ // de tipo sistema
+            }else if(restype==3){ // de tipo sistema
                 out.print("wbTree_executeAction('gotopath."+request.getParameter("tm")+".sysresources."+tmtype+tmstype+request.getParameter("id")+"');");
             }
             out.println("</script>");
@@ -190,10 +190,10 @@ public class SWBAPortlets extends GenericResource  {
                 if(request.getParameter("flag").equals("update")){
                     Portlet recRes=SWBContext.getWebSite(request.getParameter("tm")).getPortlet(request.getParameter("id"));
                     PortletType recResType=SWBContext.getWebSite(recRes.getWebSiteId()).getPortletType(recRes.getId());
-                    String restype=recResType.getId();
+                    int restype=recResType.getPortletMode();
                     String sglobal="";
                     if(recResType.getWebSite().getId().equals(SWBContext.WEBSITE_GLOBAL)) sglobal="0";
-                    if(restype.equals("2")){ // de tipo adversiting
+                    if(restype==2){ // de tipo adversiting
                         if(request.getParameter("stype")!=null && !request.getParameter("stype").equals("0")){
                             String stypetm="";
                             if(!request.getParameter("stypemap").equals(request.getParameter("tm"))) {
@@ -208,7 +208,7 @@ public class SWBAPortlets extends GenericResource  {
                             out.println("<script>wbTree_executeAction('gotopath."+request.getParameter("tm")+".advresources."+sglobal+Integer.parseInt(request.getParameter("type"))+"."+request.getParameter("id")+"');");
                             out.println("wbTree_reload();</script>");
                         }
-                    }else if(restype.equals("3")){ // de tipo sistema
+                    }else if(restype==3){ // de tipo sistema
                         if(request.getParameter("stype")!=null && !request.getParameter("stype").equals("0")){
                             String stypetm="";
                             if(!request.getParameter("stypemap").equals(request.getParameter("tm"))) {
@@ -401,7 +401,7 @@ public class SWBAPortlets extends GenericResource  {
             out.println("<TD class=\"valores\">");
             out.println(recRes.getId());
             out.println("<INPUT name=\"id\" type=\"hidden\" value=\""+recRes.getId()+"\">");
-            out.println("<INPUT name=\"type\" type=\"hidden\" value=\""+recRes.getPortletType().getId()+"\">");
+            out.println("<INPUT name=\"type\" type=\"hidden\" value=\""+recRes.getPortletType().getPortletMode()+"\">");
             out.println("<INPUT name=\"typemap\" type=\"hidden\" value=\""+recRes.getPortletType().getWebSite().getId()+"\">");
             out.println("<INPUT name=\"tm\" type=\"hidden\" value=\""+request.getParameter("tm")+"\">");
             out.println("</TD>");
@@ -757,7 +757,7 @@ public class SWBAPortlets extends GenericResource  {
                 response.setRenderParameter("reload","1");
                 PortletType ptype = Recres.getPortletType();
                 response.setRenderParameter("typemap",ptype.getWebSite().getId());
-                response.setRenderParameter("type",""+ptype.getId());
+                response.setRenderParameter("type",""+ptype.getPortletMode());
                 PortletSubType pstype = Recres.getPortletSubType();
                 response.setRenderParameter("stype",""+pstype.getId());
                 response.setRenderParameter("stypemap",""+pstype.getWebSite().getId());
