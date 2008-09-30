@@ -510,6 +510,11 @@ public class SWBPlatform
         return ret.toString();
     }
     
+    public Properties getWebProperties()
+    {
+        return props;
+    }
+    
 //    /** La instancia de WB esta configurada como cliente?.
 //     * @return Value of property client.
 //     */
