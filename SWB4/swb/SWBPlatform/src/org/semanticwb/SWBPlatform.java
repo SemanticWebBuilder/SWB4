@@ -510,7 +510,7 @@ public class SWBPlatform
         return ret.toString();
     }
     
-    public Properties getWebProperties()
+    public static Properties getWebProperties()
     {
         return props;
     }
