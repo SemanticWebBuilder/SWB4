@@ -25,6 +25,14 @@ public class Banner extends GenericResource
 
     private static Logger log = SWBUtils.getLogger(GenericXformsResource.class);
     
+    @Override
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
+    {
+        PrintWriter out=response.getWriter();
+        out.print("Banner "+getResourceBase().getId());
+    }
+    
+    
     /*
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
@@ -66,8 +74,8 @@ public class Banner extends GenericResource
     */
     
     
-    @Override
-    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
+    //@Override
+    public void doView_(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
     {
         
         StringBuffer ret = new StringBuffer("");
