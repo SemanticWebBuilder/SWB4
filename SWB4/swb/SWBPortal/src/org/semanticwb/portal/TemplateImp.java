@@ -518,7 +518,12 @@ public class TemplateImp extends Template
                 } else if (ttype == HtmlStreamTokenizer.TT_COMMENT)
                 {
                     if (scriptpart) auxpart.append(tok.getRawString());
-                    //System.out.println("Comment:"+tok.getStringValue());
+                    //System.out.println("Comment:"+tok.getRawString());
+                } else
+                {
+                    if (!textpart) textpart = true;
+                    auxpart.append(tok.getRawString());
+                    //System.out.println("else:"+tok.getRawString());
                 }
             }
             if (textpart)

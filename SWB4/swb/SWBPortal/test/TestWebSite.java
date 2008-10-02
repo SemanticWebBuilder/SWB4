@@ -264,23 +264,70 @@ public class TestWebSite {
                     child.setTitle("Pagina "+x+" "+y);
                     child.setParent(page);
                     child.setActive(true);  
-                    for(int z=0;z<10;z++)
-                    {
-                        WebPage tchild=site.createWebPage("page"+x+"_"+y+"_"+z);
-                        tchild.setTitle("Pagina "+x+" "+y+" "+z);
-                        tchild.setParent(child);
-                        tchild.setActive(true);                    
-                    }                    
+//                    for(int z=0;z<10;z++)
+//                    {
+//                        WebPage tchild=site.createWebPage("page"+x+"_"+y+"_"+z);
+//                        tchild.setTitle("Pagina "+x+" "+y+" "+z);
+//                        tchild.setParent(child);
+//                        tchild.setActive(true);                    
+//                    }                    
                 }
             }
         }
+    }
+    
+    //@Test
+    public void TestAdmin1()
+    {    
+        if(SWBContext.getWebSite("SWBAdmin")==null)
+        {
+            WebSite site=SWBContext.createWebSite("SWBAdmin", "http://www.semanticwb.org/SWBAdmin");
+            site.setTitle("Admin");
+            site.setDescription("Admin WebSite");
+            site.setActive(true);
+            
+            //Crear lenguajes por defecto
+            Language lang=site.createLanguage("es");
+            lang.setTitle("Español", "es");
+            lang.setTitle("Spanish", "en");
+            lang=site.createLanguage("en");
+            lang.setTitle("Ingles", "es");
+            lang.setTitle("English", "en");
+            
+            //Create HomePage
+            WebPage home=site.createWebPage("home");
+            site.setHomePage(home);
+            home.setActive(true);
+            home.setTitle("Semantic WebBuilder");
+
+            //Set User Repository
+            UserRepository urep=SWBContext.getDefaultRepository();
+            site.setUserRepository(urep);
+
+            Template tpl=site.createTemplate();
+            tpl.setActive(true);
+            tpl.setTitle("container");
+            
+            VersionInfo version=site.createVersionInfo();
+            version.setVersionNumber(1);
+            version.setVersionFile("template.html");
+            tpl.setActualVersion(version);
+            tpl.setLastVersion(version);
+            
+            TemplateRef tplref=site.createTemplateRef();
+            tplref.setTemplate(tpl);
+            tplref.setActive(true);
+            tplref.setPriority(3);
+            
+            home.addTemplateRef(tplref);
+        }        
     }
     
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     //
     @Test
-    public void Test4()
+    public void TestOntology()
     {
         WebSite site=SWBContext.getWebSite("sep");
         WebPage home=site.getHomePage();
@@ -320,7 +367,7 @@ public class TestWebSite {
     // The methods must be annotated with annotation @Test. For example:
     //
     @Test
-    public void Test5()
+    public void TestPerformance1()
     {
             WebSite site=SWBContext.getWebSite("sep");
             WebPage home=site.getHomePage();
@@ -338,7 +385,7 @@ public class TestWebSite {
     // The methods must be annotated with annotation @Test. For example:
     //
     @Test
-    public void Test6()
+    public void TestPerformance2()
     {
             WebSite site=SWBContext.getWebSite("sep");
             WebPage home=site.getHomePage();
