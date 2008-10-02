@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.StringTokenizer;
+import java.util.TreeSet;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.base.*;
 import org.semanticwb.platform.SemanticObject;
@@ -314,6 +315,29 @@ public class WebPage extends WebPageBase
             }
         }
         return ret.iterator();
+    }
+    
+    public Iterator<WebPage> listVisibleChilds(String sortLang)
+    {
+        return listChilds(sortLang, true, false, false, true);
+    }
+    
+    public Iterator<WebPage> listChilds(String sortLang, Boolean active, Boolean deleted, Boolean hidden, Boolean inSchedule)
+    {
+        TreeSet set= new TreeSet(new SWBComparator(sortLang));
+        //set.addAll(getChild());
+        Iterator<WebPage> it = listChilds();
+        while (it.hasNext())
+        {
+            WebPage tp=it.next();
+            if (active!=null && tp.isActive() != active) continue;
+            if (deleted!=null && tp.isDeleted() != deleted) continue;
+            if (hidden!=null && tp.isHidden() != hidden) continue;
+            //TODO:Schedule
+            //if (inSchedule!=null && tp.isInSchedule() == onSchedule) continue;
+            set.add(tp);
+        }
+        return set.iterator();        
     }
     
 }
