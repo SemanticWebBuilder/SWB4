@@ -38,8 +38,8 @@ public class SWBPortal {
 
     private static Logger log = SWBUtils.getLogger(SWBPortal.class);
     private static SWBPortal instance = null;
-    private HashMap hAnchors = null;
-    private HashMap admFiles = new HashMap();
+    private static HashMap hAnchors = null;
+    private static HashMap admFiles = new HashMap();
     private static SWBUserMgr usrMgr;
     private static SWBMonitor monitor = null;
     private static SWBResourceMgr resmgr = null;
@@ -281,7 +281,7 @@ public class SWBPortal {
         return languages;
     }
     
-    public String parseHTML(String datos, String ruta)
+    public static String parseHTML(String datos, String ruta)
     {
         return parseHTML(datos,ruta,0);
     }
@@ -290,7 +290,7 @@ public class SWBPortal {
      * @param datos
      * @param ruta
      * @return  */
-    public String parseHTML(String datos, String ruta, int pages) {
+    public static String parseHTML(String datos, String ruta, int pages) {
         hAnchors = new HashMap();
         //detección de si el contenido es de word
         boolean iswordcontent = false;
@@ -399,7 +399,7 @@ public class SWBPortal {
         return ret.toString();
     }
 
-     private String findFileName(String value)
+     private static String findFileName(String value)
     {
         //System.out.println("value:"+value);
         String out="";
@@ -428,7 +428,7 @@ public class SWBPortal {
         return value;
     }
     
-    public String takeOffString(String value, String takeOff) {
+    public static String takeOffString(String value, String takeOff) {
         int pos = -1;
         do {
             pos = value.indexOf(takeOff);
@@ -439,7 +439,7 @@ public class SWBPortal {
         return value;
     }
     
-    private int findAnchorInContent(String content,String ancla,int pages)
+    private static int findAnchorInContent(String content,String ancla,int pages)
     {
         ancla=ancla.substring(1);
         Integer page=(Integer)hAnchors.get(ancla);
@@ -461,7 +461,7 @@ public class SWBPortal {
      * @param datos
      * @param ruta
      */
-    public boolean findAnchorInContentPage(String datos,String ancla,int page,int itpages)
+    public static boolean findAnchorInContentPage(String datos,String ancla,int page,int itpages)
     {
         HtmlTag tag = new HtmlTag();
         boolean flag=false;
@@ -557,7 +557,7 @@ public class SWBPortal {
         return false;
     }
     
-    private String findImagesInScript(String value, String ext, String ruta)
+    private static String findImagesInScript(String value, String ext, String ruta)
     {
         StringBuffer aux = new StringBuffer(value.length());
         int off = 0;
