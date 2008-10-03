@@ -31,7 +31,7 @@ public class Login implements InternalServlet {
     private static String authMethod = "FORM"; //"BASIC" "FORM"
     private static String VALSESS = "swb4-auto";
     private static String CALLBACK = "swb4-callback";
-    private static String realm = "Serch Web Builder 4.0";
+    private static String _realm = "Semantic Web Builder";
     private String _name = "login";
     //Constantes para primer implementación
     public void init(ServletContext config) {
@@ -40,7 +40,8 @@ public class Login implements InternalServlet {
     }
 
     public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException {
-        if (null == dparams.getWebPage()) {
+        if (null == dparams.getWebPage())
+        {
             return;
         }
         Subject subject = SWBPortal.getUserMgr().getSubject(request);
@@ -48,44 +49,53 @@ public class Login implements InternalServlet {
         String enAuto = (String) session.getAttribute(VALSESS);
         String uri = request.getRequestURI();
         String path = SWBPlatform.getContextPath();
-        if (request.getParameter("_wb_logout") != null) {
+        if (request.getParameter("_wb_logout") != null)
+        {
             LoginContext lc;
-            try {
+            try
+            {
                 lc = new LoginContext("swb4TripleStoreModule", subject);
                 lc.logout();
                 request.getSession(true).invalidate();
                 String url = request.getParameter("_wb_goto");
-                if ((url == null || url.equals("/"))) {
+                if ((url == null || url.equals("/")))
+                {
                     url = path + dparams.getWebPage().getWebSiteId() + "/" + dparams.getWebPage().getId() + "/_lang/" + dparams.getUser().getLanguage();
                     log.debug("LOGOUT3(Path, uri, url): " + path + "   |   " + uri + "    |  " + url);
                     sendRedirect(response, url);
                     return;
                 }
-            } catch (Exception elo) {
+            } catch (Exception elo)
+            {
                 log.error("LoggingOut " + subject, elo);
             }
         }
 
-        if (uri != null) {
+        if (uri != null)
+        {
             path = uri.replaceFirst(_name, SWBPlatform.getEnv("swb/distributor"));
         }
         CallbackHandler callbackHandler = (CallbackHandler) session.getAttribute(CALLBACK);
-        if (null == callbackHandler) {
+        if (null == callbackHandler)
+        {
             log.debug("New callbackHandler...");
             callbackHandler = new SWB4CallbackHandler(request, response, authMethod, dparams); //TODO proveer otros métodos
             session.setAttribute(CALLBACK, callbackHandler);
-        } else {
+        } else
+        {
             ((SWB4CallbackHandler) callbackHandler).setRequest(request);
             ((SWB4CallbackHandler) callbackHandler).setResponse(response);
         }
-        if (null == enAuto) {
+        if (null == enAuto)
+        {
             log.debug("Starts new Authentication process...");
-            doResponse(request, response, dparams, "ErrMessage", "");
+            doResponse(request, response, dparams, null);
             session.setAttribute(VALSESS, "Working");
             return;
         }
         LoginContext lc;
-        try {
+        try
+        {
             request.getSession(true).invalidate();
             subject = SWBPortal.getUserMgr().getSubject(request);
             lc = new LoginContext("swb4TripleStoreModule", subject, callbackHandler); //TODO: Generar el contexto
@@ -93,27 +103,32 @@ public class Login implements InternalServlet {
             lc.login();
         // session.removeAttribute(VALSESS);
         // session.removeAttribute(CALLBACK);
-        } catch (LoginException ex) {
+        } catch (LoginException ex)
+        {
             log.error("Can't log User", ex);
-            doResponse(request, response, dparams, "ErrMessage", "Alert");
+            doResponse(request, response, dparams, "User non existent");
             return;
         }
 
         String url = request.getParameter("_wb_goto");
-        if ((url == null || url.equals("/"))) {
-            log.debug("PATHs: Path:"+path+" - "+dparams.getWebPage().getWebSiteId()+" - "+dparams.getWebPage().getId());
-            url = SWBPlatform.getContextPath()+ "/" + SWBPlatform.getEnv("swb/distributor") + "/" + dparams.getWebPage().getWebSiteId() + "/" + dparams.getWebPage().getId() + "/_lang/" + dparams.getUser().getLanguage();
+        if ((url == null || url.equals("/")))
+        {
+            log.debug("PATHs: Path:" + path + " - " + dparams.getWebPage().getWebSiteId() + " - " + dparams.getWebPage().getId());
+            url = SWBPlatform.getContextPath() + "/" + SWBPlatform.getEnv("swb/distributor") + "/" + dparams.getWebPage().getWebSiteId() + "/" + dparams.getWebPage().getId() + "/_lang/" + dparams.getUser().getLanguage();
         }
         sendRedirect(response, url);
     //response.getWriter().print("Hello Login, Authenticated User: "+subject.getPrincipals().iterator().next().getName());
     }
 
-    private void doResponse(HttpServletRequest request, HttpServletResponse response, DistributorParams distributorParams, String errorMessage, String alert) throws IOException {
-        if ("BASIC".equals(authMethod)) {
+    private void doResponse(HttpServletRequest request, HttpServletResponse response, DistributorParams distributorParams, String alert) throws IOException {
+        if ("BASIC".equals(authMethod))
+        {
+            String realm = (null != distributorParams.getWebPage().getDescription(distributorParams.getUser().getLanguage()) ? distributorParams.getWebPage().getDescription(distributorParams.getUser().getLanguage()) : _realm);
             basicChallenge(realm, response);//TODO Asignar nombre de Realm
         }
-        if ("FORM".equals(authMethod)) {
-            formChallenge(request, response, distributorParams, errorMessage, alert);
+        if ("FORM".equals(authMethod))
+        {
+            formChallenge(request, response, distributorParams, alert);
         }
     }
 
@@ -127,63 +142,50 @@ public class Login implements InternalServlet {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     }
 
-    private void formChallenge(HttpServletRequest request, HttpServletResponse response, DistributorParams distributorParams, String errorMessage, String alert) throws IOException {
+    private void formChallenge(HttpServletRequest request, HttpServletResponse response, DistributorParams distributorParams, String alert) throws IOException {
         String ruta = "/config/";
-        /*  if (request.getParameter("err") != null) {
+        //TODO: Obtener objetivo del siguiente código
+        /*if (request.getParameter("err") != null) {
         if (user.isRegistered()) {
         ruta += request.getParameter("err");
         } else {
         ruta += "login";
         }
         } else {
-         */ ruta += "login";
-        // }
+        */ ruta += "login";
+        //}
 
 
 
         ruta += ".html";
         String login = null;
-        try {
+        try
+        {
 
 
             String rutaSite = SWBPlatform.getWorkPath() + ruta;
 
-            try {
+            try
+            {
                 rutaSite = "/sites/" + distributorParams.getWebPage().getWebSite().getId() + "/" + ruta;
                 login = SWBPlatform.readFileFromWorkPath(rutaSite);
                 login = SWBPortal.parseHTML(login, SWBPlatform.getWebWorkPath() + "/sites/" + distributorParams.getWebPage().getId() + "/config/images/");
-            } catch (Exception ignored) {
+            } catch (Exception ignored)
+            {
             }
-            if (null == login || "".equals(login)) {
+            if (null == login || "".equals(login))
+            {
                 login = SWBPlatform.readFileFromWorkPath(ruta);
                 login = SWBPortal.parseHTML(login, SWBPlatform.getWebWorkPath() + "/config/images/");
             }
-            //try {
-
-            //  try { 
-            //      login = SWBUtils.IO.getFileFromPath(rutaSite + "." + "es" /*user.getLanguage()*/);
-            //login = WBUtils.getInstance().getFileFromWorkPath2(rutaSite + "." + user.getLanguage());
-            //  } catch (Exception ignore) {
-            //There is no file for Language, going after regular one
-            //  }
-            //  if (null == login) login = SWBUtils.IO.getFileFromPath(rutaSite);
-            //TODO
-            //login = WBUtils.getInstance().parseHTML(login, WBUtils.getInstance().getWebWorkPath() + "/sites/" + topic.getMap() + "/config/images/");
             login = login.replaceFirst("<WBVERSION>", SWBPlatform.getVersion());
-            login = login.replaceFirst("<ERRMESSAGE>", errorMessage);
-            
-        //} catch (Exception e) {
-        //ruta = SWBUtils.getApplicationPath()+"work"+ruta; 
-        //System.out.println(ruta);
-        //  login = SWBUtils.IO.getFileFromPath(ruta);
-        //  login = WBUtils.getInstance().parseHTML(login, WBUtils.getInstance().getWebWorkPath() + "/config/images/");
-        //} 
-
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             log.error("Error to load login page...", e);
         }
 
-        if (request.getParameter("err") != null) {
+        if (request.getParameter("err") != null)
+        {
             response.setStatus(403);
         }
         response.setContentType("text/html");
@@ -193,19 +195,24 @@ public class Login implements InternalServlet {
         java.io.PrintWriter out = response.getWriter();
 
         out.print(login);
-        out.print(alert);
+        if (null != alert)
+        {
+            out.print("<script>alert('" + alert + "');</script>");
+        }
         out.flush();
         out.close();
     }
 
     public void sendRedirect(HttpServletResponse response, String url) {
-        try {
+        try
+        {
             response.setContentType("Text/html");
             PrintWriter out = response.getWriter();
-            out.println("<html><head><META HTTP-EQUIV=\"Refresh\" CONTENT=\"0; URL=" + url + "\"><script>window.location='" + url + "';</script></head></html>");
+            out.println("<html><head><meta http-equiv=\"Refresh\" CONTENT=\"0; URL=" + url + "\" /><script>window.location='" + url + "';</script></head></html>");
             out.flush();
         //out.close();
-        } catch (IOException e) {
+        } catch (IOException e)
+        {
             log.error("Redirecting user", e);
         }
     }
