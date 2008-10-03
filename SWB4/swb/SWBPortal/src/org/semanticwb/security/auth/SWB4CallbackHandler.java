@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.semanticwb.security.auth;
 
 import java.io.IOException;
@@ -37,7 +33,6 @@ public class SWB4CallbackHandler implements CallbackHandler, Serializable {
         this.response = null;
         this.dparams = null;
         this.authType = (String) SWBPlatform.getServletContext().getAttribute("authType");
-        System.out.println("!!!Creado por defecto!!!");
     }
 
     public SWB4CallbackHandler(HttpServletRequest request, HttpServletResponse response, String authType, DistributorParams dparams) {
@@ -45,7 +40,6 @@ public class SWB4CallbackHandler implements CallbackHandler, Serializable {
         this.response = response;
         this.authType = authType;
         this.dparams = dparams;
-        System.out.println("Creado con sitio " + dparams.getWebPage().getWebSiteId());
     }
 
     public HttpServletRequest getRequest() {
@@ -57,7 +51,6 @@ public class SWB4CallbackHandler implements CallbackHandler, Serializable {
         if (null == dparams) {
             dparams = new DistributorParams(request, authType);
         }
-        System.out.println("Se actualizo request " + dparams);
     }
 
     public HttpServletResponse getResponse() {

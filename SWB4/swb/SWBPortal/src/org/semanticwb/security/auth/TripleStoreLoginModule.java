@@ -5,32 +5,25 @@
 package org.semanticwb.security.auth;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.logging.Level;
 import javax.security.auth.Subject;
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.NameCallback;
 import javax.security.auth.callback.PasswordCallback;
 import javax.security.auth.callback.TextInputCallback;
-import javax.security.auth.callback.TextOutputCallback;
 import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.security.auth.login.LoginException;
 import javax.security.auth.spi.LoginModule;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
 import org.semanticwb.model.WebSite;
-import org.semanticwb.model.base.UserBase;
-import org.semanticwb.platform.SemanticModel;
-import org.semanticwb.servlet.internal.DistributorParams;
 
 /**
  *
@@ -73,7 +66,6 @@ public class TripleStoreLoginModule implements LoginModule {
             credential = ((PasswordCallback) callbacks[1]).getPassword();
             ((PasswordCallback) callbacks[1]).clearPassword();
             website = ((TextInputCallback)callbacks[2]).getText();
-          //  System.out.println("-- "+login+" -- "+website+" -- "+ new String((char[])credential));
         } catch (IOException ex) {
             log.error("IO Error Login a user", ex);
             throw new LoginException("IO Error: " + ex.getMessage());
@@ -82,12 +74,8 @@ public class TripleStoreLoginModule implements LoginModule {
             throw new LoginException("UnsupportedCallbackException Error: " + ex.getMessage());
         }
         WebSite ws = SWBContext.getWebSite(website);
-        System.out.println(ws);
         UserRepository ur = ws.getUserRepository();
-        //ur = SWBContext.getUserRepository(ur.getId());
-        System.out.println(ur);
         principal = ur.getUserByLogin(login); 
-        System.out.println("--"+principal);
         //TODO Checar lo del repositorio de usuarios
         if (null==principal) throw new LoginException("User inexistent");
         
@@ -105,28 +93,6 @@ public class TripleStoreLoginModule implements LoginModule {
                     throw new LoginException("Digest Failed");
             }
         }
-            
-        //FAKE CODE
-        //SWBUtils.CryptoWrapper.comparablePassword(new String(credential));
-        //log.debug("Login: "+login);
-        //log.debug("passw: "+String.valueOf((char[])credential));
-        //log.debug("Comp: "+(String.valueOf((char[])credential).equals(login + "08")));
-        //if (!String.valueOf((char[])credential).equals(login + "08")) {
-        //    throw new LoginException("Password Mistmatch");
-        //}
-        //SemanticModel model = SWBInstance.getSemanticMgr().createModel("UsrRepDemo","www.semanticwb.org");
-
-        
-        /*Resource res = (Resource) model.getRDFModel().createResource(login, 
-        model.getRDFModel().createResource(SWBContext.getVocabulary().User.getURI()));*/
-
-        //principal = (User) model.createSemanticObject(login, SWBContext.getVocabulary().User);
-
-        //UserRepository rep = SWBContext.createUserRepository("swb_users", "http://rep.infotec.com.mx");
-        //principal = rep.createUser(login);
-        
-        //End Fake Code
-
         loginflag = true;
         principal.setUsrLastLogin(new Date());
         return loginflag;
