@@ -118,6 +118,8 @@
 
 package org.chiba.web.session.impl;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.chiba.adapter.ChibaEvent;
 import org.chiba.adapter.DefaultChibaEventImpl;
 import org.chiba.adapter.ui.UIGenerator;
@@ -145,7 +147,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
-import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 
 /**
@@ -165,8 +166,7 @@ public class XFormsSessionBase extends AbstractXFormsSession {
     private String requestURI;
     private String formURI;
 
-    //private static final Log LOGGER = LogFactory.getLog(XFormsSessionBase.class);
-    Logger log=SWBUtils.getLogger(XFormsSessionBase.class);
+    private static final Log LOGGER = LogFactory.getLog(XFormsSessionBase.class);
 
 
     public XFormsSessionBase(HttpServletRequest request,
@@ -207,7 +207,10 @@ public class XFormsSessionBase extends AbstractXFormsSession {
         if (processorBase == null || processorBase.equalsIgnoreCase("remote")) {
             baseURI = this.requestURI + this.formURI;
         } else {
-            baseURI = new File(this.contextRoot, this.formURI).toURI().toString();            
+            baseURI = new File(this.contextRoot, this.formURI).toURI().toString();
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("baseURI: " + baseURI);
+            }
         }
         return baseURI;
     }
@@ -296,9 +299,8 @@ public class XFormsSessionBase extends AbstractXFormsSession {
         }
         
         //allow absolute paths otherwise resolve relative to the servlet context
-        if(!new File(uploadDir).isAbsolute()){
+        if(!new File(uploadDir).isAbsolute())
         	uploadDir = WebFactory.resolvePath(uploadDir, httpSession.getServletContext()); 
-        }
         
         adapter.setUploadDestination(new File(uploadDir).getAbsolutePath());
         adapter.init();
@@ -325,21 +327,24 @@ public class XFormsSessionBase extends AbstractXFormsSession {
     public synchronized void handleRequest() throws XFormsException {
         boolean updating=false; //this will become true in case ServletAdapter is in use
         updateLRU();
+
         WebUtil.nonCachingResponse(response);
+        
         try {
             if (request.getMethod().equalsIgnoreCase("POST")) {
-                //updating=true; -->Comentado por Jorge Jimenez para poder redireccionar nuevamente al recurso (28/08/2008)
+                updating=true;
                 // updating ... - this is only called when ServletAdapter is in use
                 ChibaEvent chibaEvent = new DefaultChibaEventImpl();
                 chibaEvent.initEvent("http-request", null, request);
                 adapter.dispatch(chibaEvent);
             }
+
             XMLEvent exitEvent = adapter.checkForExitEvent();
             if (exitEvent != null) {
                 handleExit(exitEvent);
             }else{
                 String referer = null;
-                
+
                 if(updating){
                     // updating ... - this is only called when ServletAdapter is in use
                     referer = (String) getProperty(XFormsSession.REFERER);
@@ -350,7 +355,7 @@ public class XFormsSessionBase extends AbstractXFormsSession {
                     //initing ...
                     referer = request.getQueryString();
 
-                    //response.setContentType(WebUtil.HTML_CONTENT_TYPE);
+                    response.setContentType(WebUtil.HTML_CONTENT_TYPE);
                     //we got an initialization request (GET) - the session is not registered yet
                     UIGenerator uiGenerator = createUIGenerator();
                     //store UIGenerator in this session as a property
@@ -367,27 +372,21 @@ public class XFormsSessionBase extends AbstractXFormsSession {
                     httpSession.setAttribute(XFormsSessionManager.XFORMS_SESSION_MANAGER, DefaultXFormsSessionManagerImpl.getXFormsSessionManager());
 
                     uiGenerator.setInput(this.adapter.getXForms());
-                                        
+
                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                     uiGenerator.setOutput(outputStream);
                     uiGenerator.generate();
-                    
-                    
-                    //response.setContentLength(outputStream.toByteArray().length);
-                    //--response.getOutputStream().write(outputStream.toByteArray());
-                     //response.getOutputStream().write(outputStream.toByteArray());
-                     
-                     response.getWriter().print(outputStream.toString());
-                    //response.getWriter().print(outputStream.toString("ISO-8859-1"));
-                    //response.getWriter().println("Hola George");
+
+                    response.setContentLength(outputStream.toByteArray().length);
+                    response.getWriter().print(SWBUtils.TEXT.decode(new String(outputStream.toByteArray()),"UTF-8"));
                 }
-            }         
+            }
         } catch (IOException e) {
             throw new XFormsException(e);
         } catch (URISyntaxException e) {
             throw new XFormsException(e);
         } 
-        //WebUtil.printSessionKeys(this.httpSession);
+        WebUtil.printSessionKeys(this.httpSession);
     }
 
     /**
@@ -406,11 +405,13 @@ public class XFormsSessionBase extends AbstractXFormsSession {
 
                 //kill XFormsSession
                 getManager().deleteXFormsSession(getKey());
-                log.debug("loading: " + loadURI);
+                if(LOGGER.isDebugEnabled()){
+                    LOGGER.debug("loading: " + loadURI);
+                }
                 response.sendRedirect(response.encodeRedirectURL(loadURI));
             }
         }
-        log.debug("************************* EXITED DURING XFORMS MODEL INIT *************************");
+        LOGGER.debug("************************* EXITED DURING XFORMS MODEL INIT *************************");
     }
 
     /**
@@ -486,8 +487,7 @@ public class XFormsSessionBase extends AbstractXFormsSession {
         }else{
             generator.setParameter("action-url", getActionURL(false));
         }
-        //generator.setParameter("debug-enabled", String.valueOf(LOGGER.isDebugEnabled()));
-        generator.setParameter("debug-enabled", "false");
+        generator.setParameter("debug-enabled", String.valueOf(LOGGER.isDebugEnabled()));
         String selectorPrefix = Config.getInstance().getProperty(HttpRequestHandler.SELECTOR_PREFIX_PROPERTY,
                 HttpRequestHandler.SELECTOR_PREFIX_DEFAULT);
         generator.setParameter("selector-prefix", selectorPrefix);
@@ -546,7 +546,7 @@ public class XFormsSessionBase extends AbstractXFormsSession {
             actionURL += sessionId;
         }
 
-        log.debug("actionURL: " + actionURL);
+        LOGGER.debug("actionURL: " + actionURL);
         // encode the URL to allow for session id rewriting
         actionURL = response.encodeURL(actionURL);
         return actionURL;
