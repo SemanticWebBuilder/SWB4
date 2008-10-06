@@ -1,12 +1,22 @@
 package org.semanticwb.model;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBException;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.model.base.*;
 import org.semanticwb.platform.SemanticObject;
+import org.w3c.dom.*;
 
 public class Portlet extends PortletBase 
 {
+    private static Logger log = SWBUtils.getLogger(Portlet.class);
+        
     private String siteid=null;
     protected int randpriority;    
+    
+    private Document dom=null;
     
     public Portlet(SemanticObject base)
     {
@@ -53,4 +63,122 @@ public class Portlet extends PortletBase
     {
         return randpriority;
     }    
+    
+    
+    /** Asigna un atributo al DOM del recurso.
+     * Si no existe el atributo, lo crea y si existe lo modifica
+     * @param name String nombre del atributo
+     * @param value String valor del atributo
+     */
+    public void setAttribute(String name, String value)
+    {
+        try
+        {
+            if(dom==null)dom=SWBUtils.XML.xmlToDom(getXml());
+            SWBUtils.XML.setAttribute(dom, name, value);
+        } catch (Exception e)
+        {
+            log.error("Error in setAttribute: " + name + " ->Resource " + getId(),e);
+        }
+    }
+    
+    /** Lee un atributo del DOM del Recurso
+     * Si el atributo no esta declarado regresa el valor por defecto defvalue.
+     */
+    public String getAttribute(String name, String defvalue)
+    {
+        String ret = getAttribute(name);
+        if (ret == null) ret = defvalue;
+        return ret;
+    }
+
+
+    /** Lee un atributo del DOM del Recurso
+     * Si el atributo no esta declarado regresa null.
+     */
+    public String getAttribute(String name)
+    {
+        String ret = null;
+        try
+        {
+            if(dom==null)dom=SWBUtils.XML.xmlToDom(getXml());
+            NodeList data = dom.getElementsByTagName(name);
+            if (data.getLength() > 0)
+            {
+                Node txt = data.item(0).getFirstChild();
+                if (txt != null) ret = txt.getNodeValue();
+            }
+        } catch (Exception e)
+        {
+            log.error("Error in getAttribute: " + name + " ->Resource " + getId(), e);
+        }
+        return ret;
+    }
+    
+    /** Lee un atributo del DOM del Recurso
+     * Si el atributo no esta declarado regresa null.
+     */
+    public Iterator<String> getAttributeNames()
+    {
+        ArrayList vec=new ArrayList();
+        try
+        {
+            if(dom==null)dom=SWBUtils.XML.xmlToDom(getXml());
+            Node root=dom.getFirstChild();
+            NodeList data=root.getChildNodes();
+            for(int x=0;x<data.getLength();x++)
+            {
+                vec.add(data.item(x).getNodeName());
+            }
+        } catch (Exception e)
+        {
+            log.error(" ->Resource " + getId(), e);
+        }
+        return vec.iterator();
+    }
+    
+
+    /** Borra un atributo del DOM del Recurso
+     */
+    public void removeAttribute(String name)
+    {
+        try
+        {
+            if(dom==null)dom=SWBUtils.XML.xmlToDom(getXml());
+            Node res = dom.getFirstChild();
+            NodeList data = dom.getElementsByTagName(name);
+            if (data.getLength() > 0)
+            {
+                res.removeChild(data.item(0));
+            }
+        } catch (Exception e)
+        {
+            log.error("Error in removeAttribute: " + name + " ->Resource " + getId(), e);
+        }
+    }
+    
+    /** Actualiza los atributos del DOM a base de datos. */
+    public void updateAttributesToDB() throws SWBException
+    {
+        if(dom!=null)
+        {
+            String xml = SWBUtils.XML.domToXml(dom);
+            if (xml != null && !xml.equals(getXml()))
+            {
+                setXml(xml);
+            }
+        }
+    }
+    
+    /** Actualiza los atributos del DOM a base de datos. */
+    public void updateAttributesToDB(String userid, String comment) throws SWBException
+    {
+        String xml = SWBUtils.XML.domToXml(dom);
+        if (xml != null && !xml.equals(getXml()))
+        {
+            setXml(xml);
+            //TODO:
+            //recResource.update(userid, comment);
+        }
+    }
 }
