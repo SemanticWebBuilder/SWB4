@@ -7,13 +7,23 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class PortletRefBase extends GenericObjectBase implements Activeable,Priorityable
+public class PortletRefBase extends GenericObjectBase implements Priorityable,Activeable,Deleteable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
     public PortletRefBase(SemanticObject base)
     {
         super(base);
+    }
+
+    public boolean isDeleted()
+    {
+        return getSemanticObject().getBooleanProperty(vocabulary.deleted);
+    }
+
+    public void setDeleted(boolean deleted)
+    {
+        getSemanticObject().setBooleanProperty(vocabulary.deleted, deleted);
     }
 
     public boolean isActive()

@@ -463,7 +463,6 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
     public Iterator<Template> listTemplates()
     {
         Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
-        
         StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.Template.getOntClass());
         return new GenericIterator<Template>(Template.class, stit, true);
     }

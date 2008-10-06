@@ -92,9 +92,9 @@ public class SWBVocabulary
     public final SemanticProperty description;
     public final SemanticProperty hasPSTPortlets;
     public final SemanticProperty PSTType;
+    public final SemanticProperty deleted;
     public final SemanticProperty template;
     public final SemanticProperty priority;
-    public final SemanticProperty deleted;
     public final SemanticProperty hasRoleRef;
     public final SemanticProperty hasRule;
     public final SemanticProperty frmTextAreaRows;
@@ -233,9 +233,9 @@ public class SWBVocabulary
         description=vocabulary.getSemanticProperty(URI+"description");
         hasPSTPortlets=vocabulary.getSemanticProperty(URI+"hasPSTPortlets");
         PSTType=vocabulary.getSemanticProperty(URI+"PSTType");
+        deleted=vocabulary.getSemanticProperty(URI+"deleted");
         template=vocabulary.getSemanticProperty(URI+"template");
         priority=vocabulary.getSemanticProperty(URI+"priority");
-        deleted=vocabulary.getSemanticProperty(URI+"deleted");
         hasRoleRef=vocabulary.getSemanticProperty(URI+"hasRoleRef");
         hasRule=vocabulary.getSemanticProperty(URI+"hasRule");
         frmTextAreaRows=vocabulary.getSemanticProperty(URI+"frmTextAreaRows");

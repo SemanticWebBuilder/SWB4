@@ -7,13 +7,23 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class TemplateRefBase extends GenericObjectBase implements Activeable,Priorityable,Templateable
+public class TemplateRefBase extends GenericObjectBase implements Templateable,Priorityable,Activeable,Deleteable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
     public TemplateRefBase(SemanticObject base)
     {
         super(base);
+    }
+
+    public boolean isDeleted()
+    {
+        return getSemanticObject().getBooleanProperty(vocabulary.deleted);
+    }
+
+    public void setDeleted(boolean deleted)
+    {
+        getSemanticObject().setBooleanProperty(vocabulary.deleted, deleted);
     }
 
     public boolean isActive()
