@@ -17,7 +17,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.*;
+import javax.servlet.ServletInputStream;
+import org.apache.xerces.impl.dv.util.Base64;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.portal.util.XmlBundle;
 import org.semanticwb.model.Portlet;
@@ -74,6 +77,8 @@ public class GenericXformsResource extends GenericResource {
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         if (paramRequest.getMode().equals("loadInstance")) {
             doLoadInstance(request, response, paramRequest); //Utilizado para cargar el modelo
+        } else if (paramRequest.getMode().equals("process")) {
+            doProcess(request, response, paramRequest);
         } else {
             super.processRequest(request, response, paramRequest);
         }
@@ -118,7 +123,9 @@ public class GenericXformsResource extends GenericResource {
     {
         Portlet base = getResourceBase();
         Document dom = null;
-        if (base.getXml() != null) {
+        System.out.println("Entra a initAdminModel");
+        if (base.getXml() != null && base.getXml().trim().length()>0) {
+            System.out.println("base.getXml():"+base.getXml());
             dom = SWBUtils.XML.xmlToDom(base.getXml());
             NodeList nviewNode = dom.getElementsByTagName("wbadm");
             if (nviewNode.getLength() == 0) { //Carga la instancia de archivo
@@ -145,9 +152,7 @@ public class GenericXformsResource extends GenericResource {
      **/
     private String initAdminModelFromFile(HttpServletRequest request, SWBParamRequest paramsRequest) // Inicializa el modelo de la forma, puede leerse de un archivo xml
     {
-
         String instanceName = getClass().getName() + "_inst";
-        ;
         if (request.getAttribute("instanceName") != null) {
             instanceName = (String) request.getAttribute("instanceName");
         }
@@ -164,10 +169,9 @@ public class GenericXformsResource extends GenericResource {
         doMethod(request, response, paramRequest);
     }
 
-    private void doMethod(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException 
-    {
+    private void doMethod(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         String xml = null;
-        request.setCharacterEncoding("UTF-8");
+        //request.setCharacterEncoding("UTF-8");
         org.chiba.web.servlet.WebUtil.nonCachingResponse(response);
 
         String action = request.getParameter("action");
@@ -179,7 +183,7 @@ public class GenericXformsResource extends GenericResource {
         }
         if (action.equals("add") || action.equals("edit")) { //Cuando es alta o edición de la forma
             String instanceName = getClass().getName();
-            if (paramsRequest.getMode().equals(paramsRequest.Mode_VIEW)) {
+            if (paramsRequest.getMode().equals(paramsRequest.Mode_VIEW) || paramsRequest.getMode().equals("process")) {
                 instanceName = instanceName + "_V";
             }
             if (request.getAttribute("xformsDoc") != null) {
@@ -198,14 +202,18 @@ public class GenericXformsResource extends GenericResource {
                 }
             }
         } else if (action.equals("update")) { //Actualiza el recurso
-            StringBuffer buffer = new StringBuffer();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                buffer.append(line);
+            DocumentBuilderFactory docBF = SWBUtils.XML.getDocumentBuilderFactory();
+            org.w3c.dom.Document doc = null;
+            try {
+                DocumentBuilder docBuil = docBF.newDocumentBuilder();
+                ServletInputStream in = request.getInputStream();
+                doc = docBuil.parse(in);
+            } catch (Exception e) {
+                log.error(e);
             }
+            uploadFiles(doc);
             PrintWriter out = response.getWriter();
-            out.println(ProcessData(buffer.toString()));
+            ProcessData(SWBUtils.XML.domToXml(doc));
         }
     }
 
@@ -261,7 +269,12 @@ public class GenericXformsResource extends GenericResource {
             xFormsSession.getAdapter().setContextParam("wbRedirect",url.toString());
             }
              */
-            xFormsSession.getAdapter().setContextParam("wbRedirect", url.toString());
+            xFormsSession.getAdapter().setUploadDestination("C:/Archivos de programa/Apache Software Foundation/Tomcat 5.5/webapps/SWB4/swb/build/web/uploads");
+            SWBResourceURL processurl = paramsRequest.getRenderUrl();
+            processurl.setCallMethod(processurl.Call_DIRECT);
+            processurl.setMode("process");
+            processurl.setAction(processurl.Action_EDIT);
+            xFormsSession.getAdapter().setContextParam("wbRedirect", processurl.toString());
             xFormsSession.handleRequest();
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -299,7 +312,8 @@ public class GenericXformsResource extends GenericResource {
             } else { // Insertar el xml como nuevo
                 xml = "<wbadm>" + data + "</wbadm>";
             }
-            base.setXml("<?xml version=\"1.0\" encoding=\"UTF-8\"?><resource>" + xml + "</resource>");
+            System.out.println("Graba-JOrge:<?xml version=\"1.0\" encoding=\"UTF-8\"?><resource>" + xml + "</resource>");
+            base.setXml("<resource>" + xml + "</resource>");
         //base..update(paramsRequest.getUser().getId(), "Resource width id:"+ base.getId()+",was updated succefully");
         } catch (Exception e) {
             log.error(e);
@@ -307,16 +321,76 @@ public class GenericXformsResource extends GenericResource {
         return data;
     }
 
-    /**
-     * Metodo para hacer operaciones
-     */
-    @Override
-    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-        StringBuffer buffer = new StringBuffer();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
-        String line;
-        while ((line = reader.readLine()) != null) {
-            buffer.append(line);
+    public void doProcess(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) {
+        try {
+            if (paramsRequest.getAction().equals(paramsRequest.Action_EDIT)) {
+                DocumentBuilderFactory docBF = SWBUtils.XML.getDocumentBuilderFactory();
+                org.w3c.dom.Document doc = null;
+                try {
+                    DocumentBuilder docBuil = docBF.newDocumentBuilder();
+                    ServletInputStream in = request.getInputStream();
+                    doc = docBuil.parse(in);
+                } catch (Exception e) {
+                    log.error(e);
+                }
+                uploadFiles(doc);
+                PrintWriter out = response.getWriter();
+                String saca = ProcessData(SWBUtils.XML.domToXml(doc));
+                System.out.println("Saca:" + saca);
+                out.println(saca);
+            //doMethod(request, response, paramsRequest);
+            }
+        /*
+        response.setStatus(200);
+        SWBResourceURL url=paramsRequest.getRenderUrl();
+        url.setMode(url.Mode_VIEW);
+        url.setAction(url.Action_EDIT);
+        response.sendRedirect(url.toString());
+         **/
+        } catch (Exception e) {
+            log.error(e);
+        }
+    }
+
+    private void uploadFiles(Document doc) {
+        Portlet portlet = getResourceBase();
+        NodeList nListUploads = doc.getFirstChild().getChildNodes();
+        for (int i = 0; i < nListUploads.getLength(); i++) {
+            Node node = nListUploads.item(i);
+            NamedNodeMap nNodeMap = node.getAttributes();
+            if (nNodeMap != null && nNodeMap.getLength() > 0) //Tiene atributos
+            {
+                Node fileNode = nNodeMap.getNamedItem("file");
+                if (fileNode != null) //El nodo es de tipo file
+                {
+                    byte[] decodedData = Base64.decode(node.getFirstChild().getNodeValue());
+                    if (decodedData != null && decodedData.length > 0) {
+                        String fileName = null;
+                        int pos = fileNode.getNodeValue().lastIndexOf("\\");
+                        if (pos > -1) {
+                            fileName = fileNode.getNodeValue().substring(pos + 1);
+                        }
+                        File file = new File(SWBPlatform.getWorkPath() + portlet.getWorkPath());
+                        if (!file.exists()) {
+                            file.mkdirs();
+                        }
+                        fileNode.setNodeValue("");
+                        try {
+                            FileOutputStream fos = new FileOutputStream(SWBPlatform.getWorkPath() + portlet.getWorkPath() + "/" + fileName);
+                            fos.write(decodedData);
+                            fos.close();
+                        } catch (Exception e) {
+                            log.error(e);
+                        }
+                        node.getFirstChild().setNodeValue(fileName);
+                    }
+                }
+                Node fileType = nNodeMap.getNamedItem("type");
+                if (fileNode != null) //El nodo es de tipo type
+                {
+                    fileType.setNodeValue("");
+                }
+            }
         }
     }
     //TODO: PASAR LOS SIGUIENTES METODOS A SWBUitls en version SWB 4.0
@@ -327,7 +401,7 @@ public class GenericXformsResource extends GenericResource {
         // ensure xerces dom
         /*
         if (node instanceof org.apache.xerces.dom.DocumentImpl) {
-            return (Document) node;
+        return (Document) node;
         }*/
         Document document = getDocumentBuilder().newDocument();
         if (node instanceof Document) {
