@@ -4,9 +4,9 @@
 <chiba-config>
 
     <properties>
-                <!--property name="log4j.file" value="WEB-INF/log4j.xml" description="the location of the log4j configuration file relative to context"/-->
+                <property name="log4j.file" value="WEB-INF/log4j.xml" description="the location of the log4j configuration file relative to context"/>
 		
-		<property name="defaultRequestEncoding" value="UTF-8" description="The character encoding to use for the Request if none was set"/>
+		<property name="defaultRequestEncoding" value="ISO-8859-1" description="The character encoding to use for the Request if none was set"/>
 
 		<property name="uploadDir" value="/uploads/" description="the name of the upload directory relative to context"/>
 
@@ -26,7 +26,8 @@
 		Thus XFormsSessions won't expire with this setting though the Http Session might still time out making the
 		XFormsSession unavailable.
 		-->
-		<property name="sessionChecking" value="120000" description="the amount of time (in millis) between runs of wipe() method checking for expired XForms sessions"/>
+		<!--property name="sessionChecking" value="120000" description="the amount of time (in millis) between runs of wipe() method checking for expired XForms sessions"/-->
+                <property name="sessionChecking" value="0" description="the amount of time (in millis) between runs of wipe() method checking for expired XForms sessions"/>
 		<property name="sessionTimeout" value="600000" description="the amount of time of inactivity before XFormsSession expires"/>
 		<property name="sessionManager" value="org.chiba.web.session.impl.DefaultXFormsSessionManagerImpl" description="fully qualified classname of XFormsSessionManager implementation"/>
 		<!--<property name="sessionClass" value="org.chiba.web.session.impl.DefaultChibaSession" description="fully qualified classname of XFormsSession implementation"/>-->
@@ -123,7 +124,8 @@
 
         <submission-handler scheme="context" class="org.chiba.xml.xforms.connector.context.ContextSubmissionHandler"/>
         <submission-handler scheme="file" class="org.chiba.xml.xforms.connector.file.FileSubmissionHandler"/>
-        <submission-handler scheme="http" class="org.chiba.xml.xforms.connector.http.HTTPSubmissionHandler"/>
+        <!--submission-handler scheme="http" class="org.chiba.xml.xforms.connector.http.HTTPSubmissionHandler"/-->
+        <submission-handler scheme="http" class="org.chiba.xml.xforms.connector.http.RedirectingHTTPSubmissionHandler"/>
         <submission-handler scheme="mailto" class="org.chiba.connectors.smtp.SMTPSubmissionHandler"/>
         <submission-handler scheme="xmlrpc" class="org.chiba.connectors.xmlrpc.XMLRPCSubmissionHandler"/>
         <!--        <submission-handler scheme="jms" class="org.chiba.connectors.jms.JMSSubmissionHandler"/>-->
