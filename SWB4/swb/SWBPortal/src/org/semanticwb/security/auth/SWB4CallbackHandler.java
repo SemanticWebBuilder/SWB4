@@ -20,7 +20,7 @@ import org.semanticwb.servlet.internal.DistributorParams;
  *
  * @author Sergio Martínez  sergio.martinez@acm.org
  */
-public class SWB4CallbackHandler implements CallbackHandler, Serializable {
+public abstract class SWB4CallbackHandler implements CallbackHandler, Serializable {
 
     private static Logger log = SWBUtils.getLogger(SWB4CallbackHandler.class);
     private HttpServletRequest request;
@@ -42,83 +42,12 @@ public class SWB4CallbackHandler implements CallbackHandler, Serializable {
         this.dparams = dparams;
     }
 
-    public HttpServletRequest getRequest() {
-        return request;
-    }
+    public abstract HttpServletRequest getRequest();
 
-    public void setRequest(HttpServletRequest request) {
-        this.request = request;
-        if (null == dparams) {
-            dparams = new DistributorParams(request, authType);
-        }
-    }
+    public abstract void setRequest(HttpServletRequest request);
 
-    public HttpServletResponse getResponse() {
-        return response;
-    }
+    public abstract HttpServletResponse getResponse();
 
-    public void setResponse(HttpServletResponse response) {
-        this.response = response;
-    }
+    public abstract void setResponse(HttpServletResponse response);
 
-    public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException {
-        log.trace("Tipo de Autenticacion: " + authType);
-        if ("BASIC".equalsIgnoreCase(authType)) {
-            getBasicCredentials(callbacks);
-        }
-        if ("FORM".equalsIgnoreCase(authType)) {
-            getFormCredentials(callbacks);
-        }
-    }
-
-    private void getBasicCredentials(Callback[] callbacks) {
-        String login = "";
-        String password = "";
-        String header = request.getHeader("Authorization");
-        if (null != header && !"".equals(header)) {
-            header = header.substring(6).trim();
-            String[] datos = SWBUtils.TEXT.decodeBase64(header).split(":");
-            try {
-                login = datos[0].trim();
-                password = datos[1].trim();
-            } catch (Exception ie) {
-            } //Ignored Exception, asume no login - password
-
-        }
-        for (int i = 0; i < callbacks.length; i++) {
-            if (callbacks[i] instanceof NameCallback) {
-                NameCallback nameCallback = (NameCallback) callbacks[i];
-                nameCallback.setName(login);
-
-            } else if (callbacks[i] instanceof PasswordCallback) {
-                PasswordCallback passwordCallback = (PasswordCallback) callbacks[i];
-                passwordCallback.setPassword(password.toCharArray());
-            } else if (callbacks[i] instanceof TextInputCallback) {
-                TextInputCallback textInputCallback = (TextInputCallback) callbacks[i];
-                if (null != dparams) {
-                    textInputCallback.setText(dparams.getWebPage().getWebSiteId());
-                } else {
-                    textInputCallback.setText(SWBContext.getGlobalWebSite().getId());
-                }
-            }
-        }
-    }
-
-    private void getFormCredentials(Callback[] callbacks) {
-        String login = request.getParameter("_wb_username");
-        String password = request.getParameter("_wb_password");
-        for (int i = 0; i < callbacks.length; i++) {
-            if (callbacks[i] instanceof NameCallback) {
-                NameCallback nameCallback = (NameCallback) callbacks[i];
-                nameCallback.setName(login);
-
-            } else if (callbacks[i] instanceof PasswordCallback) {
-                PasswordCallback passwordCallback = (PasswordCallback) callbacks[i];
-                passwordCallback.setPassword(password == null ? null : password.toCharArray());
-            } else if (callbacks[i] instanceof TextInputCallback) {
-                TextInputCallback textInputCallback = (TextInputCallback) callbacks[i];
-                textInputCallback.setText(dparams.getWebPage().getWebSiteId());
-            }
-        }
-    }
 }

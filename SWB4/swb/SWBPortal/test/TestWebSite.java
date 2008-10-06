@@ -404,5 +404,13 @@ public class TestWebSite {
     }     
       
     
+    @Test
+    public void SetAtributesDefaultUserRepository()
+    {
+        UserRepository urep=SWBContext.getDefaultRepository();
+        urep.setProperty("SWBUR_AuthMethod", "FORM"); //BASIC
+        urep.setProperty("SWBUR_LoginContext", "swb4TripleStoreModule");
+        urep.setProperty("SWBUR_CallBackHandlerClassName", "org.semanticwb.security.auth.SWB4CallbackHandlerLoginPasswordImp");
+    }
 
 }

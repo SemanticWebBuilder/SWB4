@@ -6,6 +6,8 @@ package org.semanticwb.servlet.internal;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Constructor;
+import java.util.logging.Level;
 import javax.security.auth.Subject;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.LoginContext;
@@ -18,7 +20,9 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.UserRepository;
 import org.semanticwb.security.auth.SWB4CallbackHandler;
+import org.semanticwb.security.auth.SWB4CallbackHandlerLoginPasswordImp;
 
 /**
  *
@@ -28,7 +32,10 @@ public class Login implements InternalServlet {
 
     private static Logger log = SWBUtils.getLogger(Login.class);
     //TODO llevar a configuración
-    private static String authMethod = "FORM"; //"BASIC" "FORM"
+    //private static String authMethod = "FORM"; //"BASIC" "FORM"
+    private static String SWBUR_AuthMethod = "SWBUR_AuthMethod";
+    private static String SWBUR_LoginContext = "SWBUR_LoginContext";
+    private static String SWBUR_CallBackHandlerClassName = "SWBUR_CallBackHandlerClassName";
     private static String VALSESS = "swb4-auto";
     private static String CALLBACK = "swb4-callback";
     private static String _realm = "Semantic Web Builder";
@@ -44,6 +51,10 @@ public class Login implements InternalServlet {
         {
             return;
         }
+        UserRepository ur = dparams.getWebPage().getWebSite().getUserRepository();
+        String authMethod = ur.getProperty(SWBUR_AuthMethod);
+        String context = ur.getProperty(SWBUR_LoginContext);
+        String CBHClassName = ur.getProperty(SWBUR_CallBackHandlerClassName);
         Subject subject = SWBPortal.getUserMgr().getSubject(request);
         HttpSession session = request.getSession(true);
         String enAuto = (String) session.getAttribute(VALSESS);
@@ -54,7 +65,7 @@ public class Login implements InternalServlet {
             LoginContext lc;
             try
             {
-                lc = new LoginContext("swb4TripleStoreModule", subject);
+                lc = new LoginContext(context, subject);
                 lc.logout();
                 request.getSession(true).invalidate();
                 String url = request.getParameter("_wb_goto");
@@ -78,9 +89,24 @@ public class Login implements InternalServlet {
         CallbackHandler callbackHandler = (CallbackHandler) session.getAttribute(CALLBACK);
         if (null == callbackHandler)
         {
-            log.debug("New callbackHandler...");
-            callbackHandler = new SWB4CallbackHandler(request, response, authMethod, dparams); //TODO proveer otros métodos
-            session.setAttribute(CALLBACK, callbackHandler);
+            try
+            {
+                log.debug("New callbackHandler...");
+                Constructor[] constructor =  Class.forName(CBHClassName).getConstructors();
+                int method = 0;
+                for (int i=0; i<constructor.length; i++)
+                {
+                    if (constructor[i].getParameterTypes().length==4) method = i;
+                }
+                callbackHandler = (CallbackHandler) constructor[method].newInstance(request, response, authMethod, dparams);
+                //callbackHandler = new SWB4CallbackHandlerLoginPasswordImp(request, response, authMethod, dparams); //TODO proveer otros métodos
+                session.setAttribute(CALLBACK, callbackHandler);
+            } catch (Exception ex)
+            {
+                log.error("Can't Instanciate a CallBackHandler for UserRepository "+ur.getId(), ex);
+                response.sendError(500, "Authentication System failure!!!");
+                return;
+            }
         } else
         {
             ((SWB4CallbackHandler) callbackHandler).setRequest(request);
@@ -89,7 +115,7 @@ public class Login implements InternalServlet {
         if (null == enAuto)
         {
             log.debug("Starts new Authentication process...");
-            doResponse(request, response, dparams, null);
+            doResponse(request, response, dparams, null, authMethod);
             session.setAttribute(VALSESS, "Working");
             return;
         }
@@ -98,7 +124,7 @@ public class Login implements InternalServlet {
         {
             request.getSession(true).invalidate();
             subject = SWBPortal.getUserMgr().getSubject(request);
-            lc = new LoginContext("swb4TripleStoreModule", subject, callbackHandler); //TODO: Generar el contexto
+            lc = new LoginContext(context, subject, callbackHandler); 
 
             lc.login();
         // session.removeAttribute(VALSESS);
@@ -106,7 +132,7 @@ public class Login implements InternalServlet {
         } catch (LoginException ex)
         {
             log.error("Can't log User", ex);
-            doResponse(request, response, dparams, "User non existent");
+            doResponse(request, response, dparams, "User non existent", authMethod);
             return;
         }
 
@@ -120,7 +146,7 @@ public class Login implements InternalServlet {
     //response.getWriter().print("Hello Login, Authenticated User: "+subject.getPrincipals().iterator().next().getName());
     }
 
-    private void doResponse(HttpServletRequest request, HttpServletResponse response, DistributorParams distributorParams, String alert) throws IOException {
+    private void doResponse(HttpServletRequest request, HttpServletResponse response, DistributorParams distributorParams, String alert, String authMethod) throws IOException {
         if ("BASIC".equals(authMethod))
         {
             String realm = (null != distributorParams.getWebPage().getDescription(distributorParams.getUser().getLanguage()) ? distributorParams.getWebPage().getDescription(distributorParams.getUser().getLanguage()) : _realm);
