@@ -1,0 +1,64 @@
+/* 
+    Document   : swb
+    Created on : 28/09/2008, 02:45:57 AM
+    Author     : Jei
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/* 
+   TODO customize this sample style
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+
+root { 
+    display: block;
+}
+
+.swbIconPortlets,
+.swbIconPortletType,
+.swbIconPortlet,
+.swbIconPortletU,
+.swbIconTemplates,
+.swbIconTemplate,
+.swbIconTemplateU,
+.swbIconWebSite,
+.swbIconWebPage,
+.swbIconWebPageU {
+	background-repeat: no-repeat; 
+	width: 20px;
+	height: 20px;
+	text-align: center;
+	padding-right:4px; 
+}
+
+
+.swbIconPortlets { background-image: url('../icons/f_resourcetype.gif'); }
+.swbIconPortletType { background-image: url('../icons/f_resourcetype.gif'); }
+.swbIconPortlet { background-image: url('../icons/i_recurso_verde.gif'); }
+.swbIconPortletU { background-image: url('../icons/i_recurso_rojo.gif'); }
+.swbIconTemplates { background-image: url('../icons/i_plantillaa.gif'); }
+.swbIconTemplate { background-image: url('../icons/i_plantilla_verde.gif'); }
+.swbIconTemplateU { background-image: url('../icons/i_plantilla_rojo.gif'); }
+.swbIconWebSite { background-image: url('../icons/f_site_verde.gif'); }
+.swbIconWebPage { background-image: url('../icons/i_general_verde.gif'); }
+.swbIconWebPageU { background-image: url('../icons/i_general_rojo.gif'); }
+
+.admViewProperties { width:100%; }
+
+caption {
+	background:#fafafa url(../js/dojo1.1/dijit/themes/soria/images/titleBar.png) repeat-x top left;
+	border-top: 1px solid #b9bbdd;
+	padding: 5px 5px 6px 8px;
+        font-weight: bold;
+}
+
+th {
+	background-color: #4f8ce5; 
+	color: #666; 
+	font-weight: bold;
+	margin:0;
+	padding:1px 5px; 
+	background-image:url('../js/dojo1.1/dijit/themes/soria/images/titleBar.png');
+	background-position:0px -1px; 
+}
