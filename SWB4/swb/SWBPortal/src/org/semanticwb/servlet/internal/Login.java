@@ -7,7 +7,6 @@ package org.semanticwb.servlet.internal;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Constructor;
-import java.util.logging.Level;
 import javax.security.auth.Subject;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.LoginContext;
@@ -22,7 +21,6 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.UserRepository;
 import org.semanticwb.security.auth.SWB4CallbackHandler;
-import org.semanticwb.security.auth.SWB4CallbackHandlerLoginPasswordImp;
 
 /**
  *
@@ -31,11 +29,6 @@ import org.semanticwb.security.auth.SWB4CallbackHandlerLoginPasswordImp;
 public class Login implements InternalServlet {
 
     private static Logger log = SWBUtils.getLogger(Login.class);
-    //TODO llevar a configuración
-    //private static String authMethod = "FORM"; //"BASIC" "FORM"
-    private static String SWBUR_AuthMethod = "SWBUR_AuthMethod";
-    private static String SWBUR_LoginContext = "SWBUR_LoginContext";
-    private static String SWBUR_CallBackHandlerClassName = "SWBUR_CallBackHandlerClassName";
     private static String VALSESS = "swb4-auto";
     private static String CALLBACK = "swb4-callback";
     private static String _realm = "Semantic Web Builder";
@@ -52,9 +45,9 @@ public class Login implements InternalServlet {
             return;
         }
         UserRepository ur = dparams.getWebPage().getWebSite().getUserRepository();
-        String authMethod = ur.getProperty(SWBUR_AuthMethod);
-        String context = ur.getProperty(SWBUR_LoginContext);
-        String CBHClassName = ur.getProperty(SWBUR_CallBackHandlerClassName);
+        String authMethod = ur.getProperty(UserRepository.SWBUR_AuthMethod);
+        String context = ur.getProperty(UserRepository.SWBUR_LoginContext);
+        String CBHClassName = ur.getProperty(UserRepository.SWBUR_CallBackHandlerClassName);
         Subject subject = SWBPortal.getUserMgr().getSubject(request);
         HttpSession session = request.getSession(true);
         String enAuto = (String) session.getAttribute(VALSESS);

@@ -93,6 +93,9 @@ public class SWBPortal {
             urep = SWBContext.createUserRepository(SWBContext.USERREPOSITORY_DEFAULT, "http://org.semanticwb.userrep");
             urep.setTitle("Default UserRepository");
             urep.setDescription("Default UserRpository");
+            urep.setProperty(UserRepository.SWBUR_AuthMethod, "FORM"); //BASIC
+            urep.setProperty(UserRepository.SWBUR_LoginContext, "swb4TripleStoreModule");
+            urep.setProperty(UserRepository.SWBUR_CallBackHandlerClassName, "org.semanticwb.security.auth.SWB4CallbackHandlerLoginPasswordImp");
             site.setUserRepository(urep);
             //Create User
             User user = urep.createUser();
