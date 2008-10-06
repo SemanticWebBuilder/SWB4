@@ -62,6 +62,7 @@ import org.semanticwb.base.util.SFBase64;
 import org.semanticwb.base.util.SWBMailSender;
 import org.semanticwb.base.util.SWBMail;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 import sun.misc.BASE64Encoder;
 
 /**
@@ -1570,6 +1571,71 @@ public class SWBUtils {
             javax.xml.xpath.XPathExpression xpathExpression = xpathObj.compile(expression);
             return xpathExpression.evaluate(input, resultType);
         }
+        
+        /** Asigna un atributo al DOM del recurso.
+         * Si no existe el atributo, lo crea y si existe lo modifica
+         * @param name String nombre del atributo
+         * @param value String valor del atributo
+         */
+        public static void setAttribute(Document dom, String name, String value) 
+        {
+            NodeList data = dom.getElementsByTagName(name);
+            if (data.getLength() > 0)
+            {
+                Node txt = data.item(0).getFirstChild();
+                if (txt != null)
+                {
+                    if(value!=null)
+                    {
+                        txt.setNodeValue(value);
+                    }else
+                    {
+                        data.item(0).removeChild(txt);
+                    }
+                } else
+                {
+                    if(value!=null)
+                    {
+                        data.item(0).appendChild(dom.createTextNode(value));
+                    }
+                }
+            } else
+            {
+                Element res = (Element) dom.getFirstChild();
+                Element ele = dom.createElement(name);
+                if(value!=null)ele.appendChild(dom.createTextNode(value));
+                res.appendChild(ele);
+            }
+        }
+
+
+
+        /** Lee un atributo del DOM del Recurso
+         * Si el atributo no esta declarado regresa el valor por defecto defvalue.
+         */
+        public static String getAttribute(Document dom, String name, String defvalue)
+        {
+            String ret = getAttribute(dom, name);
+            if (ret == null) ret = defvalue;
+            return ret;
+        }
+
+
+        /** Lee un atributo del DOM del Recurso
+         * Si el atributo no esta declarado regresa null.
+         */
+        public static String getAttribute(Document dom, String name)
+        {
+            String ret = null;
+            NodeList data = dom.getElementsByTagName(name);
+            if (data.getLength() > 0)
+            {
+                Node txt = data.item(0).getFirstChild();
+                if (txt != null) ret = txt.getNodeValue();
+            }
+            return ret;
+        }           
+        
     }
 
     /**
