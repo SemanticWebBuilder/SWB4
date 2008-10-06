@@ -6,6 +6,10 @@ import org.semanticwb.platform.SemanticObject;
 
 public class UserRepository extends UserRepositoryBase 
 {
+    public static final String SWBUR_AuthMethod = "SWBUR_AuthMethod";
+    public static final String SWBUR_LoginContext = "SWBUR_LoginContext";
+    public static final String SWBUR_CallBackHandlerClassName = "SWBUR_CallBackHandlerClassName";
+            
     public UserRepository(SemanticObject base)
     {
         super(base);
@@ -15,12 +19,15 @@ public class UserRepository extends UserRepositoryBase
     public User getUserByLogin(String login)
     {
         User ret=null;
-        SWBVocabulary voc=SWBContext.getVocabulary();
-        Iterator aux=getSemanticObject().getRDFResource().getModel().listStatements(null, voc.usrLogin.getRDFProperty(), getSemanticObject().getModel().getRDFModel().createLiteral(login));
-        Iterator it=new GenericIterator(voc.User, aux, true);
-        if(it.hasNext())
+        if (null!=login)
         {
-            ret=(User)it.next();
+            SWBVocabulary voc=SWBContext.getVocabulary();
+            Iterator aux=getSemanticObject().getRDFResource().getModel().listStatements(null, voc.usrLogin.getRDFProperty(), getSemanticObject().getModel().getRDFModel().createLiteral(login));
+            Iterator it=new GenericIterator(voc.User, aux, true);
+            if(it.hasNext())
+            {
+                ret=(User)it.next();
+            }
         }
         return ret;
     }
