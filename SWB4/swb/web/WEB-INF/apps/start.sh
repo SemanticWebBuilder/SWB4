@@ -1,5 +1,6 @@
 #!/bin/sh
-JAVA_OPTS="-Xss2048k -Xms24m -Xmx256m -Dfile.encoding=8859_1"
+
+JAVA_OPTS="-Xss128k -Xms24m -Xmx256m -Dfile.encoding=ISO-8859-1"
 export JAVA_OPTS
 # The two previous lines should be ajusted as needed
 
@@ -20,5 +21,4 @@ exec "$_RUNJAVA" $JAVA_OPTS -Xverify:none \
 -Dloader.jar.repositories=jetty/lib,jetty/lib/endorsed \
 -Dloader.main.class=org.mortbay.jetty.Server \
 Loader jetty/conf/main.xml jetty/conf/admin.xml
-
 
