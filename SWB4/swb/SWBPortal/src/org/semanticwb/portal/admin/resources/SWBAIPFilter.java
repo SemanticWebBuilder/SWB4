@@ -5,24 +5,14 @@
 
 package org.semanticwb.portal.admin.resources;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.sql.Timestamp;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.SWBPlatform;
-import org.semanticwb.model.IPFilter;
-import org.semanticwb.model.SWBContext;
-import org.semanticwb.model.User;
-import org.semanticwb.model.WebSite;
-import org.semanticwb.portal.api.GenericResource;
-import org.semanticwb.portal.api.SWBActionResponse;
-import org.semanticwb.portal.api.SWBParamRequest;
-import org.semanticwb.portal.api.SWBResourceException;
-import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.model.*;
+import org.semanticwb.portal.api.*;
 
 
 /**
@@ -126,9 +116,9 @@ public class SWBAIPFilter extends GenericResource {
                         
                         //TODO: falta saber si el IPFilter tiene descripcion, IP y action
                         if (strOrder.equals("ip")) sort=rec.getValue(); 
-//                        else if (strOrder.equals("description"))  sort = rec.getDescription();
+                        else if (strOrder.equals("description"))  sort = rec.getDescription();
 //                        else if (strOrder.equals("action")) sort=String.valueOf(rec.getAction());
-//                        else if (strOrder.equals("lastupdate")) sort=String.valueOf(rec.getLastupdate());
+                        else if (strOrder.equals("lastupdate")) sort=String.valueOf(rec.getUpdated());
                         sort+=":"+rec.getId();
                         strArray[cont]=sort;
                         cont++;
@@ -139,9 +129,9 @@ public class SWBAIPFilter extends GenericResource {
                     sort=String.valueOf(rec.getId());
                     //TODO: falta saber si IPFilter va tener Description y action
                     if (strOrder.equals("ip")) sort=rec.getValue();
-//                    else if (strOrder.equals("description"))  sort=rec.getDescription();
+                    else if (strOrder.equals("description"))  sort=rec.getDescription();
 //                    else if (strOrder.equals("action")) sort=String.valueOf(rec.getAction());
-//                    else if (strOrder.equals("lastupdate")) sort=String.valueOf(rec.getLastupdate());
+                    else if (strOrder.equals("lastupdate")) sort=String.valueOf(rec.getUpdated());
                     sort+=":"+rec.getId();
                     strArray[cont]=sort;
                     cont++;
@@ -211,9 +201,7 @@ public class SWBAIPFilter extends GenericResource {
         sbRet.append(rec.getValue());
         sbRet.append("</td> \n");
         sbRet.append("<td> \n");
-        //TODO: getDescription()
-        //sbRet.append(rec.getDescription());
-        sbRet.append("Descripción????");
+        sbRet.append(rec.getDescription());
         sbRet.append("</td> \n");
         sbRet.append("<td> \n");
         //TODO: getAction()
@@ -221,9 +209,7 @@ public class SWBAIPFilter extends GenericResource {
         sbRet.append("Acción???");
         sbRet.append("</td> \n");
         sbRet.append("<td> \n");
-        //TODO: getUpdated()
-        //sbRet.append(rec.getUpdated());
-        sbRet.append("Ultima actualización???");
+        sbRet.append(rec.getUpdated());
         sbRet.append("</td> \n");
         sbRet.append("</tr> \n");
         return sbRet.toString();
@@ -407,7 +393,6 @@ public class SWBAIPFilter extends GenericResource {
             WebSite tm=(WebSite)it.next();
             //TODO: AdmFilterMgr.getInstance().haveAccess2TopicMap
             //if(2 == AdmFilterMgr.getInstance().haveAccess2TopicMap(user, tm.getId()))
-            if(true) // Temporal
             {
                 js+="<option value=\""+tm.getId()+"\"";
                 if(tm.getId().equals(idtm)) { js+=" selected"; bOk=true; }
@@ -432,8 +417,8 @@ public class SWBAIPFilter extends GenericResource {
         sbRet.append("<td><a href=\"javascript:sort('ip',"+iPage+")\" class=\"link\">"+paramsRequest.getLocaleString("msgIP")+"</a></td> \n");
         sbRet.append("<td><a href=\"javascript:sort('description',"+iPage+")\" class=\"link\">"+paramsRequest.getLocaleString("msgDescription")+"</a></td> \n");
         sbRet.append("<td><a href=\"javascript:sort('action',"+iPage+")\" class=\"link\">"+paramsRequest.getLocaleString("msgRestriction")+"</a></td> \n");
-        //sbRet.append("<td class=\"datos\"><a href=\"javascript:sort('lastupdate',"+iPage+")\">Fecha Última Actualización</a></td> \n");
-        sbRet.append("<td>"+paramsRequest.getLocaleString("msgLastUpdate")+"</td> \n");
+        sbRet.append("<td><a href=\"javascript:sort('lastupdate',"+iPage+")\">"+paramsRequest.getLocaleString("msgLastUpdate")+"</a></td> \n");
+        //sbRet.append("<td>"+paramsRequest.getLocaleString("msgLastUpdate")+"</td> \n");
         sbRet.append("</tr> \n");
         if (strOrder.equals("order")) 
         {
@@ -522,9 +507,7 @@ public class SWBAIPFilter extends GenericResource {
         sbRet.append("<tr> \n");
         sbRet.append("<td class=\"datos\">"+paramsRequest.getLocaleString("msgDescription")+":</td> \n");
         sbRet.append("<td class=\"valores\"><textarea name=\"description\" cols=\"38\" rows=\"8\" wrap=\"VIRTUAL\">");
-        //TODO: getDescription() se va tener descripción en IPFilter
-        //if(rec!=null && rec.getDescription()!=null) sbRet.append(rec.getDescription());
-        sbRet.append("IPFilter Descripción ????"); // temporal
+        if(rec!=null && rec.getDescription()!=null) sbRet.append(rec.getDescription());
         sbRet.append("</textarea></td> \n");
         sbRet.append("</tr> \n");
         sbRet.append("<tr> \n");
@@ -604,10 +587,10 @@ public class SWBAIPFilter extends GenericResource {
             {
                 IPFilter rec=ws.createIPFilter();
                 //TODO: IPFilter Description, Action, IP, user, created, updated
-//                    rec.setDescription(description);
+                    rec.setDescription(description);
                     rec.setValue(ip);
 //                    rec.setAction(action);
-//                    rec.setCreator(user);
+                    rec.setCreator(user);
                 //IPFilter rec=srv.createIPFilter(idtm,ip,description,action,lastupdate,response.getUser().getId());
                 if(rec!=null && !rec.getId().equals("0")) msg=response.getLocaleString("msgOkAdd")+" "+rec.getId()+".";
                 else msg=response.getLocaleString("msgErrAdd")+" "+id+".";
@@ -619,10 +602,10 @@ public class SWBAIPFilter extends GenericResource {
                 try{
                 //if(srv.updateIPFilter(idtm,id,ip,description,action,lastupdate,response.getUser().getId())) 
                     //TODO: IPFilter Description, Action, IP, user, created, updated
-//                    rec.setDescription(description);
+                    rec.setDescription(description);
                     rec.setValue(ip);
 //                    rec.setAction(action);
-//                    rec.setModifiedBy(user);
+                    rec.setModifiedBy(user);
                     msg=response.getLocaleString("msgOkUpdate")+" "+id+".";
                 }
                 catch(Exception e)

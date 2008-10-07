@@ -5,11 +5,8 @@
 
 package org.semanticwb.portal.admin.resources;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,27 +14,9 @@ import org.semanticwb.Logger;
 
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.PFlow;
-import org.semanticwb.model.Permission;
-import org.semanticwb.model.Portlet;
-import org.semanticwb.model.Role;
-import org.semanticwb.model.Rule;
-import org.semanticwb.model.SWBContext;
-import org.semanticwb.model.Template;
-import org.semanticwb.model.User;
-import org.semanticwb.model.UserRepository;
-import org.semanticwb.model.WebPage;
-import org.semanticwb.model.WebSite;
-import org.semanticwb.platform.SemanticVocabulary;
-import org.semanticwb.portal.api.GenericResource;
-import org.semanticwb.portal.api.SWBParamRequest;
-import org.semanticwb.portal.api.SWBResourceException;
-import org.semanticwb.portal.api.SWBResourceURL;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
+import org.semanticwb.model.*;
+import org.semanticwb.portal.api.*;
+import org.w3c.dom.*;
 
 
 /**
