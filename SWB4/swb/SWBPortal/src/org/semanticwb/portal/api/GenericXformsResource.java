@@ -4,6 +4,7 @@
  */
 package org.semanticwb.portal.api;
 
+import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import org.w3c.dom.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -18,7 +19,6 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.*;
 import javax.servlet.ServletInputStream;
-import org.apache.xerces.impl.dv.util.Base64;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
@@ -96,6 +96,7 @@ public class GenericXformsResource extends GenericResource {
                 response.getWriter().print(res);
             } else { //Se desea la instancia de Administración
                 //response.getOutputStream().write(initAdminModel(request,paramsRequest).getBytes());
+                System.out.println("Entra a doLoadInstanceJ1:" + initAdminModel(request, paramsRequest));
                 response.getWriter().print(initAdminModel(request, paramsRequest));
             }
         } catch (Exception e) {
@@ -107,7 +108,7 @@ public class GenericXformsResource extends GenericResource {
     /**
      * Metodo que proporciona una instancia de inicio para el recurso xForms, busca un archivo NombreClase_inst_locale
      **/
-    private String initViewModel(HttpServletRequest request, SWBParamRequest paramsRequest) // Inicializa el modelo de la forma, puede leerse de un archivo xml
+    public String initViewModel(HttpServletRequest request, SWBParamRequest paramsRequest) // Inicializa el modelo de la forma, puede leerse de un archivo xml
     {
         String instanceName = getClass().getName() + "_V_inst";
         if (request.getParameter("instanceName") != null) {
@@ -119,13 +120,12 @@ public class GenericXformsResource extends GenericResource {
     /**
      * Metodo que proporciona una instancia de inicio para el recurso xForms, busca un archivo NombreClase_inst_locale
      **/
-    private String initAdminModel(HttpServletRequest request, SWBParamRequest paramsRequest) // Inicializa el modelo de la forma, puede leerse de un archivo xml
+    public String initAdminModel(HttpServletRequest request, SWBParamRequest paramsRequest) // Inicializa el modelo de la forma, puede leerse de un archivo xml
     {
         Portlet base = getResourceBase();
         Document dom = null;
-        System.out.println("Entra a initAdminModel");
-        if (base.getXml() != null && base.getXml().trim().length()>0) {
-            System.out.println("base.getXml():"+base.getXml());
+        if (base.getXml() != null && base.getXml().trim().length() > 0) {
+            System.out.println("base.getXml-J():" + base.getXml());
             dom = SWBUtils.XML.xmlToDom(base.getXml());
             NodeList nviewNode = dom.getElementsByTagName("wbadm");
             if (nviewNode.getLength() == 0) { //Carga la instancia de archivo
@@ -150,7 +150,7 @@ public class GenericXformsResource extends GenericResource {
     /**
      * Metodo que proporciona una instancia de inicio para el recurso xForms, busca un archivo NombreClase_inst_locale
      **/
-    private String initAdminModelFromFile(HttpServletRequest request, SWBParamRequest paramsRequest) // Inicializa el modelo de la forma, puede leerse de un archivo xml
+    public String initAdminModelFromFile(HttpServletRequest request, SWBParamRequest paramsRequest) // Inicializa el modelo de la forma, puede leerse de un archivo xml
     {
         String instanceName = getClass().getName() + "_inst";
         if (request.getAttribute("instanceName") != null) {
@@ -312,7 +312,31 @@ public class GenericXformsResource extends GenericResource {
             } else { // Insertar el xml como nuevo
                 xml = "<wbadm>" + data + "</wbadm>";
             }
-            System.out.println("Graba-JOrge:<?xml version=\"1.0\" encoding=\"UTF-8\"?><resource>" + xml + "</resource>");
+            Document dom = SWBUtils.XML.xmlToDom(xml);
+            if (dom.getElementsByTagName("data") != null) {
+                System.out.println("Entra a data-1");
+                NodeList nlist =  dom.getElementsByTagName("data").item(0).getChildNodes();
+                for (int i = 0; i < nlist.getLength(); i++) 
+                {
+                    System.out.println("Entra a data-2J");
+                    Node node = nlist.item(i);
+                    if(node.getNodeName().equalsIgnoreCase("#text")) {
+                        continue;
+                    }
+                    System.out.println("node:"+node.getNodeName());
+                    if (node.getAttributes()!=null && node.getAttributes().getLength() > 0) {
+                        System.out.println("Entra a data-3");
+                        Node nSave = node.getAttributes().getNamedItem("wbsave");
+                        if (nSave != null) {
+                            System.out.println("Entra a data-4");
+                            dom.removeChild(node);
+                        }
+                    }
+                }
+            }
+
+            System.out.println("Graba-JOrgitoo:<?xml version=\"1.0\" encoding=\"UTF-8\"?><resource>" + xml + "</resource>");
+            xml = SWBUtils.TEXT.encode(xml, "UTF-8");
             base.setXml("<resource>" + xml + "</resource>");
         //base..update(paramsRequest.getUser().getId(), "Resource width id:"+ base.getId()+",was updated succefully");
         } catch (Exception e) {
@@ -336,7 +360,6 @@ public class GenericXformsResource extends GenericResource {
                 uploadFiles(doc);
                 PrintWriter out = response.getWriter();
                 String saca = ProcessData(SWBUtils.XML.domToXml(doc));
-                System.out.println("Saca:" + saca);
                 out.println(saca);
             //doMethod(request, response, paramsRequest);
             }
@@ -363,30 +386,39 @@ public class GenericXformsResource extends GenericResource {
                 Node fileNode = nNodeMap.getNamedItem("file");
                 if (fileNode != null) //El nodo es de tipo file
                 {
-                    byte[] decodedData = Base64.decode(node.getFirstChild().getNodeValue());
-                    if (decodedData != null && decodedData.length > 0) {
-                        String fileName = null;
-                        int pos = fileNode.getNodeValue().lastIndexOf("\\");
-                        if (pos > -1) {
-                            fileName = fileNode.getNodeValue().substring(pos + 1);
+                    String fileName = null;
+                    if (node.getFirstChild() != null && node.getFirstChild().getNodeValue() != null) {
+                        //byte[] decodedData = Base64.decode(node.getFirstChild().getNodeValue());
+                        String decodedData = SWBUtils.TEXT.decodeBase64(node.getFirstChild().getNodeValue());
+                        if (decodedData != null) {
+                            int pos = fileNode.getNodeValue().lastIndexOf("\\");
+                            if (pos > -1) {
+                                fileName = fileNode.getNodeValue().substring(pos + 1);
+                            }
+                            File file = new File(SWBPlatform.getWorkPath() + portlet.getWorkPath());
+                            if (!file.exists()) {
+                                file.mkdirs();
+                            }
+                            fileNode.setNodeValue("");
+                            try {
+                                FileOutputStream fos = new FileOutputStream(SWBPlatform.getWorkPath() + portlet.getWorkPath() + "/" + fileName);
+                                fos.write(decodedData.getBytes());
+                                fos.close();
+                            } catch (Exception e) {
+                                log.error(e);
+                            }
+                            node.getFirstChild().setNodeValue(fileName);
                         }
-                        File file = new File(SWBPlatform.getWorkPath() + portlet.getWorkPath());
-                        if (!file.exists()) {
-                            file.mkdirs();
-                        }
-                        fileNode.setNodeValue("");
-                        try {
-                            FileOutputStream fos = new FileOutputStream(SWBPlatform.getWorkPath() + portlet.getWorkPath() + "/" + fileName);
-                            fos.write(decodedData);
-                            fos.close();
-                        } catch (Exception e) {
-                            log.error(e);
+                    } else {
+                        System.out.println("La imagen esta vacia, pero pone en el nodo:" + node.getNodeName() + ",valor:" + fileName);
+                        if (fileName == null) {
+                            fileName = "";
                         }
                         node.getFirstChild().setNodeValue(fileName);
                     }
                 }
                 Node fileType = nNodeMap.getNamedItem("type");
-                if (fileNode != null) //El nodo es de tipo type
+                if (fileType != null) //El nodo es de tipo type
                 {
                     fileType.setNodeValue("");
                 }
