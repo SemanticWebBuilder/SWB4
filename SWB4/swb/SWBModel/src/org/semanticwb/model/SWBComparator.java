@@ -3,7 +3,6 @@ package org.semanticwb.model;
 
 import org.semanticwb.platform.*;
 import java.util.*;
-import org.semanticwb.model.base.GenericObjectBase;
 
 
 /** objeto: comparador de topicos, se utiliza para ordenar topicos
@@ -51,6 +50,26 @@ public class SWBComparator implements Comparator
             ret=-1;
         }
         return ret;
+    }
+    
+    public static Iterator sortSermanticObjects(Iterator it, String lang)
+    {    
+        TreeSet set=new TreeSet(new SWBComparator(lang));
+        while(it.hasNext())
+        {
+            set.add(it.next());
+        }
+        return set.iterator();        
+    }
+    
+    public static Iterator sortSermanticObjects(Iterator it)
+    {
+        TreeSet set=new TreeSet(new SWBComparator());
+        while(it.hasNext())
+        {
+            set.add(it.next());
+        }
+        return set.iterator();
     }
 
 }
