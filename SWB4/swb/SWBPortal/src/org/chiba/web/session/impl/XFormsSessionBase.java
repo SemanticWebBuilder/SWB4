@@ -118,8 +118,6 @@
 
 package org.chiba.web.session.impl;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.chiba.adapter.ChibaEvent;
 import org.chiba.adapter.DefaultChibaEventImpl;
 import org.chiba.adapter.ui.UIGenerator;
@@ -147,6 +145,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
+import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 
 /**
@@ -166,7 +165,8 @@ public class XFormsSessionBase extends AbstractXFormsSession {
     private String requestURI;
     private String formURI;
 
-    private static final Log LOGGER = LogFactory.getLog(XFormsSessionBase.class);
+    //private static final Log LOGGER = LogFactory.getLog(XFormsSessionBase.class);
+    private static Logger LOG = SWBUtils.getLogger(XFormsSessionBase.class);
 
 
     public XFormsSessionBase(HttpServletRequest request,
@@ -208,9 +208,6 @@ public class XFormsSessionBase extends AbstractXFormsSession {
             baseURI = this.requestURI + this.formURI;
         } else {
             baseURI = new File(this.contextRoot, this.formURI).toURI().toString();
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("baseURI: " + baseURI);
-            }
         }
         return baseURI;
     }
@@ -405,13 +402,9 @@ public class XFormsSessionBase extends AbstractXFormsSession {
 
                 //kill XFormsSession
                 getManager().deleteXFormsSession(getKey());
-                if(LOGGER.isDebugEnabled()){
-                    LOGGER.debug("loading: " + loadURI);
-                }
                 response.sendRedirect(response.encodeRedirectURL(loadURI));
             }
         }
-        LOGGER.debug("************************* EXITED DURING XFORMS MODEL INIT *************************");
     }
 
     /**
@@ -487,7 +480,7 @@ public class XFormsSessionBase extends AbstractXFormsSession {
         }else{
             generator.setParameter("action-url", getActionURL(false));
         }
-        generator.setParameter("debug-enabled", String.valueOf(LOGGER.isDebugEnabled()));
+        generator.setParameter("debug-enabled", String.valueOf(false));
         String selectorPrefix = Config.getInstance().getProperty(HttpRequestHandler.SELECTOR_PREFIX_PROPERTY,
                 HttpRequestHandler.SELECTOR_PREFIX_DEFAULT);
         generator.setParameter("selector-prefix", selectorPrefix);
@@ -546,7 +539,6 @@ public class XFormsSessionBase extends AbstractXFormsSession {
             actionURL += sessionId;
         }
 
-        LOGGER.debug("actionURL: " + actionURL);
         // encode the URL to allow for session id rewriting
         actionURL = response.encodeURL(actionURL);
         return actionURL;
