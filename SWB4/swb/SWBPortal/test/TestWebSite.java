@@ -323,6 +323,22 @@ public class TestWebSite {
         }        
     }
     
+    //@Test
+    public void TestAdmin2()
+    {    
+        //if(SWBContext.getWebSite("SWBAdmin")==null)
+        {
+            WebSite site=SWBContext.getWebSite("SWBAdmin");
+            //Asignar platilla a system 
+            WebPage menus=site.getWebPage("WBAd_System");
+            TemplateRef tplref=site.createTemplateRef();
+            tplref.setTemplate(site.getTemplate("2"));
+            tplref.setActive(true);
+            tplref.setPriority(3);
+            menus.addTemplateRef(tplref);    
+        }
+    }
+    
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     //
