@@ -5,8 +5,8 @@
 
 package org.chiba.web.filter;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+//import org.apache.commons.logging.Log;
+//import org.apache.commons.logging.LogFactory;
 import org.chiba.web.WebAdapter;
 import org.chiba.web.WebFactory;
 import org.chiba.web.servlet.WebUtil;
@@ -24,6 +24,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
+import org.semanticwb.portal.resources.Banner1;
 
 /**
  * A Servlet Filter to provide XForms functionality to existing Servlets
@@ -34,7 +37,8 @@ import java.io.IOException;
  */
 @SuppressWarnings({"JavadocReference"})
 public class XFormsFilter implements Filter {
-    private static final Log LOG = LogFactory.getLog(XFormsFilter.class);
+    //private static final Log LOG = LogFactory.getLog(XFormsFilter.class);
+    private static Logger LOG = SWBUtils.getLogger(XFormsFilter.class);
     private WebFactory webFactory;
     private String mode;
     private String defaultRequestEncoding = "UTF-8";
@@ -66,9 +70,7 @@ public class XFormsFilter implements Filter {
      * @see http://java.sun.com/j2ee/sdk_1.3/techdocs/api/javax/servlet/Filter.html#destroy()
      */
     public void destroy() {
-        if(LOG.isDebugEnabled()) {
-            LOG.debug("cleanups allocated resources");
-        }
+        LOG.debug("cleanups allocated resources");
         webFactory.destroyXFormsSessionManager();
     }
 
