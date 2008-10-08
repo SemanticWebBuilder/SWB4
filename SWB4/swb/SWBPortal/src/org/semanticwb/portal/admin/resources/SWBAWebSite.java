@@ -469,12 +469,19 @@ public class SWBAWebSite extends GenericResource {
             out.println("</TR>");
             out.println("<tr ><td width=\"150\" align=\"right\" class=\"datos\">"+paramRequest.getLocaleString("msgLanguageDefect")+":</td><td class=\"valores\">");
             // P/languages
-            String slang=tm.getLanguage().getId();
+            Language lang = tm.getLanguage(); 
+            String slang=null;
             int pos=-1;
-            pos=tm.getLanguage().getId().indexOf("_WB");
-            if(pos>-1) slang=tm.getLanguage().getId().substring(pos+3);
+            if(lang!=null)
+            {
+                slang=lang.getId();
+                pos=slang.indexOf("_WB");
+                if(pos>-1) slang=slang.substring(pos+3);
+            }
+            else slang="es";
             Language recLang=tm.getLanguage(slang);
             if(recLang!=null) out.println(recLang.getTitle());
+            else out.println("Español");
             out.println("</td></tr>");
             out.println("<tr ><td width=\"150\" align=\"right\" class=\"datos\">"+paramRequest.getLocaleString("msgRespositoryUse")+":</td><td class=\"valores\">");
             // P/Repositorios de usuarios
