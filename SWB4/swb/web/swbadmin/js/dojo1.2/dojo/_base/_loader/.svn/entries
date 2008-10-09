@@ -1,0 +1,65 @@
+8
+
+dir
+0
+http://www.semanticbuilder.com/SemWB4/SWB4/swb/web/swbadmin/js/dojo1.2/dojo/_base/_loader
+http://www.semanticbuilder.com/SemWB4
+add
+
+
+
+
+
+
+
+svn:special svn:externals svn:needs-lock
+
+hostenv_rhino.js
+file
+
+
+
+add
+
+loader.js
+file
+
+
+
+add
+
+hostenv_browser.js
+file
+
+
+
+add
+
+loader_debug.js
+file
+
+
+
+add
+
+bootstrap.js
+file
+
+
+
+add
+
+hostenv_spidermonkey.js
+file
+
+
+
+add
+
+loader_xd.js
+file
+
+
+
+add
+
