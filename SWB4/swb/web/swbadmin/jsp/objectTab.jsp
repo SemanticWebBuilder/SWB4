@@ -1,6 +1,6 @@
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
-<%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.model.*,java.util.*"%>
+<%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.model.*,java.util.*,org.semanticwb.base.util.*"%>
 <%
     response.setHeader("Cache-Control", "no-cache"); 
     response.setHeader("Pragma", "no-cache"); 
@@ -24,6 +24,9 @@
     {
 %>
 <div dojoType="dijit.layout.TabContainer" id_="bottomTabs" tabPosition_="bottom" selectedChild_="btab1">
+    <div dojoType="dijit.layout.ContentPane" title="Información" style=" padding:10px;">
+        <iframe src ="/swb/swbadmin/jsp/SemObjectEditor.jsp?suri=<%=URLEncoder.encode(obj.getURI())%>" width="100%" height="100%" frameborder="0"></iframe>
+    </div><!-- end:info btab1 -->    
 <%        
         String auxid=null;
         if(cls.getName().equals("Template"))auxid="WBAd_sys_Templates";
@@ -43,7 +46,7 @@
                     System.out.println("tab:"+tab);
 %>
     <div id_="btab1" dojoType="dijit.layout.ContentPane" title="<%=tab.getTitle()%>" style=" padding:10px; ">
-        <iframe src ="<%=tab.getUrl()%>?tm=<%=tab.getWebSiteId()%>" width="100%" height="100%" frameborder="0"></iframe>
+        <iframe src ="<%=tab.getUrl()%>?tm=<%=obj.getSemanticObject().getModel().getName()%>&tp=<%=obj.getId()%>&id=<%=obj.getId()%>&act=edit" width="100%" height="100%" frameborder="0"></iframe>
     </div><!-- end:info btab1 -->
 <%
                 
