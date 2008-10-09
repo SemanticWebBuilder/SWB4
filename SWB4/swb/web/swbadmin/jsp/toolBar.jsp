@@ -10,7 +10,7 @@
             WebPage child=it.next();
             if(child.listVisibleChilds(null).hasNext())
             {
-                out.println("		<li dojoType=\"dijit.PopupMenuItem\" iconClass=\"mailIconOptions\">");
+                out.println("		<li dojoType=\"dijit.PopupMenuItem\" iconClass=\"swbIconWebPage\">");
                 out.println("			<span>"+child.getTitle()+"</span>");
                 out.println("		<ul dojoType=\"dijit.Menu\">");
                 addChild(child,out);
@@ -18,7 +18,7 @@
                 out.println("		</li>");
             }else
             {
-                out.println("            <li dojoType=\"dijit.MenuItem\" iconClass=\"mailIconOptions\" onclick=\"addNewTab('"+child.getURI()+"','"+child.getTitle()+"');\">"+child.getTitle()+"</li>");
+                out.println("            <li dojoType=\"dijit.MenuItem\" iconClass=\"swbIconWebPage\" onclick=\"addNewTab('"+child.getURI()+"','"+child.getTitle()+"');\">"+child.getTitle()+"</li>");
             }
         }
    }
@@ -38,7 +38,7 @@
     {
         WebPage child=it.next();
 %>
-    <div id="<%=child.getId()%>" dojoType="dijit.form.DropDownButton" iconClass="mailIconOptions">
+    <div id="<%=child.getId()%>" dojoType="dijit.form.DropDownButton" iconClass="swbIconWebPage">
         <script type="dojo/method" event="onClick">
         </script>
         <span><%=child.getTitle()%></span>
@@ -75,7 +75,7 @@
     </button>
     <span dojoType="dijit.Tooltip" connectId="newMsg">Click to compose new message.</span>
 
-    <button id="options" dojoType="dijit.form.Button" iconClass="mailIconOptions">
+    <button id="options" dojoType="dijit.form.Button" iconClass="swbIconWebPage">
         &nbsp;Options
         <script type="dojo/method" event="onClick">
             dijit.byId('optionsDialog').show();
