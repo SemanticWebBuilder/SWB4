@@ -4,7 +4,6 @@
  */
 package org.semanticwb.portal.api;
 
-import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import org.w3c.dom.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -96,7 +95,7 @@ public class GenericXformsResource extends GenericResource {
                 response.getWriter().print(res);
             } else { //Se desea la instancia de Administración
                 //response.getOutputStream().write(initAdminModel(request,paramsRequest).getBytes());
-                System.out.println("Entra a doLoadInstanceJ1:" + initAdminModel(request, paramsRequest));
+                System.out.println("Entra a doLoadInstanceJ2:" + initAdminModel(request, paramsRequest));
                 response.getWriter().print(initAdminModel(request, paramsRequest));
             }
         } catch (Exception e) {
@@ -125,7 +124,6 @@ public class GenericXformsResource extends GenericResource {
         Portlet base = getResourceBase();
         Document dom = null;
         if (base.getXml() != null && base.getXml().trim().length() > 0) {
-            System.out.println("base.getXml-J():" + base.getXml());
             dom = SWBUtils.XML.xmlToDom(base.getXml());
             NodeList nviewNode = dom.getElementsByTagName("wbadm");
             if (nviewNode.getLength() == 0) { //Carga la instancia de archivo
@@ -293,6 +291,25 @@ public class GenericXformsResource extends GenericResource {
         Portlet base = getResourceBase();
         //RecResource recRsc=base.
         try {
+            Document domtmp = SWBUtils.XML.getNewDocument();
+            Document dom = SWBUtils.XML.xmlToDom(data);
+            if (dom.getElementsByTagName("data") != null) {
+                Element ndata = domtmp.createElement("data");
+                domtmp.appendChild(ndata);
+                NodeList nlist = dom.getElementsByTagName("data").item(0).getChildNodes();
+                Node nodeEle = null;
+                for (int i = 0; i < nlist.getLength(); i++) {
+                    Node node = nlist.item(i);
+                    if (node.getNodeName().equalsIgnoreCase("#text")) {
+                        continue;
+                    }
+                    if (!node.getNodeName().startsWith("wb_")){
+                        nodeEle = domtmp.importNode(node, true);
+                        ndata.appendChild(nodeEle);
+                    }
+                }
+            }
+            data = SWBUtils.XML.domToXml(domtmp);
             String xml = base.getXml();
             int pos = -1;
             if (data != null) {
@@ -301,40 +318,18 @@ public class GenericXformsResource extends GenericResource {
                     data = data.substring(pos + 1);
                 }
             }
+
             if (xml != null) {
                 if ((pos = xml.indexOf("<resource>")) > -1) {
                     xml = xml.substring(pos + 10, xml.indexOf("</resource>"));
                 }
                 //Graba modo Admin
                 if ((pos = xml.indexOf("<wbadm>")) > -1) {
-                    xml = xml.substring(0, pos) + "<wbadm>" + data + "</wbadm>" + xml.substring(xml.indexOf("</wbadm>") + 8);
+                    xml = xml.substring(0, pos + 7) + data + xml.substring(xml.indexOf("</wbadm>"));
                 }
             } else { // Insertar el xml como nuevo
                 xml = "<wbadm>" + data + "</wbadm>";
             }
-            Document dom = SWBUtils.XML.xmlToDom(xml);
-            if (dom.getElementsByTagName("data") != null) {
-                System.out.println("Entra a data-1");
-                NodeList nlist =  dom.getElementsByTagName("data").item(0).getChildNodes();
-                for (int i = 0; i < nlist.getLength(); i++) 
-                {
-                    System.out.println("Entra a data-2J");
-                    Node node = nlist.item(i);
-                    if(node.getNodeName().equalsIgnoreCase("#text")) {
-                        continue;
-                    }
-                    System.out.println("node:"+node.getNodeName());
-                    if (node.getAttributes()!=null && node.getAttributes().getLength() > 0) {
-                        System.out.println("Entra a data-3");
-                        Node nSave = node.getAttributes().getNamedItem("wbsave");
-                        if (nSave != null) {
-                            System.out.println("Entra a data-4");
-                            dom.removeChild(node);
-                        }
-                    }
-                }
-            }
-
             System.out.println("Graba-JOrgitoo:<?xml version=\"1.0\" encoding=\"UTF-8\"?><resource>" + xml + "</resource>");
             xml = SWBUtils.TEXT.encode(xml, "UTF-8");
             base.setXml("<resource>" + xml + "</resource>");
@@ -386,20 +381,19 @@ public class GenericXformsResource extends GenericResource {
                 Node fileNode = nNodeMap.getNamedItem("file");
                 if (fileNode != null) //El nodo es de tipo file
                 {
-                    String fileName = null;
+                    String fileName = fileNode.getNodeValue();
+                    int pos = fileName.lastIndexOf("\\");
+                    if (pos > -1) {
+                        fileName = fileName.substring(pos + 1);
+                    }
                     if (node.getFirstChild() != null && node.getFirstChild().getNodeValue() != null) {
                         //byte[] decodedData = Base64.decode(node.getFirstChild().getNodeValue());
                         String decodedData = SWBUtils.TEXT.decodeBase64(node.getFirstChild().getNodeValue());
                         if (decodedData != null) {
-                            int pos = fileNode.getNodeValue().lastIndexOf("\\");
-                            if (pos > -1) {
-                                fileName = fileNode.getNodeValue().substring(pos + 1);
-                            }
                             File file = new File(SWBPlatform.getWorkPath() + portlet.getWorkPath());
                             if (!file.exists()) {
                                 file.mkdirs();
                             }
-                            fileNode.setNodeValue("");
                             try {
                                 FileOutputStream fos = new FileOutputStream(SWBPlatform.getWorkPath() + portlet.getWorkPath() + "/" + fileName);
                                 fos.write(decodedData.getBytes());
@@ -410,12 +404,12 @@ public class GenericXformsResource extends GenericResource {
                             node.getFirstChild().setNodeValue(fileName);
                         }
                     } else {
-                        System.out.println("La imagen esta vacia, pero pone en el nodo:" + node.getNodeName() + ",valor:" + fileName);
                         if (fileName == null) {
                             fileName = "";
                         }
-                        node.getFirstChild().setNodeValue(fileName);
+                        node.appendChild(doc.createTextNode(fileName));
                     }
+                    fileNode.setNodeValue("");
                 }
                 Node fileType = nNodeMap.getNamedItem("type");
                 if (fileType != null) //El nodo es de tipo type
