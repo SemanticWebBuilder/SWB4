@@ -101,8 +101,10 @@ public class SWBVocabulary
     public final SemanticProperty actualVersion;
     public final SemanticProperty xml;
     public final SemanticProperty lastVersion;
-    public final SemanticProperty value;
+    public final SemanticProperty ipFilterAction;
+    public final SemanticProperty ipFilterNumber;
     public final SemanticProperty hasRuleRef;
+    public final SemanticProperty value;
     public final SemanticProperty hasCalendar;
     public final SemanticProperty hasPortletRef;
     public final SemanticProperty hasTemplateRef;
@@ -242,8 +244,10 @@ public class SWBVocabulary
         actualVersion=vocabulary.getSemanticProperty(URI+"actualVersion");
         xml=vocabulary.getSemanticProperty(URI+"xml");
         lastVersion=vocabulary.getSemanticProperty(URI+"lastVersion");
-        value=vocabulary.getSemanticProperty(URI+"value");
+        ipFilterAction=vocabulary.getSemanticProperty(URI+"ipFilterAction");
+        ipFilterNumber=vocabulary.getSemanticProperty(URI+"ipFilterNumber");
         hasRuleRef=vocabulary.getSemanticProperty(URI+"hasRuleRef");
+        value=vocabulary.getSemanticProperty(URI+"value");
         hasCalendar=vocabulary.getSemanticProperty(URI+"hasCalendar");
         hasPortletRef=vocabulary.getSemanticProperty(URI+"hasPortletRef");
         hasTemplateRef=vocabulary.getSemanticProperty(URI+"hasTemplateRef");
