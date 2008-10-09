@@ -167,4 +167,48 @@ public class SemanticProperty
     {
         return m_inverse;
     }
+    
+    public boolean isBoolean()
+    {
+        boolean ret=false;
+        if(getRange().getURI().equals("http://www.w3.org/2001/XMLSchema#boolean"))ret=true;
+        return ret;        
+    }
+    
+    public boolean isInt()
+    {
+        boolean ret=false;
+        if(getRange().getURI().equals("http://www.w3.org/2001/XMLSchema#int"))ret=true;
+        return ret;        
+    }    
+    
+    public boolean isDate()
+    {
+        boolean ret=false;
+        if(getRange().getURI().equals("http://www.w3.org/2001/XMLSchema#date"))ret=true;
+        return ret;        
+    }    
+    
+    public boolean isDateTime()
+    {
+        boolean ret=false;
+        if(getRange().getURI().equals("http://www.w3.org/2001/XMLSchema#dateTime"))ret=true;
+        return ret;        
+    }       
+    
+    public boolean isString()
+    {
+        boolean ret=false;
+        if(getRange().getURI().equals("http://www.w3.org/2001/XMLSchema#string"))ret=true;
+        return ret;        
+    }       
+    
+    public boolean isFloat()
+    {
+        boolean ret=false;
+        if(getRange().getURI().equals("http://www.w3.org/2001/XMLSchema#float"))ret=true;
+        return ret;        
+    }       
+    
+    
 }
