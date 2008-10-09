@@ -20,7 +20,7 @@ public class IPFilterSrv {
     {
         IPFilter ipFilter = website.createIPFilter();
         ipFilter.setActive(true);
-        ipFilter.setValue(value);
+        ipFilter.setIpNumber(value);
 
         SWBPortal.log(user.getURI(), "create", ipFilter.getURI(), ipFilter.getURI(), "create ipFilter", null);
         
@@ -31,7 +31,7 @@ public class IPFilterSrv {
     {
         IPFilter ipFilter = website.createIPFilter(id);
         ipFilter.setActive(true);
-        ipFilter.setValue(value);
+        ipFilter.setIpNumber(value);
 
         SWBPortal.log(user.getURI(), "create", ipFilter.getURI(), ipFilter.getURI(), "create ipFilter", null);
         
@@ -53,7 +53,7 @@ public class IPFilterSrv {
         boolean updated = false;
         
         if (value != null) {
-            ipFilter.setValue(value);
+            ipFilter.setIpNumber(value);
         }
         updated = true;
         
