@@ -14,7 +14,7 @@
     
     public void addWebSites(JSONArray arr)  throws JSONException
     {
-        Iterator<WebSite> it=SWBContext.listWebSites();
+        Iterator<WebSite> it=SWBComparator.sortSermanticObjects(SWBContext.listWebSites());
         while(it.hasNext())
         {
             WebSite site=it.next();
@@ -76,7 +76,7 @@
         JSONArray childs=new JSONArray();
         obj.putOpt("children", childs);
         
-        Iterator<Template> it=site.listTemplates();
+        Iterator<Template> it=SWBComparator.sortSermanticObjects(site.listTemplates());
         while(it.hasNext())
         {
             Template aux=it.next();
@@ -106,7 +106,7 @@
         JSONArray childs=new JSONArray();
         obj.putOpt("children", childs);
         
-        Iterator<PortletType> it=site.listPortletTypes();
+        Iterator<PortletType> it=SWBComparator.sortSermanticObjects(site.listPortletTypes());
         while(it.hasNext())
         {
             PortletType aux=it.next();
@@ -126,7 +126,7 @@
         JSONArray childs=new JSONArray();
         obj.putOpt("children", childs);
         
-        Iterator<Portlet> it=aux.listPortlets();
+        Iterator<Portlet> it=SWBComparator.sortSermanticObjects(aux.listPortlets());
         while(it.hasNext())
         {
             Portlet aux2=it.next();
