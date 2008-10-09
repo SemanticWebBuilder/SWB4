@@ -181,4 +181,11 @@ public class Portlet extends PortletBase
             //recResource.update(userid, comment);
         }
     }
+
+    @Override
+    public void setXml(String xml) 
+    {
+        dom=null;
+        super.setXml(xml);
+    }
 }
