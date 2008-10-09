@@ -7,20 +7,17 @@ package org.semanticwb.portal.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.URL;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
 import org.semanticwb.portal.api.*;
 
 /**
  *
  * @author Jei
  */
-public class Banner extends GenericResource
+public class Banner extends GenericXformsResource
 {
 
     private static Logger log = SWBUtils.getLogger(GenericXformsResource.class);
@@ -73,7 +70,7 @@ public class Banner extends GenericResource
     }
     */
     
-    
+    /*
     //@Override
     public void doView_(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
     {
@@ -174,7 +171,20 @@ public class Banner extends GenericResource
         catch (Exception e) { log.error("Error in resource Banner while bringing HTML", e); }
         response.getWriter().print(ret.toString());
     }
-   
+   */
+    
+    /**
+     * Metodo para hacer operaciones
+     */  
+    /*
+    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
+    {
+        Portlet base=getResourceBase();
+        base.addHit(request, response.getUser(), response.getTopic());
+        String url = base.getAttribute("url", "").trim();
+        if (!url.equals("")) response.sendRedirect(url);
+    }
+    */
     
     
 }

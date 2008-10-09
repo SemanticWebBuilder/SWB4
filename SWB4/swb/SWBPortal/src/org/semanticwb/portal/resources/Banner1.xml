@@ -10,7 +10,8 @@
             <xforms:instance xmlns="" src="{$wbInstance}"/>
             <xforms:bind id="bind_txtLocal" nodeset="txtLocal" required="true()"/>
             <xforms:bind id="bind_code" nodeset="code"/>
-            <xforms:bind id="bind_img" nodeset="img" type="base64Binary"/>
+            <xforms:bind id="bind_img" nodeset="wbFile_img" type="base64Binary"/>
+            <xforms:bind id="bind_showBanner1" nodeset="wb_showBanner1"/>
             <xforms:bind id="bind_alt" nodeset="alt"/>
             <xforms:bind id="bind_width" nodeset="width"/>
             <xforms:bind id="bind_height" nodeset="height"/>
@@ -65,7 +66,7 @@
                     <xforms:filename ref="@file"/>
                     <xforms:mediatype ref="@type"/>
             </xforms:upload>
-            
+            <xforms:output mediatype="text/html" bind="bind_showBanner1"/>
             <xforms:input bind="bind_alt">
                 <xforms:label>Texto alterno:</xforms:label>
                 <xforms:hint>Proporcione un texto alterno:</xforms:hint>

@@ -2,10 +2,11 @@
 <data>
 	<txtLocal/>
         <code/>
-        <img file="" type=""/>
+        <wbFile_img file="" type="" showFile="wb_showBanner1"/>
+        <wb_showBanner1/>
         <alt/>
         <width/>
         <height/>
         <url/>
-        <target/>
+        <target/>        
 </data>
