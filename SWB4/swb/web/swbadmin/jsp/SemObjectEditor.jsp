@@ -29,7 +29,7 @@
             if(prop.isDataTypeProperty())
             {
                 String value=request.getParameter(prop.getName());
-                if(value!=null)
+                if(value!=null && value.length()>0)
                 {
                     if(prop.isBoolean())obj.setBooleanProperty(prop, Boolean.parseBoolean(value));
                     if(prop.isInt())obj.setLongProperty(prop, Integer.parseInt(value));
