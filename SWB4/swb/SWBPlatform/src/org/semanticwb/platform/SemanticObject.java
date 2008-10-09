@@ -4,7 +4,7 @@ import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
-import com.hp.hpl.jena.rdf.model.impl.ResourceImpl;
+import com.hp.hpl.jena.rdf.model.impl.LiteralImpl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -136,6 +136,16 @@ public class SemanticObject
         Statement stm=m_res.getProperty(prop.getRDFProperty());
         if(stm!=null)
         {
+//            System.out.println("Int1:"+stm.getObject().getClass());
+//            if(stm.getObject() instanceof LiteralImpl)
+//            {
+//                LiteralImpl lit=(LiteralImpl)stm.getObject();
+//                System.out.println("Int:"+lit.isResource());
+//                System.out.println("Int:"+lit.isAnon());
+//                System.out.println("Int:"+lit.isURIResource());
+//                System.out.println("Int:"+lit.isValid());
+//                System.out.println("Int:"+lit.isWellFormedXML());
+//            }
             stm.changeObject(value);
         }else
         {
