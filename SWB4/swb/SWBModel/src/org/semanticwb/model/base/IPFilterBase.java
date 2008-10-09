@@ -7,23 +7,13 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class IPFilterBase extends GenericObjectBase implements Valueable,Activeable,Descriptiveable,Traceable
+public class IPFilterBase extends GenericObjectBase implements Traceable,Descriptiveable,Activeable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
     public IPFilterBase(SemanticObject base)
     {
         super(base);
-    }
-
-    public boolean isActive()
-    {
-        return getSemanticObject().getBooleanProperty(vocabulary.active);
-    }
-
-    public void setActive(boolean active)
-    {
-        getSemanticObject().setBooleanProperty(vocabulary.active, active);
     }
 
     public Date getCreated()
@@ -34,6 +24,16 @@ public class IPFilterBase extends GenericObjectBase implements Valueable,Activea
     public void setCreated(Date created)
     {
         getSemanticObject().setDateProperty(vocabulary.created, created);
+    }
+
+    public boolean isActive()
+    {
+        return getSemanticObject().getBooleanProperty(vocabulary.active);
+    }
+
+    public void setActive(boolean active)
+    {
+        getSemanticObject().setBooleanProperty(vocabulary.active, active);
     }
 
     public void setModifiedBy(org.semanticwb.model.User user)
@@ -55,16 +55,6 @@ public class IPFilterBase extends GenericObjectBase implements Valueable,Activea
              ret=(User)vocabulary.User.newGenericInstance(obj);
          }
          return ret;
-    }
-
-    public String getValue()
-    {
-        return getSemanticObject().getProperty(vocabulary.value);
-    }
-
-    public void setValue(String value)
-    {
-        getSemanticObject().setProperty(vocabulary.value, value);
     }
 
     public String getTitle()
@@ -95,6 +85,16 @@ public class IPFilterBase extends GenericObjectBase implements Valueable,Activea
     public void setUpdated(Date updated)
     {
         getSemanticObject().setDateProperty(vocabulary.updated, updated);
+    }
+
+    public int getAction()
+    {
+        return getSemanticObject().getIntProperty(vocabulary.ipFilterAction);
+    }
+
+    public void setAction(int ipFilterAction)
+    {
+        getSemanticObject().setLongProperty(vocabulary.ipFilterAction, ipFilterAction);
     }
 
     public void setCreator(org.semanticwb.model.User user)
@@ -136,6 +136,16 @@ public class IPFilterBase extends GenericObjectBase implements Valueable,Activea
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(vocabulary.description, description, lang);
+    }
+
+    public String getIpNumber()
+    {
+        return getSemanticObject().getProperty(vocabulary.ipFilterNumber);
+    }
+
+    public void setIpNumber(String ipFilterNumber)
+    {
+        getSemanticObject().setProperty(vocabulary.ipFilterNumber, ipFilterNumber);
     }
 
     public void remove()
