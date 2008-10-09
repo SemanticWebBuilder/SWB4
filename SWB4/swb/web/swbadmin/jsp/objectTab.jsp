@@ -43,6 +43,7 @@
                     System.out.println("tab:"+tab);
 %>
     <div id_="btab1" dojoType="dijit.layout.ContentPane" title="<%=tab.getTitle()%>" style=" padding:10px; ">
+        <iframe src ="<%=tab.getUrl()%>?tm=<%=tab.getWebSiteId()%>" width="100%" height="100%" frameborder="0"></iframe>
     </div><!-- end:info btab1 -->
 <%
                 
