@@ -8,7 +8,7 @@
     
     out.println("suri="+id);
 %>
-<a href="?suri=<%=org.semanticwb.base.util.URLEncoder.encode("http://www.sep.gob.mx/WebPage#home")%>">liga</a>
+<!--<a href="?suri=<%=org.semanticwb.base.util.URLEncoder.encode("http://www.sep.gob.mx/WebPage#home")%>">liga</a>-->
 <form action="/swb/swbadmin/jsp/SemObjectEditor.jsp" method="post">
     <input type="hidden" name="suri" value="<%=id%>">
 <%
@@ -51,8 +51,11 @@
             String value=obj.getProperty(prop);
             if(prop.isInt())value=""+obj.getIntProperty(prop);
             if(value==null)value="";
+            
+            String label=prop.getName();
+            if(prop.getLabel()!=null)label=prop.getLabel();
 %>
-            <%=prop.getName()%><input name="<%=prop.getName()%>" type="text" value="<%=value%>">
+            <%=label%>: <input name="<%=prop.getName()%>" type="text" value="<%=value%>"><br>
 <%      }else
         {
 /*            
@@ -64,7 +67,6 @@
 */            
         }
 %>
-<br>
 <%
     }
 %>
