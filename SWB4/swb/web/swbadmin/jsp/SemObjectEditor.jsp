@@ -29,11 +29,17 @@
             if(prop.isDataTypeProperty())
             {
                 String value=request.getParameter(prop.getName());
-                if(value!=null && value.length()>0)
+                if(value!=null)
                 {
-                    if(prop.isBoolean())obj.setBooleanProperty(prop, Boolean.parseBoolean(value));
-                    if(prop.isInt())obj.setLongProperty(prop, Integer.parseInt(value));
-                    if(prop.isString())obj.setProperty(prop, value);
+                    if(value.length()>0)
+                    {
+                        if(prop.isBoolean())obj.setBooleanProperty(prop, Boolean.parseBoolean(value));
+                        if(prop.isInt())obj.setLongProperty(prop, Integer.parseInt(value));
+                        if(prop.isString())obj.setProperty(prop, value);
+                    }else
+                    {
+                        obj.removeProperty(prop);
+                    }
                 }
             }
         }
