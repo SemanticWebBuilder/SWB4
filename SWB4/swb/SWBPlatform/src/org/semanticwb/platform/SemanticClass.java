@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Vector;
 import org.semanticwb.*;
+import org.semanticwb.base.util.URLEncoder;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.GenericObject;
 
@@ -212,6 +213,15 @@ public class SemanticClass
     {
         return m_class.getURI();
     }
+    
+    /**
+     * Regresa URI codificado para utilizar en ligas de html
+     * @return URI Codificado
+     */
+    public String getEncodedURI()
+    {
+        return URLEncoder.encode(getURI());
+    }     
     
     public String getLabel(String lang)
     {

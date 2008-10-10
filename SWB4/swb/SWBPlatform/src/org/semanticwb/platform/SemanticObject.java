@@ -12,6 +12,7 @@ import java.util.Iterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.base.util.URLEncoder;
 
 /**
  *
@@ -83,6 +84,15 @@ public class SemanticObject
         if(m_virtual)return null;
         return m_res.getURI();
     }
+    
+    /**
+     * Regresa URI codificado para utilizar en ligas de html
+     * @return URI Codificado
+     */
+    public String getEncodedURI()
+    {
+        return URLEncoder.encode(getURI());
+    }    
     
     public String getRDFName()
     {

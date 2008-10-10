@@ -10,6 +10,7 @@ import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.base.util.URLEncoder;
 
 /**
  *
@@ -51,6 +52,15 @@ public class SemanticProperty
     {
         return m_prop.getURI();
     }
+    
+    /**
+     * Regresa URI codificado para utilizar en ligas de html
+     * @return URI Codificado
+     */
+    public String getEncodedURI()
+    {
+        return URLEncoder.encode(getURI());
+    }     
     
     public Property getRDFProperty()
     {
