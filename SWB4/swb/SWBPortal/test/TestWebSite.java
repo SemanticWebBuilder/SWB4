@@ -173,7 +173,53 @@ public class TestWebSite {
             portlet.setCreator(user);
             portlet.setPortletType(ptype);
             portlet.setTitle("Banner");
-        }       
+        }  
+        
+        if(site.getPortletType("Banner1")==null)
+        {
+            
+            PortletType ptype=site.createPortletType("Banner1");
+            ptype.setPortletClassName("org.semanticwb.portal.resources.Banner1");
+            ptype.setPortletBundle("org.semanticwb.portal.resources.Banner1");
+            ptype.setPortletMode(1);
+            ptype.setTitle("Recurso Banner1");
+                    
+            Portlet portlet=site.createPortlet();
+            portlet.setActive(true);
+            portlet.setCreator(user);
+            portlet.setPortletType(ptype);
+            portlet.setTitle("Banner");
+            
+            PortletRef portletref=site.createPortletRef();
+            portletref.setActive(true);
+            portletref.setPortlet(portlet);
+            portletref.setPriority(3);
+            
+            home.addPortletRef(portletref);
+        } 
+        
+        if(site.getPortletType("Controls")==null)
+        {
+            
+            PortletType ptype=site.createPortletType("Controls");
+            ptype.setPortletClassName("org.semanticwb.portal.resources.Controls");
+            ptype.setPortletBundle("org.semanticwb.portal.resources.Controls");
+            ptype.setPortletMode(1);
+            ptype.setTitle("Recurso Controls");
+                    
+            Portlet portlet=site.createPortlet();
+            portlet.setActive(true);
+            portlet.setCreator(user);
+            portlet.setPortletType(ptype);
+            portlet.setTitle("Controls");
+            
+            PortletRef portletref=site.createPortletRef();
+            portletref.setActive(true);
+            portletref.setPortlet(portlet);
+            portletref.setPriority(3);
+            
+            home.addPortletRef(portletref);
+        } 
         
         if(site.getPortletType("Menu")==null)
         {
@@ -212,7 +258,31 @@ public class TestWebSite {
             portletref.setPriority(3);
             
             home.addPortletRef(portletref);
-        }         
+        }  
+        
+        if(site.getPortletType("JSPResource")==null)
+        {
+            
+            PortletType ptype=site.createPortletType("JSPResource");
+            ptype.setPortletClassName("org.semanticwb.portal.resources.JSPResource");
+            ptype.setPortletBundle("org.semanticwb.portal.resources.JSPResource");
+            ptype.setPortletMode(1);
+            ptype.setTitle("Recurso JSPResource");
+                    
+            Portlet portlet=site.createPortlet();
+            portlet.setActive(true);
+            portlet.setCreator(user);
+            portlet.setPortletType(ptype);
+            portlet.setTitle("JSPResource");
+            
+            PortletRef portletref=site.createPortletRef();
+            portletref.setActive(true);
+            portletref.setPortlet(portlet);
+            portletref.setPriority(3);
+            
+            home.addPortletRef(portletref);
+        }  
+        
         
         if(site.getPortletType("HelloXforms")==null)
         {
