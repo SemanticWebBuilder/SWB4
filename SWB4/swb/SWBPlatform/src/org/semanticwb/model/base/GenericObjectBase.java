@@ -6,6 +6,7 @@
 package org.semanticwb.model.base;
 
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.base.util.URLEncoder;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
@@ -27,6 +28,15 @@ public class GenericObjectBase implements GenericObject
     {
         return m_obj.getURI();
     }
+    
+    /**
+     * Regresa URI codificado para utilizar en ligas de html
+     * @return URI Codificado
+     */
+    public String getEncodedURI()
+    {
+        return URLEncoder.encode(getURI());
+    }     
     
     public String getId()
     {
