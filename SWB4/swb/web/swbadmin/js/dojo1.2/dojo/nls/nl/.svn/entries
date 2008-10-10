@@ -1,23 +1,0 @@
-8
-
-dir
-0
-http://www.semanticbuilder.com/SemWB4/SWB4/swb/web/swbadmin/js/dojo1.2/dojo/nls/nl
-http://www.semanticbuilder.com/SemWB4
-add
-
-
-
-
-
-
-
-svn:special svn:externals svn:needs-lock
-
-colors.js
-file
-
-
-
-add
-
