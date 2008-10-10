@@ -9,13 +9,9 @@
         <title>Semantic WebBuilder 4</title>
         
         <style type="text/css">
-            @import "/swb/swbadmin/js/dojo1.1/dojo/resources/dojo.css";
-            @import "/swb/swbadmin/js/dojo1.1/dijit/themes/soria/soria.css";
-            @import "/swb/swbadmin/js/dojo1.1/dijit/demos/mail/mail.css";
+            @import "/swb/swbadmin/js/dojo1.2/dojo/resources/dojo.css";
+            @import "/swb/swbadmin/js/dojo1.2/dijit/themes/soria/soria.css";
             @import "/swb/swbadmin/css/swb.css";
-            
-            #main .dijitSplitterH { height: 7px }
-            #main .dijitSplitterV { width: 7px }
             
             /* pre-loader specific stuff to prevent unsightly flash of unstyled content */
             #loader { 
@@ -40,11 +36,11 @@
             }
         </style>
         
-        <script type="text/javascript" src="/swb/swbadmin/js/dojo1.1/dojo/dojo.js" 
+        <script type="text/javascript" src="/swb/swbadmin/js/dojo1.2/dojo/dojo.js" 
                 djConfig="parseOnLoad: false, isDebug: false"></script>
         
-        <script type="text/javascript" src="/swb/swbadmin/js/dojo1.1/dijit/dijit.js"></script>
-        <script type="text/javascript" src="/swb/swbadmin/js/dojo1.1/dijit/dijit-all.js" charset="utf-8"></script>
+        <script type="text/javascript" src="/swb/swbadmin/js/dojo1.2/dijit/dijit.js"></script>
+        <script type="text/javascript" src="/swb/swbadmin/js/dojo1.2/dijit/dijit-all.js" charset="utf-8"></script>
         
         <script type="text/javascript"> // dojo.requires()
             
@@ -93,7 +89,8 @@
             dojo.require("dojo.date.locale");
             
             // for the Tree
-            dojo.require("dojo.data.ItemFileReadStore");
+            dojo.require("dojo.data.ItemFileWriteStore");
+            //dojo.require("dojo.data.ItemFileReadStore");
             
             // for the colorpalette
             function setColor(color){
@@ -171,8 +168,8 @@
         <div id="loader"><div id="loaderInner">Loading Semantic WebBuilder... </div></div>
         
         <!-- data for tree and combobox -->
-        <div dojoType="dojo.data.ItemFileReadStore" jsId="treeStore" url="/swb/swbadmin/jsp/Tree.jsp"></div>
-        <div dojoType="dojo.data.ItemFileReadStore" jsId="sitesStore" url="/swb/swbadmin/jsp/Sites.jsp"></div>        
+        <div dojoType="dojo.data.ItemFileWriteStore" jsId="treeStore" url="/swb/swbadmin/jsp/Tree.jsp"></div>
+        <div dojoType="dojo.data.ItemFileWriteStore" jsId="sitesStore" url="/swb/swbadmin/jsp/Sites.jsp"></div>        
         <!-- Inline declaration for programmatically created "New Message" tabs --
         <div dojoType="dijit.Declaration" widgetClass="mail.NewMessage">
                 <div dojoType="dijit.layout.ContentPane" dojoAttachPoint="container" region="center" href_="mail/newMail.html" closeable="true">
@@ -316,8 +313,8 @@
                                     }
                                 });    
                             </script>
-                            <div id="mtree" dojoType="MainTree" store="treeStore" query_="{type:'continent'}" label_="Sitios">
-                                <script type="dojo/method" event="onClick" args="item">
+                            <div id="mtree" dojoType="MainTree" refreshOnExpand_="true" store="treeStore" query_="{type:'continent'}" label_="Sitios">
+                                <script type="dojo/method" event="onOpen" args="item">
                                     if(item){
                                         //var newTab = dijit.byId("vprop");    
                                         var id=treeStore.getValue(item, "id");
@@ -325,6 +322,11 @@
                                         getHtml('/swb/swbadmin/jsp/viewProps.jsp?id='+encodeURIComponent(id), "vprop");
                                     }
                                 </script>
+                                <script type="dojo/method" event="onExpand" args="item">
+                                    if(item){
+                                        alert("Hola...");
+                                    }
+                                </script>                                
                                 <script type="dojo/method" event="getIconClass" args="item, opened"> 
                                     if(item)
                                     {
