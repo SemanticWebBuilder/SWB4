@@ -145,18 +145,6 @@ public class TestWebSite {
             portletref.setPriority(3);
             home.addPortletRef(portletref);            
             
-            portlet=site.createPortlet();
-            portlet.setActive(true);
-            portlet.setCreator(user);
-            portlet.setPortletType(ptype);
-            portlet.setTitle("Test");
-            
-            portletref=site.createPortletRef();
-            portletref.setActive(true);
-            portletref.setPortlet(portlet);
-            portletref.setPriority(3);
-            home.addPortletRef(portletref);            
-            
         }
         
         if(site.getPortletType("Banner")==null)
