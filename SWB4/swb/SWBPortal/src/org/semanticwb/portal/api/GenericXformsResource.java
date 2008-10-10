@@ -95,7 +95,6 @@ public class GenericXformsResource extends GenericResource {
                 response.getWriter().print(res);
             } else { //Se desea la instancia de Administración
                 //response.getOutputStream().write(initAdminModel(request,paramsRequest).getBytes());
-                System.out.println("Entra a doLoadInstanceJ2:" + initAdminModel(request, paramsRequest));
                 response.getWriter().print(initAdminModel(request, paramsRequest));
             }
         } catch (Exception e) {
@@ -267,7 +266,6 @@ public class GenericXformsResource extends GenericResource {
             xFormsSession.getAdapter().setContextParam("wbRedirect",url.toString());
             }
              */
-            xFormsSession.getAdapter().setUploadDestination("C:/Archivos de programa/Apache Software Foundation/Tomcat 5.5/webapps/SWB4/swb/build/web/uploads");
             SWBResourceURL processurl = paramsRequest.getRenderUrl();
             processurl.setCallMethod(processurl.Call_DIRECT);
             processurl.setMode("process");
@@ -330,8 +328,8 @@ public class GenericXformsResource extends GenericResource {
             } else { // Insertar el xml como nuevo
                 xml = "<wbadm>" + data + "</wbadm>";
             }
-            System.out.println("Graba-JOrgitoo:<?xml version=\"1.0\" encoding=\"UTF-8\"?><resource>" + xml + "</resource>");
-            xml = SWBUtils.TEXT.encode(xml, "UTF-8");
+            System.out.println("Graba:<?xml version=\"1.0\" encoding=\"UTF-8\"?><resource>" + xml + "</resource>");
+            //xml = SWBUtils.TEXT.encode(xml, "UTF-8");
             base.setXml("<resource>" + xml + "</resource>");
         //base..update(paramsRequest.getUser().getId(), "Resource width id:"+ base.getId()+",was updated succefully");
         } catch (Exception e) {

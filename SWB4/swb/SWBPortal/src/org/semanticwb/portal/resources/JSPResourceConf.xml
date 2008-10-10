@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+    <resource>
+        <resource-name>JSPResource</resource-name>
+        <display-name xml:lang="es">Contenido JSP</display-name>
+        <display-name xml:lang="en">JSP Resource</display-name>
+        <description xml:lang="es">Recurso que se encarga de integrar una pagina JSP como contenido en una sección(topico)</description>
+        <description xml:lang="en">Resource used to integrate a JSP page like a main content into a section(topic)</description>
+        <resource-class>com.infotec.wb.resources.JSPRseource</resource-class>
+        <expiration-cache>0</expiration-cache>
+        <resource-bundle>com.infotec.wb.resources.JSPResource</resource-bundle>
+        <resource-type>1</resource-type>
+        <extended-attributes>
+        </extended-attributes>
+    </resource>
