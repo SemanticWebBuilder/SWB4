@@ -1,16 +1,14 @@
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
-<%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.model.*,java.util.*"%>
+<%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.model.*,java.util.*,org.semanticwb.base.util.*"%>
 <%
     response.setHeader("Cache-Control", "no-cache"); 
     response.setHeader("Pragma", "no-cache"); 
     String id=request.getParameter("suri");
     
-    out.println("suri="+id);
+    //out.println("suri="+id);
 %>
-<!--<a href="?suri=<%=org.semanticwb.base.util.URLEncoder.encode("http://www.sep.gob.mx/WebPage#home")%>">liga</a>-->
 <form action="/swb/swbadmin/jsp/SemObjectEditor.jsp" method="post">
-    <input type="hidden" name="suri" value="<%=id%>">
 <%
     
     if(id==null)return;
@@ -45,6 +43,24 @@
         }
     }
     
+    String snew=request.getParameter("new");
+    if(snew!=null)
+    {
+        String sprop=request.getParameter("prop");
+        SemanticProperty prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(sprop);
+        SemanticClass ncls=prop.getRangeClass();
+        if(ncls.isAutogenId())
+        {
+            long lid=SWBPlatform.getSemanticMgr().getCounter(obj.getModel().getName()+"/"+ncls.getName());
+            SemanticObject nobj=obj.getModel().createSemanticObject(obj.getModel().getObjectUri(""+lid,ncls), ncls);
+            obj.addObjectProperty(prop, nobj);
+            obj=nobj;
+            cls=ncls;
+        }
+    }    
+%>
+    <input type="hidden" name="suri" value="<%=obj.getURI()%>">
+<%
     Iterator<SemanticProperty> it=cls.listProperties();
     while(it.hasNext())
     {
@@ -64,13 +80,20 @@
             <%=label%>: <input name="<%=prop.getName()%>" type="text" value="<%=value%>"><br>
 <%      }else
         {
-/*            
-<!--
-            Name:<%=prop.getName()% >
-            Range:< %=prop.getRange()% >
-            Valor:< %=obj.getObjectProperty(prop)% >
--->            
-*/            
+%>
+            <%=prop.getName()%>: 
+<%            
+            Iterator<SemanticObject> soit=obj.listObjectProperties(prop);
+            while(soit.hasNext())
+            {
+                SemanticObject obj2=soit.next();
+%>            
+            <a href="?suri=<%=obj2.getEncodedURI()%>">Objecto</a>
+<%            
+            }
+%>
+            <a  href="?suri=<%=obj.getEncodedURI()%>&prop=<%=prop.getEncodedURI()%>&new=true">Add New</a><br>
+<%
         }
 %>
 <%
