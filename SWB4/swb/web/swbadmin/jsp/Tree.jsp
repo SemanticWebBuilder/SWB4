@@ -149,13 +149,33 @@
 %><%
     response.setHeader("Cache-Control", "no-cache"); 
     response.setHeader("Pragma", "no-cache"); 
+    
+    String suri=request.getParameter("suri");
+    GenericObject sobj=null;
+
     JSONObject obj=new JSONObject();
     obj.put("identifier", "id");
     obj.put("label","title");
     JSONArray items=new JSONArray();
     obj.putOpt("items", items);
-    
-    addWebSites(items);
+
+    if(suri!=null)
+    {
+        sobj=SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
+        if(sobj!=null)
+        {
+            if(sobj instanceof WebSite)
+            {
+                addWebSite(items,(WebSite)sobj);
+            }else if(sobj instanceof WebPage)
+            {
+                addWebPage(items,(WebPage)sobj);
+            }
+        }
+    }else
+    {
+        addWebSites(items);
+    }
 
     out.print(obj.toString());
     /*
