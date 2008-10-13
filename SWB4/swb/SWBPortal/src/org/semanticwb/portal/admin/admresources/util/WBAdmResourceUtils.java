@@ -56,7 +56,7 @@ public class WBAdmResourceUtils {
         boolean bOk = false;
         String schema = null;
         try {
-            schema = SWBUtils.IO.readInputStream(SWBPortal.getAdminFileStream("/wbadmin/schema/admresource.xsd"));
+            schema = SWBUtils.IO.readInputStream(SWBPortal.getAdminFileStream("/swbadmin/schema/admresource.xsd"));
         } catch (Exception e) {
             return bOk;
         }
