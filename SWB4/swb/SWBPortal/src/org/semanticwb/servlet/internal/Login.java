@@ -102,6 +102,12 @@ public class Login implements InternalServlet {
             }
         } else
         {
+            if (null == request.getParameter("_wb_username")){
+            log.debug("Request a new username...");
+            doResponse(request, response, dparams, null, authMethod);
+            session.setAttribute(VALSESS, "Working");
+            return;
+            }
             ((SWB4CallbackHandler) callbackHandler).setRequest(request);
             ((SWB4CallbackHandler) callbackHandler).setResponse(response);
         }
@@ -186,9 +192,9 @@ public class Login implements InternalServlet {
 
             try
             {
-                rutaSite = "/sites/" + distributorParams.getWebPage().getWebSite().getId() + "/" + ruta;
+                rutaSite = "/" + distributorParams.getWebPage().getWebSite().getId() + ruta;
                 login = SWBPlatform.readFileFromWorkPath(rutaSite);
-                login = SWBPortal.parseHTML(login, SWBPlatform.getWebWorkPath() + "/sites/" + distributorParams.getWebPage().getId() + "/config/images/");
+                login = SWBPortal.parseHTML(login, SWBPlatform.getWebWorkPath() + "/" + distributorParams.getWebPage().getWebSite().getId() + "/config/images/");
             } catch (Exception ignored)
             {
             }
