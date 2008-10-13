@@ -125,14 +125,14 @@ public class GenericAdmResource extends GenericResource
         else  if(action.equals("update") || action.equals("remove"))
         {
             String applet="";
-            String msg=SWBUtils.TEXT.getLocaleString("com.infotec.wb.resources.GenericAdmResource","msgUndefinedOperation", new Locale(paramsRequest.getUser().getLanguage()));
+            String msg=SWBUtils.TEXT.getLocaleString("org.semanticwb.portal.api.GenericAdmResource","msgUndefinedOperation", new Locale(paramsRequest.getUser().getLanguage()));
             if(action.equals("update"))
             {   // Add or update resource.
                 try
                 {
                     AdmDBConnMgr admdbconnmgr=new AdmDBConnMgr(request,base);
                     applet=admdbconnmgr.update2DB(paramsRequest.getUser());
-                    msg=SWBUtils.TEXT.getLocaleString("com.infotec.wb.resources.GenericAdmResource","msgOkUpdateResource", new Locale(paramsRequest.getUser().getLanguage())) +" "+ base.getId();
+                    msg=SWBUtils.TEXT.getLocaleString("org.semanticwb.portal.api.GenericAdmResource","msgOkUpdateResource", new Locale(paramsRequest.getUser().getLanguage())) +" "+ base.getId();
                     ret.append(
                         "<script language=\"JavaScript\">\n"+
                         "   alert('"+msg+"');\n"+
@@ -146,7 +146,7 @@ public class GenericAdmResource extends GenericResource
                             "</script>\n");
                     }
                 }
-                catch(Exception e) { log.error(e); msg=SWBUtils.TEXT.getLocaleString("com.infotec.wb.resources.GenericAdmResource","msgErrUpdateResource", new Locale(paramsRequest.getUser().getLanguage())) +" "+ base.getId(); }
+                catch(Exception e) { log.error(e); msg=SWBUtils.TEXT.getLocaleString("org.semanticwb.portal.api.GenericAdmResource","msgErrUpdateResource", new Locale(paramsRequest.getUser().getLanguage())) +" "+ base.getId(); }
             }
             else if(action.equals("remove")) 
             {
