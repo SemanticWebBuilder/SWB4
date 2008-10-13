@@ -78,7 +78,7 @@ public class GenericAdmResource extends GenericResource
     static
     {
         try { 
-            plt=TransformerFactory.newInstance().newTemplates(new javax.xml.transform.stream.StreamSource(SWBPortal.getAdminFileStream("/wbadmin/resources/GenericAdmResource/admresource.xslt"))); 
+            plt=TransformerFactory.newInstance().newTemplates(new javax.xml.transform.stream.StreamSource(SWBPortal.getAdminFileStream("/swbadmin/resources/GenericAdmResource/admresource.xslt"))); 
         }
         catch(Exception e) {log.error("Error while loading GenericAdmResource template: ", e);}
     }
