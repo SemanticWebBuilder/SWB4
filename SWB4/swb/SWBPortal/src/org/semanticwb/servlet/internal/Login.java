@@ -7,6 +7,7 @@ package org.semanticwb.servlet.internal;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Constructor;
+import java.security.AccessController;
 import javax.security.auth.Subject;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.LoginContext;
@@ -128,6 +129,7 @@ public class Login implements InternalServlet {
             lc.login();
         // session.removeAttribute(VALSESS);
         // session.removeAttribute(CALLBACK);
+            
         } catch (LoginException ex)
         {
             log.error("Can't log User", ex);
