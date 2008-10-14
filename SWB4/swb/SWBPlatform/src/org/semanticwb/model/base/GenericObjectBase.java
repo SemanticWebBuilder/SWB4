@@ -40,10 +40,7 @@ public class GenericObjectBase implements GenericObject
     
     public String getId()
     {
-        String uri=getURI();
-        int x=uri.indexOf('#');
-        if(x>-1)return uri.substring(x+1);
-        return uri;
+        return m_obj.getId();
     }
     
     public SemanticObject getSemanticObject()
