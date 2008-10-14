@@ -16,19 +16,18 @@ public class SemanticIterator<T extends SemanticObject> implements Iterator
     private Class cls;
     private Iterator iterator;
     private Constructor constructor;
+    private boolean invert=false;
             
     public SemanticIterator(SemanticClass cls,Iterator iterator)
     {
+        this(cls,iterator,false);
+    }
+
+    public SemanticIterator(SemanticClass cls,Iterator iterator, boolean invert)
+    {
         this.scls=cls;
         this.iterator=iterator;
-//        try
-//        {
-//            constructor=clazz.getDeclaredConstructor(Resource.class);
-//        }
-//        catch(NoSuchMethodException nsme)
-//        {
-//            new IllegalArgumentException(nsme);
-//        }
+        this.invert=invert;
     }
     
     public SemanticIterator(Class cls,Iterator iterator)
@@ -64,6 +63,10 @@ public class SemanticIterator<T extends SemanticObject> implements Iterator
             {
                 try
                 {
+                    if(invert)
+                    {
+                        return (T)scls.newInstance(((Statement)obj).getSubject());
+                    }
                     return (T)scls.newInstance(((Statement)obj).getResource());
                 }
                 catch(Exception ie)
@@ -92,6 +95,10 @@ public class SemanticIterator<T extends SemanticObject> implements Iterator
             {
                 try
                 {
+                    if(invert)
+                    {
+                        return (T)constructor.newInstance(((Statement)obj).getSubject());
+                    }
                     return (T)constructor.newInstance(((Statement)obj).getResource());
                 }
                 catch(Exception ie)

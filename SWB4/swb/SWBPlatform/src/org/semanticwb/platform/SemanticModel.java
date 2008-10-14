@@ -6,8 +6,11 @@
 package org.semanticwb.platform;
 
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.rdf.model.StmtIterator;
+import java.util.Iterator;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.GenericObject;
 
@@ -181,4 +184,12 @@ public class SemanticModel
         }
         return m_modelObject;
     }
+    
+    public Iterator<SemanticObject> listInstancesOfClass(SemanticClass cls)
+    {
+        Property rdf=getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
+        StmtIterator stit=getRDFModel().listStatements(null, rdf, cls.getOntClass());
+        return new SemanticIterator(cls, stit, true);
+    }
+    
 }
