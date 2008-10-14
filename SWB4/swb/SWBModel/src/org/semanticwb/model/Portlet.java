@@ -99,11 +99,13 @@ public class Portlet extends PortletBase
     public String getAttribute(String name)
     {
         String ret = null;
+        NodeList data=null;
         try
         {
+            
             if(dom==null)dom=SWBUtils.XML.xmlToDom(getXml());
-            NodeList data = dom.getElementsByTagName(name);
-            if (data.getLength() > 0)
+            if(dom!=null) data = dom.getElementsByTagName(name);
+            if (data!=null && data.getLength() > 0)
             {
                 Node txt = data.item(0).getFirstChild();
                 if (txt != null) ret = txt.getNodeValue();
