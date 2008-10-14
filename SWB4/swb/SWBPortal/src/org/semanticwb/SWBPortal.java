@@ -123,7 +123,7 @@ public class SWBPortal {
 
         try {
             log.debug("Loading admin Files from: /WEB-INF/lib/SWBAdmin.jar");
-            String zipPath = SWBUtils.getApplicationPath() + "/WEB-INF/lib/WBAdmin.jar";
+            String zipPath = SWBUtils.getApplicationPath() + "/WEB-INF/lib/SWBAdmin.jar";
             ZipFile zf = new ZipFile(zipPath);
             Enumeration e = zf.entries();
             while (e.hasMoreElements()) {
@@ -134,7 +134,7 @@ public class SWBPortal {
             zf.close();
             log.event("-->Admin Files in Memory:\t" + admFiles.size());
         } catch (Exception e) {
-            log.warn("Error loading files for Webbuilder Administration:" + SWBUtils.getApplicationPath() + "/WEB-INF/lib/WBAdmin.jar");
+            log.warn("Error loading files for Webbuilder Administration:" + SWBUtils.getApplicationPath() + "/WEB-INF/lib/SWBAdmin.jar");
         }
     }
 
@@ -252,7 +252,7 @@ public class SWBPortal {
     }
 
     public static JarFile getAdminFile(String path) {
-        JarFile f = (JarFile) instance.admFiles.get(path);
+        JarFile f = (JarFile) admFiles.get(path);
         if (f == null) {
             f = new JarFile(path);
         }
@@ -260,7 +260,7 @@ public class SWBPortal {
     }
 
     public static InputStream getAdminFileStream(String path) {
-        JarFile f = (JarFile) instance.admFiles.get(path);
+        JarFile f = (JarFile) admFiles.get(path);
         if (f == null) {
             f = new JarFile(path);
         }
