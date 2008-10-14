@@ -63,7 +63,7 @@ body .dojoSplitPane {
 .admViewProperties { width:100%; }
 
 caption {
-	background:#fafafa url(../js/dojo1.2/dijit/themes/soria/images/titleBar.png) repeat-x top left;
+	background:#fafafa url(../js/dojo/dijit/themes/soria/images/titleBar.png) repeat-x top left;
 	border-top: 1px solid #b9bbdd;
 	padding: 5px 5px 6px 8px;
         font-weight: bold;
@@ -75,6 +75,6 @@ th {
 	font-weight: bold;
 	margin:0;
 	padding:1px 5px; 
-	background-image:url('../js/dojo1.2/dijit/themes/soria/images/titleBar.png');
+	background-image:url('../js/dojo/dijit/themes/soria/images/titleBar.png');
 	background-position:0px -1px; 
 }
