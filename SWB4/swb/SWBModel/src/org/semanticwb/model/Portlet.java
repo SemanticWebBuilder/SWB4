@@ -99,20 +99,18 @@ public class Portlet extends PortletBase
     public String getAttribute(String name)
     {
         String ret = null;
-        NodeList data=null;
         try
         {
-            
             if(dom==null)dom=SWBUtils.XML.xmlToDom(getXml());
-            if(dom!=null) data = dom.getElementsByTagName(name);
-            if (data!=null && data.getLength() > 0)
+            NodeList data = dom.getElementsByTagName(name);
+            if (data.getLength() > 0)
             {
                 Node txt = data.item(0).getFirstChild();
                 if (txt != null) ret = txt.getNodeValue();
             }
         } catch (Exception e)
         {
-            log.error("Error in getAttribute: " + name + " ->Resource " + getId(), e);
+            //log.error("Error in getAttribute: " + name + " ->Resource " + getId(), e);
         }
         return ret;
     }
