@@ -85,6 +85,16 @@ public class SemanticObject
         return m_res.getURI();
     }
     
+    public String getId()
+    {
+        if(m_virtual)return null;
+        String uri=getURI();
+        int x=uri.indexOf('#');
+        if(x>-1)return uri.substring(x+1);
+        return uri;
+    }
+    
+    
     /**
      * Regresa URI codificado para utilizar en ligas de html
      * @return URI Codificado
