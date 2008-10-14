@@ -204,18 +204,20 @@ public class SWBUtils {
         public static Date iso8601DateParse(String date) throws ParseException {
             return iso8601dateFormat.parse(date);
         }
-        
+
         /**
          * Convierte un String a entero, si el estring es nulo o esta mal formado regresa el valor de defecto.
          */
-        public static int getInt(String val, int defa)
-        {
-            if(val==null)return defa;
-            try
-            {
+        public static int getInt(String val, int defa) {
+            if (val == null) {
+                return defa;
+            }
+            try {
                 return Integer.parseInt(val);
-            }catch(Exception e){return defa;}
-        }        
+            } catch (Exception e) {
+                return defa;
+            }
+        }
 
         /**
          * Le pone a un objeto String el tipo de codificación especificado por parámetro.
@@ -385,7 +387,7 @@ public class SWBUtils {
             aux = ret.toString();
             return aux;
         }
-        
+
         public static String getLocaleString(String Bundle, String key) {
             return getLocaleString(Bundle, key, locale);
         }
@@ -408,41 +410,79 @@ public class SWBUtils {
                 return "";
             }
             return cad;
-        }        
-        
+        }
+
         /**
          * Regresa el lenguaje con el que se este trabajando en la clase (SWBUtils).
          */
-        public static Locale getLocale()
-        {
+        public static Locale getLocale() {
             return locale;
-        }       
-        
+        }
+
         /**
          * Regresa un arraylist de strings que fueron delimitados por un delimitador (regexp)
          */
         //version 1.4
-        public static ArrayList regExpSplit(String txt, String regexp)
-        {
+        public static ArrayList regExpSplit(String txt, String regexp) {
             int index = 0;
             ArrayList matchList = new ArrayList();
             java.util.regex.Matcher m = java.util.regex.Pattern.compile(regexp).matcher(txt);
 
-            while (m.find())
-            {
+            while (m.find()) {
                 String match = txt.substring(index, m.start());
-                if (match.length() > 0) matchList.add(match);
+                if (match.length() > 0) {
+                    matchList.add(match);
+                }
                 match = txt.substring(m.start(), m.end());
-                if (match.length() > 0) matchList.add(match);
+                if (match.length() > 0) {
+                    matchList.add(match);
+                }
                 index = m.end();
             }
 
             String match = txt.substring(index, txt.length());
-            if (match.length() > 0) matchList.add(match);
+            if (match.length() > 0) {
+                matchList.add(match);
+            }
             return matchList;
-        }          
-        
-        
+        }
+
+        /**
+         *   Regresa iterador con los string que se encuentren estre las cadenas pre y pos
+         *   Ejemplo:
+         *   String str="Tag uno:{request.getParameter(\"param1\") tag dos:{request.getParameter(\"param2\")}";
+         *   
+         *   Iterator it=AFUtils.findInterStr(str, "{request.getParameter(\"","\")");
+         *   while(it.hasNext())
+         *   {
+         *       System.out.println("param:("+it.next()+")");
+         *   }
+         * 
+         */
+        public static Iterator findInterStr(String str, String pre, String pos) {
+            ArrayList ret = new ArrayList();
+            int y = 0;
+            do {
+                y = findInterStr(str, pre, pos, y, ret);
+            } while (y > -1);
+            return ret.iterator();
+        }
+
+        /**
+         * Regresa iterador con los string que se encuentren estre las cadenas pre y pos.
+         */
+        private static int findInterStr(String str, String pre, String pos, int index, ArrayList arr) {
+            int i = str.indexOf(pre, index);
+            if (i > -1) {
+                i = i + pre.length();
+                int j = str.indexOf(pos, i);
+                if (j > -1) {
+                    arr.add(str.substring(i, j));
+                    return j + pos.length();
+                }
+            }
+            return -1;
+        }
     }
 
     /**
@@ -452,9 +492,8 @@ public class SWBUtils {
         /*
          * Obtiene un objeto InputStream dado un objeto String.
          */
-        
-        public static int getBufferSize()
-        {
+
+        public static int getBufferSize() {
             return bufferSize;
         }
 
@@ -1024,7 +1063,6 @@ public class SWBUtils {
             return null;
         }
 
-        
         /**
          * Sends an email in background
          * @param message class
@@ -1032,10 +1070,10 @@ public class SWBUtils {
          */
         public static void sendBGEmail(String fromEmail, String fromName, Collection address, Collection ccEmail, Collection bccEmail,
                 String subject, String contentType, String data, String login, String password, ArrayList<EmailAttachment> attachments) throws java.net.SocketException {
-            SWBMail message=new SWBMail();
+            SWBMail message = new SWBMail();
             message.setFromEmail(fromEmail);
             message.setFromName(fromName);
-            message.setAddress((ArrayList)address);
+            message.setAddress((ArrayList) address);
             message.setCcEmail(ccEmail);
             message.setBccEmail(bccEmail);
             message.setSubject(subject);
@@ -1044,12 +1082,12 @@ public class SWBUtils {
             message.setLogin(login);
             message.setPassword(password);
             message.setAttachments(attachments);
-            
+
             SWBMailSender swbMailSender = new SWBMailSender();
             swbMailSender.addEMail(message);
             swbMailSender.run();
         }
-        
+
         /**
          * Sends an email in background
          * @param message class
@@ -1060,7 +1098,6 @@ public class SWBUtils {
             swbMailSender.addEMail(message);
             swbMailSender.run();
         }
-        
     }
 
     /**
@@ -1571,71 +1608,62 @@ public class SWBUtils {
             javax.xml.xpath.XPathExpression xpathExpression = xpathObj.compile(expression);
             return xpathExpression.evaluate(input, resultType);
         }
-        
+
         /** Asigna un atributo al DOM del recurso.
          * Si no existe el atributo, lo crea y si existe lo modifica
          * @param name String nombre del atributo
          * @param value String valor del atributo
          */
-        public static void setAttribute(Document dom, String name, String value) 
-        {
+        public static void setAttribute(Document dom, String name, String value) {
             NodeList data = dom.getElementsByTagName(name);
-            if (data.getLength() > 0)
-            {
+            if (data.getLength() > 0) {
                 Node txt = data.item(0).getFirstChild();
-                if (txt != null)
-                {
-                    if(value!=null)
-                    {
+                if (txt != null) {
+                    if (value != null) {
                         txt.setNodeValue(value);
-                    }else
-                    {
+                    } else {
                         data.item(0).removeChild(txt);
                     }
-                } else
-                {
-                    if(value!=null)
-                    {
+                } else {
+                    if (value != null) {
                         data.item(0).appendChild(dom.createTextNode(value));
                     }
                 }
-            } else
-            {
+            } else {
                 Element res = (Element) dom.getFirstChild();
                 Element ele = dom.createElement(name);
-                if(value!=null)ele.appendChild(dom.createTextNode(value));
+                if (value != null) {
+                    ele.appendChild(dom.createTextNode(value));
+                }
                 res.appendChild(ele);
             }
         }
 
-
-
         /** Lee un atributo del DOM del Recurso
          * Si el atributo no esta declarado regresa el valor por defecto defvalue.
          */
-        public static String getAttribute(Document dom, String name, String defvalue)
-        {
+        public static String getAttribute(Document dom, String name, String defvalue) {
             String ret = getAttribute(dom, name);
-            if (ret == null) ret = defvalue;
+            if (ret == null) {
+                ret = defvalue;
+            }
             return ret;
         }
-
 
         /** Lee un atributo del DOM del Recurso
          * Si el atributo no esta declarado regresa null.
          */
-        public static String getAttribute(Document dom, String name)
-        {
+        public static String getAttribute(Document dom, String name) {
             String ret = null;
             NodeList data = dom.getElementsByTagName(name);
-            if (data.getLength() > 0)
-            {
+            if (data.getLength() > 0) {
                 Node txt = data.item(0).getFirstChild();
-                if (txt != null) ret = txt.getNodeValue();
+                if (txt != null) {
+                    ret = txt.getNodeValue();
+                }
             }
             return ret;
-        }           
-        
+        }
     }
 
     /**
