@@ -1,5 +1,5 @@
 <%@page contentType="text/html"%>
-<%@page pageEncoding="ISO8859-1"%>
+<%@page pageEncoding="ISO-8859-1"%>
 <%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.model.*,java.util.*,org.semanticwb.base.util.*"%>
 <%
     response.setHeader("Cache-Control", "no-cache"); 
@@ -15,8 +15,10 @@
     
     String title=obj.getProperty(SWBContext.getVocabulary().title);
     
+    String wid=obj.getModel().getName()+"/"+obj.getId();
+    System.out.println("Title:"+title+" id:"+wid);
 %>
-    <div id="<%=id%>" title="<%=title%>" class="panel" selected="true">
+    <div id="<%=wid%>" title="<%=title%>" class="panel" selected="true">
         <h2>Propiedades</h2>
         <fieldset>
 <%
@@ -39,11 +41,11 @@
                 if(prop.isBoolean())
                 {
 %>    
-                <div class="toggle" onclick="" toggled="<%=value%>"><span class="thumb"></span><span class="toggleOn">ON</span><span class="toggleOff">OFF</span></div>
+                <div class="toggle" onclick="send(this)" href="i_update.jsp?suri=<%=obj.getEncodedURI()%>&sprop=<%=prop.getEncodedURI()%>" toggled="<%=value%>"><span class="thumb"></span><span class="toggleOn">ON</span><span class="toggleOff">OFF</span></div>
 <%
                 }else{
 %>  
-                <input type="text" name="<%=prop.getName()%>" value="<%=value%>"/>
+                <input type="text" onchange="send(this)" href="i_update.jsp?suri=<%=obj.getEncodedURI()%>&sprop=<%=prop.getEncodedURI()%>" value="<%=value%>"/>
 <%
                 }
 %>                
@@ -71,29 +73,33 @@
             }else
             {
                 SemanticObject sobj=obj.getObjectProperty(prop);
+%>
+            <div class="row">
+                <a class="select" href="i_select.jsp?suri=<%=obj.getEncodedURI()%>&sprop=<%=prop.getEncodedURI()%>">
+<%                
                 if(sobj==null)
                 {
 %>
-            <div class="row">
-                <label><%=label%></label>
-                <select name="<%=prop.getName()%>">     
-                    <option>No seleccionada</option>
-                </select>                
-            </div>
+                    <table width="100%"><tr><td><%=label%></td><td align="right">not set</td></tr></table>
 <%
                 }else
                 {
 %>
-            <div class="row">
-                <label><%=label%></label>
-                <a href="i_object.jsp?suri=<%=sobj.getEncodedURI()%>"><%=sobj.getRDFName()%></a>
-            </div>
+                    <table width="100%"><tr><td><%=label%></td><td align="right"><a href="i_object.jsp?suri=<%=sobj.getEncodedURI()%>" class="ilink"><%=sobj.getRDFName()%></a></td></tr></table>
 <%
                 }
+%>
+                </a>
+            </div>
+<%
             }
         }
     }
 %>
         </fieldset>
-        <input type="button" value="Eliminar"/>
+        <fieldset>
+            <div class="row">
+                <a class="rbutton" href="">Eliminar</a>
+            </div>
+        </fieldset>
     </div>   
