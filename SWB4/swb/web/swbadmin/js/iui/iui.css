@@ -40,6 +40,13 @@ a[selected="progress"] {
     background-image: url(loading.gif), url(selection.png) !important;
 }
 
+.ilink {
+    text-decoration: none;
+    font-style: normal;
+    color: #4040b0;
+    background-image: none;
+}
+
 /************************************************************************************************/
 
 body > .toolbar {
@@ -300,6 +307,28 @@ fieldset > .row:last-child {
     width: 100px;
     height: 28px;
 }
+
+.row > .select {
+    font-weight: bold;    
+    margin: 0 0 0 0px;    
+    display: block;
+    padding: 10px 30px 10px 14px;
+    text-decoration: none;
+    text-align: left;
+    color: inherit;
+    background: url(listArrow.png) no-repeat right center;
+}
+
+.row > .rbutton {
+    font-weight: bold;    
+    margin: 0 0 0 0px;    
+    display: block;
+    padding: 10px 30px 10px 14px;
+    text-decoration: none;
+    text-align: center;
+    color: inherit;
+}
+
 
 .toggle {
     border: 1px solid #888888;
