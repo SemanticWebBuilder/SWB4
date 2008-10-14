@@ -166,7 +166,12 @@ addEventListener("click", function(event)
             setTimeout(unselect, 500);
         }
         else if (link == $("backButton"))
-            history.back();
+        {
+            //Si encuentra el pid lo muestra
+            var pid=link.getAttribute("pid");
+            if(pid)iui.showPageById(pid);
+            else history.back();
+        }
         else if (link.getAttribute("type") == "submit")
             submitForm(findParent(link, "form"));
         else if (link.getAttribute("type") == "cancel")
@@ -250,7 +255,17 @@ function updatePage(page, fromPage)
         page.id = "__" + (++newPageCount) + "__";
 
     location.href = currentHash = hashPrefix + page.id;
+    
+    //Valida si ya existia la pagina previamente
+    var index = pageHistory.indexOf(page.id);
+    var backwards = index != -1;
+    if (backwards)
+    {
+        pageHistory.splice(index, pageHistory.length);
+    }
     pageHistory.push(page.id);
+
+    //alert("href:"+location.href+" "+pageHistory);
 
     var pageTitle = $("pageTitle");
     if (page.title)
@@ -267,6 +282,7 @@ function updatePage(page, fromPage)
         {
             backButton.style.display = "inline";
             backButton.innerHTML = prevPage.title ? prevPage.title : "Back";
+            backButton.setAttribute("pid",prevPage.id);
         }
         else
             backButton.style.display = "none";
