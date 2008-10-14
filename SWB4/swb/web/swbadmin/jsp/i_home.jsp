@@ -1,5 +1,5 @@
 <%@page contentType="text/html"%>
-<%@page pageEncoding="ISO8859-1"%>
+<%@page pageEncoding="ISO-8859-1"%>
 <%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.model.*,java.util.*,org.semanticwb.base.util.*"%>
 <%
     response.setHeader("Cache-Control", "no-cache"); 
@@ -14,6 +14,17 @@
 <meta name="viewport" content="width=320; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
 <style type="text/css" media="screen">@import "/swb/swbadmin/js/iui/iui.css";</style>
 <script type="application/x-javascript" src="/swb/swbadmin/js/iui/iui.js"></script>
+<script type="application/x-javascript">
+    function send(element)
+    {
+        var value=element.getAttribute("toggled");
+        if(!value)value=element.value;
+        var href=element.getAttribute("href")+"&sval="+encodeURIComponent(value);
+        iui.showPageByHref(href,null,null,null,null);
+        //alert("href:"+href);
+    }
+</script>
+
 </head>
 
 <body onclick="">
@@ -34,7 +45,7 @@
     {
         WebSite site=sites.next();
 %>
-        <li><a href="i_object.jsp?suri=<%=site.getEncodedURI()%>"><%=site.getTitle()%></a></li>
+<li><a href="i_object.jsp?suri=<%=site.getEncodedURI()%>"><table width="100%"><tr><td><%=site.getTitle()%></td><td align="right"><a href="http://google.com" class="ilink">jei</a></td></tr></table></a></li>
 <%        
     }
 %>        
