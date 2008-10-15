@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
+import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.base.*;
 import org.semanticwb.platform.SemanticObject;
@@ -339,5 +340,11 @@ public class WebPage extends WebPageBase
         }
         return set.iterator();        
     }
+    
+    public void addHit(HttpServletRequest request, User user)
+    {
+        //TODO:
+    }
+        
     
 }
