@@ -83,8 +83,8 @@ public class SWBVocabulary
     public final SemanticProperty active;
     public final SemanticProperty usrLastLogin;
     public final SemanticProperty creator;
-    public final SemanticProperty usrPassword;
     public final SemanticProperty usrLogin;
+    public final SemanticProperty usrPassword;
     public final SemanticProperty hasRole;
     public final SemanticProperty usrSecurityQuestion;
     public final SemanticProperty usrSecurityAnswer;
@@ -119,8 +119,8 @@ public class SWBVocabulary
     public final SemanticProperty templateGroup;
     public final SemanticProperty hasPermission;
     public final SemanticProperty previousVersion;
-    public final SemanticProperty versionComment;
     public final SemanticProperty versionFile;
+    public final SemanticProperty versionComment;
     public final SemanticProperty nextVersion;
     public final SemanticProperty versionNumber;
     public final SemanticProperty camp;
@@ -226,8 +226,8 @@ public class SWBVocabulary
         active=vocabulary.getSemanticProperty(URI+"active");
         usrLastLogin=vocabulary.getSemanticProperty(URI+"usrLastLogin");
         creator=vocabulary.getSemanticProperty(URI+"creator");
-        usrPassword=vocabulary.getSemanticProperty(URI+"usrPassword");
         usrLogin=vocabulary.getSemanticProperty(URI+"usrLogin");
+        usrPassword=vocabulary.getSemanticProperty(URI+"usrPassword");
         hasRole=vocabulary.getSemanticProperty(URI+"hasRole");
         usrSecurityQuestion=vocabulary.getSemanticProperty(URI+"usrSecurityQuestion");
         usrSecurityAnswer=vocabulary.getSemanticProperty(URI+"usrSecurityAnswer");
@@ -262,8 +262,8 @@ public class SWBVocabulary
         templateGroup=vocabulary.getSemanticProperty(URI+"templateGroup");
         hasPermission=vocabulary.getSemanticProperty(URI+"hasPermission");
         previousVersion=vocabulary.getSemanticProperty(URI+"previousVersion");
-        versionComment=vocabulary.getSemanticProperty(URI+"versionComment");
         versionFile=vocabulary.getSemanticProperty(URI+"versionFile");
+        versionComment=vocabulary.getSemanticProperty(URI+"versionComment");
         nextVersion=vocabulary.getSemanticProperty(URI+"nextVersion");
         versionNumber=vocabulary.getSemanticProperty(URI+"versionNumber");
         camp=vocabulary.getSemanticProperty(URI+"camp");
