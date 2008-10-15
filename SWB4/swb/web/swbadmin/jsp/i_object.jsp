@@ -13,7 +13,7 @@
     SemanticObject obj=ont.getSemanticObject(id);
     SemanticClass cls=obj.getSemanticClass();    
     
-    String title=obj.getProperty(SWBContext.getVocabulary().title);
+    String title=obj.getDisplayName();
     
     String wid=obj.getModel().getName()+"/"+obj.getId();
     System.out.println("Title:"+title+" id:"+wid);
@@ -32,8 +32,7 @@
             if(prop.isInt())value=""+obj.getIntProperty(prop);
             if(value==null)value="";
             
-            String label=prop.getName();
-            if(prop.getLabel()!=null)label=prop.getLabel();
+            String label=prop.getCaption();
 %>
             <div class="row">
                 <label><%=label%></label>
@@ -64,7 +63,7 @@
         SemanticProperty prop=it.next();
         if(prop.isObjectProperty())
         {
-            String label=prop.getName();
+            String label=prop.getCaption();
             if(prop.getLabel()!=null)label=prop.getLabel();
             
             if(prop.getName().startsWith("has"))
@@ -85,7 +84,7 @@
                 }else
                 {
 %>
-                    <table width="100%"><tr><td><%=label%></td><td align="right"><a href="i_object.jsp?suri=<%=sobj.getEncodedURI()%>" class="ilink"><%=sobj.getRDFName()%></a></td></tr></table>
+                    <table width="100%"><tr><td><%=label%></td><td align="right"><a href="i_object.jsp?suri=<%=sobj.getEncodedURI()%>" class="ilink"><%=sobj.getDisplayName()%></a></td></tr></table>
 <%
                 }
 %>
