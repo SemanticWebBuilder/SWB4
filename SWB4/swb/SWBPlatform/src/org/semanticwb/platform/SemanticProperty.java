@@ -77,6 +77,49 @@ public class SemanticProperty
         return false;
     }
     
+    public boolean isUsedAsName()
+    {
+        Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_ANNOT_CANUSEDASNAME));
+        if(st!=null)
+        {
+            return st.getBoolean();
+        }
+        return false;
+    }    
+    
+    public String getCaption()
+    {
+        String ret=null;
+        Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_PROPCAPTION));
+        if(st!=null)
+        {
+            return st.getString();
+        }
+        return ret;
+    }    
+    
+    public String getViewGroup()
+    {
+        String ret=null;
+        Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_ANNOT_PROPGROUP));
+        if(st!=null)
+        {
+            return st.getString();
+        }
+        return ret;
+    }       
+    
+    public int getSortIndex()
+    {
+        int ret=99999999;
+        Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_ANNOT_PROPINDEX));
+        if(st!=null)
+        {
+            return st.getInt();
+        }
+        return ret;
+    }    
+    
     @Override
     public String toString()
     {
