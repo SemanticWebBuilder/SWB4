@@ -104,6 +104,12 @@ public class DistributorParams
         //System.out.println("queryString:"+queryString);
     }
     
+    /** Creates a new instance of DistributorParams */
+    public DistributorParams(HttpServletRequest request)
+    {
+        //TODO
+    }
+    
     private ArrayList _getURIParams(HttpServletRequest request, String uri)
     {
         ArrayList arr=new ArrayList();
