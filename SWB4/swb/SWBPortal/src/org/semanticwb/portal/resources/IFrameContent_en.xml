@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<xslfile>admresource.xslt</xslfile>
+	<form name="frmIFrameContent" action="true" method="POST">
+		<admdbconnmgr defconn="true"/>
+		<input type="TEXT" name="url" label="* Web address for remote contents (Frame):" size="50" jsrequired="true"/>
+		<input type="TEXT" name="width" label="Width (pixels or nn% for percentage):" size="4" maxlength="4" />
+		<input type="TEXT" name="height" label="Height (pixels or nn% for percentage):" size="4" maxlength="4" />
+		<input type="TEXT" name="marginwidth" label="Margin width (pixels):" size="4" maxlength="4" jsvaltype="js_numbers"/>
+		<input type="TEXT" name="marginheight" label="Margin height (pixels):" size="4" maxlength="4" jsvaltype="js_numbers"/>
+		<input type="TEXT" name="style" label="Style for the frame:" size="50"/>
+		<statictext name="txtAlign">Alignment:</statictext>
+		<input type="RADIO" name="align" label="Top" value="top"/>
+		<input type="RADIO" name="align" label="Middle" value="middle"/>
+		<input type="RADIO" name="align" label="Bottom" value="bottom"/>
+		<input type="RADIO" name="align" label="Left" value="left"/>
+		<input type="RADIO" name="align" label="Right" value="right"/>
+		<input type="RADIO" name="align" label="Center" value="center"/>
+		<statictext name="txtTarget">Scroll bars:</statictext>
+		<input type="RADIO" name="scrollbars" label="Automatic" value="auto"/>
+		<input type="RADIO" name="scrollbars" label="Yes" value="yes"/>
+		<input type="RADIO" name="scrollbars" label="No" value="no"/>
+		<input type="CHECKBOX" name="frameborder" label="Frame border" value="1"/>		
+		<input type="SUBMIT" name="btnSave"  value="Save"/>
+		<input type="RESET"  name="btnReset" value="Cancel"/>
+	</form>
+	<statictext name="txtNote">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				* Required information
+			</font>
+		]]>
+	</statictext>
+	<script language="JavaScript">
+		<![CDATA[
+			if(!document.frmIFrameContent.align[0].checked && 
+				!document.frmIFrameContent.align[1].checked &&
+				!document.frmIFrameContent.align[2].checked &&
+				!document.frmIFrameContent.align[3].checked &&
+				!document.frmIFrameContent.align[4].checked &&
+				!document.frmIFrameContent.align[5].checked)
+				document.frmIFrameContent.align[0].checked=true;
+			if(!document.frmIFrameContent.scrollbars[0].checked && 
+				!document.frmIFrameContent.scrollbars[1].checked &&
+				!document.frmIFrameContent.scrollbars[2].checked)
+				document.frmIFrameContent.scrollbars[0].checked=true;
+		]]>
+	</script>	
+</admresource>

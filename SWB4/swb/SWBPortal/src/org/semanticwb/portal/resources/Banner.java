@@ -56,7 +56,7 @@ import org.semanticwb.portal.api.SWBResourceException;
 
 public class Banner extends GenericAdmResource 
 {
-    private static Logger log = SWBUtils.getLogger(Banner1.class);
+    private static Logger log = SWBUtils.getLogger(Banner.class);
     
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -130,7 +130,7 @@ public class Banner extends GenericAdmResource
                             if (!height.equals("")) {
                                 ret.append(" height=\"" + height + "\"");
                             }
-                            ret.append(">");
+                            ret.append("/>");
                             if (!url.equals("")) {
                                 ret.append("</a>");
                             }

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+    <resource>
+        <resource-name>IFrameContent</resource-name>
+        <display-name xml:lang="es">Contenidos IFrame</display-name>
+        <display-name xml:lang="en">IFrame Content</display-name>
+        <description xml:lang="es">Recurso que se encarga de desplegar en recuadros Iframe dentro de la pagina Web y a manera de contenido principal, diferentes tipos de información dependiendo de la configuración indicada</description>
+        <description xml:lang="en">Resource that is in charge to unfold in Iframe boxes within the page Web like a main content, different types of information depending on the indicated configuration </description>
+        <resource-class>com.infotec.wb.resources.IFrameContent</resource-class>
+        <expiration-cache>0</expiration-cache>
+        <resource-bundle>com.infotec.wb.resources.IFrameContent</resource-bundle>
+        <resource-type>1</resource-type>
+        <extended-attributes>
+        </extended-attributes>
+    </resource>

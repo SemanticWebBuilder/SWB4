@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<xslfile>admresource.xslt</xslfile>
+	<form name="frmFavoriteTopics" action="true" method="POST" enctype="multipart/form-data">
+		<admdbconnmgr defconn="true"/>
+		<input type="FILE" name="template" label="Template (xsl, xslt):" showfile="true" msg="Current template " bydefault="{@webpath}wbadmin/xsl/FavoriteTopics/FavoriteTopics.xslt" msgbydefault="Template by default " filetype="xsl|xslt" isshowfiletype="true" size="40"/>
+		<input type="FILE" name="imgadd" label="Image for the Add button (bmp, gif, jpg, jpeg):" showfile="true" filetype="bmp|jpg|jpeg|gif" isshowfiletype="true" isremovefile="true" removemsg="Cut image for add" moreattr="onclick=&#34;jsClear(this.form, '1');&#34;" size="40"/>
+		<input type="TEXT" name="altadd" label="Alternate text for the image:" size="50"/>
+		<input type="TEXT" name="btnadd" label="Text for the button in case of not defining an image:" size="50"/>
+		<input type="FILE" name="imgedit" label="Image for the edit button (bmp, gif, jpg, jpeg):" showfile="true" filetype="bmp|jpg|jpeg|gif" isshowfiletype="true" isremovefile="true" removemsg="Cut image for edit" moreattr="onclick=&#34;jsClear(this.form, '2');&#34;" size="40"/>
+		<input type="TEXT" name="altedit" label="Alternate text for the image:" size="50"/>
+		<input type="TEXT" name="btnedit" label="Text for the button in case of not defining an image:" size="50"/>
+		<input type="FILE" name="imgremove" label="Image for the Remove button (bmp, gif, jpg, jpeg):" showfile="true" filetype="bmp|jpg|jpeg|gif" isshowfiletype="true" isremovefile="true" removemsg="Cut image for remove" moreattr="onclick=&#34;jsClear(this.form, '3');&#34;" size="40"/>
+		<input type="TEXT" name="altremove" label="Alternate text for the image:" size="50"/>
+		<input type="TEXT" name="btnremove" label="Text for the button in case of not defining an image:" size="50"/>
+		<input type="SUBMIT" name="btnSave"  value="Save"/>
+		<input type="RESET"  name="btnReset" value="Cancel" />
+	</form>
+	<script language="JavaScript">
+		<![CDATA[
+			function jsClear(frm, opt)
+			{
+			        switch(opt)
+			        {
+				        case '1':  	frm.btnadd.value='';
+				         		break
+				        case '2':  	frm.btnedit.value='';
+				         		break				         		
+				        case '3':   	frm.btnremove.value='';
+				        		break
+			        }
+			}
+		]]>
+	</script>	
+</admresource>
