@@ -163,6 +163,39 @@ public class TestWebSite {
             portlet.setTitle("Banner");
         }  
         
+        if(site.getPortletType("WBMenuMap")==null)
+        {
+            
+            PortletType ptype=site.createPortletType("WBMenuMap");
+            ptype.setPortletClassName("org.semanticwb.portal.resources.WBMenuMap");
+            ptype.setPortletBundle("org.semanticwb.portal.resources.WBMenuMap");
+            ptype.setPortletMode(1);
+            ptype.setTitle("Recurso WBMenuMap");
+                    
+            Portlet portlet=site.createPortlet();
+            portlet.setActive(true);
+            portlet.setCreator(user);
+            portlet.setPortletType(ptype);
+            portlet.setTitle("WBMenuMap");
+        }  
+        
+        if(site.getPortletType("WBMenuNivel")==null)
+        {
+            
+            PortletType ptype=site.createPortletType("WBMenuNivel");
+            ptype.setPortletClassName("org.semanticwb.portal.resources.WBMenuNivel");
+            ptype.setPortletBundle("org.semanticwb.portal.resources.WBMenuNivel");
+            ptype.setPortletMode(1);
+            ptype.setTitle("Recurso WBMenuNivel");
+                    
+            Portlet portlet=site.createPortlet();
+            portlet.setActive(true);
+            portlet.setCreator(user);
+            portlet.setPortletType(ptype);
+            portlet.setTitle("WBMenuNivel");
+        }  
+        
+        
         if(site.getPortletType("Banner1")==null)
         {
             

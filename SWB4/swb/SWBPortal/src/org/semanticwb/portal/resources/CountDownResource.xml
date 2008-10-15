@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<!--
+ * CountDownResource.xml.xml
+ *
+ * Created on 25 de julio de 2005, 08:04 PM
+ *
+ * @author  Javier Solis
+ -->
+	<xslfile>admresource.xslt</xslfile>
+	<form name="frmAdmin" action="true" method="POST" enctype="multipart/form-data">
+		<admdbconnmgr defconn="true"/>     
+<!--                         
+		<input type="FILE" name="html" label="* Archivo de contenido local:" size="40" showfile="false"/>
+		<statictext name="labelPag">* Desea páginar contenido:</statictext>
+		<input type="RADIO" name="pcont" label="Si" value="1"/>
+		<input type="RADIO" name="pcont" label="No" value="0"/>
+		<input type="TEXT" name="labelPag" label="* Número de paginas a primera vista:" size="4" maxlength="4" jsvaltype="js_numbers"/>
+-->                
+		<input type="TEXT" name="endtime" label="Fecha (mm/dd/aa):"/>
+		<input type="TEXT" name="width" label="Ancho:" size="5" jsvaltype="js_numbers"/>
+		<input type="TEXT" name="height" label="Alto:" size="5" jsvaltype="js_numbers"/>
+		<input type="TEXT" name="backgrownd" label="Color de Fondo (FFFFFF):"/>
+		<input type="SUBMIT" name="btnSave"  moreattr="class=&#34;botones&#34;" value="GUARDAR"/>
+		<input type="RESET"  name="btnReset" moreattr="class=&#34;botones&#34;" value="CANCELAR"/>
+        </form>
+</admresource>

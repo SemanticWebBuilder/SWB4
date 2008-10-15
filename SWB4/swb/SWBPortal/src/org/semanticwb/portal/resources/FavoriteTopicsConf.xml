@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+    <resource>
+        <resource-name>Favorite Topics</resource-name>
+        <display-name xml:lang="es">Topicos Favoritos</display-name>
+        <display-name xml:lang="en">Favorite Topics</display-name>
+        <description xml:lang="es">Recurso que se encarga de desplegar y administrar Mis Secciones Favoritas de
+            los usuarios finales bajo ciertos criterios(configuración de recurso).
+        </description>
+        <description xml:lang="en">Resource that used to unfold and admin My Favorite Topics of the end
+            users under certain criteria (resource configuration).</description>
+        <resource-class>com.infotec.wb.resources.FavoriteTopics</resource-class>
+        <expiration-cache>0</expiration-cache>
+        <resource-bundle>com.infotec.wb.resources.FavoriteTopics</resource-bundle>
+        <resource-type>1</resource-type>
+        <extended-attributes>
+        </extended-attributes>
+    </resource>
