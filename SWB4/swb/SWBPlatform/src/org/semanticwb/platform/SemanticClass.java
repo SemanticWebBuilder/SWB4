@@ -39,7 +39,8 @@ public class SemanticClass
     private Boolean m_autogenId=null;
     private Class m_cls=null;
     private Constructor m_constructor=null;
-    
+    private SemanticProperty displayNameProperty;
+
     public SemanticClass(OntClass oclass)
     {
         this.m_class=oclass;
@@ -62,6 +63,7 @@ public class SemanticClass
         {
             Property prop=(Property)i.next();
             SemanticProperty p=new SemanticProperty(prop);
+            if(p.isUsedAsName())displayNameProperty=p;
             //System.out.println("p.getName():"+p.getName()+" "+p);
             m_props.put( p.getName(), p);
         }
@@ -390,4 +392,7 @@ public class SemanticClass
         return m_isSWBModel.booleanValue();
     }    
     
+    public SemanticProperty getDisplayNameProperty() {
+        return displayNameProperty;
+    }  
 }
