@@ -2,6 +2,7 @@ package org.semanticwb.model;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
 import org.semanticwb.SWBUtils;
@@ -187,5 +188,82 @@ public class Portlet extends PortletBase
     {
         dom=null;
         super.setXml(xml);
+    }
+    
+    public void addHit(HttpServletRequest request, User user, WebPage page)
+    {
+        //TODO:
+    }
+    
+    /**
+     * @throws AFException
+     * @return  */
+    public String getData()
+    {
+        return getProperty("data");
+    }
+
+    /**
+     * @param data
+     * @throws AFException  */
+    public void setData(String data)
+    {
+        setProperty("data", data);
+    }
+
+    /**
+     * @param usr
+     * @throws AFException
+     * @return  */
+    public String getData(User usr)
+    {
+        return getProperty("data/usr/"+usr.getUserRepository().getId()+"/"+usr.getId());
+    }
+
+    /**
+     * @param usr
+     * @param data
+     * @throws AFException  */
+    public void setData(User usr, String data) 
+    {
+        setProperty("data/usr/"+usr.getUserRepository().getId()+"/"+usr.getId(),data);
+    }
+
+    /**
+     * @param usr
+     * @param topic
+     * @throws AFException
+     * @return  */
+    public String getData(User usr, WebPage page)
+    {
+        return getProperty("data/usr/"+usr.getUserRepository().getId()+"/"+usr.getId()+"/wp/"+page.getWebSiteId()+"/"+page.getId());
+    }
+
+    /**
+     * @param usr
+     * @param topic
+     * @param data
+     * @throws AFException  */
+    public void setData(User usr, WebPage page, String data)
+    {
+        setProperty("data/usr/"+usr.getUserRepository().getId()+"/"+usr.getId()+"/wp/"+page.getWebSiteId()+"/"+page.getId(),data);
+    }
+
+    /**
+     * @param topic
+     * @throws AFException
+     * @return  */
+    public String getData(WebPage page)
+    {
+        return getProperty("data/wp/"+page.getWebSiteId()+"/"+page.getId());
+    }
+
+    /**
+     * @param topic
+     * @param data
+     * @throws AFException  */
+    public void setData(WebPage page, String data)
+    {
+        setProperty("data/wp/"+page.getWebSiteId()+"/"+page.getId(),data);
     }
 }
