@@ -10,7 +10,7 @@
          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>iUI Music Demo</title>
+<title>Semantic WebBuilder</title>
 <meta name="viewport" content="width=320; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
 <style type="text/css" media="screen">@import "/swb/swbadmin/js/iui/iui.css";</style>
 <script type="application/x-javascript" src="/swb/swbadmin/js/iui/iui.js"></script>
@@ -45,7 +45,7 @@
     {
         WebSite site=sites.next();
 %>
-<li><a href="i_object.jsp?suri=<%=site.getEncodedURI()%>"><table width="100%"><tr><td><%=site.getTitle()%></td><td align="right"><a href="http://google.com" class="ilink">jei</a></td></tr></table></a></li>
+<li><a href="i_object.jsp?suri=<%=site.getEncodedURI()%>"><table width="100%"><tr><td><%=site.getTitle()%></td><td align="right"><a href="http://google.com" class="ilink">edit</a></td></tr></table></a></li>
 <%        
     }
 %>        

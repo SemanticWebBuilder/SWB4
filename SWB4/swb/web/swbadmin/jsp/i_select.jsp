@@ -17,8 +17,7 @@
     SemanticProperty prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(idp);
     SemanticClass clsprop=prop.getRangeClass();
     
-    String title=prop.getLabel();
-    if(title==null)title=prop.getName();
+    String title=prop.getCaption();
 
     String wid=obj.getModel().getName()+"/"+obj.getId()+"/"+prop.getRDFProperty().getLocalName();
     System.out.println("Title:"+title+" id:"+wid);
@@ -30,7 +29,7 @@
     while(it.hasNext())
     {
         SemanticObject sobj=it.next();
-        String stitle=sobj.getProperty(SWBContext.getVocabulary().title);
+        String stitle=sobj.getDisplayName();
         if(stitle==null)stitle=sobj.getProperty(SWBContext.getVocabulary().usrLogin);
 
 %>
