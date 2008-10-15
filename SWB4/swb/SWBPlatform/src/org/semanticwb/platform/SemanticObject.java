@@ -709,5 +709,10 @@ public class SemanticObject
         return getProperty(getSemanticClass().getDisplayNameProperty());
     }
     
+    public String getDisplayName(String lang)
+    {
+        return getProperty(getSemanticClass().getDisplayNameProperty(),null,lang);
+    }    
+    
 }
 
