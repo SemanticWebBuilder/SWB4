@@ -95,6 +95,8 @@ public class SemanticProperty
         {
             return st.getString();
         }
+        if(ret==null)ret=getLabel();
+        if(ret==null)ret=getName();
         return ret;
     }    
     
