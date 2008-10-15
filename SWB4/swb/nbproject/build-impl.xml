@@ -371,6 +371,7 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
                 COMPILATION SECTION
             -->
     <target depends="init" if="no.dist.ear.dir" name="deps-module-jar" unless="no.deps">
+        <ant antfile="${project.SWB3Resources}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.SWBAdmin}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.SWBBase}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.SWBModel}/build.xml" inheritall="false" target="jar"/>
@@ -379,6 +380,7 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
         <ant antfile="${project.SWBTripleStore}/build.xml" inheritall="false" target="jar"/>
     </target>
     <target depends="init" if="dist.ear.dir" name="deps-ear-jar" unless="no.deps">
+        <ant antfile="${project.SWB3Resources}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.SWBAdmin}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.SWBBase}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.SWBModel}/build.xml" inheritall="false" target="jar"/>
@@ -1009,6 +1011,7 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
                 CLEANUP SECTION
             -->
     <target depends="init" if="no.dist.ear.dir" name="deps-clean" unless="no.deps">
+        <ant antfile="${project.SWB3Resources}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBAdmin}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBBase}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBModel}/build.xml" inheritall="false" target="clean"/>
