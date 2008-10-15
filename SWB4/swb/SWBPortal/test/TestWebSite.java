@@ -66,6 +66,7 @@ public class TestWebSite {
         if(SWBContext.getWebSite("sep")==null)
         {
             WebSite site=SWBContext.createWebSite("sep", "http://www.sep.gob.mx");
+            site.setCreated(new java.util.Date(System.currentTimeMillis()));
             site.setTitle("Sep");
             site.setDescription("Sep WebSite");
             site.setActive(true);
@@ -74,20 +75,36 @@ public class TestWebSite {
             Language lang=site.createLanguage("es");
             lang.setTitle("Español", "es");
             lang.setTitle("Spanish", "en");
-            lang=site.createLanguage("en");
-            lang.setTitle("Ingles", "es");
-            lang.setTitle("English", "en");
+            
+            site.setLanguage(lang);
+ 
+            Language lang2=site.createLanguage("en");
+            lang2.setTitle("Ingles", "es");
+            lang2.setTitle("English", "en");
             
             //Create HomePage
             WebPage home=site.createWebPage("home");
             site.setHomePage(home);
             home.setActive(true);
             home.setTitle("Pagina Principal");
-
+            
             //Set User Repository
             UserRepository urep=SWBContext.getDefaultRepository();
             site.setUserRepository(urep);
+            User user=urep.getUser("1");
 
+            //VersionInfo para el WebSite
+            VersionInfo versionws=site.createVersionInfo();
+            versionws.setVersionNumber(1);
+            versionws.setCreated(new java.util.Date(System.currentTimeMillis()));
+            versionws.setCreator(user);
+            versionws.setModifiedBy(user);
+            versionws.setVersionComment("Versión inicial del sitio SEP para pruebas");
+            versionws.setUpdated(new java.util.Date(System.currentTimeMillis()));
+            site.setActualVersion(versionws);
+            site.setLastVersion(versionws);
+            site.setCreator(user);
+            site.setModifiedBy(user);
             //Create DNS
             WebSite global=SWBContext.getGlobalWebSite();
             Dns dns=global.getDns("localhost");
@@ -109,6 +126,7 @@ public class TestWebSite {
             tplref.setPriority(3);
             
             home.addTemplateRef(tplref);
+            site.setUpdated(new java.util.Date(System.currentTimeMillis()));
         }
     }
     
@@ -326,7 +344,30 @@ public class TestWebSite {
             portletref.setPriority(3);
             
             home.addPortletRef(portletref);
-        }     
+        }   
+        
+        if(site.getPortletType("SWBASemObjectEditor")==null)
+        {
+            
+            PortletType ptype=site.createPortletType("SWBASemObjectEditor");
+            ptype.setPortletClassName("org.semanticwb.portal.admin.resources.SWBASemObjectEditor");
+            ptype.setPortletBundle("org.semanticwb.portal.admin.resources.SWBASemObjectEditor");
+            ptype.setPortletMode(1);
+            ptype.setTitle("SemanticObject Editor");
+                    
+            Portlet portlet=site.createPortlet();
+            portlet.setActive(true);
+            portlet.setCreator(user);
+            portlet.setPortletType(ptype);
+            portlet.setTitle("SWBASemObjectEditor");
+            
+            PortletRef portletref=site.createPortletRef();
+            portletref.setActive(true);
+            portletref.setPortlet(portlet);
+            portletref.setPriority(3);
+            home.addPortletRef(portletref);            
+            
+        }
     }
     
     
@@ -365,6 +406,14 @@ public class TestWebSite {
                 }
             }
         }
+    }
+    
+    //@Test
+    public void Test4()
+    {
+        WebSite site=SWBContext.getWebSite("sep");
+        if(!site.isActive()) site.setActive(true);
+        
     }
     
     //@Test
