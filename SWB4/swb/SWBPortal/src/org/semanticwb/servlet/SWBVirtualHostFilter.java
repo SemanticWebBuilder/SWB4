@@ -93,6 +93,7 @@ public class SWBVirtualHostFilter implements Filter
         log.trace("iserv:"+iserv);
         
         InternalServlet serv=intServlets.get(iserv);
+        if(serv!=null && path.endsWith(".jsp"))serv=null;
         
 //        String real=WBVirtualHostMgr.getInstance().getVirtualHost(path,host);
 //        
@@ -174,12 +175,12 @@ public class SWBVirtualHostFilter implements Filter
         login.init(filterConfig.getServletContext());
 
         //TODO:Admin servlet
-//        InternalServlet admin=new Admin();
-//        intServlets.put("wbadmin", admin);
-//        intServlets.put("swbadmin", admin);
-//        admin.init(filterConfig.getServletContext());
-//        log.event("SemanticWebBuilder started...");        
-//        log.event("************************************");
+        InternalServlet admin=new Admin();
+        intServlets.put("wbadmin", admin);
+        intServlets.put("swbadmin", admin);
+        admin.init(filterConfig.getServletContext());
+        log.event("SemanticWebBuilder started...");        
+        log.event("************************************");
     }
     
     /**
