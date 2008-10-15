@@ -36,7 +36,7 @@ public class User extends UserBase implements Principal, java.io.Serializable
         }
         
     }
-    //TODO Revisar la serializacion
+    
     public String getDevice() {
         return device;
     }
