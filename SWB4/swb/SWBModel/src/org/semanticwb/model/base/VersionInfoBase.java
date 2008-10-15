@@ -7,7 +7,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class VersionInfoBase extends GenericObjectBase implements Valueable,Traceable
+public class VersionInfoBase extends GenericObjectBase implements Traceable,Valueable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
