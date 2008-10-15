@@ -65,7 +65,7 @@ public class Login implements InternalServlet {
                 String url = request.getParameter("_wb_goto");
                 if ((url == null || url.equals("/")))
                 {
-                    url = path + dparams.getWebPage().getWebSiteId() + "/" + dparams.getWebPage().getId() + "/_lang/" + dparams.getUser().getLanguage();
+                    url = path +"/"+SWBPlatform.getEnv("swb/distributor")+ "/" +dparams.getWebPage().getWebSiteId() + "/" + dparams.getWebPage().getId() + "/_lang/" + dparams.getUser().getLanguage();
                     log.debug("LOGOUT3(Path, uri, url): " + path + "   |   " + uri + "    |  " + url);
                     sendRedirect(response, url);
                     return;
@@ -129,7 +129,8 @@ public class Login implements InternalServlet {
             lc.login();
         // session.removeAttribute(VALSESS);
         // session.removeAttribute(CALLBACK);
-            
+            System.out.println(subject.toString());
+            System.out.println(lc.getSubject().toString());
         } catch (LoginException ex)
         {
             log.error("Can't log User", ex);
