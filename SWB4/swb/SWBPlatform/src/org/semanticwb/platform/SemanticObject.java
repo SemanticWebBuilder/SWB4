@@ -704,5 +704,10 @@ public class SemanticObject
         getModel().removeSemanticObject(this);
     }
     
+    public String getDisplayName()
+    {
+        return getProperty(getSemanticClass().getDisplayNameProperty());
+    }
+    
 }
 
