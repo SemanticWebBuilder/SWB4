@@ -26,7 +26,8 @@ import org.w3c.dom.Element;
  *
  * @author jorge.jimenez
  */
-public class WBMenuMap extends GenericAdmResource {
+public class WBMenuMap extends GenericAdmResource 
+{
 
     private static Logger log = SWBUtils.getLogger(WBMenuMap.class);
     javax.xml.transform.Templates tpl;

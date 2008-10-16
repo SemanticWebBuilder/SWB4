@@ -33,6 +33,7 @@ package org.semanticwb.portal.resources;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Enumeration;
@@ -75,7 +76,12 @@ public class FrameContent extends GenericAdmResource
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         Portlet base=getResourceBase();
-        if("".equals(base.getAttribute("url","").trim())) { response.getWriter().print(""); return; }
+        if("".equals(base.getAttribute("url","").trim())) 
+        { 
+            //response.getWriter().print(""); 
+            response.getWriter().println("<br><a href=\"" + paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN) + "\">admin</a>");
+            return; 
+        }
 
         StringBuffer ret = new StringBuffer("");        
         String ind = request.getParameter("WBIndexer");
@@ -133,6 +139,8 @@ public class FrameContent extends GenericAdmResource
             } 
             catch (Exception e) { log.error("Error in resource FrameContent while bringing HTML.", e); }
         }
-        response.getWriter().print(ret.toString());
+        PrintWriter out=response.getWriter();
+        out.print(ret.toString());
+        out.println("<br><a href=\"" + paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN) + "\">admin</a>");
     }
 }

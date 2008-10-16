@@ -59,6 +59,7 @@ public class JSPResource extends GenericAdmResource
      * @throws AFException
      * @throws IOException
      */
+    @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         String path = getResourceBase().getAttribute("jsppath");
@@ -78,6 +79,7 @@ public class JSPResource extends GenericAdmResource
         }
     }
 
+    @Override
     public void processAction(HttpServletRequest request, SWBActionResponse actionResponse) throws SWBResourceException, IOException
     {            
         String path = getResourceBase().getAttribute("jspactpath");

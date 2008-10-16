@@ -323,6 +323,30 @@ public class TestWebSite {
         }  
         
         
+        if(site.getPortletType("FrameContent")==null)
+        {
+            
+            PortletType ptype=site.createPortletType("FrameContent");
+            ptype.setPortletClassName("org.semanticwb.portal.resources.FrameContent");
+            ptype.setPortletBundle("org.semanticwb.portal.resources.FrameContent");
+            ptype.setPortletMode(1);
+            ptype.setTitle("Recurso FrameContent");
+                    
+            Portlet portlet=site.createPortlet();
+            portlet.setActive(true);
+            portlet.setCreator(user);
+            portlet.setPortletType(ptype);
+            portlet.setTitle("FrameContent");
+            
+            PortletRef portletref=site.createPortletRef();
+            portletref.setActive(true);
+            portletref.setPortlet(portlet);
+            portletref.setPriority(3);
+            
+            home.addPortletRef(portletref);
+        }  
+        
+        
         if(site.getPortletType("HelloXforms")==null)
         {
             

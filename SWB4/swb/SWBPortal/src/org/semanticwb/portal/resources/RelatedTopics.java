@@ -21,54 +21,21 @@
  *                                          http://www.webbuilder.org.mx
  */
 
-/*
- * CountDownResource.java
- *
- * Created on 25 de julio de 2005, 01:47 PM
- */
 
 package org.semanticwb.portal.resources;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Date;
-import org.semanticwb.SWBPlatform;
 import org.semanticwb.portal.api.GenericAdmResource;
-import org.semanticwb.portal.api.SWBResourceException;
-import org.semanticwb.portal.api.SWBParamRequest;
 
-
-/**
+/** Esta clase se encarga de desplegar y administrar topicos relacionados bajo ciertos
+ * criterios de configuraci�n. Utiliza un archivo XSL.
  *
- * @author Javier Solis Gonzalez
+ * This class is in charge to unfold and to manages related topics under certain
+ * criteria and configuration. Uses an XSL file.
+ * @author : Infotec
+ * @since : September 4th 2002, 13:19
  */
-public class CountDownResource extends GenericAdmResource
+
+public class RelatedTopics extends GenericAdmResource 
 {
-    
-    /** Creates a new instance of CountDownResource */
-    public CountDownResource()
-    {
-    }
-    
-    
-    
-    @Override
-    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
-    {
-        PrintWriter out=response.getWriter();
-        String width=getResourceBase().getAttribute("width","120");
-        String height=getResourceBase().getAttribute("height","25");
-        String date=getResourceBase().getAttribute("endtime","12/12/2012");
-        String backgrownd=getResourceBase().getAttribute("backgrownd","FFFFFF");
-        Date d=new Date(date);
-        
-        out.println("<APPLET code=\"applets/clocks/CountDown.class\" codebase=\""+SWBPlatform.getContextPath()+"\" ARCHIVE=\"wbadmin/lib/clock.jar, wbadmin/lib/WBCommons.jar\" width="+width+" height="+height+">");
-        out.println("<param name=\"actualTime\" value=\""+(new Date()).getTime()+"\">");
-        out.println("<param name=\"endTime\" value=\""+d.getTime()+"\">");
-        out.println("<param name=\"backgrownd\" value=\""+backgrownd+"\">");
-        out.println("</APPLET>");
-    }
-    
+    //TODO:
 }
