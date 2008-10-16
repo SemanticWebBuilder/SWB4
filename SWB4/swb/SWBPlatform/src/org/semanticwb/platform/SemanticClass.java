@@ -78,11 +78,16 @@ public class SemanticClass
     {
         if(m_className==null)
         {
-            Property prop=m_class.getModel().getProperty(SemanticVocabulary.SWB_ANNOT_CLASSNAME);
-            //System.out.println("Class:"+m_class+" ->"+className);
-            m_className=m_class.getRequiredProperty(prop).getString();
-            //System.out.println("Class:"+m_class+" ->"+className);
-            if(m_className==null)m_className=SemanticObject.class.getName();
+            try
+            {
+                Property prop=m_class.getModel().getProperty(SemanticVocabulary.SWB_ANNOT_CLASSNAME);
+                //System.out.println("Class:"+m_class+" ->"+className);
+                m_className=m_class.getRequiredProperty(prop).getString();
+                //System.out.println("Class:"+m_class+" ->"+className);
+                if(m_className==null)m_className=SemanticObject.class.getName();
+            } catch (Exception pnf){
+                m_className=getName();
+            }
         }
         log.trace("getClassName:"+m_className);
         return m_className;
