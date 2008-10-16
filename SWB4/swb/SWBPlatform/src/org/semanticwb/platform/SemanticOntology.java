@@ -5,11 +5,13 @@
 
 package org.semanticwb.platform;
 
+import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntResource;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.rdf.model.Model;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import org.semanticwb.SWBPlatform;
@@ -130,4 +132,12 @@ public class SemanticOntology
     {
         return cls.newGenericInstance(getSemanticObject(uri));        
     }
+    
+    public SemanticClass createSemanticClass(String uri)
+    {
+        OntModel m=m_ontology;
+        m.createStatement(m.getResource(uri), m.getProperty(SemanticVocabulary.RDF_TYPE), m.getResource(SemanticVocabulary.OWL_CLASS));
+        OntClass ontcls=m_ontology.getOntClass(uri);
+        return new SemanticClass(ontcls);    
+    }    
 }

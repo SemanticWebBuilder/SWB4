@@ -94,20 +94,10 @@ public class SemanticMgr implements SWBInstanceObject
         SemanticClassIterator tpcit=new SemanticClassIterator(m_ontology.getRDFOntModel().listClasses());
         while(tpcit.hasNext())
         {
-            SemanticClass tpc=tpcit.nextSemanticClass();
-            if(tpc!=null && tpc.getName()!=null)
+            SemanticClass cls=tpcit.nextSemanticClass();
+            if(cls!=null && cls.getName()!=null)
             {
-                log.trace("Registering SemanticClass:"+tpc+" --> "+tpc.getClassName());
-                vocabulary.addSemanticClass(tpc);
-                Iterator<SemanticProperty> tppit=tpc.listProperties();
-                while(tppit.hasNext())
-                {
-                    SemanticProperty tpp=tppit.next();
-                    //if(tpc.equals(tpp.getDomainClass()) || tpp.hasInverse())
-                    {
-                        vocabulary.addSemanticProperty(tpp);
-                    }
-                }
+                vocabulary.registerClass(cls);
             }
         }
         vocabulary.init();

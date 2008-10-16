@@ -7,6 +7,8 @@ package org.semanticwb.platform;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 
 /**
  *
@@ -14,6 +16,7 @@ import java.util.Iterator;
  */
 public class SemanticVocabulary 
 {
+    private static Logger log = SWBUtils.getLogger(SemanticVocabulary.class);
     //RDF
     public static final String RDF_URI="http://www.w3.org/1999/02/22-rdf-syntax-ns#";
     public static final String RDF_TYPE=RDF_URI+"type";
@@ -36,6 +39,7 @@ public class SemanticVocabulary
     
             
     public static final String OWL_URI="http://www.w3.org/2002/07/owl#";
+    public static final String OWL_CLASS=OWL_URI+"Class";
     public static final String OWL_DATATYPEPROPERTY=OWL_URI+"DatatypeProperty";
     public static final String OWL_OBJECTPROPERTY=OWL_URI+"ObjectProperty";
         
@@ -126,6 +130,21 @@ public class SemanticVocabulary
     public SemanticProperty getSemanticProperty(String uri)
     {
         return properties.get(uri);
+    }    
+    
+    public void registerClass(SemanticClass cls)
+    {
+        log.trace("Registering SemanticClass:"+cls+" --> "+cls.getClassName());
+        addSemanticClass(cls);
+        Iterator<SemanticProperty> propit=cls.listProperties();
+        while(propit.hasNext())
+        {
+            SemanticProperty prop=propit.next();
+            //if(tpc.equals(tpp.getDomainClass()) || tpp.hasInverse())
+            {
+                addSemanticProperty(prop);
+            }
+        }
     }    
     
     
