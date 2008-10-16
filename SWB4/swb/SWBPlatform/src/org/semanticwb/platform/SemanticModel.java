@@ -5,6 +5,9 @@
 
 package org.semanticwb.platform;
 
+import com.hp.hpl.jena.ontology.OntClass;
+import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.ontology.OntProperty;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -191,5 +194,29 @@ public class SemanticModel
         StmtIterator stit=getRDFModel().listStatements(null, rdf, cls.getOntClass());
         return new SemanticIterator(cls, stit, true);
     }
+    
+    public SemanticProperty createSemanticProperty(String uri, SemanticClass cls, String uriType, String uriRang)
+    {
+        Model m=getRDFModel();
+        m.createStatement(m.getResource(uri), m.getProperty(SemanticVocabulary.RDF_TYPE), m.getResource(uriType));
+        OntModel ont=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
+        OntProperty ontprop=ont.getOntProperty(uri);
+        ontprop.setDomain(m.getResource(cls.getURI()));
+        ontprop.setRange(m.getResource(uriRang));
+        cls=new SemanticClass(cls.getOntClass());
+        SWBPlatform.getSemanticMgr().getVocabulary().registerClass(cls);
+        return new SemanticProperty(ontprop);
+    }    
+    
+    public SemanticClass createSemanticClass(String uri)
+    {
+        Model m=getRDFModel();
+        OntModel ont=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
+        m.createStatement(m.getResource(uri), m.getProperty(SemanticVocabulary.RDF_TYPE), m.getResource(SemanticVocabulary.OWL_CLASS));
+        OntClass ontcls=ont.getOntClass(uri);
+        SemanticClass cls=new SemanticClass(ontcls);
+        SWBPlatform.getSemanticMgr().getVocabulary().registerClass(cls);
+        return cls;
+    }    
     
 }
