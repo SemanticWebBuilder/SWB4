@@ -1,8 +1,13 @@
 package org.semanticwb.model;
 
+import com.hp.hpl.jena.rdf.model.Model;
 import java.util.Iterator;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.base.*;
+import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.platform.SemanticProperty;
+import org.semanticwb.platform.SemanticVocabulary;
 
 public class UserRepository extends UserRepositoryBase 
 {
@@ -31,4 +36,31 @@ public class UserRepository extends UserRepositoryBase
         }
         return ret;
     }
+    
+    public SemanticProperty createIntExtendedAttribute(String name)
+    {
+        return getSemanticObject().getModel().createSemanticProperty(getId()+"#"+name, getExtendedAttributesClass(), SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_INT);
+    }    
+    
+    public Iterator<SemanticProperty> listExtendedAttributes()
+    {
+        return getExtendedAttributesClass().listProperties();
+    }       
+    
+    public SemanticClass getExtendedAttributesClass()
+    {
+        SemanticClass cls=null;
+        String uri=getProperty("extendedAttributes");
+        if(uri==null)
+        {
+            uri=getId()+"#clsExtendedAttibutes";
+            cls=getSemanticObject().getModel().createSemanticClass(uri);
+            setProperty("extendedAttributes", uri);
+        }else
+        {
+            cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(uri);
+        }
+        return cls;
+    }
+    
 }
