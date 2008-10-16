@@ -6,6 +6,7 @@
 package org.semanticwb.portal.resources;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -172,8 +173,6 @@ public class WBMenuNivel extends GenericAdmResource
                     ehermano.setAttribute("id", tphermano.getId());
                     ehermano.setAttribute("name", tphermano.getTitle(lang.getId()));
                     ehermano.setAttribute("path", tphermano.getUrl());
-                    System.out.println("tphermano.getLeveJ():"+tphermano);
-                    System.out.println("tphermano.getLeveJl():"+tphermano.getLevel());
                     ehermano.setAttribute("level", Integer.toString(tphermano.getLevel()));
                     ehermano.setAttribute("nivel", Integer.toString(nivel));                    
                     ehermano.setAttribute("caracter", Integer.toString(ancho*nivel));
@@ -291,7 +290,10 @@ public class WBMenuNivel extends GenericAdmResource
         {
             Document dom =getDom(request, response, paramRequest);
             if(dom != null)  {
-                response.getWriter().print(SWBUtils.XML.transformDom(tpl, dom));
+                PrintWriter out = response.getWriter();
+                //response.getWriter().print(SWBUtils.XML.transformDom(tpl, dom));
+                out.print(SWBUtils.XML.transformDom(tpl, dom));
+                out.println("<br><a href=\"" + paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN) + "\">admin</a>");
             }
         }
         catch(Exception e)

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<xslfile>admresource.xslt</xslfile>
+	<form name="frmRelatedTopics" action="true" method="POST" enctype="multipart/form-data">
+		<admdbconnmgr defconn="true"/>
+		<input type="FILE" name="template" label="Template (xsl, xslt):" showfile="true" msg="Current template " bydefault="{@webpath}wbadmin/xsl/RelatedTopics/RelatedTopics.xslt" msgbydefault="Template by default " filetype="xsl|xslt" isshowfiletype="true" size="40"/>
+		<input type="TEXT" name="title" label="Title:" size="50"/>
+		<statictext name="txtSort">Order by:</statictext>
+		<input type="RADIO" name="sort" label="Role" value="1"/>
+		<input type="RADIO" name="sort" label="Association type" value="0"/>
+		<statictext name="txtTarget">In a new window:</statictext>
+		<input type="RADIO" name="target" label="Yes" value="1"/>
+		<input type="RADIO" name="target" label="No" value="0"/>
+		<input type="SUBMIT" name="btnSave"  value="Save"/>
+		<input type="RESET"  name="btnReset" value="Cancel"/>
+	</form>
+	<statictext name="txtNote">
+		<![CDATA[
+			<br><br><font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+			* Required information</font>
+		]]>
+	</statictext>
+	<script language="JavaScript">
+		<![CDATA[
+			if(!document.frmRelatedTopics.sort[0].checked && !document.frmRelatedTopics.sort[1].checked)
+				document.frmRelatedTopics.sort[1].checked=true;
+			if(!document.frmRelatedTopics.target[0].checked && !document.frmRelatedTopics.target[1].checked)
+				document.frmRelatedTopics.target[1].checked=true;
+		]]>
+	</script>
+</admresource>

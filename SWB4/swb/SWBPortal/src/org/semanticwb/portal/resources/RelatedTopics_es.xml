@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<xslfile>admresource.xslt</xslfile>
+	<form name="frmRelatedTopics" action="true" method="POST" enctype="multipart/form-data">
+		<admdbconnmgr defconn="true"/>
+		<input type="FILE" name="template" label="Plantilla (xsl, xslt):" showfile="true" msg="Plantilla actual " bydefault="{@webpath}wbadmin/xsl/RelatedTopics/RelatedTopics.xslt" msgbydefault="Plantilla por defecto " filetype="xsl|xslt" isshowfiletype="true" size="40"/>
+		<input type="TEXT" name="title" label="Título:" size="50"/>
+		<statictext name="txtSort">Ordenado por:</statictext>
+		<input type="RADIO" name="sort" label="Rol" value="1"/>
+		<input type="RADIO" name="sort" label="Tipo de asociación" value="0"/>
+		<statictext name="txtTarget">En nueva ventana:</statictext>
+		<input type="RADIO" name="target" label="Sí" value="1" />
+		<input type="RADIO" name="target" label="No" value="0" />
+		<input type="SUBMIT" name="btnSave"  value="Guardar"/>
+		<input type="RESET"  name="btnReset" value="Cancelar"/>
+	</form>
+	<statictext name="txtNote">
+		<![CDATA[
+			<br><br><font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+			* Datos requeridos</font>
+		]]>
+	</statictext>
+	<script language="JavaScript">
+		<![CDATA[
+			if(!document.frmRelatedTopics.sort[0].checked && !document.frmRelatedTopics.sort[1].checked)
+				document.frmRelatedTopics.sort[1].checked=true;
+			if(!document.frmRelatedTopics.target[0].checked && !document.frmRelatedTopics.target[1].checked)
+				document.frmRelatedTopics.target[1].checked=true;
+		]]>
+	</script>
+</admresource>
