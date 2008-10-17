@@ -50,7 +50,8 @@ public class WBAdmResourceUtils {
 
     private static Logger log = SWBUtils.getLogger(WBAdmResourceUtils.class);
     private String webWorkPath = SWBPlatform.getWebWorkPath();
-    private String workPath = (String) SWBPlatform.getWorkPath();
+    private String workPath = SWBPlatform.getWorkPath();
+    private String webPath = SWBPlatform.getContextPath();
 
     public boolean xmlVerifierDefault(String xml) {
         boolean bOk = false;
@@ -472,8 +473,65 @@ public class WBAdmResourceUtils {
      * Despliega imagen en su representación html.
      *
      * @param   base    La información del recurso en memoria.
-     * @param   filename  El nombre de la imagen que se va a desplegar.
+     * @param   pImage  El nombre de la imagen que se va a desplegar.
      * @return  Regresa un nuevo String que contiene la representación html de la imagen.
+     */
+    public String displayImage(Portlet base, String pImage, String pNode) {
+        StringBuffer sbfRet = new StringBuffer("");
+        try {
+            String img = base.getAttribute(pNode, "").trim();
+            if (!img.equals("")) {
+                String width = base.getAttribute("imgwidth", "").trim();
+                String height = base.getAttribute("imgheight", "").trim();
+
+                if (img.endsWith(".swf")) {
+                    sbfRet.append("<object classid=\"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000\" codebase=\"http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,29,0\"");
+                    if (!width.equals("")) {
+                        sbfRet.append(" width=\"" + width + "\"");
+                    }
+                    if (!height.equals("")) {
+                        sbfRet.append(" height=\"" + height + "\"");
+                    }
+                    sbfRet.append(">");
+                    sbfRet.append("<param name=movie value=\"" + webWorkPath + base.getWorkPath() + "/" + img + "\">");
+                    sbfRet.append("<param name=quality value=high>");
+                    sbfRet.append("<embed src=\"");
+                    sbfRet.append(webWorkPath + base.getWorkPath() + "/" + img);
+                    sbfRet.append("\" quality=high pluginspage=\"http://www.macromedia.com/go/getflashplayer\" type=\"application/x-shockwave-flash\"");
+                    if (!width.equals("")) {
+                        sbfRet.append(" width=\"" + width + "\"");
+                    }
+                    if (!height.equals("")) {
+                        sbfRet.append(" height=\"" + height + "\"");
+                    }
+                    sbfRet.append(">");
+                    sbfRet.append("</embed>");
+                    sbfRet.append("</object>");
+                } else {
+                    sbfRet.append("\n<img src=\"");
+                    sbfRet.append(webWorkPath + base.getWorkPath() + "/" + img + "\"");
+                    if (!width.equals("")) {
+                        sbfRet.append(" width=\"" + width + "\"");
+                    }
+                    if (!height.equals("")) {
+                        sbfRet.append(" height=\"" + height + "\"");
+                    }
+                    sbfRet.append(" hspace=5 border=0>");
+                }
+            }
+        } catch (Exception e) {
+            sbfRet.append("\n<br>\n<!--Exception " + e + "-->");
+            log.error("Error while displaying image in resource " + base.getId() + ".", e);
+        }
+        return sbfRet.toString();
+    }
+    
+    /**
+     * Despliega imagen en su representaciÃ³n html.
+     *
+     * @param   base    La informaciÃ³n del recurso en memoria.
+     * @param   filename  El nombre de la imagen que se va a desplegar.
+     * @return  Regresa un nuevo String que contiene la representaciÃ³n html de la imagen.
      */
     public String displayImage(Portlet base, String filename, int width, int height) {
         StringBuffer strb = new StringBuffer();
@@ -695,5 +753,500 @@ public class WBAdmResourceUtils {
         }
         return sbfRet.toString();
     }
+
+    /**
+     * Obtiene el nombre del archivo de una ruta.
+     *
+     * @param     pFile     El nombre del archivo que se va a guardar.
+     * @return    Regresa un nuevo String que contiene el nombre del archivo que se guardó.
+     */
+    public String getFileName(Portlet base, String pFile) {
+        String ret = "";
+        try {
+            ret = getFileName(pFile);
+        } catch (Exception e) {
+            log.error(SWBUtils.TEXT.getLocaleString("locale_wb2_util", "error_WBResource_getFileName_exc01") + " " + base.getId() + SWBUtils.TEXT.getLocaleString("locale_wb2_util", "error_WBResource_getFileName_exc02") + " " + base.getPortletType() + SWBUtils.TEXT.getLocaleString("locale_wb2_util", "error_WBResource_getFileName_excp03") + " " + pFile + ".", e);
+        }
+        return ret;
+    }
+
+    /**
+     * Obtiene el nombre del archivo de una ruta.
+     *
+     * @param     pFile     El nombre del archivo que se va a guardar.
+     * @return    Regresa un nuevo String que contiene el nombre del archivo que se guardó.
+     */
+    public String getFileName(String pFile) {
+        String ret = "";
+        if (pFile != null && !"".equals(pFile.trim())) {
+            //ret=(new File(pFile)).getName(); 
+            pFile = pFile.replace('\\', '/');
+            int intPos = pFile.lastIndexOf("/");
+            if (intPos != -1) {
+                ret = pFile.substring(intPos + 1).trim();
+            } else {
+                ret = pFile;
+            }
+        }
+        return ret;
+    }
+
+    /**
+     * Valida extensión de archivo
+     *
+     * @param     pFile     El nombre del archivo que se va a guardar.
+     * @param     pExt      Lista de extensiones dentro de las cuales el archivo debe pertenecer a alguna.
+     * @return    Regresa un nuevo String que contiene la descripción del error en caso de que el archivo
+     *            no cumpliera con la extensión requerida.
+     */
+    public boolean isFileType(String pFile, String pExt) {
+        boolean bOk = false;
+        try {
+            String strExt = "";
+            if (pFile != null && !"".equals(pFile.trim())) {
+                //pFile=(new File(pFile)).getName();
+                pFile = getFileName(pFile);
+                int intPos = pFile.lastIndexOf(".");
+                if (intPos != -1) {
+                    strExt = pFile.substring(intPos + 1).trim().toLowerCase();
+                    StringTokenizer strToken = new StringTokenizer(pExt, "|");
+                    while (strToken.hasMoreTokens()) {
+                        if (strExt.equals(strToken.nextToken())) {
+                            bOk = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            log.error(SWBUtils.TEXT.getLocaleString("locale_wb2_util", "error_WBResource_isFileType_error") + pFile, e);
+        }
+        return bOk;
+    }
+
+    public String loadColorApplet(java.util.HashMap param) {
+        StringBuffer sbfRet = new StringBuffer();
+        sbfRet.append("\n<applet name=\"");
+        if (param.get("id") != null) {
+            sbfRet.append((String) param.get("id"));
+        } else {
+            sbfRet.append("selColor");
+        }
+        sbfRet.append("\" width=\"");
+        if (param.get("width") != null) {
+            sbfRet.append((String) param.get("width"));
+        } else {
+            sbfRet.append("293");
+        }
+        sbfRet.append("\" height=\"");
+        if (param.get("height") != null) {
+            sbfRet.append((String) param.get("height"));
+        } else {
+            sbfRet.append("240");
+        }
+        sbfRet.append("\" code=\"applets.selcolor.SelColor.class\" codebase=\"" + webPath + "\" archive=\"wbadmin/lib/SelColor.jar\" border=\"0\">");
+        sbfRet.append("\n<param name=\"name\" value=\"");
+        if (param.get("id") != null) {
+            sbfRet.append((String) param.get("id"));
+        } else {
+            sbfRet.append("selColor");
+        }
+        sbfRet.append("\">");
+        sbfRet.append("\n<param name=\"cache_archive\" value=\"" + webPath + "wbadmin/lib/SelColor.jar\">");
+        sbfRet.append("\n<param name=\"_cache_version\" value=\"1.0.0.1\">");
+        sbfRet.append("\n<param name=\"_cache_archive_ex\" value=\"applet.jar;preload, util.jar;preload,tools.jar;preload\">");
+        sbfRet.append("\n<param name=\"type\" value=\"application/x-java-applet;version=1.4\">");
+        sbfRet.append("\n<param name=\"scriptable\" value=\"true\">");
+        //sbfRet.append("\n<param name=\"JSESS\" value=\"");
+        //if(param.get("session")!=null) sbfRet.append((String)param.get("session"));
+        //sbfRet.append("\">");
+        sbfRet.append("\n<param name=\"webpath\" value=\"" + webPath + "\">");
+        sbfRet.append("\n<param name=\"foreground\" value=\"");
+        if (param.get("foreground") != null) {
+            sbfRet.append((String) param.get("foreground"));
+        } else {
+            sbfRet.append("99cccc");
+        }
+        sbfRet.append("\">");
+        sbfRet.append("\n<param name=\"background\" value=\"");
+        if (param.get("background") != null) {
+            sbfRet.append((String) param.get("background"));
+        } else {
+            sbfRet.append("99cccc");
+        }
+        sbfRet.append("\">");
+        sbfRet.append("\n<param name=\"linkcolor\" value=\"");
+        if (param.get("linkcolor") != null) {
+            sbfRet.append((String) param.get("linkcolor"));
+        } else {
+            sbfRet.append("000000");
+        }
+        sbfRet.append("\">");
+        sbfRet.append("\n<param name=\"linkactual\" value=\"");
+        if (param.get("linkactual") != null) {
+            sbfRet.append((String) param.get("linkactual"));
+        } else {
+            sbfRet.append("000000");
+        }
+        sbfRet.append("\">");
+        sbfRet.append("\n</applet>");
+        return sbfRet.toString();
+    }
+
+    public String loadWindowConfiguration(Portlet base, org.semanticwb.portal.api.SWBParamRequest paramsRequest) {
+        StringBuffer ret = new StringBuffer("");
+        try {
+            ret.append("<tr> \n");
+            ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("msgMenubar") + "</td> \n");
+            ret.append("<td class=\"valores\">");
+            ret.append("<input type=\"checkbox\" name=\"menubar\" value=\"yes\"");
+            if ("yes".equals(base.getAttribute("menubar", ""))) {
+                ret.append(" checked");
+            }
+            ret.append("></td> \n");
+            ret.append("</tr> \n");
+            ret.append("<tr> \n");
+            ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("msgToolbar") + "</td> \n");
+            ret.append("<td class=\"valores\">");
+            ret.append("<input type=\"checkbox\" name=\"toolbar\" value=\"yes\"");
+            if ("yes".equals(base.getAttribute("toolbar", ""))) {
+                ret.append(" checked");
+            }
+            ret.append("></td> \n");
+            ret.append("</tr> \n");
+            ret.append("<tr> \n");
+            ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("msgStatusbar") + "</td> \n");
+            ret.append("<td class=\"valores\">");
+            ret.append("<input type=\"checkbox\" name=\"status\" value=\"yes\"");
+            if ("yes".equals(base.getAttribute("status", ""))) {
+                ret.append(" checked");
+            }
+            ret.append("></td> \n");
+            ret.append("</tr> \n");
+            ret.append("<tr> \n");
+            ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("msgLocation") + "</td> \n");
+            ret.append("<td class=\"valores\">");
+            ret.append("<input type=\"checkbox\" name=\"location\" value=\"yes\"");
+            if ("yes".equals(base.getAttribute("location", ""))) {
+                ret.append(" checked");
+            }
+            ret.append("></td> \n");
+            ret.append("</tr> \n");
+            ret.append("<tr> \n");
+            ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("msgDirectories") + "</td> \n");
+            ret.append("<td class=\"valores\">");
+            ret.append("<input type=\"checkbox\" name=\"directories\" value=\"yes\"");
+            if ("yes".equals(base.getAttribute("directories", ""))) {
+                ret.append(" checked");
+            }
+            ret.append("></td> \n");
+            ret.append("</tr> \n");
+            ret.append("<tr> \n");
+            ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("msgScrollbars") + "</td> \n");
+            ret.append("<td class=\"valores\">");
+            ret.append("<input type=\"checkbox\" name=\"scrollbars\" value=\"yes\"");
+            if ("yes".equals(base.getAttribute("scrollbars", ""))) {
+                ret.append(" checked");
+            }
+            ret.append("></td> \n");
+            ret.append("</tr> \n");
+            ret.append("<tr> \n");
+            ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("msgResizable") + "</td> \n");
+            ret.append("<td class=\"valores\">");
+            ret.append("<input type=\"checkbox\" name=\"resizable\" value=\"yes\"");
+            if ("yes".equals(base.getAttribute("resizable", ""))) {
+                ret.append(" checked");
+            }
+            ret.append("></td> \n");
+            ret.append("</tr> \n");
+            ret.append("<tr> \n");
+            ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("msgWidth") + " " + paramsRequest.getLocaleString("msgPixels") + ":</td> \n");
+            ret.append("<td class=\"valores\">");
+            ret.append("<input type=text size=4 maxlength=4 name=width ");
+            if (!"".equals(base.getAttribute("width", "").trim())) {
+                ret.append(" value=\"" + base.getAttribute("width").trim() + "\"");
+            }
+            ret.append("></td> \n");
+            ret.append("</tr> \n");
+            ret.append("<tr> \n");
+            ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("msgHeight") + " " + paramsRequest.getLocaleString("msgPixels") + ":</td> \n");
+            ret.append("<td class=\"valores\">");
+            ret.append("<input type=text size=4 maxlength=4 name=height ");
+            if (!"".equals(base.getAttribute("height", "").trim())) {
+                ret.append(" value=\"" + base.getAttribute("height").trim() + "\"");
+            }
+            ret.append("></td> \n");
+            ret.append("</tr> \n");
+            ret.append("<tr> \n");
+            ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("msgTop") + " " + paramsRequest.getLocaleString("msgPixels") + ":</td> \n");
+            ret.append("<td class=\"valores\">");
+            ret.append("<input type=text size=4 maxlength=4 name=top ");
+            if (!"".equals(base.getAttribute("top", "").trim())) {
+                ret.append(" value=\"" + base.getAttribute("top").trim() + "\"");
+            }
+            ret.append("></td> \n");
+            ret.append("</tr> \n");
+            ret.append("<tr> \n");
+            ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("msgLeft") + " " + paramsRequest.getLocaleString("msgPixels") + ":</td> \n");
+            ret.append("<td class=\"valores\">");
+            ret.append("<input type=text size=4 maxlength=4 name=left ");
+            if (!"".equals(base.getAttribute("left", "").trim())) {
+                ret.append(" value=\"" + base.getAttribute("left").trim() + "\"");
+            }
+            ret.append("></td> \n");
+            ret.append("</tr> \n");
+        } catch (Exception e) {
+            log.error("Error while generating form to load window configuration in resource " + base.getId() + ".", e);
+        }
+        return ret.toString();
+    }
     
+    
+    /**
+     * Crea una función JavaScript específica.
+     *
+     * @return    Regresa un nuevo String que contiene la función addOption() de JavaScript.
+     */
+    public String loadAddOption()
+    {
+        StringBuffer sbfRet = new StringBuffer();
+        sbfRet.append("\nfunction addOption(pInSel, pInTxt)");
+        sbfRet.append("\n{");
+        sbfRet.append("\n   duplicateOption(pInSel, pInTxt);");
+        sbfRet.append("\n   if(swOk!=1) ");
+        sbfRet.append("\n   {");
+        sbfRet.append("\n       optionObj = new Option(pInTxt.value, pInTxt.value);");
+        sbfRet.append("\n       pInSel.options[pInSel.length]=optionObj;");
+        sbfRet.append("\n   }");
+        sbfRet.append("\n}");
+        return sbfRet.toString();
+    }
+
+    /**
+     * Crea una función JavaScript específica.
+     *
+     * @return    Regresa un nuevo String que contiene la función editOption() de JavaScript.
+     */
+    public String loadEditOption()
+    {
+        StringBuffer sbfRet = new StringBuffer();
+        sbfRet.append("\nfunction editOption(pInSel, pInTxt)");
+        sbfRet.append("\n{");
+        sbfRet.append("\n   pInTxt.value=pInSel.options[pInSel.selectedIndex].value;");
+        sbfRet.append("\n}");
+        return sbfRet.toString();
+    }
+
+    /**
+     * Crea una función JavaScript específica.
+     *
+     * @return    Regresa un nuevo String que contiene la función updateOption() de JavaScript.
+     */
+    public String loadUpdateOption()
+    {
+        StringBuffer sbfRet = new StringBuffer();
+        sbfRet.append("\nfunction updateOption(pInSel, pInTxt)");
+        sbfRet.append("\n{");
+        sbfRet.append("\n   duplicateOption(pInSel, pInTxt);");
+        sbfRet.append("\n   if(swOk!=1)");
+        sbfRet.append("\n   {");
+        sbfRet.append("\n       if(confirm('" + SWBUtils.TEXT.getLocaleString("locale_wb2_util", "usrmsg_WBResource_loadUpdateOption_msg") + " ' + pInSel.options[pInSel.selectedIndex].value + '?'))");
+        sbfRet.append("\n       pInSel.options[pInSel.selectedIndex].value=pInTxt.value;");
+        sbfRet.append("\n       pInSel.options[pInSel.selectedIndex].text=pInTxt.value;");
+        sbfRet.append("\n   }");
+        sbfRet.append("\n}");
+        return sbfRet.toString();
+    }
+
+    /**
+     * Crea una función JavaScript específica.
+     *
+     * @return    Regresa un nuevo String que contiene la función deleteOption() de JavaScript.
+     */
+    public String loadDeleteOption()
+    {
+        StringBuffer sbfRet = new StringBuffer();
+        sbfRet.append("\nfunction deleteOption(pInSel, pInTxt)");
+        sbfRet.append("\n{");
+        sbfRet.append("\n   var aryEle = new Array();");
+        sbfRet.append("\n   if(confirm('" +SWBUtils.TEXT.getLocaleString("locale_wb2_util", "usrmsg_WBResource_loadDeleteOption_msg") + "'))");
+        sbfRet.append("\n   {");
+        sbfRet.append("\n       pInTxt.value='';");
+        sbfRet.append("\n       for(var i=0, j=0; i<pInSel.length; i++)");
+        sbfRet.append("\n       {");
+        sbfRet.append("\n           if(!pInSel[i].selected)");
+        sbfRet.append("\n           {");
+        sbfRet.append("\n               aryEle[j]=pInSel.options[i].value;");
+        sbfRet.append("\n               j++;");
+        sbfRet.append("\n           }");
+        sbfRet.append("\n       }");
+        sbfRet.append("\n       while(pInSel.length!=0)");
+        sbfRet.append("\n       {");
+        sbfRet.append("\n           for( i=1;i<=pInSel.length;i++)");
+        sbfRet.append("\n           {");
+        sbfRet.append("\n               pInSel.options[0]=null;");
+        sbfRet.append("\n           }");
+        sbfRet.append("\n       }");
+        sbfRet.append("\n       for(var i=0; i<aryEle.length; i++)");
+        sbfRet.append("\n       {");
+        sbfRet.append("\n           optionObj = new Option(aryEle[i], aryEle[i]);");
+        sbfRet.append("\n           pInSel.options[pInSel.length]=optionObj;");
+        sbfRet.append("\n       }");
+        sbfRet.append("\n   }");
+        sbfRet.append("\n}");
+        return sbfRet.toString();
+    }
+
+    /**
+     * Crea una función JavaScript específica.
+     *
+     * @return    Regresa un nuevo String que contiene la función duplicateOption() de JavaScript.
+     */
+    public String loadDuplicateOption()
+    {
+        StringBuffer sbfRet = new StringBuffer();
+        sbfRet.append("\nfunction duplicateOption(pInSel, pInTxt)");
+        sbfRet.append("\n{");
+        sbfRet.append("\n   swOk=0;");
+        sbfRet.append("\n   if(pInTxt.value==null || pInTxt.value=='' || pInTxt.value==' ')");
+        sbfRet.append("\n   {");
+        sbfRet.append("\n       alert('" + SWBUtils.TEXT.getLocaleString("locale_wb2_util", "usrmsg_WBResource_loadDuplicateOption_error") + ".');");
+        sbfRet.append("\n       swOk=1;");
+        sbfRet.append("\n   }");
+        sbfRet.append("\n   for(var i=0; i<pInSel.length; i++)");
+        sbfRet.append("\n   {");
+        sbfRet.append("\n       if(pInSel.options[i].value==pInTxt.value)");
+        sbfRet.append("\n       {");
+        sbfRet.append("\n           alert('" + SWBUtils.TEXT.getLocaleString("locale_wb2_util", "usrmsg_WBResource_loadDuplicateOption_msg") + " '+ pInTxt.value);");
+        sbfRet.append("\n           swOk=1;");
+        sbfRet.append("\n           break;");
+        sbfRet.append("\n       }");
+        sbfRet.append("\n   }");
+        sbfRet.append("\n}");
+        return sbfRet.toString();
+    }
+    
+    /**
+     * Crea una función JavaScript específica.
+     *
+     * @return    Regresa un nuevo String que contiene la función isFileType() de JavaScript.
+     */
+    public String loadIsFileType()
+    {
+        StringBuffer sbfRet = new StringBuffer();
+        sbfRet.append("\nfunction isFileType(pFile, pExt)");
+        sbfRet.append("\n{");
+        sbfRet.append("\n   if(pFile.value.length > 0)");
+        sbfRet.append("\n   {");
+        sbfRet.append("\n      var swFormat=pExt + '|';");
+        sbfRet.append("\n      sExt=pFile.value.substring(pFile.value.indexOf(\".\")).toLowerCase();");
+        sbfRet.append("\n      var sType='';");
+        sbfRet.append("\n      while(swFormat.length > 0 )");
+        sbfRet.append("\n      {");
+        sbfRet.append("\n         sType= swFormat.substring(0, swFormat.indexOf(\"|\"));");
+        sbfRet.append("\n         if(sExt.indexOf(sType)!=-1) return true;");
+        sbfRet.append("\n         swFormat=swFormat.substring(swFormat.indexOf(\"|\")+1);");
+        sbfRet.append("\n      }");
+        sbfRet.append("\n      while(pExt.indexOf(\"|\")!=-1) pExt=pExt.replace('|',',');");
+        sbfRet.append("\n      alert(\"" + SWBUtils.TEXT.getLocaleString("locale_wb2_util", "usrmsg_WBResource_loadIsFile_msgext") + ": \" + pExt.replace('|',','));");
+        sbfRet.append("\n      return false;");
+        sbfRet.append("\n   }");
+        sbfRet.append("\n   else return true;");
+        sbfRet.append("\n}");
+        return sbfRet.toString();
+    }
+    
+    /**
+     * Crea una función JavaScript específica.
+     *
+     * @return    Regresa un nuevo String que contiene la función isNumber() de JavaScript.
+     */
+    public String loadIsNumber()
+    {
+        StringBuffer sbfRet = new StringBuffer();
+        sbfRet.append("\nfunction isNumber(pIn)");
+        sbfRet.append("\n{");
+        sbfRet.append("\n   pCaracter=pIn.value;");
+        sbfRet.append("\n   for (var i=0;i<pCaracter.length;i++)");
+        sbfRet.append("\n   {");
+        sbfRet.append("\n       var sByte=pCaracter.substring(i,i+1);");
+        sbfRet.append("\n       if (sByte<\"0\" || sByte>\"9\")");
+        sbfRet.append("\n       {");
+        sbfRet.append("\n           pIn.focus();");
+        sbfRet.append("\n           alert('" + SWBUtils.TEXT.getLocaleString("locale_wb2_util", "usrmsg_WBResource_loadIsNumber_msg") + ".');");
+        sbfRet.append("\n           return false;");
+        sbfRet.append("\n       }");
+        sbfRet.append("\n   }");
+        sbfRet.append("\n   return true;");
+        sbfRet.append("\n}");
+        return sbfRet.toString();
+    }
+    
+    
+    /**
+     * Crea una función JavaScript específica.
+     *
+     * @return    Regresa un nuevo String que contiene la función setPrefix() de JavaScript.
+     */
+    public String loadSetPrefix()
+    {
+        StringBuffer sbfRet = new StringBuffer();
+        sbfRet.append("\nfunction setPrefix(pIn, pPx)");
+        sbfRet.append("\n{");
+        sbfRet.append("\n   if(pIn.type==\"text\")");
+        sbfRet.append("\n   {");
+        sbfRet.append("\n       if (pIn.value.substring(0, pPx.length).indexOf(pPx)==-1)");
+        sbfRet.append("\n       {");
+        sbfRet.append("\n           alert('" + SWBUtils.TEXT.getLocaleString("locale_wb2_util", "usrmsg_WBResource_loadSetPrefix_msg1") + ": ' + pPx);");
+        sbfRet.append("\n           pIn.value=pPx+pIn.value;");
+        sbfRet.append("\n           pIn.focus();");
+        sbfRet.append("\n           return false;");
+        sbfRet.append("\n       }");
+        sbfRet.append("\n   }");
+        sbfRet.append("\n   if(pIn.type==\"select-one\" || pIn.type==\"select-multiple\")");
+        sbfRet.append("\n   {");
+        sbfRet.append("\n       for(var i=0; i<pIn.length; i++)");
+        sbfRet.append("\n       {");
+        sbfRet.append("\n           if (pIn.options[i].value.substring(0, pPx.length).indexOf(pPx)==-1)");
+        sbfRet.append("\n           {");
+        sbfRet.append("\n               alert('" + SWBUtils.TEXT.getLocaleString("locale_wb2_util", "usrmsg_WBResource_loadSetPrefixmsg2") + ": ' + pPx);");
+        sbfRet.append("\n               pIn.focus();");
+        sbfRet.append("\n               return false;");
+        sbfRet.append("\n           }");
+        sbfRet.append("\n       }");
+        sbfRet.append("\n   }");
+        sbfRet.append("\n   return true;");
+        sbfRet.append("\n}");
+        return sbfRet.toString();
+    }
+    
+    
+    public String loadIsHexadecimal()
+    {
+        StringBuffer sbfRet = new StringBuffer();
+        sbfRet.append("\nfunction isHexadecimal(pIn)");
+        sbfRet.append("\n{");
+        sbfRet.append("\n   var swFormat=\"0123456789ABCDEF\";");
+        sbfRet.append("\n   pIn.value=pIn.value.toUpperCase();");
+        sbfRet.append("\n   if(pIn.value.length<7)");
+        sbfRet.append("\n   {");
+        sbfRet.append("\n       alert('" + SWBUtils.TEXT.getLocaleString("locale_wb2_util", "usrmsg_WBResource_loadIsHexadecinal_msgLength") + "');");
+        sbfRet.append("\n       pIn.focus();");
+        sbfRet.append("\n       return false;");
+        sbfRet.append("\n   }");
+        sbfRet.append("\n   if (!setPrefix(pIn, '#')) return false;");
+        sbfRet.append("\n   for(var i=1; i < pIn.value.length; i++)");
+        sbfRet.append("\n   {");
+        sbfRet.append("\n       swOk= pIn.value.substring(i, i+1);");
+        sbfRet.append("\n       if (swFormat.indexOf(swOk, 0)==-1)");
+        sbfRet.append("\n       {");
+        sbfRet.append("\n           alert('" + SWBUtils.TEXT.getLocaleString("locale_wb2_util", "usrmsg_WBResource_loadIsHexadecinal_msgHexadecinal") + "');");
+        sbfRet.append("\n           pIn.focus();");
+        sbfRet.append("\n           return false;");
+        sbfRet.append("\n       }");
+        sbfRet.append("\n   }");
+        sbfRet.append("\n   return true;");
+        sbfRet.append("\n}");  
+        return sbfRet.toString();
+    }  
 }

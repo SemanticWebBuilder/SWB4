@@ -13,17 +13,22 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 
-public class WBFileUpload
+public class WBFileUpload extends FileUpload
 {
     private static Logger log = SWBUtils.getLogger(WBFileUpload.class);
     
     String sessid=null;
+    private String sContentType;
+    Vector parametros;
+    Hashtable table;
+    protected int maxSize;
     
     class CParameter
     {
 
         public String parametro;
         public ArrayList Valor;
+        
 
         CParameter(){
             parametro=null;
@@ -39,20 +44,6 @@ public class WBFileUpload
         parametros = new Vector();
         //maxSize = 0x2000000;
         maxSize = 0;
-    }
-
-    private void Guarda(String html, String ruta)
-    {
-        try
-        {
-            DataOutputStream fout = new DataOutputStream(new FileOutputStream(ruta));
-            fout.writeBytes(html);
-            fout.close();
-        }
-        catch(IOException e) 
-        {
-            log.error(e);
-        }
     }
 
     public void getFiles(HttpServletRequest httpservletrequest)
@@ -82,272 +73,6 @@ public class WBFileUpload
         }
     }
 
-    public String getContentType()
-    {
-        return sContentType;
-    }
-
-    public byte[] getFileData(String s)
-    {
-        byte ret[] = null;
-        if(table == null)
-            return null;
-        Enumeration enumeration = table.keys();
-        do
-        {
-            if(!enumeration.hasMoreElements())
-                break;
-            String s2 = (String)enumeration.nextElement();
-            if(s2.equals(s))
-            {
-                Object obj = table.get(s2);
-                if(obj instanceof Hashtable)
-                {
-                    Hashtable hashtable = (Hashtable)obj;
-                    obj = hashtable.get("content");
-                    byte abyte0[] = (byte[])obj;
-                    ret = abyte0;
-                }
-            }
-        } while(true);
-        maxSize=ret.length;
-        return ret;
-    }
-
-    public int getSize(){
-        return maxSize;
-    }
-
-    public InputStream getFileInputStream(String s)
-    {
-        byte data[] = getFileData(s);
-        return new ByteArrayInputStream(data);
-    }
-
-    public boolean saveFile(String s, String s1)
-        throws IOException
-    {
-        boolean flag = false;
-        if(table == null)
-            return false;
-        Enumeration enumeration = table.keys();
-        do
-        {
-            if(!enumeration.hasMoreElements())
-                break;
-            String s2 = (String)enumeration.nextElement();
-            if(s2.equals(s))
-            {
-                flag = true;
-                Object obj = table.get(s2);
-                if(obj instanceof Hashtable)
-                {
-                    Hashtable hashtable = (Hashtable)obj;
-                    obj = hashtable.get("content");
-                    byte abyte0[] = (byte[])obj;
-                    String s3 = (String)hashtable.get("filename");
-                    if(s3 != null)
-                    {
-                        int i = s3.lastIndexOf("\\");
-                        if(i != -1)
-                            s3 = s3.substring(i + 1);
-                        i = s3.lastIndexOf("/");
-                        if(i != -1)
-                            s3 = s3.substring(i + 1);
-                        FileOutputStream fileoutputstream = new FileOutputStream(String.valueOf(s1) + String.valueOf(s3));
-                        fileoutputstream.write(abyte0, 0, abyte0.length);
-                        fileoutputstream.close();
-                    }
-                }
-            }
-        } while(true);
-        return flag;
-    }
-
-    public boolean saveFile(String s, String s1, String s2)
-        throws IOException
-    {
-        boolean flag = false;
-        if(table == null)
-            return false;
-        Enumeration enumeration = table.keys();
-        do
-        {
-            if(!enumeration.hasMoreElements())
-                break;
-            String s3 = (String)enumeration.nextElement();
-            if(s3.equals(s))
-            {
-                flag = true;
-                Object obj = table.get(s3);
-                if(obj instanceof Hashtable)
-                {
-                    Hashtable hashtable = (Hashtable)obj;
-                    obj = hashtable.get("content");
-                    byte abyte0[] = (byte[])obj;
-                    String s4 = (String)hashtable.get("filename");
-                    if(s4 != null)
-                    {
-                        int i = s4.lastIndexOf("\\");
-                        if(i != -1)
-                            s4 = s4.substring(i + 1);
-                        i = s4.lastIndexOf("/");
-                        if(i != -1)
-                            s4 = s4.substring(i + 1);
-                        FileOutputStream fileoutputstream = new FileOutputStream(String.valueOf(s1) + String.valueOf(s2));
-                        fileoutputstream.write(abyte0, 0, abyte0.length);
-                        fileoutputstream.close();
-                    }
-                }
-            }
-        } while(true);
-        return flag;
-    }
-
-    public boolean saveFile(String s, String s1, String smod1, String smod2)
-        throws IOException
-    {
-        boolean flag = false;
-        if(table == null)
-            return false;
-        Enumeration enumeration = table.keys();
-        do
-        {
-            if(!enumeration.hasMoreElements())
-                break;
-            String s2 = (String)enumeration.nextElement();
-            if(s2.equals(s))
-            {
-                flag = true;
-                Object obj = table.get(s2);
-                if(obj instanceof Hashtable)
-                {
-                    Hashtable hashtable = (Hashtable)obj;
-                    obj = hashtable.get("content");
-                    byte abyte0[] = (byte[])obj;
-                    String s3 = (String)hashtable.get("filename");
-                    if(s3 != null)
-                    {
-                        int i = s3.lastIndexOf("\\");
-                        if(i != -1)
-                            s3 = s3.substring(i + 1);
-                        i = s3.lastIndexOf("/");
-                        if(i != -1)
-                            s3 = s3.substring(i + 1);
-                        FileOutputStream fileoutputstream = new FileOutputStream(String.valueOf(s1) + String.valueOf(s3) + String.valueOf(smod1) + String.valueOf(smod2));
-                        fileoutputstream.write(abyte0, 0, abyte0.length);
-                        fileoutputstream.close();
-                    }
-                }
-            }
-        } while(true);
-        return flag;
-    }
-
-    public boolean saveFileParsed(String s, String s1, String s0)
-        throws IOException
-    {
-        boolean flag = false;
-        if(table == null)
-            return false;
-        Enumeration enumeration = table.keys();
-        do
-        {
-            if(!enumeration.hasMoreElements())
-                break;
-            String s2 = (String)enumeration.nextElement();
-            if(s2.equals(s))
-            {
-                flag = true;
-                Object obj = table.get(s2);
-                if(obj instanceof Hashtable)
-                {
-                    Hashtable hashtable = (Hashtable)obj;
-                    obj = hashtable.get("content");
-                    byte abyte0[] = (byte[])obj;
-                    String s3 = (String)hashtable.get("filename");
-                    if(s3 != null)
-                    {
-                        int i = s3.lastIndexOf("\\");
-                        if(i != -1)
-                            s3 = s3.substring(i + 1);
-                        i = s3.lastIndexOf("/");
-                        if(i != -1)
-                            s3 = s3.substring(i + 1);
-                        String strNoparsed = new String(abyte0);
-                        
-                        String dataarc = "";
-                        if(s3.endsWith(".xsl") || s3.endsWith(".xslt")) dataarc=SWBPortal.parseXsl(strNoparsed, s0);
-                        else dataarc = SWBPortal.parseHTML(strNoparsed, s0);
-                        
-                        byte abyte1[] = dataarc.getBytes();
-                        FileOutputStream fileoutputstream = new FileOutputStream(String.valueOf(s1) + String.valueOf(s3));
-                        fileoutputstream.write(abyte1, 0, abyte1.length);
-                        fileoutputstream.close();
-                    }
-                }
-            }
-        } while(true);
-        return flag;
-    }
-
-    public String FindAttaches(String s)
-        throws IOException
-    {
-        boolean flag = false;
-        String dataarc = null;
-        if(table == null)
-            return "";
-        Enumeration enumeration = table.keys();
-        do
-        {
-            if(!enumeration.hasMoreElements())
-                break;
-            String s2 = (String)enumeration.nextElement();
-            if(s2.equals(s))
-            {
-                flag = true;
-                Object obj = table.get(s2);
-                if(obj instanceof Hashtable)
-                {
-                    Hashtable hashtable = (Hashtable)obj;
-                    obj = hashtable.get("content");
-                    byte abyte0[] = (byte[])obj;
-                    String strNoparsed = new String(abyte0);
-                    dataarc = SWBPortal.FindAttaches(strNoparsed);
-                }
-            }
-        } while(true);
-        return dataarc;
-    }
-
-    public String getFileName(String s) throws IOException
-    {
-        if(table == null)
-            return null;
-        for(Enumeration enumeration = table.keys(); enumeration.hasMoreElements();)
-        {
-            String s1 = (String)enumeration.nextElement();
-            if(s1.equals(s))
-            {
-                Object obj = table.get(s1);
-                if(obj instanceof Hashtable)
-                {
-                    Hashtable hashtable = (Hashtable)obj;
-                    String s2 = (String)hashtable.get("filename");
-                    if(s2 == null)
-                        return null;
-                    if(s2.trim().equals(""))
-                        return null;
-                    else
-                        return s2.trim();
-                }
-            }
-        }
-
-        return null;
-    }
-    
     public ArrayList getFileNames() throws IOException
     {
         ArrayList afileNames=new ArrayList();
@@ -361,46 +86,6 @@ public class WBFileUpload
         return afileNames;
     }
     
-    
-    public String getContentType(String s)
-        throws IOException
-    {
-        if(table == null)
-            return null;
-        for(Enumeration enumeration = table.keys(); enumeration.hasMoreElements();)
-        {
-            String s1 = (String)enumeration.nextElement();
-            if(s1.equals(s))
-            {
-                Object obj = table.get(s1);
-                if(obj instanceof Hashtable)
-                {
-                    Hashtable hashtable = (Hashtable)obj;
-                    String s2 = (String)hashtable.get("content-type");
-                    if(s2 == null)
-                        return null;
-                    if(s2.trim().equals(""))
-                        return null;
-                    else
-                        return s2.trim();
-                }
-            }
-        }
-
-        return null;
-    }
-    
-    public ArrayList getValue(String s) throws IOException {
-        for(int i = 0; i < parametros.size(); i++)
-        {
-            CParameter cparameter = (CParameter)parametros.elementAt(i);
-            if(cparameter.parametro.trim().equals(s.trim()))
-                return cparameter.Valor;
-        }
-      return null;
-    }
-    
-    
     public ArrayList getParamNames() throws IOException
     {
         ArrayList aparams=new ArrayList();
@@ -411,7 +96,19 @@ public class WBFileUpload
         }
         return aparams;
     }
+    
+    public ArrayList getValues(String s) throws IOException {
+        for(int i = 0; i < parametros.size(); i++)
+        {
+            CParameter cparameter = (CParameter)parametros.elementAt(i);
+            if(cparameter.parametro.trim().equals(s.trim()))
+                return cparameter.Valor;
+        }
+      return null;
+    }
+    
 
+    @Override
     Hashtable parseMulti(String s, ServletInputStream servletinputstream) 
     {
      try{   
@@ -601,13 +298,10 @@ public class WBFileUpload
      * @return Value of property sessid.
      *
      */
+    @Override
     public java.lang.String getSessid()
     {
         return sessid;
     }
     
-    private String sContentType;
-    Vector parametros;
-    Hashtable table;
-    protected int maxSize;
 }

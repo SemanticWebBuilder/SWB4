@@ -181,6 +181,22 @@ public class TestWebSite {
             portlet.setTitle("Banner");
         }  
         
+        if(site.getPortletType("Poll")==null)
+        {
+            
+            PortletType ptype=site.createPortletType("Poll");
+            ptype.setPortletClassName("org.semanticwb.portal.resources.Poll");
+            ptype.setPortletBundle("org.semanticwb.portal.resources.Poll");
+            ptype.setPortletMode(1);
+            ptype.setTitle("Recurso Poll");
+                    
+            Portlet portlet=site.createPortlet();
+            portlet.setActive(true);
+            portlet.setCreator(user);
+            portlet.setPortletType(ptype);
+            portlet.setTitle("Poll");
+        }  
+        
         if(site.getPortletType("WBMenuMap")==null)
         {
             
