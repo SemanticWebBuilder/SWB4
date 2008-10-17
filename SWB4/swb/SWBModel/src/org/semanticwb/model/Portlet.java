@@ -190,8 +190,8 @@ public class Portlet extends PortletBase
     @Override
     public void setXml(String xml) 
     {
-        dom=null;
         super.setXml(xml);
+        dom=null;
     }
     
     public void addHit(HttpServletRequest request, User user, WebPage page)
