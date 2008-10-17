@@ -10,6 +10,7 @@ import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntProperty;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
@@ -198,16 +199,20 @@ public class SemanticModel
     public SemanticProperty createSemanticProperty(String uri, SemanticClass cls, String uriType, String uriRang)
     {
         Model m=getRDFModel();
-        Statement st = m.getProperty(m.getResource(uri), m.getProperty(SemanticVocabulary.RDF_TYPE));
-        if (null==st)
-        {
-            st = m.createStatement(m.getResource(uri), m.getProperty(SemanticVocabulary.RDF_TYPE), m.getResource(uriType));
-            m.add(st);
-        }
+
         OntModel ont=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
-        OntProperty ontprop=ont.getOntProperty(uri);
+        OntProperty ontprop=null;
+        if (SemanticVocabulary.OWL_DATATYPEPROPERTY.equals(uriType)){
+            ontprop=ont.createDatatypeProperty(uri);
+        } else if (SemanticVocabulary.OWL_OBJECTPROPERTY.equals(uriType)){
+            ontprop=ont.createObjectProperty(uri);
+        }
         ontprop.setDomain(m.getResource(cls.getURI()));
         ontprop.setRange(m.getResource(uriRang));
+        
+        StmtIterator sit = ont.listStatements(m.getResource(ontprop.getURI()), null, (RDFNode)null);
+        m.add(sit);
+        
         cls=new SemanticClass(cls.getOntClass());
         SWBPlatform.getSemanticMgr().getVocabulary().registerClass(cls);
         return new SemanticProperty(ontprop);
