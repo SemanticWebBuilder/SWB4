@@ -65,6 +65,22 @@ public class Portlet extends PortletBase
         return randpriority;
     }    
     
+    public Document getDom() throws SWBException
+    {
+       if(dom==null)
+       {
+           String xml=getXml();
+           if(xml!=null)
+           {
+               dom=SWBUtils.XML.xmlToDom(getXml());
+           }else
+           {
+               dom=SWBUtils.XML.getNewDocument();
+           }
+       }
+       return dom;
+    }    
+    
     
     /** Asigna un atributo al DOM del recurso.
      * Si no existe el atributo, lo crea y si existe lo modifica
@@ -75,7 +91,7 @@ public class Portlet extends PortletBase
     {
         try
         {
-            if(dom==null)dom=SWBUtils.XML.xmlToDom(getXml());
+            Document dom=getDom();
             SWBUtils.XML.setAttribute(dom, name, value);
         } catch (Exception e)
         {
@@ -102,7 +118,7 @@ public class Portlet extends PortletBase
         String ret = null;
         try
         {
-            if(dom==null)dom=SWBUtils.XML.xmlToDom(getXml());
+            Document dom=getDom();
             NodeList data = dom.getElementsByTagName(name);
             if (data.getLength() > 0)
             {
@@ -124,7 +140,7 @@ public class Portlet extends PortletBase
         ArrayList vec=new ArrayList();
         try
         {
-            if(dom==null)dom=SWBUtils.XML.xmlToDom(getXml());
+            Document dom=getDom();
             Node root=dom.getFirstChild();
             NodeList data=root.getChildNodes();
             for(int x=0;x<data.getLength();x++)
@@ -145,7 +161,7 @@ public class Portlet extends PortletBase
     {
         try
         {
-            if(dom==null)dom=SWBUtils.XML.xmlToDom(getXml());
+            Document dom=getDom();
             Node res = dom.getFirstChild();
             NodeList data = dom.getElementsByTagName(name);
             if (data.getLength() > 0)
@@ -171,18 +187,6 @@ public class Portlet extends PortletBase
         }
     }
     
-    /** Actualiza los atributos del DOM a base de datos. */
-    public void updateAttributesToDB(String userid, String comment) throws SWBException
-    {
-        String xml = SWBUtils.XML.domToXml(dom);
-        if (xml != null && !xml.equals(getXml()))
-        {
-            setXml(xml);
-            //TODO:
-            //recResource.update(userid, comment);
-        }
-    }
-
     @Override
     public void setXml(String xml) 
     {
