@@ -25,6 +25,10 @@
 package org.semanticwb.portal.util;
 
 import java.util.*;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.semanticwb.SWBPlatform;
 
 
 /** Esta clase adminsitra las cookies de los usuarios del portal.
@@ -267,5 +271,86 @@ public class SWBCookieMgr
             }
         }
     }
-
+    
+    
+    /** Clase que actua como utileria para busqueda,grabado y borrado
+     * de cookies
+     * @param sName :<PRE>Este es el nombre de la cookie que este metodo debera
+     * buscar en el sistema</PRE>
+     * @param request :<PRE>request que recibe para buscar la cookie de acuerdo
+     * al dominio del mismo</PRE>
+     * @return :<PRE>regresa el valor de la cookie en caso
+     * de haberla encontrado, de lo contrario regresa nulo</PRE>
+     */
+    public String SearchCookie(String sName, HttpServletRequest request)
+    {
+        String name = null;
+        String valor = null;
+        String Cvalue = null;
+        String ena = SWBPlatform.getEnv("wb/CookEnabled");
+        if (ena == null) {
+            ena = "true";
+        }
+        if (ena.equalsIgnoreCase("true"))
+        {
+            Cookie cooks[] = request.getCookies();
+            if (cooks != null)
+            {
+                for (int icook = 0; icook < cooks.length; icook++)
+                {
+                    Cookie cook = cooks[icook];
+                    name = cook.getName();
+                    valor = cook.getValue();
+                    if (name.equalsIgnoreCase(sName))
+                    {
+                        Cvalue = valor;
+                        icook = cooks.length;
+                    }
+                }
+            }
+        }
+        return Cvalue;
+    }
+    
+    
+    public void AddCookie(String cookieName, String cookieValue, boolean save, boolean cookieEnable,HttpServletRequest request, HttpServletResponse response)
+    {
+        String ena=null;
+        if(!cookieEnable){
+            ena = SWBPlatform.getEnv("wb/CookEnabled");
+        }
+        if (ena == null){ 
+            ena = "true";
+        }
+        if (ena.equalsIgnoreCase("true"))
+        {
+            Cookie cneecook = new Cookie(cookieName, cookieValue);
+            if (save)
+            {
+                cneecook.setMaxAge(60 * 60 * 365);
+            } else
+            {
+                cneecook.setMaxAge(-1);
+            }
+            cneecook.setPath("/");
+            response.addCookie(cneecook);
+        }
+    }
+    
+    
+    /** metodo que se encarga de grabar y borrar una cookie
+     * @param cookieName :<PRE>Este es el nombre de la cookie que grabara o
+     * borrara este metodo</PRE>
+     * @param cookieValue :<PRE>Este es el valor de la cookie que sera grabada o borrada</PRE>
+     * @param save :<PRE>si este parametro es true graba la cookie, de lo
+     * contrario la borra</PRE>
+     * @param request :<PRE>Este request es para grabar la cookie</PRE>
+     * @param response :<PRE>Este response es para borrar la cookie</PRE>
+     */
+    public void AddCookie(String cookieName, String cookieValue, boolean save, HttpServletRequest request, HttpServletResponse response)
+    {
+        AddCookie(cookieName,cookieValue,save,false,request,response);
+    }
+    
+    
 }
