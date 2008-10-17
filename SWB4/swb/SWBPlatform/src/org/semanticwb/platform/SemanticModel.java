@@ -198,8 +198,12 @@ public class SemanticModel
     public SemanticProperty createSemanticProperty(String uri, SemanticClass cls, String uriType, String uriRang)
     {
         Model m=getRDFModel();
-        Statement st = m.createStatement(m.getResource(uri), m.getProperty(SemanticVocabulary.RDF_TYPE), m.getResource(uriType));
-        m.add(st);
+        Statement st = m.getProperty(m.getResource(uri), m.getProperty(SemanticVocabulary.RDF_TYPE));
+        if (null==st)
+        {
+            st = m.createStatement(m.getResource(uri), m.getProperty(SemanticVocabulary.RDF_TYPE), m.getResource(uriType));
+            m.add(st);
+        }
         OntModel ont=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
         OntProperty ontprop=ont.getOntProperty(uri);
         ontprop.setDomain(m.getResource(cls.getURI()));
@@ -214,12 +218,22 @@ public class SemanticModel
         Model m=getRDFModel();
         OntModel ont=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
         Resource res = ont.getResource(uri);
-        Statement st = m.createStatement(res, m.getProperty(SemanticVocabulary.RDF_TYPE), m.getResource(SemanticVocabulary.OWL_CLASS));
-        m.add(st);
+        Statement st = m.getProperty(res, m.getProperty(SemanticVocabulary.RDF_TYPE));
+        if (null==st)
+        {
+            st = m.createStatement(res, m.getProperty(SemanticVocabulary.RDF_TYPE), m.getResource(SemanticVocabulary.OWL_CLASS));
+            m.add(st);
+        }
+        return registerClass(uri);
+    }    
+    
+    public SemanticClass registerClass(String uri)
+    {
+        OntModel ont=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
         OntClass ontcls=ont.getOntClass(uri);
         SemanticClass cls=new SemanticClass(ontcls);
         SWBPlatform.getSemanticMgr().getVocabulary().registerClass(cls);
         return cls;
-    }    
+    }
     
 }
