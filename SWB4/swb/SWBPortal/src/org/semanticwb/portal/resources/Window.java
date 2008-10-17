@@ -147,7 +147,6 @@ public class Window extends GenericAdmResource {
             if (ret != null) {
                 out.println(ret);
             }
-            out.println("<br><a href=\"" + reqParams.getRenderUrl().setMode(reqParams.Mode_ADMIN) + "\">Window admin</a>");
         }
     }    
 
