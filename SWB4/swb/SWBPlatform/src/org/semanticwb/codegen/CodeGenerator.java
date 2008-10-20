@@ -126,17 +126,17 @@ public class CodeGenerator
         while (tpcit.hasNext())
         {
             SemanticClass tpc = tpcit.next();
+            //System.out.println("tpc: " + tpc.toString() + " isSWBClass: " + tpc.isSWBClass()+ " isSWBFormElement: " + tpc.isSWBFormElement());
             if ( tpc.isSWBInterface() )
             {
                 //System.out.println("tpc: " + tpc.toString() + " isSWBInterface: " + tpc.isSWBInterface());
                 createInterface(tpc);
             }
-            else if ( tpc.isSWBClass() || tpc.isSWBModel())
+            else if ( tpc.isSWBClass() || tpc.isSWBModel() || tpc.isSWBFormElement())
             {
-                //System.out.println("tpc: " + tpc.toString() + " isSWBClass: " + tpc.isSWBClass());
+                //System.out.println("tpc: " + tpc.toString() + " isSWBClass: " + tpc.isSWBClass()+ " isSWBFormElement: " + tpc.isSWBFormElement());
                 createClassBase(tpc);
             }
-
         }
         //System.out.println("Creating Vocabulary");
         createVocabulary();
@@ -311,8 +311,11 @@ public class CodeGenerator
         javaClassContent.append("import org.semanticwb.*;" + ENTER);
         javaClassContent.append("import org.semanticwb.platform.*;" + ENTER);
 
+        String exts="GenericObjectBase";
+        if(tpc.isSWBFormElement())exts="FormElementBase";
+        
         javaClassContent.append(ENTER);
-        javaClassContent.append("public class " + tpc.getName() + "Base extends GenericObjectBase " + getInterfaces(tpc) + "" + ENTER);
+        javaClassContent.append("public class " + tpc.getName() + "Base extends "+exts+" " + getInterfaces(tpc) + "" + ENTER);
         javaClassContent.append("{" + ENTER);
         javaClassContent.append("    SWBVocabulary vocabulary=SWBContext.getVocabulary();" + ENTER);
         javaClassContent.append(ENTER);
