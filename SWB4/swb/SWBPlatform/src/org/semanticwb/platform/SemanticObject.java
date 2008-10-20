@@ -311,6 +311,32 @@ public class SemanticObject
         return ret;
     }   
     
+        /**
+     * Asigna la propiedad con el valor especificado
+     * @param prop Propiedad a modificar
+     * @param value Valor a asignar
+     * @return SemanticObject para cascada
+     */
+    public SemanticObject setIntProperty(SemanticProperty prop, int value)
+    {
+        if(m_virtual)
+        {
+            m_virtprops.put(prop.getURI(), (Integer)value);
+            return this;
+        }            
+        Property iprop=prop.getRDFProperty();
+        Statement stm=m_res.getProperty(iprop);
+        if(stm!=null)
+        {
+            stm.changeLiteralObject(value);
+        }else
+        {
+            m_res.addLiteral(iprop, value);
+        }
+        return this;
+    }     
+
+    
     public long getLongProperty(SemanticProperty prop)
     {    
         return getLongProperty(prop,0L);
