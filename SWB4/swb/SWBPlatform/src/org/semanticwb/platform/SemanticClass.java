@@ -35,6 +35,7 @@ public class SemanticClass
     private Boolean m_isSWBClass=null;
     private Boolean m_isSWBInterface=null;
     private Boolean m_isSWBModel=null;
+    private Boolean m_isSWBFormElement=null;
     private String m_className=null;
     private Boolean m_autogenId=null;
     private Class m_cls=null;
@@ -395,7 +396,27 @@ public class SemanticClass
             }     
         }
         return m_isSWBModel.booleanValue();
-    }    
+    }   
+    
+    public boolean isSWBFormElement()
+    {
+        if(m_isSWBFormElement==null)
+        {
+            m_isSWBFormElement=false;
+            //System.out.print("Class:"+getClassName());
+            for (Iterator i = m_class.listRDFTypes(false); i.hasNext(); ) 
+            {
+                Resource res=(Resource)i.next();
+                System.out.print(" res:"+res.getURI());
+                if(res.getURI().equals(SemanticVocabulary.SWB_FORMELEMENT))
+                {
+                    m_isSWBFormElement = true;
+                }
+            }     
+            //System.out.println(" ret:"+m_isSWBFormElement);
+        }
+        return m_isSWBFormElement.booleanValue();
+    }     
     
     public SemanticProperty getDisplayNameProperty() {
         return displayNameProperty;
