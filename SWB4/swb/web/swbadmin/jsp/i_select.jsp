@@ -17,7 +17,7 @@
     SemanticProperty prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(idp);
     SemanticClass clsprop=prop.getRangeClass();
     
-    String title=prop.getCaption();
+    String title=prop.getDisplayName();
 
     String wid=obj.getModel().getName()+"/"+obj.getId()+"/"+prop.getRDFProperty().getLocalName();
     System.out.println("Title:"+title+" id:"+wid);

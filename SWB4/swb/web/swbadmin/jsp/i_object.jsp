@@ -2,6 +2,7 @@
 <%@page pageEncoding="ISO-8859-1"%>
 <%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.model.*,java.util.*,org.semanticwb.base.util.*"%>
 <%
+    String lang="es";
     response.setHeader("Cache-Control", "no-cache"); 
     response.setHeader("Pragma", "no-cache"); 
     SemanticVocabulary voc=SWBPlatform.getSemanticMgr().getVocabulary();
@@ -13,7 +14,7 @@
     SemanticObject obj=ont.getSemanticObject(id);
     SemanticClass cls=obj.getSemanticClass();    
     
-    String title=obj.getDisplayName();
+    String title=obj.getDisplayName(lang);
     
     String wid=obj.getModel().getName()+"/"+obj.getId();
     System.out.println("Title:"+title+" id:"+wid);
@@ -26,13 +27,14 @@
     while(it.hasNext())
     {
         SemanticProperty prop=it.next();
+        
         if(prop.isDataTypeProperty())
         {
             String value=obj.getProperty(prop);
             if(prop.isInt())value=""+obj.getIntProperty(prop);
             if(value==null)value="";
             
-            String label=prop.getCaption();
+            String label=prop.getDisplayName(lang);
 %>
             <div class="row">
                 <label><%=label%></label>
@@ -63,7 +65,7 @@
         SemanticProperty prop=it.next();
         if(prop.isObjectProperty())
         {
-            String label=prop.getCaption();
+            String label=prop.getDisplayName(lang);
             if(prop.getLabel()!=null)label=prop.getLabel();
             
             if(prop.getName().startsWith("has"))
@@ -84,7 +86,7 @@
                 }else
                 {
 %>
-                    <table width="100%"><tr><td><%=label%></td><td align="right"><a href="i_object.jsp?suri=<%=sobj.getEncodedURI()%>" class="ilink"><%=sobj.getDisplayName()%></a></td></tr></table>
+                    <table width="100%"><tr><td><%=label%></td><td align="right"><a href="i_object.jsp?suri=<%=sobj.getEncodedURI()%>" class="ilink"><%=sobj.getDisplayName(lang)%></a></td></tr></table>
 <%
                 }
 %>
