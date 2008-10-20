@@ -239,6 +239,16 @@ public class SemanticModel
         SemanticClass cls=new SemanticClass(ontcls);
         SWBPlatform.getSemanticMgr().getVocabulary().registerClass(cls);
         return cls;
+    }   
+    
+    public SemanticProperty getSemanticProperty(String uri)
+    {
+        Property prop=m_model.getProperty(uri);
+        if(prop!=null)
+        {
+            return new SemanticProperty(prop);
+        }
+        return null;
     }
     
 }

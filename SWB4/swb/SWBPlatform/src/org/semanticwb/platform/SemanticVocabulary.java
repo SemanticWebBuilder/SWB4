@@ -22,6 +22,7 @@ public class SemanticVocabulary
     public static final String RDF_TYPE=RDF_URI+"type";
     
     public static final String RDFS_URI="http://www.w3.org/2000/01/rdf-schema#";
+    public static final String RDFS_LABEL=RDFS_URI+"label";
     public static final String RDFS_DOMAIN=RDFS_URI+"domain";
     public static final String RDFS_RANGE=RDFS_URI+"range";
     public static final String RDFS_SUBPROPERTYOF=RDFS_URI+"subPropertyOf";

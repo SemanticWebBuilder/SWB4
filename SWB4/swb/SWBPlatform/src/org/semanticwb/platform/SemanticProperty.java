@@ -98,18 +98,27 @@ public class SemanticProperty
         return disp;
     }
     
-//    public String getCaption()
-//    {
-//        String ret=null;
-//        Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_PROPCAPTION));
-//        if(st!=null)
-//        {
-//            return st.getString();
-//        }
-//        if(ret==null)ret=getLabel();
-//        if(ret==null)ret=getName();
-//        return ret;
-//    }    
+    public String getDisplayName()
+    {
+        String ret=null;
+        SemanticObject obj=getDisplayObject();
+        if(obj!=null)ret=obj.getProperty(obj.getModel().getSemanticProperty(SemanticVocabulary.RDFS_LABEL));
+        System.out.println("Prop:"+obj+" "+ret);
+        if(ret==null)ret=getLabel();
+        if(ret==null)ret=getName();
+        return ret;
+    }
+    
+    public String getDisplayName(String lang)
+    {
+        String ret=null;
+        SemanticObject obj=getDisplayObject();
+        if(obj!=null)ret=obj.getProperty(obj.getModel().getSemanticProperty(SemanticVocabulary.RDFS_LABEL),null,lang);
+        System.out.println("Prop:"+obj+" "+ret);
+        if(ret==null)ret=getLabel();
+        if(ret==null)ret=getName();
+        return ret;
+    }    
 //    
 //    public String getViewGroup()
 //    {
