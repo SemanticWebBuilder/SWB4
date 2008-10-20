@@ -50,7 +50,7 @@ public class SemanticVocabulary
     public static final String SWB_CLASS=URI+"Class";
     public static final String SWB_INTERFACE=URI+"Interface";
     public static final String SWB_MODEL=URI+"Model";
-    public static final String SWB_FORMELEMENT=URI+"formElement";
+    public static final String SWB_FORMELEMENT=URI+"FormElement";
     public static final String SWB_PROP_VALUE=URI+"value";
     public static final String SWB_PROP_HASCLASS=URI+"hasClass";
     public static final String SWB_PROP_LOCALEABLE=URI+"localeable";
