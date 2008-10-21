@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+    <resource>
+        <resource-name>ExcelContent</resource-name>
+        <display-name xml:lang="es">Contenido Excel</display-name>
+        <display-name xml:lang="en">Excel Content</display-name>
+        <description xml:lang="es">Recurso que permite la publicación de archivos xls en formato html dentro de la pagina web a manera de contenido principal</description>
+        <description xml:lang="en">Resource used to publicate xls files in format HTML within the page Web like a main content </description>
+        <resource-class>com.infotec.wb.resources.ExcelContent</resource-class>
+        <expiration-cache>0</expiration-cache>
+        <resource-bundle>com.infotec.wb.resources.ExcelContent</resource-bundle>
+        <resource-type>1</resource-type>
+        <extended-attributes>
+        </extended-attributes>
+    </resource>

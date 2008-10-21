@@ -81,7 +81,6 @@ public class Poll extends GenericResource
     @Override
     public void setResourceBase(Portlet base)
     {
-        System.out.println("Entra a Poll-1");
         try 
         {
             super.setResourceBase(base);

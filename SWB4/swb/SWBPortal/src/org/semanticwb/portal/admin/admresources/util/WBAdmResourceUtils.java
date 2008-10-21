@@ -38,6 +38,7 @@ import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.w3c.dom.*;
 import org.semanticwb.portal.admin.admresources.*;
+import org.semanticwb.portal.util.FileUpload;
 import org.semanticwb.portal.util.WBFileUpload;
 
 /** objeto: Utilerias de uso comun para los objetos de la api de administraci�n de recursos.
@@ -698,7 +699,7 @@ public class WBAdmResourceUtils {
      * @param     pInForm   El nombre del campo del formulario donde se definió el archivo.
      * @return    Regresa un nuevo String que contiene el nombre del archivo que se guardó.
      */
-    public boolean uploadFile(Portlet base, WBFileUpload fUp, String pInForm) {
+    public boolean uploadFile(Portlet base, FileUpload fUp, String pInForm) {
 
         String strWorkPath = workPath;
         String strFile = null;

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+    <resource>
+        <resource-name>Imprimir</resource-name>
+        <display-name xml:lang="es">Imprimir</display-name>
+        <display-name xml:lang="en">Print</display-name>
+        <description xml:lang="es">Recurso que se encarga de mandar a impresión la información "contenido" de una sección o topico. Utiliza una plantilla especial para impresión</description>
+        <description xml:lang="en">Resource used for sending to impression the information "contained" of a section or topic. It uses a special template for impression</description>
+        <resource-class>com.infotec.wb.resources.Imprimir</resource-class>
+        <expiration-cache>0</expiration-cache>
+        <resource-bundle>com.infotec.wb.resources.Imprimir</resource-bundle>
+        <resource-type>2</resource-type>
+        <extended-attributes>
+        </extended-attributes>
+    </resource>
