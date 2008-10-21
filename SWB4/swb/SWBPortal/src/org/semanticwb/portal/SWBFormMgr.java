@@ -1,4 +1,3 @@
-
 package org.semanticwb.portal;
 
 import java.util.Iterator;
@@ -66,28 +65,80 @@ public class SWBFormMgr
         this.m_type = type;
     }      
     
-    public String getCodeForm()
+    public String renderForm()
     {
+        String ret="";
+        if(m_type.equals(TYPE_XHTML))
+        {
+            ret=renderXHTMLForm();
+        }else if(m_type.equals(TYPE_IPHONE))
+        {
+            ret=renderIphoneForm();
+        }
+        return ret;
+    }
+    
+    public String renderXHTMLForm()
+    {
+        
         StringBuffer ret=new StringBuffer();
         ret.append("<form action=\""+m_action+"\" method=\""+m_method+"\">");
-        
+        ret.append("	<fieldset>");
+        ret.append("		<legend>General</legend>");
+        ret.append("		<ol>");
         Iterator<SemanticProperty> it=m_cls.listProperties();
         while(it.hasNext())
         {
-            SemanticProperty prop=it.next();        
-            ret.append(getCodeElement(prop));
+            SemanticProperty prop=it.next();   
+            String code=renderElement(prop);
+            if(code!=null && code.length()>0)
+            {
+                ret.append("<li>");
+                ret.append(code);
+                ret.append("</li>");
+            }
         }
+        ret.append("		</ol>");
+        ret.append("	</fieldset>");
         ret.append("</form>");
         return ret.toString();
-    }
+    }    
     
-    public String getCodeElement(String propName)
+    public String renderIphoneForm()
+    {
+        
+        StringBuffer ret=new StringBuffer();
+        ret.append("<form action=\""+m_action+"\" method=\""+m_method+"\">");
+        ret.append("	<fieldset>");
+        ret.append("		<legend>General</legend>");
+        ret.append("		<ol>");
+        Iterator<SemanticProperty> it=m_cls.listProperties();
+        while(it.hasNext())
+        {
+            SemanticProperty prop=it.next();   
+            String code=renderElement(prop);
+            if(code!=null && code.length()>0)
+            {
+                ret.append("<li>");
+                ret.append(code);
+                ret.append("</li>");
+            }
+        }
+        ret.append("		</ol>");
+        ret.append("	</fieldset>");
+        ret.append("</form>");
+        return ret.toString();
+    }        
+    
+
+    
+    public String renderElement(String propName)
     {
         //TODO
         return null;
     }
     
-    public String getCodeElement(SemanticProperty prop)
+    public String renderElement(SemanticProperty prop)
     {
         String ret=null;
         SemanticObject obj=prop.getDisplayObject();
