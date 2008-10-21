@@ -1,5 +1,6 @@
 package org.semanticwb.model;
 
+import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.model.base.*;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
@@ -47,5 +48,33 @@ public class GenericFormElement extends FormElementBase implements FormElement
             ret="<label for=\""+name+"\">"+label+" <em>*</em></label> <input id=\""+name+"\" name=\""+name+"\" value=\""+value+"\"/>";
         }        
         return ret;
-    }    
+    }
+
+    @Override
+    public void validate(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) throws FormValidateException 
+    {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) 
+    {
+        if(prop.isDataTypeProperty())
+        {
+            String value=request.getParameter(prop.getName());
+            if(value!=null)
+            {
+                if(value.length()>0)
+                {
+                    if(prop.isBoolean())obj.setBooleanProperty(prop, Boolean.parseBoolean(value));
+                    if(prop.isInt())obj.setLongProperty(prop, Integer.parseInt(value));
+                    if(prop.isString())obj.setProperty(prop, value);
+                }else
+                {
+                    obj.removeProperty(prop);
+                }
+            }
+        }
+    }
+
 }
