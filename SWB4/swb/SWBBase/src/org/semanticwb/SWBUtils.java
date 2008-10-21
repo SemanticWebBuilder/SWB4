@@ -47,6 +47,7 @@ import java.util.Collection;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.Map;
 import java.util.StringTokenizer;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -404,7 +405,7 @@ public class SWBUtils {
                 } else {
                     cad = java.util.ResourceBundle.getBundle(Bundle, locale, loader).getString(key);
                 }
-                System.out.println("cad:" + cad);
+            //System.out.println("cad:" + cad);
             } catch (Exception e) {
                 log.error("Error while looking for properties key", e);
                 return "";
@@ -483,6 +484,118 @@ public class SWBUtils {
             }
             return -1;
         }
+
+        /*
+         *Regresa un objeto String conteniendo el nombre del número de día en el lenguaje pasado por parámetro., 
+        el número de de día se envía por parámetro y comienza con 0 (Domingo).
+         */
+        public static String getStrDay(int day, String lang) {
+            return getLocaleString("locale_date", "day_" + day, new Locale(lang));
+        }
+
+        /**
+         * Regresa un objeto String conteniendo el nombre del número de mes en el lenguaje pasado por parámetro., 
+         * el número de de mes se envía por parámetro y comienza con 0 (Enero).
+         */
+        public static String getStrMonth(int month, String lang) {
+            return getLocaleString("locale_date", "month_" + month, new Locale(lang));
+        }
+
+        /**
+         * Da formato a una fecha y la regresa en el lenguaje deseado.
+         */
+        public static String getStrDate(Date date, String lang) {
+            return getStrDate(date, lang, null);
+        }
+
+        /**
+         * Da formato a una fecha y la regresa en el lenguaje deseado.
+         */
+        public static String getStrDate(Date date, String lang, String format) {
+            String ret = "";
+            if (format != null) {
+                ret = getStrFormat(date, format, lang);
+            } else if (lang != null) {
+                if (lang.equalsIgnoreCase("es")) {
+                    ret = getStrDay(date.getDay(), lang) + " " + date.getDate() + " de " + getStrMonth(date.getMonth(), lang).toLowerCase() + " de " + (date.getYear() + 1900);
+                } else if (lang.equalsIgnoreCase("en")) {
+                    ret = getStrDay(date.getDay(), lang) + ", " + getStrMonth(date.getMonth(), lang) + " " + date.getDate() + ", " + (date.getYear() + 1900);
+                } else {
+                    ret = getStrDay(date.getDay(), lang) + ", " + getStrMonth(date.getMonth(), lang) + " " + date.getDate() + ", " + (date.getYear() + 1900);
+                }
+            } else {
+                ret = date.toLocaleString();
+            }
+            if (ret == null || ret.length() == 0) {
+                ret = date.toLocaleString();
+            }
+            return ret;
+        }
+
+        /**
+         * Use:
+         *   Day:     DAY, Day, day, dd
+         *   Month:   MONTH, Month, month, mm
+         *   Year:    yyyy, yy
+         *   Hours:   hh
+         *   Minutes: %m
+         *   Seconds: ss
+         */
+        private static String getStrFormat(Date date, String format, String lang) {
+            String ret = format;
+            ret = replaceAll(ret, "Day", getStrDay(date.getDay(), lang));
+            ret = replaceAll(ret, "DAY", getStrDay(date.getDay(), lang).toUpperCase());
+            ret = replaceAll(ret, "day", getStrDay(date.getDay(), lang).toLowerCase());
+            ret = replaceAll(ret, "dd", dateCeroComp(date.getDate()));
+            ret = replaceAll(ret, "Month", getStrMonth(date.getMonth(), lang));
+            ret = replaceAll(ret, "MONTH", getStrMonth(date.getMonth(), lang).toUpperCase());
+            ret = replaceAll(ret, "month", getStrMonth(date.getMonth(), lang).toLowerCase());
+            ret = replaceAll(ret, "mm", dateCeroComp(date.getMonth() + 1));
+            ret = replaceAll(ret, "yy", dateCeroComp(date.getYear() - 100));
+            ret = replaceAll(ret, "yyyy", dateCeroComp(date.getYear() + 1900));
+            ret = replaceAll(ret, "hh", dateCeroComp(date.getHours()));
+            ret = replaceAll(ret, "%m", dateCeroComp(date.getMinutes()));
+            ret = replaceAll(ret, "ss", dateCeroComp(date.getSeconds()));
+            return ret;
+        }
+
+        private static String dateCeroComp(int num) {
+            String ret = "" + num;
+            if (ret.length() == 1) {
+                ret = "0" + ret;
+            }
+            return ret;
+        }
+        
+        /**
+     * Optiene parametros de un url
+     * Regresa Map con parametros 
+     *  Keys: Strings
+     *  Vals: Strings [] 
+     */
+    public static Map parseQueryParams(String path)
+    {
+        Map map = new java.util.HashMap();
+        if(path==null){
+            return map;
+        }
+        int idx = path.indexOf("?");
+        String parms = path.substring(idx+1);
+        StringTokenizer st = new StringTokenizer(parms, "&");
+        while(st.hasMoreTokens())
+        {
+            String pair = st.nextToken();
+            if(pair.indexOf("=")>0)
+            {
+                String key = pair.substring(0,pair.indexOf("="));
+                String val = pair.substring(pair.indexOf("=")+1);
+                map.put(key, new String[]
+                {val});
+            }
+        }
+        return map;
+    }    
+        
     }
 
     /**
