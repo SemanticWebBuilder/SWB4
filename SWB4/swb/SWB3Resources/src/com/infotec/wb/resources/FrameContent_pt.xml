@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<xslfile>admresource.xslt</xslfile>
+	<form name="frmFrameContent" action="true" method="POST">
+		<admdbconnmgr defconn="true"/>
+		<input type="TEXT" name="url" label="* Endereço  Web do conteúdo remoto (Frame):" size="50" jsrequired="true"/>
+		<input type="SUBMIT" name="btnSave"  value="Salvar"/>
+		<input type="RESET"  name="btnReset" value="Cancelar"/>
+	</form>
+	<statictext name="txtNote">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				* Dato obrigatório
+			</font>
+		]]>
+	</statictext>
+</admresource>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+    <resource>
+        <resource-name>CountDownResource</resource-name>
+        <display-name xml:lang="es">Cuenta regresiva</display-name>
+        <display-name xml:lang="en">Count Down Resource</display-name>
+        <description xml:lang="es">Recurso que permite la generación de una cuenta regresiva a una determinada fecha</description>
+        <description xml:lang="en">Resource used to generate a count down to certain date</description>
+        <resource-class>com.infotec.wb.resources.CountDownResource</resource-class>
+        <expiration-cache>0</expiration-cache>
+        <resource-bundle>com.infotec.wb.resources.CountDownResource</resource-bundle>
+        <resource-type>2</resource-type>
+        <extended-attributes>
+        </extended-attributes>
+    </resource>

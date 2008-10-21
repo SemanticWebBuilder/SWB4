@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+    <resource>
+        <resource-name>RemoteWebApp</resource-name>
+        <display-name xml:lang="es">Aplicación remota</display-name>
+        <display-name xml:lang="en">Remote Web Application</display-name>
+        <description xml:lang="es">Recurso que permite integrar una aplicación web de otro sitio, en el sitio actual como si fuera parte natural de la pagina</description>
+        <description xml:lang="en">Resource that allows to integrate an Web application from another site, in the present site as if it were a natural part of the page </description>
+        <resource-class>com.infotec.wb.resources.RemoteWebApp</resource-class>
+        <expiration-cache>0</expiration-cache>
+        <resource-bundle>com.infotec.wb.resources.RemoteWebApp</resource-bundle>
+        <resource-type>3</resource-type>
+        <extended-attributes>
+        </extended-attributes>
+    </resource>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<!--
+ * JSPResource_en.xml.xml
+ *
+ * Created on 4 de enero de 2005, 06:06 PM
+ *
+ * @author  Juan Antonio Fernández Arias
+ -->
+	<xslfile>admresource.xslt</xslfile>
+	<form name="frmAdmin" action="true" method="POST" enctype="multipart/form-data">
+		<admdbconnmgr defconn="true"/>                      
+<!--                
+		<input type="FILE" name="html" label="* Archivo de contenido local:" size="40" showfile="false"/>
+		<statictext name="labelPag">* Desea páginar contenido:</statictext>
+		<input type="RADIO" name="pcont" label="Si" value="1"/>
+		<input type="RADIO" name="pcont" label="No" value="0"/>
+-->                
+		<input type="CHECKBOX" name="forward" label="Include / Forward:"/>
+		<input type="TEXT" name="jsppath" label="JSP path:" size="50"/>
+                <input type="TEXT" name="jspactpath" label="ProcesAction JSP path:" size="50"/>
+		<input type="SUBMIT" name="btnSave"  value="Save"/>
+		<input type="RESET"  name="btnReset" value="Cancel"/>
+        </form>
+</admresource>

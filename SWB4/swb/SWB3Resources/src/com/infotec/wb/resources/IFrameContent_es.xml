@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<xslfile>admresource.xslt</xslfile>
+	<form name="frmIFrameContent" action="true" method="POST">
+		<admdbconnmgr defconn="true"/>
+		<input type="TEXT" name="url" label="* Dirección Web del contenido remoto (Frame):" size="50" jsrequired="true"/>
+		<input type="TEXT" name="width" label="Ancho (pixeles o nn% para porcentaje):" size="4" maxlength="4" />
+		<input type="TEXT" name="height" label="Alto (pixeles o nn% para porcentaje):" size="4" maxlength="4" />
+		<input type="TEXT" name="marginwidth" label="Ancho del margen (pixels):" size="4" maxlength="4" jsvaltype="js_numbers"/>
+		<input type="TEXT" name="marginheight" label="Altura del margen (pixels):" size="4" maxlength="4" jsvaltype="js_numbers"/>
+		<input type="TEXT" name="style" label="Estilo para el frame:" size="50"/>
+		<statictext name="txtAlign">Alineación:</statictext>
+		<input type="RADIO" name="align" label="Superior" value="top"/>
+		<input type="RADIO" name="align" label="Media" value="middle"/>
+		<input type="RADIO" name="align" label="Inferior" value="bottom"/>
+		<input type="RADIO" name="align" label="Derecha" value="left"/>
+		<input type="RADIO" name="align" label="Izquierda" value="right"/>
+		<input type="RADIO" name="align" label="Centrada" value="center"/>		
+		<statictext name="txtTarget">Barras de desplazamiento:</statictext>
+		<input type="RADIO" name="scrollbars" label="Automático" value="auto"/>
+		<input type="RADIO" name="scrollbars" label="Sí" value="yes"/>
+		<input type="RADIO" name="scrollbars" label="No" value="no"/>
+		<input type="CHECKBOX" name="frameborder" label="Borde del frame" value="1"/>
+		<input type="SUBMIT" name="btnSave"  value="Guardar"/>
+		<input type="RESET"  name="btnReset" value="Cancelar"/>
+	</form>
+	<statictext name="txtNote">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				* Dato requerido
+			</font>
+		]]>
+	</statictext>
+	<script language="JavaScript">
+		<![CDATA[
+			if(!document.frmIFrameContent.align[0].checked && 
+				!document.frmIFrameContent.align[1].checked &&
+				!document.frmIFrameContent.align[2].checked &&
+				!document.frmIFrameContent.align[3].checked &&
+				!document.frmIFrameContent.align[4].checked &&
+				!document.frmIFrameContent.align[5].checked)
+				document.frmIFrameContent.align[0].checked=true;
+			if(!document.frmIFrameContent.scrollbars[0].checked && 
+				!document.frmIFrameContent.scrollbars[1].checked &&
+				!document.frmIFrameContent.scrollbars[2].checked)
+				document.frmIFrameContent.scrollbars[0].checked=true;
+		]]>
+	</script>	
+</admresource>

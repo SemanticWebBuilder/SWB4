@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+    <resource>
+        <resource-name>IndiceTematicoXSL</resource-name>
+        <display-name xml:lang="es">Indice Tematico XSL</display-name>
+        <display-name xml:lang="en">Thematic XSL index</display-name>
+        <description xml:lang="es">Recurso que se encarga de desplegar los titulos y descripciones de las secciones hijas y nietas de la sección donde se encuentra visualmente el usuario dentro del sitio Web</description>
+        <description xml:lang="en">Resource that is in charge to unfold the titles and descriptions of the sections daughters and granddaughters of the section where visually finds the user within the Web site</description>
+        <resource-class>com.infotec.wb.resources.TematicIndexXSL</resource-class>
+        <expiration-cache>0</expiration-cache>
+        <resource-bundle>com.infotec.wb.resources.TematicIndexXSL</resource-bundle>
+        <resource-type>1</resource-type>
+        <extended-attributes>
+        </extended-attributes>
+    </resource>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+    <resource>
+        <resource-name>Language</resource-name>
+        <display-name xml:lang="es">Idiomas</display-name>
+        <display-name xml:lang="en">Language</display-name>
+        <description xml:lang="es">Recurso que permite mostrar los idiomas que tiene configurados el sitio y en los cuales el usuario puede consultar la información publicada</description>
+        <description xml:lang="en">Resource used to display the different languages which the user can consult the information publisehd on the Web site </description>
+        <resource-class>com.infotec.wb.resources.Language</resource-class>
+        <expiration-cache>0</expiration-cache>
+        <resource-bundle>com.infotec.wb.resources.Language</resource-bundle>
+        <resource-type>2</resource-type>
+        <extended-attributes>
+        </extended-attributes>
+    </resource>
