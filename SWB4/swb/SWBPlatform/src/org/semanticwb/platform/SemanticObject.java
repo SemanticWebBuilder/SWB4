@@ -732,12 +732,29 @@ public class SemanticObject
     
     public String getDisplayName()
     {
-        return getProperty(getSemanticClass().getDisplayNameProperty());
+        return getDisplayName(null);
     }
     
     public String getDisplayName(String lang)
     {
-        return getProperty(getSemanticClass().getDisplayNameProperty(),null,lang);
+        String ret=null;
+        SemanticProperty prop=getSemanticClass().getDisplayNameProperty();
+        if(prop!=null)
+        {
+            if(prop.isDataTypeProperty())
+            {
+                if(lang!=null)ret=getProperty(prop,null,lang);
+                if(ret==null)
+                {
+                    ret=getProperty(prop);
+                }
+            }else if(prop.isObjectProperty())
+            {
+                SemanticObject obj=getObjectProperty(prop);
+                ret=obj.getDisplayName(lang);
+            }
+        }
+        return ret;
     }    
     
 }
