@@ -1,6 +1,6 @@
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
-<%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.model.*,java.util.*,org.semanticwb.base.util.*"%>
+<%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.portal.*,org.semanticwb.model.*,java.util.*,org.semanticwb.base.util.*"%>
 <%
     response.setHeader("Cache-Control", "no-cache"); 
     response.setHeader("Pragma", "no-cache"); 
@@ -101,3 +101,7 @@
 %>
     <input type="submit" name="update">
 </form>
+
+<%
+SWBFormMgr fmgr=new SWBFormMgr(obj, SWBFormMgr.MODE_VIEW);
+%><%=fmgr.getCodeForm()%>
