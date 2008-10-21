@@ -13,7 +13,6 @@ public class SWBVocabulary
     //Classes
     public final SemanticClass User;
     public final SemanticClass Calendar;
-    public final SemanticClass Text;
     public final SemanticClass Community;
     public final SemanticClass PortletSubType;
     public final SemanticClass TemplateRef;
@@ -24,12 +23,12 @@ public class SWBVocabulary
     public final SemanticClass Traceable;
     public final SemanticClass RoleRefable;
     public final SemanticClass Ruleable;
-    public final SemanticClass TextArea;
     public final SemanticClass PFlow;
     public final SemanticClass IPFilter;
     public final SemanticClass RuleRefable;
     public final SemanticClass Valueable;
     public final SemanticClass Calendarable;
+    public final SemanticClass TextArea;
     public final SemanticClass PortletRefable;
     public final SemanticClass DisplayObject;
     public final SemanticClass Permission;
@@ -66,6 +65,7 @@ public class SWBVocabulary
     public final SemanticClass PortletRef;
     public final SemanticClass Indexable;
     public final SemanticClass PortletType;
+    public final SemanticClass Text;
     public final SemanticClass Viewable;
 
 
@@ -98,7 +98,6 @@ public class SWBVocabulary
     public final SemanticProperty priority;
     public final SemanticProperty hasRoleRef;
     public final SemanticProperty hasRule;
-    public final SemanticProperty frmTextAreaRows;
     public final SemanticProperty actualVersion;
     public final SemanticProperty xml;
     public final SemanticProperty lastVersion;
@@ -107,6 +106,7 @@ public class SWBVocabulary
     public final SemanticProperty hasRuleRef;
     public final SemanticProperty value;
     public final SemanticProperty hasCalendar;
+    public final SemanticProperty frmTextAreaRows;
     public final SemanticProperty hasPortletRef;
     public final SemanticProperty propGroup;
     public final SemanticProperty viewElement;
@@ -121,7 +121,6 @@ public class SWBVocabulary
     public final SemanticProperty webPage;
     public final SemanticProperty dnsDefault;
     public final SemanticProperty hasGroupedTemplate;
-    public final SemanticProperty extendedAttributes;
     public final SemanticProperty hasPortlet;
     public final SemanticProperty templateGroup;
     public final SemanticProperty hasPermission;
@@ -163,7 +162,6 @@ public class SWBVocabulary
         // Classes
         User=vocabulary.getSemanticClass(URI+"User");
         Calendar=vocabulary.getSemanticClass(URI+"Calendar");
-        Text=vocabulary.getSemanticClass(URI+"Text");
         Community=vocabulary.getSemanticClass(URI+"Community");
         PortletSubType=vocabulary.getSemanticClass(URI+"PortletSubType");
         TemplateRef=vocabulary.getSemanticClass(URI+"TemplateRef");
@@ -174,12 +172,12 @@ public class SWBVocabulary
         Traceable=vocabulary.getSemanticClass(URI+"Traceable");
         RoleRefable=vocabulary.getSemanticClass(URI+"RoleRefable");
         Ruleable=vocabulary.getSemanticClass(URI+"Ruleable");
-        TextArea=vocabulary.getSemanticClass(URI+"TextArea");
         PFlow=vocabulary.getSemanticClass(URI+"PFlow");
         IPFilter=vocabulary.getSemanticClass(URI+"IPFilter");
         RuleRefable=vocabulary.getSemanticClass(URI+"RuleRefable");
         Valueable=vocabulary.getSemanticClass(URI+"Valueable");
         Calendarable=vocabulary.getSemanticClass(URI+"Calendarable");
+        TextArea=vocabulary.getSemanticClass(URI+"TextArea");
         PortletRefable=vocabulary.getSemanticClass(URI+"PortletRefable");
         DisplayObject=vocabulary.getSemanticClass(URI+"DisplayObject");
         Permission=vocabulary.getSemanticClass(URI+"Permission");
@@ -216,6 +214,7 @@ public class SWBVocabulary
         PortletRef=vocabulary.getSemanticClass(URI+"PortletRef");
         Indexable=vocabulary.getSemanticClass(URI+"Indexable");
         PortletType=vocabulary.getSemanticClass(URI+"PortletType");
+        Text=vocabulary.getSemanticClass(URI+"Text");
         Viewable=vocabulary.getSemanticClass(URI+"Viewable");
 
 
@@ -248,7 +247,6 @@ public class SWBVocabulary
         priority=vocabulary.getSemanticProperty(URI+"priority");
         hasRoleRef=vocabulary.getSemanticProperty(URI+"hasRoleRef");
         hasRule=vocabulary.getSemanticProperty(URI+"hasRule");
-        frmTextAreaRows=vocabulary.getSemanticProperty(URI+"frmTextAreaRows");
         actualVersion=vocabulary.getSemanticProperty(URI+"actualVersion");
         xml=vocabulary.getSemanticProperty(URI+"xml");
         lastVersion=vocabulary.getSemanticProperty(URI+"lastVersion");
@@ -257,6 +255,7 @@ public class SWBVocabulary
         hasRuleRef=vocabulary.getSemanticProperty(URI+"hasRuleRef");
         value=vocabulary.getSemanticProperty(URI+"value");
         hasCalendar=vocabulary.getSemanticProperty(URI+"hasCalendar");
+        frmTextAreaRows=vocabulary.getSemanticProperty(URI+"frmTextAreaRows");
         hasPortletRef=vocabulary.getSemanticProperty(URI+"hasPortletRef");
         propGroup=vocabulary.getSemanticProperty(URI+"propGroup");
         viewElement=vocabulary.getSemanticProperty(URI+"viewElement");
@@ -271,7 +270,6 @@ public class SWBVocabulary
         webPage=vocabulary.getSemanticProperty(URI+"webPage");
         dnsDefault=vocabulary.getSemanticProperty(URI+"dnsDefault");
         hasGroupedTemplate=vocabulary.getSemanticProperty(URI+"hasGroupedTemplate");
-        extendedAttributes=vocabulary.getSemanticProperty(URI+"extendedAttributes");
         hasPortlet=vocabulary.getSemanticProperty(URI+"hasPortlet");
         templateGroup=vocabulary.getSemanticProperty(URI+"templateGroup");
         hasPermission=vocabulary.getSemanticProperty(URI+"hasPermission");
