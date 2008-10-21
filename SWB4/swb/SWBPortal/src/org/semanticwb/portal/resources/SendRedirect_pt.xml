@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<xslfile>admresource.xslt</xslfile>
+	<form name="frmWBUrlContent" action="true" method="POST">
+		<admdbconnmgr defconn="true"/>
+		<input type="TEXT" name="url" label="Endereço web a redirecionar:" size="50" jsrequired="true"/>
+		<input type="SUBMIT" name="btnSave"  value="Salvar" class="boton"/>
+		<input type="RESET"  name="btnReset" value="Cancelar" class="boton"/>
+	</form>
+	<statictext name="txt">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				Tags:<BR>
+                                &nbsp;&nbsp;{user.login}<BR>
+                                &nbsp;&nbsp;{user.email}<BR>
+                                &nbsp;&nbsp;{user.language}<BR>
+                                &nbsp;&nbsp;{getEnv("XXXXX")}<BR>
+                                &nbsp;&nbsp;{request.getParameter("XXXXX")}<BR>
+                                &nbsp;&nbsp;{session.getAttribute("XXXXX")}<BR>
+                                &nbsp;&nbsp;{encode("XXXXX")}<BR>
+                                <BR>&nbsp;&nbsp;XXXXX=Text, Tag<BR>
+			</font>
+		]]>
+	</statictext>            
+</admresource>

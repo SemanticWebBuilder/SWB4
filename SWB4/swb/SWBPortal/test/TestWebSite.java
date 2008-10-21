@@ -338,6 +338,29 @@ public class TestWebSite {
             home.addPortletRef(portletref);
         }  
         
+        if(site.getPortletType("TematicIndexXSL")==null)
+        {
+            
+            PortletType ptype=site.createPortletType("TematicIndexXSL");
+            ptype.setPortletClassName("org.semanticwb.portal.resources.TematicIndexXSL");
+            ptype.setPortletBundle("org.semanticwb.portal.resources.TematicIndexXSL");
+            ptype.setPortletMode(1);
+            ptype.setTitle("Recurso TematicIndexXSL");
+                    
+            Portlet portlet=site.createPortlet();
+            portlet.setActive(true);
+            portlet.setCreator(user);
+            portlet.setPortletType(ptype);
+            portlet.setTitle("TematicIndexXSL");
+            
+            PortletRef portletref=site.createPortletRef();
+            portletref.setActive(true);
+            portletref.setPortlet(portlet);
+            portletref.setPriority(3);
+            
+            home.addPortletRef(portletref);
+        }  
+        
         
         if(site.getPortletType("FrameContent")==null)
         {
