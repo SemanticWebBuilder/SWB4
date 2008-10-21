@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+    <resource>
+        <resource-name>Ventana</resource-name>
+        <display-name xml:lang="es">Ventana Pop Up</display-name>
+        <display-name xml:lang="en">Pop up Window</display-name>
+        <description xml:lang="es">Recurso que se encarga de desplegar una ventana adicional de explorador con el propósito de mostrar un mensaje adicional a la sección</description>
+        <description xml:lang="en">Resource in charge to unfold an additional window of explorer in order to show an additional message to the section </description>
+        <resource-class>org.semanticwb.portal.resources.Window</resource-class>
+        <expiration-cache>0</expiration-cache>
+        <resource-bundle>org.semanticwb.portal.resources.Window</resource-bundle>
+        <resource-type>2</resource-type>
+        <extended-attributes>
+        </extended-attributes>
+    </resource>

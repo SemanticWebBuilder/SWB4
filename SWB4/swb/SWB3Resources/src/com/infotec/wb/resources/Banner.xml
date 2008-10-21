@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<xslfile>admresource.xslt</xslfile>
+	<form name="frmWBBanner" action="true" method="POST" enctype="multipart/form-data">
+		<admdbconnmgr defconn="true"/>
+		<statictext name="txtLocal">Banner local o externo:</statictext>
+		<input type="RADIO" name="local" label="Externo" value="1"/>
+		<input type="RADIO" name="local" label="Local" value="0"/>
+		<textarea name="code" label="*1 Código:" rows="5" cols="50" wrap="virtual"/>
+		<input type="FILE" name="img" label="*2 Banner:" size="40" showfile="true" filetype="bmp|jpg|jpeg|gif|swf" isshowfiletype="true" />
+		<input type="TEXT" name="alt" label="Texto alterno:" size="50"/>
+		<input type="TEXT" name="width" label="Ancho (pixeles):" size="4" maxlength="4" jsvaltype="js_numbers"/>
+		<input type="TEXT" name="height" label="Alto (pixeles):" size="4" maxlength="4" jsvaltype="js_numbers"/>
+		<input type="TEXT" name="url" label="Dirección web" size="50"/>
+		<statictext name="txtTarget">En una nueva ventana:</statictext>
+		<input type="RADIO" name="target" label="Sí" value="1"/>
+		<input type="RADIO" name="target" label="No" value="0"/>
+		<input type="SUBMIT" name="btnSave"  value="Guardar" onclick="if(jsValida(this.form)) return true; else return false;"/>
+		<input type="RESET"  name="btnReset" value="Cancelar"/>
+	</form>
+	<statictext name="txtNote1">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				*1 Dato requerido para publicidad externa
+			</font>
+		]]>
+	</statictext>
+	<statictext name="txtNote2">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				*2 Dato requerido para publicidad local
+			</font>
+		]]>
+	</statictext>
+	<script language="JavaScript">
+		<![CDATA[
+			if(!document.frmWBBanner.local[0].checked && !document.frmWBBanner.local[1].checked)
+				document.frmWBBanner.local[1].checked=true;
+			if(!document.frmWBBanner.target[0].checked && !document.frmWBBanner.target[1].checked)
+				document.frmWBBanner.target[1].checked=true;
+			function jsValida(frm)
+			{
+				if(frm.local[1].checked)
+				{
+					if(frm.wbfile_img==undefined && (frm.img.value==null || frm.img.value=='' || frm.img.value==' '))
+					{
+						alert('Especifique una imagen para el banner.');
+						frm.img.focus();
+						return false;
+					}
+				}
+				if(frm.local[0].checked)
+				{
+					if(frm.code.value==null || frm.code.value=='' || frm.code.value==' ')
+					{
+						alert('Defina la codificación para incluir la publicidad externa.');
+						frm.code.focus();
+						return false;
+					}
+				}			
+				return true;
+			}
+		]]>			
+	</script>
+</admresource>

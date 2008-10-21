@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+    <resource>
+        <resource-name>WBSiteMap</resource-name>
+        <display-name xml:lang="es">Mapa del Sitio</display-name>
+        <display-name xml:lang="en">Site Map</display-name>
+        <description xml:lang="es">Recurso que permite la presentación general de todas las secciones del sitio y su relación jerarquica</description>
+        <description xml:lang="en">resource that allows to display in a generic way all of the site sections and their hierarchic relationship</description>
+        <resource-class>com.infotec.wb.resources.WBSiteMap</resource-class>
+        <expiration-cache>0</expiration-cache>
+        <resource-bundle>com.infotec.wb.resources.WBSiteMap</resource-bundle>
+        <resource-type>3</resource-type>
+        <extended-attributes>
+        </extended-attributes>
+    </resource>

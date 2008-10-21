@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<xslfile>admresource.xslt</xslfile>
+	<form name="frmVentana" action="true" method="POST" enctype="multipart/form-data">
+		<admdbconnmgr defconn="true"/>
+		<statictext name="general">
+			<![CDATA[
+				<font style="color: #428AD4; text-decoration: none; font-family: Verdana; font-size: 12px; font-weight: normal;">
+				Paso 1 de 2. Datos generales</font>
+			]]>
+		</statictext>		
+		<input type="TEXT" name="title" label="Título:" size="50"/>
+		<textarea name="text" label="* Texto:" rows="5" cols="50" wrap="virtual"/>
+		<input type="FILE" name="img" label="* Imagen para contenido (bmp, gif, jpg, jpeg, swf):" showfile="true" msg="Imagen actual " filetype="bmp|jpg|jpeg|gif|swf" isshowfiletype="true" isremovefile="true" removemsg="Quitar imagen" size="40"/>
+		<input type="TEXT" name="alt" label="Texto alterno para la imagen:" size="50"/>
+		<input type="TEXT" name="url" label="Dirección web" size="50"/>
+		<statictext name="txtTarget">Ventana para despliegue:</statictext>
+		<input type="RADIO" name="target" label="En la misma ventana" value="0"/>
+		<input type="RADIO" name="target" label="En la ventana de origen y cerrar ventana pop-up" value="1" />
+		<input type="RADIO" name="target" label="En la ventana de origen y no cerrar ventana pop-up" value="2" />
+		<input type="RADIO" name="target" label="En una nueva ventana y cerrar ventana pop-up" value="3" />
+		<input type="RADIO" name="target" label="En una nueva ventana y no cerrar ventana pop-up" value="4" />
+		<input type="CHECKBOX" name="bysession" label="Abrir ventana por sesión" value="yes"/>		
+		<applet label="Color del texto:" name="wbcolor" code="applets.selcolor.SelColor.class" codebase="{@webpath}" archive="wbadmin/lib/SelColor.jar" width="293" height="240">
+			<param name="name" value="wbcolor"/>
+			<param name="cache_archive" value="wbadmin/lib/SelColor.jar"/>
+			<param name="_cache_version" value="1.0.0.1"/>
+			<param name="_cache_archive_ex" value="applet.jar;preload, util.jar;preload,tools.jar;preload"/>
+			<param name="type" value="application/x-java-applet;version=1.4"/>
+			<param name="scriptable" value="true"/>
+			<param name="webpath" value="/"/>
+			<param name="foreground" value="99cccc"/>
+			<param name="background" value="99cccc"/>
+			<param name="linkcolor" value="000000" input="textcolor" moreattr="replace('#','')"/>
+			<param name="linkactual" value="000000" input="textcolor"/>
+		</applet>
+		<input type="HIDDEN" name="textcolor"/>
+		<input type="TEXT" size="7" maxlength="7" name="hdntextcolor" label="Otro color del texto (hexadecimal):"/>
+		<input type="FILE" name="backimg" label="Imagen para el fondo (bmp, gif, jpg, jpeg):" showfile="true" msg="Imagen actual " filetype="bmp|jpg|jpeg|gif" isshowfiletype="true" isremovefile="true" removemsg="Quitar imagen" size="40"/>
+		<applet label="Color del fondo:" name="wbbgcolor" code="applets.selcolor.SelColor.class" codebase="{@webpath}" archive="wbadmin/lib/SelColor.jar" width="293" height="240">
+			<param name="name" value="wbbgcolor"/>
+			<param name="cache_archive" value="wbadmin/lib/SelColor.jar"/>
+			<param name="_cache_version" value="1.0.0.1"/>
+			<param name="_cache_archive_ex" value="applet.jar;preload, util.jar;preload,tools.jar;preload"/>
+			<param name="type" value="application/x-java-applet;version=1.4"/>
+			<param name="scriptable" value="true"/>
+			<param name="webpath" value="/"/>
+			<param name="foreground" value="99cccc"/>
+			<param name="background" value="99cccc"/>
+			<param name="linkcolor" value="000000" input="backcolor" moreattr="replace('#','')"/>
+			<param name="linkactual" value="000000" input="backcolor"/>
+		</applet>
+		<input type="HIDDEN" name="backcolor"/>
+		<input type="TEXT" size="7" maxlength="7" name="hdnbackcolor" label="Otro color de fondo (hexadecimal):"/>		
+		<statictext name="window">
+			<![CDATA[
+				<br><br><font style="color: #428AD4; text-decoration: none; font-family: Verdana; font-size: 12px; font-weight: normal;">
+				Paso 2 de 2. Configuración de la ventana</font>
+			]]>
+		</statictext>
+		<input type="CHECKBOX" name="menubar" label="Barra de menús" value="1"/>
+		<input type="CHECKBOX" name="toolbar" label="Barra de herramientas" value="1"/>
+		<input type="CHECKBOX" name="status" label="Barra de estado" value="1"/>
+		<input type="CHECKBOX" name="location" label="Barra de direcciones" value="1"/>
+		<input type="CHECKBOX" name="directories" label="Barra de vínculos" value="1"/>
+		<input type="CHECKBOX" name="scrollbars" label="Barras de desplazamiento" value="1"/>
+		<input type="CHECKBOX" name="resizable" label="Reajustar tamaño de la ventana" value="1"/>
+		<input type="TEXT" name="width" label="Ancho de la ventana (pixeles):" size="4" maxlength="4" jsvaltype="js_numbers"/>
+		<input type="TEXT" name="height" label="Alto de la ventana (pixeles):" size="4" maxlength="4" jsvaltype="js_numbers"/>
+		<input type="TEXT" name="top" label="Posición margen superior (pixeles):" size="4" maxlength="4" jsvaltype="js_numbers"/>
+		<input type="TEXT" name="left" label="Posición margen izquierdo (pixeles):" size="4" maxlength="4" jsvaltype="js_numbers"/>
+		<input type="SUBMIT" name="btnSave"  value="Guardar" onclick="if(jsValida(this.form)) return true; else return false;"/>
+		<input type="RESET"  name="btnReset" value="Cancelar"/>
+	</form>
+	<statictext name="txtNote">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				* Indique el texto de la ventana y/o la imagen..
+			</font>
+		]]>
+	</statictext>
+	<script language="JavaScript">
+		<![CDATA[
+			if(!document.frmVentana.target[0].checked && !document.frmVentana.target[1].checked && 
+				!document.frmVentana.target[2].checked && !document.frmVentana.target[3].checked && 
+				!document.frmVentana.target[4].checked)
+				document.frmVentana.target[4].checked=true;
+
+			function jsValida(frm)
+			{
+				if(frm.text.value==null || frm.text.value=='' || frm.text.value==' ')
+				{
+					if(frm.wbfile_img==undefined && (frm.img.value==null || frm.img.value=='' || frm.img.value==' '))
+					{
+						alert('Indique el texto de la ventana y/o la imagen.');
+						frm.text.focus();
+						return false;
+					}					
+				}
+				if(frm.hdntextcolor.value==null || frm.hdntextcolor.value=='' || frm.hdntextcolor.value==' ')
+					frm.textcolor.value='#'+ document.wbcolor.getColor();
+				else frm.textcolor.value=frm.hdntextcolor.value;
+
+				if(frm.hdnbackcolor.value==null || frm.hdnbackcolor.value=='' || frm.hdnbackcolor.value==' ')
+					frm.backcolor.value='#'+ document.wbbgcolor.getColor();
+				else frm.backcolor.value=frm.hdnbackcolor.value;
+
+				if(!isFormat(frm.textcolor)) return false;
+				if(!isFormat(frm.backcolor)) return false;
+				replaceChars(frm.text);
+				return true;
+			}
+			function isFormat(pIn)
+			{
+				var swFormat="0123456789ABCDEF";
+				pIn.value=pIn.value.toUpperCase();
+				if(pIn.value.length<7)
+				{
+					alert('La longitud del campo no corresponde al formato.');
+					if(pIn.type=="text") pIn.focus();
+					return false;
+				}
+				if (!setPrefix(pIn, '#')) return false;
+				for(var i=1; i < pIn.value.length; i++)
+				{
+					swOk= pIn.value.substring(i, i+1);
+					if (swFormat.indexOf(swOk, 0)==-1)
+					{
+						alert('El valor definido no corresponde al formato hexadecimal.');
+						if(pIn.type=="text") pIn.focus();
+						return false;
+					}
+				}
+				return true;
+			}
+			function setPrefix(pIn, pPx)
+			{
+				if(pIn.type=="text" || pIn.type=="hidden")
+				{
+					if (pIn.value.substring(0, pPx.length).indexOf(pPx)==-1)
+					{
+						alert('El valor definido no corresponde al formato: ' + pPx);
+						pIn.value=pPx+pIn.value;
+						if(pIn.type=="text") pIn.focus();
+						return false;
+					}
+				}
+				if(pIn.type=="select-one" || pIn.type=="select-multiple")
+				{
+					for(var i=0; i<pIn.length; i++)
+					{
+						if (pIn.options[i].value.substring(0, pPx.length).indexOf(pPx)==-1)
+						{
+							alert('El valor definido no corresponde al formato: ' + pPx);
+							pIn.focus();
+							return false;
+						}
+					}
+				}
+				return true;
+			}
+			function replaceChars(pIn)
+			{
+				out = "\r"; // replace this
+				add = "<br/>"; // with this
+				temp = "" + pIn.value; // temporary holder
+				while (temp.indexOf(out)>-1)
+				{
+					pos= temp.indexOf(out);
+					temp = "" + (temp.substring(0, pos) + add + temp.substring((pos + out.length), temp.length));
+				}
+				out = "\n"; // replace this
+				add = " "; // with this
+				temp = "" + temp; // temporary holder
+				while (temp.indexOf(out)>-1)
+				{
+					pos= temp.indexOf(out);
+					temp = "" + (temp.substring(0, pos) + add + temp.substring((pos + out.length), temp.length));
+				}
+				pIn.value = temp;
+			}			
+		]]>
+	</script>
+</admresource>

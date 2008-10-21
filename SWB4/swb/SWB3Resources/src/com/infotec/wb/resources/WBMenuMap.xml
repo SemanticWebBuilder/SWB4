@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<xslfile>admresource.xslt</xslfile>
+	<form name="frmWBMenu" action="true" method="POST" enctype="multipart/form-data">
+		<admdbconnmgr defconn="true"/>
+		<input type="FILE" name="template" label="Plantilla (xsl, xslt):" showfile="true" msg="Plantilla actual " bydefault="{@webpath}wbadmin/xsl/WBMenuMap/WBMenuMap.xslt" msgbydefault="Plantilla por defecto " filetype="xsl|xslt" isshowfiletype="true" size="40" jsrequired="false"/>
+                <input type="TEXT" name="basetopic" label="Tópico base:" size="20"/>
+		<input type="TEXT" name="nini" label="Nivel Inicial:" size="3" maxlength="3" jsvaltype="js_numbers"/>		
+          	<input type="CHECKBOX" name="bro" label="Ocultar Hermanos" value="false"/>
+          	<input type="CHECKBOX" name="bro4ch" label="-->Si no hay hijos mostrar Hermanos" value="true"/>
+		<input type="TEXT" name="nsup" label="Limite de niveles superiores:" size="3" maxlength="3" jsvaltype="js_numbers"/>		
+                <input type="TEXT" name="ninf" label="Limite de niveles inferiores:" size="3" maxlength="3" jsvaltype="js_numbers"/>
+		<input type="SUBMIT" name="btnSave"  value="Guardar" />
+		<input type="RESET"  name="btnReset" value="Cancelar"/>
+	</form>
+</admresource>

@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="ISO-8859-1"?>
+<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<!--
+ * UKGResource.xml.xml
+ *
+ * Created on 30 de diciembre de 2005, 06:18 AM
+ *
+ * @author  Jei
+ -->
+	<form name="frmAdmin">
+		<input type="TEXT" name="server" label="* Server: (http://[host][:port])" size="40" value=""/>
+		<input type="TEXT" name="iniPath" label="* InitPath: (App Uri)(/xxxxx)" size="40" value=""/>
+		<input type="TEXT" name="encode" label="Encode:" size="10" value="utf-8"/>
+		<input type="TEXT" name="basePath" label="* BasePath: (context)(/xxx;/xxx)" size="40" value=""/>
+		<input type="TEXT" name="initext" label="Init Text: (xxx|yyy)" size="40" value=""/>
+		<input type="TEXT" name="endtext" label="End Text: (xxx|yyy)" size="40" value=""/>
+		<input type="TEXT" name="replace" label="Replace Str: (xxx|yyy)" size="40" value=""/>
+		<input type="TEXT" name="direct" label="Direct Call: (xxx;yyy)" size="40" value=""/>
+		<input type="TEXT" name="loginurl" label="Login URL: (http://[host][:port]/[login path])" size="40" value=""/>
+		<input type="TEXT" name="userinsert" label="User Insert: (http://[host][:port]/[context]/wbutil/WBUserInsert.jsp)" size="40" value=""/>
+		<input type="TEXT" name="userinsert" label="User Insert: (http://[host][:port]/[context]/wbutil/WBUserInsert.jsp)" size="40" value=""/>
+		<input type="TEXT" name="headers" label="Headers: (xxxx=xxxx;yyyy=yyyy)" size="40" value=""/>
+		<input type="TEXT" name="cookies" label="Cookies: (xxx=xxxx;yyyy=yyyy)" size="40" value=""/>
+		<input type="TEXT" name="instance" label="Instance:" size="10" maxlength="10" jsvaltype="js_numbers"/>        
+		<input type="CHECKBOX" name="othercont" label="Other Contents:" value="0"/>        
+		<input type="CHECKBOX" name="firstredirect" label="Show First as Content:" value="0"/>        
+		<input type="SUBMIT" name="btnSave"  moreattr="class=&#34;botones&#34;" value="GUARDAR"/>
+		<input type="RESET"  name="btnReset" moreattr="class=&#34;botones&#34;" value="CANCELAR"/>                
+        </form>
+	<statictext name="txt">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				<b>Tags:</b><BR>
+                                &nbsp;&nbsp;{user.login}<BR>
+                                &nbsp;&nbsp;{user.email}<BR>
+                                &nbsp;&nbsp;{user.language}<BR>
+                                &nbsp;&nbsp;{getEnv("XXXXX")}<BR>
+                                &nbsp;&nbsp;{request.getParameter("XXXXX")}<BR>
+                                &nbsp;&nbsp;{session.getAttribute("XXXXX")}<BR>
+                                &nbsp;&nbsp;{encode("XXXXX")}<BR>
+                                &nbsp;&nbsp;{encodeB64("XXXXX")}<BR>
+                                <BR>&nbsp;&nbsp;<b>Note:</b> XXXXX=Text<BR><BR>
+                                <B>Samples:</B><BR>
+                                &nbsp;&nbsp;//Single Sign-ON with Basic Authorization<BR>
+                                &nbsp;&nbsp;Headers: Authorization=Basic {encodeB64("user:password")}<BR>
+			</font>
+		]]>
+	</statictext>        
+</admresource>

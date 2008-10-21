@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+    <resource>
+        <resource-name>Date</resource-name>
+        <display-name xml:lang="es">Fecha</display-name>
+        <display-name xml:lang="en">Date</display-name>
+        <description xml:lang="es">Recurso que se encarga de desplegar la fecha del sistema</description>
+        <description xml:lang="en">Resource used to display the system date</description>
+        <resource-class>com.infotec.wb.resources.WBDate</resource-class>
+        <expiration-cache>0</expiration-cache>
+        <resource-bundle>com.infotec.wb.resources.WBDate</resource-bundle>
+        <resource-type>4</resource-type>
+        <extended-attributes>
+        </extended-attributes>
+    </resource>

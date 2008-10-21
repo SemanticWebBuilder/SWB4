@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+    <resource>
+        <resource-name>FrameContent</resource-name>
+        <display-name xml:lang="es">Contenidos Frame</display-name>
+        <display-name xml:lang="en">Frame content</display-name>
+        <description xml:lang="es">Recurso que se encarga de desplegar contenidos html dentro de paginas con estrutura en frame</description>
+        <description xml:lang="en">Resource used to display html pages inside frame strutured Web pages</description>
+        <resource-class>com.infotec.wb.resources.FrameContent</resource-class>
+        <expiration-cache>0</expiration-cache>
+        <resource-bundle>com.infotec.wb.resources.FrameContent</resource-bundle>
+        <resource-type>1</resource-type>
+        <extended-attributes>
+        </extended-attributes>
+    </resource>

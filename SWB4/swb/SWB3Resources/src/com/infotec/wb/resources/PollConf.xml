@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+    <resource>
+        <resource-name>Encuesta</resource-name>
+        <display-name xml:lang="es">Encuesta</display-name>
+        <display-name xml:lang="en">Survey</display-name>
+        <description xml:lang="es">Recurso que se encarga de desplegar una pregunta con opciones de respuesta a manera de un pulso de opinión</description>
+        <description xml:lang="en">Resource in charge to unfold a question with options of answer to way of an opinion pulse</description>
+        <resource-class>com.infotec.wb.resources.FavoriteTopics</resource-class>
+        <expiration-cache>0</expiration-cache>
+        <resource-bundle>com.infotec.wb.resources.FavoriteTopics</resource-bundle>
+        <resource-type>2</resource-type>
+        <extended-attributes>
+        </extended-attributes>
+    </resource>

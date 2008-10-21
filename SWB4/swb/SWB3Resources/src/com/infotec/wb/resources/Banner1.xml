@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:xforms="http://www.w3.org/2002/xforms"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <head>
+        <title>Controls</title>
+        <xforms:model>
+            <xforms:submission id="save" action="{$wbRedirect}" method="post" replace="instance"/>
+            <xforms:instance xmlns="" src="{$wbInstance}"/>
+            <xforms:bind id="bind_txtLocal" nodeset="txtLocal" required="true()"/>
+            <xforms:bind id="bind_code" nodeset="code"/>
+            <xforms:bind id="bind_img" nodeset="wbFile_img" type="base64Binary"/>
+            <xforms:bind id="bind_showBanner1" nodeset="wb_showBanner1"/>
+            <xforms:bind id="bind_alt" nodeset="alt"/>
+            <xforms:bind id="bind_width" nodeset="width"/>
+            <xforms:bind id="bind_height" nodeset="height"/>
+            <xforms:bind id="bind_url" nodeset="url"/>
+            <xforms:bind id="bind_target" nodeset="target"/>
+        </xforms:model>
+        <style type="text/css">
+            .range-input .value{width:20px;}
+            .trigger{padding-left:5px;}
+            .foo{font-size:14px;display:block;width:400px;}
+            .progressbar{width:250px;}
+
+            .switch .selected-case{display:block;}
+            .case{margin:10px;}
+        </style>
+    </head>
+    <body>
+        <xforms:group appearance="compact">
+            <xforms:label>XForms Controls</xforms:label>
+            <span class="foo">
+                George25 This form shows different variations (appearances) of the several XForms controls and their representation
+                in HTML.<br/><br/>
+                XForms markup also mixes with standard HTML. This is some text inside a span with a custom CSS class...
+            </span>
+        </xforms:group>
+        
+        <xforms:group id="Banner-group" appearance="full">
+            <label>Datos del Bannersito</label>
+            <xforms:select1 bind="bind_txtLocal" appearance="full">
+                <xforms:label>Banner local o externo:</xforms:label>
+                <xforms:hint>Seleccione la presentación del Banner</xforms:hint>
+                <xforms:choices>
+                    <xforms:item>
+                        <xforms:label>Externo</xforms:label>
+                        <xforms:value>1</xforms:value>
+                    </xforms:item>
+                    <xforms:item>
+                        <xforms:label>Local</xforms:label>
+                        <xforms:value>0</xforms:value>
+                    </xforms:item>
+                </xforms:choices>
+            </xforms:select1>
+            
+           <xforms:textarea bind="bind_code">
+                <xforms:label>Código:</xforms:label>
+                <xforms:hint>Proporcione el código</xforms:hint>
+            </xforms:textarea>
+            
+            <xforms:upload bind="bind_img" mediatype="image/*">
+                    <xforms:label>Seleccione una imagen</xforms:label>
+                    <xforms:hint>an upload hint</xforms:hint>
+                    <xforms:filename ref="@file"/>
+                    <xforms:mediatype ref="@type"/>
+            </xforms:upload>
+            <xforms:output mediatype="text/html" bind="bind_showBanner1"/>
+            <xforms:input bind="bind_alt">
+                <xforms:label>Texto alterno:</xforms:label>
+                <xforms:hint>Proporcione un texto alterno:</xforms:hint>
+            </xforms:input>
+            
+            <xforms:input bind="bind_width">
+                <xforms:label>Ancho (pixeles):</xforms:label>
+                <xforms:hint>Proporcione ancho (pixeles):</xforms:hint>
+            </xforms:input>
+            
+            <xforms:input bind="bind_height">
+                <xforms:label>Alto (pixeles):</xforms:label>
+                <xforms:hint>Proporcione alto (pixeles):</xforms:hint>
+            </xforms:input>
+            
+            <xforms:input bind="bind_url">
+                <xforms:label>Dirección web</xforms:label>
+                <xforms:hint>Proporcione una url de redireccionamiento:</xforms:hint>
+            </xforms:input>
+            
+            <xforms:select1 bind="bind_target" appearance="full">
+                <xforms:label>En una nueva ventana:</xforms:label>
+                <xforms:hint>Seleccione la ventana de redireccionamiento</xforms:hint>
+                <xforms:choices>
+                    <xforms:item>
+                        <xforms:label>Sí</xforms:label>
+                        <xforms:value>1</xforms:value>
+                    </xforms:item>
+                    <xforms:item>
+                        <xforms:label>No</xforms:label>
+                        <xforms:value>0</xforms:value>
+                    </xforms:item>
+                </xforms:choices>
+            </xforms:select1>
+            
+            <xforms:trigger>
+                <xforms:label id="C-11">Grabar</xforms:label>
+                <xforms:action id="C-12">
+                    <xforms:send submission="save"/>
+                </xforms:action>
+            </xforms:trigger>
+            <xforms:trigger id="reset-btn">
+                <xforms:label>Reset</xforms:label>
+                <xforms:action>
+                    <xforms:reset id="reset"/>
+                </xforms:action>
+            </xforms:trigger>
+        </xforms:group>
+
+    </body>
+</html>

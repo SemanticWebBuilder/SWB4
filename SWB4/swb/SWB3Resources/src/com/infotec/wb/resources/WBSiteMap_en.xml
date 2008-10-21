@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<xslfile>admresource.xslt</xslfile>
+	<form name="frmWBSiteMap" action="true" method="POST" enctype="multipart/form-data">
+		<admdbconnmgr defconn="true"/>
+		<input type="FILE" name="template" label="Template (xsl, xslt):" showfile="true" msg="Current template " bydefault="{@webpath}wbadmin/xsl/WBSiteMap/WBSiteMap.xslt" msgbydefault="Template by default " filetype="xsl|xslt" isshowfiletype="true" size="40"/>
+		<input type="FILE" name="img" label="Image for site map (bmp, gif, jpg, jpeg):" showfile="true" filetype="bmp|jpg|jpeg|gif" isshowfiletype="true" isremovefile="true" removemsg="Cut image for site map" moreattr="onclick=&#34;jsClear(this.form);&#34;" size="40"/>
+		<input type="TEXT" name="alt" label="Alternate text for image:" size="50"/>
+		<input type="TEXT" name="btntexto" label="Text of the button in case of not defining an image:" size="50"/>
+		<input type="TEXT" name="lnktexto" label="Text of the link in case of not defining an image or button:" size="50"/>
+		<input type="TEXT" name="blnstyle" label="Style of the button or link:" size="50"/>
+		<input type="TEXT" name="title" label="Title:" size="50"/>
+		<input type="TEXT" name="level" label="Level for display:" size="2" maxlength="1" jsvaltype="js_numbers"/>
+		<input type="TEXT" name="home" label="Identifier of initial home:" size="50" maxlength="50"/>
+		<input type="SUBMIT" name="btnSave"  value="Save" onclick="if(jsValida(this.form)) return true; else return false;"/>
+		<input type="RESET"  name="btnReset" value="Cancel"/>
+	</form>
+	<script language="JavaScript">
+		<![CDATA[
+			function jsClear(frm)
+			{
+				frm.btntexto.value=''; 
+				frm.lnktexto.value='';
+			}
+			function isNumber(pIn)
+			{
+			   pCaracter=pIn.value;
+			   for (var i=0;i<pCaracter.length;i++)
+			   {
+			       var sByte=pCaracter.substring(i,i+1);
+			       if (sByte<"0" || sByte>"9")
+			       {
+			           pIn.focus();
+			           alert('Field must be numeric.');
+			           return false;
+			       }
+			   }
+			   return true;
+			}				
+			function jsValida(frm)
+			{
+				if(!isNumber(frm.level)) return false;
+				return true;
+			}
+		]]>
+	</script>
+</admresource>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+    <resource>
+        <resource-name>SendRedirect</resource-name>
+        <display-name xml:lang="es">Envía-Redirecciona</display-name>
+        <display-name xml:lang="en">Send Redirect</display-name>
+        <description xml:lang="es">Recurso que es utilizado para integrar en una pagina aplicaciones que requieren redireccionar paginas y parametros para su funcionamiento</description>
+        <description xml:lang="en">Resource that is used to integrate in a page applications that they require to redirect pages and parameters for its operation</description>
+        <resource-class>com.infotec.wb.resources.SendRedirect</resource-class>
+        <expiration-cache>0</expiration-cache>
+        <resource-bundle>com.infotec.wb.resources.Sendredirect</resource-bundle>
+        <resource-type>3</resource-type>
+        <extended-attributes>
+        </extended-attributes>
+    </resource>
