@@ -44,7 +44,7 @@ public class GenericFormElement extends FormElementBase implements FormElement
         {
             String value=obj.getProperty(prop);
             if(value==null)value="";
-            ret="<label>"+label+"</label><input type=\"text\" name=\""+name+"\" id=\""+label+"\" value=\""+value+"\"/>";
+            ret="<label for=\""+name+"\">"+label+" <em>*</em></label> <input id=\""+name+"\" name=\""+name+"\" value=\""+value+"\"/>";
         }        
         return ret;
     }    
