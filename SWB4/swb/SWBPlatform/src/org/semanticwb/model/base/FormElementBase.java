@@ -22,10 +22,10 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
         super(obj);
     }
 
-    public String getCode(SemanticObject obj, SemanticProperty prop, String type)
+    public String render(SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
     {
         String name=prop.getName();
-        String label=prop.getDisplayName();
+        String label=prop.getDisplayName(lang);
         String value=obj.getProperty(prop);
         String txt="<label>"+label+"</label><input type=\"text\" name=\""+name+"\" id=\""+label+"\" value=\""+value+"\"/>";
         return txt;
