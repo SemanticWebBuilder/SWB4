@@ -306,6 +306,7 @@ public class SWBASemObjectEditor extends GenericResource {
             SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(sprop);
             SemanticClass ncls = prop.getRangeClass();
             String id_usr_request = request.getParameter("id_usr_request");
+            System.out.println("id_recibido: "+id_usr_request);
             if (ncls.isAutogenId() || (id_usr_request != null && id_usr_request.trim().length() > 0)) {
                 long lid = SWBPlatform.getSemanticMgr().getCounter(obj.getModel().getName() + "/" + ncls.getName());
                 String str_lid = "" + lid;
@@ -313,9 +314,13 @@ public class SWBASemObjectEditor extends GenericResource {
                     str_lid = id_usr_request;
                 }
                 SemanticObject nobj = obj.getModel().createSemanticObject(obj.getModel().getObjectUri(str_lid, ncls), ncls);
-                obj.addObjectProperty(prop, nobj);
-                obj = nobj;
-                cls = ncls;
+                if(prop.getName().startsWith("has"))obj.addObjectProperty(prop, nobj);
+                else obj.setObjectProperty(prop, nobj);
+                response.setMode(response.Mode_EDIT);
+                response.setRenderParameter("suri", nobj.getURI());
+                response.setRenderParameter("rsuri", obj.getURI());
+                response.setRenderParameter("sprop", prop.getURI());
+                response.setRenderParameter("act", "");
             } else {
                 //Llamada para pedir el id del SemanticObject que no cuenta con el AutogenID
                 Enumeration enu_p = request.getParameterNames();
@@ -342,6 +347,9 @@ public class SWBASemObjectEditor extends GenericResource {
                     break;
                 }
             }
+            if (id != null)response.setRenderParameter("suri", id);
+            if (rid != null)response.setRenderParameter("rsuri", rid);
+        
         } else if ("choose".equals(action)) //suri, prop
         {
             //System.out.println("processAction(choose)");
@@ -389,13 +397,11 @@ public class SWBASemObjectEditor extends GenericResource {
             }
             response.setRenderParameter("sprop", sprop);
             response.setRenderParameter("sobj", sobj);
+            if (id != null)response.setRenderParameter("suri", id);
+            if (rid != null)response.setRenderParameter("rsuri", rid);
+        
         }
-        if (id != null) {
-            response.setRenderParameter("suri", id);
-        }
-        if (rid != null) {
-            response.setRenderParameter("rsuri", rid);
-        }
+        
 
     }
 
@@ -441,7 +447,7 @@ public class SWBASemObjectEditor extends GenericResource {
         out.println("<form action=\"" + urla + "\" method=\"post\">");
         out.println("<p>Please complete the form below. Mandatory fields marked <em>*</em></p>");
         out.println("<fieldset>");
-        out.println("	<legend> New - " + getDisplaySemObj(obj) + " </legend>");
+        out.println("	<legend> New - " + obj.getDisplayName(user.getLanguage()) + " </legend>");
         out.println("	<ol>");
         Enumeration enu_p = request.getParameterNames();
         while (enu_p.hasMoreElements()) {

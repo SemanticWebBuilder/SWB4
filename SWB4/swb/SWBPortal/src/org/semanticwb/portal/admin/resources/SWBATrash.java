@@ -12,9 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.*;
 import org.semanticwb.model.*;
 import org.semanticwb.portal.api.*;
-import org.semanticwb.portal.services.TemplateSrv;
-import org.semanticwb.portal.services.WebPageSrv;
-import org.semanticwb.portal.services.WebSiteSrv;
 
 /**
  *

@@ -10,21 +10,9 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.semanticwb.Logger;
-import org.semanticwb.SWBPlatform;
-import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Language;
-import org.semanticwb.model.Portlet;
-import org.semanticwb.model.SWBContext;
-import org.semanticwb.model.User;
-import org.semanticwb.model.WebSite;
-import org.semanticwb.model.WebPage;
-import org.semanticwb.portal.api.GenericResource;
-import org.semanticwb.portal.api.SWBActionResponse;
-import org.semanticwb.portal.api.SWBActionResponseImp;
-import org.semanticwb.portal.api.SWBParamRequest;
-import org.semanticwb.portal.api.SWBResourceException;
-import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.*;
+import org.semanticwb.model.*;
+import org.semanticwb.portal.api.*;
 import org.semanticwb.portal.services.WebPageSrv;
 
 /**
@@ -674,12 +662,12 @@ public class SWBAWebPage extends GenericResource {
                 //tpSrv.setActiveIndexHidden(tp,istatus,iindexable,ihidden,response.getUser().getId());
                 
                 String tpsort=(tp.getSortName()!=null?tpsort=tp.getSortName():"");
-                //TODO: Falta implementar
+                //TODO: Falta implementar getSubjectIdentity()
                 //String tpvirt="";if(tp.getSubjectIdentity()!=null)tpvirt=tp.getSubjectIdentity().toString();
                 String tpvirt="";
                 
                 if(!sortname.equals(tpsort)||!virtpath.equals(tpvirt)) {
-                    //TODO: Falta implementar BaseNames
+                    //TODO: Falta implementar BaseNames tp.getBaseNames()
 //                    Iterator bns = tp.getBaseNames().iterator();
 //                    while (bns.hasNext()) {
 //                        BaseName bn = (BaseName) bns.next();
@@ -705,7 +693,7 @@ public class SWBAWebPage extends GenericResource {
                 response.setRenderParameter("act","edit");
             }else if(request.getParameter("tpname")!=null){
 //                TopicSrv tpsrv=new TopicSrv();
-                Language tplang=tp.getWebSite().getLanguage();
+//                Language tplang=tp.getWebSite().getLanguage();
                 if(tp.getWebSite().getWebPage(request.getParameter("tpc"))!=null){
                     response.setRenderParameter("act","createTp");
                     response.setRenderParameter("tpc",request.getParameter("tpc"));
