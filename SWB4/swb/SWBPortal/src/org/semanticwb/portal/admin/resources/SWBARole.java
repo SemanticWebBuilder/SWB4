@@ -82,9 +82,7 @@ public class SWBARole extends GenericResource {
      * @param user
      */
     public void getPermisosGral(WebSite map,Element res,WebPage root, User user) {
-        //TODO: getSortChild()
-        //Iterator<WebPage> it=root.getSortChild(map.getTopicLang(user.getLanguage()));
-        Iterator<WebPage> it = root.listChilds();
+        Iterator<WebPage> it = root.listVisibleChilds(user.getLanguage());
         while(it.hasNext()) {
             WebPage child=it.next();
             Element etopic=addNode("topic", child.getId(), child.getTitle(user.getLanguage()), res);
@@ -100,9 +98,7 @@ public class SWBARole extends GenericResource {
     public void getPermisosGral(Element res, User user) {
         WebSite map=SWBContext.getAdminWebSite();
         WebPage root=map.getWebPage(WBPERMISS);
-        //TODO: getSortChilds()
-        //Iterator<WebPage> it=root.getSortChild(map.getTopicLang(user.getLanguage()));
-        Iterator<WebPage> it=root.listChilds();
+        Iterator<WebPage> it=root.listVisibleChilds(user.getLanguage());
         while(it.hasNext()) {
             WebPage child=it.next();
             Element etopic=addNode("topic", child.getId(), child.getTitle(user.getLanguage()), res);

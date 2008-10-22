@@ -22,8 +22,8 @@
  */
 package org.semanticwb.portal.admin.admresources.util;
 
-import gnu.regexp.RE;
-import gnu.regexp.REException;
+//import gnu.regexp.RE;
+//import gnu.regexp.REException;
 import java.io.*;
 import java.util.*;
 import org.semanticwb.model.Portlet;
@@ -134,52 +134,52 @@ public class WBAdmResourceUtils {
 
     public boolean xmlVerifierImpl(String sysid, Object objschema, Object objxml) {
         boolean bOk = false;
-        if (objschema == null || objxml == null) {
-            if (objschema == null) {
-                log.error("Error WBAdmResourceUtils.XMLVerifier(): Schema is null.");
-            } else {
-                log.error("Error WBAdmResourceUtils.XMLVerifier(): The input document is null.");
-            }
-            return bOk;
-        }
-
-        org.iso_relax.verifier.VerifierFactory factory = new com.sun.msv.verifier.jarv.TheFactoryImpl();
-        org.iso_relax.verifier.Schema schema = null;
-        try {
-            if (objschema instanceof java.io.File) {
-                schema = factory.compileSchema((java.io.File) objschema);
-            } else if (objschema instanceof org.xml.sax.InputSource) {
-                schema = factory.compileSchema((org.xml.sax.InputSource) objschema);
-            } else if (objschema instanceof java.io.InputStream) {
-                if (sysid != null && !sysid.trim().equals("")) {
-                    schema = factory.compileSchema((java.io.InputStream) objschema, sysid);
-                } else {
-                    schema = factory.compileSchema((java.io.InputStream) objschema);
-                }
-            } else if (objschema instanceof java.lang.String) {
-                schema = factory.compileSchema((java.lang.String) objschema);
-            }
-            try {
-                org.iso_relax.verifier.Verifier verifier = schema.newVerifier();
-                verifier.setErrorHandler(silentErrorHandler);
-
-                if (objxml instanceof java.io.File) {
-                    bOk = verifier.verify((java.io.File) objxml);
-                } else if (objxml instanceof org.xml.sax.InputSource) {
-                    bOk = verifier.verify((org.xml.sax.InputSource) objxml);
-                } else if (objxml instanceof org.w3c.dom.Node) {
-                    bOk = verifier.verify((org.w3c.dom.Node) objxml);
-                } else if (objxml instanceof java.lang.String) {
-                    bOk = verifier.verify((java.lang.String) objxml);
-                }
-            } catch (org.iso_relax.verifier.VerifierConfigurationException e) {
-                log.error("Error WBAdmResourceUtils.XMLVerifier(): Unable to create a new verifier.", e);
-            } catch (org.xml.sax.SAXException e) {
-                log.error("Error WBAdmResourceUtils.XMLVerifier(): The input document is not wellformed.", e);
-            }
-        } catch (Exception e) {
-            log.error("Error WBAdmResourceUtils.XMLVerifier(): Unable to parse the schema file.", e);
-        }
+//        if (objschema == null || objxml == null) {
+//            if (objschema == null) {
+//                log.error("Error WBAdmResourceUtils.XMLVerifier(): Schema is null.");
+//            } else {
+//                log.error("Error WBAdmResourceUtils.XMLVerifier(): The input document is null.");
+//            }
+//            return bOk;
+//        }
+//
+//        org.iso_relax.verifier.VerifierFactory factory = new com.sun.msv.verifier.jarv.TheFactoryImpl();
+//        org.iso_relax.verifier.Schema schema = null;
+//        try {
+//            if (objschema instanceof java.io.File) {
+//                schema = factory.compileSchema((java.io.File) objschema);
+//            } else if (objschema instanceof org.xml.sax.InputSource) {
+//                schema = factory.compileSchema((org.xml.sax.InputSource) objschema);
+//            } else if (objschema instanceof java.io.InputStream) {
+//                if (sysid != null && !sysid.trim().equals("")) {
+//                    schema = factory.compileSchema((java.io.InputStream) objschema, sysid);
+//                } else {
+//                    schema = factory.compileSchema((java.io.InputStream) objschema);
+//                }
+//            } else if (objschema instanceof java.lang.String) {
+//                schema = factory.compileSchema((java.lang.String) objschema);
+//            }
+//            try {
+//                org.iso_relax.verifier.Verifier verifier = schema.newVerifier();
+//                verifier.setErrorHandler(silentErrorHandler);
+//
+//                if (objxml instanceof java.io.File) {
+//                    bOk = verifier.verify((java.io.File) objxml);
+//                } else if (objxml instanceof org.xml.sax.InputSource) {
+//                    bOk = verifier.verify((org.xml.sax.InputSource) objxml);
+//                } else if (objxml instanceof org.w3c.dom.Node) {
+//                    bOk = verifier.verify((org.w3c.dom.Node) objxml);
+//                } else if (objxml instanceof java.lang.String) {
+//                    bOk = verifier.verify((java.lang.String) objxml);
+//                }
+//            } catch (org.iso_relax.verifier.VerifierConfigurationException e) {
+//                log.error("Error WBAdmResourceUtils.XMLVerifier(): Unable to create a new verifier.", e);
+//            } catch (org.xml.sax.SAXException e) {
+//                log.error("Error WBAdmResourceUtils.XMLVerifier(): The input document is not wellformed.", e);
+//            }
+//        } catch (Exception e) {
+//            log.error("Error WBAdmResourceUtils.XMLVerifier(): Unable to parse the schema file.", e);
+//        }
         return bOk;
     }
 
@@ -351,85 +351,85 @@ public class WBAdmResourceUtils {
     }
 
     public boolean isCharacter(String eval) {
-        if (eval != null && !eval.trim().equals("")) {
-            try {
-                RE reg = new RE("(.)");
-                if (reg.isMatch(eval)) {
-                    return true;
-                }
-            } catch (REException e) {
-                log.error("WBAdmResourceUtils.isCharacter()", e);
-            }
-        }
+//        if (eval != null && !eval.trim().equals("")) {
+//            try {
+//                RE reg = new RE("(.)");
+//                if (reg.isMatch(eval)) {
+//                    return true;
+//                }
+//            } catch (REException e) {
+//                log.error("WBAdmResourceUtils.isCharacter()", e);
+//            }
+//        }
         return false;
     }
 
     public boolean isDigit(String eval) {
         if (eval != null && !eval.trim().equals("")) {
-            try {
-                RE reg = new RE("\\d");
-                if (reg.isMatch(eval)) {
-                    return true;
-                }
-            } catch (REException e) {
-                log.error("WBAdmResourceUtils.isDigit()", e);
-            }
+//            try {
+//                RE reg = new RE("\\d");
+//                if (reg.isMatch(eval)) {
+//                    return true;
+//                }
+//            } catch (REException e) {
+//                log.error("WBAdmResourceUtils.isDigit()", e);
+//            }
         }
         return false;
     }
 
     public boolean isNumber(String eval) {
         if (eval != null && !eval.trim().equals("")) {
-            try {
-                RE reg = new RE("([0-9])+");
-                if (reg.isMatch(eval)) {
-                    return true;
-                }
-            } catch (REException e) {
-                log.error("WBAdmResourceUtils.isNumber()", e);
-            }
+//            try {
+//                RE reg = new RE("([0-9])+");
+//                if (reg.isMatch(eval)) {
+//                    return true;
+//                }
+//            } catch (REException e) {
+//                log.error("WBAdmResourceUtils.isNumber()", e);
+//            }
         }
         return false;
     }
 
     public boolean isID(String eval) {
         if (eval != null && !eval.trim().equals("")) {
-            try {
-                RE reg = new RE("^([a-zA-Z])([a-zA-Z0-9_\\.\\-])*");
-                if (reg.isMatch(eval)) {
-                    return true;
-                }
-            } catch (REException e) {
-                log.error("WBAdmResourceUtils.isID()", e);
-            }
+//            try {
+//                RE reg = new RE("^([a-zA-Z])([a-zA-Z0-9_\\.\\-])*");
+//                if (reg.isMatch(eval)) {
+//                    return true;
+//                }
+//            } catch (REException e) {
+//                log.error("WBAdmResourceUtils.isID()", e);
+//            }
         }
         return false;
     }
 
     public boolean isCDATA(String eval) {
         if (eval != null && !eval.trim().equals("")) {
-            try {
-                RE reg = new RE("^([a-zA-Z])([a-zA-Z0-9_\\.\\-\\s])*");
-                if (reg.isMatch(eval)) {
-                    return true;
-                }
-            } catch (REException e) {
-                log.error("WBAdmResourceUtils.isCDATA()", e);
-            }
+//            try {
+//                RE reg = new RE("^([a-zA-Z])([a-zA-Z0-9_\\.\\-\\s])*");
+//                if (reg.isMatch(eval)) {
+//                    return true;
+//                }
+//            } catch (REException e) {
+//                log.error("WBAdmResourceUtils.isCDATA()", e);
+//            }
         }
         return false;
     }
 
     public boolean isEmail(String eval) {
         if (eval != null && !eval.trim().equals("")) {
-            try {
-                RE reg = new RE("^([a-zA-Z0-9_\\.\\-])+\\@(([a-zA-Z0-9\\-])+\\.)+([a-zA-Z0-9]{2,4})+$");
-                if (reg.isMatch(eval)) {
-                    return true;
-                }
-            } catch (REException e) {
-                log.error("WBAdmResourceUtils.isEmail()", e);
-            }
+//            try {
+//                RE reg = new RE("^([a-zA-Z0-9_\\.\\-])+\\@(([a-zA-Z0-9\\-])+\\.)+([a-zA-Z0-9]{2,4})+$");
+//                if (reg.isMatch(eval)) {
+//                    return true;
+//                }
+//            } catch (REException e) {
+//                log.error("WBAdmResourceUtils.isEmail()", e);
+//            }
         }
         return false;
     }
