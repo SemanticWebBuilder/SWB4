@@ -1250,4 +1250,36 @@ public class WBAdmResourceUtils {
         sbfRet.append("\n}");  
         return sbfRet.toString();
     }  
+    
+     /**
+     * Crea una función JavaScript específica.
+     *
+     * @return    Regresa un nuevo String que contiene la función replaceChars() de JavaScript.
+     */
+    public String loadReplaceChars()
+    {
+        StringBuffer sbfRet = new StringBuffer();
+        sbfRet.append("\nfunction replaceChars(pIn)");
+        sbfRet.append("\n{");
+        sbfRet.append("\n   out = \"\\r\"; // replace this");
+        sbfRet.append("\n   add = \"<br>\"; // with this");
+        sbfRet.append("\n   temp = \"\" + pIn.value; // temporary holder");
+        sbfRet.append("\n   while (temp.indexOf(out)>-1)");
+        sbfRet.append("\n   {");
+        sbfRet.append("\n      pos= temp.indexOf(out);");
+        sbfRet.append("\n      temp = \"\" + (temp.substring(0, pos) + add + temp.substring((pos + out.length), temp.length));");
+        sbfRet.append("\n   }");
+        sbfRet.append("\n   out = \"\\n\"; // replace this");
+        sbfRet.append("\n   add = \" \"; // with this");
+        sbfRet.append("\n   temp = \"\" + temp; // temporary holder");
+        sbfRet.append("\n   while (temp.indexOf(out)>-1)");
+        sbfRet.append("\n   {");
+        sbfRet.append("\n      pos= temp.indexOf(out);");
+        sbfRet.append("\n      temp = \"\" + (temp.substring(0, pos) + add + temp.substring((pos + out.length), temp.length));");
+        sbfRet.append("\n   }");
+        sbfRet.append("\n   pIn.value = temp;");
+        sbfRet.append("\n}");
+        return sbfRet.toString();
+    }
+   
 }
