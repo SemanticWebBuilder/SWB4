@@ -26,12 +26,13 @@ public class SWBASemObjectEditor extends GenericResource {
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        //System.out.println("doView(SWBASemObjectEditor...)");
+        log.debug("doView(SWBASemObjectEditor...)");
         doEdit(request, response, paramRequest);
     }
 
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        log.debug("doEdit(SWBASemObjectEditor...)");
         PrintWriter out = response.getWriter();
         User user = paramRequest.getUser();
         String id = request.getParameter("suri");
@@ -55,9 +56,9 @@ public class SWBASemObjectEditor extends GenericResource {
 
         // elementos de dojo requeridos
 
-        String path = "http://" + request.getServerName() + ":" + request.getServerPort() + SWBPlatform.getContextPath();
+//        String path = "http://" + request.getServerName() + ":" + request.getServerPort() + SWBPlatform.getContextPath();
 
-        //System.out.println(path);
+//        log.debug("Ruta para importar dojo: "+path);
 //        out.println("<style type=\"text/css\">");
 //        out.println("    @import \""+path+"/swbadmin/js/dojo/dojo/resources/dojo.css\";");
 //        out.println("    @import \""+path+"/swbadmin/js/dojo/dijit/themes/soria/soria.css\";");
@@ -73,7 +74,7 @@ public class SWBASemObjectEditor extends GenericResource {
 
         if (action.equals("")) {
             String tmpName = getDisplaySemObj(obj);
-            //System.out.println("label: " + title + ", name: " + tmpName);
+            log.debug("label: " + title + ", name: " + tmpName);
             out.println("<form action=\"" + url + "\" method=\"get\">");
             out.println("<input type=\"hidden\" name=\"suri\" value=\"" + obj.getURI() + "\">");
             out.println("<p>Please complete the form below. Mandatory fields marked <em>*</em></p>");
@@ -115,7 +116,6 @@ public class SWBASemObjectEditor extends GenericResource {
                     }
                 }
             }
-
             out.println("	<hr>");
             it = cls.listProperties();
             // lista de propiedades de tipo ObjectProperty
@@ -126,7 +126,7 @@ public class SWBASemObjectEditor extends GenericResource {
                 if (prop.isObjectProperty()) {
                     String name = prop.getName();
                     String label = prop.getDisplayName();
-                    //System.out.println("label: " + label + ", name: " + name);
+                    log.debug("label: " + label + ", name: " + name);
                     modificable = true;
 
                     if (name.equalsIgnoreCase("modifiedBy") || name.equalsIgnoreCase("creator")) {
@@ -187,7 +187,6 @@ public class SWBASemObjectEditor extends GenericResource {
                     }
                 }
             }
-
             out.println("	</ol>");
             out.println("</fieldset>");
             SWBResourceURL urlBack = paramRequest.getRenderUrl();
@@ -199,19 +198,10 @@ public class SWBASemObjectEditor extends GenericResource {
             }
             out.println("</p>");
             out.println("</form>");
-        } else if (action.equals("choose")) {
-
-//            SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
-//            SemanticObject obj = ont.getSemanticObject(id);
-//            SemanticClass cls = obj.getSemanticClass();
-//            String id = request.getParameter("suri");
-//            String idp = request.getParameter("sprop");
-//            String rid = request.getParameter("rsuri");
-
+        } else if (action.equals("choose")) { //lista de instancias de tipo propiedad existentes para selecionar
             SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(idp);
             SemanticClass clsprop = prop.getRangeClass();
             title = clsprop.getName();
-
             HashMap hmSO = new HashMap();
             Iterator<SemanticObject> ite_so = obj.listObjectProperties(prop);
             while (ite_so.hasNext()) {
@@ -220,10 +210,6 @@ public class SWBASemObjectEditor extends GenericResource {
                     hmSO.put(so.getURI(), so);
                 }
             }
-
-
-            //String wid=obj.getModel().getName()+"/"+obj.getId()+"/"+prop.getRDFProperty().getLocalName();
-
             out.println("<form action=\"" + url + "\" method=\"get\">");
             out.println("<input type=\"hidden\" name=\"suri\" value=\"" + obj.getURI() + "\">");
             out.println("<fieldset>");
@@ -238,7 +224,6 @@ public class SWBASemObjectEditor extends GenericResource {
                     SWBResourceURL urlchoose = paramRequest.getActionUrl();
                     urlchoose.setAction("choose");
                     urlchoose.setParameter("suri", obj.getURI());
-                    //if(rid!=null)urlchoose.setParameter("rsuri",rid);
                     urlchoose.setParameter("sprop", prop.getURI());
                     urlchoose.setParameter("sobj", sobj.getURI());
                     out.println("<a href=\"" + urlchoose + "\">" + stitle + "</a>");
@@ -275,7 +260,7 @@ public class SWBASemObjectEditor extends GenericResource {
                 SemanticProperty prop = it.next();
                 if (prop.isDataTypeProperty()) {
                     String value = request.getParameter(prop.getName());
-                    //System.out.println(prop.getName()+" -- >"+value);
+                    log.debug("SWBASemObjectEditor: ProcessAction(update): "+prop.getName()+" -- >"+value);
                     if (value != null) {
                         if (value.length() > 0) {
                             if (prop.isBoolean()) {
@@ -306,7 +291,7 @@ public class SWBASemObjectEditor extends GenericResource {
             SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(sprop);
             SemanticClass ncls = prop.getRangeClass();
             String id_usr_request = request.getParameter("id_usr_request");
-            System.out.println("id_recibido: "+id_usr_request);
+            log.debug("id_recibido: "+id_usr_request);
             if (ncls.isAutogenId() || (id_usr_request != null && id_usr_request.trim().length() > 0)) {
                 long lid = SWBPlatform.getSemanticMgr().getCounter(obj.getModel().getName() + "/" + ncls.getName());
                 String str_lid = "" + lid;
@@ -332,17 +317,20 @@ public class SWBASemObjectEditor extends GenericResource {
             }
         } else if ("remove".equals(action)) //suri, prop
         {
-            //System.out.println("SWASemObjectEditor.processAction(remove)");
+            log.debug("SWASemObjectEditor.processAction(remove)");
             String prop_param = request.getParameter("sprop");
             Iterator<SemanticProperty> it = cls.listProperties();
             while (it.hasNext()) {
                 SemanticProperty prop = it.next();
                 String value = request.getParameter(prop.getName());
                 String sval = request.getParameter("sval");
-                //System.out.println(prop.getURI() + ":" + prop_param + "----" + (prop.getURI().equals(prop_param) ? "true" : "false"));
-                if (value != null && value.equals(prop_param)) { //se tiene que validar el valor por si es más de una
+                log.debug(prop.getURI() + ":" + prop_param + "----" + (prop.getURI().equals(prop_param) ? "true" : "false"));
+                if (value != null && value.equals(prop_param)) { //se tiene que validar el valor por si es mÃ¡s de una
                     if (sval != null) {
                         obj.removeObjectProperty(prop, ont.getSemanticObject(sval));
+                        if(prop.getName().equalsIgnoreCase("userrepository")){
+                            obj.setObjectProperty(prop, ont.getSemanticObject("urswb"));
+                        }
                     }
                     break;
                 }
@@ -352,7 +340,7 @@ public class SWBASemObjectEditor extends GenericResource {
         
         } else if ("choose".equals(action)) //suri, prop
         {
-            //System.out.println("processAction(choose)");
+            log.debug("processAction(choose)");
             String suri = request.getParameter("suri");
             String sprop = request.getParameter("sprop");
             String sobj = request.getParameter("sobj");
@@ -360,11 +348,9 @@ public class SWBASemObjectEditor extends GenericResource {
             if (sobj == null) {
                 sval = SWBUtils.TEXT.decode(request.getParameter("sval"), "UTF-8");
             }
-
             SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(sprop);
-
             String pname = prop.getName();
-            //System.out.println("Property Name:" + pname);
+            log.debug("Property Name:" + pname);
             if (!pname.startsWith("has")) {
                 if (sval != null) {
                     if (sval.length() > 0) {
@@ -383,15 +369,14 @@ public class SWBASemObjectEditor extends GenericResource {
                 } else if (sobj != null) {
                     SemanticObject aux = ont.getSemanticObject(sobj);
                     if (sobj != null) {
-                        obj.setObjectProperty(prop, aux);
+                        obj.setObjectProperty(prop, aux); //actualizando el objectProperty a una instancia existente 
                     } else {
                         obj.removeProperty(prop);
                     }
-
                 }
             } else {
                 if (sobj != null) {
-                    SemanticObject aux = ont.getSemanticObject(sobj);
+                    SemanticObject aux = ont.getSemanticObject(sobj); //agregando al objectProperty nueva instancia
                     obj.addObjectProperty(prop, aux);
                 }
             }
@@ -399,10 +384,7 @@ public class SWBASemObjectEditor extends GenericResource {
             response.setRenderParameter("sobj", sobj);
             if (id != null)response.setRenderParameter("suri", id);
             if (rid != null)response.setRenderParameter("rsuri", rid);
-        
         }
-        
-
     }
 
     public String getDateFormat(long dateTime, String lang) {
@@ -430,24 +412,17 @@ public class SWBASemObjectEditor extends GenericResource {
     }
 
     public void doFormID(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-
         PrintWriter out = response.getWriter();
         User user = paramRequest.getUser();
-
         String id = request.getParameter("suri");
-        //String idp= request.getParameter("sprop");
-        //String rid = request.getParameter("rsuri");
-
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         SemanticObject obj = ont.getSemanticObject(id);
-        //SemanticClass cls = obj.getSemanticClass();
-
         SWBResourceURL urla = paramRequest.getActionUrl();
         urla.setAction("new");
         out.println("<form action=\"" + urla + "\" method=\"post\">");
         out.println("<p>Please complete the form below. Mandatory fields marked <em>*</em></p>");
         out.println("<fieldset>");
-        out.println("	<legend> New - " + obj.getDisplayName(user.getLanguage()) + " </legend>");
+        out.println("	<legend> "+obj.getRDFName()+" - " + obj.getDisplayName(user.getLanguage()) + " </legend>");
         out.println("	<ol>");
         Enumeration enu_p = request.getParameterNames();
         while (enu_p.hasMoreElements()) {
@@ -459,8 +434,6 @@ public class SWBASemObjectEditor extends GenericResource {
         out.println("</fieldset>");
         out.println("<input type=\"submit\" value=\"enviar\">");
         out.println("</form>");
-
-
     }
 
     @Override
