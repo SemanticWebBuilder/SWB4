@@ -49,6 +49,7 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.semanticwb.portal.util.SWBCookieMgr;
 import org.semanticwb.portal.api.*;
+import org.semanticwb.portal.util.FileUpload;
 import org.semanticwb.portal.util.WBFileUpload;
 
 /**
@@ -104,19 +105,16 @@ public class Poll extends GenericResource
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
     {
-        System.out.println("Entra a Poll-Jor2");
         StringBuffer ret = new StringBuffer("");
         String action = null != request.getParameter("enc_act") && !"".equals(request.getParameter("enc_act").trim()) ? request.getParameter("enc_act").trim() : "enc_step1";
         if("enc_step2".equals(action))  showPollResults(request, response, paramRequest); // Resultados de la encuesta
         else 
         { // Encuesta
-            System.out.println("Entra a Poll-J4");
             Portlet base=getResourceBase();
             try 
             {
                 Document dom=SWBUtils.XML.xmlToDom(base.getXml());
                 if(dom==null) {
-                    System.out.println("Entra a Poll-J6.1");
                     ret.append("<br><a href=\"" + paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN) + "\">admin</a>");
                     response.getWriter().print(ret.toString());
                     return;
@@ -124,7 +122,6 @@ public class Poll extends GenericResource
                 NodeList node = dom.getElementsByTagName("option");            
                 if (!"".equals(base.getAttribute("question", "").trim()) && node.getLength() > 1)            
                 {
-                    System.out.println("Entra a Poll-J5");
                     ret.append("<form action=\""+paramRequest.getRenderUrl()+"\" method=\"POST\" name=\"frmEncuesta\" id=\"frmEncuesta\"> \n");
                     ret.append("<table width=\"100%\" border=\"0\" cellpadding=\"0\" style=\"font-family: Verdana; font-size: 12px; text-decoration: none; color: ");
                     ret.append(base.getAttribute("textcolor", "#000000").trim()+"\"> \n");
@@ -251,9 +248,7 @@ public class Poll extends GenericResource
                     ret.append("    window.open(ruta,\'_newenc\',\'"+ win +"\'); \n");
                     ret.append("} \n");
                     ret.append("</script> \n");
-                    System.out.println("Entra a Poll-J6");
                 }
-                System.out.println("Entra a Poll-J6.1");
                 ret.append("<br><a href=\"" + paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN) + "\">admin</a>");
             } 
             catch (Exception e) { log.error(paramRequest.getLocaleString("error_Encuesta_doView_resource") +" "+ restype +" "+ paramRequest.getLocaleString("error_Encuesta_doView_method"), e); }
@@ -271,7 +266,6 @@ public class Poll extends GenericResource
      */    
     public void showPollResults(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        System.out.println("Entra a Poll-J3");
         StringBuffer ret = new StringBuffer("");
         Portlet base=getResourceBase();
         try
@@ -410,11 +404,7 @@ public class Poll extends GenericResource
                         hashSec.put(request.getRemoteAddr(), fctual);
                         hashPrim = new HashMap();
                         hashPrim.put(hashSec, Tfctualmoretime);
-                    } 
-                    else if (f1 == null)
-                    {
-                        //System.out.println("...Atencion f1:::::"+f1);
-                    }
+                    }                     
                 } 
                 else if (Hm == null || Hm != hashSec)
                 {
@@ -615,7 +605,6 @@ public class Poll extends GenericResource
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
     {
-        System.out.println("Entra a Poll-3");
         StringBuffer ret = new StringBuffer("");
         Portlet base=getResourceBase();
         String msg=paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_undefinedOperation");
@@ -624,10 +613,10 @@ public class Poll extends GenericResource
         if(action.equals("add") || action.equals("edit"))  ret.append(getForm(request, paramRequest));
         else if(action.equals("update"))
         {            
-            WBFileUpload fup = new WBFileUpload();
+            FileUpload fup = new FileUpload();
             try
             {
-                fup.getFiles(request);                      
+                fup.getFiles(request, response);                    
                 String value = null != fup.getValue("question") && !"".equals(fup.getValue("question").trim()) ? fup.getValue("question").trim() : null;
                 String option = null != fup.getValue("option") && !"".equals(fup.getValue("option").trim()) ? fup.getValue("option").trim() : null;
                 if (value!=null && option!=null)
@@ -825,7 +814,7 @@ public class Poll extends GenericResource
      * @param fup
      * @param att
      */  
-    protected void setAttribute(Portlet base, WBFileUpload fup, String att)
+    protected void setAttribute(Portlet base, FileUpload fup, String att)
     {
         try
         {
@@ -845,11 +834,11 @@ public class Poll extends GenericResource
      * @param att
      * @param value
      */  
-    protected void setAttribute(Portlet base, WBFileUpload fup, String att, String value)
+    protected void setAttribute(Portlet base, FileUpload fup, String att, String value)
     {
         try
         {
-            if(null != fup.getValue(att) && value.equals(fup.getValue(att).trim())) {
+            if(null != fup.getValue(att) && !"".equals(fup.getValue(att).trim())) {
                 base.setAttribute(att, fup.getValue(att).trim());
             }
             else {
