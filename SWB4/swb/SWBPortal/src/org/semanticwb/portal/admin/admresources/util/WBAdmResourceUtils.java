@@ -690,6 +690,84 @@ public class WBAdmResourceUtils {
             return null;
         }
     }
+    
+    /**
+     * Sube un archivo parseado al filesystem.
+     *
+     * @param     base      La información del recurso en memoria.
+     * @param     pfUpload  Objeto que permite obtener la información del formulario con tipo de codificación multipart/form-data.
+     * @param     pInForm   El nombre del campo del formulario donde se definió el archivo.
+     * @return    Regresa un nuevo String que contiene el applet para subir las imágenes relativas al archivo parseado.
+     */
+    public String uploadFileParsed(Portlet base, FileUpload fUp, String pInForm, String idsession,String path2save)
+    {
+        StringBuffer sbfRet = new StringBuffer();
+        String strWorkPath = workPath;
+        String strFile = null, strClientPath = "";
+        int intPos;
+        try
+        {
+            strFile = fUp.getFileName(pInForm);
+            if (strFile != null && !strFile.trim().equals(""))
+            {
+                strFile=strFile.replace('\\','/');
+                intPos=strFile.lastIndexOf("/");
+                if(intPos != -1) 
+                {
+                    strClientPath=strFile.substring(0, intPos);
+                    strFile=strFile.substring(intPos+1).trim();
+                }
+                if(!strClientPath.endsWith("/")) strClientPath=strClientPath+"/";
+                strWorkPath+=base.getWorkPath()+"/";
+                File file=new File(strWorkPath);
+                if(file!=null)
+                {
+                    if(!file.exists()) file.mkdirs();
+                    if (file.exists() && file.isDirectory() && (strFile.endsWith(".html") || strFile.endsWith(".htm") || strFile.endsWith(".xsl") || strFile.endsWith(".xslt") ))
+                    {
+                        fUp.saveFileParsed(pInForm, strWorkPath, webWorkPath + base.getWorkPath() +"/images/");
+                        String strAttaches = fUp.FindAttaches(pInForm);
+
+                        file = new File(strWorkPath + "images/");
+                        if (!file.exists()) file.mkdir();
+                        if (file.exists() && file.isDirectory())
+                        {
+                            sbfRet.append("\n");
+                            //sbfRet.append("<OBJECT WIDTH=100% HEIGHT=100% classid=\"clsid:8AD9C840-044E-11D1-B3E9-00805F499D93\" codebase=\"http://java.sun.com/products/plugin/autodl/jinstall-1_4_0-win.cab#Version=1,4,0,0\" border=0><NOEMBED><XMP>\n");
+                            sbfRet.append("<APPLET  WIDTH=100% HEIGHT=100% CODE=\"applets.dragdrop.DragDrop.class\" codebase=\""+SWBPlatform.getContextPath()+"\" archive=\"wbadmin/lib/DragDrop.jar, wbadmin/lib/WBCommons.jar\" border=0>");
+                            //sbfRet.append("<PARAM NAME =\"JSESS\" VALUE=\"" + idsession + "\">\n");
+                            sbfRet.append("<PARAM NAME=\"webpath\" VALUE=\""+SWBPlatform.getContextPath()+"\">\n");
+                            sbfRet.append("<PARAM NAME=\"foreground\" VALUE=\"000000\">\n");
+                            sbfRet.append("<PARAM NAME=\"background\" VALUE=\"979FC3\">\n");
+                            sbfRet.append("<PARAM NAME=\"foregroundSelection\" VALUE=\"ffffff\">\n");
+                            sbfRet.append("<PARAM NAME=\"backgroundSelection\" VALUE=\"666699\">\n");
+                            sbfRet.append("<PARAM NAME=\"path\" value=\"" + strWorkPath + "images/" + "\">\n");
+                            sbfRet.append("<PARAM NAME=\"clientpath\" value=\"" + strClientPath + "\">\n");
+                            sbfRet.append("<PARAM NAME=\"files\" value=\"" + strAttaches + "\">\n");
+                            //sbfRet.append("<COMMENT>\n");
+                            //sbfRet.append("<EMBED\n");
+                            //sbfRet.append("     type=\"application/x-java-applet;version=1.4\"\n");
+                            //sbfRet.append("     CODE = \"DragDrop.class\"\n");
+                            //sbfRet.append("     ARCHIVE = \"DragDrop.jar\"\n");
+                            //sbfRet.append("     WIDTH = 100%\n");
+                            //sbfRet.append("     HEIGHT = 100%\n");
+                            //sbfRet.append("     foreground=\"979FC3\"\n");
+                            //sbfRet.append("     background=\"979FC3\"\n");
+                            //sbfRet.append("     scriptable=false\n");
+                            //sbfRet.append("     pluginspage=\"http://java.sun.com/products/plugin/index.html#download\">\n");
+                            //sbfRet.append("<NOEMBED></NOEMBED>\n");
+                            //sbfRet.append("</EMBED>\n");
+                            //sbfRet.append("</COMMENT>\n");
+                            sbfRet.append("</APPLET>\n");
+                        }
+                    }
+                    else uploadFile(base, fUp, pInForm);
+                }
+            }
+        } 
+        catch (Exception e) { log.error(SWBUtils.TEXT.getLocaleString("locale_wb2_util", "error_WBResource_uploadFileParsed_exc01") + " " + base.getId() + SWBUtils.TEXT.getLocaleString("locale_wb2_util", "error_WBResource_uploadFileParsed_exc02") + " " + base.getPortletType() + SWBUtils.TEXT.getLocaleString("locale_wb2_util", "error_WBResource_uploadFileParsed_exc03") + " " + strFile + ".",  e); }
+        return sbfRet.toString();
+    }
 
     /**
      * Sube un archivo al filesystem. 
@@ -699,7 +777,7 @@ public class WBAdmResourceUtils {
      * @param     pInForm   El nombre del campo del formulario donde se definió el archivo.
      * @return    Regresa un nuevo String que contiene el nombre del archivo que se guardó.
      */
-    public boolean uploadFile(Portlet base, FileUpload fUp, String pInForm) {
+    public boolean uploadFile(Portlet base, WBFileUpload fUp, String pInForm) {
 
         String strWorkPath = workPath;
         String strFile = null;
@@ -723,6 +801,38 @@ public class WBAdmResourceUtils {
         }
         return bOk;
     }
+    
+    /**
+     * Sube un archivo al filesystem.
+     *
+     * @param     base      La información del recurso en memoria.
+     * @param     pfUpload  Objeto que permite obtener la información del formulario con tipo de codificación multipart/form-data.
+     * @param     pInForm   El nombre del campo del formulario donde se definió el archivo.
+     * @return    Regresa un nuevo String que contiene el nombre del archivo que se guardó.
+     */
+    public boolean uploadFile(Portlet base, FileUpload fUp, String pInForm)
+    {
+        String strWorkPath = workPath;
+        String strFile = null;
+        boolean bOk = false;
+        try
+        {
+            strFile = fUp.getFileName(pInForm);
+            if (strFile != null && !strFile.trim().equals(""))
+            {
+                strWorkPath+=base.getWorkPath()+"/";
+                File file=new File(strWorkPath);
+                if(file!=null) 
+                {
+                    if(!file.exists())file.mkdirs();
+                    if (file.exists() && file.isDirectory()) bOk = fUp.saveFile(pInForm, strWorkPath, new String(), new String());
+                }
+            }
+        } 
+        catch (Exception e) { log.error(SWBUtils.TEXT.getLocaleString("locale_wb2_util", "error_WBResource_uploadFile_exc01") + " " + base.getId() + SWBUtils.TEXT.getLocaleString("locale_wb2_util", "error_WBResource_uploadFile_exc02") + " " + base.getPortletType() + SWBUtils.TEXT.getLocaleString("locale_wb2_util", "error_WBResource_uploadFile_exc03") + " " + strFile + ".", e); }
+        return bOk;
+    }
+
 
     /**
      * Elimina archivos del filesystem relacionados al recurso.
