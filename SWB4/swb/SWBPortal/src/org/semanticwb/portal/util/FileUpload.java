@@ -274,42 +274,38 @@ public class FileUpload
         return flag;
     }
 
-     public boolean saveFileParsed(String s, String s1, String s0)
-        throws IOException
+    public boolean saveFileParsed(String s, String s1, String s0)
+            throws IOException
     {
         boolean flag = false;
-        if(table == null)
+        if (table == null)
             return false;
         Enumeration enumeration = table.keys();
         do
         {
-            if(!enumeration.hasMoreElements())
+            if (!enumeration.hasMoreElements())
                 break;
-            String s2 = (String)enumeration.nextElement();
-            if(s2.equals(s))
+            String s2 = (String) enumeration.nextElement();
+            if (s2.equals(s))
             {
                 flag = true;
                 Object obj = table.get(s2);
-                if(obj instanceof Hashtable)
+                if (obj instanceof Hashtable)
                 {
-                    Hashtable hashtable = (Hashtable)obj;
+                    Hashtable hashtable = (Hashtable) obj;
                     obj = hashtable.get("content");
-                    byte abyte0[] = (byte[])obj;
-                    String s3 = (String)hashtable.get("filename");
-                    if(s3 != null)
+                    byte abyte0[] = (byte[]) obj;
+                    String s3 = (String) hashtable.get("filename");
+                    if (s3 != null)
                     {
                         int i = s3.lastIndexOf("\\");
-                        if(i != -1)
+                        if (i != -1)
                             s3 = s3.substring(i + 1);
                         i = s3.lastIndexOf("/");
-                        if(i != -1)
+                        if (i != -1)
                             s3 = s3.substring(i + 1);
                         String strNoparsed = new String(abyte0);
-                        
-                        String dataarc = "";
-                        if(s3.endsWith(".xsl") || s3.endsWith(".xslt")) dataarc=SWBPortal.parseXsl(strNoparsed, s0);
-                        else dataarc = SWBPortal.parseHTML(strNoparsed, s0);
-                        
+                        String dataarc = SWBPortal.parseHTML(strNoparsed, s0);
                         byte abyte1[] = dataarc.getBytes();
                         FileOutputStream fileoutputstream = new FileOutputStream(String.valueOf(s1) + String.valueOf(s3));
                         fileoutputstream.write(abyte1, 0, abyte1.length);
@@ -317,7 +313,7 @@ public class FileUpload
                     }
                 }
             }
-        } while(true);
+        } while (true);
         return flag;
     }
 
