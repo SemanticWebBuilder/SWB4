@@ -62,6 +62,7 @@ public class Banner extends GenericAdmResource
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         StringBuffer ret = new StringBuffer("");
         Portlet base = getResourceBase();
+        System.out.println("Banner/doView:"+base.getId());
         try {
             String local = base.getAttribute("txtLocal", "0").trim();
             if (local.equals("0")) {

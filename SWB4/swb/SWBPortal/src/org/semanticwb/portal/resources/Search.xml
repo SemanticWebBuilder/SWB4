@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<xslfile>admresource.xslt</xslfile>
+	<form name="frmSearch" action="true" method="POST" enctype="multipart/form-data">
+		<admdbconnmgr defconn="true"/>
+		<input type="FILE" name="template" label="Plantilla (xsl, xslt):" showfile="true" msg="Plantilla actual " bydefault="{@webpath}wbadmin/xsl/Search/Search.xslt" msgbydefault="Plantilla por defecto " filetype="xsl|xslt" isshowfiletype="true" jsrequired="true" size="40"/>
+		<input type="SUBMIT" name="btnSave"  value="Guardar" />
+		<input type="RESET"  name="btnReset" value="Cancelar" />
+	</form>
+</admresource>
