@@ -56,7 +56,7 @@ public class QueryResource extends GenericAdmResource {
      * XML form definition data.
      */
     private String xml;
-    String path = SWBPlatform.getContextPath() +"wbadmin/xsl/QueryResource/";
+    String path = SWBPlatform.getContextPath() +"swbadmin/xsl/QueryResource/";
     private static Logger log = SWBUtils.getLogger(QueryResource.class);
     
     /** 
