@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<xslfile>admresource.xslt</xslfile>
+	<form name="frmPromo" action="true" method="POST" enctype="multipart/form-data">
+		<admdbconnmgr defconn="true"/>
+		<input type="TEXT" name="title" label="Título del promocional:" size="50"/>
+		<textarea name="text" label="* Texto:" rows="5" cols="50" wrap="virtual" jsrequired="true"/>
+		<input type="FILE" name="img" label="Imagen (bmp, gif, jpg, jpeg):" showfile="true" filetype="bmp|jpg|jpeg|gif" isshowfiletype="true" isremovefile="true" removemsg="Quitar imagen" size="40"/>
+		<img label="Posición de la imagen con respecto al texto:" src="{@webpath}/swbadmin/images/posicion.gif" usemap="#positionmap" border="0"/>
+		<map name="positionmap">
+			<area shape="rect" coords="1,1,20,17"   onclick="javascript:document.frmPromo.pos.value=1;" title="1" alt="1.- Superior izquierda" />
+			<area shape="rect" coords="24,3,44,18"  onclick="javascript:document.frmPromo.pos.value=2;" title="2" alt="2.- Derecha" />
+			<area shape="rect" coords="48,1,68,18"  onclick="javascript:document.frmPromo.pos.value=3;" title="3" alt="3.- Arriba" />
+			<area shape="rect" coords="0,22,20,40"  onclick="javascript:document.frmPromo.pos.value=4;" title="4" alt="4.- Superior derecha" />
+			<area shape="rect" coords="24,22,44,40" onclick="javascript:document.frmPromo.pos.value=5;" title="5" alt="5.- Izquierda" />
+			<area shape="rect" coords="48,21,68,40" onclick="javascript:document.frmPromo.pos.value=6;" title="6" alt="6.- Abajo" />
+			<area shape="rect" coords="71,1,92,19"  onclick="javascript:document.frmPromo.pos.value=7;" title="7" alt="7.- Inferior izquierda" />
+			<area shape="rect" coords="71,21,92,41" onclick="javascript:document.frmPromo.pos.value=8;" title="8" alt="8.- Inferior derecha" />
+		</map>		
+		<input type="TEXT" name="pos" size="2" maxlength="1" jsvaltype="js_numbers" value="3"/>
+		<input type="TEXT" name="width" label="Ancho (pixeles):" size="4" maxlength="4" jsvaltype="js_numbers"/>
+		<input type="TEXT" name="height" label="Alto (pixeles):" size="4" maxlength="4" jsvaltype="js_numbers"/>
+		<statictext name="txtUline">Texto subrayado:</statictext>
+		<input type="RADIO" name="uline" label="Sí" value="1"/>
+		<input type="RADIO" name="uline" label="No" value="0"/>
+		<applet label="Color del texto:" name="wbcolor" code="applets.selcolor.SelColor.class" codebase="{@webpath}" archive="wbadmin/lib/SelColor.jar" width="293" height="240">
+			<param name="name" value="wbcolor"/>
+			<param name="cache_archive" value="wbadmin/lib/SelColor.jar"/>
+			<param name="_cache_version" value="1.0.0.1"/>
+			<param name="_cache_archive_ex" value="applet.jar;preload, util.jar;preload,tools.jar;preload"/>
+			<param name="type" value="application/x-java-applet;version=1.4"/>
+			<param name="scriptable" value="true"/>
+			<param name="webpath" value="/"/>
+			<param name="foreground" value="99cccc"/>
+			<param name="background" value="99cccc"/>
+			<param name="linkcolor" value="000000" input="textcolor" moreattr="replace('#','')"/>
+			<param name="linkactual" value="000000" input="textcolor"/>
+		</applet>
+		<input type="HIDDEN" name="textcolor"/>
+		<input type="TEXT" size="7" maxlength="7" name="hdntextcolor" label="Otro color del texto (hexadecimal):"/>
+		<input type="TEXT" name="url" label="Dirección web" size="50"/>
+		<statictext name="txtTarget">En una nueva ventana:</statictext>
+		<input type="RADIO" name="target" label="Sí" value="1"/>
+		<input type="RADIO" name="target" label="No" value="0"/>
+		<input type="SUBMIT" name="btnSave"  value="Guardar" onclick="if(jsValida(this.form)) return true; else return false;"/>
+		<input type="RESET"  name="btnReset" value="Cancelar"/>
+	</form>
+	<statictext name="txtNote">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				* Datos requeridos.
+			</font>
+		]]>
+	</statictext>
+	<script language="JavaScript">
+		<![CDATA[
+			if(!document.frmPromo.uline[0].checked && !document.frmPromo.uline[1].checked)
+				document.frmPromo.uline[1].checked=true;
+			if(!document.frmPromo.target[0].checked && !document.frmPromo.target[1].checked)
+				document.frmPromo.target[1].checked=true;		
+			function jsValida(frm)
+			{
+				if(frm.hdntextcolor.value==null || frm.hdntextcolor.value=='' || frm.hdntextcolor.value==' ')
+					frm.textcolor.value='#'+ document.wbcolor.getColor();
+				else frm.textcolor.value=frm.hdntextcolor.value;
+		            
+				if(frm.pos.value==null || frm.pos.value=='' || frm.pos.value==' ')
+				{
+					if(frm.img.value!=null && frm.img.value!='' && frm.img.value!=' ')
+					{
+						alert('Indique la posición de la imagen.');
+						frm.pos.focus();
+						return false;
+					}
+				}
+				if(!isFormat(frm.textcolor)) return false;
+				replaceChars(frm.text);	
+				return true;
+			}
+			function isFormat(pIn)
+			{
+				var swFormat="0123456789ABCDEF";
+				pIn.value=pIn.value.toUpperCase();
+				if(pIn.value.length<7)
+				{
+					alert('La longitud del campo no corresponde al formato.');
+					if(pIn.type=="text") pIn.focus();
+					return false;
+				}
+				if (!setPrefix(pIn, '#')) return false;
+				for(var i=1; i < pIn.value.length; i++)
+				{
+					swOk= pIn.value.substring(i, i+1);
+					if (swFormat.indexOf(swOk, 0)==-1)
+					{
+						alert('El valor definido no corresponde al formato hexadecimal.');
+						if(pIn.type=="text") pIn.focus();
+						return false;
+					}
+				}
+				return true;
+			}
+			function setPrefix(pIn, pPx)
+			{
+				if(pIn.type=="text" || pIn.type=="hidden")
+				{
+					if (pIn.value.substring(0, pPx.length).indexOf(pPx)==-1)
+					{
+						alert('El valor definido no corresponde al formato: ' + pPx);
+						pIn.value=pPx+pIn.value;
+						if(pIn.type=="text") pIn.focus();
+						return false;
+					}
+				}
+				if(pIn.type=="select-one" || pIn.type=="select-multiple")
+				{
+					for(var i=0; i<pIn.length; i++)
+					{
+						if (pIn.options[i].value.substring(0, pPx.length).indexOf(pPx)==-1)
+						{
+							alert('El valor definido no corresponde al formato: ' + pPx);
+							pIn.focus();
+							return false;
+						}
+					}
+				}
+				return true;
+			}
+			function replaceChars(pIn)
+			{
+				out = "\r"; // replace this
+				add = "<br/>"; // with this
+				temp = "" + pIn.value; // temporary holder
+				while (temp.indexOf(out)>-1)
+				{
+					pos= temp.indexOf(out);
+					temp = "" + (temp.substring(0, pos) + add + temp.substring((pos + out.length), temp.length));
+				}
+				out = "\n"; // replace this
+				add = " "; // with this
+				temp = "" + temp; // temporary holder
+				while (temp.indexOf(out)>-1)
+				{
+					pos= temp.indexOf(out);
+					temp = "" + (temp.substring(0, pos) + add + temp.substring((pos + out.length), temp.length));
+				}
+				pIn.value = temp;
+			}			
+		]]>
+	</script>
+</admresource>
