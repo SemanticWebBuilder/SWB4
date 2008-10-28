@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+    <resource>
+        <resource-name>RSSResource</resource-name>
+        <display-name xml:lang="es">Recurso RSS</display-name>
+        <display-name xml:lang="en">RSS Resource</display-name>
+        <description xml:lang="es">Recurso que permite la integración de servicios RSS dentro de la pagina como contenido de la sección</description>
+        <description xml:lang="en">Resource that allows the integration of services RSS within the page like content of the section </description>
+        <resource-class>com.infotec.wb.resources.RSSResource</resource-class>
+        <expiration-cache>0</expiration-cache>
+        <resource-bundle>com.infotec.wb.resources.RSSResource</resource-bundle>
+        <resource-type>3</resource-type>
+        <extended-attributes>
+        </extended-attributes>
+    </resource>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+    <resource>
+        <resource-name>StaticText</resource-name>
+        <display-name xml:lang="es">Texto estatico</display-name>
+        <display-name xml:lang="en">Static Text</display-name>
+        <description xml:lang="es">Recurso que se utiliza para incluir mensajes de texto simple en la página o para incluir código especifico</description>
+        <description xml:lang="en">Resource that is used to include text messages simple in the page or to include specific code</description>
+        <resource-class>com.infotec.wb.resources.StaticText</resource-class>
+        <expiration-cache>0</expiration-cache>
+        <resource-bundle>com.infotec.wb.resources.StaticText</resource-bundle>
+        <resource-type>2</resource-type>
+        <extended-attributes>
+        </extended-attributes>
+    </resource>

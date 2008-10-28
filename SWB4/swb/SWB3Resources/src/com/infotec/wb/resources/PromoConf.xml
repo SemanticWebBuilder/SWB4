@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+    <resource>
+        <resource-name>Promo</resource-name>
+        <display-name xml:lang="es">Promocional</display-name>
+        <display-name xml:lang="en">promo</display-name>
+        <description xml:lang="es">Recurso que se encarga de desplegar información de promoción sobre un contenido particular, ademas de acompañarlo con una imagen ilustrativa y una liga que dirija al usuario al articulo completo</description>
+        <description xml:lang="en">Resource that is in charge to unfold promotional information on a particular content, besides to accompany it with a ilustrative image and an hiperlink that leads to the user to the complete content</description>
+        <resource-class>com.infotec.wb.resources.promo</resource-class>
+        <expiration-cache>0</expiration-cache>
+        <resource-bundle>com.infotec.wb.resources.Promo</resource-bundle>
+        <resource-type>2</resource-type>
+        <extended-attributes>
+        </extended-attributes>
+    </resource>
