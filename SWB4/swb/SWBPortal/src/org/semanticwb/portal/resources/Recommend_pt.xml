@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<xslfile>admresource.xslt</xslfile>
+	<form name="frmRecomendar" action="true" method="POST" enctype="multipart/form-data">
+		<admdbconnmgr defconn="true"/>
+		<statictext name="general">
+			<![CDATA[
+				<font style="color: #428AD4; text-decoration: none; font-family: Verdana; font-size: 12px; font-weight: normal;">
+				Passo 1 de 3. Datos gerais</font>
+			]]>
+		</statictext>
+		<input type="FILE" name="template" label="Modelo (xsl, xslt):" showfile="true" msg="Modelo atual " bydefault="{@webpath}/swbadmin/xsl/Recommend/Recommend.xslt" msgbydefault="Modelo do defeito " filetype="xsl|xslt" isshowfiletype="true" size="40"/>
+		<input type="FILE" name="img" label="Imagen para recomendar (bmp, gif, jpg, jpeg):" showfile="true" filetype="bmp|jpg|jpeg|gif" isshowfiletype="true" isremovefile="true" removemsg="Deletar imagem para recomendar" moreattr="onclick=&#34;jsClear(this.form, '1');&#34;" size="40"/>
+		<input type="TEXT" name="alt" label="Texto alternativo para a imagem:" size="50"/>
+		<input type="TEXT" name="btntexto" label="Texto do botão no caso de não definição da imagem:" size="50"/>
+		<input type="TEXT" name="lnktexto" label="Texto do link no caso de não definição da imagem nem do botão:" size="50"/>
+		<input type="TEXT" name="blnstyle" label="Estilo dol botão ou do link:" size="50"/>
+		<input type="FILE" name="imgenviar" label="Imagem para o botão de Enviar no formulário de recomendação (bmp, gif, jpg, jpeg):" showfile="true" filetype="bmp|jpg|jpeg|gif" isshowfiletype="true" isremovefile="true" removemsg="Deletar imagem para enviar" moreattr="onclick=&#34;jsClear(this.form, '2');&#34;" size="40"/>
+		<input type="TEXT" name="altenviar" label="Texto alternativo para a imagem:" size="50"/>
+		<input type="TEXT" name="btnenviar" label="Texto do botão no caso de não definir imagem:" size="50"/>
+		<input type="FILE" name="imglimpiar" label="Imagem para o botão de Limpar no formulário de recomendação (bmp, gif, jpg, jpeg):" showfile="true" filetype="bmp|jpg|jpeg|gif" isshowfiletype="true" isremovefile="true" removemsg="Deletar imagen para limpar" moreattr="onclick=&#34;jsClear(this.form, '3');&#34;" size="40"/>
+		<input type="TEXT" name="altlimpiar" label="Texto alternativo para a imagem:" size="50"/>
+		<input type="TEXT" name="btnlimpiar" label="Texto do botão no caso de não definir a imagem:" size="50"/>
+		<statictext name="window">
+			<![CDATA[
+				<br><br><font style="color: #428AD4; text-decoration: none; font-family: Verdana; font-size: 12px; font-weight: normal;">
+				Passo 2 de 3. Configuração da janela</font>
+			]]>
+		</statictext>		
+		<input type="CHECKBOX" name="menubar" label="Barra de menu" value="1"/>
+		<input type="CHECKBOX" name="toolbar" label="Barra de ferramenta" value="1"/>
+		<input type="CHECKBOX" name="status" label="Barra de estado" value="1"/>
+		<input type="CHECKBOX" name="location" label="Barra de localização" value="1"/>
+		<input type="CHECKBOX" name="directories" label="Barra de diretório" value="1"/>
+		<input type="CHECKBOX" name="scrollbars" label="Barra de rolagem" value="1"/>
+		<input type="CHECKBOX" name="resizable" label="Redimensionamento do tamanho da janela" value="1"/>
+		<input type="TEXT" name="width" label="Largura da janela (pixels):" size="4" maxlength="4" jsvaltype="js_numbers"/>
+		<input type="TEXT" name="height" label="Altura da janela (pixels):" size="4" maxlength="4" jsvaltype="js_numbers"/>
+		<input type="TEXT" name="top" label="Posição da  margem superior (pixels):" size="4" maxlength="4" jsvaltype="js_numbers"/>
+		<input type="TEXT" name="left" label="Posição da margem esquerda (pixels):" size="4" maxlength="4" jsvaltype="js_numbers"/>
+		<statictext name="email">
+			<![CDATA[
+				<br><br><font style="color: #428AD4; text-decoration: none; font-family: Verdana; font-size: 12px; font-weight: normal;">
+				Passo 3 de 3. Definição do correio eletrônico</font>
+			]]>
+		</statictext>		
+		<input type="TEXT" name="subject" label="Assunto dal mensagem:" size="50"/>
+		<textarea name="headermsg" label="Cabeçalho da mensagem:" rows="5" cols="50" wrap="virtual" moreattr="onclick=&#34;jsClear(this.form, '2');&#34;"/>
+		<textarea name="footermsg" label="Rodapé da mensagem:" rows="5" cols="50" wrap="virtual"/>
+		<input type="SUBMIT" name="btnSave"  value="Salvar" onclick="if(jsValida(this.form)) return true; else return false;"/>
+		<input type="RESET"  name="btnReset" value="Cancelar"/>
+	</form>
+	<script language="JavaScript">
+		<![CDATA[
+			function jsClear(frm, opt)
+			{
+			        switch(opt)
+			        {
+				        case '1':	frm.btntexto.value=''; 
+							frm.lnktexto.value='';
+							break
+				        case '2':  	frm.btnenviar.value='';
+				         		break
+				        case '3':   	frm.btnlimpiar.value='';
+				        		break
+			        }
+			}
+			function jsValida(frm)
+			{
+				replaceChars(frm.headermsg);
+				replaceChars(frm.footermsg);
+				return true;
+			}
+			function replaceChars(pIn)
+			{
+			   out = "\r"; // replace this
+			   add = "<br/>"; // with this
+			   temp = "" + pIn.value; // temporary holder
+			   while (temp.indexOf(out)>-1)
+			   {
+			      pos= temp.indexOf(out);
+			      temp = "" + (temp.substring(0, pos) + add + temp.substring((pos + out.length), temp.length));
+			   }
+			   out = "\n"; // replace this
+			   add = " "; // with this
+			   temp = "" + temp; // temporary holder
+			   while (temp.indexOf(out)>-1)
+			   {
+			      pos= temp.indexOf(out);
+			      temp = "" + (temp.substring(0, pos) + add + temp.substring((pos + out.length), temp.length));
+			   }
+			   pIn.value = temp;
+			}
+		]]>			
+	</script>
+</admresource>
