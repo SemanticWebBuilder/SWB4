@@ -31,6 +31,7 @@
 package org.semanticwb.portal.resources;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
@@ -50,7 +51,6 @@ import org.w3c.dom.Node;
 import org.semanticwb.portal.util.SWBCookieMgr;
 import org.semanticwb.portal.api.*;
 import org.semanticwb.portal.util.FileUpload;
-import org.semanticwb.portal.util.WBFileUpload;
 
 /**
  * Objeto que se encarga de desplegar y administrar una encuesta de opinion bajo
@@ -253,7 +253,9 @@ public class Poll extends GenericResource
             } 
             catch (Exception e) { log.error(paramRequest.getLocaleString("error_Encuesta_doView_resource") +" "+ restype +" "+ paramRequest.getLocaleString("error_Encuesta_doView_method"), e); }
         }
-        response.getWriter().print(ret.toString());
+        PrintWriter out=response.getWriter();
+        out.print(ret.toString());
+        out.println("<br><a href=\"" + paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN) + "\">admin</a>");
     }
     
     /**
@@ -809,7 +811,7 @@ public class Poll extends GenericResource
         response.getWriter().print(ret.toString());        
     }
     
-    /**
+     /**
      * @param base
      * @param fup
      * @param att
@@ -838,7 +840,7 @@ public class Poll extends GenericResource
     {
         try
         {
-            if(null != fup.getValue(att) && !"".equals(fup.getValue(att).trim())) {
+            if(null != fup.getValue(att) && value.equals(fup.getValue(att).trim())) {
                 base.setAttribute(att, fup.getValue(att).trim());
             }
             else {
@@ -846,7 +848,7 @@ public class Poll extends GenericResource
             }        
         }
         catch(Exception e) {  log.error("Error while setting resource attribute: "+att + ", "+base.getId() +"-"+ base.getTitle(), e); }
-    }      
+    }    
     
     /*
      * @param dom
@@ -983,23 +985,47 @@ public class Poll extends GenericResource
             ret.append(">"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_onBoth")+"<br></td>");
             ret.append("</td>");
             ret.append("\n</tr>");
+            
             ret.append("\n<tr>");
             ret.append("\n<td class=\"datos\">"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_textcolor") + "</td>");
             ret.append("\n<td class=\"valores\">");
+            /*
             HashMap param=new HashMap();
             param.put("id", "selColor");
             param.put("session", request.getSession().getId());
             param.put("linkcolor",  base.getAttribute("textcolor", "#000000").trim().substring(1));
             param.put("linkactual", base.getAttribute("textcolor", "#000000").trim().substring(1));
             ret.append(admResUtils.loadColorApplet(param));
+             * * */
+            ret.append("<script type=\"text/javascript\">");
+            ret.append("   dojo.require(\"dijit.ColorPalette\");");
+            ret.append("   dojo.addOnLoad(function(){ ");
+            ret.append("   var myPalette = new dijit.ColorPalette({ ");
+            ret.append("   palette: \"7x10\", ");
+            ret.append("   onChange: function(val){ document.frmResource.textcolor.value=val;}  ");
+            ret.append("   }, \"placeHolder\" ); ");
+            ret.append("   }); ");
+            ret.append("</script>");
+            ret.append("<span id=\"placeHolder\"></span>");
             ret.append("</td> \n");
             ret.append("\n</tr>");
+            
+             
             ret.append("\n<tr>");
             ret.append("\n<td class=\"datos\">"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_otherTextcolor") + "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"1\">(" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_hexadecimal") + "):</font></td>");
+            ret.append("\n<td>");
+            ret.append("\n<table>");
+            ret.append("\n<tr>");
             ret.append("\n<td class=\"valores\">");
-            ret.append("\n<input type=text size=7 maxlength=7 name=textcolor>");
+            ret.append("\n<input type=\"text\" size=\"7\" maxlength=\"7\" id=\"textcolor\" name=\"textcolor\" value=\""+base.getAttribute("textcolor", "#000000").trim().substring(1)+"\">");
+            ret.append("</td>");
+            ret.append("<td class=\"datos\">");
+            ret.append("-"+paramRequest.getLocaleString("actual_color") + "</td><td bgcolor=\""+base.getAttribute("textcolor", "#000000")+"\" width=\"5\">&nbsp;</td>");
+             ret.append("</tr>");
+             ret.append("</table>");
             ret.append("</td>");
             ret.append("\n</tr>");
+            
             ret.append("\n<tr>");
             ret.append("\n<td class=\"datos\">"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_imgTitle") + "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"1\">(bmp, gif, jpg, jpeg):</font></td>");
             ret.append("\n<td class=\"valores\">");
@@ -1080,21 +1106,46 @@ public class Poll extends GenericResource
             if ("false".equals(value)) ret.append(" checked");
             ret.append(">" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_no") + "</td>");
             ret.append("\n</tr>");
+            
             ret.append("<tr> \n");
             ret.append("<td class=\"datos\">"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_textcolor")+"</td> \n");
             ret.append("<td class=\"valores\">");
+            /*
             param.put("id", "selColorBack");
             param.put("linkcolor",  base.getAttribute("textcolores", "#000000").trim().substring(1));
             param.put("linkactual", base.getAttribute("textcolores", "#000000").trim().substring(1));
             ret.append(admResUtils.loadColorApplet(param));
+             *  * */
+            
+            ret.append("<script type=\"text/javascript\">");
+            ret.append("   dojo.require(\"dijit.ColorPalette\");");
+            ret.append("   dojo.addOnLoad(function(){ ");
+            ret.append("   var myPalette = new dijit.ColorPalette({ ");
+            ret.append("   palette: \"7x10\", ");
+            ret.append("   onChange: function(val){ document.frmResource.textcolores.value=val;}  ");
+            ret.append("   }, \"placeHolder1\" ); ");
+            ret.append("   }); ");
+            ret.append("</script>");
+            ret.append("<span id=\"placeHolder1\"></span>");
             ret.append("</td> \n");
-            ret.append("</tr> \n");
+            ret.append("\n</tr>");
+                         
             ret.append("\n<tr>");
             ret.append("\n<td class=\"datos\">"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_otherTextcolor") + "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"1\">(" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_hexadecimal") + "):</font></td>");
+            ret.append("\n<td>");
+            ret.append("\n<table>");
+            ret.append("\n<tr>");
             ret.append("\n<td class=\"valores\">");
-            ret.append("\n<input type=text size=7 maxlength=7 name=textcolores>");
+            ret.append("\n<input type=\"text\" size=\"7\" maxlength=\"7\" id=\"textcolores\" name=\"textcolores\" value=\""+base.getAttribute("textcolores", "#000000").trim().substring(1)+"\">");
+            ret.append("</td>");
+            ret.append("<td class=\"datos\">");
+            ret.append("-"+paramRequest.getLocaleString("actual_color") + "</td><td bgcolor=\""+base.getAttribute("textcolores", "#000000")+"\" width=\"5\">&nbsp;</td>");
+            ret.append("</tr>");
+            ret.append("</table>");
             ret.append("</td>");
             ret.append("\n</tr>");
+            
+            
             ret.append("\n<tr>");
             ret.append("\n<td class=\"datos\">"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_imgBackground") + "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"1\">(bmp, gif, jpg, jpeg):</font></td>");
             ret.append("\n<td class=\"valores\">");
