@@ -32,6 +32,7 @@ package org.semanticwb.portal.resources;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Enumeration;
@@ -74,7 +75,9 @@ public class IFrameContent extends GenericAdmResource
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         Portlet base=getResourceBase();
-        if("".equals(base.getAttribute("url","").trim())) { response.getWriter().print(""); return; }
+        if("".equals(base.getAttribute("url","").trim())) {          
+            response.getWriter().print(""); return; 
+        }
 
         StringBuffer ret = new StringBuffer("");        
         String ind = request.getParameter("WBIndexer");
@@ -147,6 +150,7 @@ public class IFrameContent extends GenericAdmResource
             } 
             catch (Exception e) { log.error("Error in resource IFrameContent while bringing HTML.", e); }
         }
-        response.getWriter().print(ret.toString());
+       PrintWriter out=response.getWriter();
+       out.print(ret.toString());        
     }
 }

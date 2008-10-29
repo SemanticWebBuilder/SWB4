@@ -5,6 +5,7 @@
 package org.semanticwb.portal.resources;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.portal.api.GenericXformsResource;
@@ -21,6 +22,28 @@ import org.w3c.dom.Document;
 public class HelloXforms extends GenericXformsResource {
 
     private static Logger log = SWBUtils.getLogger(GenericXformsResource.class);
+    
+    
+    @Override
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
+        PrintWriter out=response.getWriter();
+        
+        out.println("<script type=\"text/javascript\">" +
+		" dojo.require(\"dojox.widget.ColorPicker\"); " +
+		" dojo.require(\"dojo.parser\"); "+
+		" var handler = function(val,id){ " +
+			" dojo.byId(id).value = val; " +
+		"};"+		
+	"</script>" +  
+        "</head>" +
+        " <body class=\"tundra\"> " +
+        "<div id=\"picker\" dojoType=\"dojox.widget.ColorPicker\"" +
+		"onChange=\"handler(arguments[0],'onchangeOne')\"></div>" +
+	"<p>Current value: <input readonly=\"true\" id=\"onchangeOne\" value=\"???\"/></p>" +
+       "</body>"+
+       "</html>");
+    }
 
     @Override
     public void saveData(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest, Document dom) throws SWBResourceException, IOException {
