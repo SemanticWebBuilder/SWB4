@@ -22,7 +22,7 @@
  */
 
 
-package com.infotec.wb.resources;
+package org.semanticwb.portal.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -87,32 +87,34 @@ public class Promo extends GenericAdmResource
             
             ret.append("<table border=0  width=\"99%\"> \n");
             ret.append("<tr> \n");
-            if (!"".equals(base.getAttribute("title", "").trim()))
-            {
-                if ("5".equals(position))
-                {
+            if (!"".equals(base.getAttribute("title", "").trim())) {
+                if ("5".equals(position)) {
                     ret.append("<td colspan=2> \n");
                     ret.append(base.getAttribute("title").trim());
                     ret.append("</td></tr><tr><td valign=top> \n");
-                } 
-                else
-                {
+                }else {
                     ret.append("<td> \n");
                     ret.append(base.getAttribute("title").trim());
                     ret.append("<br> \n");
                 }
+            }else {
+                if ("5".equals(position)) {
+                    ret.append("<td valign=top> \n");
+                }else {
+                    ret.append("<td> \n");
+                }
             }
-            else
-            {
-                if ("5".equals(position)) ret.append("<td valign=top> \n");
-                else ret.append("<td> \n");
-            }
-            if (!"".equals(base.getAttribute("url", "").trim()))
+            if (!"".equals(base.getAttribute("url", "").trim())) {
                 ret.append(getUrlHtml(paramRequest, base));
-            if (!"".equals(base.getAttribute("img", "").trim()))
+            }
+            if (!"".equals(base.getAttribute("img", "").trim())) {
                 ret.append(getImgPromo(paramRequest, base));
-            else ret.append(getTextHtml(base));
-            if (!"".equals(base.getAttribute("url", "").trim())) ret.append("</a> \n");
+            }else {
+                ret.append(getTextHtml(base));
+            }
+            if (!"".equals(base.getAttribute("url", "").trim())) {
+                ret.append("</a> \n");
+            }
             ret.append("</td></tr></table> \n");            
         } 
         catch (Exception e) {
@@ -131,8 +133,12 @@ public class Promo extends GenericAdmResource
         StringBuffer ret = new StringBuffer("");
         SWBResourceURL wburl=reqParams.getActionUrl();
         ret.append("<a href=\"" + wburl.toString() + "\"");
-        if ("0".equals(base.getAttribute("uline", "0").trim())) ret.append(" style=\"TEXT-DECORATION: none\"");
-        if ("1".equals(base.getAttribute("target", "0").trim())) ret.append(" target=\"_newprm\"");
+        if ("0".equals(base.getAttribute("uline", "0").trim())) {
+            ret.append(" style=\"TEXT-DECORATION: none\"");
+        }
+        if ("1".equals(base.getAttribute("target", "0").trim())) {
+            ret.append(" target=\"_newprm\"");
+        }
         ret.append("> \n");
         return ret.toString();
     }
