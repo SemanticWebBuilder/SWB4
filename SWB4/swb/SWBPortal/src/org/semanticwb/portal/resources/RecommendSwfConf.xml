@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
     <resource>
         <resource-name>RecomendarSwf</resource-name>
-        <display-name xml:lang="es">Recomendar página flash</display-name>
+        <display-name xml:lang="es">Recomendar pagina flash</display-name>
         <display-name xml:lang="en">Sugested sites flash</display-name>
         <description xml:lang="es">Recurso usado para generar un correo de recomendación del sitio a un amigo por parte del usuario usando una interfaz SWF</description>
-        <description xml:lang="en">Resource used to generate an email of recommendation from the site to a friend on behalf of the user using a swf interface</description>
-        <resource-class>org.semanticwb.portal.resources.RecomendarSwf</resource-class>
+        <description xml:lang="en">Resource used to generate an email of recommendation from the site to a friend on the part of the user using a swf interface</description>
+        <resource-class>com.infotec.wb.resources.RecomendarSwf</resource-class>
         <expiration-cache>0</expiration-cache>
-        <resource-bundle>org.semanticwb.portal.resources.RecomendarSwf</resource-bundle>
+        <resource-bundle>com.infotec.wb.resources.RecomendarSwf</resource-bundle>
         <resource-type>2</resource-type>
         <extended-attributes>
         </extended-attributes>

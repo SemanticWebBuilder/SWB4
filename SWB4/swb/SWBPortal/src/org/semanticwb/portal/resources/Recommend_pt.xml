@@ -9,7 +9,7 @@
 				Passo 1 de 3. Datos gerais</font>
 			]]>
 		</statictext>
-		<input type="FILE" name="template" label="Modelo (xsl, xslt):" showfile="true" msg="Modelo atual " bydefault="{@webpath}/swbadmin/xsl/Recommend/Recommend.xslt" msgbydefault="Modelo do defeito " filetype="xsl|xslt" isshowfiletype="true" size="40"/>
+		<input type="FILE" name="template" label="Modelo (xsl, xslt):" showfile="true" msg="Modelo atual " bydefault="{@webpath}wbadmin/xsl/Recomendar/Recomendar.xslt" msgbydefault="Modelo do defeito " filetype="xsl|xslt" isshowfiletype="true" size="40"/>
 		<input type="FILE" name="img" label="Imagen para recomendar (bmp, gif, jpg, jpeg):" showfile="true" filetype="bmp|jpg|jpeg|gif" isshowfiletype="true" isremovefile="true" removemsg="Deletar imagem para recomendar" moreattr="onclick=&#34;jsClear(this.form, '1');&#34;" size="40"/>
 		<input type="TEXT" name="alt" label="Texto alternativo para a imagem:" size="50"/>
 		<input type="TEXT" name="btntexto" label="Texto do botão no caso de não definição da imagem:" size="50"/>

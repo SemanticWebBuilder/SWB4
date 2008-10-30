@@ -181,6 +181,38 @@ public class TestWebSite {
             portlet.setTitle("Banner");
         }  
         
+        if(site.getPortletType("Recommend")==null)
+        {
+            
+            PortletType ptype=site.createPortletType("Recommend");
+            ptype.setPortletClassName("org.semanticwb.portal.resources.Recommend");
+            ptype.setPortletBundle("org.semanticwb.portal.resources.Recommend");
+            ptype.setPortletMode(1);
+            ptype.setTitle("Recurso Recommend");
+                    
+            Portlet portlet=site.createPortlet();
+            portlet.setActive(true);
+            portlet.setCreator(user);
+            portlet.setPortletType(ptype);
+            portlet.setTitle("Recommend");
+        }  
+        
+        if(site.getPortletType("RecommendSwf")==null)
+        {
+            
+            PortletType ptype=site.createPortletType("RecommendSwf");
+            ptype.setPortletClassName("org.semanticwb.portal.resources.RecommendSwf");
+            ptype.setPortletBundle("org.semanticwb.portal.resources.RecommendSwf");
+            ptype.setPortletMode(1);
+            ptype.setTitle("Recurso RecommendSwf");
+                    
+            Portlet portlet=site.createPortlet();
+            portlet.setActive(true);
+            portlet.setCreator(user);
+            portlet.setPortletType(ptype);
+            portlet.setTitle("RecommendSwf");
+        }  
+        
         if(site.getPortletType("Poll")==null)
         {
             
@@ -376,6 +408,29 @@ public class TestWebSite {
             portlet.setCreator(user);
             portlet.setPortletType(ptype);
             portlet.setTitle("FrameContent");
+            
+            PortletRef portletref=site.createPortletRef();
+            portletref.setActive(true);
+            portletref.setPortlet(portlet);
+            portletref.setPriority(3);
+            
+            home.addPortletRef(portletref);
+        }  
+        
+        if(site.getPortletType("IFrameContent")==null)
+        {
+            
+            PortletType ptype=site.createPortletType("IFrameContent");
+            ptype.setPortletClassName("org.semanticwb.portal.resources.IFrameContent");
+            ptype.setPortletBundle("org.semanticwb.portal.resources.IFrameContent");
+            ptype.setPortletMode(1);
+            ptype.setTitle("Recurso IFrameContent");
+                    
+            Portlet portlet=site.createPortlet();
+            portlet.setActive(true);
+            portlet.setCreator(user);
+            portlet.setPortletType(ptype);
+            portlet.setTitle("IFrameContent");
             
             PortletRef portletref=site.createPortletRef();
             portletref.setActive(true);

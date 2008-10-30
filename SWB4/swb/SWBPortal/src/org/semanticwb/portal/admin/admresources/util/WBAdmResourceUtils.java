@@ -1391,5 +1391,23 @@ public class WBAdmResourceUtils {
         sbfRet.append("\n}");
         return sbfRet.toString();
     }
+    
+    /**
+     * Sube un archivo parseado al filesystem.
+     *
+     * @param     base      La información del recurso en memoria.
+     * @param     pfUpload  Objeto que permite obtener la información del formulario con tipo de codificación multipart/form-data.
+     * @param     pInForm   El nombre del campo del formulario donde se definió el archivo.
+     * @return    Regresa un nuevo String que contiene el applet para subir las imágenes relativas al archivo parseado.
+     */
+    public String uploadFileParsed(Portlet base, FileUpload fUp, String pInForm)
+    {
+        return uploadFileParsed(base, fUp, pInForm, fUp.getSessid(),null);
+    }
+
+    
+    public String uploadFileParsed(Portlet base, FileUpload fUp, String pInForm, String idsession){
+        return uploadFileParsed(base, fUp, pInForm, idsession,null);
+    }
    
 }
