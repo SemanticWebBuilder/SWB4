@@ -9,7 +9,7 @@
 				Step 1 of 3. General data</font>
 			]]>
 		</statictext>
-		<input type="FILE" name="template" label="Template (xsl, xslt):" showfile="true" msg="Current template " bydefault="{@webpath}/swbadmin/xsl/Recommend/Recommend.xslt" msgbydefault="Template by default " filetype="xsl|xslt" isshowfiletype="true" size="40"/>
+		<input type="FILE" name="template" label="Template (xsl, xslt):" showfile="true" msg="Current template " bydefault="{@webpath}wbadmin/xsl/Recomendar/Recomendar.xslt" msgbydefault="Template by default " filetype="xsl|xslt" isshowfiletype="true" size="40"/>
 		<input type="FILE" name="img" label="Image for recommend (bmp, gif, jpg, jpeg):" showfile="true" filetype="bmp|jpg|jpeg|gif" isshowfiletype="true" isremovefile="true" removemsg="Cut image for recommend" moreattr="onclick=&#34;jsClear(this.form, '1');&#34;" size="40"/>
 		<input type="TEXT" name="alt" label="Alternate text for image:" size="50"/>
 		<input type="TEXT" name="btntexto" label="Text of the button in case of not defining an image:" size="50"/>

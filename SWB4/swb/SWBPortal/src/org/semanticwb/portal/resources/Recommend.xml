@@ -9,8 +9,88 @@
 				Paso 1 de 3. Datos generales</font>
 			]]>
 		</statictext>
+		<input type="FILE" name="template" label="Plantilla (xsl, xslt):" showfile="true" msg="Plantilla actual " bydefault="{@webpath}wbadmin/xsl/Recomendar/Recomendar.xslt" msgbydefault="Plantilla por defecto " filetype="xsl|xslt" isshowfiletype="true" size="40"/>
 		<input type="FILE" name="img" label="Imagen para recomendar (bmp, gif, jpg, jpeg):" showfile="true" filetype="bmp|jpg|jpeg|gif" isshowfiletype="true" isremovefile="true" removemsg="Quitar imagen para recomendar" moreattr="onclick=&#34;jsClear(this.form, '1');&#34;" size="40"/>
-		<input type="SUBMIT" name="btnSave"  value="Guardar"/>
+		<input type="TEXT" name="alt" label="Texto alterno para la imagen:" size="50"/>
+		<input type="TEXT" name="btntexto" label="Texto del botón en caso de no definir imagen:" size="50"/>
+		<input type="TEXT" name="lnktexto" label="Texto de la liga en caso de no definir imagen ni botón:" size="50"/>
+		<input type="TEXT" name="blnstyle" label="Estilo del botón o de la liga:" size="50"/>
+		<input type="FILE" name="imgenviar" label="Imagen para el botón Enviar en el formulario (bmp, gif, jpg, jpeg):" showfile="true" filetype="bmp|jpg|jpeg|gif" isshowfiletype="true" isremovefile="true" removemsg="Quitar imagen para enviar" moreattr="onclick=&#34;jsClear(this.form, '2');&#34;" size="40"/>
+		<input type="TEXT" name="altenviar" label="Texto alterno para la imagen:" size="50"/>
+		<input type="TEXT" name="btnenviar" label="Texto del botón en caso de no definir imagen:" size="50"/>
+		<input type="FILE" name="imglimpiar" label="Imagen para el botón de Limpiar en el formulario (bmp, gif, jpg, jpeg):" showfile="true" filetype="bmp|jpg|jpeg|gif" isshowfiletype="true" isremovefile="true" removemsg="Quitar imagen para limpiar" moreattr="onclick=&#34;jsClear(this.form, '3');&#34;" size="40"/>
+		<input type="TEXT" name="altlimpiar" label="Texto alterno para la imagen:" size="50"/>
+		<input type="TEXT" name="btnlimpiar" label="Texto del botón en caso de no definir imagen:" size="50"/>
+		<statictext name="window">
+			<![CDATA[
+				<br><br><font style="color: #428AD4; text-decoration: none; font-family: Verdana; font-size: 12px; font-weight: normal;">
+				Paso 2 de 3. Configuración de la ventana</font>
+			]]>
+		</statictext>		
+		<input type="CHECKBOX" name="menubar" label="Barra de menús" value="1"/>
+		<input type="CHECKBOX" name="toolbar" label="Barra de herramientas" value="1"/>
+		<input type="CHECKBOX" name="status" label="Barra de estado" value="1"/>
+		<input type="CHECKBOX" name="location" label="Barra de direcciones" value="1"/>
+		<input type="CHECKBOX" name="directories" label="Barra de vínculos" value="1"/>
+		<input type="CHECKBOX" name="scrollbars" label="Barras de desplazamiento" value="1"/>
+		<input type="CHECKBOX" name="resizable" label="Reajustar tamaño de la ventana" value="1"/>
+		<input type="TEXT" name="width" label="Ancho de la ventana (pixeles):" size="4" maxlength="4" jsvaltype="js_numbers"/>
+		<input type="TEXT" name="height" label="Alto de la ventana (pixeles):" size="4" maxlength="4" jsvaltype="js_numbers"/>
+		<input type="TEXT" name="top" label="Posición margen superior (pixeles):" size="4" maxlength="4" jsvaltype="js_numbers"/>
+		<input type="TEXT" name="left" label="Posición margen izquierdo (pixeles):" size="4" maxlength="4" jsvaltype="js_numbers"/>
+		<statictext name="email">
+			<![CDATA[
+				<br><br><font style="color: #428AD4; text-decoration: none; font-family: Verdana; font-size: 12px; font-weight: normal;">
+				Paso 3 de 3. Definición del correo electrónico</font>
+			]]>
+		</statictext>		
+		<input type="TEXT" name="subject" label="Asunto del mensaje:" size="50"/>
+		<textarea name="headermsg" label="Encabezado del mensaje:" rows="5" cols="50" wrap="virtual"/>
+		<textarea name="footermsg" label="Pie del mensaje:" rows="5" cols="50" wrap="virtual"/>
+		<input type="SUBMIT" name="btnSave"  value="Guardar" onclick="if(jsValida(this.form)) return true; else return false;"/>
 		<input type="RESET"  name="btnReset" value="Cancelar"/>
 	</form>
+	<script language="JavaScript">
+		<![CDATA[
+			function jsClear(frm, opt)
+			{
+			        switch(opt)
+			        {
+				        case '1':	frm.btntexto.value=''; 
+							frm.lnktexto.value='';
+							break
+				        case '2':  	frm.btnenviar.value='';
+				         		break
+				        case '3':   	frm.btnlimpiar.value='';
+				        		break
+			        }
+			}
+			function jsValida(frm)
+			{
+				replaceChars(frm.headermsg);
+				replaceChars(frm.footermsg);
+				return true;
+			}
+			function replaceChars(pIn)
+			{
+			   out = "\r"; // replace this
+			   add = "<br/>"; // with this
+			   temp = "" + pIn.value; // temporary holder
+			   while (temp.indexOf(out)>-1)
+			   {
+			      pos= temp.indexOf(out);
+			      temp = "" + (temp.substring(0, pos) + add + temp.substring((pos + out.length), temp.length));
+			   }
+			   out = "\n"; // replace this
+			   add = " "; // with this
+			   temp = "" + temp; // temporary holder
+			   while (temp.indexOf(out)>-1)
+			   {
+			      pos= temp.indexOf(out);
+			      temp = "" + (temp.substring(0, pos) + add + temp.substring((pos + out.length), temp.length));
+			   }
+			   pIn.value = temp;
+			}
+		]]>		
+	</script>
 </admresource>
