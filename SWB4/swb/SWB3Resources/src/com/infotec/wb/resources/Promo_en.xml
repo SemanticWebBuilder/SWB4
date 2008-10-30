@@ -22,26 +22,34 @@
 		<input type="TEXT" name="height" label="Height (pixels):" size="4" maxlength="4" jsvaltype="js_numbers"/>
 		<statictext name="txtUline">Underlined text:</statictext>
 		<input type="RADIO" name="uline" label="Yes" value="1"/>
+                
 		<input type="RADIO" name="uline" label="No" value="0" />
-		<applet label="Text color:" name="wbcolor" code="applets.selcolor.SelColor.class" codebase="{@webpath}" archive="wbadmin/lib/SelColor.jar" width="293" height="240">
-			<param name="name" value="wbcolor"/>
-			<param name="cache_archive" value="wbadmin/lib/SelColor.jar"/>
-			<param name="_cache_version" value="1.0.0.1"/>
-			<param name="_cache_archive_ex" value="applet.jar;preload, util.jar;preload,tools.jar;preload"/>
-			<param name="type" value="application/x-java-applet;version=1.4"/>
-			<param name="scriptable" value="true"/>
-			<param name="webpath" value="/"/>
-			<param name="foreground" value="99cccc"/>
-			<param name="background" value="99cccc"/>
-			<param name="linkcolor" value="000000" input="textcolor" moreattr="replace('#','')"/>
-			<param name="linkactual" value="000000" input="textcolor"/>
-		</applet>
-		<input type="HIDDEN" name="textcolor"/>
-		<input type="TEXT" size="7" maxlength="7" name="hdntextcolor" label="Other text color (hexadecimal):"/>		
+                <statictext name="lblChooseColor">Choose text color:</statictext>                
+		<statictext name="chooseColor">
+                        <![CDATA[
+                        <script type="text/javascript" src="/swb/swbadmin/js/dojo/dojo/dojo.js" djConfig="parseOnLoad: true"></script>
+                        <script type="text/javascript" src="/swb/swbadmin/js/dojo/dijit/ColorPalette.js"></script>
+                        <script type="text/javascript">
+                            dojo.require("dojo.parser");
+                            dojo.require("dijit.ColorPalette");
+                            function reportColor(selectedColor, eid) {
+                                var e=document.getElementById(eid);
+                                e.style.backgroundColor=selectedColor;
+                            }
+                        </script>
+                        <div dojoType="dijit.ColorPalette" onChange="reportColor(arguments[0], 'curTextColor')"></div>
+                        ]]>
+                </statictext>
+                <input type="TEXT" size="7" maxlength="7" value="#000000" id="textcolor" name="textcolor" label="Another text color (hexadecimal):"/>
+                <statictext name="showCurrentTextColor">
+                    <![CDATA[
+                    <div id="curTextColor" style="background-color:#009933; width:10px" >&nbsp;</div>
+                    ]]>
+                </statictext>
 		<input type="TEXT" name="url" label="Web address" size="50"/>
 		<statictext name="txtTarget">In a new window:</statictext>
 		<input type="RADIO" name="target" label="Yes" value="1"/>
-		<input type="RADIO" name="target" label="No" value="0" />
+		<input type="RADIO" name="target" label="No" value="0" />               
 		<input type="SUBMIT" name="btnSave"  value="Save" onclick="if(jsValida(this.form)) return true; else return false;"/>
 		<input type="RESET"  name="btnReset" value="Cancel"/>
 	</form>
@@ -60,9 +68,9 @@
 				document.frmPromo.target[1].checked=true;		
 			function jsValida(frm)
 			{
-				if(frm.hdntextcolor.value==null || frm.hdntextcolor.value=='' || frm.hdntextcolor.value==' ')
+				if(frm.textcolor.value==null || frm.textcolor.value=='' || frm.textcolor.value==' ')
 					frm.textcolor.value='#'+ document.wbcolor.getColor();
-				else frm.textcolor.value=frm.hdntextcolor.value;
+				else frm.textcolor.value=frm.textcolor.value;
 		            
 				if(frm.pos.value==null || frm.pos.value=='' || frm.pos.value==' ')
 				{
