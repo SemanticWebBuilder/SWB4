@@ -87,6 +87,16 @@ public class SemanticProperty
         return false;
     }  
     
+    public boolean isExternalInvocation()
+    {
+        Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_EXTERNALINVOCATION));
+        if(st!=null)
+        {
+            return st.getBoolean();
+        }
+        return false;
+    }      
+    
     public SemanticObject getDisplayObject()
     {
         SemanticObject disp=null;
@@ -100,23 +110,24 @@ public class SemanticProperty
     
     public String getDisplayName()
     {
-        String ret=null;
-        SemanticObject obj=getDisplayObject();
-        if(obj!=null)ret=obj.getProperty(obj.getModel().getSemanticProperty(SemanticVocabulary.RDFS_LABEL));
-        System.out.println("Prop:"+obj+" "+ret);
-        if(ret==null)ret=getLabel();
-        if(ret==null)ret=getName();
-        return ret;
+        return getDisplayName(null);
     }
     
     public String getDisplayName(String lang)
     {
         String ret=null;
         SemanticObject obj=getDisplayObject();
-        if(obj!=null)ret=obj.getProperty(obj.getModel().getSemanticProperty(SemanticVocabulary.RDFS_LABEL),null,lang);
-        System.out.println("Prop:"+obj+" "+ret);
+        if(obj!=null)
+        {
+            if(lang!=null)
+            {
+                ret=obj.getProperty(obj.getModel().getSemanticProperty(SemanticVocabulary.RDFS_LABEL),null,lang);
+            }
+            if(ret==null)ret=obj.getProperty(obj.getModel().getSemanticProperty(SemanticVocabulary.RDFS_LABEL));
+        }
         if(ret==null)ret=getLabel();
         if(ret==null)ret=getName();
+        //System.out.println("Prop:"+obj+" "+ret);
         return ret;
     }    
 //    
@@ -246,42 +257,56 @@ public class SemanticProperty
     public boolean isBoolean()
     {
         boolean ret=false;
-        if(getRange().getURI().equals("http://www.w3.org/2001/XMLSchema#boolean"))ret=true;
+        Resource res=getRange();
+        if(res!=null && res.getURI().equals(SemanticVocabulary.XMLS_BOOLEAN))ret=true;
         return ret;        
     }
     
     public boolean isInt()
     {
         boolean ret=false;
-        if(getRange().getURI().equals("http://www.w3.org/2001/XMLSchema#int"))ret=true;
+        Resource res=getRange();
+        if(res!=null && res.getURI().equals(SemanticVocabulary.XMLS_INT))ret=true;
         return ret;        
     }    
+    
+    public boolean isLong()
+    {
+        boolean ret=false;
+        Resource res=getRange();
+        if(res!=null && res.getURI().equals(SemanticVocabulary.XMLS_LONG))ret=true;
+        return ret;        
+    }        
     
     public boolean isDate()
     {
         boolean ret=false;
-        if(getRange().getURI().equals("http://www.w3.org/2001/XMLSchema#date"))ret=true;
+        Resource res=getRange();
+        if(res!=null && res.getURI().equals(SemanticVocabulary.XMLS_DATE))ret=true;
         return ret;        
     }    
     
     public boolean isDateTime()
     {
         boolean ret=false;
-        if(getRange().getURI().equals("http://www.w3.org/2001/XMLSchema#dateTime"))ret=true;
+        Resource res=getRange();
+        if(res!=null && res.getURI().equals(SemanticVocabulary.XMLS_DATETIME))ret=true;
         return ret;        
     }       
     
     public boolean isString()
     {
         boolean ret=false;
-        if(getRange().getURI().equals("http://www.w3.org/2001/XMLSchema#string"))ret=true;
+        Resource res=getRange();
+        if(res!=null && res.getURI().equals(SemanticVocabulary.XMLS_STRING))ret=true;
         return ret;        
     }       
     
     public boolean isFloat()
     {
         boolean ret=false;
-        if(getRange().getURI().equals("http://www.w3.org/2001/XMLSchema#float"))ret=true;
+        Resource res=getRange();
+        if(res!=null && res.getURI().equals(SemanticVocabulary.XMLS_FLOAT))ret=true;
         return ret;        
     }       
     
