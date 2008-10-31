@@ -59,7 +59,7 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
 
     public String getTitle(String lang)
     {
-        return getSemanticObject().getProperty(vocabulary.title, lang);
+        return getSemanticObject().getProperty(vocabulary.title, null, lang);
     }
 
     public void setTitle(String title, String lang)
@@ -149,6 +149,38 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
         getSemanticObject().setProperty(vocabulary.webPageSortName, webPageSortName);
     }
 
+    public int getWebPageURLType()
+    {
+        return getSemanticObject().getIntProperty(vocabulary.webPageURLType);
+    }
+
+    public void setWebPageURLType(int webPageURLType)
+    {
+        getSemanticObject().setLongProperty(vocabulary.webPageURLType, webPageURLType);
+    }
+
+    public long getDiskUsage()
+    {
+        //Implement this method in WebPage object
+        throw new SWBMethodImplementationRequiredException();
+    }
+
+    public void setDiskUsage(long webPageDiskUsage)
+    {
+        //Implement this method in WebPage object
+        throw new SWBMethodImplementationRequiredException();
+    }
+
+    public boolean isDeleted()
+    {
+        return getSemanticObject().getBooleanProperty(vocabulary.deleted);
+    }
+
+    public void setDeleted(boolean deleted)
+    {
+        getSemanticObject().setBooleanProperty(vocabulary.deleted, deleted);
+    }
+
     public GenericIterator<org.semanticwb.model.RoleRef> listRoleRefs()
     {
         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasRoleRef.getRDFProperty());
@@ -181,26 +213,6 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
          return ret;
     }
 
-    public boolean isActive()
-    {
-        return getSemanticObject().getBooleanProperty(vocabulary.active);
-    }
-
-    public void setActive(boolean active)
-    {
-        getSemanticObject().setBooleanProperty(vocabulary.active, active);
-    }
-
-    public boolean isDeleted()
-    {
-        return getSemanticObject().getBooleanProperty(vocabulary.deleted);
-    }
-
-    public void setDeleted(boolean deleted)
-    {
-        getSemanticObject().setBooleanProperty(vocabulary.deleted, deleted);
-    }
-
     public GenericIterator<org.semanticwb.model.WebPage> listVirtualParents()
     {
         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasWebPageVirtualParent.getRDFProperty());
@@ -231,6 +243,16 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
              ret=(WebPage)vocabulary.WebPage.newGenericInstance(obj);
          }
          return ret;
+    }
+
+    public boolean isActive()
+    {
+        return getSemanticObject().getBooleanProperty(vocabulary.active);
+    }
+
+    public void setActive(boolean active)
+    {
+        getSemanticObject().setBooleanProperty(vocabulary.active, active);
     }
 
     public GenericIterator<org.semanticwb.model.WebPage> listWebPageVirtualChilds()
@@ -292,6 +314,38 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
          return ret;
     }
 
+    public GenericIterator<org.semanticwb.model.PFlowRef> listPFlowRefs()
+    {
+        StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasPFlowRef.getRDFProperty());
+        return new GenericIterator<org.semanticwb.model.PFlowRef>(org.semanticwb.model.PFlowRef.class, stit);
+    }
+
+    public void addPFlowRef(org.semanticwb.model.PFlowRef pflowref)
+    {
+        getSemanticObject().addObjectProperty(vocabulary.hasPFlowRef, pflowref.getSemanticObject());
+    }
+
+    public void removeAllPFlowRef()
+    {
+        getSemanticObject().removeProperty(vocabulary.hasPFlowRef);
+    }
+
+    public void removePFlowRef(org.semanticwb.model.PFlowRef pflowref)
+    {
+        getSemanticObject().removeObjectProperty(vocabulary.hasPFlowRef,pflowref.getSemanticObject());
+    }
+
+    public PFlowRef getPFlowRef()
+    {
+         PFlowRef ret=null;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasPFlowRef);
+         if(obj!=null)
+         {
+             ret=(PFlowRef)vocabulary.PFlowRef.newGenericInstance(obj);
+         }
+         return ret;
+    }
+
     public GenericIterator<org.semanticwb.model.TemplateRef> listTemplateRefs()
     {
         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasTemplateRef.getRDFProperty());
@@ -324,36 +378,31 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
          return ret;
     }
 
-    public GenericIterator<org.semanticwb.model.PFlowRef> listPFlowRefs()
+    public GenericIterator<org.semanticwb.model.WebPage> listChilds()
     {
-        StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasPFlowRef.getRDFProperty());
-        return new GenericIterator<org.semanticwb.model.PFlowRef>(org.semanticwb.model.PFlowRef.class, stit);
+        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, vocabulary.hasWebPageChild.getInverse().getRDFProperty(), getSemanticObject().getRDFResource());
+        return new GenericIterator<org.semanticwb.model.WebPage>(org.semanticwb.model.WebPage.class, stit,true);
     }
 
-    public void addPFlowRef(org.semanticwb.model.PFlowRef pflowref)
+    public WebPage getChild()
     {
-        getSemanticObject().addObjectProperty(vocabulary.hasPFlowRef, pflowref.getSemanticObject());
-    }
-
-    public void removeAllPFlowRef()
-    {
-        getSemanticObject().removeProperty(vocabulary.hasPFlowRef);
-    }
-
-    public void removePFlowRef(org.semanticwb.model.PFlowRef pflowref)
-    {
-        getSemanticObject().removeObjectProperty(vocabulary.hasPFlowRef,pflowref.getSemanticObject());
-    }
-
-    public PFlowRef getPFlowRef()
-    {
-         PFlowRef ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasPFlowRef);
+         WebPage ret=null;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasWebPageChild);
          if(obj!=null)
          {
-             ret=(PFlowRef)vocabulary.PFlowRef.newGenericInstance(obj);
+             ret=(WebPage)vocabulary.WebPage.newGenericInstance(obj);
          }
          return ret;
+    }
+
+    public String getWebPageURL()
+    {
+        return getSemanticObject().getProperty(vocabulary.webPageURL);
+    }
+
+    public void setWebPageURL(String webPageURL)
+    {
+        getSemanticObject().setProperty(vocabulary.webPageURL, webPageURL);
     }
 
     public GenericIterator<org.semanticwb.model.RuleRef> listRuleRefs()
@@ -409,23 +458,6 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
          return ret;
     }
 
-    public GenericIterator<org.semanticwb.model.WebPage> listChilds()
-    {
-        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, vocabulary.hasWebPageChild.getInverse().getRDFProperty(), getSemanticObject().getRDFResource());
-        return new GenericIterator<org.semanticwb.model.WebPage>(org.semanticwb.model.WebPage.class, stit,true);
-    }
-
-    public WebPage getChild()
-    {
-         WebPage ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasWebPageChild);
-         if(obj!=null)
-         {
-             ret=(WebPage)vocabulary.WebPage.newGenericInstance(obj);
-         }
-         return ret;
-    }
-
     public void setParent(org.semanticwb.model.WebPage webpage)
     {
         getSemanticObject().setObjectProperty(vocabulary.webPageParent, webpage.getSemanticObject());
@@ -459,7 +491,7 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
 
     public String getDescription(String lang)
     {
-        return getSemanticObject().getProperty(vocabulary.description, lang);
+        return getSemanticObject().getProperty(vocabulary.description, null, lang);
     }
 
     public void setDescription(String description, String lang)

@@ -345,6 +345,12 @@ public class WebPage extends WebPageBase
     {
         //TODO:
     }
+    
+    @Override
+    public long getDiskUsage()
+    {
+        return 1000;
+    }     
         
     
 }

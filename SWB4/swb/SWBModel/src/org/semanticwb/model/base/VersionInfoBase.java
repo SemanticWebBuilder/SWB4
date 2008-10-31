@@ -57,6 +57,27 @@ public class VersionInfoBase extends GenericObjectBase implements Valueable,Trac
         getSemanticObject().setProperty(vocabulary.value, value);
     }
 
+    public void setVersionLockedBy(org.semanticwb.model.User user)
+    {
+        getSemanticObject().setObjectProperty(vocabulary.versionLockedBy, user.getSemanticObject());
+    }
+
+    public void removeVersionLockedBy()
+    {
+        getSemanticObject().removeProperty(vocabulary.versionLockedBy);
+    }
+
+    public User getVersionLockedBy()
+    {
+         User ret=null;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.versionLockedBy);
+         if(obj!=null)
+         {
+             ret=(User)vocabulary.User.newGenericInstance(obj);
+         }
+         return ret;
+    }
+
     public void setPreviousVersion(org.semanticwb.model.VersionInfo versioninfo)
     {
         getSemanticObject().setObjectProperty(vocabulary.previousVersion, versioninfo.getSemanticObject());
@@ -78,16 +99,6 @@ public class VersionInfoBase extends GenericObjectBase implements Valueable,Trac
          return ret;
     }
 
-    public String getVersionComment()
-    {
-        return getSemanticObject().getProperty(vocabulary.versionComment);
-    }
-
-    public void setVersionComment(String versionComment)
-    {
-        getSemanticObject().setProperty(vocabulary.versionComment, versionComment);
-    }
-
     public String getVersionFile()
     {
         return getSemanticObject().getProperty(vocabulary.versionFile);
@@ -96,6 +107,16 @@ public class VersionInfoBase extends GenericObjectBase implements Valueable,Trac
     public void setVersionFile(String versionFile)
     {
         getSemanticObject().setProperty(vocabulary.versionFile, versionFile);
+    }
+
+    public String getVersionComment()
+    {
+        return getSemanticObject().getProperty(vocabulary.versionComment);
+    }
+
+    public void setVersionComment(String versionComment)
+    {
+        getSemanticObject().setProperty(vocabulary.versionComment, versionComment);
     }
 
     public Date getUpdated()

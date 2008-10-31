@@ -80,7 +80,7 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
 
     public String getTitle(String lang)
     {
-        return getSemanticObject().getProperty(vocabulary.title, lang);
+        return getSemanticObject().getProperty(vocabulary.title, null, lang);
     }
 
     public void setTitle(String title, String lang)
@@ -109,16 +109,6 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
          return ret;
     }
 
-    public String getXml()
-    {
-        return getSemanticObject().getProperty(vocabulary.xml);
-    }
-
-    public void setXml(String xml)
-    {
-        getSemanticObject().setProperty(vocabulary.xml, xml);
-    }
-
     public int getHits()
     {
         return getSemanticObject().getIntProperty(vocabulary.hits);
@@ -127,6 +117,16 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
     public void setHits(int hits)
     {
         getSemanticObject().setLongProperty(vocabulary.hits, hits);
+    }
+
+    public String getXml()
+    {
+        return getSemanticObject().getProperty(vocabulary.xml);
+    }
+
+    public void setXml(String xml)
+    {
+        getSemanticObject().setProperty(vocabulary.xml, xml);
     }
 
     public Date getUpdated()
@@ -232,14 +232,14 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
         getSemanticObject().setLongProperty(vocabulary.priority, priority);
     }
 
-    public boolean isActive()
+    public boolean isDeleted()
     {
-        return getSemanticObject().getBooleanProperty(vocabulary.active);
+        return getSemanticObject().getBooleanProperty(vocabulary.deleted);
     }
 
-    public void setActive(boolean active)
+    public void setDeleted(boolean deleted)
     {
-        getSemanticObject().setBooleanProperty(vocabulary.active, active);
+        getSemanticObject().setBooleanProperty(vocabulary.deleted, deleted);
     }
 
     public GenericIterator<org.semanticwb.model.RoleRef> listRoleRefs()
@@ -274,14 +274,14 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
          return ret;
     }
 
-    public boolean isDeleted()
+    public boolean isActive()
     {
-        return getSemanticObject().getBooleanProperty(vocabulary.deleted);
+        return getSemanticObject().getBooleanProperty(vocabulary.active);
     }
 
-    public void setDeleted(boolean deleted)
+    public void setActive(boolean active)
     {
-        getSemanticObject().setBooleanProperty(vocabulary.deleted, deleted);
+        getSemanticObject().setBooleanProperty(vocabulary.active, active);
     }
 
     public int getViews()
@@ -401,7 +401,7 @@ public class PortletBase extends GenericObjectBase implements Versionable,Indexa
 
     public String getDescription(String lang)
     {
-        return getSemanticObject().getProperty(vocabulary.description, lang);
+        return getSemanticObject().getProperty(vocabulary.description, null, lang);
     }
 
     public void setDescription(String description, String lang)

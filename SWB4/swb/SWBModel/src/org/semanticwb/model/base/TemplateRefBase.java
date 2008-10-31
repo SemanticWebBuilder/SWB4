@@ -16,16 +16,6 @@ public class TemplateRefBase extends GenericObjectBase implements Deleteable,Act
         super(base);
     }
 
-    public boolean isDeleted()
-    {
-        return getSemanticObject().getBooleanProperty(vocabulary.deleted);
-    }
-
-    public void setDeleted(boolean deleted)
-    {
-        getSemanticObject().setBooleanProperty(vocabulary.deleted, deleted);
-    }
-
     public boolean isActive()
     {
         return getSemanticObject().getBooleanProperty(vocabulary.active);
@@ -34,6 +24,16 @@ public class TemplateRefBase extends GenericObjectBase implements Deleteable,Act
     public void setActive(boolean active)
     {
         getSemanticObject().setBooleanProperty(vocabulary.active, active);
+    }
+
+    public boolean isDeleted()
+    {
+        return getSemanticObject().getBooleanProperty(vocabulary.deleted);
+    }
+
+    public void setDeleted(boolean deleted)
+    {
+        getSemanticObject().setBooleanProperty(vocabulary.deleted, deleted);
     }
 
     public void setTemplate(org.semanticwb.model.Template template)

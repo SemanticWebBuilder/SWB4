@@ -26,26 +26,6 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
         getSemanticObject().setDateProperty(vocabulary.created, created);
     }
 
-    public boolean isDeleted()
-    {
-        return getSemanticObject().getBooleanProperty(vocabulary.deleted);
-    }
-
-    public void setDeleted(boolean deleted)
-    {
-        getSemanticObject().setBooleanProperty(vocabulary.deleted, deleted);
-    }
-
-    public boolean isActive()
-    {
-        return getSemanticObject().getBooleanProperty(vocabulary.active);
-    }
-
-    public void setActive(boolean active)
-    {
-        getSemanticObject().setBooleanProperty(vocabulary.active, active);
-    }
-
     public GenericIterator<org.semanticwb.model.RoleRef> listRoleRefs()
     {
         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasRoleRef.getRDFProperty());
@@ -76,6 +56,26 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
              ret=(RoleRef)vocabulary.RoleRef.newGenericInstance(obj);
          }
          return ret;
+    }
+
+    public boolean isDeleted()
+    {
+        return getSemanticObject().getBooleanProperty(vocabulary.deleted);
+    }
+
+    public void setDeleted(boolean deleted)
+    {
+        getSemanticObject().setBooleanProperty(vocabulary.deleted, deleted);
+    }
+
+    public boolean isActive()
+    {
+        return getSemanticObject().getBooleanProperty(vocabulary.active);
+    }
+
+    public void setActive(boolean active)
+    {
+        getSemanticObject().setBooleanProperty(vocabulary.active, active);
     }
 
     public void setModifiedBy(org.semanticwb.model.User user)
@@ -111,7 +111,7 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
 
     public String getTitle(String lang)
     {
-        return getSemanticObject().getProperty(vocabulary.title, lang);
+        return getSemanticObject().getProperty(vocabulary.title, null, lang);
     }
 
     public void setTitle(String title, String lang)
@@ -213,6 +213,27 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
          return ret;
     }
 
+    public void setCreator(org.semanticwb.model.User user)
+    {
+        getSemanticObject().setObjectProperty(vocabulary.creator, user.getSemanticObject());
+    }
+
+    public void removeCreator()
+    {
+        getSemanticObject().removeProperty(vocabulary.creator);
+    }
+
+    public User getCreator()
+    {
+         User ret=null;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.creator);
+         if(obj!=null)
+         {
+             ret=(User)vocabulary.User.newGenericInstance(obj);
+         }
+         return ret;
+    }
+
     public GenericIterator<org.semanticwb.model.RuleRef> listRuleRefs()
     {
         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasRuleRef.getRDFProperty());
@@ -241,27 +262,6 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
          if(obj!=null)
          {
              ret=(RuleRef)vocabulary.RuleRef.newGenericInstance(obj);
-         }
-         return ret;
-    }
-
-    public void setCreator(org.semanticwb.model.User user)
-    {
-        getSemanticObject().setObjectProperty(vocabulary.creator, user.getSemanticObject());
-    }
-
-    public void removeCreator()
-    {
-        getSemanticObject().removeProperty(vocabulary.creator);
-    }
-
-    public User getCreator()
-    {
-         User ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.creator);
-         if(obj!=null)
-         {
-             ret=(User)vocabulary.User.newGenericInstance(obj);
          }
          return ret;
     }
@@ -310,7 +310,7 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
 
     public String getDescription(String lang)
     {
-        return getSemanticObject().getProperty(vocabulary.description, lang);
+        return getSemanticObject().getProperty(vocabulary.description, null, lang);
     }
 
     public void setDescription(String description, String lang)

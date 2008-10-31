@@ -26,16 +26,6 @@ public class CampBase extends GenericObjectBase implements Activeable,Deleteable
         getSemanticObject().setDateProperty(vocabulary.created, created);
     }
 
-    public boolean isActive()
-    {
-        return getSemanticObject().getBooleanProperty(vocabulary.active);
-    }
-
-    public void setActive(boolean active)
-    {
-        getSemanticObject().setBooleanProperty(vocabulary.active, active);
-    }
-
     public boolean isDeleted()
     {
         return getSemanticObject().getBooleanProperty(vocabulary.deleted);
@@ -44,6 +34,16 @@ public class CampBase extends GenericObjectBase implements Activeable,Deleteable
     public void setDeleted(boolean deleted)
     {
         getSemanticObject().setBooleanProperty(vocabulary.deleted, deleted);
+    }
+
+    public boolean isActive()
+    {
+        return getSemanticObject().getBooleanProperty(vocabulary.active);
+    }
+
+    public void setActive(boolean active)
+    {
+        getSemanticObject().setBooleanProperty(vocabulary.active, active);
     }
 
     public void setModifiedBy(org.semanticwb.model.User user)
@@ -79,7 +79,7 @@ public class CampBase extends GenericObjectBase implements Activeable,Deleteable
 
     public String getTitle(String lang)
     {
-        return getSemanticObject().getProperty(vocabulary.title, lang);
+        return getSemanticObject().getProperty(vocabulary.title, null, lang);
     }
 
     public void setTitle(String title, String lang)
@@ -194,7 +194,7 @@ public class CampBase extends GenericObjectBase implements Activeable,Deleteable
 
     public String getDescription(String lang)
     {
-        return getSemanticObject().getProperty(vocabulary.description, lang);
+        return getSemanticObject().getProperty(vocabulary.description, null, lang);
     }
 
     public void setDescription(String description, String lang)

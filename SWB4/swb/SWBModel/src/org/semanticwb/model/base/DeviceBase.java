@@ -26,6 +26,16 @@ public class DeviceBase extends GenericObjectBase implements Traceable,Descripti
         getSemanticObject().setDateProperty(vocabulary.created, created);
     }
 
+    public String getValue()
+    {
+        return getSemanticObject().getProperty(vocabulary.value);
+    }
+
+    public void setValue(String value)
+    {
+        getSemanticObject().setProperty(vocabulary.value, value);
+    }
+
     public void setModifiedBy(org.semanticwb.model.User user)
     {
         getSemanticObject().setObjectProperty(vocabulary.modifiedBy, user.getSemanticObject());
@@ -47,16 +57,6 @@ public class DeviceBase extends GenericObjectBase implements Traceable,Descripti
          return ret;
     }
 
-    public String getValue()
-    {
-        return getSemanticObject().getProperty(vocabulary.value);
-    }
-
-    public void setValue(String value)
-    {
-        getSemanticObject().setProperty(vocabulary.value, value);
-    }
-
     public String getTitle()
     {
         return getSemanticObject().getProperty(vocabulary.title);
@@ -69,7 +69,7 @@ public class DeviceBase extends GenericObjectBase implements Traceable,Descripti
 
     public String getTitle(String lang)
     {
-        return getSemanticObject().getProperty(vocabulary.title, lang);
+        return getSemanticObject().getProperty(vocabulary.title, null, lang);
     }
 
     public void setTitle(String title, String lang)
@@ -120,7 +120,7 @@ public class DeviceBase extends GenericObjectBase implements Traceable,Descripti
 
     public String getDescription(String lang)
     {
-        return getSemanticObject().getProperty(vocabulary.description, lang);
+        return getSemanticObject().getProperty(vocabulary.description, null, lang);
     }
 
     public void setDescription(String description, String lang)

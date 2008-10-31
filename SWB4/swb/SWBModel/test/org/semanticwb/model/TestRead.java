@@ -10,6 +10,10 @@ import org.junit.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.platform.SemanticOntology;
+import org.semanticwb.platform.SemanticProperty;
+import org.semanticwb.platform.SemanticVocabulary;
 
 /**
  *
@@ -47,7 +51,7 @@ public class TestRead {
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     //
-    @Test
+    //@Test
     public void test()
     {
         WebSite site=SWBContext.getWebSite("sep");
@@ -72,5 +76,32 @@ public class TestRead {
         }
         System.out.println("Time:"+(System.currentTimeMillis()-time));        
     }
+    
+
+    @Test
+    public void testFormView()
+    {
+        SemanticOntology ont=SWBPlatform.getSemanticMgr().getOntology();
+        SemanticProperty propertyMode=new SemanticProperty(ont.getRDFOntModel().getProperty(SemanticVocabulary.URI+"propertyMode"));
+        SemanticProperty propertyRef=new SemanticProperty(ont.getRDFOntModel().getProperty(SemanticVocabulary.URI+"propertyRef"));
+        
+        
+        Iterator<FormView> it=SWBContext.getVocabulary().FormView.listGenericInstances();
+        while(it.hasNext())
+        {
+            FormView view=it.next();
+            System.out.println("View:"+view.getId());
+            Iterator<SemanticObject> itp=view.listCreatePropertys();
+            while(itp.hasNext())
+            {
+                SemanticObject obj=itp.next();
+                String mode=obj.getProperty(propertyMode);
+                SemanticObject ref=obj.getObjectProperty(propertyRef);
+                SemanticProperty prop=obj.transformToSemanticProperty();
+                System.out.println("-->prop:"+prop.getURI()+" mode:"+mode+" ref:"+ref);
+            }
+        }
+    }
+    
 
 }
