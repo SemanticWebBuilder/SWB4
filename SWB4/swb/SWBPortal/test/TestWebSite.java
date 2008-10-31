@@ -486,6 +486,29 @@ public class TestWebSite {
             home.addPortletRef(portletref);            
             
         }
+        if(site.getPortletType("SWBASOPropRefEditor")==null)
+        {
+            
+            PortletType ptype=site.createPortletType("SWBASOPropRefEditor");
+            ptype.setPortletClassName("org.semanticwb.portal.admin.resources.SWBASOPropRefEditor");
+            ptype.setPortletBundle("org.semanticwb.portal.admin.resources.SWBASOPropRefEditor");
+            ptype.setPortletMode(1);
+            ptype.setTitle("SemanticObjectPropRef Editor");
+                    
+            Portlet portlet=site.createPortlet();
+            portlet.setActive(true);
+            portlet.setCreator(user);
+            portlet.setPortletType(ptype);
+            portlet.setTitle("SWBASOPropRefEditor");
+            
+            PortletRef portletref=site.createPortletRef();
+            portletref.setActive(true);
+            portletref.setPortlet(portlet);
+            portletref.setPriority(3);
+            WebPage page0=site.getWebPage("page0");
+            page0.addPortletRef(portletref);            
+            
+        }        
     }
     
     
@@ -530,8 +553,33 @@ public class TestWebSite {
     public void Test4()
     {
         WebSite site=SWBContext.getWebSite("sep");
-        if(!site.isActive()) site.setActive(true);
+        site.setActive(true);
+        WebPage wp=site.getHomePage();
+        wp.setActive(true);
+        UserRepository urep=SWBContext.getDefaultRepository();
+        site.setUserRepository(urep);
+        User user=urep.getUser("1");
+        site.setModifiedBy(user);
+        Template tpl = site.getTemplate("1");
         
+        if(tpl==null)
+        {
+            tpl=site.createTemplate();
+            tpl.setTitle("Platilla1");
+            VersionInfo version=site.createVersionInfo();
+            version.setVersionNumber(1);
+            version.setVersionFile("template.html");
+            tpl.setActualVersion(version);
+            tpl.setLastVersion(version);
+        }
+        tpl.setActive(true);
+        TemplateRef tplref=site.createTemplateRef();
+        tplref.setTemplate(tpl);
+        tplref.setActive(true);
+        tplref.setPriority(3);
+        tplref.setActive(true);
+        wp.addTemplateRef(tplref);
+        site.setUpdated(new java.util.Date(System.currentTimeMillis()));  
     }
     
     //@Test
