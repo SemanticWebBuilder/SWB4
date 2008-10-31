@@ -20,6 +20,7 @@ public class SemanticVocabulary
     //RDF
     public static final String RDF_URI="http://www.w3.org/1999/02/22-rdf-syntax-ns#";
     public static final String RDF_TYPE=RDF_URI+"type";
+    public static final String RDF_PROPERTY=RDF_URI+"Property";
     
     public static final String RDFS_URI="http://www.w3.org/2000/01/rdf-schema#";
     public static final String RDFS_LABEL=RDFS_URI+"label";
@@ -29,6 +30,7 @@ public class SemanticVocabulary
     
     public static final String XMLS_URI="http://www.w3.org/2001/XMLSchema#";
     public static final String XMLS_DATETIME=XMLS_URI+"dateTime";
+    public static final String XMLS_DATE=XMLS_URI+"date";
     public static final String XMLS_BOOLEAN=XMLS_URI+"boolean";
     public static final String XMLS_STRING=XMLS_URI+"string";
     public static final String XMLS_INT=XMLS_URI+"int";
@@ -55,6 +57,7 @@ public class SemanticVocabulary
     public static final String SWB_PROP_HASCLASS=URI+"hasClass";
     public static final String SWB_PROP_LOCALEABLE=URI+"localeable";
     public static final String SWB_PROP_DISPLAYOBJECT=URI+"displayObject";
+    public static final String SWB_PROP_EXTERNALINVOCATION=URI+"externalInvocation";
 //    public static final String SWB_PROP_PROPGROUP=URI+"propGroup";
 //    public static final String SWB_PROP_PROPINDEX=URI+"propIndex";
     public static final String SWB_ANNOT_CLASSNAME=URI+"className";

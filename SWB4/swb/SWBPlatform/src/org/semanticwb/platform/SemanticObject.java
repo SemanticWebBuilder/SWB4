@@ -5,6 +5,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.rdf.model.impl.LiteralImpl;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -13,6 +14,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.base.util.URLEncoder;
+import org.semanticwb.model.GenericObject;
 
 /**
  *
@@ -257,6 +259,13 @@ public class SemanticObject
     
     public String getProperty(SemanticProperty prop, String defValue)
     {
+        //System.out.println("getProperty:"+prop+" "+prop.isExternalInvocation());
+        if(prop.isExternalInvocation())
+        {
+            Object ret=externalInvokerGet(prop);
+            if(ret==null)return null;
+            return ""+ret;
+        }        
         if(m_virtual)
         {
             String ret=(String)m_virtprops.get(prop.getURI());
@@ -274,6 +283,13 @@ public class SemanticObject
     
     public String getProperty(SemanticProperty prop, String defValue, String lang)
     {
+        //System.out.println("getProperty:"+prop+" "+prop.isExternalInvocation());
+        if(prop.isExternalInvocation())
+        {
+            Object ret=externalInvokerGet(prop);
+            if(ret==null)return null;
+            return ""+ret;
+        }
         if(m_virtual)
         {
             String ret=(String)m_virtprops.get(prop.getURI()+"|"+lang);
@@ -342,8 +358,30 @@ public class SemanticObject
         return getLongProperty(prop,0L);
     }
     
+    private Object externalInvokerGet(SemanticProperty prop)
+    {
+        Object ret=null;
+        GenericObject obj=getSemanticClass().newGenericInstance(this);
+        Class cls=obj.getClass();
+        String name=prop.getLabel();
+        if(name==null)prop.getName();
+        name="get"+name.substring(0,1).toUpperCase()+name.substring(1);
+        try
+        {
+            Method method=cls.getMethod(name);
+            ret=method.invoke(obj);
+        }catch(Exception e){log.error(e);}
+        //System.out.println("externalInvoker:"+ret);
+        return ret;
+    }
+    
     public long getLongProperty(SemanticProperty prop, long defValue)
     {
+        //System.out.println("getLongProperty:"+prop+" "+prop.isExternalInvocation());
+        if(prop.isExternalInvocation())
+        {
+            return (Long)externalInvokerGet(prop);
+        }
         if(m_virtual)
         {
             Long ret=(Long)m_virtprops.get(prop.getURI());
@@ -756,6 +794,17 @@ public class SemanticObject
         }
         return ret;
     }    
+    
+    public SemanticProperty transformToSemanticProperty()
+    {
+        SemanticProperty ret=null;
+        Property pro=getModel().getRDFModel().getProperty(getURI());
+        if(pro!=null)
+        {
+            ret=new SemanticProperty(pro);
+        }
+        return ret;
+    }
     
 }
 
