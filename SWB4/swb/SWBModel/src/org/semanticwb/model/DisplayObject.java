@@ -11,10 +11,10 @@ public class DisplayObject extends DisplayObjectBase
         super(base);
     }
     
-    public FormElement getViewElement()
+    public FormElement getFormElementInstance()
     {
         FormElement ret=null;
-        SemanticObject obj=this.getSemanticObject().getObjectProperty(SWBContext.getVocabulary().viewElement);
+        SemanticObject obj=getFormElement();
         if(obj!=null)
         {
             SemanticClass cls=obj.getSemanticClass();
@@ -22,28 +22,4 @@ public class DisplayObject extends DisplayObjectBase
         }
         return ret;
     }
-    
-    public FormElement getEditElement()
-    {
-        FormElement ret=null;
-        SemanticObject obj=this.getSemanticObject().getObjectProperty(SWBContext.getVocabulary().editElement);
-        if(obj!=null)
-        {
-            SemanticClass cls=obj.getSemanticClass();
-            ret=(FormElement)cls.newGenericInstance(obj);
-        }
-        return ret;
-    }   
-    
-    public FormElement getCreateElement()
-    {
-        FormElement ret=null;
-        SemanticObject obj=this.getSemanticObject().getObjectProperty(SWBContext.getVocabulary().createElement);
-        if(obj!=null)
-        {
-            SemanticClass cls=obj.getSemanticClass();
-            ret=(FormElement)cls.newGenericInstance(obj);
-        }
-        return ret;
-    }       
 }

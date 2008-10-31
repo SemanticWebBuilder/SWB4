@@ -16,16 +16,6 @@ public class PortletRefBase extends GenericObjectBase implements Deleteable,Acti
         super(base);
     }
 
-    public boolean isDeleted()
-    {
-        return getSemanticObject().getBooleanProperty(vocabulary.deleted);
-    }
-
-    public void setDeleted(boolean deleted)
-    {
-        getSemanticObject().setBooleanProperty(vocabulary.deleted, deleted);
-    }
-
     public boolean isActive()
     {
         return getSemanticObject().getBooleanProperty(vocabulary.active);
@@ -34,6 +24,16 @@ public class PortletRefBase extends GenericObjectBase implements Deleteable,Acti
     public void setActive(boolean active)
     {
         getSemanticObject().setBooleanProperty(vocabulary.active, active);
+    }
+
+    public boolean isDeleted()
+    {
+        return getSemanticObject().getBooleanProperty(vocabulary.deleted);
+    }
+
+    public void setDeleted(boolean deleted)
+    {
+        getSemanticObject().setBooleanProperty(vocabulary.deleted, deleted);
     }
 
     public void setPortlet(org.semanticwb.model.Portlet portlet)

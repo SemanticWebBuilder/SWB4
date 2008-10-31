@@ -7,11 +7,11 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class PFlowRefBase extends GenericObjectBase implements Deleteable,Activeable
+public class FormViewRefBase extends GenericObjectBase 
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
-    public PFlowRefBase(SemanticObject base)
+    public FormViewRefBase(SemanticObject base)
     {
         super(base);
     }
@@ -26,33 +26,33 @@ public class PFlowRefBase extends GenericObjectBase implements Deleteable,Active
         getSemanticObject().setBooleanProperty(vocabulary.active, active);
     }
 
-    public boolean isDeleted()
+    public String getFormMode()
     {
-        return getSemanticObject().getBooleanProperty(vocabulary.deleted);
+        return getSemanticObject().getProperty(vocabulary.formMode);
     }
 
-    public void setDeleted(boolean deleted)
+    public void setFormMode(String formMode)
     {
-        getSemanticObject().setBooleanProperty(vocabulary.deleted, deleted);
+        getSemanticObject().setProperty(vocabulary.formMode, formMode);
     }
 
-    public void setPflow(org.semanticwb.model.PFlow pflow)
+    public void setFormView(org.semanticwb.model.FormView formview)
     {
-        getSemanticObject().setObjectProperty(vocabulary.pflow, pflow.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.formView, formview.getSemanticObject());
     }
 
-    public void removePflow()
+    public void removeFormView()
     {
-        getSemanticObject().removeProperty(vocabulary.pflow);
+        getSemanticObject().removeProperty(vocabulary.formView);
     }
 
-    public PFlow getPflow()
+    public FormView getFormView()
     {
-         PFlow ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.pflow);
+         FormView ret=null;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.formView);
          if(obj!=null)
          {
-             ret=(PFlow)vocabulary.PFlow.newGenericInstance(obj);
+             ret=(FormView)vocabulary.FormView.newGenericInstance(obj);
          }
          return ret;
     }
@@ -66,10 +66,5 @@ public class PFlowRefBase extends GenericObjectBase implements Deleteable,Active
     {
         StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, null, getSemanticObject().getRDFResource());
         return new GenericIterator((SemanticClass)null, stit,true);
-    }
-
-    public WebSite getWebSite()
-    {
-        return new WebSite(getSemanticObject().getModel().getModelObject());
     }
 }

@@ -79,7 +79,7 @@ public class TestWebPages {
     
     public void printChilds(WebPage page)
     {
-        Iterator<WebPage> it=page.listChildWebPage();
+        Iterator<WebPage> it=page.listChilds();
         while(it.hasNext())
         {
             WebPage p=it.next();

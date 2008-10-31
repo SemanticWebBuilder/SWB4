@@ -16,24 +16,131 @@ public class DisplayObjectBase extends GenericObjectBase
         super(base);
     }
 
-    public String getPropGroup()
+    public boolean isRequired()
     {
-        return getSemanticObject().getProperty(vocabulary.propGroup);
+        return getSemanticObject().getBooleanProperty(vocabulary.propRequired);
     }
 
-    public void setPropGroup(String propGroup)
+    public void setRequired(boolean propRequired)
     {
-        getSemanticObject().setProperty(vocabulary.propGroup, propGroup);
+        getSemanticObject().setBooleanProperty(vocabulary.propRequired, propRequired);
     }
 
-    public int getPropIndex()
+    public String getSelectValues()
+    {
+        return getSemanticObject().getProperty(vocabulary.propSelectValues);
+    }
+
+    public void setSelectValues(String propSelectValues)
+    {
+        getSemanticObject().setProperty(vocabulary.propSelectValues, propSelectValues);
+    }
+
+    public String getSelectValues(String lang)
+    {
+        return getSemanticObject().getProperty(vocabulary.propSelectValues, null, lang);
+    }
+
+    public void setSelectValues(String propSelectValues, String lang)
+    {
+        getSemanticObject().setProperty(vocabulary.propSelectValues, propSelectValues, lang);
+    }
+
+    public int getIndex()
     {
         return getSemanticObject().getIntProperty(vocabulary.propIndex);
     }
 
-    public void setPropIndex(int propIndex)
+    public void setIndex(int propIndex)
     {
         getSemanticObject().setLongProperty(vocabulary.propIndex, propIndex);
+    }
+
+    public boolean isHidden()
+    {
+        return getSemanticObject().getBooleanProperty(vocabulary.propHidden);
+    }
+
+    public void setHidden(boolean propHidden)
+    {
+        getSemanticObject().setBooleanProperty(vocabulary.propHidden, propHidden);
+    }
+
+    public String getGroup()
+    {
+        return getSemanticObject().getProperty(vocabulary.propGroup);
+    }
+
+    public void setGroup(String propGroup)
+    {
+        getSemanticObject().setProperty(vocabulary.propGroup, propGroup);
+    }
+
+    public String getPromptMessage()
+    {
+        return getSemanticObject().getProperty(vocabulary.propPromptMessage);
+    }
+
+    public void setPromptMessage(String propPromptMessage)
+    {
+        getSemanticObject().setProperty(vocabulary.propPromptMessage, propPromptMessage);
+    }
+
+    public String getPromptMessage(String lang)
+    {
+        return getSemanticObject().getProperty(vocabulary.propPromptMessage, null, lang);
+    }
+
+    public void setPromptMessage(String propPromptMessage, String lang)
+    {
+        getSemanticObject().setProperty(vocabulary.propPromptMessage, propPromptMessage, lang);
+    }
+
+    public String getInvalidMessage()
+    {
+        return getSemanticObject().getProperty(vocabulary.propInvalidMessage);
+    }
+
+    public void setInvalidMessage(String propInvalidMessage)
+    {
+        getSemanticObject().setProperty(vocabulary.propInvalidMessage, propInvalidMessage);
+    }
+
+    public String getInvalidMessage(String lang)
+    {
+        return getSemanticObject().getProperty(vocabulary.propInvalidMessage, null, lang);
+    }
+
+    public void setInvalidMessage(String propInvalidMessage, String lang)
+    {
+        getSemanticObject().setProperty(vocabulary.propInvalidMessage, propInvalidMessage, lang);
+    }
+
+    public void setFormElement(org.semanticwb.platform.SemanticObject semanticobject)
+    {
+        getSemanticObject().setObjectProperty(vocabulary.formElement, semanticobject);
+    }
+
+    public void removeFormElement()
+    {
+        getSemanticObject().removeProperty(vocabulary.formElement);
+    }
+
+    public SemanticObject getFormElement()
+    {
+         SemanticObject ret=null;
+         ret=getSemanticObject().getObjectProperty(vocabulary.formElement);
+         return ret;
+    }
+
+    public boolean isEditable()
+    {
+        return getSemanticObject().getBooleanProperty(vocabulary.propEditable);
+    }
+
+    public void setEditable(boolean propEditable)
+    {
+        getSemanticObject().setBooleanProperty(vocabulary.propEditable, propEditable);
     }
 
     public void remove()

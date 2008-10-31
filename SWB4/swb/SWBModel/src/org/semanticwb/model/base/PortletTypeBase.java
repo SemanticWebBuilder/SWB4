@@ -69,7 +69,7 @@ public class PortletTypeBase extends GenericObjectBase implements Traceable,Desc
 
     public String getTitle(String lang)
     {
-        return getSemanticObject().getProperty(vocabulary.title, lang);
+        return getSemanticObject().getProperty(vocabulary.title, null, lang);
     }
 
     public void setTitle(String title, String lang)
@@ -184,7 +184,7 @@ public class PortletTypeBase extends GenericObjectBase implements Traceable,Desc
 
     public String getDescription(String lang)
     {
-        return getSemanticObject().getProperty(vocabulary.description, lang);
+        return getSemanticObject().getProperty(vocabulary.description, null, lang);
     }
 
     public void setDescription(String description, String lang)

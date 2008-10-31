@@ -1,8 +1,14 @@
 package org.semanticwb.model;
 
+import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.Resource;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.base.SWBContextBase;
+import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.platform.SemanticOntology;
+import org.semanticwb.platform.SemanticVocabulary;
 
 public class SWBContext extends SWBContextBase
 {
@@ -40,5 +46,23 @@ public class SWBContext extends SWBContextBase
     public static UserRepository getDefaultRepository()
     {
         return getUserRepository(USERREPOSITORY_DEFAULT);
+    }
+    
+    public static FormView getFormView(String id)
+    {
+        FormView view=null;
+        if(id!=null)
+        {
+            SemanticOntology ont=SWBPlatform.getSemanticMgr().getOntology();
+            Resource res=ont.getRDFOntModel().getResource("http://www.semanticwebbuilder.org/swb4/xforms/ontology#"+id);
+            Property type=ont.getRDFOntModel().getProperty(SemanticVocabulary.RDF_TYPE);
+            if(ont.getRDFOntModel().contains(res, type))
+            {
+                SemanticObject obj=new SemanticObject(res);
+                //System.out.println("id:"+id+" obj:"+obj);
+                view=new FormView(obj);
+            }
+        }
+        return view;
     }
 }
