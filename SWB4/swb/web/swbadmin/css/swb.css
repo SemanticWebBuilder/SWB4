@@ -51,10 +51,10 @@ body .dojoSplitPane {
 
 .swbIconPortlets { background-image: url('../icons/f_resourcetype.gif'); }
 .swbIconPortletType { background-image: url('../icons/f_resourcetype.gif'); }
-.swbIconPortlet { background-image: url('../icons/i_recurso_verde.gif'); }
+.swbIconPortlet { background-image: url('../icons/Portlet.png'); }
 .swbIconPortletU { background-image: url('../icons/i_recurso_rojo.gif'); }
 .swbIconTemplates { background-image: url('../icons/f_plantillas.gif'); }
-.swbIconTemplate { background-image: url('../icons/i_plantilla_verde.gif'); }
+.swbIconTemplate { background-image: url('../icons/Template.png'); }
 .swbIconTemplateU { background-image: url('../icons/i_plantilla_rojo.gif'); }
 .swbIconWebSite { background-image: url('../icons/f_site_verde.gif'); }
 .swbIconWebPage { background-image: url('../icons/i_general_verde.gif'); }
@@ -78,3 +78,101 @@ th {
 	background-image:url('../js/dojo/dijit/themes/soria/images/titleBar.png');
 	background-position:0px -1px; 
 }
+
+
+form.swbform legend {
+	padding: 0 2px;
+	font-weight: bold;
+        padding-left: 0;
+        _margin: 0 -7px; /* IE Win */
+	}
+	
+form.swbform label {
+	display: inline-block;
+	line-height: 1.8;
+	_vertical-align: top;
+        text-align: right;
+        width: 25%;
+        }
+	
+form.swbform fieldset ol{
+	margin: 0;
+	padding: 0;
+	}
+
+_form.swbform fieldset li p{
+	margin: 3px 5px;
+	padding: 0;
+        width: 70%;
+        position: absolute ;
+	}
+
+_form.swbform fieldset li span{
+	margin: 3px 5px;
+	padding: 0;
+        _width: 70%;
+        _position: absolute ;
+	}
+
+_form.swbform fieldset li {
+	list-style: none;
+	padding: 2px;
+	margin: 0;
+	_padding: 5px 10px 7px;
+	background: url(../images/swbform-divider.gif) left bottom repeat-x;
+	}
+	
+form.swbform fieldset fieldset {
+	border: none;
+        padding: 0px 25px 0px 0px;
+        background: none;
+	}
+	
+form.swbform fieldset fieldset legend {
+        width: 25%;
+        text-align: right;
+	font-weight: normal;
+	}
+	
+form.swbform fieldset fieldset label {
+	display: block;
+	width: auto;
+        margin-left: 26%;
+        text-align: left;
+        padding: 0px;
+	}
+
+form.swbform fieldset span label {
+	width: auto;
+        padding: 0px 10px 0px 0px;  /*horizontal*/
+	_display: block;            /* vertical */
+        _margin-left: 25.5%;        /* vertical */
+        _text-align: left;          /* vertical */
+	}
+
+form.swbform em {
+	font-weight: bold;
+	font-style: normal;
+	color: #f00;
+	}
+
+form.swbform {
+	_width: 90%;
+	font-size: 1.1em;
+	color: #333;
+        font: normal 100% "Lucida Grande", Helvetica, Verdana, Arial;
+	}
+	
+form.swbform legend,
+form.swbform label { color: #333; }
+
+form.swbform fieldset {
+        padding: 5px;
+	border-top: 1px solid #a0a0ff;
+	border-left: 1px solid #a0a0ff;
+	border-bottom: 1px solid #a0a0ff;
+	border-right: 1px solid #a0a0ff;
+	background: url(../images/swbform-fieldset.gif) left bottom repeat-x;
+        _background: url('../js/dojo/dijit/themes/soria/images/titleBar.png') left bottom repeat-x;
+	}
+	

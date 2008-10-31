@@ -24,8 +24,8 @@
     {
 %>
 <div dojoType="dijit.layout.TabContainer" id_="bottomTabs" tabPosition_="bottom" selectedChild_="btab1">
-    <div dojoType="dijit.layout.ContentPane" title="Información" style=" padding:10px;">
-        <iframe src ="/swb/swbadmin/jsp/SemObjectEditor.jsp?suri=<%=URLEncoder.encode(obj.getURI())%>" width="100%" height="100%" frameborder="0"></iframe>
+    <div dojoType="dijit.layout.ContentPane" title="Información" style=" padding:10px;" refreshOnShow="false" href="/swb/swbadmin/jsp/SemObjectEditor.jsp?suri=<%=URLEncoder.encode(obj.getURI())%>">
+<!--        <iframe src ="/swb/swbadmin/jsp/SemObjectEditor.jsp?suri=<%=URLEncoder.encode(obj.getURI())%>" width="100%" height="100%" frameborder="0"></iframe>-->
     </div><!-- end:info btab1 -->    
 <%        
         String auxid=null;
@@ -45,8 +45,11 @@
                     WebPage tab=it.next();
                     System.out.println("tab:"+tab);
 %>
-    <div id_="btab1" dojoType="dijit.layout.ContentPane" title="<%=tab.getTitle()%>" style=" padding:10px; ">
+
+    <div id_="btab1" dojoType="dijit.layout.ContentPane" title="<%=tab.getTitle()%>" style=" padding:10px; " refreshOnShow="false" _href="/swb/swbadmin/jsp/SemObjectEditor.jsp?suri=<%=URLEncoder.encode(obj.getURI())%>">
+<!--    
         <iframe src ="<%=tab.getUrl()%>?tm=<%=obj.getSemanticObject().getModel().getName()%>&tp=<%=obj.getId()%>&id=<%=obj.getId()%>&act=edit" width="100%" height="100%" frameborder="0"></iframe>
+-->        
     </div><!-- end:info btab1 -->
 <%
                 
