@@ -32,13 +32,17 @@ public class SWBASOPropRefEditor extends GenericResource {
 
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        response.setContentType("text/html; charset=ISO-8859-1");
         log.debug("doEdit(SWBASOPropRefEditor...)");
         PrintWriter out = response.getWriter();
         User user = paramRequest.getUser();
         String id = request.getParameter("suri");
-        
         String idp = request.getParameter("sprop");
         String idpref = request.getParameter("spropref");
+        
+        System.out.println("id:"+id);
+        System.out.println("idp:"+idp);
+        System.out.println("idpref:"+idpref);
         
         String action = request.getParameter("act");
 
@@ -81,11 +85,11 @@ public class SWBASOPropRefEditor extends GenericResource {
             out.println(" }");
             out.println("</script>");
             out.println("<fieldset>");
-            out.println("	<legend>" + prop.getDisplayName(user.getLanguage()) + "</legend>");
+//            out.println("	<legend>" + prop.getDisplayName(user.getLanguage()) + "</legend>");
             out.println("<table width=\"100%\">");
-            out.println("<caption>");
-            out.println(getDisplaySemObj(obj,user.getLanguage()));
-            out.println("</caption>");
+//            out.println("<caption>");
+//            out.println(getDisplaySemObj(obj,user.getLanguage()));
+//            out.println("</caption>");
             out.println("<thead>");
             out.println("<tr>");
             out.println("<th>");
@@ -153,7 +157,7 @@ public class SWBASOPropRefEditor extends GenericResource {
                 urlr.setParameter("sval", sobj.getURI());
                 urlr.setParameter(prop.getName(), prop.getURI());
                 urlr.setAction("remove");
-                out.println("<a href=\""+urlr+"\">remove</a>");
+                out.println("<a href=\"#\" onclick=\"submitUrl('"+urlr+"',this); return false;\">remove</a>");
                 out.println("</td>");
                 out.println("<td>");
                 SWBResourceURL urlchoose = paramRequest.getRenderUrl();
@@ -164,7 +168,7 @@ public class SWBASOPropRefEditor extends GenericResource {
                 if(idp!=null)urlchoose.setParameter("rsprop", idp);
                 if(idpref!=null)urlchoose.setParameter("rspropref", idpref);
                 urlchoose.setParameter("act", "edit");
-                out.println("<a href=\"" + urlchoose + "\">" + stitle + "</a>");
+                out.println("<a href=\"#\"  onclick=\"submitUrl('"+urlchoose+"',this); return false;\">" + stitle + "</a>");
                 //out.println(stitle); 
                 out.println("</td>");
                 if(hmprop.get(SWBContext.getVocabulary().priority)!=null)
@@ -229,7 +233,7 @@ public class SWBASOPropRefEditor extends GenericResource {
             urlNew.setParameter("sprop", idp);
             urlNew.setParameter("spropref", idp);
             urlNew.setParameter("act", "choose");
-            out.println("<p><a href=\""+urlNew+"\">Add New</a>");
+            out.println("<p><a href=\"#\" onclick=\"submitUrl('"+urlNew+"',this); return false;\">Add New</a>");
             out.println("</p>");
             out.println("</td>");
             out.println("</tr>");
@@ -325,7 +329,7 @@ public class SWBASOPropRefEditor extends GenericResource {
                         urle.setParameter(name, prop.getURI());
                         tmpName = getDisplaySemObj(obj2,user.getLanguage());
                         if (modificable) {
-                            out.println("<a href=\"" + urle + "\" >" + tmpName + "</a>");
+                            out.println("<a href=\"#\" onclick=\"submitUrl('"+urle+"',this); return false;\">" + tmpName + "</a>");
                         } else {
                             out.println(tmpName);
                         }
@@ -336,7 +340,7 @@ public class SWBASOPropRefEditor extends GenericResource {
                         urlr.setParameter(name, prop.getURI());
                         urlr.setAction("remove");
                         if (modificable) {
-                            out.println("<a  href=\"" + urlr + "\">Remove</a>");
+                            out.println("<a  href=\"#\" onclick=\"submitUrl('"+urlr+"',this); return false;\">Remove</a>");
                         }
 
                         if (unumlist) {
@@ -351,12 +355,12 @@ public class SWBASOPropRefEditor extends GenericResource {
                         urlc.setParameter("suri", obj.getURI());
                         urlc.setParameter("sprop", prop.getURI());
                         urlc.setParameter("act", "choose");
-                        out.println("<a  href=\"" + urlc + "\">Choose</a>");
+                        out.println("<a  href=\"#\" onclick=\"submitUrl('"+urlc+"',this); return false;\">Choose</a>");
                         SWBResourceURL urla = paramRequest.getActionUrl();
                         urla.setParameter("suri", obj.getURI());
                         urla.setParameter("sprop", prop.getURI());
                         urla.setAction("new");
-                        out.println("<a  href=\"" + urla + "\">Add New</a>");
+                        out.println("<a  href=\"#\" onclick=\"submitUrl('"+urla+"',this); return false;\">Add New</a>");
                     }
                     
                 }
@@ -402,7 +406,7 @@ public class SWBASOPropRefEditor extends GenericResource {
                     urlchoose.setParameter("suri", obj.getURI());
                     urlchoose.setParameter("sprop", prop.getURI());
                     urlchoose.setParameter("sobj", sobj.getURI());
-                    out.println("<a href=\"" + urlchoose + "\">" + stitle + "</a>");
+                    out.println("<a href=\"#\" onclick=\"submitUrl('"+urlchoose+"',this); return false;\">" + stitle + "</a>");
                 } else {
                     out.println(stitle);
                 }
