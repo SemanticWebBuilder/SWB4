@@ -488,7 +488,6 @@ public class TestWebSite {
         }
         if(site.getPortletType("SWBASOPropRefEditor")==null)
         {
-            
             PortletType ptype=site.createPortletType("SWBASOPropRefEditor");
             ptype.setPortletClassName("org.semanticwb.portal.admin.resources.SWBASOPropRefEditor");
             ptype.setPortletBundle("org.semanticwb.portal.admin.resources.SWBASOPropRefEditor");
@@ -629,19 +628,32 @@ public class TestWebSite {
         }        
     }
     
-    //@Test
+    @Test
     public void TestAdmin2()
     {    
         //if(SWBContext.getWebSite("SWBAdmin")==null)
         {
             WebSite site=SWBContext.getWebSite("SWBAdmin");
-            //Asignar platilla a system 
-            WebPage menus=site.getWebPage("WBAd_System");
-            TemplateRef tplref=site.createTemplateRef();
-            tplref.setTemplate(site.getTemplate("2"));
-            tplref.setActive(true);
-            tplref.setPriority(3);
-            menus.addTemplateRef(tplref);    
+//            //Asignar platilla a system 
+//            WebPage menus=site.getWebPage("WBAd_System");
+//            TemplateRef tplref=site.createTemplateRef();
+//            tplref.setTemplate(site.getTemplate("2"));
+//            tplref.setActive(true);
+//            tplref.setPriority(3);
+//            menus.addTemplateRef(tplref);    
+            
+            PortletType ptype=site.createPortletType("SWBASOPropRefEditor");
+            ptype.setPortletClassName("org.semanticwb.portal.admin.resources.SWBASOPropRefEditor");
+            ptype.setPortletBundle("org.semanticwb.portal.admin.resources.SWBASOPropRefEditor");
+            ptype.setPortletMode(3);
+            ptype.setTitle("SemanticObjectPropRef Editor");
+                    
+            Portlet portlet=site.createPortlet();
+            portlet.setActive(true);
+            //portlet.setCreator(user);
+            portlet.setPortletType(ptype);
+            portlet.setTitle("SWBASOPropRefEditor");
+            
         }
     }
     
