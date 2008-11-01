@@ -7,7 +7,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class WebPageBase extends GenericObjectBase implements Descriptiveable,PortletRefable,TemplateRefable,Indexable,Calendarable,Viewable,Activeable,RuleRefable,RoleRefable,Hiddenable,Deleteable,Traceable
+public class WebPageBase extends GenericObjectBase implements Descriptiveable,PortletRefable,TemplateRefable,Indexable,Calendarable,Viewable,Activeable,PFlowRefable,RuleRefable,RoleRefable,Hiddenable,Deleteable,Traceable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
