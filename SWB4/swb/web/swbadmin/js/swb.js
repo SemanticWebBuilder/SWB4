@@ -191,4 +191,12 @@
           }
 
       }
+      
+      function actionDone(){
+          alert("Acción realizada.");
+      }
+      
+      function actionFailed(){
+          alert("Error al ejecutar la acción.");
+      }      
             
