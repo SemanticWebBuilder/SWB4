@@ -1,5 +1,5 @@
 <%@page contentType="text/html"%>
-<%@page pageEncoding="UTF-8"%>
+<%@page pageEncoding="ISO-8859-1"%>
 <%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.model.*,java.util.*,org.semanticwb.base.util.*"%>
 <%
     response.setHeader("Cache-Control", "no-cache"); 
@@ -24,10 +24,80 @@
     {
 %>
 <div dojoType="dijit.layout.TabContainer" id_="bottomTabs" tabPosition_="bottom" selectedChild_="btab1">
-    <div dojoType="dijit.layout.ContentPane" title="InformaciÃ³n" style=" padding:10px;" refreshOnShow="false" href="/swb/swbadmin/jsp/SemObjectEditor.jsp?suri=<%=URLEncoder.encode(obj.getURI())%>">
-<!--        <iframe src ="/swb/swbadmin/jsp/SemObjectEditor.jsp?suri=<%=URLEncoder.encode(obj.getURI())%>" width="100%" height="100%" frameborder="0"></iframe>-->
-    </div><!-- end:info btab1 -->    
+<div dojoType="dijit.layout.ContentPane" title="Información" style=" padding:10px;" refreshOnShow="false" href="/swb/swbadmin/jsp/SemObjectEditor.jsp?suri=<%=URLEncoder.encode(obj.getURI())%>"></div>
 <%        
+        String buri="/swb/swb/SWBAdmin/WBAd_Home/_rid/2/_mto/3";
+        buri+="?suri="+obj.getSemanticObject().getEncodedURI();
+        SWBVocabulary voc=SWBContext.getVocabulary();
+        
+        if(obj instanceof PortletRefable)
+        {
+            String auri=buri;
+            auri+="&sprop="+voc.hasPortletRef.getEncodedURI();
+            auri+="&spropref="+voc.portlet.getEncodedURI();
+            //System.out.println("auri:"+auri);            
+%>
+<div dojoType="dijit.layout.ContentPane" title="Contenidos" style=" padding:10px;" refreshOnShow="true" href="<%=auri%>"></div>
+<%            
+        }
+        
+        if(obj instanceof TemplateRefable)
+        {
+            String auri=buri;
+            auri+="&sprop="+voc.hasTemplateRef.getEncodedURI();
+            auri+="&spropref="+voc.template.getEncodedURI();
+            //System.out.println("auri:"+auri);
+%>
+<div dojoType="dijit.layout.ContentPane" title="Plantillas" style=" padding:10px;" refreshOnShow="true" href="<%=auri%>"></div>
+<%            
+        }
+        
+        if(obj instanceof PFlowRefable)
+        {
+            String auri=buri;
+            auri+="&sprop="+voc.hasPFlowRef.getEncodedURI();
+            auri+="&spropref="+voc.pflow.getEncodedURI();
+%>
+<div dojoType="dijit.layout.ContentPane" title="Flujos de Publicación" style=" padding:10px;" refreshOnShow="true" href="<%=auri%>"></div>
+<%            
+        }
+        
+        if(obj instanceof Calendarable)
+        {
+            String auri=buri;
+            auri+="&sprop="+voc.hasCalendar.getEncodedURI();
+            //auri+="&spropref="+voc.pflow.getEncodedURI();            
+%>
+<div dojoType="dijit.layout.ContentPane" title="Calendarización" style=" padding:10px;" refreshOnShow="true" href="<%=auri%>"></div>
+<%            
+        }
+        
+        if(obj instanceof RoleRefable)
+        {
+            String auri=buri;
+            auri+="&sprop="+voc.hasRoleRef.getEncodedURI();
+            auri+="&spropref="+voc.role.getEncodedURI();            
+%>
+<div dojoType="dijit.layout.ContentPane" title="Roles" style=" padding:10px;" refreshOnShow="true" href="<%=auri%>"></div>
+<%            
+        }
+        
+        if(obj instanceof RuleRefable)
+        {
+            String auri=buri;
+            auri+="&sprop="+voc.hasRuleRef.getEncodedURI();
+            auri+="&spropref="+voc.rule.getEncodedURI();            
+%>
+<div dojoType="dijit.layout.ContentPane" title="Reglas" style=" padding:10px;" refreshOnShow="true" href="<%=auri%>"></div>
+<%            
+        }
+
+        {
+%>
+<div dojoType="dijit.layout.ContentPane" title="Bitácora" style=" padding:10px;" refreshOnShow="true" href=""></div>
+<%            
+        }
+        
         String auxid=null;
         if(cls.getName().equals("Template"))auxid="WBAd_sys_Templates";
         if(cls.getName().equals("Portlet"))auxid="WBAd_sys_Resources";

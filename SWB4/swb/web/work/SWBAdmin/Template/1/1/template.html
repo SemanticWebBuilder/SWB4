@@ -58,16 +58,27 @@
         </div>                
         -->
         
-        <div dojoType="dijit.Menu" id="submenu1" contextMenuForWindow="false" targetNodeIds="mtree" style="display: none;">
-            <div dojoType="dijit.MenuItem" onClick="alert('Hello world');">Enabled Item</div>
+        <!-- ########## changed menu code here ########## -->
+        <ul dojoType="dijit.Menu" id="menuEmpty" style="display: none;">
+        </ul>
+        
+        <ul dojoType="dijit.Menu" id="menuMap" style="display: none;">
+            <li dojoType="dijit.MenuItem" onClick="alert('Delete!');">Delete</li>
+            <li dojoType="dijit.MenuItem" onClick="alert('Pop up a properties modal!');">Properties</li>
+        </ul>
+            
+        <div dojoType="dijit.Menu" id="menuFloor" style="display: none;">
+            <div dojoType="dijit.MenuItem" onClick="alert(treeStore.getValue(this.getParent().treeNode.item, 'id'))">Enabled Item</div>
             <div dojoType="dijit.MenuItem" disabled="true">Disabled Item</div>
             <div dojoType="dijit.MenuSeparator"></div>
             <div dojoType="dijit.MenuItem" iconClass="dijitEditorIcon dijitEditorIconCut"
-   onClick="alert('not actually cutting anything, just a test!')">Cut</div>
+   onClick="treeStore.setValue(this.getParent().treeNode.item, 'icon','swbIconWebPageU')">Cut</div>
             <div dojoType="dijit.MenuItem" iconClass="dijitEditorIcon dijitEditorIconCopy"
    onClick="alert('not actually copying anything, just a test!')">Copy</div>
             <div dojoType="dijit.MenuItem" iconClass="dijitEditorIcon dijitEditorIconPaste"
    onClick="alert('not actually pasting anything, just a test!')">Paste</div>
+            <div dojoType="dijit.MenuItem" iconClass="dijitEditorIcon dijitEditorIconPaste" 
+               onClick="treeStore.deleteItem(this.getParent().treeNode.item); treeStore.save({onComplete: actionDone, onError: actionFailed});">Delete</div>
             <div dojoType="dijit.MenuSeparator"></div>
             <div dojoType="dijit.PopupMenuItem">
                 <span>Enabled Submenu</span>
@@ -98,7 +109,10 @@
                 <span>Different popup</span>
                 <div dojoType="dijit._Calendar"></div>
             </div>
-        </div>        
+        </div>
+        <!-- ############################################ -->
+        
+        
         
         
             
@@ -126,25 +140,26 @@
                            name="state2"
                            id="sitesComboBox"
                            region="top"
-                           >
+                           />
+                           
                     <div dojoType="dijit.layout.AccordionContainer"  id="leftAccordion" region="center" splitter="true">
                         
                         <div dojoType="dijit.layout.AccordionPane" title="Sitios" selected="true">
                             <!-- tree widget -->
                             <script type="text/javascript">
-                                
+/*                              
                                 dojo.declare("EditTree", dijit.Tree, {
                                     editing: false,
                                     postCreate: function(){
                                         this.inherited("postCreate", arguments);
                                         this.connect(this.domNode, "ondblclick", this._onDblClick);
                                     },
-                                    _onKeyPress: function(/*Event*/ e) {
+                                    _onKeyPress: function(/*Event* / e) {
                                         if (this.tree.editing)  
                                             return; // we are editing so we should ignore all keys
                                         this.inherited(arguments);
                                     },
-                                    _onDblClick: function(/*Event*/ e){
+                                    _onDblClick: function(/*Event* / e){
                                         var domElement = e.target;
                                         var nodeWidget = dijit.getEnclosingWidget(domElement);  
                                         if(!nodeWidget || !nodeWidget.isTreeNode){
@@ -173,7 +188,7 @@
                                         editor._edit();
                                     }
                                 });    
-                                
+*/                                
                                 dojo.declare("MainTree", dijit.Tree, {
                                     postCreate: function(){
                                         this.inherited("postCreate", arguments);
@@ -194,18 +209,22 @@
                                     }
                                 });    
                             </script>
-                            <div id="mtree" dojoType="MainTree" refreshOnExpand_="true" store="treeStore" query_="{type:'continent'}" label_="Sitios">
-                                <script type="dojo/method" event="onOpen" args="item">
+                            <div id="mtree" dojoType="MainTree" refreshOnExpand_="true" store="treeStore" _query="{type:'WebSite'}" showRoot="false" label_="Sitios">
+<!--                            
+                                <script type="dojo/method" event="onClick" args="item">
                                     if(item){
                                         //var newTab = dijit.byId("vprop");    
                                         var id=treeStore.getValue(item, "id");
                                         //newTab.href='/swb/swbadmin/jsp/viewProps.jsp';
                                         getHtml('/swb/swbadmin/jsp/viewProps.jsp?id='+encodeURIComponent(id), "vprop");
+                                        //alert("onClick:"+id);
                                     }
                                 </script>
-                                <script type="dojo/method" event="onExpand" args="item">
+-->                                
+                                <script type="dojo/method" event="onOpen" args="item">
                                     if(item){
-                                        alert("Hola...");
+                                        var id=treeStore.getValue(item, "id");
+                                        //alert("onOpen:"+id);
                                     }
                                 </script>                                
                                 <script type="dojo/method" event="getIconClass" args="item, opened"> 
@@ -213,7 +232,30 @@
                                     {
                                         return treeStore.getValue(item, "icon");
                                     }
-                                </script>                                 
+                                </script>    
+                                <script type="dojo/connect">
+                                    var menuEmpty = dijit.byId("menuEmpty");
+                                    
+                                    menuEmpty.bindDomNode(this.domNode);
+                                    
+                                    dojo.connect(menuEmpty, "_openMyself", this, function(e)
+                                    {
+                                        var treeNode = dijit.getEnclosingWidget(e.target);
+                                        
+                                        if (treeNode.item.type == "WebPage"){
+                                            menuEmpty = dijit.byId("menuFloor");
+                                            menuEmpty._openMyself(e);
+                                        }
+                                        else if (treeNode.item.type == "WebSite"){
+                                            menuEmpty = dijit.byId("menuMap");
+                                            menuEmpty._openMyself(e);
+                                        }
+                                        else {
+                                            menuEmpty = dijit.byId("menuEmpty");
+                                        }
+                                        menuEmpty.treeNode=treeNode;
+                                    });
+                                </script>
                             </div>
                         </div>
                         
@@ -226,18 +268,18 @@
                         </div>
                         
                     </div><!-- end AccordionContainer -->
-                    
+<!--                    
                     <div id="vprop" dojoType="dijit.TitlePane" title="View Properties" style="height:150px;" duration="150" minSize="20" splitter="true" region="bottom">
                         View Properties ...
                     </div>
-                    
+-->                    
                 </div><!-- leftsplit -->
 
                         <!-- top tabs (marked as "center" to take up the main part of the BorderContainer) -->
                 <div dojoType="dijit.layout.TabContainer" region="center" id="tabs" jsId="tabs">
                     <!-- sixth upper tab -->
                     <div id="tab6" dojoType="dijit.layout.ContentPane" title="Home" style="display:none; padding:10px; " closable="false" href_="/swb/swb">
-                        <iframe src ="/swb/swb" width="100%" height="100%" frameborder="0"></iframe>
+<!--                        <iframe src ="/swb/swb" width="100%" height="100%" frameborder="0"></iframe>  -->
                     </div>
                 </div><!-- end of region="center" TabContainer -->
             </div> <!-- end of "mainSplit" BorderContainer -->
