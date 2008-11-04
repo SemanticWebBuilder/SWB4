@@ -65,7 +65,7 @@ public class SWBFormMgr
     
     public void addProperty(SemanticProperty prop)
     {
-        SemanticObject obj=prop.getDisplayObject();
+        SemanticObject obj=prop.getDisplayProperty();
         String grp=null;
         boolean hidden=false;
         if(obj!=null)
@@ -81,8 +81,8 @@ public class SWBFormMgr
             props=new TreeSet(new Comparator(){
 
                 public int compare(Object o1, Object o2){
-                    SemanticObject sobj1=((SemanticProperty)o1).getDisplayObject();
-                    SemanticObject sobj2=((SemanticProperty)o2).getDisplayObject();
+                    SemanticObject sobj1=((SemanticProperty)o1).getDisplayProperty();
+                    SemanticObject sobj2=((SemanticProperty)o2).getDisplayProperty();
                     int v1=999999999;
                     int v2=999999999;
                     if(sobj1!=null)v1=new DisplayProperty(sobj1).getIndex();
@@ -232,7 +232,7 @@ public class SWBFormMgr
     
     private FormElement getFormElement(SemanticProperty prop)
     {
-        SemanticObject obj=prop.getDisplayObject();
+        SemanticObject obj=prop.getDisplayProperty();
         FormElement ele=null;
         if(obj!=null)
         {
