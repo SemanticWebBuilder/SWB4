@@ -4,9 +4,9 @@ import org.semanticwb.model.base.*;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 
-public class DisplayObject extends DisplayObjectBase 
+public class DisplayProperty extends DisplayPropertyBase 
 {
-    public DisplayObject(SemanticObject base)
+    public DisplayProperty(SemanticObject base)
     {
         super(base);
     }
@@ -21,5 +21,5 @@ public class DisplayObject extends DisplayObjectBase
             ret=(FormElement)cls.newGenericInstance(obj);
         }
         return ret;
-    }
+    }    
 }
