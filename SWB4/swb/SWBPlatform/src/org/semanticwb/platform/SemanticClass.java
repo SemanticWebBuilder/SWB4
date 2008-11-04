@@ -68,12 +68,18 @@ public class SemanticClass
             //System.out.println("p.getName():"+p.getName()+" "+p);
             m_props.put( p.getName(), p);
         }
+        System.out.println("Name:"+getName()+" "+getClassName()+" "+m_class.getNameSpace()+" "+getPrefix());
     }
     
     public String getName()
     {
         return m_class.getLocalName();
     }
+    
+    public String getPrefix()
+    {
+        return m_class.getOntModel().getNsURIPrefix(m_class.getNameSpace());
+    }    
     
     public String getClassName()
     {
