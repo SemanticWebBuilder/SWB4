@@ -7,8 +7,7 @@ import java.util.Map;
 import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.semanticwb.SWBPlatform;
-import org.semanticwb.model.DisplayObject;
+import org.semanticwb.model.DisplayProperty;
 import org.semanticwb.model.FormElement;
 import org.semanticwb.model.FormView;
 import org.semanticwb.model.GenericFormElement;
@@ -71,7 +70,7 @@ public class SWBFormMgr
         boolean hidden=false;
         if(obj!=null)
         {
-            DisplayObject disp=new DisplayObject(obj);       
+            DisplayProperty disp=new DisplayProperty(obj);       
             grp=disp.getGroup();
             hidden=disp.isHidden();
         }
@@ -86,8 +85,8 @@ public class SWBFormMgr
                     SemanticObject sobj2=((SemanticProperty)o2).getDisplayObject();
                     int v1=999999999;
                     int v2=999999999;
-                    if(sobj1!=null)v1=new DisplayObject(sobj1).getIndex();
-                    if(sobj2!=null)v2=new DisplayObject(sobj2).getIndex();
+                    if(sobj1!=null)v1=new DisplayProperty(sobj1).getIndex();
+                    if(sobj2!=null)v2=new DisplayProperty(sobj2).getIndex();
                     return v1<v2?-1:1;
                 }
             });
@@ -237,7 +236,7 @@ public class SWBFormMgr
         FormElement ele=null;
         if(obj!=null)
         {
-            DisplayObject disp=new DisplayObject(obj);
+            DisplayProperty disp=new DisplayProperty(obj);
             ele=disp.getFormElementInstance();
         }
         if(ele==null)ele=new GenericFormElement();
