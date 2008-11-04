@@ -45,7 +45,7 @@ public class GenericFormElement extends FormElementBase implements FormElement
         String ret="";
         String name=prop.getName();
         String label=prop.getDisplayName(lang);
-        SemanticObject sobj=prop.getDisplayObject();
+        SemanticObject sobj=prop.getDisplayProperty();
         boolean required=false;
         String pmsg=null;
         String imsg=null;
