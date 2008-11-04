@@ -97,10 +97,10 @@ public class SemanticProperty
         return false;
     }      
     
-    public SemanticObject getDisplayObject()
+    public SemanticObject getDisplayProperty()
     {
         SemanticObject disp=null;
-        Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYOBJECT));
+        Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYPROPERTY));
         if(st!=null)
         {
             disp=new SemanticObject(st.getResource());
@@ -116,7 +116,7 @@ public class SemanticProperty
     public String getDisplayName(String lang)
     {
         String ret=null;
-        SemanticObject obj=getDisplayObject();
+        SemanticObject obj=getDisplayProperty();
         if(obj!=null)
         {
             if(lang!=null)
