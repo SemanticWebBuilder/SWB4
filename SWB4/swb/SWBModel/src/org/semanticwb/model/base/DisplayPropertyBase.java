@@ -7,13 +7,23 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class DisplayPropertyBase extends GenericObjectBase 
+public class DisplayPropertyBase extends GenericObjectBase implements Sortable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
     public DisplayPropertyBase(SemanticObject base)
     {
         super(base);
+    }
+
+    public int getIndex()
+    {
+        return getSemanticObject().getIntProperty(vocabulary.index);
+    }
+
+    public void setIndex(int index)
+    {
+        getSemanticObject().setLongProperty(vocabulary.index, index);
     }
 
     public boolean isRequired()
@@ -44,16 +54,6 @@ public class DisplayPropertyBase extends GenericObjectBase
     public void setSelectValues(String propSelectValues, String lang)
     {
         getSemanticObject().setProperty(vocabulary.propSelectValues, propSelectValues, lang);
-    }
-
-    public int getIndex()
-    {
-        return getSemanticObject().getIntProperty(vocabulary.propIndex);
-    }
-
-    public void setIndex(int propIndex)
-    {
-        getSemanticObject().setLongProperty(vocabulary.propIndex, propIndex);
     }
 
     public boolean isHidden()
