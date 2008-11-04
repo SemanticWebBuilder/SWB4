@@ -7,11 +7,11 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class DisplayObjectBase extends GenericObjectBase 
+public class DisplayPropertyBase extends GenericObjectBase 
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
-    public DisplayObjectBase(SemanticObject base)
+    public DisplayPropertyBase(SemanticObject base)
     {
         super(base);
     }

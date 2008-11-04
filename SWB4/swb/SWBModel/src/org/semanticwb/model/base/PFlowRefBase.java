@@ -7,7 +7,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class PFlowRefBase extends GenericObjectBase implements Activeable,Deleteable
+public class PFlowRefBase extends GenericObjectBase implements Deleteable,Activeable
 {
     SWBVocabulary vocabulary=SWBContext.getVocabulary();
 

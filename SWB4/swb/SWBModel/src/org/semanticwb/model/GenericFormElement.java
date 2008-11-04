@@ -52,7 +52,7 @@ public class GenericFormElement extends FormElementBase implements FormElement
         String selectValues=null;
         if(sobj!=null)
         {
-            DisplayObject dobj=new DisplayObject(sobj);
+            DisplayProperty dobj=new DisplayProperty(sobj);
             required=dobj.isRequired();
             pmsg=dobj.getPromptMessage();
             imsg=dobj.getInvalidMessage();
