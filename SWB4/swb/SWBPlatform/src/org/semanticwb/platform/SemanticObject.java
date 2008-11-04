@@ -680,6 +680,23 @@ public class SemanticObject
         return this;
     }    
     
+    public Iterator<String> listProperties(SemanticProperty prop)
+    {
+        if(m_virtual)
+        {
+            ArrayList list=(ArrayList)m_virtprops.get(prop.getURI());
+            if(list!=null)
+            {
+                return list.iterator();
+            }
+            else
+            {
+                return new ArrayList().iterator();
+            }
+        }            
+        return new DataTypeIterator(String.class,m_res.listProperties(prop.getRDFProperty()));
+    }    
+    
     public Iterator<SemanticObject> listObjectProperties(SemanticProperty prop)
     {
         if(m_virtual)
