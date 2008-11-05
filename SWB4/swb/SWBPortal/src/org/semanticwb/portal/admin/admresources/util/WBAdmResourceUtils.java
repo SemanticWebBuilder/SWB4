@@ -1409,5 +1409,59 @@ public class WBAdmResourceUtils {
     public String uploadFileParsed(Portlet base, FileUpload fUp, String pInForm, String idsession){
         return uploadFileParsed(base, fUp, pInForm, idsession,null);
     }
+    
+     /**
+     * Crea una función JavaScript específica.
+     *
+     * @return    Regresa un nuevo String que contiene la función trim() de JavaScript.
+     */
+    public String loadTrim()
+    {
+        StringBuffer sbfRet = new StringBuffer();
+        sbfRet.append("\nfunction trim(field) ");
+        sbfRet.append("\n{");
+        sbfRet.append("\n   var retVal = '';");
+        sbfRet.append("\n   var start = 0;");
+        sbfRet.append("\n   while ((start < field.value.length) && (field.value.charAt(start) == ' ')) {");
+        sbfRet.append("\n      ++start;");
+        sbfRet.append("\n   }");
+        sbfRet.append("\n   var end = field.value.length;");
+        sbfRet.append("\n   while ((end > 0) && (field.value.charAt(end - 1) == ' ')) {");
+        sbfRet.append("\n      --end;");
+        sbfRet.append("\n   }");
+        sbfRet.append("\n   retVal = field.value.substring(start, end);");
+        sbfRet.append("\n   if (end == 0) field.value='';");
+        sbfRet.append("\n   else field.value=retVal;");
+        sbfRet.append("\n}");        
+        return sbfRet.toString();
+    }    
+    
+    /**
+     * Crea una función JavaScript específica.
+     *
+     * @return    Regresa un nuevo String que contiene la función isEmail() de JavaScript.
+     */
+    public String loadIsEmail()
+    {
+        StringBuffer sbfRet = new StringBuffer();
+        sbfRet.append("\nfunction isEmail(pInTxt)");
+        sbfRet.append("\n{");
+        sbfRet.append("\n   var swOK=2;");
+        sbfRet.append("\n   pCaracter=pInTxt.value.replace(\" \",\"\0\");");
+        sbfRet.append("\n   for (var i = 0; i < pCaracter.length; i++)");
+        sbfRet.append("\n   {");
+        sbfRet.append("\n      var sByte = pCaracter.substring(i, i + 1);");
+        sbfRet.append("\n      if (sByte==\"@\" || sByte==\".\") { swOK = swOK - 1; }");
+        sbfRet.append("\n   }");
+        sbfRet.append("\n   if (swOK > 0 || pCaracter.length < 5 || pCaracter.charAt(0) == '@' || pCaracter.charAt(0) == '.' || pCaracter.charAt(pCaracter.length-1)=='@' || pCaracter.charAt(pCaracter.length-1)=='.' || pCaracter.charAt(pCaracter.indexOf(\"@\")+1)=='.' || pCaracter.indexOf(\"@\") == -1)");
+        sbfRet.append("\n   {");
+        sbfRet.append("\n      pInTxt.focus();");
+        sbfRet.append("\n      alert('" + SWBUtils.TEXT.getLocaleString("locale_wb2_util", "usrmsg_WBResource_loadIsEmail_msg") + ".');");
+        sbfRet.append("\n      return false;");
+        sbfRet.append("\n   }");
+        sbfRet.append("\n   return true;");
+        sbfRet.append("\n}");
+        return sbfRet.toString();
+    }
    
 }
