@@ -20,6 +20,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
 import org.semanticwb.security.auth.SWB4CallbackHandler;
 
@@ -127,6 +128,7 @@ public class Login implements InternalServlet {
             lc = new LoginContext(context, subject, callbackHandler); 
 
             lc.login();
+            ((User)(subject.getPrincipals().iterator().next())).setLogin(true);
         // session.removeAttribute(VALSESS);
         // session.removeAttribute(CALLBACK);
             System.out.println(subject.toString());
