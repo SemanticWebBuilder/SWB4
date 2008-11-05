@@ -193,7 +193,7 @@ public class SemanticModel
     {
         Property rdf=getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
         StmtIterator stit=getRDFModel().listStatements(null, rdf, cls.getOntClass());
-        return new SemanticIterator(cls, stit, true);
+        return new SemanticIterator(stit, true);
     }
     
     public SemanticProperty createSemanticProperty(String uri, SemanticClass cls, String uriType, String uriRang)
