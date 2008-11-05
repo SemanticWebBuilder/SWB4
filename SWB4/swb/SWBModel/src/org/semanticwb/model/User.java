@@ -1,7 +1,9 @@
 package org.semanticwb.model;
 
+import java.security.AccessController;
 import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
+import java.security.PrivilegedAction;
 import java.util.Date;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
@@ -17,6 +19,7 @@ public class User extends UserBase implements Principal, java.io.Serializable
     Logger log = SWBUtils.getLogger(User.class);
     private String device = null;
     private String ip = null;
+    private boolean login = false;
 
     public User(SemanticObject base)
     {
@@ -64,6 +67,25 @@ public class User extends UserBase implements Principal, java.io.Serializable
         this.ip = ip;
     }
 
+    public boolean isSigned()
+    {
+        return login;
+    }
+
+    public void setLogin(boolean login)
+    {
+        final boolean result = login;
+        this.login = (Boolean) AccessController.doPrivileged(
+          new PrivilegedAction() {
+            public Object run() {
+                return Boolean.valueOf(result);
+            }
+          }
+        );
+         
+    }
+
+    
     public void setExtendedAttribute(String name, Object value) throws SWBException
     {
         SemanticProperty prop = getSemanticObject().getSemanticClass().getProperty(name);
