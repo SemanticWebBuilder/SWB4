@@ -14,7 +14,7 @@
       dojo.require("dijit.Tooltip");
       dojo.require("dijit.Tree");
 
-      dojo.require("dojox.widget.TimeSpinner");
+      dojo.require("dojox.form.TimeSpinner");
 
       // editor:
       dojo.require("dijit.Editor"); 
