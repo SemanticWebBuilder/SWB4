@@ -3,7 +3,6 @@ package org.semanticwb.platform;
 
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
-import java.lang.reflect.Constructor;
 import java.util.Iterator;
 
 /**
@@ -12,37 +11,19 @@ import java.util.Iterator;
  */
 public class SemanticIterator<T extends SemanticObject> implements Iterator
 {
-    private SemanticClass scls;
-    private Class cls;
     private Iterator iterator;
-    private Constructor constructor;
     private boolean invert=false;
             
-    public SemanticIterator(SemanticClass cls,Iterator iterator)
+    public SemanticIterator(Iterator iterator)
     {
-        this(cls,iterator,false);
+        this(iterator,false);
     }
 
-    public SemanticIterator(SemanticClass cls,Iterator iterator, boolean invert)
+    public SemanticIterator(Iterator iterator, boolean invert)
     {
-        this.scls=cls;
         this.iterator=iterator;
         this.invert=invert;
     }
-    
-    public SemanticIterator(Class cls,Iterator iterator)
-    {
-        this.cls=cls;
-        this.iterator=iterator;
-        try
-        {
-            constructor=cls.getDeclaredConstructor(Resource.class);
-        }
-        catch(NoSuchMethodException nsme)
-        {
-            new IllegalArgumentException(nsme);
-        }
-    }    
     
     public void remove()
     {
@@ -57,7 +38,6 @@ public class SemanticIterator<T extends SemanticObject> implements Iterator
     public T next() 
     {        
         Object obj=iterator.next();
-        if(scls!=null)
         {
             if(obj instanceof Statement)
             {
@@ -65,9 +45,9 @@ public class SemanticIterator<T extends SemanticObject> implements Iterator
                 {
                     if(invert)
                     {
-                        return (T)scls.newInstance(((Statement)obj).getSubject());
+                        return (T)new SemanticObject(((Statement)obj).getSubject());
                     }
-                    return (T)scls.newInstance(((Statement)obj).getResource());
+                    return (T)new SemanticObject(((Statement)obj).getResource());
                 }
                 catch(Exception ie)
                 {
@@ -78,7 +58,7 @@ public class SemanticIterator<T extends SemanticObject> implements Iterator
             {
                 try
                 {
-                    return (T)scls.newInstance((Resource)obj);
+                    return (T)new SemanticObject((Resource)obj);
                 }
                 catch(Exception ie)
                 {
@@ -87,40 +67,8 @@ public class SemanticIterator<T extends SemanticObject> implements Iterator
             }
             else
             {
-                throw new AssertionError("No type found...");        
-            }        
-        }else
-        {
-            if(obj instanceof Statement)
-            {
-                try
-                {
-                    if(invert)
-                    {
-                        return (T)constructor.newInstance(((Statement)obj).getSubject());
-                    }
-                    return (T)constructor.newInstance(((Statement)obj).getResource());
-                }
-                catch(Exception ie)
-                {
-                    throw new AssertionError(ie.getMessage());        
-                }
+                throw new AssertionError("No type found...");      
             }
-            else if(obj instanceof Resource)
-            {
-                try
-                {
-                    return (T)constructor.newInstance((Resource)obj);
-                }
-                catch(Exception ie)
-                {
-                    throw new AssertionError(ie.getMessage());        
-                }
-            }
-            else
-            {
-                throw new AssertionError("No type found...");        
-            }              
         }
     }
 }

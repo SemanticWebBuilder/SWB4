@@ -95,6 +95,10 @@ public class GenericIterator<T extends GenericObject> implements Iterator
             {
                 return (T)scls.newGenericInstance((Resource)obj);
             }
+            else if(obj instanceof SemanticObject)
+            {
+                return (T)scls.newGenericInstance((SemanticObject)obj);
+            }
             else
             {
                 throw new AssertionError("No type found...,"+obj);        
@@ -127,6 +131,17 @@ public class GenericIterator<T extends GenericObject> implements Iterator
                     throw new AssertionError(ie.getMessage());        
                 }
             }
+            else if(obj instanceof SemanticObject)
+            {
+                try
+                {
+                    return (T)constructor.newInstance((SemanticObject)obj);
+                }
+                catch(Exception ie)
+                {
+                    throw new AssertionError(ie.getMessage());        
+                }
+            }            
             else
             {
                 throw new AssertionError("No type found...");        
@@ -151,6 +166,12 @@ public class GenericIterator<T extends GenericObject> implements Iterator
                 Resource res=(Resource)obj;
                 SemanticClass sclss=SWBPlatform.getSemanticMgr().getOntology().getSemanticObjectClass(res);
                 return (T)sclss.newGenericInstance((Resource)obj);
+            }
+            else if(obj instanceof SemanticObject)
+            {
+                SemanticObject sobj=(SemanticObject)obj;
+                SemanticClass sclss=sobj.getSemanticClass();
+                return (T)sclss.newGenericInstance(sobj);
             }
             else
             {

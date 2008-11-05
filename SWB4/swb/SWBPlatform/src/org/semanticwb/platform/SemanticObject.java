@@ -823,5 +823,11 @@ public class SemanticObject
         return ret;
     }
     
+    public Iterator<SemanticObject> listRelatedObjects()
+    {
+        StmtIterator stit=getModel().getRDFModel().listStatements(null, null, getRDFResource());
+        return new SemanticIterator(stit,true);
+    }    
+    
 }
 
