@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+    <resource>
+        <resource-name>Comentario</resource-name>
+        <display-name xml:lang="es">Comentario</display-name>
+        <display-name xml:lang="en">Comment</display-name>
+        <description xml:lang="es">Recurso que permite la emisión de comentarios o sugerencias respecto del sitio a los usuarios que así se designe</description>
+        <description xml:lang="en">Resource that allows sending commentaries or suggestions about the web site to the designed users</description>
+        <resource-class>org.semanticwb.portal.resources.Comment</resource-class>
+        <expiration-cache>0</expiration-cache>
+        <resource-bundle>org.semanticwb.portal.resources.Comment</resource-bundle>
+        <resource-type>2</resource-type>
+        <extended-attributes>
+        </extended-attributes>
+    </resource>
