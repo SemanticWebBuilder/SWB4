@@ -7,7 +7,6 @@ package org.semanticwb.servlet.internal;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Constructor;
-import java.security.AccessController;
 import javax.security.auth.Subject;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.LoginContext;
@@ -20,7 +19,6 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
 import org.semanticwb.security.auth.SWB4CallbackHandler;
 
