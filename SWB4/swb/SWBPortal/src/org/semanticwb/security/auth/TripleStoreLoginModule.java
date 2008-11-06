@@ -9,6 +9,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.logging.Level;
 import javax.security.auth.Subject;
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
@@ -111,6 +112,13 @@ public class TripleStoreLoginModule implements LoginModule {
             subject.getPrincipals().add(principal);
         }
         subject.getPrivateCredentials().add(credential);
+        try
+        {
+            principal.checkCredential(credential);
+        } catch (NoSuchAlgorithmException ex)
+        {
+            log.error("Can't set Signed status", ex);
+        }
         return loginflag;
     }
 
