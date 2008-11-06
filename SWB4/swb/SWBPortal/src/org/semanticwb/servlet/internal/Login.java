@@ -125,12 +125,13 @@ public class Login implements InternalServlet {
         {
             request.getSession(true).invalidate();
             subject = SWBPortal.getUserMgr().getSubject(request);
-            lc = new LoginContext(context, subject, callbackHandler); 
+            lc = new LoginContext(context, subject, callbackHandler);
             lc.login();
         // session.removeAttribute(VALSESS);
         // session.removeAttribute(CALLBACK);
          //   System.out.println(subject.toString());
          //   System.out.println(lc.getSubject().toString());
+         //   System.out.println(((User)lc.getSubject().getPrincipals().iterator().next()).isSigned());
         } catch (LoginException ex)
         {
             log.error("Can't log User", ex);
