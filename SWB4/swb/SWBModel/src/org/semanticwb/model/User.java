@@ -1,9 +1,7 @@
 package org.semanticwb.model;
 
-import java.security.AccessController;
 import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
-import java.security.PrivilegedAction;
 import java.util.Date;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
@@ -70,6 +68,11 @@ public class User extends UserBase implements Principal, java.io.Serializable
     public boolean isSigned()
     {
         return login;
+    }
+    
+    public boolean isRegistered()
+    {
+        return !(getSemanticObject().isVirtual());
     }
 
     public void checkCredential(Object credential) throws NoSuchAlgorithmException
