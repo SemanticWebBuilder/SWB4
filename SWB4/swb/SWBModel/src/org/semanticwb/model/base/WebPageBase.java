@@ -42,7 +42,7 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.modifiedBy);
          if(obj!=null)
          {
-             ret=(User)vocabulary.User.newGenericInstance(obj);
+             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
          }
          return ret;
     }
@@ -89,9 +89,7 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
 
     public GenericIterator<org.semanticwb.model.Calendar> listCalendars()
     {
-        StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasCalendar.getRDFProperty());
-        return new GenericIterator<org.semanticwb.model.Calendar>(org.semanticwb.model.Calendar.class, stit);
-    }
+        return new GenericIterator<org.semanticwb.model.Calendar>(org.semanticwb.model.Calendar.class, getSemanticObject().listObjectProperties(vocabulary.hasCalendar));    }
 
     public void addCalendar(org.semanticwb.model.Calendar calendar)
     {
@@ -114,7 +112,7 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasCalendar);
          if(obj!=null)
          {
-             ret=(Calendar)vocabulary.Calendar.newGenericInstance(obj);
+             ret=(Calendar)vocabulary.swb_Calendar.newGenericInstance(obj);
          }
          return ret;
     }
@@ -183,9 +181,7 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
 
     public GenericIterator<org.semanticwb.model.RoleRef> listRoleRefs()
     {
-        StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasRoleRef.getRDFProperty());
-        return new GenericIterator<org.semanticwb.model.RoleRef>(org.semanticwb.model.RoleRef.class, stit);
-    }
+        return new GenericIterator<org.semanticwb.model.RoleRef>(org.semanticwb.model.RoleRef.class, getSemanticObject().listObjectProperties(vocabulary.hasRoleRef));    }
 
     public void addRoleRef(org.semanticwb.model.RoleRef roleref)
     {
@@ -208,16 +204,14 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasRoleRef);
          if(obj!=null)
          {
-             ret=(RoleRef)vocabulary.RoleRef.newGenericInstance(obj);
+             ret=(RoleRef)vocabulary.swb_RoleRef.newGenericInstance(obj);
          }
          return ret;
     }
 
     public GenericIterator<org.semanticwb.model.WebPage> listVirtualParents()
     {
-        StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasWebPageVirtualParent.getRDFProperty());
-        return new GenericIterator<org.semanticwb.model.WebPage>(org.semanticwb.model.WebPage.class, stit);
-    }
+        return new GenericIterator<org.semanticwb.model.WebPage>(org.semanticwb.model.WebPage.class, getSemanticObject().listObjectProperties(vocabulary.hasWebPageVirtualParent));    }
 
     public void addVirtualParent(org.semanticwb.model.WebPage webpage)
     {
@@ -240,7 +234,7 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasWebPageVirtualParent);
          if(obj!=null)
          {
-             ret=(WebPage)vocabulary.WebPage.newGenericInstance(obj);
+             ret=(WebPage)vocabulary.swb_WebPage.newGenericInstance(obj);
          }
          return ret;
     }
@@ -267,7 +261,7 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasWebPageVirtualChild);
          if(obj!=null)
          {
-             ret=(WebPage)vocabulary.WebPage.newGenericInstance(obj);
+             ret=(WebPage)vocabulary.swb_WebPage.newGenericInstance(obj);
          }
          return ret;
     }
@@ -284,9 +278,7 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
 
     public GenericIterator<org.semanticwb.model.PortletRef> listPortletRefs()
     {
-        StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasPortletRef.getRDFProperty());
-        return new GenericIterator<org.semanticwb.model.PortletRef>(org.semanticwb.model.PortletRef.class, stit);
-    }
+        return new GenericIterator<org.semanticwb.model.PortletRef>(org.semanticwb.model.PortletRef.class, getSemanticObject().listObjectProperties(vocabulary.hasPortletRef));    }
 
     public void addPortletRef(org.semanticwb.model.PortletRef portletref)
     {
@@ -309,16 +301,14 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasPortletRef);
          if(obj!=null)
          {
-             ret=(PortletRef)vocabulary.PortletRef.newGenericInstance(obj);
+             ret=(PortletRef)vocabulary.swb_PortletRef.newGenericInstance(obj);
          }
          return ret;
     }
 
     public GenericIterator<org.semanticwb.model.PFlowRef> listPFlowRefs()
     {
-        StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasPFlowRef.getRDFProperty());
-        return new GenericIterator<org.semanticwb.model.PFlowRef>(org.semanticwb.model.PFlowRef.class, stit);
-    }
+        return new GenericIterator<org.semanticwb.model.PFlowRef>(org.semanticwb.model.PFlowRef.class, getSemanticObject().listObjectProperties(vocabulary.hasPFlowRef));    }
 
     public void addPFlowRef(org.semanticwb.model.PFlowRef pflowref)
     {
@@ -341,16 +331,14 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasPFlowRef);
          if(obj!=null)
          {
-             ret=(PFlowRef)vocabulary.PFlowRef.newGenericInstance(obj);
+             ret=(PFlowRef)vocabulary.swb_PFlowRef.newGenericInstance(obj);
          }
          return ret;
     }
 
     public GenericIterator<org.semanticwb.model.TemplateRef> listTemplateRefs()
     {
-        StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasTemplateRef.getRDFProperty());
-        return new GenericIterator<org.semanticwb.model.TemplateRef>(org.semanticwb.model.TemplateRef.class, stit);
-    }
+        return new GenericIterator<org.semanticwb.model.TemplateRef>(org.semanticwb.model.TemplateRef.class, getSemanticObject().listObjectProperties(vocabulary.hasTemplateRef));    }
 
     public void addTemplateRef(org.semanticwb.model.TemplateRef templateref)
     {
@@ -373,7 +361,7 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasTemplateRef);
          if(obj!=null)
          {
-             ret=(TemplateRef)vocabulary.TemplateRef.newGenericInstance(obj);
+             ret=(TemplateRef)vocabulary.swb_TemplateRef.newGenericInstance(obj);
          }
          return ret;
     }
@@ -390,7 +378,7 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasWebPageChild);
          if(obj!=null)
          {
-             ret=(WebPage)vocabulary.WebPage.newGenericInstance(obj);
+             ret=(WebPage)vocabulary.swb_WebPage.newGenericInstance(obj);
          }
          return ret;
     }
@@ -407,9 +395,7 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
 
     public GenericIterator<org.semanticwb.model.RuleRef> listRuleRefs()
     {
-        StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasRuleRef.getRDFProperty());
-        return new GenericIterator<org.semanticwb.model.RuleRef>(org.semanticwb.model.RuleRef.class, stit);
-    }
+        return new GenericIterator<org.semanticwb.model.RuleRef>(org.semanticwb.model.RuleRef.class, getSemanticObject().listObjectProperties(vocabulary.hasRuleRef));    }
 
     public void addRuleRef(org.semanticwb.model.RuleRef ruleref)
     {
@@ -432,7 +418,7 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasRuleRef);
          if(obj!=null)
          {
-             ret=(RuleRef)vocabulary.RuleRef.newGenericInstance(obj);
+             ret=(RuleRef)vocabulary.swb_RuleRef.newGenericInstance(obj);
          }
          return ret;
     }
@@ -453,7 +439,7 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.creator);
          if(obj!=null)
          {
-             ret=(User)vocabulary.User.newGenericInstance(obj);
+             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
          }
          return ret;
     }
@@ -474,7 +460,7 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.webPageParent);
          if(obj!=null)
          {
-             ret=(WebPage)vocabulary.WebPage.newGenericInstance(obj);
+             ret=(WebPage)vocabulary.swb_WebPage.newGenericInstance(obj);
          }
          return ret;
     }
@@ -506,8 +492,7 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
 
     public Iterator<GenericObject> listRelatedObjects()
     {
-        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, null, getSemanticObject().getRDFResource());
-        return new GenericIterator((SemanticClass)null, stit,true);
+        return new GenericIterator((SemanticClass)null, getSemanticObject().listRelatedObjects(),true);
     }
 
     public WebSite getWebSite()

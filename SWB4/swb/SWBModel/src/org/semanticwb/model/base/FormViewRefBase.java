@@ -7,23 +7,12 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class FormViewRefBase extends GenericObjectBase 
+public class FormViewRefBase extends ReferenceBase 
 {
-    SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
     public FormViewRefBase(SemanticObject base)
     {
         super(base);
-    }
-
-    public boolean isActive()
-    {
-        return getSemanticObject().getBooleanProperty(vocabulary.active);
-    }
-
-    public void setActive(boolean active)
-    {
-        getSemanticObject().setBooleanProperty(vocabulary.active, active);
     }
 
     public String getFormMode()
@@ -52,19 +41,8 @@ public class FormViewRefBase extends GenericObjectBase
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.formView);
          if(obj!=null)
          {
-             ret=(FormView)vocabulary.FormView.newGenericInstance(obj);
+             ret=(FormView)vocabulary.swb_FormView.newGenericInstance(obj);
          }
          return ret;
-    }
-
-    public void remove()
-    {
-        getSemanticObject().remove();
-    }
-
-    public Iterator<GenericObject> listRelatedObjects()
-    {
-        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, null, getSemanticObject().getRDFResource());
-        return new GenericIterator((SemanticClass)null, stit,true);
     }
 }

@@ -42,7 +42,7 @@ public class TemplateGroupBase extends GenericObjectBase implements Descriptivea
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.modifiedBy);
          if(obj!=null)
          {
-             ret=(User)vocabulary.User.newGenericInstance(obj);
+             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
          }
          return ret;
     }
@@ -93,7 +93,7 @@ public class TemplateGroupBase extends GenericObjectBase implements Descriptivea
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.creator);
          if(obj!=null)
          {
-             ret=(User)vocabulary.User.newGenericInstance(obj);
+             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
          }
          return ret;
     }
@@ -130,7 +130,7 @@ public class TemplateGroupBase extends GenericObjectBase implements Descriptivea
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasGroupedTemplate);
          if(obj!=null)
          {
-             ret=(Template)vocabulary.Template.newGenericInstance(obj);
+             ret=(Template)vocabulary.swb_Template.newGenericInstance(obj);
          }
          return ret;
     }
@@ -142,8 +142,7 @@ public class TemplateGroupBase extends GenericObjectBase implements Descriptivea
 
     public Iterator<GenericObject> listRelatedObjects()
     {
-        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, null, getSemanticObject().getRDFResource());
-        return new GenericIterator((SemanticClass)null, stit,true);
+        return new GenericIterator((SemanticClass)null, getSemanticObject().listRelatedObjects(),true);
     }
 
     public WebSite getWebSite()

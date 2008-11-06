@@ -7,23 +7,12 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class PortletRefBase extends GenericObjectBase implements Priorityable,Activeable,Deleteable
+public class PortletRefBase extends ReferenceBase implements Priorityable,Activeable,Deleteable
 {
-    SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
     public PortletRefBase(SemanticObject base)
     {
         super(base);
-    }
-
-    public boolean isActive()
-    {
-        return getSemanticObject().getBooleanProperty(vocabulary.active);
-    }
-
-    public void setActive(boolean active)
-    {
-        getSemanticObject().setBooleanProperty(vocabulary.active, active);
     }
 
     public boolean isDeleted()
@@ -52,7 +41,7 @@ public class PortletRefBase extends GenericObjectBase implements Priorityable,Ac
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.portlet);
          if(obj!=null)
          {
-             ret=(Portlet)vocabulary.Portlet.newGenericInstance(obj);
+             ret=(Portlet)vocabulary.swb_Portlet.newGenericInstance(obj);
          }
          return ret;
     }
@@ -65,21 +54,5 @@ public class PortletRefBase extends GenericObjectBase implements Priorityable,Ac
     public void setPriority(int priority)
     {
         getSemanticObject().setLongProperty(vocabulary.priority, priority);
-    }
-
-    public void remove()
-    {
-        getSemanticObject().remove();
-    }
-
-    public Iterator<GenericObject> listRelatedObjects()
-    {
-        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, null, getSemanticObject().getRDFResource());
-        return new GenericIterator((SemanticClass)null, stit,true);
-    }
-
-    public WebSite getWebSite()
-    {
-        return new WebSite(getSemanticObject().getModel().getModelObject());
     }
 }

@@ -42,7 +42,7 @@ public class PortletTypeBase extends GenericObjectBase implements Descriptiveabl
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.modifiedBy);
          if(obj!=null)
          {
-             ret=(User)vocabulary.User.newGenericInstance(obj);
+             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
          }
          return ret;
     }
@@ -109,7 +109,7 @@ public class PortletTypeBase extends GenericObjectBase implements Descriptiveabl
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasPTPortlet);
          if(obj!=null)
          {
-             ret=(Portlet)vocabulary.Portlet.newGenericInstance(obj);
+             ret=(Portlet)vocabulary.swb_Portlet.newGenericInstance(obj);
          }
          return ret;
     }
@@ -150,7 +150,7 @@ public class PortletTypeBase extends GenericObjectBase implements Descriptiveabl
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.creator);
          if(obj!=null)
          {
-             ret=(User)vocabulary.User.newGenericInstance(obj);
+             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
          }
          return ret;
     }
@@ -167,7 +167,7 @@ public class PortletTypeBase extends GenericObjectBase implements Descriptiveabl
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasPTSubType);
          if(obj!=null)
          {
-             ret=(PortletSubType)vocabulary.PortletSubType.newGenericInstance(obj);
+             ret=(PortletSubType)vocabulary.swb_PortletSubType.newGenericInstance(obj);
          }
          return ret;
     }
@@ -199,8 +199,7 @@ public class PortletTypeBase extends GenericObjectBase implements Descriptiveabl
 
     public Iterator<GenericObject> listRelatedObjects()
     {
-        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, null, getSemanticObject().getRDFResource());
-        return new GenericIterator((SemanticClass)null, stit,true);
+        return new GenericIterator((SemanticClass)null, getSemanticObject().listRelatedObjects(),true);
     }
 
     public WebSite getWebSite()

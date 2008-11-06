@@ -59,7 +59,7 @@ public class FormViewBase extends GenericObjectBase implements Descriptiveable
     public SemanticIterator<org.semanticwb.platform.SemanticObject> listCreatePropertys()
     {
         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasCreateProperty.getRDFProperty());
-        return new SemanticIterator<org.semanticwb.platform.SemanticObject>(org.semanticwb.platform.SemanticObject.class, stit);
+        return new SemanticIterator<org.semanticwb.platform.SemanticObject>(stit);
     }
 
     public void addCreateProperty(org.semanticwb.platform.SemanticObject semanticobject)
@@ -87,7 +87,7 @@ public class FormViewBase extends GenericObjectBase implements Descriptiveable
     public SemanticIterator<org.semanticwb.platform.SemanticObject> listViewPropertys()
     {
         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasViewProperty.getRDFProperty());
-        return new SemanticIterator<org.semanticwb.platform.SemanticObject>(org.semanticwb.platform.SemanticObject.class, stit);
+        return new SemanticIterator<org.semanticwb.platform.SemanticObject>(stit);
     }
 
     public void addViewProperty(org.semanticwb.platform.SemanticObject semanticobject)
@@ -115,7 +115,7 @@ public class FormViewBase extends GenericObjectBase implements Descriptiveable
     public SemanticIterator<org.semanticwb.platform.SemanticObject> listEditPropertys()
     {
         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasEditProperty.getRDFProperty());
-        return new SemanticIterator<org.semanticwb.platform.SemanticObject>(org.semanticwb.platform.SemanticObject.class, stit);
+        return new SemanticIterator<org.semanticwb.platform.SemanticObject>(stit);
     }
 
     public void addEditProperty(org.semanticwb.platform.SemanticObject semanticobject)
@@ -147,7 +147,6 @@ public class FormViewBase extends GenericObjectBase implements Descriptiveable
 
     public Iterator<GenericObject> listRelatedObjects()
     {
-        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, null, getSemanticObject().getRDFResource());
-        return new GenericIterator((SemanticClass)null, stit,true);
+        return new GenericIterator((SemanticClass)null, getSemanticObject().listRelatedObjects(),true);
     }
 }

@@ -32,7 +32,7 @@ public class SWBContextBase
 
     public static Iterator<org.semanticwb.model.UserRepository> listUserRepositorys()
     {
-        return (Iterator<org.semanticwb.model.UserRepository>)vocabulary.UserRepository.listGenericInstances();
+        return (Iterator<org.semanticwb.model.UserRepository>)vocabulary.swb_UserRepository.listGenericInstances();
     }
 
     public static void removeUserRepository(String uri)
@@ -43,7 +43,7 @@ public class SWBContextBase
     public static UserRepository createUserRepository(String name, String namespace)
     {
         SemanticModel model=mgr.createModel(name, namespace);
-        return (UserRepository)model.createGenericObject(name, vocabulary.UserRepository);
+        return (UserRepository)model.createGenericObject(name, vocabulary.swb_UserRepository);
     }
 
     public static WebSite getWebSite(String uri)
@@ -63,7 +63,7 @@ public class SWBContextBase
 
     public static Iterator<org.semanticwb.model.WebSite> listWebSites()
     {
-        return (Iterator<org.semanticwb.model.WebSite>)vocabulary.WebSite.listGenericInstances();
+        return (Iterator<org.semanticwb.model.WebSite>)vocabulary.swb_WebSite.listGenericInstances();
     }
 
     public static void removeWebSite(String uri)
@@ -74,6 +74,6 @@ public class SWBContextBase
     public static WebSite createWebSite(String name, String namespace)
     {
         SemanticModel model=mgr.createModel(name, namespace);
-        return (WebSite)model.createGenericObject(name, vocabulary.WebSite);
+        return (WebSite)model.createGenericObject(name, vocabulary.swb_WebSite);
     }
 }

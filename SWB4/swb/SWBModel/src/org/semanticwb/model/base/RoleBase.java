@@ -42,7 +42,7 @@ public class RoleBase extends GenericObjectBase implements Groupable,Descriptive
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.modifiedBy);
          if(obj!=null)
          {
-             ret=(User)vocabulary.User.newGenericInstance(obj);
+             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
          }
          return ret;
     }
@@ -93,16 +93,14 @@ public class RoleBase extends GenericObjectBase implements Groupable,Descriptive
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.creator);
          if(obj!=null)
          {
-             ret=(User)vocabulary.User.newGenericInstance(obj);
+             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
          }
          return ret;
     }
 
     public GenericIterator<org.semanticwb.model.Permission> listPermissions()
     {
-        StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasPermission.getRDFProperty());
-        return new GenericIterator<org.semanticwb.model.Permission>(org.semanticwb.model.Permission.class, stit);
-    }
+        return new GenericIterator<org.semanticwb.model.Permission>(org.semanticwb.model.Permission.class, getSemanticObject().listObjectProperties(vocabulary.hasPermission));    }
 
     public void addPermission(org.semanticwb.model.Permission permission)
     {
@@ -125,7 +123,7 @@ public class RoleBase extends GenericObjectBase implements Groupable,Descriptive
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasPermission);
          if(obj!=null)
          {
-             ret=(Permission)vocabulary.Permission.newGenericInstance(obj);
+             ret=(Permission)vocabulary.swb_Permission.newGenericInstance(obj);
          }
          return ret;
     }
@@ -152,9 +150,7 @@ public class RoleBase extends GenericObjectBase implements Groupable,Descriptive
 
     public GenericIterator<org.semanticwb.model.ObjectGroup> listGroups()
     {
-        StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasGroup.getRDFProperty());
-        return new GenericIterator<org.semanticwb.model.ObjectGroup>(org.semanticwb.model.ObjectGroup.class, stit);
-    }
+        return new GenericIterator<org.semanticwb.model.ObjectGroup>(org.semanticwb.model.ObjectGroup.class, getSemanticObject().listObjectProperties(vocabulary.hasGroup));    }
 
     public void addGroup(org.semanticwb.model.ObjectGroup objectgroup)
     {
@@ -177,7 +173,7 @@ public class RoleBase extends GenericObjectBase implements Groupable,Descriptive
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasGroup);
          if(obj!=null)
          {
-             ret=(ObjectGroup)vocabulary.ObjectGroup.newGenericInstance(obj);
+             ret=(ObjectGroup)vocabulary.swb_ObjectGroup.newGenericInstance(obj);
          }
          return ret;
     }
@@ -189,8 +185,7 @@ public class RoleBase extends GenericObjectBase implements Groupable,Descriptive
 
     public Iterator<GenericObject> listRelatedObjects()
     {
-        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, null, getSemanticObject().getRDFResource());
-        return new GenericIterator((SemanticClass)null, stit,true);
+        return new GenericIterator((SemanticClass)null, getSemanticObject().listRelatedObjects(),true);
     }
 
     public UserRepository getUserRepository()
