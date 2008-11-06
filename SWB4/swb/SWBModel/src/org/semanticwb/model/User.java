@@ -77,7 +77,6 @@ public class User extends UserBase implements Principal, java.io.Serializable
         this.login = getUsrPassword().equals(SWBUtils.CryptoWrapper.comparablePassword(new String((char[]) credential)));
     }
 
-    
     public void setExtendedAttribute(String name, Object value) throws SWBException
     {
         SemanticProperty prop = getSemanticObject().getSemanticClass().getProperty(name);
