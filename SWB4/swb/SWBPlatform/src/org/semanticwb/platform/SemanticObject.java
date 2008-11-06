@@ -680,7 +680,7 @@ public class SemanticObject
         return this;
     }    
     
-    public Iterator<String> listProperties(SemanticProperty prop)
+    public Iterator<String> listStringProperties(SemanticProperty prop)
     {
         if(m_virtual)
         {
@@ -696,6 +696,15 @@ public class SemanticObject
         }            
         return new DataTypeIterator(String.class,m_res.listProperties(prop.getRDFProperty()));
     }    
+    
+    /**
+     * 
+     * @return
+     */
+//    public Iterator<SemanticProperty> listProperties()
+//    {
+//        getRDFResource().l
+//    }
     
     public Iterator<SemanticObject> listObjectProperties(SemanticProperty prop)
     {
