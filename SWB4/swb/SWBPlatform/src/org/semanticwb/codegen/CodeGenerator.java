@@ -374,7 +374,7 @@ public class CodeGenerator
             parent = ( SemanticClass ) it.next();
             if ( parent.isSWBClass() || parent.isSWBModel() )
             {
-                exts = getClassName(parent) + "Base";
+                exts = getClassName(parent) ;
                 break;
             }
             else
@@ -393,7 +393,7 @@ public class CodeGenerator
         javaClassContent.append("{" + ENTER);
         if ( parent == null )
         {
-            javaClassContent.append("    SWBVocabulary vocabulary=SWBContext.getVocabulary();" + ENTER);
+            javaClassContent.append("    public static SWBVocabulary vocabulary=SWBContext.getVocabulary();" + ENTER);
         }
         javaClassContent.append(ENTER);
         javaClassContent.append(PUBLIC + className + "Base(SemanticObject base)" + ENTER);
@@ -426,10 +426,10 @@ public class CodeGenerator
         javaClassContent.append("}" + ENTER);
         File fileClass = new File(dir.getPath() + File.separatorChar + className + "Base.java");
         saveFile(fileClass, javaClassContent.toString());
-        createClass(tpc);
+        createClass(tpc,parent);
     }
 
-    private void createClass(SemanticClass tpc) throws CodeGeneratorException
+    private void createClass(SemanticClass tpc,SemanticClass parent) throws CodeGeneratorException
     {
         String sPackage = getPackage(tpc);
 
@@ -447,7 +447,14 @@ public class CodeGenerator
             javaClassContent.append("import " + sPackage + ".base.*;" + ENTER);
             javaClassContent.append("import org.semanticwb.platform.SemanticObject;" + ENTER);
             javaClassContent.append(ENTER);
-            javaClassContent.append("public class " + className + " extends " + className + "Base " + ENTER);
+            if(parent==null)
+            {
+                javaClassContent.append("public class " + className + " extends " + className + "Base " + ENTER);
+            }
+            else
+            {
+                javaClassContent.append("public class " + className + " extends " + getClassName(parent) + "Base " + ENTER);
+            }
             javaClassContent.append("{" + ENTER);
             javaClassContent.append(PUBLIC + className + "(SemanticObject base)" + ENTER);
             javaClassContent.append(OPEN_BLOCK + ENTER);
