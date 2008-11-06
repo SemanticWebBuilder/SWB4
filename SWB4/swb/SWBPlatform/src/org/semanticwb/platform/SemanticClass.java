@@ -68,6 +68,7 @@ public class SemanticClass
             //System.out.println("p.getName():"+p.getName()+" "+p);
             m_props.put( p.getName(), p);
         }
+        log.trace("SemanticClass:"+getName()+" "+getClassName()+" "+m_class.getNameSpace()+" "+getPrefix());
         //System.out.println("Name:"+getName()+" "+getClassName()+" "+m_class.getNameSpace()+" "+getPrefix());
     }
     
@@ -95,8 +96,8 @@ public class SemanticClass
             } catch (Exception pnf){
                 m_className=getName();
             }
+            //log.trace("getClassName:"+m_className);
         }
-        log.trace("getClassName:"+m_className);
         return m_className;
     }   
     
