@@ -58,6 +58,7 @@ public class CodeGeneratorTest
             String sPakage = "org.semanticwb.model";
             CodeGenerator codeGeneration = new CodeGenerator(dir, sPakage);
             codeGeneration.generateCode();
+            System.out.println("Generación de clases completa");
         }
         catch ( CodeGeneratorException cge )
         {
