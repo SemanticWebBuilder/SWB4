@@ -62,7 +62,7 @@ public class CampBase extends GenericObjectBase implements Activeable,Deleteable
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.modifiedBy);
          if(obj!=null)
          {
-             ret=(User)vocabulary.User.newGenericInstance(obj);
+             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
          }
          return ret;
     }
@@ -113,16 +113,14 @@ public class CampBase extends GenericObjectBase implements Activeable,Deleteable
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.creator);
          if(obj!=null)
          {
-             ret=(User)vocabulary.User.newGenericInstance(obj);
+             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
          }
          return ret;
     }
 
     public GenericIterator<org.semanticwb.model.Calendar> listCalendars()
     {
-        StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasCalendar.getRDFProperty());
-        return new GenericIterator<org.semanticwb.model.Calendar>(org.semanticwb.model.Calendar.class, stit);
-    }
+        return new GenericIterator<org.semanticwb.model.Calendar>(org.semanticwb.model.Calendar.class, getSemanticObject().listObjectProperties(vocabulary.hasCalendar));    }
 
     public void addCalendar(org.semanticwb.model.Calendar calendar)
     {
@@ -145,16 +143,14 @@ public class CampBase extends GenericObjectBase implements Activeable,Deleteable
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasCalendar);
          if(obj!=null)
          {
-             ret=(Calendar)vocabulary.Calendar.newGenericInstance(obj);
+             ret=(Calendar)vocabulary.swb_Calendar.newGenericInstance(obj);
          }
          return ret;
     }
 
     public GenericIterator<org.semanticwb.model.Role> listRoles()
     {
-        StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasRole.getRDFProperty());
-        return new GenericIterator<org.semanticwb.model.Role>(org.semanticwb.model.Role.class, stit);
-    }
+        return new GenericIterator<org.semanticwb.model.Role>(org.semanticwb.model.Role.class, getSemanticObject().listObjectProperties(vocabulary.hasRole));    }
 
     public void addRole(org.semanticwb.model.Role role)
     {
@@ -177,7 +173,7 @@ public class CampBase extends GenericObjectBase implements Activeable,Deleteable
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasRole);
          if(obj!=null)
          {
-             ret=(Role)vocabulary.Role.newGenericInstance(obj);
+             ret=(Role)vocabulary.swb_Role.newGenericInstance(obj);
          }
          return ret;
     }
@@ -204,9 +200,7 @@ public class CampBase extends GenericObjectBase implements Activeable,Deleteable
 
     public GenericIterator<org.semanticwb.model.Rule> listRules()
     {
-        StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasRule.getRDFProperty());
-        return new GenericIterator<org.semanticwb.model.Rule>(org.semanticwb.model.Rule.class, stit);
-    }
+        return new GenericIterator<org.semanticwb.model.Rule>(org.semanticwb.model.Rule.class, getSemanticObject().listObjectProperties(vocabulary.hasRule));    }
 
     public void addRule(org.semanticwb.model.Rule rule)
     {
@@ -229,7 +223,7 @@ public class CampBase extends GenericObjectBase implements Activeable,Deleteable
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasRule);
          if(obj!=null)
          {
-             ret=(Rule)vocabulary.Rule.newGenericInstance(obj);
+             ret=(Rule)vocabulary.swb_Rule.newGenericInstance(obj);
          }
          return ret;
     }
@@ -241,8 +235,7 @@ public class CampBase extends GenericObjectBase implements Activeable,Deleteable
 
     public Iterator<GenericObject> listRelatedObjects()
     {
-        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, null, getSemanticObject().getRDFResource());
-        return new GenericIterator((SemanticClass)null, stit,true);
+        return new GenericIterator((SemanticClass)null, getSemanticObject().listRelatedObjects(),true);
     }
 
     public WebSite getWebSite()

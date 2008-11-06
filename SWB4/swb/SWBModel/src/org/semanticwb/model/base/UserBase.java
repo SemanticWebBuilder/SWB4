@@ -52,7 +52,7 @@ public class UserBase extends GenericObjectBase implements Groupable,Activeable,
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.modifiedBy);
          if(obj!=null)
          {
-             ret=(User)vocabulary.User.newGenericInstance(obj);
+             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
          }
          return ret;
     }
@@ -119,9 +119,7 @@ public class UserBase extends GenericObjectBase implements Groupable,Activeable,
 
     public GenericIterator<org.semanticwb.model.ObjectGroup> listGroups()
     {
-        StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasGroup.getRDFProperty());
-        return new GenericIterator<org.semanticwb.model.ObjectGroup>(org.semanticwb.model.ObjectGroup.class, stit);
-    }
+        return new GenericIterator<org.semanticwb.model.ObjectGroup>(org.semanticwb.model.ObjectGroup.class, getSemanticObject().listObjectProperties(vocabulary.hasGroup));    }
 
     public void addGroup(org.semanticwb.model.ObjectGroup objectgroup)
     {
@@ -144,7 +142,7 @@ public class UserBase extends GenericObjectBase implements Groupable,Activeable,
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasGroup);
          if(obj!=null)
          {
-             ret=(ObjectGroup)vocabulary.ObjectGroup.newGenericInstance(obj);
+             ret=(ObjectGroup)vocabulary.swb_ObjectGroup.newGenericInstance(obj);
          }
          return ret;
     }
@@ -185,7 +183,7 @@ public class UserBase extends GenericObjectBase implements Groupable,Activeable,
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.creator);
          if(obj!=null)
          {
-             ret=(User)vocabulary.User.newGenericInstance(obj);
+             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
          }
          return ret;
     }
@@ -212,9 +210,7 @@ public class UserBase extends GenericObjectBase implements Groupable,Activeable,
 
     public GenericIterator<org.semanticwb.model.Role> listRoles()
     {
-        StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasRole.getRDFProperty());
-        return new GenericIterator<org.semanticwb.model.Role>(org.semanticwb.model.Role.class, stit);
-    }
+        return new GenericIterator<org.semanticwb.model.Role>(org.semanticwb.model.Role.class, getSemanticObject().listObjectProperties(vocabulary.hasRole));    }
 
     public void addRole(org.semanticwb.model.Role role)
     {
@@ -237,7 +233,7 @@ public class UserBase extends GenericObjectBase implements Groupable,Activeable,
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasRole);
          if(obj!=null)
          {
-             ret=(Role)vocabulary.Role.newGenericInstance(obj);
+             ret=(Role)vocabulary.swb_Role.newGenericInstance(obj);
          }
          return ret;
     }
@@ -269,8 +265,7 @@ public class UserBase extends GenericObjectBase implements Groupable,Activeable,
 
     public Iterator<GenericObject> listRelatedObjects()
     {
-        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, null, getSemanticObject().getRDFResource());
-        return new GenericIterator((SemanticClass)null, stit,true);
+        return new GenericIterator((SemanticClass)null, getSemanticObject().listRelatedObjects(),true);
     }
 
     public UserRepository getUserRepository()

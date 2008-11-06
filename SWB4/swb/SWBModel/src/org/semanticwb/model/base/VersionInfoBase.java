@@ -42,7 +42,7 @@ public class VersionInfoBase extends GenericObjectBase implements Traceable,Valu
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.modifiedBy);
          if(obj!=null)
          {
-             ret=(User)vocabulary.User.newGenericInstance(obj);
+             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
          }
          return ret;
     }
@@ -73,7 +73,7 @@ public class VersionInfoBase extends GenericObjectBase implements Traceable,Valu
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.versionLockedBy);
          if(obj!=null)
          {
-             ret=(User)vocabulary.User.newGenericInstance(obj);
+             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
          }
          return ret;
     }
@@ -94,7 +94,7 @@ public class VersionInfoBase extends GenericObjectBase implements Traceable,Valu
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.previousVersion);
          if(obj!=null)
          {
-             ret=(VersionInfo)vocabulary.VersionInfo.newGenericInstance(obj);
+             ret=(VersionInfo)vocabulary.swb_VersionInfo.newGenericInstance(obj);
          }
          return ret;
     }
@@ -145,7 +145,7 @@ public class VersionInfoBase extends GenericObjectBase implements Traceable,Valu
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.nextVersion);
          if(obj!=null)
          {
-             ret=(VersionInfo)vocabulary.VersionInfo.newGenericInstance(obj);
+             ret=(VersionInfo)vocabulary.swb_VersionInfo.newGenericInstance(obj);
          }
          return ret;
     }
@@ -166,7 +166,7 @@ public class VersionInfoBase extends GenericObjectBase implements Traceable,Valu
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.creator);
          if(obj!=null)
          {
-             ret=(User)vocabulary.User.newGenericInstance(obj);
+             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
          }
          return ret;
     }
@@ -188,8 +188,7 @@ public class VersionInfoBase extends GenericObjectBase implements Traceable,Valu
 
     public Iterator<GenericObject> listRelatedObjects()
     {
-        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, null, getSemanticObject().getRDFResource());
-        return new GenericIterator((SemanticClass)null, stit,true);
+        return new GenericIterator((SemanticClass)null, getSemanticObject().listRelatedObjects(),true);
     }
 
     public WebSite getWebSite()

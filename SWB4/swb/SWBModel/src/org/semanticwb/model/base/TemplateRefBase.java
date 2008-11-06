@@ -7,23 +7,12 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class TemplateRefBase extends GenericObjectBase implements Templateable,Priorityable,Activeable,Deleteable
+public class TemplateRefBase extends ReferenceBase implements Templateable,Priorityable,Activeable,Deleteable
 {
-    SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
     public TemplateRefBase(SemanticObject base)
     {
         super(base);
-    }
-
-    public boolean isActive()
-    {
-        return getSemanticObject().getBooleanProperty(vocabulary.active);
-    }
-
-    public void setActive(boolean active)
-    {
-        getSemanticObject().setBooleanProperty(vocabulary.active, active);
     }
 
     public boolean isDeleted()
@@ -52,7 +41,7 @@ public class TemplateRefBase extends GenericObjectBase implements Templateable,P
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.template);
          if(obj!=null)
          {
-             ret=(Template)vocabulary.Template.newGenericInstance(obj);
+             ret=(Template)vocabulary.swb_Template.newGenericInstance(obj);
          }
          return ret;
     }
@@ -65,21 +54,5 @@ public class TemplateRefBase extends GenericObjectBase implements Templateable,P
     public void setPriority(int priority)
     {
         getSemanticObject().setLongProperty(vocabulary.priority, priority);
-    }
-
-    public void remove()
-    {
-        getSemanticObject().remove();
-    }
-
-    public Iterator<GenericObject> listRelatedObjects()
-    {
-        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, null, getSemanticObject().getRDFResource());
-        return new GenericIterator((SemanticClass)null, stit,true);
-    }
-
-    public WebSite getWebSite()
-    {
-        return new WebSite(getSemanticObject().getModel().getModelObject());
     }
 }

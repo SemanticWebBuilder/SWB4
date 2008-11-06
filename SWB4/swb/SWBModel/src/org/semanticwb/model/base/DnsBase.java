@@ -42,7 +42,7 @@ public class DnsBase extends GenericObjectBase implements WebPageable,Descriptiv
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.modifiedBy);
          if(obj!=null)
          {
-             ret=(User)vocabulary.User.newGenericInstance(obj);
+             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
          }
          return ret;
     }
@@ -93,7 +93,7 @@ public class DnsBase extends GenericObjectBase implements WebPageable,Descriptiv
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.creator);
          if(obj!=null)
          {
-             ret=(User)vocabulary.User.newGenericInstance(obj);
+             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
          }
          return ret;
     }
@@ -114,7 +114,7 @@ public class DnsBase extends GenericObjectBase implements WebPageable,Descriptiv
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.webPage);
          if(obj!=null)
          {
-             ret=(WebPage)vocabulary.WebPage.newGenericInstance(obj);
+             ret=(WebPage)vocabulary.swb_WebPage.newGenericInstance(obj);
          }
          return ret;
     }
@@ -156,8 +156,7 @@ public class DnsBase extends GenericObjectBase implements WebPageable,Descriptiv
 
     public Iterator<GenericObject> listRelatedObjects()
     {
-        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, null, getSemanticObject().getRDFResource());
-        return new GenericIterator((SemanticClass)null, stit,true);
+        return new GenericIterator((SemanticClass)null, getSemanticObject().listRelatedObjects(),true);
     }
 
     public WebSite getWebSite()

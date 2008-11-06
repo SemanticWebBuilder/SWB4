@@ -42,7 +42,7 @@ public class RuleBase extends GenericObjectBase implements Groupable,Traceable,X
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.modifiedBy);
          if(obj!=null)
          {
-             ret=(User)vocabulary.User.newGenericInstance(obj);
+             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
          }
          return ret;
     }
@@ -83,7 +83,7 @@ public class RuleBase extends GenericObjectBase implements Groupable,Traceable,X
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.actualVersion);
          if(obj!=null)
          {
-             ret=(VersionInfo)vocabulary.VersionInfo.newGenericInstance(obj);
+             ret=(VersionInfo)vocabulary.swb_VersionInfo.newGenericInstance(obj);
          }
          return ret;
     }
@@ -124,7 +124,7 @@ public class RuleBase extends GenericObjectBase implements Groupable,Traceable,X
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.lastVersion);
          if(obj!=null)
          {
-             ret=(VersionInfo)vocabulary.VersionInfo.newGenericInstance(obj);
+             ret=(VersionInfo)vocabulary.swb_VersionInfo.newGenericInstance(obj);
          }
          return ret;
     }
@@ -145,7 +145,7 @@ public class RuleBase extends GenericObjectBase implements Groupable,Traceable,X
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.creator);
          if(obj!=null)
          {
-             ret=(User)vocabulary.User.newGenericInstance(obj);
+             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
          }
          return ret;
     }
@@ -172,9 +172,7 @@ public class RuleBase extends GenericObjectBase implements Groupable,Traceable,X
 
     public GenericIterator<org.semanticwb.model.ObjectGroup> listGroups()
     {
-        StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasGroup.getRDFProperty());
-        return new GenericIterator<org.semanticwb.model.ObjectGroup>(org.semanticwb.model.ObjectGroup.class, stit);
-    }
+        return new GenericIterator<org.semanticwb.model.ObjectGroup>(org.semanticwb.model.ObjectGroup.class, getSemanticObject().listObjectProperties(vocabulary.hasGroup));    }
 
     public void addGroup(org.semanticwb.model.ObjectGroup objectgroup)
     {
@@ -197,7 +195,7 @@ public class RuleBase extends GenericObjectBase implements Groupable,Traceable,X
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasGroup);
          if(obj!=null)
          {
-             ret=(ObjectGroup)vocabulary.ObjectGroup.newGenericInstance(obj);
+             ret=(ObjectGroup)vocabulary.swb_ObjectGroup.newGenericInstance(obj);
          }
          return ret;
     }
@@ -209,8 +207,7 @@ public class RuleBase extends GenericObjectBase implements Groupable,Traceable,X
 
     public Iterator<GenericObject> listRelatedObjects()
     {
-        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, null, getSemanticObject().getRDFResource());
-        return new GenericIterator((SemanticClass)null, stit,true);
+        return new GenericIterator((SemanticClass)null, getSemanticObject().listRelatedObjects(),true);
     }
 
     public WebSite getWebSite()

@@ -7,23 +7,12 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class PFlowRefBase extends GenericObjectBase implements Activeable,Deleteable
+public class PFlowRefBase extends ReferenceBase implements Activeable,Deleteable
 {
-    SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
     public PFlowRefBase(SemanticObject base)
     {
         super(base);
-    }
-
-    public boolean isActive()
-    {
-        return getSemanticObject().getBooleanProperty(vocabulary.active);
-    }
-
-    public void setActive(boolean active)
-    {
-        getSemanticObject().setBooleanProperty(vocabulary.active, active);
     }
 
     public boolean isDeleted()
@@ -52,24 +41,8 @@ public class PFlowRefBase extends GenericObjectBase implements Activeable,Delete
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.pflow);
          if(obj!=null)
          {
-             ret=(PFlow)vocabulary.PFlow.newGenericInstance(obj);
+             ret=(PFlow)vocabulary.swb_PFlow.newGenericInstance(obj);
          }
          return ret;
-    }
-
-    public void remove()
-    {
-        getSemanticObject().remove();
-    }
-
-    public Iterator<GenericObject> listRelatedObjects()
-    {
-        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, null, getSemanticObject().getRDFResource());
-        return new GenericIterator((SemanticClass)null, stit,true);
-    }
-
-    public WebSite getWebSite()
-    {
-        return new WebSite(getSemanticObject().getModel().getModelObject());
     }
 }

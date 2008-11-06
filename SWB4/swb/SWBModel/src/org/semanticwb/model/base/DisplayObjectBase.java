@@ -28,9 +28,7 @@ public class DisplayObjectBase extends GenericObjectBase implements Sortable
 
     public GenericIterator<org.semanticwb.model.ObjectAction> listObjectActions()
     {
-        StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasObjectAction.getRDFProperty());
-        return new GenericIterator<org.semanticwb.model.ObjectAction>(org.semanticwb.model.ObjectAction.class, stit);
-    }
+        return new GenericIterator<org.semanticwb.model.ObjectAction>(org.semanticwb.model.ObjectAction.class, getSemanticObject().listObjectProperties(vocabulary.hasObjectAction));    }
 
     public void addObjectAction(org.semanticwb.model.ObjectAction objectaction)
     {
@@ -53,7 +51,7 @@ public class DisplayObjectBase extends GenericObjectBase implements Sortable
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasObjectAction);
          if(obj!=null)
          {
-             ret=(ObjectAction)vocabulary.ObjectAction.newGenericInstance(obj);
+             ret=(ObjectAction)vocabulary.swb_ObjectAction.newGenericInstance(obj);
          }
          return ret;
     }
@@ -61,7 +59,7 @@ public class DisplayObjectBase extends GenericObjectBase implements Sortable
     public SemanticIterator<org.semanticwb.platform.SemanticObject> listBehaviors()
     {
         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.hasBehavior.getRDFProperty());
-        return new SemanticIterator<org.semanticwb.platform.SemanticObject>(org.semanticwb.platform.SemanticObject.class, stit);
+        return new SemanticIterator<org.semanticwb.platform.SemanticObject>(stit);
     }
 
     public void addBehavior(org.semanticwb.platform.SemanticObject semanticobject)
@@ -93,7 +91,6 @@ public class DisplayObjectBase extends GenericObjectBase implements Sortable
 
     public Iterator<GenericObject> listRelatedObjects()
     {
-        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, null, getSemanticObject().getRDFResource());
-        return new GenericIterator((SemanticClass)null, stit,true);
+        return new GenericIterator((SemanticClass)null, getSemanticObject().listRelatedObjects(),true);
     }
 }
