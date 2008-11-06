@@ -72,17 +72,9 @@ public class User extends UserBase implements Principal, java.io.Serializable
         return login;
     }
 
-    public void setLogin(boolean login)
+    public void checkCredential(Object credential) throws NoSuchAlgorithmException
     {
-        final boolean result = login;
-        this.login = (Boolean) AccessController.doPrivileged(
-          new PrivilegedAction() {
-            public Object run() {
-                return Boolean.valueOf(result);
-            }
-          }
-        );
-         
+        this.login = getUsrPassword().equals(SWBUtils.CryptoWrapper.comparablePassword(new String((char[]) credential)));
     }
 
     
