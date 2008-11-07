@@ -1088,11 +1088,13 @@ public class SWBUtils {
                 String subject, String contentType, String data, String login, String password, ArrayList<EmailAttachment> attachments) {
             try {
                 HtmlEmail email = new HtmlEmail();
-
-                Iterator itAttaches = attachments.iterator();
-                while (itAttaches.hasNext()) {
-                    EmailAttachment attchment = (EmailAttachment) itAttaches.next();
-                    email.attach(attchment);
+                
+                if(attachments!=null && attachments.size()>0){
+                    Iterator itAttaches = attachments.iterator();
+                    while (itAttaches.hasNext()) {
+                        EmailAttachment attchment = (EmailAttachment) itAttaches.next();
+                        email.attach(attchment);
+                    }
                 }
 
                 email.setHostName(smtpserver);
