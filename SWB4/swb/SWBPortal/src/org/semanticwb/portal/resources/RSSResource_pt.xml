@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<xslfile>admresource.xslt</xslfile>
+	<form name="frmRSSResource" action="true" method="POST">
+		<admdbconnmgr defconn="true"/>
+		<input type="TEXT" name="url" label="* URL da RSS" size="50" jsrequired="true" />
+		<input type="FILE" name="template" label="Modelo (xsl, xslt):" showfile="true" msg="Modelo atual " bydefault="{@webpath}wbadmin/xsl/RSSResource/RSSResource.xslt" msgbydefault="Modelo do defeito " filetype="xsl|xslt" isshowfiletype="true" size="40"/>
+		<input type="SUBMIT" name="btnSave"  value="Enviar"/>
+		<input type="RESET"  name="btnReset" value="Cancelar"/>
+	</form>
+	<statictext name="txtNote">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				* Dados obrigatórios
+			</font>
+		]]>
+	</statictext>
+</admresource>
