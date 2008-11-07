@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<xslfile>admresource.xslt</xslfile>
+	<form name="frmPDFContent" action="true" method="POST">
+		<admdbconnmgr defconn="true"/>
+		<input type="FILE" name="archive" label="* Archivo (pdf, doc, txt):" size="40" showfile="true" msg="Archivo actual " filetype="pdf|doc|txt" isshowfiletype="true" />
+		<input type="TEXT" name="width" label="Ancho (pixeles o nn% para porcentaje):" size="4" maxlength="4" />
+		<input type="TEXT" name="height" label="Alto (pixeles o nn% para porcentaje):" size="4" maxlength="4" />
+		<input type="TEXT" name="marginwidth" label="Ancho del margen (pixels):" size="4" maxlength="4" jsvaltype="js_numbers"/>
+		<input type="TEXT" name="marginheight" label="Altura del margen (pixels):" size="4" maxlength="4" jsvaltype="js_numbers"/>
+		<input type="TEXT" name="style" label="Estilo para el frame:" size="50"/>
+		<statictext name="txtAlign">Alineación:</statictext>
+		<input type="RADIO" name="align" label="Superior" value="top"/>
+		<input type="RADIO" name="align" label="Media" value="middle"/>
+		<input type="RADIO" name="align" label="Inferior" value="bottom"/>
+		<input type="RADIO" name="align" label="Derecha" value="left"/>
+		<input type="RADIO" name="align" label="Izquierda" value="right"/>
+		<input type="RADIO" name="align" label="Centrada" value="center"/>		
+		<statictext name="txtTarget">Barras de desplazamiento:</statictext>
+		<input type="RADIO" name="scrollbars" label="Automático" value="auto"/>
+		<input type="RADIO" name="scrollbars" label="Sí" value="yes"/>
+		<input type="RADIO" name="scrollbars" label="No" value="no"/>
+		<input type="CHECKBOX" name="frameborder" label="Borde del frame" value="1"/>
+		<input type="SUBMIT" name="btnSave"  value="Guardar" onclick="if(jsValida(this.form)) return true; else return false;"/>
+		<input type="RESET"  name="btnReset" value="Cancelar"/>
+	</form>
+	<statictext name="txtNote">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				* Dato requerido
+			</font>
+		]]>
+	</statictext>
+	<script language="JavaScript">
+		<![CDATA[
+			if(!document.frmPDFContent.align[0].checked && 
+				!document.frmPDFContent.align[1].checked &&
+				!document.frmPDFContent.align[2].checked &&
+				!document.frmPDFContent.align[3].checked &&
+				!document.frmPDFContent.align[4].checked &&
+				!document.frmPDFContent.align[5].checked)
+				document.frmPDFContent.align[0].checked=true;
+			if(!document.frmPDFContent.scrollbars[0].checked && 
+				!document.frmPDFContent.scrollbars[1].checked &&
+				!document.frmPDFContent.scrollbars[2].checked)
+				document.frmPDFContent.scrollbars[0].checked=true;
+			function jsValida(frm)
+			{
+				if(frm.wbfile_archive==undefined && (frm.archive.value==null || frm.archive.value=='' || frm.archive.value==' '))
+				{
+					alert('Especifique el archivo para desplegar.');
+					frm.archive.focus();
+					return false;
+				}
+				return true;
+			}								
+		]]>
+	</script>	
+</admresource>
