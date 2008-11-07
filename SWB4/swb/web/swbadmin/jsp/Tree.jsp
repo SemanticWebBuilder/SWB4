@@ -1,4 +1,4 @@
-<%@page contentType="text/html"%><%@page pageEncoding="UTF-8"%>
+<%@page contentType="text/html"%><%@page pageEncoding="ISO-8859-1"%>
 <%@page import="org.json.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 <%!
     public JSONObject getNode(String id, String title, String type, String icon) throws JSONException
