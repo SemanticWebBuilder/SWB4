@@ -25,6 +25,7 @@
 package org.semanticwb.portal.resources;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.HashMap;
 import java.util.Vector;
@@ -131,7 +132,6 @@ public class WBSiteMap extends GenericAdmResource
             if (tpsite == null) {
                 tpsite = tm.getHomePage();
             }
-            
             Document dom = SWBUtils.XML.getNewDocument();
             Element emn = dom.createElement("mapa");
             if (!"".equals(base.getAttribute("title", "").trim())) {
@@ -139,7 +139,6 @@ public class WBSiteMap extends GenericAdmResource
             }
             emn.setAttribute("path", path);
             dom.appendChild(emn);
-
             //if (user.haveAccess(tpsite)) TODO: VER4
             {
                 SWBResourceURL url=paramRequest.getRenderUrl().setMode(paramRequest.Mode_VIEW);
@@ -290,14 +289,15 @@ public class WBSiteMap extends GenericAdmResource
             try
             {
                 Document dom =getDom(request, response, paramRequest);
-                //System.out.println(AFUtils.getInstance().DomtoXml(dom));
                 if(dom != null) {
                     ret.append(SWBUtils.XML.transformDom(tpl, dom));
                 }
             }
             catch(Exception e){ log.error(e); }
         }
-        response.getWriter().print(ret.toString());
+        PrintWriter out = response.getWriter();
+        out.println(ret.toString());
+        out.println("<br><a href=\"" + paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN) + "\">SiteMap admin</a>");
     }    
 
     /**
@@ -342,7 +342,7 @@ public class WBSiteMap extends GenericAdmResource
                     hijo.appendChild(hijospc);
                 }
                 hijo.setAttribute("url", tpsub.getUrl());
-                hijo.setAttribute("nombre", tpsub.getDisplayName(lang));
+                hijo.setAttribute("nombre", tpsub.getTitle(lang));
                 emn.appendChild(hijo);                
                 
                 if(tpsub.listChilds().hasNext())
@@ -494,8 +494,6 @@ public class WBSiteMap extends GenericAdmResource
             String action = null != request.getParameter("act") && !"".equals(request.getParameter("act").trim()) ? request.getParameter("act").trim() : paramRequest.getAction();
             if("add".equals(action))
             {
-                System.out.println(paramRequest.getTopic().getId()+"-----------");
-                
                 SWBResourceURLImp url=new SWBResourceURLImp(request, base, paramRequest.getTopic(),SWBResourceURL.UrlType_RENDER);
                 url.setResourceBase(base);
                 url.setMode(url.Mode_VIEW);

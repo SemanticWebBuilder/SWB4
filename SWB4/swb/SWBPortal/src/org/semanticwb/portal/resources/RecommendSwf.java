@@ -80,6 +80,7 @@ public class RecommendSwf extends Recommend
      * @throws AFException
      * @throws IOException
      */       
+    @Override
     public org.w3c.dom.Document getDom(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         String action = null != request.getParameter("rec_act") && !"".equals(request.getParameter("rec_act").trim()) ? request.getParameter("rec_act").trim() : "rec_step2";
@@ -141,6 +142,7 @@ public class RecommendSwf extends Recommend
      * @throws AFException
      * @throws IOException
      */    
+    @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         Portlet base=getResourceBase();
