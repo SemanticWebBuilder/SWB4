@@ -507,7 +507,23 @@ public class TestWebSite {
             WebPage page0=site.getWebPage("page0");
             page0.addPortletRef(portletref);            
             
-        }        
+        }
+        
+        if (site.getPortletType("CommentSwf") == null)
+        {
+            PortletType ptype = site.createPortletType("CommentSwf");
+            ptype.setPortletClassName("org.semanticwb.portal.resources.CommentSwf");
+            ptype.setPortletBundle("org.semanticwb.portal.resources.CommentSwf");
+            ptype.setPortletMode(1);
+            ptype.setTitle("Recurso CommentSwf");
+                    
+            Portlet portlet = site.createPortlet();
+            portlet.setActive(true);
+            portlet.setCreator(user);
+            portlet.setPortletType(ptype);
+            portlet.setTitle("CommentSwf");
+        }  
+
     }
     
     
@@ -671,7 +687,7 @@ public class TestWebSite {
         User user=urep.getUserByLogin("admin");
         System.out.println("User:"+user);
 
-        WebPage homeOnt=(WebPage)SWBPlatform.getSemanticMgr().getOntology().getGenericObject(home.getURI(), SWBContext.getVocabulary().WebPage);
+        WebPage homeOnt=(WebPage)SWBPlatform.getSemanticMgr().getOntology().getGenericObject(home.getURI());  //, SWBContext.getVocabulary().WebPage
 
         System.out.println("home:"+home+" "+home.getTitle());
         System.out.println("homeOnt:"+homeOnt+" "+homeOnt.getTitle());
