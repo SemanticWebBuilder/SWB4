@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<!--
+ * VirtualResource.xml.xml
+ *
+ * Created on 24 de enero de 2005, 07:27 PM
+ *
+ * @author  Javier Solis
+ -->
+	<xslfile>admresource.xslt</xslfile>
+	<form name="frmAdmin" action="true" method="POST" enctype="multipart/form-data">
+		<admdbconnmgr defconn="true"/>     
+<!--                         
+		<input type="FILE" name="html" label="* Archivo de contenido local:" size="40" showfile="false"/>
+		<statictext name="labelPag">* Desea páginar contenido:</statictext>
+		<input type="RADIO" name="pcont" label="Si" value="1"/>
+		<input type="RADIO" name="pcont" label="No" value="0"/>
+-->                
+		<input type="TEXT" name="tmid" label="Identificador do site:" size="50" maxlength="50"/>                
+		<input type="TEXT" name="resid" label="Identificador do recurso:" size="10" maxlength="10" jsvaltype="js_numbers"/>                
+		<input type="SUBMIT" name="btnSave"  moreattr="class=&#34;botones&#34;" value="Salvar"/>
+		<input type="RESET"  name="btnReset" moreattr="class=&#34;botones&#34;" value="Cancelar"/>                
+        </form>
+</admresource>
