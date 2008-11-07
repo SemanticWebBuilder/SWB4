@@ -31,6 +31,7 @@
 package org.semanticwb.portal.resources;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -38,6 +39,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Portlet;
 import org.semanticwb.model.Template;
@@ -153,7 +155,6 @@ public class Print extends GenericResource
                 url.setParameter("imp_act","imp_step3");
                 //url.setParameter("page", "0");
             }
-            
             getParams(request, url);
             
             //response.sendRedirect(url.toString());
@@ -191,12 +192,15 @@ public class Print extends GenericResource
                         ret.append(base.getAttribute("lnktexto").trim());
                     }
                     else {
-                        paramRequest.getLocaleString("msgPrint");
+                        ret.append(paramRequest.getLocaleString("msgPrint"));
                     }
                     ret.append("</a>");
                 }
             }
-            response.getWriter().print(ret.toString());            
+            
+            PrintWriter out = response.getWriter();
+            out.println(ret.toString());
+            out.println("<br><a href=\"" + paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN) + "\">Print admin</a>");
         }
     }
     
@@ -289,7 +293,7 @@ public class Print extends GenericResource
                     request.setAttribute("page",request.getParameter("page"));
                 } 
                 if(tpl!=null) {
-                    ((TemplateImp)tpl).build(request, response, paramRequest.getUser(), paramRequest.getTopic());
+                    ((TemplateImp)SWBPortal.getTemplateMgr().getTemplateImp(tpl)).build(request, response, paramRequest.getUser(), paramRequest.getTopic());
                 }
             } 
             catch(Exception e) { log.error("Error while getting topic to print: "+base.getId() +"-"+ base.getTitle(), e); }
