@@ -64,8 +64,10 @@
         
         if(obj instanceof Calendarable)
         {
-            String auri=buri;
+            String auri="/swb/swb/SWBAdmin/WBAd_Home/_rid/55/_mto/3";
+            auri+="?suri="+obj.getSemanticObject().getEncodedURI();
             auri+="&sprop="+voc.hasCalendar.getEncodedURI();
+            System.out.println(auri);
             //auri+="&spropref="+voc.pflow.getEncodedURI();            
 %>
 <div dojoType="dijit.layout.ContentPane" title="Calendarización" style=" padding:10px;" refreshOnShow="true" href="<%=auri%>"></div>
