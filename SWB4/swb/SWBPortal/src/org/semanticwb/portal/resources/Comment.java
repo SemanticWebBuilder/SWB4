@@ -34,6 +34,7 @@ package org.semanticwb.portal.resources;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.io.IOException;
+import java.io.PrintWriter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -72,7 +73,7 @@ public class Comment extends GenericResource {
     javax.xml.transform.Templates tpl; 
     String name = getClass().getName().substring(getClass().getName().lastIndexOf(".") + 1);
     String webWorkPath = "/work";
-    String path = SWBPlatform.getContextPath() + "swbadmin/xsl/" + name + "/";
+    String path = SWBPlatform.getContextPath() + "/swbadmin/xsl/" + name + "/";
 
     /** Creates a new instance of Ventana */    
     public Comment() {
@@ -412,7 +413,7 @@ public class Comment extends GenericResource {
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest reqParams) throws IOException {
-        StringBuffer ret = new StringBuffer("");
+        StringBuffer ret = new StringBuffer(400);
         Portlet base = getResourceBase();
         String action = null != request.getParameter("com_act") && !"".equals(request.getParameter("com_act").trim()) ? request.getParameter("com_act").trim() : "com_step1";
 
@@ -501,8 +502,14 @@ public class Comment extends GenericResource {
             } catch (Exception e) {
                 log.error(e);
             }
-        }        
-        response.getWriter().print(ret.toString());
+        }
+        
+        PrintWriter out = response.getWriter();
+        out.print(ret.toString());
+        out.println("<br><a href=\"" 
+                + reqParams.getRenderUrl().setMode(reqParams.Mode_ADMIN)
+                + "\">CommentSwf admin</a>");
+        
     }
 
     /**
