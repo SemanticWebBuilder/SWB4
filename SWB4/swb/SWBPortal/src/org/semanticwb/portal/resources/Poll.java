@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.StringTokenizer;
@@ -64,7 +65,7 @@ import org.semanticwb.portal.util.FileUpload;
 public class Poll extends GenericResource 
 {
     private static Logger log = SWBUtils.getLogger(Poll.class);
-    
+    private static String div_Id = "_div01";
     
     HashMap hashSec;
     HashMap hashPrim;    
@@ -93,6 +94,23 @@ public class Poll extends GenericResource
         }
         catch(Exception e) { log.error("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);  }
     }
+    
+    /**
+     * @param request
+     * @param response
+     * @param paramRequest
+     * @throws SWBResourceException
+     * @throws IOException
+     */    
+    @Override
+    public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
+        if(paramRequest.getMode().equals("showResults")) {
+            doShowPollResults(request,response,paramRequest);
+        }else {
+            super.processRequest(request, response, paramRequest);
+        }
+    }
    
     /**
      * Muestra el html al usuario final
@@ -107,155 +125,186 @@ public class Poll extends GenericResource
     {
         StringBuffer ret = new StringBuffer("");
         String action = null != request.getParameter("enc_act") && !"".equals(request.getParameter("enc_act").trim()) ? request.getParameter("enc_act").trim() : "enc_step1";
-        if("enc_step2".equals(action))  showPollResults(request, response, paramRequest); // Resultados de la encuesta
-        else 
-        { // Encuesta
-            Portlet base=getResourceBase();
-            try 
+
+        Portlet base=getResourceBase();
+        try 
+        {
+            Document dom=SWBUtils.XML.xmlToDom(base.getXml());
+            if(dom==null) {
+                ret.append("<br /><a href=\"" + paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN) + "\">admin</a>");
+                response.getWriter().print(ret.toString());
+                return;
+            }
+            NodeList node = dom.getElementsByTagName("option");            
+            if (!"".equals(base.getAttribute("question", "").trim()) && node.getLength() > 1)            
             {
-                Document dom=SWBUtils.XML.xmlToDom(base.getXml());
-                if(dom==null) {
-                    ret.append("<br><a href=\"" + paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN) + "\">admin</a>");
-                    response.getWriter().print(ret.toString());
-                    return;
-                }
-                NodeList node = dom.getElementsByTagName("option");            
-                if (!"".equals(base.getAttribute("question", "").trim()) && node.getLength() > 1)            
+                ret.append("<form action=\""+paramRequest.getRenderUrl()+"\" method=\"POST\" name=\"frmEncuesta\" id=\"frmEncuesta\"> \n");
+                ret.append("<table width=\"100%\" border=\"0\" cellpadding=\"0\" style=\"font-family: Verdana; font-size: 12px; text-decoration: none; color: ");
+                ret.append(base.getAttribute("textcolor", "#000000").trim()+"\"> \n");
+                if (!"".equals(base.getAttribute("imgencuesta", "").trim()))
                 {
-                    ret.append("<form action=\""+paramRequest.getRenderUrl()+"\" method=\"POST\" name=\"frmEncuesta\" id=\"frmEncuesta\"> \n");
-                    ret.append("<table width=\"100%\" border=\"0\" cellpadding=\"0\" style=\"font-family: Verdana; font-size: 12px; text-decoration: none; color: ");
-                    ret.append(base.getAttribute("textcolor", "#000000").trim()+"\"> \n");
-                    if (!"".equals(base.getAttribute("imgencuesta", "").trim()))
-                    {
-                        ret.append("<tr><td colspan=\"2\"> \n");
-                        ret.append("<img src=\"");
-                        ret.append(webWorkPath +"/"+ base.getAttribute("imgencuesta").trim());
-                        ret.append("\" border=\"0\"> \n");
-                        ret.append("</td></tr> \n");
-                    }
                     ret.append("<tr><td colspan=\"2\"> \n");
-                    ret.append(base.getAttribute("question").trim() + "</td></tr> \n");
-                    for (int i = 0; i < node.getLength(); i++)
-                    {
-                        ret.append("<tr><td width=\"5\"><input type=\"radio\" name=\"radiobutton\" value=\"enc_votos" + (i + 1) + "\"></td> \n");
-                        ret.append("<td>" + node.item(i).getChildNodes().item(0).getNodeValue().trim() +"</td></tr> \n");
-                    }
-                    ret.append("<tr><td align=\"center\" colspan=\"2\"> \n");
-                    if (!"".equals(base.getAttribute("button", "").trim()))
-                    {
-                        ret.append("<input type=\"image\" name=\"votar\" src=\"" + webWorkPath +"/"+ base.getAttribute("button").trim() +"\" onClick=\"buscaCookie(this.form); return false;\"> \n");
-                    } 
-                    else ret.append("<input type=\"button\" name=\"votar\" value=\"" + base.getAttribute("msg_tovote",paramRequest.getLocaleString("msg_tovote")) +"\" onClick=\"buscaCookie(this.form);\"> \n");
+                    ret.append("<img src=\"");
+                    ret.append(webWorkPath +"/"+ base.getAttribute("imgencuesta").trim());
+                    ret.append("\" border=\"0\"/> \n");
                     ret.append("</td></tr> \n");
+                }
+                ret.append("<tr><td colspan=\"2\"> \n");
+                ret.append(base.getAttribute("question").trim() + "</td></tr> \n");
+                for (int i = 0; i < node.getLength(); i++)
+                {
+                    ret.append("<tr><td width=\"5\"><input type=\"radio\" name=\"radiobutton\" value=\"enc_votos" + (i + 1) + "\"/></td> \n");
+                    ret.append("<td>" + node.item(i).getChildNodes().item(0).getNodeValue().trim() +"</td></tr> \n");
+                }
+                ret.append("<tr><td align=\"center\" colspan=\"2\"> \n");
+                if (!"".equals(base.getAttribute("button", "").trim())) {
+                    ret.append("<input type=\"image\" name=\"votar\" src=\"" + webWorkPath +"/"+ base.getAttribute("button").trim() +"\" onClick=\"buscaCookie(this.form); return false;\"/> \n");
+                }else {
+                    ret.append("<input type=\"button\" name=\"votar\" value=\"" + base.getAttribute("msg_tovote",paramRequest.getLocaleString("msg_tovote")) +"\" onClick=\"buscaCookie(this.form);\"/> \n");
+                }
+                ret.append("</td></tr> \n");                    
+
+                SWBResourceURLImp url=new SWBResourceURLImp(request, base, paramRequest.getTopic(),SWBResourceURL.UrlType_RENDER);
+                url.setResourceBase(base);
+                url.setMode("showResults");
+                url.setWindowState(SWBResourceURLImp.WinState_MAXIMIZED);
+                url.setParameter("NombreCookie","VotosEncuesta"+ base.getId());
+                url.setTopic(paramRequest.getTopic());
+                url.setCallMethod(paramRequest.Call_DIRECT);
+
+                boolean display = Boolean.valueOf(base.getAttribute("display","true")).booleanValue();
+                if(display){
                     ret.append("<tr><td align=\"center\" colspan=\"2\"> \n");
-
-                    SWBResourceURLImp url=new SWBResourceURLImp(request, base, paramRequest.getTopic(),SWBResourceURL.UrlType_RENDER);
-                    url.setResourceBase(base);
-                    url.setMode(url.Mode_VIEW);
-                    url.setWindowState(url.WinState_MAXIMIZED);
-                    url.setParameter("enc_act","enc_step2");
-                    url.setParameter("NombreCookie","VotosEncuesta"+ base.getId());
-                    url.setTopic(paramRequest.getTopic());
-                    url.setCallMethod(paramRequest.Call_DIRECT);
-
                     ret.append("\n<a href=\"javascript:abreresultados(\'" + url.toString(true) + "\')\">" + base.getAttribute("msg_viewresults",paramRequest.getLocaleString("msg_viewresults")) + "</a> \n");
-                    ret.append("<br><br></td></tr> \n");
+                    ret.append("<br /><br /></td></tr> \n");
                     ret.append("<tr><td align=\"center\" colspan=\"2\"> \n");
-                    if("1".equals(base.getAttribute("wherelinks", "").trim()) || "3".equals(base.getAttribute("wherelinks", "").trim()))
-                    {
+                    if("1".equals(base.getAttribute("wherelinks", "").trim()) || "3".equals(base.getAttribute("wherelinks", "").trim()))                         {
                         ret.append(getLinks(dom.getElementsByTagName("link"), paramRequest.getLocaleString("usrmsg_Encuesta_doView_relatedLink")));
                     }
                     ret.append("</td></tr> \n");
                     ret.append("</table> \n");
-                    ret.append("<input type=\"hidden\" name=\"NombreCookie\" value=\"VotosEncuesta"+ base.getId() +"\"> \n");
+                    ret.append("<input type=\"hidden\" name=\"NombreCookie\" value=\"VotosEncuesta"+ base.getId() +"\"/> \n");
                     ret.append("</form> \n");
+                }else {
+                    ret.append("<tr><td align=\"center\" colspan=\"2\"> \n");
+                    ret.append("\n<a href=\"javascript:;\" onmousedown=\"getHtml('"+url.toString(true)+"','"+div_Id+"');slidedown('"+div_Id+"');\">" + base.getAttribute("msg_viewresults",paramRequest.getLocaleString("msg_viewresults")) + "</a> \n");
 
-                    String win = "menubar="+ base.getAttribute("menubar", "no").trim();
-                    win += ",toolbar="+ base.getAttribute("toolbar", "no").trim();
-                    win += ",status="+ base.getAttribute("status", "no").trim();
-                    win += ",location="+ base.getAttribute("location", "no").trim();
-                    win += ",directories="+ base.getAttribute("directories", "no").trim();
-                    win += ",scrollbars="+ base.getAttribute("scrollbars", "no").trim();
-                    win += ",resizable="+ base.getAttribute("resizable", "no").trim();
-                    win += ",width="+ base.getAttribute("width", "360").trim();
-                    win += ",height="+ base.getAttribute("height", "350").trim();
-                    win += ",top="+ base.getAttribute("top", "125").trim();
-                    win += ",left="+ base.getAttribute("left", "220").trim();
-                    ret.append("<script type=\"text/javascript\"> \n");
-                    ret.append("function buscaCookie(forma) \n");
-                    ret.append("{ \n");
-                    ret.append("    var numcom = getCookie(forma.NombreCookie.value); \n");
-                    ret.append("    if (numcom == \"SI\") { \n");
-                    if ("true".equals(base.getAttribute("oncevote", "true").trim()) && !"0".equals(base.getAttribute("vmode", "0").trim())){
-                        ret.append("        alert('"+ paramRequest.getLocaleString("usrmsg_Encuesta_doView_msgVote") +"'); \n");
+                    ret.append("\n<div id=\""+div_Id+"\" ");
+                    ret.append("style=\"display:none; overflow:hidden; height:"+base.getAttribute("height", "350").trim()+"px; ");
+                    /*if (!"".equals(base.getAttribute("textcolores", "").trim())) {
+                        ret.append("color:" + base.getAttribute("textcolores").trim() + "; ");
                     }
-                    ret.append("     } ");
-                    ret.append("    else \n");
-                    ret.append("    { \n");
-                    //if ("true".equals(base.getAttribute("oncevote", "true").trim()))
-                    //ret.append("        setCookie(forma.NombreCookie.value); \n");
-                    ret.append("    } \n");
-                    ret.append("        Grabaencuesta(forma); \n");
-                    ret.append("} \n");
-                    ret.append("function setCookie(name) \n");
-                    ret.append("{ \n");
-                    ret.append("    document.cookie = name; \n");
-                    ret.append("    var expDate = new Date(); \n");
-                    ret.append("    expDate.setTime(expDate.getTime() + ( 720 * 60 * 60 * 1000) ); \n");
-                    ret.append("    expDate = expDate.toGMTString(); \n");
-                    ret.append("    var str1 = name +\"=SI; expires=\" + expDate + \";Path=/\"; \n");
-                    ret.append("    document.cookie = str1; \n");
-                    ret.append("} \n");
-                    ret.append("function getCookie (name) \n");
-                    ret.append("{ \n");
-                    ret.append("    var arg = name + \"=\"; \n");
-                    ret.append("    var alen = arg.length; \n");
-                    ret.append("    var clen = document.cookie.length; \n");
-                    ret.append("    var i = 0; \n");
-                    ret.append("    while (i < clen)\n");
-                    ret.append("    { \n");
-                    ret.append("        var j = i + alen; \n");
-                    ret.append("        if (document.cookie.substring(i, j) == arg) \n");
-                    ret.append("            return getCookieVal (j); \n");
-                    ret.append("        i = document.cookie.indexOf(\" \", i) + 1; \n");
-                    ret.append("        if (i == 0) break; \n");
-                    ret.append("    } \n");
-                    ret.append("    return null; \n");
-                    ret.append("} \n");
-                    ret.append("function getCookieVal (offset) \n");
-                    ret.append("{ \n");
-                    ret.append("    var endstr = document.cookie.indexOf (\";\", offset); \n");
-                    ret.append("    if (endstr == -1) \n");
-                    ret.append("        endstr = document.cookie.length; \n");
-                    ret.append("    return unescape(document.cookie.substring(offset, endstr)); \n");
-                    ret.append("} \n");
-                    ret.append("function Grabaencuesta(forma) \n");
-                    ret.append("{ \n");
-                    ret.append("    var radiobutton; \n");
-                    ret.append("    for(var i=0; i< forma.length; i++) \n");
-                    ret.append("    { \n");
-                    ret.append("        if(forma.elements[i].type == \"radio\") \n");
-                    ret.append("            if(forma.elements[i].checked) \n");
-                    ret.append("                radiobutton=forma.elements[i].value; \n");
-                    ret.append("    } \n");
-                    ret.append("    if(radiobutton!=null) { \n");
-                    ret.append("        window.open(\'"+ url.toString() +"&radiobutton=\' + radiobutton,\'_newsave\',\'"+ win + "\'); \n");
-                    ret.append("    } \n");
-                    ret.append("    else { alert('"+ paramRequest.getLocaleString("usrmsg_Encuesta_doView_msgAnswer") +"'); } \n");
-                    ret.append("} \n");
-                    ret.append("function abreresultados(ruta) \n");
-                    ret.append("{ \n");
-                    ret.append("    window.open(ruta,\'_newenc\',\'"+ win +"\'); \n");
-                    ret.append("} \n");
-                    ret.append("</script> \n");
+                    if (!"".equals(base.getAttribute("backimgres", "").trim())) {
+                        ret.append("background-image:url(" + webWorkPath +"/"+ base.getAttribute("backimgres").trim() + ");");
+                    }*/
+                    ret.append("\">");
+                    ret.append("</div>");
+                    ret.append("<br /></td></tr> \n");
+                    ret.append("<tr><td align=\"center\" colspan=\"2\"> \n");
+                    if("1".equals(base.getAttribute("wherelinks", "").trim()) || "3".equals(base.getAttribute("wherelinks", "").trim()))                         {
+                        ret.append(getLinks(dom.getElementsByTagName("link"), paramRequest.getLocaleString("usrmsg_Encuesta_doView_relatedLink")));
+                    }
+                    ret.append("</td></tr> \n");
+                    ret.append("</table> \n");
+                    ret.append("<input type=\"hidden\" name=\"NombreCookie\" value=\"VotosEncuesta"+ base.getId() +"\"/> \n");
+                    ret.append("</form> \n");
                 }
-                ret.append("<br><a href=\"" + paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN) + "\">admin</a>");
-            } 
-            catch (Exception e) { log.error(paramRequest.getLocaleString("error_Encuesta_doView_resource") +" "+ restype +" "+ paramRequest.getLocaleString("error_Encuesta_doView_method"), e); }
+
+                String win = "menubar="+ base.getAttribute("menubar", "no").trim();
+                win += ",toolbar="+ base.getAttribute("toolbar", "no").trim();
+                win += ",status="+ base.getAttribute("status", "no").trim();
+                win += ",location="+ base.getAttribute("location", "no").trim();
+                win += ",directories="+ base.getAttribute("directories", "no").trim();
+                win += ",scrollbars="+ base.getAttribute("scrollbars", "no").trim();
+                win += ",resizable="+ base.getAttribute("resizable", "no").trim();
+                win += ",width="+ base.getAttribute("width", "360").trim();
+                win += ",height="+ base.getAttribute("height", "350").trim();
+                win += ",top="+ base.getAttribute("top", "125").trim();
+                win += ",left="+ base.getAttribute("left", "220").trim();
+
+
+                ret.append("<script type=\"text/javascript\" src=\"/swb/swbadmin/js/wb/motion/collapsibleDiv.js\"></script>");
+                ret.append("<script type=\"text/javascript\"> \n");
+                
+                ret.append("function buscaCookie(forma) \n");
+                ret.append("{ \n");
+                ret.append("    var numcom = getCookie(forma.NombreCookie.value); \n");
+                ret.append("    if (numcom == \"SI\") { \n");
+                if("true".equals(base.getAttribute("oncevote", "true").trim()) && !"0".equals(base.getAttribute("vmode", "0").trim())) {
+                    ret.append("        alert('"+ paramRequest.getLocaleString("usrmsg_Encuesta_doView_msgVote") +"'); \n");
+                }
+                ret.append("     } ");
+                ret.append("    else \n");
+                ret.append("    { \n");
+                ret.append("    } \n");
+                ret.append("        Grabaencuesta(forma); \n");
+                ret.append("} \n");
+                ret.append("function setCookie(name) \n");
+                ret.append("{ \n");
+                ret.append("    document.cookie = name; \n");
+                ret.append("    var expDate = new Date(); \n");
+                ret.append("    expDate.setTime(expDate.getTime() + ( 720 * 60 * 60 * 1000) ); \n");
+                ret.append("    expDate = expDate.toGMTString(); \n");
+                ret.append("    var str1 = name +\"=SI; expires=\" + expDate + \";Path=/\"; \n");
+                ret.append("    document.cookie = str1; \n");
+                ret.append("} \n");
+                ret.append("function getCookie (name) \n");
+                ret.append("{ \n");
+                ret.append("    var arg = name + \"=\"; \n");
+                ret.append("    var alen = arg.length; \n");
+                ret.append("    var clen = document.cookie.length; \n");
+                ret.append("    var i = 0; \n");
+                ret.append("    while (i < clen)\n");
+                ret.append("    { \n");
+                ret.append("        var j = i + alen; \n");
+                ret.append("        if (document.cookie.substring(i, j) == arg) \n");
+                ret.append("            return getCookieVal (j); \n");
+                ret.append("        i = document.cookie.indexOf(\" \", i) + 1; \n");
+                ret.append("        if (i == 0) break; \n");
+                ret.append("    } \n");
+                ret.append("    return null; \n");
+                ret.append("} \n");
+                ret.append("function getCookieVal (offset) \n");
+                ret.append("{ \n");
+                ret.append("    var endstr = document.cookie.indexOf (\";\", offset); \n");
+                ret.append("    if (endstr == -1) \n");
+                ret.append("        endstr = document.cookie.length; \n");
+                ret.append("    return unescape(document.cookie.substring(offset, endstr)); \n");
+                ret.append("} \n");
+                ret.append("function Grabaencuesta(forma) \n");
+                ret.append("{ \n");
+                ret.append("    var radiobutton; \n");
+                ret.append("    for(var i=0; i< forma.length; i++) \n");
+                ret.append("    { \n");
+                ret.append("        if(forma.elements[i].type == \"radio\") \n");
+                ret.append("            if(forma.elements[i].checked) \n");
+                ret.append("                radiobutton=forma.elements[i].value; \n");
+                ret.append("    } \n");
+                ret.append("    if(radiobutton!=null) { \n");
+                if(display) {
+                    ret.append("  window.open(\'"+ url.toString() +"&radiobutton=\' + radiobutton,\'_newenc\',\'"+ win + "\'); \n");
+                }else {
+                    ret.append("  getHtml('"+url.toString()+"&radiobutton='+radiobutton,'"+div_Id+"'); slidedown('"+div_Id+"');");
+                }
+                ret.append("    } \n");
+                ret.append("    else { alert('"+ paramRequest.getLocaleString("usrmsg_Encuesta_doView_msgAnswer") +"'); } \n");
+                ret.append("} \n");
+                ret.append("function abreresultados(ruta) \n");
+                ret.append("{ \n");
+                ret.append("    window.open(ruta,\'_newenc\',\'"+ win +"\'); \n");
+                ret.append("} \n");
+                ret.append("</script> \n");
+            }
+        }catch (Exception e) {
+            log.error(paramRequest.getLocaleString("error_Encuesta_doView_resource") +" "+ restype +" "+ paramRequest.getLocaleString("error_Encuesta_doView_method"), e);
         }
-        PrintWriter out=response.getWriter();
+        response.setContentType("text/html; charset=iso-8859-1");
+        response.setHeader("Cache-Control","no-cache"); //HTTP 1.1
+        response.setHeader("Pragma","no-cache"); //HTTP 1.0
+        response.setDateHeader ("Expires", 0); //prevents caching at the proxy server
+        PrintWriter out=response.getWriter();        
         out.print(ret.toString());
-        out.println("<br><a href=\"" + paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN) + "\">admin</a>");
+        out.println("<br /><a href=\"" + paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN) + "\">admin</a>");
     }
     
     /**
@@ -266,19 +315,19 @@ public class Poll extends GenericResource
      * @throws AFException
      * @throws IOException
      */    
-    public void showPollResults(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    public void doShowPollResults(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         StringBuffer ret = new StringBuffer("");
         Portlet base=getResourceBase();
-        try
-        {
+        try {
             String data = base.getData();
             Document dom = null;
             if(data != null) {
                 dom = SWBUtils.XML.xmlToDom(data);
             }
-            if (request.getParameter("radiobutton") != null && request.getParameter("radiobutton").length()>9)
-            { 
+            //if(request.getParameter("radiobutton")!=null && request.getParameter("radiobutton").length()>9)
+            if(request.getParameter("radiobutton")!=null)
+            {
                 boolean flag=false;
                 int validateMode=Integer.parseInt(base.getAttribute("vmode", "0"));
                 if(validateMode==0){
@@ -294,15 +343,19 @@ public class Poll extends GenericResource
                 if ("false".equals(base.getAttribute("oncevote", "true").trim()) || !flag) // Es un usuario que paso la prueba de las IPs
                 {
                     int valor = 0;
-                    try{ valor=Integer.parseInt(request.getParameter("radiobutton").substring(9)); }
-                    catch(Exception e) { valor=0; log.error("", e); }
+                    try { 
+                        valor=Integer.parseInt(request.getParameter("radiobutton").substring(9)); 
+                    }catch(Exception e) { 
+                        valor=0; 
+                        log.error("Respuesta de encuesta en cero. ", e); 
+                    }
+                    
                     if(valor > 0)
                     {
                         String varia = "enc_votos";
                         if (data == null)
                         {
-                            try
-                            {
+                            try {
                                 dom = SWBUtils.XML.getNewDocument();
                                 Element root = dom.createElement("resource");
                                 dom.appendChild(root);
@@ -310,8 +363,9 @@ public class Poll extends GenericResource
                                 option.appendChild(dom.createTextNode("1"));
                                 root.appendChild(option);
                                 base.setData(SWBUtils.XML.domToXml(dom));
-                            } 
-                            catch (Exception e) { log.error(paramRequest.getLocaleString("error_Encuesta_doView_setData") +" "+ restype +" " + paramRequest.getLocaleString("error_Encuesta_doView_id") +" "+ base.getId() +" - "+ base.getTitle(), e); }
+                            }catch (Exception e) {
+                                log.error(paramRequest.getLocaleString("error_Encuesta_doView_setData") +" "+ restype +" " + paramRequest.getLocaleString("error_Encuesta_doView_id") +" "+ base.getId() +" - "+ base.getTitle(), e); 
+                            }
                         } 
                         else
                         {
@@ -346,8 +400,13 @@ public class Poll extends GenericResource
                 }
             } 
             ret.append(getPollResults(request, paramRequest, dom));
+        }catch(Exception e) { 
+            log.error(e); 
         }
-        catch(Exception e)  { log.error(e); }
+        response.setContentType("text/html; charset=iso-8859-1");
+        response.setHeader("Cache-Control","no-cache"); //HTTP 1.1
+        response.setHeader("Pragma","no-cache"); //HTTP 1.0
+        response.setDateHeader ("Expires", 0); //prevents caching at the proxy server
         response.getWriter().print(ret.toString());
     }
     
@@ -359,7 +418,9 @@ public class Poll extends GenericResource
     private boolean validateCookie(javax.servlet.http.HttpServletRequest request){
         for(int i=0;i<request.getCookies().length;i++){
             javax.servlet.http.Cookie cookie=request.getCookies() [i];
-            if(request.getParameter("NombreCookie").equals(cookie.getName()) && cookie.getValue().equals("SI")) return true;
+            if(request.getParameter("NombreCookie").equals(cookie.getName()) && cookie.getValue().equals("SI")) {
+                return true;
+            }
         }
         return false;
     }
@@ -372,13 +433,18 @@ public class Poll extends GenericResource
     private boolean validateIPAddress(javax.servlet.http.HttpServletRequest request)
     {
         boolean flag = false;
-        int minutes=20;
-        try { minutes=Integer.parseInt(getResourceBase().getAttribute("time", "20").trim()); }
-        catch(Exception e){ minutes=20; }
-        Date date = new Date();
-        Timestamp fctual = new Timestamp(date.getTime());
-        date = new Date(date.getYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes() + minutes, date.getSeconds());
-        Timestamp Tfctualmoretime = new Timestamp(date.getTime());
+        int minutes;
+        try { 
+            minutes=Integer.parseInt(getResourceBase().getAttribute("time", "20").trim()); 
+        }catch(Exception e){ 
+            minutes=20; 
+        }
+        Date firstTime = new Date();
+        Timestamp fctual = new Timestamp(firstTime.getTime());
+        GregorianCalendar newTime = new GregorianCalendar();
+        newTime.setTime(firstTime);
+        newTime.add(GregorianCalendar.MINUTE, minutes);
+        Timestamp Tfctualmoretime = new Timestamp(newTime.getTimeInMillis());
         if (hashPrim != null && hashSec != null && hashPrim.size() > 0 && hashSec.size() > 0)
         { // Existe hash primario
             Iterator IHmP = hashPrim.keySet().iterator();
@@ -424,54 +490,71 @@ public class Poll extends GenericResource
         return flag;
     }
     
-    /*
+    /**
+     * Muestra los resultados de la encuesta
      * @param request
      * @param reqParams
      * @param data
      * @throws AFException
      * @throws IOException
-     */ 
-    /**
-     * Muestra los resultados de la encuesta
      */    
     private String getPollResults(HttpServletRequest request, SWBParamRequest paramRequest, Document data) throws SWBResourceException, IOException
     {
         StringBuffer ret = new StringBuffer("");
         Portlet base=getResourceBase();
+        boolean display = Boolean.valueOf(base.getAttribute("display","true")).booleanValue();
         try
-        {
+        {            
             Document dom=SWBUtils.XML.xmlToDom(base.getXml());
             if(dom==null) {
                 return ret.toString();
             }
-            ret.append("<html> \n");
-            ret.append("<head> \n");
-            ret.append("<title>" + paramRequest.getLocaleString("usrmsg_Encuesta_getResultEnc_title") + "</title> \n");
-            ret.append("</head> \n");
-            ret.append("<body leftmargin=\"0\" topmargin=\"0\" marginwidth=\"0\" marginheight=\"0\"");
-            if (!"".equals(base.getAttribute("textcolores", "").trim())) {
-                ret.append(" text=\"" + base.getAttribute("textcolores").trim() + "\"");
-            }
-            if (!"".equals(base.getAttribute("backimgres", "").trim())) {
-                ret.append(" background=\"" + webWorkPath +"/"+ base.getAttribute("backimgres").trim() + "\"");
-            }
-            ret.append("><br><br> \n");
-            /*
-             * Se calcula el n�mero de saltos que se proporcion� en la admon. del recurso
-             * y se procede a generar la cadena de <BR> respectivos.
-             */
-            int count =1;
-            try { Integer.parseInt(base.getAttribute("branches", "1")); } 
-            catch(Exception e) { count=1; }
-            for (int i = 0; i < count; i++) {
-                ret.append("<br>");
+            if(display){
+                ret.append("<html> \n");
+                ret.append("<head> \n");
+                ret.append("<title>" + paramRequest.getLocaleString("usrmsg_Encuesta_getResultEnc_title") + "</title> \n");
+                ret.append("</head> \n");
+                ret.append("<body leftmargin=\"0\" topmargin=\"0\" marginwidth=\"0\" marginheight=\"0\"");
+                if (!"".equals(base.getAttribute("textcolores", "").trim())) {
+                    ret.append(" text=\"" + base.getAttribute("textcolores").trim() + "\"");
+                }
+                if (!"".equals(base.getAttribute("backimgres", "").trim())) {
+                    ret.append(" background=\"" + webWorkPath +"/"+ base.getAttribute("backimgres").trim() + "\"");
+                }
+                ret.append(">\n");
+                ret.append("<br />\n");
+                /*
+                 * Se calcula el n�mero de saltos que se proporcion� en la admon. del recurso
+                 * y se procede a generar la cadena de <BR> respectivos.
+                 */
+                int count =1;
+                try { 
+                    Integer.parseInt(base.getAttribute("branches", "1")); 
+                }catch(Exception e) {
+                    count=1; 
+                }
+                for (int i = 0; i < count; i++) {
+                    ret.append("<br />");
+                }
             }
 
-            NodeList node = dom.getElementsByTagName("option");            
-            ret.append("<table border=\"0\" cellpadding=\"5\" cellspacing=\"5\" align=\"center\" style=\"font-family: Verdana; font-size: 12px; text-decoration: none;\"> \n");
+            NodeList node = dom.getElementsByTagName("option");
+            if(display) {
+                ret.append("<table border=\"0\" cellpadding=\"5\" cellspacing=\"5\" align=\"center\" style=\"font-family: Verdana; font-size: 12px; text-decoration: none;\"> \n");
+            }else {
+                ret.append("<table border=\"0\" cellpadding=\"5\" cellspacing=\"5\" align=\"center\" style=\"font-family: Verdana; font-size: 12px; text-decoration: none; ");
+                if (!"".equals(base.getAttribute("textcolores", "").trim())) {
+                    ret.append("color:" + base.getAttribute("textcolores").trim() + "; ");
+                }
+                if (!"".equals(base.getAttribute("backimgres", "").trim())) {
+                    ret.append("background-image:url(" + webWorkPath +"/"+ base.getAttribute("backimgres").trim() + "); ");
+                }
+                ret.append("\"> \n");
+            }
+            
             if (!"".equals(base.getAttribute("question", "").trim()) && node.getLength() > 1)            
             {
-                ret.append("<tr><td><b>" + base.getAttribute("question").trim() + "</b></td></tr> \n");
+                ret.append("<tr><td><strong>" + base.getAttribute("question").trim() + "</strong></td></tr> \n");
                 if (data != null)
                 {
                     //Suma el total de votos para calcular el porcentaje
@@ -496,17 +579,28 @@ public class Poll extends GenericResource
                     long falta;
                     float intPorcentaje = 0;
                     float largo = 0;
-                    ret.append("<tr><td> \n");
-                    ret.append("<table width=\"100%\" border=\"0\" cellpadding=\"5\" cellspacing=\"3\" style=\"font-family: Verdana; font-size: 12px; text-decoration: none;\"> \n");
+                    ret.append("<tr><td> \n");                    
+                    if(display) {
+                        ret.append("  <table width=\"100%\" border=\"0\" cellpadding=\"5\" cellspacing=\"3\"> \n");
+                    }else {
+                        ret.append("  <table width=\"100%\" border=\"0\" cellpadding=\"5\" cellspacing=\"3\" style=\"font-family: Verdana; font-size: 12px; text-decoration: none; ");
+                        if (!"".equals(base.getAttribute("textcolores", "").trim())) {
+                            ret.append("color:" + base.getAttribute("textcolores").trim() + "; ");
+                        }
+                        if (!"".equals(base.getAttribute("backimgres", "").trim())) {
+                            ret.append("background-image:url(" + webWorkPath +"/"+ base.getAttribute("backimgres").trim() + "); ");
+                        }
+                        ret.append("\"> \n");
+                    }
                     
                     boolean porcent = Boolean.valueOf(base.getAttribute("porcent","true")).booleanValue();
                     boolean totvote = Boolean.valueOf(base.getAttribute("totvote","true")).booleanValue();
                     for (int i = 0; i < node.getLength(); i++)
                     {
                         int num = i + 1;
-                        ret.append("<tr valign=top><td align=right> \n");
+                        ret.append("<tr valign=\"top\"><td align=\"right\"> \n");
                         ret.append(node.item(i).getChildNodes().item(0).getNodeValue());
-                        ret.append(":</td><td width=150> \n");
+                        ret.append(":</td><td width=\"150\"> \n");
                         String varia = "enc_votos";
                         NodeList nlist = data.getElementsByTagName(varia + num);
                         for (int j = 0; j < nlist.getLength(); j++)
@@ -525,9 +619,10 @@ public class Poll extends GenericResource
                             {
                                 largo = intPorcentaje;
                                 falta = 100 - (int) largo;
-                                ret.append("<img src=\"" + SWBPlatform.getContextPath() + "swbadmin/images/linealleno1.gif\" width=" + largo + " height=\"5\"> \n");
-                                ret.append("<img src=\"" + SWBPlatform.getContextPath() + "swbadmin/images/lineavacio.gif\" width=\"" + falta + "\" height=\"5\"> \n");
-                                ret.append("<br><center><b> \n");
+                                System.out.println("SWBPlatform.getContextPath()="+SWBPlatform.getContextPath());
+                                ret.append("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/linealleno.gif\" width=\"" + largo + "\" height=\"5\"/> \n");
+                                ret.append("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/lineavacio.gif\" width=\"" + falta + "\" height=\"5\"/> \n");
+                                ret.append("<br /><center><strong> \n");
                                 if (porcent) {
                                     ret.append(largo + "%");
                                 }
@@ -537,30 +632,41 @@ public class Poll extends GenericResource
                                 if (totvote) {
                                     ret.append(intVotos + " " + base.getAttribute("msg_vote",paramRequest.getLocaleString("msg_vote")) + "(s)");
                                 }
-                                ret.append("</b></center> \n");
+                                ret.append("</strong></center> \n");
                             }
                         }
                         ret.append("</td></tr> \n");
                     }
                     intAjuste = 0;
-                    ret.append("</table> \n");
+                    ret.append("  </table> \n");
                     ret.append("</td></tr> \n");
                     if (totvote) ret.append("<tr><td align=\"right\">"+ base.getAttribute("msg_totvotes",paramRequest.getLocaleString("msg_totvotes")) + ": " + intTotalVotos + "</td></tr>");
-                } 
-                else ret.append("<tr><td>" + paramRequest.getLocaleString("usrmsg_Encuesta_getResultEnc_noVotes") +"</td></tr> \n");
+                }else {
+                    ret.append("<tr><td>" + paramRequest.getLocaleString("usrmsg_Encuesta_getResultEnc_noVotes") +"</td></tr> \n");
+                }
                 ret.append("<tr><td align=\"center\"> \n");
                 if("2".equals(base.getAttribute("wherelinks", "").trim()) || "3".equals(base.getAttribute("wherelinks", "").trim()))
                 {
-                    ret.append("<br>"+getLinks(dom.getElementsByTagName("link"), paramRequest.getLocaleString("usrmsg_Encuesta_doView_relatedLink")));
+                    ret.append("<br />"+getLinks(dom.getElementsByTagName("link"), paramRequest.getLocaleString("usrmsg_Encuesta_doView_relatedLink")));
                 }
                 ret.append("</td></tr> \n");
-                ret.append("<tr><td align=\"center\"><br><a href=\"javascript:window.close();\">" + base.getAttribute("msg_closewin",paramRequest.getLocaleString("msg_closewin")) + "</a></td></tr> \n");
+                                
+                if(display){
+                    ret.append("<tr><td align=\"center\"><br /><a href=\"javascript:window.close();\">" + base.getAttribute("msg_closewin",paramRequest.getLocaleString("msg_closewin")) + "</a></td></tr> \n");
+                }else {
+                    ret.append("<tr><td align=\"center\"><br /><a href=\"javascript:;\" onmousedown=\"slideup('"+div_Id+"');\">" + base.getAttribute("msg_closewin",paramRequest.getLocaleString("msg_closewin")) + "</a></td></tr> \n");
+                }
                 ret.append("</table>");
-                ret.append("</body>");
-                ret.append("</html>");
+                
+                if(display){
+                    ret.append("</body>");
+                    ret.append("</html>");
+                }
             }
         } 
-        catch (Exception e) { log.error(paramRequest.getLocaleString("error_Encuesta_doView_resource") +" "+ restype +" "+ paramRequest.getLocaleString("error_Encuesta_doView_method"), e); }
+        catch (Exception e) { 
+            log.error(paramRequest.getLocaleString("error_Encuesta_doView_resource") +" "+ restype +" "+ paramRequest.getLocaleString("error_Encuesta_doView_method"), e); 
+        }
         return ret.toString();
     }
 
@@ -589,7 +695,7 @@ public class Poll extends GenericResource
                     _comment = value.substring(idx + 10);
                     value = value.substring(0, idx);
                 }
-                ret.append("<a href=\"" + value + "\" target=\"_newlink\">"+ _comment + "</a><br> \n");
+                ret.append("<a href=\"" + value + "\" target=\"_newlink\">"+ _comment + "</a><br /> \n");
                 _comment=comment;
             }
         }
@@ -612,9 +718,9 @@ public class Poll extends GenericResource
         String msg=paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_undefinedOperation");
         String action = null != request.getParameter("act") && !"".equals(request.getParameter("act").trim()) ? request.getParameter("act").trim() : paramRequest.getAction();
 
-        if(action.equals("add") || action.equals("edit"))  ret.append(getForm(request, paramRequest));
-        else if(action.equals("update"))
-        {            
+        if(action.equals("add") || action.equals("edit")) {
+            ret.append(getForm(request, paramRequest));
+        }else if(action.equals("update")) {            
             FileUpload fup = new FileUpload();
             try
             {
@@ -729,6 +835,7 @@ public class Poll extends GenericResource
                     setAttribute(base, fup, "textcolor");
                     setAttribute(base, fup, "oncevote");
                     setAttribute(base, fup, "vmode");
+                    setAttribute(base, fup, "display");
                     setAttribute(base, fup, "porcent");
                     setAttribute(base, fup, "totvote");
                     setAttribute(base, fup, "textcolores");
@@ -888,10 +995,10 @@ public class Poll extends GenericResource
             SWBResourceURL url = paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN);
             url.setAction("update");
             ret.append("<form name=\"frmResource\" method=\"post\" enctype=\"multipart/form-data\" action=\""+ url.toString()+"\"> \n");            
-            ret.append("<div class=box>");
+            ret.append("<div class=\"box\">");
             ret.append("<table width=\"100%\"  border=\"0\" cellpadding=\"5\" cellspacing=\"0\">");
             ret.append("<tr> \n");
-            ret.append("<td colspan=2>");
+            ret.append("<td colspan=\"2\">");
             ret.append("<font style=\"color: #428AD4; text-decoration: none; font-family: Verdana; font-size: 12px; font-weight: normal;\">");
             ret.append(paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_section1") +"</font>");
             ret.append("</td> \n");
@@ -899,24 +1006,28 @@ public class Poll extends GenericResource
             ret.append("\n<tr>");
             ret.append("\n<td class=\"datos\">* " + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_question") + "</td>");
             ret.append("\n<td class=\"valores\">");
-            ret.append("\n<input type=text size=50 name=question ");
-            if (!"".equals(base.getAttribute("question", "").trim()))  ret.append(" value=\"" + base.getAttribute("question").trim().replaceAll("\"", "&#34;") + "\"");
-            ret.append("></td> \n");
+            ret.append("\n<input type=\"text\" size=\"50\" name=\"question\" ");
+            if (!"".equals(base.getAttribute("question", "").trim())) {
+                ret.append(" value=\"" + base.getAttribute("question").trim().replaceAll("\"", "&#34;") + "\"");
+            }
+            ret.append("/></td> \n");
             ret.append("\n</tr>");
             ret.append("\n<tr>");
             ret.append("\n<td class=\"datos\">* " + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_option") + "</td>");
             ret.append("\n<td class=\"valores\">");
-            ret.append("\n<input type=text size=50 name=txtOption><input type=hidden name=option ");
-            if (!"".equals(base.getAttribute("option", "").trim())) ret.append(" value=\"" + base.getAttribute("option").trim().replaceAll("\"", "&#34;") + "\"");
-            ret.append(">");
-            ret.append("\n<input type=button name=btnAdd  class=\"boton\" value=" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_btnAdd") + " onClick=\"addOption(this.form.selOption, this.form.txtOption)\">");
-            ret.append("\n<input type=button name=btnEdit class=\"boton\" value=" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_btnEdit") + " onClick=\"updateOption(this.form.selOption, this.form.txtOption)\">");
+            ret.append("\n<input type=\"text\" size=\"50\" name=\"txtOption\"/><input type=\"hidden\" name=\"option\" ");
+            if (!"".equals(base.getAttribute("option", "").trim())) {
+                ret.append(" value=\"" + base.getAttribute("option").trim().replaceAll("\"", "&#34;") + "\"");
+            }
+            ret.append("/>");
+            ret.append("\n<input type=\"button\" name=\"btnAdd\" class=\"boton\" value=\"" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_btnAdd") + "\" onClick=\"addOption(this.form.selOption, this.form.txtOption)\"/>");
+            ret.append("\n<input type=\"button\" name=\"btnEdit\" class=\"boton\" value=\"" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_btnEdit") + "\" onClick=\"updateOption(this.form.selOption, this.form.txtOption)\"/>");
             ret.append("</td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
             ret.append("<td>&nbsp;</td> \n");
             ret.append("<td class=\"valores\">");
-            ret.append("\n<select name=\"selOption\" size=5 multiple onChange=\"editOption(this.form.selOption, this.form.txtOption)\">");
+            ret.append("\n<select name=\"selOption\" size=\"5\" multiple=\"multiple\" onChange=\"editOption(this.form.selOption, this.form.txtOption)\">");
             String value="";
             //Document dom=base.getDom();
             Document dom=SWBUtils.XML.xmlToDom(base.getXml());
@@ -935,23 +1046,25 @@ public class Poll extends GenericResource
                 }                  
             }            
             ret.append("\n</select>");
-            ret.append("\n<input type=button name=btnDel class=\"boton\" value=" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_btnDelete") + " onClick=\"deleteOption(this.form.selOption, this.form.txtOption)\" >");
+            ret.append("\n<input type=\"button\" name=\"btnDel\" class=\"boton\" value=\"" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_btnDelete") + "\" onClick=\"deleteOption(this.form.selOption, this.form.txtOption)\" />");
             ret.append("</td>");
             ret.append("\n</tr>");
             ret.append("\n<tr>");
             ret.append("\n<td class=\"datos\">"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_link") + "</td>");
             ret.append("\n<td class=\"valores\">");
-            ret.append("\n<input type=text size=50 name=txtLink><input type=hidden name=link ");
-            if (!"".equals(base.getAttribute("link", "").trim())) ret.append(" value=\"" + base.getAttribute("link").trim().replaceAll("\"", "&#34;") + "\"");
-            ret.append(">");
-            ret.append("\n<input type=button name=btnAdd  class=\"boton\" value=" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_btnAdd") + " onClick=\"addOption(this.form.selLink, this.form.txtLink)\" >");
-            ret.append("\n<input type=button name=btnEdit class=\"boton\" value=" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_btnEdit") + "  onClick=\"updateOption(this.form.selLink, this.form.txtLink)\" >");
+            ret.append("\n<input type=\"text\" size=\"50\" name=\"txtLink\"/><input type=\"hidden\" name=\"link\" ");
+            if(!"".equals(base.getAttribute("link", "").trim())) {
+                ret.append(" value=\"" + base.getAttribute("link").trim().replaceAll("\"", "&#34;") + "\"");
+            }
+            ret.append("/>");
+            ret.append("\n<input type=\"button\" name=\"btnAdd\" class=\"boton\" value=\"" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_btnAdd") + "\" onClick=\"addOption(this.form.selLink, this.form.txtLink)\" />");
+            ret.append("\n<input type=\"button\" name=\"btnEdit\" class=\"boton\" value=\"" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_btnEdit") + "\" onClick=\"updateOption(this.form.selLink, this.form.txtLink)\" />");
             ret.append("</td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
             ret.append("<td>&nbsp;</td> \n");
             ret.append("<td class=\"valores\">");
-            ret.append("\n<select name=\"selLink\" size=5 multiple onChange=\"editOption(this.form.selLink, this.form.txtLink)\">");
+            ret.append("\n<select name=\"selLink\" size=\"5\" multiple=\"multiple\" onChange=\"editOption(this.form.selLink, this.form.txtLink)\">");
             if(dom!=null)
             {
                 NodeList node = dom.getElementsByTagName("link");
@@ -967,36 +1080,34 @@ public class Poll extends GenericResource
                 }                  
             }            
             ret.append("\n</select>");
-            ret.append("\n<input type=button name=btnDel class=\"boton\" value=" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_btnDelete") + " onClick=\"deleteOption(this.form.selLink, this.form.txtLink)\" >");
+            ret.append("\n<input type=\"button\" name=\"btnDel\" class=\"boton\" value=\"" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_btnDelete") + "\" onClick=\"deleteOption(this.form.selLink, this.form.txtLink)\" />");
             ret.append("</td>");
             ret.append("\n</tr>");
             ret.append("\n<tr>");
             ret.append("\n<td class=\"datos\">"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_displayLinks") + "</td>");
             ret.append("\n<td class=\"valores\">");
             value=base.getAttribute("wherelinks", "1").trim();
-            ret.append("\n<input type=radio name=\"wherelinks\" value=\"1\" ");
-            if ("1".equals(value)) ret.append(" checked");
-            ret.append(">"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_onPoll")+"<br>");
-            ret.append("\n<input type=radio name=\"wherelinks\" value=\"2\" ");
-            if ("2".equals(value)) ret.append(" checked");
-            ret.append(">"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_onPollResults")+"<br>");
+            ret.append("\n<input type=\"radio\" name=\"wherelinks\" value=\"1\" ");
+            if("1".equals(value)) {
+                ret.append(" checked=\"checked\"");
+            }
+            ret.append("/>"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_onPoll")+"<br />");
+            ret.append("\n<input type=\"radio\" name=\"wherelinks\" value=\"2\" ");
+            if("2".equals(value)) {
+                ret.append(" checked=\"checked\"");
+            }
+            ret.append("/>"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_onPollResults")+"<br />");
             ret.append("\n<input type=radio name=\"wherelinks\" value=\"3\" ");
-            if ("3".equals(value)) ret.append(" checked");
-            ret.append(">"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_onBoth")+"<br></td>");
+            if("3".equals(value)) {
+                ret.append(" checked=\"checked\"");
+            }
+            ret.append("/>"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_onBoth")+"<br /></td>");
             ret.append("</td>");
             ret.append("\n</tr>");
             
             ret.append("\n<tr>");
             ret.append("\n<td class=\"datos\">"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_textcolor") + "</td>");
             ret.append("\n<td class=\"valores\">");
-            /*
-            HashMap param=new HashMap();
-            param.put("id", "selColor");
-            param.put("session", request.getSession().getId());
-            param.put("linkcolor",  base.getAttribute("textcolor", "#000000").trim().substring(1));
-            param.put("linkactual", base.getAttribute("textcolor", "#000000").trim().substring(1));
-            ret.append(admResUtils.loadColorApplet(param));
-             * * */
             ret.append("<script type=\"text/javascript\">");
             ret.append("   dojo.require(\"dijit.ColorPalette\");");
             ret.append("   dojo.addOnLoad(function(){ ");
@@ -1017,7 +1128,7 @@ public class Poll extends GenericResource
             ret.append("\n<table>");
             ret.append("\n<tr>");
             ret.append("\n<td class=\"valores\">");
-            ret.append("\n<input type=\"text\" size=\"7\" maxlength=\"7\" id=\"textcolor\" name=\"textcolor\" value=\""+base.getAttribute("textcolor", "#000000").trim().substring(1)+"\">");
+            ret.append("\n<input type=\"text\" size=\"7\" maxlength=\"7\" id=\"textcolor\" name=\"textcolor\" value=\""+base.getAttribute("textcolor", "#000000").trim()+"\">");
             ret.append("</td>");
             ret.append("<td class=\"datos\">");
             ret.append("-"+paramRequest.getLocaleString("actual_color") + "</td><td bgcolor=\""+base.getAttribute("textcolor", "#000000")+"\" width=\"5\">&nbsp;</td>");
@@ -1029,82 +1140,119 @@ public class Poll extends GenericResource
             ret.append("\n<tr>");
             ret.append("\n<td class=\"datos\">"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_imgTitle") + "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"1\">(bmp, gif, jpg, jpeg):</font></td>");
             ret.append("\n<td class=\"valores\">");
-            ret.append("\n<input type=file size=40 name=imgencuesta onChange=\"isFileType(this, 'bmp|jpg|jpeg|gif');\">");
-            if (!"".equals(base.getAttribute("imgencuesta", "").trim())) ret.append("<p>"+admResUtils.displayImage(base, base.getAttribute("imgencuesta").trim(), "imgencuesta") +"<input type=checkbox name=noimgencuesta value=1>" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_cutImage") + " <i>" + base.getAttribute("imgencuesta").trim() + "</i></p>");
+            ret.append("\n<input type=\"file\" size=\"40\" name=\"imgencuesta\" onChange=\"isFileType(this, 'bmp|jpg|jpeg|gif');\"/>");
+            if(!"".equals(base.getAttribute("imgencuesta", "").trim())) {
+                ret.append("<p>"+admResUtils.displayImage(base, base.getAttribute("imgencuesta").trim(), "imgencuesta") +"<input type=\"checkbox\" name=\"noimgencuesta\" value=\"1\"/>" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_cutImage") + " <i>" + base.getAttribute("imgencuesta").trim() + "</i></p>");
+            }
             ret.append("\n</td>");
             ret.append("\n</tr>");
             ret.append("\n<tr>");
             ret.append("\n<td class=\"datos\">"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_imgVote") + "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"1\">(bmp, gif, jpg, jpeg):</font></td>");
             ret.append("\n<td class=\"valores\">");
-            ret.append("\n<input type=file size=40 name=button onChange=\"isFileType(this, 'bmp|jpg|jpeg|gif');\">");
-            if (!"".equals(base.getAttribute("button", "").trim())) ret.append("<p>"+admResUtils.displayImage(base, base.getAttribute("button").trim(), "button") +"<input type=checkbox name=nobutton value=1>" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_cutImage") + " <i>" + base.getAttribute("button").trim() + "</i></p>");
+            ret.append("\n<input type=\"file\" size=\"40\" name=\"button\" onChange=\"isFileType(this, 'bmp|jpg|jpeg|gif');\"/>");
+            if(!"".equals(base.getAttribute("button", "").trim())) {
+                ret.append("<p>"+admResUtils.displayImage(base, base.getAttribute("button").trim(), "button") +"<input type=\"checkbox\" name=\"nobutton\" value=\"1\"/>" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_cutImage") + " <i>" + base.getAttribute("button").trim() + "</i></p>");
+            }
             ret.append("\n</td>");
             ret.append("\n</tr>");
             ret.append("\n<tr>");
             ret.append("\n<td class=\"datos\">"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_voteOnce") + "</td>");
             ret.append("\n<td class=\"valores\">");
             value=base.getAttribute("oncevote", "true").trim();
-            ret.append("\n<input type=radio name=oncevote value=true ");
-            if ("true".equals(value)) ret.append(" checked");
-            ret.append(">" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_yes") +" ");
-            ret.append("\n<input type=radio name=oncevote value=false ");
-            if ("false".equals(value)) ret.append(" checked");
-            ret.append(">" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_no") +"</td>");
+            ret.append("\n<input type=\"radio\" name=\"oncevote\" value=\"true\" ");
+            if("true".equals(value)) {
+                ret.append(" checked=\"checked\"");
+            }
+            ret.append("/>" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_yes") +" ");
+            ret.append("\n<input type=\"radio\" name=\"oncevote\" value=\"false\" ");
+            if("false".equals(value)) {
+                ret.append(" checked=\"checked\"");
+            }
+            ret.append("/>" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_no") +"</td>");
             ret.append("\n</tr>");
             
             ret.append("\n<tr>");
             ret.append("\n<td class=\"datos\">"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_vmode") + "</td>");
             ret.append("\n<td class=\"valores\">");
             value=base.getAttribute("vmode", "0").trim();
-            ret.append("\n<input type=radio name=vmode value=0 ");
-            if ("0".equals(value)) ret.append(" checked");
-            ret.append(">" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_ipMode") +" ");
-            ret.append("\n<input type=radio name=vmode value=1 ");
-            if ("1".equals(value)) ret.append(" checked");
+            ret.append("\n<input type=\"radio\" name=\"vmode\" value=\"0\" ");
+            if("0".equals(value)) {
+                ret.append(" checked=\"checked\"");
+            }
+            ret.append("/>" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_ipMode") +" ");
+            ret.append("\n<input type=\"radio\" name=\"vmode\" value=\"1\" ");
+            if("1".equals(value)) {
+                ret.append(" checked=\"checked\"");
+            }
             ret.append(">" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_cookieMode") +"</td>");
             ret.append("\n</tr>");
             
             ret.append("\n<tr>");
             ret.append("\n<td class=\"datos\">"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_time") + "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"1\">(" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_minutes") + "):</font></td>");
             ret.append("\n<td class=\"valores\">");
-            ret.append("\n<input type=text size=6 maxlength=5 name=time dir=rtl ");
+            ret.append("\n<input type=\"text\" size=\"6\" maxlength=\"5\" name=\"time\" dir=\"rtl\" ");
             ret.append(" value=\"" + base.getAttribute("time", "20").trim() + "\"");
-            ret.append("></td>");
+            ret.append("/></td>");
             ret.append("\n</tr>");            
             ret.append("<tr> \n");
             ret.append("<td colspan=2>");
-            ret.append("<br><br><font style=\"color: #428AD4; text-decoration: none; font-family: Verdana; font-size: 12px; font-weight: normal;\">");
+            ret.append("<br /><br /><font style=\"color: #428AD4; text-decoration: none; font-family: Verdana; font-size: 12px; font-weight: normal;\">");
             ret.append(paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_section2") +"</font>");
             ret.append("</td> \n");
             ret.append("</tr> \n");
+            
+            ret.append("\n<tr>");
+            ret.append("\n<td class=\"datos\">"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_display_results") + "</td>");
+            ret.append("\n<td class=\"valores\">");
+            value=base.getAttribute("display", "true").trim();
+            ret.append("\n<input type=\"radio\" name=\"display\" value=\"true\" ");
+            if ("true".equals(value)) {
+                ret.append(" checked=\"checked\"");
+            }
+            ret.append("/>" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_window") + " ");
+            ret.append("\n<input type=\"radio\" name=\"display\" value=\"false\" ");
+            if ("false".equals(value)) {
+                ret.append(" checked=\"checked\"");
+            }
+            ret.append("/>" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_collapseDiv") + "</td>");
+            ret.append("\n</tr>");
+            
             ret.append("\n<tr>");
             ret.append("\n<td class=\"datos\">"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_spaceLine") + "</td>");
             ret.append("\n<td class=\"valores\">");
-            ret.append("\n<input type=text size=2 maxlength=2 name=branches ");
+            ret.append("\n<input type=\"text\" size=\"2\" maxlength=\"2\" name=\"branches\" ");
             ret.append(" value=\"" + base.getAttribute("branches", "1").trim() + "\"");
-            ret.append("></td>");
+            ret.append("/></td>");
             ret.append("\n</tr>");
             ret.append("\n<tr>");
             ret.append("\n<td class=\"datos\">"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_percentage") + "</td>");
             ret.append("\n<td class=\"valores\">");
             value=base.getAttribute("porcent", "true").trim();
-            ret.append("\n<input type=radio name=porcent value=true ");
-            if ("true".equals(value)) ret.append(" checked");
-            ret.append(">" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_yes") + " ");
-            ret.append("\n<input type=radio name=porcent value=false ");
-            if ("false".equals(value)) ret.append(" checked");
-            ret.append(">" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_no") + "</td>");
+            ret.append("\n<input type=\"radio\" name=\"porcent\" value=\"true\" ");
+            if("true".equals(value)) {
+                ret.append(" checked=\"checked\"");
+            }
+            ret.append("/>" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_yes") + " ");
+            ret.append("\n<input type=\"radio\" name=\"porcent\" value=\"false\" ");
+            if("false".equals(value)) {
+                ret.append(" checked=\"checked\"");
+            }
+            ret.append("/>" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_no") + "</td>");
             ret.append("\n</tr>");
             ret.append("\n<tr>");
             ret.append("\n<td class=\"datos\">"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_total") + "</td>");
             ret.append("\n<td class=\"valores\">");
             value=base.getAttribute("totvote", "true").trim();
-            ret.append("\n<input type=radio name=totvote value=true ");
-            if ("true".equals(value)) ret.append(" checked");
-            ret.append(">" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_yes") + " ");
-            ret.append("\n<input type=radio name=totvote value=false ");
-            if ("false".equals(value)) ret.append(" checked");
-            ret.append(">" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_no") + "</td>");
+            ret.append("\n<input type=\"radio\" name=\"totvote\" value=\"true\" ");
+            if("true".equals(value)) {
+                ret.append(" checked=\"checked\"");
+            }
+            ret.append("/>" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_yes") + " ");
+            ret.append("\n<input type=\"radio\" name=\"totvote\" value=\"false\" ");
+            if("false".equals(value)) {
+                ret.append(" checked=\"checked\"");
+            }
+            ret.append("/>" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_no") + "</td>");
             ret.append("\n</tr>");
             
             ret.append("<tr> \n");
@@ -1136,7 +1284,7 @@ public class Poll extends GenericResource
             ret.append("\n<table>");
             ret.append("\n<tr>");
             ret.append("\n<td class=\"valores\">");
-            ret.append("\n<input type=\"text\" size=\"7\" maxlength=\"7\" id=\"textcolores\" name=\"textcolores\" value=\""+base.getAttribute("textcolores", "#000000").trim().substring(1)+"\">");
+            ret.append("\n<input type=\"text\" size=\"7\" maxlength=\"7\" id=\"textcolores\" name=\"textcolores\" value=\""+base.getAttribute("textcolores", "#000000").trim()+"\"/>");
             ret.append("</td>");
             ret.append("<td class=\"datos\">");
             ret.append("-"+paramRequest.getLocaleString("actual_color") + "</td><td bgcolor=\""+base.getAttribute("textcolores", "#000000")+"\" width=\"5\">&nbsp;</td>");
@@ -1149,55 +1297,67 @@ public class Poll extends GenericResource
             ret.append("\n<tr>");
             ret.append("\n<td class=\"datos\">"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_imgBackground") + "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"1\">(bmp, gif, jpg, jpeg):</font></td>");
             ret.append("\n<td class=\"valores\">");
-            ret.append("\n<input type=file size=40 name=backimgres onChange=\"isFileType(this, 'bmp|jpg|jpeg|gif');\">");
-            if (!"".equals(base.getAttribute("backimgres", "").trim())) ret.append("<p>"+admResUtils.displayImage(base, base.getAttribute("backimgres").trim(), "backimgres") +"<input type=checkbox name=nobackimgres value=1>" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_cutImage") + " <i>" + base.getAttribute("backimgres").trim() + "</i></p>");
+            ret.append("\n<input type=\"file\" size=\"40\" name=\"backimgres\" onChange=\"isFileType(this, 'bmp|jpg|jpeg|gif');\"/>");
+            if(!"".equals(base.getAttribute("backimgres", "").trim())) {
+                ret.append("<p>"+admResUtils.displayImage(base, base.getAttribute("backimgres").trim(), "backimgres") +"<input type=\"checkbox\" name=\"nobackimgres\" value=\"1\"/>" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_cutImage") + " <i>" + base.getAttribute("backimgres").trim() + "</i></p>");
+            }
             ret.append("\n</td>");
             ret.append("\n</tr>");
             ret.append("\n<tr>");
             ret.append("\n<td class=\"datos\">"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_message")+" "+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_msgResults")+" :</td>");
             ret.append("<td class=\"valores\">");
             ret.append("<input type=\"text\" name=\"msg_viewresults\"");
-            if (!"".equals(base.getAttribute("msg_viewresults", "").trim())) ret.append( "value=\""+base.getAttribute("msg_viewresults").trim()+"\"");
-            ret.append("></td>"); 
+            if(!"".equals(base.getAttribute("msg_viewresults", "").trim())) {
+                ret.append( "value=\""+base.getAttribute("msg_viewresults").trim()+"\"");
+            }
+            ret.append("/></td>"); 
             ret.append("\n</tr>");
             ret.append("\n<tr>");
             ret.append("\n<td class=\"datos\">"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_message")+" "+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_numVotes")+":</td>");
             ret.append("<td class=\"valores\">");
             ret.append("<input type=\"text\" name=\"msg_vote\"");
-            if (!"".equals(base.getAttribute("msg_vote", "").trim())) ret.append(" value=\""+base.getAttribute("msg_vote").trim()+"\"");
-            ret.append("></td>");
+            if(!"".equals(base.getAttribute("msg_vote", "").trim())) {
+                ret.append(" value=\""+base.getAttribute("msg_vote").trim()+"\"");
+            }
+            ret.append("/></td>");
             ret.append("\n</tr>");
             ret.append("\n<tr>");
             ret.append("\n<td class=\"datos\">"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_message")+" "+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_windowClose")+":</td>");
             ret.append("<td class=\"valores\">");
             ret.append("<input type=\"text\" name=\"msg_closewin\"");
-            if (!"".equals(base.getAttribute("msg_closewin", "").trim())) ret.append(" value=\""+base.getAttribute("msg_closewin").trim()+ "\"");
-            ret.append("></td>");
+            if(!"".equals(base.getAttribute("msg_closewin", "").trim())) {
+                ret.append(" value=\""+base.getAttribute("msg_closewin").trim()+ "\"");
+            }
+            ret.append("/></td>");
             ret.append("\n</tr>");
             ret.append("\n<tr>");
             ret.append("\n<td class=\"datos\">"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_message")+" "+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_totalVotes")+":</td>");
             ret.append("<td class=\"valores\">");
             ret.append("<input type=\"text\" name=\"msg_totvotes\"");
-            if (!"".equals(base.getAttribute("msg_totvotes", "").trim())) ret.append(" value=\""+base.getAttribute("msg_totvotes").trim()+"\"");
-            ret.append("></td>");
+            if(!"".equals(base.getAttribute("msg_totvotes", "").trim())) {
+                ret.append(" value=\""+base.getAttribute("msg_totvotes").trim()+"\"");
+            }
+            ret.append("/></td>");
             ret.append("\n</tr>");
             ret.append("\n<tr>");
             ret.append("\n<td class=\"datos\">"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_message")+" "+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_vote")+":</td>");
             ret.append("<td class=\"valores\">");
             ret.append("<input type=\"text\" name=\"msg_tovote\"");
-            if (!"".equals(base.getAttribute("msg_tovote", "").trim())) ret.append(" value=\""+base.getAttribute("msg_tovote").trim()+"\"");
-            ret.append("></td>");
+            if(!"".equals(base.getAttribute("msg_tovote", "").trim())) {
+                ret.append(" value=\""+base.getAttribute("msg_tovote").trim()+"\"");
+            }
+            ret.append("/></td>");
             ret.append("\n</tr>");            
             ret.append(admResUtils.loadWindowConfiguration(base, paramRequest));
             ret.append("\n<tr>");
-            ret.append("\n<td colspan=2 align=right>");
-            ret.append("<br><hr size=1 noshade> \n");
-            ret.append("\n<input type=submit name=btnSave class=\"boton\" value=\"" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_submit") + "\" onClick=\"if(jsValida(this.form)) return true; else return false;\">&nbsp;");
-            ret.append("<input type=reset name=btnReset class=\"boton\" value=\"" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_reset") + "\">");
+            ret.append("\n<td colspan=\"2\" align=\"right\">");
+            ret.append("<br /><hr size=\"1\" noshade=\"noshade\"> \n");
+            ret.append("\n<input type=\"submit\" name=\"btnSave\" class=\"boton\" value=\"" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_submit") + "\" onClick=\"if(jsValida(this.form)) return true; else return false;\"/>&nbsp;");
+            ret.append("<input type=\"reset\" name=\"btnReset\" class=\"boton\" value=\"" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_reset") + "\"/>");
             ret.append("\n</td>");
             ret.append("\n</tr>");
             ret.append("<tr> \n");
-            ret.append("<td colspan=2 class=datos><br><font style=\"color: #428AD4; font-family: Verdana; font-size: 10px;\"> \n");
+            ret.append("<td colspan=\"2\" class=\"datos\"><br /><font style=\"color: #428AD4; font-family: Verdana; font-size: 10px;\"> \n");
             ret.append("* " + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_required"));
             ret.append("</font></td> \n");
             ret.append("</tr> \n");
