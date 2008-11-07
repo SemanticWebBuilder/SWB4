@@ -81,7 +81,8 @@ public class SWBASOPropRefEditor extends GenericResource {
             out.println("function updPriority(location,txt){");
             out.println("  var urlupd = location+txt.value;");
             out.println("  alert(txt.value);");
-            out.println("  window.location=urlupd;");
+            out.println("   return urlupd;");
+            //out.println("  submitUrl(location+txt.value,txt);");
             out.println(" }");
             out.println("</script>");
             out.println("<fieldset>");
@@ -182,7 +183,7 @@ public class SWBASOPropRefEditor extends GenericResource {
                     urlu.setParameter("spropref", idp);
                     urlu.setAction("update");
                     
-                    out.println("<input type=\"text\" name=\""+semprop.getName()+"\" onblur=\"updPriority('"+urlu+"&"+semprop.getName()+"=',this);\" value=\""+getValueSemProp(sobj, semprop)+"\" />");
+                    out.println("<input type=\"text\" name=\""+semprop.getName()+"\" onblur=\"submitUrl(updPriority('"+urlu+"&"+semprop.getName()+"=',this),this); return false;\" value=\""+getValueSemProp(sobj, semprop)+"\" />");
                     out.println("</td>");
                 }
                 if(hmprop.get(SWBContext.getVocabulary().created)!=null)
@@ -211,7 +212,7 @@ public class SWBASOPropRefEditor extends GenericResource {
                     urlu.setParameter("spropref", idp);
                     urlu.setAction("updstatus");
                     urlu.setParameter("val", "1");
-                    out.println("<input name=\""+prop.getName()+sobj.getURI()+"\" type=\"radio\" value=\"true\" id=\""+prop.getName()+sobj.getURI()+"\" onclick=\"window.location='"+urlu+"'\" "+(activo?"checked='checked'":"")+"/>");
+                    out.println("<input name=\""+prop.getName()+sobj.getURI()+"\" type=\"radio\" value=\"true\" id=\""+prop.getName()+sobj.getURI()+"\" onclick=\"submitUrl('"+urlu+"',this); return false;\"  "+(activo?"checked='checked'":"")+"/>"); //onclick=\"window.location='"+urlu+"'\"
                     SWBResourceURL urlun = paramRequest.getActionUrl();
                     urlun.setParameter("suri", id);
                     urlun.setParameter("sprop", idp);
@@ -219,7 +220,7 @@ public class SWBASOPropRefEditor extends GenericResource {
                     urlun.setParameter("spropref", idp);
                     urlun.setAction("updstatus");
                     urlun.setParameter("val", "0");
-                    out.println("<input name=\""+prop.getName()+sobj.getURI()+"\" type=\"radio\" value=\"false\" id=\""+prop.getName()+sobj.getURI()+"\" onclick=\"window.location='"+urlun+"'\" "+(!activo?"checked='checked'":"")+" />");
+                    out.println("<input name=\""+prop.getName()+sobj.getURI()+"\" type=\"radio\" value=\"false\" id=\""+prop.getName()+sobj.getURI()+"\" onclick=\"submitUrl('"+urlun+"',this); return false;\"  "+(!activo?"checked='checked'":"")+" />"); //onclick=\"window.location='"+urlun+"'\"
                     out.println("</td>");
                 }
                 out.println("</tr>");
@@ -367,14 +368,14 @@ public class SWBASOPropRefEditor extends GenericResource {
             }
             out.println("	</ol>");
             out.println("</fieldset>");
-            out.println("<p><input type=\"submit\" value=\"Guardar\" />");
+            out.println("<p><input type=\"button\" value=\"Guardar\" onclick=\"submitUrl('"+url+"',this); return false;\" />");
             if(request.getParameter("rsuri")!=null&&request.getParameter("rsprop")!=null&&request.getParameter("rspropref")!=null)
             {
                 SWBResourceURL urlb = paramRequest.getRenderUrl();
                 urlb.setParameter("suri",request.getParameter("rsuri"));
                 urlb.setParameter("sprop", request.getParameter("rsprop"));
                 urlb.setParameter("spropref", request.getParameter("rspropref"));
-                out.println("<input type=\"button\" value=\"Regresar\" onclick=\"window.location='"+urlb+"'\"/>");
+                out.println("<input type=\"button\" value=\"Regresar\" onclick=\"submitUrl('"+urlb+"',this); return false;\" />"); //onclick=\"window.location='"+urlb+"'\"
             }
             out.println("</p>");
             out.println("</form>");
@@ -419,9 +420,9 @@ public class SWBASOPropRefEditor extends GenericResource {
             if(request.getParameter("sprop")!=null)urlBack.setParameter("sprop", request.getParameter("sprop"));
             if(request.getParameter("spropref")!=null)urlBack.setParameter("spropref", request.getParameter("spropref"));
             urlBack.setParameter("act", "");
-            out.println("<p><input type=\"submit\" value=\"Guardar\" />");
+            out.println("<p><input type=\"button\" value=\"Guardar\" onclick=\"submitUrl('"+url+"',this); return false;\" />");
             if (request.getParameter("suri")!=null&&request.getParameter("sprop")!=null&&request.getParameter("spropref")!=null) {
-                out.println("<input type=\"button\" value=\"regresar\" onclick=\"window.location='" + urlBack + "';\" />");
+                out.println("<input type=\"button\" value=\"regresar\" onclick=\"submitUrl('"+urlBack+"',this); return false;\" />");
             }
             out.println("</p>");
             out.println("</form>");
