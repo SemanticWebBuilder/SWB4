@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<xslfile>admresource.xslt</xslfile>
+	<form name="frmWBUrlContent" action="true" method="POST">
+		<admdbconnmgr defconn="true"/>
+		<input type="TEXT" name="url" label="Web address for remote contents:" size="50" jsrequired="true"/>
+		<input type="TEXT" name="tagbcawb" label="Label to search:" value="bca" size="20" maxlength="20"/>
+                <input type="TEXT" name="charset" label="charset:" size="20" maxlength="20"/>
+		<statictext name="showInfoLink">
+			<![CDATA[
+				Do you wish to show web address for information origin?
+			]]>	
+		</statictext>
+		<input type="RADIO" name="InfoSource" label="No" value="0" checked="true"/>
+		<input type="RADIO" name="InfoSource" label="Yes" value="1"/>
+		<input type="SUBMIT" name="btnSave"  value="Save" class="boton"/>
+		<input type="RESET"  name="btnReset" value="Cancel" class="boton"/>
+	</form>
+</admresource>
