@@ -70,7 +70,7 @@ public class Portlet extends PortletBase
        if(dom==null)
        {
            String xml=getXml();
-           if(xml!=null)
+           if(xml!=null && xml.length()>0)
            {
                dom=SWBUtils.XML.xmlToDom(getXml());
            }else
