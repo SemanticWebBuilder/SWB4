@@ -92,6 +92,11 @@ public class Portlet extends PortletBase
         try
         {
             Document dom=getDom();
+            Element res = (Element) dom.getFirstChild();
+            if(res==null){
+                Element ele = dom.createElement("resource");
+                dom.appendChild(ele);
+            }   
             SWBUtils.XML.setAttribute(dom, name, value);
         } catch (Exception e)
         {
