@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+    <resource>
+        <resource-name>Virtual resource</resource-name>
+        <display-name xml:lang="es">Contenido Virtual</display-name>
+        <display-name xml:lang="en">Virtual resource</display-name>
+        <description xml:lang="es">Recurso que se encarga de desplegar a manera de contenido en una sección cualquier otro contenido o recurso que este publicado en el sitio</description>
+        <description xml:lang="en">Resource that is in charge to unfold like a content in a section any other content or resource that this publishing in the site</description>
+        <resource-class>com.infotec.wb.resources.VirtualResource</resource-class>
+        <expiration-cache>0</expiration-cache>
+        <resource-bundle>com.infotec.wb.resources.VirtualResource</resource-bundle>
+        <resource-type>1</resource-type>
+        <extended-attributes>
+        </extended-attributes>
+    </resource>
