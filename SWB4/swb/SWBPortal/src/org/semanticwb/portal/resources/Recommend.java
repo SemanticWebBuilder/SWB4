@@ -68,7 +68,7 @@ public class Recommend extends GenericAdmResource
     javax.xml.transform.Templates tpl; 
     String webWorkPath = "/work";    
     String name=getClass().getName().substring(getClass().getName().lastIndexOf(".")+1);
-    String path = SWBPlatform.getContextPath() +"swbadmin/xsl/"+name+"/";
+    String path = SWBPlatform.getContextPath() +"/swbadmin/xsl/";
     
     /** 
      * Creates a new instance of Recomendar. 
@@ -113,6 +113,109 @@ public class Recommend extends GenericAdmResource
      * @throws AFException
      * @throws IOException
      */
+    
+    public org.w3c.dom.Document getDom(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
+        String action = null != request.getParameter("rec_act") && !"".equals(request.getParameter("rec_act").trim()) ? request.getParameter("rec_act").trim() : "rec_step2";
+        Portlet base=getResourceBase();
+        try
+        {        
+            Document  dom = SWBUtils.XML.getNewDocument();
+            if("rec_step3".equals(action)) dom=getDomEmail(request, response, paramRequest); // Envia correo
+            else
+            { // Nueva ventana con formulario
+                User user=paramRequest.getUser();
+                SWBResourceURLImp url=new SWBResourceURLImp(request, base, paramRequest.getTopic(),SWBResourceURL.UrlType_RENDER);
+                url.setResourceBase(base);
+                url.setMode(url.Mode_VIEW);
+                url.setWindowState(url.WinState_MAXIMIZED);
+                url.setParameter("rec_act","rec_step3");
+                url.setTopic(paramRequest.getTopic());
+                url.setCallMethod(paramRequest.Call_DIRECT);
+
+                Element el = dom.createElement("form");
+                el.setAttribute("path", path);
+                el.setAttribute("accion", url.toString());
+                el.setAttribute("from",paramRequest.getLocaleString("msgFrom"));
+                el.setAttribute("to",paramRequest.getLocaleString("msgTo"));
+                dom.appendChild(el);
+
+                el = dom.createElement("ftextsender");
+                el.setAttribute("tag", paramRequest.getLocaleString("msgSender"));
+                el.setAttribute("inname", "txtFromName");
+                //if (user.isLoged())   TODO: VER4
+                {
+                    String strFromName = null != user.getUsrFirstName() && !"".equals(user.getUsrFirstName().trim()) ? user.getUsrFirstName().trim() : "";
+                    strFromName+= null != user.getUsrLastName() && !"".equals(user.getUsrLastName().trim()) ? " " + user.getUsrLastName().trim() : "";
+                    strFromName+= null != user.getUsrSecondLastName() && !"".equals(user.getUsrSecondLastName().trim()) ? " " + user.getUsrSecondLastName().trim() : "";
+                    el.setAttribute("invalue", strFromName);
+                }
+                dom.getChildNodes().item(0).appendChild(el);
+
+                el = dom.createElement("ftextsender");
+                el.setAttribute("tag", paramRequest.getLocaleString("msgSenderEmail"));
+                el.setAttribute("inname", "txtFromEmail");
+                //if (user.isLoged()) //TODO VER4
+                {
+                    String strFromEmail = null != user.getUsrEmail() && !"".equals(user.getUsrEmail().trim()) ? user.getUsrEmail().trim() : "";
+                    el.setAttribute("invalue", strFromEmail);
+                }
+                dom.getChildNodes().item(0).appendChild(el);
+
+                el = dom.createElement("ftextreceiver");
+                el.setAttribute("tag", paramRequest.getLocaleString("msgReceiver"));
+                el.setAttribute("inname", "txtToName");
+                dom.getChildNodes().item(0).appendChild(el);
+
+                el = dom.createElement("ftextreceiver");
+                el.setAttribute("tag", paramRequest.getLocaleString("msgReceiverEmail"));
+                el.setAttribute("inname", "txtToEmail");
+                dom.getChildNodes().item(0).appendChild(el);
+
+                el = dom.createElement("ftextarea");
+                el.setAttribute("tag", paramRequest.getLocaleString("msgMessage"));
+                el.setAttribute("inname", "tarMsg");
+                dom.getChildNodes().item(0).appendChild(el);
+
+                el = dom.createElement("fsubmit");
+                if (!"".equals(base.getAttribute("imgenviar", "").trim()))
+                {
+                    el.setAttribute("img", "1");
+                    el.setAttribute("src", webWorkPath + "/" + base.getAttribute("imgenviar").trim());
+                    if (!"".equals(base.getAttribute("altenviar", "").trim())) el.setAttribute("alt", base.getAttribute("altenviar").trim());
+                    else el.setAttribute("alt", paramRequest.getLocaleString("msgRecommend"));
+                } 
+                else
+                {
+                    el.setAttribute("img", "0");
+                    if (!"".equals(base.getAttribute("btnenviar", "").trim())) el.setAttribute("tag", base.getAttribute("btnenviar").trim());
+                    else el.setAttribute("tag", paramRequest.getLocaleString("btnSubmit"));
+                }
+                dom.getChildNodes().item(0).appendChild(el);
+
+                el = dom.createElement("freset");
+                if (!"".equals(base.getAttribute("imglimpiar", "").trim()))
+                {
+                    el.setAttribute("img", "1");
+                    el.setAttribute("src", webWorkPath + "/" + base.getAttribute("imglimpiar").trim());
+                    if (!"".equals(base.getAttribute("altlimpiar", "").trim())) el.setAttribute("alt", base.getAttribute("altlimpiar").trim());
+                    else el.setAttribute("alt", paramRequest.getLocaleString("btnReset"));
+                } 
+                else
+                {
+                    el.setAttribute("img", "0");
+                    if (!"".equals(base.getAttribute("btnlimpiar", "").trim())) el.setAttribute("tag", base.getAttribute("btnlimpiar").trim());
+                    else el.setAttribute("tag", paramRequest.getLocaleString("btnReset"));
+                }
+                dom.getChildNodes().item(0).appendChild(el);
+            }
+            return dom;
+        }
+        catch (Exception e) { log.error("Error while generating DOM in resource "+ base.getPortletType().getPortletClassName() +" with identifier " + base.getId() + " - " + base.getTitle(), e); }
+        return null;
+    }
+    
+    /*
     public org.w3c.dom.Document getDom(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         String action = null != request.getParameter("rec_act") && !"".equals(request.getParameter("rec_act").trim()) ? request.getParameter("rec_act").trim() : "rec_step2";
@@ -211,7 +314,7 @@ public class Recommend extends GenericAdmResource
         catch (Exception e) { log.error("Error while generating DOM in resource "+ base.getPortletType().getPortletClassName() +" with identifier " + base.getId() + " - " + base.getTitle(), e); }
         return null;
     }
-
+**/
     /**
      * @param request
      * @param response
@@ -332,7 +435,7 @@ public class Recommend extends GenericAdmResource
             if ("1".equals(base.getAttribute("resizable", "0").trim())) onclick += ",resizable=yes";
             else onclick += ",resizable=no";
             onclick += ",width="+ base.getAttribute("width", "450").trim();
-            onclick += ",height="+ base.getAttribute("height", "330").trim();
+            onclick += ",height="+ base.getAttribute("height", "400").trim();
             onclick += ",top="+ base.getAttribute("top", "10").trim();
             onclick += ",left="+ base.getAttribute("left", "10").trim();
 
