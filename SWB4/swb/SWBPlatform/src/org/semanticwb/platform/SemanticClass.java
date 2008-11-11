@@ -363,19 +363,20 @@ public class SemanticClass
         for (Iterator i = m_class.listRDFTypes(false); i.hasNext(); ) 
         {
             Resource res=(Resource)i.next();
-            if(res.getURI().equals(SemanticVocabulary.SWB_CLASS))
+            String uri=res.getURI();
+            if(uri.equals(SemanticVocabulary.SWB_CLASS))
             {
                 m_isSWBClass = true;
                 break;
-            }else if(res.getURI().equals(SemanticVocabulary.SWB_INTERFACE))
+            }else if(uri.equals(SemanticVocabulary.SWB_INTERFACE))
             {
                 m_isSWBInterface = true;
                 break;
-            }else if(res.getURI().equals(SemanticVocabulary.SWB_MODEL))
+            }else if(uri.equals(SemanticVocabulary.SWB_MODEL))
             {
                 m_isSWBModel = true;
                 break;
-            }else if(res.getURI().equals(SemanticVocabulary.SWB_FORMELEMENT))
+            }else if(uri.equals(SemanticVocabulary.SWB_FORMELEMENT))
             {
                 m_isSWBFormElement = true;
                 break;
