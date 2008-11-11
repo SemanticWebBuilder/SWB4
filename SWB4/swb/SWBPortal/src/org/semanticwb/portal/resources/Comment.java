@@ -56,6 +56,7 @@ import org.semanticwb.portal.api.SWBResourceURLImp;
 import org.semanticwb.portal.admin.admresources.util.WBAdmResourceUtils;
 import org.semanticwb.portal.api.SWBResourceException;
 
+
 /** 
  * Se encarga de desplegar y administrar comentarios de los usuarios finales
  * bajo ciertos criterios(configuraci&oacute;n del recurso).
@@ -270,7 +271,7 @@ public class Comment extends GenericResource {
                 WebPage topic = reqParams.getTopic();
                 String lang = reqParams.getUser().getLanguage();
                 Element emn = dom.createElement("form");
-                emn.setAttribute("path", path);
+                emn.setAttribute("path", "http://" + request.getServerName() + (request.getServerPort() != 80 ? ":" + request.getServerPort() : "") + path);
                 emn.setAttribute("email", "1");
                 dom.appendChild(emn);
                 addElem(dom, emn, "site", topic.getWebSiteId());
@@ -416,7 +417,7 @@ public class Comment extends GenericResource {
         StringBuffer ret = new StringBuffer(400);
         Portlet base = getResourceBase();
         String action = null != request.getParameter("com_act") && !"".equals(request.getParameter("com_act").trim()) ? request.getParameter("com_act").trim() : "com_step1";
-
+        
         if("com_step1".equals(action)) {
             // Objeto (imagen/botón) para invocar la nueva ventana con formulario
             String onclick = "";
@@ -485,8 +486,7 @@ public class Comment extends GenericResource {
                         ArrayList aAddress = new ArrayList();
                         aAddress.add(address1);
                         
-                        //if ((from!=null && subject!=null) && SWBResourceUtils.getInstance().sendEmail(from, to, subject, null, null, ret.toString()))
-                        if ((from != null && to != null && subject != null) && SWBUtils.EMAIL.sendMail(from, from, aAddress, null, null, subject, "text", ret.toString(), null, null, null) != null) {
+                        if ((from != null && to != null && subject != null) && SWBUtils.EMAIL.sendMail(from, from, aAddress, null, null, subject, "HTML", ret.toString(), null, null, null) != null) {
                             ret.append("\n<script>");
                             ret.append("\nalert('" + reqParams.getLocaleString("msgSendEmail") + "');");
                             ret.append("\nwindow.close();");
