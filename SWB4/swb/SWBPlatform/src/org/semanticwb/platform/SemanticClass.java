@@ -354,19 +354,40 @@ public class SemanticClass
         return ret;
     }    
     
+    private void checkType()
+    {
+        m_isSWBClass=false;
+        m_isSWBInterface=false;
+        m_isSWBModel=false;
+        m_isSWBFormElement=false;
+        for (Iterator i = m_class.listRDFTypes(false); i.hasNext(); ) 
+        {
+            Resource res=(Resource)i.next();
+            if(res.getURI().equals(SemanticVocabulary.SWB_CLASS))
+            {
+                m_isSWBClass = true;
+                break;
+            }else if(res.getURI().equals(SemanticVocabulary.SWB_INTERFACE))
+            {
+                m_isSWBInterface = true;
+                break;
+            }else if(res.getURI().equals(SemanticVocabulary.SWB_MODEL))
+            {
+                m_isSWBModel = true;
+                break;
+            }else if(res.getURI().equals(SemanticVocabulary.SWB_FORMELEMENT))
+            {
+                m_isSWBFormElement = true;
+                break;
+            }
+        }        
+    }
+    
     public boolean isSWBClass()
     {
         if(m_isSWBClass==null)
         {
-            m_isSWBClass=false;
-            for (Iterator i = m_class.listRDFTypes(false); i.hasNext(); ) 
-            {
-                Resource res=(Resource)i.next();
-                if(res.getURI().equals(SemanticVocabulary.SWB_CLASS))
-                {
-                    m_isSWBClass = true;
-                }
-            }        
+            checkType();
         }
         return m_isSWBClass.booleanValue();
     }
@@ -375,15 +396,7 @@ public class SemanticClass
     {
         if(m_isSWBInterface==null)
         {
-            m_isSWBInterface=false;
-            for (Iterator i = m_class.listRDFTypes(false); i.hasNext(); ) 
-            {
-                Resource res=(Resource)i.next();
-                if(res.getURI().equals(SemanticVocabulary.SWB_INTERFACE))
-                {
-                    m_isSWBInterface = true;
-                }
-            }     
+            checkType();
         }
         return m_isSWBInterface.booleanValue();
     }
@@ -392,15 +405,7 @@ public class SemanticClass
     {
         if(m_isSWBModel==null)
         {
-            m_isSWBModel=false;
-            for (Iterator i = m_class.listRDFTypes(false); i.hasNext(); ) 
-            {
-                Resource res=(Resource)i.next();
-                if(res.getURI().equals(SemanticVocabulary.SWB_MODEL))
-                {
-                    m_isSWBModel = true;
-                }
-            }     
+            checkType();
         }
         return m_isSWBModel.booleanValue();
     }   
@@ -409,18 +414,7 @@ public class SemanticClass
     {
         if(m_isSWBFormElement==null)
         {
-            m_isSWBFormElement=false;
-            //System.out.print("Class:"+getClassName());
-            for (Iterator i = m_class.listRDFTypes(false); i.hasNext(); ) 
-            {
-                Resource res=(Resource)i.next();
-                System.out.print(" res:"+res.getURI());
-                if(res.getURI().equals(SemanticVocabulary.SWB_FORMELEMENT))
-                {
-                    m_isSWBFormElement = true;
-                }
-            }     
-            //System.out.println(" ret:"+m_isSWBFormElement);
+            checkType();
         }
         return m_isSWBFormElement.booleanValue();
     }     
