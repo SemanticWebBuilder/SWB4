@@ -156,7 +156,7 @@ public class CodeGenerator
         while (tpcit.hasNext())
         {
             SemanticClass tpc = tpcit.next();
-            System.out.println("tpc: " + tpc.toString() + " isSWBClass: " + tpc.isSWBClass()+ " isSWBFormElement: " + tpc.isSWBFormElement());
+            //System.out.println("tpc: " + tpc.toString() + " isSWBClass: " + tpc.isSWBClass()+ " isSWBFormElement: " + tpc.isSWBFormElement());
             if ( tpc.isSWBInterface() )
             {
                 //System.out.println("tpc: " + tpc.toString() + " isSWBInterface: " + tpc.isSWBInterface());
