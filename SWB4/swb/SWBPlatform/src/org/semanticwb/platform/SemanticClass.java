@@ -119,6 +119,19 @@ public class SemanticClass
         return m_autogenId;
     }
     
+    public SemanticLiteral getRequiredProperty(SemanticProperty prop)
+    {
+        SemanticLiteral ret=null;
+        Property iprop=prop.getRDFProperty();
+        try
+        {
+            ret=new SemanticLiteral(m_class.getRequiredProperty(iprop).getLiteral());
+        }catch(PropertyNotFoundException noe){}
+        return ret;
+    }
+    
+    
+    
     
     
     /**
