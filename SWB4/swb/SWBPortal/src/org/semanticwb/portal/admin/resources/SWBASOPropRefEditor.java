@@ -183,7 +183,7 @@ public class SWBASOPropRefEditor extends GenericResource {
                     urlu.setParameter("spropref", idp);
                     urlu.setAction("update");
                     
-                    out.println("<input type=\"text\" name=\""+semprop.getName()+"\" onblur=\"submitUrl(updPriority('"+urlu+"&"+semprop.getName()+"=',this),this); return false;\" value=\""+getValueSemProp(sobj, semprop)+"\" />");
+                    out.println("<input type=\"text\" name=\""+semprop.getName()+"\" onblur=\"submitUrl('"+urlu+"&"+semprop.getName()+"='+this.value,this); return false;\" value=\""+getValueSemProp(sobj, semprop)+"\" />");
                     out.println("</td>");
                 }
                 if(hmprop.get(SWBContext.getVocabulary().created)!=null)
@@ -471,11 +471,11 @@ public class SWBASOPropRefEditor extends GenericResource {
                             obj.removeProperty(prop);
                         }
                     } 
-                    else if(prop.isBoolean()) obj.setBooleanProperty(prop, false);
+                    //else if(prop.isBoolean()) obj.setBooleanProperty(prop, false);
                        
                 }
             }
-            if (id != null)response.setRenderParameter("suri", rid);
+            if (id != null)response.setRenderParameter("suri", id);
             if (sprop != null)response.setRenderParameter("sprop", sprop);
             if (spropref != null)response.setRenderParameter("spropref", spropref);
             response.setRenderParameter("act","");
