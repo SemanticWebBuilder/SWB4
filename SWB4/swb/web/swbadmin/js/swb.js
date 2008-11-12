@@ -68,7 +68,7 @@
       dojo.addOnLoad(function() {
 
           var start = new Date().getTime();
-          dojo.parser.parse(dojo.byId('container')); 
+          //dojo.parser.parse(dojo.byId('container')); 
           console.info("Total parse time: " + (new Date().getTime() - start) + "ms");
 
           dojo.byId('loaderInner').innerHTML += " done.";
@@ -181,17 +181,39 @@
               {
                   id: objid,
                   closeable:'true',
-                  title:"<span class='mailIconOptions' align='left'></span>"+title, 
+                  onClose: function()
+                  {
+                      var ret=true;
+                      //ret=confirm("Do you really want to Close this?");
+                      if(ret)
+                      {
+                          var d=dijit.byId(objid+"2");
+                          if(d)
+                          {
+                            var arr=d.getChildren();
+                            for (var n = 0; n < arr.length; n++)
+                            {
+                                d.closeChild(arr[n]);
+                            }
+                          }
+                          //alert(d.getChildren());
+                          //if(d)d.destroyRecursive();
+                          //this.destroy();
+                          //return false;
+                      }
+                      return ret;
+                  },
+                  title:title, 
                   href:'/swb/swbadmin/jsp/objectTab.jsp?id='+encodeURIComponent(id)
               });
               newTab.closable=true;
               tabs.addChild(newTab);
               tabs.selectChild(newTab);                                    
+              //dojo.parser.parse(newTab);
           }else
           {
               tabs.selectChild(newTab);   
           }
-
       }
       
       function actionDone(){
