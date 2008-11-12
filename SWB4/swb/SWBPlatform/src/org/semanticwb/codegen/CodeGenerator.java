@@ -156,7 +156,7 @@ public class CodeGenerator
         while (tpcit.hasNext())
         {
             SemanticClass tpc = tpcit.next();
-            //System.out.println("tpc: " + tpc.toString() + " isSWBClass: " + tpc.isSWBClass()+ " isSWBFormElement: " + tpc.isSWBFormElement());
+            System.out.println("tpc: " + tpc.toString() + " isSWBClass: " + tpc.isSWBClass()+ " isSWBFormElement: " + tpc.isSWBFormElement());
             if ( tpc.isSWBInterface() )
             {
                 //System.out.println("tpc: " + tpc.toString() + " isSWBInterface: " + tpc.isSWBInterface());
@@ -167,7 +167,7 @@ public class CodeGenerator
                 //System.out.println("tpc: " + tpc.toString() + " isSWBClass: " + tpc.isSWBClass()+ " isSWBFormElement: " + tpc.isSWBFormElement());
                 if ( tpc.getName().toLowerCase().startsWith("basenode") )
                 {
-                    System.out.println("tpc: " + tpc.toString() + " isSWBClass: " + tpc.isSWBClass() + " isSWBFormElement: " + tpc.isSWBFormElement());
+                    //System.out.println("tpc: " + tpc.toString() + " isSWBClass: " + tpc.isSWBClass() + " isSWBFormElement: " + tpc.isSWBFormElement());
                 }
                 createClassBase(tpc);
             }
@@ -343,10 +343,10 @@ public class CodeGenerator
     {
         String exts = "GenericObjectBase";
         SemanticClass parent = null;
-        Iterator it = tpc.listSuperClasses(true);
+        Iterator<SemanticClass> it = tpc.listSuperClasses(true);
         while (it.hasNext())
         {
-            parent = ( SemanticClass ) it.next();
+            parent = it.next();
             if ( parent.isSWBClass() || parent.isSWBModel() )
             {
                 exts = getClassName(parent);
@@ -1164,7 +1164,7 @@ public class CodeGenerator
         String sPackage = getPackage(tpc);
         while (tppit.hasNext())
         {
-            SemanticProperty tpp = tppit.next();
+            SemanticProperty tpp = tppit.next();            
             if ( !isPropertyOfParent(tpp, parent) )
             {
                 if ( tpp.isObjectProperty() )
