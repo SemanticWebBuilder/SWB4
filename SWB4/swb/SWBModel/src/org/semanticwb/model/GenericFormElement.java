@@ -112,7 +112,7 @@ public class GenericFormElement extends FormElementBase implements FormElement
 //                        id=tok.substring(0,ind);
 //                        val=tok.substring(ind+1);
 //                    }
-//                    ret+="      <label for=\""+name+id+"\"><input dojoType=\"dijit.form.RadioButton\" id=\""+name+id+"\" name=\""+name+"\"";
+//                    ret+="      <label for=\""+name+id+"\"><input dojoType=\"dijit.form.RadioButton\" _id=\""+name+id+"\" name=\""+name+"\"";
 //                    if(id.equals(value))ret+=" checked=\"checked\"";
 //                    ret+=" value=\""+id+"\" type=\"radio\" />"+val+"</label>";
 //                }
@@ -131,7 +131,7 @@ public class GenericFormElement extends FormElementBase implements FormElement
                         id=tok.substring(0,ind);
                         val=tok.substring(ind+1);
                     }
-                    ret+=" <label for=\""+name+id+"\"><input dojoType=\"dijit.form.RadioButton\" id=\""+name+id+"\" name=\""+name+"\"";
+                    ret+=" <label for=\""+name+id+"\"><input dojoType=\"dijit.form.RadioButton\" _id=\""+name+id+"\" name=\""+name+"\"";
                     if(id.equals(value))ret+=" checked=\"checked\"";
                     ret+=" value=\""+id+"\" type=\"radio\" />"+val+"</label>";
                 }
@@ -144,7 +144,7 @@ public class GenericFormElement extends FormElementBase implements FormElement
                 if(value)checked="checked=\"checked\"";
                 ret="<label for=\""+name+"\">"+label
                     + reqtxt
-                    + "</label> <input type=\"checkbox\" id=\""+name+"\" name=\""+name+"\" "+checked
+                    + "</label> <input type=\"checkbox\" id_=\""+name+"\" name=\""+name+"\" "+checked
                     + " dojoType=\"dijit.form.CheckBox\""
                     + " required=\""+required+"\""
 //                    + " propercase=\"true\""
@@ -159,7 +159,7 @@ public class GenericFormElement extends FormElementBase implements FormElement
                 ret="<label for=\""+name+"\">"+label
                     + reqtxt
                     + "</label>"
-                    + " <span id=\""+name+"\" name=\""+name+"\">"+value+"</span>";
+                    + " <span _id=\""+name+"\" name=\""+name+"\">"+value+"</span>";
             }else if(prop.isInt() || prop.isLong())
             {
                 String value=obj.getProperty(prop);
@@ -168,7 +168,7 @@ public class GenericFormElement extends FormElementBase implements FormElement
                 {
                     ret="<label for=\""+name+"\">"+label
                         + reqtxt
-                        + "</label> <input id=\""+name+"\" name=\""+name+"\" value=\""+value+"\""
+                        + "</label> <input _id=\""+name+"\" name=\""+name+"\" value=\""+value+"\""
                         + " dojoType=\"dijit.form.ValidationTextBox\""
                         + " regExp=\"\\d+\""
                         + " required=\""+required+"\""
@@ -182,13 +182,13 @@ public class GenericFormElement extends FormElementBase implements FormElement
 //                    ret="<label for=\""+name+"\">"+label
 //                        + reqtxt
 //                        + "</label>"
-//                        + "<p><span id=\""+name+"\" dojoType=\"dijit.InlineEditBox\" editor=\"dijit.form.ValidationTextBox\" editorParams=\"{regExp:'\\\\d+'}\" autoSave=\"false\" name=\""+name+"\">"+value+"</span></p>";
+//                        + "<p><span _id=\""+name+"\" dojoType=\"dijit.InlineEditBox\" editor=\"dijit.form.ValidationTextBox\" editorParams=\"{regExp:'\\\\d+'}\" autoSave=\"false\" name=\""+name+"\">"+value+"</span></p>";
                 }else if(mode.equals("view"))
                 {
                     ret="<label for=\""+name+"\">"+label
                         + reqtxt
                         + "</label>"
-                        + " <span id=\""+name+"\" name=\""+name+"\">"+value+"</span>";
+                        + " <span _id=\""+name+"\" name=\""+name+"\">"+value+"</span>";
                 }
             }else
             {
@@ -198,7 +198,7 @@ public class GenericFormElement extends FormElementBase implements FormElement
                 {
                     ret="<label for=\""+name+"\">"+label
                         + reqtxt
-                        + "</label> <input id=\""+name+"\" name=\""+name+"\" value=\""+value+"\""
+                        + "</label> <input _id=\""+name+"\" name=\""+name+"\" value=\""+value+"\""
                         + " dojoType=\"dijit.form.ValidationTextBox\""
                         + " required=\""+required+"\""
     //                    + " propercase=\"true\""
@@ -211,7 +211,7 @@ public class GenericFormElement extends FormElementBase implements FormElement
                     ret="<label for=\""+name+"\">"+label
                         + reqtxt
                         + "</label>"
-                        + " <span id=\""+name+"\" name=\""+name+"\">"+value+"</span>";
+                        + " <span _id=\""+name+"\" name=\""+name+"\">"+value+"</span>";
                 }
             }
 
