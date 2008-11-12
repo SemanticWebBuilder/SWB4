@@ -17,7 +17,11 @@ import org.semanticwb.*;
  */
 public class SemanticClassIterator<T extends SemanticClass> implements Iterator
 {
-    Iterator<SemanticClass> m_it;
+    private Iterator<SemanticClass> m_it;
+    private boolean create=false;
+    private SemanticClass tmp=null;
+    private boolean next=false;
+    
     
     public SemanticClassIterator(Iterator it)
     {
@@ -26,40 +30,49 @@ public class SemanticClassIterator<T extends SemanticClass> implements Iterator
     
     public SemanticClassIterator(Iterator it, boolean create)
     {
-        ArrayList<SemanticClass> list=new ArrayList();
-        while(it.hasNext())
-        {
-            Object obj=it.next();
-            SemanticClass cls=null;
-            if(obj instanceof Statement)
-            {
-                cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(((Statement)obj).getResource().getURI());
-            }else
-            {
-                OntClass ocls=(OntClass)obj;
-                cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(ocls.getURI());
-                if(create && cls==null)
-                {
-                    cls=new SemanticClass(ocls);
-                }
-            }            
-            //if(cls!=null && cls.getName()!=null)
-            if(cls!=null)
-            {
-                list.add(cls);
-            }
-        }
-        m_it=list.iterator();
+        this.m_it=it;
+        this.create=create;
     }
 
     public boolean hasNext() 
     {
-        return m_it.hasNext();
+        next=true;
+        boolean ret=m_it.hasNext();
+        if(ret)
+        {
+            tmp=_next();    
+            if(tmp==null)ret=hasNext();
+        }
+        return ret;
+    }
+    
+    private SemanticClass _next()
+    {
+        Object obj=m_it.next();
+        SemanticClass cls=null;
+        if(obj instanceof Statement)
+        {
+            cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(((Statement)obj).getResource().getURI());
+        }else
+        {
+            OntClass ocls=(OntClass)obj;
+            cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(ocls.getURI());
+            if(create && cls==null)
+            {
+                cls=new SemanticClass(ocls);
+            }
+        }            
+        return cls;
     }
 
     public T next()
     {
-        return (T)m_it.next();
+        if(!next)
+        {
+            hasNext();
+        }
+        next=false;
+        return (T)tmp;
     }
     
     public void remove()
