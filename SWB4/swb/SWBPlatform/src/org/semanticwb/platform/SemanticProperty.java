@@ -76,6 +76,17 @@ public class SemanticProperty
         return URLEncoder.encode(getURI());
     }     
     
+    public SemanticLiteral getRequiredProperty(SemanticProperty prop)
+    {
+        SemanticLiteral ret=null;
+        Statement st=m_prop.getProperty(prop.getRDFProperty());
+        if(st!=null)
+        {
+            ret=new SemanticLiteral(st);
+        }
+        return ret;
+    }
+    
     public boolean isLocaleable()
     {
         Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_LOCALEABLE));
