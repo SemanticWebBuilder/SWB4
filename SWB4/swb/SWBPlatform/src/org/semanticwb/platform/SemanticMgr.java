@@ -91,11 +91,11 @@ public class SemanticMgr implements SWBInstanceObject
         
         //Create Vocabulary
         vocabulary=new SemanticVocabulary();
-        SemanticClassIterator tpcit=new SemanticClassIterator(m_ontology.getRDFOntModel().listClasses());
+        Iterator<SemanticClass> tpcit=new SemanticClassIterator(m_ontology.getRDFOntModel().listClasses(),true);
         while(tpcit.hasNext())
         {
-            SemanticClass cls=tpcit.nextSemanticClass();
-            if(cls!=null && cls.getName()!=null)
+            SemanticClass cls=tpcit.next();
+            //if(cls.getName()!=null)
             {
                 vocabulary.registerClass(cls);
             }
