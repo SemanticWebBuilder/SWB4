@@ -53,7 +53,7 @@ public class UserTest {
         System.out.println("Repository:"+repository);
         System.out.println("Model:"+repository.getSemanticObject().getModel().getRDFModel());
         
-        SemanticClass cls=SWBContext.getVocabulary().Dns;
+        SemanticClass cls=SWBContext.getVocabulary().swb_Dns;
         Dns dns=(Dns)SWBPlatform.getSemanticMgr().getOntology().getGenericObject("localhost", cls);
         System.out.println("dns:"+dns);
         System.out.println("dns_model:"+dns.getSemanticObject().getModel().getRDFModel());
