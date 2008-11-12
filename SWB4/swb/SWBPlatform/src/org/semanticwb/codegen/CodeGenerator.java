@@ -385,7 +385,7 @@ public class CodeGenerator
         }
         javaClassContent.append("import java.util.Date;" + ENTER);
         javaClassContent.append("import java.util.Iterator;" + ENTER);
-
+        javaClassContent.append("import java.util.ArrayList;"+ ENTER);
         if ( parent == null )
         {
             javaClassContent.append("import org.semanticwb.model.base.GenericObjectBase;" + ENTER);
@@ -813,7 +813,15 @@ public class CodeGenerator
                 javaClassContent.append(OPEN_BLOCK + ENTER);
                 if ( !tpp.hasInverse() )
                 {
-                    javaClassContent.append("        return getSemanticObject().list"+ type +"Properties(vocabulary." + tpp.getPrefix()+"_"+tpp.getName() + ");" + ENTER);                
+                    javaClassContent.append("        ArrayList<"+type+"> values=new ArrayList<"+ type +">();"+ ENTER);
+                    javaClassContent.append("        Iterator<SemanticLiteral> it=getSemanticObject().listLiteralProperties(vocabulary."+ tpp.getPrefix()+"_"+tpp.getName() +");"+ ENTER);
+                    javaClassContent.append("        while(it.hasNext())"+ ENTER);
+                    javaClassContent.append("        {"+ ENTER);
+                    javaClassContent.append("                SemanticLiteral literal=it.next();"+ ENTER);
+                    javaClassContent.append("                values.add(literal.getString());"+ ENTER);
+                    javaClassContent.append("        }"+ ENTER);
+                    javaClassContent.append("        return values.iterator();"+ ENTER);
+                    //javaClassContent.append("        return getSemanticObject().list"+ type +"Properties(vocabulary." + tpp.getPrefix()+"_"+tpp.getName() + ");" + ENTER);                
                 }
                 else
                 {
