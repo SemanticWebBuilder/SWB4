@@ -10,7 +10,7 @@
     if(res==null)return;
     SemanticClass cls=ont.getSemanticObjectClass(res);
     GenericObject obj=ont.getGenericObject(id,cls);
-    String title=obj.getSemanticObject().getProperty(SWBContext.getVocabulary().title);
+    //String title=obj.getSemanticObject().getProperty(SWBContext.getVocabulary().title);
     
     //Validar menu principal
     WebPage menup=SWBContext.getAdminWebSite().getWebPage("WBAd_mnu_Main");
@@ -23,7 +23,7 @@
     //Otro        
     {
 %>
-<div dojoType="dijit.layout.TabContainer" id_="bottomTabs" tabPosition_="bottom" selectedChild_="btab1">
+<div dojoType="dijit.layout.TabContainer" id="<%=id%>/tab2" _tabPosition="bottom" _selectedChild="btab1">
 <div dojoType="dijit.layout.ContentPane" title="Información" style=" padding:10px;" refreshOnShow="false" href="/swb/swbadmin/jsp/SemObjectEditor.jsp?suri=<%=URLEncoder.encode(obj.getURI())%>"></div>
 <%        
         String buri="/swb/swb/SWBAdmin/WBAd_Home/_rid/2/_mto/3";
@@ -37,7 +37,7 @@
             auri+="&spropref="+voc.portlet.getEncodedURI();
             //System.out.println("auri:"+auri);            
 %>
-<div dojoType="dijit.layout.ContentPane" title="Contenidos" style=" padding:10px;" refreshOnShow="true" href="<%=auri%>"></div>
+<div dojoType="dijit.layout.ContentPane" title="Contenidos" style=" padding:10px;" refreshOnShow="false" href="<%=auri%>"></div>
 <%            
         }
         
@@ -48,7 +48,7 @@
             auri+="&spropref="+voc.template.getEncodedURI();
             //System.out.println("auri:"+auri);
 %>
-<div dojoType="dijit.layout.ContentPane" title="Plantillas" style=" padding:10px;" refreshOnShow="true" href="<%=auri%>"></div>
+<div dojoType="dijit.layout.ContentPane" title="Plantillas" style=" padding:10px;" refreshOnShow="false" href="<%=auri%>"></div>
 <%            
         }
         
@@ -58,7 +58,7 @@
             auri+="&sprop="+voc.hasPFlowRef.getEncodedURI();
             auri+="&spropref="+voc.pflow.getEncodedURI();
 %>
-<div dojoType="dijit.layout.ContentPane" title="Flujos de Publicación" style=" padding:10px;" refreshOnShow="true" href="<%=auri%>"></div>
+<div dojoType="dijit.layout.ContentPane" title="Flujos de Publicación" style=" padding:10px;" refreshOnShow="false" href="<%=auri%>"></div>
 <%            
         }
         
@@ -70,7 +70,7 @@
             System.out.println(auri);
             //auri+="&spropref="+voc.pflow.getEncodedURI();            
 %>
-<div dojoType="dijit.layout.ContentPane" title="Calendarización" style=" padding:10px;" refreshOnShow="true" href="<%=auri%>"></div>
+<div dojoType="dijit.layout.ContentPane" title="Calendarización" style=" padding:10px;" refreshOnShow="false" href="<%=auri%>"></div>
 <%            
         }
         
@@ -80,7 +80,7 @@
             auri+="&sprop="+voc.hasRoleRef.getEncodedURI();
             auri+="&spropref="+voc.role.getEncodedURI();            
 %>
-<div dojoType="dijit.layout.ContentPane" title="Roles" style=" padding:10px;" refreshOnShow="true" href="<%=auri%>"></div>
+<div dojoType="dijit.layout.ContentPane" title="Roles" style=" padding:10px;" refreshOnShow="false" href="<%=auri%>"></div>
 <%            
         }
         
@@ -90,13 +90,13 @@
             auri+="&sprop="+voc.hasRuleRef.getEncodedURI();
             auri+="&spropref="+voc.rule.getEncodedURI();            
 %>
-<div dojoType="dijit.layout.ContentPane" title="Reglas" style=" padding:10px;" refreshOnShow="true" href="<%=auri%>"></div>
+<div dojoType="dijit.layout.ContentPane" title="Reglas" style=" padding:10px;" refreshOnShow="false" href="<%=auri%>"></div>
 <%            
         }
 
         {
 %>
-<div dojoType="dijit.layout.ContentPane" title="Bitácora" style=" padding:10px;" refreshOnShow="true" href=""></div>
+<div dojoType="dijit.layout.ContentPane" title="Bitácora" style=" padding:10px;" refreshOnShow="false" href=""></div>
 <%            
         }
         
