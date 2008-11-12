@@ -129,6 +129,28 @@ public class SemanticObject
         return null;
     }
     
+    public Iterator<SemanticClass> listSemanticClasses()
+    {
+        //TODO:
+        if(m_virtual)
+        {
+            return null;//m_virtclass;
+        }        
+        return new SemanticClassIterator<SemanticClass>(m_res.listProperties(m_res.getModel().getProperty(SemanticVocabulary.RDF_TYPE)));
+    }    
+    
+    public void addSemanticClass(SemanticClass cls)
+    {
+        //TODO:
+        if(m_virtual)
+        {
+            
+        }else
+        {
+            m_res.addProperty(m_res.getModel().getProperty(SemanticVocabulary.RDF_TYPE), cls.getOntClass());
+        }
+    }      
+    
     /**
      * Regresa el Modelo de del SemanticObject
      * @return
