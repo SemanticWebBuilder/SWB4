@@ -21,6 +21,10 @@ public class SemanticProperty
     private Property m_prop;
     private SemanticProperty m_inverse;
     
+    private Boolean isObjectProperty=null;
+    private Boolean isDataTypeProperty=null;
+    private Boolean hasInverse=null;
+    
     public SemanticProperty(Property prop)
     {
         this.m_prop=prop;
@@ -224,34 +228,43 @@ public class SemanticProperty
     
     public boolean isObjectProperty()
     {
-        boolean ret=false;
-        Statement stm=m_prop.getProperty(m_prop.getModel().getProperty(SemanticVocabulary.RDF_TYPE));
-        if(stm!=null)
+        if(isObjectProperty==null)
         {
-            ret=SemanticVocabulary.OWL_OBJECTPROPERTY.equals(stm.getResource().getURI());
+            isObjectProperty=false;
+            Statement stm=m_prop.getProperty(m_prop.getModel().getProperty(SemanticVocabulary.RDF_TYPE));
+            if(stm!=null)
+            {
+                isObjectProperty=SemanticVocabulary.OWL_OBJECTPROPERTY.equals(stm.getResource().getURI());
+            }
         }
-        return ret;      
+        return isObjectProperty;      
     }
     
     public boolean isDataTypeProperty()
     {
-        boolean ret=false;
-        Statement stm=m_prop.getProperty(m_prop.getModel().getProperty(SemanticVocabulary.RDF_TYPE));
-        if(stm!=null)
+        if(isDataTypeProperty==null)
         {
-            ret=SemanticVocabulary.OWL_DATATYPEPROPERTY.equals(stm.getResource().getURI());
+            isDataTypeProperty=false;
+            Statement stm=m_prop.getProperty(m_prop.getModel().getProperty(SemanticVocabulary.RDF_TYPE));
+            if(stm!=null)
+            {
+                isDataTypeProperty=SemanticVocabulary.OWL_DATATYPEPROPERTY.equals(stm.getResource().getURI());
+            }
         }
-        return ret;
+        return isDataTypeProperty;
     }
     
     public boolean hasInverse()
     {
-        boolean ret=false;
-        if(m_prop instanceof OntProperty)
+        if(hasInverse==null)
         {
-            ret=((OntProperty)m_prop).hasInverse();
-        }        
-        return ret;
+            hasInverse=false;
+            if(m_prop instanceof OntProperty)
+            {
+                hasInverse=((OntProperty)m_prop).hasInverse();
+            }        
+        }
+        return hasInverse;
     }
     
     public SemanticProperty getInverse()
