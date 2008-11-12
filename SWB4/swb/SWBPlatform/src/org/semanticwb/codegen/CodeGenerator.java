@@ -813,8 +813,7 @@ public class CodeGenerator
                 javaClassContent.append(OPEN_BLOCK + ENTER);
                 if ( !tpp.hasInverse() )
                 {
-                    javaClassContent.append("        return getSemanticObject().listProperties(vocabulary." + tpp.getPrefix()+"_"+tpp.getName() + ");" + ENTER);
-                //javaClassContent.append("        return new Iterator<" + type + ">(" + type + ".class, stit);" + ENTER);
+                    javaClassContent.append("        return getSemanticObject().list"+ type +"Properties(vocabulary." + tpp.getPrefix()+"_"+tpp.getName() + ");" + ENTER);                
                 }
                 else
                 {
@@ -828,7 +827,7 @@ public class CodeGenerator
                     javaClassContent.append(ENTER);
                     javaClassContent.append("    public void add" + objectName + "(" + type + " " + objectName.toLowerCase() + ")" + ENTER);
                     javaClassContent.append(OPEN_BLOCK + ENTER);
-                    javaClassContent.append("        getSemanticObject().add" + type + "Property(vocabulary." + tpp.getPrefix()+"_"+tpp.getName() + ", " + objectName.toLowerCase() + ".getSemanticObject());" + ENTER);
+                    javaClassContent.append("        getSemanticObject().set" + (type.equals("String")?"":type) + "Property(vocabulary." + tpp.getPrefix()+"_"+tpp.getName() + ", " + objectName.toLowerCase() + ");" + ENTER);
                     javaClassContent.append(CLOSE_BLOCK + ENTER);
                     javaClassContent.append(ENTER);
                     javaClassContent.append("    public void removeAll" + objectName + "()" + ENTER);
@@ -838,7 +837,7 @@ public class CodeGenerator
                     javaClassContent.append(ENTER);
                     javaClassContent.append("    public void remove" + objectName + "(" + type + " " + objectName.toLowerCase() + ")" + ENTER);
                     javaClassContent.append(OPEN_BLOCK + ENTER);
-                    javaClassContent.append("        getSemanticObject().removeObjectProperty(vocabulary." + tpp.getPrefix()+"_"+tpp.getName() + "," + objectName.toLowerCase() + ".getSemanticObject());" + ENTER);
+                    javaClassContent.append("        getSemanticObject().removeProperty(vocabulary." + tpp.getPrefix()+"_"+tpp.getName() + "," + objectName.toLowerCase() + ");" + ENTER);
                     javaClassContent.append(CLOSE_BLOCK + ENTER);
                 }
             }
