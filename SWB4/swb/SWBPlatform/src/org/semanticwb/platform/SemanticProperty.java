@@ -37,6 +37,11 @@ public class SemanticProperty
         }
     }
     
+    public Property getRDFProperty()
+    {
+        return m_prop;
+    }
+    
     public String getName()
     {
         return m_prop.getLocalName();
@@ -70,11 +75,6 @@ public class SemanticProperty
     {
         return URLEncoder.encode(getURI());
     }     
-    
-    public Property getRDFProperty()
-    {
-        return m_prop;
-    }
     
     public boolean isLocaleable()
     {

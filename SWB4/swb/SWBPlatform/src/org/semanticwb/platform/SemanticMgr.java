@@ -63,11 +63,6 @@ public class SemanticMgr implements SWBInstanceObject
         conn.getDriver().setDoDuplicateCheck(false);
         maker = ModelFactory.createModelRDBMaker(conn);
         
-        //load SWBSystem Model
-        log.debug("Loading DBModel:"+"SWBSystem");
-        m_system=new SemanticModel("SWBSystem",loadRDFDBModel("SWBSystem"));
-//        debugModel(m_system);
-
         //Load Ontology from file
         String swbowl="file:"+SWBUtils.getApplicationPath()+SWB_OWL_PATH;
         log.debug("Loading Model:"+swbowl);
@@ -82,7 +77,6 @@ public class SemanticMgr implements SWBInstanceObject
         //Create Omtology
         m_ontology = new SemanticOntology("SWB",ModelFactory.createOntologyModel(spec,m_schema.getRDFModel()));
         //m_ontology.addSubModel(m_schema,false);
-        m_ontology.addSubModel(m_system,false);
         
         //Agrega ontologia a los modelos
         SemanticModel ontModel=new SemanticModel("swb_ontology", m_ontology.getRDFOntModel());
@@ -115,6 +109,13 @@ public class SemanticMgr implements SWBInstanceObject
         
         //debugClasses(ontoModel);
         //debugModel(ontoModel);
+        
+        //load SWBSystem Model
+        log.debug("Loading DBModel:"+"SWBSystem");
+        m_system=new SemanticModel("SWBSystem",loadRDFDBModel("SWBSystem"));
+//        debugModel(m_system);
+        m_ontology.addSubModel(m_system,false);
+        
 
         loadDBModels();
         m_ontology.rebind();
