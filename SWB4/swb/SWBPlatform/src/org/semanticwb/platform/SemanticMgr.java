@@ -74,7 +74,7 @@ public class SemanticMgr implements SWBInstanceObject
         m_schema=new SemanticModel("SWBSchema",loadRDFFileModel(swbowl));
 //        debugModel(swbSquema);
         
-        OntModelSpec spec = OntModelSpec.OWL_MEM_RDFS_INF;
+        OntModelSpec spec = OntModelSpec.OWL_MEM;
 //        OntModelSpec spec = new OntModelSpec( OntModelSpec.OWL_MEM );
 //        spec.setBaseModelMaker(maker);
 //        spec.setImportModelMaker(maker);
