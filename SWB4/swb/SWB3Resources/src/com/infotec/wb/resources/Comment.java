@@ -506,9 +506,6 @@ public class Comment extends GenericResource {
         
         PrintWriter out = response.getWriter();
         out.print(ret.toString());
-        out.println("<br><a href=\"" 
-                + reqParams.getRenderUrl().setMode(reqParams.Mode_ADMIN)
-                + "\">CommentSwf admin</a>");
         
     }
 
