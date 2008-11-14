@@ -24,6 +24,7 @@ public class SemanticProperty
     private Boolean isObjectProperty=null;
     private Boolean isDataTypeProperty=null;
     private Boolean hasInverse=null;
+    private Boolean isExternalInvocation=null;
     
     public SemanticProperty(Property prop)
     {
@@ -109,12 +110,16 @@ public class SemanticProperty
     
     public boolean isExternalInvocation()
     {
-        Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_EXTERNALINVOCATION));
-        if(st!=null)
+        if(isExternalInvocation==null)
         {
-            return st.getBoolean();
+            isExternalInvocation=false;
+            Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_EXTERNALINVOCATION));
+            if(st!=null)
+            {
+                isExternalInvocation=st.getBoolean();
+            }
         }
-        return false;
+        return isExternalInvocation;
     }      
     
     public SemanticObject getDisplayProperty()
