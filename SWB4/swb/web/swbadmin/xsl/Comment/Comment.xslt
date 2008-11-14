@@ -2,84 +2,56 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:output method="html" encoding="ISO-8859-1"/>
 <xsl:template match="/form">
-	<LINK href="{@path}images/Coment.css" rel="stylesheet" type="text/css"></LINK>
-	<DIV class="com_box">
-	<TABLE width="100%" border="0" align="center" cellSpacing="3" cellPadding="3"> 
+	<LINK href="{@path}swb-estilo.css" rel="stylesheet" type="text/css"></LINK>
+	<DIV id="swb-comentar">
 	<xsl:choose>
 		<xsl:when test="@email ='1'">
-			<TR><TD class="com_data">
-				<FONT face="Verdana, Arial, Helvetica, sans-serif" size="2"><BR />
-				----------------------------------------------------<BR />
-				Sitio o portal: <B><xsl:value-of select="site" />.<xsl:value-of select="topic" /></B><BR />
-				Solicitud: <B><xsl:value-of select="commenttype" /></B><BR />
-				----------------------------------------------------<BR />
-				<xsl:if test="count(headermsg) &gt; 0">
-					<BR /><xsl:value-of select="headermsg" disable-output-escaping="yes" /><BR/><BR/>
-				</xsl:if><BR/>
-				<TABLE border="0" class="com_data">
-				<TR>
-					<TD colspan="2" ><FONT face="Verdana, Arial, Helvetica, sans-serif" size="2">
-						<xsl:value-of select="responsable" /><BR /> 
-						<xsl:value-of select="area" /><BR /><BR />
-					</FONT></TD>
-				</TR>
-				<TR>
-					<TD><FONT face="Verdana, Arial, Helvetica, sans-serif" size="2"><B>
-						Nombre:</B>
-					</FONT></TD>
-					<TD><FONT face="Verdana, Arial, Helvetica, sans-serif" size="2">
-						<xsl:value-of select="fromname" />
-					</FONT></TD>
-				</TR>
-				<TR>
-					<TD><FONT face="Verdana, Arial, Helvetica, sans-serif" size="2"><B>
-						Correo electrónico:</B>
-					</FONT></TD>
-					<TD><FONT face="Verdana, Arial, Helvetica, sans-serif" size="2">
-						<xsl:value-of select="fromemail" />
-					</FONT></TD>
-				</TR>
-				<xsl:if test="count(phone) &gt; 0">
-					<TR>
-						<TD><FONT face="Verdana, Arial, Helvetica, sans-serif" size="2"><B>
-							Teléfono(s):</B>
-						</FONT></TD>
-						<TD><FONT face="Verdana, Arial, Helvetica, sans-serif" size="2">
-							<xsl:value-of select="phone" />
-						</FONT></TD>
-					</TR>
-				</xsl:if>
-				<xsl:if test="count(fax) &gt; 0">
-					<TR>
-						<TD><FONT face="Verdana, Arial, Helvetica, sans-serif" size="2"><B>
-							Fax:</B>
-						</FONT></TD>
-						<TD><FONT face="Verdana, Arial, Helvetica, sans-serif" size="2">
-							<xsl:value-of select="fax" />
-						</FONT></TD>
-					</TR>
-				</xsl:if>
-				<TR>
-					<TD colspan="2"><FONT face="Verdana, Arial, Helvetica, sans-serif" size="2"><BR /><BR />
-						Y escribe:<BR /><BR />
-						<xsl:value-of select="message" />
-					</FONT></TD>
-				</TR>
-				</TABLE>
-				<xsl:if test="count(footermsg) &gt; 0">
-					<BR /><BR /><BR />
-					<xsl:value-of select="footermsg" disable-output-escaping="yes" />
-				</xsl:if>
-				<BR /><BR /><BR /></FONT>
-			</TD> </TR>
+                    <h1><xsl:value-of select="site" /></h1>
+                    <h2>Para: <xsl:value-of select="responsable" />, <xsl:value-of select="area" /> </h2>
+		    <xsl:if test="count(headermsg) &gt; 0">
+			<p><xsl:value-of select="headermsg" disable-output-escaping="yes" /></p>
+		    </xsl:if>
+                    <TABLE>
+			<TR>
+				<TD>Nombre:</TD>
+				<TD><xsl:value-of select="fromname" /></TD>
+			</TR>
+			<TR>
+				<TD>Correo electrónico:</TD>
+				<TD><xsl:value-of select="fromemail" /></TD>
+			</TR>
+			<xsl:if test="count(phone) &gt; 0">
+			<TR>
+				<TD>Teléfono(s):</TD>
+				<TD><xsl:value-of select="phone" /></TD>
+			</TR>
+			</xsl:if>
+			<xsl:if test="count(fax) &gt; 0">
+			<TR>
+				<TD>Fax:</TD>
+				<TD><xsl:value-of select="fax" /></TD>
+			</TR>
+			</xsl:if>
+		    </TABLE>
+                    <fieldset>
+                    	<legend>Mensaje</legend>
+                        <p><xsl:value-of select="message" /></p>
+                    </fieldset>
+                    <xsl:if test="count(footermsg) &gt; 0">
+                        <p>
+                        <xsl:value-of select="footermsg" disable-output-escaping="yes" />
+                        </p>
+                    </xsl:if>
 		</xsl:when>
 		<xsl:otherwise>
-			<FORM name="frmSendEmail" method="POST" action="{@accion}" > 
+                    <h1>Comentarios</h1>
+		    <FORM name="frmSendEmail" method="POST" action="{@accion}" > 
+        	    <TABLE align="center">
 			<xsl:for-each select="fselect">
 				<TR>
-					<TD class="com_data"><xsl:value-of select="@tag" /></TD> 
+					<TD><label><xsl:value-of select="@tag" /></label></TD> 
 					<TD>
-						<select name="{@inname}" class="com_input">
+						<select name="{@inname}">
 							<xsl:for-each select="foption">
 								<option value="{@invalue}"><xsl:value-of select="@invalue" /></option>
 							</xsl:for-each>					
@@ -89,18 +61,18 @@
 			</xsl:for-each>
 			<xsl:for-each select="ftext">
 				<TR>
-					<TD class="com_data"><xsl:value-of select="@tag" /></TD> 
-					<TD><INPUT type="text" name="{@inname}" size="30" value="{@invalue}" class="com_input"></INPUT></TD>
+					<TD><label><xsl:value-of select="@tag" /></label></TD> 
+					<TD><INPUT type="text" name="{@inname}" value="{@invalue}" class="swb-comentar-text"></INPUT></TD>
 				</TR> 
 			</xsl:for-each>
 			<xsl:for-each select="ftextarea">
 				<TR>
-					<TD class="com_data"><xsl:value-of select="@tag" /></TD> 
-					<TD><TEXTAREA name="{@inname}" rows="6" cols="29" wrap="virtual" class="com_input"></TEXTAREA></TD> 
-				</TR> 
+					<TD><label><xsl:value-of select="@tag" /></label></TD>
+					<TD><TEXTAREA name="{@inname}" wrap="virtual"></TEXTAREA></TD>
+				</TR>
 			</xsl:for-each>
-			<TR> 
-				<TD align="center" colspan="2" >
+        	        </TABLE>
+			<p>
 					<xsl:for-each select="fsubmit">
 						<xsl:if test="@img ='1'">		
 							<A href="javascript:if(jsValida(document.frmSendEmail)) document.frmSendEmail.submit();" >
@@ -108,7 +80,7 @@
 							</A>
 						</xsl:if>
 						<xsl:if test="@img ='0'">		
-							<INPUT type="submit" name="btnEnviar" onClick="if(jsValida(this.form)) return true; else return false;" class="com_button" value="{@tag}" ></INPUT>
+							<INPUT type="submit" name="btnEnviar" onClick="if(jsValida(this.form)) return true; else return false;" class="swb-recomendar-boton" value="{@tag}" ></INPUT>
 						</xsl:if>
 					</xsl:for-each>
 					<xsl:for-each select="freset">
@@ -119,11 +91,10 @@
 						</xsl:if>
 						<xsl:if test="@img ='0'">		
 							<xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
-							<INPUT type="reset" name="btnLimpiar" class="com_button" value="{@tag}" ></INPUT>
+							<INPUT type="reset" name="btnLimpiar" class="swb-recomendar-boton" value="{@tag}" ></INPUT>
 						</xsl:if>
 					</xsl:for-each>
-				</TD> 
-			</TR>
+			</p>
 			</FORM>
 			<SCRIPT type="text/javascript"><xsl:text disable-output-escaping="yes">
 				function jsValida(pForm) 
@@ -163,7 +134,6 @@
 			</xsl:text></SCRIPT>			
 		</xsl:otherwise>
 	</xsl:choose>
-	</TABLE>
 	</DIV>
 </xsl:template>
 </xsl:stylesheet>
