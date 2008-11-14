@@ -266,6 +266,7 @@ public class SWBASchedule extends GenericResource {
      */
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        response.setContentType("text/html; charset=ISO-8859-1");
         log.debug("----doEdit() ");
         PrintWriter out = response.getWriter();
 
@@ -292,9 +293,9 @@ public class SWBASchedule extends GenericResource {
 
         SWBResourceURL url = paramRequest.getActionUrl();
         //url.setAction("add");
-        url.setAction("ADD");
+        url.setAction("add");
         //out.println(getJavaScript(response, paramRequest));
-        out.println("<form  action=\""+url+"\" dojoType=\"dijit.form.Form\" id=\""+id+"/calendar\" name=\""+id+"/calendar\" method=\"post\" >"); //id=\"calendar\" name=\"calendar\"
+        out.println("<form  action=\""+url+"\"  id=\""+id+"/calendar\" name=\""+id+"/calendar\" method=\"post\" class=\"swbform\">"); //id=\"calendar\" name=\"calendar\" dojoType=\"dijit.form.Form\"
         out.println("<fieldset>");
         if (action.equals("AddNew")) { //lista de instancias de tipo propiedad existentes para selecionar
             log.debug("----AddNew" );
@@ -729,7 +730,7 @@ public class SWBASchedule extends GenericResource {
             out.println("        <tbody>");
             out.println("        <tr>");
             out.println("          <td width=100 >" + paramRequest.getLocaleString("frmStartDate") + ":</td>");
-            out.println("          <td colSpan=4 ><input type=\"text\" name=\""+id+"/inidate\" id=\""+id+"/inidate\" dojoType=\"dijit.form.DateTextBox\" required=\"true\" invalidMessage=\"La Fecha inicial es requerida.\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\"></td>"); 
+            out.println("          <td colSpan=4 ><input type=\"text\" name=\""+id+"/inidate\" id=\""+id+"/inidate\" dojoType=\"dijit.form.DateTextBox\"  size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\"></td>"); 
             out.println("        </tr>");
             out.println("        </tbody>");
             out.println("      </table>");
@@ -743,7 +744,7 @@ public class SWBASchedule extends GenericResource {
             out.println("        <tr>");
             out.println("          <td width=\"20\" ><input type=\"radio\" dojoType=\"dijit.form.RadioButton\" value=\"enddate\" name=\""+id+"/endselect\" onclick=\"dijit.byId('"+id+"/enddate').setDisabled(false); dijit.byId('"+id+"/enddate').focus();\" checked></td>"); 
             out.println("          <td width=\"77\" >" + paramRequest.getLocaleString("frmEndDate") + ":</td>");
-            out.println("          <td ><input type=\"text\" name=\""+id+"/enddate\" id=\""+id+"/enddate\" dojoType=\"dijit.form.DateTextBox\" size=\"11\" disabled=\"false\" style=\"width:110px;\" hasDownArrow=\"true\"></td>"); 
+            out.println("          <td ><input type=\"text\" name=\""+id+"/enddate\" id=\""+id+"/enddate\" dojoType=\"dijit.form.DateTextBox\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\"></td>"); 
             out.println("        </tr>");
             out.println("        <tr>");
             out.println("          <td ><input type=\"radio\" dojoType=\"dijit.form.RadioButton\" value=\"noend\" name=\""+id+"/endselect\" onclick=\"dijit.byId('"+id+"/enddate').setDisabled(true);\"></td>");
@@ -995,7 +996,7 @@ public class SWBASchedule extends GenericResource {
                 urlb.setParameter("sprop", idp);
                 if(idpref!=null) urlb.setParameter("spropref", idpref);
                 urlb.setMode(SWBResourceURL.Mode_VIEW);
-                out.println("<button dojoType=\"dijit.form.Button\" id=\""+id+"/bckbutton\" name=\"bckbutton\" onclick=\"submitUrl('" + urlb + "',dijit.byId('"+id+"/calendar').domNode); return false;\">Regresar</button>");
+                out.println("<button dojoType=\"dijit.form.Button\" id=\""+id+"/bckbutton\" name=\"bckbutton\" onclick=\"submitUrl('" + urlb + "',this.form); return false;\">Regresar</button>"); //dijit.byId('"+id+"/calendar').domNode
             }
             out.println("</p>");
             out.println("</fieldset>");
@@ -1045,7 +1046,10 @@ public class SWBASchedule extends GenericResource {
             log.debug("parametro: "+param+", value: "+request.getParameter(param));
         }
         
-        
+        String id = request.getParameter("suri");
+        String rid = request.getParameter("rsuri");
+        String sprop = request.getParameter("sprop");
+        String spropref = request.getParameter("spropref");
         
         if ("add".equals(action)) {
 
@@ -1076,6 +1080,8 @@ public class SWBASchedule extends GenericResource {
 //                }
 //                response.setMode(MODE_IdREQUEST);
 //            }
+            
+            response.setMode(response.Mode_VIEW);
         }
         
         
@@ -1341,336 +1347,12 @@ public class SWBASchedule extends GenericResource {
             response.setRenderParameter("tp", strTp);
             response.setRenderParameter("tm", strTm);
         }
+        if(null!=id) response.setRenderParameter("suri", id);
+        if(null!=sprop) response.setRenderParameter("sprop", sprop);
+        if(null!=spropref)response.setRenderParameter("spropref", spropref);
     }
 
-//    private String getJavaScript(HttpServletResponse response, SWBParamRequest paramRequest) {
-//        StringBuilder out = new StringBuilder();
-//        try {
-//            out.append("\n <script type=\"text/JavaScript\"> ");
-//            out.append("\n function disableIt(obj) {");
-//            out.append("\n    obj.disabled = !(obj.disabled);");
-//            out.append("\n }");
-//
-//            out.append("\n function envia() {");
-//            out.append("\n    enableHidden();");
-//            out.append("\n    var isFill=false;");
-//            out.append("\n    var isFill=validateForm();");
-//            out.append("\n    if (isFill) {");
-//            out.append("\n       document.calendar.submit();");
-//            out.append("\n    }");
-//            out.append("\n}");
-//
-//            out.append("\n function disableAll() {");
-//            out.append("\n   var _f=document.calendar;");
-//            out.append("\n       for (i=0; i<_f.elements.length; i++ ) { ");
-//            out.append("\n           if(_f.elements[i]!=undefined) {");
-//            out.append("\n               if (_f.elements[i].name=='cal') {");
-//            out.append("\n                   _f.elements[i].disabled = false;");
-//            out.append("\n               }");
-//            out.append("\n               else {");
-//            out.append("\n               _f.elements[i].disabled = true;");
-//            out.append("\n           }");
-//            out.append("\n       }");
-//            out.append("\n   }");
-//            out.append("\n }");
-//
-//            out.append("function enableAll() {");
-//            out.append("\n   var _f=document.calendar;");
-//            out.append("\n   if (_f.cal.value == '1')");
-//            out.append("\n       disablePeriodicity();");
-//            out.append("\n   else");
-//            out.append("\n       disableAll();");
-//            out.append("\n}");
-//
-//            out.append("\n function disableEndDate() {");
-//            out.append("\n   alert('disable End Date');");
-//            out.append("\n   for (i=0;i<2;i++) {");
-//            out.append("\n       if (document.calendar.endselect[i].checked && !document.calendar.endselect[i].disabled)");
-//            out.append("\n           var endselect = document.calendar.endselect[i].value");
-//            out.append("\n   }");
-//            out.append("\n   if (endselect!=undefined) {");
-//            out.append("\n       if (endselect=='endselect')");
-//            out.append("\n           document.calendar.enddate.disabled=false;");
-//            out.append("\n       else if (endselect=='noend')");
-//            out.append("\n           document.calendar.enddate.disabled=true;");
-//            out.append("\n   }");
-//            out.append("\n}");
-//            out.append("function enableTime() {");
-//            out.append("\n   var _f=document.calendar;");
-//            out.append("\n   if (_f.time.checked == true) {");
-//            out.append("\n       var time='on';");
-//            out.append("\n   }");
-//            out.append("\n   else {");
-//            out.append("\n       var time='off';");
-//            out.append("\n   }");
-//            out.append("\n   if (time=='on') {");
-//            out.append("\n       _f.starthour.disabled = false;");
-//            out.append("\n       _f.endhour.disabled = false;");
-//            out.append("\n   }");
-//            out.append("\n   else if (time=='off') {");
-//            out.append("\n       _f.starthour.disabled = true;");
-//            out.append("\n       _f.endhour.disabled = true;");
-//            out.append("\n   }");
-//            out.append("\n}");
-//
-//            out.append("\n function disablePeriodicity() {");
-//            out.append("\n   var _f=document.calendar;");
-//            out.append("\n   for (i=0; i<_f.elements.length; i++ ) { ");
-//            out.append("\n       if(_f.elements[i]!=undefined) {");
-//            out.append("\n                if (_f.elements[i].name=='cal' || _f.elements[i].name=='title' || _f.elements[i].name=='inidate' || _f.elements[i].name=='enddate' || _f.elements[i].name=='endselect' || _f.elements[i].name=='periodicidad' || _f.elements[i].name=='time' || _f.elements[i].name=='enviar') {");
-//            out.append("\n                   _f.elements[i].disabled = false;");
-//            out.append("\n                }");
-//            out.append("\n                else {");
-//            out.append("\n                   if (_f.periodicidad.checked == true)");
-//            out.append("\n                       _f.elements[i].disabled = false;");
-//            out.append("\n                   else");
-//            out.append("\n                       _f.elements[i].disabled = true;");
-//            out.append("\n                }");
-//            out.append("\n       }");
-//            out.append("\n   }");
-//            out.append("\n   for (i=0;i<3;i++) {");
-//            out.append("\n       if (document.calendar.period[i].checked && !document.calendar.period[i].disabled) {");
-//            out.append("\n           var period = document.calendar.period[i].value");
-//            out.append("\n       }");
-//            out.append("\n   }");
-//            out.append("\n   if (period!=undefined) {");
-//            out.append("\n       if (period=='weekly')");
-//            out.append("\n           enableWeekly();");
-//            out.append("\n       else if (period=='monthly')");
-//            out.append("\n           enableMonthly();");
-//            out.append("\n       else if (period=='yearly')");
-//            out.append("\n           enableYearly();");
-//            out.append("\n   }");
-//            out.append("\n   disableEndDate();");
-//            out.append("\n   enableTime();");
-//            out.append("\n }");
-//
-//            out.append("\n function enableWeekly() {");
-//            out.append("\n   var _f=document.calendar;");
-//            out.append("\n   for (i=0; i<_f.elements.length; i++ ) { ");
-//            out.append("\n       if(_f.elements[i]!=undefined) {");
-//            out.append("\n           if (_f.elements[i].name=='cal' || _f.elements[i].name=='title' || _f.elements[i].name=='inidate' || _f.elements[i].name=='enddate' || _f.elements[i].name=='endselect' || _f.elements[i].name=='periodicidad' || _f.elements[i].name=='time' || _f.elements[i].name=='period' || _f.elements[i].name.substring(0,4)=='wday' || _f.elements[i].name=='enviar') {");
-//            out.append("\n               _f.elements[i].disabled = false;");
-//            out.append("\n           }");
-//            out.append("\n           else {");
-//            out.append("\n               _f.elements[i].disabled = true;");
-//            out.append("\n           }");
-//            out.append("\n       }");
-//            out.append("\n   }");
-//            out.append("\n   disableEndDate();");
-//            out.append("\n   enableTime();");
-//            out.append("\n }");
-//
-//            out.append("\n function enableMonthly() {");
-//            out.append("\n   var _f=document.calendar;");
-//            out.append("\n   for (i=0; i<_f.elements.length; i++ ) { ");
-//            out.append("\n       if(_f.elements[i]!=undefined) {");
-//            out.append("\n           if (_f.elements[i].name=='cal' || _f.elements[i].name=='title' || _f.elements[i].name=='inidate' || _f.elements[i].name=='enddate' || _f.elements[i].name=='endselect' || _f.elements[i].name=='periodicidad' || _f.elements[i].name=='period' || _f.elements[i].name=='time' || _f.elements[i].name.substring(0,4)=='mday' || _f.elements[i].name.substring(0,4)=='mmon' || _f.elements[i].name.substring(0,4)=='mwee' || _f.elements[i].name=='enviar' || _f.elements[i].name.substring(0,4)=='smon') {");
-//            out.append("\n               if (document.calendar.smonth[0].checked && !document.calendar.smonth[0].disabled)");
-//            out.append("\n                   var smonth = document.calendar.smonth[0].value");
-//            out.append("\n               else if (document.calendar.smonth[1].checked && !document.calendar.smonth[1].disabled)");
-//            out.append("\n                   var smonth = document.calendar.smonth[1].value");
-//            out.append("\n               _f.elements[i].disabled = false;");
-//            out.append("\n           }");
-//            out.append("\n           else {");
-//            out.append("\n               _f.elements[i].disabled = true;");
-//            out.append("\n           }");
-//            out.append("\n       }");
-//            out.append("\n   }");
-//            out.append("\n   disableEndDate();");
-//            out.append("\n   enableTime();");
-//            out.append("\n   if (smonth=='day') {");
-//            out.append("\n       enableMonthlySubUp();");
-//            out.append("\n   }");
-//            out.append("\n   else if (smonth=='week') {");
-//            out.append("\n       enableMonthlySubDown();");
-//            out.append("\n   }");
-//            out.append("\n }");
-//
-//            out.append("\n function enableMonthlySubUp() {");
-//            out.append("\n   var _f=document.calendar;");
-//            out.append("\n   for (i=0; i<_f.elements.length; i++ ) { ");
-//            out.append("\n       if(_f.elements[i]!=undefined) {");
-//            out.append("\n           if (_f.elements[i].name=='cal' || _f.elements[i].name=='title' || _f.elements[i].name=='inidate' || _f.elements[i].name=='enddate' || _f.elements[i].name=='endselect' || _f.elements[i].name=='periodicidad' || _f.elements[i].name=='period' || _f.elements[i].name=='time' || _f.elements[i].name=='enviar'  || _f.elements[i].name=='mmonths1' || _f.elements[i].name.substring(0,4)=='smon' || _f.elements[i].name=='mmday') {");
-//            out.append("\n               _f.elements[i].disabled = false;");
-//            out.append("\n           }");
-//            out.append("\n           else {");
-//            out.append("\n               _f.elements[i].disabled = true;");
-//            out.append("\n           }");
-//            out.append("\n       }");
-//            out.append("\n   }");
-//            out.append("\n   disableEndDate();");
-//            out.append("\n   enableTime();");
-//            out.append("\n }");
-//
-//            out.append("\n function enableMonthlySubDown() {");
-//            out.append("\n   var _f=document.calendar;");
-//            out.append("\n   for (i=0; i<_f.elements.length; i++ ) { ");
-//            out.append("\n       if(_f.elements[i]!=undefined) {");
-//            out.append("\n           if (_f.elements[i].name=='cal' || _f.elements[i].name=='title' || _f.elements[i].name=='inidate' || _f.elements[i].name=='enddate' || _f.elements[i].name=='endselect' || _f.elements[i].name=='periodicidad' || _f.elements[i].name=='period' || _f.elements[i].name=='time' || _f.elements[i].name=='enviar'  || _f.elements[i].name=='mmonths2' || _f.elements[i].name.substring(0,4)=='smon' || _f.elements[i].name=='mweek' || _f.elements[i].name.substring(0,4)=='mday') {");
-//            out.append("\n               _f.elements[i].disabled = false;");
-//            out.append("\n           }");
-//            out.append("\n           else {");
-//            out.append("\n               _f.elements[i].disabled = true;");
-//            out.append("\n           }");
-//            out.append("\n       }");
-//            out.append("\n   }");
-//            out.append("\n   disableEndDate();");
-//            out.append("\n   enableTime();");
-//            out.append("\n }");
-//
-//            out.append("\n function enableYearlySubUp() {");
-//            out.append("\n   var _f=document.calendar;");
-//            out.append("\n   for (i=0; i<_f.elements.length; i++ ) { ");
-//            out.append("\n       if(_f.elements[i]!=undefined) {");
-//            out.append("\n           if (_f.elements[i].name=='cal' || _f.elements[i].name=='title' || _f.elements[i].name=='inidate' || _f.elements[i].name=='enddate' || _f.elements[i].name=='endselect' || _f.elements[i].name=='periodicidad' || _f.elements[i].name=='period' || _f.elements[i].name=='time' || _f.elements[i].name=='enviar'  || _f.elements[i].name=='ymonth1' || _f.elements[i].name.substring(0,4)=='syea' || _f.elements[i].name=='yyday' || _f.elements[i].name=='yyears1') {");
-//            out.append("\n               _f.elements[i].disabled = false;");
-//            out.append("\n           }");
-//            out.append("\n           else {");
-//            out.append("\n               _f.elements[i].disabled = true;");
-//            out.append("\n           }");
-//            out.append("\n       }");
-//            out.append("\n   }");
-//            out.append("\n   disableEndDate();");
-//            out.append("\n   enableTime();");
-//            out.append("\n }");
-//
-//            out.append("\n function enableYearlySubDown() {");
-//            out.append("\n   var _f=document.calendar;");
-//            out.append("\n   for (i=0; i<_f.elements.length; i++ ) { ");
-//            out.append("\n       if(_f.elements[i]!=undefined) {");
-//            out.append("\n           if (_f.elements[i].name=='cal' || _f.elements[i].name=='title' || _f.elements[i].name=='inidate' || _f.elements[i].name=='enddate' || _f.elements[i].name=='endselect' || _f.elements[i].name=='periodicidad' || _f.elements[i].name=='period' || _f.elements[i].name=='time' || _f.elements[i].name=='enviar'  || _f.elements[i].name=='ymonth2' || _f.elements[i].name.substring(0,4)=='syea' || _f.elements[i].name.substring(0,4)=='yday' || _f.elements[i].name=='yweek' || _f.elements[i].name=='yyears2') {");
-//            out.append("\n               _f.elements[i].disabled = false;");
-//            out.append("\n           }");
-//            out.append("\n           else {");
-//            out.append("\n               _f.elements[i].disabled = true;");
-//            out.append("\n           }");
-//            out.append("\n       }");
-//            out.append("\n   }");
-//            out.append("\n   disableEndDate();");
-//            out.append("\n   enableTime();");
-//            out.append("\n }");
-//
-//            out.append("\n function enableYearly() {");
-//            out.append("\n   var _f=document.calendar;");
-//            out.append("\n   for (i=0; i<_f.elements.length; i++ ) { ");
-//            out.append("\n       if(_f.elements[i]!=undefined) {");
-//            out.append("\n           if (_f.elements[i].name=='cal' || _f.elements[i].name=='title' || _f.elements[i].name=='inidate' || _f.elements[i].name=='enddate' || _f.elements[i].name=='endselect' || _f.elements[i].name=='periodicidad' || _f.elements[i].name=='period' || _f.elements[i].name=='time' || _f.elements[i].name.substring(0,4)=='yday' || _f.elements[i].name.substring(0,4)=='ymon' || _f.elements[i].name.substring(0,4)=='ywee' || _f.elements[i].name=='enviar' || _f.elements[i].name.substring(0,4)=='syea' || _f.elements[i].name.substring(0,4)=='yyea') {");
-//            out.append("\n               if (document.calendar.syear[0].checked && !document.calendar.syear[0].disabled)");
-//            out.append("\n                   var syear = document.calendar.syear[0].value");
-//            out.append("\n               else if (document.calendar.syear[1].checked && !document.calendar.syear[1].disabled)");
-//            out.append("\n                   var syear = document.calendar.syear[1].value");
-//            out.append("\n               _f.elements[i].disabled = false;");
-//            out.append("\n           }");
-//            out.append("\n           else {");
-//            out.append("\n               _f.elements[i].disabled = true;");
-//            out.append("\n           }");
-//            out.append("\n       }");
-//            out.append("\n   }");
-//            out.append("\n   disableEndDate();");
-//            out.append("\n   enableTime();");
-//            out.append("\n   if (syear=='day') {");
-//            out.append("\n       enableYearlySubUp();");
-//            out.append("\n   }");
-//            out.append("\n   else if (syear=='week') {");
-//            out.append("\n       enableYearlySubDown();");
-//            out.append("\n   }");
-//            out.append("\n }");
-//
-//            out.append("\n function IsValidTime(field) {");
-//            out.append("\n    var timeStr = field.value;");
-//            out.append("\n    if (timeStr!='') {");
-//            out.append("\n       var timePat = /^(\\d{1,2}):(\\d{2})(:(\\d{2}))?(\\s?(AM|am|PM|pm))?$/;");
-//            out.append("\n       var matchArray = timeStr.match(timePat);");
-//            out.append("\n       var ok = 'yes';");
-//            out.append("\n       if (matchArray != null) {");
-//            out.append("\n           hour = matchArray[1];");
-//            out.append("\n           minute = matchArray[2];");
-//            out.append("\n           second = matchArray[4];");
-//            out.append("\n           ampm = matchArray[6];");
-//            out.append("\n           if (second=='') { second = null; }");
-//            out.append("\n           if (ampm=='') { ampm = null }");
-//            out.append("\n           if (hour < 0  || hour > 23) {");
-//            out.append("\n           alert('" + paramRequest.getLocaleString("jsHourAlert") + "');");
-//            out.append("\n           ok = 'no';");
-//            out.append("\n       }");
-//            out.append("\n       if  (hour > 12 && ampm != null) {");
-//            out.append("\n           alert('" + paramRequest.getLocaleString("jsNotAMPM") + "');");
-//            out.append("\n           ok = 'no';");
-//            out.append("\n       }");
-//            out.append("\n       if (minute<0 || minute > 59) {");
-//            out.append("\n           alert ('" + paramRequest.getLocaleString("jsMinutes") + "');");
-//            out.append("\n           ok = 'no';");
-//            out.append("\n       }");
-//            out.append("\n       if (second != null && (second < 0 || second > 59)) {");
-//            out.append("\n           alert ('" + paramRequest.getLocaleString("jsSeconds") + "');");
-//            out.append("\n           ok = 'no';");
-//            out.append("\n       }");
-//            out.append("\n    }");
-//            out.append("\n    else{");
-//            out.append("\n        alert('" + paramRequest.getLocaleString("jsBadFormat") + "');");
-//            out.append("\n        ok = 'no';");
-//            out.append("\n    }");
-//            out.append("\n    if (ok == 'no') {");
-//            out.append("\n       field.focus();");
-//            out.append("\n       field.select();");
-//            out.append("\n    }");
-//            out.append("\n   }");
-//            out.append("\n }");
-//
-//            out.append("\n function selectCombo(obj,id) {");
-//            out.append("\n   obj.selectedIndex=id;");
-//            out.append("\n }");
-//
-//            out.append("\n function enableHidden() {");
-//            out.append("\n   var _f=document.calendar;");
-//            out.append("\n   _f.id.disabled=false;");
-//            out.append("\n   _f.type.disabled=false;");
-//            out.append("\n   _f.tp.disabled=false;");
-//            out.append("\n   _f.tm.disabled=false;");
-//            out.append("\n   _f.view.disabled=false;");
-//            out.append("\n   _f.oldtitle.disabled=false;");
-//            out.append("\n}");
-//
-//            out.append("\n function checkRadio(obj, val) {");
-//            out.append("\n   for(i=0;i<obj.length;i++)");
-//            out.append("\n       if(obj[i].value==val) {");
-//            out.append("\n           obj[i].checked=true");
-//            out.append("\n   }");
-//            out.append("\n }");
-//
-//            out.append("\n function isFilled() {");
-//            out.append("\n var _f=document.calendar;");
-//            out.append("\n if (_f.title.value=='') {");
-//            out.append("\n   alert ('" + paramRequest.getLocaleString("jsEmptyField") + "');");
-//            out.append("\n   _f.title.focus();");
-//            out.append("\n   return false;");
-//            out.append("\n   }");
-//            out.append("else");
-//            out.append("\n   return true;");
-//            out.append("\n}");
-//
-//            out.append("function validateForm() {");
-//            out.append("var _f=document.calendar;");
-//            out.append("\n   for (i=0; i<_f.elements.length; i++ ) { ");
-//            out.append("\n       if(_f.elements[i]!=undefined && _f.elements[i].disabled!=true) {");
-//            out.append("\n           if(_f.elements[i].type==\"text\" || _f.elements[i].type==\"textarea\") {");
-//            out.append("\n               if (_f.elements[i].value=='') {");
-//            out.append("\n                   alert ('" + paramRequest.getLocaleString("jsEmptyField") + "');");
-//            out.append("\n                   _f.elements[i].focus();");
-//            out.append("\n                   return false;");
-//            out.append("\n               }");
-//            out.append("\n           }");
-//            out.append("\n       }");
-//            out.append("\n   }");
-//            out.append("\n   return true;");
-//            out.append("\n }");
-//            out.append("\n </script>");
-//        } catch (Exception e) {
-//            log.error("Error on method getJavaScript() resource" + " " + strRscType + " " + "with id" + " " + getResourceBase().getId(), e);
-//        }
-//        return out.toString();
-//    }
+
 
     /**
      *
