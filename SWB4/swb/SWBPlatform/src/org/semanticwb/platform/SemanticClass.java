@@ -130,6 +130,22 @@ public class SemanticClass
         return ret;
     }
     
+    public Iterator<SemanticLiteral> listRequiredProperties(SemanticProperty prop)
+    {
+        ArrayList<SemanticLiteral> literals=new ArrayList<SemanticLiteral>();        
+        Property iprop=prop.getRDFProperty();
+        try
+        {            
+             StmtIterator it=m_class.listProperties(iprop);
+             while(it.hasNext())
+             {
+                 Statement statement=it.nextStatement();
+                 literals.add(new SemanticLiteral(statement));
+             }
+        }catch(PropertyNotFoundException noe){}
+        return literals.iterator();
+    }
+    
     
     
     
