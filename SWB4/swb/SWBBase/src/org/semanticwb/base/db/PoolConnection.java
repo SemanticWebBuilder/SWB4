@@ -300,7 +300,8 @@ public class PoolConnection implements java.sql.Connection
 
     public PreparedStatement prepareStatement(String str) throws SQLException
     {
-        return con.prepareStatement(str);
+        PreparedStatement st = new PoolPreparedStatement(con.prepareStatement(str),str);
+        return st;
     }
 
     public boolean getAutoCommit() throws SQLException
