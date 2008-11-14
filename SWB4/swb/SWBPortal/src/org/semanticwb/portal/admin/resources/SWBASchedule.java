@@ -1474,5 +1474,6 @@ public class SWBASchedule extends GenericResource {
         }
         return ret;
     }
+    
 }
 
