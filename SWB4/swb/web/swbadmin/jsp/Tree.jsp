@@ -14,6 +14,7 @@
     
     public void addWebSites(JSONArray arr)  throws JSONException
     {
+        //System.out.println("addWebSites");
         Iterator<WebSite> it=SWBComparator.sortSermanticObjects(SWBContext.listWebSites());
         while(it.hasNext())
         {
@@ -26,6 +27,7 @@
    
     public void addWebSite(JSONArray arr, WebSite site) throws JSONException
     {
+        //System.out.println("addWebSite");
         String type="WebSite";
         String icon="swbIcon"+type;
         if(!site.isActive())icon=icon+"U";
@@ -47,6 +49,7 @@
     
     public void addWebPage(JSONArray arr, WebPage page) throws JSONException
     {
+        //System.out.println("addWebPage");
         String type="WebPage";
         String icon="swbIcon"+type;
         if(!page.isActive())icon=icon+"U";
@@ -67,6 +70,7 @@
     
     public void addTemplates(JSONArray arr, WebSite site)  throws JSONException
     {
+        //System.out.println("addTemplates");
         String type="Templates";
         String icon="swbIcon"+type;
         JSONObject obj=getNode(site.getId()+"."+"Templates", "Plantillas", type, icon);
@@ -86,6 +90,7 @@
     
     public void addTemplate(JSONArray arr, Template template) throws JSONException
     {
+        //System.out.println("addTemplate");
         String type="Template";
         String icon="swbIcon"+type;
         if(!template.isActive())icon=icon+"U";
@@ -96,6 +101,7 @@
     
     public void addPortlets(JSONArray arr, WebSite site)  throws JSONException
     {
+        //System.out.println("addPortlets");
         String type="Portlets";
         String icon="swbIcon"+type;
         
@@ -116,6 +122,7 @@
     
     public void addPortletType(JSONArray arr, PortletType aux)  throws JSONException
     {
+        //System.out.println("addPortletType");
         String type="PortletType";
         String icon="swbIcon"+type;
         
@@ -136,6 +143,7 @@
     
     public void addPortlet(JSONArray arr, Portlet aux) throws JSONException
     {
+        //System.out.println("addPortlet");
         String type="Portlet";
         String icon="swbIcon"+type;
         if(!aux.isActive())icon=icon+"U";
@@ -144,9 +152,8 @@
         arr.put(obj);
     }    
     
-    
-    
 %><%
+    System.out.println("Tree1");
     response.setHeader("Cache-Control", "no-cache"); 
     response.setHeader("Pragma", "no-cache"); 
     
@@ -190,4 +197,5 @@
      { name:'Argentina', type:'country'}
 ]}
     */
+    System.out.println("Tree2");
 %>

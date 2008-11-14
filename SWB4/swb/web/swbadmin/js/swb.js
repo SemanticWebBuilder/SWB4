@@ -193,7 +193,8 @@
                             var arr=d.getChildren();
                             for (var n = 0; n < arr.length; n++)
                             {
-                                d.closeChild(arr[n]);
+                                //d.closeChild(arr[n]);
+                                arr[n].setContent(null);
                             }
                           }
                           //alert(d.getChildren());
