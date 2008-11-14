@@ -225,4 +225,20 @@
           alert("Error al ejecutar la acción.");
       }      
 
- 
+      function loadScript(id, filepath)
+      {
+         if (document.getElementById(id))
+         { // Already exists
+             return;
+         }
+         var head = document.getElementsByTagName("head")[0];
+         if(head)
+         {
+             script = document.createElement('script');
+             script.id = id;
+             script.type = 'text/javascript';
+             script.src = filepath;
+             head.appendChild(script);
+         }
+     }
+
