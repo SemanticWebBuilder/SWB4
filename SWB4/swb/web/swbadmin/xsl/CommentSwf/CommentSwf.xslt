@@ -2,13 +2,13 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:output method="html" encoding="ISO-8859-1"/>
 <xsl:template match="/form">
-	<LINK href="{@path}images/CommentSwf.css" rel="stylesheet" type="text/css"></LINK>
+	<LINK href="{@path}swb-estilo.css" rel="stylesheet" type="text/css"></LINK>
 	<xsl:choose>
 		<xsl:when test="@email ='1'">
-			<DIV class="com_box">
-			<TABLE width="100%" border="0" align="center" cellSpacing="3" cellPadding="3"> 
-			<TR><TD class="com_data">
-				<FONT face="Verdana, Arial, Helvetica, sans-serif" size="2"><BR />
+			<DIV id="swb-comentar">
+			<TABLE align="center"> 
+			<TR><TD>
+				<label><BR />
 				----------------------------------------------------<BR />
 				Sitio o portal: <B><xsl:value-of select="site" />.<xsl:value-of select="topic" /></B><BR />
 				Solicitud: <B><xsl:value-of select="commenttype" /></B><BR />
@@ -16,62 +16,48 @@
 				<xsl:if test="count(headermsg) &gt; 0">
 					<BR /><xsl:value-of select="headermsg" disable-output-escaping="yes" /><BR/><BR/>
 				</xsl:if><BR/>
-				<TABLE border="0" class="com_data">
+                                </label>
+				<TABLE>
 				<TR>
-					<TD colspan="2" ><FONT face="Verdana, Arial, Helvetica, sans-serif" size="2">
+					<TD colspan="2" ><label>
 						<xsl:value-of select="responsable" /><BR /> 
 						<xsl:value-of select="area" /><BR /><BR />
-					</FONT></TD>
+					</label></TD>
 				</TR>
 				<TR>
-					<TD><FONT face="Verdana, Arial, Helvetica, sans-serif" size="2"><B>
-						Nombre:</B>
-					</FONT></TD>
-					<TD><FONT face="Verdana, Arial, Helvetica, sans-serif" size="2">
-						<xsl:value-of select="fromname" />
-					</FONT></TD>
+					<TD><label><B>Nombre:</B></label></TD>
+					<TD><label><xsl:value-of select="fromname" /></label></TD>
 				</TR>
 				<TR>
-					<TD><FONT face="Verdana, Arial, Helvetica, sans-serif" size="2"><B>
-						Correo electrónico:</B>
-					</FONT></TD>
-					<TD><FONT face="Verdana, Arial, Helvetica, sans-serif" size="2">
-						<xsl:value-of select="fromemail" />
-					</FONT></TD>
+					<TD><label><B>Correo electrónico:</B></label></TD>
+					<TD><label><xsl:value-of select="fromemail" /></label></TD>
 				</TR>
 				<xsl:if test="count(phone) &gt; 0">
 					<TR>
-						<TD><FONT face="Verdana, Arial, Helvetica, sans-serif" size="2"><B>
-							Teléfono(s):</B>
-						</FONT></TD>
-						<TD><FONT face="Verdana, Arial, Helvetica, sans-serif" size="2">
-							<xsl:value-of select="phone" />
-						</FONT></TD>
+						<TD><label><B>Teléfono(s):</B></label></TD>
+						<TD><label><xsl:value-of select="phone" /></label></TD>
 					</TR>
 				</xsl:if>
 				<xsl:if test="count(fax) &gt; 0">
 					<TR>
-						<TD><FONT face="Verdana, Arial, Helvetica, sans-serif" size="2"><B>
-							Fax:</B>
-						</FONT></TD>
-						<TD><FONT face="Verdana, Arial, Helvetica, sans-serif" size="2">
-							<xsl:value-of select="fax" />
-						</FONT></TD>
+						<TD><label><B>Fax:</B></label></TD>
+						<TD><label><xsl:value-of select="fax" /></label></TD>
 					</TR>
 				</xsl:if>
 				<TR>
-					<TD colspan="2"><FONT face="Verdana, Arial, Helvetica, sans-serif" size="2"><BR /><BR />
+					<TD colspan="2"><label><BR /><BR />
 						Y escribe:<BR /><BR />
 						<xsl:value-of select="message" />
-					</FONT></TD>
+					</label></TD>
 				</TR>
 				</TABLE>
+                                <label>
 				<xsl:if test="count(footermsg) &gt; 0">
 					<BR /><BR /><BR />
 					<xsl:value-of select="footermsg" disable-output-escaping="yes" />
 				</xsl:if>
-				<BR /><BR /><BR /></FONT>
-			</TD> </TR>		
+				<BR /><BR /><BR /></label>
+			</TD> </TR>
 			</TABLE>
 			</DIV>
 		</xsl:when>
