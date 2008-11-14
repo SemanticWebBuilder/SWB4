@@ -129,12 +129,50 @@ public class TestWebSite {
             site.setUpdated(new java.util.Date(System.currentTimeMillis()));
         }
     }
-    
+
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     //
     @Test
     public void Test2()
+    {
+        WebSite site=SWBContext.getWebSite("sep");
+        WebPage home=site.getHomePage();
+        UserRepository urep=site.getUserRepository();
+        Template tpl=site.getTemplate("1");
+
+        if(site.getWebPage("page0")==null)
+        {
+            for(int x=0;x<10;x++)
+            {
+                WebPage page=site.createWebPage("page"+x);
+                page.setTitle("Pagina "+x);
+                page.setParent(home);
+                page.setActive(true);
+                for(int y=0;y<10;y++)
+                {
+                    WebPage child=site.createWebPage("page"+x+"_"+y);
+                    child.setTitle("Pagina "+x+" "+y);
+                    child.setParent(page);
+                    child.setActive(true);
+//                    for(int z=0;z<10;z++)
+//                    {
+//                        WebPage tchild=site.createWebPage("page"+x+"_"+y+"_"+z);
+//                        tchild.setTitle("Pagina "+x+" "+y+" "+z);
+//                        tchild.setParent(child);
+//                        tchild.setActive(true);
+//                    }
+                }
+            }
+        }
+    }
+
+    
+    // TODO add test methods here.
+    // The methods must be annotated with annotation @Test. For example:
+    //
+    @Test
+    public void Test3()
     {
         WebSite site=SWBContext.getWebSite("sep");
         WebPage home=site.getHomePage();
@@ -526,44 +564,6 @@ public class TestWebSite {
 
     }
     
-    
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
-    //
-    @Test
-    public void Test3()
-    {
-        WebSite site=SWBContext.getWebSite("sep");
-        WebPage home=site.getHomePage();
-        UserRepository urep=site.getUserRepository();
-        Template tpl=site.getTemplate("1");
-
-        if(site.getWebPage("page0")==null)
-        {
-            for(int x=0;x<10;x++)
-            {
-                WebPage page=site.createWebPage("page"+x);
-                page.setTitle("Pagina "+x);
-                page.setParent(home);
-                page.setActive(true);
-                for(int y=0;y<10;y++)
-                {
-                    WebPage child=site.createWebPage("page"+x+"_"+y);
-                    child.setTitle("Pagina "+x+" "+y);
-                    child.setParent(page);
-                    child.setActive(true);  
-//                    for(int z=0;z<10;z++)
-//                    {
-//                        WebPage tchild=site.createWebPage("page"+x+"_"+y+"_"+z);
-//                        tchild.setTitle("Pagina "+x+" "+y+" "+z);
-//                        tchild.setParent(child);
-//                        tchild.setActive(true);                    
-//                    }                    
-                }
-            }
-        }
-    }
-    
     //@Test
     public void Test4()
     {
@@ -647,7 +647,7 @@ public class TestWebSite {
     @Test
     public void TestAdmin2()
     {    
-        //if(SWBContext.getWebSite("SWBAdmin")==null)
+        if(SWBContext.getWebSite("SWBAdmin")!=null)
         {
             WebSite site=SWBContext.getWebSite("SWBAdmin");
 //            //Asignar platilla a system 
