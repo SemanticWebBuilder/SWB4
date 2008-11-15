@@ -4,8 +4,11 @@
  */
 package org.semanticwb.jcr170.implementation;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionIterator;
+import org.semanticwb.repository.BaseNode;
 
 /**
  *
@@ -13,35 +16,59 @@ import javax.jcr.version.VersionIterator;
  */
 public class VersionIteratorImp implements VersionIterator
 {
-
+    private final Iterator<BaseNode> versions;
+    private final int size;
+    private long position=0;
+    VersionIteratorImp(VersionHistoryImp versionHistory)
+    {
+        ArrayList<BaseNode> temp=new ArrayList<BaseNode>();
+        for(BaseNode version : versionHistory.getVersions())
+        {
+            temp.add(version);
+        }
+        size=versionHistory.getVersions().length;
+        versions=temp.iterator();
+    }
     public Version nextVersion()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        position++;
+        BaseNode node=versions.next();
+        if(node!=null)
+        {
+            return new VersionImp(node);
+        }
+        else
+        {
+            return null;
+        }
     }
 
     public void skip(long arg0)
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        for(int i=1;i<=arg0;i++)
+        {
+            nextVersion();
+        }
     }
 
     public long getSize()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return size;
     }
 
     public long getPosition()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return position;
     }
 
     public boolean hasNext()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return versions.hasNext();
     }
 
     public Object next()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return nextVersion();
     }
 
     public void remove()
