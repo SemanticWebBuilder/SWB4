@@ -199,9 +199,16 @@ public final class NodeImp implements Node
         }
         return normalize;
     }
-
+    private void checksLock() throws LockException
+    {
+        if(node.isLocked() && !node.getLockOwner().equals(session.getUserID()))
+        {
+            throw new LockException("The node is locked by teh user "+node.getLockOwner());
+        }
+    }
     public Node addNode(String relPath, String primaryNodeTypeName) throws ItemExistsException, PathNotFoundException, NoSuchNodeTypeException, LockException, VersionException, ConstraintViolationException, RepositoryException
     {
+        checksLock();
         checkRelPath(relPath);
         NodeImp newNode = null;
         if ( primaryNodeTypeName == null )
@@ -416,6 +423,7 @@ public final class NodeImp implements Node
 
     public Property setProperty(String name, Value[] value, int arg2) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
+        checksLock();
         PropertyImp propertyToReturn = null;
         for ( Value ovalue : value )
         {
@@ -706,6 +714,7 @@ public final class NodeImp implements Node
 
     public void addMixin(String mixinName) throws NoSuchNodeTypeException, VersionException, ConstraintViolationException, LockException, RepositoryException
     {
+        checksLock();
         try
         {
             node.addMixin(mixinName);
@@ -719,6 +728,7 @@ public final class NodeImp implements Node
 
     public void removeMixin(String mixinName) throws NoSuchNodeTypeException, VersionException, ConstraintViolationException, LockException, RepositoryException
     {
+        checksLock();
         try
         {
             node.removeMixin(mixinName);
@@ -741,6 +751,7 @@ public final class NodeImp implements Node
 
     public Version checkin() throws VersionException, UnsupportedRepositoryOperationException, InvalidItemStateException, LockException, RepositoryException
     {
+        checksLock();
         if ( node.isVersionable() )
         {
             if(node.isChekedOut())
@@ -761,6 +772,7 @@ public final class NodeImp implements Node
 
     public void checkout() throws UnsupportedRepositoryOperationException, LockException, RepositoryException
     {
+        checksLock();
         if ( !node.isVersionable() )
         {
             throw new UnsupportedRepositoryOperationException();
@@ -1070,6 +1082,7 @@ public final class NodeImp implements Node
 
     public void remove() throws VersionException, LockException, ConstraintViolationException, RepositoryException
     {
+        checksLock();
         if ( node != session.getRootBaseNode() )
         {
             node.remove();
