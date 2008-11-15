@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+    <resource>
+        <resource-name>QueryResource</resource-name>
+        <display-name xml:lang="es">Recurso de Consultas a Base de Datos</display-name>
+        <display-name xml:lang="en">Query Resource</display-name>
+        <description xml:lang="es">Recurso que sirve para la generación de consultas a base de datos y presenta los resultados como un contenido en la sección a la que está relacionado.</description>
+        <description xml:lang="en">Resource that is used to consult information directly from the data base in order to display the query result like a content in the section it's related to.</description>
+        <resource-class>org.semanticwb.portal.resources.QueryResource</resource-class>
+        <expiration-cache>0</expiration-cache>
+        <resource-bundle>org.semanticwb.portal.resources.QueryResource</resource-bundle>
+        <resource-type>3</resource-type>
+        <extended-attributes>
+        </extended-attributes>
+    </resource>

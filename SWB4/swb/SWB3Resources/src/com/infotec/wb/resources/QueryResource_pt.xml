@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xslfile>admresource.xslt</xslfile>
+    <form name="frmQueryResource" action="true" method="POST" enctype="multipart/form-data">
+        <admdbconnmgr defconn="true"/>
+        <statictext name="datos">
+			<![CDATA[
+				<font style="color: #428AD4; font-family: Verdana; font-size: 13px;">
+					Dados gerais do recurso
+				</font>
+			]]>
+        </statictext>
+        <statictext name="solicitud">
+			<![CDATA[
+				<font style="color: #428AD4; font-family: Verdana; font-size: 13px;">
+					Informe os dados que é solicitado à segui:
+				</font>
+			]]>
+        </statictext>
+        <input type="TEXT"
+               name="dbcon"
+               label="* Nome da conexão:"
+               size="50"
+               jsrequired="true"
+               moreattr="class=&#34;datos&#34;"/>
+        <textarea name="query"
+                  label="* Critério de consulta:"
+                  rows="5"
+                  cols="50"
+                  wrap="virtual"
+                  jsrequired="true"
+                  moreattr="class=&#34;datos&#34;"/>
+        <input type="FILE"
+               name="template"
+               label="Modelo (xsl, xslt):"
+               showfile="true"
+               msg="Modelo atual "
+               bydefault="{@webpath}/swbadmin/xsl/QueryResource/QueryResource.xslt"
+               msgbydefault="Modelo do defeito "
+               filetype="xsl|xslt"
+               isshowfiletype="true"
+               size="40"/>
+        <input type="SUBMIT" name="btnSave" value="Salvar"/>
+    </form>
+    <statictext name="requeridos">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				 * Datos Obrigatórios
+			</font>
+		]]>
+    </statictext>
+    <statictext name="args">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				Argumentos:
+			</font>
+		]]>
+    </statictext>
+    <statictext name="usuario">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				{userid} - Identificador do usuário
+			</font>
+		]]>
+    </statictext>
+    <statictext name="atributo">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				{getUserAttribute(x)} - Regresa ao atributo do usuário
+			</font>
+		]]>
+    </statictext>
+    <statictext name="topicmap">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				{topicmap} -  Identificador do site
+			</font>
+		]]>
+    </statictext>
+    <statictext name="topicid">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				{topicid} -  Identificador da seção
+			</font>
+		]]>
+    </statictext>
+    <statictext name="argument">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				{getArgument(x)} -  Retorna o argumento solicitado do modelo
+			</font>
+		]]>
+    </statictext>
+    <statictext name="parameter">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				{getParameter(x)} -  Retorna o argumento solicitado da solicitação
+			</font>
+		]]>
+    </statictext>
+</admresource>

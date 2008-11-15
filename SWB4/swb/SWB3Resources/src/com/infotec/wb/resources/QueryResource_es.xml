@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xslfile>admresource.xslt</xslfile>
+    <form name="frmQueryResource" action="true" method="POST" enctype="multipart/form-data">
+        <admdbconnmgr defconn="true"/>
+        <statictext name="datos">
+			<![CDATA[
+				<font style="color: #428AD4; font-family: Verdana; font-size: 13px;">
+					Datos generales del recurso
+				</font>
+			]]>
+        </statictext>
+        <statictext name="solicitud">
+			<![CDATA[
+				<font style="color: #428AD4; font-family: Verdana; font-size: 13px;">
+					Proporcione los datos que se solicitan a continuación:
+				</font>
+			]]>
+        </statictext>
+        <input type="TEXT"
+               name="dbcon"
+               label="* Nombre de conexión:"
+               size="50"
+               jsrequired="true"
+               moreattr="class=&#34;datos&#34;"/>
+        <textarea name="query"
+                  label="* Criterio de consulta:"
+                  rows="5"
+                  cols="50"
+                  wrap="virtual"
+                  jsrequired="true"
+                  moreattr="class=&#34;datos&#34;"/>
+        <input type="FILE"
+               name="template"
+               label="Plantilla (xsl, xslt):"
+               showfile="true"
+               msg="Plantilla actual "
+               bydefault="{@webpath}/swbadmin/xsl/QueryResource/QueryResource.xslt"
+               msgbydefault="Plantilla por defecto "
+               filetype="xsl|xslt"
+               isshowfiletype="true"
+               size="40"/>
+        <input type="SUBMIT" name="btnSave" value="Guardar"/>
+    </form>
+    <statictext name="requeridos">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				 * Datos requeridos
+			</font>
+		]]>
+    </statictext>
+    <statictext name="args">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				Argumentos:
+			</font>
+		]]>
+    </statictext>
+    <statictext name="usuario">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				{userid} - Identificador del usuario
+			</font>
+		]]>
+    </statictext>
+    <statictext name="atributo">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				{getUserAttribute(x)} - Regresa el atributo del usuario
+			</font>
+		]]>
+    </statictext>
+    <statictext name="topicmap">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				{topicmap} -  Identificador del sitio
+			</font>
+		]]>
+    </statictext>
+    <statictext name="topicid">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				{topicid} -  Identificador de la sección
+			</font>
+		]]>
+    </statictext>
+    <statictext name="argument">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				{getArgument(x)} -  Regresa el argumento obtenido de la plantilla
+			</font>
+		]]>
+    </statictext>
+    <statictext name="parameter">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				{getParameter(x)} -  Regresa el argumento obtenido de la solicitud
+			</font>
+		]]>
+    </statictext>
+</admresource>
