@@ -16,7 +16,7 @@ import org.semanticwb.platform.SemanticLiteral;
 
 public class BaseNode extends BaseNodeBase
 {
-    
+
     private static final String JCR_ISCHECKEDOUT_PROPERTY = "jcr:isCheckedOut";
     private static final String JCR_ROOTVERSION_PROPERTY = "jcr:rootVersion";
     private static final String NT_VERSION_NODE = "nt:version";
@@ -46,20 +46,36 @@ public class BaseNode extends BaseNodeBase
         super(base);
 
     }
-
-    private boolean isVersionNode()
+    private boolean isNodeType(String name)
     {
         boolean isVersionNode = false;
         try
         {
-            SemanticClass clazz = getSemanticClass(NT_VERSION_NODE);
-            isVersionNode = clazz.equals(getSemanticObject().getSemanticClass());
+            SemanticClass clazz = getSemanticClass(name);
+            Iterator<SemanticClass> classes = this.getSemanticObject().listSemanticClasses();
+            while (classes.hasNext())
+            {
+                SemanticClass clazzNode = classes.next();
+                if ( clazzNode.equals(clazz) )
+                {
+                    isVersionNode = true;
+                    break;
+                }
+            }
         }
         catch ( SWBException swbe )
         {
             isVersionNode = false;
         }
         return isVersionNode;
+    }
+     public boolean isVersionHistoryNode()
+    {
+        return isNodeType(NT_VERSIONHISTORY_NODE);
+    }
+    public boolean isVersionNode()
+    {
+        return isNodeType(NT_VERSION_NODE);
     }
 
     private void unLock() throws SWBException
@@ -350,9 +366,9 @@ public class BaseNode extends BaseNodeBase
         }
         else
         {
-            if(property.isObjectProperty())
+            if ( property.isObjectProperty() )
             {
-                throw new SWBException("The property "+property.getPrefix()+":"+property.getName()+" is not a datatype property");
+                throw new SWBException("The property " + property.getPrefix() + ":" + property.getName() + " is not a datatype property");
             }
             if ( value == null )
             {
@@ -376,7 +392,7 @@ public class BaseNode extends BaseNodeBase
         {
             throw new SWBException("The property " + property.getPrefix() + ":" + property.getName() + " is protected");
         }
-        if(property.isObjectProperty())
+        if ( property.isObjectProperty() )
         {
             throw new SWBException("The property " + property.getPrefix() + ":" + property.getName() + " is not datatype");
         }
@@ -641,73 +657,110 @@ public class BaseNode extends BaseNodeBase
             addNodeToProperty(property, NT_VERSIONHISTORY_NODE);
         }
     }
+
     private BaseNode getHistoryNode() throws SWBException
     {
-        BaseNode getHistoryNode=null;
+        BaseNode getHistoryNode = null;
         SemanticProperty property = getSemanticProperty(JCR_VERSIONHISTORY_PROPERTY);
-        if(property.isObjectProperty())
+        if ( property.isObjectProperty() )
         {
-            SemanticObject versionHistory=getSemanticObject().getObjectProperty(property);
-            if(versionHistory==null)
+            SemanticObject versionHistory = getSemanticObject().getObjectProperty(property);
+            if ( versionHistory == null )
             {
                 createVersionHistoryNode();
-                versionHistory=getSemanticObject().getObjectProperty(property);
+                versionHistory = getSemanticObject().getObjectProperty(property);
             }
-            getHistoryNode=new BaseNode(versionHistory);            
+            getHistoryNode = new BaseNode(versionHistory);
         }
         return getHistoryNode;
     }
+
     private BaseNode getBaseNode(SemanticProperty property)
     {
-        BaseNode getBaseNode=null;    
-        if(property.isObjectProperty())
+        BaseNode getBaseNode = null;
+        if ( property.isObjectProperty() )
         {
-            SemanticObject object=getSemanticObject().getObjectProperty(property);
-            if(object!=null)
+            SemanticObject object = getSemanticObject().getObjectProperty(property);
+            if ( object != null )
             {
-                getBaseNode=new BaseNode(object);
-            }            
+                getBaseNode = new BaseNode(object);
+            }
         }
         return getBaseNode;
     }
+
     public boolean isChekedOut()
     {
-        boolean isChekedOut=false;
+        boolean isChekedOut = false;
         try
         {
-            SemanticProperty isCheckoutPropety=getSemanticProperty(JCR_ISCHECKEDOUT_PROPERTY);        
-            String value=getProperty(isCheckoutPropety,null);
-            if(value!=null)
+            SemanticProperty isCheckoutPropety = getSemanticProperty(JCR_ISCHECKEDOUT_PROPERTY);
+            String value = getProperty(isCheckoutPropety, null);
+            if ( value != null )
             {
-                isChekedOut=Boolean.parseBoolean(value);
+                isChekedOut = Boolean.parseBoolean(value);
             }
         }
-        catch(SWBException swbe)
+        catch ( SWBException swbe )
         {
-            isChekedOut=false;
+            isChekedOut = false;
         }
         return isChekedOut;
     }
-    public void checkin() throws SWBException
+    private void propageCheckin(BaseNode node) throws SWBException
     {
-        if(isChekedOut())
+        if(node.isVersionable() && node.isChekedOut())
+        {
+            SemanticProperty isCheckoutPropety = getSemanticProperty(JCR_ISCHECKEDOUT_PROPERTY);
+            node.setProperty(isCheckoutPropety, null);
+            Iterator<BaseNode> childs=node.listNodes();
+            while(childs.hasNext())
+            {
+                propageCheckin(childs.next());
+            }
+        }        
+    }
+    private void propageCheckout(BaseNode node) throws SWBException
+    {
+        if(node.isVersionable())
+        {
+            SemanticProperty isCheckoutPropety = getSemanticProperty(JCR_ISCHECKEDOUT_PROPERTY);
+            node.setProperty(isCheckoutPropety, "true");
+            Iterator<BaseNode> childs=node.listNodes();
+            while(childs.hasNext())
+            {
+                propageCheckout(childs.next());
+            }
+        }        
+        
+    }
+    public BaseNode checkin() throws SWBException
+    {
+        propageCheckin(this);
+        BaseNode versionNode=addVersionToHistoryNode();        
+        return versionNode;
+    }
+    public void checkout() throws SWBException
+    {
+        if ( isChekedOut() )
         {
             throw new SWBException("The node is chekedout");
         }
-        SemanticProperty isCheckoutPropety=getSemanticProperty(JCR_ISCHECKEDOUT_PROPERTY);        
-        setProperty(isCheckoutPropety, "true");
-        addVersionToHistoryNode();        
+        propageCheckout(this);
     }
-    private void addVersionToHistoryNode() throws SWBException
+
+    private BaseNode addVersionToHistoryNode() throws SWBException
     {
-        if(isVersionable())
+        if ( isVersionable() )
         {
-            BaseNode versionHistory=getHistoryNode();
-            if(versionHistory!=null)
+            BaseNode versionHistory = getHistoryNode();
+            if ( versionHistory != null )
             {
-                BaseNode version=cloneNode();                
+                BaseNode version = cloneNode();
+                return version;
             }
         }
+        throw new SWBException("The node is not versionable");
     }
 
     private void checkVersionable() throws SWBException
@@ -948,29 +1001,15 @@ public class BaseNode extends BaseNodeBase
         String uri = getUri(name);
         return getSemanticObject().getModel().getSemanticProperty(uri);
     }
-
+    public BaseNode[] getVersions()
+    {
+        ArrayList<BaseNode> version=new ArrayList<BaseNode>();
+        return version.toArray(new BaseNode[version.size()]);
+    }
     public final boolean isLockable()
     {
         return isNodeType(LOCKABLE_NAME);
     }
-
-    private boolean isNodeType(String nodeType)
-    {
-        boolean isNodeType = false;
-        Iterator<SemanticClass> classes = this.getSemanticObject().listSemanticClasses();
-        while (classes.hasNext())
-        {
-            SemanticClass clazz = classes.next();
-            String name = clazz.getPrefix() + ":" + clazz.getName();
-            if ( name.equals(nodeType) )
-            {
-                isNodeType = true;
-                break;
-            }
-        }
-        return isNodeType;
-    }
-
     public final boolean isReferenceable()
     {
         return (isNodeType(REFERENCEABLE_NAME) || isVersionable());
