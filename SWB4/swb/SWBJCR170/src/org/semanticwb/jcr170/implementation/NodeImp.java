@@ -760,7 +760,7 @@ public final class NodeImp implements Node
             }
             try
             {
-                node.checkin();
+                return new VersionImp(node.checkin());
             }
             catch(SWBException swbe)
             {
@@ -774,9 +774,18 @@ public final class NodeImp implements Node
     {
         checksLock();
         if ( !node.isVersionable() )
-        {
-            throw new UnsupportedRepositoryOperationException();
+        {            
+            try
+            {
+                node.checkout();
+                return;            
+            }
+            catch(SWBException swbe)
+            {
+                throw new RepositoryException();
+            }
         }
+        throw new UnsupportedRepositoryOperationException();
 
     }
 

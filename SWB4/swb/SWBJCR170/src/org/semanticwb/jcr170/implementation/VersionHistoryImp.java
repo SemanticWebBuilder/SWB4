@@ -35,6 +35,8 @@ import javax.jcr.version.Version;
 import javax.jcr.version.VersionException;
 import javax.jcr.version.VersionHistory;
 import javax.jcr.version.VersionIterator;
+import org.semanticwb.SWBException;
+import org.semanticwb.repository.BaseNode;
 
 /**
  *
@@ -42,20 +44,38 @@ import javax.jcr.version.VersionIterator;
  */
 public class VersionHistoryImp implements VersionHistory
 {
-
+    private final BaseNode node;
+    VersionHistoryImp(BaseNode node)
+    {
+        if(!node.isVersionHistoryNode())
+        {
+            throw new IllegalArgumentException("The node is not a versionhistory node");
+        }
+        this.node=node;
+    }
+    public BaseNode[] getVersions()
+    {
+        return node.getVersions();
+    }
     public String getVersionableUUID() throws RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        try
+        {
+            return node.getUUID();
+        }
+        catch(SWBException swbe)
+        {
+            throw new RepositoryException(swbe);
+        }
     }
-
     public Version getRootVersion() throws RepositoryException
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     public VersionIterator getAllVersions() throws RepositoryException
-    {
-        throw new UnsupportedOperationException("Not supported yet.");
+    {        
+        return new VersionIteratorImp(this);
     }
 
     public Version getVersion(String arg0) throws VersionException, RepositoryException
