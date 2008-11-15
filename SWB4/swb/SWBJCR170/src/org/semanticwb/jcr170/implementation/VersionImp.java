@@ -34,6 +34,7 @@ import javax.jcr.nodetype.NodeType;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionException;
 import javax.jcr.version.VersionHistory;
+import org.semanticwb.repository.BaseNode;
 
 /**
  *
@@ -41,7 +42,16 @@ import javax.jcr.version.VersionHistory;
  */
 public class VersionImp implements Version
 {
-
+    private final BaseNode version;
+    VersionImp(BaseNode version)
+    {
+        if(!version.isVersionNode())
+        {
+            throw new IllegalArgumentException("The node is not a version node");
+        }
+        this.version=version;
+        
+    }
     public VersionHistory getContainingHistory() throws RepositoryException
     {
         throw new UnsupportedOperationException("Not supported yet.");
