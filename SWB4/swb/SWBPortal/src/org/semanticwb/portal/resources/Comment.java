@@ -47,6 +47,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Portlet;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.util.FileUpload;
+import javax.mail.internet.InternetAddress;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.model.User;
@@ -655,10 +656,9 @@ public class Comment extends GenericResource {
                                 0).getFirstChild().getNodeValue();
                         String subject = dom.getElementsByTagName(
                                 "subject").item(0).getFirstChild().getNodeValue();
-                        javax.mail.internet.InternetAddress address1 = new 
-                                javax.mail.internet.InternetAddress();
+                        InternetAddress address1 = new InternetAddress();
                         address1.setAddress(to);
-                        ArrayList aAddress = new ArrayList();
+                        ArrayList<InternetAddress> aAddress = new ArrayList<InternetAddress>();
                         aAddress.add(address1);
                         
                         if ((from != null && to != null && subject != null)
@@ -1436,7 +1436,7 @@ public class Comment extends GenericResource {
      * @return <b>ArrayList</b> con objetos <b>TypeComment</b>
      */     
     private ArrayList getTypesComment(Document dom) {
-        ArrayList list = new ArrayList();
+        ArrayList<TypeComment> list = new ArrayList<TypeComment>();
         
         if (dom != null) {
             TypeComment tc = new TypeComment();
