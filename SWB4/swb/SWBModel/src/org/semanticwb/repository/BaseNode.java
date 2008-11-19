@@ -21,7 +21,7 @@ public class BaseNode extends BaseNodeBase
 {
 
     private static final String JCR_CHILDDEFINITION_PROPERTY = "jcr:childNodeDefinition";
-    private static final String JCR_PROTECTED_PROPERTY = "jcr:protected";
+    private static final String JCR_FROZENNODE_NAME = "jcr:frozenNode";    
     private static final String JCR_MANDATORY_PROPERTY = "jcr:mandatory";
     private static final String MIX_MIXIN_PROPERTY = "mix:mixin";
     private static final String ONPARENTVERSION_COPY = "COPY";
@@ -549,7 +549,7 @@ public class BaseNode extends BaseNodeBase
         boolean isProtected = false;
         try
         {
-            SemanticLiteral literal = getPropertyOfProperty(property, JCR_PROTECTED_PROPERTY);
+            SemanticLiteral literal = property.getRequiredProperty(vocabulary.jcr_protected);
             if ( literal != null )
             {
                 isProtected = literal.getBoolean();
@@ -819,8 +819,8 @@ public class BaseNode extends BaseNodeBase
             if ( value == null )
             {
                 SemanticProperty jcr_baseVersion = vocabulary.jcr_baseVersion;
-                BaseNode ntVersion = historyNode.createNodeBase(vocabulary.nt_Version);
-                BaseNode ntFrozenNode = ntVersion.createNodeBase(vocabulary.nt_FrozenNode);
+                BaseNode ntVersion = historyNode.createNodeBase("jcr:version", vocabulary.nt_Version);
+                BaseNode ntFrozenNode = ntVersion.createNodeBase(JCR_FROZENNODE_NAME, vocabulary.nt_FrozenNode);
                 addFrozenProperties(ntFrozenNode.getSemanticObject());
                 historyNode.getSemanticObject().setObjectProperty(jcr_root, ntVersion.getSemanticObject());
                 this.getSemanticObject().setObjectProperty(jcr_baseVersion, ntVersion.getSemanticObject());
@@ -970,8 +970,8 @@ public class BaseNode extends BaseNodeBase
             BaseNode versionHistory = getHistoryNode();
             if ( versionHistory != null )
             {
-                BaseNode ntVersion = versionHistory.createNodeBase(vocabulary.nt_Version);
-                BaseNode ntFrozenNode = ntVersion.createNodeBase(vocabulary.nt_FrozenNode);
+                BaseNode ntVersion = versionHistory.createNodeBase("jcr:version", vocabulary.nt_Version);
+                BaseNode ntFrozenNode = ntVersion.createNodeBase(JCR_FROZENNODE_NAME, vocabulary.nt_FrozenNode);
                 copyPropertiesToFrozenNode(ntFrozenNode);
                 addFrozenProperties(ntFrozenNode.getSemanticObject());
                 addVersionToHistoryNode = ntVersion;
@@ -1099,11 +1099,27 @@ public class BaseNode extends BaseNodeBase
         return createNodeBase(UUID.randomUUID().toString(), clazz);
     }
 
+    public boolean isProtected()
+    {
+        boolean isProtected = false;
+        Iterator<SemanticLiteral> literals = getSemanticObject().getSemanticClass().listRequiredProperties(vocabulary.jcr_protected);
+        while (literals.hasNext())
+        {
+            SemanticLiteral literal = literals.next();
+            if ( literal != null && literal.getString() != null )
+            {
+                String value = literal.getString();
+                return Boolean.parseBoolean(value);
+            }
+        }
+        return isProtected;
+    }
+
     public final BaseNode createNodeBase(String name, SemanticClass clazz) throws SWBException
     {
         if ( canAddNode(clazz) )
         {
-            String uri = getSemanticObject().getModel().getObjectUri(name, clazz);
+            String uri = getSemanticObject().getModel().getObjectUri(UUID.randomUUID().toString(), clazz);
             SemanticObject object = getSemanticObject().getModel().createSemanticObject(uri, clazz);
             BaseNode newBaseNode = new BaseNode(object, clazz);
             newBaseNode.setName(name);
