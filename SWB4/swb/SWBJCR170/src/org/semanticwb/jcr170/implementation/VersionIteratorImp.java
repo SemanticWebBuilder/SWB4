@@ -19,7 +19,9 @@ public class VersionIteratorImp implements VersionIterator
     private final Iterator<BaseNode> versions;
     private final int size;
     private long position=0;
-    VersionIteratorImp(VersionHistoryImp versionHistory)
+    private final VersionHistoryImp versionHistory;
+    private final SessionImp session;
+    VersionIteratorImp(VersionHistoryImp versionHistory,SessionImp session)
     {
         ArrayList<BaseNode> temp=new ArrayList<BaseNode>();
         for(BaseNode version : versionHistory.getVersions())
@@ -28,6 +30,8 @@ public class VersionIteratorImp implements VersionIterator
         }
         size=versionHistory.getVersions().length;
         versions=temp.iterator();
+        this.versionHistory=versionHistory;
+        this.session=session;
     }
     public Version nextVersion()
     {
@@ -35,7 +39,7 @@ public class VersionIteratorImp implements VersionIterator
         BaseNode node=versions.next();
         if(node!=null)
         {
-            return new VersionImp(node);
+            return new VersionImp(node,versionHistory.getVersionHistoryBase(),session);
         }
         else
         {

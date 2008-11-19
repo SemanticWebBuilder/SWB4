@@ -35,7 +35,7 @@ public class VersionImp extends NodeImp implements Version
     }
     public VersionHistory getContainingHistory() throws RepositoryException
     {        
-        return new VersionHistoryImp(history);
+        return new VersionHistoryImp(history,session);
     }
 
     public Calendar getCreated() throws RepositoryException
