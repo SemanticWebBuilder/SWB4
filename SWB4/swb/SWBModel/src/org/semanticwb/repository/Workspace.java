@@ -221,10 +221,10 @@ public class Workspace extends WorkspaceBase
 
     static void appendNodeInternalView(BaseNode node, Element parent, boolean internal)
     {
-        Element element = new Element(getName(node.getName()));
-        if ( internal )
+        Element element = new Element(getName(node.getName()));        
+        if(internal)
         {
-            element.setAttribute("id", node.getId());            
+            element.setAttribute("id", node.getId());
         }
         appendPropertiesToNodeInternalView(node, element);
         parent.addContent(element);
@@ -232,17 +232,19 @@ public class Workspace extends WorkspaceBase
         while (itChilds.hasNext())
         {
             BaseNode child = itChilds.next();
-            appendNodeInternalView(child, element, internal);
+            if(!child.isProtected())
+            {
+                appendNodeInternalView(child, element, internal);
+            }
         }
     }
 
     private static void appendNodeInternalView(BaseNode node, Document document, boolean internal)
     {
-
-        Element element = new Element(getName(node.getName()));
-        if ( internal )
+        Element element = new Element(getName(node.getName()));        
+        if(internal)
         {
-            element.setAttribute("id", node.getId());            
+            element.setAttribute("id", node.getId());
         }
         appendPropertiesToNodeInternalView(node, element);
         document.addContent(element);
@@ -250,7 +252,10 @@ public class Workspace extends WorkspaceBase
         while (itChilds.hasNext())
         {
             BaseNode child = itChilds.next();
-            appendNodeInternalView(child, element, internal);
+            if(!child.isProtected())
+            {
+                appendNodeInternalView(child, element, internal);
+            }
         }
     }
 
