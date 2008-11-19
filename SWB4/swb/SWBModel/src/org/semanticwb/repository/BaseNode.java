@@ -34,7 +34,7 @@ public class BaseNode extends BaseNodeBase
     public BaseNode(SemanticObject base)
     {
         super(base);
-
+        addPrimaryType(getSemanticObject().getSemanticClass());
     }
 
     private BaseNode(SemanticObject base, SemanticClass clazz) throws SWBException
@@ -83,10 +83,19 @@ public class BaseNode extends BaseNodeBase
 
     public void save() throws SWBException
     {
-        checkVersionable();
-        checkProperties();
-        setModified(false);
-        setNew(false);
+        if ( isModified() || isNew() )
+        {
+            checkVersionable();
+            checkProperties();
+            setModified(false);
+            setNew(false);
+        }
+        GenericIterator<BaseNode> childs = listNodes();
+        while (childs.hasNext())
+        {
+            BaseNode child = childs.next();
+            child.save();
+        }
     }
 
     private boolean isNodeType(SemanticClass clazz)
@@ -528,7 +537,10 @@ public class BaseNode extends BaseNodeBase
         SemanticProperty jcr_primaryType = vocabulary.jcr_primaryType;
         if ( jcr_primaryType != null )
         {
-            setPropertyInternal(jcr_primaryType, clazz.getPrefix() + ":" + clazz.getName());
+            if ( getPropertyInternal(jcr_primaryType, null) == null )
+            {
+                setPropertyInternal(jcr_primaryType, clazz.getPrefix() + ":" + clazz.getName());
+            }
         }
     }
 
@@ -536,7 +548,7 @@ public class BaseNode extends BaseNodeBase
     {
         boolean isProtected = false;
         try
-        {            
+        {
             SemanticLiteral literal = getPropertyOfProperty(property, JCR_PROTECTED_PROPERTY);
             if ( literal != null )
             {
@@ -665,9 +677,9 @@ public class BaseNode extends BaseNodeBase
                 if ( clazzDomain.equals(clazz) || clazzDomain.isSuperClass(clazz) )
                 {
                     value = getSemanticObject().getModel().createSemanticObject(name, clazz);
-                    BaseNode valueNode=new BaseNode(value,clazz);
+                    BaseNode valueNode = new BaseNode(value, clazz);
                     valueNode.setName(name);
-                    getSemanticObject().setObjectProperty(property, value);                    
+                    getSemanticObject().setObjectProperty(property, value);
                 }
                 else
                 {
@@ -708,10 +720,10 @@ public class BaseNode extends BaseNodeBase
                 String onParentVersion = getOnParentVersion(childNode);
                 if ( onParentVersion.equals(ONPARENTVERSION_COPY) )
                 {
-                    BaseNode frozenChild=frozenNode.createNodeBase(vocabulary.nt_FrozenNode);                                        
+                    BaseNode frozenChild = frozenNode.createNodeBase(vocabulary.nt_FrozenNode);
                     childNode.copyPropertiesToFrozenNode(frozenChild);
-                    childNode.addFrozenProperties(frozenChild.getSemanticObject());                    
-                    copyNodesToFrozenNode(frozenChild);
+                    childNode.addFrozenProperties(frozenChild.getSemanticObject());
+                    childNode.copyPropertiesToFrozenNode(frozenChild);
                 }
             }
         }
@@ -806,10 +818,10 @@ public class BaseNode extends BaseNodeBase
             SemanticObject value = historyNode.getSemanticObject().getObjectProperty(jcr_root, null);
             if ( value == null )
             {
-                SemanticProperty jcr_baseVersion = vocabulary.jcr_baseVersion;                
-                BaseNode ntVersion=historyNode.createNodeBase(vocabulary.nt_Version);
-                BaseNode ntFrozenNode=ntVersion.createNodeBase(vocabulary.nt_FrozenNode);
-                addFrozenProperties(ntFrozenNode.getSemanticObject());                        
+                SemanticProperty jcr_baseVersion = vocabulary.jcr_baseVersion;
+                BaseNode ntVersion = historyNode.createNodeBase(vocabulary.nt_Version);
+                BaseNode ntFrozenNode = ntVersion.createNodeBase(vocabulary.nt_FrozenNode);
+                addFrozenProperties(ntFrozenNode.getSemanticObject());
                 historyNode.getSemanticObject().setObjectProperty(jcr_root, ntVersion.getSemanticObject());
                 this.getSemanticObject().setObjectProperty(jcr_baseVersion, ntVersion.getSemanticObject());
 
@@ -852,8 +864,6 @@ public class BaseNode extends BaseNodeBase
         return getHistoryNode;
     }
 
-    
-
     private boolean isCheckedoutByParents()
     {
         boolean isCheckedoutByParents = false;
@@ -870,6 +880,21 @@ public class BaseNode extends BaseNodeBase
             }
         }
         return isCheckedoutByParents;
+    }
+
+    public boolean isChekedin()
+    {
+        boolean isChekedin = false;
+        if ( isVersionable() )
+        {
+            SemanticProperty isCheckoutPropety = vocabulary.jcr_isCheckedOut;
+            String value = getPropertyInternal(isCheckoutPropety, null);
+            if ( value != null )
+            {
+                isChekedin = !Boolean.parseBoolean(value);
+            }
+        }
+        return isChekedin;
     }
 
     public boolean isChekedOut()
@@ -933,10 +958,6 @@ public class BaseNode extends BaseNodeBase
 
     public void checkout() throws SWBException
     {
-        if ( isChekedOut() )
-        {
-            throw new SWBException("The node is chekedout");
-        }
         SemanticProperty isCheckoutPropety = vocabulary.jcr_isCheckedOut;
         setPropertyInternal(isCheckoutPropety, "true");
     }
@@ -948,11 +969,11 @@ public class BaseNode extends BaseNodeBase
         {
             BaseNode versionHistory = getHistoryNode();
             if ( versionHistory != null )
-            {                
-                BaseNode ntVersion=versionHistory.createNodeBase(vocabulary.nt_Version);
-                BaseNode ntFrozenNode=ntVersion.createNodeBase(vocabulary.nt_FrozenNode);                                
+            {
+                BaseNode ntVersion = versionHistory.createNodeBase(vocabulary.nt_Version);
+                BaseNode ntFrozenNode = ntVersion.createNodeBase(vocabulary.nt_FrozenNode);
                 copyPropertiesToFrozenNode(ntFrozenNode);
-                addFrozenProperties(ntFrozenNode.getSemanticObject());                
+                addFrozenProperties(ntFrozenNode.getSemanticObject());
                 addVersionToHistoryNode = ntVersion;
             }
         }
@@ -967,14 +988,9 @@ public class BaseNode extends BaseNodeBase
             if ( history == null )
             {
                 createVersionHistoryNode();
+                checkout();
             }
         }
-    }
-
-    private void addIsCheckedOut() throws SWBException
-    {
-        SemanticProperty property = vocabulary.jcr_isCheckedOut;
-        setPropertyInternal(property, "false");
     }
 
     public final void addMixin(String mixinName) throws SWBException
@@ -984,7 +1000,6 @@ public class BaseNode extends BaseNodeBase
         setPropertyInternal(property, mixinName);
         this.getSemanticObject().addSemanticClass(clazz);
         addVersionableUuid();
-        addIsCheckedOut();
         addUUID();
         addCreatedProperty();
     }
@@ -1081,24 +1096,26 @@ public class BaseNode extends BaseNodeBase
 
     private final BaseNode createNodeBase(SemanticClass clazz) throws SWBException
     {
-        return createNodeBase(UUID.randomUUID().toString(),clazz);
+        return createNodeBase(UUID.randomUUID().toString(), clazz);
     }
+
     public final BaseNode createNodeBase(String name, SemanticClass clazz) throws SWBException
     {
         if ( canAddNode(clazz) )
         {
             String uri = getSemanticObject().getModel().getObjectUri(name, clazz);
             SemanticObject object = getSemanticObject().getModel().createSemanticObject(uri, clazz);
-            BaseNode newBaseNode = new BaseNode(object,clazz);            
+            BaseNode newBaseNode = new BaseNode(object, clazz);
             newBaseNode.setName(name);
             newBaseNode.setParent(this);
             return newBaseNode;
         }
         else
         {
-            throw new SWBException("The nodetype " + clazz.getPrefix()+":"+clazz.getName() + " is not possible to add");
+            throw new SWBException("The nodetype " + clazz.getPrefix() + ":" + clazz.getName() + " is not possible to add");
         }
     }
+
     public final BaseNode createNodeBase(String name, String primaryNodeTypeName) throws SWBException
     {
         if ( primaryNodeTypeName == null )
