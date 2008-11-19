@@ -73,7 +73,7 @@ public class QueryResultImp implements QueryResult
         for ( int i = 0; i < nodes.size(); i++ )
         {
             Element eNode = ( Element ) nodes.get(i);
-            String id = eNode.getAttributeValue("name", ns);
+            String id = eNode.getAttributeValue("id");
             String type = eNode.getAttributeValue("primaryType", ns);
             if ( type == null )
             {
