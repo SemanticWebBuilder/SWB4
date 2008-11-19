@@ -10,6 +10,7 @@ import org.jdom.output.XMLOutputter;
 import org.semanticwb.SWBException;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.platform.SemanticClass;
+import org.semanticwb.platform.SemanticLiteral;
 import org.semanticwb.repository.base.*;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
@@ -25,7 +26,7 @@ public class Workspace extends WorkspaceBase
     static
     {
         excludeInternalView.add("swbrep");
-        excludeInternalView.add("jcr");
+    //excludeInternalView.add("jcr");
     }
 
     public Workspace(SemanticObject base)
@@ -37,7 +38,131 @@ public class Workspace extends WorkspaceBase
     {
         Document document = new Document();
         BaseNode root = this.getRoot();
-        appendNodeInternalView(root, document, false);        
+        appendNodeInternalView(root, document, false);
+        return document;
+    }
+
+    static void appendNode(BaseNode node, Element parent)
+    {
+        SemanticClass clazz = node.getSemanticObject().getSemanticClass();
+        String uri = getUri(clazz.getURI());
+        Namespace ns = Namespace.getNamespace(clazz.getPrefix(), uri);
+        Element element = new Element(clazz.getName(), ns);
+        element.setAttribute("id", node.getId());
+
+        appendPropertiesToNode(node, element);
+        parent.addContent(element);
+        GenericIterator<BaseNode> itChilds = node.listNodes();
+        while (itChilds.hasNext())
+        {
+            BaseNode child = itChilds.next();
+            appendNode(child, element);
+        }
+    }
+
+    private static final Iterator<SemanticProperty> listSemanticProperties(BaseNode node)
+    {
+        HashSet<SemanticProperty> propertiesToReturn = new HashSet<SemanticProperty>();
+        Iterator<SemanticClass> classes = node.getSemanticObject().listSemanticClasses();
+        while (classes.hasNext())
+        {
+            SemanticClass clazz = classes.next();
+            Iterator<SemanticProperty> properties = clazz.listProperties();
+            while (properties.hasNext())
+            {
+                SemanticProperty property = properties.next();
+
+                propertiesToReturn.add(property);
+
+            }
+        }
+        return propertiesToReturn.iterator();
+    }
+
+    private static void appendPropertiesToNode(BaseNode node, Element nodeElement)
+    {
+        Iterator<SemanticProperty> properties = listSemanticProperties(node);
+        while (properties.hasNext())
+        {
+            SemanticProperty property = properties.next();
+            if ( property != null )
+            {
+                boolean exclude = false;
+                String name = property.getPrefix() + ":" + property.getName();
+                if ( name.equals("swbrep:parentNode") )
+                {
+                    exclude = true;
+                }
+                if ( !exclude )
+                {
+                    if ( property.isObjectProperty() )
+                    {
+                        SemanticObject object = node.getSemanticObject().getObjectProperty(property);
+                        if ( object != null )
+                        {
+                            BaseNode nodeproperty = new BaseNode(object);
+                            appendNode(nodeproperty, nodeElement);
+                        }
+                    }
+                    else
+                    {
+                        String uri = getUri(property.getURI());
+                        Namespace ns = Namespace.getNamespace(property.getPrefix(), uri);
+                        try
+                        {
+                            Iterator<SemanticLiteral> literals = node.getSemanticObject().listLiteralProperties(property);
+                            while (literals.hasNext())
+                            {
+                                SemanticLiteral literal = literals.next();
+
+                                if ( literal != null && literal.getString() != null )
+                                {
+                                    nodeElement.setAttribute(property.getName(), literal.getString(), ns);
+                                }
+                            }
+                        }
+                        catch ( Throwable ex )
+                        {
+                            ex.printStackTrace(System.out);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private static void appendNode(BaseNode node, Document document)
+    {
+
+        Element element = new Element(getName(node.getName()));
+
+        element.setAttribute("id", node.getId());
+        SemanticClass clazz = node.getSemanticObject().getSemanticClass();
+
+        appendPropertiesToNode(node, element);
+        document.addContent(element);
+        GenericIterator<BaseNode> itChilds = node.listNodes();
+        while (itChilds.hasNext())
+        {
+            BaseNode child = itChilds.next();
+            appendNode(child, element);
+        }
+    }
+
+    public Document toXML()
+    {
+        Document document = new Document();
+        BaseNode root = this.getRoot();
+        appendNode(root, document);
+        try
+        {
+            XMLOutputter out = new XMLOutputter();
+            out.output(document, System.out);
+        }
+        catch ( Exception e )
+        {
+            e.printStackTrace(System.out);
+        }
         return document;
     }
 
@@ -70,7 +195,7 @@ public class Workspace extends WorkspaceBase
 
     private static void appendPropertiesToNodeInternalView(BaseNode node, Element nodeElement)
     {
-        Iterator<SemanticProperty> properties = node.listSemanticProperties();
+        Iterator<SemanticProperty> properties = listSemanticProperties(node);
         while (properties.hasNext())
         {
             SemanticProperty property = properties.next();
@@ -87,14 +212,11 @@ public class Workspace extends WorkspaceBase
                     }
                 }
 
-
                 if ( !exclude )
                 {
                     String value = node.getSemanticObject().getProperty(property);
                     if ( value != null )
                     {
-
-
                         nodeElement.setAttribute(property.getName(), value, ns);
                     }
 
@@ -102,15 +224,13 @@ public class Workspace extends WorkspaceBase
             }
         }
     }
-    
+
     static void appendNodeInternalView(BaseNode node, Element parent, boolean internal)
     {
         Element element = new Element(getName(node.getName()));
         if ( internal )
         {
-            element.setAttribute("id", node.getId());
-            SemanticClass clazz = node.getSemanticObject().getSemanticClass();
-            element.setAttribute("type", clazz.getPrefix() + ":" + clazz.getName());
+            element.setAttribute("id", node.getId());            
         }
         appendPropertiesToNodeInternalView(node, element);
         parent.addContent(element);
@@ -118,7 +238,7 @@ public class Workspace extends WorkspaceBase
         while (itChilds.hasNext())
         {
             BaseNode child = itChilds.next();
-            appendNodeInternalView(child, element,internal);
+            appendNodeInternalView(child, element, internal);
         }
     }
 
@@ -128,9 +248,7 @@ public class Workspace extends WorkspaceBase
         Element element = new Element(getName(node.getName()));
         if ( internal )
         {
-            element.setAttribute("id", node.getId());
-            SemanticClass clazz = node.getSemanticObject().getSemanticClass();
-            element.setAttribute("type", clazz.getPrefix() + ":" + clazz.getName());
+            element.setAttribute("id", node.getId());            
         }
         appendPropertiesToNodeInternalView(node, element);
         document.addContent(element);
@@ -138,7 +256,7 @@ public class Workspace extends WorkspaceBase
         while (itChilds.hasNext())
         {
             BaseNode child = itChilds.next();
-            appendNodeInternalView(child, element,internal);
+            appendNodeInternalView(child, element, internal);
         }
     }
 
