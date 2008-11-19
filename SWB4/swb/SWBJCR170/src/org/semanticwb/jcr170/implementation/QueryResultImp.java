@@ -11,6 +11,7 @@ import javax.jcr.RepositoryException;
 import javax.jcr.query.QueryResult;
 import javax.jcr.query.RowIterator;
 import org.jdom.Element;
+import org.jdom.Namespace;
 import org.semanticwb.SWBException;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.repository.BaseNode;
@@ -52,6 +53,16 @@ public class QueryResultImp implements QueryResult
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    private static String getUri(String uri)
+    {
+        int pos = uri.indexOf("#");
+        if ( pos != -1 )
+        {
+            uri = uri.substring(0, pos);
+        }
+        return uri;
+    }
+
     public NodeIterator getNodes() throws RepositoryException
     {
         ArrayList<BaseNode> basenodes = new ArrayList<BaseNode>();
@@ -60,18 +71,27 @@ public class QueryResultImp implements QueryResult
         {
             Element eNode = ( Element ) nodes.get(i);
             String id = eNode.getAttributeValue("id");
-            String type = eNode.getAttributeValue("type");
-            try
+            String uri = Workspace.vocabulary.listUris().get("jcr");
+            Namespace ns = Namespace.getNamespace("jcr", getUri(uri));
+            String type = eNode.getAttributeValue("primaryType", ns);
+            if ( type == null )
             {
-                BaseNode baseNode = workspace.getBaseNodeFromType(id, type);
-                if ( baseNode != null )
-                {
-                    basenodes.add(baseNode);
-                }
+                throw new RepositoryException("The jcr:primaryType was not found");
             }
-            catch ( SWBException swe )
+            else
             {
-                throw new RepositoryException(swe);
+                try
+                {
+                    BaseNode baseNode = workspace.getBaseNodeFromType(id, type);
+                    if ( baseNode != null )
+                    {
+                        basenodes.add(baseNode);
+                    }
+                }
+                catch ( SWBException swe )
+                {
+                    throw new RepositoryException(swe);
+                }
             }
         }
         return new NodeIteratorImp(session, basenodes);
