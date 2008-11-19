@@ -206,21 +206,18 @@ public class NodeImp implements Node
         if ( node.isLocked() && !node.getLockOwner().equals(session.getUserID()) )
         {
             throw new LockException("The node is locked by the user " + node.getLockOwner());
-        }
-        chechsChekin();
+        }        
     }
 
-    private void chechsChekin() throws VersionException
-    {
-        if ( node.isVersionable() && !node.isChekedOut() )
-        {
-            throw new VersionException("Can not add a child to checked-in node");
-        }
-    }
+    
 
     public Node addNode(String relPath, String primaryNodeTypeName) throws ItemExistsException, PathNotFoundException, NoSuchNodeTypeException, LockException, VersionException, ConstraintViolationException, RepositoryException
     {
         checksLock();
+        if(node.isChekedin())
+        {
+            throw new RepositoryException("The node can not add a child in check-in mode");
+        }
         checkRelPath(relPath);
         NodeImp newNode = null;
         if ( primaryNodeTypeName == null )
@@ -437,6 +434,10 @@ public class NodeImp implements Node
     public Property setProperty(String name, Value[] value, int arg2) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
         checksLock();
+        if(node.isChekedin())
+        {
+            throw new RepositoryException("The node can not modify properties in check-in mode");
+        }
         PropertyImp propertyToReturn = null;
         for ( Value ovalue : value )
         {
@@ -1123,23 +1124,13 @@ public class NodeImp implements Node
 
     public void save() throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
     {
-        if(isParentCheckOut())
+        if(node.isNew())
         {
             throw new RepositoryException("Can not save a new item Node:"+this.getPath());
-        }
+        }        
         try
         {
-            if ( node.isModified() || node.isNew() )
-            {
-                node.save();
-            }
-            NodeIterator nodes = this.getNodes();
-            while (nodes.hasNext())
-            {
-                Node child = nodes.nextNode();
-                child.save();
-
-            }
+            node.save();            
         }
         catch ( SWBException swe )
         {
