@@ -47,8 +47,7 @@ public class Workspace extends WorkspaceBase
         SemanticClass clazz = node.getSemanticObject().getSemanticClass();
         String uri = getUri(clazz.getURI());
         Namespace ns = Namespace.getNamespace(clazz.getPrefix(), uri);
-        Element element = new Element(clazz.getName(), ns);
-        element.setAttribute("id", node.getId());
+        Element element = new Element(clazz.getName(), ns);        
 
         appendPropertiesToNode(node, element);
         parent.addContent(element);
@@ -80,7 +79,7 @@ public class Workspace extends WorkspaceBase
     }
 
     private static void appendPropertiesToNode(BaseNode node, Element nodeElement)
-    {
+    {          
         Iterator<SemanticProperty> properties = listSemanticProperties(node);
         while (properties.hasNext())
         {
@@ -133,12 +132,7 @@ public class Workspace extends WorkspaceBase
 
     private static void appendNode(BaseNode node, Document document)
     {
-
         Element element = new Element(getName(node.getName()));
-
-        element.setAttribute("id", node.getId());
-        SemanticClass clazz = node.getSemanticObject().getSemanticClass();
-
         appendPropertiesToNode(node, element);
         document.addContent(element);
         GenericIterator<BaseNode> itChilds = node.listNodes();
