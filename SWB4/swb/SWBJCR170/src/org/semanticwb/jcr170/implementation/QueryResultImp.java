@@ -27,7 +27,8 @@ public class QueryResultImp implements QueryResult
     private final List nodes;
     private final String workspaceName;
     private final SessionImp session;
-
+    private final String jcr_uri;
+    private final Namespace ns;
     QueryResultImp(SessionImp session, List nodes, String workspaceName)
     {
         if ( session == null || workspaceName == null )
@@ -41,6 +42,8 @@ public class QueryResultImp implements QueryResult
         this.nodes = nodes;
         this.workspaceName = workspaceName;
         this.session = session;
+        jcr_uri = getUri(Workspace.vocabulary.listUris().get("jcr"));        
+        ns = Namespace.getNamespace("jcr", jcr_uri);
     }
 
     public String[] getColumnNames() throws RepositoryException
@@ -70,9 +73,7 @@ public class QueryResultImp implements QueryResult
         for ( int i = 0; i < nodes.size(); i++ )
         {
             Element eNode = ( Element ) nodes.get(i);
-            String id = eNode.getAttributeValue("id");
-            String uri = Workspace.vocabulary.listUris().get("jcr");
-            Namespace ns = Namespace.getNamespace("jcr", getUri(uri));
+            String id = eNode.getAttributeValue("name", ns);
             String type = eNode.getAttributeValue("primaryType", ns);
             if ( type == null )
             {
