@@ -164,23 +164,7 @@ public class NodeImp implements Node
         return getBaseNodeFromAbsolutePath;
     }
 
-    private boolean existsBaseNode(String relPath)
-    {
-        boolean existsNode = true;
-        try
-        {
-            BaseNode baseNode = getBaseNode(relPath);
-            if ( baseNode == null )
-            {
-                existsNode = false;
-            }
-        }
-        catch ( Exception pnfe )
-        {
-            existsNode = false;
-        }
-        return existsNode;
-    }
+    
 
     private String normalize(String relPath) throws RepositoryException
     {
@@ -224,7 +208,11 @@ public class NodeImp implements Node
         {
             primaryNodeTypeName = DEFAULT_PRIMARY_NODE_TYPE_NAME;
         }
-        if ( existsBaseNode(relPath) )
+        if(!node.canAddNode(primaryNodeTypeName))
+        {
+            throw new NoSuchNodeTypeException("The nodeType "+primaryNodeTypeName+" can not be added to this node");
+        }
+        if ( !node.canAddSameNameSiblings(primaryNodeTypeName) && node.existsSameNode(relPath) )
         {
             throw new ItemExistsException("The item " + relPath + " already exists");
         }
@@ -998,7 +986,7 @@ public class NodeImp implements Node
 
     public String getPath() throws RepositoryException
     {
-        String path = PATH_SEPARATOR;
+        /*String path = PATH_SEPARATOR;
         BaseNode parent = node.getParent();
         if ( parent != null )
         {
@@ -1013,7 +1001,8 @@ public class NodeImp implements Node
                 path = parentNode.getPath() + PATH_SEPARATOR + getName();
             }
         }
-        return path;
+        return path;*/
+        return node.getPath();
     }
 
     public String getName() throws RepositoryException
