@@ -50,7 +50,7 @@ public class NodeImp implements Node
 {
 
     private static final ValueFactoryImp factory = new ValueFactoryImp();
-    private static final String DEFAULT_PRIMARY_NODE_TYPE_NAME = "nt:base";
+    private static final String DEFAULT_PRIMARY_NODE_TYPE_NAME = "nt:unstructured";
     private static final String NOT_SUPPORTED_YET = "Not supported yet.";
     private static final String WAS_NOT_FOUND = " was not found";
     private static final String PATH_SEPARATOR = "/";
@@ -200,13 +200,24 @@ public class NodeImp implements Node
         }
         return normalize;
     }
-    private void checksLock() throws LockException
+
+    private void checksLock() throws LockException, VersionException
     {
-        if(node.isLocked() && !node.getLockOwner().equals(session.getUserID()))
-        {            
-            throw new LockException("The node is locked by teh user "+node.getLockOwner());
+        if ( node.isLocked() && !node.getLockOwner().equals(session.getUserID()) )
+        {
+            throw new LockException("The node is locked by the user " + node.getLockOwner());
+        }
+        chechsChekin();
+    }
+
+    private void chechsChekin() throws VersionException
+    {
+        if ( node.isVersionable() && !node.isChekedOut() )
+        {
+            throw new VersionException("Can not add a child to checked-in node");
         }
     }
+
     public Node addNode(String relPath, String primaryNodeTypeName) throws ItemExistsException, PathNotFoundException, NoSuchNodeTypeException, LockException, VersionException, ConstraintViolationException, RepositoryException
     {
         checksLock();
@@ -231,11 +242,12 @@ public class NodeImp implements Node
                 newNode = new NodeImp(newBaseNode, session);
                 newBaseNode.setNew(true);
                 newBaseNode.setModified(true);
+                node.setModified(true);
                 return newNode;
             }
             else
             {
-                throw new ConstraintViolationException("The nodetype "+primaryNodeTypeName+" can not be added to the nodetype " + node.getSemanticObject().getSemanticClass().getPrefix()+":"+node.getSemanticObject().getSemanticClass().getName());
+                throw new ConstraintViolationException("The nodetype " + primaryNodeTypeName + " can not be added to the nodetype " + node.getSemanticObject().getSemanticClass().getPrefix() + ":" + node.getSemanticObject().getSemanticClass().getName());
             }
         }
         catch ( SWBException swe )
@@ -749,34 +761,29 @@ public class NodeImp implements Node
     {
         throw new UnsupportedOperationException(NOT_SUPPORTED_YET);
     }
-    
+
     public Version checkin() throws VersionException, UnsupportedRepositoryOperationException, InvalidItemStateException, LockException, RepositoryException
     {
         checksLock();
         if ( node.isVersionable() )
         {
-            if(node.isChekedOut())
+            if ( node.isChekedOut() )
             {
-                
+                if ( node.isPendingChanges() )
+                {
+                    throw new InvalidItemStateException("The node must be saved before");
+                }
                 try
                 {
-                    node.unLock(session.getUserID(),session.getLockUserComparator());
-                    BaseNode versionNode=node.checkin();                                    
-                    return new VersionImp(versionNode,node.getHistoryNode(),session);
+                    BaseNode versionNode = node.checkin();
+                    SWBContext.listWorkspaces().next().toXML();
+                    return new VersionImp(versionNode, node.getHistoryNode(), session);
                 }
-                catch(SWBException swbe)
+                catch ( SWBException swbe )
                 {
-                    try
-                    {
-                        node.lock(session.getUserID(), false);
-                    }
-                    catch(SWBException swbe2)
-                    {
-                        throw new RepositoryException(swbe2);
-                    }
                     throw new RepositoryException(swbe);
-                }                
-            }   
+                }
+            }
             else
             {
                 throw new InvalidItemStateException("The node is not checkcout");
@@ -787,24 +794,23 @@ public class NodeImp implements Node
             throw new UnsupportedRepositoryOperationException("The node is not versionable");
         }
     }
-   
+
     public void checkout() throws UnsupportedRepositoryOperationException, LockException, RepositoryException
-    {        
-        SWBContext.listWorkspaces().next().toXML();        
+    {
+        SWBContext.listWorkspaces().next().toXML();
         checksLock();
         if ( node.isVersionable() )
-        {          
-            if(node.isPendingChanges())
+        {
+            if ( node.isPendingChanges() )
             {
                 throw new UnsupportedRepositoryOperationException("The node must be saved before, because has changes or is new");
             }
             try
             {
-                node.lock(session.getUserID(), false);
-                node.checkout();                
-                return;            
+                node.checkout();
+                return;
             }
-            catch(SWBException swbe)
+            catch ( SWBException swbe )
             {
                 throw new RepositoryException(swbe);
             }
@@ -956,7 +962,7 @@ public class NodeImp implements Node
             {
                 // por el momento sólo puede desbloquear el mismo usuario, deberia verse como un super usurio lo puede desbloquear
                 LockImp lock = getLockImp();
-                node.unLock(session.getUserID(),session.getLockUserComparator());
+                node.unLock(session.getUserID(), session.getLockUserComparator());
                 if ( lock != null && lock.isSessionScoped() )
                 {
                     session.removeLockSession(lock);
@@ -1090,8 +1096,37 @@ public class NodeImp implements Node
 
     }
 
+    private boolean isParentCheckOut()
+    {
+        boolean isParentCheckOut = false;
+        if ( node.getParent() != null )
+        {
+            NodeImp parentNode = new NodeImp(node.getParent(), session);
+            try
+            {
+                if ( parentNode.isCheckedOut() )
+                {
+                    isParentCheckOut = true;
+                }
+            }
+            catch ( Exception e )
+            {
+
+            }
+            if(parentNode.isParentCheckOut())
+            {
+                isParentCheckOut = true;
+            }
+        }
+        return isParentCheckOut;
+    }
+
     public void save() throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
     {
+        if(isParentCheckOut())
+        {
+            throw new RepositoryException("Can not save a new item Node:"+this.getPath());
+        }
         try
         {
             if ( node.isModified() || node.isNew() )
@@ -1121,7 +1156,7 @@ public class NodeImp implements Node
     {
         checksLock();
         if ( node != session.getRootBaseNode() )
-        {            
+        {
             node.remove();
         }
     }
