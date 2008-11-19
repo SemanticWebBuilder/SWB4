@@ -48,7 +48,7 @@ public class Workspace extends WorkspaceBase
         String uri = getUri(clazz.getURI());
         Namespace ns = Namespace.getNamespace(clazz.getPrefix(), uri);
         Element element = new Element(clazz.getName(), ns);        
-
+        element.setAttribute("id",node.getId());
         appendPropertiesToNode(node, element);
         parent.addContent(element);
         GenericIterator<BaseNode> itChilds = node.listNodes();
@@ -133,8 +133,9 @@ public class Workspace extends WorkspaceBase
     private static void appendNode(BaseNode node, Document document)
     {
         Element element = new Element(getName(node.getName()));
+        element.setAttribute("id",node.getId());
         appendPropertiesToNode(node, element);
-        document.addContent(element);
+        document.setRootElement(element);
         GenericIterator<BaseNode> itChilds = node.listNodes();
         while (itChilds.hasNext())
         {
@@ -145,7 +146,7 @@ public class Workspace extends WorkspaceBase
 
     public Document toXML()
     {
-        Document document = new Document();
+        Document document = new Document();        
         BaseNode root = this.getRoot();
         appendNode(root, document);
         try
