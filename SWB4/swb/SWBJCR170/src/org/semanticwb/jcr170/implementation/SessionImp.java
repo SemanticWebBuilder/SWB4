@@ -37,6 +37,7 @@ import javax.jcr.version.VersionException;
 import org.semanticwb.SWBException;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.repository.BaseNode;
+import org.semanticwb.repository.LockUserComparator;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 
@@ -53,7 +54,11 @@ class SessionImp implements Session
     private final SimpleCredentials credentials;
     private final String workspaceName;
     private final Hashtable<Node, LockImp> locksSessions = new Hashtable<Node, LockImp>();
-
+    private SimpleLockUserComparator simpleLockUserComparator=new SimpleLockUserComparator();
+    public LockUserComparator getLockUserComparator()
+    {
+        return simpleLockUserComparator;
+    }
     SessionImp(RepositoryImp repository, String workspaceName, SimpleCredentials credentials)
     {
         if ( repository == null || workspaceName == null || credentials == null )
@@ -276,7 +281,7 @@ class SessionImp implements Session
             {
                 try
                 {
-                    lock.getLockBaseNode().unLock(credentials.getUserID());
+                    lock.getLockBaseNode().unLock(credentials.getUserID(),this.getLockUserComparator());
                 }
                 catch ( SWBException swbe )
                 {
