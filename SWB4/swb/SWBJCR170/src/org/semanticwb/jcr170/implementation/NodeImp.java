@@ -35,11 +35,14 @@ import javax.jcr.nodetype.NodeType;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionException;
 import javax.jcr.version.VersionHistory;
+import org.jdom.Document;
 import org.semanticwb.SWBException;
 import org.semanticwb.model.GenericIterator;
+import org.semanticwb.model.SWBContext;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.repository.BaseNode;
+import org.semanticwb.repository.LockUserComparator;
 
 /**
  *
@@ -202,7 +205,7 @@ public final class NodeImp implements Node
     private void checksLock() throws LockException
     {
         if(node.isLocked() && !node.getLockOwner().equals(session.getUserID()))
-        {
+        {            
             throw new LockException("The node is locked by teh user "+node.getLockOwner());
         }
     }
@@ -748,7 +751,7 @@ public final class NodeImp implements Node
     {
         throw new UnsupportedOperationException(NOT_SUPPORTED_YET);
     }
-
+    
     public Version checkin() throws VersionException, UnsupportedRepositoryOperationException, InvalidItemStateException, LockException, RepositoryException
     {
         checksLock();
@@ -756,36 +759,62 @@ public final class NodeImp implements Node
         {
             if(node.isChekedOut())
             {
-                throw new InvalidItemStateException("The node is already checkedout");
+                
+                try
+                {
+                    node.unLock(session.getUserID(),session.getLockUserComparator());
+                    BaseNode versionNode=node.checkin();                
+                    return new VersionImp(versionNode);
+                }
+                catch(SWBException swbe)
+                {
+                    try
+                    {
+                        node.lock(session.getUserID(), false);
+                    }
+                    catch(SWBException swbe2)
+                    {
+                        throw new RepositoryException(swbe2);
+                    }
+                    throw new RepositoryException(swbe);
+                }                
+            }   
+            else
+            {
+                throw new InvalidItemStateException("The node is not checkcout");
+            }
+        }
+        else
+        {
+            throw new UnsupportedRepositoryOperationException("The node is not versionable");
+        }
+    }
+   
+    public void checkout() throws UnsupportedRepositoryOperationException, LockException, RepositoryException
+    {        
+        SWBContext.listWorkspaces().next().toXML();        
+        checksLock();
+        if ( node.isVersionable() )
+        {          
+            if(node.isPendingChanges())
+            {
+                throw new UnsupportedRepositoryOperationException("The node must be saved before, because has changes or is new");
             }
             try
             {
-                return new VersionImp(node.checkin());
+                node.lock(session.getUserID(), false);
+                node.checkout();                
+                return;            
             }
             catch(SWBException swbe)
             {
                 throw new RepositoryException(swbe);
             }
         }
-        throw new UnsupportedOperationException(NOT_SUPPORTED_YET);
-    }
-
-    public void checkout() throws UnsupportedRepositoryOperationException, LockException, RepositoryException
-    {
-        checksLock();
-        if ( !node.isVersionable() )
-        {            
-            try
-            {
-                node.checkout();
-                return;            
-            }
-            catch(SWBException swbe)
-            {
-                throw new RepositoryException();
-            }
+        else
+        {
+            throw new UnsupportedRepositoryOperationException("The node is not versionable");
         }
-        throw new UnsupportedRepositoryOperationException();
 
     }
 
@@ -929,7 +958,7 @@ public final class NodeImp implements Node
             {
                 // por el momento sólo puede desbloquear el mismo usuario, deberia verse como un super usurio lo puede desbloquear
                 LockImp lock = getLockImp();
-                node.unLock(session.getUserID());
+                node.unLock(session.getUserID(),session.getLockUserComparator());
                 if ( lock != null && lock.isSessionScoped() )
                 {
                     session.removeLockSession(lock);
@@ -941,7 +970,10 @@ public final class NodeImp implements Node
                 throw new LockException(e);
             }
         }
-        throw new UnsupportedRepositoryOperationException("The node " + node.getName() + " is not lockable or is not locked");
+        else
+        {
+            throw new UnsupportedRepositoryOperationException("The node " + node.getName() + " is not lockable or is not locked");
+        }
     }
 
     public boolean holdsLock() throws RepositoryException
@@ -1066,9 +1098,7 @@ public final class NodeImp implements Node
         {
             if ( node.isModified() || node.isNew() )
             {
-                node.checkProperties();
-                node.setModified(false);
-                node.setNew(false);
+                node.save();
             }
             NodeIterator nodes = this.getNodes();
             while (nodes.hasNext())
