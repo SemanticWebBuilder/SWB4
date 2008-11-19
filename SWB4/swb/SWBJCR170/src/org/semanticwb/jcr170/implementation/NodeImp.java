@@ -35,20 +35,18 @@ import javax.jcr.nodetype.NodeType;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionException;
 import javax.jcr.version.VersionHistory;
-import org.jdom.Document;
 import org.semanticwb.SWBException;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.repository.BaseNode;
-import org.semanticwb.repository.LockUserComparator;
 
 /**
  *
  * @author victor.lorenzana
  */
-public final class NodeImp implements Node
+public class NodeImp implements Node
 {
 
     private static final ValueFactoryImp factory = new ValueFactoryImp();
@@ -56,8 +54,8 @@ public final class NodeImp implements Node
     private static final String NOT_SUPPORTED_YET = "Not supported yet.";
     private static final String WAS_NOT_FOUND = " was not found";
     private static final String PATH_SEPARATOR = "/";
-    private final BaseNode node;
-    private final SessionImp session;
+    protected final BaseNode node;
+    protected final SessionImp session;
     private final int index;
 
     NodeImp(BaseNode node, SessionImp session)
@@ -763,8 +761,8 @@ public final class NodeImp implements Node
                 try
                 {
                     node.unLock(session.getUserID(),session.getLockUserComparator());
-                    BaseNode versionNode=node.checkin();                
-                    return new VersionImp(versionNode);
+                    BaseNode versionNode=node.checkin();                                    
+                    return new VersionImp(versionNode,node.getHistoryNode(),session);
                 }
                 catch(SWBException swbe)
                 {
@@ -1123,7 +1121,7 @@ public final class NodeImp implements Node
     {
         checksLock();
         if ( node != session.getRootBaseNode() )
-        {
+        {            
             node.remove();
         }
     }
