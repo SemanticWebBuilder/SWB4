@@ -21,7 +21,7 @@ import javax.jcr.ValueFormatException;
  * @author victor.lorenzana
  */
 public class ValueImp implements Value
-{  private static final Calendar calendar=Calendar.getInstance();
+{      
     private static SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss"); 
     private final int type;
     Object value;
