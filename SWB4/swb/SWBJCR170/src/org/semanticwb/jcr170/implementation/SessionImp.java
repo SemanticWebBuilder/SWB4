@@ -45,7 +45,7 @@ import org.xml.sax.SAXException;
  *
  * @author victor.lorenzana
  */
-class SessionImp implements Session
+public class SessionImp implements Session
 {
 
     private static final String NOT_SUPPORTED_YET = "Not supported yet.";
@@ -197,7 +197,7 @@ class SessionImp implements Session
 
     public void save() throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
     {
-        throw new UnsupportedOperationException(NOT_SUPPORTED_YET);
+        getRootNode().save();
     }
 
     public void refresh(boolean keepChanges) throws RepositoryException
