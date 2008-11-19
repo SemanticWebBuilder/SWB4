@@ -536,7 +536,7 @@ public class BaseNode extends BaseNodeBase
     {
         boolean isProtected = false;
         try
-        {
+        {            
             SemanticLiteral literal = getPropertyOfProperty(property, JCR_PROTECTED_PROPERTY);
             if ( literal != null )
             {
@@ -852,19 +852,7 @@ public class BaseNode extends BaseNodeBase
         return getHistoryNode;
     }
 
-    private BaseNode getBaseNode(SemanticProperty property)
-    {
-        BaseNode getBaseNode = null;
-        if ( property.isObjectProperty() )
-        {
-            SemanticObject object = getSemanticObject().getObjectProperty(property);
-            if ( object != null )
-            {
-                getBaseNode = new BaseNode(object);
-            }
-        }
-        return getBaseNode;
-    }
+    
 
     private boolean isCheckedoutByParents()
     {
@@ -969,18 +957,6 @@ public class BaseNode extends BaseNodeBase
             }
         }
         return addVersionToHistoryNode;
-    }
-
-    private BaseNode getVersionHistory() throws SWBException
-    {
-        BaseNode getVersionHistory = null;
-        SemanticProperty propVersionHistory = vocabulary.jcr_versionHistory;
-        SemanticObject object = getSemanticObject().getObjectProperty(propVersionHistory);
-        if ( object != null )
-        {
-            getVersionHistory = new BaseNode(object);
-        }
-        return getVersionHistory;
     }
 
     private void checkVersionable() throws SWBException
