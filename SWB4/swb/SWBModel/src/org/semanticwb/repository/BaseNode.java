@@ -1,8 +1,10 @@
 package org.semanticwb.repository;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import org.semanticwb.SWBException;
@@ -16,8 +18,7 @@ import org.semanticwb.model.GenericIterator;
 import org.semanticwb.platform.SemanticLiteral;
 
 public class BaseNode extends BaseNodeBase
-{
-
+{    
     private static final String JCR_CHILDDEFINITION_PROPERTY = "jcr:childNodeDefinition";
     private static final String JCR_PROTECTED_PROPERTY = "jcr:protected";
     private static final String JCR_MANDATORY_PROPERTY = "jcr:mandatory";
@@ -69,12 +70,45 @@ public class BaseNode extends BaseNodeBase
         }
         return isVersionNode;
     }
-
+    public Calendar getCreated() throws SWBException
+    {
+        SemanticProperty jcr_created=vocabulary.jcr_created;
+        String value=getPropertyInternal(jcr_created, null);
+        if(value==null)
+        {
+            throw new SWBException("The poperty jcr:created was not found");
+        }
+        else
+        {
+            try
+            {
+                Date date=iso8601dateFormat.parse(value);
+                Calendar cal=Calendar.getInstance(); 
+                cal.setTime(date);
+                return cal;
+            }
+            catch(ParseException pse)
+            {
+                throw new SWBException(pse.getMessage());
+            }
+        }
+        
+    }
     public boolean isVersionHistoryNode()
     {
         return isNodeType(vocabulary.nt_VersionHistory);
     }
-
+    @Override
+    public void remove()
+    {
+        GenericIterator<BaseNode> childs=listNodes();
+        while(childs.hasNext())
+        {
+            BaseNode child=childs.next();
+            child.remove();
+        }
+        super.remove();
+    }
     public boolean isVersionNode()
     {
         return isNodeType(vocabulary.nt_Version);
@@ -322,7 +356,7 @@ public class BaseNode extends BaseNodeBase
                         SemanticObject objectValue = getSemanticObject().getObjectProperty(property, null);
                         if ( objectValue == null )
                         {
-                            throw new SWBException("The value for the property " + property.getPrefix() + ":" + property.getName() + " is null for the node" + this.getName() + " of type " + this.getSemanticObject().getSemanticClass().getPrefix() + ":" + this.getSemanticObject().getSemanticClass().getName());
+                            throw new SWBException("The value for the property " + property.getPrefix() + ":" + property.getName() + " is null for the node " + this.getName() + " of type " + this.getSemanticObject().getSemanticClass().getPrefix() + ":" + this.getSemanticObject().getSemanticClass().getName());
                         }
                         else
                         {
@@ -335,7 +369,7 @@ public class BaseNode extends BaseNodeBase
                         String value = getPropertyInternal(property, null);
                         if ( value == null )
                         {
-                            throw new SWBException("The value for the property " + property.getPrefix() + ":" + property.getName() + " is null for the node" + this.getName() + " of type " + this.getSemanticObject().getSemanticClass().getPrefix() + ":" + this.getSemanticObject().getSemanticClass().getName());
+                            throw new SWBException("The value for the property " + property.getPrefix() + ":" + property.getName() + " is null for the node " + this.getName() + " of type " + this.getSemanticObject().getSemanticClass().getPrefix() + ":" + this.getSemanticObject().getSemanticClass().getName());
                         }
                     }
                 }
@@ -638,7 +672,7 @@ public class BaseNode extends BaseNodeBase
         if ( !abort )
         {
             properties = this.getSemanticObject().getSemanticClass().listProperties();
-            SemanticObject cloneNode = getSemanticObject().getModel().createSemanticObject(name, this.getSemanticObject().getSemanticClass());
+            SemanticObject cloneNode = getSemanticObject().getModel().createSemanticObject(name, vocabulary.nt_Version);
             new BaseNode(cloneNode).setName(name);
             while (properties.hasNext())
             {
@@ -724,11 +758,8 @@ public class BaseNode extends BaseNodeBase
                 version.addPrimaryType(this.getSemanticObject().getSemanticClass());
                 dummyVersion.setObjectProperty(jcr_fronzenNode, dummyFrozenNode);
                 dummyFrozenNode.setObjectProperty(jcr_version, dummyObject);
-                historyNode.getSemanticObject().setObjectProperty(jcr_root, dummyVersion);
-                if ( this.isVersionNode() )
-                {
-                    this.getSemanticObject().setObjectProperty(jcr_baseVersion, dummyVersion);
-                }
+                historyNode.getSemanticObject().setObjectProperty(jcr_root, dummyVersion);                
+                this.getSemanticObject().setObjectProperty(jcr_baseVersion, dummyVersion);                
             }
         }
     }
@@ -742,8 +773,15 @@ public class BaseNode extends BaseNodeBase
             addRootNodeToHistory(historyNode);
         }
     }
-
-    private BaseNode getHistoryNode() throws SWBException
+    public BaseNode[] getSuccessors() throws SWBException
+    {
+        return null;
+    }
+    public BaseNode[] getPredecessors() throws SWBException
+    {
+        return null;
+    }
+    public BaseNode getHistoryNode() throws SWBException
     {
         BaseNode getHistoryNode = null;
         SemanticProperty property = vocabulary.jcr_versionHistory;
