@@ -92,45 +92,42 @@ public class TestRepository
             session = repository.login(credentials);
             String title = "Deportes";
             Workspace ws = session.getWorkspace();
+            Node root = session.getRootNode();            
+            NodeIterator it=root.getNodes();
+            while(it.hasNext())
+            {
+                it.nextNode().remove();
+            }
             QueryManager qmanager = ws.getQueryManager();
-            Query query = qmanager.createQuery("//Category", Query.XPATH);
+            Query query = qmanager.createQuery("//" + title + "[@cm:title='" + title + "']", Query.XPATH);
             QueryResult result = query.execute();
             NodeIterator nodeIterator = result.getNodes();
-            if ( nodeIterator.hasNext() )
+            while (nodeIterator.hasNext())
             {
                 Node node = nodeIterator.nextNode();
                 node.remove();
             }
-            query = qmanager.createQuery("//Category[@cm:title='" + title + "']", Query.XPATH);
-            result = query.execute();
-            nodeIterator = result.getNodes();
-            if ( nodeIterator.hasNext() )
+
+
+            Node newNode = root.addNode(title, "cm:Category");
+            newNode.setProperty("cm:title", title);
+            newNode.setProperty("cm:description", title);
+            root.save();
+            newNode.checkout();
+            Node content = newNode.addNode("Contenido1", "cm:Content");
+            content.setProperty("cm:title", "Contenido 1");
+            content.setProperty("cm:description", "Contenido de prueba");
+            UUID = newNode.getUUID();
+            root.save();
+            newNode.checkin();
+            content.setProperty("cm:title", "Contenido 2");
+            content.setProperty("cm:description", "Contenido de prueba 2");            
+            
+            if ( UUID == null || UUID.equals("") )
             {
-                Node node = nodeIterator.nextNode();
-                node.remove();
+                Assert.fail("UUDI incorrecto");
             }
-            else
-            {
-                Node root = session.getRootNode();
-                Node newNode = root.addNode("Deportes", "cm:Category");                
-                newNode.setProperty("cm:title", title);
-                newNode.setProperty("cm:description", title);
-                newNode.save();
-                Node content=newNode.addNode("Contenido1", "cm:Content");                                
-                content.setProperty("cm:title", "Contenido 1");
-                content.setProperty("cm:description", "Contenido de prueba");                                
-                UUID = newNode.getUUID();                
-                root.save();
-                content.checkout();
-                content.setProperty("cm:title", "Contenido 2");
-                content.setProperty("cm:description", "Contenido de prueba 2");                
-                Version version=content.checkin();                
-                System.out.println(version.getProperty("cm:title"));
-                if ( UUID == null || UUID.equals("") )
-                {
-                    Assert.fail("UUDI incorrecto");
-                }
-            }
+
         }
         catch ( Throwable e )
         {
