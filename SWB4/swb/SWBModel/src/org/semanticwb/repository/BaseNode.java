@@ -1086,7 +1086,7 @@ public class BaseNode extends BaseNodeBase
                 {
                     predecessor.getSemanticObject().setObjectProperty(vocabulary.jcr_successors, ntVersion.getSemanticObject());
                     ntVersion.getSemanticObject().setObjectProperty(vocabulary.jcr_predecessors, predecessor.getSemanticObject());
-                }                
+                }                  
                 BaseNode ntFrozenNode = ntVersion.createNodeBase(JCR_FROZENNODE_NAME, vocabulary.nt_FrozenNode);
                 copyPropertiesToFrozenNode(ntFrozenNode);
                 addFrozenProperties(ntFrozenNode.getSemanticObject());
