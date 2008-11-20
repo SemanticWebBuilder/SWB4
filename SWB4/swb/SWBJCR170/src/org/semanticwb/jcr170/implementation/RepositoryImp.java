@@ -15,7 +15,7 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.SimpleCredentials;
 import org.semanticwb.model.SWBContext;
-import org.semanticwb.repository.BaseNode;
+import org.semanticwb.repository.Unstructured;
 import org.semanticwb.repository.Workspace;
 
 /**
@@ -49,22 +49,42 @@ public final class RepositoryImp implements Repository
     private String defaultWorkspaceName = "defaultWorkspace";
     private static final String namespace = "http://www.semanticwb.org/repository/workspace/default";
 
-    public RepositoryImp()
-    {
-        String[] names = listWorkspaces();
-        if ( names.length > 0 )
+    public RepositoryImp() throws RepositoryException
+    {         
+        boolean exists = false;
+        for ( String name : listWorkspaces() )
         {
-            defaultWorkspaceName = listWorkspaces()[0];
+            if ( name.equals(defaultWorkspaceName) )
+            {
+                exists = true;
+                break;
+            }
         }
-        else
+        if ( !exists )
         {
-            Workspace ws = SWBContext.createWorkspace(defaultWorkspaceName, namespace);
-            BaseNode root = ws.createBaseNode();
-            root.setName("jcr:root");
-            ws.setRoot(root);
+            createWorkspace(defaultWorkspaceName);
         }
+        
     }
 
+    public RepositoryImp(String defaultWorkspaceName) throws RepositoryException
+    {
+        this(); 
+        this.defaultWorkspaceName=defaultWorkspaceName;
+        boolean exists = false;
+        for ( String name : listWorkspaces() )
+        {
+            if ( name.equals(defaultWorkspaceName) )
+            {
+                exists = true;
+                break;
+            }
+        }
+        if ( !exists )
+        {
+            createWorkspace(defaultWorkspaceName);
+        }
+    }
     public String[] listWorkspaces()
     {
         HashSet<String> names = new HashSet<String>();
@@ -78,23 +98,7 @@ public final class RepositoryImp implements Repository
         return names.toArray(new String[size]);
     }
 
-    public RepositoryImp(String defaultWorkspaceName) throws RepositoryException
-    {
-        boolean exists = false;
-        for ( String name : listWorkspaces() )
-        {
-            if ( name.equals(defaultWorkspaceName) )
-            {
-                exists = true;
-                break;
-            }
-        }
-        if ( !exists )
-        {
-            throw new RepositoryException("The workspace " + defaultWorkspaceName + " was not found");
-        }
-        this.defaultWorkspaceName = defaultWorkspaceName;
-    }
+    
 
     public void setDefaultWorspaceName(String defaultWorkspaceName)
     {
@@ -123,8 +127,9 @@ public final class RepositoryImp implements Repository
             throw new RepositoryException("The name of repository can not be null or empty");
         }
         Workspace ws = SWBContext.createWorkspace(name, namespace);
-        BaseNode root = ws.createBaseNode();
+        Unstructured root = ws.createUnstructured();
         root.setName("jcr:root");
+        root.setPath("/");
         ws.setRoot(root);
     }
 
