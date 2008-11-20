@@ -1080,11 +1080,18 @@ public class BaseNode extends BaseNodeBase
             BaseNode versionHistory = getHistoryNode();
             if ( versionHistory != null )
             {
+                BaseNode[] predecessors=this.getVersions();                
                 BaseNode ntVersion = versionHistory.createNodeBase(JCR_VERSION_NAME, vocabulary.nt_Version);
+                for(BaseNode predecessor : predecessors)
+                {
+                    predecessor.getSemanticObject().setObjectProperty(vocabulary.jcr_successors, ntVersion.getSemanticObject());
+                    ntVersion.getSemanticObject().setObjectProperty(vocabulary.jcr_predecessors, predecessor.getSemanticObject());
+                }                
                 BaseNode ntFrozenNode = ntVersion.createNodeBase(JCR_FROZENNODE_NAME, vocabulary.nt_FrozenNode);
                 copyPropertiesToFrozenNode(ntFrozenNode);
                 addFrozenProperties(ntFrozenNode.getSemanticObject());
                 addVersionToHistoryNode = ntVersion;
+                
             }
         }
         return addVersionToHistoryNode;
@@ -1373,10 +1380,32 @@ public class BaseNode extends BaseNodeBase
         return getSemanticObject().getModel().getSemanticProperty(uri);
     }
 
-    public BaseNode[] getVersions()
-    {
-        ArrayList<BaseNode> version = new ArrayList<BaseNode>();
-        return version.toArray(new BaseNode[version.size()]);
+    public BaseNode[] getVersions() throws SWBException
+    {        
+        if(this.isVersionable())
+        {
+            if(this.isNew())
+            {
+                throw new SWBException("The node can be saved before");
+            }
+            ArrayList<BaseNode> versions = new ArrayList<BaseNode>();
+            BaseNode history=getHistoryNode();
+            GenericIterator<BaseNode> nodes=history.listNodes();
+            while(nodes.hasNext())
+            {
+                BaseNode node=nodes.next();
+                if(node.isVersionNode())
+                {
+                    versions.add(node);
+                }
+            }
+            return versions.toArray(new BaseNode[versions.size()]);
+        }
+        else
+        {
+            throw new SWBException("The node is not versionable");
+        }
+        
     }
 
     public final boolean isLockable()
