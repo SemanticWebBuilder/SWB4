@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionIterator;
+import org.semanticwb.SWBException;
 import org.semanticwb.repository.BaseNode;
 
 /**
@@ -21,7 +22,7 @@ public class VersionIteratorImp implements VersionIterator
     private long position=0;
     private final VersionHistoryImp versionHistory;
     private final SessionImp session;
-    VersionIteratorImp(VersionHistoryImp versionHistory,SessionImp session)
+    VersionIteratorImp(VersionHistoryImp versionHistory,SessionImp session) throws SWBException
     {
         ArrayList<BaseNode> temp=new ArrayList<BaseNode>();
         for(BaseNode version : versionHistory.getVersions())
