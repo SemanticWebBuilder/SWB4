@@ -1255,7 +1255,28 @@ public class CodeGenerator
         properties = new HashSet<String>();
         while (tpcit.hasNext())
         {
-            SemanticClass tpc = tpcit.next();
+            SemanticClass tpc = tpcit.next();            
+            /*Iterator<SemanticProperty> requiredProperties=tpc.listRequiredProperties();
+            while(requiredProperties.hasNext())
+            {
+                SemanticProperty tpp = requiredProperties.next();
+                String propertyName=tpp.getPrefix() + "_" + tpp.getName();
+                if ( !properties.contains(propertyName) )
+                {
+                    properties.add(propertyName);
+                    if ( !tpp.getURI().equals("#") )
+                    {
+                        int pos = tpp.getURI().indexOf("#");
+                        String uri = tpp.getURI();
+                        if ( pos != -1 )
+                        {
+                            uri = uri.substring(0, pos+1);
+                        }
+                        namespaces.put(tpp.getPrefix(), uri);
+                    }
+                    javaClassContent.append("        " + propertyName + "=vocabulary.getSemanticProperty(\"" + tpp.getURI() + "\");" + ENTER);
+                }
+            }*/
             Iterator<SemanticProperty> tppit = tpc.listProperties();
             while (tppit.hasNext())
             {
