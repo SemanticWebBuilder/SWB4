@@ -4,33 +4,10 @@
  */
 package org.semanticwb.jcr170.implementation;
 
-import java.io.InputStream;
-import java.util.Calendar;
 import javax.jcr.AccessDeniedException;
-import javax.jcr.InvalidItemStateException;
-import javax.jcr.Item;
-import javax.jcr.ItemExistsException;
-import javax.jcr.ItemNotFoundException;
-import javax.jcr.ItemVisitor;
-import javax.jcr.MergeException;
-import javax.jcr.NoSuchWorkspaceException;
-import javax.jcr.Node;
-import javax.jcr.NodeIterator;
-import javax.jcr.PathNotFoundException;
-import javax.jcr.Property;
-import javax.jcr.PropertyIterator;
 import javax.jcr.ReferentialIntegrityException;
 import javax.jcr.RepositoryException;
-import javax.jcr.Session;
 import javax.jcr.UnsupportedRepositoryOperationException;
-import javax.jcr.Value;
-import javax.jcr.ValueFormatException;
-import javax.jcr.lock.Lock;
-import javax.jcr.lock.LockException;
-import javax.jcr.nodetype.ConstraintViolationException;
-import javax.jcr.nodetype.NoSuchNodeTypeException;
-import javax.jcr.nodetype.NodeDefinition;
-import javax.jcr.nodetype.NodeType;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionException;
 import javax.jcr.version.VersionHistory;
@@ -56,7 +33,7 @@ public class VersionHistoryImp extends NodeImp implements VersionHistory
     {
         return node;
     }
-    public BaseNode[] getVersions()
+    public BaseNode[] getVersions() throws SWBException
     {
         return node.getVersions();
     }
@@ -78,7 +55,14 @@ public class VersionHistoryImp extends NodeImp implements VersionHistory
 
     public VersionIterator getAllVersions() throws RepositoryException
     {        
-        return new VersionIteratorImp(this,session);
+        try
+        {
+            return new VersionIteratorImp(this,session);
+        }
+        catch(SWBException swbe)
+        {
+            throw new RepositoryException(swbe);
+        }
     }
 
     public Version getVersion(String arg0) throws VersionException, RepositoryException
