@@ -139,11 +139,28 @@ public class SemanticClass
              StmtIterator it=m_class.listProperties(iprop);
              while(it.hasNext())
              {
-                 Statement statement=it.nextStatement();
+                 Statement statement=it.nextStatement();                 
                  literals.add(new SemanticLiteral(statement));
              }
         }catch(PropertyNotFoundException noe){}
         return literals.iterator();
+    }
+    public Iterator<SemanticObject> listObjectRequiredProperties(SemanticProperty prop)
+    {
+        ArrayList<SemanticObject> objects=new ArrayList<SemanticObject>();        
+        Property iprop=prop.getRDFProperty();
+        try
+        {            
+             StmtIterator it=m_class.listProperties(iprop);
+             while(it.hasNext())
+             {
+                 Statement statement=it.nextStatement();       
+                 Resource res=statement.getResource();
+                 SemanticObject object=new SemanticObject(res);
+                 objects.add(object);
+             }
+        }catch(PropertyNotFoundException noe){}
+        return objects.iterator();
     }
     
     
