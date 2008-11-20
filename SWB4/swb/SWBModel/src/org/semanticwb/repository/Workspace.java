@@ -32,6 +32,12 @@ public class Workspace extends WorkspaceBase
     public Workspace(SemanticObject base)
     {
         super(base);
+        if(getRoot()==null)
+        {
+            BaseNode root = createBaseNode();
+            root.setName("jcr:root");
+            setRoot(root);
+        }
     }
 
     public Document getDocumentView()
