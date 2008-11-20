@@ -192,9 +192,6 @@ public class NodeImp implements Node
             throw new LockException("The node is locked by the user " + node.getLockOwner());
         }        
     }
-
-    
-
     public Node addNode(String relPath, String primaryNodeTypeName) throws ItemExistsException, PathNotFoundException, NoSuchNodeTypeException, LockException, VersionException, ConstraintViolationException, RepositoryException
     {
         checksLock();
