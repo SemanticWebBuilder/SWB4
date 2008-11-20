@@ -330,8 +330,8 @@ public class Workspace extends WorkspaceBase
     }
 
     public BaseNode getBaseNodeFromType(String id, String type) throws SWBException
-    {
-        SemanticClass clazz = BaseNode.getSemanticClass(type);
+    {        
+        SemanticClass clazz = this.getRoot().getSemanticClass(type);
         String uri = getSemanticObject().getModel().getObjectUri(id, clazz);
         SemanticObject object = getSemanticObject().getModel().getSemanticObject(uri);
         return new BaseNode(object);
