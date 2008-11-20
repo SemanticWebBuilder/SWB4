@@ -55,14 +55,14 @@ public class Window extends GenericAdmResource {
     String webWorkPath = "/work";
     private static Logger log = SWBUtils.getLogger(Window.class);
     
-    /** Crea una nueva instancia de esta clase */    
+    /** Crea una nueva instancia de esta clase */
     public Window() {
     }
 
     /**
      * Inicializa el recurso
      * @param base
-     */    
+     */
     @Override
     public void setResourceBase(Portlet base) {
         try {
@@ -83,7 +83,7 @@ public class Window extends GenericAdmResource {
      * @param reqParams
      * @throws SWBResourceException
      * @throws IOException
-     */    
+     */
     @Override
     public void doView(HttpServletRequest request,
                        HttpServletResponse response,
@@ -92,8 +92,8 @@ public class Window extends GenericAdmResource {
         
         String action = (null != request.getParameter("ven_act") 
                          && !"".equals(request.getParameter("ven_act").trim()))
-                        ? request.getParameter("ven_act").trim() 
-                        : "ven_step1";
+                         ? request.getParameter("ven_act").trim() 
+                         : "ven_step1";
         if ("ven_step2".equals(action)) {
             showWindow(request, response, reqParams); // Nueva ventana pop-up
         } else { // Se invoca la nueva ventana
@@ -101,10 +101,12 @@ public class Window extends GenericAdmResource {
             if ("yes".equals(base.getAttribute("bysession", ""))) {
                 if (request.getSession().getAttribute("wbwindow") != null 
                         && String.valueOf(base.getId() + "_" 
-                        + base.getWebSiteId()).equals(request.getSession().getAttribute("wbwindow"))) {
+                        + base.getWebSiteId()).equals(request.getSession(
+                        ).getAttribute("wbwindow"))) {
                     return;
                 } else {
-                    request.getSession().setAttribute("wbwindow", base.getId() + "_" + base.getWebSiteId());
+                    request.getSession().setAttribute("wbwindow", 
+                            base.getId() + "_" + base.getWebSiteId());
                 }
             }
             StringBuilder props = new StringBuilder(250);
@@ -130,12 +132,13 @@ public class Window extends GenericAdmResource {
             props.append(base.getAttribute("top", "10").trim());
             props.append(",left=");
             props.append(base.getAttribute("left", "10").trim());
-
-            SWBResourceURLImp url = new SWBResourceURLImp(request, base, reqParams.getTopic(),SWBResourceURL.UrlType_RENDER);
+            
+            SWBResourceURLImp url = new SWBResourceURLImp(request, base,
+                    reqParams.getTopic(), SWBResourceURL.UrlType_RENDER);
             url.setResourceBase(base);
             url.setMode(SWBResourceURL.Mode_VIEW);
             url.setWindowState(SWBResourceURL.WinState_MAXIMIZED);
-            url.setParameter("ven_act","ven_step2");
+            url.setParameter("ven_act", "ven_step2");
             url.setTopic(reqParams.getTopic());
             url.setCallMethod(reqParams.Call_DIRECT);
             //response.sendRedirect(url.toString());
@@ -147,12 +150,15 @@ public class Window extends GenericAdmResource {
             if (ret != null) {
                 out.println(ret);
             }
+            out.println("<br><a href=\"" 
+                + reqParams.getRenderUrl().setMode(SWBParamRequest.Mode_ADMIN)
+                + "\">Click para Window admin</a>");
         }
-    }    
+    }
 
     /**
      * Crea el c&oacute;digo del documento HTML a mostrar en la ventana indicada,
-     * seg&uacute; la configuraci&oacute;n seleccionada en la 
+     * seg&uacute;n la configuraci&oacute;n seleccionada en la 
      * administraci&oacute;n de este recurso.
      * @param request
      * @param response
@@ -191,6 +197,7 @@ public class Window extends GenericAdmResource {
             ret.append("<font size=\"+1\">" + base.getAttribute("title"));
             ret.append("</font><br><br>");
         }
+        
         SWBResourceURL wburl = reqParams.getActionUrl();
         String url = base.getAttribute("url", "").trim();
         if (!"".equals(url)) {
@@ -215,11 +222,6 @@ public class Window extends GenericAdmResource {
                 ret.append("<a href=\"javascript:redirect('" + wburl.toString());
                 ret.append("');\"> \n");
             } else if ("3".equals(target) || "4".equals(target)) {
-                /*
-                ret.append("<a href=\"" + wburl.toString() + "\" target=\"ven_step2\"");
-                if ("3".equals(target)) ret.append(" onClick=\"javascript:window.close();\"");
-                ret.append("> \n");
-                 */
                 ret.append("<a href=\"#\" onClick=\"javascript:window.open('");
                 ret.append(wburl.toString() + "', '_newven2');");
                 if ("3".equals(target)) {
@@ -230,13 +232,19 @@ public class Window extends GenericAdmResource {
         }
 
         String img = base.getAttribute("img", "").trim();
+        
         if (!"".equals(img)) {
             if (img.endsWith(".swf")) {
                 ret.append("<object classid=\"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000\" codebase=\"http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0\"> \n");
-                ret.append("<param name=movie value=\""+ webWorkPath +"/"+ img +"\" />\n");
+                ret.append("<param name=movie value=\"" + webWorkPath + "/"
+                        + img + "\" />\n");
                 ret.append("<param name=\"quality\" value=\"high\" />\n");
-                if(!"".equals(url)) ret.append("<param name=\"FlashVars\" value=\"liga=" + wburl.toString() +"\" /> \n");
-                ret.append("<embed id=\""+ img +"\" name=\""+ img +"\" src=\""+ webWorkPath +"/"+ img);
+                if (!"".equals(url)) {
+                    ret.append("<param name=\"FlashVars\" value=\"liga="
+                            + wburl.toString() +"\" /> \n");
+                }
+                ret.append("<embed id=\"" + img + "\" name=\"" + img
+                        + "\" src=\"" + webWorkPath + "/" + img);
                 ret.append("\" quality=\"high\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" type=\"application/x-shockwave-flash\">");
                 ret.append("</embed>\n");
                 ret.append("</object>\n");
@@ -245,7 +253,7 @@ public class Window extends GenericAdmResource {
                 if (!"".equals(base.getAttribute("alt", "").trim())) {
                     ret.append(" alt=\""+base.getAttribute("alt").trim()+"\"");
                 }
-                ret.append(" src=\""+ webWorkPath +"/"+ img +"\" border=0>");
+                ret.append(" src=\"" + webWorkPath + "/" + img + "\" border=0>");
             }
         }
         if (!"".equals(base.getAttribute("text", "").trim())) {
@@ -275,9 +283,11 @@ public class Window extends GenericAdmResource {
                               SWBActionResponse response) 
                               throws SWBResourceException, java.io.IOException {
         Portlet base = getResourceBase();
-        //TODO Espera de adicion de un metodo equivalente a addHit
+        
         base.addHit(request, response.getUser(), response.getTopic());
         String url = base.getAttribute("url", "").trim();
-        if (!url.equals("")) response.sendRedirect(url);
+        if (!url.equals("")) {
+            response.sendRedirect(url);
+        }
     }
 }

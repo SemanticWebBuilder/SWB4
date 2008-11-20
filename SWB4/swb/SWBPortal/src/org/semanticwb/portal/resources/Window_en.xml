@@ -21,35 +21,42 @@
 		<input type="RADIO" name="target" label="In a new window and close the pop-up window" value="3" />
 		<input type="RADIO" name="target" label="In a new window and do not close the  pop-up window" value="4" />
 		<input type="CHECKBOX" name="bysession" label="Open window by session" value="yes"/>		
-		<applet label="Text color:" name="wbcolor" code="applets.selcolor.SelColor.class" codebase="{@webpath}" archive="wbadmin/lib/SelColor.jar" width="293" height="240">
-			<param name="name" value="wbcolor"/>
-			<param name="cache_archive" value="wbadmin/lib/SelColor.jar"/>
-			<param name="_cache_version" value="1.0.0.1"/>
-			<param name="_cache_archive_ex" value="applet.jar;preload, util.jar;preload,tools.jar;preload"/>
-			<param name="type" value="application/x-java-applet;version=1.4"/>
-			<param name="scriptable" value="true"/>
-			<param name="webpath" value="/"/>
-			<param name="foreground" value="99cccc"/>
-			<param name="background" value="99cccc"/>
-			<param name="linkcolor" value="000000" input="textcolor" moreattr="replace('#','')"/>
-			<param name="linkactual" value="000000" input="textcolor"/>
-		</applet>
+                <statictext name="chooseColor">
+                        <![CDATA[
+                        Text color:
+                        <script type="text/javascript" src="/swb/swbadmin/js/dojo/dojo/dojo.js" djConfig="parseOnLoad: true"></script>
+                        <script type="text/javascript" src="/swb/swbadmin/js/dojo/dijit/ColorPalette.js"></script>
+                        <script type="text/javascript">
+                            dojo.require("dojo.parser");
+                            dojo.require("dijit.ColorPalette");
+                            function reportColor(selectedColor, eid) {
+                                var e=document.getElementById(eid);
+                                eval("document.frmVentana." + eid + ".value='" + selectedColor + "'");
+                                e.style.backgroundColor=selectedColor;
+                            }
+                        </script>
+                        <div dojoType="dijit.ColorPalette" onChange="reportColor(arguments[0], 'textcolor')">&nbsp;&nbsp;</div>
+                    <span id="textcolor"> &nbsp; &nbsp;  &nbsp; &nbsp;  &nbsp; &nbsp; </span>
+                        ]]>
+                </statictext>
 		<input type="HIDDEN" name="textcolor"/>
 		<input type="TEXT" size="7" maxlength="7" name="hdntextcolor" label="Other text color (hexadecimal):"/>		
 		<input type="FILE" name="backimg" label="Background image (bmp, gif, jpg, jpeg):" showfile="true" msg="Current image " filetype="bmp|jpg|jpeg|gif" isshowfiletype="true" isremovefile="true" removemsg="Remove image" size="40"/>
-		<applet label="Background color:" name="wbbgcolor" code="applets.selcolor.SelColor.class" codebase="{@webpath}" archive="wbadmin/lib/SelColor.jar" width="293" height="240">
-			<param name="name" value="wbbgcolor"/>
-			<param name="cache_archive" value="wbadmin/lib/SelColor.jar"/>
-			<param name="_cache_version" value="1.0.0.1"/>
-			<param name="_cache_archive_ex" value="applet.jar;preload, util.jar;preload,tools.jar;preload"/>
-			<param name="type" value="application/x-java-applet;version=1.4"/>
-			<param name="scriptable" value="true"/>
-			<param name="webpath" value="/"/>
-			<param name="foreground" value="99cccc"/>
-			<param name="background" value="99cccc"/>
-			<param name="linkcolor" value="000000" input="backcolor" moreattr="replace('#','')"/>
-			<param name="linkactual" value="000000" input="backcolor"/>
-		</applet>
+                <statictext name="chooseBkgrndColor">
+                        <![CDATA[
+                        Window background color:
+                        <script type="text/javascript">
+                            dojo.require("dojo.parser");
+                            dojo.require("dijit.ColorPalette");
+                            /*function reportColor(selectedColor, eid) {
+                                var e=document.getElementById(eid);
+                                e.style.backgroundColor=selectedColor;
+                            }*/
+                        </script>
+                        <div dojoType="dijit.ColorPalette" onChange="reportColor(arguments[0], 'backcolor')" onClick="reportColor(arguments[0], 'backcolor')">&nbsp;&nbsp;</div>
+                    <span id="backcolor"> &nbsp; &nbsp;  &nbsp; &nbsp;  &nbsp; &nbsp; </span>
+                        ]]>
+		</statictext>
 		<input type="HIDDEN" name="backcolor"/>
 		<input type="TEXT" size="7" maxlength="7" name="hdnbackcolor" label="Other background color (hexadecimal):"/>		
 		<statictext name="window">
