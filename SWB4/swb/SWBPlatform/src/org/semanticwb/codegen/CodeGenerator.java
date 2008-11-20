@@ -471,14 +471,15 @@ public class CodeGenerator
             javaClassContent.append("import " + sPackage + ".base.*;" + ENTER);
             javaClassContent.append("import org.semanticwb.platform.SemanticObject;" + ENTER);
             javaClassContent.append(ENTER);
-            if ( parent == null )
+            javaClassContent.append("public class " + className + " extends " + className + "Base " + ENTER);
+            /*if ( parent == null )
             {
                 javaClassContent.append("public class " + className + " extends " + className + "Base " + ENTER);
             }
             else
             {
                 javaClassContent.append("public class " + className + " extends " + getClassName(parent) + "Base " + ENTER);
-            }
+            }*/
             javaClassContent.append("{" + ENTER);
             javaClassContent.append(PUBLIC + className + "(SemanticObject base)" + ENTER);
             javaClassContent.append(OPEN_BLOCK + ENTER);
