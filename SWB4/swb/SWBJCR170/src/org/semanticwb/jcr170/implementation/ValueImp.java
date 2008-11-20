@@ -111,6 +111,6 @@ public class ValueImp implements Value
 
     public int getType()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return type;
     }
 }
