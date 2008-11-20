@@ -41,6 +41,7 @@ import org.semanticwb.model.SWBContext;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.repository.BaseNode;
+import org.semanticwb.repository.PropertyType;
 
 /**
  *
@@ -164,8 +165,6 @@ public class NodeImp implements Node
         return getBaseNodeFromAbsolutePath;
     }
 
-    
-
     private String normalize(String relPath) throws RepositoryException
     {
         String normalize = relPath;
@@ -190,12 +189,13 @@ public class NodeImp implements Node
         if ( node.isLocked() && !node.getLockOwner().equals(session.getUserID()) )
         {
             throw new LockException("The node is locked by the user " + node.getLockOwner());
-        }        
+        }
     }
+
     public Node addNode(String relPath, String primaryNodeTypeName) throws ItemExistsException, PathNotFoundException, NoSuchNodeTypeException, LockException, VersionException, ConstraintViolationException, RepositoryException
     {
         checksLock();
-        if(node.isChekedin())
+        if ( node.isChekedin() )
         {
             throw new RepositoryException("The node can not add a child in check-in mode");
         }
@@ -205,9 +205,9 @@ public class NodeImp implements Node
         {
             primaryNodeTypeName = DEFAULT_PRIMARY_NODE_TYPE_NAME;
         }
-        if(!node.canAddNode(primaryNodeTypeName))
+        if ( !node.canAddNode(primaryNodeTypeName) )
         {
-            throw new NoSuchNodeTypeException("The nodeType "+primaryNodeTypeName+" can not be added to this node");
+            throw new NoSuchNodeTypeException("The nodeType " + primaryNodeTypeName + " can not be added to this node");
         }
         if ( !node.canAddSameNameSiblings(primaryNodeTypeName) && node.existsSameNode(relPath) )
         {
@@ -419,34 +419,48 @@ public class NodeImp implements Node
     public Property setProperty(String name, Value[] value, int arg2) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
         checksLock();
-        if(node.isChekedin())
+        if ( node.isChekedin() )
         {
             throw new RepositoryException("The node can not modify properties in check-in mode");
         }
-        PropertyImp propertyToReturn = null;
+        if ( !node.canAddProperty(name) )
+        {
+            throw new RepositoryException("The property was not definied in the nodetype");
+        }
         for ( Value ovalue : value )
         {
             try
             {
-                SemanticProperty property = node.getSemanticProperty(name);
+                PropertyType type = PropertyType.STRING;
+                switch ( ovalue.getType() )
+                {
+                    case javax.jcr.PropertyType.BOOLEAN:
+                        type = PropertyType.BOOLEAN;
+                        break;
+                    case javax.jcr.PropertyType.DATE:
+                        type = PropertyType.DATETIME;
+                        break;
+                    case javax.jcr.PropertyType.DOUBLE:
+                        type = PropertyType.DOUBLE;
+                        break;
+                    case javax.jcr.PropertyType.LONG:
+                        type = PropertyType.LONG;
+                        break;
+
+                }
+                SemanticProperty property = node.getSemanticProperty(name, type);
                 node.setProperty(property, ovalue.getString());
                 node.setModified(true);
-                propertyToReturn = new PropertyImp(this, property);
+                PropertyImp propertyToReturn = new PropertyImp(this, property);
+                return propertyToReturn;
             }
             catch ( SWBException swe )
             {
                 throw new RepositoryException(swe);
             }
-
         }
+        throw new ValueFormatException("No has values to set");
 
-
-
-        if ( propertyToReturn == null )
-        {
-            throw new RepositoryException("The property " + name + WAS_NOT_FOUND);
-        }
-        return propertyToReturn;
     }
 
     public Property setProperty(String name, String[] value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
@@ -987,16 +1001,16 @@ public class NodeImp implements Node
         BaseNode parent = node.getParent();
         if ( parent != null )
         {
-            NodeImp parentNode = new NodeImp(parent, session);
-            String pathParent = parentNode.getPath();
-            if ( pathParent.endsWith(PATH_SEPARATOR) )
-            {
-                path = parentNode.getPath() + getName();
-            }
-            else
-            {
-                path = parentNode.getPath() + PATH_SEPARATOR + getName();
-            }
+        NodeImp parentNode = new NodeImp(parent, session);
+        String pathParent = parentNode.getPath();
+        if ( pathParent.endsWith(PATH_SEPARATOR) )
+        {
+        path = parentNode.getPath() + getName();
+        }
+        else
+        {
+        path = parentNode.getPath() + PATH_SEPARATOR + getName();
+        }
         }
         return path;*/
         return node.getPath();
@@ -1100,7 +1114,7 @@ public class NodeImp implements Node
             {
 
             }
-            if(parentNode.isParentCheckOut())
+            if ( parentNode.isParentCheckOut() )
             {
                 isParentCheckOut = true;
             }
@@ -1110,13 +1124,13 @@ public class NodeImp implements Node
 
     public void save() throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
     {
-        if(node.isNew())
+        if ( node.isNew() )
         {
-            throw new RepositoryException("Can not save a new item Node:"+this.getPath());
-        }        
+            throw new RepositoryException("Can not save a new item Node:" + this.getPath());
+        }
         try
         {
-            node.save();            
+            node.save();
         }
         catch ( SWBException swe )
         {
@@ -1131,6 +1145,10 @@ public class NodeImp implements Node
 
     public void remove() throws VersionException, LockException, ConstraintViolationException, RepositoryException
     {
+        if ( node.isChekedin() )
+        {
+            throw new RepositoryException("The node can not be removed in check-in mode");
+        }
         checksLock();
         if ( node != session.getRootBaseNode() )
         {

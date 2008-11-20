@@ -5,6 +5,7 @@
 package org.semanticwb.jcr170.implementation;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
 import javax.jcr.AccessDeniedException;
@@ -27,7 +28,6 @@ import javax.jcr.nodetype.NoSuchNodeTypeException;
 import javax.jcr.nodetype.PropertyDefinition;
 import javax.jcr.version.VersionException;
 import org.semanticwb.platform.SemanticLiteral;
-import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.repository.BaseNode;
 
@@ -55,26 +55,36 @@ public final class PropertyImp implements Property
         this.parent = parent;
         this.node = parent.getBaseNode();
         this.property = property;
+
     }
 
     public void setValue(Value value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        node.getSemanticObject().setProperty(property, value.getString());
+        Value[] values = {value};
+        setValue(values);
+
     }
 
     public void setValue(Value[] value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        throw new UnsupportedOperationException(NOT_SUPPORTED_YET);
+        for ( Value ovalue : value )
+        {
+            node.getSemanticObject().setProperty(property, ovalue.getString());
+        }
+
     }
 
     public void setValue(String value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        node.getSemanticObject().setProperty(property, factory.createValue(value).toString());
+        setValue(factory.createValue(value));
     }
 
     public void setValue(String[] value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        throw new UnsupportedOperationException(NOT_SUPPORTED_YET);
+        for ( String svalue : value )
+        {
+            setValue(factory.createValue(svalue));
+        }
     }
 
     public void setValue(InputStream value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
@@ -84,36 +94,36 @@ public final class PropertyImp implements Property
 
     public void setValue(long value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        node.getSemanticObject().setProperty(property, factory.createValue(value).toString());
+        setValue(factory.createValue(value));
     }
 
     public void setValue(double value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        node.getSemanticObject().setProperty(property, factory.createValue(value).toString());
+        setValue(factory.createValue(value));
     }
 
     public void setValue(Calendar value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        node.getSemanticObject().setProperty(property, factory.createValue(value).toString());
+        setValue(factory.createValue(value));
     }
 
     public void setValue(boolean value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        node.getSemanticObject().setProperty(property, factory.createValue(value).toString());
+        setValue(factory.createValue(value));
     }
 
     public void setValue(Node node) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        String uudi = node.getUUID();
-        this.node.getSemanticObject().setProperty(property, factory.createValue(uudi).toString());
+        throw new UnsupportedOperationException(NOT_SUPPORTED_YET);
     }
 
     public Value getValue() throws ValueFormatException, RepositoryException
     {
+
         if ( !property.isObjectProperty() )
         {
-            String value=node.getSemanticObject().getProperty(property);
-            if(value!=null)
+            String value = node.getSemanticObject().getProperty(property);
+            if ( value != null )
             {
                 return factory.createValue(value);
             }
@@ -130,7 +140,17 @@ public final class PropertyImp implements Property
 
     public Value[] getValues() throws ValueFormatException, RepositoryException
     {
-        throw new UnsupportedOperationException(NOT_SUPPORTED_YET);
+        ArrayList<Value> avalues=new ArrayList<Value>();
+        Iterator<SemanticLiteral> values=node.getSemanticObject().listLiteralProperties(property);
+        while(values.hasNext())
+        {
+            SemanticLiteral value=values.next();
+            if(value!=null && value.getString()!=null)
+            {
+                avalues.add(factory.createValue(value.getString()));
+            }
+        }
+        return avalues.toArray(new Value[avalues.size()]);
     }
 
     public String getString() throws ValueFormatException, RepositoryException
@@ -140,7 +160,7 @@ public final class PropertyImp implements Property
 
     public InputStream getStream() throws ValueFormatException, RepositoryException
     {
-        return getValue().getStream();
+        throw new UnsupportedOperationException(NOT_SUPPORTED_YET);
     }
 
     public long getLong() throws ValueFormatException, RepositoryException
@@ -165,36 +185,12 @@ public final class PropertyImp implements Property
 
     public Node getNode() throws ValueFormatException, RepositoryException
     {
-        if ( this.getType() == PropertyType.REFERENCE )
-        {
-            SemanticObject object = this.node.getSemanticObject().getObjectProperty(property);
-            BaseNode nodeReturn = new BaseNode(object);
-            return new NodeImp(nodeReturn, parent.getSessionImp());
-        }
-        throw new ValueFormatException(NOT_SUPPORTED_YET);
+        throw new UnsupportedOperationException(NOT_SUPPORTED_YET);
     }
 
     public long getLength() throws ValueFormatException, RepositoryException
     {
-        int length = 0;
-        if ( this.getType() == PropertyType.REFERENCE )
-        {
-
-            Iterator<SemanticObject> values = this.node.getSemanticObject().listObjectProperties(property);
-            while (values.hasNext())
-            {
-                length++;
-            }
-        }
-        else
-        {
-            Iterator<SemanticLiteral> values = this.node.getSemanticObject().listLiteralProperties(property);
-            while (values.hasNext())
-            {
-                length++;
-            }
-        }
-        return length;
+        throw new UnsupportedOperationException(NOT_SUPPORTED_YET);
     }
 
     public long[] getLengths() throws ValueFormatException, RepositoryException
@@ -204,7 +200,7 @@ public final class PropertyImp implements Property
 
     public PropertyDefinition getDefinition() throws RepositoryException
     {
-        throw new UnsupportedOperationException(NOT_SUPPORTED_YET);
+       return new SemanticPropertyDefinition(property, node);
     }
 
     public int getType() throws RepositoryException
