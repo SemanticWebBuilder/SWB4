@@ -47,6 +47,7 @@ public final class RepositoryImp implements Repository
 
     }
     private String defaultWorkspaceName = "defaultWorkspace";
+    private static final String namespace = "http://www.semanticwb.org/repository/workspace/default";
 
     public RepositoryImp()
     {
@@ -57,9 +58,7 @@ public final class RepositoryImp implements Repository
         }
         else
         {
-            String namespace = "http://www.semanticwb.org/repository/workspace/default";
             Workspace ws = SWBContext.createWorkspace(defaultWorkspaceName, namespace);
-            ws.setName(defaultWorkspaceName);
             BaseNode root = ws.createBaseNode();
             root.setName("jcr:root");
             ws.setRoot(root);
@@ -92,7 +91,7 @@ public final class RepositoryImp implements Repository
         }
         if ( !exists )
         {
-            throw new RepositoryException("The workspace " + defaultWorkspaceName + " does not exist");
+            throw new RepositoryException("The workspace " + defaultWorkspaceName + " was not found");
         }
         this.defaultWorkspaceName = defaultWorkspaceName;
     }
@@ -115,6 +114,18 @@ public final class RepositoryImp implements Repository
     public String getDescriptor(String descriptor)
     {
         return descriptors.get(descriptor);
+    }
+
+    public static void createWorkspace(String name) throws RepositoryException
+    {
+        if ( name == null || name.trim().equals("") )
+        {
+            throw new RepositoryException("The name of repository can not be null or empty");
+        }
+        Workspace ws = SWBContext.createWorkspace(name, namespace);
+        BaseNode root = ws.createBaseNode();
+        root.setName("jcr:root");
+        ws.setRoot(root);
     }
 
     public Session login(Credentials credentials, String workspaceName) throws LoginException, NoSuchWorkspaceException, RepositoryException
