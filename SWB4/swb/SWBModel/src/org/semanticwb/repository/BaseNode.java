@@ -15,30 +15,25 @@ import org.semanticwb.platform.SemanticProperty;
 import java.util.UUID;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.GenericIterator;
-import org.semanticwb.model.SWBContext;
 import org.semanticwb.platform.SemanticLiteral;
 
 public class BaseNode extends BaseNodeBase
 {
 
     private static final String PATH_SEPARATOR = "/";
-    private static final String JCR_CHILDDEFINITION_PROPERTY = "jcr:childNodeDefinition";
     private static final String JCR_FROZENNODE_NAME = "jcr:frozenNode";
-    private static final String JCR_SAMENAMESIBILINGS_PROPERTY = "jcr:sameNameSiblings";
     private static final String JCR_VERSION_NAME = "jcr:version";
-    private static final String MIX_MIXIN_PROPERTY = "mix:mixin";
     private static final String ONPARENTVERSION_COPY = "COPY";
-    private static final String ONPARENTVERSION_VERSION = "VERSION";
-    private static final String JCR_SUPERTYPES_PROPERTY = "jcr:supertypes";
+    private static final String ONPARENTVERSION_VERSION = "VERSION";    
     private static final String WAS_NOT_FOUND = " was not found";
     private static final Calendar calendar = Calendar.getInstance();
     private static SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
     private static final String PREFIX_PROPERTY_TO_EXCLUDE = "swbrep";
 
     public BaseNode(SemanticObject base)
-    {
+    {   
         super(base);
-        addPrimaryType(getSemanticObject().getSemanticClass());
+        addPrimaryType(getSemanticObject().getSemanticClass());        
     }
 
     @Override
@@ -371,18 +366,6 @@ public class BaseNode extends BaseNodeBase
         }
     }
 
-    private SemanticLiteral getPropertyOfProperty(SemanticProperty property, String name) throws SWBException
-    {
-        SemanticLiteral getPropertyOfProperty = null;
-        String uri = getUri(name);
-        SemanticProperty propertyRequired = getSemanticObject().getModel().getSemanticProperty(uri);
-        if ( propertyRequired != null )
-        {
-            getPropertyOfProperty = property.getRequiredProperty(propertyRequired);
-        }
-        return getPropertyOfProperty;
-    }
-
     public boolean canAddSameNameSiblings(String name)
     {
         boolean canAddSameNameSiblings = true;
@@ -401,18 +384,11 @@ public class BaseNode extends BaseNodeBase
     private boolean canAddSameNameSiblings(SemanticClass clazz)
     {
         boolean canAddSameNameSiblings = true;
-        try
+        SemanticProperty prop = vocabulary.jcr_sameNameSiblings;
+        SemanticLiteral literal = clazz.getRequiredProperty(prop);
+        if ( literal != null && literal.getString() != null )
         {
-            SemanticProperty prop = getSemanticProperty(JCR_SAMENAMESIBILINGS_PROPERTY);
-            SemanticLiteral literal = clazz.getRequiredProperty(prop);
-            if ( literal != null && literal.getString() != null )
-            {
-                canAddSameNameSiblings = Boolean.parseBoolean(literal.getString());
-            }
-        }
-        catch ( SWBException swbe )
-        {
-            canAddSameNameSiblings = true;
+            canAddSameNameSiblings = Boolean.parseBoolean(literal.getString());
         }
         return canAddSameNameSiblings;
     }
@@ -665,7 +641,7 @@ public class BaseNode extends BaseNodeBase
         while (classes.hasNext())
         {
             SemanticClass clazz = classes.next();
-            Iterator<SemanticLiteral> literals = listSemanticLiterals(clazz, JCR_SUPERTYPES_PROPERTY);
+            Iterator<SemanticLiteral> literals = listSemanticLiterals(clazz, vocabulary.jcr_supertypes);
             while (literals.hasNext())
             {
                 SemanticLiteral literal = literals.next();
@@ -698,11 +674,9 @@ public class BaseNode extends BaseNodeBase
         return classes.toArray(new SemanticClass[classes.size()]);
     }
 
-    private final SemanticLiteral getSemanticLiteral(SemanticClass clazz, String name) throws SWBException
+    private final SemanticLiteral getSemanticLiteral(SemanticClass clazz, SemanticProperty property) throws SWBException
     {
         SemanticLiteral literal = null;
-        String uri = getUri(name);
-        SemanticProperty property = getSemanticObject().getModel().getSemanticProperty(uri);
         if ( property != null )
         {
             literal = clazz.getRequiredProperty(property);
@@ -710,18 +684,9 @@ public class BaseNode extends BaseNodeBase
         return literal;
     }
 
-    private final Iterator<SemanticLiteral> listSemanticLiterals(SemanticClass clazz, String name) throws SWBException
+    private final Iterator<SemanticLiteral> listSemanticLiterals(SemanticClass clazz, SemanticProperty property) throws SWBException
     {
-        String uri = getUri(name);
-        SemanticProperty property = getSemanticObject().getModel().getSemanticProperty(uri);
-        if ( property != null )
-        {
-            return clazz.listRequiredProperties(property);
-        }
-        else
-        {
-            throw new SWBException("The property " + name + WAS_NOT_FOUND);
-        }
+        return clazz.listRequiredProperties(property);
     }
 
     public final boolean isMixIn(SemanticClass clazz)
@@ -729,7 +694,7 @@ public class BaseNode extends BaseNodeBase
         boolean isMixIn = false;
         try
         {
-            SemanticLiteral literal = getSemanticLiteral(clazz, MIX_MIXIN_PROPERTY);
+            SemanticLiteral literal = getSemanticLiteral(clazz, vocabulary.mix_mixin);
             if ( literal != null )
             {
                 isMixIn = literal.getBoolean();
@@ -762,7 +727,7 @@ public class BaseNode extends BaseNodeBase
                     String uri = getSemanticObject().getModel().getObjectUri(UUID.randomUUID().toString(), clazz);
                     value = getSemanticObject().getModel().createSemanticObject(uri, clazz);
                     BaseNode valueNode = new BaseNode(value, clazz);
-                    valueNode.setPath(this.getPath()+property.getPrefix()+":"+property.getName());
+                    valueNode.setPath(this.getPath() + property.getPrefix() + ":" + property.getName());
                     valueNode.setName(name);
                     getSemanticObject().setObjectProperty(property, value);
                 }
@@ -907,18 +872,11 @@ public class BaseNode extends BaseNodeBase
     {
         if ( historyNode.isVersionHistoryNode() )
         {
-            SemanticProperty jcr_root = vocabulary.jcr_rootVersion;
-            SemanticObject value = historyNode.getSemanticObject().getObjectProperty(jcr_root, null);
-            if ( value == null )
-            {
-                SemanticProperty jcr_baseVersion = vocabulary.jcr_baseVersion;
-                BaseNode ntVersion = historyNode.createNodeBase(JCR_VERSION_NAME, vocabulary.nt_Version);
-                BaseNode ntFrozenNode = ntVersion.createNodeBase(JCR_FROZENNODE_NAME, vocabulary.nt_FrozenNode);
-                addFrozenProperties(ntFrozenNode.getSemanticObject());
-                historyNode.getSemanticObject().setObjectProperty(jcr_root, ntVersion.getSemanticObject());
-                this.getSemanticObject().setObjectProperty(jcr_baseVersion, ntVersion.getSemanticObject());
-
-            }
+            SemanticProperty jcr_baseVersion = vocabulary.jcr_baseVersion;
+            BaseNode ntVersion = historyNode.createNodeBase(JCR_VERSION_NAME, vocabulary.nt_Version);
+            BaseNode ntFrozenNode = ntVersion.createNodeBase(JCR_FROZENNODE_NAME, vocabulary.nt_FrozenNode);
+            addFrozenProperties(ntFrozenNode.getSemanticObject());
+            this.getSemanticObject().setObjectProperty(jcr_baseVersion, ntVersion.getSemanticObject());
         }
     }
 
@@ -1030,23 +988,6 @@ public class BaseNode extends BaseNodeBase
         return isPendingChanges;
     }
 
-    private BaseNode getRoot()
-    {
-        return SWBContext.listWorkspaces().next().getRoot();
-    }
-
-    private int size()
-    {
-        int size = 0;
-        GenericIterator<BaseNode> nodes = this.listNodes();
-        while (nodes.hasNext())
-        {
-            nodes.next();
-            size++;
-        }
-        return size;
-    }
-
     public BaseNode checkin() throws SWBException
     {
         if ( this.isVersionable() && isChekedOut() )
@@ -1080,18 +1021,18 @@ public class BaseNode extends BaseNodeBase
             BaseNode versionHistory = getHistoryNode();
             if ( versionHistory != null )
             {
-                BaseNode[] predecessors=this.getVersions();                
+                BaseNode[] predecessors = this.getVersions();
                 BaseNode ntVersion = versionHistory.createNodeBase(JCR_VERSION_NAME, vocabulary.nt_Version);
-                for(BaseNode predecessor : predecessors)
+                for ( BaseNode predecessor : predecessors )
                 {
                     predecessor.getSemanticObject().setObjectProperty(vocabulary.jcr_successors, ntVersion.getSemanticObject());
                     ntVersion.getSemanticObject().setObjectProperty(vocabulary.jcr_predecessors, predecessor.getSemanticObject());
-                }                  
+                }
                 BaseNode ntFrozenNode = ntVersion.createNodeBase(JCR_FROZENNODE_NAME, vocabulary.nt_FrozenNode);
                 copyPropertiesToFrozenNode(ntFrozenNode);
                 addFrozenProperties(ntFrozenNode.getSemanticObject());
                 addVersionToHistoryNode = ntVersion;
-                
+
             }
         }
         return addVersionToHistoryNode;
@@ -1121,29 +1062,20 @@ public class BaseNode extends BaseNodeBase
         addCreatedProperty();
     }
 
-    private String[] getChildNodeDefinition(SemanticClass clazz)
+    private SemanticObject[] getChildNodeDefinition(SemanticClass clazz)
     {
-        ArrayList<String> getChildNodeDefinition = new ArrayList<String>();
-        try
+        ArrayList<SemanticObject> getChildNodeDefinition = new ArrayList<SemanticObject>();
+        SemanticProperty property = vocabulary.jcr_childNodeDefinition;
+        if ( property != null )
         {
-            SemanticProperty property = getSemanticProperty(JCR_CHILDDEFINITION_PROPERTY);
-            if ( property != null )
+            Iterator<SemanticObject> definitions = clazz.listObjectRequiredProperties(property);
+            while (definitions.hasNext())
             {
-                Iterator<SemanticLiteral> literals = clazz.listRequiredProperties(property);
-                while (literals.hasNext())
-                {
-                    SemanticLiteral literal = literals.next();
-                    if ( literal != null && literal.getString() != null && !literal.getString().trim().equals("") )
-                    {
-                        getChildNodeDefinition.add(literal.getString());
-                    }
-                }
+                SemanticObject object = definitions.next();                
+                getChildNodeDefinition.add(object);
             }
         }
-        catch ( SWBException swbe )
-        {
-        }
-        return getChildNodeDefinition.toArray(new String[getChildNodeDefinition.size()]);
+        return getChildNodeDefinition.toArray(new SemanticObject[getChildNodeDefinition.size()]);
     }
 
     public boolean canAddNode(String nodeType)
@@ -1165,12 +1097,13 @@ public class BaseNode extends BaseNodeBase
     private boolean canAddNode(SemanticClass clazzSurce, SemanticClass clazzDest)
     {
         boolean canAddNode = false;
-        String[] childDefinitions = getChildNodeDefinition(clazzDest);
+        SemanticObject[] childDefinitions = getChildNodeDefinition(clazzDest);
         if ( childDefinitions.length > 0 )
         {
-            for ( String childDefinition : childDefinitions )
+            for ( SemanticObject childDefinition : childDefinitions )
             {
-                if ( childDefinition.equals("*") )
+                String name=childDefinition.getProperty(vocabulary.jcr_name);
+                if ( name.equals("*") )
                 {
                     canAddNode = true;
                     break;
@@ -1179,7 +1112,7 @@ public class BaseNode extends BaseNodeBase
                 {
                     try
                     {
-                        SemanticClass clazzChild = getSemanticClass(childDefinition);
+                        SemanticClass clazzChild = getSemanticClass(name);
                         if ( clazzChild != null )
                         {
                             if ( clazzChild.equals(clazzSurce) )
@@ -1198,7 +1131,7 @@ public class BaseNode extends BaseNodeBase
         }
         else
         {
-            canAddNode = true;
+            canAddNode = false;
         }
         return canAddNode;
     }
@@ -1221,11 +1154,6 @@ public class BaseNode extends BaseNodeBase
         return canAddNode(clazzSurce, getSemanticObject().getSemanticClass());
     }
 
-    private final BaseNode createNodeBase(SemanticClass clazz) throws SWBException
-    {
-        return createNodeBase(UUID.randomUUID().toString(), clazz);
-    }
-
     public boolean isProtected()
     {
         boolean isProtected = false;
@@ -1236,7 +1164,8 @@ public class BaseNode extends BaseNodeBase
             if ( literal != null && literal.getString() != null )
             {
                 String value = literal.getString();
-                return Boolean.parseBoolean(value);
+                isProtected = Boolean.parseBoolean(value);
+                break;
             }
         }
         return isProtected;
@@ -1381,20 +1310,20 @@ public class BaseNode extends BaseNodeBase
     }
 
     public BaseNode[] getVersions() throws SWBException
-    {        
-        if(this.isVersionable())
+    {
+        if ( this.isVersionable() )
         {
-            if(this.isNew())
+            if ( this.isNew() )
             {
                 throw new SWBException("The node can be saved before");
             }
             ArrayList<BaseNode> versions = new ArrayList<BaseNode>();
-            BaseNode history=getHistoryNode();
-            GenericIterator<BaseNode> nodes=history.listNodes();
-            while(nodes.hasNext())
+            BaseNode history = getHistoryNode();
+            GenericIterator<BaseNode> nodes = history.listNodes();
+            while (nodes.hasNext())
             {
-                BaseNode node=nodes.next();
-                if(node.isVersionNode())
+                BaseNode node = nodes.next();
+                if ( node.isVersionNode() )
                 {
                     versions.add(node);
                 }
@@ -1405,7 +1334,7 @@ public class BaseNode extends BaseNodeBase
         {
             throw new SWBException("The node is not versionable");
         }
-        
+
     }
 
     public final boolean isLockable()
