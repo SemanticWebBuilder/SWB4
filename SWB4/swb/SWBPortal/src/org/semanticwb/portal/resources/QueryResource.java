@@ -56,7 +56,7 @@ public class QueryResource extends GenericAdmResource {
      * XML form definition data.
      */
     private String xml;
-    String path = SWBPlatform.getContextPath() +"swbadmin/xsl/QueryResource/";
+    String path = SWBPlatform.getContextPath() + "/swbadmin/xsl/QueryResource/";
     private static Logger log = SWBUtils.getLogger(QueryResource.class);
     
     /** 
@@ -66,20 +66,30 @@ public class QueryResource extends GenericAdmResource {
     }
 
     @Override
+    public void processRequest(HttpServletRequest request,
+            HttpServletResponse response, SWBParamRequest paramsRequest) 
+            throws SWBResourceException, IOException {
+        
+        if (paramsRequest.getMode().equals("excel_file")) {
+            doExcel(request, response, paramsRequest);
+        } else {
+            super.processRequest(request, response, paramsRequest);
+        }
+    }
+    
+    @Override
     public void setResourceBase(Portlet base) {
         try {
             super.setResourceBase(base);
         } catch(Exception e) {
             log.error("Error while setting resource base: " + base.getId(), e);
         }
-        if(!"".equals(base.getAttribute("template","").trim())) {
-            try { 
-                //tpl = com.infotec.appfw.util.AFUtils.getInstance().loadTemplateXSLT(WBUtils.getInstance().getFileFromWorkPath(base.getResourceWorkPath() +"/"+ base.getAttribute("template").trim())); 
+        if (!"".equals(base.getAttribute("template", "").trim())) {
+            try {
                 tpl = SWBUtils.XML.loadTemplateXSLT(
                         SWBUtils.IO.getStreamFromString(
                         SWBUtils.IO.getFileFromPath(base.getWorkPath() + "/"
                         + base.getAttribute("template").trim())));
-                //path=WBUtils.getInstance().getWebWorkPath() +  base.getResourceWorkPath() + "/";
                 path = SWBPlatform.getWebWorkPath() + base.getWorkPath() + "/";
             } catch(Exception e) {
                 log.error("Error while loading resource template: " 
@@ -88,7 +98,6 @@ public class QueryResource extends GenericAdmResource {
         }
         if (tpl == null) {
             try {
-                //tpl = com.infotec.appfw.util.AFUtils.getInstance().loadTemplateXSLT(WBUtils.getInstance().getAdminFileStream("/wbadmin/xsl/QueryResource/QueryResource.xslt"));
                 tpl = SWBUtils.XML.loadTemplateXSLT(
                         SWBPortal.getAdminFileStream(
                         "/swbadmin/xsl/QueryResource/QueryResource.xslt"));
@@ -114,7 +123,7 @@ public class QueryResource extends GenericAdmResource {
         
         Portlet base = getResourceBase();
         Document doc = null;
-        ByteArrayOutputStream bout = new ByteArrayOutputStream();
+        //ByteArrayOutputStream bout = new ByteArrayOutputStream();
         String query = parse(base.getAttribute("query"), request, paramsRequest);
         String dbcon = base.getAttribute("dbcon");
         if (query != null) {
@@ -152,7 +161,9 @@ public class QueryResource extends GenericAdmResource {
                                 eresult.appendChild(erow);
                                 for (int x = 1; x <= col; x++) {
                                     String aux = rs.getString(x);
-                                    if (aux == null) aux = "";
+                                    if (aux == null) {
+                                        aux = "";
+                                    }
                                     Element ecol = addElem(doc, erow, "col", aux);
                                 }
                             }
@@ -201,10 +212,22 @@ public class QueryResource extends GenericAdmResource {
         out.flush();
         //response.getWriter().print(new String(bout.toByteArray()));
         PrintWriter webOut = response.getWriter();
+        String excelFile = (String) request.getAttribute("excelFile");
+        
+        if (excelFile != null && "yes".equalsIgnoreCase(excelFile)) {
+            response.setContentType("application/vnd.ms-excel");
+        }
         webOut.println(new String(bout.toByteArray()));
-        webOut.println("<br><a href=\"" 
-                + paramsRequest.getRenderUrl().setMode(paramsRequest.Mode_ADMIN)
-                + "\">QueryResource admin</a>");
+        
+        if (excelFile == null || !"yes".equalsIgnoreCase(excelFile)) {
+            webOut.println("<br><a href=\"" 
+                    + paramsRequest.getRenderUrl().setCallMethod(
+                    SWBParamRequest.Call_DIRECT).setMode("excel_file")
+                    + "\">Archivo de Excel</a>");
+            webOut.println("<br><a href=\"" 
+                    + paramsRequest.getRenderUrl().setMode(SWBParamRequest.Mode_ADMIN)
+                    + "\">QueryResource admin</a>");
+        }
     }
 
     /** 
@@ -282,5 +305,14 @@ public class QueryResource extends GenericAdmResource {
         ret = ret.trim();
         log.debug("return " + ret);
         return ret;
+    }
+    
+    public void doExcel(HttpServletRequest request,
+                       HttpServletResponse response,
+                       SWBParamRequest paramsRequest)
+                       throws SWBResourceException, IOException {
+        
+        request.setAttribute("excelFile", "yes");
+        doView(request, response, paramsRequest);
     }
 }
