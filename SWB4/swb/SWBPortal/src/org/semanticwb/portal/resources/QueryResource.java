@@ -133,7 +133,12 @@ public class QueryResource extends GenericAdmResource {
                 doc.appendChild(equery);
                 equery.setAttribute("query", query);
                 equery.setAttribute("dbcon", dbcon);
-                equery.setAttribute("path", path);
+                equery.setAttribute("path",
+                        "http://" + request.getServerName()
+                        + (request.getServerPort() != 80 
+                        ? ":" + request.getServerPort()
+                        : "")
+                        + SWBPlatform.getContextPath() + "/swbadmin/css/");
                 addElem(doc, equery, "title", base.getTitle());
                 addElem(doc, equery, "description", base.getDescription());
                 Connection con = null;
