@@ -22,21 +22,21 @@
     var useP = false;
     if(dijit.byId(suri+'/periodicidad').checked)
         useP = true;
-     if(useP)
-         {
-             dijit.byId(suri+"/period1").setDisabled(false);
-             dijit.byId(suri+"/period2").setDisabled(false);
-             dijit.byId(suri+"/period3").setDisabled(false);
-          } 
-     enableWeekly(suri);
-     enableMonthly(suri);
-     enableYearly(suri);   
-     if(!useP)
-         {
-             dijit.byId(suri+"/period1").setDisabled(true);
-             dijit.byId(suri+"/period2").setDisabled(true);
-             dijit.byId(suri+"/period3").setDisabled(true);
-         }
+    if(useP)
+     {
+         dijit.byId(suri+"/period1").setDisabled(false);
+         dijit.byId(suri+"/period2").setDisabled(false);
+         dijit.byId(suri+"/period3").setDisabled(false);
+      } 
+    enableWeekly(suri);
+    enableMonthly(suri);
+    enableYearly(suri);   
+    if(!useP)
+     {
+         dijit.byId(suri+"/period1").setDisabled(true);
+         dijit.byId(suri+"/period2").setDisabled(true);
+         dijit.byId(suri+"/period3").setDisabled(true);
+     }
  }
  
  function enableWeekly(suri) {
@@ -66,6 +66,24 @@
  }
 
  function enableMonthly(suri) {
+      if(dijit.byId(suri+"/periodicidad").checked && dijit.byId(suri+"/period2").checked)
+     {
+         dijit.byId(suri+"/smonth1").setDisabled(false); 
+         dijit.byId(suri+"/smonth2").setDisabled(false);
+         if(!dijit.byId(suri+"/smonth1").checked && !dijit.byId(suri+"/smonth2").checked)
+             {
+                 dijit.byId(suri+"/smonth1").checked = "checked";  
+                 dijit.byId(suri+"/smonth2").checked = "";
+             } 
+     }
+     
+   if(dijit.byId(suri+"/smonth1").checked && dijit.byId(suri+"/smonth2").checked)
+     {
+         dijit.byId(suri+"/smonth1").checked = "checked";  
+         dijit.byId(suri+"/smonth2").checked = "";
+     } 
+     
+   
    if(dijit.byId(suri+"/periodicidad").checked && dijit.byId(suri+"/period2").checked && dijit.byId(suri+"/smonth1").checked)
      {
         dijit.byId(suri+"/smonth1").setDisabled(false); 
@@ -121,11 +139,28 @@
         dijit.byId(suri+"/mday6").setDisabled(true);
         dijit.byId(suri+"/mday7").setDisabled(true);
      }
-
  }
  
  
  function enableYearly(suri) {
+     
+   if(dijit.byId(suri+"/periodicidad").checked && dijit.byId(suri+"/period3").checked)
+     {
+         dijit.byId(suri+"/radio1").setDisabled(false); 
+         dijit.byId(suri+"/radio2").setDisabled(false); 
+         if(!dijit.byId(suri+"/radio1").checked && !dijit.byId(suri+"/radio2").checked)
+             {
+                 dijit.byId(suri+"/radio1").checked = "checked";  
+                 dijit.byId(suri+"/radio2").checked = "";
+             } 
+     }
+     
+   if(dijit.byId(suri+"/radio1").checked && dijit.byId(suri+"/radio2").checked)
+     {
+         dijit.byId(suri+"/radio1").checked = "checked";  
+         dijit.byId(suri+"/radio2").checked = "";
+     } 
+   
    if(dijit.byId(suri+"/periodicidad").checked && dijit.byId(suri+"/period3").checked && dijit.byId(suri+"/radio1").checked)
      {
         dijit.byId(suri+"/radio1").setDisabled(false); 
@@ -190,3 +225,8 @@
      }
   
  }
+ 
+function selectCombo(obj,id) 
+{
+   obj.selectedIndex=id;
+}
