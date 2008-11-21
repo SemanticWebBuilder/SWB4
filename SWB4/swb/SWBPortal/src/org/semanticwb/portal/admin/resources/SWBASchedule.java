@@ -170,6 +170,9 @@ public class SWBASchedule extends GenericResource {
                 urlchoose.setParameter("suri", obj.getURI());
                 urlchoose.setParameter("sprop", prop.getURI());
                 urlchoose.setParameter("sobj", sobj.getURI());
+                urlchoose.setParameter("sval", sobj.getURI());
+                urlchoose.setParameter("act", "edit");
+                urlchoose.setMode(SWBResourceURL.Mode_EDIT);
                 if (id != null) {
                     urlchoose.setParameter("rsuri", id);
                 }
@@ -243,7 +246,7 @@ public class SWBASchedule extends GenericResource {
             urlNew.setParameter("sprop", idp);
             urlNew.setParameter("spropref", idp);
             urlNew.setMode(SWBResourceURL.Mode_EDIT);
-            urlNew.setParameter("act", "AddNew");
+            urlNew.setParameter("act", "add");
             out.println("<p><a href=\"#\" onclick=\"submitUrl('" + urlNew + "',this); return false;\">Add New</a>");
             out.println("</p>");
             out.println("</td>");
@@ -274,7 +277,7 @@ public class SWBASchedule extends GenericResource {
         String idp = request.getParameter("sprop");
         String idpref = request.getParameter("spropref");
         User user = paramRequest.getUser();
-
+        String idCalendar = request.getParameter("sval");
         // Parámetros
         String view = request.getParameter("view");
         String action = request.getParameter("act") != null ? request.getParameter("act") : "";
@@ -288,33 +291,39 @@ public class SWBASchedule extends GenericResource {
 
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         SemanticObject obj = ont.getSemanticObject(id);
+        SemanticObject so_cal = null;
+        if(null!=idCalendar) so_cal=ont.getSemanticObject(idCalendar);
         SemanticClass cls = obj.getSemanticClass();
         String title = cls.getName();
 
         SWBResourceURL url = paramRequest.getActionUrl();
         //url.setAction("add");
-        url.setAction("add");
-        //out.println(getJavaScript(response, paramRequest));
-        out.println("<form  action=\""+url+"\"  id=\""+id+"/calendar\" name=\""+id+"/calendar\" method=\"post\" class=\"swbform\">"); //id=\"calendar\" name=\"calendar\" dojoType=\"dijit.form.Form\"
+        if(action.equals("edit")) url.setAction("update");
+        else url.setAction("add");
+        log.debug("Action: "+action);
+        out.println("<script tyte=\"text/javascript\">loadScript('SWBASchedule','"+SWBPlatform.getContextPath()+"/swbadmin/js/schedule.js');</script>"); //loadScript(id, filepath)
+        out.println("<form  action=\"" + url + "\"  id=\"" + id + "/calendar\" name=\"" + id + "/calendar\" method=\"post\" class=\"swbform\">"); //id=\"calendar\" name=\"calendar\" dojoType=\"dijit.form.Form\"
         out.println("<fieldset>");
-        if (action.equals("AddNew")) { //lista de instancias de tipo propiedad existentes para selecionar
-            log.debug("----AddNew" );
+        if (action.equals("add")||action.equals("edit")) { //lista de instancias de tipo propiedad existentes para selecionar
+            log.debug("----add/edit: "+action);
             SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(idp);
             SemanticClass clsprop = prop.getRangeClass();
             log.debug("class: " + clsprop.getClassName());
 
             title = clsprop.getName();
-            
-            out.println("<input type=\"hidden\" name=\""+id+"/suri\" value=\"" + id + "\">");
-            out.println("<input type=\"hidden\" name=\""+id+"/rsuri\" value=\"" + id + "\">");
+
+            out.println("<input type=\"hidden\" name=\"" + id + "/suri\" value=\"" + id + "\">");
+            out.println("<input type=\"hidden\" name=\"" + id + "/rsuri\" value=\"" + id + "\">");
             if (idp != null) {
-                out.println("<input type=\"hidden\" name=\""+id+"/sprop\" value=\"" + idp + "\">");
+                out.println("<input type=\"hidden\" name=\"" + id + "/sprop\" value=\"" + idp + "\">");
             }
             if (idpref != null) {
-                out.println("<input type=\"hidden\" name=\""+id+"/spropref\" value=\"" + idpref + "\">");
+                out.println("<input type=\"hidden\" name=\"" + id + "/spropref\" value=\"" + idpref + "\">");
             }
-            
-            
+            if (idCalendar != null) {
+                out.println("<input type=\"hidden\" name=\"" + id + "/sval\" value=\"" + idCalendar + "\">");
+            }
+
             out.println("	<ol>");
             //boolean haveObjProp = false;
             Iterator<SemanticProperty> ite_sp = clsprop.listProperties();
@@ -323,156 +332,25 @@ public class SWBASchedule extends GenericResource {
                 log.debug("prop:" + sp.getDisplayName() + "---" + sp.getName());
                 if (sp.isDataTypeProperty()) {
                     String value = "";
+                    if(null!=so_cal) value = getValueSemProp(so_cal, sp);
                     String label = sp.getDisplayName();
                     String name = sp.getName();
                     if (sp.isBoolean()) {
-                        out.println("		<li><label for=\"" + name + "\">" + label + " <em>*</em></label> <input type=\"checkbox\"  id=\""+id+"/" + name + "\" name=\""+id+"/" + name + "\" value=\"true\" " + (value != null && value.equals("true") ? "checked" : "") + "/></li>"); // 
-                    } else if (sp.isDate() || sp.isDateTime()) {
-                        //out.println("		<li><label for=\"" + name + "\">" + label + " <em>*</em></label> " + value + " </li>");
-                    } else {
-                        out.println("		<li><label for=\"" + name + "\">" + label + " <em>*</em></label> <input type=\"text\" id=\""+id+"/" + name + "\" name=\""+id+"/" + name + "\" value=\"" + value + "\"/></li>");
-                    }
-                } 
-            }
-            out.println("	</ol>");
-            out.println("</fieldset>");
-
-
-        } else if (action.equals("update")) {
-            if (request.getParameter("sobj") != null) {
-                id = request.getParameter("sobj");
-            }
-            log.debug("----Update " );
-            obj = ont.getSemanticObject(id);
-            cls = obj.getSemanticClass();
-            title = cls.getName();
-            String tmpName = getDisplaySemObj(obj, user.getLanguage());
-            log.debug("label: " + title + ", name: " + tmpName);
-            out.println("<fieldset>");
-            out.println("<legend> Propiedades - " + title + " ( " + tmpName + " ) </legend>");
-            out.println("<input type=\"hidden\" name=\""+id+"/suri\" value=\"" + obj.getURI() + "\">");
-            out.println("<input type=\"hidden\" name=\""+id+"/rsuri\" value=\"" + request.getParameter("suri") + "\">");
-            if (idp != null) {
-                out.println("<input type=\"hidden\" name=\""+id+"/sprop\" value=\"" + idp + "\">");
-            }
-            if (idpref != null) {
-                out.println("<input type=\"hidden\" name=\""+id+"/spropref\" value=\"" + idpref + "\">");
-            }
-            out.println("	<legend> Propiedades - " + title + " ( " + tmpName + " ) </legend>");
-            out.println("	<ol>");
-
-            Iterator<SemanticProperty> it = cls.listProperties();
-            while (it.hasNext()) {
-                SemanticProperty prop = it.next();
-                if (prop.isDataTypeProperty()) {
-
-                    String value = obj.getProperty(prop);
-                    if (prop.isInt()) {
-                        value = "" + obj.getIntProperty(prop);
-                    }
-                    if (prop.isDate() || prop.isDateTime()) {
-                        Date fecha = obj.getDateProperty(prop);
-                        if (null != fecha) {
-                            value = getDateFormat(fecha.getTime(), user.getLanguage());
-                        } else {
-                            value = "not set";
-                        }
-                    }
-                    if (prop.isBoolean()) {
-                        value = Boolean.toString(obj.getBooleanProperty(prop));
-                    }
-                    if (value == null) {
-                        value = "";
-                    }
-                    String label = prop.getDisplayName();
-                    String name = prop.getName();
-
-                    if (prop.isBoolean()) {
-                        out.println("		<li><label for=\"" + name + "\">" + label + " <em>*</em></label> <input type=\"checkbox\"  id=\""+id+"/" + name + "\" name=\""+id+"/" + name + "\" value=\"true\" " + (value != null && value.equals("true") ? "checked" : "") + "/></li>"); // 
-                    } else if (prop.isDate() || prop.isDateTime()) {
+                        out.println("		<li><label for=\"" + name + "\">" + label + " <em>*</em></label> <input type=\"checkbox\"  id=\"" + id + "/" + name + "\" name=\"" + id + "/" + name + "\" value=\"true\" " + (value != null && value.equals("true") ? "checked" : "") + "/></li>"); // 
+                    } else if ("edit".equals(action)&&(sp.isDate()||sp.isDateTime())) {
                         out.println("		<li><label for=\"" + name + "\">" + label + " <em>*</em></label> " + value + " </li>");
-                    } else {
-                        out.println("		<li><label for=\"" + name + "\">" + label + " <em>*</em></label> <input type=\"text\" id=\""+id+"/" + name + "\" name=\""+id+"/" + name + "\" value=\"" + value + "\"/></li>");
+                        
+                    } else if ("add".equals(action)&&(sp.isDate()||sp.isDateTime())) {
+                        //out.println("		<li><label for=\"" + name + "\">" + label + " <em>*</em></label> " + value + " </li>");
+                    } else if(!sp.equals(SWBContext.getVocabulary().xml)){
+                        out.println("		<li><label for=\"" + name + "\">" + label + " <em>*</em></label> <input type=\"text\" id=\"" + id + "/" + name + "\" name=\"" + id + "/" + name + "\" value=\"" + value + "\"/></li>");
                     }
-                }
-            }
-            out.println("	<hr size=\"1\" noshade>");
-            it = cls.listProperties();
-            // lista de propiedades de tipo ObjectProperty
-            while (it.hasNext()) {
-                SemanticProperty prop = it.next();
-                boolean modificable = true;
-                boolean unumlist = false;
-                if (prop.isObjectProperty()) {
-                    String name = prop.getName();
-                    String label = prop.getDisplayName();
-                    log.debug("label: " + label + ", name: " + name);
-                    modificable = true;
-
-                    if (name.equalsIgnoreCase("modifiedBy") || name.equalsIgnoreCase("creator")) {
-                        modificable = false;
-                    }
-                    if (name.startsWith("has")) {
-                        unumlist = true;
-                    }
-                    out.println("<li><label for=\"" + name + "\">" + label + " <em>*</em></label> ");
-                    Iterator<SemanticObject> soit = obj.listObjectProperties(prop);
-                    SemanticObject obj2 = null;
-                    while (soit.hasNext()) {
-                        if (unumlist) {
-                            out.print("<ul>");
-                        }
-                        obj2 = soit.next();
-                        SWBResourceURL urle = paramRequest.getRenderUrl();
-                        urle.setParameter("rsuri", obj.getURI());
-                        urle.setParameter("suri", obj2.getURI());
-                        urle.setParameter("sprop", prop.getURI());
-                        urle.setParameter(name, prop.getURI());
-                        tmpName = getDisplaySemObj(obj2, user.getLanguage());
-                        if (modificable) {
-                            out.println("<a href=\"#\" onclick=\"submitUrl('" + urle + "',this); return false;\">" + tmpName + "</a>");
-                        } else {
-                            out.println(tmpName);
-                        }
-                        SWBResourceURL urlr = paramRequest.getActionUrl();
-                        urlr.setParameter("suri", obj.getURI());
-                        urlr.setParameter("sprop", prop.getURI());
-                        urlr.setParameter("sval", obj2.getURI());
-                        urlr.setParameter(name, prop.getURI());
-                        urlr.setAction("remove");
-                        if (modificable) {
-                            out.println("<a  href=\"#\" onclick=\"submitUrl('" + urlr + "',this); return false;\">Remove</a>");
-                        }
-
-                        if (unumlist) {
-                            out.print("</ul>");
-                        }
-                    }
-                    out.println("</li>");
-
-                    if (modificable) {
-                        SWBResourceURL urlc = paramRequest.getRenderUrl();
-                        urlc.setMode(SWBResourceURL.Mode_EDIT);
-                        urlc.setParameter("suri", obj.getURI());
-                        urlc.setParameter("sprop", prop.getURI());
-                        urlc.setParameter("act", "choose");
-                        out.println("<a  href=\"#\" onclick=\"submitUrl('" + urlc + "',this); return false;\">Choose</a>");
-                        SWBResourceURL urla = paramRequest.getActionUrl();
-                        urla.setParameter("suri", obj.getURI());
-                        urla.setParameter("sprop", prop.getURI());
-                        urla.setAction("new");
-                        out.println("<a  href=\"#\" onclick=\"submitUrl('" + urla + "',this); return false;\">Add New</a>");
-                    }
-
                 }
             }
             out.println("	</ol>");
-            out.println("</p>");
             out.println("</fieldset>");
-        }
-
+        } 
         // Recurso de calendarización
-        String strType = paramRequest.getAdminTopic().getId();
 
         String createdate = "";
         String usercreate = "";
@@ -523,42 +401,44 @@ public class SWBASchedule extends GenericResource {
         String months = "";
         String years = "";
 
+        String yearlyd="true";
+        String pchk="";
+        String periodd="true";
+        String period1c="", period2c="", period3c="";
+        String period1cd="true", period2cd="true", period3cd="true";
+        String smonth1c="", smonth2c="";
+        String smonth1cd="true", smonth2cd="true";
+        String radio1c ="",radio2c ="";
+        String radio1cd ="true",radio2cd ="true";
+        String op1="",op2="",op3="",op4="",op5="",op6="",op7="",op8="",op9="",op10="",op11="",op12="";
         // Genera forma de administración de calendarizaciones
-            {    
-            String tit = request.getParameter("title");
-            if (strXmlConf != null) {
+        {
+            //String tit = request.getParameter("title");
+            if(so_cal!=null) strXmlConf = so_cal.getProperty(SWBContext.getVocabulary().xml);
+            if (strXmlConf != null&&strXmlConf.trim().length()>0) {
                 doc = SWBUtils.XML.xmlToDom(strXmlConf);
+                active = SWBUtils.XML.getAttribute(doc, "active");
+                createdate = SWBUtils.XML.getAttribute(doc, "createdate");
+                usercreate = SWBUtils.XML.getAttribute(doc, "usercreate");
+                inidate = SWBUtils.XML.getAttribute(doc, "inidate");
+                enddate = SWBUtils.XML.getAttribute(doc, "enddate");
+                if(null!=enddate) sendselect = "endselect";
+                starthour = SWBUtils.XML.getAttribute(doc, "starthour");
+                endhour = SWBUtils.XML.getAttribute(doc, "endhour");
+                
                 NodeList nodes = doc.getElementsByTagName("interval");
                 for (int i = 0; i < nodes.getLength(); i++) {
                     Node node = nodes.item(i);
-                    if (node.getFirstChild().getLastChild().getNodeValue().equalsIgnoreCase(tit)) {
+                    //if (node.getFirstChild().getLastChild().getNodeValue().equalsIgnoreCase(tit)) {
                         NodeList nodesChild = node.getChildNodes();
                         for (int j = 0; j < nodesChild.getLength(); j++) {
                             Node nodeChild = nodesChild.item(j);
-                            String val = nodeChild.getFirstChild().getNodeValue();
+//                            String val = nodeChild.getNodeValue(); //nodeChild.getFirstChild().getNodeValue();
                             String name = nodeChild.getNodeName();
                             cal = "on";
-                            if (name.equals("title")) {
-                                title = val;
-                            } else if (name.equals("active")) {
-                                active = val;
-                            } else if (name.equals("createdate")) {
-                                createdate = val;
-                            } else if (name.equals("usercreate")) {
-                                usercreate = val;
-                            } else if (name.equals("inidate")) {
-                                inidate = val;
-                            } else if (name.equals("enddate")) {
-                                enddate = val;
-                                sendselect = "endselect";
-                            } else if (name.equals("enddate")) {
-                                enddate = val;
-                            } else if (name.equals("starthour")) {
-                                starthour = val;
-                            } else if (name.equals("endhour")) {
-                                endhour = val;
-                            }
-                            if (name.equals("iterations")) {
+                            if (name!=null&&name.equals("iterations")) {
+                                if(nodeChild.getFirstChild()!=null)
+                                {
                                 String strChildName = nodeChild.getFirstChild().getNodeName();
                                 NodeList nodesGrandChild = nodeChild.getFirstChild().getChildNodes();
                                 speriod = strChildName;
@@ -567,10 +447,14 @@ public class SWBASchedule extends GenericResource {
                                     String valChild = nodeGrandChild.getFirstChild().getNodeValue();
                                     strChildName = nodeGrandChild.getNodeName();
                                     if (speriod.equals("weekly")) {
+                                        pchk="checked";
+                                        period1c="checked";
                                         if (strChildName.equals("wdays")) {
                                             wdays = valChild;
                                         }
                                     } else if (speriod.equals("monthly")) {
+                                        pchk="checked";
+                                        period2c="checked";
                                         if (strChildName.equals("months")) {
                                             months = valChild;
                                         } else if (strChildName.equals("wdays")) {
@@ -581,6 +465,9 @@ public class SWBASchedule extends GenericResource {
                                             day = valChild;
                                         }
                                     } else if (speriod.equals("yearly")) {
+                                        pchk="checked";
+                                        period3c="checked";
+                                        yearlyd="false";
                                         if (strChildName.equals("day")) {
                                             day = valChild;
                                         } else if (strChildName.equals("month")) {
@@ -594,10 +481,13 @@ public class SWBASchedule extends GenericResource {
                                         }
                                     }
                                 }
+                              }
                             }
                         }
-                    }
+                    //}
                 }
+                
+                if(pchk.equals("checked"))periodd="false";
 
                 // Obtiene los días seleccionados
                 if (wdays != null && !wdays.equals("")) {
@@ -696,10 +586,14 @@ public class SWBASchedule extends GenericResource {
                         ssmonth = "day";
                         mmday = day;
                         mmonths1 = months;
+                        smonth1c = "checked";
+                        smonth1cd = "false";
                     } else {
                         ssmonth = "week";
                         mweek = week;
                         mmonths2 = months;
+                        smonth2c = "checked";
+                        smonth2cd = "false";
                     }
                 }
                 if (speriod.equals("yearly")) {
@@ -708,18 +602,22 @@ public class SWBASchedule extends GenericResource {
                         yyday = day;
                         ymonth1 = months;
                         yyears1 = years;
+                        radio1c="checked";
+                        radio1cd="false";                       
                     } else {
                         ssyear = "week";
                         yweek = week;
                         ymonth2 = months;
                         yyears2 = years;
+                        radio2c="checked";
+                        radio2cd="false";
                     }
                 }
             }
         }
 
         {
-            
+
             out.println("<fieldset>");
             out.println(" <legend> Definici&oacute;n Periodicidad </legend>");
             out.println("  <table cellSpacing=0 cellPadding=1 width=\"100%\" border=0>");
@@ -730,24 +628,36 @@ public class SWBASchedule extends GenericResource {
             out.println("        <tbody>");
             out.println("        <tr>");
             out.println("          <td width=100 >" + paramRequest.getLocaleString("frmStartDate") + ":</td>");
-            out.println("          <td colSpan=4 ><input type=\"text\" name=\""+id+"/inidate\" id=\""+id+"/inidate\" dojoType=\"dijit.form.DateTextBox\"  size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\"></td>"); 
+            out.println("          <td colSpan=4 ><input type=\"text\" name=\"" + id + "/inidate\" id=\"" + id + "/inidate\" dojoType=\"dijit.form.DateTextBox\"  size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+inidate+"\"></td>");
             out.println("        </tr>");
             out.println("        </tbody>");
             out.println("      </table>");
             out.println("    </td>");
             out.println("  </tr>");
             out.println("  <tr><td><hr size=\"1\" noshade></td></tr>");
+            String endselect1 = "checked", endselect2 = "", endselectd="";
+            if("add".equals(action)||("edit".equals(action)&&(enddate!=null&&enddate.trim().length()>0)))
+            {
+                endselect1 = "checked";
+                endselect2 = "";
+                endselectd="false";
+            } else 
+            {
+                endselect1 = "";
+                endselect2 = "checked";
+                endselectd="true";
+            }
             out.println("  <tr>");
             out.println("    <td>");
             out.println("      <table cellSpacing=0 cellPadding=1 width=\"100%\" border=0>");
             out.println("        <tbody>");
             out.println("        <tr>");
-            out.println("          <td width=\"20\" ><input type=\"radio\" dojoType=\"dijit.form.RadioButton\" value=\"enddate\" name=\""+id+"/endselect\" onclick=\"dijit.byId('"+id+"/enddate').setDisabled(false); dijit.byId('"+id+"/enddate').focus();\" checked></td>"); 
+            out.println("          <td width=\"20\" ><input type=\"radio\" dojoType=\"dijit.form.RadioButton\" value=\"enddate\" id=\"" + id + "/endselect1\" name=\"" + id + "/endselect\" onclick=\"dijit.byId('" + id + "/enddate').setDisabled(false); dijit.byId('" + id + "/enddate').focus();\" "+endselect1+"></td>");
             out.println("          <td width=\"77\" >" + paramRequest.getLocaleString("frmEndDate") + ":</td>");
-            out.println("          <td ><input type=\"text\" name=\""+id+"/enddate\" id=\""+id+"/enddate\" dojoType=\"dijit.form.DateTextBox\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\"></td>"); 
+            out.println("          <td ><input type=\"text\" name=\"" + id + "/enddate\" id=\"" + id + "/enddate\" dojoType=\"dijit.form.DateTextBox\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+enddate+"\" required=\"true\" disabled=\""+endselectd+"\" ></td>");
             out.println("        </tr>");
             out.println("        <tr>");
-            out.println("          <td ><input type=\"radio\" dojoType=\"dijit.form.RadioButton\" value=\"noend\" name=\""+id+"/endselect\" onclick=\"dijit.byId('"+id+"/enddate').setDisabled(true);\"></td>");
+            out.println("          <td ><input type=\"radio\" dojoType=\"dijit.form.RadioButton\" value=\"noend\" id=\"" + id + "/endselect2\" name=\"" + id + "/endselect\" onclick=\"dijit.byId('" + id + "/enddate').setDisabled(true);\" "+endselect2+"></td>");
             out.println("          <td colSpan=2 >" + paramRequest.getLocaleString("frmNoEndDate") + "</td>");
             out.println("        </tr>");
             out.println("        </tbody>");
@@ -760,8 +670,8 @@ public class SWBASchedule extends GenericResource {
             out.println("      <table cellSpacing=\"0\" cellPadding=\"1\" width=\"100%\" border=0>");
             out.println("        <tbody>");
             out.println("        <tr>");
-            out.println("          <td width=20 ><input type=\"checkbox\" id=\""+id+"/time\" name=\""+id+"/time\" dojoType=\"dijit.form.CheckBox\" onClick=\"enableTime('"+id+"');\"></td>");
-            out.println("          <td >" + paramRequest.getLocaleString("frmStartHour") + ":&nbsp;<input name=\""+id+"/starthour\" id=\""+id+"/starthour\" dojoType=\"dojox.form.TimeSpinner\" value=\"00:00\"  hours=\"24\" smalldelta=\"10\" maxLength=\"10\" size=\"10\" disabled=\"true\" style=\"width:100px;\"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + paramRequest.getLocaleString("frmEndHour") + ":&nbsp;<input name=\""+id+"/endhour\" id=\""+id+"/endhour\" dojoType=\"dojox.form.TimeSpinner\" value=\"00:00\"  hours=\"24\" smalldelta=\"10\"  maxLength=\"10\" size=\"10\" disabled=\"true\" style=\"width:100px;\"/></td>"); //<input maxLength=10 size=10 name=starthour  disabled=true value=\"" + starthour + "\" onBlur=\"javascript:IsValidTime(this);\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + paramRequest.getLocaleString("frmEndHour") + ":&nbsp;<input id=\"timeSpinnere\" dojoType=\"dojox.form.TimeSpinner\" value=\"00:00\" name=\"timeSpinnere\" hours=\"24\" smalldelta=\"1\" id=\"timeSpinnere\" />&nbsp;<input  maxLength=10 size=10 name=endhour disabled=true value=\"" + endhour + "\" onBlur=\"javascript:IsValidTime(this);\"></td></tr>");
+            out.println("          <td width=20 ><input type=\"checkbox\" id=\"" + id + "/time\" name=\"" + id + "/time\" dojoType=\"dijit.form.CheckBox\" onClick=\"enableTime('" + id + "');\" "+(starthour!=null&&starthour.trim().length()>0?"checked":"")+"></td>");
+            out.println("          <td >" + paramRequest.getLocaleString("frmStartHour") + ":&nbsp;<input name=\"" + id + "/starthour\" id=\"" + id + "/starthour\" dojoType=\"dojox.form.TimeSpinner\" value=\""+(starthour!=null&&starthour.trim().length()>0?starthour:"00:00")+"\" hours=\"24\" smalldelta=\"10\" maxLength=\"10\" size=\"10\" disabled=\""+(starthour!=null&&starthour.trim().length()>0?"false":"true")+"\" style=\"width:100px;\" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + paramRequest.getLocaleString("frmEndHour") + ":&nbsp;<input name=\"" + id + "/endhour\" id=\"" + id + "/endhour\" dojoType=\"dojox.form.TimeSpinner\" value=\""+(endhour!=null&&endhour.trim().length()>0?endhour:"00:00")+"\"  hours=\"24\" smalldelta=\"10\"  maxLength=\"10\" size=\"10\" disabled=\""+(endhour!=null&&endhour.trim().length()>0?"false":"true")+"\" style=\"width:100px;\" /></td>"); 
             out.println("         </tr>");
             out.println("        </tbody>");
             out.println("      </table>");
@@ -770,11 +680,32 @@ public class SWBASchedule extends GenericResource {
             out.println("  <tr>");
             out.println("    <td>");
             out.println("      <hr size=\"1\" noshade>");
-            out.println("    </td>"); 
+            out.println("    </td>");
             out.println("  </tr>");
             //PERIODICIDAD
+            if(pchk.equals(""))
+            {
+                //Valores por defecto
+                period1c="checked";
+                period1cd="true";
+                period2c="";
+                period2cd="true";
+                period3c="";
+                period3cd="true";
+                smonth1c="checked";
+                smonth2c="";
+                smonth1cd="true";
+                smonth2cd="true";
+                radio1c ="checked";
+                radio2c ="";
+                radio1cd ="true";
+                radio2cd ="true";
+            }
+            if(pchk.equals("checked")&&period1c.equals("checked"))
+                period1cd="false";
+            
             out.println("  <tr>");
-            out.println("    <td ><input id=\""+id+"/periodicidad\" type=\"checkbox\"  dojoType=\"dijit.form.CheckBox\" name=\""+id+"/periodicidad\" onClick=\"disablePeriodicity('"+id+"');\">&nbsp;" + paramRequest.getLocaleString("frmRegularity") + "</td>");
+            out.println("    <td ><input id=\"" + id + "/periodicidad\" type=\"checkbox\"  dojoType=\"dijit.form.CheckBox\" name=\"" + id + "/periodicidad\" onClick=\"disablePeriodicity('" + id + "');\" "+pchk+">&nbsp;" + paramRequest.getLocaleString("frmRegularity") + "</td>");
             out.println("  </tr>");
             // SEMANAL
             out.println("  <tr>");
@@ -783,16 +714,16 @@ public class SWBASchedule extends GenericResource {
             out.println("        <tbody>");
             out.println("        <tr>");
             out.println("          <td width=10 rowSpan=3>&nbsp;</td>");
-            out.println("          <td width=100 rowSpan=2 ><input id=\""+id+"/period1\" type=\"radio\" dojoType=\"dijit.form.RadioButton\" value=\"weekl\" name=\""+id+"/period\" onClick=\"disablePeriodicity('"+id+"');\" checked disabled=\"true\">" + paramRequest.getLocaleString("frmWeekly") + "</td>");
-            out.println("          <td ><input type=\"checkbox\" dojoType=\"dijit.form.CheckBox\" id=\""+id+"/wday1\" name=\""+id+"/wday1\" " + wday1 + " disabled=\"true\">" + paramRequest.getLocaleString("frmSunday") + "</td>");
-            out.println("          <td ><input type=\"checkbox\" dojoType=\"dijit.form.CheckBox\" id=\""+id+"/wday2\" name=\""+id+"/wday2\" " + wday2 + " disabled=\"true\">" + paramRequest.getLocaleString("frmMonday") + "</td>");
-            out.println("          <td ><input type=\"checkbox\" dojoType=\"dijit.form.CheckBox\" id=\""+id+"/wday3\" name=\""+id+"/wday3\" " + wday3 + " disabled=\"true\">" + paramRequest.getLocaleString("frmTuesday") + "</td>");
-            out.println("          <td ><input type=\"checkbox\" dojoType=\"dijit.form.CheckBox\" id=\""+id+"/wday4\" name=\""+id+"/wday4\" " + wday4 + " disabled=\"true\">" + paramRequest.getLocaleString("frmWednesday") + "</td>");
+            out.println("          <td width=100 rowSpan=2 ><input id=\"" + id + "/period1\" type=\"radio\" dojoType=\"dijit.form.RadioButton\" value=\"weekly\" name=\"" + id + "/period\" onClick=\"disablePeriodicity('" + id + "');\" "+period1c+" disabled=\""+periodd+"\">" + paramRequest.getLocaleString("frmWeekly") + "</td>");
+            out.println("          <td ><input type=\"checkbox\" dojoType=\"dijit.form.CheckBox\" id=\"" + id + "/wday1\" name=\"" + id + "/wday1\" " + wday1 + " disabled=\""+period1cd+"\">" + paramRequest.getLocaleString("frmSunday") + "</td>");
+            out.println("          <td ><input type=\"checkbox\" dojoType=\"dijit.form.CheckBox\" id=\"" + id + "/wday2\" name=\"" + id + "/wday2\" " + wday2 + " disabled=\""+period1cd+"\">" + paramRequest.getLocaleString("frmMonday") + "</td>");
+            out.println("          <td ><input type=\"checkbox\" dojoType=\"dijit.form.CheckBox\" id=\"" + id + "/wday3\" name=\"" + id + "/wday3\" " + wday3 + " disabled=\""+period1cd+"\">" + paramRequest.getLocaleString("frmTuesday") + "</td>");
+            out.println("          <td ><input type=\"checkbox\" dojoType=\"dijit.form.CheckBox\" id=\"" + id + "/wday4\" name=\"" + id + "/wday4\" " + wday4 + " disabled=\""+period1cd+"\">" + paramRequest.getLocaleString("frmWednesday") + "</td>");
             out.println("        </tr>");
             out.println("        <tr>");
-            out.println("          <td><input type=\"checkbox\" dojoType=\"dijit.form.CheckBox\" id=\""+id+"/wday5\" name=\""+id+"/wday5\" " + wday5 + " disabled=\"true\">" + paramRequest.getLocaleString("frmThursday") + "</td>");
-            out.println("          <td><input type=\"checkbox\" dojoType=\"dijit.form.CheckBox\" id=\""+id+"/wday6\" name=\""+id+"/wday6\" " + wday6 + " disabled=\"true\">" + paramRequest.getLocaleString("frmFriday") + "</td>");
-            out.println("          <td><input type=\"checkbox\" dojoType=\"dijit.form.CheckBox\" id=\""+id+"/wday7\" name=\""+id+"/wday7\" " + wday7 + " disabled=\"true\">" + paramRequest.getLocaleString("frmSaturday") + "</td>");
+            out.println("          <td><input type=\"checkbox\" dojoType=\"dijit.form.CheckBox\" id=\"" + id + "/wday5\" name=\"" + id + "/wday5\" " + wday5 + " disabled=\""+period1cd+"\">" + paramRequest.getLocaleString("frmThursday") + "</td>");
+            out.println("          <td><input type=\"checkbox\" dojoType=\"dijit.form.CheckBox\" id=\"" + id + "/wday6\" name=\"" + id + "/wday6\" " + wday6 + " disabled=\""+period1cd+"\">" + paramRequest.getLocaleString("frmFriday") + "</td>");
+            out.println("          <td><input type=\"checkbox\" dojoType=\"dijit.form.CheckBox\" id=\"" + id + "/wday7\" name=\"" + id + "/wday7\" " + wday7 + " disabled=\""+period1cd+"\">" + paramRequest.getLocaleString("frmSaturday") + "</td>");
             out.println("          <td></td>");
             out.println("        </tr>");
             out.println("        <tr>");
@@ -805,6 +736,20 @@ public class SWBASchedule extends GenericResource {
             out.println("    </td>");
             out.println("  </tr>");
             // MENSUAL
+            if(pchk.equals("checked")&&period2c.equals("checked"))
+            {
+                period2cd="false";
+                if(smonth1c.equals("checked")){
+                    smonth1cd="false";
+                    smonth2c="";
+                    smonth2cd="true";
+                } else if(smonth2c.equals("checked")){
+                    smonth1c="";
+                    smonth1cd="true";
+                    smonth2cd="false";
+                }
+                    
+            }
             out.println("  <tr>");
             out.println("    <td>");
             out.println("      <table cellSpacing=\"0\" cellPadding=\"1\" width=\"100%\" border=\"0\">");
@@ -812,10 +757,10 @@ public class SWBASchedule extends GenericResource {
             out.println("        <tr>");
             out.println("          <td width=\"10\" rowSpan=\"5\">&nbsp;</td>");
             out.println("          <td width=\"100\" rowSpan=\"4\" >");
-            out.println("           <input id=\""+id+"/period2\" type=\"radio\" dojoType=\"dijit.form.RadioButton\" value=\"monthly\"  name=\""+id+"/period\" onClick=\"disablePeriodicity('"+id+"');\" >" + paramRequest.getLocaleString("frmMonthly"));
+            out.println("           <input id=\"" + id + "/period2\" type=\"radio\" dojoType=\"dijit.form.RadioButton\" value=\"monthly\"  name=\"" + id + "/period\" onClick=\"disablePeriodicity('" + id + "');\" "+period2c+" disabled=\""+periodd+"\">" + paramRequest.getLocaleString("frmMonthly"));
             out.println("            </td>");
-            out.println("          <td ><input type=\"radio\" dojoType=\"dijit.form.RadioButton\" id=\""+id+"/smonth1\" name=\""+id+"/smonth\"  value=\"day\" checked onClick=\"enableMonthly('"+id+"');\" disabled=\"true\"></td>");
-            out.println("          <td colSpan=\"3\" >" + paramRequest.getLocaleString("frmTheDay") + " <input  type=\"text\" dojoType=\"dijit.form.TextBox\" maxLength=\"2\" size=\"2\" id=\""+id+"/mmday\" name=\""+id+"/mmday\" value=\"" + mmday + "\"  style=\"width:30px;\" disabled=\"true\">&nbsp;" + paramRequest.getLocaleString("frmOfEvery") + " <input maxLength=\"2\"  size=\"2\" id=\""+id+"/mmonths1\" type=\"text\" dojoType=\"dijit.form.TextBox\" name=\""+id+"/mmonths1\" value=\"" + mmonths1 + "\"  style=\"width:30px;\" disabled=\"true\">&nbsp;" + paramRequest.getLocaleString("frmMonths") + "</td>");
+            out.println("          <td ><input type=\"radio\" dojoType=\"dijit.form.RadioButton\" id=\"" + id + "/smonth1\" name=\"" + id + "/smonth\"  value=\"day\" onClick=\"enableMonthly('" + id + "');\" "+smonth1c+" disabled=\""+period2cd+"\"></td>");
+            out.println("          <td colSpan=\"3\" >" + paramRequest.getLocaleString("frmTheDay") + " <input  type=\"text\" dojoType=\"dijit.form.TextBox\" maxLength=\"2\" size=\"2\" id=\"" + id + "/mmday\" name=\"" + id + "/mmday\" value=\"" + mmday + "\"  style=\"width:30px;\" disabled=\""+smonth1cd+"\">&nbsp;" + paramRequest.getLocaleString("frmOfEvery") + " <input maxLength=\"2\"  size=\"2\" id=\"" + id + "/mmonths1\" type=\"text\" dojoType=\"dijit.form.TextBox\" name=\"" + id + "/mmonths1\" value=\"" + mmonths1 + "\"  style=\"width:30px;\" disabled=\""+smonth1cd+"\">&nbsp;" + paramRequest.getLocaleString("frmMonths") + "</td>");
             out.println("        </tr>");
             out.println("        <tr >");
             out.println("          <td colSpan=\"4\">");
@@ -823,38 +768,50 @@ public class SWBASchedule extends GenericResource {
             out.println("          </td>");
             out.println("        </tr>");
             out.println("        <tr>");
-            out.println("          <td ><input type=\"radio\" dojoType=\"dijit.form.RadioButton\" id=\""+id+"/smonth2\" name=\""+id+"/smonth\"  value=\"week\" onClick=\"enableMonthly('"+id+"');\" disabled=\"true\"></td>"); 
+            out.println("          <td ><input type=\"radio\" dojoType=\"dijit.form.RadioButton\" id=\"" + id + "/smonth2\" name=\"" + id + "/smonth\"  value=\"week\" onClick=\"enableMonthly('" + id + "');\" "+smonth2c+" disabled=\""+period2cd+"\"></td>");
             out.println("          <td >" + paramRequest.getLocaleString("frmThe") + " &nbsp; ");
-            out.println("               <select  id=\""+id+"/mweek\" name=\""+id+"/mweek\"  dojoType=\"dijit.form.ComboBox\" autocomplete=\"true\" hasDownArrow=\"true\" style=\"width:90px;\" disabled=\"true\">");
-            out.println("                   <option value=\"1\" selected>" + paramRequest.getLocaleString("frmFirst") + "</option>");
-            out.println("                   <option value=\"2\">" + paramRequest.getLocaleString("frmSecond") + "</option>");
-            out.println("                   <option value=\"3\">" + paramRequest.getLocaleString("frmThird") + "</option>");
-            out.println("                   <option value=\"4\">" + paramRequest.getLocaleString("frmFourth") + "</option>");
-            out.println("                   <option value=\"5\">" + paramRequest.getLocaleString("frmLast") + "</option>");
-            out.println("               </select> </td>");
-            if (mweek != null && !mweek.equals("")) {
-                out.println("       <script language=\"JavaScript\" type=\"text/JavaScript\">");
-                out.println("           selectCombo(document.calendar.mweek,'" + mweek + "');");
-                out.println("       </script>");
+            if("add".equals(action))
+            {
+                op1="selected";
             }
+            else if(mweek!=null && !mweek.equals(""))
+            {
+                op1= mweek.equals("1")?"selected":"";
+                op2= mweek.equals("2")?"selected":"";
+                op3= mweek.equals("3")?"selected":"";
+                op4= mweek.equals("4")?"selected":"";
+                op5= mweek.equals("5")?"selected":"";
+            }
+            out.println("               <select  id=\"" + id + "/mweek\" name=\"" + id + "/mweek\"  dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"true\" hasDownArrow=\"true\" style=\"width:90px;\" disabled=\""+smonth2cd+"\">");
+            out.println("                   <option value=\"1\" "+op1+" >" + paramRequest.getLocaleString("frmFirst") + "</option>");
+            out.println("                   <option value=\"2\" "+op2+" >" + paramRequest.getLocaleString("frmSecond") + "</option>");
+            out.println("                   <option value=\"3\" "+op3+" >" + paramRequest.getLocaleString("frmThird") + "</option>");
+            out.println("                   <option value=\"4\" "+op4+" >" + paramRequest.getLocaleString("frmFourth") + "</option>");
+            out.println("                   <option value=\"5\" "+op5+" >" + paramRequest.getLocaleString("frmLast") + "</option>");
+            out.println("               </select> </td>");
+//            if (mweek != null && !mweek.equals("")) {
+//                out.println("       <script language=\"JavaScript\" type=\"text/JavaScript\">");
+//                out.println("           selectCombo(dijit.byId('"+id+"/mweek').domNode,'" + mweek + "');");
+//                out.println("       </script>");
+//            }
             out.println("          <td>");
             out.println("            <table cellSpacing=\"0\" cellPadding=\"1\" width=\"100%\" border=\"0\">");
             out.println("              <tbody>");
             out.println("              <tr>");
-            out.println("                <td ><input type=\"checkbox\"  dojoType=\"dijit.form.CheckBox\" id=\""+id+"/mday1\" name=\""+id+"/mday1\" " + mday1 + " disabled=\"true\">" + paramRequest.getLocaleString("frmSun") + "</td>");
-            out.println("                <td ><input type=\"checkbox\"  dojoType=\"dijit.form.CheckBox\" id=\""+id+"/mday2\" name=\""+id+"/mday2\" " + mday2 + " disabled=\"true\">" + paramRequest.getLocaleString("frmMon") + "</td>");
-            out.println("                <td ><input type=\"checkbox\"  dojoType=\"dijit.form.CheckBox\" id=\""+id+"/mday3\" name=\""+id+"/mday3\" " + mday3 + " disabled=\"true\">" + paramRequest.getLocaleString("frmTue") + "</td>");
-            out.println("                <td ><input type=\"checkbox\"  dojoType=\"dijit.form.CheckBox\" id=\""+id+"/mday4\" name=\""+id+"/mday4\" " + mday4 + " disabled=\"true\">" + paramRequest.getLocaleString("frmWed") + "</td>");
+            out.println("                <td ><input type=\"checkbox\"  dojoType=\"dijit.form.CheckBox\" id=\"" + id + "/mday1\" name=\"" + id + "/mday1\" " + mday1 + " disabled=\""+smonth2cd+"\">" + paramRequest.getLocaleString("frmSun") + "</td>");
+            out.println("                <td ><input type=\"checkbox\"  dojoType=\"dijit.form.CheckBox\" id=\"" + id + "/mday2\" name=\"" + id + "/mday2\" " + mday2 + " disabled=\""+smonth2cd+"\">" + paramRequest.getLocaleString("frmMon") + "</td>");
+            out.println("                <td ><input type=\"checkbox\"  dojoType=\"dijit.form.CheckBox\" id=\"" + id + "/mday3\" name=\"" + id + "/mday3\" " + mday3 + " disabled=\""+smonth2cd+"\">" + paramRequest.getLocaleString("frmTue") + "</td>");
+            out.println("                <td ><input type=\"checkbox\"  dojoType=\"dijit.form.CheckBox\" id=\"" + id + "/mday4\" name=\"" + id + "/mday4\" " + mday4 + " disabled=\""+smonth2cd+"\">" + paramRequest.getLocaleString("frmWed") + "</td>");
             out.println("              </tr>");
             out.println("              <tr>");
-            out.println("                <td ><input type=\"checkbox\"  dojoType=\"dijit.form.CheckBox\" id=\""+id+"/mday5\" name=\""+id+"/mday5\" " + mday5 + " disabled=\"true\">" + paramRequest.getLocaleString("frmThu") + "</td>");
-            out.println("                <td ><input type=\"checkbox\"  dojoType=\"dijit.form.CheckBox\" id=\""+id+"/mday6\" name=\""+id+"/mday6\" " + mday6 + " disabled=\"true\">" + paramRequest.getLocaleString("frmFri") + "</td>");
-            out.println("                <td ><input type=\"checkbox\"  dojoType=\"dijit.form.CheckBox\" id=\""+id+"/mday7\" name=\""+id+"/mday7\" " + mday7 + " disabled=\"true\">" + paramRequest.getLocaleString("frmSat") + "</td>");
+            out.println("                <td ><input type=\"checkbox\"  dojoType=\"dijit.form.CheckBox\" id=\"" + id + "/mday5\" name=\"" + id + "/mday5\" " + mday5 + " disabled=\""+smonth2cd+"\">" + paramRequest.getLocaleString("frmThu") + "</td>");
+            out.println("                <td ><input type=\"checkbox\"  dojoType=\"dijit.form.CheckBox\" id=\"" + id + "/mday6\" name=\"" + id + "/mday6\" " + mday6 + " disabled=\""+smonth2cd+"\">" + paramRequest.getLocaleString("frmFri") + "</td>");
+            out.println("                <td ><input type=\"checkbox\"  dojoType=\"dijit.form.CheckBox\" id=\"" + id + "/mday7\" name=\"" + id + "/mday7\" " + mday7 + " disabled=\""+smonth2cd+"\">" + paramRequest.getLocaleString("frmSat") + "</td>");
             out.println("              </tr>");
             out.println("              </tbody>");
             out.println("            </table>");
             out.println("          </td>");
-            out.println("          <td >&nbsp;" + paramRequest.getLocaleString("frmOfEvery") + " &nbsp;<input  dojoType=\"dijit.form.TextBox\" maxLength=\"2\" size=\"2\" id=\""+id+"/mmonths2\" name=\""+id+"/mmonths2\" style=\"width:30px;\" value=\"" + mmonths2 + "\" disabled=\"true\">&nbsp;" + paramRequest.getLocaleString("frmMonths") + "</td>");
+            out.println("          <td >&nbsp;" + paramRequest.getLocaleString("frmOfEvery") + " &nbsp;<input  dojoType=\"dijit.form.TextBox\" maxLength=\"2\" size=\"2\" id=\"" + id + "/mmonths2\" name=\"" + id + "/mmonths2\" style=\"width:30px;\" value=\"" + mmonths2 + "\" disabled=\""+smonth2cd+"\">&nbsp;" + paramRequest.getLocaleString("frmMonths") + "</td>");
             out.println("        </tr>");
             out.println("        <tr>");
             out.println("          <td colSpan=\"5\">");
@@ -866,6 +823,20 @@ public class SWBASchedule extends GenericResource {
             out.println("   </td>");
             out.println("  </tr>");
             // ANUAL
+//            if(pchk.equals("checked")&&period3c.equals("checked"))
+//            {
+//                period3cd="false";
+//                if(smonth1c.equals("checked")){
+//                    smonth1cd="false";
+//                    smonth2c="";
+//                    smonth2cd="true";
+//                } else if(smonth2c.equals("checked")){
+//                    smonth1c="";
+//                    smonth1cd="true";
+//                    smonth2cd="false";
+//                }
+//                    
+//            }
             out.println("  <tr>");
             out.println("    <td >");
             out.println("      <table cellSpacing=\"0\" cellPadding=\"1\" width=\"100%\" border=\"0\">");
@@ -873,34 +844,55 @@ public class SWBASchedule extends GenericResource {
             out.println("        <tr>");
             out.println("          <td width=\"10\" rowSpan=\"4\">&nbsp;</td>");
             out.println("          <td width=\"100\" rowSpan=\"4\" >");
-            out.println("          <input  id=\""+id+"/period3\"  type=\"radio\" dojoType=\"dijit.form.RadioButton\" value=\"yearly\" name=\""+id+"/period\" onClick=\"disablePeriodicity('"+id+"');\" disabled=\"true\">" + paramRequest.getLocaleString("frmYearly") + "</td>");
-            out.println("          <td ><input id=\""+id+"/radio1\" type=\"radio\"  dojoType=\"dijit.form.RadioButton\" name=\""+id+"/syear\" value=\"day\" checked onClick=\"enableYearly('"+id+"');\" disabled=\"true\"></td>");
+            out.println("          <input  id=\"" + id + "/period3\"  type=\"radio\" dojoType=\"dijit.form.RadioButton\" value=\"yearly\" name=\"" + id + "/period\" onClick=\"disablePeriodicity('" + id + "');\" "+period3c+" disabled=\""+periodd+"\">" + paramRequest.getLocaleString("frmYearly") + "</td>");
+
+            
+            out.println("          <td ><input id=\"" + id + "/radio1\" type=\"radio\"  dojoType=\"dijit.form.RadioButton\" name=\"" + id + "/syear\" value=\"day\" onClick=\"enableYearly('" + id + "');\" "+radio1c+" disabled=\""+yearlyd+"\"></td>");
             out.println("          <td colSpan=3 >" + paramRequest.getLocaleString("frmTheDay"));
-            out.println("            <input type=\"text\" dojoType=\"dijit.form.TextBox\" id=\""+id+"/text1\" maxLength=\"2\" size=\"2\" name=\""+id+"/yyday\" style=\"width:30px;\" value=\"" + yyday + "\" disabled=\"true\">&nbsp;" + paramRequest.getLocaleString("frmOf"));
-            out.println("            <select id=\""+id+"/selectm1\"  name=\""+id+"/ymonth1\" dojoType=\"dijit.form.ComboBox\" autocomplete=\"true\" hasDownArrow=\"true\" style=\"width:110px;\" disabled=\"true\">");
-            out.println("                <option value=\"1\" selected>" + paramRequest.getLocaleString("frmJanuary") + "</option>");
-            out.println("                <option value=\"2\">" + paramRequest.getLocaleString("frmFebruary") + "</option>");
-            out.println("                <option value=\"3\">" + paramRequest.getLocaleString("frmMarch") + "</option>");
-            out.println("                <option value=\"4\">" + paramRequest.getLocaleString("frmApril") + "</option>");
-            out.println("                <option value=\"5\">" + paramRequest.getLocaleString("frmMay") + "</option>");
-            out.println("                <option value=\"6\">" + paramRequest.getLocaleString("frmJune") + "</option>");
-            out.println("                <option value=\"7\">" + paramRequest.getLocaleString("frmJuly") + "</option>");
-            out.println("                <option value=\"8\">" + paramRequest.getLocaleString("frmAugust") + "</option>");
-            out.println("                <option value=\"9\">" + paramRequest.getLocaleString("frmSeptember") + "</option>");
-            out.println("                <option value=\"10\">" + paramRequest.getLocaleString("frmOctober") + "</option>");
-            out.println("                <option value=\"11\">" + paramRequest.getLocaleString("frmNovember") + "</option>");
-            out.println("                <option value=\"12\">" + paramRequest.getLocaleString("frmDecember") + "</option>");
+            out.println("            <input type=\"text\" dojoType=\"dijit.form.TextBox\" id=\"" + id + "/text1\" maxLength=\"2\" size=\"2\" name=\"" + id + "/yyday\" style=\"width:30px;\" value=\"" + yyday + "\" disabled=\""+radio1cd+"\">&nbsp;" + paramRequest.getLocaleString("frmOf"));
+            op1="";op2="";op3="";op4="";op5="";op6="";op7="";op8="";op9="";op10="";op11="";op12="";
+            if("add".equals(action))
+            {
+                op1="selected";
+            }
+            else if(ymonth1!=null && !ymonth1.equals(""))
+            {
+                op1= ymonth1.equals("1")?"selected":"";
+                op2= ymonth1.equals("2")?"selected":"";
+                op3= ymonth1.equals("3")?"selected":"";
+                op4= ymonth1.equals("4")?"selected":"";
+                op5= ymonth1.equals("5")?"selected":"";
+                op6= ymonth1.equals("6")?"selected":"";
+                op7= ymonth1.equals("7")?"selected":"";
+                op8= ymonth1.equals("8")?"selected":"";
+                op9= ymonth1.equals("9")?"selected":"";
+                op10= ymonth1.equals("10")?"selected":"";
+                op11= ymonth1.equals("11")?"selected":"";
+                op12= ymonth1.equals("12")?"selected":"";
+            }
+            out.println("            <select id=\"" + id + "/selectm1\"  name=\"" + id + "/ymonth1\" dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"true\" hasDownArrow=\"true\" style=\"width:110px;\" disabled=\""+radio1cd+"\">");
+            out.println("                <option value=\"1\" "+op1+" >" + paramRequest.getLocaleString("frmJanuary") + "</option>");
+            out.println("                <option value=\"2\" "+op2+" >" + paramRequest.getLocaleString("frmFebruary") + "</option>");
+            out.println("                <option value=\"3\" "+op3+" >" + paramRequest.getLocaleString("frmMarch") + "</option>");
+            out.println("                <option value=\"4\" "+op4+" >" + paramRequest.getLocaleString("frmApril") + "</option>");
+            out.println("                <option value=\"5\" "+op5+" >" + paramRequest.getLocaleString("frmMay") + "</option>");
+            out.println("                <option value=\"6\" "+op6+" >" + paramRequest.getLocaleString("frmJune") + "</option>");
+            out.println("                <option value=\"7\" "+op7+" >" + paramRequest.getLocaleString("frmJuly") + "</option>");
+            out.println("                <option value=\"8\" "+op8+" >" + paramRequest.getLocaleString("frmAugust") + "</option>");
+            out.println("                <option value=\"9\" "+op9+" >" + paramRequest.getLocaleString("frmSeptember") + "</option>");
+            out.println("                <option value=\"10\" "+op10+" >" + paramRequest.getLocaleString("frmOctober") + "</option>");
+            out.println("                <option value=\"11\" "+op11+" >" + paramRequest.getLocaleString("frmNovember") + "</option>");
+            out.println("                <option value=\"12\" "+op12+" >" + paramRequest.getLocaleString("frmDecember") + "</option>");
             out.println("            </select>");
-//            if (ymonth1 != null && !ymonth2.equals("")) {
+//            if (ymonth1!=null && !ymonth2.equals("")) {
 //                out.println("       <script language=\"JavaScript\" type=\"text/JavaScript\">");
-//                out.println("           selectCombo(document.calendar.ymonth1,'" + ymonth1 + "');");
+//                out.println("           selectCombo(dijit.byId('"+id+"/selectm1').domNode,'"+ymonth1+"');");
 //                out.println("       </script>");
 //            }
-
             if (yyears1 != null && !yyears1.equals("")) {
-                out.println("            &nbsp;" + paramRequest.getLocaleString("frmOfEvery") + " <input  type=\"text\" dojoType=\"dijit.form.TextBox\" id=\""+id+"/text2\" maxLength=\"2\" size=\"2\" style=\"width:30px;\" name=\""+id+"/yyears1\" value=\"" + yyears1 + "\" disabled=\"true\">&nbsp;" + paramRequest.getLocaleString("frmYears") + "");
+                out.println("            &nbsp;" + paramRequest.getLocaleString("frmOfEvery") + " <input  type=\"text\" dojoType=\"dijit.form.TextBox\" id=\"" + id + "/text2\" maxLength=\"2\" size=\"2\" style=\"width:30px;\" name=\"" + id + "/yyears1\" value=\"" + yyears1 + "\" disabled=\""+radio1cd+"\">&nbsp;" + paramRequest.getLocaleString("frmYears") + "");
             } else {
-                out.println("            &nbsp;" + paramRequest.getLocaleString("frmOfEvery") + "<input  type=\"text\" dojoType=\"dijit.form.TextBox\" id=\""+id+"/text2\" maxLength=\"2\" size=\"2\" style=\"width:30px;\" name=\""+id+"/yyears1\" value=\"1\" disabled=\"true\">&nbsp;" + paramRequest.getLocaleString("frmYears") + "");
+                out.println("            &nbsp;" + paramRequest.getLocaleString("frmOfEvery") + "<input  type=\"text\" dojoType=\"dijit.form.TextBox\" id=\"" + id + "/text2\" maxLength=\"2\" size=\"2\" style=\"width:30px;\" name=\"" + id + "/yyears1\" value=\"1\" disabled=\""+radio1cd+"\">&nbsp;" + paramRequest.getLocaleString("frmYears") + "");
             }
             out.println("          </td></tr>");
             out.println("        <tr >");
@@ -908,65 +900,98 @@ public class SWBASchedule extends GenericResource {
             out.println("            <hr size=\"1\" noshade>");
             out.println("          </td></tr>");
             out.println("        <tr>");
-            out.println("          <td ><input id=\""+id+"/radio2\" type=\"radio\"  dojoType=\"dijit.form.RadioButton\" name=\""+id+"/syear\" value=\"week\" onClick=\"enableYearly('"+id+"');\" disabled=\"true\"></td>");
+            out.println("          <td ><input id=\"" + id + "/radio2\" type=\"radio\"  dojoType=\"dijit.form.RadioButton\" name=\"" + id + "/syear\" value=\"week\" onClick=\"enableYearly('" + id + "');\" "+radio2c+" disabled=\""+yearlyd+"\"></td>");
             out.println("          <td >" + paramRequest.getLocaleString("frmThe") + " &nbsp;");
-            out.println("             <select id=\""+id+"/select1\" name=\"yweek\"  dojoType=\"dijit.form.ComboBox\" autocomplete=\"true\" hasDownArrow=\"true\" style=\"width:90px;\" disabled=\"true\">");
-            out.println("              <option value=\"1\" selected>" + paramRequest.getLocaleString("frmFirst") + "</option>");
-            out.println("              <option value=\"2\">" + paramRequest.getLocaleString("frmSecond") + "</option>");
-            out.println("              <option value=\"3\">" + paramRequest.getLocaleString("frmThird") + "</option>");
-            out.println("              <option value=\"4\">" + paramRequest.getLocaleString("frmFourth") + "</option>");
-            out.println("              <option value=\"5\">" + paramRequest.getLocaleString("frmLast") + "</option>");
+            op1="";op2="";op3="";op4="";op5="";
+            if("add".equals(action))
+            {
+                op1="selected";
+            }
+            else if(yweek!=null && !yweek.equals(""))
+            {
+                op1= yweek.equals("1")?"selected":"";
+                op2= yweek.equals("2")?"selected":"";
+                op3= yweek.equals("3")?"selected":"";
+                op4= yweek.equals("4")?"selected":"";
+                op5= yweek.equals("5")?"selected":"";
+            }
+            out.println("             <select id=\"" + id + "/select1\" name=\""+id+"/yweek\"  dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"true\" hasDownArrow=\"true\" style=\"width:90px;\" disabled=\""+radio2cd+"\">");
+            out.println("              <option value=\"1\" "+op1+" >" + paramRequest.getLocaleString("frmFirst") + "</option>");
+            out.println("              <option value=\"2\" "+op2+" >" + paramRequest.getLocaleString("frmSecond") + "</option>");
+            out.println("              <option value=\"3\" "+op3+" >" + paramRequest.getLocaleString("frmThird") + "</option>");
+            out.println("              <option value=\"4\" "+op4+" >" + paramRequest.getLocaleString("frmFourth") + "</option>");
+            out.println("              <option value=\"5\" "+op5+" >" + paramRequest.getLocaleString("frmLast") + "</option>");
             out.println("             </select>");
-//            if (yweek != null && !yweek.equals("")) {
+            out.println("          </td>");
+//            if (yweek!=null && !yweek.equals("")) {
 //                out.println("       <script language=\"JavaScript\" type=\"text/JavaScript\">");
-//                out.println("           selectCombo(document.calendar.yweek,'" + yweek + "');");
+//                out.println("           selectCombo(dijit.byId('"+id+"/select1').domNode,'"+yweek+"');");
 //                out.println("       </script>");
 //            }
-            out.println("          </td>");
             out.println("          <td>");
             out.println("            <table cellSpacing=\"0\" cellPadding=\"1\" width=\"100%\" border=\"0\">");
             out.println("              <tbody>");
             out.println("              <tr>");
-            out.println("                <td ><input  type=\"checkbox\" dojoType=\"dijit.form.CheckBox\" id=\""+id+"/yday1\" name=\""+id+"/yday1\" " + yday1 + " disabled=\"true\">" + paramRequest.getLocaleString("frmSun") + "</td>");
-            out.println("                <td ><input  type=\"checkbox\" dojoType=\"dijit.form.CheckBox\" id=\""+id+"/yday2\" name=\""+id+"/yday2\" " + yday2 + " disabled=\"true\">" + paramRequest.getLocaleString("frmMon") + "</td>");
-            out.println("                <td ><input  type=\"checkbox\" dojoType=\"dijit.form.CheckBox\" id=\""+id+"/yday3\" name=\""+id+"/yday3\" " + yday3 + " disabled=\"true\">" + paramRequest.getLocaleString("frmTue") + "</td>");
-            out.println("                <td ><input  type=\"checkbox\" dojoType=\"dijit.form.CheckBox\" id=\""+id+"/yday4\" name=\""+id+"/yday4\" " + yday4 + " disabled=\"true\">" + paramRequest.getLocaleString("frmWed") + "</td>");
+            out.println("                <td ><input  type=\"checkbox\" dojoType=\"dijit.form.CheckBox\" id=\"" + id + "/yday1\" name=\"" + id + "/yday1\" " + yday1 + " disabled=\""+radio2cd+"\">" + paramRequest.getLocaleString("frmSun") + "</td>");
+            out.println("                <td ><input  type=\"checkbox\" dojoType=\"dijit.form.CheckBox\" id=\"" + id + "/yday2\" name=\"" + id + "/yday2\" " + yday2 + " disabled=\""+radio2cd+"\">" + paramRequest.getLocaleString("frmMon") + "</td>");
+            out.println("                <td ><input  type=\"checkbox\" dojoType=\"dijit.form.CheckBox\" id=\"" + id + "/yday3\" name=\"" + id + "/yday3\" " + yday3 + " disabled=\""+radio2cd+"\">" + paramRequest.getLocaleString("frmTue") + "</td>");
+            out.println("                <td ><input  type=\"checkbox\" dojoType=\"dijit.form.CheckBox\" id=\"" + id + "/yday4\" name=\"" + id + "/yday4\" " + yday4 + " disabled=\""+radio2cd+"\">" + paramRequest.getLocaleString("frmWed") + "</td>");
             out.println("              </tr>");
             out.println("              <tr>");
-            out.println("                <td ><input  type=\"checkbox\" dojoType=\"dijit.form.CheckBox\" id=\""+id+"/yday5\" name=\""+id+"/yday5\" " + yday5 + " disabled=\"true\">" + paramRequest.getLocaleString("frmThu") + "</td>");
-            out.println("                <td ><input  type=\"checkbox\" dojoType=\"dijit.form.CheckBox\" id=\""+id+"/yday6\" name=\""+id+"/yday6\" " + yday6 + " disabled=\"true\">" + paramRequest.getLocaleString("frmFri") + "</td>");
-            out.println("                <td ><input  type=\"checkbox\" dojoType=\"dijit.form.CheckBox\" id=\""+id+"/yday7\" name=\""+id+"/yday7\" " + yday7 + " disabled=\"true\">" + paramRequest.getLocaleString("frmSat") + "</td>");
+            out.println("                <td ><input  type=\"checkbox\" dojoType=\"dijit.form.CheckBox\" id=\"" + id + "/yday5\" name=\"" + id + "/yday5\" " + yday5 + " disabled=\""+radio2cd+"\">" + paramRequest.getLocaleString("frmThu") + "</td>");
+            out.println("                <td ><input  type=\"checkbox\" dojoType=\"dijit.form.CheckBox\" id=\"" + id + "/yday6\" name=\"" + id + "/yday6\" " + yday6 + " disabled=\""+radio2cd+"\">" + paramRequest.getLocaleString("frmFri") + "</td>");
+            out.println("                <td ><input  type=\"checkbox\" dojoType=\"dijit.form.CheckBox\" id=\"" + id + "/yday7\" name=\"" + id + "/yday7\" " + yday7 + " disabled=\""+radio2cd+"\">" + paramRequest.getLocaleString("frmSat") + "</td>");
             out.println("              </tr>");
             out.println("              </tbody>");
             out.println("            </table>");
             out.println("          </td>");
-            out.println("          <td >&nbsp;" + paramRequest.getLocaleString("frmOf")); 
-            out.println("             <select id=\""+id+"/selectm2\" name=\""+id+"/ymonth2\" dojoType=\"dijit.form.ComboBox\" autocomplete=\"true\" hasDownArrow=\"true\" style=\"width:110px;\" disabled=\"true\">");
-            out.println("                <option value=\"1\" selected>" + paramRequest.getLocaleString("frmJanuary") + "</option>");
-            out.println("                <option value=\"2\">" + paramRequest.getLocaleString("frmFebruary") + "</option>");
-            out.println("                <option value=\"3\">" + paramRequest.getLocaleString("frmMarch") + "</option>");
-            out.println("                <option value=\"4\">" + paramRequest.getLocaleString("frmApril") + "</option>");
-            out.println("                <option value=\"5\">" + paramRequest.getLocaleString("frmMay") + "</option>");
-            out.println("                <option value=\"6\">" + paramRequest.getLocaleString("frmJune") + "</option>");
-            out.println("                <option value=\"7\">" + paramRequest.getLocaleString("frmJuly") + "</option>");
-            out.println("                <option value=\"8\">" + paramRequest.getLocaleString("frmAugust") + "</option>");
-            out.println("                <option value=\"9\">" + paramRequest.getLocaleString("frmSeptember") + "</option>");
-            out.println("                <option value=\"10\">" + paramRequest.getLocaleString("frmOctober") + "</option>");
-            out.println("                <option value=\"11\">" + paramRequest.getLocaleString("frmNovember") + "</option>");
-            out.println("                <option value=\"12\">" + paramRequest.getLocaleString("frmDecember") + "</option>");
+            out.println("          <td >&nbsp;" + paramRequest.getLocaleString("frmOf"));
+            op1="";op2="";op3="";op4="";op5="";op6="";op7="";op8="";op9="";op10="";op11="";op12="";
+            if("add".equals(action))
+            {
+                op1="selected";
+            }
+            else if(ymonth2!=null && !ymonth2.equals(""))
+            {
+                op1= ymonth2.equals("1")?"selected":"";
+                op2= ymonth2.equals("2")?"selected":"";
+                op3= ymonth2.equals("3")?"selected":"";
+                op4= ymonth2.equals("4")?"selected":"";
+                op5= ymonth2.equals("5")?"selected":"";
+                op6= ymonth2.equals("6")?"selected":"";
+                op7= ymonth2.equals("7")?"selected":"";
+                op8= ymonth2.equals("8")?"selected":"";
+                op9= ymonth2.equals("9")?"selected":"";
+                op10= ymonth2.equals("10")?"selected":"";
+                op11= ymonth2.equals("11")?"selected":"";
+                op12= ymonth2.equals("12")?"selected":"";
+            }
+            out.println("             <select id=\"" + id + "/selectm2\" name=\"" + id + "/ymonth2\" dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"true\" hasDownArrow=\"true\" style=\"width:110px;\" disabled=\""+radio2cd+"\">");
+            out.println("                <option value=\"1\" "+op1+" >" + paramRequest.getLocaleString("frmJanuary") + "</option>");
+            out.println("                <option value=\"2\" "+op2+" >" + paramRequest.getLocaleString("frmFebruary") + "</option>");
+            out.println("                <option value=\"3\" "+op3+" >" + paramRequest.getLocaleString("frmMarch") + "</option>");
+            out.println("                <option value=\"4\" "+op4+" >" + paramRequest.getLocaleString("frmApril") + "</option>");
+            out.println("                <option value=\"5\" "+op5+" >" + paramRequest.getLocaleString("frmMay") + "</option>");
+            out.println("                <option value=\"6\" "+op6+" >" + paramRequest.getLocaleString("frmJune") + "</option>");
+            out.println("                <option value=\"7\" "+op7+" >" + paramRequest.getLocaleString("frmJuly") + "</option>");
+            out.println("                <option value=\"8\" "+op8+" >" + paramRequest.getLocaleString("frmAugust") + "</option>");
+            out.println("                <option value=\"9\" "+op9+" >" + paramRequest.getLocaleString("frmSeptember") + "</option>");
+            out.println("                <option value=\"10\" "+op10+" >" + paramRequest.getLocaleString("frmOctober") + "</option>");
+            out.println("                <option value=\"11\" "+op11+" >" + paramRequest.getLocaleString("frmNovember") + "</option>");
+            out.println("                <option value=\"12\" "+op12+" >" + paramRequest.getLocaleString("frmDecember") + "</option>");
             out.println("             </select>");
 //            if (ymonth2 != null && !ymonth2.equals("")) {
 //                out.println("       <script language=\"JavaScript\" type=\"text/JavaScript\">");
-//                out.println("           selectCombo(document.calendar.ymonth2,'" + ymonth2 + "');");
+//                out.println("           selectCombo(dijit.byId('"+id+"/selectm2').domNode,'" + ymonth2 + "');");
 //                out.println("       </script>");
 //            }
             if (yyears2 != null && !yyears2.equals("")) {
                 out.println("               &nbsp;" + paramRequest.getLocaleString("frmOfEvery") + " &nbsp;");
-                out.println("               <input   id=\""+id+"/text3\" type=\"text\" dojoType=\"dijit.form.TextBox\" maxLength=\"2\" size=\"2\" name=\""+id+"/yyears2\" value=\"" + yyears2 + "\"  style=\"width:30px;\" disabled=\"true\">");
+                out.println("               <input   id=\"" + id + "/text3\" type=\"text\" dojoType=\"dijit.form.TextBox\" maxLength=\"2\" size=\"2\" name=\"" + id + "/yyears2\" value=\"" + yyears2 + "\"  style=\"width:30px;\" disabled=\""+radio2cd+"\">");
                 out.println("               &nbsp;" + paramRequest.getLocaleString("frmYears") + "</td></tr></tbody></table></td></tr>");
             } else {
                 out.println("               &nbsp;" + paramRequest.getLocaleString("frmOfEvery") + " &nbsp;");
-                out.println("               <input  id=\""+id+"/text3\" type=\"text\" dojoType=\"dijit.form.TextBox\" maxLength=\"2\" size=\"2\" name=\""+id+"/yyears2\" value=\"1\"  style=\"width:30px;\" disabled=\"true\">");
+                out.println("               <input  id=\"" + id + "/text3\" type=\"text\" dojoType=\"dijit.form.TextBox\" maxLength=\"2\" size=\"2\" name=\"" + id + "/yyears2\" value=\"1\"  style=\"width:30px;\" disabled=\""+radio2cd+"\">");
                 out.println("               &nbsp;" + paramRequest.getLocaleString("frmYears") + "</td></tr></tbody></table></td></tr>");
             }
             out.println("  <tr>");
@@ -978,7 +1003,7 @@ public class SWBASchedule extends GenericResource {
             out.println("<input type=\"hidden\" name=\"view\" value=\"" + view + "\"> ");
             out.println("<input type=\"hidden\" name=\"tp\" value=\"" + topic + "\"> ");
             out.println("<input type=\"hidden\" name=\"tm\" value=\"" + tm + "\"> ");
-            out.println("<input type=\"hidden\" name=\"type\" value=\"" + strType + "\"> ");
+            //out.println("<input type=\"hidden\" name=\"type\" value=\"" + strType + "\"> ");
             out.println("<input type=\"hidden\" name=\"oldtitle\" value=\"" + title + "\"> ");
             out.println("<input type=\"hidden\" name=\"createdate\" value=\"" + createdate + "\"> ");
             out.println("<input type=\"hidden\" name=\"usercreate\" value=\"" + usercreate + "\"> ");
@@ -986,17 +1011,20 @@ public class SWBASchedule extends GenericResource {
             out.println("<input type=\"hidden\" name=\"suri\" value=\"" + id + "\"> ");
             out.println("<input type=\"hidden\" name=\"sprop\" value=\"" + idp + "\"> ");
             out.println("<input type=\"hidden\" name=\"spropref\" value=\"" + idpref + "\"> ");
-            
+            if(null!=idCalendar)out.println("<input type=\"hidden\" name=\"sval\" value=\"" + idCalendar + "\"> ");
+
             //paramRequest.getActionUrl().setParameter("idp",Integer.toString(iId));
-             
+
             out.println("<p><button dojoType=\"dijit.form.Button\" name=\"enviar\" onclick=\"submitForm('" + id + "/calendar'); return false;\">" + paramRequest.getLocaleString("btnSend") + "</button>");
-            if (id != null && idp != null ) {
+            if (id != null && idp != null) {
                 SWBResourceURL urlb = paramRequest.getRenderUrl();
                 urlb.setParameter("suri", id);
                 urlb.setParameter("sprop", idp);
-                if(idpref!=null) urlb.setParameter("spropref", idpref);
+                if (idpref != null) {
+                    urlb.setParameter("spropref", idpref);
+                }
                 urlb.setMode(SWBResourceURL.Mode_VIEW);
-                out.println("<button dojoType=\"dijit.form.Button\" id=\""+id+"/bckbutton\" name=\"bckbutton\" onclick=\"submitUrl('" + urlb + "',this.form); return false;\">Regresar</button>"); //dijit.byId('"+id+"/calendar').domNode
+                out.println("<button dojoType=\"dijit.form.Button\" id=\"" + id + "/bckbutton\" name=\"bckbutton\" onclick=\"submitUrl('" + urlb + "',document.getElementById('"+id+"/calendar')); return false;\">Regresar</button>"); //dijit.byId('"+id+"/calendar').domNode
             }
             out.println("</p>");
             out.println("</fieldset>");
@@ -1019,340 +1047,376 @@ public class SWBASchedule extends GenericResource {
      */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-        
+
+        String id = request.getParameter("suri");
+        User user = response.getUser();
         String action = response.getAction();
-        if(null==action) action="";
-        
-        String stype = request.getParameter("type");
-        String sres = request.getParameter("res");
-        String suserid = request.getParameter("userid");
-        String act = request.getParameter("act");
-        String strTp = request.getParameter("tp");
-        String strTm = request.getParameter("tm");
-        String strId = request.getParameter("id");
+        if (null == action) {
+            action = "";
+        }
+        String stype = request.getParameter(id+"/type")!=null?request.getParameter("type"):"";
+        String sres = request.getParameter(id+"/res");
+        String suserid = request.getParameter(id+"/userid");
+        String act = request.getParameter(id+"/act");
+        String strTp = request.getParameter(id+"/tp");
+        String strTm = request.getParameter(id+"/tm");
+        String strId = request.getParameter(id+"/id");
 
 
         String strCreateDate = "";
         //String strUserCreate=response.getUser().getId();
-        String strUserCreate = request.getParameter("usercreate");
+        String strUserCreate = request.getParameter(id+"/usercreate");
         String strModDate = Long.toString(System.currentTimeMillis());
         String strUserMod = response.getUser().getId();
-        String strActive = request.getParameter("active");
+        String strActive = request.getParameter(id+"/active");
 
+        log.debug("SWBASchedule.processAction()--------------------------------------");
         Enumeration<String> enup = request.getParameterNames();
-        while(enup.hasMoreElements())
-        {
+        while (enup.hasMoreElements()) {
             String param = enup.nextElement();
-            log.debug("parametro: "+param+", value: "+request.getParameter(param));
+            log.debug( param + ": " + request.getParameter(param));
         }
-        
-        String id = request.getParameter("suri");
+
         String rid = request.getParameter("rsuri");
         String sprop = request.getParameter("sprop");
         String spropref = request.getParameter("spropref");
-        
-        if ("add".equals(action)) {
+        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+        SemanticObject obj = ont.getSemanticObject(id); //// object al cual se le va a asociar el calendario
+        SemanticClass cls = obj.getSemanticClass();
 
-//            SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(sprop);
-//            SemanticClass ncls = prop.getRangeClass();
-//            String id_usr_request = request.getParameter("id_usr_request");
-//            log.debug("id_recibido: "+id_usr_request);
-//            if (ncls.isAutogenId() || (id_usr_request != null && id_usr_request.trim().length() > 0)) {
-//                long lid = SWBPlatform.getSemanticMgr().getCounter(obj.getModel().getName() + "/" + ncls.getName());
-//                String str_lid = "" + lid;
-//                if (id_usr_request != null && id_usr_request.trim().length() > 0) {
-//                    str_lid = id_usr_request;
-//                }
-//                SemanticObject nobj = obj.getModel().createSemanticObject(obj.getModel().getObjectUri(str_lid, ncls), ncls);
-//                if(prop.getName().startsWith("has"))obj.addObjectProperty(prop, nobj);
-//                else obj.setObjectProperty(prop, nobj);
-//                response.setMode(response.Mode_EDIT);
-//                response.setRenderParameter("suri", nobj.getURI());
-//                response.setRenderParameter("rsuri", obj.getURI());
-//                response.setRenderParameter("sprop", prop.getURI());
-//                response.setRenderParameter("act", "");
-//            } else {
-//                //Llamada para pedir el id del SemanticObject que no cuenta con el AutogenID
-//                Enumeration enu_p = request.getParameterNames();
-//                while (enu_p.hasMoreElements()) {
-//                    String p_name = (String) enu_p.nextElement();
-//                    response.setRenderParameter(p_name, request.getParameter(p_name));
-//                }
-//                response.setMode(MODE_IdREQUEST);
-//            }
-            
+        String idCalendar = request.getParameter("sval");
+        
+        if ("add".equals(action)) 
+        {    
+            SemanticProperty prop1 = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(sprop);
+            SemanticClass ncls = prop1.getRangeClass();
+            String id_usr_request = request.getParameter("id_usr_request");
+            log.debug("id_recibido: " + id_usr_request);
+            if (ncls.isAutogenId() ) { //|| (id_usr_request != null && id_usr_request.trim().length() > 0)
+                long lid = SWBPlatform.getSemanticMgr().getCounter(obj.getModel().getName() + "/" + ncls.getName());
+                String str_lid = "" + lid;
+                SemanticObject nobj = obj.getModel().createSemanticObject(obj.getModel().getObjectUri(str_lid, ncls), ncls);
+                Date cdate = new Date(System.currentTimeMillis());
+                nobj.setDateProperty(SWBContext.getVocabulary().created, cdate);
+                nobj.setDateProperty(SWBContext.getVocabulary().updated, cdate);
+                if (prop1.getName().startsWith("has")) {
+                    obj.addObjectProperty(prop1, nobj);
+                } else {
+                    obj.setObjectProperty(prop1, nobj);
+                }
+                idCalendar = nobj.getURI();
+                strUserCreate = user.getId();
+                strCreateDate = Long.toString(cdate.getTime());
+                strModDate = Long.toString(cdate.getTime());
+                // asociando los valores a las propiedades recibidas
+                Iterator<SemanticProperty> it = ncls.listProperties();
+                while (it.hasNext()) {
+                    SemanticProperty prop = it.next();
+                    if (prop.isDataTypeProperty()) {
+                        String value = request.getParameter(id+"/"+prop.getName());
+                        log.debug("SWBASchedule: ProcessAction(new): " + prop.getName() + " -- >" + value);
+                        if (value != null) {
+                            if (value.length() > 0) {
+                                if (prop.isBoolean()) {
+                                    nobj.setBooleanProperty(prop, true);
+                                    if(prop.getName().equals(SWBContext.getVocabulary().active.getName()))strActive="true";
+                                }
+                                if (prop.isInt()) {
+                                    nobj.setLongProperty(prop, Integer.parseInt(value));
+                                }
+                                if (prop.isString()) {
+                                    nobj.setProperty(prop, value);
+                                }
+                                if (prop.isFloat()) {
+                                    nobj.setFloatProperty(prop, Float.parseFloat(value));
+                                }
+                            } else {
+                                nobj.removeProperty(prop);
+                            }
+                        } else {
+                            if (prop.isBoolean()) {
+                                nobj.setBooleanProperty(prop, false);
+                                if(prop.getName().equals(SWBContext.getVocabulary().active.getName()))strActive="false";
+                            }
+                        }
+                    }
+                }
+            }
             response.setMode(response.Mode_VIEW);
         }
-        
-        
-        
-        
-        
-        if (request.getParameter("createdate") != null && !request.getParameter("createdate").equals("")) {
-            strCreateDate = request.getParameter("createdate");
-        } else {
-            strCreateDate = Long.toString(System.currentTimeMillis());
-        }
-        if (request.getParameter("usercreate") != null && !request.getParameter("usercreate").equals("")) {
-            strUserCreate = request.getParameter("usercreate");
-        } else {
-            strUserCreate = response.getUser().getId();
-        }
-        if (request.getParameter("active") != null && !request.getParameter("active").equals("")) {
-            strActive = request.getParameter("active");
-        } else {
-            strActive = "false";
-        }
-        String iId = "0";
-        if (!stype.equals("WBAd_sysi_TopicsPeriodicity")) {
-            if (strId != null && !strId.equals("")) {
-                iId = strId;
+        else if ("update".equals(action)) {
+            if(request.getParameter("sval")!=null) 
+                obj = ont.getSemanticObject(request.getParameter("sval"));
+            idCalendar = obj.getURI();
+            cls = obj.getSemanticClass();
+            Iterator<SemanticProperty> it = cls.listProperties();
+            while (it.hasNext()) {
+                SemanticProperty prop = it.next();
+                if (prop.isDataTypeProperty()) {
+                    String value = request.getParameter(id+"/"+prop.getName());
+                    log.debug("SWBASchedule: ProcessAction(update): "+prop.getName()+" -- >"+value);
+                    if (value != null) {
+                        if (value.length() > 0) {
+                            if (prop.isBoolean()) {
+                                obj.setBooleanProperty(prop, true);
+                                if(prop.getName().equals(SWBContext.getVocabulary().active.getName()))strActive="true";
+                            }
+                            if (prop.isInt()) {
+                                obj.setLongProperty(prop, Integer.parseInt(value));
+                            }
+                            if (prop.isString()) {
+                                obj.setProperty(prop, value);
+                            }
+                            if (prop.isFloat()) {
+                                obj.setFloatProperty(prop, Float.parseFloat(value));
+                            }
+                            if (prop.isDate() || prop.isDateTime()) {
+                                if(prop.getName().equals(SWBContext.getVocabulary().updated.getName()) || prop.getName().equals(SWBContext.getVocabulary().created.getName()))
+                                    obj.setDateProperty(prop, new Date(System.currentTimeMillis()));
+                            }
+                        } else
+                        {
+                            if (prop.isBoolean()) {
+                                obj.setBooleanProperty(prop, false);
+                                if(prop.getName().equals(SWBContext.getVocabulary().active.getName()))strActive="false";
+                            }
+                        }
+                    }                      
+                }
+            }
+            Date mdate = new Date(System.currentTimeMillis());
+            obj.setDateProperty(SWBContext.getVocabulary().updated, mdate);
+            strUserMod = user.getId();
+            strModDate = Long.toString(mdate.getTime());
+            if (id != null)response.setRenderParameter("suri", id);
+            if (sprop != null)response.setRenderParameter("sprop", sprop);
+            if (spropref != null)response.setRenderParameter("spropref", spropref);
+            response.setRenderParameter("act","");
+            response.setMode(response.Mode_VIEW);
+        } 
+        else if ("updstatus".equals(action)) {
+            String soid = request.getParameter("sval");
+            String value = request.getParameter("val");
+            SemanticObject sobj = ont.getSemanticObject(soid);
+            sobj.setBooleanProperty(SWBContext.getVocabulary().active, value.equals("1")?true:false);
+            Date mdate = new Date(System.currentTimeMillis());
+            sobj.setDateProperty(SWBContext.getVocabulary().updated, mdate);
+            strModDate = Long.toString(mdate.getTime());
+            log.debug("SWBASchedule: ProcessAction(updstatus):"+sobj.getSemanticClass().getClassName()+": "+value);
+
+            if (id != null)response.setRenderParameter("suri", id);
+            if (sprop != null)response.setRenderParameter("sprop", sprop);
+            if (spropref != null)response.setRenderParameter("spropref", spropref);
+            response.setRenderParameter("act","");
+            response.setMode(response.Mode_VIEW);
+        } 
+        else if ("remove".equals(action)) //suri, prop
+        {
+            log.debug("SWASchedule.processAction(remove)");
+            Iterator<SemanticProperty> it = cls.listProperties();
+            while (it.hasNext()) {
+                SemanticProperty prop = it.next();
+                String value = request.getParameter(prop.getName());
+                String sval = request.getParameter("sval");
+                log.debug(prop.getURI() + ":" + sprop + "----" + (prop.getURI().equals(sprop) ? "true" : "false"));
+                if (value != null && value.equals(sprop)) { //se tiene que validar el valor por si es mÃ¡s de una
+                    if (sval != null) {
+                        obj.removeObjectProperty(prop, ont.getSemanticObject(sval));
+                    }
+                    break;
+                }
             }
         }
-        String strOldTitle = request.getParameter("oldtitle");
-        if (act == null) {
-            // Para menejo de administración del recurso
-            if (stype != null && sres != null && suserid != null) {
-                Portlet res = SWBContext.getWebSite(getResourceBase().getWebSiteId()).getPortlet(sres);
-                res.setAttribute("type", stype);
-                //res.updateAttributesToDB(suserid, "The resource with id:"+sres+" has been updated");
-                response.setMode(response.Mode_ADMIN);
-                response.setAction("update");
-            } else {
-                try {
-                    Document doc = SWBUtils.XML.getNewDocument();
+
+        if(("add".equals(action) || "update".equals(action)) && null!=idCalendar) 
+        {
+            log.debug("Id Calendario: "+idCalendar);
+            String xmlOrig = null;
+            Document doc = null;
+            SemanticObject so = ont.getSemanticObject(idCalendar);
+            if (request.getParameter(id+"/createdate") != null && !request.getParameter(id+"/createdate").equals("")) {
+                strCreateDate = request.getParameter(id+"/createdate");
+            } 
+            if (request.getParameter(id+"/usercreate") != null && !request.getParameter(id+"/usercreate").equals("")) {
+                strUserCreate = request.getParameter(id+"/usercreate");
+            } 
+            try {
+                    try
+                    {
+                        xmlOrig = so.getProperty(SWBContext.getVocabulary().xml);
+                    }
+                    catch(Exception xmle)
+                    {   // no tiene XML definido, genera un nuevo XML
+                        doc = SWBUtils.XML.getNewDocument();
+                        xmlOrig = "";
+                    }
+                    doc = SWBUtils.XML.getNewDocument();
+                    if(action.equals("add")) doc = SWBUtils.XML.getNewDocument();
                     Element interval = doc.createElement("interval");
                     doc.appendChild(interval);
                     //addElem(doc, interval, "title", request.getParameter("title"));
-                    addElem(doc, interval, "inidate", request.getParameter("inidate"));
-                    addElem(doc, interval, "active", strCreateDate);
+                    addElem(doc, interval, "inidate", request.getParameter(id+"/inidate"));
+                    addElem(doc, interval, "active", strActive);
                     addElem(doc, interval, "createdate", strCreateDate);
                     addElem(doc, interval, "usercreate", strUserCreate);
                     addElem(doc, interval, "moddate", strModDate);
-                    addElem(doc, interval, "usermod", strUserMod);
-                    String endselect = request.getParameter("endselect");
+                    addElem(doc, interval, "usermod", user.getId());
+                    String endselect = request.getParameter(id+"/endselect");
                     if (endselect != null && endselect.equals("enddate")) {
-                        addElem(doc, interval, "enddate", request.getParameter("enddate"));
+                        addElem(doc, interval, "enddate", request.getParameter(id+"/enddate"));
                     }
-                    if (request.getParameter("time") != null) {
-                        addElem(doc, interval, "starthour", request.getParameter("starthour"));
-                        addElem(doc, interval, "endhour", request.getParameter("endhour"));
+                    if (request.getParameter(id+"/time") != null) {
+                        String starthour = request.getParameter(id+"/starthour");
+                        starthour = starthour.substring(11, 16);
+                        addElem(doc, interval, "starthour", starthour);
+                        String endhour = request.getParameter(id+"/endhour");
+                        endhour = endhour.substring(11, 16);
+                        addElem(doc, interval, "endhour", endhour);
                     }
-                    if (request.getParameter("periodicidad") != null) {
+                    if (request.getParameter(id+"/periodicidad") != null) {
                         Element iterations = doc.createElement("iterations");
                         interval.appendChild(iterations);
-                        String period = request.getParameter("period");
+                        String period = request.getParameter(id+"/period");
                         if (period != null) {
                             Element eleperiod = doc.createElement(period);
                             iterations.appendChild(eleperiod);
                             if (period.equals("weekly")) {
                                 int x = 0;
-                                if (request.getParameter("wday1") != null) {
+                                if (request.getParameter(id+"/wday1") != null) {
                                     x += 1;
                                 }
-                                if (request.getParameter("wday2") != null) {
+                                if (request.getParameter(id+"/wday2") != null) {
                                     x += 2;
                                 }
-                                if (request.getParameter("wday3") != null) {
+                                if (request.getParameter(id+"/wday3") != null) {
                                     x += 4;
                                 }
-                                if (request.getParameter("wday4") != null) {
+                                if (request.getParameter(id+"/wday4") != null) {
                                     x += 8;
                                 }
-                                if (request.getParameter("wday5") != null) {
+                                if (request.getParameter(id+"/wday5") != null) {
                                     x += 16;
                                 }
-                                if (request.getParameter("wday6") != null) {
+                                if (request.getParameter(id+"/wday6") != null) {
                                     x += 32;
                                 }
-                                if (request.getParameter("wday7") != null) {
+                                if (request.getParameter(id+"/wday7") != null) {
                                     x += 64;
                                 }
                                 addElem(doc, eleperiod, "wdays", "" + x);
                             }
                             if (period.equals("monthly")) {
-                                String smonth = request.getParameter("smonth");
+                                String smonth = request.getParameter(id+"/smonth");
                                 if (smonth != null && smonth.equals("day")) {
-                                    if (request.getParameter("mmday") != null) {
-                                        addElem(doc, eleperiod, "day", request.getParameter("mmday"));
+                                    if (request.getParameter(id+"/mmday") != null) {
+                                        addElem(doc, eleperiod, "day", request.getParameter(id+"/mmday"));
                                     }
-                                    if (request.getParameter("mmonths1") != null) {
-                                        addElem(doc, eleperiod, "months", request.getParameter("mmonths1"));
+                                    if (request.getParameter(id+"/mmonths1") != null) {
+                                        addElem(doc, eleperiod, "months", request.getParameter(id+"/mmonths1"));
                                     }
                                 } else if (smonth != null && smonth.equals("week")) {
-                                    if (request.getParameter("mweek") != null) {
-                                        addElem(doc, eleperiod, "week", request.getParameter("mweek"));
+                                    if (request.getParameter(id+"/mweek") != null) {
+                                        addElem(doc, eleperiod, "week", request.getParameter(id+"/mweek"));
                                     }
                                     int x = 0;
-                                    if (request.getParameter("mday1") != null) {
+                                    if (request.getParameter(id+"/mday1") != null) {
                                         x += 1;
                                     }
-                                    if (request.getParameter("mday2") != null) {
+                                    if (request.getParameter(id+"/mday2") != null) {
                                         x += 2;
                                     }
-                                    if (request.getParameter("mday3") != null) {
+                                    if (request.getParameter(id+"/mday3") != null) {
                                         x += 4;
                                     }
-                                    if (request.getParameter("mday4") != null) {
+                                    if (request.getParameter(id+"/mday4") != null) {
                                         x += 8;
                                     }
-                                    if (request.getParameter("mday5") != null) {
+                                    if (request.getParameter(id+"/mday5") != null) {
                                         x += 16;
                                     }
-                                    if (request.getParameter("mday6") != null) {
+                                    if (request.getParameter(id+"/mday6") != null) {
                                         x += 32;
                                     }
-                                    if (request.getParameter("mday7") != null) {
+                                    if (request.getParameter(id+"/mday7") != null) {
                                         x += 64;
                                     }
                                     addElem(doc, eleperiod, "wdays", "" + x);
-                                    if (request.getParameter("mmonths2") != null) {
-                                        addElem(doc, eleperiod, "months", request.getParameter("mmonths2"));
+                                    if (request.getParameter(id+"/mmonths2") != null) {
+                                        addElem(doc, eleperiod, "months", request.getParameter(id+"/mmonths2"));
                                     }
                                 }
                             }
                             if (period.equals("yearly")) {
-                                String syear = request.getParameter("syear");
+                                log.debug("Entro a YEARLY");
+                                String syear = request.getParameter(id+"/syear");
                                 if (syear != null && syear.equals("day")) {
-                                    if (request.getParameter("yyday") != null) {
-                                        addElem(doc, eleperiod, "day", request.getParameter("yyday"));
+                                    if (request.getParameter(id+"/yyday") != null) {
+                                        log.debug("YYDAY:"+request.getParameter(id+"/yyday"));
+                                        addElem(doc, eleperiod, "day", request.getParameter(id+"/yyday"));
                                     }
-                                    if (request.getParameter("ymonth1") != null) {
-                                        addElem(doc, eleperiod, "month", request.getParameter("ymonth1"));
+                                    if (request.getParameter(id+"/ymonth1") != null) {
+                                        addElem(doc, eleperiod, "month", request.getParameter(id+"/ymonth1"));
                                     }
-                                    if (request.getParameter("yyears1") != null) {
-                                        addElem(doc, eleperiod, "years", request.getParameter("yyears1"));
+                                    if (request.getParameter(id+"/yyears1") != null) {
+                                        addElem(doc, eleperiod, "years", request.getParameter(id+"/yyears1"));
                                     }
                                 } else if (syear != null && syear.equals("week")) {
-                                    if (request.getParameter("yweek") != null) {
-                                        addElem(doc, eleperiod, "week", request.getParameter("yweek"));
+                                    if (request.getParameter(id+"/yweek") != null) {
+                                        addElem(doc, eleperiod, "week", request.getParameter(id+"/yweek"));
                                     }
                                     int x = 0;
-                                    if (request.getParameter("yday1") != null) {
+                                    if (request.getParameter(id+"/yday1") != null) {
                                         x += 1;
                                     }
-                                    if (request.getParameter("yday2") != null) {
+                                    if (request.getParameter(id+"/yday2") != null) {
                                         x += 2;
                                     }
-                                    if (request.getParameter("yday3") != null) {
+                                    if (request.getParameter(id+"/yday3") != null) {
                                         x += 4;
                                     }
-                                    if (request.getParameter("yday4") != null) {
+                                    if (request.getParameter(id+"/yday4") != null) {
                                         x += 8;
                                     }
-                                    if (request.getParameter("yday5") != null) {
+                                    if (request.getParameter(id+"/yday5") != null) {
                                         x += 16;
                                     }
-                                    if (request.getParameter("yday6") != null) {
+                                    if (request.getParameter(id+"/yday6") != null) {
                                         x += 32;
                                     }
-                                    if (request.getParameter("yday7") != null) {
+                                    if (request.getParameter(id+"/yday7") != null) {
                                         x += 64;
                                     }
                                     addElem(doc, eleperiod, "wdays", "" + x);
-                                    if (request.getParameter("ymonth2") != null) {
-                                        addElem(doc, eleperiod, "month", request.getParameter("ymonth2"));
+                                    if (request.getParameter(id+"/ymonth2") != null) {
+                                        addElem(doc, eleperiod, "month", request.getParameter(id+"/ymonth2"));
                                     }
-                                    if (request.getParameter("yyears2") != null) {
-                                        addElem(doc, eleperiod, "years", request.getParameter("yyears2"));
+                                    if (request.getParameter(id+"/yyears2") != null) {
+                                        addElem(doc, eleperiod, "years", request.getParameter(id+"/yyears2"));
                                     }
                                 }
                             }
                         }
                     }
                     String strXml = SWBUtils.XML.domToXml(doc);
-                    strXml = strXml.substring(strXml.lastIndexOf("?>") + 2, strXml.length());
-                    if (stype != null && stype.equals("WBAd_sysi_ResourcesPeriodicity")) {
-                        //el XML sería ahora el calendar, ya no se guarda en el XML del recurso
-                        //ResourceSrv resServ=new ResourceSrv();
-                        if (strOldTitle != null && !strOldTitle.equals("")) {
-                            //resServ.updateSchedule(strTm,iId,strOldTitle,strXml,response.getUser().getId());
-                            WebSite ws = SWBContext.getWebSite(strTm);
-                            Calendar cal = ws.getCalendar(iId);
-                            cal.setTitle(strOldTitle);
-                        } else if (strOldTitle == null || (strOldTitle != null && strOldTitle.equals(""))) {
-                            //resServ.addSchedule(strTm,iId,strXml,response.getUser().getId());
-                            Calendar cal = SWBContext.getWebSite(strTm).createCalendar();
-                            cal.setActive(true);
+                    log.debug(strXml);
+                    so.setProperty(SWBContext.getVocabulary().xml, strXml);
 
-
-                        }
-                    }
-
-//                    if (stype!=null && stype.equals("WBAd_sysi_TopicsPeriodicity")) {
-//                        if (strTp!=null && !strTp.equals("")) {
-//                            WebSite topicmap=TopicMgr.getInstance().getTopicMap(strTm);
-//                            WebPage topic=topicmap.getTopic(strTp);
-//                            TopicSrv tpServ=new TopicSrv();
-//                            if (strOldTitle!=null && !strOldTitle.equals(""))
-//                                tpServ.updateSchedule(topic,strOldTitle,strXml,response.getUser().getId());
-//                            else
-//                                tpServ.addSchedule(topic,strXml,response.getUser().getId());
-//                        }
-//                    }
-
-                    if (stype != null && stype.equals("WBAd_sysi_TemplatesPeriodicity")) {
-//                        TemplateSrv tplServ=new TemplateSrv();
-                        if (strOldTitle != null && !strOldTitle.equals("")) {
-                            //el XML sería ahora el calendar, ya no se guarda en el XML del template
-                            //tplServ.updateSchedule(strTm,iId,strOldTitle,strXml,response.getUser().getId());
-                        } else {
-                            //tplServ.addSchedule(strTm,iId,strXml,response.getUser().getId());
-                        }
-                    }
-
-                    if (stype != null && stype.equals("WBAd_sysi_ContentsPeriodicity")) {
-//                        ResourceSrv contServ=new ResourceSrv();
-                        //el XML sería ahora el calendar, ya no se guarda en el XML del contenido 
-                        if (strOldTitle != null && !strOldTitle.equals("")) {
-                            //contServ.updateSchedule(strTm,iId,strOldTitle,strXml,response.getUser().getId());
-                        } else {
-                            //contServ.addSchedule(strTm,iId,strXml,response.getUser().getId());
-                        }
-                    }
-                    response.setRenderParameter("id", request.getParameter("id"));
-                    response.setRenderParameter("tp", strTp);
-                    response.setRenderParameter("tm", strTm);
                 } catch (Exception e) {
                     log.error("The XML schedule can't be generated", e);
+                    // No se actualiza y conserva el XML original
+                    so.setProperty(SWBContext.getVocabulary().xml, xmlOrig);
                 }
-            }
-        } else if (act != null && act.equals("remove")) {
-            if (stype != null && stype.equals("WBAd_sysi_ResourcesPeriodicity")) {
-                //ResourceSrv resServ=new ResourceSrv();
-                //resServ.removeSchedule(strTm,iId,request.getParameter("title"),response.getUser().getId());
-                WebSite ws = SWBContext.getWebSite(strTm);
-                Calendar cal = ws.getCalendar(iId);
-            }
-//            if (stype!=null && stype.equals("WBAd_sysi_TopicsPeriodicity")) {
-//                if (strTp!=null && !strTp.equals("")) {
-//                    WebSite topicmap=TopicMgr.getInstance().getTopicMap(strTm);
-//                    WebPage topic=topicmap.getTopic(strTp);
-//                    TopicSrv tpServ=new TopicSrv();
-//                    tpServ.removeSchedule(topic,request.getParameter("title"),response.getUser().getId());
-//                }
-//            }
-            if (stype != null && stype.equals("WBAd_sysi_TemplatesPeriodicity")) {
-                //el XML sería ahora el calendar, ya no se guarda en el XML del template
-                // el id del calendar antes era el título
-                //TemplateSrv tplServ=new TemplateSrv();
-//                tplServ.removeSchedule(strTm,iId,request.getParameter("title"),response.getUser().getId());
-            }
-            if (stype != null && stype.equals("WBAd_sysi_ContentsPeriodicity")) {
-                //ResourceSrv contServ=new ResourceSrv();
-                // el id del calendar antes era el título
-//                contServ.removeSchedule(strTm,iId,request.getParameter("title"),response.getUser().getId());
-            }
-            response.setRenderParameter("id", request.getParameter("id"));
-            response.setRenderParameter("tp", strTp);
-            response.setRenderParameter("tm", strTm);
         }
-        if(null!=id) response.setRenderParameter("suri", id);
-        if(null!=sprop) response.setRenderParameter("sprop", sprop);
-        if(null!=spropref)response.setRenderParameter("spropref", spropref);
+        if (null != id) {
+            response.setRenderParameter("suri", id);
+        }
+        if (null != sprop) {
+            response.setRenderParameter("sprop", sprop);
+        }
+        if (null != spropref) {
+            response.setRenderParameter("spropref", spropref);
+        }
     }
-
-
 
     /**
      *
@@ -1367,79 +1431,14 @@ public class SWBASchedule extends GenericResource {
         parent.appendChild(elem);
     }
 
-    /**
-     *
-     * @param tm
-     * @param iId
-     * @throws AFException
-     * @return
-     */
-    public String getXmlConf(String tm, String iId) throws SWBResourceException {
-        Portlet recRes = SWBContext.getWebSite(tm).getPortlet(iId);
-        if (recRes.getXmlConf() != null) {
-            return recRes.getXmlConf();
-        } else {
-            return "";
-        }
-    }
-
-    /**
-     *
-     * @param tm
-     * @param tp
-     * @throws AFException
-     * @return
-     */
-    public String getTpXmlConf(String tm, String tp) throws SWBResourceException {
-        WebPage recTp = SWBContext.getWebSite(tm).getWebPage(tp);
-//        if (recTp.getXmlconf()!=null)
-//            return recTp.getXmlconf();
-//        else
-        return "";
-    }
-
-    /**
-     *
-     * @param tm
-     * @param iId
-     * @throws AFException
-     * @return
-     */
-    public String getTplXmlConf(String tm, String iId) throws SWBResourceException {
-        Template tpl = SWBContext.getWebSite(tm).getTemplate(iId);
-        return ""; //tpl.getXml();
-    }
-
-    /**
-     *
-     * @param strXmlConf
-     * @return
-     */
-    public Vector getTitles(String strXmlConf) {
-        Vector vTitles = new Vector();
-        try {
-            if (strXmlConf.trim().length() > 0) {
-                NodeList ntitlesConf = SWBUtils.XML.xmlToDom(strXmlConf).getElementsByTagName("title");
-                if (ntitlesConf.getLength() > 0) {
-                    for (int i = 0; i < ntitlesConf.getLength(); i++) {
-                        vTitles.add(ntitlesConf.item(i).getChildNodes().item(0).getNodeValue());
-                    }
-                }
-            }
-        } catch (Exception e) {
-            log.error("Error while getting schedule titles - WBAContentSchedule:getTitles", e);
-        }
-        return vTitles;
-    }
-
-    public String getDateFormat(long dateTime, String lang) {
-        if (null == lang) {
-            lang = "es";
-        }
-        Locale local = new Locale(lang);
-        DateFormat df = DateFormat.getDateInstance(DateFormat.FULL, local);
-        return df.format(new Date(dateTime));
-    }
+//    public String getDateFormat(long dateTime, String lang) {
+//        if (null == lang) {
+//            lang = "es";
+//        }
+//        Locale local = new Locale(lang);
+//        DateFormat df = DateFormat.getDateInstance(DateFormat.FULL, local);
+//        return df.format(new Date(dateTime));
+//    }
 
     public String getDisplaySemObj(SemanticObject obj, String lang) {
         String ret = obj.getRDFName();
@@ -1474,6 +1473,5 @@ public class SWBASchedule extends GenericResource {
         }
         return ret;
     }
-    
 }
 
