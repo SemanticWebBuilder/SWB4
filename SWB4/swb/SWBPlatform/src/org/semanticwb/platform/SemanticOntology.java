@@ -139,5 +139,12 @@ public class SemanticOntology
         m.createStatement(m.getResource(uri), m.getProperty(SemanticVocabulary.RDF_TYPE), m.getResource(SemanticVocabulary.OWL_CLASS));
         OntClass ontcls=m_ontology.getOntClass(uri);
         return new SemanticClass(ontcls);    
-    }    
+    }
+
+    public SemanticProperty getSemanticProperty(String uri)
+    {
+        return SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(uri);
+    }
+    
+
 }

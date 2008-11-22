@@ -67,6 +67,16 @@ public class SemanticObject
         this.m_res=res;
         validateModel();
     }
+
+    /**
+     * Contruye un SemanticObject virtual
+     *
+     * @param model
+     */
+    public SemanticObject()
+    {
+        this(null,null);
+    }
     
     /**
      * Contruye un SemanticObject virtual relacionado al Model y al tipo de elemento
@@ -94,6 +104,15 @@ public class SemanticObject
         int x=uri.indexOf('#');
         if(x>-1)return uri.substring(x+1);
         return uri;
+    }
+
+    /**
+     * Regreasa SemanticID compuesto por /[model name]/[cls name]/[id]
+     * @return
+     */
+    public String getSID()
+    {
+        return "/"+getModel().getName()+"/"+getSemanticClass().getName()+"/"+getId();
     }
     
     
@@ -411,17 +430,20 @@ public class SemanticObject
     private Object externalInvokerGet(SemanticProperty prop)
     {
         Object ret=null;
-        GenericObject obj=getSemanticClass().newGenericInstance(this);
-        Class cls=obj.getClass();
-        String name=prop.getLabel();
-        if(name==null)prop.getName();
-        name="get"+name.substring(0,1).toUpperCase()+name.substring(1);
-        try
+        if(!m_virtual)
         {
-            Method method=cls.getMethod(name);
-            ret=method.invoke(obj);
-        }catch(Exception e){log.error(e);}
-        //System.out.println("externalInvoker:"+ret);
+            GenericObject obj=getSemanticClass().newGenericInstance(this);
+            Class cls=obj.getClass();
+            String name=prop.getLabel();
+            if(name==null)prop.getName();
+            name="get"+name.substring(0,1).toUpperCase()+name.substring(1);
+            try
+            {
+                Method method=cls.getMethod(name);
+                ret=method.invoke(obj);
+            }catch(Exception e){log.error(e);}
+            //System.out.println("externalInvoker:"+ret);
+        }
         return ret;
     }
     
@@ -786,7 +808,7 @@ public class SemanticObject
         if(m_virtual)
         {
             ArrayList<SemanticObject> arr=((ArrayList)m_virtprops.get(prop.getURI()));
-            if(!arr.isEmpty())
+            if(arr!=null && !arr.isEmpty())
             {
                 ret=(SemanticObject)arr.get(0);
             }

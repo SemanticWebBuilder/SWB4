@@ -5,9 +5,12 @@
 
 package org.semanticwb.platform;
 
+import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.rdf.model.Property;
 import java.util.HashMap;
 import java.util.Iterator;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 
 /**
@@ -59,6 +62,7 @@ public class SemanticVocabulary
     public static final String SWB_PROP_DISPLAYPROPERTY=URI+"displayProperty";
     public static final String SWB_PROP_DISPLAYOBJECT=URI+"displayObject";
     public static final String SWB_PROP_EXTERNALINVOCATION=URI+"externalInvocation";
+    public static final String SWB_PROP_HERARQUICALRELATION=URI+"herarquicalRelation";
 //    public static final String SWB_PROP_PROPGROUP=URI+"propGroup";
 //    public static final String SWB_PROP_PROPINDEX=URI+"propIndex";
     public static final String SWB_ANNOT_CLASSNAME=URI+"className";
@@ -134,7 +138,18 @@ public class SemanticVocabulary
     
     public SemanticProperty getSemanticProperty(String uri)
     {
-        return properties.get(uri);
+        SemanticProperty prop=properties.get(uri);
+        if(prop==null)
+        {
+            OntModel ont=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
+            Property p=ont.getProperty(uri);
+            if(p!=null)
+            {
+                prop=new SemanticProperty(p);
+                addSemanticProperty(prop);
+            }
+        }
+        return prop;
     }    
     
     public void registerClass(SemanticClass cls)
