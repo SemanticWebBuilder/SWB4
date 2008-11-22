@@ -28,7 +28,7 @@ public class PropertyIteratorImp implements PropertyIterator
             throw new IllegalArgumentException();
         }
         this.parent = parent;
-        properties = parent.getBaseNode().getSemanticObject().getSemanticClass().listProperties();
+        properties = parent.getBaseNode().listSemanticProperties();
     }
 
     public Property nextProperty()

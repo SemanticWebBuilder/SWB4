@@ -4,6 +4,7 @@
  */
 package org.semanticwb.jcr170.implementation;
 
+import org.semanticwb.jcr170.implementation.util.XMLChar;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -36,6 +37,7 @@ import javax.jcr.version.Version;
 import javax.jcr.version.VersionException;
 import javax.jcr.version.VersionHistory;
 import org.semanticwb.SWBException;
+import org.semanticwb.jcr170.implementation.util.NCName;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.platform.SemanticClass;
@@ -194,30 +196,27 @@ public class NodeImp implements Node
 
     public Node addNode(String relPath, String primaryNodeTypeName) throws ItemExistsException, PathNotFoundException, NoSuchNodeTypeException, LockException, VersionException, ConstraintViolationException, RepositoryException
     {
-        checksLock();
-        if ( node.isChekedin() )
-        {
-            throw new RepositoryException("The node can not add a child in check-in mode");
-        }
         checkRelPath(relPath);
         NodeImp newNode = null;
         if ( primaryNodeTypeName == null )
         {
             primaryNodeTypeName = DEFAULT_PRIMARY_NODE_TYPE_NAME;
         }
-        if ( !node.canAddNode(primaryNodeTypeName) )
-        {
-            throw new NoSuchNodeTypeException("The nodeType " + primaryNodeTypeName + " can not be added to this node");
-        }
-        if ( !node.canAddSameNameSiblings(primaryNodeTypeName) && node.existsSameNode(relPath) )
-        {
-            throw new ItemExistsException("The item " + relPath + " already exists");
-        }
         String name = getNodeName(relPath);
         String parentPath = getParentPath(relPath);
         BaseNode parent = getBaseNode(parentPath);
         try
         {
+            NodeImp parentNode = new NodeImp(parent, session);
+            parentNode.checksLock();
+            if ( parent.isChekedin() )
+            {
+                throw new RepositoryException("The node can not add a child in check-in mode");
+            }
+            if ( !parent.canAddSameNameSiblings(primaryNodeTypeName) && node.existsSameNode(relPath) )
+            {
+                throw new ItemExistsException("The item " + relPath + " already exists");
+            }
             if ( parent.canAddNode(primaryNodeTypeName) )
             {
                 BaseNode newBaseNode = parent.createNodeBase(name, primaryNodeTypeName);
@@ -238,7 +237,7 @@ public class NodeImp implements Node
         }
     }
 
-    public static boolean isAbsolute(String relPath)
+    public static boolean isAbsolute(String relPath) throws RepositoryException
     {
         boolean isAbsolute = false;
         if ( relPath.equals(PATH_SEPARATOR) || (relPath.startsWith("") && relPath.length() > 1 && isRelative(relPath.substring(1))) )
@@ -248,7 +247,7 @@ public class NodeImp implements Node
         return isAbsolute;
     }
 
-    public static boolean isRelative(String relPath)
+    public static boolean isRelative(String relPath) throws RepositoryException
     {
 
         boolean isRelative = false;
@@ -274,9 +273,10 @@ public class NodeImp implements Node
             }
         }
         return isRelative;
+
     }
 
-    public static boolean isName(String relPath)
+    public static boolean isName(String relPath) throws RepositoryException
     {
         boolean isName = false;
         int pos = relPath.indexOf(":");
@@ -290,20 +290,15 @@ public class NodeImp implements Node
         else
         {
             simpleName = relPath;
-        }
-        boolean prefixValid = false;
-        if ( prefix == null )
-        {
-            prefixValid = true;
-        }
-        else
-        {
-            if ( prefix.length() <= 3 && prefix.length() > 0 )
+        }        
+        if ( prefix != null )        {
+            NCName ncname = new NCName();
+            if ( !ncname.isValid(prefix) )
             {
-                prefixValid = true;
+                throw new RepositoryException("The prefix is invalid");
             }
-        }
-        if ( prefixValid && isSimpleName(simpleName) )
+        }        
+        if (isSimpleName(simpleName) )
         {
             isName = true;
         }
@@ -355,7 +350,7 @@ public class NodeImp implements Node
         return isThreeormorecharname;
     }
 
-    public static boolean isPathElement(String relPath)
+    public static boolean isPathElement(String relPath) throws RepositoryException
     {
         boolean isPathElement = false;
         if ( relPath.equals(".") || relPath.equals("..") || isName(relPath) )
@@ -387,11 +382,11 @@ public class NodeImp implements Node
         return isPathElement;
     }
 
-    public static void checkRelPath(String relPath) throws PathNotFoundException
+    public static void checkRelPath(String relPath) throws RepositoryException
     {
         if ( !(isRelative(relPath) || isAbsolute(relPath)) )
         {
-            throw new PathNotFoundException("The relpath is incorrect");
+            throw new RepositoryException("The relpath is incorrect");
         }
     }
 
@@ -449,6 +444,14 @@ public class NodeImp implements Node
 
                 }
                 SemanticProperty property = node.getSemanticProperty(name, type);
+                if(node.isInternal(property))
+                {
+                    throw new RepositoryException("The property "+name+" is internal and can not be modified");
+                }
+                if(node.isProtected(property))
+                {
+                    throw new RepositoryException("The property "+name+" is protected and can not be modified");
+                }
                 node.setProperty(property, ovalue.getString());
                 node.setModified(true);
                 PropertyImp propertyToReturn = new PropertyImp(this, property);
@@ -559,6 +562,10 @@ public class NodeImp implements Node
             try
             {
                 SemanticProperty prop = node.getSemanticProperty(relPath);
+                if ( node.isProtected(prop) )
+                {
+                    throw new PathNotFoundException("The propety " + relPath + " was not found");
+                }
                 if ( prop != null )
                 {
                     return new PropertyImp(this, prop);

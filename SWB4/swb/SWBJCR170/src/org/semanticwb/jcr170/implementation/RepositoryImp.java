@@ -51,6 +51,7 @@ public final class RepositoryImp implements Repository
 
     public RepositoryImp() throws RepositoryException
     {         
+        //SWBContext.removeWorkspace(defaultWorkspaceName);
         boolean exists = false;
         for ( String name : listWorkspaces() )
         {
@@ -65,12 +66,11 @@ public final class RepositoryImp implements Repository
             createWorkspace(defaultWorkspaceName);
         }
         
-    }
-
+    }    
     public RepositoryImp(String defaultWorkspaceName) throws RepositoryException
     {
         this(); 
-        this.defaultWorkspaceName=defaultWorkspaceName;
+        this.defaultWorkspaceName=defaultWorkspaceName;        
         boolean exists = false;
         for ( String name : listWorkspaces() )
         {
@@ -85,9 +85,10 @@ public final class RepositoryImp implements Repository
             createWorkspace(defaultWorkspaceName);
         }
     }
+    
     public String[] listWorkspaces()
     {
-        HashSet<String> names = new HashSet<String>();
+        HashSet<String> names = new HashSet<String>();        
         Iterator<org.semanticwb.repository.Workspace> it = SWBContext.listWorkspaces();
         int size = 0;
         while (it.hasNext())
