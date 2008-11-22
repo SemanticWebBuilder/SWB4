@@ -13,7 +13,6 @@ import javax.jcr.Workspace;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
-import javax.jcr.version.Version;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -108,6 +107,9 @@ public class TestRepository
                 node.remove();
             }
 
+            Node demo = root.addNode("demo");
+            demo.setProperty("deportes", 1);            
+            System.out.println(demo.getProperty("deportes").getString());
 
             Node newNode = root.addNode(title, "cm:Category");
             newNode.setProperty("cm:title", title);
