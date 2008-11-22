@@ -31,13 +31,7 @@ public class Workspace extends WorkspaceBase
 
     public Workspace(SemanticObject base)
     {
-        super(base);
-        if(getRoot()==null)
-        {
-            BaseNode root = createBaseNode();
-            root.setName("jcr:root");
-            setRoot(root);
-        }
+        super(base);        
     }
 
     public Document getDocumentView()
@@ -65,41 +59,17 @@ public class Workspace extends WorkspaceBase
         }
     }
 
-    private static final Iterator<SemanticProperty> listSemanticProperties(BaseNode node)
-    {
-        HashSet<SemanticProperty> propertiesToReturn = new HashSet<SemanticProperty>();
-        Iterator<SemanticClass> classes = node.getSemanticObject().listSemanticClasses();
-        while (classes.hasNext())
-        {
-            SemanticClass clazz = classes.next();
-            Iterator<SemanticProperty> properties = clazz.listProperties();
-            while (properties.hasNext())
-            {
-                SemanticProperty property = properties.next();
-
-                propertiesToReturn.add(property);
-
-            }
-        }
-        return propertiesToReturn.iterator();
-    }
+    
 
     private static void appendPropertiesToNode(BaseNode node, Element nodeElement)
     {          
-        Iterator<SemanticProperty> properties = listSemanticProperties(node);
+        Iterator<SemanticProperty> properties = node.listSemanticProperties();
         while (properties.hasNext())
         {
             SemanticProperty property = properties.next();
             if ( property != null )
             {
-                boolean exclude = false;
-                String name = property.getPrefix() + ":" + property.getName();
-                if ( name.equals("swbrep:parentNode") )
-                {
-                    exclude = true;
-                }
-                if ( !exclude )
-                {
+                
                     if ( property.isObjectProperty() )
                     {
                         SemanticObject object = node.getSemanticObject().getObjectProperty(property);
@@ -131,7 +101,7 @@ public class Workspace extends WorkspaceBase
                             ex.printStackTrace(System.out);
                         }
                     }
-                }
+                
             }
         }
     }
@@ -196,7 +166,7 @@ public class Workspace extends WorkspaceBase
 
     private static void appendPropertiesToNodeInternalView(BaseNode node, Element nodeElement)
     {
-        Iterator<SemanticProperty> properties = listSemanticProperties(node);
+        Iterator<SemanticProperty> properties = node.listSemanticProperties();
         while (properties.hasNext())
         {
             SemanticProperty property = properties.next();
