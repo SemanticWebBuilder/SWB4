@@ -247,18 +247,7 @@ public class SemanticModel
     
     public SemanticProperty getSemanticProperty(String uri)
     {
-        SemanticProperty prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(uri);
-        if(prop==null)
-        {
-            OntModel ont=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
-            Property p=ont.getProperty(uri);
-            if(p!=null)
-            {
-                prop=new SemanticProperty(p);
-                SWBPlatform.getSemanticMgr().getVocabulary().addSemanticProperty(prop);
-            }
-        }
-        return prop;
+        return SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(uri);
     }
     
 }
