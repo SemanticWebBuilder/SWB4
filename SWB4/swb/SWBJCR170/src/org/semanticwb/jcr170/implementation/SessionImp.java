@@ -55,6 +55,7 @@ public class SessionImp implements Session
     private final String workspaceName;
     private final Hashtable<Node, LockImp> locksSessions = new Hashtable<Node, LockImp>();
     private SimpleLockUserComparator simpleLockUserComparator=new SimpleLockUserComparator();
+    
     public LockUserComparator getLockUserComparator()
     {
         return simpleLockUserComparator;
