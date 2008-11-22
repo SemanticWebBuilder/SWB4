@@ -99,6 +99,10 @@ public class SemanticModel
 ////        if(res!=null)ret=new SemanticObject(res);
 ////        return ret;
 //    }
+    public SemanticObject createSemanticObjectById(String id, SemanticClass cls)
+    {
+        return createSemanticObject(getObjectUri(id, cls), cls);
+    }
 
     public SemanticObject createSemanticObject(String uri, SemanticClass cls)
     {
@@ -243,12 +247,18 @@ public class SemanticModel
     
     public SemanticProperty getSemanticProperty(String uri)
     {
-        Property prop=m_model.getProperty(uri);
-        if(prop!=null)
+        SemanticProperty prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(uri);
+        if(prop==null)
         {
-            return new SemanticProperty(prop);
+            OntModel ont=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
+            Property p=ont.getProperty(uri);
+            if(p!=null)
+            {
+                prop=new SemanticProperty(p);
+                SWBPlatform.getSemanticMgr().getVocabulary().addSemanticProperty(prop);
+            }
         }
-        return null;
+        return prop;
     }
     
 }
