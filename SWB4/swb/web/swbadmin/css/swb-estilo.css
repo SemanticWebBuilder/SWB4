@@ -161,7 +161,7 @@ body {
 	float:right;
 }
 .swb-recomendar-text {
-	/* class en código para funcionar en IE y FFox*/
+	/* class en cï¿½digo para funcionar en IE y FFox*/
 	color:#336699;
 	width:15em;
 	float:left;
@@ -175,7 +175,7 @@ body {
 	float:left;
 }
 .swb-recomendar-boton {
-	/* class en código para funcionar en IE y FFox*/
+	/* class en cï¿½digo para funcionar en IE y FFox*/
 	background:#336699;
 	width:auto;
 	color:#FFFFFF;
@@ -208,9 +208,17 @@ body {
 	text-align: center;
 	text-transform: capitalize;
 }
+#swb-comentar h2{
+	font-size:0.8em;
+	font-weight: bold;
+	color: #336699;
+	text-align: center;
+}
 #swb-comentar table{
 	padding: .6em .6em .6em .6em;
 	margin-left:1.25em;
+	font-size:.75em;
+	color:#336699;
 }
 #swb-comentar td{
 	vertical-align: top;
@@ -227,7 +235,7 @@ body {
 	float:left;
 }
 .swb-comentar-text {
-	/* class en código para funcionar en IE y FFox*/
+	/* class en cï¿½digo para funcionar en IE y FFox*/
 	color:#336699;
 	width:15em;
 	float:left;
@@ -241,7 +249,7 @@ body {
 	float:left;
 }
 .swb-comentar-boton {
-	/* class en código para funcionar en IE y FFox*/
+	/* class en cï¿½digo para funcionar en IE y FFox*/
 	background:#336699;
 	width:auto;
 	color:#FFFFFF;
@@ -251,9 +259,26 @@ body {
 #swb-comentar p {
 	text-align:center;
 	font-size:.75em;
+	color:#336699;
 }
 #swb-comentar a {
 	color:#336699;
+}
+#swb-comentar fieldset{
+	margin:1em 1em 1em 1em;
+	padding-bottom:.6em;
+	background: #d6e7f8 url(bg_fieldset.jpg) top repeat-x;
+	border:#336699 solid 0.06em;
+}
+#swb-comentar legend{
+	padding: .3em .6em .3em .6em;
+	margin-left:2em;
+	margin-bottom:0.5em;
+	font-size:.75em;
+	font-weight:bold;
+	color: #FFFFFF;
+	border:#336699 solid 0.06em;
+	background: #6699cc;
 }
 /*------------------- Comentarios  ----*/
 /*------------------- PROMO        ----*/
@@ -387,3 +412,52 @@ body {
 }
 
 /*------------------- Mapa de sitio ---*/
+/*------------------- Query ---*/
+#swb-query {
+	border: #336699 solid .06em;
+	padding: .2em .2em .2em .2em;
+	font-family:Arial;
+}
+#swb-query table {
+	width:100%;
+	border: #336699 solid .06em;
+	border-collapse:collapse;
+	text-align:center;
+	font-size: 1em;
+}
+#swb-query caption {
+	background: url(bg_titulos.gif) #336699 repeat-x;
+	margin: 0 0 0 0;
+	padding: 0;
+	line-height:1.56em;
+	font-size:0.88em;
+	font-weight: bold;
+	color: #FFFFFF;
+	text-transform: capitalize;
+}
+#swb-query thead {
+	font-size: .75em;
+}
+#swb-query tbody {
+}
+#swb-query tfoot td {
+	font-size: .6em;
+	color:#FFFFFF;
+	background: #6699CC;
+}
+#swb-query th {
+	background: #CCE6FF;
+	color: #336699;
+	border-bottom: #336699 solid .06em;
+	padding:5px;
+}
+#swb-query span {
+	background: red;
+}
+#swb-query td {
+	border-bottom: #CEDAE6 solid .06em;
+	background: #EFF6FF;
+	font-size: .75em;
+	padding:5px;
+}
+/*------------------- Query ---*/
