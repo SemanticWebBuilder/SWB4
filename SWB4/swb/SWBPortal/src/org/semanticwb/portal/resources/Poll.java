@@ -191,12 +191,6 @@ public class Poll extends GenericResource
 
                     ret.append("\n<div id=\""+div_Id+"\" ");
                     ret.append("style=\"display:none; overflow:hidden; height:"+base.getAttribute("height", "350").trim()+"px; ");
-                    /*if (!"".equals(base.getAttribute("textcolores", "").trim())) {
-                        ret.append("color:" + base.getAttribute("textcolores").trim() + "; ");
-                    }
-                    if (!"".equals(base.getAttribute("backimgres", "").trim())) {
-                        ret.append("background-image:url(" + webWorkPath +"/"+ base.getAttribute("backimgres").trim() + ");");
-                    }*/
                     ret.append("\">");
                     ret.append("</div>");
                     ret.append("<br /></td></tr> \n");
@@ -222,7 +216,7 @@ public class Poll extends GenericResource
                 win += ",top="+ base.getAttribute("top", "125").trim();
                 win += ",left="+ base.getAttribute("left", "220").trim();
 
-
+                ret.append("<script type=\"text/javascript\" src=\"/swb/swbadmin/js/swb.js\"></script>");
                 ret.append("<script type=\"text/javascript\" src=\"/swb/swbadmin/js/wb/motion/collapsibleDiv.js\"></script>");
                 ret.append("<script type=\"text/javascript\"> \n");
                 
@@ -1033,6 +1027,7 @@ public class Poll extends GenericResource
             Document dom=SWBUtils.XML.xmlToDom(base.getXml());
             if(dom!=null)
             {
+                System.out.println("base.getXml()\n"+base.getXml()+"\n\n");
                 NodeList node = dom.getElementsByTagName("option");
                 if (node.getLength() > 0)
                 {
@@ -1041,6 +1036,7 @@ public class Poll extends GenericResource
                         value = node.item(i).getChildNodes().item(0).getNodeValue().trim();
                         if(!"".equals(value.trim())) {
                             ret.append("\n<option value=\"" + value.trim().replaceAll("\"", "&#34;") + "\">" + value.trim() + "</option>");
+                            System.out.println("\n<option value=\"" + value.trim().replaceAll("\"", "&#34;") + "\">" + value.trim() + "</option>");
                         }
                     }
                 }                  
