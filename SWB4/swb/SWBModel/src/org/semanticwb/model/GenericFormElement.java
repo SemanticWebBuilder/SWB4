@@ -24,6 +24,7 @@ public class GenericFormElement extends FormElementBase implements FormElement
     @Override
     public String render(SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
     {
+        if(obj==null)obj=new SemanticObject();
         String ret="";
         if(type.endsWith("iphone"))
         {
