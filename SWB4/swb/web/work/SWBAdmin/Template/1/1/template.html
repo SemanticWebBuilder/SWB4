@@ -69,6 +69,7 @@
         </ul>
             
         <div dojoType="dijit.Menu" id="menuFloor" style="display: none;">
+            <div dojoType="dijit.MenuItem" onClick="showDialog('/swb/swbadmin/jsp/SemObjectEditor.jsp?scls=http%3A%2F%2Fwww.semanticwebbuilder.org%2Fswb4%2Fontology%23WebPage&sref='+treeStore.getValue(this.getParent().treeNode.item, 'id'))">Create</div>
             <div dojoType="dijit.MenuItem" onClick="alert(treeStore.getValue(this.getParent().treeNode.item, 'id'))">Enabled Item</div>
             <div dojoType="dijit.MenuItem" disabled="true">Disabled Item</div>
             <div dojoType="dijit.MenuSeparator"></div>
@@ -137,7 +138,7 @@
                            class="medium"
                            store="sitesStore"
                            searchAttr="name"
-                           style="width: 250;"
+                           style="width: 250px;"
                            name="state2"
                            id="sitesComboBox"
                            region="top"
@@ -210,7 +211,7 @@
                                     }
                                 });    
                             </script>
-                            <div id="mtree" dojoType="MainTree" refreshOnExpand_="true" store="treeStore" _query="{type:'WebSite'}" showRoot="false" label_="Sitios">
+                            <div id="mtree" dojoType="MainTree" refreshOnExpand_="true" _model="tmodel" store="treeStore" persist="false" query_="{type:'WebSite'}" showRoot="false" _label="Sitios">
 <!--                            
                                 <script type="dojo/method" event="onClick" args="item">
                                     if(item){
@@ -223,11 +224,12 @@
                                 </script>
 -->                                
                                 <script type="dojo/method" event="onOpen" args="item">
-                                    if(item){
-                                        var id=treeStore.getValue(item, "id");
-                                        //alert("onOpen:"+id);
+                                    if(item)
+                                    {
+                                        //alert("onOpen");
+                                        executeTreeNodeEvent(treeStore,item,"onOpen");
                                     }
-                                </script>                                
+                                </script>
                                 <script type="dojo/method" event="getIconClass" args="item, opened"> 
                                     if(item)
                                     {
@@ -285,6 +287,12 @@
                 </div><!-- end of region="center" TabContainer -->
             </div> <!-- end of "mainSplit" BorderContainer -->
         </div><!-- end of "main" BorderContainer -->
+        <!-- dialog -->
+        <div dojoType="dijit.Dialog" style="display:none;" id="swbDialog" title="Agregar">
+            <div dojoType="dojox.layout.ContentPane" id="swbDialogImp" executeScripts="true">
+                Cargando...
+            </div>
+        </div>
         
     </body>
 </html>
