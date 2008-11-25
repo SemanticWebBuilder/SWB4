@@ -86,7 +86,7 @@ public class TestRead {
         SemanticProperty propertyRef=new SemanticProperty(ont.getRDFOntModel().getProperty(SemanticVocabulary.URI+"propertyRef"));
         
         
-        Iterator<FormView> it=SWBContext.getVocabulary().swb_FormView.listGenericInstances();
+        Iterator<FormView> it=SWBContext.getVocabulary().swbxf_FormView.listGenericInstances();
         while(it.hasNext())
         {
             FormView view=it.next();
