@@ -52,12 +52,21 @@ public class UserTest {
         repository = SWBContext.getUserRepository("urswb");
         System.out.println("Repository:"+repository);
         System.out.println("Model:"+repository.getSemanticObject().getModel().getRDFModel());
+
+        repository.getUserType("empresario");
+        User instance = repository.getUser("serch");
+        //instance.getSemanticObject().getSemanticClass()
         
+       // repository.createStringExtendedAttribute("escuela", "estudiante");
+        
+        
+        repository.createUser();
+        /*
         SemanticClass cls=SWBContext.getVocabulary().swb_Dns;
         Dns dns=(Dns)SWBPlatform.getSemanticMgr().getOntology().getGenericObject("localhost", cls);
         System.out.println("dns:"+dns);
         System.out.println("dns_model:"+dns.getSemanticObject().getModel().getRDFModel());
-        
+        */
 //        if (null==repository) 
 //        {
 //            repository = SWBContext.createUserRepository("swb_users", "http://www.infotec.com.mx");
