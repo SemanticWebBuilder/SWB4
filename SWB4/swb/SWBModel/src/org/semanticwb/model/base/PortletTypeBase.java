@@ -2,6 +2,12 @@ package org.semanticwb.model.base;
 
 import java.util.Date;
 import java.util.Iterator;
+import java.util.ArrayList;
+import org.semanticwb.model.base.GenericObjectBase;
+import org.semanticwb.model.SWBVocabulary;
+import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.GenericObject;
+import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.*;
 import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
@@ -9,7 +15,7 @@ import org.semanticwb.platform.*;
 
 public class PortletTypeBase extends GenericObjectBase implements Descriptiveable,Traceable
 {
-    SWBVocabulary vocabulary=SWBContext.getVocabulary();
+    public static SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
     public PortletTypeBase(SemanticObject base)
     {
@@ -18,28 +24,28 @@ public class PortletTypeBase extends GenericObjectBase implements Descriptiveabl
 
     public Date getCreated()
     {
-        return getSemanticObject().getDateProperty(vocabulary.created);
+        return getSemanticObject().getDateProperty(vocabulary.swb_created);
     }
 
     public void setCreated(Date created)
     {
-        getSemanticObject().setDateProperty(vocabulary.created, created);
+        getSemanticObject().setDateProperty(vocabulary.swb_created, created);
     }
 
     public void setModifiedBy(org.semanticwb.model.User user)
     {
-        getSemanticObject().setObjectProperty(vocabulary.modifiedBy, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.swb_modifiedBy, user.getSemanticObject());
     }
 
     public void removeModifiedBy()
     {
-        getSemanticObject().removeProperty(vocabulary.modifiedBy);
+        getSemanticObject().removeProperty(vocabulary.swb_modifiedBy);
     }
 
     public User getModifiedBy()
     {
          User ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.modifiedBy);
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_modifiedBy);
          if(obj!=null)
          {
              ret=(User)vocabulary.swb_User.newGenericInstance(obj);
@@ -49,64 +55,69 @@ public class PortletTypeBase extends GenericObjectBase implements Descriptiveabl
 
     public String getPortletBundle()
     {
-        return getSemanticObject().getProperty(vocabulary.portletBundle);
+        return getSemanticObject().getProperty(vocabulary.swb_portletBundle);
     }
 
     public void setPortletBundle(String portletBundle)
     {
-        getSemanticObject().setProperty(vocabulary.portletBundle, portletBundle);
+        getSemanticObject().setProperty(vocabulary.swb_portletBundle, portletBundle);
     }
 
     public String getTitle()
     {
-        return getSemanticObject().getProperty(vocabulary.title);
+        return getSemanticObject().getProperty(vocabulary.swb_title);
     }
 
     public void setTitle(String title)
     {
-        getSemanticObject().setProperty(vocabulary.title, title);
+        getSemanticObject().setProperty(vocabulary.swb_title, title);
     }
 
     public String getTitle(String lang)
     {
-        return getSemanticObject().getProperty(vocabulary.title, null, lang);
+        return getSemanticObject().getProperty(vocabulary.swb_title, null, lang);
+    }
+
+    public String getDisplayTitle(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(vocabulary.swb_title, lang);
     }
 
     public void setTitle(String title, String lang)
     {
-        getSemanticObject().setProperty(vocabulary.title, title, lang);
+        getSemanticObject().setProperty(vocabulary.swb_title, title, lang);
     }
 
     public int getPortletCache()
     {
-        return getSemanticObject().getIntProperty(vocabulary.portletCache);
+        return getSemanticObject().getIntProperty(vocabulary.swb_portletCache);
     }
 
     public void setPortletCache(int portletCache)
     {
-        getSemanticObject().setLongProperty(vocabulary.portletCache, portletCache);
+        getSemanticObject().setLongProperty(vocabulary.swb_portletCache, portletCache);
     }
 
     public String getPortletClassName()
     {
-        return getSemanticObject().getProperty(vocabulary.portletClassName);
+        return getSemanticObject().getProperty(vocabulary.swb_portletClassName);
     }
 
     public void setPortletClassName(String portletClassName)
     {
-        getSemanticObject().setProperty(vocabulary.portletClassName, portletClassName);
+        getSemanticObject().setProperty(vocabulary.swb_portletClassName, portletClassName);
     }
 
     public GenericIterator<org.semanticwb.model.Portlet> listPortlets()
     {
-        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, vocabulary.hasPTPortlet.getInverse().getRDFProperty(), getSemanticObject().getRDFResource());
+        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, vocabulary.swb_hasPTPortlet.getInverse().getRDFProperty(), getSemanticObject().getRDFResource());
         return new GenericIterator<org.semanticwb.model.Portlet>(org.semanticwb.model.Portlet.class, stit,true);
     }
 
     public Portlet getPortlet()
     {
          Portlet ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasPTPortlet);
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasPTPortlet);
          if(obj!=null)
          {
              ret=(Portlet)vocabulary.swb_Portlet.newGenericInstance(obj);
@@ -116,38 +127,38 @@ public class PortletTypeBase extends GenericObjectBase implements Descriptiveabl
 
     public Date getUpdated()
     {
-        return getSemanticObject().getDateProperty(vocabulary.updated);
+        return getSemanticObject().getDateProperty(vocabulary.swb_updated);
     }
 
     public void setUpdated(Date updated)
     {
-        getSemanticObject().setDateProperty(vocabulary.updated, updated);
+        getSemanticObject().setDateProperty(vocabulary.swb_updated, updated);
     }
 
     public int getPortletMode()
     {
-        return getSemanticObject().getIntProperty(vocabulary.portletMode);
+        return getSemanticObject().getIntProperty(vocabulary.swb_portletMode);
     }
 
     public void setPortletMode(int portletMode)
     {
-        getSemanticObject().setLongProperty(vocabulary.portletMode, portletMode);
+        getSemanticObject().setLongProperty(vocabulary.swb_portletMode, portletMode);
     }
 
     public void setCreator(org.semanticwb.model.User user)
     {
-        getSemanticObject().setObjectProperty(vocabulary.creator, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.swb_creator, user.getSemanticObject());
     }
 
     public void removeCreator()
     {
-        getSemanticObject().removeProperty(vocabulary.creator);
+        getSemanticObject().removeProperty(vocabulary.swb_creator);
     }
 
     public User getCreator()
     {
          User ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.creator);
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_creator);
          if(obj!=null)
          {
              ret=(User)vocabulary.swb_User.newGenericInstance(obj);
@@ -157,14 +168,14 @@ public class PortletTypeBase extends GenericObjectBase implements Descriptiveabl
 
     public GenericIterator<org.semanticwb.model.PortletSubType> listSubTypes()
     {
-        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, vocabulary.hasPTSubType.getInverse().getRDFProperty(), getSemanticObject().getRDFResource());
+        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, vocabulary.swb_hasPTSubType.getInverse().getRDFProperty(), getSemanticObject().getRDFResource());
         return new GenericIterator<org.semanticwb.model.PortletSubType>(org.semanticwb.model.PortletSubType.class, stit,true);
     }
 
     public PortletSubType getSubType()
     {
          PortletSubType ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasPTSubType);
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasPTSubType);
          if(obj!=null)
          {
              ret=(PortletSubType)vocabulary.swb_PortletSubType.newGenericInstance(obj);
@@ -174,22 +185,27 @@ public class PortletTypeBase extends GenericObjectBase implements Descriptiveabl
 
     public String getDescription()
     {
-        return getSemanticObject().getProperty(vocabulary.description);
+        return getSemanticObject().getProperty(vocabulary.swb_description);
     }
 
     public void setDescription(String description)
     {
-        getSemanticObject().setProperty(vocabulary.description, description);
+        getSemanticObject().setProperty(vocabulary.swb_description, description);
     }
 
     public String getDescription(String lang)
     {
-        return getSemanticObject().getProperty(vocabulary.description, null, lang);
+        return getSemanticObject().getProperty(vocabulary.swb_description, null, lang);
+    }
+
+    public String getDisplayDescription(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(vocabulary.swb_description, lang);
     }
 
     public void setDescription(String description, String lang)
     {
-        getSemanticObject().setProperty(vocabulary.description, description, lang);
+        getSemanticObject().setProperty(vocabulary.swb_description, description, lang);
     }
 
     public void remove()
