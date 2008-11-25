@@ -16,6 +16,7 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 import org.semanticwb.*;
 import org.semanticwb.base.util.URLEncoder;
@@ -41,6 +42,7 @@ public class SemanticClass
     private Class m_cls=null;
     private Constructor m_constructor=null;
     private SemanticProperty displayNameProperty;
+    List<SemanticProperty> herarquicalProps;
 
     public SemanticClass(OntClass oclass)
     {
@@ -58,16 +60,21 @@ public class SemanticClass
     private void init()
     {
         m_props=new HashMap();
+        herarquicalProps=new ArrayList();
         // super-classes
         //System.out.println("m_class:"+m_class);
+        int x=0;
         for (Iterator i = m_class.listDeclaredProperties(false); i.hasNext(); ) 
         {
             Property prop=(Property)i.next();
+            x++;
             SemanticProperty p=new SemanticProperty(prop);
             if(p.isUsedAsName())displayNameProperty=p;
-            //System.out.println("p.getName():"+p.getName()+" "+p);
+            if(p.isHeraquicalRelation())herarquicalProps.add(p);
+            //System.out.println("p.getName():"+x+" "+p.getName()+" "+p);
             m_props.put( p.getName(), p);
         }
+        //System.out.println("m_props:"+m_props.size());
         log.trace("SemanticClass:"+getName()+" "+getClassName()+" "+m_class.getNameSpace()+" "+getPrefix());
         //System.out.println("Name:"+getName()+" "+getClassName()+" "+m_class.getNameSpace()+" "+getPrefix());
     }
@@ -174,17 +181,29 @@ public class SemanticClass
      */
     public Iterator<SemanticClass> listModelClasses()
     {
-        Iterator ret=null;
+        Iterator ret=(new Vector()).iterator();
         if(isSWBModel()==true)
         {
             Property prop=m_class.getModel().getProperty(SemanticVocabulary.SWB_PROP_HASCLASS);
             ret=new SemanticClassIterator(m_class.listProperties(prop));
-        }else
-        {
-            ret=(new Vector()).iterator();
         }
         return ret;        
     }
+
+    /**
+     * Lista los nodos a mostrar en el arbol de SWB
+     */
+    public Iterator<SemanticObject> listHerarquicalNodes()
+    {
+        Iterator ret=(new Vector()).iterator();
+        if(isSWBModel()==true)
+        {
+            Property prop=m_class.getModel().getProperty(SemanticVocabulary.SWB_PROP_HASHERARQUICALNODE);
+            ret=new SemanticIterator(m_class.listProperties(prop));
+        }
+        return ret;        
+    }
+
     
     public Iterator<SemanticClass> listOwnerModels()
     {
@@ -468,5 +487,10 @@ public class SemanticClass
     
     public SemanticProperty getDisplayNameProperty() {
         return displayNameProperty;
-    }  
+    }
+
+    public Iterator<SemanticProperty> listHerarquicalProperties()
+    {
+        return herarquicalProps.iterator();
+    }
 }

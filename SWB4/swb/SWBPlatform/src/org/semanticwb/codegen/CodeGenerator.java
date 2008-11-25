@@ -984,6 +984,15 @@ public class CodeGenerator
                     }
                     javaClassContent.append(CLOSE_BLOCK + ENTER);
 
+                    if(type.equals("String"))
+                    {
+                        javaClassContent.append(ENTER);
+                        javaClassContent.append(PUBLIC + type + " " + prefix + "Display" + methodName + "(String lang)" + ENTER);
+                        javaClassContent.append(OPEN_BLOCK + ENTER);
+                        javaClassContent.append("        return " + "getSemanticObject().getLocaleProperty" + "(vocabulary." + tpp.getPrefix()+"_"+tpp.getName() + ", lang);" + ENTER);
+                        javaClassContent.append(CLOSE_BLOCK + ENTER);
+                    }
+
                     javaClassContent.append(ENTER);
                     javaClassContent.append(PUBLIC + "void set" + methodName + "(" + type + " " + tpp.getName() + ", String lang)" + ENTER);
                     javaClassContent.append(OPEN_BLOCK + ENTER);

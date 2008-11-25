@@ -4,7 +4,6 @@ import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
-import com.hp.hpl.jena.rdf.model.impl.LiteralImpl;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
@@ -272,7 +271,8 @@ public class SemanticObject
         while(stit.hasNext())
         {
             Statement staux=stit.nextStatement();
-            if(staux.getLanguage().equals(lang))
+            String lg=staux.getLanguage();
+            if(lg!=null && lg.equals(lang))
             {
                 st=staux;
                 break;
@@ -305,7 +305,8 @@ public class SemanticObject
             while(stit.hasNext())
             {
                 Statement staux=stit.nextStatement();
-                if(staux.getLanguage().equals(lang))
+                String lg=staux.getLanguage();
+                if(lg!=null && lg.equals(lang))
                 {
                     stit.remove();
                 }
@@ -349,7 +350,7 @@ public class SemanticObject
         if(ret==null)ret=defValue;
         return ret;
     }
-    
+
     public String getProperty(SemanticProperty prop, String defValue, String lang)
     {
         //System.out.println("getProperty:"+prop+" "+prop.isExternalInvocation());
@@ -371,6 +372,30 @@ public class SemanticObject
         {
             ret=stm.getString();
         }
+        return ret;
+    }
+
+    public String getLocaleProperty(SemanticProperty prop, String lang)
+    {
+        String ret=null;
+        String def=null;
+        String other=null;
+        if(lang==null)ret=getProperty(prop);
+        StmtIterator stit=m_res.listProperties(prop.getRDFProperty());
+        while(stit.hasNext())
+        {
+            Statement st=stit.nextStatement();
+            other=st.getString();
+            String lg=st.getLanguage();
+            if(lg==null || lg.length()==0)def=st.getString();
+            else if(lg.equals(lang))
+            {
+                ret=st.getString();
+                break;
+            }
+        }
+        if(ret==null)ret=def;
+        if(ret==null)ret=other;
         return ret;
     }
     
@@ -793,8 +818,17 @@ public class SemanticObject
             {
                 return new ArrayList().iterator();
             }
-        }            
-        return new SemanticObjectIterator(m_res.listProperties(prop.getRDFProperty()));
+        }
+
+        Iterator ret=null;
+        if(!prop.hasInverse())
+        {
+            ret=new SemanticIterator(m_res.listProperties(prop.getRDFProperty()));
+        }else
+        {
+            ret=new SemanticIterator(getModel().getRDFModel().listStatements(null, prop.getInverse().getRDFProperty(), getRDFResource()),true);
+        }
+        return ret;
     }
     
     public SemanticObject getObjectProperty(SemanticProperty prop)
@@ -881,11 +915,7 @@ public class SemanticObject
         {
             if(prop.isDataTypeProperty())
             {
-                if(lang!=null)ret=getProperty(prop,null,lang);
-                if(ret==null)
-                {
-                    ret=getProperty(prop);
-                }
+                ret=getLocaleProperty(prop, lang);
             }else if(prop.isObjectProperty())
             {
                 SemanticObject obj=getObjectProperty(prop);
