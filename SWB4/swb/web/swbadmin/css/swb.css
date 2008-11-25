@@ -39,26 +39,50 @@ body .dojoSplitPane {
 .swbIconTemplate,
 .swbIconTemplateU,
 .swbIconWebSite,
+.swbIconWebSiteU,
 .swbIconWebPage,
-.swbIconWebPageU {
+.swbIconWebPageU,
+.swbIconCamps,
+.swbIconCamp,
+.swbIconCampU,
+.swbIconPFlows,
+.swbIconPFlow,
+.swbIconPFlowU,
+.swbIconLanguages,
+.swbIconLanguage,
+.swbIconDevices,
+.swbIconDevice,
+.swbIconRules,
+.swbIconRule,
+.swbIconRuleU,
+.swbIconRoles,
+.swbIconRole,
+.swbIconRoleU,
+.swbIconDnss,
+.swbIconDns
+{
 	background-repeat: no-repeat; 
-	width: 20px;
-	height: 20px;
+	width:16px;
+	height: 16px;
 	text-align: center;
-	padding-right:4px; 
+	padding-right:0px;
+    background-image: url('../icons/icons16x16.png'); background-position: -352px -0px;
 }
 
-
-.swbIconPortlets { background-image: url('../icons/f_resourcetype.gif'); }
-.swbIconPortletType { background-image: url('../icons/f_resourcetype.gif'); }
-.swbIconPortlet { background-image: url('../icons/Portlet.png'); }
-.swbIconPortletU { background-image: url('../icons/i_recurso_rojo.gif'); }
-.swbIconTemplates { background-image: url('../icons/f_plantillas.gif'); }
-.swbIconTemplate { background-image: url('../icons/Template.png'); }
-.swbIconTemplateU { background-image: url('../icons/i_plantilla_rojo.gif'); }
-.swbIconWebSite { background-image: url('../icons/f_site_verde.gif'); }
-.swbIconWebPage { background-image: url('../icons/i_general_verde.gif'); }
-.swbIconWebPageU { background-image: url('../icons/i_general_rojo.gif'); }
+.swbIconPortlets { background-image: url('../icons/icons16x16.png'); background-position: -224px -0px; }
+.swbIconPortletType { background-image: url('../icons/icons16x16.png'); background-position: -48px -0px; }
+.swbIconPortlet { background-image: url('../icons/icons16x16.png'); background-position: -352px -0px; }
+.swbIconPortletU { background-image: url('../icons/icons16x16.png'); background-position: -352px -16px; }
+.swbIconTemplates { background-image: url('../icons/icons16x16.png'); background-position: -352px -0px; }
+.swbIconTemplate { background-image: url('../icons/icons16x16.png'); background-position: -256px -0px; }
+.swbIconTemplateU { background-image: url('../icons/icons16x16.png'); background-position: -256px -16px; }
+.swbIconWebSite { background-image: url('../icons/icons16x16.png'); background-position: -32px -0px; }
+.swbIconWebSiteU { background-image: url('../icons/icons16x16.png'); background-position: -32px -16px; }
+.swbIconWebPage { background-image: url('../icons/icons16x16.png'); background-position: -352px -0px; }
+.swbIconWebPageU { background-image: url('../icons/icons16x16.png'); background-position: -352px -16px; }
+.swbIconDnss { background-image: url('../icons/icons16x16.png'); background-position: -352px -0px; }
+.swbIconDns { background-image: url('../icons/icons16x16.png'); background-position: -192px -0px; }
+.swbIconLanguage { background-image: url('../icons/icons16x16.png'); background-position: -80px -0px; }
 
 .admViewProperties { width:100%; }
 
@@ -66,7 +90,7 @@ caption {
 	background:#fafafa url(../js/dojo/dijit/themes/soria/images/titleBar.png) repeat-x top left;
 	border-top: 1px solid #b9bbdd;
 	padding: 5px 5px 6px 8px;
-        font-weight: bold;
+    font-weight: bold;
 }
 
 th {
@@ -83,17 +107,17 @@ th {
 form.swbform legend {
 	padding: 0 2px;
 	font-weight: bold;
-        padding-left: 0;
-        _margin: 0 -7px; /* IE Win */
+    padding-left: 0;
+    _margin: 0 -7px; /* IE Win */
 	}
 	
 form.swbform label {
 	display: inline-block;
 	line-height: 1.8;
 	_vertical-align: top;
-        text-align: right;
-        width: 25%;
-        }
+    text-align: right;
+    width: 25%;
+    }
 	
 form.swbform fieldset ol{
 	margin: 0;
@@ -103,15 +127,15 @@ form.swbform fieldset ol{
 _form.swbform fieldset li p{
 	margin: 3px 5px;
 	padding: 0;
-        width: 70%;
-        position: absolute ;
+    width: 70%;
+    position: absolute ;
 	}
 
 _form.swbform fieldset li span{
 	margin: 3px 5px;
 	padding: 0;
-        _width: 70%;
-        _position: absolute ;
+    _width: 70%;
+    _position: absolute ;
 	}
 
 _form.swbform fieldset li {
@@ -124,30 +148,30 @@ _form.swbform fieldset li {
 	
 form.swbform fieldset fieldset {
 	border: none;
-        padding: 0px 25px 0px 0px;
-        background: none;
+    padding: 0px 25px 0px 0px;
+    background: none;
 	}
 	
 form.swbform fieldset fieldset legend {
-        width: 25%;
-        text-align: right;
+    width: 25%;
+    text-align: right;
 	font-weight: normal;
 	}
 	
 form.swbform fieldset fieldset label {
 	display: block;
 	width: auto;
-        margin-left: 26%;
-        text-align: left;
-        padding: 0px;
+    margin-left: 26%;
+    text-align: left;
+    padding: 0px;
 	}
 
 form.swbform fieldset span label {
 	width: auto;
-        padding: 0px 10px 0px 0px;  /*horizontal*/
+    padding: 0px 10px 0px 0px;  /*horizontal*/
 	_display: block;            /* vertical */
-        _margin-left: 25.5%;        /* vertical */
-        _text-align: left;          /* vertical */
+    _margin-left: 25.5%;        /* vertical */
+    _text-align: left;          /* vertical */
 	}
 
 form.swbform em {
@@ -157,22 +181,23 @@ form.swbform em {
 	}
 
 form.swbform {
-	_width: 90%;
+	_width: 100%;
 	font-size: 1.1em;
 	color: #333;
-        font: normal 100% "Lucida Grande", Helvetica, Verdana, Arial;
+    font: normal 100% "Lucida Grande", Helvetica, Verdana, Arial;
 	}
 	
 form.swbform legend,
 form.swbform label { color: #333; }
 
 form.swbform fieldset {
-        padding: 5px;
+    _width: 400px;
+    padding: 5px;
 	border-top: 1px solid #a0a0ff;
 	border-left: 1px solid #a0a0ff;
 	border-bottom: 1px solid #a0a0ff;
 	border-right: 1px solid #a0a0ff;
 	background: url(../images/swbform-fieldset.gif) left bottom repeat-x;
-        _background: url('../js/dojo/dijit/themes/soria/images/titleBar.png') left bottom repeat-x;
+    _background: url('../js/dojo/dijit/themes/soria/images/titleBar.png') left bottom repeat-x;
 	}
 	

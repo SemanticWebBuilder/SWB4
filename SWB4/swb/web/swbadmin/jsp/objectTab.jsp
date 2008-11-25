@@ -26,15 +26,15 @@
 <div dojoType="dijit.layout.TabContainer" id="<%=id%>/tab2" _tabPosition="bottom" _selectedChild="btab1">
 <div dojoType="dijit.layout.ContentPane" title="Información" style=" padding:10px;" refreshOnShow="false" href="/swb/swbadmin/jsp/SemObjectEditor.jsp?suri=<%=URLEncoder.encode(obj.getURI())%>"></div>
 <%        
-        String buri="/swb/swb/SWBAdmin/WBAd_Home/_rid/2/_mto/3";
+        String buri="/swb/swb/SWBAdmin/WBAd_Home/_rid/1/_mto/3";
         buri+="?suri="+obj.getSemanticObject().getEncodedURI();
         SWBVocabulary voc=SWBContext.getVocabulary();
         
         if(obj instanceof PortletRefable)
         {
             String auri=buri;
-            auri+="&sprop="+voc.hasPortletRef.getEncodedURI();
-            auri+="&spropref="+voc.portlet.getEncodedURI();
+            auri+="&sprop="+voc.swb_hasPortletRef.getEncodedURI();
+            auri+="&spropref="+voc.swb_portlet.getEncodedURI();
             //System.out.println("auri:"+auri);            
 %>
 <div dojoType="dijit.layout.ContentPane" title="Contenidos" style=" padding:10px;" refreshOnShow="false" href="<%=auri%>"></div>
@@ -44,8 +44,8 @@
         if(obj instanceof TemplateRefable)
         {
             String auri=buri;
-            auri+="&sprop="+voc.hasTemplateRef.getEncodedURI();
-            auri+="&spropref="+voc.template.getEncodedURI();
+            auri+="&sprop="+voc.swb_hasTemplateRef.getEncodedURI();
+            auri+="&spropref="+voc.swb_template.getEncodedURI();
             //System.out.println("auri:"+auri);
 %>
 <div dojoType="dijit.layout.ContentPane" title="Plantillas" style=" padding:10px;" refreshOnShow="false" href="<%=auri%>"></div>
@@ -55,8 +55,8 @@
         if(obj instanceof PFlowRefable)
         {
             String auri=buri;
-            auri+="&sprop="+voc.hasPFlowRef.getEncodedURI();
-            auri+="&spropref="+voc.pflow.getEncodedURI();
+            auri+="&sprop="+voc.swb_hasPFlowRef.getEncodedURI();
+            auri+="&spropref="+voc.swb_pflow.getEncodedURI();
 %>
 <div dojoType="dijit.layout.ContentPane" title="Flujos de Publicación" style=" padding:10px;" refreshOnShow="false" href="<%=auri%>"></div>
 <%            
@@ -66,7 +66,7 @@
         {
             String auri="/swb/swb/SWBAdmin/WBAd_Home/_rid/55/_mto/3";
             auri+="?suri="+obj.getSemanticObject().getEncodedURI();
-            auri+="&sprop="+voc.hasCalendar.getEncodedURI();
+            auri+="&sprop="+voc.swb_hasCalendar.getEncodedURI();
             System.out.println(auri);
             //auri+="&spropref="+voc.pflow.getEncodedURI();            
 %>
@@ -77,8 +77,8 @@
         if(obj instanceof RoleRefable)
         {
             String auri=buri;
-            auri+="&sprop="+voc.hasRoleRef.getEncodedURI();
-            auri+="&spropref="+voc.role.getEncodedURI();            
+            auri+="&sprop="+voc.swb_hasRoleRef.getEncodedURI();
+            auri+="&spropref="+voc.swb_role.getEncodedURI();
 %>
 <div dojoType="dijit.layout.ContentPane" title="Roles" style=" padding:10px;" refreshOnShow="false" href="<%=auri%>"></div>
 <%            
@@ -87,8 +87,8 @@
         if(obj instanceof RuleRefable)
         {
             String auri=buri;
-            auri+="&sprop="+voc.hasRuleRef.getEncodedURI();
-            auri+="&spropref="+voc.rule.getEncodedURI();            
+            auri+="&sprop="+voc.swb_hasRuleRef.getEncodedURI();
+            auri+="&spropref="+voc.swb_rule.getEncodedURI();
 %>
 <div dojoType="dijit.layout.ContentPane" title="Reglas" style=" padding:10px;" refreshOnShow="false" href="<%=auri%>"></div>
 <%            

@@ -3,9 +3,6 @@
  * and open the template in the editor.
  */
 
-      var paneId=1;
-
-
       dojo.require("dijit.Menu");
       dojo.require("dijit._Calendar");
       dojo.require("dijit.ColorPalette");
@@ -15,6 +12,7 @@
       dojo.require("dijit.Tree");
 
       dojo.require("dojox.form.TimeSpinner");
+      dojo.require("dojox.layout.ContentPane");
 
       // editor:
       dojo.require("dijit.Editor"); 
@@ -51,7 +49,7 @@
 
       // for the Tree
       dojo.require("dojo.data.ItemFileWriteStore");
-      //dojo.require("dojo.data.ItemFileReadStore");
+      dojo.require("dojo.data.ItemFileReadStore");
 
       // for the colorpalette
       function setColor(color){
@@ -98,13 +96,55 @@
               handleAs: "text"
           });            
       }
+
+      function getJSON(url)
+      {
+          //alert("load:"+url);
+          var ret=[];
+          var obj=dojo.xhrGet({
+              url: url,
+              sync: true,
+              load: function(data){
+                  //obj=data;
+                  //alert("1:"+data);
+                  ret=data;
+                  return data;
+              },
+              error: function(data){
+                  alert("An error occurred, with response: " + data);
+                  return data;
+              },
+              handleAs: "json"
+          });
+          //alert(url+" "+ret);
+          return ret;
+      }
+
+
+      function showDialog(url)
+      {
+          dojo.xhrGet({
+              url: url,
+              load: function(response, ioArgs){
+                  dijit.byId('swbDialogImp').setContent(response);
+                  dijit.byId('swbDialog').show();
+                  return response;
+              },
+              error: function(response, ioArgs){
+                  dijit.byId('swbDialogImp').setContent("Error: "+response);
+                  dijit.byId('swbDialog').show();
+                  return response;
+              },
+              handleAs: "text"
+          });
+      }
       
       function getContentPanel(reference)
       {
           if(!reference)return null;
           //alert("reference:"+reference.id);
           var att=reference.getAttribute("dojoType");
-          if(att && att=="dijit.layout.ContentPane")
+          if(att && (att=="dijit.layout.ContentPane" || att=="dojox.layout.ContentPane"))
           {
                   return dijit.byNode(reference);
           }else
@@ -134,10 +174,18 @@
       {
           var obj=dojo.byId(formid);
           var objd=dijit.byId(formid);
+          var fid=formid;
+          //alert("id:"+formid+" "+"dojo:"+obj +" dijit:"+objd);
+          if(!obj && objd) //si la forma esta dentro de un dialog
+          {
+              obj=objd.domNode;
+              fid=obj;
+          }
+
           if(!objd || objd.isValid())
           {
               //alert("entra2");
-              dojo.xhrPost ({
+              dojo.xhrPost({
                   // The page that parses the POST request
                   contentType: "application/x-www-form-urlencoded; charset=utf-8",                        
 
@@ -146,7 +194,7 @@
                   url: obj.action,
 
                   // Name of the Form we want to submit
-                  form: formid,
+                  form: fid,
 
                   // Loads this function if everything went ok
                   load: function (data) {
@@ -157,6 +205,7 @@
                               //alert("id:"+panel.id);
                               panel.setContent(data);
                           }
+                          //dijit.byId('swbDialog').hide();
                           //div_node.innerHTML = data;
                           //dojo.parser.parse(div_node,true);
                   },
@@ -215,6 +264,75 @@
           {
               tabs.selectChild(newTab);   
           }
+      }
+
+      function executeTreeNodeEvent(store, item, eventname)
+      {
+            var event=getTreeNodeEvent(store,item,eventname);
+            if(event)
+            {
+                //alert("event:"+event.name+" "+event.action);
+                if(event.action=="reload")
+                {
+                    reloadTreeNode(store,item);
+                }
+            }
+      }
+
+      //regrasa evento de nombre eventname asociado al nodo item del store
+      function getTreeNodeEvent(store, item, eventname)
+      {
+            var events=store.getValues(item, "events");
+            //var events=item.events;
+            if(events)
+            {
+                for(var x=0;x<events.length;x++)
+                {
+                    if(events[x].name==eventname)
+                    {
+                        return events[x];
+                    }
+                }
+            }
+            return null;
+      }
+
+      function removeChilds(store,item)
+      {
+          var items=item.children;
+          if(items)
+          {
+              for (var i=0; i<items.length;i++)
+              {
+                  removeChilds(store,items[i]);
+                  store.deleteItem(items[i]);
+              }
+              store.save();
+          }
+      }
+
+      function reloadTreeNode(store, item)
+      {
+          //alert("reload:"+item.id);
+          removeChilds(store,item);
+
+          var items=getJSON("/swb/swbadmin/jsp/Tree.jsp?suri="+encodeURIComponent(item.id))
+
+          //alert("nitem:"+items.length);
+          for (var i=0; i<items.length;i++)
+          {
+                //alert("item:"+i+" "+items[i].id);
+                var pInfo={parent:item, attribute:"children"};
+                var ite=store.newItem(items[i],pInfo);
+                if(items[i].hasChilds)
+                {
+                    //alert("hasChilds:"+items[i].id+" "+ite);
+                    pInfo={parent:ite, attribute:"children"};
+                    var dummy={"id":items[i].id+"_tmp_","icon":"swbIconWebSite","title":"dummy"};
+                    store.newItem(dummy,pInfo);
+                }
+          }
+          store.save();
       }
       
       function actionDone(){
