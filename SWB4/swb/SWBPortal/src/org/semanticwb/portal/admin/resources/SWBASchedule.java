@@ -105,8 +105,8 @@ public class SWBASchedule extends GenericResource {
             out.println("<th>");
             out.println("Name");
             out.println("</th>");
-            if (hmprop.get(SWBContext.getVocabulary().created) != null) {
-                sptemp = (SemanticProperty) hmprop.get(SWBContext.getVocabulary().created);
+            if (hmprop.get(SWBContext.getVocabulary().swb_created) != null) {
+                sptemp = (SemanticProperty) hmprop.get(SWBContext.getVocabulary().swb_created);
                 String propname = sptemp.getName();
                 try {
                     propname = sptemp.getDisplayName(user.getLanguage());
@@ -116,8 +116,8 @@ public class SWBASchedule extends GenericResource {
                 out.println(propname);
                 out.println("</th>");
             }
-            if (hmprop.get(SWBContext.getVocabulary().updated) != null) {
-                sptemp = (SemanticProperty) hmprop.get(SWBContext.getVocabulary().updated);
+            if (hmprop.get(SWBContext.getVocabulary().swb_updated) != null) {
+                sptemp = (SemanticProperty) hmprop.get(SWBContext.getVocabulary().swb_updated);
                 String propname = sptemp.getName();
                 try {
                     propname = sptemp.getDisplayName(user.getLanguage());
@@ -127,8 +127,8 @@ public class SWBASchedule extends GenericResource {
                 out.println(propname);
                 out.println("</th>");
             }
-            if (hmprop.get(SWBContext.getVocabulary().priority) != null) {
-                sptemp = (SemanticProperty) hmprop.get(SWBContext.getVocabulary().priority);
+            if (hmprop.get(SWBContext.getVocabulary().swb_priority) != null) {
+                sptemp = (SemanticProperty) hmprop.get(SWBContext.getVocabulary().swb_priority);
                 String propname = sptemp.getName();
                 try {
                     propname = sptemp.getDisplayName(user.getLanguage());
@@ -138,7 +138,7 @@ public class SWBASchedule extends GenericResource {
                 out.println(propname);
                 out.println("</th>");
             }
-            if (hmprop.get(SWBContext.getVocabulary().active) != null) {
+            if (hmprop.get(SWBContext.getVocabulary().swb_active) != null) {
                 out.println("<th>");
                 out.println("Status<br>Active/Unactive");
                 out.println("</th>");
@@ -186,8 +186,8 @@ public class SWBASchedule extends GenericResource {
                 out.println("<a href=\"#\"  onclick=\"submitUrl('" + urlchoose + "',this); return false;\">" + stitle + "</a>");
                 //out.println(stitle); 
                 out.println("</td>");
-                if (hmprop.get(SWBContext.getVocabulary().priority) != null) {
-                    SemanticProperty semprop = (SemanticProperty) hmprop.get(SWBContext.getVocabulary().priority);
+                if (hmprop.get(SWBContext.getVocabulary().swb_priority) != null) {
+                    SemanticProperty semprop = (SemanticProperty) hmprop.get(SWBContext.getVocabulary().swb_priority);
                     out.println("<td align=\"center\">");
                     SWBResourceURL urlu = paramRequest.getActionUrl();
                     urlu.setParameter("suri", id);
@@ -199,22 +199,22 @@ public class SWBASchedule extends GenericResource {
                     out.println("<input type=\"text\" name=\"" + semprop.getName() + "\" onblur=\"submitUrl('" + urlu + "&" + semprop.getName() + "='+" + semprop.getName() + ".value,this);\" value=\"" + getValueSemProp(sobj, semprop) + "\" />");
                     out.println("</td>");
                 }
-                if (hmprop.get(SWBContext.getVocabulary().created) != null) {
-                    SemanticProperty semprop = (SemanticProperty) hmprop.get(SWBContext.getVocabulary().created);
+                if (hmprop.get(SWBContext.getVocabulary().swb_created) != null) {
+                    SemanticProperty semprop = (SemanticProperty) hmprop.get(SWBContext.getVocabulary().swb_created);
                     out.println("<td>");
                     out.println(getValueSemProp(sobj, semprop));
                     out.println("</td>");
                 }
-                if (hmprop.get(SWBContext.getVocabulary().updated) != null) {
-                    SemanticProperty semprop = (SemanticProperty) hmprop.get(SWBContext.getVocabulary().updated);
+                if (hmprop.get(SWBContext.getVocabulary().swb_updated) != null) {
+                    SemanticProperty semprop = (SemanticProperty) hmprop.get(SWBContext.getVocabulary().swb_updated);
                     out.println("<td>");
                     out.println(getValueSemProp(sobj, semprop));
                     out.println("</td>");
                 }
-                if (hmprop.get(SWBContext.getVocabulary().active) != null) {
+                if (hmprop.get(SWBContext.getVocabulary().swb_active) != null) {
                     out.println("<td align=\"center\">");
                     boolean activo = false;
-                    if (sobj.getBooleanProperty(SWBContext.getVocabulary().active)) {
+                    if (sobj.getBooleanProperty(SWBContext.getVocabulary().swb_active)) {
                         activo = true;
                     }
                     SWBResourceURL urlu = paramRequest.getActionUrl();
@@ -342,7 +342,7 @@ public class SWBASchedule extends GenericResource {
                         
                     } else if ("add".equals(action)&&(sp.isDate()||sp.isDateTime())) {
                         //out.println("		<li><label for=\"" + name + "\">" + label + " <em>*</em></label> " + value + " </li>");
-                    } else if(!sp.equals(SWBContext.getVocabulary().xml)){
+                    } else if(!sp.equals(SWBContext.getVocabulary().swb_xml)){
                         out.println("		<li><label for=\"" + name + "\">" + label + " <em>*</em></label> <input type=\"text\" id=\"" + id + "/" + name + "\" name=\"" + id + "/" + name + "\" value=\"" + value + "\"/></li>");
                     }
                 }
@@ -414,7 +414,7 @@ public class SWBASchedule extends GenericResource {
         // Genera forma de administración de calendarizaciones
         {
             //String tit = request.getParameter("title");
-            if(so_cal!=null) strXmlConf = so_cal.getProperty(SWBContext.getVocabulary().xml);
+            if(so_cal!=null) strXmlConf = so_cal.getProperty(SWBContext.getVocabulary().swb_xml);
             if (strXmlConf != null&&strXmlConf.trim().length()>0) {
                 doc = SWBUtils.XML.xmlToDom(strXmlConf);
                 active = SWBUtils.XML.getAttribute(doc, "active");
@@ -1097,8 +1097,8 @@ public class SWBASchedule extends GenericResource {
                 String str_lid = "" + lid;
                 SemanticObject nobj = obj.getModel().createSemanticObject(obj.getModel().getObjectUri(str_lid, ncls), ncls);
                 Date cdate = new Date(System.currentTimeMillis());
-                nobj.setDateProperty(SWBContext.getVocabulary().created, cdate);
-                nobj.setDateProperty(SWBContext.getVocabulary().updated, cdate);
+                nobj.setDateProperty(SWBContext.getVocabulary().swb_created, cdate);
+                nobj.setDateProperty(SWBContext.getVocabulary().swb_updated, cdate);
                 if (prop1.getName().startsWith("has")) {
                     obj.addObjectProperty(prop1, nobj);
                 } else {
@@ -1119,7 +1119,7 @@ public class SWBASchedule extends GenericResource {
                             if (value.length() > 0) {
                                 if (prop.isBoolean()) {
                                     nobj.setBooleanProperty(prop, true);
-                                    if(prop.getName().equals(SWBContext.getVocabulary().active.getName()))strActive="true";
+                                    if(prop.getName().equals(SWBContext.getVocabulary().swb_active.getName()))strActive="true";
                                 }
                                 if (prop.isInt()) {
                                     nobj.setLongProperty(prop, Integer.parseInt(value));
@@ -1136,7 +1136,7 @@ public class SWBASchedule extends GenericResource {
                         } else {
                             if (prop.isBoolean()) {
                                 nobj.setBooleanProperty(prop, false);
-                                if(prop.getName().equals(SWBContext.getVocabulary().active.getName()))strActive="false";
+                                if(prop.getName().equals(SWBContext.getVocabulary().swb_active.getName()))strActive="false";
                             }
                         }
                     }
@@ -1159,7 +1159,7 @@ public class SWBASchedule extends GenericResource {
                         if (value.length() > 0) {
                             if (prop.isBoolean()) {
                                 obj.setBooleanProperty(prop, true);
-                                if(prop.getName().equals(SWBContext.getVocabulary().active.getName()))strActive="true";
+                                if(prop.getName().equals(SWBContext.getVocabulary().swb_active.getName()))strActive="true";
                             }
                             if (prop.isInt()) {
                                 obj.setLongProperty(prop, Integer.parseInt(value));
@@ -1171,21 +1171,21 @@ public class SWBASchedule extends GenericResource {
                                 obj.setFloatProperty(prop, Float.parseFloat(value));
                             }
                             if (prop.isDate() || prop.isDateTime()) {
-                                if(prop.getName().equals(SWBContext.getVocabulary().updated.getName()) || prop.getName().equals(SWBContext.getVocabulary().created.getName()))
+                                if(prop.getName().equals(SWBContext.getVocabulary().swb_updated.getName()) || prop.getName().equals(SWBContext.getVocabulary().swb_created.getName()))
                                     obj.setDateProperty(prop, new Date(System.currentTimeMillis()));
                             }
                         } else
                         {
                             if (prop.isBoolean()) {
                                 obj.setBooleanProperty(prop, false);
-                                if(prop.getName().equals(SWBContext.getVocabulary().active.getName()))strActive="false";
+                                if(prop.getName().equals(SWBContext.getVocabulary().swb_active.getName()))strActive="false";
                             }
                         }
                     }                      
                 }
             }
             Date mdate = new Date(System.currentTimeMillis());
-            obj.setDateProperty(SWBContext.getVocabulary().updated, mdate);
+            obj.setDateProperty(SWBContext.getVocabulary().swb_updated, mdate);
             strUserMod = user.getId();
             strModDate = Long.toString(mdate.getTime());
             if (id != null)response.setRenderParameter("suri", id);
@@ -1198,9 +1198,9 @@ public class SWBASchedule extends GenericResource {
             String soid = request.getParameter("sval");
             String value = request.getParameter("val");
             SemanticObject sobj = ont.getSemanticObject(soid);
-            sobj.setBooleanProperty(SWBContext.getVocabulary().active, value.equals("1")?true:false);
+            sobj.setBooleanProperty(SWBContext.getVocabulary().swb_active, value.equals("1")?true:false);
             Date mdate = new Date(System.currentTimeMillis());
-            sobj.setDateProperty(SWBContext.getVocabulary().updated, mdate);
+            sobj.setDateProperty(SWBContext.getVocabulary().swb_updated, mdate);
             strModDate = Long.toString(mdate.getTime());
             log.debug("SWBASchedule: ProcessAction(updstatus):"+sobj.getSemanticClass().getClassName()+": "+value);
 
@@ -1243,7 +1243,7 @@ public class SWBASchedule extends GenericResource {
             try {
                     try
                     {
-                        xmlOrig = so.getProperty(SWBContext.getVocabulary().xml);
+                        xmlOrig = so.getProperty(SWBContext.getVocabulary().swb_xml);
                     }
                     catch(Exception xmle)
                     {   // no tiene XML definido, genera un nuevo XML
@@ -1399,12 +1399,12 @@ public class SWBASchedule extends GenericResource {
                     }
                     String strXml = SWBUtils.XML.domToXml(doc);
                     log.debug(strXml);
-                    so.setProperty(SWBContext.getVocabulary().xml, strXml);
+                    so.setProperty(SWBContext.getVocabulary().swb_xml, strXml);
 
                 } catch (Exception e) {
                     log.error("The XML schedule can't be generated", e);
                     // No se actualiza y conserva el XML original
-                    so.setProperty(SWBContext.getVocabulary().xml, xmlOrig);
+                    so.setProperty(SWBContext.getVocabulary().swb_xml, xmlOrig);
                 }
         }
         if (null != id) {
@@ -1445,7 +1445,7 @@ public class SWBASchedule extends GenericResource {
         try {
             ret = obj.getDisplayName(lang);
         } catch (Exception e) {
-            ret = obj.getProperty(SWBContext.getVocabulary().title);
+            ret = obj.getProperty(SWBContext.getVocabulary().swb_title);
         }
         return ret;
     }
