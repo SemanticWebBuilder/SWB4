@@ -1,6 +1,8 @@
 package org.semanticwb.model;
 
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.rdf.model.StmtIterator;
 import java.util.Iterator;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.base.*;
@@ -17,15 +19,27 @@ public class UserRepository extends UserRepositoryBase
     public static final String SWBUR_CallBackHandlerClassName = "SWBUR_CallBackHandlerClassName";
     public static final String SWBUR_ClassHold = "extendedAttributes";
     public static final String SWBUR_ClassPost = "#clsExtendedAttibutes";
+    public static final String SWBUR_ClassUserTypeHold = "userType";
+    public static final String SWBUR_ClassUserTypePost = "#clsUserType";
 
     public UserRepository(SemanticObject base)
     {
         super(base);
-        String uri = getProperty("extendedAttributes");
+        String uri = getProperty(SWBUR_ClassHold);
         if (uri != null)
         {
             uri = getId() + SWBUR_ClassPost;
             getSemanticObject().getModel().registerClass(uri);
+        }
+        StmtIterator ptopIt = getSemanticObject().getModel().getRDFModel().listStatements(getSemanticObject().getRDFResource(),null, (String)null);
+        while (ptopIt.hasNext()){
+            Statement sp = (Statement)ptopIt.next();
+            System.out.println("Prop: "+sp.toString()+" - "+sp.getPredicate().getLocalName());
+            if (sp.getPredicate().getLocalName().startsWith(SWBUR_ClassUserTypeHold)){
+            uri = sp.getObject().toString();
+            System.out.println(uri);
+            getSemanticObject().getModel().registerClass(uri);
+            }
         }
     }
 
@@ -112,10 +126,16 @@ public class UserRepository extends UserRepositoryBase
 
     public SemanticProperty createStringExtendedAttribute(String name)
     {
+        return createStringExtendedAttribute(name, null);
+    }
+    
+    public SemanticProperty createStringExtendedAttribute(String name, String clsName)
+    {
+        SemanticClass cls = (null==clsName)?getExtendedAttributesClass():getUserType(clsName);
         SemanticProperty sp = getExtendedAttributesClass().getProperty(name);
         if (null == sp)
         {
-            sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, getExtendedAttributesClass(), SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_STRING);
+            sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, cls, SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_STRING);
         }
         return sp;
     }
@@ -135,6 +155,21 @@ public class UserRepository extends UserRepositoryBase
             cls = getSemanticObject().getModel().createSemanticClass(uri);
             setProperty(SWBUR_ClassHold, uri);
         } else
+        {
+            cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(uri);
+        }
+        return cls;
+    }
+    
+    public SemanticClass getUserType(String name){
+        SemanticClass cls = null;
+        String uri = getProperty(SWBUR_ClassUserTypeHold+name);
+        if (uri== null)
+        {
+            uri = getId()+ "/" + name +  SWBUR_ClassUserTypePost;
+            cls = getSemanticObject().getModel().createSemanticClass(uri);
+            setProperty(SWBUR_ClassUserTypeHold+name, uri);
+        } else 
         {
             cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(uri);
         }
