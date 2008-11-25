@@ -3,6 +3,7 @@ package org.semanticwb.model;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
+import java.util.ArrayList;
 import java.util.Iterator;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.base.*;
@@ -20,11 +21,13 @@ public class UserRepository extends UserRepositoryBase
     public static final String SWBUR_ClassHold = "extendedAttributes";
     public static final String SWBUR_ClassPost = "#clsExtendedAttibutes";
     public static final String SWBUR_ClassUserTypeHold = "userType";
-    public static final String SWBUR_ClassUserTypePost = "#clsUserType";
+    public static final String SWBUR_ClassUserTypePost = "/clsUserType";
+    private static ArrayList<String> userTypes = new ArrayList<String>();
 
     public UserRepository(SemanticObject base)
     {
         super(base);
+      //  System.out.println("Creando repositorio: "+base);
         String uri = getProperty(SWBUR_ClassHold);
         if (uri != null)
         {
@@ -34,10 +37,11 @@ public class UserRepository extends UserRepositoryBase
         StmtIterator ptopIt = getSemanticObject().getModel().getRDFModel().listStatements(getSemanticObject().getRDFResource(),null, (String)null);
         while (ptopIt.hasNext()){
             Statement sp = (Statement)ptopIt.next();
-            System.out.println("Prop: "+sp.toString()+" - "+sp.getPredicate().getLocalName());
+         //   System.out.println("Prop: "+sp.toString()+" - "+sp.getObject().toString());
             if (sp.getPredicate().getLocalName().startsWith(SWBUR_ClassUserTypeHold)){
             uri = sp.getObject().toString();
-            System.out.println(uri);
+         //   System.out.println(uri);
+            userTypes.add(uri.split("#")[1]);
             getSemanticObject().getModel().registerClass(uri);
             }
         }
@@ -166,13 +170,19 @@ public class UserRepository extends UserRepositoryBase
         String uri = getProperty(SWBUR_ClassUserTypeHold+name);
         if (uri== null)
         {
-            uri = getId()+ "/" + name +  SWBUR_ClassUserTypePost;
+            uri = getId() +  SWBUR_ClassUserTypePost + "#" + name;
             cls = getSemanticObject().getModel().createSemanticClass(uri);
             setProperty(SWBUR_ClassUserTypeHold+name, uri);
+            userTypes.add(uri.split("#")[1]);
         } else 
         {
             cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(uri);
         }
         return cls;
+    }
+    
+    public Iterator<String> getUserTypes()
+    {
+        return userTypes.iterator();
     }
 }
