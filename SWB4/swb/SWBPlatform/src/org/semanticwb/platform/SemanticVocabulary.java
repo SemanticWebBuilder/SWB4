@@ -63,6 +63,7 @@ public class SemanticVocabulary
     public static final String SWB_PROP_DISPLAYOBJECT=URI+"displayObject";
     public static final String SWB_PROP_EXTERNALINVOCATION=URI+"externalInvocation";
     public static final String SWB_PROP_HERARQUICALRELATION=URI+"herarquicalRelation";
+    public static final String SWB_PROP_HASHERARQUICALNODE=URI+"hasHerarquicalNode";
 //    public static final String SWB_PROP_PROPGROUP=URI+"propGroup";
 //    public static final String SWB_PROP_PROPINDEX=URI+"propIndex";
     public static final String SWB_ANNOT_CLASSNAME=URI+"className";
@@ -102,7 +103,9 @@ public class SemanticVocabulary
                 //System.out.println("Prop:"+tpp+"\t"+tpp.getDomainClass()+"\t"+tpc+"\t"+tpc.isSubClass(tpp.getDomainClass()));
                 if(tpp.getDomainClass()==null || (tpp.hasInverse() && !(tpc.equals(tpp.getDomainClass())||tpc.isSubClass(tpp.getDomainClass()))))
                 {
+                    System.out.println("Remove:"+tpp.getName());
                     tppit.remove();
+                    tpc.herarquicalProps.remove(tpp);
                 }
             }
         }        
@@ -142,12 +145,15 @@ public class SemanticVocabulary
         if(prop==null)
         {
             OntModel ont=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
-            Property p=ont.getProperty(uri);
-            if(p!=null)
+            try
             {
-                prop=new SemanticProperty(p);
-                addSemanticProperty(prop);
-            }
+                Property p=ont.getProperty(uri);
+                if(p!=null)
+                {
+                    prop=new SemanticProperty(p);
+                    addSemanticProperty(prop);
+                }
+            }catch(Exception e){log.warn(uri,e);}
         }
         return prop;
     }    

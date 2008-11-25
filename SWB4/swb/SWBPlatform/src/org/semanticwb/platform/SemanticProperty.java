@@ -106,7 +106,18 @@ public class SemanticProperty
             return st.getBoolean();
         }
         return false;
-    }  
+    }
+
+    public boolean isHeraquicalRelation()
+    {
+        Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_HERARQUICALRELATION));
+        if(st!=null)
+        {
+            return st.getBoolean();
+        }
+        return false;
+    }
+
     
     public boolean isExternalInvocation()
     {
