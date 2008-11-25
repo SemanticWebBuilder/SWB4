@@ -2,6 +2,12 @@ package org.semanticwb.model.base;
 
 import java.util.Date;
 import java.util.Iterator;
+import java.util.ArrayList;
+import org.semanticwb.model.base.GenericObjectBase;
+import org.semanticwb.model.SWBVocabulary;
+import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.GenericObject;
+import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.*;
 import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
@@ -9,7 +15,7 @@ import org.semanticwb.platform.*;
 
 public class TemplateBase extends GenericObjectBase implements RoleRefable,Calendarable,Versionable,Activeable,Deleteable,Traceable,RuleRefable,Descriptiveable,Localeable
 {
-    SWBVocabulary vocabulary=SWBContext.getVocabulary();
+    public static SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
     public TemplateBase(SemanticObject base)
     {
@@ -18,37 +24,37 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
 
     public Date getCreated()
     {
-        return getSemanticObject().getDateProperty(vocabulary.created);
+        return getSemanticObject().getDateProperty(vocabulary.swb_created);
     }
 
     public void setCreated(Date created)
     {
-        getSemanticObject().setDateProperty(vocabulary.created, created);
+        getSemanticObject().setDateProperty(vocabulary.swb_created, created);
     }
 
     public GenericIterator<org.semanticwb.model.RoleRef> listRoleRefs()
     {
-        return new GenericIterator<org.semanticwb.model.RoleRef>(org.semanticwb.model.RoleRef.class, getSemanticObject().listObjectProperties(vocabulary.hasRoleRef));    }
+        return new GenericIterator<org.semanticwb.model.RoleRef>(org.semanticwb.model.RoleRef.class, getSemanticObject().listObjectProperties(vocabulary.swb_hasRoleRef));    }
 
     public void addRoleRef(org.semanticwb.model.RoleRef roleref)
     {
-        getSemanticObject().addObjectProperty(vocabulary.hasRoleRef, roleref.getSemanticObject());
+        getSemanticObject().addObjectProperty(vocabulary.swb_hasRoleRef, roleref.getSemanticObject());
     }
 
     public void removeAllRoleRef()
     {
-        getSemanticObject().removeProperty(vocabulary.hasRoleRef);
+        getSemanticObject().removeProperty(vocabulary.swb_hasRoleRef);
     }
 
     public void removeRoleRef(org.semanticwb.model.RoleRef roleref)
     {
-        getSemanticObject().removeObjectProperty(vocabulary.hasRoleRef,roleref.getSemanticObject());
+        getSemanticObject().removeObjectProperty(vocabulary.swb_hasRoleRef,roleref.getSemanticObject());
     }
 
     public RoleRef getRoleRef()
     {
          RoleRef ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasRoleRef);
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasRoleRef);
          if(obj!=null)
          {
              ret=(RoleRef)vocabulary.swb_RoleRef.newGenericInstance(obj);
@@ -58,38 +64,38 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
 
     public boolean isDeleted()
     {
-        return getSemanticObject().getBooleanProperty(vocabulary.deleted);
+        return getSemanticObject().getBooleanProperty(vocabulary.swb_deleted);
     }
 
     public void setDeleted(boolean deleted)
     {
-        getSemanticObject().setBooleanProperty(vocabulary.deleted, deleted);
+        getSemanticObject().setBooleanProperty(vocabulary.swb_deleted, deleted);
     }
 
     public boolean isActive()
     {
-        return getSemanticObject().getBooleanProperty(vocabulary.active);
+        return getSemanticObject().getBooleanProperty(vocabulary.swb_active);
     }
 
     public void setActive(boolean active)
     {
-        getSemanticObject().setBooleanProperty(vocabulary.active, active);
+        getSemanticObject().setBooleanProperty(vocabulary.swb_active, active);
     }
 
     public void setModifiedBy(org.semanticwb.model.User user)
     {
-        getSemanticObject().setObjectProperty(vocabulary.modifiedBy, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.swb_modifiedBy, user.getSemanticObject());
     }
 
     public void removeModifiedBy()
     {
-        getSemanticObject().removeProperty(vocabulary.modifiedBy);
+        getSemanticObject().removeProperty(vocabulary.swb_modifiedBy);
     }
 
     public User getModifiedBy()
     {
          User ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.modifiedBy);
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_modifiedBy);
          if(obj!=null)
          {
              ret=(User)vocabulary.swb_User.newGenericInstance(obj);
@@ -99,38 +105,43 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
 
     public String getTitle()
     {
-        return getSemanticObject().getProperty(vocabulary.title);
+        return getSemanticObject().getProperty(vocabulary.swb_title);
     }
 
     public void setTitle(String title)
     {
-        getSemanticObject().setProperty(vocabulary.title, title);
+        getSemanticObject().setProperty(vocabulary.swb_title, title);
     }
 
     public String getTitle(String lang)
     {
-        return getSemanticObject().getProperty(vocabulary.title, null, lang);
+        return getSemanticObject().getProperty(vocabulary.swb_title, null, lang);
+    }
+
+    public String getDisplayTitle(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(vocabulary.swb_title, lang);
     }
 
     public void setTitle(String title, String lang)
     {
-        getSemanticObject().setProperty(vocabulary.title, title, lang);
+        getSemanticObject().setProperty(vocabulary.swb_title, title, lang);
     }
 
     public void setTemplateGroup(org.semanticwb.model.TemplateGroup templategroup)
     {
-        getSemanticObject().setObjectProperty(vocabulary.templateGroup, templategroup.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.swb_templateGroup, templategroup.getSemanticObject());
     }
 
     public void removeTemplateGroup()
     {
-        getSemanticObject().removeProperty(vocabulary.templateGroup);
+        getSemanticObject().removeProperty(vocabulary.swb_templateGroup);
     }
 
     public TemplateGroup getTemplateGroup()
     {
          TemplateGroup ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.templateGroup);
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_templateGroup);
          if(obj!=null)
          {
              ret=(TemplateGroup)vocabulary.swb_TemplateGroup.newGenericInstance(obj);
@@ -140,18 +151,18 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
 
     public void setActualVersion(org.semanticwb.model.VersionInfo versioninfo)
     {
-        getSemanticObject().setObjectProperty(vocabulary.actualVersion, versioninfo.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.swb_actualVersion, versioninfo.getSemanticObject());
     }
 
     public void removeActualVersion()
     {
-        getSemanticObject().removeProperty(vocabulary.actualVersion);
+        getSemanticObject().removeProperty(vocabulary.swb_actualVersion);
     }
 
     public VersionInfo getActualVersion()
     {
          VersionInfo ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.actualVersion);
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_actualVersion);
          if(obj!=null)
          {
              ret=(VersionInfo)vocabulary.swb_VersionInfo.newGenericInstance(obj);
@@ -161,18 +172,18 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
 
     public void setLanguage(org.semanticwb.model.Language language)
     {
-        getSemanticObject().setObjectProperty(vocabulary.language, language.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.swb_language, language.getSemanticObject());
     }
 
     public void removeLanguage()
     {
-        getSemanticObject().removeProperty(vocabulary.language);
+        getSemanticObject().removeProperty(vocabulary.swb_language);
     }
 
     public Language getLanguage()
     {
          Language ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.language);
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_language);
          if(obj!=null)
          {
              ret=(Language)vocabulary.swb_Language.newGenericInstance(obj);
@@ -182,28 +193,28 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
 
     public Date getUpdated()
     {
-        return getSemanticObject().getDateProperty(vocabulary.updated);
+        return getSemanticObject().getDateProperty(vocabulary.swb_updated);
     }
 
     public void setUpdated(Date updated)
     {
-        getSemanticObject().setDateProperty(vocabulary.updated, updated);
+        getSemanticObject().setDateProperty(vocabulary.swb_updated, updated);
     }
 
     public void setLastVersion(org.semanticwb.model.VersionInfo versioninfo)
     {
-        getSemanticObject().setObjectProperty(vocabulary.lastVersion, versioninfo.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.swb_lastVersion, versioninfo.getSemanticObject());
     }
 
     public void removeLastVersion()
     {
-        getSemanticObject().removeProperty(vocabulary.lastVersion);
+        getSemanticObject().removeProperty(vocabulary.swb_lastVersion);
     }
 
     public VersionInfo getLastVersion()
     {
          VersionInfo ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.lastVersion);
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_lastVersion);
          if(obj!=null)
          {
              ret=(VersionInfo)vocabulary.swb_VersionInfo.newGenericInstance(obj);
@@ -213,18 +224,18 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
 
     public void setCreator(org.semanticwb.model.User user)
     {
-        getSemanticObject().setObjectProperty(vocabulary.creator, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.swb_creator, user.getSemanticObject());
     }
 
     public void removeCreator()
     {
-        getSemanticObject().removeProperty(vocabulary.creator);
+        getSemanticObject().removeProperty(vocabulary.swb_creator);
     }
 
     public User getCreator()
     {
          User ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.creator);
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_creator);
          if(obj!=null)
          {
              ret=(User)vocabulary.swb_User.newGenericInstance(obj);
@@ -234,27 +245,27 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
 
     public GenericIterator<org.semanticwb.model.RuleRef> listRuleRefs()
     {
-        return new GenericIterator<org.semanticwb.model.RuleRef>(org.semanticwb.model.RuleRef.class, getSemanticObject().listObjectProperties(vocabulary.hasRuleRef));    }
+        return new GenericIterator<org.semanticwb.model.RuleRef>(org.semanticwb.model.RuleRef.class, getSemanticObject().listObjectProperties(vocabulary.swb_hasRuleRef));    }
 
     public void addRuleRef(org.semanticwb.model.RuleRef ruleref)
     {
-        getSemanticObject().addObjectProperty(vocabulary.hasRuleRef, ruleref.getSemanticObject());
+        getSemanticObject().addObjectProperty(vocabulary.swb_hasRuleRef, ruleref.getSemanticObject());
     }
 
     public void removeAllRuleRef()
     {
-        getSemanticObject().removeProperty(vocabulary.hasRuleRef);
+        getSemanticObject().removeProperty(vocabulary.swb_hasRuleRef);
     }
 
     public void removeRuleRef(org.semanticwb.model.RuleRef ruleref)
     {
-        getSemanticObject().removeObjectProperty(vocabulary.hasRuleRef,ruleref.getSemanticObject());
+        getSemanticObject().removeObjectProperty(vocabulary.swb_hasRuleRef,ruleref.getSemanticObject());
     }
 
     public RuleRef getRuleRef()
     {
          RuleRef ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasRuleRef);
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasRuleRef);
          if(obj!=null)
          {
              ret=(RuleRef)vocabulary.swb_RuleRef.newGenericInstance(obj);
@@ -264,27 +275,27 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
 
     public GenericIterator<org.semanticwb.model.Calendar> listCalendars()
     {
-        return new GenericIterator<org.semanticwb.model.Calendar>(org.semanticwb.model.Calendar.class, getSemanticObject().listObjectProperties(vocabulary.hasCalendar));    }
+        return new GenericIterator<org.semanticwb.model.Calendar>(org.semanticwb.model.Calendar.class, getSemanticObject().listObjectProperties(vocabulary.swb_hasCalendar));    }
 
     public void addCalendar(org.semanticwb.model.Calendar calendar)
     {
-        getSemanticObject().addObjectProperty(vocabulary.hasCalendar, calendar.getSemanticObject());
+        getSemanticObject().addObjectProperty(vocabulary.swb_hasCalendar, calendar.getSemanticObject());
     }
 
     public void removeAllCalendar()
     {
-        getSemanticObject().removeProperty(vocabulary.hasCalendar);
+        getSemanticObject().removeProperty(vocabulary.swb_hasCalendar);
     }
 
     public void removeCalendar(org.semanticwb.model.Calendar calendar)
     {
-        getSemanticObject().removeObjectProperty(vocabulary.hasCalendar,calendar.getSemanticObject());
+        getSemanticObject().removeObjectProperty(vocabulary.swb_hasCalendar,calendar.getSemanticObject());
     }
 
     public Calendar getCalendar()
     {
          Calendar ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.hasCalendar);
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasCalendar);
          if(obj!=null)
          {
              ret=(Calendar)vocabulary.swb_Calendar.newGenericInstance(obj);
@@ -294,22 +305,27 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
 
     public String getDescription()
     {
-        return getSemanticObject().getProperty(vocabulary.description);
+        return getSemanticObject().getProperty(vocabulary.swb_description);
     }
 
     public void setDescription(String description)
     {
-        getSemanticObject().setProperty(vocabulary.description, description);
+        getSemanticObject().setProperty(vocabulary.swb_description, description);
     }
 
     public String getDescription(String lang)
     {
-        return getSemanticObject().getProperty(vocabulary.description, null, lang);
+        return getSemanticObject().getProperty(vocabulary.swb_description, null, lang);
+    }
+
+    public String getDisplayDescription(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(vocabulary.swb_description, lang);
     }
 
     public void setDescription(String description, String lang)
     {
-        getSemanticObject().setProperty(vocabulary.description, description, lang);
+        getSemanticObject().setProperty(vocabulary.swb_description, description, lang);
     }
 
     public void remove()
