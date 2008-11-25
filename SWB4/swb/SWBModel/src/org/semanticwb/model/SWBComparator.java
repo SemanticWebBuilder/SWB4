@@ -34,12 +34,12 @@ public class SWBComparator implements Comparator
         else sobj1 = (SemanticObject) obj1;
         if(obj2 instanceof GenericObject) sobj2=((GenericObject)obj2).getSemanticObject();
         else sobj2 = (SemanticObject) obj2;
-        String name1=sobj1.getProperty(SWBContext.getVocabulary().webPageSortName);
-        if(name1==null)name1=sobj1.getProperty(SWBContext.getVocabulary().title,null,lang);
-        if(name1==null)name1=sobj1.getProperty(SWBContext.getVocabulary().title);
-        String name2=sobj2.getProperty(SWBContext.getVocabulary().webPageSortName);
-        if(name2==null)name2=sobj2.getProperty(SWBContext.getVocabulary().title,null,lang);
-        if(name2==null)name2=sobj2.getProperty(SWBContext.getVocabulary().title);
+        String name1=sobj1.getProperty(SWBContext.getVocabulary().swb_webPageSortName);
+        if(name1==null)name1=sobj1.getProperty(SWBContext.getVocabulary().swb_title,null,lang);
+        if(name1==null)name1=sobj1.getProperty(SWBContext.getVocabulary().swb_title);
+        String name2=sobj2.getProperty(SWBContext.getVocabulary().swb_webPageSortName);
+        if(name2==null)name2=sobj2.getProperty(SWBContext.getVocabulary().swb_title,null,lang);
+        if(name2==null)name2=sobj2.getProperty(SWBContext.getVocabulary().swb_title);
         //System.out.println("name1:"+name1+" name2:"+name2);
         if(name1!=null && name2!=null)
         {
