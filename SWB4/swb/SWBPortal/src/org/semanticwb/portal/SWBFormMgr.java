@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.DisplayProperty;
 import org.semanticwb.model.FormElement;
 import org.semanticwb.model.FormView;
@@ -25,8 +26,15 @@ public class SWBFormMgr
     public static final String MODE_CREATE="create";
     public static final String TYPE_XHTML="xhtml";
     public static final String TYPE_IPHONE="iphone";
+
+    public static final String PRM_ID="id";
+    public static final String PRM_MODE="smode";
+    public static final String PRM_REF="sref";
+    public static final String PRM_URI="suri";
+    public static final String PRM_CLS="scls";
     
     private SemanticObject m_obj;
+    private SemanticObject m_ref;
     private SemanticClass m_cls;
     private FormView m_fview=null;
     private Map<SemanticProperty, String> m_propmap=null;
@@ -46,6 +54,21 @@ public class SWBFormMgr
         this.m_fview=SWBContext.getFormView(frmview);
         init();
     }
+
+    /**
+     * Modo creacion
+     * @param cls
+     * @param frmview
+     */
+    public SWBFormMgr(SemanticClass cls, SemanticObject ref, String frmview)
+    {
+        this.m_mode=MODE_CREATE;
+        this.m_cls=cls;
+        this.m_ref=ref;
+        this.m_fview=SWBContext.getFormView(frmview);
+        init();
+    }
+
     
     public void init()
     {
@@ -65,15 +88,20 @@ public class SWBFormMgr
     
     public void addProperty(SemanticProperty prop)
     {
+        boolean createGroup=false;
+        boolean addProp=false;
         SemanticObject obj=prop.getDisplayProperty();
         String grp=null;
         boolean hidden=false;
+        boolean required=false;
         if(obj!=null)
         {
             DisplayProperty disp=new DisplayProperty(obj);       
             grp=disp.getGroup();
             hidden=disp.isHidden();
+            required=disp.isRequired();
         }
+
         if(grp==null)grp="General";
         TreeSet<SemanticProperty> props=groups.get(grp);
         if(props==null)
@@ -90,17 +118,34 @@ public class SWBFormMgr
                     return v1<v2?-1:1;
                 }
             });
-            groups.put(grp, props);
+            createGroup=true;
         }
         if(m_fview!=null)           //valida si la propiedad se encuentra dentro de la vista
         {
             if(m_propmap.containsKey(prop))
             {
-                props.add(prop);
+                addProp=true;
             }
         }else
         {
-            if(!hidden)props.add(prop);
+            if(!hidden)
+            {
+                if(m_mode.equals(MODE_CREATE))      //solo se agregan las requeridas
+                {
+                    if(required)
+                    {
+                        addProp=true;
+                    }
+                }else
+                {
+                    addProp=true;
+                }
+            }
+        }
+        if(addProp)
+        {
+            props.add(prop);
+            if(createGroup)groups.put(grp, props);
         }
     }
     
@@ -149,68 +194,117 @@ public class SWBFormMgr
         return ret;
     }
     
-    public void processForm(HttpServletRequest request, HttpServletResponse response)
+    public SemanticObject processForm(HttpServletRequest request, HttpServletResponse response)
     {
-        String smode=request.getParameter("smode");
+        SemanticObject ret=m_obj;
+        String smode=request.getParameter(PRM_MODE);
         if(smode!=null)
         {
-            Iterator<SemanticProperty> it=m_cls.listProperties();
-            while(it.hasNext())
+            if(smode.equals(MODE_CREATE))
             {
-                SemanticProperty prop=it.next();   
-                processElement(request, prop, smode);
+                SemanticModel model=m_ref.getModel();
+                if(!m_cls.isAutogenId())
+                {
+                    String id=request.getParameter(PRM_ID);
+                    ret=model.createSemanticObjectById(id, m_cls);
+                }else
+                {
+                    long id=SWBPlatform.getSemanticMgr().getCounter(model.getName()+"/"+m_cls.getName());
+                    ret=model.createSemanticObjectById(""+id,m_cls);
+                }
+                m_obj=ret;
+            }
+            //else
+            {
+                Iterator<SemanticProperty> it=m_cls.listProperties();
+                while(it.hasNext())
+                {
+                    SemanticProperty prop=it.next();
+                    processElement(request, prop, smode);
+                }
             }
         }
+        return ret;
     }
     
     public String renderXHTMLForm()
-    {        
-        String frmname=m_obj.getURI()+"/form";
+    {
         StringBuffer ret=new StringBuffer();
-        ret.append("<form id=\""+frmname+"\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\""+m_action+"\" method=\""+m_method+"\">");
-        ret.append("    <input type=\"hidden\" name=\"suri\" value=\""+m_obj.getURI()+"\">");
-        ret.append("    <input type=\"hidden\" name=\"smode\" value=\""+m_mode+"\">");
-        ret.append("	<fieldset>");
-        ret.append("	    <ol>");
-        ret.append("            <li>");
-        ret.append("                <label>Identificador &nbsp;</label> <span>"+m_obj.getId()+"</span>");
-        ret.append("            </li>");
-        ret.append("	    </ol>");
-        ret.append("	</fieldset>");
-        
-        Iterator<String> itgp=groups.keySet().iterator();
-        while(itgp.hasNext())
+        String uri;
+        String name;
+        String frmname=null;
+        if(m_mode.equals(MODE_CREATE))
         {
-            String group=itgp.next();
+            uri=m_cls.getURI();
+        }else
+        {
+            uri=m_obj.getURI();
+        }
+        frmname=uri+"/form";
+        ret.append("<form id=\""+frmname+"\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\""+m_action+"\" method=\""+m_method+"\">");
+        if(m_obj!=null)ret.append("    <input type=\"hidden\" name=\""+PRM_URI+"\" value=\""+m_obj.getURI()+"\">");
+        if(m_cls!=null)ret.append("    <input type=\"hidden\" name=\""+PRM_CLS+"\" value=\""+m_cls.getURI()+"\">");
+        if(m_mode!=null)ret.append("    <input type=\"hidden\" name=\""+PRM_MODE+"\" value=\""+m_mode+"\">");
+        if(m_ref!=null)ret.append("    <input type=\"hidden\" name=\""+PRM_REF+"\" value=\""+m_ref.getURI()+"\">");
+
+        if(!m_mode.equals(MODE_CREATE))
+        {
             ret.append("	<fieldset>");
-            ret.append("	    <legend>"+group+"</legend>");
             ret.append("	    <ol>");
-//            ret.append("	    <table border=\"1\" width=\"100%\">");
-            Iterator<SemanticProperty> it=groups.get(group).iterator();
-            while(it.hasNext())
-            {
-                SemanticProperty prop=it.next();   
-                String code=null;
-                if(m_propmap!=null)
-                {
-                    code=renderElement(prop,m_propmap.get(prop));
-                }else
-                {
-                    code=renderElement(prop,m_mode);
-                }
-                if(code!=null && code.length()>0)
-                {
-                    ret.append("<li>");
-//                    ret.append("<tr><td>");
-                    ret.append(code);
-//                    ret.append("</td></tr>");
-                    ret.append("</li>");
-                }
-            }
-            //ret.append("	    </table>");
+            ret.append("            <li>");
+            ret.append("                <label>Identificador &nbsp;</label> <span>"+m_obj.getId()+"</span>");
+            ret.append("            </li>");
             ret.append("	    </ol>");
             ret.append("	</fieldset>");
         }
+
+        if(m_mode.equals(MODE_CREATE) && !m_cls.isAutogenId())
+        {
+            ret.append("	<fieldset>");
+            ret.append("	    <ol>");
+            ret.append("            <li>");
+            ret.append("                <label>Identificador <em>*</em></label> <input type=\"text\" name=\""+PRM_ID+"\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura Identificador.\" invalidMessage=\"Identificador es requerido.\" trim=\"true\"/>");
+            ret.append("            </li>");
+            ret.append("	    </ol>");
+            ret.append("	</fieldset>");
+        }
+//        else
+        {
+            Iterator<String> itgp=groups.keySet().iterator();
+            while(itgp.hasNext())
+            {
+                String group=itgp.next();
+                ret.append("	<fieldset>");
+                ret.append("	    <legend>"+group+"</legend>");
+                ret.append("	    <ol>");
+    //            ret.append("	    <table border=\"1\" width=\"100%\">");
+                Iterator<SemanticProperty> it=groups.get(group).iterator();
+                while(it.hasNext())
+                {
+                    SemanticProperty prop=it.next();
+                    String code=null;
+                    if(m_propmap!=null)
+                    {
+                        code=renderElement(prop,m_propmap.get(prop));
+                    }else
+                    {
+                        code=renderElement(prop,m_mode);
+                    }
+                    if(code!=null && code.length()>0)
+                    {
+                        ret.append("<li>");
+    //                    ret.append("<tr><td>");
+                        ret.append(code);
+    //                    ret.append("</td></tr>");
+                        ret.append("</li>");
+                    }
+                }
+                //ret.append("	    </table>");
+                ret.append("	    </ol>");
+                ret.append("	</fieldset>");
+            }
+        }
+
         ret.append("    <p><input type=\"button\" onclick=\"submitForm('"+frmname+"');\" value=\"Actualizar\"/></p>");
         ret.append("</form>");
         return ret.toString();
