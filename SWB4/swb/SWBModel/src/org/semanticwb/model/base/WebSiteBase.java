@@ -2,6 +2,12 @@ package org.semanticwb.model.base;
 
 import java.util.Date;
 import java.util.Iterator;
+import java.util.ArrayList;
+import org.semanticwb.model.base.GenericObjectBase;
+import org.semanticwb.model.SWBVocabulary;
+import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.GenericObject;
+import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.*;
 import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
@@ -9,7 +15,7 @@ import org.semanticwb.platform.*;
 
 public class WebSiteBase extends GenericObjectBase implements Deleteable,Localeable,Activeable,Versionable,Descriptiveable,Traceable
 {
-    SWBVocabulary vocabulary=SWBContext.getVocabulary();
+    public static SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
     public WebSiteBase(SemanticObject base)
     {
@@ -18,48 +24,48 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public Date getCreated()
     {
-        return getSemanticObject().getDateProperty(vocabulary.created);
+        return getSemanticObject().getDateProperty(vocabulary.swb_created);
     }
 
     public void setCreated(Date created)
     {
-        getSemanticObject().setDateProperty(vocabulary.created, created);
+        getSemanticObject().setDateProperty(vocabulary.swb_created, created);
     }
 
     public boolean isDeleted()
     {
-        return getSemanticObject().getBooleanProperty(vocabulary.deleted);
+        return getSemanticObject().getBooleanProperty(vocabulary.swb_deleted);
     }
 
     public void setDeleted(boolean deleted)
     {
-        getSemanticObject().setBooleanProperty(vocabulary.deleted, deleted);
+        getSemanticObject().setBooleanProperty(vocabulary.swb_deleted, deleted);
     }
 
     public boolean isActive()
     {
-        return getSemanticObject().getBooleanProperty(vocabulary.active);
+        return getSemanticObject().getBooleanProperty(vocabulary.swb_active);
     }
 
     public void setActive(boolean active)
     {
-        getSemanticObject().setBooleanProperty(vocabulary.active, active);
+        getSemanticObject().setBooleanProperty(vocabulary.swb_active, active);
     }
 
     public void setModifiedBy(org.semanticwb.model.User user)
     {
-        getSemanticObject().setObjectProperty(vocabulary.modifiedBy, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.swb_modifiedBy, user.getSemanticObject());
     }
 
     public void removeModifiedBy()
     {
-        getSemanticObject().removeProperty(vocabulary.modifiedBy);
+        getSemanticObject().removeProperty(vocabulary.swb_modifiedBy);
     }
 
     public User getModifiedBy()
     {
          User ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.modifiedBy);
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_modifiedBy);
          if(obj!=null)
          {
              ret=(User)vocabulary.swb_User.newGenericInstance(obj);
@@ -69,38 +75,43 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public String getTitle()
     {
-        return getSemanticObject().getProperty(vocabulary.title);
+        return getSemanticObject().getProperty(vocabulary.swb_title);
     }
 
     public void setTitle(String title)
     {
-        getSemanticObject().setProperty(vocabulary.title, title);
+        getSemanticObject().setProperty(vocabulary.swb_title, title);
     }
 
     public String getTitle(String lang)
     {
-        return getSemanticObject().getProperty(vocabulary.title, null, lang);
+        return getSemanticObject().getProperty(vocabulary.swb_title, null, lang);
+    }
+
+    public String getDisplayTitle(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(vocabulary.swb_title, lang);
     }
 
     public void setTitle(String title, String lang)
     {
-        getSemanticObject().setProperty(vocabulary.title, title, lang);
+        getSemanticObject().setProperty(vocabulary.swb_title, title, lang);
     }
 
     public void setActualVersion(org.semanticwb.model.VersionInfo versioninfo)
     {
-        getSemanticObject().setObjectProperty(vocabulary.actualVersion, versioninfo.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.swb_actualVersion, versioninfo.getSemanticObject());
     }
 
     public void removeActualVersion()
     {
-        getSemanticObject().removeProperty(vocabulary.actualVersion);
+        getSemanticObject().removeProperty(vocabulary.swb_actualVersion);
     }
 
     public VersionInfo getActualVersion()
     {
          VersionInfo ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.actualVersion);
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_actualVersion);
          if(obj!=null)
          {
              ret=(VersionInfo)vocabulary.swb_VersionInfo.newGenericInstance(obj);
@@ -110,18 +121,18 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public void setLanguage(org.semanticwb.model.Language language)
     {
-        getSemanticObject().setObjectProperty(vocabulary.language, language.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.swb_language, language.getSemanticObject());
     }
 
     public void removeLanguage()
     {
-        getSemanticObject().removeProperty(vocabulary.language);
+        getSemanticObject().removeProperty(vocabulary.swb_language);
     }
 
     public Language getLanguage()
     {
          Language ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.language);
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_language);
          if(obj!=null)
          {
              ret=(Language)vocabulary.swb_Language.newGenericInstance(obj);
@@ -131,28 +142,28 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public Date getUpdated()
     {
-        return getSemanticObject().getDateProperty(vocabulary.updated);
+        return getSemanticObject().getDateProperty(vocabulary.swb_updated);
     }
 
     public void setUpdated(Date updated)
     {
-        getSemanticObject().setDateProperty(vocabulary.updated, updated);
+        getSemanticObject().setDateProperty(vocabulary.swb_updated, updated);
     }
 
     public void setLastVersion(org.semanticwb.model.VersionInfo versioninfo)
     {
-        getSemanticObject().setObjectProperty(vocabulary.lastVersion, versioninfo.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.swb_lastVersion, versioninfo.getSemanticObject());
     }
 
     public void removeLastVersion()
     {
-        getSemanticObject().removeProperty(vocabulary.lastVersion);
+        getSemanticObject().removeProperty(vocabulary.swb_lastVersion);
     }
 
     public VersionInfo getLastVersion()
     {
          VersionInfo ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.lastVersion);
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_lastVersion);
          if(obj!=null)
          {
              ret=(VersionInfo)vocabulary.swb_VersionInfo.newGenericInstance(obj);
@@ -162,18 +173,18 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public void setCreator(org.semanticwb.model.User user)
     {
-        getSemanticObject().setObjectProperty(vocabulary.creator, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.swb_creator, user.getSemanticObject());
     }
 
     public void removeCreator()
     {
-        getSemanticObject().removeProperty(vocabulary.creator);
+        getSemanticObject().removeProperty(vocabulary.swb_creator);
     }
 
     public User getCreator()
     {
          User ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.creator);
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_creator);
          if(obj!=null)
          {
              ret=(User)vocabulary.swb_User.newGenericInstance(obj);
@@ -183,18 +194,18 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public void setHomePage(org.semanticwb.model.WebPage webpage)
     {
-        getSemanticObject().setObjectProperty(vocabulary.homePage, webpage.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.swb_homePage, webpage.getSemanticObject());
     }
 
     public void removeHomePage()
     {
-        getSemanticObject().removeProperty(vocabulary.homePage);
+        getSemanticObject().removeProperty(vocabulary.swb_homePage);
     }
 
     public WebPage getHomePage()
     {
          WebPage ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.homePage);
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_homePage);
          if(obj!=null)
          {
              ret=(WebPage)vocabulary.swb_WebPage.newGenericInstance(obj);
@@ -204,18 +215,18 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public void setUserRepository(org.semanticwb.model.UserRepository userrepository)
     {
-        getSemanticObject().setObjectProperty(vocabulary.userRepository, userrepository.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.swb_userRepository, userrepository.getSemanticObject());
     }
 
     public void removeUserRepository()
     {
-        getSemanticObject().removeProperty(vocabulary.userRepository);
+        getSemanticObject().removeProperty(vocabulary.swb_userRepository);
     }
 
     public UserRepository getUserRepository()
     {
          UserRepository ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.userRepository);
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_userRepository);
          if(obj!=null)
          {
              ret=(UserRepository)vocabulary.swb_UserRepository.newGenericInstance(obj);
@@ -225,22 +236,27 @@ public class WebSiteBase extends GenericObjectBase implements Deleteable,Localea
 
     public String getDescription()
     {
-        return getSemanticObject().getProperty(vocabulary.description);
+        return getSemanticObject().getProperty(vocabulary.swb_description);
     }
 
     public void setDescription(String description)
     {
-        getSemanticObject().setProperty(vocabulary.description, description);
+        getSemanticObject().setProperty(vocabulary.swb_description, description);
     }
 
     public String getDescription(String lang)
     {
-        return getSemanticObject().getProperty(vocabulary.description, null, lang);
+        return getSemanticObject().getProperty(vocabulary.swb_description, null, lang);
+    }
+
+    public String getDisplayDescription(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(vocabulary.swb_description, lang);
     }
 
     public void setDescription(String description, String lang)
     {
-        getSemanticObject().setProperty(vocabulary.description, description, lang);
+        getSemanticObject().setProperty(vocabulary.swb_description, description, lang);
     }
 
     public WebPage getWebPage(String id)

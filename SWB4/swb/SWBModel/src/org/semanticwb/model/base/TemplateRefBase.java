@@ -2,12 +2,13 @@ package org.semanticwb.model.base;
 
 import java.util.Date;
 import java.util.Iterator;
+import java.util.ArrayList;
 import org.semanticwb.model.*;
 import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class TemplateRefBase extends ReferenceBase implements Templateable,Priorityable,Activeable,Deleteable
+public class TemplateRefBase extends Reference implements Templateable,Priorityable,Activeable,Deleteable
 {
 
     public TemplateRefBase(SemanticObject base)
@@ -17,28 +18,28 @@ public class TemplateRefBase extends ReferenceBase implements Templateable,Prior
 
     public boolean isDeleted()
     {
-        return getSemanticObject().getBooleanProperty(vocabulary.deleted);
+        return getSemanticObject().getBooleanProperty(vocabulary.swb_deleted);
     }
 
     public void setDeleted(boolean deleted)
     {
-        getSemanticObject().setBooleanProperty(vocabulary.deleted, deleted);
+        getSemanticObject().setBooleanProperty(vocabulary.swb_deleted, deleted);
     }
 
     public void setTemplate(org.semanticwb.model.Template template)
     {
-        getSemanticObject().setObjectProperty(vocabulary.template, template.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.swb_template, template.getSemanticObject());
     }
 
     public void removeTemplate()
     {
-        getSemanticObject().removeProperty(vocabulary.template);
+        getSemanticObject().removeProperty(vocabulary.swb_template);
     }
 
     public Template getTemplate()
     {
          Template ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.template);
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_template);
          if(obj!=null)
          {
              ret=(Template)vocabulary.swb_Template.newGenericInstance(obj);
@@ -48,11 +49,11 @@ public class TemplateRefBase extends ReferenceBase implements Templateable,Prior
 
     public int getPriority()
     {
-        return getSemanticObject().getIntProperty(vocabulary.priority);
+        return getSemanticObject().getIntProperty(vocabulary.swb_priority);
     }
 
     public void setPriority(int priority)
     {
-        getSemanticObject().setLongProperty(vocabulary.priority, priority);
+        getSemanticObject().setLongProperty(vocabulary.swb_priority, priority);
     }
 }
