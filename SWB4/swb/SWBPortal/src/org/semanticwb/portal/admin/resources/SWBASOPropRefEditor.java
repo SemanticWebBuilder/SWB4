@@ -99,9 +99,9 @@ public class SWBASOPropRefEditor extends GenericResource {
             out.println("<th>");
             out.println("Name");
             out.println("</th>");
-            if(hmprop.get(SWBContext.getVocabulary().created)!=null)
+            if(hmprop.get(SWBContext.getVocabulary().swb_created)!=null)
             {
-                sptemp = (SemanticProperty)hmprop.get(SWBContext.getVocabulary().created);
+                sptemp = (SemanticProperty)hmprop.get(SWBContext.getVocabulary().swb_created);
                 String propname = sptemp.getName();
                 try{
                     propname = sptemp.getDisplayName(user.getLanguage());
@@ -110,9 +110,9 @@ public class SWBASOPropRefEditor extends GenericResource {
                 out.println(propname);
                 out.println("</th>");
             }
-            if(hmprop.get(SWBContext.getVocabulary().updated)!=null)
+            if(hmprop.get(SWBContext.getVocabulary().swb_updated)!=null)
             {
-                sptemp = (SemanticProperty)hmprop.get(SWBContext.getVocabulary().updated);
+                sptemp = (SemanticProperty)hmprop.get(SWBContext.getVocabulary().swb_updated);
                 String propname = sptemp.getName();
                 try{
                     propname = sptemp.getDisplayName(user.getLanguage());
@@ -121,9 +121,9 @@ public class SWBASOPropRefEditor extends GenericResource {
                 out.println(propname);
                 out.println("</th>");
             }
-            if(hmprop.get(SWBContext.getVocabulary().priority)!=null)
+            if(hmprop.get(SWBContext.getVocabulary().swb_priority)!=null)
             {
-                sptemp = (SemanticProperty)hmprop.get(SWBContext.getVocabulary().priority);
+                sptemp = (SemanticProperty)hmprop.get(SWBContext.getVocabulary().swb_priority);
                 String propname = sptemp.getName();
                 try{
                     propname = sptemp.getDisplayName(user.getLanguage());
@@ -132,7 +132,7 @@ public class SWBASOPropRefEditor extends GenericResource {
                 out.println(propname);
                 out.println("</th>");
             }
-            if(hmprop.get(SWBContext.getVocabulary().active)!=null)
+            if(hmprop.get(SWBContext.getVocabulary().swb_active)!=null)
             {
                 out.println("<th>");
                 out.println("Status<br>Active/Unactive");
@@ -172,9 +172,9 @@ public class SWBASOPropRefEditor extends GenericResource {
                 out.println("<a href=\"#\"  onclick=\"submitUrl('"+urlchoose+"',this); return false;\">" + stitle + "</a>");
                 //out.println(stitle); 
                 out.println("</td>");
-                if(hmprop.get(SWBContext.getVocabulary().priority)!=null)
+                if(hmprop.get(SWBContext.getVocabulary().swb_priority)!=null)
                 {
-                    SemanticProperty semprop = (SemanticProperty)hmprop.get(SWBContext.getVocabulary().priority);
+                    SemanticProperty semprop = (SemanticProperty)hmprop.get(SWBContext.getVocabulary().swb_priority);
                     out.println("<td align=\"center\">");
                     SWBResourceURL urlu = paramRequest.getActionUrl();
                     urlu.setParameter("suri", id);
@@ -186,25 +186,25 @@ public class SWBASOPropRefEditor extends GenericResource {
                     out.println("<input type=\"text\" name=\""+semprop.getName()+"\" onblur=\"submitUrl('"+urlu+"&"+semprop.getName()+"='+this.value,this); return false;\" value=\""+getValueSemProp(sobj, semprop)+"\" />");
                     out.println("</td>");
                 }
-                if(hmprop.get(SWBContext.getVocabulary().created)!=null)
+                if(hmprop.get(SWBContext.getVocabulary().swb_created)!=null)
                 {
-                    SemanticProperty semprop = (SemanticProperty)hmprop.get(SWBContext.getVocabulary().created);
+                    SemanticProperty semprop = (SemanticProperty)hmprop.get(SWBContext.getVocabulary().swb_created);
                     out.println("<td>");
                     out.println(getValueSemProp(sobj,semprop));
                     out.println("</td>");
                 }
-                if(hmprop.get(SWBContext.getVocabulary().updated)!=null)
+                if(hmprop.get(SWBContext.getVocabulary().swb_updated)!=null)
                 {
-                    SemanticProperty semprop = (SemanticProperty)hmprop.get(SWBContext.getVocabulary().updated);
+                    SemanticProperty semprop = (SemanticProperty)hmprop.get(SWBContext.getVocabulary().swb_updated);
                     out.println("<td>");
                     out.println(getValueSemProp(sobj,semprop));
                     out.println("</td>");
                 }
-                if(hmprop.get(SWBContext.getVocabulary().active)!=null)
+                if(hmprop.get(SWBContext.getVocabulary().swb_active)!=null)
                 {
                     out.println("<td align=\"center\">");
                     boolean activo=false;
-                    if(sobj.getBooleanProperty(SWBContext.getVocabulary().active)) activo=true;
+                    if(sobj.getBooleanProperty(SWBContext.getVocabulary().swb_active)) activo=true;
                     SWBResourceURL urlu = paramRequest.getActionUrl();
                     urlu.setParameter("suri", id);
                     urlu.setParameter("sprop", idp);
@@ -484,7 +484,7 @@ public class SWBASOPropRefEditor extends GenericResource {
             String soid = request.getParameter("sval");
             String value = request.getParameter("val");
             SemanticObject sobj = ont.getSemanticObject(soid);
-            sobj.setBooleanProperty(SWBContext.getVocabulary().active, value.equals("1")?true:false);
+            sobj.setBooleanProperty(SWBContext.getVocabulary().swb_active, value.equals("1")?true:false);
 
             SemanticClass scls = sobj.getSemanticClass();
             log.debug("SWBASOPropRefEditor: ProcessAction(updstatus):"+scls.getClassName()+": "+value);
@@ -612,7 +612,7 @@ public class SWBASOPropRefEditor extends GenericResource {
         try {
             ret = obj.getDisplayName(lang);
         } catch (Exception e) {
-            ret = obj.getProperty(SWBContext.getVocabulary().title);
+            ret = obj.getProperty(SWBContext.getVocabulary().swb_title);
         }
         return ret;
     }

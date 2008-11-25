@@ -406,7 +406,7 @@ public class SWBASemObjectEditor extends GenericResource {
         try {
             ret = obj.getDisplayName();
         } catch (Exception e) {
-            ret = obj.getProperty(SWBContext.getVocabulary().title);
+            ret = obj.getProperty(SWBContext.getVocabulary().swb_title);
         }
         return ret;
     }
