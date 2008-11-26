@@ -6,6 +6,8 @@ package org.semanticwb.jcr170.implementation;
 
 import javax.jcr.nodetype.NodeDefinition;
 import javax.jcr.nodetype.NodeType;
+import javax.jcr.version.OnParentVersionAction;
+import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.repository.BaseNode;
 
 /**
@@ -14,53 +16,67 @@ import org.semanticwb.repository.BaseNode;
  */
 public class NodeDefinitionImp implements NodeDefinition
 {
-    private final BaseNode node;
-    NodeDefinitionImp(BaseNode node)
+    private NodeType[] getRequiredPrimaryTypes=null;
+    private NodeType getDefaultPrimaryType=null;
+    private boolean allowsSameNameSiblings=true;
+    private NodeType getDeclaringNodeType;
+    private String name;
+    private int onParentVerion=OnParentVersionAction.VERSION;
+    private boolean autocreated,mandatory,isProtected;
+    NodeDefinitionImp(SemanticObject object)
     {
-        this.node=node;
+        name=object.getProperty(BaseNode.vocabulary.jcr_name);
+        autocreated=object.getBooleanProperty(BaseNode.vocabulary.jcr_autoCreated, false);
+        mandatory=object.getBooleanProperty(BaseNode.vocabulary.jcr_mandatory, false);
+        String sOnParentVersion=object.getProperty(BaseNode.vocabulary.jcr_onParentVersion);
+        if(sOnParentVersion!=null)
+        {
+            onParentVerion=OnParentVersionAction.valueFromName(sOnParentVersion);
+        }
+        isProtected=object.getBooleanProperty(BaseNode.vocabulary.jcr_protected, false);
     }
     public NodeType[] getRequiredPrimaryTypes()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return getRequiredPrimaryTypes;
     }
 
     public NodeType getDefaultPrimaryType()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return getDefaultPrimaryType;
     }
 
     public boolean allowsSameNameSiblings()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return allowsSameNameSiblings;
     }
 
     public NodeType getDeclaringNodeType()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return getDeclaringNodeType;
     }
 
     public String getName()
     {
-        return node.getSemanticObject().getSemanticClass().getName();
+        return name;
     }
 
     public boolean isAutoCreated()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return autocreated;
     }
 
     public boolean isMandatory()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return mandatory;
     }
 
     public int getOnParentVersion()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return onParentVerion;
     }
 
     public boolean isProtected()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return isProtected;
     }
 }

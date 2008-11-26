@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
-import org.semanticwb.repository.BaseNode;
 
 /**
  *
@@ -18,19 +17,16 @@ public final class NodeIteratorImp implements NodeIterator
 {
 
     private final SessionImp session;    
-    private final Iterator<BaseNode> nodes;
+    private final Iterator<SimpleNode> nodes;
     private int size = 0;
     private int position = 0;    
 
-    NodeIteratorImp(SessionImp session, NodeImp root,int size)
-    {        
-        this(session,root.getBaseNode().listNodes(),size);
-    }
-    NodeIteratorImp(SessionImp session, ArrayList<BaseNode> nodes)
+    
+    NodeIteratorImp(SessionImp session, ArrayList<SimpleNode> nodes)
     {
         this(session,nodes.iterator(),nodes.size());
     }
-    NodeIteratorImp(SessionImp session, Iterator<BaseNode> nodes,int size)
+    NodeIteratorImp(SessionImp session, Iterator<SimpleNode> nodes,int size)
     {
         this.session = session;
         this.nodes=nodes;
@@ -38,9 +34,8 @@ public final class NodeIteratorImp implements NodeIterator
     }
 
     public Node nextNode()
-    {
-        BaseNode basenextNode=nodes.next();
-        NodeImp nextNode = new NodeImp(basenextNode, session,0);
+    {        
+        SimpleNode nextNode = nodes.next();
         position++;
         return nextNode;
     }

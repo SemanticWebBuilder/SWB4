@@ -25,13 +25,17 @@ public class ValueImp implements Value
     private static SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss"); 
     private final int type;
     Object value;
-    ValueImp(Object value,int type)
-    {
+    ValueImp(Object value,int type) throws ValueFormatException
+    {        
         this.type=type;
         this.value=value;
     }
     public String getString() throws ValueFormatException, IllegalStateException, RepositoryException
     {
+        if(value==null)
+        {
+            return null;
+        }
         String valueString=value.toString();
         if(value instanceof Node && type==PropertyType.REFERENCE)
         {
@@ -51,6 +55,10 @@ public class ValueImp implements Value
 
     public long getLong() throws ValueFormatException, IllegalStateException, RepositoryException
     {
+        if(value==null)
+        {
+            throw new ValueFormatException();
+        }
         try
         {
             return Long.parseLong(value.toString());
@@ -63,6 +71,10 @@ public class ValueImp implements Value
 
     public double getDouble() throws ValueFormatException, IllegalStateException, RepositoryException
     {
+         if(value==null)
+        {
+            throw new ValueFormatException();
+        }
         try
         {
             return Double.parseDouble(value.toString());
@@ -75,6 +87,10 @@ public class ValueImp implements Value
 
     public Calendar getDate() throws ValueFormatException, IllegalStateException, RepositoryException
     {
+        if(value==null)
+        {
+            return null;
+        }
         Calendar calendar=null;
         if(type==PropertyType.DATE && value instanceof Calendar)
         {
@@ -99,6 +115,10 @@ public class ValueImp implements Value
 
     public boolean getBoolean() throws ValueFormatException, IllegalStateException, RepositoryException
     {
+         if(value==null)
+        {
+            throw new ValueFormatException();
+        }
         try
         {
             return Boolean.parseBoolean(value.toString());

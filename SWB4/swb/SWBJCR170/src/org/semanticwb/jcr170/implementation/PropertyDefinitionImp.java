@@ -4,9 +4,12 @@
  */
 package org.semanticwb.jcr170.implementation;
 
+import javax.jcr.PropertyType;
 import javax.jcr.Value;
 import javax.jcr.nodetype.NodeType;
 import javax.jcr.nodetype.PropertyDefinition;
+import javax.jcr.version.OnParentVersionAction;
+import org.semanticwb.platform.SemanticProperty;
 
 /**
  *
@@ -15,53 +18,122 @@ import javax.jcr.nodetype.PropertyDefinition;
 public class PropertyDefinitionImp implements PropertyDefinition
 {
 
+    private final String name;
+    private int requiredType = PropertyType.UNDEFINED;
+    private boolean multiple = true;
+    private boolean isProtected = false;
+    private boolean mandatory = false,autocreated=false;
+    private int onParentVersion=OnParentVersionAction.COPY;
+    PropertyDefinitionImp(String name)
+    {
+        this.name = name;
+    }
+
+    PropertyDefinitionImp(SessionImp session, SemanticProperty property)
+    {
+        this.name = property.getPrefix() + ":" + property.getName();
+        multiple = session.getRootBaseNode().isMultiple(property);
+        int type = PropertyType.UNDEFINED;
+        if ( property.isObjectProperty() )
+        {
+            type = PropertyType.REFERENCE;
+        }
+        else
+        {
+            if ( property.isBoolean() )
+            {
+                type = PropertyType.BOOLEAN;
+            }
+            else if ( property.isDate() || property.isDateTime() )
+            {
+                type = PropertyType.DATE;
+            }
+            else if ( property.isLong() || property.isInt() )
+            {
+                type = PropertyType.LONG;
+            }
+            else if ( property.isString() )
+            {
+                type = PropertyType.STRING;
+            }
+            else if ( property.isFloat() )
+            {
+                type = PropertyType.DOUBLE;
+            }
+        }
+        this.requiredType = type;
+        mandatory=session.getRootBaseNode().isMandatory(property);
+        autocreated=session.getRootBaseNode().isAutocreated(property);
+        String svalue=session.getRootBaseNode().getOnParentVersion(property);
+        if(svalue!=null)
+        {
+            onParentVersion=OnParentVersionAction.valueFromName(svalue);
+        }
+        isProtected=session.getRootBaseNode().isProtected(property);
+    }
+
+    public void setRequiredType(int requiredType)
+    {
+        this.requiredType = requiredType;
+    }
+
     public int getRequiredType()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return requiredType;
+    }
+
+    public void setMultiple(boolean multiple)
+    {
+        this.multiple = multiple;
     }
 
     public String[] getValueConstraints()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return null;
     }
 
     public Value[] getDefaultValues()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return null;
     }
 
     public boolean isMultiple()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return multiple;
     }
 
     public NodeType getDeclaringNodeType()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return null;
     }
 
     public String getName()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return name;
     }
 
     public boolean isAutoCreated()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return autocreated;
     }
 
     public boolean isMandatory()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return mandatory;
     }
 
     public int getOnParentVersion()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return onParentVersion;
     }
 
     public boolean isProtected()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return isProtected;
+    }
+    @Override
+    public String toString()
+    {
+        return name;
     }
 }

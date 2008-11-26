@@ -7,7 +7,6 @@ package org.semanticwb.jcr170.implementation;
 import java.util.Iterator;
 import javax.jcr.Property;
 import javax.jcr.PropertyIterator;
-import org.semanticwb.platform.SemanticProperty;
 
 /**
  *
@@ -17,30 +16,24 @@ public class PropertyIteratorImp implements PropertyIterator
 {
 
     private static final String NOT_SUPPORTED_YET = "Not supported yet.";
-    NodeImp parent;
-    Iterator<SemanticProperty> properties;
+    SimpleNode parent;
+    Iterator<PropertyImp> properties;
     private long position;
-
-    PropertyIteratorImp(NodeImp parent)
+    private int size;
+    PropertyIteratorImp(Iterator<PropertyImp> properties, SimpleNode parent,int size)
     {
         if ( parent == null )
         {
             throw new IllegalArgumentException();
         }
-        this.parent = parent;
-        properties = parent.getBaseNode().listSemanticProperties();
+        this.parent = parent;        
+        this.properties = properties;
+        this.size=size;
     }
 
     public Property nextProperty()
-    {
-        PropertyImp propertyToReturn = null;
-        SemanticProperty property = properties.next();
-        if ( property != null )
-        {
-            position++;
-            propertyToReturn = new PropertyImp(parent, property);
-        }
-        return propertyToReturn;
+    {        
+        return properties.next();        
     }
 
     public void skip(long skip)
@@ -53,7 +46,7 @@ public class PropertyIteratorImp implements PropertyIterator
 
     public long getSize()
     {
-        throw new UnsupportedOperationException(NOT_SUPPORTED_YET);
+        return size;
     }
 
     public long getPosition()
@@ -63,12 +56,12 @@ public class PropertyIteratorImp implements PropertyIterator
 
     public boolean hasNext()
     {
-        throw new UnsupportedOperationException(NOT_SUPPORTED_YET);
+        return properties.hasNext();
     }
 
     public Object next()
     {
-        throw new UnsupportedOperationException(NOT_SUPPORTED_YET);
+        return this.nextProperty();
     }
 
     public void remove()
