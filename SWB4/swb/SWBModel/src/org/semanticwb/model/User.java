@@ -3,10 +3,12 @@ package org.semanticwb.model;
 import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
 import java.util.Date;
+import java.util.Iterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.base.*;
+import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.platform.SemanticVocabulary;
@@ -69,7 +71,7 @@ public class User extends UserBase implements Principal, java.io.Serializable
     {
         return login;
     }
-    
+
     public boolean isRegistered()
     {
         return !(getSemanticObject().isVirtual());
@@ -78,6 +80,26 @@ public class User extends UserBase implements Principal, java.io.Serializable
     public void checkCredential(Object credential) throws NoSuchAlgorithmException
     {
         this.login = getUsrPassword().equals(SWBUtils.CryptoWrapper.comparablePassword(new String((char[]) credential)));
+    }
+
+    public void setUserTypeAttribute(String userType, String name, Object value) throws SWBException
+    {
+        SemanticProperty prop = null;
+        Iterator<SemanticClass> itsc = getSemanticObject().listSemanticClasses();
+        SemanticClass current = null;
+        while (itsc.hasNext())
+        {
+            current = itsc.next();
+            if (current.getName().equals(userType))
+            {
+                break;
+            }
+        }
+        if (current.getName().equals(userType))
+        {
+            prop = current.getProperty(name);
+        }
+        setExtendedAttribute(prop, value);
     }
 
     public void setExtendedAttribute(String name, Object value) throws SWBException
@@ -226,5 +248,28 @@ public class User extends UserBase implements Principal, java.io.Serializable
         {
             throw new SWBException("Property null or maybe not an extended attribute");
         }
+    }
+
+    public void addUserType(String userType)
+    {
+        if (!hasUserType(userType))
+        {
+            getSemanticObject().addSemanticClass(getUserRepository().getUserType(userType));
+        }
+    }
+
+    public boolean hasUserType(String userType)
+    {
+        Iterator<SemanticClass> itse = getSemanticObject().listSemanticClasses();
+        SemanticClass current = null;
+        while (itse.hasNext())
+        {
+            current = itse.next();
+            if (userType.equals(current.getName()))
+            {
+                break;
+            }
+        }
+        return userType.equals(current.getName());
     }
 }
