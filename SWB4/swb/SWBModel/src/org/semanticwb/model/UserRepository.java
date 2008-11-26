@@ -1,6 +1,5 @@
 package org.semanticwb.model;
 
-import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import java.util.ArrayList;
@@ -27,22 +26,21 @@ public class UserRepository extends UserRepositoryBase
     public UserRepository(SemanticObject base)
     {
         super(base);
-      //  System.out.println("Creando repositorio: "+base);
         String uri = getProperty(SWBUR_ClassHold);
         if (uri != null)
         {
             uri = getId() + SWBUR_ClassPost;
             getSemanticObject().getModel().registerClass(uri);
         }
-        StmtIterator ptopIt = getSemanticObject().getModel().getRDFModel().listStatements(getSemanticObject().getRDFResource(),null, (String)null);
-        while (ptopIt.hasNext()){
-            Statement sp = (Statement)ptopIt.next();
-         //   System.out.println("Prop: "+sp.toString()+" - "+sp.getObject().toString());
-            if (sp.getPredicate().getLocalName().startsWith(SWBUR_ClassUserTypeHold)){
-            uri = sp.getObject().toString();
-         //   System.out.println(uri);
-            userTypes.add(uri.split("#")[1]);
-            getSemanticObject().getModel().registerClass(uri);
+        StmtIterator ptopIt = getSemanticObject().getModel().getRDFModel().listStatements(getSemanticObject().getRDFResource(), null, (String) null);
+        while (ptopIt.hasNext())
+        {
+            Statement sp = (Statement) ptopIt.next();
+            if (sp.getPredicate().getLocalName().startsWith(SWBUR_ClassUserTypeHold))
+            {
+                uri = sp.getObject().toString();
+                userTypes.add(uri.split("#")[1]);
+                getSemanticObject().getModel().registerClass(uri);
             }
         }
     }
@@ -70,60 +68,96 @@ public class UserRepository extends UserRepositoryBase
 
     public SemanticProperty createIntExtendedAttribute(String name)
     {
-        SemanticProperty sp = getExtendedAttributesClass().getProperty(name);
+        return createIntExtendedAttribute(name, null);
+    }
+
+    public SemanticProperty createIntExtendedAttribute(String name, String clsName)
+    {
+        SemanticClass cls = (null == clsName) ? getExtendedAttributesClass() : getUserType(clsName);
+        SemanticProperty sp = cls.getProperty(name);
         if (null == sp)
         {
-            sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, getExtendedAttributesClass(), SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_INT);
+            sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, cls, SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_INT);
         }
         return sp;
     }
 
     public SemanticProperty createLongExtendedAttribute(String name)
     {
-        SemanticProperty sp = getExtendedAttributesClass().getProperty(name);
+        return createLongExtendedAttribute(name, null);
+    }
+
+    public SemanticProperty createLongExtendedAttribute(String name, String clsName)
+    {
+        SemanticClass cls = (null == clsName) ? getExtendedAttributesClass() : getUserType(clsName);
+        SemanticProperty sp = cls.getProperty(name);
         if (null == sp)
         {
-            sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, getExtendedAttributesClass(), SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_LONG);
+            sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, cls, SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_LONG);
         }
         return sp;
     }
 
     public SemanticProperty createBooleanExtendedAttribute(String name)
     {
-        SemanticProperty sp = getExtendedAttributesClass().getProperty(name);
+        return createBooleanExtendedAttribute(name, null);
+    }
+
+    public SemanticProperty createBooleanExtendedAttribute(String name, String clsName)
+    {
+        SemanticClass cls = (null == clsName) ? getExtendedAttributesClass() : getUserType(clsName);
+        SemanticProperty sp = cls.getProperty(name);
         if (null == sp)
         {
-            sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, getExtendedAttributesClass(), SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_BOOLEAN);
+            sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, cls, SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_BOOLEAN);
         }
         return sp;
     }
 
     public SemanticProperty createDateTimeExtendedAttribute(String name)
     {
-        SemanticProperty sp = getExtendedAttributesClass().getProperty(name);
+        return createDateTimeExtendedAttribute(name, null);
+    }
+
+    public SemanticProperty createDateTimeExtendedAttribute(String name, String clsName)
+    {
+        SemanticClass cls = (null == clsName) ? getExtendedAttributesClass() : getUserType(clsName);
+        SemanticProperty sp = cls.getProperty(name);
         if (null == sp)
         {
-            sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, getExtendedAttributesClass(), SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_DATETIME);
+            sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, cls, SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_DATETIME);
         }
         return sp;
     }
 
     public SemanticProperty createDoubleExtendedAttribute(String name)
     {
-        SemanticProperty sp = getExtendedAttributesClass().getProperty(name);
+        return createDoubleExtendedAttribute(name, null);
+    }
+
+    public SemanticProperty createDoubleExtendedAttribute(String name, String clsName)
+    {
+        SemanticClass cls = (null == clsName) ? getExtendedAttributesClass() : getUserType(clsName);
+        SemanticProperty sp = cls.getProperty(name);
         if (null == sp)
         {
-            sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, getExtendedAttributesClass(), SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_DOUBLE);
+            sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, cls, SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_DOUBLE);
         }
         return sp;
     }
 
     public SemanticProperty createFloatExtendedAttribute(String name)
     {
-        SemanticProperty sp = getExtendedAttributesClass().getProperty(name);
+        return createFloatExtendedAttribute(name, null);
+    }
+
+    public SemanticProperty createFloatExtendedAttribute(String name, String clsName)
+    {
+        SemanticClass cls = (null == clsName) ? getExtendedAttributesClass() : getUserType(clsName);
+        SemanticProperty sp = cls.getProperty(name);
         if (null == sp)
         {
-            sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, getExtendedAttributesClass(), SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_FLOAT);
+            sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, cls, SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_FLOAT);
         }
         return sp;
     }
@@ -132,11 +166,11 @@ public class UserRepository extends UserRepositoryBase
     {
         return createStringExtendedAttribute(name, null);
     }
-    
+
     public SemanticProperty createStringExtendedAttribute(String name, String clsName)
     {
-        SemanticClass cls = (null==clsName)?getExtendedAttributesClass():getUserType(clsName);
-        SemanticProperty sp = getExtendedAttributesClass().getProperty(name);
+        SemanticClass cls = (null == clsName) ? getExtendedAttributesClass() : getUserType(clsName);
+        SemanticProperty sp = cls.getProperty(name);
         if (null == sp)
         {
             sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, cls, SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_STRING);
@@ -144,9 +178,64 @@ public class UserRepository extends UserRepositoryBase
         return sp;
     }
 
-    public Iterator<SemanticProperty> listExtendedAttributes()
+    public Iterator<SemanticProperty> listAttributes()
     {
-        return getExtendedAttributesClass().listProperties();
+        ArrayList<SemanticProperty> alsp = new ArrayList<SemanticProperty>();
+        String uri = null;
+        SWBVocabulary voc = SWBContext.getVocabulary();
+        SemanticClass sc = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(voc.swb_User.getURI());
+        if (null != sc)
+        {
+            Iterator<SemanticProperty> itsp = sc.listProperties();
+            while (itsp.hasNext())
+            {
+                SemanticProperty sp = itsp.next();
+                if (null == sp.getRange())
+                {
+                    continue;
+                }
+                alsp.add(sp);
+            }
+        }
+        uri = getProperty(SWBUR_ClassHold);
+        sc = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(uri);
+        if (null != sc)
+        {
+            Iterator<SemanticProperty> itsp = sc.listProperties();
+            while (itsp.hasNext())
+            {
+                SemanticProperty sp = itsp.next();
+                if (null == sp.getRange())
+                {
+                    continue;
+                }
+                alsp.add(sp);
+            }
+        }
+        StmtIterator ptopIt = getSemanticObject().getModel().getRDFModel().listStatements(getSemanticObject().getRDFResource(), null, (String) null);
+        while (ptopIt.hasNext())
+        {
+            Statement st = (Statement) ptopIt.next();
+            if (st.getPredicate().getLocalName().startsWith(SWBUR_ClassUserTypeHold))
+            {
+                uri = st.getObject().toString();
+                sc = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(uri);
+                if (null != sc)
+                {
+                    Iterator<SemanticProperty> itsp = sc.listProperties();
+                    while (itsp.hasNext())
+                    {
+                        SemanticProperty sp = itsp.next();
+                        if (null == sp.getRange())
+                        {
+                            continue;
+                        }
+                        alsp.add(sp);
+                    }
+                }
+            }
+        }
+        return alsp.iterator();
     }
 
     public SemanticClass getExtendedAttributesClass()
@@ -164,23 +253,24 @@ public class UserRepository extends UserRepositoryBase
         }
         return cls;
     }
-    
-    public SemanticClass getUserType(String name){
+
+    public SemanticClass getUserType(String name)
+    {
         SemanticClass cls = null;
-        String uri = getProperty(SWBUR_ClassUserTypeHold+name);
-        if (uri== null)
+        String uri = getProperty(SWBUR_ClassUserTypeHold + name);
+        if (uri == null)
         {
-            uri = getId() +  SWBUR_ClassUserTypePost + "#" + name;
+            uri = getId() + SWBUR_ClassUserTypePost + "#" + name;
             cls = getSemanticObject().getModel().createSemanticClass(uri);
-            setProperty(SWBUR_ClassUserTypeHold+name, uri);
+            setProperty(SWBUR_ClassUserTypeHold + name, uri);
             userTypes.add(uri.split("#")[1]);
-        } else 
+        } else
         {
             cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(uri);
         }
         return cls;
     }
-    
+
     public Iterator<String> getUserTypes()
     {
         return userTypes.iterator();
