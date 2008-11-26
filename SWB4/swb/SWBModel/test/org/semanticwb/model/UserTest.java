@@ -78,6 +78,20 @@ public class UserTest {
             
             System.out.println("getName: "+sp.getName()+" getRange: "+sp.getRange());
         }
+        System.out.println("Extended");
+        it  = repository.listExtendedAttributes();
+        while(it.hasNext()){
+            SemanticProperty sp = it.next();
+            
+            System.out.println("getName: "+sp.getName()+" getRange: "+sp.getRange());
+        }
+        System.out.println("UserType estudiante");
+        it  = repository.listAttributesofUserType("estudiante");
+        while(it.hasNext()){
+            SemanticProperty sp = it.next();
+            
+            System.out.println("getName: "+sp.getName()+" getRange: "+sp.getRange());
+        }
             // repository.createStringExtendedAttribute("escuela", "estudiante");
 
             //repository.createUser();
