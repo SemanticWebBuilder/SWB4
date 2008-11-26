@@ -95,7 +95,8 @@ public class TestRepository
             NodeIterator it=root.getNodes();
             while(it.hasNext())
             {
-                it.nextNode().remove();
+                Node node=it.nextNode();
+                node.remove();
             }
             QueryManager qmanager = ws.getQueryManager();
             Query query = qmanager.createQuery("//" + title + "[@cm:title='" + title + "']", Query.XPATH);
