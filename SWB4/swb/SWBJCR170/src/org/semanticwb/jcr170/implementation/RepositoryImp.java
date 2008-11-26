@@ -50,13 +50,20 @@ public final class RepositoryImp implements Repository
     private static final String namespace = "http://www.semanticwb.org/repository/workspace/default";
 
     public RepositoryImp() throws RepositoryException
-    {         
-        //SWBContext.removeWorkspace(defaultWorkspaceName);
+    {
         boolean exists = false;
         for ( String name : listWorkspaces() )
         {
             if ( name.equals(defaultWorkspaceName) )
             {
+                Workspace ws = SWBContext.createWorkspace(name, namespace);
+                if ( ws.getRoot() == null )
+                {
+                    Unstructured root = ws.createUnstructured();
+                    root.setName("jcr:root");
+                    root.setPath("/");
+                    ws.setRoot(root);
+                }
                 exists = true;
                 break;
             }
@@ -65,17 +72,26 @@ public final class RepositoryImp implements Repository
         {
             createWorkspace(defaultWorkspaceName);
         }
-        
-    }    
+
+    }
+
     public RepositoryImp(String defaultWorkspaceName) throws RepositoryException
     {
-        this(); 
-        this.defaultWorkspaceName=defaultWorkspaceName;        
+        this();
+        this.defaultWorkspaceName = defaultWorkspaceName;
         boolean exists = false;
         for ( String name : listWorkspaces() )
         {
             if ( name.equals(defaultWorkspaceName) )
             {
+                Workspace ws = SWBContext.createWorkspace(name, namespace);
+                if ( ws.getRoot() == null )
+                {
+                    Unstructured root = ws.createUnstructured();
+                    root.setName("jcr:root");
+                    root.setPath("/");
+                    ws.setRoot(root);
+                }
                 exists = true;
                 break;
             }
@@ -85,10 +101,10 @@ public final class RepositoryImp implements Repository
             createWorkspace(defaultWorkspaceName);
         }
     }
-    
+
     public String[] listWorkspaces()
     {
-        HashSet<String> names = new HashSet<String>();        
+        HashSet<String> names = new HashSet<String>();
         Iterator<org.semanticwb.repository.Workspace> it = SWBContext.listWorkspaces();
         int size = 0;
         while (it.hasNext())
@@ -98,8 +114,6 @@ public final class RepositoryImp implements Repository
         }
         return names.toArray(new String[size]);
     }
-
-    
 
     public void setDefaultWorspaceName(String defaultWorkspaceName)
     {

@@ -67,11 +67,10 @@ public class QueryImp implements Query
         }
     }
     public QueryResult execute() throws RepositoryException
-    {
-        Workspace workspace=SWBContext.getWorkspace(this.workspaceName);
+    {        
         try
         {   
-            List nodes=xpath.selectNodes(workspace.getDocumentInternalView());
+            List nodes=xpath.selectNodes(session.getDocumentInternalView());
             return new QueryResultImp(session,nodes,workspaceName);
         }
         catch(JDOMException jde)

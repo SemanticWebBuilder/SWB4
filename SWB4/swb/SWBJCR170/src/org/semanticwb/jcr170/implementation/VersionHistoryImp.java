@@ -19,11 +19,11 @@ import org.semanticwb.repository.BaseNode;
  *
  * @author victor.lorenzana
  */
-public class VersionHistoryImp extends NodeImp implements VersionHistory
+public class VersionHistoryImp extends SimpleNode implements VersionHistory
 {    
-    VersionHistoryImp(BaseNode node,SessionImp session)
+    VersionHistoryImp(BaseNode node,SessionImp session,SimpleNode parent) throws RepositoryException
     {
-        super(node,session);
+        super(node, session, parent);
         if(!node.isVersionHistoryNode())
         {
             throw new IllegalArgumentException("The node is not a versionhistory node");
@@ -57,7 +57,7 @@ public class VersionHistoryImp extends NodeImp implements VersionHistory
     {        
         try
         {
-            return new VersionIteratorImp(this,session);
+            return new VersionIteratorImp(this,session,parent);
         }
         catch(SWBException swbe)
         {

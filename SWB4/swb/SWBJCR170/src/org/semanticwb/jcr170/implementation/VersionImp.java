@@ -16,12 +16,12 @@ import org.semanticwb.repository.BaseNode;
  *
  * @author victor.lorenzana
  */
-public class VersionImp extends NodeImp implements Version
+public class VersionImp extends SimpleNode implements Version
 {    
     private final BaseNode history;
-    VersionImp(BaseNode version,BaseNode history,SessionImp session)
+    VersionImp(BaseNode version,BaseNode history,SessionImp session,SimpleNode parent) throws RepositoryException
     {
-        super(version, session);
+        super(version, session,parent);
         if(!version.isVersionNode())
         {
             throw new IllegalArgumentException("The node is not a version node");
@@ -35,7 +35,7 @@ public class VersionImp extends NodeImp implements Version
     }
     public VersionHistory getContainingHistory() throws RepositoryException
     {        
-        return new VersionHistoryImp(history,session);
+        return new VersionHistoryImp(history,session,this);
     }
 
     public Calendar getCreated() throws RepositoryException
@@ -57,7 +57,7 @@ public class VersionImp extends NodeImp implements Version
             ArrayList<Version> versions=new ArrayList<Version>();
             for(BaseNode versionNode : node.getSuccessors())
             {
-                VersionImp version=new VersionImp(versionNode, history, session);
+                VersionImp version=new VersionImp(versionNode, history, session,this);
                 versions.add(version);
             }
             return versions.toArray(new Version[versions.size()]);
@@ -75,7 +75,7 @@ public class VersionImp extends NodeImp implements Version
             ArrayList<Version> versions=new ArrayList<Version>();
             for(BaseNode versionNode : node.getPredecessors())
             {
-                VersionImp version=new VersionImp(versionNode, history, session);
+                VersionImp version=new VersionImp(versionNode, history, session,this);
                 versions.add(version);
             }
             return versions.toArray(new Version[versions.size()]);

@@ -8,7 +8,6 @@ import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.lock.Lock;
 import javax.jcr.lock.LockException;
-import org.semanticwb.repository.BaseNode;
 
 /**
  *
@@ -17,31 +16,27 @@ import org.semanticwb.repository.BaseNode;
 public class LockImp implements Lock
 {
 
-    private final BaseNode node;
-    private final BaseNode nodeLock;
-    private final SessionImp session;
+    private final SimpleNode nodeLock;
     private final String lockowner;
     private final boolean isDeep;
     private final boolean isSessionScoped;
-    LockImp(BaseNode node, SessionImp session)
+    LockImp(SimpleNode node) throws RepositoryException
     {
-        this(node, session,false);
+        this(node, false);
     }
-    LockImp(BaseNode node, SessionImp session,boolean isSessionScoped)
+    LockImp(SimpleNode node,boolean isSessionScoped) throws RepositoryException
     {
         if ( !(node.isLockable() && node.isLocked()) )
         {
             throw new IllegalArgumentException("The node " + node.getName() + " is not lockable or is not locked");
-        }
-        this.node = node;
-        this.session = session;
+        }        
         nodeLock = node.getLockBaseNode();
         lockowner = node.getLockOwner();
         isDeep = node.isDeepLock();
         this.isSessionScoped=isSessionScoped;
     }
 
-    public BaseNode getLockBaseNode()
+    public SimpleNode getLockBaseNode()
     {
         return nodeLock;
     }
@@ -58,7 +53,7 @@ public class LockImp implements Lock
 
     public Node getNode()
     {
-        return new NodeImp(nodeLock, session);
+        return nodeLock;
     }
 
     public String getLockToken()

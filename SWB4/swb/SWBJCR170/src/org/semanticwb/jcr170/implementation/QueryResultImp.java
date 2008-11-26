@@ -68,7 +68,7 @@ public class QueryResultImp implements QueryResult
 
     public NodeIterator getNodes() throws RepositoryException
     {
-        ArrayList<BaseNode> basenodes = new ArrayList<BaseNode>();
+        ArrayList<SimpleNode> simpleNodes = new ArrayList<SimpleNode>();
         Workspace workspace = SWBContext.getWorkspace(workspaceName);
         for ( int i = 0; i < nodes.size(); i++ )
         {
@@ -83,10 +83,10 @@ public class QueryResultImp implements QueryResult
             {
                 try
                 {
-                    BaseNode baseNode = workspace.getBaseNodeFromType(id, type);
+                    BaseNode baseNode = session.getBaseNodeFromType(id, type);
                     if ( baseNode != null )
-                    {
-                        basenodes.add(baseNode);
+                    {                        
+                        simpleNodes.add((SimpleNode)session.getItem(baseNode.getPath()));
                     }
                 }
                 catch ( SWBException swe )
@@ -95,6 +95,6 @@ public class QueryResultImp implements QueryResult
                 }
             }
         }
-        return new NodeIteratorImp(session, basenodes);
+        return new NodeIteratorImp(session, simpleNodes);
     }
 }

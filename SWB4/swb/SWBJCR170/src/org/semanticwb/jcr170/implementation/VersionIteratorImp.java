@@ -22,7 +22,8 @@ public class VersionIteratorImp implements VersionIterator
     private long position=0;
     private final VersionHistoryImp versionHistory;
     private final SessionImp session;
-    VersionIteratorImp(VersionHistoryImp versionHistory,SessionImp session) throws SWBException
+    private final SimpleNode parent;
+    VersionIteratorImp(VersionHistoryImp versionHistory,SessionImp session,SimpleNode parent) throws SWBException
     {
         ArrayList<BaseNode> temp=new ArrayList<BaseNode>();
         for(BaseNode version : versionHistory.getVersions())
@@ -33,14 +34,15 @@ public class VersionIteratorImp implements VersionIterator
         versions=temp.iterator();
         this.versionHistory=versionHistory;
         this.session=session;
+        this.parent=parent;
     }
     public Version nextVersion()
     {
         position++;
         BaseNode node=versions.next();
         if(node!=null)
-        {
-            return new VersionImp(node,versionHistory.getVersionHistoryBase(),session);
+        {            
+            return new VersionImp(node, versionHistory.getBaseNode(), session, parent);
         }
         else
         {
