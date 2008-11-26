@@ -72,7 +72,7 @@ public class SimpleNode implements Node
     private String path = null;
 
     SimpleNode(SessionImp session, String name, SemanticClass clazz, SimpleNode parent, int index) throws RepositoryException
-    {        
+    {
         this.name = name;
         root = session.getRootBaseNode();
         this.clazz = clazz;
@@ -214,26 +214,6 @@ public class SimpleNode implements Node
         }
     }
 
-    private PropertyImp setProperty(SemanticProperty property, boolean value) throws RepositoryException
-    {
-        if ( this.properties.containsKey(getName(property)) )
-        {
-            properties.get(getName(property)).setValue(value);
-            return this.properties.get(getName(property));
-        }
-        return null;
-    }
-
-    private PropertyImp setProperty(SemanticProperty property, String value) throws RepositoryException
-    {
-        if ( this.properties.containsKey(getName(property)) )
-        {
-            properties.get(getName(property)).setValue(value);
-            return this.properties.get(getName(property));
-        }
-        return null;
-    }
-
     private PropertyImp addProperty(SemanticProperty property, BaseNode node, boolean isNew) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
         PropertyImp prop = addProperty(property, node);
@@ -285,7 +265,7 @@ public class SimpleNode implements Node
         }
         else
         {
-            prop=this.properties.get(name);
+            prop = this.properties.get(name);
         }
         return prop;
     }
@@ -585,12 +565,20 @@ public class SimpleNode implements Node
 
     public String getUUID() throws UnsupportedRepositoryOperationException, RepositoryException
     {
-        String getUUID = properties.get(BaseNode.vocabulary.jcr_uuid).toString();
-        if ( getUUID == null )
+        if ( properties.get(getName(BaseNode.vocabulary.jcr_uuid)) != null )
+        {
+            String getUUID = properties.get(getName(BaseNode.vocabulary.jcr_uuid)).getString();
+            if ( getUUID == null )
+            {
+                throw new UnsupportedRepositoryOperationException();
+            }
+            return getUUID;
+        }
+        else
         {
             throw new UnsupportedRepositoryOperationException();
         }
-        return getUUID;
+        
     }
 
     public boolean hasNodes() throws RepositoryException
@@ -640,7 +628,7 @@ public class SimpleNode implements Node
             throw new LockException("The node is already locked");
         }
         addProperty(getName(BaseNode.vocabulary.jcr_lockOwner)).setValueInternal(getSession().getUserID());
-        addProperty(getName(BaseNode.vocabulary.jcr_lockIsDeep)).setValueInternal(isDeep);                
+        addProperty(getName(BaseNode.vocabulary.jcr_lockIsDeep)).setValueInternal(isDeep);
         LockImp lock = new LockImp(this, isSessionScoped);
         if ( isSessionScoped )
         {
@@ -652,11 +640,14 @@ public class SimpleNode implements Node
 
     public boolean isLocked() throws RepositoryException
     {
-        boolean isLocked = false;        
-        String value = properties.get(getName(BaseNode.vocabulary.jcr_lockOwner)).getString();
-        if ( value != null )
+        boolean isLocked = false;
+        if ( properties.get(getName(BaseNode.vocabulary.jcr_lockOwner)) != null )
         {
-            return Boolean.parseBoolean(value.toString());
+            String value = properties.get(getName(BaseNode.vocabulary.jcr_lockOwner)).getString();
+            if ( value != null )
+            {
+                return Boolean.parseBoolean(value.toString());
+            }
         }
         return isLocked;
     }
@@ -745,7 +736,7 @@ public class SimpleNode implements Node
         }
         try
         {
-            for(SemanticClass mixinClazz : this.mixins)
+            for ( SemanticClass mixinClazz : this.mixins )
             {
                 node.registerClass(mixinClazz);
             }
@@ -815,7 +806,7 @@ public class SimpleNode implements Node
 
             // por el momento sólo puede desbloquear el mismo usuario, deberia verse como un super usurio lo puede desbloquear
             LockImp lock = getLockImp();
-            properties.remove(getName( BaseNode.vocabulary.jcr_lockOwner));
+            properties.remove(getName(BaseNode.vocabulary.jcr_lockOwner));
             properties.remove(getName(BaseNode.vocabulary.jcr_lockIsDeep));
             if ( lock != null && lock.isSessionScoped() )
             {
@@ -858,11 +849,11 @@ public class SimpleNode implements Node
         {
             try
             {
-                getLockOwner = properties.get(getName(BaseNode.vocabulary.jcr_lockOwner)).getString();        
+                getLockOwner = properties.get(getName(BaseNode.vocabulary.jcr_lockOwner)).getString();
             }
-            catch(Exception e)
+            catch ( Exception e )
             {
-                
+
             }
         }
         return getLockOwner;
@@ -1105,7 +1096,14 @@ public class SimpleNode implements Node
             String nameProperty = getName(BaseNode.vocabulary.jcr_isCheckedOut);
             if ( properties.get(nameProperty) != null )
             {
-               return properties.get(getName(BaseNode.vocabulary.jcr_isCheckedOut)).getBoolean();                
+                try
+                {
+                    return properties.get(getName(BaseNode.vocabulary.jcr_isCheckedOut)).getBoolean();
+                }
+                catch(ValueFormatException e)
+                {
+                    return false;
+                }
             }
         }
         return true;

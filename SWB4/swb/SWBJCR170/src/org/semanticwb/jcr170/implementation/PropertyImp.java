@@ -239,7 +239,12 @@ public final class PropertyImp implements Property
 
     public double getDouble() throws ValueFormatException, RepositoryException
     {
-        return getValue().getDouble();
+         Value value=getValue();
+        if(value==null)
+        {
+            throw new ValueFormatException();
+        }
+        return value.getDouble();        
     }
 
     public Calendar getDate() throws ValueFormatException, RepositoryException
@@ -254,7 +259,12 @@ public final class PropertyImp implements Property
 
     public boolean getBoolean() throws ValueFormatException, RepositoryException
     {
-        return getValue().getBoolean();
+        Value value=getValue();
+        if(value==null)
+        {
+            throw new ValueFormatException();
+        }
+        return value.getBoolean();
     }
 
     public Node getNode() throws ValueFormatException, RepositoryException
