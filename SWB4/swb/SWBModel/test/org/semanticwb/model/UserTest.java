@@ -92,6 +92,13 @@ public class UserTest {
             
             System.out.println("getName: "+sp.getName()+" getRange: "+sp.getRange());
         }
+        System.out.println("Básicos");
+        it  = repository.listBasicAttributes();
+        while(it.hasNext()){
+            SemanticProperty sp = it.next();
+            
+            System.out.println("getName: "+sp.getName()+" getRange: "+sp.getRange());
+        }
             // repository.createStringExtendedAttribute("escuela", "estudiante");
 
             //repository.createUser();

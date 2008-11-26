@@ -210,6 +210,27 @@ public class UserRepository extends UserRepositoryBase
         return alsp.iterator();
     }
 
+    public Iterator<SemanticProperty> listBasicAttributes()
+    {
+        ArrayList<SemanticProperty> alsp = new ArrayList<SemanticProperty>();
+        SWBVocabulary voc = SWBContext.getVocabulary();
+        SemanticClass sc = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(voc.swb_User.getURI());
+        if (null != sc)
+        {
+            Iterator<SemanticProperty> itsp = sc.listProperties();
+            while (itsp.hasNext())
+            {
+                SemanticProperty sp = itsp.next();
+                if (null == sp.getRange())
+                {
+                    continue;
+                }
+                alsp.add(sp);
+            }
+        }
+        return alsp.iterator();
+    }
+
     public Iterator<SemanticProperty> listAttributes()
     {
         ArrayList<SemanticProperty> alsp = new ArrayList<SemanticProperty>();
