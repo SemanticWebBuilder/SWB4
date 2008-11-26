@@ -178,6 +178,38 @@ public class UserRepository extends UserRepositoryBase
         return sp;
     }
 
+    public Iterator<SemanticProperty> listAttributesofUserType(String name)
+    {
+        ArrayList<SemanticProperty> alsp = new ArrayList<SemanticProperty>();
+        Iterator<SemanticProperty> itsp = getUserType(name).listProperties();
+        while (itsp.hasNext())
+        {
+            SemanticProperty sp = itsp.next();
+            if (null == sp.getRange())
+            {
+                continue;
+            }
+            alsp.add(sp);
+        }
+        return alsp.iterator();
+    }
+
+    public Iterator<SemanticProperty> listExtendedAttributes()
+    {
+        ArrayList<SemanticProperty> alsp = new ArrayList<SemanticProperty>();
+        Iterator<SemanticProperty> itsp = getExtendedAttributesClass().listProperties();
+        while (itsp.hasNext())
+        {
+            SemanticProperty sp = itsp.next();
+            if (null == sp.getRange())
+            {
+                continue;
+            }
+            alsp.add(sp);
+        }
+        return alsp.iterator();
+    }
+
     public Iterator<SemanticProperty> listAttributes()
     {
         ArrayList<SemanticProperty> alsp = new ArrayList<SemanticProperty>();
