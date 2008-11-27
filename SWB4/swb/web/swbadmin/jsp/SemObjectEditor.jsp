@@ -43,7 +43,7 @@
                 }
                 out.println("<script type=\"text/javascript\">");
                 out.println("dijit.byId('swbDialog').hide();");
-                out.println("addNewTab('"+obj.getURI()+"','"+obj.getDisplayName()+"','"+"swbIcon"+cls.getName()+"');");
+                out.println("addNewTab('"+obj.getURI()+"','"+obj.getDisplayName()+"','"+SWBPlatform.getContextPath()+"/swbadmin/jsp/objectTab.jsp');");
                 out.println("</script>");
             }
         }
