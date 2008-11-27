@@ -220,7 +220,7 @@
           }
       }
 
-      function addNewTab(id, title, icon)
+      function addNewTab(id, title, url)
       {
           var objid=id+"/tab";
           var newTab = dijit.byId(objid);
@@ -242,27 +242,37 @@
                             var arr=d.getChildren();
                             for (var n = 0; n < arr.length; n++)
                             {
-                                //d.closeChild(arr[n]);
                                 arr[n].setContent(null);
                             }
                           }
-                          //alert(d.getChildren());
-                          //if(d)d.destroyRecursive();
-                          //this.destroy();
-                          //return false;
                       }
                       return ret;
                   },
-                  title:title, 
-                  href:'/swb/swbadmin/jsp/objectTab.jsp?id='+encodeURIComponent(id)
+                  title: title,
+                  href: url+"?suri="+encodeURIComponent(id)
               });
               newTab.closable=true;
               tabs.addChild(newTab);
-              tabs.selectChild(newTab);                                    
-              //dojo.parser.parse(newTab);
+              tabs.selectChild(newTab);
           }else
           {
-              tabs.selectChild(newTab);   
+              tabs.selectChild(newTab);
+          }
+      }
+
+      function executeAction(store, item, action)
+      {
+          if(action.length)action=action[0];
+          //alert("action:"+action+" ["+action.name+"] "+action.length);
+          if(action.name=="reload")
+          {
+              reloadTreeNode(store,item);
+          }else if(action.name=="newTab")
+          {
+              addNewTab(item.id, item.title, action.value);
+          }else if(action.name=="showDialog")
+          {
+                showDialog(action.value);
           }
       }
 
@@ -272,10 +282,7 @@
             if(event)
             {
                 //alert("event:"+event.name+" "+event.action);
-                if(event.action=="reload")
-                {
-                    reloadTreeNode(store,item);
-                }
+                executeAction(store,item,event.action);
             }
       }
 
@@ -311,13 +318,37 @@
           }
       }
 
+      function updateTreeNode(store, item, jsonNode)
+      {
+          store.setValues(item, "title", jsonNode.title);
+          store.setValues(item, "type", jsonNode.type);
+          store.setValues(item, "icon", jsonNode.icon);
+          if(jsonNode.events)store.setValues(item, "events", jsonNode.events);
+          else store.unsetAttribute(item, "events");
+          store.save();
+      }
+
+      function setWaitCursor()
+      {
+          document.body.style.cursor="wait";
+          //dojo.byId("mtree").style.cursor="wait";
+      }
+
+      function setDefaultCursor()
+      {
+          document.body.style.cursor="default";
+          //dojo.byId("mtree").style.cursor="wait";
+      }
+
       function reloadTreeNode(store, item)
       {
+          setWaitCursor();
           //alert("reload:"+item.id);
           removeChilds(store,item);
-
-          var items=getJSON("/swb/swbadmin/jsp/Tree.jsp?suri="+encodeURIComponent(item.id))
-
+          var arr=getJSON("/swb/swbadmin/jsp/Tree.jsp?suri="+encodeURIComponent(item.id))
+          updateTreeNode(store,item,arr[0]);
+          //alert("arr:"+arr[0].id);
+          var items=arr[0].children;
           //alert("nitem:"+items.length);
           for (var i=0; i<items.length;i++)
           {
@@ -333,6 +364,7 @@
                 }
           }
           store.save();
+          setDefaultCursor();
       }
       
       function actionDone(){
