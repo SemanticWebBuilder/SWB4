@@ -24,10 +24,13 @@
 
 package org.semanticwb.portal.admin.admresources;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import org.semanticwb.portal.admin.admresources.lib.WBAdmResourceAbs;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.Portlet;
 import org.w3c.dom.*;
 
 /**
@@ -46,7 +49,9 @@ public class HtmlFE extends WBAdmResourceAbs
     protected String value=null;
     protected String language=null;
     protected String src=null;
-    
+    protected ArrayList aAttrs=new ArrayList();
+    protected Portlet base=null;
+        
     public HtmlFE() {
         html = null;
     }
@@ -66,6 +71,12 @@ public class HtmlFE extends WBAdmResourceAbs
         setAttributes();
     }
     
+    public HtmlFE(Node tag, Portlet base){
+        this.tag=tag;
+        setAttributes();
+        this.base=base; 
+    }
+    
     /**
     * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
     * obtains the final xml element to show in the resource admin
@@ -83,7 +94,12 @@ public class HtmlFE extends WBAdmResourceAbs
                 if(xml!=null && !"".equals(xml.trim())) 
                 {
                     xml=xml.substring(xml.indexOf("<"+tag.getNodeName().toLowerCase()));
-                    xml=xml.replaceFirst("\\{@webpath\\}", SWBPlatform.getContextPath());
+                    xml=xml.replaceFirst("\\{@webpath\\}", SWBPlatform.getContextPath());                    
+                    Iterator <String>itAttr=aAttrs.iterator();
+                    while(itAttr.hasNext()){
+                        String attr=itAttr.next();
+                        xml=SWBUtils.TEXT.replaceAll(xml, "{@db_"+attr+"}", base.getAttribute(attr));
+                    }                    
                 }
                 else xml="";
             }
@@ -146,14 +162,35 @@ public class HtmlFE extends WBAdmResourceAbs
                         else if(attrName.equalsIgnoreCase("src"))
                         {
                             src = attrValue;
-                            if(src.toLowerCase().startsWith("{@webpath}"))
+                            if(src.toLowerCase().startsWith("{@webpath}")){
                                 src=SWBPlatform.getContextPath() + src.substring(10);
+                            }
                             continue;
                         }                        
                     }
                 }
             }
             value= getFullText(tag);
+            //Revisa si encuentra constantes a sustituir por atributos de bd
+            Document dom=null;
+            try{
+                dom=SWBUtils.XML.getNewDocument(); 
+            }catch(Exception e){
+                log.error(e);
+            }
+            if(dom!=null && tag!=null)
+            {
+                Node child = dom.importNode(tag, true);
+                dom.appendChild(child);
+                String xml=SWBUtils.XML.domToXml(dom, "ISO-8859-1", true);
+                if(xml!=null && !"".equals(xml.trim())) 
+                {
+                    Iterator <String>it=SWBUtils.TEXT.findInterStr(xml, "{@db_" , "}");
+                    while(it.hasNext()){
+                        aAttrs.add(it.next());
+                    }
+                }
+            }            
         }
     }
     
@@ -181,7 +218,7 @@ public class HtmlFE extends WBAdmResourceAbs
                 // Validity does require that if they do appear their 
                 // replacement text is pure text, no elements.
             }
-        }
+        }    
         return ret.toString();
     }
 }
