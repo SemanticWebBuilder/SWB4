@@ -4,7 +4,7 @@
 <%
     response.setHeader("Cache-Control", "no-cache"); 
     response.setHeader("Pragma", "no-cache"); 
-    String id=request.getParameter("id");
+    String id=request.getParameter("suri");
     SemanticOntology ont=SWBPlatform.getSemanticMgr().getOntology();
     com.hp.hpl.jena.rdf.model.Resource res=ont.getResource(id);
     if(res==null)return;

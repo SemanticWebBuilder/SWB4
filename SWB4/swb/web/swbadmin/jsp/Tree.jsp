@@ -4,14 +4,32 @@
     int nullnode=0;
     String lang="es";
 
-    public JSONObject getEvent(String name, String action, String value, String target) throws JSONException
+    public JSONObject getAction(String name, String value, String target) throws JSONException
+    {
+        JSONObject obj=new JSONObject();
+        obj.put("id", "_NOID_"+(nullnode++));
+        obj.put("name", name);
+        obj.put("value", value);
+        obj.put("target", target);
+        return obj;
+    }
+
+    public JSONObject getEvent(String name, JSONObject action) throws JSONException
     {
         JSONObject obj=new JSONObject();
         obj.put("id", "_NOID_"+(nullnode++));
         obj.put("name", name);
         obj.put("action", action);
-        obj.put("value", value);
-        obj.put("target", target);
+        return obj;
+    }
+
+    public JSONObject getMenuItem(String title, String icon, JSONObject action) throws JSONException
+    {
+        JSONObject obj=new JSONObject();
+        obj.put("id", "_NOID_"+(nullnode++));
+        obj.put("title", title);
+        obj.put("icon", icon);
+        obj.put("action", action);
         return obj;
     }
 
@@ -26,12 +44,19 @@
         return obj;
     }
 
-    public JSONObject getDummy() throws JSONException
+    public JSONObject getReloadAction() throws JSONException
     {
-        JSONObject obj=new JSONObject();
-        obj.put("id", "_NOID_"+(nullnode++));
-        obj.put("title", "Dummy");
-        return obj;
+        return getAction("reload",null,null);
+    }
+
+    public JSONObject getNewTabAction() throws JSONException
+    {
+        return getAction("newTab",SWBPlatform.getContextPath()+"/swbadmin/jsp/objectTab.jsp",null);
+    }
+
+    public JSONObject getMenuSeparator() throws JSONException
+    {
+        return getMenuItem("_",null, null);
     }
     
     public void addWebSites(JSONArray arr)  throws JSONException
@@ -43,212 +68,156 @@
             WebSite site=it.next();
             //TODO: arreglar lista de sitios en SWBContext (estal ligados a ontologia)
             site=SWBContext.getWebSite(site.getURI());
-            addWebSite(arr, site);
+            addSemanticObject(arr, site.getSemanticObject(),false,true);
+            //addWebSite(arr, site);
         }                 
     }
-   
-    public void addWebSite(JSONArray arr, WebSite site) throws JSONException
-    {
-        //System.out.println("addWebSite");
-        String type="WebSite";
-        String icon="swbIcon"+type;
-        if(!site.isActive())icon=icon+"U";
-        JSONObject obj=getNode(site.getId(), site.getDisplayTitle(lang), type,icon);
-        arr.put(obj);
-        
-        JSONArray childs=new JSONArray();
-        obj.putOpt("children", childs);
-        
-        //addTemplates(childs,site);
-        //addPortlets(childs,site);
 
-        addHerarquicalNodes(childs, site.getSemanticObject());
-        
-        WebPage home=site.getHomePage();
-        if(home!=null)
+    public boolean hasHerarquicalNodes(SemanticObject obj) throws JSONException
+    {
+        boolean ret=false;
+        Iterator<SemanticObject> it=obj.getSemanticClass().listHerarquicalNodes();
+        if(it.hasNext())
         {
-            addWebPage(childs, home);
+            ret=true;
         }
+        return ret;
     }
 
-    public void addHerarquicalNodes(JSONArray arr, SemanticObject model) throws JSONException
+
+    public void addHerarquicalNodes(JSONArray arr, SemanticObject obj) throws JSONException
     {
-        Iterator<SemanticObject> it=model.getSemanticClass().listHerarquicalNodes();
+        Iterator<SemanticObject> it=obj.getSemanticClass().listHerarquicalNodes();
         while(it.hasNext())
         {
             HerarquicalNode node=new HerarquicalNode(it.next());
-            addHerarquicalNode(arr,node,model);
+            addHerarquicalNode(arr,node,obj,false);
         }
     }
 
-    public void addHerarquicalNode(JSONArray arr, HerarquicalNode node, SemanticObject model) throws JSONException
+    public void addHerarquicalNode(JSONArray arr, HerarquicalNode node, SemanticObject obj, boolean addChilds) throws JSONException
     {
-        JSONObject obj=getNode(model.getURI()+"/HerarquicalNode#"+node.getId(), node.getDisplayTitle(lang), "HerarquicalNode", node.getIconClass());
-        arr.put(obj);
-
-        JSONArray childs=new JSONArray();
-        Iterator<SemanticObject> it=model.getModel().listInstancesOfClass(SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(node.getHClass().getURI()));
-        if(it.hasNext())
-        {
-            obj.putOpt("children", childs);
-            //childs.put(getDummy());
-            //JSONArray events=new JSONArray();
-            //obj.putOpt("events", events);
-            //events.put(getEvent("onOpen","reload",null,null));
-        }
-        while(it.hasNext())
-        {
-            SemanticObject so=it.next();
-            addSemanticObject(childs, so);
-        }
-
-    }
-
-    public void addSemanticObject(JSONArray arr, SemanticObject obj) throws JSONException
-    {
-        JSONObject jobj=getNode(obj.getURI(), obj.getDisplayName(lang), obj.getSemanticClass().getName(), "swbIcon"+obj.getSemanticClass().getName());
+        SemanticClass cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(node.getHClass().getURI());
+        JSONObject jobj=getNode("HN|"+obj.getURI()+"|"+node.getURI(), node.getDisplayTitle(lang), "HerarquicalNode", node.getIconClass());
         arr.put(jobj);
 
-        System.out.println("obj:"+obj.getId());
-        SemanticClass cls=obj.getSemanticClass();
         JSONArray childs=new JSONArray();
         jobj.putOpt("children", childs);
-        Iterator<SemanticProperty> it=cls.listHerarquicalProperties();
-        while(it.hasNext())
+        Iterator<SemanticObject> it=obj.getModel().listInstancesOfClass(cls);
+
+        //Menus
+        JSONArray menus=new JSONArray();
+        jobj.putOpt("menus", menus);
+        menus.put(getMenuItem("Agregar", "dijitEditorIcon dijitEditorIconCut",getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+cls.getEncodedURI()+"&sref="+obj.getEncodedURI(),null)));
+        menus.put(getMenuSeparator());
+        menus.put(getMenuItem("Recargar", "dijitEditorIcon dijitEditorIconCut", getReloadAction()));
+
+
+        if(addChilds)
         {
-            SemanticProperty prop=it.next();
-            System.out.println("prop:"+prop.getName());
-            Iterator<SemanticObject> it2=obj.listObjectProperties(prop);
-            if(it2.hasNext())
+            while(it.hasNext())
             {
-                //childs.put(getDummy());
-                //JSONArray events=new JSONArray();
-                //obj.putOpt("events", events);
-                //events.put(getEvent("onOpen","reload",null,null));
+                SemanticObject so=it.next();
+                addSemanticObject(childs, so,false);
             }
-            while(it2.hasNext())
+        }else
+        {
+            if(it.hasNext())
             {
-                SemanticObject ch=it2.next();
-                addSemanticObject(childs, ch);
+                jobj.put("hasChilds", "true");
+                JSONArray events=new JSONArray();
+                jobj.putOpt("events", events);
+                events.put(getEvent("onOpen", getReloadAction()));
             }
         }
     }
 
+    public void addSemanticObject(JSONArray arr, SemanticObject obj, boolean addChilds) throws JSONException
+    {
+        addSemanticObject(arr, obj, addChilds, false);
+    }
 
-    public void addWebPage(JSONArray arr, WebPage page) throws JSONException
-    {
-        //System.out.println("addWebPage");
-        String type="WebPage";
-        String icon="swbIcon"+type;
-        if(!page.isActive())icon=icon+"U";
-        JSONObject obj=getNode(page.getURI(), page.getTitle(), type, icon);
-        arr.put(obj);
-        
-        //if(page.getId().length()>3)return;
-        JSONArray childs=new JSONArray();
 
-        Iterator<WebPage> it=page.listChilds(null,null,false,null,null);
-        if(it.hasNext())
-        {
-            obj.putOpt("children", childs);
-            childs.put(getDummy());
-            JSONArray events=new JSONArray();
-            obj.putOpt("events", events);
-            events.put(getEvent("onOpen","reload",null,null));
-        }
-        //while(it.hasNext())
-        //{
-        //    WebPage wp=it.next();
-        //    addWebPage(childs, wp);
-        //}
-    }
-    
-    public void addTemplates(JSONArray arr, WebSite site)  throws JSONException
+    public void addSemanticObject(JSONArray arr, SemanticObject obj, boolean addChilds, boolean addDummy) throws JSONException
     {
-        //System.out.println("addTemplates");
-        String type="Templates";
+        boolean hasChilds=false;
+        SemanticClass cls=obj.getSemanticClass();
+        String type=cls.getName();
+
         String icon="swbIcon"+type;
-        JSONObject obj=getNode(site.getId()+"."+"Templates", "Plantillas", type, icon);
-        arr.put(obj);
-        
-        //if(page.getId().length()>3)return;
+        SemanticProperty activeprop=cls.getProperty("active");
+        if(activeprop!=null)
+        {
+            boolean active=obj.getBooleanProperty(activeprop);
+            if(!active)icon=icon+"U";
+        }
+        JSONObject jobj=getNode(obj.getURI(), obj.getDisplayName(lang), type, icon);
+        arr.put(jobj);
+
+        //System.out.println("obj:"+obj.getId());
+
+        //menus
+        JSONArray menus=new JSONArray();
+        jobj.putOpt("menus", menus);
+        menus.put(getMenuItem("Agregar", "dijitEditorIcon dijitEditorIconCut",getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+cls.getEncodedURI()+"&sref="+obj.getEncodedURI(),null)));
+        menus.put(getMenuSeparator());
+        menus.put(getMenuItem("Editar", "dijitEditorIcon dijitEditorIconCut", getNewTabAction()));
+        menus.put(getMenuItem("Eliminar", "dijitEditorIcon dijitEditorIconCut", getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+cls.getEncodedURI()+"&sref="+obj.getEncodedURI(),null)));
+        menus.put(getMenuSeparator());
+        menus.put(getMenuItem("Recargar", "dijitEditorIcon dijitEditorIconCut", getReloadAction()));
+
+        //eventos
+        JSONArray events=new JSONArray();
+        jobj.putOpt("events", events);
+        events.put(getEvent("onDblClick", getAction("newTab", "/swb/swbadmin/jsp/objectTab.jsp", null)));
+
+        //hijos
         JSONArray childs=new JSONArray();
-        obj.putOpt("children", childs);
-        
-        Iterator<Template> it=SWBComparator.sortSermanticObjects(site.listTemplates());
-        while(it.hasNext())
+        jobj.putOpt("children", childs);
+
+        hasChilds=hasHerarquicalNodes(obj);
+        if(addChilds || !hasChilds)
         {
-            Template aux=it.next();
-            addTemplate(childs, aux);
+            addHerarquicalNodes(childs, obj);
+
+            Iterator<SemanticProperty> it=cls.listHerarquicalProperties();
+            while(it.hasNext())
+            {
+                SemanticProperty prop=it.next();
+                //System.out.println("prop:"+prop.getName());
+                Iterator<SemanticObject> it2=obj.listObjectProperties(prop);
+                if(addChilds)
+                {
+                    while(it2.hasNext())
+                    {
+                        SemanticObject ch=it2.next();
+                        addSemanticObject(childs, ch,false);
+                    }
+                }else
+                {
+                    if(it2.hasNext())
+                    {
+                        hasChilds=true;
+                    }
+                }
+            }
+        }
+        if(hasChilds && !addChilds)
+        {
+            if (addDummy) {
+                childs.put(getNode("_NOID_" + (nullnode++), "DUMMY", "DUMMY", "DUMMY"));
+            } else {
+                jobj.put("hasChilds", "true");
+            }
+            events.put(getEvent("onOpen", getReloadAction()));
         }
     }
-    
-    public void addTemplate(JSONArray arr, Template template) throws JSONException
-    {
-        //System.out.println("addTemplate");
-        String type="Template";
-        String icon="swbIcon"+type;
-        if(!template.isActive())icon=icon+"U";
-        
-        JSONObject obj=getNode(template.getURI(), template.getTitle(), type, icon);
-        arr.put(obj);
-    }
-    
-    public void addPortlets(JSONArray arr, WebSite site)  throws JSONException
-    {
-        //System.out.println("addPortlets");
-        String type="Portlets";
-        String icon="swbIcon"+type;
-        
-        JSONObject obj=getNode(site.getId()+"."+"Portlets", "Portlets", type,icon);
-        arr.put(obj);
-        
-        //if(page.getId().length()>3)return;
-        JSONArray childs=new JSONArray();
-        obj.putOpt("children", childs);
-        
-        Iterator<PortletType> it=SWBComparator.sortSermanticObjects(site.listPortletTypes());
-        while(it.hasNext())
-        {
-            PortletType aux=it.next();
-            addPortletType(childs, aux);
-        }
-    }
-    
-    public void addPortletType(JSONArray arr, PortletType aux)  throws JSONException
-    {
-        //System.out.println("addPortletType");
-        String type="PortletType";
-        String icon="swbIcon"+type;
-        
-        JSONObject obj=getNode(aux.getURI(), aux.getTitle(), type, icon);
-        arr.put(obj);
-        
-        //if(page.getId().length()>3)return;
-        JSONArray childs=new JSONArray();
-        obj.putOpt("children", childs);
-        
-        Iterator<Portlet> it=SWBComparator.sortSermanticObjects(aux.listPortlets());
-        while(it.hasNext())
-        {
-            Portlet aux2=it.next();
-            addPortlet(childs, aux2);
-        }
-    }    
-    
-    public void addPortlet(JSONArray arr, Portlet aux) throws JSONException
-    {
-        //System.out.println("addPortlet");
-        String type="Portlet";
-        String icon="swbIcon"+type;
-        if(!aux.isActive())icon=icon+"U";
-        
-        JSONObject obj=getNode(aux.getURI(), aux.getTitle(), type, icon);
-        arr.put(obj);
-    }    
+
     
 %><%
-    System.out.println("Tree1");
+    System.out.println(new Date()+" Tree1");
+    SemanticOntology ont=SWBPlatform.getSemanticMgr().getOntology();
+
     response.setHeader("Cache-Control", "no-cache"); 
     response.setHeader("Pragma", "no-cache"); 
     
@@ -267,39 +236,30 @@
     }else
     {
         JSONArray items=new JSONArray();
-        GenericObject sobj=null;
-        sobj=SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
-        if(sobj!=null)
+        if(suri.startsWith("HN|"))
         {
-            if(sobj instanceof WebSite)
+            StringTokenizer st=new StringTokenizer(suri,"|");
+            String aux=st.nextToken();
+            String ouri=st.nextToken();
+            String nuri=st.nextToken();
+            //System.out.println("aux:"+aux+" ouri:"+ouri+" nuri:"+nuri);
+            if(ouri!=null && nuri!=null)
             {
-                addWebSite(items,(WebSite)sobj);
-            }else if(sobj instanceof WebPage)
-            {
-                Iterator<WebPage> it=((WebPage)sobj).listChilds();
-                while(it.hasNext())
-                {
-                    WebPage p=it.next();
-                    //addWebPage(items,page);
-                    String type="WebPage";
-                    String icon="swbIcon"+type;
-                    if(!p.isActive())icon=icon+"U";
-                    JSONObject obj=getNode(p.getURI(), p.getTitle(), type, icon);
-                    items.put(obj);
-
-                    Iterator<WebPage> it2=p.listChilds(null,null,false,null,null);
-                    if(it2.hasNext())
-                    {
-                        obj.put("hasChilds", "true");
-                        JSONArray events=new JSONArray();
-                        obj.putOpt("events", events);
-                        events.put(getEvent("onOpen","reload",null,null));
-                    }
-                }
+                SemanticObject obj=ont.getSemanticObject(ouri);
+                SemanticObject nobj=ont.getSemanticObject(nuri);
+                //System.out.println("obj:"+obj+" node:"+nobj);
+                HerarquicalNode node=new HerarquicalNode(nobj);
+                addHerarquicalNode(items,node,obj,true);
             }
-            out.println(items.toString());
-            //System.out.println(items.toString());
+        }else
+        {
+            SemanticObject sobj=ont.getSemanticObject(suri);
+            if(sobj!=null)
+            {
+                addSemanticObject(items, sobj,true);
+            }
         }
+        out.print(items.toString());
     }    
 
     /*
@@ -314,5 +274,5 @@
      { name:'Argentina', type:'country'}
 ]}
     */
-    System.out.println("Tree2");
+    System.out.println(new Date()+" Tree2");
 %>
