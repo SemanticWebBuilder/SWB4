@@ -66,6 +66,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import sun.misc.BASE64Encoder;
 
+
 /**
  *
  * @author  Javier Solis Gonzalez (jsolis@infotec.com.mx)
@@ -460,8 +461,8 @@ public class SWBUtils {
          *   }
          * 
          */
-        public static Iterator findInterStr(String str, String pre, String pos) {
-            ArrayList ret = new ArrayList();
+        public static Iterator<String> findInterStr(String str, String pre, String pos) {
+            ArrayList <String> ret = new ArrayList();
             int y = 0;
             do {
                 y = findInterStr(str, pre, pos, y, ret);
