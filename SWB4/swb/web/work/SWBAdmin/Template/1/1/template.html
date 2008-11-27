@@ -190,13 +190,13 @@
                                         editor._edit();
                                     }
                                 });    
-*/                                
+
                                 dojo.declare("MainTree", dijit.Tree, {
                                     postCreate: function(){
                                         this.inherited("postCreate", arguments);
-                                        this.connect(this.domNode, "ondblclick", this._onDblClick);
+                                        //this.connect(this.domNode, "ondblclick", this._onDblClick);
                                     },
-                                    _onDblClick: function(/*Event*/ e){
+                                    _onDblClick: function(/ *Event* / e){
                                         var domElement = e.target;
                                         var nodeWidget = dijit.getEnclosingWidget(domElement);  
                                         if(!nodeWidget || !nodeWidget.isTreeNode){
@@ -209,9 +209,10 @@
                                         addNewTab(id,title,icon);
                                         //alert(newTab);
                                     }
-                                });    
+                                });
+*/
                             </script>
-                            <div id="mtree" dojoType="MainTree" refreshOnExpand_="true" _model="tmodel" store="treeStore" persist="false" query_="{type:'WebSite'}" showRoot="false" _label="Sitios">
+                            <div id="mtree" dojoType="dijit.Tree" refreshOnExpand_="true" model_="tmodel" store="treeStore" persist="false" query_="{type:'WebSite'}" showRoot="false" label_="Sitios">
 <!--                            
                                 <script type="dojo/method" event="onClick" args="item">
                                     if(item){
@@ -230,6 +231,14 @@
                                         executeTreeNodeEvent(treeStore,item,"onOpen");
                                     }
                                 </script>
+                                <script type="dojo/method" event="onDblClick" args="event">
+                                    //alert("onDblClick:"+event);
+                                    var domElement = event.target;
+                                    var nodeWidget = dijit.getEnclosingWidget(domElement);
+                                    if(nodeWidget && nodeWidget.isTreeNode){
+                                        executeTreeNodeEvent(treeStore,nodeWidget.item,"onDblClick");
+                                    }
+                                </script>
                                 <script type="dojo/method" event="getIconClass" args="item, opened"> 
                                     if(item)
                                     {
@@ -245,6 +254,53 @@
                                     {
                                         var treeNode = dijit.getEnclosingWidget(e.target);
                                         
+                                        var ch = menuEmpty.getChildren();
+                                        //console.log("menu children is "+ch);
+                                        if (ch && ch != "undefined")
+                                        {
+                                            dojo.forEach(ch, function(child)
+                                            {
+                                                //console.log("Remving old child "+child);
+                                                menuEmpty.removeChild(child);
+                                            });
+                                        }
+
+                                        if(treeNode.item.menus)
+                                        {
+                                            //console.log("Adding new submenus");
+                                            for (var m in treeNode.item.menus)
+                                            {
+                                                var menu = treeNode.item.menus[m];
+                                                //console.log("Adding submenu " + mstr);
+                                                var mi = document.createElement('div')
+                                                var sm;
+                                                if(menu.title=="_")
+                                                {
+                                                    sm = new dijit.MenuSeparator();
+                                                }else
+                                                {
+                                                    sm = new dijit.MenuItem(
+                                                    {
+                                                        label: menu.title,
+                                                        iconClass:menu.icon,
+                                                        action: menu.action
+                                                    }, mi);
+                                                    sm.onClick = function(ele)
+                                                    {
+                                                        var m=dijit.getEnclosingWidget(ele.target);
+                                                        //alert(m);
+                                                        executeAction(treeStore, treeNode.item, m.action)
+                                                    };
+                                                }
+                                                menuEmpty.addChild(sm);
+                                                //mi.actualstring = mstr;
+                                                //console.log("wm.custom.Menu for "+this.id+" adding submenu to menu "+this.dijit);
+                                                
+                                            }
+                                            //menuEmpty._openMyself(e);
+                                        }
+/*
+                                        }
                                         if (treeNode.item.type == "WebPage"){
                                             menuEmpty = dijit.byId("menuFloor");
                                             menuEmpty._openMyself(e);
@@ -253,10 +309,11 @@
                                             menuEmpty = dijit.byId("menuMap");
                                             menuEmpty._openMyself(e);
                                         }
-                                        else {
-                                            menuEmpty = dijit.byId("menuEmpty");
-                                        }
-                                        menuEmpty.treeNode=treeNode;
+*/
+                                        //else {
+                                        //    menuEmpty = dijit.byId("menuEmpty");
+                                        //}
+                                        //menuEmpty.treeNode=treeNode;
                                     });
                                 </script>
                             </div>
