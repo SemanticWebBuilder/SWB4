@@ -32,7 +32,7 @@
                             dojo.require("dijit.ColorPalette");
                             function reportColor(selectedColor, eid) {
                                 var e=document.getElementById(eid);
-                                e.style.backgroundColor=selectedColor;
+                                e.value=selectedColor;
                             }
                         </script>
                         <div dojoType="dijit.ColorPalette" onChange="reportColor(arguments[0], 'textcolor')"></div>
@@ -41,7 +41,7 @@
                 <input type="TEXT" size="7" maxlength="7" value="#000000" id="textcolor" name="textcolor" label="Otro color del texto (hexadecimal):"/>
                 <statictext name="showCurrentTextColor">
                     <![CDATA[
-                         "<div id="curTextColor" style="background-color:"+x+"; width:10px" >&nbsp;</div>"
+                         Color actual: <div id="curTextColor" style="background-color:{@db_textcolor}; width:10px" >&nbsp;</div>
                     ]]>
                 </statictext>
 		<input type="TEXT" name="url" label="Dirección web" size="50"/>

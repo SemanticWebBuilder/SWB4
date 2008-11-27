@@ -41,7 +41,7 @@
                 <input type="TEXT" size="7" maxlength="7" value="#000000" id="textcolor" name="textcolor" label="Otro color del texto (hexadecimal):"/>
                 <statictext name="showCurrentTextColor">
                     <![CDATA[
-                    <div id="curTextColor" style="background-color:#009933; width:10px" >&nbsp;</div>
+                         Color actual: <div id="curTextColor" style="background-color:{@db_textcolor}; width:10px" >&nbsp;</div>
                     ]]>
                 </statictext>
 		<input type="TEXT" name="url" label="Endereço web" size="50"/>
