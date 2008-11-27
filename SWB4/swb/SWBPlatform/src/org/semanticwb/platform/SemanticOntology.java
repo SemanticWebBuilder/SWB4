@@ -56,7 +56,8 @@ public class SemanticOntology
     {
         m_ontology.rebind();
     }
-    
+
+    //TODO: Mejorar performance
     public Resource getResource(String uri)
     {
         Resource ret=null;
@@ -93,6 +94,16 @@ public class SemanticOntology
                     }
                     if(ret!=null)break;
                 }
+            }
+        }
+        if(ret==null)
+        {
+            Model model=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
+            Resource res=model.getResource(uri);
+            Property type=model.getProperty(SemanticVocabulary.RDF_TYPE);
+            if(model.contains(res, type))
+            {
+                ret=res;
             }
         }
         return ret;
