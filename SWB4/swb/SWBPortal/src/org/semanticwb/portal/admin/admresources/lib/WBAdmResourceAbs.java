@@ -43,7 +43,6 @@ public abstract class WBAdmResourceAbs implements WBAdmResource {
     protected String styleclass=null;
     protected AdmDBConnMgr dbconnmgr=null;
     protected String label=null;
-    protected Portlet base=null;
     
     /** Creates a new instance of WBAdmResourceAbs */
     public WBAdmResourceAbs() {

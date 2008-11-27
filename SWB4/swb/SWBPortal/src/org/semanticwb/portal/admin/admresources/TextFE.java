@@ -40,6 +40,7 @@ public class TextFE extends WBJsInputFEAbs
     private static Logger log = SWBUtils.getLogger(TextFE.class);
     
     protected String value=null;
+    protected String defvalue=null;
     protected int size=-1;
     protected int maxlength=-1;
     protected String accesskey=null;
@@ -95,6 +96,10 @@ public class TextFE extends WBJsInputFEAbs
         this.value=value;
     }
     
+    public void setDefValue(String defvalue){
+        this.defvalue=defvalue;
+    }
+    
     public void setAlign(String align){
         this.align=align;
     }
@@ -141,6 +146,10 @@ public class TextFE extends WBJsInputFEAbs
     
     public String getValue(){
         return value;
+    }
+    
+    public String getDefValue(){
+        return defvalue;
     }
     
     public String getAlign(){
@@ -250,6 +259,7 @@ public class TextFE extends WBJsInputFEAbs
                         else if(attrName.equalsIgnoreCase("width")) width=Integer.parseInt(attrValue);
                         else if(attrName.equalsIgnoreCase("height")) height=Integer.parseInt(attrValue);
                         else if(attrName.equalsIgnoreCase("value")) value=attrValue;
+                        //else if(attrName.equalsIgnoreCase("defvalue")) defvalue=attrValue;
                         else if(attrName.equalsIgnoreCase("disabled")) isdisabled=Boolean.valueOf(attrValue).booleanValue();
                         else if(attrName.equalsIgnoreCase("readonly")) isreadonly=Boolean.valueOf(attrValue).booleanValue();
                         else if(attrName.equalsIgnoreCase("autocomplete")) isautocomplete=Boolean.valueOf(attrValue).booleanValue();
