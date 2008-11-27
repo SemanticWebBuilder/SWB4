@@ -259,7 +259,6 @@ public class TextFE extends WBJsInputFEAbs
                         else if(attrName.equalsIgnoreCase("width")) width=Integer.parseInt(attrValue);
                         else if(attrName.equalsIgnoreCase("height")) height=Integer.parseInt(attrValue);
                         else if(attrName.equalsIgnoreCase("value")) value=attrValue;
-                        //else if(attrName.equalsIgnoreCase("defvalue")) defvalue=attrValue;
                         else if(attrName.equalsIgnoreCase("disabled")) isdisabled=Boolean.valueOf(attrValue).booleanValue();
                         else if(attrName.equalsIgnoreCase("readonly")) isreadonly=Boolean.valueOf(attrValue).booleanValue();
                         else if(attrName.equalsIgnoreCase("autocomplete")) isautocomplete=Boolean.valueOf(attrValue).booleanValue();
