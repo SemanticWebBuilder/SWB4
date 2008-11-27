@@ -103,7 +103,7 @@ public class SemanticVocabulary
                 //System.out.println("Prop:"+tpp+"\t"+tpp.getDomainClass()+"\t"+tpc+"\t"+tpc.isSubClass(tpp.getDomainClass()));
                 if(tpp.getDomainClass()==null || (tpp.hasInverse() && !(tpc.equals(tpp.getDomainClass())||tpc.isSubClass(tpp.getDomainClass()))))
                 {
-                    System.out.println("Remove:"+tpp.getName());
+                    //System.out.println("Remove:"+tpp.getName());
                     tppit.remove();
                     tpc.herarquicalProps.remove(tpp);
                 }

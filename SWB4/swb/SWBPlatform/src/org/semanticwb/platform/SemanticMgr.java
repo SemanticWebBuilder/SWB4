@@ -60,7 +60,7 @@ public class SemanticMgr implements SWBInstanceObject
         // Create database connection
         conn = new DBConnection(SWBUtils.DB.getDefaultConnection(), SWBUtils.DB.getDatabaseName());
         conn.getDriver().setTableNamePrefix("swb_");
-        conn.getDriver().setDoDuplicateCheck(false);
+        //conn.getDriver().setDoDuplicateCheck(false);
         maker = ModelFactory.createModelRDBMaker(conn);
         
         //Load Ontology from file
