@@ -245,7 +245,9 @@ public class AdmResourceMgr extends WBContainerFE
                                             forma.setAdmDBConnMgr(admdbconnmgr);
                                         }else
                                             if((tag.getNodeName().equalsIgnoreCase("statictext") || tag.getNodeName().equalsIgnoreCase("script")) && forma != null) {
-                                                HtmlFE htmlfe = new HtmlFE(tag);
+                                                //HtmlFE htmlfe = new HtmlFE(tag);
+                                                //TODO:check if the base needs to be passed to other tags, if yes it need to be declared in the WBAdmResource interface
+                                                HtmlFE htmlfe = new HtmlFE(tag, base);
                                                 forma.add(htmlfe);
                                             }
             }
