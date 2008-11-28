@@ -121,15 +121,16 @@ public class BaseNode extends BaseNodeBase
 
     public void save() throws SWBException
     {
-        checkVersionable();
-        checkSave();
-
         GenericIterator<BaseNode> childs = listNodes();
         while (childs.hasNext())
         {
             BaseNode child = childs.next();
             child.save();
         }
+        checkVersionable();
+        checkSave();
+
+        
     }
 
     private boolean isNodeType(SemanticClass clazz)
