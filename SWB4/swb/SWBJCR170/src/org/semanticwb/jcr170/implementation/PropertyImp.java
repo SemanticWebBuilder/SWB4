@@ -28,6 +28,7 @@ import javax.jcr.nodetype.NoSuchNodeTypeException;
 import javax.jcr.nodetype.PropertyDefinition;
 import javax.jcr.version.VersionException;
 import org.semanticwb.SWBException;
+import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticLiteral;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
@@ -49,8 +50,9 @@ public final class PropertyImp implements Property
     private ArrayList<Value> values = new ArrayList<Value>();
     private String path;
     private final SimpleNode parent;
+    private final SemanticClass clazz;
 
-    PropertyImp(SimpleNode parent, String name, PropertyDefinitionImp propertyDefinition)
+    PropertyImp(SimpleNode parent, SemanticClass clazz, String name, PropertyDefinitionImp propertyDefinition)
     {
         if ( name == null )
         {
@@ -60,6 +62,12 @@ public final class PropertyImp implements Property
         this.propertyDefinition = propertyDefinition;
         path = parent.getSimplePath() + "/" + name;
         this.parent = parent;
+        this.clazz = clazz;
+    }
+
+    public SemanticClass getSemanticClass()
+    {
+        return clazz;
     }
 
     public void setValue(Value value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
@@ -71,12 +79,16 @@ public final class PropertyImp implements Property
 
     public void setValueInternal(String value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        
+        this.values.clear();
+        this.values.add(factory.createValue(value));
     }
+
     public void setValueInternal(boolean value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        
-    }   
+        this.values.clear();
+        this.values.add(factory.createValue(value));
+    }
+
     public void setValue(Value[] value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
         if ( !getDefinition().isMultiple() && value.length > 1 )
@@ -179,27 +191,21 @@ public final class PropertyImp implements Property
         BaseNode node = parent.node;
         if ( node.existsProperty(node.getSemanticObject().getSemanticClass(), name) )
         {
-            try
+            SemanticProperty property = node.getSemanticProperty(name, clazz);
+            if ( property.isDataTypeProperty() )
             {
-                SemanticProperty property = node.getSemanticProperty(name);
-                if ( property.isDataTypeProperty() )
+                Iterator<SemanticLiteral> literals = node.getSemanticObject().listLiteralProperties(property);
+                while (literals.hasNext())
                 {
-                    Iterator<SemanticLiteral> literals = node.getSemanticObject().listLiteralProperties(property);
-                    while (literals.hasNext())
-                    {
-                        values.add(factory.createValue(literals.next().getString()));
-                    }
-                }
-                else
-                {
-                    Iterator<SemanticObject> value = node.getSemanticObject().listObjectProperties(property);
-                // TODO
+                    values.add(factory.createValue(literals.next().getString()));
                 }
             }
-            catch ( SWBException swbe )
+            else
             {
+                Iterator<SemanticObject> value = node.getSemanticObject().listObjectProperties(property);
+            // TODO
+            }
 
-            }
         }
     }
 
@@ -239,12 +245,12 @@ public final class PropertyImp implements Property
 
     public double getDouble() throws ValueFormatException, RepositoryException
     {
-         Value value=getValue();
-        if(value==null)
+        Value value = getValue();
+        if ( value == null )
         {
             throw new ValueFormatException();
         }
-        return value.getDouble();        
+        return value.getDouble();
     }
 
     public Calendar getDate() throws ValueFormatException, RepositoryException
@@ -259,8 +265,8 @@ public final class PropertyImp implements Property
 
     public boolean getBoolean() throws ValueFormatException, RepositoryException
     {
-        Value value=getValue();
-        if(value==null)
+        Value value = getValue();
+        if ( value == null )
         {
             throw new ValueFormatException();
         }
