@@ -139,9 +139,17 @@ public class SWBASchedule extends GenericResource {
                 out.println("</th>");
             }
             if (hmprop.get(SWBContext.getVocabulary().swb_active) != null) {
+                sptemp = (SemanticProperty)hmprop.get(SWBContext.getVocabulary().swb_active);
+                String propname = sptemp.getName();
+                try{
+                    propname = sptemp.getDisplayName(user.getLanguage());
+                }catch(Exception e){}
                 out.println("<th>");
-                out.println("Status<br>Active/Unactive");
+                out.println(propname);
                 out.println("</th>");
+//                out.println("<th>");
+//                out.println("Status<br>Active/Unactive");
+//                out.println("</th>");
             }
             out.println("</thead>");
             out.println("<tbody>");
@@ -223,16 +231,17 @@ public class SWBASchedule extends GenericResource {
                     urlu.setParameter("sval", sobj.getURI());
                     urlu.setParameter("spropref", idp);
                     urlu.setAction("updstatus");
-                    urlu.setParameter("val", "1");
-                    out.println("<input name=\"" + prop.getName() + sobj.getURI() + "\" type=\"radio\" value=\"true\" id=\"" + prop.getName() + sobj.getURI() + "\" onclick=\"submitUrl('" + urlu + "',this); return false;\"  " + (activo ? "checked='checked'" : "") + "/>"); //onclick=\"window.location='"+urlu+"'\"
-                    SWBResourceURL urlun = paramRequest.getActionUrl();
-                    urlun.setParameter("suri", id);
-                    urlun.setParameter("sprop", idp);
-                    urlun.setParameter("sval", sobj.getURI());
-                    urlun.setParameter("spropref", idp);
-                    urlun.setAction("updstatus");
-                    urlun.setParameter("val", "0");
-                    out.println("<input name=\"" + prop.getName() + sobj.getURI() + "\" type=\"radio\" value=\"false\" id=\"" + prop.getName() + sobj.getURI() + "\" onclick=\"submitUrl('" + urlun + "',this); return false;\" " + (!activo ? "checked='checked'" : "") + " />"); //onclick=\"window.location='"+urlun+"'\"
+                    //urlu.setParameter("val", "1");
+                    out.println("<input name=\""+prop.getName()+sobj.getURI()+"\" type=\"checkbox\" value=\"1\" id=\""+prop.getName()+sobj.getURI()+"\" onclick=\"submitUrl('"+urlu+"&val='+this.checked,this); return false;\"  "+(activo?"checked='checked'":"")+"/>"); 
+//                    out.println("<input name=\"" + prop.getName() + sobj.getURI() + "\" type=\"radio\" value=\"true\" id=\"" + prop.getName() + sobj.getURI() + "\" onclick=\"submitUrl('" + urlu + "',this); return false;\"  " + (activo ? "checked='checked'" : "") + "/>"); //onclick=\"window.location='"+urlu+"'\"
+//                    SWBResourceURL urlun = paramRequest.getActionUrl();
+//                    urlun.setParameter("suri", id);
+//                    urlun.setParameter("sprop", idp);
+//                    urlun.setParameter("sval", sobj.getURI());
+//                    urlun.setParameter("spropref", idp);
+//                    urlun.setAction("updstatus");
+//                    urlun.setParameter("val", "0");
+//                    out.println("<input name=\"" + prop.getName() + sobj.getURI() + "\" type=\"radio\" value=\"false\" id=\"" + prop.getName() + sobj.getURI() + "\" onclick=\"submitUrl('" + urlun + "',this); return false;\" " + (!activo ? "checked='checked'" : "") + " />"); //onclick=\"window.location='"+urlun+"'\"
                     out.println("</td>");
                 }
                 out.println("</tr>");
@@ -1197,8 +1206,9 @@ public class SWBASchedule extends GenericResource {
         else if ("updstatus".equals(action)) {
             String soid = request.getParameter("sval");
             String value = request.getParameter("val");
+            if(value==null) value="0";
             SemanticObject sobj = ont.getSemanticObject(soid);
-            sobj.setBooleanProperty(SWBContext.getVocabulary().swb_active, value.equals("1")?true:false);
+            sobj.setBooleanProperty(SWBContext.getVocabulary().swb_active, value.equals("true")?true:false);
             Date mdate = new Date(System.currentTimeMillis());
             sobj.setDateProperty(SWBContext.getVocabulary().swb_updated, mdate);
             strModDate = Long.toString(mdate.getTime());
