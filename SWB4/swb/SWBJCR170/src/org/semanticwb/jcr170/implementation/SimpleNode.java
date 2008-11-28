@@ -7,8 +7,8 @@ package org.semanticwb.jcr170.implementation;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.UUID;
 import javax.jcr.AccessDeniedException;
@@ -43,8 +43,8 @@ import org.semanticwb.SWBException;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticProperty;
+import org.semanticwb.platform.SemanticVocabulary;
 import org.semanticwb.repository.BaseNode;
-import org.semanticwb.repository.PropertyType;
 
 /**
  *
@@ -53,6 +53,7 @@ import org.semanticwb.repository.PropertyType;
 public class SimpleNode implements Node
 {
 
+    private String id;
     static final String DEFAULT_PRIMARY_NODE_TYPE_NAME = "nt:unstructured";
     protected static final String NOT_SUPPORTED_YET = "Not supported yet.";
     protected static final String WAS_NOT_FOUND = " was not found";
@@ -61,9 +62,9 @@ public class SimpleNode implements Node
     protected BaseNode node;
     private final BaseNode root;
     private final HashSet<SemanticClass> mixins = new HashSet<SemanticClass>();
-    private final Hashtable<String, SimpleNode> childs = new Hashtable<String, SimpleNode>();
+    private final HashMap<String, SimpleNode> childs = new HashMap<String, SimpleNode>();
     private final ArrayList<SimpleNode> removedchilds = new ArrayList<SimpleNode>();
-    private final Hashtable<String, PropertyImp> properties = new Hashtable<String, PropertyImp>();
+    private final HashMap<String, PropertyImp> properties = new HashMap<String, PropertyImp>();
     private final String name;
     protected final SemanticClass clazz;
     protected final SessionImp session;
@@ -71,8 +72,9 @@ public class SimpleNode implements Node
     protected final SimpleNode parent;
     private String path = null;
 
-    SimpleNode(SessionImp session, String name, SemanticClass clazz, SimpleNode parent, int index) throws RepositoryException
+    SimpleNode(SessionImp session, String name, SemanticClass clazz, SimpleNode parent, int index, String id) throws RepositoryException
     {
+        this.id = id;
         this.name = name;
         root = session.getRootBaseNode();
         this.clazz = clazz;
@@ -94,9 +96,9 @@ public class SimpleNode implements Node
         {
             this.path = PATH_SEPARATOR;
         }
-        if ( parent != null )
+        if ( parent != null && !parent.childs.containsKey(id) )
         {
-            parent.childs.put(name, this);
+            parent.childs.put(this.id, this);
         }
         try
         {
@@ -121,7 +123,7 @@ public class SimpleNode implements Node
                     prop = addProperty(getName(BaseNode.vocabulary.jcr_lockIsDeep), superTypeClazz);
                     prop.setValueInternal(false);
                 }
-                if ( root.isMixIn(clazz) )
+                if ( root.isMixIn(superTypeClazz) )
                 {
                     mixins.add(superTypeClazz);
                 }
@@ -134,8 +136,9 @@ public class SimpleNode implements Node
 
     }
 
-    SimpleNode(BaseNode node, SessionImp session, SimpleNode parent) throws RepositoryException
+    SimpleNode(BaseNode node, SessionImp session, SimpleNode parent, String id) throws RepositoryException
     {
+        this.id = id;
         if ( node == null )
         {
             throw new IllegalArgumentException("The base node is null");
@@ -150,7 +153,7 @@ public class SimpleNode implements Node
         {
             root = session.getRootBaseNode();
         }
-        this.clazz = root.getSemanticObject().getSemanticClass();
+        this.clazz = node.getSemanticObject().getSemanticClass();
         this.index = 0;
         this.parent = parent;
         if ( parent != null )
@@ -192,19 +195,20 @@ public class SimpleNode implements Node
                 mixins.add(parentClazz);
             }
         }
-        if ( parent != null )
+        if ( parent != null && !parent.childs.containsKey(id))
         {
-            parent.childs.put(name, this);
+            parent.childs.put(this.id, this);
         }
-        if ( node != null )
+
+        Iterator<SemanticProperty> semanticProperties = clazz.listProperties();
+        while (semanticProperties.hasNext())
         {
-            Iterator<SemanticProperty> semanticProperties = node.listSemanticProperties();
-            while (semanticProperties.hasNext())
+            SemanticProperty prop = semanticProperties.next();
+            if ( !node.isInternal(prop) )
             {
-                SemanticProperty prop = semanticProperties.next();
                 try
                 {
-                    addProperty(prop, node, false);
+                    addProperty(prop, node, false, clazz);
                 }
                 catch ( Exception e )
                 {
@@ -212,17 +216,18 @@ public class SimpleNode implements Node
                 }
             }
         }
+
     }
 
-    private PropertyImp addProperty(SemanticProperty property, BaseNode node, boolean isNew) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
+    private PropertyImp addProperty(SemanticProperty property, BaseNode node, boolean isNew, SemanticClass clazz) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        PropertyImp prop = addProperty(property, node);
+        PropertyImp prop = addProperty(property, node, clazz);
         prop.setNew(isNew);
         return prop;
 
     }
 
-    private PropertyImp addProperty(SemanticProperty property, BaseNode node) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
+    private PropertyImp addProperty(SemanticProperty property, BaseNode node, SemanticClass clazz) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
         if ( this.properties.containsKey(getName(property)) )
         {
@@ -231,7 +236,7 @@ public class SimpleNode implements Node
         else
         {
             PropertyDefinitionImp propertyDefinition = new PropertyDefinitionImp(session, property);
-            PropertyImp prop = new PropertyImp(this, getName(property), propertyDefinition);
+            PropertyImp prop = new PropertyImp(this, clazz, getName(property), propertyDefinition);
             this.properties.put(prop.getName(), prop);
             return prop;
         }
@@ -244,22 +249,15 @@ public class SimpleNode implements Node
         {
             if ( session.getRootBaseNode().existsProperty(clazz, name) )
             {
-                try
-                {
-                    SemanticProperty property = session.getRootBaseNode().getSemanticProperty(name);
-                    PropertyDefinitionImp propertyDefinition = new PropertyDefinitionImp(session, property);
-                    prop = new PropertyImp(this, name, propertyDefinition);
-                    this.properties.put(name, prop);
-                }
-                catch ( SWBException swbe )
-                {
-                    throw new RepositoryException(swbe);
-                }
+                SemanticProperty property = session.getRootBaseNode().getSemanticProperty(name, clazz);
+                PropertyDefinitionImp propertyDefinition = new PropertyDefinitionImp(session, property);
+                prop = new PropertyImp(this, clazz, name, propertyDefinition);
+                this.properties.put(name, prop);
             }
             else
             {
                 PropertyDefinitionImp propertyDefinition = new PropertyDefinitionImp(name);
-                prop = new PropertyImp(this, name, propertyDefinition);
+                prop = new PropertyImp(this, clazz, name, propertyDefinition);
                 this.properties.put(name, prop);
             }
         }
@@ -468,71 +466,76 @@ public class SimpleNode implements Node
         return null;
     }
 
-    SimpleNode getSimpleNode(String name) throws RepositoryException
+    public SimpleNode getNodeByName(String name) throws RepositoryException
     {
-        SimpleNode getSimpleNode = this.childs.get(name);
-        if ( getSimpleNode != null )
+        for ( SimpleNode childNode : getSimpleNodes() )
         {
-            return getSimpleNode;
-        }
-        else
-        {
-            GenericIterator<BaseNode> childs = node.listNodes();
-            while (childs.hasNext())
+            if ( childNode.getName().equals(name) )
             {
-                BaseNode nodeChild = childs.next();
-                if ( nodeChild.getName().equals(name) )
-                {
-                    boolean isDeleted = false;
-                    for ( SimpleNode childNode : this.removedchilds )
-                    {
-                        if ( childNode.node != null && childNode.node.getSemanticObject().equals(nodeChild.getSemanticObject()) )
-                        {
-                            isDeleted = true;
-                            break;
-                        }
-                    }
-                    if ( !isDeleted && this.childs.get(name) == null )
-                    {
-                        SimpleNode child = new SimpleNode(nodeChild, session, this);
-                        this.childs.put(nodeChild.getName(), child);
-                        return child;
-                    }
-                }
+                return childNode;
             }
         }
-        return getSimpleNode;
+        return null;
     }
 
-    Iterator<SimpleNode> getSimpleNodes() throws RepositoryException
+    public String getId()
+    {
+        return id;
+    }
+
+    public SimpleNode[] getSimpleNodeByName(String name) throws RepositoryException
     {
         ArrayList<SimpleNode> nodes = new ArrayList<SimpleNode>();
-        if ( node != null )
+        for ( SimpleNode childNode : getSimpleNodes() )
         {
-            GenericIterator<BaseNode> childs = node.listNodes();
-            while (childs.hasNext())
+            if ( childNode.name.equals(name) )
             {
-                BaseNode nodeChild = childs.next();
-                if ( !this.childs.containsKey(nodeChild.getName()) )
-                {
-                    boolean isDeleted = false;
-                    for ( SimpleNode childNode : this.removedchilds )
-                    {
-                        if ( childNode.node != null && childNode.node.getSemanticObject().equals(nodeChild.getSemanticObject()) )
-                        {
-                            isDeleted = true;
-                            break;
-                        }
-                    }
-                    if ( !isDeleted && this.childs.get(name) == null )
-                    {
-                        this.childs.put(nodeChild.getName(), new SimpleNode(nodeChild, session, this));
-                    }
-                }
+                nodes.add(childNode);
             }
         }
-        nodes.addAll(this.childs.values());
-        return nodes.iterator();
+        return nodes.toArray(new SimpleNode[nodes.size()]);
+    }
+
+    public SimpleNode getSimpleNodeById(String id) throws RepositoryException
+    {
+        for ( SimpleNode childNode : getSimpleNodes() )
+        {
+            if ( childNode.id.equals(id) )
+            {
+                return childNode;
+            }
+        }
+        return null;
+    }
+
+    SimpleNode[] getSimpleNodes() throws RepositoryException
+    {
+        if ( node != null )
+        {
+            GenericIterator<BaseNode> childNodes = node.listNodes();
+            while (childNodes.hasNext())
+            {
+                BaseNode nodeChild = childNodes.next();
+                boolean isDeleted = false;
+                for ( SimpleNode childNode : this.removedchilds )
+                {
+                    if ( childNode.id.equals(nodeChild.getId()) )
+                    {
+                        isDeleted = true;
+                        break;
+                    }
+                }
+                if ( !isDeleted )
+                {
+                    if ( !childs.containsKey(nodeChild.getId()) )
+                    {
+                        new SimpleNode(nodeChild, session, this, nodeChild.getId());
+                    }
+                }
+
+            }
+        }
+        return childs.values().toArray(new SimpleNode[childs.size()]);
     }
 
     public NodeIterator getNodes() throws RepositoryException
@@ -578,7 +581,7 @@ public class SimpleNode implements Node
         {
             throw new UnsupportedRepositoryOperationException();
         }
-        
+
     }
 
     public boolean hasNodes() throws RepositoryException
@@ -681,11 +684,11 @@ public class SimpleNode implements Node
     {
         int depth = 0;
         Node thisNode = this;
-        Node parent = this.getParent();
-        while (parent == null)
+        Node parentNode = this.getParent();
+        while (parentNode == null)
         {
-            thisNode = parent;
-            parent = thisNode.getParent();
+            thisNode = parentNode;
+            parentNode = thisNode.getParent();
             depth++;
         }
         return depth;
@@ -728,6 +731,71 @@ public class SimpleNode implements Node
 
     }
 
+    private void saveProperties() throws SWBException, RepositoryException
+    {
+        for ( SimpleNode child : this.childs.values() )
+        {
+            child.saveProperties();
+        }
+        for ( SemanticClass mixinClazz : this.mixins )
+        {
+            node.registerClass(mixinClazz);
+        }
+        for ( PropertyImp prop : this.properties.values() )
+        {
+            if ( prop.isNew() || prop.isModified() )
+            {
+                if ( node.existsProperty(prop.getName(), prop.getSemanticClass()) )
+                {
+                    SemanticProperty semanticProperty = node.getSemanticProperty(prop.getName(), prop.getSemanticClass());
+                    node.setProperty(semanticProperty, prop.getString());
+                }
+                else
+                {
+                    String type = SemanticVocabulary.XMLS_STRING;
+                    SemanticProperty semanticProperty = node.registerCustomProperty(prop.getName(), type, prop.getSemanticClass());
+                    node.setProperty(semanticProperty, prop.getString());
+                }
+                prop.setModified(false);
+                prop.setNew(false);
+            }
+        }
+    }
+
+    private void removeChilds() throws RepositoryException, SWBException
+    {
+        for ( SimpleNode child : this.removedchilds )
+        {
+            child.removeChilds();
+            if ( child.node != null )
+            {
+                child.node.remove();
+            }
+        }
+        // delete childNodes
+        this.removedchilds.clear();
+    }
+
+    private void createChilds() throws RepositoryException, SWBException
+    {
+        ArrayList<SimpleNode> newChilds=new ArrayList<SimpleNode>();
+        for ( SimpleNode child : this.childs.values() )
+        {
+            if ( child.node == null )
+            {
+                child.node = node.createNodeBase(child.getName(), child.clazz);                
+                child.id = child.node.getId();                                
+            }
+            child.createChilds();
+            newChilds.add(child);
+        }
+        this.childs.clear();
+        for(SimpleNode child : newChilds)
+        {
+            this.childs.put(child.id, child);
+        }
+    }
+
     public void save() throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
     {
         if ( isNew() )
@@ -736,50 +804,9 @@ public class SimpleNode implements Node
         }
         try
         {
-            for ( SemanticClass mixinClazz : this.mixins )
-            {
-                node.registerClass(mixinClazz);
-            }
-            for ( PropertyImp prop : this.properties.values() )
-            {
-                if ( prop.isNew() || prop.isModified() )
-                {
-                    if ( node.existsProperty(clazz, prop.getName()) )
-                    {
-                        SemanticProperty semanticProperty = node.getSemanticProperty(prop.getName());
-                        node.setProperty(semanticProperty, prop.getString());
-                    }
-                    else
-                    {
-                        PropertyType type = PropertyType.STRING;
-                        SemanticProperty semanticProperty = node.getSemanticProperty(prop.getName(), type);
-                        node.setProperty(semanticProperty, prop.getString());
-                    }
-                    prop.setModified(false);
-                    prop.setNew(false);
-                }
-            }
-            // delete childNodes
-            for ( SimpleNode childs : this.removedchilds )
-            {
-                if ( childs.node != null )
-                {
-                    childs.node.remove();
-                }
-            }
-            this.removedchilds.clear();
-            for ( SimpleNode child : this.childs.values() )
-            {
-                if ( child.node == null )
-                {
-                    child.node = node.createNodeBase(child.getName(), child.clazz);
-                    child.save();
-                }
-                else
-                {
-                    child.save();
-                }
-            }
+            removeChilds();
+            createChilds();
+            saveProperties();
             node.save();
         }
         catch ( SWBException swbe )
@@ -828,13 +855,14 @@ public class SimpleNode implements Node
 
     public void remove() throws VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        if ( isVersionable() && !isCheckedOut() )
+        if ( parent.isVersionable() && !parent.isCheckedOut() )
         {
             throw new RepositoryException("The node can not be removed in check-in mode");
         }
+
         session.checksLock(this);
-        parent.removedchilds.add(parent.childs.get(name));
-        parent.childs.remove(name);
+        parent.removedchilds.add(this);
+        parent.childs.remove(this.id);
     }
 
     protected SessionImp getSessionImp()
@@ -963,7 +991,7 @@ public class SimpleNode implements Node
             primaryNodeTypeName = DEFAULT_PRIMARY_NODE_TYPE_NAME;
         }
         relPath = SessionImp.normalize(relPath, this);
-        String name = SessionImp.getNodeName(relPath);
+        String nameNode = SessionImp.getNodeName(relPath);
         String parentPath = SessionImp.getParentPath(relPath, this);
         Item item = session.getItem(parentPath);
         if ( item.isNode() )
@@ -979,16 +1007,24 @@ public class SimpleNode implements Node
             {
                 throw new ItemExistsException("The item " + relPath + " already exists");
             }
-            NodeTypeImp nodeType = ( NodeTypeImp ) this.getPrimaryNodeType();
-            if ( !nodeType.canAddChildNode(name, primaryNodeTypeName) )
+            //NodeTypeImp nodeType = ( NodeTypeImp ) this.getPrimaryNodeType();
+            try
             {
-                throw new ConstraintViolationException();
+                SemanticClass clazzToInsert = session.getRootBaseNode().getSemanticClass(primaryNodeTypeName);
+                if ( !session.getRootBaseNode().canAddNode(clazzToInsert, clazz) )
+                {
+                    throw new ConstraintViolationException("The node can not be added to this node");
+                }
+            }
+            catch ( SWBException e )
+            {
+                throw new NoSuchNodeTypeException("The node type " + primaryNodeTypeName + " was not found");
             }
 
             try
             {
-                SemanticClass clazz = root.getSemanticClass(primaryNodeTypeName);
-                SimpleNode tmp = new SimpleNode(session, name, clazz, this, 0);
+                SemanticClass primaryNodeClazz = root.getSemanticClass(primaryNodeTypeName);
+                SimpleNode tmp = new SimpleNode(session, nameNode, primaryNodeClazz, this, 0, UUID.randomUUID().toString());
                 return tmp;
             }
             catch ( SWBException swbe )
@@ -1067,9 +1103,16 @@ public class SimpleNode implements Node
 
     public VersionHistory getVersionHistory() throws UnsupportedRepositoryOperationException, RepositoryException
     {
-        if ( isVersionable() )
+        if ( isVersionable() && node != null )
         {
-
+            try
+            {
+                return new VersionHistoryImp(node.getHistoryNode(), session, this);
+            }
+            catch ( SWBException e )
+            {
+                throw new RepositoryException(e);
+            }
         }
         throw new UnsupportedRepositoryOperationException(NOT_SUPPORTED_YET);
     }
@@ -1100,7 +1143,7 @@ public class SimpleNode implements Node
                 {
                     return properties.get(getName(BaseNode.vocabulary.jcr_isCheckedOut)).getBoolean();
                 }
-                catch(ValueFormatException e)
+                catch ( ValueFormatException e )
                 {
                     return false;
                 }
@@ -1208,16 +1251,16 @@ public class SimpleNode implements Node
     {
         ArrayList<Property> propeties = new ArrayList<Property>();
         String[] names = namePattern.split("|");
-        for ( String name : names )
+        for ( String propertyNames : names )
         {
-            if ( name != null && !name.trim().equals("") )
+            if ( propertyNames != null && !propertyNames.trim().equals("") )
             {
                 PropertyIterator myProperties = this.getProperties();
                 while (myProperties.hasNext())
                 {
                     Property prop = myProperties.nextProperty();
-                    String namePrefix = getPrefix(name);
-                    String namePropertyToFind = getNameProperty(name);
+                    String namePrefix = getPrefix(propertyNames);
+                    String namePropertyToFind = getNameProperty(propertyNames);
                     String propPrefix = getPrefix(prop.getName());
                     String propName = SessionImp.getNodeName(prop.getName());
                     boolean prefixEquals = false;
@@ -1257,14 +1300,7 @@ public class SimpleNode implements Node
         boolean equals = false;
         if ( obj instanceof SimpleNode )
         {
-            try
-            {
-                equals = (( SimpleNode ) obj).getPath().equals(this.getPath());
-            }
-            catch ( RepositoryException re )
-            {
-                equals = false;
-            }
+            equals = (( SimpleNode ) obj).id.equals(this.id);
         }
         return equals;
     }
@@ -1278,14 +1314,7 @@ public class SimpleNode implements Node
     @Override
     public int hashCode()
     {
-        try
-        {
-            return this.getPath().hashCode();
-        }
-        catch ( RepositoryException re )
-        {
-            return 0;
-        }
+        return this.id.hashCode();
     }
 }   
     
