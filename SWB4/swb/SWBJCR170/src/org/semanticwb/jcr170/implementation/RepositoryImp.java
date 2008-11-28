@@ -60,8 +60,7 @@ public final class RepositoryImp implements Repository
                 if ( ws.getRoot() == null )
                 {
                     Unstructured root = ws.createUnstructured();
-                    root.setName("jcr:root");
-                    root.setPath("/");
+                    root.setName("jcr:root");                    
                     ws.setRoot(root);
                 }
                 exists = true;
@@ -88,8 +87,7 @@ public final class RepositoryImp implements Repository
                 if ( ws.getRoot() == null )
                 {
                     Unstructured root = ws.createUnstructured();
-                    root.setName("jcr:root");
-                    root.setPath("/");
+                    root.setName("jcr:root");                    
                     ws.setRoot(root);
                 }
                 exists = true;
@@ -101,7 +99,19 @@ public final class RepositoryImp implements Repository
             createWorkspace(defaultWorkspaceName);
         }
     }
-
+    public void recreateDefaultWorkspace() throws RepositoryException
+    {
+        for ( String name : listWorkspaces() )
+        {
+            if ( name.equals(defaultWorkspaceName) )
+            {                
+                String uri=SWBContext.getWorkspace(defaultWorkspaceName).getURI();
+                SWBContext.removeWorkspace(uri);                
+                createWorkspace(defaultWorkspaceName);
+                break;
+            }
+        }
+    }
     public String[] listWorkspaces()
     {
         HashSet<String> names = new HashSet<String>();
@@ -143,8 +153,7 @@ public final class RepositoryImp implements Repository
         }
         Workspace ws = SWBContext.createWorkspace(name, namespace);
         Unstructured root = ws.createUnstructured();
-        root.setName("jcr:root");
-        root.setPath("/");
+        root.setName("jcr:root");        
         ws.setRoot(root);
     }
 

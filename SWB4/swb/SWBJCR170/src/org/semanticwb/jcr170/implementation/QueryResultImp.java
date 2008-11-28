@@ -68,31 +68,14 @@ public class QueryResultImp implements QueryResult
 
     public NodeIterator getNodes() throws RepositoryException
     {
-        ArrayList<SimpleNode> simpleNodes = new ArrayList<SimpleNode>();
-        Workspace workspace = SWBContext.getWorkspace(workspaceName);
+        ArrayList<SimpleNode> simpleNodes = new ArrayList<SimpleNode>();        
         for ( int i = 0; i < nodes.size(); i++ )
         {
             Element eNode = ( Element ) nodes.get(i);
-            String id = eNode.getAttributeValue("id");
-            String type = eNode.getAttributeValue("primaryType", ns);
-            if ( type == null )
+            String path = eNode.getAttributeValue("path");                        
+            for(SimpleNode node : session.getSimpleNodeByPath(path,session.getSimpleRootNode(),true))
             {
-                throw new RepositoryException("The jcr:primaryType was not found");
-            }
-            else
-            {
-                try
-                {
-                    BaseNode baseNode = session.getBaseNodeFromType(id, type);
-                    if ( baseNode != null )
-                    {                        
-                        simpleNodes.add((SimpleNode)session.getItem(baseNode.getPath()));
-                    }
-                }
-                catch ( SWBException swe )
-                {
-                    throw new RepositoryException(swe);
-                }
+                simpleNodes.add(node);            
             }
         }
         return new NodeIteratorImp(session, simpleNodes);

@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.AccessControlException;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
 import javax.jcr.AccessDeniedException;
@@ -46,7 +46,6 @@ import org.jdom.Namespace;
 import org.jdom.output.XMLOutputter;
 import org.semanticwb.SWBException;
 import org.semanticwb.jcr170.implementation.util.NCName;
-import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
@@ -87,31 +86,12 @@ public class SessionImp implements Session
         this.credentials = credentials;
         this.workspace = new WorkspaceImp(this, workspaceName);
         BaseNode rootBaseNode = SWBContext.getWorkspace(this.workspace.getName()).getRoot();
-        root = new SimpleNode(rootBaseNode, this, null);
+        root = new SimpleNode(rootBaseNode, this, null, rootBaseNode.getId());
     }
 
-    private SimpleNode load(String path) throws RepositoryException
+    public SimpleNode getSimpleRootNode()
     {
-        SimpleNode load = null;        
-        String[] values = path.split("/");
-        if(values.length==0)
-        {
-            return root;
-        }
-        for ( String value : values )
-        {
-            if ( value.equals("") || values.equals("/") )
-            {
-                load = root;
-            }
-            else
-            {
-                SimpleNode parent = load;
-                load = parent.getSimpleNode(value);
-            }
-        }
-
-        return load;
+        return root;
     }
 
     public Document getDocumentView() throws RepositoryException
@@ -129,12 +109,62 @@ public class SessionImp implements Session
         Element element = new Element(clazz.getName(), ns);
         appendPropertiesToNode(node, element);
         parent.addContent(element);
-        Iterator<SimpleNode> itChilds = node.getSimpleNodes();
-        while (itChilds.hasNext())
+        for(SimpleNode child : node.getSimpleNodes())
         {
-            SimpleNode child = itChilds.next();
-            appendNode(child, element);
+             appendNode(child, element);
         }
+        
+    }
+
+    
+    public SimpleNode[] getSimpleNodeByPath(String path,SimpleNode parent,boolean all) throws RepositoryException
+    {
+               
+        ArrayList<SimpleNode> nodes = new ArrayList<SimpleNode>(); 
+        String[] values = path.split("/");
+        if ( values.length == 0 )
+        {
+            nodes.add(root);
+        }
+        else
+        {
+            int depth=0;            
+            for ( String value : values )
+            {
+                SimpleNode[] parents={parent};
+                depth++;
+                if ( value.equals("") || values.equals("/") )
+                {
+                    parent = root;
+                }
+                else
+                {
+                    String name=value;
+                    int pos=name.indexOf("[");
+                    if(pos!=-1)
+                    {
+                        name=name.substring(0,pos);
+                    }
+                    for(SimpleNode parentNode : parents)
+                    {
+                        SimpleNode[] childs=parentNode.getSimpleNodeByName(value);
+                        if(depth!=values.length)
+                        {
+                            parents=childs;
+                        }
+                        else
+                        {
+                            for(SimpleNode child : childs)
+                            {
+                                nodes.add(child);
+                            }
+                        }
+                    }
+                }
+                
+            }
+        }
+        return nodes.toArray(new SimpleNode[nodes.size()]);
     }
 
     private static String getPrefix(String name)
@@ -197,10 +227,8 @@ public class SessionImp implements Session
         Element element = new Element(getName(node.getName()));
         appendPropertiesToNode(node, element);
         document.setRootElement(element);
-        Iterator<SimpleNode> itChilds = node.getSimpleNodes();
-        while (itChilds.hasNext())
+        for(SimpleNode child : node.getSimpleNodes())
         {
-            SimpleNode child = itChilds.next();
             appendNode(child, element);
         }
     }
@@ -278,12 +306,10 @@ public class SessionImp implements Session
         }
         appendPropertiesToNodeInternalView(node, element);
         parent.addContent(element);
-        Iterator<SimpleNode> itChilds = node.getSimpleNodes();
-        while (itChilds.hasNext())
+        for(SimpleNode child : node.getSimpleNodes())
         {
-            SimpleNode child = itChilds.next();
             appendNodeInternalView(child, element, internal);
-        }
+        }        
     }
 
     private static void appendNodeInternalView(SimpleNode node, Document document, boolean internal) throws RepositoryException
@@ -291,14 +317,12 @@ public class SessionImp implements Session
         Element element = new Element(getName(node.getName()));
         if ( internal )
         {
-            element.setAttribute("path", node.getSimplePath());
+            element.setAttribute("path", node.getPath());
         }
         appendPropertiesToNodeInternalView(node, element);
         document.addContent(element);
-        Iterator<SimpleNode> itChilds = node.getSimpleNodes();
-        while (itChilds.hasNext())
+        for(SimpleNode child : node.getSimpleNodes())
         {
-            SimpleNode child = itChilds.next();
             appendNodeInternalView(child, element, internal);
         }
     }
@@ -335,10 +359,8 @@ public class SessionImp implements Session
         element.setAttribute(new Attribute("name", node.getName(), NAMESPACE));
         appendPropertiesToNodeSystemView(node, element);
         parent.addContent(element);
-        Iterator<SimpleNode> itChilds = node.getSimpleNodes();
-        while (itChilds.hasNext())
-        {
-            SimpleNode child = itChilds.next();
+        for(SimpleNode child : node.getSimpleNodes())
+        {            
             appendNodeSystemView(child, element);
         }
 
@@ -350,10 +372,8 @@ public class SessionImp implements Session
         element.setAttribute(new Attribute("name", node.getName(), NAMESPACE));
         appendPropertiesToNodeSystemView(node, element);
         document.addContent(element);
-        Iterator<SimpleNode> itChilds = node.getSimpleNodes();
-        while (itChilds.hasNext())
-        {
-            SimpleNode child = itChilds.next();
+        for(SimpleNode child : node.getSimpleNodes())
+        {            
             appendNodeSystemView(child, element);
         }
     }
@@ -407,7 +427,10 @@ public class SessionImp implements Session
 
     public static boolean isRelative(String relPath) throws RepositoryException
     {
-
+        if(relPath.startsWith("/"))            
+        {
+            return false;
+        }        
         boolean isRelative = false;
         if ( isPathElement(relPath) )
         {
@@ -672,12 +695,14 @@ public class SessionImp implements Session
 
     public Item getItem(String absPath) throws PathNotFoundException, RepositoryException
     {
-        Item getItem = load(absPath);
-        if ( getItem == null )
+        // TODO, no trae propiedades y la ruta puede indicar el segundo o el primero
+        // ejemplo /Categorty[0]/Deportes[1]
+        SimpleNode[] nodes = getSimpleNodeByPath(absPath,root,false);
+        if ( nodes.length == 0 )
         {
             throw new PathNotFoundException();
         }
-        return getItem;
+        return nodes[0];
 
     }
 
