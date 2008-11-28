@@ -40,9 +40,9 @@ public class SWBASOPropRefEditor extends GenericResource {
         String idp = request.getParameter("sprop");
         String idpref = request.getParameter("spropref");
         
-        System.out.println("id:"+id);
-        System.out.println("idp:"+idp);
-        System.out.println("idpref:"+idpref);
+//        System.out.println("id:"+id);
+//        System.out.println("idp:"+idp);
+//        System.out.println("idpref:"+idpref);
         
         String action = request.getParameter("act");
 
@@ -134,9 +134,18 @@ public class SWBASOPropRefEditor extends GenericResource {
             }
             if(hmprop.get(SWBContext.getVocabulary().swb_active)!=null)
             {
+                sptemp = (SemanticProperty)hmprop.get(SWBContext.getVocabulary().swb_active);
+                String propname = sptemp.getName();
+                try{
+                    propname = sptemp.getDisplayName(user.getLanguage());
+                }catch(Exception e){}
                 out.println("<th>");
-                out.println("Status<br>Active/Unactive");
+                out.println(propname);
                 out.println("</th>");
+                
+//                out.println("<th>");
+//                out.println("Status<br>Active/Unactive");
+//                out.println("</th>");
             }
             out.println("</thead>");
             out.println("<tbody>");
@@ -153,8 +162,9 @@ public class SWBASOPropRefEditor extends GenericResource {
                 
                 out.println("<td>"); 
                 SWBResourceURL urlr = paramRequest.getActionUrl();
-                urlr.setParameter("suri", obj.getURI());
-                urlr.setParameter("sprop", prop.getURI());
+                urlr.setParameter("suri", id);
+                urlr.setParameter("sprop", idp);
+                urlr.setParameter("spropref", idpref);
                 urlr.setParameter("sval", sobj.getURI());
                 urlr.setParameter(prop.getName(), prop.getURI());
                 urlr.setAction("remove");
@@ -162,8 +172,9 @@ public class SWBASOPropRefEditor extends GenericResource {
                 out.println("</td>");
                 out.println("<td>");
                 SWBResourceURL urlchoose = paramRequest.getRenderUrl();
-                urlchoose.setParameter("suri", obj.getURI());
-                urlchoose.setParameter("sprop", prop.getURI());
+                urlchoose.setParameter("suri", id);
+                urlchoose.setParameter("sprop", idp);
+                urlchoose.setParameter("spropref", idpref);
                 urlchoose.setParameter("sobj", sobj.getURI());
                 if(id!=null)urlchoose.setParameter("rsuri",id);
                 if(idp!=null)urlchoose.setParameter("rsprop", idp);
@@ -180,7 +191,7 @@ public class SWBASOPropRefEditor extends GenericResource {
                     urlu.setParameter("suri", id);
                     urlu.setParameter("sprop", idp);
                     urlu.setParameter("sval", sobj.getURI());
-                    urlu.setParameter("spropref", idp);
+                    urlu.setParameter("spropref", idpref);
                     urlu.setAction("update");
                     
                     out.println("<input type=\"text\" name=\""+semprop.getName()+"\" onblur=\"submitUrl('"+urlu+"&"+semprop.getName()+"='+this.value,this); return false;\" value=\""+getValueSemProp(sobj, semprop)+"\" />");
@@ -209,18 +220,19 @@ public class SWBASOPropRefEditor extends GenericResource {
                     urlu.setParameter("suri", id);
                     urlu.setParameter("sprop", idp);
                     urlu.setParameter("sval", sobj.getURI());
-                    urlu.setParameter("spropref", idp);
+                    urlu.setParameter("spropref", idpref);
                     urlu.setAction("updstatus");
-                    urlu.setParameter("val", "1");
-                    out.println("<input name=\""+prop.getName()+sobj.getURI()+"\" type=\"radio\" value=\"true\" id=\""+prop.getName()+sobj.getURI()+"\" onclick=\"submitUrl('"+urlu+"',this); return false;\"  "+(activo?"checked='checked'":"")+"/>"); //onclick=\"window.location='"+urlu+"'\"
-                    SWBResourceURL urlun = paramRequest.getActionUrl();
-                    urlun.setParameter("suri", id);
-                    urlun.setParameter("sprop", idp);
-                    urlun.setParameter("sval", sobj.getURI());
-                    urlun.setParameter("spropref", idp);
-                    urlun.setAction("updstatus");
-                    urlun.setParameter("val", "0");
-                    out.println("<input name=\""+prop.getName()+sobj.getURI()+"\" type=\"radio\" value=\"false\" id=\""+prop.getName()+sobj.getURI()+"\" onclick=\"submitUrl('"+urlun+"',this); return false;\"  "+(!activo?"checked='checked'":"")+" />"); //onclick=\"window.location='"+urlun+"'\"
+                    //urlu.setParameter("val", "1");
+                    out.println("<input name=\""+prop.getName()+sobj.getURI()+"\" type=\"checkbox\" value=\"1\" id=\""+prop.getName()+sobj.getURI()+"\" onclick=\"submitUrl('"+urlu+"&val='+this.checked,this); return false;\"  "+(activo?"checked='checked'":"")+"/>"); 
+                    //out.println("<input name=\""+prop.getName()+sobj.getURI()+"\" type=\"radio\" value=\"true\" id=\""+prop.getName()+sobj.getURI()+"\" onclick=\"submitUrl('"+urlu+"',this); return false;\"  "+(activo?"checked='checked'":"")+"/>"); 
+//                    SWBResourceURL urlun = paramRequest.getActionUrl();
+//                    urlun.setParameter("suri", id);
+//                    urlun.setParameter("sprop", idp);
+//                    urlun.setParameter("sval", sobj.getURI());
+//                    urlun.setParameter("spropref", idpref);
+//                    urlun.setAction("updstatus");
+//                    urlun.setParameter("val", "0");
+//                    out.println("<input name=\""+prop.getName()+sobj.getURI()+"\" type=\"radio\" value=\"false\" id=\""+prop.getName()+sobj.getURI()+"\" onclick=\"submitUrl('"+urlun+"',this); return false;\"  "+(!activo?"checked='checked'":"")+" />"); 
                     out.println("</td>");
                 }
                 out.println("</tr>");
@@ -232,7 +244,7 @@ public class SWBASOPropRefEditor extends GenericResource {
             SWBResourceURL urlNew = paramRequest.getRenderUrl();
             urlNew.setParameter("suri", id);
             urlNew.setParameter("sprop", idp);
-            urlNew.setParameter("spropref", idp);
+            urlNew.setParameter("spropref", idpref);
             urlNew.setParameter("act", "choose");
             out.println("<p><a href=\"#\" onclick=\"submitUrl('"+urlNew+"',this); return false;\">Add New</a>");
             out.println("</p>");
@@ -381,6 +393,7 @@ public class SWBASOPropRefEditor extends GenericResource {
             out.println("</form>");
         } else if (action.equals("choose")) { //lista de instancias de tipo propiedad existentes para selecionar
             SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(idp);
+            if(idpref!=null) prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(idpref);
             SemanticClass clsprop = prop.getRangeClass();
             title = clsprop.getName();
             HashMap hmSO = new HashMap();
@@ -396,6 +409,7 @@ public class SWBASOPropRefEditor extends GenericResource {
             out.println("<fieldset>");
             out.println("	<legend> Choose - " + prop.getDisplayName(user.getLanguage()) + " ( " + getDisplaySemObj(obj,user.getLanguage()) + " )</legend>");
             out.println("	<ol>");
+            log.debug("Clase: "+clsprop.getName());
             Iterator<SemanticObject> itso = obj.getModel().listInstancesOfClass(clsprop);
             while (itso.hasNext()) {
                 SemanticObject sobj = itso.next();
@@ -405,7 +419,8 @@ public class SWBASOPropRefEditor extends GenericResource {
                     SWBResourceURL urlchoose = paramRequest.getActionUrl();
                     urlchoose.setAction("choose");
                     urlchoose.setParameter("suri", obj.getURI());
-                    urlchoose.setParameter("sprop", prop.getURI());
+                    urlchoose.setParameter("sprop", idp); 
+                    if(idpref!=null)urlchoose.setParameter("spropref", idpref); 
                     urlchoose.setParameter("sobj", sobj.getURI());
                     out.println("<a href=\"#\" onclick=\"submitUrl('"+urlchoose+"',this); return false;\">" + stitle + "</a>");
                 } else {
@@ -483,8 +498,9 @@ public class SWBASOPropRefEditor extends GenericResource {
         else if ("updstatus".equals(action)) {
             String soid = request.getParameter("sval");
             String value = request.getParameter("val");
+            if(value==null) value="0";
             SemanticObject sobj = ont.getSemanticObject(soid);
-            sobj.setBooleanProperty(SWBContext.getVocabulary().swb_active, value.equals("1")?true:false);
+            sobj.setBooleanProperty(SWBContext.getVocabulary().swb_active, value.equals("true")?true:false);
 
             SemanticClass scls = sobj.getSemanticClass();
             log.debug("SWBASOPropRefEditor: ProcessAction(updstatus):"+scls.getClassName()+": "+value);
@@ -510,10 +526,20 @@ public class SWBASOPropRefEditor extends GenericResource {
                 SemanticObject nobj = obj.getModel().createSemanticObject(obj.getModel().getObjectUri(str_lid, ncls), ncls);
                 if(prop.getName().startsWith("has"))obj.addObjectProperty(prop, nobj);
                 else obj.setObjectProperty(prop, nobj);
+                if(prop.getName().endsWith("Ref")&&spropref!=null)
+                {
+                    String soid = request.getParameter("sobj"); 
+                    SemanticObject soref = null;
+                    if(soid!=null&&soid.trim().length()>0) soref = ont.getSemanticObject(soid);
+                    SemanticProperty spref = ont.getSemanticProperty(spropref);
+                    nobj.setObjectProperty(spref, soref);
+                }
+
                 response.setMode(response.Mode_EDIT);
-                response.setRenderParameter("suri", nobj.getURI());
-                response.setRenderParameter("rsuri", obj.getURI());
-                response.setRenderParameter("sprop", prop.getURI());
+                if(id!=null)response.setRenderParameter("suri", id);
+                if(rid!=null)response.setRenderParameter("rsuri", rid);
+                if(sprop!=null)response.setRenderParameter("sprop", sprop);
+                if(spropref!=null)response.setRenderParameter("spropref", spropref);
                 response.setRenderParameter("act", "");
             } else {
                 //Llamada para pedir el id del SemanticObject que no cuenta con el AutogenID
@@ -527,15 +553,13 @@ public class SWBASOPropRefEditor extends GenericResource {
         } else if ("remove".equals(action)) //suri, prop
         {
             log.debug("SWASemObjectEditor.processAction(remove)");
-            String prop_param = request.getParameter("sprop");
-            String prop_param_ref = request.getParameter("spropref");
             Iterator<SemanticProperty> it = cls.listProperties();
             while (it.hasNext()) {
                 SemanticProperty prop = it.next();
                 String value = request.getParameter(prop.getName());
                 String sval = request.getParameter("sval");
-                log.debug(prop.getURI() + ":" + prop_param + "----" + (prop.getURI().equals(prop_param) ? "true" : "false"));
-                if (value != null && value.equals(prop_param)) { //se tiene que validar el valor por si es mÃ¡s de una
+                log.debug(prop.getURI() + ":" + sprop + "----" + (prop.getURI().equals(sprop) ? "true" : "false"));
+                if (value != null && value.equals(sprop)) { //se tiene que validar el valor por si es mÃ¡s de una
                     if (sval != null) {
                         obj.removeObjectProperty(prop, ont.getSemanticObject(sval));
                         if(prop.getName().equalsIgnoreCase("userrepository")){
@@ -546,8 +570,8 @@ public class SWBASOPropRefEditor extends GenericResource {
                 }
             }
             if (id != null)response.setRenderParameter("suri", id);
-            if (prop_param != null)response.setRenderParameter("sprop", prop_param);
-            if (prop_param_ref != null)response.setRenderParameter("spropref", prop_param_ref);
+            if (sprop != null)response.setRenderParameter("sprop", sprop);
+            if (spropref != null)response.setRenderParameter("spropref", spropref);
         
         } else if ("choose".equals(action)) //suri, prop
         {
@@ -591,6 +615,7 @@ public class SWBASOPropRefEditor extends GenericResource {
                     obj.addObjectProperty(prop, aux);
                 }
             }
+            response.setRenderParameter("spropref", spropref);
             response.setRenderParameter("sprop", sprop);
             response.setRenderParameter("sobj", sobj);
             if (id != null)response.setRenderParameter("suri", id);
