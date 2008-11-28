@@ -23,7 +23,7 @@ public class VersionHistoryImp extends SimpleNode implements VersionHistory
 {    
     VersionHistoryImp(BaseNode node,SessionImp session,SimpleNode parent) throws RepositoryException
     {
-        super(node, session, parent);
+        super(node, session, parent,node.getId());
         if(!node.isVersionHistoryNode())
         {
             throw new IllegalArgumentException("The node is not a versionhistory node");

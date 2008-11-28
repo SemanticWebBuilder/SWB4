@@ -6,6 +6,7 @@ package org.semanticwb.jcr170.implementation;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import javax.jcr.RepositoryException;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionIterator;
 import org.semanticwb.SWBException;
@@ -42,7 +43,14 @@ public class VersionIteratorImp implements VersionIterator
         BaseNode node=versions.next();
         if(node!=null)
         {            
-            return new VersionImp(node, versionHistory.getBaseNode(), session, parent);
+            try
+            {
+                return new VersionImp(node, versionHistory.getBaseNode(), session, parent);
+            }
+            catch(RepositoryException e)
+            {
+                return null;
+            }
         }
         else
         {
