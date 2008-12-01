@@ -251,7 +251,7 @@ public class SWBATrash extends GenericResource {
                         //if(AdmFilterMgr.getInstance().haveAccess2GrpTemplate(user,viewSite,rT.getTemplateGroup().getId())==2)
                         {
                             //System.out.println("TM param: "+viewSite+ ", DBCatalog: " + DBCatalogs.getInstance().getGrpTemplate(viewSite,rT.getGrpid()).getTopicMapId());
-                            if(viewSite.equals(rT.getTemplateGroup().getWebSite().getId())) {
+                            if(viewSite.equals(rT.getGroup().getWebSite().getId())) {
                                 SWBResourceURL urlRecover=paramRequest.getActionUrl();   //?view="+view+"&site="+viewSite+"&ax=recover&id="+rT.getId()+"
                                 urlRecover.setParameter("view",view);
                                 urlRecover.setParameter("site",viewSite);

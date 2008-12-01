@@ -52,7 +52,7 @@ public class SWBAGrpTemplates extends GenericResource{
                 int cuenta=0;
                 while(enuTemp.hasNext()){
                     Template rt = enuTemp.next();
-                    if(rt.getTemplateGroup().getId().equals(id)){
+                    if(rt.getGroup().getId().equals(id)){
                         cuenta++;
                         break;
                     }

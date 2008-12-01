@@ -18,6 +18,7 @@ import org.semanticwb.portal.SWBMonitor;
 import org.semanticwb.portal.SWBResourceMgr;
 import org.semanticwb.portal.SWBTemplateMgr;
 import org.semanticwb.portal.SWBUserMgr;
+/*
 import org.semanticwb.portal.services.CalendarSrv;
 import org.semanticwb.portal.services.CampSrv;
 import org.semanticwb.portal.services.DeviceSrv;
@@ -33,6 +34,7 @@ import org.semanticwb.portal.services.SWBServices;
 import org.semanticwb.portal.services.TemplateSrv;
 import org.semanticwb.portal.services.WebPageSrv;
 import org.semanticwb.portal.services.WebSiteSrv;
+ */
 import org.semanticwb.util.JarFile;
 
 public class SWBPortal {
@@ -142,6 +144,7 @@ public class SWBPortal {
         return SWBPlatform.getContextPath() + "/" + SWBPlatform.getEnv("swb/distributor", "swb");
     }
 
+/*
     public static SWBServices getSWBServices() {
         SWBServices swbServices = new SWBServices();
         return swbServices;
@@ -216,7 +219,7 @@ public class SWBPortal {
         PFlowSrv pFlowSrv = new PFlowSrv();
         return pFlowSrv;
     }
-
+*/
     public static SWBUserMgr getUserMgr() {
         return usrMgr;
     }

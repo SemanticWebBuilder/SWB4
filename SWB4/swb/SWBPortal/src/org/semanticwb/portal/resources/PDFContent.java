@@ -80,19 +80,20 @@ public class PDFContent extends GenericAdmResource {
         if(faux==null)
             return;
         String pdf=SWBPlatform.getWorkPath() + base.getWorkPath() +"/"+ faux.trim();
-        
-        try {           
-            String cont=new DocumentExtractorSrv().pdfExtractor(new File(pdf));
-            if(cont!=null) {
-                response.getWriter().print(cont);
-            }
-        }catch(NullPointerException e) {
-            log.error("PDFBox.jar, FontBox.jar not found!!!", e);
-            throw new SWBResourceException(e.getMessage());
-        }catch(IOException i) {
-            log.error("PDFBox.jar, FontBox.jar not found!!!", i);
-            throw new SWBResourceException(i.getMessage());
-        }
+
+          //TODO:
+//        try {
+//            String cont=new DocumentExtractorSrv().pdfExtractor(new File(pdf));
+//            if(cont!=null) {
+//                response.getWriter().print(cont);
+//            }
+//        }catch(NullPointerException e) {
+//            log.error("PDFBox.jar, FontBox.jar not found!!!", e);
+//            throw new SWBResourceException(e.getMessage());
+//        }catch(IOException i) {
+//            log.error("PDFBox.jar, FontBox.jar not found!!!", i);
+//            throw new SWBResourceException(i.getMessage());
+//        }
     }
 
     /**
