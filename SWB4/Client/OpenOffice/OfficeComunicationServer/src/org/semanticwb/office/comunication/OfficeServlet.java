@@ -6,14 +6,8 @@ package org.semanticwb.office.comunication;
 
 
 import java.io.*;
-import java.net.*;
-import java.util.Hashtable;
-import javax.jcr.Repository;
-import javax.jcr.RepositoryException;
 import javax.servlet.*;
 import javax.servlet.http.*;
-import org.apache.jackrabbit.core.RepositoryImpl;
-import org.apache.jackrabbit.core.config.RepositoryConfig;
 import org.semanticwb.xmlrpc.XMLRPCServlet;
 import static org.semanticwb.office.comunication.Base64.*;
 

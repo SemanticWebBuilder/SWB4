@@ -7,10 +7,8 @@ package org.semanticwb.office.comunication;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Map;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
-import javax.jcr.Repository;
 import javax.jcr.Session;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryResult;
@@ -26,34 +24,12 @@ import org.semanticwb.xmlrpc.XmlRpcObject;
  * @author victor.lorenzana
  */
 public class OfficeApplication extends XmlRpcObject implements IOfficeApplication
-{   
-    private static final String CONTENT_MODEL_URI = "http://www.semanticwb.org.mx/model/content/1.0";
-    private static final String CONTENT_MODEL_PREFIX = "swb";
-    private static final String CONTENT_URI = "http://www.semanticwb.org.mx/model/content/1.0/cm";
+{       
+    
     private static final String CONTENT_PREFIX = "cm";
     private static final String CONTENT_TITE = CONTENT_PREFIX+":title";
     private static final String CONTENT_DESCRIPTION = CONTENT_PREFIX+":description";
-    static
-    {
-        try
-        {
-            RepositoryManager.addNamespace(CONTENT_MODEL_PREFIX, new URI(CONTENT_MODEL_URI));
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace(System.out);
-        }
-        try
-        {
-            RepositoryManager.addNamespace(CONTENT_PREFIX, new URI(CONTENT_URI));
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace(System.out);
-        }        
-    }
-
-    
+        
     
     //private Session session;
     public boolean isValidVersion(double version)
@@ -170,7 +146,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             else
             {
                 Node root = session.getRootNode();
-                Node newNode = root.addNode("Category", "swb:categoryType");
+                Node newNode = root.addNode("Category", "cm:Category");
                 newNode.setProperty( CONTENT_TITE,title);
                 newNode.setProperty( CONTENT_DESCRIPTION,description);
                 root.save();
