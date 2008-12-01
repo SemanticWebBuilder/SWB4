@@ -1568,18 +1568,17 @@
     >{contextPath}/swbadmin/jsp/SemObjectEditor.jsp</swbxf:behaviorURL>
   </swbxf:ObjectBehavior>
   <swbxf:ObjectBehavior rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#bh_Contents">
-    <swbxf:behaviorURL rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >{contextPath}/swb/SWBAdmin/WBAd_Home/_rid/19/_mto/3</swbxf:behaviorURL>
     <swb:title xml:lang="en">Contents</swb:title>
     <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
     >10</swb:index>
-    <swbxf:interface rdf:resource="#PortletRefable"/>
-    <swbxf:hasResourceParam rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#sproprefContents"/>
+    <swbxf:behaviorURL rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >{contextPath}/swb/SWBAdmin/WBAd_Home/_rid/19/_mto/3</swbxf:behaviorURL>
+    <swbxf:interface rdf:resource="#Portletable"/>
     <swbxf:hasResourceParam>
       <swbxf:ResourceParameter rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#spropContents">
+        <swb:resParamValue rdf:resource="#hasPortlet"/>
         <swbxf:resParamName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >sprop</swbxf:resParamName>
-        <swb:resParamValue rdf:resource="#hasPortletRef"/>
       </swbxf:ResourceParameter>
     </swbxf:hasResourceParam>
     <swb:title xml:lang="es">Contenidos</swb:title>
