@@ -239,6 +239,14 @@
                                         executeTreeNodeEvent(treeStore,nodeWidget.item,"onDblClick");
                                     }
                                 </script>
+                                <script type="dojo/method" event="onEnterKey" args="event">
+                                    alert("onEnterKey"+event);
+                                    var domElement = event.target;
+                                    var nodeWidget = dijit.getEnclosingWidget(domElement);
+                                    if(nodeWidget && nodeWidget.isTreeNode){
+                                        executeTreeNodeEvent(treeStore,nodeWidget.item,"onDblClick");
+                                    }
+                                </script>
                                 <script type="dojo/method" event="getIconClass" args="item, opened"> 
                                     if(item)
                                     {
