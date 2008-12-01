@@ -12,12 +12,12 @@ public interface Traceable extends GenericObject
     public void removeModifiedBy();
 
     public User getModifiedBy();
+    public Date getUpdated();
+    public void setUpdated(Date updated);
 
     public void setCreator(org.semanticwb.model.User user);
 
     public void removeCreator();
 
     public User getCreator();
-    public Date getUpdated();
-    public void setUpdated(Date updated);
 }

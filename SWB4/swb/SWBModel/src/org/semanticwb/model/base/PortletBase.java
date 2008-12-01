@@ -13,7 +13,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class PortletBase extends GenericObjectBase implements Versionable,Indexable,XMLable,XMLConfable,Descriptiveable,Viewable,Calendarable,Activeable,RuleRefable,Traceable,RoleRefable,Priorityable,Deleteable,Localeable
+public class PortletBase extends GenericObjectBase implements Versionable,Indexable,XMLable,XMLConfable,Editable,Descriptiveable,Viewable,Calendarable,Activeable,RuleRefable,Traceable,RoleRefable,Priorityable,Deleteable,Localeable
 {
     public static SWBVocabulary vocabulary=SWBContext.getVocabulary();
 

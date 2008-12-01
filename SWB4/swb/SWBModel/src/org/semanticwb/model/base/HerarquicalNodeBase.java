@@ -13,7 +13,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class HerarquicalNodeBase extends GenericObjectBase implements Descriptiveable,Iconable
+public class HerarquicalNodeBase extends GenericObjectBase implements Sortable,Iconable,Descriptiveable
 {
     public static SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
@@ -22,21 +22,24 @@ public class HerarquicalNodeBase extends GenericObjectBase implements Descriptiv
         super(base);
     }
 
-    public void setHClass(org.semanticwb.platform.SemanticObject semanticobject)
+    public int getIndex()
     {
-        getSemanticObject().setObjectProperty(vocabulary.swbxf_heClass, semanticobject);
+        return getSemanticObject().getIntProperty(vocabulary.swb_index);
     }
 
-    public void removeHClass()
+    public void setIndex(int index)
     {
-        getSemanticObject().removeProperty(vocabulary.swbxf_heClass);
+        getSemanticObject().setLongProperty(vocabulary.swb_index, index);
     }
 
-    public SemanticObject getHClass()
+    public String getIconClass()
     {
-         SemanticObject ret=null;
-         ret=getSemanticObject().getObjectProperty(vocabulary.swbxf_heClass);
-         return ret;
+        return getSemanticObject().getProperty(vocabulary.swb_iconClass);
+    }
+
+    public void setIconClass(String iconClass)
+    {
+        getSemanticObject().setProperty(vocabulary.swb_iconClass, iconClass);
     }
 
     public String getTitle()
@@ -64,14 +67,21 @@ public class HerarquicalNodeBase extends GenericObjectBase implements Descriptiv
         getSemanticObject().setProperty(vocabulary.swb_title, title, lang);
     }
 
-    public String getIconClass()
+    public void setHClass(org.semanticwb.platform.SemanticObject semanticobject)
     {
-        return getSemanticObject().getProperty(vocabulary.swb_iconClass);
+        getSemanticObject().setObjectProperty(vocabulary.swbxf_heClass, semanticobject);
     }
 
-    public void setIconClass(String iconClass)
+    public void removeHClass()
     {
-        getSemanticObject().setProperty(vocabulary.swb_iconClass, iconClass);
+        getSemanticObject().removeProperty(vocabulary.swbxf_heClass);
+    }
+
+    public SemanticObject getHClass()
+    {
+         SemanticObject ret=null;
+         ret=getSemanticObject().getObjectProperty(vocabulary.swbxf_heClass);
+         return ret;
     }
 
     public String getDescription()

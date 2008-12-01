@@ -62,31 +62,20 @@ public class DisplayObjectBase extends GenericObjectBase implements Sortable
          return ret;
     }
 
-    public SemanticIterator<org.semanticwb.platform.SemanticObject> listBehaviors()
+    public GenericIterator<org.semanticwb.model.ObjectBehavior> listBehaviors()
     {
-        StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.swb_hasBehavior.getRDFProperty());
-        return new SemanticIterator<org.semanticwb.platform.SemanticObject>(stit);
+        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, vocabulary.swb_hasBehavior.getInverse().getRDFProperty(), getSemanticObject().getRDFResource());
+        return new GenericIterator<org.semanticwb.model.ObjectBehavior>(org.semanticwb.model.ObjectBehavior.class, stit,true);
     }
 
-    public void addBehavior(org.semanticwb.platform.SemanticObject semanticobject)
+    public ObjectBehavior getBehavior()
     {
-        getSemanticObject().addObjectProperty(vocabulary.swb_hasBehavior, semanticobject);
-    }
-
-    public void removeAllBehavior()
-    {
-        getSemanticObject().removeProperty(vocabulary.swb_hasBehavior);
-    }
-
-    public void removeBehavior(org.semanticwb.platform.SemanticObject semanticobject)
-    {
-        getSemanticObject().removeObjectProperty(vocabulary.swb_hasBehavior,semanticobject);
-    }
-
-    public SemanticObject getBehavior()
-    {
-         SemanticObject ret=null;
-         ret=getSemanticObject().getObjectProperty(vocabulary.swb_hasBehavior);
+         ObjectBehavior ret=null;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasBehavior);
+         if(obj!=null)
+         {
+             ret=(ObjectBehavior)vocabulary.swbxf_ObjectBehavior.newGenericInstance(obj);
+         }
          return ret;
     }
 

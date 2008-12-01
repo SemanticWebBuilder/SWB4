@@ -13,7 +13,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class UserBase extends GenericObjectBase implements Groupable,Activeable,Traceable,Roleable
+public class UserBase extends GenericObjectBase implements Roleable,Traceable,Activeable
 {
     public static SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
@@ -73,6 +73,27 @@ public class UserBase extends GenericObjectBase implements Groupable,Activeable,
         getSemanticObject().setProperty(vocabulary.swb_usrEmail, usrEmail);
     }
 
+    public void setGroup(org.semanticwb.model.UserGroup usergroup)
+    {
+        getSemanticObject().setObjectProperty(vocabulary.swb_userGroup, usergroup.getSemanticObject());
+    }
+
+    public void removeGroup()
+    {
+        getSemanticObject().removeProperty(vocabulary.swb_userGroup);
+    }
+
+    public UserGroup getGroup()
+    {
+         UserGroup ret=null;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_userGroup);
+         if(obj!=null)
+         {
+             ret=(UserGroup)vocabulary.swb_UserGroup.newGenericInstance(obj);
+         }
+         return ret;
+    }
+
     public Date getUpdated()
     {
         return getSemanticObject().getDateProperty(vocabulary.swb_updated);
@@ -123,36 +144,6 @@ public class UserBase extends GenericObjectBase implements Groupable,Activeable,
         getSemanticObject().setProperty(vocabulary.swb_usrLastName, usrLastName);
     }
 
-    public GenericIterator<org.semanticwb.model.ObjectGroup> listGroups()
-    {
-        return new GenericIterator<org.semanticwb.model.ObjectGroup>(org.semanticwb.model.ObjectGroup.class, getSemanticObject().listObjectProperties(vocabulary.swb_hasGroup));    }
-
-    public void addGroup(org.semanticwb.model.ObjectGroup objectgroup)
-    {
-        getSemanticObject().addObjectProperty(vocabulary.swb_hasGroup, objectgroup.getSemanticObject());
-    }
-
-    public void removeAllGroup()
-    {
-        getSemanticObject().removeProperty(vocabulary.swb_hasGroup);
-    }
-
-    public void removeGroup(org.semanticwb.model.ObjectGroup objectgroup)
-    {
-        getSemanticObject().removeObjectProperty(vocabulary.swb_hasGroup,objectgroup.getSemanticObject());
-    }
-
-    public ObjectGroup getGroup()
-    {
-         ObjectGroup ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasGroup);
-         if(obj!=null)
-         {
-             ret=(ObjectGroup)vocabulary.swb_ObjectGroup.newGenericInstance(obj);
-         }
-         return ret;
-    }
-
     public boolean isActive()
     {
         return getSemanticObject().getBooleanProperty(vocabulary.swb_active);
@@ -194,16 +185,6 @@ public class UserBase extends GenericObjectBase implements Groupable,Activeable,
          return ret;
     }
 
-    public String getUsrPassword()
-    {
-        return getSemanticObject().getProperty(vocabulary.swb_usrPassword);
-    }
-
-    public void setUsrPassword(String usrPassword)
-    {
-        getSemanticObject().setProperty(vocabulary.swb_usrPassword, usrPassword);
-    }
-
     public String getUsrLogin()
     {
         return getSemanticObject().getProperty(vocabulary.swb_usrLogin);
@@ -212,6 +193,16 @@ public class UserBase extends GenericObjectBase implements Groupable,Activeable,
     public void setUsrLogin(String usrLogin)
     {
         getSemanticObject().setProperty(vocabulary.swb_usrLogin, usrLogin);
+    }
+
+    public String getUsrPassword()
+    {
+        return getSemanticObject().getProperty(vocabulary.swb_usrPassword);
+    }
+
+    public void setUsrPassword(String usrPassword)
+    {
+        getSemanticObject().setProperty(vocabulary.swb_usrPassword, usrPassword);
     }
 
     public GenericIterator<org.semanticwb.model.Role> listRoles()

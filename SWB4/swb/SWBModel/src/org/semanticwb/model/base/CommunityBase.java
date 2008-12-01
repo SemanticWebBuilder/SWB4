@@ -13,23 +13,13 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class CommunityBase extends GenericObjectBase implements Descriptiveable,Traceable,Activeable
+public class CommunityBase extends GenericObjectBase implements Activeable,Traceable,Descriptiveable
 {
     public static SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
     public CommunityBase(SemanticObject base)
     {
         super(base);
-    }
-
-    public boolean isActive()
-    {
-        return getSemanticObject().getBooleanProperty(vocabulary.swb_active);
-    }
-
-    public void setActive(boolean active)
-    {
-        getSemanticObject().setBooleanProperty(vocabulary.swb_active, active);
     }
 
     public Date getCreated()
@@ -40,6 +30,16 @@ public class CommunityBase extends GenericObjectBase implements Descriptiveable,
     public void setCreated(Date created)
     {
         getSemanticObject().setDateProperty(vocabulary.swb_created, created);
+    }
+
+    public boolean isActive()
+    {
+        return getSemanticObject().getBooleanProperty(vocabulary.swb_active);
+    }
+
+    public void setActive(boolean active)
+    {
+        getSemanticObject().setBooleanProperty(vocabulary.swb_active, active);
     }
 
     public void setModifiedBy(org.semanticwb.model.User user)

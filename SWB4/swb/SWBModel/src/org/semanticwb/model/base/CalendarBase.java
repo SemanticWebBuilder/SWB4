@@ -22,16 +22,6 @@ public class CalendarBase extends GenericObjectBase implements Traceable,XMLable
         super(base);
     }
 
-    public boolean isActive()
-    {
-        return getSemanticObject().getBooleanProperty(vocabulary.swb_active);
-    }
-
-    public void setActive(boolean active)
-    {
-        getSemanticObject().setBooleanProperty(vocabulary.swb_active, active);
-    }
-
     public Date getCreated()
     {
         return getSemanticObject().getDateProperty(vocabulary.swb_created);
@@ -40,6 +30,16 @@ public class CalendarBase extends GenericObjectBase implements Traceable,XMLable
     public void setCreated(Date created)
     {
         getSemanticObject().setDateProperty(vocabulary.swb_created, created);
+    }
+
+    public boolean isActive()
+    {
+        return getSemanticObject().getBooleanProperty(vocabulary.swb_active);
+    }
+
+    public void setActive(boolean active)
+    {
+        getSemanticObject().setBooleanProperty(vocabulary.swb_active, active);
     }
 
     public void setModifiedBy(org.semanticwb.model.User user)

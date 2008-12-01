@@ -13,7 +13,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class VersionInfoBase extends GenericObjectBase implements Traceable,Valueable
+public class VersionInfoBase extends GenericObjectBase implements Valueable,Traceable
 {
     public static SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
@@ -63,27 +63,6 @@ public class VersionInfoBase extends GenericObjectBase implements Traceable,Valu
         getSemanticObject().setProperty(vocabulary.swb_value, value);
     }
 
-    public void setVersionLockedBy(org.semanticwb.model.User user)
-    {
-        getSemanticObject().setObjectProperty(vocabulary.swb_versionLockedBy, user.getSemanticObject());
-    }
-
-    public void removeVersionLockedBy()
-    {
-        getSemanticObject().removeProperty(vocabulary.swb_versionLockedBy);
-    }
-
-    public User getVersionLockedBy()
-    {
-         User ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_versionLockedBy);
-         if(obj!=null)
-         {
-             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
-         }
-         return ret;
-    }
-
     public void setPreviousVersion(org.semanticwb.model.VersionInfo versioninfo)
     {
         getSemanticObject().setObjectProperty(vocabulary.swb_previousVersion, versioninfo.getSemanticObject());
@@ -101,6 +80,27 @@ public class VersionInfoBase extends GenericObjectBase implements Traceable,Valu
          if(obj!=null)
          {
              ret=(VersionInfo)vocabulary.swb_VersionInfo.newGenericInstance(obj);
+         }
+         return ret;
+    }
+
+    public void setVersionLockedBy(org.semanticwb.model.User user)
+    {
+        getSemanticObject().setObjectProperty(vocabulary.swb_versionLockedBy, user.getSemanticObject());
+    }
+
+    public void removeVersionLockedBy()
+    {
+        getSemanticObject().removeProperty(vocabulary.swb_versionLockedBy);
+    }
+
+    public User getVersionLockedBy()
+    {
+         User ret=null;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_versionLockedBy);
+         if(obj!=null)
+         {
+             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
          }
          return ret;
     }

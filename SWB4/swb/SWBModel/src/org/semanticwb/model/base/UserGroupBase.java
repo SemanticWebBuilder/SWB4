@@ -13,13 +13,30 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class TemplateGroupBase extends GenericObjectBase implements Descriptiveable,Traceable
+public class UserGroupBase extends GenericObjectBase implements Traceable,Descriptiveable
 {
     public static SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
-    public TemplateGroupBase(SemanticObject base)
+    public UserGroupBase(SemanticObject base)
     {
         super(base);
+    }
+
+    public GenericIterator<org.semanticwb.model.User> listUsers()
+    {
+        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, vocabulary.swb_hasGroupedUser.getInverse().getRDFProperty(), getSemanticObject().getRDFResource());
+        return new GenericIterator<org.semanticwb.model.User>(org.semanticwb.model.User.class, stit,true);
+    }
+
+    public User getUser()
+    {
+         User ret=null;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasGroupedUser);
+         if(obj!=null)
+         {
+             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public Date getCreated()
@@ -134,23 +151,6 @@ public class TemplateGroupBase extends GenericObjectBase implements Descriptivea
         getSemanticObject().setProperty(vocabulary.swb_description, description, lang);
     }
 
-    public GenericIterator<org.semanticwb.model.Template> listGroupedTemplates()
-    {
-        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, vocabulary.swb_hasGroupedTemplate.getInverse().getRDFProperty(), getSemanticObject().getRDFResource());
-        return new GenericIterator<org.semanticwb.model.Template>(org.semanticwb.model.Template.class, stit,true);
-    }
-
-    public Template getGroupedTemplate()
-    {
-         Template ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasGroupedTemplate);
-         if(obj!=null)
-         {
-             ret=(Template)vocabulary.swb_Template.newGenericInstance(obj);
-         }
-         return ret;
-    }
-
     public void remove()
     {
         getSemanticObject().remove();
@@ -161,8 +161,8 @@ public class TemplateGroupBase extends GenericObjectBase implements Descriptivea
         return new GenericIterator((SemanticClass)null, getSemanticObject().listRelatedObjects(),true);
     }
 
-    public WebSite getWebSite()
+    public UserRepository getUserRepository()
     {
-        return new WebSite(getSemanticObject().getModel().getModelObject());
+        return new UserRepository(getSemanticObject().getModel().getModelObject());
     }
 }

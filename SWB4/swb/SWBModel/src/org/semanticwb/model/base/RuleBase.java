@@ -13,7 +13,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class RuleBase extends GenericObjectBase implements Groupable,Traceable,XMLable,Descriptiveable,Versionable
+public class RuleBase extends GenericObjectBase implements Editable,Traceable,XMLable,Descriptiveable,Versionable
 {
     public static SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
@@ -184,36 +184,6 @@ public class RuleBase extends GenericObjectBase implements Groupable,Traceable,X
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(vocabulary.swb_description, description, lang);
-    }
-
-    public GenericIterator<org.semanticwb.model.ObjectGroup> listGroups()
-    {
-        return new GenericIterator<org.semanticwb.model.ObjectGroup>(org.semanticwb.model.ObjectGroup.class, getSemanticObject().listObjectProperties(vocabulary.swb_hasGroup));    }
-
-    public void addGroup(org.semanticwb.model.ObjectGroup objectgroup)
-    {
-        getSemanticObject().addObjectProperty(vocabulary.swb_hasGroup, objectgroup.getSemanticObject());
-    }
-
-    public void removeAllGroup()
-    {
-        getSemanticObject().removeProperty(vocabulary.swb_hasGroup);
-    }
-
-    public void removeGroup(org.semanticwb.model.ObjectGroup objectgroup)
-    {
-        getSemanticObject().removeObjectProperty(vocabulary.swb_hasGroup,objectgroup.getSemanticObject());
-    }
-
-    public ObjectGroup getGroup()
-    {
-         ObjectGroup ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasGroup);
-         if(obj!=null)
-         {
-             ret=(ObjectGroup)vocabulary.swb_ObjectGroup.newGenericInstance(obj);
-         }
-         return ret;
     }
 
     public void remove()

@@ -13,33 +13,40 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class TextAreaBase extends FormElementBase 
+public class ResourceParameterBase extends GenericObjectBase 
 {
     public static SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
-    public TextAreaBase(SemanticObject base)
+    public ResourceParameterBase(SemanticObject base)
     {
         super(base);
     }
 
-    public int getRows()
+    public void setValue(org.semanticwb.platform.SemanticObject semanticobject)
     {
-        return getSemanticObject().getIntProperty(vocabulary.swbxf_textAreaRows);
+        getSemanticObject().setObjectProperty(vocabulary.swb_resParamValue, semanticobject);
     }
 
-    public void setRows(int textAreaRows)
+    public void removeValue()
     {
-        getSemanticObject().setLongProperty(vocabulary.swbxf_textAreaRows, textAreaRows);
+        getSemanticObject().removeProperty(vocabulary.swb_resParamValue);
     }
 
-    public int getCols()
+    public SemanticObject getValue()
     {
-        return getSemanticObject().getIntProperty(vocabulary.swbxf_textAreaCols);
+         SemanticObject ret=null;
+         ret=getSemanticObject().getObjectProperty(vocabulary.swb_resParamValue);
+         return ret;
     }
 
-    public void setCols(int textAreaCols)
+    public String getName()
     {
-        getSemanticObject().setLongProperty(vocabulary.swbxf_textAreaCols, textAreaCols);
+        return getSemanticObject().getProperty(vocabulary.swbxf_resParamName);
+    }
+
+    public void setName(String resParamName)
+    {
+        getSemanticObject().setProperty(vocabulary.swbxf_resParamName, resParamName);
     }
 
     public void remove()
