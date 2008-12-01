@@ -249,6 +249,11 @@ public class AdmResourceMgr extends WBContainerFE
                                                 //TODO:check if the base needs to be passed to other tags, if yes it need to be declared in the WBAdmResource interface
                                                 HtmlFE htmlfe = new HtmlFE(tag, base);
                                                 forma.add(htmlfe);
+                                            }else if(tag.getNodeName().equalsIgnoreCase("fieldset") && forma != null) {
+                                                //HtmlFE htmlfe = new HtmlFE(tag);
+                                                //TODO:check if the base needs to be passed to other tags, if yes it need to be declared in the WBAdmResource interface
+                                                FieldSet fieldset = new FieldSet(tag);
+                                                forma.add(fieldset);
                                             }
             }
         return forma;
