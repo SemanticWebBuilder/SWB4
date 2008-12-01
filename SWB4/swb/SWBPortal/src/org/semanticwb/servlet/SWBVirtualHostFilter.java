@@ -18,6 +18,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.servlet.internal.Admin;
 import org.semanticwb.servlet.internal.Distributor;
 import org.semanticwb.servlet.internal.DistributorParams;
+import org.semanticwb.servlet.internal.GateWayOffice;
 import org.semanticwb.servlet.internal.InternalServlet;
 import org.semanticwb.servlet.internal.Login;
 
@@ -174,6 +175,11 @@ public class SWBVirtualHostFilter implements Filter
         intServlets.put("login", login);
         login.init(filterConfig.getServletContext());
 
+        InternalServlet gtwOffice=new GateWayOffice();
+        intServlets.put("gtw", gtwOffice);        
+        gtwOffice.init(filterConfig.getServletContext());
+        
+        
         //TODO:Admin servlet
         InternalServlet admin=new Admin();
         intServlets.put("wbadmin", admin);
@@ -181,6 +187,8 @@ public class SWBVirtualHostFilter implements Filter
         admin.init(filterConfig.getServletContext());
         log.event("SemanticWebBuilder started...");        
         log.event("************************************");
+        
+        
     }
     
     /**
