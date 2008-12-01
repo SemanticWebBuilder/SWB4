@@ -35,6 +35,8 @@ public class SWBASOPropRefEditor extends GenericResource {
         response.setContentType("text/html; charset=ISO-8859-1");
         log.debug("doEdit(SWBASOPropRefEditor...)");
         PrintWriter out = response.getWriter();
+        response.setHeader("Cache-Control", "no-cache"); 
+        response.setHeader("Pragma", "no-cache"); 
         User user = paramRequest.getUser();
         String id = request.getParameter("suri");
         String idp = request.getParameter("sprop");
@@ -670,6 +672,8 @@ public class SWBASOPropRefEditor extends GenericResource {
     public void doFormID(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         User user = paramRequest.getUser();
+        response.setHeader("Cache-Control", "no-cache"); 
+        response.setHeader("Pragma", "no-cache"); 
         String id = request.getParameter("suri");
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         SemanticObject obj = ont.getSemanticObject(id);
