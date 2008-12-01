@@ -86,7 +86,8 @@ public class TestRepository
         Session session = null;
         try
         {
-            Repository repository = new RepositoryImp();
+            RepositoryImp repository = new RepositoryImp();            
+            //repository.recreateDefaultWorkspace();
             SimpleCredentials credentials = new SimpleCredentials("victor", "victor".toCharArray());
             session = repository.login(credentials);
             String title = "Deportes";
@@ -109,14 +110,16 @@ public class TestRepository
             }
 
             Node demo = root.addNode("demo");
-            demo.setProperty("deportes", 1);            
-            System.out.println(demo.getProperty("deportes").getString());
+            //demo.setProperty("deportes", 1);            
+            //System.out.println(demo.getProperty("deportes").getString());
 
             Node newNode = root.addNode(title, "cm:Category");
             newNode.setProperty("cm:title", title);
             newNode.setProperty("cm:description", title);
             root.save();
+            //System.out.println(demo.getProperty("deportes").getString());
             newNode.checkout();
+            newNode.getVersionHistory().getAllVersions().getSize();
             Node content = newNode.addNode("Contenido1", "cm:Content");
             content.setProperty("cm:title", "Contenido 1");
             content.setProperty("cm:description", "Contenido de prueba");
@@ -143,6 +146,7 @@ public class TestRepository
             {
                 session.logout();
             }
+            
         }
 
 
