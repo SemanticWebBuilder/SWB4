@@ -28,7 +28,7 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
-import org.semanticwb.portal.services.TemplateSrv;
+//import org.semanticwb.portal.services.TemplateSrv;
 
 /**
  *
@@ -120,7 +120,7 @@ public class SWBATemplate extends GenericResource {
                         recTpl.setDeleted(rTemplate.isDeleted());
                         recTpl.setActive(rTemplate.isActive());
                         recTpl.setCreator(user);
-                        recTpl.setTemplateGroup(rTemplate.getTemplateGroup());
+                        recTpl.setGroup(rTemplate.getGroup());
                         
                         VersionInfo vil = rTemplate.getLastVersion();
                         VersionInfo nvi = recTpl.getWebSite().createVersionInfo();
@@ -142,7 +142,7 @@ public class SWBATemplate extends GenericResource {
                         out.println("<script>wbTree_remove();</script>");
                         out.println(paramRequest.getLocaleString("msgStatusTemplateReplicated"));
                         if (recTpl != null) {
-                            out.println("<script>wbTree_executeAction('gotopath." + recTpl.getWebSiteId() + ".templates');wbTree_reload();wbTree_executeAction('gotopath." + recTpl.getWebSiteId() + ".templates." + recTpl.getTemplateGroup().getId() + "." + recTpl.getId() + "');</script>");
+                            out.println("<script>wbTree_executeAction('gotopath." + recTpl.getWebSiteId() + ".templates');wbTree_reload();wbTree_executeAction('gotopath." + recTpl.getWebSiteId() + ".templates." + recTpl.getGroup().getId() + "." + recTpl.getId() + "');</script>");
                         } else {
                             out.println("<font color=red>" + paramRequest.getLocaleString("msgErrorCopyTemplate") + ": " + id + "</font>");
                         }
@@ -193,7 +193,7 @@ public class SWBATemplate extends GenericResource {
                                 urlEdit.setMode(paramRequest.Mode_EDIT);
                                 urlEdit.setParameter("act", "info");
                                 urlEdit.setParameter("id", rTemp.getId());
-                                out.println("<tr ><td><a href=\"" + urlEdit.toString() + "\" title=\"" + paramRequest.getLocaleString("msgTitleEditTemplate") + "\">" + rTemp.getId() + "</a></td><td>" + rTemp.getTitle() + "</td><td>" + rTemp.getUpdated().toString() + "</td><td>" + rTemp.getTemplateGroup().getId() + "</td><td><a href=\"" + url.toString() + "\" title=\"" + paramRequest.getLocaleString("msgTitleDeleteTemplate") + "\">" + paramRequest.getLocaleString("msgDelete") + "</a></td></tr>");
+                                out.println("<tr ><td><a href=\"" + urlEdit.toString() + "\" title=\"" + paramRequest.getLocaleString("msgTitleEditTemplate") + "\">" + rTemp.getId() + "</a></td><td>" + rTemp.getTitle() + "</td><td>" + rTemp.getUpdated().toString() + "</td><td>" + rTemp.getGroup().getId() + "</td><td><a href=\"" + url.toString() + "\" title=\"" + paramRequest.getLocaleString("msgTitleDeleteTemplate") + "\">" + paramRequest.getLocaleString("msgDelete") + "</a></td></tr>");
                             }
                         }
                         out.println("</table>");
@@ -258,7 +258,7 @@ public class SWBATemplate extends GenericResource {
                 rTemp.setTitle(titulo);
                 rTemp.setDescription(descr);
                 TemplateGroup tpg = ws.getTemplateGroup(idgrp);
-                rTemp.setTemplateGroup(tpg);
+                rTemp.setGroup(tpg);
                 rTemp.setCreator(user);
 
                 idTemp = rTemp.getId();
@@ -376,7 +376,7 @@ public class SWBATemplate extends GenericResource {
                     if (request.getParameter("flag").equals("update")) {
                         Template rTemp = SWBContext.getWebSite(request.getParameter("tmsid")).getTemplate(request.getParameter("id"));
                         strTm = request.getParameter("tmsid");
-                        out.println("<script>wbTree_executeAction('gotopath." + request.getParameter("tmsid") + ".templates');wbTree_reload();wbTree_executeAction('gotopath." + request.getParameter("tmsid") + ".templates." + rTemp.getTemplateGroup().getId() + "." + request.getParameter("id") + "');wbTree_reload();</script>");
+                        out.println("<script>wbTree_executeAction('gotopath." + request.getParameter("tmsid") + ".templates');wbTree_reload();wbTree_executeAction('gotopath." + request.getParameter("tmsid") + ".templates." + rTemp.getGroup().getId() + "." + request.getParameter("id") + "');wbTree_reload();</script>");
                     }
                 }
             }
@@ -516,7 +516,7 @@ public class SWBATemplate extends GenericResource {
                         out.println("<tr ><td width=\"150\" align=\"right\" class=\"datos\">" + paramRequest.getLocaleString("msgActive") + ":</td><td align=\"left\" class=\"valores\">" + paramRequest.getLocaleString("msgYes") + "&nbsp;<input type=radio name=active value=\"1\"  " + strYes + ">&nbsp;&nbsp;" + paramRequest.getLocaleString("msgNo") + "&nbsp;<input type=radio name=active value=\"0\"  " + strNo + "></td></tr>");
                         out.println("<tr ><td width=\"150\" align=\"right\" class=\"datos\">" + paramRequest.getLocaleString("msgGroup") + ":</td><td align=\"left\" class=\"valores\"><select class=\"campos\" name=group>");
                         Iterator<TemplateGroup> enu = SWBContext.getWebSite(strTm).listTemplateGroups();
-                        TemplateGroup rgt = SWBContext.getWebSite(strTm).getTemplateGroup(rTemp.getTemplateGroup().getId());
+                        TemplateGroup rgt = SWBContext.getWebSite(strTm).getTemplateGroup(rTemp.getGroup().getId());
 
                         String GrpTMID = "";
                         GrpTMID = rgt.getWebSite().getId();
@@ -530,7 +530,7 @@ public class SWBATemplate extends GenericResource {
 
                             if (GrpTMID.equals(thisTM)) {
                                 strSelect = "";
-                                if (rTmp.getId().equals(rTemp.getTemplateGroup().getId())) {
+                                if (rTmp.getId().equals(rTemp.getGroup().getId())) {
                                     strSelect = "selected";
                                 }
                                 out.println("<option value=\"" + rTmp.getId() + "\"  " + strSelect + " >" + rTmp.getTitle() + "</option>");
@@ -592,7 +592,7 @@ public class SWBATemplate extends GenericResource {
                         Iterator<TemplateGroup> enu = SWBContext.getWebSite(strTm).listTemplateGroups();
                         while (enu.hasNext()) {
                             TemplateGroup rTmp = enu.next();
-                            if (rTmp.getId().equals(rTemp.getTemplateGroup().getId())) {
+                            if (rTmp.getId().equals(rTemp.getGroup().getId())) {
                                 out.println(rTmp.getTitle());
                             }
                         }
@@ -896,7 +896,7 @@ public class SWBATemplate extends GenericResource {
                 rTemplate.setTitle(request.getParameter("title"));
                 rTemplate.setDescription(request.getParameter("description"));
                 TemplateGroup tgrp = rTemplate.getWebSite().getTemplateGroup(request.getParameter("group"));
-                rTemplate.setTemplateGroup(tgrp);
+                rTemplate.setGroup(tgrp);
                 boolean bact = request.getParameter("active") != null&&request.getParameter("active").equals("1")?true:false;
                 rTemplate.setActive(bact);
                 int tplversion = Integer.parseInt(request.getParameter("aversion"));
@@ -930,7 +930,7 @@ public class SWBATemplate extends GenericResource {
                 Template tpl = ws.getTemplate(id);
 
                 //tsrv.resetVersions(tmid, Integer.parseInt(id), response.getUser().getId());
-                boolean resettpl = TemplateSrv.resetTemplates(ws, tpl, response.getUser()); //Temporal
+                //boolean resettpl = TemplateSrv.resetTemplates(ws, tpl, response.getUser()); //Temporal
                 if (request.getParameter("act") != null) {
                     response.setRenderParameter("act", "info");
                 }

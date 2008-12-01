@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.portal.services.SWBServices;
+//import org.semanticwb.portal.services.SWBServices;
 
 /**
  *
@@ -17,7 +17,7 @@ import org.semanticwb.portal.services.SWBServices;
  */
 public class SWBRecHits 
 {
-    private static Logger log = SWBUtils.getLogger(SWBServices.class);
+    private static Logger log = SWBUtils.getLogger(SWBRecHits.class);
 
     public Iterator getResGlobalHitsLog(String webSite) {
         Iterator ret = new ArrayList().iterator();

@@ -7,7 +7,7 @@ package org.semanticwb.portal.db;
 import java.sql.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.portal.services.SWBServices;
+//import org.semanticwb.portal.services.SWBServices;
 
 /**
  *
@@ -15,7 +15,7 @@ import org.semanticwb.portal.services.SWBServices;
  */
 public class IterRecHits implements java.util.Iterator 
 {
-    private static Logger log = SWBUtils.getLogger(SWBServices.class);
+    private static Logger log = SWBUtils.getLogger(IterRecHits.class);
     
     private ResultSet rs;
     private Connection con;

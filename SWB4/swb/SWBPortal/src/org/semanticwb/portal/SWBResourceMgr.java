@@ -111,12 +111,14 @@ public class SWBResourceMgr
         Date today = new Date();
         //today = new Date(today.getYear(), today.getMonth(), today.getDate());
         TreeSet ret = new TreeSet(new SWBPriorityComparator(true));
-        Iterator<PortletRef> it = topic.listPortletRefs();
+        //Iterator<PortletRef> it = topic.listPortletRefs();
+        Iterator<Portlet> it = topic.listPortlets();
         while (it.hasNext())
         {
-            PortletRef ref = it.next();
+            //PortletRef ref = it.next();
             //System.out.println("Occ:"+occ.getResourceData());
-            Portlet portlet=ref.getPortlet();
+            //Portlet portlet=ref.getPortlet();
+            Portlet portlet=it.next();
             SWBResource res = getResource(portlet.getWebSiteId(), portlet.getId());
             if (res != null)
             {

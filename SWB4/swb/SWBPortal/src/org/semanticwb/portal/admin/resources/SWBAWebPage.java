@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.*;
 import org.semanticwb.model.*;
 import org.semanticwb.portal.api.*;
-import org.semanticwb.portal.services.WebPageSrv;
+//import org.semanticwb.portal.services.WebPageSrv;
 
 /**
  *
@@ -627,7 +627,7 @@ public class SWBAWebPage extends GenericResource {
         String ntpid=null;
         WebPage topic=null;
         User user = response.getUser();
-        WebPageSrv tpSrv=new WebPageSrv();
+        //WebPageSrv tpSrv=new WebPageSrv();
         if (tmid!=null && tpid!=null) {
             WebSite tm = SWBContext.getWebSite(tmid);
             WebPage tp=tm.getWebPage(tpid);
