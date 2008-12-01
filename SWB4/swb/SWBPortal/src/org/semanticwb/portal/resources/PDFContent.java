@@ -41,7 +41,7 @@ import org.semanticwb.model.Portlet;
 import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
-import org.semanticwb.portal.services.DocumentExtractorSrv;
+//import org.semanticwb.portal.services.DocumentExtractorSrv;
 //import org.pdfbox.exceptions.CryptographyException;
 //import org.pdfbox.exceptions.InvalidPasswordException;
 //import org.pdfbox.pdmodel.PDDocument;
