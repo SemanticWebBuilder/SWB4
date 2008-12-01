@@ -52,6 +52,7 @@ public class TextFE extends WBJsInputFEAbs
     protected int height=-1;
     protected Node tag=null;
     
+    
     protected String xmltag=null;
     
     
@@ -195,6 +196,7 @@ public class TextFE extends WBJsInputFEAbs
                 Element child=dom.createElement("input");
                 child.setAttribute("type", "text");
                 if(name!=null) child.setAttribute("name",name);
+                if(id!=null) child.setAttribute("id",id);
                 if(size!=-1) child.setAttribute("size",String.valueOf(size));
                 if(maxlength!=-1) child.setAttribute("maxlength",String.valueOf(maxlength));
                 if(width!=-1) child.setAttribute("width",String.valueOf(width));
@@ -249,6 +251,7 @@ public class TextFE extends WBJsInputFEAbs
                     if(attrValue!=null && !attrValue.equals("")){
                         //defecto
                         if(attrName.equalsIgnoreCase("name")) name=attrValue;
+                        else if(attrName.equalsIgnoreCase("id")) id=attrValue;
                         else if(attrName.equalsIgnoreCase("style")) style=attrValue;
                         else if(attrName.equalsIgnoreCase("class")) styleclass=attrValue;
                         else if(attrName.equalsIgnoreCase("moreattr")) moreattr=attrValue;
