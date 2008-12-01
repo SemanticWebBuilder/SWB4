@@ -598,10 +598,10 @@ public class Comment extends GenericResource {
                 url.setCallMethod(reqParams.Call_DIRECT);
                 link.append("javascript:window.open('");
                 link.append(url.toString() + "','_newcom','");
-                link.append(windowProps.toString() + "'); return true;");
+                link.append(windowProps.toString() + "'); return false;");
 
                 if (!"".equals(base.getAttribute("img", "").trim())) {
-                    ret.append("\n<a href=\"#\"><img onClick=\"");
+                    ret.append("\n<a href=\""+link.toString()+"\"><img onClick=\"");
                     ret.append(link.toString() +"\" src=\"");
                     ret.append(webWorkPath + "/");
                     ret.append(base.getAttribute("img").trim() + "\" alt=\"");
@@ -621,7 +621,7 @@ public class Comment extends GenericResource {
                     }
                     ret.append("\n></form>");
                 } else {
-                    ret.append("\n<a href=\"#\" onClick=\"" + link.toString()
+                    ret.append("\n<a href=\""+link.toString()+"\" onClick=\"" + link.toString()
                             + "\"");
                     if (!"".equals(base.getAttribute("blnstyle", "").trim())) {
                         ret.append(" style=\"");
