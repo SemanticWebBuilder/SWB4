@@ -21,31 +21,31 @@
 		<input type="TEXT" name="width" label="Width (pixels):" size="4" maxlength="4" jsvaltype="js_numbers"/>
 		<input type="TEXT" name="height" label="Height (pixels):" size="4" maxlength="4" jsvaltype="js_numbers"/>
 		<statictext name="txtUline">Underlined text:</statictext>
-		<input type="RADIO" name="uline" label="Yes" value="1"/>
-                
+		<input type="RADIO" name="uline" label="Yes" value="1"/>                
 		<input type="RADIO" name="uline" label="No" value="0" />
-                <statictext name="lblChooseColor">Choose text color:</statictext>                
+                
+                <statictext name="showCurrentTextColor">
+                    <![CDATA[
+                         <nobr>Current Color:&nbsp;<span id="curTextColor" style="background-color:{@db_anotherColor};" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;[{@db_anotherColor}]</nobr>
+                    ]]>
+                </statictext>
+                <input type="TEXT" size="7" maxlength="7" value="" id="anotherColor" name="anotherColor" label="Choose another text color: (hexadecimal):" />
 		<statictext name="chooseColor">
-                        <![CDATA[
+                    <![CDATA[
                         <script type="text/javascript" src="/swb/swbadmin/js/dojo/dojo/dojo.js" djConfig="parseOnLoad: true"></script>
                         <script type="text/javascript" src="/swb/swbadmin/js/dojo/dijit/ColorPalette.js"></script>
                         <script type="text/javascript">
                             dojo.require("dojo.parser");
                             dojo.require("dijit.ColorPalette");
                             function reportColor(selectedColor, eid) {
-                                var e=document.getElementById(eid);
-                                e.style.backgroundColor=selectedColor;
+                                var el=document.getElementById(eid);                                
+                                el.value=selectedColor;
                             }
                         </script>
-                        <div dojoType="dijit.ColorPalette" onChange="reportColor(arguments[0], 'textcolor')"></div>
-                        ]]>
-                </statictext>
-                <input type="TEXT" size="7" maxlength="7" value="#000000" id="textcolor" name="textcolor" label="Another text color (hexadecimal):"/>
-                <statictext name="showCurrentTextColor">
-                    <![CDATA[
-                         Current color: <div id="curTextColor" style="background-color:{@db_textcolor}; width:10px" >&nbsp;</div>
+                        <div dojoType="dijit.ColorPalette" onChange="reportColor(arguments[0], 'anotherColor')"></div>
                     ]]>
                 </statictext>
+                
 		<input type="TEXT" name="url" label="Web address" size="50"/>
 		<statictext name="txtTarget">In a new window:</statictext>
 		<input type="RADIO" name="target" label="Yes" value="1"/>
@@ -61,99 +61,103 @@
 		]]>
 	</statictext>
 	<script language="JavaScript">
-		<![CDATA[
-			if(!document.frmPromo.uline[0].checked && !document.frmPromo.uline[1].checked)
-				document.frmPromo.uline[1].checked=true;
-			if(!document.frmPromo.target[0].checked && !document.frmPromo.target[1].checked)
-				document.frmPromo.target[1].checked=true;		
-			function jsValida(frm)
-			{
-				if(frm.textcolor.value==null || frm.textcolor.value=='' || frm.textcolor.value==' ')
-					frm.textcolor.value='#'+ document.wbcolor.getColor();
-				else frm.textcolor.value=frm.textcolor.value;
-		            
-				if(frm.pos.value==null || frm.pos.value=='' || frm.pos.value==' ')
-				{
-					if(frm.img.value!=null && frm.img.value!='' && frm.img.value!=' ')
-					{
-						alert('Please indicate the image position.');
-						frm.pos.focus();
-						return false;
-					}
-				}
-				if(!isFormat(frm.textcolor)) return false;
-				replaceChars(frm.text);	
-				return true;
-			}
-			function isFormat(pIn)
-			{
-				var swFormat="0123456789ABCDEF";
-				pIn.value=pIn.value.toUpperCase();
-				if(pIn.value.length<7)
-				{
-					alert('The field lenght does not correspond to the format.');
-					if(pIn.type=="text") pIn.focus();
-					return false;
-				}
-				if (!setPrefix(pIn, '#')) return false;
-				for(var i=1; i < pIn.value.length; i++)
-				{
-					swOk= pIn.value.substring(i, i+1);
-					if (swFormat.indexOf(swOk, 0)==-1)
-					{
-						alert('The value defined does not correspond to hexadecimal format.');
-						if(pIn.type=="text") pIn.focus();
-						return false;
-					}
-				}
-				return true;
-			}
-			function setPrefix(pIn, pPx)
-			{
-				if(pIn.type=="text" || pIn.type=="hidden")
-				{
-					if (pIn.value.substring(0, pPx.length).indexOf(pPx)==-1)
-					{
-						alert('The value defined does not correspond to the format: ' + pPx);
-						pIn.value=pPx+pIn.value;
-						if(pIn.type=="text") pIn.focus();
-						return false;
-					}
-				}
-				if(pIn.type=="select-one" || pIn.type=="select-multiple")
-				{
-					for(var i=0; i<pIn.length; i++)
-					{
-						if (pIn.options[i].value.substring(0, pPx.length).indexOf(pPx)==-1)
-						{
-							alert('The value defined does not correspond to the format: ' + pPx);
-							pIn.focus();
-							return false;
-						}
-					}
-				}
-				return true;
-			}
-			function replaceChars(pIn)
-			{
-				out = "\r"; // replace this
-				add = "<br/>"; // with this
-				temp = "" + pIn.value; // temporary holder
-				while (temp.indexOf(out)>-1)
-				{
-					pos= temp.indexOf(out);
-					temp = "" + (temp.substring(0, pos) + add + temp.substring((pos + out.length), temp.length));
-				}
-				out = "\n"; // replace this
-				add = " "; // with this
-				temp = "" + temp; // temporary holder
-				while (temp.indexOf(out)>-1)
-				{
-					pos= temp.indexOf(out);
-					temp = "" + (temp.substring(0, pos) + add + temp.substring((pos + out.length), temp.length));
-				}
-				pIn.value = temp;
-			}			
-		]]>
+            <![CDATA[
+                    if(!document.frmPromo.uline[0].checked && !document.frmPromo.uline[1].checked)
+                            document.frmPromo.uline[1].checked=true;
+                    if(!document.frmPromo.target[0].checked && !document.frmPromo.target[1].checked)
+                            document.frmPromo.target[1].checked=true;
+
+                    function jsValida(frm)
+                    {
+                        /*if(frm.anotherColor.value==null || frm.anotherColor.value=='' || frm.anotherColor.value==' ') {
+                            frm.anotherColor.value='#'+ document.wbcolor.getColor();
+                        }else {
+                            frm.anotherColor.value=frm.anotherColor.value;
+                        }*/
+
+                        if(frm.pos.value==null || frm.pos.value=='' || frm.pos.value==' ')
+                        {
+                                if(frm.img.value!=null && frm.img.value!='' && frm.img.value!=' ')
+                                {
+                                        alert('Please indicate the image position.');
+                                        frm.pos.focus();
+                                        return false;
+                                }
+                        }
+                        if(!isFormat(frm.anotherColor)) return false;
+                        replaceChars(frm.text);	
+                        return true;
+                    }
+
+                    function isFormat(pIn)
+                    {
+                            var swFormat="0123456789ABCDEF";
+                            pIn.value=pIn.value.toUpperCase();
+                            if(pIn.value.length<7)
+                            {
+                                    alert('The field lenght does not correspond to the format.');
+                                    if(pIn.type=="text") pIn.focus();
+                                    return false;
+                            }
+                            if (!setPrefix(pIn, '#')) return false;
+                            for(var i=1; i < pIn.value.length; i++)
+                            {
+                                    swOk= pIn.value.substring(i, i+1);
+                                    if (swFormat.indexOf(swOk, 0)==-1)
+                                    {
+                                            alert('The value defined does not correspond to hexadecimal format.');
+                                            if(pIn.type=="text") pIn.focus();
+                                            return false;
+                                    }
+                            }
+                            return true;
+                    }
+                    function setPrefix(pIn, pPx)
+                    {
+                            if(pIn.type=="text" || pIn.type=="hidden")
+                            {
+                                    if (pIn.value.substring(0, pPx.length).indexOf(pPx)==-1)
+                                    {
+                                            alert('The value defined does not correspond to the format: ' + pPx);
+                                            pIn.value=pPx+pIn.value;
+                                            if(pIn.type=="text") pIn.focus();
+                                            return false;
+                                    }
+                            }
+                            if(pIn.type=="select-one" || pIn.type=="select-multiple")
+                            {
+                                    for(var i=0; i<pIn.length; i++)
+                                    {
+                                            if (pIn.options[i].value.substring(0, pPx.length).indexOf(pPx)==-1)
+                                            {
+                                                    alert('The value defined does not correspond to the format: ' + pPx);
+                                                    pIn.focus();
+                                                    return false;
+                                            }
+                                    }
+                            }
+                            return true;
+                    }
+                    function replaceChars(pIn)
+                    {
+                            out = "\r"; // replace this
+                            add = "<br/>"; // with this
+                            temp = "" + pIn.value; // temporary holder
+                            while (temp.indexOf(out)>-1)
+                            {
+                                    pos= temp.indexOf(out);
+                                    temp = "" + (temp.substring(0, pos) + add + temp.substring((pos + out.length), temp.length));
+                            }
+                            out = "\n"; // replace this
+                            add = " "; // with this
+                            temp = "" + temp; // temporary holder
+                            while (temp.indexOf(out)>-1)
+                            {
+                                    pos= temp.indexOf(out);
+                                    temp = "" + (temp.substring(0, pos) + add + temp.substring((pos + out.length), temp.length));
+                            }
+                            pIn.value = temp;
+                    }			
+            ]]>
 	</script>
 </admresource>

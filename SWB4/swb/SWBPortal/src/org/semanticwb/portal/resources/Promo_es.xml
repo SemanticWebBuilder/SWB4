@@ -23,27 +23,29 @@
 		<statictext name="txtUline">Texto subrayado:</statictext>
 		<input type="RADIO" name="uline" label="Sí" value="1"/>
 		<input type="RADIO" name="uline" label="No" value="0"/>
-		<statictext name="chooseColor">
-                        <![CDATA[
-                        <script type="text/javascript" src="/swb/swbadmin/js/dojo/dojo/dojo.js" djConfig="parseOnLoad: true"></script>
-                        <script type="text/javascript" src="/swb/swbadmin/js/dojo/dijit/ColorPalette.js"></script>
-                        <script type="text/javascript">
-                            dojo.require("dojo.parser");
-                            dojo.require("dijit.ColorPalette");
-                            function reportColor(selectedColor, eid) {
-                                var e=document.getElementById(eid);
-                                e.style.backgroundColor=selectedColor;
-                            }
-                        </script>
-                        <div dojoType="dijit.ColorPalette" onChange="reportColor(arguments[0], 'textcolor')"></div>
-                        ]]>
-                </statictext>
-                <input type="TEXT" size="7" maxlength="7" value="#000000" id="textcolor" name="textcolor" label="Otro color del texto (hexadecimal):"/>
+		
                 <statictext name="showCurrentTextColor">
                     <![CDATA[
-                         Color actual: <div id="curTextColor" style="background-color:{@db_textcolor}; width:10px" >&nbsp;</div>
+                         <nobr>Color actual:&nbsp;<span id="curTextColor" style="background-color:{@db_anotherColor};" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;[{@db_anotherColor}]</nobr>
                     ]]>
                 </statictext>
+                <input type="TEXT" size="7" maxlength="7" value="" id="anotherColor" name="anotherColor" label="Otro color del texto (hexadecimal):" />
+                <statictext name="chooseColor">
+                    <![CDATA[
+                    <script type="text/javascript" src="/swb/swbadmin/js/dojo/dojo/dojo.js" djConfig="parseOnLoad: true"></script>
+                    <script type="text/javascript" src="/swb/swbadmin/js/dojo/dijit/ColorPalette.js"></script>
+                    <script type="text/javascript">
+                        dojo.require("dojo.parser");
+                        dojo.require("dijit.ColorPalette");
+                        function reportColor(selectedColor, eid) {
+                            var el=document.getElementById(eid);                                
+                            el.value=selectedColor;
+                        }
+                    </script>
+                    <div dojoType="dijit.ColorPalette" onChange="reportColor(arguments[0], 'anotherColor')"></div>
+                    ]]>
+                </statictext>
+                                
 		<input type="TEXT" name="url" label="Dirección web" size="50"/>
 		<statictext name="txtTarget">En una nueva ventana:</statictext>
 		<input type="RADIO" name="target" label="Sí" value="1"/>
@@ -59,99 +61,101 @@
 		]]>
 	</statictext>
 	<script language="JavaScript">
-		<![CDATA[
-			if(!document.frmPromo.uline[0].checked && !document.frmPromo.uline[1].checked)
-				document.frmPromo.uline[1].checked=true;
-			if(!document.frmPromo.target[0].checked && !document.frmPromo.target[1].checked)
-				document.frmPromo.target[1].checked=true;		
-			function jsValida(frm)
-			{
-				if(frm.textcolor.value==null || frm.textcolor.value=='' || frm.textcolor.value==' ')
-					frm.textcolor.value='#'+ document.wbcolor.getColor();
-				else frm.textcolor.value=frm.textcolor.value;
-		            
-				if(frm.pos.value==null || frm.pos.value=='' || frm.pos.value==' ')
-				{
-					if(frm.img.value!=null && frm.img.value!='' && frm.img.value!=' ')
-					{
-						alert('Indique la posición de la imagen.');
-						frm.pos.focus();
-						return false;
-					}
-				}
-				if(!isFormat(frm.textcolor)) return false;
-				replaceChars(frm.text);	
-				return true;
-			}
-			function isFormat(pIn)
-			{
-				var swFormat="0123456789ABCDEF";
-				pIn.value=pIn.value.toUpperCase();
-				if(pIn.value.length<7)
-				{
-					alert('La longitud del campo no corresponde al formato.');
-					if(pIn.type=="text") pIn.focus();
-					return false;
-				}
-				if (!setPrefix(pIn, '#')) return false;
-				for(var i=1; i < pIn.value.length; i++)
-				{
-					swOk= pIn.value.substring(i, i+1);
-					if (swFormat.indexOf(swOk, 0)==-1)
-					{
-						alert('El valor definido no corresponde al formato hexadecimal.');
-						if(pIn.type=="text") pIn.focus();
-						return false;
-					}
-				}
-				return true;
-			}
-			function setPrefix(pIn, pPx)
-			{
-				if(pIn.type=="text" || pIn.type=="hidden")
-				{
-					if (pIn.value.substring(0, pPx.length).indexOf(pPx)==-1)
-					{
-						alert('El valor definido no corresponde al formato: ' + pPx);
-						pIn.value=pPx+pIn.value;
-						if(pIn.type=="text") pIn.focus();
-						return false;
-					}
-				}
-				if(pIn.type=="select-one" || pIn.type=="select-multiple")
-				{
-					for(var i=0; i<pIn.length; i++)
-					{
-						if (pIn.options[i].value.substring(0, pPx.length).indexOf(pPx)==-1)
-						{
-							alert('El valor definido no corresponde al formato: ' + pPx);
-							pIn.focus();
-							return false;
-						}
-					}
-				}
-				return true;
-			}
-			function replaceChars(pIn)
-			{
-				out = "\r"; // replace this
-				add = "<br/>"; // with this
-				temp = "" + pIn.value; // temporary holder
-				while (temp.indexOf(out)>-1)
-				{
-					pos= temp.indexOf(out);
-					temp = "" + (temp.substring(0, pos) + add + temp.substring((pos + out.length), temp.length));
-				}
-				out = "\n"; // replace this
-				add = " "; // with this
-				temp = "" + temp; // temporary holder
-				while (temp.indexOf(out)>-1)
-				{
-					pos= temp.indexOf(out);
-					temp = "" + (temp.substring(0, pos) + add + temp.substring((pos + out.length), temp.length));
-				}
-				pIn.value = temp;
-			}			
-		]]>
+            <![CDATA[
+                if(!document.frmPromo.uline[0].checked && !document.frmPromo.uline[1].checked)
+                        document.frmPromo.uline[1].checked=true;
+                if(!document.frmPromo.target[0].checked && !document.frmPromo.target[1].checked)
+                        document.frmPromo.target[1].checked=true;		
+                function jsValida(frm)
+                {
+                        /*if(frm.anotherColor.value==null || frm.anotherColor.value=='' || frm.anotherColor.value==' ') {
+                            frm.anotherColor.value='#'+ document.wbcolor.getColor();
+                        }else {
+                            frm.anotherColor.value=frm.anotherColor.value;
+                        }*/
+
+                        if(frm.pos.value==null || frm.pos.value=='' || frm.pos.value==' ')
+                        {
+                                if(frm.img.value!=null && frm.img.value!='' && frm.img.value!=' ')
+                                {
+                                        alert('Indique la posición de la imagen.');
+                                        frm.pos.focus();
+                                        return false;
+                                }
+                        }
+                        if(!isFormat(frm.anotherColor)) return false;
+                        replaceChars(frm.text);	
+                        return true;
+                }
+                function isFormat(pIn)
+                {
+                    var swFormat="0123456789ABCDEF";
+                    pIn.value=pIn.value.toUpperCase();
+                    if(pIn.value.length<7)
+                    {
+                            alert('La longitud del campo no corresponde al formato.');
+                            if(pIn.type=="text") pIn.focus();
+                            return false;
+                    }
+                    if (!setPrefix(pIn, '#')) return false;
+                    for(var i=1; i < pIn.value.length; i++)
+                    {
+                            swOk= pIn.value.substring(i, i+1);
+                            if (swFormat.indexOf(swOk, 0)==-1)
+                            {
+                                    alert('El valor definido no corresponde al formato hexadecimal.');
+                                    if(pIn.type=="text") pIn.focus();
+                                    return false;
+                            }
+                    }
+                    return true;
+                }
+                function setPrefix(pIn, pPx)
+                {
+                    if(pIn.type=="text" || pIn.type=="hidden")
+                    {
+                            if (pIn.value.substring(0, pPx.length).indexOf(pPx)==-1)
+                            {
+                                    alert('El valor definido no corresponde al formato: ' + pPx);
+                                    pIn.value=pPx+pIn.value;
+                                    if(pIn.type=="text") pIn.focus();
+                                    return false;
+                            }
+                    }
+                    if(pIn.type=="select-one" || pIn.type=="select-multiple")
+                    {
+                            for(var i=0; i<pIn.length; i++)
+                            {
+                                    if (pIn.options[i].value.substring(0, pPx.length).indexOf(pPx)==-1)
+                                    {
+                                            alert('El valor definido no corresponde al formato: ' + pPx);
+                                            pIn.focus();
+                                            return false;
+                                    }
+                            }
+                    }
+                    return true;
+                }
+                function replaceChars(pIn)
+                {
+                    out = "\r"; // replace this
+                    add = "<br/>"; // with this
+                    temp = "" + pIn.value; // temporary holder
+                    while (temp.indexOf(out)>-1)
+                    {
+                            pos= temp.indexOf(out);
+                            temp = "" + (temp.substring(0, pos) + add + temp.substring((pos + out.length), temp.length));
+                    }
+                    out = "\n"; // replace this
+                    add = " "; // with this
+                    temp = "" + temp; // temporary holder
+                    while (temp.indexOf(out)>-1)
+                    {
+                            pos= temp.indexOf(out);
+                            temp = "" + (temp.substring(0, pos) + add + temp.substring((pos + out.length), temp.length));
+                    }
+                    pIn.value = temp;
+                }
+            ]]>
 	</script>
 </admresource>
