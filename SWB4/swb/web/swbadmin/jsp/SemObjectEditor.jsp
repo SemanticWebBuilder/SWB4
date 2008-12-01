@@ -8,6 +8,8 @@
     String suri=request.getParameter("suri");
     String scls=request.getParameter("scls");
     String sref=request.getParameter("sref");
+    String sprop=request.getParameter("sprop");
+    System.out.println("SemObjectEditor suri:"+suri+" scls:"+scls+" sref:"+sref+" sprop:"+sprop);
     
     if(suri==null && scls==null)
     {
@@ -30,17 +32,27 @@
         SemanticClass cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(scls);
         SemanticObject ref=SWBPlatform.getSemanticMgr().getOntology().getSemanticObject(sref);
         SWBFormMgr frm=new SWBFormMgr(cls,ref,null);
-        
+        frm.addHiddenParameter("sprop", sprop);
+
         SemanticObject obj=frm.processForm(request, response);
         if(obj!=null)
         {
             if(smode.equals(SWBFormMgr.MODE_CREATE))
             {
-                GenericObject gobj=cls.newGenericInstance(obj);
-                if(gobj instanceof WebPage)
+                SemanticProperty prop=null;
+                if(sprop!=null)prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(sprop);
+
+                if(prop!=null && prop.hasInverse())
                 {
-                    ((WebPage)gobj).setParent((WebPage)cls.newGenericInstance(ref));
+                    //System.out.println("prop:"+prop.getURI()+" "+prop.hasInverse()+" "+prop.getInverse());
+                    obj.setObjectProperty(prop.getInverse(), ref);
                 }
+                //GenericObject gobj=cls.newGenericInstance(obj);
+                //if(gobj instanceof WebPage)
+                //{
+                //    ((WebPage)gobj).setParent((WebPage)cls.newGenericInstance(ref));
+                //}
+                
                 out.println("<script type=\"text/javascript\">");
                 out.println("dijit.byId('swbDialog').hide();");
                 out.println("addNewTab('"+obj.getURI()+"','"+obj.getDisplayName()+"','"+SWBPlatform.getContextPath()+"/swbadmin/jsp/objectTab.jsp');");

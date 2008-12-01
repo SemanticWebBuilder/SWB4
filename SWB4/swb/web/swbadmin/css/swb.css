@@ -35,6 +35,7 @@ body .dojoSplitPane {
 .swbIconPortletType,
 .swbIconPortlet,
 .swbIconPortletU,
+.swbIconTemplateGroup,
 .swbIconTemplates,
 .swbIconTemplate,
 .swbIconTemplateU,
@@ -197,7 +198,7 @@ form.swbform fieldset {
 	border-left: 1px solid #a0a0ff;
 	border-bottom: 1px solid #a0a0ff;
 	border-right: 1px solid #a0a0ff;
-	background: url(../images/swbform-fieldset.gif) left bottom repeat-x;
+	background: url(../images/swbform-fieldset.png) left bottom repeat-x;
     _background: url('../js/dojo/dijit/themes/soria/images/titleBar.png') left bottom repeat-x;
 	}
 	

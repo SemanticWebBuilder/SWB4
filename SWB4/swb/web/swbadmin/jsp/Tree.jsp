@@ -87,7 +87,7 @@
 
     public void addHerarquicalNodes(JSONArray arr, SemanticObject obj) throws JSONException
     {
-        Iterator<SemanticObject> it=obj.getSemanticClass().listHerarquicalNodes();
+        Iterator<SemanticObject> it=SWBComparator.sortSortableObject(obj.getSemanticClass().listHerarquicalNodes());
         while(it.hasNext())
         {
             HerarquicalNode node=new HerarquicalNode(it.next());
@@ -108,7 +108,8 @@
         //Menus
         JSONArray menus=new JSONArray();
         jobj.putOpt("menus", menus);
-        menus.put(getMenuItem("Agregar", "dijitEditorIcon dijitEditorIconCut",getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+cls.getEncodedURI()+"&sref="+obj.getEncodedURI(),null)));
+        String url=SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+cls.getEncodedURI()+"&sref="+obj.getEncodedURI();
+        menus.put(getMenuItem("Agregar "+cls.getDisplayName(lang), "dijitEditorIcon dijitEditorIconCut",getAction("showDialog", url,null)));
         menus.put(getMenuSeparator());
         menus.put(getMenuItem("Recargar", "dijitEditorIcon dijitEditorIconCut", getReloadAction()));
 
@@ -145,12 +146,18 @@
         String type=cls.getName();
 
         String icon="swbIcon"+type;
+        //Active
+        boolean active=false;
         SemanticProperty activeprop=cls.getProperty("active");
         if(activeprop!=null)
         {
-            boolean active=obj.getBooleanProperty(activeprop);
-            if(!active)icon=icon+"U";
+            active=obj.getBooleanProperty(activeprop);
+            if(!active)
+            {
+                icon=icon+"U";
+            }
         }
+
         JSONObject jobj=getNode(obj.getURI(), obj.getDisplayName(lang), type, icon);
         arr.put(jobj);
 
@@ -159,8 +166,28 @@
         //menus
         JSONArray menus=new JSONArray();
         jobj.putOpt("menus", menus);
-        menus.put(getMenuItem("Agregar", "dijitEditorIcon dijitEditorIconCut",getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+cls.getEncodedURI()+"&sref="+obj.getEncodedURI(),null)));
+
+        Iterator<SemanticProperty> pit=cls.listHerarquicalProperties();
+        while(pit.hasNext())
+        {
+            SemanticProperty prop=pit.next();
+            SemanticClass rcls=prop.getRangeClass();
+            menus.put(getMenuItem("Agregar "+rcls.getDisplayName(lang), "dijitEditorIcon dijitEditorIconCut",getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+rcls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),null)));
+        }
         menus.put(getMenuSeparator());
+
+        //Active
+        if(activeprop!=null)
+        {
+            if(!active)
+            {
+                menus.put(getMenuItem("Activar", "dijitEditorIcon dijitEditorIconCut", getNewTabAction()));
+            }else
+            {
+                menus.put(getMenuItem("Desactivar", "dijitEditorIcon dijitEditorIconCut", getNewTabAction()));
+            }
+        }
+
         menus.put(getMenuItem("Editar", "dijitEditorIcon dijitEditorIconCut", getNewTabAction()));
         menus.put(getMenuItem("Eliminar", "dijitEditorIcon dijitEditorIconCut", getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+cls.getEncodedURI()+"&sref="+obj.getEncodedURI(),null)));
         menus.put(getMenuSeparator());
