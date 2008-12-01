@@ -27,7 +27,7 @@ public class SemanticObject
     SemanticModel m_model=null;
     
     //Virtual properties
-    private SemanticClass m_virtclass=null;
+    private SemanticClass m_cls=null;
     private boolean m_virtual=false;
     private HashMap m_virtprops;
     
@@ -85,7 +85,7 @@ public class SemanticObject
     public SemanticObject(SemanticModel model, SemanticClass cls)
     {
         m_model=model;
-        m_virtclass=cls;
+        m_cls=cls;
         m_virtual=true;
         m_virtprops=new HashMap();
     }    
@@ -132,22 +132,18 @@ public class SemanticObject
     
     public SemanticClass getSemanticClass()
     {
-        SemanticClass cls=null;
-        if(m_virtual)
-        {
-            cls=m_virtclass;
-        }else
+        if(m_cls==null)
         {
             Statement stm=m_res.getProperty(m_res.getModel().getProperty(SemanticVocabulary.RDF_TYPE));
             if(stm!=null)
             {
                 try
                 {
-                    cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(stm.getResource().getURI());
+                    m_cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(stm.getResource().getURI());
                 }catch(Exception e){log.error(e);}
             }
         }
-        return cls;
+        return m_cls;
     }
     
     public Iterator<SemanticClass> listSemanticClasses()
@@ -910,17 +906,24 @@ public class SemanticObject
     public String getDisplayName(String lang)
     {
         String ret=null;
-        SemanticProperty prop=getSemanticClass().getDisplayNameProperty();
-        if(prop!=null)
+        SemanticClass cls=getSemanticClass();
+        if(cls!=null)
         {
-            if(prop.isDataTypeProperty())
+            SemanticProperty prop=cls.getDisplayNameProperty();
+            if(prop!=null)
             {
-                ret=getLocaleProperty(prop, lang);
-            }else if(prop.isObjectProperty())
-            {
-                SemanticObject obj=getObjectProperty(prop);
-                ret=obj.getDisplayName(lang);
+                if(prop.isDataTypeProperty())
+                {
+                    ret=getLocaleProperty(prop, lang);
+                }else if(prop.isObjectProperty())
+                {
+                    SemanticObject obj=getObjectProperty(prop);
+                    ret=obj.getDisplayName(lang);
+                }
             }
+        }else
+        {
+            log.warn("Object does not have cls:"+getURI());
         }
         return ret;
     }    
