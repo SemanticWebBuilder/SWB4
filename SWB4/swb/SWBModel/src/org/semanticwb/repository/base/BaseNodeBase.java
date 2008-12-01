@@ -53,16 +53,6 @@ public class BaseNodeBase extends GenericObjectBase
          return ret;
     }
 
-    public boolean isNew()
-    {
-        return getSemanticObject().getBooleanProperty(vocabulary.swbrep_isNew);
-    }
-
-    public void setNew(boolean isNew)
-    {
-        getSemanticObject().setBooleanProperty(vocabulary.swbrep_isNew, isNew);
-    }
-
     public GenericIterator<org.semanticwb.repository.BaseNode> listNodes()
     {
         StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, vocabulary.swbrep_hasNodes.getInverse().getRDFProperty(), getSemanticObject().getRDFResource());
@@ -107,24 +97,14 @@ public class BaseNodeBase extends GenericObjectBase
         getSemanticObject().removeProperty(vocabulary.jcr_mixinTypes,mixintype);
     }
 
-    public boolean isModified()
-    {
-        return getSemanticObject().getBooleanProperty(vocabulary.swbrep_isModified);
-    }
-
-    public void setModified(boolean isModified)
-    {
-        getSemanticObject().setBooleanProperty(vocabulary.swbrep_isModified, isModified);
-    }
-
     public String getName()
     {
-        return getSemanticObject().getProperty(vocabulary.jcr_name);
+        return getSemanticObject().getProperty(vocabulary.swbrep_name);
     }
 
     public void setName(String name)
     {
-        getSemanticObject().setProperty(vocabulary.jcr_name, name);
+        getSemanticObject().setProperty(vocabulary.swbrep_name, name);
     }
 
     public void remove()

@@ -43,16 +43,6 @@ public class WorkspaceBase extends GenericObjectBase
          return ret;
     }
 
-    public String getName()
-    {
-        return getSemanticObject().getProperty(vocabulary.swbrep_Name);
-    }
-
-    public void setName(String Name)
-    {
-        getSemanticObject().setProperty(vocabulary.swbrep_Name, Name);
-    }
-
     public BaseNode getBaseNode(String id)
     {
         return (BaseNode)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.nt_BaseNode),vocabulary.nt_BaseNode);
@@ -83,5 +73,37 @@ public class WorkspaceBase extends GenericObjectBase
     public boolean hasBaseNode(String id)
     {
         return (getBaseNode(id)!=null);
+    }
+
+    public Unstructured getUnstructured(String id)
+    {
+        return (Unstructured)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.nt_Unstructured),vocabulary.nt_Unstructured);
+    }
+
+    public Iterator<Unstructured> listUnstructureds()
+    {
+        Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
+        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.nt_Unstructured.getOntClass());
+        return new GenericIterator<Unstructured>(Unstructured.class, stit, true);
+    }
+
+    public Unstructured createUnstructured(String id)
+    {
+        return (Unstructured)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, vocabulary.nt_Unstructured), vocabulary.nt_Unstructured);
+    }
+
+    public Unstructured createUnstructured()
+    {
+        long id=SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+vocabulary.nt_Unstructured.getName());
+        return createUnstructured(""+id);
+    } 
+
+    public void removeUnstructured(String id)
+    {
+        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.nt_Unstructured));
+    }
+    public boolean hasUnstructured(String id)
+    {
+        return (getUnstructured(id)!=null);
     }
 }
