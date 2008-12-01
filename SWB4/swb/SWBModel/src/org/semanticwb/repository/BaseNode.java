@@ -22,6 +22,7 @@ public class BaseNode extends BaseNodeBase
 {
 
     private static final String JCR_FROZENNODE_NAME = "jcr:frozenNode";
+    private static final String JCR_VERSIONLABELS_NAME = "jcr:versionLabels";
     private static final String JCR_VERSION_NAME = "jcr:version";
     private static final String ONPARENTVERSION_COPY = "COPY";
     private static final String ONPARENTVERSION_VERSION = "VERSION";
@@ -1031,7 +1032,7 @@ public class BaseNode extends BaseNodeBase
         {
             SemanticProperty jcr_baseVersion = vocabulary.jcr_baseVersion;
             BaseNode ntVersion = historyNode.createNodeBase(JCR_VERSION_NAME, vocabulary.nt_Version);
-            BaseNode versionLabels = historyNode.createNodeBase("jcr:versionLabels", vocabulary.nt_versionLabels);
+            BaseNode versionLabels = historyNode.createNodeBase(JCR_VERSIONLABELS_NAME, vocabulary.nt_versionLabels);
             BaseNode ntFrozenNode = ntVersion.createNodeBase(JCR_FROZENNODE_NAME, vocabulary.nt_FrozenNode);
             addFrozenProperties(ntFrozenNode.getSemanticObject());
             this.getSemanticObject().setObjectProperty(jcr_baseVersion, ntVersion.getSemanticObject());
