@@ -43,6 +43,8 @@ public class SWBFormMgr
     private String m_method="POST";
     private String m_lang="es";
     private String m_type=TYPE_XHTML;
+
+    private HashMap<String, String> hidden=null;
     
     private HashMap<String, TreeSet> groups=null;
     
@@ -78,6 +80,7 @@ public class SWBFormMgr
         }
         //System.out.println("m_fview:"+m_fview+" m_propmap:"+m_propmap);
         groups=new HashMap();
+        hidden=new HashMap();
         Iterator<SemanticProperty> it=m_cls.listProperties();
         while(it.hasNext())
         {
@@ -241,11 +244,17 @@ public class SWBFormMgr
             uri=m_obj.getURI();
         }
         frmname=uri+"/form";
-        ret.append("<form id=\""+frmname+"\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\""+m_action+"\" method=\""+m_method+"\">");
+        ret.append("<form id=\""+frmname+"\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\""+m_action+"\" onSubmit=\"submitForm('"+frmname+"');return false;\" method=\""+m_method+"\">");
         if(m_obj!=null)ret.append("    <input type=\"hidden\" name=\""+PRM_URI+"\" value=\""+m_obj.getURI()+"\">");
         if(m_cls!=null)ret.append("    <input type=\"hidden\" name=\""+PRM_CLS+"\" value=\""+m_cls.getURI()+"\">");
         if(m_mode!=null)ret.append("    <input type=\"hidden\" name=\""+PRM_MODE+"\" value=\""+m_mode+"\">");
         if(m_ref!=null)ret.append("    <input type=\"hidden\" name=\""+PRM_REF+"\" value=\""+m_ref.getURI()+"\">");
+        Iterator<Map.Entry<String,String>> hit=hidden.entrySet().iterator();
+        while(hit.hasNext())
+        {
+            Map.Entry entry=hit.next();
+            ret.append("    <input type=\"hidden\" name=\""+entry.getKey()+"\" value=\""+entry.getValue()+"\">");
+        }
 
         if(!m_mode.equals(MODE_CREATE))
         {
@@ -305,7 +314,7 @@ public class SWBFormMgr
             }
         }
 
-        ret.append("    <p><input type=\"button\" onclick=\"submitForm('"+frmname+"');\" value=\"Actualizar\"/></p>");
+        ret.append("    <p><input type=\"submit\" dojoType=\"dijit.form.Button\" value=\"Actualizar\"/></p>");
         ret.append("</form>");
         return ret.toString();
     }    
@@ -352,5 +361,8 @@ public class SWBFormMgr
         return ret;
     }
     
-    
+    public void addHiddenParameter(String key, String value)
+    {
+        if(key!=null && value!=null)hidden.put(key, value);
+    }
 }
