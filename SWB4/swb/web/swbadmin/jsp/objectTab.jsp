@@ -2,6 +2,7 @@
 <%@page pageEncoding="ISO-8859-1"%>
 <%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.model.*,java.util.*,org.semanticwb.base.util.*"%>
 <%
+    String lang="es";
     response.setHeader("Cache-Control", "no-cache"); 
     response.setHeader("Pragma", "no-cache"); 
     String id=request.getParameter("suri");
@@ -22,9 +23,48 @@
     }else
     //Otro        
     {
+        out.println("<div dojoType=\"dijit.layout.TabContainer\" id=\""+id+"/tab2\" _tabPosition=\"bottom\" _selectedChild=\"btab1\">");
+
+        Iterator<ObjectBehavior> obit=SWBComparator.sortSortableObject(SWBContext.getVocabulary().swbxf_ObjectBehavior.listGenericInstances(true));
+        while(obit.hasNext())
+        {
+            ObjectBehavior ob=obit.next();
+            String title=ob.getTitle(lang);
+            DisplayObject dpobj=ob.getDisplayObject();
+            SemanticObject interf=ob.getInterface();
+            boolean refresh=ob.isRefreshOnShow();
+            String url=ob.getURL();
+            System.out.println("ob:"+ob.getTitle(lang)+" "+ob.getDisplayObject()+" "+ob.getInterface()+" "+ob.getURL());
+
+            String params="suri="+URLEncoder.encode(obj.getURI());
+            Iterator<ResourceParameter> prmit=ob.listParams();
+            while(prmit.hasNext())
+            {
+                ResourceParameter rp=prmit.next();
+                params+="&"+rp.getName()+"="+rp.getValue().getEncodedURI();
+            }
+            System.out.println("params:"+params);
+            //Genericos
+            if(dpobj==null)
+            {
+                if(interf==null)
+                {
+                    out.println("<div dojoType=\"dijit.layout.ContentPane\" title=\""+title+"\" style=\"padding:10px;\" refreshOnShow=\""+refresh+"\" href=\""+url+"?"+params+"\"></div>");
+                }else
+                {
+                    SemanticClass scls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(interf.getURI());
+                    if(scls!=null)
+                    {
+                        if(scls.getObjectClass().isInstance(obj))
+                        {
+                            out.println("<div dojoType=\"dijit.layout.ContentPane\" title=\""+title+"\" style=\"padding:10px;\" refreshOnShow=\""+refresh+"\" href=\""+url+"?"+params+"\"></div>");
+                        }
+                    }
+                }
+            }
+        }
 %>
-<div dojoType="dijit.layout.TabContainer" id="<%=id%>/tab2" _tabPosition="bottom" _selectedChild="btab1">
-<div dojoType="dijit.layout.ContentPane" title="Información" style=" padding:10px;" refreshOnShow="false" href="/swb/swbadmin/jsp/SemObjectEditor.jsp?suri=<%=URLEncoder.encode(obj.getURI())%>"></div>
+
 <%        
         String buri="/swb/swb/SWBAdmin/WBAd_Home/_rid/1/_mto/3";
         buri+="?suri="+obj.getSemanticObject().getEncodedURI();
