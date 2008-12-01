@@ -568,7 +568,7 @@ public class CodeGenerator
                     else
                     {
                         javaClassContent.append(ENTER);
-                        javaClassContent.append("    public void set" + objectName + "(" + pack + "." + valueToReturn + " " + valueToReturn.toLowerCase() + ");" + ENTER);
+                        javaClassContent.append("    public void set" + objectName + "(" + pack + "." + toUpperCase(valueToReturn) + " " + valueToReturn.toLowerCase() + ");" + ENTER);
                         javaClassContent.append(ENTER);
                         javaClassContent.append("    public void remove" + objectName + "();" + ENTER);
                         javaClassContent.append(ENTER);
@@ -1052,7 +1052,7 @@ public class CodeGenerator
                 if ( !tpp.hasInverse() )
                 {
                     javaClassContent.append(ENTER);
-                    javaClassContent.append("    public void add" + objectName + "(" + sPackage + "." + valueToReturn + " " + valueToReturn.toLowerCase() + ")" + ENTER);
+                    javaClassContent.append("    public void add" + objectName + "(" + sPackage + "." + toUpperCase(valueToReturn) + " " + valueToReturn.toLowerCase() + ")" + ENTER);
                     javaClassContent.append(OPEN_BLOCK + ENTER);
                     javaClassContent.append("        getSemanticObject().addObjectProperty(vocabulary." + tpp.getPrefix()+"_"+tpp.getName() + ", " + valueToReturn.toLowerCase() + ".getSemanticObject());" + ENTER);
                     javaClassContent.append(CLOSE_BLOCK + ENTER);
@@ -1064,7 +1064,7 @@ public class CodeGenerator
                     javaClassContent.append(CLOSE_BLOCK + ENTER);
 
                     javaClassContent.append(ENTER);
-                    javaClassContent.append("    public void remove" + objectName + "(" + sPackage + "." + valueToReturn + " " + valueToReturn.toLowerCase() + ")" + ENTER);
+                    javaClassContent.append("    public void remove" + objectName + "(" + sPackage + "." + toUpperCase(valueToReturn) + " " + valueToReturn.toLowerCase() + ")" + ENTER);
                     javaClassContent.append(OPEN_BLOCK + ENTER);
                     javaClassContent.append("        getSemanticObject().removeObjectProperty(vocabulary." + tpp.getPrefix()+"_"+tpp.getName() + "," + valueToReturn.toLowerCase() + ".getSemanticObject());" + ENTER);
                     javaClassContent.append(CLOSE_BLOCK + ENTER);
@@ -1073,7 +1073,7 @@ public class CodeGenerator
             else
             {
                 javaClassContent.append(ENTER);
-                javaClassContent.append("    public void set" + objectName + "(" + sPackage + "." + valueToReturn + " " + valueToReturn.toLowerCase() + ")" + ENTER);
+                javaClassContent.append("    public void set" + objectName + "(" + sPackage + "." + toUpperCase(valueToReturn) + " " + valueToReturn.toLowerCase() + ")" + ENTER);
                 javaClassContent.append(OPEN_BLOCK + ENTER);
                 javaClassContent.append("        getSemanticObject().setObjectProperty(vocabulary." + tpp.getPrefix()+"_"+tpp.getName() + ", " + valueToReturn.toLowerCase() + ".getSemanticObject());" + ENTER);
                 javaClassContent.append(CLOSE_BLOCK + ENTER);
@@ -1144,7 +1144,7 @@ public class CodeGenerator
                     javaClassContent.append(CLOSE_BLOCK + ENTER);
 
                     javaClassContent.append(ENTER);
-                    javaClassContent.append("    public void remove" + objectName + "(" + pack + "." + valueToReturn + " " + valueToReturn.toLowerCase() + ")" + ENTER);
+                    javaClassContent.append("    public void remove" + objectName + "(" + pack + "." + toUpperCase(valueToReturn) + " " + valueToReturn.toLowerCase() + ")" + ENTER);
                     javaClassContent.append(OPEN_BLOCK + ENTER);
                     javaClassContent.append("        getSemanticObject().removeObjectProperty(vocabulary." + tpp.getPrefix()+"_"+tpp.getName() + "," + valueToReturn.toLowerCase() + ");" + ENTER);
                     javaClassContent.append(CLOSE_BLOCK + ENTER);
@@ -1153,7 +1153,7 @@ public class CodeGenerator
             else
             {
                 javaClassContent.append(ENTER);
-                javaClassContent.append("    public void set" + objectName + "(" + pack + "." + valueToReturn + " " + valueToReturn.toLowerCase() + ")" + ENTER);
+                javaClassContent.append("    public void set" + objectName + "(" + pack + "." + toUpperCase( valueToReturn) + " " + valueToReturn.toLowerCase() + ")" + ENTER);
                 javaClassContent.append(OPEN_BLOCK + ENTER);
                 javaClassContent.append("        getSemanticObject().setObjectProperty(vocabulary." + tpp.getPrefix()+"_"+tpp.getName() + ", " + valueToReturn.toLowerCase() + ");" + ENTER);
                 javaClassContent.append(CLOSE_BLOCK + ENTER);
