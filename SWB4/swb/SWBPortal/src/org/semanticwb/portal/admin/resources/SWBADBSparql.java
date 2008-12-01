@@ -7,28 +7,19 @@ package org.semanticwb.portal.admin.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-//import java.sql.Connection;
-//import java.sql.ResultSet;
-//import java.sql.ResultSetMetaData;
-//import java.sql.Statement;
-//import java.util.Enumeration;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-//import org.semanticwb.base.db.DBConnectionPool;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import com.hp.hpl.jena.query.*;
-//import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
-//import com.hp.hpl.jena.sparql.util.IndentedWriter;
 import java.util.Iterator;
-//import org.junit.*;
 import org.semanticwb.SWBPlatform;
-//import org.semanticwb.platform.SemanticVocabulary;
+
 
 /**
  *

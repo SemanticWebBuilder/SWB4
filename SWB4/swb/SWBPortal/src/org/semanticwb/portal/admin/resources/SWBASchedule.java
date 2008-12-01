@@ -5,14 +5,10 @@
 package org.semanticwb.portal.admin.resources;
 
 import java.io.*;
-//import java.util.*;
-import java.text.DateFormat;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Locale;
-import java.util.Vector;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.*;
@@ -21,7 +17,6 @@ import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.platform.SemanticProperty;
-import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.*;
 import org.w3c.dom.*;
 
@@ -46,6 +41,8 @@ public class SWBASchedule extends GenericResource {
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache"); 
+        response.setHeader("Pragma", "no-cache"); 
         log.debug("doView()");
         PrintWriter out = response.getWriter();
         User user = paramRequest.getUser();
@@ -279,6 +276,8 @@ public class SWBASchedule extends GenericResource {
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache"); 
+        response.setHeader("Pragma", "no-cache"); 
         log.debug("----doEdit() ");
         PrintWriter out = response.getWriter();
 
