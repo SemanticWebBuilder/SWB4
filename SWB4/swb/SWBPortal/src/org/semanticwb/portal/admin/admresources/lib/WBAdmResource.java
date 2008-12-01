@@ -55,6 +55,8 @@ public interface WBAdmResource {
     
     public void setStyleClass(String styleclass);
     
+    public void setId(String id);
+    
     //gets
     /**
      * regresa el nombre del elemento de la forma
@@ -73,6 +75,8 @@ public interface WBAdmResource {
     public String getStyle();
     
     public String getStyleClass();
+    
+    public String getId();
     
        
     /**
