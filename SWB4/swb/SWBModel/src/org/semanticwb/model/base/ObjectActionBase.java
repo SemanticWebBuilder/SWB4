@@ -13,7 +13,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class ObjectActionBase extends GenericObjectBase implements Sortable,Descriptiveable
+public class ObjectActionBase extends GenericObjectBase implements Iconable,Descriptiveable,Sortable
 {
     public static SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
@@ -30,6 +30,16 @@ public class ObjectActionBase extends GenericObjectBase implements Sortable,Desc
     public void setIndex(int index)
     {
         getSemanticObject().setLongProperty(vocabulary.swb_index, index);
+    }
+
+    public String getIconClass()
+    {
+        return getSemanticObject().getProperty(vocabulary.swb_iconClass);
+    }
+
+    public void setIconClass(String iconClass)
+    {
+        getSemanticObject().setProperty(vocabulary.swb_iconClass, iconClass);
     }
 
     public String getTitle()
@@ -57,6 +67,26 @@ public class ObjectActionBase extends GenericObjectBase implements Sortable,Desc
         getSemanticObject().setProperty(vocabulary.swb_title, title, lang);
     }
 
+    public String getActGroup()
+    {
+        return getSemanticObject().getProperty(vocabulary.swb_actGroup);
+    }
+
+    public void setActGroup(String actGroup)
+    {
+        getSemanticObject().setProperty(vocabulary.swb_actGroup, actGroup);
+    }
+
+    public String getActionURL()
+    {
+        return getSemanticObject().getProperty(vocabulary.swb_actionURL);
+    }
+
+    public void setActionURL(String actionURL)
+    {
+        getSemanticObject().setProperty(vocabulary.swb_actionURL, actionURL);
+    }
+
     public String getDescription()
     {
         return getSemanticObject().getProperty(vocabulary.swb_description);
@@ -80,16 +110,6 @@ public class ObjectActionBase extends GenericObjectBase implements Sortable,Desc
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(vocabulary.swb_description, description, lang);
-    }
-
-    public String getActGroup()
-    {
-        return getSemanticObject().getProperty(vocabulary.swb_actGroup);
-    }
-
-    public void setActGroup(String actGroup)
-    {
-        getSemanticObject().setProperty(vocabulary.swb_actGroup, actGroup);
     }
 
     public void remove()

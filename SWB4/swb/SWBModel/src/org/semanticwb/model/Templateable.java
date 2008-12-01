@@ -5,9 +5,13 @@ import java.util.Date;
 public interface Templateable extends GenericObject
 {
 
-    public void setTemplate(org.semanticwb.model.Template template);
+    public GenericIterator<org.semanticwb.model.Template> listTemplates();
 
-    public void removeTemplate();
+    public void addTemplate(org.semanticwb.model.Template template);
+
+    public void removeAllTemplate();
+
+    public void removeTemplate(org.semanticwb.model.Template template);
 
     public Template getTemplate();
 }

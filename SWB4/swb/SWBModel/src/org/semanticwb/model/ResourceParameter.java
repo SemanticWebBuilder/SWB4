@@ -3,9 +3,9 @@ package org.semanticwb.model;
 import org.semanticwb.model.base.*;
 import org.semanticwb.platform.SemanticObject;
 
-public class TemplateGroup extends TemplateGroupBase 
+public class ResourceParameter extends ResourceParameterBase 
 {
-    public TemplateGroup(SemanticObject base)
+    public ResourceParameter(SemanticObject base)
     {
         super(base);
     }

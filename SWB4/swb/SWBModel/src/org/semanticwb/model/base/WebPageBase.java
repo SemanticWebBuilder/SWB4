@@ -13,7 +13,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class WebPageBase extends GenericObjectBase implements Descriptiveable,PortletRefable,TemplateRefable,Indexable,Calendarable,Viewable,Activeable,PFlowRefable,RuleRefable,RoleRefable,Hiddenable,Deleteable,Traceable
+public class WebPageBase extends GenericObjectBase implements Descriptiveable,Portletable,TemplateRefable,Indexable,Calendarable,Viewable,Activeable,PFlowRefable,RuleRefable,RoleRefable,Hiddenable,Deleteable,Traceable
 {
     public static SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
@@ -287,32 +287,32 @@ public class WebPageBase extends GenericObjectBase implements Descriptiveable,Po
         getSemanticObject().setLongProperty(vocabulary.swb_views, views);
     }
 
-    public GenericIterator<org.semanticwb.model.PortletRef> listPortletRefs()
+    public GenericIterator<org.semanticwb.model.Portlet> listPortlets()
     {
-        return new GenericIterator<org.semanticwb.model.PortletRef>(org.semanticwb.model.PortletRef.class, getSemanticObject().listObjectProperties(vocabulary.swb_hasPortletRef));    }
+        return new GenericIterator<org.semanticwb.model.Portlet>(org.semanticwb.model.Portlet.class, getSemanticObject().listObjectProperties(vocabulary.swb_hasPortlet));    }
 
-    public void addPortletRef(org.semanticwb.model.PortletRef portletref)
+    public void addPortlet(org.semanticwb.model.Portlet portlet)
     {
-        getSemanticObject().addObjectProperty(vocabulary.swb_hasPortletRef, portletref.getSemanticObject());
+        getSemanticObject().addObjectProperty(vocabulary.swb_hasPortlet, portlet.getSemanticObject());
     }
 
-    public void removeAllPortletRef()
+    public void removeAllPortlet()
     {
-        getSemanticObject().removeProperty(vocabulary.swb_hasPortletRef);
+        getSemanticObject().removeProperty(vocabulary.swb_hasPortlet);
     }
 
-    public void removePortletRef(org.semanticwb.model.PortletRef portletref)
+    public void removePortlet(org.semanticwb.model.Portlet portlet)
     {
-        getSemanticObject().removeObjectProperty(vocabulary.swb_hasPortletRef,portletref.getSemanticObject());
+        getSemanticObject().removeObjectProperty(vocabulary.swb_hasPortlet,portlet.getSemanticObject());
     }
 
-    public PortletRef getPortletRef()
+    public Portlet getPortlet()
     {
-         PortletRef ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasPortletRef);
+         Portlet ret=null;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasPortlet);
          if(obj!=null)
          {
-             ret=(PortletRef)vocabulary.swb_PortletRef.newGenericInstance(obj);
+             ret=(Portlet)vocabulary.swb_Portlet.newGenericInstance(obj);
          }
          return ret;
     }

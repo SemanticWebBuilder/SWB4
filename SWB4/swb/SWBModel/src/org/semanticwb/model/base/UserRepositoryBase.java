@@ -166,6 +166,32 @@ public class UserRepositoryBase extends GenericObjectBase implements Descriptive
         return (getPermission(id)!=null);
     }
 
+    public UserGroup getUserGroup(String id)
+    {
+        return (UserGroup)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.swb_UserGroup),vocabulary.swb_UserGroup);
+    }
+
+    public Iterator<UserGroup> listUserGroups()
+    {
+        Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
+        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.swb_UserGroup.getOntClass());
+        return new GenericIterator<UserGroup>(UserGroup.class, stit, true);
+    }
+
+    public UserGroup createUserGroup(String id)
+    {
+        return (UserGroup)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, vocabulary.swb_UserGroup), vocabulary.swb_UserGroup);
+    }
+
+    public void removeUserGroup(String id)
+    {
+        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.swb_UserGroup));
+    }
+    public boolean hasUserGroup(String id)
+    {
+        return (getUserGroup(id)!=null);
+    }
+
     public User getUser(String id)
     {
         return (User)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.swb_User),vocabulary.swb_User);
@@ -196,38 +222,6 @@ public class UserRepositoryBase extends GenericObjectBase implements Descriptive
     public boolean hasUser(String id)
     {
         return (getUser(id)!=null);
-    }
-
-    public ObjectGroup getObjectGroup(String id)
-    {
-        return (ObjectGroup)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.swb_ObjectGroup),vocabulary.swb_ObjectGroup);
-    }
-
-    public Iterator<ObjectGroup> listObjectGroups()
-    {
-        Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
-        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.swb_ObjectGroup.getOntClass());
-        return new GenericIterator<ObjectGroup>(ObjectGroup.class, stit, true);
-    }
-
-    public ObjectGroup createObjectGroup(String id)
-    {
-        return (ObjectGroup)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, vocabulary.swb_ObjectGroup), vocabulary.swb_ObjectGroup);
-    }
-
-    public ObjectGroup createObjectGroup()
-    {
-        long id=SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+vocabulary.swb_ObjectGroup.getName());
-        return createObjectGroup(""+id);
-    } 
-
-    public void removeObjectGroup(String id)
-    {
-        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.swb_ObjectGroup));
-    }
-    public boolean hasObjectGroup(String id)
-    {
-        return (getObjectGroup(id)!=null);
     }
 
     public Role getRole(String id)

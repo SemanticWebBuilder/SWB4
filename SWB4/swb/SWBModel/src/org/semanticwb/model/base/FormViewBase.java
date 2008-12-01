@@ -47,31 +47,6 @@ public class FormViewBase extends GenericObjectBase implements Descriptiveable
         getSemanticObject().setProperty(vocabulary.swb_title, title, lang);
     }
 
-    public String getDescription()
-    {
-        return getSemanticObject().getProperty(vocabulary.swb_description);
-    }
-
-    public void setDescription(String description)
-    {
-        getSemanticObject().setProperty(vocabulary.swb_description, description);
-    }
-
-    public String getDescription(String lang)
-    {
-        return getSemanticObject().getProperty(vocabulary.swb_description, null, lang);
-    }
-
-    public String getDisplayDescription(String lang)
-    {
-        return getSemanticObject().getLocaleProperty(vocabulary.swb_description, lang);
-    }
-
-    public void setDescription(String description, String lang)
-    {
-        getSemanticObject().setProperty(vocabulary.swb_description, description, lang);
-    }
-
     public SemanticIterator<org.semanticwb.platform.SemanticObject> listCreatePropertys()
     {
         StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.swb_hasCreateProperty.getRDFProperty());
@@ -98,6 +73,31 @@ public class FormViewBase extends GenericObjectBase implements Descriptiveable
          SemanticObject ret=null;
          ret=getSemanticObject().getObjectProperty(vocabulary.swb_hasCreateProperty);
          return ret;
+    }
+
+    public String getDescription()
+    {
+        return getSemanticObject().getProperty(vocabulary.swb_description);
+    }
+
+    public void setDescription(String description)
+    {
+        getSemanticObject().setProperty(vocabulary.swb_description, description);
+    }
+
+    public String getDescription(String lang)
+    {
+        return getSemanticObject().getProperty(vocabulary.swb_description, null, lang);
+    }
+
+    public String getDisplayDescription(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(vocabulary.swb_description, lang);
+    }
+
+    public void setDescription(String description, String lang)
+    {
+        getSemanticObject().setProperty(vocabulary.swb_description, description, lang);
     }
 
     public SemanticIterator<org.semanticwb.platform.SemanticObject> listViewPropertys()

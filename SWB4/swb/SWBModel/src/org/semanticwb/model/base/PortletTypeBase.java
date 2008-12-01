@@ -13,7 +13,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class PortletTypeBase extends GenericObjectBase implements Descriptiveable,Traceable
+public class PortletTypeBase extends GenericObjectBase implements Traceable,Descriptiveable
 {
     public static SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
@@ -63,6 +63,16 @@ public class PortletTypeBase extends GenericObjectBase implements Descriptiveabl
         getSemanticObject().setProperty(vocabulary.swb_portletBundle, portletBundle);
     }
 
+    public int getPortletCache()
+    {
+        return getSemanticObject().getIntProperty(vocabulary.swb_portletCache);
+    }
+
+    public void setPortletCache(int portletCache)
+    {
+        getSemanticObject().setLongProperty(vocabulary.swb_portletCache, portletCache);
+    }
+
     public String getTitle()
     {
         return getSemanticObject().getProperty(vocabulary.swb_title);
@@ -86,16 +96,6 @@ public class PortletTypeBase extends GenericObjectBase implements Descriptiveabl
     public void setTitle(String title, String lang)
     {
         getSemanticObject().setProperty(vocabulary.swb_title, title, lang);
-    }
-
-    public int getPortletCache()
-    {
-        return getSemanticObject().getIntProperty(vocabulary.swb_portletCache);
-    }
-
-    public void setPortletCache(int portletCache)
-    {
-        getSemanticObject().setLongProperty(vocabulary.swb_portletCache, portletCache);
     }
 
     public String getPortletClassName()
@@ -145,6 +145,23 @@ public class PortletTypeBase extends GenericObjectBase implements Descriptiveabl
         getSemanticObject().setLongProperty(vocabulary.swb_portletMode, portletMode);
     }
 
+    public GenericIterator<org.semanticwb.model.PortletSubType> listSubTypes()
+    {
+        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, vocabulary.swb_hasPTSubType.getInverse().getRDFProperty(), getSemanticObject().getRDFResource());
+        return new GenericIterator<org.semanticwb.model.PortletSubType>(org.semanticwb.model.PortletSubType.class, stit,true);
+    }
+
+    public PortletSubType getSubType()
+    {
+         PortletSubType ret=null;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasPTSubType);
+         if(obj!=null)
+         {
+             ret=(PortletSubType)vocabulary.swb_PortletSubType.newGenericInstance(obj);
+         }
+         return ret;
+    }
+
     public void setCreator(org.semanticwb.model.User user)
     {
         getSemanticObject().setObjectProperty(vocabulary.swb_creator, user.getSemanticObject());
@@ -162,23 +179,6 @@ public class PortletTypeBase extends GenericObjectBase implements Descriptiveabl
          if(obj!=null)
          {
              ret=(User)vocabulary.swb_User.newGenericInstance(obj);
-         }
-         return ret;
-    }
-
-    public GenericIterator<org.semanticwb.model.PortletSubType> listSubTypes()
-    {
-        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, vocabulary.swb_hasPTSubType.getInverse().getRDFProperty(), getSemanticObject().getRDFResource());
-        return new GenericIterator<org.semanticwb.model.PortletSubType>(org.semanticwb.model.PortletSubType.class, stit,true);
-    }
-
-    public PortletSubType getSubType()
-    {
-         PortletSubType ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasPTSubType);
-         if(obj!=null)
-         {
-             ret=(PortletSubType)vocabulary.swb_PortletSubType.newGenericInstance(obj);
          }
          return ret;
     }

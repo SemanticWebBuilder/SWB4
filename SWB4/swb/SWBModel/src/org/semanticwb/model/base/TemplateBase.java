@@ -13,7 +13,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class TemplateBase extends GenericObjectBase implements RoleRefable,Calendarable,Versionable,Activeable,Deleteable,Traceable,RuleRefable,Descriptiveable,Localeable
+public class TemplateBase extends GenericObjectBase implements RoleRefable,Calendarable,Versionable,Activeable,Deleteable,Traceable,RuleRefable,Descriptiveable,Editable,Localeable
 {
     public static SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
@@ -128,17 +128,17 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
         getSemanticObject().setProperty(vocabulary.swb_title, title, lang);
     }
 
-    public void setTemplateGroup(org.semanticwb.model.TemplateGroup templategroup)
+    public void setGroup(org.semanticwb.model.TemplateGroup templategroup)
     {
         getSemanticObject().setObjectProperty(vocabulary.swb_templateGroup, templategroup.getSemanticObject());
     }
 
-    public void removeTemplateGroup()
+    public void removeGroup()
     {
         getSemanticObject().removeProperty(vocabulary.swb_templateGroup);
     }
 
-    public TemplateGroup getTemplateGroup()
+    public TemplateGroup getGroup()
     {
          TemplateGroup ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_templateGroup);

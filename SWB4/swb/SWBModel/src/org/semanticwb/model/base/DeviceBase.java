@@ -13,7 +13,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class DeviceBase extends GenericObjectBase implements Valueable,Descriptiveable,Traceable
+public class DeviceBase extends GenericObjectBase implements Traceable,Descriptiveable,Valueable
 {
     public static SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
@@ -30,16 +30,6 @@ public class DeviceBase extends GenericObjectBase implements Valueable,Descripti
     public void setCreated(Date created)
     {
         getSemanticObject().setDateProperty(vocabulary.swb_created, created);
-    }
-
-    public String getValue()
-    {
-        return getSemanticObject().getProperty(vocabulary.swb_value);
-    }
-
-    public void setValue(String value)
-    {
-        getSemanticObject().setProperty(vocabulary.swb_value, value);
     }
 
     public void setModifiedBy(org.semanticwb.model.User user)
@@ -61,6 +51,16 @@ public class DeviceBase extends GenericObjectBase implements Valueable,Descripti
              ret=(User)vocabulary.swb_User.newGenericInstance(obj);
          }
          return ret;
+    }
+
+    public String getValue()
+    {
+        return getSemanticObject().getProperty(vocabulary.swb_value);
+    }
+
+    public void setValue(String value)
+    {
+        getSemanticObject().setProperty(vocabulary.swb_value, value);
     }
 
     public String getTitle()
