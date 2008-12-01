@@ -446,13 +446,13 @@ public class Recommend extends GenericAdmResource
             url.setParameter("rec_act","rec_step2");
             url.setTopic(paramRequest.getTopic());
             url.setCallMethod(paramRequest.Call_DIRECT);
-            onclick="javascript:window.open('" + url.toString() +"','_newrec','" + onclick + "'); return true;";
+            onclick="javascript:window.open('" + url.toString() +"','_newrec','" + onclick + "'); return false;";
 
             synchronized (ret)
             {
                 if (!"".equals(base.getAttribute("img", "").trim()))
                 {
-                    ret.append("\n<a href=\"#\"><img onClick=\""+ onclick +"\" src=\"");
+                    ret.append("\n<a href=\""+onclick+"\"><img onClick=\""+ onclick +"\" src=\"");
                     ret.append(webWorkPath +"/"+ base.getAttribute("img").trim() +"\"");
                     if (!"".equals(base.getAttribute("alt","").trim())) ret.append(" alt=\"" + base.getAttribute("alt").trim().replaceAll("\"", "&#34;") + "\"");
                     ret.append(" border=0></a>");
@@ -467,7 +467,7 @@ public class Recommend extends GenericAdmResource
                 }
                 else
                 {
-                    ret.append("\n<a href=\"#\" onClick=\""+ onclick +"\"");
+                    ret.append("\n<a href=\""+onclick+"\" onClick=\""+ onclick +"\"");
                     if (!"".equals(base.getAttribute("blnstyle", "").trim())) ret.append(" style=\"" + base.getAttribute("blnstyle").trim().replaceAll("\"", "&#34;") + "\"");
                     ret.append(">");
                     if (!"".equals(base.getAttribute("lnktexto", "").trim())) ret.append(base.getAttribute("lnktexto").trim());
