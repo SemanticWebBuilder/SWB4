@@ -33,10 +33,10 @@ public class SWBASOPropRefEditor extends GenericResource {
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
         log.debug("doEdit(SWBASOPropRefEditor...)");
         PrintWriter out = response.getWriter();
-        response.setHeader("Cache-Control", "no-cache"); 
-        response.setHeader("Pragma", "no-cache"); 
         User user = paramRequest.getUser();
         String id = request.getParameter("suri");
         String idp = request.getParameter("sprop");
