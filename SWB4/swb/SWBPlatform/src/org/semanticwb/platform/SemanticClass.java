@@ -307,6 +307,13 @@ public class SemanticClass
     {
         return m_class.getLabel(lang);
     }
+
+    public String getDisplayName(String lang)
+    {
+        String ret=getLabel(lang);
+        if(ret==null)ret=getName();
+        return ret;
+    }
     
 //    public boolean isSuperClass(SemanticClass cls)
 //    {
