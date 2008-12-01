@@ -4,7 +4,6 @@
  */
 package org.semanticwb.office.comunication;
 
-
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.Calendar;
@@ -12,7 +11,6 @@ import javax.jcr.ItemExistsException;
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
-import javax.jcr.PathNotFoundException;
 import javax.jcr.Property;
 import javax.jcr.PropertyIterator;
 import javax.jcr.RepositoryException;
@@ -26,50 +24,52 @@ import org.semanticwb.xmlrpc.Part;
 import org.semanticwb.xmlrpc.XmlRpcObject;
 import sun.net.www.MimeTable;
 
-
 /**
  *
  * @author victor.lorenzana
  */
 public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 {
-    private static final String DEFAULT_MIME_TYPE = "application/octet-stream";
-    private static final String MIX_VERSIONABLE = "mix:versionable";
 
-    public String publish(String title,String description,String repositoryName,String categoryID,String type) throws Exception
-    {        
-        Session session=null;
+    private static final String CM_CONTENT = "cm:Content";
+    private static final String CM_DESCRIPTION = "cm:description";
+    private static final String CM_TITLE = "cm:title";
+    private static final String CM_TYPE = "cm:type";
+    private static final String DEFAULT_MIME_TYPE = "application/octet-stream";    
+    private static final String CM_PART = "cm:Part";
+    private static final String NT_RESOURCE = "nt:resource";
+
+    public String publish(String title, String description, String repositoryName, String categoryID, String type) throws Exception
+    {
+        Session session = null;
         try
-        {            
-            session=RepositoryManager.openSession(repositoryName,"","");
+        {
+            session = RepositoryManager.openSession(repositoryName, "", "");
             Node categoryNode = session.getNodeByUUID(categoryID);
-            if ( !categoryNode.isLocked() )
+            if (!categoryNode.isLocked())
             {
                 categoryNode.lock(false, true); // blocks the nodeContent
+
             }
             try
             {
-                Node contentNode = categoryNode.addNode("Content", "swb:contentType");
-                contentNode.checkout();
-                contentNode.setProperty("cm:title", title);
-                contentNode.setProperty("cm:type", type);
-                contentNode.setProperty("cm:description", description);
+                Node contentNode = categoryNode.addNode("Content", CM_CONTENT);
+                contentNode.setProperty(CM_TITLE, title);
+                contentNode.setProperty(CM_TYPE, type);
+                contentNode.setProperty(CM_DESCRIPTION, description);
                 String[] values = new String[parts.size()];
                 int iPart = 0;
-                for ( Part part : parts )
+                for (Part part : parts)
                 {
                     MimeTable mt = MimeTable.getDefaultTable();
                     String mimeType = mt.getContentTypeFor(part.getName());
-                    if ( mimeType == null )
+                    if (mimeType == null)
                     {
                         mimeType = DEFAULT_MIME_TYPE;
                     }
 
-                    Node nodePart = contentNode.addNode(part.getName(), "nt:file");
-                    nodePart.addMixin(MIX_VERSIONABLE);
-                    nodePart.checkout();
-                    Node resNode = nodePart.addNode("jcr:content", "nt:resource");
-                    resNode.addMixin(MIX_VERSIONABLE);
+                    Node nodePart = contentNode.addNode(part.getName(), CM_PART);
+                    Node resNode = nodePart.addNode("jcr:content", NT_RESOURCE);
                     resNode.setProperty("jcr:mimeType", mimeType);
                     resNode.setProperty("jcr:encoding", "");
                     InputStream in = new ByteArrayInputStream(part.getContent());
@@ -83,16 +83,15 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     values[iPart] = versionPart.getUUID();
                     iPart++;
                 }
-                contentNode.setProperty("cm:part", values);
                 session.save();
                 contentNode.checkin();
                 return contentNode.getUUID();
             }
-            catch ( ItemExistsException e )
+            catch (ItemExistsException e)
             {
                 throw new Exception("Ya existe un contenido con ese título", e);
             }
-            catch ( Exception e )
+            catch (Exception e)
             {
                 e.printStackTrace(System.out);
                 throw e;
@@ -103,23 +102,23 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             }
 
         }
-        catch ( ItemNotFoundException infe )
+        catch (ItemNotFoundException infe)
         {
             throw new Exception("La categoria indica no existe", infe);
         }
-        catch ( LockException e )
+        catch (LockException e)
         {
             e.printStackTrace(System.out);
             throw e;
         }
-        catch ( Exception e )
+        catch (Exception e)
         {
             e.printStackTrace(System.out);
             throw e;
         }
         finally
         {
-            if(session!=null)
+            if (session != null)
             {
                 session.logout();
             }
@@ -132,7 +131,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         while (frozenNodes.hasNext())
         {
             Node frozenNode = frozenNodes.nextNode();
-            Node contentNode=frozenNode.getNodes().nextNode();
+            Node contentNode = frozenNode.getNodes().nextNode();
             return contentNode;
         }
         throw new Exception("Node not found from a version");
@@ -146,77 +145,57 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      */
     public String updateContent(String contentId) throws Exception
     {
-        Session session=null;
+        Session session = null;
         try
         {
-            session=RepositoryManager.openSession("","","");
+            session = RepositoryManager.openSession("", "", "");
             Node nodeContent = session.getNodeByUUID(contentId);
-            if ( !nodeContent.isLocked() )
+            if (!nodeContent.isLocked())
             {
                 nodeContent.lock(false, true); // blocks the nodeContent
+
             }
             else
             {
                 throw new Exception("The content is locked");
             }
-            if ( !nodeContent.isCheckedOut() )
+            if (!nodeContent.isCheckedOut())
             {
                 nodeContent.checkout();
                 try
                 {
                     String[] values = new String[parts.size()];
                     int iPart = 0;
-                    for ( Part part : parts )
+                    for (Part part : parts)
                     {
                         MimeTable mt = MimeTable.getDefaultTable();
                         String mimeType = mt.getContentTypeFor(part.getName());
-                        if ( mimeType == null )
+                        if (mimeType == null)
                         {
                             mimeType = DEFAULT_MIME_TYPE;
                         }
                         Node nodePart = null;
-                        try
-                        {
-                            nodePart = nodeContent.getNode(part.getName());
-                            nodePart.checkout();
-                            Node resNode = nodePart.getNode("jcr:content");
-                            resNode.setProperty("jcr:mimeType", mimeType);
-                            resNode.setProperty("jcr:encoding", "");
-                            InputStream in = new ByteArrayInputStream(part.getContent());
-                            resNode.getProperty("jcr:data").setValue(in);
-                            Calendar lastModified = Calendar.getInstance();
-                            lastModified.setTimeInMillis(System.currentTimeMillis());
-                            resNode.setProperty("jcr:lastModified", lastModified);
-                            session.save();
-                            Version versionPart = nodePart.checkin();
-                            values[iPart] = versionPart.getUUID();
-                            iPart++;
-                        }
-                        catch ( PathNotFoundException pnfe )
-                        {
-                            nodePart = nodeContent.addNode(part.getName(), "nt:file");
-                            nodePart.addMixin(MIX_VERSIONABLE);
-                            nodePart.checkout();
-                            Node resNode = nodePart.addNode("jcr:content", "nt:resource");
-                            resNode.addMixin(MIX_VERSIONABLE);
-                            resNode.setProperty("jcr:mimeType", mimeType);
-                            resNode.setProperty("jcr:encoding", "");
-                            InputStream in = new ByteArrayInputStream(part.getContent());
-                            resNode.setProperty("jcr:data", in);
-                            in.close();
-                            Calendar lastModified = Calendar.getInstance();
-                            lastModified.setTimeInMillis(System.currentTimeMillis());
-                            resNode.setProperty("jcr:lastModified", lastModified);
-                            session.save();
-                            Version versionPart = nodePart.checkin();
-                            values[iPart] = versionPart.getUUID();
-                            iPart++;
-                        }
+                        nodePart = nodeContent.getNode(part.getName());
+                        nodePart.checkout();
+                        Node resNode = nodePart.getNode("jcr:content");
+                        resNode.setProperty("jcr:mimeType", mimeType);
+                        resNode.setProperty("jcr:encoding", "");
+                        InputStream in = new ByteArrayInputStream(part.getContent());
+                        resNode.getProperty("jcr:data").setValue(in);
+                        Calendar lastModified = Calendar.getInstance();
+                        lastModified.setTimeInMillis(System.currentTimeMillis());
+                        resNode.setProperty("jcr:lastModified", lastModified);
+                        session.save();
+                        Version versionPart = nodePart.checkin();
+                        values[iPart] = versionPart.getUUID();
+                        iPart++;
+
+
                     }
                     nodeContent.setProperty("cm:part", values);
                     session.save();
                 }
-                catch ( RepositoryException e )
+                catch (RepositoryException e)
                 {
                     e.printStackTrace(System.out);
                     throw e;
@@ -229,19 +208,19 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     while (propIt.hasNext())
                     {
                         Property property = propIt.nextProperty();
-                        for ( Value value : property.getValues() )
+                        for (Value value : property.getValues())
                         {
                             String UUDI = value.getString();
                             Node versionPart = session.getNodeByUUID(UUDI);
-                            if(versionPart instanceof Version)
+                            if (versionPart instanceof Version)
                             {
                                 //System.out.println("Part UUID: " + UUDI);
                                 System.out.println("name of version: " + versionPart.getName());
-                                Node node=getNodeFromVersion((Version)versionPart);
+                                Node node = getNodeFromVersion((Version) versionPart);
                                 System.out.println("node.getName(): " + node.getName());
                             }
                         }
-                    }                   
+                    }
                     session.save();
                     return version.getName();
                 }
@@ -251,13 +230,13 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 throw new Exception("El contenido esta siendo editado, intente más tarde");
             }
         }
-        catch ( ItemNotFoundException infe )
+        catch (ItemNotFoundException infe)
         {
             throw new Exception("El contenido no se encuentró en el repositorio.", infe);
         }
         finally
         {
-            if(session!=null)                
+            if (session != null)
             {
                 session.logout();
             }
@@ -272,50 +251,47 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 
     public boolean exists(String contentId) throws Exception
     {
-        boolean exists=false;
-        Session session=null;
+        boolean exists = false;
+        Session session = null;
         try
         {
-            session=RepositoryManager.openSession("","","");            
+            session = RepositoryManager.openSession("", "", "");
             session.getNodeByUUID(contentId);
-            exists=true;
+            exists = true;
         }
-        catch ( ItemNotFoundException pnfe )
+        catch (ItemNotFoundException pnfe)
         {
-            exists=false;
+            exists = false;
         }
         finally
         {
-            if(session!=null)
+            if (session != null)
             {
                 session.logout();
             }
         }
         return exists;
-        
+
     }
 
     public void setTitle(String contentID, String title)
     {
-
     }
 
     public void setDescription(String contentID, String description)
     {
-
-    }   
+    }
 
     public void sendToAuthorize()
     {
-
     }
+
     public void setPagination(String contentId) throws Exception
     {
-        
     }
+
     public void setActive(String contentID, boolean active)
     {
-
     }
 
     public boolean getActive(String contentID)
@@ -325,7 +301,6 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 
     public void delete(String contentID)
     {
-
     }
 }
 
