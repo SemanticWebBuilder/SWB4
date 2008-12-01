@@ -298,10 +298,10 @@ public class SWBATrash extends GenericResource {
                         {
                             //ArrayList alOcc = Tp.getOccurrences();
                             //Iterator itOcc = alOcc.iterator();
-                            Iterator<PortletRef> itOcc = Tp.listPortletRefs();
+                            Iterator<Portlet> itOcc = Tp.listPortlets();
                             while(itOcc.hasNext()){
 
-                                PortletRef rOcc =  itOcc.next();
+                                Portlet rOcc =  itOcc.next();
                                 String strTopicAsoc=Tp.getTitle(); //TopicMgr.getInstance().getTopicMap(rOcc.getIdtm()).getTopic(rOcc.getIdtp()).getDisplayName();
                                 String strTopicAsocID=Tp.getId(); //rOcc.getIdtp();
                                 if(rOcc.isDeleted()){
@@ -310,10 +310,10 @@ public class SWBATrash extends GenericResource {
                                     boolean pasa = false;
                                     while(enuRes.hasNext()){
                                         Portlet recRes = enuRes.next();
-                                        if(recRes.getId().equals(rOcc.getPortlet().getId())) pasa=true;
+                                        if(recRes.equals(rOcc)) pasa=true;
                                     }
                                     if(pasa){
-                                        Portlet rRes = rOcc.getPortlet(); //SWBContext.getWebSite(viewSite).getPortlet(rOcc.getResourceData());
+                                        Portlet rRes = rOcc; //SWBContext.getWebSite(viewSite).getPortlet(rOcc.getResourceData());
                                         if(rRes!=null&&!rRes.equals(null)){
                                             
                                             SWBResourceURL urlRecover=paramRequest.getActionUrl();   //"?view="+view+"&site="+viewSite+"&ax=recover&id="+rOcc.getId()+
@@ -480,15 +480,15 @@ public class SWBATrash extends GenericResource {
                     if(request.getParameter("idtmp")!=null) {
                         Template temp = SWBContext.getWebSite(viewSite).getTemplate(request.getParameter("idtmp"));
                         
-                        TemplateGroup rgr = temp.getTemplateGroup();
+                        TemplateGroup rgr = temp.getGroup();
                         
                         String ttm = ""; //"global";
                         ttm = rgr.getWebSite().getId();
                         
                         ret.append("\n<script>");
-                        ret.append("wbTree_executeAction('gotopath."+ttm+".templates."+temp.getTemplateGroup().getId()+"'); ");
+                        ret.append("wbTree_executeAction('gotopath."+ttm+".templates."+temp.getGroup().getId()+"'); ");
                         ret.append("wbTree_reload();");
-                        ret.append("wbTree_executeAction('gotopath."+ttm+".templates."+temp.getTemplateGroup().getId()+"."+temp.getId()+"'); ");
+                        ret.append("wbTree_executeAction('gotopath."+ttm+".templates."+temp.getGroup().getId()+"."+temp.getId()+"'); ");
                         ret.append("</script>");
                     }
                 }
@@ -658,7 +658,7 @@ public class SWBATrash extends GenericResource {
                                     rTemplate.setDeleted(false);
                                     //rTemplate.update();
                                     rTemplate.setModifiedBy(user);
-                                    grpTemID = rTemplate.getTemplateGroup().getId();
+                                    grpTemID = rTemplate.getGroup().getId();
                                     rTemplate=null;
                                 }  
                                 if(cuenta==1){
