@@ -32,56 +32,6 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
         getSemanticObject().setDateProperty(vocabulary.swb_created, created);
     }
 
-    public GenericIterator<org.semanticwb.model.RoleRef> listRoleRefs()
-    {
-        return new GenericIterator<org.semanticwb.model.RoleRef>(org.semanticwb.model.RoleRef.class, getSemanticObject().listObjectProperties(vocabulary.swb_hasRoleRef));    }
-
-    public void addRoleRef(org.semanticwb.model.RoleRef roleref)
-    {
-        getSemanticObject().addObjectProperty(vocabulary.swb_hasRoleRef, roleref.getSemanticObject());
-    }
-
-    public void removeAllRoleRef()
-    {
-        getSemanticObject().removeProperty(vocabulary.swb_hasRoleRef);
-    }
-
-    public void removeRoleRef(org.semanticwb.model.RoleRef roleref)
-    {
-        getSemanticObject().removeObjectProperty(vocabulary.swb_hasRoleRef,roleref.getSemanticObject());
-    }
-
-    public RoleRef getRoleRef()
-    {
-         RoleRef ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasRoleRef);
-         if(obj!=null)
-         {
-             ret=(RoleRef)vocabulary.swb_RoleRef.newGenericInstance(obj);
-         }
-         return ret;
-    }
-
-    public boolean isDeleted()
-    {
-        return getSemanticObject().getBooleanProperty(vocabulary.swb_deleted);
-    }
-
-    public void setDeleted(boolean deleted)
-    {
-        getSemanticObject().setBooleanProperty(vocabulary.swb_deleted, deleted);
-    }
-
-    public boolean isActive()
-    {
-        return getSemanticObject().getBooleanProperty(vocabulary.swb_active);
-    }
-
-    public void setActive(boolean active)
-    {
-        getSemanticObject().setBooleanProperty(vocabulary.swb_active, active);
-    }
-
     public void setModifiedBy(org.semanticwb.model.User user)
     {
         getSemanticObject().setObjectProperty(vocabulary.swb_modifiedBy, user.getSemanticObject());
@@ -170,27 +120,6 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
          return ret;
     }
 
-    public void setLanguage(org.semanticwb.model.Language language)
-    {
-        getSemanticObject().setObjectProperty(vocabulary.swb_language, language.getSemanticObject());
-    }
-
-    public void removeLanguage()
-    {
-        getSemanticObject().removeProperty(vocabulary.swb_language);
-    }
-
-    public Language getLanguage()
-    {
-         Language ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_language);
-         if(obj!=null)
-         {
-             ret=(Language)vocabulary.swb_Language.newGenericInstance(obj);
-         }
-         return ret;
-    }
-
     public Date getUpdated()
     {
         return getSemanticObject().getDateProperty(vocabulary.swb_updated);
@@ -222,23 +151,103 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
          return ret;
     }
 
-    public void setCreator(org.semanticwb.model.User user)
+    public GenericIterator<org.semanticwb.model.Calendar> listCalendars()
     {
-        getSemanticObject().setObjectProperty(vocabulary.swb_creator, user.getSemanticObject());
+        return new GenericIterator<org.semanticwb.model.Calendar>(org.semanticwb.model.Calendar.class, getSemanticObject().listObjectProperties(vocabulary.swb_hasCalendar));    }
+
+    public void addCalendar(org.semanticwb.model.Calendar calendar)
+    {
+        getSemanticObject().addObjectProperty(vocabulary.swb_hasCalendar, calendar.getSemanticObject());
     }
 
-    public void removeCreator()
+    public void removeAllCalendar()
     {
-        getSemanticObject().removeProperty(vocabulary.swb_creator);
+        getSemanticObject().removeProperty(vocabulary.swb_hasCalendar);
     }
 
-    public User getCreator()
+    public void removeCalendar(org.semanticwb.model.Calendar calendar)
     {
-         User ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_creator);
+        getSemanticObject().removeObjectProperty(vocabulary.swb_hasCalendar,calendar.getSemanticObject());
+    }
+
+    public Calendar getCalendar()
+    {
+         Calendar ret=null;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasCalendar);
          if(obj!=null)
          {
-             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
+             ret=(Calendar)vocabulary.swb_Calendar.newGenericInstance(obj);
+         }
+         return ret;
+    }
+
+    public boolean isDeleted()
+    {
+        return getSemanticObject().getBooleanProperty(vocabulary.swb_deleted);
+    }
+
+    public void setDeleted(boolean deleted)
+    {
+        getSemanticObject().setBooleanProperty(vocabulary.swb_deleted, deleted);
+    }
+
+    public GenericIterator<org.semanticwb.model.RoleRef> listRoleRefs()
+    {
+        return new GenericIterator<org.semanticwb.model.RoleRef>(org.semanticwb.model.RoleRef.class, getSemanticObject().listObjectProperties(vocabulary.swb_hasRoleRef));    }
+
+    public void addRoleRef(org.semanticwb.model.RoleRef roleref)
+    {
+        getSemanticObject().addObjectProperty(vocabulary.swb_hasRoleRef, roleref.getSemanticObject());
+    }
+
+    public void removeAllRoleRef()
+    {
+        getSemanticObject().removeProperty(vocabulary.swb_hasRoleRef);
+    }
+
+    public void removeRoleRef(org.semanticwb.model.RoleRef roleref)
+    {
+        getSemanticObject().removeObjectProperty(vocabulary.swb_hasRoleRef,roleref.getSemanticObject());
+    }
+
+    public RoleRef getRoleRef()
+    {
+         RoleRef ret=null;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasRoleRef);
+         if(obj!=null)
+         {
+             ret=(RoleRef)vocabulary.swb_RoleRef.newGenericInstance(obj);
+         }
+         return ret;
+    }
+
+    public boolean isActive()
+    {
+        return getSemanticObject().getBooleanProperty(vocabulary.swb_active);
+    }
+
+    public void setActive(boolean active)
+    {
+        getSemanticObject().setBooleanProperty(vocabulary.swb_active, active);
+    }
+
+    public void setLanguage(org.semanticwb.model.Language language)
+    {
+        getSemanticObject().setObjectProperty(vocabulary.swb_language, language.getSemanticObject());
+    }
+
+    public void removeLanguage()
+    {
+        getSemanticObject().removeProperty(vocabulary.swb_language);
+    }
+
+    public Language getLanguage()
+    {
+         Language ret=null;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_language);
+         if(obj!=null)
+         {
+             ret=(Language)vocabulary.swb_Language.newGenericInstance(obj);
          }
          return ret;
     }
@@ -273,32 +282,23 @@ public class TemplateBase extends GenericObjectBase implements RoleRefable,Calen
          return ret;
     }
 
-    public GenericIterator<org.semanticwb.model.Calendar> listCalendars()
+    public void setCreator(org.semanticwb.model.User user)
     {
-        return new GenericIterator<org.semanticwb.model.Calendar>(org.semanticwb.model.Calendar.class, getSemanticObject().listObjectProperties(vocabulary.swb_hasCalendar));    }
-
-    public void addCalendar(org.semanticwb.model.Calendar calendar)
-    {
-        getSemanticObject().addObjectProperty(vocabulary.swb_hasCalendar, calendar.getSemanticObject());
+        getSemanticObject().setObjectProperty(vocabulary.swb_creator, user.getSemanticObject());
     }
 
-    public void removeAllCalendar()
+    public void removeCreator()
     {
-        getSemanticObject().removeProperty(vocabulary.swb_hasCalendar);
+        getSemanticObject().removeProperty(vocabulary.swb_creator);
     }
 
-    public void removeCalendar(org.semanticwb.model.Calendar calendar)
+    public User getCreator()
     {
-        getSemanticObject().removeObjectProperty(vocabulary.swb_hasCalendar,calendar.getSemanticObject());
-    }
-
-    public Calendar getCalendar()
-    {
-         Calendar ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasCalendar);
+         User ret=null;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_creator);
          if(obj!=null)
          {
-             ret=(Calendar)vocabulary.swb_Calendar.newGenericInstance(obj);
+             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
          }
          return ret;
     }

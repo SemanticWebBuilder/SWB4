@@ -32,6 +32,27 @@ public class ObjectBehaviorBase extends GenericObjectBase implements Descriptive
         getSemanticObject().setLongProperty(vocabulary.swb_index, index);
     }
 
+    public void setDisplayObject(org.semanticwb.model.DisplayObject displayobject)
+    {
+        getSemanticObject().setObjectProperty(vocabulary.swbxf_displayObject, displayobject.getSemanticObject());
+    }
+
+    public void removeDisplayObject()
+    {
+        getSemanticObject().removeProperty(vocabulary.swbxf_displayObject);
+    }
+
+    public DisplayObject getDisplayObject()
+    {
+         DisplayObject ret=null;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swbxf_displayObject);
+         if(obj!=null)
+         {
+             ret=(DisplayObject)vocabulary.swbxf_DisplayObject.newGenericInstance(obj);
+         }
+         return ret;
+    }
+
     public String getIconClass()
     {
         return getSemanticObject().getProperty(vocabulary.swb_iconClass);
@@ -65,27 +86,6 @@ public class ObjectBehaviorBase extends GenericObjectBase implements Descriptive
     public void setTitle(String title, String lang)
     {
         getSemanticObject().setProperty(vocabulary.swb_title, title, lang);
-    }
-
-    public void setDisplayObject(org.semanticwb.model.DisplayObject displayobject)
-    {
-        getSemanticObject().setObjectProperty(vocabulary.swbxf_displayObject, displayobject.getSemanticObject());
-    }
-
-    public void removeDisplayObject()
-    {
-        getSemanticObject().removeProperty(vocabulary.swbxf_displayObject);
-    }
-
-    public DisplayObject getDisplayObject()
-    {
-         DisplayObject ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swbxf_displayObject);
-         if(obj!=null)
-         {
-             ret=(DisplayObject)vocabulary.swbxf_DisplayObject.newGenericInstance(obj);
-         }
-         return ret;
     }
 
     public boolean isRefreshOnShow()

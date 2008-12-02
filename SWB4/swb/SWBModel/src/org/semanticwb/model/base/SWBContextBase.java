@@ -6,6 +6,9 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.platform.SemanticMgr;
 import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.repository.Unstructured;
+import org.semanticwb.repository.BaseNode;
+import org.semanticwb.repository.Workspace;
 public class SWBContextBase
 {
     private static SWBVocabulary vocabulary=new SWBVocabulary();
@@ -75,5 +78,36 @@ public class SWBContextBase
     {
         SemanticModel model=mgr.createModel(name, namespace);
         return (WebSite)model.createGenericObject(name, vocabulary.swb_WebSite);
+    }
+
+    public static Workspace getWorkspace(String uri)
+    {
+        Workspace ret=null;
+        SemanticModel model=mgr.getModel(uri);
+        if(model!=null)
+        {
+            SemanticObject obj=model.getSemanticObject(uri);
+            if(obj!=null)
+            {
+                ret=(Workspace)new Workspace(obj);
+            }
+        }
+        return ret;
+    }
+
+    public static Iterator<org.semanticwb.repository.Workspace> listWorkspaces()
+    {
+        return (Iterator<org.semanticwb.repository.Workspace>)vocabulary.swbrep_Workspace.listGenericInstances();
+    }
+
+    public static void removeWorkspace(String uri)
+    {
+        mgr.removeModel(uri);
+    }
+
+    public static Workspace createWorkspace(String name, String namespace)
+    {
+        SemanticModel model=mgr.createModel(name, namespace);
+        return (Workspace)model.createGenericObject(name, vocabulary.swbrep_Workspace);
     }
 }

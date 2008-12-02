@@ -67,16 +67,6 @@ public class DisplayPropertyBase extends GenericObjectBase implements Sortable
         getSemanticObject().setProperty(vocabulary.swb_propSelectValues, propSelectValues, lang);
     }
 
-    public boolean isHidden()
-    {
-        return getSemanticObject().getBooleanProperty(vocabulary.swb_propHidden);
-    }
-
-    public void setHidden(boolean propHidden)
-    {
-        getSemanticObject().setBooleanProperty(vocabulary.swb_propHidden, propHidden);
-    }
-
     public String getGroup()
     {
         return getSemanticObject().getProperty(vocabulary.swb_propGroup);
@@ -85,6 +75,16 @@ public class DisplayPropertyBase extends GenericObjectBase implements Sortable
     public void setGroup(String propGroup)
     {
         getSemanticObject().setProperty(vocabulary.swb_propGroup, propGroup);
+    }
+
+    public boolean isHidden()
+    {
+        return getSemanticObject().getBooleanProperty(vocabulary.swb_propHidden);
+    }
+
+    public void setHidden(boolean propHidden)
+    {
+        getSemanticObject().setBooleanProperty(vocabulary.swb_propHidden, propHidden);
     }
 
     public String getPromptMessage()
@@ -137,6 +137,16 @@ public class DisplayPropertyBase extends GenericObjectBase implements Sortable
         getSemanticObject().setProperty(vocabulary.swb_propInvalidMessage, propInvalidMessage, lang);
     }
 
+    public boolean isEditable()
+    {
+        return getSemanticObject().getBooleanProperty(vocabulary.swb_propEditable);
+    }
+
+    public void setEditable(boolean propEditable)
+    {
+        getSemanticObject().setBooleanProperty(vocabulary.swb_propEditable, propEditable);
+    }
+
     public void setFormElement(org.semanticwb.platform.SemanticObject semanticobject)
     {
         getSemanticObject().setObjectProperty(vocabulary.swb_formElement, semanticobject);
@@ -152,16 +162,6 @@ public class DisplayPropertyBase extends GenericObjectBase implements Sortable
          SemanticObject ret=null;
          ret=getSemanticObject().getObjectProperty(vocabulary.swb_formElement);
          return ret;
-    }
-
-    public boolean isEditable()
-    {
-        return getSemanticObject().getBooleanProperty(vocabulary.swb_propEditable);
-    }
-
-    public void setEditable(boolean propEditable)
-    {
-        getSemanticObject().setBooleanProperty(vocabulary.swb_propEditable, propEditable);
     }
 
     public void remove()

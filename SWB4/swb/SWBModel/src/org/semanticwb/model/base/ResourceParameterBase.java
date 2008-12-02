@@ -22,6 +22,16 @@ public class ResourceParameterBase extends GenericObjectBase
         super(base);
     }
 
+    public String getName()
+    {
+        return getSemanticObject().getProperty(vocabulary.swbxf_resParamName);
+    }
+
+    public void setName(String resParamName)
+    {
+        getSemanticObject().setProperty(vocabulary.swbxf_resParamName, resParamName);
+    }
+
     public void setValue(org.semanticwb.platform.SemanticObject semanticobject)
     {
         getSemanticObject().setObjectProperty(vocabulary.swb_resParamValue, semanticobject);
@@ -37,16 +47,6 @@ public class ResourceParameterBase extends GenericObjectBase
          SemanticObject ret=null;
          ret=getSemanticObject().getObjectProperty(vocabulary.swb_resParamValue);
          return ret;
-    }
-
-    public String getName()
-    {
-        return getSemanticObject().getProperty(vocabulary.swbxf_resParamName);
-    }
-
-    public void setName(String resParamName)
-    {
-        getSemanticObject().setProperty(vocabulary.swbxf_resParamName, resParamName);
     }
 
     public void remove()

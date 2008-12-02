@@ -32,16 +32,6 @@ public class UserBase extends GenericObjectBase implements Roleable,Traceable,Ac
         getSemanticObject().setDateProperty(vocabulary.swb_created, created);
     }
 
-    public String getUsrSecondLastName()
-    {
-        return getSemanticObject().getProperty(vocabulary.swb_usrSecondLastName);
-    }
-
-    public void setUsrSecondLastName(String usrSecondLastName)
-    {
-        getSemanticObject().setProperty(vocabulary.swb_usrSecondLastName, usrSecondLastName);
-    }
-
     public void setModifiedBy(org.semanticwb.model.User user)
     {
         getSemanticObject().setObjectProperty(vocabulary.swb_modifiedBy, user.getSemanticObject());
@@ -61,6 +51,16 @@ public class UserBase extends GenericObjectBase implements Roleable,Traceable,Ac
              ret=(User)vocabulary.swb_User.newGenericInstance(obj);
          }
          return ret;
+    }
+
+    public String getUsrSecondLastName()
+    {
+        return getSemanticObject().getProperty(vocabulary.swb_usrSecondLastName);
+    }
+
+    public void setUsrSecondLastName(String usrSecondLastName)
+    {
+        getSemanticObject().setProperty(vocabulary.swb_usrSecondLastName, usrSecondLastName);
     }
 
     public String getUsrEmail()
