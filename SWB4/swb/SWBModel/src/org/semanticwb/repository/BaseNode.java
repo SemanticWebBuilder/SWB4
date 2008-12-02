@@ -134,14 +134,14 @@ public class BaseNode extends BaseNodeBase
         
     }
 
-    private boolean isNodeType(SemanticClass clazz)
+    public boolean isNodeType(SemanticClass clazz)
     {
         boolean isVersionNode = false;
         Iterator<SemanticClass> classes = this.getSemanticObject().listSemanticClasses();
         while (classes.hasNext())
         {
             SemanticClass clazzNode = classes.next();
-            if ( clazzNode.equals(clazz) )
+            if ( clazzNode.equals(clazz) || clazzNode.isSubClass(clazz))
             {
                 isVersionNode = true;
                 break;
@@ -1380,6 +1380,16 @@ public class BaseNode extends BaseNodeBase
             SemanticObject object = getSemanticObject().getModel().createSemanticObject(uri, clazz);
             newBaseNode = new BaseNode(object, clazz);
             newBaseNode.setName(name);
+            String path=getPath();
+            if(path.equals("/"))
+            {                
+                path+=name;
+            }
+            else
+            {
+                path+="/"+name;
+            }
+            newBaseNode.setPath(path);
             newBaseNode.setParent(this);
             return newBaseNode;
         }
