@@ -25,7 +25,7 @@
     }
 
     String smode=request.getParameter("smode");
-    out.println(smode);
+    out.println(smode+" "+Thread.currentThread().getName());
     SemanticOntology ont=SWBPlatform.getSemanticMgr().getOntology();
     if(suri==null) //es una creacion
     {
