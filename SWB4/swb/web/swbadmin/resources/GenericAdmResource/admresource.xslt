@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <xsl:output method="html" version="1.0" encoding="ISO-8859-1" indent="yes"/>
     <xsl:template match="/admresource">
@@ -58,11 +58,56 @@
 		<xsl:apply-templates />
 	<xsl:text disable-output-escaping="yes">&lt;/</xsl:text><xsl:value-of select="name()" /><xsl:text disable-output-escaping="yes">&gt;</xsl:text>
     </xsl:template>
+    <xsl:template match="fieldset">
+        <xsl:text disable-output-escaping="yes">&lt;</xsl:text>TR<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    	<xsl:text disable-output-escaping="yes">&lt;</xsl:text>TD class="valores" colspan="2"<xsl:text disable-output-escaping="yes">&gt;</xsl:text> 
+    	<xsl:text disable-output-escaping="yes">&lt;</xsl:text><xsl:value-of select="name()" />
+    	<xsl:if test="string-length( @id     ) &gt; 0"> id=&quot;<xsl:value-of select="@id" />&quot;</xsl:if>
+    	<xsl:if test="string-length( @name   ) &gt; 0"> name=&quot;<xsl:value-of select="@name" />&quot;</xsl:if>
+    	<xsl:if test="string-length( @title  ) &gt; 0"> title=&quot;<xsl:value-of select="@title" />&quot;</xsl:if>
+    	<xsl:if test="string-length( @method ) &gt; 0"> method=&quot;<xsl:value-of select="@method" />&quot;</xsl:if>
+    	<xsl:if test="string-length( @enctype) &gt; 0"> enctype=&quot;<xsl:value-of select="@enctype" />&quot;</xsl:if>
+    	<xsl:if test="string-length( @action ) &gt; 0"> action=&quot;<xsl:value-of select="@action" />&quot;</xsl:if>
+    	<xsl:if test="string-length( @accept ) &gt; 0"> accept=&quot;<xsl:value-of select="@accept" />&quot;</xsl:if>
+    	<xsl:if test="string-length( @accept-charset) &gt; 0"> accept-charset=&quot;<xsl:value-of select="@accept-charset" />&quot;</xsl:if>
+    	<xsl:if test="string-length( @lang   ) &gt; 0"> lang=&quot;<xsl:value-of select="@lang" />&quot;</xsl:if>
+    	<xsl:if test="@dir = 'ltr' or @dir = 'rtl'"> dir=&quot;<xsl:value-of select="@dir" />&quot;</xsl:if>
+    	<xsl:if test="string-length( @class  ) &gt; 0"> class=&quot;<xsl:value-of select="@class" />&quot;</xsl:if>
+    	<xsl:if test="string-length( @style  ) &gt; 0"> style=&quot;<xsl:value-of select="@style" />&quot;</xsl:if>
+    	<xsl:if test="string-length( @onclick    ) &gt; 0"> onclick=&quot;<xsl:value-of select="@onclick" />&quot;</xsl:if>
+    	<xsl:if test="string-length( @ondblclick ) &gt; 0"> ondblclick=&quot;<xsl:value-of select="@ondblclick" />&quot;</xsl:if>
+    	<xsl:if test="string-length( @onmousedown) &gt; 0"> onmousedown=&quot;<xsl:value-of select="@onmousedown" />&quot;</xsl:if>
+    	<xsl:if test="string-length( @onmouseup  ) &gt; 0"> onmouseup=&quot;<xsl:value-of select="@onmouseup" />&quot;</xsl:if>
+    	<xsl:if test="string-length( @onmouseover) &gt; 0"> onmouseover=&quot;<xsl:value-of select="@onmouseover" />&quot;</xsl:if>
+    	<xsl:if test="string-length( @onmousemove) &gt; 0"> onmousemove=&quot;<xsl:value-of select="@onmousemove" />&quot;</xsl:if>
+    	<xsl:if test="string-length( @onmouseout ) &gt; 0"> onmouseout=&quot;<xsl:value-of select="@onmouseout" />&quot;</xsl:if>
+    	<xsl:if test="string-length( @onkeypress ) &gt; 0"> onkeypress=&quot;<xsl:value-of select="@onkeypress" />&quot;</xsl:if>
+    	<xsl:if test="string-length( @onkeydown  ) &gt; 0"> onkeydown=&quot;<xsl:value-of select="@onkeydown" />&quot;</xsl:if>
+    	<xsl:if test="string-length( @onkeyup    ) &gt; 0"> onkeyup=&quot;<xsl:value-of select="@onkeyup" />&quot;</xsl:if>
+    	<xsl:if test="string-length( @onsubmit   ) &gt; 0"> onsubmit=&quot;<xsl:value-of select="@onsubmit" />&quot;</xsl:if>
+    	<xsl:if test="string-length( @onreset    ) &gt; 0"> onreset=&quot;<xsl:value-of select="@onreset" />&quot;</xsl:if>
+    	<xsl:if test="string-length( @moreattr) &gt; 0"><xsl:text> </xsl:text><xsl:value-of select="@moreattr" /></xsl:if>
+    	<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    	<xsl:if test="string-length( @legend   ) &gt; 0"> 
+    		<xsl:text disable-output-escaping="yes">&lt;</xsl:text>legend<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    		<xsl:value-of select="@legend" />
+    		<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/legend<xsl:text disable-output-escaping="yes">&gt;</xsl:text>    	
+    	</xsl:if>
+    	<xsl:text disable-output-escaping="yes">&lt;</xsl:text>TABLE<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    	<xsl:apply-templates />
+    	<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/TABLE<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    	<xsl:text disable-output-escaping="yes">&lt;/</xsl:text><xsl:value-of select="name()" /><xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    	<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/TD<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    	<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/TR<xsl:text disable-output-escaping="yes">&gt;</xsl:text>    	  
+    </xsl:template>
     <xsl:template match="label">
 	<TR>
 		<TD class="datos"><xsl:value-of select="node()" disable-output-escaping="yes" /></TD>
 		<TD class="valores"><xsl:apply-templates select="./*" /></TD>
 	</TR> 
+    </xsl:template>
+    <xsl:template match="legend">
+    		<legend><xsl:value-of select="node()" disable-output-escaping="yes" /></legend>    		
     </xsl:template>
     <xsl:template match="input[@type = 'submit' or @type = 'reset']">
     		<xsl:if test="@type = 'submit'"> 
