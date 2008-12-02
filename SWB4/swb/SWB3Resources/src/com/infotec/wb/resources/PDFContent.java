@@ -41,7 +41,7 @@ import org.semanticwb.model.Portlet;
 import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
-import org.semanticwb.portal.services.DocumentExtractorSrv;
+//import org.semanticwb.portal.services.DocumentExtractorSrv;
 //import org.pdfbox.exceptions.CryptographyException;
 //import org.pdfbox.exceptions.InvalidPasswordException;
 //import org.pdfbox.pdmodel.PDDocument;
@@ -80,22 +80,23 @@ public class PDFContent extends GenericAdmResource {
         if(faux==null)
             return;
         String pdf=SWBPlatform.getWorkPath() + base.getWorkPath() +"/"+ faux.trim();
-        
-        try
-        {
-            Class cls=getClass().forName("org.pdfbox.pdmodel.PDDocument");
-            //PDFContent.PDFContentIndexer indexer=new PDFContent.PDFContentIndexer();
-            //String cont=indexer.index(pdf);
-            String cont=new DocumentExtractorSrv().pdfExtractor(new File(pdf));
-            if(cont!=null)
-            {
-                //System.out.println("PDFContent:"+contents);
-                response.getWriter().print(cont);
-            }
-        }catch(ClassNotFoundException e)
-        {
-            log.error("PDFBox.jar, FontBox.jar not found!!!", e);
-        }          
+
+        //TODO:
+//        try
+//        {
+//            Class cls=getClass().forName("org.pdfbox.pdmodel.PDDocument");
+//            //PDFContent.PDFContentIndexer indexer=new PDFContent.PDFContentIndexer();
+//            //String cont=indexer.index(pdf);
+//            String cont=new DocumentExtractorSrv().pdfExtractor(new File(pdf));
+//            if(cont!=null)
+//            {
+//                //System.out.println("PDFContent:"+contents);
+//                response.getWriter().print(cont);
+//            }
+//        }catch(ClassNotFoundException e)
+//        {
+//            log.error("PDFBox.jar, FontBox.jar not found!!!", e);
+//        }
     }
 
     /**
