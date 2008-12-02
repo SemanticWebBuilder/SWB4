@@ -1576,9 +1576,9 @@
     <swbxf:interface rdf:resource="#Portletable"/>
     <swbxf:hasResourceParam>
       <swbxf:ResourceParameter rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#spropContents">
-        <swb:resParamValue rdf:resource="#hasPortlet"/>
         <swbxf:resParamName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >sprop</swbxf:resParamName>
+        <swb:resParamValue rdf:resource="#hasPortlet"/>
       </swbxf:ResourceParameter>
     </swbxf:hasResourceParam>
     <swb:title xml:lang="es">Contenidos</swb:title>
