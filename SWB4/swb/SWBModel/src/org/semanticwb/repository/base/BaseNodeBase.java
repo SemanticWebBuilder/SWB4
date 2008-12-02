@@ -97,6 +97,16 @@ public class BaseNodeBase extends GenericObjectBase
         getSemanticObject().removeProperty(vocabulary.jcr_mixinTypes,mixintype);
     }
 
+    public String getPath()
+    {
+        return getSemanticObject().getProperty(vocabulary.swbrep_path);
+    }
+
+    public void setPath(String path)
+    {
+        getSemanticObject().setProperty(vocabulary.swbrep_path, path);
+    }
+
     public String getName()
     {
         return getSemanticObject().getProperty(vocabulary.swbrep_name);
