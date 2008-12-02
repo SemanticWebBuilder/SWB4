@@ -4,14 +4,6 @@
  */
 package org.semanticwb.jcr170.implementation;
 
-import com.hp.hpl.jena.query.Query;
-import com.hp.hpl.jena.query.QueryExecution;
-import com.hp.hpl.jena.query.QueryExecutionFactory;
-import com.hp.hpl.jena.query.QueryFactory;
-import com.hp.hpl.jena.query.QuerySolution;
-import com.hp.hpl.jena.query.ResultSet;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.RDFNode;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -50,12 +42,10 @@ import org.jdom.Element;
 import org.jdom.Namespace;
 import org.jdom.output.XMLOutputter;
 import org.semanticwb.SWBException;
-import org.semanticwb.SWBPlatform;
 import org.semanticwb.jcr170.implementation.util.NCName;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
-import org.semanticwb.platform.SemanticVocabulary;
 import org.semanticwb.repository.BaseNode;
 import org.semanticwb.repository.LockUserComparator;
 import org.xml.sax.ContentHandler;
@@ -681,45 +671,22 @@ public class SessionImp implements Session
 
     public Node getNodeByUUID(String uuid) throws ItemNotFoundException, RepositoryException
     {
-        Model model = SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
-        String prolog = "PREFIX jcr: <" + BaseNode.vocabulary.listUris().get("jcr") + ">";
-        prolog += "PREFIX rdf: <" + SemanticVocabulary.RDF_URI + ">";
-        prolog += "PREFIX swbrep: <" + BaseNode.vocabulary.listUris().get("swbrep") + ">";
-        prolog += "PREFIX rdfs: <" + SemanticVocabulary.RDFS_URI + ">";
 
-        String queryString = prolog + NL +
-                "SELECT ?path ?uuid WHERE {?x jcr:uuid ?uuid . FILTER regex(?uuid, \""+ uuid +"\") ?x swbrep:path ?path . }";
-        Query query = QueryFactory.create(queryString);
-        QueryExecution qexec = QueryExecutionFactory.create(query, model);
-        try
-        {            
-            ResultSet rs = qexec.execSelect();            
-            // The order of results is undefined. 
-            if(rs.hasNext())
+        Iterator<SemanticObject> it = SWBContext.getWorkspace(workspaceName).getSemanticObject().getModel().listSubjects(BaseNode.vocabulary.jcr_uuid, uuid);
+        while (it.hasNext())
+        {
+            String path = it.next().getProperty(BaseNode.vocabulary.swbrep_path);
+            Item item = this.getItem(path.toString());
+            if (item.isNode())
             {
-                QuerySolution rb = rs.nextSolution();
-                Iterator<String> it = rs.getResultVars().iterator();
-                if(it.hasNext())
+                SimpleNode node = (SimpleNode) item;
+                if (!node.isDeleted())
                 {
-                    String pathVariable = it.next();
-                    RDFNode pathValue = rb.get(pathVariable);                                        
-                    Item item=this.getItem(pathValue.toString());
-                    if(item.isNode())
-                    {
-                        SimpleNode node=(SimpleNode)item;
-                        if(!node.isDeleted())
-                        {
-                            return node;
-                        }
-                    }
-                }                
+                    return node;
+                }
             }
         }
-        finally
-        {
-            qexec.close();
-        }
-        throw new ItemNotFoundException("The node with the uuid "+ uuid +" was not found");
+        throw new ItemNotFoundException("The node with the uuid " + uuid + " was not found");
     }
 
     void checksLock(Node node) throws LockException, VersionException, RepositoryException
@@ -827,12 +794,12 @@ public class SessionImp implements Session
     }
 
     public String[] getNamespacePrefixes() throws RepositoryException
-    {        
+    {
         return registry.getPrefixes();
     }
 
     public String getNamespaceURI(String prefix) throws NamespaceException, RepositoryException
-    {        
+    {
         return registry.getURI(prefix);
     }
 
