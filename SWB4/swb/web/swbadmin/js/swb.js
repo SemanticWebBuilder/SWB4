@@ -69,7 +69,7 @@
           //dojo.parser.parse(dojo.byId('container')); 
           console.info("Total parse time: " + (new Date().getTime() - start) + "ms");
 
-          dojo.byId('loaderInner').innerHTML += " done.";
+          //dojo.byId('loaderInner').innerHTML += " done.";
           setTimeout(function hideLoader(){
               var loader = dojo.byId('loader'); 
               dojo.fadeOut({ node: loader, duration:500,
@@ -85,12 +85,19 @@
           dojo.xhrGet({
               url: url,
               load: function(response, ioArgs){
+                if(dojo.byId(tagid)) {
                   dojo.byId(tagid).innerHTML = response;
-                  return response;
+                }else {
+                  alert("No existe ningún elemento con id " + tagid);
+                }
+                return response;
               },
               error: function(response, ioArgs){
-                  dojo.byId(tagid).innerHTML = 
-                      "An error occurred, with response: " + response;
+                  if(dojo.byId(tagid)) {
+                    dojo.byId(tagid).innerHTML = "<p>Ocurrió un error con respuesta:<br />" + response + "</p>";
+                  }else {
+                    alert("No existe ningún elemento con id " + tagid);
+                  }
                   return response;
               },
               handleAs: "text"
@@ -169,7 +176,7 @@
               handleAs: "text"
           });           
       }
-
+      
       function submitForm(formid) 
       {
           var obj=dojo.byId(formid);
