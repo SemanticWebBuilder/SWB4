@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
+import java.security.Principal;
 import java.sql.Connection;
 import java.util.Properties;
 import javax.servlet.ServletContext;
@@ -29,7 +30,6 @@ public class SWBPlatform
     private String contextPath="/";
     private static String workPath = "";
     private static String webWorkPath = "";
-    
     
     private static ServletContext servletContext=null;
 
@@ -381,10 +381,17 @@ public class SWBPlatform
         return servletContext;
     }    
 
-    public static SemanticMgr getSemanticMgr() 
+    public static SemanticMgr getSemanticMgr(Principal user)
+    {
+        semanticMgr.addSessionUser(user);
+        return semanticMgr;
+    }
+
+    public static SemanticMgr getSemanticMgr()
     {
         return semanticMgr;
-    }    
+    }
+
     
     public static String getVersion() {
         return version;
