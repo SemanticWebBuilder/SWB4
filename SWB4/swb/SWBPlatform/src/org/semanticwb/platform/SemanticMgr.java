@@ -17,6 +17,7 @@ import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.util.FileManager;
 import java.io.File;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -52,6 +53,8 @@ public class SemanticMgr implements SWBInstanceObject
     
     private SemanticVocabulary vocabulary;
 
+    private HashMap<String,SessionUser> m_sessions;
+
     public void init(SWBPlatform context) 
     {
         log.event("Initializing SemanticMgr...");
@@ -60,6 +63,8 @@ public class SemanticMgr implements SWBInstanceObject
         m_models=new HashMap();
         m_imodels=new HashMap();
         m_schemas=new HashMap();
+
+        m_sessions=new HashMap();
         
         // Create database connection
         conn = new DBConnection(SWBUtils.DB.getDefaultConnection(), SWBUtils.DB.getDatabaseName());
@@ -350,5 +355,24 @@ public class SemanticMgr implements SWBInstanceObject
         Resource res=model.getRDFModel().createResource(name);
         Property prop=model.getRDFModel().createProperty("swb:count");
         model.getRDFModel().remove(res, prop, null);
-    }    
+    }
+
+    public void addSessionUser(Principal user)
+    {
+        if(user!=null)
+        {
+            SessionUser sess=m_sessions.get(Thread.currentThread().getName());
+            if(sess==null)m_sessions.put(Thread.currentThread().getName(),new SessionUser(user));
+            else sess.setUser(user);
+        }
+    }
+
+    public Principal getSessionUser()
+    {
+        Principal user=null;
+        SessionUser sess=m_sessions.get(Thread.currentThread().getName());
+        if(sess!=null)user=sess.getUser();
+        return user;
+    }
+
 }

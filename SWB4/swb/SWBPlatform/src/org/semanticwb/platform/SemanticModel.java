@@ -14,6 +14,7 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
+import java.security.Principal;
 import java.util.Iterator;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.GenericObject;
@@ -110,6 +111,8 @@ public class SemanticModel
 
     public SemanticObject createSemanticObject(String uri, SemanticClass cls)
     {
+        Principal user=SWBPlatform.getSemanticMgr().getSessionUser();
+        System.out.println("createSemanticObject:"+user);
         Resource res=m_model.createResource(uri);
         res.addProperty(m_model.getProperty(SemanticVocabulary.RDF_TYPE), cls.getOntClass());
         return cls.newInstance(res);
