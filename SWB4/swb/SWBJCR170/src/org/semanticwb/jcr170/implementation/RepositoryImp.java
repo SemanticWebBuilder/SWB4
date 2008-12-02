@@ -154,6 +154,7 @@ public final class RepositoryImp implements Repository
         Workspace ws = SWBContext.createWorkspace(name, namespace);
         Unstructured root = ws.createUnstructured();
         root.setName("jcr:root");        
+        root.setPath("/");
         ws.setRoot(root);
     }
 

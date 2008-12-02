@@ -4,6 +4,14 @@
  */
 package org.semanticwb.jcr170.implementation;
 
+import com.hp.hpl.jena.query.Query;
+import com.hp.hpl.jena.query.QueryExecution;
+import com.hp.hpl.jena.query.QueryExecutionFactory;
+import com.hp.hpl.jena.query.QueryFactory;
+import com.hp.hpl.jena.query.QuerySolution;
+import com.hp.hpl.jena.query.ResultSet;
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.RDFNode;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -21,7 +29,6 @@ import javax.jcr.ItemNotFoundException;
 import javax.jcr.LoginException;
 import javax.jcr.NamespaceException;
 import javax.jcr.Node;
-import javax.jcr.NodeIterator;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.Property;
 import javax.jcr.PropertyIterator;
@@ -36,8 +43,6 @@ import javax.jcr.Workspace;
 import javax.jcr.lock.LockException;
 import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.nodetype.NoSuchNodeTypeException;
-import javax.jcr.query.Query;
-import javax.jcr.query.QueryResult;
 import javax.jcr.version.VersionException;
 import org.jdom.Attribute;
 import org.jdom.Document;
@@ -45,10 +50,12 @@ import org.jdom.Element;
 import org.jdom.Namespace;
 import org.jdom.output.XMLOutputter;
 import org.semanticwb.SWBException;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.jcr170.implementation.util.NCName;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.platform.SemanticVocabulary;
 import org.semanticwb.repository.BaseNode;
 import org.semanticwb.repository.LockUserComparator;
 import org.xml.sax.ContentHandler;
@@ -61,6 +68,7 @@ import org.xml.sax.SAXException;
 public class SessionImp implements Session
 {
 
+    static public final String NL = System.getProperty("line.separator");
     private static NamespaceRegistryImp registry = new NamespaceRegistryImp();
     private static final String SYSTEM_VIEW_NAMESPACE = "http://www.jcp.org/jcr/sv/1.0";
     private static final String SYSTEM_VIEW_PREFIX = "sv";
@@ -77,7 +85,7 @@ public class SessionImp implements Session
 
     SessionImp(RepositoryImp repository, String workspaceName, SimpleCredentials credentials) throws RepositoryException
     {
-        if ( repository == null || workspaceName == null || credentials == null )
+        if (repository == null || workspaceName == null || credentials == null)
         {
             throw new IllegalArgumentException("The repository is null or workspace is null or credentials is null");
         }
@@ -109,59 +117,61 @@ public class SessionImp implements Session
         Element element = new Element(clazz.getName(), ns);
         appendPropertiesToNode(node, element);
         parent.addContent(element);
-        for(SimpleNode child : node.getSimpleNodes())
+        for (SimpleNode child : node.getSimpleNodes())
         {
-             appendNode(child, element);
+            appendNode(child, element);
         }
-        
+
     }
 
-    
-    public SimpleNode[] getSimpleNodeByPath(String path,SimpleNode parent,boolean all) throws RepositoryException
+    public SimpleNode[] getSimpleNodeByPath(String path, SimpleNode parent, boolean all) throws RepositoryException
     {
-               
-        ArrayList<SimpleNode> nodes = new ArrayList<SimpleNode>(); 
+
+        ArrayList<SimpleNode> nodes = new ArrayList<SimpleNode>();
         String[] values = path.split("/");
-        if ( values.length == 0 )
+        if (values.length == 0)
         {
             nodes.add(root);
         }
         else
         {
-            int depth=0;            
-            for ( String value : values )
+            int depth = 0;
+            for (String value : values)
             {
-                SimpleNode[] parents={parent};
+                SimpleNode[] parents =
+                {
+                    parent
+                };
                 depth++;
-                if ( value.equals("") || values.equals("/") )
+                if (value.equals("") || values.equals("/"))
                 {
                     parent = root;
                 }
                 else
                 {
-                    String name=value;
-                    int pos=name.indexOf("[");
-                    if(pos!=-1)
+                    String name = value;
+                    int pos = name.indexOf("[");
+                    if (pos != -1)
                     {
-                        name=name.substring(0,pos);
+                        name = name.substring(0, pos);
                     }
-                    for(SimpleNode parentNode : parents)
+                    for (SimpleNode parentNode : parents)
                     {
-                        SimpleNode[] childs=parentNode.getSimpleNodeByName(value);
-                        if(depth!=values.length)
+                        SimpleNode[] childs = parentNode.getSimpleNodeByName(value);
+                        if (depth != values.length)
                         {
-                            parents=childs;
+                            parents = childs;
                         }
                         else
                         {
-                            for(SimpleNode child : childs)
+                            for (SimpleNode child : childs)
                             {
                                 nodes.add(child);
                             }
                         }
                     }
                 }
-                
+
             }
         }
         return nodes.toArray(new SimpleNode[nodes.size()]);
@@ -171,7 +181,7 @@ public class SessionImp implements Session
     {
         String getPrefix = null;
         int pos = name.indexOf(":");
-        if ( pos != -1 )
+        if (pos != -1)
         {
             getPrefix = name.substring(0, pos);
         }
@@ -184,34 +194,34 @@ public class SessionImp implements Session
         while (properties.hasNext())
         {
             Property property = properties.nextProperty();
-            if ( property != null )
+            if (property != null)
             {
-                if ( property.isNode() )
+                if (property.isNode())
                 {
                     Node object = property.getNode();
-                    if ( object instanceof SimpleNode )
+                    if (object instanceof SimpleNode)
                     {
-                        if ( object != null )
+                        if (object != null)
                         {
-                            appendNode(( SimpleNode ) object, nodeElement);
+                            appendNode((SimpleNode) object, nodeElement);
                         }
                     }
                 }
                 else
                 {
                     String prefix = getPrefix(property.getName());
-                    if ( prefix != null )
+                    if (prefix != null)
                     {
 
                         Namespace ns = Namespace.getNamespace(prefix, registry.getURI(prefix));
                         try
                         {
-                            for ( Value value : property.getValues() )
+                            for (Value value : property.getValues())
                             {
                                 nodeElement.setAttribute(property.getName(), value.getString(), ns);
                             }
                         }
-                        catch ( Throwable ex )
+                        catch (Throwable ex)
                         {
                             ex.printStackTrace(System.out);
                         }
@@ -227,7 +237,7 @@ public class SessionImp implements Session
         Element element = new Element(getName(node.getName()));
         appendPropertiesToNode(node, element);
         document.setRootElement(element);
-        for(SimpleNode child : node.getSimpleNodes())
+        for (SimpleNode child : node.getSimpleNodes())
         {
             appendNode(child, element);
         }
@@ -242,7 +252,7 @@ public class SessionImp implements Session
             XMLOutputter out = new XMLOutputter();
             out.output(document, System.out);
         }
-        catch ( Exception e )
+        catch (Exception e)
         {
             e.printStackTrace(System.out);
         }
@@ -258,7 +268,7 @@ public class SessionImp implements Session
             XMLOutputter out = new XMLOutputter();
             out.output(document, System.out);
         }
-        catch ( Exception e )
+        catch (Exception e)
         {
             e.printStackTrace(System.out);
         }
@@ -272,23 +282,22 @@ public class SessionImp implements Session
         {
             Property property = properties.nextProperty();
 
-            if ( !property.isNode() )
+            if (!property.isNode())
             {
                 String prefix = getPrefix(property.getName());
-                if ( prefix != null )
+                if (prefix != null)
                 {
                     Namespace ns = Namespace.getNamespace(prefix, registry.getURI(prefix));
                     try
                     {
                         String value = property.getString();
-                        if ( value != null )
+                        if (value != null)
                         {
                             nodeElement.setAttribute(property.getName(), value, ns);
                         }
                     }
-                    catch ( Exception e )
+                    catch (Exception e)
                     {
-
                     }
 
 
@@ -300,28 +309,28 @@ public class SessionImp implements Session
     static void appendNodeInternalView(SimpleNode node, Element parent, boolean internal) throws RepositoryException
     {
         Element element = new Element(node.getName());
-        if ( internal )
+        if (internal)
         {
             element.setAttribute("path", node.getPath());
         }
         appendPropertiesToNodeInternalView(node, element);
         parent.addContent(element);
-        for(SimpleNode child : node.getSimpleNodes())
+        for (SimpleNode child : node.getSimpleNodes())
         {
             appendNodeInternalView(child, element, internal);
-        }        
+        }
     }
 
     private static void appendNodeInternalView(SimpleNode node, Document document, boolean internal) throws RepositoryException
     {
         Element element = new Element(getName(node.getName()));
-        if ( internal )
+        if (internal)
         {
             element.setAttribute("path", node.getPath());
         }
         appendPropertiesToNodeInternalView(node, element);
         document.addContent(element);
-        for(SimpleNode child : node.getSimpleNodes())
+        for (SimpleNode child : node.getSimpleNodes())
         {
             appendNodeInternalView(child, element, internal);
         }
@@ -330,7 +339,7 @@ public class SessionImp implements Session
     private static String getName(String name)
     {
         int pos = name.indexOf(":");
-        if ( pos != -1 )
+        if (pos != -1)
         {
             name = name.substring(pos + 1);
         }
@@ -359,8 +368,8 @@ public class SessionImp implements Session
         element.setAttribute(new Attribute("name", node.getName(), NAMESPACE));
         appendPropertiesToNodeSystemView(node, element);
         parent.addContent(element);
-        for(SimpleNode child : node.getSimpleNodes())
-        {            
+        for (SimpleNode child : node.getSimpleNodes())
+        {
             appendNodeSystemView(child, element);
         }
 
@@ -372,8 +381,8 @@ public class SessionImp implements Session
         element.setAttribute(new Attribute("name", node.getName(), NAMESPACE));
         appendPropertiesToNodeSystemView(node, element);
         document.addContent(element);
-        for(SimpleNode child : node.getSimpleNodes())
-        {            
+        for (SimpleNode child : node.getSimpleNodes())
+        {
             appendNodeSystemView(child, element);
         }
     }
@@ -418,7 +427,7 @@ public class SessionImp implements Session
     public static boolean isAbsolute(String relPath) throws RepositoryException
     {
         boolean isAbsolute = false;
-        if ( relPath.equals(PATH_SEPARATOR) || (relPath.startsWith("") && relPath.length() > 1 && isRelative(relPath.substring(1))) )
+        if (relPath.equals(PATH_SEPARATOR) || (relPath.startsWith("") && relPath.length() > 1 && isRelative(relPath.substring(1))))
         {
             isAbsolute = true;
         }
@@ -427,28 +436,28 @@ public class SessionImp implements Session
 
     public static boolean isRelative(String relPath) throws RepositoryException
     {
-        if(relPath.startsWith("/"))            
+        if (relPath.startsWith("/"))
         {
             return false;
-        }        
+        }
         boolean isRelative = false;
-        if ( isPathElement(relPath) )
+        if (isPathElement(relPath))
         {
             isRelative = true;
         }
         else
         {
             int pos = relPath.lastIndexOf(PATH_SEPARATOR);
-            if ( pos > 0 )
+            if (pos > 0)
             {
                 String pathElement = relPath.substring(pos + 1);
                 relPath = relPath.substring(0, pos);
-                if ( isRelative(relPath) && isPathElement(pathElement) )
+                if (isRelative(relPath) && isPathElement(pathElement))
                 {
                     isRelative = true;
                 }
             }
-            if ( relPath.startsWith("/") )
+            if (relPath.startsWith("/"))
             {
                 isRelative = false;
             }
@@ -463,7 +472,7 @@ public class SessionImp implements Session
         int pos = relPath.indexOf(":");
         String prefix = null;
         String simpleName = null;
-        if ( pos != -1 )
+        if (pos != -1)
         {
             prefix = relPath.substring(0, pos).trim();
             simpleName = relPath.substring(pos + 1);
@@ -472,15 +481,15 @@ public class SessionImp implements Session
         {
             simpleName = relPath;
         }
-        if ( prefix != null )
+        if (prefix != null)
         {
             NCName ncname = new NCName();
-            if ( !ncname.isValid(prefix) )
+            if (!ncname.isValid(prefix))
             {
                 throw new RepositoryException("The prefix is invalid");
             }
         }
-        if ( isSimpleName(simpleName) )
+        if (isSimpleName(simpleName))
         {
             isName = true;
         }
@@ -490,7 +499,7 @@ public class SessionImp implements Session
     public static boolean isSimpleName(String relPath)
     {
         boolean isSimpleName = false;
-        if ( isOnecharsimplename(relPath) || isTwocharsimplename(relPath) || isThreeormorecharname(relPath) )
+        if (isOnecharsimplename(relPath) || isTwocharsimplename(relPath) || isThreeormorecharname(relPath))
         {
             isSimpleName = true;
         }
@@ -500,7 +509,7 @@ public class SessionImp implements Session
     public static boolean isOnecharsimplename(String relPath)
     {
         boolean isOnecharsimplename = true;
-        if ( relPath.indexOf('.') != -1 || relPath.indexOf('/') != -1 || relPath.indexOf(':') != -1 || relPath.indexOf('[') != -1 || relPath.indexOf(']') != -1 || relPath.indexOf('*') != -1 || relPath.indexOf('\'') != -1 || relPath.indexOf('\"') != -1 || relPath.indexOf('|') != -1 || relPath.indexOf(' ') != -1 )
+        if (relPath.indexOf('.') != -1 || relPath.indexOf('/') != -1 || relPath.indexOf(':') != -1 || relPath.indexOf('[') != -1 || relPath.indexOf(']') != -1 || relPath.indexOf('*') != -1 || relPath.indexOf('\'') != -1 || relPath.indexOf('\"') != -1 || relPath.indexOf('|') != -1 || relPath.indexOf(' ') != -1)
         {
             isOnecharsimplename = false;
         }
@@ -511,9 +520,9 @@ public class SessionImp implements Session
     {
         boolean isTwocharsimplename = false;
         String[] values = relPath.split(".");
-        for ( String value : values )
+        for (String value : values)
         {
-            if ( isOnecharsimplename(value) )
+            if (isOnecharsimplename(value))
             {
                 isTwocharsimplename = true;
                 break;
@@ -525,7 +534,7 @@ public class SessionImp implements Session
     public static boolean isThreeormorecharname(String relPath)
     {
         boolean isThreeormorecharname = true;
-        if ( relPath.startsWith(" ") || relPath.endsWith(" ") )
+        if (relPath.startsWith(" ") || relPath.endsWith(" "))
         {
             isThreeormorecharname = false;
         }
@@ -535,27 +544,27 @@ public class SessionImp implements Session
     public static boolean isPathElement(String relPath) throws RepositoryException
     {
         boolean isPathElement = false;
-        if ( relPath.equals(".") || relPath.equals("..") || isName(relPath) )
+        if (relPath.equals(".") || relPath.equals("..") || isName(relPath))
         {
             isPathElement = true;
         }
         int pos = relPath.lastIndexOf("[");
-        if ( pos != -1 )
+        if (pos != -1)
         {
             String name = relPath.substring(0, pos);
             relPath = relPath.substring(pos + 1);
-            if ( relPath.endsWith("]") )
+            if (relPath.endsWith("]"))
             {
                 String number = relPath.substring(0, relPath.length() - 2);
                 try
                 {
                     int inumber = Integer.parseInt(number);
-                    if ( inumber > 0 && isName(name) )
+                    if (inumber > 0 && isName(name))
                     {
                         isPathElement = true;
                     }
                 }
-                catch ( NumberFormatException nfe )
+                catch (NumberFormatException nfe)
                 {
                     isPathElement = false;
                 }
@@ -566,7 +575,7 @@ public class SessionImp implements Session
 
     public static void checkRelPath(String relPath) throws RepositoryException
     {
-        if ( !(isRelative(relPath) || isAbsolute(relPath)) )
+        if (!(isRelative(relPath) || isAbsolute(relPath)))
         {
             throw new RepositoryException("The relpath is incorrect");
         }
@@ -575,10 +584,10 @@ public class SessionImp implements Session
     public static String normalize(String relPath, Node node) throws RepositoryException
     {
         String normalize = relPath;
-        if ( isRelative(relPath) )
+        if (isRelative(relPath))
         {
             String thisPath = node.getPath();
-            if ( thisPath.endsWith(PATH_SEPARATOR) )
+            if (thisPath.endsWith(PATH_SEPARATOR))
             {
                 normalize = thisPath + relPath;
             }
@@ -593,19 +602,19 @@ public class SessionImp implements Session
 
     public static String getParentPath(String relPath, Node node) throws RepositoryException
     {
-        if ( isRelative(relPath) )
+        if (isRelative(relPath))
         {
             relPath = SessionImp.normalize(relPath, node);
         }
         StringBuilder getParentPath = new StringBuilder();
         String[] values = relPath.split(PATH_SEPARATOR);
-        for ( int i = 0; i < values.length - 1; i++ )
+        for (int i = 0; i < values.length - 1; i++)
         {
             String value = values[i];
             getParentPath.append(value + PATH_SEPARATOR);
         }
         String path = getParentPath.toString();
-        if ( !path.equals(PATH_SEPARATOR) && path.endsWith(PATH_SEPARATOR) )
+        if (!path.equals(PATH_SEPARATOR) && path.endsWith(PATH_SEPARATOR))
         {
             path = path.substring(0, path.length() - 1);
         }
@@ -619,7 +628,7 @@ public class SessionImp implements Session
 
     void removeLockSession(LockImp lock)
     {
-        if ( lock != null )
+        if (lock != null)
         {
             locksSessions.remove(lock.getNode());
         }
@@ -628,7 +637,7 @@ public class SessionImp implements Session
     LockImp getLock(Node node)
     {
         LockImp getLock = null;
-        if ( node != null )
+        if (node != null)
         {
             getLock = locksSessions.get(node);
         }
@@ -672,22 +681,50 @@ public class SessionImp implements Session
 
     public Node getNodeByUUID(String uuid) throws ItemNotFoundException, RepositoryException
     {
-        Query query = workspace.getQueryManager().createQuery("//.[jcr:uuid='" + uuid + "']", Query.XPATH);
-        QueryResult result = query.execute();
-        NodeIterator iterator = result.getNodes();
-        if ( iterator.hasNext() )
-        {
-            return iterator.nextNode();
+        Model model = SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
+        String prolog = "PREFIX jcr: <" + BaseNode.vocabulary.listUris().get("jcr") + ">";
+        prolog += "PREFIX rdf: <" + SemanticVocabulary.RDF_URI + ">";
+        prolog += "PREFIX swbrep: <" + BaseNode.vocabulary.listUris().get("swbrep") + ">";
+        prolog += "PREFIX rdfs: <" + SemanticVocabulary.RDFS_URI + ">";
+
+        String queryString = prolog + NL +
+                "SELECT ?path ?uuid WHERE {?x jcr:uuid ?uuid . FILTER regex(?uuid, \""+ uuid +"\") ?x swbrep:path ?path . }";
+        Query query = QueryFactory.create(queryString);
+        QueryExecution qexec = QueryExecutionFactory.create(query, model);
+        try
+        {            
+            ResultSet rs = qexec.execSelect();            
+            // The order of results is undefined. 
+            if(rs.hasNext())
+            {
+                QuerySolution rb = rs.nextSolution();
+                Iterator<String> it = rs.getResultVars().iterator();
+                if(it.hasNext())
+                {
+                    String pathVariable = it.next();
+                    RDFNode pathValue = rb.get(pathVariable);                                        
+                    Item item=this.getItem(pathValue.toString());
+                    if(item.isNode())
+                    {
+                        SimpleNode node=(SimpleNode)item;
+                        if(!node.isDeleted())
+                        {
+                            return node;
+                        }
+                    }
+                }                
+            }
         }
-        else
+        finally
         {
-            throw new ItemExistsException("The node with uuid " + uuid + " was not found");
+            qexec.close();
         }
+        throw new ItemNotFoundException("The node with the uuid "+ uuid +" was not found");
     }
 
     void checksLock(Node node) throws LockException, VersionException, RepositoryException
     {
-        if ( node.isLocked() && !node.getLock().getLockOwner().equals(this.getUserID()) )
+        if (node.isLocked() && !node.getLock().getLockOwner().equals(this.getUserID()))
         {
             throw new LockException("The node is locked by the user " + node.getLock().getLockOwner());
         }
@@ -697,8 +734,8 @@ public class SessionImp implements Session
     {
         // TODO, no trae propiedades y la ruta puede indicar el segundo o el primero
         // ejemplo /Categorty[0]/Deportes[1]
-        SimpleNode[] nodes = getSimpleNodeByPath(absPath,root,false);
-        if ( nodes.length == 0 )
+        SimpleNode[] nodes = getSimpleNodeByPath(absPath, root, false);
+        if (nodes.length == 0)
         {
             throw new PathNotFoundException();
         }
@@ -712,12 +749,12 @@ public class SessionImp implements Session
         try
         {
             Item item = this.getItem(abspath);
-            if ( item != null )
+            if (item != null)
             {
                 itemExists = true;
             }
         }
-        catch ( PathNotFoundException pnfe )
+        catch (PathNotFoundException pnfe)
         {
             itemExists = false;
         }
@@ -790,14 +827,12 @@ public class SessionImp implements Session
     }
 
     public String[] getNamespacePrefixes() throws RepositoryException
-    {
-        NamespaceRegistryImp registry = new NamespaceRegistryImp();
+    {        
         return registry.getPrefixes();
     }
 
     public String getNamespaceURI(String prefix) throws NamespaceException, RepositoryException
-    {
-        NamespaceRegistryImp registry = new NamespaceRegistryImp();
+    {        
         return registry.getURI(prefix);
     }
 
@@ -809,17 +844,16 @@ public class SessionImp implements Session
 
     private void releaseLockSessions()
     {
-        for ( LockImp lock : locksSessions.values() )
+        for (LockImp lock : locksSessions.values())
         {
-            if ( lock.isSessionScoped() )
+            if (lock.isSessionScoped())
             {
                 try
                 {
                     lock.getLockBaseNode().unlock();
                 }
-                catch ( Exception e )
+                catch (Exception e)
                 {
-
                 }
             }
         }

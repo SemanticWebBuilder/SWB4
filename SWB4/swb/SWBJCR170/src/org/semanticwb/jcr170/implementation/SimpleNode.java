@@ -53,6 +53,7 @@ import org.semanticwb.repository.BaseNode;
 public class SimpleNode implements Node
 {
 
+    private String path;
     private String id;
     static final String DEFAULT_PRIMARY_NODE_TYPE_NAME = "nt:unstructured";
     protected static final String NOT_SUPPORTED_YET = "Not supported yet.";
@@ -70,7 +71,6 @@ public class SimpleNode implements Node
     protected final SessionImp session;
     private final int index;
     protected final SimpleNode parent;
-    private String path = null;
 
     SimpleNode(SessionImp session, String name, SemanticClass clazz, SimpleNode parent, int index, String id) throws RepositoryException
     {
@@ -81,9 +81,9 @@ public class SimpleNode implements Node
         this.session = session;
         this.index = index;
         this.parent = parent;
-        if ( parent != null )
+        if (parent != null)
         {
-            if ( parent.getPath().equals(PATH_SEPARATOR) )
+            if (parent.getPath().equals(PATH_SEPARATOR))
             {
                 this.path = parent.getPath() + name;
             }
@@ -96,42 +96,41 @@ public class SimpleNode implements Node
         {
             this.path = PATH_SEPARATOR;
         }
-        if ( parent != null && !parent.childs.containsKey(id) )
+        if (parent != null && !parent.childs.containsKey(id))
         {
             parent.childs.put(this.id, this);
         }
         try
         {
             String[] supertypes = root.getSuperTypes(clazz);
-            for ( String superType : supertypes )
+            for (String superType : supertypes)
             {
                 SemanticClass superTypeClazz = root.getSemanticClass(superType);
-                if ( superTypeClazz.equals(BaseNode.vocabulary.mix_Referenceable) )
+                if (superTypeClazz.equals(BaseNode.vocabulary.mix_Referenceable) || superTypeClazz.isSubClass(BaseNode.vocabulary.mix_Referenceable))
                 {
                     PropertyImp prop = addProperty(getName(BaseNode.vocabulary.jcr_uuid), superTypeClazz);
                     prop.setValueInternal(UUID.randomUUID().toString());
                 }
-                if ( superTypeClazz.equals(BaseNode.vocabulary.mix_Versionable) )
+                if (superTypeClazz.equals(BaseNode.vocabulary.mix_Versionable) || superTypeClazz.isSubClass(BaseNode.vocabulary.mix_Versionable))
                 {
                     PropertyImp prop = addProperty(getName(BaseNode.vocabulary.jcr_isCheckedOut), superTypeClazz);
                     prop.setValueInternal(true);
                 }
-                if ( superTypeClazz.equals(BaseNode.vocabulary.mix_Lockable) )
+                if (superTypeClazz.equals(BaseNode.vocabulary.mix_Lockable) || superTypeClazz.isSubClass(BaseNode.vocabulary.mix_Lockable))
                 {
                     PropertyImp prop = addProperty(getName(BaseNode.vocabulary.jcr_lockOwner), superTypeClazz);
                     prop.setValueInternal(null);
                     prop = addProperty(getName(BaseNode.vocabulary.jcr_lockIsDeep), superTypeClazz);
                     prop.setValueInternal(false);
                 }
-                if ( root.isMixIn(superTypeClazz) )
+                if (root.isMixIn(superTypeClazz))
                 {
                     mixins.add(superTypeClazz);
                 }
             }
         }
-        catch ( SWBException e )
+        catch (SWBException e)
         {
-
         }
 
     }
@@ -139,13 +138,13 @@ public class SimpleNode implements Node
     SimpleNode(BaseNode node, SessionImp session, SimpleNode parent, String id) throws RepositoryException
     {
         this.id = id;
-        if ( node == null )
+        if (node == null)
         {
             throw new IllegalArgumentException("The base node is null");
         }
         this.node = node;
         this.session = session;
-        if ( parent == null )
+        if (parent == null)
         {
             root = node;
         }
@@ -156,9 +155,9 @@ public class SimpleNode implements Node
         this.clazz = node.getSemanticObject().getSemanticClass();
         this.index = 0;
         this.parent = parent;
-        if ( parent != null )
+        if (parent != null)
         {
-            if ( parent.getPath().equals(PATH_SEPARATOR) )
+            if (parent.getPath().equals(PATH_SEPARATOR))
             {
                 this.path = parent.getPath() + node.getName();
             }
@@ -176,17 +175,17 @@ public class SimpleNode implements Node
         while (classes.hasNext())
         {
             SemanticClass parentClazz = classes.next();
-            if ( node.isMixIn(parentClazz) )
+            if (node.isMixIn(parentClazz))
             {
-                if ( parentClazz.equals(BaseNode.vocabulary.mix_Referenceable) )
+                if (parentClazz.equals(BaseNode.vocabulary.mix_Referenceable) || parentClazz.isSubClass(BaseNode.vocabulary.mix_Referenceable))
                 {
                     addProperty(getName(BaseNode.vocabulary.jcr_uuid), parentClazz);
                 }
-                if ( parentClazz.equals(BaseNode.vocabulary.mix_Versionable) )
+                if (parentClazz.equals(BaseNode.vocabulary.mix_Versionable) || parentClazz.isSubClass(BaseNode.vocabulary.mix_Versionable))
                 {
                     addProperty(getName(BaseNode.vocabulary.jcr_isCheckedOut), parentClazz);
                 }
-                if ( parentClazz.equals(BaseNode.vocabulary.mix_Lockable) )
+                if (parentClazz.equals(BaseNode.vocabulary.mix_Lockable) || parentClazz.isSubClass(BaseNode.vocabulary.mix_Lockable))
                 {
                     addProperty(getName(BaseNode.vocabulary.jcr_lockOwner), parentClazz);
                     addProperty(getName(BaseNode.vocabulary.jcr_lockIsDeep), parentClazz);
@@ -195,7 +194,7 @@ public class SimpleNode implements Node
                 mixins.add(parentClazz);
             }
         }
-        if ( parent != null && !parent.childs.containsKey(id))
+        if (parent != null && !parent.childs.containsKey(id))
         {
             parent.childs.put(this.id, this);
         }
@@ -204,19 +203,23 @@ public class SimpleNode implements Node
         while (semanticProperties.hasNext())
         {
             SemanticProperty prop = semanticProperties.next();
-            if ( !node.isInternal(prop) )
+            if (!node.isInternal(prop))
             {
                 try
                 {
                     addProperty(prop, node, false, clazz);
                 }
-                catch ( Exception e )
+                catch (Exception e)
                 {
-
                 }
             }
         }
 
+    }
+
+    boolean isDeleted()
+    {
+        return parent.removedchilds.contains(this);
     }
 
     private PropertyImp addProperty(SemanticProperty property, BaseNode node, boolean isNew, SemanticClass clazz) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
@@ -229,7 +232,7 @@ public class SimpleNode implements Node
 
     private PropertyImp addProperty(SemanticProperty property, BaseNode node, SemanticClass clazz) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        if ( this.properties.containsKey(getName(property)) )
+        if (this.properties.containsKey(getName(property)))
         {
             return this.properties.get(getName(property));
         }
@@ -245,9 +248,9 @@ public class SimpleNode implements Node
     private PropertyImp addProperty(String name, SemanticClass clazz) throws RepositoryException
     {
         PropertyImp prop = null;
-        if ( !this.properties.containsKey(name) )
+        if (!this.properties.containsKey(name))
         {
-            if ( session.getRootBaseNode().existsProperty(clazz, name) )
+            if (session.getRootBaseNode().existsProperty(clazz, name))
             {
                 SemanticProperty property = session.getRootBaseNode().getSemanticProperty(name, clazz);
                 PropertyDefinitionImp propertyDefinition = new PropertyDefinitionImp(session, property);
@@ -294,29 +297,27 @@ public class SimpleNode implements Node
         boolean isParentCheckOut = false;
         try
         {
-            if ( getParent() != null )
+            if (getParent() != null)
             {
                 SimpleNode parentNode = this.parent;
                 try
                 {
-                    if ( parentNode.isCheckedOut() )
+                    if (parentNode.isCheckedOut())
                     {
                         isParentCheckOut = true;
                     }
                 }
-                catch ( Exception e )
+                catch (Exception e)
                 {
-
                 }
-                if ( parentNode.isParentCheckOut() )
+                if (parentNode.isParentCheckOut())
                 {
                     isParentCheckOut = true;
                 }
             }
         }
-        catch ( Exception e )
+        catch (Exception e)
         {
-
         }
         return isParentCheckOut;
     }
@@ -332,7 +333,7 @@ public class SimpleNode implements Node
         SessionImp.checkRelPath(relPath);
         relPath = SessionImp.normalize(relPath, this);
         Item item = session.getItem(relPath);
-        if ( item != null && item.isNode() )
+        if (item != null && item.isNode())
         {
             hasNode = true;
         }
@@ -345,7 +346,7 @@ public class SimpleNode implements Node
         SessionImp.checkRelPath(relPath);
         relPath = SessionImp.normalize(relPath, this);
         Item item = session.getItem(relPath);
-        if ( item != null && !item.isNode() )
+        if (item != null && !item.isNode())
         {
             hasProperty = true;
         }
@@ -363,21 +364,21 @@ public class SimpleNode implements Node
         try
         {
             SemanticClass mixinClazz = root.getSemanticClass(mixinName);
-            if ( !root.isMixIn(mixinClazz) )
+            if (!root.isMixIn(mixinClazz))
             {
                 throw new ConstraintViolationException("The mixinName is not a minxin node type");
             }
-            if ( mixinClazz.equals(BaseNode.vocabulary.mix_Referenceable) )
+            if (mixinClazz.equals(BaseNode.vocabulary.mix_Referenceable) || mixinClazz.isSubClass(BaseNode.vocabulary.mix_Referenceable))
             {
                 PropertyImp prop = addProperty(getName(BaseNode.vocabulary.jcr_uuid), mixinClazz);
                 prop.setValueInternal(UUID.randomUUID().toString());
             }
-            if ( mixinClazz.equals(BaseNode.vocabulary.mix_Versionable) )
+            if (mixinClazz.equals(BaseNode.vocabulary.mix_Versionable) || mixinClazz.isSubClass(BaseNode.vocabulary.mix_Versionable))
             {
                 PropertyImp prop = addProperty(getName(BaseNode.vocabulary.jcr_isCheckedOut), mixinClazz);
                 prop.setValueInternal(true);
             }
-            if ( mixinClazz.equals(BaseNode.vocabulary.mix_Lockable) )
+            if (mixinClazz.equals(BaseNode.vocabulary.mix_Lockable) || mixinClazz.isSubClass(BaseNode.vocabulary.mix_Lockable))
             {
                 PropertyImp prop = addProperty(getName(BaseNode.vocabulary.jcr_lockOwner), mixinClazz);
                 prop.setValueInternal(null);
@@ -387,7 +388,7 @@ public class SimpleNode implements Node
 
             mixins.add(mixinClazz);
         }
-        catch ( SWBException e )
+        catch (SWBException e)
         {
             throw new NoSuchNodeTypeException(e);
         }
@@ -399,13 +400,13 @@ public class SimpleNode implements Node
         try
         {
             SemanticClass mixin = root.getSemanticClass(mixinName);
-            if ( !root.isMixIn(mixin) )
+            if (!root.isMixIn(mixin))
             {
                 throw new ConstraintViolationException("The mixinName is not a minxin node type");
             }
             mixins.remove(mixin);
         }
-        catch ( SWBException e )
+        catch (SWBException e)
         {
             throw new NoSuchNodeTypeException(e);
         }
@@ -419,7 +420,7 @@ public class SimpleNode implements Node
             SemanticClass mixin = root.getSemanticClass(mixinName);
             canAddMixin = !mixins.contains(mixin);
         }
-        catch ( SWBException swb )
+        catch (SWBException swb)
         {
             throw new NoSuchNodeTypeException(swb);
         }
@@ -434,18 +435,18 @@ public class SimpleNode implements Node
     public Property setProperty(String name, Value[] value, int arg2) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
         session.checksLock(this);
-        if ( !isCheckedOut() )
+        if (!isCheckedOut())
         {
             throw new RepositoryException("The node can not modify properties in check-in mode");
         }
         PropertyImp property = properties.get(name);
-        if ( property != null )
+        if (property != null)
         {
             property.setValue(value);
         }
         else
         {
-            if ( !getPrimaryNodeType().canSetProperty(name, value) )
+            if (!getPrimaryNodeType().canSetProperty(name, value))
             {
                 throw new ConstraintViolationException("The property can not be added");
             }
@@ -468,9 +469,9 @@ public class SimpleNode implements Node
 
     public SimpleNode getNodeByName(String name) throws RepositoryException
     {
-        for ( SimpleNode childNode : getSimpleNodes() )
+        for (SimpleNode childNode : getSimpleNodes())
         {
-            if ( childNode.getName().equals(name) )
+            if (childNode.getName().equals(name))
             {
                 return childNode;
             }
@@ -486,9 +487,9 @@ public class SimpleNode implements Node
     public SimpleNode[] getSimpleNodeByName(String name) throws RepositoryException
     {
         ArrayList<SimpleNode> nodes = new ArrayList<SimpleNode>();
-        for ( SimpleNode childNode : getSimpleNodes() )
+        for (SimpleNode childNode : getSimpleNodes())
         {
-            if ( childNode.name.equals(name) )
+            if (childNode.name.equals(name))
             {
                 nodes.add(childNode);
             }
@@ -498,9 +499,9 @@ public class SimpleNode implements Node
 
     public SimpleNode getSimpleNodeById(String id) throws RepositoryException
     {
-        for ( SimpleNode childNode : getSimpleNodes() )
+        for (SimpleNode childNode : getSimpleNodes())
         {
-            if ( childNode.id.equals(id) )
+            if (childNode.id.equals(id))
             {
                 return childNode;
             }
@@ -510,24 +511,24 @@ public class SimpleNode implements Node
 
     SimpleNode[] getSimpleNodes() throws RepositoryException
     {
-        if ( node != null )
+        if (node != null)
         {
             GenericIterator<BaseNode> childNodes = node.listNodes();
             while (childNodes.hasNext())
             {
                 BaseNode nodeChild = childNodes.next();
                 boolean isDeleted = false;
-                for ( SimpleNode childNode : this.removedchilds )
+                for (SimpleNode childNode : this.removedchilds)
                 {
-                    if ( childNode.id.equals(nodeChild.getId()) )
+                    if (childNode.id.equals(nodeChild.getId()))
                     {
                         isDeleted = true;
                         break;
                     }
                 }
-                if ( !isDeleted )
+                if (!isDeleted)
                 {
-                    if ( !childs.containsKey(nodeChild.getId()) )
+                    if (!childs.containsKey(nodeChild.getId()))
                     {
                         new SimpleNode(nodeChild, session, this, nodeChild.getId());
                     }
@@ -551,7 +552,7 @@ public class SimpleNode implements Node
     public Property getProperty(String relPath) throws PathNotFoundException, RepositoryException
     {
         SessionImp.checkRelPath(relPath);
-        if ( SessionImp.isName(relPath) && this.existsProperty(relPath) )
+        if (SessionImp.isName(relPath) && this.existsProperty(relPath))
         {
             return properties.get(relPath);
         }
@@ -568,10 +569,10 @@ public class SimpleNode implements Node
 
     public String getUUID() throws UnsupportedRepositoryOperationException, RepositoryException
     {
-        if ( properties.get(getName(BaseNode.vocabulary.jcr_uuid)) != null )
+        if (properties.get(getName(BaseNode.vocabulary.jcr_uuid)) != null)
         {
             String getUUID = properties.get(getName(BaseNode.vocabulary.jcr_uuid)).getString();
-            if ( getUUID == null )
+            if (getUUID == null)
             {
                 throw new UnsupportedRepositoryOperationException();
             }
@@ -597,7 +598,7 @@ public class SimpleNode implements Node
     public NodeType[] getMixinNodeTypes() throws RepositoryException
     {
         ArrayList<NodeType> mininNodeTypes = new ArrayList<NodeType>();
-        for ( SemanticClass mixInClazz : mixins )
+        for (SemanticClass mixInClazz : mixins)
         {
             NodeTypeImp nodeType = new NodeTypeImp(mixInClazz, session);
             mininNodeTypes.add(nodeType);
@@ -622,18 +623,29 @@ public class SimpleNode implements Node
 
     public Lock lock(boolean isDeep, boolean isSessionScoped) throws UnsupportedRepositoryOperationException, LockException, AccessDeniedException, InvalidItemStateException, RepositoryException
     {
-        if ( !isLockable() )
+        if (!isLockable())
         {
             throw new UnsupportedRepositoryOperationException("The node can not be lockable");
         }
-        if ( isLocked() )
+        if (isLocked())
         {
             throw new LockException("The node is already locked");
         }
         addProperty(getName(BaseNode.vocabulary.jcr_lockOwner)).setValueInternal(getSession().getUserID());
         addProperty(getName(BaseNode.vocabulary.jcr_lockIsDeep)).setValueInternal(isDeep);
         LockImp lock = new LockImp(this, isSessionScoped);
-        if ( isSessionScoped )
+        if (!isSessionScoped && !this.isNew())
+        {
+            try
+            {
+                node.setProperty(BaseNode.vocabulary.jcr_lockOwner, getSession().getUserID());
+                node.setProperty(BaseNode.vocabulary.jcr_lockIsDeep, String.valueOf(isDeep));
+            }
+            catch (Exception e)
+            {
+            }
+        }
+        if (isSessionScoped)
         {
             session.addLockSession(lock);
         }
@@ -641,23 +653,43 @@ public class SimpleNode implements Node
 
     }
 
+    public boolean isLockedByParent() throws RepositoryException
+    {
+        boolean isLockedByParent=false;
+        if(parent!=null)
+        {
+            if(parent.isLocked() && parent.isDeepLock())
+            {
+                return true;
+            }
+        }
+        return isLockedByParent;
+    }    
     public boolean isLocked() throws RepositoryException
     {
         boolean isLocked = false;
-        if ( properties.get(getName(BaseNode.vocabulary.jcr_lockOwner)) != null )
+        if (properties.get(getName(BaseNode.vocabulary.jcr_lockOwner)) != null)
         {
             String value = properties.get(getName(BaseNode.vocabulary.jcr_lockOwner)).getString();
-            if ( value != null )
+            if (value != null)
             {
-                return Boolean.parseBoolean(value.toString());
+                return true;
             }
+        }
+        if(isLockedByParent())
+        {
+            return true;
+        }
+        if (node != null)
+        {
+            return node.isLocked();
         }
         return isLocked;
     }
 
     public String getPath() throws RepositoryException
     {
-        if ( path == null )
+        if (path == null)
         {
             throw new RepositoryException("The was unable to find");
         }
@@ -706,7 +738,7 @@ public class SimpleNode implements Node
 
     public boolean isNew()
     {
-        if ( node == null )
+        if (node == null)
         {
             return true;
         }
@@ -728,24 +760,23 @@ public class SimpleNode implements Node
 
     public void accept(ItemVisitor visitor) throws RepositoryException
     {
-
     }
 
     private void saveProperties() throws SWBException, RepositoryException
     {
-        for ( SimpleNode child : this.childs.values() )
+        for (SimpleNode child : this.childs.values())
         {
             child.saveProperties();
         }
-        for ( SemanticClass mixinClazz : this.mixins )
+        for (SemanticClass mixinClazz : this.mixins)
         {
             node.registerClass(mixinClazz);
         }
-        for ( PropertyImp prop : this.properties.values() )
+        for (PropertyImp prop : this.properties.values())
         {
-            if ( prop.isNew() || prop.isModified() )
+            if (prop.isNew() || prop.isModified())
             {
-                if ( node.existsProperty(prop.getName(), prop.getSemanticClass()) )
+                if (node.existsProperty(prop.getName(), prop.getSemanticClass()))
                 {
                     SemanticProperty semanticProperty = node.getSemanticProperty(prop.getName(), prop.getSemanticClass());
                     node.setProperty(semanticProperty, prop.getString());
@@ -764,10 +795,10 @@ public class SimpleNode implements Node
 
     private void removeChilds() throws RepositoryException, SWBException
     {
-        for ( SimpleNode child : this.removedchilds )
+        for (SimpleNode child : this.removedchilds)
         {
             child.removeChilds();
-            if ( child.node != null )
+            if (child.node != null)
             {
                 child.node.remove();
             }
@@ -778,19 +809,19 @@ public class SimpleNode implements Node
 
     private void createChilds() throws RepositoryException, SWBException
     {
-        ArrayList<SimpleNode> newChilds=new ArrayList<SimpleNode>();
-        for ( SimpleNode child : this.childs.values() )
+        ArrayList<SimpleNode> newChilds = new ArrayList<SimpleNode>();
+        for (SimpleNode child : this.childs.values())
         {
-            if ( child.node == null )
+            if (child.node == null)
             {
-                child.node = node.createNodeBase(child.getName(), child.clazz);                
-                child.id = child.node.getId();                                
+                child.node = node.createNodeBase(child.getName(), child.clazz);
+                child.id = child.node.getId();
             }
             child.createChilds();
             newChilds.add(child);
         }
         this.childs.clear();
-        for(SimpleNode child : newChilds)
+        for (SimpleNode child : newChilds)
         {
             this.childs.put(child.id, child);
         }
@@ -798,7 +829,7 @@ public class SimpleNode implements Node
 
     public void save() throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
     {
-        if ( isNew() )
+        if (isNew())
         {
             throw new RepositoryException("Can not save a new item Node:" + this.getPath());
         }
@@ -809,7 +840,7 @@ public class SimpleNode implements Node
             saveProperties();
             node.save();
         }
-        catch ( SWBException swbe )
+        catch (SWBException swbe)
         {
             throw new RepositoryException(swbe);
         }
@@ -828,14 +859,14 @@ public class SimpleNode implements Node
 
     public void unlock() throws UnsupportedRepositoryOperationException, LockException, AccessDeniedException, InvalidItemStateException, RepositoryException
     {
-        if ( isLockable() && isLocked() )
+        if (isLockable() && isLocked())
         {
 
             // por el momento sólo puede desbloquear el mismo usuario, deberia verse como un super usurio lo puede desbloquear
             LockImp lock = getLockImp();
             properties.remove(getName(BaseNode.vocabulary.jcr_lockOwner));
             properties.remove(getName(BaseNode.vocabulary.jcr_lockIsDeep));
-            if ( lock != null && lock.isSessionScoped() )
+            if (lock != null && lock.isSessionScoped())
             {
                 session.removeLockSession(lock);
             }
@@ -855,7 +886,7 @@ public class SimpleNode implements Node
 
     public void remove() throws VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        if ( parent.isVersionable() && !parent.isCheckedOut() )
+        if (parent.isVersionable() && !parent.isCheckedOut())
         {
             throw new RepositoryException("The node can not be removed in check-in mode");
         }
@@ -873,15 +904,14 @@ public class SimpleNode implements Node
     public String getLockOwner()
     {
         String getLockOwner = null;
-        if ( properties.get(BaseNode.vocabulary.jcr_lockOwner) != null )
+        if (properties.get(BaseNode.vocabulary.jcr_lockOwner) != null)
         {
             try
             {
                 getLockOwner = properties.get(getName(BaseNode.vocabulary.jcr_lockOwner)).getString();
             }
-            catch ( Exception e )
+            catch (Exception e)
             {
-
             }
         }
         return getLockOwner;
@@ -889,12 +919,12 @@ public class SimpleNode implements Node
 
     public Lock getLock() throws UnsupportedRepositoryOperationException, LockException, AccessDeniedException, RepositoryException
     {
-        if ( isLockable() && isLocked() )
+        if (isLockable() && isLocked())
         {
             LockImp lock = getLockImp();
-            if ( lock == null )
+            if (lock == null)
             {
-                if ( isLocked() )
+                if (isLocked())
                 {
                     lock = new LockImp(this);
                 }
@@ -912,7 +942,7 @@ public class SimpleNode implements Node
     {
         Value[] values = new Value[value.length];
         int i = 0;
-        for ( String oValue : value )
+        for (String oValue : value)
         {
             values[i] = factory.createValue(oValue);
             i++;
@@ -922,13 +952,19 @@ public class SimpleNode implements Node
 
     public Property setProperty(String name, String value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        Value[] values = {factory.createValue(value)};
+        Value[] values =
+        {
+            factory.createValue(value)
+        };
         return setProperty(name, values, 0);
     }
 
     public Property setProperty(String name, String value, int arg2) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        Value[] values = {factory.createValue(value)};
+        Value[] values =
+        {
+            factory.createValue(value)
+        };
         return setProperty(name, values, 0);
     }
 
@@ -939,25 +975,37 @@ public class SimpleNode implements Node
 
     public Property setProperty(String name, boolean value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        Value[] values = {factory.createValue(value)};
+        Value[] values =
+        {
+            factory.createValue(value)
+        };
         return setProperty(name, values, 0);
     }
 
     public Property setProperty(String name, double value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        Value[] values = {factory.createValue(value)};
+        Value[] values =
+        {
+            factory.createValue(value)
+        };
         return setProperty(name, values, 0);
     }
 
     public Property setProperty(String name, long value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        Value[] values = {factory.createValue(value)};
+        Value[] values =
+        {
+            factory.createValue(value)
+        };
         return setProperty(name, values, 0);
     }
 
     public Property setProperty(String name, Calendar value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        Value[] values = {factory.createValue(value)};
+        Value[] values =
+        {
+            factory.createValue(value)
+        };
         return setProperty(name, values, 0);
     }
 
@@ -971,9 +1019,9 @@ public class SimpleNode implements Node
         SessionImp.checkRelPath(relPath);
         relPath = SessionImp.normalize(relPath, this);
         Item item = session.getItem(relPath);
-        if ( item.isNode() )
+        if (item.isNode())
         {
-            return ( Node ) item;
+            return (Node) item;
         }
         throw new PathNotFoundException("The path is not a node");
     }
@@ -986,7 +1034,7 @@ public class SimpleNode implements Node
     public Node addNode(String relPath, String primaryNodeTypeName) throws ItemExistsException, PathNotFoundException, NoSuchNodeTypeException, LockException, VersionException, ConstraintViolationException, RepositoryException
     {
         SessionImp.checkRelPath(relPath);
-        if ( primaryNodeTypeName == null )
+        if (primaryNodeTypeName == null)
         {
             primaryNodeTypeName = DEFAULT_PRIMARY_NODE_TYPE_NAME;
         }
@@ -994,16 +1042,16 @@ public class SimpleNode implements Node
         String nameNode = SessionImp.getNodeName(relPath);
         String parentPath = SessionImp.getParentPath(relPath, this);
         Item item = session.getItem(parentPath);
-        if ( item.isNode() )
+        if (item.isNode())
         {
-            Node parentNode = ( Node ) item;
+            Node parentNode = (Node) item;
             session.checksLock(parentNode);
-            if ( !parentNode.isCheckedOut() )
+            if (!parentNode.isCheckedOut())
             {
                 throw new RepositoryException("The node can not add a child in check-in mode");
             }
 
-            if ( session.itemExists(relPath) )
+            if (session.itemExists(relPath))
             {
                 throw new ItemExistsException("The item " + relPath + " already exists");
             }
@@ -1011,12 +1059,12 @@ public class SimpleNode implements Node
             try
             {
                 SemanticClass clazzToInsert = session.getRootBaseNode().getSemanticClass(primaryNodeTypeName);
-                if ( !session.getRootBaseNode().canAddNode(clazzToInsert, clazz) )
+                if (!session.getRootBaseNode().canAddNode(clazzToInsert, clazz))
                 {
                     throw new ConstraintViolationException("The node can not be added to this node");
                 }
             }
-            catch ( SWBException e )
+            catch (SWBException e)
             {
                 throw new NoSuchNodeTypeException("The node type " + primaryNodeTypeName + " was not found");
             }
@@ -1027,7 +1075,7 @@ public class SimpleNode implements Node
                 SimpleNode tmp = new SimpleNode(session, nameNode, primaryNodeClazz, this, 0, UUID.randomUUID().toString());
                 return tmp;
             }
-            catch ( SWBException swbe )
+            catch (SWBException swbe)
             {
                 throw new NoSuchNodeTypeException(swbe);
             }
@@ -1045,7 +1093,10 @@ public class SimpleNode implements Node
 
     public Property setProperty(String name, Value value, int arg2) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        Value[] values = {value};
+        Value[] values =
+        {
+            value
+        };
         return setProperty(name, values, arg2);
     }
 
@@ -1066,9 +1117,8 @@ public class SimpleNode implements Node
 
     public Version getBaseVersion() throws UnsupportedRepositoryOperationException, RepositoryException
     {
-        if ( isVersionable() )
+        if (isVersionable())
         {
-
         }
         throw new UnsupportedRepositoryOperationException(NOT_SUPPORTED_YET);
     }
@@ -1085,31 +1135,29 @@ public class SimpleNode implements Node
 
     public void restore(Version version, String relPath, boolean arg2) throws PathNotFoundException, ItemExistsException, VersionException, ConstraintViolationException, UnsupportedRepositoryOperationException, LockException, InvalidItemStateException, RepositoryException
     {
-        if ( isVersionable() )
+        if (isVersionable())
         {
-
         }
         throw new UnsupportedRepositoryOperationException(NOT_SUPPORTED_YET);
     }
 
     public void restoreByLabel(String label, boolean arg1) throws VersionException, ItemExistsException, UnsupportedRepositoryOperationException, LockException, InvalidItemStateException, RepositoryException
     {
-        if ( isVersionable() )
+        if (isVersionable())
         {
-
         }
         throw new UnsupportedRepositoryOperationException(NOT_SUPPORTED_YET);
     }
 
     public VersionHistory getVersionHistory() throws UnsupportedRepositoryOperationException, RepositoryException
     {
-        if ( isVersionable() && node != null )
+        if (isVersionable() && node != null)
         {
             try
             {
                 return new VersionHistoryImp(node.getHistoryNode(), session, this);
             }
-            catch ( SWBException e )
+            catch (SWBException e)
             {
                 throw new RepositoryException(e);
             }
@@ -1134,16 +1182,16 @@ public class SimpleNode implements Node
 
     public boolean isCheckedOut() throws RepositoryException
     {
-        if ( isVersionable() )
+        if (isVersionable())
         {
             String nameProperty = getName(BaseNode.vocabulary.jcr_isCheckedOut);
-            if ( properties.get(nameProperty) != null )
+            if (properties.get(nameProperty) != null)
             {
                 try
                 {
                     return properties.get(getName(BaseNode.vocabulary.jcr_isCheckedOut)).getBoolean();
                 }
-                catch ( ValueFormatException e )
+                catch (ValueFormatException e)
                 {
                     return false;
                 }
@@ -1179,7 +1227,7 @@ public class SimpleNode implements Node
 
     private boolean hasPendingChanges()
     {
-        if ( properties.isEmpty() && childs.isEmpty() )
+        if (properties.isEmpty() && childs.isEmpty())
         {
             return true;
         }
@@ -1199,9 +1247,9 @@ public class SimpleNode implements Node
     public void checkout() throws UnsupportedRepositoryOperationException, LockException, RepositoryException
     {
         session.checksLock(this);
-        if ( isVersionable() )
+        if (isVersionable())
         {
-            if ( hasPendingChanges() )
+            if (hasPendingChanges())
             {
                 throw new UnsupportedRepositoryOperationException("The node must be saved before, because has changes or is new");
             }
@@ -1221,10 +1269,10 @@ public class SimpleNode implements Node
     {
         String namePrefix = null;
         int pos = name.indexOf(":");
-        if ( pos != -1 )
+        if (pos != -1)
         {
             namePrefix = name.substring(0, pos);
-            if ( namePrefix.trim().equals("") )
+            if (namePrefix.trim().equals(""))
             {
                 namePrefix = null;
             }
@@ -1236,7 +1284,7 @@ public class SimpleNode implements Node
     {
         String nameProperty = null;
         int pos = name.indexOf(":");
-        if ( pos != -1 )
+        if (pos != -1)
         {
             nameProperty = name.substring(pos + 1);
         }
@@ -1251,9 +1299,9 @@ public class SimpleNode implements Node
     {
         ArrayList<Property> propeties = new ArrayList<Property>();
         String[] names = namePattern.split("|");
-        for ( String propertyNames : names )
+        for (String propertyNames : names)
         {
-            if ( propertyNames != null && !propertyNames.trim().equals("") )
+            if (propertyNames != null && !propertyNames.trim().equals(""))
             {
                 PropertyIterator myProperties = this.getProperties();
                 while (myProperties.hasNext())
@@ -1265,21 +1313,21 @@ public class SimpleNode implements Node
                     String propName = SessionImp.getNodeName(prop.getName());
                     boolean prefixEquals = false;
                     boolean nameEquals = false;
-                    if ( namePrefix != null && propPrefix != null )
+                    if (namePrefix != null && propPrefix != null)
                     {
-                        if ( namePrefix.equals("*") || namePrefix.equals(propPrefix) )
+                        if (namePrefix.equals("*") || namePrefix.equals(propPrefix))
                         {
                             prefixEquals = true;
                         }
                     }
-                    if ( namePropertyToFind != null && propName != null )
+                    if (namePropertyToFind != null && propName != null)
                     {
-                        if ( namePropertyToFind.equals("*") || namePropertyToFind.equals(propName) )
+                        if (namePropertyToFind.equals("*") || namePropertyToFind.equals(propName))
                         {
                             prefixEquals = true;
                         }
                     }
-                    if ( prefixEquals && nameEquals )
+                    if (prefixEquals && nameEquals)
                     {
                         propeties.add(prop);
                     }
@@ -1298,9 +1346,9 @@ public class SimpleNode implements Node
     public boolean equals(Object obj)
     {
         boolean equals = false;
-        if ( obj instanceof SimpleNode )
+        if (obj instanceof SimpleNode)
         {
-            equals = (( SimpleNode ) obj).id.equals(this.id);
+            equals = ((SimpleNode) obj).id.equals(this.id);
         }
         return equals;
     }
