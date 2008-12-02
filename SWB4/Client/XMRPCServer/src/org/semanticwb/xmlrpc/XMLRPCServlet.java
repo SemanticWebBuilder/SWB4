@@ -40,7 +40,7 @@ public abstract class XMLRPCServlet extends HttpServlet
     private static final String RETURN = "\r\n";
     private static Hashtable<String, Object> cacheObjects = new Hashtable<String, Object>();
     private static final String PREFIX_PROPERTY_PATH = "org.semanticwb.xmlrpc.";
-    private static final String XMLRPC_DOCUMENT = "xmlrpc";    
+    private static final String XMLRPC_DOCUMENT = "xmlrpc";        
     
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -130,6 +130,7 @@ public abstract class XMLRPCServlet extends HttpServlet
         if ( objToExecute instanceof XmlRpcObject )
         {
             XmlRpcObject xmlRpcObject = ( XmlRpcObject ) objToExecute;
+            xmlRpcObject.init(this.getServletConfig());
             xmlRpcObject.setParts(parts);
         }
     }
