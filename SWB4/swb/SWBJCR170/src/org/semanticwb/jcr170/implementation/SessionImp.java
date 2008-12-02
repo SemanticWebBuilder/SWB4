@@ -671,7 +671,6 @@ public class SessionImp implements Session
 
     public Node getNodeByUUID(String uuid) throws ItemNotFoundException, RepositoryException
     {
-
         Iterator<SemanticObject> it = SWBContext.getWorkspace(workspaceName).getSemanticObject().getModel().listSubjects(BaseNode.vocabulary.jcr_uuid, uuid);
         while (it.hasNext())
         {
