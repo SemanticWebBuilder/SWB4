@@ -152,7 +152,7 @@ public class SWBVirtualHostFilter implements Filter
      *
      * @param filterConfig 
      */
-    public void init(FilterConfig filterConfig)
+    public void init(FilterConfig filterConfig) throws ServletException
     {
         log.event("************************************");
         log.event("Initializing SemanticWebBuilder...");        
