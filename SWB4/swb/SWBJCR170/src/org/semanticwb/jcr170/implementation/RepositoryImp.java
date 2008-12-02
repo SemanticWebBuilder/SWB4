@@ -29,21 +29,21 @@ public final class RepositoryImp implements Repository
 
     static
     {
-        descriptors.put("OPTION_VERSIONING_SUPPORTED", "true");
-        descriptors.put("SPEC_VERSION_DESC", "1.0");
-        descriptors.put("SPEC_NAME_DESC", "Content Repository for Java Technology API");
-        descriptors.put("REP_VENDOR_DESC", "Semantic INFOTEC WebBuilder 4.0");
-        descriptors.put("REP_VENDOR_URL_DESC", "http://www.webbuilder.org.mx");
-        descriptors.put("REP_NAME_DESC", "Semantic INFOTEC WebBuilder 4.0 Repository");
-        descriptors.put("REP_VERSION_DESC", "1.0.0.0");
-        descriptors.put("LEVEL_1_SUPPORTED", "true");
-        descriptors.put("LEVEL_2_SUPPORTED", "false");
-        descriptors.put("OPTION_TRANSACTIONS_SUPPORTED", "false");
-        descriptors.put("OPTION_OBSERVATION_SUPPORTED", "false");
-        descriptors.put("OPTION_LOCKING_SUPPORTED", "true");
-        descriptors.put("OPTION_QUERY_SQL_SUPPORTED", "false");
-        descriptors.put("QUERY_XPATH_POS_INDEX", "false");
-        descriptors.put("UERY_XPATH_DOC_ORDER", "true");
+        descriptors.put(OPTION_VERSIONING_SUPPORTED, "true");
+        descriptors.put(SPEC_VERSION_DESC, "1.0");
+        descriptors.put(SPEC_NAME_DESC, "Content Repository for Java Technology API");
+        descriptors.put(REP_VENDOR_DESC, "Semantic INFOTEC WebBuilder 4.0");
+        descriptors.put(REP_VENDOR_URL_DESC, "http://www.webbuilder.org.mx");
+        descriptors.put(REP_NAME_DESC, "Semantic INFOTEC WebBuilder 4.0 Repository");
+        descriptors.put(REP_VERSION_DESC, "1.0.0.0");
+        descriptors.put(LEVEL_1_SUPPORTED, "true");
+        descriptors.put(LEVEL_2_SUPPORTED, "false");
+        descriptors.put(OPTION_TRANSACTIONS_SUPPORTED, "false");
+        descriptors.put(OPTION_OBSERVATION_SUPPORTED, "false");
+        descriptors.put(OPTION_LOCKING_SUPPORTED, "true");
+        descriptors.put(OPTION_QUERY_SQL_SUPPORTED, "false");
+        descriptors.put(QUERY_XPATH_POS_INDEX, "false");
+        descriptors.put(QUERY_XPATH_DOC_ORDER, "true");
 
     }
     private String defaultWorkspaceName = "defaultWorkspace";
