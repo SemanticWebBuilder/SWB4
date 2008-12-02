@@ -22,6 +22,16 @@ public class UserGroupBase extends GenericObjectBase implements Traceable,Descri
         super(base);
     }
 
+    public Date getCreated()
+    {
+        return getSemanticObject().getDateProperty(vocabulary.swb_created);
+    }
+
+    public void setCreated(Date created)
+    {
+        getSemanticObject().setDateProperty(vocabulary.swb_created, created);
+    }
+
     public GenericIterator<org.semanticwb.model.User> listUsers()
     {
         StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, vocabulary.swb_hasGroupedUser.getInverse().getRDFProperty(), getSemanticObject().getRDFResource());
@@ -37,16 +47,6 @@ public class UserGroupBase extends GenericObjectBase implements Traceable,Descri
              ret=(User)vocabulary.swb_User.newGenericInstance(obj);
          }
          return ret;
-    }
-
-    public Date getCreated()
-    {
-        return getSemanticObject().getDateProperty(vocabulary.swb_created);
-    }
-
-    public void setCreated(Date created)
-    {
-        getSemanticObject().setDateProperty(vocabulary.swb_created, created);
     }
 
     public void setModifiedBy(org.semanticwb.model.User user)
