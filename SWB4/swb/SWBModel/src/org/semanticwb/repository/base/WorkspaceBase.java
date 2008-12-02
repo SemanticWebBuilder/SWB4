@@ -60,12 +60,6 @@ public class WorkspaceBase extends GenericObjectBase
         return (BaseNode)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, vocabulary.nt_BaseNode), vocabulary.nt_BaseNode);
     }
 
-    public BaseNode createBaseNode()
-    {
-        long id=SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+vocabulary.nt_BaseNode.getName());
-        return createBaseNode(""+id);
-    } 
-
     public void removeBaseNode(String id)
     {
         getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.nt_BaseNode));
