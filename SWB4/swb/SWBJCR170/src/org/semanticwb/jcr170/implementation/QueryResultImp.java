@@ -10,12 +10,7 @@ import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.query.QueryResult;
 import javax.jcr.query.RowIterator;
-import org.jdom.Element;
-import org.jdom.Namespace;
-import org.semanticwb.SWBException;
 import org.semanticwb.model.SWBContext;
-import org.semanticwb.repository.BaseNode;
-import org.semanticwb.repository.Workspace;
 
 /**
  *
@@ -24,12 +19,10 @@ import org.semanticwb.repository.Workspace;
 public class QueryResultImp implements QueryResult
 {
 
-    private final List nodes;
+    private final List<String> nodes;
     private final String workspaceName;
-    private final SessionImp session;
-    private final String jcr_uri;
-    private final Namespace ns;
-    QueryResultImp(SessionImp session, List nodes, String workspaceName)
+    private final SessionImp session;    
+    QueryResultImp(SessionImp session, List<String> nodes, String workspaceName)
     {
         if ( session == null || workspaceName == null )
         {
@@ -41,11 +34,9 @@ public class QueryResultImp implements QueryResult
         }
         this.nodes = nodes;
         this.workspaceName = workspaceName;
-        this.session = session;
-        jcr_uri = getUri(Workspace.vocabulary.listUris().get("jcr"));        
-        ns = Namespace.getNamespace("jcr", jcr_uri);
+        this.session = session;        
+        
     }
-
     public String[] getColumnNames() throws RepositoryException
     {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -69,10 +60,8 @@ public class QueryResultImp implements QueryResult
     public NodeIterator getNodes() throws RepositoryException
     {
         ArrayList<SimpleNode> simpleNodes = new ArrayList<SimpleNode>();        
-        for ( int i = 0; i < nodes.size(); i++ )
-        {
-            Element eNode = ( Element ) nodes.get(i);
-            String path = eNode.getAttributeValue("path");                        
+        for ( String path : nodes )
+        { 
             for(SimpleNode node : session.getSimpleNodeByPath(path,session.getSimpleRootNode(),true))
             {
                 simpleNodes.add(node);            

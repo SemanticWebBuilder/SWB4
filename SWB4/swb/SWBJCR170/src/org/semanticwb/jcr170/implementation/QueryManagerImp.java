@@ -34,7 +34,7 @@ public final class QueryManagerImp implements QueryManager
     }
     public Query createQuery(String statement, String language) throws InvalidQueryException, RepositoryException
     {
-        if(!language.equals(Query.XPATH))
+        if(!(language.equals(Query.XPATH) || language.endsWith(QueryImp.SPARQL)))
         {
             throw new InvalidQueryException("This implementation only accepts XPATH language");
         }
