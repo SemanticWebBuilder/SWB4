@@ -13,6 +13,7 @@ import javax.jcr.Workspace;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
+import javax.jcr.version.Version;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -100,7 +101,17 @@ public class TestRepository
                 node.remove();
             }
             QueryManager qmanager = ws.getQueryManager();
-            Query query = qmanager.createQuery("//" + title + "[@cm:title='" + title + "']", Query.XPATH);
+            Query query;
+            if(repository.getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf("webbuilder")!=-1)
+            {
+        
+                String statement="SELECT ?title WHERE {?x cm:title ?title FILTER regex(?title, \""+ title +"\")  }" ; 
+                query = qmanager.createQuery(statement, "SPARQL");
+            }
+            else
+            {
+                query = qmanager.createQuery("//" + title + "[@cm:title='" + title + "']", Query.XPATH);
+            }            
             QueryResult result = query.execute();
             NodeIterator nodeIterator = result.getNodes();
             while (nodeIterator.hasNext())
@@ -108,26 +119,22 @@ public class TestRepository
                 Node node = nodeIterator.nextNode();
                 node.remove();
             }
-
-            Node demo = root.addNode("demo");
-            //demo.setProperty("deportes", 1);            
-            //System.out.println(demo.getProperty("deportes").getString());
-
-            Node newNode = root.addNode(title, "cm:Category");
+            Node newNode = root.addNode(title, "cm:Category");            
             newNode.setProperty("cm:title", title);
             newNode.setProperty("cm:description", title);
             root.save();
-            //System.out.println(demo.getProperty("deportes").getString());
-            newNode.checkout();
-            newNode.getVersionHistory().getAllVersions().getSize();
+            String id=newNode.getUUID();
+            session.getNodeByUUID(id);            
             Node content = newNode.addNode("Contenido1", "cm:Content");
             content.setProperty("cm:title", "Contenido 1");
             content.setProperty("cm:description", "Contenido de prueba");
             UUID = newNode.getUUID();
             root.save();
-            newNode.checkin();
+            Version version=content.checkin();
+            content.checkout();
             content.setProperty("cm:title", "Contenido 2");
             content.setProperty("cm:description", "Contenido de prueba 2");            
+            version=content.checkin();
             
             if ( UUID == null || UUID.equals("") )
             {
