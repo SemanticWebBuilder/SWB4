@@ -22,16 +22,6 @@ public class BaseNodeBase extends GenericObjectBase
         super(base);
     }
 
-    public String getPrimaryType()
-    {
-        return getSemanticObject().getProperty(vocabulary.jcr_primaryType);
-    }
-
-    public void setPrimaryType(String primaryType)
-    {
-        getSemanticObject().setProperty(vocabulary.jcr_primaryType, primaryType);
-    }
-
     public void setParent(org.semanticwb.repository.BaseNode basenode)
     {
         getSemanticObject().setObjectProperty(vocabulary.swbrep_parentNode, basenode.getSemanticObject());
@@ -51,6 +41,16 @@ public class BaseNodeBase extends GenericObjectBase
              ret=(BaseNode)vocabulary.nt_BaseNode.newGenericInstance(obj);
          }
          return ret;
+    }
+
+    public String getPrimaryType()
+    {
+        return getSemanticObject().getProperty(vocabulary.jcr_primaryType);
+    }
+
+    public void setPrimaryType(String primaryType)
+    {
+        getSemanticObject().setProperty(vocabulary.jcr_primaryType, primaryType);
     }
 
     public GenericIterator<org.semanticwb.repository.BaseNode> listNodes()
