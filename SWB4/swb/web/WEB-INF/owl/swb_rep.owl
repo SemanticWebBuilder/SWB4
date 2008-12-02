@@ -221,7 +221,7 @@
   </owl:Class>
   <owl:Class rdf:about="http://www.semanticwb.org.mx/swb4/content#Part">
     <jcr:supertypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >mix:versionable</jcr:supertypes>
+    >mix:referenceable</jcr:supertypes>
     <rdf:type rdf:resource="#Node"/>
     <rdfs:subClassOf>
       <swbrep:Node rdf:about="http://www.jcp.org/jcr/nt/1.0#file">
@@ -822,6 +822,10 @@
     <jcr:onParentVersion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >INITIALIZE</jcr:onParentVersion>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="path">
+    <rdfs:domain rdf:resource="http://www.jcp.org/jcr/nt/1.0#base"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:about="http://www.jcp.org/jcr/1.0#lastModified">
     <rdfs:domain rdf:resource="http://www.jcp.org/jcr/nt/1.0#resource"/>
     <jcr:autoCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -939,8 +943,6 @@
     >false</jcr:sameNameSiblings>
     <rdfs:subClassOf rdf:resource="http://www.semanticwb.org.mx/swb4/content#Descriptiveable"/>
     <rdfs:subClassOf rdf:resource="http://www.jcp.org/jcr/nt/1.0#folder"/>
-    <jcr:supertypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >mix:versionable</jcr:supertypes>
     <jcr:supertypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >mix:referenceable</jcr:supertypes>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
