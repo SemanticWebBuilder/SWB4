@@ -22,7 +22,6 @@ import org.semanticwb.office.interfaces.IOfficeDocument;
 import org.semanticwb.repository.RepositoryManager;
 import org.semanticwb.xmlrpc.Part;
 import org.semanticwb.xmlrpc.XmlRpcObject;
-import sun.net.www.MimeTable;
 
 /**
  *
@@ -35,8 +34,10 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     private static final String CM_DESCRIPTION = "cm:description";
     private static final String CM_TITLE = "cm:title";
     private static final String CM_TYPE = "cm:type";
+    private static final String CONTENT_NAME = "Content";
     private static final String DEFAULT_MIME_TYPE = "application/octet-stream";    
     private static final String CM_PART = "cm:Part";
+    private static final String JCR_CONTENT = "jcr:content";
     private static final String NT_RESOURCE = "nt:resource";
 
     public String publish(String title, String description, String repositoryName, String categoryID, String type) throws Exception
@@ -48,12 +49,15 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             Node categoryNode = session.getNodeByUUID(categoryID);
             if (!categoryNode.isLocked())
             {
-                categoryNode.lock(false, true); // blocks the nodeContent
-
+                categoryNode.lock(false, false); // blocks the nodeContent
+            }
+            else
+            {
+                throw new Exception("The node is locked");
             }
             try
             {
-                Node contentNode = categoryNode.addNode("Content", CM_CONTENT);
+                Node contentNode = categoryNode.addNode( CONTENT_NAME,CM_CONTENT);
                 contentNode.setProperty(CM_TITLE, title);
                 contentNode.setProperty(CM_TYPE, type);
                 contentNode.setProperty(CM_DESCRIPTION, description);
@@ -61,15 +65,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 int iPart = 0;
                 for (Part part : parts)
                 {
-                    MimeTable mt = MimeTable.getDefaultTable();
-                    String mimeType = mt.getContentTypeFor(part.getName());
+                    String mimeType = config.getServletContext().getMimeType(part.getName());
                     if (mimeType == null)
                     {
                         mimeType = DEFAULT_MIME_TYPE;
                     }
 
                     Node nodePart = contentNode.addNode(part.getName(), CM_PART);
-                    Node resNode = nodePart.addNode("jcr:content", NT_RESOURCE);
+                    Node resNode = nodePart.addNode( JCR_CONTENT,NT_RESOURCE);
                     resNode.setProperty("jcr:mimeType", mimeType);
                     resNode.setProperty("jcr:encoding", "");
                     InputStream in = new ByteArrayInputStream(part.getContent());
@@ -167,9 +170,8 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     String[] values = new String[parts.size()];
                     int iPart = 0;
                     for (Part part : parts)
-                    {
-                        MimeTable mt = MimeTable.getDefaultTable();
-                        String mimeType = mt.getContentTypeFor(part.getName());
+                    {   
+                        String mimeType =this.config.getServletContext().getMimeType(part.getName());
                         if (mimeType == null)
                         {
                             mimeType = DEFAULT_MIME_TYPE;

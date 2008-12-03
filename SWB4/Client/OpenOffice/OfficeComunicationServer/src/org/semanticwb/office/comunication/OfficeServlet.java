@@ -25,7 +25,7 @@ public abstract class OfficeServlet extends XMLRPCServlet
     public void init() throws ServletException
     {        
         addMappingType("OfficeDocument", OfficeDocument.class);
-        addMappingType("OfficeApplication", OfficeApplication.class);
+        addMappingType("OfficeApplication", OfficeApplication.class);                
     }  
     
     private static String getPassword(String userpassDecoded) throws IOException
