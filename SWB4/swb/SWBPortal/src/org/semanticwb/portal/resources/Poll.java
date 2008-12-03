@@ -216,7 +216,7 @@ public class Poll extends GenericResource
                 win += ",top="+ base.getAttribute("top", "125").trim();
                 win += ",left="+ base.getAttribute("left", "220").trim();
 
-                ret.append("<script type=\"text/javascript\" src=\"/swb/swbadmin/js/swb.js\"></script>");
+                //ret.append("<script type=\"text/javascript\" src=\"/swb/swbadmin/js/swb.js\"></script>");
                 ret.append("<script type=\"text/javascript\" src=\"/swb/swbadmin/js/wb/motion/collapsibleDiv.js\"></script>");
                 ret.append("<script type=\"text/javascript\"> \n");
                 
@@ -287,6 +287,30 @@ public class Poll extends GenericResource
                 ret.append("{ \n");
                 ret.append("    window.open(ruta,\'_newenc\',\'"+ win +"\'); \n");
                 ret.append("} \n");
+                
+                ret.append("function getHtml(url, tagid) {\n");
+                ret.append("  dojo.xhrGet({\n");
+                ret.append("      url: url,\n");
+                ret.append("      load: function(response, ioArgs){\n");
+                ret.append("        if(dojo.byId(tagid)) {\n");
+                ret.append("          dojo.byId(tagid).innerHTML = response;\n");
+                ret.append("        }else {\n");
+                ret.append("          alert('No existe ningún elemento con id ' + tagid);\n");
+                ret.append("        }\n");
+                ret.append("        return response;\n");
+                ret.append("      },\n");
+                ret.append("      error: function(response, ioArgs){\n");
+                ret.append("          if(dojo.byId(tagid)) {\n");
+                ret.append("            dojo.byId(tagid).innerHTML = '<p>Ocurrió un error con respuesta:<br />' + response + '</p>';\n");
+                ret.append("          }else {\n");
+                ret.append("            alert('No existe ningún elemento con id ' + tagid);\n");
+                ret.append("          }\n");
+                ret.append("          return response;\n");
+                ret.append("      },\n");
+                ret.append("      handleAs: 'text'\n");
+                ret.append("  });\n");
+                ret.append("}\n");
+                
                 ret.append("</script> \n");
             }
         }catch (Exception e) {
