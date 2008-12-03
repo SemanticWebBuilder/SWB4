@@ -25,7 +25,7 @@ public class ValueImp implements Value
     private static SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss"); 
     private final int type;
     Object value;
-    ValueImp(Object value,int type) throws ValueFormatException
+    ValueImp(Object value,int type)
     {        
         this.type=type;
         this.value=value;
