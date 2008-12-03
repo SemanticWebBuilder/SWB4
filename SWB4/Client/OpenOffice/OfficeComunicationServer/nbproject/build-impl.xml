@@ -319,6 +319,7 @@ is divided into following sections:
     <target depends="init" name="deps-jar" unless="no.deps">
         <ant antfile="${project.OfficeComunicationInterfaces}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.RepositoryManager}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.SWBBase}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.XMLRPCCommon}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.XMRPCServer}/build.xml" inheritall="false" target="jar"/>
     </target>
@@ -637,6 +638,7 @@ is divided into following sections:
     <target depends="init" name="deps-clean" unless="no.deps">
         <ant antfile="${project.OfficeComunicationInterfaces}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.RepositoryManager}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.SWBBase}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.XMLRPCCommon}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.XMRPCServer}/build.xml" inheritall="false" target="clean"/>
     </target>
