@@ -41,7 +41,7 @@ public final class RepositoryManager
                 String name=rep.getDescriptor(Repository.REP_NAME_DESC);
                 if(!repositories.containsKey(name))
                 {
-                    log.event("Adding repository "+ name +" with class "+clazz+" ...");
+                    log.event("Adding repository "+ name +" ...");
                     repositories.put(name, rep);
                 }
             }
