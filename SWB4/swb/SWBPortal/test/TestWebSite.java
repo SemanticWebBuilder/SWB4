@@ -195,11 +195,7 @@ public class TestWebSite {
             portlet.setPortletType(ptype);
             portlet.setTitle("Test");
             
-            PortletRef portletref=site.createPortletRef();
-            portletref.setActive(true);
-            portletref.setPortlet(portlet);
-            portletref.setPriority(3);
-            home.addPortletRef(portletref);            
+            home.addPortlet(portlet);            
             
         }
         
@@ -315,12 +311,7 @@ public class TestWebSite {
             portlet.setPortletType(ptype);
             portlet.setTitle("Banner");
             
-            PortletRef portletref=site.createPortletRef();
-            portletref.setActive(true);
-            portletref.setPortlet(portlet);
-            portletref.setPriority(3);
-            
-            home.addPortletRef(portletref);
+            home.addPortlet(portlet);
         } 
         
         if(site.getPortletType("Controls")==null)
@@ -338,12 +329,7 @@ public class TestWebSite {
             portlet.setPortletType(ptype);
             portlet.setTitle("Controls");
             
-            PortletRef portletref=site.createPortletRef();
-            portletref.setActive(true);
-            portletref.setPortlet(portlet);
-            portletref.setPriority(3);
-            
-            home.addPortletRef(portletref);
+            home.addPortlet(portlet);
         } 
         
         if(site.getPortletType("Menu")==null)
@@ -377,12 +363,7 @@ public class TestWebSite {
             portlet.setPortletType(ptype);
             portlet.setTitle("HtmlContent");
             
-            PortletRef portletref=site.createPortletRef();
-            portletref.setActive(true);
-            portletref.setPortlet(portlet);
-            portletref.setPriority(3);
-            
-            home.addPortletRef(portletref);
+            home.addPortlet(portlet);
         }  
         
         if(site.getPortletType("JSPResource")==null)
@@ -400,12 +381,7 @@ public class TestWebSite {
             portlet.setPortletType(ptype);
             portlet.setTitle("JSPResource");
             
-            PortletRef portletref=site.createPortletRef();
-            portletref.setActive(true);
-            portletref.setPortlet(portlet);
-            portletref.setPriority(3);
-            
-            home.addPortletRef(portletref);
+            home.addPortlet(portlet);
         }  
         
         if(site.getPortletType("TematicIndexXSL")==null)
@@ -423,12 +399,7 @@ public class TestWebSite {
             portlet.setPortletType(ptype);
             portlet.setTitle("TematicIndexXSL");
             
-            PortletRef portletref=site.createPortletRef();
-            portletref.setActive(true);
-            portletref.setPortlet(portlet);
-            portletref.setPriority(3);
-            
-            home.addPortletRef(portletref);
+            home.addPortlet(portlet);
         }  
         
         
@@ -447,12 +418,7 @@ public class TestWebSite {
             portlet.setPortletType(ptype);
             portlet.setTitle("FrameContent");
             
-            PortletRef portletref=site.createPortletRef();
-            portletref.setActive(true);
-            portletref.setPortlet(portlet);
-            portletref.setPriority(3);
-            
-            home.addPortletRef(portletref);
+            home.addPortlet(portlet);
         }  
         
         if(site.getPortletType("IFrameContent")==null)
@@ -470,12 +436,7 @@ public class TestWebSite {
             portlet.setPortletType(ptype);
             portlet.setTitle("IFrameContent");
             
-            PortletRef portletref=site.createPortletRef();
-            portletref.setActive(true);
-            portletref.setPortlet(portlet);
-            portletref.setPriority(3);
-            
-            home.addPortletRef(portletref);
+            home.addPortlet(portlet);
         }  
         
         
@@ -494,12 +455,7 @@ public class TestWebSite {
             portlet.setPortletType(ptype);
             portlet.setTitle("HelloXforms");
             
-            PortletRef portletref=site.createPortletRef();
-            portletref.setActive(true);
-            portletref.setPortlet(portlet);
-            portletref.setPriority(3);
-            
-            home.addPortletRef(portletref);
+            home.addPortlet(portlet);
         }   
         
         if(site.getPortletType("SWBASemObjectEditor")==null)
@@ -517,11 +473,7 @@ public class TestWebSite {
             portlet.setPortletType(ptype);
             portlet.setTitle("SWBASemObjectEditor");
             
-            PortletRef portletref=site.createPortletRef();
-            portletref.setActive(true);
-            portletref.setPortlet(portlet);
-            portletref.setPriority(3);
-            home.addPortletRef(portletref);            
+            home.addPortlet(portlet);
             
         }
         if(site.getPortletType("SWBASOPropRefEditor")==null)
@@ -538,12 +490,8 @@ public class TestWebSite {
             portlet.setPortletType(ptype);
             portlet.setTitle("SWBASOPropRefEditor");
             
-            PortletRef portletref=site.createPortletRef();
-            portletref.setActive(true);
-            portletref.setPortlet(portlet);
-            portletref.setPriority(3);
             WebPage page0=site.getWebPage("page0");
-            page0.addPortletRef(portletref);            
+            page0.addPortlet(portlet);            
             
         }
         
