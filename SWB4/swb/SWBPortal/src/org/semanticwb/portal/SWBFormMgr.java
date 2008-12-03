@@ -197,7 +197,7 @@ public class SWBFormMgr
         return ret;
     }
     
-    public SemanticObject processForm(HttpServletRequest request, HttpServletResponse response)
+    public SemanticObject processForm(HttpServletRequest request)
     {
         SemanticObject ret=m_obj;
         String smode=request.getParameter(PRM_MODE);
