@@ -805,8 +805,7 @@ public class SessionImp implements Session
     }
 
     public String getNamespacePrefix(String uri) throws NamespaceException, RepositoryException
-    {
-        NamespaceRegistryImp registry = new NamespaceRegistryImp();
+    {        
         return registry.getPrefix(uri);
     }
 
