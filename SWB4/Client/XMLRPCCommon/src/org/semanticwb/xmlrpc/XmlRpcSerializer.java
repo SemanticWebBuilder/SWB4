@@ -26,7 +26,7 @@ import org.jdom.xpath.XPath;
 public class XmlRpcSerializer {
 
     private static SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-    public static <T> T deserializeResponse(java.lang.Class<T> clazz, Document requestDocument) throws XmlRpcException, ParseException
+    public static Object deserializeResponse(java.lang.Class clazz, Document requestDocument) throws XmlRpcException, ParseException
     {
         try
         {
@@ -148,7 +148,7 @@ public class XmlRpcSerializer {
         }
         return newmethods;
     }
-    private static <T> T deserializeArray(Class<T> clazz, Element array) throws JDOMException, ParseException, XmlRpcException
+    private static Object deserializeArray(Class clazz, Element array) throws JDOMException, ParseException, XmlRpcException
     {
         if ( clazz.isArray() )
         {
@@ -173,16 +173,16 @@ public class XmlRpcSerializer {
                 }
                 i++;
             }
-            return clazz.cast(arrayToReturn);
+            return arrayToReturn;
         }
         else
         {
             throw new XmlRpcException("The value of return must be an array");
         }        
     }
-    private static <T> T deserializeObject(Class<T> clazz, Element eType) throws ParseException, JDOMException, XmlRpcException
+    private static Object deserializeObject(Class clazz, Element eType) throws ParseException, JDOMException, XmlRpcException
     {
-        T res = null;
+        Object res=null;
         String name = eType.getName();
         if ( name.equalsIgnoreCase("i4") || name.equalsIgnoreCase("int") )
         {
@@ -224,12 +224,12 @@ public class XmlRpcSerializer {
         return res;
 
     }
-    private static <T> T deserializeStruct(Class<T> clazz, Element struct) throws JDOMException, ParseException, XmlRpcException, XmlRpcException
+    private static Object deserializeStruct(Class clazz, Element struct) throws JDOMException, ParseException, XmlRpcException, XmlRpcException
     {
         List listMembers = XPath.selectNodes(struct, "./member");
         try
         {
-            T result = clazz.newInstance();
+            Object result = clazz.newInstance();
             for ( Object objMember : listMembers )
             {
                 Element eMember = ( Element ) objMember;
@@ -370,11 +370,11 @@ public class XmlRpcSerializer {
 
         }
     }
-    private static <T> T convertBoolean(Class<T> clazz, boolean data) throws XmlRpcException
+    private static Boolean convertBoolean(Class clazz, boolean data) throws XmlRpcException
     {
         if(clazz==Boolean.class || clazz==boolean.class)
         {
-            return ( T ) new Boolean(data);
+            return new Boolean(data);
         }
         else
         {
@@ -382,11 +382,11 @@ public class XmlRpcSerializer {
         }
     }
 
-    private static <T> T convertFloat(Class<T> clazz, float data) throws XmlRpcException
+    private static Float convertFloat(Class clazz, float data) throws XmlRpcException
     {
         if(clazz==Float.class || clazz==float.class)
         {
-            return ( T ) new Float(data);
+            return new Float(data);
         }
         else
         {
@@ -394,31 +394,31 @@ public class XmlRpcSerializer {
         }
     }
 
-    private static <T> T convertDouble(Class<T> clazz, double data) throws XmlRpcException
+    private static Double convertDouble(Class clazz, double data) throws XmlRpcException
     {
         if(clazz==Double.class || clazz==double.class)
         {
-            return ( T ) new Double(data);
+            return new Double(data);
         }
         else
         {
             throw new XmlRpcException("The data are incopatibles, can not be converted double to "+clazz.getName());
         }
     }
-    private static <T> T convertString(Class<T> clazz, String data) throws XmlRpcException
+    private static String convertString(Class clazz, String data) throws XmlRpcException
     {
         if(clazz==String.class)
         {
-            return ( T ) data;
+            return data;
         }
         throw new XmlRpcException("The data are incopatibles, can not be converted String to "+clazz.getName());
     }
 
-    private static <T> T convertInteger(Class<T> clazz, int data) throws XmlRpcException
+    private static Integer convertInteger(Class clazz, int data) throws XmlRpcException
     {
         if(clazz==Integer.class || clazz==int.class)
         {
-            return ( T ) new Integer(data);
+            return new Integer(data);
         }
         else
         {
@@ -437,11 +437,11 @@ public class XmlRpcSerializer {
         }
     }
 
-    private static <T> T convertDate(Class<T> clazz, Date data) throws XmlRpcException
+    private static Date convertDate(Class clazz, Date data) throws XmlRpcException
     {
         if ( clazz==data.getClass() )
         {
-            return ( T ) data;
+            return data;
         }
         throw new XmlRpcException("The data are incopatibles, can not be converted Date to "+clazz.getName());
     }
