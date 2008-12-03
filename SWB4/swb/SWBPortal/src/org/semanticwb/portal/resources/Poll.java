@@ -1125,6 +1125,7 @@ public class Poll extends GenericResource
             ret.append("</td>");
             ret.append("\n</tr>");
             
+            /*
             ret.append("\n<tr>");
             ret.append("\n<td class=\"datos\">"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_textcolor") + "</td>");
             ret.append("\n<td class=\"valores\">");
@@ -1140,8 +1141,11 @@ public class Poll extends GenericResource
             ret.append("<span id=\"placeHolder\"></span>");
             ret.append("</td> \n");
             ret.append("\n</tr>");
-            
-             
+             * */
+            ret.append("<script type=\"text/javascript\">");
+            ret.append(" var cp = new ColorPicker(); // DIV style ");
+            ret.append("</script>");
+                         
             ret.append("\n<tr>");
             ret.append("\n<td class=\"datos\">"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_otherTextcolor") + "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"1\">(" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_hexadecimal") + "):</font></td>");
             ret.append("\n<td>");
@@ -1149,6 +1153,8 @@ public class Poll extends GenericResource
             ret.append("\n<tr>");
             ret.append("\n<td class=\"valores\">");
             ret.append("\n<input type=\"text\" size=\"7\" maxlength=\"7\" id=\"textcolor\" name=\"textcolor\" value=\""+base.getAttribute("textcolor", "#000000").trim()+"\">");
+            ret.append("<A HREF=\"#\" onClick=\"cp.select(document.frmResource.textcolor,'pick2');return false;\" NAME=\"pick2\" ID=\"pick2\">Colores</A>");
+            ret.append("<SCRIPT LANGUAGE=\"JavaScript\">cp.writeDiv()</SCRIPT>");
             ret.append("</td>");
             ret.append("<td class=\"datos\">");
             ret.append("-"+paramRequest.getLocaleString("actual_color") + "</td><td bgcolor=\""+base.getAttribute("textcolor", "#000000")+"\" width=\"5\">&nbsp;</td>");
@@ -1284,7 +1290,7 @@ public class Poll extends GenericResource
             param.put("linkactual", base.getAttribute("textcolores", "#000000").trim().substring(1));
             ret.append(admResUtils.loadColorApplet(param));
              *  * */
-            
+            /*
             ret.append("<script type=\"text/javascript\">");
             ret.append("   dojo.require(\"dijit.ColorPalette\");");
             ret.append("   dojo.addOnLoad(function(){ ");
@@ -1295,9 +1301,14 @@ public class Poll extends GenericResource
             ret.append("   }); ");
             ret.append("</script>");
             ret.append("<span id=\"placeHolder1\"></span>");
+             * */
             ret.append("</td> \n");
             ret.append("\n</tr>");
                          
+            ret.append("<script type=\"text/javascript\">");
+            ret.append(" var cp1 = new ColorPicker(); // DIV style ");
+            ret.append("</script>");
+            
             ret.append("\n<tr>");
             ret.append("\n<td class=\"datos\">"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_otherTextcolor") + "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"1\">(" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_hexadecimal") + "):</font></td>");
             ret.append("\n<td>");
@@ -1305,6 +1316,8 @@ public class Poll extends GenericResource
             ret.append("\n<tr>");
             ret.append("\n<td class=\"valores\">");
             ret.append("\n<input type=\"text\" size=\"7\" maxlength=\"7\" id=\"textcolores\" name=\"textcolores\" value=\""+base.getAttribute("textcolores", "#000000").trim()+"\"/>");
+            ret.append("<A HREF=\"#\" onClick=\"cp1.select(document.frmResource.textcolores,'pick3');return false;\" NAME=\"pick3\" ID=\"pick3\">Colores</A>");
+            ret.append("<SCRIPT LANGUAGE=\"JavaScript\">cp1.writeDiv()</SCRIPT>");
             ret.append("</td>");
             ret.append("<td class=\"datos\">");
             ret.append("-"+paramRequest.getLocaleString("actual_color") + "</td><td bgcolor=\""+base.getAttribute("textcolores", "#000000")+"\" width=\"5\">&nbsp;</td>");
