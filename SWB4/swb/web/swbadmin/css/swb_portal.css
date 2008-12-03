@@ -1,0 +1,38 @@
+/* 
+    Document   : swb_portal
+    Created on : 3/12/2008, 09:18:39 PM
+    Author     : Administrador
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/* 
+   TODO customize this sample style
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+
+
+/* Gallery Styles */
+#motioncontainer {
+/*margin:0 auto;  Uncomment this line if you wish to center the gallery on page */
+width: 550px; /* Set to gallery width, in px or percentage */
+height: 130px; /* Set to gallery height */
+}
+#motioncontainer a img {
+border: 1px solid #cccccc; /* Set image border color */
+}
+#motioncontainer a:hover img {
+border: 1px solid navy; /* Set image border hover color */
+}
+#statusdiv {
+background-color: lightyellow;
+border: 1px solid gray;
+padding: 2px;
+position: absolute; /* Stop Editing Gallery Styles */
+left: 300px;
+visibility: visible;
+}
+#motioncontainer a:hover {
+color: red; /* Dummy definition to overcome IE bug */
+}
+/* End Gallery Styles */
