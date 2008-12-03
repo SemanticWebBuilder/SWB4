@@ -13,6 +13,9 @@ import javax.jcr.Repository;
 import javax.jcr.Session;
 import javax.jcr.SimpleCredentials;
 import javax.jcr.Workspace;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBUtils;
 
 /**
  *
@@ -20,12 +23,29 @@ import javax.jcr.Workspace;
  */
 public final class RepositoryManager
 {
-
+    static Logger log = SWBUtils.getLogger(RepositoryManager.class);
     private static Hashtable<String, Repository> repositories = new Hashtable<String, Repository>();
     private static Hashtable<String, URI> namespaces = new Hashtable<String, URI>();
     private static RepositoryManager instance = new RepositoryManager();
     private static HashSet<RepositoryListener> listeners = new HashSet<RepositoryListener>();
-
+    static
+    {
+        String repConfig=SWBPlatform.getEnv("swb/repositories","");
+        String[] repositoriesClasess=repConfig.split(",");
+        for(String clazz :  repositoriesClasess)
+        {
+            try
+            {
+                log.event("Initializing repository with class "+clazz+" ...");
+                Repository rep=(Repository)Class.forName(clazz).newInstance();
+                repositories.put(rep.getDescriptor(Repository.REP_NAME_DESC), rep);
+            }
+            catch(Exception e)
+            {
+                log.error(e);
+            }
+        }
+    }
     private RepositoryManager()
     {
     }
