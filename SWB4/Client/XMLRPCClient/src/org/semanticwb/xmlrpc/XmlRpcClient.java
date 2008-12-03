@@ -69,7 +69,7 @@ class XmlRpcClient
         Document responseDoc = request(requestDoc, attachments);
         try
         {
-            return deserializeResponse(clazz, responseDoc);
+            return (T)deserializeResponse(clazz, responseDoc);
         }
         catch ( ParseException pe )
         {
