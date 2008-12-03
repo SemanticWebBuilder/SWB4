@@ -53,11 +53,13 @@ public final class RepositoryImp implements Repository
 
     public RepositoryImp() throws RepositoryException
     {
+        log.event("Initializing repository "+namespace+" ...");
         boolean exists = false;
         for ( String name : listWorkspaces() )
         {
             if ( name.equals(defaultWorkspaceName) )
             {
+                log.event("Creating default Workspace "+ defaultWorkspaceName + " ...");
                 Workspace ws = SWBContext.createWorkspace(name, namespace);
                 if ( ws.getRoot() == null )
                 {
@@ -153,6 +155,7 @@ public final class RepositoryImp implements Repository
         {
             throw new RepositoryException("The name of repository can not be null or empty");
         }
+        log.debug("Creating workspace "+ name + " ...");
         Workspace ws = SWBContext.createWorkspace(name, namespace);
         Unstructured root = ws.createUnstructured();
         root.setName("jcr:root");        
