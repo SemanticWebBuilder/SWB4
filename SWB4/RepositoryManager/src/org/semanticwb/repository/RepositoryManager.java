@@ -38,7 +38,12 @@ public final class RepositoryManager
             {
                 log.event("Initializing repository with class "+clazz+" ...");
                 Repository rep=(Repository)Class.forName(clazz).newInstance();
-                repositories.put(rep.getDescriptor(Repository.REP_NAME_DESC), rep);
+                String name=rep.getDescriptor(Repository.REP_NAME_DESC);
+                if(!repositories.containsKey(name))
+                {
+                    log.event("Adding repository "+ name +" with class "+clazz+" ...");
+                    repositories.put(name, rep);
+                }
             }
             catch(Exception e)
             {
