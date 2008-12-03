@@ -1,6 +1,7 @@
 // ===================================================================
 // Author: Matt Kruse <matt@mattkruse.com>
 // WWW: http://www.mattkruse.com/
+// Color Picker
 // ===================================================================
 /* SOURCE FILE: AnchorPosition.js */
 function getAnchorPosition(anchorname){var useWindow=false;var coordinates=new Object();var x=0,y=0;var use_gebi=false, use_css=false, use_layers=false;if(document.getElementById){use_gebi=true;}else if(document.all){use_css=true;}else if(document.layers){use_layers=true;}if(use_gebi && document.all){x=AnchorPosition_getPageOffsetLeft(document.all[anchorname]);y=AnchorPosition_getPageOffsetTop(document.all[anchorname]);}else if(use_gebi){var o=document.getElementById(anchorname);x=AnchorPosition_getPageOffsetLeft(o);y=AnchorPosition_getPageOffsetTop(o);}else if(use_css){x=AnchorPosition_getPageOffsetLeft(document.all[anchorname]);y=AnchorPosition_getPageOffsetTop(document.all[anchorname]);}else if(use_layers){var found=0;for(var i=0;i<document.anchors.length;i++){if(document.anchors[i].name==anchorname){found=1;break;}}if(found==0){coordinates.x=0;coordinates.y=0;return coordinates;}x=document.anchors[i].x;y=document.anchors[i].y;}else{coordinates.x=0;coordinates.y=0;return coordinates;}coordinates.x=x;coordinates.y=y;return coordinates;}
@@ -56,3 +57,324 @@ function ColorPicker(){var windowMode = false;if(arguments.length==0){var divnam
 "#33FF33","#33FF66","#33FF99","#33FFCC","#33FFFF","#66FF00","#66FF33","#66FF66","#66FF99","#66FFCC","#66FFFF",
 "#99FF00","#99FF33","#99FF66","#99FF99","#99FFCC","#99FFFF","#CCFF00","#CCFF33","#CCFF66","#CCFF99","#CCFFCC",
 "#CCFFFF","#FFFF00","#FFFF33","#FFFF66","#FFFF99","#FFFFCC","#FFFFFF");var total = colors.length;var width = 18;var cp_contents = "";var windowRef =(windowMode)?"window.opener.":"";if(windowMode){cp_contents += "<HTML><HEAD><TITLE>Select Color</TITLE></HEAD>";cp_contents += "<BODY MARGINWIDTH=0 MARGINHEIGHT=0 LEFTMARGIN=0 TOPMARGIN=0><CENTER>";}cp_contents += "<TABLE BORDER=1 CELLSPACING=1 CELLPADDING=0>";var use_highlight =(document.getElementById || document.all)?true:false;for(var i=0;i<total;i++){if((i % width) == 0){cp_contents += "<TR>";}if(use_highlight){var mo = 'onMouseOver="'+windowRef+'ColorPicker_highlightColor(\''+colors[i]+'\',window.document)"';}else{mo = "";}cp_contents += '<TD BGCOLOR="'+colors[i]+'"><FONT SIZE="-3"><A HREF="#" onClick="'+windowRef+'ColorPicker_pickColor(\''+colors[i]+'\','+windowRef+'window.popupWindowObjects['+cp.index+']);return false;" '+mo+' STYLE="text-decoration:none;">&nbsp;&nbsp;&nbsp;</A></FONT></TD>';if( ((i+1)>=total) ||(((i+1) % width) == 0)){cp_contents += "</TR>";}}if(document.getElementById){var width1 = Math.floor(width/2);var width2 = width = width1;cp_contents += "<TR><TD COLSPAN='"+width1+"' BGCOLOR='#ffffff' ID='colorPickerSelectedColor'>&nbsp;</TD><TD COLSPAN='"+width2+"' ALIGN='CENTER' ID='colorPickerSelectedColorValue'>#FFFFFF</TD></TR>";}cp_contents += "</TABLE>";if(windowMode){cp_contents += "</CENTER></BODY></HTML>";}cp.populate(cp_contents+"\n");cp.offsetY = 25;cp.autoHide();return cp;}
+
+// ===================================================================
+// Color Picker
+// FIN
+// ===================================================================
+
+
+
+
+
+
+
+
+
+/***********************************************
+* CMotion Image Gallery- © Dynamic Drive DHTML code library (www.dynamicdrive.com)
+* Visit http://www.dynamicDrive.com for source code
+* This copyright notice must stay intact for legal use
+* Modified for autowidth and optional starting positions in
+* http://www.dynamicdrive.com/forums/showthread.php?t=11839 by jschuer1 8/5/06
+***********************************************/
+
+ //1) Set width of the "neutral" area in the center of the gallery.
+var restarea=6;
+ //2) Set top scroll speed in pixels. Script auto creates a range from 0 to top speed.
+var maxspeed=7;
+ //3) Set to maximum width for gallery - must be less than the actual length of the image train.
+var maxwidth=1000;
+ //4) Set to 1 for left start, 0 for right, 2 for center.
+var startpos=0;
+ //5) Set message to show at end of gallery. Enter "" to disable message.
+var endofgallerymsg='<span style="font-size: 11px;">End of Gallery</span>';
+
+function enlargeimage(path, optWidth, optHeight){ //function to enlarge image. Change as desired.
+var actualWidth=typeof optWidth!="undefined" ? optWidth : "600px" //set 600px to default width
+var actualHeight=typeof optHeight!="undefined" ? optHeight : "500px" //set 500px to  default height
+var winattributes="width="+actualWidth+",height="+actualHeight+",resizable=yes"
+window.open(path,"", winattributes)
+}
+
+////NO NEED TO EDIT BELOW THIS LINE////////////
+
+var iedom=document.all||document.getElementById, scrollspeed=0, movestate='', actualwidth='', cross_scroll, ns_scroll, statusdiv, loadedyes=0, lefttime, righttime;
+
+function ietruebody(){
+return (document.compatMode && document.compatMode!="BackCompat")? document.documentElement : document.body;
+}
+
+function creatediv(){
+statusdiv=document.createElement("div")
+statusdiv.setAttribute("id","statusdiv")
+document.body.appendChild(statusdiv)
+statusdiv=document.getElementById("statusdiv")
+statusdiv.innerHTML=endofgallerymsg
+}
+
+function positiondiv(){
+var mainobjoffset=getposOffset(crossmain, "left"),
+menuheight=parseInt(crossmain.offsetHeight),
+mainobjoffsetH=getposOffset(crossmain, "top");
+statusdiv.style.left=mainobjoffset+(menuwidth/2)-(statusdiv.offsetWidth/2)+"px";
+statusdiv.style.top=menuheight+mainobjoffsetH+"px";
+}
+
+function showhidediv(what){
+if (endofgallerymsg!="") {
+positiondiv();
+statusdiv.style.visibility=what;
+}
+}
+
+function getposOffset(what, offsettype){
+var totaloffset=(offsettype=="left")? what.offsetLeft: what.offsetTop;
+var parentEl=what.offsetParent;
+while (parentEl!=null){
+totaloffset=(offsettype=="left")? totaloffset+parentEl.offsetLeft : totaloffset+parentEl.offsetTop;
+parentEl=parentEl.offsetParent;
+}
+return totaloffset;
+}
+
+
+function moveleft(){
+if (loadedyes){
+movestate="left";
+if (iedom&&parseInt(cross_scroll.style.left)>(menuwidth-actualwidth)){
+cross_scroll.style.left=parseInt(cross_scroll.style.left)-scrollspeed+"px";
+showhidediv("hidden");
+}
+else
+showhidediv("visible");
+}
+lefttime=setTimeout("moveleft()",10);
+}
+
+function moveright(){
+if (loadedyes){
+movestate="right";
+if (iedom&&parseInt(cross_scroll.style.left)<0){
+cross_scroll.style.left=parseInt(cross_scroll.style.left)+scrollspeed+"px";
+showhidediv("hidden");
+}
+else
+showhidediv("visible");
+}
+righttime=setTimeout("moveright()",10);
+}
+
+function motionengine(e){
+var mainobjoffset=getposOffset(crossmain, "left"),
+dsocx=(window.pageXOffset)? pageXOffset: ietruebody().scrollLeft,
+dsocy=(window.pageYOffset)? pageYOffset : ietruebody().scrollTop,
+curposy=window.event? event.clientX : e.clientX? e.clientX: "";
+curposy-=mainobjoffset-dsocx;
+var leftbound=(menuwidth-restarea)/2;
+var rightbound=(menuwidth+restarea)/2;
+if (curposy>rightbound){
+scrollspeed=(curposy-rightbound)/((menuwidth-restarea)/2) * maxspeed;
+clearTimeout(righttime);
+if (movestate!="left") moveleft();
+}
+else if (curposy<leftbound){
+scrollspeed=(leftbound-curposy)/((menuwidth-restarea)/2) * maxspeed;
+clearTimeout(lefttime);
+if (movestate!="right") moveright();
+}
+else
+scrollspeed=0;
+}
+
+function contains_ns6(a, b) {
+if (b!==null)
+while (b.parentNode)
+if ((b = b.parentNode) == a)
+return true;
+return false;
+}
+
+function stopmotion(e){
+if (!window.opera||(window.opera&&e.relatedTarget!==null))
+if ((window.event&&!crossmain.contains(event.toElement)) || (e && e.currentTarget && e.currentTarget!= e.relatedTarget && !contains_ns6(e.currentTarget, e.relatedTarget))){
+clearTimeout(lefttime);
+clearTimeout(righttime);
+movestate="";
+}
+}
+
+function fillup(){
+if (iedom){
+crossmain=document.getElementById? document.getElementById("motioncontainer") : document.all.motioncontainer;
+if(typeof crossmain.style.maxWidth!=='undefined')
+crossmain.style.maxWidth=maxwidth+'px';
+menuwidth=crossmain.offsetWidth;
+cross_scroll=document.getElementById? document.getElementById("motiongallery") : document.all.motiongallery;
+actualwidth=document.getElementById? document.getElementById("trueContainer").offsetWidth : document.all['trueContainer'].offsetWidth;
+if (startpos)
+cross_scroll.style.left=(menuwidth-actualwidth)/startpos+'px';
+crossmain.onmousemove=function(e){
+motionengine(e);
+}
+
+crossmain.onmouseout=function(e){
+stopmotion(e);
+showhidediv("hidden");
+}
+}
+loadedyes=1
+if (endofgallerymsg!=""){
+creatediv();
+positiondiv();
+}
+if (document.body.filters)
+onresize()
+}
+window.onload=fillup;
+
+onresize=function(){
+if (typeof motioncontainer!=='undefined'&&motioncontainer.filters){
+motioncontainer.style.width="0";
+motioncontainer.style.width="";
+motioncontainer.style.width=Math.min(motioncontainer.offsetWidth, maxwidth)+'px';
+}
+menuwidth=crossmain.offsetWidth;
+cross_scroll.style.left=startpos? (menuwidth-actualwidth)/startpos+'px' : 0;
+}
+
+/***********************************************
+* CMotion Image Gallery- © Dynamic Drive DHTML code library (www.dynamicdrive.com)
+* FIN
+***********************************************/
+ 
+
+
+
+
+
+
+/***********************************************
+* Collapsible div
+* Permite abrir y cerrar un div colapsándolo y expandiéndolo
+***********************************************/
+/* 
+ Ejemplo 1.
+
+    <a href="javascript:;" onmousedown="slidedown('mydiv');">Slide Down</a> |
+    <a href="javascript:;" onmousedown="slideup('mydiv');">Slide Up</a>	
+    <div id="mydiv" style="display:none; overflow:hidden; height:385px;">
+        <h3>This is a test!<br>Can you see me?</h3>
+        <h3>This is a test!<br>Can you see me?</h3>
+        <h3>This is a test!<br>Can you see me?</h3>
+        <h3>This is a test!<br>Can you see me?</h3>
+        <h3>This is a test!<br>Can you see me?</h3>
+        <h3>This is a test!<br>Can you see me?</h3>
+    </div>
+
+  Ejemplo 2.
+    <img id="ctrTogle" src="mas.jpg" alt="" onmousedown="collapseDivMgr('mydiv',this.id);" />
+    <div id="mydiv" style="display:none; overflow:hidden; height:385px;" class="divs">
+        <h3>This is a test!<br>Can you see me?</h3>
+        <h3>This is a test!<br>Can you see me?</h3>
+        <h3>This is a test!<br>Can you see me?</h3>
+        <h3>This is a test!<br>Can you see me?</h3>
+        <h3>This is a test!<br>Can you see me?</h3>
+        <h3>This is a test!<br>Can you see me?</h3>
+    </div>
+
+
+*/
+
+
+var timerlen = 5;
+var slideAniLen = 500;
+var timerID = new Array();
+var startTime = new Array();
+var obj = new Array();
+var endHeight = new Array();
+var moving = new Array();
+var dir = new Array();
+
+function slidedown(objname){
+  if(moving[objname])
+	return false;
+ 
+  if(document.getElementById(objname).style.display != "none")
+	return false; // cannot slide down something that is already visible
+ 
+  moving[objname] = true;
+  dir[objname] = "down";
+  startslide(objname);
+  
+  return true;
+}
+ 
+function slideup(objname){
+  if(moving[objname])
+	return false;
+ 
+  if(document.getElementById(objname).style.display == "none")
+	return false; // cannot slide up something that is already hidden
+ 
+  moving[objname] = true;
+  dir[objname] = "up";
+  startslide(objname);
+  
+  return true;
+}
+
+function startslide(objname){
+  obj[objname] = document.getElementById(objname);
+ 
+  endHeight[objname] = parseInt(obj[objname].style.height);
+  startTime[objname] = (new Date()).getTime();
+ 
+  if(dir[objname] == "down"){
+	obj[objname].style.height = "1px";
+  }
+ 
+  obj[objname].style.display = "block";
+ 
+  timerID[objname] = setInterval('slidetick(\'' + objname + '\');',timerlen);
+}
+
+function slidetick(objname){
+  var elapsed = (new Date()).getTime() - startTime[objname];
+ 
+  if (elapsed > slideAniLen)
+	endSlide(objname)
+  else {
+	var d =Math.round(elapsed / slideAniLen * endHeight[objname]);
+	if(dir[objname] == "up")
+	  d = endHeight[objname] - d;
+ 
+	obj[objname].style.height = d + "px";
+  }
+ 
+  return;
+}
+
+function endSlide(objname){
+  clearInterval(timerID[objname]);
+ 
+  if(dir[objname] == "up")
+	obj[objname].style.display = "none";
+ 
+  obj[objname].style.height = endHeight[objname] + "px";
+ 
+  delete(moving[objname]);
+  delete(timerID[objname]);
+  delete(startTime[objname]);
+  delete(endHeight[objname]);
+  delete(obj[objname]);
+  delete(dir[objname]);
+ 
+  return;
+}
+
+/***********************************************
+* Collapsible div
+* FIN
+***********************************************/
+	
