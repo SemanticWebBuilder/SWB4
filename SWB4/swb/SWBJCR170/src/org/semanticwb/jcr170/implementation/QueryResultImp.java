@@ -10,6 +10,8 @@ import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.query.QueryResult;
 import javax.jcr.query.RowIterator;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
 
 /**
@@ -18,7 +20,7 @@ import org.semanticwb.model.SWBContext;
  */
 public class QueryResultImp implements QueryResult
 {
-
+    static Logger log=SWBUtils.getLogger(QueryResultImp.class);
     private final List<String> nodes;
     private final String workspaceName;
     private final SessionImp session;    

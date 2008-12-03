@@ -41,7 +41,9 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
 import org.jdom.output.XMLOutputter;
+import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.jcr170.implementation.util.NCName;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.platform.SemanticClass;
@@ -57,7 +59,7 @@ import org.xml.sax.SAXException;
  */
 public class SessionImp implements Session
 {
-
+    static Logger log=SWBUtils.getLogger(SessionImp.class);
     static public final String NL = System.getProperty("line.separator");
     private static NamespaceRegistryImp registry = new NamespaceRegistryImp();
     private static final String SYSTEM_VIEW_NAMESPACE = "http://www.jcp.org/jcr/sv/1.0";

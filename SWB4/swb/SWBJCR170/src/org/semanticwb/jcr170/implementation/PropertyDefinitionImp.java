@@ -9,6 +9,8 @@ import javax.jcr.Value;
 import javax.jcr.nodetype.NodeType;
 import javax.jcr.nodetype.PropertyDefinition;
 import javax.jcr.version.OnParentVersionAction;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.platform.SemanticProperty;
 
 /**
@@ -17,7 +19,7 @@ import org.semanticwb.platform.SemanticProperty;
  */
 public class PropertyDefinitionImp implements PropertyDefinition
 {
-
+    static Logger log=SWBUtils.getLogger(PropertyDefinitionImp.class);
     private final String name;
     private int requiredType = PropertyType.UNDEFINED;
     private boolean multiple = true;
@@ -135,5 +137,32 @@ public class PropertyDefinitionImp implements PropertyDefinition
     public String toString()
     {
         return name;
+    }
+   
+    @Override
+    public int hashCode()
+    {
+        int hash = 7;
+        hash = 29 * hash + (this.name != null ? this.name.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final PropertyDefinitionImp other = (PropertyDefinitionImp) obj;
+        if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name))
+        {
+            return false;
+        }
+        return true;
     }
 }

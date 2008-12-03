@@ -20,7 +20,7 @@ public class NodeDefinitionImp implements NodeDefinition
     private NodeType getDefaultPrimaryType=null;
     private boolean allowsSameNameSiblings=true;
     private NodeType getDeclaringNodeType;
-    private String name;
+    private String name="*";
     private int onParentVerion=OnParentVersionAction.VERSION;
     private boolean autocreated,mandatory,isProtected;
     NodeDefinitionImp(SemanticObject object)

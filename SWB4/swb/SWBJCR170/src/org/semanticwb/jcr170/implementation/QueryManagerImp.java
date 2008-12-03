@@ -4,11 +4,14 @@
  */
 package org.semanticwb.jcr170.implementation;
 
+
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.query.InvalidQueryException;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
 
 /**
@@ -17,6 +20,7 @@ import org.semanticwb.model.SWBContext;
  */
 public final class QueryManagerImp implements QueryManager
 {
+    static Logger log=SWBUtils.getLogger(QueryManagerImp.class);
     private final String workspaceName;
     private final SessionImp session;
     QueryManagerImp(SessionImp session,String workspaceName)
