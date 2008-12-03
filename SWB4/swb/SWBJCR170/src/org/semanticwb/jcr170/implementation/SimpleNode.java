@@ -58,6 +58,7 @@ public class SimpleNode implements Node
     static Logger log = SWBUtils.getLogger(SimpleNode.class);
     private String path;
     private String id;
+    private boolean modified=false;
     static final String DEFAULT_PRIMARY_NODE_TYPE_NAME = "nt:unstructured";
     protected static final String NOT_SUPPORTED_YET = "Not supported yet.";
     protected static final String WAS_NOT_FOUND = " was not found";
@@ -447,6 +448,7 @@ public class SimpleNode implements Node
         if (property != null)
         {
             property.setValue(value);
+            modified=true;
         }
         else
         {
@@ -456,6 +458,7 @@ public class SimpleNode implements Node
             }
             property = addProperty(name);
             property.setValue(value);
+            modified=true;
         }
         return property;
     }
@@ -755,7 +758,7 @@ public class SimpleNode implements Node
 
     public boolean isModified()
     {
-        return true;
+        return modified;
     }
 
     public boolean isSame(Item otherItem) throws RepositoryException
@@ -772,6 +775,7 @@ public class SimpleNode implements Node
         for (SimpleNode child : this.childs.values())
         {
             child.saveProperties();
+            child.modified=false;
         }
         for (SemanticClass mixinClazz : this.mixins)
         {
@@ -796,6 +800,7 @@ public class SimpleNode implements Node
                 prop.setNew(false);
             }
         }
+        modified=false;
     }
 
     private void removeChilds() throws RepositoryException, SWBException
@@ -844,6 +849,8 @@ public class SimpleNode implements Node
             createChilds();
             saveProperties();
             node.save();
+            
+            modified=false;
         }
         catch (SWBException swbe)
         {
@@ -899,6 +906,8 @@ public class SimpleNode implements Node
         session.checksLock(this);
         parent.removedchilds.add(this);
         parent.childs.remove(this.id);
+        parent.modified=true;
+        this.modified=true;
     }
 
     protected SessionImp getSessionImp()
@@ -1078,6 +1087,7 @@ public class SimpleNode implements Node
             {
                 SemanticClass primaryNodeClazz = root.getSemanticClass(primaryNodeTypeName);
                 SimpleNode tmp = new SimpleNode(session, nameNode, primaryNodeClazz, this, 0, UUID.randomUUID().toString());
+                modified=true;
                 return tmp;
             }
             catch (SWBException swbe)
@@ -1122,10 +1132,22 @@ public class SimpleNode implements Node
 
     public Version getBaseVersion() throws UnsupportedRepositoryOperationException, RepositoryException
     {
-        if (isVersionable())
+        if (isVersionable() && node!=null)
         {
+            BaseNode baseVersion=node.getBaseVersion();
+            if(baseVersion!=null)
+            {
+                try
+                {
+                    return new VersionImp(baseVersion, node.getHistoryNode(), session, this);
+                }
+                catch(SWBException e)
+                {
+                    throw new RepositoryException(e);
+                }
+            }
         }
-        throw new UnsupportedRepositoryOperationException(NOT_SUPPORTED_YET);
+        throw new UnsupportedRepositoryOperationException("The node is new or is not versionable");
     }
 
     public void restore(String versionName, boolean arg1) throws VersionException, ItemExistsException, UnsupportedRepositoryOperationException, LockException, InvalidItemStateException, RepositoryException
@@ -1246,7 +1268,23 @@ public class SimpleNode implements Node
 
     public Version checkin() throws VersionException, UnsupportedRepositoryOperationException, InvalidItemStateException, LockException, RepositoryException
     {
-        throw new UnsupportedRepositoryOperationException("The node must be saved before, because has changes or is new");
+        if(node==null || this.isModified())
+        {
+            throw new UnsupportedRepositoryOperationException("The node must be saved before, because has changes or is new");
+        }
+        else
+        {
+            try
+            {
+                BaseNode version=node.checkin();
+                return new VersionImp(version, node.getHistoryNode(), session, this);
+            }
+            catch(SWBException e)
+            {
+                throw new RepositoryException(e);
+            }
+        }
+
     }
 
     public void checkout() throws UnsupportedRepositoryOperationException, LockException, RepositoryException
