@@ -39,7 +39,9 @@ import javax.jcr.nodetype.NodeType;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionException;
 import javax.jcr.version.VersionHistory;
+import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticProperty;
@@ -52,7 +54,7 @@ import org.semanticwb.repository.BaseNode;
  */
 public class SimpleNode implements Node
 {
-
+    static Logger log=SWBUtils.getLogger(SimpleNode.class);
     private String path;
     private String id;
     static final String DEFAULT_PRIMARY_NODE_TYPE_NAME = "nt:unstructured";
@@ -1342,16 +1344,7 @@ public class SimpleNode implements Node
         throw new UnsupportedOperationException(NOT_SUPPORTED_YET);
     }
 
-    @Override
-    public boolean equals(Object obj)
-    {
-        boolean equals = false;
-        if (obj instanceof SimpleNode)
-        {
-            equals = ((SimpleNode) obj).id.equals(this.id);
-        }
-        return equals;
-    }
+    
 
     @Override
     public String toString()
@@ -1360,9 +1353,30 @@ public class SimpleNode implements Node
     }
 
     @Override
+    public boolean equals(Object obj)
+    {
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final SimpleNode other = (SimpleNode) obj;
+        if ((this.id == null) ? (other.id != null) : !this.id.equals(other.id))
+        {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
     public int hashCode()
     {
-        return this.id.hashCode();
+        int hash = 7;
+        hash = 37 * hash + (this.id != null ? this.id.hashCode() : 0);
+        return hash;
     }
 }   
     

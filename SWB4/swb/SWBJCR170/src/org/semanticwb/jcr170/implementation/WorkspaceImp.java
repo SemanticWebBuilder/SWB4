@@ -26,6 +26,8 @@ import javax.jcr.observation.ObservationManager;
 import javax.jcr.query.QueryManager;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionException;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
 import org.xml.sax.ContentHandler;
 
@@ -35,7 +37,7 @@ import org.xml.sax.ContentHandler;
  */
 public final class WorkspaceImp implements Workspace
 {
-
+    static Logger log=SWBUtils.getLogger(WorkspaceImp.class);
     private static final String NOT_SUPPORTED_YET = "Not supported yet.";
     private final SessionImp session;
     private final String workspaceName;

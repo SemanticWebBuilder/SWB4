@@ -10,10 +10,7 @@ import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.RDFNode;
-import com.hp.hpl.jena.rdf.model.Resource;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import javax.jcr.ItemExistsException;
 import javax.jcr.ItemNotFoundException;
@@ -30,6 +27,8 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.Namespace;
 import org.jdom.xpath.XPath;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.repository.BaseNode;
 import org.semanticwb.repository.Workspace;
@@ -40,6 +39,7 @@ import org.semanticwb.repository.Workspace;
  */
 public class QueryImp implements Query
 {
+    static Logger log=SWBUtils.getLogger(QueryImp.class);
     private static final String NL = System.getProperty("line.separator") ; 
     public static final String SPARQL = "SPARQL";
     private final String workspaceName;

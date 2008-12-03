@@ -15,13 +15,16 @@ import javax.jcr.PropertyType;
 import javax.jcr.RepositoryException;
 import javax.jcr.Value;
 import javax.jcr.ValueFormatException;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 
 /**
  *
  * @author victor.lorenzana
  */
 public class ValueImp implements Value
-{      
+{
+    static Logger log=SWBUtils.getLogger(ValueImp.class);
     private static SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss"); 
     private final int type;
     Object value;

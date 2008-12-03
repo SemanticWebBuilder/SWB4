@@ -14,6 +14,8 @@ import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.SimpleCredentials;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.repository.Unstructured;
 import org.semanticwb.repository.Workspace;
@@ -24,7 +26,7 @@ import org.semanticwb.repository.Workspace;
  */
 public final class RepositoryImp implements Repository
 {
-
+    static Logger log=SWBUtils.getLogger(RepositoryImp.class);
     private static Hashtable<String, String> descriptors = new Hashtable<String, String>();
 
     static

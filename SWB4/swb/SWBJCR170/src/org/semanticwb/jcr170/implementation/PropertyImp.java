@@ -27,7 +27,8 @@ import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.nodetype.NoSuchNodeTypeException;
 import javax.jcr.nodetype.PropertyDefinition;
 import javax.jcr.version.VersionException;
-import org.semanticwb.SWBException;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticLiteral;
 import org.semanticwb.platform.SemanticObject;
@@ -40,7 +41,7 @@ import org.semanticwb.repository.BaseNode;
  */
 public final class PropertyImp implements Property
 {
-
+    static Logger log=SWBUtils.getLogger(PropertyImp.class);
     private static final String NOT_SUPPORTED_YET = "Not supported yet.";
     private boolean isNew = true;
     private boolean isModified = true;
