@@ -8,6 +8,9 @@ package org.semanticwb.office.comunication;
 import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
+import org.semanticwb.repository.RepositoryManager;
 import org.semanticwb.xmlrpc.XMLRPCServlet;
 import static org.semanticwb.office.comunication.Base64.*;
 
@@ -17,15 +20,19 @@ import static org.semanticwb.office.comunication.Base64.*;
  */
 public abstract class OfficeServlet extends XMLRPCServlet
 {
-    
+    static Logger log = SWBUtils.getLogger(OfficeServlet.class);
     private static String REALM = "Secure Area";
     private static String PREFIX_BASIC = "Basic ";    
 
     @Override
     public void init() throws ServletException
-    {        
+    {
+        log.event("Adding mappingType OfficeDocument...");
         addMappingType("OfficeDocument", OfficeDocument.class);
-        addMappingType("OfficeApplication", OfficeApplication.class);                
+        log.event("Adding mappingType OfficeApplication...");
+        addMappingType("OfficeApplication", OfficeApplication.class);
+        log.event("Initializing Repository Manager...");
+        RepositoryManager.getInstance();
     }  
     
     private static String getPassword(String userpassDecoded) throws IOException
