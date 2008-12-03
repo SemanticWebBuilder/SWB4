@@ -27,6 +27,7 @@ import static org.junit.Assert.*;
  */
 public class DocumentRepoteTest
 {
+    private static final String URL_GATEWAY = "http://localhost:8084/SemWB4/GatewayOffice";
 
     public DocumentRepoteTest()
     {
@@ -58,7 +59,7 @@ public class DocumentRepoteTest
     {
         try
         {
-            IOpenOfficeApplication application = XmlRpcProxyFactory.newInstance(IOpenOfficeApplication.class, new URI("http://localhost:8084/TestRPC/GatewayOffice"));
+            IOpenOfficeApplication application = XmlRpcProxyFactory.newInstance(IOpenOfficeApplication.class, new URI(URL_GATEWAY));
             application.setUser("victor");
             application.setPassword("victor");
             String[] repNames=application.getRepositories();
@@ -83,7 +84,7 @@ public class DocumentRepoteTest
     {
         try
         {
-            IOpenOfficeApplication application = XmlRpcProxyFactory.newInstance(IOpenOfficeApplication.class, new URI("http://localhost:8084/TestRPC/GatewayOffice"));
+            IOpenOfficeApplication application = XmlRpcProxyFactory.newInstance(IOpenOfficeApplication.class, new URI(URL_GATEWAY));
             application.setUser("victor");
             application.setPassword("victor");
             String[] repNames=application.getRepositories();
