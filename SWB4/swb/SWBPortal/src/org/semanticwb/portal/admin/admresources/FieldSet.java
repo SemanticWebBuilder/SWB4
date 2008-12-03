@@ -4,6 +4,7 @@
  */
 package org.semanticwb.portal.admin.admresources;
 
+import java.util.ArrayList;
 import org.semanticwb.portal.admin.admresources.lib.*;
 import org.w3c.dom.*;
 import org.semanticwb.Logger;
@@ -21,7 +22,7 @@ public class FieldSet extends WBContainerFE {
     protected Node tag = null;
     protected Portlet base = null;
     FormFE form=null;
-
+    
     public FieldSet(String id) {
         this.id = id;
     }
@@ -122,7 +123,7 @@ public class FieldSet extends WBContainerFE {
         }
     }
 
-    /**
+    /** 
      * Crea objetos html de acuerdo a tags del xml de la administraci�n de los recursos
      * Creates html objects according with the tags of xml admin resources
      */
@@ -137,30 +138,39 @@ public class FieldSet extends WBContainerFE {
                     if (type != null) {
                         if (type.equalsIgnoreCase("TEXT")) {
                             TextFE textfe = new TextFE(tag);
+                            textfe.setAdmDBConnMgr(form.getAdmDBConnMgr());
                             this.add(textfe);
                         } else if (type.equalsIgnoreCase("PASSWORD")) {
                             PasswordFE passwordfe = new PasswordFE(tag);
+                            passwordfe.setAdmDBConnMgr(form.getAdmDBConnMgr());
                             this.add(passwordfe);
                         } else if (type.equalsIgnoreCase("FILE")) {
                             FileFE filefe = new FileFE(tag);
+                            filefe.setAdmDBConnMgr(form.getAdmDBConnMgr());
                             this.add(filefe);
                         } else if (type.equalsIgnoreCase("CHECKBOX")) {
                             CheckBoxFE checkboxfe = new CheckBoxFE(tag);
+                            checkboxfe.setAdmDBConnMgr(form.getAdmDBConnMgr());
                             this.add(checkboxfe);
                         } else if (type.equalsIgnoreCase("RADIO")) {
                             RadioFE radiofe = new RadioFE(tag);
+                            radiofe.setAdmDBConnMgr(form.getAdmDBConnMgr());
                             this.add(radiofe);
                         } else if (type.equalsIgnoreCase("SUBMIT")) {
                             SubmitFE submitfe = new SubmitFE(tag, form);
+                            submitfe.setAdmDBConnMgr(form.getAdmDBConnMgr());
                             this.add(submitfe);
                         } else if (type.equalsIgnoreCase("RESET")) {
                             ResetFE resetfe = new ResetFE(tag);
+                            resetfe.setAdmDBConnMgr(form.getAdmDBConnMgr());
                             this.add(resetfe);
                         } else if (type.equalsIgnoreCase("HIDDEN")) {
                             HiddenFE hiddenfe = new HiddenFE(tag);
+                            hiddenfe.setAdmDBConnMgr(form.getAdmDBConnMgr());
                             this.add(hiddenfe);
                         } else if (type.equalsIgnoreCase("BUTTON")) {
                             ButtonFE buttonfe = new ButtonFE(tag);
+                            buttonfe.setAdmDBConnMgr(form.getAdmDBConnMgr());
                             this.add(buttonfe);
                         }
                     }
@@ -168,35 +178,43 @@ public class FieldSet extends WBContainerFE {
                     if (tag.getNodeName().equalsIgnoreCase("SELECT")) {
                         SelectFE selectfe = new SelectFE(tag);
                         selectfe = (SelectFE) addChildsFE(tag, selectfe);
+                        selectfe.setAdmDBConnMgr(form.getAdmDBConnMgr());
                         this.add(selectfe);
                     } else if (tag.getNodeName().equalsIgnoreCase("TEXTAREA")) {
                         TextAreaFE textareafe = new TextAreaFE(tag);
+                        textareafe.setAdmDBConnMgr(form.getAdmDBConnMgr());
                         this.add(textareafe);
                     } else if (tag.getNodeName().equalsIgnoreCase("IMG")) {
                         ImgFE imgfe = new ImgFE(tag);
+                        imgfe.setAdmDBConnMgr(form.getAdmDBConnMgr());
                         this.add(imgfe);
                     } else if (tag.getNodeName().equalsIgnoreCase("MAP")) {
                         MapFE mapfe = new MapFE(tag);
                         mapfe.setAdmDBConnMgr(this.getAdmDBConnMgr());
                         mapfe = (MapFE) addChildsMapFE(tag, mapfe);
+                        mapfe.setAdmDBConnMgr(form.getAdmDBConnMgr());
                         this.add(mapfe);
                     } else if (tag.getNodeName().equalsIgnoreCase("APPLET")) {
                         AppletFE appletfe = new AppletFE(tag);
                         appletfe.setAdmDBConnMgr(this.getAdmDBConnMgr());
                         appletfe = (AppletFE) addChildsAppletFE(tag, appletfe);
+                        appletfe.setAdmDBConnMgr(form.getAdmDBConnMgr());
                         this.add(appletfe);
                     } else if (tag.getNodeName().equalsIgnoreCase("CALENDAR")) {
                         CalendarFE calendarfe = new CalendarFE(tag);
+                        calendarfe.setAdmDBConnMgr(form.getAdmDBConnMgr());
                         this.add(calendarfe);
                     } else if ((tag.getNodeName().equalsIgnoreCase("statictext") || tag.getNodeName().equalsIgnoreCase("script"))) {
                         //HtmlFE htmlfe = new HtmlFE(tag);
                         //TODO:check if the base needs to be passed to other tags, if yes it need to be declared in the WBAdmResource interface
                         HtmlFE htmlfe = new HtmlFE(tag, base);
+                        htmlfe.setAdmDBConnMgr(form.getAdmDBConnMgr());
                         this.add(htmlfe);
                     } else if (tag.getNodeName().equalsIgnoreCase("fieldset")) {
                         //HtmlFE htmlfe = new HtmlFE(tag);
                         //TODO:check if the base needs to be passed to other tags, if yes it need to be declared in the WBAdmResource interface
                         FieldSet fieldset = new FieldSet(tag, base, form);
+                        fieldset.setAdmDBConnMgr(form.getAdmDBConnMgr());
                         this.add(fieldset);
                     }
                 }
@@ -269,6 +287,5 @@ public class FieldSet extends WBContainerFE {
         }
         return obj;
     }   
-    
     
 }
