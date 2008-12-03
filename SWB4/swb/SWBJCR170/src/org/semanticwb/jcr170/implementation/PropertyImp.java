@@ -41,7 +41,8 @@ import org.semanticwb.repository.BaseNode;
  */
 public final class PropertyImp implements Property
 {
-    static Logger log=SWBUtils.getLogger(PropertyImp.class);
+
+    static Logger log = SWBUtils.getLogger(PropertyImp.class);
     private static final String NOT_SUPPORTED_YET = "Not supported yet.";
     private boolean isNew = true;
     private boolean isModified = true;
@@ -55,7 +56,7 @@ public final class PropertyImp implements Property
 
     PropertyImp(SimpleNode parent, SemanticClass clazz, String name, PropertyDefinitionImp propertyDefinition)
     {
-        if ( name == null )
+        if (name == null)
         {
             throw new IllegalArgumentException();
         }
@@ -73,8 +74,11 @@ public final class PropertyImp implements Property
 
     public void setValue(Value value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        Value[] values = {value};
-        setValue(values);
+        Value[] valuesToInsert =
+        {
+            value
+        };
+        setValue(valuesToInsert);
 
     }
 
@@ -92,11 +96,11 @@ public final class PropertyImp implements Property
 
     public void setValue(Value[] value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        if ( !getDefinition().isMultiple() && value.length > 1 )
+        if (!getDefinition().isMultiple() && value.length > 1)
         {
             throw new ValueFormatException("The property " + this.name + "  is not multiple");
         }
-        else if ( getDefinition().isProtected() )
+        else if (getDefinition().isProtected())
         {
             throw new ValueFormatException("The property " + this.name + " is protected");
         }
@@ -105,24 +109,24 @@ public final class PropertyImp implements Property
             int type = PropertyType.UNDEFINED;
             int requiredType = getDefinition().getRequiredType();
             boolean errorRequiredType = false;
-            for ( Value ovalue : value )
+            for (Value ovalue : value)
             {
                 type = ovalue.getType();
-                if ( requiredType == 0 )
+                if (requiredType == 0)
                 {
                     type = requiredType;
                 }
-                if ( type != requiredType )
+                if (type != requiredType)
                 {
                     errorRequiredType = true;
                     break;
                 }
             }
-            if ( errorRequiredType )
+            if (errorRequiredType)
             {
                 throw new ValueFormatException("A value is " + PropertyType.nameFromValue(type) + " and the property is defined as " + PropertyType.nameFromValue(requiredType));
             }
-            for ( Value ovalue : value )
+            for (Value ovalue : value)
             {
                 this.values.clear();
                 this.values.add(ovalue);
@@ -138,7 +142,7 @@ public final class PropertyImp implements Property
 
     public void setValue(String[] value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        for ( String svalue : value )
+        for (String svalue : value)
         {
             setValue(factory.createValue(svalue));
         }
@@ -176,11 +180,11 @@ public final class PropertyImp implements Property
 
     public Value getValue() throws ValueFormatException, RepositoryException
     {
-        if ( values.size() == 0 && parent.node != null )
+        if (values.size() == 0 && parent.node != null)
         {
             loadPropertiesFromDataBase();
         }
-        if ( values.size() > 0 )
+        if (values.size() > 0)
         {
             return values.get(0);
         }
@@ -190,10 +194,10 @@ public final class PropertyImp implements Property
     private void loadPropertiesFromDataBase()
     {
         BaseNode node = parent.node;
-        if ( node.existsProperty(node.getSemanticObject().getSemanticClass(), name) )
+        if (node.existsProperty(node.getSemanticObject().getSemanticClass(), name))
         {
             SemanticProperty property = node.getSemanticProperty(name, clazz);
-            if ( property.isDataTypeProperty() )
+            if (property.isDataTypeProperty())
             {
                 Iterator<SemanticLiteral> literals = node.getSemanticObject().listLiteralProperties(property);
                 while (literals.hasNext())
@@ -212,7 +216,7 @@ public final class PropertyImp implements Property
 
     public Value[] getValues() throws ValueFormatException, RepositoryException
     {
-        if ( values.size() == 0 && parent.node != null )
+        if (values.size() == 0 && parent.node != null)
         {
             loadPropertiesFromDataBase();
         }
@@ -222,7 +226,7 @@ public final class PropertyImp implements Property
     public String getString() throws ValueFormatException, RepositoryException
     {
         Value value = getValue();
-        if ( value != null )
+        if (value != null)
         {
             return value.getString();
         }
@@ -237,7 +241,7 @@ public final class PropertyImp implements Property
     public long getLong() throws ValueFormatException, RepositoryException
     {
         Value value = getValue();
-        if ( value == null )
+        if (value == null)
         {
             throw new ValueFormatException();
         }
@@ -247,7 +251,7 @@ public final class PropertyImp implements Property
     public double getDouble() throws ValueFormatException, RepositoryException
     {
         Value value = getValue();
-        if ( value == null )
+        if (value == null)
         {
             throw new ValueFormatException();
         }
@@ -257,7 +261,7 @@ public final class PropertyImp implements Property
     public Calendar getDate() throws ValueFormatException, RepositoryException
     {
         Value value = getValue();
-        if ( value == null )
+        if (value == null)
         {
             return null;
         }
@@ -267,7 +271,7 @@ public final class PropertyImp implements Property
     public boolean getBoolean() throws ValueFormatException, RepositoryException
     {
         Value value = getValue();
-        if ( value == null )
+        if (value == null)
         {
             throw new ValueFormatException();
         }
@@ -370,7 +374,6 @@ public final class PropertyImp implements Property
 
     public void accept(ItemVisitor arg0) throws RepositoryException
     {
-
     }
 
     public void save() throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException

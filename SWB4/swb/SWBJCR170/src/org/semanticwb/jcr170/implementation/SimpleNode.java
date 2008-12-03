@@ -54,7 +54,8 @@ import org.semanticwb.repository.BaseNode;
  */
 public class SimpleNode implements Node
 {
-    static Logger log=SWBUtils.getLogger(SimpleNode.class);
+
+    static Logger log = SWBUtils.getLogger(SimpleNode.class);
     private String path;
     private String id;
     static final String DEFAULT_PRIMARY_NODE_TYPE_NAME = "nt:unstructured";
@@ -102,10 +103,11 @@ public class SimpleNode implements Node
         {
             parent.childs.put(this.id, this);
         }
-        try
+
+        String[] supertypes = root.getSuperTypes(clazz);
+        for (String superType : supertypes)
         {
-            String[] supertypes = root.getSuperTypes(clazz);
-            for (String superType : supertypes)
+            try
             {
                 SemanticClass superTypeClazz = root.getSemanticClass(superType);
                 if (superTypeClazz.equals(BaseNode.vocabulary.mix_Referenceable) || superTypeClazz.isSubClass(BaseNode.vocabulary.mix_Referenceable))
@@ -130,11 +132,11 @@ public class SimpleNode implements Node
                     mixins.add(superTypeClazz);
                 }
             }
+            catch (SWBException e)
+            {
+                log.error(e);
+            }
         }
-        catch (SWBException e)
-        {
-        }
-
     }
 
     SimpleNode(BaseNode node, SessionImp session, SimpleNode parent, String id) throws RepositoryException
@@ -391,7 +393,7 @@ public class SimpleNode implements Node
             mixins.add(mixinClazz);
         }
         catch (SWBException e)
-        {
+        {            
             throw new NoSuchNodeTypeException(e);
         }
     }
@@ -657,16 +659,17 @@ public class SimpleNode implements Node
 
     public boolean isLockedByParent() throws RepositoryException
     {
-        boolean isLockedByParent=false;
-        if(parent!=null)
+        boolean isLockedByParent = false;
+        if (parent != null)
         {
-            if(parent.isLocked() && parent.isDeepLock())
+            if (parent.isLocked() && parent.isDeepLock())
             {
                 return true;
             }
         }
         return isLockedByParent;
-    }    
+    }
+
     public boolean isLocked() throws RepositoryException
     {
         boolean isLocked = false;
@@ -678,7 +681,7 @@ public class SimpleNode implements Node
                 return true;
             }
         }
-        if(isLockedByParent())
+        if (isLockedByParent())
         {
             return true;
         }
@@ -1343,8 +1346,6 @@ public class SimpleNode implements Node
     {
         throw new UnsupportedOperationException(NOT_SUPPORTED_YET);
     }
-
-    
 
     @Override
     public String toString()
