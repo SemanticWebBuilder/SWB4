@@ -6,6 +6,7 @@ package org.semanticwb.xmlrpc;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -299,20 +300,6 @@ public abstract class XMLRPCServlet extends HttpServlet
         value.addContent(struct);
         addElement(struct, "faultCode", e.hashCode());
         addElement(struct, "faultString", messageError.toString());
-        /*String xmlString = "<?xml version=\"1.0\" encoding=\"utf-8\"?><methodResponse><fault><value><struct><member><name>faultCode</name>" +
-                "<value><int>" + e.hashCode() + "</int></value></member><member><name>faultString</name>" +
-                "<value><string>" + messageError + "</string></value></member></struct>" +
-                "</value></fault></methodResponse>";
-
-        Reader stringReader = new StringReader(xmlString);
-        SAXBuilder builder = new SAXBuilder();
-        return builder.build(stringReader);*/
-        XMLOutputter out=new XMLOutputter();
-        try
-        {
-            out.output(doc, System.out);
-        }
-        catch(Exception ue){}
         return doc;
 
     }
