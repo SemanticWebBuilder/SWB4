@@ -53,7 +53,7 @@ public final class RepositoryImp implements Repository
 
     public RepositoryImp() throws RepositoryException
     {
-        log.event("Initializing repository "+namespace+" ...");
+        log.event("Initializing repository with namespace "+namespace+" ...");
         boolean exists = false;
         for ( String name : listWorkspaces() )
         {
