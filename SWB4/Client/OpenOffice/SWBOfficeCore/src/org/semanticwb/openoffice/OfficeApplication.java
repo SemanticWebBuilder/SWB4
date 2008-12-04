@@ -94,8 +94,9 @@ public abstract class OfficeApplication
                 }
             }
             catch ( Exception e )
-            {
+            {                
                 throw new WBException("Error al tratar de verificar compatibilidad de versiones entre el publicador y el servidor", e);
+                
             }
         }
         return application;
