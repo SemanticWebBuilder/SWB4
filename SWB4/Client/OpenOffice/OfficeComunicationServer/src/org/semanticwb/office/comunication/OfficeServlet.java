@@ -30,8 +30,7 @@ public abstract class OfficeServlet extends XMLRPCServlet
         log.event("Adding mappingType OfficeDocument...");
         addMappingType("OfficeDocument", OfficeDocument.class);
         log.event("Adding mappingType OfficeApplication...");
-        addMappingType("OfficeApplication", OfficeApplication.class);
-        log.event("Initializing Repository Manager...");
+        addMappingType("OfficeApplication", OfficeApplication.class);        
         RepositoryManagerLoader.getInstance();
     }  
     
