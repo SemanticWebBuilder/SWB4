@@ -19,7 +19,8 @@ import javax.jcr.Value;
 import javax.jcr.lock.LockException;
 import javax.jcr.version.Version;
 import org.semanticwb.office.interfaces.IOfficeDocument;
-import org.semanticwb.repository.RepositoryManager;
+import org.semanticwb.repository.RepositoryManagerLoader;
+import org.semanticwb.repository.SWBRepositoryManager;
 import org.semanticwb.xmlrpc.Part;
 import org.semanticwb.xmlrpc.XmlRpcObject;
 
@@ -39,13 +40,13 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     private static final String CM_PART = "cm:Part";
     private static final String JCR_CONTENT = "jcr:content";
     private static final String NT_RESOURCE = "nt:resource";
-
+    private static final RepositoryManagerLoader loader=RepositoryManagerLoader.getInstance();
     public String publish(String title, String description, String repositoryName, String categoryID, String type) throws Exception
     {
         Session session = null;
         try
         {
-            session = RepositoryManager.openSession(repositoryName, "", "");
+            session = loader.openSession(repositoryName, "", "");
             Node categoryNode = session.getNodeByUUID(categoryID);
             if (!categoryNode.isLocked())
             {
@@ -151,7 +152,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         Session session = null;
         try
         {
-            session = RepositoryManager.openSession("", "", "");
+            session = loader.openSession("", "", "");
             Node nodeContent = session.getNodeByUUID(contentId);
             if (!nodeContent.isLocked())
             {
@@ -257,7 +258,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         Session session = null;
         try
         {
-            session = RepositoryManager.openSession("", "", "");
+            session = loader.openSession("", "", "");
             session.getNodeByUUID(contentId);
             exists = true;
         }

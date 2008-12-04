@@ -10,7 +10,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.repository.RepositoryManager;
+import org.semanticwb.repository.RepositoryManagerLoader;
 import org.semanticwb.xmlrpc.XMLRPCServlet;
 import static org.semanticwb.office.comunication.Base64.*;
 
@@ -32,7 +32,7 @@ public abstract class OfficeServlet extends XMLRPCServlet
         log.event("Adding mappingType OfficeApplication...");
         addMappingType("OfficeApplication", OfficeApplication.class);
         log.event("Initializing Repository Manager...");
-        RepositoryManager.getInstance();
+        RepositoryManagerLoader.getInstance();
     }  
     
     private static String getPassword(String userpassDecoded) throws IOException
