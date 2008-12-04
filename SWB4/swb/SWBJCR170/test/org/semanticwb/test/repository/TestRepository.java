@@ -130,12 +130,12 @@ public class TestRepository
             content.setProperty("cm:description", "Contenido de prueba");
             UUID = newNode.getUUID();
             root.save();
-            Version version=content.checkin();
+            content.checkin();
             content.checkout();
             content.setProperty("cm:title", "Contenido 2");
-            content.setProperty("cm:description", "Contenido de prueba 2");            
-            version=content.checkin();
-            
+            content.setProperty("cm:description", "Contenido de prueba 2");
+            content.save();
+            content.checkin();            
             if ( UUID == null || UUID.equals("") )
             {
                 Assert.fail("UUDI incorrecto");
