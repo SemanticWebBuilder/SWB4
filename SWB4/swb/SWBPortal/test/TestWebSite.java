@@ -14,7 +14,6 @@ import org.semanticwb.model.Dns;
 import org.semanticwb.model.Language;
 import org.semanticwb.model.PortletType;
 import org.semanticwb.model.Portlet;
-import org.semanticwb.model.PortletRef;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.Template;
 import org.semanticwb.model.TemplateRef;
@@ -700,6 +699,12 @@ public class TestWebSite {
             ArrayList arr=SWBPortal.getAppLanguages();
             System.out.println(arr);
     }     
+
+    @Test
+    public void setXml()
+    {
+
+    }
       
     
     //@Test
