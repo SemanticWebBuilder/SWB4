@@ -16,9 +16,7 @@ import javax.jcr.version.Version;
 import javax.jcr.version.VersionIterator;
 import org.semanticwb.office.interfaces.CategoryInfo;
 import org.semanticwb.office.interfaces.IOfficeApplication;
-import org.semanticwb.repository.RepositoryManager;
 import org.semanticwb.repository.RepositoryManagerLoader;
-import org.semanticwb.repository.SWBRepositoryManager;
 import org.semanticwb.xmlrpc.XmlRpcObject;
 
 /**
