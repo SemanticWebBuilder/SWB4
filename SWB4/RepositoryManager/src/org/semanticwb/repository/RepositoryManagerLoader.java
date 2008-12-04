@@ -33,8 +33,11 @@ public class RepositoryManagerLoader
             {
                 log.event("Adding RepositoryManager with class "+ clazz +" ...");
                 RepositoryManager manager=(RepositoryManager)Class.forName(clazz).newInstance();
-                manager.init();
-                repositoryManagers.put(manager.getName(),manager);
+                if(!repositoryManagers.containsKey(manager.getName()))
+                {
+                    manager.init();
+                    repositoryManagers.put(manager.getName(),manager);
+                }
             }
             catch(Throwable e)
             {
