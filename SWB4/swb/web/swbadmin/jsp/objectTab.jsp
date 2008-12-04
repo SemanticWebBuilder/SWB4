@@ -8,89 +8,62 @@
     String id=request.getParameter("suri");
     SemanticOntology ont=SWBPlatform.getSemanticMgr().getOntology();
     com.hp.hpl.jena.rdf.model.Resource res=ont.getResource(id);
+    System.out.println("suri:"+id);
     if(res==null)return;
     SemanticClass cls=ont.getSemanticObjectClass(res);
     GenericObject obj=ont.getGenericObject(id,cls);
-    //String title=obj.getSemanticObject().getProperty(SWBContext.getVocabulary().title);
-    
-    //Validar menu principal
-    WebPage menup=SWBContext.getAdminWebSite().getWebPage("WBAd_mnu_Main");
-    if(obj instanceof WebPage && ((WebPage)obj).isChildof(menup))
-    {
-%>
-        <iframe src ="<%=((WebPage)obj).getUrl()%>" width="100%" height="100%" frameborder="0"></iframe>
-<%
-    }else
-    //Otro        
-    {
-        out.println("<div dojoType=\"dijit.layout.TabContainer\" id=\""+id+"/tab2\" _tabPosition=\"bottom\" _selectedChild=\"btab1\">");
 
-        Iterator<ObjectBehavior> obit=SWBComparator.sortSortableObject(SWBContext.getVocabulary().swbxf_ObjectBehavior.listGenericInstances(true));
-        while(obit.hasNext())
+    out.println("<div dojoType=\"dijit.layout.TabContainer\" id=\""+id+"/tab2\" _tabPosition=\"bottom\" _selectedChild=\"btab1\">");
+
+    Iterator<ObjectBehavior> obit=SWBComparator.sortSortableObject(SWBContext.getVocabulary().swbxf_ObjectBehavior.listGenericInstances(true));
+    while(obit.hasNext())
+    {
+        ObjectBehavior ob=obit.next();
+        String title=ob.getTitle(lang);
+        DisplayObject dpobj=ob.getDisplayObject();
+        SemanticObject interf=ob.getInterface();
+        boolean refresh=ob.isRefreshOnShow();
+        String url=ob.getURL();
+        System.out.println("ob:"+ob.getTitle(lang)+" "+ob.getDisplayObject()+" "+ob.getInterface()+" "+ob.getURL());
+
+        String params="suri="+URLEncoder.encode(obj.getURI());
+        Iterator<ResourceParameter> prmit=ob.listParams();
+        while(prmit.hasNext())
         {
-            ObjectBehavior ob=obit.next();
-            String title=ob.getTitle(lang);
-            DisplayObject dpobj=ob.getDisplayObject();
-            SemanticObject interf=ob.getInterface();
-            boolean refresh=ob.isRefreshOnShow();
-            String url=ob.getURL();
-            System.out.println("ob:"+ob.getTitle(lang)+" "+ob.getDisplayObject()+" "+ob.getInterface()+" "+ob.getURL());
-
-            String params="suri="+URLEncoder.encode(obj.getURI());
-            Iterator<ResourceParameter> prmit=ob.listParams();
-            while(prmit.hasNext())
+            ResourceParameter rp=prmit.next();
+            params+="&"+rp.getName()+"="+rp.getValue().getEncodedURI();
+        }
+        System.out.println("params:"+params);
+        //Genericos
+        boolean addDiv=false;
+        if(dpobj==null)
+        {
+            if(interf==null)
             {
-                ResourceParameter rp=prmit.next();
-                params+="&"+rp.getName()+"="+rp.getValue().getEncodedURI();
-            }
-            System.out.println("params:"+params);
-            //Genericos
-            if(dpobj==null)
+                addDiv=true;
+            }else
             {
-                if(interf==null)
+                SemanticClass scls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(interf.getURI());
+                if(scls!=null)
                 {
-                    out.println("<div dojoType=\"dijit.layout.ContentPane\" title=\""+title+"\" style=\"padding:10px;\" refreshOnShow=\""+refresh+"\" href=\""+url+"?"+params+"\"></div>");
-                }else
-                {
-                    SemanticClass scls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(interf.getURI());
-                    if(scls!=null)
+                    if(scls.getObjectClass().isInstance(obj))
                     {
-                        if(scls.getObjectClass().isInstance(obj))
-                        {
-                            out.println("<div dojoType=\"dijit.layout.ContentPane\" title=\""+title+"\" style=\"padding:10px;\" refreshOnShow=\""+refresh+"\" href=\""+url+"?"+params+"\"></div>");
-                        }
+                        addDiv=true;
                     }
                 }
             }
         }
+        if(addDiv)
+        {
+            out.println("<div dojoType=\"dojox.layout.ContentPane\" title=\""+title+"\" style=\"padding:10px;\" refreshOnShow=\""+refresh+"\" href=\""+url+"?"+params+"\" executeScripts=\"true\"></div>");
+        }
+    }
 %>
 
 <%        
         String buri="/swb/swb/SWBAdmin/WBAd_Home/_rid/1/_mto/3";
         buri+="?suri="+obj.getSemanticObject().getEncodedURI();
         SWBVocabulary voc=SWBContext.getVocabulary();
-        
-        if(obj instanceof PortletRefable)
-        {
-            String auri=buri;
-            auri+="&sprop="+voc.swb_hasPortletRef.getEncodedURI();
-            auri+="&spropref="+voc.swb_portlet.getEncodedURI();
-            //System.out.println("auri:"+auri);            
-%>
-<div dojoType="dijit.layout.ContentPane" title="Contenidos" style=" padding:10px;" refreshOnShow="false" href="<%=auri%>"></div>
-<%            
-        }
-        
-        if(obj instanceof TemplateRefable)
-        {
-            String auri=buri;
-            auri+="&sprop="+voc.swb_hasTemplateRef.getEncodedURI();
-            auri+="&spropref="+voc.swb_template.getEncodedURI();
-            //System.out.println("auri:"+auri);
-%>
-<div dojoType="dijit.layout.ContentPane" title="Plantillas" style=" padding:10px;" refreshOnShow="false" href="<%=auri%>"></div>
-<%            
-        }
         
         if(obj instanceof PFlowRefable)
         {
@@ -139,37 +112,6 @@
 <div dojoType="dijit.layout.ContentPane" title="Bitácora" style=" padding:10px;" refreshOnShow="false" href=""></div>
 <%            
         }
-        
-        String auxid=null;
-        if(cls.getName().equals("Template"))auxid="WBAd_sys_Templates";
-        if(cls.getName().equals("Portlet"))auxid="WBAd_sys_Resources";
-        if(cls.getName().equals("PortletType"))auxid="WBAd_sys_ResourceType";
-        if(cls.getName().equals("WebPage"))auxid="WBAd_sys_Topics";
-        if(cls.getName().equals("WebSite"))auxid="WBAd_sys_TopicMaps";
-        if(auxid!=null)
-        {
-            WebPage aux=SWBContext.getAdminWebSite().getWebPage(auxid);
-            if(aux!=null)
-            {
-                Iterator<WebPage> it=aux.listVisibleChilds(null);
-                while(it.hasNext())
-                {
-                    WebPage tab=it.next();
-                    System.out.println("tab:"+tab);
-%>
 
-    <div id_="btab1" dojoType="dijit.layout.ContentPane" title="<%=tab.getTitle()%>" style=" padding:10px; " refreshOnShow="false" _href="/swb/swbadmin/jsp/SemObjectEditor.jsp?suri=<%=URLEncoder.encode(obj.getURI())%>">
-<!--    
-        <iframe src ="<%=tab.getUrl()%>?tm=<%=obj.getSemanticObject().getModel().getName()%>&tp=<%=obj.getId()%>&id=<%=obj.getId()%>&act=edit" width="100%" height="100%" frameborder="0"></iframe>
--->        
-    </div><!-- end:info btab1 -->
-<%
-                
-                }
-            }
-        }
-%>
-</div><!-- end Bottom TabContainer -->
-<%
-    }
+    out.println("</div><!-- end Bottom TabContainer -->");
 %>

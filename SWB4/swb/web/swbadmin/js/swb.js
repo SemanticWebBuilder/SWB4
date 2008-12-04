@@ -233,10 +233,11 @@
           var newTab = dijit.byId(objid);
           if(newTab==null)
           {
-              newTab = new dijit.layout.ContentPane(
+              newTab = new dojox.layout.ContentPane(
               {
                   id: objid,
                   closeable:'true',
+                  executeScripts:'true',
                   onClose: function()
                   {
                       var ret=true;
@@ -246,11 +247,11 @@
                           var d=dijit.byId(objid+"2");
                           if(d)
                           {
-                            var arr=d.getChildren();
-                            for (var n = 0; n < arr.length; n++)
-                            {
-                                arr[n].setContent(null);
-                            }
+                              var arr=d.getChildren();
+                              for (var n = 0; n < arr.length; n++)
+                              {
+                                  arr[n].setContent(null);
+                              }
                           }
                       }
                       return ret;

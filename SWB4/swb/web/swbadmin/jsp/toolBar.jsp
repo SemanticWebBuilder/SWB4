@@ -18,7 +18,7 @@
                 out.println("		</li>");
             }else
             {
-                out.println("            <li dojoType=\"dijit.MenuItem\" iconClass=\"swbIconWebPage\" onclick=\"addNewTab('"+child.getURI()+"','"+child.getTitle()+"');\">"+child.getTitle()+"</li>");
+                out.println("            <li dojoType=\"dijit.MenuItem\" iconClass=\"swbIconWebPage\" onclick=\"addNewTab('"+child.getURI()+"','"+child.getTitle()+"','"+SWBPlatform.getContextPath()+"/swbadmin/jsp/menuTab.jsp"+"');\">"+child.getTitle()+"</li>");
             }
         }
    }

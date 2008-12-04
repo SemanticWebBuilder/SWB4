@@ -34,7 +34,7 @@
         SWBFormMgr frm=new SWBFormMgr(cls,ref,null);
         frm.addHiddenParameter("sprop", sprop);
 
-        SemanticObject obj=frm.processForm(request, response);
+        SemanticObject obj=frm.processForm(request);
         if(obj!=null)
         {
             if(smode.equals(SWBFormMgr.MODE_CREATE))
@@ -65,7 +65,7 @@
     {
         SemanticObject obj=ont.getSemanticObject(suri);
         SWBFormMgr frm=new SWBFormMgr(obj, null,SWBFormMgr.MODE_EDIT);
-        frm.processForm(request, response);
+        frm.processForm(request);
         frm.setAction("/swb/swbadmin/jsp/SemObjectEditor.jsp");
         out.println(frm.renderForm());
      }
