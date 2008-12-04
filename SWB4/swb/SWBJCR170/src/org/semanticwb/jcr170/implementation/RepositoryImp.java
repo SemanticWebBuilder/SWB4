@@ -59,7 +59,7 @@ public final class RepositoryImp implements Repository
         {
             if ( name.equals(defaultWorkspaceName) )
             {
-                log.event("Creating default Workspace "+ defaultWorkspaceName + " ...");
+                log.event("Creating a Default Workspace with name "+ defaultWorkspaceName + " ...");
                 Workspace ws = SWBContext.createWorkspace(name, namespace);
                 if ( ws.getRoot() == null )
                 {
