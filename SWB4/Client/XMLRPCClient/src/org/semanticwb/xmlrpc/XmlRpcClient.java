@@ -65,7 +65,7 @@ class XmlRpcClient
                 throw new XmlRpcException("The attachment '" + attachment.getName() + "' does not exist");
             }
         }
-        Document requestDoc = serializeRequest(methodName, parameters);        
+        Document requestDoc = serializeRequest(methodName, parameters);           
         Document responseDoc = request(requestDoc, attachments);
         try
         {
