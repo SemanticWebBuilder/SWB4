@@ -300,6 +300,7 @@ public abstract class XMLRPCServlet extends HttpServlet
         value.addContent(struct);
         addElement(struct, "faultCode", e.hashCode());
         addElement(struct, "faultString", messageError.toString());
+        log.debug(e);
         return doc;
 
     }
