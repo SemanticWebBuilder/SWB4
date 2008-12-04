@@ -23,7 +23,7 @@ public final class SWBRepositoryManager implements RepositoryManager
 {
     private static Logger log = SWBUtils.getLogger(SWBRepositoryManager.class);
     private RepositoryImp repository;
-    private SWBRepositoryManager() throws SWBException,RepositoryException
+    public SWBRepositoryManager() throws SWBException,RepositoryException
     {
         repository=new RepositoryImp();
     }
