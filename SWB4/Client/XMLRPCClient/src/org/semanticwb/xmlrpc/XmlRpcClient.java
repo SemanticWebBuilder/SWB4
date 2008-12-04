@@ -69,6 +69,13 @@ class XmlRpcClient
         Document responseDoc = request(requestDoc, attachments);
         try
         {
+            XMLOutputter out=new XMLOutputter();
+            out.output(responseDoc, System.out);
+        }
+        catch(Exception e){}
+        try
+        {
+            
             return (T)deserializeResponse(clazz, responseDoc);
         }
         catch ( ParseException pe )
