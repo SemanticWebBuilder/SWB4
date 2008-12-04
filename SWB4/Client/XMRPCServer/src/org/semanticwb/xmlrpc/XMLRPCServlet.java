@@ -87,12 +87,12 @@ public abstract class XMLRPCServlet extends HttpServlet
             {
                 try
                 {
-                    Document docResponse = this.getException(cne);
+                    Document docResponse = XMLRPCServlet.getException(cne);
                     sendResponse(response, docResponse);
                 }
                 catch ( IOException ioeSendResponse )
                 {
-                    Document docResponse = this.getException(ioeSendResponse);
+                    Document docResponse = XMLRPCServlet.getException(ioeSendResponse);
                     sendResponse(response, docResponse);
                 }
             }
@@ -101,7 +101,7 @@ public abstract class XMLRPCServlet extends HttpServlet
         {
             try
             {
-                Document docResponse = this.getException(jde);
+                Document docResponse = XMLRPCServlet.getException(jde);
                 sendResponse(response, docResponse);
             }
             catch ( Exception ex )
