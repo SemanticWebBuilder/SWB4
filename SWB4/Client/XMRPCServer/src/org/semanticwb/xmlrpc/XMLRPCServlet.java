@@ -6,8 +6,6 @@ package org.semanticwb.xmlrpc;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -15,6 +13,7 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
+
 import javax.servlet.ServletException;
 import javax.servlet.ServletInputStream;
 import javax.servlet.ServletOutputStream;
@@ -28,6 +27,8 @@ import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 import org.jdom.xpath.XPath;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 import static org.semanticwb.xmlrpc.XmlRpcSerializer.*;
 
 /**
@@ -36,7 +37,7 @@ import static org.semanticwb.xmlrpc.XmlRpcSerializer.*;
  */
 public abstract class XMLRPCServlet extends HttpServlet
 {
-
+    private static Logger log = SWBUtils.getLogger(XMLRPCServlet.class);
     private static final String RETURN = "\r\n";
     private static Hashtable<String, Object> cacheObjects = new Hashtable<String, Object>();
     private static final String PREFIX_PROPERTY_PATH = "org.semanticwb.xmlrpc.";
@@ -244,6 +245,30 @@ public abstract class XMLRPCServlet extends HttpServlet
         return methods;
     }
 
+    private static void addElement(Element element,String name,int value) throws JDOMException, IOException
+    {
+        Element emember=new Element("member");
+        Element ename=new Element("name");
+        ename.setText(name);
+        Element evalue=new Element("value");
+        Element eint=new Element("int");
+        eint.setText(String.valueOf(value));
+        element.addContent(emember);
+        emember.addContent(ename);
+        emember.addContent(evalue);
+    }
+    private static void addElement(Element element,String name,String value) throws JDOMException, IOException
+    {
+        Element emember=new Element("member");
+        Element ename=new Element("name");
+        ename.setText(name);
+        Element evalue=new Element("value");
+        Element eint=new Element("int");
+        eint.setText(value);
+        element.addContent(emember);
+        emember.addContent(ename);
+        emember.addContent(evalue);
+    }
     private static Document getException(Exception e) throws JDOMException, IOException
     {
         StringBuilder messageError = new StringBuilder(e.getLocalizedMessage() + RETURN);
@@ -260,14 +285,34 @@ public abstract class XMLRPCServlet extends HttpServlet
                 messageError.append(element.toString() + RETURN);
             }
         }
-        String xmlString = "<?xml version=\"1.0\" encoding=\"utf-8\"?><methodResponse><fault><value><struct><member><name>faultCode</name>" +
+
+        Document doc=new Document();
+        Element methodResponse=new Element("methodResponse");
+        doc.addContent(methodResponse);
+        Element fault=new Element("fault");
+        methodResponse.addContent(fault);
+        Element value=new Element("value");
+        Element struct=new Element("struct");
+        fault.addContent(value);
+        value.addContent(struct);
+        addElement(struct, "faultCode", e.hashCode());
+        addElement(struct, "faultString", messageError.toString());
+        /*String xmlString = "<?xml version=\"1.0\" encoding=\"utf-8\"?><methodResponse><fault><value><struct><member><name>faultCode</name>" +
                 "<value><int>" + e.hashCode() + "</int></value></member><member><name>faultString</name>" +
                 "<value><string>" + messageError + "</string></value></member></struct>" +
                 "</value></fault></methodResponse>";
 
         Reader stringReader = new StringReader(xmlString);
         SAXBuilder builder = new SAXBuilder();
-        return builder.build(stringReader);
+        return builder.build(stringReader);*/
+        XMLOutputter out=new XMLOutputter();
+        try
+        {
+            out.output(doc, System.out);
+        }
+        catch(Exception ue){}
+        return doc;
+
     }
 
     private static Document getDocument(byte[] document) throws JDOMException, IOException
