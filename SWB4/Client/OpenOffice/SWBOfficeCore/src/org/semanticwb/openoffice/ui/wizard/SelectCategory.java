@@ -62,8 +62,15 @@ public class SelectCategory extends WizardPage
             }
         }
         catch ( Exception wbe )
-        {
-            JOptionPane.showMessageDialog(this, wbe.getLocalizedMessage(), getDescription(), JOptionPane.OK_OPTION);
+        {    
+            String message=wbe.getLocalizedMessage();
+            if(wbe.getCause()!=null)
+            {
+                Throwable cause=wbe.getCause();
+                message+="\r\n"+ cause.getMessage();
+            }
+            JOptionPane.showMessageDialog(this, message , getDescription(), JOptionPane.OK_OPTION);            
+            System.exit(0);
         }
         if ( this.jTreeCategory.getRowCount() > 0 )
         {
