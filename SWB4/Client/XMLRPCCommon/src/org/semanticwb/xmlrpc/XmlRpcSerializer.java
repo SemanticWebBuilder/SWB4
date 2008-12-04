@@ -51,7 +51,6 @@ public class XmlRpcSerializer {
             else
             {
                 return deserializeObject(clazz, param);
-
             }
         }
         catch ( JDOMException jde )
@@ -217,9 +216,20 @@ public class XmlRpcSerializer {
         {
             res = deserializeStruct(clazz, eType);
         }
+        else if ( name.equalsIgnoreCase("param") ||  name.equalsIgnoreCase("value"))
+        {
+            if(eType.getChildren().size()>0)
+            {
+                res=deserializeObject(clazz, (Element)eType.getChildren().get(0));
+            }
+            else
+            {
+                return null;
+            }
+        }
         else
         {
-            res = null;
+            return null;
         }
         return res;
 
