@@ -13,7 +13,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class DnsBase extends GenericObjectBase implements Traceable,Descriptiveable,WebPageable
+public class DnsBase extends GenericObjectBase implements WebPageable,Descriptiveable,Traceable
 {
     public static SWBVocabulary vocabulary=SWBContext.getVocabulary();
 

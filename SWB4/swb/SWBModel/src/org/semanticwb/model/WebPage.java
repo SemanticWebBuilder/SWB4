@@ -144,7 +144,7 @@ public class WebPage extends WebPageBase
         if (tpacssclass!=null && tpacssclass.length() > 0) ret.append("<span " + tpacssclass + ">");
         else if (cssclass != null && cssclass.length() > 0) ret.append("<span " + cssclass + ">");
         if (selectcolor != null && selectcolor.length() > 0) ret.append("<font " + selectcolor + ">");
-        ret.append(this.getTitle(language));
+        ret.append(this.getDisplayName(language));
         if (selectcolor != null && selectcolor.length() > 0) ret.append("</font>");
         if ((tpacssclass!=null && tpacssclass.length() > 0) || (cssclass != null && cssclass.length() > 0)) ret.append("</span>");
             
@@ -159,12 +159,12 @@ public class WebPage extends WebPageBase
                     if (links.equals("true") && tp.isActive())
                     {
                         ret.insert(0, separator);
-                        ret.insert(0, "<a href=\"" + tp.getUrl() + "\" " + cssclass + " "+target+">" + tp.getTitle(language) + "</a>");
+                        ret.insert(0, "<a href=\"" + tp.getUrl() + "\" " + cssclass + " "+target+">" + tp.getDisplayName(language) + "</a>");
                     }
                     else if(active==null || (tp.isActive() && active!=null && !active.toLowerCase().trim().equals("true")))
                     {
                         ret.insert(0, separator);
-                        ret.insert(0, tp.getTitle(language));
+                        ret.insert(0, tp.getDisplayName(language));
                     }
                 }
                 if (arr.contains(tp)) break;
@@ -246,24 +246,20 @@ public class WebPage extends WebPageBase
     
     /** Regresa el nombre por defecto.
      * @return String
-     * @deprecated Usar getTitle()
      */
-    @Deprecated
     public String getDisplayName()
     {
-        return getTitle();
+        return getDisplayName((String)null);
     }    
     
     /** Regresa el nombre por defecto, en base a un idioma.
      * @param String Idioma
      * @return String
-     * @deprecated 
      */
-    @Deprecated
     public String getDisplayName(String lang)
     {
-        return getTitle(lang);
-    }    
+        return getSemanticObject().getLocaleProperty(SWBContext.getVocabulary().swb_title, lang);
+    }
 
     /** Regresa el nombre por defecto, en base a un idioma que recibe como parametro
      * con identificador "<B>language</B>".
@@ -280,9 +276,7 @@ public class WebPage extends WebPageBase
      * @param args HashMap, con paraetros del template
      * ejemplo:
      *    language=es
-     * @deprecated 
      */
-    @Deprecated
     public String getDisplayName(HashMap args)
     {
         String language = (String) args.get("language");

@@ -8,7 +8,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class PortletRefBase extends Reference implements Deleteable,Activeable,Priorityable
+public class PortletRefBase extends Reference implements Priorityable,Activeable,Deleteable
 {
 
     public PortletRefBase(SemanticObject base)

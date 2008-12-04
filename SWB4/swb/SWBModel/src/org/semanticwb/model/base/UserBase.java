@@ -13,7 +13,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class UserBase extends GenericObjectBase implements Roleable,Traceable,Activeable
+public class UserBase extends GenericObjectBase implements Activeable,Traceable,Roleable
 {
     public static SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
