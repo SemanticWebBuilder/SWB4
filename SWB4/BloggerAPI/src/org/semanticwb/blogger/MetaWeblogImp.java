@@ -17,14 +17,17 @@ import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryResult;
+import javax.servlet.http.HttpServletResponse;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.output.XMLOutputter;
+import org.jdom.transform.XSLTransformer;
 import org.semantic.blogger.interfaces.CategoryInfo;
 import org.semantic.blogger.interfaces.MetaWeblog;
 import org.semantic.blogger.interfaces.Post;
 import org.semantic.blogger.interfaces.UserBlog;
-import org.semanticwb.repository.RepositoryManager;
+import org.semanticwb.repository.RepositoryManagerLoader;
+
 
 /**
  *
@@ -47,12 +50,12 @@ public final class MetaWeblogImp implements MetaWeblog
     private static final String BLOG_DATE_CREATED = BLOG_PREFIX + ":dateCreated";
     private static final String BLOG_HTMLURL = BLOG_PREFIX + ":htmlUrl";
     private static final String ID_SEPARATOR = ":";
-
+    private static final RepositoryManagerLoader loader=RepositoryManagerLoader.getInstance();
     static
     {
-        try
+        /*try
         {
-            RepositoryManager.addNamespace(BLOG_MODEL_PREFIX, new URI(BLOG_MODEL_URI));
+            loader.addNamespace(BLOG_MODEL_PREFIX, new URI(BLOG_MODEL_URI));
         }
         catch ( Exception e )
         {
@@ -60,12 +63,12 @@ public final class MetaWeblogImp implements MetaWeblog
         }
         try
         {
-            RepositoryManager.addNamespace(BLOG_PREFIX, new URI(BLOG_URI));
+            loader.addNamespace(BLOG_PREFIX, new URI(BLOG_URI));
         }
         catch ( Exception e )
         {
             e.printStackTrace(System.out);
-        }
+        }*/
     }
 
     /**
@@ -120,7 +123,7 @@ public final class MetaWeblogImp implements MetaWeblog
         {
             String repositoryName = getRepositoryName(postid);
             postid = getID(postid);
-            session = RepositoryManager.openSession(repositoryName, username, password);
+            session = loader.openSession(repositoryName, username, password);
             Node nodePost = session.getNodeByUUID(postid);
             nodePost.remove();
             session.save();
@@ -152,7 +155,7 @@ public final class MetaWeblogImp implements MetaWeblog
         {
             String repositoryName = getRepositoryName(blogid);
             blogid = getID(blogid);
-            session = RepositoryManager.openSession(repositoryName, username, password);
+            session = loader.openSession(repositoryName, username, password);
             Node nodeBlog = session.getNodeByUUID(blogid);
             if ( nodeBlog.hasNode("post") )
             {
@@ -208,7 +211,7 @@ public final class MetaWeblogImp implements MetaWeblog
         }
         try
         {
-            session = RepositoryManager.openSession(repositoryName, username, password);
+            session = loader.openSession(repositoryName, username, password);
             Query query = session.getWorkspace().getQueryManager().createQuery("//blog[@blog:name='" + name + "']", Query.XPATH);
             QueryResult result = query.execute();
             NodeIterator nodeIterator = result.getNodes();
@@ -256,11 +259,11 @@ public final class MetaWeblogImp implements MetaWeblog
     {
         HashSet<UserBlog> blogs = new HashSet<UserBlog>();
         Session session = null;
-        for ( String repositoryName : RepositoryManager.getRepositoryNames() )
+        for ( String repositoryName : loader.getWorkspaces() )
         {
             try
             {
-                session = RepositoryManager.openSession(repositoryName, username, password);
+                session = loader.openSession(repositoryName, username, password);
                 Query query = session.getWorkspace().getQueryManager().createQuery("//blog", Query.XPATH);
                 QueryResult result = query.execute();
                 NodeIterator nodeIterator = result.getNodes();
@@ -307,7 +310,7 @@ public final class MetaWeblogImp implements MetaWeblog
         {
             String repositoryName = getRepositoryName(blogid);
             blogid = getID(blogid);
-            session = RepositoryManager.openSession(repositoryName, username, password);
+            session = loader.openSession(repositoryName, username, password);
             Node blogNode = session.getNodeByUUID(blogid);
             NodeIterator postNodes = blogNode.getNodes("post");
             while (postNodes.hasNext())
@@ -378,15 +381,48 @@ public final class MetaWeblogImp implements MetaWeblog
         url += "/mode/categoriesrss";
         return url;
     }
-
-    public void showCategoriesAsRss(String blogid, String categoryName, OutputStream out, String userid, String password) throws Exception
+    /**
+     * Shows the post into a category using Html format
+     * @param blogid The blog ID, The blog ID must contain the repositoryName as part the ID
+     * @param categoryName The categoryName to show
+     * @param xslt The Document Template in Xslt format to create the html
+     * @param response The response
+     * @param userid The userID to access to repository
+     * @param password The password to access to repository
+     * @throws java.lang.Exception
+     */
+    
+    public void showCategoriesAsHtml(String blogid, String categoryName,Document xslt, HttpServletResponse response, String userid, String password) throws Exception
     {
+        OutputStream out=response.getOutputStream();
+        response.setContentType("text/html");
+        Document document = getCategoriesAsRss(blogid, categoryName, userid, password);        
+        XSLTransformer transformer=new XSLTransformer(xslt);
+        Document transformed=transformer.transform(document);
+        XMLOutputter xMLOutputter = new XMLOutputter();
+        xMLOutputter.output(transformed, out);
+    }
+    /**
+     * Shows the post into a category using Rss format
+     * @param blogid The blog ID, The blog ID must contain the repositoryName as part the ID
+     * @param categoryName The categoryName to show
+     * @param response The response
+     * @param userid The userID to access to repository
+     * @param password The password to access to repository
+     * @throws java.lang.Exception
+     */
+
+    public void showCategoriesAsRss(String blogid, String categoryName, HttpServletResponse response, String userid, String password) throws Exception
+    {
+        OutputStream out=response.getOutputStream();
+        response.setContentType("text/xml");
         Document document = getCategoriesAsRss(blogid, categoryName, userid, password);
         XMLOutputter xMLOutputter = new XMLOutputter();
         xMLOutputter.output(document, out);
     }
+    
 
-    public Document getCategoriesAsRss(String blogid, String categoryName, String userid, String password) throws Exception
+    private Document getCategoriesAsRss(String blogid, String categoryName, String userid, String password) throws Exception
     {
         Document document = new Document();
         Element rss = new Element("rss");
@@ -399,7 +435,7 @@ public final class MetaWeblogImp implements MetaWeblog
         {
             String repositoryName = getRepositoryName(blogid);
             blogid = getID(blogid);
-            session = RepositoryManager.openSession(repositoryName, userid, password);
+            session = loader.openSession(repositoryName, userid, password);
             Node blogNode = session.getNodeByUUID(blogid);
             {
                 Element title = new Element("title");
@@ -475,7 +511,7 @@ public final class MetaWeblogImp implements MetaWeblog
         {
             String repositoryName = getRepositoryName(postid);
             postid = getID(postid);
-            session = RepositoryManager.openSession(repositoryName, userid, password);
+            session = loader.openSession(repositoryName, userid, password);
             Node postNode = session.getNodeByUUID(postid);
             postNode.checkout();
             postNode.setProperty(BLOG_TITLE, post.title);
@@ -528,7 +564,7 @@ public final class MetaWeblogImp implements MetaWeblog
         {
             String repositoryName = getRepositoryName(userid);
             postid = getID(postid);
-            session = RepositoryManager.openSession(repositoryName, userid, password);
+            session = loader.openSession(repositoryName, userid, password);
             Node postNode = session.getNodeByUUID(postid);
             Post value = new Post();
             ArrayList<String> categories = new ArrayList<String>();
@@ -578,7 +614,7 @@ public final class MetaWeblogImp implements MetaWeblog
         {
             String repositoryName = getRepositoryName(blogid);
             blogid = getID(blogid);
-            session = RepositoryManager.openSession(repositoryName, userid, password);
+            session = loader.openSession(repositoryName, userid, password);
             Node blogNode = session.getNodeByUUID(blogid);
             Node postNode = blogNode.addNode("post", "blognode:blogEntry");
             postNode.setProperty(BLOG_TITLE, post.title);
@@ -632,7 +668,7 @@ public final class MetaWeblogImp implements MetaWeblog
         try
         {
 
-            session = RepositoryManager.openSession(repositoryName, username, password);
+            session = loader.openSession(repositoryName, username, password);
             Query query = session.getWorkspace().getQueryManager().createQuery("//blog/category[blog:name='" + name + "']", Query.XPATH);
             QueryResult result = query.execute();
             NodeIterator nodeIterator = result.getNodes();
@@ -688,7 +724,7 @@ public final class MetaWeblogImp implements MetaWeblog
         {
             String repositoryName = getRepositoryName(blogid);
             blogid = getID(blogid);
-            session = RepositoryManager.openSession(repositoryName, username, password);
+            session = loader.openSession(repositoryName, username, password);
             Query query = session.getWorkspace().getQueryManager().createQuery("//blog/category", Query.XPATH);
             QueryResult result = query.execute();
             NodeIterator nodeIterator = result.getNodes();
