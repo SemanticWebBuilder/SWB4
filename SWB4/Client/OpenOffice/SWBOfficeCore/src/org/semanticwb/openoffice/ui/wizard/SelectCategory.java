@@ -70,7 +70,8 @@ public class SelectCategory extends WizardPage
                 message+="\r\n"+ cause.getMessage();
             }
             JOptionPane.showMessageDialog(this, message , getDescription(), JOptionPane.OK_OPTION);            
-            System.exit(0);
+            this.setProblem(message);
+            return;
         }
         if ( this.jTreeCategory.getRowCount() > 0 )
         {
