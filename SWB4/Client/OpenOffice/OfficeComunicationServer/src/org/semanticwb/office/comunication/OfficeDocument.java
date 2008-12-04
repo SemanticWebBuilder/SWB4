@@ -20,7 +20,6 @@ import javax.jcr.lock.LockException;
 import javax.jcr.version.Version;
 import org.semanticwb.office.interfaces.IOfficeDocument;
 import org.semanticwb.repository.RepositoryManagerLoader;
-import org.semanticwb.repository.SWBRepositoryManager;
 import org.semanticwb.xmlrpc.Part;
 import org.semanticwb.xmlrpc.XmlRpcObject;
 
