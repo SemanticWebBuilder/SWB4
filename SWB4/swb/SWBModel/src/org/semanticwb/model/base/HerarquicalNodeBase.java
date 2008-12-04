@@ -13,7 +13,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class HerarquicalNodeBase extends GenericObjectBase implements Sortable,Iconable,Descriptiveable
+public class HerarquicalNodeBase extends GenericObjectBase implements Descriptiveable,Iconable,Sortable
 {
     public static SWBVocabulary vocabulary=SWBContext.getVocabulary();
 

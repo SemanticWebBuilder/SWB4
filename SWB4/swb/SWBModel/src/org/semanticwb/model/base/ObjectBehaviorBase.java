@@ -13,7 +13,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class ObjectBehaviorBase extends GenericObjectBase implements Descriptiveable,Iconable,Sortable
+public class ObjectBehaviorBase extends GenericObjectBase implements Sortable,Iconable,Descriptiveable
 {
     public static SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
