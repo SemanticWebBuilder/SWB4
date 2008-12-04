@@ -17,6 +17,8 @@ import javax.jcr.version.VersionIterator;
 import org.semanticwb.office.interfaces.CategoryInfo;
 import org.semanticwb.office.interfaces.IOfficeApplication;
 import org.semanticwb.repository.RepositoryManager;
+import org.semanticwb.repository.RepositoryManagerLoader;
+import org.semanticwb.repository.SWBRepositoryManager;
 import org.semanticwb.xmlrpc.XmlRpcObject;
 
 /**
@@ -29,7 +31,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
     private static final String CM_CATEGORY = "cm:Category";
     private static final String CM_TITLE = "cm:tite";
     private static final String CM_DESCRIPTION = "cm:description";
-    
+    private static final RepositoryManagerLoader loader=RepositoryManagerLoader.getInstance();
         
     
     //private Session session;
@@ -58,7 +60,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         try
         {
             
-            session = RepositoryManager.openSession(repositoryName,"","");
+            session = loader.openSession(repositoryName,"","");
             ArrayList<String> contents = new ArrayList<String>();
             Node categoryNode = session.getNodeByUUID(categoryID);
             NodeIterator nodes = categoryNode.getNodes(CATEGORY_NAME);
@@ -94,7 +96,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
 
     public String[] getRepositories() throws Exception
     {
-        return RepositoryManager.getRepositoryNames().toArray(new String[RepositoryManager.getRepositoryNames().size()]);
+        return loader.getWorkspacesForOffice();
     }
 
     public CategoryInfo[] getCategories(String repositoryName) throws Exception
@@ -102,7 +104,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         Session session = null;
         try
         {
-            session = RepositoryManager.openSession(repositoryName,"","");
+            session = loader.openSession(repositoryName,"","");
             ArrayList<CategoryInfo> categories = new ArrayList<CategoryInfo>();
             Query query;
             if(session.getRepository().getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf("webbuilder")!=-1)
@@ -148,7 +150,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         root.lock(false,false);
         try
         {
-            session = RepositoryManager.openSession(repositoryName,"","");
+            session = loader.openSession(repositoryName,"","");
             Query query;
             if(session.getRepository().getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf("webbuilder")!=-1)
             {
