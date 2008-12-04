@@ -252,6 +252,7 @@ public abstract class XMLRPCServlet extends HttpServlet
         ename.setText(name);
         Element evalue=new Element("value");
         Element eint=new Element("int");
+        evalue.addContent(eint);
         eint.setText(String.valueOf(value));
         element.addContent(emember);
         emember.addContent(ename);
@@ -265,6 +266,7 @@ public abstract class XMLRPCServlet extends HttpServlet
         Element evalue=new Element("value");
         Element eint=new Element("string");
         eint.setText(value);
+        evalue.addContent(eint);
         element.addContent(emember);
         emember.addContent(ename);
         emember.addContent(evalue);
