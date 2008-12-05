@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.MouseEvent;
 import java.util.Map;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -22,6 +23,7 @@ import org.netbeans.spi.wizard.WizardPage;
 import org.netbeans.spi.wizard.WizardPanelNavResult;
 import org.semanticwb.office.interfaces.CategoryInfo;
 import org.semanticwb.openoffice.OfficeApplication;
+import org.semanticwb.openoffice.ui.dialogs.DialogAddCategory;
 
 /**
  *
@@ -48,32 +50,33 @@ public class SelectCategory extends WizardPage
         DefaultMutableTreeNode repositories = new RepositoryNode("Repositorios");
         DefaultTreeModel model = new DefaultTreeModel(repositories);
         this.jTreeCategory.setModel(model);
+
         try
         {
-            for ( String repository : OfficeApplication.getOfficeApplicationProxy().getRepositories() )
+            for (String repository : OfficeApplication.getOfficeApplicationProxy().getRepositories())
             {
                 DefaultMutableTreeNode repositoryNode = new RepositoryNode(repository);
                 model.insertNodeInto(repositoryNode, repositories, 0);
-                for ( CategoryInfo category : OfficeApplication.getOfficeApplicationProxy().getCategories(repository) )
+                for (CategoryInfo category : OfficeApplication.getOfficeApplicationProxy().getCategories(repository))
                 {
                     DefaultMutableTreeNode categoryNode = new CategoryNode(category.UDDI, category.title, category.description);
                     model.insertNodeInto(categoryNode, repositoryNode, 0);
                 }
             }
         }
-        catch ( Exception wbe )
-        {    
-            String message=wbe.getLocalizedMessage();
-            if(wbe.getCause()!=null)
+        catch (Exception wbe)
+        {
+            String message = wbe.getLocalizedMessage();
+            if (wbe.getCause() != null)
             {
-                Throwable cause=wbe.getCause();
-                message+="\r\n"+ cause.getMessage();
+                Throwable cause = wbe.getCause();
+                message += "\r\n" + cause.getMessage();
             }
-            JOptionPane.showMessageDialog(this, message , getDescription(), JOptionPane.OK_OPTION);            
+            JOptionPane.showMessageDialog(this, message, getDescription(), JOptionPane.OK_OPTION);
             this.setProblem(message);
             return;
         }
-        if ( this.jTreeCategory.getRowCount() > 0 )
+        if (this.jTreeCategory.getRowCount() > 0)
         {
             this.jTreeCategory.expandRow(0);
         }
@@ -89,7 +92,7 @@ public class SelectCategory extends WizardPage
     public WizardPanelNavResult allowNext(String arg, Map map, Wizard wizard)
     {
         WizardPanelNavResult result = WizardPanelNavResult.PROCEED;
-        if ( this.getWizardDataMap().get(CATEGORY_ID) == null )
+        if (this.getWizardDataMap().get(CATEGORY_ID) == null)
         {
             javax.swing.JOptionPane.showMessageDialog(null, "¡Debe seleccionar una categoria!", getDescription(), JOptionPane.ERROR_MESSAGE);
             this.jTreeCategory.requestFocus();
@@ -106,25 +109,35 @@ public class SelectCategory extends WizardPage
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        jToolBar1 = new javax.swing.JToolBar();
+        jButtonAddCategory = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTreeCategory = new JTree(){
-            public String getToolTipText(MouseEvent evt) 
-            {
-                String value=null;
-                if (getRowForLocation(evt.getX(), evt.getY()) != -1)
-                {
-                    TreePath curPath = getPathForLocation(evt.getX(), evt.getY());
-                    value=((ToolTipTreeNode)curPath.getLastPathComponent()).getToolTipText();
-                }    
-                return value;	
-            }
-        };
-        ;
+        jTreeCategory = new javax.swing.JTree();
 
         setPreferredSize(new java.awt.Dimension(500, 322));
         setLayout(new java.awt.BorderLayout());
 
-        jTreeCategory.setFocusCycleRoot(true);
+        jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+
+        jToolBar1.setRollover(true);
+
+        jButtonAddCategory.setText("Agregar Categoria");
+        jButtonAddCategory.setEnabled(false);
+        jButtonAddCategory.setFocusable(false);
+        jButtonAddCategory.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonAddCategory.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonAddCategory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAddCategoryActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(jButtonAddCategory);
+
+        jPanel1.add(jToolBar1);
+
+        add(jPanel1, java.awt.BorderLayout.NORTH);
+
         jTreeCategory.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
             public void valueChanged(javax.swing.event.TreeSelectionEvent evt) {
                 jTreeCategoryValueChanged(evt);
@@ -134,23 +147,55 @@ public class SelectCategory extends WizardPage
 
         add(jScrollPane1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
-    private void jTreeCategoryValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_jTreeCategoryValueChanged
-        if ( this.jTreeCategory.getSelectionPath().getLastPathComponent() instanceof CategoryNode )
+
+private void jButtonAddCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddCategoryActionPerformed
+    Object selected = this.jTreeCategory.getLastSelectedPathComponent();
+    if (selected!=null &&  selected instanceof RepositoryNode)
+    {
+        RepositoryNode repositoryNode = (RepositoryNode) selected;
+        DialogAddCategory addCategory = new DialogAddCategory(new JFrame(), true, repositoryNode.getName());
+        addCategory.setVisible(true);
+        if (!addCategory.isCancel())
         {
-            String categoryID = (( CategoryNode ) this.jTreeCategory.getSelectionPath().getLastPathComponent()).getID();
-            String repositoryName = (( RepositoryNode ) this.jTreeCategory.getSelectionPath().getParentPath().getLastPathComponent()).getName();
-            this.getWizardDataMap().put(CATEGORY_ID, categoryID);
-            this.getWizardDataMap().put("repositoryName", repositoryName);
+            try
+            {
+                for (CategoryInfo category : OfficeApplication.getOfficeApplicationProxy().getCategories(repositoryNode.getName()))
+                {
+                    DefaultMutableTreeNode categoryNode = new CategoryNode(category.UDDI, category.title, category.description);
+                    ((DefaultTreeModel) jTreeCategory.getModel()).insertNodeInto(categoryNode, repositoryNode, 0);
+                }
+            }
+            catch (Exception e)
+            {
+            }
+        }
+    }
+}//GEN-LAST:event_jButtonAddCategoryActionPerformed
+
+private void jTreeCategoryValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_jTreeCategoryValueChanged
+    Object selected = this.jTreeCategory.getLastSelectedPathComponent();
+    if (selected!=null &&  selected instanceof RepositoryNode)
+    {
+        if(((RepositoryNode)selected).getName().equals("Repositorios"))
+        {
+            this.jButtonAddCategory.setEnabled(false);
         }
         else
         {
-            this.getWizardDataMap().put(CATEGORY_ID, null);
-            this.getWizardDataMap().put("repositoryName", null);
+            this.jButtonAddCategory.setEnabled(true);
         }
-    }//GEN-LAST:event_jTreeCategoryValueChanged
+    }
+    else
+    {
+        this.jButtonAddCategory.setEnabled(false);
+    }
+}//GEN-LAST:event_jTreeCategoryValueChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonAddCategory;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JToolBar jToolBar1;
     private javax.swing.JTree jTreeCategory;
     // End of variables declaration//GEN-END:variables
 }
@@ -201,9 +246,9 @@ class RepositoryNode extends DefaultMutableTreeNode implements ToolTipTreeNode
     public boolean equals(Object obj)
     {
         boolean equals = false;
-        if ( obj instanceof RepositoryNode )
+        if (obj instanceof RepositoryNode)
         {
-            equals = (( RepositoryNode ) obj).name.equals(this.name);
+            equals = ((RepositoryNode) obj).name.equals(this.name);
         }
         return equals;
     }
@@ -255,9 +300,9 @@ class CategoryNode extends DefaultMutableTreeNode implements ToolTipTreeNode
     public boolean equals(Object obj)
     {
         boolean equals = false;
-        if ( obj instanceof CategoryNode )
+        if (obj instanceof CategoryNode)
         {
-            equals = (( CategoryNode ) obj).title.equals(this.title);
+            equals = ((CategoryNode) obj).title.equals(this.title);
         }
         return equals;
     }
@@ -285,25 +330,25 @@ class TreeRender extends JPanel implements TreeCellRenderer
     {
         Component component = this;
         tree.setToolTipText("");
-        if ( object instanceof CategoryNode )
+        if (object instanceof CategoryNode)
         {
-            component = (( CategoryNode ) object).getComponent();
-            if ( hasFocus )
+            component = ((CategoryNode) object).getComponent();
+            if (hasFocus)
             {
-                tree.setToolTipText((( CategoryNode ) object).getDescription());
+                tree.setToolTipText(((CategoryNode) object).getDescription());
             }
         }
-        if ( object instanceof RepositoryNode )
+        if (object instanceof RepositoryNode)
         {
-            component = (( RepositoryNode ) object).getComponent();
+            component = ((RepositoryNode) object).getComponent();
         //component.setFont(tree.getFont());
         }
-        if ( component != null )
+        if (component != null)
         {
-            JLabel label = ( JLabel ) component;
+            JLabel label = (JLabel) component;
 
             label.setFont(tree.getFont());
-            if ( expanded )
+            if (expanded)
             {
                 label.setIcon(new javax.swing.ImageIcon(getClass().getResource("open.gif")));
             }
@@ -311,7 +356,7 @@ class TreeRender extends JPanel implements TreeCellRenderer
             {
                 label.setIcon(new javax.swing.ImageIcon(getClass().getResource("close.gif")));
             }
-            if ( selected )
+            if (selected)
             {
                 label.setBackground(Color.BLUE);
                 label.setForeground(Color.WHITE);
