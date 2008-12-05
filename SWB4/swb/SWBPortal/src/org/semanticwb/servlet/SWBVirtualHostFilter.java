@@ -115,7 +115,11 @@ public class SWBVirtualHostFilter implements Filter
                 if(validateDB(_response))
                 {
                     String auri=path.substring(iserv.length()+1);
-                    DistributorParams dparams=new DistributorParams(_request,auri);
+                    DistributorParams dparams=null;
+                    if(!(serv instanceof Admin))
+                    {
+                        dparams=new DistributorParams(_request,auri);
+                    }
                     serv.doProcess(_request, _response, dparams);
                 }
             }else
