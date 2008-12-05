@@ -27,7 +27,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
 {
     private static final String CATEGORY_NAME = "Category";
     private static final String CM_CATEGORY = "cm:Category";
-    private static final String CM_TITLE = "cm:tite";
+    private static final String CM_TITLE = "cm:title";
     private static final String CM_DESCRIPTION = "cm:description";
     private static final RepositoryManagerLoader loader=RepositoryManagerLoader.getInstance();
         
@@ -102,8 +102,11 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         Session session = null;
         try
         {
+            
             session = loader.openSession(repositoryName,"","");
+            
             ArrayList<CategoryInfo> categories = new ArrayList<CategoryInfo>();
+            
             Query query;
             if(session.getRepository().getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf("webbuilder")!=-1)
             {
@@ -124,7 +127,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                 categoryInfo.title = categoryNode.getProperty(CM_TITLE).getString();
                 categoryInfo.description = categoryNode.getProperty(CM_DESCRIPTION).getString();
                 categories.add(categoryInfo);
-            }
+            }            
             return categories.toArray(new CategoryInfo[categories.size()]);
         }
         catch ( Exception e )
@@ -144,11 +147,12 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
     {
         String UUID = "";
         Session session = null;
-        Node root = session.getRootNode();
-        root.lock(false,false);
+        Node root=null;
         try
         {
             session = loader.openSession(repositoryName,"","");
+            root = session.getRootNode();
+            
             Query query;
             if(session.getRepository().getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf("webbuilder")!=-1)
             {
@@ -182,8 +186,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         finally
         {
             if ( session != null )
-            {
-                root.unlock();
+            {                
                 session.logout();
             }
         }
