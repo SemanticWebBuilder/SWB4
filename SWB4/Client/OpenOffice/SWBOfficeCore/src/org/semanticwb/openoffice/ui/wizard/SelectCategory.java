@@ -189,6 +189,10 @@ private void jTreeCategoryValueChanged(javax.swing.event.TreeSelectionEvent evt)
     {
         this.jButtonAddCategory.setEnabled(false);
     }
+    if(selected!=null && selected instanceof CategoryNode)
+    {
+        this.getWizardDataMap().put(CATEGORY_ID,((CategoryNode)selected).getID());
+    }
 }//GEN-LAST:event_jTreeCategoryValueChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
