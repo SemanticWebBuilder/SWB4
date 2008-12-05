@@ -130,11 +130,12 @@ private void jButtonAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         return;
     }
     try
-    {
+    {        
         OfficeApplication.getOfficeApplicationProxy().createCategory(repository, this.jTextFieldName.getText(), jTextAreaDescription.getText());
     }
     catch (Exception e)
     {
+        
     }
     cancel = false;
     this.setVisible(false);
