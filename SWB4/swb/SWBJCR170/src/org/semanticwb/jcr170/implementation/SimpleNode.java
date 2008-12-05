@@ -578,7 +578,8 @@ public class SimpleNode implements Node
     {
         if (properties.get(getName(BaseNode.vocabulary.jcr_uuid)) != null)
         {
-            String getUUID = properties.get(getName(BaseNode.vocabulary.jcr_uuid)).getString();
+            PropertyImp prop=properties.get(getName(BaseNode.vocabulary.jcr_uuid));
+            String getUUID = prop.getString();
             if (getUUID == null)
             {
                 throw new UnsupportedRepositoryOperationException();
@@ -589,6 +590,7 @@ public class SimpleNode implements Node
         {
             throw new UnsupportedRepositoryOperationException();
         }
+
 
     }
 
