@@ -6,6 +6,7 @@
 package org.semanticwb.openoffice.ui.dialogs;
 
 import javax.swing.JOptionPane;
+import org.semanticwb.office.interfaces.CategoryInfo;
 import org.semanticwb.openoffice.OfficeApplication;
 
 /**
@@ -24,7 +25,7 @@ public class DialogAddCategory extends javax.swing.JDialog
         super(parent, modal);
         initComponents();
         this.repository = repository;
-        this.setTitle("Agregar categoria a repositorio "+repository);
+        this.setTitle("Agregar categoria a repositorio " + repository);
         this.setLocationRelativeTo(null);
     }
 
@@ -117,25 +118,48 @@ private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN
 }//GEN-LAST:event_jButtonCancelActionPerformed
 
 private void jButtonAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAcceptActionPerformed
-    if(jTextFieldName.getText().isEmpty())
+    if (jTextFieldName.getText().isEmpty())
     {
-        JOptionPane.showMessageDialog(this, "¡Debe indicar el nombre de la categoria!","Error al capturar nombre",JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(this, "¡Debe indicar el nombre de la categoria!", "Error al capturar el nombre de la categoria", JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
         jTextFieldName.requestFocus();
         return;
     }
-    if(jTextAreaDescription.getText().isEmpty())
+    if (jTextAreaDescription.getText().isEmpty())
     {
-        JOptionPane.showMessageDialog(this, "¡Debe indicar la descripción de la categoria!","Error al capturar nombre",JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(this, "¡Debe indicar la descripción de la categoria!", "Error al capturar descripción de la categoria", JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
         jTextAreaDescription.requestFocus();
         return;
     }
+    boolean existe = false;
     try
-    {        
-        OfficeApplication.getOfficeApplicationProxy().createCategory(repository, this.jTextFieldName.getText(), jTextAreaDescription.getText());
+    {
+        for (CategoryInfo category : OfficeApplication.getOfficeApplicationProxy().getCategories(repository))
+        {
+            if (category.title.equalsIgnoreCase(jTextFieldName.getText()))
+            {
+                existe = true;
+                break;
+            }
+        }
     }
     catch (Exception e)
     {
-        
+    }
+    if (existe)
+    {
+        JOptionPane.showMessageDialog(this, "¡Ya existe una categoria con ese nombre!", "Error al capturar nombre", JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+        jTextFieldName.requestFocus();
+        return;
+    }
+    else
+    {
+        try
+        {
+            OfficeApplication.getOfficeApplicationProxy().createCategory(repository, this.jTextFieldName.getText(), jTextAreaDescription.getText());
+        }
+        catch (Exception e)
+        {
+        }
     }
     cancel = false;
     this.setVisible(false);
