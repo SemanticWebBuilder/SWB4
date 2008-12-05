@@ -454,7 +454,7 @@ public class SimpleNode implements Node
         {
             if (!getPrimaryNodeType().canSetProperty(name, value))
             {
-                throw new ConstraintViolationException("The property can not be added");
+                throw new ConstraintViolationException("The property "+ name +" is not defined in this nodeType");
             }
             property = addProperty(name);
             property.setValue(value);
