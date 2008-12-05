@@ -30,17 +30,17 @@ public class DialogLogin extends javax.swing.JDialog
         super(parent, modal);
         initComponents();
         this.jComboBoxWebAddress.removeAllItems();
-        for ( URI uri : configurationListURI.getAddresses() )
+        for (URI uri : configurationListURI.getAddresses())
         {
             this.jComboBoxWebAddress.addItem(uri);
         }
-        if ( this.jComboBoxWebAddress.getSelectedItem() == null )
+        if (this.jComboBoxWebAddress.getSelectedItem() == null)
         {
             this.jComboBoxWebAddress.requestFocus();
         }
         else
         {
-            if ( this.jTextFieldClave.getText().equals("") )
+            if (this.jTextFieldClave.getText().equals(""))
             {
                 this.jTextFieldClave.requestFocus();
             }
@@ -89,6 +89,7 @@ public class DialogLogin extends javax.swing.JDialog
         jTextFieldClave = new javax.swing.JTextField();
         jLabelPassword = new javax.swing.JLabel();
         jPassword = new javax.swing.JPasswordField();
+        jButtonDelete = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Acceso a servicio de publicación");
@@ -140,6 +141,13 @@ public class DialogLogin extends javax.swing.JDialog
 
         jPassword.setNextFocusableComponent(jButtonAccept);
 
+        jButtonDelete.setText("X");
+        jButtonDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonDeleteActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -154,16 +162,19 @@ public class DialogLogin extends javax.swing.JDialog
                             .addComponent(jLabelClave))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextFieldClave, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
-                            .addComponent(jPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
-                            .addComponent(jComboBoxWebAddress, javax.swing.GroupLayout.Alignment.TRAILING, 0, 251, Short.MAX_VALUE)))
+                            .addComponent(jTextFieldClave, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE)
+                            .addComponent(jPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jComboBoxWebAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButtonDelete))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jButtonAvanced, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(75, 75, 75)
                         .addComponent(jButtonCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButtonAccept, javax.swing.GroupLayout.DEFAULT_SIZE, 89, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(jButtonAccept, javax.swing.GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)))
+                .addGap(22, 22, 22))
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButtonAvanced, jButtonCancel});
@@ -174,7 +185,8 @@ public class DialogLogin extends javax.swing.JDialog
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelWebAddress)
-                    .addComponent(jComboBoxWebAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jComboBoxWebAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonDelete))
                 .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabelClave)
@@ -198,21 +210,21 @@ public class DialogLogin extends javax.swing.JDialog
     private void jButtonAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAcceptActionPerformed
 
         numTry++;
-        if ( numTry < 3 )
+        if (numTry < 3)
         {
-            if ( this.jComboBoxWebAddress.getSelectedItem() != null )
+            if (this.jComboBoxWebAddress.getSelectedItem() != null)
             {
                 String sUri = this.jComboBoxWebAddress.getSelectedItem().toString();
                 try
                 {
                     URI uri = new URI(sUri);
-                    if ( this.jTextFieldClave.getText().isEmpty() )
+                    if (this.jTextFieldClave.getText().isEmpty())
                     {
                         JOptionPane.showMessageDialog(null, "Debe indicar la clave de acceso", this.getTitle(), JOptionPane.ERROR_MESSAGE);
                         this.jTextFieldClave.requestFocus();
                         return;
                     }
-                    if ( this.jPassword.getPassword().length == 0 )
+                    if (this.jPassword.getPassword().length == 0)
                     {
                         JOptionPane.showMessageDialog(null, "Debe indicar la contraseña de acceso", this.getTitle(), JOptionPane.ERROR_MESSAGE);
                         this.jPassword.requestFocus();
@@ -225,11 +237,11 @@ public class DialogLogin extends javax.swing.JDialog
                     this.setVisible(false);
                     this.canceled = false;
                 }
-                catch ( URISyntaxException use )
+                catch (URISyntaxException use)
                 {
                     JOptionPane.showMessageDialog(null, "La dirección Web no es válida", this.getTitle(), JOptionPane.ERROR_MESSAGE);
-                    this.jComboBoxWebAddress.requestFocus();                    
-                }                
+                    this.jComboBoxWebAddress.requestFocus();
+                }
             }
             else
             {
@@ -258,7 +270,7 @@ public class DialogLogin extends javax.swing.JDialog
     }//GEN-LAST:event_jButtonAvancedActionPerformed
 
     private void jComboBoxWebAddressActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxWebAddressActionPerformed
-        if ( this.jComboBoxWebAddress.getSelectedItem() != null )
+        if (this.jComboBoxWebAddress.getSelectedItem() != null)
         {
             String sUri = this.jComboBoxWebAddress.getSelectedItem().toString();
             try
@@ -266,17 +278,30 @@ public class DialogLogin extends javax.swing.JDialog
                 URI uri = new URI(sUri);
                 this.jTextFieldClave.setText(configurationListURI.getLogin(uri));
             }
-            catch ( URISyntaxException use )
+            catch (URISyntaxException use)
             {
                 JOptionPane.showMessageDialog(this, "Error al escribir la dirección web", this.getTitle(), JOptionPane.ERROR);
             }
         }
     }//GEN-LAST:event_jComboBoxWebAddressActionPerformed
 
+private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
+    int res = JOptionPane.showConfirmDialog(this, "¿Desea borrar esta configuración de conexión?", "Borrado de configuración", JOptionPane.YES_NO_OPTION);
+    if (res == JOptionPane.YES_OPTION)
+    {
+        URI uri = (URI) this.jComboBoxWebAddress.getSelectedItem();
+        if (uri != null)
+        {
+            configurationListURI.removeAddress(uri);
+            this.jComboBoxWebAddress.removeItem(uri);
+        }
+    }
+}//GEN-LAST:event_jButtonDeleteActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAccept;
     private javax.swing.JButton jButtonAvanced;
     private javax.swing.JButton jButtonCancel;
+    private javax.swing.JButton jButtonDelete;
     private javax.swing.JComboBox jComboBoxWebAddress;
     private javax.swing.JLabel jLabelClave;
     private javax.swing.JLabel jLabelPassword;
