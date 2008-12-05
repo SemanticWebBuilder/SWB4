@@ -67,12 +67,12 @@ class XmlRpcClient
         }
         Document requestDoc = serializeRequest(methodName, parameters);           
         Document responseDoc = request(requestDoc, attachments);
-        try
+        /*try
         {
             XMLOutputter out=new XMLOutputter();
             out.output(responseDoc, System.out);
         }
-        catch(Exception e){}
+        catch(Exception e){}*/
         try
         {
             
