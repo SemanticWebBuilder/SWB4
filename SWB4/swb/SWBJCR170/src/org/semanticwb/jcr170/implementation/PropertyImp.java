@@ -194,7 +194,7 @@ public final class PropertyImp implements Property
     private void loadPropertiesFromDataBase()
     {
         BaseNode node = parent.node;
-        if (node.existsProperty(node.getSemanticObject().getSemanticClass(), name))
+        if (node.existsProperty(clazz, name))
         {
             SemanticProperty property = node.getSemanticProperty(name, clazz);
             if (property.isDataTypeProperty())
