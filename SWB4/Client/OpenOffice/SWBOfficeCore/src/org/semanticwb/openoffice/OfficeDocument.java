@@ -555,7 +555,7 @@ public abstract class OfficeDocument
                                 break;
 
                         }
-                        Wizard wiz = WizardPage.createWizard(TITLE, clazz, resultProducer);
+                        Wizard wiz = WizardPage.createWizard(TITLE, clazz, resultProducer);                                             
                         wiz.show();
                     }
                 }
