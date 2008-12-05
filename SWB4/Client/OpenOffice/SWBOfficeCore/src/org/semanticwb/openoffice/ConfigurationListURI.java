@@ -44,7 +44,14 @@ public final class ConfigurationListURI
     {
         return this.userConfigurations.keySet().toArray(new URI[this.userConfigurations.size()]);
     }
-
+    public void removeAddress(URI uri)
+    {
+        if (this.userConfigurations.containsKey(uri))
+        {
+            this.userConfigurations.remove(uri);
+            this.save();
+        }
+    }
     /**
      * 
      * @param uri
