@@ -30,19 +30,22 @@ public class RepositoryManagerLoader
         String[] repositoriesClasess = repConfig.split(",");
         for (String clazz : repositoriesClasess)
         {
-            try
+            if (!clazz.equals(""))
             {
-                log.event("Adding RepositoryManager with class " + clazz + " ...");
-                RepositoryManager manager = (RepositoryManager) Class.forName(clazz).newInstance();
-                if (!repositoryManagers.containsKey(manager.getName()))
+                try
                 {
-                    manager.init();
-                    repositoryManagers.put(manager.getName(), manager);
+                    log.event("Adding RepositoryManager with class " + clazz + " ...");
+                    RepositoryManager manager = (RepositoryManager) Class.forName(clazz).newInstance();
+                    if (!repositoryManagers.containsKey(manager.getName()))
+                    {
+                        manager.init();
+                        repositoryManagers.put(manager.getName(), manager);
+                    }
                 }
-            }
-            catch (Throwable e)
-            {
-                log.error(e);
+                catch (Throwable e)
+                {
+                    log.error(e);
+                }
             }
         }
     }
