@@ -5,6 +5,7 @@
 
 package org.semanticwb.platform;
 
+import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.Property;
 import java.util.HashMap;
@@ -123,7 +124,21 @@ public class SemanticVocabulary
     
     public SemanticClass getSemanticClass(String uri)
     {
-        return classes.get(uri);
+        SemanticClass cls=classes.get(uri);
+        if(cls==null)
+        {
+            OntModel ont=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
+            try
+            {
+                OntClass c=ont.getOntClass(uri);
+                if(c!=null)
+                {
+                    cls=new SemanticClass(c);
+                    addSemanticClass(cls);
+                }
+            }catch(Exception e){log.warn(uri,e);}
+        }
+        return cls;
     }
     
     void addSemanticProperty(SemanticProperty tpp)
