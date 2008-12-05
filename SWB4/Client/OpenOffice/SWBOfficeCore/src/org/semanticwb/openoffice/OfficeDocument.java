@@ -44,20 +44,19 @@ import org.semanticwb.xmlrpc.HttpException;
 import org.semanticwb.xmlrpc.XmlRpcException;
 import static org.semanticwb.openoffice.util.FileUtil.copyFile;
 
-
 /**
  * An Office documents is an abstraction of a document that can be published
  * @author victor.lorenzana
  */
 public abstract class OfficeDocument
 {
+
     private static final String TITLE = "Asistente de publicación";
-    
     private static final String CONTENT_ID_NAME = "contentID";
-    private static final
-    String TITLE_VERIFY = "Verificación de contenido";
+    private static final String TITLE_VERIFY = "Verificación de contenido";
     // By default the content is not published
     private String contentID = null;
+    
 
     static
     {
@@ -66,7 +65,7 @@ public abstract class OfficeDocument
         {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         }
-        catch ( Exception ue )
+        catch (Exception ue)
         {
             // No debe hacer nada
             System.out.println(ue.getMessage());
@@ -80,60 +79,58 @@ public abstract class OfficeDocument
 
     protected OfficeDocument()
     {
-
     }
 
     private final boolean setupDocument()
     {
-        boolean setupDocument=false;
+        boolean setupDocument = false;
         String contentId = this.getCustomProperties().get(CONTENT_ID_NAME);
         try
         {
             contentID = OfficeApplication.setupDocument(contentId);
-            setupDocument=true;
+            setupDocument = true;
         }
-
-
-        catch ( XmlRpcException e )
+        catch (XmlRpcException e)
         {
-            if(e.getCause()!=null && e.getCause() instanceof ConnectException)
+            if (e.getCause() != null && e.getCause() instanceof ConnectException)
             {
                 JOptionPane.showMessageDialog(null,
-                        "No se puede verificar la existencia del contenido en el sitio, al paracer el sitio al que intenta conectarse no esta disponible.",TITLE_VERIFY, JOptionPane.WARNING_MESSAGE);                                
+                        "No se puede verificar la existencia del contenido en el sitio, al paracer el sitio al que intenta conectarse no esta disponible.", TITLE_VERIFY, JOptionPane.WARNING_MESSAGE);
             }
             else
             {
                 JOptionPane.showMessageDialog(null,
-                        "No se puede verificar la existencia del contenido en el sitio, la causa es:\r\n" + e.getLocalizedMessage(),TITLE_VERIFY, JOptionPane.WARNING_MESSAGE);                
+                        "No se puede verificar la existencia del contenido en el sitio, la causa es:\r\n" + e.getLocalizedMessage(), TITLE_VERIFY, JOptionPane.WARNING_MESSAGE);
             }
             OfficeApplication.logOff();
-            ErrorLog.log(e);            
-        }        catch ( HttpException e )
+            ErrorLog.log(e);
+        }
+        catch (HttpException e)
         {
-            if(e.getCode()==404)
+            if (e.getCode() == 404)
             {
                 JOptionPane.showMessageDialog(null,
-                        "No se puede verificar la existencia del contenido en el sitio, al paracer el sitio al que intenta conectarse no tiene habilitada la función de publicación de contenidos.",TITLE_VERIFY, JOptionPane.ERROR_MESSAGE);
-                
+                        "No se puede verificar la existencia del contenido en el sitio, al paracer el sitio al que intenta conectarse no tiene habilitada la función de publicación de contenidos.", TITLE_VERIFY, JOptionPane.ERROR_MESSAGE);
+
             }
             else
             {
                 JOptionPane.showMessageDialog(null,
-                        "No se puede verificar la existencia del contenido en el sitio, la causa es:\r\n" + e.getLocalizedMessage(),TITLE_VERIFY, JOptionPane.ERROR_MESSAGE);                
-            
+                        "No se puede verificar la existencia del contenido en el sitio, la causa es:\r\n" + e.getLocalizedMessage(), TITLE_VERIFY, JOptionPane.ERROR_MESSAGE);
+
             }
             OfficeApplication.logOff();
-            ErrorLog.log(e);            
-        }        catch ( Exception e )
+            ErrorLog.log(e);
+        }
+        catch (Exception e)
         {
             JOptionPane.showMessageDialog(null,
-                    e.getLocalizedMessage(),TITLE_VERIFY, JOptionPane.ERROR_MESSAGE);
+                    e.getLocalizedMessage(), TITLE_VERIFY, JOptionPane.ERROR_MESSAGE);
             ErrorLog.log(e);
             OfficeApplication.logOff();
         }
         return setupDocument;
     }
-    
 
     /**
      * Gets the Application Version
@@ -217,9 +214,9 @@ public abstract class OfficeDocument
     public Set<File> getMisssingAttachtments() throws NoHasLocationException
     {
         Set<File> attachments = new HashSet<File>();
-        for ( File file : this.getAllAttachments() )
+        for (File file : this.getAllAttachments())
         {
-            if ( file.exists() )
+            if (file.exists())
             {
                 attachments.add(file);
             }
@@ -230,9 +227,9 @@ public abstract class OfficeDocument
     public Set<File> getNotMissingAttachtments() throws NoHasLocationException
     {
         Set<File> attachments = new HashSet<File>();
-        for ( File file : this.getAllAttachments() )
+        for (File file : this.getAllAttachments())
         {
-            if ( file.exists() )
+            if (file.exists())
             {
                 attachments.add(file);
             }
@@ -246,9 +243,9 @@ public abstract class OfficeDocument
         try
         {
             URI uri = new URI(path);
-            if ( uri.getScheme() == null || uri.getScheme().equalsIgnoreCase("file") )
+            if (uri.getScheme() == null || uri.getScheme().equalsIgnoreCase("file"))
             {
-                if ( uri.isAbsolute() )
+                if (uri.isAbsolute())
                 {
                     attachments.add(getFile(uri));
                 }
@@ -260,7 +257,7 @@ public abstract class OfficeDocument
                 }
             }
         }
-        catch ( URISyntaxException use )
+        catch (URISyntaxException use)
         {
             ErrorLog.log(use);
         }
@@ -270,30 +267,28 @@ public abstract class OfficeDocument
 
     public final void delete()
     {
-
     }
 
     public final void deleteAssociation()
     {
-    /*try
-    {
-    HashMap<String, String> properties = new HashMap<String, String>();
-    document.saveCustomProperties(properties);
-    }
-    catch (WBAlertException wba)
-    {
-    }
-    catch (WBOfficeException wboe)
-    {
-    }
-    catch (WBException wbe)
-    {
-    }*/
+        /*try
+        {
+        HashMap<String, String> properties = new HashMap<String, String>();
+        document.saveCustomProperties(properties);
+        }
+        catch (WBAlertException wba)
+        {
+        }
+        catch (WBOfficeException wboe)
+        {
+        }
+        catch (WBException wbe)
+        {
+        }*/
     }
 
     public final void showDocumentInSite()
     {
-
     }
 
     public final void showChanges()
@@ -313,11 +308,11 @@ public abstract class OfficeDocument
     final void deleteTemporalDirectory(File dir)
     {
         File[] files = dir.listFiles();
-        if ( files != null )
+        if (files != null)
         {
-            for ( File file : files )
+            for (File file : files)
             {
-                if ( file.isFile() )
+                if (file.isFile())
                 {
                     file.delete();
                 }
@@ -358,7 +353,7 @@ public abstract class OfficeDocument
     private final File saveHtmlPrepareAndGetFiles(String guid) throws WBException
     {
         File file = this.saveOnGuidDirectoryAsHtml(guid);
-        for ( File attatchment : this.getNotMissingAttachtments() )
+        for (File attatchment : this.getNotMissingAttachtments())
         {
             copyFile(attatchment, file.getParentFile());
         }
@@ -386,7 +381,7 @@ public abstract class OfficeDocument
             BufferedInputStream origin = null;
             int BUFFER_SIZE = 2048;
             byte[] data = new byte[BUFFER_SIZE];
-            for ( File file : getFiles(tempotalDir) )
+            for (File file : getFiles(tempotalDir))
             {
                 ZipEntry entry = new ZipEntry(file.getName());
                 zipFile.putNextEntry(entry);
@@ -406,11 +401,11 @@ public abstract class OfficeDocument
             deleteTemporalDirectory(tempotalDir);
             return tempotalZipFile;
         }
-        catch ( FileNotFoundException fnfe )
+        catch (FileNotFoundException fnfe)
         {
             throw new WBException("No se puede crear el archivo zip", fnfe);
         }
-        catch ( IOException ioe )
+        catch (IOException ioe)
         {
             throw new WBException("No se puede crear el archivo zip", ioe);
         }
@@ -424,9 +419,9 @@ public abstract class OfficeDocument
     protected final List<File> getFiles(File dir)
     {
         ArrayList<File> attachments = new ArrayList<File>();
-        for ( File file : dir.listFiles() )
+        for (File file : dir.listFiles())
         {
-            if ( file.isFile() )
+            if (file.isFile())
             {
                 attachments.add(file);
             }
@@ -446,7 +441,7 @@ public abstract class OfficeDocument
     public final boolean isPublicated()
     {
         boolean isPublicated = false;
-        if ( this.contentID == null )
+        if (this.contentID == null)
         {
             isPublicated = false;
         }
@@ -461,54 +456,54 @@ public abstract class OfficeDocument
     {
         boolean result = false;
         DialogSaveDocument fileChooser = new DialogSaveDocument(new JFrame(), true);
-        if ( document.getDocumentType() == DocumentType.WORD )
+        if (document.getDocumentType() == DocumentType.WORD)
         {
             fileChooser.setFileFilter(new WordFileFilter());
         }
-        if ( document.getDocumentType() == DocumentType.PPT )
+        if (document.getDocumentType() == DocumentType.PPT)
         {
             fileChooser.setFileFilter(new PPTFileFilter());
         }
-        if ( document.getDocumentType() == DocumentType.EXCEL )
+        if (document.getDocumentType() == DocumentType.EXCEL)
         {
             fileChooser.setFileFilter(new ExcelFileFilter());
         }
         fileChooser.setVisible(true);
         boolean isCanceled = fileChooser.isCanceled();
-        if ( !isCanceled )
+        if (!isCanceled)
         {
             File file = fileChooser.getSelectedFile();
-            saveDocument(file);
-        }
+            result=saveDocument(file);
+        }        
         return result;
     }
 
     public final void publish()
     {
-        if ( isReadOnly() )
+        if (isReadOnly())
         {
             JOptionPane.showMessageDialog(null, "El documento es de sólo lectura, por lo cuál no puede ser publicado", TITLE, JOptionPane.ERROR_MESSAGE);
         }
         else
         {
-            if ( OfficeApplication.tryLogin() && setupDocument() )
+            if (OfficeApplication.tryLogin() && setupDocument())
             {
-                boolean canbepublished = false;
-                if ( isNewDocument() )
-                {
+                boolean canbepublished = false;                
+                if (isNewDocument())                
+                {                    
                     canbepublished = showSaveDialog(this);
                 }
                 else
-                {
+                {                    
                     canbepublished = true;
                 }
-                if ( canbepublished )
+                if (canbepublished)
                 {
-                    if ( isPublicated() )
+                    if (isPublicated())
                     {
                         try
                         {
-                            if ( isModified() )
+                            if (isModified())
                             {
                                 save();
                             }
@@ -516,13 +511,13 @@ public abstract class OfficeDocument
                             {
                                 updateContent();
                             }
-                            catch ( Exception e )
+                            catch (Exception e)
                             {
                                 JOptionPane.showMessageDialog(null, "No se puede actualizar el contenido la causa es: " + e.getMessage(), TITLE, JOptionPane.ERROR_MESSAGE);
                                 ErrorLog.log(e);
                             }
                         }
-                        catch ( WBException e )
+                        catch (WBException e)
                         {
                             JOptionPane.showMessageDialog(null, e.getMessage(), TITLE, JOptionPane.ERROR_MESSAGE);
                             ErrorLog.log(e);
@@ -532,22 +527,34 @@ public abstract class OfficeDocument
                     {
                         PublishResultProducer resultProducer = new PublishResultProducer(this);
                         Class[] clazz;
-                        switch ( getDocumentType() )
+                        switch (getDocumentType())
                         {
                             case WORD:
-                                clazz = new Class[]{TitleAndDescription.class, SelectCategory.class, PagContenido.class, SelectTypeToShow.class};
+                                clazz = new Class[]
+                                        {
+                                            TitleAndDescription.class, SelectCategory.class, PagContenido.class, SelectTypeToShow.class
+                                        };
                                 break;
                             case EXCEL:
-                                clazz = new Class[]{TitleAndDescription.class, SelectCategory.class, PagContenido.class};
+                                clazz = new Class[]
+                                        {
+                                            TitleAndDescription.class, SelectCategory.class, PagContenido.class
+                                        };
                                 break;
                             case PPT:
-                                clazz = new Class[]{TitleAndDescription.class, SelectCategory.class, PagContenido.class};
+                                clazz = new Class[]
+                                        {
+                                            TitleAndDescription.class, SelectCategory.class, PagContenido.class
+                                        };
                                 break;
                             default:
-                                clazz = new Class[]{TitleAndDescription.class, SelectCategory.class};
+                                clazz = new Class[]
+                                        {
+                                            TitleAndDescription.class, SelectCategory.class
+                                        };
                                 break;
 
-                            }
+                        }
                         Wizard wiz = WizardPage.createWizard(TITLE, clazz, resultProducer);
                         wiz.show();
                     }
@@ -567,27 +574,39 @@ public abstract class OfficeDocument
     private final boolean saveDocument(File file)
     {
         boolean result = false;
-        if ( getDocumentType() == DocumentType.WORD )
+        if (getDocumentType() == DocumentType.WORD)
         {
-            if ( !file.getName().endsWith(getDefaultExtension()) )
+            if (!file.getName().endsWith(getDefaultExtension()))
             {
                 file = new File(file.getPath() + getDefaultExtension());
             }
         }
-        if ( file.exists() )
+        if (file.exists())
         {
             int resultOption = JOptionPane.showConfirmDialog(null, "El archivo ya existe, ¿Desea sobre escribir?", TITLE, JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION);
-            if ( resultOption != JOptionPane.NO_OPTION )
+            if (resultOption != JOptionPane.NO_OPTION)
             {
                 try
                 {
                     save(file);
                     result = true;
                 }
-                catch ( WBException wbe )
+                catch (WBException wbe)
                 {
                     JOptionPane.showMessageDialog(null, wbe.getMessage(), TITLE, JOptionPane.ERROR_MESSAGE);
                 }
+            }
+        }
+        else
+        {
+            try
+            {
+                save(file);
+                result = true;
+            }
+            catch (WBException wbe)
+            {
+                JOptionPane.showMessageDialog(null, wbe.getMessage(), TITLE, JOptionPane.ERROR_MESSAGE);
             }
         }
         return result;
@@ -622,13 +641,13 @@ public abstract class OfficeDocument
         {
             getOfficeDocumentProxy().updateContent(this.contentID);
         }
-        catch ( Exception e )
+        catch (Exception e)
         {
             throw e;
         }
         finally
         {
-            if ( zipFile != null && zipFile.exists() )
+            if (zipFile != null && zipFile.exists())
             {
                 zipFile.delete();
             }
@@ -637,7 +656,6 @@ public abstract class OfficeDocument
 
     public final void addRule()
     {
-
     }
 
     public final void addLink()
@@ -646,5 +664,4 @@ public abstract class OfficeDocument
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
     }
-    
 }
