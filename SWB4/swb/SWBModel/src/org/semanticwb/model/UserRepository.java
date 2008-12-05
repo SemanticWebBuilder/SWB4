@@ -26,6 +26,7 @@ public class UserRepository extends UserRepositoryBase
     public UserRepository(SemanticObject base)
     {
         super(base);
+/*
         String uri = getProperty(SWBUR_ClassHold);
         if (uri != null)
         {
@@ -43,6 +44,7 @@ public class UserRepository extends UserRepositoryBase
                 getSemanticObject().getModel().registerClass(uri);
             }
         }
+*/
     }
 
     public User getUserByLogin(String login)
