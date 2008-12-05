@@ -4,7 +4,6 @@
  */
 package org.semanticwb.jcr170.implementation;
 
-
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QuerySolution;
@@ -39,15 +38,17 @@ import org.semanticwb.repository.Workspace;
  */
 public class QueryImp implements Query
 {
-    static Logger log=SWBUtils.getLogger(QueryImp.class);
-    private static final String NL = System.getProperty("line.separator") ; 
+
+    static Logger log = SWBUtils.getLogger(QueryImp.class);
+    private static final String NL = System.getProperty("line.separator");
     public static final String SPARQL = "SPARQL";
     private final String workspaceName;
     private final String statement;
     private final String language;
     private final SessionImp session;
     private XPath xpath = null;
-    private StringBuilder prefixStatement=new StringBuilder("");
+    private StringBuilder prefixStatement = new StringBuilder("");
+
     QueryImp(SessionImp session, String workspaceName, String statement, String language)
     {
         if (session == null || workspaceName == null)
@@ -59,15 +60,15 @@ public class QueryImp implements Query
             throw new IllegalArgumentException("The workspace " + workspaceName + " was not found");
         }
         this.statement = statement;
-        this.workspaceName = workspaceName;        
+        this.workspaceName = workspaceName;
         this.language = language;
         this.session = session;
         if (language.equals(SPARQL))
-        {            
-            for(String prefix : BaseNode.vocabulary.listUris().keySet())
+        {
+            for (String prefix : BaseNode.vocabulary.listUris().keySet())
             {
-                prefixStatement.append("PREFIX "+ prefix +": <"+BaseNode.vocabulary.listUris().get(prefix)+">");        
-            }  
+                prefixStatement.append("PREFIX " + prefix + ": <" + BaseNode.vocabulary.listUris().get(prefix) + ">");
+            }
         }
         else if (language.equals(javax.jcr.query.Query.XPATH))
         {
@@ -94,7 +95,7 @@ public class QueryImp implements Query
         {
             throw new IllegalArgumentException("The language " + language + " is not supported");
         }
-        
+
     }
 
     public QueryResult execute() throws RepositoryException
@@ -104,10 +105,10 @@ public class QueryImp implements Query
             try
             {
                 List<Element> elements = xpath.selectNodes(session.getDocumentInternalView());
-                ArrayList<String> nodes=new ArrayList<String>();
-                for(Element e : elements)
+                ArrayList<String> nodes = new ArrayList<String>();
+                for (Element e : elements)
                 {
-                    if(e.getAttributeValue("path")!=null || !e.getAttributeValue("path").equals(""))
+                    if (e.getAttributeValue("path") != null || !e.getAttributeValue("path").equals(""))
                     {
                         nodes.add(e.getAttributeValue("path"));
                     }
@@ -129,25 +130,32 @@ public class QueryImp implements Query
         }
         else
         {
-            ArrayList<String> nodes=new ArrayList<String>();
-            Model model=SWBContext.getWorkspace(workspaceName).getSemanticObject().getModel().getRDFModel();
-            StringBuilder newStatement=new StringBuilder(statement);
-            int pos=newStatement.toString().toLowerCase().indexOf("select ");
-            if(pos!=-1)
+            ArrayList<String> nodes = new ArrayList<String>();
+            Model model = SWBContext.getWorkspace(workspaceName).getSemanticObject().getModel().getRDFModel();
+            StringBuilder newStatement = new StringBuilder(statement);
+            int pos = newStatement.toString().toLowerCase().indexOf("select ");
+            if (pos != -1)
             {
-                newStatement.insert(pos+6, " ?path ");
-                pos=newStatement.indexOf("{");
-                newStatement.insert(pos+1, " ?x swbrep:path ?path . ");
+                newStatement.insert(pos + 6, " ?path ");
+                pos = newStatement.indexOf("{");
+                newStatement.insert(pos + 1, " ?x swbrep:path ?path . ");
             }
-            String sparql=prefixStatement.toString()+NL+newStatement;
-            com.hp.hpl.jena.query.Query query = com.hp.hpl.jena.query.QueryFactory.create(sparql) ;
-            QueryExecution qexec = QueryExecutionFactory.create(query, model) ;
-            ResultSet rs = qexec.execSelect() ;
-            while(rs.hasNext())
+            String sparql = prefixStatement.toString() + NL + newStatement;
+            com.hp.hpl.jena.query.Query query = com.hp.hpl.jena.query.QueryFactory.create(sparql);
+            QueryExecution qexec = QueryExecutionFactory.create(query, model);
+            try
             {
-                QuerySolution rb = rs.nextSolution() ;
-                String path=rb.get("path").toString();
-                nodes.add(path);
+                ResultSet rs = qexec.execSelect();
+                while (rs.hasNext())
+                {
+                    QuerySolution rb = rs.nextSolution();
+                    String path = rb.get("path").toString();
+                    nodes.add(path);
+                }
+            }
+            catch (Throwable e)
+            {
+                log.error(e);
             }
             return new QueryResultImp(session, nodes, workspaceName);
         }
