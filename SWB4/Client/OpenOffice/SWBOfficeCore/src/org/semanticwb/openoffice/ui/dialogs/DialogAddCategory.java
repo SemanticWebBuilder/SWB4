@@ -24,6 +24,8 @@ public class DialogAddCategory extends javax.swing.JDialog
         super(parent, modal);
         initComponents();
         this.repository = repository;
+        this.setTitle("Agregar categoria a repositorio "+repository);
+        this.setLocationRelativeTo(null);
     }
 
     /** This method is called from within the constructor to
@@ -44,6 +46,7 @@ public class DialogAddCategory extends javax.swing.JDialog
         jButtonCancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Agregar Categoria");
 
         jLabel1.setText("Nombre:");
 
@@ -110,7 +113,7 @@ public class DialogAddCategory extends javax.swing.JDialog
     }// </editor-fold>//GEN-END:initComponents
 
 private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelActionPerformed
-    this.setVisible(true);
+    this.setVisible(false);
 }//GEN-LAST:event_jButtonCancelActionPerformed
 
 private void jButtonAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAcceptActionPerformed
