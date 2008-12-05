@@ -233,11 +233,10 @@
           var newTab = dijit.byId(objid);
           if(newTab==null)
           {
-              newTab = new dojox.layout.ContentPane(
+              newTab = new dijit.layout.ContentPane(
               {
                   id: objid,
                   closeable:'true',
-                  executeScripts:'true',
                   onClose: function()
                   {
                       var ret=true;
@@ -398,5 +397,30 @@
              script.src = filepath;
              head.appendChild(script);
          }
+     }
+
+     var sy=0;
+     var si=1;
+     function scroll()
+     {
+        var t=30;
+        var ele=dojo.byId('status');
+        if(sy>20)
+        {
+            si=-1;
+            t=5000;
+        }
+        sy+=si;
+        ele.style.bottom=sy+'px';
+        if(sy>0)setTimeout(scroll,t);
+     }
+
+     function setStatus(msg)
+     {
+         var ele=dojo.byId('status');
+         ele.innerHTML=msg;
+         sy=0;
+         si=1;
+         scroll();
      }
 

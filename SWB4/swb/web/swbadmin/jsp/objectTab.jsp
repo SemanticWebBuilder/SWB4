@@ -55,7 +55,7 @@
         }
         if(addDiv)
         {
-            out.println("<div dojoType=\"dojox.layout.ContentPane\" title=\""+title+"\" style=\"padding:10px;\" refreshOnShow=\""+refresh+"\" href=\""+url+"?"+params+"\" executeScripts=\"true\"></div>");
+            out.println("<div dojoType=\"dijit.layout.ContentPane\" title=\""+title+"\" style=\"padding:10px;\" refreshOnShow=\""+refresh+"\" href=\""+url+"?"+params+"\" executeScripts=\"false\"></div>");
         }
     }
 %>
