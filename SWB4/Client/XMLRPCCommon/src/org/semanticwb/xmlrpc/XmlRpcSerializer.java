@@ -159,7 +159,7 @@ public class XmlRpcSerializer {
             for ( Object objValue : listValues )
             {
                 Element eValue = ( Element ) objValue;
-                Iterator itValues = eValue.getDescendants();
+                Iterator itValues = eValue.getChildren().iterator();
                 while (itValues.hasNext())
                 {
                     Object child = itValues.next();
