@@ -58,7 +58,7 @@ public class SimpleNode implements Node
     static Logger log = SWBUtils.getLogger(SimpleNode.class);
     private String path;
     private String id;
-    private boolean modified=false;
+    private boolean modified = false;
     static final String DEFAULT_PRIMARY_NODE_TYPE_NAME = "nt:unstructured";
     protected static final String NOT_SUPPORTED_YET = "Not supported yet.";
     protected static final String WAS_NOT_FOUND = " was not found";
@@ -394,7 +394,7 @@ public class SimpleNode implements Node
             mixins.add(mixinClazz);
         }
         catch (SWBException e)
-        {            
+        {
             throw new NoSuchNodeTypeException(e);
         }
     }
@@ -448,17 +448,17 @@ public class SimpleNode implements Node
         if (property != null)
         {
             property.setValue(value);
-            modified=true;
+            modified = true;
         }
         else
         {
             if (!getPrimaryNodeType().canSetProperty(name, value))
             {
-                throw new ConstraintViolationException("The property "+ name +" is not defined in this nodeType");
+                throw new ConstraintViolationException("The property " + name + " is not defined in this nodeType");
             }
             property = addProperty(name);
             property.setValue(value);
-            modified=true;
+            modified = true;
         }
         return property;
     }
@@ -578,7 +578,7 @@ public class SimpleNode implements Node
     {
         if (properties.get(getName(BaseNode.vocabulary.jcr_uuid)) != null)
         {
-            PropertyImp prop=properties.get(getName(BaseNode.vocabulary.jcr_uuid));
+            PropertyImp prop = properties.get(getName(BaseNode.vocabulary.jcr_uuid));
             String getUUID = prop.getString();
             if (getUUID == null)
             {
@@ -777,7 +777,7 @@ public class SimpleNode implements Node
         for (SimpleNode child : this.childs.values())
         {
             child.saveProperties();
-            child.modified=false;
+            child.modified = false;
         }
         for (SemanticClass mixinClazz : this.mixins)
         {
@@ -802,7 +802,7 @@ public class SimpleNode implements Node
                 prop.setNew(false);
             }
         }
-        modified=false;
+        modified = false;
     }
 
     private void removeChilds() throws RepositoryException, SWBException
@@ -851,8 +851,8 @@ public class SimpleNode implements Node
             createChilds();
             saveProperties();
             node.save();
-            
-            modified=false;
+
+            modified = false;
         }
         catch (SWBException swbe)
         {
@@ -908,8 +908,8 @@ public class SimpleNode implements Node
         session.checksLock(this);
         parent.removedchilds.add(this);
         parent.childs.remove(this.id);
-        parent.modified=true;
-        this.modified=true;
+        parent.modified = true;
+        this.modified = true;
     }
 
     protected SessionImp getSessionImp()
@@ -1066,10 +1066,22 @@ public class SimpleNode implements Node
             {
                 throw new RepositoryException("The node can not add a child in check-in mode");
             }
-
-            if (session.itemExists(relPath))
+            boolean allowsSameNameSiblings=false;
+            try
             {
-                throw new ItemExistsException("The item " + relPath + " already exists");
+                SemanticClass clazzToCreate=node.getSemanticClass(primaryNodeTypeName);
+                allowsSameNameSiblings=root.allowsSameNameSiblings(clazz,clazzToCreate);
+            }
+            catch(SWBException swbe)
+            {
+                
+            }
+            if (!allowsSameNameSiblings)
+            {
+                if (session.itemExists(relPath))
+                {
+                    throw new ItemExistsException("The item " + relPath + " already exists");
+                }
             }
             //NodeTypeImp nodeType = ( NodeTypeImp ) this.getPrimaryNodeType();
             try
@@ -1089,7 +1101,7 @@ public class SimpleNode implements Node
             {
                 SemanticClass primaryNodeClazz = root.getSemanticClass(primaryNodeTypeName);
                 SimpleNode tmp = new SimpleNode(session, nameNode, primaryNodeClazz, this, 0, UUID.randomUUID().toString());
-                modified=true;
+                modified = true;
                 return tmp;
             }
             catch (SWBException swbe)
@@ -1134,16 +1146,16 @@ public class SimpleNode implements Node
 
     public Version getBaseVersion() throws UnsupportedRepositoryOperationException, RepositoryException
     {
-        if (isVersionable() && node!=null)
+        if (isVersionable() && node != null)
         {
-            BaseNode baseVersion=node.getBaseVersion();
-            if(baseVersion!=null)
+            BaseNode baseVersion = node.getBaseVersion();
+            if (baseVersion != null)
             {
                 try
                 {
                     return new VersionImp(baseVersion, node.getHistoryNode(), session, this);
                 }
-                catch(SWBException e)
+                catch (SWBException e)
                 {
                     throw new RepositoryException(e);
                 }
@@ -1270,7 +1282,7 @@ public class SimpleNode implements Node
 
     public Version checkin() throws VersionException, UnsupportedRepositoryOperationException, InvalidItemStateException, LockException, RepositoryException
     {
-        if(node==null || this.isModified())
+        if (node == null || this.isModified())
         {
             throw new UnsupportedRepositoryOperationException("The node must be saved before, because has changes or is new");
         }
@@ -1278,10 +1290,10 @@ public class SimpleNode implements Node
         {
             try
             {
-                BaseNode version=node.checkin();
+                BaseNode version = node.checkin();
                 return new VersionImp(version, node.getHistoryNode(), session, this);
             }
-            catch(SWBException e)
+            catch (SWBException e)
             {
                 throw new RepositoryException(e);
             }
