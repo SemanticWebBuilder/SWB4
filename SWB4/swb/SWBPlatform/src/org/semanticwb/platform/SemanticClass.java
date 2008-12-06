@@ -500,4 +500,12 @@ public class SemanticClass
     {
         return herarquicalProps.iterator();
     }
+
+    public void addSubClassOf(SemanticClass cls)
+    {
+        SemanticObject obj=SWBPlatform.getSemanticMgr().getOntology().getSemanticObject(cls.getURI());
+        Resource res=obj.getRDFResource();
+        res.addProperty(res.getModel().getProperty(SemanticVocabulary.RDFS_SUBCLASSOF), cls.getOntClass());
+    }
+
 }

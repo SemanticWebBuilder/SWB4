@@ -166,7 +166,7 @@ public class SemanticObject
             m_res.addProperty(m_res.getModel().getProperty(SemanticVocabulary.RDF_TYPE), cls.getOntClass());
         }
     }      
-    
+
     public SemanticObject removeSemanticClass(SemanticClass cls)
     {
         if(m_virtual)

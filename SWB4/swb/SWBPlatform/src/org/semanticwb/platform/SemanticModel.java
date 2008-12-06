@@ -241,7 +241,7 @@ public class SemanticModel
             m.add(st);
         }
         return registerClass(uri);
-    }    
+    }
     
     public SemanticClass registerClass(String uri)
     {
