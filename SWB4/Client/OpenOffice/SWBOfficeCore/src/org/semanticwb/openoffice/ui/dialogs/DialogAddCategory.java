@@ -5,6 +5,7 @@
  */
 package org.semanticwb.openoffice.ui.dialogs;
 
+import java.awt.Cursor;
 import javax.swing.JOptionPane;
 import org.semanticwb.office.interfaces.CategoryInfo;
 import org.semanticwb.openoffice.OfficeApplication;
@@ -130,6 +131,7 @@ private void jButtonAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         jTextAreaDescription.requestFocus();
         return;
     }
+    setCursor(new Cursor(Cursor.WAIT_CURSOR));
     boolean existe = false;
     try
     {
@@ -147,6 +149,7 @@ private void jButtonAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     }
     if (existe)
     {
+        setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         JOptionPane.showMessageDialog(this, "¡Ya existe una categoria con ese nombre!", "Error al capturar nombre", JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
         jTextFieldName.requestFocus();
         return;
@@ -162,6 +165,7 @@ private void jButtonAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         }
     }
     cancel = false;
+    setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
     this.setVisible(false);
 }//GEN-LAST:event_jButtonAcceptActionPerformed
 
