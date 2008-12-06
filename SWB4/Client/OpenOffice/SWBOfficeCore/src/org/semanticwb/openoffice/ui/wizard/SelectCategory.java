@@ -7,7 +7,6 @@ package org.semanticwb.openoffice.ui.wizard;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.event.MouseEvent;
 import java.util.Map;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -17,6 +16,7 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeCellRenderer;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import org.netbeans.spi.wizard.Wizard;
 import org.netbeans.spi.wizard.WizardPage;
@@ -33,6 +33,7 @@ public class SelectCategory extends WizardPage
 {
 
     private static final String CATEGORY_ID = "categoryID";
+    private static final String REPOSITORY_ID = "repositoryID";
 
     /** Creates new form SelectCategory */
     public SelectCategory()
@@ -112,6 +113,7 @@ public class SelectCategory extends WizardPage
         jPanel1 = new javax.swing.JPanel();
         jToolBar1 = new javax.swing.JToolBar();
         jButtonAddCategory = new javax.swing.JButton();
+        jButtonDeletCategory = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTreeCategory = new javax.swing.JTree();
 
@@ -134,6 +136,18 @@ public class SelectCategory extends WizardPage
         });
         jToolBar1.add(jButtonAddCategory);
 
+        jButtonDeletCategory.setText("Borrar Categoria");
+        jButtonDeletCategory.setEnabled(false);
+        jButtonDeletCategory.setFocusable(false);
+        jButtonDeletCategory.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonDeletCategory.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonDeletCategory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonDeletCategoryActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(jButtonDeletCategory);
+
         jPanel1.add(jToolBar1);
 
         add(jPanel1, java.awt.BorderLayout.NORTH);
@@ -150,7 +164,7 @@ public class SelectCategory extends WizardPage
 
 private void jButtonAddCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddCategoryActionPerformed
     Object selected = this.jTreeCategory.getLastSelectedPathComponent();
-    if (selected!=null &&  selected instanceof RepositoryNode)
+    if (selected != null && selected instanceof RepositoryNode)
     {
         RepositoryNode repositoryNode = (RepositoryNode) selected;
         DialogAddCategory addCategory = new DialogAddCategory(new JFrame(), true, repositoryNode.getName());
@@ -174,9 +188,11 @@ private void jButtonAddCategoryActionPerformed(java.awt.event.ActionEvent evt) {
 
 private void jTreeCategoryValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_jTreeCategoryValueChanged
     Object selected = this.jTreeCategory.getLastSelectedPathComponent();
-    if (selected!=null &&  selected instanceof RepositoryNode)
+    this.getWizardDataMap().put(CATEGORY_ID, null);
+    this.getWizardDataMap().put(REPOSITORY_ID, null);
+    if (selected != null && selected instanceof RepositoryNode)
     {
-        if(((RepositoryNode)selected).getName().equals("Repositorios"))
+        if (((RepositoryNode) selected).getName().equals("Repositorios"))
         {
             this.jButtonAddCategory.setEnabled(false);
         }
@@ -189,14 +205,51 @@ private void jTreeCategoryValueChanged(javax.swing.event.TreeSelectionEvent evt)
     {
         this.jButtonAddCategory.setEnabled(false);
     }
-    if(selected!=null && selected instanceof CategoryNode)
+    this.jButtonDeletCategory.setEnabled(false);
+    if (selected != null && selected instanceof CategoryNode)
     {
-        this.getWizardDataMap().put(CATEGORY_ID,((CategoryNode)selected).getID());
+        String categoryId = ((CategoryNode) selected).getID();
+        String repository = ((RepositoryNode) ((CategoryNode) selected).getParent()).getName();
+        this.getWizardDataMap().put(CATEGORY_ID, categoryId);
+        this.getWizardDataMap().put(REPOSITORY_ID, repository);
+        try
+        {
+            if (OfficeApplication.getOfficeApplicationProxy().canDeleteCategory(repository, categoryId))
+            {
+                this.jButtonDeletCategory.setEnabled(true);
+            }
+        }
+        catch (Exception e)
+        {
+        }
     }
 }//GEN-LAST:event_jTreeCategoryValueChanged
 
+private void jButtonDeletCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeletCategoryActionPerformed
+
+    String categoryId = (String) this.getWizardDataMap().get(CATEGORY_ID);
+    String repository = (String) this.getWizardDataMap().get(REPOSITORY_ID);
+    try
+    {
+        if (OfficeApplication.getOfficeApplicationProxy().deleteCategory(repository, categoryId))
+        {
+            TreePath selected = this.jTreeCategory.getSelectionPath();
+            TreePath parent = selected.getParentPath();
+            jTreeCategory.removeSelectionPath(selected);
+            jTreeCategory.setSelectionPath(parent);
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(this, "No se puede borrar la categoria por que tiene contenidos","Borrar categoria",JOptionPane.ERROR | JOptionPane.YES_NO_OPTION);
+        }
+    }
+    catch (Exception e)
+    {
+    }
+}//GEN-LAST:event_jButtonDeletCategoryActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAddCategory;
+    private javax.swing.JButton jButtonDeletCategory;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar jToolBar1;
