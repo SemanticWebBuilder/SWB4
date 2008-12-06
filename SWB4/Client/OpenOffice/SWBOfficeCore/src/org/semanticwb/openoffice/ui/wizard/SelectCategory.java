@@ -7,6 +7,7 @@ package org.semanticwb.openoffice.ui.wizard;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.util.Map;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -163,6 +164,7 @@ public class SelectCategory extends WizardPage
     }// </editor-fold>//GEN-END:initComponents
 
 private void jButtonAddCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddCategoryActionPerformed
+    this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
     Object selected = this.jTreeCategory.getLastSelectedPathComponent();
     if (selected != null && selected instanceof RepositoryNode)
     {
@@ -184,9 +186,11 @@ private void jButtonAddCategoryActionPerformed(java.awt.event.ActionEvent evt) {
             }
         }
     }
+    this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 }//GEN-LAST:event_jButtonAddCategoryActionPerformed
 
 private void jTreeCategoryValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_jTreeCategoryValueChanged
+    this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
     Object selected = this.jTreeCategory.getLastSelectedPathComponent();
     this.getWizardDataMap().put(CATEGORY_ID, null);
     this.getWizardDataMap().put(REPOSITORY_ID, null);
@@ -223,29 +227,39 @@ private void jTreeCategoryValueChanged(javax.swing.event.TreeSelectionEvent evt)
         {
         }
     }
+    this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 }//GEN-LAST:event_jTreeCategoryValueChanged
 
 private void jButtonDeletCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeletCategoryActionPerformed
-
+    this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
     String categoryId = (String) this.getWizardDataMap().get(CATEGORY_ID);
     String repository = (String) this.getWizardDataMap().get(REPOSITORY_ID);
     try
     {
         if (OfficeApplication.getOfficeApplicationProxy().deleteCategory(repository, categoryId))
         {
-            TreePath selected = this.jTreeCategory.getSelectionPath();
-            TreePath parent = selected.getParentPath();
-            jTreeCategory.removeSelectionPath(selected);
-            jTreeCategory.setSelectionPath(parent);
+            DefaultMutableTreeNode node = (DefaultMutableTreeNode) jTreeCategory.getLastSelectedPathComponent();
+            if (node == null)
+            {
+                return;
+            }
+            DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) (node.getParent());
+            if (parentNode == null)
+            {
+                return;//-- remove node --
+            }
+            parentNode.remove(node);
+            ((DefaultTreeModel)jTreeCategory.getModel()).reload(parentNode);
         }
         else
         {
-            JOptionPane.showMessageDialog(this, "No se puede borrar la categoria por que tiene contenidos","Borrar categoria",JOptionPane.ERROR | JOptionPane.YES_NO_OPTION);
+            JOptionPane.showMessageDialog(this, "No se puede borrar la categoria por que tiene contenidos", "Borrar categoria", JOptionPane.ERROR | JOptionPane.YES_NO_OPTION);
         }
     }
     catch (Exception e)
     {
     }
+    this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 }//GEN-LAST:event_jButtonDeletCategoryActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAddCategory;
