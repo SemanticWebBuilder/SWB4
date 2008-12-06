@@ -17,8 +17,6 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeCellRenderer;
-import javax.swing.tree.TreeNode;
-import javax.swing.tree.TreePath;
 import org.netbeans.spi.wizard.Wizard;
 import org.netbeans.spi.wizard.WizardPage;
 import org.netbeans.spi.wizard.WizardPanelNavResult;
@@ -33,8 +31,8 @@ import org.semanticwb.openoffice.ui.dialogs.DialogAddCategory;
 public class SelectCategory extends WizardPage
 {
 
-    private static final String CATEGORY_ID = "categoryID";
-    private static final String REPOSITORY_ID = "repositoryID";
+    public static final String CATEGORY_ID = "categoryID";
+    public  static final String REPOSITORY_ID = "repositoryID";
 
     /** Creates new form SelectCategory */
     public SelectCategory()
