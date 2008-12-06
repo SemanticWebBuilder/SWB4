@@ -18,8 +18,8 @@ import org.semanticwb.openoffice.util.FixedLengthPlainDocument;
  */
 public class TitleAndDescription extends WizardPage
 {
-    private static final String TITLE="title";
-    private static final String DESCRIPTION="description";
+    public static final String TITLE="title";
+    public static final String DESCRIPTION="description";
     
     /** Creates new form TitleAndDescription */
     public TitleAndDescription()
