@@ -60,6 +60,7 @@ public class UserTest {
         System.out.println("Model:"+repository.getSemanticObject().getModel().getRDFModel());
         SemanticClass cls = repository.getUserType("estudiante");
         repository.createStringExtendedAttribute("escuela", "estudiante");
+        repository.createIntExtendedAttribute("edad");
         User instance = repository.getUserByLogin("admin");
         instance.addUserType("estudiante");
         //instance.getSemanticObject().addSemanticClass(cls);
