@@ -22,7 +22,15 @@ public interface IOfficeApplication {
     @XmlRpcMethod(methodName="OfficeApplication.existPage")
     public boolean existsPage(String id) throws Exception; 
     @XmlRpcMethod(methodName="OfficeApplication.createCategory")
-    public String createCategory(String repositoryName,String id,String description) throws Exception; 
+    public String createCategory(String repositoryName,String id,String description) throws Exception;
+
+    @XmlRpcMethod(methodName="OfficeApplication.canDeleteCategory")
+    public boolean canDeleteCategory(String repositoryName,String id) throws Exception;
+
+
+    @XmlRpcMethod(methodName="OfficeApplication.deleteCategory")
+    public boolean deleteCategory(String repositoryName,String id) throws Exception;
+
     @XmlRpcMethod(methodName="OfficeApplication.getRepositories")
     public String[] getRepositories() throws Exception;
     @XmlRpcMethod(methodName="OfficeApplication.getCategories")
