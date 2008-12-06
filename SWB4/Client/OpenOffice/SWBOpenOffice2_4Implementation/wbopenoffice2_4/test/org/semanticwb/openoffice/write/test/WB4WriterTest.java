@@ -264,7 +264,7 @@ public class WB4WriterTest
             WB4Writer writer = new WB4Writer(this.xContext);
             writer.publish();
         }
-        catch ( WBException wbe )
+        catch ( Throwable wbe )
         {
             Assert.fail(wbe.getMessage());
         }
