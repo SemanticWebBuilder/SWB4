@@ -31,6 +31,7 @@ public class SemanticVocabulary
     public static final String RDFS_DOMAIN=RDFS_URI+"domain";
     public static final String RDFS_RANGE=RDFS_URI+"range";
     public static final String RDFS_SUBPROPERTYOF=RDFS_URI+"subPropertyOf";
+    public static final String RDFS_SUBCLASSOF=RDFS_URI+"subClassOf";
     
     public static final String XMLS_URI="http://www.w3.org/2001/XMLSchema#";
     public static final String XMLS_DATETIME=XMLS_URI+"dateTime";
