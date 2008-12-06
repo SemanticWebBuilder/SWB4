@@ -52,7 +52,7 @@ public class PublishResultProducer implements WizardResultProducer
                 String categoryID=wizardData.get(SelectCategory.CATEGORY_ID).toString();                
                 String repositoryName=wizardData.get(SelectCategory.REPOSITORY_ID).toString();                
                 String contentID=openOfficeDocument.publish(title, description,repositoryName,categoryID,document.getDocumentType().toString());
-                document.SaveContentId(contentID);                
+                document.SaveContentId(contentID,repositoryName);                
                 Summary summary=Summary.create(new SummaryPublish(),null);               
                 progress.finished(summary);
             }           
