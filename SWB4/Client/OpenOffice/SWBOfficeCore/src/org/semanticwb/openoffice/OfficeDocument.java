@@ -52,7 +52,9 @@ public abstract class OfficeDocument
 {
 
     private static final String TITLE = "Asistente de publicación";
-    private static final String CONTENT_ID_NAME = "contentID";
+    public static final String CONTENT_ID_NAME = "contentID";
+    public static final String WORKSPACE_ID_NAME = "workspaceID";
+    
     private static final String TITLE_VERIFY = "Verificación de contenido";
     // By default the content is not published
     private String contentID = null;
@@ -532,19 +534,20 @@ public abstract class OfficeDocument
                             case WORD:
                                 clazz = new Class[]
                                         {
-                                            TitleAndDescription.class, SelectCategory.class, PagContenido.class, SelectTypeToShow.class
+                                            //TitleAndDescription.class, SelectCategory.class, PagContenido.class, SelectTypeToShow.class
+                                            TitleAndDescription.class, SelectCategory.class, SelectTypeToShow.class
                                         };
                                 break;
                             case EXCEL:
                                 clazz = new Class[]
                                         {
-                                            TitleAndDescription.class, SelectCategory.class, PagContenido.class
+                                            TitleAndDescription.class, SelectCategory.class, SelectTypeToShow.class
                                         };
                                 break;
                             case PPT:
                                 clazz = new Class[]
                                         {
-                                            TitleAndDescription.class, SelectCategory.class, PagContenido.class
+                                            TitleAndDescription.class, SelectCategory.class, SelectTypeToShow.class
                                         };
                                 break;
                             default:
@@ -563,11 +566,12 @@ public abstract class OfficeDocument
         }
     }
 
-    void SaveContentId(String contentId) throws WBException
+    void SaveContentId(String contentId,String workspaceId) throws WBException
     {
         this.contentID = contentId;
         HashMap<String, String> values = new HashMap<String, String>();
         values.put(CONTENT_ID_NAME, contentId);
+        values.put(WORKSPACE_ID_NAME, workspaceId);
         saveCustomProperties(values);
     }
 
