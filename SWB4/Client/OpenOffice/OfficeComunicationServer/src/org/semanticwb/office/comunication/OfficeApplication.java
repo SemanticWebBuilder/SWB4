@@ -14,6 +14,8 @@ import javax.jcr.query.Query;
 import javax.jcr.query.QueryResult;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionIterator;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.office.interfaces.CategoryInfo;
 import org.semanticwb.office.interfaces.IOfficeApplication;
 import org.semanticwb.repository.RepositoryManagerLoader;
@@ -25,6 +27,7 @@ import org.semanticwb.xmlrpc.XmlRpcObject;
  */
 public class OfficeApplication extends XmlRpcObject implements IOfficeApplication
 {
+    static Logger log = SWBUtils.getLogger(OfficeApplication.class);
     private static final String CATEGORY_NAME = "Category";
     private static final String CM_CATEGORY = "cm:Category";
     private static final String CM_TITLE = "cm:title";
@@ -192,5 +195,56 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         }
 
         return UUID;
+    }
+
+    public boolean canDeleteCategory(String repositoryName, String id) throws Exception
+    {
+        boolean canDeleteCategory=false;
+        Session session=null;
+        try
+        {
+            session = loader.openSession(repositoryName,"","");
+            Node node=session.getNodeByUUID(id);
+            canDeleteCategory=!node.getNodes().hasNext();
+        }
+        finally
+        {
+            if ( session != null )
+            {
+                session.logout();
+            }
+        }
+        return canDeleteCategory;
+    }
+
+    public boolean deleteCategory(String repositoryName, String id) throws Exception
+    {
+        boolean deleteCategory=false;
+        Session session=null;
+        try
+        {
+            session = loader.openSession(repositoryName,"","");
+            Node node=session.getNodeByUUID(id);
+            if(!node.getNodes().hasNext())
+            {
+                Node parent=node.getParent();
+                node.remove();
+                parent.save();
+                deleteCategory=true;
+            }
+
+        }
+        catch(Throwable e)
+        {
+            log.error(e);
+        }
+        finally
+        {
+            if ( session != null )
+            {
+                session.logout();
+            }
+        }
+        return deleteCategory;
     }
 }
