@@ -9,10 +9,12 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.office.comunication.OfficeApplication;
+import org.semanticwb.office.interfaces.CategoryInfo;
 
 /**
  *
@@ -52,6 +54,7 @@ public class TestServices
     // The methods must be annotated with annotation @Test. For example:
     //
     @Test
+    @Ignore
     public void getCategoriesTest()
     {
         OfficeApplication office=new OfficeApplication();
@@ -59,6 +62,28 @@ public class TestServices
         {
             office.createCategory(workspaceid, "demo", "Categoria demo");
             office.getCategories(workspaceid);
+        }
+        catch(Exception e)
+        {
+            Assert.fail(e.getMessage());
+        }
+    }
+    @Test
+    public void deleteCategory()
+    {
+        OfficeApplication office=new OfficeApplication();
+        try
+        {
+            for(CategoryInfo cat : office.getCategories(workspaceid))
+            {
+                if(office.canDeleteCategory(workspaceid, cat.UDDI))
+                {
+                    if(!office.deleteCategory(workspaceid, cat.UDDI))
+                    {
+                        System.out.println("No se puede borra la categoria "+cat.title);
+                    }
+                }
+            }
         }
         catch(Exception e)
         {
