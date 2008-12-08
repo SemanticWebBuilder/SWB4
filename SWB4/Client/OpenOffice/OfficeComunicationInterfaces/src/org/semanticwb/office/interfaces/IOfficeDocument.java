@@ -14,7 +14,7 @@ import org.semanticwb.xmlrpc.XmlRpcMethod;
 public interface IOfficeDocument
 {
     @XmlRpcMethod(methodName="OfficeDocument.publish") 
-    public String publish(String title,String description,String repositoryName,String categoryID,String type) throws Exception;
+    public String publish(String title,String description,String repositoryName,String categoryID,String type,String nodeType) throws Exception;
     @XmlRpcMethod(methodName="OfficeDocument.getPath")    
     public void setTitle(String contentID,String title) throws Exception;
     @XmlRpcMethod(methodName="OfficeDocument.setDescription")
