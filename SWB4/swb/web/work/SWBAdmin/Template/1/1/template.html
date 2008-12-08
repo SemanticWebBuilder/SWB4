@@ -33,13 +33,22 @@
                 color:#fff; 			
             }
             #status {
-                padding:5px;
-                position:absolute;
-                right:30px;
-                bottom:0px;
-                background:#3c3;
-                color:#fff;
-                z-index:999;
+	padding:5px;
+	position:absolute;
+	left:0px;
+	bottom:-30px;
+	background:#3c3;
+    text-align:center;
+    font-weight:bold;
+	color:#fff;
+	z-index:999;
+    width:100%;
+	cursor:wait;
+	opacity:.85; filter: alpha(opacity='85'); -moz-opacity: 0.85;
+	border:1px double black;
+    -webkit-border-radius: 4px;    /* for Safari */
+    -moz-border-radius: 4px;       /* for Firefox */
+
             }
         </style>
 
@@ -365,7 +374,7 @@
                 Cargando...
             </div>
         </div>
-        <div id="status" onclick="setStatus('Jei');">status...
+        <div id="status" dojoType="dojox.layout.ContentPane" executeScripts="true">status...
         </div>
         
     </body>

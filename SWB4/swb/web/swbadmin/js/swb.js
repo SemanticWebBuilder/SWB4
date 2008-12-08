@@ -51,18 +51,6 @@
       dojo.require("dojo.data.ItemFileWriteStore");
       dojo.require("dojo.data.ItemFileReadStore");
 
-      // for the colorpalette
-      function setColor(color){
-          var theSpan = dojo.byId("outputSpan");
-          dojo.style(theSpan,"color",color); 
-          theSpan.innerHTML = color;
-      }
-
-      // for the calendar
-      function myHandler(id,newValue){
-          console.debug("onChange for id = " + id + ", value: " + newValue);
-      }
-
       dojo.addOnLoad(function() {
 
           var start = new Date().getTime();
@@ -115,11 +103,11 @@
                   //obj=data;
                   //alert("1:"+data);
                   ret=data;
-                  return data;
+                  //return data;
               },
               error: function(data){
                   alert("An error occurred, with response: " + data);
-                  return data;
+                  //return data;
               },
               handleAs: "json"
           });
@@ -267,8 +255,13 @@
           }
       }
 
+      var act_item;
+      var act_store;
+
       function executeAction(store, item, action)
       {
+          act_item=item;
+          act_store=store;
           if(action.length)action=action[0];
           //alert("action:"+action+" ["+action.name+"] "+action.length);
           if(action.name=="reload")
@@ -280,6 +273,9 @@
           }else if(action.name=="showDialog")
           {
                 showDialog(action.value);
+          }else if(action.name=="showStatusURL")
+          {
+                showStatusURL(action.value);
           }
       }
 
@@ -327,28 +323,64 @@
 
       function updateTreeNode(store, item, jsonNode)
       {
+          if(!store)store=act_store;
+          if(!item)item=act_item;
+          var onlyNode=false;
+          if(!jsonNode)
+          {
+              onlyNode=true;
+              jsonNode=getJSON("/swb/swbadmin/jsp/Tree.jsp?suri="+encodeURIComponent(item.id))[0];
+          }
+
           store.setValues(item, "title", jsonNode.title);
           store.setValues(item, "type", jsonNode.type);
           store.setValues(item, "icon", jsonNode.icon);
-          if(jsonNode.events)store.setValues(item, "events", jsonNode.events);
-          else store.unsetAttribute(item, "events");
+          if(!onlyNode)
+          {
+            if(jsonNode.events)store.setValues(item, "events", jsonNode.events);
+            else store.unsetAttribute(item, "events");
+          }
+          if(jsonNode.menus)store.setValues(item, "menus", jsonNode.menus);
+          else store.unsetAttribute(item, "menus");
           store.save();
       }
 
       function setWaitCursor()
       {
           document.body.style.cursor="wait";
-          //dojo.byId("mtree").style.cursor="wait";
+          dojo.byId("leftAccordion").style.cursor="wait";
       }
 
       function setDefaultCursor()
       {
           document.body.style.cursor="default";
-          //dojo.byId("mtree").style.cursor="wait";
+          dojo.byId("leftAccordion").style.cursor="default";
+      }
+
+      function removeTreeNode(store, item)
+      {
+          if(!store)store=act_store;
+          if(!item)item=act_item;
+          var objid=item.id+"/tab";
+          setWaitCursor();
+          //alert("reload:"+item.id);
+          removeChilds(store,item);
+          store.deleteItem(item);
+          store.save();
+
+          var newTab = dijit.byId(objid);
+          if(newTab)
+          {
+              tabs.closeChild(newTab);
+          }
+
+          setDefaultCursor();
       }
 
       function reloadTreeNode(store, item)
       {
+          if(!store)store=act_store;
+          if(!item)item=act_item;
           setWaitCursor();
           //alert("reload:"+item.id);
           removeChilds(store,item);
@@ -399,28 +431,58 @@
          }
      }
 
-     var sy=0;
-     var si=1;
+     var ini=-30;
+     var sy=ini;
+     var si=5;
      function scroll()
      {
         var t=30;
         var ele=dojo.byId('status');
-        if(sy>20)
+        if(sy>0)
         {
-            si=-1;
+            si=-2;
             t=5000;
         }
         sy+=si;
         ele.style.bottom=sy+'px';
-        if(sy>0)setTimeout(scroll,t);
+        if(sy>ini)setTimeout(scroll,t);
      }
 
-     function setStatus(msg)
+     function showStatus(msg)
      {
-         var ele=dojo.byId('status');
-         ele.innerHTML=msg;
-         sy=0;
-         si=1;
+         var ele=dijit.byId('status');
+         ele.setContent(msg);
+         //ele.innerHTML=msg;
+         sy=ini;
+         si=2;
          scroll();
      }
+
+      function showStatusURL(url)
+      {
+          dojo.xhrGet({
+              url: url,
+              load: function(response, ioArgs){
+                showStatus(response);
+              },
+              error: function(response, ioArgs){
+                showStatus("Error: "+response);
+              },
+              handleAs: "text"
+          });
+      }
+
+      function getItem(store,id)
+      {
+          var ret=null;
+          var x=store.fetchItemByIdentity(
+          {
+              identity: id,
+              onItem: function(item)
+              {
+                  ret=item;
+              }
+          });
+          return ret;
+      }
 

@@ -181,15 +181,15 @@
         {
             if(!active)
             {
-                menus.put(getMenuItem("Activar", "dijitEditorIcon dijitEditorIconCut", getNewTabAction()));
+                menus.put(getMenuItem("Activar", "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/active.jsp?suri="+obj.getEncodedURI()+"&act=active",null)));
             }else
             {
-                menus.put(getMenuItem("Desactivar", "dijitEditorIcon dijitEditorIconCut", getNewTabAction()));
+                menus.put(getMenuItem("Desactivar", "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/active.jsp?suri="+obj.getEncodedURI()+"&act=unactive",null)));
             }
         }
 
         menus.put(getMenuItem("Editar", "dijitEditorIcon dijitEditorIconCut", getNewTabAction()));
-        menus.put(getMenuItem("Eliminar", "dijitEditorIcon dijitEditorIconCut", getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+cls.getEncodedURI()+"&sref="+obj.getEncodedURI(),null)));
+        menus.put(getMenuItem("Eliminar", "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/delete.jsp?suri="+obj.getEncodedURI(),null)));
         menus.put(getMenuSeparator());
         menus.put(getMenuItem("Recargar", "dijitEditorIcon dijitEditorIconCut", getReloadAction()));
 
