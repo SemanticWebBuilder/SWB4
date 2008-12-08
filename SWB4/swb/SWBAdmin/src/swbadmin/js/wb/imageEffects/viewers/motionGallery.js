@@ -6,14 +6,14 @@
 * http://www.dynamicdrive.com/forums/showthread.php?t=11839 by jschuer1 8/5/06
 ***********************************************/
 
- //1) Set width of the "neutral" area, en pixeles, in the center of the gallery.
-var restarea=126;
+ //1) Set width of the "neutral" area in the center of the gallery.
+var restarea=6;
  //2) Set top scroll speed in pixels. Script auto creates a range from 0 to top speed.
 var maxspeed=7;
  //3) Set to maximum width for gallery - must be less than the actual length of the image train.
 var maxwidth=1000;
  //4) Set to 1 for left start, 0 for right, 2 for center.
-var startpos=1;
+var startpos=0;
  //5) Set message to show at end of gallery. Enter "" to disable message.
 var endofgallerymsg='<span style="font-size: 11px;">End of Gallery</span>';
 
@@ -41,8 +41,7 @@ statusdiv.innerHTML=endofgallerymsg
 }
 
 function positiondiv(){
-var crossmain=document.getElementById? document.getElementById("motioncontainer") : document.all.motioncontainer;
-    var mainobjoffset=getposOffset(crossmain, "left"),
+var mainobjoffset=getposOffset(crossmain, "left"),
 menuheight=parseInt(crossmain.offsetHeight),
 mainobjoffsetH=getposOffset(crossmain, "top");
 statusdiv.style.left=mainobjoffset+(menuwidth/2)-(statusdiv.offsetWidth/2)+"px";
@@ -134,10 +133,10 @@ movestate="";
 
 function fillup(){
 if (iedom){
-var crossmain=document.getElementById? document.getElementById("motioncontainer") : document.all.motioncontainer;
+crossmain=document.getElementById? document.getElementById("motioncontainer") : document.all.motioncontainer;
 if(typeof crossmain.style.maxWidth!=='undefined')
 crossmain.style.maxWidth=maxwidth+'px';
-var menuwidth=crossmain.offsetWidth;
+menuwidth=crossmain.offsetWidth;
 cross_scroll=document.getElementById? document.getElementById("motiongallery") : document.all.motiongallery;
 actualwidth=document.getElementById? document.getElementById("trueContainer").offsetWidth : document.all['trueContainer'].offsetWidth;
 if (startpos)
