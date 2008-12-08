@@ -888,14 +888,14 @@ $.widget("ui.dynatree", {
 		var $this = this.element;
 		var opts = this.options;
 
-		// Guess skin path, if not specified
+		// Guess themes path, if not specified
 		if(!opts.imagePath) {
 			$("script").each( function () {
 				if( this.src.search(/.*dynatree[^/]*\.js$/i) >= 0 ) {
                     if( this.src.indexOf("/")>=0 ) // issue # 47
-					    opts.imagePath = this.src.slice(0, this.src.lastIndexOf("/")) + "/skin/";
+					    opts.imagePath = this.src.slice(0, this.src.lastIndexOf("/")) + "/themes/";
                     else
-					    opts.imagePath = "skin/";
+					    opts.imagePath = "themes/";
 					logMsg("Guessing imagePath from '%s': '%s'", this.src, opts.imagePath);
 					return false; // first match
 				}
@@ -1031,7 +1031,7 @@ $.ui.dynatree.defaults = {
 	title: "Dynatree root", // Name of the root node.
 	rootVisible: false, // Set to true, to make the root node visible.
 	rootCollapsible: false, // Prevent root node from being collapsed.
-	imagePath: null, // Path to a folder containing icons. Defaults to 'skin/' subdirectory.
+	imagePath: null, // Path to a folder containing icons. Defaults to 'themes/' subdirectory.
 	children: null, // Init tree structure from this object array.
 	initId: null, // Init tree structure from a <ul> element with this ID.
 	initAjax: null, // Ajax options used to initialize the tree strucuture.
