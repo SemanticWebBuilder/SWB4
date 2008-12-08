@@ -1498,6 +1498,21 @@ public class BaseNode extends BaseNodeBase
         }
         return getSemanticProperty;
     }
+    public final SemanticProperty getRequiredSemanticProperty(String propertyName)
+    {
+        SemanticProperty getSemanticProperty = null;
+        try
+        {
+            String uri = getUri(propertyName);
+            return SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(uri);
+        }
+        catch (SWBException e)
+        {
+            log.debug(e);
+            getSemanticProperty = null;
+        }
+        return getSemanticProperty;
+    }
 
     public final boolean existsProperty(String propertyName, SemanticClass clazz)
     {
