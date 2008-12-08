@@ -55,15 +55,20 @@ public class TestClass {
     /**
      * Test of getName method, of class User.
      */
-    @Test
+    
     public void testClase() {
         SemanticOntology ont=SWBPlatform.getSemanticMgr().getOntology();
     //SemanticClass clase=SWBPlatform.getSemanticMgr().getModel(smodel).createSemanticClass(suri);
     //SemanticClass clase=ont.createSemanticClass(suri);
-    SemanticClass clase = SWBContext.getDefaultRepository().getUserType("estudiante");
-    //clase = SWBContext.getVocabulary().swb_UserRepository;
+    //SemanticClass clase = SWBContext.getDefaultRepository().getUserType("estudiante");
+
+    SemanticClass clase = SWBContext.getDefaultRepository().getUserType("publico");
+    //clas2.addSuperClass(clase);
+    //clase = SWBContext.getVocabulary().swb_User;
     //clase.getOntClass().addSuperClass(SWBContext.getVocabulary().swb_User.getOntClass().getRDFType());
-    clase.addSubClassOf(SWBContext.getVocabulary().swb_User);
+    //clase.addSuperClass(SWBContext.getVocabulary().swb_User);
+   // clase = clas2;
+    //SWBContext.getDefaultRepository().createBooleanExtendedAttribute("inscrito", "publico");
     out.println(clase.getURI());
     Iterator <SemanticClass> sclsit = clase.listSuperClasses();
 
@@ -80,10 +85,20 @@ public class TestClass {
         out.println(itsp.next());
     }
     out.println("</pre>");
-    SWBFormMgr frm=new SWBFormMgr(clase, null,SWBFormMgr.MODE_VIEW);
+    SWBFormMgr frm=new SWBFormMgr(clase, null, null);
      //   frm.processForm(request, response);
         frm.setAction("/swb/swbadmin/jsp/SemClassEditor.jsp");
         out.println(frm.renderForm());
     }
 
+
+    @Test
+    public void doTest(){
+        out.println("<pre>");
+        SemanticClass clase=SWBPlatform.getSemanticMgr().getModel("urswb").createSemanticClass("urswb/clsUserType#publico");
+        Iterator<SemanticProperty>itsp = clase.listProperties();
+    while(itsp.hasNext()){
+        out.println(itsp.next());
+    }
+    }
 }
