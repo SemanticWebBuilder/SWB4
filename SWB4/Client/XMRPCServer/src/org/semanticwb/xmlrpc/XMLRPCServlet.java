@@ -78,7 +78,7 @@ public abstract class XMLRPCServlet extends HttpServlet
                 String methodName = getMethodName(xmlrpcDocument);
                 ArrayList<Method> methods = getMethods(methodName);
                 Object[] parameters = deserializeRequest(xmlrpcDocument, methods);
-                Method method = getMethod(methodName, methods);
+                Method method = getMethod(methodName, methods,parameters);
                 String objectName = method.getDeclaringClass().getName();
                 Object objResponse = execute(objectName, method, parameters, parts);
                 Document docResponse = serializeResponse(objResponse);
@@ -148,15 +148,23 @@ public abstract class XMLRPCServlet extends HttpServlet
         }
     }
 
-    private static Method getMethod(String methodName, ArrayList<Method> methods) throws NoSuchMethodException
+    private static Method getMethod(String methodName, ArrayList<Method> methods,Object[] parameters) throws NoSuchMethodException
     {
-        switch (methods.size())
+        for(Method m : methods)
+        {
+            if(m.getParameterTypes().length==parameters.length)
+            {
+                return m;
+            }
+        }
+        throw new NoSuchMethodException("The method " + methodName + " was not found");
+        /*switch (methods.size())
         {
             case 1:
                 return methods.get(0);
             default:
         }
-        throw new NoSuchMethodException("The method " + methodName + " was not found");
+        throw new NoSuchMethodException("The method " + methodName + " was not found");*/
     }
 
     private static void sendResponse(ServletResponse response, Document docResponse) throws IOException
