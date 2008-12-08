@@ -4,6 +4,7 @@
  */
 package org.semanticwb.jcr170.implementation;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -17,6 +18,10 @@ import javax.jcr.SimpleCredentials;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
+import org.semanticwb.platform.SemanticClass;
+import org.semanticwb.platform.SemanticLiteral;
+import org.semanticwb.platform.SemanticProperty;
+import org.semanticwb.repository.BaseNode;
 import org.semanticwb.repository.Unstructured;
 import org.semanticwb.repository.Workspace;
 
@@ -26,8 +31,10 @@ import org.semanticwb.repository.Workspace;
  */
 public final class RepositoryImp implements Repository
 {
-    static Logger log=SWBUtils.getLogger(RepositoryImp.class);
+
+    static Logger log = SWBUtils.getLogger(RepositoryImp.class);
     private static Hashtable<String, String> descriptors = new Hashtable<String, String>();
+
 
     static
     {
@@ -53,25 +60,25 @@ public final class RepositoryImp implements Repository
 
     public RepositoryImp() throws RepositoryException
     {
-        log.event("Initializing repository with namespace "+namespace+" ...");
+        log.event("Initializing repository with namespace " + namespace + " ...");
         boolean exists = false;
-        for ( String name : listWorkspaces() )
+        for (String name : listWorkspaces())
         {
-            if ( name.equals(defaultWorkspaceName) )
+            if (name.equals(defaultWorkspaceName))
             {
-                log.event("Creating a Default Workspace with name "+ defaultWorkspaceName + " ...");
+                log.event("Creating a Default Workspace with name " + defaultWorkspaceName + " ...");
                 Workspace ws = SWBContext.createWorkspace(name, namespace);
-                if ( ws.getRoot() == null )
+                if (ws.getRoot() == null)
                 {
                     Unstructured root = ws.createUnstructured();
-                    root.setName("jcr:root");                    
+                    root.setName("jcr:root");
                     ws.setRoot(root);
                 }
                 exists = true;
                 break;
             }
         }
-        if ( !exists )
+        if (!exists)
         {
             createWorkspace(defaultWorkspaceName);
         }
@@ -83,39 +90,41 @@ public final class RepositoryImp implements Repository
         this();
         this.defaultWorkspaceName = defaultWorkspaceName;
         boolean exists = false;
-        for ( String name : listWorkspaces() )
+        for (String name : listWorkspaces())
         {
-            if ( name.equals(defaultWorkspaceName) )
+            if (name.equals(defaultWorkspaceName))
             {
                 Workspace ws = SWBContext.createWorkspace(name, namespace);
-                if ( ws.getRoot() == null )
+                if (ws.getRoot() == null)
                 {
                     Unstructured root = ws.createUnstructured();
-                    root.setName("jcr:root");                    
+                    root.setName("jcr:root");
                     ws.setRoot(root);
                 }
                 exists = true;
                 break;
             }
         }
-        if ( !exists )
+        if (!exists)
         {
             createWorkspace(defaultWorkspaceName);
         }
     }
+
     public void recreateDefaultWorkspace() throws RepositoryException
     {
-        for ( String name : listWorkspaces() )
+        for (String name : listWorkspaces())
         {
-            if ( name.equals(defaultWorkspaceName) )
-            {                
-                String uri=SWBContext.getWorkspace(defaultWorkspaceName).getURI();
-                SWBContext.removeWorkspace(uri);                
+            if (name.equals(defaultWorkspaceName))
+            {
+                String uri = SWBContext.getWorkspace(defaultWorkspaceName).getURI();
+                SWBContext.removeWorkspace(uri);
                 createWorkspace(defaultWorkspaceName);
                 break;
             }
         }
     }
+
     public String[] listWorkspaces()
     {
         HashSet<String> names = new HashSet<String>();
@@ -151,34 +160,34 @@ public final class RepositoryImp implements Repository
 
     public static void createWorkspace(String name) throws RepositoryException
     {
-        if ( name == null || name.trim().equals("") )
+        if (name == null || name.trim().equals(""))
         {
             throw new RepositoryException("The name of repository can not be null or empty");
         }
-        log.debug("Creating workspace "+ name + " ...");
+        log.debug("Creating workspace " + name + " ...");
         Workspace ws = SWBContext.createWorkspace(name, namespace);
         Unstructured root = ws.createUnstructured();
-        root.setName("jcr:root");        
+        root.setName("jcr:root");
         root.setPath("/");
         ws.setRoot(root);
     }
 
     public Session login(Credentials credentials, String workspaceName) throws LoginException, NoSuchWorkspaceException, RepositoryException
     {
-        if ( credentials == null )
+        if (credentials == null)
         {
             throw new LoginException("The simple credential is null");
         }
-        if ( workspaceName == null )
+        if (workspaceName == null)
         {
             workspaceName = defaultWorkspaceName;
         }
         Workspace workspace = SWBContext.getWorkspace(workspaceName);
-        if ( workspace != null )
+        if (workspace != null)
         {
-            if ( credentials instanceof SimpleCredentials )
+            if (credentials instanceof SimpleCredentials)
             {
-                SimpleCredentials simpleCredentials = ( SimpleCredentials ) credentials;
+                SimpleCredentials simpleCredentials = (SimpleCredentials) credentials;
                 return new SessionImp(this, workspace.getURI(), simpleCredentials);
             }
             else
@@ -205,5 +214,42 @@ public final class RepositoryImp implements Repository
     public Session login() throws LoginException, RepositoryException
     {
         return login(null, null);
+    }
+
+    public HashMap<String, String> getContentTypes()
+    {
+        HashMap<String, String> types = new HashMap<String, String>();
+        SemanticClass cm_content = BaseNode.vocabulary.cm_Content;
+        if (SWBContext.getWorkspace(defaultWorkspaceName) != null)
+        {
+            SemanticProperty prop = SWBContext.getWorkspace(defaultWorkspaceName).getRoot().getRequiredSemanticProperty("swbrep:nodeTitle");
+            if (prop != null)
+            {
+                String label = "Sin descripción";
+                SemanticLiteral literal = cm_content.getRequiredProperty(prop);
+                if (literal != null && literal.getString() != null)
+                {
+                    label = literal.getString();
+                }
+                types.put(cm_content.getPrefix() + ":" + cm_content.getName(), label);
+                Iterator<SemanticClass> childClases = cm_content.listSubClasses();
+                while (childClases.hasNext())
+                {
+                    SemanticClass clazz = childClases.next();
+                    label = "Sin descripción";
+                    literal = clazz.getRequiredProperty(prop);
+                    if (literal != null && literal.getString() != null)
+                    {
+                        label = literal.getString();
+                    }
+                    types.put(clazz.getPrefix() + ":" + clazz.getName(), label);
+                }
+            }
+        }
+        else
+        {
+            log.debug("The workspace " + defaultWorkspaceName + "was not found");
+        }
+        return types;
     }
 }
