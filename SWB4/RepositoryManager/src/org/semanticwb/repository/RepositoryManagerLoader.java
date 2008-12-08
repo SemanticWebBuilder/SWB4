@@ -5,7 +5,7 @@
 package org.semanticwb.repository;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Hashtable;
 import javax.jcr.Session;
 import org.semanticwb.Logger;
@@ -92,6 +92,19 @@ public class RepositoryManagerLoader
             String workspace = values[0];
             String repository = values[1];
             return repositoryManagers.get(repository).openSession(workspace, id, password);
+        }
+        else
+        {
+            throw new IllegalArgumentException("The workspaceid is invalid");
+        }
+    }
+    public HashMap<String,String> getContentTypes(String workspaceId)
+    {
+        String[] values = workspaceId.split("@");
+        if (values.length == 2)
+        {            
+            String repository = values[1];
+            return repositoryManagers.get(repository).getContentTypes();
         }
         else
         {
