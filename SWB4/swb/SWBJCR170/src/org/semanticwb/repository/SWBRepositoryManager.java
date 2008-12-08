@@ -6,6 +6,7 @@ package org.semanticwb.repository;
 
 import org.semanticwb.repository.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import org.semanticwb.jcr170.implementation.RepositoryImp;
 import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
@@ -58,5 +59,11 @@ public final class SWBRepositoryManager implements RepositoryManager
     public boolean isUsedForOffice()
     {
         return true;
+    }
+    public HashMap<String,String> getContentTypes()
+    {
+        HashMap<String,String> types=new HashMap<String, String>();
+        types.put("cm:Content","Contenido Simple");
+        return types;
     }
 }
