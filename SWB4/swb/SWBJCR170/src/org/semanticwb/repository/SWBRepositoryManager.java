@@ -7,7 +7,6 @@ package org.semanticwb.repository;
 import org.semanticwb.repository.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import org.semanticwb.jcr170.implementation.RepositoryImp;
 import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
@@ -16,7 +15,6 @@ import javax.jcr.SimpleCredentials;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.platform.SemanticClass;
 
 /**
  *
@@ -65,5 +63,20 @@ public final class SWBRepositoryManager implements RepositoryManager
     public HashMap<String,String> getContentTypes()
     {        
         return repository.getContentTypes();
+    }
+
+    public String getCategoryType()
+    {
+        return BaseNode.vocabulary.cm_OfficeCategory.getPrefix()+":"+BaseNode.vocabulary.cm_OfficeCategory.getName();
+    }
+
+    public String getPropertyTitleType()
+    {
+        return BaseNode.vocabulary.cm_title.getPrefix()+":"+BaseNode.vocabulary.cm_title.getName();
+    }
+
+    public String getPropertyDescriptionType()
+    {
+        return BaseNode.vocabulary.cm_description.getPrefix()+":"+BaseNode.vocabulary.cm_description.getName();
     }
 }
