@@ -26,23 +26,42 @@
 		
                 <statictext name="showCurrentTextColor">
                     <![CDATA[
-                         <nobr>Color actual:&nbsp;<span id="curTextColor" style="background-color:{@db_anotherColor};" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;[{@db_anotherColor}]</nobr>
+                    <nobr>
+                    Color de texto (hexadecimal):&nbsp;
+                    <input type="TEXT" id="textcolor" name="textcolor" value="{@db_textcolor}" size="7" maxlength="7" />
+                    <span style="background-color:{@db_textcolor};">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    </nobr>
                     ]]>
                 </statictext>
-                <input type="TEXT" size="7" maxlength="7" value="" id="anotherColor" name="anotherColor" label="Otro color del texto (hexadecimal):" />
                 <statictext name="chooseColor">
                     <![CDATA[
-                    <script type="text/javascript" src="/swb/swbadmin/js/dojo/dojo/dojo.js" djConfig="parseOnLoad: true"></script>
-                    <script type="text/javascript" src="/swb/swbadmin/js/dojo/dijit/ColorPalette.js"></script>
+                    <table border="0" width="100%">
+                    <tr>
+                    <td>Otro color de texto (hexadecimal):</td>
+                    <td><div id="cptextcolor">Otro color de texto (hexadecimal):&nbsp;</div></td>
+                    </tr>
+                    </table>
+                    <script src="/swb/swbadmin/js/jquery/colorpicker.js" type="text/javascript"></script>
                     <script type="text/javascript">
-                        dojo.require("dojo.parser");
-                        dojo.require("dijit.ColorPalette");
-                        function reportColor(selectedColor, eid) {
-                            var el=document.getElementById(eid);                                
-                            el.value=selectedColor;
-                        }
+                    var colors=new Array('#ffffff', '#fff5ee', '#fff8dc', '#fffacd', '#ffffe0', '#98fb98', '#afeeee', '#e0ffff', '#e6e6fa', '#dda0dd',
+                                       '#d3d3d3', '#ffc0cb', '#ffe4c4', '#ffe4b5', '#f0e68c', '#90ee90', '#20b2aa', '#87cefa', '#6495ed', '#ee82ee',
+                                       '#c0c0c0', '#f08080', '#f4a460', '#ffa500', '#eee8aa', '#7fff00', '#48d1cc', '#87ceeb', '#7b68ee', '#da70d6',
+                                       '#808080', '#ff0000', '#ff4500', '#ff8c00', '#ffff00', '#32cd32', '#8fbc8f', '#4169e1', '#6a5acd', '#ba55d3',
+                                       '#696969', '#dc143c', '#d2691e', '#ff7f50', '#ffd700', '#228b22', '#2e8b57', '#0000ff', '#8a2be2', '#9932cc',
+                                       '#2f4f4f', '#b22222', '#8b4513', '#a0522d', '#808000', '#008000', '#008b8b', '#0000cd', '#483d8b', '#8b008b',
+                                       '#000000', '#8b0000', '#800000', '#a52a2a', '#556b2f', '#006400', '#006400', '#000080', '#4b0082', '#800080');            
+                    $(document).ready(function(){
+                        $('#cptextcolor').colorPicker(
+                        {
+                            //color:colors,
+                            defaultColor:colors.indexOf('{@db_textcolor}'.toLowerCase()),
+                            columns:10,
+                            click:function(c){
+                                $('#textcolor').val(c);
+                            }
+                        });
+                    });
                     </script>
-                    <div dojoType="dijit.ColorPalette" onChange="reportColor(arguments[0], 'anotherColor')"></div>
                     ]]>
                 </statictext>
                                 
@@ -68,10 +87,10 @@
                         document.frmPromo.target[1].checked=true;		
                 function jsValida(frm)
                 {
-                        /*if(frm.anotherColor.value==null || frm.anotherColor.value=='' || frm.anotherColor.value==' ') {
-                            frm.anotherColor.value='#'+ document.wbcolor.getColor();
+                        /*if(frm.textcolor.value==null || frm.textcolor.value=='' || frm.textcolor.value==' ') {
+                            frm.textcolor.value='#'+ document.wbcolor.getColor();
                         }else {
-                            frm.anotherColor.value=frm.anotherColor.value;
+                            frm.textcolor.value=frm.textcolor.value;
                         }*/
 
                         if(frm.pos.value==null || frm.pos.value=='' || frm.pos.value==' ')
@@ -83,7 +102,7 @@
                                         return false;
                                 }
                         }
-                        if(!isFormat(frm.anotherColor)) return false;
+                        if(!isFormat(frm.textcolor)) return false;
                         replaceChars(frm.text);	
                         return true;
                 }
