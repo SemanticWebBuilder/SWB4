@@ -6,13 +6,11 @@
     response.setHeader("Cache-Control", "no-cache");
     response.setHeader("Pragma", "no-cache");
     String suri=request.getParameter("suri");
-    String smodel=request.getParameter("smodel");
+    
 
     //out.println(suri+" "+smodel+" "+Thread.currentThread().getName());
-    //SemanticOntology ont=SWBPlatform.getSemanticMgr().getOntology();
-    SemanticClass clase=SWBPlatform.getSemanticMgr().getModel(smodel).createSemanticClass(suri);
-    //SemanticClass clase=ont.createSemanticClass(suri);
-    //SemanticClass clase = SWBContext.getDefaultRepository().getUserType("estudiante");
+    SemanticOntology ont=SWBPlatform.getSemanticMgr().getOntology();
+    SemanticClass clase=ont.createSemanticClass(suri);
     //out.println(clase.getURI());
 
     out.println("<pre>");
