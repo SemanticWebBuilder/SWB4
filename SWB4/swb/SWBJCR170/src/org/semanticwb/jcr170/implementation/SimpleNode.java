@@ -59,7 +59,7 @@ public class SimpleNode implements Node
     private String path;
     private String id;
     private boolean modified = false;
-    static final String DEFAULT_PRIMARY_NODE_TYPE_NAME = "nt:unstructured";
+    static final String DEFAULT_PRIMARY_NODE_TYPE_NAME = BaseNode.vocabulary.nt_Unstructured.getPrefix()+":"+BaseNode.vocabulary.nt_Unstructured.getName();
     protected static final String NOT_SUPPORTED_YET = "Not supported yet.";
     protected static final String WAS_NOT_FOUND = " was not found";
     private static final String PATH_SEPARATOR = "/";
