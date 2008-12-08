@@ -24,9 +24,11 @@ public final class SWBRepositoryManager implements RepositoryManager
 {    
     private static Logger log = SWBUtils.getLogger(SWBRepositoryManager.class);
     private RepositoryImp repository;
+    private OfficeManager officeManager;
     public SWBRepositoryManager() throws SWBException,RepositoryException
     {
         repository=new RepositoryImp();
+        officeManager=new SWBOfficeManager();
     }
 
     public void init()
@@ -56,27 +58,8 @@ public final class SWBRepositoryManager implements RepositoryManager
         return "swb";
     }
 
-    public boolean isUsedForOffice()
+    public OfficeManager getOfficeManager()
     {
-        return true;
-    }
-    public HashMap<String,String> getContentTypes()
-    {        
-        return repository.getContentTypes();
-    }
-
-    public String getCategoryType()
-    {
-        return BaseNode.vocabulary.cm_OfficeCategory.getPrefix()+":"+BaseNode.vocabulary.cm_OfficeCategory.getName();
-    }
-
-    public String getPropertyTitleType()
-    {
-        return BaseNode.vocabulary.cm_title.getPrefix()+":"+BaseNode.vocabulary.cm_title.getName();
-    }
-
-    public String getPropertyDescriptionType()
-    {
-        return BaseNode.vocabulary.cm_description.getPrefix()+":"+BaseNode.vocabulary.cm_description.getName();
+        return officeManager;
     }
 }
