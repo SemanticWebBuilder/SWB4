@@ -337,6 +337,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             ContentType contentType=new ContentType();
             contentType.id=type;
             contentType.title=mtypes.get(type);
+            types.add(contentType);
         }
         return types.toArray(new ContentType[types.size()]);
     }
