@@ -60,7 +60,8 @@ public class RepositoryManagerLoader
         ArrayList<String> workspaces = new ArrayList<String>();
         for (RepositoryManager manager : repositoryManagers.values())
         {
-            if (manager.isUsedForOffice())
+            OfficeManager officemanager=manager.getOfficeManager();
+            if (officemanager!=null)
             {
                 for (String workspace : manager.getWorkspaces())
                 {
@@ -98,56 +99,20 @@ public class RepositoryManagerLoader
             throw new IllegalArgumentException("The workspaceid is invalid");
         }
     }
-    public HashMap<String,String> getContentTypes(String workspaceId)
+   
+
+    public OfficeManager getOfficeManager(String workspaceId)
     {
         String[] values = workspaceId.split("@");
         if (values.length == 2)
-        {            
+        {
             String repository = values[1];
-            return repositoryManagers.get(repository).getContentTypes();
+            return repositoryManagers.get(repository).getOfficeManager();
         }
         else
         {
             throw new IllegalArgumentException("The workspaceid is invalid");
         }
     }
-    public String getCategoryType(String workspaceId)
-    {
-        String[] values = workspaceId.split("@");
-        if (values.length == 2)
-        {
-            String repository = values[1];
-            return repositoryManagers.get(repository).getCategoryType();
-        }
-        else
-        {
-            throw new IllegalArgumentException("The workspaceid is invalid");
-        }
-    }
-    public String getPropertyTitleType(String workspaceId)
-    {
-        String[] values = workspaceId.split("@");
-        if (values.length == 2)
-        {
-            String repository = values[1];
-            return repositoryManagers.get(repository).getPropertyTitleType();
-        }
-        else
-        {
-            throw new IllegalArgumentException("The workspaceid is invalid");
-        }
-    }
-     public String getPropertyDescriptionType(String workspaceId)
-    {
-        String[] values = workspaceId.split("@");
-        if (values.length == 2)
-        {
-            String repository = values[1];
-            return repositoryManagers.get(repository).getPropertyDescriptionType();
-        }
-        else
-        {
-            throw new IllegalArgumentException("The workspaceid is invalid");
-        }
-    }
+
 }
