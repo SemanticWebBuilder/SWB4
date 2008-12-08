@@ -60,7 +60,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             session = loader.openSession(repositoryName, "", "");
             ArrayList<String> contents = new ArrayList<String>();
             Node categoryNode = session.getNodeByUUID(categoryID);
-            String cm_category = loader.getCategoryType(repositoryName);
+            String cm_category = loader.getOfficeManager(repositoryName).getCategoryType();
             NodeIterator nodes = categoryNode.getNodes(cm_category);
             while (nodes.hasNext())
             {
@@ -73,7 +73,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                     content.append(",");
                     content.append(versionContent.getName());
                     content.append(",");
-                    String cm_title = loader.getPropertyTitleType(repositoryName);
+                    String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
                     content.append(nodeContent.getProperty(cm_title).getString());
                     contents.add(content.toString());
                 }
@@ -108,7 +108,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             ArrayList<CategoryInfo> categories = new ArrayList<CategoryInfo>();
             Node root = session.getRootNode();
             NodeIterator it = root.getNodes();
-            String cm_category = loader.getCategoryType(repositoryName);
+            String cm_category = loader.getOfficeManager(repositoryName).getCategoryType();
             while (it.hasNext())
             {
                 Node node = it.nextNode();
@@ -116,8 +116,8 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                 {
                     CategoryInfo category = new CategoryInfo();
                     category.UDDI = node.getUUID();
-                    String cm_title = loader.getPropertyTitleType(repositoryName);
-                    String cm_description = loader.getPropertyDescriptionType(repositoryName);
+                    String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
+                    String cm_description = loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
                     category.description = node.getProperty(cm_description).toString();
                     category.title = node.getProperty(cm_title).toString();
                     categories.add(category);
@@ -147,7 +147,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         {
             session = loader.openSession(repositoryName, "", "");
             root = session.getRootNode();
-            String cm_category = loader.getCategoryType(repositoryName);
+            String cm_category = loader.getOfficeManager(repositoryName).getCategoryType();
             Query query;
             if (session.getRepository().getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf("webbuilder") != -1)
             {
@@ -167,8 +167,8 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             else
             {
                 Node newNode = root.addNode(cm_category, cm_category);
-                String cm_title = loader.getPropertyTitleType(repositoryName);
-                String cm_description = loader.getPropertyDescriptionType(repositoryName);
+                String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
+                String cm_description = loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
                 newNode.setProperty(cm_title, title);
                 newNode.setProperty(cm_description, description);
                 root.save();
@@ -251,7 +251,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         {
             session = loader.openSession(repositoryName, "", "");
             parent = session.getNodeByUUID(categoryId);
-            String cm_category = loader.getCategoryType(repositoryName);
+            String cm_category = loader.getOfficeManager(repositoryName).getCategoryType();
             Query query;
             if (session.getRepository().getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf("webbuilder") != -1)
             {
@@ -270,8 +270,8 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             }
             else
             {
-                String cm_title = loader.getPropertyTitleType(repositoryName);
-                String cm_description = loader.getPropertyDescriptionType(repositoryName);
+                String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
+                String cm_description = loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
                 Node newNode = parent.addNode(cm_category, cm_category);
                 newNode.setProperty(cm_title, title);
                 newNode.setProperty(cm_description, description);
@@ -305,7 +305,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             ArrayList<CategoryInfo> categories = new ArrayList<CategoryInfo>();
             Node root = session.getNodeByUUID(categoryId);
             NodeIterator it = root.getNodes();
-            String cm_category = loader.getCategoryType(repositoryName);
+            String cm_category = loader.getOfficeManager(repositoryName).getCategoryType();
             while (it.hasNext())
             {
                 Node node = it.nextNode();
@@ -313,8 +313,8 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                 {
                     CategoryInfo category = new CategoryInfo();
                     category.UDDI = node.getUUID();
-                    String cm_title = loader.getPropertyTitleType(repositoryName);
-                    String cm_description = loader.getPropertyDescriptionType(repositoryName);
+                    String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
+                    String cm_description = loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
                     category.description = node.getProperty(cm_description).toString();
                     category.title = node.getProperty(cm_title).toString();
                     categories.add(category);
@@ -338,7 +338,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
     public ContentType[] getContentTypes(String repositoryName) throws Exception
     {
         ArrayList<ContentType> types = new ArrayList<ContentType>();
-        HashMap<String, String> mtypes = loader.getContentTypes(repositoryName);
+        HashMap<String, String> mtypes = loader.getOfficeManager(repositoryName).getContentTypes();
         for (String type : mtypes.keySet())
         {
             ContentType contentType = new ContentType();
