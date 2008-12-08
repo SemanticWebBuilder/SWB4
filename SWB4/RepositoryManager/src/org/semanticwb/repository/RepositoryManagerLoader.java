@@ -111,4 +111,43 @@ public class RepositoryManagerLoader
             throw new IllegalArgumentException("The workspaceid is invalid");
         }
     }
+    public String getCategoryType(String workspaceId)
+    {
+        String[] values = workspaceId.split("@");
+        if (values.length == 2)
+        {
+            String repository = values[1];
+            return repositoryManagers.get(repository).getCategoryType();
+        }
+        else
+        {
+            throw new IllegalArgumentException("The workspaceid is invalid");
+        }
+    }
+    public String getPropertyTitleType(String workspaceId)
+    {
+        String[] values = workspaceId.split("@");
+        if (values.length == 2)
+        {
+            String repository = values[1];
+            return repositoryManagers.get(repository).getPropertyTitleType();
+        }
+        else
+        {
+            throw new IllegalArgumentException("The workspaceid is invalid");
+        }
+    }
+     public String getPropertyDescriptionType(String workspaceId)
+    {
+        String[] values = workspaceId.split("@");
+        if (values.length == 2)
+        {
+            String repository = values[1];
+            return repositoryManagers.get(repository).getPropertyDescriptionType();
+        }
+        else
+        {
+            throw new IllegalArgumentException("The workspaceid is invalid");
+        }
+    }
 }

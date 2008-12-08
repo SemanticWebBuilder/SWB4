@@ -20,4 +20,7 @@ public interface RepositoryManager {
     public String getName();
     public boolean isUsedForOffice();
     public HashMap<String,String> getContentTypes();
+    public String getCategoryType();
+    public String getPropertyTitleType();
+    public String getPropertyDescriptionType();
 }
