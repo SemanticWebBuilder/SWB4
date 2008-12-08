@@ -7,6 +7,7 @@ package org.semanticwb.repository;
 import org.semanticwb.repository.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import org.semanticwb.jcr170.implementation.RepositoryImp;
 import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
@@ -15,13 +16,14 @@ import javax.jcr.SimpleCredentials;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.platform.SemanticClass;
 
 /**
  *
  * @author victor.lorenzana
  */
 public final class SWBRepositoryManager implements RepositoryManager
-{
+{    
     private static Logger log = SWBUtils.getLogger(SWBRepositoryManager.class);
     private RepositoryImp repository;
     public SWBRepositoryManager() throws SWBException,RepositoryException
@@ -61,9 +63,7 @@ public final class SWBRepositoryManager implements RepositoryManager
         return true;
     }
     public HashMap<String,String> getContentTypes()
-    {
-        HashMap<String,String> types=new HashMap<String, String>();
-        types.put("cm:Content","Contenido Simple");
-        return types;
+    {        
+        return repository.getContentTypes();
     }
 }
