@@ -32,7 +32,7 @@ public class SelectCategory extends WizardPage
 {
 
     public static final String CATEGORY_ID = "categoryID";
-    public  static final String REPOSITORY_ID = "repositoryID";
+    public static final String REPOSITORY_ID = "repositoryID";
 
     /** Creates new form SelectCategory */
     public SelectCategory()
@@ -41,6 +41,22 @@ public class SelectCategory extends WizardPage
         loadTree();
         this.getWizardDataMap().put(CATEGORY_ID, null);
         this.getWizardDataMap().put("repositoryName", null);
+    }
+
+    private void addCategory(String repository, CategoryNode parent, DefaultTreeModel model)
+    {
+        try
+        {
+            for (CategoryInfo category : OfficeApplication.getOfficeApplicationProxy().getCategories(repository, parent.getID()))
+            {
+                CategoryNode categoryNode = new CategoryNode(category.UDDI, category.title, category.description);
+                model.insertNodeInto(categoryNode, parent, 0);
+                addCategory(repository, categoryNode, model);
+            }
+        }
+        catch (Exception e)
+        {
+        }
     }
 
     private void loadTree()
@@ -55,12 +71,13 @@ public class SelectCategory extends WizardPage
         {
             for (String repository : OfficeApplication.getOfficeApplicationProxy().getRepositories())
             {
-                DefaultMutableTreeNode repositoryNode = new RepositoryNode(repository);
+                RepositoryNode repositoryNode = new RepositoryNode(repository);
                 model.insertNodeInto(repositoryNode, repositories, 0);
                 for (CategoryInfo category : OfficeApplication.getOfficeApplicationProxy().getCategories(repository))
                 {
-                    DefaultMutableTreeNode categoryNode = new CategoryNode(category.UDDI, category.title, category.description);
+                    CategoryNode categoryNode = new CategoryNode(category.UDDI, category.title, category.description);
                     model.insertNodeInto(categoryNode, repositoryNode, 0);
+                    addCategory(repository, categoryNode, model);
                 }
             }
         }
@@ -247,7 +264,7 @@ private void jButtonDeletCategoryActionPerformed(java.awt.event.ActionEvent evt)
                 return;//-- remove node --
             }
             parentNode.remove(node);
-            ((DefaultTreeModel)jTreeCategory.getModel()).reload(parentNode);
+            ((DefaultTreeModel) jTreeCategory.getModel()).reload(parentNode);
         }
         else
         {
