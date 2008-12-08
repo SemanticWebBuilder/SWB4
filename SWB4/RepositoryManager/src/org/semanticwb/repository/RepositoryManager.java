@@ -6,6 +6,7 @@
 package org.semanticwb.repository;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import javax.jcr.Session;
 
 /**
@@ -18,4 +19,5 @@ public interface RepositoryManager {
     public Session openSession(String workspace,String id,String password) throws Exception;
     public String getName();
     public boolean isUsedForOffice();
+    public HashMap<String,String> getContentTypes();
 }
