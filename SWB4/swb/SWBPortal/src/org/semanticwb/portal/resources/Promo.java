@@ -79,6 +79,7 @@ public class Promo extends GenericAdmResource
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
     {
+        response.setContentType("text/html;charset=iso-8859-1");
         StringBuffer ret = new StringBuffer("");
         Portlet base=getResourceBase();
         try 
