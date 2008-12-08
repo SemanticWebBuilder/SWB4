@@ -10,6 +10,8 @@ import javax.swing.JOptionPane;
 import org.netbeans.spi.wizard.Wizard;
 import org.netbeans.spi.wizard.WizardPage;
 import org.netbeans.spi.wizard.WizardPanelNavResult;
+import org.semanticwb.office.interfaces.ContentType;
+import org.semanticwb.openoffice.OfficeApplication;
 import org.semanticwb.openoffice.util.FixedLengthPlainDocument;
 
 /**
@@ -20,7 +22,7 @@ public class TitleAndDescription extends WizardPage
 {
     public static final String TITLE="title";
     public static final String DESCRIPTION="description";
-    
+    public static final String NODE_TYPE="NODE_TYPE";
     /** Creates new form TitleAndDescription */
     public TitleAndDescription()
     {        
@@ -35,6 +37,18 @@ public class TitleAndDescription extends WizardPage
         }
         this.jTextFieldName.setDocument(new FixedLengthPlainDocument(255));
         this.jTextAreaDescription.setDocument(new FixedLengthPlainDocument(255));
+        this.jComboBoxType.removeAllItems();
+        try
+        {
+        for(ContentType type  : OfficeApplication.getOfficeApplicationProxy().getContentTypes(this.getWizardDataMap().get(SelectCategory.REPOSITORY_ID).toString()))
+        {
+            this.jComboBoxType.addItem(type);
+        }
+        }
+        catch(Exception e)
+        {
+            
+        }
     }
 
     public static String getDescription()
@@ -61,10 +75,16 @@ public class TitleAndDescription extends WizardPage
             JOptionPane.showMessageDialog(null, "¡Debe indicar la descripción del contenido!",getDescription(), JOptionPane.ERROR_MESSAGE);
             this.jTextAreaDescription.requestFocus();            
         }
+        else if(this.jComboBoxType.getSelectedItem()==null)
+        {            
+            JOptionPane.showMessageDialog(null, "¡Debe indicar el tipo de contenido!",getDescription(), JOptionPane.ERROR_MESSAGE);
+            this.jComboBoxType.requestFocus();            
+        }
         else
         {
             map.put(TITLE, this.jTextFieldName.getText().trim());
             map.put(DESCRIPTION, this.jTextAreaDescription.getText().trim());
+            map.put(NODE_TYPE, ((ContentType)this.jComboBoxType.getSelectedItem()).id);
             result=WizardPanelNavResult.PROCEED;
         }
         return result;
@@ -83,6 +103,8 @@ public class TitleAndDescription extends WizardPage
         jTextFieldName = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextAreaDescription = new javax.swing.JTextArea();
+        jLabelType = new javax.swing.JLabel();
+        jComboBoxType = new javax.swing.JComboBox();
 
         jLabelName.setText("Título:");
 
@@ -94,6 +116,10 @@ public class TitleAndDescription extends WizardPage
         jTextAreaDescription.setWrapStyleWord(true);
         jScrollPane1.setViewportView(jTextAreaDescription);
 
+        jLabelType.setText("Tipo de Contenido:");
+
+        jComboBoxType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -101,13 +127,15 @@ public class TitleAndDescription extends WizardPage
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabelType)
                     .addComponent(jLabelDescription)
                     .addComponent(jLabelName))
                 .addGap(35, 35, 35)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)
-                    .addComponent(jTextFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jTextFieldName, javax.swing.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)
+                    .addComponent(jComboBoxType, 0, 294, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -120,12 +148,18 @@ public class TitleAndDescription extends WizardPage
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabelDescription)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(102, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelType)
+                    .addComponent(jComboBoxType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(76, 76, 76))
         );
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox jComboBoxType;
     private javax.swing.JLabel jLabelDescription;
     private javax.swing.JLabel jLabelName;
+    private javax.swing.JLabel jLabelType;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextAreaDescription;
     private javax.swing.JTextField jTextFieldName;
