@@ -33,8 +33,9 @@ public final class RepositoryImp implements Repository
 {
 
     static Logger log = SWBUtils.getLogger(RepositoryImp.class);
+    private static final String DESCRIPTION_BY_DEFAULT = "Sin descripción";
     private static Hashtable<String, String> descriptors = new Hashtable<String, String>();
-
+    private static SemanticClass cm_content = BaseNode.vocabulary.cm_OfficeContent;
 
     static
     {
@@ -218,14 +219,13 @@ public final class RepositoryImp implements Repository
 
     public HashMap<String, String> getContentTypes()
     {
-        HashMap<String, String> types = new HashMap<String, String>();
-        SemanticClass cm_content = BaseNode.vocabulary.cm_Content;
+        HashMap<String, String> types = new HashMap<String, String>();        
         if (SWBContext.getWorkspace(defaultWorkspaceName) != null)
         {
             SemanticProperty prop = SWBContext.getWorkspace(defaultWorkspaceName).getRoot().getRequiredSemanticProperty("swbrep:nodeTitle");
             if (prop != null)
             {
-                String label = "Sin descripción";
+                String label = DESCRIPTION_BY_DEFAULT;
                 SemanticLiteral literal = cm_content.getRequiredProperty(prop);
                 if (literal != null && literal.getString() != null)
                 {
@@ -236,7 +236,7 @@ public final class RepositoryImp implements Repository
                 while (childClases.hasNext())
                 {
                     SemanticClass clazz = childClases.next();
-                    label = "Sin descripción";
+                    label = DESCRIPTION_BY_DEFAULT;
                     literal = clazz.getRequiredProperty(prop);
                     if (literal != null && literal.getString() != null)
                     {
