@@ -18,15 +18,25 @@ public class SWBOfficeManager implements OfficeManager
 {
 
     private static final String DESCRIPTION_BY_DEFAULT = "Sin descripción";
+    private static final String LANGUAGE_BY_DEFAULT = "es";
     private static Logger log = SWBUtils.getLogger(SWBOfficeManager.class);
-    SemanticClass cm_content = BaseNode.vocabulary.cm_OfficeContent;
+    private final SemanticClass cm_content = BaseNode.vocabulary.cm_OfficeContent;
+    public SWBOfficeManager()
+    {
+        log.event("Initializing SWBOfficeManager ...");
+        HashMap<String,String> types=getContentTypes();
+        for(String type : types.keySet())
+        {
+            log.event("Type of office content "+type+" "+types.get(type));
+        }
+    }
 
     public HashMap<String, String> getContentTypes()
     {
         HashMap<String, String> types = new HashMap<String, String>();
 
-        String label = DESCRIPTION_BY_DEFAULT;
-        String literal = cm_content.getDisplayName("es");
+        String label = DESCRIPTION_BY_DEFAULT+"("+ cm_content.getPrefix()+":"+cm_content.getName() +")";
+        String literal = cm_content.getDisplayName(LANGUAGE_BY_DEFAULT);
         if (literal != null)
         {
             label = literal;
@@ -36,8 +46,8 @@ public class SWBOfficeManager implements OfficeManager
         while (childClases.hasNext())
         {
             SemanticClass clazz = childClases.next();
-            label = DESCRIPTION_BY_DEFAULT;
-            literal = clazz.getDisplayName("es");
+            label = DESCRIPTION_BY_DEFAULT+"("+ clazz.getPrefix()+":"+clazz.getName() +")";
+            literal = clazz.getDisplayName(LANGUAGE_BY_DEFAULT);
             if (literal != null)
             {
                 label = literal;
