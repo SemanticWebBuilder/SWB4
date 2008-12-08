@@ -29,18 +29,16 @@ import org.semanticwb.xmlrpc.XmlRpcObject;
  */
 public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 {
-
-    private static final String CM_CONTENT = "cm:Content";
+    
     private static final String CM_DESCRIPTION = "cm:description";
     private static final String CM_TITLE = "cm:title";
     private static final String CM_TYPE = "cm:type";
-    private static final String CONTENT_NAME = "Content";
     private static final String DEFAULT_MIME_TYPE = "application/octet-stream";    
     private static final String CM_PART = "cm:Part";
     private static final String JCR_CONTENT = "jcr:content";
     private static final String NT_RESOURCE = "nt:resource";
     private static final RepositoryManagerLoader loader=RepositoryManagerLoader.getInstance();
-    public String publish(String title, String description, String repositoryName, String categoryID, String type) throws Exception
+    public String publish(String title, String description, String repositoryName, String categoryID, String type,String nodeType) throws Exception
     {
         Session session = null;
         try
@@ -57,7 +55,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             }
             try
             {
-                Node contentNode = categoryNode.addNode( CONTENT_NAME,CM_CONTENT);
+                Node contentNode = categoryNode.addNode( nodeType,nodeType);
                 contentNode.setProperty(CM_TITLE, title);
                 contentNode.setProperty(CM_TYPE, type);
                 contentNode.setProperty(CM_DESCRIPTION, description);
