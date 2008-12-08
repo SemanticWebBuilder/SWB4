@@ -4,7 +4,6 @@
  */
 package org.semanticwb.office.comunication;
 
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.jcr.Node;
@@ -29,26 +28,22 @@ import org.semanticwb.xmlrpc.XmlRpcObject;
  */
 public class OfficeApplication extends XmlRpcObject implements IOfficeApplication
 {
-    static Logger log = SWBUtils.getLogger(OfficeApplication.class);    
-    private static final String CM_CATEGORY = "cm:Category";
-    private static final String CM_TITLE = "cm:title";
-    private static final String CM_DESCRIPTION = "cm:description";
-    private static final RepositoryManagerLoader loader=RepositoryManagerLoader.getInstance();
-        
-    
+
+    static Logger log = SWBUtils.getLogger(OfficeApplication.class);
+    private static final RepositoryManagerLoader loader = RepositoryManagerLoader.getInstance();
+
     //private Session session;
     public boolean isValidVersion(double version)
     {
         return IOfficeApplication.version >= version;
     }
+
     public void createPage(String title, String id, String description) throws Exception
     {
-
     }
 
     public void changePassword(String newPassword) throws Exception
     {
-
     }
 
     public boolean existsPage(String id) throws Exception
@@ -61,11 +56,12 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         Session session = null;
         try
         {
-            
-            session = loader.openSession(repositoryName,"","");
+
+            session = loader.openSession(repositoryName, "", "");
             ArrayList<String> contents = new ArrayList<String>();
             Node categoryNode = session.getNodeByUUID(categoryID);
-            NodeIterator nodes = categoryNode.getNodes(CM_CATEGORY);
+            String cm_category = loader.getCategoryType(repositoryName);
+            NodeIterator nodes = categoryNode.getNodes(cm_category);
             while (nodes.hasNext())
             {
                 Node nodeContent = nodes.nextNode();
@@ -77,19 +73,20 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                     content.append(",");
                     content.append(versionContent.getName());
                     content.append(",");
-                    content.append(nodeContent.getProperty(CM_TITLE).getString());
+                    String cm_title = loader.getPropertyTitleType(repositoryName);
+                    content.append(nodeContent.getProperty(cm_title).getString());
                     contents.add(content.toString());
                 }
             }
             return contents.toArray(new String[contents.size()]);
         }
-        catch ( Exception e )
+        catch (Exception e)
         {
             throw e;
         }
         finally
         {
-            if ( session != null )
+            if (session != null)
             {
                 session.logout();
             }
@@ -106,32 +103,35 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         Session session = null;
         try
         {
-            
-            session = loader.openSession(repositoryName,"","");            
+
+            session = loader.openSession(repositoryName, "", "");
             ArrayList<CategoryInfo> categories = new ArrayList<CategoryInfo>();
-            Node root=session.getRootNode();
-            NodeIterator it=root.getNodes();
-            while(it.hasNext())
+            Node root = session.getRootNode();
+            NodeIterator it = root.getNodes();
+            String cm_category = loader.getCategoryType(repositoryName);
+            while (it.hasNext())
             {
-                Node node=it.nextNode();
-                if(node.getDefinition().getName().equals(CM_CATEGORY))
+                Node node = it.nextNode();
+                if (node.getDefinition().getName().equals(cm_category))
                 {
-                    CategoryInfo category=new CategoryInfo();
-                    category.UDDI=node.getUUID();
-                    category.description=node.getProperty(CM_TITLE).toString();
-                    category.title=node.getProperty(CM_TITLE).toString();
+                    CategoryInfo category = new CategoryInfo();
+                    category.UDDI = node.getUUID();
+                    String cm_title = loader.getPropertyTitleType(repositoryName);
+                    String cm_description = loader.getPropertyDescriptionType(repositoryName);
+                    category.description = node.getProperty(cm_description).toString();
+                    category.title = node.getProperty(cm_title).toString();
                     categories.add(category);
                 }
             }
             return categories.toArray(new CategoryInfo[categories.size()]);
         }
-        catch ( Exception e )
+        catch (Exception e)
         {
             throw e;
         }
         finally
         {
-            if ( session != null )
+            if (session != null)
             {
                 session.logout();
             }
@@ -142,46 +142,48 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
     {
         String UUID = "";
         Session session = null;
-        Node root=null;
+        Node root = null;
         try
         {
-            session = loader.openSession(repositoryName,"","");
+            session = loader.openSession(repositoryName, "", "");
             root = session.getRootNode();
-            
+            String cm_category = loader.getCategoryType(repositoryName);
             Query query;
-            if(session.getRepository().getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf("webbuilder")!=-1)
+            if (session.getRepository().getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf("webbuilder") != -1)
             {
-                String statement="SELECT ?title WHERE {?x cm:title ?title FILTER regex(?title, \""+ title +"\")  }" ; 
+                String statement = "SELECT ?title WHERE {?x cm:title ?title FILTER regex(?title, \"" + title + "\")  }";
                 query = session.getWorkspace().getQueryManager().createQuery(statement, "SPARQL");
             }
             else
             {
-                query = session.getWorkspace().getQueryManager().createQuery("//"+ CM_CATEGORY +"[@cm:title='" + title + "']", Query.XPATH);
-            }            
+                query = session.getWorkspace().getQueryManager().createQuery("//" + cm_category + "[@cm:title='" + title + "']", Query.XPATH);
+            }
             QueryResult result = query.execute();
             NodeIterator nodeIterator = result.getNodes();
-            if ( nodeIterator.hasNext() )
+            if (nodeIterator.hasNext())
             {
                 UUID = nodeIterator.nextNode().getUUID();
             }
             else
             {
-                Node newNode = root.addNode(CM_CATEGORY,CM_CATEGORY);
-                newNode.setProperty( CM_TITLE,title);
-                newNode.setProperty( CM_DESCRIPTION,description);
-                root.save();                
+                Node newNode = root.addNode(cm_category, cm_category);
+                String cm_title = loader.getPropertyTitleType(repositoryName);
+                String cm_description = loader.getPropertyDescriptionType(repositoryName);
+                newNode.setProperty(cm_title, title);
+                newNode.setProperty(cm_description, description);
+                root.save();
                 UUID = newNode.getUUID();
             }
         }
-        catch ( Exception e )
+        catch (Exception e)
         {
             e.printStackTrace(System.out);
             throw e;
         }
         finally
         {
-            if ( session != null )
-            {                
+            if (session != null)
+            {
                 session.logout();
             }
         }
@@ -191,17 +193,17 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
 
     public boolean canDeleteCategory(String repositoryName, String id) throws Exception
     {
-        boolean canDeleteCategory=false;
-        Session session=null;
+        boolean canDeleteCategory = false;
+        Session session = null;
         try
         {
-            session = loader.openSession(repositoryName,"","");
-            Node node=session.getNodeByUUID(id);
-            canDeleteCategory=!node.getNodes().hasNext();
+            session = loader.openSession(repositoryName, "", "");
+            Node node = session.getNodeByUUID(id);
+            canDeleteCategory = !node.getNodes().hasNext();
         }
         finally
         {
-            if ( session != null )
+            if (session != null)
             {
                 session.logout();
             }
@@ -211,28 +213,28 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
 
     public boolean deleteCategory(String repositoryName, String id) throws Exception
     {
-        boolean deleteCategory=false;
-        Session session=null;
+        boolean deleteCategory = false;
+        Session session = null;
         try
         {
-            session = loader.openSession(repositoryName,"","");
-            Node node=session.getNodeByUUID(id);
-            if(!node.getNodes().hasNext())
+            session = loader.openSession(repositoryName, "", "");
+            Node node = session.getNodeByUUID(id);
+            if (!node.getNodes().hasNext())
             {
-                Node parent=node.getParent();
+                Node parent = node.getParent();
                 node.remove();
                 parent.save();
-                deleteCategory=true;
+                deleteCategory = true;
             }
 
         }
-        catch(Throwable e)
+        catch (Throwable e)
         {
             log.error(e);
         }
         finally
         {
-            if ( session != null )
+            if (session != null)
             {
                 session.logout();
             }
@@ -244,45 +246,47 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
     {
         String UUID = "";
         Session session = null;
-        Node parent=null;
+        Node parent = null;
         try
         {
-            session = loader.openSession(repositoryName,"","");
+            session = loader.openSession(repositoryName, "", "");
             parent = session.getNodeByUUID(categoryId);
-
+            String cm_category = loader.getCategoryType(repositoryName);
             Query query;
-            if(session.getRepository().getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf("webbuilder")!=-1)
+            if (session.getRepository().getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf("webbuilder") != -1)
             {
-                String statement="SELECT ?title WHERE {?x cm:title ?title FILTER regex(?title, \""+ title +"\")  }" ;
+                String statement = "SELECT ?title WHERE {?x cm:title ?title FILTER regex(?title, \"" + title + "\")  }";
                 query = session.getWorkspace().getQueryManager().createQuery(statement, "SPARQL");
             }
             else
             {
-                query = session.getWorkspace().getQueryManager().createQuery("//"+ CM_CATEGORY +"[@cm:title='" + title + "']", Query.XPATH);
+                query = session.getWorkspace().getQueryManager().createQuery("//" + cm_category + "[@cm:title='" + title + "']", Query.XPATH);
             }
             QueryResult result = query.execute();
             NodeIterator nodeIterator = result.getNodes();
-            if ( nodeIterator.hasNext() )
+            if (nodeIterator.hasNext())
             {
                 UUID = nodeIterator.nextNode().getUUID();
             }
             else
             {
-                Node newNode = parent.addNode(CM_CATEGORY,CM_CATEGORY);
-                newNode.setProperty( CM_TITLE,title);
-                newNode.setProperty( CM_DESCRIPTION,description);
+                String cm_title = loader.getPropertyTitleType(repositoryName);
+                String cm_description = loader.getPropertyDescriptionType(repositoryName);
+                Node newNode = parent.addNode(cm_category, cm_category);
+                newNode.setProperty(cm_title, title);
+                newNode.setProperty(cm_description, description);
                 parent.save();
                 UUID = newNode.getUUID();
             }
         }
-        catch ( Exception e )
+        catch (Exception e)
         {
             e.printStackTrace(System.out);
             throw e;
         }
         finally
         {
-            if ( session != null )
+            if (session != null)
             {
                 session.logout();
             }
@@ -297,31 +301,34 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         try
         {
 
-            session = loader.openSession(repositoryName,"","");
+            session = loader.openSession(repositoryName, "", "");
             ArrayList<CategoryInfo> categories = new ArrayList<CategoryInfo>();
-            Node root=session.getNodeByUUID(categoryId);
-            NodeIterator it=root.getNodes();
-            while(it.hasNext())
+            Node root = session.getNodeByUUID(categoryId);
+            NodeIterator it = root.getNodes();
+            String cm_category = loader.getCategoryType(repositoryName);
+            while (it.hasNext())
             {
-                Node node=it.nextNode();
-                if(node.getDefinition().getName().equals(CM_CATEGORY))
+                Node node = it.nextNode();
+                if (node.getDefinition().getName().equals(cm_category))
                 {
-                    CategoryInfo category=new CategoryInfo();
-                    category.UDDI=node.getUUID();
-                    category.description=node.getProperty(CM_TITLE).toString();
-                    category.title=node.getProperty(CM_TITLE).toString();
+                    CategoryInfo category = new CategoryInfo();
+                    category.UDDI = node.getUUID();
+                    String cm_title = loader.getPropertyTitleType(repositoryName);
+                    String cm_description = loader.getPropertyDescriptionType(repositoryName);
+                    category.description = node.getProperty(cm_description).toString();
+                    category.title = node.getProperty(cm_title).toString();
                     categories.add(category);
                 }
             }
             return categories.toArray(new CategoryInfo[categories.size()]);
         }
-        catch ( Exception e )
+        catch (Exception e)
         {
             throw e;
         }
         finally
         {
-            if ( session != null )
+            if (session != null)
             {
                 session.logout();
             }
@@ -330,13 +337,13 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
 
     public ContentType[] getContentTypes(String repositoryName) throws Exception
     {
-        ArrayList<ContentType> types=new ArrayList<ContentType>();
-        HashMap<String,String> mtypes=loader.getContentTypes(repositoryName);
-        for(String type : mtypes.keySet() )
+        ArrayList<ContentType> types = new ArrayList<ContentType>();
+        HashMap<String, String> mtypes = loader.getContentTypes(repositoryName);
+        for (String type : mtypes.keySet())
         {
-            ContentType contentType=new ContentType();
-            contentType.id=type;
-            contentType.title=mtypes.get(type);
+            ContentType contentType = new ContentType();
+            contentType.id = type;
+            contentType.title = mtypes.get(type);
             types.add(contentType);
         }
         return types.toArray(new ContentType[types.size()]);

@@ -30,8 +30,6 @@ import org.semanticwb.xmlrpc.XmlRpcObject;
 public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 {
     
-    private static final String CM_DESCRIPTION = "cm:description";
-    private static final String CM_TITLE = "cm:title";
     private static final String CM_TYPE = "cm:type";
     private static final String DEFAULT_MIME_TYPE = "application/octet-stream";    
     private static final String CM_PART = "cm:Part";
@@ -55,10 +53,12 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             }
             try
             {
+                String cm_title = loader.getPropertyTitleType(repositoryName);
+                String cm_description = loader.getPropertyDescriptionType(repositoryName);
                 Node contentNode = categoryNode.addNode( nodeType,nodeType);
-                contentNode.setProperty(CM_TITLE, title);
+                contentNode.setProperty(cm_title, title);
                 contentNode.setProperty(CM_TYPE, type);
-                contentNode.setProperty(CM_DESCRIPTION, description);
+                contentNode.setProperty(cm_description, description);
                 String[] values = new String[parts.size()];
                 int iPart = 0;
                 for (Part part : parts)
