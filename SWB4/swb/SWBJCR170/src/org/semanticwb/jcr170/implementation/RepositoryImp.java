@@ -4,7 +4,6 @@
  */
 package org.semanticwb.jcr170.implementation;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -19,8 +18,6 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.platform.SemanticClass;
-import org.semanticwb.platform.SemanticLiteral;
-import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.repository.BaseNode;
 import org.semanticwb.repository.Unstructured;
 import org.semanticwb.repository.Workspace;
@@ -217,39 +214,5 @@ public final class RepositoryImp implements Repository
         return login(null, null);
     }
 
-    public HashMap<String, String> getContentTypes()
-    {
-        HashMap<String, String> types = new HashMap<String, String>();        
-        if (SWBContext.getWorkspace(defaultWorkspaceName) != null)
-        {
-            SemanticProperty prop = SWBContext.getWorkspace(defaultWorkspaceName).getRoot().getRequiredSemanticProperty("swbrep:nodeTitle");
-            if (prop != null)
-            {
-                String label = DESCRIPTION_BY_DEFAULT;
-                SemanticLiteral literal = cm_content.getRequiredProperty(prop);
-                if (literal != null && literal.getString() != null)
-                {
-                    label = literal.getString();
-                }
-                types.put(cm_content.getPrefix() + ":" + cm_content.getName(), label);
-                Iterator<SemanticClass> childClases = cm_content.listSubClasses();
-                while (childClases.hasNext())
-                {
-                    SemanticClass clazz = childClases.next();
-                    label = DESCRIPTION_BY_DEFAULT;
-                    literal = clazz.getRequiredProperty(prop);
-                    if (literal != null && literal.getString() != null)
-                    {
-                        label = literal.getString();
-                    }
-                    types.put(clazz.getPrefix() + ":" + clazz.getName(), label);
-                }
-            }
-        }
-        else
-        {
-            log.debug("The workspace " + defaultWorkspaceName + "was not found");
-        }
-        return types;
-    }
+    
 }
