@@ -100,5 +100,20 @@ public class TestClass {
     while(itsp.hasNext()){
         out.println(itsp.next());
     }
+        out.println("-----");
+        SemanticOntology ont=SWBPlatform.getSemanticMgr().getOntology();
+        clase=ont.createSemanticClass("urswb/clsUserType#publico");
+        itsp = clase.listProperties();
+    while(itsp.hasNext()){
+        out.println(itsp.next());
+    }
+        SWBContext.getDefaultRepository().createDateTimeExtendedAttribute("fechaRegistro", "publico");
+        clase=ont.createSemanticClass("urswb/clsUserType#publico");
+        itsp = clase.listProperties();
+          out.println("-----");
+            out.println("-----");
+    while(itsp.hasNext()){
+        out.println(itsp.next());
+    }
     }
 }
