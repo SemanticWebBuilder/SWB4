@@ -213,9 +213,9 @@ public class WebSiteBase extends GenericObjectBase implements Versionable,Descri
          return ret;
     }
 
-    public void setUserRepository(org.semanticwb.platform.SemanticObject semanticobject)
+    public void setUserRepository(org.semanticwb.model.UserRepository userrepository)
     {
-        getSemanticObject().setObjectProperty(vocabulary.swb_userRepository, semanticobject);
+        getSemanticObject().setObjectProperty(vocabulary.swb_userRepository, userrepository.getSemanticObject());
     }
 
     public void removeUserRepository()
@@ -223,10 +223,14 @@ public class WebSiteBase extends GenericObjectBase implements Versionable,Descri
         getSemanticObject().removeProperty(vocabulary.swb_userRepository);
     }
 
-    public SemanticObject getUserRepository()
+    public UserRepository getUserRepository()
     {
-         SemanticObject ret=null;
-         ret=getSemanticObject().getObjectProperty(vocabulary.swb_userRepository);
+         UserRepository ret=null;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_userRepository);
+         if(obj!=null)
+         {
+             ret=(UserRepository)vocabulary.swb_UserRepository.newGenericInstance(obj);
+         }
          return ret;
     }
 
