@@ -30,7 +30,7 @@
     {
         SemanticObject sobj=it.next();
         String stitle=sobj.getDisplayName();
-        if(stitle==null)stitle=sobj.getProperty(SWBContext.getVocabulary().usrLogin);
+        if(stitle==null)stitle=sobj.getProperty(SWBContext.getVocabulary().swb_usrLogin);
 
 %>
             <div class="row">
