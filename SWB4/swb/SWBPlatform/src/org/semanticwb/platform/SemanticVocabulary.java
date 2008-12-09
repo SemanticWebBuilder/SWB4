@@ -8,6 +8,7 @@ package org.semanticwb.platform;
 import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.Property;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import org.semanticwb.Logger;
@@ -120,7 +121,7 @@ public class SemanticVocabulary
     
     public Iterator<SemanticClass> listSemanticClasses()
     {
-        return classes.values().iterator();
+        return new ArrayList(classes.values()).iterator();
     }
     
     public SemanticClass getSemanticClass(String uri)

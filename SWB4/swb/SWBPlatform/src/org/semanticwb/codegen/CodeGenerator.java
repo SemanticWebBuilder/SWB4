@@ -528,7 +528,8 @@ public class CodeGenerator
             {
                 String valueToReturn = null;
                 String pack = getPackage(tpc);
-                if ( tpp.getRangeClass() != null )
+                SemanticClass cls=tpp.getRangeClass();
+                if ( cls != null && cls.isSWBClass())
                 {
                     SemanticClass tpcToReturn = tpp.getRangeClass();
                     valueToReturn = getClassName(tpcToReturn);
@@ -1020,7 +1021,8 @@ public class CodeGenerator
 
     private void insertObjectProperty(SemanticProperty tpp, StringBuilder javaClassContent, String sPackage)
     {
-        if ( tpp.getRangeClass() != null && tpp.getRangeClass().getURI() != null )
+        SemanticClass cls=tpp.getRangeClass();
+        if ( cls != null && cls.getURI() != null && cls.isSWBClass())
         {
 
             String objectName = tpp.getLabel();
