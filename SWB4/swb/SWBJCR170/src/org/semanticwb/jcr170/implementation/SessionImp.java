@@ -664,11 +664,9 @@ public class SessionImp implements Session
         while (it.hasNext())
         {
             String path = it.next().getProperty(BaseNode.vocabulary.swbrep_path);
-            Item item = this.getItem(path.toString());
-            if (item.isNode())
+            for(SimpleNode node : this.getSimpleNodeByPath(path, root, true))
             {
-                SimpleNode node = (SimpleNode) item;
-                if (!node.isDeleted())
+                if(node.getUUID().equals(uuid))
                 {
                     return node;
                 }
