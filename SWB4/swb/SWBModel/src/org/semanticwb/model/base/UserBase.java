@@ -13,7 +13,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class UserBase extends GenericObjectBase implements Activeable,Traceable,Roleable
+public class UserBase extends GenericObjectBase implements Roleable,Traceable,Activeable,Calendarable
 {
     public static SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
@@ -122,6 +122,36 @@ public class UserBase extends GenericObjectBase implements Activeable,Traceable,
     public void setLanguage(String usrLanguage)
     {
         getSemanticObject().setProperty(vocabulary.swb_usrLanguage, usrLanguage);
+    }
+
+    public GenericIterator<org.semanticwb.model.Calendar> listCalendars()
+    {
+        return new GenericIterator<org.semanticwb.model.Calendar>(org.semanticwb.model.Calendar.class, getSemanticObject().listObjectProperties(vocabulary.swb_hasCalendar));    }
+
+    public void addCalendar(org.semanticwb.model.Calendar calendar)
+    {
+        getSemanticObject().addObjectProperty(vocabulary.swb_hasCalendar, calendar.getSemanticObject());
+    }
+
+    public void removeAllCalendar()
+    {
+        getSemanticObject().removeProperty(vocabulary.swb_hasCalendar);
+    }
+
+    public void removeCalendar(org.semanticwb.model.Calendar calendar)
+    {
+        getSemanticObject().removeObjectProperty(vocabulary.swb_hasCalendar,calendar.getSemanticObject());
+    }
+
+    public Calendar getCalendar()
+    {
+         Calendar ret=null;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasCalendar);
+         if(obj!=null)
+         {
+             ret=(Calendar)vocabulary.swb_Calendar.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public Date getUsrPasswordChanged()

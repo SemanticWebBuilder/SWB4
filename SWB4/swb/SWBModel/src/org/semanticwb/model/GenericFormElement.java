@@ -228,7 +228,7 @@ public class GenericFormElement extends FormElementBase implements FormElement
                 ret+=" <span>";
                 if(value!=null)
                 {
-                    ret+="<a href=\"?suri="+value.getEncodedURI()+"\">"+value.getDisplayName()+"</a>";
+                    ret+="<a href=\"?suri="+value.getEncodedURI()+"\" onclick=\"addNewTab('"+value.getURI()+"', '"+value.getDisplayName(lang)+"');return false;\">"+value.getDisplayName()+"</a>";
                 }
                 ret+="</span>";
             }
