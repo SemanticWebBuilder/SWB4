@@ -18,37 +18,6 @@ public class SWBContextBase
         return vocabulary;
     }
 
-    public static UserRepository getUserRepository(String uri)
-    {
-        UserRepository ret=null;
-        SemanticModel model=mgr.getModel(uri);
-        if(model!=null)
-        {
-            SemanticObject obj=model.getSemanticObject(uri);
-            if(obj!=null)
-            {
-                ret=(UserRepository)new UserRepository(obj);
-            }
-        }
-        return ret;
-    }
-
-    public static Iterator<org.semanticwb.model.UserRepository> listUserRepositorys()
-    {
-        return (Iterator<org.semanticwb.model.UserRepository>)vocabulary.swb_UserRepository.listGenericInstances();
-    }
-
-    public static void removeUserRepository(String uri)
-    {
-        mgr.removeModel(uri);
-    }
-
-    public static UserRepository createUserRepository(String name, String namespace)
-    {
-        SemanticModel model=mgr.createModel(name, namespace);
-        return (UserRepository)model.createGenericObject(name, vocabulary.swb_UserRepository);
-    }
-
     public static WebSite getWebSite(String uri)
     {
         WebSite ret=null;
@@ -78,6 +47,37 @@ public class SWBContextBase
     {
         SemanticModel model=mgr.createModel(name, namespace);
         return (WebSite)model.createGenericObject(name, vocabulary.swb_WebSite);
+    }
+
+    public static UserRepository getUserRepository(String uri)
+    {
+        UserRepository ret=null;
+        SemanticModel model=mgr.getModel(uri);
+        if(model!=null)
+        {
+            SemanticObject obj=model.getSemanticObject(uri);
+            if(obj!=null)
+            {
+                ret=(UserRepository)new UserRepository(obj);
+            }
+        }
+        return ret;
+    }
+
+    public static Iterator<org.semanticwb.model.UserRepository> listUserRepositorys()
+    {
+        return (Iterator<org.semanticwb.model.UserRepository>)vocabulary.swb_UserRepository.listGenericInstances();
+    }
+
+    public static void removeUserRepository(String uri)
+    {
+        mgr.removeModel(uri);
+    }
+
+    public static UserRepository createUserRepository(String name, String namespace)
+    {
+        SemanticModel model=mgr.createModel(name, namespace);
+        return (UserRepository)model.createGenericObject(name, vocabulary.swb_UserRepository);
     }
 
     public static Workspace getWorkspace(String uri)
