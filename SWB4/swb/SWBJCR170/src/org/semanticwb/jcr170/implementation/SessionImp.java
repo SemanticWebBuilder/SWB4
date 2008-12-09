@@ -59,7 +59,8 @@ import org.xml.sax.SAXException;
  */
 public class SessionImp implements Session
 {
-    static Logger log=SWBUtils.getLogger(SessionImp.class);
+
+    static Logger log = SWBUtils.getLogger(SessionImp.class);
     static public final String NL = System.getProperty("line.separator");
     private static NamespaceRegistryImp registry = new NamespaceRegistryImp();
     private static final String SYSTEM_VIEW_NAMESPACE = "http://www.jcp.org/jcr/sv/1.0";
@@ -121,50 +122,36 @@ public class SessionImp implements Session
 
         ArrayList<SimpleNode> nodes = new ArrayList<SimpleNode>();
         String[] values = path.split("/");
-        if (values.length == 0)
+        if (values.length == 0 || values.length == 1)
         {
             nodes.add(root);
         }
         else
         {
-            int depth = 0;
+            SimpleNode[] parents =
+            {
+                root
+            };
+            
+            ArrayList<SimpleNode> childNodes = new ArrayList<SimpleNode>();
             for (String value : values)
             {
-                SimpleNode[] parents =
+                if (!value.equals(""))
                 {
-                    parent
-                };
-                depth++;
-                if (value.equals("") || values.equals("/"))
-                {
-                    parent = root;
-                }
-                else
-                {
-                    String name = value;
-                    int pos = name.indexOf("[");
-                    if (pos != -1)
-                    {
-                        name = name.substring(0, pos);
-                    }
+
+                    childNodes = new ArrayList<SimpleNode>();
                     for (SimpleNode parentNode : parents)
                     {
                         SimpleNode[] childs = parentNode.getSimpleNodeByName(value);
-                        if (depth != values.length)
+                        for (SimpleNode child : childs)
                         {
-                            parents = childs;
-                        }
-                        else
-                        {
-                            for (SimpleNode child : childs)
-                            {
-                                nodes.add(child);
-                            }
+                            childNodes.add(child);
                         }
                     }
+                    parents = childNodes.toArray(new SimpleNode[childNodes.size()]);
                 }
-
             }
+            nodes = childNodes;
         }
         return nodes.toArray(new SimpleNode[nodes.size()]);
     }
@@ -805,7 +792,7 @@ public class SessionImp implements Session
     }
 
     public String getNamespacePrefix(String uri) throws NamespaceException, RepositoryException
-    {        
+    {
         return registry.getPrefix(uri);
     }
 
