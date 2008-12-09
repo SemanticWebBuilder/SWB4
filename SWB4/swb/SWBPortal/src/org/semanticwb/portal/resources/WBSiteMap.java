@@ -101,86 +101,31 @@ public class WBSiteMap extends GenericAdmResource
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        if(paramRequest.getMode().equals("jSON")) {
-            doJSON(request, response, paramRequest);
-        }else if(paramRequest.getMode().equals("getChilds")){
-            doJSONChilds(request, response, paramRequest);
+        if(paramRequest.getMode().equals("childs")){
+            doChilds(request, response, paramRequest);
         }else {
             super.processRequest(request, response, paramRequest);
         }
-    }
-    
-    public void doJSON(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+    }    
+        
+    public void doChilds(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/json;charset=iso-8859-1");
         PrintWriter out = response.getWriter();
-        Portlet base=getResourceBase();
-        String data;
-        String buildMode = base.getAttribute("buildmode", "dynamic");
-        
-        try {
-            if(buildMode.equalsIgnoreCase("dynamic"))            
-                data = getJSONDynamically(paramRequest.getTopic().getWebSite(), paramRequest.getUser());
-            else
-                data = getJSONRecursively(paramRequest.getTopic().getWebSite(), paramRequest.getUser());
-        }catch(Exception e) {
-            log.error(e);
-            data = e.toString();
-        }
-        out.println(data);
-    }
-        
-    public void doJSONChilds(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        response.setContentType("text/json;charset=iso-8859-1");
-        PrintWriter out = response.getWriter();
-        String data;
-        
-        try {            
-            data = getJSONDynamically(paramRequest.getTopic().getWebSite(), paramRequest.getTopic(), paramRequest.getUser());
-        }catch(Exception e) {
-            log.error(e);
-            data = e.toString();
-        }
-        out.println(data);
-    }
-    
-    /** Crea el inicio del objeto json del árbol del mapa del sitio recursivamente.
-     * @param webSite
-     * @param user
-     * @throws SWBResourceException
-     * @throws IOException
-     */
-    public String getJSONRecursively(WebSite webSite, User user) throws SWBResourceException, IOException
-    {
         Portlet base=getResourceBase();
         StringBuffer data = new StringBuffer();
-        
-        try
-        {
-            WebPage tpsite = null;
-            data.append("{");
-            data.append(" identifier: 'id',");
-            data.append(" label: 'name',");
-            data.append(" url: 'tpurl',");
-            data.append(" children: 'childs',");
-            data.append(" loaded: 'boolean',");
-            data.append(" items: [");
-                        
-            if(base.getAttribute("home") != null) {
-                tpsite = webSite.getWebPage(base.getAttribute("home").trim());
-            }            
+        try {
+            WebPage tpsite = null;                        
+            tpsite = paramRequest.getTopic().getWebSite().getWebPage(request.getParameter("wp").trim());
             if (tpsite == null) {
-                tpsite = webSite.getHomePage();
+                throw new SWBResourceException("pagina desconocida");
             }
                         
-            //if (user.haveAccess(tpsite)) TODO: VER4
-            if(true)
-            {   
-                String lang = user.getLanguage();
-                data.append(" {");
-                data.append(" id:'"+tpsite.getId()+"', carpeta:'true', name:'"+tpsite.getTitle(lang)+"', tpurl:'"+tpsite.getUrl()+"', type:'home', loaded:'true' ");                
-                Iterator <WebPage> it = tpsite.listChilds(lang, true, false, false, null);                
+            //if(user.haveAccess(tpsite)) TODO: VER4
+            {
+                String lang = paramRequest.getUser().getLanguage();                                
+                Iterator <WebPage> it = tpsite.listChilds(lang, true, false, false, null);
                 if(it.hasNext()) {
-                    data.append(", children: [");
+                    data.append("[");
                     boolean hasChilds;
                     while (it.hasNext())
                     {
@@ -188,95 +133,32 @@ public class WBSiteMap extends GenericAdmResource
                         //if(tp!=null && tp.getId()!=null && user.haveAccess(tp)) //TODO VER 4.0
                         if(tp!=null && tp.getId()!=null)
                         {
-                            data.append(" {");
-                            data.append(" id:'"+tp.getId()+"', ");
-                            hasChilds = tp.listChilds(lang, true, false, false, null).hasNext();
+                            data.append("{");
+                            data.append("id:'"+tp.getId()+"'");
+                            data.append(",title:'"+tp.getTitle(lang)+"'");                            
+                            hasChilds = tp.listChilds(lang, true, false, false, null).hasNext();                            
                             if(hasChilds) {
-                                data.append("carpeta:'true', loaded:'true', ");
-                            }else {
-                                data.append("carpeta:'false', loaded:'true', ");
+                                data.append(",isFolder:true");
+                                    data.append(",isLazy:true");
+                            }else{
+                                data.append(",purl:'"+tp.getUrl()+"'");
                             }
-                            data.append("name:'"+tp.getTitle(lang)+"', ");
-                            data.append("tpurl:'"+tp.getUrl()+"', ");
-                            data.append("type:'webpage'");
-                            if(hasChilds) {
-                                data.append(", children: [");                                
-                                data.append(getJSONRecursively(webSite, tp, user));
-                                data.append("]");
-                            }
+
                             if(it.hasNext()) {
                                 data.append("},");
                             }else {
                                 data.append("}");
-                            }                            
+                            }
                         }
                     }
+                    data.append("]");
                 }
-                data.append(" ]}");
             }
-            
-            data.append("]}");
-        }catch(Exception e) { 
-            log.error("Error while generating DOM in resource "+ base.getPortletType().getPortletClassName() +" with identifier " + base.getId() + " - " + base.getTitle(), e); 
+        }catch(Exception e) {
+            log.error(e);
             data.append(e.toString());
         }
-        return data.toString();
-    }
-    
-    /** Crea el cuerpo del objeto json del árbol del mapa del sitio recursivamente.
-     * @param webSite
-     * @param user
-     * @throws SWBResourceException
-     * @throws IOException
-     */
-    public String getJSONRecursively(WebSite webSite, WebPage webPage, User user) throws SWBResourceException, IOException
-    {
-        Portlet base=getResourceBase();
-        StringBuffer data = new StringBuffer();
-        try {
-            WebPage tpsite = webPage;
-            //if (user.haveAccess(tpsite)) TODO: VER4
-            if(true)
-            {
-                String lang = user.getLanguage();
-                Iterator <WebPage> it = tpsite.listChilds(lang, true, false, false, null);
-                boolean hasChilds;
-
-                while (it.hasNext()) {
-                    WebPage tp = it.next();
-                    //if(tp!=null && tp.getId()!=null && user.haveAccess(tp)) //TODO VER 4.0
-                    if(tp!=null && tp.getId()!=null)
-                    {
-                        data.append(" {");
-                        data.append(" id:'"+tp.getId()+"', ");
-                        hasChilds = tp.listChilds(lang, true, false, false, null).hasNext();
-                        if(hasChilds) {
-                            data.append("carpeta:'true', loaded:'true', ");
-                        }else {
-                            data.append("carpeta:'false', loaded:'true', ");
-                        }
-                        data.append("name:'"+tp.getTitle(lang)+"', ");
-                        data.append("tpurl:'"+tp.getUrl()+"', ");
-                        data.append("type:'webpage'");
-                        if(hasChilds) {
-                            data.append(", children: [");
-                            data.append(getJSONRecursively(webSite, tp, user));
-                            data.append("]");
-                        }
-                        if(it.hasNext()) {
-                            data.append("},");
-                        }else {
-                            data.append("}");
-                        }                                               
-                    }
-                }
-                
-            }
-            return data.toString();
-        }catch(Exception e) { 
-            log.error("Error while generating DOM in resource "+ base.getPortletType().getPortletClassName() +" with identifier " + base.getId() + " - " + base.getTitle(), e); 
-        }
-        return null;      
+        out.println(data.toString());
     }
     
     /** Crea el inicio del objeto json del árbol del mapa del sitio eventualmente usando ajax.
@@ -290,20 +172,15 @@ public class WBSiteMap extends GenericAdmResource
         Portlet base=getResourceBase();
         StringBuffer data = new StringBuffer();
         int subLevel = 1;
-        try
-        {
+        try {
             WebPage tpsite = null;
-            data.append("{");
-            data.append(" identifier: 'id',");
-            data.append(" label: 'name',");
-            data.append(" url: 'tpurl',");
-            data.append(" children: 'childs',");
-            data.append(" loaded: 'boolean',");
-            data.append(" items: [");
-            
+                        
             if (!"".equals(base.getAttribute("level", "").trim())) {
                 try {
                     maxLevel = Integer.parseInt(base.getAttribute("level", "1").trim());
+                    if(maxLevel<1) {
+                        maxLevel = 1;
+                    }                        
                 }catch (Exception e) {
                     maxLevel = 1;
                 }
@@ -320,13 +197,10 @@ public class WBSiteMap extends GenericAdmResource
             //if (subLevel<=maxLevel && user.haveAccess(tpsite)) TODO: VER4
             if(subLevel<=maxLevel)
             {
-                String lang = user.getLanguage();
-                data.append(" {");
-                data.append(" id:'"+tpsite.getId()+"', carpeta:'true', name:'"+tpsite.getTitle(lang)+"', tpurl:'"+tpsite.getUrl()+"', type:'home', loaded:'true' ");
-                                
+                String lang = user.getLanguage();                                
                 Iterator <WebPage> it = tpsite.listChilds(lang, true, false, false, null);
                 if(it.hasNext()) {                    
-                    data.append(", children: [");
+                    data.append(",children:[");
                     boolean hasChilds;
                     while (it.hasNext())
                     {
@@ -334,27 +208,23 @@ public class WBSiteMap extends GenericAdmResource
                         //if(tp!=null && tp.getId()!=null && user.haveAccess(tp)) //TODO VER 4.0
                         if(tp!=null && tp.getId()!=null)
                         {
-                            data.append(" {");
-                            data.append(" id:'"+tp.getId()+"', ");
-                            hasChilds = tp.listChilds(lang, true, false, false, null).hasNext();
-                            
-                            if(hasChilds && (subLevel+1)<=maxLevel) {
-                                data.append("carpeta:'true', loaded:'true', ");
-                            }else if(hasChilds) {
-                                data.append("carpeta:'true', loaded:'false', ");
-                            }else {
-                                data.append("carpeta:'false', loaded:'true', ");
-                            }
-                            data.append("name:'"+tp.getTitle(lang)+"', ");
-                            data.append("tpurl:'"+tp.getUrl()+"', ");
-                            data.append("type:'webpage'");
+                            data.append("{");
+                            data.append("id:'"+tp.getId()+"'");
+                            data.append(",title:'"+tp.getTitle(lang)+"'");                            
+                            hasChilds = tp.listChilds(lang, true, false, false, null).hasNext();                            
                             if(hasChilds) {
-                                data.append(", children: [");                                
+                                data.append(",isFolder:true");
                                 if(subLevel < maxLevel) {
+                                    data.append(",expand:true,children:[");
                                     data.append(getJSONDynamically(webSite, tp, user, subLevel+1));
+                                    data.append("]");
+                                }else {
+                                    data.append(",isLazy:true");
                                 }
-                                data.append("]");
+                            }else{
+                                data.append(",purl:'"+tp.getUrl()+"'");
                             }
+
                             if(it.hasNext()) {
                                 data.append("},");
                             }else {
@@ -362,12 +232,9 @@ public class WBSiteMap extends GenericAdmResource
                             }
                         }
                     }
-                    data.append(" ]");
+                    data.append("]");
                 }
             }
-            data.append(" }");
-            data.append(" ]");
-            data.append(" }");
         }catch(Exception e) { 
             log.error("Error while generating DOM in resource "+ base.getPortletType().getPortletClassName() +" with identifier " + base.getId() + " - " + base.getTitle(), e); 
             data.append(e.toString());
@@ -397,26 +264,23 @@ public class WBSiteMap extends GenericAdmResource
                     //if(tp!=null && tp.getId()!=null && user.haveAccess(tp)) //TODO VER 4.0
                     if(tp!=null && tp.getId()!=null)
                     {
-                        data.append(" {");
-                        data.append("id:'"+tp.getId()+"', ");
-                        hasChilds = tp.listChilds(lang, true, false, false, null).hasNext();
-                        if(hasChilds && (subLevel+1)<=maxLevel) {
-                            data.append("carpeta:'true', loaded:'true', ");
-                        }else if(hasChilds) {
-                            data.append("carpeta:'true', loaded:'false', ");
-                        }else {
-                            data.append("carpeta:'false', loaded:'true', ");
-                        }
-                        data.append(" name:'"+tp.getTitle(lang)+"', ");
-                        data.append(" tpurl:'"+tp.getUrl()+"', ");
-                        data.append(" type:'webpage' ");
+                        data.append("{");
+                        data.append("id:'"+tp.getId()+"'");
+                        data.append(",title:'"+tp.getTitle(lang)+"'");                            
+                        hasChilds = tp.listChilds(lang, true, false, false, null).hasNext();                            
                         if(hasChilds) {
-                            data.append(", children: [");
-                            if(subLevel < maxLevel) {                                
+                            data.append(",isFolder:true");
+                            if(subLevel < maxLevel) {
+                                data.append(",expand:true,children:[");
                                 data.append(getJSONDynamically(webSite, tp, user, subLevel+1));
+                                data.append("]");
+                            }else {
+                                data.append(",isLazy:true");
                             }
-                            data.append("]");
-                        }                          
+                        }else{
+                            data.append(",purl:'"+tp.getUrl()+"'");
+                        }
+
                         if(it.hasNext()) {
                             data.append("},");
                         }else {
@@ -550,69 +414,37 @@ public class WBSiteMap extends GenericAdmResource
             try {
                 SWBResourceURLImp url=new SWBResourceURLImp(request, base, paramRequest.getTopic(),SWBResourceURL.UrlType_RENDER);
                 url.setResourceBase(base);
-                url.setMode("jSON");        
+                url.setMode("childs");                
                 url.setTopic(paramRequest.getTopic());
                 url.setCallMethod(paramRequest.Call_DIRECT);
-
-                ret.append("\n");
-                ret.append("<div dojoType=\"dojo.data.ItemFileWriteStore\" url=\""+url.toString()+"\" jsId=\"storetp\"></div>\n");
-                ret.append("<div dojoType=\"dijit.tree.ForestStoreModel\" jsId=\"modeltp\" store=\"storetp\" >\n");        
-                ret.append("    <script type=\"dojo/method\" event=\"getChildren\" args=\"item, onComplete\">\n");
-                ret.append("        switch(item.root ?  \"top\" : storetp.getValue(item, \"type\")){\n");
-                ret.append("            case \"top\":\n");
-                ret.append("                return storetp.fetch({query: {type:'home'}, onComplete: onComplete});\n");
-                ret.append("            default:\n");
-                ret.append("                return dijit.tree.ForestStoreModel.prototype.getChildren.apply(this, arguments);\n");
-                ret.append("        }\n");
-                ret.append("    </script>");
-
-                ret.append("    <script type=\"dojo/method\" event=\"mayHaveChildren\" args=\"item\">\n");
-                ret.append("        if(item.root) {\n");	// top level
-                ret.append("             return true;\n");
-                ret.append("        }\n");
-                ret.append("        var folder = storetp.getValue(item, \"carpeta\");\n");
-                ret.append("        return (folder=='true');\n");
-                ret.append("    </script>\n");
-                ret.append("</div>\n");
-
-
-                ret.append("<div dojoType=\"dijit.Tree\" id=\"_sm01\" model=\"modeltp\" labelAttr=\"name\" label=\"root\" showroot=\"false\">\n");
-                ret.append("  <script type=\"dojo/method\" event=\"onClick\" args=\"item, node\">\n");
-                //ret.append("  <script type=\"dojo/method\" event=\"onOpen\" args=\"item\">\n");
-                ret.append("    if(item) {\n");           
-                ret.append("        var isFolder = storetp.getValue(item,\"carpeta\");\n");
-                ret.append("        var isLoaded = storetp.getValue(item,\"loaded\");");        
-                ret.append("        if(isFolder=='true' && isLoaded=='false' ) {\n");
-                ret.append("            var url = storetp.getValue(item, \"tpurl\");");
-                ret.append("            url = url + '/_rid/"+base.getId()+"/_mod/getChilds/_mto/3/'; \n");
-                ret.append("            return getData(url, item);\n");                
-                ret.append("        }\n");
-                ret.append("        else {\n");
-                ret.append("            window.location=storetp.getValue(item,'tpurl');\n");
-                ret.append("        }\n");
-                ret.append("    }\n");                
-                ret.append("  </script>\n");
-                ret.append("</div>\n");
-
-                ret.append("<script type=\"text/javascript\">\n");
-                ret.append("    function getData(tpurl,item) { \n"); // Cargando con AJAX el mapa del sitio
-                ret.append("       dojo.xhrGet( { \n");
-                ret.append("           url: tpurl, \n");
-                ret.append("           handleAs: 'text', \n");
-                ret.append("           load: function(responseObject, ioArgs) { \n");
-                ret.append("               var items = eval('['+ responseObject+']'); \n");
-                ret.append("               for (var i=0; i<items.length;i++){ \n");
-                ret.append("                   pInfo={parent:item, attribute:\"children\"}; \n");
-                ret.append("                   storetp.newItem(items[i],pInfo); \n");
-                ret.append("               } \n");
-                ret.append("               item['loaded']=eval('[true]'); \n");
-                ret.append("               storetp.save(); \n");
-                ret.append("               return responseObject; \n");
-                ret.append("           } \n");
-                ret.append("       }); \n");
-                ret.append("       return; \n");
-                ret.append("    } \n");                
-                ret.append("</script>");
+                
+                ret.append("<div id=\"tree_sitemap_"+base.getId()+"\"> </div> \n");
+                ret.append("<script type='text/javascript' src='/swb/swbadmin/js/jquery/jquery.dynatree.js'></script> \n");
+                ret.append("<script type='text/javascript'> \n");
+                ret.append("$(function(){ \n");                
+                ret.append("    $(\"#tree_sitemap_"+base.getId()+"\").dynatree({ \n");
+                ret.append("        onLazyRead: function(dtnode) { \n");
+                ret.append("            dtnode.appendAjax({url:'"+url.toString()+"?wp='+dtnode.data.id, \n");
+                ret.append("            cache: false \n");
+                ret.append("            }); \n");
+                ret.append("        } \n");
+                ret.append("        ,autoCollapse:"+base.getAttribute("collapse","false")+" \n");
+                ret.append("        ,title: '"+base.getAttribute("home","Home")+"' \n");
+                ret.append("        ,rootVisible: "+base.getAttribute("showroot","false")+" \n");
+                ret.append("        ,strings: { \n");
+                ret.append("            loading: '"+base.getAttribute("loadmsg","Cargando&#8230;")+"' \n");
+                ret.append("            ,loadError: '"+base.getAttribute("errormsg","¡Error, la p&aacute;gina no existe!")+"' \n");
+                ret.append("        } \n");
+                
+                ret.append("        ,onSelect: function(dtnode) { \n");
+                ret.append("            if(dtnode.data.purl) {");
+                ret.append("                window.location=dtnode.data.purl");
+                ret.append("            }");
+                ret.append("        } \n");                
+                ret.append(getJSONDynamically(paramRequest.getTopic().getWebSite(), paramRequest.getUser()));
+                ret.append("    }); \n");
+                ret.append("}); \n");
+                ret.append("</script>\n");
             }
             catch(Exception e) {
                 log.error(e);
