@@ -95,6 +95,7 @@ public class XmlRpcSerializer {
                     iParameter++;
                 }
                 newMethods.add(method);
+                break;
             }
             catch ( Exception e )
             {
