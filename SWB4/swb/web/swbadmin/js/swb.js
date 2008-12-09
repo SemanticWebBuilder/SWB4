@@ -2,6 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+      var context="/swb";
 
       dojo.require("dijit.Menu");
       dojo.require("dijit._Calendar");
@@ -219,6 +220,7 @@
       {
           var objid=id+"/tab";
           var newTab = dijit.byId(objid);
+          if(!url)url=context+"/swbadmin/jsp/objectTab.jsp";
           if(newTab==null)
           {
               newTab = new dijit.layout.ContentPane(
@@ -329,7 +331,7 @@
           if(!jsonNode)
           {
               onlyNode=true;
-              jsonNode=getJSON("/swb/swbadmin/jsp/Tree.jsp?suri="+encodeURIComponent(item.id))[0];
+              jsonNode=getJSON(context+"/swbadmin/jsp/Tree.jsp?suri="+encodeURIComponent(item.id))[0];
           }
 
           store.setValues(item, "title", jsonNode.title);
@@ -384,7 +386,7 @@
           setWaitCursor();
           //alert("reload:"+item.id);
           removeChilds(store,item);
-          var arr=getJSON("/swb/swbadmin/jsp/Tree.jsp?suri="+encodeURIComponent(item.id))
+          var arr=getJSON(context+"/swbadmin/jsp/Tree.jsp?suri="+encodeURIComponent(item.id))
           updateTreeNode(store,item,arr[0]);
           //alert("arr:"+arr[0].id);
           var items=arr[0].children;
