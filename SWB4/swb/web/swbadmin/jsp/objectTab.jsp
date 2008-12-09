@@ -65,16 +65,6 @@
         buri+="?suri="+obj.getSemanticObject().getEncodedURI();
         SWBVocabulary voc=SWBContext.getVocabulary();
         
-        if(obj instanceof PFlowRefable)
-        {
-            String auri=buri;
-            auri+="&sprop="+voc.swb_hasPFlowRef.getEncodedURI();
-            auri+="&spropref="+voc.swb_pflow.getEncodedURI();
-%>
-<div dojoType="dijit.layout.ContentPane" title="Flujos de Publicación" style=" padding:10px;" refreshOnShow="false" href="<%=auri%>"></div>
-<%            
-        }
-        
         if(obj instanceof Calendarable)
         {
             String auri="/swb/swb/SWBAdmin/WBAd_Home/_rid/55/_mto/3";
