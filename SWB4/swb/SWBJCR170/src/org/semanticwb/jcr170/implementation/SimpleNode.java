@@ -233,7 +233,7 @@ public class SimpleNode implements Node
         prop.setNew(isNew);
         return prop;
 
-    }
+    }   
 
     private PropertyImp addProperty(SemanticProperty property, BaseNode node, SemanticClass clazz) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
