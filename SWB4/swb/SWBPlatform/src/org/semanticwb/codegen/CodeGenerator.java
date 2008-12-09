@@ -35,6 +35,7 @@ public class CodeGenerator
     private static final String TYPE_BOOLEAN = "boolean";
     private static final String TYPE_BYTE = "byte";
     private static final String TYPE_DATE_TIME = "dateTime";
+    private static final String TYPE_DATE = "date";
     private static final String TYPE_DOUBLE = "double";
     private static final String TYPE_FLOAT = "float";
     private static final String TYPE_INT = "int";
@@ -529,7 +530,7 @@ public class CodeGenerator
                 String valueToReturn = null;
                 String pack = getPackage(tpc);
                 SemanticClass cls=tpp.getRangeClass();
-                if ( cls != null && cls.isSWBClass())
+                if ( cls != null && cls.isSWB())
                 {
                     SemanticClass tpcToReturn = tpp.getRangeClass();
                     valueToReturn = getClassName(tpcToReturn);
@@ -623,7 +624,7 @@ public class CodeGenerator
                         type = TYPE_BOOLEAN;
                         prefix = "is";
                     }
-                    else if ( uri.getFragment().equals(TYPE_DATE_TIME) )
+                    else if ( uri.getFragment().equals(TYPE_DATE_TIME) || uri.getFragment().equals(TYPE_DATE) )
                     {
                         type = "Date";
                     }
@@ -800,7 +801,7 @@ public class CodeGenerator
                 {
                     type = TYPE_BOOLEAN;
                 }
-                else if ( uri.getFragment().equals(TYPE_DATE_TIME) )
+                else if ( uri.getFragment().equals(TYPE_DATE_TIME) || uri.getFragment().equals(TYPE_DATE) )
                 {
                     type = "Date";
                 }
@@ -914,7 +915,7 @@ public class CodeGenerator
                     getMethod = "getBooleanProperty";
                     setMethod = "setBooleanProperty";
                 }
-                else if ( uri.getFragment().equals(TYPE_DATE_TIME) )
+                else if ( uri.getFragment().equals(TYPE_DATE_TIME) || uri.getFragment().equals(TYPE_DATE) )
                 {
                     type = "Date";
                     getMethod = "getDateProperty";
@@ -1022,7 +1023,7 @@ public class CodeGenerator
     private void insertObjectProperty(SemanticProperty tpp, StringBuilder javaClassContent, String sPackage)
     {
         SemanticClass cls=tpp.getRangeClass();
-        if ( cls != null && cls.getURI() != null && cls.isSWBClass())
+        if ( cls != null && cls.getURI() != null && cls.isSWB())
         {
 
             String objectName = tpp.getLabel();

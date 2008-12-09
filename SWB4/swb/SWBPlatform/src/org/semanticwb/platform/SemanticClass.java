@@ -508,4 +508,8 @@ public class SemanticClass
         res.addProperty(res.getModel().getProperty(SemanticVocabulary.RDFS_SUBCLASSOF), cls.getOntClass());
     }
 
+    public boolean isSWB()
+    {
+        return isSWBClass() || isSWBModel() || isSWBFormElement() || isSWBInterface();
+    }
 }
