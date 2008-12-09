@@ -40,6 +40,8 @@ public class SWBAWebPageContents extends GenericResource {
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache"); 
         log.debug("doEdit(SWBAWebPageContents...)");
         PrintWriter out = response.getWriter();
         User user = paramRequest.getUser();

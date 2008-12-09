@@ -163,6 +163,20 @@ public class SWBASemObjectEditor extends GenericResource {
                         if (modificable) {
                             out.println("<a  href=\"" + urlr + "\">Remove</a>");
                         }
+                        WebSite ws = paramRequest.getTopic().getWebSite();
+                        WebPage page0 = ws.getWebPage("page0");
+                        Portlet portlet = ws.getPortlet("3");
+                        SWBResourceURLImp urltest = (SWBResourceURLImp) paramRequest.getRenderUrl();
+                        urltest.setResourceBase(portlet);
+                        urltest.setTopic(page0);
+                        urltest.setParameter("suri", obj.getURI());
+                        urltest.setParameter("sprop", prop.getURI());
+                        urltest.setParameter("spropref", obj2.getURI());
+                        //urltest.setParameter(name, prop.getURI());
+                        urltest.setAction("list");
+                        if (modificable) {
+                            out.println("<a  href=\"" + urltest + "\">Lista</a>");
+                        }
                         if (unumlist) {
                             out.print("</ul>");
                         }
@@ -185,6 +199,7 @@ public class SWBASemObjectEditor extends GenericResource {
                         urla.setAction("new");
                         out.println("<a  href=\"" + urla + "\">Add New</a>");
                     }
+                    
                 }
             }
             out.println("	</ol>");
