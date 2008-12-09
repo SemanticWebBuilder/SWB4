@@ -4,18 +4,6 @@
     <script type="text/javascript" language="JavaScript">
         <![CDATA[          
         
-            function toggleLevel(frm) {        
-                for (var i=0; i<frm.buildmode.length; i++) {
-                    if(frm.buildmode[i].checked && frm.buildmode[i].value=='recursive') {                        
-                        frm.level.value="";
-                        frm.level.disabled=true;
-                        break
-                    }else {
-                        frm.level.disabled=false;
-                    }
-                }
-            }
-            
             function jsClear(frm)
             {
                     frm.btntexto.value=''; 
@@ -42,6 +30,12 @@
             {
                 if(!isNumber(frm.level)) {
                     return false;
+                }else {
+                    var lvl = parseInt(frm.level.value, 10);
+                    if(lvl<1) {
+                        alert("El nivel de despliegue debe ser mayor que cero.");
+                        return false;
+                    }
                 }
                 return true;
             }            
@@ -56,17 +50,15 @@
         <input type="TEXT" name="lnktexto" label="Text of the link in case of not defining an image or button:" size="50"/>
         <input type="TEXT" name="blnstyle" label="Style of the button or link:" size="50"/>
         <input type="TEXT" name="title" label="Title:" size="50"/>
-        <input type="TEXT" name="level" label="Level for display:" size="2" maxlength="1" jsvaltype="js_numbers"/>
-        <input type="TEXT" name="home" label="Identifier of initial home:" size="50" maxlength="50"/>
-        <statictext name="txtAlign">Build mode:</statictext>
-        <input type="RADIO" name="buildmode" label="Dynamic" value="dynamic" moreattr="onclick=&#34;toggleLevel(this.form);&#34;" />
-        <input type="RADIO" name="buildmode" label="Recursive -Recomended to small sites (100 web pages o less)" value="recursive" moreattr="onclick=&#34;toggleLevel(this.form);&#34;" />
+        <input type="TEXT" name="level" label="Level for display:" size="2" maxlength="1" value="1" jsvaltype="js_numbers"/>
+
+            <input type="TEXT" name="home" label="Name of the root node:" size="50" maxlength="50" value="Home" />
+            <input type="CHECKBOX" name="showroot" label="Set to true, to make the root node visible:" value="true" />
+            <input type="CHECKBOX" name="collapse" label="Automatically collapse all siblings, when a node is expanded:" value="true" />
+            <input type="TEXT" name="loadmsg" label="Message on request" value="Loading&#8230;" />
+            <input type="TEXT" name="errormsg" label="Message on error" value="Load error!" />
+
         <input type="SUBMIT" name="btnSave"  value="Save" onclick="if(jsValida(this.form)) return true; else return false;"/>
         <input type="RESET"  name="btnReset" value="Cancel"/>
     </form>
-    <script type="text/javascript" language="JavaScript">
-        <![CDATA[        
-            toggleLevel(frmWBSiteMap);        
-        ]]>
-    </script>
 </admresource>

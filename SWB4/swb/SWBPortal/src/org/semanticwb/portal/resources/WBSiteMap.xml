@@ -4,18 +4,6 @@
     <script type="text/javascript" language="JavaScript">
         <![CDATA[          
         
-            function toggleLevel(frm) {        
-                for (var i=0; i<frm.buildmode.length; i++) {
-                    if(frm.buildmode[i].checked && frm.buildmode[i].value=='recursive') {                        
-                        frm.level.value="";
-                        frm.level.disabled=true;
-                        break
-                    }else {
-                        frm.level.disabled=false;
-                    }
-                }
-            }
-            
             function jsClear(frm)
             {
                     frm.btntexto.value=''; 
@@ -42,6 +30,12 @@
             {
                 if(!isNumber(frm.level)) {
                     return false;
+                }else {
+                    var lvl = parseInt(frm.level.value, 10);
+                    if(lvl<1) {
+                        alert("El nivel de despliegue debe ser mayor que cero.");
+                        return false;
+                    }
                 }
                 return true;
             }            
@@ -56,17 +50,15 @@
         <input type="TEXT" name="lnktexto" label="Texto de la liga en caso de no definir imagen ni botón:" size="50"/>
         <input type="TEXT" name="blnstyle" label="Estilo del botón o de la liga según sea el caso:" size="50"/>
         <input type="TEXT" name="title" label="Título:" size="50"/>
-        <input type="TEXT" name="level" label="Nivel de despliegue:" size="2" maxlength="1" jsvaltype="js_numbers"/>
-        <input type="TEXT" name="home" label="Identificador de sección inicial:" size="50" maxlength="50"/>
-        <statictext name="txtAlign">Modo de construcción:</statictext>
-        <input type="RADIO" name="buildmode" label="Dinámico" value="dynamic" moreattr="onclick=&#34;toggleLevel(this.form);&#34;" />
-        <input type="RADIO" name="buildmode" label="Recursivo -Recomendado para sitios pequeños(100 páginas o menos)" value="recursive" moreattr="onclick=&#34;toggleLevel(this.form);&#34;" />
+        <input type="TEXT" name="level" label="Nivel de despliegue:" size="2" maxlength="1" value="1" jsvaltype="js_numbers"/>
+
+            <input type="TEXT" name="home" label="Título de la sección inicial:" size="50" maxlength="50" value="Home" />
+            <input type="CHECKBOX" name="showroot" label="Mostrar la sección inicial:" value="true" />
+            <input type="CHECKBOX" name="collapse" label="Colapsar automáticamente todas las demás ramas cuando se expande una:" value="true" />
+            <input type="TEXT" name="loadmsg" label="Mensaje para indicar una solicitud asíncrona" value="Cargando&#8230;" />
+            <input type="TEXT" name="errormsg" label="Mensaje para indicar un error en una solicitud asíncrona" value="Lo siento, no existe" />
+
         <input type="SUBMIT" name="btnSave"  value="Guardar" onclick="if(jsValida(this.form)) return true; else return false;"/>
         <input type="RESET"  name="btnReset" value="Cancelar"/>
     </form>
-    <script type="text/javascript" language="JavaScript">
-        <![CDATA[        
-            toggleLevel(frmWBSiteMap);        
-        ]]>
-    </script>
 </admresource>
