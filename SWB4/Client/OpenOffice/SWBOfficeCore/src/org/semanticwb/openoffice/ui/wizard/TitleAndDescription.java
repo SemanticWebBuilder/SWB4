@@ -20,41 +20,36 @@ import org.semanticwb.openoffice.util.FixedLengthPlainDocument;
  */
 public class TitleAndDescription extends WizardPage
 {
-    public static final String TITLE="title";
-    public static final String DESCRIPTION="description";
-    public static final String NODE_TYPE="NODE_TYPE";
+
+    public static final String TITLE = "title";
+    public static final String DESCRIPTION = "description";
+    public static final String NODE_TYPE = "NODE_TYPE";
+
     /** Creates new form TitleAndDescription */
     public TitleAndDescription()
-    {        
-        initComponents();
-        if(this.getWizardData(TITLE)!=null)
-        {
-            this.jLabelName.setText(this.getWizardData(TITLE).toString());
-        }
-        if(this.getWizardData(DESCRIPTION)!=null)
-        {
-            this.jTextAreaDescription.setText(this.getWizardData(TITLE).toString());
-        }
+    {  
+        initComponents();                
         this.jTextFieldName.setDocument(new FixedLengthPlainDocument(255));
         this.jTextAreaDescription.setDocument(new FixedLengthPlainDocument(255));
-        this.jComboBoxType.removeAllItems();
+        this.jComboBoxType.removeAllItems();        
         try
-        {
-        for(ContentType type  : OfficeApplication.getOfficeApplicationProxy().getContentTypes(this.getWizardDataMap().get(SelectCategory.REPOSITORY_ID).toString()))
-        {
-            this.jComboBoxType.addItem(type);
+        {            
+            String repository=SelectCategory.map.get(SelectCategory.REPOSITORY_ID).toString();
+            for (ContentType type : OfficeApplication.getOfficeApplicationProxy().getContentTypes(repository))
+            {
+                this.jComboBoxType.addItem(type);
+            }
         }
-        }
-        catch(Exception e)
+        catch (Exception e)
         {
-            
         }
     }
 
     public static String getDescription()
     {
-        return "Información del contenido";                
+        return "Información del contenido";
     }
+
     /**     * 
      * @param arg
      * @param map
@@ -62,30 +57,30 @@ public class TitleAndDescription extends WizardPage
      * @return
      */
     @Override
-    public WizardPanelNavResult allowNext(String arg,Map map,Wizard wizard)
+    public WizardPanelNavResult allowNext(String arg, Map map, Wizard wizard)
     {
-        WizardPanelNavResult result=WizardPanelNavResult.REMAIN_ON_PAGE;        
-        if(this.jTextFieldName.getText().trim().equals(""))
-        {            
-            JOptionPane.showMessageDialog(null, "¡Debe indicar el título del contenido!",getDescription(), JOptionPane.ERROR_MESSAGE);
-            this.jTextFieldName.requestFocus();            
+        WizardPanelNavResult result = WizardPanelNavResult.REMAIN_ON_PAGE;
+        if (this.jTextFieldName.getText().trim().equals(""))
+        {
+            JOptionPane.showMessageDialog(null, "¡Debe indicar el título del contenido!", getDescription(), JOptionPane.ERROR_MESSAGE);
+            this.jTextFieldName.requestFocus();
         }
-        else if(this.jTextAreaDescription.getText().trim().equals(""))
-        {            
-            JOptionPane.showMessageDialog(null, "¡Debe indicar la descripción del contenido!",getDescription(), JOptionPane.ERROR_MESSAGE);
-            this.jTextAreaDescription.requestFocus();            
+        else if (this.jTextAreaDescription.getText().trim().equals(""))
+        {
+            JOptionPane.showMessageDialog(null, "¡Debe indicar la descripción del contenido!", getDescription(), JOptionPane.ERROR_MESSAGE);
+            this.jTextAreaDescription.requestFocus();
         }
-        else if(this.jComboBoxType.getSelectedItem()==null)
-        {            
-            JOptionPane.showMessageDialog(null, "¡Debe indicar el tipo de contenido!",getDescription(), JOptionPane.ERROR_MESSAGE);
-            this.jComboBoxType.requestFocus();            
+        else if (this.jComboBoxType.getSelectedItem() == null)
+        {
+            JOptionPane.showMessageDialog(null, "¡Debe indicar el tipo de contenido!", getDescription(), JOptionPane.ERROR_MESSAGE);
+            this.jComboBoxType.requestFocus();
         }
         else
         {
             map.put(TITLE, this.jTextFieldName.getText().trim());
             map.put(DESCRIPTION, this.jTextAreaDescription.getText().trim());
-            map.put(NODE_TYPE, ((ContentType)this.jComboBoxType.getSelectedItem()).id);
-            result=WizardPanelNavResult.PROCEED;
+            map.put(NODE_TYPE, ((ContentType) this.jComboBoxType.getSelectedItem()).id);
+            result = WizardPanelNavResult.PROCEED;
         }
         return result;
     }
