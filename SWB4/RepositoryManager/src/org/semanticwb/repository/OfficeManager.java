@@ -15,5 +15,7 @@ public interface OfficeManager {
     public String getPropertyTitleType();
     public String getCategoryType();
     public String getPropertyDescriptionType();
+    public String getPropertyType();
+    public String getPartType();    
     public HashMap<String, String> getContentTypes();
 }
