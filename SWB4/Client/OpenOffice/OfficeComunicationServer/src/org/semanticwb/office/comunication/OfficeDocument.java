@@ -29,12 +29,8 @@ import org.semanticwb.xmlrpc.XmlRpcObject;
  */
 public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 {
-    
-    private static final String CM_TYPE = "cm:type";
-    private static final String DEFAULT_MIME_TYPE = "application/octet-stream";    
-    private static final String CM_PART = "cm:Part";
-    private static final String JCR_CONTENT = "jcr:content";
-    private static final String NT_RESOURCE = "nt:resource";
+        
+    private static final String DEFAULT_MIME_TYPE = "application/octet-stream";        
     private static final RepositoryManagerLoader loader=RepositoryManagerLoader.getInstance();
     public String publish(String title, String description, String repositoryName, String categoryID, String type,String nodeType) throws Exception
     {
@@ -53,11 +49,12 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             }
             try
             {
-                String cm_title = loader.getPropertyTitleType(repositoryName);
-                String cm_description = loader.getPropertyDescriptionType(repositoryName);
+                String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
+                String cm_description = loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
                 Node contentNode = categoryNode.addNode( nodeType,nodeType);
                 contentNode.setProperty(cm_title, title);
-                contentNode.setProperty(CM_TYPE, type);
+                String cm_type = loader.getOfficeManager(repositoryName).getPropertyType();
+                contentNode.setProperty(cm_type, type);
                 contentNode.setProperty(cm_description, description);
                 String[] values = new String[parts.size()];
                 int iPart = 0;
@@ -68,9 +65,9 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     {
                         mimeType = DEFAULT_MIME_TYPE;
                     }
-
-                    Node nodePart = contentNode.addNode(part.getName(), CM_PART);
-                    Node resNode = nodePart.addNode( JCR_CONTENT,NT_RESOURCE);
+                    String cm_part=loader.getOfficeManager(repositoryName).getPartType();
+                    Node nodePart = contentNode.addNode(part.getName(), cm_part);                    
+                    Node resNode = nodePart.addNode( "jcr:content","nt:resource");
                     resNode.setProperty("jcr:mimeType", mimeType);
                     resNode.setProperty("jcr:encoding", "");
                     InputStream in = new ByteArrayInputStream(part.getContent());
