@@ -20,7 +20,6 @@ import org.semanticwb.openoffice.ui.dialogs.DialogChangePassword;
 import org.semanticwb.openoffice.ui.dialogs.DialogLogin;
 import org.semanticwb.openoffice.ui.wizard.Search;
 import org.semanticwb.openoffice.ui.wizard.SelectDirectory;
-import org.semanticwb.openoffice.ui.wizard.SelectCategory;
 import org.semanticwb.openoffice.ui.wizard.SelectVersionToOpen;
 import org.semanticwb.xmlrpc.XmlRpcProxyFactory;
 
