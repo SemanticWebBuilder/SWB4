@@ -255,10 +255,16 @@ public class SWBPortal {
     }
 
     public static JarFile getAdminFile(String path) {
-        JarFile f = (JarFile) admFiles.get(path);
-        if (f == null) {
-            f = new JarFile(path);
+        JarFile f = new JarFile(path);
+        if(!f.exists())
+        {
+            JarFile aux=(JarFile) admFiles.get(path);
+            if(aux!=null)f=aux;
         }
+//        JarFile f = (JarFile) admFiles.get(path);
+//        if (f == null) {
+//            f = new JarFile(path);
+//        }
         return f;
     }
 
