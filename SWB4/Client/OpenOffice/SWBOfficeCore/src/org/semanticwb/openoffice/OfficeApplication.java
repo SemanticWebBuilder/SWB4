@@ -18,6 +18,7 @@ import org.semanticwb.openoffice.interfaces.IOpenOfficeDocument;
 import org.semanticwb.openoffice.ui.dialogs.DialogAbout;
 import org.semanticwb.openoffice.ui.dialogs.DialogChangePassword;
 import org.semanticwb.openoffice.ui.dialogs.DialogLogin;
+import org.semanticwb.openoffice.ui.wizard.Search;
 import org.semanticwb.openoffice.ui.wizard.SelectDirectory;
 import org.semanticwb.openoffice.ui.wizard.SelectCategory;
 import org.semanticwb.openoffice.ui.wizard.SelectVersionToOpen;
@@ -229,7 +230,7 @@ public abstract class OfficeApplication
     public final void open()
     {
         OpenResultProducer resultProducer = new OpenResultProducer(this);
-        Class[] clazz = new Class[]{SelectCategory.class, SelectVersionToOpen.class, SelectDirectory.class};
+        Class[] clazz = new Class[]{Search.class, SelectVersionToOpen.class, SelectDirectory.class};
         Wizard wiz = WizardPage.createWizard("Asistente de apertura de contenido", clazz, resultProducer);
         wiz.show();
     }
