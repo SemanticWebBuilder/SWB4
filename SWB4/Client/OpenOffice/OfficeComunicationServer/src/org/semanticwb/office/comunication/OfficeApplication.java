@@ -374,11 +374,11 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                 statement.append(" WHERE {");
                 if (!(title.equals("") || title.equals("*")))
                 {
-                    statement.append(" ?x cm:title ?title FILTER regex(?title, \"^" + title + "\") ");
+                    statement.append(" ?x cm:title ?title . FILTER regex(?title, \"^" + title + "\") ");
                 }
                 if (!(description.equals("") || description.equals("*")))
                 {
-                    statement.append(" ?x cm:description ?description FILTER regex(?description, \"^" + description + "\") ");
+                    statement.append(" ?x cm:description ?description . FILTER regex(?description, \"^" + description + "\") ");
                 }
                 statement.append(" } ");
                 query = session.getWorkspace().getQueryManager().createQuery(statement.toString(), "SPARQL");
