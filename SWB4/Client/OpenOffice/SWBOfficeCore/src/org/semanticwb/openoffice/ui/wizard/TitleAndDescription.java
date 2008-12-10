@@ -50,6 +50,11 @@ public class TitleAndDescription extends WizardPage
         return "Información del contenido";
     }
 
+    @Override
+    public WizardPanelNavResult allowNext(String arg, Map map, Wizard wizard)
+    {
+        return allowFinish(arg, map, wizard);
+    }
     /**     * 
      * @param arg
      * @param map
@@ -57,8 +62,8 @@ public class TitleAndDescription extends WizardPage
      * @return
      */
     @Override
-    public WizardPanelNavResult allowNext(String arg, Map map, Wizard wizard)
-    {
+    public WizardPanelNavResult allowFinish(String arg, Map map, Wizard wizard)
+    {        
         WizardPanelNavResult result = WizardPanelNavResult.REMAIN_ON_PAGE;
         if (this.jTextFieldName.getText().trim().equals(""))
         {
