@@ -65,6 +65,7 @@
     {
         SemanticObject obj=ont.getSemanticObject(suri);
         SWBFormMgr frm=new SWBFormMgr(obj, null,SWBFormMgr.MODE_EDIT);
+        frm.setLang("es");
         frm.processForm(request);
         frm.setAction("/swb/swbadmin/jsp/SemObjectEditor.jsp");
         out.println(frm.renderForm());
