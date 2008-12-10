@@ -17,8 +17,10 @@ import javax.jcr.version.VersionIterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.office.interfaces.CategoryInfo;
+import org.semanticwb.office.interfaces.ContentInfo;
 import org.semanticwb.office.interfaces.ContentType;
 import org.semanticwb.office.interfaces.IOfficeApplication;
+import org.semanticwb.repository.OfficeManager;
 import org.semanticwb.repository.RepositoryManagerLoader;
 import org.semanticwb.xmlrpc.XmlRpcObject;
 
@@ -347,5 +349,73 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             types.add(contentType);
         }
         return types.toArray(new ContentType[types.size()]);
+    }
+
+    public ContentInfo[] search(String repositoryName, String title, String description, String category) throws Exception
+    {
+        Session session = null;
+        try
+        {
+
+            session = loader.openSession(repositoryName, "", "");
+            ArrayList<ContentInfo> contents = new ArrayList<ContentInfo>();
+            Query query;
+            if (session.getRepository().getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf("webbuilder") != -1)
+            {
+                StringBuilder statement = new StringBuilder("SELECT ");
+                if (!(title.equals("") || title.equals("*")))
+                {
+                    statement.append(" ?title ");//WHERE {?x cm:title ?title FILTER regex(?title, \"^" + title + "\")  }");
+                }
+                if (!(description.equals("") || description.equals("*")))
+                {
+                    statement.append(" ?description ");// {?x cm:description ?description FILTER regex(?description, \"^" + description + "\")  }");
+                }
+                statement.append(" WHERE {");
+                if (!(title.equals("") || title.equals("*")))
+                {
+                    statement.append(" ?x cm:title ?title FILTER regex(?title, \"^" + title + "\") ");
+                }
+                if (!(description.equals("") || description.equals("*")))
+                {
+                    statement.append(" ?x cm:description ?description FILTER regex(?description, \"^" + description + "\") ");
+                }
+                statement.append(" } ");
+                query = session.getWorkspace().getQueryManager().createQuery(statement.toString(), "SPARQL");
+            }
+            else
+            {
+                query = session.getWorkspace().getQueryManager().createQuery("/", Query.XPATH);
+            }
+            QueryResult result = query.execute();
+            NodeIterator nodeIterator = result.getNodes();
+            if (nodeIterator.hasNext())
+            {
+                Node node = nodeIterator.nextNode();
+                ContentInfo info = new ContentInfo();
+                info.id = node.getUUID();
+                OfficeManager manager = loader.getOfficeManager(repositoryName);
+                String cm_title = manager.getPropertyTitleType();
+                info.title = node.getProperty(cm_title).getValue().getString();
+                String cm_description = manager.getPropertyDescriptionType();
+                info.descripcion = node.getProperty(cm_description).getValue().getString();
+                Node parent = node.getParent();
+                info.categoryId = parent.getUUID();
+                info.categoryTitle = parent.getProperty(cm_title).getValue().getString();
+                contents.add(info);
+            }
+            return contents.toArray(new ContentInfo[contents.size()]);
+        }
+        catch (Exception e)
+        {
+            throw e;
+        }
+        finally
+        {
+            if (session != null)
+            {
+                session.logout();
+            }
+        }
     }
 }
