@@ -535,19 +535,19 @@ public abstract class OfficeDocument
                                 clazz = new Class[]
                                         {
                                             //TitleAndDescription.class, SelectCategory.class, PagContenido.class, SelectTypeToShow.class
-                                            SelectCategory.class,TitleAndDescription.class, SelectTypeToShow.class
+                                            SelectCategory.class,TitleAndDescription.class
                                         };
                                 break;
                             case EXCEL:
                                 clazz = new Class[]
                                         {
-                                            SelectCategory.class,TitleAndDescription.class, SelectTypeToShow.class
+                                            SelectCategory.class,TitleAndDescription.class
                                         };
                                 break;
                             case PPT:
                                 clazz = new Class[]
                                         {
-                                            SelectCategory.class,TitleAndDescription.class, SelectTypeToShow.class
+                                            SelectCategory.class,TitleAndDescription.class
                                         };
                                 break;
                             default:
