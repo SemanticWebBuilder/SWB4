@@ -20,14 +20,21 @@ public class DialogAddCategory extends javax.swing.JDialog
     /** Creates new form DialogAddCategory */
     private boolean cancel = true;
     private final String repository;
+    private final String categoryId;
 
-    public DialogAddCategory(java.awt.Frame parent, boolean modal, String repository)
+    public DialogAddCategory(java.awt.Frame parent, boolean modal, String repository, String categoryid)
     {
         super(parent, modal);
         initComponents();
         this.repository = repository;
         this.setTitle("Agregar categoria a repositorio " + repository);
         this.setLocationRelativeTo(null);
+        this.categoryId = categoryid;
+    }
+
+    public DialogAddCategory(java.awt.Frame parent, boolean modal, String repository)
+    {
+        this(parent, modal, repository, null);
     }
 
     /** This method is called from within the constructor to
@@ -156,13 +163,27 @@ private void jButtonAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     }
     else
     {
-        try
+        if (categoryId != null)
         {
-            OfficeApplication.getOfficeApplicationProxy().createCategory(repository, this.jTextFieldName.getText(), jTextAreaDescription.getText());
+            try
+            {
+                OfficeApplication.getOfficeApplicationProxy().createCategory(repository, categoryId,this.jTextFieldName.getText(), jTextAreaDescription.getText());
+            }
+            catch (Exception e)
+            {
+            }
         }
-        catch (Exception e)
+        else
         {
+             try
+            {
+                OfficeApplication.getOfficeApplicationProxy().createCategory(repository, this.jTextFieldName.getText(), jTextAreaDescription.getText());
+            }
+            catch (Exception e)
+            {
+            }
         }
+
     }
     cancel = false;
     setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
