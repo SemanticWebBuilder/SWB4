@@ -1084,6 +1084,7 @@
     <rdfs:label xml:lang="en">Last Name</rdfs:label>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_usrLastName">
+        <swb:propGroup xml:lang="en">Personal Data</swb:propGroup>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >160</swb:index>
         <swb:propGroup xml:lang="es">Datos Personales</swb:propGroup>
@@ -1479,10 +1480,10 @@
     </swb:displayProperty>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="usrFirstName">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="en">First Name</rdfs:label>
     <rdfs:domain rdf:resource="#User"/>
     <rdfs:label xml:lang="es">Nombre(s)</rdfs:label>
-    <rdfs:label xml:lang="en">First Name</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_usrFirstName">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
