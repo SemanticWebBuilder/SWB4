@@ -16,7 +16,7 @@
       dojo.require("dojox.layout.ContentPane");
 
       // editor:
-      dojo.require("dijit.Editor"); 
+      dojo.require("dijit.Editor");
 
       // dnd:
       dojo.require("dojo.dnd.Source");
@@ -27,12 +27,12 @@
       dojo.require("dijit.form.Textarea");
       dojo.require("dijit.form.FilteringSelect");
       dojo.require("dijit.form.TextBox");
-      dojo.require("dijit.form.DateTextBox");	
-      dojo.require("dijit.form.TimeTextBox");	
+      dojo.require("dijit.form.DateTextBox");
+      dojo.require("dijit.form.TimeTextBox");
       dojo.require("dijit.form.Button");
       dojo.require("dijit.InlineEditBox");
       dojo.require("dijit.form.NumberSpinner");
-      dojo.require("dijit.form.Slider"); 
+      dojo.require("dijit.form.Slider");
 
       // layouts used in page
 
@@ -43,9 +43,9 @@
       dojo.require("dijit.Dialog");
 
       // scan page for widgets and instantiate them
-      dojo.require("dojo.parser");	
+      dojo.require("dojo.parser");
 
-      // humm?		
+      // humm?
       dojo.require("dojo.date.locale");
 
       // for the Tree
@@ -55,15 +55,15 @@
       dojo.addOnLoad(function() {
 
           var start = new Date().getTime();
-          //dojo.parser.parse(dojo.byId('container')); 
+          //dojo.parser.parse(dojo.byId('container'));
           console.info("Total parse time: " + (new Date().getTime() - start) + "ms");
 
           //dojo.byId('loaderInner').innerHTML += " done.";
           setTimeout(function hideLoader(){
-              var loader = dojo.byId('loader'); 
+              var loader = dojo.byId('loader');
               dojo.fadeOut({ node: loader, duration:500,
-                  onEnd: function(){ 
-                      loader.style.display = "none"; 
+                  onEnd: function(){
+                      loader.style.display = "none";
                   }
               }).play();
           }, 250);
@@ -90,7 +90,7 @@
                   return response;
               },
               handleAs: "text"
-          });            
+          });
       }
 
       function getJSON(url)
@@ -134,11 +134,11 @@
               handleAs: "text"
           });
       }
-      
+
       function getContentPanel(reference)
       {
           if(!reference)return null;
-          //alert("reference:"+reference.id);
+          //alert("reference:"+reference.getAttribute("dojoType"));
           var att=reference.getAttribute("dojoType");
           if(att && (att=="dijit.layout.ContentPane" || att=="dojox.layout.ContentPane"))
           {
@@ -148,10 +148,11 @@
                   return getContentPanel(reference.parentNode);
           }
       }
-      
+
       function submitUrl(url, reference)
       {
           var panel=getContentPanel(reference);
+          //alert("panel:"+panel);
           dojo.xhrGet({
               url: url,
               load: function(response, ioArgs){
@@ -163,10 +164,10 @@
                   return response;
               },
               handleAs: "text"
-          });           
+          });
       }
-      
-      function submitForm(formid) 
+
+      function submitForm(formid)
       {
           var obj=dojo.byId(formid);
           var objd=dijit.byId(formid);
@@ -183,7 +184,7 @@
               //alert("entra2");
               dojo.xhrPost({
                   // The page that parses the POST request
-                  contentType: "application/x-www-form-urlencoded; charset=utf-8",                        
+                  contentType: "application/x-www-form-urlencoded; charset=utf-8",
 
                   //handleAs: "text",
 
@@ -195,11 +196,14 @@
                   // Loads this function if everything went ok
                   load: function (data) {
                           var panel=getContentPanel(obj);
-                          //alert("div:"+panel);
+                          //alert("div:"+panel.id);
                           if(panel)
                           {
-                              //alert("id:"+panel.id);
+                              try
+                              {
                               panel.setContent(data);
+                              //alert("data:"+data);
+                              }catch(e){alert(e.message);}
                           }
                           //dijit.byId('swbDialog').hide();
                           //div_node.innerHTML = data;
@@ -223,7 +227,7 @@
           if(!url)url=context+"/swbadmin/jsp/objectTab.jsp";
           if(newTab==null)
           {
-              newTab = new dijit.layout.ContentPane(
+              newTab = new dojox.layout.ContentPane(
               {
                   id: objid,
                   closeable:'true',
@@ -407,14 +411,14 @@
           store.save();
           setDefaultCursor();
       }
-      
+
       function actionDone(){
           alert("Acción realizada.");
       }
-      
+
       function actionFailed(){
           alert("Error al ejecutar la acción.");
-      }      
+      }
 
       function loadScript(id, filepath)
       {
@@ -487,4 +491,3 @@
           });
           return ret;
       }
-
