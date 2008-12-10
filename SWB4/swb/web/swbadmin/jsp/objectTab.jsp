@@ -1,6 +1,4 @@
-<%@page contentType="text/html"%>
-<%@page pageEncoding="ISO-8859-1"%>
-<%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.model.*,java.util.*,org.semanticwb.base.util.*"%>
+<%@page contentType="text/html"%><%@page pageEncoding="ISO-8859-1"%><%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.model.*,java.util.*,org.semanticwb.base.util.*"%>
 <%
     String lang="es";
     response.setHeader("Cache-Control", "no-cache"); 
@@ -12,8 +10,7 @@
     if(res==null)return;
     SemanticClass cls=ont.getSemanticObjectClass(res);
     GenericObject obj=ont.getGenericObject(id,cls);
-
-    out.println("<div dojoType=\"dijit.layout.TabContainer\" id=\""+id+"/tab2\" _tabPosition=\"bottom\" _selectedChild=\"btab1\">");
+    out.println("<div dojoType=\"dijit.layout.TabContainer\" region=\"center\" style=\"width=100%;height=100%;\" id=\""+id+"/tab2\" _tabPosition=\"bottom\" _selectedChild=\"btab1\">");
 
     Iterator<ObjectBehavior> obit=SWBComparator.sortSortableObject(SWBContext.getVocabulary().swbxf_ObjectBehavior.listGenericInstances(true));
     while(obit.hasNext())
@@ -55,7 +52,7 @@
         }
         if(addDiv)
         {
-            out.println("<div dojoType=\"dijit.layout.ContentPane\" title=\""+title+"\" style=\"padding:10px;\" refreshOnShow=\""+refresh+"\" href=\""+url+"?"+params+"\" executeScripts=\"false\"></div>");
+            out.println("<div dojoType=\"dojox.layout.ContentPane\" title=\""+title+"\" style=\"display:true;padding:10px;\" refreshOnShow=\""+refresh+"\" href=\""+url+"?"+params+"\" executeScripts=\"true\"></div>");
         }
     }
 %>
