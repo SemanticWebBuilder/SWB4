@@ -31,6 +31,7 @@ import org.semanticwb.openoffice.ui.dialogs.DialogAddCategory;
 public class SelectCategory extends WizardPage
 {
 
+    public static Map map =null;
     public static final String CATEGORY_ID = "categoryID";
     public static final String REPOSITORY_ID = "repositoryID";
 
@@ -38,20 +39,20 @@ public class SelectCategory extends WizardPage
     public SelectCategory()
     {
         initComponents();
-        loadTree();
         this.getWizardDataMap().put(CATEGORY_ID, null);
-        this.getWizardDataMap().put("repositoryName", null);
+        this.getWizardDataMap().put(REPOSITORY_ID, null);
+        loadTree();        
     }
 
-    private void addCategory(String repository, CategoryNode parent, DefaultTreeModel model)
+    private void addCategory(String repository, CategoryNode parent)
     {
         try
         {
             for (CategoryInfo category : OfficeApplication.getOfficeApplicationProxy().getCategories(repository, parent.getID()))
             {
-                CategoryNode categoryNode = new CategoryNode(category.UDDI, category.title, category.description);
-                model.insertNodeInto(categoryNode, parent, 0);
-                addCategory(repository, categoryNode, model);
+                CategoryNode categoryNode = new CategoryNode(category.UDDI, category.title, category.description,repository);
+                parent.add(categoryNode);                
+                addCategory(repository,categoryNode);
             }
         }
         catch (Exception e)
@@ -75,9 +76,9 @@ public class SelectCategory extends WizardPage
                 model.insertNodeInto(repositoryNode, repositories, 0);
                 for (CategoryInfo category : OfficeApplication.getOfficeApplicationProxy().getCategories(repository))
                 {
-                    CategoryNode categoryNode = new CategoryNode(category.UDDI, category.title, category.description);
-                    model.insertNodeInto(categoryNode, repositoryNode, 0);
-                    addCategory(repository, categoryNode, model);
+                    CategoryNode categoryNode = new CategoryNode(category.UDDI, category.title, category.description,repository);
+                    repositoryNode.add(categoryNode);                    
+                    addCategory(repository, categoryNode);
                 }
             }
         }
@@ -110,11 +111,12 @@ public class SelectCategory extends WizardPage
     {
         WizardPanelNavResult result = WizardPanelNavResult.PROCEED;
         if (this.getWizardDataMap().get(CATEGORY_ID) == null)
-        {
+        {            
             javax.swing.JOptionPane.showMessageDialog(null, "¡Debe seleccionar una categoria!", getDescription(), JOptionPane.ERROR_MESSAGE);
             this.jTreeCategory.requestFocus();
             result = WizardPanelNavResult.REMAIN_ON_PAGE;
-        }
+        }       
+        SelectCategory.map=map;
         return result;
     }
 
@@ -181,6 +183,26 @@ public class SelectCategory extends WizardPage
 private void jButtonAddCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddCategoryActionPerformed
     this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
     Object selected = this.jTreeCategory.getLastSelectedPathComponent();
+    if (selected != null && selected instanceof CategoryNode)
+    {
+        CategoryNode categoryNode = (CategoryNode) selected;
+        DialogAddCategory addCategory = new DialogAddCategory(new JFrame(), true, categoryNode.getRepository(),categoryNode.getID());
+        addCategory.setVisible(true);
+        if (!addCategory.isCancel())
+        {
+            try
+            {
+                for (CategoryInfo category : OfficeApplication.getOfficeApplicationProxy().getCategories(categoryNode.getRepository(),categoryNode.getID()))
+                {
+                    DefaultMutableTreeNode child = new CategoryNode(category.UDDI, category.title, category.description,categoryNode.getRepository());
+                    ((DefaultTreeModel) jTreeCategory.getModel()).insertNodeInto(child,categoryNode, 0);
+                }
+            }
+            catch (Exception e)
+            {
+            }
+        }
+    }
     if (selected != null && selected instanceof RepositoryNode)
     {
         RepositoryNode repositoryNode = (RepositoryNode) selected;
@@ -192,7 +214,7 @@ private void jButtonAddCategoryActionPerformed(java.awt.event.ActionEvent evt) {
             {
                 for (CategoryInfo category : OfficeApplication.getOfficeApplicationProxy().getCategories(repositoryNode.getName()))
                 {
-                    DefaultMutableTreeNode categoryNode = new CategoryNode(category.UDDI, category.title, category.description);
+                    DefaultMutableTreeNode categoryNode = new CategoryNode(category.UDDI, category.title, category.description,repositoryNode.getName());
                     ((DefaultTreeModel) jTreeCategory.getModel()).insertNodeInto(categoryNode, repositoryNode, 0);
                 }
             }
@@ -222,13 +244,15 @@ private void jTreeCategoryValueChanged(javax.swing.event.TreeSelectionEvent evt)
     }
     else
     {
-        this.jButtonAddCategory.setEnabled(false);
+        this.jButtonAddCategory.setEnabled(true);
     }
     this.jButtonDeletCategory.setEnabled(false);
     if (selected != null && selected instanceof CategoryNode)
     {
-        String categoryId = ((CategoryNode) selected).getID();
-        String repository = ((RepositoryNode) ((CategoryNode) selected).getParent()).getName();
+        CategoryNode categoryNode=(CategoryNode)selected;
+        String categoryId = categoryNode.getID();
+        
+        String repository = categoryNode.getRepository();
         this.getWizardDataMap().put(CATEGORY_ID, categoryId);
         this.getWizardDataMap().put(REPOSITORY_ID, repository);
         try
@@ -352,16 +376,21 @@ class CategoryNode extends DefaultMutableTreeNode implements ToolTipTreeNode
     private String id;
     private String title;
     private String description;
+    private String repository;
 
-    public CategoryNode(String id, String title, String description)
+    public CategoryNode(String id, String title, String description,String repository)
     {
         this.id = id;
         this.title = title;
         this.description = description;
-
+        this.repository=repository;
         component.setText(title);
         component.setToolTipText(description);
         component.setOpaque(true);
+    }
+    public String getRepository()
+    {
+        return this.repository;
     }
 
     public String getToolTipText()
