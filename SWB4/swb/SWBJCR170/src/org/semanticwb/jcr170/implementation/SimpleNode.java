@@ -1112,9 +1112,9 @@ public class SimpleNode implements Node
         Item item = session.getItem(parentPath);
         if (item.isNode())
         {
-            Node parentNode = (Node) item;
+            SimpleNode parentNode = (SimpleNode) item;
             session.checksLock(parentNode);
-            if (!parentNode.isCheckedOut())
+            if (parentNode.isVersionable() && !parentNode.isCheckedOut())
             {
                 throw new RepositoryException("The node can not add a child in check-in mode");
             }
