@@ -28,6 +28,7 @@ import javax.jcr.nodetype.NoSuchNodeTypeException;
 import javax.jcr.nodetype.PropertyDefinition;
 import javax.jcr.version.VersionException;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBException;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticLiteral;
@@ -182,7 +183,14 @@ public final class PropertyImp implements Property
     {
         if (values.size() == 0 && parent.node != null)
         {
-            loadPropertiesFromDataBase();
+            try
+            {
+                loadPropertiesFromDataBase();
+            }
+            catch(SWBException swbe)
+            {
+                throw new RepositoryException(swbe);
+            }
         }
         if (values.size() > 0)
         {
@@ -191,7 +199,7 @@ public final class PropertyImp implements Property
         return null;
     }
 
-    private void loadPropertiesFromDataBase()
+    private void loadPropertiesFromDataBase() throws SWBException
     {
         BaseNode node = parent.node;
         if (node.existsProperty(clazz, name))
@@ -199,10 +207,17 @@ public final class PropertyImp implements Property
             SemanticProperty property = node.getSemanticProperty(name, clazz);
             if (property.isDataTypeProperty())
             {
+                if(property.isBinary())
+                {
+                    values.add(factory.createValue(node.getSemanticObject().getInputStreamProperty(property)));
+                }
+                else
+                {
                 Iterator<SemanticLiteral> literals = node.getSemanticObject().listLiteralProperties(property);
                 while (literals.hasNext())
                 {
                     values.add(factory.createValue(literals.next().getString()));
+                }
                 }
             }
             else
@@ -218,7 +233,14 @@ public final class PropertyImp implements Property
     {
         if (values.size() == 0 && parent.node != null)
         {
-            loadPropertiesFromDataBase();
+            try
+            {
+                loadPropertiesFromDataBase();
+            }
+            catch(SWBException e)
+            {
+                throw new RepositoryException(e);
+            }
         }
         return values.toArray(new Value[values.size()]);
     }
@@ -389,7 +411,14 @@ public final class PropertyImp implements Property
     public void refresh(boolean arg0) throws InvalidItemStateException, RepositoryException
     {
         values.clear();
-        loadPropertiesFromDataBase();
+        try
+        {
+            loadPropertiesFromDataBase();
+        }
+        catch(SWBException e)
+        {
+            throw new RepositoryException(e);
+        }
     }
 
     public void remove() throws VersionException, LockException, ConstraintViolationException, RepositoryException
