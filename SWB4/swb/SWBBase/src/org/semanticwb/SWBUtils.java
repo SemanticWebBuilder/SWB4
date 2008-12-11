@@ -37,8 +37,10 @@ import org.xml.sax.InputSource;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 import org.apache.commons.mail.HtmlEmail;
@@ -80,6 +82,8 @@ public class SWBUtils {
     private static boolean initLogger = false;
     private static Locale locale = Locale.ENGLISH;
     public static String LOCALE_SERVICES = null;
+    
+    private static PrintWriter log2File = new PrintWriter(System.err);
 
     /** Creates new utils */
     private SWBUtils() {
@@ -1043,6 +1047,22 @@ public class SWBUtils {
             }
             return null;
         }
+                
+        public static void log2File(String pathFile,String msg) throws IOException 
+        {
+            String path=null;
+            int pos=pathFile.lastIndexOf("/");
+            if(pos>-1){
+                path=pathFile.substring(0,pos-1);
+            }            
+            File file=new File(path);
+            if(!file.exists()) file.mkdirs();
+            String logFile=new File(pathFile).getCanonicalPath().replace('\\','/');
+            log2File=new PrintWriter(new FileWriter(logFile, true), true);
+            log2File.println(msg);
+        }
+        
+        
     }
 
     /**
