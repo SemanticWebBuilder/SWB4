@@ -1,5 +1,9 @@
 package org.semanticwb.repository;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -371,7 +375,7 @@ public class BaseNode extends BaseNodeBase
         try
         {
             SemanticClass clazz = getSemanticClass(name);
-            canAddSameNameSiblings = canAddSameNameSiblings(clazz);
+            canAddSameNameSiblings = canAddSameNameSiblings(clazz, name);
         }
         catch (SWBException swbe)
         {
@@ -380,9 +384,9 @@ public class BaseNode extends BaseNodeBase
         return canAddSameNameSiblings;
     }
 
-    private boolean canAddSameNameSiblings(SemanticClass clazz)
+    private boolean canAddSameNameSiblings(SemanticClass clazz, String nameToCreate)
     {
-        return allowsSameNameSiblings(this.getSemanticObject().getSemanticClass(), clazz);
+        return allowsSameNameSiblings(this.getSemanticObject().getSemanticClass(), clazz, nameToCreate);
     }
 
     public boolean isMandatory(SemanticProperty property)
@@ -550,6 +554,17 @@ public class BaseNode extends BaseNodeBase
             getSemanticObject().setProperty(property, value);
         }
     }
+    private void setInputStreamPropertyInternal(SemanticProperty property, InputStream value) throws SWBException
+    {
+        if (value == null)
+        {
+            getSemanticObject().removeProperty(property);
+        }
+        else
+        {
+            getSemanticObject().setInputStreamProperty(property, value,this.getName());
+        }
+    }
 
     private void savePropertyToDB(SemanticProperty property, String value) throws SWBException
     {
@@ -560,6 +575,41 @@ public class BaseNode extends BaseNodeBase
         else
         {
             getSemanticObject().setProperty(property, value);
+        }
+    }
+
+    private void savePropertyToDB(SemanticProperty property, InputStream value) throws SWBException
+    {
+        if (value == null)
+        {
+            getSemanticObject().removeProperty(property);
+        }
+        else
+        {
+            String fileName=UUID.randomUUID().toString();
+            getSemanticObject().setInputStreamProperty(property, value,fileName);
+            /*String path = SWBPlatform.getEnv("swb/repositoryPath", "");
+            if (!(path.endsWith("\\") || path.endsWith("/")))
+            {
+                path += "/";
+            }
+            File file = new File(path + this.getName());
+            try
+            {
+                FileOutputStream out = new FileOutputStream(file);
+                byte[] buffer = new byte[2048];
+                int read = value.read(buffer);
+                while (read != -1)
+                {
+                    out.write(buffer, 0, read);
+                    read = value.read(buffer);
+                }
+                getSemanticObject().setProperty(property, file.getAbsolutePath());
+            }
+            catch (IOException fnfe)
+            {
+                throw new SWBException("The property " + property.getURI() + " was not possible to save", fnfe);
+            }*/
         }
     }
 
@@ -580,6 +630,33 @@ public class BaseNode extends BaseNodeBase
         }
     }
 
+    public void setProperty(SemanticProperty property, InputStream value) throws SWBException
+    {
+        String name = property.getPrefix() + ":" + property.getName();
+        if (isInternal(property))
+        {
+            throw new SWBException("The property " + name + " is internal and can not be modified");
+        }
+        else
+        {
+            if (property.isObjectProperty())
+            {
+                throw new SWBException("The property " + name + " is not a datatype property");
+            }
+            savePropertyToDB(property, value);
+        }
+    }
+    public InputStream getInputStreamProperty(SemanticProperty property) throws SWBException
+    {
+        InputStream getProperty = null;
+        if (isInternal(property))
+        {
+            throw new SWBException("the property " + property.getPrefix() + ":" + property.getName() + " is internal");
+        }
+        getProperty = getSemanticObject().getInputStreamProperty(property);
+        return getProperty;
+    }
+
     private String getPropertyInternal(SemanticProperty property, String value)
     {
         return getSemanticObject().getProperty(property, value);
@@ -595,6 +672,7 @@ public class BaseNode extends BaseNodeBase
         getProperty = getSemanticObject().getProperty(property);
         return getProperty;
     }
+    
 
     public final Iterator<SemanticProperty> listSemanticProperties(SemanticClass clazz)
     {
@@ -711,39 +789,55 @@ public class BaseNode extends BaseNodeBase
         return isProtected;
     }
 
-    public final boolean allowsSameNameSiblings(SemanticClass clazz, SemanticClass clazzToCreate)
+    public final boolean allowsSameNameSiblings(SemanticClass clazz, SemanticClass clazzToCreate, String nameTocreate)
     {
-        boolean allowsSameNameSiblings = false;
+        boolean allowsSameNameSiblings = false;        
         for (SemanticObject nodeDefinition : getChildNodeDefinition(clazz))
         {
             String name = nodeDefinition.getProperty(vocabulary.jcr_name);
-            if (name != null && name.equals("*") && nodeDefinition.getProperty(vocabulary.jcr_sameNameSiblings) != null && nodeDefinition.getProperty(vocabulary.jcr_sameNameSiblings).equals("true"))
-            {
-                allowsSameNameSiblings = true;
-                break;
-            }
-            else
+            String requiredType = nodeDefinition.getProperty(vocabulary.jcr_requiredPrimaryTypes);
+            if (name.equals(nameTocreate) && requiredType != null)
             {
                 try
                 {
-                    SemanticClass clazzAllowed = getSemanticClass(name);
-                    if (clazzAllowed != null)
+                    SemanticClass clazzAllowed = getSemanticClass(requiredType);
+                    if (clazzToCreate.equals(clazzAllowed) || clazzToCreate.isSubClass(clazzAllowed))
                     {
-                        if (clazzToCreate.equals(clazzAllowed) || clazzToCreate.isSubClass(clazzAllowed))
+                        if (nodeDefinition.getProperty(vocabulary.jcr_sameNameSiblings) != null && nodeDefinition.getProperty(vocabulary.jcr_sameNameSiblings).equals("true"))
                         {
-                            if (nodeDefinition.getProperty(vocabulary.jcr_sameNameSiblings) != null && nodeDefinition.getProperty(vocabulary.jcr_sameNameSiblings).equals("true"))
-                            {
-                                allowsSameNameSiblings = true;
-                                break;
-                            }
+                            allowsSameNameSiblings = true;
+                            break;
                         }
                     }
                 }
                 catch (SWBException e)
                 {
+                    log.error(e);
+                }
+            }
+            if (!allowsSameNameSiblings)
+            {
+                if (name.equals("*") && requiredType != null)
+                {
+                    try
+                    {
+                        SemanticClass clazzAllowed = getSemanticClass(requiredType);
+                        if (clazzToCreate.equals(clazzAllowed) || clazzToCreate.isSubClass(clazzAllowed))
+                        {
+                            if (nodeDefinition.getProperty(vocabulary.jcr_sameNameSiblings) != null && nodeDefinition.getProperty(vocabulary.jcr_sameNameSiblings).equals("true"))
+                            {
+                                allowsSameNameSiblings = true;
+                            }
+                        }
+                    }
+                    catch (SWBException e)
+                    {
+                        log.error(e);
+                    }
                 }
             }
         }
+
         return allowsSameNameSiblings;
     }
 
@@ -1000,7 +1094,14 @@ public class BaseNode extends BaseNodeBase
                         String onParentVersion = getOnParentVersion(property);
                         if (property.isDataTypeProperty() && onParentVersion.equals(ONPARENTVERSION_COPY))
                         {
-                            frozenNode.setPropertyInternal(property, getProperty(property));
+                            if(property.isBinary())
+                            {
+                                frozenNode.setInputStreamPropertyInternal(property, getInputStreamProperty(property));
+                            }
+                            else
+                            {
+                                frozenNode.setPropertyInternal(property, getProperty(property));
+                            }
                         }
                         if (property.isObjectProperty() && onParentVersion.equals(ONPARENTVERSION_COPY))
                         {
@@ -1288,7 +1389,21 @@ public class BaseNode extends BaseNodeBase
         }
         else
         {
-            canAddNode = false;
+            Iterator<SemanticClass> classes = clazzDest.listSuperClasses();
+            while (classes.hasNext())
+            {
+                SemanticClass clazz = classes.next();
+                canAddNode = canAddNode(clazzSurce, clazz);
+                if (canAddNode)
+                {
+                    break;
+                }
+            }
+            if (!canAddNode)
+            {
+                canAddNode = false;
+            }
+
         }
         return canAddNode;
     }
@@ -1398,7 +1513,7 @@ public class BaseNode extends BaseNodeBase
         if (canAddNode(clazz))
         {
             boolean hasOtherObjectWithSameName = false;
-            if (!canAddSameNameSiblings(clazz))
+            if (!canAddSameNameSiblings(clazz, name))
             {
                 hasOtherObjectWithSameName = existsSameNode(name);
             }
@@ -1498,7 +1613,6 @@ public class BaseNode extends BaseNodeBase
         }
         return getSemanticProperty;
     }
-    
 
     public final boolean existsProperty(String propertyName, SemanticClass clazz)
     {
