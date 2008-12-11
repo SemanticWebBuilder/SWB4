@@ -62,6 +62,10 @@ public class PropertyDefinitionImp implements PropertyDefinition
             {
                 type = PropertyType.DOUBLE;
             }
+            else if ( property.isBinary() )
+            {
+                type=PropertyType.BINARY;
+            }
         }
         this.requiredType = type;
         mandatory=session.getRootBaseNode().isMandatory(property);
