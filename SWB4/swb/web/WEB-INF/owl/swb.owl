@@ -18,11 +18,6 @@
   <rdfs:Class rdf:ID="Model">
     <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </rdfs:Class>
-  <rdfs:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#PasswordUpdate">
-    <rdfs:subClassOf rdf:resource="#SWBFormElement"/>
-    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >org.semanticwb.model.PasswordUpdate</swb:className>
-  </rdfs:Class>
   <rdfs:Class rdf:ID="FormElement">
     <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </rdfs:Class>
@@ -41,6 +36,12 @@
   <rdfs:Class rdf:ID="ViewReferenceProperty">
     <rdfs:subClassOf rdf:resource="#Property"/>
   </rdfs:Class>
+  <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#PasswordUpdate">
+    <rdfs:subClassOf rdf:resource="#SWBFormElement"/>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model.PasswordUpdate</swb:className>
+    <rdf:type rdf:resource="#FormElement"/>
+  </owl:Class>
   <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#DisplayProperty">
     <rdfs:subClassOf>
       <swb:Interface rdf:ID="Sortable">
