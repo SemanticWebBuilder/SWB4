@@ -24,6 +24,7 @@ import javax.jcr.NodeIterator;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.Property;
 import javax.jcr.PropertyIterator;
+import javax.jcr.PropertyType;
 import javax.jcr.ReferentialIntegrityException;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
@@ -47,6 +48,7 @@ import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.platform.SemanticVocabulary;
 import org.semanticwb.repository.BaseNode;
+import org.semanticwb.repository.LockUserComparator;
 
 /**
  *
@@ -105,6 +107,14 @@ public class SimpleNode implements Node
             parent.childs.put(this.id, this);
         }
 
+        if (clazz.equals(BaseNode.vocabulary.nt_hierarchyNode) || clazz.isSubClass(BaseNode.vocabulary.nt_hierarchyNode))
+        {
+            PropertyImp prop = addProperty(getName(BaseNode.vocabulary.jcr_created), clazz);
+            Value time=factory.createValue(Calendar.getInstance());
+            prop.setValueInternal(time.getString());
+        }
+        
+
         String[] supertypes = root.getSuperTypes(clazz);
         for (String superType : supertypes)
         {
@@ -136,6 +146,21 @@ public class SimpleNode implements Node
             catch (SWBException e)
             {
                 log.error(e);
+            }
+        }
+        Iterator<SemanticProperty> semanticProperties = clazz.listProperties();
+        while (semanticProperties.hasNext())
+        {
+            SemanticProperty prop = semanticProperties.next();
+            if (!root.isInternal(prop))
+            {
+                try
+                {
+                    addProperty(getName(prop), clazz);
+                }
+                catch (Exception e)
+                {
+                }
             }
         }
     }
@@ -275,6 +300,7 @@ public class SimpleNode implements Node
         }
         return prop;
     }
+
 
     private PropertyImp addProperty(String name) throws RepositoryException
     {
@@ -630,37 +656,7 @@ public class SimpleNode implements Node
         return null;
     }
 
-    public Lock lock(boolean isDeep, boolean isSessionScoped) throws UnsupportedRepositoryOperationException, LockException, AccessDeniedException, InvalidItemStateException, RepositoryException
-    {
-        if (!isLockable())
-        {
-            throw new UnsupportedRepositoryOperationException("The node can not be lockable");
-        }
-        if (isLocked())
-        {
-            throw new LockException("The node is already locked");
-        }
-        addProperty(getName(BaseNode.vocabulary.jcr_lockOwner)).setValueInternal(getSession().getUserID());
-        addProperty(getName(BaseNode.vocabulary.jcr_lockIsDeep)).setValueInternal(isDeep);
-        LockImp lock = new LockImp(this, isSessionScoped);
-        if (!isSessionScoped && !this.isNew())
-        {
-            try
-            {
-                node.setProperty(BaseNode.vocabulary.jcr_lockOwner, getSession().getUserID());
-                node.setProperty(BaseNode.vocabulary.jcr_lockIsDeep, String.valueOf(isDeep));
-            }
-            catch (Exception e)
-            {
-            }
-        }
-        if (isSessionScoped)
-        {
-            session.addLockSession(lock);
-        }
-        return lock;
-
-    }
+    
 
     public boolean isLockedByParent() throws RepositoryException
     {
@@ -790,7 +786,14 @@ public class SimpleNode implements Node
                 if (node.existsProperty(prop.getName(), prop.getSemanticClass()))
                 {
                     SemanticProperty semanticProperty = node.getSemanticProperty(prop.getName(), prop.getSemanticClass());
-                    node.setProperty(semanticProperty, prop.getString());
+                    if(semanticProperty.isBinary())
+                    {
+                        node.setProperty(semanticProperty, prop.getStream());
+                    }
+                    else
+                    {
+                        node.setProperty(semanticProperty, prop.getString());
+                    }
                 }
                 else
                 {
@@ -871,6 +874,37 @@ public class SimpleNode implements Node
         return session.getLock(this);
     }
 
+    public Lock lock(boolean isDeep, boolean isSessionScoped) throws UnsupportedRepositoryOperationException, LockException, AccessDeniedException, InvalidItemStateException, RepositoryException
+    {
+        if (!isLockable())
+        {
+            throw new UnsupportedRepositoryOperationException("The node can not be lockable");
+        }
+        if (isLocked())
+        {
+            throw new LockException("The node is already locked");
+        }
+        addProperty(getName(BaseNode.vocabulary.jcr_lockOwner)).setValueInternal(getSession().getUserID());
+        addProperty(getName(BaseNode.vocabulary.jcr_lockIsDeep)).setValueInternal(isDeep);
+        LockImp lock = new LockImp(this, isSessionScoped);
+        if (!isSessionScoped && !this.isNew())
+        {
+            try
+            {
+                node.setProperty(BaseNode.vocabulary.jcr_lockOwner, getSession().getUserID());
+                node.setProperty(BaseNode.vocabulary.jcr_lockIsDeep, String.valueOf(isDeep));
+            }
+            catch (Exception e)
+            {
+            }
+        }
+        if (isSessionScoped)
+        {
+            session.addLockSession(lock);
+        }
+        return lock;
+
+    }
     public void unlock() throws UnsupportedRepositoryOperationException, LockException, AccessDeniedException, InvalidItemStateException, RepositoryException
     {
         if (isLockable() && isLocked())
@@ -880,8 +914,22 @@ public class SimpleNode implements Node
             LockImp lock = getLockImp();
             properties.remove(getName(BaseNode.vocabulary.jcr_lockOwner));
             properties.remove(getName(BaseNode.vocabulary.jcr_lockIsDeep));
-            if (lock != null && lock.isSessionScoped())
+            if (!this.isNew() && node.isLocked())
             {
+                try
+                {
+                node.unLock(name, new LockUserComparator() {
+
+                    public boolean canUnlockNodeLockedByUser(String lockOwner, String unlockUser)
+                    {
+                        return true;
+                    }
+                });
+                }
+                catch(SWBException e)
+                {
+                    throw new RepositoryException(e);
+                }
                 session.removeLockSession(lock);
             }
             return;
@@ -986,7 +1034,11 @@ public class SimpleNode implements Node
 
     public Property setProperty(String name, InputStream value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        throw new UnsupportedRepositoryOperationException(NOT_SUPPORTED_YET);
+        Value[] values =
+        {
+            factory.createValue(value)
+        };
+        return setProperty(name, values, 0);
     }
 
     public Property setProperty(String name, boolean value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
@@ -1069,8 +1121,8 @@ public class SimpleNode implements Node
             boolean allowsSameNameSiblings=false;
             try
             {
-                SemanticClass clazzToCreate=node.getSemanticClass(primaryNodeTypeName);
-                allowsSameNameSiblings=root.allowsSameNameSiblings(clazz,clazzToCreate);
+                SemanticClass clazzToCreate=root.getSemanticClass(primaryNodeTypeName);
+                allowsSameNameSiblings=root.allowsSameNameSiblings(clazz,clazzToCreate,nameNode);
             }
             catch(SWBException swbe)
             {
@@ -1078,18 +1130,26 @@ public class SimpleNode implements Node
             }
             if (!allowsSameNameSiblings)
             {
-                if (session.itemExists(relPath))
+                boolean exists=false;
+                for(SimpleNode child : childs.values())
+                {
+                    if(child.getName().equals(nameNode))
+                    {
+                        exists=true;
+                        break;
+                    }
+                }
+                if (exists)
                 {
                     throw new ItemExistsException("The item " + relPath + " already exists");
                 }
-            }
-            //NodeTypeImp nodeType = ( NodeTypeImp ) this.getPrimaryNodeType();
+            }            
             try
             {
                 SemanticClass clazzToInsert = session.getRootBaseNode().getSemanticClass(primaryNodeTypeName);
                 if (!session.getRootBaseNode().canAddNode(clazzToInsert, clazz))
                 {
-                    throw new ConstraintViolationException("The node can not be added to this node");
+                    throw new ConstraintViolationException("The nodeType "+ clazzToInsert.getPrefix()+":"+clazzToInsert.getName() +" can not be added to the nodeType "+clazz.getPrefix()+":"+clazz.getName());
                 }
             }
             catch (SWBException e)
