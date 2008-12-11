@@ -67,7 +67,6 @@ public class SWBAWebPageContents extends GenericResource {
             SemanticObject snobj = ont.getSemanticObject(request.getParameter("nsuri"));
             if(snobj!=null)
                 out.println("<script type=\"text/javascript\">");
-                //out.println("dijit.byId('swbDialog').hide();");
                 out.println("addNewTab('"+snobj.getURI()+"','"+snobj.getDisplayName()+"','"+SWBPlatform.getContextPath()+"/swbadmin/jsp/objectTab.jsp');");
                 out.println("</script>");
         }
@@ -158,6 +157,14 @@ public class SWBAWebPageContents extends GenericResource {
                 urlr.setParameter(prop.getName(), prop.getURI());
                 urlr.setAction("remove");
                 out.println("<a href=\"#\" onclick=\"submitUrl('" + urlr + "',this); return false;\">remove</a>");
+//                SWBResourceURL urla = paramRequest.getRenderUrl();
+//                urla.setParameter("suri", id);
+//                urla.setParameter("id", id);
+//                urla.setParameter("sprop", idp);
+//                urla.setParameter("sval", sobj.getURI());
+//                urla.setParameter(prop.getName(), prop.getURI());
+//                urla.setMode(SWBResourceURL.Mode_EDIT);
+//                out.println("&nbsp;<a href=\"#\" onclick=\"submitUrl('" + urla + "',this); return false;\">Adm</a>");
                 out.println("</td>");
                 out.println("<td>");
                 SWBResourceURL urlchoose = paramRequest.getRenderUrl();
