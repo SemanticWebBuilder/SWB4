@@ -314,7 +314,14 @@ public class SemanticProperty
         if(res!=null && res.getURI().equals(SemanticVocabulary.XMLS_INT))ret=true;
         return ret;        
     }    
-    
+
+    public boolean isBinary()
+    {
+         boolean ret=false;
+        Resource res=getRange();
+        if(res!=null && res.getURI().equals(SemanticVocabulary.XMLS_BASE64BINARY))ret=true;
+        return ret;
+    }
     public boolean isLong()
     {
         boolean ret=false;
