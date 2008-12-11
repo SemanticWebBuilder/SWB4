@@ -396,7 +396,13 @@ public class SWBPlatform
     public static String getVersion() {
         return version;
     }    
-    
+
+    public static void removeFileFromWorkPath(String path)
+    {
+        //TOTO:Impementar Replicacion de archivos
+        File file=new File(getWorkPath() + path);
+        file.delete();
+    }
     
     /**
      * @param path
