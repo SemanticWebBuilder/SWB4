@@ -677,7 +677,7 @@ public class SessionImp implements Session
 
     void checksLock(Node node) throws LockException, VersionException, RepositoryException
     {
-        if (node.isLocked() && !node.getLock().getLockOwner().equals(this.getUserID()))
+        if (node.isLocked() && node.getLock().getLockOwner()!=null  && !node.getLock().getLockOwner().equals(this.getUserID()))
         {
             throw new LockException("The node is locked by the user " + node.getLock().getLockOwner());
         }
