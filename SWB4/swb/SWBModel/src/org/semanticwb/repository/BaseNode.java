@@ -1,8 +1,5 @@
 package org.semanticwb.repository;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -30,7 +27,7 @@ public class BaseNode extends BaseNodeBase
     static Logger log = SWBUtils.getLogger(BaseNode.class);
     private static final String JCR_FROZENNODE_NAME = "jcr:frozenNode";
     private static final String JCR_VERSIONLABELS_NAME = "jcr:versionLabels";
-    private static final String JCR_VERSION_NAME = "jcr:version";
+    //private static final String JCR_VERSION_NAME = "jcr:version";
     private static final String ONPARENTVERSION_COPY = "COPY";
     private static final String ONPARENTVERSION_VERSION = "VERSION";
     private static final String WAS_NOT_FOUND = " was not found";
@@ -1124,7 +1121,7 @@ public class BaseNode extends BaseNodeBase
     {
         if (historyNode.isVersionHistoryNode())
         {
-            BaseNode ntVersion = historyNode.createNodeBase(JCR_VERSION_NAME, vocabulary.nt_Version);
+            BaseNode ntVersion = historyNode.createNodeBase("1.0", vocabulary.nt_Version);
             BaseNode versionLabels = historyNode.createNodeBase(JCR_VERSIONLABELS_NAME, vocabulary.nt_versionLabels);
             BaseNode ntFrozenNode = ntVersion.createNodeBase(JCR_FROZENNODE_NAME, vocabulary.nt_FrozenNode);
             addFrozenProperties(ntFrozenNode.getSemanticObject());
@@ -1262,12 +1259,12 @@ public class BaseNode extends BaseNodeBase
             if (versionHistory != null)
             {
                 BaseNode[] predecessors = versionHistory.getVersions();
-                BaseNode ntVersion = versionHistory.createNodeBase(JCR_VERSION_NAME, vocabulary.nt_Version);
+                BaseNode ntVersion = versionHistory.createNodeBase("1."+predecessors.length, vocabulary.nt_Version);
                 // TODO: DEBE AGREGAR REFERENCIA A LAS PREDECEDORAS, PERO FALTA METODO PARA AGREGAR
                 for (BaseNode predecessor : predecessors)
                 {
-                    predecessor.getSemanticObject().setObjectProperty(vocabulary.jcr_successors, ntVersion.getSemanticObject());
-                    ntVersion.getSemanticObject().setObjectProperty(vocabulary.jcr_predecessors, predecessor.getSemanticObject());
+                    predecessor.getSemanticObject().addObjectProperty(vocabulary.jcr_successors, ntVersion.getSemanticObject());
+                    ntVersion.getSemanticObject().addObjectProperty(vocabulary.jcr_predecessors, predecessor.getSemanticObject());
                 }
                 BaseNode ntFrozenNode = ntVersion.createNodeBase(JCR_FROZENNODE_NAME, vocabulary.nt_FrozenNode);
                 copyPropertiesToFrozenNode(ntFrozenNode);
