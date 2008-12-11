@@ -52,7 +52,7 @@ public class UserTest {
     /**
      * Test of getName method, of class User.
      */
-    @Test
+    //@Test
     public void testGetName() {
         UserRepository repository = null;
         repository = SWBContext.getUserRepository("urswb");
@@ -197,5 +197,15 @@ public class UserTest {
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }*/
+
+    @Test
+    public void listUserAttr(){
+        UserRepository repository = null;
+        repository = SWBContext.getUserRepository("urswb");
+        Iterator <SemanticProperty> itsp = repository.listBasicAttributes();
+        while ( itsp.hasNext()){
+            System.out.println(itsp.next().getName());
+        }
+    }
 
 }

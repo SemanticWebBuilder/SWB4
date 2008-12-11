@@ -35,6 +35,7 @@ public class SWBVocabulary
     public final SemanticClass swbrep_Traceable;
     public final SemanticClass swb_Permission;
     public final SemanticClass swbxf_ObjectBehavior;
+    public final SemanticClass swbxf_PasswordUpdate;
     public final SemanticClass cm_Part;
     public final SemanticClass swbrep_ClassDefinition;
     public final SemanticClass swbrep_CommonPropertiesforDefinition;
@@ -50,8 +51,8 @@ public class SWBVocabulary
     public final SemanticClass mix_Lockable;
     public final SemanticClass swbxf_ResourceParameter;
     public final SemanticClass nt_hierarchyNode;
-    public final SemanticClass swb_XMLable;
     public final SemanticClass swb_SWBClass;
+    public final SemanticClass swb_XMLable;
     public final SemanticClass nt_propertyDefinition;
     public final SemanticClass swbxf_DisplayProperty;
     public final SemanticClass swb_Rule;
@@ -316,6 +317,7 @@ public class SWBVocabulary
         swbrep_Traceable=vocabulary.getSemanticClass("http://www.semanticwebbuilder.org/swb4/repository#Traceable");
         swb_Permission=vocabulary.getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Permission");
         swbxf_ObjectBehavior=vocabulary.getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectBehavior");
+        swbxf_PasswordUpdate=vocabulary.getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#PasswordUpdate");
         cm_Part=vocabulary.getSemanticClass("http://www.semanticwb.org.mx/swb4/content#Part");
         swbrep_ClassDefinition=vocabulary.getSemanticClass("http://www.semanticwebbuilder.org/swb4/repository#ClassDefinition");
         swbrep_CommonPropertiesforDefinition=vocabulary.getSemanticClass("http://www.semanticwebbuilder.org/swb4/repository#CommonPropertiesforDefinition");
@@ -331,8 +333,8 @@ public class SWBVocabulary
         mix_Lockable=vocabulary.getSemanticClass("http://www.jcp.org/jcr/mix/1.0#lockable");
         swbxf_ResourceParameter=vocabulary.getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#ResourceParameter");
         nt_hierarchyNode=vocabulary.getSemanticClass("http://www.jcp.org/jcr/nt/1.0#hierarchyNode");
-        swb_XMLable=vocabulary.getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#XMLable");
         swb_SWBClass=vocabulary.getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#SWBClass");
+        swb_XMLable=vocabulary.getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#XMLable");
         nt_propertyDefinition=vocabulary.getSemanticClass("http://www.jcp.org/jcr/nt/1.0#propertyDefinition");
         swbxf_DisplayProperty=vocabulary.getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#DisplayProperty");
         swb_Rule=vocabulary.getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Rule");
