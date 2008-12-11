@@ -29,16 +29,18 @@ import org.semanticwb.xmlrpc.XmlRpcObject;
  */
 public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 {
-        
-    private static final String DEFAULT_MIME_TYPE = "application/octet-stream";        
-    private static final RepositoryManagerLoader loader=RepositoryManagerLoader.getInstance();
-    public String publish(String title, String description, String repositoryName, String categoryID, String type,String nodeType) throws Exception
+
+    private static final String DEFAULT_MIME_TYPE = "application/octet-stream";
+    private static final RepositoryManagerLoader loader = RepositoryManagerLoader.getInstance();
+
+    public String publish(String title, String description, String repositoryName, String categoryID, String type, String nodeType) throws Exception
     {
         Session session = null;
+        Node categoryNode = null;
         try
         {
             session = loader.openSession(repositoryName, "", "");
-            Node categoryNode = session.getNodeByUUID(categoryID);
+            categoryNode = session.getNodeByUUID(categoryID);
             if (!categoryNode.isLocked())
             {
                 categoryNode.lock(false, false); // blocks the nodeContent
@@ -51,23 +53,25 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             {
                 String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
                 String cm_description = loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
-                Node contentNode = categoryNode.addNode( nodeType,nodeType);
+                Node contentNode = categoryNode.addNode(nodeType, nodeType);
                 contentNode.setProperty(cm_title, title);
                 String cm_type = loader.getOfficeManager(repositoryName).getPropertyType();
                 contentNode.setProperty(cm_type, type);
-                contentNode.setProperty(cm_description, description);
-                String[] values = new String[parts.size()];
-                int iPart = 0;
+                contentNode.setProperty(cm_description, description);                                
                 for (Part part : parts)
                 {
-                    String mimeType = config.getServletContext().getMimeType(part.getName());
-                    if (mimeType == null)
+                    String mimeType = DEFAULT_MIME_TYPE;
+                    if (config!=null && config.getServletContext() != null)
                     {
-                        mimeType = DEFAULT_MIME_TYPE;
+                        mimeType = config.getServletContext().getMimeType(part.getName());
+                        if (mimeType == null)
+                        {
+                            mimeType = DEFAULT_MIME_TYPE;
+                        }
                     }
-                    String cm_part=loader.getOfficeManager(repositoryName).getPartType();
-                    Node nodePart = contentNode.addNode(part.getName(), cm_part);                    
-                    Node resNode = nodePart.addNode( "jcr:content","nt:resource");
+                    String cm_part = loader.getOfficeManager(repositoryName).getPartType();
+                    Node nodePart = contentNode.addNode(part.getName(), cm_part);
+                    Node resNode = nodePart.addNode("jcr:content", "nt:resource");
                     resNode.setProperty("jcr:mimeType", mimeType);
                     resNode.setProperty("jcr:encoding", "");
                     InputStream in = new ByteArrayInputStream(part.getContent());
@@ -76,18 +80,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     Calendar lastModified = Calendar.getInstance();
                     lastModified.setTimeInMillis(System.currentTimeMillis());
                     resNode.setProperty("jcr:lastModified", lastModified);
-                    categoryNode.save();
-                    Version versionPart = nodePart.checkin();
-                    values[iPart] = versionPart.getUUID();
-                    iPart++;
-                }
-                session.save();
+                    categoryNode.save();                                                            
+                }                
                 contentNode.checkin();
                 return contentNode.getUUID();
             }
             catch (ItemExistsException e)
             {
-                throw new Exception("Ya existe un contenido con ese título", e);
+                throw new Exception("Ya existe un contenido con ese nombre", e);
             }
             catch (Exception e)
             {
@@ -111,6 +111,10 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
         catch (Exception e)
         {
+            if (categoryNode != null)
+            {
+                categoryNode.unlock();
+            }
             e.printStackTrace(System.out);
             throw e;
         }
@@ -165,8 +169,8 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     String[] values = new String[parts.size()];
                     int iPart = 0;
                     for (Part part : parts)
-                    {   
-                        String mimeType =this.config.getServletContext().getMimeType(part.getName());
+                    {
+                        String mimeType = this.config.getServletContext().getMimeType(part.getName());
                         if (mimeType == null)
                         {
                             mimeType = DEFAULT_MIME_TYPE;
