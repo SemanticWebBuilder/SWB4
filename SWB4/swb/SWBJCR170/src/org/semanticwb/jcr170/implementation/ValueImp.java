@@ -4,7 +4,11 @@
  */
 package org.semanticwb.jcr170.implementation;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -24,49 +28,78 @@ import org.semanticwb.SWBUtils;
  */
 public class ValueImp implements Value
 {
-    static Logger log=SWBUtils.getLogger(ValueImp.class);
-    private static SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss"); 
+
+    static Logger log = SWBUtils.getLogger(ValueImp.class);
+    private static SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
     private final int type;
+    ByteArrayOutputStream out = new ByteArrayOutputStream();
     Object value;
-    ValueImp(Object value,int type)
-    {        
-        this.type=type;
-        this.value=value;
+
+    ValueImp(Object value, int type)
+    {
+        this.type = type;
+
+        if (value instanceof InputStream)
+        {
+            byte[] buffer = new byte[2048];
+            InputStream in = (InputStream) value;
+            try
+            {
+                int read = in.read(buffer);
+                while (read != -1)
+                {
+                    out.write(buffer, 0, read);
+                    read = in.read(buffer);
+                }
+                this.value = out;
+            }
+            catch (IOException ioe)
+            {
+                throw new IllegalArgumentException(ioe);
+            }
+
+        }
+        else
+        {
+            this.value = value;
+        }
     }
+
     public String getString() throws ValueFormatException, IllegalStateException, RepositoryException
     {
-        if(value==null)
+        if (value == null)
         {
             return null;
         }
-        String valueString=value.toString();
-        if(value instanceof Node && type==PropertyType.REFERENCE)
+        String valueString = value.toString();
+        if (value instanceof Node && type == PropertyType.REFERENCE)
         {
-            valueString=((Node)value).getUUID();
+            valueString = ((Node) value).getUUID();
         }
-        if(value instanceof Calendar)
+        if (value instanceof Calendar)
         {
-            valueString=iso8601dateFormat.format(((Calendar)value).getTime());
+            valueString = iso8601dateFormat.format(((Calendar) value).getTime());
         }
         return valueString;
     }
 
     public InputStream getStream() throws IllegalStateException, RepositoryException
     {
-        if(value==null)
+        if (value == null)
         {
             return null;
         }
-        if(value instanceof InputStream && type==PropertyType.BINARY)
+        if (value instanceof ByteArrayOutputStream && type == PropertyType.BINARY)
         {
-            return (InputStream)value;
+            ByteArrayOutputStream out=(ByteArrayOutputStream)value;
+            return new ByteArrayInputStream(out.toByteArray());
         }
         return null;
     }
 
     public long getLong() throws ValueFormatException, IllegalStateException, RepositoryException
     {
-        if(value==null)
+        if (value == null)
         {
             throw new ValueFormatException();
         }
@@ -74,7 +107,7 @@ public class ValueImp implements Value
         {
             return Long.parseLong(value.toString());
         }
-        catch(NumberFormatException nfe)
+        catch (NumberFormatException nfe)
         {
             throw new ValueFormatException(nfe);
         }
@@ -82,7 +115,7 @@ public class ValueImp implements Value
 
     public double getDouble() throws ValueFormatException, IllegalStateException, RepositoryException
     {
-         if(value==null)
+        if (value == null)
         {
             throw new ValueFormatException();
         }
@@ -90,7 +123,7 @@ public class ValueImp implements Value
         {
             return Double.parseDouble(value.toString());
         }
-        catch(NumberFormatException nfe)
+        catch (NumberFormatException nfe)
         {
             throw new ValueFormatException(nfe);
         }
@@ -98,35 +131,35 @@ public class ValueImp implements Value
 
     public Calendar getDate() throws ValueFormatException, IllegalStateException, RepositoryException
     {
-        if(value==null)
+        if (value == null)
         {
             return null;
         }
-        Calendar calendar=null;
-        if(type==PropertyType.DATE && value instanceof Calendar)
+        Calendar calendar = null;
+        if (type == PropertyType.DATE && value instanceof Calendar)
         {
-            calendar=(Calendar)value;
+            calendar = (Calendar) value;
         }
         else
         {
-            String stringDate=getString();
+            String stringDate = getString();
             try
             {
-                Date date=DateFormat.getDateTimeInstance().parse(stringDate);
-                calendar=Calendar.getInstance();
-                calendar.setTime(date);                
+                Date date = DateFormat.getDateTimeInstance().parse(stringDate);
+                calendar = Calendar.getInstance();
+                calendar.setTime(date);
             }
-            catch(ParseException pe)
+            catch (ParseException pe)
             {
                 throw new ValueFormatException(pe);
-            }            
+            }
         }
         return calendar;
     }
 
     public boolean getBoolean() throws ValueFormatException, IllegalStateException, RepositoryException
     {
-         if(value==null)
+        if (value == null)
         {
             throw new ValueFormatException();
         }
@@ -134,7 +167,7 @@ public class ValueImp implements Value
         {
             return Boolean.parseBoolean(value.toString());
         }
-        catch(NumberFormatException nfe)
+        catch (NumberFormatException nfe)
         {
             throw new ValueFormatException(nfe);
         }
