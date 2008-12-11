@@ -48,7 +48,7 @@ public class SWBUtilsTest {
             System.out.println("Success");
         }*/
     }
-/*
+
     @Test
     public void testRemoveDirectory() {
         System.out.println("RemoveDirectory(");
@@ -134,11 +134,11 @@ public class SWBUtilsTest {
         } catch (Exception e) {
         }
     }
-**/
+
     /**
      * Este metodo prueba el envío x correo del metodo sendMail (NO BACKGROUND) de SWBUtils
      */
-    /*
+    
     @Test
     public void testSendMail() {
         try {
@@ -165,12 +165,10 @@ public class SWBUtilsTest {
             e.printStackTrace();
         }
     }
-**/
     /**
      * Este metodo prueba el envío x correo del metodo sendBGEmail (BACKGROUND) de SWBUtils, pasandole la una instancia de
      * clase SWBMail
      */
-    /*
     @Test
     public void testSendMail2() {
         try {
@@ -206,12 +204,12 @@ public class SWBUtilsTest {
             e.printStackTrace();
         }
     }
-**/
+
     /**
      * Este metodo prueba el envío x correo del metodo sendMail (NO BACKGROUND) de la clase SWBMail
      * clase SWBMail
      */
-    /*
+   
     @Test
     public void testSendMail3() {
         try {
@@ -339,7 +337,7 @@ public class SWBUtilsTest {
             e.printStackTrace();
         }
     }
-    **/
+    
     @Test
     public void testLog2File(){
         try{
