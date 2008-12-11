@@ -235,7 +235,12 @@ public final class PropertyImp implements Property
 
     public InputStream getStream() throws ValueFormatException, RepositoryException
     {
-        throw new UnsupportedOperationException(NOT_SUPPORTED_YET);
+        Value value = getValue();
+        if (value == null)
+        {
+            throw new ValueFormatException();
+        }
+        return value.getStream();
     }
 
     public long getLong() throws ValueFormatException, RepositoryException
