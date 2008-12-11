@@ -53,6 +53,14 @@ public class ValueImp implements Value
 
     public InputStream getStream() throws IllegalStateException, RepositoryException
     {
+        if(value==null)
+        {
+            return null;
+        }
+        if(value instanceof InputStream && type==PropertyType.BINARY)
+        {
+            return (InputStream)value;
+        }
         return null;
     }
 
