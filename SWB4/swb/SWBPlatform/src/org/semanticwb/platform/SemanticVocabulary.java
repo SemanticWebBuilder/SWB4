@@ -45,6 +45,7 @@ public class SemanticVocabulary
     public static final String XMLS_LONG=XMLS_URI+"long";
     public static final String XMLS_SHORT=XMLS_URI+"short";
     public static final String XMLS_BYTE=XMLS_URI+"byte";
+    public static final String XMLS_BASE64BINARY=XMLS_URI+"base64Binary";
     
             
     public static final String OWL_URI="http://www.w3.org/2002/07/owl#";
