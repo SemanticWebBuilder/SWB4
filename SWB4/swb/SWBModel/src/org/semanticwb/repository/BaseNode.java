@@ -587,29 +587,7 @@ public class BaseNode extends BaseNodeBase
         else
         {
             String fileName=UUID.randomUUID().toString();
-            getSemanticObject().setInputStreamProperty(property, value,fileName);
-            /*String path = SWBPlatform.getEnv("swb/repositoryPath", "");
-            if (!(path.endsWith("\\") || path.endsWith("/")))
-            {
-                path += "/";
-            }
-            File file = new File(path + this.getName());
-            try
-            {
-                FileOutputStream out = new FileOutputStream(file);
-                byte[] buffer = new byte[2048];
-                int read = value.read(buffer);
-                while (read != -1)
-                {
-                    out.write(buffer, 0, read);
-                    read = value.read(buffer);
-                }
-                getSemanticObject().setProperty(property, file.getAbsolutePath());
-            }
-            catch (IOException fnfe)
-            {
-                throw new SWBException("The property " + property.getURI() + " was not possible to save", fnfe);
-            }*/
+            getSemanticObject().setInputStreamProperty(property, value,fileName);            
         }
     }
 
