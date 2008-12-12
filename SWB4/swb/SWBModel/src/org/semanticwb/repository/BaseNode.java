@@ -1090,7 +1090,7 @@ public class BaseNode extends BaseNodeBase
     {
         if (historyNode.isVersionHistoryNode())
         {
-            BaseNode ntVersion = historyNode.createNodeBase("1.0", vocabulary.nt_Version);
+            BaseNode ntVersion = historyNode.createNodeBase("0", vocabulary.nt_Version);
             BaseNode versionLabels = historyNode.createNodeBase(JCR_VERSIONLABELS_NAME, vocabulary.nt_versionLabels);
             BaseNode ntFrozenNode = ntVersion.createNodeBase(JCR_FROZENNODE_NAME, vocabulary.nt_FrozenNode);
             addFrozenProperties(ntFrozenNode.getSemanticObject());
@@ -1192,6 +1192,7 @@ public class BaseNode extends BaseNodeBase
             SemanticProperty isCheckoutPropety = vocabulary.jcr_isCheckedOut;
             setPropertyInternal(isCheckoutPropety, "false");
             BaseNode versionNode = addVersionToHistoryNode();
+            log.debug("Version created "+versionNode.getName());
             return versionNode;
         }
         else
@@ -1228,7 +1229,17 @@ public class BaseNode extends BaseNodeBase
             if (versionHistory != null)
             {
                 BaseNode[] predecessors = versionHistory.getVersions();
-                BaseNode ntVersion = versionHistory.createNodeBase("1." + predecessors.length, vocabulary.nt_Version);
+                String nameBaseVersion=this.getBaseVersion().getName();
+                String nextVersion="0";
+                try
+                {
+                    nextVersion=String.valueOf(Integer.parseInt(nameBaseVersion)+1);
+                }
+                catch(NumberFormatException nfe)
+                {
+                    log.error(nfe);
+                }
+                BaseNode ntVersion = versionHistory.createNodeBase(nextVersion, vocabulary.nt_Version);
                 // TODO: DEBE AGREGAR REFERENCIA A LAS PREDECEDORAS, PERO FALTA METODO PARA AGREGAR
                 for (BaseNode predecessor : predecessors)
                 {
