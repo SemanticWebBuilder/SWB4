@@ -1521,6 +1521,9 @@
     <rdfs:domain rdf:resource="#User"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_usrPassword">
+        <swb:formElement>
+          <swbxf:PasswordUpdate rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#usrPassword"/>
+        </swb:formElement>
         <swb:propGroup xml:lang="es">Identidad</swb:propGroup>
         <swb:propGroup xml:lang="en">Identity</swb:propGroup>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
