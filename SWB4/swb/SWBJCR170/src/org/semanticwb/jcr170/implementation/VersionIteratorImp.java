@@ -45,7 +45,7 @@ public class VersionIteratorImp implements VersionIterator
         {            
             try
             {
-                return new VersionImp(node, versionHistory.getBaseNode(), session, parent);
+                return new VersionImp(node, versionHistory, session);
             }
             catch(RepositoryException e)
             {
