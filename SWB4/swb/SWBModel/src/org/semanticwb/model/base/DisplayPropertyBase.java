@@ -32,16 +32,6 @@ public class DisplayPropertyBase extends GenericObjectBase implements Sortable
         getSemanticObject().setLongProperty(vocabulary.swb_index, index);
     }
 
-    public boolean isRequired()
-    {
-        return getSemanticObject().getBooleanProperty(vocabulary.swb_propRequired);
-    }
-
-    public void setRequired(boolean propRequired)
-    {
-        getSemanticObject().setBooleanProperty(vocabulary.swb_propRequired, propRequired);
-    }
-
     public String getSelectValues()
     {
         return getSemanticObject().getProperty(vocabulary.swb_propSelectValues);
