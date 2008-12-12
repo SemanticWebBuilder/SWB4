@@ -1207,7 +1207,7 @@ public class BaseNode extends BaseNodeBase
         return addVersionToHistoryNode;
     }
 
-    private void checkVersionable() throws SWBException
+    public void checkVersionable() throws SWBException
     {
         if (isVersionable())
         {
