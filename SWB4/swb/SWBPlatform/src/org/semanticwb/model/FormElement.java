@@ -15,7 +15,9 @@ import org.semanticwb.platform.SemanticProperty;
  */
 public interface FormElement extends GenericObject
 {
-    public String render(SemanticObject obj, SemanticProperty prop, String type, String mode, String lang);
+    public String renderLabel(SemanticObject obj, SemanticProperty prop, String type, String mode, String lang);
+
+    public String renderElement(SemanticObject obj, SemanticProperty prop, String type, String mode, String lang);
 
     public void validate(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) throws FormValidateException;
 

@@ -63,6 +63,7 @@ public class SemanticVocabulary
     public static final String SWB_PROP_VALUE=URI+"value";
     public static final String SWB_PROP_HASCLASS=URI+"hasClass";
     public static final String SWB_PROP_LOCALEABLE=URI+"localeable";
+    public static final String SWB_PROP_REQUIRED=URI+"required";
     public static final String SWB_PROP_DISPLAYPROPERTY=URI+"displayProperty";
     public static final String SWB_PROP_DISPLAYOBJECT=URI+"displayObject";
     public static final String SWB_PROP_EXTERNALINVOCATION=URI+"externalInvocation";

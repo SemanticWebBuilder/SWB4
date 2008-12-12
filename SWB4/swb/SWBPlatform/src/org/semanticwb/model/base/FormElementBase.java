@@ -24,18 +24,55 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
         super(obj);
     }
 
-    public String render(SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
-    {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
     public void validate(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) throws FormValidateException 
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) 
+    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
     {
+        //System.out.println("process...:"+obj.getURI()+" "+prop.getURI());
+        if(prop.isDataTypeProperty())
+        {
+            String value=request.getParameter(prop.getName());
+            if(prop.isBoolean())
+            {
+                if(value!=null)obj.setBooleanProperty(prop, true);
+                else obj.setBooleanProperty(prop, false);
+            }else
+            {
+                if(value!=null)
+                {
+                    if(value.length()>0)
+                    {
+                        if(prop.isFloat())obj.setFloatProperty(prop, Float.parseFloat(value));
+                        if(prop.isInt())obj.setLongProperty(prop, Integer.parseInt(value));
+                        if(prop.isString())obj.setProperty(prop, value);
+                    }else
+                    {
+                        obj.removeProperty(prop);
+                    }
+                }
+            }
+        }
+    }
+
+    public String renderLabel(SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
+    {
+        String ret="";
+        String name=prop.getName();
+        String label=prop.getDisplayName(lang);
+        SemanticObject sobj=prop.getDisplayProperty();
+        boolean required=prop.isRequired();
+
+        String reqtxt=" &nbsp;";
+        if(required)reqtxt=" <em>*</em>";
+
+        ret="<label for=\""+name+"\">"+label + reqtxt + "</label>";
+        return ret;
+    }
+
+    public String renderElement(SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
