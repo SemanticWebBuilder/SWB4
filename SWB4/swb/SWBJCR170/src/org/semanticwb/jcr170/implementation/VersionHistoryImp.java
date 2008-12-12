@@ -4,6 +4,7 @@
  */
 package org.semanticwb.jcr170.implementation;
 
+import java.util.Iterator;
 import javax.jcr.AccessDeniedException;
 import javax.jcr.ReferentialIntegrityException;
 import javax.jcr.RepositoryException;
@@ -21,10 +22,10 @@ import org.semanticwb.repository.BaseNode;
  */
 public class VersionHistoryImp extends SimpleNode implements VersionHistory
 {    
-    VersionHistoryImp(BaseNode node,SessionImp session,SimpleNode parent) throws RepositoryException
+    VersionHistoryImp(BaseNode versionHistory,SessionImp session,SimpleNode parent) throws RepositoryException
     {
-        super(node, session, parent,node.getId());
-        if(!node.isVersionHistoryNode())
+        super(versionHistory, session, parent,versionHistory.getId());
+        if(!versionHistory.isVersionHistoryNode())
         {
             throw new IllegalArgumentException("The node is not a versionhistory node");
         }
@@ -50,7 +51,16 @@ public class VersionHistoryImp extends SimpleNode implements VersionHistory
     }
     public Version getRootVersion() throws RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        Iterator<BaseNode> nodes=this.node.listNodes();
+        while(nodes.hasNext())
+        {
+            BaseNode child=nodes.next();
+            if(child.getName().equals("jcr:rootVersion"))
+            {
+                return new VersionImp(child, node, session, parent);
+            }
+        }
+        throw new RepositoryException("The root version was not found");
     }
 
     public VersionIterator getAllVersions() throws RepositoryException
@@ -65,12 +75,21 @@ public class VersionHistoryImp extends SimpleNode implements VersionHistory
         }
     }
 
-    public Version getVersion(String arg0) throws VersionException, RepositoryException
+    public Version getVersion(String name) throws VersionException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        Iterator<BaseNode> nodes=this.node.listNodes();
+        while(nodes.hasNext())
+        {
+            BaseNode child=nodes.next();
+            if(child.getName().equals(name) && child.getSemanticObject().getSemanticClass().equals(BaseNode.vocabulary.nt_Version))
+            {
+                return new VersionImp(child, node, session, parent);
+            }
+        }
+        throw new RepositoryException("The version "+ name +" was not found");
     }
 
-    public Version getVersionByLabel(String arg0) throws RepositoryException
+    public Version getVersionByLabel(String label) throws RepositoryException
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
