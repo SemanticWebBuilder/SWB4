@@ -45,6 +45,7 @@ import org.semanticwb.SWBException;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.platform.SemanticClass;
+import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.platform.SemanticVocabulary;
 import org.semanticwb.repository.BaseNode;
@@ -77,6 +78,7 @@ public class SimpleNode implements Node
     protected final SessionImp session;
     private final int index;
     protected final SimpleNode parent;
+    protected final NodeDefinitionImp nodeDefinition;
 
     SimpleNode(SessionImp session, String name, SemanticClass clazz, SimpleNode parent, int index, String id) throws RepositoryException
     {
@@ -84,6 +86,7 @@ public class SimpleNode implements Node
         this.name = name;
         root = session.getRootBaseNode();
         this.clazz = clazz;
+        nodeDefinition=this.getNodeDefinition(clazz, name,session);
         this.session = session;
         this.index = index;
         this.parent = parent;
@@ -156,7 +159,12 @@ public class SimpleNode implements Node
             {
                 try
                 {
-                    addProperty(getName(prop), clazz);
+                    PropertyImp propImp=addProperty(getName(prop), clazz);
+                    if(prop.equals(BaseNode.vocabulary.jcr_primaryType) && propImp.getValue()==null)
+                    {
+                        propImp.setValueInternal(clazz.getPrefix()+":"+clazz.getName());
+                    }
+                    
                 }
                 catch (Exception e)
                 {
@@ -167,6 +175,7 @@ public class SimpleNode implements Node
 
     SimpleNode(BaseNode node, SessionImp session, SimpleNode parent, String id) throws RepositoryException
     {
+        
         this.id = id;
         if (node == null)
         {
@@ -182,6 +191,7 @@ public class SimpleNode implements Node
         {
             root = session.getRootBaseNode();
         }
+        nodeDefinition=this.getNodeDefinition(node.getSemanticObject().getSemanticClass(), node.getName(),session);
         this.clazz = node.getSemanticObject().getSemanticClass();
         this.index = 0;
         this.parent = parent;
@@ -246,7 +256,15 @@ public class SimpleNode implements Node
         }
 
     }
-
+    private NodeDefinitionImp getNodeDefinition(SemanticClass clazz,String name,SessionImp session)
+    {
+        SemanticObject object=root.getChildNodeDefinition(clazz,name);
+        if(object!=null)
+        {
+            return new NodeDefinitionImp(object,session);
+        }
+        return null;
+    }
     boolean isDeleted()
     {
         return parent.removedchilds.contains(this);
@@ -460,7 +478,7 @@ public class SimpleNode implements Node
 
     public NodeDefinition getDefinition() throws RepositoryException
     {
-        return null;
+        return nodeDefinition;
     }
 
     public Property setProperty(String name, Value[] value, int arg2) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
@@ -792,6 +810,10 @@ public class SimpleNode implements Node
                     }
                     else
                     {
+                        if(prop.getString()==null)
+                        {
+                            System.out.println(prop.getString());
+                        }
                         node.setProperty(semanticProperty, prop.getString());
                     }
                 }
@@ -841,7 +863,43 @@ public class SimpleNode implements Node
             this.childs.put(child.id, child);
         }
     }
-
+    public void checkRequiredProperties() throws SWBException, RepositoryException
+    {
+        for(PropertyImp prop : this.properties.values())
+        {
+            PropertyDefinitionImp def=(PropertyDefinitionImp)prop.getDefinition();
+            if(def.isMandatory())
+            {
+                if(!prop.isNode())
+                {
+                    if(prop.getDefinition().getRequiredType()==PropertyType.BINARY)
+                    {
+                        if(prop.getStream()==null)
+                        {
+                            throw new SWBException("The value for the property " + prop.getName() + " is null for the node " + this.getName() + " of type " + clazz.getPrefix() + ":" + clazz.getName());
+                        }
+                    }
+                    else
+                    {
+                        if(prop.getString()==null)
+                        {
+                            throw new SWBException("The value for the property " + prop.getName() + " is null for the node " + this.getName() + " of type " + clazz.getPrefix() + ":" + clazz.getName());
+                        }
+                    }
+                }                
+            }
+        }
+        
+    }
+    public void checkSave() throws SWBException,RepositoryException
+    {
+        checkRequiredProperties();
+        for(SimpleNode child : childs.values())
+        {
+            child.checkRequiredProperties();
+        }
+    }
+    
     public void save() throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
     {
         if (isNew())
@@ -850,11 +908,10 @@ public class SimpleNode implements Node
         }
         try
         {
+            this.checkSave();
             removeChilds();
             createChilds();
             saveProperties();
-            node.save();
-
             modified = false;
         }
         catch (SWBException swbe)
@@ -1109,7 +1166,7 @@ public class SimpleNode implements Node
         relPath = SessionImp.normalize(relPath, this);
         String nameNode = SessionImp.getNodeName(relPath);
         String parentPath = SessionImp.getParentPath(relPath, this);
-        Item item = session.getItem(parentPath);
+        Item item=this;
         if (item.isNode())
         {
             SimpleNode parentNode = (SimpleNode) item;
