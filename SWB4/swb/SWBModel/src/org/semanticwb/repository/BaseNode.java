@@ -95,18 +95,20 @@ public class BaseNode extends BaseNodeBase
         return hasOrderableChildNodes;
     }
 
-    public String getOnParentVersion(BaseNode node)
+    public String getOnParentVersion(BaseNode node, BaseNode parent)
     {
+        SemanticObject nodeDefinition = parent.getChildNodeDefinition(parent.getSemanticObject().getSemanticClass(), node.getName());
         String value = ONPARENTVERSION_VERSION;
-        SemanticProperty onParentVersionProperty = vocabulary.jcr_onParentVersion;
-        Iterator<SemanticLiteral> literals = node.getSemanticObject().getSemanticClass().listRequiredProperties(onParentVersionProperty);
-        while (literals.hasNext())
+        if (nodeDefinition != null)
         {
-            SemanticLiteral literal = literals.next();
-            if (literal != null && literal.getString() != null)
+            value = nodeDefinition.getProperty(vocabulary.jcr_onParentVersion);
+            if (value != null)
             {
-                value = literal.getString();
-                break;
+                return value;
+            }
+            else
+            {
+                value = ONPARENTVERSION_VERSION;
             }
         }
         return value;
@@ -126,18 +128,17 @@ public class BaseNode extends BaseNodeBase
 
     /*public void save() throws SWBException
     {
-        GenericIterator<BaseNode> childs = listNodes();
-        while (childs.hasNext())
-        {
-            BaseNode child = childs.next();
-            child.save();
-        }
-        checkVersionable();
-        checkSave();
+    GenericIterator<BaseNode> childs = listNodes();
+    while (childs.hasNext())
+    {
+    BaseNode child = childs.next();
+    child.save();
+    }
+    checkVersionable();
+    checkSave();
 
 
     }*/
-
     public boolean isNodeType(SemanticClass clazz)
     {
         boolean isVersionNode = false;
@@ -459,6 +460,7 @@ public class BaseNode extends BaseNodeBase
             getSemanticObject().setProperty(property, value);
         }
     }
+
     private void setInputStreamPropertyInternal(SemanticProperty property, InputStream value) throws SWBException
     {
         if (value == null)
@@ -467,7 +469,8 @@ public class BaseNode extends BaseNodeBase
         }
         else
         {
-            getSemanticObject().setInputStreamProperty(property, value,this.getName());
+            String name = UUID.randomUUID().toString();
+            getSemanticObject().setInputStreamProperty(property, value, name);
         }
     }
 
@@ -491,8 +494,8 @@ public class BaseNode extends BaseNodeBase
         }
         else
         {
-            String fileName=UUID.randomUUID().toString();
-            getSemanticObject().setInputStreamProperty(property, value,fileName);            
+            String fileName = UUID.randomUUID().toString();
+            getSemanticObject().setInputStreamProperty(property, value, fileName);
         }
     }
 
@@ -529,6 +532,7 @@ public class BaseNode extends BaseNodeBase
             savePropertyToDB(property, value);
         }
     }
+
     public InputStream getInputStreamProperty(SemanticProperty property) throws SWBException
     {
         InputStream getProperty = null;
@@ -555,7 +559,6 @@ public class BaseNode extends BaseNodeBase
         getProperty = getSemanticObject().getProperty(property);
         return getProperty;
     }
-    
 
     public final Iterator<SemanticProperty> listSemanticProperties(SemanticClass clazz)
     {
@@ -671,9 +674,10 @@ public class BaseNode extends BaseNodeBase
         }
         return isProtected;
     }
-    public SemanticObject getChildNodeDefinition(SemanticClass clazz,String nodeName)
+
+    public SemanticObject getChildNodeDefinition(SemanticClass clazz, String nodeName)
     {
-        SemanticObject getChildNodeDefinition=null;
+        SemanticObject getChildNodeDefinition = null;
         for (SemanticObject nodeDefinition : getChildNodeDefinition(clazz))
         {
             String name = nodeDefinition.getProperty(vocabulary.jcr_name);
@@ -690,12 +694,34 @@ public class BaseNode extends BaseNodeBase
                 return nodeDefinition;
             }
         }
+        Iterator<SemanticClass> classes = this.getSemanticObject().getSemanticClass().listSuperClasses(true);
+        while (classes.hasNext())
+        {
+            SemanticClass superclazz = classes.next();
+            for (SemanticObject nodeDefinition : getChildNodeDefinition(superclazz))
+            {
+                String name = nodeDefinition.getProperty(vocabulary.jcr_name);
+                if (name.equals(nodeName))
+                {
+                    return nodeDefinition;
+                }
+            }
+            for (SemanticObject nodeDefinition : getChildNodeDefinition(superclazz))
+            {
+                String name = nodeDefinition.getProperty(vocabulary.jcr_name);
+                if (name.equals("*"))
+                {
+                    return nodeDefinition;
+                }
+            }
+
+        }
         return getChildNodeDefinition;
     }
 
     public final boolean allowsSameNameSiblings(SemanticClass clazz, SemanticClass clazzToCreate, String nameTocreate)
     {
-        boolean allowsSameNameSiblings = false;        
+        boolean allowsSameNameSiblings = false;
         for (SemanticObject nodeDefinition : getChildNodeDefinition(clazz))
         {
             String name = nodeDefinition.getProperty(vocabulary.jcr_name);
@@ -943,7 +969,7 @@ public class BaseNode extends BaseNodeBase
             while (nodes.hasNext())
             {
                 BaseNode childNode = nodes.next();
-                String onParentVersion = getOnParentVersion(childNode);
+                String onParentVersion = getOnParentVersion(childNode, this);
                 if (onParentVersion.equals(ONPARENTVERSION_COPY))
                 {
                     BaseNode frozenChild = frozenNode.createNodeBase(JCR_FROZENNODE_NAME, vocabulary.nt_FrozenNode);
@@ -959,66 +985,80 @@ public class BaseNode extends BaseNodeBase
         }
     }
 
+    private void checkAbort(BaseNode frozenNode) throws SWBException
+    {
+        Iterator<SemanticProperty> properties = this.getSemanticObject().getSemanticClass().listProperties();
+        boolean abort = false;
+        GenericIterator<BaseNode> nodes = this.listNodes();
+        while (nodes.hasNext())
+        {
+            BaseNode childNode = nodes.next();
+            String onParentVersion = getOnParentVersion(childNode, this);
+            if (onParentVersion.equals("ABORT"))
+            {
+                abort = true;
+                break;
+            }
+        }
+        while (properties.hasNext())
+        {
+            SemanticProperty property = properties.next();
+            String onParentVersion = getOnParentVersion(property);
+            if (onParentVersion.equals("ABORT"))
+            {
+                abort = true;
+                break;
+            }
+        }
+        if (abort)
+        {
+            throw new SWBException("A property has the onparentversion equals to abort");
+        }
+    }
+
+    private void copyChildsTo(BaseNode node,BaseNode frozenNode) throws SWBException
+    {
+        GenericIterator<BaseNode> nodes = node.listNodes();
+        while (nodes.hasNext())
+        {
+            BaseNode childNode = nodes.next();
+            BaseNode frozenChild=frozenNode.createNodeBase(JCR_FROZENNODE_NAME, vocabulary.nt_FrozenNode);
+            childNode.copyPropertiesToFrozenNode(frozenChild);
+        }
+    }
+
     private void copyPropertiesToFrozenNode(BaseNode frozenNode) throws SWBException
     {
         if (frozenNode.isFrozenNode())
         {
-
+            checkAbort(frozenNode);
+            copyChildsTo(this,frozenNode);
             Iterator<SemanticProperty> properties = this.getSemanticObject().getSemanticClass().listProperties();
-            boolean abort = false;
-            GenericIterator<BaseNode> nodes = this.listNodes();
-            while (nodes.hasNext())
-            {
-                BaseNode childNode = nodes.next();
-                String onParentVersion = getOnParentVersion(childNode);
-                if (onParentVersion.equals("ABORT"))
-                {
-                    abort = true;
-                    break;
-                }
-            }
+            properties = this.getSemanticObject().getSemanticClass().listProperties();
             while (properties.hasNext())
             {
                 SemanticProperty property = properties.next();
-                String onParentVersion = getOnParentVersion(property);
-                if (onParentVersion.equals("ABORT"))
+                if (!isInternal(property))
                 {
-                    abort = true;
-                    break;
-                }
-            }
-            if (!abort)
-            {
-                properties = this.getSemanticObject().getSemanticClass().listProperties();
-                while (properties.hasNext())
-                {
-                    SemanticProperty property = properties.next();
-                    if (!isInternal(property))
+                    String onParentVersion = getOnParentVersion(property);
+                    if (property.isDataTypeProperty() && onParentVersion.equals(ONPARENTVERSION_COPY))
                     {
-                        String onParentVersion = getOnParentVersion(property);
-                        if (property.isDataTypeProperty() && onParentVersion.equals(ONPARENTVERSION_COPY))
+                        if (property.isBinary())
                         {
-                            if(property.isBinary())
-                            {
-                                frozenNode.setInputStreamPropertyInternal(property, getInputStreamProperty(property));
-                            }
-                            else
-                            {
-                                frozenNode.setPropertyInternal(property, getProperty(property));
-                            }
+                            frozenNode.setInputStreamPropertyInternal(property, getInputStreamProperty(property));
                         }
-                        if (property.isObjectProperty() && onParentVersion.equals(ONPARENTVERSION_COPY))
+                        else
                         {
-                            frozenNode.getSemanticObject().setObjectProperty(property, this.getSemanticObject().getObjectProperty(property));
+                            frozenNode.setPropertyInternal(property, getProperty(property));
                         }
                     }
+                    if (property.isObjectProperty() && onParentVersion.equals(ONPARENTVERSION_COPY))
+                    {
+                        frozenNode.getSemanticObject().setObjectProperty(property, this.getSemanticObject().getObjectProperty(property));
+                    }
                 }
-                copyNodesToFrozenNode(frozenNode);
             }
-            else
-            {
-                throw new SWBException("A property has the onparentversion equals to abort");
-            }
+            
         }
         else
         {
@@ -1188,7 +1228,7 @@ public class BaseNode extends BaseNodeBase
             if (versionHistory != null)
             {
                 BaseNode[] predecessors = versionHistory.getVersions();
-                BaseNode ntVersion = versionHistory.createNodeBase("1."+predecessors.length, vocabulary.nt_Version);
+                BaseNode ntVersion = versionHistory.createNodeBase("1." + predecessors.length, vocabulary.nt_Version);
                 // TODO: DEBE AGREGAR REFERENCIA A LAS PREDECEDORAS, PERO FALTA METODO PARA AGREGAR
                 for (BaseNode predecessor : predecessors)
                 {
