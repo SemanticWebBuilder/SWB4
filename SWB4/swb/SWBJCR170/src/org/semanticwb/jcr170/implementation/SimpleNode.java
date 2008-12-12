@@ -58,7 +58,7 @@ import org.semanticwb.repository.LockUserComparator;
 public class SimpleNode implements Node
 {
 
-    static Logger log = SWBUtils.getLogger(SimpleNode.class);
+    private static Logger log = SWBUtils.getLogger(SimpleNode.class);
     private String path;
     private String id;
     private boolean modified = false;
