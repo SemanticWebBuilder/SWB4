@@ -914,12 +914,19 @@ public class SimpleNode implements Node
 
     public void checkVersionable() throws SWBException, RepositoryException
     {
-
         for (SimpleNode child : childs.values())
         {
             child.checkVersionable();
         }
         node.checkVersionable();
+        if(this.versionHistory==null)
+        {
+            BaseNode history=node.getHistoryNode();
+            if(history!=null)
+            {
+                this.versionHistory=new VersionHistoryImp(history, session, this);
+            }
+        }
     }
 
     public void save() throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
