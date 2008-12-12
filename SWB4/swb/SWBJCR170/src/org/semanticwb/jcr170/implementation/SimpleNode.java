@@ -62,7 +62,7 @@ public class SimpleNode implements Node
     private String path;
     private String id;
     private boolean modified = false;
-    static final String DEFAULT_PRIMARY_NODE_TYPE_NAME = BaseNode.vocabulary.nt_Unstructured.getPrefix()+":"+BaseNode.vocabulary.nt_Unstructured.getName();
+    static final String DEFAULT_PRIMARY_NODE_TYPE_NAME = BaseNode.vocabulary.nt_Unstructured.getPrefix() + ":" + BaseNode.vocabulary.nt_Unstructured.getName();
     protected static final String NOT_SUPPORTED_YET = "Not supported yet.";
     protected static final String WAS_NOT_FOUND = " was not found";
     private static final String PATH_SEPARATOR = "/";
@@ -86,7 +86,7 @@ public class SimpleNode implements Node
         this.name = name;
         root = session.getRootBaseNode();
         this.clazz = clazz;
-        nodeDefinition=this.getNodeDefinition(clazz, name,session);
+        nodeDefinition = this.getNodeDefinition(clazz, name, session);
         this.session = session;
         this.index = index;
         this.parent = parent;
@@ -113,10 +113,10 @@ public class SimpleNode implements Node
         if (clazz.equals(BaseNode.vocabulary.nt_hierarchyNode) || clazz.isSubClass(BaseNode.vocabulary.nt_hierarchyNode))
         {
             PropertyImp prop = addProperty(getName(BaseNode.vocabulary.jcr_created), clazz);
-            Value time=factory.createValue(Calendar.getInstance());
+            Value time = factory.createValue(Calendar.getInstance());
             prop.setValueInternal(time.getString());
         }
-        
+
 
         String[] supertypes = root.getSuperTypes(clazz);
         for (String superType : supertypes)
@@ -159,12 +159,12 @@ public class SimpleNode implements Node
             {
                 try
                 {
-                    PropertyImp propImp=addProperty(getName(prop), clazz);
-                    if(prop.equals(BaseNode.vocabulary.jcr_primaryType) && propImp.getValue()==null)
+                    PropertyImp propImp = addProperty(getName(prop), clazz);
+                    if (prop.equals(BaseNode.vocabulary.jcr_primaryType) && propImp.getValue() == null)
                     {
-                        propImp.setValueInternal(clazz.getPrefix()+":"+clazz.getName());
+                        propImp.setValueInternal(clazz.getPrefix() + ":" + clazz.getName());
                     }
-                    
+
                 }
                 catch (Exception e)
                 {
@@ -175,7 +175,7 @@ public class SimpleNode implements Node
 
     SimpleNode(BaseNode node, SessionImp session, SimpleNode parent, String id) throws RepositoryException
     {
-        
+
         this.id = id;
         if (node == null)
         {
@@ -191,7 +191,7 @@ public class SimpleNode implements Node
         {
             root = session.getRootBaseNode();
         }
-        nodeDefinition=this.getNodeDefinition(node.getSemanticObject().getSemanticClass(), node.getName(),session);
+        nodeDefinition = this.getNodeDefinition(node.getSemanticObject().getSemanticClass(), node.getName(), session);
         this.clazz = node.getSemanticObject().getSemanticClass();
         this.index = 0;
         this.parent = parent;
@@ -256,15 +256,17 @@ public class SimpleNode implements Node
         }
 
     }
-    private NodeDefinitionImp getNodeDefinition(SemanticClass clazz,String name,SessionImp session)
+
+    private NodeDefinitionImp getNodeDefinition(SemanticClass clazz, String name, SessionImp session)
     {
-        SemanticObject object=root.getChildNodeDefinition(clazz,name);
-        if(object!=null)
+        SemanticObject object = root.getChildNodeDefinition(clazz, name);
+        if (object != null)
         {
-            return new NodeDefinitionImp(object,session);
+            return new NodeDefinitionImp(object, session);
         }
         return null;
     }
+
     boolean isDeleted()
     {
         return parent.removedchilds.contains(this);
@@ -276,7 +278,7 @@ public class SimpleNode implements Node
         prop.setNew(isNew);
         return prop;
 
-    }   
+    }
 
     private PropertyImp addProperty(SemanticProperty property, BaseNode node, SemanticClass clazz) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
@@ -318,7 +320,6 @@ public class SimpleNode implements Node
         }
         return prop;
     }
-
 
     private PropertyImp addProperty(String name) throws RepositoryException
     {
@@ -674,8 +675,6 @@ public class SimpleNode implements Node
         return null;
     }
 
-    
-
     public boolean isLockedByParent() throws RepositoryException
     {
         boolean isLockedByParent = false;
@@ -804,13 +803,16 @@ public class SimpleNode implements Node
                 if (node.existsProperty(prop.getName(), prop.getSemanticClass()))
                 {
                     SemanticProperty semanticProperty = node.getSemanticProperty(prop.getName(), prop.getSemanticClass());
-                    if(semanticProperty.isBinary())
+                    if (semanticProperty.isDataTypeProperty())
                     {
-                        node.setProperty(semanticProperty, prop.getStream());
-                    }
-                    else
-                    {                        
-                        node.setProperty(semanticProperty, prop.getString());
+                        if (semanticProperty.isBinary())
+                        {
+                            node.setProperty(semanticProperty, prop.getStream());
+                        }
+                        else
+                        {
+                            node.setProperty(semanticProperty, prop.getString());
+                        }
                     }
                 }
                 else
@@ -859,52 +861,55 @@ public class SimpleNode implements Node
             this.childs.put(child.id, child);
         }
     }
+
     public void checkRequiredProperties() throws SWBException, RepositoryException
     {
-        for(PropertyImp prop : this.properties.values())
+        for (PropertyImp prop : this.properties.values())
         {
-            PropertyDefinitionImp def=(PropertyDefinitionImp)prop.getDefinition();
-            if(def.isMandatory())
+            PropertyDefinitionImp def = (PropertyDefinitionImp) prop.getDefinition();
+            if (def.isMandatory())
             {
-                if(!prop.isNode())
+                if (!prop.isNode())
                 {
-                    if(prop.getDefinition().getRequiredType()==PropertyType.BINARY)
+                    if (prop.getDefinition().getRequiredType() == PropertyType.BINARY)
                     {
-                        if(prop.getStream()==null)
+                        if (prop.getStream() == null)
                         {
                             throw new SWBException("The value for the property " + prop.getName() + " is null for the node " + this.getName() + " of type " + clazz.getPrefix() + ":" + clazz.getName());
                         }
                     }
                     else
                     {
-                        if(prop.getString()==null)
+                        if (prop.getString() == null)
                         {
                             throw new SWBException("The value for the property " + prop.getName() + " is null for the node " + this.getName() + " of type " + clazz.getPrefix() + ":" + clazz.getName());
                         }
                     }
-                }                
+                }
             }
         }
-        
+
     }
-    public void checkSave() throws SWBException,RepositoryException
+
+    public void checkSave() throws SWBException, RepositoryException
     {
         checkRequiredProperties();
-        for(SimpleNode child : childs.values())
+        for (SimpleNode child : childs.values())
         {
-            child.checkRequiredProperties();            
+            child.checkRequiredProperties();
         }
     }
-    public void checkVersionable() throws SWBException,RepositoryException
+
+    public void checkVersionable() throws SWBException, RepositoryException
     {
 
-        for(SimpleNode child : childs.values())
+        for (SimpleNode child : childs.values())
         {
             child.checkVersionable();
         }
         node.checkVersionable();
     }
-    
+
     public void save() throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
     {
         if (isNew())
@@ -968,6 +973,7 @@ public class SimpleNode implements Node
         return lock;
 
     }
+
     public void unlock() throws UnsupportedRepositoryOperationException, LockException, AccessDeniedException, InvalidItemStateException, RepositoryException
     {
         if (isLockable() && isLocked())
@@ -981,15 +987,16 @@ public class SimpleNode implements Node
             {
                 try
                 {
-                node.unLock(name, new LockUserComparator() {
-
-                    public boolean canUnlockNodeLockedByUser(String lockOwner, String unlockUser)
+                    node.unLock(name, new LockUserComparator()
                     {
-                        return true;
-                    }
-                });
+
+                        public boolean canUnlockNodeLockedByUser(String lockOwner, String unlockUser)
+                        {
+                            return true;
+                        }
+                    });
                 }
-                catch(SWBException e)
+                catch (SWBException e)
                 {
                     throw new RepositoryException(e);
                 }
@@ -1172,7 +1179,7 @@ public class SimpleNode implements Node
         relPath = SessionImp.normalize(relPath, this);
         String nameNode = SessionImp.getNodeName(relPath);
         String parentPath = SessionImp.getParentPath(relPath, this);
-        Item item=this;
+        Item item = this;
         if (item.isNode())
         {
             SimpleNode parentNode = (SimpleNode) item;
@@ -1181,24 +1188,23 @@ public class SimpleNode implements Node
             {
                 throw new RepositoryException("The node can not add a child in check-in mode");
             }
-            boolean allowsSameNameSiblings=false;
+            boolean allowsSameNameSiblings = false;
             try
             {
-                SemanticClass clazzToCreate=root.getSemanticClass(primaryNodeTypeName);
-                allowsSameNameSiblings=root.allowsSameNameSiblings(clazz,clazzToCreate,nameNode);
+                SemanticClass clazzToCreate = root.getSemanticClass(primaryNodeTypeName);
+                allowsSameNameSiblings = root.allowsSameNameSiblings(clazz, clazzToCreate, nameNode);
             }
-            catch(SWBException swbe)
+            catch (SWBException swbe)
             {
-                
             }
             if (!allowsSameNameSiblings)
             {
-                boolean exists=false;
-                for(SimpleNode child : childs.values())
+                boolean exists = false;
+                for (SimpleNode child : childs.values())
                 {
-                    if(child.getName().equals(nameNode))
+                    if (child.getName().equals(nameNode))
                     {
-                        exists=true;
+                        exists = true;
                         break;
                     }
                 }
@@ -1206,13 +1212,13 @@ public class SimpleNode implements Node
                 {
                     throw new ItemExistsException("The item " + relPath + " already exists");
                 }
-            }            
+            }
             try
             {
                 SemanticClass clazzToInsert = session.getRootBaseNode().getSemanticClass(primaryNodeTypeName);
                 if (!session.getRootBaseNode().canAddNode(clazzToInsert, clazz))
                 {
-                    throw new ConstraintViolationException("The nodeType "+ clazzToInsert.getPrefix()+":"+clazzToInsert.getName() +" can not be added to the nodeType "+clazz.getPrefix()+":"+clazz.getName());
+                    throw new ConstraintViolationException("The nodeType " + clazzToInsert.getPrefix() + ":" + clazzToInsert.getName() + " can not be added to the nodeType " + clazz.getPrefix() + ":" + clazz.getName());
                 }
             }
             catch (SWBException e)
