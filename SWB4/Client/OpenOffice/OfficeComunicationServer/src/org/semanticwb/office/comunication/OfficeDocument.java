@@ -147,17 +147,16 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @return The version name created
      * @throws java.lang.Exception
      */
-    public String updateContent(String contentId) throws Exception
+    public String updateContent(String repositoryName,String contentId) throws Exception
     {
         Session session = null;
         try
         {
-            session = loader.openSession("", "", "");
+            session = loader.openSession(repositoryName, "", "");
             Node nodeContent = session.getNodeByUUID(contentId);
             if (!nodeContent.isLocked())
             {
-                nodeContent.lock(false, true); // blocks the nodeContent
-
+                nodeContent.lock(true, true); // blocks the nodeContent for all
             }
             else
             {
@@ -175,8 +174,6 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                         {
                             mimeType = DEFAULT_MIME_TYPE;
                         }
-                        
-                        
                         Node resNode = nodeContent.getNode("jcr:content");
                         resNode.setProperty("jcr:mimeType", mimeType);
                         resNode.setProperty("jcr:encoding", "");
@@ -184,9 +181,8 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                         resNode.getProperty("jcr:data").setValue(in);
                         Calendar lastModified = Calendar.getInstance();
                         lastModified.setTimeInMillis(System.currentTimeMillis());
-                        resNode.setProperty("jcr:lastModified", lastModified);
-                        session.save();                        
-                    }                    
+                        resNode.setProperty("jcr:lastModified", lastModified);                                            
+                    }
                     session.save();
                 }
                 catch (RepositoryException e)
@@ -197,6 +193,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 finally
                 {
                     Version version = nodeContent.checkin();
+                    nodeContent.unlock();
                     log.debug("version created " + version.getName());
                     session.save();
                     return version.getName();
