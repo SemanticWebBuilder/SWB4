@@ -809,11 +809,7 @@ public class SimpleNode implements Node
                         node.setProperty(semanticProperty, prop.getStream());
                     }
                     else
-                    {
-                        if(prop.getString()==null)
-                        {
-                            System.out.println(prop.getString());
-                        }
+                    {                        
                         node.setProperty(semanticProperty, prop.getString());
                     }
                 }
@@ -896,8 +892,17 @@ public class SimpleNode implements Node
         checkRequiredProperties();
         for(SimpleNode child : childs.values())
         {
-            child.checkRequiredProperties();
+            child.checkRequiredProperties();            
         }
+    }
+    public void checkVersionable() throws SWBException,RepositoryException
+    {
+
+        for(SimpleNode child : childs.values())
+        {
+            child.checkVersionable();
+        }
+        node.checkVersionable();
     }
     
     public void save() throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
@@ -912,6 +917,7 @@ public class SimpleNode implements Node
             removeChilds();
             createChilds();
             saveProperties();
+            checkVersionable();
             modified = false;
         }
         catch (SWBException swbe)
