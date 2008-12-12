@@ -4,6 +4,10 @@
  */
 package org.semanticwb.office.communication.office;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.HashSet;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -13,8 +17,10 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.office.comunication.OfficeApplication;
+import org.semanticwb.office.comunication.OfficeDocument;
 import org.semanticwb.office.interfaces.CategoryInfo;
 import org.semanticwb.office.interfaces.ContentType;
+import org.semanticwb.xmlrpc.Part;
 
 /**
  *
@@ -109,7 +115,7 @@ public class TestServices
     }
 
     @Test
-    //@Ignore
+    @Ignore
     public void createCategory()
     {
         OfficeApplication office = new OfficeApplication();
@@ -133,9 +139,46 @@ public class TestServices
         {
             for (ContentType type : office.getContentTypes(workspaceid))
             {
-                System.out.println("type: "+type.id);
-                System.out.println("title: "+type.title);
+                System.out.println("type: " + type.id);
+                System.out.println("title: " + type.title);
             }
+        }
+        catch (Exception e)
+        {
+            Assert.fail(e.getMessage());
+        }
+    }
+
+    @Test    
+    public void createContentTest()
+    {
+        OfficeDocument document = new OfficeDocument();
+        OfficeApplication office = new OfficeApplication();
+        try
+        {
+            String id = office.createCategory(workspaceid, "demo", "Categoria demo");
+            String categoryid = id;
+            String contentType = office.getContentTypes(workspaceid)[0].id;
+            HashSet<Part> parts=new HashSet<Part>();
+            File file=new File("C:\\temp\\demo.odt");
+            FileInputStream in=new FileInputStream(file);
+            byte[] buffer=new byte[2048];
+            int read=in.read(buffer);
+            ByteArrayOutputStream bin=new ByteArrayOutputStream();
+            while(read!=-1)
+            {
+                bin.write(buffer, 0, read);
+                read=in.read(buffer);
+            }
+            byte[] part=bin.toByteArray();
+            parts.add(new Part(part,file.getName(),file.getName()));
+            document.setParts(parts);
+            String contentid=document.publish("contentido2", "contenido de prueba", workspaceid, categoryid, "WORD", contentType);
+            System.out.println("Contenido creado con id="+contentid);
+            document.clearParts();
+            document.setParts(parts);
+            contentid=document.updateContent(workspaceid,contentid);
+            System.out.println("Contenido actualizado con id="+contentid);
         }
         catch (Exception e)
         {
