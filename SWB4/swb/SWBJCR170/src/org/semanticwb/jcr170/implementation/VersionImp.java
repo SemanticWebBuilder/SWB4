@@ -19,18 +19,20 @@ import org.semanticwb.repository.BaseNode;
 public class VersionImp extends SimpleNode implements Version
 {    
     private final BaseNode history;
-    VersionImp(BaseNode version,BaseNode history,SessionImp session,SimpleNode parent) throws RepositoryException
+    private final VersionHistoryImp historyNode;
+    VersionImp(BaseNode version,VersionHistoryImp historyNode,SessionImp session) throws RepositoryException
     {
-        super(version, session,parent,version.getId());
+        super(version, session,historyNode,version.getId());
         if(!version.isVersionNode())
         {
             throw new IllegalArgumentException("The node is not a version node");
         }
+        this.history=historyNode.node;
         if(!history.isVersionHistoryNode())
         {
             throw new IllegalArgumentException("The node is not a version history");
-        }        
-        this.history=history;
+        }
+        this.historyNode=historyNode;
         
     }
     public VersionHistory getContainingHistory() throws RepositoryException
@@ -57,7 +59,7 @@ public class VersionImp extends SimpleNode implements Version
             ArrayList<Version> versions=new ArrayList<Version>();
             for(BaseNode versionNode : node.getSuccessors())
             {
-                VersionImp version=new VersionImp(versionNode, history, session,this);
+                VersionImp version=new VersionImp(versionNode, historyNode, session);
                 versions.add(version);
             }
             return versions.toArray(new Version[versions.size()]);
@@ -75,7 +77,7 @@ public class VersionImp extends SimpleNode implements Version
             ArrayList<Version> versions=new ArrayList<Version>();
             for(BaseNode versionNode : node.getPredecessors())
             {
-                VersionImp version=new VersionImp(versionNode, history, session,this);
+                VersionImp version=new VersionImp(versionNode, historyNode, session);
                 versions.add(version);
             }
             return versions.toArray(new Version[versions.size()]);
