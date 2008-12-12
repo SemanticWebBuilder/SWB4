@@ -4,9 +4,7 @@
  */
 package org.semanticwb.repository;
 
-import org.semanticwb.repository.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import org.semanticwb.jcr170.implementation.RepositoryImp;
 import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
