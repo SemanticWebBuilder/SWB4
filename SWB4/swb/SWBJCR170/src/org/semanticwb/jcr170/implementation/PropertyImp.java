@@ -127,12 +127,19 @@ public final class PropertyImp implements Property
             {
                 throw new ValueFormatException("A value is " + PropertyType.nameFromValue(type) + " and the property is defined as " + PropertyType.nameFromValue(requiredType));
             }
-            for (Value ovalue : value)
+            this.values.clear();
+            if (getDefinition().isMultiple())
             {
-                this.values.clear();
-                this.values.add(ovalue);
-                isModified = true;
+                for (Value ovalue : value)
+                {
+                    this.values.add(ovalue);
+                }
             }
+            else
+            {
+                this.values.add(value[0]);
+            }
+            isModified = true;
         }
     }
 
@@ -151,7 +158,7 @@ public final class PropertyImp implements Property
 
     public void setValue(InputStream value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        throw new UnsupportedOperationException(NOT_SUPPORTED_YET);
+        setValue(factory.createValue(value));
     }
 
     public void setValue(long value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
@@ -187,7 +194,7 @@ public final class PropertyImp implements Property
             {
                 loadPropertiesFromDataBase();
             }
-            catch(SWBException swbe)
+            catch (SWBException swbe)
             {
                 throw new RepositoryException(swbe);
             }
@@ -207,17 +214,17 @@ public final class PropertyImp implements Property
             SemanticProperty property = node.getSemanticProperty(name, clazz);
             if (property.isDataTypeProperty())
             {
-                if(property.isBinary())
+                if (property.isBinary())
                 {
                     values.add(factory.createValue(node.getSemanticObject().getInputStreamProperty(property)));
                 }
                 else
                 {
-                Iterator<SemanticLiteral> literals = node.getSemanticObject().listLiteralProperties(property);
-                while (literals.hasNext())
-                {
-                    values.add(factory.createValue(literals.next().getString()));
-                }
+                    Iterator<SemanticLiteral> literals = node.getSemanticObject().listLiteralProperties(property);
+                    while (literals.hasNext())
+                    {
+                        values.add(factory.createValue(literals.next().getString()));
+                    }
                 }
             }
             else
@@ -237,7 +244,7 @@ public final class PropertyImp implements Property
             {
                 loadPropertiesFromDataBase();
             }
-            catch(SWBException e)
+            catch (SWBException e)
             {
                 throw new RepositoryException(e);
             }
@@ -415,7 +422,7 @@ public final class PropertyImp implements Property
         {
             loadPropertiesFromDataBase();
         }
-        catch(SWBException e)
+        catch (SWBException e)
         {
             throw new RepositoryException(e);
         }
