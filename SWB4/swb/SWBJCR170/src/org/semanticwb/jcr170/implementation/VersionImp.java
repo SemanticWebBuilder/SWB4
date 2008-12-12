@@ -37,7 +37,7 @@ public class VersionImp extends SimpleNode implements Version
     }
     public VersionHistory getContainingHistory() throws RepositoryException
     {        
-        return new VersionHistoryImp(history,session,this);
+        return historyNode;
     }
 
     public Calendar getCreated() throws RepositoryException
