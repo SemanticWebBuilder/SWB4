@@ -79,6 +79,7 @@ public class SimpleNode implements Node
     private final int index;
     protected final SimpleNode parent;
     protected final NodeDefinitionImp nodeDefinition;
+    protected VersionHistoryImp versionHistory = null;
 
     SimpleNode(SessionImp session, String name, SemanticClass clazz, SimpleNode parent, int index, String id) throws RepositoryException
     {
@@ -252,6 +253,17 @@ public class SimpleNode implements Node
                 catch (Exception e)
                 {
                 }
+            }
+        }
+        if (node.isVersionable())
+        {
+            try
+            {
+                versionHistory = new VersionHistoryImp(node.getHistoryNode(), session, this);
+            }
+            catch (SWBException e)
+            {
+                log.error(e);
             }
         }
 
@@ -1280,14 +1292,7 @@ public class SimpleNode implements Node
             BaseNode baseVersion = node.getBaseVersion();
             if (baseVersion != null)
             {
-                try
-                {
-                    return new VersionImp(baseVersion, node.getHistoryNode(), session, this);
-                }
-                catch (SWBException e)
-                {
-                    throw new RepositoryException(e);
-                }
+                return new VersionImp(baseVersion, versionHistory, session);
             }
         }
         throw new UnsupportedRepositoryOperationException("The node is new or is not versionable");
@@ -1420,7 +1425,7 @@ public class SimpleNode implements Node
             try
             {
                 BaseNode version = node.checkin();
-                return new VersionImp(version, node.getHistoryNode(), session, this);
+                return new VersionImp(version, this.versionHistory, session);
             }
             catch (SWBException e)
             {
