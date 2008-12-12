@@ -1,8 +1,8 @@
 <%@page contentType="text/html"%>
 <%@page pageEncoding="ISO-8859-1"%>
 <%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.portal.*,org.semanticwb.model.*,java.util.*,org.semanticwb.base.util.*"%>
-
 <%
+    String lang="es";
     response.setHeader("Cache-Control", "no-cache"); 
     response.setHeader("Pragma", "no-cache"); 
     String suri=request.getParameter("suri");
@@ -25,7 +25,7 @@
     }
 
     String smode=request.getParameter("smode");
-    out.println(smode+" "+Thread.currentThread().getName());
+    //out.println(smode+" "+Thread.currentThread().getName());
     SemanticOntology ont=SWBPlatform.getSemanticMgr().getOntology();
     if(suri==null) //es una creacion
     {
@@ -55,7 +55,9 @@
                 
                 out.println("<script type=\"text/javascript\">");
                 out.println("dijit.byId('swbDialog').hide();");
-                out.println("addNewTab('"+obj.getURI()+"','"+obj.getDisplayName()+"','"+SWBPlatform.getContextPath()+"/swbadmin/jsp/objectTab.jsp');");
+                out.println("reloadTreeNode();");
+                out.println("showStatus('"+obj.getSemanticClass().getDisplayName(lang)+" creado');");
+                out.println("addNewTab('"+obj.getURI()+"','"+obj.getDisplayName(lang)+"','"+SWBPlatform.getContextPath()+"/swbadmin/jsp/objectTab.jsp');");
                 out.println("</script>");
             }
         }
@@ -65,8 +67,15 @@
     {
         SemanticObject obj=ont.getSemanticObject(suri);
         SWBFormMgr frm=new SWBFormMgr(obj, null,SWBFormMgr.MODE_EDIT);
-        frm.setLang("es");
-        frm.processForm(request);
+        frm.setLang(lang);
+        if(smode!=null)
+        {
+            frm.processForm(request);
+            out.println("<script type=\"text/javascript\">");
+            out.println("updateTreeNode(treeStore,getItem(treeStore,'"+obj.getURI()+"'));");
+            out.println("showStatus('"+obj.getSemanticClass().getDisplayName(lang)+" actualizado');");
+            out.println("</script>");
+        }
         frm.setAction("/swb/swbadmin/jsp/SemObjectEditor.jsp");
         out.println(frm.renderForm());
      }

@@ -52,6 +52,8 @@
       dojo.require("dojo.data.ItemFileWriteStore");
       dojo.require("dojo.data.ItemFileReadStore");
 
+      dojo.require("dojo.fx");
+
       dojo.addOnLoad(function() {
 
           var start = new Date().getTime();
@@ -169,6 +171,11 @@
 
       function submitForm(formid)
       {
+          try
+          {
+            //dojo.fadeOut({node: formid, duration: 1000}).play();
+            dojo.fx.wipeOut({node: formid, duration: 1000}).play();
+          }catch(noe){}
           var obj=dojo.byId(formid);
           var objd=dijit.byId(formid);
           var fid=formid;
@@ -194,7 +201,8 @@
                   form: fid,
 
                   // Loads this function if everything went ok
-                  load: function (data) {
+                  load: function (data)
+                  {
                           var panel=getContentPanel(obj);
                           //alert("div:"+panel.id);
                           if(panel)
@@ -458,7 +466,7 @@
      {
          var ele=dijit.byId('status');
          ele.setContent(msg);
-         //ele.innerHTML=msg;
+         ele.innerHTML=msg;
          sy=ini;
          si=2;
          scroll();
