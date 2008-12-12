@@ -8,7 +8,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class TemplateRefBase extends Reference implements Deleteable,Activeable,Priorityable
+public class TemplateRefBase extends Reference implements Priorityable,Activeable,Deleteable
 {
 
     public TemplateRefBase(SemanticObject base)
