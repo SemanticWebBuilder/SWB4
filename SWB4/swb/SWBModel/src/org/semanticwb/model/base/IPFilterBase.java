@@ -13,7 +13,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class IPFilterBase extends GenericObjectBase implements Traceable,Descriptiveable,Activeable
+public class IPFilterBase extends GenericObjectBase implements Activeable,Descriptiveable,Traceable
 {
     public static SWBVocabulary vocabulary=SWBContext.getVocabulary();
 

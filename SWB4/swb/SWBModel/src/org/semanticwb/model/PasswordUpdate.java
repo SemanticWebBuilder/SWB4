@@ -13,23 +13,7 @@ public class PasswordUpdate extends PasswordUpdateBase
     }
 
     @Override
-    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
-    {
-        String value=request.getParameter(prop.getName());
-        if(value!=null)
-        {
-            if(value.length()>0)
-            {
-                obj.setProperty(prop, value);
-            }else
-            {
-                obj.removeProperty(prop);
-            }
-        }
-    }
-
-    @Override
-    public String render(SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) {
+    public String renderElement(SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) {
         if(obj==null)obj=new SemanticObject();
         String ret="";
         if(type.endsWith("iphone"))
@@ -53,13 +37,12 @@ public class PasswordUpdate extends PasswordUpdateBase
         String name=prop.getName();
         String label=prop.getDisplayName(lang);
         SemanticObject sobj=prop.getDisplayProperty();
-        boolean required=false;
+        boolean required=prop.isRequired();
         String pmsg=null;
         String imsg=null;
         if(sobj!=null)
         {
             DisplayProperty dobj=new DisplayProperty(sobj);
-            required=dobj.isRequired();
             pmsg=dobj.getPromptMessage();
             imsg=dobj.getInvalidMessage();
         }
@@ -85,33 +68,19 @@ public class PasswordUpdate extends PasswordUpdateBase
             }
         }
 
-        String reqtxt=" &nbsp;";
-        if(required)reqtxt=" <em>*</em>";
-
         String value=obj.getProperty(prop);
         if(value==null)value="";
         if(mode.equals("edit") || mode.equals("create") )
         {
-            ret="<label for=\""+name+"\">"+label
-                + reqtxt
-                + "</label> <input name=\""+name+"\" type=\"password\" >"
-                ;
+            ret="<input name=\""+name+"\" type=\"password\" >";
         }else if(mode.equals("view"))
         {
-            ret="<label for=\""+name+"\">"+label
-                + reqtxt
-                + "</label>"
-                + " <span _id=\""+name+"\" name=\""+name+"\">"+value+"</span>";
+            ret="<span _id=\""+name+"\" name=\""+name+"\">"+value+"</span>";
         }
 
         return ret;
     }
 
-
-    @Override
-    public void validate(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) throws FormValidateException {
-        super.validate(request, obj, prop, type, mode, lang);
-    }
 
 
 }
