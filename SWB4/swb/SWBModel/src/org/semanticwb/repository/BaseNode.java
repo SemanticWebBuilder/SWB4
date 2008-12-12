@@ -124,7 +124,7 @@ public class BaseNode extends BaseNodeBase
         return value;
     }
 
-    public void save() throws SWBException
+    /*public void save() throws SWBException
     {
         GenericIterator<BaseNode> childs = listNodes();
         while (childs.hasNext())
@@ -136,7 +136,7 @@ public class BaseNode extends BaseNodeBase
         checkSave();
 
 
-    }
+    }*/
 
     public boolean isNodeType(SemanticClass clazz)
     {
@@ -448,98 +448,6 @@ public class BaseNode extends BaseNodeBase
         return canAddMixin;
     }
 
-    public void checkRequiredProperties() throws SWBException
-    {
-        Iterator<SemanticClass> classes = getSemanticObject().listSemanticClasses();
-        while (classes.hasNext())
-        {
-            SemanticClass clazz = classes.next();
-            Iterator<SemanticProperty> properties = clazz.listProperties();
-            while (properties.hasNext())
-            {
-                SemanticProperty property = properties.next();
-                if (isMandatory(property))
-                {
-                    if (property.isObjectProperty())
-                    {
-                        SemanticObject objectValue = getSemanticObject().getObjectProperty(property, null);
-                        if (objectValue == null)
-                        {
-                            throw new SWBException("The value for the property " + property.getPrefix() + ":" + property.getName() + " is null for the node " + this.getName() + " of type " + this.getSemanticObject().getSemanticClass().getPrefix() + ":" + this.getSemanticObject().getSemanticClass().getName());
-                        }
-                        else
-                        {
-                            BaseNode nodeChild = new BaseNode(objectValue);
-                            nodeChild.checkRequiredProperties();
-                        }
-                    }
-                    else
-                    {
-                        String value = getPropertyInternal(property, null);
-                        if (value == null)
-                        {
-                            throw new SWBException("The value for the property " + property.getPrefix() + ":" + property.getName() + " is null for the node " + this.getName() + " of type " + this.getSemanticObject().getSemanticClass().getPrefix() + ":" + this.getSemanticObject().getSemanticClass().getName());
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    public void checkSave() throws SWBException
-    {
-        checkRequiredProperties();
-        checkRequiredNodes();
-
-    }
-
-    private void checkRequiredNodes() throws SWBException
-    {
-        for (SemanticObject childDefinition : getChildNodeDefinition(this.getSemanticObject().getSemanticClass()))
-        {
-            String value = childDefinition.getProperty(vocabulary.jcr_mandatory);
-            if (value != null)
-            {
-                boolean mandatory = Boolean.parseBoolean(value);
-                if (mandatory)
-                {
-                    String name = childDefinition.getProperty(vocabulary.jcr_name);
-                    if (name != null && !name.equals("*"))
-                    {
-                        BaseNode node = findNode(name);
-                        if (node == null)
-                        {
-                            throw new SWBException("The node with name " + name + WAS_NOT_FOUND + " and is required by the node " + this.getName());
-                        }
-                    }
-                }
-            }
-        }
-        GenericIterator<BaseNode> nodes = listNodes();
-        while (nodes.hasNext())
-        {
-            BaseNode node = nodes.next();
-            node.checkRequiredNodes();
-        }
-    }
-
-    private BaseNode findNode(String name)
-    {
-        BaseNode findNode = null;
-        GenericIterator<BaseNode> nodes = listNodes();
-        while (nodes.hasNext())
-        {
-            BaseNode node = nodes.next();
-            String nodeName = node.getName();
-            if (nodeName != null && nodeName.equals(name))
-            {
-                findNode = node;
-                break;
-            }
-        }
-        return findNode;
-    }
-
     private void setPropertyInternal(SemanticProperty property, String value)
     {
         if (value == null)
@@ -762,6 +670,27 @@ public class BaseNode extends BaseNodeBase
             isProtected = false;
         }
         return isProtected;
+    }
+    public SemanticObject getChildNodeDefinition(SemanticClass clazz,String nodeName)
+    {
+        SemanticObject getChildNodeDefinition=null;
+        for (SemanticObject nodeDefinition : getChildNodeDefinition(clazz))
+        {
+            String name = nodeDefinition.getProperty(vocabulary.jcr_name);
+            if (name.equals(nodeName))
+            {
+                return nodeDefinition;
+            }
+        }
+        for (SemanticObject nodeDefinition : getChildNodeDefinition(clazz))
+        {
+            String name = nodeDefinition.getProperty(vocabulary.jcr_name);
+            if (name.equals("*"))
+            {
+                return nodeDefinition;
+            }
+        }
+        return getChildNodeDefinition;
     }
 
     public final boolean allowsSameNameSiblings(SemanticClass clazz, SemanticClass clazzToCreate, String nameTocreate)
@@ -1221,7 +1150,7 @@ public class BaseNode extends BaseNodeBase
         if (this.isVersionable() && isChekedOut())
         {
             SemanticProperty isCheckoutPropety = vocabulary.jcr_isCheckedOut;
-            setPropertyInternal(isCheckoutPropety, null);
+            setPropertyInternal(isCheckoutPropety, "false");
             BaseNode versionNode = addVersionToHistoryNode();
             return versionNode;
         }
