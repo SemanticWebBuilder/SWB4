@@ -111,8 +111,12 @@ form.swbform legend {
     padding-left: 0;
     _margin: 0 -7px; /* IE Win */
 	}
-	
-form.swbform label {
+
+form.swbform table {
+    width: 100%;
+    }
+
+form.swbform label_ {
 	display: inline-block;
 	line-height: 1.8;
 	_vertical-align: top;
