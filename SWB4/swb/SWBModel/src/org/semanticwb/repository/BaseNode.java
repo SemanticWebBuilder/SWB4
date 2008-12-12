@@ -1105,7 +1105,7 @@ public class BaseNode extends BaseNodeBase
         {
             SemanticProperty property = vocabulary.jcr_versionHistory;
             String path = this.getPath() + "/" + property.getPrefix() + ":" + property.getName();
-            BaseNode historyNode = addNodeToProperty(property, vocabulary.nt_VersionHistory, UUID.randomUUID().toString(), path);
+            BaseNode historyNode = addNodeToProperty(property, vocabulary.nt_VersionHistory, "jcr:versionHistory", path);
             historyNode.setPropertyInternal(vocabulary.jcr_uuid, UUID.randomUUID().toString());
             addRootNodeToHistory(historyNode);
         }
