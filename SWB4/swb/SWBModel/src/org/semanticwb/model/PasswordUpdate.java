@@ -94,9 +94,8 @@ public class PasswordUpdate extends PasswordUpdateBase
         {
             ret="<label for=\""+name+"\">"+label
                 + reqtxt
-                + "</label> <textarea name=\""+name+"\" dojoType_=\"dijit.Editor\" >"
-                + value
-                + "</textarea>";
+                + "</label> <input name=\""+name+"\" type=\"password\" >"
+                ;
         }else if(mode.equals("view"))
         {
             ret="<label for=\""+name+"\">"+label
