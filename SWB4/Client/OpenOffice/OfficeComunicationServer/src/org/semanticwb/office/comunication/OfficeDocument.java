@@ -237,10 +237,12 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                                             if (isRootBefore)
                                             {
                                                 upperVersion.remove();
+                                                history.save();
                                                 break;
                                             }
 
                                         }
+
                                         versions = history.getAllVersions();
                                         dif = versions.getSize() - numberOfVersions;
                                     }
