@@ -156,7 +156,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             Node nodeContent = session.getNodeByUUID(contentId);
             if (!nodeContent.isLocked())
             {
-                nodeContent.lock(true, true); // blocks the nodeContent for all
+                nodeContent.lock(false, false); // blocks the nodeContent for all
             }
             else
             {
@@ -169,10 +169,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 {   
                     for (Part part : parts)
                     {
-                        String mimeType = this.config.getServletContext().getMimeType(part.getName());
-                        if (mimeType == null)
+                        String mimeType=DEFAULT_MIME_TYPE;
+                        if(this.config!=null && this.config.getServletContext()!=null)
                         {
-                            mimeType = DEFAULT_MIME_TYPE;
+                            mimeType = this.config.getServletContext().getMimeType(part.getName());
+                        }
+                        if(mimeType==null)
+                        {
+                            mimeType=DEFAULT_MIME_TYPE;
                         }
                         Node resNode = nodeContent.getNode("jcr:content");
                         resNode.setProperty("jcr:mimeType", mimeType);
