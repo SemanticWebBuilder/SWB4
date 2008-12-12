@@ -26,7 +26,7 @@ public class RepositoryManagerLoader
     private RepositoryManagerLoader()
     {
         log.event("Initializing RepositoryManagerLoader ...");
-        String repConfig = SWBPlatform.getEnv("swb/repositoryManager", "");
+        String repConfig = SWBPlatform.getEnv("swbrep/repositoryManager", "");
         String[] repositoriesClasess = repConfig.split(",");
         for (String clazz : repositoriesClasess)
         {
