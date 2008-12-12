@@ -602,7 +602,11 @@ public class SessionImp implements Session
 
     void addLockSession(LockImp lock)
     {
-        locksSessions.put(lock.getNode(), lock);
+        if(lock!=null)
+        {
+            locksSessions.put(lock.getNode(), lock);
+        }
+        
     }
 
     void removeLockSession(LockImp lock)
