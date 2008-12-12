@@ -57,7 +57,7 @@ public class VersionHistoryImp extends SimpleNode implements VersionHistory
             BaseNode child=nodes.next();
             if(child.getName().equals("jcr:rootVersion"))
             {
-                return new VersionImp(child, node, session, parent);
+                return new VersionImp(child, this, session);
             }
         }
         throw new RepositoryException("The root version was not found");
@@ -83,7 +83,7 @@ public class VersionHistoryImp extends SimpleNode implements VersionHistory
             BaseNode child=nodes.next();
             if(child.getName().equals(name) && child.getSemanticObject().getSemanticClass().equals(BaseNode.vocabulary.nt_Version))
             {
-                return new VersionImp(child, node, session, parent);
+                return new VersionImp(child, this, session);
             }
         }
         throw new RepositoryException("The version "+ name +" was not found");
