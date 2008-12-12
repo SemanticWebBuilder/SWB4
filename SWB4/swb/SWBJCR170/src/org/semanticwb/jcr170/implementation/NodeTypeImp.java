@@ -99,7 +99,7 @@ public class NodeTypeImp implements NodeType
         ArrayList<NodeDefinitionImp> definitions = new ArrayList<NodeDefinitionImp>();
         for ( SemanticObject object : session.getRootBaseNode().getChildNodeDefinition(clazz) )
         {
-            definitions.add(new NodeDefinitionImp(object));
+            definitions.add(new NodeDefinitionImp(object,session));
         }
         return definitions.toArray(new NodeDefinitionImp[definitions.size()]);
     }
