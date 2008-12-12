@@ -18,8 +18,12 @@ import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.lock.LockException;
 import javax.jcr.version.Version;
+import javax.jcr.version.VersionHistory;
+import javax.jcr.version.VersionIterator;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.base.util.SWBProperties;
 import org.semanticwb.office.interfaces.IOfficeDocument;
 import org.semanticwb.repository.RepositoryManagerLoader;
 import org.semanticwb.xmlrpc.Part;
@@ -60,18 +64,18 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 contentNode.setProperty(cm_title, title);
                 String cm_type = loader.getOfficeManager(repositoryName).getPropertyType();
                 contentNode.setProperty(cm_type, type);
-                contentNode.setProperty(cm_description, description);                                
+                contentNode.setProperty(cm_description, description);
                 for (Part part : parts)
                 {
                     String mimeType = DEFAULT_MIME_TYPE;
-                    if (config!=null && config.getServletContext() != null)
+                    if (config != null && config.getServletContext() != null)
                     {
                         mimeType = config.getServletContext().getMimeType(part.getName());
                         if (mimeType == null)
                         {
                             mimeType = DEFAULT_MIME_TYPE;
                         }
-                    }                    
+                    }
                     Node resNode = contentNode.addNode("jcr:content", "nt:resource");
                     resNode.setProperty("jcr:mimeType", mimeType);
                     resNode.setProperty("jcr:encoding", "");
@@ -81,10 +85,10 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     Calendar lastModified = Calendar.getInstance();
                     lastModified.setTimeInMillis(System.currentTimeMillis());
                     resNode.setProperty("jcr:lastModified", lastModified);
-                    categoryNode.save();                                                            
-                }                
-                Version version=contentNode.checkin();
-                log.debug("Version created with number "+version.getName());
+                    categoryNode.save();
+                }
+                Version version = contentNode.checkin();
+                log.debug("Version created with number " + version.getName());
                 return contentNode.getUUID();
             }
             catch (ItemExistsException e)
@@ -147,7 +151,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @return The version name created
      * @throws java.lang.Exception
      */
-    public String updateContent(String repositoryName,String contentId) throws Exception
+    public String updateContent(String repositoryName, String contentId) throws Exception
     {
         Session session = null;
         try
@@ -166,17 +170,17 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             {
                 nodeContent.checkout();
                 try
-                {   
+                {
                     for (Part part : parts)
                     {
-                        String mimeType=DEFAULT_MIME_TYPE;
-                        if(this.config!=null && this.config.getServletContext()!=null)
+                        String mimeType = DEFAULT_MIME_TYPE;
+                        if (this.config != null && this.config.getServletContext() != null)
                         {
                             mimeType = this.config.getServletContext().getMimeType(part.getName());
                         }
-                        if(mimeType==null)
+                        if (mimeType == null)
                         {
-                            mimeType=DEFAULT_MIME_TYPE;
+                            mimeType = DEFAULT_MIME_TYPE;
                         }
                         Node resNode = nodeContent.getNode("jcr:content");
                         resNode.setProperty("jcr:mimeType", mimeType);
@@ -185,7 +189,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                         resNode.getProperty("jcr:data").setValue(in);
                         Calendar lastModified = Calendar.getInstance();
                         lastModified.setTimeInMillis(System.currentTimeMillis());
-                        resNode.setProperty("jcr:lastModified", lastModified);                                            
+                        resNode.setProperty("jcr:lastModified", lastModified);
                     }
                     session.save();
                 }
@@ -197,6 +201,59 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 finally
                 {
                     Version version = nodeContent.checkin();
+                    String snumberOfVersions = SWBPlatform.getEnv("swbrep/maxNumberOfVersions");
+                    if (snumberOfVersions != null && !snumberOfVersions.trim().equals(""))
+                    {
+                        try
+                        {
+                            // debe haber una más por la versión raiz
+                            long numberOfVersions = Long.parseLong(snumberOfVersions);
+                            if (numberOfVersions <= 0)
+                            {
+                                log.error("The configuration of swb/numberOfVersions is invalid, the value must be greater than 0, the value will be omited");                                
+                            }
+                            else
+                            {
+                                numberOfVersions++;
+                                VersionHistory history = nodeContent.getVersionHistory();
+                                VersionIterator versions = history.getAllVersions();
+                                if (versions.getSize() > numberOfVersions)
+                                {
+                                    long dif = versions.getSize() - numberOfVersions;
+                                    Version root = history.getRootVersion();
+                                    while (dif != 0)
+                                    {
+                                        for (Version upperVersion : root.getSuccessors())
+                                        {
+                                            boolean isRootBefore = false;
+                                            for (Version lowerVersion : upperVersion.getPredecessors())
+                                            {
+                                                if (lowerVersion.getName().equals(root.getName()))
+                                                {
+                                                    isRootBefore = true;
+                                                    break;
+                                                }
+                                            }
+                                            if (isRootBefore)
+                                            {
+                                                upperVersion.remove();
+                                                break;
+                                            }
+
+                                        }
+                                        versions = history.getAllVersions();
+                                        dif = versions.getSize() - numberOfVersions;
+                                    }
+
+                                }
+                            }
+                        }
+                        catch (NumberFormatException nfe)
+                        {
+                            log.error(nfe);
+                        }
+                    }
+
                     nodeContent.unlock();
                     log.debug("version created " + version.getName());
                     session.save();
