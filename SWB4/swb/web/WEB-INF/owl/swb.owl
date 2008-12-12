@@ -890,6 +890,7 @@
     <rdfs:range rdf:resource="#Class"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="userGroup">
+    <rdfs:label>Group</rdfs:label>
     <rdfs:domain rdf:resource="#User"/>
     <rdfs:range rdf:resource="#UserGroup"/>
     <owl:inverseOf rdf:resource="#hasGroupedUser"/>
@@ -1544,6 +1545,7 @@
     </swb:displayProperty>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="usrLanguage">
+    <rdfs:label>Language</rdfs:label>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#User"/>
     <swb:displayProperty>
