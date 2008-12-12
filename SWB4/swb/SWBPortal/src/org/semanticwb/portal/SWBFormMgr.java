@@ -96,13 +96,12 @@ public class SWBFormMgr
         SemanticObject obj=prop.getDisplayProperty();
         String grp=null;
         boolean hidden=false;
-        boolean required=false;
+        boolean required=prop.isRequired();
         if(obj!=null)
         {
             DisplayProperty disp=new DisplayProperty(obj);       
             grp=disp.getGroup();
             hidden=disp.isHidden();
-            required=disp.isRequired();
         }
 
         if(grp==null)grp="General";
@@ -259,22 +258,30 @@ public class SWBFormMgr
         if(!m_mode.equals(MODE_CREATE))
         {
             ret.append("	<fieldset>");
-            ret.append("	    <ol>");
-            ret.append("            <li>");
-            ret.append("                <label>Identificador &nbsp;</label> <span>"+m_obj.getId()+"</span>");
-            ret.append("            </li>");
-            ret.append("	    </ol>");
+//            ret.append("	    <ol>");
+//            ret.append("            <li>");
+            ret.append("	    <table><tr><td>");
+            ret.append("                <label>Identificador</label>");
+            //ret.append("        </td><td>");
+            ret.append("                <span>"+m_obj.getId()+"</span>");
+            ret.append("	    </td></tr></table>");
+//            ret.append("            </li>");
+//            ret.append("	    </ol>");
             ret.append("	</fieldset>");
         }
 
         if(m_mode.equals(MODE_CREATE) && !m_cls.isAutogenId())
         {
             ret.append("	<fieldset>");
-            ret.append("	    <ol>");
-            ret.append("            <li>");
-            ret.append("                <label>Identificador <em>*</em></label> <input type=\"text\" name=\""+PRM_ID+"\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura Identificador.\" invalidMessage=\"Identificador es requerido.\" trim=\"true\"/>");
-            ret.append("            </li>");
-            ret.append("	    </ol>");
+//            ret.append("	    <ol>");
+//            ret.append("            <li>");
+            ret.append("	    <table><tr><td>");
+            ret.append("                <label>Identificador <em>*</em></label>");
+            //ret.append("        </td><td>");
+            ret.append("                <input type=\"text\" name=\""+PRM_ID+"\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura Identificador.\" invalidMessage=\"Identificador es requerido.\" trim=\"true\"/>");
+            ret.append("	    </td></tr></table>");
+//            ret.append("            </li>");
+//            ret.append("	    </ol>");
             ret.append("	</fieldset>");
         }
 //        else
@@ -285,36 +292,44 @@ public class SWBFormMgr
                 String group=itgp.next();
                 ret.append("	<fieldset>");
                 ret.append("	    <legend>"+group+"</legend>");
-                ret.append("	    <ol>");
-    //            ret.append("	    <table border=\"1\" width=\"100%\">");
+                //ret.append("	    <ol>");
+                ret.append("	    <table>");
                 Iterator<SemanticProperty> it=groups.get(group).iterator();
                 while(it.hasNext())
                 {
                     SemanticProperty prop=it.next();
-                    String code=null;
+                    String label=null;
+                    String element=null;
+                    FormElement ele=getFormElement(prop);
                     if(m_propmap!=null)
                     {
-                        code=renderElement(prop,m_propmap.get(prop));
+                        label=ele.renderLabel(m_obj, prop, m_type, m_propmap.get(prop), m_lang);
+                        element=ele.renderElement(m_obj, prop, m_type, m_propmap.get(prop), m_lang);
                     }else
                     {
-                        code=renderElement(prop,m_mode);
+                        label=ele.renderLabel(m_obj, prop, m_type, m_mode, m_lang);
+                        element=ele.renderElement(m_obj, prop, m_type, m_mode, m_lang);
                     }
-                    if(code!=null && code.length()>0)
+                    if(element!=null && element.length()>0)
                     {
-                        ret.append("<li>");
-    //                    ret.append("<tr><td>");
-                        ret.append(code);
-    //                    ret.append("</td></tr>");
-                        ret.append("</li>");
+                        //ret.append("<li>");
+                        ret.append("<tr><td>");
+                        //ret.append("<span>");
+                        ret.append(label);
+                        ret.append("</td><td>");
+                        ret.append(element);
+                        //ret.append("</span><br/>");
+                        ret.append("</td></tr>");
+                        //ret.append("</li>");
                     }
                 }
-                //ret.append("	    </table>");
-                ret.append("	    </ol>");
+                ret.append("	    </table>");
+                //ret.append("	    </ol>");
                 ret.append("	</fieldset>");
             }
         }
 
-        ret.append("    <p><input type=\"submit\" dojoType=\"dijit.form.Button\" value=\"Actualizar\"/></p>");
+        ret.append("<button dojoType='dijit.form.Button' type=\"submit\">Guardar</button>");
         ret.append("</form>");
         return ret.toString();
     }    
@@ -352,12 +367,21 @@ public class SWBFormMgr
         ele.process(request, m_obj, prop, m_type, mode, m_lang);
     }
     
+    public String renderLabel(SemanticProperty prop, String mode)
+    {
+        String ret=null;
+        //System.out.println("prop:"+prop+" mode:"+mode);
+        FormElement ele=getFormElement(prop);
+        ret=ele.renderLabel(m_obj, prop, m_type, mode, m_lang);
+        return ret;
+    }
+
     public String renderElement(SemanticProperty prop, String mode)
     {
         String ret=null;
         //System.out.println("prop:"+prop+" mode:"+mode);
         FormElement ele=getFormElement(prop);
-        ret=ele.render(m_obj, prop, m_type, mode, m_lang);
+        ret=ele.renderElement(m_obj, prop, m_type, mode, m_lang);
         return ret;
     }
     

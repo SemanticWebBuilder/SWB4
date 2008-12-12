@@ -16,6 +16,7 @@ import org.semanticwb.model.PortletType;
 import org.semanticwb.model.Portlet;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.Template;
+import org.semanticwb.model.TemplateGroup;
 import org.semanticwb.model.TemplateRef;
 import org.semanticwb.model.UserRepository;
 import org.semanticwb.model.User;
@@ -109,9 +110,12 @@ public class TestWebSite {
             Dns dns=global.getDns("localhost");
             dns.setWebPage(home);
 
+            TemplateGroup grp=site.createTemplateGroup();
+
             Template tpl=site.createTemplate();
             tpl.setActive(true);
             tpl.setTitle("Platilla1");
+            tpl.setGroup(grp);
             
             VersionInfo version=site.createVersionInfo();
             version.setVersionNumber(1);
@@ -181,7 +185,6 @@ public class TestWebSite {
         
         if(site.getPortletType("Test")==null)
         {
-            
             PortletType ptype=site.createPortletType("Test");
             ptype.setPortletClassName("org.semanticwb.portal.resources.Test");
             ptype.setPortletBundle("org.semanticwb.portal.resources.Test");
@@ -195,12 +198,10 @@ public class TestWebSite {
             portlet.setTitle("Test");
             
             home.addPortlet(portlet);            
-            
         }
         
         if(site.getPortletType("Banner")==null)
         {
-            
             PortletType ptype=site.createPortletType("Banner");
             ptype.setPortletClassName("org.semanticwb.portal.resources.Banner");
             ptype.setPortletBundle("org.semanticwb.portal.resources.Banner");
@@ -515,33 +516,37 @@ public class TestWebSite {
     public void Test4()
     {
         WebSite site=SWBContext.getWebSite("sep");
-        site.setActive(true);
-        WebPage wp=site.getHomePage();
-        wp.setActive(true);
-        UserRepository urep=SWBContext.getDefaultRepository();
-        site.setUserRepository(urep);
-        User user=urep.getUser("1");
-        site.setModifiedBy(user);
+//        site.setActive(true);
+//        WebPage wp=site.getHomePage();
+//        wp.setActive(true);
+//        UserRepository urep=SWBContext.getDefaultRepository();
+//        site.setUserRepository(urep);
+//        User user=urep.getUser("1");
+//        site.setModifiedBy(user);
         Template tpl = site.getTemplate("1");
+        TemplateGroup grp=site.createTemplateGroup();
+        tpl.setGroup(grp);
+
         
-        if(tpl==null)
-        {
-            tpl=site.createTemplate();
-            tpl.setTitle("Platilla1");
-            VersionInfo version=site.createVersionInfo();
-            version.setVersionNumber(1);
-            version.setVersionFile("template.html");
-            tpl.setActualVersion(version);
-            tpl.setLastVersion(version);
-        }
-        tpl.setActive(true);
-        TemplateRef tplref=site.createTemplateRef();
-        tplref.setTemplate(tpl);
-        tplref.setActive(true);
-        tplref.setPriority(3);
-        tplref.setActive(true);
-        wp.addTemplateRef(tplref);
-        site.setUpdated(new java.util.Date(System.currentTimeMillis()));  
+//        if(tpl==null)
+//        {
+//            tpl=site.createTemplate();
+//            tpl.setTitle("Platilla1");
+//            VersionInfo version=site.createVersionInfo();
+//            version.setVersionNumber(1);
+//            version.setVersionFile("template.html");
+//            tpl.setActualVersion(version);
+//            tpl.setLastVersion(version);
+//        }
+//
+//        tpl.setActive(true);
+//        TemplateRef tplref=site.createTemplateRef();
+//        tplref.setTemplate(tpl);
+//        tplref.setActive(true);
+//        tplref.setPriority(3);
+//        tplref.setActive(true);
+//        wp.addTemplateRef(tplref);
+//        site.setUpdated(new java.util.Date(System.currentTimeMillis()));
     }
     
     //@Test
