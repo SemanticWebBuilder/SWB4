@@ -26,6 +26,7 @@ public class BaseNode extends BaseNodeBase
 
     static Logger log = SWBUtils.getLogger(BaseNode.class);
     private static final String JCR_FROZENNODE_NAME = "jcr:frozenNode";
+    private static final String JCR_ROOTVERSION = "jcr:rootVersion";
     private static final String JCR_VERSIONLABELS_NAME = "jcr:versionLabels";
     //private static final String JCR_VERSION_NAME = "jcr:version";
     private static final String ONPARENTVERSION_COPY = "COPY";
@@ -1016,13 +1017,13 @@ public class BaseNode extends BaseNodeBase
         }
     }
 
-    private void copyChildsTo(BaseNode node,BaseNode frozenNode) throws SWBException
+    private void copyChildsTo(BaseNode node, BaseNode frozenNode) throws SWBException
     {
         GenericIterator<BaseNode> nodes = node.listNodes();
         while (nodes.hasNext())
         {
             BaseNode childNode = nodes.next();
-            BaseNode frozenChild=frozenNode.createNodeBase(JCR_FROZENNODE_NAME, vocabulary.nt_FrozenNode);
+            BaseNode frozenChild = frozenNode.createNodeBase(JCR_FROZENNODE_NAME, vocabulary.nt_FrozenNode);
             childNode.copyPropertiesToFrozenNode(frozenChild);
         }
     }
@@ -1032,7 +1033,7 @@ public class BaseNode extends BaseNodeBase
         if (frozenNode.isFrozenNode())
         {
             checkAbort(frozenNode);
-            copyChildsTo(this,frozenNode);
+            copyChildsTo(this, frozenNode);
             Iterator<SemanticProperty> properties = this.getSemanticObject().getSemanticClass().listProperties();
             properties = this.getSemanticObject().getSemanticClass().listProperties();
             while (properties.hasNext())
@@ -1058,7 +1059,7 @@ public class BaseNode extends BaseNodeBase
                     }
                 }
             }
-            
+
         }
         else
         {
@@ -1090,7 +1091,7 @@ public class BaseNode extends BaseNodeBase
     {
         if (historyNode.isVersionHistoryNode())
         {
-            BaseNode ntVersion = historyNode.createNodeBase("0", vocabulary.nt_Version);
+            BaseNode ntVersion = historyNode.createNodeBase(JCR_ROOTVERSION, vocabulary.nt_Version);
             BaseNode versionLabels = historyNode.createNodeBase(JCR_VERSIONLABELS_NAME, vocabulary.nt_versionLabels);
             BaseNode ntFrozenNode = ntVersion.createNodeBase(JCR_FROZENNODE_NAME, vocabulary.nt_FrozenNode);
             addFrozenProperties(ntFrozenNode.getSemanticObject());
@@ -1112,12 +1113,24 @@ public class BaseNode extends BaseNodeBase
 
     public BaseNode[] getSuccessors() throws SWBException
     {
-        return null;
+        ArrayList<BaseNode> successors=new ArrayList<BaseNode>();
+        Iterator<SemanticObject> objs=this.getSemanticObject().listObjectProperties(vocabulary.jcr_successors);
+        while(objs.hasNext())
+        {
+            successors.add(new BaseNode(objs.next()));
+        }
+        return successors.toArray(new BaseNode[successors.size()]);
     }
 
     public BaseNode[] getPredecessors() throws SWBException
     {
-        return null;
+        ArrayList<BaseNode> predecessors=new ArrayList<BaseNode>();
+        Iterator<SemanticObject> objs=this.getSemanticObject().listObjectProperties(vocabulary.jcr_predecessors);
+        while(objs.hasNext())
+        {
+            predecessors.add(new BaseNode(objs.next()));
+        }
+        return predecessors.toArray(new BaseNode[predecessors.size()]);
     }
 
     public BaseNode getHistoryNode() throws SWBException
@@ -1192,7 +1205,7 @@ public class BaseNode extends BaseNodeBase
             SemanticProperty isCheckoutPropety = vocabulary.jcr_isCheckedOut;
             setPropertyInternal(isCheckoutPropety, "false");
             BaseNode versionNode = addVersionToHistoryNode();
-            log.debug("Version created "+versionNode.getName());
+            log.debug("Version created " + versionNode.getName());
             return versionNode;
         }
         else
@@ -1229,15 +1242,18 @@ public class BaseNode extends BaseNodeBase
             if (versionHistory != null)
             {
                 BaseNode[] predecessors = versionHistory.getVersions();
-                String nameBaseVersion=this.getBaseVersion().getName();
-                String nextVersion="0";
-                try
+                String nameBaseVersion = this.getBaseVersion().getName();
+                String nextVersion = "1";
+                if (!nameBaseVersion.equals(JCR_ROOTVERSION))
                 {
-                    nextVersion=String.valueOf(Integer.parseInt(nameBaseVersion)+1);
-                }
-                catch(NumberFormatException nfe)
-                {
-                    log.error(nfe);
+                    try
+                    {
+                        nextVersion = String.valueOf(Integer.parseInt(nameBaseVersion) + 1);
+                    }
+                    catch (NumberFormatException nfe)
+                    {
+                        log.error(nfe);
+                    }
                 }
                 BaseNode ntVersion = versionHistory.createNodeBase(nextVersion, vocabulary.nt_Version);
                 // TODO: DEBE AGREGAR REFERENCIA A LAS PREDECEDORAS, PERO FALTA METODO PARA AGREGAR
