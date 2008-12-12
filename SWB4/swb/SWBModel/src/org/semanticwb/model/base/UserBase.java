@@ -73,17 +73,17 @@ public class UserBase extends GenericObjectBase implements Roleable,Traceable,Ac
         getSemanticObject().setProperty(vocabulary.swb_usrEmail, usrEmail);
     }
 
-    public void setUserGroup(org.semanticwb.model.UserGroup usergroup)
+    public void setGroup(org.semanticwb.model.UserGroup usergroup)
     {
         getSemanticObject().setObjectProperty(vocabulary.swb_userGroup, usergroup.getSemanticObject());
     }
 
-    public void removeUserGroup()
+    public void removeGroup()
     {
         getSemanticObject().removeProperty(vocabulary.swb_userGroup);
     }
 
-    public UserGroup getUserGroup()
+    public UserGroup getGroup()
     {
          UserGroup ret=null;
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_userGroup);
@@ -114,12 +114,12 @@ public class UserBase extends GenericObjectBase implements Roleable,Traceable,Ac
         getSemanticObject().setProperty(vocabulary.swb_usrFirstName, usrFirstName);
     }
 
-    public String getUsrLanguage()
+    public String getLanguage()
     {
         return getSemanticObject().getProperty(vocabulary.swb_usrLanguage);
     }
 
-    public void setUsrLanguage(String usrLanguage)
+    public void setLanguage(String usrLanguage)
     {
         getSemanticObject().setProperty(vocabulary.swb_usrLanguage, usrLanguage);
     }
