@@ -1335,16 +1335,9 @@ public class SimpleNode implements Node
     {
         if (isVersionable() && node != null)
         {
-            try
-            {
-                return new VersionHistoryImp(node.getHistoryNode(), session, this);
-            }
-            catch (SWBException e)
-            {
-                throw new RepositoryException(e);
-            }
+            return versionHistory;
         }
-        throw new UnsupportedRepositoryOperationException(NOT_SUPPORTED_YET);
+        throw new UnsupportedRepositoryOperationException("The node is not versionable or is new");
     }
 
     public final int getIndex() throws RepositoryException
