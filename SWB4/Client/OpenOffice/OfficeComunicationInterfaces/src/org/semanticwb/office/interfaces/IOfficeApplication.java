@@ -53,4 +53,7 @@ public interface IOfficeApplication
 
     @XmlRpcMethod(methodName = "OfficeApplication.search")
     public ContentInfo[] search(String repositoryName, String title, String description, String category) throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeApplication.openContent")
+    public void openContent(String repositoryName,VersionInfo versioninfo) throws Exception;
 }
