@@ -26,5 +26,7 @@ public interface IOfficeDocument
     @XmlRpcMethod(methodName="OfficeDocument.updateContent")    
     public String updateContent(String repositoryName,String contentId) throws Exception;
     @XmlRpcMethod(methodName="OfficeDocument.setPagination")    
-    public void setPagination(String contentId) throws Exception;     
+    public void setPagination(String contentId) throws Exception;
+    @XmlRpcMethod(methodName="OfficeDocument.getVersions")
+    public VersionInfo[] getVersions(String repositoryName,String contentId) throws Exception;
 }
