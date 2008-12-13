@@ -38,7 +38,10 @@ public class TestServices
     @BeforeClass
     public static void setUpClass() throws Exception
     {
-        System.setProperty("swb.web." + "swb/repositoryManager", "org.semanticwb.repository.SWBRepositoryManager");
+        //swbrep/repositoryManager=org.semanticwb.repository.SWBRepositoryManager
+        //swbrep/numberOfVersions=2
+        System.setProperty("swb.web." + "swbrep/repositoryManager", "org.semanticwb.repository.SWBRepositoryManager");
+        System.setProperty("swb.web." + "swbrep/maxNumberOfVersions", "2");
         SWBPlatform.createInstance(null);
 
     }
@@ -175,13 +178,15 @@ public class TestServices
             document.setParts(parts);
             String contentid=document.publish("contentido2", "contenido de prueba", workspaceid, categoryid, "WORD", contentType);
             System.out.println("Contenido creado con id="+contentid);
-            document.clearParts();
-            document.setParts(parts);
-            contentid=document.updateContent(workspaceid,contentid);
-            System.out.println("Contenido actualizado con id="+contentid);
+            //document.clearParts();
+            //document.setParts(parts);
+            String versionName=document.updateContent(workspaceid,contentid);
+            System.out.println("Contenido actualizado con id "+contentid);
+            versionName=document.updateContent(workspaceid,contentid);
         }
         catch (Exception e)
         {
+            e.printStackTrace(System.out);
             Assert.fail(e.getMessage());
         }
     }
