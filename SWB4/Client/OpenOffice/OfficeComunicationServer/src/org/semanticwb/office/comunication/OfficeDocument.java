@@ -6,6 +6,7 @@ package org.semanticwb.office.comunication;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Calendar;
 import javax.jcr.ItemExistsException;
 import javax.jcr.ItemNotFoundException;
@@ -25,6 +26,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.SWBProperties;
 import org.semanticwb.office.interfaces.IOfficeDocument;
+import org.semanticwb.office.interfaces.VersionInfo;
 import org.semanticwb.repository.RepositoryManagerLoader;
 import org.semanticwb.xmlrpc.Part;
 import org.semanticwb.xmlrpc.XmlRpcObject;
@@ -133,18 +135,17 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
-    private static Node getNodeFromVersion(Version version) throws Exception
+    /*private static Node getNodeFromVersion(Version version) throws Exception
     {
-        NodeIterator frozenNodes = version.getNodes();
-        while (frozenNodes.hasNext())
-        {
-            Node frozenNode = frozenNodes.nextNode();
-            Node contentNode = frozenNode.getNodes().nextNode();
-            return contentNode;
-        }
-        throw new Exception("Node not found from a version");
+    NodeIterator frozenNodes = version.getNodes();
+    while (frozenNodes.hasNext())
+    {
+    Node frozenNode = frozenNodes.nextNode();
+    Node contentNode = frozenNode.getNodes().nextNode();
+    return contentNode;
     }
-
+    throw new Exception("Node not found from a version");
+    }*/
     /**
      * Update a Content
      * @param contentId ID of the content, the id is a UUID
@@ -210,7 +211,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                             long numberOfVersions = Long.parseLong(snumberOfVersions);
                             if (numberOfVersions <= 0)
                             {
-                                log.error("The configuration of swb/numberOfVersions is invalid, the value must be greater than 0, the value will be omited");                                
+                                log.error("The configuration of swb/numberOfVersions is invalid, the value must be greater than 0, the value will be omited");
                             }
                             else
                             {
@@ -338,6 +339,47 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 
     public void delete(String contentID)
     {
+    }
+
+    public VersionInfo[] getVersions(String repositoryName, String contentId) throws Exception
+    {
+        Session session = null;
+        ArrayList<VersionInfo> versions = new ArrayList<VersionInfo>();
+        try
+        {
+            session = loader.openSession(repositoryName, "", "");
+            Node nodeContent = session.getNodeByUUID(contentId);
+            if (!nodeContent.isLocked())
+            {
+                nodeContent.lock(false, false); // blocks the nodeContent for all
+            }
+            else
+            {
+                throw new Exception("The content is locked");
+            }
+            VersionIterator it=nodeContent.getVersionHistory().getAllVersions();
+            while(it.hasNext())
+            {
+                Version version=it.nextVersion();
+                VersionInfo info=new VersionInfo();
+                info.contentId=contentId;
+                info.nameOfVersion=version.getName();
+                versions.add(info);
+            }
+            nodeContent.unlock();
+        }
+        catch (ItemNotFoundException infe)
+        {
+            throw new Exception("El contenido no se encuentró en el repositorio.", infe);
+        }
+        finally
+        {
+            if (session != null)
+            {
+                session.logout();
+            }
+        }
+        return versions.toArray(new VersionInfo[versions.size()]);
     }
 }
 
