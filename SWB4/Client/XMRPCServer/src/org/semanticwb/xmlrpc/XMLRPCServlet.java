@@ -79,7 +79,7 @@ public abstract class XMLRPCServlet extends HttpServlet
                 Object[] parameters = deserializeRequest(xmlrpcDocument, methods);
                 Method method = getMethod(methodName, methods,parameters);
                 String objectName = method.getDeclaringClass().getName();
-                Object objResponse = execute(objectName, method, parameters, parts);
+                Object objResponse = execute(objectName, method, parameters, parts,request.getAttribute("user").toString(),request.getAttribute("password").toString());
                 Document docResponse = serializeResponse(objResponse);
                 sendResponse(response, docResponse);
 
@@ -128,12 +128,14 @@ public abstract class XMLRPCServlet extends HttpServlet
         }
     }
 
-    protected void beforeExecute(Object objToExecute, Set<Part> parts) throws Exception
+    protected void beforeExecute(Object objToExecute, Set<Part> parts,String user,String password) throws Exception
     {
         if (objToExecute instanceof XmlRpcObject)
         {
             XmlRpcObject xmlRpcObject = (XmlRpcObject) objToExecute;
             xmlRpcObject.init(this.getServletConfig());
+            xmlRpcObject.setUser(user);
+            xmlRpcObject.setUser(password);
             xmlRpcObject.setParts(parts);
         }
     }
@@ -186,7 +188,7 @@ public abstract class XMLRPCServlet extends HttpServlet
         return classFullPath;
     }
 
-    private Object execute(String objectName, Method method, Object[] parameters, Set<Part> parts) throws ClassNotFoundException, XmlRpcException, InstantiationException, IllegalAccessException, NoSuchMethodException
+    private Object execute(String objectName, Method method, Object[] parameters, Set<Part> parts,String user,String password) throws ClassNotFoundException, XmlRpcException, InstantiationException, IllegalAccessException, NoSuchMethodException
     {
         Class clazz = method.getDeclaringClass();
 
@@ -199,7 +201,7 @@ public abstract class XMLRPCServlet extends HttpServlet
         Object objToExecute = clazz.newInstance();
         try
         {
-            beforeExecute(objToExecute, parts);
+            beforeExecute(objToExecute, parts,user,password);
         }
         catch (Exception e)
         {
