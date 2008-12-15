@@ -20,6 +20,7 @@ import org.semanticwb.office.comunication.OfficeApplication;
 import org.semanticwb.office.comunication.OfficeDocument;
 import org.semanticwb.office.interfaces.CategoryInfo;
 import org.semanticwb.office.interfaces.ContentType;
+import org.semanticwb.office.interfaces.VersionInfo;
 import org.semanticwb.xmlrpc.Part;
 
 /**
@@ -176,13 +177,19 @@ public class TestServices
             byte[] part=bin.toByteArray();
             parts.add(new Part(part,file.getName(),file.getName()));
             document.setParts(parts);
-            String contentid=document.publish("contentido2", "contenido de prueba", workspaceid, categoryid, "WORD", contentType);
+            String contentid=document.publish("contentido2", "contenido de prueba", workspaceid, categoryid, "WORD", contentType,file.getName());
             System.out.println("Contenido creado con id="+contentid);
             //document.clearParts();
             //document.setParts(parts);
-            String versionName=document.updateContent(workspaceid,contentid);
-            System.out.println("Contenido actualizado con id "+contentid);
-            versionName=document.updateContent(workspaceid,contentid);
+            String versionName=document.updateContent(workspaceid,contentid,file.getName());
+
+            System.out.println("Contenido actualizado con version "+versionName);
+            versionName=document.updateContent(workspaceid,contentid,file.getName());
+            System.out.println("Contenido actualizado con version "+versionName);
+            for(VersionInfo info : document.getVersions(workspaceid, contentid))
+            {
+                System.out.println(info.nameOfVersion);
+            }
         }
         catch (Exception e)
         {
