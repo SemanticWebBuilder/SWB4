@@ -74,6 +74,8 @@ public class SessionImp implements Session
     private final String workspaceName;
     private final Hashtable<Node, LockImp> locksSessions = new Hashtable<Node, LockImp>();
     private SimpleLockUserComparator simpleLockUserComparator = new SimpleLockUserComparator();
+    private final Hashtable<String, SimpleNode> nodesByUUID = new Hashtable<String, SimpleNode>();
+    private final Hashtable<String, SimpleNode> nodes = new Hashtable<String, SimpleNode>();
     private final SimpleNode root;
 
     SessionImp(RepositoryImp repository, String workspaceName, SimpleCredentials credentials) throws RepositoryException
@@ -87,12 +89,22 @@ public class SessionImp implements Session
         this.credentials = credentials;
         this.workspace = new WorkspaceImp(this, workspaceName);
         BaseNode rootBaseNode = SWBContext.getWorkspace(this.workspace.getName()).getRoot();
-        root = new SimpleNode(rootBaseNode, this, null, rootBaseNode.getId());
+        root = new SimpleNode(rootBaseNode, this);
     }
 
     public SimpleNode getSimpleRootNode()
     {
         return root;
+    }
+
+    public SimpleNode getSimpleNodeByID(String id)
+    {
+        return nodes.get(id);
+    }
+
+    public boolean existSimpleNodeByID(String id)
+    {
+        return nodes.containsKey(id);
     }
 
     public Document getDocumentView() throws RepositoryException
@@ -132,7 +144,7 @@ public class SessionImp implements Session
             {
                 root
             };
-            
+
             ArrayList<SimpleNode> childNodes = new ArrayList<SimpleNode>();
             for (String value : values)
             {
@@ -602,11 +614,11 @@ public class SessionImp implements Session
 
     void addLockSession(LockImp lock)
     {
-        if(lock!=null)
+        if (lock != null)
         {
             locksSessions.put(lock.getNode(), lock);
         }
-        
+
     }
 
     void removeLockSession(LockImp lock)
@@ -662,26 +674,61 @@ public class SessionImp implements Session
         return root;
     }
 
+    void removeSimpleNode(SimpleNode node)
+    {
+        nodes.remove(node.getId());
+        try
+        {
+            String uudi = node.getUUID();
+            this.nodesByUUID.remove(uudi);
+        }
+        catch (Exception e)
+        {
+            log.debug(e);
+        }
+    }
+
+    void addSimpleNode(SimpleNode node)
+    {
+        nodes.put(node.getId(), node);
+        if (node.isVersionable())
+        {
+            try
+            {
+                String uudi = node.getUUID();
+                this.nodesByUUID.put(uudi, node);
+            }
+            catch (Exception e)
+            {
+                log.debug(e);
+            }
+        }
+    }
+
     public Node getNodeByUUID(String uuid) throws ItemNotFoundException, RepositoryException
     {
-        Iterator<SemanticObject> it = SWBContext.getWorkspace(workspaceName).getSemanticObject().getModel().listSubjects(BaseNode.vocabulary.jcr_uuid, uuid);
-        while (it.hasNext())
+        SimpleNode nodeToReturn = nodes.get(uuid);
+        if (nodeToReturn == null)
         {
-            String path = it.next().getProperty(BaseNode.vocabulary.swbrep_path);
-            for(SimpleNode node : this.getSimpleNodeByPath(path, root, true))
+
+            Iterator<SemanticObject> it = SWBContext.getWorkspace(workspaceName).getSemanticObject().getModel().listSubjects(BaseNode.vocabulary.jcr_uuid, uuid);
+            while (it.hasNext())
             {
-                if(node.getUUID().equals(uuid))
-                {
-                    return node;
-                }
+                SemanticObject obj=it.next();
+                BaseNode node=new BaseNode(obj);
+                return new SimpleNode(node, this);
             }
+        }
+        else
+        {
+            return nodeToReturn;
         }
         throw new ItemNotFoundException("The node with the uuid " + uuid + " was not found");
     }
 
     void checksLock(Node node) throws LockException, VersionException, RepositoryException
     {
-        if (node.isLocked() && node.getLock().getLockOwner()!=null  && !node.getLock().getLockOwner().equals(this.getUserID()))
+        if (node.isLocked() && node.getLock().getLockOwner() != null && !node.getLock().getLockOwner().equals(this.getUserID()))
         {
             throw new LockException("The node is locked by the user " + node.getLock().getLockOwner());
         }
