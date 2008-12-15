@@ -360,24 +360,12 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         {
             session = loader.openSession(repositoryName, "", "");
             String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
-            String cm_description = loader.getOfficeManager(repositoryName).getPropertyDescriptionType();            
+            String cm_description = loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
             Query query = null;
             if (session.getRepository().getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf("webbuilder") != -1)
             {
                 StringBuilder statement = new StringBuilder("SELECT ");
-
-                statement.append(" ?title ");
-                statement.append(" ?description ");
-                //statement.append(" ?uuid ");
-
-                if (!(type.equals("") || type.equals("*")))
-                {
-                    statement.append(" ?type ");
-                }
-
-
                 statement.append(" WHERE {");
-
                 statement.append(" ?x " + cm_title + " ?title . ");
                 if (!(title.equals("") || title.equals("*")))
                 {
@@ -394,8 +382,6 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                 {
                     statement.append(" FILTER regex(?type, \"" + type + "\") ");
                 }
-                //statement.append(" ?x jcr:uuid ?uuid . ");
-
                 statement.append(" } ");
                 query = session.getWorkspace().getQueryManager().createQuery(statement.toString(), "SPARQL");
 
@@ -410,14 +396,31 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             while (nodeIterator.hasNext())
             {
                 Node node = nodeIterator.nextNode();
-                ContentInfo info = new ContentInfo();
-                info.id = node.getUUID();
-                info.title = node.getProperty(cm_title).getValue().getString();
-                info.descripcion = node.getProperty(cm_description).getValue().getString();
-                Node parent = node.getParent();
-                info.categoryId = parent.getUUID();
-                info.categoryTitle = parent.getProperty(cm_title).getValue().getString();
-                contents.add(info);
+                if (category == null || category.equals("") || category.equals("*"))
+                {
+                    Node parent = node.getParent();
+                    ContentInfo info = new ContentInfo();
+                    info.id = node.getUUID();
+                    info.title = node.getProperty(cm_title).getValue().getString();
+                    info.descripcion = node.getProperty(cm_description).getValue().getString();
+                    info.categoryId = parent.getUUID();
+                    info.categoryTitle = parent.getProperty(cm_title).getValue().getString();
+                    contents.add(info);
+                }
+                else
+                {
+                    Node parent = node.getParent();
+                    if (category.equals(parent.getUUID()))
+                    {
+                        ContentInfo info = new ContentInfo();
+                        info.id = node.getUUID();
+                        info.title = node.getProperty(cm_title).getValue().getString();
+                        info.descripcion = node.getProperty(cm_description).getValue().getString();
+                        info.categoryId = parent.getUUID();
+                        info.categoryTitle = parent.getProperty(cm_title).getValue().getString();
+                        contents.add(info);
+                    }
+                }
             }
         }
         catch (Exception e)
