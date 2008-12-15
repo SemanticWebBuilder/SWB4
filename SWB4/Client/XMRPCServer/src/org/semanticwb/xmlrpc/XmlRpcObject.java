@@ -15,6 +15,8 @@ import javax.servlet.ServletConfig;
 public class XmlRpcObject {
     protected Set<Part> parts; 
     protected ServletConfig config;
+    protected String user;
+    protected String password;
     public void setParts(Set<Part> parts)
     {
         this.parts=parts;
@@ -25,7 +27,15 @@ public class XmlRpcObject {
         {
             this.parts.clear();
         }
-    } 
+    }
+    public void setUser(String user)
+    {
+        this.user=user;
+    }
+    public void setPassword(String password)
+    {
+        this.password=password;
+    }
     public void init(ServletConfig config)
     {
         this.config=config;
