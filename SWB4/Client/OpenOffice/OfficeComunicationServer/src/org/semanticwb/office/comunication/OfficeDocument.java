@@ -372,6 +372,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     VersionInfo info = new VersionInfo();
                     info.contentId = contentId;
                     info.nameOfVersion = version.getName();
+                    info.created=version.getProperty("jcr:created").getDate().getTime();
                     versions.add(info);
                 }
             }
