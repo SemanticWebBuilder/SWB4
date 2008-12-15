@@ -407,7 +407,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             }
             QueryResult result = query.execute();
             NodeIterator nodeIterator = result.getNodes();
-            if (nodeIterator.hasNext())
+            while (nodeIterator.hasNext())
             {
                 Node node = nodeIterator.nextNode();
                 ContentInfo info = new ContentInfo();
