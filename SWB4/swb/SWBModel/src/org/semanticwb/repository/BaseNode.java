@@ -1113,9 +1113,9 @@ public class BaseNode extends BaseNodeBase
 
     public BaseNode[] getSuccessors() throws SWBException
     {
-        ArrayList<BaseNode> successors=new ArrayList<BaseNode>();
-        Iterator<SemanticObject> objs=this.getSemanticObject().listObjectProperties(vocabulary.jcr_successors);
-        while(objs.hasNext())
+        ArrayList<BaseNode> successors = new ArrayList<BaseNode>();
+        Iterator<SemanticObject> objs = this.getSemanticObject().listObjectProperties(vocabulary.jcr_successors);
+        while (objs.hasNext())
         {
             successors.add(new BaseNode(objs.next()));
         }
@@ -1124,9 +1124,9 @@ public class BaseNode extends BaseNodeBase
 
     public BaseNode[] getPredecessors() throws SWBException
     {
-        ArrayList<BaseNode> predecessors=new ArrayList<BaseNode>();
-        Iterator<SemanticObject> objs=this.getSemanticObject().listObjectProperties(vocabulary.jcr_predecessors);
-        while(objs.hasNext())
+        ArrayList<BaseNode> predecessors = new ArrayList<BaseNode>();
+        Iterator<SemanticObject> objs = this.getSemanticObject().listObjectProperties(vocabulary.jcr_predecessors);
+        while (objs.hasNext())
         {
             predecessors.add(new BaseNode(objs.next()));
         }
@@ -1200,18 +1200,29 @@ public class BaseNode extends BaseNodeBase
 
     public BaseNode checkin() throws SWBException
     {
-        if (this.isVersionable() && isChekedOut())
+        if (!this.isVersionable())
         {
-            SemanticProperty isCheckoutPropety = vocabulary.jcr_isCheckedOut;
-            setPropertyInternal(isCheckoutPropety, "false");
-            BaseNode versionNode = addVersionToHistoryNode();
-            log.debug("Version created " + versionNode.getName());
-            return versionNode;
+            throw new SWBException("The node is not versionable");
         }
-        else
-        {
-            throw new SWBException("The node is not versionable or not is checkedout");
-        }
+        // TODO: pro revisar si la propiedad debe ser a nivel semantico o no
+        SemanticProperty isCheckoutPropety = vocabulary.jcr_isCheckedOut;
+        setPropertyInternal(isCheckoutPropety, "false");
+        BaseNode versionNode = addVersionToHistoryNode();
+        log.debug("Version created " + versionNode.getName());
+        return versionNode;
+
+    /*if (isChekedOut())
+    {
+    SemanticProperty isCheckoutPropety = vocabulary.jcr_isCheckedOut;
+    setPropertyInternal(isCheckoutPropety, "false");
+    BaseNode versionNode = addVersionToHistoryNode();
+    log.debug("Version created " + versionNode.getName());
+    return versionNode;
+    }
+    else
+    {
+    throw new SWBException("The node is not checkedout");
+    }*/
     }
 
     public void checkout() throws SWBException
