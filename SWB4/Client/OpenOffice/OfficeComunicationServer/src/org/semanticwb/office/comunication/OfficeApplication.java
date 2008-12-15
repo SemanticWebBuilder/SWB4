@@ -151,15 +151,16 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             session = loader.openSession(repositoryName, "", "");
             root = session.getRootNode();
             String cm_category = loader.getOfficeManager(repositoryName).getCategoryType();
+            String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
             Query query;
             if (session.getRepository().getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf("webbuilder") != -1)
             {
-                String statement = "SELECT ?title WHERE {?x cm:title ?title FILTER regex(?title, \"" + title + "\")  }";
+                String statement = "SELECT ?title WHERE {?x "+cm_title+" ?title FILTER regex(?title, \"" + title + "\")  }";
                 query = session.getWorkspace().getQueryManager().createQuery(statement, "SPARQL");
             }
             else
             {
-                query = session.getWorkspace().getQueryManager().createQuery("//" + cm_category + "[@cm:title='" + title + "']", Query.XPATH);
+                query = session.getWorkspace().getQueryManager().createQuery("//" + cm_category + "[@"+cm_title+"='" + title + "']", Query.XPATH);
             }
             QueryResult result = query.execute();
             NodeIterator nodeIterator = result.getNodes();
@@ -169,8 +170,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             }
             else
             {
-                Node newNode = root.addNode(cm_category, cm_category);
-                String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
+                Node newNode = root.addNode(cm_category, cm_category);                
                 String cm_description = loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
                 newNode.setProperty(cm_title, title);
                 newNode.setProperty(cm_description, description);
@@ -255,15 +255,16 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             session = loader.openSession(repositoryName, "", "");
             parent = session.getNodeByUUID(categoryId);
             String cm_category = loader.getOfficeManager(repositoryName).getCategoryType();
+            String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
             Query query;
             if (session.getRepository().getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf("webbuilder") != -1)
             {
-                String statement = "SELECT ?title WHERE {?x cm:title ?title FILTER regex(?title, \"" + title + "\")  }";
+                String statement = "SELECT ?title WHERE {?x "+cm_title+" ?title FILTER regex(?title, \"" + title + "\")  }";
                 query = session.getWorkspace().getQueryManager().createQuery(statement, "SPARQL");
             }
             else
             {
-                query = session.getWorkspace().getQueryManager().createQuery("//" + cm_category + "[@cm:title='" + title + "']", Query.XPATH);
+                query = session.getWorkspace().getQueryManager().createQuery("//" + cm_category + "[@"+ cm_title +"='" + title + "']", Query.XPATH);
             }
             QueryResult result = query.execute();
             NodeIterator nodeIterator = result.getNodes();
@@ -272,8 +273,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                 UUID = nodeIterator.nextNode().getUUID();
             }
             else
-            {
-                String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
+            {                
                 String cm_description = loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
                 Node newNode = parent.addNode(cm_category, cm_category);
                 newNode.setProperty(cm_title, title);
@@ -352,13 +352,15 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         return types.toArray(new ContentType[types.size()]);
     }
 
-    public ContentInfo[] search(String repositoryName, String title, String description, String category) throws Exception
+    public ContentInfo[] search(String repositoryName, String title, String description, String category,String type) throws Exception
     {
         Session session = null;
         try
         {
 
             session = loader.openSession(repositoryName, "", "");
+            String cm_title=loader.getOfficeManager(repositoryName).getPropertyTitleType();
+            String cm_description=loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
             ArrayList<ContentInfo> contents = new ArrayList<ContentInfo>();
             Query query;
             if (session.getRepository().getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf("webbuilder") != -1)
@@ -366,45 +368,43 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                 StringBuilder statement = new StringBuilder("SELECT ");
                 if (!(title.equals("") || title.equals("*")))
                 {
-                    statement.append(" ?title ");//WHERE {?x cm:title ?title FILTER regex(?title, \"^" + title + "\")  }");
+                    statement.append(" ?title ");
                 }
                 if (!(description.equals("") || description.equals("*")))
                 {
-                    statement.append(" ?description ");// {?x cm:description ?description FILTER regex(?description, \"^" + description + "\")  }");
+                    statement.append(" ?description ");
                 }
                 statement.append(" WHERE {");
                 if (!(title.equals("") || title.equals("*")))
                 {
-                    statement.append(" ?x cm:title ?title . FILTER regex(?title, \"^" + title + "\") ");
+                    statement.append(" ?x "+cm_title+" ?title . FILTER regex(?title, \"^" + title + "\") ");
                 }
                 if (!(description.equals("") || description.equals("*")))
                 {
-                    statement.append(" ?x cm:description ?description . FILTER regex(?description, \"^" + description + "\") ");
+                    statement.append(" ?x "+ cm_description +" ?description . FILTER regex(?description, \"^" + description + "\") ");
                 }
                 statement.append(" } ");
                 query = session.getWorkspace().getQueryManager().createQuery(statement.toString(), "SPARQL");
             }
             else
             {
-                query = session.getWorkspace().getQueryManager().createQuery("/", Query.XPATH);
-            }
-            QueryResult result = query.execute();
+                query = session.getWorkspace().getQueryManager().createQuery("//"+type, Query.XPATH);
+                QueryResult result = query.execute();
             NodeIterator nodeIterator = result.getNodes();
             if (nodeIterator.hasNext())
             {
                 Node node = nodeIterator.nextNode();
                 ContentInfo info = new ContentInfo();
                 info.id = node.getUUID();
-                OfficeManager manager = loader.getOfficeManager(repositoryName);
-                String cm_title = manager.getPropertyTitleType();
                 info.title = node.getProperty(cm_title).getValue().getString();
-                String cm_description = manager.getPropertyDescriptionType();
                 info.descripcion = node.getProperty(cm_description).getValue().getString();
                 Node parent = node.getParent();
                 info.categoryId = parent.getUUID();
                 info.categoryTitle = parent.getProperty(cm_title).getValue().getString();
                 contents.add(info);
             }
+            }
+            
             return contents.toArray(new ContentInfo[contents.size()]);
         }
         catch (Exception e)
