@@ -104,7 +104,7 @@ public class GenericFormElement extends FormElementBase
                         id=tok.substring(0,ind);
                         val=tok.substring(ind+1);
                     }
-                    ret+=" <label for=\""+name+id+"\"><input dojoType=\"dijit.form.RadioButton\" id=\""+name+id+"\" name=\""+name+"\"";
+                    ret+=" <label for=\""+name+id+"\"><input dojoType=\"dijit.form.RadioButton\" id_=\""+name+id+"\" name=\""+name+"\"";
                     if(id.equals(value))ret+=" checked=\"checked\"";
                     ret+=" value=\""+id+"\" type=\"radio\" />"+val+"</label>";
                 }
