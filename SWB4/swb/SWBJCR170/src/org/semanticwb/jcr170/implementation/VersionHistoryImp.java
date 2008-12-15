@@ -29,6 +29,7 @@ public class VersionHistoryImp extends SimpleNode implements VersionHistory
         {
             throw new IllegalArgumentException("The node is not a versionhistory node");
         }
+        this.parent=parent;
     }
     public BaseNode getVersionHistoryBase()
     {
