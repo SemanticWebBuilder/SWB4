@@ -80,4 +80,9 @@ public class SWBOfficeManager implements OfficeManager
     {
         return BaseNode.vocabulary.cm_type.getPrefix() + ":" + BaseNode.vocabulary.cm_type.getName();
     }
+
+    public String getUserType()
+    {
+        return BaseNode.vocabulary.cm_user.getPrefix() + ":" + BaseNode.vocabulary.cm_user.getName();
+    }
 }
