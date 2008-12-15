@@ -22,7 +22,7 @@ public interface IOfficeDocument
     @XmlRpcMethod(methodName="OfficeDocument.setPath")            
     public void delete(String contentID) throws Exception;
     @XmlRpcMethod(methodName="OfficeDocument.exists")
-    public boolean exists(String contentId) throws Exception;
+    public boolean exists(String repositoryName,String contentId) throws Exception;
     @XmlRpcMethod(methodName="OfficeDocument.updateContent")    
     public String updateContent(String repositoryName,String contentId,String file) throws Exception;
     @XmlRpcMethod(methodName="OfficeDocument.setPagination")    
