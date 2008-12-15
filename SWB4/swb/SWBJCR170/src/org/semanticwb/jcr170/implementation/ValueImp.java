@@ -145,7 +145,7 @@ public class ValueImp implements Value
             String stringDate = getString();
             try
             {
-                Date date = DateFormat.getDateTimeInstance().parse(stringDate);
+                Date date = iso8601dateFormat.parse(stringDate);
                 calendar = Calendar.getInstance();
                 calendar.setTime(date);
             }
