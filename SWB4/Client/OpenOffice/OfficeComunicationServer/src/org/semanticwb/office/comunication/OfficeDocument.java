@@ -65,10 +65,10 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 Node contentNode = categoryNode.addNode(nodeType, nodeType);
                 contentNode.setProperty(cm_title, title);
                 String cm_type = loader.getOfficeManager(repositoryName).getPropertyType();
-                String cm_file = loader.getOfficeManager(repositoryName).getPropertyType();
+                String cm_file = loader.getOfficeManager(repositoryName).getPropertyFileType();
                 contentNode.setProperty(cm_type, type);
                 contentNode.setProperty(cm_description, description);
-                contentNode.setProperty(cm_description, file);
+                contentNode.setProperty(cm_file, file);
                 for (Part part : parts)
                 {
                     String mimeType = DEFAULT_MIME_TYPE;
@@ -174,6 +174,8 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 nodeContent.checkout();
                 String cm_file=loader.getOfficeManager(repositoryName).getPropertyFileType();
                 nodeContent.setProperty(cm_file, file);
+                nodeContent.save();
+
                 try
                 {
                     for (Part part : parts)
