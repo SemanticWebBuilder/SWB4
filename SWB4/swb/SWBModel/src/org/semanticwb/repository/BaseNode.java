@@ -1502,7 +1502,7 @@ public class BaseNode extends BaseNodeBase
             }
             if (hasOtherObjectWithSameName)
             {
-                throw new SWBException("Already exists a node with the same name");
+                throw new SWBException("Already exists a node with the same name NodeName: "+name);
             }
             BaseNode newBaseNode;
             String uri = getSemanticObject().getModel().getObjectUri(UUID.randomUUID().toString(), clazz);
