@@ -67,7 +67,7 @@ public class SimpleNode implements Node
     protected static final String WAS_NOT_FOUND = " was not found";
     private static final String PATH_SEPARATOR = "/";
     private static final ValueFactoryImp factory = new ValueFactoryImp();
-    protected BaseNode node;    
+    protected BaseNode node;
     private final HashSet<SemanticClass> mixins = new HashSet<SemanticClass>();
     private final HashMap<String, SimpleNode> childs = new HashMap<String, SimpleNode>();
     protected final ArrayList<SimpleNode> removedchilds = new ArrayList<SimpleNode>();
@@ -83,7 +83,7 @@ public class SimpleNode implements Node
     SimpleNode(SessionImp session, String name, SemanticClass clazz, SimpleNode parent, int index, String id) throws RepositoryException
     {
         this.id = id;
-        this.name = name;        
+        this.name = name;
         this.clazz = clazz;
         nodeDefinition = this.getNodeDefinition(session.getRootBaseNode(), clazz, name, session);
         this.session = session;
@@ -182,8 +182,8 @@ public class SimpleNode implements Node
         }
         this.id = node.getId();
         this.node = node;
-        this.session = session;        
-        nodeDefinition = this.getNodeDefinition(node,node.getSemanticObject().getSemanticClass(), node.getName(), session);
+        this.session = session;
+        nodeDefinition = this.getNodeDefinition(node, node.getSemanticObject().getSemanticClass(), node.getName(), session);
         this.clazz = node.getSemanticObject().getSemanticClass();
         this.index = 0;
         this.path = node.getPath();
@@ -244,19 +244,22 @@ public class SimpleNode implements Node
         }
         if (node.isVersionable())
         {
-            try
+            if (versionHistory == null)
             {
-                versionHistory = new VersionHistoryImp(node.getHistoryNode(), session, this);
-            }
-            catch (SWBException e)
-            {
-                log.error(e);
+                try
+                {
+                    versionHistory = new VersionHistoryImp(node.getHistoryNode(), session, this);
+                }
+                catch (SWBException e)
+                {
+                    log.error(e);
+                }
             }
         }
 
     }
 
-    private NodeDefinitionImp getNodeDefinition(BaseNode node,SemanticClass clazz, String name, SessionImp session)
+    private NodeDefinitionImp getNodeDefinition(BaseNode node, SemanticClass clazz, String name, SessionImp session)
     {
         SemanticObject object = node.getChildNodeDefinition(clazz, name);
         if (object != null)
@@ -1053,7 +1056,7 @@ public class SimpleNode implements Node
         }
 
         session.checksLock(this);
-        if(!parent.removedchilds.contains(this))
+        if (!parent.removedchilds.contains(this))
         {
             parent.removedchilds.add(this);
         }
@@ -1276,7 +1279,6 @@ public class SimpleNode implements Node
             throw new NoSuchNodeTypeException("The relpath is not a node");
         }
     }
-
 
     public Property setProperty(String name, Value value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
