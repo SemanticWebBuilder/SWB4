@@ -11,8 +11,11 @@ import javax.jcr.RepositoryException;
 import javax.jcr.query.QueryResult;
 import javax.jcr.query.RowIterator;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
+import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.repository.BaseNode;
 
 /**
  *
@@ -21,10 +24,28 @@ import org.semanticwb.model.SWBContext;
 public class QueryResultImp implements QueryResult
 {
     static Logger log=SWBUtils.getLogger(QueryResultImp.class);
-    private final List<String> nodes;
+    private final List<SemanticObject> nodes;
     private final String workspaceName;
-    private final SessionImp session;    
-    QueryResultImp(SessionImp session, List<String> nodes, String workspaceName)
+    private final SessionImp session;
+    QueryResultImp(SessionImp session, SemanticObject[] nodes, String workspaceName)
+    {
+        if ( session == null || workspaceName == null )
+        {
+            throw new IllegalArgumentException("the session or workspaceName was null");
+        }
+        if ( SWBContext.getWorkspace(workspaceName) == null )
+        {
+            throw new IllegalArgumentException("The workspace " + workspaceName + " was not found");
+        }
+        this.workspaceName = workspaceName;
+        this.session = session;
+        this.nodes=new ArrayList<SemanticObject>();
+        for(SemanticObject id : nodes)
+        {
+            this.nodes.add(id);
+        }
+    }
+    QueryResultImp(SessionImp session, List<SemanticObject> nodes, String workspaceName)
     {
         if ( session == null || workspaceName == null )
         {
@@ -62,11 +83,18 @@ public class QueryResultImp implements QueryResult
     public NodeIterator getNodes() throws RepositoryException
     {
         ArrayList<SimpleNode> simpleNodes = new ArrayList<SimpleNode>();        
-        for ( String path : nodes )
+        for ( SemanticObject object : nodes )
         { 
-            for(SimpleNode node : session.getSimpleNodeByPath(path,session.getSimpleRootNode(),true))
+            BaseNode node=new BaseNode(object);
+            if(session.existSimpleNodeByID(node.getId()))
             {
-                simpleNodes.add(node);            
+                simpleNodes.add(session.getSimpleNodeByID(node.getId()));
+            }
+            else
+            {
+                SimpleNode simpleNode=new SimpleNode(node, session);
+                session.addSimpleNode(simpleNode);
+                simpleNodes.add(simpleNode);
             }
         }
         return new NodeIteratorImp(session, simpleNodes);
