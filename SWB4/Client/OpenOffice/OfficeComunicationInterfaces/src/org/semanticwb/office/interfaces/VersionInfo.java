@@ -5,6 +5,8 @@
 
 package org.semanticwb.office.interfaces;
 
+import java.util.Date;
+
 /**
  *
  * @author victor.lorenzana
@@ -12,4 +14,5 @@ package org.semanticwb.office.interfaces;
 public class VersionInfo {
     public String contentId;    
     public String nameOfVersion;
+    public Date created;
 }
