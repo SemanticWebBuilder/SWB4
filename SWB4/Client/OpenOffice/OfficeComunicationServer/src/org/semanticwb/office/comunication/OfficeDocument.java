@@ -42,7 +42,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     private static final String DEFAULT_MIME_TYPE = "application/octet-stream";
     private static final RepositoryManagerLoader loader = RepositoryManagerLoader.getInstance();
 
-    public String publish(String title, String description, String repositoryName, String categoryID, String type, String nodeType) throws Exception
+    public String publish(String title, String description, String repositoryName, String categoryID, String type, String nodeType,String file) throws Exception
     {
         Session session = null;
         Node categoryNode = null;
@@ -65,8 +65,10 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 Node contentNode = categoryNode.addNode(nodeType, nodeType);
                 contentNode.setProperty(cm_title, title);
                 String cm_type = loader.getOfficeManager(repositoryName).getPropertyType();
+                String cm_file = loader.getOfficeManager(repositoryName).getPropertyType();
                 contentNode.setProperty(cm_type, type);
                 contentNode.setProperty(cm_description, description);
+                contentNode.setProperty(cm_description, file);
                 for (Part part : parts)
                 {
                     String mimeType = DEFAULT_MIME_TYPE;
@@ -152,7 +154,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @return The version name created
      * @throws java.lang.Exception
      */
-    public String updateContent(String repositoryName, String contentId) throws Exception
+    public String updateContent(String repositoryName, String contentId,String file) throws Exception
     {
         Session session = null;
         try
@@ -170,6 +172,8 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             if (!nodeContent.isCheckedOut())
             {
                 nodeContent.checkout();
+                String cm_file=loader.getOfficeManager(repositoryName).getPropertyFileType();
+                nodeContent.setProperty(cm_file, file);
                 try
                 {
                     for (Part part : parts)
