@@ -773,6 +773,10 @@ public class SessionImp implements Session
     public void save() throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
     {
         getRootNode().save();
+        for(SimpleNode node : nodes.values())
+        {
+            node.save();
+        }
     }
 
     public void refresh(boolean keepChanges) throws RepositoryException
