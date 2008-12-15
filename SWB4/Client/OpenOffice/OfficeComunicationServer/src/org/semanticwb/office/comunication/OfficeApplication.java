@@ -388,7 +388,6 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             }
             else
             {
-
                 query = session.getWorkspace().getQueryManager().createQuery("//" + type, Query.XPATH);
             }
             QueryResult result = query.execute();
