@@ -75,6 +75,11 @@ public abstract class OfficeServlet extends XMLRPCServlet
                     {
                         response.sendError(response.SC_FORBIDDEN);
                     }
+                    else
+                    {
+                        request.setAttribute("user", pUserName);
+                        request.setAttribute("password", pPassword);
+                    }
                 }
                 else
                 {
