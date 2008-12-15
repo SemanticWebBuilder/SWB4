@@ -948,18 +948,21 @@ public class SimpleNode implements Node
         {
             throw new RepositoryException("Can not save a new item Node:" + this.getPath());
         }
-        try
+        if (modified)
         {
-            this.checkSave();
-            removeChilds();
-            createChilds();
-            saveProperties();
-            checkVersionable();
-            modified = false;
-        }
-        catch (SWBException swbe)
-        {
-            throw new RepositoryException(swbe);
+            try
+            {
+                this.checkSave();
+                removeChilds();
+                createChilds();
+                saveProperties();
+                checkVersionable();
+                modified = false;
+            }
+            catch (SWBException swbe)
+            {
+                throw new RepositoryException(swbe);
+            }
         }
 
     }
