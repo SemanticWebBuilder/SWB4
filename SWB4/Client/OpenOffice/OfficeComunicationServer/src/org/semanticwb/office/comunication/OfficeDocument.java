@@ -357,14 +357,17 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             {
                 throw new Exception("The content is locked");
             }
-            VersionIterator it=nodeContent.getVersionHistory().getAllVersions();
-            while(it.hasNext())
+            VersionIterator it = nodeContent.getVersionHistory().getAllVersions();
+            while (it.hasNext())
             {
-                Version version=it.nextVersion();
-                VersionInfo info=new VersionInfo();
-                info.contentId=contentId;
-                info.nameOfVersion=version.getName();
-                versions.add(info);
+                Version version = it.nextVersion();
+                if (!version.getName().equals("jcr:rootVersion"))
+                {
+                    VersionInfo info = new VersionInfo();
+                    info.contentId = contentId;
+                    info.nameOfVersion = version.getName();
+                    versions.add(info);
+                }
             }
             nodeContent.unlock();
         }
