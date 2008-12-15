@@ -1259,7 +1259,7 @@ public class BaseNode extends BaseNodeBase
                 {
                     try
                     {
-                        Float version=new Float(nextVersion);
+                        Float version=new Float(nameBaseVersion);
                         nextVersion = String.valueOf(version.floatValue()+.1f);
                     }
                     catch (NumberFormatException nfe)
