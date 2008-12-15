@@ -1254,12 +1254,13 @@ public class BaseNode extends BaseNodeBase
             {
                 BaseNode[] predecessors = versionHistory.getVersions();
                 String nameBaseVersion = this.getBaseVersion().getName();
-                String nextVersion = "1";
+                String nextVersion = "1.0";
                 if (!nameBaseVersion.equals(JCR_ROOTVERSION))
                 {
                     try
                     {
-                        nextVersion = String.valueOf(Integer.parseInt(nameBaseVersion) + 1);
+                        Float version=new Float(nextVersion);
+                        nextVersion = String.valueOf(version.floatValue()+.1f);
                     }
                     catch (NumberFormatException nfe)
                     {
