@@ -260,7 +260,7 @@ public class SWBFormMgr
             ret.append("	<fieldset>");
 //            ret.append("	    <ol>");
 //            ret.append("            <li>");
-            ret.append("	    <table><tr><td width_=\"200px\" align=\"right\">");
+            ret.append("	    <table><tr><td width=\"200px\" align=\"right\">");
             ret.append("                <label>Identificador &nbsp;</label>");
             ret.append("        </td><td>");
             ret.append("                <span>"+m_obj.getId()+"</span>");
@@ -275,7 +275,7 @@ public class SWBFormMgr
             ret.append("	<fieldset>");
 //            ret.append("	    <ol>");
 //            ret.append("            <li>");
-            ret.append("	    <table><tr><td width_=\"200px\" align=\"right\">");
+            ret.append("	    <table><tr><td width=\"200px\" align=\"right\">");
             ret.append("                <label>Identificador <em>*</em></label>");
             ret.append("        </td><td>");
             ret.append("                <input type=\"text\" name=\""+PRM_ID+"\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura Identificador.\" invalidMessage=\"Identificador es requerido.\" trim=\"true\"/>");
@@ -293,7 +293,7 @@ public class SWBFormMgr
                 ret.append("	<fieldset>");
                 ret.append("	    <legend>"+group+"</legend>");
                 //ret.append("	    <ol>");
-                ///ret.append("	    <table>");
+                ret.append("	    <table>");
                 Iterator<SemanticProperty> it=groups.get(group).iterator();
                 while(it.hasNext())
                 {
@@ -310,20 +310,20 @@ public class SWBFormMgr
                         label=ele.renderLabel(m_obj, prop, m_type, m_mode, m_lang);
                         element=ele.renderElement(m_obj, prop, m_type, m_mode, m_lang);
                     }
-                    ret.append("<div>");
+                    //ret.append("<div>");
                     if(element!=null && element.length()>0)
                     {
                         //ret.append("<li>");
-                        //ret.append("<tr><td width_=\"200px\" align=\"right\">");
+                        ret.append("<tr><td width=\"200px\" align=\"right\">");
                         ret.append(label.replaceAll(" ", "&nbsp;"));
-                        //ret.append("</td><td>");
+                        ret.append("</td><td>");
                         ret.append(element);
-                        //ret.append("</td></tr>");
+                        ret.append("</td></tr>");
                         //ret.append("</li>");
                     }
-                    ret.append("</div>");
+                    //ret.append("</div>");
                 }
-                //ret.append("	    </table>");
+                ret.append("	    </table>");
                 //ret.append("	    </ol>");
                 ret.append("	</fieldset>");
             }
