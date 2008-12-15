@@ -48,7 +48,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         Node categoryNode = null;
         try
         {
-            session = loader.openSession(repositoryName, "", "");
+            session = loader.openSession(repositoryName, this.user, this.password);
             categoryNode = session.getNodeByUUID(categoryID);
             if (!categoryNode.isLocked())
             {
@@ -66,9 +66,11 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 contentNode.setProperty(cm_title, title);
                 String cm_type = loader.getOfficeManager(repositoryName).getPropertyType();
                 String cm_file = loader.getOfficeManager(repositoryName).getPropertyFileType();
+                String cm_user = loader.getOfficeManager(repositoryName).getUserType();
                 contentNode.setProperty(cm_type, type);
                 contentNode.setProperty(cm_description, description);
                 contentNode.setProperty(cm_file, file);
+                contentNode.setProperty(cm_user, this.user);
                 for (Part part : parts)
                 {
                     String mimeType = DEFAULT_MIME_TYPE;
@@ -159,7 +161,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         Session session = null;
         try
         {
-            session = loader.openSession(repositoryName, "", "");
+            session = loader.openSession(repositoryName, this.user, this.password);
             Node nodeContent = session.getNodeByUUID(contentId);
             if (!nodeContent.isLocked())
             {
@@ -173,7 +175,9 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             {
                 nodeContent.checkout();
                 String cm_file=loader.getOfficeManager(repositoryName).getPropertyFileType();
+                String cm_user = loader.getOfficeManager(repositoryName).getUserType();
                 nodeContent.setProperty(cm_file, file);
+                nodeContent.setProperty(cm_user, this.user);
                 nodeContent.save();
 
                 try
@@ -293,13 +297,13 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return "/";
     }
 
-    public boolean exists(String contentId) throws Exception
+    public boolean exists(String repositoryName,String contentId) throws Exception
     {
         boolean exists = false;
         Session session = null;
         try
         {
-            session = loader.openSession("", "", "");
+            session = loader.openSession(repositoryName, this.user, this.password);
             session.getNodeByUUID(contentId);
             exists = true;
         }
@@ -353,7 +357,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         ArrayList<VersionInfo> versions = new ArrayList<VersionInfo>();
         try
         {
-            session = loader.openSession(repositoryName, "", "");
+            session = loader.openSession(repositoryName, this.user, this.password);
             Node nodeContent = session.getNodeByUUID(contentId);
             if (!nodeContent.isLocked())
             {
