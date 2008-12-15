@@ -89,7 +89,7 @@ public class SemanticMgr implements SWBInstanceObject
 //        spec.setBaseModelMaker(maker);
 //        spec.setImportModelMaker(maker);
         
-        //Create Omtology
+        //Create Ontology
         m_ontology = new SemanticOntology("SWB",ModelFactory.createOntologyModel(spec));
         Iterator<SemanticModel> it=m_schemas.values().iterator();
         while(it.hasNext())
