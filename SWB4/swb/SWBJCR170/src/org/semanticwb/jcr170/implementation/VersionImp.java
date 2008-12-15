@@ -33,6 +33,7 @@ public class VersionImp extends SimpleNode implements Version
             throw new IllegalArgumentException("The node is not a version history");
         }
         this.historyNode=historyNode;
+        this.parent=historyNode;
         
     }
     public VersionHistory getContainingHistory() throws RepositoryException
