@@ -134,9 +134,25 @@ public class SWBPortal {
                 admFiles.put("/" + ze.getName(), new JarFile(ze, zipPath));
             }
             zf.close();
+            //log.event("-->Admin Files in Memory:\t" + admFiles.size());
+        } catch (Exception e) {
+            log.warn("Error loading files for Webbuilder Administration:" + SWBUtils.getApplicationPath() + "/WEB-INF/lib/SWBAdmin.jar",e);
+        }
+
+        try {
+            log.debug("Loading admin Files from: /WEB-INF/lib/dojo.zip");
+            String zipPath = SWBUtils.getApplicationPath() + "/WEB-INF/lib/dojo.zip";
+            ZipFile zf = new ZipFile(zipPath);
+            Enumeration e = zf.entries();
+            while (e.hasMoreElements()) {
+                ZipEntry ze = (ZipEntry) e.nextElement();
+                log.debug("/" + ze.getName() + ", " + ze.getSize() + ", " + ze.getTime());
+                admFiles.put("/" + ze.getName(), new JarFile(ze, zipPath));
+            }
+            zf.close();
             log.event("-->Admin Files in Memory:\t" + admFiles.size());
         } catch (Exception e) {
-            log.warn("Error loading files for Webbuilder Administration:" + SWBUtils.getApplicationPath() + "/WEB-INF/lib/SWBAdmin.jar");
+            log.warn("Error loading files for Webbuilder Administration:" + SWBUtils.getApplicationPath() + "/WEB-INF/lib/dojo.zip",e);
         }
     }
 
