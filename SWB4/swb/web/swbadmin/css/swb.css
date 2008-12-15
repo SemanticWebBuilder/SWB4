@@ -112,8 +112,14 @@ form.swbform legend {
     _margin: 0 -7px; /* IE Win */
 	}
 
-form.swbform table {
-    width: 100%;
+form.swbform div {
+    display: inline-block;
+    }
+
+form.swbform div label {
+    display: block;
+    width: 6em;
+    float: left;
     }
 
 form.swbform label_ {
