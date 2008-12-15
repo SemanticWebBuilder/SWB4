@@ -70,7 +70,7 @@ public class SimpleNode implements Node
     protected BaseNode node;    
     private final HashSet<SemanticClass> mixins = new HashSet<SemanticClass>();
     private final HashMap<String, SimpleNode> childs = new HashMap<String, SimpleNode>();
-    private final ArrayList<SimpleNode> removedchilds = new ArrayList<SimpleNode>();
+    protected final ArrayList<SimpleNode> removedchilds = new ArrayList<SimpleNode>();
     private final HashMap<String, PropertyImp> properties = new HashMap<String, PropertyImp>();
     private final String name;
     protected final SemanticClass clazz;
@@ -1053,7 +1053,10 @@ public class SimpleNode implements Node
         }
 
         session.checksLock(this);
-        parent.removedchilds.add(this);
+        if(!parent.removedchilds.contains(this))
+        {
+            parent.removedchilds.add(this);
+        }
         parent.childs.remove(this.id);
         session.removeSimpleNode(this);
         parent.modified = true;
