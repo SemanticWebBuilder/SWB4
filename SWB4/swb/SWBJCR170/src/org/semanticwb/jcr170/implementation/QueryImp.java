@@ -9,7 +9,10 @@ import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.RDFNode;
+import com.hp.hpl.jena.rdf.model.Resource;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import javax.jcr.ItemExistsException;
 import javax.jcr.ItemNotFoundException;
@@ -27,8 +30,11 @@ import org.jdom.JDOMException;
 import org.jdom.Namespace;
 import org.jdom.xpath.XPath;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
+import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.platform.SemanticVocabulary;
 import org.semanticwb.repository.BaseNode;
 import org.semanticwb.repository.Workspace;
 
@@ -69,6 +75,8 @@ public class QueryImp implements Query
             {
                 prefixStatement.append("PREFIX " + prefix + ": <" + BaseNode.vocabulary.listUris().get(prefix) + ">");
             }
+            prefixStatement.append(" PREFIX rdf: <"+SemanticVocabulary.RDF_URI+"> ") ;
+            prefixStatement.append(" PREFIX rdfs: <"+SemanticVocabulary.RDFS_URI+"> ") ;
         }
         else if (language.equals(javax.jcr.query.Query.XPATH))
         {
@@ -102,7 +110,8 @@ public class QueryImp implements Query
     {
         if (xpath != null)
         {
-            try
+            return null;
+            /*try
             {
                 List<Element> elements = xpath.selectNodes(session.getDocumentInternalView());
                 ArrayList<String> nodes = new ArrayList<String>();
@@ -126,19 +135,17 @@ public class QueryImp implements Query
             catch (Throwable jde)
             {
                 throw new RepositoryException(jde);
-            }
+            }*/
         }
         else
         {
-            ArrayList<String> nodes = new ArrayList<String>();
+            HashSet<SemanticObject> nodes = new HashSet<SemanticObject>();
             Model model = SWBContext.getWorkspace(workspaceName).getSemanticObject().getModel().getRDFModel();
-            StringBuilder newStatement = new StringBuilder(statement);
-            int pos = newStatement.toString().toLowerCase().indexOf("select ");
+            StringBuilder newStatement = new StringBuilder("select ?x ");
+            int pos = statement.toLowerCase().indexOf("where");
             if (pos != -1)
             {
-                newStatement.insert(pos + 6, " ?path ");
-                pos = newStatement.indexOf("{");
-                newStatement.insert(pos + 1, " ?x swbrep:path ?path . ");
+                newStatement.append(statement.substring(pos));
             }
             String sparql = prefixStatement.toString() + NL + newStatement;
             com.hp.hpl.jena.query.Query query = com.hp.hpl.jena.query.QueryFactory.create(sparql);
@@ -148,16 +155,25 @@ public class QueryImp implements Query
                 ResultSet rs = qexec.execSelect();
                 while (rs.hasNext())
                 {
-                    QuerySolution rb = rs.nextSolution();
-                    String path = rb.get("path").toString();
-                    nodes.add(path);
+                    while(rs.hasNext())
+                    {
+                        QuerySolution rb = rs.nextSolution();
+                        Resource res=rb.getResource("x");
+                        
+                        nodes.add(new SemanticObject(res));
+                    }
                 }
             }
             catch (Throwable e)
             {
                 log.error(e);
             }
-            return new QueryResultImp(session, nodes, workspaceName);
+            finally
+            {
+                qexec.close();
+            }
+            return new QueryResultImp(session, nodes.toArray(new SemanticObject[nodes.size()]), workspaceName);
+
         }
     }
 
