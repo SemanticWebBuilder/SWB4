@@ -1623,6 +1623,18 @@ public class BaseNode extends BaseNodeBase
                     break;
                 }
             }
+            if(!existsProperty)
+            {
+                SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(uri);
+                if (prop != null)
+                {
+                    String value = getSemanticObject().getProperty(prop);
+                    if (value != null)
+                    {
+                        existsProperty = true;
+                    }
+                }
+            }
         }
         catch (SWBException e)
         {
