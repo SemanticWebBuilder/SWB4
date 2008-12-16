@@ -5,6 +5,7 @@
 
 package org.semanticwb.xmlrpc;
 
+import java.util.HashSet;
 import java.util.Set;
 import javax.servlet.ServletConfig;
 
@@ -13,19 +14,31 @@ import javax.servlet.ServletConfig;
  * @author victor.lorenzana
  */
 public class XmlRpcObject {
-    protected Set<Part> parts; 
+    protected Set<Part> requestParts;
+    protected Set<Part> responseParts=new HashSet<Part>();
     protected ServletConfig config;
     protected String user;
     protected String password;
-    public void setParts(Set<Part> parts)
+    public void setRequestParts(Set<Part> parts)
     {
-        this.parts=parts;
+        this.requestParts=parts;
     } 
-    public void clearParts()
+    public void clearRequestParts()
     {
-        if(this.parts!=null)
+        if(this.requestParts!=null)
         {
-            this.parts.clear();
+            this.requestParts.clear();
+        }
+    }
+    public void setResponseParts(Set<Part> parts)
+    {
+        this.responseParts=parts;
+    }
+    public void clearResponseParts()
+    {
+        if(this.responseParts!=null)
+        {
+            this.responseParts.clear();
         }
     }
     public void setUser(String user)
