@@ -1,5 +1,6 @@
 package org.semanticwb.model;
 
+import com.hp.hpl.jena.rdf.model.Statement;
 import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
 import java.util.Date;
@@ -34,11 +35,22 @@ public class User extends UserBase implements Principal, java.io.Serializable
     @Override
     public void setUsrPassword(String password)
     {
+        System.out.println("setPassword:"+password);
         String tmpPasswd = null;
         try
         {
             tmpPasswd = SWBUtils.CryptoWrapper.passwordDigest(password);
-            super.setUsrPassword(tmpPasswd);
+            System.out.println("tmpPasswd:"+tmpPasswd);
+
+            Statement stm = getSemanticObject().getRDFResource().getProperty(User.vocabulary.swb_usrPassword.getRDFProperty());
+            if (stm != null)
+            {
+                stm.changeObject(tmpPasswd);
+            }
+            else
+            {
+                getSemanticObject().getRDFResource().addProperty(User.vocabulary.swb_usrPassword.getRDFProperty(), tmpPasswd);
+            }
             setUsrPasswordChanged(new Date());
         } catch (NoSuchAlgorithmException ex)
         {
@@ -46,6 +58,20 @@ public class User extends UserBase implements Principal, java.io.Serializable
         }
 
     }
+
+    @Override
+    public String getUsrPassword()
+    {
+        String ret=null;
+        Statement st=getSemanticObject().getRDFResource().getProperty(User.vocabulary.swb_usrPassword.getRDFProperty());
+        if(st!=null)
+        {
+            ret=st.getString();
+        }
+        System.out.println("getPassword:"+ret);
+        return ret;
+    }
+
 
     public String getDevice()
     {
