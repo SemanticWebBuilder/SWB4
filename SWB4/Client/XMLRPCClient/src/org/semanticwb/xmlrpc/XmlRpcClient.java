@@ -13,6 +13,7 @@ import java.net.Proxy;
 import java.net.Proxy.Type;
 import java.text.ParseException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import org.jdom.Document;
@@ -78,7 +79,9 @@ class XmlRpcClient
         {
 
             Object obj=deserializeResponse(clazz, response.getDocument());
-            Response responseToReturn=new Response(obj);
+            Response responseToReturn=new Response(obj,response.getResponseParts());
+            
+            
             return responseToReturn;
         }
         catch (ParseException pe)
@@ -285,7 +288,17 @@ class XmlRpcClient
                 {
                     throw new XmlRpcException("Error getting the response document", ioe);
                 }
-                XmlResponse response=new XmlResponse(doc);
+                HashSet<Part> parts=new HashSet<Part>();
+                for(String name : upload.getFileNames())
+                {
+                    if(!name.equals("xmlrpc"))
+                    {
+                        byte[] content = upload.getFileData(name);
+                        Part part = new Part(content, name, upload.getFileName(name));
+                        parts.add(part);
+                    }
+                }
+                XmlResponse response=new XmlResponse(doc,parts);
                 return response;
             }
             catch (Exception e)
