@@ -254,15 +254,15 @@ public abstract class OfficeApplication
         return webAddress;
     }
 
-    static String setupDocument(String contentId) throws Exception
+    static String setupDocument(String workspace,String contentId) throws Exception
     {
         String contentIdToReturn = null;
         if ( contentId != null && !contentId.trim().equals("") && OfficeApplication.tryLogin() )
         {
             document = getOfficeDocumentProxy();
             try
-            {
-                if ( document.exists(contentId) )
+            {                
+                if ( document.exists(workspace,contentId) )
                 {
                     contentIdToReturn = contentId;
                 }
