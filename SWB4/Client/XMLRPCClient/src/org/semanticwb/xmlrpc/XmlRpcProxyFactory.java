@@ -8,6 +8,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.net.URI;
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
@@ -15,7 +16,7 @@ import java.util.HashSet;
  */
 public class XmlRpcProxyFactory implements java.lang.reflect.InvocationHandler, XmlProxy
 {
-
+    Set<Part> parts=new HashSet<Part>();
     private HashSet<Attachment> attachments = new HashSet<Attachment>();
     private URI webAddress;
     private String user,  password;
@@ -182,7 +183,10 @@ public class XmlRpcProxyFactory implements java.lang.reflect.InvocationHandler, 
                 {
                     attachments = new HashSet<Attachment>();
                 }
-                ObjectToreturn = xmlclient.execute(m.getReturnType(),methodName, args, this.attachments);
+                parts.clear();
+                Response response = xmlclient.execute(m.getReturnType(),methodName, args, this.attachments);
+                parts=response.getResponseParts();
+                ObjectToreturn=response.getObject();
             }
             catch ( Exception e )
             {
@@ -194,6 +198,11 @@ public class XmlRpcProxyFactory implements java.lang.reflect.InvocationHandler, 
             }
         }
         return ObjectToreturn;
+    }
+
+    public Set<Part> getResponseParts()
+    {
+        return parts;
     }
 }
 
