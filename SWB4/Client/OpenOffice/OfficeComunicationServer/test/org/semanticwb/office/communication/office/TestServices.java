@@ -19,6 +19,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.office.comunication.OfficeApplication;
 import org.semanticwb.office.comunication.OfficeDocument;
 import org.semanticwb.office.interfaces.CategoryInfo;
+import org.semanticwb.office.interfaces.ContentInfo;
 import org.semanticwb.office.interfaces.ContentType;
 import org.semanticwb.office.interfaces.VersionInfo;
 import org.semanticwb.xmlrpc.Part;
@@ -66,10 +67,12 @@ public class TestServices
     // The methods must be annotated with annotation @Test. For example:
     //
     @Test
-    @Ignore
+    //@Ignore
     public void getCategoriesTest()
     {
         OfficeApplication office = new OfficeApplication();
+        office.setUser("admin");
+        office.setPassword("password");
         try
         {
             String id = office.createCategory(workspaceid, "demo", "Categoria demo");
@@ -87,7 +90,6 @@ public class TestServices
 
     private void getCategories(OfficeApplication office, String workspaceid, String categoriId) throws Exception
     {
-
         for (CategoryInfo category : office.getCategories(workspaceid, categoriId))
         {
             getCategories(office, workspaceid, category.UDDI);
@@ -99,6 +101,8 @@ public class TestServices
     public void deleteCategory()
     {
         OfficeApplication office = new OfficeApplication();
+        office.setUser("admin");
+        office.setPassword("password");
         try
         {
             for (CategoryInfo cat : office.getCategories(workspaceid))
@@ -119,10 +123,12 @@ public class TestServices
     }
 
     @Test
-    @Ignore
+    //@Ignore
     public void createCategory()
     {
         OfficeApplication office = new OfficeApplication();
+        office.setUser("admin");
+        office.setPassword("password");
         try
         {
             String id = office.createCategory(workspaceid, "demo", "demo descripcion");
@@ -135,10 +141,12 @@ public class TestServices
     }
 
     @Test
-    @Ignore
+    //@Ignore
     public void getContentTypesTest()
     {
         OfficeApplication office = new OfficeApplication();
+        office.setUser("admin");
+        office.setPassword("password");
         try
         {
             for (ContentType type : office.getContentTypes(workspaceid))
@@ -153,42 +161,47 @@ public class TestServices
         }
     }
 
-    @Test    
+    @Test
+    //@Ignore
     public void createContentTest()
     {
         OfficeDocument document = new OfficeDocument();
+        document.setUser("admin");
+        document.setPassword("password");
         OfficeApplication office = new OfficeApplication();
+        office.setUser("admin");
+        office.setPassword("password");
         try
         {
             String id = office.createCategory(workspaceid, "demo", "Categoria demo");
             String categoryid = id;
             String contentType = office.getContentTypes(workspaceid)[0].id;
-            HashSet<Part> parts=new HashSet<Part>();
-            File file=new File("C:\\temp\\demo.odt");
-            FileInputStream in=new FileInputStream(file);
-            byte[] buffer=new byte[2048];
-            int read=in.read(buffer);
-            ByteArrayOutputStream bin=new ByteArrayOutputStream();
-            while(read!=-1)
+            HashSet<Part> parts = new HashSet<Part>();
+            File file = new File("C:\\temp\\demo.odt");
+            FileInputStream in = new FileInputStream(file);
+            byte[] buffer = new byte[2048];
+            int read = in.read(buffer);
+            ByteArrayOutputStream bin = new ByteArrayOutputStream();
+            while (read != -1)
             {
                 bin.write(buffer, 0, read);
-                read=in.read(buffer);
+                read = in.read(buffer);
             }
-            byte[] part=bin.toByteArray();
-            parts.add(new Part(part,file.getName(),file.getName()));
+            byte[] part = bin.toByteArray();
+            parts.add(new Part(part, file.getName(), file.getName()));
             document.setParts(parts);
-            String contentid=document.publish("contentido2", "contenido de prueba", workspaceid, categoryid, "WORD", contentType,file.getName());
-            System.out.println("Contenido creado con id="+contentid);
+            String contentid = document.publish("contentido3", "contenido de prueba", workspaceid, categoryid, "WORD", contentType, file.getName());
+            System.out.println("Contenido creado con id=" + contentid);
             //document.clearParts();
             //document.setParts(parts);
-            String versionName=document.updateContent(workspaceid,contentid,file.getName());
-
-            System.out.println("Contenido actualizado con version "+versionName);
-            versionName=document.updateContent(workspaceid,contentid,file.getName());
-            System.out.println("Contenido actualizado con version "+versionName);
-            for(VersionInfo info : document.getVersions(workspaceid, contentid))
+            document.updateContent(workspaceid, contentid, file.getName());
+            document.updateContent(workspaceid, contentid, file.getName());
+            for (VersionInfo info : document.getVersions(workspaceid, contentid))
             {
-                System.out.println(info.nameOfVersion);
+                System.out.println("nameOfVersion: "+info.nameOfVersion);
+                System.out.println("Created: "+info.created);
+                System.out.println("user: " +info.user);
+                System.out.println("------------- Fin de version info  ------------");
             }
         }
         catch (Exception e)
@@ -196,5 +209,42 @@ public class TestServices
             e.printStackTrace(System.out);
             Assert.fail(e.getMessage());
         }
+    }
+
+    @Test
+    public void searchTest()
+    {
+        OfficeApplication office = new OfficeApplication();
+        office.setUser("admin");
+        office.setPassword("password");
+        try
+        {
+            for (ContentInfo info : office.search(workspaceid, "contentido2", "contenido de", "*", "cm:OfficeContent"))
+            {
+                System.out.println("categoryTitle : " + info.categoryTitle);
+                System.out.println("descripcion : " + info.descripcion);
+                System.out.println("categoryId : " + info.categoryId);
+                System.out.println("id : " + info.id);
+                System.out.println("title : " + info.title);
+                System.out.println("-------------------------------------------");
+            }
+            System.out.println("-----------Fin de busqueda de 1 contenido --------------------------------");
+            for (ContentInfo info : office.search(workspaceid, "*", "*", "*", "cm:OfficeContent"))
+            {
+                System.out.println("categoryTitle : " + info.categoryTitle);
+                System.out.println("descripcion : " + info.descripcion);
+                System.out.println("categoryId : " + info.categoryId);
+                System.out.println("id : " + info.id);
+                System.out.println("title : " + info.title);
+                System.out.println("-------------------------------------------");
+            }
+            System.out.println("-----------Fin de busqueda de varios contenido --------------------------------");
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace(System.out);
+            Assert.fail(e.getMessage());
+        }
+
     }
 }
