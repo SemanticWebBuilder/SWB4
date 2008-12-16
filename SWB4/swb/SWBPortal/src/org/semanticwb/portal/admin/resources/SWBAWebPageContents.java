@@ -86,7 +86,7 @@ public class SWBAWebPageContents extends GenericResource {
             SemanticProperty sptemp = null;
 
             out.println("<fieldset>");
-            out.println("<form id=\""+id+"/NSF\" dojoType=\"dijit.form.Form\" method=\"post\">");
+            out.println("<form  dojoType=\"dijit.form.Form\" method=\"post\">");
             out.println("<table width=\"100%\" class=\"swbform\">");
             out.println("<thead>");
             out.println("<tr>");
