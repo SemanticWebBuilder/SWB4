@@ -6,6 +6,7 @@
 package org.semanticwb.xmlrpc;
 
 import java.net.URI;
+import java.util.Set;
 
 /**
  *
@@ -30,5 +31,7 @@ public interface XmlProxy
     
     public int getProxyPort();
     public void setProxyPort(int port);
+    
+    public Set<Part> getParts();
     
 }
