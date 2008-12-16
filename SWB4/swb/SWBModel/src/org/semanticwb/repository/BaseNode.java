@@ -25,8 +25,8 @@ public class BaseNode extends BaseNodeBase
 {
 
     static Logger log = SWBUtils.getLogger(BaseNode.class);
-    private static final String JCR_FROZENNODE_NAME = "jcr:frozenNode";
-    private static final String JCR_ROOTVERSION = "jcr:rootVersion";
+    public static final String JCR_FROZENNODE_NAME = "jcr:frozenNode";
+    public static final String JCR_ROOTVERSION = "jcr:rootVersion";
     private static final String JCR_VERSIONLABELS_NAME = "jcr:versionLabels";
     //private static final String JCR_VERSION_NAME = "jcr:version";
     private static final String ONPARENTVERSION_COPY = "COPY";
