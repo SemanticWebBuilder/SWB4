@@ -32,9 +32,7 @@ import org.semanticwb.openoffice.ui.dialogs.DialogAddLink;
 import org.semanticwb.openoffice.ui.dialogs.DialogContentInformation;
 import org.semanticwb.openoffice.ui.dialogs.DialogHistory;
 import org.semanticwb.openoffice.ui.dialogs.DialogSaveDocument;
-import org.semanticwb.openoffice.ui.wizard.PagContenido;
 import org.semanticwb.openoffice.ui.wizard.SelectCategory;
-import org.semanticwb.openoffice.ui.wizard.SelectTypeToShow;
 import org.semanticwb.openoffice.ui.wizard.TitleAndDescription;
 import org.semanticwb.openoffice.util.ExcelFileFilter;
 import org.semanticwb.openoffice.util.PPTFileFilter;
@@ -87,9 +85,10 @@ public abstract class OfficeDocument
     {
         boolean setupDocument = false;
         String contentId = this.getCustomProperties().get(CONTENT_ID_NAME);
+        String workspace = this.getCustomProperties().get(WORKSPACE_ID_NAME);
         try
         {
-            contentID = OfficeApplication.setupDocument(contentId);
+            contentID = OfficeApplication.setupDocument(workspace,contentId);
             setupDocument = true;
         }
         catch (XmlRpcException e)
@@ -643,7 +642,8 @@ public abstract class OfficeDocument
         getOfficeDocumentProxy().addAttachment(new Attachment(zipFile, zipFile.getName()));
         try
         {
-            getOfficeDocumentProxy().updateContent(this.contentID);
+            String workspace=this.getCustomProperties().get(WORKSPACE_ID_NAME);
+            getOfficeDocumentProxy().updateContent(workspace,this.contentID,this.getLocalPath().getName());
         }
         catch (Exception e)
         {
