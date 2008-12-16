@@ -136,7 +136,7 @@ public abstract class XMLRPCServlet extends HttpServlet
             xmlRpcObject.init(this.getServletConfig());
             xmlRpcObject.setUser(user);
             xmlRpcObject.setUser(password);
-            xmlRpcObject.setParts(parts);
+            xmlRpcObject.setRequestParts(parts);
         }
     }
 
@@ -145,7 +145,7 @@ public abstract class XMLRPCServlet extends HttpServlet
         if (objToExecute instanceof XmlRpcObject)
         {
             XmlRpcObject xmlRpcObject = (XmlRpcObject) objToExecute;
-            xmlRpcObject.clearParts();
+            xmlRpcObject.clearRequestParts();
         }
     }
 
