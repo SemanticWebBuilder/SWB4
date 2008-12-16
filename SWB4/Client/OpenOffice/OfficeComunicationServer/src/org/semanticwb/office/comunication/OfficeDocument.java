@@ -373,7 +373,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     info.nameOfVersion = version.getName();
                     info.created=version.getProperty("jcr:created").getDate().getTime();
                     String cm_user=loader.getOfficeManager(repositoryName).getUserType();
-                    info.user=version.getProperty(cm_user).getString();
+                    info.user=version.getNode("jcr:frozenNode").getProperty(cm_user).getString();
                     versions.add(info);
                 }
             }
