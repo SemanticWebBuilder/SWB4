@@ -21,6 +21,7 @@ import org.jdom.output.XMLOutputter;
 import static org.semanticwb.xmlrpc.Base64.encode;
 import static java.net.HttpURLConnection.*;
 import static org.semanticwb.xmlrpc.XmlRpcSerializer.*;
+
 /**
  *
  * @author victor.lorenzana
@@ -29,7 +30,7 @@ class XmlRpcClient
 {
 
     private Map<String, List<String>> responseProperties = new HashMap<String, List<String>>();
-    private static String boundary = "gc0p4Jq0M2Yt08jU534c0p";    
+    private static String boundary = "gc0p4Jq0M2Yt08jU534c0p";
     private XmlRpcClientConfig config;
 
     public XmlRpcClient(XmlRpcClientConfig config)
@@ -54,31 +55,31 @@ class XmlRpcClient
 
     public <T> T execute(Class<T> clazz, String methodName, Object[] parameters, Set<Attachment> attachments) throws XmlRpcException, HttpException
     {
-        for ( Attachment attachment : attachments )
+        for (Attachment attachment : attachments)
         {
-            if ( attachment.getFile().isDirectory() )
+            if (attachment.getFile().isDirectory())
             {
                 throw new XmlRpcException("The attachment '" + attachment.getName() + "' is a directory");
             }
-            if ( !attachment.getFile().exists() )
+            if (!attachment.getFile().exists())
             {
                 throw new XmlRpcException("The attachment '" + attachment.getName() + "' does not exist");
             }
         }
-        Document requestDoc = serializeRequest(methodName, parameters);           
+        Document requestDoc = serializeRequest(methodName, parameters);
         Document responseDoc = request(requestDoc, attachments);
         /*try
         {
-            XMLOutputter out=new XMLOutputter();
-            out.output(responseDoc, System.out);
+        XMLOutputter out=new XMLOutputter();
+        out.output(responseDoc, System.out);
         }
         catch(Exception e){}*/
         try
         {
-            
-            return (T)deserializeResponse(clazz, responseDoc);
+
+            return (T) deserializeResponse(clazz, responseDoc);
         }
-        catch ( ParseException pe )
+        catch (ParseException pe)
         {
             throw new XmlRpcException(pe.getMessage(), pe);
         }
@@ -91,7 +92,7 @@ class XmlRpcClient
         {
             return builder.build(in);
         }
-        catch ( Exception jde )
+        catch (Exception jde)
         {
             throw new XmlRpcException("It was not possible to contruct the document from the InputStream");
         }
@@ -150,7 +151,7 @@ class XmlRpcClient
         try
         {
             Proxy proxy;
-            if ( config.usesProxyServer() )
+            if (config.usesProxyServer())
             {
                 proxy = new Proxy(Type.HTTP, new InetSocketAddress(config.getProxyServer().toString(), config.getProxyPort()));
             }
@@ -158,9 +159,9 @@ class XmlRpcClient
             {
                 proxy = Proxy.NO_PROXY;
             }
-            HttpURLConnection connection = ( HttpURLConnection ) config.getWebAddress().toURL().openConnection(proxy);
+            HttpURLConnection connection = (HttpURLConnection) config.getWebAddress().toURL().openConnection(proxy);
             HttpURLConnection.setFollowRedirects(true);
-            if ( config.hasUserPassWord() )
+            if (config.hasUserPassWord())
             {
                 connection.setRequestProperty("Authorization", "Basic " + getUserPassWordEncoded());
             }
@@ -169,7 +170,7 @@ class XmlRpcClient
             connection.setDoInput(true);
             out = sendHeaders(connection);
             sendXmlDocumentPart(requestDoc, out);
-            for ( Attachment attachment : attachments )
+            for (Attachment attachment : attachments)
             {
                 File file = attachment.getFile();
                 String name = attachment.getName();
@@ -180,7 +181,7 @@ class XmlRpcClient
             int responseCode = connection.getResponseCode();
             String contentType = connection.getHeaderField("Content-Type");
             InputStream error = connection.getErrorStream();
-            switch ( responseCode )
+            switch (responseCode)
             {
                 case HTTP_OK:
                     this.responseProperties = connection.getHeaderFields();
@@ -191,24 +192,24 @@ class XmlRpcClient
                     throw new HttpException(connection.getResponseMessage(), HTTP_NOT_FOUND, getDetail(error, contentType));
             }
         }
-        catch ( MalformedURLException mfe )
+        catch (MalformedURLException mfe)
         {
             throw new XmlRpcException(mfe);
         }
-        catch ( IOException ioe )
+        catch (IOException ioe)
         {
             throw new XmlRpcException(ioe);
         }
         finally
         {
-            if ( out != null )
+            if (out != null)
             {
                 try
                 {
                     out.close();
                 }
-                catch ( IOException ioe )
-                {                
+                catch (IOException ioe)
+                {
                     throw new XmlRpcException(ioe);
                 }
             }
@@ -220,10 +221,10 @@ class XmlRpcClient
         StringBuilder sb = new StringBuilder();
 
         String charSet = "utf-8";
-        if ( contentType != null )
+        if (contentType != null)
         {
             int posInit = contentType.indexOf("charset=");
-            if ( posInit != -1 )
+            if (posInit != -1)
             {
                 charSet = contentType.substring(posInit + 8);
             }
@@ -239,19 +240,19 @@ class XmlRpcClient
                 read = in.read(buffer);
             }
         }
-        catch ( IOException ioe )
+        catch (IOException ioe)
         {
             throw new XmlRpcException("Error gettting the detail of response", ioe);
         }
         finally
         {
-            if ( in != null )
+            if (in != null)
             {
                 try
                 {
                     in.close();
                 }
-                catch ( IOException ioe )
+                catch (IOException ioe)
                 {
                     throw new XmlRpcException("Error closing conexión in the detail of response", ioe);
                 }
@@ -262,25 +263,50 @@ class XmlRpcClient
 
     private static Document getResponse(InputStream in, String contentType) throws XmlRpcException
     {
-        if ( contentType == null )
+        if (contentType == null)
         {
-            throw new XmlRpcException("The content-Type is not valid");
+            throw new XmlRpcException("The content-Type is not valid (is null)");
         }
-        if ( !contentType.startsWith("text/xml") )
+        else if (contentType.startsWith("multipart/form-data"))
         {
-            throw new XmlRpcException("The content-Type is not text/xml");
+            WBFileUpload upload = new WBFileUpload();
+            try
+            {
+                upload.getFiles(in, contentType);
+                InputStream inDocument = upload.getFileInputStream("xmlrpc");
+                Document doc = getDocument(inDocument);
+                try
+                {
+                    in.close();
+                }
+                catch (IOException ioe)
+                {
+                    throw new XmlRpcException("Error getting the response document", ioe);
+                }
+                return doc;
+            }
+            catch (Exception e)
+            {
+                throw new XmlRpcException(e);
+            }
         }
-        Document doc = getDocument(in);
-        try
+        else if (contentType.startsWith("text/xml"))
         {
-            in.close();
+            Document doc = getDocument(in);
+            try
+            {
+                in.close();
+            }
+            catch (IOException ioe)
+            {
+                throw new XmlRpcException("Error getting the response document", ioe);
+            }
+            return doc;
         }
-        catch ( IOException ioe )
+        else
         {
-            throw new XmlRpcException("Error getting the response document", ioe);
+            throw new XmlRpcException("The content-Type is invalid (" + contentType + ")");
         }
-        return doc;
+
     }
-    
-    
 }
