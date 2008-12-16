@@ -7,34 +7,34 @@
 	<xsl:choose>
 		<xsl:when test="@email ='1'">
                     <h1><xsl:value-of select="site" /></h1>
-                    <h2>Para: <xsl:value-of select="responsable" />, <xsl:value-of select="area" /> </h2>
+                    <h2><xsl:value-of select="msgTo" disable-output-escaping="yes" /> <xsl:value-of select="responsable" />, <xsl:value-of select="area" /> </h2>
 		    <xsl:if test="count(headermsg) &gt; 0">
 			<p><xsl:value-of select="headermsg" disable-output-escaping="yes" /></p>
 		    </xsl:if>
                     <TABLE>
 			<TR>
-				<TD>Nombre:</TD>
+				<TD><xsl:value-of select="msgName" disable-output-escaping="yes" /></TD>
 				<TD><xsl:value-of select="fromname" /></TD>
 			</TR>
 			<TR>
-				<TD>Correo electrónico:</TD>
+				<TD><xsl:value-of select="msgViewEmail" disable-output-escaping="yes" /></TD>
 				<TD><xsl:value-of select="fromemail" /></TD>
 			</TR>
 			<xsl:if test="count(phone) &gt; 0">
 			<TR>
-				<TD>Teléfono(s):</TD>
+				<TD><xsl:value-of select="msgPhone" disable-output-escaping="yes" /></TD>
 				<TD><xsl:value-of select="phone" /></TD>
 			</TR>
 			</xsl:if>
 			<xsl:if test="count(fax) &gt; 0">
 			<TR>
-				<TD>Fax:</TD>
+				<TD><xsl:value-of select="msgFax" disable-output-escaping="yes" /></TD>
 				<TD><xsl:value-of select="fax" /></TD>
 			</TR>
 			</xsl:if>
 		    </TABLE>
                     <fieldset>
-                    	<legend>Mensaje</legend>
+                    	<legend><xsl:value-of select="msgMessage" disable-output-escaping="yes" /></legend>
                         <p><xsl:value-of select="message" /></p>
                     </fieldset>
                     <xsl:if test="count(footermsg) &gt; 0">
@@ -44,7 +44,7 @@
                     </xsl:if>
 		</xsl:when>
 		<xsl:otherwise>
-                    <h1>Comentarios</h1>
+                    <h1><xsl:value-of select="msgComments" disable-output-escaping="yes" /></h1>
 		    <FORM name="frmSendEmail" method="POST" action="{@accion}" > 
         	    <TABLE align="center">
 			<xsl:for-each select="fselect">
