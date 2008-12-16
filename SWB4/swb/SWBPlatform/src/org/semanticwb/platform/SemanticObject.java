@@ -306,13 +306,16 @@ public class SemanticObject
         if (prop.isBinary())
         {
             String value = getProperty(prop);
-            GenericObjectBase obj = new GenericObjectBase(this);
-            String workPath = obj.getWorkPath();
-            if (!(workPath.endsWith("\\") || workPath.equals("/")))
+            if (value != null)
             {
-                workPath += "/" + value;
+                GenericObjectBase obj = new GenericObjectBase(this);
+                String workPath = obj.getWorkPath();
+                if (!(workPath.endsWith("\\") || workPath.equals("/")))
+                {
+                    workPath += "/" + value;
+                }
+                SWBPlatform.removeFileFromWorkPath(workPath);
             }
-            SWBPlatform.removeFileFromWorkPath(workPath);
         }
         if (m_virtual)
         {
@@ -522,7 +525,7 @@ public class SemanticObject
             String name = prop.getLabel();
             if (name == null)
             {
-                name=prop.getName();
+                name = prop.getName();
             }
             name = "get" + name.substring(0, 1).toUpperCase() + name.substring(1);
             try
@@ -1027,11 +1030,11 @@ public class SemanticObject
 
     public void remove()
     {
-        Iterator<SemanticProperty> properties=this.getSemanticClass().listProperties();
-        while(properties.hasNext())
+        Iterator<SemanticProperty> properties = this.getSemanticClass().listProperties();
+        while (properties.hasNext())
         {
-            SemanticProperty prop=properties.next();
-            if(prop.isBinary())
+            SemanticProperty prop = properties.next();
+            if (prop.isBinary())
             {
                 // removida manualmente por ser binaria
                 removeProperty(prop);
@@ -1063,9 +1066,10 @@ public class SemanticObject
                     SemanticObject obj = getObjectProperty(prop);
                     ret = obj.getDisplayName(lang);
                 }
-            }else
+            }
+            else
             {
-                ret=getLocaleProperty(getModel().getSemanticProperty(SemanticVocabulary.RDFS_LABEL), lang);
+                ret = getLocaleProperty(getModel().getSemanticProperty(SemanticVocabulary.RDFS_LABEL), lang);
             }
         }
         else
@@ -1091,7 +1095,5 @@ public class SemanticObject
         StmtIterator stit = getModel().getRDFModel().listStatements(null, null, getRDFResource());
         return new SemanticIterator(stit, true);
     }
-
-
 }
 
