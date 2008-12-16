@@ -327,6 +327,7 @@ public class CommentSwf extends Comment {
                 setAttribute(base, fup, "subject");
                 setAttribute(base, fup, "headermsg");
                 setAttribute(base, fup, "footermsg");
+                setAttribute(base, fup, "generatelog");
 
                 base.updateAttributesToDB();
                 Document dom = base.getDom();
@@ -505,6 +506,19 @@ public class CommentSwf extends Comment {
             }
             ret.append("</td> \n");
             ret.append("</tr> \n");
+            
+            ret.append("<tr> \n");
+            ret.append("<td class=\"datos\">"
+                    + paramsRequest.getLocaleString("msgGenerateLog")
+                    + " :</td> \n");
+            ret.append("<td class=\"valores\">");
+            ret.append("<input type=\"checkbox\" name=\"generatelog\" value=\"1\"");
+            if ("1".equals(base.getAttribute("generatelog", "0"))) {
+                ret.append(" checked");
+            }
+            ret.append("></td> \n");
+            ret.append("</tr> \n");
+            
             ret.append("<tr> \n");
             ret.append("<td class=\"datos\">"
                     + paramsRequest.getLocaleString("msgSwfConfiguration")
