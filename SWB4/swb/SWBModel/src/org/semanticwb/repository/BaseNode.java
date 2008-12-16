@@ -1,6 +1,7 @@
 package org.semanticwb.repository;
 
 import java.io.InputStream;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -495,6 +496,7 @@ public class BaseNode extends BaseNodeBase
         }
         else
         {
+            getSemanticObject().removeProperty(property);
             String fileName = UUID.randomUUID().toString();
             getSemanticObject().setInputStreamProperty(property, value, fileName);
         }
@@ -1259,8 +1261,9 @@ public class BaseNode extends BaseNodeBase
                 {
                     try
                     {
-                        Float version=new Float(nameBaseVersion);
-                        nextVersion = String.valueOf(version.floatValue()+.1f);
+                        Float version = new Float(nameBaseVersion);
+                        DecimalFormat format = new DecimalFormat("#.00");
+                        nextVersion = format.format(version.floatValue() + .1f);
                     }
                     catch (NumberFormatException nfe)
                     {
@@ -1502,7 +1505,7 @@ public class BaseNode extends BaseNodeBase
             }
             if (hasOtherObjectWithSameName)
             {
-                throw new SWBException("Already exists a node with the same name NodeName: "+name);
+                throw new SWBException("Already exists a node with the same name NodeName: " + name);
             }
             BaseNode newBaseNode;
             String uri = getSemanticObject().getModel().getObjectUri(UUID.randomUUID().toString(), clazz);
@@ -1623,7 +1626,7 @@ public class BaseNode extends BaseNodeBase
                     break;
                 }
             }
-            if(!existsProperty)
+            if (!existsProperty)
             {
                 SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(uri);
                 if (prop != null)
