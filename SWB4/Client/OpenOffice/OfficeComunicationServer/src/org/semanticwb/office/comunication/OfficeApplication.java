@@ -60,7 +60,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         try
         {
 
-            session = loader.openSession(repositoryName, "", "");
+            session = loader.openSession(repositoryName, this.user, this.password);
             ArrayList<String> contents = new ArrayList<String>();
             Node categoryNode = session.getNodeByUUID(categoryID);
             String cm_category = loader.getOfficeManager(repositoryName).getCategoryType();
@@ -107,7 +107,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         try
         {
 
-            session = loader.openSession(repositoryName, "", "");
+            session = loader.openSession(repositoryName, this.user, this.password);
             ArrayList<CategoryInfo> categories = new ArrayList<CategoryInfo>();
             Node root = session.getRootNode();
             NodeIterator it = root.getNodes();
@@ -148,7 +148,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         Node root = null;
         try
         {
-            session = loader.openSession(repositoryName, "", "");
+            session = loader.openSession(repositoryName, this.user, this.password);
             root = session.getRootNode();
             String cm_category = loader.getOfficeManager(repositoryName).getCategoryType();
             String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
@@ -200,7 +200,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         Session session = null;
         try
         {
-            session = loader.openSession(repositoryName, "", "");
+            session = loader.openSession(repositoryName, this.user, this.password);
             Node node = session.getNodeByUUID(id);
             canDeleteCategory = !node.getNodes().hasNext();
         }
@@ -220,7 +220,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         Session session = null;
         try
         {
-            session = loader.openSession(repositoryName, "", "");
+            session = loader.openSession(repositoryName, this.user,this.password);
             Node node = session.getNodeByUUID(id);
             if (!node.getNodes().hasNext())
             {
@@ -252,7 +252,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         Node parent = null;
         try
         {
-            session = loader.openSession(repositoryName, "", "");
+            session = loader.openSession(repositoryName, this.user, this.password);
             parent = session.getNodeByUUID(categoryId);
             String cm_category = loader.getOfficeManager(repositoryName).getCategoryType();
             String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
@@ -304,7 +304,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         try
         {
 
-            session = loader.openSession(repositoryName, "", "");
+            session = loader.openSession(repositoryName, this.user, this.password);
             ArrayList<CategoryInfo> categories = new ArrayList<CategoryInfo>();
             Node categoryNode = session.getNodeByUUID(categoryId);
             NodeIterator it = categoryNode.getNodes();
@@ -358,7 +358,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         ArrayList<ContentInfo> contents = new ArrayList<ContentInfo>();
         try
         {
-            session = loader.openSession(repositoryName, "", "");
+            session = loader.openSession(repositoryName, this.user, this.password);
             String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
             String cm_description = loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
             Query query = null;
