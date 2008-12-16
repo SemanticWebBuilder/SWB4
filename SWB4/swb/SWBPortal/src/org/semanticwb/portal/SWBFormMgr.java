@@ -12,7 +12,10 @@ import org.semanticwb.model.DisplayProperty;
 import org.semanticwb.model.FormElement;
 import org.semanticwb.model.FormView;
 import org.semanticwb.model.GenericFormElement;
+import org.semanticwb.model.PropertyGroup;
+import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.SWBVocabulary;
 import org.semanticwb.platform.*;
 
 /**
@@ -43,10 +46,11 @@ public class SWBFormMgr
     private String m_method="POST";
     private String m_lang="es";
     private String m_type=TYPE_XHTML;
+    private PropertyGroup m_general=null;
 
     private HashMap<String, String> hidden=null;
     
-    private HashMap<String, TreeSet> groups=null;
+    private HashMap<PropertyGroup, TreeSet> groups=null;
     
     public SWBFormMgr(SemanticObject obj, String frmview, String mode)
     {
@@ -74,6 +78,8 @@ public class SWBFormMgr
     
     public void init()
     {
+        m_general=(PropertyGroup)SWBPlatform.getSemanticMgr().getOntology().getGenericObject(SemanticVocabulary.SWBXF_URI+"pg_General");
+        //System.out.println("********************"+m_general+"***************************");
         if(m_fview!=null)
         {
             m_propmap=m_fview.getPropertyMap(m_mode);
@@ -86,7 +92,7 @@ public class SWBFormMgr
         {
             SemanticProperty prop=it.next();
             addProperty(prop);
-        }        
+        }
     }
     
     public void addProperty(SemanticProperty prop)
@@ -94,7 +100,7 @@ public class SWBFormMgr
         boolean createGroup=false;
         boolean addProp=false;
         SemanticObject obj=prop.getDisplayProperty();
-        String grp=null;
+        PropertyGroup grp=null;
         boolean hidden=false;
         boolean required=prop.isRequired();
         if(obj!=null)
@@ -104,7 +110,7 @@ public class SWBFormMgr
             hidden=disp.isHidden();
         }
 
-        if(grp==null)grp="General";
+        if(grp==null)grp=m_general;
         TreeSet<SemanticProperty> props=groups.get(grp);
         if(props==null)
         {
@@ -147,6 +153,7 @@ public class SWBFormMgr
         if(addProp)
         {
             props.add(prop);
+            //System.out.println("put:"+grp);
             if(createGroup)groups.put(grp, props);
         }
     }
@@ -286,12 +293,14 @@ public class SWBFormMgr
         }
 //        else
         {
-            Iterator<String> itgp=groups.keySet().iterator();
+            Iterator<PropertyGroup> itgp=SWBComparator.sortSortableObject(groups.keySet().iterator());
             while(itgp.hasNext())
             {
-                String group=itgp.next();
+                PropertyGroup group=itgp.next();
                 ret.append("	<fieldset>");
-                ret.append("	    <legend>"+group+"</legend>");
+                //System.out.println("group:"+group);
+                //System.out.println("so:"+group.getSemanticObject());
+                ret.append("	    <legend>"+group.getSemanticObject().getDisplayName(m_lang)+"</legend>");
                 //ret.append("	    <ol>");
                 ret.append("	    <table>");
                 Iterator<SemanticProperty> it=groups.get(group).iterator();
