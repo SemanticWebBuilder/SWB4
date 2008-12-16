@@ -42,6 +42,7 @@ import javax.jcr.version.VersionException;
 import javax.jcr.version.VersionHistory;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.platform.SemanticClass;
@@ -282,7 +283,7 @@ public class SimpleNode implements Node
 
     }
 
-    private PropertyImp addProperty(SemanticProperty property, BaseNode node, SemanticClass clazz) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
+    private PropertyImp addProperty(SemanticProperty property, BaseNode node, SemanticClass clazz) throws RepositoryException
     {
         if (this.properties.containsKey(getName(property)))
         {
@@ -600,7 +601,30 @@ public class SimpleNode implements Node
 
     private boolean existsProperty(String name)
     {
-        return properties.containsKey(name);
+        boolean existsProperty=properties.containsKey(name);
+        if(!existsProperty && node!=null)
+        {
+            // puede ser una propiedad agregada
+            try
+            {
+                String uri=node.getUri(name);
+                SemanticProperty prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(uri);
+                if(prop!=null)
+                {
+                    String value=node.getSemanticObject().getProperty(prop);
+                    if(value!=null)
+                    {
+                        addProperty(prop, node, clazz);
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+                log.error(e);
+            }
+
+        }
+        return existsProperty;
     }
 
     public Property getProperty(String relPath) throws PathNotFoundException, RepositoryException
