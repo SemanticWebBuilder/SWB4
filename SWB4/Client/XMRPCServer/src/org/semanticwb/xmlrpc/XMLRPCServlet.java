@@ -5,7 +5,9 @@
 package org.semanticwb.xmlrpc;
 
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -37,6 +39,7 @@ import static org.semanticwb.xmlrpc.XmlRpcSerializer.*;
 public abstract class XMLRPCServlet extends HttpServlet
 {
 
+    private static String boundary = "gc0p4Jq0M2Yt08jU534c0p";
     private static Logger log = SWBUtils.getLogger(XMLRPCServlet.class);
     private static final String RETURN = "\r\n";
     //private static Hashtable<String, Object> cacheObjects = new Hashtable<String, Object>();
@@ -77,11 +80,11 @@ public abstract class XMLRPCServlet extends HttpServlet
                 String methodName = getMethodName(xmlrpcDocument);
                 ArrayList<Method> methods = getMethods(methodName);
                 Object[] parameters = deserializeRequest(xmlrpcDocument, methods);
-                Method method = getMethod(methodName, methods,parameters);
+                Method method = getMethod(methodName, methods, parameters);
                 String objectName = method.getDeclaringClass().getName();
-                Object objResponse = execute(objectName, method, parameters, parts,request.getAttribute("user").toString(),request.getAttribute("password").toString());
+                Object objResponse = execute(objectName, method, parameters, parts, request.getAttribute("user").toString(), request.getAttribute("password").toString());
                 Document docResponse = serializeResponse(objResponse);
-                sendResponse(response, docResponse);
+                sendResponse(response, docResponse, objResponse);
 
             }
             catch (Exception cne)
@@ -128,7 +131,7 @@ public abstract class XMLRPCServlet extends HttpServlet
         }
     }
 
-    protected void beforeExecute(Object objToExecute, Set<Part> parts,String user,String password) throws Exception
+    protected void beforeExecute(Object objToExecute, Set<Part> parts, String user, String password) throws Exception
     {
         if (objToExecute instanceof XmlRpcObject)
         {
@@ -149,23 +152,80 @@ public abstract class XMLRPCServlet extends HttpServlet
         }
     }
 
-    private static Method getMethod(String methodName, ArrayList<Method> methods,Object[] parameters) throws NoSuchMethodException
+    private static Method getMethod(String methodName, ArrayList<Method> methods, Object[] parameters) throws NoSuchMethodException
     {
-        for(Method m : methods)
+        for (Method m : methods)
         {
-            if(m.getParameterTypes().length==parameters.length)
+            if (m.getParameterTypes().length == parameters.length)
             {
                 return m;
             }
         }
         throw new NoSuchMethodException("The method " + methodName + " was not found");
-        /*switch (methods.size())
+    }
+
+    private static void sendPart(byte[] content, String name,String filename, OutputStream out) throws IOException
+    {
+        String newBoundary = "\r\n--" + boundary + "\r\n";
+        String contentDisposition = "Content-Disposition: form-data; name=\"" + name + "\"; filename=\"" + filename + "\"\r\n\r\n";
+        out.write(newBoundary.getBytes());
+        out.write(contentDisposition.getBytes());
+        out.write(content);
+    }
+
+    private static void writeEnd(OutputStream out) throws IOException
+    {
+        String newBoundary = "\r\n--" + boundary + "\r\n";
+        out.write(newBoundary.getBytes());
+    }
+
+    private static void sendXmlDocumentPart(Document requestDoc, OutputStream out) throws IOException
+    {
+        String newBoundary = "--" + boundary + "\r\n";
+        String contentDisposition = "Content-Disposition: form-data; name=\"xmlrpc\"; filename=\"xmlrpc.xml\"\r\n\r\n";
+        out.write(newBoundary.getBytes());
+        out.write(contentDisposition.getBytes());
+        XMLOutputter outp = new XMLOutputter();
+        outp.output(requestDoc, out);
+    }
+
+    private static void sendResponse(ServletResponse response, Document docResponse, Object objResponse) throws IOException
+    {
+        if (objResponse instanceof XmlRpcObject)
         {
-            case 1:
-                return methods.get(0);
-            default:
+            XmlRpcObject xmlobject = (XmlRpcObject) objResponse;
+            if (xmlobject.responseParts == null || xmlobject.responseParts.size() == 0)
+            {
+                response.setContentType("text/xml");
+                ServletOutputStream out = response.getOutputStream();
+                XMLOutputter xMLOutputter = new XMLOutputter();
+                xMLOutputter.output(docResponse, out);
+                out.flush();
+                out.close();
+            }
+            else
+            {
+                response.setContentType("multipart/form-data; boundary=" + boundary);
+                OutputStream out = response.getOutputStream();
+                sendXmlDocumentPart(docResponse, out);
+                for (Part attachment : xmlobject.responseParts)
+                {                    
+                    sendPart(attachment.getContent(), attachment.getName(),attachment.getFileName(), out);
+                }
+                writeEnd(out);
+                out.flush();
+                out.close();
+            }
         }
-        throw new NoSuchMethodException("The method " + methodName + " was not found");*/
+        else
+        {
+            response.setContentType("text/xml");
+            ServletOutputStream out = response.getOutputStream();
+            XMLOutputter xMLOutputter = new XMLOutputter();
+            xMLOutputter.output(docResponse, out);
+            out.flush();
+            out.close();
+        }
     }
 
     private static void sendResponse(ServletResponse response, Document docResponse) throws IOException
@@ -188,7 +248,7 @@ public abstract class XMLRPCServlet extends HttpServlet
         return classFullPath;
     }
 
-    private Object execute(String objectName, Method method, Object[] parameters, Set<Part> parts,String user,String password) throws ClassNotFoundException, XmlRpcException, InstantiationException, IllegalAccessException, NoSuchMethodException
+    private Object execute(String objectName, Method method, Object[] parameters, Set<Part> parts, String user, String password) throws ClassNotFoundException, XmlRpcException, InstantiationException, IllegalAccessException, NoSuchMethodException
     {
         Class clazz = method.getDeclaringClass();
 
@@ -201,7 +261,7 @@ public abstract class XMLRPCServlet extends HttpServlet
         Object objToExecute = clazz.newInstance();
         try
         {
-            beforeExecute(objToExecute, parts,user,password);
+            beforeExecute(objToExecute, parts, user, password);
         }
         catch (Exception e)
         {
