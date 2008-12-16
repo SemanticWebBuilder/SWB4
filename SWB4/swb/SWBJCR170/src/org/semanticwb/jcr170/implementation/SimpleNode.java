@@ -601,24 +601,25 @@ public class SimpleNode implements Node
 
     private boolean existsProperty(String name)
     {
-        boolean existsProperty=properties.containsKey(name);
-        if(!existsProperty && node!=null)
+        boolean existsProperty = properties.containsKey(name);
+        if (!existsProperty && node != null)
         {
             // puede ser una propiedad agregada
             try
             {
-                String uri=node.getUri(name);
-                SemanticProperty prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(uri);
-                if(prop!=null)
+                String uri = node.getUri(name);
+                SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(uri);
+                if (prop != null)
                 {
-                    String value=node.getSemanticObject().getProperty(prop);
-                    if(value!=null)
+                    String value = node.getSemanticObject().getProperty(prop);
+                    if (value != null)
                     {
                         addProperty(prop, node, clazz);
+                        existsProperty = true;
                     }
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 log.error(e);
             }
@@ -1218,11 +1219,47 @@ public class SimpleNode implements Node
     public Node getNode(String relPath) throws PathNotFoundException, RepositoryException
     {
         SessionImp.checkRelPath(relPath);
-        relPath = SessionImp.normalize(relPath, this);
+        /*relPath = SessionImp.normalize(relPath, this);
         Item item = session.getItem(relPath);
         if (item.isNode())
         {
-            return (Node) item;
+        return (Node) item;
+        }*/
+
+        for (SimpleNode child : childs.values())
+        {
+            if (child.getName().equals(relPath))
+            {
+                return child;
+            }
+        }
+        if (node != null)
+        {
+            Iterator<BaseNode> childsBaseNodes = node.listNodes();
+            while (childsBaseNodes.hasNext())
+            {
+                BaseNode child = childsBaseNodes.next();
+                if (child.getName().equals(relPath))
+                {
+                    BaseNode nodeChild = child;
+                    boolean isDeleted = false;
+                    for (SimpleNode childNode : this.removedchilds)
+                    {
+                        if (childNode.id.equals(nodeChild.getId()))
+                        {
+                            isDeleted = true;
+                            break;
+                        }
+                    }
+                    if (!isDeleted)
+                    {
+                        if (!childs.containsKey(nodeChild.getId()))
+                        {
+                            return new SimpleNode(nodeChild, session);
+                        }
+                    }
+                }
+            }
         }
         throw new PathNotFoundException("The path is not a node");
     }
