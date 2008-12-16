@@ -76,12 +76,12 @@ public class XmlRpcSerializer {
     {
         ArrayList<Method> newMethods = new ArrayList<Method>();
         ArrayList<Object> parameters = new ArrayList<Object>();
+        List values = XPath.selectNodes(document, "/methodCall/params/param/value");
+        methods = selectMethodsWithSameNumberOfParameters(methods, values.size());
         for ( Method method : methods )
         {
             try
             {
-                List values = XPath.selectNodes(document, "/methodCall/params/param/value");
-                methods = selectMethodsWithSameNumberOfParameters(methods, values.size());                
                 int iParameter=0;
                 for ( Object oElement : values )
                 {
