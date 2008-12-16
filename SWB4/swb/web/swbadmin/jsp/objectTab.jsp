@@ -64,7 +64,7 @@
         
         if(obj instanceof Calendarable)
         {
-            String auri="/swb/swb/SWBAdmin/WBAd_Home/_rid/55/_mto/3";
+            String auri="/swb/swb/SWBAdmin/WBAd_Home/_rid/4/_mto/3";
             auri+="?suri="+obj.getSemanticObject().getEncodedURI();
             auri+="&sprop="+voc.swb_hasCalendar.getEncodedURI();
             System.out.println(auri);
