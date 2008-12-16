@@ -33,6 +33,8 @@ package org.semanticwb.portal.resources;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Date;
+import javax.mail.internet.InternetAddress;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
@@ -52,23 +54,25 @@ import org.w3c.dom.Element;
 
 
 
-/** Objeto que se encarga de desplegar y administrar recomendaciones de usuarios finales bajo ciertos
- * criterios(configuraci�n de recurso).
+/** Objeto que se encarga de desplegar y administrar recomendaciones de usuarios 
+ * finales bajo ciertos criterios(configuraci�n de recurso).
  *
- * Object that is in charge to unfold and to administer recommendations of end users under certain
- * criteria (resource configuration).
+ * Object that is in charge to unfold and to administer recommendations of end 
+ * users under certain criteria (resource configuration).
  *
  * @author : Vanessa Arredondo N��ez
  * @version 1.0
  */
-public class Recommend extends GenericAdmResource
-{
+public class Recommend extends GenericAdmResource {
+    
+    
     private static Logger log = SWBUtils.getLogger(Recommend.class);
     
     javax.xml.transform.Templates tpl; 
     String webWorkPath = "/work";    
-    String name=getClass().getName().substring(getClass().getName().lastIndexOf(".")+1);
-    String path = SWBPlatform.getContextPath() +"/swbadmin/xsl/";
+    String name = getClass().getName().substring(getClass().getName(
+            ).lastIndexOf(".") + 1);
+    String path = SWBPlatform.getContextPath() + "/swbadmin/xsl/";
     
     /** 
      * Creates a new instance of Recomendar. 
@@ -79,30 +83,37 @@ public class Recommend extends GenericAdmResource
     /**
      * @param base
      */    
-    public void setResourceBase(Portlet base)
-    {
-        try 
-        {
+    @Override
+    public void setResourceBase(Portlet base) {
+        try {
             super.setResourceBase(base);
-            webWorkPath = (String) SWBPlatform.getWebWorkPath() +  base.getWorkPath();            
+            webWorkPath = (String) SWBPlatform.getWebWorkPath()
+                    + base.getWorkPath();            
+        } catch (Exception e) {
+            log.error("Error while setting resource base: " + base.getId()
+                    + "-" + base.getTitle(), e);
         }
-        catch(Exception e) { log.error("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);  }
-        if(!"".equals(base.getAttribute("template","").trim()))
-        {
-            try 
-            { 
-                tpl = SWBUtils.XML.loadTemplateXSLT(SWBPlatform.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim())); 
-                path=webWorkPath + "/";
-            }
-            catch(Exception e) { log.error("Error while loading resource template: "+base.getId(), e); }
-        }
-        if(tpl==null)
-        {
+        if (!"".equals(base.getAttribute("template", "").trim())) {
             try { 
-                tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getAdminFileStream("/swbadmin/xsl/"+name+"/"+name+".xslt")); 
-            } 
-            catch(Exception e) { log.error("Error while loading default resource template: "+base.getId(), e); }
-        }   
+                tpl = SWBUtils.XML.loadTemplateXSLT(
+                        SWBPlatform.getFileFromWorkPath(base.getWorkPath() + "/"
+                        + base.getAttribute("template").trim())); 
+                path = webWorkPath + "/";
+            } catch (Exception e) {
+                log.error("Error while loading resource template: "
+                        + base.getId(), e);
+            }
+        }
+        if (tpl == null) {
+            try {
+                tpl = SWBUtils.XML.loadTemplateXSLT(
+                        SWBPortal.getAdminFileStream("/swbadmin/xsl/" + name
+                                                     + "/" + name + ".xslt")); 
+            } catch (Exception e) {
+                log.error("Error while loading default resource template: "
+                        + base.getId(), e);
+            }
+        }
     }
     
     /**
@@ -113,62 +124,90 @@ public class Recommend extends GenericAdmResource
      * @throws AFException
      * @throws IOException
      */
-    
-    public org.w3c.dom.Document getDom(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
-        String action = null != request.getParameter("rec_act") && !"".equals(request.getParameter("rec_act").trim()) ? request.getParameter("rec_act").trim() : "rec_step2";
-        Portlet base=getResourceBase();
-        try
-        {        
-            Document  dom = SWBUtils.XML.getNewDocument();
-            if("rec_step3".equals(action)) dom=getDomEmail(request, response, paramRequest); // Envia correo
-            else
-            { // Nueva ventana con formulario
-                User user=paramRequest.getUser();
-                SWBResourceURLImp url=new SWBResourceURLImp(request, base, paramRequest.getTopic(),SWBResourceURL.UrlType_RENDER);
+    public Document getDom(HttpServletRequest request,
+            HttpServletResponse response, SWBParamRequest paramRequest)
+            throws SWBResourceException, IOException {
+        
+        String action = (null != request.getParameter("rec_act")
+                         && !"".equals(request.getParameter("rec_act").trim()))
+                         ? request.getParameter("rec_act").trim()
+                         : "rec_step2";
+        Portlet base = getResourceBase();
+        try {        
+            Document dom = SWBUtils.XML.getNewDocument();
+            if ("rec_step3".equals(action)) {
+                dom = getDomEmail(request, response, paramRequest); // Envia correo
+            } else { // Nueva ventana con formulario
+                User user = paramRequest.getUser();
+                SWBResourceURLImp url = new SWBResourceURLImp(request, base,
+                        paramRequest.getTopic(), SWBResourceURL.UrlType_RENDER);
                 url.setResourceBase(base);
-                url.setMode(url.Mode_VIEW);
-                url.setWindowState(url.WinState_MAXIMIZED);
-                url.setParameter("rec_act","rec_step3");
+                url.setMode(SWBResourceURLImp.Mode_VIEW);
+                url.setWindowState(SWBResourceURLImp.WinState_MAXIMIZED);
+                url.setParameter("rec_act", "rec_step3");
                 url.setTopic(paramRequest.getTopic());
                 url.setCallMethod(paramRequest.Call_DIRECT);
 
                 Element el = dom.createElement("form");
-                el.setAttribute("path", path);
+                el.setAttribute("path",
+                        SWBPlatform.getContextPath() + "/swbadmin/css/");
                 el.setAttribute("accion", url.toString());
-                el.setAttribute("from",paramRequest.getLocaleString("msgFrom"));
-                el.setAttribute("to",paramRequest.getLocaleString("msgTo"));
+                el.setAttribute("from", paramRequest.getLocaleString("msgFrom"));
+                el.setAttribute("to", paramRequest.getLocaleString("msgTo"));
                 dom.appendChild(el);
 
+                el = dom.createElement("msgRecommend");
+                el.appendChild(dom.createTextNode(paramRequest.getLocaleString("msgRecommend")));
+                dom.getChildNodes().item(0).appendChild(el);
+                
+                el = dom.createElement("labelSender");
+                el.appendChild(dom.createTextNode(paramRequest.getLocaleString("msgSender")));
+                dom.getChildNodes().item(0).appendChild(el);
                 el = dom.createElement("ftextsender");
                 el.setAttribute("tag", paramRequest.getLocaleString("msgSender"));
                 el.setAttribute("inname", "txtFromName");
-                //if (user.isLoged())   TODO: VER4
-                {
-                    String strFromName = null != user.getUsrFirstName() && !"".equals(user.getUsrFirstName().trim()) ? user.getUsrFirstName().trim() : "";
-                    strFromName+= null != user.getUsrLastName() && !"".equals(user.getUsrLastName().trim()) ? " " + user.getUsrLastName().trim() : "";
-                    strFromName+= null != user.getUsrSecondLastName() && !"".equals(user.getUsrSecondLastName().trim()) ? " " + user.getUsrSecondLastName().trim() : "";
+                if (user.isSigned()) {
+                    String strFromName = (null != user.getUsrFirstName()
+                            && !"".equals(user.getUsrFirstName().trim()))
+                            ? user.getUsrFirstName().trim()
+                            : "";
+                    strFromName += (null != user.getUsrLastName()
+                            && !"".equals(user.getUsrLastName().trim()))
+                            ? " " + user.getUsrLastName().trim()
+                            : "";
+                    strFromName += (null != user.getUsrSecondLastName()
+                            && !"".equals(user.getUsrSecondLastName().trim()))
+                            ? " " + user.getUsrSecondLastName().trim()
+                            : "";
                     el.setAttribute("invalue", strFromName);
                 }
                 dom.getChildNodes().item(0).appendChild(el);
 
                 el = dom.createElement("ftextsender");
-                el.setAttribute("tag", paramRequest.getLocaleString("msgSenderEmail"));
+                el.setAttribute("tag",
+                                paramRequest.getLocaleString("msgSenderEmail"));
                 el.setAttribute("inname", "txtFromEmail");
-                //if (user.isLoged()) //TODO VER4
-                {
-                    String strFromEmail = null != user.getUsrEmail() && !"".equals(user.getUsrEmail().trim()) ? user.getUsrEmail().trim() : "";
+                if (user.isSigned()) {
+                    String strFromEmail = (null != user.getUsrEmail()
+                            && !"".equals(user.getUsrEmail().trim()))
+                            ? user.getUsrEmail().trim()
+                            : "";
                     el.setAttribute("invalue", strFromEmail);
                 }
                 dom.getChildNodes().item(0).appendChild(el);
 
+                el = dom.createElement("labelReceiver");
+                el.appendChild(dom.createTextNode(paramRequest.getLocaleString("msgReceiver")));
+                dom.getChildNodes().item(0).appendChild(el);
                 el = dom.createElement("ftextreceiver");
-                el.setAttribute("tag", paramRequest.getLocaleString("msgReceiver"));
+                el.setAttribute("tag",
+                                paramRequest.getLocaleString("msgReceiver"));
                 el.setAttribute("inname", "txtToName");
                 dom.getChildNodes().item(0).appendChild(el);
 
                 el = dom.createElement("ftextreceiver");
-                el.setAttribute("tag", paramRequest.getLocaleString("msgReceiverEmail"));
+                el.setAttribute("tag",
+                                paramRequest.getLocaleString("msgReceiverEmail"));
                 el.setAttribute("inname", "txtToEmail");
                 dom.getChildNodes().item(0).appendChild(el);
 
@@ -178,40 +217,60 @@ public class Recommend extends GenericAdmResource
                 dom.getChildNodes().item(0).appendChild(el);
 
                 el = dom.createElement("fsubmit");
-                if (!"".equals(base.getAttribute("imgenviar", "").trim()))
-                {
+                if (!"".equals(base.getAttribute("imgenviar", "").trim())) {
                     el.setAttribute("img", "1");
-                    el.setAttribute("src", webWorkPath + "/" + base.getAttribute("imgenviar").trim());
-                    if (!"".equals(base.getAttribute("altenviar", "").trim())) el.setAttribute("alt", base.getAttribute("altenviar").trim());
-                    else el.setAttribute("alt", paramRequest.getLocaleString("msgRecommend"));
-                } 
-                else
-                {
+                    el.setAttribute("src", webWorkPath + "/" 
+                            + base.getAttribute("imgenviar").trim());
+                    if (!"".equals(base.getAttribute("altenviar", "").trim())) {
+                        el.setAttribute("alt",
+                                        base.getAttribute("altenviar").trim());
+                    } else {
+                        el.setAttribute("alt",
+                                paramRequest.getLocaleString("msgRecommend"));
+                    }
+                } else {
                     el.setAttribute("img", "0");
-                    if (!"".equals(base.getAttribute("btnenviar", "").trim())) el.setAttribute("tag", base.getAttribute("btnenviar").trim());
-                    else el.setAttribute("tag", paramRequest.getLocaleString("btnSubmit"));
+                    if (!"".equals(base.getAttribute("btnenviar", "").trim())) {
+                        el.setAttribute("tag",
+                                        base.getAttribute("btnenviar").trim());
+                    } else {
+                        el.setAttribute("tag",
+                                        paramRequest.getLocaleString("btnSubmit"));
+                    }
                 }
                 dom.getChildNodes().item(0).appendChild(el);
 
                 el = dom.createElement("freset");
-                if (!"".equals(base.getAttribute("imglimpiar", "").trim()))
-                {
+                if (!"".equals(base.getAttribute("imglimpiar", "").trim())) {
                     el.setAttribute("img", "1");
-                    el.setAttribute("src", webWorkPath + "/" + base.getAttribute("imglimpiar").trim());
-                    if (!"".equals(base.getAttribute("altlimpiar", "").trim())) el.setAttribute("alt", base.getAttribute("altlimpiar").trim());
-                    else el.setAttribute("alt", paramRequest.getLocaleString("btnReset"));
-                } 
-                else
-                {
+                    el.setAttribute("src", webWorkPath + "/"
+                            + base.getAttribute("imglimpiar").trim());
+                    if (!"".equals(base.getAttribute("altlimpiar", "").trim())) {
+                        el.setAttribute("alt",
+                                base.getAttribute("altlimpiar").trim());
+                    } else {
+                        el.setAttribute("alt",
+                                paramRequest.getLocaleString("btnReset"));
+                    }
+                } else {
                     el.setAttribute("img", "0");
-                    if (!"".equals(base.getAttribute("btnlimpiar", "").trim())) el.setAttribute("tag", base.getAttribute("btnlimpiar").trim());
-                    else el.setAttribute("tag", paramRequest.getLocaleString("btnReset"));
+                    if (!"".equals(base.getAttribute("btnlimpiar", "").trim())) {
+                        el.setAttribute("tag",
+                                base.getAttribute("btnlimpiar").trim());
+                    } else {
+                        el.setAttribute("tag",
+                                paramRequest.getLocaleString("btnReset"));
+                    }
                 }
                 dom.getChildNodes().item(0).appendChild(el);
             }
             return dom;
+        } catch (Exception e) {
+            log.error("Error while generating DOM in resource "
+                    + base.getPortletType().getPortletClassName()
+                    + " with identifier " + base.getId() + " - "
+                    + base.getTitle(), e);
         }
-        catch (Exception e) { log.error("Error while generating DOM in resource "+ base.getPortletType().getPortletClassName() +" with identifier " + base.getId() + " - " + base.getTitle(), e); }
         return null;
     }
     
@@ -243,7 +302,7 @@ public class Recommend extends GenericAdmResource
                 el = dom.createElement("ftext");
                 el.setAttribute("tag", paramRequest.getLocaleString("msgSender"));
                 el.setAttribute("inname", "txtFromName");
-                //if (user.isLoged())   TODO: VER4
+                if (user.isSigned())
                 {
                     String strFromName = null != user.getUsrFirstName() && !"".equals(user.getUsrFirstName().trim()) ? user.getUsrFirstName().trim() : "";
                     strFromName+= null != user.getUsrLastName() && !"".equals(user.getUsrLastName().trim()) ? " " + user.getUsrLastName().trim() : "";
@@ -255,7 +314,7 @@ public class Recommend extends GenericAdmResource
                 el = dom.createElement("ftext");
                 el.setAttribute("tag", paramRequest.getLocaleString("msgSenderEmail"));
                 el.setAttribute("inname", "txtFromEmail");
-                //if (user.isLoged()) //TODO VER4
+                if (user.isSigned())
                 {
                     String strFromEmail = null != user.getUsrEmail() && !"".equals(user.getUsrEmail().trim()) ? user.getUsrEmail().trim() : "";
                     el.setAttribute("invalue", strFromEmail);
@@ -323,51 +382,86 @@ public class Recommend extends GenericAdmResource
      * @throws AFException
      * @throws IOException
      */    
-    public org.w3c.dom.Document getDomEmail(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
+    public Document getDomEmail(HttpServletRequest request,
+            HttpServletResponse response, SWBParamRequest paramRequest)
+            throws SWBResourceException, IOException {
         Portlet base=getResourceBase();
-        try
-        {
-            String strFromEmail = null != request.getParameter("txtFromEmail") && !"".equals(request.getParameter("txtFromEmail").trim()) ? request.getParameter("txtFromEmail").trim() : null;
-            String strToEmail = null != request.getParameter("txtToEmail") && !"".equals(request.getParameter("txtToEmail").trim()) ? request.getParameter("txtToEmail").trim() : null;
+        try {
+            String strFromEmail = (null != request.getParameter("txtFromEmail")
+                    && !"".equals(request.getParameter("txtFromEmail").trim()))
+                    ? request.getParameter("txtFromEmail").trim()
+                    : null;
+            String strToEmail = (null != request.getParameter("txtToEmail")
+                    && !"".equals(request.getParameter("txtToEmail").trim()))
+                    ? request.getParameter("txtToEmail").trim()
+                    : null;
             
-            if(strFromEmail != null && strToEmail != null)
-            {            
+            if (strFromEmail != null && strToEmail != null) {            
                 Document  dom = SWBUtils.XML.getNewDocument();
-                String strFromName = null != request.getParameter("txtFromName") && !"".equals(request.getParameter("txtFromName").trim()) ? request.getParameter("txtFromName").trim() : null;
-                String strToName = null != request.getParameter("txtToName") && !"".equals(request.getParameter("txtToName").trim()) ? request.getParameter("txtToName").trim() : null;
-                String strTarMsg = null != request.getParameter("tarMsg") && !"".equals(request.getParameter("tarMsg").trim()) ? request.getParameter("tarMsg").trim() : null;
-                String strSubject = !"".equals(base.getAttribute("subject", "").trim()) ? base.getAttribute("subject").trim() : paramRequest.getLocaleString("msgSubject");
-                String strUrl = "http://"+request.getServerName() + (request.getServerPort()!=80 ? ":"+request.getServerPort() : "");
-                WebPage topic=paramRequest.getTopic();
-                String lang=paramRequest.getUser().getLanguage();
+                String strFromName = (null != request.getParameter("txtFromName")
+                        && !"".equals(request.getParameter("txtFromName").trim()))
+                        ? request.getParameter("txtFromName").trim()
+                        : null;
+                String strToName = (null != request.getParameter("txtToName")
+                        && !"".equals(request.getParameter("txtToName").trim()))
+                        ? request.getParameter("txtToName").trim()
+                        : null;
+                String strTarMsg = (null != request.getParameter("tarMsg")
+                        && !"".equals(request.getParameter("tarMsg").trim()))
+                        ? request.getParameter("tarMsg").trim()
+                        : null;
+                String strSubject = (!"".equals(base.getAttribute("subject",
+                                                "").trim())
+                                     ? base.getAttribute("subject").trim()
+                                     : paramRequest.getLocaleString("msgSubject"));
+                String strUrl = "http://" + request.getServerName()
+                        + (request.getServerPort() != 80 
+                           ? ":" + request.getServerPort()
+                           : "");
+                WebPage topic = paramRequest.getTopic();
+                String lang = paramRequest.getUser().getLanguage();
 
                 Element emn = dom.createElement("form");
-                emn.setAttribute("path", path);
+                emn.setAttribute("path", "http://" + request.getServerName()
+                        + (request.getServerPort() != 80 
+                        ? ":" + request.getServerPort()
+                        : "") + SWBPlatform.getContextPath() + "/swbadmin/css/");
                 emn.setAttribute("email", "1");
                 dom.appendChild(emn);
+                
+                addElem(dom, emn, "msgRecommend", paramRequest.getLocaleString("msgRecommend"));
+                addElem(dom, emn, "msgToMessage", paramRequest.getLocaleString("msgToMessage") + ' ');
+                addElem(dom, emn, "msgFromMessage", paramRequest.getLocaleString("msgFromMessage") + ' ');
+                addElem(dom, emn, "msgBodyMessage", ' ' + paramRequest.getLocaleString("msgBodyMessage") + ' ');
+                addElem(dom, emn, "msgFooterMessage", paramRequest.getLocaleString("msgFooterMessage"));
+
                 addElem(dom, emn, "site", topic.getWebSiteId());
                 addElem(dom, emn, "siteurl", strUrl);
                 addElem(dom, emn, "topic", topic.getTitle(lang));
                 addElem(dom, emn, "topicurl", strUrl + topic.getUrl());
                             
-                if(strFromName != null) addElem(dom, emn, "fromname", strFromName);
+                if (strFromName != null) {
+                    addElem(dom, emn, "fromname", strFromName);
+                }
                 addElem(dom, emn, "fromemail", strFromEmail);
-                if(strToName != null) addElem(dom, emn, "toname", strToName);
+                if (strToName != null) {
+                    addElem(dom, emn, "toname", strToName);
+                }
                 addElem(dom, emn, "toemail", strToEmail);
                 addElem(dom, emn, "subject", strSubject);
-                if(strTarMsg != null) addElem(dom, emn, "message", strTarMsg);
+                if (strTarMsg != null) {
+                    addElem(dom, emn, "message", strTarMsg);
+                }
                 
                 String strHeadermsg = "<br> \n";
                 strHeadermsg += "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=2> \n";
                 strHeadermsg += "----------------------------------------------------------------------<br> \n";
                 strHeadermsg += paramRequest.getLocaleString("msgHeaderMessage") + "<br> \n";
                 strHeadermsg += "----------------------------------------------------------------------<br> \n";
-                if (!"".equals(base.getAttribute("headermsg", "").trim()))
-                {
+                if (!"".equals(base.getAttribute("headermsg", "").trim())) {
                     addElem(dom, emn, "headermsg", base.getAttribute("headermsg").trim());
                     strHeadermsg += "<br>" + base.getAttribute("headermsg").trim() + "<br><br> \n";
-                }                
+                }
                 strHeadermsg += "<br> \n";
                 strHeadermsg += " " + paramRequest.getLocaleString("msgToMessage") + " ";
                 strHeadermsg += null != strToName ? "<I>"+ strToName +"</I>" : "";
@@ -380,11 +474,10 @@ public class Recommend extends GenericAdmResource
                 strHeadermsg += "</a> \n";
                 if(strTarMsg != null) strHeadermsg +="<br><br> \n";
                 String strFootermsg = "";
-                if (!"".equals(base.getAttribute("footermsg", "").trim()))
-                {
+                if (!"".equals(base.getAttribute("footermsg", "").trim())) {
                     addElem(dom, emn, "footermsg", base.getAttribute("footermsg").trim());
                     strFootermsg +="<br><br><br>"+ base.getAttribute("footermsg").trim() +" \n";
-                }                
+                }
                 strFootermsg += "<br><br> \n";
                 strFootermsg += "----------------------------------------------------------------------<br> \n";
                 strFootermsg += " " + paramRequest.getLocaleString("msgFooterMessage") + "<br> \n";
@@ -393,14 +486,17 @@ public class Recommend extends GenericAdmResource
                 strFootermsg += "<br><br> \n";
                 addElem(dom, emn, "emailbody", strHeadermsg + strTarMsg + strFootermsg);
                 return dom;
+            } else {
+                throw new SWBResourceException("Error Missing Data. The following data fields are required: "
+                        + "\n\t email account of the sender: " + strFromEmail
+                        + "\n\t email account of the receiver: " + strToEmail);
             }
-            else {
-                throw new SWBResourceException("Error Missing Data. The following data fields are required: " +
-                "\n\t email account of the sender: "+strFromEmail+
-                "\n\t email account of the receiver: "+strToEmail);
-            }
+        } catch (Exception e) {
+            log.error("Error while generating email message in resource "
+                    + base.getPortletType().getPortletClassName()
+                    + " with identifier " + base.getId() + " - "
+                    + base.getTitle(), e);
         }
-        catch (Exception e) { log.error("Error while generating email message in resource "+ base.getPortletType().getPortletClassName() +" with identifier " + base.getId() + " - " + base.getTitle(), e); }
         return null;
     }
 
@@ -411,116 +507,176 @@ public class Recommend extends GenericAdmResource
      * @throws AFException
      * @throws IOException
      */    
-    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
+    @Override
+    public void doView(HttpServletRequest request, HttpServletResponse response,
+            SWBParamRequest paramRequest) throws SWBResourceException,
+            IOException {
+        
         response.setContentType("text/html");
-        StringBuffer ret = new StringBuffer("");
-        Portlet base=getResourceBase();
-        String action = null != request.getParameter("rec_act") && !"".equals(request.getParameter("rec_act").trim()) ? request.getParameter("rec_act").trim() : "rec_step1";
-        if("rec_step1".equals(action))  
-        { // Objeto (imagen/bot�n) para invocar la nueva ventana con formulario
+        StringBuffer ret = new StringBuffer(200);
+        Portlet base = getResourceBase();
+        String action = (null != request.getParameter("rec_act")
+                         && !"".equals(request.getParameter("rec_act").trim()))
+                        ? request.getParameter("rec_act").trim()
+                        : "rec_step1";
+        if ("rec_step1".equals(action)) {
+            // Objeto (imagen/botón) para invocar la nueva ventana con formulario
             String onclick = "";
-            if ("1".equals(base.getAttribute("menubar", "0").trim())) onclick = "menubar=yes";
-            else onclick = "menubar=no";
-            if ("1".equals(base.getAttribute("toolbar", "0").trim())) onclick += ",toolbar=yes";
-            else onclick += ",toolbar=no";
-            if ("1".equals(base.getAttribute("status", "0").trim())) onclick += ",status=yes";
-            else onclick += ",status=no";
-            if ("1".equals(base.getAttribute("location", "0").trim())) onclick += ",location=yes";
-            else onclick += ",location=no";
-            if ("1".equals(base.getAttribute("directories", "0").trim())) onclick += ",directories=yes";
-            else onclick += ",directories=no";
-            if ("1".equals(base.getAttribute("scrollbars", "0").trim())) onclick += ",scrollbars=yes";
-            else onclick += ",scrollbars=no";
-            if ("1".equals(base.getAttribute("resizable", "0").trim())) onclick += ",resizable=yes";
-            else onclick += ",resizable=no";
-            onclick += ",width="+ base.getAttribute("width", "450").trim();
-            onclick += ",height="+ base.getAttribute("height", "400").trim();
-            onclick += ",top="+ base.getAttribute("top", "10").trim();
-            onclick += ",left="+ base.getAttribute("left", "10").trim();
+            if ("1".equals(base.getAttribute("menubar", "0").trim())) {
+                onclick = "menubar=yes";
+            } else {
+                onclick = "menubar=no";
+            }
+            if ("1".equals(base.getAttribute("toolbar", "0").trim())) {
+                onclick += ",toolbar=yes";
+            } else {
+                onclick += ",toolbar=no";
+            }
+            if ("1".equals(base.getAttribute("status", "0").trim())) {
+                onclick += ",status=yes";
+            } else {
+                onclick += ",status=no";
+            }
+            if ("1".equals(base.getAttribute("location", "0").trim())) {
+                onclick += ",location=yes";
+            } else {
+                onclick += ",location=no";
+            }
+            if ("1".equals(base.getAttribute("directories", "0").trim())) {
+                onclick += ",directories=yes";
+            } else {
+                onclick += ",directories=no";
+            }
+            if ("1".equals(base.getAttribute("scrollbars", "0").trim())) {
+                onclick += ",scrollbars=yes";
+            } else {
+                onclick += ",scrollbars=no";
+            }
+            if ("1".equals(base.getAttribute("resizable", "0").trim())) {
+                onclick += ",resizable=yes";
+            } else {
+                onclick += ",resizable=no";
+            }
+            onclick += ",width=" + base.getAttribute("width", "450").trim();
+            onclick += ",height=" + base.getAttribute("height", "400").trim();
+            onclick += ",top=" + base.getAttribute("top", "10").trim();
+            onclick += ",left=" + base.getAttribute("left", "10").trim();
 
-            SWBResourceURLImp url=new SWBResourceURLImp(request, base, paramRequest.getTopic(), SWBResourceURLImp.UrlType_RENDER);
+            SWBResourceURLImp url = new SWBResourceURLImp(request, base,
+                    paramRequest.getTopic(), SWBResourceURLImp.UrlType_RENDER);
             url.setResourceBase(base);
-            url.setMode(url.Mode_VIEW);
-            url.setWindowState(url.WinState_MAXIMIZED);
-            url.setParameter("rec_act","rec_step2");
+            url.setMode(SWBResourceURLImp.Mode_VIEW);
+            url.setWindowState(SWBResourceURLImp.WinState_MAXIMIZED);
+            url.setParameter("rec_act", "rec_step2");
             url.setTopic(paramRequest.getTopic());
             url.setCallMethod(paramRequest.Call_DIRECT);
-            onclick="javascript:window.open('" + url.toString() +"','_newrec','" + onclick + "'); return false;";
+            onclick = "javascript:window.open('" + url.toString()
+                    + "','_newrec','" + onclick + "'); return false;";
 
-            synchronized (ret)
-            {
-                if (!"".equals(base.getAttribute("img", "").trim()))
-                {
-                    ret.append("\n<a href=\""+onclick+"\"><img onClick=\""+ onclick +"\" src=\"");
-                    ret.append(webWorkPath +"/"+ base.getAttribute("img").trim() +"\"");
-                    if (!"".equals(base.getAttribute("alt","").trim())) ret.append(" alt=\"" + base.getAttribute("alt").trim().replaceAll("\"", "&#34;") + "\"");
+            synchronized (ret) {
+                if (!"".equals(base.getAttribute("img", "").trim())) {
+                    ret.append("\n<a href=\"" + onclick + "\"><img onClick=\""
+                            + onclick + "\" src=\"");
+                    ret.append(webWorkPath + "/" + base.getAttribute("img").trim()
+                            + "\"");
+                    if (!"".equals(base.getAttribute("alt","").trim())) {
+                        ret.append(" alt=\"" 
+                                + base.getAttribute("alt").trim().replaceAll("\"",
+                                  "&#34;") + "\"");
+                    }
                     ret.append(" border=0></a>");
-                } 
-                else if (!"".equals(base.getAttribute("btntexto", "").trim()))
-                {
+                } else if (!"".equals(base.getAttribute("btntexto", "").trim())) {
                     ret.append("\n<form name=frmRecomendar>");
-                    ret.append("\n<input type=button name=btnRecomendar onClick=\""+ onclick +"\" value=");
-                    ret.append("\"" + base.getAttribute("btntexto").trim().replaceAll("\"", "&#34;") + "\"");
-                    if (!"".equals(base.getAttribute("blnstyle", "").trim())) ret.append(" style=\"" + base.getAttribute("blnstyle").trim().replaceAll("\"", "&#34;") + "\"");
+                    ret.append("\n<input type=button name=btnRecomendar onClick=\""
+                            + onclick + "\" value=");
+                    ret.append("\"" + base.getAttribute("btntexto").trim(
+                            ).replaceAll("\"", "&#34;") + "\"");
+                    if (!"".equals(base.getAttribute("blnstyle", "").trim())) {
+                        ret.append(" style=\"" + base.getAttribute("blnstyle"
+                                ).trim().replaceAll("\"", "&#34;") + "\"");
+                    }
                     ret.append("\n></form>");
-                }
-                else
-                {
-                    ret.append("\n<a href=\""+onclick+"\" onClick=\""+ onclick +"\"");
-                    if (!"".equals(base.getAttribute("blnstyle", "").trim())) ret.append(" style=\"" + base.getAttribute("blnstyle").trim().replaceAll("\"", "&#34;") + "\"");
+                } else {
+                    ret.append("\n<a href=\"" + onclick + "\" onClick=\""
+                            + onclick + "\"");
+                    if (!"".equals(base.getAttribute("blnstyle", "").trim())) {
+                        ret.append(" style=\""
+                                + base.getAttribute("blnstyle").trim().replaceAll(
+                                       "\"", "&#34;") + "\"");
+                    }
                     ret.append(">");
-                    if (!"".equals(base.getAttribute("lnktexto", "").trim())) ret.append(base.getAttribute("lnktexto").trim());
-                    else ret.append(paramRequest.getLocaleString("msgRecommend"));
+                    if (!"".equals(base.getAttribute("lnktexto", "").trim())) {
+                        ret.append(base.getAttribute("lnktexto").trim());
+                    } else {
+                        ret.append(paramRequest.getLocaleString("msgRecommend"));
+                    }
                     ret.append("</a>");
                 }
-            }            
-        }
-        else
-        {
-            try
-            {
-                Document dom =getDom(request, response, paramRequest);
-                if(dom != null) 
-                {
+            }
+        } else {
+            try {
+                Document dom = getDom(request, response, paramRequest);
+                if (dom != null) {
                     ret.append(SWBUtils.XML.transformDom(tpl, dom));
-                    if("rec_step3".equals(action))
-                    {
-                        String from   =dom.getElementsByTagName("fromemail").item(0).getFirstChild().getNodeValue();
-                        String to     =dom.getElementsByTagName("toemail").item(0).getFirstChild().getNodeValue();
-                        String subject=dom.getElementsByTagName("subject").item(0).getFirstChild().getNodeValue();
+                    if ("rec_step3".equals(action)) {
+                        String from = dom.getElementsByTagName("fromemail"
+                                ).item(0).getFirstChild().getNodeValue();
+                        String to = dom.getElementsByTagName("toemail"
+                                ).item(0).getFirstChild().getNodeValue();
+                        String subject = dom.getElementsByTagName("subject"
+                                ).item(0).getFirstChild().getNodeValue();
+                        boolean mailSent = false;
+                        String strUrl = "=\"http://" + request.getServerName()
+                                + (request.getServerPort()!=80
+                                   ? ":" + request.getServerPort()
+                                   : "")
+                                + path;
+                        ret = new StringBuffer(SWBUtils.TEXT.replaceAll(
+                                ret.toString(), "=\"" + path, strUrl));
                         
-                        String strUrl = "=\"http://"+request.getServerName() + (request.getServerPort()!=80 ? ":"+request.getServerPort() : "") + path;
-                        ret = new StringBuffer(SWBUtils.TEXT.replaceAll(ret.toString(), "=\""+path, strUrl));
-                        
-                        javax.mail.internet.InternetAddress address1 = new javax.mail.internet.InternetAddress();
+                        InternetAddress address1 = new InternetAddress();
                         address1.setAddress(to);
-                        ArrayList aAddress = new ArrayList();
+                        ArrayList<InternetAddress> aAddress = 
+                                new ArrayList<InternetAddress>();
                         aAddress.add(address1);
                         
-                        //SWBUtils.EMAIL.setSMTPServer("webmail.infotec.com.mx");
-                        if ((from!=null && to!=null && subject!=null) && SWBUtils.EMAIL.sendMail(from, from, aAddress, null, null, subject, "text",  ret.toString(), null, null, null)!=null)
-                        {
+                        if ((from != null && to != null && subject != null)
+                                && SWBUtils.EMAIL.sendMail(from, from, aAddress,
+                                   null, null, subject, "html",  ret.toString(),
+                                   null, null, null) != null) {
                             ret.append("\n<script>");
-                            ret.append("\nalert('" + paramRequest.getLocaleString("msgSendEmail") + "');");
+                            ret.append("\nalert('" 
+                                    + paramRequest.getLocaleString("msgSendEmail")
+                                    + "');");
                             ret.append("\nwindow.close();");
                             ret.append("\n</script>");
-                        }
-                        else
-                        {
+                            mailSent = true;
+                        } else {
                             ret.append("\n<script>");
-                            ret.append("\nalert('" + paramRequest.getLocaleString("msgEmailRequired") + "');");
+                            ret.append("\nalert('"
+                                    + paramRequest.getLocaleString("msgEmailRequired")
+                                    + "');");
                             ret.append("\nhistory.go(-1);");
                             ret.append("\n</script>");
                         }
+                        if (mailSent) {
+                            try {
+                                feedRecommendLog(dom, paramRequest.getUser());
+                            } catch (Exception e) {
+                                log.error(e);
+                            }
+                        }
                     }
                 }
+            } catch (Exception e) {
+                log.error(e);
             }
-            catch(Exception e){log.error(e);}           
         }
-         PrintWriter out = response.getWriter();
+        PrintWriter out = response.getWriter();
         out.println(ret.toString());
-        out.println("<br><a href=\"" + paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN) + "\">admin Recomend</a>");
+        out.println("<br><a href=\""
+                + paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN)
+                + "\">admin Recomend</a>");
     }
     
     /**
@@ -534,5 +690,58 @@ public class Recommend extends GenericAdmResource
         org.w3c.dom.Element elem = doc.createElement(elemName);
         elem.appendChild(doc.createTextNode(elemValue));
         parent.appendChild(elem);
-    }    
+    }
+    
+    /**
+     * Agrega la informaci&oacute;n enviada por correo al archivo log de este
+     * recurso.
+     * @param dom <code>Document</code> que contiene los datos enviados por correo.
+     * @param user <code>User</code> que identifica al usuario que ejecuta la 
+     *             acci&oacute;n de env&iacute;o de comentario sobre el recurso
+     */
+    protected void feedRecommendLog(Document dom, User user) throws IOException {
+        
+        Portlet base = getResourceBase();
+        String logPath = SWBPlatform.getWorkPath() + base.getWorkPath() 
+                + "/Comment.log";
+        StringBuilder toLog = new StringBuilder(500);
+        Date now = new Date();
+        
+        toLog.append(SWBUtils.TEXT.iso8601DateFormat(now));
+        if (user != null && user.isSigned()) {
+            toLog.append("\n    User:");
+            toLog.append((null != user.getUsrFirstName() 
+                          && !"".equals(user.getUsrFirstName().trim()))
+                         ? user.getUsrFirstName().trim()
+                         : "");
+            toLog.append((null != user.getUsrLastName() 
+                          && !"".equals(user.getUsrLastName().trim()))
+                         ? user.getUsrLastName().trim()
+                         : "");
+            toLog.append((null != user.getUsrSecondLastName() 
+                          && !"".equals(user.getUsrSecondLastName().trim()))
+                         ? user.getUsrSecondLastName().trim()
+                         : "");
+        }
+        toLog.append("\n    Site:" + dom.getElementsByTagName("site").item(
+                                0).getFirstChild().getNodeValue());
+        toLog.append("\n    Topic:" + dom.getElementsByTagName("topic").item(
+                                0).getFirstChild().getNodeValue());
+        toLog.append("<" + dom.getElementsByTagName("topicurl").item(
+                                0).getFirstChild().getNodeValue() + ">");
+        toLog.append("\n    From:" + dom.getElementsByTagName("fromname").item(
+                                0).getFirstChild().getNodeValue());
+        toLog.append("<" + dom.getElementsByTagName("fromemail").item(
+                                0).getFirstChild().getNodeValue() + ">");
+        toLog.append("\n    To:" + dom.getElementsByTagName("toname").item(
+                                0).getFirstChild().getNodeValue());
+        toLog.append("<" + dom.getElementsByTagName("toemail").item(
+                                0).getFirstChild().getNodeValue() + ">");
+        toLog.append("\n    Subject:" + dom.getElementsByTagName("subject").item(
+                                0).getFirstChild().getNodeValue());
+        toLog.append("\n    Message:" + dom.getElementsByTagName("message").item(
+                                0).getFirstChild().getNodeValue());
+        toLog.append("\n");
+        SWBUtils.IO.log2File(logPath, toLog.toString());
+    }
 }

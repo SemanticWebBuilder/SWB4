@@ -36,6 +36,7 @@ import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -164,6 +165,9 @@ public class Comment extends GenericResource {
                 dom.appendChild(root);
                 Element emn = null;
                 
+                emn = dom.createElement("msgComments");
+                emn.appendChild(dom.createTextNode(reqParams.getLocaleString("msgComments")));
+                root.appendChild(emn);
                 if (!"".equals(base.getAttribute("comentario", "").trim())) {
                     emn = dom.createElement("fselect");
                     emn.setAttribute("tag",
@@ -190,7 +194,7 @@ public class Comment extends GenericResource {
                 emn = dom.createElement("ftext");
                 emn.setAttribute("tag", reqParams.getLocaleString("msgName"));
                 emn.setAttribute("inname", "txtFromName");
-                /*if (user.isLoged()) TODO: ver. 4  */ {
+                if (user.isSigned()) {
                     String strFromName = ("1".equals(
                             base.getAttribute("firstname", "0").trim())
                             && (null != user.getUsrFirstName() 
@@ -215,8 +219,7 @@ public class Comment extends GenericResource {
                 emn = dom.createElement("ftext");
                 emn.setAttribute("tag", reqParams.getLocaleString("msgViewEmail"));
                 emn.setAttribute("inname", "txtFromEmail");
-                //if (user.isLoged())   TODO: ver. 4
-                {
+                if (user.isSigned()) {
                     String strFromEmail = (null != user.getUsrEmail() 
                             && !"".equals(user.getUsrEmail().trim())
                             ? user.getUsrEmail().trim()
@@ -357,6 +360,14 @@ public class Comment extends GenericResource {
                 addElem(dom, emn, "fromemail", strFromEmail);
                 addElem(dom, emn, "subject", strSubject);
                 addElem(dom, emn, "message", strTarMsg);
+                addElem(dom, emn, "msgTo", reqParams.getLocaleString("msgTo"));
+                addElem(dom, emn, "msgName", reqParams.getLocaleString("msgName"));
+                addElem(dom, emn, "msgViewEmail",
+                        reqParams.getLocaleString("msgViewEmail"));
+                addElem(dom, emn, "msgPhone", reqParams.getLocaleString("msgPhone"));
+                addElem(dom, emn, "msgFax", reqParams.getLocaleString("msgFax"));
+                addElem(dom, emn, "msgMessage",
+                        reqParams.getLocaleString("msgMessage"));
                 
                 String value = "";
                 String area = "";
@@ -656,13 +667,18 @@ public class Comment extends GenericResource {
                                 0).getFirstChild().getNodeValue();
                         String subject = dom.getElementsByTagName(
                                 "subject").item(0).getFirstChild().getNodeValue();
+                        String fromname = dom.getElementsByTagName(
+                                "fromname").item(0).getFirstChild().getNodeValue();
                         InternetAddress address1 = new InternetAddress();
+                        boolean mailSent = false;
                         address1.setAddress(to);
                         ArrayList<InternetAddress> aAddress = new ArrayList<InternetAddress>();
                         aAddress.add(address1);
                         
+                        //TODO: Eliminar la siguiente linea despues de pruebas
+                        SWBUtils.EMAIL.setSMTPServer("webmail.infotec.com.mx");
                         if ((from != null && to != null && subject != null)
-                                && (SWBUtils.EMAIL.sendMail(from, from, aAddress,
+                                && (SWBUtils.EMAIL.sendMail(from, fromname, aAddress,
                                         null, null, subject, "HTML",
                                         ret.toString(), null, null,
                                         null) != null)) {
@@ -672,6 +688,7 @@ public class Comment extends GenericResource {
                                     + "');");
                             ret.append("\nwindow.close();");
                             ret.append("\n</script>");
+                            mailSent = true;
                         } else {
                             ret.append("\n<script>");
                             ret.append("\nalert('"
@@ -679,6 +696,13 @@ public class Comment extends GenericResource {
                                     + "');");
                             ret.append("\nhistory.go(-1);");
                             ret.append("\n</script>");
+                        }
+                        if (mailSent) {
+                            try {
+                                feedCommentLog(dom, reqParams.getUser());
+                            } catch (Exception e) {
+                                log.error(e);
+                            }
                         }
                     }
                 }
@@ -885,6 +909,7 @@ public class Comment extends GenericResource {
                 setAttribute(base, fup, "subject");
                 setAttribute(base, fup, "headermsg");
                 setAttribute(base, fup, "footermsg");
+                setAttribute(base, fup, "generatelog");
 
                 base.updateAttributesToDB();
                 Document dom=base.getDom();
@@ -1265,7 +1290,19 @@ public class Comment extends GenericResource {
                         "&#34;") + "\"");
             }
             ret.append("></td> \n");
-            ret.append("</tr> \n");            
+            ret.append("</tr> \n");
+            
+            ret.append("<tr> \n");
+            ret.append("<td class=\"datos\">"
+                    + paramsRequest.getLocaleString("msgGenerateLog") + "</td> \n");
+            ret.append("<td class=\"valores\">");
+            ret.append("<input type=\"checkbox\" name=\"generatelog\" value=\"1\"");
+            if ("1".equals(base.getAttribute("generatelog", "0"))) {
+                ret.append(" checked");
+            }
+            ret.append("></td> \n");
+            ret.append("</tr> \n");
+            
             ret.append("<tr> \n");
             ret.append("<td colspan=2>");
             ret.append("<br><br><font style=\"color: #428AD4; text-decoration: none; font-family: Verdana; font-size: 12px; font-weight: normal;\">");
@@ -1666,6 +1703,63 @@ public class Comment extends GenericResource {
         Element elem = doc.createElement(elemName);
         elem.appendChild(doc.createTextNode(elemValue));
         parent.appendChild(elem);
+    }
+    
+    /**
+     * Agrega la informaci&oacute;n enviada por correo al archivo log de este
+     * recurso.
+     * @param dom <code>Document</code> que contiene los datos enviados por correo.
+     * @param user <code>User</code> que identifica al usuario que ejecuta la 
+     *             acci&oacute;n de env&iacute;o de comentario sobre el recurso
+     */
+    protected void feedCommentLog(Document dom, User user) throws IOException {
+        
+        Portlet base = getResourceBase();
+        String logPath = SWBPlatform.getWorkPath() + base.getWorkPath() 
+                + "/Comment.log";
+        StringBuilder toLog = new StringBuilder(500);
+        Date now = new Date();
+
+        toLog.append(SWBUtils.TEXT.iso8601DateFormat(now));
+        
+        if (user != null && user.isSigned()) {
+            toLog.append("\n    User:");
+            toLog.append((null != user.getUsrFirstName() 
+                          && !"".equals(user.getUsrFirstName().trim()))
+                         ? user.getUsrFirstName().trim()
+                         : "");
+            toLog.append((null != user.getUsrLastName() 
+                          && !"".equals(user.getUsrLastName().trim()))
+                         ? user.getUsrLastName().trim()
+                         : "");
+            toLog.append((null != user.getUsrSecondLastName() 
+                          && !"".equals(user.getUsrSecondLastName().trim()))
+                         ? user.getUsrSecondLastName().trim()
+                         : "");
+        }
+        
+/*        toLog.append("\n    Site:" + dom.getElementsByTagName("site").item(
+                                0).getFirstChild().getNodeValue()); */
+        toLog.append("\n    From:" + dom.getElementsByTagName("fromname").item(
+                                0).getFirstChild().getNodeValue());
+        toLog.append("<" + dom.getElementsByTagName("fromemail").item(
+                                0).getFirstChild().getNodeValue() + ">");
+/*        toLog.append("\n    To:" + dom.getElementsByTagName("responsable").item(
+                                0).getFirstChild().getNodeValue());
+        toLog.append("<" + dom.getElementsByTagName("toemail").item(
+                                0).getFirstChild().getNodeValue() + ">"); */
+        toLog.append("\n    Subject:" + dom.getElementsByTagName("subject").item(
+                                0).getFirstChild().getNodeValue());
+/*        toLog.append("\n    Area:" + dom.getElementsByTagName("area").item(
+                                0).getFirstChild().getNodeValue()); */
+        toLog.append("\n    Phone:" + dom.getElementsByTagName("phone").item(
+                                0).getFirstChild().getNodeValue());
+        toLog.append("\n    Fax:" + dom.getElementsByTagName("fax").item(
+                                0).getFirstChild().getNodeValue());
+        toLog.append("\n    Message:" + dom.getElementsByTagName("message").item(
+                                0).getFirstChild().getNodeValue());
+        toLog.append("\n");
+        SWBUtils.IO.log2File(logPath, toLog.toString());
     }
 }
 

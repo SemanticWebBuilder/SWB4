@@ -21,6 +21,7 @@
 		<input type="FILE" name="imglimpiar" label="Imagem para o botão de Limpar no formulário de recomendação (bmp, gif, jpg, jpeg):" showfile="true" filetype="bmp|jpg|jpeg|gif" isshowfiletype="true" isremovefile="true" removemsg="Deletar imagen para limpar" moreattr="onclick=&#34;jsClear(this.form, '3');&#34;" size="40"/>
 		<input type="TEXT" name="altlimpiar" label="Texto alternativo para a imagem:" size="50"/>
 		<input type="TEXT" name="btnlimpiar" label="Texto do botão no caso de não definir a imagem:" size="50"/>
+		<input type="CHECKBOX" name="generatelog" label="Generar archivo log:" value="1"/>
 		<statictext name="window">
 			<![CDATA[
 				<br><br><font style="color: #428AD4; text-decoration: none; font-family: Verdana; font-size: 12px; font-weight: normal;">

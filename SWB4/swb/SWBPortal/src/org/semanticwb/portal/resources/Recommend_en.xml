@@ -21,6 +21,7 @@
 		<input type="FILE" name="imglimpiar" label="Image for the Clear button in the form (bmp, gif, jpg, jpeg):" showfile="true" filetype="bmp|jpg|jpeg|gif" isshowfiletype="true" isremovefile="true" removemsg="Cut image for clear in recommendation" moreattr="onclick=&#34;jsClear(this.form, '3');&#34;" size="40"/>
 		<input type="TEXT" name="altlimpiar" label="Alternate text for the image:" size="50"/>
 		<input type="TEXT" name="btnlimpiar" label="Text of the button in case of not defining an image:" size="50"/>
+		<input type="CHECKBOX" name="generatelog" label="Generate log file:" value="1"/>
 		<statictext name="window">
 			<![CDATA[
 				<br><br><font style="color: #428AD4; text-decoration: none; font-family: Verdana; font-size: 12px; font-weight: normal;">
