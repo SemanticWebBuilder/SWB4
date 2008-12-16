@@ -44,6 +44,7 @@ public class SWBAWebPageContents extends GenericResource {
         response.setHeader("Pragma", "no-cache"); 
         log.debug("doEdit(SWBAWebPageContents...)");
         PrintWriter out = response.getWriter();
+        Portlet base = getResourceBase();
         User user = paramRequest.getUser();
         String id = request.getParameter("suri");
         String idp = request.getParameter("sprop");
@@ -85,6 +86,7 @@ public class SWBAWebPageContents extends GenericResource {
             SemanticProperty sptemp = null;
 
             out.println("<fieldset>");
+            out.println("<form id=\""+id+"/NSF\" dojoType=\"dijit.form.Form\" method=\"post\">");
             out.println("<table width=\"100%\" class=\"swbform\">");
             out.println("<thead>");
             out.println("<tr>");
@@ -194,7 +196,15 @@ public class SWBAWebPageContents extends GenericResource {
                     urlu.setParameter("sprop", idp);
                     urlu.setParameter("sval", sobj.getURI());
                     urlu.setAction("update");
-                    out.println("<input type=\"text\" name=\"" + semprop.getName() + "\" onblur=\"submitUrl('" + urlu + "&" + semprop.getName() + "='+this.value,this); return false;\" value=\"" + getValueSemProp(sobj, semprop) + "\" />");
+                    
+                    out.println("<div dojoType=\"dijit.form.NumberSpinner\" id=\""+id+"/"+base.getId()+"/NS\" jsId=\""+id+"/"+base.getId()+"/NS\" intermediateChanges=\"true\" smallDelta=\"1\" constraints=\"{min:0,max:999,places:0}\" style=\"width:50px\" type=\"text\" name=\"" + semprop.getName() + "\" maxlength=\"3\"  value=\"" + getValueSemProp(sobj, semprop) + "\" >");
+                    out.println("<script type=\"dojo/connect\" event=\"onChange\">");
+                    out.println("var self=this;  // So widget is referencable in function ");
+                    out.println(" return submitUrl('" + urlu + "&" + semprop.getName() + "='+self.getValue(),self.domNode); ");
+                    out.println(" return false; ");
+                    out.println("</script>");
+                    out.println("</div>");
+                    //out.println("<input id=\""+id+"/"+base.getId()+"/NS\" dojoType=\"dijit.form.NumberSpinner\" smallDelta=\"1\" constraints=\"{min:0,max:999,places:0}\" style=\"width:50px\" type=\"text\" name=\"" + semprop.getName() + "\" maxlength=\"3\" onchange=\"submitUrl('" + urlu + "&" + semprop.getName() + "='+dijit.byId('"+id+"/"+base.getId()+"/NS').getValue(),dijit.byId('"+id+"/"+base.getId()+"/NS')); return false;\" value=\"" + getValueSemProp(sobj, semprop) + "\" />");
                     out.println("</td>");
                 }
                 if (hmprop.get(SWBContext.getVocabulary().swb_active) != null) {
@@ -228,8 +238,9 @@ public class SWBAWebPageContents extends GenericResource {
             out.println("</tr>");
             out.println("</tfoot>");
             out.println("</table>");
+            out.println("</form>");
             out.println("</fieldset>");
-            out.println("");
+            
         }  else if (action.equals("choose")) { //lista de instancias de tipo propiedad existentes para selecionar
             SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(idp);
             idptype = SWBContext.getVocabulary().swb_portletType.getURI();
