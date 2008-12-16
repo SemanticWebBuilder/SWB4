@@ -15,4 +15,5 @@ public class VersionInfo {
     public String contentId;    
     public String nameOfVersion;
     public Date created;
+    public String user;
 }
