@@ -522,7 +522,7 @@ public class SemanticObject
             String name = prop.getLabel();
             if (name == null)
             {
-                prop.getName();
+                name=prop.getName();
             }
             name = "get" + name.substring(0, 1).toUpperCase() + name.substring(1);
             try
@@ -1063,6 +1063,9 @@ public class SemanticObject
                     SemanticObject obj = getObjectProperty(prop);
                     ret = obj.getDisplayName(lang);
                 }
+            }else
+            {
+                ret=getLocaleProperty(getModel().getSemanticProperty(SemanticVocabulary.RDFS_LABEL), lang);
             }
         }
         else
@@ -1088,5 +1091,7 @@ public class SemanticObject
         StmtIterator stit = getModel().getRDFModel().listStatements(null, null, getRDFResource());
         return new SemanticIterator(stit, true);
     }
+
+
 }
 

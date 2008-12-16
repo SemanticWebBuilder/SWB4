@@ -55,6 +55,7 @@ public class SemanticVocabulary
         
     //General
     public static final String URI="http://www.semanticwebbuilder.org/swb4/ontology#";
+    public static final String SWBXF_URI="http://www.semanticwebbuilder.org/swb4/xforms/ontology#";
 
     public static final String SWB_CLASS=URI+"Class";
     public static final String SWB_INTERFACE=URI+"Interface";
