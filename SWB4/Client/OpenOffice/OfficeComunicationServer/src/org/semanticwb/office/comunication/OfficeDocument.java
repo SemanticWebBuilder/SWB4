@@ -11,12 +11,8 @@ import java.util.Calendar;
 import javax.jcr.ItemExistsException;
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
-import javax.jcr.NodeIterator;
-import javax.jcr.Property;
-import javax.jcr.PropertyIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
-import javax.jcr.Value;
 import javax.jcr.lock.LockException;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionHistory;
@@ -24,7 +20,6 @@ import javax.jcr.version.VersionIterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.base.util.SWBProperties;
 import org.semanticwb.office.interfaces.IOfficeDocument;
 import org.semanticwb.office.interfaces.VersionInfo;
 import org.semanticwb.repository.RepositoryManagerLoader;
@@ -377,6 +372,8 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     info.contentId = contentId;
                     info.nameOfVersion = version.getName();
                     info.created=version.getProperty("jcr:created").getDate().getTime();
+                    String cm_user=loader.getOfficeManager(repositoryName).getUserType();
+                    info.user=version.getProperty(cm_user).getString();
                     versions.add(info);
                 }
             }
