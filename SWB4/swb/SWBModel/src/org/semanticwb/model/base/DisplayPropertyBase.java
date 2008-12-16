@@ -34,124 +34,135 @@ public class DisplayPropertyBase extends GenericObjectBase implements Sortable
 
     public String getSelectValues()
     {
-        return getSemanticObject().getProperty(vocabulary.swb_propSelectValues);
+        return getSemanticObject().getProperty(vocabulary.swbxf_propSelectValues);
     }
 
     public void setSelectValues(String propSelectValues)
     {
-        getSemanticObject().setProperty(vocabulary.swb_propSelectValues, propSelectValues);
+        getSemanticObject().setProperty(vocabulary.swbxf_propSelectValues, propSelectValues);
     }
 
     public String getSelectValues(String lang)
     {
-        return getSemanticObject().getProperty(vocabulary.swb_propSelectValues, null, lang);
+        return getSemanticObject().getProperty(vocabulary.swbxf_propSelectValues, null, lang);
     }
 
     public String getDisplaySelectValues(String lang)
     {
-        return getSemanticObject().getLocaleProperty(vocabulary.swb_propSelectValues, lang);
+        return getSemanticObject().getLocaleProperty(vocabulary.swbxf_propSelectValues, lang);
     }
 
     public void setSelectValues(String propSelectValues, String lang)
     {
-        getSemanticObject().setProperty(vocabulary.swb_propSelectValues, propSelectValues, lang);
+        getSemanticObject().setProperty(vocabulary.swbxf_propSelectValues, propSelectValues, lang);
     }
 
-    public String getGroup()
+    public void setGroup(org.semanticwb.model.PropertyGroup propertygroup)
     {
-        return getSemanticObject().getProperty(vocabulary.swb_propGroup);
+        getSemanticObject().setObjectProperty(vocabulary.swbxf_propGroup, propertygroup.getSemanticObject());
     }
 
-    public void setGroup(String propGroup)
+    public void removeGroup()
     {
-        getSemanticObject().setProperty(vocabulary.swb_propGroup, propGroup);
+        getSemanticObject().removeProperty(vocabulary.swbxf_propGroup);
+    }
+
+    public PropertyGroup getGroup()
+    {
+         PropertyGroup ret=null;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swbxf_propGroup);
+         if(obj!=null)
+         {
+             ret=(PropertyGroup)vocabulary.swbxf_PropertyGroup.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public boolean isHidden()
     {
-        return getSemanticObject().getBooleanProperty(vocabulary.swb_propHidden);
+        return getSemanticObject().getBooleanProperty(vocabulary.swbxf_propHidden);
     }
 
     public void setHidden(boolean propHidden)
     {
-        getSemanticObject().setBooleanProperty(vocabulary.swb_propHidden, propHidden);
+        getSemanticObject().setBooleanProperty(vocabulary.swbxf_propHidden, propHidden);
     }
 
     public String getPromptMessage()
     {
-        return getSemanticObject().getProperty(vocabulary.swb_propPromptMessage);
+        return getSemanticObject().getProperty(vocabulary.swbxf_propPromptMessage);
     }
 
     public void setPromptMessage(String propPromptMessage)
     {
-        getSemanticObject().setProperty(vocabulary.swb_propPromptMessage, propPromptMessage);
+        getSemanticObject().setProperty(vocabulary.swbxf_propPromptMessage, propPromptMessage);
     }
 
     public String getPromptMessage(String lang)
     {
-        return getSemanticObject().getProperty(vocabulary.swb_propPromptMessage, null, lang);
+        return getSemanticObject().getProperty(vocabulary.swbxf_propPromptMessage, null, lang);
     }
 
     public String getDisplayPromptMessage(String lang)
     {
-        return getSemanticObject().getLocaleProperty(vocabulary.swb_propPromptMessage, lang);
+        return getSemanticObject().getLocaleProperty(vocabulary.swbxf_propPromptMessage, lang);
     }
 
     public void setPromptMessage(String propPromptMessage, String lang)
     {
-        getSemanticObject().setProperty(vocabulary.swb_propPromptMessage, propPromptMessage, lang);
+        getSemanticObject().setProperty(vocabulary.swbxf_propPromptMessage, propPromptMessage, lang);
     }
 
     public String getInvalidMessage()
     {
-        return getSemanticObject().getProperty(vocabulary.swb_propInvalidMessage);
+        return getSemanticObject().getProperty(vocabulary.swbxf_propInvalidMessage);
     }
 
     public void setInvalidMessage(String propInvalidMessage)
     {
-        getSemanticObject().setProperty(vocabulary.swb_propInvalidMessage, propInvalidMessage);
+        getSemanticObject().setProperty(vocabulary.swbxf_propInvalidMessage, propInvalidMessage);
     }
 
     public String getInvalidMessage(String lang)
     {
-        return getSemanticObject().getProperty(vocabulary.swb_propInvalidMessage, null, lang);
+        return getSemanticObject().getProperty(vocabulary.swbxf_propInvalidMessage, null, lang);
     }
 
     public String getDisplayInvalidMessage(String lang)
     {
-        return getSemanticObject().getLocaleProperty(vocabulary.swb_propInvalidMessage, lang);
+        return getSemanticObject().getLocaleProperty(vocabulary.swbxf_propInvalidMessage, lang);
     }
 
     public void setInvalidMessage(String propInvalidMessage, String lang)
     {
-        getSemanticObject().setProperty(vocabulary.swb_propInvalidMessage, propInvalidMessage, lang);
-    }
-
-    public boolean isEditable()
-    {
-        return getSemanticObject().getBooleanProperty(vocabulary.swb_propEditable);
-    }
-
-    public void setEditable(boolean propEditable)
-    {
-        getSemanticObject().setBooleanProperty(vocabulary.swb_propEditable, propEditable);
+        getSemanticObject().setProperty(vocabulary.swbxf_propInvalidMessage, propInvalidMessage, lang);
     }
 
     public void setFormElement(org.semanticwb.platform.SemanticObject semanticobject)
     {
-        getSemanticObject().setObjectProperty(vocabulary.swb_formElement, semanticobject);
+        getSemanticObject().setObjectProperty(vocabulary.swbxf_formElement, semanticobject);
     }
 
     public void removeFormElement()
     {
-        getSemanticObject().removeProperty(vocabulary.swb_formElement);
+        getSemanticObject().removeProperty(vocabulary.swbxf_formElement);
     }
 
     public SemanticObject getFormElement()
     {
          SemanticObject ret=null;
-         ret=getSemanticObject().getObjectProperty(vocabulary.swb_formElement);
+         ret=getSemanticObject().getObjectProperty(vocabulary.swbxf_formElement);
          return ret;
+    }
+
+    public boolean isEditable()
+    {
+        return getSemanticObject().getBooleanProperty(vocabulary.swbxf_propEditable);
+    }
+
+    public void setEditable(boolean propEditable)
+    {
+        getSemanticObject().setBooleanProperty(vocabulary.swbxf_propEditable, propEditable);
     }
 
     public void remove()

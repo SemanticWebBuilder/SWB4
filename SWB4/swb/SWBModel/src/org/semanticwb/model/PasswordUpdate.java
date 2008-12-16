@@ -73,6 +73,7 @@ public class PasswordUpdate extends PasswordUpdateBase
         if(mode.equals("edit") || mode.equals("create") )
         {
             ret="<input name=\""+name+"\" type=\"password\" >";
+            ret+="<br/><input name=\"pwd_verify\" type=\"password\" >";
         }else if(mode.equals("view"))
         {
             ret="<span _id=\""+name+"\" name=\""+name+"\">"+value+"</span>";
