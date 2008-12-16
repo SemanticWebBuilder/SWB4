@@ -339,7 +339,7 @@ public abstract class OfficeDocument
      * 
      * @return
      */
-    private String getGuid()
+    private String createGuid()
     {
         String guid = java.util.UUID.randomUUID().toString().replace('-', '_');
         return guid;
@@ -373,7 +373,7 @@ public abstract class OfficeDocument
         File tempotalZipFile = null;
         try
         {
-            String guid = getGuid();
+            String guid = createGuid();
             File fileHtml = saveHtmlPrepareAndGetFiles(guid);
             tempotalDir = fileHtml.getParentFile();
             tempotalZipFile = new File(tempotalDir.getParentFile().getPath() + File.separatorChar + guid + ".zip");
