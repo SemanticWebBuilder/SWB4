@@ -32,6 +32,6 @@ public interface XmlProxy
     public int getProxyPort();
     public void setProxyPort(int port);
     
-    public Set<Part> getParts();
+    public Set<Part> getResponseParts();
     
 }
