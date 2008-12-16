@@ -197,9 +197,9 @@ public class SWBAWebPageContents extends GenericResource {
                     urlu.setParameter("sval", sobj.getURI());
                     urlu.setAction("update");
                     
-                    out.println("<div dojoType=\"dijit.form.NumberSpinner\" id=\""+id+"/"+base.getId()+"/NS\" jsId=\""+id+"/"+base.getId()+"/NS\" intermediateChanges=\"true\" smallDelta=\"1\" constraints=\"{min:0,max:999,places:0}\" style=\"width:50px\" type=\"text\" name=\"" + semprop.getName() + "\" maxlength=\"3\"  value=\"" + getValueSemProp(sobj, semprop) + "\" >");
+                    out.println("<div dojoType=\"dijit.form.NumberSpinner\" id=\""+id+"/"+base.getId()+"/"+sobj.getId()+"/NS\" jsId=\""+id+"/"+base.getId()+"/"+sobj.getId()+"/NS\" intermediateChanges=\"true\" smallDelta=\"1\" constraints=\"{min:0,max:999,places:0}\" style=\"width:50px\"  name=\"" + semprop.getName() + "\" maxlength=\"3\"  value=\"" + getValueSemProp(sobj, semprop) + "\" >");
                     out.println("<script type=\"dojo/connect\" event=\"onChange\">");
-                    out.println("var self=this;  // So widget is referencable in function ");
+                    out.println("var self=this;   ");
                     out.println(" return submitUrl('" + urlu + "&" + semprop.getName() + "='+self.getValue(),self.domNode); ");
                     out.println(" return false; ");
                     out.println("</script>");
