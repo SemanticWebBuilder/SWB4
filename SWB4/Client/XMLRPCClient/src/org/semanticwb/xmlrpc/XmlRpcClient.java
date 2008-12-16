@@ -53,7 +53,7 @@ class XmlRpcClient
         return responseProperties;
     }
 
-    public <T> T execute(Class<T> clazz, String methodName, Object[] parameters, Set<Attachment> attachments) throws XmlRpcException, HttpException
+    public Response execute(Class clazz, String methodName, Object[] parameters, Set<Attachment> attachments) throws XmlRpcException, HttpException
     {
         for (Attachment attachment : attachments)
         {
@@ -67,7 +67,7 @@ class XmlRpcClient
             }
         }
         Document requestDoc = serializeRequest(methodName, parameters);
-        Document responseDoc = request(requestDoc, attachments);
+        XmlResponse response = request(requestDoc, attachments);
         /*try
         {
         XMLOutputter out=new XMLOutputter();
@@ -77,7 +77,9 @@ class XmlRpcClient
         try
         {
 
-            return (T) deserializeResponse(clazz, responseDoc);
+            Object obj=deserializeResponse(clazz, response.getDocument());
+            Response responseToReturn=new Response(obj);
+            return responseToReturn;
         }
         catch (ParseException pe)
         {
@@ -145,7 +147,7 @@ class XmlRpcClient
         return encoded;
     }
 
-    private Document request(Document requestDoc, Set<Attachment> attachments) throws XmlRpcException, HttpException
+    private XmlResponse request(Document requestDoc, Set<Attachment> attachments) throws XmlRpcException, HttpException
     {
         OutputStream out = null;
         try
@@ -261,7 +263,7 @@ class XmlRpcClient
         return sb.toString();
     }
 
-    private static Document getResponse(InputStream in, String contentType) throws XmlRpcException
+    private static XmlResponse getResponse(InputStream in, String contentType) throws XmlRpcException
     {
         if (contentType == null)
         {
@@ -283,7 +285,8 @@ class XmlRpcClient
                 {
                     throw new XmlRpcException("Error getting the response document", ioe);
                 }
-                return doc;
+                XmlResponse response=new XmlResponse(doc);
+                return response;
             }
             catch (Exception e)
             {
@@ -301,7 +304,7 @@ class XmlRpcClient
             {
                 throw new XmlRpcException("Error getting the response document", ioe);
             }
-            return doc;
+            return new XmlResponse(doc);
         }
         else
         {
