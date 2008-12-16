@@ -66,7 +66,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 contentNode.setProperty(cm_description, description);
                 contentNode.setProperty(cm_file, file);
                 contentNode.setProperty(cm_user, this.user);
-                for (Part part : parts)
+                for (Part part : requestParts)
                 {
                     String mimeType = DEFAULT_MIME_TYPE;
                     if (config != null && config.getServletContext() != null)
@@ -177,7 +177,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 
                 try
                 {
-                    for (Part part : parts)
+                    for (Part part : requestParts)
                     {
                         String mimeType = DEFAULT_MIME_TYPE;
                         if (this.config != null && this.config.getServletContext() != null)

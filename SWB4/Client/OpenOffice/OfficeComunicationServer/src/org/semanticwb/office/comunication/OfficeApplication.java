@@ -4,8 +4,11 @@
  */
 package org.semanticwb.office.comunication;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Repository;
@@ -13,6 +16,7 @@ import javax.jcr.Session;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryResult;
 import javax.jcr.version.Version;
+import javax.jcr.version.VersionHistory;
 import javax.jcr.version.VersionIterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
@@ -22,6 +26,7 @@ import org.semanticwb.office.interfaces.ContentType;
 import org.semanticwb.office.interfaces.IOfficeApplication;
 import org.semanticwb.office.interfaces.VersionInfo;
 import org.semanticwb.repository.RepositoryManagerLoader;
+import org.semanticwb.xmlrpc.Part;
 import org.semanticwb.xmlrpc.XmlRpcObject;
 
 /**
@@ -175,7 +180,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                 newNode.setProperty(cm_user, this.user);
                 newNode.setProperty(cm_title, title);
                 newNode.setProperty(cm_description, description);
-                
+
                 root.save();
                 UUID = newNode.getUUID();
             }
@@ -222,7 +227,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         Session session = null;
         try
         {
-            session = loader.openSession(repositoryName, this.user,this.password);
+            session = loader.openSession(repositoryName, this.user, this.password);
             Node node = session.getNodeByUUID(id);
             if (!node.getNodes().hasNext())
             {
@@ -441,8 +446,51 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         return contents.toArray(new ContentInfo[contents.size()]);
     }
 
-    public void openContent(String repositoryName, VersionInfo versioninfo) throws Exception
+    public String openContent(String repositoryName, VersionInfo versioninfo) throws Exception
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        Session session = null;
+        try
+        {
+            session = loader.openSession(repositoryName, this.user, this.password);
+            Node contentNode = session.getNodeByUUID(versioninfo.contentId);
+            VersionHistory history = contentNode.getVersionHistory();
+            Version versiontoReturn = history.getVersion(versioninfo.nameOfVersion);
+            if (versiontoReturn != null)
+            {
+                Node frozenNode = versiontoReturn.getNode("jcr:frozenNode");
+                String cm_file = loader.getOfficeManager(repositoryName).getPropertyFileType();
+                String file=frozenNode.getProperty(cm_file).getString();
+                Node resNode = frozenNode.getNode("jcr:content");
+                InputStream in=resNode.getProperty("jcr:data").getStream();
+                ByteArrayOutputStream out=new ByteArrayOutputStream();
+                byte[] buffer=new byte[2048];
+                int read=in.read(buffer);
+                while(read!=-1)
+                {
+                    out.write(buffer, 0, read);
+                    read=in.read(buffer);
+                }
+                Part part=new Part(out.toByteArray(), file, file);
+                HashSet parts=new HashSet();
+                parts.add(part);
+                return file;
+            }
+            else
+            {
+                throw new Exception("The version "+ versioninfo.nameOfVersion +" does not exist");
+            }
+        }
+        catch(Exception e)
+        {
+            log.error(e);
+            throw e;
+        }
+        finally
+        {
+            if (session != null)
+            {
+                session.logout();
+            }
+        }
     }
 }
