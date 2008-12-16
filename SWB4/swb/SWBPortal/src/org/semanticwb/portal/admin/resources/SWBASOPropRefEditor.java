@@ -23,6 +23,7 @@ public class SWBASOPropRefEditor extends GenericResource {
     
     private Logger log = SWBUtils.getLogger(SWBASOPropRefEditor.class);
     static String MODE_IdREQUEST = "FORMID";
+    Portlet base = null;
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -36,6 +37,7 @@ public class SWBASOPropRefEditor extends GenericResource {
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
         log.debug("doEdit(SWBASOPropRefEditor...)");
+        base = getResourceBase();
         PrintWriter out = response.getWriter();
         User user = paramRequest.getUser();
         String id = request.getParameter("suri");
@@ -185,8 +187,23 @@ public class SWBASOPropRefEditor extends GenericResource {
                     urlu.setParameter("sval", sobj.getURI());
                     urlu.setParameter("spropref", idpref);
                     urlu.setAction("update");
-                    
-                    out.println("<input type=\"text\" name=\""+semprop.getName()+"\" onblur=\"submitUrl('"+urlu+"&"+semprop.getName()+"='+this.value,this); return false;\" value=\""+getValueSemProp(sobj, semprop)+"\" />");
+
+                    String val = getValueSemProp(sobj, semprop).trim();
+                    String op1="", op2="", op3="", op4="", op5="";
+                    if("1".equals(val)) op1="selected";
+                    else if("2".equals(val)) op2="selected";
+                    else if("3".equals(val)) op3="selected";
+                    else if("4".equals(val)) op4="selected";
+                    else if("5".equals(val)) op5="selected";
+                    out.println("               <select  id=\"" + id + "/"+base.getId()+"/PSO\" name=\"" +semprop.getName()+ "\"  dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"false\" hasDownArrow=\"true\" style=\"width:90px;\" onchange=\"submitUrl('"+urlu+"&"+semprop.getName()+"='+dijit.byId('" + id + "/"+base.getId()+"/PSO').getValue(),this.domNode); return false;\">");
+                    out.println("                   <option value=\"1\" "+op1+" >" + paramRequest.getLocaleString("defecto") + "</option>");
+                    out.println("                   <option value=\"2\" "+op2+" >" + paramRequest.getLocaleString("low") + "</option>");
+                    out.println("                   <option value=\"3\" "+op3+" >" + paramRequest.getLocaleString("media") + "</option>");
+                    out.println("                   <option value=\"4\" "+op4+" >" + paramRequest.getLocaleString("high") + "</option>");
+                    out.println("                   <option value=\"5\" "+op5+" >" + paramRequest.getLocaleString("priority") + "</option>");
+                    out.println("               </select>");
+
+                    //out.println("<input type=\"text\" name=\""+semprop.getName()+"\" onblur=\"submitUrl('"+urlu+"&"+semprop.getName()+"='+this.value,this); return false;\" value=\""+getValueSemProp(sobj, semprop)+"\" />");
                     out.println("</td>");
                 }
                 if(hmprop.get(SWBContext.getVocabulary().swb_created)!=null)
