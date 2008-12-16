@@ -29,6 +29,7 @@ import javax.jcr.nodetype.PropertyDefinition;
 import javax.jcr.version.VersionException;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticLiteral;
@@ -212,25 +213,33 @@ public final class PropertyImp implements Property
         if (node.existsProperty(clazz, name))
         {
             SemanticProperty property = node.getSemanticProperty(name, clazz);
-            if (property.isDataTypeProperty())
+            if (property == null)
             {
-                if (property.isBinary())
+                String uri=node.getUri(name);
+                property = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(uri);
+            }
+            if (property != null)
+            {
+                if (property.isDataTypeProperty())
                 {
-                    values.add(factory.createValue(node.getSemanticObject().getInputStreamProperty(property)));
+                    if (property.isBinary())
+                    {
+                        values.add(factory.createValue(node.getSemanticObject().getInputStreamProperty(property)));
+                    }
+                    else
+                    {
+                        Iterator<SemanticLiteral> literals = node.getSemanticObject().listLiteralProperties(property);
+                        while (literals.hasNext())
+                        {
+                            values.add(factory.createValue(literals.next().getString()));
+                        }
+                    }
                 }
                 else
                 {
-                    Iterator<SemanticLiteral> literals = node.getSemanticObject().listLiteralProperties(property);
-                    while (literals.hasNext())
-                    {
-                        values.add(factory.createValue(literals.next().getString()));
-                    }
+                    Iterator<SemanticObject> value = node.getSemanticObject().listObjectProperties(property);
+                // TODO
                 }
-            }
-            else
-            {
-                Iterator<SemanticObject> value = node.getSemanticObject().listObjectProperties(property);
-            // TODO
             }
 
         }
