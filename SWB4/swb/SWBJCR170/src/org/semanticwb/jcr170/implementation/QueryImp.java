@@ -67,10 +67,10 @@ public class QueryImp implements Query
         {
             for (String prefix : BaseNode.vocabulary.listUris().keySet())
             {
-                prefixStatement.append("PREFIX " + prefix + ": <" + BaseNode.vocabulary.listUris().get(prefix) + ">");
+                prefixStatement.append("PREFIX " + prefix + ": <" + BaseNode.vocabulary.listUris().get(prefix) + ">"+NL);
             }
-            prefixStatement.append(" PREFIX rdf: <"+SemanticVocabulary.RDF_URI+"> ") ;
-            prefixStatement.append(" PREFIX rdfs: <"+SemanticVocabulary.RDFS_URI+"> ") ;
+            prefixStatement.append(" PREFIX rdf: <"+SemanticVocabulary.RDF_URI+"> "+NL) ;
+            prefixStatement.append(" PREFIX rdfs: <"+SemanticVocabulary.RDFS_URI+"> "+NL) ;
         }
         else if (language.equals(javax.jcr.query.Query.XPATH))
         {
