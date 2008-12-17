@@ -43,7 +43,7 @@ public class TemplateGroupBase extends SWBClass implements Traceable,Descriptive
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_modifiedBy);
          if(obj!=null)
          {
-             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
+             ret=(User)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -99,7 +99,7 @@ public class TemplateGroupBase extends SWBClass implements Traceable,Descriptive
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_creator);
          if(obj!=null)
          {
-             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
+             ret=(User)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -141,7 +141,7 @@ public class TemplateGroupBase extends SWBClass implements Traceable,Descriptive
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasGroupedTemplate);
          if(obj!=null)
          {
-             ret=(Template)vocabulary.swb_Template.newGenericInstance(obj);
+             ret=(Template)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }

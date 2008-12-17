@@ -43,7 +43,7 @@ public class ObjectBehaviorBase extends SWBClass implements Iconable,Descriptive
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swbxf_displayObject);
          if(obj!=null)
          {
-             ret=(DisplayObject)vocabulary.swbxf_DisplayObject.newGenericInstance(obj);
+             ret=(DisplayObject)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -170,7 +170,7 @@ public class ObjectBehaviorBase extends SWBClass implements Iconable,Descriptive
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swbxf_hasResourceParam);
          if(obj!=null)
          {
-             ret=(ResourceParameter)vocabulary.swbxf_ResourceParameter.newGenericInstance(obj);
+             ret=(ResourceParameter)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }

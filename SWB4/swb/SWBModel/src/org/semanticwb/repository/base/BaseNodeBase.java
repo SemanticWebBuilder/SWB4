@@ -38,7 +38,7 @@ public class BaseNodeBase extends GenericObjectBase
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swbrep_parentNode);
          if(obj!=null)
          {
-             ret=(BaseNode)vocabulary.nt_BaseNode.newGenericInstance(obj);
+             ret=(BaseNode)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -65,7 +65,7 @@ public class BaseNodeBase extends GenericObjectBase
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swbrep_hasNodes);
          if(obj!=null)
          {
-             ret=(BaseNode)vocabulary.nt_BaseNode.newGenericInstance(obj);
+             ret=(BaseNode)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }

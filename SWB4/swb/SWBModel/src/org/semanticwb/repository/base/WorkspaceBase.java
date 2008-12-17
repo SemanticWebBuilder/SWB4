@@ -34,7 +34,7 @@ public class WorkspaceBase extends SWBModel
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.jcr_root);
          if(obj!=null)
          {
-             ret=(BaseNode)vocabulary.nt_BaseNode.newGenericInstance(obj);
+             ret=(BaseNode)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }

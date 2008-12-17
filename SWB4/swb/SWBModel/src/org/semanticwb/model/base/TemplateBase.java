@@ -43,7 +43,7 @@ public class TemplateBase extends SWBClass implements RoleRefable,Calendarable,V
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_modifiedBy);
          if(obj!=null)
          {
-             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
+             ret=(User)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -89,7 +89,7 @@ public class TemplateBase extends SWBClass implements RoleRefable,Calendarable,V
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_templateGroup);
          if(obj!=null)
          {
-             ret=(TemplateGroup)vocabulary.swb_TemplateGroup.newGenericInstance(obj);
+             ret=(TemplateGroup)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -110,7 +110,7 @@ public class TemplateBase extends SWBClass implements RoleRefable,Calendarable,V
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_actualVersion);
          if(obj!=null)
          {
-             ret=(VersionInfo)vocabulary.swb_VersionInfo.newGenericInstance(obj);
+             ret=(VersionInfo)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -141,7 +141,7 @@ public class TemplateBase extends SWBClass implements RoleRefable,Calendarable,V
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_lastVersion);
          if(obj!=null)
          {
-             ret=(VersionInfo)vocabulary.swb_VersionInfo.newGenericInstance(obj);
+             ret=(VersionInfo)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -171,7 +171,7 @@ public class TemplateBase extends SWBClass implements RoleRefable,Calendarable,V
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasCalendar);
          if(obj!=null)
          {
-             ret=(Calendar)vocabulary.swb_Calendar.newGenericInstance(obj);
+             ret=(Calendar)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -211,7 +211,7 @@ public class TemplateBase extends SWBClass implements RoleRefable,Calendarable,V
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasRoleRef);
          if(obj!=null)
          {
-             ret=(RoleRef)vocabulary.swb_RoleRef.newGenericInstance(obj);
+             ret=(RoleRef)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -242,7 +242,7 @@ public class TemplateBase extends SWBClass implements RoleRefable,Calendarable,V
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_language);
          if(obj!=null)
          {
-             ret=(Language)vocabulary.swb_Language.newGenericInstance(obj);
+             ret=(Language)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -272,7 +272,7 @@ public class TemplateBase extends SWBClass implements RoleRefable,Calendarable,V
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasRuleRef);
          if(obj!=null)
          {
-             ret=(RuleRef)vocabulary.swb_RuleRef.newGenericInstance(obj);
+             ret=(RuleRef)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -293,7 +293,7 @@ public class TemplateBase extends SWBClass implements RoleRefable,Calendarable,V
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_creator);
          if(obj!=null)
          {
-             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
+             ret=(User)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }

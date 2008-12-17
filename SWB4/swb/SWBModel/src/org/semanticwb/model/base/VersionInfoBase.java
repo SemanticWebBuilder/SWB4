@@ -43,7 +43,7 @@ public class VersionInfoBase extends SWBClass implements Valueable,Traceable
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_modifiedBy);
          if(obj!=null)
          {
-             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
+             ret=(User)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -74,7 +74,7 @@ public class VersionInfoBase extends SWBClass implements Valueable,Traceable
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_previousVersion);
          if(obj!=null)
          {
-             ret=(VersionInfo)vocabulary.swb_VersionInfo.newGenericInstance(obj);
+             ret=(VersionInfo)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -95,7 +95,7 @@ public class VersionInfoBase extends SWBClass implements Valueable,Traceable
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_versionLockedBy);
          if(obj!=null)
          {
-             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
+             ret=(User)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -146,7 +146,7 @@ public class VersionInfoBase extends SWBClass implements Valueable,Traceable
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_nextVersion);
          if(obj!=null)
          {
-             ret=(VersionInfo)vocabulary.swb_VersionInfo.newGenericInstance(obj);
+             ret=(VersionInfo)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -167,7 +167,7 @@ public class VersionInfoBase extends SWBClass implements Valueable,Traceable
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_creator);
          if(obj!=null)
          {
-             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
+             ret=(User)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }

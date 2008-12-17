@@ -52,7 +52,7 @@ public class DisplayObjectBase extends SWBClass implements Sortable
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swbxf_hasObjectAction);
          if(obj!=null)
          {
-             ret=(ObjectAction)vocabulary.swbxf_ObjectAction.newGenericInstance(obj);
+             ret=(ObjectAction)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -69,7 +69,7 @@ public class DisplayObjectBase extends SWBClass implements Sortable
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swbxf_hasBehavior);
          if(obj!=null)
          {
-             ret=(ObjectBehavior)vocabulary.swbxf_ObjectBehavior.newGenericInstance(obj);
+             ret=(ObjectBehavior)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }

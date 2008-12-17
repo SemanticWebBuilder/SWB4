@@ -43,7 +43,7 @@ public class PortletSubTypeBase extends SWBClass implements Traceable,Descriptiv
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_modifiedBy);
          if(obj!=null)
          {
-             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
+             ret=(User)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -60,7 +60,7 @@ public class PortletSubTypeBase extends SWBClass implements Traceable,Descriptiv
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasPSTPortlets);
          if(obj!=null)
          {
-             ret=(Portlet)vocabulary.swb_Portlet.newGenericInstance(obj);
+             ret=(Portlet)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -116,7 +116,7 @@ public class PortletSubTypeBase extends SWBClass implements Traceable,Descriptiv
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_PSTType);
          if(obj!=null)
          {
-             ret=(PortletType)vocabulary.swb_PortletType.newGenericInstance(obj);
+             ret=(PortletType)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -137,7 +137,7 @@ public class PortletSubTypeBase extends SWBClass implements Traceable,Descriptiv
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_creator);
          if(obj!=null)
          {
-             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
+             ret=(User)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }

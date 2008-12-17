@@ -33,7 +33,7 @@ public class RuleRefBase extends Reference implements Activeable
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_rule);
          if(obj!=null)
          {
-             ret=(Rule)vocabulary.swb_Rule.newGenericInstance(obj);
+             ret=(Rule)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
