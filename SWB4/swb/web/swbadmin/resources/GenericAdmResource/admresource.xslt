@@ -2,7 +2,7 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <xsl:output method="html" version="1.0" encoding="ISO-8859-1" indent="yes"/>
     <xsl:template match="/admresource">
-        <DIV class="box">
+        <DIV class="swbform">
         <TABLE width="100%"  border="0" cellpadding="5" cellspacing="0">
 		<xsl:apply-templates />
 	</TABLE>
@@ -111,10 +111,7 @@
     </xsl:template>
     <xsl:template match="input[@type = 'submit' or @type = 'reset']">
     		<xsl:if test="@type = 'submit'"> 
-			<TR><TD colspan="2">
-				<xsl:text disable-output-escaping="yes">&lt;</xsl:text>HR size="1" noshade<xsl:text disable-output-escaping="yes">/&gt;</xsl:text>
-			</TD></TR>
-    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>TR<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>TR<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
     			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>TD colspan="2" align="right"<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
     		</xsl:if>
 	        <xsl:text disable-output-escaping="yes">&lt;</xsl:text><xsl:value-of select="name()" /> type=&quot;<xsl:value-of select="@type" />&quot;
