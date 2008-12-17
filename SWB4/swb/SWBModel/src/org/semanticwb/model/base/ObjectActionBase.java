@@ -69,22 +69,22 @@ public class ObjectActionBase extends GenericObjectBase implements Sortable,Desc
 
     public String getActGroup()
     {
-        return getSemanticObject().getProperty(vocabulary.swb_actGroup);
+        return getSemanticObject().getProperty(vocabulary.swbxf_actGroup);
     }
 
     public void setActGroup(String actGroup)
     {
-        getSemanticObject().setProperty(vocabulary.swb_actGroup, actGroup);
+        getSemanticObject().setProperty(vocabulary.swbxf_actGroup, actGroup);
     }
 
     public String getActionURL()
     {
-        return getSemanticObject().getProperty(vocabulary.swb_actionURL);
+        return getSemanticObject().getProperty(vocabulary.swbxf_actionURL);
     }
 
     public void setActionURL(String actionURL)
     {
-        getSemanticObject().setProperty(vocabulary.swb_actionURL, actionURL);
+        getSemanticObject().setProperty(vocabulary.swbxf_actionURL, actionURL);
     }
 
     public String getDescription()
