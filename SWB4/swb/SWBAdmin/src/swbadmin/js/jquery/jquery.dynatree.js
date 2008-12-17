@@ -1028,7 +1028,7 @@ $.ui.dynatree.getter = "getTree getRoot getSelectedNode";
 // Plugin default options:
 
 $.ui.dynatree.defaults = {
-	title: "Dynatree root", // Name of the root node.
+	title: "treeview root", // Name of the root node.
 	rootVisible: false, // Set to true, to make the root node visible.
 	rootCollapsible: false, // Prevent root node from being collapsed.
 	imagePath: null, // Path to a folder containing icons. Defaults to 'themes/' subdirectory.
@@ -1046,7 +1046,7 @@ $.ui.dynatree.defaults = {
 	expandOnAdd: false, // Automatically expand parent, when a child is added.
 	selectExpandsFolders: true, // Clicking a folder title expands the node instead of selecting it.
 	selectionVisible: true, // Make sure, selected nodes are visible (expanded).
-	idPrefix: 'ui-dynatree-id-', // Used to generate node id's like <span id="ui-dynatree-id-<key>">.
+	idPrefix: 'ui-tree-id-', // Used to generate node id's like <span id="ui-dynatree-id-<key>">.
 	ajaxDefaults: { // Used by initAjax option
 		cache: false, // Append random '_' argument to url to prevent caching.
 		dataType: "json" // Expect json format and pass json object to callbacks.
