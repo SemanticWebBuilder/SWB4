@@ -361,7 +361,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         return types.toArray(new ContentType[types.size()]);
     }
 
-    public ContentInfo[] search(String repositoryName, String title, String description, String category, String type) throws Exception
+    public ContentInfo[] search(String repositoryName, String title, String description, String category, String type,String officeType) throws Exception
     {
         Session session = null;
         ArrayList<ContentInfo> contents = new ArrayList<ContentInfo>();
@@ -370,26 +370,29 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             session = loader.openSession(repositoryName, this.user, this.password);
             String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
             String cm_description = loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
+            String cm_officeType = loader.getOfficeManager(repositoryName).getPropertyType();
             Query query = null;
             if (session.getRepository().getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf("webbuilder") != -1)
             {
                 StringBuilder statement = new StringBuilder("SELECT ");
                 statement.append(" WHERE {");
                 statement.append(" ?x " + cm_title + " ?title . ");
+                statement.append(" ?x " + cm_officeType + " ?type . ");
                 if (!(title.equals("") || title.equals("*")))
                 {
-                    statement.append("FILTER regex(?title, \"^" + title + "\") ");
-                }
+                    statement.append("FILTER regex(?title, \"" + title + "\") ");
+                }                
+                statement.append("FILTER regex(?type, \"^" + officeType + "\") ");                
                 statement.append(" ?x " + cm_description + " ?description . ");
                 if (!(description.equals("") || description.equals("*")))
                 {
-                    statement.append(" FILTER regex(?description, \"^" + description + "\") ");
+                    statement.append(" FILTER regex(?description, \"" + description + "\") ");
                 }
                 statement.append(" ?x jcr:primaryType ?type . ");
 
                 if (!(type.equals("") || type.equals("*")))
                 {
-                    statement.append(" FILTER regex(?type, \"" + type + "\") ");
+                    statement.append(" FILTER regex(?type, \"^" + type + "\") ");
                 }
                 statement.append(" } ");
                 query = session.getWorkspace().getQueryManager().createQuery(statement.toString(), "SPARQL");
