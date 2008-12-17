@@ -3,19 +3,14 @@ package org.semanticwb.model.base;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.ArrayList;
-import org.semanticwb.model.base.GenericObjectBase;
-import org.semanticwb.model.SWBVocabulary;
-import org.semanticwb.model.SWBContext;
-import org.semanticwb.model.GenericObject;
-import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.*;
 import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
+import org.semanticwb.model.GenericIterator;
 
-public class DnsBase extends GenericObjectBase implements Traceable,Descriptiveable,WebPageable
+public class DnsBase extends SWBClass implements Traceable,Descriptiveable,WebPageable
 {
-    public static SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
     public DnsBase(SemanticObject base)
     {
@@ -163,16 +158,6 @@ public class DnsBase extends GenericObjectBase implements Traceable,Descriptivea
     public void setDefault(boolean dnsDefault)
     {
         getSemanticObject().setBooleanProperty(vocabulary.swb_dnsDefault, dnsDefault);
-    }
-
-    public void remove()
-    {
-        getSemanticObject().remove();
-    }
-
-    public Iterator<GenericObject> listRelatedObjects()
-    {
-        return new GenericIterator((SemanticClass)null, getSemanticObject().listRelatedObjects(),true);
     }
 
     public WebSite getWebSite()

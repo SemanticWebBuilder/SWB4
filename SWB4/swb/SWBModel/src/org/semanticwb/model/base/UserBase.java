@@ -3,19 +3,14 @@ package org.semanticwb.model.base;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.ArrayList;
-import org.semanticwb.model.base.GenericObjectBase;
-import org.semanticwb.model.SWBVocabulary;
-import org.semanticwb.model.SWBContext;
-import org.semanticwb.model.GenericObject;
-import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.*;
 import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
+import org.semanticwb.model.GenericIterator;
 
-public class UserBase extends GenericObjectBase implements Roleable,Traceable,Activeable,Calendarable
+public class UserBase extends SWBClass implements Roleable,Traceable,Activeable,Calendarable
 {
-    public static SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
     public UserBase(SemanticObject base)
     {
@@ -285,16 +280,6 @@ public class UserBase extends GenericObjectBase implements Roleable,Traceable,Ac
     public void setUsrSecurityAnswer(String usrSecurityAnswer)
     {
         getSemanticObject().setProperty(vocabulary.swb_usrSecurityAnswer, usrSecurityAnswer);
-    }
-
-    public void remove()
-    {
-        getSemanticObject().remove();
-    }
-
-    public Iterator<GenericObject> listRelatedObjects()
-    {
-        return new GenericIterator((SemanticClass)null, getSemanticObject().listRelatedObjects(),true);
     }
 
     public UserRepository getUserRepository()

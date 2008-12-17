@@ -3,19 +3,14 @@ package org.semanticwb.model.base;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.ArrayList;
-import org.semanticwb.model.base.GenericObjectBase;
-import org.semanticwb.model.SWBVocabulary;
-import org.semanticwb.model.SWBContext;
-import org.semanticwb.model.GenericObject;
-import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.*;
 import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
+import org.semanticwb.model.GenericIterator;
 
-public class DisplayPropertyBase extends GenericObjectBase implements Sortable
+public class DisplayPropertyBase extends SWBClass implements Sortable
 {
-    public static SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
     public DisplayPropertyBase(SemanticObject base)
     {
@@ -138,9 +133,9 @@ public class DisplayPropertyBase extends GenericObjectBase implements Sortable
         getSemanticObject().setProperty(vocabulary.swbxf_propInvalidMessage, propInvalidMessage, lang);
     }
 
-    public void setFormElement(org.semanticwb.platform.SemanticObject semanticobject)
+    public void setFormElement(org.semanticwb.model.SWBFormElement swbformelement)
     {
-        getSemanticObject().setObjectProperty(vocabulary.swbxf_formElement, semanticobject);
+        getSemanticObject().setObjectProperty(vocabulary.swbxf_formElement, swbformelement.getSemanticObject());
     }
 
     public void removeFormElement()
@@ -148,10 +143,14 @@ public class DisplayPropertyBase extends GenericObjectBase implements Sortable
         getSemanticObject().removeProperty(vocabulary.swbxf_formElement);
     }
 
-    public SemanticObject getFormElement()
+    public SWBFormElement getFormElement()
     {
-         SemanticObject ret=null;
-         ret=getSemanticObject().getObjectProperty(vocabulary.swbxf_formElement);
+         SWBFormElement ret=null;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swbxf_formElement);
+         if(obj!=null)
+         {
+             ret=(SWBFormElement)vocabulary.swb_SWBFormElement.newGenericInstance(obj);
+         }
          return ret;
     }
 
@@ -163,15 +162,5 @@ public class DisplayPropertyBase extends GenericObjectBase implements Sortable
     public void setEditable(boolean propEditable)
     {
         getSemanticObject().setBooleanProperty(vocabulary.swbxf_propEditable, propEditable);
-    }
-
-    public void remove()
-    {
-        getSemanticObject().remove();
-    }
-
-    public Iterator<GenericObject> listRelatedObjects()
-    {
-        return new GenericIterator((SemanticClass)null, getSemanticObject().listRelatedObjects(),true);
     }
 }

@@ -7,6 +7,7 @@ import org.semanticwb.model.*;
 import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
+import org.semanticwb.model.GenericIterator;
 
 public class RuleRefBase extends Reference implements Activeable
 {
@@ -35,5 +36,10 @@ public class RuleRefBase extends Reference implements Activeable
              ret=(Rule)vocabulary.swb_Rule.newGenericInstance(obj);
          }
          return ret;
+    }
+
+    public WebSite getWebSite()
+    {
+        return new WebSite(getSemanticObject().getModel().getModelObject());
     }
 }

@@ -7,6 +7,7 @@ import org.semanticwb.model.*;
 import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
+import org.semanticwb.model.GenericIterator;
 
 public class PortletRefBase extends Reference implements Deleteable,Activeable,Priorityable
 {
@@ -55,5 +56,10 @@ public class PortletRefBase extends Reference implements Deleteable,Activeable,P
     public void setPriority(int priority)
     {
         getSemanticObject().setLongProperty(vocabulary.swb_priority, priority);
+    }
+
+    public WebSite getWebSite()
+    {
+        return new WebSite(getSemanticObject().getModel().getModelObject());
     }
 }

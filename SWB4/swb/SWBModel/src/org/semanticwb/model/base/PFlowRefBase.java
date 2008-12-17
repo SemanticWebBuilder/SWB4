@@ -7,6 +7,7 @@ import org.semanticwb.model.*;
 import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
+import org.semanticwb.model.GenericIterator;
 
 public class PFlowRefBase extends Reference implements Deleteable,Activeable
 {
@@ -45,5 +46,10 @@ public class PFlowRefBase extends Reference implements Deleteable,Activeable
              ret=(PFlow)vocabulary.swb_PFlow.newGenericInstance(obj);
          }
          return ret;
+    }
+
+    public WebSite getWebSite()
+    {
+        return new WebSite(getSemanticObject().getModel().getModelObject());
     }
 }

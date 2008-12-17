@@ -7,6 +7,7 @@ import org.semanticwb.model.*;
 import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
+import org.semanticwb.model.GenericIterator;
 
 public class FormViewRefBase extends Reference 
 {
