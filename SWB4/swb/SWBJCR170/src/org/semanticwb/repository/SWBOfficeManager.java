@@ -78,7 +78,7 @@ public class SWBOfficeManager implements OfficeManager
 
     public String getPropertyType()
     {
-        return BaseNode.vocabulary.cm_type.getPrefix() + ":" + BaseNode.vocabulary.cm_type.getName();
+        return BaseNode.vocabulary.cm_officetype.getPrefix() + ":" + BaseNode.vocabulary.cm_officetype.getName();
     }
 
     public String getUserType()
