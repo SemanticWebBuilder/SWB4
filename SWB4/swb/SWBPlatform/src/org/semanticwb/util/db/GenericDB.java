@@ -234,7 +234,7 @@ public class GenericDB {
         String schema=null;
         try { 
             //schema = com.infotec.appfw.util.AFUtils.getInstance().readInputStream(WBUtils.getInstance().getAdminFileStream("/wbadmin/schema/GenericDB.xsd")); 
-            schema = SWBUtils.IO.readInputStream(new FileInputStream("/xsds/GenericDB.xsd")); 
+            schema = SWBUtils.IO.readInputStream(new FileInputStream(SWBPlatform.getContextPath()+"/swbadmin/schema/GenericDB.xsd")); 
         } 
         catch(Exception e) { return bOk; }
         //if (schema != null && xml !=null) bOk=com.infotec.wb.admin.admresources.util.WBAdmResourceUtils.getInstance().xmlVerifier(schema, xml);
@@ -256,14 +256,10 @@ public class GenericDB {
         Document dom = SWBUtils.XML.xmlToDom(strXML);
         
         if (dom != null) {
-
-            DialectFactory dialectF = new DialectFactory();
-            Dialect dialect = dialectF.buildDialect(getDBDialect(DBName));
-
+            Dialect dialect = DialectFactory.buildDialect(getDBDialect(DBName));
             Element root = dom.getDocumentElement();
             NodeList tbEle = root.getElementsByTagName("table");
             if (tbEle != null && tbEle.getLength() > 0) {
-
                 for (int i = 0; i < tbEle.getLength(); i++) {
                     Element ele = (Element) tbEle.item(i);
                     if (ele.getNodeName().equals("table")) {
@@ -743,9 +739,7 @@ public class GenericDB {
         }
         return strBuff.toString();
     }
-    
-    
-    
+
     public HashMap getDialects()
     {
         if(hmDialect==null)
