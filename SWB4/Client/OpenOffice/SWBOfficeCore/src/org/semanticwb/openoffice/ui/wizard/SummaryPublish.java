@@ -3,20 +3,56 @@
  *
  * Created on 3 de junio de 2008, 03:58 PM
  */
-
 package org.semanticwb.openoffice.ui.wizard;
+
+import java.text.SimpleDateFormat;
+import javax.swing.table.DefaultTableModel;
+import org.semanticwb.office.interfaces.IOfficeDocument;
+import org.semanticwb.office.interfaces.VersionInfo;
+import org.semanticwb.openoffice.OfficeApplication;
 
 /**
  *
  * @author  victor.lorenzana
  */
-public class SummaryPublish extends javax.swing.JPanel {
+public class SummaryPublish extends javax.swing.JPanel
+{
+
+    private static SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     
-    /** Creates new form SummaryPublish */
-    public SummaryPublish() {
-        initComponents();        
+    public SummaryPublish()
+    {
+        initComponents();
     }
-    
+    /** Creates new form SummaryPublish */
+    public SummaryPublish(String contentId, String repositoryName)
+    {
+        this();
+        loadVersions(contentId,repositoryName);
+    }
+    public void loadVersions(String contentId, String repositoryName)
+    {        
+        try
+        {            
+            DefaultTableModel model=(DefaultTableModel)jTableSummary1.getModel(); 
+            int rows=model.getRowCount();
+            for(int i=1;i<=rows;i++)
+            {
+                model.removeRow(0);
+            }
+            IOfficeDocument document = OfficeApplication.getOfficeDocumentProxy();
+            for (VersionInfo versionInfo : document.getVersions(repositoryName, contentId))
+            {
+                String date=iso8601dateFormat.format(versionInfo.created);
+                String[] rowData={versionInfo.nameOfVersion,date,versionInfo.user};
+                model.addRow(rowData);
+            }
+        }
+        catch (Exception e)
+        {
+        }
+    }
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -27,38 +63,26 @@ public class SummaryPublish extends javax.swing.JPanel {
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanelPreview = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jEditorPanePreview = new javax.swing.JEditorPane();
-        jPanelSummary = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTableSummary = new javax.swing.JTable();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTableSummary1 = new javax.swing.JTable();
 
         setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.LINE_AXIS));
 
         jPanelPreview.setLayout(new javax.swing.BoxLayout(jPanelPreview, javax.swing.BoxLayout.LINE_AXIS));
 
-        jEditorPanePreview.setEditable(false);
-        jScrollPane1.setViewportView(jEditorPanePreview);
-
-        jPanelPreview.add(jScrollPane1);
-
-        jTabbedPane1.addTab("Contenido Almacenado", jPanelPreview);
-
-        jPanelSummary.setLayout(new javax.swing.BoxLayout(jPanelSummary, javax.swing.BoxLayout.LINE_AXIS));
-
-        jTableSummary.setModel(new javax.swing.table.DefaultTableModel(
+        jTableSummary1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Title 1", "Title 2"
+                "Versión", "Fecha de creación", "Creador"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false
+                false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -69,24 +93,20 @@ public class SummaryPublish extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane2.setViewportView(jTableSummary);
+        jTableSummary1.setFocusable(false);
+        jTableSummary1.setRowSelectionAllowed(false);
+        jScrollPane3.setViewportView(jTableSummary1);
 
-        jPanelSummary.add(jScrollPane2);
+        jPanelPreview.add(jScrollPane3);
 
-        jTabbedPane1.addTab("Resumen de publicación", jPanelSummary);
+        jTabbedPane1.addTab("Versiones Existentes", jPanelPreview);
 
         add(jTabbedPane1);
     }// </editor-fold>//GEN-END:initComponents
-    
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JEditorPane jEditorPanePreview;
     private javax.swing.JPanel jPanelPreview;
-    private javax.swing.JPanel jPanelSummary;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTableSummary;
+    private javax.swing.JTable jTableSummary1;
     // End of variables declaration//GEN-END:variables
-    
 }
