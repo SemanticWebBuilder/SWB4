@@ -440,6 +440,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                         info.descripcion = node.getProperty(cm_description).getValue().getString();
                         info.categoryId = parent.getUUID();
                         info.categoryTitle = parent.getProperty(cm_title).getValue().getString();
+                        info.created = node.getProperty("jcr:created").getDate().getTime();
                         contents.add(info);
                     }
                 }
