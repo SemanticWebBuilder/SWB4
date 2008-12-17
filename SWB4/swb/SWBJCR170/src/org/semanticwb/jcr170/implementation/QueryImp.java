@@ -152,8 +152,7 @@ public class QueryImp implements Query
                     while(rs.hasNext())
                     {
                         QuerySolution rb = rs.nextSolution();
-                        Resource res=rb.getResource("x");
-                        
+                        Resource res=rb.getResource("x");                        
                         nodes.add(new SemanticObject(res));
                     }
                 }
