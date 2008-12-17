@@ -18,7 +18,7 @@ import org.semanticwb.openoffice.OfficeApplication;
 public class SummaryPublish extends javax.swing.JPanel
 {
 
-    private static SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+    
     
     public SummaryPublish()
     {
@@ -43,7 +43,7 @@ public class SummaryPublish extends javax.swing.JPanel
             IOfficeDocument document = OfficeApplication.getOfficeDocumentProxy();
             for (VersionInfo versionInfo : document.getVersions(repositoryName, contentId))
             {
-                String date=iso8601dateFormat.format(versionInfo.created);
+                String date=OfficeApplication.iso8601dateFormat.format(versionInfo.created);
                 String[] rowData={versionInfo.nameOfVersion,date,versionInfo.user};
                 model.addRow(rowData);
             }
