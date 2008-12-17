@@ -164,12 +164,7 @@ public class CodeGenerator
                 createInterface(tpc);
             }
             else if ( tpc.isSWBClass() || tpc.isSWBModel() || tpc.isSWBFormElement() )
-            {
-                //System.out.println("tpc: " + tpc.toString() + " isSWBClass: " + tpc.isSWBClass()+ " isSWBFormElement: " + tpc.isSWBFormElement());
-                if ( tpc.getName().toLowerCase().startsWith("basenode") )
-                {
-                    //System.out.println("tpc: " + tpc.toString() + " isSWBClass: " + tpc.isSWBClass() + " isSWBFormElement: " + tpc.isSWBFormElement());
-                }
+            {                
                 createClassBase(tpc);
             }
         }
