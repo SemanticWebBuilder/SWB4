@@ -261,6 +261,7 @@ public class WB4WriterTest
     }
 
     @Test
+    @Ignore
     public void publishTest()
     {
         try
@@ -274,8 +275,7 @@ public class WB4WriterTest
         }
     }
 
-    @Test
-    @Ignore
+    @Test    
     public void openTest()
     {
         WB4WriterApplication writer = new WB4WriterApplication(this.xContext);
