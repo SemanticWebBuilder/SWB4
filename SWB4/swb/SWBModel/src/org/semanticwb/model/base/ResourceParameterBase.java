@@ -34,18 +34,18 @@ public class ResourceParameterBase extends GenericObjectBase
 
     public void setValue(org.semanticwb.platform.SemanticObject semanticobject)
     {
-        getSemanticObject().setObjectProperty(vocabulary.swb_resParamValue, semanticobject);
+        getSemanticObject().setObjectProperty(vocabulary.swbxf_resParamValue, semanticobject);
     }
 
     public void removeValue()
     {
-        getSemanticObject().removeProperty(vocabulary.swb_resParamValue);
+        getSemanticObject().removeProperty(vocabulary.swbxf_resParamValue);
     }
 
     public SemanticObject getValue()
     {
          SemanticObject ret=null;
-         ret=getSemanticObject().getObjectProperty(vocabulary.swb_resParamValue);
+         ret=getSemanticObject().getObjectProperty(vocabulary.swbxf_resParamValue);
          return ret;
     }
 

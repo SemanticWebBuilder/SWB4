@@ -227,12 +227,14 @@ public class UserBase extends GenericObjectBase implements Calendarable,Activeab
 
     public String getUsrPassword()
     {
-        return getSemanticObject().getProperty(vocabulary.swb_usrPassword);
+        //Implement this method in User object
+        throw new SWBMethodImplementationRequiredException();
     }
 
     public void setUsrPassword(String usrPassword)
     {
-        getSemanticObject().setProperty(vocabulary.swb_usrPassword, usrPassword);
+        //Implement this method in User object
+        throw new SWBMethodImplementationRequiredException();
     }
 
     public GenericIterator<org.semanticwb.model.Role> listRoles()
