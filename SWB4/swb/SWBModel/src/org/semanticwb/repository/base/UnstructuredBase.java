@@ -7,6 +7,7 @@ import org.semanticwb.repository.*;
 import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
+import org.semanticwb.model.GenericIterator;
 
 public class UnstructuredBase extends BaseNode 
 {
@@ -14,5 +15,10 @@ public class UnstructuredBase extends BaseNode
     public UnstructuredBase(SemanticObject base)
     {
         super(base);
+    }
+
+    public Workspace getWorkspace()
+    {
+        return new Workspace(getSemanticObject().getModel().getModelObject());
     }
 }

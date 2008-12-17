@@ -7,11 +7,11 @@ import org.semanticwb.model.base.GenericObjectBase;
 import org.semanticwb.model.SWBVocabulary;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.GenericObject;
-import org.semanticwb.model.GenericIterator;
 import org.semanticwb.repository.*;
 import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
+import org.semanticwb.model.GenericIterator;
 
 public class BaseNodeBase extends GenericObjectBase 
 {
