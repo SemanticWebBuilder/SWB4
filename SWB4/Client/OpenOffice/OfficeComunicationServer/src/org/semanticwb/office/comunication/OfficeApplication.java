@@ -361,7 +361,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         return types.toArray(new ContentType[types.size()]);
     }
 
-    public ContentInfo[] search(String repositoryName, String title, String description, String category, String type,String officeType) throws Exception
+    public ContentInfo[] search(String repositoryName, String title, String description, String category, String type, String officeType) throws Exception
     {
         Session session = null;
         ArrayList<ContentInfo> contents = new ArrayList<ContentInfo>();
@@ -375,24 +375,34 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             if (session.getRepository().getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf("webbuilder") != -1)
             {
                 StringBuilder statement = new StringBuilder("SELECT ");
+
                 statement.append(" WHERE {");
-                statement.append(" ?x " + cm_title + " ?title . ");
-                statement.append(" ?x " + cm_officeType + " ?type . ");
+
                 if (!(title.equals("") || title.equals("*")))
                 {
+                    statement.append(" ?x " + cm_title + " ?title . ");
                     statement.append("FILTER regex(?title, \"" + title + "\") ");
-                }                
-                statement.append("FILTER regex(?type, \"^" + officeType + "\") ");                
-                statement.append(" ?x " + cm_description + " ?description . ");
+                }
+
+                
+                if (!(officeType.equals("") || officeType.equals("*")))
+                {
+                    statement.append(" ?x " + cm_officeType + " ?officetype . ");
+                    statement.append(" FILTER regex(?officetype, \"" + officeType + "\") ");
+                }
+                
                 if (!(description.equals("") || description.equals("*")))
                 {
+                    statement.append(" ?x " + cm_description + " ?description . ");
                     statement.append(" FILTER regex(?description, \"" + description + "\") ");
                 }
-                statement.append(" ?x jcr:primaryType ?type . ");
+
+                
 
                 if (!(type.equals("") || type.equals("*")))
                 {
-                    statement.append(" FILTER regex(?type, \"^" + type + "\") ");
+                    statement.append(" ?x jcr:primaryType ?type . ");
+                    statement.append(" FILTER regex(?type, \"" + type + "\") ");
                 }
                 statement.append(" } ");
                 query = session.getWorkspace().getQueryManager().createQuery(statement.toString(), "SPARQL");
@@ -416,6 +426,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                     info.descripcion = node.getProperty(cm_description).getValue().getString();
                     info.categoryId = parent.getUUID();
                     info.categoryTitle = parent.getProperty(cm_title).getValue().getString();
+                    info.created = node.getProperty("jcr:created").getDate().getTime();
                     contents.add(info);
                 }
                 else
@@ -462,28 +473,28 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             {
                 Node frozenNode = versiontoReturn.getNode("jcr:frozenNode");
                 String cm_file = loader.getOfficeManager(repositoryName).getPropertyFileType();
-                String file=frozenNode.getProperty(cm_file).getString();
+                String file = frozenNode.getProperty(cm_file).getString();
                 Node resNode = frozenNode.getNode("jcr:content");
-                InputStream in=resNode.getProperty("jcr:data").getStream();
-                ByteArrayOutputStream out=new ByteArrayOutputStream();
-                byte[] buffer=new byte[2048];
-                int read=in.read(buffer);
-                while(read!=-1)
+                InputStream in = resNode.getProperty("jcr:data").getStream();
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                byte[] buffer = new byte[2048];
+                int read = in.read(buffer);
+                while (read != -1)
                 {
                     out.write(buffer, 0, read);
-                    read=in.read(buffer);
+                    read = in.read(buffer);
                 }
-                Part part=new Part(out.toByteArray(), file, file);
-                HashSet parts=new HashSet();
+                Part part = new Part(out.toByteArray(), file, file);
+                HashSet parts = new HashSet();
                 parts.add(part);
                 return file;
             }
             else
             {
-                throw new Exception("The version "+ versioninfo.nameOfVersion +" does not exist");
+                throw new Exception("The version " + versioninfo.nameOfVersion + " does not exist");
             }
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             log.error(e);
             throw e;
