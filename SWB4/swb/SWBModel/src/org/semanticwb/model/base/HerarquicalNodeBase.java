@@ -3,19 +3,14 @@ package org.semanticwb.model.base;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.ArrayList;
-import org.semanticwb.model.base.GenericObjectBase;
-import org.semanticwb.model.SWBVocabulary;
-import org.semanticwb.model.SWBContext;
-import org.semanticwb.model.GenericObject;
-import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.*;
 import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
+import org.semanticwb.model.GenericIterator;
 
-public class HerarquicalNodeBase extends GenericObjectBase implements Sortable,Iconable,Descriptiveable
+public class HerarquicalNodeBase extends SWBClass implements Sortable,Iconable,Descriptiveable
 {
-    public static SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
     public HerarquicalNodeBase(SemanticObject base)
     {
@@ -30,6 +25,27 @@ public class HerarquicalNodeBase extends GenericObjectBase implements Sortable,I
     public void setIndex(int index)
     {
         getSemanticObject().setLongProperty(vocabulary.swb_index, index);
+    }
+
+    public void setModel(org.semanticwb.model.SWBModel swbmodel)
+    {
+        getSemanticObject().setObjectProperty(vocabulary.swbxf_heModel, swbmodel.getSemanticObject());
+    }
+
+    public void removeModel()
+    {
+        getSemanticObject().removeProperty(vocabulary.swbxf_heModel);
+    }
+
+    public SWBModel getModel()
+    {
+         SWBModel ret=null;
+         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swbxf_heModel);
+         if(obj!=null)
+         {
+             ret=(SWBModel)vocabulary.swb_SWBModel.newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public String getIconClass()
@@ -107,15 +123,5 @@ public class HerarquicalNodeBase extends GenericObjectBase implements Sortable,I
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(vocabulary.swb_description, description, lang);
-    }
-
-    public void remove()
-    {
-        getSemanticObject().remove();
-    }
-
-    public Iterator<GenericObject> listRelatedObjects()
-    {
-        return new GenericIterator((SemanticClass)null, getSemanticObject().listRelatedObjects(),true);
     }
 }

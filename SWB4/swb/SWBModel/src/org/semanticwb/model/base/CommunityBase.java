@@ -3,19 +3,14 @@ package org.semanticwb.model.base;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.ArrayList;
-import org.semanticwb.model.base.GenericObjectBase;
-import org.semanticwb.model.SWBVocabulary;
-import org.semanticwb.model.SWBContext;
-import org.semanticwb.model.GenericObject;
-import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.*;
 import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
+import org.semanticwb.model.GenericIterator;
 
-public class CommunityBase extends GenericObjectBase implements Activeable,Traceable,Descriptiveable
+public class CommunityBase extends SWBClass implements Activeable,Traceable,Descriptiveable
 {
-    public static SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
     public CommunityBase(SemanticObject base)
     {
@@ -142,16 +137,6 @@ public class CommunityBase extends GenericObjectBase implements Activeable,Trace
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(vocabulary.swb_description, description, lang);
-    }
-
-    public void remove()
-    {
-        getSemanticObject().remove();
-    }
-
-    public Iterator<GenericObject> listRelatedObjects()
-    {
-        return new GenericIterator((SemanticClass)null, getSemanticObject().listRelatedObjects(),true);
     }
 
     public WebSite getWebSite()

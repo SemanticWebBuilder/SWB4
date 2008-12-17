@@ -18,6 +18,37 @@ public class SWBContextBase
         return vocabulary;
     }
 
+    public static SWBModel getSWBModel(String uri)
+    {
+        SWBModel ret=null;
+        SemanticModel model=mgr.getModel(uri);
+        if(model!=null)
+        {
+            SemanticObject obj=model.getSemanticObject(uri);
+            if(obj!=null)
+            {
+                ret=(SWBModel)new SWBModel(obj);
+            }
+        }
+        return ret;
+    }
+
+    public static Iterator<org.semanticwb.model.SWBModel> listSWBModels()
+    {
+        return (Iterator<org.semanticwb.model.SWBModel>)vocabulary.swb_SWBModel.listGenericInstances();
+    }
+
+    public static void removeSWBModel(String uri)
+    {
+        mgr.removeModel(uri);
+    }
+
+    public static SWBModel createSWBModel(String name, String namespace)
+    {
+        SemanticModel model=mgr.createModel(name, namespace);
+        return (SWBModel)model.createGenericObject(name, vocabulary.swb_SWBModel);
+    }
+
     public static WebSite getWebSite(String uri)
     {
         WebSite ret=null;

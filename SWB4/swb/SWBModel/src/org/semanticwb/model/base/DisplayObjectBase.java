@@ -3,19 +3,14 @@ package org.semanticwb.model.base;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.ArrayList;
-import org.semanticwb.model.base.GenericObjectBase;
-import org.semanticwb.model.SWBVocabulary;
-import org.semanticwb.model.SWBContext;
-import org.semanticwb.model.GenericObject;
-import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.*;
 import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
+import org.semanticwb.model.GenericIterator;
 
-public class DisplayObjectBase extends GenericObjectBase implements Sortable
+public class DisplayObjectBase extends SWBClass implements Sortable
 {
-    public static SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
     public DisplayObjectBase(SemanticObject base)
     {
@@ -77,15 +72,5 @@ public class DisplayObjectBase extends GenericObjectBase implements Sortable
              ret=(ObjectBehavior)vocabulary.swbxf_ObjectBehavior.newGenericInstance(obj);
          }
          return ret;
-    }
-
-    public void remove()
-    {
-        getSemanticObject().remove();
-    }
-
-    public Iterator<GenericObject> listRelatedObjects()
-    {
-        return new GenericIterator((SemanticClass)null, getSemanticObject().listRelatedObjects(),true);
     }
 }

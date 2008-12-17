@@ -3,19 +3,14 @@ package org.semanticwb.model.base;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.ArrayList;
-import org.semanticwb.model.base.GenericObjectBase;
-import org.semanticwb.model.SWBVocabulary;
-import org.semanticwb.model.SWBContext;
-import org.semanticwb.model.GenericObject;
-import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.*;
 import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
+import org.semanticwb.model.GenericIterator;
 
-public class VersionInfoBase extends GenericObjectBase implements Valueable,Traceable
+public class VersionInfoBase extends SWBClass implements Valueable,Traceable
 {
-    public static SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
     public VersionInfoBase(SemanticObject base)
     {
@@ -185,16 +180,6 @@ public class VersionInfoBase extends GenericObjectBase implements Valueable,Trac
     public void setVersionNumber(int versionNumber)
     {
         getSemanticObject().setLongProperty(vocabulary.swb_versionNumber, versionNumber);
-    }
-
-    public void remove()
-    {
-        getSemanticObject().remove();
-    }
-
-    public Iterator<GenericObject> listRelatedObjects()
-    {
-        return new GenericIterator((SemanticClass)null, getSemanticObject().listRelatedObjects(),true);
     }
 
     public WebSite getWebSite()

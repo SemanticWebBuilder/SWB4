@@ -1,12 +1,11 @@
 package org.semanticwb.model;
 
 import org.semanticwb.model.base.*;
-import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 
-public class DisplayProperty extends DisplayPropertyBase 
+public class SWBClass extends SWBClassBase 
 {
-    public DisplayProperty(SemanticObject base)
+    public SWBClass(SemanticObject base)
     {
         super(base);
     }
