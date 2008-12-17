@@ -7,6 +7,7 @@ package org.semanticwb.openoffice;
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 import javax.swing.JOptionPane;
@@ -29,7 +30,7 @@ import org.semanticwb.xmlrpc.XmlRpcProxyFactory;
  */
 public abstract class OfficeApplication
 {
-
+    public static SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     private static final String DELETE_CONFIGURATION_ERROR = "Error trying to get the proxy server, delete the file ";
     private static MenuListener menuListener;
     private static UserInfo userInfo = null;
