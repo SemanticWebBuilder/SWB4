@@ -173,7 +173,7 @@ public class SWBAProperties extends GenericResource {
 //            out.println("<a href=\"#\" onclick=\"window.location='"+urla+"'\">Admin</a>");
 //            out.println("<form id=\""+base.getId()+"/fpropeditor\">");
             out.println("<fieldset>");
-            out.println("	<legend> Properties file edition. "+fileSelected+"</legend>");
+            //out.println("	<legend> Properties file edition. "+fileSelected+"</legend>");
             out.println("<table cellpadding=10 cellspacing=0 width=100% class=\"swbform\">");
             out.println("<thead>");
             out.println("<tr>");
@@ -205,7 +205,7 @@ public class SWBAProperties extends GenericResource {
                 cambiaColor = !(cambiaColor);
                 out.println("<tr bgcolor=\""+rowColor+"\">");
                 out.println("<td class=\"valores\">");
-                if(!prop.isReadOnly())out.println("<a class=\"link\" href=\""+urlRemove.toString()+"\" onclick=\"if(confirm('"+paramRequest.getLocaleString("msgAlertRemoveProperty")+"?')) { return(true);} else {return(false);}\"><img border=0 src=\""+SWBPlatform.getContextPath()+"wbadmin/images/eliminar.gif\" alt=\""+paramRequest.getLocaleString("msgLinkRemove")+"\"></a>");
+                if(!prop.isReadOnly())out.println("<a class=\"link\" href=\""+urlRemove.toString()+"\" onclick=\"if(confirm('"+paramRequest.getLocaleString("msgAlertRemoveProperty")+"?')) { return(true);} else {return(false);}\"><img border=0 src=\""+SWBPlatform.getContextPath()+"/swbadmin/images/delete.gif\" alt=\""+paramRequest.getLocaleString("msgLinkRemove")+"\"></a>");
                 out.println("</td>");
                 out.println("<td class=\"valores\">");
                 if(!prop.isReadOnly())out.println("<a class=\"link\" href=\""+urlEdit.toString()+"\">"+key+"</a>");
