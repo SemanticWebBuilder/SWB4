@@ -48,6 +48,7 @@ public class SWBAVersionInfo extends GenericResource {
         User user = paramRequest.getUser();
 
         String id = request.getParameter("suri");
+        id = "http://www.sep.gob.mx/Rule#1";
         String idvi = request.getParameter("sobj");
         String action = request.getParameter("act");
         GenericObject obj = ont.getGenericObject(id);
@@ -63,7 +64,11 @@ public class SWBAVersionInfo extends GenericResource {
             return;
         }
 
-        if (vio != null && (action == null || action.equals(""))) {
+        out.println("<fieldset>");
+        out.println("VersionInfo doView");
+        out.println("</fieldset>");
+
+        if (action == null || action.equals("")) {
 
             out.println("<fieldset>");
             out.println("<table width=\"100%\" class=\"swbform\">");
@@ -81,44 +86,45 @@ public class SWBAVersionInfo extends GenericResource {
             out.println("</tr>");
             out.println("</thead>");
             out.println("<tbody>");
+            if (vio != null) {
+                while (vio.getNextVersion() != null) {
 
-            while (vio.getNextVersion() != null) {
+                    out.println("<tr>");
 
-                out.println("<tr>");
+                    out.println("<td align=\"center\">");
+                    out.println(vio.getVersionNumber());
+                    out.println("</td>");
 
-                out.println("<td align=\"center\">");
-                out.println(vio.getVersionNumber());
-                out.println("</td>");
+                    out.println("<td>");
+                    SWBResourceURL urle = paramRequest.getRenderUrl();
+                    urle.setParameter("suri", id);
+                    urle.setParameter("sval", vio.getURI());
+                    urle.setMode(SWBResourceURL.Mode_EDIT);
+                    out.println("<a href=\"#\" onclick=\"submitUrl('" + urle + "',this); return false;\">edit</a>");
 
-                out.println("<td>");
-                SWBResourceURL urle = paramRequest.getRenderUrl();
-                urle.setParameter("suri", id);
-                urle.setParameter("sval", vio.getURI());
-                urle.setMode(SWBResourceURL.Mode_EDIT);
-                out.println("<a href=\"#\" onclick=\"submitUrl('" + urle + "',this); return false;\">edit</a>");
+                    SWBResourceURL urlr = paramRequest.getActionUrl();
+                    urlr.setParameter("suri", id);
+                    urlr.setParameter("sval", vio.getURI());
+                    urlr.setAction("remove");
+                    out.println("&nbsp;<a href=\"#\" onclick=\"submitUrl('" + urlr + "',this); return false;\">remove</a>");
+                    if (!vio.equals(via)) {
+                        SWBResourceURL urlsa = paramRequest.getActionUrl();
+                        urlsa.setParameter("suri", id);
+                        urlsa.setParameter("sval", vio.getURI());
+                        urlsa.setAction("setactual");
+                        out.println("&nbsp;<a href=\"#\" onclick=\"submitUrl('" + urlsa + "',this); return false;\">Cambiar</a>");
+                    } else {
+                        out.println("-----");
+                    }
+                    out.println("</td>");
+                    out.println("<td>");
+                    if (vio.equals(via)) {
+                        out.println("Versión Actual");
+                    }
 
-                SWBResourceURL urlr = paramRequest.getActionUrl();
-                urlr.setParameter("suri", id);
-                urlr.setParameter("sval", vio.getURI());
-                urlr.setAction("remove");
-                out.println("&nbsp;<a href=\"#\" onclick=\"submitUrl('" + urlr + "',this); return false;\">remove</a>");
-                if (!vio.equals(via)) {
-                    SWBResourceURL urlsa = paramRequest.getActionUrl();
-                    urlsa.setParameter("suri", id);
-                    urlsa.setParameter("sval", vio.getURI());
-                    urlsa.setAction("setactual");
-                    out.println("&nbsp;<a href=\"#\" onclick=\"submitUrl('" + urlsa + "',this); return false;\">Cambiar</a>");
-                } else {
-                    out.println("-----");
+                    out.println("&nbsp;</td>");
+                    out.println("</tr>");
                 }
-                out.println("</td>");
-                out.println("<td>");
-                if (vio.equals(via)) {
-                    out.println("Versión Actual");
-                }
-
-                out.println("&nbsp;</td>");
-                out.println("</tr>");
             }
             out.println("</tbody>");
             out.println("<tfoot>");
@@ -139,9 +145,16 @@ public class SWBAVersionInfo extends GenericResource {
     }
 
     private VersionInfo findFirstVersion(GenericObject obj) {
-        VersionInfo ver = ((Versionable) obj).getActualVersion();
-        while (ver.getPreviousVersion() != null) {
-            ver = ver.getPreviousVersion();
+
+        VersionInfo ver = null;
+        if(obj!=null)
+         ver = ((Versionable) obj).getActualVersion();
+        
+        if(null!=ver)
+        {
+            while (ver.getPreviousVersion() != null) {
+                ver = ver.getPreviousVersion();
+            }
         }
         return ver;
     }
@@ -182,6 +195,11 @@ public class SWBAVersionInfo extends GenericResource {
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
+        PrintWriter out = response.getWriter();
+        out.println("<fieldset>");
+        out.println("Este recurso no es administrable.");
+        out.println("</fieldset>");
+
     }
 
     @Override
