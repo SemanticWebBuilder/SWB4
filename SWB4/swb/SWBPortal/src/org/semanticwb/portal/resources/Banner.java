@@ -144,7 +144,6 @@ public class Banner extends GenericAdmResource
             log.error("Error in resource Banner while bringing HTML", e);
         }
         PrintWriter out = response.getWriter();
-        out.println(ret.toString());
-        out.println("<br><a href=\"" + paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN) + "\">admin</a>");
+        out.println(ret.toString());        
     }
 }
