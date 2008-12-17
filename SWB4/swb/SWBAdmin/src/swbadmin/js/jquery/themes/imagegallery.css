@@ -1,0 +1,9 @@
+/* CSS Document */
+
+.imagegallery {
+	position: relative; /*keep this intact*/
+	visibility: hidden; /*keep this intact*/
+	border: 2px solid #6699FF;	
+	background-color: #CCCCCC;
+}
+

@@ -1,0 +1,24 @@
+.jColorSelect {
+	overflow:hidden; /* for IE6 */
+	border:1px solid #6699FF;
+        padding:1px;
+}
+.jColorSelect div{
+	background:url(colorpicker-selector.gif) no-repeat;
+	float:left;
+	width:15px;
+	height:15px;
+	cursor:pointer;
+	overflow:hidden; /* for IE6 */
+	border:1px solid #d9dcdd;
+	margin:1px;
+}
+
+.jColorSelect .checkwht {
+	cursor:default;	
+	background-position:-13px 0;
+}
+.jColorSelect .checkblk {
+	cursor:default;	
+	background-position:-26px 0;
+}
