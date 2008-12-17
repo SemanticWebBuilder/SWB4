@@ -343,6 +343,10 @@ public class CodeGenerator
     {
         
         String exts = "GenericObjectBase";
+        if ( tpc.isSWBFormElement() )
+        {
+            exts = "FormElementBase";
+        }
         SemanticClass parent = null;
         Iterator<SemanticClass> it = tpc.listSuperClasses(true);
         while (it.hasNext())
@@ -393,7 +397,7 @@ public class CodeGenerator
             javaClassContent.append("import org.semanticwb.model.SWBVocabulary;" + ENTER);
             javaClassContent.append("import org.semanticwb.model.SWBContext;" + ENTER);
             javaClassContent.append("import org.semanticwb.model.GenericObject;" + ENTER);
-            javaClassContent.append("import org.semanticwb.model.GenericIterator;" + ENTER);
+            //javaClassContent.append("import org.semanticwb.model.GenericIterator;" + ENTER);
         }
         if ( parent != null && !sPackage.equals(getPackage(parent)) )
         {
@@ -403,7 +407,10 @@ public class CodeGenerator
         javaClassContent.append("import " + sPackage + ".*;" + ENTER);
         javaClassContent.append("import com.hp.hpl.jena.rdf.model.*;" + ENTER);
         javaClassContent.append("import org.semanticwb.*;" + ENTER);
-        javaClassContent.append("import org.semanticwb.platform.*;" + ENTER);        
+        javaClassContent.append("import org.semanticwb.platform.*;" + ENTER);
+        javaClassContent.append("import org.semanticwb.model.GenericIterator;" + ENTER);
+
+        
         String className = getClassName(tpc);
         javaClassContent.append(ENTER);
         javaClassContent.append("public class " + className + "Base extends " + exts + " " + getInterfaces(tpc) + "" + ENTER);
