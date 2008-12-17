@@ -1262,7 +1262,7 @@ public class BaseNode extends BaseNodeBase
                     try
                     {
                         Float version = new Float(nameBaseVersion);
-                        DecimalFormat format = new DecimalFormat("#.00");
+                        DecimalFormat format = new DecimalFormat("#.0");
                         nextVersion = format.format(version.floatValue() + .1f);
                     }
                     catch (NumberFormatException nfe)
