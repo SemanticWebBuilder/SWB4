@@ -104,25 +104,24 @@ th {
 	background-position:0px -1px; 
 }
 
-
-form.swbform legend {
+.swbform legend {
 	padding: 0 2px;
 	font-weight: bold;
     padding-left: 0;
     _margin: 0 -7px; /* IE Win */
 	}
 
-form.swbform div {
+.swbform div {
     display: inline-block;
     }
 
-form.swbform div label {
+.swbform div label {
     display: block;
     width: 6em;
     float: left;
     }
 
-form.swbform label_ {
+.swbform label_ {
 	display: inline-block;
 	line-height: 1.8;
 	_vertical-align: top;
@@ -130,7 +129,7 @@ form.swbform label_ {
     width: 25%;
     }
 	
-form.swbform fieldset ol{
+.swbform fieldset ol{
 	margin: 0;
 	padding: 0;
 	}
@@ -157,19 +156,19 @@ _form.swbform fieldset li {
 	background: url(../images/swbform-divider.gif) left bottom repeat-x;
 	}
 	
-form.swbform fieldset fieldset {
+.swbform fieldset fieldset {
 	border: none;
     padding: 0px 25px 0px 0px;
     background: none;
 	}
 	
-form.swbform fieldset fieldset legend {
+.swbform fieldset fieldset legend {
     width: 25%;
     text-align: right;
 	font-weight: normal;
 	}
 	
-form.swbform fieldset fieldset label {
+.swbform fieldset fieldset label {
 	display: block;
 	width: auto;
     margin-left: 26%;
@@ -177,7 +176,7 @@ form.swbform fieldset fieldset label {
     padding: 0px;
 	}
 
-form.swbform fieldset span label {
+.swbform fieldset span label {
 	width: auto;
     padding: 0px 10px 0px 0px;  /*horizontal*/
 	_display: block;            /* vertical */
@@ -185,23 +184,23 @@ form.swbform fieldset span label {
     _text-align: left;          /* vertical */
 	}
 
-form.swbform em {
+.swbform em {
 	font-weight: bold;
 	font-style: normal;
 	color: #f00;
 	}
 
-form.swbform {
+.swbform {
 	_width: 100%;
 	font-size: 1.1em;
 	color: #333;
     font: normal 100% "Lucida Grande", Helvetica, Verdana, Arial;
 	}
 	
-form.swbform legend,
-form.swbform label { color: #333; }
+.swbform legend,
+.swbform label { color: #333; }
 
-form.swbform fieldset {
+.swbform fieldset {
     _width: 400px;
     padding: 5px;
 	border-top: 1px solid #a0a0ff;
@@ -211,4 +210,44 @@ form.swbform fieldset {
 	background: url(../images/swbform-fieldset.png) left bottom repeat-x;
     _background: url('../js/dojo/dijit/themes/soria/images/titleBar.png') left bottom repeat-x;
 	}
-	
+
+/************* Version 3 ****************/
+
+.selected {
+	color: #114982;
+	text-decoration: none;
+	font-family: Verdana;
+	font-size: 11px;
+}
+.titulo {
+	color: #428AD4;
+	text-decoration: none;
+	font-family: Verdana;
+	font-size: 14px;
+	font-weight: bold;
+}
+.status {
+	color: #666666;
+	text-decoration: none;
+	font-family: Verdana;
+	font-size: 11px;
+}
+.datos {
+	color: #333333;
+	text-decoration: none;
+	font-family: Verdana;
+	font-size: 12px;
+}
+.valores {
+	color: #000000;
+	text-decoration: none;
+	font-family: Verdana;
+	font-size: 12px;
+}
+.indice {
+	color: #428AD4;
+	text-decoration: none;
+	font-family: Verdana;
+	font-size: 11px;
+}
+
