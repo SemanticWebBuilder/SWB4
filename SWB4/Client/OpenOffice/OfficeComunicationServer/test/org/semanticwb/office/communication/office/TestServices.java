@@ -63,9 +63,7 @@ public class TestServices
     {
     }
 
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
-    //
+    
     @Test
     //@Ignore
     public void getCategoriesTest()
@@ -189,7 +187,7 @@ public class TestServices
             }
             byte[] part = bin.toByteArray();
             parts.add(new Part(part, file.getName(), file.getName()));
-            document.setParts(parts);
+            document.setRequestParts(parts);
             String contentid = document.publish("contentido3", "contenido de prueba", workspaceid, categoryid, "WORD", contentType, file.getName());
             System.out.println("Contenido creado con id=" + contentid);
             //document.clearParts();
