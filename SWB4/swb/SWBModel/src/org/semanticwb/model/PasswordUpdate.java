@@ -72,8 +72,22 @@ public class PasswordUpdate extends PasswordUpdateBase
         if(value==null)value="";
         if(mode.equals("edit") || mode.equals("create") )
         {
-            ret="<input name=\""+name+"\" type=\"password\" >";
-            ret+="<br/><input name=\"pwd_verify\" type=\"password\" >";
+            ret="<input name=\""+name+"\" type=\"password\" "
+                     + " dojoType=\"dijit.form.ValidationTextBox\""
+                        + " required=\""+required+"\""
+    //                    + " propercase=\"true\""
+                        + " promptMessage=\""+pmsg+"\""
+                        + " invalidMessage=\""+imsg+"\""
+                        + " trim=\"true\""
+                        + ">";
+            ret+="<br/><input name=\"pwd_verify\" type=\"password\" "
+                     + " dojoType=\"dijit.form.ValidationTextBox\""
+                        + " required=\""+required+"\""
+    //                    + " propercase=\"true\""
+                        + " promptMessage=\""+pmsg+"\""
+                        + " invalidMessage=\""+imsg+"\""
+                        + " trim=\"true\""
+                        + ">";
         }else if(mode.equals("view"))
         {
             ret="<span _id=\""+name+"\" name=\""+name+"\">"+value+"</span>";
