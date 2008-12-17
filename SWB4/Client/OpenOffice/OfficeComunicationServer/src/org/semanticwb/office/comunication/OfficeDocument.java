@@ -47,7 +47,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             categoryNode = session.getNodeByUUID(categoryID);
             if (!categoryNode.isLocked())
             {
-                categoryNode.lock(false, false); // blocks the nodeContent
+                //categoryNode.lock(false, false); // blocks the nodeContent
             }
             else
             {
@@ -103,7 +103,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             }
             finally
             {
-                categoryNode.unlock();
+                //categoryNode.unlock();
             }
 
         }
@@ -120,7 +120,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         {
             if (categoryNode != null)
             {
-                categoryNode.unlock();
+                //categoryNode.unlock();
             }
             e.printStackTrace(System.out);
             throw e;
@@ -160,7 +160,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             Node nodeContent = session.getNodeByUUID(contentId);
             if (!nodeContent.isLocked())
             {
-                nodeContent.lock(false, false); // blocks the nodeContent for all
+                //nodeContent.lock(false, false); // blocks the nodeContent for all
             }
             else
             {
@@ -262,7 +262,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                         }
                     }
 
-                    nodeContent.unlock();
+                    //nodeContent.unlock();
                     log.debug("version created " + version.getName());
                     session.save();
                     return version.getName();
@@ -356,7 +356,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             Node nodeContent = session.getNodeByUUID(contentId);
             if (!nodeContent.isLocked())
             {
-                nodeContent.lock(false, false); // blocks the nodeContent for all
+                //nodeContent.lock(false, false); // blocks the nodeContent for all
             }
             else
             {
@@ -377,7 +377,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     versions.add(info);
                 }
             }
-            nodeContent.unlock();
+            //nodeContent.unlock();
         }
         catch (ItemNotFoundException infe)
         {
