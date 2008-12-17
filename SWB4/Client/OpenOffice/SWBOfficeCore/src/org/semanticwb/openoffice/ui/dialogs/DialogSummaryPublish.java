@@ -3,21 +3,75 @@
  *
  * Created on 4 de junio de 2008, 11:38 AM
  */
-
 package org.semanticwb.openoffice.ui.dialogs;
+
+import java.awt.Cursor;
+import java.io.File;
+import org.semanticwb.openoffice.OfficeDocument;
+import org.semanticwb.xmlrpc.Attachment;
 
 /**
  *
  * @author  victor.lorenzana
  */
-public class DialogSummaryPublish extends javax.swing.JDialog {
-    
+public class DialogSummaryPublish extends javax.swing.JDialog
+{
+
+    private boolean updated = false;
+    private String workspaceid,  contentid;
+    private OfficeDocument document;
+
+    class Update extends Thread
+    {
+
+        File zipFile;
+
+        public Update(File zipFile)
+        {
+            this.zipFile = zipFile;
+        }
+
+        @Override
+        public void run()
+        {
+            try
+            {                
+                jLabel1.setText("Enviando archivo de publicación "+zipFile.getName());
+                jLabel1.repaint();
+                document.getOfficeDocumentProxy().updateContent(workspaceid, contentid, document.getLocalPath().getName());
+                jProgressBar.setValue(2);
+                jLabel1.setText("Actualización terminada");
+                //summaryPublish1.setVisible(true);
+                summaryPublish1.loadVersions(contentid, workspaceid);
+                jButtonUpdate.setEnabled(false);
+                
+            }
+            catch (Exception e)
+            {
+            }
+            finally
+            {
+                if (zipFile != null && zipFile.exists())
+                {
+                    zipFile.delete();
+                }
+                setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+        }
+    }
+
     /** Creates new form DialogSummaryPublish */
-    public DialogSummaryPublish(java.awt.Frame parent, boolean modal) {
+    public DialogSummaryPublish(java.awt.Frame parent, boolean modal, String wokspaceid, String contentid, OfficeDocument document)
+    {
         super(parent, modal);
         initComponents();
+        this.workspaceid = wokspaceid;
+        this.contentid = contentid;
+        //summaryPublish1.setVisible(false);
+        summaryPublish1.loadVersions(contentid, wokspaceid);
+        this.document = document;
     }
-    
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -29,6 +83,8 @@ public class DialogSummaryPublish extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         jButtonClose = new javax.swing.JButton();
         jProgressBar = new javax.swing.JProgressBar();
+        jButtonUpdate = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
         summaryPublish1 = new org.semanticwb.openoffice.ui.wizard.SummaryPublish();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -46,24 +102,41 @@ public class DialogSummaryPublish extends javax.swing.JDialog {
             }
         });
 
+        jButtonUpdate.setText("Actualizar");
+        jButtonUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonUpdateActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Selecione la opción de actualizar");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jProgressBar, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(jButtonClose)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jProgressBar, javax.swing.GroupLayout.DEFAULT_SIZE, 274, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButtonClose)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButtonUpdate))
+                    .addComponent(jLabel1))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(16, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonClose))
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButtonUpdate)
+                        .addComponent(jButtonClose))
+                    .addComponent(jProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -76,29 +149,41 @@ public class DialogSummaryPublish extends javax.swing.JDialog {
     private void jButtonCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCloseActionPerformed
         this.setVisible(false);
     }//GEN-LAST:event_jButtonCloseActionPerformed
-    
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                DialogSummaryPublish dialog = new DialogSummaryPublish(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
+
+private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUpdateActionPerformed
+    if (!updated)
+    {
+        File zipFile = null;
+        try
+        {
+
+            jProgressBar.setMaximum(2);
+            this.jLabel1.setText("Creando archivo para publicación ...");
+            jLabel1.repaint();
+            this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+            jProgressBar.setValue(0);
+            zipFile = document.createZipFile();
+            this.jLabel1.setText("Archivo de publicación creado");
+            jLabel1.repaint();
+            jProgressBar.setValue(1);
+            document.getOfficeDocumentProxy().addAttachment(new Attachment(zipFile, zipFile.getName()));            
+            Update up = new Update(zipFile);
+            up.start();
+        }
+        catch (Exception e)
+        {
+        }
+
     }
-    
+
+    updated = true;
+}//GEN-LAST:event_jButtonUpdateActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonClose;
+    private javax.swing.JButton jButtonUpdate;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JProgressBar jProgressBar;
     private org.semanticwb.openoffice.ui.wizard.SummaryPublish summaryPublish1;
     // End of variables declaration//GEN-END:variables
-    
 }
