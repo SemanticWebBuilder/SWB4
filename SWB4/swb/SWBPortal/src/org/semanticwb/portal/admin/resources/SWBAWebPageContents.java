@@ -675,10 +675,13 @@ public class SWBAWebPageContents extends GenericResource {
                 log.debug(prop.getURI() + ":" + sprop + "----" + (prop.getURI().equals(sprop) ? "true" : "false"));
                 if (value != null && value.equals(sprop)) { //se tiene que validar el valor por si es mÃ¡s de una
                     if (sval != null) {
-                        obj.removeObjectProperty(prop, ont.getSemanticObject(sval));
+                        SemanticObject so = ont.getSemanticObject(sval);
+                        obj.removeObjectProperty(prop, so);
                         if (prop.getName().equalsIgnoreCase("userrepository")) {
                             obj.setObjectProperty(prop, ont.getSemanticObject("urswb"));
                         }
+                        SemanticModel model = obj.getModel();
+                        model.removeSemanticObject(so);
                     }
                     break;
                 }
