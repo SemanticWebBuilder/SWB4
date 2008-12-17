@@ -1098,7 +1098,7 @@ public class CodeGenerator
             javaClassContent.append("         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary." + tpp.getPrefix()+"_"+ tpp.getName() + ");" + ENTER);
             javaClassContent.append("         if(obj!=null)" + ENTER);
             javaClassContent.append("         {" + ENTER);
-            javaClassContent.append("             ret=(" + valueToReturn + ")vocabulary." + tpcToReturn.getPrefix() + "_" + valueToReturn + ".newGenericInstance(obj);" + ENTER);
+            javaClassContent.append("             ret=(" + valueToReturn + ")obj.getSemanticClass().newGenericInstance(obj);" + ENTER);
             javaClassContent.append("         }" + ENTER);
             javaClassContent.append("         return ret;" + ENTER);
             javaClassContent.append(CLOSE_BLOCK + ENTER);
