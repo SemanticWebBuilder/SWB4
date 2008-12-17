@@ -28,12 +28,10 @@ public class BaseNode extends BaseNodeBase
     static Logger log = SWBUtils.getLogger(BaseNode.class);
     private static final String JCR_FROZENNODE_NAME = "jcr:frozenNode";
     private static final String JCR_ROOTVERSION = "jcr:rootVersion";
-    private static final String JCR_VERSIONLABELS_NAME = "jcr:versionLabels";
-    //private static final String JCR_VERSION_NAME = "jcr:version";
+    private static final String JCR_VERSIONLABELS_NAME = "jcr:versionLabels";    
     private static final String ONPARENTVERSION_COPY = "COPY";
     private static final String ONPARENTVERSION_VERSION = "VERSION";
-    private static final String WAS_NOT_FOUND = " was not found";
-    private static final Calendar calendar = Calendar.getInstance();
+    private static final String WAS_NOT_FOUND = " was not found";    
     private static SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
     public BaseNode(SemanticObject base)
@@ -1401,7 +1399,7 @@ public class BaseNode extends BaseNodeBase
             SemanticProperty jcr_created = vocabulary.jcr_created;
             if (jcr_created != null)
             {
-                String value = iso8601dateFormat.format(calendar.getTime());
+                String value = iso8601dateFormat.format(Calendar.getInstance().getTime());
                 setPropertyInternal(jcr_created, value);
             }
         }
