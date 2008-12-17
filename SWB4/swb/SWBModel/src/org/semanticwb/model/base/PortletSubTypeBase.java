@@ -13,7 +13,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class PortletSubTypeBase extends GenericObjectBase implements Descriptiveable,Traceable
+public class PortletSubTypeBase extends GenericObjectBase implements Traceable,Descriptiveable
 {
     public static SWBVocabulary vocabulary=SWBContext.getVocabulary();
 
