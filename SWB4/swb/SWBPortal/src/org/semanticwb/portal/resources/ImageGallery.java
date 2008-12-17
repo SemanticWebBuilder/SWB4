@@ -64,58 +64,61 @@ public class ImageGallery extends GenericAdmResource {
         response.setHeader("Pragma","no-cache"); //HTTP 1.0
         response.setDateHeader ("Expires", 0); //prevents caching at the proxy server
         PrintWriter out = response.getWriter();
+        
         Portlet base=getResourceBase();
         
         StringBuffer ret = new StringBuffer();
         try {
-            ret.append("<script type=\"text/javascript\" src=\"/swb/swbadmin/js/wb/imageEffects/viewers/motionGallery.js\">");
-            ret.append("/***********************************************\n");
-            ret.append("* CMotion Image Gallery- © Dynamic Drive DHTML code library (www.dynamicdrive.com)\n");
-            ret.append("* Visit http://www.dynamicDrive.com for hundreds of DHTML scripts\n");
-            ret.append("* This notice must stay intact for legal use\n");
-            ret.append("* Modified by Jscheuer1 for autowidth and optional starting positions\n");
-            ret.append("***********************************************/\n");
-            ret.append("</script>\n");
-
-            /*ret.append("<div id=\"motioncontainer_"+base.getId()+"\" style=\"position:relative;overflow:hidden;\">\n");
-            ret.append("<div id=\"motiongallery_"+base.getId()+"\" style=\"position:absolute;left:0;top:0;white-space: nowrap;\">\n");
-            ret.append("<nobr id=\"trueContainer_"+base.getId()+"\">\n");*/
-            ret.append("<div id=\"motioncontainer\" style=\"position:relative;overflow:hidden;\">\n");
-            ret.append("<div id=\"motiongallery\" style=\"position:absolute;left:0px;top:0px;white-space:nowrap;\">\n");
-            ret.append("<nobr id=\"trueContainer\">\n");
+            ret.append("<script type=\"text/javascript\" src=\"/swb/swbadmin/js/jquery/jquery-imagegallery.js\"></script>\n");            
+            ret.append("<script type=\"text/javascript\"> \n");
             
-            System.out.println("webWorkPath="+webWorkPath);
-            int i = 1;
+            ret.append("    simpleGallery_navpanel={ \n");
+            ret.append("        panel: {height:'45px', opacity:0.5, paddingTop:'5px', fontStyle:'bold 9px Verdana'}, //customize nav panel container \n");
+            ret.append("        images: [ '/swb/swbadmin/js/jquery/themes/control_rewind_blue.png', '/swb/swbadmin/js/jquery/themes/control_play_blue.png', '/swb/swbadmin/js/jquery/themes/control_fastforward_blue.png', '/swb/swbadmin/js/jquery/themes/control_pause_blue.png'], //nav panel images (in that order) \n");
+            ret.append("        imageSpacing: {offsetTop:[-3, 0, -3], spacing:10}, //top offset of left, play, and right images, PLUS spacing between the 3 images \n");            
+            ret.append("        slideduration: 500 //duration of slide up animation to reveal panel \n");
+            ret.append("    }; \n");            
+            
+            ret.append("    var mygallery=new simpleGallery({ \n");
+            ret.append("	wrapperid: 'imggallery_"+ base.getId()+"', //ID of main gallery container, \n");
+            ret.append("	dimensions: ["+base.getAttribute("imgwidth","220")+", "+base.getAttribute("imgheight","150")+"], //width/height of gallery in pixels. Should reflect dimensions of the images exactly \n");
+            ret.append("	imagearray: [ \n");            
             String input;
-            //do {
-            for(int j=0; j<15; j++) {
-                input = "imggallery_" + base.getId() + "_" + i;
+            for(int j=1; j<16; j++) {
+                input = "imggallery_" + base.getId() + "_" + j;
                 if(base.getAttribute(input)!=null) {
-                    ret.append("    <a href=\"javascript:enlargeimage('"+webWorkPath +"/"+ base.getAttribute(input).trim()+"');\">\n");
-                    ret.append("    <img src=\""+webWorkPath +"/"+ base.getAttribute(input).trim()+"\" border=\"1\" width=\""+base.getAttribute("imgwidth", "100")+"\" height=\""+base.getAttribute("imgheight", "152")+"\" />\n");
-                    ret.append("    </a>\n");
+                    ret.append("['"+webWorkPath +"/"+ base.getAttribute(input)+"','','']");
                 }
-                i++;
-            }
-            //}while(base.getAttribute(input)!=null);            
-            ret.append("</nobr>\n");
-            ret.append("</div>\n");
-            ret.append("</div>\n");
-            /*ret.append("<script type=\"text/javascript\">\n");
-            ret.append("alert('loading...');\n");
-            ret.append("    fillup('motioncontainer_"+base.getId()+"', 'motiongallery_"+base.getId()+"', 'trueContainer_"+base.getId()+"');\n");
-            ret.append("    if (endofgallerymsg!='') {\n");
-            ret.append("alert('msging...');\n");
-            ret.append("        creatediv();\n");
-            ret.append("        positiondiv();\n");
-            ret.append("    }\n");
-            ret.append("</script>");*/
+                if(j!=15) {
+                    ret.append(", ");
+                }
+            }            
+            ret.append("	], \n");
+            ret.append("	autoplay: "+base.getAttribute("autoplay","false")+", \n");
+            ret.append("	persist: false, \n");
+            ret.append("	pause: "+base.getAttribute("pause","2500")+", //pause between slides (milliseconds) \n");
+            ret.append("	fadeduration: "+base.getAttribute("fadetime","500")+", //transition duration (milliseconds) \n");
+            ret.append("	oninit:function(){ //event that fires when gallery has initialized/ ready to run \n");
+            ret.append("	}, \n");
+            ret.append("	onslide:function(curslide, i){ //event that fires after each slide is shown \n");
+            ret.append("		//curslide: returns DOM reference to current slide's DIV (ie: try alert(curslide.innerHTML) \n");
+            ret.append("		//i: integer reflecting current image within collection being shown (0=1st image, 1=2nd etc) \n");
+            ret.append("	} \n");            
+            ret.append("        ,fullwidth:"+base.getAttribute("fullwidth","350")+" \n");
+            ret.append("        ,fullheight:"+base.getAttribute("fullheight","280")+" \n");
+            //ret.append("        ,imageClosing: '/swb/swbadmin/js/jquery/themes/cancel.png'");
+            ret.append("    } \n");
+            ret.append("); \n");            
+            ret.append("</script> \n");
+            ret.append("<div>");
+            ret.append("<span>"+base.getAttribute("title","")+"</span>");
+            ret.append("<div class=\"imagegallery\" id=\"imggallery_"+base.getId()+"\"></div> \n");
+            ret.append("</div>");
         }catch(Exception e) {
             log.error(e);
         }
         out.println(ret.toString());
-        out.println("<br><a href=\"" + paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN) + "\">admin gallery</a>");
-        
+        out.println("<br><a href=\"" + paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN) + "\">admin gallery</a>");        
     }
     
     @Override
@@ -124,8 +127,6 @@ public class ImageGallery extends GenericAdmResource {
         response.setContentType("text/html;charset=iso-8859-1");
         StringBuffer ret = new StringBuffer("");
         Portlet base=getResourceBase();
-        
-        System.out.println("\n\nxml"+base.getXml()+"\n\n");
         
         String msg=paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_undefinedOperation");
         String action = null != request.getParameter("act") && !"".equals(request.getParameter("act").trim()) ? request.getParameter("act").trim() : paramRequest.getAction();
@@ -137,35 +138,40 @@ public class ImageGallery extends GenericAdmResource {
             try
             {
                 fup.getFiles(request, response);
-                String value = null != fup.getValue("title") && !"".equals(fup.getValue("title").trim()) ? fup.getValue("title").trim() : null;
-                base.setAttribute("title", value);
                 
-                base.setAttribute("imgwidth", "100");
-                base.setAttribute("imgheight", "152");
-                
+                String value = null!=fup.getValue("title") && !"".equals(fup.getValue("title").trim()) ? fup.getValue("title").trim() : null;
+                base.setAttribute("title", value);                
+                value = null!=fup.getValue("imgwidth") && !"".equals(fup.getValue("imgwidth").trim()) ? fup.getValue("imgwidth").trim() : null;
+                base.setAttribute("imgwidth", value);
+                value = null!=fup.getValue("imgheight") && !"".equals(fup.getValue("imgheight").trim()) ? fup.getValue("imgheight").trim() : null;
+                base.setAttribute("imgheight", value);                
+                value = null!=fup.getValue("fullwidth") && !"".equals(fup.getValue("fullwidth").trim()) ? fup.getValue("fullwidth").trim() : null;
+                base.setAttribute("fullwidth", value);
+                value = null!=fup.getValue("fullheight") && !"".equals(fup.getValue("fullheight").trim()) ? fup.getValue("fullheight").trim() : null;
+                base.setAttribute("fullheight", value);                
+                value = null!=fup.getValue("autoplay") && !"".equals(fup.getValue("autoplay").trim()) ? fup.getValue("autoplay").trim() : null;
+                base.setAttribute("autoplay", value);
+                value = null!=fup.getValue("pause") && !"".equals(fup.getValue("pause").trim()) ? fup.getValue("pause").trim() : null;
+                base.setAttribute("pause", value);
+                value = null!=fup.getValue("fadetime") && !"".equals(fup.getValue("fadetime").trim()) ? fup.getValue("fadetime").trim() : null;
+                base.setAttribute("fadetime", value);
+                                
                 int i = 1;
                 String fileInput, filename, removeChk;
                 //do {
-                for(int j=0; j<15; j++) {                    
+                for(int j=0; j<15; j++) {
                     fileInput = "imggallery_" + base.getId() + "_" + i;
-                    removeChk = "remove_" + base.getId() + "_" + i;
-                    System.out.println("fileInput="+fileInput);                    
-                                        
+                    removeChk = "remove_" + base.getId() + "_" + i;                                        
                     value = null!=fup.getValue(removeChk) && !"".equals(fup.getValue(removeChk).trim()) ? fup.getValue(removeChk).trim() : "0";
-                    System.out.println(removeChk+"="+value);
                     
                     if("1".equals(value) && base.getAttribute(fileInput)!=null) {
-                        System.out.println("\n\n\neliminar en: " + workPath + "/" + base.getAttribute(fileInput).trim());                        
-                        //SWBUtils.IO.removeDirectory(workPath + "/" + base.getAttribute(fileInput).trim());
                         File imgFile = new File(workPath + "/" + base.getAttribute(fileInput).trim());
                         imgFile.delete();
                         base.removeAttribute(fileInput);
                     }else {
                         value = null!=fup.getFileName(fileInput) && !"".equals(fup.getFileName(fileInput).trim()) ? fup.getFileName(fileInput).trim() : null;
-                        System.out.println("value="+value);
                         if(value!=null) {
                             filename = admResUtils.getFileName(base, value);
-                            System.out.println("filename="+filename);
                             if(filename!=null && !filename.trim().equals(""))
                             {
                                 if (!admResUtils.isFileType(filename, "bmp|jpg|jpeg|gif|png")){
@@ -185,8 +191,6 @@ public class ImageGallery extends GenericAdmResource {
                     i++;
                 }
                 //}while(value!=null || base.getAttribute(fileInput)!=null);
-                
-                
                 base.updateAttributesToDB();
                 
                 msg=paramRequest.getLocaleString("msgOkUpdateResource") +" "+ base.getId();
@@ -195,7 +199,6 @@ public class ImageGallery extends GenericAdmResource {
                 ret.append("   location='"+paramRequest.getRenderUrl().setAction("edit").toString()+"';\n");
                 ret.append("</script>\n");
             }catch(Exception e) {
-                System.out.println("error. " + e);
                 log.error(e); msg=paramRequest.getLocaleString("msgErrUpdateResource") +" "+ base.getId(); 
             }
         }
@@ -265,7 +268,7 @@ public class ImageGallery extends GenericAdmResource {
             ret.append("/></td> \n");
             ret.append("\n</tr>");            
             ret.append("\n<tr>");
-            ret.append("\n<td class=\"datos\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_img") + "<i>bmp, jpg, jpeg, gif, png</i></td>");
+            ret.append("\n<td class=\"datos\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_img") + "&nbsp;(<i>bmp, jpg, jpeg, gif, png</i>)</td>");
             ret.append("\n<td class=\"valores\">");
             ret.append("<div id=\"igcontainer_"+base.getId()+"\" style=\"background-color:#F0F0F0; width:602px; height:432px; overflow:visible\">\n");
             ret.append("<table width=\"99%\" border=\"0\" align=\"center\">\n");
@@ -290,7 +293,63 @@ public class ImageGallery extends GenericAdmResource {
             ret.append("</div>\n");
             ret.append("</div>\n");
             ret.append("</td> \n");
-            ret.append("</tr> \n");            
+            ret.append("</tr> \n");
+            
+            ret.append("\n<tr>");
+            ret.append("\n<td class=\"datos\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_imgwidth") + "</td>");
+            ret.append("\n<td class=\"valores\">");
+            ret.append("\n<input type=\"text\" size=\"50\" maxlength=\"50\" name=\"imgwidth\" ");
+            ret.append(" value=\"" + base.getAttribute("imgwidth", "220").replaceAll("\"", "&#34;") + "\" />");
+            ret.append("\n</td>");
+            ret.append("\n</tr>");
+            ret.append("\n<tr>");
+            ret.append("\n<td class=\"datos\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_imgheight") + "</td>");
+            ret.append("\n<td class=\"valores\">");
+            ret.append("\n<input type=\"text\" size=\"50\" maxlength=\"50\" name=\"imgheight\" ");
+            ret.append(" value=\"" + base.getAttribute("imgheight", "150").replaceAll("\"", "&#34;") + "\" />");
+            ret.append("\n</td>");
+            ret.append("\n</tr>");
+            
+            ret.append("\n<tr>");
+            ret.append("\n<td class=\"datos\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_fullwidth") + "</td>");
+            ret.append("\n<td class=\"valores\">");
+            ret.append("\n<input type=\"text\" size=\"50\" maxlength=\"50\" name=\"fullwidth\" ");
+            ret.append(" value=\"" + base.getAttribute("fullwidth", "350").replaceAll("\"", "&#34;") + "\" />");
+            ret.append("\n</td>");
+            ret.append("\n</tr>");
+            ret.append("\n<tr>");
+            ret.append("\n<td class=\"datos\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_fullheight") + "</td>");
+            ret.append("\n<td class=\"valores\">");
+            ret.append("\n<input type=\"text\" size=\"50\" maxlength=\"50\" name=\"fullheight\" ");
+            ret.append(" value=\"" + base.getAttribute("fullheight", "280").replaceAll("\"", "&#34;") + "\" />");
+            ret.append("\n</td>");
+            ret.append("\n</tr>");            
+            
+            ret.append("\n<tr>");
+            ret.append("\n<td class=\"datos\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_autoplay") + "</td>");
+            ret.append("\n<td class=\"valores\">");
+            ret.append("\n<input type=\"checkbox\" value=\"true\" name=\"autoplay\" ");
+            if ("true".equals(base.getAttribute("autoplay", "false"))) {
+                ret.append(" checked=\"checked\"");
+            }
+            ret.append("/>");
+            ret.append("\n</td>");
+            ret.append("\n</tr>");
+            ret.append("\n<tr>");
+            ret.append("\n<td class=\"datos\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_pause") + "</td>");
+            ret.append("\n<td class=\"valores\">");
+            ret.append("\n<input type=\"text\" size=\"50\" maxlength=\"50\" name=\"pause\" ");
+            ret.append(" value=\"" + base.getAttribute("pause", "2500").replaceAll("\"", "&#34;") + "\" />");
+            ret.append("\n</td>");
+            ret.append("\n</tr>");
+            ret.append("\n<tr>");
+            ret.append("\n<td class=\"datos\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_fadetime") + "</td>");
+            ret.append("\n<td class=\"valores\">");
+            ret.append("\n<input type=\"text\" size=\"50\" maxlength=\"50\" name=\"fadetime\" ");
+            ret.append(" value=\"" + base.getAttribute("fadetime", "500").replaceAll("\"", "&#34;") + "\" />");
+            ret.append("\n</td>");
+            ret.append("\n</tr>");
+            
             ret.append("\n<tr>");
             ret.append("\n<td colspan=\"2\" align=\"right\">");
             ret.append("<br /><hr size=\"1\" noshade=\"noshade\"> \n");
@@ -410,9 +469,7 @@ public class ImageGallery extends GenericAdmResource {
             //do {
             for(int j=0; j<15; j++) {
                 input = "imggallery_" + base.getId() + "_" + i;
-                System.out.println("action==edit.  input="+input);
                 if( base.getAttribute(input)!=null ) {
-                    System.out.println("addRowToTable('igtbl_"+base.getId()+"', '"+base.getAttribute(input)+"', '"+admResUtils.displayImage(base, base.getAttribute(input), input)+"', '"+input.substring(11)+"');");
                     ret.append("addRowToTable('igtbl_"+base.getId()+"', '"+base.getAttribute(input)+"', '"+admResUtils.displayImage(base, base.getAttribute(input), input)+"', '"+input.substring(11)+"');\n");
                 }
                 i++;
@@ -434,7 +491,6 @@ public class ImageGallery extends GenericAdmResource {
             ret.append("\n<script type=\"text/javascript\">");
             /*ret.append("\nvar swOk=0, optionObj;");*/
             ret.append("\nfunction jsValida(pForm) {");
-            ret.append("\n  return true;");
             /*ret.append("\n   if(pForm.question.value==null || pForm.question.value=='' || pForm.question.value==' ')");
             ret.append("\n   {");
             ret.append("\n       alert('" + paramsRequest.getLocaleString("usrmsg_Encuesta_doAdmin_msgQuestion") + "');");
@@ -474,8 +530,8 @@ public class ImageGallery extends GenericAdmResource {
             ret.append("\n   {");
             ret.append("\n       if(i>0) pForm.link.value+=\"|\";");
             ret.append("\n       pForm.link.value+=pForm.selLink.options[i].value;");
-            ret.append("\n   }");
-            ret.append("\n   return true;");*/
+            ret.append("\n   }");*/
+            ret.append("\n   return true;");
             ret.append("\n}");
             /*ret.append(admResUtils.loadAddOption());            
             ret.append(admResUtils.loadEditOption());
