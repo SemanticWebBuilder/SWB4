@@ -7,12 +7,17 @@ package org.semanticwb.openoffice;
 
 import java.awt.EventQueue;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 import org.netbeans.spi.wizard.DeferredWizardResult;
 import org.netbeans.spi.wizard.ResultProgressHandle;
 import org.netbeans.spi.wizard.WizardException;
 import org.netbeans.spi.wizard.WizardPage.WizardResultProducer;
+import org.semanticwb.office.interfaces.IOfficeApplication;
+import org.semanticwb.office.interfaces.VersionInfo;
+import org.semanticwb.xmlrpc.Part;
+import org.semanticwb.xmlrpc.XmlProxy;
 
 /**
  *
@@ -36,8 +41,21 @@ public class OpenResultProducer implements WizardResultProducer{
                 progress.setProgress("Descargando documento", 0, 3);
                 // descarga el documento
                 progress.setProgress("Abriendo documento", 1, 3);
-                File file=new File("");
-                OfficeDocument document=application.open(file);
+                IOfficeApplication openOfficeDocument=OfficeApplication.getOfficeApplicationProxy();                                                
+                String repositoryName="";
+                VersionInfo versioninfo=null;
+                String fileName=openOfficeDocument.openContent(repositoryName, versioninfo);
+                XmlProxy proxy=(XmlProxy)openOfficeDocument;
+                String guid = java.util.UUID.randomUUID().toString().replace('-', '_');
+                for(Part part : proxy.getResponseParts())
+                {
+                    File file=new File(guid+"/"+part.getFileName());
+                    FileOutputStream out=new FileOutputStream(file);
+                    out.write(part.getContent());
+                    out.close();
+                }
+                File contentfile=new File(guid+"/"+ fileName);
+                OfficeDocument document=application.open(contentfile);
                 HashMap<String,String> properties=new HashMap<String, String>();
                 document.saveCustomProperties(properties);
 

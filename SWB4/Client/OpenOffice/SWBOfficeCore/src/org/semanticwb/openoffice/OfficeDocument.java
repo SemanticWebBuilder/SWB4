@@ -4,6 +4,7 @@
  */
 package org.semanticwb.openoffice;
 
+import java.awt.Frame;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -32,6 +33,7 @@ import org.semanticwb.openoffice.ui.dialogs.DialogAddLink;
 import org.semanticwb.openoffice.ui.dialogs.DialogContentInformation;
 import org.semanticwb.openoffice.ui.dialogs.DialogHistory;
 import org.semanticwb.openoffice.ui.dialogs.DialogSaveDocument;
+import org.semanticwb.openoffice.ui.dialogs.DialogSummaryPublish;
 import org.semanticwb.openoffice.ui.wizard.SelectCategory;
 import org.semanticwb.openoffice.ui.wizard.TitleAndDescription;
 import org.semanticwb.openoffice.util.ExcelFileFilter;
@@ -52,7 +54,6 @@ public abstract class OfficeDocument
     private static final String TITLE = "Asistente de publicación";
     public static final String CONTENT_ID_NAME = "contentID";
     public static final String WORKSPACE_ID_NAME = "workspaceID";
-    
     private static final String TITLE_VERIFY = "Verificación de contenido";
     // By default the content is not published
     private String contentID = null;
@@ -88,7 +89,7 @@ public abstract class OfficeDocument
         String workspace = this.getCustomProperties().get(WORKSPACE_ID_NAME);
         try
         {
-            contentID = OfficeApplication.setupDocument(workspace,contentId);
+            contentID = OfficeApplication.setupDocument(workspace, contentId);
             setupDocument = true;
         }
         catch (XmlRpcException e)
@@ -474,8 +475,8 @@ public abstract class OfficeDocument
         if (!isCanceled)
         {
             File file = fileChooser.getSelectedFile();
-            result=saveDocument(file);
-        }        
+            result = saveDocument(file);
+        }
         return result;
     }
 
@@ -489,13 +490,13 @@ public abstract class OfficeDocument
         {
             if (OfficeApplication.tryLogin() && setupDocument())
             {
-                boolean canbepublished = false;                
-                if (isNewDocument())                
-                {                    
+                boolean canbepublished = false;
+                if (isNewDocument())
+                {
                     canbepublished = showSaveDialog(this);
                 }
                 else
-                {                    
+                {
                     canbepublished = true;
                 }
                 if (canbepublished)
@@ -534,19 +535,19 @@ public abstract class OfficeDocument
                                 clazz = new Class[]
                                         {
                                             //TitleAndDescription.class, SelectCategory.class, PagContenido.class, SelectTypeToShow.class
-                                            SelectCategory.class,TitleAndDescription.class
+                                            SelectCategory.class, TitleAndDescription.class
                                         };
                                 break;
                             case EXCEL:
                                 clazz = new Class[]
                                         {
-                                            SelectCategory.class,TitleAndDescription.class
+                                            SelectCategory.class, TitleAndDescription.class
                                         };
                                 break;
                             case PPT:
                                 clazz = new Class[]
                                         {
-                                            SelectCategory.class,TitleAndDescription.class
+                                            SelectCategory.class, TitleAndDescription.class
                                         };
                                 break;
                             default:
@@ -557,7 +558,7 @@ public abstract class OfficeDocument
                                 break;
 
                         }
-                        Wizard wiz = WizardPage.createWizard(TITLE, clazz, resultProducer);                                             
+                        Wizard wiz = WizardPage.createWizard(TITLE, clazz, resultProducer);
                         wiz.show();
                     }
                 }
@@ -565,7 +566,7 @@ public abstract class OfficeDocument
         }
     }
 
-    void SaveContentId(String contentId,String workspaceId) throws WBException
+    void SaveContentId(String contentId, String workspaceId) throws WBException
     {
         this.contentID = contentId;
         HashMap<String, String> values = new HashMap<String, String>();
@@ -638,24 +639,11 @@ public abstract class OfficeDocument
     }*/
     private void updateContent() throws Exception
     {
-        File zipFile = this.createZipFile();
-        getOfficeDocumentProxy().addAttachment(new Attachment(zipFile, zipFile.getName()));
-        try
-        {
-            String workspace=this.getCustomProperties().get(WORKSPACE_ID_NAME);
-            getOfficeDocumentProxy().updateContent(workspace,this.contentID,this.getLocalPath().getName());
-        }
-        catch (Exception e)
-        {
-            throw e;
-        }
-        finally
-        {
-            if (zipFile != null && zipFile.exists())
-            {
-                zipFile.delete();
-            }
-        }
+        String workspace = this.getCustomProperties().get(WORKSPACE_ID_NAME);
+        DialogSummaryPublish summary = new DialogSummaryPublish(new Frame(), true, workspace, contentID, this);
+        summary.setLocationRelativeTo(null);
+        summary.setAlwaysOnTop(true);
+        summary.setVisible(true);
     }
 
     public final void addRule()
