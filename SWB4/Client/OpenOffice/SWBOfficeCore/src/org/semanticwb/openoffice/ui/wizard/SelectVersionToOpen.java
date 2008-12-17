@@ -3,26 +3,60 @@
  *
  * Created on 3 de junio de 2008, 11:55 AM
  */
-
 package org.semanticwb.openoffice.ui.wizard;
 
+import java.awt.Cursor;
+import javax.swing.table.DefaultTableModel;
 import org.netbeans.spi.wizard.WizardPage;
+import org.semanticwb.office.interfaces.ContentInfo;
+import org.semanticwb.office.interfaces.VersionInfo;
+import org.semanticwb.openoffice.OfficeApplication;
 
 /**
  *
  * @author  victor.lorenzana
  */
-public class SelectVersionToOpen extends WizardPage {
-    
+public class SelectVersionToOpen extends WizardPage
+{
+
     /** Creates new form SelectVersionToOpen */
-    public SelectVersionToOpen() {
+    public SelectVersionToOpen()
+    {        
         initComponents();
+        
     }
+    @Override
+    protected void renderingPage()
+    {
+        this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+        ContentInfo content=(ContentInfo)Search.map.get(Search.CONTENT);
+        DefaultTableModel model=(DefaultTableModel)this.jTableVersion.getModel();
+        int rows=model.getRowCount();
+        for(int i=0;i<rows;i++)
+        {
+            model.removeRow(0);
+        }
+        try
+        {
+            String workspace=Search.map.get(Search.WORKSPACE).toString();
+            for (VersionInfo info : OfficeApplication.getOfficeDocumentProxy().getVersions(workspace, content.id))
+            {
+                String date=OfficeApplication.iso8601dateFormat.format(info.created);
+                Object[] value={content,content.descripcion,info.nameOfVersion,date};
+                model.addRow(value);
+            }
+        }
+        catch (Exception e)
+        {
+        }
+        this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+    }
+
     public static String getDescription()
     {
         return "Versión de Contenido a Abrir";
     }
-    
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -41,11 +75,11 @@ public class SelectVersionToOpen extends WizardPage {
 
             },
             new String [] {
-                "Identificador", "Titulo del contenido", "Version", "Versión Activa"
+                "Titulo", "Descripción", "Version", "Fecha de creación"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Boolean.class
+                java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false
@@ -63,11 +97,8 @@ public class SelectVersionToOpen extends WizardPage {
 
         add(jScrollPane1);
     }// </editor-fold>//GEN-END:initComponents
-    
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableVersion;
     // End of variables declaration//GEN-END:variables
-    
 }
