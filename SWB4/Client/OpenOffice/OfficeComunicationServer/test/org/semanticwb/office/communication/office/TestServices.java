@@ -217,7 +217,7 @@ public class TestServices
         office.setPassword("password");
         try
         {
-            for (ContentInfo info : office.search(workspaceid, "contentido2", "contenido de", "*", "cm:OfficeContent"))
+            for (ContentInfo info : office.search(workspaceid, "contentido2", "contenido de", "*", "cm:OfficeContent","WORD"))
             {
                 System.out.println("categoryTitle : " + info.categoryTitle);
                 System.out.println("descripcion : " + info.descripcion);
@@ -227,7 +227,7 @@ public class TestServices
                 System.out.println("-------------------------------------------");
             }
             System.out.println("-----------Fin de busqueda de 1 contenido --------------------------------");
-            for (ContentInfo info : office.search(workspaceid, "*", "*", "*", "cm:OfficeContent"))
+            for (ContentInfo info : office.search(workspaceid, "*", "*", "*", "cm:OfficeContent","WORD"))
             {
                 System.out.println("categoryTitle : " + info.categoryTitle);
                 System.out.println("descripcion : " + info.descripcion);
