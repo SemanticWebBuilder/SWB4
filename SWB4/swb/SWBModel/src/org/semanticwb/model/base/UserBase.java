@@ -43,7 +43,7 @@ public class UserBase extends SWBClass implements Roleable,Traceable,Activeable,
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_modifiedBy);
          if(obj!=null)
          {
-             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
+             ret=(User)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -84,7 +84,7 @@ public class UserBase extends SWBClass implements Roleable,Traceable,Activeable,
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_userGroup);
          if(obj!=null)
          {
-             ret=(UserGroup)vocabulary.swb_UserGroup.newGenericInstance(obj);
+             ret=(UserGroup)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -144,7 +144,7 @@ public class UserBase extends SWBClass implements Roleable,Traceable,Activeable,
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasCalendar);
          if(obj!=null)
          {
-             ret=(Calendar)vocabulary.swb_Calendar.newGenericInstance(obj);
+             ret=(Calendar)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -205,7 +205,7 @@ public class UserBase extends SWBClass implements Roleable,Traceable,Activeable,
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_creator);
          if(obj!=null)
          {
-             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
+             ret=(User)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -257,7 +257,7 @@ public class UserBase extends SWBClass implements Roleable,Traceable,Activeable,
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasRole);
          if(obj!=null)
          {
-             ret=(Role)vocabulary.swb_Role.newGenericInstance(obj);
+             ret=(Role)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }

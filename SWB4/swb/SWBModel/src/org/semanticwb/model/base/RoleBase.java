@@ -43,7 +43,7 @@ public class RoleBase extends SWBClass implements Traceable,Descriptiveable
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_modifiedBy);
          if(obj!=null)
          {
-             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
+             ret=(User)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -99,7 +99,7 @@ public class RoleBase extends SWBClass implements Traceable,Descriptiveable
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_creator);
          if(obj!=null)
          {
-             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
+             ret=(User)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -129,7 +129,7 @@ public class RoleBase extends SWBClass implements Traceable,Descriptiveable
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasPermission);
          if(obj!=null)
          {
-             ret=(Permission)vocabulary.swb_Permission.newGenericInstance(obj);
+             ret=(Permission)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }

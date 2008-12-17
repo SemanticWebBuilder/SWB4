@@ -43,7 +43,7 @@ public class WebPageBase extends SWBClass implements Descriptiveable,Portletable
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_modifiedBy);
          if(obj!=null)
          {
-             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
+             ret=(User)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -118,7 +118,7 @@ public class WebPageBase extends SWBClass implements Descriptiveable,Portletable
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasCalendar);
          if(obj!=null)
          {
-             ret=(Calendar)vocabulary.swb_Calendar.newGenericInstance(obj);
+             ret=(Calendar)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -210,7 +210,7 @@ public class WebPageBase extends SWBClass implements Descriptiveable,Portletable
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasRoleRef);
          if(obj!=null)
          {
-             ret=(RoleRef)vocabulary.swb_RoleRef.newGenericInstance(obj);
+             ret=(RoleRef)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -240,7 +240,7 @@ public class WebPageBase extends SWBClass implements Descriptiveable,Portletable
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasWebPageVirtualParent);
          if(obj!=null)
          {
-             ret=(WebPage)vocabulary.swb_WebPage.newGenericInstance(obj);
+             ret=(WebPage)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -267,7 +267,7 @@ public class WebPageBase extends SWBClass implements Descriptiveable,Portletable
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasWebPageVirtualChild);
          if(obj!=null)
          {
-             ret=(WebPage)vocabulary.swb_WebPage.newGenericInstance(obj);
+             ret=(WebPage)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -307,7 +307,7 @@ public class WebPageBase extends SWBClass implements Descriptiveable,Portletable
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasPortlet);
          if(obj!=null)
          {
-             ret=(Portlet)vocabulary.swb_Portlet.newGenericInstance(obj);
+             ret=(Portlet)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -337,7 +337,7 @@ public class WebPageBase extends SWBClass implements Descriptiveable,Portletable
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasPFlowRef);
          if(obj!=null)
          {
-             ret=(PFlowRef)vocabulary.swb_PFlowRef.newGenericInstance(obj);
+             ret=(PFlowRef)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -367,7 +367,7 @@ public class WebPageBase extends SWBClass implements Descriptiveable,Portletable
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasTemplateRef);
          if(obj!=null)
          {
-             ret=(TemplateRef)vocabulary.swb_TemplateRef.newGenericInstance(obj);
+             ret=(TemplateRef)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -384,7 +384,7 @@ public class WebPageBase extends SWBClass implements Descriptiveable,Portletable
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasWebPageChild);
          if(obj!=null)
          {
-             ret=(WebPage)vocabulary.swb_WebPage.newGenericInstance(obj);
+             ret=(WebPage)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -424,7 +424,7 @@ public class WebPageBase extends SWBClass implements Descriptiveable,Portletable
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasRuleRef);
          if(obj!=null)
          {
-             ret=(RuleRef)vocabulary.swb_RuleRef.newGenericInstance(obj);
+             ret=(RuleRef)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -445,7 +445,7 @@ public class WebPageBase extends SWBClass implements Descriptiveable,Portletable
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_creator);
          if(obj!=null)
          {
-             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
+             ret=(User)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -466,7 +466,7 @@ public class WebPageBase extends SWBClass implements Descriptiveable,Portletable
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_webPageParent);
          if(obj!=null)
          {
-             ret=(WebPage)vocabulary.swb_WebPage.newGenericInstance(obj);
+             ret=(WebPage)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }

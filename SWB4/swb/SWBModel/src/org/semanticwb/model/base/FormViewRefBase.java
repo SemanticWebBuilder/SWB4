@@ -43,7 +43,7 @@ public class FormViewRefBase extends Reference
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_formView);
          if(obj!=null)
          {
-             ret=(FormView)vocabulary.swbxf_FormView.newGenericInstance(obj);
+             ret=(FormView)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }

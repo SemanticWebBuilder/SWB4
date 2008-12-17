@@ -43,7 +43,7 @@ public class RuleBase extends SWBClass implements Editable,Traceable,XMLable,Des
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_modifiedBy);
          if(obj!=null)
          {
-             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
+             ret=(User)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -89,7 +89,7 @@ public class RuleBase extends SWBClass implements Editable,Traceable,XMLable,Des
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_actualVersion);
          if(obj!=null)
          {
-             ret=(VersionInfo)vocabulary.swb_VersionInfo.newGenericInstance(obj);
+             ret=(VersionInfo)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -130,7 +130,7 @@ public class RuleBase extends SWBClass implements Editable,Traceable,XMLable,Des
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_lastVersion);
          if(obj!=null)
          {
-             ret=(VersionInfo)vocabulary.swb_VersionInfo.newGenericInstance(obj);
+             ret=(VersionInfo)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -151,7 +151,7 @@ public class RuleBase extends SWBClass implements Editable,Traceable,XMLable,Des
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_creator);
          if(obj!=null)
          {
-             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
+             ret=(User)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }

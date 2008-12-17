@@ -43,7 +43,7 @@ public class PFlowRefBase extends Reference implements Deleteable,Activeable
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_pflow);
          if(obj!=null)
          {
-             ret=(PFlow)vocabulary.swb_PFlow.newGenericInstance(obj);
+             ret=(PFlow)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }

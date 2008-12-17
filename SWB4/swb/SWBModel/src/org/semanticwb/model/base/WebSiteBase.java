@@ -63,7 +63,7 @@ public class WebSiteBase extends SWBModel implements Versionable,Descriptiveable
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_modifiedBy);
          if(obj!=null)
          {
-             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
+             ret=(User)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -109,7 +109,7 @@ public class WebSiteBase extends SWBModel implements Versionable,Descriptiveable
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_actualVersion);
          if(obj!=null)
          {
-             ret=(VersionInfo)vocabulary.swb_VersionInfo.newGenericInstance(obj);
+             ret=(VersionInfo)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -130,7 +130,7 @@ public class WebSiteBase extends SWBModel implements Versionable,Descriptiveable
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_language);
          if(obj!=null)
          {
-             ret=(Language)vocabulary.swb_Language.newGenericInstance(obj);
+             ret=(Language)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -161,7 +161,7 @@ public class WebSiteBase extends SWBModel implements Versionable,Descriptiveable
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_lastVersion);
          if(obj!=null)
          {
-             ret=(VersionInfo)vocabulary.swb_VersionInfo.newGenericInstance(obj);
+             ret=(VersionInfo)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -182,7 +182,7 @@ public class WebSiteBase extends SWBModel implements Versionable,Descriptiveable
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_creator);
          if(obj!=null)
          {
-             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
+             ret=(User)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -203,7 +203,7 @@ public class WebSiteBase extends SWBModel implements Versionable,Descriptiveable
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_homePage);
          if(obj!=null)
          {
-             ret=(WebPage)vocabulary.swb_WebPage.newGenericInstance(obj);
+             ret=(WebPage)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -224,7 +224,7 @@ public class WebSiteBase extends SWBModel implements Versionable,Descriptiveable
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_userRepository);
          if(obj!=null)
          {
-             ret=(UserRepository)vocabulary.swb_UserRepository.newGenericInstance(obj);
+             ret=(UserRepository)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }

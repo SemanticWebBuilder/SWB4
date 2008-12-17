@@ -43,7 +43,7 @@ public class PortletBase extends SWBClass implements Versionable,Indexable,XMLab
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_modifiedBy);
          if(obj!=null)
          {
-             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
+             ret=(User)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -64,7 +64,7 @@ public class PortletBase extends SWBClass implements Versionable,Indexable,XMLab
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_camp);
          if(obj!=null)
          {
-             ret=(Camp)vocabulary.swb_Camp.newGenericInstance(obj);
+             ret=(Camp)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -110,7 +110,7 @@ public class PortletBase extends SWBClass implements Versionable,Indexable,XMLab
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_actualVersion);
          if(obj!=null)
          {
-             ret=(VersionInfo)vocabulary.swb_VersionInfo.newGenericInstance(obj);
+             ret=(VersionInfo)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -161,7 +161,7 @@ public class PortletBase extends SWBClass implements Versionable,Indexable,XMLab
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_lastVersion);
          if(obj!=null)
          {
-             ret=(VersionInfo)vocabulary.swb_VersionInfo.newGenericInstance(obj);
+             ret=(VersionInfo)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -191,7 +191,7 @@ public class PortletBase extends SWBClass implements Versionable,Indexable,XMLab
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasCalendar);
          if(obj!=null)
          {
-             ret=(Calendar)vocabulary.swb_Calendar.newGenericInstance(obj);
+             ret=(Calendar)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -271,7 +271,7 @@ public class PortletBase extends SWBClass implements Versionable,Indexable,XMLab
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasRoleRef);
          if(obj!=null)
          {
-             ret=(RoleRef)vocabulary.swb_RoleRef.newGenericInstance(obj);
+             ret=(RoleRef)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -312,7 +312,7 @@ public class PortletBase extends SWBClass implements Versionable,Indexable,XMLab
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_language);
          if(obj!=null)
          {
-             ret=(Language)vocabulary.swb_Language.newGenericInstance(obj);
+             ret=(Language)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -342,7 +342,7 @@ public class PortletBase extends SWBClass implements Versionable,Indexable,XMLab
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasRuleRef);
          if(obj!=null)
          {
-             ret=(RuleRef)vocabulary.swb_RuleRef.newGenericInstance(obj);
+             ret=(RuleRef)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -363,7 +363,7 @@ public class PortletBase extends SWBClass implements Versionable,Indexable,XMLab
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_creator);
          if(obj!=null)
          {
-             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
+             ret=(User)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -384,7 +384,7 @@ public class PortletBase extends SWBClass implements Versionable,Indexable,XMLab
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_portletSubType);
          if(obj!=null)
          {
-             ret=(PortletSubType)vocabulary.swb_PortletSubType.newGenericInstance(obj);
+             ret=(PortletSubType)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -430,7 +430,7 @@ public class PortletBase extends SWBClass implements Versionable,Indexable,XMLab
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_portletType);
          if(obj!=null)
          {
-             ret=(PortletType)vocabulary.swb_PortletType.newGenericInstance(obj);
+             ret=(PortletType)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }

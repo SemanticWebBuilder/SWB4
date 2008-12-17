@@ -33,7 +33,7 @@ public class RoleRefBase extends Reference implements Activeable
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_role);
          if(obj!=null)
          {
-             ret=(Role)vocabulary.swb_Role.newGenericInstance(obj);
+             ret=(Role)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }

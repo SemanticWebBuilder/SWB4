@@ -43,7 +43,7 @@ public class TemplateRefBase extends Reference implements Deleteable,Activeable,
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_template);
          if(obj!=null)
          {
-             ret=(Template)vocabulary.swb_Template.newGenericInstance(obj);
+             ret=(Template)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }

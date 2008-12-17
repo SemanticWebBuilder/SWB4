@@ -43,7 +43,7 @@ public class DnsBase extends SWBClass implements Traceable,Descriptiveable,WebPa
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_modifiedBy);
          if(obj!=null)
          {
-             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
+             ret=(User)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -99,7 +99,7 @@ public class DnsBase extends SWBClass implements Traceable,Descriptiveable,WebPa
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_creator);
          if(obj!=null)
          {
-             ret=(User)vocabulary.swb_User.newGenericInstance(obj);
+             ret=(User)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -120,7 +120,7 @@ public class DnsBase extends SWBClass implements Traceable,Descriptiveable,WebPa
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_webPage);
          if(obj!=null)
          {
-             ret=(WebPage)vocabulary.swb_WebPage.newGenericInstance(obj);
+             ret=(WebPage)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }

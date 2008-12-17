@@ -43,7 +43,7 @@ public class HerarquicalNodeBase extends SWBClass implements Sortable,Iconable,D
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swbxf_heModel);
          if(obj!=null)
          {
-             ret=(SWBModel)vocabulary.swb_SWBModel.newGenericInstance(obj);
+             ret=(SWBModel)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }

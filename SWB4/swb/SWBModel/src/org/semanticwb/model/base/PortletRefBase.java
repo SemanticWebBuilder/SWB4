@@ -43,7 +43,7 @@ public class PortletRefBase extends Reference implements Deleteable,Activeable,P
          SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_portlet);
          if(obj!=null)
          {
-             ret=(Portlet)vocabulary.swb_Portlet.newGenericInstance(obj);
+             ret=(Portlet)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
