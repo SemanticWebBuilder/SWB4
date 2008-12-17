@@ -17,7 +17,7 @@ import org.semanticwb.platform.SemanticVocabulary;
 public class User extends UserBase implements Principal, java.io.Serializable
 {
 
-    Logger log = SWBUtils.getLogger(User.class);
+    static Logger log = SWBUtils.getLogger(User.class);
     private String device = null;
     private String ip = null;
     private boolean login = false;
