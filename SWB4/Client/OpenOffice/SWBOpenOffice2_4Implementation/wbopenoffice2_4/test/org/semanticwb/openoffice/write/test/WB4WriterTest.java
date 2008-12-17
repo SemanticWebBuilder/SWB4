@@ -44,7 +44,7 @@ public class WB4WriterTest
     XComponentContext xContext;
     XComponent xCompDest = null;
     XDesktop oDesktop = null;
-    File sUrlDestiny = new File("c:/temp/demopub.odt");
+    File sUrlDestiny = new File("c:/temp/demo.odt");
     File tempDir = new File("c:/temp/demo/");
 
     public WB4WriterTest()
@@ -54,10 +54,14 @@ public class WB4WriterTest
 
     @BeforeClass
     public static void setUpClass() throws Exception
-    {
-        System.setProperty(ConfigurationListURI.CONFIGURATION, "c:\\temp\\list.xml");
-        System.setProperty(Configuration.CONFIGURATION_PROPERTY_NAME, "c:\\temp\\config.xml");
-        System.setProperty(ErrorLog.CONFIGURATION, "c:\\temp");
+    {        
+        File home=new File(System.getProperty("user.home"));
+        System.setProperty(ConfigurationListURI.CONFIGURATION, home.getPath()+"/list.xml");
+        System.setProperty(Configuration.CONFIGURATION_PROPERTY_NAME, home.getPath()+"/config.xml");
+        System.setProperty(ErrorLog.CONFIGURATION, home.getPath());
+        //System.setProperty(ConfigurationListURI.CONFIGURATION, "c:\\temp\\list.xml");
+        //System.setProperty(Configuration.CONFIGURATION_PROPERTY_NAME, "c:\\temp\\config.xml");
+        //System.setProperty(ErrorLog.CONFIGURATION, "c:\\temp");
     }
 
     @AfterClass
