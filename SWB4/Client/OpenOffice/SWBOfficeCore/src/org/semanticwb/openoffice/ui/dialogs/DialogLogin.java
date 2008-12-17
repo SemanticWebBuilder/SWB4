@@ -142,6 +142,7 @@ public class DialogLogin extends javax.swing.JDialog
         jPassword.setNextFocusableComponent(jButtonAccept);
 
         jButtonDelete.setText("X");
+        jButtonDelete.setEnabled(false);
         jButtonDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonDeleteActionPerformed(evt);
@@ -233,7 +234,7 @@ public class DialogLogin extends javax.swing.JDialog
                     configurationListURI.addUserConfiguration(uri, this.jTextFieldClave.getText());
                     this.webAddress = uri;
                     this.login = this.jTextFieldClave.getText();
-                    this.password = this.jPassword.toString();
+                    this.password = new String(this.jPassword.getPassword());
                     this.setVisible(false);
                     this.canceled = false;
                 }
@@ -270,8 +271,10 @@ public class DialogLogin extends javax.swing.JDialog
     }//GEN-LAST:event_jButtonAvancedActionPerformed
 
     private void jComboBoxWebAddressActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxWebAddressActionPerformed
+        this.jButtonDelete.setEnabled(false);
         if (this.jComboBoxWebAddress.getSelectedItem() != null)
         {
+            this.jButtonDelete.setEnabled(true);
             String sUri = this.jComboBoxWebAddress.getSelectedItem().toString();
             try
             {
@@ -286,14 +289,16 @@ public class DialogLogin extends javax.swing.JDialog
     }//GEN-LAST:event_jComboBoxWebAddressActionPerformed
 
 private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
-    int res = JOptionPane.showConfirmDialog(this, "¿Desea borrar esta configuración de conexión?", "Borrado de configuración", JOptionPane.YES_NO_OPTION);
-    if (res == JOptionPane.YES_OPTION)
+
+    URI uri = (URI) this.jComboBoxWebAddress.getSelectedItem();
+    if (uri != null)
     {
-        URI uri = (URI) this.jComboBoxWebAddress.getSelectedItem();
-        if (uri != null)
+        int res = JOptionPane.showConfirmDialog(this, "¿Desea borrar esta configuración de conexión?", "Borrado de configuración", JOptionPane.YES_NO_OPTION);
+        if (res == JOptionPane.YES_OPTION)
         {
             configurationListURI.removeAddress(uri);
             this.jComboBoxWebAddress.removeItem(uri);
+
         }
     }
 }//GEN-LAST:event_jButtonDeleteActionPerformed
