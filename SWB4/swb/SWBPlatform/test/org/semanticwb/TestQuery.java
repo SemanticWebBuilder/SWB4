@@ -65,7 +65,7 @@ public class TestQuery {
         
         // Query string.
         String queryString = prolog + NL +
-            "SELECT ?title ?class WHERE {?x swb:title ?title. ?x rdf:type swb:WebPage}" ; 
+            "SELECT ?title ?desc WHERE {?x swb:title ?title. ?x rdf:type swb:WebPage. ?x swb:description ?desc}" ;
         
         Query query = QueryFactory.create(queryString) ;
         // Print with line numbers
