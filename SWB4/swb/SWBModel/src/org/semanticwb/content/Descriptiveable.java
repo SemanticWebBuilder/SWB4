@@ -6,6 +6,8 @@ import org.semanticwb.model.GenericIterator;
 import java.util.Date;
 public interface Descriptiveable extends GenericObject
 {
+    public String getUser();
+    public void setUser(String user);
     public String getTitle();
     public void setTitle(String title);
     public String getDescription();
