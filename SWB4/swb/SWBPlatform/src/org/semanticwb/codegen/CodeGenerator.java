@@ -656,7 +656,7 @@ public class CodeGenerator
 
     private void insertLinkToClass4Model(SemanticClass tpcls, StringBuilder javaClassContent, SemanticClass parent)
     {
-        if ( parent == null ) // Already exists this method in the parent class
+        //if ( parent == null ) // Already exists this method in the parent class
         {
             Iterator<SemanticClass> tpcit = tpcls.listOwnerModels();
             while (tpcit.hasNext())
