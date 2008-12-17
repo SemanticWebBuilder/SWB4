@@ -14,19 +14,6 @@
         <h3>This is a test!<br>Can you see me?</h3>
         <h3>This is a test!<br>Can you see me?</h3>
     </div>
-
-  Ejemplo 2.
-    <img id="ctrTogle" src="mas.jpg" alt="" onmousedown="collapseDivMgr('mydiv',this.id);" />
-    <div id="mydiv" style="display:none; overflow:hidden; height:385px;" class="divs">
-        <h3>This is a test!<br>Can you see me?</h3>
-        <h3>This is a test!<br>Can you see me?</h3>
-        <h3>This is a test!<br>Can you see me?</h3>
-        <h3>This is a test!<br>Can you see me?</h3>
-        <h3>This is a test!<br>Can you see me?</h3>
-        <h3>This is a test!<br>Can you see me?</h3>
-    </div>
-
-
 */
 
 
@@ -116,18 +103,4 @@ function endSlide(objname){
   return;
 }
 
-function togleImg(objId, srcImg){
-  var e = document.getElementById(objId);
-  if(e.hasAttribute("src")) {
-    e.src=srcImg;
-  }
-}
-
-function collapseDivMgr(divId, imgId){
-  if(slidedown(divId)) {
-    togleImg(imgId, "menos.jpg");
-  }else if(slideup(divId)) {
-    togleImg(imgId, "mas.jpg");
-  }
-}
 	
