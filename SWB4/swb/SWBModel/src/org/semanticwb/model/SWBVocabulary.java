@@ -18,8 +18,8 @@ public class SWBVocabulary
     public final SemanticClass swb_Iconable;
     public final SemanticClass swbxf_FormViewRef;
     public final SemanticClass swb_Deleteable;
-    public final SemanticClass swbrep_Nameable;
     public final SemanticClass swb_Reference;
+    public final SemanticClass swbrep_Nameable;
     public final SemanticClass swb_Roleable;
     public final SemanticClass swb_PFlowRefable;
     public final SemanticClass blog_Category;
@@ -68,6 +68,7 @@ public class SWBVocabulary
     public final SemanticClass swb_Viewable;
     public final SemanticClass swbxf_Text;
     public final SemanticClass swb_PortletSubType;
+    public final SemanticClass swb_Inheritable;
     public final SemanticClass swb_TemplateRef;
     public final SemanticClass swb_Templateable;
     public final SemanticClass swb_Sortable;
@@ -113,6 +114,7 @@ public class SWBVocabulary
     public final SemanticClass swb_Class;
     public final SemanticClass swb_WebPage;
     public final SemanticClass swb_Indexable;
+    public final SemanticClass swbxf_SelectOne;
     public final SemanticClass swbrep_Workspace;
 
 
@@ -239,6 +241,7 @@ public class SWBVocabulary
     public final SemanticProperty swb_views;
     public final SemanticProperty swb_hits;
     public final SemanticProperty swb_PSTType;
+    public final SemanticProperty swb_inherita;
     public final SemanticProperty swb_template;
     public final SemanticProperty swb_hasTemplate;
     public final SemanticProperty swbxf_textAreaRows;
@@ -285,6 +288,7 @@ public class SWBVocabulary
     public final SemanticProperty swb_hasWebPageVirtualParent;
     public final SemanticProperty swb_webPageURL;
     public final SemanticProperty swb_webPageParent;
+    public final SemanticProperty swbxf_selectOneBlankSuport;
     public final SemanticProperty jcr_root;
 
 
@@ -301,8 +305,8 @@ public class SWBVocabulary
         swb_Iconable=vocabulary.getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Iconable");
         swbxf_FormViewRef=vocabulary.getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#FormViewRef");
         swb_Deleteable=vocabulary.getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Deleteable");
-        swbrep_Nameable=vocabulary.getSemanticClass("http://www.semanticwebbuilder.org/swb4/repository#Nameable");
         swb_Reference=vocabulary.getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Reference");
+        swbrep_Nameable=vocabulary.getSemanticClass("http://www.semanticwebbuilder.org/swb4/repository#Nameable");
         swb_Roleable=vocabulary.getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Roleable");
         swb_PFlowRefable=vocabulary.getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PFlowRefable");
         blog_Category=vocabulary.getSemanticClass("http://www.semanticwb.org.mx/swb4/blog#Category");
@@ -351,6 +355,7 @@ public class SWBVocabulary
         swb_Viewable=vocabulary.getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Viewable");
         swbxf_Text=vocabulary.getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#Text");
         swb_PortletSubType=vocabulary.getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PortletSubType");
+        swb_Inheritable=vocabulary.getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Inheritable");
         swb_TemplateRef=vocabulary.getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#TemplateRef");
         swb_Templateable=vocabulary.getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Templateable");
         swb_Sortable=vocabulary.getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Sortable");
@@ -396,6 +401,7 @@ public class SWBVocabulary
         swb_Class=vocabulary.getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Class");
         swb_WebPage=vocabulary.getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebPage");
         swb_Indexable=vocabulary.getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Indexable");
+        swbxf_SelectOne=vocabulary.getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectOne");
         swbrep_Workspace=vocabulary.getSemanticClass("http://www.semanticwebbuilder.org/swb4/repository#Workspace");
 
 
@@ -522,6 +528,7 @@ public class SWBVocabulary
         swb_views=vocabulary.getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#views");
         swb_hits=vocabulary.getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hits");
         swb_PSTType=vocabulary.getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#PSTType");
+        swb_inherita=vocabulary.getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#inherita");
         swb_template=vocabulary.getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#template");
         swb_hasTemplate=vocabulary.getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasTemplate");
         swbxf_textAreaRows=vocabulary.getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#textAreaRows");
@@ -568,6 +575,7 @@ public class SWBVocabulary
         swb_hasWebPageVirtualParent=vocabulary.getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageVirtualParent");
         swb_webPageURL=vocabulary.getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#webPageURL");
         swb_webPageParent=vocabulary.getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#webPageParent");
+        swbxf_selectOneBlankSuport=vocabulary.getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneBlankSuport");
         jcr_root=vocabulary.getSemanticProperty("http://www.jcp.org/jcr/1.0#root");
     }
 

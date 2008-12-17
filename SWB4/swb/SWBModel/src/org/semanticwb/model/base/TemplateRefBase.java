@@ -8,7 +8,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class TemplateRefBase extends Reference implements Priorityable,Activeable,Deleteable
+public class TemplateRefBase extends Reference implements Deleteable,Activeable,Priorityable,Inheritable
 {
 
     public TemplateRefBase(SemanticObject base)
@@ -45,6 +45,16 @@ public class TemplateRefBase extends Reference implements Priorityable,Activeabl
              ret=(Template)vocabulary.swb_Template.newGenericInstance(obj);
          }
          return ret;
+    }
+
+    public int getInherita()
+    {
+        return getSemanticObject().getIntProperty(vocabulary.swb_inherita);
+    }
+
+    public void setInherita(int inherita)
+    {
+        getSemanticObject().setLongProperty(vocabulary.swb_inherita, inherita);
     }
 
     public int getPriority()

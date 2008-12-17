@@ -8,7 +8,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import org.semanticwb.*;
 import org.semanticwb.platform.*;
 
-public class PFlowRefBase extends Reference implements Activeable,Deleteable
+public class PFlowRefBase extends Reference implements Deleteable,Activeable
 {
 
     public PFlowRefBase(SemanticObject base)
