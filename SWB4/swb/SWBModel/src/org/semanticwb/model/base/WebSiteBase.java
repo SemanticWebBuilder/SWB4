@@ -254,36 +254,30 @@ public class WebSiteBase extends SWBModel implements Versionable,Descriptiveable
         getSemanticObject().setProperty(vocabulary.swb_description, description, lang);
     }
 
-    public Role getRole(String id)
+    public Community getCommunity(String id)
     {
-        return (Role)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.swb_Role),vocabulary.swb_Role);
+        return (Community)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.swb_Community),vocabulary.swb_Community);
     }
 
-    public Iterator<Role> listRoles()
+    public Iterator<Community> listCommunitys()
     {
         Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
-        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.swb_Role.getOntClass());
-        return new GenericIterator<Role>(Role.class, stit, true);
+        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.swb_Community.getOntClass());
+        return new GenericIterator<Community>(Community.class, stit, true);
     }
 
-    public Role createRole(String id)
+    public Community createCommunity(String id)
     {
-        return (Role)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, vocabulary.swb_Role), vocabulary.swb_Role);
+        return (Community)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, vocabulary.swb_Community), vocabulary.swb_Community);
     }
 
-    public Role createRole()
+    public void removeCommunity(String id)
     {
-        long id=SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+vocabulary.swb_Role.getName());
-        return createRole(""+id);
-    } 
-
-    public void removeRole(String id)
-    {
-        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.swb_Role));
+        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.swb_Community));
     }
-    public boolean hasRole(String id)
+    public boolean hasCommunity(String id)
     {
-        return (getRole(id)!=null);
+        return (getCommunity(id)!=null);
     }
 
     public PortletType getPortletType(String id)
@@ -800,32 +794,6 @@ public class WebSiteBase extends SWBModel implements Versionable,Descriptiveable
         return (getPFlow(id)!=null);
     }
 
-    public UserGroup getUserGroup(String id)
-    {
-        return (UserGroup)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.swb_UserGroup),vocabulary.swb_UserGroup);
-    }
-
-    public Iterator<UserGroup> listUserGroups()
-    {
-        Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
-        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.swb_UserGroup.getOntClass());
-        return new GenericIterator<UserGroup>(UserGroup.class, stit, true);
-    }
-
-    public UserGroup createUserGroup(String id)
-    {
-        return (UserGroup)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, vocabulary.swb_UserGroup), vocabulary.swb_UserGroup);
-    }
-
-    public void removeUserGroup(String id)
-    {
-        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.swb_UserGroup));
-    }
-    public boolean hasUserGroup(String id)
-    {
-        return (getUserGroup(id)!=null);
-    }
-
     public TemplateRef getTemplateRef(String id)
     {
         return (TemplateRef)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.swb_TemplateRef),vocabulary.swb_TemplateRef);
@@ -946,31 +914,5 @@ public class WebSiteBase extends SWBModel implements Versionable,Descriptiveable
     public boolean hasPortletSubType(String id)
     {
         return (getPortletSubType(id)!=null);
-    }
-
-    public Community getCommunity(String id)
-    {
-        return (Community)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.swb_Community),vocabulary.swb_Community);
-    }
-
-    public Iterator<Community> listCommunitys()
-    {
-        Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
-        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.swb_Community.getOntClass());
-        return new GenericIterator<Community>(Community.class, stit, true);
-    }
-
-    public Community createCommunity(String id)
-    {
-        return (Community)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, vocabulary.swb_Community), vocabulary.swb_Community);
-    }
-
-    public void removeCommunity(String id)
-    {
-        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.swb_Community));
-    }
-    public boolean hasCommunity(String id)
-    {
-        return (getCommunity(id)!=null);
     }
 }
