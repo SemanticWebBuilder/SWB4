@@ -60,9 +60,8 @@ public class WBFileUpload
         if (s == null)
         {
             return;
-        }
-        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-        table = parseMulti(s, reader);
+        }        
+        table = parseMulti(s, in);
 
     }
 
@@ -433,7 +432,7 @@ public class WBFileUpload
         return aparams;
     }
 
-    public int readLine(byte[] b, int off, int len, BufferedReader in) throws IOException
+    public int readLine(byte[] b, int off, int len, InputStream in) throws IOException
     {
 
         if (len <= 0)
@@ -441,7 +440,7 @@ public class WBFileUpload
             return 0;
         }
         int count = 0, c;
-
+        
         while ((c = in.read()) != -1)
         {
             b[off++] = (byte) c;
@@ -454,7 +453,7 @@ public class WBFileUpload
         return count > 0 ? count : -1;
     }
 
-    Hashtable parseMulti(String s, BufferedReader servletinputstream) throws IOException
+    Hashtable parseMulti(String s, InputStream servletinputstream) throws IOException
     {
 
         char c = '\u2000';
