@@ -32,7 +32,7 @@ public class SelectDirectory extends WizardPage {
     public WizardPanelNavResult allowNext(String arg, Map map, Wizard wizard)
     {
         WizardPanelNavResult result = WizardPanelNavResult.PROCEED;
-        if (!this.jFileChooser1.getSelectedFile().exists())
+        if (this.jFileChooser1.getSelectedFile()==null || !this.jFileChooser1.getSelectedFile().exists())
         {
             JOptionPane.showMessageDialog(this, "!Debe indicar un directorio!", SelectDirectory.getDescription(), JOptionPane.ERROR_MESSAGE);
             this.jFileChooser1.requestFocus();            
