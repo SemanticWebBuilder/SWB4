@@ -178,6 +178,8 @@ public abstract class OfficeDocument
      * @throws org.semanticwb.openoffice.WBException If the list of properties are more that four
      */
     public abstract Map<String, String> getCustomProperties();
+    
+    public abstract String getPublicationExtension();
 
     /**
      * Save the properties in custom properties in the document
