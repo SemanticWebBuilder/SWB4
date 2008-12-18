@@ -6,7 +6,7 @@
     String id=request.getParameter("suri");
     SemanticOntology ont=SWBPlatform.getSemanticMgr().getOntology();
     com.hp.hpl.jena.rdf.model.Resource res=ont.getResource(id);
-    System.out.println("suri:"+id);
+    //System.out.println("suri:"+id);
     if(res==null)return;
     SemanticClass cls=ont.getSemanticObjectClass(res);
     GenericObject obj=ont.getGenericObject(id,cls);
@@ -19,12 +19,12 @@
     while(obit.hasNext())
     {
         ObjectBehavior ob=obit.next();
-        String title=ob.getTitle(lang);
-        DisplayObject dpobj=ob.getDisplayObject();
+        String title=ob.getDisplayName(lang);
+        //DisplayObject dpobj=ob.getDisplayObject();
         SemanticObject interf=ob.getInterface();
         boolean refresh=ob.isRefreshOnShow();
         String url=ob.getParsedURL();
-        System.out.println("ob:"+ob.getTitle(lang)+" "+ob.getDisplayObject()+" "+ob.getInterface()+" "+ob.getURL());
+        //System.out.println("ob:"+ob.getTitle(lang)+" "+ob.getDisplayObject()+" "+ob.getInterface()+" "+ob.getURL());
 
         String params="suri="+URLEncoder.encode(obj.getURI());
         Iterator<ResourceParameter> prmit=ob.listParams();
@@ -33,10 +33,10 @@
             ResourceParameter rp=prmit.next();
             params+="&"+rp.getName()+"="+rp.getValue().getEncodedURI();
         }
-        System.out.println("params:"+params);
+        //System.out.println("params:"+params);
         //Genericos
         boolean addDiv=false;
-        if(dpobj==null)
+        //if(dpobj==null)
         {
             if(interf==null)
             {
@@ -53,8 +53,9 @@
                 }
             }
         }
-        if(addDiv)
+        if(addDiv)// && ob.isVisible())
         {
+
             out.println("<div dojoType=\"dojox.layout.ContentPane\" title=\""+title+"\" style=\"display:true;padding:10px;\" refreshOnShow=\""+refresh+"\" href=\""+url+"?"+params+"\" executeScripts=\"true\">");
             out.println("</div>");
         }

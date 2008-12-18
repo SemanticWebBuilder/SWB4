@@ -10,10 +10,10 @@
     if(res==null)return;
     SemanticClass cls=ont.getSemanticObjectClass(res);
     GenericObject obj=ont.getGenericObject(id,cls);
-    String title=obj.getSemanticObject().getProperty(SWBContext.getVocabulary().title);
-    String description=obj.getSemanticObject().getProperty(SWBContext.getVocabulary().description);
-    String active=obj.getSemanticObject().getProperty(SWBContext.getVocabulary().active);
-    String sortname=obj.getSemanticObject().getProperty(SWBContext.getVocabulary().webPageSortName);
+    String title=obj.getSemanticObject().getProperty(SWBContext.getVocabulary().swb_title);
+    String description=obj.getSemanticObject().getProperty(SWBContext.getVocabulary().swb_description);
+    String active=obj.getSemanticObject().getProperty(SWBContext.getVocabulary().swb_active);
+    String sortname=obj.getSemanticObject().getProperty(SWBContext.getVocabulary().swb_webPageSortName);
 %>
 <table class="admViewProperties">
     <caption>Propiedades</caption>
@@ -24,5 +24,4 @@
     <%if(active!=null){%><tr><td>Active</td><td><%=active%></td></tr><%}%>
     <tr><td>Type</td><td><%=cls.getName()%></td></tr>
     <%if(description!=null){%><tr><td>Desc</td><td><%=description%></td></tr><%}%>
-    
 </table>

@@ -9,7 +9,7 @@
     String scls=request.getParameter("scls");
     String sref=request.getParameter("sref");
     String sprop=request.getParameter("sprop");
-    System.out.println("SemObjectEditor suri:"+suri+" scls:"+scls+" sref:"+sref+" sprop:"+sprop);
+    //System.out.println("SemObjectEditor suri:"+suri+" scls:"+scls+" sref:"+sref+" sprop:"+sprop);
     
     if(suri==null && scls==null)
     {

@@ -5,7 +5,7 @@
     String id=request.getParameter("suri");
     SemanticOntology ont=SWBPlatform.getSemanticMgr().getOntology();
     com.hp.hpl.jena.rdf.model.Resource res=ont.getResource(id);
-    System.out.println("suri:"+id);
+    //System.out.println("suri:"+id);
     if(res==null)return;
     SemanticClass cls=ont.getSemanticObjectClass(res);
     GenericObject obj=ont.getGenericObject(id,cls);
