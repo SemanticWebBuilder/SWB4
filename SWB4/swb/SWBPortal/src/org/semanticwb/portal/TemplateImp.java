@@ -696,8 +696,8 @@ public class TemplateImp extends Template
         {
             //TODO:implementar hits
 //            tini = System.currentTimeMillis();
-//            resbuf = new StringBuffer(300);
-//            logbuf = new StringBuffer(300);
+            resbuf = new StringBuffer(300);
+            logbuf = new StringBuffer(300);
 //            logbuf.append("log|");
 //            logbuf.append(request.getRemoteAddr());
 //            logbuf.append("|");
