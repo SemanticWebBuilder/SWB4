@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.semanticwb.xmlrpc;
 
 /**
@@ -11,25 +10,24 @@ package org.semanticwb.xmlrpc;
  */
 import java.io.*;
 import java.util.*;
+
 public class WBFileUpload
 {
-    private static final
-    String CONTENT = "content";
-    private static final
-    String FILENAME = "filename";
 
-    
+    private static final String CONTENT = "content";
+    private static final String FILENAME = "filename";
+    byte[] content = null;
 
     class CParameter
     {
 
         public String parametro;
-        public ArrayList Valor;
+        public ArrayList<String> Valor;
 
         CParameter()
         {
             parametro = null;
-            Valor = new ArrayList();
+            Valor = new ArrayList<String>();
         }
     }
 
@@ -37,14 +35,14 @@ public class WBFileUpload
     {
         sContentType = null;
         table = null;
-        parametros = new Vector();
+        parametros = new Vector<CParameter>();
         //maxSize = 0x2000000;
         maxSize = 0;
     }
 
-    public void getFiles(InputStream in,String contentType)
+    public void getFiles(InputStream in, String contentType)
             throws IOException
-    {        
+    {
         if (contentType == null)
         {
             return;
@@ -62,12 +60,11 @@ public class WBFileUpload
         if (s == null)
         {
             return;
-        }        
-        BufferedReader reader=new BufferedReader(new InputStreamReader(in));
+        }
+        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
         table = parseMulti(s, reader);
 
     }
- 
 
     public byte[] getFileData(String s)
     {
@@ -320,7 +317,7 @@ public class WBFileUpload
         while (true);
         return flag;
     }
-    
+
     public String getFileName(String s) throws IOException
     {
         if (table == null)
@@ -355,6 +352,7 @@ public class WBFileUpload
 
         return null;
     }
+
     /**
      * Gets the list of files
      * @return List of files
@@ -424,9 +422,9 @@ public class WBFileUpload
         return null;
     }
 
-    public ArrayList getParamNames() throws IOException
+    public ArrayList<String> getParamNames() throws IOException
     {
-        ArrayList aparams = new ArrayList();
+        ArrayList<String> aparams = new ArrayList<String>();
         for (int i = 0; i < parametros.size(); i++)
         {
             CParameter cparameter = (CParameter) parametros.elementAt(i);
@@ -435,19 +433,40 @@ public class WBFileUpload
         return aparams;
     }
 
+    public int readLine(byte[] b, int off, int len, BufferedReader in) throws IOException
+    {
+
+        if (len <= 0)
+        {
+            return 0;
+        }
+        int count = 0, c;
+
+        while ((c = in.read()) != -1)
+        {
+            b[off++] = (byte) c;
+            count++;
+            if (c == '\n' || count == len)
+            {
+                break;
+            }
+        }
+        return count > 0 ? count : -1;
+    }
+
     Hashtable parseMulti(String s, BufferedReader servletinputstream) throws IOException
     {
 
         char c = '\u2000';
-        Hashtable hashtable = new Hashtable();
+        Hashtable<String, Object> hashtable = new Hashtable<String, Object>();
         String s1 = "--".concat(String.valueOf(String.valueOf(s)));
         byte abyte0[] = new byte[c];
-                        
-        String s2 = servletinputstream.readLine();
-        if(s2==null || s2.isEmpty())
+        int i = readLine(abyte0, 0, abyte0.length, servletinputstream);
+        if (i == -1)
         {
             throw new IllegalArgumentException("InputStream truncated");
         }
+        String s2 = new String(abyte0, 0, 0, i);
         if (!s2.startsWith(s1))
         {
             throw new IllegalArgumentException("MIME boundary missing: ".concat(String.valueOf(String.valueOf(s2))));
@@ -464,18 +483,13 @@ public class WBFileUpload
                 s7 = null;
                 s8 = null;
                 bytearrayoutputstream = new ByteArrayOutputStream();
-                
-                /*int j = servletinputstream.readLine(abyte0, 0, abyte0.length);
+                //Object obj = null;
+                int j = readLine(abyte0, 0, abyte0.length, servletinputstream);
                 if (j == -1)
                 {
                     return hashtable;
-                }*/
-                
-                s3 = servletinputstream.readLine();
-                if(s3==null || s3.isEmpty())
-                {
-                    return hashtable;
-                }                
+                }
+                s3 = new String(abyte0, 0, 0, j - 2);
                 s6 = s3.toLowerCase();
             }
             while (!s6.startsWith("content-disposition"));
@@ -503,18 +517,12 @@ public class WBFileUpload
             {
                 s7 = s3.substring(l1 + 10, i2);
             }
-            /*int k = servletinputstream.readLine(abyte0, 0, abyte0.length);
+            int k = readLine(abyte0, 0, abyte0.length, servletinputstream);
             if (k == -1)
             {
                 return hashtable;
-            }*/
-            
-            s3 = servletinputstream.readLine();
-            if(s3==null || s3.isEmpty())
-            {
-                return hashtable;
             }
-            int k=s3.getBytes().length;
+            s3 = new String(abyte0, 0, 0, k - 2);
             s6 = s3.toLowerCase();
             for (; sContentType == null; sContentType = s6)
             {
@@ -528,17 +536,12 @@ public class WBFileUpload
                     throw new IllegalArgumentException("Content-Type line misformatted: ".concat(String.valueOf(String.valueOf(s3))));
                 }
                 s8 = s6.substring(j2 + 1);
-                /*k = servletinputstream.readLine(abyte0, 0, abyte0.length);
+                k = readLine(abyte0, 0, abyte0.length, servletinputstream);
                 if (k == -1)
                 {
                     return hashtable;
-                }*/
-                s3 = servletinputstream.readLine();
-                if(s3==null || s3.isEmpty())
-                {
-                    return hashtable;
                 }
-                k=s3.getBytes().length;
+                s3 = new String(abyte0, 0, 0, k - 2);
                 if (s3.length() != 0)
                 {
                     throw new IllegalArgumentException("Unexpected line in MIMEpart header: ".concat(String.valueOf(String.valueOf(s3))));
@@ -555,17 +558,12 @@ public class WBFileUpload
             boolean flag1 = true;
             byte abyte1[] = new byte[c];
             int k2 = 0;
-            /*k = servletinputstream.readLine(abyte0, 0, abyte0.length);
+            k = readLine(abyte0, 0, abyte0.length, servletinputstream);
             if (k == -1)
             {
                 return hashtable;
-            }*/
-            s3 = servletinputstream.readLine();
-            if(s3==null || s3.isEmpty())
-            {
-                return hashtable;
             }
-            k=s3.getBytes().length;
+            s3 = new String(abyte0, 0, 0, k);
             CParameter cparameter = FindParameter(s9.trim());
             if (cparameter != null)
             {
@@ -580,19 +578,13 @@ public class WBFileUpload
             if (!s3.startsWith(s1))
             {
                 System.arraycopy(abyte0, 0, abyte1, 0, k);
-                //k2 = k;
-                /*k = servletinputstream.readLine(abyte0, 0, abyte0.length);
+                k2 = k;
+                k = readLine(abyte0, 0, abyte0.length, servletinputstream);
                 if (k == -1)
                 {
                     return hashtable;
-                }*/
-                String s4 = servletinputstream.readLine();
-                if(s4==null || s4.isEmpty())
-                {
-                    return hashtable;
                 }
-                k2 = k;
-                k=s4.getBytes().length;                
+                String s4 = new String(abyte0, 0, 0, k);
                 flag1 = false;
                 if (s4.startsWith(s1))
                 {
@@ -612,20 +604,13 @@ public class WBFileUpload
                 }
                 bytearrayoutputstream.write(abyte1, 0, k2);
                 System.arraycopy(abyte0, 0, abyte1, 0, k);
-                /*k2 = k;
-                k = servletinputstream.readLine(abyte0, 0, abyte0.length);
+                k2 = k;
+                k = readLine(abyte0, 0, abyte0.length, servletinputstream);
                 if (k == -1)
                 {
                     return hashtable;
-                }*/
-                String s5 = servletinputstream.readLine();
-                if(s5==null || s5.isEmpty())
-                {
-                    return hashtable;
                 }
-                k2 = k;
-                k=s5.getBytes().length;
-                
+                String s5 = new String(abyte0, 0, 0, k);
                 if (s5.startsWith(s1))
                 {
                     flag = false;
@@ -669,9 +654,9 @@ public class WBFileUpload
             }
             else
             {
-                Hashtable hashtable1 = new Hashtable(4);
+                Hashtable<String, Object> hashtable1 = new Hashtable<String, Object>(4);
                 hashtable1.put("name", s9);
-                hashtable1.put( FILENAME,s7);
+                hashtable1.put(FILENAME, s7);
                 if (s8 == null)
                 {
                     s8 = "application/octet-stream";
@@ -693,13 +678,13 @@ public class WBFileUpload
 
     private CParameter FindParameter(String parameter)
     {
-        CParameter findParameter=null;
+        CParameter findParameter = null;
         for (int i = 0; i < parametros.size(); i++)
         {
             CParameter cparameter = (CParameter) parametros.elementAt(i);
             if (cparameter.parametro.trim().equals(parameter))
             {
-                findParameter=cparameter;
+                findParameter = cparameter;
             }
         }
         return findParameter;
@@ -707,22 +692,20 @@ public class WBFileUpload
 
     private boolean CheckValue(CParameter cParameter, String value)
     {
-        boolean checkValue=false;
+        boolean checkValue = false;
         Iterator values = cParameter.Valor.iterator();
         while (values.hasNext())
         {
             String svalue = (String) values.next();
             if (svalue.trim().equalsIgnoreCase(value.trim()))
             {
-                checkValue= true;
+                checkValue = true;
             }
         }
         return checkValue;
     }
-
-    
     private String sContentType;
-    Vector parametros;
+    Vector<CParameter> parametros;
     Hashtable table;
     protected int maxSize;
 }
