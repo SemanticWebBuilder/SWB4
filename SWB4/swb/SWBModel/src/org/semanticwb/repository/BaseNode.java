@@ -28,10 +28,10 @@ public class BaseNode extends BaseNodeBase
     static Logger log = SWBUtils.getLogger(BaseNode.class);
     private static final String JCR_FROZENNODE_NAME = "jcr:frozenNode";
     private static final String JCR_ROOTVERSION = "jcr:rootVersion";
-    private static final String JCR_VERSIONLABELS_NAME = "jcr:versionLabels";    
+    private static final String JCR_VERSIONLABELS_NAME = "jcr:versionLabels";
     private static final String ONPARENTVERSION_COPY = "COPY";
     private static final String ONPARENTVERSION_VERSION = "VERSION";
-    private static final String WAS_NOT_FOUND = " was not found";    
+    private static final String WAS_NOT_FOUND = " was not found";
     private static SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
     public BaseNode(SemanticObject base)
@@ -962,31 +962,9 @@ public class BaseNode extends BaseNodeBase
         return isNodeType(vocabulary.nt_FrozenNode);
     }
 
-    private void copyNodesToFrozenNode(BaseNode frozenNode) throws SWBException
-    {
-        if (frozenNode.isFrozenNode())
-        {
-            GenericIterator<BaseNode> nodes = this.listNodes();
-            while (nodes.hasNext())
-            {
-                BaseNode childNode = nodes.next();
-                String onParentVersion = getOnParentVersion(childNode, this);
-                if (onParentVersion.equals(ONPARENTVERSION_COPY))
-                {
-                    BaseNode frozenChild = frozenNode.createNodeBase(JCR_FROZENNODE_NAME, vocabulary.nt_FrozenNode);
-                    childNode.copyPropertiesToFrozenNode(frozenChild);
-                    childNode.addFrozenProperties(frozenChild.getSemanticObject());
-                    childNode.copyPropertiesToFrozenNode(frozenChild);
-                }
-            }
-        }
-        else
-        {
-            throw new SWBException("The node is not a frozen node");
-        }
-    }
+    
 
-    private void checkAbort(BaseNode frozenNode) throws SWBException
+    private void checkAbort() throws SWBException
     {
         Iterator<SemanticProperty> properties = this.getSemanticObject().getSemanticClass().listProperties();
         boolean abort = false;
@@ -1016,24 +994,54 @@ public class BaseNode extends BaseNodeBase
             throw new SWBException("A property has the onparentversion equals to abort");
         }
     }
-
-    private void copyChildsTo(BaseNode node, BaseNode frozenNode) throws SWBException
+    private void doCopy(BaseNode targetNode, BaseNode destNode) throws SWBException
     {
-        GenericIterator<BaseNode> nodes = node.listNodes();
+        GenericIterator<BaseNode> nodes = targetNode.listNodes();
         while (nodes.hasNext())
         {
             BaseNode childNode = nodes.next();
-            BaseNode frozenChild = frozenNode.createNodeBase(JCR_FROZENNODE_NAME, vocabulary.nt_FrozenNode);
-            childNode.copyPropertiesToFrozenNode(frozenChild);
+            BaseNode copyChild = destNode.createNodeBase(childNode.getName(), childNode.getSemanticObject().getSemanticClass());
+            childNode.doCopy(copyChild);
         }
     }
 
-    private void copyPropertiesToFrozenNode(BaseNode frozenNode) throws SWBException
+    private void doCopy(BaseNode copyChild) throws SWBException
+    {
+        doCopy(this, copyChild);
+        Iterator<SemanticProperty> properties = this.getSemanticObject().getSemanticClass().listProperties();
+        properties = this.getSemanticObject().getSemanticClass().listProperties();
+        while (properties.hasNext())
+        {
+            SemanticProperty property = properties.next();
+            if (!isInternal(property))
+            {
+                String onParentVersion = getOnParentVersion(property);
+                if (property.isDataTypeProperty() && onParentVersion.equals(ONPARENTVERSION_COPY))
+                {
+                    if (property.isBinary())
+                    {
+                        copyChild.setInputStreamPropertyInternal(property, getInputStreamProperty(property));
+                    }
+                    else
+                    {
+                        copyChild.setPropertyInternal(property, getProperty(property));
+                    }
+                }
+                if (property.isObjectProperty() && onParentVersion.equals(ONPARENTVERSION_COPY))
+                {
+                    copyChild.getSemanticObject().setObjectProperty(property, this.getSemanticObject().getObjectProperty(property));
+                }
+            }
+        }
+    }
+
+    private void doCopyToFrozenNode(BaseNode frozenNode) throws SWBException
     {
         if (frozenNode.isFrozenNode())
         {
-            checkAbort(frozenNode);
-            copyChildsTo(this, frozenNode);
+            checkAbort();
+            initializeFrozenProperties(frozenNode.getSemanticObject());            
+            doCopy(this, frozenNode);
             Iterator<SemanticProperty> properties = this.getSemanticObject().getSemanticClass().listProperties();
             properties = this.getSemanticObject().getSemanticClass().listProperties();
             while (properties.hasNext())
@@ -1067,7 +1075,7 @@ public class BaseNode extends BaseNodeBase
         }
     }
 
-    private void addFrozenProperties(SemanticObject frozenNode) throws SWBException
+    private void initializeFrozenProperties(SemanticObject frozenNode) throws SWBException
     {
         SemanticProperty jcr_frozenUuid = vocabulary.jcr_frozenUuid;
         SemanticProperty jcr_frozenPrimaryType = vocabulary.jcr_frozenPrimaryType;
@@ -1094,7 +1102,7 @@ public class BaseNode extends BaseNodeBase
             BaseNode ntVersion = historyNode.createNodeBase(JCR_ROOTVERSION, vocabulary.nt_Version);
             BaseNode versionLabels = historyNode.createNodeBase(JCR_VERSIONLABELS_NAME, vocabulary.nt_versionLabels);
             BaseNode ntFrozenNode = ntVersion.createNodeBase(JCR_FROZENNODE_NAME, vocabulary.nt_FrozenNode);
-            addFrozenProperties(ntFrozenNode.getSemanticObject());
+            initializeFrozenProperties(ntFrozenNode.getSemanticObject());
             this.getSemanticObject().setObjectProperty(vocabulary.jcr_baseVersion, ntVersion.getSemanticObject());
         }
     }
@@ -1233,15 +1241,16 @@ public class BaseNode extends BaseNodeBase
 
     public BaseNode getBaseVersion()
     {
+        BaseNode getBaseVersion=null;
         if (isVersionable())
         {
             SemanticObject baseVersion = getSemanticObject().getObjectProperty(vocabulary.jcr_baseVersion);
             if (baseVersion != null)
             {
-                return new BaseNode(baseVersion);
+                getBaseVersion=new BaseNode(baseVersion);
             }
         }
-        return null;
+        return getBaseVersion;
     }
 
     private BaseNode addVersionToHistoryNode() throws SWBException
@@ -1276,8 +1285,7 @@ public class BaseNode extends BaseNodeBase
                     ntVersion.getSemanticObject().addObjectProperty(vocabulary.jcr_predecessors, predecessor.getSemanticObject());
                 }
                 BaseNode ntFrozenNode = ntVersion.createNodeBase(JCR_FROZENNODE_NAME, vocabulary.nt_FrozenNode);
-                copyPropertiesToFrozenNode(ntFrozenNode);
-                addFrozenProperties(ntFrozenNode.getSemanticObject());
+                doCopyToFrozenNode(ntFrozenNode);                
                 addVersionToHistoryNode = ntVersion;
                 //update the BaseVersion of this node
                 this.getSemanticObject().setObjectProperty(vocabulary.jcr_baseVersion, ntVersion.getSemanticObject());
