@@ -23,7 +23,7 @@
         DisplayObject dpobj=ob.getDisplayObject();
         SemanticObject interf=ob.getInterface();
         boolean refresh=ob.isRefreshOnShow();
-        String url=ob.getURL();
+        String url=ob.getParsedURL();
         System.out.println("ob:"+ob.getTitle(lang)+" "+ob.getDisplayObject()+" "+ob.getInterface()+" "+ob.getURL());
 
         String params="suri="+URLEncoder.encode(obj.getURI());
