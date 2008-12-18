@@ -588,4 +588,10 @@ public class WB4Writer extends OfficeDocument
     {
         return OPENOFFICE_EXTENSION;
     }
+
+    @Override
+    public String getPublicationExtension()
+    {
+        return WORD_EXTENSION;
+    }
 }
