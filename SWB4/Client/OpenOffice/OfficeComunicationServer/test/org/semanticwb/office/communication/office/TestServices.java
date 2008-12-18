@@ -65,7 +65,7 @@ public class TestServices
 
     
     @Test
-    //@Ignore
+    @Ignore
     public void getCategoriesTest()
     {
         OfficeApplication office = new OfficeApplication();
@@ -121,7 +121,7 @@ public class TestServices
     }
 
     @Test
-    //@Ignore
+    @Ignore
     public void createCategory()
     {
         OfficeApplication office = new OfficeApplication();
@@ -139,7 +139,7 @@ public class TestServices
     }
 
     @Test
-    //@Ignore
+    @Ignore
     public void getContentTypesTest()
     {
         OfficeApplication office = new OfficeApplication();
@@ -160,7 +160,7 @@ public class TestServices
     }
 
     @Test
-    //@Ignore
+    @Ignore
     public void createContentTest()
     {
         OfficeDocument document = new OfficeDocument();
@@ -216,17 +216,7 @@ public class TestServices
         office.setUser("admin");
         office.setPassword("password");
         try
-        {
-            for (ContentInfo info : office.search(workspaceid, "contentido2", "contenido de", "*", "cm:OfficeContent","WORD"))
-            {
-                System.out.println("categoryTitle : " + info.categoryTitle);
-                System.out.println("descripcion : " + info.descripcion);
-                System.out.println("categoryId : " + info.categoryId);
-                System.out.println("id : " + info.id);
-                System.out.println("title : " + info.title);
-                System.out.println("-------------------------------------------");
-            }
-            System.out.println("-----------Fin de busqueda de 1 contenido --------------------------------");
+        {            
             for (ContentInfo info : office.search(workspaceid, "*", "*", "*", "cm:OfficeContent","WORD"))
             {
                 System.out.println("categoryTitle : " + info.categoryTitle);
