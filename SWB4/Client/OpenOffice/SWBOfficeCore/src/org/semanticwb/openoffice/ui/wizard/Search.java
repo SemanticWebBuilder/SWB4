@@ -16,6 +16,7 @@ import org.netbeans.spi.wizard.WizardPanelNavResult;
 import org.semanticwb.office.interfaces.CategoryInfo;
 import org.semanticwb.office.interfaces.ContentInfo;
 import org.semanticwb.office.interfaces.ContentType;
+import org.semanticwb.openoffice.DocumentType;
 import org.semanticwb.openoffice.OfficeApplication;
 
 /**
@@ -27,10 +28,12 @@ public class Search extends WizardPage
     public static final String CONTENT = "CONTENT";
     public static final String WORKSPACE = "workspaceid";
     public static Map map;
+    private DocumentType officeType;
     /** Creates new form Search */
-    public Search()
+    public Search(DocumentType officeType)
     {
         initComponents();
+        this.officeType=officeType;
         this.jComboBoxCategory.removeAllItems();
         this.jComboBoxType.removeAllItems();
         this.jComboBoxRepositorio.removeAllItems();
@@ -57,14 +60,15 @@ public class Search extends WizardPage
         }
         try
         {
-            ContentInfo[] contens= OfficeApplication.getOfficeApplicationProxy().search(repositoryName, title, description, category, type,"WORD");
+            
+            ContentInfo[] contens= OfficeApplication.getOfficeApplicationProxy().search(repositoryName, title, description, category, type,officeType.toString());
             if(contens.length==0)
             {
-                JOptionPane.showMessageDialog(this,"¡No se encontrarón coincidencias para la busqueda!","Búsqueda de contenidos",JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this,"¡No se encontrarón coincidencias para la busqueda!",Search.getDescription(),JOptionPane.INFORMATION_MESSAGE);
             }
             else
             {
-                JOptionPane.showMessageDialog(this,"¡Se encontrarón "+ contens.length +" coincidencias para la busqueda!","Búsqueda de contenidos",JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this,"¡Se encontrarón "+ contens.length +" coincidencias para la busqueda!",Search.getDescription(),JOptionPane.INFORMATION_MESSAGE);
             }
             for (ContentInfo info : contens)
             {
@@ -181,15 +185,13 @@ public class Search extends WizardPage
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(103, 103, 103)
-                .addComponent(jComboBoxRepositorio, 0, 356, Short.MAX_VALUE)
-                .addContainerGap(10, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 449, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 449, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
                             .addComponent(jLabel1)
@@ -198,15 +200,16 @@ public class Search extends WizardPage
                             .addComponent(jLabel5))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jComboBoxType, 0, 356, Short.MAX_VALUE)
-                            .addComponent(jTextFieldDescription, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)
-                            .addComponent(jTextFieldTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)
-                            .addComponent(jComboBoxCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addComponent(jButtonSearch)
-                                .addGap(76, 76, 76)
-                                .addComponent(jButtonView)))))
+                            .addComponent(jComboBoxRepositorio, javax.swing.GroupLayout.Alignment.TRAILING, 0, 356, Short.MAX_VALUE)
+                            .addComponent(jComboBoxCategory, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextFieldTitle, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)
+                            .addComponent(jTextFieldDescription, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)
+                            .addComponent(jComboBoxType, javax.swing.GroupLayout.Alignment.TRAILING, 0, 356, Short.MAX_VALUE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGap(107, 107, 107)
+                        .addComponent(jButtonView)
+                        .addGap(49, 49, 49)
+                        .addComponent(jButtonSearch)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -245,19 +248,19 @@ public class Search extends WizardPage
 private void jButtonSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSearchActionPerformed
     if (this.jComboBoxRepositorio.getSelectedItem() == null)
     {
-        JOptionPane.showMessageDialog(this, "¡Debe indicar un repositorio!", "Busqueda de contenido", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(this, "¡Debe indicar un repositorio!", Search.getDescription(), JOptionPane.ERROR_MESSAGE);
         this.jComboBoxRepositorio.requestFocus();
         return;
     }    
     if (this.jComboBoxCategory.getSelectedItem() == null)
     {
-        JOptionPane.showMessageDialog(this, "¡Debe indicar una categoria!", "Busqueda de contenido", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(this, "¡Debe indicar una categoria!", Search.getDescription(), JOptionPane.ERROR_MESSAGE);
         this.jComboBoxCategory.requestFocus();
         return;
     }
     if (this.jComboBoxType.getSelectedItem() == null)
     {
-        JOptionPane.showMessageDialog(this, "¡Debe indicar un tipo de contenido!", "Busqueda de contenido", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(this, "¡Debe indicar un tipo de contenido!", Search.getDescription(), JOptionPane.ERROR_MESSAGE);
         this.jComboBoxType.requestFocus();
         return;
     }
