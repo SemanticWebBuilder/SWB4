@@ -14,4 +14,4 @@
     GenericObject obj=ont.getGenericObject(id,cls);
     //String title=obj.getSemanticObject().getProperty(SWBContext.getVocabulary().title);
 %>
-    <iframe src ="<%=((WebPage)obj).getUrl()%>" width="100%" height="100%" frameborder="0" scrolling="yes"></iframe>
+    <iframe dojoType="dijit.layout.ContentPane" src="<%=((WebPage)obj).getUrl()%>" width_="100%" height_="100%" frameborder="0" scrolling="yes"></iframe>
