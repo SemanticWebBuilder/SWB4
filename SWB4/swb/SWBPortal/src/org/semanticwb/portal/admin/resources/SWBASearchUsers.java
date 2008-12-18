@@ -24,6 +24,78 @@ public class SWBASearchUsers extends GenericResource {
     
     public SWBASearchUsers() { 
     }
+
+    @Override
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest)
+            throws SWBResourceException, IOException
+    {
+        StringBuffer ret = new StringBuffer("");
+        SWBResourceURL url = paramRequest.getRenderUrl();
+        url.setMode("search");
+        Iterator<UserRepository> itur = SWBContext.listUserRepositorys();
+        ret.append("  <form id=\"SWBASearchUsers\" name=\"SWBASearchUsers\" method=\"post\" action=\""+url+"\">\n");
+        ret.append("<fieldset>\n");
+        ret.append("  <legend>Busqueda usuarios</legend>\n");
+        ret.append("<table>\n");
+        ret.append("    <tr><td>Repositorio de usuarios</td>\n");
+        ret.append("    <td><select name=\"userRepository\" id=\"userRepository\">\n");
+        while(itur.hasNext()){
+            UserRepository ur = itur.next();
+            ret.append("        <option value=\""+ur.getId()+"\">"+ur.getTitle()+"</option>\n"); //todo Add Language
+        }
+        ret.append("    </select>\n");
+        ret.append("    </td></tr>\n");
+        ret.append("    <tr><td>Correo Electrónico</td>\n");
+        ret.append("    <td><input type=\"text\" name=\"usrEMail\" id=\"usrEMail\" />\n");
+        ret.append("    </td></tr>\n");
+        ret.append("    <tr><td>Nombre(s)</td>\n");
+        ret.append("    <td><input type=\"text\" name=\"usrFirstName\" id=\"usrFirstName\" />\n");
+        ret.append("    </td></tr>\n");
+        ret.append("    <tr><td>Primer Apellido</td>\n");
+        ret.append("    <td><input type=\"text\" name=\"usrLastName\" id=\"usrLastName\" />\n");
+        ret.append("    </td></tr>\n");
+        ret.append("    <tr><td>Segundo Apellido</td>\n");
+        ret.append("    <td><input type=\"text\" name=\"usrSecondLastName\" id=\"usrSecondLastName\" />\n");
+        ret.append("    </td></tr>\n");
+        ret.append("</table>");
+        ret.append("</fieldset>\n");
+        ret.append("<fieldset>\n");
+        ret.append("    <input name=\"search\" type=\"submit\" value=\"Buscar\" />\n");
+        ret.append("</fieldset>\n");
+        ret.append("  </form>\n");
+        response.getWriter().write(ret.toString());
+    }
+
+    public void doSearch(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest)
+            throws SWBResourceException, IOException
+    {
+        StringBuffer ret = new StringBuffer("");
+        String usrep  = request.getParameter("userRepository");
+        String usrFirstName = request.getParameter("usrFirstName");
+        String usrLastName = request.getParameter("usrLastName");
+        String usrSecondLastName = request.getParameter("usrSecondLastName");
+        String usrEmail = request.getParameter("usrEMail");
+        UserRepository ur  =SWBContext.getUserRepository(usrep);
+        Iterator<String> itst = ur.searchUsersBy(usrFirstName, usrLastName, usrSecondLastName, usrEmail);
+        ret.append("<table><tr><td>login</td><td>Nombre(s)</td><td>Primer Apellido</td><td>Segundo Apellido</td><td>Correo electr&oacute;nico</td></tr>");
+        while (itst.hasNext()){
+            String[] valores = itst.next().split("\\|\\|");
+           ret.append("<tr><td><a href=\"javascript:addNewTab('"+valores[0]+"', '"+valores[5]+"');\">");
+           ret.append(valores[5]);
+           ret.append("</a></td><td>");
+           ret.append(valores[1]);
+           ret.append("</td><td>");
+           ret.append(valores[2]);
+           ret.append("</td><td>");
+           ret.append(valores[3]);
+           ret.append("</td><td>");
+           ret.append(valores[4]);
+           ret.append("</td></tr>");
+
+        }
+        ret.append("</table>");
+        response.getWriter().write(ret.toString());
+    }
 //
 //    @Override
 //    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
@@ -752,13 +824,17 @@ public class SWBASearchUsers extends GenericResource {
 //        return bOk;
 //    }
 //
-//    @Override
-//    public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-//     
-//        if(paramRequest.getMode().equals("search")){
-//            doSearch(request,response,paramRequest);
-//        }
-//        else super.processRequest(request, response, paramRequest);
-//    }
+    @Override
+    public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+     
+        if(paramRequest.getMode().equals("search")){
+            doSearch(request,response,paramRequest);
+        }
+      //  else
+     //   if(paramRequest.getMode().equals("details")){
+        //
+     //   }
+        else super.processRequest(request, response, paramRequest);
+    }
     
 }
