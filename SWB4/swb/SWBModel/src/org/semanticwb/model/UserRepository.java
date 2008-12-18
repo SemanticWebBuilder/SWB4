@@ -1,5 +1,13 @@
 package org.semanticwb.model;
 
+import com.hp.hpl.jena.query.Query;
+import com.hp.hpl.jena.query.QueryExecution;
+import com.hp.hpl.jena.query.QueryExecutionFactory;
+import com.hp.hpl.jena.query.QueryFactory;
+import com.hp.hpl.jena.query.QuerySolution;
+import com.hp.hpl.jena.query.ResultSet;
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import java.util.ArrayList;
@@ -22,29 +30,93 @@ public class UserRepository extends UserRepositoryBase
     public static final String SWBUR_ClassUserTypeHold = "userType";
     public static final String SWBUR_ClassUserTypePost = "/clsUserType";
     private static ArrayList<String> userTypes = new ArrayList<String>();
+    private static final String NL = System.getProperty("line.separator");
 
     public UserRepository(SemanticObject base)
     {
         super(base);
-/*
-        String uri = getProperty(SWBUR_ClassHold);
-        if (uri != null)
+    /*
+    String uri = getProperty(SWBUR_ClassHold);
+    if (uri != null)
+    {
+    uri = getId() + SWBUR_ClassPost;
+    getSemanticObject().getModel().registerClass(uri);
+    }
+    StmtIterator ptopIt = getSemanticObject().getModel().getRDFModel().listStatements(getSemanticObject().getRDFResource(), null, (String) null);
+    while (ptopIt.hasNext())
+    {
+    Statement sp = (Statement) ptopIt.next();
+    if (sp.getPredicate().getLocalName().startsWith(SWBUR_ClassUserTypeHold))
+    {
+    uri = sp.getObject().toString();
+    userTypes.add(uri.split("#")[1]);
+    getSemanticObject().getModel().registerClass(uri);
+    }
+    }
+     */
+    }
+
+    public Iterator<String> searchUsersBy(String usrFirstName, String usrLastName, String usrSecondLastName, String usrEmail)
+    {
+        Iterator<String> ret = null;
+        SWBVocabulary voc = SWBContext.getVocabulary();
+        Model model = SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
+
+        // First part or the query string
+        String prolog = "PREFIX swb: <" + SemanticVocabulary.URI + ">";
+        prolog += "PREFIX rdf: <" + SemanticVocabulary.RDF_URI + ">";
+        prolog += "PREFIX rdfs: <" + SemanticVocabulary.RDFS_URI + ">";
+
+
+        String _usrFirstName = usrFirstName!=null?usrFirstName:"";
+        String _usrLastName = usrLastName!=null?usrLastName:"";
+        String _usrSecondLastName = usrSecondLastName!=null?usrSecondLastName:"";
+        String _usrEmail = usrEmail!=null?usrEmail:"";
+
+
+        // Query string.
+        //"SELECT ?title ?class WHERE {?x swb:title ?title. ?x rdf:type swb:WebPage}"
+
+        String queryString = prolog + NL +
+                "SELECT ?x ?fname ?lname ?slname ?mail ?login WHERE {?x rdf:type swb:User. " +
+                "?x swb:usrFirstName ?gfn .   FILTER regex(?gfn, \""+_usrFirstName+"\", \"i\"). " +
+                "?x swb:usrLastName ?gln.   FILTER regex(?gln, \""+_usrLastName+"\", \"i\"). " +
+                "?x swb:usrSecondLastName ?gsln.   FILTER regex(?gsln, \""+_usrSecondLastName+"\", \"i\"). " +
+                "?x swb:usrEmail ?gml.   FILTER regex(?gml, \""+_usrEmail+"\", \"i\"). " +
+                "?x swb:usrLastName ?lname. " +
+                "?x swb:usrFirstName ?fname. " +
+                "?x swb:usrSecondLastName ?slname. " +
+                "?x swb:usrEmail ?mail. " +
+                "?x swb:usrLogin ?login " +
+                "}";
+
+
+        Query query = QueryFactory.create(queryString);
+        QueryExecution qexec = QueryExecutionFactory.create(query, model);
+        try
         {
-            uri = getId() + SWBUR_ClassPost;
-            getSemanticObject().getModel().registerClass(uri);
-        }
-        StmtIterator ptopIt = getSemanticObject().getModel().getRDFModel().listStatements(getSemanticObject().getRDFResource(), null, (String) null);
-        while (ptopIt.hasNext())
-        {
-            Statement sp = (Statement) ptopIt.next();
-            if (sp.getPredicate().getLocalName().startsWith(SWBUR_ClassUserTypeHold))
+            ResultSet rs = qexec.execSelect();
+            ArrayList<String> lista = new ArrayList<String>();
+            for (; rs.hasNext();)
             {
-                uri = sp.getObject().toString();
-                userTypes.add(uri.split("#")[1]);
-                getSemanticObject().getModel().registerClass(uri);
+                QuerySolution rb = rs.nextSolution();
+                String current = rb.get("x").toString() + "||" +
+                        rb.get("fname").toString() + "||" +
+                        rb.get("lname").toString() + "||" +
+                        rb.get("slname").toString() + "||" +
+                        rb.get("mail").toString() + "||" +
+                        rb.get("login").toString();
+                lista.add(current);
+
             }
+            ret = lista.iterator();
+        } finally
+        {
+            // QueryExecution objects should be closed to free any system resources
+            qexec.close();
         }
-*/
+
+        return ret;
     }
 
     public User getUserByLogin(String login)
