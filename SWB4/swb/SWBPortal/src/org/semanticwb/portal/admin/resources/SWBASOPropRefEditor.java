@@ -322,6 +322,7 @@ public class SWBASOPropRefEditor extends GenericResource {
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         SemanticObject obj = ont.getSemanticObject(id);
         SemanticClass cls = obj.getSemanticClass();
+        SWBVocabulary voc = SWBContext.getVocabulary();
         if ("update".equals(action)) {
             if(request.getParameter("sval")!=null) 
                 obj = ont.getSemanticObject(request.getParameter("sval"));
@@ -398,6 +399,17 @@ public class SWBASOPropRefEditor extends GenericResource {
                     if(soid!=null&&soid.trim().length()>0) soref = ont.getSemanticObject(soid);
                     SemanticProperty spref = ont.getSemanticProperty(spropref);
                     nobj.setObjectProperty(spref, soref);
+
+                    Iterator<SemanticProperty> itsp = nobj.getSemanticClass().listProperties();
+                    while(itsp.hasNext())
+                    {
+                        SemanticProperty sp = itsp.next();
+                        if(sp.equals(voc.swb_priority))
+                        {
+                            nobj.setIntProperty(sp, 3);
+                            break;
+                        }
+                    }
                 }
 
                 response.setMode(response.Mode_EDIT);
