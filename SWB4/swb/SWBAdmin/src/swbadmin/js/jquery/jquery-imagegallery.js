@@ -26,7 +26,7 @@ function simpleGallery(settingarg){
 		preloadimages[i].src=setting.imagearray[i][0]
 	}        
         setting.fullwidth=parseInt(setting.fullwidth);
-        setting.fullheight=parseInt(setting.fullheight);
+        setting.fullheight=parseInt(setting.fullheight);        
         
 	var slideshow=this
 	jQuery(document).ready(function($){
@@ -105,7 +105,7 @@ simpleGallery.prototype={
 		var imgindex=(keyword=="next")? (setting.curimage<totalimages-1? setting.curimage+1 : 0)
 			: (keyword=="prev")? (setting.curimage>0? setting.curimage-1 : totalimages-1)
 			: Math.min(keyword, totalimages-1)
-		setting.gallerylayers[setting.bglayer].innerHTML=simpleGallery.routines.getSlideHTML(setting.imagearray[imgindex],setting.fullwidth,setting.fullheight)
+		setting.gallerylayers[setting.bglayer].innerHTML=simpleGallery.routines.getSlideHTML(setting.imagearray[imgindex],setting.dimensions[0],setting.dimensions[1],setting.fullwidth,setting.fullheight,setting.imageClosing)
 		setting.$gallerylayers.eq(setting.bglayer).css({zIndex:1000, opacity:0}) //background layer becomes foreground
 			.stop().css({opacity:0}).animate({opacity:1}, setting.fadeduration, function(){ //Callback function after fade animation is complete:
 				clearTimeout(setting.playtimer)
@@ -134,104 +134,63 @@ simpleGallery.prototype={
 }
 
 simpleGallery.routines={
+  getSlideHTML:function(imgelement,miniwidth,miniheight,fullwidth,fullheight,imgclosing){
+    var layerHTML='<a href="#" onclick="simpleGallery.routines.generateCoverDiv(\'cover01\',\'#000000\',80,\''+imgelement[0]+'\','+fullwidth+','+fullheight+',\''+imgclosing+'\')">';
+    layerHTML+='<img src="'+imgelement[0]+'" style="border-width:0" width="'+miniwidth+'" height="'+miniheight+'"/>'
+    layerHTML+='</a>';
+    return layerHTML;
 
-	getSlideHTML:function(imgelement,width,height){            
-                var layerHTML='<a href="#" onclick="generateCoverDiv(\'cvr01\')">';
-		layerHTML+='<img src="'+imgelement[0]+'" style="border-width:0" />'
-		layerHTML+='</a>';
-		return layerHTML;
-		/*var layerHTML='<a href="#" onclick="window.open(\''+imgelement[0]+'\',\'\',\'width='+width+',height='+height+',resizable=yes\');">';
-		layerHTML+='<img src="'+imgelement[0]+'" style="border-width:0" />'
-		layerHTML+='</a>';
-		return layerHTML;*/
-		
-		/*
-                 * Este código pertenece a la versión original de esta libreria
-                 */
-		/*var layerHTML=(imgelement[1])? '<a href="'+imgelement[1]+'" target="'+imgelement[2]+'">\n' : '' //hyperlink slide?
-		layerHTML+='<img src="'+imgelement[0]+'" style="border-width:0" />'
-		layerHTML+=(imgelement[1])? '</a>' : ''
-		return layerHTML //return HTML for this layer*/
-	},
+    /*
+    * Este código pertenece a la versión original de esta libreria
+    */
+    /*var layerHTML=(imgelement[1])? '<a href="'+imgelement[1]+'" target="'+imgelement[2]+'">\n' : '' //hyperlink slide?
+    layerHTML+='<img src="'+imgelement[0]+'" style="border-width:0" />'
+    layerHTML+=(imgelement[1])? '</a>' : ''
+    return layerHTML //return HTML for this layer*/
+  },
 
-	addnavpanel:function(setting){
-		var interfaceHTML=''
-		for (var i=0; i<3; i++){
-			var imgstyle='position:relative; border:0; cursor:hand; cursor:pointer; top:'+simpleGallery_navpanel.imageSpacing.offsetTop[i]+'px; margin-right:'+(i!=2? simpleGallery_navpanel.imageSpacing.spacing+'px' : 0)
-			var title=(i==0? 'Prev' : (i==1)? (setting.ispaused? 'Play' : 'Pause') : 'Next')
-			var imagesrc=(i==1)? simpleGallery_navpanel.images[(setting.ispaused)? 1 : 3] : simpleGallery_navpanel.images[i]
-			interfaceHTML+='<img class="navimages" title="' + title + '" src="'+ imagesrc +'" style="'+imgstyle+'" /> '
-		}
-		interfaceHTML+='<div class="gallerystatus" style="margin-top:1px">' + (setting.curimage+1) + '/' + setting.imagearray.length + '</div>'
-		setting.$navpanel=$('<div class="navpanellayer"></div>')
-			.css({position:'absolute', width:'100%', height:simpleGallery_navpanel.panel.height, left:0, top:setting.dimensions[1], font:simpleGallery_navpanel.panel.fontStyle, zIndex:'1001'})
-			.appendTo(setting.$wrapperdiv)
-		$('<div class="navpanellayerbg"></div><div class="navpanellayerfg"></div>')
-			.css({position:'absolute', left:0, top:0, width:'100%', height:'100%'})
-			.eq(0).css({background:'black', opacity:simpleGallery_navpanel.panel.opacity}) //"navpanellayerbg" div
-			.end().eq(1).css({paddingTop:simpleGallery_navpanel.panel.paddingTop, textAlign:'center', color:'white'}).html(interfaceHTML) //"navpanellayerfg" div
-			.end().appendTo(setting.$navpanel)
-		return setting.$navpanel.find('img.navimages, div.gallerystatus').get() ////return 4 nav buttons DIVs as DOM objects
-	},
+  addnavpanel:function(setting){
+    var interfaceHTML=''
+    for (var i=0; i<3; i++){
+        var imgstyle='position:relative; border:0; cursor:hand; cursor:pointer; top:'+simpleGallery_navpanel.imageSpacing.offsetTop[i]+'px; margin-right:'+(i!=2? simpleGallery_navpanel.imageSpacing.spacing+'px' : 0)
+        var title=(i==0? 'Prev' : (i==1)? (setting.ispaused? 'Play' : 'Pause') : 'Next')
+        var imagesrc=(i==1)? simpleGallery_navpanel.images[(setting.ispaused)? 1 : 3] : simpleGallery_navpanel.images[i]
+        interfaceHTML+='<img class="navimages" title="' + title + '" src="'+ imagesrc +'" style="'+imgstyle+'" /> '
+    }
+    interfaceHTML+='<div class="gallerystatus" style="margin-top:1px">' + (setting.curimage+1) + '/' + setting.imagearray.length + '</div>'
+    setting.$navpanel=$('<div class="navpanellayer"></div>')
+        .css({position:'absolute', width:'100%', height:simpleGallery_navpanel.panel.height, left:0, top:setting.dimensions[1], font:simpleGallery_navpanel.panel.fontStyle, zIndex:'1001'})
+        .appendTo(setting.$wrapperdiv)
+    $('<div class="navpanellayerbg"></div><div class="navpanellayerfg"></div>')
+        .css({position:'absolute', left:0, top:0, width:'100%', height:'100%'})
+        .eq(0).css({background:'black', opacity:simpleGallery_navpanel.panel.opacity}) //"navpanellayerbg" div
+        .end().eq(1).css({paddingTop:simpleGallery_navpanel.panel.paddingTop, textAlign:'center', color:'white'}).html(interfaceHTML) //"navpanellayerfg" div
+        .end().appendTo(setting.$navpanel)
+    return setting.$navpanel.find('img.navimages, div.gallerystatus').get() ////return 4 nav buttons DIVs as DOM objects
+  },
 
-	getCookie:function(Name){ 
-		var re=new RegExp(Name+"=[^;]+", "i"); //construct RE to search for target name/value pair
-		if (document.cookie.match(re)) //if cookie found
-			return document.cookie.match(re)[0].split("=")[1] //return its value
-		return null
-	},
+  getCookie:function(Name){ 
+    var re=new RegExp(Name+"=[^;]+", "i"); //construct RE to search for target name/value pair
+    if (document.cookie.match(re)) //if cookie found
+        return document.cookie.match(re)[0].split("=")[1] //return its value
+    return null
+  },
 
-	setCookie:function(name, value){
-		document.cookie = name+"=" + value + ";path=/"
-	}
-        
-        ,removeCoverDiv:function(divid) {
-            var layer=document.getElementById(divid);
-            var superlayer=document.getElementById('s_'+divid);
-            if(layer && superlayer) {
-                document.body.removeChild(superlayer);
-                document.body.removeChild(layer);
-            }            
-        }
-        
-        ,generateCoverDiv:function(divid, bgcolor, opacity) {
-            var layer=document.createElement('div');
-            layer.id=divid;
-            layer.style.width='100%';
-            layer.style.height='100%';
-            layer.style.backgroundColor=bgcolor;
-            layer.style.position='absolute';
-            layer.style.top=0;
-            layer.style.left=0;		
-            layer.style.zIndex=1000;
-            layer.style.filter='alpha(opacity='+opacity+')';
-            layer.style.opacity=opacity/100;
-            document.body.appendChild(layer);
+  setCookie:function(name, value){
+    document.cookie = name+"=" + value + ";path=/"
+  }
 
-            var superlayer=document.createElement('div');
-            superlayer.id='s_'+divid;
-            superlayer.style.backgroundColor='white';
-            superlayer.style.position='absolute';
-            superlayer.style.top=100;
-            superlayer.style.left=50;
-            superlayer.style.zIndex=1001;
-            superlayer.innerHTML='<input type="button" value="uncover" onclick="removeCoverDiv(\'cover01\');" />';
-            document.body.appendChild(superlayer);
-        }
-}
-
-    
-    
-/*function removeCoverDiv(divid) {
+  ,removeCoverDiv:function(divid) {
     var layer=document.getElementById(divid);
     var superlayer=document.getElementById('s_'+divid);
     if(layer && superlayer) {
+    //if(superlayer) {
         document.body.removeChild(superlayer);
         document.body.removeChild(layer);
-    }
-}
+    }            
+  }
 
-function generateCoverDiv(divid, bgcolor, opacity) {
+  ,generateCoverDiv:function(divid, bgcolor, opacity, imgsrc, width, height, imgclosing) {
     var layer=document.createElement('div');
     layer.id=divid;
     layer.style.width='100%';
@@ -244,14 +203,34 @@ function generateCoverDiv(divid, bgcolor, opacity) {
     layer.style.filter='alpha(opacity='+opacity+')';
     layer.style.opacity=opacity/100;
     document.body.appendChild(layer);
-
+    
+    var cwidth=width+50;
+    var cheight=height+50;
     var superlayer=document.createElement('div');
     superlayer.id='s_'+divid;
-    superlayer.style.backgroundColor='white';
-    superlayer.style.position='absolute';
-    superlayer.style.top=100;
-    superlayer.style.left=50;
     superlayer.style.zIndex=1001;
-    superlayer.innerHTML='<input type="button" value="uncover" onclick="removeCoverDiv(\'cover01\');" />';
+    //superlayer.style.backgroundColor=bgcolor;
+    //superlayer.style.filter='alpha(opacity='+opacity+')';    
+    //superlayer.style.opacity=opacity/100;
+    superlayer.style.position='absolute';
+    superlayer.style.styleFloat='left';
+    superlayer.style.top='50%';
+    superlayer.style.left='50%';    
+    superlayer.style.marginLeft=-cwidth/2+'px';
+    superlayer.style.marginTop=-cheight/2+'px';
+    superlayer.style.width=cwidth+'px';
+    superlayer.style.height=cheight+'px';
+
+    superlayer.innerHTML='<input type="image" src="'+imgclosing+'" name="cancel" id="cancel" onclick="simpleGallery.routines.removeCoverDiv(\'cover01\');"/><br /><br />';
+    
+    var foto=document.createElement('img');
+    foto.src=imgsrc;
+    foto.width=width;
+    foto.height=height;
+    foto.border='2px solid #FFFFCC'
+    superlayer.appendChild(foto);
+
     document.body.appendChild(superlayer);
-}*/
+  }
+}
+
