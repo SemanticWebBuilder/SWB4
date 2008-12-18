@@ -9,7 +9,7 @@ import org.semanticwb.*;
 import org.semanticwb.platform.*;
 import org.semanticwb.model.GenericIterator;
 
-public class ObjectBehaviorBase extends SWBClass implements Iconable,Descriptiveable,Sortable
+public class ObjectBehaviorBase extends SWBClass implements Sortable,Descriptiveable,Iconable
 {
 
     public ObjectBehaviorBase(SemanticObject base)

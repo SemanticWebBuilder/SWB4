@@ -17,13 +17,23 @@ public class SelectOneBase extends SWBFormElement
         super(base);
     }
 
-    public boolean isBlankSuport()
+    public boolean isGlobalScope()
     {
-        return getSemanticObject().getBooleanProperty(vocabulary.swbxf_selectOneBlankSuport);
+        return getSemanticObject().getBooleanProperty(vocabulary.swbxf_so_globalScope);
     }
 
-    public void setBlankSuport(boolean selectOneBlankSuport)
+    public void setGlobalScope(boolean so_globalScope)
     {
-        getSemanticObject().setBooleanProperty(vocabulary.swbxf_selectOneBlankSuport, selectOneBlankSuport);
+        getSemanticObject().setBooleanProperty(vocabulary.swbxf_so_globalScope, so_globalScope);
+    }
+
+    public boolean isBlankSuport()
+    {
+        return getSemanticObject().getBooleanProperty(vocabulary.swbxf_so_blankSuport);
+    }
+
+    public void setBlankSuport(boolean so_blankSuport)
+    {
+        getSemanticObject().setBooleanProperty(vocabulary.swbxf_so_blankSuport, so_blankSuport);
     }
 }

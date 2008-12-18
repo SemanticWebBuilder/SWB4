@@ -9,7 +9,7 @@ import org.semanticwb.*;
 import org.semanticwb.platform.*;
 import org.semanticwb.model.GenericIterator;
 
-public class CommunityBase extends SWBClass implements Activeable,Traceable,Descriptiveable
+public class CommunityBase extends SWBClass implements Descriptiveable,Traceable,Activeable
 {
 
     public CommunityBase(SemanticObject base)

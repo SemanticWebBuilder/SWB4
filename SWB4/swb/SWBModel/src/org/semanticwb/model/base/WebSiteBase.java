@@ -254,30 +254,36 @@ public class WebSiteBase extends SWBModel implements Versionable,Descriptiveable
         getSemanticObject().setProperty(vocabulary.swb_description, description, lang);
     }
 
-    public Community getCommunity(String id)
+    public Role getRole(String id)
     {
-        return (Community)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.swb_Community),vocabulary.swb_Community);
+        return (Role)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.swb_Role),vocabulary.swb_Role);
     }
 
-    public Iterator<Community> listCommunitys()
+    public Iterator<Role> listRoles()
     {
         Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
-        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.swb_Community.getOntClass());
-        return new GenericIterator<Community>(Community.class, stit, true);
+        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.swb_Role.getOntClass());
+        return new GenericIterator<Role>(Role.class, stit, true);
     }
 
-    public Community createCommunity(String id)
+    public Role createRole(String id)
     {
-        return (Community)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, vocabulary.swb_Community), vocabulary.swb_Community);
+        return (Role)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, vocabulary.swb_Role), vocabulary.swb_Role);
     }
 
-    public void removeCommunity(String id)
+    public Role createRole()
     {
-        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.swb_Community));
+        long id=SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+vocabulary.swb_Role.getName());
+        return createRole(""+id);
+    } 
+
+    public void removeRole(String id)
+    {
+        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.swb_Role));
     }
-    public boolean hasCommunity(String id)
+    public boolean hasRole(String id)
     {
-        return (getCommunity(id)!=null);
+        return (getRole(id)!=null);
     }
 
     public PortletType getPortletType(String id)
@@ -698,6 +704,38 @@ public class WebSiteBase extends SWBModel implements Versionable,Descriptiveable
         return (getPortletRef(id)!=null);
     }
 
+    public Permission getPermission(String id)
+    {
+        return (Permission)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.swb_Permission),vocabulary.swb_Permission);
+    }
+
+    public Iterator<Permission> listPermissions()
+    {
+        Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
+        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.swb_Permission.getOntClass());
+        return new GenericIterator<Permission>(Permission.class, stit, true);
+    }
+
+    public Permission createPermission(String id)
+    {
+        return (Permission)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, vocabulary.swb_Permission), vocabulary.swb_Permission);
+    }
+
+    public Permission createPermission()
+    {
+        long id=SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+vocabulary.swb_Permission.getName());
+        return createPermission(""+id);
+    } 
+
+    public void removePermission(String id)
+    {
+        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.swb_Permission));
+    }
+    public boolean hasPermission(String id)
+    {
+        return (getPermission(id)!=null);
+    }
+
     public Template getTemplate(String id)
     {
         return (Template)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.swb_Template),vocabulary.swb_Template);
@@ -760,6 +798,32 @@ public class WebSiteBase extends SWBModel implements Versionable,Descriptiveable
     public boolean hasPFlow(String id)
     {
         return (getPFlow(id)!=null);
+    }
+
+    public UserGroup getUserGroup(String id)
+    {
+        return (UserGroup)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.swb_UserGroup),vocabulary.swb_UserGroup);
+    }
+
+    public Iterator<UserGroup> listUserGroups()
+    {
+        Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
+        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.swb_UserGroup.getOntClass());
+        return new GenericIterator<UserGroup>(UserGroup.class, stit, true);
+    }
+
+    public UserGroup createUserGroup(String id)
+    {
+        return (UserGroup)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, vocabulary.swb_UserGroup), vocabulary.swb_UserGroup);
+    }
+
+    public void removeUserGroup(String id)
+    {
+        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.swb_UserGroup));
+    }
+    public boolean hasUserGroup(String id)
+    {
+        return (getUserGroup(id)!=null);
     }
 
     public TemplateRef getTemplateRef(String id)
@@ -882,5 +946,31 @@ public class WebSiteBase extends SWBModel implements Versionable,Descriptiveable
     public boolean hasPortletSubType(String id)
     {
         return (getPortletSubType(id)!=null);
+    }
+
+    public Community getCommunity(String id)
+    {
+        return (Community)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.swb_Community),vocabulary.swb_Community);
+    }
+
+    public Iterator<Community> listCommunitys()
+    {
+        Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
+        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.swb_Community.getOntClass());
+        return new GenericIterator<Community>(Community.class, stit, true);
+    }
+
+    public Community createCommunity(String id)
+    {
+        return (Community)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, vocabulary.swb_Community), vocabulary.swb_Community);
+    }
+
+    public void removeCommunity(String id)
+    {
+        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.swb_Community));
+    }
+    public boolean hasCommunity(String id)
+    {
+        return (getCommunity(id)!=null);
     }
 }

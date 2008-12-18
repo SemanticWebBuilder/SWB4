@@ -9,7 +9,7 @@ import org.semanticwb.*;
 import org.semanticwb.platform.*;
 import org.semanticwb.model.GenericIterator;
 
-public class IPFilterBase extends SWBClass implements Traceable,Descriptiveable,Activeable
+public class IPFilterBase extends SWBClass implements Activeable,Descriptiveable,Traceable
 {
 
     public IPFilterBase(SemanticObject base)

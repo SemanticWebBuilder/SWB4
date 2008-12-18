@@ -9,7 +9,7 @@ import org.semanticwb.*;
 import org.semanticwb.platform.*;
 import org.semanticwb.model.GenericIterator;
 
-public class TemplateRefBase extends Reference implements Deleteable,Activeable,Priorityable,Inheritable
+public class TemplateRefBase extends Reference implements Inheritable,Priorityable,Activeable,Deleteable
 {
 
     public TemplateRefBase(SemanticObject base)

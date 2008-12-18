@@ -67,8 +67,8 @@ public class PermissionBase extends SWBClass implements Descriptiveable
         getSemanticObject().setProperty(vocabulary.swb_description, description, lang);
     }
 
-    public UserRepository getUserRepository()
+    public WebSite getWebSite()
     {
-        return new UserRepository(getSemanticObject().getModel().getModelObject());
+        return new WebSite(getSemanticObject().getModel().getModelObject());
     }
 }

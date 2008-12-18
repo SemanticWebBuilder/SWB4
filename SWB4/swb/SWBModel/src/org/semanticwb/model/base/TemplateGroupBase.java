@@ -9,7 +9,7 @@ import org.semanticwb.*;
 import org.semanticwb.platform.*;
 import org.semanticwb.model.GenericIterator;
 
-public class TemplateGroupBase extends SWBClass implements Traceable,Descriptiveable
+public class TemplateGroupBase extends SWBClass implements Descriptiveable,Traceable
 {
 
     public TemplateGroupBase(SemanticObject base)

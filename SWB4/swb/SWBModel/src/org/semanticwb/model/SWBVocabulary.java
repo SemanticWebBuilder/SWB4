@@ -290,7 +290,8 @@ public class SWBVocabulary
     public final SemanticProperty swb_hasWebPageVirtualParent;
     public final SemanticProperty swb_webPageURL;
     public final SemanticProperty swb_webPageParent;
-    public final SemanticProperty swbxf_selectOneBlankSuport;
+    public final SemanticProperty swbxf_so_globalScope;
+    public final SemanticProperty swbxf_so_blankSuport;
     public final SemanticProperty jcr_root;
 
 
@@ -579,7 +580,8 @@ public class SWBVocabulary
         swb_hasWebPageVirtualParent=vocabulary.getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageVirtualParent");
         swb_webPageURL=vocabulary.getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#webPageURL");
         swb_webPageParent=vocabulary.getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#webPageParent");
-        swbxf_selectOneBlankSuport=vocabulary.getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneBlankSuport");
+        swbxf_so_globalScope=vocabulary.getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#so_globalScope");
+        swbxf_so_blankSuport=vocabulary.getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#so_blankSuport");
         jcr_root=vocabulary.getSemanticProperty("http://www.jcp.org/jcr/1.0#root");
     }
 

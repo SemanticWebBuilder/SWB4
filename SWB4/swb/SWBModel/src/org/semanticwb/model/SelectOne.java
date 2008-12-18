@@ -87,7 +87,7 @@ public class SelectOne extends SelectOneBase
                 if(isBlankSuport())ret+="<option value=\"\"></option>";
                 SemanticClass cls=prop.getRangeClass();
                 Iterator<SemanticObject> it=null;
-                if(cls.isSWBModel())
+                if(isGlobalScope())
                 {
                     it=cls.listInstances(true);
                 }else

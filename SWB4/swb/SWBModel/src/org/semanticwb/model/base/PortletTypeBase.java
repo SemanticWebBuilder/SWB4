@@ -9,7 +9,7 @@ import org.semanticwb.*;
 import org.semanticwb.platform.*;
 import org.semanticwb.model.GenericIterator;
 
-public class PortletTypeBase extends SWBClass implements Traceable,Descriptiveable
+public class PortletTypeBase extends SWBClass implements Descriptiveable,Traceable
 {
 
     public PortletTypeBase(SemanticObject base)

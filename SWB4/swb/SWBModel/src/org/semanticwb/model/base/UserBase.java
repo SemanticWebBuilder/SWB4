@@ -9,7 +9,7 @@ import org.semanticwb.*;
 import org.semanticwb.platform.*;
 import org.semanticwb.model.GenericIterator;
 
-public class UserBase extends SWBClass implements Roleable,Traceable,Activeable,Calendarable
+public class UserBase extends SWBClass implements Calendarable,Activeable,Traceable,Roleable
 {
 
     public UserBase(SemanticObject base)

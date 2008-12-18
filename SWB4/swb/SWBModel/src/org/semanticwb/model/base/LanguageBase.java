@@ -9,7 +9,7 @@ import org.semanticwb.*;
 import org.semanticwb.platform.*;
 import org.semanticwb.model.GenericIterator;
 
-public class LanguageBase extends SWBClass implements Traceable,Descriptiveable
+public class LanguageBase extends SWBClass implements Descriptiveable,Traceable
 {
 
     public LanguageBase(SemanticObject base)

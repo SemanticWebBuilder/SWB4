@@ -9,7 +9,7 @@ import org.semanticwb.*;
 import org.semanticwb.platform.*;
 import org.semanticwb.model.GenericIterator;
 
-public class DnsBase extends SWBClass implements Traceable,Descriptiveable,WebPageable
+public class DnsBase extends SWBClass implements WebPageable,Descriptiveable,Traceable
 {
 
     public DnsBase(SemanticObject base)

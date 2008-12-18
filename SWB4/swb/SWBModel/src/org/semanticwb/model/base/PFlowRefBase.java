@@ -9,7 +9,7 @@ import org.semanticwb.*;
 import org.semanticwb.platform.*;
 import org.semanticwb.model.GenericIterator;
 
-public class PFlowRefBase extends Reference implements Deleteable,Activeable
+public class PFlowRefBase extends Reference implements Activeable,Deleteable
 {
 
     public PFlowRefBase(SemanticObject base)
