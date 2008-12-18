@@ -906,4 +906,10 @@ public class WB4Impress extends OfficeDocument
     {
         return OPENOFFICE_EXTENSION;
     }
+
+    @Override
+    public String getPublicationExtension()
+    {
+        return PPT_EXTENSION;
+    }
 }
