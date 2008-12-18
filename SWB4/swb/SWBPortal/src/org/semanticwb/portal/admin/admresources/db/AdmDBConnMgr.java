@@ -794,7 +794,7 @@ public class AdmDBConnMgr {
                     }
                 }
             }
-            System.out.println("query loadXmlRes:" + query);
+            //System.out.println("query loadXmlRes:" + query);
             PreparedStatement st = con.prepareStatement(query);
             st.setString(1, base.getId());
             st.setString(2, base.getWebSiteId());
@@ -846,7 +846,7 @@ public class AdmDBConnMgr {
         } catch (Exception e) {
             log.error(e);
         }
-        System.out.println("loadxml:" + loadxml);
+        //System.out.println("loadxml:" + loadxml);
         return loadxml;
     }
 
