@@ -124,6 +124,7 @@ public class OpenResultProducer implements WizardResultProducer
                         properties.put(OfficeDocument.CONTENT_ID_NAME, versioninfo.contentId);
                         properties.put(OfficeDocument.WORKSPACE_ID_NAME, wizardData.get(Search.WORKSPACE).toString());
                         document.saveCustomProperties(properties);
+                        //document.save();
                         progress.setProgress("Documento completo", 2, 3);
                     }
                 }
