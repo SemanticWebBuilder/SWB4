@@ -486,8 +486,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                     read = in.read(buffer);
                 }
                 Part part = new Part(out.toByteArray(), file, file);
-                HashSet parts = new HashSet();
-                parts.add(part);
+                this.responseParts.add(part);
                 return file;
             }
             else
