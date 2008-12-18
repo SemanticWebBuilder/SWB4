@@ -227,11 +227,11 @@ public abstract class OfficeApplication
 
     }
 
-    public final void open()
+    public final void open(DocumentType type)
     {
         OpenResultProducer resultProducer = new OpenResultProducer(this);
-        Class[] clazz = new Class[]{Search.class, SelectVersionToOpen.class, SelectDirectory.class};
-        Wizard wiz = WizardPage.createWizard("Asistente de apertura de contenido", clazz, resultProducer);
+        WizardPage[] clazz = new WizardPage[]{new Search(type), new SelectVersionToOpen(), new SelectDirectory()};
+        Wizard wiz = WizardPage.createWizard("Asistente de apertura de contenido", clazz, resultProducer);        
         wiz.show();
     }
 
