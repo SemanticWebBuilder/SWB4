@@ -687,4 +687,10 @@ public class WB4Calc extends OfficeDocument
     {
         return OPENOFFICE_EXTENSION;
     }
+
+    @Override
+    public String getPublicationExtension()
+    {
+        return EXCEL_EXTENSION;
+    }
 }
