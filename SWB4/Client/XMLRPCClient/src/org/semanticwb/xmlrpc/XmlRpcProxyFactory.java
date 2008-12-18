@@ -103,7 +103,11 @@ public class XmlRpcProxyFactory implements java.lang.reflect.InvocationHandler, 
             throws Throwable
     {
         Object ObjectToreturn = null;
-        if ( m.getName().equals("getWebAddress") && args.length == 0 )
+        if ( m.getName().equals("getResponseParts") && args==null)
+        {
+            ObjectToreturn = this.getResponseParts();
+        }
+        else if ( m.getName().equals("getWebAddress") && args.length == 0 )
         {
             ObjectToreturn = this.webAddress;
         }
