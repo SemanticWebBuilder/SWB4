@@ -105,8 +105,8 @@ public class ImageGallery extends GenericAdmResource {
             ret.append("		//i: integer reflecting current image within collection being shown (0=1st image, 1=2nd etc) \n");
             ret.append("	} \n");            
             ret.append("        ,fullwidth:"+base.getAttribute("fullwidth","350")+" \n");
-            ret.append("        ,fullheight:"+base.getAttribute("fullheight","280")+" \n");
-            //ret.append("        ,imageClosing: '/swb/swbadmin/js/jquery/themes/cancel.png'");
+            ret.append("        ,fullheight:"+base.getAttribute("fullheight","280")+" \n");        
+            ret.append("        ,imageClosing: '/swb/swbadmin/js/jquery/themes/cancel.png'");
             ret.append("    } \n");
             ret.append("); \n");            
             ret.append("</script> \n");
