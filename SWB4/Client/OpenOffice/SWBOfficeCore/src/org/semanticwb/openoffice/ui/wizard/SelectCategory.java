@@ -292,7 +292,7 @@ private void jButtonDeletCategoryActionPerformed(java.awt.event.ActionEvent evt)
         }
         else
         {
-            JOptionPane.showMessageDialog(this, "No se puede borrar la categoria por que tiene contenidos", "Borrar categoria", JOptionPane.ERROR | JOptionPane.YES_NO_OPTION);
+            JOptionPane.showMessageDialog(this, "No se puede borrar la categoria por que tiene contenidos", getDescription(), JOptionPane.ERROR | JOptionPane.YES_NO_OPTION);
         }
     }
     catch (Exception e)
