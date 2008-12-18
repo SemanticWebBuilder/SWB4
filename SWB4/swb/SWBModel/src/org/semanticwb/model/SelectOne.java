@@ -89,7 +89,7 @@ public class SelectOne extends SelectOneBase
                 Iterator<SemanticObject> it=null;
                 if(isGlobalScope())
                 {
-                    it=cls.listInstances(true);
+                    it=cls.listInstances();
                 }else
                 {
                     it=obj.getModel().listInstancesOfClass(cls);
