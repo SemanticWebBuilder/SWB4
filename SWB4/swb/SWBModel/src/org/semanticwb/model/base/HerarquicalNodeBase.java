@@ -9,7 +9,7 @@ import org.semanticwb.*;
 import org.semanticwb.platform.*;
 import org.semanticwb.model.GenericIterator;
 
-public class HerarquicalNodeBase extends SWBClass implements Sortable,Iconable,Descriptiveable
+public class HerarquicalNodeBase extends SWBClass implements Descriptiveable,Iconable,Sortable
 {
 
     public HerarquicalNodeBase(SemanticObject base)

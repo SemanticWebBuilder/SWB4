@@ -9,7 +9,7 @@ import org.semanticwb.*;
 import org.semanticwb.platform.*;
 import org.semanticwb.model.GenericIterator;
 
-public class VersionInfoBase extends SWBClass implements Valueable,Traceable
+public class VersionInfoBase extends SWBClass implements Traceable,Valueable
 {
 
     public VersionInfoBase(SemanticObject base)

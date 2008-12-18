@@ -9,7 +9,7 @@ import org.semanticwb.*;
 import org.semanticwb.platform.*;
 import org.semanticwb.model.GenericIterator;
 
-public class DeviceBase extends SWBClass implements Traceable,Descriptiveable,Valueable
+public class DeviceBase extends SWBClass implements Valueable,Descriptiveable,Traceable
 {
 
     public DeviceBase(SemanticObject base)

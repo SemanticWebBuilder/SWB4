@@ -129,64 +129,6 @@ public class UserRepositoryBase extends SWBModel implements Descriptiveable,Trac
         getSemanticObject().setProperty(vocabulary.swb_description, description, lang);
     }
 
-    public Permission getPermission(String id)
-    {
-        return (Permission)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.swb_Permission),vocabulary.swb_Permission);
-    }
-
-    public Iterator<Permission> listPermissions()
-    {
-        Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
-        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.swb_Permission.getOntClass());
-        return new GenericIterator<Permission>(Permission.class, stit, true);
-    }
-
-    public Permission createPermission(String id)
-    {
-        return (Permission)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, vocabulary.swb_Permission), vocabulary.swb_Permission);
-    }
-
-    public Permission createPermission()
-    {
-        long id=SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+vocabulary.swb_Permission.getName());
-        return createPermission(""+id);
-    } 
-
-    public void removePermission(String id)
-    {
-        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.swb_Permission));
-    }
-    public boolean hasPermission(String id)
-    {
-        return (getPermission(id)!=null);
-    }
-
-    public UserGroup getUserGroup(String id)
-    {
-        return (UserGroup)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.swb_UserGroup),vocabulary.swb_UserGroup);
-    }
-
-    public Iterator<UserGroup> listUserGroups()
-    {
-        Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
-        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.swb_UserGroup.getOntClass());
-        return new GenericIterator<UserGroup>(UserGroup.class, stit, true);
-    }
-
-    public UserGroup createUserGroup(String id)
-    {
-        return (UserGroup)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, vocabulary.swb_UserGroup), vocabulary.swb_UserGroup);
-    }
-
-    public void removeUserGroup(String id)
-    {
-        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.swb_UserGroup));
-    }
-    public boolean hasUserGroup(String id)
-    {
-        return (getUserGroup(id)!=null);
-    }
-
     public User getUser(String id)
     {
         return (User)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.swb_User),vocabulary.swb_User);
@@ -217,37 +159,5 @@ public class UserRepositoryBase extends SWBModel implements Descriptiveable,Trac
     public boolean hasUser(String id)
     {
         return (getUser(id)!=null);
-    }
-
-    public Role getRole(String id)
-    {
-        return (Role)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.swb_Role),vocabulary.swb_Role);
-    }
-
-    public Iterator<Role> listRoles()
-    {
-        Property rdf=getSemanticObject().getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
-        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, vocabulary.swb_Role.getOntClass());
-        return new GenericIterator<Role>(Role.class, stit, true);
-    }
-
-    public Role createRole(String id)
-    {
-        return (Role)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, vocabulary.swb_Role), vocabulary.swb_Role);
-    }
-
-    public Role createRole()
-    {
-        long id=SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+vocabulary.swb_Role.getName());
-        return createRole(""+id);
-    } 
-
-    public void removeRole(String id)
-    {
-        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,vocabulary.swb_Role));
-    }
-    public boolean hasRole(String id)
-    {
-        return (getRole(id)!=null);
     }
 }

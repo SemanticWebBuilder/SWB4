@@ -12,13 +12,21 @@ public class ObjectBehavior extends ObjectBehaviorBase
         super(base);
     }
 
+
     @Override
     public String getURL()
     {
         String ret=super.getURL();
-        ret=SWBUtils.TEXT.replaceAll(ret, "{contextPath}", SWBPlatform.getContextPath());
         return ret;
     }
+
+    public String getParsedURL()
+    {
+        String ret=super.getURL();
+        if(ret!=null)ret=SWBUtils.TEXT.replaceAll(ret, "{contextPath}", SWBPlatform.getContextPath());
+        return ret;
+    }
+
 
 
 }

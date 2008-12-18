@@ -9,7 +9,7 @@ import org.semanticwb.*;
 import org.semanticwb.platform.*;
 import org.semanticwb.model.GenericIterator;
 
-public class UserGroupBase extends SWBClass implements Traceable,Descriptiveable
+public class UserGroupBase extends SWBClass implements Descriptiveable,Traceable
 {
 
     public UserGroupBase(SemanticObject base)
@@ -146,8 +146,8 @@ public class UserGroupBase extends SWBClass implements Traceable,Descriptiveable
         getSemanticObject().setProperty(vocabulary.swb_description, description, lang);
     }
 
-    public UserRepository getUserRepository()
+    public WebSite getWebSite()
     {
-        return new UserRepository(getSemanticObject().getModel().getModelObject());
+        return new WebSite(getSemanticObject().getModel().getModelObject());
     }
 }
