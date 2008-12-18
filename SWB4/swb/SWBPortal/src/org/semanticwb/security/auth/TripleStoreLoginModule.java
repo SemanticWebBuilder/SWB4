@@ -80,7 +80,7 @@ public class TripleStoreLoginModule implements LoginModule {
         //TODO Checar lo del repositorio de usuarios
         if (null==principal) throw new LoginException("User inexistent");
         
-        System.out.println(principal.getClass().getName());
+        //System.out.println(principal.getClass().getName());
         if (!principal.isActive()) throw new LoginException("User innactive");
         if (null==principal.getUsrPassword()) {
             if (null!=credential) throw new LoginException("Password Mistmatch");

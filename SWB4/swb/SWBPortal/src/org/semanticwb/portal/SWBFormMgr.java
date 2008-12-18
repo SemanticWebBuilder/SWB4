@@ -370,7 +370,7 @@ public class SWBFormMgr
             DisplayProperty disp=new DisplayProperty(obj);
             ele=disp.getFormElement();
         }
-        System.out.println("obj:"+obj+" prop:"+prop+" ele:"+ele);
+        //System.out.println("obj:"+obj+" prop:"+prop+" ele:"+ele);
         if(ele==null)ele=new GenericFormElement();
         return ele;
     }

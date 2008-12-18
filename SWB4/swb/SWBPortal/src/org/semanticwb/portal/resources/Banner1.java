@@ -35,7 +35,7 @@ public class Banner1 extends GenericXformsResource {
         StringBuffer ret = new StringBuffer("");
         Portlet base = getResourceBase();
         try {
-            System.out.println("Entra Banne1Jorge:" + base.getXml());
+            //System.out.println("Entra Banne1Jorge:" + base.getXml());
             String local = base.getAttribute("txtLocal", "0").trim();
             if (local.equals("0")) {
                 String img = base.getAttribute("wbFile_img", "").trim();
@@ -157,7 +157,7 @@ public class Banner1 extends GenericXformsResource {
                     }
                 }
                 String xml = SWBUtils.XML.domToXml(dom);
-                System.out.println("Entra Admin BannerJ1Sip:" + xml);
+                //System.out.println("Entra Admin BannerJ1Sip:" + xml);
                 response.getWriter().print(xml);
             }
         } catch (Exception e) {
@@ -189,7 +189,7 @@ public class Banner1 extends GenericXformsResource {
     Node nodeFile=nImg.getAttributes().getNamedItem("file");
     nodeFile.setNodeValue(base.getAttribute("img", "").trim());
     String xml=SWBUtils.XML.domToXml(dom);
-    System.out.println("Entra a doLoadInstanceJ-Banner1:"+xml);
+    //System.out.println("Entra a doLoadInstanceJ-Banner1:"+xml);
     response.getWriter().print(xml);                    
     }
     }

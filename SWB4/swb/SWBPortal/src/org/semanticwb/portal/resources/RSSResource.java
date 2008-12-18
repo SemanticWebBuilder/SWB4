@@ -76,10 +76,10 @@ public class RSSResource extends GenericAdmResource
         }catch(Exception e) { 
             log.error("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);
         }
-        System.out.println("******************************* veamos");
+        //System.out.println("******************************* veamos");
         if(!"".equals(base.getAttribute("template","").trim()))
         {
-            System.out.println("******************************* por el primer if");
+            //System.out.println("******************************* por el primer if");
             try { 
                 tpl = SWBUtils.XML.loadTemplateXSLT(SWBPlatform.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim())); 
             }catch(Exception e) { 
@@ -88,7 +88,7 @@ public class RSSResource extends GenericAdmResource
         }
         if(tpl==null)
         {
-            System.out.println("******************************* por el segundo if");
+            //System.out.println("******************************* por el segundo if");
             try { 
                 tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getAdminFileStream("/swbadmin/xsl/RSSResource/RSSResource.xslt")); 
             } catch(Exception e) { 
