@@ -28,6 +28,7 @@ import org.semanticwb.openoffice.Configuration;
 import org.semanticwb.openoffice.ConfigurationListURI;
 import org.semanticwb.openoffice.DocumentType;
 import org.semanticwb.openoffice.ErrorLog;
+import org.semanticwb.openoffice.OfficeDocument;
 import org.semanticwb.openoffice.SaveDocumentFormat;
 import org.semanticwb.openoffice.WBException;
 import org.semanticwb.openoffice.writer.WB4WriterApplication;
@@ -278,8 +279,8 @@ public class WB4WriterTest
     @Test    
     public void openTest()
     {
-        WB4WriterApplication writer = new WB4WriterApplication(this.xContext);
-        writer.open();
+        WB4WriterApplication writer = new WB4WriterApplication(this.xContext);        
+        writer.open(DocumentType.WORD);
 
     }
 
