@@ -6,13 +6,18 @@
 
 package org.semanticwb.openoffice.ui.wizard;
 
+import java.util.Map;
+import javax.swing.JOptionPane;
+import org.netbeans.spi.wizard.Wizard;
 import org.netbeans.spi.wizard.WizardPage;
+import org.netbeans.spi.wizard.WizardPanelNavResult;
 
 /**
  *
  * @author  victor.lorenzana
  */
 public class SelectDirectory extends WizardPage {
+    public static final String DIRECTORY = "dir";
     
     /** Creates new form SelectDirectory */
     public SelectDirectory() {
@@ -23,6 +28,22 @@ public class SelectDirectory extends WizardPage {
         return "Directorio de almacenamiento";
     }
     
+    @Override
+    public WizardPanelNavResult allowNext(String arg, Map map, Wizard wizard)
+    {
+        WizardPanelNavResult result = WizardPanelNavResult.PROCEED;
+        if (!this.jFileChooser1.getSelectedFile().exists())
+        {
+            JOptionPane.showMessageDialog(this, "!Debe indicar un directorio!", SelectDirectory.getDescription(), JOptionPane.ERROR_MESSAGE);
+            this.jFileChooser1.requestFocus();            
+            result = WizardPanelNavResult.REMAIN_ON_PAGE;
+        }
+        else
+        {
+            map.put(DIRECTORY, this.jFileChooser1.getSelectedFile());
+        }
+        return result;
+    }
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
