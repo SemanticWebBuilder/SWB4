@@ -172,7 +172,7 @@ public class SWBAProperties extends GenericResource {
 
             out.println("<div class=\"swbform\">");
             out.println("<fieldset>");
-            out.println("<table cellpadding=10 cellspacing=0 width=100% >");
+            out.println("<table cellpadding=10 cellspacing=0 >");
             out.println("<thead>");
             out.println("<tr>");
             out.println("<th >"+paramRequest.getLocaleString("msgRemove")+"</th>");
@@ -198,27 +198,30 @@ public class SWBAProperties extends GenericResource {
                 SWBResourceURL urlRemove = paramRequest.getActionUrl();
                 urlRemove.setParameter("act","remove");
                 urlRemove.setParameter("id",key);
-                rowColor="#EFEDEC";
-                if(!cambiaColor) rowColor="#FFFFFF";
-                cambiaColor = !(cambiaColor);
-                out.println("<tr bgcolor=\""+rowColor+"\">");
-                out.println("<td class=\"valores\">");
+//                rowColor="#EFEDEC";
+//                if(!cambiaColor) rowColor="#FFFFFF";
+//                cambiaColor = !(cambiaColor);
+                out.println("<tr >"); //bgcolor=\""+rowColor+"\"
+                out.println("<td >");
                 if(!prop.isReadOnly())out.println("<a class=\"link\" href=\""+urlRemove.toString()+"\" onclick=\"if(confirm('"+paramRequest.getLocaleString("msgAlertRemoveProperty")+"?')) { return(true);} else {return(false);}\"><img border=0 src=\""+SWBPlatform.getContextPath()+"/swbadmin/images/delete.gif\" alt=\""+paramRequest.getLocaleString("msgLinkRemove")+"\"></a>");
                 out.println("</td>");
-                out.println("<td class=\"valores\">");
+                out.println("<td >");
                 if(!prop.isReadOnly())out.println("<a class=\"link\" href=\""+urlEdit.toString()+"\">"+key+"</a>");
                 else out.println(key);
                 out.println("</td>");
-                out.println("<td class=\"valores\">"+value+"</td>");
-                out.println("<td class=\"valores\"><PRE class=\"valores\">"+comment+"</PRE></td>");
+                out.println("<td >"+value+"</td>");
+                out.println("<td ><PRE >"+comment+"</PRE></td>");
                 
                 out.println("</tr>");
             }
             out.println("</tbody>");
-            out.println("<tfoot>");
-            out.println("<tr>");
-            out.println("<td colspan=4 align=right><HR size=\"1\" noshade>");
-            
+            out.println("</table>");
+            out.println("</fieldset>");
+            out.println("<fieldset>");
+//            out.println("<tfoot>");
+//            out.println("<tr>");
+//            out.println("<td colspan=4 ><HR size=\"1\" noshade>");
+//
             if(prop.hasChangeIt()){
                 SWBResourceURL urlRoll = paramRequest.getActionUrl();
                 urlRoll.setParameter("act","rollback");
@@ -235,10 +238,10 @@ public class SWBAProperties extends GenericResource {
             urlAdd.setMode(paramRequest.Mode_EDIT);
             urlAdd.setParameter("act","add");
             if(!prop.isReadOnly())out.println("<button dojoType=\"dijit.form.Button\" type=button name=\""+base.getId()+"/btnAdd\" onclick=\"window.location='"+urlAdd.toString()+"';\">"+paramRequest.getLocaleString("msgBtnAdd")+"</button>");
-            out.println("</td>");
-            out.println("</tr>");
-            out.println("</tfoot>");
-            out.println("</table>");
+//            out.println("</td>");
+//            out.println("</tr>");
+//            out.println("</tfoot>");
+//            out.println("</table>");
             out.println("</fieldset>");
             out.println("</div>");
         }
@@ -322,13 +325,14 @@ public class SWBAProperties extends GenericResource {
             out.println("    }              ");
             out.println("</script>");
 
-            SWBResourceURL urla = paramRequest.getRenderUrl();
-            urla.setMode(SWBResourceURL.Mode_VIEW);
-
-            out.println("<a href=\"#\" onclick=\"window.location='"+urla+"'\">view</a>");
+//            SWBResourceURL urla = paramRequest.getRenderUrl();
+//            urla.setMode(SWBResourceURL.Mode_VIEW);
+//
+//            out.println("<a href=\"#\" onclick=\"window.location='"+urla+"'\">view</a>");
+            out.println("<div class=\"swbform\">");
+            //out.println("	<legend> Properties file edition. "+fileSelected+"</legend>");
+            out.println("<form name=\"frmAdd\" method=post action=\""+paramRequest.getActionUrl().setAction("update").toString()+"\" onsubmit=\"return (valida(frmAdd));\" >");
             out.println("<fieldset>");
-            out.println("	<legend> Properties file edition. "+fileSelected+"</legend>");
-            out.println("<form name=\"frmAdd\" method=post action=\""+paramRequest.getActionUrl().setAction("update").toString()+"\" onsubmit=\"return (valida(frmAdd));\" class=\"swbform\">");
             out.println("<table cellpadding=10 cellspacing=0 width=100%>");
             out.println("<tr>");
             out.println("<td colspan=2 class=\"tabla\">"+msgTitle+"</td>");
@@ -345,20 +349,24 @@ public class SWBAProperties extends GenericResource {
             out.println("<td class=\"datos\" align=right width=150>"+paramRequest.getLocaleString("msgComment")+": </td>");
             out.println("<td class=\"valores\"><textarea class=\"campos\" cols=50 rows=10 name=comentario>"+strComment+"</textarea></td>");
             out.println("</tr>");
-            out.println("<tr>");
-            out.println("<td colspan=2 class=\"tabla\" align=\"right\"><HR size=\"1\" noshade>");
+            out.println("</table>");
+            out.println("</fieldset>");
+            out.println("<fieldset>");
+//            out.println("<tr>");
+//            out.println("<td colspan=2 class=\"tabla\" align=\"right\"><HR size=\"1\" noshade>");
             
             SWBResourceURL urlBack = paramRequest.getRenderUrl();
             urlBack.setMode(paramRequest.Mode_VIEW);
             
             out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\" name=\""+base.getId()+"/btnSend\" >"+paramRequest.getLocaleString("msgBtnSend")+"</button>");
             out.println("<button dojoType=\"dijit.form.Button\" type=\"button\" name=\""+base.getId()+"/btnCancel\" onclick=\"window.location='"+urlBack.toString()+"';\">"+paramRequest.getLocaleString("msgBtnCancel")+"</button>");
-            out.println("</td>");
-            out.println("</tr>");
-            out.println("</table>");
-            out.println("</form>");
+//            out.println("</td>");
+//            out.println("</tr>");
+//            out.println("</table>");
+            
             out.println("</fieldset>");
-
+            out.println("</form>");
+            out.println("</div>");
             
         }
     }
@@ -379,9 +387,10 @@ public class SWBAProperties extends GenericResource {
         PrintWriter out = response.getWriter();
         String fileSelect = "";
         if(base.getProperty("uptPropFile")!=null) fileSelect=base.getProperty("uptPropFile");
-        out.println("<form method=post action=\""+paramRequest.getActionUrl().setAction("uptPropFile").toString()+"\" class=\"swbform\">");
+        out.println("<div class=\"swbform\">");
+        out.println("<form method=post action=\""+paramRequest.getActionUrl().setAction("uptPropFile").toString()+"\" >");
         out.println("<fieldset>");
-        out.println("	<legend> Properties file edition. "+fileSelect+"</legend>");
+        //out.println("	<legend> Properties file edition. "+fileSelect+"</legend>");
         out.println("<table cellpadding=10 cellspacing=0 width=100%>");
         out.println("<tr>");
         out.println("<td colspan=2 class=\"tabla\">"+paramRequest.getLocaleString("msgSelectPropertyFile")+"</td>");
@@ -403,13 +412,17 @@ public class SWBAProperties extends GenericResource {
         out.println("</select>");
         out.println("</td>");
         out.println("</tr>");
-        out.println("<tr>");
-        out.println("<td colspan=2 class=\"tabla\" align=\"right\"><HR size=\"1\" noshade>");
-        out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\" name=\"btnSend\">"+paramRequest.getLocaleString("msgBtnSend")+"</button>");
-        out.println("</td>");
-        out.println("</tr>");
         out.println("</table>");
-        out.println("</form>");
+        out.println("</fieldset>");
+        out.println("<fieldset>");
+//        out.println("<tr>");
+//        out.println("<td colspan=2 class=\"tabla\" align=\"right\"><HR size=\"1\" noshade>");
+        out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\" name=\"btnSend\">"+paramRequest.getLocaleString("msgBtnSend")+"</button>");
+//        out.println("</td>");
+//        out.println("</tr>");
         out.println("</fielset>");
+        out.println("</form>");
+        out.println("</div>");
+       
     }
 }
