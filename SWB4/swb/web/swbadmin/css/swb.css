@@ -60,7 +60,11 @@ body .dojoSplitPane {
 .swbIconRole,
 .swbIconRoleU,
 .swbIconDnss,
-.swbIconDns
+.swbIconDns,
+.swbIconUserGroups,
+.swbIconUserGroup,
+.swbIconBehaviors,
+.swbIconBehavior
 {
 	background-repeat: no-repeat; 
 	width:16px;

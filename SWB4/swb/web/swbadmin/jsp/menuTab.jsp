@@ -1,7 +1,4 @@
-<%@page contentType="text/html"%>
-<%@page pageEncoding="ISO-8859-1"%>
-<%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.model.*,java.util.*,org.semanticwb.base.util.*"%>
-<%
+<%@page contentType="text/html"%><%@page pageEncoding="ISO-8859-1"%><%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.model.*,java.util.*,org.semanticwb.base.util.*"%><%
     String lang="es";
     response.setHeader("Cache-Control", "no-cache"); 
     response.setHeader("Pragma", "no-cache"); 
@@ -13,5 +10,4 @@
     SemanticClass cls=ont.getSemanticObjectClass(res);
     GenericObject obj=ont.getGenericObject(id,cls);
     //String title=obj.getSemanticObject().getProperty(SWBContext.getVocabulary().title);
-%>
-    <iframe dojoType="dijit.layout.ContentPane" src="<%=((WebPage)obj).getUrl()%>" width_="100%" height_="100%" frameborder="0" scrolling="yes"></iframe>
+%><iframe dojoType_="dijit.layout.ContentPane" style_="overflow:visible;" src="<%=((WebPage)obj).getUrl()%>" width="100%" height="100%" frameborder="0" scrolling="yes"></iframe>
