@@ -5,7 +5,6 @@
 package org.semanticwb.xmlrpc;
 
 import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
@@ -82,8 +81,8 @@ public abstract class XMLRPCServlet extends HttpServlet
                 Object[] parameters = deserializeRequest(xmlrpcDocument, methods);
                 Method method = getMethod(methodName, methods, parameters);
                 String objectName = method.getDeclaringClass().getName();
-                Object objResponse = execute(objectName, method, parameters, parts, request.getAttribute("user").toString(), request.getAttribute("password").toString());
-                Document docResponse = serializeResponse(objResponse);
+                Response objResponse = execute(objectName, method, parameters, parts, request.getAttribute("user").toString(), request.getAttribute("password").toString());
+                Document docResponse = serializeResponse(objResponse.getObject());
                 sendResponse(response, docResponse, objResponse);
 
             }
@@ -189,12 +188,9 @@ public abstract class XMLRPCServlet extends HttpServlet
         outp.output(requestDoc, out);
     }
 
-    private static void sendResponse(ServletResponse response, Document docResponse, Object objResponse) throws IOException
-    {
-        if (objResponse instanceof XmlRpcObject)
-        {
-            XmlRpcObject xmlobject = (XmlRpcObject) objResponse;
-            if (xmlobject.responseParts == null || xmlobject.responseParts.size() == 0)
+    private static void sendResponse(ServletResponse response, Document docResponse, Response objToResponse) throws IOException
+    {                   
+            if (objToResponse.getResponseParts() == null || objToResponse.getResponseParts().size() == 0)
             {
                 response.setContentType("text/xml");
                 ServletOutputStream out = response.getOutputStream();
@@ -208,7 +204,7 @@ public abstract class XMLRPCServlet extends HttpServlet
                 response.setContentType("multipart/form-data; boundary=" + boundary);
                 OutputStream out = response.getOutputStream();
                 sendXmlDocumentPart(docResponse, out);
-                for (Part attachment : xmlobject.responseParts)
+                for (Part attachment : objToResponse.getResponseParts())
                 {                    
                     sendPart(attachment.getContent(), attachment.getName(),attachment.getFileName(), out);
                 }
@@ -216,16 +212,7 @@ public abstract class XMLRPCServlet extends HttpServlet
                 out.flush();
                 out.close();
             }
-        }
-        else
-        {
-            response.setContentType("text/xml");
-            ServletOutputStream out = response.getOutputStream();
-            XMLOutputter xMLOutputter = new XMLOutputter();
-            xMLOutputter.output(docResponse, out);
-            out.flush();
-            out.close();
-        }
+       
     }
 
     private static void sendResponse(ServletResponse response, Document docResponse) throws IOException
@@ -248,7 +235,7 @@ public abstract class XMLRPCServlet extends HttpServlet
         return classFullPath;
     }
 
-    private Object execute(String objectName, Method method, Object[] parameters, Set<Part> parts, String user, String password) throws ClassNotFoundException, XmlRpcException, InstantiationException, IllegalAccessException, NoSuchMethodException
+    private Response execute(String objectName, Method method, Object[] parameters, Set<Part> parts, String user, String password) throws ClassNotFoundException, XmlRpcException, InstantiationException, IllegalAccessException, NoSuchMethodException
     {
         Class clazz = method.getDeclaringClass();
 
@@ -271,7 +258,16 @@ public abstract class XMLRPCServlet extends HttpServlet
         {
             Object objectToReturn = method.invoke(objToExecute, parameters);
             afterExecute(objToExecute);
-            return objectToReturn;
+            Response resp=null;
+            if(objToExecute instanceof XmlRpcObject)
+            {
+                resp=new Response(objectToReturn,((XmlRpcObject)objToExecute).responseParts);
+            }
+            else
+            {
+                resp=new Response(objectToReturn);
+            }
+            return resp;
         }
         catch (InvocationTargetException inte)
         {
