@@ -146,8 +146,8 @@ public class UserGroupBase extends SWBClass implements Descriptiveable,Traceable
         getSemanticObject().setProperty(vocabulary.swb_description, description, lang);
     }
 
-    public WebSite getWebSite()
+    public UserRepository getUserRepository()
     {
-        return new WebSite(getSemanticObject().getModel().getModelObject());
+        return new UserRepository(getSemanticObject().getModel().getModelObject());
     }
 }
