@@ -6,8 +6,13 @@
 package org.semanticwb.openoffice.ui.wizard;
 
 import java.awt.Cursor;
+import java.awt.event.KeyEvent;
+import java.util.Map;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import org.netbeans.spi.wizard.Wizard;
 import org.netbeans.spi.wizard.WizardPage;
+import org.netbeans.spi.wizard.WizardPanelNavResult;
 import org.semanticwb.office.interfaces.ContentInfo;
 import org.semanticwb.office.interfaces.VersionInfo;
 import org.semanticwb.openoffice.OfficeApplication;
@@ -18,6 +23,7 @@ import org.semanticwb.openoffice.OfficeApplication;
  */
 public class SelectVersionToOpen extends WizardPage
 {
+    public static final String VERSION = "version";
 
     /** Creates new form SelectVersionToOpen */
     public SelectVersionToOpen()
@@ -42,7 +48,7 @@ public class SelectVersionToOpen extends WizardPage
             for (VersionInfo info : OfficeApplication.getOfficeDocumentProxy().getVersions(workspace, content.id))
             {
                 String date=OfficeApplication.iso8601dateFormat.format(info.created);
-                Object[] value={content,content.descripcion,info.nameOfVersion,date};
+                Object[] value={content,content.descripcion,info,date};
                 model.addRow(value);
             }
         }
@@ -56,6 +62,23 @@ public class SelectVersionToOpen extends WizardPage
     {
         return "Versión de Contenido a Abrir";
     }
+    @Override
+    public WizardPanelNavResult allowNext(String arg, Map map, Wizard wizard)
+    {
+        WizardPanelNavResult result = WizardPanelNavResult.PROCEED;
+        if (this.jTableVersion.getSelectedRow()==-1)
+        {
+            JOptionPane.showMessageDialog(this, "!Debe indicar una versión!", SelectVersionToOpen.getDescription(), JOptionPane.ERROR_MESSAGE);
+            this.jTableVersion.requestFocus();            
+            result = WizardPanelNavResult.REMAIN_ON_PAGE;
+        }
+        else
+        {
+            Object selection=this.jTableVersion.getModel().getValueAt(this.jTableVersion.getSelectedRow(), 2);
+            map.put( VERSION,selection);                                    
+        }
+        return result;
+    }
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -67,8 +90,10 @@ public class SelectVersionToOpen extends WizardPage
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableVersion = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
+        jButtonViewVersion = new javax.swing.JButton();
 
-        setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.LINE_AXIS));
+        setLayout(new java.awt.BorderLayout());
 
         jTableVersion.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -93,11 +118,45 @@ public class SelectVersionToOpen extends WizardPage
                 return canEdit [columnIndex];
             }
         });
+        jTableVersion.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTableVersionKeyPressed(evt);
+            }
+        });
+        jTableVersion.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableVersionMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTableVersion);
 
-        add(jScrollPane1);
+        add(jScrollPane1, java.awt.BorderLayout.CENTER);
+
+        jButtonViewVersion.setText("Ver versión");
+        jButtonViewVersion.setEnabled(false);
+        jPanel1.add(jButtonViewVersion);
+
+        add(jPanel1, java.awt.BorderLayout.PAGE_START);
     }// </editor-fold>//GEN-END:initComponents
+
+private void jTableVersionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableVersionMouseClicked
+    this.jButtonViewVersion.setEnabled(false);
+    if(jTableVersion.getSelectedRow()!=-1)
+    {
+        this.jButtonViewVersion.setEnabled(true);
+    }
+}//GEN-LAST:event_jTableVersionMouseClicked
+
+private void jTableVersionKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTableVersionKeyPressed
+if(evt.getKeyCode()==KeyEvent.VK_UP || evt.getKeyCode()==KeyEvent.VK_DOWN)
+    {
+        jTableVersionMouseClicked(null);
+    }// TODO add your handling code here:
+}//GEN-LAST:event_jTableVersionKeyPressed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonViewVersion;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableVersion;
     // End of variables declaration//GEN-END:variables
