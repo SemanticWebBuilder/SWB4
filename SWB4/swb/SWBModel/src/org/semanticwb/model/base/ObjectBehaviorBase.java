@@ -9,7 +9,7 @@ import org.semanticwb.*;
 import org.semanticwb.platform.*;
 import org.semanticwb.model.GenericIterator;
 
-public class ObjectBehaviorBase extends SWBClass implements Sortable,Descriptiveable,Iconable
+public class ObjectBehaviorBase extends WebPage implements Sortable,Iconable
 {
 
     public ObjectBehaviorBase(SemanticObject base)
@@ -27,27 +27,6 @@ public class ObjectBehaviorBase extends SWBClass implements Sortable,Descriptive
         getSemanticObject().setLongProperty(vocabulary.swb_index, index);
     }
 
-    public void setDisplayObject(org.semanticwb.model.DisplayObject displayobject)
-    {
-        getSemanticObject().setObjectProperty(vocabulary.swbxf_displayObject, displayobject.getSemanticObject());
-    }
-
-    public void removeDisplayObject()
-    {
-        getSemanticObject().removeProperty(vocabulary.swbxf_displayObject);
-    }
-
-    public DisplayObject getDisplayObject()
-    {
-         DisplayObject ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swbxf_displayObject);
-         if(obj!=null)
-         {
-             ret=(DisplayObject)obj.getSemanticClass().newGenericInstance(obj);
-         }
-         return ret;
-    }
-
     public String getIconClass()
     {
         return getSemanticObject().getProperty(vocabulary.swb_iconClass);
@@ -56,31 +35,6 @@ public class ObjectBehaviorBase extends SWBClass implements Sortable,Descriptive
     public void setIconClass(String iconClass)
     {
         getSemanticObject().setProperty(vocabulary.swb_iconClass, iconClass);
-    }
-
-    public String getTitle()
-    {
-        return getSemanticObject().getProperty(vocabulary.swb_title);
-    }
-
-    public void setTitle(String title)
-    {
-        getSemanticObject().setProperty(vocabulary.swb_title, title);
-    }
-
-    public String getTitle(String lang)
-    {
-        return getSemanticObject().getProperty(vocabulary.swb_title, null, lang);
-    }
-
-    public String getDisplayTitle(String lang)
-    {
-        return getSemanticObject().getLocaleProperty(vocabulary.swb_title, lang);
-    }
-
-    public void setTitle(String title, String lang)
-    {
-        getSemanticObject().setProperty(vocabulary.swb_title, title, lang);
     }
 
     public boolean isRefreshOnShow()
@@ -108,31 +62,6 @@ public class ObjectBehaviorBase extends SWBClass implements Sortable,Descriptive
          SemanticObject ret=null;
          ret=getSemanticObject().getObjectProperty(vocabulary.swbxf_interface);
          return ret;
-    }
-
-    public String getDescription()
-    {
-        return getSemanticObject().getProperty(vocabulary.swb_description);
-    }
-
-    public void setDescription(String description)
-    {
-        getSemanticObject().setProperty(vocabulary.swb_description, description);
-    }
-
-    public String getDescription(String lang)
-    {
-        return getSemanticObject().getProperty(vocabulary.swb_description, null, lang);
-    }
-
-    public String getDisplayDescription(String lang)
-    {
-        return getSemanticObject().getLocaleProperty(vocabulary.swb_description, lang);
-    }
-
-    public void setDescription(String description, String lang)
-    {
-        getSemanticObject().setProperty(vocabulary.swb_description, description, lang);
     }
 
     public String getURL()

@@ -58,7 +58,7 @@ public class SWBContext extends SWBContextBase
             Property type=ont.getRDFOntModel().getProperty(SemanticVocabulary.RDF_TYPE);
             if(ont.getRDFOntModel().contains(res, type))
             {
-                SemanticObject obj=new SemanticObject(res);
+                SemanticObject obj=SemanticObject.createSemanticObject(res);
                 //System.out.println("id:"+id+" obj:"+obj);
                 view=new FormView(obj);
             }
