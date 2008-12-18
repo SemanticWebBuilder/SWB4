@@ -25,6 +25,7 @@ public class SWBAProperties extends GenericResource {
     private Logger log = SWBUtils.getLogger(SWBAProperties.class);
     ArrayList properties;
     SWBProperties prop;
+    Portlet base;
     
     /** Creates a new instance of WBAProperties */
     public SWBAProperties() {
@@ -54,6 +55,7 @@ public class SWBAProperties extends GenericResource {
     public void setResourceBase(Portlet base) throws SWBResourceException
     {
         super.setResourceBase(base);
+
         String fileSelected = base.getProperty("uptPropFile");
         //fileSelected ="web.properties";  //quitar, es solo para pruebas
         if(fileSelected==null)return;
@@ -90,7 +92,7 @@ public class SWBAProperties extends GenericResource {
      */  
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-        Portlet base = getResourceBase();
+        base = getResourceBase();
 
         String fileSelected = base.getProperty("uptPropFile");
        
@@ -159,7 +161,7 @@ public class SWBAProperties extends GenericResource {
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
-        Portlet base = getResourceBase();
+        base = getResourceBase();
         String accion = request.getParameter("act");
         
         PrintWriter out = response.getWriter();
@@ -167,14 +169,10 @@ public class SWBAProperties extends GenericResource {
         if(null==fileSelected) doAdmin(request, response, paramRequest);
         if(accion==null) accion="";
         if(accion.equals("")){
-//            SWBResourceURL urla = paramRequest.getRenderUrl();
-//            urla.setMode(SWBResourceURL.Mode_ADMIN);
-//
-//            out.println("<a href=\"#\" onclick=\"window.location='"+urla+"'\">Admin</a>");
-//            out.println("<form id=\""+base.getId()+"/fpropeditor\">");
+
+            out.println("<div class=\"swbform\">");
             out.println("<fieldset>");
-            //out.println("	<legend> Properties file edition. "+fileSelected+"</legend>");
-            out.println("<table cellpadding=10 cellspacing=0 width=100% class=\"swbform\">");
+            out.println("<table cellpadding=10 cellspacing=0 width=100% >");
             out.println("<thead>");
             out.println("<tr>");
             out.println("<th >"+paramRequest.getLocaleString("msgRemove")+"</th>");
@@ -242,7 +240,7 @@ public class SWBAProperties extends GenericResource {
             out.println("</tfoot>");
             out.println("</table>");
             out.println("</fieldset>");
-            out.println("</form>");
+            out.println("</div>");
         }
         
         
@@ -260,7 +258,7 @@ public class SWBAProperties extends GenericResource {
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
-        Portlet base = getResourceBase();
+        base = getResourceBase();
         String accion = request.getParameter("act");
         
         PrintWriter out = response.getWriter();
@@ -377,7 +375,7 @@ public class SWBAProperties extends GenericResource {
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
-        Portlet base = getResourceBase();
+        base = getResourceBase();
         PrintWriter out = response.getWriter();
         String fileSelect = "";
         if(base.getProperty("uptPropFile")!=null) fileSelect=base.getProperty("uptPropFile");
