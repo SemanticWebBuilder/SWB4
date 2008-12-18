@@ -82,7 +82,7 @@ public class SWBAProperties extends GenericResource {
                                "Make sure "+fileSelected+" is in the CLASSPATH",e);
             }            
         }     
-    }
+    } 
 
      /** Requested action of the WBAProperties resource
      * @param request input parameters
