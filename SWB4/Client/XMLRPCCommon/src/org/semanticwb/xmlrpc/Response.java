@@ -5,7 +5,6 @@
 
 package org.semanticwb.xmlrpc;
 
-import org.semanticwb.xmlrpc.*;
 import java.util.HashSet;
 import java.util.Set;
 
