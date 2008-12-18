@@ -12,6 +12,7 @@ import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.Model;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import org.semanticwb.SWBPlatform;
@@ -121,22 +122,16 @@ public class SemanticOntology
     
     public SemanticObject getSemanticObject(String uri)
     {
-        SemanticObject ret=null;
-//        OntResource res=m_ontology.getOntResource(uri);
-//        if(m_ontology.containsResource(res))
-//        {
-//            ret=new SemanticObject(res);
-//        }
-//        return ret;        
-        Resource res=getResource(uri);
-        if(res!=null)ret=new SemanticObject(res);
+        SemanticObject ret=SemanticObject.createSemanticObject(uri);
         return ret;        
     }
+
     
     public GenericObject getGenericObject(String uri)
     {
-        SemanticClass cls=getSemanticObjectClass(getResource(uri));
-        return getGenericObject(uri, cls);
+        SemanticObject sobj=getSemanticObject(uri);
+        SemanticClass cls=sobj.getSemanticClass();
+        return cls.newGenericInstance(sobj);
     }    
     
     public GenericObject getGenericObject(String uri, SemanticClass cls)

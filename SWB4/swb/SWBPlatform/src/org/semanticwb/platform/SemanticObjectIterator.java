@@ -40,10 +40,10 @@ public class SemanticObjectIterator implements Iterator
         Object obj=it.next();
         if(obj instanceof Resource)
         {
-            return new SemanticObject((Resource)obj);
+            return SemanticObject.createSemanticObject((Resource)obj);
         }else if(obj instanceof Statement)
         {
-            return new SemanticObject(((Statement)obj).getResource());
+            return SemanticObject.createSemanticObject(((Statement)obj).getResource());
         }
         throw new AssertionError("No type found...");
     }

@@ -152,6 +152,7 @@ public class SemanticClass
         }catch(PropertyNotFoundException noe){}
         return literals.iterator();
     }
+
     public Iterator<SemanticObject> listObjectRequiredProperties(SemanticProperty prop)
     {
         ArrayList<SemanticObject> objects=new ArrayList<SemanticObject>();        
@@ -163,7 +164,7 @@ public class SemanticClass
              {
                  Statement statement=it.nextStatement();       
                  Resource res=statement.getResource();
-                 SemanticObject object=new SemanticObject(res);
+                 SemanticObject object=SemanticObject.createSemanticObject(res);
                  objects.add(object);
              }
         }catch(PropertyNotFoundException noe){}
@@ -252,7 +253,7 @@ public class SemanticClass
 //        try
 //        {
             //return (SemanticObject)getConstructor().newInstance(res);
-            return new SemanticObject(res);
+            return SemanticObject.createSemanticObject(res);
 //        }
 //        catch(Exception ie)
 //        {
