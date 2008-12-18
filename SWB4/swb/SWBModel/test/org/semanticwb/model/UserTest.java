@@ -23,11 +23,22 @@ import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 import static org.junit.Assert.*;
 
+import com.hp.hpl.jena.query.*;
+import com.hp.hpl.jena.rdf.model.Literal;
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.RDFNode;
+import com.hp.hpl.jena.sparql.util.IndentedWriter;
+import java.util.Iterator;
+import org.junit.*;
+import org.semanticwb.platform.SemanticVocabulary;
+
 /**
  *
  * @author serch
  */
 public class UserTest {
+
+    static public final String NL = System.getProperty("line.separator") ;
 
     public UserTest() {
     }
@@ -198,7 +209,7 @@ public class UserTest {
         fail("The test case is a prototype.");
     }*/
 
-    @Test
+   // @Test
     public void listUserAttr(){
         UserRepository repository = null;
         repository = SWBContext.getUserRepository("urswb");
@@ -207,5 +218,116 @@ public class UserTest {
             System.out.println(itsp.next().getName());
         }
     }
+
+    //@Test
+    public void FillUsers(){
+      UserRepository repository = null;
+      String[] nombres = {"Sergio", "Javier", "Jorge", "Carlos", "Edgar", "Nohemi", "Victor", "Melissa", "Nancy", "Rogelio", "Jose", "Aura"};
+      String[] apellidos = {"Martínez", "Solís", "Jimenez", "Ramos", "Estrada", "Vargas", "Lorenzana", "Aduna", "Lopez", "Esperon", "Gonzalez", "Castro"};
+
+      String nombre = null;
+      String apellido1 = null;
+      String apellido2 = null;
+      String login = null;
+      String mail = null;
+      repository = SWBContext.getUserRepository("urswb");
+      for (int i=0; i<100; i++){
+          nombre = nombres[(int)Math.floor(Math.random()*12)];
+          apellido1 = apellidos[(int)Math.floor(Math.random()*12)];
+          apellido2 = apellidos[(int)Math.floor(Math.random()*12)];
+          login = ""+apellido1.substring(0, 1)+nombre+"_"+i;
+          mail = login+"@webbuilder.info";
+          User current = repository.createUser();
+          current.setActive(true);
+          current.setUsrFirstName(nombre);
+          current.setUsrLastName(apellido1);
+          current.setUsrSecondLastName(apellido2);
+          current.setUsrLogin(login);
+          current.setUsrEmail(mail);
+          current.setUsrPassword(apellido2+"."+apellido1);
+      }
+    }
+
+       @Test
+    public void test()
+    {
+        long time=System.currentTimeMillis();
+
+        Model model=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
+
+        // First part or the query string
+        String prolog = "PREFIX swb: <"+SemanticVocabulary.URI+">" ;
+        prolog+= "PREFIX rdf: <"+SemanticVocabulary.RDF_URI+">" ;
+        prolog+= "PREFIX rdfs: <"+SemanticVocabulary.RDFS_URI+">" ;
+
+        // Query string.
+        //"SELECT ?title ?class WHERE {?x swb:title ?title. ?x rdf:type swb:WebPage}"
+
+        String queryString = prolog + NL +
+            "SELECT ?x WHERE {?x rdf:type swb:User}" ;
+
+        Query query = QueryFactory.create(queryString) ;
+        // Print with line numbers
+        query.serialize(new IndentedWriter(System.out,true)) ;
+        System.out.println() ;
+
+        // Create a single execution of this query, apply to a model
+        // which is wrapped up as a Dataset
+
+        QueryExecution qexec = QueryExecutionFactory.create(query, model) ;
+        // Or QueryExecutionFactory.create(queryString, model) ;
+
+        try {
+            // Assumption: it's a SELECT query.
+            ResultSet rs = qexec.execSelect() ;
+
+            Iterator<String> it=rs.getResultVars().iterator();
+            while(it.hasNext())
+            {
+                System.out.print(it.next()+"\t");
+            }
+            System.out.println();
+
+            // The order of results is undefined.
+            for ( ; rs.hasNext() ; )
+            {
+                QuerySolution rb = rs.nextSolution() ;
+
+
+                it=rs.getResultVars().iterator();
+                while(it.hasNext())
+                {
+                    String name=it.next();
+                    RDFNode x = rb.get(name) ;
+                    System.out.print(x+"\t");
+                }
+                System.out.println();
+
+                // Get title - variable names do not include the '?' (or '$')
+//                RDFNode x = rb.get("x") ;
+//                RDFNode title = rb.get("title") ;
+//
+//                System.out.println("x:"+x+" title:"+title) ;
+//                // Check the type of the result value
+//                if ( x.isLiteral() )
+//                {
+//                    Literal titleStr = (Literal)x  ;
+//                    System.out.println("    "+titleStr) ;
+//                }
+//                else
+//                    System.out.println("Strange - not a literal: "+x) ;
+
+            }
+        }
+        finally
+        {
+            // QueryExecution objects should be closed to free any system resources
+            qexec.close() ;
+        }
+
+
+        System.out.println("Time:"+(System.currentTimeMillis()-time));
+    }
+
 
 }
