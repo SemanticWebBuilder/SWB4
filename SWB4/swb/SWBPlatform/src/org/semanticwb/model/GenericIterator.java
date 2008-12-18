@@ -111,9 +111,9 @@ public class GenericIterator<T extends GenericObject> implements Iterator
                 {
                     if(invert)
                     {
-                        return (T)constructor.newInstance(new SemanticObject(((Statement)obj).getSubject()));
+                        return (T)constructor.newInstance(SemanticObject.createSemanticObject(((Statement)obj).getSubject()));
                     }
-                    return (T)constructor.newInstance(new SemanticObject(((Statement)obj).getResource()));
+                    return (T)constructor.newInstance(SemanticObject.createSemanticObject(((Statement)obj).getResource()));
                 }
                 catch(Exception ie)
                 {
@@ -124,7 +124,7 @@ public class GenericIterator<T extends GenericObject> implements Iterator
             {
                 try
                 {
-                    return (T)constructor.newInstance(new SemanticObject((Resource)obj));
+                    return (T)constructor.newInstance(SemanticObject.createSemanticObject((Resource)obj));
                 }
                 catch(Exception ie)
                 {

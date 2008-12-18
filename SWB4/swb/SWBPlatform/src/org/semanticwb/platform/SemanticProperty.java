@@ -149,7 +149,7 @@ public class SemanticProperty
         Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYPROPERTY));
         if(st!=null)
         {
-            disp=new SemanticObject(st.getResource());
+            disp=SemanticObject.createSemanticObject(st.getResource());
         }
         return disp;
     }

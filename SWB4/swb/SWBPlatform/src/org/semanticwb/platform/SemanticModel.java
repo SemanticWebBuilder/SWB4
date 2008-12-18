@@ -41,11 +41,13 @@ public class SemanticModel
     {
         
     }
+
     public Iterator<SemanticObject> listSubjects(SemanticProperty prop,String value)
     {
         SemanticIterator<SemanticObject> it = new SemanticIterator(getRDFModel().listStatements(null, prop.getRDFProperty(), value), true);
         return it;
     }
+
     public String getName() {
         return m_name;
     }
@@ -55,55 +57,41 @@ public class SemanticModel
         return m_model;
     }
     
-    public SemanticClass getSemanticObjectClass(Resource res)
-    {
-        Statement stm=res.getRequiredProperty(res.getModel().getProperty(SemanticVocabulary.RDF_TYPE));
-        if(stm!=null)
-        {
-            return SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(stm.getResource().getURI());
-        }
-        return null;
-    }    
+//    public SemanticClass getSemanticObjectClass(Resource res)
+//    {
+//        Statement stm=res.getProperty(res.getModel().getProperty(SemanticVocabulary.RDF_TYPE));
+//        if(stm!=null)
+//        {
+//            return SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(stm.getResource().getURI());
+//        }
+//        return null;
+//    }
     
-    public SemanticClass getSemanticObjectClass(String uri)
-    {
-        SemanticClass ret=null;
-        Resource res=m_model.getResource(uri);
-        if(res!=null)
-        {
-            ret=getSemanticObjectClass(res);
-        }
-        return ret;
-    }
+//    public SemanticClass getSemanticObjectClass(String uri)
+//    {
+//        SemanticClass ret=null;
+//        Resource res=m_model.getResource(uri);
+//        if(res!=null)
+//        {
+//            ret=getSemanticObjectClass(res);
+//        }
+//        return ret;
+//    }
     
     public SemanticObject getSemanticObject(String uri)
     {
-//        Resource res=m_model.getResource(uri);
-//        SemanticClass cl=getSemanticObjectClass(res);
-//        return cl.newInstance(res);
-        SemanticObject ret=null;
-        Resource res=m_model.getResource(uri);
-        if(m_model.containsResource(res))
+        SemanticObject ret=SemanticObject.getSemanticObject(uri);
+        if(ret==null)
         {
-            ret=new SemanticObject(res);
+            Resource res=m_model.getResource(uri);
+            if(m_model.containsResource(res))
+            {
+                ret=SemanticObject.createSemanticObject(res);
+            }
         }
         return ret;
     }
 
-//    public SemanticObject getSemanticObject(String uri, SemanticClass cl)
-//    {
-//        SemanticObject ret=null;
-//        Resource res=m_model.getResource(uri);
-//        if(res!=null)
-//        {
-//            ret=cl.newInstance(res);
-//        }
-//        return ret;
-////        SemanticObject ret=null;
-////        Resource res=m_model.getResource(uri);
-////        if(res!=null)ret=new SemanticObject(res);
-////        return ret;
-//    }
     public SemanticObject createSemanticObjectById(String id, SemanticClass cls)
     {
         return createSemanticObject(getObjectUri(id, cls), cls);
@@ -112,7 +100,7 @@ public class SemanticModel
     public SemanticObject createSemanticObject(String uri, SemanticClass cls)
     {
         Principal user=SWBPlatform.getSemanticMgr().getSessionUser();
-        System.out.println("createSemanticObject:"+user);
+        //System.out.println("createSemanticObject:"+user);
         Resource res=m_model.createResource(uri);
         res.addProperty(m_model.getProperty(SemanticVocabulary.RDF_TYPE), cls.getOntClass());
         return cls.newInstance(res);
@@ -121,8 +109,8 @@ public class SemanticModel
     public GenericObject getGenericObject(String uri)
     {
         GenericObject ret=null;
-        SemanticClass cl=getSemanticObjectClass(uri);
         SemanticObject obj=getSemanticObject(uri);
+        SemanticClass cl=obj.getSemanticClass();
         if(cl!=null && obj!=null)
         {
             ret=cl.newGenericInstance(obj);
@@ -154,22 +142,13 @@ public class SemanticModel
     
     public void removeSemanticObject(String uri)
     {
-        Resource res=m_model.getResource(uri);
-        if(res!=null)
-        {
-            m_model.removeAll(res,null,null);
-            m_model.removeAll(null,null,res);
-        }
+        SemanticObject obj=getSemanticObject(uri);
+        if(obj!=null)obj.remove();
     }  
     
     public void removeSemanticObject(SemanticObject obj)
     {
-        Resource res=obj.getRDFResource();
-        if(res!=null)
-        {
-            m_model.removeAll(res,null,null);
-            m_model.removeAll(null,null,res);
-        }
+        obj.remove();
     }     
     
     public void removeGenericObject(GenericObject obj)

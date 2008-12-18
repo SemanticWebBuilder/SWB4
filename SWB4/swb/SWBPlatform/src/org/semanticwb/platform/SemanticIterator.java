@@ -45,9 +45,9 @@ public class SemanticIterator<T extends SemanticObject> implements Iterator
                 {
                     if(invert)
                     {
-                        return (T)new SemanticObject(((Statement)obj).getSubject());
+                        return (T)SemanticObject.createSemanticObject(((Statement)obj).getSubject());
                     }
-                    return (T)new SemanticObject(((Statement)obj).getResource());
+                    return (T)SemanticObject.createSemanticObject(((Statement)obj).getResource());
                 }
                 catch(Exception ie)
                 {
@@ -58,7 +58,7 @@ public class SemanticIterator<T extends SemanticObject> implements Iterator
             {
                 try
                 {
-                    return (T)new SemanticObject((Resource)obj);
+                    return (T)SemanticObject.createSemanticObject((Resource)obj);
                 }
                 catch(Exception ie)
                 {
