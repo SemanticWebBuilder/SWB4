@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
+import javax.swing.JOptionPane;
 import org.apache.tools.ant.taskdefs.Zip;
 import org.netbeans.spi.wizard.DeferredWizardResult;
 import org.netbeans.spi.wizard.ResultProgressHandle;
@@ -76,9 +77,13 @@ public class OpenResultProducer implements WizardResultProducer
                 VersionInfo versioninfo = (VersionInfo) wizardData.get(SelectVersionToOpen.VERSION);
                 String fileName = openOfficeDocument.openContent(repositoryName, versioninfo);
                 XmlProxy proxy = (XmlProxy) openOfficeDocument;
-
-                String guid = java.util.UUID.randomUUID().toString().replace('-', '_');
                 File dir = (File) wizardData.get(SelectDirectory.DIRECTORY);
+                File contentfile = new File(dir.getAbsolutePath() + "/" + fileName);
+                if(contentfile.exists())
+                {
+                    
+                }                
+                String guid = java.util.UUID.randomUUID().toString().replace('-', '_');                
                 File zipFile = new File(dir.getAbsolutePath() + "/" + guid + ".zip");
                 for (Part part : proxy.getResponseParts())
                 {
@@ -92,9 +97,16 @@ public class OpenResultProducer implements WizardResultProducer
                     ZipFile zip = new ZipFile(zipFile);
                     ZipEntry entry = zip.getEntry(fileName);
                     if (entry != null)
-                    {
-                        File contentfile = new File(dir.getAbsolutePath() + "/" + fileName);
+                    {                        
                         contentfile.getParentFile().mkdirs();
+                        if(contentfile.exists())
+                        {
+                            if(!contentfile.delete())
+                            {
+                                JOptionPane.showMessageDialog(null,"¡Existe un documento con el mismo nombre\r\nNo se puede borrar el documento para reemplazarlo por el contenido descargado!","Apertura de contenido",JOptionPane.ERROR_MESSAGE);
+                                return;
+                            }
+                        }
                         InputStream in = zip.getInputStream(entry);
                         FileOutputStream out = new FileOutputStream(contentfile);
                         byte[] buffer = new byte[2048];
@@ -117,7 +129,7 @@ public class OpenResultProducer implements WizardResultProducer
                 }
                 catch (ZipException ioe)
                 {                    
-                    openFileDirect(dir, fileName, proxy, versioninfo, wizardData, progress);
+                    //openFileDirect(dir, fileName, proxy, versioninfo, wizardData, progress);
                 }
                 catch (IOException ioe)
                 {
