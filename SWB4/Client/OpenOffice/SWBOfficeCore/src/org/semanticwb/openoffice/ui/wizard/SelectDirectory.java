@@ -31,6 +31,7 @@ public class SelectDirectory extends WizardPage {
     @Override
     public WizardPanelNavResult allowNext(String arg, Map map, Wizard wizard)
     {
+        
         WizardPanelNavResult result = WizardPanelNavResult.PROCEED;
         if (this.jFileChooser1.getSelectedFile()==null || !this.jFileChooser1.getSelectedFile().exists())
         {
@@ -43,6 +44,11 @@ public class SelectDirectory extends WizardPage {
             map.put(DIRECTORY, this.jFileChooser1.getSelectedFile());
         }
         return result;
+    }
+    @Override
+    public WizardPanelNavResult allowFinish(String arg, Map map, Wizard wizard)
+    {        
+       return allowNext(arg, map, wizard);
     }
     /** This method is called from within the constructor to
      * initialize the form.
