@@ -261,7 +261,15 @@ public class WB4WriterTest
         }
     }
 
-    @Test
+    @Test 
+    //@Ignore
+    public void openTest()
+    {
+        WB4WriterApplication writer = new WB4WriterApplication(this.xContext);        
+        writer.open(DocumentType.WORD);
+
+    }
+    @Test  
     @Ignore
     public void publishTest()
     {
@@ -276,13 +284,7 @@ public class WB4WriterTest
         }
     }
 
-    @Test    
-    public void openTest()
-    {
-        WB4WriterApplication writer = new WB4WriterApplication(this.xContext);        
-        writer.open(DocumentType.WORD);
-
-    }
+    
 
     @Test
     @Ignore
