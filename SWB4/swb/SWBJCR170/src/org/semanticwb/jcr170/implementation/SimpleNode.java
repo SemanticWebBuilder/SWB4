@@ -1261,7 +1261,7 @@ public class SimpleNode implements Node
                 }
             }
         }
-        throw new PathNotFoundException("The path is not a node");
+        throw new PathNotFoundException("The node "+relPath+" was not found");
     }
 
     public Node addNode(String relPath) throws ItemExistsException, PathNotFoundException, VersionException, ConstraintViolationException, LockException, RepositoryException
