@@ -35,8 +35,8 @@ public interface IOfficeDocument
     
     @XmlRpcMethod(methodName="OfficeDocument.setDescription")
     public void setDescription(String contentID,String description) throws Exception;
-    @XmlRpcMethod(methodName="OfficeDocument.setPath")            
-    public void delete(String contentID) throws Exception;
+    
+    public void delete(String repositoryName,String contentID) throws Exception;
     @XmlRpcMethod(methodName="OfficeDocument.exists")
     public boolean exists(String repositoryName,String contentId) throws Exception;
     @XmlRpcMethod(methodName="OfficeDocument.updateContent")    
