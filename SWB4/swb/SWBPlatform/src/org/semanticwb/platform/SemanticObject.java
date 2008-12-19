@@ -83,14 +83,16 @@ public class SemanticObject
     {
         if(value instanceof String && !prop.isString())
         {
-            if(prop.isInt())value=Integer.parseInt((String)value);
-            if(prop.isLong())value=Long.parseLong((String)value);
-            if(prop.isBoolean())value=Boolean.parseBoolean((String)value);
-            if(prop.isFloat())value=Float.parseFloat((String)value);
-            if(prop.isDate())value=Date.parse((String)value);
-            if(prop.isDateTime())value=Date.parse((String)value);
+            if(prop.isInt())getIntProperty(prop);
+            if(prop.isLong())getLongProperty(prop);
+            if(prop.isBoolean())getBooleanProperty(prop);
+            if(prop.isFloat())getFloatProperty(prop);
+            if(prop.isDate())getDateProperty(prop);
+            if(prop.isDateTime())getDateProperty(prop);
+        }else
+        {
+            m_cacheprops.put(prop.getURI()+"|"+lang, value);
         }
-        m_cacheprops.put(prop.getURI()+"|"+lang, value);
     }
 
     private Object getPropertyValueCache(SemanticProperty prop, String lang)
