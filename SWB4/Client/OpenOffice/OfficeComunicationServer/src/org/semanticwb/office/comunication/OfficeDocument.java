@@ -8,6 +8,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import javax.jcr.ItemExistsException;
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
@@ -32,6 +33,8 @@ import org.semanticwb.xmlrpc.XmlRpcObject;
  */
 public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 {
+    private static final String JCR_CONTENT = "jcr:content";
+    private static final String JCR_LASTMODIFIED = "jcr:lastModified";
 
     private static Logger log = SWBUtils.getLogger(OfficeDocument.class);
     private static final String DEFAULT_MIME_TYPE = "application/octet-stream";
@@ -77,7 +80,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                             mimeType = DEFAULT_MIME_TYPE;
                         }
                     }
-                    Node resNode = contentNode.addNode("jcr:content", "nt:resource");
+                    Node resNode = contentNode.addNode(JCR_CONTENT,"nt:resource");
                     resNode.setProperty("jcr:mimeType", mimeType);
                     resNode.setProperty("jcr:encoding", "");
                     InputStream in = new ByteArrayInputStream(part.getContent());
@@ -85,7 +88,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     in.close();
                     Calendar lastModified = Calendar.getInstance();
                     lastModified.setTimeInMillis(System.currentTimeMillis());
-                    resNode.setProperty("jcr:lastModified", lastModified);
+                    resNode.setProperty( JCR_LASTMODIFIED,lastModified);
                     categoryNode.save();
                 }
                 Version version = contentNode.checkin();
@@ -188,14 +191,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                         {
                             mimeType = DEFAULT_MIME_TYPE;
                         }
-                        Node resNode = nodeContent.getNode("jcr:content");
+                        Node resNode = nodeContent.getNode(JCR_CONTENT);
                         resNode.setProperty("jcr:mimeType", mimeType);
                         resNode.setProperty("jcr:encoding", "");
                         InputStream in = new ByteArrayInputStream(part.getContent());
                         resNode.getProperty("jcr:data").setValue(in);
                         Calendar lastModified = Calendar.getInstance();
                         lastModified.setTimeInMillis(System.currentTimeMillis());
-                        resNode.setProperty("jcr:lastModified", lastModified);
+                        resNode.setProperty( JCR_LASTMODIFIED,lastModified);
                     }
                     session.save();
                 }
@@ -381,7 +384,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
         catch (ItemNotFoundException infe)
         {
-            throw new Exception("El contenido no se encuentró en el repositorio.", infe);
+            throw new Exception("El contenido no se encontró en el repositorio.", infe);
         }
         finally
         {
@@ -391,6 +394,140 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             }
         }
         return versions.toArray(new VersionInfo[versions.size()]);
+    }
+
+    public void setTitle(String repositoryName, String contentID, String title) throws Exception
+    {
+        Session session = null;
+        try
+        {
+            session = loader.openSession(repositoryName, this.user, this.password);
+            Node nodeContent = session.getNodeByUUID(contentID);
+            if (!nodeContent.isLocked())
+            {
+                String cm_title=loader.getOfficeManager(repositoryName).getPropertyTitleType();
+                nodeContent.setProperty(cm_title, title);
+                nodeContent.save();
+            }
+            else
+            {
+                throw new Exception("The content is locked");
+            }
+
+        }
+        catch (ItemNotFoundException infe)
+        {
+            throw new Exception("El contenido no se encontró en el repositorio.", infe);
+        }
+        finally
+        {
+            if (session != null)
+            {
+                session.logout();
+            }
+        }
+    }
+
+    public String getTitle(String repositoryName, String contentID) throws Exception
+    {
+        Session session = null;
+        try
+        {
+            session = loader.openSession(repositoryName, this.user, this.password);
+            Node nodeContent = session.getNodeByUUID(contentID);
+            String cm_title=loader.getOfficeManager(repositoryName).getPropertyTitleType();
+            return nodeContent.getProperty(cm_title).getString();
+        }
+        catch (ItemNotFoundException infe)
+        {
+            throw new Exception("El contenido no se encontró en el repositorio.", infe);
+        }
+        finally
+        {
+            if (session != null)
+            {
+                session.logout();
+            }
+        }
+    }
+
+    public String getDescription(String repositoryName, String contentID) throws Exception
+    {
+        Session session = null;
+        try
+        {
+            session = loader.openSession(repositoryName, this.user, this.password);
+            Node nodeContent = session.getNodeByUUID(contentID);
+            String cm_description=loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
+            return nodeContent.getProperty(cm_description).getString();
+        }
+        catch (ItemNotFoundException infe)
+        {
+            throw new Exception("El contenido no se encontró en el repositorio.", infe);
+        }
+        finally
+        {
+            if (session != null)
+            {
+                session.logout();
+            }
+        }
+    }
+
+    public void setDescription(String repositoryName, String contentID, String description) throws Exception
+    {
+        Session session = null;
+        try
+        {
+            session = loader.openSession(repositoryName, this.user, this.password);
+            Node nodeContent = session.getNodeByUUID(contentID);
+            if (!nodeContent.isLocked())
+            {
+                String cm_description=loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
+                nodeContent.setProperty(cm_description, description);
+                nodeContent.save();
+            }
+            else
+            {
+                throw new Exception("The content is locked");
+            }
+
+        }
+        catch (ItemNotFoundException infe)
+        {
+            throw new Exception("El contenido no se encontró en el repositorio.", infe);
+        }
+        finally
+        {
+            if (session != null)
+            {
+                session.logout();
+            }
+        }
+    }
+
+    public Date getLasUpdate(String repositoryName, String contentID) throws Exception
+    {
+        Session session = null;
+        try
+        {
+            session = loader.openSession(repositoryName, this.user, this.password);
+            Node nodeContent = session.getNodeByUUID(contentID);
+            Node resource=nodeContent.getNode(JCR_CONTENT);
+            return resource.getProperty(JCR_LASTMODIFIED).getDate().getTime();
+
+        }
+        catch (ItemNotFoundException infe)
+        {
+            throw new Exception("El contenido no se encontró en el repositorio.", infe);
+        }
+        finally
+        {
+            if (session != null)
+            {
+                session.logout();
+            }
+        }
     }
 }
 
