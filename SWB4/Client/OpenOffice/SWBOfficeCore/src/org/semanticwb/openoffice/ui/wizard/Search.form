@@ -97,6 +97,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="jTextFieldTitle">
+      <Properties>
+        <Property name="toolTipText" type="java.lang.String" value="Debe indicar una palabra o t&#xed;tulo completo a buscar"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>
@@ -104,10 +107,14 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="jTextFieldDescription">
+      <Properties>
+        <Property name="toolTipText" type="java.lang.String" value="Debe indicar una palabra o descripci&#xf3;n completa a buscar"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="jButtonSearch">
       <Properties>
         <Property name="text" type="java.lang.String" value="Buscar"/>
+        <Property name="toolTipText" type="java.lang.String" value="Seleccione esta opci&#xf3;n para buscar contenidos que coincidan con los criterios de b&#xfa;squeda"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonSearchActionPerformed"/>
@@ -128,6 +135,7 @@
             <StringItem index="3" value="Item 4"/>
           </StringArray>
         </Property>
+        <Property name="toolTipText" type="java.lang.String" value="Seleccione una categoria para buscar el contenido"/>
       </Properties>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane1">
@@ -206,6 +214,7 @@
             <StringItem index="3" value="Item 4"/>
           </StringArray>
         </Property>
+        <Property name="toolTipText" type="java.lang.String" value="Seleccione un repositorio de contenidos"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jComboBoxRepositorioActionPerformed"/>

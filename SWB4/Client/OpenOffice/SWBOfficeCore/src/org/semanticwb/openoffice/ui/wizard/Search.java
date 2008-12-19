@@ -116,9 +116,14 @@ public class Search extends WizardPage
 
         jLabel1.setText("Título:");
 
+        jTextFieldTitle.setToolTipText("Debe indicar una palabra o título completo a buscar");
+
         jLabel2.setText("Descripción:");
 
+        jTextFieldDescription.setToolTipText("Debe indicar una palabra o descripción completa a buscar");
+
         jButtonSearch.setText("Buscar");
+        jButtonSearch.setToolTipText("Seleccione esta opción para buscar contenidos que coincidan con los criterios de búsqueda");
         jButtonSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonSearchActionPerformed(evt);
@@ -128,6 +133,7 @@ public class Search extends WizardPage
         jLabel3.setText("Categoria:");
 
         jComboBoxCategory.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBoxCategory.setToolTipText("Seleccione una categoria para buscar el contenido");
 
         jTableContents.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -171,6 +177,7 @@ public class Search extends WizardPage
         jLabel4.setText("Repositorio:");
 
         jComboBoxRepositorio.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBoxRepositorio.setToolTipText("Seleccione un repositorio de contenidos");
         jComboBoxRepositorio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBoxRepositorioActionPerformed(evt);
