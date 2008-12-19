@@ -33,14 +33,15 @@ import org.semanticwb.xmlrpc.XmlRpcObject;
  */
 public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 {
+
+    private static final String CONTENT_NOT_FOUND = "El contenido no se encontró en el repositorio.";
     private static final String JCR_CONTENT = "jcr:content";
     private static final String JCR_LASTMODIFIED = "jcr:lastModified";
-
     private static Logger log = SWBUtils.getLogger(OfficeDocument.class);
     private static final String DEFAULT_MIME_TYPE = "application/octet-stream";
     private static final RepositoryManagerLoader loader = RepositoryManagerLoader.getInstance();
 
-    public String publish(String title, String description, String repositoryName, String categoryID, String type, String nodeType,String file) throws Exception
+    public String publish(String title, String description, String repositoryName, String categoryID, String type, String nodeType, String file) throws Exception
     {
         Session session = null;
         Node categoryNode = null;
@@ -80,7 +81,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                             mimeType = DEFAULT_MIME_TYPE;
                         }
                     }
-                    Node resNode = contentNode.addNode(JCR_CONTENT,"nt:resource");
+                    Node resNode = contentNode.addNode(JCR_CONTENT, "nt:resource");
                     resNode.setProperty("jcr:mimeType", mimeType);
                     resNode.setProperty("jcr:encoding", "");
                     InputStream in = new ByteArrayInputStream(part.getContent());
@@ -88,7 +89,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     in.close();
                     Calendar lastModified = Calendar.getInstance();
                     lastModified.setTimeInMillis(System.currentTimeMillis());
-                    resNode.setProperty( JCR_LASTMODIFIED,lastModified);
+                    resNode.setProperty(JCR_LASTMODIFIED, lastModified);
                     categoryNode.save();
                 }
                 Version version = contentNode.checkin();
@@ -154,7 +155,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @return The version name created
      * @throws java.lang.Exception
      */
-    public String updateContent(String repositoryName, String contentId,String file) throws Exception
+    public String updateContent(String repositoryName, String contentId, String file) throws Exception
     {
         Session session = null;
         try
@@ -172,7 +173,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             if (!nodeContent.isCheckedOut())
             {
                 nodeContent.checkout();
-                String cm_file=loader.getOfficeManager(repositoryName).getPropertyFileType();
+                String cm_file = loader.getOfficeManager(repositoryName).getPropertyFileType();
                 String cm_user = loader.getOfficeManager(repositoryName).getUserType();
                 nodeContent.setProperty(cm_file, file);
                 nodeContent.setProperty(cm_user, this.user);
@@ -198,7 +199,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                         resNode.getProperty("jcr:data").setValue(in);
                         Calendar lastModified = Calendar.getInstance();
                         lastModified.setTimeInMillis(System.currentTimeMillis());
-                        resNode.setProperty( JCR_LASTMODIFIED,lastModified);
+                        resNode.setProperty(JCR_LASTMODIFIED, lastModified);
                     }
                     session.save();
                 }
@@ -295,7 +296,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return "/";
     }
 
-    public boolean exists(String repositoryName,String contentId) throws Exception
+    public boolean exists(String repositoryName, String contentId) throws Exception
     {
         boolean exists = false;
         Session session = null;
@@ -345,8 +346,29 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return false;
     }
 
-    public void delete(String contentID)
+    public void delete(String repositoryName, String contentID) throws Exception
     {
+        Session session = null;
+        try
+        {
+            session = loader.openSession(repositoryName, this.user, this.password);
+            Node nodeContent = session.getNodeByUUID(contentID);
+            Node parent = nodeContent.getParent();
+            nodeContent.remove();
+            parent.save();
+
+        }
+        catch (ItemNotFoundException infe)
+        {
+            throw new Exception(CONTENT_NOT_FOUND, infe);
+        }
+        finally
+        {
+            if (session != null)
+            {
+                session.logout();
+            }
+        }
     }
 
     public VersionInfo[] getVersions(String repositoryName, String contentId) throws Exception
@@ -374,17 +396,17 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     VersionInfo info = new VersionInfo();
                     info.contentId = contentId;
                     info.nameOfVersion = version.getName();
-                    info.created=version.getProperty("jcr:created").getDate().getTime();
-                    String cm_user=loader.getOfficeManager(repositoryName).getUserType();
-                    info.user=version.getNode("jcr:frozenNode").getProperty(cm_user).getString();
+                    info.created = version.getProperty("jcr:created").getDate().getTime();
+                    String cm_user = loader.getOfficeManager(repositoryName).getUserType();
+                    info.user = version.getNode("jcr:frozenNode").getProperty(cm_user).getString();
                     versions.add(info);
                 }
             }
-            //nodeContent.unlock();
+        //nodeContent.unlock();
         }
         catch (ItemNotFoundException infe)
         {
-            throw new Exception("El contenido no se encontró en el repositorio.", infe);
+            throw new Exception(CONTENT_NOT_FOUND, infe);
         }
         finally
         {
@@ -405,7 +427,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             Node nodeContent = session.getNodeByUUID(contentID);
             if (!nodeContent.isLocked())
             {
-                String cm_title=loader.getOfficeManager(repositoryName).getPropertyTitleType();
+                String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
                 nodeContent.setProperty(cm_title, title);
                 nodeContent.save();
             }
@@ -417,7 +439,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
         catch (ItemNotFoundException infe)
         {
-            throw new Exception("El contenido no se encontró en el repositorio.", infe);
+            throw new Exception(CONTENT_NOT_FOUND, infe);
         }
         finally
         {
@@ -435,12 +457,12 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         {
             session = loader.openSession(repositoryName, this.user, this.password);
             Node nodeContent = session.getNodeByUUID(contentID);
-            String cm_title=loader.getOfficeManager(repositoryName).getPropertyTitleType();
+            String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
             return nodeContent.getProperty(cm_title).getString();
         }
         catch (ItemNotFoundException infe)
         {
-            throw new Exception("El contenido no se encontró en el repositorio.", infe);
+            throw new Exception(CONTENT_NOT_FOUND, infe);
         }
         finally
         {
@@ -458,12 +480,12 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         {
             session = loader.openSession(repositoryName, this.user, this.password);
             Node nodeContent = session.getNodeByUUID(contentID);
-            String cm_description=loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
+            String cm_description = loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
             return nodeContent.getProperty(cm_description).getString();
         }
         catch (ItemNotFoundException infe)
         {
-            throw new Exception("El contenido no se encontró en el repositorio.", infe);
+            throw new Exception(CONTENT_NOT_FOUND, infe);
         }
         finally
         {
@@ -483,7 +505,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             Node nodeContent = session.getNodeByUUID(contentID);
             if (!nodeContent.isLocked())
             {
-                String cm_description=loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
+                String cm_description = loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
                 nodeContent.setProperty(cm_description, description);
                 nodeContent.save();
             }
@@ -495,7 +517,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
         catch (ItemNotFoundException infe)
         {
-            throw new Exception("El contenido no se encontró en el repositorio.", infe);
+            throw new Exception(CONTENT_NOT_FOUND, infe);
         }
         finally
         {
@@ -513,13 +535,13 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         {
             session = loader.openSession(repositoryName, this.user, this.password);
             Node nodeContent = session.getNodeByUUID(contentID);
-            Node resource=nodeContent.getNode(JCR_CONTENT);
+            Node resource = nodeContent.getNode(JCR_CONTENT);
             return resource.getProperty(JCR_LASTMODIFIED).getDate().getTime();
 
         }
         catch (ItemNotFoundException infe)
         {
-            throw new Exception("El contenido no se encontró en el repositorio.", infe);
+            throw new Exception(CONTENT_NOT_FOUND, infe);
         }
         finally
         {
