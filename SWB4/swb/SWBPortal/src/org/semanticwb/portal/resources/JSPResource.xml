@@ -2,11 +2,15 @@
 <admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<xslfile>admresource.xslt</xslfile>
 	<form name="frmAdmin" action="true" method="POST" enctype="multipart/form-data">
-		<admdbconnmgr defconn="true"/>                      
+            	<admdbconnmgr defconn="true"/>                      
+                <fieldset>
 		<input type="CHECKBOX" name="forward" label="Include / Forward:"/>
 		<input type="TEXT" name="jsppath" label="Ruta del JSP:" size="50"/>
 		<input type="TEXT" name="jspactpath" label="Ruta del ProcesAction JSP:" size="50"/>
+                </fieldset>
+                <fieldset>
 		<input type="SUBMIT" name="btnSave"  value="Guardar"/>
 		<input type="RESET"  name="btnReset" value="Cancelar"/>
+                </fieldset>
         </form>
 </admresource>

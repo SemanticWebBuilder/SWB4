@@ -3,8 +3,12 @@
 	<xslfile>admresource.xslt</xslfile>
 	<form name="frmSearch" action="true" method="POST" enctype="multipart/form-data">
 		<admdbconnmgr defconn="true"/>
+                <fieldset>
 		<input type="FILE" name="template" label="Plantilla (xsl, xslt):" showfile="true" msg="Plantilla actual " bydefault="{@webpath}wbadmin/xsl/Search/Search.xslt" msgbydefault="Plantilla por defecto " filetype="xsl|xslt" isshowfiletype="true" jsrequired="true" size="40"/>
+                </fieldset>
+                <fieldset>
 		<input type="SUBMIT" name="btnSave"  value="Guardar" />
 		<input type="RESET"  name="btnReset" value="Cancelar" />
+                </fieldset>
 	</form>
 </admresource>

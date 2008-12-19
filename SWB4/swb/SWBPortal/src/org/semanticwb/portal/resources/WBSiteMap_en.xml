@@ -43,6 +43,7 @@
     </script>
     <form name="frmWBSiteMap" id="frmWBSiteMap" action="true" method="POST" enctype="multipart/form-data">
         <admdbconnmgr defconn="true"/>
+        <fieldset>
         <input type="FILE" name="template" label="Template (xsl, xslt):" showfile="true" msg="Current template " bydefault="{@webpath}wbadmin/xsl/WBSiteMap/WBSiteMap.xslt" msgbydefault="Template by default " filetype="xsl|xslt" isshowfiletype="true" size="40"/>
         <input type="FILE" name="img" label="Image for site map (bmp, gif, jpg, jpeg):" showfile="true" filetype="bmp|jpg|jpeg|gif" isshowfiletype="true" isremovefile="true" removemsg="Cut image for site map" moreattr="onclick=&#34;jsClear(this.form);&#34;" size="40"/>
         <input type="TEXT" name="alt" label="Alternate text for image:" size="50"/>
@@ -57,8 +58,10 @@
             <input type="CHECKBOX" name="collapse" label="Automatically collapse all siblings, when a node is expanded:" value="true" />
             <input type="TEXT" name="loadmsg" label="Message on request" value="Loading&#8230;" />
             <input type="TEXT" name="errormsg" label="Message on error" value="Load error!" />
-
+        </fieldset>
+        <fieldset>
         <input type="SUBMIT" name="btnSave"  value="Save" onclick="if(jsValida(this.form)) return true; else return false;"/>
         <input type="RESET"  name="btnReset" value="Cancel"/>
+        </fieldset>
     </form>
 </admresource>

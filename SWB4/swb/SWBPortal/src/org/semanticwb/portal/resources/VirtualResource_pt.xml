@@ -9,7 +9,8 @@
  -->
 	<xslfile>admresource.xslt</xslfile>
 	<form name="frmAdmin" action="true" method="POST" enctype="multipart/form-data">
-		<admdbconnmgr defconn="true"/>     
+		<admdbconnmgr defconn="true"/>   
+                <fieldset>
 <!--                         
 		<input type="FILE" name="html" label="* Archivo de contenido local:" size="40" showfile="false"/>
 		<statictext name="labelPag">* Desea páginar contenido:</statictext>
@@ -18,7 +19,10 @@
 -->                
 		<input type="TEXT" name="tmid" label="Identificador do site:" size="50" maxlength="50"/>                
 		<input type="TEXT" name="resid" label="Identificador do recurso:" size="10" maxlength="10" jsvaltype="js_numbers"/>                
+                </fieldset>
+                <fieldset>
 		<input type="SUBMIT" name="btnSave"  moreattr="class=&#34;botones&#34;" value="Salvar"/>
-		<input type="RESET"  name="btnReset" moreattr="class=&#34;botones&#34;" value="Cancelar"/>                
+		<input type="RESET"  name="btnReset" moreattr="class=&#34;botones&#34;" value="Cancelar"/>  
+                </fieldset>
         </form>
 </admresource>

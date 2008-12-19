@@ -3,6 +3,7 @@
 	<xslfile>admresource.xslt</xslfile>
 	<form name="frmWBUrlContent" action="true" method="POST">
 		<admdbconnmgr defconn="true"/>
+                <fieldset>
 		<input type="TEXT" name="url" label="Dirección web del contenido remoto:" size="50" jsrequired="true"/>
 		<input type="TEXT" name="tagbcawb" label="Etiqueta a buscar:" value="bca" size="20" maxlength="20"/>
                 <input type="TEXT" name="charset" label="codificación" size="20" maxlength="20"/>
@@ -13,7 +14,10 @@
 		</statictext>
 		<input type="RADIO" name="InfoSource" label="No" value="0" checked="true"/>
 		<input type="RADIO" name="InfoSource" label="Sí" value="1"/>
+                </fieldset>
+                <fieldset>
 		<input type="SUBMIT" name="btnSave"  value="Guardar" class="boton"/>
 		<input type="RESET"  name="btnReset" value="Cancelar" class="boton"/>
+                </fieldset>
 	</form>
 </admresource>

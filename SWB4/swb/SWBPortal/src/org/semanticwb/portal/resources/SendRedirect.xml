@@ -3,9 +3,13 @@
 	<xslfile>admresource.xslt</xslfile>
 	<form name="frmWBUrlContent" action="true" method="POST">
 		<admdbconnmgr defconn="true"/>
+                <fieldset>
 		<input type="TEXT" name="url" label="Dirección de redireccionamiento:" size="50" jsrequired="true"/>
+                </fieldset>
+                <fieldset>
 		<input type="SUBMIT" name="btnSave"  value="Guardar" class="boton"/>
 		<input type="RESET"  name="btnReset" value="Cancelar" class="boton"/>
+                </fieldset>
 	</form>
 	<statictext name="txt">
 		<![CDATA[

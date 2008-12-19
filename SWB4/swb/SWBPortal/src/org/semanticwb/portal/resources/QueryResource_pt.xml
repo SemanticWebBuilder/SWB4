@@ -3,6 +3,7 @@
     <xslfile>admresource.xslt</xslfile>
     <form name="frmQueryResource" action="true" method="POST" enctype="multipart/form-data">
         <admdbconnmgr defconn="true"/>
+        <fieldset>
         <statictext name="datos">
 			<![CDATA[
 				<font style="color: #428AD4; font-family: Verdana; font-size: 13px;">
@@ -40,7 +41,10 @@
                filetype="xsl|xslt"
                isshowfiletype="true"
                size="40"/>
+               </fieldset>
+               <fieldset>
         <input type="SUBMIT" name="btnSave" value="Salvar"/>
+        </fieldset>
     </form>
     <statictext name="requeridos">
 		<![CDATA[
