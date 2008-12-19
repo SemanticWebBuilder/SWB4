@@ -81,6 +81,15 @@ public class SemanticObject
 
     private void setPropertyValueCache(SemanticProperty prop, String lang, Object value)
     {
+        if(value instanceof String && !prop.isString())
+        {
+            if(prop.isInt())value=Integer.parseInt((String)value);
+            if(prop.isLong())value=Long.parseLong((String)value);
+            if(prop.isBoolean())value=Boolean.parseBoolean((String)value);
+            if(prop.isFloat())value=Float.parseFloat((String)value);
+            if(prop.isDate())value=Date.parse((String)value);
+            if(prop.isDateTime())value=Date.parse((String)value);
+        }
         m_cacheprops.put(prop.getURI()+"|"+lang, value);
     }
 
@@ -436,7 +445,8 @@ public class SemanticObject
         }
         else
         {
-            ret=(String)getPropertyValueCache(prop,null);
+            Object aux=getPropertyValueCache(prop,null);
+            if(aux!=null)ret=aux.toString();
             if(ret==null)
             {
                 Statement stm = m_res.getProperty(prop.getRDFProperty());
@@ -476,7 +486,8 @@ public class SemanticObject
             }
         }else
         {
-            ret=(String)getPropertyValueCache(prop, lang);
+            Object aux=getPropertyValueCache(prop,lang);
+            if(aux!=null)ret=aux.toString();
             if(ret==null)
             {
                 Statement stm = getLocaleStatement(prop, lang);
@@ -493,36 +504,44 @@ public class SemanticObject
 
     public String getLocaleProperty(SemanticProperty prop, String lang)
     {
-        String ret = null;
-        String def = null;
-        String other = null;
-        if (lang == null)
+        String ret = (String)getPropertyValueCache(prop, lang);
+        if(ret==null)
         {
-            ret = getProperty(prop);
-        }
-        StmtIterator stit = m_res.listProperties(prop.getRDFProperty());
-        while (stit.hasNext())
-        {
-            Statement st = stit.nextStatement();
-            other = st.getString();
-            String lg = st.getLanguage();
-            if (lg == null || lg.length() == 0)
+            String def = null;
+            String other = null;
+            if (lang == null)
             {
-                def = st.getString();
+                ret = getProperty(prop);
             }
-            else if (lg.equals(lang))
+            StmtIterator stit = m_res.listProperties(prop.getRDFProperty());
+            while (stit.hasNext())
             {
-                ret = st.getString();
-                break;
+                Statement st = stit.nextStatement();
+                other = st.getString();
+                String lg = st.getLanguage();
+                if (lg == null || lg.length() == 0)
+                {
+                    def = st.getString();
+                }
+                else if (lg.equals(lang))
+                {
+                    ret = st.getString();
+                    break;
+                }
             }
-        }
-        if (ret == null)
-        {
-            ret = def;
-        }
-        if (ret == null)
-        {
-            ret = other;
+            if (ret == null)
+            {
+                ret = def;
+            }
+            if (ret == null)
+            {
+                ret = other;
+            }
+
+            if(ret!=null)
+            {
+                setPropertyValueCache(prop, lang, ret);
+            }
         }
         return ret;
     }
