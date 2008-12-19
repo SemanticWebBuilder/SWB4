@@ -321,8 +321,7 @@ public class Poll extends GenericResource
         response.setHeader("Pragma","no-cache"); //HTTP 1.0
         response.setDateHeader ("Expires", 0); //prevents caching at the proxy server
         PrintWriter out=response.getWriter();        
-        out.print(ret.toString());
-        out.println("<br /><a href=\"" + paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN) + "\">admin</a>");
+        out.print(ret.toString());        
     }
     
     /**
