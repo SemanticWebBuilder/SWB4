@@ -3,10 +3,14 @@
 	<xslfile>admresource.xslt</xslfile>
 	<form name="frmRSSResource" action="true" method="POST">
 		<admdbconnmgr defconn="true"/>
+                <fieldset>
 		<input type="TEXT" name="url" label="* URL for RSS" size="50" jsrequired="true" />
 		<input type="FILE" name="template" label="Template (xsl, xslt):" showfile="true" msg="Current template " bydefault="{@webpath}wbadmin/xsl/RSSResource/RSSResource.xslt" msgbydefault="Template by default " filetype="xsl|xslt" isshowfiletype="true" size="40"/>
+                </fieldset>
+                <fieldset>
 		<input type="SUBMIT" name="btnSave"  value="Save"/>
 		<input type="RESET"  name="btnReset" value="Cancel"/>
+                </fieldset>
 	</form>
 	<statictext name="txtNote">
 		<![CDATA[

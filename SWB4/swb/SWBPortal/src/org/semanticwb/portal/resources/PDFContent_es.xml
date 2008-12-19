@@ -3,6 +3,7 @@
 	<xslfile>admresource.xslt</xslfile>
 	<form name="frmPDFContent" action="true" method="POST">
 		<admdbconnmgr defconn="true"/>
+                <fieldset>
 		<input type="FILE" name="archive" label="* Archivo (pdf, doc, txt):" size="40" showfile="true" msg="Archivo actual " filetype="pdf|doc|txt" isshowfiletype="true" />
 		<input type="TEXT" name="width" label="Ancho (pixeles o nn% para porcentaje):" size="4" maxlength="4" />
 		<input type="TEXT" name="height" label="Alto (pixeles o nn% para porcentaje):" size="4" maxlength="4" />
@@ -21,8 +22,11 @@
 		<input type="RADIO" name="scrollbars" label="Sí" value="yes"/>
 		<input type="RADIO" name="scrollbars" label="No" value="no"/>
 		<input type="CHECKBOX" name="frameborder" label="Borde del frame" value="1"/>
+                </fieldset>
+                <fieldset>
 		<input type="SUBMIT" name="btnSave"  value="Guardar" onclick="if(jsValida(this.form)) return true; else return false;"/>
 		<input type="RESET"  name="btnReset" value="Cancelar"/>
+                </fieldset>
 	</form>
 	<statictext name="txtNote">
 		<![CDATA[

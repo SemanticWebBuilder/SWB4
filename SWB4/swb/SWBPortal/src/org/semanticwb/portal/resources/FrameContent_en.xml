@@ -3,9 +3,13 @@
 	<xslfile>admresource.xslt</xslfile>
 	<form name="frmFrameContent" action="true" method="POST">
 		<admdbconnmgr defconn="true"/>
+                <fieldset>
 		<input type="TEXT" name="url" label="* Web address for remote contents (Frame):" size="50" jsrequired="true"/>
+                </fieldset>
+                <fieldset>
 		<input type="SUBMIT" name="btnSave"  value="Save"/>
 		<input type="RESET"  name="btnReset" value="Cancel"/>
+                </fieldset>
 	</form>
 	<statictext name="txtNote">
 		<![CDATA[

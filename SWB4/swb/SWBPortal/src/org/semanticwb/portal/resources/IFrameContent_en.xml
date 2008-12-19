@@ -3,6 +3,7 @@
 	<xslfile>admresource.xslt</xslfile>
 	<form name="frmIFrameContent" action="true" method="POST">
 		<admdbconnmgr defconn="true"/>
+                <fieldset>
 		<input type="TEXT" name="url" label="* Web address for remote contents (Frame):" size="50" jsrequired="true"/>
 		<input type="TEXT" name="width" label="Width (pixels or nn% for percentage):" size="4" maxlength="4" />
 		<input type="TEXT" name="height" label="Height (pixels or nn% for percentage):" size="4" maxlength="4" />
@@ -20,9 +21,12 @@
 		<input type="RADIO" name="scrollbars" label="Automatic" value="auto"/>
 		<input type="RADIO" name="scrollbars" label="Yes" value="yes"/>
 		<input type="RADIO" name="scrollbars" label="No" value="no"/>
-		<input type="CHECKBOX" name="frameborder" label="Frame border" value="1"/>		
+		<input type="CHECKBOX" name="frameborder" label="Frame border" value="1"/>
+                </fieldset>
+                <fieldset>
 		<input type="SUBMIT" name="btnSave"  value="Save"/>
 		<input type="RESET"  name="btnReset" value="Cancel"/>
+                </fieldset>
 	</form>
 	<statictext name="txtNote">
 		<![CDATA[

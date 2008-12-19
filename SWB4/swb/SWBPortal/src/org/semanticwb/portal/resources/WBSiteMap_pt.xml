@@ -37,6 +37,7 @@
     </script>
     <form name="frmWBSiteMap" id="frmWBSiteMap" action="true" method="POST" enctype="multipart/form-data">
         <admdbconnmgr defconn="true"/>
+        <fieldset>
         <input type="FILE" name="template" label="Modelo (xsl, xslt):" showfile="true" msg="Modelo atual " bydefault="{@webpath}wbadmin/xsl/WBSiteMap/WBSiteMap.xslt" msgbydefault="Modelo do defeito " filetype="xsl|xslt" isshowfiletype="true" size="40"/>
         <input type="FILE" name="img" label="Imagem para o esquema do site (bmp, gif, jpg, jpeg):" showfile="true" filetype="bmp|jpg|jpeg|gif" isshowfiletype="true" isremovefile="true" removemsg="Deletar a imagem para o esquema do site" moreattr="onclick=&#34;jsClear(this.form);&#34;" size="40"/>
         <input type="TEXT" name="alt" label="Texto alternativo para a imagem:" size="50"/>
@@ -51,8 +52,10 @@
             <input type="CHECKBOX" name="collapse" label="Colapsar automáticamente todas las demás ramas cuando se expande una:" value="true" />
             <input type="TEXT" name="loadmsg" label="Mensaje para indicar una solicitud asíncrona" value="Cargando&#8230;" />
             <input type="TEXT" name="errormsg" label="Mensaje para indicar un error en una solicitud asíncrona" value="Lo siento, no existe" />
-
+        </fieldset>
+        <fieldset>
         <input type="SUBMIT" name="btnSave"  value="Salvar" onclick="if(jsValida(this.form)) return true; else return false;"/>
         <input type="RESET"  name="btnReset" value="Cancelar"/>
+        </fieldset>
     </form>
 </admresource>

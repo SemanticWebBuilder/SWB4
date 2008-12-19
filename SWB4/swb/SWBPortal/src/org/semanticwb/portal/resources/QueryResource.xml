@@ -3,6 +3,7 @@
 	<xslfile>admresource.xslt</xslfile>
 	<form name="frmQueryResource" action="true" method="POST" enctype="multipart/form-data">
 		<admdbconnmgr defconn="true"/>
+                <fieldset>
 		<statictext name="datos">
 			<![CDATA[
 				<font style="color: #428AD4; font-family: Verdana; font-size: 13px;">
@@ -20,7 +21,10 @@
 		<input type="TEXT" name="dbcon" label="* Nombre de la conexión:" size="50" jsrequired="true" moreattr="class=&#34;datos&#34;"/>
 		<textarea name="query" label="* Criterio de consulta:" rows="5" cols="50" wrap="virtual" jsrequired="true" moreattr="class=&#34;datos&#34;"/>
 		<input type="FILE" name="template" label="Plantilla (xsl, xslt):" showfile="true" msg="Plantilla actual " bydefault="{@webpath}/swbadmin/xsl/QueryResource/QueryResource.xslt" msgbydefault="Plantilla por defecto " filetype="xsl|xslt" isshowfiletype="true" size="40"/>
+                </fieldset>
+                <fieldset>
 		<input type="SUBMIT" name="btnSave" value="Guardar"/>
+                </fieldset>
 	</form>
 	<statictext name="requeridos">
 		<![CDATA[

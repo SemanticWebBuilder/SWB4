@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <!--
  * UKGResource.xml.xml
@@ -8,6 +8,7 @@
  * @author  Jei
  -->
 	<form name="frmAdmin">
+                <fieldset>
 		<input type="TEXT" name="server" label="* Server: (http://[host][:port])" size="40" value=""/>
 		<input type="TEXT" name="iniPath" label="* InitPath: (App Uri)(/xxxxx)" size="40" value=""/>
 		<input type="TEXT" name="encode" label="Encode:" size="10" value="utf-8"/>
@@ -23,9 +24,12 @@
 		<input type="TEXT" name="cookies" label="Cookies: (xxx=xxxx;yyyy=yyyy)" size="40" value=""/>
 		<input type="TEXT" name="instance" label="Instance:" size="10" maxlength="10" jsvaltype="js_numbers"/>        
 		<input type="CHECKBOX" name="othercont" label="Other Contents:" value="0"/>        
-		<input type="CHECKBOX" name="firstredirect" label="Show First as Content:" value="0"/>        
+		<input type="CHECKBOX" name="firstredirect" label="Show First as Content:" value="0"/>       
+                </fieldset>
+                <fieldset>
 		<input type="SUBMIT" name="btnSave"  moreattr="class=&#34;botones&#34;" value="GUARDAR"/>
-		<input type="RESET"  name="btnReset" moreattr="class=&#34;botones&#34;" value="CANCELAR"/>                
+		<input type="RESET"  name="btnReset" moreattr="class=&#34;botones&#34;" value="CANCELAR"/>   
+                </fieldset>
         </form>
 	<statictext name="txt">
 		<![CDATA[

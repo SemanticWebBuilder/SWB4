@@ -3,8 +3,12 @@
 	<xslfile>admresource.xslt</xslfile>
 	<form name="frmIndiceTematicoXSL" action="true" method="POST" enctype="multipart/form-data">
 		<admdbconnmgr defconn="true"/>
+                <fieldset>
 		<input type="FILE" name="template" label="Modelo (xsl, xslt):" jsrequired="true" showfile="true" msg="Modelo atual " bydefault="{@webpath}wbadmin/xsl/IndiceTematicoXSL/IndiceTematicoXSL.xslt" msgbydefault="Modelo do defeito " filetype="xsl|xslt" isshowfiletype="true" size="40"/>
+                </fieldset>
+                <fieldset>
 		<input type="SUBMIT" name="btnSave"  value="Salvar"/>
 		<input type="RESET"  name="btnReset" value="Cancelar"/>
+                </fieldset>
 	</form>
 </admresource>

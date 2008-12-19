@@ -3,6 +3,7 @@
 	<xslfile>admresource.xslt</xslfile>
 	<form name="frmRelatedTopics" action="true" method="POST" enctype="multipart/form-data">
 		<admdbconnmgr defconn="true"/>
+                <fieldset>
 		<input type="FILE" name="template" label="Modelo (xsl, xslt):" showfile="true" msg="Modelo atual " bydefault="{@webpath}wbadmin/xsl/RelatedTopics/RelatedTopics.xslt" msgbydefault="Modelo do defeito " filetype="xsl|xslt" isshowfiletype="true" size="40"/>
 		<input type="TEXT" name="title" label="Título:" size="50"/>
 		<statictext name="txtSort">Ordenado por:</statictext>
@@ -11,8 +12,11 @@
 		<statictext name="txtTarget">Em uma nova janela:</statictext>
 		<input type="RADIO" name="target" label="Sim" value="1" />
 		<input type="RADIO" name="target" label="Não" value="0" />
+                </fieldset>
+                <fieldset>
 		<input type="SUBMIT" name="btnSave"  value="Salvar"/>
 		<input type="RESET"  name="btnReset" value="Cancelar"/>
+                </fieldset>
 	</form>
 	<statictext name="txtNote">
 		<![CDATA[

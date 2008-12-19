@@ -9,7 +9,8 @@
  -->
 	<xslfile>admresource.xslt</xslfile>
 	<form name="frmAdmin" action="true" method="POST" enctype="multipart/form-data">
-		<admdbconnmgr defconn="true"/>                      
+		<admdbconnmgr defconn="true"/>       
+                <fieldset>
 <!--                
 		<input type="FILE" name="html" label="* Archivo de contenido local:" size="40" showfile="false"/>
 		<statictext name="labelPag">* Desea páginar contenido:</statictext>
@@ -19,7 +20,10 @@
 		<input type="CHECKBOX" name="forward" label="Include / Forward:"/>
 		<input type="TEXT" name="jsppath" label="Ruta del JSP:" size="50"/>
                 <input type="TEXT" name="jspactpath" label="Ruta del ProcesAction JSP:" size="50"/>
+                </fieldset>
+                <fieldset>
 		<input type="SUBMIT" name="btnSave"  value="Salvar"/>
 		<input type="RESET"  name="btnReset" value="Cancelar"/>
+                </fieldset>
         </form>
 </admresource>

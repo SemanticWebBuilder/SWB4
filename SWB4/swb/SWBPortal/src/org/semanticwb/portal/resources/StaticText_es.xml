@@ -9,7 +9,8 @@
  -->
 	<xslfile>admresource.xslt</xslfile>
 	<form name="frmAdmin" action="true" method="POST" enctype="multipart/form-data">
-		<admdbconnmgr defconn="true"/>     
+		<admdbconnmgr defconn="true"/>   
+                <fieldset>
 <!--                         
 		<input type="FILE" name="html" label="* Archivo de contenido local:" size="40" showfile="false"/>
 		<statictext name="labelPag">* Desea páginar contenido:</statictext>
@@ -17,10 +18,13 @@
 		<input type="RADIO" name="pcont" label="No" value="0"/>
 --> 
                 <textarea name="text" label="* Text:" rows="5" cols="38" jsrequired="true"/>
+                </fieldset>
+                <fieldset>
 		<input type="SUBMIT" name="btnSave"  moreattr="class=&#34;boton&#34;" value="Guardar"/>
 		<input type="RESET"  name="btnReset" moreattr="class=&#34;boton&#34;" value="Cancelar"/>
                 <statictext name="labelPag">
                 	<![CDATA[* Datos requeridos]]>
 		</statictext>
+                </fieldset>
         </form>
 </admresource>

@@ -43,6 +43,7 @@
     </script>
     <form name="frmWBSiteMap" id="frmWBSiteMap" action="true" method="POST" enctype="multipart/form-data">
         <admdbconnmgr defconn="true"/>
+        <fieldset>
         <input type="FILE" name="template" label="Plantilla (xsl, xslt):" showfile="true" msg="Plantilla actual " bydefault="{@webpath}wbadmin/xsl/WBSiteMap/WBSiteMap.xslt" msgbydefault="Plantilla por defecto " filetype="xsl|xslt" isshowfiletype="true" size="40"/>
         <input type="FILE" name="img" label="Imagen para mapa del sitio (bmp, gif, jpg, jpeg):" showfile="true" filetype="bmp|jpg|jpeg|gif" isshowfiletype="true" isremovefile="true" removemsg="Quitar imagen para mapa de sitio" moreattr="onclick=&#34;jsClear(this.form);&#34;" size="40"/>
         <input type="TEXT" name="alt" label="Texto alterno para la imagen:" size="50"/>
@@ -57,8 +58,10 @@
             <input type="CHECKBOX" name="collapse" label="Colapsar automáticamente todas las demás ramas cuando se expande una:" value="true" />
             <input type="TEXT" name="loadmsg" label="Mensaje para indicar una solicitud asíncrona" value="Cargando&#8230;" />
             <input type="TEXT" name="errormsg" label="Mensaje para indicar un error en una solicitud asíncrona" value="Lo siento, no existe" />
-
+        </fieldset>
+        <fieldset>
         <input type="SUBMIT" name="btnSave"  value="Guardar" onclick="if(jsValida(this.form)) return true; else return false;"/>
         <input type="RESET"  name="btnReset" value="Cancelar"/>
+        </fieldset>
     </form>
 </admresource>

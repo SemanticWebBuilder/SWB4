@@ -3,6 +3,7 @@
 	<xslfile>admresource.xslt</xslfile>
 	<form name="frmPromo" action="true" method="POST" enctype="multipart/form-data">
 		<admdbconnmgr defconn="true"/>
+                <fieldset>
 		<input type="TEXT" name="title" label="Título do promocional:" size="50"/>
 		<textarea name="text" label="* Texto:" rows="5" cols="50" wrap="virtual" jsrequired="true"/>
 		<input type="FILE" name="img" label="Imagem (bmp, gif, jpg, jpeg):" showfile="true" filetype="bmp|jpg|jpeg|gif" isshowfiletype="true" isremovefile="true" removemsg="Deletar imagem" size="40"/>
@@ -69,8 +70,11 @@
 		<statictext name="txtTarget">Uma nova janela:</statictext>
 		<input type="RADIO" name="target" label="Sim" value="1"/>
 		<input type="RADIO" name="target" label="Não" value="0"/>
+                </fieldset>
+                <fieldset>
 		<input type="SUBMIT" name="btnSave"  value="Salvarr" onclick="if(jsValida(this.form)) return true; else return false;"/>
 		<input type="RESET"  name="btnReset" value="Cancelar"/>
+                </fieldset>
 	</form>
 	<statictext name="txtNote">
 		<![CDATA[
