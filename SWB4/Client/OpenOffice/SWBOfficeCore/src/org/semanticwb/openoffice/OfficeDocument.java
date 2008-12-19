@@ -301,9 +301,12 @@ public abstract class OfficeDocument
         dialog.setVisible(true);
     }
 
-    public final static void showDocumentInfo()
+    public final void showDocumentInfo()
     {
-        DialogContentInformation dialog = new DialogContentInformation(new javax.swing.JFrame(), true);
+        Map<String,String> properties=this.getCustomProperties();
+        String contentId=properties.get(CONTENT_ID_NAME);
+        String rep=properties.get(WORKSPACE_ID_NAME);
+        DialogContentInformation dialog = new DialogContentInformation(new javax.swing.JFrame(), true,contentId,rep);
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
     }

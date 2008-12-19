@@ -23,7 +23,7 @@
     <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
-    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,1,-68,0,0,1,-31"/>
+    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,1,-66,0,0,1,-31"/>
   </AuxValues>
 
   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
@@ -118,37 +118,49 @@
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jLabel1Description" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel1Id" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel1Title" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel1DateofModification" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel1State" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel1Activity" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabelVisible" alignment="0" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
-                              <Component id="jLabel13" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="103" alignment="0" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jLabel1DisplayDateOfModification" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jScrollPane2" alignment="0" pref="248" max="32767" attributes="1"/>
-                                      <Component id="jTextFieldTitle" alignment="0" pref="248" max="32767" attributes="1"/>
-                                      <Component id="jLabel2DisplayActivity" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabel1DisplayState" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jLabel1Title" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel1Description" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel1DateofModification" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="-2" pref="88" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="jLabel1DisplayDateOfModification" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace pref="115" max="32767" attributes="0"/>
                                   </Group>
-                                  <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="jScrollPane2" pref="248" max="32767" attributes="1"/>
+                                      <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="jTextFieldTitle" pref="248" max="32767" attributes="1"/>
+                                      <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
+                                  </Group>
                               </Group>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="jRadioButtonVisibleYes" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="jRadioButtonVisibleNo" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="179" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="jLabel1State" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="jLabel1DisplayState" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace pref="228" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jLabel1Activity" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabelVisible" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="jRadioButtonVisibleYes" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Component id="jRadioButtonVisibleNo" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Component id="jLabel2DisplayActivity" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace pref="76" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -159,61 +171,44 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jLabel1Id" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel13" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel1Title" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jTextFieldTitle" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jLabel1Description" min="-2" max="-2" attributes="0"/>
                           <Component id="jScrollPane2" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jLabel1DateofModification" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel1DisplayDateOfModification" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jLabel1DateofModification" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel1DisplayDateOfModification" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel1State" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel1DisplayState" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel1Activity" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel2DisplayActivity" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="103" alignment="0" groupAlignment="3" attributes="0">
-                              <Component id="jRadioButtonVisibleYes" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jRadioButtonVisibleNo" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Component id="jLabelVisible" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jLabelVisible" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jRadioButtonVisibleYes" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jRadioButtonVisibleNo" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="116" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JLabel" name="jLabel1Id">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Identificador:"/>
-              </Properties>
-            </Component>
             <Component class="javax.swing.JLabel" name="jLabel1Title">
               <Properties>
                 <Property name="text" type="java.lang.String" value="T&#xed;tulo:"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JLabel" name="jLabel13">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="1542"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="jTextFieldTitle">
@@ -534,7 +529,7 @@
                       <Component id="jRadioButtonWeb" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jRadioButtonOffice" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="253" max="32767" attributes="0"/>
+                      <EmptySpace pref="255" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -562,10 +557,6 @@
           </Constraints>
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
-          <SubComponents>
-            <Component class="org.semanticwb.openoffice.ui.wizard.PagContenido" name="pagContenido1">
-            </Component>
-          </SubComponents>
         </Container>
       </SubComponents>
     </Container>
