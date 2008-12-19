@@ -5,6 +5,8 @@
  */
 package org.semanticwb.openoffice.ui.dialogs;
 
+import org.semanticwb.openoffice.OfficeApplication;
+
 /**
  *
  * @author  victor.lorenzana
@@ -12,11 +14,25 @@ package org.semanticwb.openoffice.ui.dialogs;
 public class DialogContentInformation extends javax.swing.JDialog
 {
 
+    private String contentId,repository;
     /** Creates new form DialogContentInformation */
-    public DialogContentInformation(java.awt.Frame parent, boolean modal)
+    public DialogContentInformation(java.awt.Frame parent, boolean modal,String contentId,String repository)
     {
         super(parent, modal);
         initComponents();
+        this.contentId=contentId;
+        this.repository=repository;
+        try
+        {
+            this.jTextFieldTitle.setText(OfficeApplication.getOfficeDocumentProxy().getTitle(repository, contentId));
+            this.jTextAreaDescription.setText(OfficeApplication.getOfficeDocumentProxy().getDescription(repository, contentId));
+            String date=OfficeApplication.iso8601dateFormat.format(OfficeApplication.getOfficeDocumentProxy().getLasUpdate(repository, contentId));
+            this.jLabel1DisplayDateOfModification.setText(date);
+        }
+        catch(Exception e)
+        {
+            
+        }
     }
 
     /** This method is called from within the constructor to
@@ -35,9 +51,7 @@ public class DialogContentInformation extends javax.swing.JDialog
         jButtonSchuddler = new javax.swing.JButton();
         jTabbedPane2 = new javax.swing.JTabbedPane();
         jPanelInformation = new javax.swing.JPanel();
-        jLabel1Id = new javax.swing.JLabel();
         jLabel1Title = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
         jTextFieldTitle = new javax.swing.JTextField();
         jLabel1Description = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -66,7 +80,6 @@ public class DialogContentInformation extends javax.swing.JDialog
         jRadioButtonWeb = new javax.swing.JRadioButton();
         jRadioButtonOffice = new javax.swing.JRadioButton();
         jPanelChangePagContenido = new javax.swing.JPanel();
-        pagContenido1 = new org.semanticwb.openoffice.ui.wizard.PagContenido();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Información del Contenido");
@@ -112,11 +125,7 @@ public class DialogContentInformation extends javax.swing.JDialog
 
         getContentPane().add(jPanelButtons, java.awt.BorderLayout.SOUTH);
 
-        jLabel1Id.setText("Identificador:");
-
         jLabel1Title.setText("Título:");
-
-        jLabel13.setText("1542");
 
         jLabel1Description.setText("Descripción:");
 
@@ -152,67 +161,69 @@ public class DialogContentInformation extends javax.swing.JDialog
             .addGroup(jPanelInformationLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1Description)
-                    .addComponent(jLabel1Id)
-                    .addComponent(jLabel1Title)
-                    .addComponent(jLabel1DateofModification)
-                    .addComponent(jLabel1State)
-                    .addComponent(jLabel1Activity)
-                    .addComponent(jLabelVisible))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanelInformationLayout.createSequentialGroup()
-                        .addComponent(jLabel13)
-                        .addContainerGap())
-                    .addGroup(jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanelInformationLayout.createSequentialGroup()
-                            .addGroup(jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1Title)
+                            .addComponent(jLabel1Description)
+                            .addComponent(jLabel1DateofModification))
+                        .addGap(88, 88, 88)
+                        .addGroup(jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanelInformationLayout.createSequentialGroup()
                                 .addComponent(jLabel1DisplayDateOfModification)
+                                .addContainerGap(115, Short.MAX_VALUE))
+                            .addGroup(jPanelInformationLayout.createSequentialGroup()
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
+                                .addGap(21, 21, 21))
+                            .addGroup(jPanelInformationLayout.createSequentialGroup()
                                 .addComponent(jTextFieldTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
-                                .addComponent(jLabel2DisplayActivity)
-                                .addComponent(jLabel1DisplayState))
-                            .addGap(21, 21, 21))
-                        .addGroup(jPanelInformationLayout.createSequentialGroup()
-                            .addComponent(jRadioButtonVisibleYes)
-                            .addGap(18, 18, 18)
-                            .addComponent(jRadioButtonVisibleNo)
-                            .addContainerGap(179, Short.MAX_VALUE)))))
+                                .addGap(21, 21, 21))))
+                    .addGroup(jPanelInformationLayout.createSequentialGroup()
+                        .addComponent(jLabel1State)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel1DisplayState)
+                        .addContainerGap(228, Short.MAX_VALUE))
+                    .addGroup(jPanelInformationLayout.createSequentialGroup()
+                        .addGroup(jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1Activity)
+                            .addComponent(jLabelVisible))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanelInformationLayout.createSequentialGroup()
+                                .addComponent(jRadioButtonVisibleYes)
+                                .addGap(18, 18, 18)
+                                .addComponent(jRadioButtonVisibleNo))
+                            .addComponent(jLabel2DisplayActivity))
+                        .addContainerGap(76, Short.MAX_VALUE))))
         );
         jPanelInformationLayout.setVerticalGroup(
             jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelInformationLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1Id)
-                    .addComponent(jLabel13))
-                .addGap(18, 18, 18)
-                .addGroup(jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1Title)
                     .addComponent(jTextFieldTitle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(24, 24, 24)
+                .addGap(18, 18, 18)
                 .addGroup(jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1Description)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGap(11, 11, 11)
+                .addGroup(jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1DateofModification)
                     .addComponent(jLabel1DisplayDateOfModification))
                 .addGap(18, 18, 18)
                 .addGroup(jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1State)
                     .addComponent(jLabel1DisplayState))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1Activity)
                     .addComponent(jLabel2DisplayActivity))
-                .addGap(18, 18, 18)
-                .addGroup(jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jRadioButtonVisibleYes)
-                        .addComponent(jRadioButtonVisibleNo))
-                    .addComponent(jLabelVisible))
-                .addGap(44, 44, 44))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelVisible)
+                    .addComponent(jRadioButtonVisibleYes)
+                    .addComponent(jRadioButtonVisibleNo))
+                .addGap(116, 116, 116))
         );
 
         jTabbedPane2.addTab("Información del contenido", jPanelInformation);
@@ -350,43 +361,19 @@ public class DialogContentInformation extends javax.swing.JDialog
                 .addComponent(jRadioButtonWeb)
                 .addGap(18, 18, 18)
                 .addComponent(jRadioButtonOffice)
-                .addContainerGap(253, Short.MAX_VALUE))
+                .addContainerGap(255, Short.MAX_VALUE))
         );
 
         jTabbedPane2.addTab("Tipo de despluiegue", jPanelTypeOfDisplay);
 
         jPanelChangePagContenido.setLayout(new javax.swing.BoxLayout(jPanelChangePagContenido, javax.swing.BoxLayout.LINE_AXIS));
-        jPanelChangePagContenido.add(pagContenido1);
-
         jTabbedPane2.addTab("Páginación del Contenido", jPanelChangePagContenido);
 
         getContentPane().add(jTabbedPane2, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[])
-    {
-        java.awt.EventQueue.invokeLater(new Runnable()
-        {
-
-            public void run()
-            {
-                DialogContentInformation dialog = new DialogContentInformation(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter()
-                {
-
-                    public void windowClosing(java.awt.event.WindowEvent e)
-                    {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
+   
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButtonAccept;
@@ -395,13 +382,11 @@ public class DialogContentInformation extends javax.swing.JDialog
     private javax.swing.JButton jButtonSendToAuthorize;
     private javax.swing.JCheckBox jCheckBoxAllowEditFromWeb;
     private javax.swing.JComboBox jComboBoxRol;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel1Activity;
     private javax.swing.JLabel jLabel1DateofModification;
     private javax.swing.JLabel jLabel1Description;
     private javax.swing.JLabel jLabel1DisplayDateOfModification;
     private javax.swing.JLabel jLabel1DisplayState;
-    private javax.swing.JLabel jLabel1Id;
     private javax.swing.JLabel jLabel1State;
     private javax.swing.JLabel jLabel1Title;
     private javax.swing.JLabel jLabel2DisplayActivity;
@@ -427,6 +412,5 @@ public class DialogContentInformation extends javax.swing.JDialog
     private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JTextArea jTextAreaDescription;
     private javax.swing.JTextField jTextFieldTitle;
-    private org.semanticwb.openoffice.ui.wizard.PagContenido pagContenido1;
     // End of variables declaration//GEN-END:variables
 }
