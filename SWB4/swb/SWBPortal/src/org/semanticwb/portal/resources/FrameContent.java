@@ -140,7 +140,6 @@ public class FrameContent extends GenericAdmResource
             catch (Exception e) { log.error("Error in resource FrameContent while bringing HTML.", e); }
         }
         PrintWriter out=response.getWriter();
-        out.print(ret.toString());
-        out.println("<br><a href=\"" + paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN) + "\">admin</a>");
+        out.print(ret.toString());        
     }
 }
