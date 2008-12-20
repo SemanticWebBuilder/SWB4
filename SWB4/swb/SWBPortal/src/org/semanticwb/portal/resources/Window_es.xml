@@ -3,6 +3,7 @@
 	<xslfile>admresource.xslt</xslfile>
 	<form name="frmVentana" action="true" method="POST" enctype="multipart/form-data">
 		<admdbconnmgr defconn="true"/>
+            <fieldset>
 		<statictext name="general">
 			<![CDATA[
 				<font style="color: #428AD4; text-decoration: none; font-family: Verdana; font-size: 12px; font-weight: normal;">
@@ -119,8 +120,11 @@
 		<input type="TEXT" name="height" label="Alto de la ventana (pixeles):" size="4" maxlength="4" jsvaltype="js_numbers"/>
 		<input type="TEXT" name="top" label="Posición margen superior (pixeles):" size="4" maxlength="4" jsvaltype="js_numbers"/>
 		<input type="TEXT" name="left" label="Posición margen izquierdo (pixeles):" size="4" maxlength="4" jsvaltype="js_numbers"/>
+            </fieldset>
+            <fieldset>
 		<input type="SUBMIT" name="btnSave"  value="Guardar" onclick="if(jsValida(this.form)) return true; else return false;"/>
 		<input type="RESET"  name="btnReset" value="Cancelar"/>
+            </fieldset>
 	</form>
 	<statictext name="txtNote">
 		<![CDATA[
