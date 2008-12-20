@@ -157,11 +157,13 @@ public class Recommend extends GenericAdmResource {
                 dom.appendChild(el);
 
                 el = dom.createElement("msgRecommend");
-                el.appendChild(dom.createTextNode(paramRequest.getLocaleString("msgRecommend")));
+                el.appendChild(dom.createTextNode(paramRequest.getLocaleString(
+                        "msgRecommend")));
                 dom.getChildNodes().item(0).appendChild(el);
                 
                 el = dom.createElement("labelSender");
-                el.appendChild(dom.createTextNode(paramRequest.getLocaleString("msgSender")));
+                el.appendChild(dom.createTextNode(paramRequest.getLocaleString(
+                        "msgSender")));
                 dom.getChildNodes().item(0).appendChild(el);
                 el = dom.createElement("ftextsender");
                 el.setAttribute("tag", paramRequest.getLocaleString("msgSender"));
@@ -197,7 +199,8 @@ public class Recommend extends GenericAdmResource {
                 dom.getChildNodes().item(0).appendChild(el);
 
                 el = dom.createElement("labelReceiver");
-                el.appendChild(dom.createTextNode(paramRequest.getLocaleString("msgReceiver")));
+                el.appendChild(dom.createTextNode(paramRequest.getLocaleString(
+                        "msgReceiver")));
                 dom.getChildNodes().item(0).appendChild(el);
                 el = dom.createElement("ftextreceiver");
                 el.setAttribute("tag",
@@ -385,7 +388,8 @@ public class Recommend extends GenericAdmResource {
     public Document getDomEmail(HttpServletRequest request,
             HttpServletResponse response, SWBParamRequest paramRequest)
             throws SWBResourceException, IOException {
-        Portlet base=getResourceBase();
+        
+        Portlet base = getResourceBase();
         try {
             String strFromEmail = (null != request.getParameter("txtFromEmail")
                     && !"".equals(request.getParameter("txtFromEmail").trim()))
@@ -429,11 +433,16 @@ public class Recommend extends GenericAdmResource {
                 emn.setAttribute("email", "1");
                 dom.appendChild(emn);
                 
-                addElem(dom, emn, "msgRecommend", paramRequest.getLocaleString("msgRecommend"));
-                addElem(dom, emn, "msgToMessage", paramRequest.getLocaleString("msgToMessage") + ' ');
-                addElem(dom, emn, "msgFromMessage", paramRequest.getLocaleString("msgFromMessage") + ' ');
-                addElem(dom, emn, "msgBodyMessage", ' ' + paramRequest.getLocaleString("msgBodyMessage") + ' ');
-                addElem(dom, emn, "msgFooterMessage", paramRequest.getLocaleString("msgFooterMessage"));
+                addElem(dom, emn, "msgRecommend",
+                        paramRequest.getLocaleString("msgRecommend"));
+                addElem(dom, emn, "msgToMessage",
+                        paramRequest.getLocaleString("msgToMessage") + ' ');
+                addElem(dom, emn, "msgFromMessage",
+                        paramRequest.getLocaleString("msgFromMessage") + ' ');
+                addElem(dom, emn, "msgBodyMessage",
+                        ' ' + paramRequest.getLocaleString("msgBodyMessage") + ' ');
+                addElem(dom, emn, "msgFooterMessage",
+                        paramRequest.getLocaleString("msgFooterMessage"));
 
                 addElem(dom, emn, "site", topic.getWebSiteId());
                 addElem(dom, emn, "siteurl", strUrl);
@@ -454,7 +463,6 @@ public class Recommend extends GenericAdmResource {
                 }
                 
                 String strHeadermsg = "<br> \n";
-                strHeadermsg += "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=2> \n";
                 strHeadermsg += "----------------------------------------------------------------------<br> \n";
                 strHeadermsg += paramRequest.getLocaleString("msgHeaderMessage") + "<br> \n";
                 strHeadermsg += "----------------------------------------------------------------------<br> \n";
@@ -472,22 +480,27 @@ public class Recommend extends GenericAdmResource {
                 strHeadermsg += " <a href=\""+ strUrl + topic.getUrl() +"\">";
                 strHeadermsg += topic.getTitle(lang);
                 strHeadermsg += "</a> \n";
-                if(strTarMsg != null) strHeadermsg +="<br><br> \n";
+                if (strTarMsg != null) {
+                    strHeadermsg +="<br><br> \n";
+                }
                 String strFootermsg = "";
                 if (!"".equals(base.getAttribute("footermsg", "").trim())) {
-                    addElem(dom, emn, "footermsg", base.getAttribute("footermsg").trim());
-                    strFootermsg +="<br><br><br>"+ base.getAttribute("footermsg").trim() +" \n";
+                    addElem(dom, emn, "footermsg",
+                            base.getAttribute("footermsg").trim());
+                    strFootermsg += "<br><br><br>"
+                            + base.getAttribute("footermsg").trim() + " \n";
                 }
                 strFootermsg += "<br><br> \n";
                 strFootermsg += "----------------------------------------------------------------------<br> \n";
                 strFootermsg += " " + paramRequest.getLocaleString("msgFooterMessage") + "<br> \n";
                 strFootermsg += " <a href=\""+strUrl +"\">" + topic.getWebSiteId() + "</a> \n";
-                strFootermsg += "</font> \n";
                 strFootermsg += "<br><br> \n";
-                addElem(dom, emn, "emailbody", strHeadermsg + strTarMsg + strFootermsg);
+                addElem(dom, emn, "emailbody",
+                        strHeadermsg + strTarMsg + strFootermsg);
                 return dom;
             } else {
-                throw new SWBResourceException("Error Missing Data. The following data fields are required: "
+                throw new SWBResourceException(
+                        "Error Missing Data. The following data fields are required: "
                         + "\n\t email account of the sender: " + strFromEmail
                         + "\n\t email account of the receiver: " + strToEmail);
             }
@@ -685,9 +698,10 @@ public class Recommend extends GenericAdmResource {
      * @param elemName
      * @param elemValue
      */      
-    private void addElem(org.w3c.dom.Document doc, org.w3c.dom.Element parent, String elemName, String elemValue)
-    {
-        org.w3c.dom.Element elem = doc.createElement(elemName);
+    private void addElem(Document doc, Element parent, String elemName,
+            String elemValue) {
+        
+        Element elem = doc.createElement(elemName);
         elem.appendChild(doc.createTextNode(elemValue));
         parent.appendChild(elem);
     }
