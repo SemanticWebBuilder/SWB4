@@ -194,8 +194,8 @@ public class Window extends GenericAdmResource {
         ret.append("> \n");
         ret.append("<center> \n");
         if (!"".equals(base.getAttribute("title", "").trim())) {
-            ret.append("<font size=\"+1\">" + base.getAttribute("title"));
-            ret.append("</font><br><br>");
+            ret.append(base.getAttribute("title"));
+            ret.append("<br><br>");
         }
         
         SWBResourceURL wburl = reqParams.getActionUrl();
