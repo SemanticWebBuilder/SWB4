@@ -396,23 +396,26 @@ public class CommentSwf extends Comment {
         Portlet base = getResourceBase();
         
         try {
-            SWBResourceURL url = paramsRequest.getRenderUrl().setAction("update");  
+            SWBResourceURL url = paramsRequest.getRenderUrl().setAction("update");
+            ret.append("<div class=\"swbform\">");
             ret.append("<form name=\"frmResource\" method=\"post\" enctype=\"multipart/form-data\" action=\""
                     + url.toString() + "\"> \n");
-            ret.append("<div class=box>");
-            ret.append("<table width=\"100%\"  border=\"0\" cellpadding=\"5\" cellspacing=\"0\">");
+            ret.append("<table>");
+            ret.append("<tr> \n");
+            ret.append("<td>\n");
+            ret.append("<fieldset>\n");
+            ret.append("<table>");
             ret.append("<tr> \n");
             ret.append("<td colspan=2>");
-            ret.append("<font style=\"color: #428AD4; text-decoration: none; font-family: Verdana; font-size: 12px; font-weight: normal;\">");
-            ret.append(paramsRequest.getLocaleString("msgStep1") + "</font>");
+            ret.append(paramsRequest.getLocaleString("msgStep1"));
             ret.append("</td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
-            ret.append("<td class=\"datos\">"
+            ret.append("<td>"
                     + paramsRequest.getLocaleString("msgTemplate")
                     + " (xsl, xslt):</td> \n");
-            ret.append("<td class=\"valores\">");
-            ret.append("<input type=\"file\" name=\"template\" size=\"40\" onChange=\"isFileType(this, 'xsl|xslt');\" />");
+            ret.append("<td>");
+            ret.append("<input type=\"file\" name=\"template\" onChange=\"isFileType(this, 'xsl|xslt');\" />");
             //if (!"".equals(base.getAttribute("template", "").trim()))
             if (path.indexOf(webWorkPath) !=-1) {
                 ret.append("<p>"
@@ -429,11 +432,11 @@ public class CommentSwf extends Comment {
             ret.append("</td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
-            ret.append("<td class=\"datos\">"
+            ret.append("<td>"
                     + paramsRequest.getLocaleString("msgImage")
                     + " (bmp, gif, jpg, jpeg):</td> \n");
-            ret.append("<td class=\"valores\">");
-            ret.append("<input type=\"file\" name=\"img\" size=\"40\" onClick=\"this.form.btntexto.value=''; this.form.lnktexto.value=''\" onChange=\"isFileType(this, 'bmp|jpg|jpeg|gif');\"/>");
+            ret.append("<td>");
+            ret.append("<input type=\"file\" name=\"img\" onClick=\"this.form.btntexto.value=''; this.form.lnktexto.value=''\" onChange=\"isFileType(this, 'bmp|jpg|jpeg|gif');\"/>");
             if (!"".equals(base.getAttribute("img", "").trim())) {
                 ret.append("<p>"
                         + admResUtils.displayImage(base,
@@ -446,10 +449,10 @@ public class CommentSwf extends Comment {
             ret.append("</td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
-            ret.append("<td class=\"datos\">"
+            ret.append("<td>"
                     + paramsRequest.getLocaleString("msgAlt") + "</td> \n");
-            ret.append("<td class=\"valores\">");
-            ret.append("<input type=text size=50 name=alt ");
+            ret.append("<td>");
+            ret.append("<input type=text name=alt ");
             if (!"".equals(base.getAttribute("alt", "").trim())) {
                 ret.append(" value=\""
                         + base.getAttribute("alt").trim().replaceAll("\"", "&#34;")
@@ -458,10 +461,10 @@ public class CommentSwf extends Comment {
             ret.append("></td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
-            ret.append("<td class=\"datos\">"
+            ret.append("<td>"
                     + paramsRequest.getLocaleString("msgButton") + "</td> \n");
-            ret.append("<td class=\"valores\">");
-            ret.append("<input type=text size=50 name=btntexto ");
+            ret.append("<td>");
+            ret.append("<input type=text name=btntexto ");
             if (!"".equals(base.getAttribute("btntexto", "").trim())) {
                 ret.append(" value=\""
                         + base.getAttribute("btntexto").trim().replaceAll("\"", "&#34;")
@@ -470,11 +473,11 @@ public class CommentSwf extends Comment {
             ret.append("></td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
-            ret.append("<td class=\"datos\">"
+            ret.append("<td>"
                     + paramsRequest.getLocaleString("msgLink")
                     + "</td> \n");
-            ret.append("<td class=\"valores\">");
-            ret.append("<input type=text size=50 name=lnktexto ");
+            ret.append("<td>");
+            ret.append("<input type=text name=lnktexto ");
             if (!"".equals(base.getAttribute("lnktexto", "").trim())) {
                 ret.append(" value=\""
                         + base.getAttribute("lnktexto").trim().replaceAll("\"", "&#34;")
@@ -483,10 +486,10 @@ public class CommentSwf extends Comment {
             ret.append("></td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
-            ret.append("<td class=\"datos\">"
+            ret.append("<td>"
                     + paramsRequest.getLocaleString("msgStyle") + "</td> \n");
-            ret.append("<td class=\"valores\">");
-            ret.append("<input type=text size=50 name=blnstyle ");
+            ret.append("<td>");
+            ret.append("<input type=text name=blnstyle ");
             if (!"".equals(base.getAttribute("blnstyle", "").trim())) {
                 ret.append(" value=\""
                         + base.getAttribute("blnstyle").trim().replaceAll("\"", "&#34;")
@@ -495,11 +498,11 @@ public class CommentSwf extends Comment {
             ret.append("></td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
-            ret.append("<td class=\"datos\">* "
+            ret.append("<td>* "
                     + paramsRequest.getLocaleString("msgFlash")
                     + " (swf, emf, wmf):</td> \n");
-            ret.append("<td class=\"valores\">");
-            ret.append("<input type=\"file\" name=\"swf\" size=\"40\" onChange=\"isFileType(this, 'swf|emf|wmf');\"/>");
+            ret.append("<td>");
+            ret.append("<input type=\"file\" name=\"swf\" onChange=\"isFileType(this, 'swf|emf|wmf');\"/>");
             if (!"".equals(base.getAttribute("swf", "").trim())) {
                 ret.append("<p>" + paramsRequest.getLocaleString("msgCurrentSwf")
                         + " <i>" + base.getAttribute("swf").trim() + "</i></p>");
@@ -508,10 +511,10 @@ public class CommentSwf extends Comment {
             ret.append("</tr> \n");
             
             ret.append("<tr> \n");
-            ret.append("<td class=\"datos\">"
+            ret.append("<td>"
                     + paramsRequest.getLocaleString("msgGenerateLog")
                     + " :</td> \n");
-            ret.append("<td class=\"valores\">");
+            ret.append("<td>");
             ret.append("<input type=\"checkbox\" name=\"generatelog\" value=\"1\"");
             if ("1".equals(base.getAttribute("generatelog", "0"))) {
                 ret.append(" checked");
@@ -520,11 +523,11 @@ public class CommentSwf extends Comment {
             ret.append("</tr> \n");
             
             ret.append("<tr> \n");
-            ret.append("<td class=\"datos\">"
+            ret.append("<td>"
                     + paramsRequest.getLocaleString("msgSwfConfiguration")
                     + "</td> \n");
-            ret.append("<td class=\"valores\">");
-            ret.append("<input type=text size=50 name=txtSwfvar><input type=hidden name=swfvar ");
+            ret.append("<td>");
+            ret.append("<input type=text name=txtSwfvar><input type=hidden name=swfvar ");
             if (!"".equals(base.getAttribute("swfvar", "").trim())) {
                 ret.append(" value=\""
                         + base.getAttribute("swfvar").trim().replaceAll("\"", "&#34;")
@@ -541,7 +544,7 @@ public class CommentSwf extends Comment {
             ret.append("</tr> \n");
             ret.append("<tr> \n");
             ret.append("<td>&nbsp;</td> \n");
-            ret.append("<td class=\"valores\">");
+            ret.append("<td>");
             ret.append("\n<select name=\"selSwfvar\" size=5 multiple onChange=\"editOption(this.form.selSwfvar, this.form.txtSwfvar)\">");
             String swfvar = "";
             Document dom = base.getDom();
@@ -562,14 +565,14 @@ public class CommentSwf extends Comment {
             ret.append("\n</select>");
             ret.append("\n<input type=button name=btnDel value="
                     + paramsRequest.getLocaleString("btnRemove")
-                    + " onClick=\"deleteOption(this.form.selSwfvar, this.form.txtSwfvar)\" class=boton>");
+                    + " onClick=\"deleteOption(this.form.selSwfvar, this.form.txtSwfvar)\">");
             ret.append("</td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
-            ret.append("<td class=\"datos\">"
+            ret.append("<td>"
                     + paramsRequest.getLocaleString("msgFirstName")
                     + "</td> \n");
-            ret.append("<td class=\"valores\">");
+            ret.append("<td>");
             ret.append("<input type=\"checkbox\" name=\"firstname\" value=\"1\"");
             if ("1".equals(base.getAttribute("firstname", "0"))) {
                 ret.append(" checked");
@@ -577,9 +580,9 @@ public class CommentSwf extends Comment {
             ret.append("></td> \n");
             ret.append("</tr> \n");  
             ret.append("<tr> \n");
-            ret.append("<td class=\"datos\">"
+            ret.append("<td>"
                     + paramsRequest.getLocaleString("msgLastName") + "</td> \n");
-            ret.append("<td class=\"valores\">");
+            ret.append("<td>");
             ret.append("<input type=\"checkbox\" name=\"lastname\" value=\"1\"");
             if ("1".equals(base.getAttribute("lastname", "0"))) {
                 ret.append(" checked");
@@ -587,10 +590,10 @@ public class CommentSwf extends Comment {
             ret.append("></td> \n");
             ret.append("</tr> \n");  
             ret.append("<tr> \n");
-            ret.append("<td class=\"datos\">"
+            ret.append("<td>"
                     + paramsRequest.getLocaleString("msgMiddleName")
                     + "</td> \n");
-            ret.append("<td class=\"valores\">");
+            ret.append("<td>");
             ret.append("<input type=\"checkbox\" name=\"middlename\" value=\"1\"");
             if ("1".equals(base.getAttribute("middlename", "0"))) {
                 ret.append(" checked");
@@ -599,22 +602,22 @@ public class CommentSwf extends Comment {
             ret.append("</tr> \n");             
             ret.append("<tr> \n");
             ret.append("<td colspan=2>");
-            ret.append("<br><br><font style=\"color: #428AD4; text-decoration: none; font-family: Verdana; font-size: 12px; font-weight: normal;\">");
+            ret.append("<br><br>");
             ret.append(paramsRequest.getLocaleString("msgStep2") + "</font>");
             ret.append("</td> \n");
             ret.append("</tr> \n");
             ret.append(admResUtils.loadWindowConfiguration(base, paramsRequest));       
             ret.append("<tr> \n");
             ret.append("<td colspan=2>");
-            ret.append("<br><br><font style=\"color: #428AD4; text-decoration: none; font-family: Verdana; font-size: 12px; font-weight: normal;\">");
-            ret.append(paramsRequest.getLocaleString("msgStep3") + "</font>");
+            ret.append("<br><br>");
+            ret.append(paramsRequest.getLocaleString("msgStep3"));
             ret.append("</td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
-            ret.append("<td class=\"datos\">* "
+            ret.append("<td>* "
                     + paramsRequest.getLocaleString("msgArea") + "</td> \n");
-            ret.append("<td class=\"valores\">");
-            ret.append("<input type=text size=50 name=area ");
+            ret.append("<td>");
+            ret.append("<input type=text name=area ");
             if (!"".equals(base.getAttribute("area", "").trim())) {
                 ret.append(" value=\""
                         + base.getAttribute("area").trim().replaceAll("\"", "&#34;")
@@ -623,10 +626,10 @@ public class CommentSwf extends Comment {
             ret.append("></td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
-            ret.append("<td class=\"datos\">* "
+            ret.append("<td>* "
                     + paramsRequest.getLocaleString("msgResponsable") + "</td> \n");
             ret.append("<td class=\"valores\">");
-            ret.append("<input type=text size=50 name=responsable ");
+            ret.append("<input type=text name=responsable ");
             if (!"".equals(base.getAttribute("responsable", "").trim())) {
                 ret.append(" value=\""
                         + base.getAttribute("responsable").trim().replaceAll("\"", "&#34;")
@@ -635,10 +638,10 @@ public class CommentSwf extends Comment {
             ret.append("></td> \n");
             ret.append("</tr> \n"); 
             ret.append("<tr> \n");
-            ret.append("<td class=\"datos\">* "
+            ret.append("<td>* "
                     + paramsRequest.getLocaleString("msgEmail") + "</td> \n");
             ret.append("<td class=\"valores\">");
-            ret.append("<input type=text size=50 name=email ");
+            ret.append("<input type=text name=email ");
             if (!"".equals(base.getAttribute("email", "").trim())) {
                 ret.append(" value=\""
                         + base.getAttribute("email").trim().replaceAll("\"", "&#34;")
@@ -647,10 +650,10 @@ public class CommentSwf extends Comment {
             ret.append("></td> \n");
             ret.append("</tr> \n"); 
             ret.append("<tr> \n");
-            ret.append("<td class=\"datos\">"
+            ret.append("<td>"
                     + paramsRequest.getLocaleString("msgSubjectTag") + "</td> \n");
-            ret.append("<td class=\"valores\">");
-            ret.append("<input type=text size=50 name=subject ");
+            ret.append("<td>");
+            ret.append("<input type=text name=subject ");
             if (!"".equals(base.getAttribute("subject", "").trim())) {
                 ret.append(" value=\""
                         + base.getAttribute("subject").trim().replaceAll("\"", "&#34;")
@@ -659,44 +662,49 @@ public class CommentSwf extends Comment {
             ret.append("></td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
-            ret.append("<td class=\"datos\">"
+            ret.append("<td>"
                     + paramsRequest.getLocaleString("msgMessageHeader")
                     + "</td> \n");
-            ret.append("<td class=\"valores\">");
-            ret.append("<textarea name=headermsg rows=5 cols=50 wrap=virtual>");
+            ret.append("<td>");
+            ret.append("<textarea name=headermsg>");
             if (!"".equals(base.getAttribute("headermsg", "").trim())) {
                 ret.append(base.getAttribute("headermsg").trim().replaceAll("\"", "&#34;"));
             }
             ret.append("</textarea></td> \n");
             ret.append("</tr> \n");               
             ret.append("<tr> \n");
-            ret.append("<td class=\"datos\">"
+            ret.append("<td>"
                     + paramsRequest.getLocaleString("msgMessageFooter") + "</td> \n");
-            ret.append("<td class=\"valores\">");
-            ret.append("<textarea name=footermsg rows=5 cols=50 wrap=virtual>");
+            ret.append("<td>");
+            ret.append("<textarea name=footermsg>");
             if (!"".equals(base.getAttribute("footermsg", "").trim())) {
                 ret.append(base.getAttribute("footermsg").trim().replaceAll("\"", "&#34;"));
             }
             ret.append("</textarea></td> \n");
-            ret.append("</tr> \n");              
+            ret.append("</tr> \n");
+            ret.append("</table> \n");
+            ret.append("</fieldset>\n");
+            ret.append("\n</td>");
+            ret.append("\n</tr>");
             ret.append("<tr> \n");
-            ret.append("\n<td colspan=2 align=right>");
-            ret.append("<br><hr size=1 noshade> \n");
+            ret.append("\n<td>");
+            ret.append("<fieldset>\n");
             ret.append("\n<input type=submit name=btnSave value="
                     + paramsRequest.getLocaleString("btnSubmit")
-                    + " onClick=\"if(jsValida(this.form)) return true; else return false;\" class=boton>&nbsp;");
+                    + " onClick=\"if(jsValida(this.form)) return true; else return false;\">&nbsp;");
             ret.append("<input type=reset name=btnReset value="
-                    + paramsRequest.getLocaleString("btnReset") + " class=boton>");
+                    + paramsRequest.getLocaleString("btnReset") + ">");
+            ret.append("</fieldset>\n");
             ret.append("\n</td>");
-            ret.append("\n</tr>");          
+            ret.append("\n</tr>");
             ret.append("<tr> \n");
-            ret.append("\n<td colspan=2><br><font style=\"color: #428AD4; font-family: Verdana; font-size: 10px;\">");
+            ret.append("\n<td><br>");
             ret.append("\n* " + paramsRequest.getLocaleString("msgRequiredData"));
-            ret.append("\n</font></td>");
-            ret.append("\n</tr>");          
+            ret.append("\n</td>");
+            ret.append("\n</tr>");
             ret.append("</table> \n");
-            ret.append("</div>");
             ret.append("</form> \n");
+            ret.append("</div> \n");
             ret.append(getScript(request, paramsRequest));
         } catch (Exception e) {
             log.error(e);
