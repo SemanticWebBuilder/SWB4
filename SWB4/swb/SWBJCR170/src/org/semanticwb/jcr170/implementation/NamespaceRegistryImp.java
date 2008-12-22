@@ -10,8 +10,7 @@ import javax.jcr.NamespaceException;
 import javax.jcr.NamespaceRegistry;
 import javax.jcr.RepositoryException;
 import javax.jcr.UnsupportedRepositoryOperationException;
-import org.semanticwb.model.SWBContext;
-import org.semanticwb.model.SWBVocabulary;
+import org.semanticwb.repository.BaseNode;
 
 /**
  *
@@ -22,9 +21,8 @@ public class NamespaceRegistryImp implements NamespaceRegistry
     
     private final Hashtable<String,String> namespaces;
     NamespaceRegistryImp()
-    {           
-        SWBVocabulary vocabulary=SWBContext.getVocabulary();
-        namespaces=vocabulary.listUris();
+    {   
+        namespaces=BaseNode.listUris();
     }
     
     public void registerNamespace(String prefix, String uri) throws NamespaceException, UnsupportedRepositoryOperationException, AccessDeniedException, RepositoryException
