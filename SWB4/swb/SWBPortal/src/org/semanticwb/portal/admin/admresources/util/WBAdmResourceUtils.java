@@ -682,7 +682,7 @@ public class WBAdmResourceUtils {
                 }
             }
         } catch (Exception e) {
-            log.error(SWBUtils.TEXT.getLocaleString("locale_wb2_util", "error_WBResource_uploadFileParsed_exc01") + " " + base.getId() + SWBUtils.TEXT.getLocaleString("locale_wb2_util", "error_WBResource_uploadFileParsed_exc02") + " " + base.getPortletType() + SWBUtils.TEXT.getLocaleString("locale_wb2_util", "error_WBResource_uploadFileParsed_exc03") + " " + strFile + ".", e);
+            log.error(SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_uploadFileParsed_exc01") + " " + base.getId() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_uploadFileParsed_exc02") + " " + base.getPortletType() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_uploadFileParsed_exc03") + " " + strFile + ".", e);
         }
         if (strb != null) {
             return strb.toString();
@@ -765,7 +765,7 @@ public class WBAdmResourceUtils {
                 }
             }
         } 
-        catch (Exception e) { log.error(SWBUtils.TEXT.getLocaleString("locale_wb2_util", "error_WBResource_uploadFileParsed_exc01") + " " + base.getId() + SWBUtils.TEXT.getLocaleString("locale_wb2_util", "error_WBResource_uploadFileParsed_exc02") + " " + base.getPortletType() + SWBUtils.TEXT.getLocaleString("locale_wb2_util", "error_WBResource_uploadFileParsed_exc03") + " " + strFile + ".",  e); }
+        catch (Exception e) { log.error(SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_uploadFileParsed_exc01") + " " + base.getId() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_uploadFileParsed_exc02") + " " + base.getPortletType() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_uploadFileParsed_exc03") + " " + strFile + ".",  e); }
         return sbfRet.toString();
     }
 
@@ -797,7 +797,7 @@ public class WBAdmResourceUtils {
                 }
             }
         } catch (Exception e) {
-            log.error(SWBUtils.TEXT.getLocaleString("locale_wb2_util", "error_WBResource_uploadFile_exc01") + " " + base.getId() + SWBUtils.TEXT.getLocaleString("locale_wb2_util", "error_WBResource_uploadFile_exc02") + " " + base.getPortletType() + SWBUtils.TEXT.getLocaleString("locale_wb2_util", "error_WBResource_uploadFile_exc03") + " " + strFile + ".");
+            log.error(SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_uploadFile_exc01") + " " + base.getId() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_uploadFile_exc02") + " " + base.getPortletType() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_uploadFile_exc03") + " " + strFile + ".");
         }
         return bOk;
     }
@@ -829,7 +829,7 @@ public class WBAdmResourceUtils {
                 }
             }
         } 
-        catch (Exception e) { log.error(SWBUtils.TEXT.getLocaleString("locale_wb2_util", "error_WBResource_uploadFile_exc01") + " " + base.getId() + SWBUtils.TEXT.getLocaleString("locale_wb2_util", "error_WBResource_uploadFile_exc02") + " " + base.getPortletType() + SWBUtils.TEXT.getLocaleString("locale_wb2_util", "error_WBResource_uploadFile_exc03") + " " + strFile + ".", e); }
+        catch (Exception e) { log.error(SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_uploadFile_exc01") + " " + base.getId() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_uploadFile_exc02") + " " + base.getPortletType() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_uploadFile_exc03") + " " + strFile + ".", e); }
         return bOk;
     }
 
@@ -842,16 +842,16 @@ public class WBAdmResourceUtils {
      */
     public String removeResource(Portlet base) {
         StringBuffer sbfRet = new StringBuffer();
-        String strError = SWBUtils.TEXT.getLocaleString("locale_wb2_util", "usrmsg_WBResource_removeResource_htmlAlerta");
+        String strError = SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_removeResource_htmlAlerta");
         try {
-            strError += SWBUtils.TEXT.getLocaleString("locale_wb2_util", "error_WBResource_removeResource_nodelete") + base.getTitle() + SWBUtils.TEXT.getLocaleString("locale_wb2_util", "error_WBResourceremoveResource_tipo") + " " + base.getPortletType().getId() + " " + SWBUtils.TEXT.getLocaleString("locale_wb2_util", "error_WBResource_removeResource_ident") + base.getId() + SWBUtils.TEXT.getLocaleString("locale_wb2_util", "usrmsg_WBResource_removeResource_html2");
+            strError += SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_removeResource_nodelete") + base.getTitle() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResourceremoveResource_tipo") + " " + base.getPortletType().getId() + " " + SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_removeResource_ident") + base.getId() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_removeResource_html2");
 
             File file = new File(workPath + base.getWorkPath());
             if (file.exists() && file.isDirectory()) {
                 try {
                     SWBUtils.IO.removeDirectory(workPath + base.getWorkPath() + "/");
-                    sbfRet.append(SWBUtils.TEXT.getLocaleString("locale_wb2_util", "usrmsg_WBResource_removeResource_ok1") + base.getTitle() + SWBUtils.TEXT.getLocaleString("locale_wb2_util", "usrmsg_WBResource_removeResource_ok2") + base.getPortletType().getId() + " " + SWBUtils.TEXT.getLocaleString("locale_wb2_util", "usrmsg_WBResource_removeResource_ok3") + base.getId() + SWBUtils.TEXT.getLocaleString("locale_wb2_util", "usrmsg_WBResource_removeResource_ok4"));
-                    sbfRet.append(SWBUtils.TEXT.getLocaleString("locale_wb2_util", "usrmsg_WBResource_removeResource_ubica") + workPath + base.getWorkPath() + " " + SWBUtils.TEXT.getLocaleString("locale_wb2_util", "usrmsg_WBResource_removeResource_coment"));
+                    sbfRet.append(SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_removeResource_ok1") + base.getTitle() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_removeResource_ok2") + base.getPortletType().getId() + " " + SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_removeResource_ok3") + base.getId() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_removeResource_ok4"));
+                    sbfRet.append(SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_removeResource_ubica") + workPath + base.getWorkPath() + " " + SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_removeResource_coment"));
                 } catch (Exception e) {
                     sbfRet.append("\n<br>" + strError + "<br>\n<!-- " + e + " -->");
                     log.error(strError, e);
@@ -860,7 +860,7 @@ public class WBAdmResourceUtils {
                 sbfRet.append("\n<br>" + strError + "<br>\n<!-- Error no " + workPath + base.getWorkPath() + " -->");
             }
         } catch (Exception e) {
-            log.error(SWBUtils.TEXT.getLocaleString("locale_wb2_util", "error_WBResource_run_recerror") + base.getId() + SWBUtils.TEXT.getLocaleString("locale_wb2_util", "error_WBResource_removeResource_tiperec") + base.getPortletType() + ".", e);
+            log.error(SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_run_recerror") + base.getId() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_removeResource_tiperec") + base.getPortletType() + ".", e);
         }
         return sbfRet.toString();
     }
@@ -876,7 +876,7 @@ public class WBAdmResourceUtils {
         try {
             ret = getFileName(pFile);
         } catch (Exception e) {
-            log.error(SWBUtils.TEXT.getLocaleString("locale_wb2_util", "error_WBResource_getFileName_exc01") + " " + base.getId() + SWBUtils.TEXT.getLocaleString("locale_wb2_util", "error_WBResource_getFileName_exc02") + " " + base.getPortletType() + SWBUtils.TEXT.getLocaleString("locale_wb2_util", "error_WBResource_getFileName_excp03") + " " + pFile + ".", e);
+            log.error(SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_getFileName_exc01") + " " + base.getId() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_getFileName_exc02") + " " + base.getPortletType() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_getFileName_excp03") + " " + pFile + ".", e);
         }
         return ret;
     }
@@ -930,7 +930,7 @@ public class WBAdmResourceUtils {
                 }
             }
         } catch (Exception e) {
-            log.error(SWBUtils.TEXT.getLocaleString("locale_wb2_util", "error_WBResource_isFileType_error") + pFile, e);
+            log.error(SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_isFileType_error") + pFile, e);
         }
         return bOk;
     }
@@ -1161,7 +1161,7 @@ public class WBAdmResourceUtils {
         sbfRet.append("\n   duplicateOption(pInSel, pInTxt);");
         sbfRet.append("\n   if(swOk!=1)");
         sbfRet.append("\n   {");
-        sbfRet.append("\n       if(confirm('" + SWBUtils.TEXT.getLocaleString("locale_wb2_util", "usrmsg_WBResource_loadUpdateOption_msg") + " ' + pInSel.options[pInSel.selectedIndex].value + '?'))");
+        sbfRet.append("\n       if(confirm('" + SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_loadUpdateOption_msg") + " ' + pInSel.options[pInSel.selectedIndex].value + '?'))");
         sbfRet.append("\n       pInSel.options[pInSel.selectedIndex].value=pInTxt.value;");
         sbfRet.append("\n       pInSel.options[pInSel.selectedIndex].text=pInTxt.value;");
         sbfRet.append("\n   }");
@@ -1180,7 +1180,7 @@ public class WBAdmResourceUtils {
         sbfRet.append("\nfunction deleteOption(pInSel, pInTxt)");
         sbfRet.append("\n{");
         sbfRet.append("\n   var aryEle = new Array();");
-        sbfRet.append("\n   if(confirm('" +SWBUtils.TEXT.getLocaleString("locale_wb2_util", "usrmsg_WBResource_loadDeleteOption_msg") + "'))");
+        sbfRet.append("\n   if(confirm('" +SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_loadDeleteOption_msg") + "'))");
         sbfRet.append("\n   {");
         sbfRet.append("\n       pInTxt.value='';");
         sbfRet.append("\n       for(var i=0, j=0; i<pInSel.length; i++)");
@@ -1221,14 +1221,14 @@ public class WBAdmResourceUtils {
         sbfRet.append("\n   swOk=0;");
         sbfRet.append("\n   if(pInTxt.value==null || pInTxt.value=='' || pInTxt.value==' ')");
         sbfRet.append("\n   {");
-        sbfRet.append("\n       alert('" + SWBUtils.TEXT.getLocaleString("locale_wb2_util", "usrmsg_WBResource_loadDuplicateOption_error") + ".');");
+        sbfRet.append("\n       alert('" + SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_loadDuplicateOption_error") + ".');");
         sbfRet.append("\n       swOk=1;");
         sbfRet.append("\n   }");
         sbfRet.append("\n   for(var i=0; i<pInSel.length; i++)");
         sbfRet.append("\n   {");
         sbfRet.append("\n       if(pInSel.options[i].value==pInTxt.value)");
         sbfRet.append("\n       {");
-        sbfRet.append("\n           alert('" + SWBUtils.TEXT.getLocaleString("locale_wb2_util", "usrmsg_WBResource_loadDuplicateOption_msg") + " '+ pInTxt.value);");
+        sbfRet.append("\n           alert('" + SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_loadDuplicateOption_msg") + " '+ pInTxt.value);");
         sbfRet.append("\n           swOk=1;");
         sbfRet.append("\n           break;");
         sbfRet.append("\n       }");
@@ -1259,7 +1259,7 @@ public class WBAdmResourceUtils {
         sbfRet.append("\n         swFormat=swFormat.substring(swFormat.indexOf(\"|\")+1);");
         sbfRet.append("\n      }");
         sbfRet.append("\n      while(pExt.indexOf(\"|\")!=-1) pExt=pExt.replace('|',',');");
-        sbfRet.append("\n      alert(\"" + SWBUtils.TEXT.getLocaleString("locale_wb2_util", "usrmsg_WBResource_loadIsFile_msgext") + ": \" + pExt.replace('|',','));");
+        sbfRet.append("\n      alert(\"" + SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_loadIsFile_msgext") + ": \" + pExt.replace('|',','));");
         sbfRet.append("\n      return false;");
         sbfRet.append("\n   }");
         sbfRet.append("\n   else return true;");
@@ -1284,7 +1284,7 @@ public class WBAdmResourceUtils {
         sbfRet.append("\n       if (sByte<\"0\" || sByte>\"9\")");
         sbfRet.append("\n       {");
         sbfRet.append("\n           pIn.focus();");
-        sbfRet.append("\n           alert('" + SWBUtils.TEXT.getLocaleString("locale_wb2_util", "usrmsg_WBResource_loadIsNumber_msg") + ".');");
+        sbfRet.append("\n           alert('" + SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_loadIsNumber_msg") + ".');");
         sbfRet.append("\n           return false;");
         sbfRet.append("\n       }");
         sbfRet.append("\n   }");
@@ -1308,7 +1308,7 @@ public class WBAdmResourceUtils {
         sbfRet.append("\n   {");
         sbfRet.append("\n       if (pIn.value.substring(0, pPx.length).indexOf(pPx)==-1)");
         sbfRet.append("\n       {");
-        sbfRet.append("\n           alert('" + SWBUtils.TEXT.getLocaleString("locale_wb2_util", "usrmsg_WBResource_loadSetPrefix_msg1") + ": ' + pPx);");
+        sbfRet.append("\n           alert('" + SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_loadSetPrefix_msg1") + ": ' + pPx);");
         sbfRet.append("\n           pIn.value=pPx+pIn.value;");
         sbfRet.append("\n           pIn.focus();");
         sbfRet.append("\n           return false;");
@@ -1320,7 +1320,7 @@ public class WBAdmResourceUtils {
         sbfRet.append("\n       {");
         sbfRet.append("\n           if (pIn.options[i].value.substring(0, pPx.length).indexOf(pPx)==-1)");
         sbfRet.append("\n           {");
-        sbfRet.append("\n               alert('" + SWBUtils.TEXT.getLocaleString("locale_wb2_util", "usrmsg_WBResource_loadSetPrefixmsg2") + ": ' + pPx);");
+        sbfRet.append("\n               alert('" + SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_loadSetPrefixmsg2") + ": ' + pPx);");
         sbfRet.append("\n               pIn.focus();");
         sbfRet.append("\n               return false;");
         sbfRet.append("\n           }");
@@ -1341,7 +1341,7 @@ public class WBAdmResourceUtils {
         sbfRet.append("\n   pIn.value=pIn.value.toUpperCase();");
         sbfRet.append("\n   if(pIn.value.length<7)");
         sbfRet.append("\n   {");
-        sbfRet.append("\n       alert('" + SWBUtils.TEXT.getLocaleString("locale_wb2_util", "usrmsg_WBResource_loadIsHexadecinal_msgLength") + "');");
+        sbfRet.append("\n       alert('" + SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_loadIsHexadecinal_msgLength") + "');");
         sbfRet.append("\n       pIn.focus();");
         sbfRet.append("\n       return false;");
         sbfRet.append("\n   }");
@@ -1351,7 +1351,7 @@ public class WBAdmResourceUtils {
         sbfRet.append("\n       swOk= pIn.value.substring(i, i+1);");
         sbfRet.append("\n       if (swFormat.indexOf(swOk, 0)==-1)");
         sbfRet.append("\n       {");
-        sbfRet.append("\n           alert('" + SWBUtils.TEXT.getLocaleString("locale_wb2_util", "usrmsg_WBResource_loadIsHexadecinal_msgHexadecinal") + "');");
+        sbfRet.append("\n           alert('" + SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_loadIsHexadecinal_msgHexadecinal") + "');");
         sbfRet.append("\n           pIn.focus();");
         sbfRet.append("\n           return false;");
         sbfRet.append("\n       }");
@@ -1456,7 +1456,7 @@ public class WBAdmResourceUtils {
         sbfRet.append("\n   if (swOK > 0 || pCaracter.length < 5 || pCaracter.charAt(0) == '@' || pCaracter.charAt(0) == '.' || pCaracter.charAt(pCaracter.length-1)=='@' || pCaracter.charAt(pCaracter.length-1)=='.' || pCaracter.charAt(pCaracter.indexOf(\"@\")+1)=='.' || pCaracter.indexOf(\"@\") == -1)");
         sbfRet.append("\n   {");
         sbfRet.append("\n      pInTxt.focus();");
-        sbfRet.append("\n      alert('" + SWBUtils.TEXT.getLocaleString("locale_wb2_util", "usrmsg_WBResource_loadIsEmail_msg") + ".');");
+        sbfRet.append("\n      alert('" + SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_loadIsEmail_msg") + ".');");
         sbfRet.append("\n      return false;");
         sbfRet.append("\n   }");
         sbfRet.append("\n   return true;");
