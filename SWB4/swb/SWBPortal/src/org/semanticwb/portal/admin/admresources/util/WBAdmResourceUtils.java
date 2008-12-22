@@ -509,7 +509,7 @@ public class WBAdmResourceUtils {
                     sbfRet.append("</embed>");
                     sbfRet.append("</object>");
                 } else {
-                    sbfRet.append("\n<img src=\"");
+                    sbfRet.append("<img src=\"");
                     sbfRet.append(webWorkPath + base.getWorkPath() + "/" + img + "\"");
                     if (!width.equals("")) {
                         sbfRet.append(" width=\"" + width + "\"");
@@ -517,7 +517,7 @@ public class WBAdmResourceUtils {
                     if (!height.equals("")) {
                         sbfRet.append(" height=\"" + height + "\"");
                     }
-                    sbfRet.append(" hspace=5 border=0>");
+                    sbfRet.append(" hspace=\"5\" border=\"0\" />");
                 }
             }
         } catch (Exception e) {
@@ -564,7 +564,7 @@ public class WBAdmResourceUtils {
                 strb.append("</embed>");
                 strb.append("</object>");
             } else { //para desplegar imagenes otros tipos de imagenes
-                strb.append("\n<img src=\"");
+                strb.append("<img src=\"");
                 strb.append(webWorkPath + base.getWorkPath() + "/" + filename);
                 strb.append("\"");
                 if (width > 0) {
@@ -573,7 +573,7 @@ public class WBAdmResourceUtils {
                 if (height > 0) {
                     strb.append(" height=\"" + height + "\"");
                 }
-                strb.append(" hspace=\"5\" border=\"0\"/>");
+                strb.append(" hspace=\"5\" border=\"0\" />");
             }
         } catch (Exception e) {
             log.error("Error while displaying image " + webWorkPath + base.getWorkPath() + "/" + filename + " in resource " + base.getId() + ".", e);
