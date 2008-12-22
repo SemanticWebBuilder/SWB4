@@ -50,6 +50,7 @@ import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.repository.BaseNode;
 import org.semanticwb.repository.LockUserComparator;
+import org.semanticwb.repository.Referenceable;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 
@@ -109,8 +110,7 @@ public class SessionImp implements Session
 
     public Document getDocumentView() throws RepositoryException
     {
-        Document document = new Document();
-        SimpleNode root = this.root;
+        Document document = new Document();        
         appendNodeInternalView(root, document, false);
         return document;
     }
@@ -711,7 +711,7 @@ public class SessionImp implements Session
         if (nodeToReturn == null)
         {
 
-            Iterator<SemanticObject> it = SWBContext.getWorkspace(workspaceName).getSemanticObject().getModel().listSubjects(BaseNode.vocabulary.jcr_uuid, uuid);
+            Iterator<SemanticObject> it = SWBContext.getWorkspace(workspaceName).getSemanticObject().getModel().listSubjects(Referenceable.jcr_uuid, uuid);
             while (it.hasNext())
             {
                 SemanticObject obj=it.next();
