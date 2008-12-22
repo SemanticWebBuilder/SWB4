@@ -28,13 +28,13 @@
   </rdfs:Class>
   <rdfs:Class rdf:ID="Node">
     <rdfs:subClassOf>
-      <swb:Class rdf:ID="ClassDefinition">
+      <swb:Interface rdf:ID="ClassDefinition">
         <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >org.semanticwb.repository.ClassDefinition</swb:className>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
         <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
         <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
-      </swb:Class>
+      </swb:Interface>
     </rdfs:subClassOf>
     <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </rdfs:Class>
