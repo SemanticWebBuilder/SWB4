@@ -14,10 +14,12 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Portlet;
 import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.SWBFormElement;
 import org.semanticwb.model.SWBVocabulary;
 import org.semanticwb.model.User;
 import org.semanticwb.model.VersionInfo;
 import org.semanticwb.model.Versionable;
+import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.portal.SWBFormMgr;
@@ -48,7 +50,6 @@ public class SWBAVersionInfo extends GenericResource {
         User user = paramRequest.getUser();
         PrintWriter out = response.getWriter();
         String id = request.getParameter("suri");
-        //id = "http://www.sep.gob.mx/Rule#1";
         if (null == id) {
             out.println("<fieldset>");
             out.println("URI faltante");
@@ -57,25 +58,17 @@ public class SWBAVersionInfo extends GenericResource {
             String action = request.getParameter("act");
             GenericObject obj = ont.getGenericObject(id);
 
-            log.debug("doEdit(SWBAVersionInfo...)");
-            int numver = 0;
+            log.debug("doView(), suri: "+id);
             VersionInfo via = null;
             VersionInfo vio = null;
 
-            if (!(obj instanceof Versionable)) {
-                out.println("<fieldset>");
-                out.println("GenericObject ... No aplica para versiones");
-                out.println("</fieldset>");
-            } else if (obj instanceof Versionable) {
+            if (obj instanceof Versionable) {
                 vio = (VersionInfo) findFirstVersion(obj);
                 via = ((Versionable) obj).getActualVersion();
 
-                out.println("<fieldset>");
-                out.println("VersionInfo doView");
-                out.println("</fieldset>");
-
                 if (action == null || action.equals("")) {
 
+                    log.debug("act:''");
                     out.println("<fieldset>");
                     out.println("<table width=\"100%\" class=\"swbform\">");
                     out.println("<thead>");
@@ -92,19 +85,18 @@ public class SWBAVersionInfo extends GenericResource {
                     out.println("</tr>");
                     out.println("</thead>");
                     out.println("<tbody>");
-                    if (vio != null) {
-                        while (vio.getNextVersion() != null) {
+                    if (null != vio) {
+                        while (vio != null) { 
 
                             out.println("<tr>");
-
                             out.println("<td align=\"center\">");
                             out.println(vio.getVersionNumber());
                             out.println("</td>");
-
                             out.println("<td>");
                             SWBResourceURL urle = paramRequest.getRenderUrl();
                             urle.setParameter("suri", id);
-                            urle.setParameter("sval", vio.getURI());
+                            urle.setParameter("sobj", vio.getURI());
+                            urle.setParameter("act", "edit");
                             urle.setMode(SWBResourceURL.Mode_EDIT);
                             out.println("<a href=\"#\" onclick=\"submitUrl('" + urle + "',this); return false;\">edit</a>");
 
@@ -125,11 +117,11 @@ public class SWBAVersionInfo extends GenericResource {
                             out.println("</td>");
                             out.println("<td>");
                             if (vio.equals(via)) {
-                                out.println("Versión Actual");
+                                out.println("Version Actual");
                             }
-
                             out.println("&nbsp;</td>");
                             out.println("</tr>");
+                            vio = vio.getNextVersion();
                         }
                     }
                     out.println("</tbody>");
@@ -138,7 +130,7 @@ public class SWBAVersionInfo extends GenericResource {
                     out.println("<td colspan=\"4\">");
                     SWBResourceURL urlNew = paramRequest.getRenderUrl();
                     urlNew.setParameter("suri", id);
-                    urlNew.setParameter("act", "newversion");
+                    urlNew.setParameter("act","newversion");
                     urlNew.setMode(SWBResourceURL.Mode_EDIT);
                     out.println("<p><a href=\"#\" onclick=\"submitUrl('" + urlNew + "',this); return false;\">Add New</a>");
                     out.println("</p>");
@@ -153,14 +145,12 @@ public class SWBAVersionInfo extends GenericResource {
     }
 
     private VersionInfo findFirstVersion(GenericObject obj) {
-
         VersionInfo ver = null;
         if (obj != null) {
             ver = ((Versionable) obj).getActualVersion();
         }
-
         if (null != ver) {
-            while (ver.getPreviousVersion() != null) {
+            while (ver.getPreviousVersion() != null) { //
                 ver = ver.getPreviousVersion();
             }
         }
@@ -173,24 +163,73 @@ public class SWBAVersionInfo extends GenericResource {
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
-
+        base = getResourceBase();
+        log.debug("doEdit");
+        User user = paramRequest.getUser();
         String action = request.getParameter("act");
         String id = request.getParameter("suri");
-        SemanticObject so = ont.getSemanticObject(id);
+        String idvi = request.getParameter("sobj");
+        SemanticObject so = null;
         PrintWriter out = response.getWriter();
         SWBFormMgr fm = null;
 
         if (action.equals("newversion")) {
-            fm = new SWBFormMgr(voc.swb_VersionInfo, so, null);
+
+            SemanticObject soref = ont.getSemanticObject(id);
+            SWBResourceURL urla = paramRequest.getActionUrl();
+            urla.setAction("newversion");
+
+            //WBFormElement sfe = new SWBFormElement(so);
+
+            fm = new SWBFormMgr(voc.swb_VersionInfo, soref,null);
             fm.addHiddenParameter("suri", id);
-            fm.addHiddenParameter("act", "new");
+            fm.addHiddenParameter("psuri", id);
+            //fm.addHiddenParameter("sobj", so.getURI());
+            fm.setAction(urla.toString());
 
+            out.println("<div class=\"swbform\">");
+            out.println("<form id=\""+id+"/"+base.getId()+"/FVIComment\" action=\""+urla+"\" method=\"post\">");
+            out.println("<input type=\"hidden\" name=\"suri\" value=\""+id+"\">");
+            out.println("<fieldset>");
+            out.println("<table>");
+            out.println("<tbody>");
+            out.println("<tr>");
+            out.println("<td>");
+            out.println(fm.renderElement(voc.swb_versionComment.getLabel())!=null?fm.renderElement(voc.swb_versionComment.getLabel()):"Comment");
+            out.println("</td>");
+            out.println("<td>");
+            out.println(fm.renderElement(voc.swb_versionComment,SWBFormMgr.MODE_EDIT));
+            out.println("</td>");
+            out.println("</tr>");
+            out.println("</tbody>");
+            out.println("</table>");
+            out.println("</filedset>");
+            out.println("<filedset>");
+            out.println("<hr noshade>");
+            out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitForm('"+id+"/"+base.getId()+"/FVIComment');return false;\">Guardar</button>");
+            out.println("<button dojoType=\"dijit.form.Button\">Favoritos</button>");
+            out.println("<button dojoType=\"dijit.form.Button\">Eliminar</button>");
+            SWBResourceURL urlb = paramRequest.getRenderUrl();
+            urlb.setMode(SWBResourceURL.Mode_VIEW);
+            urlb.setParameter("act","");
+            urlb.setParameter("suri",id);
+            out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlb + "',this.domNode); return false;\">Cancelar</button>");
+            out.println("</filedset>");
+            out.println("</form>");
+            out.println("</div>");
 
-            out.println(fm.renderForm());
         } else if (action.equals("edit")) {
-            fm = new SWBFormMgr(voc.swb_VersionInfo, so, SWBFormMgr.MODE_EDIT);
+
+            SWBResourceURL urla = paramRequest.getActionUrl();
+            urla.setAction("update");
+            log.debug("VI id:"+idvi);
+            so = ont.getSemanticObject(idvi);
+            fm = new SWBFormMgr(so, null, SWBFormMgr.MODE_EDIT);
             fm.addHiddenParameter("suri", id);
-            fm.addHiddenParameter("act", "update");
+            fm.addHiddenParameter("psuri", id);
+            fm.addHiddenParameter("sobj", so.getURI());
+            fm.setAction(urla.toString());
+
             out.println(fm.renderForm());
         }
     }
@@ -209,6 +248,100 @@ public class SWBAVersionInfo extends GenericResource {
 
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-        super.processAction(request, response);
+        String id = request.getParameter("suri");
+        String act = response.getAction();
+        log.debug("Action:" + act + ", suri: " + id);
+        GenericObject go = ont.getGenericObject(id);
+        VersionInfo vio = null;
+        VersionInfo via = null;
+        VersionInfo vil = null;
+        VersionInfo vin = null;
+        if (act == null) {
+            act = "";
+        }
+        if ("newversion".equals(act)) {
+            if (go instanceof Versionable) {
+                log.debug("processAction. newVersion(Versionable)");
+                Versionable gov = (Versionable) go;
+                SemanticObject sobase = ont.getSemanticObject(id);
+                SemanticClass sc = voc.swb_VersionInfo;
+                long lid = 0;
+                if (sc.isAutogenId()) {
+                    lid = SWBPlatform.getSemanticMgr().getCounter(sobase.getModel().getName() + "/" + sc.getName());
+                }
+                SemanticObject nvinf = sobase.getModel().createSemanticObject(sobase.getModel().getObjectUri("" + lid, sc), sc);
+                GenericObject ngo = ont.getGenericObject(nvinf.getURI());
+                vin = (VersionInfo) ngo;
+                int vnum = 1;
+                vio = (VersionInfo) findFirstVersion(go);
+                if (vio != null) {
+                    via = gov.getActualVersion();
+                    vil = gov.getLastVersion();
+                    vnum = vil.getVersionNumber() + 1;
+                    vin.setPreviousVersion(vil);
+                    vil.setNextVersion(vin);
+                } else {
+                    gov.setActualVersion(vin);
+                }
+                vin.setVersionNumber(vnum);
+                String VersionComment = request.getParameter("versionComment");
+                log.debug(VersionComment);
+                if(VersionComment!=null) vin.setVersionComment(VersionComment);
+                gov.setLastVersion(vin);
+                //response.setRenderParameter("sobj", nvinf.getURI());
+                response.setRenderParameter("act", "");
+                response.setMode(response.Mode_VIEW);
+            }
+        } else if ("update".equals(act)) {
+            id=request.getParameter("psuri");
+            response.setRenderParameter(act, "");
+            response.setMode(response.Mode_VIEW);
+        } else if ("setactual".equals(act)) {
+            String idval = request.getParameter("sval");
+            SemanticObject sobase = ont.getSemanticObject(id);
+            SemanticObject soactual = ont.getSemanticObject(idval);
+            sobase.setObjectProperty(voc.swb_actualVersion, soactual);
+            response.setRenderParameter(act, "");
+            response.setMode(response.Mode_VIEW);
+        } else if ("remove".equals(act)) {
+            String idval = request.getParameter("sval");
+            GenericObject sobase = ont.getGenericObject(id);
+            vio = null;
+
+            VersionInfo vip = null;
+            vin = null;
+
+            if(sobase instanceof VersionInfo)
+            {
+                vio = (VersionInfo)sobase;
+                vip = vio.getPreviousVersion();
+                vin = vio.getNextVersion();
+                if(null!=vip) // si es una version intermedia
+                {
+                    if(null!=vin)
+                    {
+                        vip.setNextVersion(vin);
+                        vin.setPreviousVersion(vip);
+                    }
+                    else // la ultima version
+                    {
+                        vip.setNextVersion(null);
+                    }
+
+                }
+                else if(null!=vin) //  era la primera version
+                {
+                    vin.setPreviousVersion(null);
+                }
+                vio.remove(); // se elimina la version
+            }
+
+
+            //SemanticObject soactual = ont.getSemanticObject(idval);
+            //sobase.setObjectProperty(voc.swb_actualVersion, soactual);
+            response.setRenderParameter(act, "");
+            response.setMode(response.Mode_VIEW);
+        }
+        response.setRenderParameter("suri", id);
     }
 }
