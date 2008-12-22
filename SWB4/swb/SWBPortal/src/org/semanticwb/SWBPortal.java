@@ -711,9 +711,9 @@ public class SWBPortal {
                 }
             }
         } catch (NumberFormatException f) {
-            log.error(SWBUtils.TEXT.getLocaleString("locale_wb2_util", "error_WBUtils_decodifica"), f);
+            log.error(SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBUtils_decodifica"), f);
         } catch (Exception e) {
-            log.error(SWBUtils.TEXT.getLocaleString("locale_wb2_util", "error_WBUtils_IOHTML"), e);
+            log.error(SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBUtils_IOHTML"), e);
         }
         return ret.toString();
     }
@@ -826,9 +826,9 @@ public class SWBPortal {
                 ret.append((String) vvector.elementAt(i) + ";");
             }
         } catch (NumberFormatException f) {
-            log.error(SWBUtils.TEXT.getLocaleString("locale_wb2_util", "error_WBUtils_decodifica"), f);
+            log.error(SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBUtils_decodifica"), f);
         } catch (Exception e) {
-            log.error(SWBUtils.TEXT.getLocaleString("locale_wb2_util", "error_WBUtils_IOHTML"), e);
+            log.error(SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBUtils_IOHTML"), e);
         }
         //System.out.println("entra a FindAttaches regresando:"+ret.toString());
         return ret.toString();
