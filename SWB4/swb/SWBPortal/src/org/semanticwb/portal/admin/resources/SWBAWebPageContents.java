@@ -381,7 +381,13 @@ public class SWBAWebPageContents extends GenericResource {
             Iterator<SemanticObject> itso = obj.getModel().listInstancesOfClass(clsprop);
             while (itso.hasNext()) {
                 SemanticObject sobj = itso.next();
-                int mode = sobj.getIntProperty(voc.swb_portletMode);
+                log.debug("before:");
+                int mode = 0;
+                try{
+                    mode = sobj.getIntProperty(voc.swb_portletMode);
+                }
+                catch(Exception e) {mode=0;}
+                log.debug("after: mode:"+mode);
                 if (mode == 1)//tipo contenido
                 {
                     hmContent.put(sobj.getId(), sobj);
