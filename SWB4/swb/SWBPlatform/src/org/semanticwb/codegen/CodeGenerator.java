@@ -1236,7 +1236,7 @@ public class CodeGenerator
             javaClassContent.append("         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(" + tpp.getPrefix() + "_" + tpp.getName() + ");" + ENTER);
             javaClassContent.append("         if(obj!=null)" + ENTER);
             javaClassContent.append("         {" + ENTER);
-            javaClassContent.append("             ret=(" + tpcToReturn.getClassName() + ")" + tpcToReturn.getPrefix() + "_" + valueToReturn + ".newGenericInstance(obj);" + ENTER);
+            javaClassContent.append("             ret=(" + tpcToReturn.getClassName() + ")obj.getSemanticClass().newGenericInstance(obj);" + ENTER);
             javaClassContent.append("         }" + ENTER);
             javaClassContent.append("         return ret;" + ENTER);
             javaClassContent.append(CLOSE_BLOCK + ENTER);
