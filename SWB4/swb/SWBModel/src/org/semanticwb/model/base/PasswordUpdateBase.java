@@ -1,44 +1,38 @@
 package org.semanticwb.model.base;
 
-import java.util.Date;
-import java.util.Iterator;
-import java.util.ArrayList;
-import org.semanticwb.model.*;
-import com.hp.hpl.jena.rdf.model.*;
-import org.semanticwb.*;
-import org.semanticwb.platform.*;
-import org.semanticwb.model.GenericIterator;
 
-public class PasswordUpdateBase extends SWBFormElement 
+public class PasswordUpdateBase extends org.semanticwb.model.SWBFormElement 
 {
+    public static final org.semanticwb.platform.SemanticProperty swb_passUpdVerify=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#passUpdVerify");
+    public static final org.semanticwb.platform.SemanticClass swbxf_PasswordUpdate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#PasswordUpdate");
 
-    public PasswordUpdateBase(SemanticObject base)
+    public PasswordUpdateBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
 
     public String getVerifyText()
     {
-        return getSemanticObject().getProperty(vocabulary.swb_passUpdVerify);
+        return getSemanticObject().getProperty(swb_passUpdVerify);
     }
 
     public void setVerifyText(String passUpdVerify)
     {
-        getSemanticObject().setProperty(vocabulary.swb_passUpdVerify, passUpdVerify);
+        getSemanticObject().setProperty(swb_passUpdVerify, passUpdVerify);
     }
 
     public String getVerifyText(String lang)
     {
-        return getSemanticObject().getProperty(vocabulary.swb_passUpdVerify, null, lang);
+        return getSemanticObject().getProperty(swb_passUpdVerify, null, lang);
     }
 
     public String getDisplayVerifyText(String lang)
     {
-        return getSemanticObject().getLocaleProperty(vocabulary.swb_passUpdVerify, lang);
+        return getSemanticObject().getLocaleProperty(swb_passUpdVerify, lang);
     }
 
     public void setVerifyText(String passUpdVerify, String lang)
     {
-        getSemanticObject().setProperty(vocabulary.swb_passUpdVerify, passUpdVerify, lang);
+        getSemanticObject().setProperty(swb_passUpdVerify, passUpdVerify, lang);
     }
 }

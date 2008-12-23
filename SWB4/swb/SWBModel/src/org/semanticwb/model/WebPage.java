@@ -258,7 +258,7 @@ public class WebPage extends WebPageBase
      */
     public String getDisplayName(String lang)
     {
-        return getSemanticObject().getLocaleProperty(SWBContext.getVocabulary().swb_title, lang);
+        return getSemanticObject().getLocaleProperty(Descriptiveable.swb_title, lang);
     }
 
     /** Regresa el nombre por defecto, en base a un idioma que recibe como parametro

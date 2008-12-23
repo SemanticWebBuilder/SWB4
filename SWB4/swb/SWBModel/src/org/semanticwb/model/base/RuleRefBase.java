@@ -1,45 +1,40 @@
 package org.semanticwb.model.base;
 
-import java.util.Date;
-import java.util.Iterator;
-import java.util.ArrayList;
-import org.semanticwb.model.*;
-import com.hp.hpl.jena.rdf.model.*;
-import org.semanticwb.*;
-import org.semanticwb.platform.*;
-import org.semanticwb.model.GenericIterator;
 
-public class RuleRefBase extends Reference implements Activeable
+public class RuleRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.Activeable
 {
+    public static final org.semanticwb.platform.SemanticClass swb_Rule=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Rule");
+    public static final org.semanticwb.platform.SemanticProperty swb_rule=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#rule");
+    public static final org.semanticwb.platform.SemanticClass swb_RuleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#RuleRef");
 
-    public RuleRefBase(SemanticObject base)
+    public RuleRefBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
 
     public void setRule(org.semanticwb.model.Rule rule)
     {
-        getSemanticObject().setObjectProperty(vocabulary.swb_rule, rule.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_rule, rule.getSemanticObject());
     }
 
     public void removeRule()
     {
-        getSemanticObject().removeProperty(vocabulary.swb_rule);
+        getSemanticObject().removeProperty(swb_rule);
     }
 
-    public Rule getRule()
+    public org.semanticwb.model.Rule getRule()
     {
-         Rule ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_rule);
+         org.semanticwb.model.Rule ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_rule);
          if(obj!=null)
          {
-             ret=(Rule)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.Rule)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
 
-    public WebSite getWebSite()
+    public org.semanticwb.model.WebSite getWebSite()
     {
-        return new WebSite(getSemanticObject().getModel().getModelObject());
+        return new org.semanticwb.model.WebSite(getSemanticObject().getModel().getModelObject());
     }
 }

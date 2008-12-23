@@ -1,55 +1,51 @@
 package org.semanticwb.model.base;
 
-import java.util.Date;
-import java.util.Iterator;
-import java.util.ArrayList;
-import org.semanticwb.model.*;
-import com.hp.hpl.jena.rdf.model.*;
-import org.semanticwb.*;
-import org.semanticwb.platform.*;
-import org.semanticwb.model.GenericIterator;
 
-public class PFlowRefBase extends Reference implements Activeable,Deleteable
+public class PFlowRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.Activeable,org.semanticwb.model.Deleteable
 {
+    public static final org.semanticwb.platform.SemanticProperty swb_deleted=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#deleted");
+    public static final org.semanticwb.platform.SemanticClass swb_PFlow=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PFlow");
+    public static final org.semanticwb.platform.SemanticProperty swb_pflow=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#pflow");
+    public static final org.semanticwb.platform.SemanticClass swb_PFlowRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PFlowRef");
 
-    public PFlowRefBase(SemanticObject base)
+    public PFlowRefBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
 
     public boolean isDeleted()
     {
-        return getSemanticObject().getBooleanProperty(vocabulary.swb_deleted);
+        return getSemanticObject().getBooleanProperty(swb_deleted);
     }
 
     public void setDeleted(boolean deleted)
     {
-        getSemanticObject().setBooleanProperty(vocabulary.swb_deleted, deleted);
+        getSemanticObject().setBooleanProperty(swb_deleted, deleted);
     }
 
     public void setPflow(org.semanticwb.model.PFlow pflow)
     {
-        getSemanticObject().setObjectProperty(vocabulary.swb_pflow, pflow.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_pflow, pflow.getSemanticObject());
     }
 
     public void removePflow()
     {
-        getSemanticObject().removeProperty(vocabulary.swb_pflow);
+        getSemanticObject().removeProperty(swb_pflow);
     }
 
-    public PFlow getPflow()
+    public org.semanticwb.model.PFlow getPflow()
     {
-         PFlow ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_pflow);
+         org.semanticwb.model.PFlow ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_pflow);
          if(obj!=null)
          {
-             ret=(PFlow)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.PFlow)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
 
-    public WebSite getWebSite()
+    public org.semanticwb.model.WebSite getWebSite()
     {
-        return new WebSite(getSemanticObject().getModel().getModelObject());
+        return new org.semanticwb.model.WebSite(getSemanticObject().getModel().getModelObject());
     }
 }

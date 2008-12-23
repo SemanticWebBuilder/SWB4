@@ -1,29 +1,23 @@
 package org.semanticwb.model.base;
 
-import java.util.Date;
-import java.util.Iterator;
-import java.util.ArrayList;
-import org.semanticwb.model.*;
-import com.hp.hpl.jena.rdf.model.*;
-import org.semanticwb.*;
-import org.semanticwb.platform.*;
-import org.semanticwb.model.GenericIterator;
 
-public class PropertyGroupBase extends SWBClass implements Sortable
+public class PropertyGroupBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Sortable
 {
+    public static final org.semanticwb.platform.SemanticProperty swb_index=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#index");
+    public static final org.semanticwb.platform.SemanticClass swbxf_PropertyGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#PropertyGroup");
 
-    public PropertyGroupBase(SemanticObject base)
+    public PropertyGroupBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
 
     public int getIndex()
     {
-        return getSemanticObject().getIntProperty(vocabulary.swb_index);
+        return getSemanticObject().getIntProperty(swb_index);
     }
 
     public void setIndex(int index)
     {
-        getSemanticObject().setLongProperty(vocabulary.swb_index, index);
+        getSemanticObject().setLongProperty(swb_index, index);
     }
 }

@@ -1,11 +1,12 @@
 package org.semanticwb.model;
 
-import org.semanticwb.model.GenericIterator;
-import java.util.Date;
-public interface Ruleable extends GenericObject
+public interface Ruleable extends org.semanticwb.model.GenericObject
 {
+    public static final org.semanticwb.platform.SemanticClass swb_Rule=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Rule");
+    public static final org.semanticwb.platform.SemanticProperty swb_hasRule=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasRule");
+    public static final org.semanticwb.platform.SemanticClass swb_Ruleable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Ruleable");
 
-    public GenericIterator<org.semanticwb.model.Rule> listRules();
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.Rule> listRules();
 
     public void addRule(org.semanticwb.model.Rule rule);
 

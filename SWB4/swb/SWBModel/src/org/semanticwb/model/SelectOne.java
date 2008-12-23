@@ -77,7 +77,7 @@ public class SelectOne extends SelectOneBase
             String value="";
             if(val!=null)
             {
-                uri=obj.getURI();
+                uri=val.getURI();
                 value=obj.getDisplayName(lang);
             }
             if(mode.equals("edit") || mode.equals("create") )
@@ -97,7 +97,7 @@ public class SelectOne extends SelectOneBase
                 while(it.hasNext())
                 {
                     SemanticObject sob=it.next();
-                    ret+="<option value=\""+obj.getURI()+"\" ";
+                    ret+="<option value=\""+sob.getURI()+"\" ";
                     if(sob.getURI().equals(uri))ret+="selected";
                     ret+=">"+sob.getDisplayName(lang)+"</option>";
                 }

@@ -1,6 +1,5 @@
 package org.semanticwb.model;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -20,8 +19,6 @@ public class FormView extends FormViewBase
     private SemanticOntology ont=SWBPlatform.getSemanticMgr().getOntology();
     private SemanticProperty propertyMode=new SemanticProperty(ont.getRDFOntModel().getProperty(SemanticVocabulary.URI+"propertyMode"));
     private SemanticProperty propertyRef=new SemanticProperty(ont.getRDFOntModel().getProperty(SemanticVocabulary.URI+"propertyRef"));
-    
-    SWBVocabulary vocabulary=SWBContext.getVocabulary();
     
     public FormView(SemanticObject base)
     {

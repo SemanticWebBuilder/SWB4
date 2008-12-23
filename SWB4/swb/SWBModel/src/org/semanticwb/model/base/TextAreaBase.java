@@ -1,39 +1,34 @@
 package org.semanticwb.model.base;
 
-import java.util.Date;
-import java.util.Iterator;
-import java.util.ArrayList;
-import org.semanticwb.model.*;
-import com.hp.hpl.jena.rdf.model.*;
-import org.semanticwb.*;
-import org.semanticwb.platform.*;
-import org.semanticwb.model.GenericIterator;
 
-public class TextAreaBase extends SWBFormElement 
+public class TextAreaBase extends org.semanticwb.model.SWBFormElement 
 {
+    public static final org.semanticwb.platform.SemanticProperty swbxf_textAreaRows=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#textAreaRows");
+    public static final org.semanticwb.platform.SemanticProperty swbxf_textAreaCols=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#textAreaCols");
+    public static final org.semanticwb.platform.SemanticClass swbxf_TextArea=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea");
 
-    public TextAreaBase(SemanticObject base)
+    public TextAreaBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
 
     public int getRows()
     {
-        return getSemanticObject().getIntProperty(vocabulary.swbxf_textAreaRows);
+        return getSemanticObject().getIntProperty(swbxf_textAreaRows);
     }
 
     public void setRows(int textAreaRows)
     {
-        getSemanticObject().setLongProperty(vocabulary.swbxf_textAreaRows, textAreaRows);
+        getSemanticObject().setLongProperty(swbxf_textAreaRows, textAreaRows);
     }
 
     public int getCols()
     {
-        return getSemanticObject().getIntProperty(vocabulary.swbxf_textAreaCols);
+        return getSemanticObject().getIntProperty(swbxf_textAreaCols);
     }
 
     public void setCols(int textAreaCols)
     {
-        getSemanticObject().setLongProperty(vocabulary.swbxf_textAreaCols, textAreaCols);
+        getSemanticObject().setLongProperty(swbxf_textAreaCols, textAreaCols);
     }
 }

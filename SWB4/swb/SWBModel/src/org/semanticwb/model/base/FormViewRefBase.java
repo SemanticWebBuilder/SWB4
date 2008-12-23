@@ -1,49 +1,45 @@
 package org.semanticwb.model.base;
 
-import java.util.Date;
-import java.util.Iterator;
-import java.util.ArrayList;
-import org.semanticwb.model.*;
-import com.hp.hpl.jena.rdf.model.*;
-import org.semanticwb.*;
-import org.semanticwb.platform.*;
-import org.semanticwb.model.GenericIterator;
 
-public class FormViewRefBase extends Reference 
+public class FormViewRefBase extends org.semanticwb.model.Reference 
 {
+    public static final org.semanticwb.platform.SemanticProperty swb_formMode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#formMode");
+    public static final org.semanticwb.platform.SemanticClass swbxf_FormView=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#FormView");
+    public static final org.semanticwb.platform.SemanticProperty swb_formView=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#formView");
+    public static final org.semanticwb.platform.SemanticClass swbxf_FormViewRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#FormViewRef");
 
-    public FormViewRefBase(SemanticObject base)
+    public FormViewRefBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
 
     public String getFormMode()
     {
-        return getSemanticObject().getProperty(vocabulary.swb_formMode);
+        return getSemanticObject().getProperty(swb_formMode);
     }
 
     public void setFormMode(String formMode)
     {
-        getSemanticObject().setProperty(vocabulary.swb_formMode, formMode);
+        getSemanticObject().setProperty(swb_formMode, formMode);
     }
 
     public void setFormView(org.semanticwb.model.FormView formview)
     {
-        getSemanticObject().setObjectProperty(vocabulary.swb_formView, formview.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_formView, formview.getSemanticObject());
     }
 
     public void removeFormView()
     {
-        getSemanticObject().removeProperty(vocabulary.swb_formView);
+        getSemanticObject().removeProperty(swb_formView);
     }
 
-    public FormView getFormView()
+    public org.semanticwb.model.FormView getFormView()
     {
-         FormView ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_formView);
+         org.semanticwb.model.FormView ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_formView);
          if(obj!=null)
          {
-             ret=(FormView)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.FormView)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }

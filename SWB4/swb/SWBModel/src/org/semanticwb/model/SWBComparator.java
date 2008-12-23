@@ -35,14 +35,14 @@ public class SWBComparator implements Comparator
         if(obj2 instanceof GenericObject) sobj2=((GenericObject)obj2).getSemanticObject();
         else sobj2 = (SemanticObject) obj2;
 
-        String name1=sobj1.getProperty(SWBContext.getVocabulary().swb_webPageSortName);
+        String name1=sobj1.getProperty(WebPage.swb_webPageSortName);
         //if(name1==null)name1=sobj1.getDisplayName(lang);
-        if(name1==null)name1=sobj1.getProperty(SWBContext.getVocabulary().swb_title,null,lang);
-        if(name1==null)name1=sobj1.getProperty(SWBContext.getVocabulary().swb_title);
-        String name2=sobj2.getProperty(SWBContext.getVocabulary().swb_webPageSortName);
+        if(name1==null)name1=sobj1.getProperty(Descriptiveable.swb_title,null,lang);
+        if(name1==null)name1=sobj1.getProperty(Descriptiveable.swb_title);
+        String name2=sobj2.getProperty(WebPage.swb_webPageSortName);
         //if(name2==null)name2=sobj2.getDisplayName(lang);
-        if(name2==null)name2=sobj2.getProperty(SWBContext.getVocabulary().swb_title,null,lang);
-        if(name2==null)name2=sobj2.getProperty(SWBContext.getVocabulary().swb_title);
+        if(name2==null)name2=sobj2.getProperty(Descriptiveable.swb_title,null,lang);
+        if(name2==null)name2=sobj2.getProperty(Descriptiveable.swb_title);
         //System.out.println("name1:"+name1+" name2:"+name2);
         if(name1!=null && name2!=null)
         {
@@ -90,8 +90,8 @@ public class SWBComparator implements Comparator
                     if(o2!=null)v2=((Sortable)o2).getIndex();
                 }else if(o1 instanceof SemanticObject)
                 {
-                    String t1=((SemanticObject)o1).getProperty(SWBContext.getVocabulary().swb_index);
-                    String t2=((SemanticObject)o2).getProperty(SWBContext.getVocabulary().swb_index);
+                    String t1=((SemanticObject)o1).getProperty(Sortable.swb_index);
+                    String t2=((SemanticObject)o2).getProperty(Sortable.swb_index);
                     if(t1!=null)v1=Integer.parseInt(t1);
                     if(t2!=null)v2=Integer.parseInt(t2);
                 }

@@ -42,14 +42,14 @@ public class User extends UserBase implements Principal, java.io.Serializable
             tmpPasswd = SWBUtils.CryptoWrapper.passwordDigest(password);
             System.out.println("tmpPasswd:"+tmpPasswd);
 
-            Statement stm = getSemanticObject().getRDFResource().getProperty(User.vocabulary.swb_usrPassword.getRDFProperty());
+            Statement stm = getSemanticObject().getRDFResource().getProperty(User.swb_usrPassword.getRDFProperty());
             if (stm != null)
             {
                 stm.changeObject(tmpPasswd);
             }
             else
             {
-                getSemanticObject().getRDFResource().addProperty(User.vocabulary.swb_usrPassword.getRDFProperty(), tmpPasswd);
+                getSemanticObject().getRDFResource().addProperty(User.swb_usrPassword.getRDFProperty(), tmpPasswd);
             }
             setUsrPasswordChanged(new Date());
         } catch (NoSuchAlgorithmException ex)
@@ -63,7 +63,7 @@ public class User extends UserBase implements Principal, java.io.Serializable
     public String getUsrPassword()
     {
         String ret=null;
-        Statement st=getSemanticObject().getRDFResource().getProperty(User.vocabulary.swb_usrPassword.getRDFProperty());
+        Statement st=getSemanticObject().getRDFResource().getProperty(User.swb_usrPassword.getRDFProperty());
         if(st!=null)
         {
             ret=st.getString();

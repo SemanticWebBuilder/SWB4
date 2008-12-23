@@ -1,75 +1,73 @@
 package org.semanticwb.model.base;
 
-import java.util.Date;
-import java.util.Iterator;
-import java.util.ArrayList;
-import org.semanticwb.model.*;
-import com.hp.hpl.jena.rdf.model.*;
-import org.semanticwb.*;
-import org.semanticwb.platform.*;
-import org.semanticwb.model.GenericIterator;
 
-public class TemplateRefBase extends Reference implements Inheritable,Priorityable,Activeable,Deleteable
+public class TemplateRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.Inheritable,org.semanticwb.model.Priorityable,org.semanticwb.model.Activeable,org.semanticwb.model.Deleteable
 {
+    public static final org.semanticwb.platform.SemanticProperty swb_deleted=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#deleted");
+    public static final org.semanticwb.platform.SemanticClass swb_Template=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Template");
+    public static final org.semanticwb.platform.SemanticProperty swb_template=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#template");
+    public static final org.semanticwb.platform.SemanticProperty swb_inherita=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#inherita");
+    public static final org.semanticwb.platform.SemanticProperty swb_priority=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#priority");
+    public static final org.semanticwb.platform.SemanticClass swb_TemplateRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#TemplateRef");
 
-    public TemplateRefBase(SemanticObject base)
+    public TemplateRefBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
 
     public boolean isDeleted()
     {
-        return getSemanticObject().getBooleanProperty(vocabulary.swb_deleted);
+        return getSemanticObject().getBooleanProperty(swb_deleted);
     }
 
     public void setDeleted(boolean deleted)
     {
-        getSemanticObject().setBooleanProperty(vocabulary.swb_deleted, deleted);
+        getSemanticObject().setBooleanProperty(swb_deleted, deleted);
     }
 
     public void setTemplate(org.semanticwb.model.Template template)
     {
-        getSemanticObject().setObjectProperty(vocabulary.swb_template, template.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_template, template.getSemanticObject());
     }
 
     public void removeTemplate()
     {
-        getSemanticObject().removeProperty(vocabulary.swb_template);
+        getSemanticObject().removeProperty(swb_template);
     }
 
-    public Template getTemplate()
+    public org.semanticwb.model.Template getTemplate()
     {
-         Template ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_template);
+         org.semanticwb.model.Template ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_template);
          if(obj!=null)
          {
-             ret=(Template)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.Template)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
 
     public int getInherita()
     {
-        return getSemanticObject().getIntProperty(vocabulary.swb_inherita);
+        return getSemanticObject().getIntProperty(swb_inherita);
     }
 
     public void setInherita(int inherita)
     {
-        getSemanticObject().setLongProperty(vocabulary.swb_inherita, inherita);
+        getSemanticObject().setLongProperty(swb_inherita, inherita);
     }
 
     public int getPriority()
     {
-        return getSemanticObject().getIntProperty(vocabulary.swb_priority);
+        return getSemanticObject().getIntProperty(swb_priority);
     }
 
     public void setPriority(int priority)
     {
-        getSemanticObject().setLongProperty(vocabulary.swb_priority, priority);
+        getSemanticObject().setLongProperty(swb_priority, priority);
     }
 
-    public WebSite getWebSite()
+    public org.semanticwb.model.WebSite getWebSite()
     {
-        return new WebSite(getSemanticObject().getModel().getModelObject());
+        return new org.semanticwb.model.WebSite(getSemanticObject().getModel().getModelObject());
     }
 }

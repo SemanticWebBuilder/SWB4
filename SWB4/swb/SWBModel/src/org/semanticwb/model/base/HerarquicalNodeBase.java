@@ -1,127 +1,128 @@
 package org.semanticwb.model.base;
 
-import java.util.Date;
-import java.util.Iterator;
-import java.util.ArrayList;
-import org.semanticwb.model.*;
-import com.hp.hpl.jena.rdf.model.*;
-import org.semanticwb.*;
-import org.semanticwb.platform.*;
-import org.semanticwb.model.GenericIterator;
 
-public class HerarquicalNodeBase extends SWBClass implements Descriptiveable,Iconable,Sortable
+public class HerarquicalNodeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Iconable,org.semanticwb.model.Sortable
 {
+    public static final org.semanticwb.platform.SemanticProperty swb_index=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#index");
+    public static final org.semanticwb.platform.SemanticClass swb_SWBModel=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#SWBModel");
+    public static final org.semanticwb.platform.SemanticProperty swbxf_heModel=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#heModel");
+    public static final org.semanticwb.platform.SemanticProperty swb_iconClass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#iconClass");
+    public static final org.semanticwb.platform.SemanticProperty swb_title=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#title");
+    public static final org.semanticwb.platform.SemanticClass swb_Class=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Class");
+    public static final org.semanticwb.platform.SemanticProperty swbxf_heClass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#heClass");
+    public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
+    public static final org.semanticwb.platform.SemanticClass swbxf_HerarquicalNode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#HerarquicalNode");
 
-    public HerarquicalNodeBase(SemanticObject base)
+    public HerarquicalNodeBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
 
     public int getIndex()
     {
-        return getSemanticObject().getIntProperty(vocabulary.swb_index);
+        return getSemanticObject().getIntProperty(swb_index);
     }
 
     public void setIndex(int index)
     {
-        getSemanticObject().setLongProperty(vocabulary.swb_index, index);
+        getSemanticObject().setLongProperty(swb_index, index);
     }
 
     public void setModel(org.semanticwb.model.SWBModel swbmodel)
     {
-        getSemanticObject().setObjectProperty(vocabulary.swbxf_heModel, swbmodel.getSemanticObject());
+        getSemanticObject().setObjectProperty(swbxf_heModel, swbmodel.getSemanticObject());
     }
 
     public void removeModel()
     {
-        getSemanticObject().removeProperty(vocabulary.swbxf_heModel);
+        getSemanticObject().removeProperty(swbxf_heModel);
     }
 
-    public SWBModel getModel()
+    public org.semanticwb.model.SWBModel getModel()
     {
-         SWBModel ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swbxf_heModel);
+         org.semanticwb.model.SWBModel ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swbxf_heModel);
          if(obj!=null)
          {
-             ret=(SWBModel)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.SWBModel)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
 
     public String getIconClass()
     {
-        return getSemanticObject().getProperty(vocabulary.swb_iconClass);
+        return getSemanticObject().getProperty(swb_iconClass);
     }
 
     public void setIconClass(String iconClass)
     {
-        getSemanticObject().setProperty(vocabulary.swb_iconClass, iconClass);
+        getSemanticObject().setProperty(swb_iconClass, iconClass);
     }
 
     public String getTitle()
     {
-        return getSemanticObject().getProperty(vocabulary.swb_title);
+        return getSemanticObject().getProperty(swb_title);
     }
 
     public void setTitle(String title)
     {
-        getSemanticObject().setProperty(vocabulary.swb_title, title);
+        getSemanticObject().setProperty(swb_title, title);
     }
 
     public String getTitle(String lang)
     {
-        return getSemanticObject().getProperty(vocabulary.swb_title, null, lang);
+        return getSemanticObject().getProperty(swb_title, null, lang);
     }
 
     public String getDisplayTitle(String lang)
     {
-        return getSemanticObject().getLocaleProperty(vocabulary.swb_title, lang);
+        return getSemanticObject().getLocaleProperty(swb_title, lang);
     }
 
     public void setTitle(String title, String lang)
     {
-        getSemanticObject().setProperty(vocabulary.swb_title, title, lang);
+        getSemanticObject().setProperty(swb_title, title, lang);
     }
 
     public void setHClass(org.semanticwb.platform.SemanticObject semanticobject)
     {
-        getSemanticObject().setObjectProperty(vocabulary.swbxf_heClass, semanticobject);
+        getSemanticObject().setObjectProperty(swbxf_heClass, semanticobject);
     }
 
     public void removeHClass()
     {
-        getSemanticObject().removeProperty(vocabulary.swbxf_heClass);
+        getSemanticObject().removeProperty(swbxf_heClass);
     }
 
-    public SemanticObject getHClass()
+    public org.semanticwb.platform.SemanticObject getHClass()
     {
-         SemanticObject ret=null;
-         ret=getSemanticObject().getObjectProperty(vocabulary.swbxf_heClass);
+         org.semanticwb.platform.SemanticObject ret=null;
+         ret=getSemanticObject().getObjectProperty(swbxf_heClass);
          return ret;
     }
 
     public String getDescription()
     {
-        return getSemanticObject().getProperty(vocabulary.swb_description);
+        return getSemanticObject().getProperty(swb_description);
     }
 
     public void setDescription(String description)
     {
-        getSemanticObject().setProperty(vocabulary.swb_description, description);
+        getSemanticObject().setProperty(swb_description, description);
     }
 
     public String getDescription(String lang)
     {
-        return getSemanticObject().getProperty(vocabulary.swb_description, null, lang);
+        return getSemanticObject().getProperty(swb_description, null, lang);
     }
 
     public String getDisplayDescription(String lang)
     {
-        return getSemanticObject().getLocaleProperty(vocabulary.swb_description, lang);
+        return getSemanticObject().getLocaleProperty(swb_description, lang);
     }
 
     public void setDescription(String description, String lang)
     {
-        getSemanticObject().setProperty(vocabulary.swb_description, description, lang);
+        getSemanticObject().setProperty(swb_description, description, lang);
     }
 }

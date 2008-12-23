@@ -1,65 +1,62 @@
 package org.semanticwb.model.base;
 
-import java.util.Date;
-import java.util.Iterator;
-import java.util.ArrayList;
-import org.semanticwb.model.*;
-import com.hp.hpl.jena.rdf.model.*;
-import org.semanticwb.*;
-import org.semanticwb.platform.*;
-import org.semanticwb.model.GenericIterator;
 
-public class PortletRefBase extends Reference implements Priorityable,Activeable,Deleteable
+public class PortletRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.Priorityable,org.semanticwb.model.Activeable,org.semanticwb.model.Deleteable
 {
+    public static final org.semanticwb.platform.SemanticProperty swb_deleted=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#deleted");
+    public static final org.semanticwb.platform.SemanticClass swb_Portlet=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Portlet");
+    public static final org.semanticwb.platform.SemanticProperty swb_portlet=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#portlet");
+    public static final org.semanticwb.platform.SemanticProperty swb_priority=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#priority");
+    public static final org.semanticwb.platform.SemanticClass swb_PortletRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PortletRef");
 
-    public PortletRefBase(SemanticObject base)
+    public PortletRefBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
 
     public boolean isDeleted()
     {
-        return getSemanticObject().getBooleanProperty(vocabulary.swb_deleted);
+        return getSemanticObject().getBooleanProperty(swb_deleted);
     }
 
     public void setDeleted(boolean deleted)
     {
-        getSemanticObject().setBooleanProperty(vocabulary.swb_deleted, deleted);
+        getSemanticObject().setBooleanProperty(swb_deleted, deleted);
     }
 
     public void setPortlet(org.semanticwb.model.Portlet portlet)
     {
-        getSemanticObject().setObjectProperty(vocabulary.swb_portlet, portlet.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_portlet, portlet.getSemanticObject());
     }
 
     public void removePortlet()
     {
-        getSemanticObject().removeProperty(vocabulary.swb_portlet);
+        getSemanticObject().removeProperty(swb_portlet);
     }
 
-    public Portlet getPortlet()
+    public org.semanticwb.model.Portlet getPortlet()
     {
-         Portlet ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_portlet);
+         org.semanticwb.model.Portlet ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_portlet);
          if(obj!=null)
          {
-             ret=(Portlet)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.Portlet)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
 
     public int getPriority()
     {
-        return getSemanticObject().getIntProperty(vocabulary.swb_priority);
+        return getSemanticObject().getIntProperty(swb_priority);
     }
 
     public void setPriority(int priority)
     {
-        getSemanticObject().setLongProperty(vocabulary.swb_priority, priority);
+        getSemanticObject().setLongProperty(swb_priority, priority);
     }
 
-    public WebSite getWebSite()
+    public org.semanticwb.model.WebSite getWebSite()
     {
-        return new WebSite(getSemanticObject().getModel().getModelObject());
+        return new org.semanticwb.model.WebSite(getSemanticObject().getModel().getModelObject());
     }
 }

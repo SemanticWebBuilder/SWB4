@@ -1,11 +1,12 @@
 package org.semanticwb.model;
 
-import org.semanticwb.model.GenericIterator;
-import java.util.Date;
-public interface Portletable extends GenericObject
+public interface Portletable extends org.semanticwb.model.GenericObject
 {
+    public static final org.semanticwb.platform.SemanticClass swb_Portlet=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Portlet");
+    public static final org.semanticwb.platform.SemanticProperty swb_hasPortlet=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasPortlet");
+    public static final org.semanticwb.platform.SemanticClass swb_Portletable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Portletable");
 
-    public GenericIterator<org.semanticwb.model.Portlet> listPortlets();
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.Portlet> listPortlets();
 
     public void addPortlet(org.semanticwb.model.Portlet portlet);
 
