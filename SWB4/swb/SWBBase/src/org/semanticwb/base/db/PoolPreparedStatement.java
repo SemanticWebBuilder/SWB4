@@ -20,11 +20,11 @@ import java.util.Calendar;
  */
 public class PoolPreparedStatement implements java.sql.PreparedStatement
 {
-    PreparedStatement st;
-    boolean closed = false;
-    String query=null;
-    String args="";
-    boolean debug=false;
+    private PreparedStatement st;
+    private boolean closed = false;
+    private String query=null;
+    private String args="";
+    private boolean debug=false;
 
     /** Creates a new instance of PoolStatement
      * @param st 
