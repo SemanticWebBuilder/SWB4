@@ -71,7 +71,7 @@
             String auri="/swb/swb/SWBAdmin/WBAd_Home/_rid/4/_mto/3";
             auri+="?suri="+obj.getSemanticObject().getEncodedURI();
             auri+="&sprop="+Calendarable.swb_hasCalendar.getEncodedURI();
-            System.out.println(auri);
+            //System.out.println(auri);
             //auri+="&spropref="+voc.pflow.getEncodedURI();            
 %>
 <div dojoType="dijit.layout.ContentPane" title="Calendarización" style=" padding:10px;" refreshOnShow="false" href="<%=auri%>"></div>

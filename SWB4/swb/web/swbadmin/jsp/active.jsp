@@ -28,11 +28,11 @@
     {
         if(act.equals("active"))
         {
-            obj.setBooleanProperty(SWBContext.getVocabulary().swb_active, true);
+            obj.setBooleanProperty(Activeable.swb_active, true);
             out.println(obj.getSemanticClass().getDisplayName(lang)+" fue activado...");
         }else
         {
-            obj.setBooleanProperty(SWBContext.getVocabulary().swb_active, false);
+            obj.setBooleanProperty(Activeable.swb_active, false);
             out.println(obj.getSemanticClass().getDisplayName(lang)+" fue desactivado...");
         }
     }

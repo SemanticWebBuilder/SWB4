@@ -242,14 +242,14 @@
 
     
 %><%
-    System.out.println(new Date()+" Tree1");
+    //System.out.println(new Date()+" Tree1");
     SemanticOntology ont=SWBPlatform.getSemanticMgr().getOntology();
 
     response.setHeader("Cache-Control", "no-cache"); 
     response.setHeader("Pragma", "no-cache"); 
     
     String suri=request.getParameter("suri");
-    System.out.println("suri:"+suri);
+    //System.out.println("suri:"+suri);
     if(suri==null)
     {
         JSONObject obj=new JSONObject();
@@ -301,5 +301,5 @@
      { name:'Argentina', type:'country'}
 ]}
     */
-    System.out.println(new Date()+" Tree2");
+    //System.out.println(new Date()+" Tree2");
 %>
