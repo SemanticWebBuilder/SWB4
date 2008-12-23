@@ -141,7 +141,7 @@ simpleGallery.routines={
     return layerHTML;
 
     /*
-    * Este código pertenece a la versión original de esta libreria
+    * Este cÃ³digo pertenece a la versiÃ³n original de esta libreria
     */
     /*var layerHTML=(imgelement[1])? '<a href="'+imgelement[1]+'" target="'+imgelement[2]+'">\n' : '' //hyperlink slide?
     layerHTML+='<img src="'+imgelement[0]+'" style="border-width:0" />'
@@ -233,4 +233,3 @@ simpleGallery.routines={
     document.body.appendChild(superlayer);
   }
 }
-
