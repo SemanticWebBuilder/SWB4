@@ -1,7 +1,9 @@
 package org.semanticwb.model;
 
 import java.util.Iterator;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.base.*;
+import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 
 public class WebSite extends WebSiteBase 
@@ -48,5 +50,24 @@ public class WebSite extends WebSiteBase
 //    public PortletType getPortletType(String id) {
 //        return super.getPortletType(id.toLowerCase());
 //    }
+
+    @Override
+    public WebPage getWebPage(String id)
+    {
+        WebPage ret=null;
+        SemanticClass cls=swb_WebPage;
+        int i=id.indexOf(':');
+        if(i>0)
+        {
+            String clsid=id.substring(0,i);
+            cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassByID(clsid);
+            id=id.substring(i+1);
+        }
+        if(cls!=null)
+        {
+            ret=(org.semanticwb.model.WebPage)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,cls),cls);
+        }
+        return ret;
+    }
     
 }
