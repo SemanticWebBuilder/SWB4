@@ -45,4 +45,6 @@ public interface IOfficeDocument
     public void setPagination(String contentId) throws Exception;
     @XmlRpcMethod(methodName="OfficeDocument.getVersions")
     public VersionInfo[] getVersions(String repositoryName,String contentId) throws Exception;
+    @XmlRpcMethod(methodName="OfficeDocument.publishToPortletContent")
+    public void publishToPortletContent(String repositoryName, String contentId, WebPageInfo webpage) throws Exception;
 }
