@@ -363,13 +363,16 @@ public class SWBASOPropRefEditor extends GenericResource {
                                 else if(value.equals("false")||value.equals("0"))
                                    obj.setBooleanProperty(prop, false);
                             }
-                            if (prop.isInt()) {
+                            if (prop.isInt())
+                            {
                                 obj.setLongProperty(prop, Integer.parseInt(value));
                             }
-                            if (prop.isString()) {
+                            if (prop.isString())
+                            {
                                 obj.setProperty(prop, value);
                             }
-                            if (prop.isFloat()) {
+                            if (prop.isFloat())
+                            {
                                 obj.setFloatProperty(prop, Float.parseFloat(value));
                             }
                         } else {
