@@ -687,9 +687,6 @@ public class Recommend extends GenericAdmResource {
         }
         PrintWriter out = response.getWriter();
         out.println(ret.toString());
-        out.println("<br><a href=\""
-                + paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN)
-                + "\">admin Recomend</a>");
     }
     
     /**

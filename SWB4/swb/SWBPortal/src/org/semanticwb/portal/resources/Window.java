@@ -1,3 +1,4 @@
+
 /*
  * INFOTEC WebBuilder es una herramienta para el desarrollo de portales de conocimiento, colaboraci�n e integraci�n para Internet,
  * la cual, es una creaci�n original del Fondo de Informaci�n y Documentaci�n para la Industria INFOTEC, misma que se encuentra
@@ -150,9 +151,6 @@ public class Window extends GenericAdmResource {
             if (ret != null) {
                 out.println(ret);
             }
-            out.println("<br><a href=\"" 
-                + reqParams.getRenderUrl().setMode(SWBParamRequest.Mode_ADMIN)
-                + "\">Click para Window admin</a>");
         }
     }
 
