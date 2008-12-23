@@ -49,7 +49,6 @@ public class SWBAWebPageContents extends GenericResource {
         String id = request.getParameter("suri");
         String idp = request.getParameter("sprop");
         String idptype = request.getParameter("sproptype");
-        SWBVocabulary voc = SWBContext.getVocabulary();
 
         String action = request.getParameter("act");
 
@@ -97,7 +96,7 @@ public class SWBAWebPageContents extends GenericResource {
             out.println("Name");
             out.println("</th>");
             String propname = "";
-            sptemp = hmprop.get(voc.swb_created);
+            sptemp = hmprop.get(Traceable.swb_created);
             if (sptemp != null) {
                 propname = sptemp.getName();
                 try {
@@ -107,7 +106,7 @@ public class SWBAWebPageContents extends GenericResource {
                 out.println(propname);
                 out.println("</th>");
             }
-            sptemp = hmprop.get(voc.swb_updated);
+            sptemp = hmprop.get(Traceable.swb_updated);
             if (sptemp != null) {
                 propname = sptemp.getName();
                 try {
@@ -117,8 +116,8 @@ public class SWBAWebPageContents extends GenericResource {
                 out.println(propname);
                 out.println("</th>");
             }
-            sptemp = hmprop.get(voc.swb_priority);
-            if (hmprop.get(SWBContext.getVocabulary().swb_priority) != null) {
+            sptemp = hmprop.get(Priorityable.swb_priority);
+            if (hmprop.get(Priorityable.swb_priority) != null) {
                 propname = sptemp.getName();
                 try {
                     propname = sptemp.getDisplayName(user.getLanguage());
@@ -127,7 +126,7 @@ public class SWBAWebPageContents extends GenericResource {
                 out.println(propname);
                 out.println("</th>");
             }
-            sptemp = hmprop.get(voc.swb_active);
+            sptemp = hmprop.get(Activeable.swb_active);
             if (sptemp != null) {
                 propname = sptemp.getName();
                 try {
@@ -176,20 +175,20 @@ public class SWBAWebPageContents extends GenericResource {
                 urlchoose.setParameter("act", "edit");
                 out.println("<a href=\"#\"  onclick=\"addNewTab('" + sobj.getURI() + "','"+sobj.getDisplayName()+"','"+SWBPlatform.getContextPath()+"/swbadmin/jsp/objectTab.jsp');return false;\">" + stitle + "</a>");
                 out.println("</td>");
-                if (hmprop.get(SWBContext.getVocabulary().swb_created) != null) {
-                    semprop = (SemanticProperty) hmprop.get(SWBContext.getVocabulary().swb_created);
+                if (hmprop.get(Traceable.swb_created) != null) {
+                    semprop = (SemanticProperty) hmprop.get(Traceable.swb_created);
                     out.println("<td>");
                     out.println(getValueSemProp(sobj, semprop));
                     out.println("</td>");
                 }
-                if (hmprop.get(SWBContext.getVocabulary().swb_updated) != null) {
-                    semprop = (SemanticProperty) hmprop.get(SWBContext.getVocabulary().swb_updated);
+                if (hmprop.get(Traceable.swb_updated) != null) {
+                    semprop = (SemanticProperty) hmprop.get(Traceable.swb_updated);
                     out.println("<td>");
                     out.println(getValueSemProp(sobj, semprop));
                     out.println("</td>");
                 }
-                if (hmprop.get(SWBContext.getVocabulary().swb_priority) != null) {
-                    semprop = (SemanticProperty) hmprop.get(SWBContext.getVocabulary().swb_priority);
+                if (hmprop.get(Priorityable.swb_priority) != null) {
+                    semprop = (SemanticProperty) hmprop.get(Priorityable.swb_priority);
                     out.println("<td align=\"center\">");
                     SWBResourceURL urlu = paramRequest.getActionUrl();
                     urlu.setParameter("suri", id);
@@ -207,10 +206,10 @@ public class SWBAWebPageContents extends GenericResource {
                     //out.println("<input id=\""+id+"/"+base.getId()+"/NS\" dojoType=\"dijit.form.NumberSpinner\" smallDelta=\"1\" constraints=\"{min:0,max:999,places:0}\" style=\"width:50px\" type=\"text\" name=\"" + semprop.getName() + "\" maxlength=\"3\" onchange=\"submitUrl('" + urlu + "&" + semprop.getName() + "='+dijit.byId('"+id+"/"+base.getId()+"/NS').getValue(),dijit.byId('"+id+"/"+base.getId()+"/NS')); return false;\" value=\"" + getValueSemProp(sobj, semprop) + "\" />");
                     out.println("</td>");
                 }
-                if (hmprop.get(SWBContext.getVocabulary().swb_active) != null) {
+                if (hmprop.get(Activeable.swb_active) != null) {
                     out.println("<td align=\"center\">");
                     boolean activo = false;
-                    if (sobj.getBooleanProperty(SWBContext.getVocabulary().swb_active)) {
+                    if (sobj.getBooleanProperty(Activeable.swb_active)) {
                         activo = true;
                     }
                     SWBResourceURL urlu = paramRequest.getActionUrl();
@@ -243,7 +242,7 @@ public class SWBAWebPageContents extends GenericResource {
             
         }  else if (action.equals("choose")) { //lista de instancias de tipo propiedad existentes para selecionar
             SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(idp);
-            idptype = SWBContext.getVocabulary().swb_portletType.getURI();
+            idptype = Portlet.swb_portletType.getURI();
             if (idptype != null) {
                 prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(idptype);
             }
@@ -274,7 +273,7 @@ public class SWBAWebPageContents extends GenericResource {
             HashMap<String, SemanticObject> hmSystem = new HashMap();
             while (itgso.hasNext()) {
                 SemanticObject sobj = itgso.next();
-                int mode = sobj.getIntProperty(voc.swb_portletMode);
+                int mode = sobj.getIntProperty(PortletType.swb_portletMode);
                 if (mode == 1)//tipo contenido
                 {
                     hmContent.put(sobj.getId(), sobj);
@@ -310,7 +309,7 @@ public class SWBAWebPageContents extends GenericResource {
                 while (itgso.hasNext()) {
                     SemanticObject sobj = itgso.next();
                     String stitle = getDisplaySemObj(sobj, user.getLanguage());
-                    String sdescription = sobj.getProperty(voc.swb_description);
+                    String sdescription = sobj.getProperty(Descriptiveable.swb_description);
                     out.println("<tr>");
                     out.println("<td align=\"center\">");
                     out.println("<input type=\"radio\" dojoType=\"dijit.form.RadioButton\" name=\"sobj\" id=\""+sobj.getURI()+"/sptype\" value=\"global|"+sobj.getURI()+"\" >");
@@ -352,7 +351,7 @@ public class SWBAWebPageContents extends GenericResource {
                 while (itgso.hasNext()) {
                     SemanticObject sobj = itgso.next();
                     String stitle = getDisplaySemObj(sobj, user.getLanguage());
-                    String sdescription = sobj.getProperty(voc.swb_description);
+                    String sdescription = sobj.getProperty(Descriptiveable.swb_description);
                     out.println("<tr>");
                     out.println("<td align=\"center\">");
                     out.println("<input type=\"radio\" dojoType=\"dijit.form.RadioButton\" name=\"sobj\" id=\""+sobj.getURI()+"/sptype\" value=\"global|"+sobj.getURI()+"\" >");
@@ -384,7 +383,7 @@ public class SWBAWebPageContents extends GenericResource {
                 log.debug("before:");
                 int mode = 0;
                 try{
-                    mode = sobj.getIntProperty(voc.swb_portletMode);
+                    mode = sobj.getIntProperty(PortletType.swb_portletMode);
                 }
                 catch(Exception e) {mode=0;}
                 log.debug("after: mode:"+mode);
@@ -423,7 +422,7 @@ public class SWBAWebPageContents extends GenericResource {
                 while (itso.hasNext()) {
                     SemanticObject sobj = itso.next();
                     String stitle = getDisplaySemObj(sobj, user.getLanguage());
-                    String sdescription = sobj.getProperty(voc.swb_description);
+                    String sdescription = sobj.getProperty(Descriptiveable.swb_description);
                     out.println("<tr>");
                     out.println("<td align=\"center\">");
                     out.println("<input type=\"radio\" dojoType=\"dijit.form.RadioButton\" name=\"sobj\" id=\""+sobj.getURI()+"/sptype\" value=\""+sobj.getURI()+"\" >");
@@ -465,7 +464,7 @@ public class SWBAWebPageContents extends GenericResource {
                 while (itso.hasNext()) {
                     SemanticObject sobj = itso.next();
                     String stitle = getDisplaySemObj(sobj, user.getLanguage());
-                    String sdescription = sobj.getProperty(voc.swb_description);
+                    String sdescription = sobj.getProperty(Descriptiveable.swb_description);
                     out.println("<tr>");
                     out.println("<td align=\"center\">");
                     out.println("<input type=\"radio\" dojoType=\"dijit.form.RadioButton\" name=\"sobj\" id=\""+sobj.getURI()+"/sptype\" value=\""+sobj.getURI()+"\" >");
@@ -528,7 +527,7 @@ public class SWBAWebPageContents extends GenericResource {
             obj = ont.getSemanticObject(id);
             cls = obj.getSemanticClass();
             SemanticObject so = ont.getSemanticObject(sobj);
-            SWBFormMgr fmgr = new SWBFormMgr(voc.swb_Portlet, obj, null);
+            SWBFormMgr fmgr = new SWBFormMgr(Portlet.swb_Portlet, obj, null);
             fmgr.setAction(urlPA.toString());
             
             log.debug("new: suri: "+id);
@@ -561,7 +560,6 @@ public class SWBAWebPageContents extends GenericResource {
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         SemanticObject obj = ont.getSemanticObject(id); //WebPage
         SemanticClass cls = obj.getSemanticClass();
-        SWBVocabulary voc = SWBContext.getVocabulary();
         
         if ("update".equals(action)) {
             if (request.getParameter("sval") != null) {
@@ -615,7 +613,7 @@ public class SWBAWebPageContents extends GenericResource {
                 value = "0";
             }
             SemanticObject sobj = ont.getSemanticObject(soid);
-            sobj.setBooleanProperty(SWBContext.getVocabulary().swb_active, value.equals("true") ? true : false);
+            sobj.setBooleanProperty(Activeable.swb_active, value.equals("true") ? true : false);
 
             SemanticClass scls = sobj.getSemanticClass();
             log.debug("SWBAWebPageContents: ProcessAction(updstatus):" + scls.getClassName() + ": " + value);
@@ -644,11 +642,11 @@ public class SWBAWebPageContents extends GenericResource {
             SemanticObject wpage = null;
             wpage = ont.getSemanticObject(id);
 
-            SWBFormMgr fmgr = new SWBFormMgr(voc.swb_Portlet, wpage, null);
+            SWBFormMgr fmgr = new SWBFormMgr(Portlet.swb_Portlet, wpage, null);
             SemanticObject nso = fmgr.processForm(request);
             
             SemanticObject ptype = ont.getSemanticObject(sobj);
-            nso.setObjectProperty(voc.swb_portletType, ptype);
+            nso.setObjectProperty(Portlet.swb_portletType, ptype);
             
             if (prop.getName().startsWith("has")) {
                 obj.addObjectProperty(prop, nso);
@@ -718,7 +716,7 @@ public class SWBAWebPageContents extends GenericResource {
         try {
             ret = obj.getDisplayName(lang);
         } catch (Exception e) {
-            ret = obj.getProperty(SWBContext.getVocabulary().swb_title);
+            ret = obj.getProperty(Descriptiveable.swb_title);
         }
         return ret;
     }
