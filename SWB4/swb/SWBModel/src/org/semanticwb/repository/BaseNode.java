@@ -19,12 +19,11 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.platform.SemanticLiteral;
-import org.semanticwb.platform.SemanticMgr;
 import org.semanticwb.platform.SemanticVocabulary;
 
 public class BaseNode extends BaseNodeBase
 {
-
+    private static Hashtable<String, String> namespaces = new Hashtable<String, String>();        
     static Logger log = SWBUtils.getLogger(BaseNode.class);
     private static final String JCR_FROZENNODE_NAME = "jcr:frozenNode";
     private static final String JCR_ROOTVERSION = "jcr:rootVersion";
@@ -33,7 +32,13 @@ public class BaseNode extends BaseNodeBase
     private static final String ONPARENTVERSION_VERSION = "VERSION";
     private static final String WAS_NOT_FOUND = " was not found";
     private static SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-
+    static
+    {
+        namespaces.put("mix", "http://www.jcp.org/jcr/mix/1.0");
+        namespaces.put("jcr", "http://www.jcp.org/jcr/1.0");
+        namespaces.put("nt", "http://www.jcp.org/jcr/nt/1.0");
+        namespaces.put("cm", "http://www.semanticwb.org.mx/swb4/content");
+    }
     public BaseNode(SemanticObject base)
     {
         super(base);
@@ -1727,14 +1732,13 @@ public class BaseNode extends BaseNodeBase
 
     public static Hashtable<String, String> listUris()
     {
-        Hashtable<String, String> namespaces = new Hashtable<String, String>();
-        SemanticMgr mgr = SWBPlatform.getSemanticMgr();
-        Iterator<SemanticClass> tpcit = mgr.getVocabulary().listSemanticClasses();
+        
+        Iterator<SemanticClass> tpcit = nt_BaseNode.listSubClasses();
         while (tpcit.hasNext())
         {
             SemanticClass tpc = tpcit.next();
             // solo agregar espacios de nombre de clases abajo de base
-            if (tpc.getPrefix() != null && tpc.isSubClass(BaseNode.nt_BaseNode))
+            if (tpc.getPrefix() != null)
             {
                 if (!namespaces.containsKey(tpc.getPrefix()))
                 {
