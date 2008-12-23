@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.UUID;
 import javax.jcr.ItemExistsException;
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
@@ -21,8 +22,16 @@ import javax.jcr.version.VersionIterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.Portlet;
+import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.WebPage;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.office.interfaces.IOfficeDocument;
 import org.semanticwb.office.interfaces.VersionInfo;
+import org.semanticwb.office.interfaces.WebPageInfo;
+import org.semanticwb.portlet.office.ExcelPortlet;
+import org.semanticwb.portlet.office.PPTPortlet;
+import org.semanticwb.portlet.office.WordPortlet;
 import org.semanticwb.repository.RepositoryManagerLoader;
 import org.semanticwb.xmlrpc.Part;
 import org.semanticwb.xmlrpc.XmlRpcObject;
@@ -542,6 +551,48 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         catch (ItemNotFoundException infe)
         {
             throw new Exception(CONTENT_NOT_FOUND, infe);
+        }
+        finally
+        {
+            if (session != null)
+            {
+                session.logout();
+            }
+        }
+    }
+    public void publishToPortletContent(String repositoryName, String contentId, WebPageInfo webpage) throws Exception
+    {
+        WebSite site = SWBContext.getWebSite(webpage.siteID);
+        WebPage parent = site.getWebPage(webpage.id);
+
+        Session session = null;
+        try
+        {
+            session = loader.openSession(repositoryName, this.user, this.password);
+            Node contentNode = session.getNodeByUUID(contentId);
+            String cm_officeType=loader.getOfficeManager(repositoryName).getPropertyType();
+            String type=contentNode.getProperty(cm_officeType).getString();
+            Portlet portlet = null;
+            String id=UUID.randomUUID().toString();
+            if(type.equals("EXCEL"))
+            {
+                portlet=new ExcelPortlet(ExcelPortlet.swbrep_ExcelPortlet.newInstance(id));
+            }
+            else if(type.equals("PPT"))
+            {
+                portlet=new PPTPortlet(PPTPortlet.swbrep_PPTPortlet.newInstance(id));
+            }
+            else
+            {
+                portlet=new WordPortlet(WordPortlet.swbrep_WordPortlet.newInstance(id));
+            }
+            parent.addPortlet(portlet);
+
+        }
+        catch (Exception e)
+        {
+            log.error(e);
+            throw e;
         }
         finally
         {

@@ -8,7 +8,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Iterator;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Repository;
@@ -20,11 +20,20 @@ import javax.jcr.version.VersionHistory;
 import javax.jcr.version.VersionIterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.Portlet;
+import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.WebPage;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.office.interfaces.CategoryInfo;
 import org.semanticwb.office.interfaces.ContentInfo;
 import org.semanticwb.office.interfaces.ContentType;
 import org.semanticwb.office.interfaces.IOfficeApplication;
 import org.semanticwb.office.interfaces.VersionInfo;
+import org.semanticwb.office.interfaces.WebPageInfo;
+import org.semanticwb.office.interfaces.WebSiteInfo;
+import org.semanticwb.portlet.office.ExcelPortlet;
+import org.semanticwb.portlet.office.PPTPortlet;
+import org.semanticwb.portlet.office.WordPortlet;
 import org.semanticwb.repository.RepositoryManagerLoader;
 import org.semanticwb.xmlrpc.Part;
 import org.semanticwb.xmlrpc.XmlRpcObject;
@@ -384,20 +393,20 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                     statement.append("FILTER regex(?title, \"" + title + "\") ");
                 }
 
-                
+
                 if (!(officeType.equals("") || officeType.equals("*")))
                 {
                     statement.append(" ?x " + cm_officeType + " ?officetype . ");
                     statement.append(" FILTER regex(?officetype, \"" + officeType + "\") ");
                 }
-                
+
                 if (!(description.equals("") || description.equals("*")))
                 {
                     statement.append(" ?x " + cm_description + " ?description . ");
                     statement.append(" FILTER regex(?description, \"" + description + "\") ");
                 }
 
-                
+
 
                 if (!(type.equals("") || type.equals("*")))
                 {
@@ -507,4 +516,47 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             }
         }
     }
+
+    public WebSiteInfo[] getSites() throws Exception
+    {
+        ArrayList<WebSiteInfo> websites = new ArrayList<WebSiteInfo>();
+        Iterator<WebSite> sites = SWBContext.listWebSites();
+        while (sites.hasNext())
+        {
+            WebSite site = sites.next();
+            WebSiteInfo info = new WebSiteInfo();
+            info.title = site.getTitle();
+            info.id = site.getId();
+        }
+        return websites.toArray(new WebSiteInfo[websites.size()]);
+    }
+
+    public WebPageInfo getHomePage(WebSiteInfo website) throws Exception
+    {
+
+        WebSite site = SWBContext.getWebSite(website.id);
+        WebPageInfo info = new WebPageInfo();
+        info.id = site.getHomePage().getId();
+        info.title = site.getHomePage().getTitle();
+        info.siteID = website.id;
+        return info;
+    }
+
+    public WebPageInfo[] getPages(WebPageInfo webpage) throws Exception
+    {
+        ArrayList<WebPageInfo> pagesToReturn = new ArrayList<WebPageInfo>();
+        WebSite site = SWBContext.getWebSite(webpage.siteID);
+        WebPage parent = site.getWebPage(webpage.id);
+        Iterator<WebPage> pages = parent.listChilds();
+        while (pages.hasNext())
+        {
+            WebPageInfo info = new WebPageInfo();
+            info.id = site.getHomePage().getId();
+            info.title = site.getHomePage().getTitle();
+            info.siteID = webpage.siteID;
+        }
+        return pagesToReturn.toArray(new WebPageInfo[pagesToReturn.size()]);
+    }
+
+   
 }
