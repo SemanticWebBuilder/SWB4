@@ -365,6 +365,7 @@ public class PoolPreparedStatement implements java.sql.PreparedStatement
             System.out.println("--> execute():"+query);
             System.out.println("--> args:"+args);
             args="";
+            new Exception().printStackTrace();
         }
         ret=st.execute();
         if(debug)System.out.println("------------------"+(System.currentTimeMillis() - time)+"-----------------------");
