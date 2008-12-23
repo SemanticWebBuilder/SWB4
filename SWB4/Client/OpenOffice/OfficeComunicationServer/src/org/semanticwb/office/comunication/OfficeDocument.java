@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.UUID;
 import javax.jcr.ItemExistsException;
 import javax.jcr.ItemNotFoundException;
@@ -27,9 +28,13 @@ import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.office.interfaces.IOfficeDocument;
+import org.semanticwb.office.interfaces.PortletInfo;
+import org.semanticwb.office.interfaces.PropertyInfo;
 import org.semanticwb.office.interfaces.VersionInfo;
 import org.semanticwb.office.interfaces.WebPageInfo;
+import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portlet.office.ExcelPortlet;
+import org.semanticwb.portlet.office.OfficePortlet;
 import org.semanticwb.portlet.office.PPTPortlet;
 import org.semanticwb.portlet.office.WordPortlet;
 import org.semanticwb.repository.RepositoryManagerLoader;
@@ -560,7 +565,52 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             }
         }
     }
-    public String publishToPortletContent(String repositoryName, String contentId, WebPageInfo webpage) throws Exception
+
+    public PortletInfo[] listPortlets(PortletInfo portletInfo, WebPageInfo webpage) throws Exception
+    {
+        ArrayList<PortletInfo> listPortlets = new ArrayList<PortletInfo>();
+        WebSite site = SWBContext.getWebSite(portletInfo.siteId);
+        WebPage parent = site.getWebPage(webpage.id);
+        Iterator<Portlet> portlets = parent.listPortlets();
+        while (portlets.hasNext())
+        {
+            Portlet portlet = portlets.next();
+            if (portlet instanceof OfficePortlet)
+            {
+                OfficePortlet officePortlet = (OfficePortlet) portlet;
+                PortletInfo info = new PortletInfo();
+                info.id = officePortlet.getId();
+                info.siteId = webpage.siteID;
+                String repositoryName = officePortlet.getRepositoryName();
+                String contentId = officePortlet.getContent();
+                Session session = null;
+                try
+                {
+                    session = loader.openSession(repositoryName, this.user, this.password);
+                    Node contentNode = session.getNodeByUUID(contentId);
+                    String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
+                    String cm_description = loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
+                    info.description=contentNode.getProperty(cm_description).getString();
+                    info.title=contentNode.getProperty(cm_title).getString();
+                }
+                catch (Exception e)
+                {
+                    log.error(e);
+                    throw e;
+                }
+                finally
+                {
+                    if (session != null)
+                    {
+                        session.logout();
+                    }
+                }
+            }
+        }
+        return listPortlets.toArray(new PortletInfo[listPortlets.size()]);
+    }
+
+    public PortletInfo publishToPortletContent(String repositoryName, String contentId, WebPageInfo webpage) throws Exception
     {
         WebSite site = SWBContext.getWebSite(webpage.siteID);
         WebPage parent = site.getWebPage(webpage.id);
@@ -570,24 +620,27 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         {
             session = loader.openSession(repositoryName, this.user, this.password);
             Node contentNode = session.getNodeByUUID(contentId);
-            String cm_officeType=loader.getOfficeManager(repositoryName).getPropertyType();
-            String type=contentNode.getProperty(cm_officeType).getString();
+            String cm_officeType = loader.getOfficeManager(repositoryName).getPropertyType();
+            String type = contentNode.getProperty(cm_officeType).getString();
             Portlet portlet = null;
-            String id=UUID.randomUUID().toString();
-            if(type.equals("EXCEL"))
+            String id = UUID.randomUUID().toString();
+            if (type.equals("EXCEL"))
             {
-                portlet=new ExcelPortlet(ExcelPortlet.swbrep_ExcelPortlet.newInstance(id));
+                portlet = new ExcelPortlet(ExcelPortlet.swbrep_ExcelPortlet.newInstance(id));
             }
-            else if(type.equals("PPT"))
+            else if (type.equals("PPT"))
             {
-                portlet=new PPTPortlet(PPTPortlet.swbrep_PPTPortlet.newInstance(id));
+                portlet = new PPTPortlet(PPTPortlet.swbrep_PPTPortlet.newInstance(id));
             }
             else
             {
-                portlet=new WordPortlet(WordPortlet.swbrep_WordPortlet.newInstance(id));
+                portlet = new WordPortlet(WordPortlet.swbrep_WordPortlet.newInstance(id));
             }
             parent.addPortlet(portlet);
-            return id;
+            PortletInfo PortletInfo = new PortletInfo();
+            PortletInfo.id = id;
+            PortletInfo.siteId = webpage.id;
+            return PortletInfo;
 
         }
         catch (Exception e)
@@ -602,6 +655,52 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 session.logout();
             }
         }
+    }
+
+    public void setPortletProperties(PortletInfo portletInfo, PropertyInfo propertyInfo, String value) throws Exception
+    {
+        WebSite site = SWBContext.getWebSite(portletInfo.siteId);
+        Portlet portlet = site.getPortlet(portletInfo.id);
+        SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(propertyInfo.id);
+        portlet.getSemanticObject().setProperty(prop, value);
+    }
+
+    public PropertyInfo[] getPortletProperties(PortletInfo portletInfo) throws Exception
+    {
+        ArrayList<PropertyInfo> properties = new ArrayList<PropertyInfo>();
+        WebSite site = SWBContext.getWebSite(portletInfo.siteId);
+        Portlet portlet = site.getPortlet(portletInfo.id);
+        Iterator<SemanticProperty> propertiesClazz = portlet.getSemanticObject().getSemanticClass().listProperties();
+        while (propertiesClazz.hasNext())
+        {
+            SemanticProperty prop = propertiesClazz.next();
+
+            if (prop.isDataTypeProperty() && !prop.isBinary() && prop.getPrefix() != null)
+            {
+                String label = prop.getLabel();
+                if (label != null)
+                {
+                    PropertyInfo info = new PropertyInfo();
+                    info.id = prop.getURI();
+                    info.isRequired = prop.isRequired();
+                    info.title = label;
+                    if (prop.isString())
+                    {
+                        info.type = "String";
+                    }
+                    if (prop.isBoolean())
+                    {
+                        info.type = "Boolean";
+                    }
+                    if (prop.isInt())
+                    {
+                        info.type = "Integer";
+                    }
+                    properties.add(info);
+                }
+            }
+        }
+        return properties.toArray(new PropertyInfo[properties.size()]);
     }
 }
 
