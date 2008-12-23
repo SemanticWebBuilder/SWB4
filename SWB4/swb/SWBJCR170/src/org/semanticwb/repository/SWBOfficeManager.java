@@ -9,6 +9,8 @@ import java.util.Iterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.platform.SemanticClass;
+import org.semanticwb.repository.office.OfficeCategory;
+import org.semanticwb.repository.office.OfficeContent;
 
 /**
  *
@@ -20,7 +22,7 @@ public class SWBOfficeManager implements OfficeManager
     private static final String DESCRIPTION_BY_DEFAULT = "Sin descripción";
     private static final String LANGUAGE_BY_DEFAULT = "es";
     private static Logger log = SWBUtils.getLogger(SWBOfficeManager.class);
-    private final SemanticClass cm_content = BaseNode.vocabulary.cm_OfficeContent;
+    private final SemanticClass cm_content = OfficeContent.cm_OfficeContent;
     public SWBOfficeManager()
     {
         log.event("Initializing SWBOfficeManager ...");
@@ -59,30 +61,30 @@ public class SWBOfficeManager implements OfficeManager
 
     public String getCategoryType()
     {
-        return BaseNode.vocabulary.cm_OfficeCategory.getPrefix() + ":" + BaseNode.vocabulary.cm_OfficeCategory.getName();
+        return OfficeCategory.cm_OfficeCategory.getPrefix() + ":" + OfficeCategory.cm_OfficeCategory.getName();
     }
 
     public String getPropertyTitleType()
     {
-        return BaseNode.vocabulary.cm_title.getPrefix() + ":" + BaseNode.vocabulary.cm_title.getName();
+        return OfficeCategory.cm_title.getPrefix() + ":" + OfficeCategory.cm_title.getName();
     }
 
     public String getPropertyDescriptionType()
     {
-        return BaseNode.vocabulary.cm_description.getPrefix() + ":" + BaseNode.vocabulary.cm_description.getName();
+        return OfficeCategory.cm_description.getPrefix() + ":" + OfficeCategory.cm_description.getName();
     }
     public String getPropertyFileType()
     {
-        return BaseNode.vocabulary.cm_file.getPrefix() + ":" + BaseNode.vocabulary.cm_file.getName();
+        return OfficeContent.cm_file.getPrefix() + ":" + OfficeContent.cm_file.getName();
     }
 
     public String getPropertyType()
     {
-        return BaseNode.vocabulary.cm_officetype.getPrefix() + ":" + BaseNode.vocabulary.cm_officetype.getName();
+        return OfficeContent.cm_officetype.getPrefix() + ":" + OfficeContent.cm_officetype.getName();
     }
 
     public String getUserType()
     {
-        return BaseNode.vocabulary.cm_user.getPrefix() + ":" + BaseNode.vocabulary.cm_user.getName();
+        return OfficeContent.cm_user.getPrefix() + ":" + OfficeContent.cm_user.getName();
     }
 }
