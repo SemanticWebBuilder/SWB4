@@ -33,6 +33,9 @@ public class SWBAWebPageContents extends GenericResource {
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        response.setContentType("text/html; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
         log.debug("doView(SWBAWebPageContents...)");
         doEdit(request, response, paramRequest);
     }
@@ -84,9 +87,9 @@ public class SWBAWebPageContents extends GenericResource {
             }
             SemanticProperty sptemp = null;
 
+            out.println("<div class=\"swbform\">");
             out.println("<fieldset>");
-            out.println("<form  dojoType=\"dijit.form.Form\" method=\"post\">");
-            out.println("<table width=\"100%\" class=\"swbform\">");
+            out.println("<table width=\"98%\" >");
             out.println("<thead>");
             out.println("<tr>");
             out.println("<th>");
@@ -237,8 +240,9 @@ public class SWBAWebPageContents extends GenericResource {
             out.println("</tr>");
             out.println("</tfoot>");
             out.println("</table>");
-            out.println("</form>");
+            
             out.println("</fieldset>");
+            out.println("</div>");
             
         }  else if (action.equals("choose")) { //lista de instancias de tipo propiedad existentes para selecionar
             SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(idp);
@@ -259,7 +263,7 @@ public class SWBAWebPageContents extends GenericResource {
             SWBResourceURL urlAdd = paramRequest.getRenderUrl();
             urlAdd.setMode(SWBResourceURL.Mode_EDIT);
             urlAdd.setParameter("act", "edit");
-            out.println("<form id=\""+id+"/WPContent\" action=\"" + urlAdd + "\" method=\"post\" class=\"swbform\">");
+            out.println("<form id=\""+id+"/WPContent\" action=\"" + urlAdd + "\" method=\"post\" class=\"swbform\" onsubmit=\"submitForm('"+id+"/WPContent'); return false;\">");
             out.println("<input type=\"hidden\" id=\""+id+"/suri\" name=\"suri\" value=\""+id+"\">");
             out.println("<input type=\"hidden\" id=\""+id+"/sprop\" name=\"sprop\" value=\""+idp+"\">");
             out.println("<input type=\"hidden\" id=\""+id+"/sproptype\" name=\"sproptype\" value=\""+idptype+"\">");
@@ -285,7 +289,7 @@ public class SWBAWebPageContents extends GenericResource {
 
             itgso = hmContent.values().iterator();
             if (hmContent.size() > 0) {
-                out.println("<table width=\"100%\">");
+                out.println("<table width=\"98%\">");
                 out.println("<thead>");
                 out.println("<tr>");
                 out.println("<th colspan=\"3\">");
@@ -327,7 +331,7 @@ public class SWBAWebPageContents extends GenericResource {
             }
             itgso = hmSystem.values().iterator();
             if (hmSystem.size() > 0) {
-                out.println("<table width=\"100%\">");
+                out.println("<table width=\"98%\">");
                 out.println("<thead>");
                 out.println("<tr>");
                 out.println("<th colspan=\"3\">");
@@ -398,7 +402,7 @@ public class SWBAWebPageContents extends GenericResource {
 
             itso = hmContent.values().iterator();
             if (hmContent.size() > 0) {
-                out.println("<table width=\"100%\">");
+                out.println("<table width=\"98%\">");
                 out.println("<thead>");
                 out.println("<tr>");
                 out.println("<th colspan=\"3\">");
@@ -440,7 +444,7 @@ public class SWBAWebPageContents extends GenericResource {
             }
             itso = hmSystem.values().iterator();
             if (hmSystem.size() > 0) {
-                out.println("<table width=\"100%\">");
+                out.println("<table width=\"98%\">");
                 out.println("<thead>");
                 out.println("<tr>");
                 out.println("<th colspan=\"3\">");
@@ -492,7 +496,7 @@ public class SWBAWebPageContents extends GenericResource {
                 urlBack.setParameter("sproptype", idptype);
             }
             urlBack.setParameter("act", "");
-            out.println("<table width=\"100%\">");
+            out.println("<table width=\"98%\">");
             out.println("<tbody>");
             out.println("<tr>");
             out.println("<th>");

@@ -13,9 +13,6 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Portlet;
-import org.semanticwb.model.SWBContext;
-import org.semanticwb.model.SWBFormElement;
-import org.semanticwb.model.SWBVocabulary;
 import org.semanticwb.model.User;
 import org.semanticwb.model.VersionInfo;
 import org.semanticwb.model.Versionable;
@@ -68,8 +65,9 @@ public class SWBAVersionInfo extends GenericResource {
                 if (action == null || action.equals("")) {
 
                     log.debug("act:''");
+                    out.println("<div class=\"swbform\">");
                     out.println("<fieldset>");
-                    out.println("<table width=\"98%\" class=\"swbform\">");
+                    out.println("<table width=\"98%\" >");
                     out.println("<thead>");
                     out.println("<tr>");
                     out.println("<th>");
@@ -138,6 +136,7 @@ public class SWBAVersionInfo extends GenericResource {
                     out.println("</tfoot>");
                     out.println("</table>");
                     out.println("</fieldset>");
+                    out.println("</div>");
                 }
             }
         }
@@ -187,7 +186,7 @@ public class SWBAVersionInfo extends GenericResource {
             fm.setAction(urla.toString());
 
             out.println("<div class=\"swbform\">");
-            out.println("<form id=\""+id+"/"+idvi+"/"+base.getId()+"/FVIComment\" action=\""+urla+"\" method=\"post\">");
+            out.println("<form id=\""+id+"/"+idvi+"/"+base.getId()+"/FVIComment\" action=\""+urla+"\" method=\"post\" onsubmit=\"submitForm('"+id+"/"+idvi+"/"+base.getId()+"/FVIComment');return false;\">");
             out.println("<input type=\"hidden\" name=\"suri\" value=\""+id+"\">");
             out.println("<fieldset>");
             out.println("<table>");
@@ -239,9 +238,11 @@ public class SWBAVersionInfo extends GenericResource {
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
         PrintWriter out = response.getWriter();
+        out.println("<div class=\"swbform\">");
         out.println("<fieldset>");
         out.println("Este recurso no es administrable.");
         out.println("</fieldset>");
+        out.println("</div>");
 
     }
 
