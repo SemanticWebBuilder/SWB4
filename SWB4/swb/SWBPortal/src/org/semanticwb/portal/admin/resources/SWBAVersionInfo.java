@@ -69,7 +69,7 @@ public class SWBAVersionInfo extends GenericResource {
 
                     log.debug("act:''");
                     out.println("<fieldset>");
-                    out.println("<table width=\"100%\" class=\"swbform\">");
+                    out.println("<table width=\"98%\" class=\"swbform\">");
                     out.println("<thead>");
                     out.println("<tr>");
                     out.println("<th>");
@@ -85,7 +85,7 @@ public class SWBAVersionInfo extends GenericResource {
                     out.println("</thead>");
                     out.println("<tbody>");
                     if (null != vio) {
-                        while (vio != null) { 
+                        while (vio != null) {
 
                             out.println("<tr>");
                             out.println("<td align=\"center\">");
@@ -126,7 +126,7 @@ public class SWBAVersionInfo extends GenericResource {
                     out.println("</tbody>");
                     out.println("<tfoot>");
                     out.println("<tr>");
-                    out.println("<td colspan=\"4\">");
+                    out.println("<td colspan=\"3\">");
                     SWBResourceURL urlNew = paramRequest.getRenderUrl();
                     urlNew.setParameter("suri", id);
                     urlNew.setParameter("act","newversion");
@@ -180,14 +180,14 @@ public class SWBAVersionInfo extends GenericResource {
 
             //WBFormElement sfe = new SWBFormElement(so);
 
-            fm = new SWBFormMgr(VersionInfo.swb_VersionInfo, soref,null);
+            fm = new SWBFormMgr(Versionable.swb_VersionInfo, soref,null);
             fm.addHiddenParameter("suri", id);
             fm.addHiddenParameter("psuri", id);
             //fm.addHiddenParameter("sobj", so.getURI());
             fm.setAction(urla.toString());
 
             out.println("<div class=\"swbform\">");
-            out.println("<form id=\""+id+"/"+base.getId()+"/FVIComment\" action=\""+urla+"\" method=\"post\">");
+            out.println("<form id=\""+id+"/"+idvi+"/"+base.getId()+"/FVIComment\" action=\""+urla+"\" method=\"post\">");
             out.println("<input type=\"hidden\" name=\"suri\" value=\""+id+"\">");
             out.println("<fieldset>");
             out.println("<table>");
@@ -205,7 +205,7 @@ public class SWBAVersionInfo extends GenericResource {
             out.println("</filedset>");
             out.println("<filedset>");
             out.println("<hr noshade>");
-            out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitForm('"+id+"/"+base.getId()+"/FVIComment');return false;\">Guardar</button>");
+            out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitForm('"+id+"/"+idvi+"/"+base.getId()+"/FVIComment');return false;\">Guardar</button>");
             out.println("<button dojoType=\"dijit.form.Button\">Favoritos</button>");
             out.println("<button dojoType=\"dijit.form.Button\">Eliminar</button>");
             SWBResourceURL urlb = paramRequest.getRenderUrl();
@@ -274,19 +274,23 @@ public class SWBAVersionInfo extends GenericResource {
                 int vnum = 1;
                 vio = (VersionInfo) findFirstVersion(go);
                 if (vio != null) {
-                    via = gov.getActualVersion();
+                    //via = gov.getActualVersion();
                     vil = gov.getLastVersion();
                     vnum = vil.getVersionNumber() + 1;
-                    vin.setPreviousVersion(vil);
-                    vil.setNextVersion(vin);
+                    log.debug("version num:"+vnum);
+                    nvinf.setObjectProperty(VersionInfo.swb_previousVersion, vil.getSemanticObject()); //vin.setVersionComment(VersionComment);
+                    //vin.setPreviousVersion(vil);
+                    vil.getSemanticObject().setObjectProperty(VersionInfo.swb_nextVersion, nvinf);
                 } else {
-                    gov.setActualVersion(vin);
+                    gov.getSemanticObject().setObjectProperty(Versionable.swb_actualVersion, nvinf);
                 }
-                vin.setVersionNumber(vnum);
+                //vin.setVersionNumber(vnum);
+                nvinf.setIntProperty(VersionInfo.swb_versionNumber, vnum);
                 String VersionComment = request.getParameter("versionComment");
                 log.debug(VersionComment);
-                if(VersionComment!=null) vin.setVersionComment(VersionComment);
-                gov.setLastVersion(vin);
+                if(VersionComment!=null) nvinf.setProperty(VersionInfo.swb_versionComment, VersionComment); //vin.setVersionComment(VersionComment);
+
+                gov.getSemanticObject().setObjectProperty(Versionable.swb_lastVersion, nvinf);
                 //response.setRenderParameter("sobj", nvinf.getURI());
                 response.setRenderParameter("act", "");
                 response.setMode(response.Mode_VIEW);
@@ -303,36 +307,58 @@ public class SWBAVersionInfo extends GenericResource {
             response.setRenderParameter(act, "");
             response.setMode(response.Mode_VIEW);
         } else if ("remove".equals(act)) {
+            log.debug("remove");
             String idval = request.getParameter("sval");
-            GenericObject sobase = ont.getGenericObject(id);
+            log.debug("suri:"+id+"sval:"+idval);
+            SemanticObject sobj = ont.getSemanticObject(id);
+            GenericObject sobase = ont.getGenericObject(idval);
             vio = null;
-
             VersionInfo vip = null;
             vin = null;
 
-            if(sobase instanceof VersionInfo)
+            GenericObject gobj = ont.getGenericObject(id);
+            if(gobj instanceof Versionable)
             {
-                vio = (VersionInfo)sobase;
-                vip = vio.getPreviousVersion();
-                vin = vio.getNextVersion();
-                if(null!=vip) // si es una version intermedia
+                Versionable vigo = (Versionable) gobj;
+                via = vigo.getActualVersion(); // Version Actual
+                vil = vigo.getLastVersion(); // Última versión
+                if(sobase instanceof VersionInfo)
                 {
-                    if(null!=vin)
+                    vio = (VersionInfo)sobase;
+                    vip = vio.getPreviousVersion();
+                    vin = vio.getNextVersion();
+                    if(null!=vip) // si es una versión intermedia ó la última versión
                     {
-                        vip.setNextVersion(vin);
-                        vin.setPreviousVersion(vip);
-                    }
-                    else // la ultima version
-                    {
-                        vip.setNextVersion(null);
-                    }
+                        if(null!=vin)
+                        {
+                            vip.setNextVersion(vin);
+                            vin.setPreviousVersion(vip);
+                            if(via.equals(vio)) sobj.setObjectProperty(Versionable.swb_actualVersion, vin.getSemanticObject());
+                            if(vil.equals(vio)) sobj.setObjectProperty(Versionable.swb_lastVersion, vin.getSemanticObject());
+                        }
+                        else // la ultima version
+                        {
+                            vip.getSemanticObject().removeProperty(VersionInfo.swb_nextVersion);
+                            if(via.equals(vio)) sobj.setObjectProperty(Versionable.swb_actualVersion, vip.getSemanticObject());
+                            if(vil.equals(vio)) sobj.setObjectProperty(Versionable.swb_lastVersion, vip.getSemanticObject());
+                        }
 
+
+                    }
+                    else if(null!=vin) //  era la primera version
+                    {
+                        vin.getSemanticObject().removeProperty(VersionInfo.swb_previousVersion);
+                        if(via.equals(vio)) sobj.setObjectProperty(Versionable.swb_actualVersion, vin.getSemanticObject());
+                        if(vil.equals(vio)) sobj.setObjectProperty(Versionable.swb_lastVersion, vin.getSemanticObject());
+
+                    }
+                    else if(vip==null&&vin==null) // es la única version
+                    {
+                        sobj.removeProperty(Versionable.swb_actualVersion);
+                        sobj.removeProperty(Versionable.swb_lastVersion);
+                    }
+                    vio.getSemanticObject().getModel().removeSemanticObject(sobase.getSemanticObject()); // se elimina la version
                 }
-                else if(null!=vin) //  era la primera version
-                {
-                    vin.setPreviousVersion(null);
-                }
-                vio.remove(); // se elimina la version
             }
 
 
