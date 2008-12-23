@@ -12,17 +12,9 @@ public class ObjectBehavior extends ObjectBehaviorBase
         super(base);
     }
 
-
-    @Override
-    public String getURL()
-    {
-        String ret=super.getURL();
-        return ret;
-    }
-
     public String getParsedURL()
     {
-        String ret=super.getURL();
+        String ret=super.getBehaviorURL();
         if(ret!=null)ret=SWBUtils.TEXT.replaceAll(ret, "{contextPath}", SWBPlatform.getContextPath());
         return ret;
     }

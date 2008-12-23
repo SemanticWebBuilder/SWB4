@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class ObjectActionBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.Sortable,org.semanticwb.model.Iconable
+public class ObjectActionBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.Iconable,org.semanticwb.model.Sortable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_index=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#index");
     public static final org.semanticwb.platform.SemanticProperty swb_iconClass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#iconClass");
