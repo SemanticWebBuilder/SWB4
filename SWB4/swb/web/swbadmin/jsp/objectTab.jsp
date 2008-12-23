@@ -15,7 +15,7 @@
     //out.println("       alert(item);");
     //out.println("    </script>");
 
-    Iterator<ObjectBehavior> obit=SWBComparator.sortSortableObject(SWBContext.getVocabulary().swbxf_ObjectBehavior.listGenericInstances(true));
+    Iterator<ObjectBehavior> obit=SWBComparator.sortSortableObject(ObjectBehavior.swbxf_ObjectBehavior.listGenericInstances(true));
     while(obit.hasNext())
     {
         ObjectBehavior ob=obit.next();
@@ -65,13 +65,12 @@
 <%        
         String buri="/swb/swb/SWBAdmin/WBAd_Home/_rid/1/_mto/3";
         buri+="?suri="+obj.getSemanticObject().getEncodedURI();
-        SWBVocabulary voc=SWBContext.getVocabulary();
         
         if(obj instanceof Calendarable)
         {
             String auri="/swb/swb/SWBAdmin/WBAd_Home/_rid/4/_mto/3";
             auri+="?suri="+obj.getSemanticObject().getEncodedURI();
-            auri+="&sprop="+voc.swb_hasCalendar.getEncodedURI();
+            auri+="&sprop="+Calendarable.swb_hasCalendar.getEncodedURI();
             System.out.println(auri);
             //auri+="&spropref="+voc.pflow.getEncodedURI();            
 %>
@@ -82,8 +81,8 @@
         if(obj instanceof RoleRefable)
         {
             String auri=buri;
-            auri+="&sprop="+voc.swb_hasRoleRef.getEncodedURI();
-            auri+="&spropref="+voc.swb_role.getEncodedURI();
+            auri+="&sprop="+RoleRefable.swb_hasRoleRef.getEncodedURI();
+            auri+="&spropref="+RoleRef.swb_role.getEncodedURI();
 %>
 <div dojoType="dijit.layout.ContentPane" title="Roles" style=" padding:10px;" refreshOnShow="false" href="<%=auri%>"></div>
 <%            
@@ -92,8 +91,8 @@
         if(obj instanceof RuleRefable)
         {
             String auri=buri;
-            auri+="&sprop="+voc.swb_hasRuleRef.getEncodedURI();
-            auri+="&spropref="+voc.swb_rule.getEncodedURI();
+            auri+="&sprop="+RuleRefable.swb_hasRuleRef.getEncodedURI();
+            auri+="&spropref="+RuleRef.swb_rule.getEncodedURI();
 %>
 <div dojoType="dijit.layout.ContentPane" title="Reglas" style=" padding:10px;" refreshOnShow="false" href="<%=auri%>"></div>
 <%            
