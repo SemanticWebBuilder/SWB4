@@ -601,11 +601,11 @@ public class CodeGenerator
                 }
             }
             javaClassContent.append("    public static final org.semanticwb.platform.SemanticProperty " + tpp.getPrefix() + "_" + tpp.getName() + "=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(\"" + tpp.getURI() + "\");" + ENTER);
-            if (tpp.hasInverse())
-            {
-                SemanticProperty inverse = tpp.getInverse();
-                javaClassContent.append("    public static final org.semanticwb.platform.SemanticProperty " + inverse.getPrefix() + "_" + inverse.getName() + "=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(\"" + inverse.getURI() + "\");" + ENTER);
-            }
+//            if (tpp.hasInverse())
+//            {
+//                SemanticProperty inverse = tpp.getInverse();
+//                javaClassContent.append("    public static final org.semanticwb.platform.SemanticProperty " + inverse.getPrefix() + "_" + inverse.getName() + "=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(\"" + inverse.getURI() + "\");" + ENTER);
+//            }
         }
 
         javaClassContent.append("    public static final org.semanticwb.platform.SemanticClass " + tpc.getPrefix() + "_" + className + "=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(\"" + tpc.getURI() + "\");" + ENTER);
@@ -922,8 +922,8 @@ public class CodeGenerator
                 javaClassContent.append(ENTER);
                 javaClassContent.append("    public java.util.Iterator<" + type + "> list" + objectName + "s()" + ENTER);
                 javaClassContent.append(OPEN_BLOCK + ENTER);
-                if (!tpp.hasInverse())
-                {
+//                if (!tpp.hasInverse())
+//                {
 
                     javaClassContent.append("        java.util.ArrayList<" + type + "> values=new java.util.ArrayList<" + type + ">();" + ENTER);
                     javaClassContent.append("        java.util.Iterator<org.semanticwb.platform.SemanticLiteral> it=getSemanticObject().listLiteralProperties(" + tpp.getPrefix() + "_" + tpp.getName() + ");" + ENTER);
@@ -933,12 +933,12 @@ public class CodeGenerator
                     javaClassContent.append("                values.add(literal.getString());" + ENTER);
                     javaClassContent.append("        }" + ENTER);
                     javaClassContent.append("        return values.iterator();" + ENTER);
-                }
-                else
-                {
-                    javaClassContent.append("        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, " + tpp.getPrefix() + "_" + tpp.getName() + ".getInverse().getRDFProperty(), getSemanticObject().getRDFResource());" + ENTER);
-                    javaClassContent.append("        return new java.util.Iterator<" + type + ">(" + type + ".class, stit,true);" + ENTER);
-                }
+//                }
+//                else
+//                {
+//                    javaClassContent.append("        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, " + tpp.getPrefix() + "_" + tpp.getName() + ".getInverse().getRDFProperty(), getSemanticObject().getRDFResource());" + ENTER);
+//                    javaClassContent.append("        return new java.util.Iterator<" + type + ">(" + type + ".class, stit,true);" + ENTER);
+//                }
                 javaClassContent.append(CLOSE_BLOCK + ENTER);
 
                 if (!tpp.hasInverse())
@@ -1182,15 +1182,15 @@ public class CodeGenerator
                 javaClassContent.append(ENTER);
                 javaClassContent.append("    public org.semanticwb.model.GenericIterator<" + getPackage(tpcToReturn) + "." + valueToReturn + "> list" + objectName + "s()" + ENTER);
                 javaClassContent.append(OPEN_BLOCK + ENTER);
-                if (!tpp.hasInverse())
-                {
+//                if (!tpp.hasInverse())
+//                {
                     javaClassContent.append("        return new org.semanticwb.model.GenericIterator<" + getPackage(tpcToReturn) + "." + valueToReturn + ">(" + getPackage(tpcToReturn) + "." + valueToReturn + ".class, getSemanticObject().listObjectProperties(" + tpp.getPrefix() + "_" + tpp.getName() + "));");
-                }
-                else
-                {
-                    javaClassContent.append("        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, " + tpp.getPrefix() + "_" + tpp.getName() + ".getInverse().getRDFProperty(), getSemanticObject().getRDFResource());" + ENTER);
-                    javaClassContent.append("        return new org.semanticwb.model.GenericIterator<" + sPackage + "." + valueToReturn + ">(" + sPackage + "." + valueToReturn + ".class, stit,true);" + ENTER);
-                }
+//                }
+//                else
+//                {
+//                    javaClassContent.append("        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, " + tpp.getPrefix() + "_" + tpp.getName() + ".getInverse().getRDFProperty(), getSemanticObject().getRDFResource());" + ENTER);
+//                    javaClassContent.append("        return new org.semanticwb.model.GenericIterator<" + sPackage + "." + valueToReturn + ">(" + sPackage + "." + valueToReturn + ".class, stit,true);" + ENTER);
+//                }
                 javaClassContent.append(CLOSE_BLOCK + ENTER);
 
                 if (!tpp.hasInverse())
@@ -1259,16 +1259,16 @@ public class CodeGenerator
                 javaClassContent.append(ENTER);
                 javaClassContent.append("    public org.semanticwb.platform.SemanticIterator<" + pack + "." + valueToReturn + "> list" + objectName + "s()" + ENTER);
                 javaClassContent.append(OPEN_BLOCK + ENTER);
-                if (!tpp.hasInverse())
-                {
+//                if (!tpp.hasInverse())
+//                {
                     javaClassContent.append("        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getRDFResource().listProperties(" + tpp.getPrefix() + "_" + tpp.getName() + ".getRDFProperty());" + ENTER);
                     javaClassContent.append("        return new org.semanticwb.platform.SemanticIterator<" + pack + "." + valueToReturn + ">(stit);" + ENTER);
-                }
-                else
-                {
-                    javaClassContent.append("        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, " + tpp.getPrefix() + "_" + tpp.getName() + ".getInverse().getRDFProperty(), getSemanticObject().getRDFResource());" + ENTER);
-                    javaClassContent.append("        return new org.semanticwb.platform.SemanticIterator<" + pack + "." + valueToReturn + ">(stit,true);" + ENTER);
-                }
+//                }
+//                else
+//                {
+//                    javaClassContent.append("        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, " + tpp.getPrefix() + "_" + tpp.getName() + ".getInverse().getRDFProperty(), getSemanticObject().getRDFResource());" + ENTER);
+//                    javaClassContent.append("        return new org.semanticwb.platform.SemanticIterator<" + pack + "." + valueToReturn + ">(stit,true);" + ENTER);
+//                }
                 javaClassContent.append(CLOSE_BLOCK + ENTER);
 
                 if (!tpp.hasInverse())

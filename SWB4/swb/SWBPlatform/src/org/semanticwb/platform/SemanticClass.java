@@ -285,6 +285,7 @@ public class SemanticClass
             try
             {
                 m_cls=Class.forName(getClassName());
+                //System.out.println("createClass:"+getClassName()+" "+m_cls);
             }catch(Exception e){log.error(e);}
         }
         return m_cls;

@@ -6,6 +6,7 @@
 package org.semanticwb.model.base;
 
 import javax.servlet.http.HttpServletRequest;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.FormElement;
 import org.semanticwb.model.FormValidateException;
 import org.semanticwb.model.GenericObject;
@@ -48,6 +49,28 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
                         if(prop.isFloat())obj.setFloatProperty(prop, Float.parseFloat(value));
                         if(prop.isInt())obj.setLongProperty(prop, Integer.parseInt(value));
                         if(prop.isString())obj.setProperty(prop, value);
+                    }else
+                    {
+                        obj.removeProperty(prop);
+                    }
+                }
+            }
+        }else if(prop.isObjectProperty())
+        {
+            String name=prop.getName();
+            String uri=request.getParameter(name);
+            if(uri!=null)
+            {
+                System.out.println("**** obj:"+obj+" uri:"+uri+" name:"+name);
+                if(name.startsWith("has"))
+                {
+                    //TODO:
+                }else
+                {
+                    SemanticObject aux=SWBPlatform.getSemanticMgr().getOntology().getSemanticObject(uri);
+                    if(aux!=null)
+                    {
+                        obj.setObjectProperty(prop, aux);
                     }else
                     {
                         obj.removeProperty(prop);
