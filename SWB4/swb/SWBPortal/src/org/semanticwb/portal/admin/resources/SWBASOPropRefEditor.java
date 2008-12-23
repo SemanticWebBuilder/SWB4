@@ -49,6 +49,9 @@ public class SWBASOPropRefEditor extends GenericResource {
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        response.setContentType("text/html; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
         log.debug("doView(SWBASOPropRefEditor...)");
         doEdit(request, response, paramRequest);
     }
@@ -98,9 +101,10 @@ public class SWBASOPropRefEditor extends GenericResource {
             SemanticProperty sptemp=null;
 
             title = clsprop.getName();
+            out.println("<div class=\"swbform\">");
             out.println("<fieldset>");
 //            out.println("	<legend>" + prop.getDisplayName(user.getLanguage()) + "</legend>");
-            out.println("<table width=\"100%\">");
+            out.println("<table width=\"98%\">");
 //            out.println("<caption>");
 //            out.println(getDisplaySemObj(obj,user.getLanguage()));
 //            out.println("</caption>");
@@ -275,7 +279,7 @@ public class SWBASOPropRefEditor extends GenericResource {
             out.println("</tfoot>");
             out.println("</table>");
             out.println("</fieldset>");
-            out.println("");
+            out.println("</div>");
         }
         else if (action.equals("choose"))  //lista de instancias de tipo propiedad existentes para selecionar
         {
@@ -292,7 +296,7 @@ public class SWBASOPropRefEditor extends GenericResource {
                     hmSO.put(so.getURI(), so);
                 }
             }
-            out.println("<form id=\""+id+"/chooseSO\" action=\"" + url + "\" method=\"get\" class=\"swbform\">");
+            out.println("<form id=\""+id+"/chooseSO\" action=\"" + url + "\" method=\"get\" class=\"swbform\" onsubmit=\"submitUrl('"+url+"',this); return false;\">");
             out.println("<input type=\"hidden\" name=\"suri\" value=\"" + obj.getURI() + "\">");
             out.println("<fieldset>");
             out.println("	<legend> Choose - " + prop.getDisplayName(user.getLanguage()) + " ( " + getDisplaySemObj(obj,user.getLanguage()) + " )</legend>");
@@ -567,7 +571,8 @@ public class SWBASOPropRefEditor extends GenericResource {
     }
     
     public void doFormID(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        response.setHeader("Cache-Control", "no-cache"); 
+        response.setContentType("text/html; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
         PrintWriter out = response.getWriter();
         User user = paramRequest.getUser();

@@ -333,7 +333,7 @@ public class SWBAProperties extends GenericResource {
             //out.println("	<legend> Properties file edition. "+fileSelected+"</legend>");
             out.println("<form name=\"frmAdd\" method=post action=\""+paramRequest.getActionUrl().setAction("update").toString()+"\" onsubmit=\"return (valida(frmAdd));\" >");
             out.println("<fieldset>");
-            out.println("<table cellpadding=10 cellspacing=0 width=100%>");
+            out.println("<table cellpadding=10 cellspacing=0 width=98%>");
             out.println("<tr>");
             out.println("<td colspan=2 class=\"tabla\">"+msgTitle+"</td>");
             out.println("</tr>");
@@ -391,7 +391,7 @@ public class SWBAProperties extends GenericResource {
         out.println("<form method=post action=\""+paramRequest.getActionUrl().setAction("uptPropFile").toString()+"\" >");
         out.println("<fieldset>");
         //out.println("	<legend> Properties file edition. "+fileSelect+"</legend>");
-        out.println("<table cellpadding=10 cellspacing=0 width=100%>");
+        out.println("<table cellpadding=10 cellspacing=0 width=98%>");
         out.println("<tr>");
         out.println("<td colspan=2 class=\"tabla\">"+paramRequest.getLocaleString("msgSelectPropertyFile")+"</td>");
         out.println("</tr>");

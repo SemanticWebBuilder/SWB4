@@ -85,15 +85,16 @@ public class SWBASchedule extends GenericResource {
 
 
             title = clsprop.getName();
-            out.println("<script language=\"javascript\">");
-            out.println("function updPriority(location,txt){");
-            out.println("  var urlupd = location+txt.value;");
-            out.println("  alert(txt.value);");
-            out.println("  window.location=urlupd;");
-            out.println(" }");
-            out.println("</script>");
+//            out.println("<script language=\"javascript\">");
+//            out.println("function updPriority(location,txt){");
+//            out.println("  var urlupd = location+txt.value;");
+//            out.println("  alert(txt.value);");
+//            out.println("  window.location=urlupd;");
+//            out.println(" }");
+//            out.println("</script>");
+            out.println("<div class=\"swbform\">");
             out.println("<fieldset>");
-            out.println("<table width=\"100%\">");
+            out.println("<table width=\"98%\">");
             out.println("<thead>");
             out.println("<tr>");
             out.println("<th>");
@@ -148,10 +149,10 @@ public class SWBASchedule extends GenericResource {
 //                out.println("Status<br>Active/Unactive");
 //                out.println("</th>");
             }
+            out.println("</tr>");
             out.println("</thead>");
             out.println("<tbody>");
-            out.println("</tr>");
-
+            
             Iterator<SemanticObject> itso = obj.listObjectProperties(prop);
             while (itso.hasNext()) {
                 SemanticObject sobj = itso.next();
@@ -260,7 +261,7 @@ public class SWBASchedule extends GenericResource {
             out.println("</tfoot>");
             out.println("</table>");
             out.println("</fieldset>");
-            out.println("");
+            out.println("</div>");
         }
 
     }
@@ -309,8 +310,9 @@ public class SWBASchedule extends GenericResource {
         if(action.equals("edit")) url.setAction("update");
         else url.setAction("add");
         log.debug("Action: "+action);
-        out.println("<script tyte=\"text/javascript\">loadScript('SWBASchedule','"+SWBPlatform.getContextPath()+"/swbadmin/js/schedule.js');</script>"); //loadScript(id, filepath)
-        out.println("<form  action=\"" + url + "\"  id=\"" + id + "/calendar\" name=\"" + id + "/calendar\" method=\"post\" class=\"swbform\">"); //id=\"calendar\" name=\"calendar\" dojoType=\"dijit.form.Form\"
+        //out.println("<script tyte=\"text/javascript\">loadScript('SWBASchedule','"+SWBPlatform.getContextPath()+"/swbadmin/js/schedule.js');</script>"); //loadScript(id, filepath)
+        out.println("<div class=\"swbform\">");
+        out.println("<form  action=\"" + url + "\"  id=\"" + id + "/calendar\" name=\"" + id + "/calendar\" method=\"post\" onsubmit=\"submitForm('" + id + "/calendar'); return false;\">"); //id=\"calendar\" name=\"calendar\" dojoType=\"dijit.form.Form\"
         out.println("<fieldset>");
         if (action.equals("add")||action.equals("edit")) { //lista de instancias de tipo propiedad existentes para selecionar
             log.debug("----add/edit: "+action);
@@ -628,7 +630,7 @@ public class SWBASchedule extends GenericResource {
 
             out.println("<fieldset>");
             out.println(" <legend> Definici&oacute;n Periodicidad </legend>");
-            out.println("  <table cellSpacing=0 cellPadding=1 width=\"100%\" border=0>");
+            out.println("  <table cellSpacing=0 cellPadding=1 width=\"98%\" border=0>");
             out.println("  <tbody>");
             out.println("  <tr>");
             out.println("    <td>");
@@ -1037,6 +1039,7 @@ public class SWBASchedule extends GenericResource {
             out.println("</p>");
             out.println("</fieldset>");
             out.println("</form>");
+            out.println("</div>");
 //            out.println("<script>");
 //            out.println("  window.onload=function() { ");
 //            out.println("   alert('onload...');");
@@ -1474,7 +1477,10 @@ public class SWBASchedule extends GenericResource {
                     ret = obj.getProperty(prop);
                 }
                 if (prop.isDateTime()) {
-                    ret = "" + obj.getDateProperty(prop);
+                    try{
+                        ret = "" + obj.getDateProperty(prop);
+                    }
+                    catch(Exception e1){ret = obj.getProperty(prop);}
                 }
             }
         } catch (Exception e) {
