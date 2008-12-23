@@ -59,7 +59,6 @@ public class UserRepository extends UserRepositoryBase
     public Iterator<String> searchUsersBy(String usrFirstName, String usrLastName, String usrSecondLastName, String usrEmail)
     {
         Iterator<String> ret = null;
-        SWBVocabulary voc = SWBContext.getVocabulary();
         Model model = SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
 
         // First part or the query string
@@ -124,9 +123,8 @@ public class UserRepository extends UserRepositoryBase
         User ret = null;
         if (null != login)
         {
-            SWBVocabulary voc = SWBContext.getVocabulary();
-            Iterator aux = getSemanticObject().getRDFResource().getModel().listStatements(null, voc.swb_usrLogin.getRDFProperty(), getSemanticObject().getModel().getRDFModel().createLiteral(login));
-            Iterator it = new GenericIterator(voc.swb_User, aux, true);
+            Iterator aux = getSemanticObject().getRDFResource().getModel().listStatements(null, User.swb_usrLogin.getRDFProperty(), getSemanticObject().getModel().getRDFModel().createLiteral(login));
+            Iterator it = new GenericIterator(User.swb_User, aux, true);
             if (it.hasNext())
             {
                 ret = (User) it.next();
@@ -287,8 +285,7 @@ public class UserRepository extends UserRepositoryBase
     public Iterator<SemanticProperty> listBasicAttributes()
     {
         ArrayList<SemanticProperty> alsp = new ArrayList<SemanticProperty>();
-        SWBVocabulary voc = SWBContext.getVocabulary();
-        SemanticClass sc = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(voc.swb_User.getURI());
+        SemanticClass sc = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(User.swb_User.getURI());
         if (null != sc)
         {
             Iterator<SemanticProperty> itsp = sc.listProperties();
@@ -309,8 +306,7 @@ public class UserRepository extends UserRepositoryBase
     {
         ArrayList<SemanticProperty> alsp = new ArrayList<SemanticProperty>();
         String uri = null;
-        SWBVocabulary voc = SWBContext.getVocabulary();
-        SemanticClass sc = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(voc.swb_User.getURI());
+        SemanticClass sc = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(User.swb_User.getURI());
         if (null != sc)
         {
             Iterator<SemanticProperty> itsp = sc.listProperties();

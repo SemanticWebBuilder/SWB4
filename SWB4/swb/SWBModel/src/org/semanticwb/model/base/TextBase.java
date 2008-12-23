@@ -1,18 +1,11 @@
 package org.semanticwb.model.base;
 
-import java.util.Date;
-import java.util.Iterator;
-import java.util.ArrayList;
-import org.semanticwb.model.*;
-import com.hp.hpl.jena.rdf.model.*;
-import org.semanticwb.*;
-import org.semanticwb.platform.*;
-import org.semanticwb.model.GenericIterator;
 
-public class TextBase extends SWBFormElement 
+public class TextBase extends org.semanticwb.model.SWBFormElement 
 {
+    public static final org.semanticwb.platform.SemanticClass swbxf_Text=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#Text");
 
-    public TextBase(SemanticObject base)
+    public TextBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }

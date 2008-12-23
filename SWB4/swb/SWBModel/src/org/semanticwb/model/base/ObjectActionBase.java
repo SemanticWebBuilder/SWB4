@@ -1,59 +1,56 @@
 package org.semanticwb.model.base;
 
-import java.util.Date;
-import java.util.Iterator;
-import java.util.ArrayList;
-import org.semanticwb.model.*;
-import com.hp.hpl.jena.rdf.model.*;
-import org.semanticwb.*;
-import org.semanticwb.platform.*;
-import org.semanticwb.model.GenericIterator;
 
-public class ObjectActionBase extends WebPage implements Sortable,Iconable
+public class ObjectActionBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.Sortable,org.semanticwb.model.Iconable
 {
+    public static final org.semanticwb.platform.SemanticProperty swb_index=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#index");
+    public static final org.semanticwb.platform.SemanticProperty swb_iconClass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#iconClass");
+    public static final org.semanticwb.platform.SemanticProperty swbxf_actGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#actGroup");
+    public static final org.semanticwb.platform.SemanticProperty swbxf_actionURL=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#actionURL");
+    public static final org.semanticwb.platform.SemanticClass swbxf_ObjectAction=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectAction");
 
-    public ObjectActionBase(SemanticObject base)
+    public ObjectActionBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
 
     public int getIndex()
     {
-        return getSemanticObject().getIntProperty(vocabulary.swb_index);
+        return getSemanticObject().getIntProperty(swb_index);
     }
 
     public void setIndex(int index)
     {
-        getSemanticObject().setLongProperty(vocabulary.swb_index, index);
+        getSemanticObject().setLongProperty(swb_index, index);
     }
 
     public String getIconClass()
     {
-        return getSemanticObject().getProperty(vocabulary.swb_iconClass);
+        return getSemanticObject().getProperty(swb_iconClass);
     }
 
     public void setIconClass(String iconClass)
     {
-        getSemanticObject().setProperty(vocabulary.swb_iconClass, iconClass);
+        getSemanticObject().setProperty(swb_iconClass, iconClass);
     }
 
     public String getActGroup()
     {
-        return getSemanticObject().getProperty(vocabulary.swbxf_actGroup);
+        return getSemanticObject().getProperty(swbxf_actGroup);
     }
 
     public void setActGroup(String actGroup)
     {
-        getSemanticObject().setProperty(vocabulary.swbxf_actGroup, actGroup);
+        getSemanticObject().setProperty(swbxf_actGroup, actGroup);
     }
 
     public String getActionURL()
     {
-        return getSemanticObject().getProperty(vocabulary.swbxf_actionURL);
+        return getSemanticObject().getProperty(swbxf_actionURL);
     }
 
     public void setActionURL(String actionURL)
     {
-        getSemanticObject().setProperty(vocabulary.swbxf_actionURL, actionURL);
+        getSemanticObject().setProperty(swbxf_actionURL, actionURL);
     }
 }

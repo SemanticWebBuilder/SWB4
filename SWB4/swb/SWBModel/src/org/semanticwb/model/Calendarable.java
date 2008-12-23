@@ -1,11 +1,12 @@
 package org.semanticwb.model;
 
-import org.semanticwb.model.GenericIterator;
-import java.util.Date;
-public interface Calendarable extends GenericObject
+public interface Calendarable extends org.semanticwb.model.GenericObject
 {
+    public static final org.semanticwb.platform.SemanticClass swb_Calendar=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Calendar");
+    public static final org.semanticwb.platform.SemanticProperty swb_hasCalendar=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasCalendar");
+    public static final org.semanticwb.platform.SemanticClass swb_Calendarable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Calendarable");
 
-    public GenericIterator<org.semanticwb.model.Calendar> listCalendars();
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.Calendar> listCalendars();
 
     public void addCalendar(org.semanticwb.model.Calendar calendar);
 

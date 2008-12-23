@@ -1,189 +1,194 @@
 package org.semanticwb.model.base;
 
-import java.util.Date;
-import java.util.Iterator;
-import java.util.ArrayList;
-import org.semanticwb.model.*;
-import com.hp.hpl.jena.rdf.model.*;
-import org.semanticwb.*;
-import org.semanticwb.platform.*;
-import org.semanticwb.model.GenericIterator;
 
-public class VersionInfoBase extends SWBClass implements Traceable,Valueable
+public class VersionInfoBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Valueable
 {
+    public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
+    public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
+    public static final org.semanticwb.platform.SemanticProperty swb_modifiedBy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy");
+    public static final org.semanticwb.platform.SemanticProperty swb_value=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#value");
+    public static final org.semanticwb.platform.SemanticClass swb_VersionInfo=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#VersionInfo");
+    public static final org.semanticwb.platform.SemanticProperty swb_previousVersion=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#previousVersion");
+    public static final org.semanticwb.platform.SemanticProperty swb_versionLockedBy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#versionLockedBy");
+    public static final org.semanticwb.platform.SemanticProperty swb_versionFile=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#versionFile");
+    public static final org.semanticwb.platform.SemanticProperty swb_versionComment=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#versionComment");
+    public static final org.semanticwb.platform.SemanticProperty swb_updated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#updated");
+    public static final org.semanticwb.platform.SemanticProperty swb_nextVersion=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#nextVersion");
+    public static final org.semanticwb.platform.SemanticProperty swb_creator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#creator");
+    public static final org.semanticwb.platform.SemanticProperty swb_versionNumber=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#versionNumber");
 
-    public VersionInfoBase(SemanticObject base)
+    public VersionInfoBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
 
-    public Date getCreated()
+    public java.util.Date getCreated()
     {
-        return getSemanticObject().getDateProperty(vocabulary.swb_created);
+        return getSemanticObject().getDateProperty(swb_created);
     }
 
-    public void setCreated(Date created)
+    public void setCreated(java.util.Date created)
     {
-        getSemanticObject().setDateProperty(vocabulary.swb_created, created);
+        getSemanticObject().setDateProperty(swb_created, created);
     }
 
     public void setModifiedBy(org.semanticwb.model.User user)
     {
-        getSemanticObject().setObjectProperty(vocabulary.swb_modifiedBy, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_modifiedBy, user.getSemanticObject());
     }
 
     public void removeModifiedBy()
     {
-        getSemanticObject().removeProperty(vocabulary.swb_modifiedBy);
+        getSemanticObject().removeProperty(swb_modifiedBy);
     }
 
-    public User getModifiedBy()
+    public org.semanticwb.model.User getModifiedBy()
     {
-         User ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_modifiedBy);
+         org.semanticwb.model.User ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_modifiedBy);
          if(obj!=null)
          {
-             ret=(User)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
 
     public String getValue()
     {
-        return getSemanticObject().getProperty(vocabulary.swb_value);
+        return getSemanticObject().getProperty(swb_value);
     }
 
     public void setValue(String value)
     {
-        getSemanticObject().setProperty(vocabulary.swb_value, value);
+        getSemanticObject().setProperty(swb_value, value);
     }
 
     public void setPreviousVersion(org.semanticwb.model.VersionInfo versioninfo)
     {
-        getSemanticObject().setObjectProperty(vocabulary.swb_previousVersion, versioninfo.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_previousVersion, versioninfo.getSemanticObject());
     }
 
     public void removePreviousVersion()
     {
-        getSemanticObject().removeProperty(vocabulary.swb_previousVersion);
+        getSemanticObject().removeProperty(swb_previousVersion);
     }
 
-    public VersionInfo getPreviousVersion()
+    public org.semanticwb.model.VersionInfo getPreviousVersion()
     {
-         VersionInfo ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_previousVersion);
+         org.semanticwb.model.VersionInfo ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_previousVersion);
          if(obj!=null)
          {
-             ret=(VersionInfo)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.VersionInfo)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
 
     public void setVersionLockedBy(org.semanticwb.model.User user)
     {
-        getSemanticObject().setObjectProperty(vocabulary.swb_versionLockedBy, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_versionLockedBy, user.getSemanticObject());
     }
 
     public void removeVersionLockedBy()
     {
-        getSemanticObject().removeProperty(vocabulary.swb_versionLockedBy);
+        getSemanticObject().removeProperty(swb_versionLockedBy);
     }
 
-    public User getVersionLockedBy()
+    public org.semanticwb.model.User getVersionLockedBy()
     {
-         User ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_versionLockedBy);
+         org.semanticwb.model.User ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_versionLockedBy);
          if(obj!=null)
          {
-             ret=(User)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
 
     public String getVersionFile()
     {
-        return getSemanticObject().getProperty(vocabulary.swb_versionFile);
+        return getSemanticObject().getProperty(swb_versionFile);
     }
 
     public void setVersionFile(String versionFile)
     {
-        getSemanticObject().setProperty(vocabulary.swb_versionFile, versionFile);
+        getSemanticObject().setProperty(swb_versionFile, versionFile);
     }
 
     public String getVersionComment()
     {
-        return getSemanticObject().getProperty(vocabulary.swb_versionComment);
+        return getSemanticObject().getProperty(swb_versionComment);
     }
 
     public void setVersionComment(String versionComment)
     {
-        getSemanticObject().setProperty(vocabulary.swb_versionComment, versionComment);
+        getSemanticObject().setProperty(swb_versionComment, versionComment);
     }
 
-    public Date getUpdated()
+    public java.util.Date getUpdated()
     {
-        return getSemanticObject().getDateProperty(vocabulary.swb_updated);
+        return getSemanticObject().getDateProperty(swb_updated);
     }
 
-    public void setUpdated(Date updated)
+    public void setUpdated(java.util.Date updated)
     {
-        getSemanticObject().setDateProperty(vocabulary.swb_updated, updated);
+        getSemanticObject().setDateProperty(swb_updated, updated);
     }
 
     public void setNextVersion(org.semanticwb.model.VersionInfo versioninfo)
     {
-        getSemanticObject().setObjectProperty(vocabulary.swb_nextVersion, versioninfo.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_nextVersion, versioninfo.getSemanticObject());
     }
 
     public void removeNextVersion()
     {
-        getSemanticObject().removeProperty(vocabulary.swb_nextVersion);
+        getSemanticObject().removeProperty(swb_nextVersion);
     }
 
-    public VersionInfo getNextVersion()
+    public org.semanticwb.model.VersionInfo getNextVersion()
     {
-         VersionInfo ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_nextVersion);
+         org.semanticwb.model.VersionInfo ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_nextVersion);
          if(obj!=null)
          {
-             ret=(VersionInfo)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.VersionInfo)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
 
     public void setCreator(org.semanticwb.model.User user)
     {
-        getSemanticObject().setObjectProperty(vocabulary.swb_creator, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_creator, user.getSemanticObject());
     }
 
     public void removeCreator()
     {
-        getSemanticObject().removeProperty(vocabulary.swb_creator);
+        getSemanticObject().removeProperty(swb_creator);
     }
 
-    public User getCreator()
+    public org.semanticwb.model.User getCreator()
     {
-         User ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_creator);
+         org.semanticwb.model.User ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
          if(obj!=null)
          {
-             ret=(User)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
 
     public int getVersionNumber()
     {
-        return getSemanticObject().getIntProperty(vocabulary.swb_versionNumber);
+        return getSemanticObject().getIntProperty(swb_versionNumber);
     }
 
     public void setVersionNumber(int versionNumber)
     {
-        getSemanticObject().setLongProperty(vocabulary.swb_versionNumber, versionNumber);
+        getSemanticObject().setLongProperty(swb_versionNumber, versionNumber);
     }
 
-    public WebSite getWebSite()
+    public org.semanticwb.model.WebSite getWebSite()
     {
-        return new WebSite(getSemanticObject().getModel().getModelObject());
+        return new org.semanticwb.model.WebSite(getSemanticObject().getModel().getModelObject());
     }
 }

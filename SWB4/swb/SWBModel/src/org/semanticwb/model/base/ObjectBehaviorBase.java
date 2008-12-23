@@ -1,105 +1,106 @@
 package org.semanticwb.model.base;
 
-import java.util.Date;
-import java.util.Iterator;
-import java.util.ArrayList;
-import org.semanticwb.model.*;
-import com.hp.hpl.jena.rdf.model.*;
-import org.semanticwb.*;
-import org.semanticwb.platform.*;
-import org.semanticwb.model.GenericIterator;
 
-public class ObjectBehaviorBase extends WebPage implements Sortable,Iconable
+public class ObjectBehaviorBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.Sortable,org.semanticwb.model.Iconable
 {
+    public static final org.semanticwb.platform.SemanticProperty swb_index=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#index");
+    public static final org.semanticwb.platform.SemanticProperty swb_iconClass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#iconClass");
+    public static final org.semanticwb.platform.SemanticProperty swbxf_behaviorRefreshOnShow=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#behaviorRefreshOnShow");
+    public static final org.semanticwb.platform.SemanticClass swb_Interface=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Interface");
+    public static final org.semanticwb.platform.SemanticProperty swbxf_interface=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#interface");
+    public static final org.semanticwb.platform.SemanticProperty swbxf_behaviorURL=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#behaviorURL");
+    public static final org.semanticwb.platform.SemanticClass swbxf_ResourceParameter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#ResourceParameter");
+    public static final org.semanticwb.platform.SemanticProperty swbxf_hasResourceParam=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#hasResourceParam");
+    public static final org.semanticwb.platform.SemanticClass swbxf_ObjectBehavior=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectBehavior");
 
-    public ObjectBehaviorBase(SemanticObject base)
+    public ObjectBehaviorBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
 
     public int getIndex()
     {
-        return getSemanticObject().getIntProperty(vocabulary.swb_index);
+        return getSemanticObject().getIntProperty(swb_index);
     }
 
     public void setIndex(int index)
     {
-        getSemanticObject().setLongProperty(vocabulary.swb_index, index);
+        getSemanticObject().setLongProperty(swb_index, index);
     }
 
     public String getIconClass()
     {
-        return getSemanticObject().getProperty(vocabulary.swb_iconClass);
+        return getSemanticObject().getProperty(swb_iconClass);
     }
 
     public void setIconClass(String iconClass)
     {
-        getSemanticObject().setProperty(vocabulary.swb_iconClass, iconClass);
+        getSemanticObject().setProperty(swb_iconClass, iconClass);
     }
 
     public boolean isRefreshOnShow()
     {
-        return getSemanticObject().getBooleanProperty(vocabulary.swbxf_behaviorRefreshOnShow);
+        return getSemanticObject().getBooleanProperty(swbxf_behaviorRefreshOnShow);
     }
 
     public void setRefreshOnShow(boolean behaviorRefreshOnShow)
     {
-        getSemanticObject().setBooleanProperty(vocabulary.swbxf_behaviorRefreshOnShow, behaviorRefreshOnShow);
+        getSemanticObject().setBooleanProperty(swbxf_behaviorRefreshOnShow, behaviorRefreshOnShow);
     }
 
     public void setInterface(org.semanticwb.platform.SemanticObject semanticobject)
     {
-        getSemanticObject().setObjectProperty(vocabulary.swbxf_interface, semanticobject);
+        getSemanticObject().setObjectProperty(swbxf_interface, semanticobject);
     }
 
     public void removeInterface()
     {
-        getSemanticObject().removeProperty(vocabulary.swbxf_interface);
+        getSemanticObject().removeProperty(swbxf_interface);
     }
 
-    public SemanticObject getInterface()
+    public org.semanticwb.platform.SemanticObject getInterface()
     {
-         SemanticObject ret=null;
-         ret=getSemanticObject().getObjectProperty(vocabulary.swbxf_interface);
+         org.semanticwb.platform.SemanticObject ret=null;
+         ret=getSemanticObject().getObjectProperty(swbxf_interface);
          return ret;
     }
 
     public String getURL()
     {
-        return getSemanticObject().getProperty(vocabulary.swbxf_behaviorURL);
+        return getSemanticObject().getProperty(swbxf_behaviorURL);
     }
 
     public void setURL(String behaviorURL)
     {
-        getSemanticObject().setProperty(vocabulary.swbxf_behaviorURL, behaviorURL);
+        getSemanticObject().setProperty(swbxf_behaviorURL, behaviorURL);
     }
 
-    public GenericIterator<org.semanticwb.model.ResourceParameter> listParams()
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceParameter> listParams()
     {
-        return new GenericIterator<org.semanticwb.model.ResourceParameter>(org.semanticwb.model.ResourceParameter.class, getSemanticObject().listObjectProperties(vocabulary.swbxf_hasResourceParam));    }
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceParameter>(org.semanticwb.model.ResourceParameter.class, getSemanticObject().listObjectProperties(swbxf_hasResourceParam));    }
 
     public void addParam(org.semanticwb.model.ResourceParameter resourceparameter)
     {
-        getSemanticObject().addObjectProperty(vocabulary.swbxf_hasResourceParam, resourceparameter.getSemanticObject());
+        getSemanticObject().addObjectProperty(swbxf_hasResourceParam, resourceparameter.getSemanticObject());
     }
 
     public void removeAllParam()
     {
-        getSemanticObject().removeProperty(vocabulary.swbxf_hasResourceParam);
+        getSemanticObject().removeProperty(swbxf_hasResourceParam);
     }
 
     public void removeParam(org.semanticwb.model.ResourceParameter resourceparameter)
     {
-        getSemanticObject().removeObjectProperty(vocabulary.swbxf_hasResourceParam,resourceparameter.getSemanticObject());
+        getSemanticObject().removeObjectProperty(swbxf_hasResourceParam,resourceparameter.getSemanticObject());
     }
 
-    public ResourceParameter getParam()
+    public org.semanticwb.model.ResourceParameter getParam()
     {
-         ResourceParameter ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swbxf_hasResourceParam);
+         org.semanticwb.model.ResourceParameter ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swbxf_hasResourceParam);
          if(obj!=null)
          {
-             ret=(ResourceParameter)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.ResourceParameter)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }

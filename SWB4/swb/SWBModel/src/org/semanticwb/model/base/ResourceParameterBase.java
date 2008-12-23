@@ -1,46 +1,41 @@
 package org.semanticwb.model.base;
 
-import java.util.Date;
-import java.util.Iterator;
-import java.util.ArrayList;
-import org.semanticwb.model.*;
-import com.hp.hpl.jena.rdf.model.*;
-import org.semanticwb.*;
-import org.semanticwb.platform.*;
-import org.semanticwb.model.GenericIterator;
 
-public class ResourceParameterBase extends SWBClass 
+public class ResourceParameterBase extends org.semanticwb.model.SWBClass 
 {
+    public static final org.semanticwb.platform.SemanticProperty swbxf_resParamValue=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#resParamValue");
+    public static final org.semanticwb.platform.SemanticProperty swbxf_resParamName=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#resParamName");
+    public static final org.semanticwb.platform.SemanticClass swbxf_ResourceParameter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#ResourceParameter");
 
-    public ResourceParameterBase(SemanticObject base)
+    public ResourceParameterBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
 
     public void setValue(org.semanticwb.platform.SemanticObject semanticobject)
     {
-        getSemanticObject().setObjectProperty(vocabulary.swbxf_resParamValue, semanticobject);
+        getSemanticObject().setObjectProperty(swbxf_resParamValue, semanticobject);
     }
 
     public void removeValue()
     {
-        getSemanticObject().removeProperty(vocabulary.swbxf_resParamValue);
+        getSemanticObject().removeProperty(swbxf_resParamValue);
     }
 
-    public SemanticObject getValue()
+    public org.semanticwb.platform.SemanticObject getValue()
     {
-         SemanticObject ret=null;
-         ret=getSemanticObject().getObjectProperty(vocabulary.swbxf_resParamValue);
+         org.semanticwb.platform.SemanticObject ret=null;
+         ret=getSemanticObject().getObjectProperty(swbxf_resParamValue);
          return ret;
     }
 
     public String getName()
     {
-        return getSemanticObject().getProperty(vocabulary.swbxf_resParamName);
+        return getSemanticObject().getProperty(swbxf_resParamName);
     }
 
     public void setName(String resParamName)
     {
-        getSemanticObject().setProperty(vocabulary.swbxf_resParamName, resParamName);
+        getSemanticObject().setProperty(swbxf_resParamName, resParamName);
     }
 }

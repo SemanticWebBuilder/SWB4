@@ -1,23 +1,11 @@
 package org.semanticwb.model.base;
 
-import java.util.Date;
-import java.util.Iterator;
-import java.util.ArrayList;
-import org.semanticwb.model.base.GenericObjectBase;
-import org.semanticwb.model.SWBVocabulary;
-import org.semanticwb.model.SWBContext;
-import org.semanticwb.model.GenericObject;
-import org.semanticwb.model.*;
-import com.hp.hpl.jena.rdf.model.*;
-import org.semanticwb.*;
-import org.semanticwb.platform.*;
-import org.semanticwb.model.GenericIterator;
 
-public class SWBClassBase extends GenericObjectBase 
+public class SWBClassBase extends org.semanticwb.model.base.GenericObjectBase 
 {
-    public static SWBVocabulary vocabulary=SWBContext.getVocabulary();
+    public static final org.semanticwb.platform.SemanticClass swb_SWBClass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#SWBClass");
 
-    public SWBClassBase(SemanticObject base)
+    public SWBClassBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
@@ -27,8 +15,8 @@ public class SWBClassBase extends GenericObjectBase
         getSemanticObject().remove();
     }
 
-    public Iterator<GenericObject> listRelatedObjects()
+    public java.util.Iterator<org.semanticwb.model.GenericObject> listRelatedObjects()
     {
-        return new GenericIterator((SemanticClass)null, getSemanticObject().listRelatedObjects(),true);
+        return new org.semanticwb.model.GenericIterator((org.semanticwb.platform.SemanticClass)null, getSemanticObject().listRelatedObjects(),true);
     }
 }

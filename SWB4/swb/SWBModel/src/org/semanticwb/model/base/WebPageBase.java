@@ -1,503 +1,525 @@
 package org.semanticwb.model.base;
 
-import java.util.Date;
-import java.util.Iterator;
-import java.util.ArrayList;
-import org.semanticwb.model.*;
-import com.hp.hpl.jena.rdf.model.*;
-import org.semanticwb.*;
-import org.semanticwb.platform.*;
-import org.semanticwb.model.GenericIterator;
 
-public class WebPageBase extends SWBClass implements Descriptiveable,Portletable,TemplateRefable,Indexable,Calendarable,Viewable,Activeable,PFlowRefable,RuleRefable,RoleRefable,Hiddenable,Deleteable,Traceable
+public class WebPageBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Portletable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Indexable,org.semanticwb.model.Calendarable,org.semanticwb.model.Viewable,org.semanticwb.model.Activeable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Hiddenable,org.semanticwb.model.Deleteable,org.semanticwb.model.Traceable
 {
+    public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
+    public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
+    public static final org.semanticwb.platform.SemanticProperty swb_modifiedBy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy");
+    public static final org.semanticwb.platform.SemanticProperty swb_title=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#title");
+    public static final org.semanticwb.platform.SemanticProperty swb_hits=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hits");
+    public static final org.semanticwb.platform.SemanticProperty swb_updated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#updated");
+    public static final org.semanticwb.platform.SemanticClass swb_Calendar=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Calendar");
+    public static final org.semanticwb.platform.SemanticProperty swb_hasCalendar=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasCalendar");
+    public static final org.semanticwb.platform.SemanticProperty swb_hidden=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hidden");
+    public static final org.semanticwb.platform.SemanticProperty swb_indexable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#indexable");
+    public static final org.semanticwb.platform.SemanticProperty swb_webPageSortName=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#webPageSortName");
+    public static final org.semanticwb.platform.SemanticProperty swb_webPageURLType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#webPageURLType");
+    public static final org.semanticwb.platform.SemanticProperty swb_webPageDiskUsage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#webPageDiskUsage");
+    public static final org.semanticwb.platform.SemanticProperty swb_deleted=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#deleted");
+    public static final org.semanticwb.platform.SemanticClass swb_RoleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#RoleRef");
+    public static final org.semanticwb.platform.SemanticProperty swb_hasRoleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasRoleRef");
+    public static final org.semanticwb.platform.SemanticClass swb_WebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebPage");
+    public static final org.semanticwb.platform.SemanticProperty swb_hasWebPageVirtualParent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageVirtualParent");
+    public static final org.semanticwb.platform.SemanticProperty swb_active=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#active");
+    public static final org.semanticwb.platform.SemanticProperty swb_hasWebPageVirtualChild=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageVirtualChild");
+    public static final org.semanticwb.platform.SemanticProperty swb_views=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#views");
+    public static final org.semanticwb.platform.SemanticClass swb_Portlet=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Portlet");
+    public static final org.semanticwb.platform.SemanticProperty swb_hasPortlet=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasPortlet");
+    public static final org.semanticwb.platform.SemanticClass swb_PFlowRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PFlowRef");
+    public static final org.semanticwb.platform.SemanticProperty swb_hasPFlowRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasPFlowRef");
+    public static final org.semanticwb.platform.SemanticClass swb_TemplateRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#TemplateRef");
+    public static final org.semanticwb.platform.SemanticProperty swb_hasTemplateRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasTemplateRef");
+    public static final org.semanticwb.platform.SemanticProperty swb_hasWebPageChild=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild");
+    public static final org.semanticwb.platform.SemanticProperty swb_webPageURL=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#webPageURL");
+    public static final org.semanticwb.platform.SemanticClass swb_RuleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#RuleRef");
+    public static final org.semanticwb.platform.SemanticProperty swb_hasRuleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasRuleRef");
+    public static final org.semanticwb.platform.SemanticProperty swb_creator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#creator");
+    public static final org.semanticwb.platform.SemanticProperty swb_webPageParent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#webPageParent");
+    public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
 
-    public WebPageBase(SemanticObject base)
+    public WebPageBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
 
-    public Date getCreated()
+    public java.util.Date getCreated()
     {
-        return getSemanticObject().getDateProperty(vocabulary.swb_created);
+        return getSemanticObject().getDateProperty(swb_created);
     }
 
-    public void setCreated(Date created)
+    public void setCreated(java.util.Date created)
     {
-        getSemanticObject().setDateProperty(vocabulary.swb_created, created);
+        getSemanticObject().setDateProperty(swb_created, created);
     }
 
     public void setModifiedBy(org.semanticwb.model.User user)
     {
-        getSemanticObject().setObjectProperty(vocabulary.swb_modifiedBy, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_modifiedBy, user.getSemanticObject());
     }
 
     public void removeModifiedBy()
     {
-        getSemanticObject().removeProperty(vocabulary.swb_modifiedBy);
+        getSemanticObject().removeProperty(swb_modifiedBy);
     }
 
-    public User getModifiedBy()
+    public org.semanticwb.model.User getModifiedBy()
     {
-         User ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_modifiedBy);
+         org.semanticwb.model.User ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_modifiedBy);
          if(obj!=null)
          {
-             ret=(User)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
 
     public String getTitle()
     {
-        return getSemanticObject().getProperty(vocabulary.swb_title);
+        return getSemanticObject().getProperty(swb_title);
     }
 
     public void setTitle(String title)
     {
-        getSemanticObject().setProperty(vocabulary.swb_title, title);
+        getSemanticObject().setProperty(swb_title, title);
     }
 
     public String getTitle(String lang)
     {
-        return getSemanticObject().getProperty(vocabulary.swb_title, null, lang);
+        return getSemanticObject().getProperty(swb_title, null, lang);
     }
 
     public String getDisplayTitle(String lang)
     {
-        return getSemanticObject().getLocaleProperty(vocabulary.swb_title, lang);
+        return getSemanticObject().getLocaleProperty(swb_title, lang);
     }
 
     public void setTitle(String title, String lang)
     {
-        getSemanticObject().setProperty(vocabulary.swb_title, title, lang);
+        getSemanticObject().setProperty(swb_title, title, lang);
     }
 
     public int getHits()
     {
-        return getSemanticObject().getIntProperty(vocabulary.swb_hits);
+        return getSemanticObject().getIntProperty(swb_hits);
     }
 
     public void setHits(int hits)
     {
-        getSemanticObject().setLongProperty(vocabulary.swb_hits, hits);
+        getSemanticObject().setLongProperty(swb_hits, hits);
     }
 
-    public Date getUpdated()
+    public java.util.Date getUpdated()
     {
-        return getSemanticObject().getDateProperty(vocabulary.swb_updated);
+        return getSemanticObject().getDateProperty(swb_updated);
     }
 
-    public void setUpdated(Date updated)
+    public void setUpdated(java.util.Date updated)
     {
-        getSemanticObject().setDateProperty(vocabulary.swb_updated, updated);
+        getSemanticObject().setDateProperty(swb_updated, updated);
     }
 
-    public GenericIterator<org.semanticwb.model.Calendar> listCalendars()
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.Calendar> listCalendars()
     {
-        return new GenericIterator<org.semanticwb.model.Calendar>(org.semanticwb.model.Calendar.class, getSemanticObject().listObjectProperties(vocabulary.swb_hasCalendar));    }
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Calendar>(org.semanticwb.model.Calendar.class, getSemanticObject().listObjectProperties(swb_hasCalendar));    }
 
     public void addCalendar(org.semanticwb.model.Calendar calendar)
     {
-        getSemanticObject().addObjectProperty(vocabulary.swb_hasCalendar, calendar.getSemanticObject());
+        getSemanticObject().addObjectProperty(swb_hasCalendar, calendar.getSemanticObject());
     }
 
     public void removeAllCalendar()
     {
-        getSemanticObject().removeProperty(vocabulary.swb_hasCalendar);
+        getSemanticObject().removeProperty(swb_hasCalendar);
     }
 
     public void removeCalendar(org.semanticwb.model.Calendar calendar)
     {
-        getSemanticObject().removeObjectProperty(vocabulary.swb_hasCalendar,calendar.getSemanticObject());
+        getSemanticObject().removeObjectProperty(swb_hasCalendar,calendar.getSemanticObject());
     }
 
-    public Calendar getCalendar()
+    public org.semanticwb.model.Calendar getCalendar()
     {
-         Calendar ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasCalendar);
+         org.semanticwb.model.Calendar ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasCalendar);
          if(obj!=null)
          {
-             ret=(Calendar)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.Calendar)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
 
     public boolean isHidden()
     {
-        return getSemanticObject().getBooleanProperty(vocabulary.swb_hidden);
+        return getSemanticObject().getBooleanProperty(swb_hidden);
     }
 
     public void setHidden(boolean hidden)
     {
-        getSemanticObject().setBooleanProperty(vocabulary.swb_hidden, hidden);
+        getSemanticObject().setBooleanProperty(swb_hidden, hidden);
     }
 
     public boolean isIndexable()
     {
-        return getSemanticObject().getBooleanProperty(vocabulary.swb_indexable);
+        return getSemanticObject().getBooleanProperty(swb_indexable);
     }
 
     public void setIndexable(boolean indexable)
     {
-        getSemanticObject().setBooleanProperty(vocabulary.swb_indexable, indexable);
+        getSemanticObject().setBooleanProperty(swb_indexable, indexable);
     }
 
     public String getSortName()
     {
-        return getSemanticObject().getProperty(vocabulary.swb_webPageSortName);
+        return getSemanticObject().getProperty(swb_webPageSortName);
     }
 
     public void setSortName(String webPageSortName)
     {
-        getSemanticObject().setProperty(vocabulary.swb_webPageSortName, webPageSortName);
+        getSemanticObject().setProperty(swb_webPageSortName, webPageSortName);
     }
 
     public int getWebPageURLType()
     {
-        return getSemanticObject().getIntProperty(vocabulary.swb_webPageURLType);
+        return getSemanticObject().getIntProperty(swb_webPageURLType);
     }
 
     public void setWebPageURLType(int webPageURLType)
     {
-        getSemanticObject().setLongProperty(vocabulary.swb_webPageURLType, webPageURLType);
+        getSemanticObject().setLongProperty(swb_webPageURLType, webPageURLType);
     }
 
     public long getDiskUsage()
     {
         //Implement this method in WebPage object
-        throw new SWBMethodImplementationRequiredException();
+        throw new org.semanticwb.SWBMethodImplementationRequiredException();
     }
 
     public void setDiskUsage(long webPageDiskUsage)
     {
         //Implement this method in WebPage object
-        throw new SWBMethodImplementationRequiredException();
+        throw new org.semanticwb.SWBMethodImplementationRequiredException();
     }
 
     public boolean isDeleted()
     {
-        return getSemanticObject().getBooleanProperty(vocabulary.swb_deleted);
+        return getSemanticObject().getBooleanProperty(swb_deleted);
     }
 
     public void setDeleted(boolean deleted)
     {
-        getSemanticObject().setBooleanProperty(vocabulary.swb_deleted, deleted);
+        getSemanticObject().setBooleanProperty(swb_deleted, deleted);
     }
 
-    public GenericIterator<org.semanticwb.model.RoleRef> listRoleRefs()
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef> listRoleRefs()
     {
-        return new GenericIterator<org.semanticwb.model.RoleRef>(org.semanticwb.model.RoleRef.class, getSemanticObject().listObjectProperties(vocabulary.swb_hasRoleRef));    }
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef>(org.semanticwb.model.RoleRef.class, getSemanticObject().listObjectProperties(swb_hasRoleRef));    }
 
     public void addRoleRef(org.semanticwb.model.RoleRef roleref)
     {
-        getSemanticObject().addObjectProperty(vocabulary.swb_hasRoleRef, roleref.getSemanticObject());
+        getSemanticObject().addObjectProperty(swb_hasRoleRef, roleref.getSemanticObject());
     }
 
     public void removeAllRoleRef()
     {
-        getSemanticObject().removeProperty(vocabulary.swb_hasRoleRef);
+        getSemanticObject().removeProperty(swb_hasRoleRef);
     }
 
     public void removeRoleRef(org.semanticwb.model.RoleRef roleref)
     {
-        getSemanticObject().removeObjectProperty(vocabulary.swb_hasRoleRef,roleref.getSemanticObject());
+        getSemanticObject().removeObjectProperty(swb_hasRoleRef,roleref.getSemanticObject());
     }
 
-    public RoleRef getRoleRef()
+    public org.semanticwb.model.RoleRef getRoleRef()
     {
-         RoleRef ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasRoleRef);
+         org.semanticwb.model.RoleRef ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasRoleRef);
          if(obj!=null)
          {
-             ret=(RoleRef)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.RoleRef)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
 
-    public GenericIterator<org.semanticwb.model.WebPage> listVirtualParents()
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.WebPage> listVirtualParents()
     {
-        return new GenericIterator<org.semanticwb.model.WebPage>(org.semanticwb.model.WebPage.class, getSemanticObject().listObjectProperties(vocabulary.swb_hasWebPageVirtualParent));    }
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.WebPage>(org.semanticwb.model.WebPage.class, getSemanticObject().listObjectProperties(swb_hasWebPageVirtualParent));    }
 
     public void addVirtualParent(org.semanticwb.model.WebPage webpage)
     {
-        getSemanticObject().addObjectProperty(vocabulary.swb_hasWebPageVirtualParent, webpage.getSemanticObject());
+        getSemanticObject().addObjectProperty(swb_hasWebPageVirtualParent, webpage.getSemanticObject());
     }
 
     public void removeAllVirtualParent()
     {
-        getSemanticObject().removeProperty(vocabulary.swb_hasWebPageVirtualParent);
+        getSemanticObject().removeProperty(swb_hasWebPageVirtualParent);
     }
 
     public void removeVirtualParent(org.semanticwb.model.WebPage webpage)
     {
-        getSemanticObject().removeObjectProperty(vocabulary.swb_hasWebPageVirtualParent,webpage.getSemanticObject());
+        getSemanticObject().removeObjectProperty(swb_hasWebPageVirtualParent,webpage.getSemanticObject());
     }
 
-    public WebPage getVirtualParent()
+    public org.semanticwb.model.WebPage getVirtualParent()
     {
-         WebPage ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasWebPageVirtualParent);
+         org.semanticwb.model.WebPage ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasWebPageVirtualParent);
          if(obj!=null)
          {
-             ret=(WebPage)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.WebPage)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
 
     public boolean isActive()
     {
-        return getSemanticObject().getBooleanProperty(vocabulary.swb_active);
+        return getSemanticObject().getBooleanProperty(swb_active);
     }
 
     public void setActive(boolean active)
     {
-        getSemanticObject().setBooleanProperty(vocabulary.swb_active, active);
+        getSemanticObject().setBooleanProperty(swb_active, active);
     }
 
-    public GenericIterator<org.semanticwb.model.WebPage> listWebPageVirtualChilds()
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.WebPage> listWebPageVirtualChilds()
     {
-        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, vocabulary.swb_hasWebPageVirtualChild.getInverse().getRDFProperty(), getSemanticObject().getRDFResource());
-        return new GenericIterator<org.semanticwb.model.WebPage>(org.semanticwb.model.WebPage.class, stit,true);
-    }
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.WebPage>(org.semanticwb.model.WebPage.class, getSemanticObject().listObjectProperties(swb_hasWebPageVirtualChild));    }
 
-    public WebPage getWebPageVirtualChild()
+    public org.semanticwb.model.WebPage getWebPageVirtualChild()
     {
-         WebPage ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasWebPageVirtualChild);
+         org.semanticwb.model.WebPage ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasWebPageVirtualChild);
          if(obj!=null)
          {
-             ret=(WebPage)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.WebPage)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
 
     public int getViews()
     {
-        return getSemanticObject().getIntProperty(vocabulary.swb_views);
+        return getSemanticObject().getIntProperty(swb_views);
     }
 
     public void setViews(int views)
     {
-        getSemanticObject().setLongProperty(vocabulary.swb_views, views);
+        getSemanticObject().setLongProperty(swb_views, views);
     }
 
-    public GenericIterator<org.semanticwb.model.Portlet> listPortlets()
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.Portlet> listPortlets()
     {
-        return new GenericIterator<org.semanticwb.model.Portlet>(org.semanticwb.model.Portlet.class, getSemanticObject().listObjectProperties(vocabulary.swb_hasPortlet));    }
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Portlet>(org.semanticwb.model.Portlet.class, getSemanticObject().listObjectProperties(swb_hasPortlet));    }
 
     public void addPortlet(org.semanticwb.model.Portlet portlet)
     {
-        getSemanticObject().addObjectProperty(vocabulary.swb_hasPortlet, portlet.getSemanticObject());
+        getSemanticObject().addObjectProperty(swb_hasPortlet, portlet.getSemanticObject());
     }
 
     public void removeAllPortlet()
     {
-        getSemanticObject().removeProperty(vocabulary.swb_hasPortlet);
+        getSemanticObject().removeProperty(swb_hasPortlet);
     }
 
     public void removePortlet(org.semanticwb.model.Portlet portlet)
     {
-        getSemanticObject().removeObjectProperty(vocabulary.swb_hasPortlet,portlet.getSemanticObject());
+        getSemanticObject().removeObjectProperty(swb_hasPortlet,portlet.getSemanticObject());
     }
 
-    public Portlet getPortlet()
+    public org.semanticwb.model.Portlet getPortlet()
     {
-         Portlet ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasPortlet);
+         org.semanticwb.model.Portlet ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasPortlet);
          if(obj!=null)
          {
-             ret=(Portlet)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.Portlet)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
 
-    public GenericIterator<org.semanticwb.model.PFlowRef> listPFlowRefs()
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowRef> listPFlowRefs()
     {
-        return new GenericIterator<org.semanticwb.model.PFlowRef>(org.semanticwb.model.PFlowRef.class, getSemanticObject().listObjectProperties(vocabulary.swb_hasPFlowRef));    }
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowRef>(org.semanticwb.model.PFlowRef.class, getSemanticObject().listObjectProperties(swb_hasPFlowRef));    }
 
     public void addPFlowRef(org.semanticwb.model.PFlowRef pflowref)
     {
-        getSemanticObject().addObjectProperty(vocabulary.swb_hasPFlowRef, pflowref.getSemanticObject());
+        getSemanticObject().addObjectProperty(swb_hasPFlowRef, pflowref.getSemanticObject());
     }
 
     public void removeAllPFlowRef()
     {
-        getSemanticObject().removeProperty(vocabulary.swb_hasPFlowRef);
+        getSemanticObject().removeProperty(swb_hasPFlowRef);
     }
 
     public void removePFlowRef(org.semanticwb.model.PFlowRef pflowref)
     {
-        getSemanticObject().removeObjectProperty(vocabulary.swb_hasPFlowRef,pflowref.getSemanticObject());
+        getSemanticObject().removeObjectProperty(swb_hasPFlowRef,pflowref.getSemanticObject());
     }
 
-    public PFlowRef getPFlowRef()
+    public org.semanticwb.model.PFlowRef getPFlowRef()
     {
-         PFlowRef ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasPFlowRef);
+         org.semanticwb.model.PFlowRef ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasPFlowRef);
          if(obj!=null)
          {
-             ret=(PFlowRef)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.PFlowRef)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
 
-    public GenericIterator<org.semanticwb.model.TemplateRef> listTemplateRefs()
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.TemplateRef> listTemplateRefs()
     {
-        return new GenericIterator<org.semanticwb.model.TemplateRef>(org.semanticwb.model.TemplateRef.class, getSemanticObject().listObjectProperties(vocabulary.swb_hasTemplateRef));    }
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.TemplateRef>(org.semanticwb.model.TemplateRef.class, getSemanticObject().listObjectProperties(swb_hasTemplateRef));    }
 
     public void addTemplateRef(org.semanticwb.model.TemplateRef templateref)
     {
-        getSemanticObject().addObjectProperty(vocabulary.swb_hasTemplateRef, templateref.getSemanticObject());
+        getSemanticObject().addObjectProperty(swb_hasTemplateRef, templateref.getSemanticObject());
     }
 
     public void removeAllTemplateRef()
     {
-        getSemanticObject().removeProperty(vocabulary.swb_hasTemplateRef);
+        getSemanticObject().removeProperty(swb_hasTemplateRef);
     }
 
     public void removeTemplateRef(org.semanticwb.model.TemplateRef templateref)
     {
-        getSemanticObject().removeObjectProperty(vocabulary.swb_hasTemplateRef,templateref.getSemanticObject());
+        getSemanticObject().removeObjectProperty(swb_hasTemplateRef,templateref.getSemanticObject());
     }
 
-    public TemplateRef getTemplateRef()
+    public org.semanticwb.model.TemplateRef getTemplateRef()
     {
-         TemplateRef ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasTemplateRef);
+         org.semanticwb.model.TemplateRef ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasTemplateRef);
          if(obj!=null)
          {
-             ret=(TemplateRef)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.TemplateRef)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
 
-    public GenericIterator<org.semanticwb.model.WebPage> listChilds()
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.WebPage> listChilds()
     {
-        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, vocabulary.swb_hasWebPageChild.getInverse().getRDFProperty(), getSemanticObject().getRDFResource());
-        return new GenericIterator<org.semanticwb.model.WebPage>(org.semanticwb.model.WebPage.class, stit,true);
-    }
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.WebPage>(org.semanticwb.model.WebPage.class, getSemanticObject().listObjectProperties(swb_hasWebPageChild));    }
 
-    public WebPage getChild()
+    public org.semanticwb.model.WebPage getChild()
     {
-         WebPage ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasWebPageChild);
+         org.semanticwb.model.WebPage ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasWebPageChild);
          if(obj!=null)
          {
-             ret=(WebPage)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.WebPage)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
 
     public String getWebPageURL()
     {
-        return getSemanticObject().getProperty(vocabulary.swb_webPageURL);
+        return getSemanticObject().getProperty(swb_webPageURL);
     }
 
     public void setWebPageURL(String webPageURL)
     {
-        getSemanticObject().setProperty(vocabulary.swb_webPageURL, webPageURL);
+        getSemanticObject().setProperty(swb_webPageURL, webPageURL);
     }
 
-    public GenericIterator<org.semanticwb.model.RuleRef> listRuleRefs()
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef> listRuleRefs()
     {
-        return new GenericIterator<org.semanticwb.model.RuleRef>(org.semanticwb.model.RuleRef.class, getSemanticObject().listObjectProperties(vocabulary.swb_hasRuleRef));    }
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef>(org.semanticwb.model.RuleRef.class, getSemanticObject().listObjectProperties(swb_hasRuleRef));    }
 
     public void addRuleRef(org.semanticwb.model.RuleRef ruleref)
     {
-        getSemanticObject().addObjectProperty(vocabulary.swb_hasRuleRef, ruleref.getSemanticObject());
+        getSemanticObject().addObjectProperty(swb_hasRuleRef, ruleref.getSemanticObject());
     }
 
     public void removeAllRuleRef()
     {
-        getSemanticObject().removeProperty(vocabulary.swb_hasRuleRef);
+        getSemanticObject().removeProperty(swb_hasRuleRef);
     }
 
     public void removeRuleRef(org.semanticwb.model.RuleRef ruleref)
     {
-        getSemanticObject().removeObjectProperty(vocabulary.swb_hasRuleRef,ruleref.getSemanticObject());
+        getSemanticObject().removeObjectProperty(swb_hasRuleRef,ruleref.getSemanticObject());
     }
 
-    public RuleRef getRuleRef()
+    public org.semanticwb.model.RuleRef getRuleRef()
     {
-         RuleRef ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasRuleRef);
+         org.semanticwb.model.RuleRef ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasRuleRef);
          if(obj!=null)
          {
-             ret=(RuleRef)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.RuleRef)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
 
     public void setCreator(org.semanticwb.model.User user)
     {
-        getSemanticObject().setObjectProperty(vocabulary.swb_creator, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_creator, user.getSemanticObject());
     }
 
     public void removeCreator()
     {
-        getSemanticObject().removeProperty(vocabulary.swb_creator);
+        getSemanticObject().removeProperty(swb_creator);
     }
 
-    public User getCreator()
+    public org.semanticwb.model.User getCreator()
     {
-         User ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_creator);
+         org.semanticwb.model.User ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
          if(obj!=null)
          {
-             ret=(User)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
 
     public void setParent(org.semanticwb.model.WebPage webpage)
     {
-        getSemanticObject().setObjectProperty(vocabulary.swb_webPageParent, webpage.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_webPageParent, webpage.getSemanticObject());
     }
 
     public void removeParent()
     {
-        getSemanticObject().removeProperty(vocabulary.swb_webPageParent);
+        getSemanticObject().removeProperty(swb_webPageParent);
     }
 
-    public WebPage getParent()
+    public org.semanticwb.model.WebPage getParent()
     {
-         WebPage ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_webPageParent);
+         org.semanticwb.model.WebPage ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_webPageParent);
          if(obj!=null)
          {
-             ret=(WebPage)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.WebPage)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
 
     public String getDescription()
     {
-        return getSemanticObject().getProperty(vocabulary.swb_description);
+        return getSemanticObject().getProperty(swb_description);
     }
 
     public void setDescription(String description)
     {
-        getSemanticObject().setProperty(vocabulary.swb_description, description);
+        getSemanticObject().setProperty(swb_description, description);
     }
 
     public String getDescription(String lang)
     {
-        return getSemanticObject().getProperty(vocabulary.swb_description, null, lang);
+        return getSemanticObject().getProperty(swb_description, null, lang);
     }
 
     public String getDisplayDescription(String lang)
     {
-        return getSemanticObject().getLocaleProperty(vocabulary.swb_description, lang);
+        return getSemanticObject().getLocaleProperty(swb_description, lang);
     }
 
     public void setDescription(String description, String lang)
     {
-        getSemanticObject().setProperty(vocabulary.swb_description, description, lang);
+        getSemanticObject().setProperty(swb_description, description, lang);
     }
 
-    public WebSite getWebSite()
+    public org.semanticwb.model.WebSite getWebSite()
     {
-        return new WebSite(getSemanticObject().getModel().getModelObject());
+        return new org.semanticwb.model.WebSite(getSemanticObject().getModel().getModelObject());
     }
 }

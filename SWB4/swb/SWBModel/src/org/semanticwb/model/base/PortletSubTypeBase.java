@@ -1,174 +1,176 @@
 package org.semanticwb.model.base;
 
-import java.util.Date;
-import java.util.Iterator;
-import java.util.ArrayList;
-import org.semanticwb.model.*;
-import com.hp.hpl.jena.rdf.model.*;
-import org.semanticwb.*;
-import org.semanticwb.platform.*;
-import org.semanticwb.model.GenericIterator;
 
-public class PortletSubTypeBase extends SWBClass implements Descriptiveable,Traceable
+public class PortletSubTypeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
+    public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
+    public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
+    public static final org.semanticwb.platform.SemanticProperty swb_modifiedBy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy");
+    public static final org.semanticwb.platform.SemanticClass swb_Portlet=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Portlet");
+    public static final org.semanticwb.platform.SemanticProperty swb_hasPSTPortlets=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasPSTPortlets");
+    public static final org.semanticwb.platform.SemanticProperty swb_title=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#title");
+    public static final org.semanticwb.platform.SemanticProperty swb_updated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#updated");
+    public static final org.semanticwb.platform.SemanticClass swb_PortletType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PortletType");
+    public static final org.semanticwb.platform.SemanticProperty swb_PSTType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#PSTType");
+    public static final org.semanticwb.platform.SemanticProperty swb_creator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#creator");
+    public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
+    public static final org.semanticwb.platform.SemanticClass swb_PortletSubType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PortletSubType");
 
-    public PortletSubTypeBase(SemanticObject base)
+    public PortletSubTypeBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
 
-    public Date getCreated()
+    public java.util.Date getCreated()
     {
-        return getSemanticObject().getDateProperty(vocabulary.swb_created);
+        return getSemanticObject().getDateProperty(swb_created);
     }
 
-    public void setCreated(Date created)
+    public void setCreated(java.util.Date created)
     {
-        getSemanticObject().setDateProperty(vocabulary.swb_created, created);
+        getSemanticObject().setDateProperty(swb_created, created);
     }
 
     public void setModifiedBy(org.semanticwb.model.User user)
     {
-        getSemanticObject().setObjectProperty(vocabulary.swb_modifiedBy, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_modifiedBy, user.getSemanticObject());
     }
 
     public void removeModifiedBy()
     {
-        getSemanticObject().removeProperty(vocabulary.swb_modifiedBy);
+        getSemanticObject().removeProperty(swb_modifiedBy);
     }
 
-    public User getModifiedBy()
+    public org.semanticwb.model.User getModifiedBy()
     {
-         User ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_modifiedBy);
+         org.semanticwb.model.User ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_modifiedBy);
          if(obj!=null)
          {
-             ret=(User)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
 
-    public GenericIterator<org.semanticwb.model.Portlet> listPortlets()
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.Portlet> listPortlets()
     {
-        StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, vocabulary.swb_hasPSTPortlets.getInverse().getRDFProperty(), getSemanticObject().getRDFResource());
-        return new GenericIterator<org.semanticwb.model.Portlet>(org.semanticwb.model.Portlet.class, stit,true);
-    }
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Portlet>(org.semanticwb.model.Portlet.class, getSemanticObject().listObjectProperties(swb_hasPSTPortlets));    }
 
-    public Portlet getPortlet()
+    public org.semanticwb.model.Portlet getPortlet()
     {
-         Portlet ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_hasPSTPortlets);
+         org.semanticwb.model.Portlet ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasPSTPortlets);
          if(obj!=null)
          {
-             ret=(Portlet)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.Portlet)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
 
     public String getTitle()
     {
-        return getSemanticObject().getProperty(vocabulary.swb_title);
+        return getSemanticObject().getProperty(swb_title);
     }
 
     public void setTitle(String title)
     {
-        getSemanticObject().setProperty(vocabulary.swb_title, title);
+        getSemanticObject().setProperty(swb_title, title);
     }
 
     public String getTitle(String lang)
     {
-        return getSemanticObject().getProperty(vocabulary.swb_title, null, lang);
+        return getSemanticObject().getProperty(swb_title, null, lang);
     }
 
     public String getDisplayTitle(String lang)
     {
-        return getSemanticObject().getLocaleProperty(vocabulary.swb_title, lang);
+        return getSemanticObject().getLocaleProperty(swb_title, lang);
     }
 
     public void setTitle(String title, String lang)
     {
-        getSemanticObject().setProperty(vocabulary.swb_title, title, lang);
+        getSemanticObject().setProperty(swb_title, title, lang);
     }
 
-    public Date getUpdated()
+    public java.util.Date getUpdated()
     {
-        return getSemanticObject().getDateProperty(vocabulary.swb_updated);
+        return getSemanticObject().getDateProperty(swb_updated);
     }
 
-    public void setUpdated(Date updated)
+    public void setUpdated(java.util.Date updated)
     {
-        getSemanticObject().setDateProperty(vocabulary.swb_updated, updated);
+        getSemanticObject().setDateProperty(swb_updated, updated);
     }
 
     public void setType(org.semanticwb.model.PortletType portlettype)
     {
-        getSemanticObject().setObjectProperty(vocabulary.swb_PSTType, portlettype.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_PSTType, portlettype.getSemanticObject());
     }
 
     public void removeType()
     {
-        getSemanticObject().removeProperty(vocabulary.swb_PSTType);
+        getSemanticObject().removeProperty(swb_PSTType);
     }
 
-    public PortletType getType()
+    public org.semanticwb.model.PortletType getType()
     {
-         PortletType ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_PSTType);
+         org.semanticwb.model.PortletType ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_PSTType);
          if(obj!=null)
          {
-             ret=(PortletType)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.PortletType)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
 
     public void setCreator(org.semanticwb.model.User user)
     {
-        getSemanticObject().setObjectProperty(vocabulary.swb_creator, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_creator, user.getSemanticObject());
     }
 
     public void removeCreator()
     {
-        getSemanticObject().removeProperty(vocabulary.swb_creator);
+        getSemanticObject().removeProperty(swb_creator);
     }
 
-    public User getCreator()
+    public org.semanticwb.model.User getCreator()
     {
-         User ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_creator);
+         org.semanticwb.model.User ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
          if(obj!=null)
          {
-             ret=(User)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
 
     public String getDescription()
     {
-        return getSemanticObject().getProperty(vocabulary.swb_description);
+        return getSemanticObject().getProperty(swb_description);
     }
 
     public void setDescription(String description)
     {
-        getSemanticObject().setProperty(vocabulary.swb_description, description);
+        getSemanticObject().setProperty(swb_description, description);
     }
 
     public String getDescription(String lang)
     {
-        return getSemanticObject().getProperty(vocabulary.swb_description, null, lang);
+        return getSemanticObject().getProperty(swb_description, null, lang);
     }
 
     public String getDisplayDescription(String lang)
     {
-        return getSemanticObject().getLocaleProperty(vocabulary.swb_description, lang);
+        return getSemanticObject().getLocaleProperty(swb_description, lang);
     }
 
     public void setDescription(String description, String lang)
     {
-        getSemanticObject().setProperty(vocabulary.swb_description, description, lang);
+        getSemanticObject().setProperty(swb_description, description, lang);
     }
 
-    public WebSite getWebSite()
+    public org.semanticwb.model.WebSite getWebSite()
     {
-        return new WebSite(getSemanticObject().getModel().getModelObject());
+        return new org.semanticwb.model.WebSite(getSemanticObject().getModel().getModelObject());
     }
 }

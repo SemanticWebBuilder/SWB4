@@ -1,45 +1,40 @@
 package org.semanticwb.model.base;
 
-import java.util.Date;
-import java.util.Iterator;
-import java.util.ArrayList;
-import org.semanticwb.model.*;
-import com.hp.hpl.jena.rdf.model.*;
-import org.semanticwb.*;
-import org.semanticwb.platform.*;
-import org.semanticwb.model.GenericIterator;
 
-public class RoleRefBase extends Reference implements Activeable
+public class RoleRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.Activeable
 {
+    public static final org.semanticwb.platform.SemanticClass swb_Role=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Role");
+    public static final org.semanticwb.platform.SemanticProperty swb_role=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#role");
+    public static final org.semanticwb.platform.SemanticClass swb_RoleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#RoleRef");
 
-    public RoleRefBase(SemanticObject base)
+    public RoleRefBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
 
     public void setRole(org.semanticwb.model.Role role)
     {
-        getSemanticObject().setObjectProperty(vocabulary.swb_role, role.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_role, role.getSemanticObject());
     }
 
     public void removeRole()
     {
-        getSemanticObject().removeProperty(vocabulary.swb_role);
+        getSemanticObject().removeProperty(swb_role);
     }
 
-    public Role getRole()
+    public org.semanticwb.model.Role getRole()
     {
-         Role ret=null;
-         SemanticObject obj=getSemanticObject().getObjectProperty(vocabulary.swb_role);
+         org.semanticwb.model.Role ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_role);
          if(obj!=null)
          {
-             ret=(Role)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.Role)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
 
-    public WebSite getWebSite()
+    public org.semanticwb.model.WebSite getWebSite()
     {
-        return new WebSite(getSemanticObject().getModel().getModelObject());
+        return new org.semanticwb.model.WebSite(getSemanticObject().getModel().getModelObject());
     }
 }

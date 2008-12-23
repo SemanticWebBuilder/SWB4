@@ -1,153 +1,151 @@
 package org.semanticwb.model.base;
 
-import java.util.Date;
-import java.util.Iterator;
-import java.util.ArrayList;
-import org.semanticwb.model.*;
-import com.hp.hpl.jena.rdf.model.*;
-import org.semanticwb.*;
-import org.semanticwb.platform.*;
-import org.semanticwb.model.GenericIterator;
 
-public class FormViewBase extends SWBClass implements Descriptiveable
+public class FormViewBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable
 {
+    public static final org.semanticwb.platform.SemanticProperty swb_title=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#title");
+    public static final org.semanticwb.platform.SemanticProperty swbxf_hasCreateProperty=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#hasCreateProperty");
+    public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
+    public static final org.semanticwb.platform.SemanticProperty swbxf_hasViewProperty=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#hasViewProperty");
+    public static final org.semanticwb.platform.SemanticProperty swbxf_hasEditProperty=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#hasEditProperty");
+    public static final org.semanticwb.platform.SemanticClass swbxf_FormView=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#FormView");
 
-    public FormViewBase(SemanticObject base)
+    public FormViewBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
 
     public String getTitle()
     {
-        return getSemanticObject().getProperty(vocabulary.swb_title);
+        return getSemanticObject().getProperty(swb_title);
     }
 
     public void setTitle(String title)
     {
-        getSemanticObject().setProperty(vocabulary.swb_title, title);
+        getSemanticObject().setProperty(swb_title, title);
     }
 
     public String getTitle(String lang)
     {
-        return getSemanticObject().getProperty(vocabulary.swb_title, null, lang);
+        return getSemanticObject().getProperty(swb_title, null, lang);
     }
 
     public String getDisplayTitle(String lang)
     {
-        return getSemanticObject().getLocaleProperty(vocabulary.swb_title, lang);
+        return getSemanticObject().getLocaleProperty(swb_title, lang);
     }
 
     public void setTitle(String title, String lang)
     {
-        getSemanticObject().setProperty(vocabulary.swb_title, title, lang);
+        getSemanticObject().setProperty(swb_title, title, lang);
     }
 
-    public SemanticIterator<org.semanticwb.platform.SemanticObject> listCreatePropertys()
+    public org.semanticwb.platform.SemanticIterator<org.semanticwb.platform.SemanticObject> listCreatePropertys()
     {
-        StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.swbxf_hasCreateProperty.getRDFProperty());
-        return new SemanticIterator<org.semanticwb.platform.SemanticObject>(stit);
+        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getRDFResource().listProperties(swbxf_hasCreateProperty.getRDFProperty());
+        return new org.semanticwb.platform.SemanticIterator<org.semanticwb.platform.SemanticObject>(stit);
     }
 
     public void addCreateProperty(org.semanticwb.platform.SemanticObject semanticobject)
     {
-        getSemanticObject().addObjectProperty(vocabulary.swbxf_hasCreateProperty, semanticobject);
+        getSemanticObject().addObjectProperty(swbxf_hasCreateProperty, semanticobject);
     }
 
     public void removeAllCreateProperty()
     {
-        getSemanticObject().removeProperty(vocabulary.swbxf_hasCreateProperty);
+        getSemanticObject().removeProperty(swbxf_hasCreateProperty);
     }
 
     public void removeCreateProperty(org.semanticwb.platform.SemanticObject semanticobject)
     {
-        getSemanticObject().removeObjectProperty(vocabulary.swbxf_hasCreateProperty,semanticobject);
+        getSemanticObject().removeObjectProperty(swbxf_hasCreateProperty,semanticobject);
     }
 
-    public SemanticObject getCreateProperty()
+    public org.semanticwb.platform.SemanticObject getCreateProperty()
     {
-         SemanticObject ret=null;
-         ret=getSemanticObject().getObjectProperty(vocabulary.swbxf_hasCreateProperty);
+         org.semanticwb.platform.SemanticObject ret=null;
+         ret=getSemanticObject().getObjectProperty(swbxf_hasCreateProperty);
          return ret;
     }
 
     public String getDescription()
     {
-        return getSemanticObject().getProperty(vocabulary.swb_description);
+        return getSemanticObject().getProperty(swb_description);
     }
 
     public void setDescription(String description)
     {
-        getSemanticObject().setProperty(vocabulary.swb_description, description);
+        getSemanticObject().setProperty(swb_description, description);
     }
 
     public String getDescription(String lang)
     {
-        return getSemanticObject().getProperty(vocabulary.swb_description, null, lang);
+        return getSemanticObject().getProperty(swb_description, null, lang);
     }
 
     public String getDisplayDescription(String lang)
     {
-        return getSemanticObject().getLocaleProperty(vocabulary.swb_description, lang);
+        return getSemanticObject().getLocaleProperty(swb_description, lang);
     }
 
     public void setDescription(String description, String lang)
     {
-        getSemanticObject().setProperty(vocabulary.swb_description, description, lang);
+        getSemanticObject().setProperty(swb_description, description, lang);
     }
 
-    public SemanticIterator<org.semanticwb.platform.SemanticObject> listViewPropertys()
+    public org.semanticwb.platform.SemanticIterator<org.semanticwb.platform.SemanticObject> listViewPropertys()
     {
-        StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.swbxf_hasViewProperty.getRDFProperty());
-        return new SemanticIterator<org.semanticwb.platform.SemanticObject>(stit);
+        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getRDFResource().listProperties(swbxf_hasViewProperty.getRDFProperty());
+        return new org.semanticwb.platform.SemanticIterator<org.semanticwb.platform.SemanticObject>(stit);
     }
 
     public void addViewProperty(org.semanticwb.platform.SemanticObject semanticobject)
     {
-        getSemanticObject().addObjectProperty(vocabulary.swbxf_hasViewProperty, semanticobject);
+        getSemanticObject().addObjectProperty(swbxf_hasViewProperty, semanticobject);
     }
 
     public void removeAllViewProperty()
     {
-        getSemanticObject().removeProperty(vocabulary.swbxf_hasViewProperty);
+        getSemanticObject().removeProperty(swbxf_hasViewProperty);
     }
 
     public void removeViewProperty(org.semanticwb.platform.SemanticObject semanticobject)
     {
-        getSemanticObject().removeObjectProperty(vocabulary.swbxf_hasViewProperty,semanticobject);
+        getSemanticObject().removeObjectProperty(swbxf_hasViewProperty,semanticobject);
     }
 
-    public SemanticObject getViewProperty()
+    public org.semanticwb.platform.SemanticObject getViewProperty()
     {
-         SemanticObject ret=null;
-         ret=getSemanticObject().getObjectProperty(vocabulary.swbxf_hasViewProperty);
+         org.semanticwb.platform.SemanticObject ret=null;
+         ret=getSemanticObject().getObjectProperty(swbxf_hasViewProperty);
          return ret;
     }
 
-    public SemanticIterator<org.semanticwb.platform.SemanticObject> listEditPropertys()
+    public org.semanticwb.platform.SemanticIterator<org.semanticwb.platform.SemanticObject> listEditPropertys()
     {
-        StmtIterator stit=getSemanticObject().getRDFResource().listProperties(vocabulary.swbxf_hasEditProperty.getRDFProperty());
-        return new SemanticIterator<org.semanticwb.platform.SemanticObject>(stit);
+        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getRDFResource().listProperties(swbxf_hasEditProperty.getRDFProperty());
+        return new org.semanticwb.platform.SemanticIterator<org.semanticwb.platform.SemanticObject>(stit);
     }
 
     public void addEditProperty(org.semanticwb.platform.SemanticObject semanticobject)
     {
-        getSemanticObject().addObjectProperty(vocabulary.swbxf_hasEditProperty, semanticobject);
+        getSemanticObject().addObjectProperty(swbxf_hasEditProperty, semanticobject);
     }
 
     public void removeAllEditProperty()
     {
-        getSemanticObject().removeProperty(vocabulary.swbxf_hasEditProperty);
+        getSemanticObject().removeProperty(swbxf_hasEditProperty);
     }
 
     public void removeEditProperty(org.semanticwb.platform.SemanticObject semanticobject)
     {
-        getSemanticObject().removeObjectProperty(vocabulary.swbxf_hasEditProperty,semanticobject);
+        getSemanticObject().removeObjectProperty(swbxf_hasEditProperty,semanticobject);
     }
 
-    public SemanticObject getEditProperty()
+    public org.semanticwb.platform.SemanticObject getEditProperty()
     {
-         SemanticObject ret=null;
-         ret=getSemanticObject().getObjectProperty(vocabulary.swbxf_hasEditProperty);
+         org.semanticwb.platform.SemanticObject ret=null;
+         ret=getSemanticObject().getObjectProperty(swbxf_hasEditProperty);
          return ret;
     }
 }

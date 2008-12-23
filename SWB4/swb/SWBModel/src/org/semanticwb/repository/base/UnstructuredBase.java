@@ -1,24 +1,17 @@
 package org.semanticwb.repository.base;
 
-import java.util.Date;
-import java.util.Iterator;
-import java.util.ArrayList;
-import org.semanticwb.repository.*;
-import com.hp.hpl.jena.rdf.model.*;
-import org.semanticwb.*;
-import org.semanticwb.platform.*;
-import org.semanticwb.model.GenericIterator;
 
-public class UnstructuredBase extends BaseNode 
+public class UnstructuredBase extends org.semanticwb.repository.BaseNode 
 {
+    public static final org.semanticwb.platform.SemanticClass nt_Unstructured=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#unstructured");
 
-    public UnstructuredBase(SemanticObject base)
+    public UnstructuredBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
 
-    public Workspace getWorkspace()
+    public org.semanticwb.repository.Workspace getWorkspace()
     {
-        return new Workspace(getSemanticObject().getModel().getModelObject());
+        return new org.semanticwb.repository.Workspace(getSemanticObject().getModel().getModelObject());
     }
 }

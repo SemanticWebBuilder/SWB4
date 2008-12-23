@@ -1,39 +1,34 @@
 package org.semanticwb.model.base;
 
-import java.util.Date;
-import java.util.Iterator;
-import java.util.ArrayList;
-import org.semanticwb.model.*;
-import com.hp.hpl.jena.rdf.model.*;
-import org.semanticwb.*;
-import org.semanticwb.platform.*;
-import org.semanticwb.model.GenericIterator;
 
-public class SelectOneBase extends SWBFormElement 
+public class SelectOneBase extends org.semanticwb.model.SWBFormElement 
 {
+    public static final org.semanticwb.platform.SemanticProperty swbxf_so_blankSuport=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#so_blankSuport");
+    public static final org.semanticwb.platform.SemanticProperty swbxf_so_globalScope=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#so_globalScope");
+    public static final org.semanticwb.platform.SemanticClass swbxf_SelectOne=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectOne");
 
-    public SelectOneBase(SemanticObject base)
+    public SelectOneBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
 
     public boolean isBlankSuport()
     {
-        return getSemanticObject().getBooleanProperty(vocabulary.swbxf_so_blankSuport);
+        return getSemanticObject().getBooleanProperty(swbxf_so_blankSuport);
     }
 
     public void setBlankSuport(boolean so_blankSuport)
     {
-        getSemanticObject().setBooleanProperty(vocabulary.swbxf_so_blankSuport, so_blankSuport);
+        getSemanticObject().setBooleanProperty(swbxf_so_blankSuport, so_blankSuport);
     }
 
     public boolean isGlobalScope()
     {
-        return getSemanticObject().getBooleanProperty(vocabulary.swbxf_so_globalScope);
+        return getSemanticObject().getBooleanProperty(swbxf_so_globalScope);
     }
 
     public void setGlobalScope(boolean so_globalScope)
     {
-        getSemanticObject().setBooleanProperty(vocabulary.swbxf_so_globalScope, so_globalScope);
+        getSemanticObject().setBooleanProperty(swbxf_so_globalScope, so_globalScope);
     }
 }

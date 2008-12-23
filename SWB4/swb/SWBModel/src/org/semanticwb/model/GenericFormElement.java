@@ -134,7 +134,7 @@ public class GenericFormElement extends SWBFormElement
                 if(value==null)value="";
                 if(mode.equals("edit") || mode.equals("create") )
                 {
-                    ret="<input _id=\""+name+"\" name=\""+name+"\" value=\""+value+"\""
+                    ret="<input _id=\""+name+"\" name=\""+name+"\" size=\"10\" value=\""+value+"\""
                         + " dojoType=\"dijit.form.ValidationTextBox\""
                         + " regExp=\"\\d+\""
                         + " required=\""+required+"\""
@@ -159,7 +159,7 @@ public class GenericFormElement extends SWBFormElement
                 if(value==null)value="";
                 if(mode.equals("edit") || mode.equals("create") )
                 {
-                    ret="<input _id=\""+name+"\" name=\""+name+"\" value=\""+value+"\""
+                    ret="<input _id=\""+name+"\" name=\""+name+"\" size=\"30\" value=\""+value+"\""
                         + " dojoType=\"dijit.form.ValidationTextBox\""
                         + " required=\""+required+"\""
     //                    + " propercase=\"true\""

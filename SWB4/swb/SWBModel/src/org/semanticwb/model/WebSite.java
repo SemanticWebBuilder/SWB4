@@ -14,13 +14,13 @@ public class WebSite extends WebSiteBase
     @Override
     public Dns createDns(String uri)
     {
-        return (Dns)getSemanticObject().getModel().createGenericObject(uri, SWBContext.getVocabulary().swb_Dns);
+        return (Dns)getSemanticObject().getModel().createGenericObject(uri, Dns.swb_Dns);
     }    
 
     @Override
     public Dns getDns(String id)
     {
-        return (Dns)getSemanticObject().getModel().getGenericObject(id,SWBContext.getVocabulary().swb_Dns);
+        return (Dns)getSemanticObject().getModel().getGenericObject(id,Dns.swb_Dns);
     }
     
     public Dns getDefaultDns()
