@@ -115,11 +115,11 @@ th {
     _margin: 0 -7px; /* IE Win */
 	}
 
-.swbform div {
+_.swbform div {
     display: inline-block;
     }
 
-.swbform div label {
+_.swbform div label {
     display: block;
     width: 6em;
     float: left;
@@ -181,7 +181,7 @@ _form.swbform fieldset li {
 	}
 
 .swbform fieldset span label {
-	width: auto;
+    width: auto;
     padding: 0px 10px 0px 0px;  /*horizontal*/
 	_display: block;            /* vertical */
     _margin-left: 25.5%;        /* vertical */

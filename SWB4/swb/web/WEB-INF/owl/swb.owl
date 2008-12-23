@@ -360,21 +360,6 @@
     >org.semanticwb.model.PFlowRef</swb:className>
     <rdf:type rdf:resource="#Class"/>
   </owl:Class>
-  <owl:Class rdf:ID="UserRepository">
-    <swb:hasClass>
-      <owl:Class rdf:ID="User"/>
-    </swb:hasClass>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >false</swb:autogenId>
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="SWBModel"/>
-    </rdfs:subClassOf>
-    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >org.semanticwb.model.UserRepository</swb:className>
-    <rdfs:subClassOf rdf:resource="#Traceable"/>
-    <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
-    <rdf:type rdf:resource="#Model"/>
-  </owl:Class>
   <owl:Class rdf:ID="TemplateRef">
     <rdfs:subClassOf rdf:resource="#Deleteable"/>
     <rdfs:subClassOf rdf:resource="#Activeable"/>
@@ -417,7 +402,7 @@
     >org.semanticwb.model.RoleRefable</swb:className>
     <rdf:type rdf:resource="#Interface"/>
   </owl:Class>
-  <owl:Class rdf:about="#User">
+  <owl:Class rdf:ID="User">
     <rdfs:subClassOf>
       <swb:Interface rdf:ID="Roleable">
         <rdfs:subClassOf>
@@ -506,7 +491,7 @@
     >org.semanticwb.model.WebPage</swb:className>
     <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
   </owl:Class>
-  <owl:Class rdf:about="#SWBModel">
+  <owl:Class rdf:ID="SWBModel">
     <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.model.SWBModel</swb:className>
     <rdf:type rdf:resource="#Model"/>
@@ -660,17 +645,6 @@
     </swb:displayProperty>
     <rdfs:domain>
       <swb:Model rdf:ID="WebSite">
-        <swb:hasHerarquicalNode>
-          <swbxf:HerarquicalNode rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_UserGroups">
-            <swb:title xml:lang="es">Grupos de Usuarios</swb:title>
-            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >27</swb:index>
-            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >swbIconUserGroups</swb:iconClass>
-            <swb:title xml:lang="en">User Groups</swb:title>
-            <swbxf:heClass rdf:resource="#UserGroup"/>
-          </swbxf:HerarquicalNode>
-        </swb:hasHerarquicalNode>
         <swb:hasClass rdf:resource="#PFlow"/>
         <swb:hasClass rdf:resource="#Device"/>
         <swb:hasClass rdf:resource="#TemplateRef"/>
@@ -809,7 +783,6 @@
             >50</swb:index>
           </swbxf:HerarquicalNode>
         </swb:hasHerarquicalNode>
-        <swb:hasClass rdf:resource="#UserGroup"/>
         <swb:hasClass rdf:resource="#Community"/>
         <swb:hasClass rdf:resource="#RoleRef"/>
         <rdfs:subClassOf rdf:resource="#Traceable"/>
@@ -826,28 +799,6 @@
         </swb:hasHerarquicalNode>
         <swb:hasClass rdf:resource="#Dns"/>
         <swb:hasHerarquicalNode>
-          <swbxf:HerarquicalNode rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Roles">
-            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >swbIconRoles</swb:iconClass>
-            <swbxf:heClass>
-              <swb:Class rdf:ID="Role">
-                <rdfs:subClassOf rdf:resource="#Traceable"/>
-                <rdfs:subClassOf rdf:resource="#SWBClass"/>
-                <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
-                <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-                >org.semanticwb.model.Role</swb:className>
-                <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-                >true</swb:autogenId>
-                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-              </swb:Class>
-            </swbxf:heClass>
-            <swb:title xml:lang="es">Roles</swb:title>
-            <swb:title xml:lang="en">Roles</swb:title>
-            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >25</swb:index>
-          </swbxf:HerarquicalNode>
-        </swb:hasHerarquicalNode>
-        <swb:hasHerarquicalNode>
           <swbxf:HerarquicalNode rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Languages">
             <swbxf:heClass rdf:resource="#Language"/>
             <swb:title xml:lang="en">Lenguages</swb:title>
@@ -859,7 +810,6 @@
           </swbxf:HerarquicalNode>
         </swb:hasHerarquicalNode>
         <swb:hasClass rdf:resource="#PFlowRef"/>
-        <swb:hasClass rdf:resource="#Role"/>
         <swb:hasClass rdf:resource="#PortletSubType"/>
         <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
         >false</swb:autogenId>
@@ -892,7 +842,54 @@
         >org.semanticwb.model.WebSite</swb:className>
       </swb:Model>
     </rdfs:domain>
-    <rdfs:range rdf:resource="#UserRepository"/>
+    <rdfs:range>
+      <swb:Model rdf:ID="UserRepository">
+        <swb:hasHerarquicalNode>
+          <swbxf:HerarquicalNode rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Roles">
+            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >swbIconRoles</swb:iconClass>
+            <swbxf:heClass>
+              <swb:Class rdf:ID="Role">
+                <rdfs:subClassOf rdf:resource="#Traceable"/>
+                <rdfs:subClassOf rdf:resource="#SWBClass"/>
+                <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
+                <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                >org.semanticwb.model.Role</swb:className>
+                <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+                >true</swb:autogenId>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+              </swb:Class>
+            </swbxf:heClass>
+            <swb:title xml:lang="es">Roles</swb:title>
+            <swb:title xml:lang="en">Roles</swb:title>
+            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >25</swb:index>
+          </swbxf:HerarquicalNode>
+        </swb:hasHerarquicalNode>
+        <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+        <rdfs:subClassOf rdf:resource="#Traceable"/>
+        <swb:hasHerarquicalNode>
+          <swbxf:HerarquicalNode rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_UserGroups">
+            <swb:title xml:lang="es">Grupos de Usuarios</swb:title>
+            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >27</swb:index>
+            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >swbIconUserGroups</swb:iconClass>
+            <swb:title xml:lang="en">User Groups</swb:title>
+            <swbxf:heClass rdf:resource="#UserGroup"/>
+          </swbxf:HerarquicalNode>
+        </swb:hasHerarquicalNode>
+        <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >org.semanticwb.model.UserRepository</swb:className>
+        <rdfs:subClassOf rdf:resource="#SWBModel"/>
+        <swb:hasClass rdf:resource="#Role"/>
+        <swb:hasClass rdf:resource="#UserGroup"/>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</swb:autogenId>
+        <swb:hasClass rdf:resource="#User"/>
+      </swb:Model>
+    </rdfs:range>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="language">
     <swb:displayProperty>
