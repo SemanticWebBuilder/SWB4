@@ -219,7 +219,7 @@ public class UserTest {
         }
     }
 
-    //@Test
+    @Test
     public void FillUsers(){
       UserRepository repository = null;
       String[] nombres = {"Sergio", "Javier", "Jorge", "Carlos", "Edgar", "Nohemi", "Victor", "Melissa", "Nancy", "Rogelio", "Jose", "Aura"};
@@ -230,7 +230,7 @@ public class UserTest {
       String apellido2 = null;
       String login = null;
       String mail = null;
-      repository = SWBContext.getUserRepository("urswb");
+      repository = SWBContext.getUserRepository("externalUsers");
       for (int i=0; i<100; i++){
           nombre = nombres[(int)Math.floor(Math.random()*12)];
           apellido1 = apellidos[(int)Math.floor(Math.random()*12)];
@@ -248,7 +248,7 @@ public class UserTest {
       }
     }
 
-       @Test
+    //   @Test
     public void test()
     {
         long time=System.currentTimeMillis();
@@ -329,5 +329,27 @@ public class UserTest {
         System.out.println("Time:"+(System.currentTimeMillis()-time));
     }
 
+   // @Test
+    public void addRyG(){
+        UserRepository rep = SWBContext.createUserRepository("externalUsers", "ussrepext");
+        Role role = rep.createRole();
+        role.setTitle("Director");
+        role = rep.createRole();
+        role.setTitle("Gerente");
+        role = rep.createRole();
+        role.setTitle("Analista");
+        role = rep.createRole();
+        role.setTitle("Operador");
+        UserGroup group = rep.createUserGroup("OPER");
+        group = rep.createUserGroup("CAT");
+        group = rep.createUserGroup("SALES");
+        group = rep.createUserGroup("INVEST");
+    }
+
+    //@Test
+    public void urdemo(){
+        UserRepository rep = SWBContext.getUserRepository("externalUsers");
+        rep.setTitle("Usuarios Externos");
+    }
 
 }
