@@ -26,8 +26,8 @@ public class WebPage extends WebPageBase
             siteid=getWebSite().getId();
         }
         return siteid;
-    }     
-    
+    }
+
     /**  Regresa el Url de la pagina
      *  Ejemplo: /wb2/jei/home
      * @return String
