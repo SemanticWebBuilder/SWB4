@@ -43,6 +43,8 @@ public class SemanticClass
     private Constructor m_constructor=null;
     private SemanticProperty displayNameProperty;
     List<SemanticProperty> herarquicalProps;
+    private String m_classID=null;
+    private boolean m_isClassIDCheck=false;
 
     public SemanticClass(OntClass oclass)
     {
@@ -125,6 +127,21 @@ public class SemanticClass
         //log.trace("isAutogenId:"+m_autogenId);
         return m_autogenId;
     }
+
+    public String getClassID()
+    {
+        if(!m_isClassIDCheck)
+        {
+            Property prop=m_class.getModel().getProperty(SemanticVocabulary.SWB_PROP_CLASSID);
+            try
+            {
+                m_classID=m_class.getRequiredProperty(prop).getString();
+            }catch(PropertyNotFoundException noe){}
+            m_isClassIDCheck=true;
+        }
+        return m_classID;
+    }
+
     
     public SemanticLiteral getRequiredProperty(SemanticProperty prop)
     {
