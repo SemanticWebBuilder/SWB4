@@ -9,6 +9,7 @@ import java.lang.reflect.Method;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import org.semanticwb.Logger;
@@ -112,9 +113,29 @@ public class SemanticObject
         return ret;
     }
 
-    private void clearPropertyValueCache(SemanticProperty prop, String lang)
+    private void removePropertyValueCache(SemanticProperty prop, String lang)
     {
         m_cacheprops.remove(prop.getURI()+"|"+lang);
+    }
+
+    private Iterator<SemanticObject> getListObjectPropertyCache(SemanticProperty prop)
+    {
+        Iterator it=null;
+        ArrayList arr=(ArrayList)m_cacheprops.get(prop.getURI()+"|list");
+        if(arr!=null)it=arr.iterator();
+        return it;
+    }
+
+    private Iterator<SemanticObject> setListObjectPropertyCache(SemanticProperty prop, Iterator<SemanticObject> list)
+    {
+        ArrayList arr=new ArrayList();
+        while(list.hasNext())
+        {
+            SemanticObject obj=list.next();
+            arr.add(obj);
+        }
+        m_cacheprops.put(prop.getURI()+"|list", arr);
+        return arr.iterator();
     }
 
     private void validateModel()
@@ -492,7 +513,7 @@ public class SemanticObject
             Property iprop = prop.getRDFProperty();
             m_res.removeAll(iprop);
         }
-        clearPropertyValueCache(prop, null);
+        removePropertyValueCache(prop, null);
         return this;
     }
 
@@ -511,7 +532,7 @@ public class SemanticObject
                 }
             }
         }
-        clearPropertyValueCache(prop, lang);
+        removePropertyValueCache(prop, lang);
         return this;
     }
 
@@ -558,6 +579,7 @@ public class SemanticObject
         }
         Property iprop = prop.getRDFProperty();
         m_res.addProperty(iprop, object.getRDFResource());
+        removePropertyValueCache(prop, "list");
         return this;
     }
 
@@ -581,6 +603,7 @@ public class SemanticObject
                 stmt.remove();
             }
         }
+        removePropertyValueCache(prop, "list");
         return this;
     }
 
@@ -609,14 +632,18 @@ public class SemanticObject
             }
         }
 
-        Iterator ret = null;
-        if (!prop.hasInverse())
+        Iterator ret = getListObjectPropertyCache(prop);
+        if(ret==null)
         {
-            ret = new SemanticIterator(m_res.listProperties(prop.getRDFProperty()));
-        }
-        else
-        {
-            ret = new SemanticIterator(getModel().getRDFModel().listStatements(null, prop.getInverse().getRDFProperty(), getRDFResource()), true);
+            if (!prop.hasInverse())
+            {
+                ret = new SemanticIterator(m_res.listProperties(prop.getRDFProperty()));
+            }
+            else
+            {
+                ret = new SemanticIterator(getModel().getRDFModel().listStatements(null, prop.getInverse().getRDFProperty(), getRDFResource()), true);
+            }
+            ret=setListObjectPropertyCache(prop, ret);
         }
         return ret;
     }
@@ -717,6 +744,13 @@ public class SemanticObject
                 // removida manualmente por ser binaria
                 removeProperty(prop);
             }
+        }
+        //TODO:mejorar
+        Iterator<SemanticObject> rel=listRelatedObjects();
+        while(rel.hasNext())
+        {
+            SemanticObject obj=rel.next();
+            removeCache(obj.getURI());
         }
         Resource res=getRDFResource();
         if(res!=null)
