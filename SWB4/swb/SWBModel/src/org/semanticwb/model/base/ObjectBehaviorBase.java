@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class ObjectBehaviorBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.Sortable,org.semanticwb.model.Iconable
+public class ObjectBehaviorBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.Iconable,org.semanticwb.model.Sortable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_index=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#index");
     public static final org.semanticwb.platform.SemanticProperty swb_iconClass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#iconClass");
@@ -65,12 +65,12 @@ public class ObjectBehaviorBase extends org.semanticwb.model.WebPage implements 
          return ret;
     }
 
-    public String getURL()
+    public String getBehaviorURL()
     {
         return getSemanticObject().getProperty(swbxf_behaviorURL);
     }
 
-    public void setURL(String behaviorURL)
+    public void setBehaviorURL(String behaviorURL)
     {
         getSemanticObject().setProperty(swbxf_behaviorURL, behaviorURL);
     }
