@@ -46,5 +46,5 @@ public interface IOfficeDocument
     @XmlRpcMethod(methodName="OfficeDocument.getVersions")
     public VersionInfo[] getVersions(String repositoryName,String contentId) throws Exception;
     @XmlRpcMethod(methodName="OfficeDocument.publishToPortletContent")
-    public void publishToPortletContent(String repositoryName, String contentId, WebPageInfo webpage) throws Exception;
+    public String publishToPortletContent(String repositoryName, String contentId, WebPageInfo webpage) throws Exception;
 }
