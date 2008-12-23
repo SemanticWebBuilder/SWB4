@@ -117,8 +117,7 @@ public class ImageGallery extends GenericAdmResource {
         }catch(Exception e) {
             log.error(e);
         }
-        out.println(ret.toString());
-        out.println("<br><a href=\"" + paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN) + "\">admin gallery</a>");        
+        out.println(ret.toString());        
     }
     
     @Override
@@ -212,34 +211,6 @@ public class ImageGallery extends GenericAdmResource {
         }
         response.getWriter().print(ret.toString());        
     }
-
-    protected void setAttribute(Portlet base, FileUpload fup, String att)
-    {
-        try
-        {
-            if(null != fup.getValue(att) && !"".equals(fup.getValue(att).trim())) {
-                base.setAttribute(att, fup.getValue(att).trim());
-            }
-            else {
-                base.removeAttribute(att);
-            }        
-        }
-        catch(Exception e) {  log.error("Error while setting resource attribute: "+att + ", "+base.getId() +"-"+ base.getTitle(), e); }
-    }
-
-    protected void setAttribute(Portlet base, FileUpload fup, String att, String value)
-    {
-        try
-        {
-            if(null != fup.getValue(att) && value.equals(fup.getValue(att).trim())) {
-                base.setAttribute(att, fup.getValue(att).trim());
-            }
-            else {
-                base.removeAttribute(att);
-            }        
-        }
-        catch(Exception e) {  log.error("Error while setting resource attribute: "+att + ", "+base.getId() +"-"+ base.getTitle(), e); }
-    } 
     
     private String getForm(javax.servlet.http.HttpServletRequest request, SWBParamRequest paramRequest)
     {
@@ -249,45 +220,44 @@ public class ImageGallery extends GenericAdmResource {
         {
             SWBResourceURL url = paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN);
             url.setAction("update");
+            
+            ret.append("<div class=\"swbform\"> \n");
             ret.append("<form name=\"frmImgGalleryResource_"+base.getId()+"\" method=\"post\" enctype=\"multipart/form-data\" action=\""+ url.toString()+"\"> \n");            
-            ret.append("<div class=\"box\">");
-            ret.append("<table width=\"100%\"  border=\"0\" cellpadding=\"5\" cellspacing=\"0\">");
+            ret.append("<fieldset> \n");
+            ret.append("<table width=\"100%\"  border=\"0\" cellpadding=\"5\" cellspacing=\"0\"> \n");
             ret.append("<tr> \n");
             ret.append("<td colspan=\"2\">");
-            ret.append("<font style=\"color: #428AD4; text-decoration: none; font-family: Verdana; font-size: 12px; font-weight: normal;\">");
-            ret.append(paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_section") +"</font>");
+            ret.append(paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_section"));
             ret.append("</td> \n");
             ret.append("</tr> \n");
             ret.append("\n<tr>");
-            ret.append("\n<td class=\"datos\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_title") + "</td>");
-            ret.append("\n<td class=\"valores\">");
+            ret.append("\n<td>" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_title") + "</td>");
+            ret.append("\n<td>");
             ret.append("\n<input type=\"text\" size=\"50\" maxlength=\"50\" name=\"title\" ");
-            if (!"".equals(base.getAttribute("title", "").trim())) {
-                ret.append(" value=\"" + base.getAttribute("title").trim().replaceAll("\"", "&#34;") + "\"");
-            }
-            ret.append("/></td> \n");
+            ret.append(" value=\"" + base.getAttribute("title", "").trim().replaceAll("\"", "&#34;") + "\" />");
+            ret.append("</td> \n");
             ret.append("\n</tr>");            
             ret.append("\n<tr>");
-            ret.append("\n<td class=\"datos\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_img") + "&nbsp;(<i>bmp, jpg, jpeg, gif, png</i>)</td>");
-            ret.append("\n<td class=\"valores\">");
+            ret.append("\n<td>* " + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_img") + "&nbsp;(<i>bmp, jpg, jpeg, gif, png</i>)</td>");
+            ret.append("\n<td>");
             ret.append("<div id=\"igcontainer_"+base.getId()+"\" style=\"background-color:#F0F0F0; width:602px; height:432px; overflow:visible\">\n");
             ret.append("<table width=\"99%\" border=\"0\" align=\"center\">\n");
             ret.append("<tr>\n");
-            ret.append("<td><span style=\"color:#808000; font-size:12px; font-variant:small-caps; font-weight:bold\">Galería de imágenes</span></td>\n");
+            ret.append("<td><span>" + paramRequest.getLocaleString("usrmsg_ImageGallery_imggrid") + "</span></td>\n");
             ret.append("<td align=\"right\"></td>\n");
             ret.append("<td align=\"right\">\n");
-            ret.append("    <input type=\"button\" value=\"Agregar\" onclick=\"addRowToTable('igtbl_"+base.getId()+"');\" />\n");
-            ret.append("    &nbsp;<input type=\"button\" value=\"Cancelar\" onclick=\"removeRowFromTable('igtbl_"+base.getId()+"');\"/></td>\n");
+            ret.append("    <input type=\"button\" value=\"Agregar\" onclick=\"addRowToTable('igtbl_"+base.getId()+"');\" />&nbsp; \n");
+            ret.append("    <input type=\"button\" value=\"Cancelar\" onclick=\"removeRowFromTable('igtbl_"+base.getId()+"');\"/></td>\n");
             ret.append("</tr>\n");
             ret.append("</table>\n");
             ret.append("<div id=\"iggrid_"+base.getId()+"\" style=\"width:600px;height:400px;left:2px;top:20px;overflow:scroll; background-color:#EFEFEF\">\n");
             ret.append("  <table id=\"igtbl_"+base.getId()+"\" width=\"99%\" cellspacing=\"1\" bgcolor=\"#8fbc8f\" align=\"center\">\n");
             ret.append("  <tr bgcolor=\"#808000\">\n");
-            ret.append("    <th align=\"center\" scope=\"col\" style=\"color:#eee8aa; text-align:center; font-size:12px; height:20px\" width=\"10\" height=\"20\" nowrap=\"nowrap\">&nbsp;</th>\n");
-            ret.append("    <th align=\"center\" scope=\"col\" style=\"color:#eee8aa; text-align:center; font-size:12px; height:20px\" width=\"20\" height=\"20\" nowrap=\"nowrap\">Editar</th>\n");
-            ret.append("    <th align=\"center\" scope=\"col\" style=\"color:#eee8aa; text-align:center; font-size:12px; height:20px\" width=\"30\" height=\"20\" nowrap=\"nowrap\">Eliminar</th>\n");
-            ret.append("    <th align=\"center\" scope=\"col\" style=\"color:#eee8aa; text-align:center; font-size:12px; height:20px\" width=\"40%\" height=\"20\" nowrap=\"nowrap\">Archivo</th>\n");
-            ret.append("    <th align=\"center\" scope=\"col\" style=\"color:#eee8aa; text-align:center; font-size:12px; height:20px\" width=\"40%\" height=\"20\" nowrap=\"nowrap\">Imagen</th>\n");
+            ret.append("    <th align=\"center\" scope=\"col\" style=\"text-align:center;\" width=\"10\" height=\"20\" nowrap=\"nowrap\">&nbsp;</th>\n");
+            ret.append("    <th align=\"center\" scope=\"col\" style=\"text-align:center;\" width=\"20\" height=\"20\" nowrap=\"nowrap\">Editar</th>\n");
+            ret.append("    <th align=\"center\" scope=\"col\" style=\"text-align:center;\" width=\"30\" height=\"20\" nowrap=\"nowrap\">Eliminar</th>\n");
+            ret.append("    <th align=\"center\" scope=\"col\" style=\"text-align:center;\" width=\"40%\" height=\"20\" nowrap=\"nowrap\">Archivo</th>\n");
+            ret.append("    <th align=\"center\" scope=\"col\" style=\"text-align:center;\" width=\"40%\" height=\"20\" nowrap=\"nowrap\">Imagen</th>\n");
             ret.append("  </tr>\n");
             ret.append("</table>\n");
             ret.append("</div>\n");
@@ -296,38 +266,38 @@ public class ImageGallery extends GenericAdmResource {
             ret.append("</tr> \n");
             
             ret.append("\n<tr>");
-            ret.append("\n<td class=\"datos\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_imgwidth") + "</td>");
-            ret.append("\n<td class=\"valores\">");
+            ret.append("\n<td>" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_imgwidth") + "</td>");
+            ret.append("\n<td>");
             ret.append("\n<input type=\"text\" size=\"50\" maxlength=\"50\" name=\"imgwidth\" ");
             ret.append(" value=\"" + base.getAttribute("imgwidth", "220").replaceAll("\"", "&#34;") + "\" />");
             ret.append("\n</td>");
             ret.append("\n</tr>");
             ret.append("\n<tr>");
-            ret.append("\n<td class=\"datos\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_imgheight") + "</td>");
-            ret.append("\n<td class=\"valores\">");
+            ret.append("\n<td>" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_imgheight") + "</td>");
+            ret.append("\n<td>");
             ret.append("\n<input type=\"text\" size=\"50\" maxlength=\"50\" name=\"imgheight\" ");
             ret.append(" value=\"" + base.getAttribute("imgheight", "150").replaceAll("\"", "&#34;") + "\" />");
             ret.append("\n</td>");
             ret.append("\n</tr>");
             
             ret.append("\n<tr>");
-            ret.append("\n<td class=\"datos\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_fullwidth") + "</td>");
-            ret.append("\n<td class=\"valores\">");
+            ret.append("\n<td>" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_fullwidth") + "</td>");
+            ret.append("\n<td>");
             ret.append("\n<input type=\"text\" size=\"50\" maxlength=\"50\" name=\"fullwidth\" ");
             ret.append(" value=\"" + base.getAttribute("fullwidth", "350").replaceAll("\"", "&#34;") + "\" />");
             ret.append("\n</td>");
             ret.append("\n</tr>");
             ret.append("\n<tr>");
-            ret.append("\n<td class=\"datos\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_fullheight") + "</td>");
-            ret.append("\n<td class=\"valores\">");
+            ret.append("\n<td>" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_fullheight") + "</td>");
+            ret.append("\n<td>");
             ret.append("\n<input type=\"text\" size=\"50\" maxlength=\"50\" name=\"fullheight\" ");
             ret.append(" value=\"" + base.getAttribute("fullheight", "280").replaceAll("\"", "&#34;") + "\" />");
             ret.append("\n</td>");
             ret.append("\n</tr>");            
             
             ret.append("\n<tr>");
-            ret.append("\n<td class=\"datos\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_autoplay") + "</td>");
-            ret.append("\n<td class=\"valores\">");
+            ret.append("\n<td>" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_autoplay") + "</td>");
+            ret.append("\n<td>");
             ret.append("\n<input type=\"checkbox\" value=\"true\" name=\"autoplay\" ");
             if ("true".equals(base.getAttribute("autoplay", "false"))) {
                 ret.append(" checked=\"checked\"");
@@ -336,35 +306,36 @@ public class ImageGallery extends GenericAdmResource {
             ret.append("\n</td>");
             ret.append("\n</tr>");
             ret.append("\n<tr>");
-            ret.append("\n<td class=\"datos\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_pause") + "</td>");
-            ret.append("\n<td class=\"valores\">");
+            ret.append("\n<td>" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_pause") + "</td>");
+            ret.append("\n<td>");
             ret.append("\n<input type=\"text\" size=\"50\" maxlength=\"50\" name=\"pause\" ");
             ret.append(" value=\"" + base.getAttribute("pause", "2500").replaceAll("\"", "&#34;") + "\" />");
             ret.append("\n</td>");
             ret.append("\n</tr>");
             ret.append("\n<tr>");
-            ret.append("\n<td class=\"datos\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_fadetime") + "</td>");
-            ret.append("\n<td class=\"valores\">");
+            ret.append("\n<td>" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_fadetime") + "</td>");
+            ret.append("\n<td>");
             ret.append("\n<input type=\"text\" size=\"50\" maxlength=\"50\" name=\"fadetime\" ");
             ret.append(" value=\"" + base.getAttribute("fadetime", "500").replaceAll("\"", "&#34;") + "\" />");
             ret.append("\n</td>");
             ret.append("\n</tr>");
+            ret.append("</table> \n");
+            ret.append("</fieldset>\n");
             
+            ret.append("<fieldset>\n");
+            ret.append("<table width=\"100%\"  border=\"0\" cellpadding=\"5\" cellspacing=\"0\">\n");
             ret.append("\n<tr>");
-            ret.append("\n<td colspan=\"2\" align=\"right\">");
-            ret.append("<br /><hr size=\"1\" noshade=\"noshade\"> \n");
-            ret.append("\n<input type=\"submit\" name=\"btnSave\" class=\"boton\" value=\"" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_submit") + "\" onClick=\"if(jsValida(this.form)) return true; else return false;\"/>&nbsp;");
-            ret.append("<input type=\"reset\" name=\"btnReset\" class=\"boton\" value=\"" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_reset") + "\"/>");
+            ret.append("\n<td>");
+            ret.append("\n<input type=\"submit\" name=\"btnSave\" value=\"" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_submit") + "\" onClick=\"if(jsValida(this.form)) return true; else return false;\"/>&nbsp;");
+            ret.append("\n<input type=\"reset\" name=\"btnReset\" value=\"" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_reset") + "\"/>");
             ret.append("\n</td>");
             ret.append("\n</tr>");
-            ret.append("<tr> \n");
-            ret.append("<td colspan=\"2\" class=\"datos\"><br /><font style=\"color: #428AD4; font-family: Verdana; font-size: 10px;\"> \n");
-            ret.append("* " + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_required"));
-            ret.append("</font></td> \n");
-            ret.append("</tr> \n");
-            ret.append("</table> \n");
-            ret.append("</div> \n");
+            ret.append("</table>\n");
+            ret.append("</fieldset>\n");
+            
             ret.append("</form> \n");
+            ret.append("* " + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_required"));
+            ret.append("</div> \n");
             
             ret.append("<script type=\"text/javascript\">\n");                        
             ret.append("function addRowToTable(tblId, filename, img, cellSufix) {\n");
@@ -512,9 +483,14 @@ public class ImageGallery extends GenericAdmResource {
             ret.append("\n   if(!isHexadecimal(pForm.textcolor)) return false;");
             ret.append("\n   if(pForm.textcolores.value==null || pForm.textcolores.value=='' || pForm.textcolores.value==' ')");
             ret.append("\n       pForm.textcolores.value='#'+ document.selColorBack.getColor();");
-            ret.append("\n   if(!isHexadecimal(pForm.textcolores)) return false;");
-            ret.append("\n   if(!isNumber(pForm.time)) return false;");
-            ret.append("\n   if(!isNumber(pForm.branches)) return false;");
+            ret.append("\n   if(!isHexadecimal(pForm.textcolores)) return false;");*/
+            ret.append("\n   if(!isNumber(pForm.imgwidth)) return false;");
+            ret.append("\n   if(!isNumber(pForm.imgheight)) return false;");
+            ret.append("\n   if(!isNumber(pForm.fullwidth)) return false;");
+            ret.append("\n   if(!isNumber(pForm.fullheight)) return false;");
+            ret.append("\n   if(!isNumber(pForm.pause)) return false;");
+            ret.append("\n   if(!isNumber(pForm.fadetime)) return false;");            
+            /*ret.append("\n   if(!isNumber(pForm.branches)) return false;");
             ret.append("\n   if(!isNumber(pForm.width)) return false;");
             ret.append("\n   if(!isNumber(pForm.height)) return false;");
             ret.append("\n   if(!isNumber(pForm.top)) return false;");
@@ -538,13 +514,15 @@ public class ImageGallery extends GenericAdmResource {
             ret.append(admResUtils.loadUpdateOption());
             ret.append(admResUtils.loadDeleteOption());
             ret.append(admResUtils.loadDuplicateOption());
-            ret.append(admResUtils.loadIsFileType());
+            ret.append(admResUtils.loadIsFileType());*/
             ret.append(admResUtils.loadIsNumber());
-            ret.append(admResUtils.loadSetPrefix());
+            /*ret.append(admResUtils.loadSetPrefix());
             ret.append(admResUtils.loadIsHexadecimal());*/
             ret.append("\n</script>");
         }
-        catch(Exception e) {  log.error(e); }
+        catch(Exception e) {
+            log.error(e); 
+        }
         return ret.toString();
     }
     
