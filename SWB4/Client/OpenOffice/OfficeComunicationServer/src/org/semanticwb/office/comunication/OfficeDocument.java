@@ -560,7 +560,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             }
         }
     }
-    public void publishToPortletContent(String repositoryName, String contentId, WebPageInfo webpage) throws Exception
+    public String publishToPortletContent(String repositoryName, String contentId, WebPageInfo webpage) throws Exception
     {
         WebSite site = SWBContext.getWebSite(webpage.siteID);
         WebPage parent = site.getWebPage(webpage.id);
@@ -587,6 +587,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 portlet=new WordPortlet(WordPortlet.swbrep_WordPortlet.newInstance(id));
             }
             parent.addPortlet(portlet);
+            return id;
 
         }
         catch (Exception e)
