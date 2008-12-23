@@ -230,9 +230,6 @@ public class QueryResource extends GenericAdmResource {
                     SWBParamRequest.Call_DIRECT).setMode("excel_file")
                     + "\">" + paramsRequest.getLocaleLogString("usrmsg_ExcelFile")
                     + "</a>");
-            webOut.println("<br><a href=\"" 
-                    + paramsRequest.getRenderUrl().setMode(SWBParamRequest.Mode_ADMIN)
-                    + "\">QueryResource admin</a>");
         }
     }
 
