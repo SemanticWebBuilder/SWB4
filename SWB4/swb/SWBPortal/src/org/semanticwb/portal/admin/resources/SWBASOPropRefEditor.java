@@ -8,33 +8,13 @@ package org.semanticwb.portal.admin.resources;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DateFormat;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Locale;
+import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.semanticwb.Logger;
-import org.semanticwb.SWBPlatform;
-import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Activeable;
-import org.semanticwb.model.Descriptiveable;
-import org.semanticwb.model.Portlet;
-import org.semanticwb.model.Priorityable;
-import org.semanticwb.model.SWBContext;
-import org.semanticwb.model.SWBVocabulary;
-import org.semanticwb.model.Traceable;
-import org.semanticwb.model.User;
-import org.semanticwb.platform.SemanticClass;
-import org.semanticwb.platform.SemanticObject;
-import org.semanticwb.platform.SemanticOntology;
-import org.semanticwb.platform.SemanticProperty;
-import org.semanticwb.portal.api.GenericResource;
-import org.semanticwb.portal.api.SWBActionResponse;
-import org.semanticwb.portal.api.SWBParamRequest;
-import org.semanticwb.portal.api.SWBResourceException;
-import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.*;
+import org.semanticwb.model.*;
+import org.semanticwb.platform.*;
+import org.semanticwb.portal.api.*;
 
 
 /**
@@ -61,7 +41,7 @@ public class SWBASOPropRefEditor extends GenericResource {
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
-        log.debug("doEdit(SWBASOPropRefEditor...)");
+        log.debug("doEdit()");
         base = getResourceBase();
         PrintWriter out = response.getWriter();
         User user = paramRequest.getUser();
@@ -69,16 +49,18 @@ public class SWBASOPropRefEditor extends GenericResource {
         String idp = request.getParameter("sprop");
         String idpref = request.getParameter("spropref");
 
-        String action = request.getParameter("act");
+        log.debug("suri: "+id);
+        log.debug("sprop: "+idp);
+        log.debug("spropref: "+idpref);
 
-        if (id == null) {
-            id = paramRequest.getTopic().getWebSiteId();
-        }
+        String action = request.getParameter("act");
         if (action == null) {
             action = "";
         }
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
-        SemanticObject obj = ont.getSemanticObject(id);
+        GenericObject gobj = ont.getGenericObject(id);
+        SemanticObject obj = gobj.getSemanticObject();
+        SemanticObject refObj = null;
         SemanticClass cls = obj.getSemanticClass();
         String title = cls.getName();
 
@@ -86,10 +68,11 @@ public class SWBASOPropRefEditor extends GenericResource {
         url.setAction("update");
 
         if (action.equals(""))
-          { //lista de instancias de tipo propiedad existentes para selecionar
+          {
+            //lista de instancias de tipo propiedad existentes para selecionar
             SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(idp);
             SemanticClass clsprop = prop.getRangeClass();
-            log.debug("class: "+clsprop.getClassName());
+            log.debug("CLASE: "+clsprop.getClassName());
             HashMap hmprop = new HashMap();
             Iterator<SemanticProperty> ite_sp= clsprop.listProperties();
             while(ite_sp.hasNext())
@@ -98,16 +81,21 @@ public class SWBASOPropRefEditor extends GenericResource {
                 log.debug("propiedad:"+sp.getDisplayName()+"---"+sp.getName());
                 hmprop.put(sp, sp);
             }
+
+            if(gobj instanceof TemplateRef)
+            {
+                log.debug("TemplateRef");
+
+            }
+
+
+
             SemanticProperty sptemp=null;
 
             title = clsprop.getName();
             out.println("<div class=\"swbform\">");
             out.println("<fieldset>");
-//            out.println("	<legend>" + prop.getDisplayName(user.getLanguage()) + "</legend>");
             out.println("<table width=\"98%\">");
-//            out.println("<caption>");
-//            out.println(getDisplaySemObj(obj,user.getLanguage()));
-//            out.println("</caption>");
             out.println("<thead>");
             out.println("<tr>");
             out.println("<th>");
@@ -173,10 +161,8 @@ public class SWBASOPropRefEditor extends GenericResource {
                 SemanticObject sobj = itso.next();
                 SemanticClass clsobj=sobj.getSemanticClass();
                 log.debug("Clase:"+clsobj.getName());
-                
                 String stitle = getDisplaySemObj(sobj,user.getLanguage());
                 out.println("<tr>"); 
-                
                 out.println("<td>"); 
                 SWBResourceURL urlr = paramRequest.getActionUrl();
                 urlr.setParameter("suri", id);
@@ -190,7 +176,6 @@ public class SWBASOPropRefEditor extends GenericResource {
                 out.println("<td>");
 
                 // Edición del elemento, abre un nuevo tab
-
                 SWBResourceURL urlchoose = paramRequest.getRenderUrl();
                 urlchoose.setParameter("suri", id);
                 urlchoose.setParameter("sprop", idp);
@@ -201,7 +186,6 @@ public class SWBASOPropRefEditor extends GenericResource {
                 if(idpref!=null)urlchoose.setParameter("rspropref", idpref);
                 urlchoose.setParameter("act", "edit");
                 out.println("<a href=\"#\"  onclick=\"addNewTab('" + sobj.getURI() + "','"+sobj.getDisplayName()+"','"+SWBPlatform.getContextPath()+"/swbadmin/jsp/objectTab.jsp');return false;\" >" + stitle + "</a>"); //onclick=\"submitUrl('"+urlchoose+"',this); return false;\"
-                //out.println(stitle); 
                 out.println("</td>");
                 if(hmprop.get(Priorityable.swb_priority)!=null)
                 {
@@ -228,7 +212,6 @@ public class SWBASOPropRefEditor extends GenericResource {
                     out.println("                   <option value=\"4\" "+op4+" >" + paramRequest.getLocaleString("high") + "</option>");
                     out.println("                   <option value=\"5\" "+op5+" >" + paramRequest.getLocaleString("priority") + "</option>");
                     out.println("               </select>");
-
                     //out.println("<input type=\"text\" name=\""+semprop.getName()+"\" onblur=\"submitUrl('"+urlu+"&"+semprop.getName()+"='+this.value,this); return false;\" value=\""+getValueSemProp(sobj, semprop)+"\" />");
                     out.println("</td>");
                 }
@@ -284,8 +267,10 @@ public class SWBASOPropRefEditor extends GenericResource {
         else if (action.equals("choose"))  //lista de instancias de tipo propiedad existentes para selecionar
         {
             SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(idp);
-            if(idpref!=null) prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(idpref);
-            SemanticClass clsprop = prop.getRangeClass();
+            SemanticProperty propref =null;
+            if(idpref!=null) propref = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(idpref);
+
+            SemanticClass clsprop = propref.getRangeClass();
             title = clsprop.getName();
             
             HashMap hmSO = new HashMap();
@@ -293,20 +278,25 @@ public class SWBASOPropRefEditor extends GenericResource {
             while (ite_so.hasNext()) {
                 SemanticObject so = ite_so.next();
                 if (null != so) {
-                    hmSO.put(so.getURI(), so);
+                    SemanticObject soref = so.getObjectProperty(propref);
+                    hmSO.put(soref.getURI(), soref);
+ //                   log.debug(soref.getURI()+" -- HashMap");
                 }
             }
-            out.println("<form id=\""+id+"/chooseSO\" action=\"" + url + "\" method=\"get\" class=\"swbform\" onsubmit=\"submitUrl('"+url+"',this); return false;\">");
+            out.println("<div class=\"swbform\">");
+            out.println("<form id=\""+id+"/chooseSO\" action=\"" + url + "\" method=\"get\"  onsubmit=\"submitUrl('"+url+"',this); return false;\">");
             out.println("<input type=\"hidden\" name=\"suri\" value=\"" + obj.getURI() + "\">");
             out.println("<fieldset>");
-            out.println("	<legend> Choose - " + prop.getDisplayName(user.getLanguage()) + " ( " + getDisplaySemObj(obj,user.getLanguage()) + " )</legend>");
-            out.println("	<ol>");
+            out.println("<table width=\"98%\">");
+            //out.println("	<legend> Choose - " + prop.getDisplayName(user.getLanguage()) + " ( " + getDisplaySemObj(obj,user.getLanguage()) + " )</legend>");
             log.debug("Clase: "+clsprop.getName());
             Iterator<SemanticObject> itso = obj.getModel().listInstancesOfClass(clsprop);
             while (itso.hasNext()) {
                 SemanticObject sobj = itso.next();
                 String stitle = getDisplaySemObj(sobj,user.getLanguage());
-                out.println("<li><label for=\"" + stitle + "\">" + stitle + " <em>*</em></label> ");
+                out.println("<tr>");
+                out.println("<td>" + stitle + "</td> ");
+                log.debug(sobj.getURI()+"choose");
                 if (hmSO.get(sobj.getURI()) == null) {
                     SWBResourceURL urlchoose = paramRequest.getActionUrl();
                     urlchoose.setAction("new"); //choose
@@ -314,27 +304,33 @@ public class SWBASOPropRefEditor extends GenericResource {
                     urlchoose.setParameter("sprop", idp); 
                     if(idpref!=null)urlchoose.setParameter("spropref", idpref); 
                     urlchoose.setParameter("sobj", sobj.getURI());
+                    out.println("<td>");
                     out.println("<a href=\"#\" onclick=\"submitUrl('"+urlchoose+"',this); return false;\">" + stitle + "</a>");
+                    out.println("</td> ");
                 } 
                 else
                 {
-                //    out.println(stitle);
+                    out.println("<td>");
+                    out.println(title +" in use. ");
+                    out.println("</td>");
                 }
-                out.println("</li>");
+              out.println("</tr>");
             }
-            out.println("	</ol>");
+            out.println("	</table>");
             out.println("</fieldset>");
+            out.println("<fieldset>");
             SWBResourceURL urlBack = paramRequest.getRenderUrl();
             if(request.getParameter("suri")!=null)urlBack.setParameter("suri", id);
             if(request.getParameter("sprop")!=null)urlBack.setParameter("sprop", idp);
             if(request.getParameter("spropref")!=null)urlBack.setParameter("spropref", idpref);
             urlBack.setParameter("act", "");
-            out.println("<p><button dojoType=\"dijit.form.Button\" type=\"button\" onclick=\"submitUrl('"+url+"',this); return false;\" >Guardar</button>");
+            out.println("<button dojoType=\"dijit.form.Button\" type=\"button\" onclick=\"submitUrl('"+url+"',this); return false;\" >Guardar</button>");
             if (id!=null&&idp!=null&&idpref!=null) {
                 out.println("<button dojoType=\"dijit.form.Button\" type=\"button\" onclick=\"submitUrl('" + urlBack + "',document.getElementById('"+id+"/chooseSO')); return false;\" >Regresar</button>");
             }
-            out.println("</p>");
+            out.println("</fieldset>");
             out.println("</form>");
+            out.println("</div>");
         }
     }
 
@@ -456,22 +452,25 @@ public class SWBASOPropRefEditor extends GenericResource {
         else if ("remove".equals(action)) //suri, prop
         {
             log.debug("SWASemObjectEditor.processAction(remove)");
-            Iterator<SemanticProperty> it = cls.listProperties();
-            while (it.hasNext()) {
-                SemanticProperty prop = it.next();
-                String value = request.getParameter(prop.getName());
-                String sval = request.getParameter("sval");
-                log.debug(prop.getURI() + ":" + sprop + "----" + (prop.getURI().equals(sprop) ? "true" : "false"));
-                if (value != null && value.equals(sprop)) { //se tiene que validar el valor por si es mÃ¡s de una
-                    if (sval != null) {
-                        obj.removeObjectProperty(prop, ont.getSemanticObject(sval));
-                        if(prop.getName().equalsIgnoreCase("userrepository")){
-                            obj.setObjectProperty(prop, ont.getSemanticObject("urswb"));
-                        }
-                    }
-                    break;
-                }
-            }
+            String sval = request.getParameter("sval");
+            SemanticObject sobj = ont.getSemanticObject(sval);
+            sobj.remove();
+//            Iterator<SemanticProperty> it = cls.listProperties();
+//            while (it.hasNext()) {
+//                SemanticProperty prop = it.next();
+//                String value = request.getParameter(prop.getName());
+//                String sval = request.getParameter("sval");
+//                log.debug(prop.getURI() + ":" + sprop + "----" + (prop.getURI().equals(sprop) ? "true" : "false"));
+//                if (value != null && value.equals(sprop)) { //se tiene que validar el valor por si es mÃ¡s de una
+//                    if (sval != null) {
+//                        obj.removeObjectProperty(prop, ont.getSemanticObject(sval));
+//                        if(prop.getName().equalsIgnoreCase("userrepository")){
+//                            obj.setObjectProperty(prop, ont.getSemanticObject("urswb"));
+//                        }
+//                    }
+//                    break;
+//                }
+//            }
             if (id != null)response.setRenderParameter("suri", id);
             if (sprop != null)response.setRenderParameter("sprop", sprop);
             if (spropref != null)response.setRenderParameter("spropref", spropref);
