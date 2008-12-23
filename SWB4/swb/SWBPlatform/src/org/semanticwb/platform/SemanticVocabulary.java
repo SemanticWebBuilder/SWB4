@@ -75,16 +75,19 @@ public class SemanticVocabulary
     public static final String SWB_ANNOT_CLASSNAME=URI+"className";
     public static final String SWB_ANNOT_AUTOGENID=URI+"autogenId";
     public static final String SWB_ANNOT_CANUSEDASNAME=URI+"canUsedAsName";
+    public static final String SWB_PROP_CLASSID=URI+"classID";
     
     //public static final String SWB_NS="swbns";
 
     public HashMap<String, SemanticClass> classes;
     public HashMap<String, SemanticProperty> properties;
+    public HashMap<String, SemanticClass> clsbyid;
     
     
     public SemanticVocabulary()
     {
         classes=new HashMap();
+        clsbyid=new HashMap();
         properties=new HashMap();
     }
     
@@ -120,6 +123,8 @@ public class SemanticVocabulary
     void addSemanticClass(SemanticClass tpc)
     {
         classes.put(tpc.getURI(), tpc);
+        String clsid=tpc.getClassID();
+        if(clsid!=null)clsbyid.put(clsid, tpc);
     }
     
     public Iterator<SemanticClass> listSemanticClasses()
@@ -145,6 +150,12 @@ public class SemanticVocabulary
         }
         return cls;
     }
+
+    public SemanticClass getSemanticClassByID(String classID)
+    {
+        return clsbyid.get(classID);
+    }
+
     
     void addSemanticProperty(SemanticProperty tpp)
     {
