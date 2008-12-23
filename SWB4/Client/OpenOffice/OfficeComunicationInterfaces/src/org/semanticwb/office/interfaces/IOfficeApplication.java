@@ -56,4 +56,13 @@ public interface IOfficeApplication
 
     @XmlRpcMethod(methodName = "OfficeApplication.openContent")
     public String openContent(String repositoryName,VersionInfo versioninfo) throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeApplication.getSites")
+    public WebSiteInfo[] getSites() throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeApplication.getHomePage")
+    public WebPageInfo getHomePage(WebSiteInfo website) throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeApplication.getPages")
+    public WebPageInfo[] getPages(WebPageInfo webpage) throws Exception;
 }
