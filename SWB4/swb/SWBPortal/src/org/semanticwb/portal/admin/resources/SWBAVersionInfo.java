@@ -39,7 +39,6 @@ public class SWBAVersionInfo extends GenericResource {
     String webpath = SWBPlatform.getContextPath();
     Portlet base;
     SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
-    SWBVocabulary voc = SWBContext.getVocabulary();
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -181,7 +180,7 @@ public class SWBAVersionInfo extends GenericResource {
 
             //WBFormElement sfe = new SWBFormElement(so);
 
-            fm = new SWBFormMgr(voc.swb_VersionInfo, soref,null);
+            fm = new SWBFormMgr(VersionInfo.swb_VersionInfo, soref,null);
             fm.addHiddenParameter("suri", id);
             fm.addHiddenParameter("psuri", id);
             //fm.addHiddenParameter("sobj", so.getURI());
@@ -195,10 +194,10 @@ public class SWBAVersionInfo extends GenericResource {
             out.println("<tbody>");
             out.println("<tr>");
             out.println("<td>");
-            out.println(fm.renderElement(voc.swb_versionComment.getLabel())!=null?fm.renderElement(voc.swb_versionComment.getLabel()):"Comment");
+            out.println(fm.renderElement(VersionInfo.swb_versionComment.getLabel())!=null?fm.renderElement(VersionInfo.swb_versionComment.getLabel()):"Comment");
             out.println("</td>");
             out.println("<td>");
-            out.println(fm.renderElement(voc.swb_versionComment,SWBFormMgr.MODE_EDIT));
+            out.println(fm.renderElement(VersionInfo.swb_versionComment,SWBFormMgr.MODE_EDIT));
             out.println("</td>");
             out.println("</tr>");
             out.println("</tbody>");
@@ -264,7 +263,7 @@ public class SWBAVersionInfo extends GenericResource {
                 log.debug("processAction. newVersion(Versionable)");
                 Versionable gov = (Versionable) go;
                 SemanticObject sobase = ont.getSemanticObject(id);
-                SemanticClass sc = voc.swb_VersionInfo;
+                SemanticClass sc = VersionInfo.swb_VersionInfo;
                 long lid = 0;
                 if (sc.isAutogenId()) {
                     lid = SWBPlatform.getSemanticMgr().getCounter(sobase.getModel().getName() + "/" + sc.getName());
@@ -300,7 +299,7 @@ public class SWBAVersionInfo extends GenericResource {
             String idval = request.getParameter("sval");
             SemanticObject sobase = ont.getSemanticObject(id);
             SemanticObject soactual = ont.getSemanticObject(idval);
-            sobase.setObjectProperty(voc.swb_actualVersion, soactual);
+            sobase.setObjectProperty(Versionable.swb_actualVersion, soactual);
             response.setRenderParameter(act, "");
             response.setMode(response.Mode_VIEW);
         } else if ("remove".equals(act)) {
