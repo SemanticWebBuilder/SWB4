@@ -277,30 +277,39 @@ public class SWBASOPropRefEditor extends GenericResource {
                 {
                     SemanticProperty semprop = (SemanticProperty)hmprop.get(Inheritable.swb_inherita);
                     SemanticObject semobj = sobj.getObjectProperty(spref);
-                    DisplayProperty dobj=new DisplayProperty(semobj);
+                    DisplayProperty dobj=new DisplayProperty(semprop.getDisplayProperty());
                     String pmsg=dobj.getPromptMessage();
                     String imsg=dobj.getInvalidMessage();
                     String selectValues=dobj.getSelectValues(user.getLanguage());
                     log.debug("selectValues: "+selectValues);
-                    out.println("<td>");
+                    out.println("<td allign=\"center\">");
                     if(selectValues!=null)
                     {
-                        String value=getValueSemProp(semobj,semprop);
-
-                        out.println("<select  id=\"" + id + "/"+base.getId()+"/"+sobj.getURI()+"/INESO\" name=\"" +semprop.getName()+ "\"  dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"false\" hasDownArrow=\"true\" style=\"width:90px;\" >"); //onchange=\"submitUrl('"+urlu+"&"+semprop.getName()+"='+dijit.byId('" + id + "/"+base.getId()+"/"+sobj.getURI()+"/PSO').getValue(),this.domNode); return false;\"
+                        String value=getValueSemProp(sobj,semprop);
+                        if(null==value||"Not set".equals(value.trim())) value="1";
+                        int ivalue=Integer.parseInt(value);
+                        SWBResourceURL urluinh = paramRequest.getActionUrl();
+                        urluinh.setParameter("suri", id);
+                        urluinh.setParameter("sprop", idp);
+                        urluinh.setParameter("sval", sobj.getURI());
+                        urluinh.setParameter("spropref", idpref);
+                        urluinh.setAction("updinherit");
+                        out.println("<select  id=\"" + id + "/"+base.getId()+"/"+sobj.getURI()+"/INESO\" name=\"p_inherita\"  dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"false\" hasDownArrow=\"true\" style=\"width:120px;\" onchange=\"submitUrl('"+urluinh+"&p_inherita='+dijit.byId('" + id + "/"+base.getId()+"/"+sobj.getURI()+"/INESO').getValue(),this.domNode); return false;\">");
                         StringTokenizer st=new StringTokenizer(selectValues,"|");
                         while(st.hasMoreTokens())
                         {
                             String tok=st.nextToken();
                             int ind=tok.indexOf(':');
                             String idt=tok;
+                            int ival = 1;
                             String val=tok;
                             if(ind>0)
                             {
                                 idt=tok.substring(0,ind);
+                                ival = Integer.parseInt(idt);
                                 val=tok.substring(ind+1);
                             }
-                            out.println("<option value=\""+idt+"\" "+(idt.equals(value)?"selected":"")+">");
+                            out.println("<option value=\""+ival+"\" "+(ival==ivalue?"selected":"")+">");
                             out.println(val);
                             out.println("</option>");
                         }
@@ -330,7 +339,7 @@ public class SWBASOPropRefEditor extends GenericResource {
                     else if("3".equals(val)) op3="selected";
                     else if("4".equals(val)) op4="selected";
                     else if("5".equals(val)) op5="selected";
-                    out.println("               <select  id=\"" + id + "/"+base.getId()+"/"+sobj.getURI()+"/PSO\" name=\"" +semprop.getName()+ "\"  dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"false\" hasDownArrow=\"true\" style=\"width:90px;\" onchange=\"submitUrl('"+urlu+"&"+semprop.getName()+"='+dijit.byId('" + id + "/"+base.getId()+"/"+sobj.getURI()+"/PSO').getValue(),this.domNode); return false;\">");
+                    out.println("               <select  id=\"" + id + "/"+base.getId()+"/"+sobj.getURI()+"/PSO\" name=\"" +semprop.getName()+ "\"  dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"false\" hasDownArrow=\"true\" style=\"width:100px;\" onchange=\"submitUrl('"+urlu+"&"+semprop.getName()+"='+dijit.byId('" + id + "/"+base.getId()+"/"+sobj.getURI()+"/PSO').getValue(),this.domNode); return false;\">");
                     out.println("                   <option value=\"1\" "+op1+" >" + paramRequest.getLocaleString("defecto") + "</option>");
                     out.println("                   <option value=\"2\" "+op2+" >" + paramRequest.getLocaleString("low") + "</option>");
                     out.println("                   <option value=\"3\" "+op3+" >" + paramRequest.getLocaleString("media") + "</option>");
@@ -515,6 +524,21 @@ public class SWBASOPropRefEditor extends GenericResource {
             if (spropref != null)response.setRenderParameter("spropref", spropref);
             
         }
+        else if ("updinherit".equals(action)) {
+            String soid = request.getParameter("sval");
+            String value = request.getParameter("p_inherita");
+            if(value==null) value="1";
+            SemanticObject sobj = ont.getSemanticObject(soid);
+            sobj.setLongProperty(Inheritable.swb_inherita, Long.parseLong(value));
+
+            SemanticClass scls = sobj.getSemanticClass();
+            log.debug("ProcessAction(updinherit):"+scls.getClassName()+", value:"+value);
+
+            if (id != null)response.setRenderParameter("suri", id);
+            if (sprop != null)response.setRenderParameter("sprop", sprop);
+            if (spropref != null)response.setRenderParameter("spropref", spropref);
+
+        }
         // revisar para agregar nuevo semantic object
         else if ("new".equals(action)) {
 
@@ -664,7 +688,7 @@ public class SWBASOPropRefEditor extends GenericResource {
         try {
             if(prop.isDataTypeProperty())
             {
-                log.debug("getValueSemProp..."+obj.getProperty(prop));
+                log.debug("getValueSemProp("+prop.getName()+")"+obj.getProperty(prop));
                 if (prop.isBoolean()) {
                     ret=""+obj.getBooleanProperty(prop);
                 }
