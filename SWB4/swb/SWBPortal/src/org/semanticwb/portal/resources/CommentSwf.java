@@ -400,9 +400,6 @@ public class CommentSwf extends Comment {
             ret.append("<div class=\"swbform\">");
             ret.append("<form name=\"frmResource\" method=\"post\" enctype=\"multipart/form-data\" action=\""
                     + url.toString() + "\"> \n");
-            ret.append("<table>");
-            ret.append("<tr> \n");
-            ret.append("<td>\n");
             ret.append("<fieldset>\n");
             ret.append("<table>");
             ret.append("<tr> \n");
@@ -684,10 +681,6 @@ public class CommentSwf extends Comment {
             ret.append("</tr> \n");
             ret.append("</table> \n");
             ret.append("</fieldset>\n");
-            ret.append("\n</td>");
-            ret.append("\n</tr>");
-            ret.append("<tr> \n");
-            ret.append("\n<td>");
             ret.append("<fieldset>\n");
             ret.append("\n<input type=submit name=btnSave value="
                     + paramsRequest.getLocaleString("btnSubmit")
@@ -695,14 +688,7 @@ public class CommentSwf extends Comment {
             ret.append("<input type=reset name=btnReset value="
                     + paramsRequest.getLocaleString("btnReset") + ">");
             ret.append("</fieldset>\n");
-            ret.append("\n</td>");
-            ret.append("\n</tr>");
-            ret.append("<tr> \n");
-            ret.append("\n<td><br>");
-            ret.append("\n* " + paramsRequest.getLocaleString("msgRequiredData"));
-            ret.append("\n</td>");
-            ret.append("\n</tr>");
-            ret.append("</table> \n");
+            ret.append("\n<br>* " + paramsRequest.getLocaleString("msgRequiredData"));
             ret.append("</form> \n");
             ret.append("</div> \n");
             ret.append(getScript(request, paramsRequest));
