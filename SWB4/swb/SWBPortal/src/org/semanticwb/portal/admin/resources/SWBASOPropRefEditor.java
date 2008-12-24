@@ -237,22 +237,26 @@ public class SWBASOPropRefEditor extends GenericResource {
                 if(hmprop.get(Template.swb_language)!=null)
                 {
                     SemanticProperty semprop = (SemanticProperty)hmprop.get(Template.swb_language);
+                    SemanticObject semobj = sobj.getObjectProperty(spref);
                     out.println("<td>");
-                    out.println(getValueSemProp(sobj,semprop));
+                    out.println(getValueSemProp(semobj.getObjectProperty(semprop),Descriptiveable.swb_title));
+                    //out.println(sobj.getURI());
                     out.println("</td>");
                 }
                 if(hmprop.get(Traceable.swb_modifiedBy)!=null)
                 {
                     SemanticProperty semprop = (SemanticProperty)hmprop.get(Traceable.swb_modifiedBy);
+                    SemanticObject semobj = sobj.getObjectProperty(spref);
                     out.println("<td>");
-                    out.println(getValueSemProp(sobj,semprop));
+                    out.println(getValueSemProp(semobj.getObjectProperty(semprop),Descriptiveable.swb_title));
                     out.println("</td>");
                 }
                 if(hmprop.get(Template.swb_templateGroup)!=null)
                 {
                    SemanticProperty semprop = (SemanticProperty)hmprop.get(Template.swb_templateGroup);
+                    SemanticObject semobj = sobj.getObjectProperty(spref);
                     out.println("<td>");
-                    out.println(getValueSemProp(sobj,semprop));
+                    out.println(getValueSemProp(semobj.getObjectProperty(semprop),Descriptiveable.swb_title));
                     out.println("</td>");
                 }
                 if(hmprop.get(Traceable.swb_created)!=null)
@@ -272,8 +276,40 @@ public class SWBASOPropRefEditor extends GenericResource {
                 if(hmprop.get(Inheritable.swb_inherita)!=null)
                 {
                     SemanticProperty semprop = (SemanticProperty)hmprop.get(Inheritable.swb_inherita);
+                    SemanticObject semobj = sobj.getObjectProperty(spref);
+                    DisplayProperty dobj=new DisplayProperty(semobj);
+                    String pmsg=dobj.getPromptMessage();
+                    String imsg=dobj.getInvalidMessage();
+                    String selectValues=dobj.getSelectValues(user.getLanguage());
+                    log.debug("selectValues: "+selectValues);
                     out.println("<td>");
-                    out.println(getValueSemProp(sobj,semprop));
+                    if(selectValues!=null)
+                    {
+                        String value=getValueSemProp(semobj,semprop);
+
+                        out.println("<select  id=\"" + id + "/"+base.getId()+"/"+sobj.getURI()+"/INESO\" name=\"" +semprop.getName()+ "\"  dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"false\" hasDownArrow=\"true\" style=\"width:90px;\" >"); //onchange=\"submitUrl('"+urlu+"&"+semprop.getName()+"='+dijit.byId('" + id + "/"+base.getId()+"/"+sobj.getURI()+"/PSO').getValue(),this.domNode); return false;\"
+                        StringTokenizer st=new StringTokenizer(selectValues,"|");
+                        while(st.hasMoreTokens())
+                        {
+                            String tok=st.nextToken();
+                            int ind=tok.indexOf(':');
+                            String idt=tok;
+                            String val=tok;
+                            if(ind>0)
+                            {
+                                idt=tok.substring(0,ind);
+                                val=tok.substring(ind+1);
+                            }
+                            out.println("<option value=\""+idt+"\" "+(idt.equals(value)?"selected":"")+">");
+                            out.println(val);
+                            out.println("</option>");
+                        }
+                        out.println("</select>");
+                    }
+                    else
+                    {
+                        out.println(getValueSemProp(semobj,semprop));
+                    }
                     out.println("</td>");
                 }
                 if(hmprop.get(Priorityable.swb_priority)!=null)
@@ -641,7 +677,11 @@ public class SWBASOPropRefEditor extends GenericResource {
                 if (prop.isDateTime()) {
                     ret=""+obj.getDateProperty(prop);
                 }
-            } 
+            }
+            else if(prop.isObjectProperty())
+            {
+                ret = obj.getObjectProperty(prop).getURI();
+            }
         } catch (Exception e) {
             ret = "Not set";
         }
