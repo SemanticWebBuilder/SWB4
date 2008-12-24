@@ -1087,9 +1087,6 @@ public class Comment extends GenericResource {
             ret.append("<form name=\"frmResource\" method=\"post\" enctype=\"multipart/form-data\" action=\"");
             ret.append(url.toString());
             ret.append("\"> \n");
-            ret.append("<table>");
-            ret.append("<tr> \n");
-            ret.append("<td>");
             ret.append("<fieldset>");
             ret.append("<table>");
             ret.append("<tr> \n");
@@ -1443,14 +1440,10 @@ public class Comment extends GenericResource {
             ret.append("</tr> \n");
             ret.append("</table> \n");
             ret.append("</fieldset>\n");
-            ret.append("</td> \n");
-            ret.append("</tr> \n");
+            ret.append("<fieldset>\n");
+            ret.append("<table> \n");
             ret.append("<tr> \n");
             ret.append("\n<td>");
-/*            ret.append("<table> \n");
-            ret.append("<tr> \n");
-            ret.append("\n<td>");*/
-            ret.append("<fieldset>\n");
             ret.append("\n<input type=submit name=btnSave value="
                     + paramsRequest.getLocaleString("btnSubmit")
                     + " onClick=\"if(jsValida(this.form, " + i + ", '" + area
@@ -1458,18 +1451,11 @@ public class Comment extends GenericResource {
                     + "')) return true; else return false;\">&nbsp;");
             ret.append("<input type=reset name=btnReset value="
                     + paramsRequest.getLocaleString("btnReset") + ">");
+            ret.append("\n</td>");
+            ret.append("\n</tr>");
+            ret.append("\n</table>");
             ret.append("</fieldset>\n");
-/*            ret.append("\n</td>");
-            ret.append("\n</tr>");
-            ret.append("\n</table>");*/
-            ret.append("\n</td>");
-            ret.append("\n</tr>");
-            ret.append("<tr> \n");
-            ret.append("\n<td><br>");
-            ret.append("\n* " + paramsRequest.getLocaleString("msgRequiredData"));
-            ret.append("\n</td>");
-            ret.append("\n</tr>");          
-            ret.append("</table> \n");
+            ret.append("\n<br>* " + paramsRequest.getLocaleString("msgRequiredData"));
             ret.append("</form> \n");
             ret.append("</div> \n");
             ret.append(getScript(request, paramsRequest));
