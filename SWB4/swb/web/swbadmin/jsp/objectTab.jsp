@@ -10,29 +10,39 @@
     if(res==null)return;
     SemanticClass cls=ont.getSemanticObjectClass(res);
     GenericObject obj=ont.getGenericObject(id,cls);
-    out.println("<div dojoType=\"dijit.layout.TabContainer\" region=\"center\" style=\"width=100%;height=100%;\" id=\""+id+"/tab2\" _tabPosition=\"bottom\" _selectedChild=\"btab1\">");
+    out.println("<div dojoType=\"dijit.layout.TabContainer\" region=\"center\" style=\"width=100%;height=100%;\" id=\""+id+"/tab2\" _tabPosition=\"bottom\" onSelected=\"alert('hola');\" nested=\"true\" _selectedChild=\"btab1\">");
     //out.println("    <script type=\"dojo/method\" event=\"onClick\" args=\"item\">");
     //out.println("       alert(item);");
     //out.println("    </script>");
 
-    Iterator<ObjectBehavior> obit=SWBComparator.sortSortableObject(ObjectBehavior.swbxf_ObjectBehavior.listGenericInstances(true));
+    Iterator<ObjectBehavior> obit=SWBComparator.sortSermanticObjects(ObjectBehavior.swbxf_ObjectBehavior.listGenericInstances(true));
+    //Iterator<ObjectBehavior> obit=SWBComparator.sortSermanticObjects(new GenericIterator(ObjectBehavior.swbxf_ObjectBehavior, obj.getSemanticObject().getModel().listInstancesOfClass(ObjectBehavior.swbxf_ObjectBehavior)));
     while(obit.hasNext())
     {
         ObjectBehavior ob=obit.next();
+        if(!ob.isVisible())continue;
+
         String title=ob.getDisplayName(lang);
         //DisplayObject dpobj=ob.getDisplayObject();
         SemanticObject interf=ob.getInterface();
         boolean refresh=ob.isRefreshOnShow();
-        String url=ob.getParsedURL();
+        //String url=ob.getParsedURL();
+        String url=ob.getUrl();
         //System.out.println("ob:"+ob.getTitle(lang)+" "+ob.getDisplayObject()+" "+ob.getInterface()+" "+ob.getURL());
 
         String params="suri="+URLEncoder.encode(obj.getURI());
-        Iterator<ResourceParameter> prmit=ob.listParams();
-        while(prmit.hasNext())
+
+        String bp=ob.getBehaviorParams();
+        if(bp!=null)
         {
-            ResourceParameter rp=prmit.next();
-            params+="&"+rp.getName()+"="+rp.getValue().getEncodedURI();
+            params+="&"+SWBUtils.TEXT.replaceAll(bp, "swb:", URLEncoder.encode(SemanticVocabulary.URI));
         }
+//        Iterator<ResourceParameter> prmit=ob.listParams();
+//        while(prmit.hasNext())
+//        {
+//            ResourceParameter rp=prmit.next();
+//            params+="&"+rp.getName()+"="+rp.getValue().getEncodedURI();
+//        }
         //System.out.println("params:"+params);
         //Genericos
         boolean addDiv=false;
@@ -53,56 +63,14 @@
                 }
             }
         }
-        if(addDiv)// && ob.isVisible())
+        if(addDiv)
         {
-
-            out.println("<div dojoType=\"dojox.layout.ContentPane\" title=\""+title+"\" style=\"display:true;padding:10px;\" refreshOnShow=\""+refresh+"\" href=\""+url+"?"+params+"\" executeScripts=\"true\">");
+            //out.println("<div dojoType=\"dojox.layout.ContentPane\" title=\""+title+"\" _style=\"display:true;padding:10px;\" refreshOnShow=\""+refresh+"\" href=\""+url+"?"+params+"\" executeScripts=\"true\">");
+            out.println("<div dojoType=\"dijit.layout.ContentPane\" title=\""+title+"\" refreshOnShow=\""+refresh+"\" href=\""+url+"?"+params+"\" _onLoad=\"runScript(this);\">");
+            //request.getRequestDispatcher((url+"?"+params).substring(4)).include(request, response);
             out.println("</div>");
         }
     }
-%>
-
-<%        
-        String buri="/swb/swb/SWBAdmin/WBAd_Home/_rid/1/_mto/3";
-        buri+="?suri="+obj.getSemanticObject().getEncodedURI();
-        
-        if(obj instanceof Calendarable)
-        {
-            String auri="/swb/swb/SWBAdmin/WBAd_Home/_rid/4/_mto/3";
-            auri+="?suri="+obj.getSemanticObject().getEncodedURI();
-            auri+="&sprop="+Calendarable.swb_hasCalendar.getEncodedURI();
-            //System.out.println(auri);
-            //auri+="&spropref="+voc.pflow.getEncodedURI();            
-%>
-<div dojoType="dijit.layout.ContentPane" title="Calendarización" style=" padding:10px;" refreshOnShow="false" href="<%=auri%>"></div>
-<%            
-        }
-        
-        if(obj instanceof RoleRefable)
-        {
-            String auri=buri;
-            auri+="&sprop="+RoleRefable.swb_hasRoleRef.getEncodedURI();
-            auri+="&spropref="+RoleRef.swb_role.getEncodedURI();
-%>
-<div dojoType="dijit.layout.ContentPane" title="Roles" style=" padding:10px;" refreshOnShow="false" href="<%=auri%>"></div>
-<%            
-        }
-        
-        if(obj instanceof RuleRefable)
-        {
-            String auri=buri;
-            auri+="&sprop="+RuleRefable.swb_hasRuleRef.getEncodedURI();
-            auri+="&spropref="+RuleRef.swb_rule.getEncodedURI();
-%>
-<div dojoType="dijit.layout.ContentPane" title="Reglas" style=" padding:10px;" refreshOnShow="false" href="<%=auri%>"></div>
-<%            
-        }
-
-        {
-%>
-<div dojoType="dijit.layout.ContentPane" title="Bitácora" style=" padding:10px;" refreshOnShow="false" href=""></div>
-<%            
-        }
 
     out.println("</div><!-- end Bottom TabContainer -->");
 %>

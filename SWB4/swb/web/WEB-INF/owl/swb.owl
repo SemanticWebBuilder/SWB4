@@ -122,7 +122,6 @@
   <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectBehavior">
     <swb:classID rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >objbhv</swb:classID>
-    <rdfs:subClassOf rdf:resource="#Sortable"/>
     <rdfs:subClassOf>
       <owl:Class rdf:ID="WebPage"/>
     </rdfs:subClassOf>
@@ -217,7 +216,6 @@
   <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectAction">
     <swb:classID rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >objact</swb:classID>
-    <rdfs:subClassOf rdf:resource="#Sortable"/>
     <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.model.ObjectAction</swb:className>
     <rdfs:subClassOf>
@@ -970,16 +968,8 @@
     <rdfs:domain rdf:resource="#Versionable"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#resParamValue">
-    <rdfs:label>value</rdfs:label>
     <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
-    <rdfs:domain>
-      <swb:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ResourceParameter">
-        <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >org.semanticwb.model.ResourceParameter</swb:className>
-        <rdfs:subClassOf rdf:resource="#SWBClass"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </rdfs:domain>
+    <rdfs:label>value</rdfs:label>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="propertyRef">
     <rdfs:domain rdf:resource="#ViewReferenceProperty"/>
@@ -1142,11 +1132,6 @@
     <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:herarquicalRelation>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hasResourceParam">
-    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectBehavior"/>
-    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ResourceParameter"/>
-    <rdfs:label>hasParam</rdfs:label>
-  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#heModel">
     <rdfs:label>model</rdfs:label>
     <rdfs:range rdf:resource="#SWBModel"/>
@@ -1215,6 +1200,10 @@
         </swbxf:propGroup>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#behaviorParams">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectBehavior"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="xml">
     <swb:displayProperty>
@@ -1563,11 +1552,6 @@
     <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:required>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#resParamName">
-    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ResourceParameter"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:label>name</rdfs:label>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="versionFile">
     <rdfs:domain rdf:resource="#VersionInfo"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
@@ -1782,11 +1766,6 @@
     >view</swb:propertyMode>
     <swb:propertyRef rdf:resource="#views"/>
   </swb:ViewReferenceProperty>
-  <swbxf:ResourceParameter rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#spropTemplates">
-    <swbxf:resParamName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >sprop</swbxf:resParamName>
-    <swbxf:resParamValue rdf:resource="#hasTemplateRef"/>
-  </swbxf:ResourceParameter>
   <swbxf:FormView rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#vi_info">
     <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >info</swb:title>
@@ -1801,111 +1780,26 @@
     <swbxf:hasEditProperty rdf:resource="#description"/>
     <swbxf:hasEditProperty rdf:resource="#dnsDefault"/>
   </swbxf:FormView>
-  <swbxf:ResourceParameter rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#sproprefContents">
-    <swbxf:resParamName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >spropref</swbxf:resParamName>
-    <swbxf:resParamValue rdf:resource="#portlet"/>
-  </swbxf:ResourceParameter>
   <swb:Permission rdf:ID="PermSU">
     <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Super User</swb:title>
     <swb:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Super User Permission</swb:description>
   </swb:Permission>
-  <swbxf:ObjectBehavior rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#bh_Templates">
-    <swbxf:behaviorURL rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >{contextPath}/swb/SWBAdmin/WBAd_Home/_rid/1/_mto/3</swbxf:behaviorURL>
-    <swbxf:hasResourceParam rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#spropTemplates"/>
-    <swbxf:interface rdf:resource="#TemplateRefable"/>
-    <swb:title xml:lang="es">Plantillas</swb:title>
-    <swbxf:hasResourceParam>
-      <swbxf:ResourceParameter rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#sproprefTemplates">
-        <swbxf:resParamName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >spropref</swbxf:resParamName>
-        <swbxf:resParamValue rdf:resource="#template"/>
-      </swbxf:ResourceParameter>
-    </swbxf:hasResourceParam>
-    <swb:title xml:lang="en">Templates</swb:title>
-    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-    >20</swb:index>
-  </swbxf:ObjectBehavior>
   <swbxf:ObjectAction rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#act_Edit">
     <swb:title xml:lang="en">Edit</swb:title>
     <swb:title xml:lang="es">Editar</swb:title>
   </swbxf:ObjectAction>
-  <swbxf:ObjectBehavior rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#bh_Information">
-    <swb:title xml:lang="en">Information</swb:title>
-    <swb:title xml:lang="es">Información</swb:title>
-    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-    >0</swb:index>
-    <swbxf:behaviorURL rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >{contextPath}/swbadmin/jsp/SemObjectEditor.jsp</swbxf:behaviorURL>
-  </swbxf:ObjectBehavior>
-  <swbxf:ObjectBehavior rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#bh_Contents">
-    <swbxf:behaviorURL rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >{contextPath}/swb/SWBAdmin/WBAd_Home/_rid/3/_mto/3</swbxf:behaviorURL>
-    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-    >10</swb:index>
-    <swb:title xml:lang="en">Contents</swb:title>
-    <swbxf:interface rdf:resource="#Portletable"/>
-    <swbxf:hasResourceParam>
-      <swbxf:ResourceParameter rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#spropContents">
-        <swbxf:resParamName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >sprop</swbxf:resParamName>
-        <swbxf:resParamValue rdf:resource="#hasPortlet"/>
-      </swbxf:ResourceParameter>
-    </swbxf:hasResourceParam>
-    <swb:title xml:lang="es">Contenidos</swb:title>
-  </swbxf:ObjectBehavior>
-  <swbxf:ResourceParameter rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#spropPFlows">
-    <swbxf:resParamName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >sprop</swbxf:resParamName>
-    <swbxf:resParamValue rdf:resource="#hasPFlowRef"/>
-  </swbxf:ResourceParameter>
-  <swbxf:ObjectBehavior rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#bh_Versions">
-    <swbxf:behaviorURL rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >{contextPath}/swb/SWBAdmin/bh_Versions</swbxf:behaviorURL>
-    <swb:title xml:lang="en">Versions</swb:title>
-    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-    >25</swb:index>
-    <swb:title xml:lang="es">Versiones</swb:title>
-    <swbxf:interface rdf:resource="#Versionable"/>
-  </swbxf:ObjectBehavior>
-  <swbxf:ObjectBehavior rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#bh_EditPorltet">
-    <swbxf:behaviorURL rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >{contextPath}/swbadmin/jsp/editPortlet.jsp</swbxf:behaviorURL>
-    <swbxf:interface rdf:resource="#Editable"/>
-    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-    >15</swb:index>
-    <swb:title xml:lang="en">Edit</swb:title>
-    <swb:title xml:lang="es">Editar</swb:title>
-  </swbxf:ObjectBehavior>
   <swbxf:ObjectAction rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#act_Delete">
     <swb:title xml:lang="es">Crear</swb:title>
     <swb:title xml:lang="en">Create</swb:title>
   </swbxf:ObjectAction>
-  <swbxf:ResourceParameter rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#sproprefPFlows">
-    <swbxf:resParamName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >spropref</swbxf:resParamName>
-    <swbxf:resParamValue rdf:resource="#pflow"/>
-  </swbxf:ResourceParameter>
   <swb:Permission rdf:ID="PermAdmin">
     <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Administrator</swb:title>
     <swb:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Administrator Permission</swb:description>
   </swb:Permission>
-  <swbxf:ObjectBehavior rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#bh_PFlows">
-    <swbxf:behaviorURL rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >{contextPath}/swb/SWBAdmin/WBAd_Home/_rid/1/_mto/3</swbxf:behaviorURL>
-    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-    >30</swb:index>
-    <swb:title xml:lang="es">Flujos de Publicación</swb:title>
-    <swbxf:interface rdf:resource="#TemplateRefable"/>
-    <swb:title xml:lang="en">Publish Flows</swb:title>
-    <swbxf:hasResourceParam rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#spropPFlows"/>
-    <swbxf:hasResourceParam rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#sproprefPFlows"/>
-  </swbxf:ObjectBehavior>
   <swbxf:FormViewRef rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#vr_info_view">
     <swb:formView rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#vi_info"/>
     <swb:formMode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"

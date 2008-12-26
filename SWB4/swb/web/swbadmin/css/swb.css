@@ -6,29 +6,13 @@
         Purpose of the stylesheet follows.
 */
 
-/* 
-   TODO customize this sample style
-   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
-*/
-
-root { 
-    display: block;
-}
-
-
-
 html, body, #main{	
-	width: 100%;	
+	width: 100%;
 	height: 100%;
-	overflow: hidden;
+	_overflow: hidden;
 	padding: 0 0 0 0;
 	margin: 0 0 0 0;
 	font: 10pt Arial,Myriad,Tahoma,Verdana,sans-serif;
-}
-
-body .dojoSplitPane {
-	background: #ededff;
-	overflow: auto;
 }
 
 .swbIconPortlets,
@@ -67,27 +51,27 @@ body .dojoSplitPane {
 .swbIconObjectBehavior
 {
 	background-repeat: no-repeat; 
-	width:16px;
-	height: 16px;
+	width:20px;
+	height: 20px;
 	text-align: center;
 	padding-right:0px;
-    background-image: url('../icons/icons16x16.png'); background-position: -352px -0px;
+    background-image: url('../icons/icons20x20.png'); background-position: -352px -0px;
 }
 
-.swbIconPortlets { background-image: url('../icons/icons16x16.png'); background-position: -224px -0px; }
-.swbIconPortletType { background-image: url('../icons/icons16x16.png'); background-position: -48px -0px; }
-.swbIconPortlet { background-image: url('../icons/icons16x16.png'); background-position: -352px -0px; }
-.swbIconPortletU { background-image: url('../icons/icons16x16.png'); background-position: -352px -16px; }
-.swbIconTemplates { background-image: url('../icons/icons16x16.png'); background-position: -352px -0px; }
-.swbIconTemplate { background-image: url('../icons/icons16x16.png'); background-position: -256px -0px; }
-.swbIconTemplateU { background-image: url('../icons/icons16x16.png'); background-position: -256px -16px; }
-.swbIconWebSite { background-image: url('../icons/icons16x16.png'); background-position: -32px -0px; }
-.swbIconWebSiteU { background-image: url('../icons/icons16x16.png'); background-position: -32px -16px; }
-.swbIconWebPage { background-image: url('../icons/icons16x16.png'); background-position: -352px -0px; }
-.swbIconWebPageU { background-image: url('../icons/icons16x16.png'); background-position: -352px -16px; }
-.swbIconDnss { background-image: url('../icons/icons16x16.png'); background-position: -352px -0px; }
-.swbIconDns { background-image: url('../icons/icons16x16.png'); background-position: -192px -0px; }
-.swbIconLanguage { background-image: url('../icons/icons16x16.png'); background-position: -80px -0px; }
+.swbIconPortlets { background-position: -260px -0px; }
+.swbIconPortlet { background-position: -260px -20px; }
+.swbIconPortletU { background-position: -260px -40px; }
+.swbIconPortletType { background-position: -48px -0px; }
+.swbIconTemplates { background-position: -352px -0px; }
+.swbIconTemplate { background-position: -256px -0px; }
+.swbIconTemplateU { background-position: -256px -16px; }
+.swbIconWebSite { background-position: -32px -0px; }
+.swbIconWebSiteU { background-position: -32px -16px; }
+.swbIconWebPage { background-position: -352px -0px; }
+.swbIconWebPageU { background-position: -352px -16px; }
+.swbIconDnss { background-position: -352px -0px; }
+.swbIconDns { background-position: -192px -0px; }
+.swbIconLanguage { background-position: -80px -0px; }
 
 .admViewProperties { width:100%; }
 
@@ -112,7 +96,7 @@ th {
 	padding: 0 2px;
 	font-weight: bold;
     padding-left: 0;
-    _margin: 0 -7px; /* IE Win */
+    _margin: 0 -7px; /*IE Win*/
 	}
 
 _.swbform div {
@@ -200,7 +184,7 @@ _form.swbform fieldset li {
 	color: #333;
     font: normal 100% "Lucida Grande", Helvetica, Verdana, Arial;
 	}
-	
+
 .swbform legend,
 .swbform label { color: #333; }
 
@@ -254,4 +238,3 @@ _form.swbform fieldset li {
 	font-family: Verdana;
 	font-size: 11px;
 }
-
