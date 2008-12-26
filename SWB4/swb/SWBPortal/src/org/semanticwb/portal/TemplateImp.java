@@ -1498,6 +1498,10 @@ public class TemplateImp extends Template
         return "<";        
     }        
     
-    
+    @Override
+    public void reload()
+    {
+        SWBPortal.getTemplateMgr().reloadTemplate(this);
+    }
     
 }
