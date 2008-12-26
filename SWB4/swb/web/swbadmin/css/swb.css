@@ -23,6 +23,7 @@ html, body, #main{
 .swbIconTemplates,
 .swbIconTemplate,
 .swbIconTemplateU,
+.swbIconWebSites,
 .swbIconWebSite,
 .swbIconWebSiteU,
 .swbIconWebPage,
@@ -62,16 +63,18 @@ html, body, #main{
 .swbIconPortlet { background-position: -260px -20px; }
 .swbIconPortletU { background-position: -260px -40px; }
 .swbIconPortletType { background-position: -48px -0px; }
-.swbIconTemplates { background-position: -352px -0px; }
-.swbIconTemplate { background-position: -256px -0px; }
-.swbIconTemplateU { background-position: -256px -16px; }
-.swbIconWebSite { background-position: -32px -0px; }
-.swbIconWebSiteU { background-position: -32px -16px; }
-.swbIconWebPage { background-position: -352px -0px; }
-.swbIconWebPageU { background-position: -352px -16px; }
-.swbIconDnss { background-position: -352px -0px; }
-.swbIconDns { background-position: -192px -0px; }
-.swbIconLanguage { background-position: -80px -0px; }
+.swbIconTemplates { background-position: -140px -0px; }
+.swbIconTemplate { background-position: -140px -20px; }
+.swbIconTemplateU { background-position: -140px -40px; }
+.swbIconWebSites { background-position: -280px -0px; }
+.swbIconWebSite { background-position: -280px -20px; }
+.swbIconWebSiteU { background-position: -280px -40px; }
+.swbIconWebPage { background-position: -420px -20px; }
+.swbIconWebPageU { background-position: -420px -40px; }
+.swbIconDnss { background-position: -80px -0px; }
+.swbIconDns { background-position: -80px -20px; }
+.swbIconLanguages { background-position: -20px -0px; }
+.swbIconLanguage { background-position: -20px -20px; }
 
 .admViewProperties { width:100%; }
 
