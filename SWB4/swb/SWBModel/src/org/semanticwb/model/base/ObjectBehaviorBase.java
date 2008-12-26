@@ -11,6 +11,7 @@ public class ObjectBehaviorBase extends org.semanticwb.model.WebPage implements 
     public static final org.semanticwb.platform.SemanticProperty swbxf_behaviorURL=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#behaviorURL");
     public static final org.semanticwb.platform.SemanticClass swbxf_ResourceParameter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#ResourceParameter");
     public static final org.semanticwb.platform.SemanticProperty swbxf_hasResourceParam=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#hasResourceParam");
+    public static final org.semanticwb.platform.SemanticProperty swbxf_behaviorParams=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#behaviorParams");
     public static final org.semanticwb.platform.SemanticClass swbxf_ObjectBehavior=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectBehavior");
 
     public ObjectBehaviorBase(org.semanticwb.platform.SemanticObject base)
@@ -103,5 +104,15 @@ public class ObjectBehaviorBase extends org.semanticwb.model.WebPage implements 
              ret=(org.semanticwb.model.ResourceParameter)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
+    }
+
+    public String getBehaviorParams()
+    {
+        return getSemanticObject().getProperty(swbxf_behaviorParams);
+    }
+
+    public void setBehaviorParams(String behaviorParams)
+    {
+        getSemanticObject().setProperty(swbxf_behaviorParams, behaviorParams);
     }
 }

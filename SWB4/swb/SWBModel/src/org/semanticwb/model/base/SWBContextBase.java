@@ -8,17 +8,21 @@ import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.repository.File;
+import org.semanticwb.portlet.office.WordPortlet;
 import org.semanticwb.repository.FrozenNode;
 import org.semanticwb.repository.Unstructured;
 import org.semanticwb.repository.BaseNode;
+import org.semanticwb.portlet.office.OfficePortlet;
 import org.semanticwb.repository.office.OfficeContent;
 import org.semanticwb.repository.HierarchyNode;
+import org.semanticwb.portlet.office.ExcelPortlet;
 import org.semanticwb.repository.VersionLabels;
 import org.semanticwb.repository.VersionHistory;
 import org.semanticwb.repository.Resource;
 import org.semanticwb.repository.office.OfficeCategory;
 import org.semanticwb.repository.Folder;
 import org.semanticwb.repository.Version;
+import org.semanticwb.portlet.office.PPTPortlet;
 import org.semanticwb.repository.Workspace;
 public class SWBContextBase
 {

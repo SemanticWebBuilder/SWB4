@@ -1516,6 +1516,20 @@ public class Template extends TemplateBase
 //        return "<";        
 //    }        
     
-    
-    
+    public void reload()
+    {
+        
+    }
+
+    public String getFileName(int version)
+    {
+        String ret=null;
+        VersionInfo info=getLastVersion();
+        while(info!=null && info.getVersionNumber()!=version)
+        {
+            info=info.getPreviousVersion();
+        }
+        if(info!=null)ret=info.getVersionFile();
+        return ret;
+    }
 }
