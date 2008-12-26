@@ -14,6 +14,7 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
+import java.io.OutputStream;
 import java.security.Principal;
 import java.util.Iterator;
 import org.semanticwb.SWBPlatform;
@@ -235,5 +236,19 @@ public class SemanticModel
     {
         return SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(uri);
     }
-    
+
+    /**
+     * <p>Write a serialization of this model as an XML document.
+     * </p>
+     * <p>The language in which to write the model is specified by the
+     * <code>lang</code> argument.  Predefined values are "RDF/XML",
+     * "RDF/XML-ABBREV", "N-TRIPLE" and "N3".  The default value is
+     * represented by <code>null</code> is "RDF/XML".</p>
+     * @param out The output stream to which the XML will be written
+     * @return This model
+     */
+    public void write(OutputStream out)
+    {
+        m_model.write(out);
+    }
 }
