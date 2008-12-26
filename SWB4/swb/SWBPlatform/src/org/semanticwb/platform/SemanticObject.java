@@ -1184,8 +1184,16 @@ public class SemanticObject
                 ret = getLocaleProperty(getModel().getSemanticProperty(SemanticVocabulary.RDFS_LABEL), lang);
                 if(ret==null)
                 {
-                    ret=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getNsURIPrefix(getModel().getNameSpace()); //prefijo
-                    ret+=":"+getId();
+                    int x=getURI().indexOf('#');
+                    if(x>0)
+                    {
+                        ret=getURI().substring(0,x+1);
+                        ret=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getNsURIPrefix(ret);
+                        ret+=":"+getId();
+                    }else
+                    {
+                        ret+=":"+getId();
+                    }
                 }
             }
         }

@@ -17,6 +17,7 @@ import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.util.FileManager;
 import java.io.File;
+import java.io.InputStream;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -264,6 +265,13 @@ public class SemanticMgr implements SWBInstanceObject
 //        model.setNsPrefix(name+"_"+SemanticVocabulary.SWB_NS, nameSpace);
 //        model.setNsPrefix(name, SemanticVocabulary.URI+SemanticVocabulary.SWB_NS);
         model.setNsPrefix(name, nameSpace);
+        return ret;
+    }
+
+    public SemanticModel createModelByRDF(String name, String namespace, InputStream in)
+    {
+        SemanticModel ret=createModel(name, namespace);
+        ret.getRDFModel().read(in, "");
         return ret;
     }
      
