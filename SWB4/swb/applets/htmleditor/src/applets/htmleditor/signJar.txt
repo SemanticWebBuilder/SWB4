@@ -1,0 +1,20 @@
+E:\programming\proys\wb2.1\dragndrop>keytool -genkey -alias webbuilder -keypass wbadmkey
+Escriba la contrase±a del almacÚn de claves:  softjei
++Cußles son su nombre y su apellido?
+  [Unknown]:  Infotec WebBuilder
++Cußl es el nombre de su unidad de organizaci¾n?
+  [Unknown]:  DAIDT
++Cußl es el nombre de su organizaci¾n?
+  [Unknown]:  Infotec
++Cußl es el nombre de su ciudad o localidad?
+  [Unknown]:  Mexico
++Cußl es el nombre de su estado o provincia?
+  [Unknown]:  D.F.
++Cußl es el c¾digo de paÝs de dos letras de la unidad?
+  [Unknown]:  mx
++Es correcto CN=Infotec WebBuilder, OU=DAIDT, O=Infotec, L=Mexico, ST=D.F., C=mx?
+  [no]:  y
+
+E:\programming\proys\wb2.1\dragndrop>jarsigner DragDrop.jar webbuilder
+Enter Passphrase for keystore: softjei
+Enter key password for webbuilder: wbadmkey
