@@ -8,6 +8,7 @@ import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.base.*;
+import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 
 public class WebPage extends WebPageBase 
@@ -34,7 +35,13 @@ public class WebPage extends WebPageBase
      */
     public String getRealUrl()
     {
-        return SWBPlatform.getContextPath() + "/" + SWBPlatform.getEnv("swb/distributor","swb") + "/" + getWebSiteId() + "/" + getId();
+        String id=getId();
+        SemanticClass cls=getSemanticObject().getSemanticClass();
+        //if(cls!=swb_WebPage)
+        {
+            id=cls.getClassID()+":"+id;
+        }
+        return SWBPlatform.getContextPath() + "/" + SWBPlatform.getEnv("swb/distributor","swb") + "/" + getWebSiteId() + "/" + id;
     }    
     
     /**  Regresa el Url del topico
