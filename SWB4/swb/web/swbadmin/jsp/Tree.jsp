@@ -73,6 +73,20 @@
         }                 
     }
 
+       public void addUserReps(JSONArray arr)  throws JSONException
+    {
+        //System.out.println("addWebSites");
+        Iterator<UserRepository> it=SWBComparator.sortSermanticObjects(SWBContext.listUserRepositorys());
+        while(it.hasNext())
+        {
+            UserRepository rep=it.next();
+            //TODO: arreglar lista de sitios en SWBContext (estal ligados a ontologia)
+            rep=SWBContext.getUserRepository(rep.getURI());
+            addSemanticObject(arr, rep.getSemanticObject(),false,true);
+            //addWebSite(arr, site);
+        }
+    }
+
     public boolean hasHerarquicalNodes(SemanticObject obj) throws JSONException
     {
         boolean ret=false;
@@ -258,6 +272,7 @@
         JSONArray items=new JSONArray();
         obj.putOpt("items", items);
         addWebSites(items);
+        addUserReps(items);
         out.print(obj.toString());
         //System.out.print(obj.toString());
     }else
