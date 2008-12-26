@@ -350,8 +350,8 @@ public class Distributor implements InternalServlet
                 {
                     return false;
                 }
-                
-                response.setContentType("text/html");
+
+                //response.setContentType("text/html");
                 java.util.zip.GZIPOutputStream garr = null;
                 PrintWriter out = null;
                 

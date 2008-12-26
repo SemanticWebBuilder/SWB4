@@ -35,6 +35,13 @@ public class SWBTemplateMgr
     {
         templates=new HashMap();
     }
+
+    public void reloadTemplate(Template tpl)
+    {
+        Template tp=tpl.getWebSite().getTemplate(tpl.getId());
+        TemplateImp ret=new TemplateImp(tpl);
+        templates.put(ret.getURI(), ret);
+    }
     
     public Template getTemplateImp(Template tpl)
     {
