@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.semanticwb.portal.admin.resources;
 
 import java.io.IOException;
@@ -18,11 +17,13 @@ import org.semanticwb.portal.api.*;
  *
  * @author juan.fernandez
  */
-public class SWBASearchUsers extends GenericResource {
+public class SWBASearchUsers extends GenericResource
+{
 
-    private Logger log=SWBUtils.getLogger(SWBASearchUsers.class);
-    
-    public SWBASearchUsers() { 
+    private Logger log = SWBUtils.getLogger(SWBASearchUsers.class);
+
+    public SWBASearchUsers()
+    {
     }
 
     @Override
@@ -33,16 +34,24 @@ public class SWBASearchUsers extends GenericResource {
         SWBResourceURL url = paramRequest.getRenderUrl();
         url.setMode("search");
         Iterator<UserRepository> itur = SWBContext.listUserRepositorys();
-        ret.append("  <form id=\"SWBASearchUsers\" name=\"SWBASearchUsers\" method=\"post\" action=\""+url+"\">\n");
+        ret.append("  <form id=\"SWBASearchUsers\" name=\"SWBASearchUsers\" method=\"post\" action=\"" + url + "\">\n");
         ret.append("<fieldset>\n");
-       // ret.append("  <legend>Busqueda usuarios</legend>\n");
+        // ret.append("  <legend>Busqueda usuarios</legend>\n");
         ret.append("<table>\n");
+        url.setMode("details");
+        url.setCallMethod(SWBResourceURL.Call_DIRECT);
         ret.append("    <tr><td>Repositorio de usuarios</td>\n");
-        ret.append("    <td><select dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"false\" name=\"userRepository\" id=\"userRepository\">\n");
-        while(itur.hasNext()){
+        ret.append("    <td><select dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"false\" name=\"userRepository\" id=\"userRepository\" >\n");
+        while (itur.hasNext())
+        {
             UserRepository ur = itur.next();
-            ret.append("        <option value=\""+ur.getId()+"\">"+ur.getTitle()+"</option>\n"); //todo Add Language
+            ret.append("        <option value=\"" + ur.getId() + "\">" + ur.getTitle() + "</option>\n"); //todo Add Language
         }
+        ret.append("<script type=\"dojo/method\" event=\"onChange\" args=\"suri\">\n");
+        ret.append("    alert(suri);\n");
+        ret.append("getHtml('"+url+"?userRepository='+suri, 'SWBASearchUsers_GR');\n");
+        ret.append("</script> \n");
+
         ret.append("    </select>\n");
         ret.append("    </td></tr>\n");
         ret.append("    <tr><td>Correo Electrónico</td>\n");
@@ -57,25 +66,31 @@ public class SWBASearchUsers extends GenericResource {
         ret.append("    <tr><td>Segundo Apellido</td>\n");
         ret.append("    <td><input type=\"text\" name=\"usrSecondLastName\" id=\"usrSecondLastName\" dojoType=\"dijit.form.TextBox\" />\n");
         ret.append("    </td></tr>\n");
-        Iterator<Role>itroles = SWBContext.getDefaultRepository().listRoles();
+        ret.append("</table>");
+        ret.append("<div id=\"SWBASearchUsers_GR\" name=\"SWBASearchUsers_GR\">\n");
+        ret.append("<table>");
+        Iterator<Role> itroles = SWBContext.getDefaultRepository().listRoles();
         ret.append("    <tr><td>Roles</td>\n");
         ret.append("    <td><select name=\"userRoles\" id=\"userRoles\" dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"false\" >\n");
-        while(itroles.hasNext()){
+        while (itroles.hasNext())
+        {
             Role role = itroles.next();
-            ret.append("        <option value=\""+role.getId()+"\">"+role.getTitle()+"</option>\n"); //todo Add Language
+            ret.append("        <option value=\"" + role.getId() + "\">" + role.getTitle() + "</option>\n"); //todo Add Language
         }
         ret.append("    </select>\n");
         ret.append("    </td></tr>\n");
-        Iterator<UserGroup>itgroup = SWBContext.getDefaultRepository().listUserGroups();
+        Iterator<UserGroup> itgroup = SWBContext.getDefaultRepository().listUserGroups();
         ret.append("    <tr><td>Grupos de usuarios</td>\n");
         ret.append("    <td><select name=\"userGroups\" id=\"userGroups\" dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"false\" >\n");
-        while(itgroup.hasNext()){
+        while (itgroup.hasNext())
+        {
             UserGroup group = itgroup.next();
-            ret.append("        <option value=\""+group.getURI()+"\">"+group.getId()+"</option>\n"); //todo Add Language
+            ret.append("        <option value=\"" + group.getURI() + "\">" + group.getId() + "</option>\n"); //todo Add Language
         }
         ret.append("    </select>\n");
         ret.append("    </td></tr>\n");
         ret.append("</table>");
+        ret.append("</div>\n");
         ret.append("</fieldset>\n");
         ret.append("<fieldset>\n");
         ret.append("    <input name=\"search\" type=\"submit\" value=\"Buscar\" />\n");
@@ -88,32 +103,64 @@ public class SWBASearchUsers extends GenericResource {
             throws SWBResourceException, IOException
     {
         StringBuffer ret = new StringBuffer("");
-        String usrep  = request.getParameter("userRepository");
+        String usrep = request.getParameter("userRepository");
         String usrFirstName = request.getParameter("usrFirstName");
         String usrLastName = request.getParameter("usrLastName");
         String usrSecondLastName = request.getParameter("usrSecondLastName");
         String usrEmail = request.getParameter("usrEMail");
-        UserRepository ur  =SWBContext.getUserRepository(usrep);
+        UserRepository ur = SWBContext.getUserRepository(usrep);
         Iterator<String> itst = ur.searchUsersBy(usrFirstName, usrLastName, usrSecondLastName, usrEmail);
         ret.append("<table><thead><tr><th>login</th><th>Nombre(s)</th><th>Primer Apellido</th><th>Segundo Apellido</th><th>Correo electr&oacute;nico</th></tr></thead><tbody>");
-        while (itst.hasNext()){
+        while (itst.hasNext())
+        {
             String[] valores = itst.next().split("\\|\\|");
-           ret.append("<tr><td><a href=\"javascript:addNewTab('"+valores[0]+"', '"+valores[5]+"');\">");
-           ret.append(valores[5]);
-           ret.append("</a></td><td>");
-           ret.append(valores[1]);
-           ret.append("</td><td>");
-           ret.append(valores[2]);
-           ret.append("</td><td>");
-           ret.append(valores[3]);
-           ret.append("</td><td>");
-           ret.append(valores[4]);
-           ret.append("</td></tr>");
+            ret.append("<tr><td><a href=\"javascript:addNewTab('" + valores[0] + "', '" + valores[5] + "');\">");
+            ret.append(valores[5]);
+            ret.append("</a></td><td>");
+            ret.append(valores[1]);
+            ret.append("</td><td>");
+            ret.append(valores[2]);
+            ret.append("</td><td>");
+            ret.append(valores[3]);
+            ret.append("</td><td>");
+            ret.append(valores[4]);
+            ret.append("</td></tr>");
 
         }
         ret.append("</tbody></table>");
         response.getWriter().write(ret.toString());
     }
+
+    public void doDetails(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest)
+            throws SWBResourceException, IOException
+    {
+        StringBuffer ret = new StringBuffer("");
+        String usrep = request.getParameter("userRepository");
+        Iterator<Role> itroles = SWBContext.getUserRepository(usrep).listRoles();
+        ret.append("<table>");
+        ret.append("    <tr><td>Roles</td>\n");
+        ret.append("    <td><select name=\"userRoles\" id=\"userRoles\" dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"false\" >\n");
+        while (itroles.hasNext())
+        {
+            Role role = itroles.next();
+            ret.append("        <option value=\"" + role.getId() + "\">" + role.getTitle() + "</option>\n"); //todo Add Language
+        }
+        ret.append("    </select>\n");
+        ret.append("    </td></tr>\n");
+        Iterator<UserGroup> itgroup = SWBContext.getUserRepository(usrep).listUserGroups();
+        ret.append("    <tr><td>Grupos de usuarios</td>\n");
+        ret.append("    <td><select name=\"userGroups\" id=\"userGroups\" dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"false\" >\n");
+        while (itgroup.hasNext())
+        {
+            UserGroup group = itgroup.next();
+            ret.append("        <option value=\"" + group.getURI() + "\">" + group.getId() + "</option>\n"); //todo Add Language
+        }
+        ret.append("    </select>\n");
+        ret.append("    </td></tr>\n");
+        ret.append("</table>");
+        response.getWriter().write(ret.toString());
+    }
+
 //
 //    @Override
 //    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
@@ -843,16 +890,19 @@ public class SWBASearchUsers extends GenericResource {
 //    }
 //
     @Override
-    public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-     
-        if(paramRequest.getMode().equals("search")){
-            doSearch(request,response,paramRequest);
+    public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
+
+        if (paramRequest.getMode().equals("search"))
+        {
+            doSearch(request, response, paramRequest);
+        }   else
+           if(paramRequest.getMode().equals("details")){
+           doDetails(request, response, paramRequest);
+           }
+        else
+        {
+            super.processRequest(request, response, paramRequest);
         }
-      //  else
-     //   if(paramRequest.getMode().equals("details")){
-        //
-     //   }
-        else super.processRequest(request, response, paramRequest);
     }
-    
 }
