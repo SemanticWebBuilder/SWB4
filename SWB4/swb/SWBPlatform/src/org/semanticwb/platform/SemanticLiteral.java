@@ -69,6 +69,7 @@ public class SemanticLiteral
         {
             ret=(Boolean)m_obj;
         }
+        if(ret==null)ret=false;
         return ret;
     }
     
@@ -95,6 +96,7 @@ public class SemanticLiteral
         {
             ret=(Byte)m_obj;
         }
+        if(ret==null)ret=0;
         return ret;
     }    
     
@@ -108,6 +110,7 @@ public class SemanticLiteral
         {
             ret=(Character)m_obj;
         }
+        if(ret==null)ret=0;
         return ret;
     }    
     
@@ -121,6 +124,7 @@ public class SemanticLiteral
         {
             ret=(Double)m_obj;
         }
+        if(ret==null)ret=0D;
         return ret;
     }    
     
@@ -134,6 +138,7 @@ public class SemanticLiteral
         {
             ret=(Float)m_obj;
         }
+        if(ret==null)ret=0F;
         return ret;
     }    
 
@@ -147,6 +152,7 @@ public class SemanticLiteral
         {
             ret=(Integer)m_obj;
         }
+        if(ret==null)ret=0;
         return ret;
     }    
     
@@ -160,6 +166,7 @@ public class SemanticLiteral
         {
             ret=(Short)m_obj;
         }
+        if(ret==null)ret=0;
         return ret;
     }    
     
@@ -186,6 +193,7 @@ public class SemanticLiteral
         {
             ret=(Long)m_obj;
         }
+        if(ret==null)ret=0L;
         return ret;
     }      
 
