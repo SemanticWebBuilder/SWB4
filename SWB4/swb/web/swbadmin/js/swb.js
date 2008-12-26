@@ -69,6 +69,14 @@
                   }
               }).play();
           }, 250);
+
+
+            // assuming our tabContainer has id="bar"
+            //dojo.subscribe("tabs-selectChild", function(child){
+            //    alert("A new child was selected:"+child);
+            //});
+
+
       });
 
       function getHtml(url, tagid)
@@ -124,12 +132,12 @@
           dojo.xhrGet({
               url: url,
               load: function(response, ioArgs){
-                  dijit.byId('swbDialogImp').setContent(response);
+                  dijit.byId('swbDialogImp').attr('content',response);
                   dijit.byId('swbDialog').show();
                   return response;
               },
               error: function(response, ioArgs){
-                  dijit.byId('swbDialogImp').setContent("Error: "+response);
+                  dijit.byId('swbDialogImp').attr('content','Error: '+response);
                   dijit.byId('swbDialog').show();
                   return response;
               },
@@ -144,10 +152,15 @@
           var att=reference.getAttribute("dojoType");
           if(att && (att=="dijit.layout.ContentPane" || att=="dojox.layout.ContentPane"))
           {
-                  return dijit.byNode(reference);
+              var x=dijit.byNode(reference);
+              if(x)
+              {
+                if(att=="dojox.layout.ContentPane")x.suportScripts=true;
+              }
+              return x;
           }else
           {
-                  return getContentPanel(reference.parentNode);
+              return getContentPanel(reference.parentNode);
           }
       }
 
@@ -158,11 +171,11 @@
           dojo.xhrGet({
               url: url,
               load: function(response, ioArgs){
-                  if(panel!=null)panel.setContent(response);
+                  if(panel!=null)panel.attr('content',response);
                   return response;
               },
               error: function(response, ioArgs){
-                  if(panel!=null)panel.setContent("An error occurred, with response: " + response);
+                  if(panel!=null)panel.attr('content','An error occurred, with response: ' + response);
                   return response;
               },
               handleAs: "text"
@@ -204,13 +217,13 @@
                   load: function (data)
                   {
                           var panel=getContentPanel(obj);
-                          //alert("div:"+panel.id);
+                          //alert("div:"+panel.suportScripts);
                           if(panel)
                           {
                               try
                               {
-                              panel.setContent(data);
-                              //alert("data:"+data);
+                              panel.attr('content',data);
+                              if(!panel.suportScripts)runScripts(data);
                               }catch(e){alert(e.message);}
                           }
                           //dijit.byId('swbDialog').hide();
@@ -219,7 +232,7 @@
                   },
                   // Call this function if an error happened
                   error: function (error) {
-                          console.error ('Error: ', error);
+                          alert('Error: ', error);
                   }
               });
           }else
@@ -251,7 +264,7 @@
                               var arr=d.getChildren();
                               for (var n = 0; n < arr.length; n++)
                               {
-                                  arr[n].setContent(null);
+                                  arr[n].attr('content',null);
                               }
                           }
                       }
@@ -465,7 +478,7 @@
      function showStatus(msg)
      {
          var ele=dijit.byId('status');
-         ele.setContent(msg);
+         ele.attr('content',msg);
          ele.innerHTML=msg;
          sy=ini;
          si=2;
@@ -498,4 +511,32 @@
               }
           });
           return ret;
+      }
+
+      function runScripts(content)
+      {
+          //var content=panel.attr('content');
+          //alert(content);
+          var src = new RegExp('<script[\\s\\S]*?</script>', 'gim');
+          var load = content.match(src);
+          //alert(load);
+          if (load != null)
+          {
+              for (var c = 0; c < load.length ; c++)
+              {
+                  var txt=load[c];
+                  if(txt.indexOf("dojo/connect")>-1 || txt.indexOf("dojo/method")>-1)continue;
+                  // Remove begin tag
+                  var repl = new RegExp('<script.*?>', 'gim');
+                  var onloadscript = txt.replace(repl, '');
+
+                  // Remove end tag
+                  repl = new RegExp('</script>', 'gim');
+                  onloadscript = onloadscript.replace(repl, '');
+
+                  // Save scripts
+                  //alert("script:"+onloadscript);
+                  eval(onloadscript);
+              }
+          }
       }

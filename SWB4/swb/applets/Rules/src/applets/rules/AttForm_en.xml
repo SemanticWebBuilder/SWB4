@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genericDialog>
+    <panels>
+        <panel title="Selects a user attribute" type="Grid">
+            
+        <fields>
+                <field label="Feature:" title="feature" name="caracteristica" type="catalog" mandatory="true" catalog="attributes" action="changeAttribute"/>
+                <field label="Operator:" title="operator" name="operador" type="catalog" mandatory="true" catalog="operators" />
+                <field label="Selects value:" title="valor" name="valor" type="catalog" mandatory="false" catalog="attValues" />
+                <field label="Captured value:" title="valortxt" name="valortxt" type="text" mandatory="true" columns="100" />
+            </fields>
+        </panel>
+        <panel title="Actions" type="Flow">
+            <fields>
+                <field name="okButton" label="Save" type="button" action="doOK" />
+                <field name="cancelButton" label="Cancel" type="button" action="doCancel" />
+            </fields>
+        </panel>    
+    </panels>
+    
+</genericDialog>
+
