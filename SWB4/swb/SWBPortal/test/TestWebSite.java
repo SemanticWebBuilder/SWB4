@@ -711,6 +711,12 @@ public class TestWebSite {
 
     }
       
+    @Test
+    public void write()
+    {
+        WebSite site=SWBContext.getWebSite("sep");
+        site.getSemanticObject().getModel().write(System.out);
+    }
     
     //@Test
     public void SetAtributesDefaultUserRepository()
