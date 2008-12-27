@@ -28,6 +28,7 @@ import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.sparql.util.IndentedWriter;
+import java.util.ArrayList;
 import java.util.Iterator;
 import org.junit.*;
 import org.semanticwb.platform.SemanticVocabulary;
@@ -219,7 +220,7 @@ public class UserTest {
         }
     }
 
-    @Test
+    //@Test
     public void addRyG(){
         UserRepository rep = SWBContext.createUserRepository("externalUsers", "ussrepext");
         rep.setTitle("Usuarios Externos");
@@ -237,7 +238,7 @@ public class UserTest {
         group = rep.createUserGroup("INVEST");
     }
 
-    @Test
+    //@Test
     public void FillUsers(){
       UserRepository repository = null;
       String[] nombres = {"Sergio", "Javier", "Jorge", "Carlos", "Edgar", "Nohemi", "Victor", "Melissa", "Nancy", "Rogelio", "Jose", "Aura"};
@@ -265,6 +266,42 @@ public class UserTest {
           current.setUsrPassword(apellido2+"."+apellido1);
       }
     }
+
+    //@Test
+    public void putRoles(){
+        Iterator<Role> itro = SWBContext.getDefaultRepository().listRoles();
+        ArrayList<Role> arliro = new ArrayList<Role>();
+        while (itro.hasNext()){
+            arliro.add(itro.next());
+        }
+        Iterator<User>itus = SWBContext.getDefaultRepository().listUsers();
+        int i = 0;
+        while (itus.hasNext()){
+            User usr = itus.next();
+            i++;
+            if (i == arliro.size()) i = 0;
+            usr.addRole(arliro.get(i));
+        }
+    }
+
+    @Test
+    public void putGroups(){
+        Iterator<UserGroup> itro = SWBContext.getDefaultRepository().listUserGroups();
+        ArrayList<UserGroup> arliro = new ArrayList<UserGroup>();
+        while (itro.hasNext()){
+            arliro.add(itro.next());
+        }
+        Iterator<User>itus = SWBContext.getDefaultRepository().listUsers();
+        int i = 0;
+        while (itus.hasNext()){
+            User usr = itus.next();
+            i++;
+            if (i == arliro.size()) i = 0;
+            usr.setGroup(arliro.get(i));
+        }
+    }
+
+
 
     //@Test
     public void test()

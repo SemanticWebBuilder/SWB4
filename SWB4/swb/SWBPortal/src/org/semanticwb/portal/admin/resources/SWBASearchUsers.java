@@ -48,7 +48,7 @@ public class SWBASearchUsers extends GenericResource
             ret.append("        <option value=\"" + ur.getId() + "\">" + ur.getTitle() + "</option>\n"); //todo Add Language
         }
         ret.append("<script type=\"dojo/method\" event=\"onChange\" args=\"suri\">\n");
-        ret.append("    alert(suri);\n");
+        ret.append("   // alert(suri);\n");
         ret.append("getHtml('"+url+"?userRepository='+suri, 'SWBASearchUsers_GR');\n");
         ret.append("</script> \n");
 
@@ -72,6 +72,7 @@ public class SWBASearchUsers extends GenericResource
         Iterator<Role> itroles = SWBContext.getDefaultRepository().listRoles();
         ret.append("    <tr><td>Roles</td>\n");
         ret.append("    <td><select name=\"userRoles\" id=\"userRoles\" dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"false\" >\n");
+        ret.append("        <option value=\"\"></option>\n");
         while (itroles.hasNext())
         {
             Role role = itroles.next();
@@ -82,10 +83,11 @@ public class SWBASearchUsers extends GenericResource
         Iterator<UserGroup> itgroup = SWBContext.getDefaultRepository().listUserGroups();
         ret.append("    <tr><td>Grupos de usuarios</td>\n");
         ret.append("    <td><select name=\"userGroups\" id=\"userGroups\" dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"false\" >\n");
+        ret.append("        <option value=\"\"></option>\n");
         while (itgroup.hasNext())
         {
             UserGroup group = itgroup.next();
-            ret.append("        <option value=\"" + group.getURI() + "\">" + group.getId() + "</option>\n"); //todo Add Language
+            ret.append("        <option value=\"" + group.getId() + "\">" + group.getTitle() + "</option>\n"); //todo Add Language
         }
         ret.append("    </select>\n");
         ret.append("    </td></tr>\n");
@@ -108,8 +110,10 @@ public class SWBASearchUsers extends GenericResource
         String usrLastName = request.getParameter("usrLastName");
         String usrSecondLastName = request.getParameter("usrSecondLastName");
         String usrEmail = request.getParameter("usrEMail");
+        String Role = request.getParameter("userRoles");
+        String Group = request.getParameter("userGroups");
         UserRepository ur = SWBContext.getUserRepository(usrep);
-        Iterator<String> itst = ur.searchUsersBy(usrFirstName, usrLastName, usrSecondLastName, usrEmail);
+        Iterator<String> itst = ur.searchUsersBy(usrFirstName, usrLastName, usrSecondLastName, usrEmail, Role, Group);
         ret.append("<table><thead><tr><th>login</th><th>Nombre(s)</th><th>Primer Apellido</th><th>Segundo Apellido</th><th>Correo electr&oacute;nico</th></tr></thead><tbody>");
         while (itst.hasNext())
         {
@@ -140,6 +144,7 @@ public class SWBASearchUsers extends GenericResource
         ret.append("<table>");
         ret.append("    <tr><td>Roles</td>\n");
         ret.append("    <td><select name=\"userRoles\" id=\"userRoles\" dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"false\" >\n");
+        ret.append("        <option value=\"\"></option>\n");
         while (itroles.hasNext())
         {
             Role role = itroles.next();
@@ -150,10 +155,11 @@ public class SWBASearchUsers extends GenericResource
         Iterator<UserGroup> itgroup = SWBContext.getUserRepository(usrep).listUserGroups();
         ret.append("    <tr><td>Grupos de usuarios</td>\n");
         ret.append("    <td><select name=\"userGroups\" id=\"userGroups\" dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"false\" >\n");
+        ret.append("        <option value=\"\"></option>\n");
         while (itgroup.hasNext())
         {
             UserGroup group = itgroup.next();
-            ret.append("        <option value=\"" + group.getURI() + "\">" + group.getId() + "</option>\n"); //todo Add Language
+            ret.append("        <option value=\"" + group.getId() + "\">" + group.getTitle() + "</option>\n"); //todo Add Language
         }
         ret.append("    </select>\n");
         ret.append("    </td></tr>\n");
