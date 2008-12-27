@@ -62,7 +62,7 @@
     public void addWebSites(JSONArray arr)  throws JSONException
     {
         //System.out.println("addWebSites");
-        Iterator<WebSite> it=SWBComparator.sortSermanticObjects(SWBContext.listWebSites());
+        Iterator<WebSite> it=SWBComparator.sortSermanticObjects(SWBContext.listWebSites(),lang);
         while(it.hasNext())
         {
             WebSite site=it.next();
@@ -76,7 +76,7 @@
     public void addUserReps(JSONArray arr)  throws JSONException
     {
         //System.out.println("addWebSites");
-        Iterator<UserRepository> it=SWBComparator.sortSermanticObjects(SWBContext.listUserRepositorys());
+        Iterator<UserRepository> it=SWBComparator.sortSermanticObjects(SWBContext.listUserRepositorys(),lang);
         while(it.hasNext())
         {
             UserRepository rep=it.next();
@@ -117,7 +117,7 @@
 
         JSONArray childs=new JSONArray();
         jobj.putOpt("children", childs);
-        Iterator<SemanticObject> it=obj.getModel().listInstancesOfClass(cls);
+        Iterator<SemanticObject> it=SWBComparator.sortSermanticObjects(obj.getModel().listInstancesOfClass(cls),lang);
 
         //Menus
         JSONArray menus=new JSONArray();
@@ -226,7 +226,7 @@
             {
                 SemanticProperty prop=it.next();
                 //System.out.println("prop:"+prop.getName());
-                Iterator<SemanticObject> it2=obj.listObjectProperties(prop);
+                Iterator<SemanticObject> it2=SWBComparator.sortSermanticObjects(obj.listObjectProperties(prop),lang);
                 if(addChilds)
                 {
                     while(it2.hasNext())
