@@ -67,13 +67,13 @@
         {
             WebSite site=it.next();
             //TODO: arreglar lista de sitios en SWBContext (estal ligados a ontologia)
-            site=SWBContext.getWebSite(site.getURI());
+            //site=SWBContext.getWebSite(site.getURI());
             addSemanticObject(arr, site.getSemanticObject(),false,true);
             //addWebSite(arr, site);
         }                 
     }
 
-       public void addUserReps(JSONArray arr)  throws JSONException
+    public void addUserReps(JSONArray arr)  throws JSONException
     {
         //System.out.println("addWebSites");
         Iterator<UserRepository> it=SWBComparator.sortSermanticObjects(SWBContext.listUserRepositorys());
@@ -81,7 +81,7 @@
         {
             UserRepository rep=it.next();
             //TODO: arreglar lista de sitios en SWBContext (estal ligados a ontologia)
-            rep=SWBContext.getUserRepository(rep.getURI());
+            //rep=SWBContext.getUserRepository(rep.getURI());
             addSemanticObject(arr, rep.getSemanticObject(),false,true);
             //addWebSite(arr, site);
         }
