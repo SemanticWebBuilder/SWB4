@@ -89,10 +89,10 @@ public class SelectOne extends SelectOneBase
                 Iterator<SemanticObject> it=null;
                 if(isGlobalScope())
                 {
-                    it=cls.listInstances();
+                    it=SWBComparator.sortSermanticObjects(cls.listInstances(),lang);
                 }else
                 {
-                    it=obj.getModel().listInstancesOfClass(cls);
+                    it=SWBComparator.sortSermanticObjects(obj.getModel().listInstancesOfClass(cls),lang);
                 }
                 while(it.hasNext())
                 {
