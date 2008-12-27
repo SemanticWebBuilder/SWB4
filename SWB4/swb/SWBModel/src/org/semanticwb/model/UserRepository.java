@@ -10,6 +10,7 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
+import com.hp.hpl.jena.sparql.util.IndentedWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import org.semanticwb.SWBPlatform;
@@ -56,8 +57,10 @@ public class UserRepository extends UserRepositoryBase
      */
     }
 
-    public Iterator<String> searchUsersBy(String usrFirstName, String usrLastName, String usrSecondLastName, String usrEmail)
+    public Iterator<String> searchUsersBy(String usrFirstName, String usrLastName, String usrSecondLastName, String usrEmail, String Role, String Group)
     {
+        System.out.println("Grp: "+Group);
+
         Iterator<String> ret = null;
         Model model = SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
 
@@ -71,18 +74,34 @@ public class UserRepository extends UserRepositoryBase
         String _usrLastName = usrLastName!=null?usrLastName:"";
         String _usrSecondLastName = usrSecondLastName!=null?usrSecondLastName:"";
         String _usrEmail = usrEmail!=null?usrEmail:"";
+        String _Role = Role!=null?Role:null;
+        String _Group = Group!=null?Group:null;
+
+        if (null!=_Role){
+            if (hasRole(_Role)){
+                _Role = getRole(_Role).getURI();
+            } else _Role = null;
+        }
+
+        if (null!=_Group){
+            if (hasUserGroup(_Group)){
+                _Group = getUserGroup(_Group).getURI();
+            } else _Group = null;
+        }
 
 
         // Query string.
         //"SELECT ?title ?class WHERE {?x swb:title ?title. ?x rdf:type swb:WebPage}"
 
         String queryString = prolog + NL +
-                "SELECT ?x ?fname ?lname ?slname ?mail ?login WHERE {?x rdf:type swb:User. " +
-                "?x swb:usrFirstName ?gfn .   FILTER regex(?gfn, \""+_usrFirstName+"\", \"i\"). " +
-                "?x swb:usrLastName ?gln.   FILTER regex(?gln, \""+_usrLastName+"\", \"i\"). " +
-                "?x swb:usrSecondLastName ?gsln.   FILTER regex(?gsln, \""+_usrSecondLastName+"\", \"i\"). " +
-                "?x swb:usrEmail ?gml.   FILTER regex(?gml, \""+_usrEmail+"\", \"i\"). " +
-                "?x swb:usrLastName ?lname. " +
+                "SELECT ?x ?fname ?lname ?slname ?mail ?login WHERE {?x rdf:type swb:User. ";
+        if (null!=_Role)     queryString +=   "?x swb:hasRole <"+_Role+">." ;
+        if (null!=_Group)     queryString +=   "?x swb:userGroup <"+_Group+">." ;
+        if (!"".equals(_usrFirstName))     queryString +=   "?x swb:usrFirstName ?gfn .   FILTER regex(?gfn, \""+_usrFirstName+"\", \"i\"). " ;
+        if (!"".equals(_usrLastName))     queryString +=   "?x swb:usrLastName ?gln.   FILTER regex(?gln, \""+_usrLastName+"\", \"i\"). " ;
+        if (!"".equals(_usrSecondLastName))     queryString +=   "?x swb:usrSecondLastName ?gsln.   FILTER regex(?gsln, \""+_usrSecondLastName+"\", \"i\"). " ;
+        if (!"".equals(_usrEmail))     queryString +=   "?x swb:usrEmail ?gml.   FILTER regex(?gml, \""+_usrEmail+"\", \"i\"). " ;
+             queryString +=   "?x swb:usrLastName ?lname. " +
                 "?x swb:usrFirstName ?fname. " +
                 "?x swb:usrSecondLastName ?slname. " +
                 "?x swb:usrEmail ?mail. " +
@@ -91,6 +110,12 @@ public class UserRepository extends UserRepositoryBase
 
 
         Query query = QueryFactory.create(queryString);
+
+        System.out.println(getId());
+        // Print with line numbers
+        query.serialize(new IndentedWriter(System.out,true)) ;
+        System.out.println() ;
+
         QueryExecution qexec = QueryExecutionFactory.create(query, model);
         try
         {
