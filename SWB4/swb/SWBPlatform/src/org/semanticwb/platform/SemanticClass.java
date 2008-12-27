@@ -369,6 +369,11 @@ public class SemanticClass
     {
         return m_props.get(name);
     }
+
+    public boolean hasProperty(String name)
+    {
+        return m_props.containsKey(name);
+    }
     
     public Iterator<SemanticProperty> listProperties()
     {
