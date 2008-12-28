@@ -51,6 +51,10 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -68,7 +72,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import sun.misc.BASE64Encoder;
 
-
 /**
  *
  * @author  Javier Solis Gonzalez (jsolis@infotec.com.mx)
@@ -82,7 +85,6 @@ public class SWBUtils {
     private static boolean initLogger = false;
     private static Locale locale = Locale.ENGLISH;
     public static String LOCALE_SERVICES = null;
-    
     private static PrintWriter log2File = new PrintWriter(System.err);
 
     /** Creates new utils */
@@ -466,7 +468,7 @@ public class SWBUtils {
          * 
          */
         public static Iterator<String> findInterStr(String str, String pre, String pos) {
-            ArrayList <String> ret = new ArrayList();
+            ArrayList<String> ret = new ArrayList();
             int y = 0;
             do {
                 y = findInterStr(str, pre, pos, y, ret);
@@ -571,36 +573,31 @@ public class SWBUtils {
             }
             return ret;
         }
-        
+
         /**
-     * Optiene parametros de un url
-     * Regresa Map con parametros 
-     *  Keys: Strings
-     *  Vals: Strings [] 
-     */
-    public static Map parseQueryParams(String path)
-    {
-        Map map = new java.util.HashMap();
-        if(path==null){
+         * Optiene parametros de un url
+         * Regresa Map con parametros 
+         *  Keys: Strings
+         *  Vals: Strings [] 
+         */
+        public static Map parseQueryParams(String path) {
+            Map map = new java.util.HashMap();
+            if (path == null) {
+                return map;
+            }
+            int idx = path.indexOf("?");
+            String parms = path.substring(idx + 1);
+            StringTokenizer st = new StringTokenizer(parms, "&");
+            while (st.hasMoreTokens()) {
+                String pair = st.nextToken();
+                if (pair.indexOf("=") > 0) {
+                    String key = pair.substring(0, pair.indexOf("="));
+                    String val = pair.substring(pair.indexOf("=") + 1);
+                    map.put(key, new String[]{val});
+                }
+            }
             return map;
         }
-        int idx = path.indexOf("?");
-        String parms = path.substring(idx+1);
-        StringTokenizer st = new StringTokenizer(parms, "&");
-        while(st.hasMoreTokens())
-        {
-            String pair = st.nextToken();
-            if(pair.indexOf("=")>0)
-            {
-                String key = pair.substring(0,pair.indexOf("="));
-                String val = pair.substring(pair.indexOf("=")+1);
-                map.put(key, new String[]
-                {val});
-            }
-        }
-        return map;
-    }    
-        
     }
 
     /**
@@ -1047,22 +1044,170 @@ public class SWBUtils {
             }
             return null;
         }
-                
-        public static void log2File(String pathFile,String msg) throws IOException 
-        {
-            String path=null;
-            int pos=pathFile.lastIndexOf("/");
-            if(pos>-1){
-                path=pathFile.substring(0,pos-1);
-            }            
-            File file=new File(path);
-            if(!file.exists()) file.mkdirs();
-            String logFile=new File(pathFile).getCanonicalPath().replace('\\','/');
-            log2File=new PrintWriter(new FileWriter(logFile, true), true);
+
+        public static void log2File(String pathFile, String msg) throws IOException {
+            String path = null;
+            int pos = pathFile.lastIndexOf("/");
+            if (pos > -1) {
+                path = pathFile.substring(0, pos - 1);
+            }
+            File file = new File(path);
+            if (!file.exists()) {
+                file.mkdirs();
+            }
+            String logFile = new File(pathFile).getCanonicalPath().replace('\\', '/');
+            log2File = new PrintWriter(new FileWriter(logFile, true), true);
             log2File.println(msg);
+        }
+
+        /**
+         * 
+         * @param directory
+         * @param base
+         * @param zos
+         * @Autor:Jorge Jiménez
+         * @throws java.io.IOException
+         */
+        public static final void zip(File directory, File base, ZipOutputStream zos) throws IOException {
+            File[] files = directory.listFiles();
+            byte[] buffer = new byte[8192];
+            int read = 0;
+            for (int i = 0, n = files.length; i < n; i++) {
+                if (files[i].isDirectory()) {
+                    zip(files[i], base, zos);
+                } else {
+                    FileInputStream in = new FileInputStream(files[i]);
+                    ZipEntry entry = new ZipEntry(files[i].getPath().substring(base.getPath().length() + 1));
+                    zos.putNextEntry(entry);
+                    while (-1 != (read = in.read(buffer))) {
+                        zos.write(buffer, 0, read);
+                    }
+                    zos.closeEntry();
+                    in.close();
+                }
+            }
+        }
+
+        /**
+         * 
+         * @param zipFile
+         * @param files
+         * @Autor:Jorge Jiménez
+         * @throws java.io.IOException
+         */
+        public static void addFilesToExistingZip(File zipFile, File[] files) throws IOException {
+            // get a temp file
+            File tempFile = File.createTempFile(zipFile.getName(), null);
+            // delete it, otherwise you cannot rename your existing zip to it.
+            tempFile.delete();
+
+            boolean renameOk = zipFile.renameTo(tempFile);
+            if (!renameOk) {
+                throw new RuntimeException("could not rename the file " + zipFile.getAbsolutePath() + " to " + tempFile.getAbsolutePath());
+            }
+            byte[] buf = new byte[1024];
+
+            ZipInputStream zin = new ZipInputStream(new FileInputStream(tempFile));
+            ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zipFile));
+
+            ZipEntry entry = zin.getNextEntry();
+            while (entry != null) {
+                String name = entry.getName();
+                boolean notInFiles = true;
+                for (File f : files) {
+                    if (f.getName().equals(name)) {
+                        notInFiles = false;
+                        break;
+                    }
+                }
+                if (notInFiles) {
+                    // Add ZIP entry to output stream.
+                    out.putNextEntry(new ZipEntry(name));
+                    // Transfer bytes from the ZIP file to the output file
+                    int len;
+                    while ((len = zin.read(buf)) > 0) {
+                        out.write(buf, 0, len);
+                    }
+                }
+                entry = zin.getNextEntry();
+            }
+            // Close the streams		
+            zin.close();
+            // Compress the files
+            for (int i = 0; i < files.length; i++) {
+                InputStream in = new FileInputStream(files[i]);
+                // Add ZIP entry to output stream.
+                out.putNextEntry(new ZipEntry(files[i].getName()));
+                // Transfer bytes from the file to the ZIP file
+                int len;
+                while ((len = in.read(buf)) > 0) {
+                    out.write(buf, 0, len);
+                }
+                // Complete the entry
+                out.closeEntry();
+                in.close();
+            }
+            // Complete the ZIP file
+            out.close();
+            tempFile.delete();
+        }
+
+        
+        /**
+         * @param zip
+         * @Autor:Jorge Jiménez
+         * @param extractTo
+         * @throws java.io.IOException
+         */
+        public static final void unzip(File zip, File extractTo) throws IOException {
+            unzip(zip,extractTo,new ArrayList(), null, null);
         }
         
         
+        /**
+         * @param zip
+         * @Autor:Jorge Jiménez
+         * @param extractTo
+         * @throws java.io.IOException
+         */
+        public static final void unzip(File zip, File extractTo, ArrayList fext2parse, String parse, String parse2) throws IOException {
+            ZipFile archive = new ZipFile(zip);
+            Enumeration e = archive.entries();
+            while (e.hasMoreElements()) {
+                ZipEntry entry = (ZipEntry) e.nextElement();
+                File file = new File(extractTo, entry.getName());
+                if (entry.isDirectory() && !file.exists()) {
+                    file.mkdirs();
+                } else {
+                    if (!file.getParentFile().exists()) {
+                        file.getParentFile().mkdirs();
+                    }
+
+                    InputStream in = archive.getInputStream(entry);
+                    String content = readInputStream(in);
+
+                    //Parse file content
+                    if (!fext2parse.isEmpty()) {
+                        String ext = null;
+                        int pos = file.getName().lastIndexOf(".");
+                        if (pos > -1) {
+                            ext = file.getName().substring(pos + 1);
+                        }
+                        if (fext2parse.contains(ext)) {
+                            content = content.replaceAll(parse, parse2);
+                        }
+                    }
+
+                    //Writes content
+                    FileOutputStream out = new FileOutputStream(file);
+                    copyStream(getStreamFromString(content), out);
+
+                    out.close();
+                    in.close();                    
+                }
+            }
+            archive.close();
+        }
     }
 
     /**
@@ -1109,8 +1254,8 @@ public class SWBUtils {
                 String subject, String contentType, String data, String login, String password, ArrayList<EmailAttachment> attachments) {
             try {
                 HtmlEmail email = new HtmlEmail();
-                
-                if(attachments!=null && attachments.size()>0){
+
+                if (attachments != null && attachments.size() > 0) {
                     Iterator itAttaches = attachments.iterator();
                     while (itAttaches.hasNext()) {
                         EmailAttachment attchment = (EmailAttachment) itAttaches.next();
