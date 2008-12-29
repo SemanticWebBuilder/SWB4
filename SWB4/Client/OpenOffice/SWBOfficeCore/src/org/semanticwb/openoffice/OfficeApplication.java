@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import org.netbeans.spi.wizard.Wizard;
 import org.netbeans.spi.wizard.WizardPage;
+import org.semanticwb.office.interfaces.WebPageInfo;
 import org.semanticwb.openoffice.interfaces.IOpenOfficeApplication;
 import org.semanticwb.openoffice.interfaces.IOpenOfficeDocument;
 import org.semanticwb.openoffice.ui.dialogs.DialogAbout;
@@ -22,6 +23,7 @@ import org.semanticwb.openoffice.ui.dialogs.DialogLogin;
 import org.semanticwb.openoffice.ui.wizard.Search;
 import org.semanticwb.openoffice.ui.wizard.SelectDirectory;
 import org.semanticwb.openoffice.ui.wizard.SelectVersionToOpen;
+import org.semanticwb.openoffice.ui.wizard.TitleAndDescription;
 import org.semanticwb.xmlrpc.XmlRpcProxyFactory;
 
 /**
@@ -222,9 +224,12 @@ public abstract class OfficeApplication
         }
     }
 
-    public static final void createPage()
+    public static final void createPage(WebPageInfo parent)
     {
-
+        CreatePageResultProducer resultProducer = new CreatePageResultProducer(parent);
+        WizardPage[] clazz = new WizardPage[]{new TitleAndDescription()};
+        Wizard wiz = WizardPage.createWizard("Asistente de creación de página", clazz, resultProducer);        
+        wiz.show();
     }
 
     public final void open(DocumentType type)
