@@ -20,6 +20,7 @@ import javax.jcr.version.VersionHistory;
 import javax.jcr.version.VersionIterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
@@ -556,7 +557,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         ArrayList<WebPageInfo> pagesToReturn = new ArrayList<WebPageInfo>();
         WebSite site = SWBContext.getWebSite(webpage.siteID);
         WebPage parent = site.getWebPage(webpage.id);
-        Iterator<WebPage> pages = parent.listChilds();
+        GenericIterator<WebPage> pages = parent.listChilds();
         while (pages.hasNext())
         {
             WebPageInfo info = new WebPageInfo();
