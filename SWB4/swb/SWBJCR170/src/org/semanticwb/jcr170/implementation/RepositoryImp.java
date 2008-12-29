@@ -17,8 +17,6 @@ import javax.jcr.SimpleCredentials;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
-import org.semanticwb.platform.SemanticClass;
-import org.semanticwb.repository.BaseNode;
 import org.semanticwb.repository.Unstructured;
 import org.semanticwb.repository.Workspace;
 
@@ -29,10 +27,9 @@ import org.semanticwb.repository.Workspace;
 public final class RepositoryImp implements Repository
 {
 
-    static Logger log = SWBUtils.getLogger(RepositoryImp.class);
-    private static final String DESCRIPTION_BY_DEFAULT = "Sin descripción";
+    static Logger log = SWBUtils.getLogger(RepositoryImp.class);    
     private static Hashtable<String, String> descriptors = new Hashtable<String, String>();
-    private static SemanticClass cm_content = BaseNode.vocabulary.cm_OfficeContent;
+    
 
     static
     {
