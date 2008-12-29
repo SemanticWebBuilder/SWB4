@@ -105,7 +105,7 @@ public class VersionHistoryImp extends SimpleNode implements VersionHistory
         while (nodes.hasNext())
         {
             BaseNode child = nodes.next();
-            if (child.getName().equals(name) && child.getSemanticObject().getSemanticClass().equals(BaseNode.vocabulary.nt_Version))
+            if (child.getName().equals(name) && child.getSemanticObject().getSemanticClass().equals(org.semanticwb.repository.Version.nt_Version))
             {
                 return new VersionImp(child, this, session);
             }
