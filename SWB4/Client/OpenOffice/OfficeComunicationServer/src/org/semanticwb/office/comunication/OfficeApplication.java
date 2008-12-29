@@ -168,7 +168,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             Query query;
             if (session.getRepository().getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf("webbuilder") != -1)
             {
-                String statement = "SELECT ?title WHERE {?x " + cm_title + " ?title FILTER regex(?title, \"" + title + "\")  }";
+                String statement = "SELECT ?x WHERE {?x " + cm_title + " ?title FILTER regex(?title, \"" + title + "\")  }";
                 query = session.getWorkspace().getQueryManager().createQuery(statement, "SPARQL");
             }
             else
@@ -275,7 +275,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             Query query;
             if (session.getRepository().getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf("webbuilder") != -1)
             {
-                String statement = "SELECT ?title WHERE {?x " + cm_title + " ?title FILTER regex(?title, \"" + title + "\")  }";
+                String statement = "SELECT ?x WHERE {?x " + cm_title + " ?title FILTER regex(?title, \"" + title + "\")  }";
                 query = session.getWorkspace().getQueryManager().createQuery(statement, "SPARQL");
             }
             else
@@ -383,7 +383,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             Query query = null;
             if (session.getRepository().getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf("webbuilder") != -1)
             {
-                StringBuilder statement = new StringBuilder("SELECT ");
+                StringBuilder statement = new StringBuilder("SELECT ?x ");
 
                 statement.append(" WHERE {");
 
