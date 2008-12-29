@@ -51,6 +51,7 @@ public class SummaryPublish extends javax.swing.JPanel
         catch (Exception e)
         {
         }
+        
     }
 
     /** This method is called from within the constructor to
