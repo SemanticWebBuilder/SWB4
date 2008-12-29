@@ -50,7 +50,13 @@ import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.platform.SemanticVocabulary;
 import org.semanticwb.repository.BaseNode;
+import org.semanticwb.repository.HierarchyNode;
 import org.semanticwb.repository.LockUserComparator;
+import org.semanticwb.repository.Lockable;
+import org.semanticwb.repository.Referenceable;
+import org.semanticwb.repository.Traceable;
+import org.semanticwb.repository.Unstructured;
+import org.semanticwb.repository.Versionable;
 
 /**
  *
@@ -63,7 +69,7 @@ public class SimpleNode implements Node
     private String path;
     private String id;
     private boolean modified = false;
-    static final String DEFAULT_PRIMARY_NODE_TYPE_NAME = BaseNode.vocabulary.nt_Unstructured.getPrefix() + ":" + BaseNode.vocabulary.nt_Unstructured.getName();
+    static final String DEFAULT_PRIMARY_NODE_TYPE_NAME = Unstructured.nt_Unstructured.getPrefix() + ":" + Unstructured.nt_Unstructured.getName();
     protected static final String NOT_SUPPORTED_YET = "Not supported yet.";
     protected static final String WAS_NOT_FOUND = " was not found";
     private static final String PATH_SEPARATOR = "/";
@@ -110,9 +116,9 @@ public class SimpleNode implements Node
             parent.childs.put(this.id, this);
         }
 
-        if (clazz.equals(BaseNode.vocabulary.nt_hierarchyNode) || clazz.isSubClass(BaseNode.vocabulary.nt_hierarchyNode))
+        if (clazz.equals(HierarchyNode.nt_HierarchyNode) || clazz.isSubClass(HierarchyNode.nt_HierarchyNode))
         {
-            PropertyImp prop = addProperty(getName(BaseNode.vocabulary.jcr_created), clazz);
+            PropertyImp prop = addProperty(getName(Traceable.jcr_created), clazz);
             Value time = factory.createValue(Calendar.getInstance());
             prop.setValueInternal(time.getString());
         }
@@ -124,22 +130,22 @@ public class SimpleNode implements Node
             try
             {
                 SemanticClass superTypeClazz = session.getRootBaseNode().getSemanticClass(superType);
-                if (superTypeClazz.equals(BaseNode.vocabulary.mix_Referenceable) || superTypeClazz.isSubClass(BaseNode.vocabulary.mix_Referenceable))
+                if (superTypeClazz.equals(Referenceable.mix_Referenceable) || superTypeClazz.isSubClass(Referenceable.mix_Referenceable))
                 {
-                    PropertyImp prop = addProperty(getName(BaseNode.vocabulary.jcr_uuid), superTypeClazz);
+                    PropertyImp prop = addProperty(getName(Referenceable.jcr_uuid), superTypeClazz);
                     prop.setValueInternal(UUID.randomUUID().toString());
                     session.addSimpleNode(this);
                 }
-                if (superTypeClazz.equals(BaseNode.vocabulary.mix_Versionable) || superTypeClazz.isSubClass(BaseNode.vocabulary.mix_Versionable))
+                if (superTypeClazz.equals(Versionable.mix_Versionable) || superTypeClazz.isSubClass(Versionable.mix_Versionable))
                 {
-                    PropertyImp prop = addProperty(getName(BaseNode.vocabulary.jcr_isCheckedOut), superTypeClazz);
+                    PropertyImp prop = addProperty(getName(Versionable.jcr_isCheckedOut), superTypeClazz);
                     prop.setValueInternal(true);
                 }
-                if (superTypeClazz.equals(BaseNode.vocabulary.mix_Lockable) || superTypeClazz.isSubClass(BaseNode.vocabulary.mix_Lockable))
+                if (superTypeClazz.equals(Lockable.mix_Lockable) || superTypeClazz.isSubClass(Lockable.mix_Lockable))
                 {
-                    PropertyImp prop = addProperty(getName(BaseNode.vocabulary.jcr_lockOwner), superTypeClazz);
+                    PropertyImp prop = addProperty(getName(Lockable.jcr_lockOwner), superTypeClazz);
                     prop.setValueInternal(null);
-                    prop = addProperty(getName(BaseNode.vocabulary.jcr_lockIsDeep), superTypeClazz);
+                    prop = addProperty(getName(Lockable.jcr_lockIsDeep), superTypeClazz);
                     prop.setValueInternal(false);
                 }
                 if (session.getRootBaseNode().isMixIn(superTypeClazz))
@@ -161,7 +167,7 @@ public class SimpleNode implements Node
                 try
                 {
                     PropertyImp propImp = addProperty(getName(prop), clazz);
-                    if (prop.equals(BaseNode.vocabulary.jcr_primaryType) && propImp.getValue() == null)
+                    if (prop.equals(BaseNode.jcr_primaryType) && propImp.getValue() == null)
                     {
                         propImp.setValueInternal(clazz.getPrefix() + ":" + clazz.getName());
                     }
@@ -197,19 +203,17 @@ public class SimpleNode implements Node
             SemanticClass parentClazz = classes.next();
             if (node.isMixIn(parentClazz))
             {
-                if (parentClazz.equals(BaseNode.vocabulary.mix_Referenceable) || parentClazz.isSubClass(BaseNode.vocabulary.mix_Referenceable))
+                if (parentClazz.equals(Referenceable.mix_Referenceable) || parentClazz.isSubClass(Referenceable.mix_Referenceable))
                 {
-                    addProperty(getName(BaseNode.vocabulary.jcr_uuid), parentClazz);
+                    addProperty(getName(Referenceable.jcr_uuid), parentClazz);
                 }
-                if (parentClazz.equals(BaseNode.vocabulary.mix_Versionable) || parentClazz.isSubClass(BaseNode.vocabulary.mix_Versionable))
+                if (parentClazz.equals(Versionable.mix_Versionable) || parentClazz.isSubClass(Versionable.mix_Versionable))
                 {
-                    addProperty(getName(BaseNode.vocabulary.jcr_isCheckedOut), parentClazz);
+                    addProperty(getName(Versionable.jcr_isCheckedOut), parentClazz);
                 }
-                if (parentClazz.equals(BaseNode.vocabulary.mix_Lockable) || parentClazz.isSubClass(BaseNode.vocabulary.mix_Lockable))
+                if (parentClazz.equals(Lockable.mix_Lockable) || parentClazz.isSubClass(Lockable.mix_Lockable))
                 {
-                    addProperty(getName(BaseNode.vocabulary.jcr_lockOwner), parentClazz);
-                    addProperty(getName(BaseNode.vocabulary.jcr_lockIsDeep), parentClazz);
-
+                    addProperty(getName(Lockable.jcr_lockOwner), parentClazz);
                 }
                 mixins.add(parentClazz);
             }
@@ -421,22 +425,20 @@ public class SimpleNode implements Node
             {
                 throw new ConstraintViolationException("The mixinName is not a minxin node type");
             }
-            if (mixinClazz.equals(BaseNode.vocabulary.mix_Referenceable) || mixinClazz.isSubClass(BaseNode.vocabulary.mix_Referenceable))
+            if (mixinClazz.equals(Referenceable.mix_Referenceable) || mixinClazz.isSubClass(Referenceable.mix_Referenceable))
             {
-                PropertyImp prop = addProperty(getName(BaseNode.vocabulary.jcr_uuid), mixinClazz);
+                PropertyImp prop = addProperty(getName(Referenceable.jcr_uuid), mixinClazz);
                 prop.setValueInternal(UUID.randomUUID().toString());
             }
-            if (mixinClazz.equals(BaseNode.vocabulary.mix_Versionable) || mixinClazz.isSubClass(BaseNode.vocabulary.mix_Versionable))
+            if (mixinClazz.equals(Versionable.mix_Versionable) || mixinClazz.isSubClass(Versionable.mix_Versionable))
             {
-                PropertyImp prop = addProperty(getName(BaseNode.vocabulary.jcr_isCheckedOut), mixinClazz);
+                PropertyImp prop = addProperty(getName(Versionable.jcr_isCheckedOut), mixinClazz);
                 prop.setValueInternal(true);
             }
-            if (mixinClazz.equals(BaseNode.vocabulary.mix_Lockable) || mixinClazz.isSubClass(BaseNode.vocabulary.mix_Lockable))
+            if (mixinClazz.equals(Lockable.mix_Lockable) || mixinClazz.isSubClass(Lockable.mix_Lockable))
             {
-                PropertyImp prop = addProperty(getName(BaseNode.vocabulary.jcr_lockOwner), mixinClazz);
-                prop.setValueInternal(null);
-                prop = addProperty(getName(BaseNode.vocabulary.jcr_isCheckedOut), mixinClazz);
-                prop.setValueInternal(false);
+                PropertyImp prop = addProperty(getName(Lockable.jcr_lockOwner), mixinClazz);
+                prop.setValueInternal(null);                
             }
 
             mixins.add(mixinClazz);
@@ -648,9 +650,9 @@ public class SimpleNode implements Node
 
     public String getUUID() throws UnsupportedRepositoryOperationException, RepositoryException
     {
-        if (properties.get(getName(BaseNode.vocabulary.jcr_uuid)) != null)
+        if (properties.get(getName(Referenceable.jcr_uuid)) != null)
         {
-            PropertyImp prop = properties.get(getName(BaseNode.vocabulary.jcr_uuid));
+            PropertyImp prop = properties.get(getName(Referenceable.jcr_uuid));
             String getUUID = prop.getString();
             if (getUUID == null)
             {
@@ -689,12 +691,12 @@ public class SimpleNode implements Node
 
     protected boolean isVersionable()
     {
-        return mixins.contains(BaseNode.vocabulary.mix_Versionable);
+        return mixins.contains(Versionable.mix_Versionable);
     }
 
     protected boolean isLockable()
     {
-        return mixins.contains(BaseNode.vocabulary.mix_Lockable);
+        return mixins.contains(Lockable.mix_Lockable);
     }
 
     SimpleNode getLockBaseNode()
@@ -718,9 +720,9 @@ public class SimpleNode implements Node
     public boolean isLocked() throws RepositoryException
     {
         boolean isLocked = false;
-        if (properties.get(getName(BaseNode.vocabulary.jcr_lockOwner)) != null)
+        if (properties.get(getName(Lockable.jcr_lockOwner)) != null)
         {
-            String value = properties.get(getName(BaseNode.vocabulary.jcr_lockOwner)).getString();
+            String value = properties.get(getName(Lockable.jcr_lockOwner)).getString();
             if (value != null)
             {
                 return true;
@@ -1012,15 +1014,15 @@ public class SimpleNode implements Node
         {
             throw new LockException("The node is already locked");
         }
-        addProperty(getName(BaseNode.vocabulary.jcr_lockOwner)).setValueInternal(getSession().getUserID());
-        addProperty(getName(BaseNode.vocabulary.jcr_lockIsDeep)).setValueInternal(isDeep);
+        addProperty(getName(Lockable.jcr_lockOwner)).setValueInternal(getSession().getUserID());
+        addProperty(getName(Lockable.jcr_lockIsDeep)).setValueInternal(isDeep);
         LockImp lock = new LockImp(this, isSessionScoped);
         if (!isSessionScoped && !this.isNew())
         {
             try
             {
-                node.setProperty(BaseNode.vocabulary.jcr_lockOwner, getSession().getUserID());
-                node.setProperty(BaseNode.vocabulary.jcr_lockIsDeep, String.valueOf(isDeep));
+                node.setProperty(Lockable.jcr_lockOwner, getSession().getUserID());
+                node.setProperty(Lockable.jcr_lockIsDeep, String.valueOf(isDeep));
             }
             catch (Exception e)
             {
@@ -1041,8 +1043,8 @@ public class SimpleNode implements Node
 
             // por el momento sólo puede desbloquear el mismo usuario, deberia verse como un super usurio lo puede desbloquear
             LockImp lock = getLockImp();
-            properties.remove(getName(BaseNode.vocabulary.jcr_lockOwner));
-            properties.remove(getName(BaseNode.vocabulary.jcr_lockIsDeep));
+            properties.remove(getName(Lockable.jcr_lockOwner));
+            properties.remove(getName(Lockable.jcr_lockIsDeep));
             if (!this.isNew() && node.isLocked())
             {
                 try
@@ -1102,11 +1104,11 @@ public class SimpleNode implements Node
     public String getLockOwner()
     {
         String getLockOwner = null;
-        if (properties.get(BaseNode.vocabulary.jcr_lockOwner) != null)
+        if (properties.get(Lockable.jcr_lockOwner) != null)
         {
             try
             {
-                getLockOwner = properties.get(getName(BaseNode.vocabulary.jcr_lockOwner)).getString();
+                getLockOwner = properties.get(getName(Lockable.jcr_lockOwner)).getString();
             }
             catch (Exception e)
             {
@@ -1440,12 +1442,12 @@ public class SimpleNode implements Node
     {
         if (isVersionable())
         {
-            String nameProperty = getName(BaseNode.vocabulary.jcr_isCheckedOut);
+            String nameProperty = getName(Versionable.jcr_isCheckedOut);
             if (properties.get(nameProperty) != null)
             {
                 try
                 {
-                    return properties.get(getName(BaseNode.vocabulary.jcr_isCheckedOut)).getBoolean();
+                    return properties.get(getName(Versionable.jcr_isCheckedOut)).getBoolean();
                 }
                 catch (ValueFormatException e)
                 {
@@ -1505,7 +1507,7 @@ public class SimpleNode implements Node
         {
             try
             {
-                addProperty(getName(BaseNode.vocabulary.jcr_isCheckedOut)).setValueInternal(false);
+                addProperty(getName(Versionable.jcr_isCheckedOut)).setValueInternal(false);
                 BaseNode version = node.checkin();
                 return new VersionImp(version, this.versionHistory, session);
             }
@@ -1527,7 +1529,7 @@ public class SimpleNode implements Node
                 throw new UnsupportedRepositoryOperationException("The node must be saved before, because has changes or is new");
             }
 
-            addProperty(getName(BaseNode.vocabulary.jcr_isCheckedOut)).setValueInternal(true);
+            addProperty(getName(Versionable.jcr_isCheckedOut)).setValueInternal(true);
             return;
 
         }
