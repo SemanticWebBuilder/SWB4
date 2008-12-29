@@ -23,6 +23,7 @@ import javax.jcr.version.VersionIterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.Portlet;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.WebPage;
@@ -571,7 +572,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         ArrayList<PortletInfo> listPortlets = new ArrayList<PortletInfo>();
         WebSite site = SWBContext.getWebSite(portletInfo.siteId);
         WebPage parent = site.getWebPage(webpage.id);
-        Iterator<Portlet> portlets = parent.listPortlets();
+        GenericIterator<Portlet> portlets = parent.listPortlets();
         while (portlets.hasNext())
         {
             Portlet portlet = portlets.next();
@@ -626,15 +627,15 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             String id = UUID.randomUUID().toString();
             if (type.equals("EXCEL"))
             {
-                //portlet = new ExcelPortlet(ExcelPortlet.swbrep_ExcelPortlet.newInstance(id));
+                portlet = new ExcelPortlet(ExcelPortlet.swbrep_ExcelPortlet.newInstance(id));
             }
             else if (type.equals("PPT"))
             {
-                //portlet = new PPTPortlet(PPTPortlet.swbrep_PPTPortlet.newInstance(id));
+                portlet = new PPTPortlet(PPTPortlet.swbrep_PPTPortlet.newInstance(id));
             }
             else
             {
-                //portlet = new WordPortlet(WordPortlet.swbrep_WordPortlet.newInstance(id));
+                portlet = new WordPortlet(WordPortlet.swbrep_WordPortlet.newInstance(id));
             }
             parent.addPortlet(portlet);
             PortletInfo PortletInfo = new PortletInfo();
@@ -664,7 +665,6 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(propertyInfo.id);
         portlet.getSemanticObject().setProperty(prop, value);
     }
-
     public PropertyInfo[] getPortletProperties(PortletInfo portletInfo) throws Exception
     {
         ArrayList<PropertyInfo> properties = new ArrayList<PropertyInfo>();
