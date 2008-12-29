@@ -38,7 +38,6 @@
     <form name="frmWBSiteMap" id="frmWBSiteMap" action="true" method="POST" enctype="multipart/form-data">
         <admdbconnmgr defconn="true"/>
         <fieldset>
-        <input type="FILE" name="template" label="Modelo (xsl, xslt):" showfile="true" msg="Modelo atual " bydefault="{@webpath}wbadmin/xsl/WBSiteMap/WBSiteMap.xslt" msgbydefault="Modelo do defeito " filetype="xsl|xslt" isshowfiletype="true" size="40"/>
         <input type="FILE" name="img" label="Imagem para o esquema do site (bmp, gif, jpg, jpeg):" showfile="true" filetype="bmp|jpg|jpeg|gif" isshowfiletype="true" isremovefile="true" removemsg="Deletar a imagem para o esquema do site" moreattr="onclick=&#34;jsClear(this.form);&#34;" size="40"/>
         <input type="TEXT" name="alt" label="Texto alternativo para a imagem:" size="50"/>
         <input type="TEXT" name="btntexto" label="Texto do botão no caso de não definição da imagen:" size="50"/>

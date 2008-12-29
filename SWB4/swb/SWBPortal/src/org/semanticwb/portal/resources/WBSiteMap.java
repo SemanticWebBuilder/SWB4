@@ -72,23 +72,6 @@ public class WBSiteMap extends GenericAdmResource
         }catch(Exception e) {
             log.error("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);
         }
-        if(!"".equals(base.getAttribute("template","").trim()))
-        {
-            try { 
-                tpl = SWBUtils.XML.loadTemplateXSLT(SWBPlatform.getFileFromWorkPath(base.getWorkPath()+"/"+ base.getAttribute("template").trim())); 
-                path=webWorkPath + "/";
-            }catch(Exception e) {
-                log.error("Error while loading resource template: "+base.getId(), e); 
-            }
-        }
-        if(tpl==null)
-        {
-            try {
-                tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getAdminFileStream("/swbadmin/xsl/WBSiteMap/WBSiteMap.xslt")); 
-            }catch(Exception e) {
-                log.error("Error while loading default resource template: "+base.getId(), e);
-            }
-        } 
     }
     
     /**
@@ -135,7 +118,7 @@ public class WBSiteMap extends GenericAdmResource
                         {
                             data.append("{");
                             data.append("id:'"+tp.getId()+"'");
-                            data.append(",title:'"+tp.getTitle(lang)+"'");                            
+                            data.append(",title:'"+tp.getDisplayName(lang)+"'");
                             hasChilds = tp.listChilds(lang, true, false, false, null).hasNext();                            
                             if(hasChilds) {
                                 data.append(",isFolder:true");
@@ -197,7 +180,7 @@ public class WBSiteMap extends GenericAdmResource
             //if (subLevel<=maxLevel && user.haveAccess(tpsite)) TODO: VER4
             if(subLevel<=maxLevel)
             {
-                String lang = user.getLanguage();                                
+                String lang = user.getLanguage();
                 Iterator <WebPage> it = tpsite.listChilds(lang, true, false, false, null);
                 if(it.hasNext()) {                    
                     data.append(",children:[");
@@ -210,7 +193,7 @@ public class WBSiteMap extends GenericAdmResource
                         {
                             data.append("{");
                             data.append("id:'"+tp.getId()+"'");
-                            data.append(",title:'"+tp.getTitle(lang)+"'");                            
+                            data.append(",title:'"+tp.getDisplayName(lang)+"'");
                             hasChilds = tp.listChilds(lang, true, false, false, null).hasNext();                            
                             if(hasChilds) {
                                 data.append(",isFolder:true");
@@ -266,7 +249,7 @@ public class WBSiteMap extends GenericAdmResource
                     {
                         data.append("{");
                         data.append("id:'"+tp.getId()+"'");
-                        data.append(",title:'"+tp.getTitle(lang)+"'");                            
+                        data.append(",title:'"+tp.getDisplayName(lang)+"'");
                         hasChilds = tp.listChilds(lang, true, false, false, null).hasNext();                            
                         if(hasChilds) {
                             data.append(",isFolder:true");
@@ -296,14 +279,8 @@ public class WBSiteMap extends GenericAdmResource
         }
         return data.toString();      
     }
-    
-    /** Crea el cuerpo del objeto json del árbol del mapa del sitio eventualmente usando ajax.
-     * @param webSite
-     * @param user
-     * @throws SWBResourceException
-     * @throws IOException
-     */
-    public String getJSONDynamically(WebSite webSite, WebPage webPage, User user) throws SWBResourceException, IOException
+
+    /*public String getJSONDynamically(WebSite webSite, WebPage webPage, User user) throws SWBResourceException, IOException
     {
         Portlet base=getResourceBase();
         StringBuffer data = new StringBuffer();
@@ -347,7 +324,7 @@ public class WBSiteMap extends GenericAdmResource
             data.append(e.toString());
         }
         return data.toString();      
-    }
+    }*/
         
     /**
      * @param request
@@ -451,7 +428,6 @@ public class WBSiteMap extends GenericAdmResource
             }
         }
         out.println(ret.toString());
-        out.println("<br><a href=\"" + paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN) + "\">admin sitemap</a>");
     }
     
     /**

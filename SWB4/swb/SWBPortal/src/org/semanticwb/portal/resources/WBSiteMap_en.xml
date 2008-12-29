@@ -44,7 +44,6 @@
     <form name="frmWBSiteMap" id="frmWBSiteMap" action="true" method="POST" enctype="multipart/form-data">
         <admdbconnmgr defconn="true"/>
         <fieldset>
-        <input type="FILE" name="template" label="Template (xsl, xslt):" showfile="true" msg="Current template " bydefault="{@webpath}wbadmin/xsl/WBSiteMap/WBSiteMap.xslt" msgbydefault="Template by default " filetype="xsl|xslt" isshowfiletype="true" size="40"/>
         <input type="FILE" name="img" label="Image for site map (bmp, gif, jpg, jpeg):" showfile="true" filetype="bmp|jpg|jpeg|gif" isshowfiletype="true" isremovefile="true" removemsg="Cut image for site map" moreattr="onclick=&#34;jsClear(this.form);&#34;" size="40"/>
         <input type="TEXT" name="alt" label="Alternate text for image:" size="50"/>
         <input type="TEXT" name="btntexto" label="Text of the button in case of not defining an image:" size="50"/>
