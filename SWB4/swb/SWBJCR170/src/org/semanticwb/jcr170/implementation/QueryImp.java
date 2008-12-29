@@ -11,6 +11,7 @@ import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
 import java.util.HashSet;
+import java.util.List;
 import javax.jcr.ItemExistsException;
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
@@ -30,7 +31,6 @@ import org.semanticwb.model.SWBContext;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticVocabulary;
 import org.semanticwb.repository.BaseNode;
-import org.semanticwb.repository.Workspace;
 
 /**
  *
@@ -65,21 +65,21 @@ public class QueryImp implements Query
         this.session = session;
         if (language.equals(SPARQL))
         {
-            for (String prefix : BaseNode.vocabulary.listUris().keySet())
+            for (String prefix : BaseNode.listUris().keySet())
             {
-                prefixStatement.append("PREFIX " + prefix + ": <" + BaseNode.vocabulary.listUris().get(prefix) + ">"+NL);
+                prefixStatement.append("PREFIX " + prefix + ": <" + BaseNode.listUris().get(prefix) + ">" + NL);
             }
-            prefixStatement.append(" PREFIX rdf: <"+SemanticVocabulary.RDF_URI+"> "+NL) ;
-            prefixStatement.append(" PREFIX rdfs: <"+SemanticVocabulary.RDFS_URI+"> "+NL) ;
+            prefixStatement.append(" PREFIX rdf: <" + SemanticVocabulary.RDF_URI + "> " + NL);
+            prefixStatement.append(" PREFIX rdfs: <" + SemanticVocabulary.RDFS_URI + "> " + NL);
         }
         else if (language.equals(javax.jcr.query.Query.XPATH))
         {
             try
             {
                 xpath = XPath.newInstance(statement);
-                for (String prefix : Workspace.vocabulary.listUris().keySet())
+                for (String prefix : BaseNode.listUris().keySet())
                 {
-                    String namespace = Workspace.vocabulary.listUris().get(prefix);
+                    String namespace = BaseNode.listUris().get(prefix);
                     if (namespace.endsWith("#"))
                     {
                         namespace = namespace.substring(0, namespace.length() - 1);
@@ -105,43 +105,37 @@ public class QueryImp implements Query
         if (xpath != null)
         {
             return null;
-            /*try
-            {
-                List<Element> elements = xpath.selectNodes(session.getDocumentInternalView());
-                ArrayList<String> nodes = new ArrayList<String>();
-                for (Element e : elements)
-                {
-                    if (e.getAttributeValue("path") != null || !e.getAttributeValue("path").equals(""))
-                    {
-                        nodes.add(e.getAttributeValue("path"));
-                    }
-                }
-                return new QueryResultImp(session, nodes, workspaceName);
-            }
-            catch (JDOMException jde)
-            {
-                throw new RepositoryException(jde);
-            }
-            catch (Exception jde)
-            {
-                throw new RepositoryException(jde);
-            }
-            catch (Throwable jde)
-            {
-                throw new RepositoryException(jde);
-            }*/
+        /*try
+        {
+        List<Element> elements = xpath.selectNodes(session.getDocumentInternalView());
+        ArrayList<String> nodes = new ArrayList<String>();
+        for (Element e : elements)
+        {
+        if (e.getAttributeValue("path") != null || !e.getAttributeValue("path").equals(""))
+        {
+        nodes.add(e.getAttributeValue("path"));
+        }
+        }
+        return new QueryResultImp(session, nodes, workspaceName);
+        }
+        catch (JDOMException jde)
+        {
+        throw new RepositoryException(jde);
+        }
+        catch (Exception jde)
+        {
+        throw new RepositoryException(jde);
+        }
+        catch (Throwable jde)
+        {
+        throw new RepositoryException(jde);
+        }*/
         }
         else
         {
             HashSet<SemanticObject> nodes = new HashSet<SemanticObject>();
             Model model = SWBContext.getWorkspace(workspaceName).getSemanticObject().getModel().getRDFModel();
-            StringBuilder newStatement = new StringBuilder("select ?x ");
-            int pos = statement.toLowerCase().indexOf("where");
-            if (pos != -1)
-            {
-                newStatement.append(statement.substring(pos));
-            }
-            String sparql = prefixStatement.toString() + NL + newStatement;
+            String sparql = prefixStatement.toString() + NL + statement;
             com.hp.hpl.jena.query.Query query = com.hp.hpl.jena.query.QueryFactory.create(sparql);
             QueryExecution qexec = QueryExecutionFactory.create(query, model);
             try
@@ -149,12 +143,17 @@ public class QueryImp implements Query
                 ResultSet rs = qexec.execSelect();
                 while (rs.hasNext())
                 {
-                    while(rs.hasNext())
+                    QuerySolution rb = rs.nextSolution();
+                    List resultVars=rs.getResultVars();
+                    for(Object name : resultVars)
                     {
-                        QuerySolution rb = rs.nextSolution();
-                        Resource res=rb.getResource("x");                        
-                        nodes.add(new SemanticObject(res));
+                        if(rb.get(name.toString()).isResource())
+                        {
+                            Resource res=rb.getResource(name.toString());
+                            nodes.add(SemanticObject.getSemanticObject(res.getURI()));
+                        }
                     }
+
                 }
             }
             catch (Throwable e)

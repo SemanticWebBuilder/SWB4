@@ -13,6 +13,7 @@ import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticLiteral;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.repository.BaseNode;
+import org.semanticwb.repository.ChildNodeDefinition;
 
 /**
  *
@@ -30,16 +31,16 @@ public class NodeDefinitionImp implements NodeDefinition
     NodeDefinitionImp(SemanticObject object,SessionImp session)
     {
         BaseNode node=new BaseNode(object);
-        name=object.getProperty(BaseNode.vocabulary.jcr_name);
-        autocreated=object.getBooleanProperty(BaseNode.vocabulary.jcr_autoCreated, false);
-        mandatory=object.getBooleanProperty(BaseNode.vocabulary.jcr_mandatory, false);
-        String sOnParentVersion=object.getProperty(BaseNode.vocabulary.jcr_onParentVersion);
+        name=object.getProperty(ChildNodeDefinition.jcr_name);
+        autocreated=object.getBooleanProperty(ChildNodeDefinition.jcr_autoCreated, false);
+        mandatory=object.getBooleanProperty(ChildNodeDefinition.jcr_mandatory, false);
+        String sOnParentVersion=object.getProperty(ChildNodeDefinition.jcr_onParentVersion);
         if(sOnParentVersion!=null)
         {
             onParentVerion=OnParentVersionAction.valueFromName(sOnParentVersion);
         }
-        isProtected=object.getBooleanProperty(BaseNode.vocabulary.jcr_protected, false);
-        Iterator<SemanticLiteral> values= object.getSemanticClass().listRequiredProperties(BaseNode.vocabulary.jcr_requiredPrimaryTypes);
+        isProtected=object.getBooleanProperty(ChildNodeDefinition.jcr_protected, false);
+        Iterator<SemanticLiteral> values= object.getSemanticClass().listRequiredProperties(ChildNodeDefinition.jcr_requiredPrimaryTypes);
         while(values.hasNext())
         {
             String value=values.next().getString();
