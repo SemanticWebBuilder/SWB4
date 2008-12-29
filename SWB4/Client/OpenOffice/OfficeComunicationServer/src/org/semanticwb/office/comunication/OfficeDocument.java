@@ -626,15 +626,15 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             String id = UUID.randomUUID().toString();
             if (type.equals("EXCEL"))
             {
-                portlet = new ExcelPortlet(ExcelPortlet.swbrep_ExcelPortlet.newInstance(id));
+                //portlet = new ExcelPortlet(ExcelPortlet.swbrep_ExcelPortlet.newInstance(id));
             }
             else if (type.equals("PPT"))
             {
-                portlet = new PPTPortlet(PPTPortlet.swbrep_PPTPortlet.newInstance(id));
+                //portlet = new PPTPortlet(PPTPortlet.swbrep_PPTPortlet.newInstance(id));
             }
             else
             {
-                portlet = new WordPortlet(WordPortlet.swbrep_WordPortlet.newInstance(id));
+                //portlet = new WordPortlet(WordPortlet.swbrep_WordPortlet.newInstance(id));
             }
             parent.addPortlet(portlet);
             PortletInfo PortletInfo = new PortletInfo();
