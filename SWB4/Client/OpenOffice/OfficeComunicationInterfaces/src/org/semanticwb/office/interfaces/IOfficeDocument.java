@@ -53,4 +53,7 @@ public interface IOfficeDocument
 
     @XmlRpcMethod(methodName="OfficeDocument.setPortletProperties")
     public void setPortletProperties(PortletInfo portletInfo,PropertyInfo propertyInfo,String value) throws Exception;
+    
+    @XmlRpcMethod(methodName="OfficeDocument.listPortlets")
+    public PortletInfo[] listPortlets(PortletInfo portletInfo, WebPageInfo webpage) throws Exception;
 }

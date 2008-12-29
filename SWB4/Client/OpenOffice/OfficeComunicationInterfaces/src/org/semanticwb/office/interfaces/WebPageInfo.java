@@ -13,6 +13,7 @@ public class WebPageInfo {
     public String id;
     public String title;
     public String siteID;
+    public String description;
     @Override
     public boolean equals(Object obj)
     {
