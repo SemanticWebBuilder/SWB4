@@ -43,43 +43,36 @@ public class DialogContentInformation extends javax.swing.JDialog
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        buttonGroup1 = new javax.swing.ButtonGroup();
         jPanelButtons = new javax.swing.JPanel();
         jButtonAccept = new javax.swing.JButton();
         jButtonCancel = new javax.swing.JButton();
-        jButtonSendToAuthorize = new javax.swing.JButton();
-        jButtonSchuddler = new javax.swing.JButton();
-        jTabbedPane2 = new javax.swing.JTabbedPane();
-        jPanelInformation = new javax.swing.JPanel();
-        jLabel1Title = new javax.swing.JLabel();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jPanelContentInformation = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
         jTextFieldTitle = new javax.swing.JTextField();
-        jLabel1Description = new javax.swing.JLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTextAreaDescription = new javax.swing.JTextArea();
-        jLabel1DateofModification = new javax.swing.JLabel();
-        jLabel1DisplayDateOfModification = new javax.swing.JLabel();
-        jLabel1State = new javax.swing.JLabel();
-        jLabel1DisplayState = new javax.swing.JLabel();
-        jLabel1Activity = new javax.swing.JLabel();
-        jLabel2DisplayActivity = new javax.swing.JLabel();
-        jLabelVisible = new javax.swing.JLabel();
-        jRadioButtonVisibleYes = new javax.swing.JRadioButton();
-        jRadioButtonVisibleNo = new javax.swing.JRadioButton();
-        jPanelPermissions = new javax.swing.JPanel();
-        jCheckBoxAllowEditFromWeb = new javax.swing.JCheckBox();
-        jLabelRol = new javax.swing.JLabel();
-        jComboBoxRol = new javax.swing.JComboBox();
-        jPanelRolsAndRules = new javax.swing.JPanel();
-        jPanelRol = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jListRol = new javax.swing.JList();
-        jPanelRules = new javax.swing.JPanel();
+        jTextAreaDescription = new javax.swing.JTextArea();
+        jLabel1DisplayDateOfModification = new javax.swing.JLabel();
+        jPanelPublishInformation = new javax.swing.JPanel();
+        jToolBar1 = new javax.swing.JToolBar();
+        jButtonEdit = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JToolBar.Separator();
+        jButtonPublish = new javax.swing.JButton();
+        jSeparator3 = new javax.swing.JToolBar.Separator();
+        jButtonViewPage = new javax.swing.JButton();
+        jSeparator2 = new javax.swing.JToolBar.Separator();
+        jButton5 = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        jPanelVersions = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jListRules = new javax.swing.JList();
-        jPanelTypeOfDisplay = new javax.swing.JPanel();
-        jRadioButtonWeb = new javax.swing.JRadioButton();
-        jRadioButtonOffice = new javax.swing.JRadioButton();
-        jPanelChangePagContenido = new javax.swing.JPanel();
+        jTableSummary1 = new javax.swing.JTable();
+        jToolBar2 = new javax.swing.JToolBar();
+        jButton1 = new javax.swing.JButton();
+        jSeparator4 = new javax.swing.JToolBar.Separator();
+        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Información del Contenido");
@@ -92,20 +85,12 @@ public class DialogContentInformation extends javax.swing.JDialog
 
         jButtonCancel.setText("Cancelar");
 
-        jButtonSendToAuthorize.setText("Enviar a autorizar");
-
-        jButtonSchuddler.setText("Calendarizar");
-
         javax.swing.GroupLayout jPanelButtonsLayout = new javax.swing.GroupLayout(jPanelButtons);
         jPanelButtons.setLayout(jPanelButtonsLayout);
         jPanelButtonsLayout.setHorizontalGroup(
             jPanelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelButtonsLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButtonSendToAuthorize)
-                .addGap(18, 18, 18)
-                .addComponent(jButtonSchuddler)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
+                .addContainerGap(307, Short.MAX_VALUE)
                 .addComponent(jButtonCancel)
                 .addGap(18, 18, 18)
                 .addComponent(jButtonAccept)
@@ -117,300 +102,219 @@ public class DialogContentInformation extends javax.swing.JDialog
                 .addContainerGap(16, Short.MAX_VALUE)
                 .addGroup(jPanelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonAccept)
-                    .addComponent(jButtonCancel)
-                    .addComponent(jButtonSendToAuthorize)
-                    .addComponent(jButtonSchuddler))
+                    .addComponent(jButtonCancel))
                 .addContainerGap())
         );
 
         getContentPane().add(jPanelButtons, java.awt.BorderLayout.SOUTH);
 
-        jLabel1Title.setText("Título:");
+        jLabel1.setText("Título:");
 
-        jLabel1Description.setText("Descripción:");
+        jLabel2.setText("Descripción:");
+
+        jLabel3.setText("Fecha de última modificación:");
 
         jTextAreaDescription.setColumns(20);
         jTextAreaDescription.setRows(5);
-        jScrollPane2.setViewportView(jTextAreaDescription);
+        jScrollPane1.setViewportView(jTextAreaDescription);
 
-        jLabel1DateofModification.setText("Fecha de Modificación:");
+        jLabel1DisplayDateOfModification.setText("18 de Diciembre de 1973 20:30");
 
-        jLabel1DisplayDateOfModification.setText("16 de Mayo de 2008 10:40 a.m.");
-
-        jLabel1State.setText("Estado en el proceso de autorización:");
-
-        jLabel1DisplayState.setText("Revisión");
-
-        jLabel1Activity.setText("Actividad en el proceso de autorización:");
-
-        jLabel2DisplayActivity.setText("Autorización por parte de Diseño gráfico");
-
-        jLabelVisible.setText("Visible");
-
-        buttonGroup1.add(jRadioButtonVisibleYes);
-        jRadioButtonVisibleYes.setSelected(true);
-        jRadioButtonVisibleYes.setText("Sí");
-
-        buttonGroup1.add(jRadioButtonVisibleNo);
-        jRadioButtonVisibleNo.setText("No");
-
-        javax.swing.GroupLayout jPanelInformationLayout = new javax.swing.GroupLayout(jPanelInformation);
-        jPanelInformation.setLayout(jPanelInformationLayout);
-        jPanelInformationLayout.setHorizontalGroup(
-            jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelInformationLayout.createSequentialGroup()
+        javax.swing.GroupLayout jPanelContentInformationLayout = new javax.swing.GroupLayout(jPanelContentInformation);
+        jPanelContentInformation.setLayout(jPanelContentInformationLayout);
+        jPanelContentInformationLayout.setHorizontalGroup(
+            jPanelContentInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelContentInformationLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanelInformationLayout.createSequentialGroup()
-                        .addGroup(jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1Title)
-                            .addComponent(jLabel1Description)
-                            .addComponent(jLabel1DateofModification))
-                        .addGap(88, 88, 88)
-                        .addGroup(jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanelInformationLayout.createSequentialGroup()
-                                .addComponent(jLabel1DisplayDateOfModification)
-                                .addContainerGap(115, Short.MAX_VALUE))
-                            .addGroup(jPanelInformationLayout.createSequentialGroup()
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
-                                .addGap(21, 21, 21))
-                            .addGroup(jPanelInformationLayout.createSequentialGroup()
-                                .addComponent(jTextFieldTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
-                                .addGap(21, 21, 21))))
-                    .addGroup(jPanelInformationLayout.createSequentialGroup()
-                        .addComponent(jLabel1State)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel1DisplayState)
-                        .addContainerGap(228, Short.MAX_VALUE))
-                    .addGroup(jPanelInformationLayout.createSequentialGroup()
-                        .addGroup(jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1Activity)
-                            .addComponent(jLabelVisible))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanelInformationLayout.createSequentialGroup()
-                                .addComponent(jRadioButtonVisibleYes)
-                                .addGap(18, 18, 18)
-                                .addComponent(jRadioButtonVisibleNo))
-                            .addComponent(jLabel2DisplayActivity))
-                        .addContainerGap(76, Short.MAX_VALUE))))
+                .addGroup(jPanelContentInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3))
+                .addGap(30, 30, 30)
+                .addGroup(jPanelContentInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
+                    .addComponent(jTextFieldTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
+                    .addComponent(jLabel1DisplayDateOfModification, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE))
+                .addContainerGap())
         );
-        jPanelInformationLayout.setVerticalGroup(
-            jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelInformationLayout.createSequentialGroup()
+        jPanelContentInformationLayout.setVerticalGroup(
+            jPanelContentInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelContentInformationLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1Title)
+                .addGroup(jPanelContentInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
                     .addComponent(jTextFieldTitle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1Description)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(11, 11, 11)
-                .addGroup(jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1DateofModification)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanelContentInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                .addGroup(jPanelContentInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
                     .addComponent(jLabel1DisplayDateOfModification))
-                .addGap(18, 18, 18)
-                .addGroup(jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1State)
-                    .addComponent(jLabel1DisplayState))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1Activity)
-                    .addComponent(jLabel2DisplayActivity))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelVisible)
-                    .addComponent(jRadioButtonVisibleYes)
-                    .addComponent(jRadioButtonVisibleNo))
-                .addGap(116, 116, 116))
+                .addGap(96, 96, 96))
         );
 
-        jTabbedPane2.addTab("Información del contenido", jPanelInformation);
+        jTabbedPane1.addTab("Información del Contenido", jPanelContentInformation);
 
-        jCheckBoxAllowEditFromWeb.setText("Permitir editar desde el navegador");
+        jPanelPublishInformation.setLayout(new java.awt.BorderLayout());
 
-        jLabelRol.setText("Rol permitido para su edición");
+        jToolBar1.setFloatable(false);
+        jToolBar1.setRollover(true);
 
-        jComboBoxRol.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jButtonEdit.setText("Editar información");
+        jButtonEdit.setToolTipText("Edita las opciones de publicación de un contenido presentado en la lista");
+        jButtonEdit.setEnabled(false);
+        jButtonEdit.setFocusable(false);
+        jButtonEdit.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonEdit.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jButtonEdit);
+        jToolBar1.add(jSeparator1);
 
-        jPanelRolsAndRules.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Roles y Reglas Permitidas para su visualización", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.ABOVE_TOP));
+        jButtonPublish.setText("Publicar en otra página");
+        jButtonPublish.setFocusable(false);
+        jButtonPublish.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonPublish.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jButtonPublish);
+        jToolBar1.add(jSeparator3);
 
-        jPanelRol.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Roles", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.ABOVE_TOP));
+        jButtonViewPage.setText("Ver página");
+        jButtonViewPage.setEnabled(false);
+        jButtonViewPage.setFocusable(false);
+        jButtonViewPage.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonViewPage.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jButtonViewPage);
+        jToolBar1.add(jSeparator2);
 
-        jListRol.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
+        jButton5.setText("Eliminar");
+        jButton5.setFocusable(false);
+        jButton5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton5.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jButton5);
+
+        jPanelPublishInformation.add(jToolBar1, java.awt.BorderLayout.NORTH);
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Página", "Activo", "Tipo de presentación", "Version"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.Boolean.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
         });
-        jScrollPane1.setViewportView(jListRol);
+        jTable1.setColumnSelectionAllowed(true);
+        jScrollPane2.setViewportView(jTable1);
+        jTable1.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
-        javax.swing.GroupLayout jPanelRolLayout = new javax.swing.GroupLayout(jPanelRol);
-        jPanelRol.setLayout(jPanelRolLayout);
-        jPanelRolLayout.setHorizontalGroup(
-            jPanelRolLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelRolLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 376, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(18, Short.MAX_VALUE))
-        );
-        jPanelRolLayout.setVerticalGroup(
-            jPanelRolLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelRolLayout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        jPanelPublishInformation.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
-        jPanelRules.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Reglas", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.ABOVE_TOP));
+        jTabbedPane1.addTab("Información de Publicación", jPanelPublishInformation);
 
-        jListRules.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
+        jPanelVersions.setLayout(new java.awt.BorderLayout());
+
+        jTableSummary1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Versión", "Fecha de creación", "Creador"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
         });
-        jScrollPane3.setViewportView(jListRules);
+        jTableSummary1.setColumnSelectionAllowed(true);
+        jTableSummary1.setFocusable(false);
+        jTableSummary1.setRowSelectionAllowed(false);
+        jScrollPane3.setViewportView(jTableSummary1);
+        jTableSummary1.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
-        javax.swing.GroupLayout jPanelRulesLayout = new javax.swing.GroupLayout(jPanelRules);
-        jPanelRules.setLayout(jPanelRulesLayout);
-        jPanelRulesLayout.setHorizontalGroup(
-            jPanelRulesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelRulesLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 376, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(18, Short.MAX_VALUE))
-        );
-        jPanelRulesLayout.setVerticalGroup(
-            jPanelRulesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelRulesLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        jPanelVersions.add(jScrollPane3, java.awt.BorderLayout.CENTER);
 
-        javax.swing.GroupLayout jPanelRolsAndRulesLayout = new javax.swing.GroupLayout(jPanelRolsAndRules);
-        jPanelRolsAndRules.setLayout(jPanelRolsAndRulesLayout);
-        jPanelRolsAndRulesLayout.setHorizontalGroup(
-            jPanelRolsAndRulesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelRolsAndRulesLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanelRolsAndRulesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanelRules, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanelRol, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        jPanelRolsAndRulesLayout.setVerticalGroup(
-            jPanelRolsAndRulesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelRolsAndRulesLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanelRol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanelRules, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
-                .addContainerGap())
-        );
+        jToolBar2.setFloatable(false);
+        jToolBar2.setRollover(true);
 
-        javax.swing.GroupLayout jPanelPermissionsLayout = new javax.swing.GroupLayout(jPanelPermissions);
-        jPanelPermissions.setLayout(jPanelPermissionsLayout);
-        jPanelPermissionsLayout.setHorizontalGroup(
-            jPanelPermissionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelPermissionsLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanelPermissionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jCheckBoxAllowEditFromWeb)
-                    .addComponent(jPanelRolsAndRules, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanelPermissionsLayout.createSequentialGroup()
-                        .addComponent(jLabelRol)
-                        .addGap(18, 18, 18)
-                        .addComponent(jComboBoxRol, 0, 301, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
-        jPanelPermissionsLayout.setVerticalGroup(
-            jPanelPermissionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelPermissionsLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jCheckBoxAllowEditFromWeb)
-                .addGap(10, 10, 10)
-                .addGroup(jPanelPermissionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelRol)
-                    .addComponent(jComboBoxRol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(12, 12, 12)
-                .addComponent(jPanelRolsAndRules, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        jButton1.setText("Ver");
+        jButton1.setEnabled(false);
+        jButton1.setFocusable(false);
+        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar2.add(jButton1);
+        jToolBar2.add(jSeparator4);
 
-        jTabbedPane2.addTab("Permisos", jPanelPermissions);
+        jButton3.setText("Eliminar versión");
+        jButton3.setEnabled(false);
+        jButton3.setFocusable(false);
+        jButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar2.add(jButton3);
 
-        jRadioButtonWeb.setText("Web (No se requiere office para visualizar el contenido)");
+        jPanelVersions.add(jToolBar2, java.awt.BorderLayout.PAGE_START);
 
-        jRadioButtonOffice.setText("Office (Es requerido office para visualizar el contenido)");
+        jTabbedPane1.addTab("Versiones del contenido", jPanelVersions);
 
-        javax.swing.GroupLayout jPanelTypeOfDisplayLayout = new javax.swing.GroupLayout(jPanelTypeOfDisplay);
-        jPanelTypeOfDisplay.setLayout(jPanelTypeOfDisplayLayout);
-        jPanelTypeOfDisplayLayout.setHorizontalGroup(
-            jPanelTypeOfDisplayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelTypeOfDisplayLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanelTypeOfDisplayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jRadioButtonWeb)
-                    .addComponent(jRadioButtonOffice))
-                .addContainerGap(179, Short.MAX_VALUE))
-        );
-        jPanelTypeOfDisplayLayout.setVerticalGroup(
-            jPanelTypeOfDisplayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelTypeOfDisplayLayout.createSequentialGroup()
-                .addGap(49, 49, 49)
-                .addComponent(jRadioButtonWeb)
-                .addGap(18, 18, 18)
-                .addComponent(jRadioButtonOffice)
-                .addContainerGap(255, Short.MAX_VALUE))
-        );
-
-        jTabbedPane2.addTab("Tipo de despluiegue", jPanelTypeOfDisplay);
-
-        jPanelChangePagContenido.setLayout(new javax.swing.BoxLayout(jPanelChangePagContenido, javax.swing.BoxLayout.LINE_AXIS));
-        jTabbedPane2.addTab("Páginación del Contenido", jPanelChangePagContenido);
-
-        getContentPane().add(jTabbedPane2, java.awt.BorderLayout.CENTER);
+        getContentPane().add(jTabbedPane1, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
    
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton5;
     private javax.swing.JButton jButtonAccept;
     private javax.swing.JButton jButtonCancel;
-    private javax.swing.JButton jButtonSchuddler;
-    private javax.swing.JButton jButtonSendToAuthorize;
-    private javax.swing.JCheckBox jCheckBoxAllowEditFromWeb;
-    private javax.swing.JComboBox jComboBoxRol;
-    private javax.swing.JLabel jLabel1Activity;
-    private javax.swing.JLabel jLabel1DateofModification;
-    private javax.swing.JLabel jLabel1Description;
+    private javax.swing.JButton jButtonEdit;
+    private javax.swing.JButton jButtonPublish;
+    private javax.swing.JButton jButtonViewPage;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel1DisplayDateOfModification;
-    private javax.swing.JLabel jLabel1DisplayState;
-    private javax.swing.JLabel jLabel1State;
-    private javax.swing.JLabel jLabel1Title;
-    private javax.swing.JLabel jLabel2DisplayActivity;
-    private javax.swing.JLabel jLabelRol;
-    private javax.swing.JLabel jLabelVisible;
-    private javax.swing.JList jListRol;
-    private javax.swing.JList jListRules;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanelButtons;
-    private javax.swing.JPanel jPanelChangePagContenido;
-    private javax.swing.JPanel jPanelInformation;
-    private javax.swing.JPanel jPanelPermissions;
-    private javax.swing.JPanel jPanelRol;
-    private javax.swing.JPanel jPanelRolsAndRules;
-    private javax.swing.JPanel jPanelRules;
-    private javax.swing.JPanel jPanelTypeOfDisplay;
-    private javax.swing.JRadioButton jRadioButtonOffice;
-    private javax.swing.JRadioButton jRadioButtonVisibleNo;
-    private javax.swing.JRadioButton jRadioButtonVisibleYes;
-    private javax.swing.JRadioButton jRadioButtonWeb;
+    private javax.swing.JPanel jPanelContentInformation;
+    private javax.swing.JPanel jPanelPublishInformation;
+    private javax.swing.JPanel jPanelVersions;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTabbedPane jTabbedPane2;
+    private javax.swing.JToolBar.Separator jSeparator1;
+    private javax.swing.JToolBar.Separator jSeparator2;
+    private javax.swing.JToolBar.Separator jSeparator3;
+    private javax.swing.JToolBar.Separator jSeparator4;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTableSummary1;
     private javax.swing.JTextArea jTextAreaDescription;
     private javax.swing.JTextField jTextFieldTitle;
+    private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JToolBar jToolBar2;
     // End of variables declaration//GEN-END:variables
 }
