@@ -7,13 +7,19 @@ package org.semanticwb.openoffice;
 import java.awt.EventQueue;
 import java.io.File;
 import java.util.Map;
+import javax.swing.JOptionPane;
 import org.netbeans.spi.wizard.DeferredWizardResult;
 import org.netbeans.spi.wizard.ResultProgressHandle;
 import org.netbeans.spi.wizard.Summary;
+import org.netbeans.spi.wizard.Wizard;
 import org.netbeans.spi.wizard.WizardException;
+import org.netbeans.spi.wizard.WizardPage;
 import org.netbeans.spi.wizard.WizardPage.WizardResultProducer;
 import org.semanticwb.openoffice.interfaces.IOpenOfficeDocument;
+import org.semanticwb.openoffice.ui.wizard.PropertyEditor;
+import org.semanticwb.openoffice.ui.wizard.PublishVersion;
 import org.semanticwb.openoffice.ui.wizard.SelectCategory;
+import org.semanticwb.openoffice.ui.wizard.SelectPage;
 import org.semanticwb.openoffice.ui.wizard.SummaryPublish;
 import org.semanticwb.openoffice.ui.wizard.TitleAndDescription;
 import org.semanticwb.xmlrpc.Attachment;
@@ -56,6 +62,14 @@ public class PublishResultProducer implements WizardResultProducer
                 String contentID=openOfficeDocument.publish(title, description,repositoryName,categoryID,document.getDocumentType().toString(),nodeType,name);
                 document.SaveContentId(contentID,repositoryName);                
                 Summary summary=Summary.create(new SummaryPublish(contentID,repositoryName),null);               
+                int res=JOptionPane.showConfirmDialog(null, "¿Desea publicar este contenido en una página web?","Publicación de contenido",JOptionPane.YES_NO_OPTION);
+                if(res==JOptionPane.YES_OPTION)
+                {
+                    PublishContentToWebPageResultProducer resultProducer = new PublishContentToWebPageResultProducer();
+                    WizardPage[] clazz = new WizardPage[]{new SelectPage(),new PublishVersion(contentID,repositoryName),new PropertyEditor()};
+                    Wizard wiz = WizardPage.createWizard("Asistente de publicación de contenido en página web", clazz, resultProducer);        
+                    wiz.show();
+                }
                 progress.finished(summary);
             }           
             catch (Exception e)
