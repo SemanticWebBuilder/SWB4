@@ -1677,7 +1677,7 @@ public class BaseNode extends BaseNodeBase
                     }
                     else
                     {
-                        uri = namespace + values[1];
+                        uri = namespace +"#"+ values[1];
                     }
                 }
                 break;
