@@ -181,8 +181,11 @@ public class SemanticClass
              {
                  Statement statement=it.nextStatement();       
                  Resource res=statement.getResource();
-                 SemanticObject object=SemanticObject.createSemanticObject(res);
-                 objects.add(object);
+                 if(res.getURI()!=null)
+                 {
+                    SemanticObject object=SemanticObject.createSemanticObject(res);
+                    objects.add(object);
+                 }
              }
         }catch(PropertyNotFoundException noe){}
         return objects.iterator();
