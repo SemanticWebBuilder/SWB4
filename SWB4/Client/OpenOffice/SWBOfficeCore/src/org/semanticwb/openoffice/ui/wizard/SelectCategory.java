@@ -132,6 +132,7 @@ public class SelectCategory extends WizardPage
         jPanel1 = new javax.swing.JPanel();
         jToolBar1 = new javax.swing.JToolBar();
         jButtonAddCategory = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JToolBar.Separator();
         jButtonDeletCategory = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTreeCategory = new javax.swing.JTree();
@@ -141,6 +142,7 @@ public class SelectCategory extends WizardPage
 
         jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
+        jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
         jButtonAddCategory.setText("Agregar Categoria");
@@ -154,6 +156,7 @@ public class SelectCategory extends WizardPage
             }
         });
         jToolBar1.add(jButtonAddCategory);
+        jToolBar1.add(jSeparator1);
 
         jButtonDeletCategory.setText("Borrar Categoria");
         jButtonDeletCategory.setEnabled(false);
@@ -312,6 +315,7 @@ private void jButtonDeletCategoryActionPerformed(java.awt.event.ActionEvent evt)
     private javax.swing.JButton jButtonDeletCategory;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JTree jTreeCategory;
     // End of variables declaration//GEN-END:variables
