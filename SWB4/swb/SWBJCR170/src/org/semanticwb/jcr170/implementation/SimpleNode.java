@@ -438,7 +438,9 @@ public class SimpleNode implements Node
             if (mixinClazz.equals(Lockable.mix_Lockable) || mixinClazz.isSubClass(Lockable.mix_Lockable))
             {
                 PropertyImp prop = addProperty(getName(Lockable.jcr_lockOwner), mixinClazz);
-                prop.setValueInternal(null);                
+                prop.setValueInternal(null);
+                prop = addProperty(getName(Lockable.jcr_lockIsDeep), mixinClazz);
+                prop.setValueInternal(false);
             }
 
             mixins.add(mixinClazz);
