@@ -19,6 +19,7 @@ import javax.jcr.version.Version;
 import javax.jcr.version.VersionHistory;
 import javax.jcr.version.VersionIterator;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Portlet;
 import org.semanticwb.model.SWBContext;
@@ -54,15 +55,25 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         return IOfficeApplication.version >= version;
     }
 
-    public void createPage(String title, String id, String description) throws Exception
+    public void createPage(WebPageInfo page,String pageid,String title,String description) throws Exception
     {
+        WebSite website=SWBContext.getWebSite(page.siteID);
+        if(website.getWebPage(pageid)==null)
+        {
+            throw new Exception("The webpage already exists");
+        }
+        WebPage newpage=website.createWebPage(pageid);
+        newpage.setTitle(title);
+        newpage.setDescription(description);
+        WebPage parent=website.getWebPage(page.id);
+        newpage.setParent(parent);
     }
 
     public void changePassword(String newPassword) throws Exception
     {
     }
 
-    public boolean existsPage(String id) throws Exception
+    public boolean existsPage(WebSiteInfo site,WebPageInfo page,String pageid) throws Exception
     {
         return false;
     }
@@ -539,6 +550,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         info.id = site.getHomePage().getId();
         info.title = site.getHomePage().getTitle();
         info.siteID = website.id;
+        info.description=site.getDescription();
         return info;
     }
 
@@ -554,6 +566,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             info.id = site.getHomePage().getId();
             info.title = site.getHomePage().getTitle();
             info.siteID = webpage.siteID;
+            info.description = site.getHomePage().getDescription();
         }
         return pagesToReturn.toArray(new WebPageInfo[pagesToReturn.size()]);
     }
