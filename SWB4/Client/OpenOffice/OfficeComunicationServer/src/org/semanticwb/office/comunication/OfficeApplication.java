@@ -19,9 +19,7 @@ import javax.jcr.version.Version;
 import javax.jcr.version.VersionHistory;
 import javax.jcr.version.VersionIterator;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
@@ -32,9 +30,6 @@ import org.semanticwb.office.interfaces.IOfficeApplication;
 import org.semanticwb.office.interfaces.VersionInfo;
 import org.semanticwb.office.interfaces.WebPageInfo;
 import org.semanticwb.office.interfaces.WebSiteInfo;
-import org.semanticwb.portlet.office.ExcelPortlet;
-import org.semanticwb.portlet.office.PPTPortlet;
-import org.semanticwb.portlet.office.WordPortlet;
 import org.semanticwb.repository.RepositoryManagerLoader;
 import org.semanticwb.xmlrpc.Part;
 import org.semanticwb.xmlrpc.XmlRpcObject;
@@ -179,7 +174,8 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             Query query;
             if (session.getRepository().getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf("webbuilder") != -1)
             {
-                String statement = "SELECT ?x WHERE {?x " + cm_title + " ?title FILTER regex(?title, \"" + title + "\")  }";
+                //String statement = "SELECT ?x WHERE {?x " + cm_title + " ?title FILTER regex(?title, \"" + title + "\")  }";
+                String statement = "SELECT ?x WHERE {?x " + cm_title + " ?title FILTER (?title= \"" + title + "\")  }";
                 query = session.getWorkspace().getQueryManager().createQuery(statement, "SPARQL");
             }
             else
@@ -286,7 +282,8 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             Query query;
             if (session.getRepository().getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf("webbuilder") != -1)
             {
-                String statement = "SELECT ?x WHERE {?x " + cm_title + " ?title FILTER regex(?title, \"" + title + "\")  }";
+                //String statement = "SELECT ?x WHERE {?x " + cm_title + " ?title FILTER regex(?title, \"" + title + "\")  }";
+                String statement = "SELECT ?x WHERE {?x " + cm_title + " ?title FILTER (?title=\"" + title + "\") }";
                 query = session.getWorkspace().getQueryManager().createQuery(statement, "SPARQL");
             }
             else
