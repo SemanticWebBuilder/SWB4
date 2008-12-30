@@ -61,20 +61,14 @@ public class SelectCategory extends WizardPage
         }
     }
 
-    private void loadTree()
+    private void addCategory(RepositoryNode parent)
     {
-        this.jTreeCategory.setCellRenderer(new TreeRender());
-        this.jTreeCategory.setEditable(false);
-        DefaultMutableTreeNode repositories = new RepositoryNode("Repositorios");
-        DefaultTreeModel model = new DefaultTreeModel(repositories);
-        this.jTreeCategory.setModel(model);
-
         try
         {
             for (String repository : OfficeApplication.getOfficeApplicationProxy().getRepositories())
             {
                 RepositoryNode repositoryNode = new RepositoryNode(repository);
-                model.insertNodeInto(repositoryNode, repositories, 0);
+                parent.add(repositoryNode);
                 for (CategoryInfo category : OfficeApplication.getOfficeApplicationProxy().getCategories(repository))
                 {
                     CategoryNode categoryNode = new CategoryNode(category.UDDI, category.title, category.description, repository);
@@ -95,6 +89,16 @@ public class SelectCategory extends WizardPage
             this.setProblem(message);
             return;
         }
+    }
+
+    private void loadTree()
+    {
+        this.jTreeCategory.setCellRenderer(new TreeRender());
+        this.jTreeCategory.setEditable(false);
+        RepositoryNode repositories = new RepositoryNode("Repositorios");
+        DefaultTreeModel model = new DefaultTreeModel(repositories);
+        this.jTreeCategory.setModel(model);
+        addCategory(repositories);
         if (this.jTreeCategory.getRowCount() > 0)
         {
             this.jTreeCategory.expandRow(0);
@@ -194,17 +198,8 @@ private void jButtonAddCategoryActionPerformed(java.awt.event.ActionEvent evt) {
         addCategory.setVisible(true);
         if (!addCategory.isCancel())
         {
-            try
-            {
-                for (CategoryInfo category : OfficeApplication.getOfficeApplicationProxy().getCategories(categoryNode.getRepository(), categoryNode.getID()))
-                {
-                    DefaultMutableTreeNode child = new CategoryNode(category.UDDI, category.title, category.description, categoryNode.getRepository());
-                    ((DefaultTreeModel) jTreeCategory.getModel()).insertNodeInto(child, categoryNode, 0);
-                }
-            }
-            catch (Exception e)
-            {
-            }
+            categoryNode.removeAllChildren();
+            addCategory(categoryNode.getRepository(), categoryNode);
         }
     }
     if (selected != null && selected instanceof RepositoryNode)
@@ -214,17 +209,8 @@ private void jButtonAddCategoryActionPerformed(java.awt.event.ActionEvent evt) {
         addCategory.setVisible(true);
         if (!addCategory.isCancel())
         {
-            try
-            {
-                for (CategoryInfo category : OfficeApplication.getOfficeApplicationProxy().getCategories(repositoryNode.getName()))
-                {
-                    DefaultMutableTreeNode categoryNode = new CategoryNode(category.UDDI, category.title, category.description, repositoryNode.getName());
-                    ((DefaultTreeModel) jTreeCategory.getModel()).insertNodeInto(categoryNode, repositoryNode, 0);
-                }
-            }
-            catch (Exception e)
-            {
-            }
+            repositoryNode.removeAllChildren();
+            addCategory(repositoryNode);
         }
     }
     this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
@@ -245,10 +231,10 @@ private void jTreeCategoryValueChanged(javax.swing.event.TreeSelectionEvent evt)
         {
 
             RepositoryNode rep = (RepositoryNode) selected;
-            if(rep.getChildCount()==0)
+            if (rep.getChildCount() == 0)
             {
-                JOptionPane.showMessageDialog(this, "¡No existen categorias en este repositorio!\r\nDebe crear una para poder publicar el contenido",getDescription(),JOptionPane.ERROR_MESSAGE);
-            }            
+                JOptionPane.showMessageDialog(this, "¡No existen categorias en este repositorio!\r\nDebe crear una para poder publicar el contenido", getDescription(), JOptionPane.ERROR_MESSAGE);
+            }
             this.jButtonAddCategory.setEnabled(true);
         }
     }
