@@ -241,7 +241,7 @@ public class SemanticObject
         //System.out.print("getSemanticClass:"+getURI());
         if (m_cls == null)
         {
-            StmtIterator stmit = m_res.listProperties(m_res.getModel().getProperty(SemanticVocabulary.RDF_TYPE));
+            StmtIterator stmit = m_res.listProperties(getModel().getSemanticProperty(SemanticVocabulary.RDF_TYPE).getRDFProperty());
             while(stmit.hasNext())
             {
                 Statement stm=stmit.nextStatement();
@@ -267,7 +267,7 @@ public class SemanticObject
             //TODO:
             return null;//m_virtclass;
         }
-        return new SemanticClassIterator<SemanticClass>(m_res.listProperties(m_res.getModel().getProperty(SemanticVocabulary.RDF_TYPE)));
+        return new SemanticClassIterator<SemanticClass>(m_res.listProperties(getModel().getSemanticProperty(SemanticVocabulary.RDF_TYPE).getRDFProperty()));
     }
 
     public void addSemanticClass(SemanticClass cls)
@@ -278,7 +278,7 @@ public class SemanticObject
         }
         else
         {
-            m_res.addProperty(m_res.getModel().getProperty(SemanticVocabulary.RDF_TYPE), cls.getOntClass());
+            m_res.addProperty(getModel().getSemanticProperty(SemanticVocabulary.RDF_TYPE).getRDFProperty(), cls.getOntClass());
         }
     }
 
@@ -290,7 +290,7 @@ public class SemanticObject
         }
         else if (m_res != null)
         {
-            StmtIterator stit = m_res.listProperties(m_res.getModel().getProperty(SemanticVocabulary.RDF_TYPE));
+            StmtIterator stit = m_res.listProperties(getModel().getSemanticProperty(SemanticVocabulary.RDF_TYPE).getRDFProperty());
             while (stit.hasNext())
             {
                 Statement staux = stit.nextStatement();
