@@ -27,10 +27,10 @@ import org.semanticwb.model.GenericObject;
  *
  * @author Jei
  */
-public class SemanticClass 
+public class SemanticClass
 {
     private static Logger log=SWBUtils.getLogger(SemanticClass.class);
-    
+
     private OntClass m_class;
     private HashMap<String,SemanticProperty> m_props;
     private Boolean m_isSWBClass=null;
@@ -51,14 +51,14 @@ public class SemanticClass
         this.m_class=oclass;
         init();
     }
-    
+
     public SemanticClass(String classuri) throws SWBException
     {
         this.m_class=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getOntClass(classuri);
         if(this.m_class==null) throw new SWBException("OntClass Not Found");
         init();
     }
-    
+
     private void init()
     {
         m_props=new HashMap();
@@ -66,7 +66,7 @@ public class SemanticClass
         // super-classes
         //System.out.println("m_class:"+m_class);
         int x=0;
-        for (Iterator i = m_class.listDeclaredProperties(false); i.hasNext(); ) 
+        for (Iterator i = m_class.listDeclaredProperties(false); i.hasNext(); )
         {
             Property prop=(Property)i.next();
             x++;
@@ -80,24 +80,24 @@ public class SemanticClass
         log.trace("SemanticClass:"+getName()+" "+getClassName()+" "+m_class.getNameSpace()+" "+getPrefix());
         //System.out.println("Name:"+getName()+" "+getClassName()+" "+m_class.getNameSpace()+" "+getPrefix());
     }
-    
+
     public String getName()
     {
         return m_class.getLocalName();
     }
-    
+
     public String getPrefix()
     {
         return m_class.getOntModel().getNsURIPrefix(m_class.getNameSpace());
-    }    
-    
+    }
+
     public String getClassName()
     {
         if(m_className==null)
         {
             try
             {
-                Property prop=m_class.getModel().getProperty(SemanticVocabulary.SWB_ANNOT_CLASSNAME);
+                Property prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.SWB_ANNOT_CLASSNAME).getRDFProperty();
                 //System.out.println("Class:"+m_class+" ->"+className);
                 m_className=m_class.getRequiredProperty(prop).getString();
                 //System.out.println("Class:"+m_class+" ->"+className);
@@ -108,13 +108,13 @@ public class SemanticClass
             //log.trace("getClassName:"+m_className);
         }
         return m_className;
-    }   
-    
+    }
+
     public boolean isAutogenId()
     {
         if(m_autogenId==null)
         {
-            Property prop=m_class.getModel().getProperty(SemanticVocabulary.SWB_ANNOT_AUTOGENID);
+            Property prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.SWB_ANNOT_AUTOGENID).getRDFProperty();
             //System.out.println("Class:"+m_class+" ->"+className);
             try
             {
@@ -132,7 +132,7 @@ public class SemanticClass
     {
         if(!m_isClassIDCheck)
         {
-            Property prop=m_class.getModel().getProperty(SemanticVocabulary.SWB_PROP_CLASSID);
+            Property prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.SWB_PROP_CLASSID).getRDFProperty();
             try
             {
                 m_classID=m_class.getRequiredProperty(prop).getString();
@@ -142,7 +142,7 @@ public class SemanticClass
         return m_classID;
     }
 
-    
+
     public SemanticLiteral getRequiredProperty(SemanticProperty prop)
     {
         SemanticLiteral ret=null;
@@ -153,17 +153,17 @@ public class SemanticClass
         }catch(PropertyNotFoundException noe){}
         return ret;
     }
-    
+
     public Iterator<SemanticLiteral> listRequiredProperties(SemanticProperty prop)
     {
-        ArrayList<SemanticLiteral> literals=new ArrayList<SemanticLiteral>();        
+        ArrayList<SemanticLiteral> literals=new ArrayList<SemanticLiteral>();
         Property iprop=prop.getRDFProperty();
         try
-        {            
+        {
              StmtIterator it=m_class.listProperties(iprop);
              while(it.hasNext())
              {
-                 Statement statement=it.nextStatement();                 
+                 Statement statement=it.nextStatement();
                  literals.add(new SemanticLiteral(statement));
              }
         }catch(PropertyNotFoundException noe){}
@@ -172,29 +172,26 @@ public class SemanticClass
 
     public Iterator<SemanticObject> listObjectRequiredProperties(SemanticProperty prop)
     {
-        ArrayList<SemanticObject> objects=new ArrayList<SemanticObject>();        
+        ArrayList<SemanticObject> objects=new ArrayList<SemanticObject>();
         Property iprop=prop.getRDFProperty();
         try
-        {            
+        {
              StmtIterator it=m_class.listProperties(iprop);
              while(it.hasNext())
              {
-                 Statement statement=it.nextStatement();       
+                 Statement statement=it.nextStatement();
                  Resource res=statement.getResource();
-                 if(res.getURI()!=null)
-                 {
-                    SemanticObject object=SemanticObject.createSemanticObject(res);
-                    objects.add(object);
-                 }
+                 SemanticObject object=SemanticObject.createSemanticObject(res);
+                 objects.add(object);
              }
         }catch(PropertyNotFoundException noe){}
         return objects.iterator();
     }
-    
-    
-    
-    
-    
+
+
+
+
+
     /**
      * Lista las clases relacionadas a esta clase del tipo modelo con la propiedad hasClass
      * Solo si isSWBModel = true
@@ -205,10 +202,10 @@ public class SemanticClass
         Iterator ret=(new Vector()).iterator();
         if(isSWBModel()==true)
         {
-            Property prop=m_class.getModel().getProperty(SemanticVocabulary.SWB_PROP_HASCLASS);
+            Property prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.SWB_PROP_HASCLASS).getRDFProperty();
             ret=new SemanticClassIterator(m_class.listProperties(prop));
         }
-        return ret;        
+        return ret;
     }
 
     /**
@@ -219,19 +216,19 @@ public class SemanticClass
         Iterator ret=(new Vector()).iterator();
         if(isSWBModel()==true)
         {
-            Property prop=m_class.getModel().getProperty(SemanticVocabulary.SWB_PROP_HASHERARQUICALNODE);
+            Property prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.SWB_PROP_HASHERARQUICALNODE).getRDFProperty();
             ret=new SemanticIterator(m_class.listProperties(prop));
         }
-        return ret;        
+        return ret;
     }
 
-    
+
     public Iterator<SemanticClass> listOwnerModels()
     {
         ArrayList ret=new ArrayList();
         if(isSWBModel()==false)
         {
-            Property prop=m_class.getModel().getProperty(SemanticVocabulary.SWB_PROP_HASCLASS);
+            Property prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.SWB_PROP_HASCLASS).getRDFProperty();
             StmtIterator it=m_class.getModel().listStatements(null, prop, m_class);
             //System.out.println("listOwnerModels:"+prop+"-"+m_class);
             while(it.hasNext())
@@ -240,10 +237,10 @@ public class SemanticClass
                 ret.add(SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(stmt.getSubject().getURI()));
             }
         }
-        return ret.iterator();        
+        return ret.iterator();
     }
-    
-    
+
+
     public Constructor getConstructor()
     {
         if(m_constructor==null)
@@ -256,18 +253,18 @@ public class SemanticClass
             catch(NoSuchMethodException nsme)
             {
                 new IllegalArgumentException(nsme);
-            }        
+            }
         }
         return m_constructor;
-        
+
     }
-    
+
     public SemanticObject newInstance(String uri)
     {
         Resource res=m_class.getModel().getResource(uri);
         return newInstance(res);
     }
-    
+
     public SemanticObject newInstance(Resource res)
     {
 //        try
@@ -277,15 +274,15 @@ public class SemanticClass
 //        }
 //        catch(Exception ie)
 //        {
-//            throw new AssertionError(ie.getMessage());        
-//        }        
-    }    
-    
+//            throw new AssertionError(ie.getMessage());
+//        }
+    }
+
     public GenericObject newGenericInstance(Resource res)
     {
         return newGenericInstance(newInstance(res));
-    }     
-    
+    }
+
     public GenericObject newGenericInstance(SemanticObject obj)
     {
         try
@@ -294,10 +291,10 @@ public class SemanticClass
         }
         catch(Exception ie)
         {
-            throw new AssertionError(ie.getMessage());        
-        }        
-    }       
-    
+            throw new AssertionError(ie.getMessage());
+        }
+    }
+
     public Class getObjectClass()
     {
         if(m_cls==null)
@@ -310,12 +307,12 @@ public class SemanticClass
         }
         return m_cls;
     }
-    
+
     public String getURI()
     {
         return m_class.getURI();
     }
-    
+
     /**
      * Regresa URI codificado para utilizar en ligas de html
      * @return URI Codificado
@@ -323,8 +320,8 @@ public class SemanticClass
     public String getEncodedURI()
     {
         return URLEncoder.encode(getURI());
-    }     
-    
+    }
+
     public String getLabel(String lang)
     {
         return m_class.getLabel(lang);
@@ -336,38 +333,38 @@ public class SemanticClass
         if(ret==null)ret=getName();
         return ret;
     }
-    
+
 //    public boolean isSuperClass(SemanticClass cls)
 //    {
 //        return m_class.hasSuperClass(cls.getOntClass(),false);
 //    }
-//    
+//
 //    public boolean isSubClass(SemanticClass cls)
 //    {
 //        return m_class.hasSubClass(cls.getOntClass(),false);
-//    }    
+//    }
 
     public Iterator listInstances()
     {
         return listInstances(false);
     }
-    
+
     public Iterator listInstances(boolean direct)
     {
         //return new SemanticIterator(this,m_class.listInstances(direct));
         return new SemanticObjectIterator(m_class.listInstances(direct));
     }
-    
+
     public Iterator listGenericInstances()
     {
         return listGenericInstances(false);
     }
-    
+
     public Iterator listGenericInstances(boolean direct)
     {
         return new GenericIterator(this,m_class.listInstances(direct));
     }
-    
+
     public SemanticProperty getProperty(String name)
     {
         return m_props.get(name);
@@ -377,23 +374,23 @@ public class SemanticClass
     {
         return m_props.containsKey(name);
     }
-    
+
     public Iterator<SemanticProperty> listProperties()
     {
         return m_props.values().iterator();
     }
-    
+
     public OntClass getOntClass()
     {
         return m_class;
     }
-    
-    
+
+
     public boolean isSuperClass(SemanticClass cls)
     {
         return cls.isSubClass(this);
-    }    
-    
+    }
+
     public boolean isSubClass(SemanticClass cls)
     {
         boolean ret=false;
@@ -414,22 +411,22 @@ public class SemanticClass
     {
         return listSubClasses(false);
     }
-    
+
     public Iterator<SemanticClass> listSubClasses(boolean direct)
     {
         return new SemanticClassIterator(m_class.listSubClasses(direct));
-    }    
-    
+    }
+
     public Iterator<SemanticClass> listSuperClasses()
     {
         return listSuperClasses(false);
     }
-    
+
     public Iterator<SemanticClass> listSuperClasses(boolean direct)
     {
         return new SemanticClassIterator(m_class.listSuperClasses(direct));
-    }     
-    
+    }
+
     @Override
     public String toString()
     {
@@ -437,13 +434,13 @@ public class SemanticClass
     }
 
     @Override
-    public int hashCode() 
+    public int hashCode()
     {
         return m_class.hashCode();
     }
 
     @Override
-    public boolean equals(Object obj) 
+    public boolean equals(Object obj)
     {
         boolean ret=false;
         if(obj!=null)
@@ -451,15 +448,15 @@ public class SemanticClass
             ret=(hashCode()==obj.hashCode());
         }
         return ret;
-    }    
-    
+    }
+
     private void checkType()
     {
         m_isSWBClass=false;
         m_isSWBInterface=false;
         m_isSWBModel=false;
         m_isSWBFormElement=false;
-        for (Iterator i = m_class.listRDFTypes(false); i.hasNext(); ) 
+        for (Iterator i = m_class.listRDFTypes(false); i.hasNext(); )
         {
             Resource res=(Resource)i.next();
             String uri=res.getURI();
@@ -480,9 +477,9 @@ public class SemanticClass
                 m_isSWBFormElement = true;
                 break;
             }
-        }        
+        }
     }
-    
+
     public boolean isSWBClass()
     {
         if(m_isSWBClass==null)
@@ -491,7 +488,7 @@ public class SemanticClass
         }
         return m_isSWBClass.booleanValue();
     }
-    
+
     public boolean isSWBInterface()
     {
         if(m_isSWBInterface==null)
@@ -500,7 +497,7 @@ public class SemanticClass
         }
         return m_isSWBInterface.booleanValue();
     }
-    
+
     public boolean isSWBModel()
     {
         if(m_isSWBModel==null)
@@ -508,8 +505,8 @@ public class SemanticClass
             checkType();
         }
         return m_isSWBModel.booleanValue();
-    }   
-    
+    }
+
     public boolean isSWBFormElement()
     {
         if(m_isSWBFormElement==null)
@@ -517,8 +514,8 @@ public class SemanticClass
             checkType();
         }
         return m_isSWBFormElement.booleanValue();
-    }     
-    
+    }
+
     public SemanticProperty getDisplayNameProperty() {
         return displayNameProperty;
     }
@@ -532,7 +529,7 @@ public class SemanticClass
     {
         SemanticObject obj=SWBPlatform.getSemanticMgr().getOntology().getSemanticObject(getURI());
         Resource res=obj.getRDFResource();
-        res.addProperty(res.getModel().getProperty(SemanticVocabulary.RDFS_SUBCLASSOF), cls.getOntClass());
+        res.addProperty(SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.RDFS_SUBCLASSOF).getRDFProperty(), cls.getOntClass());
     }
 
     public boolean isSWB()
