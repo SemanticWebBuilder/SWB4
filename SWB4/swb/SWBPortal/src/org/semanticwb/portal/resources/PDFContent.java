@@ -30,7 +30,6 @@
 
 package org.semanticwb.portal.resources;
 
-import java.io.File;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -41,11 +40,6 @@ import org.semanticwb.model.Portlet;
 import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
-//import org.semanticwb.portal.services.DocumentExtractorSrv;
-//import org.pdfbox.exceptions.CryptographyException;
-//import org.pdfbox.exceptions.InvalidPasswordException;
-//import org.pdfbox.pdmodel.PDDocument;
-//import org.pdfbox.util.PDFTextStripper;
 
 /** Objeto que se encarga de desplegar y administrar un contenido de tipo remoto en un frame independiente
  * bajo ciertos criterios (configuraci�n de recurso).
@@ -107,8 +101,7 @@ public class PDFContent extends GenericAdmResource {
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramReq) throws SWBResourceException, IOException 
     {        
         Portlet base=getResourceBase();
-        if("".equals(base.getAttribute("archive","").trim())) { 
-            //response.getWriter().print(""); 
+        if("".equals(base.getAttribute("archive","").trim())) {
             response.getWriter().println("<br><a href=\"" + paramReq.getRenderUrl().setMode(paramReq.Mode_ADMIN) + "\">admin pdf content</a>");
             return; 
         }
@@ -142,7 +135,6 @@ public class PDFContent extends GenericAdmResource {
                 if("center".equals(align)){
                     ret.append("</p>");
                 }
-                ret.append("<br><a href=\"" + paramReq.getRenderUrl().setMode(paramReq.Mode_ADMIN) + "\">admin pdf content</a>");
             } 
             catch (Exception e) { 
                 log.error("Error in resource PDFContent while bringing HTML.", e);
