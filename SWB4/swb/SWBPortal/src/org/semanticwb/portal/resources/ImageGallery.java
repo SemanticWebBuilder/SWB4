@@ -225,11 +225,11 @@ public class ImageGallery extends GenericAdmResource {
             ret.append("<form name=\"frmImgGalleryResource_"+base.getId()+"\" method=\"post\" enctype=\"multipart/form-data\" action=\""+ url.toString()+"\"> \n");            
             ret.append("<fieldset> \n");
             ret.append("<table width=\"100%\"  border=\"0\" cellpadding=\"5\" cellspacing=\"0\"> \n");
-            ret.append("<tr> \n");
+            /*ret.append("<tr> \n");
             ret.append("<td colspan=\"2\">");
             ret.append(paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_section"));
             ret.append("</td> \n");
-            ret.append("</tr> \n");
+            ret.append("</tr> \n");*/
             ret.append("\n<tr>");
             ret.append("\n<td>" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_title") + "</td>");
             ret.append("\n<td>");
