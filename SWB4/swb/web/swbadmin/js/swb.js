@@ -3,6 +3,7 @@
  * and open the template in the editor.
  */
       var context="/swb";
+      var stores= new Array();
 
       dojo.require("dijit.Menu");
       dojo.require("dijit._Calendar");
@@ -51,6 +52,8 @@
       // for the Tree
       dojo.require("dojo.data.ItemFileWriteStore");
       dojo.require("dojo.data.ItemFileReadStore");
+
+      //dojo.require("dijit.PopupMenu");
 
       dojo.require("dojo.fx");
 
@@ -282,6 +285,26 @@
           }
       }
 
+      function reloadTab(uri)
+      {
+          var objid=uri+"/tab";
+          var tab = dijit.byId(objid);
+          if(tab!=null)
+          {
+              //close
+              var d=dijit.byId(objid+"2");
+              if(d)
+              {
+                  var arr=d.getChildren();
+                  for (var n = 0; n < arr.length; n++)
+                  {
+                      arr[n].attr('content',null);
+                  }
+              }
+            tab.refresh();
+          }
+      }
+
       var act_item;
       var act_store;
 
@@ -290,7 +313,7 @@
           act_item=item;
           act_store=store;
           if(action.length)action=action[0];
-          //alert("action:"+action+" ["+action.name+"] "+action.length);
+          //alert("store:"+store+" action:"+action+" ["+action.name+"] "+action.length);
           if(action.name=="reload")
           {
               reloadTreeNode(store,item);
@@ -348,8 +371,22 @@
           }
       }
 
+      function updateTreeNodeByUri(uri)
+      {
+          for(x=0;x<stores.length;x++)
+          {
+              var s=stores[x];
+              var n=getItem(s,uri);
+              if(n)
+              {
+                 updateTreeNode(s,n);
+              }
+          }
+      }
+
       function updateTreeNode(store, item, jsonNode)
       {
+          //alert("Store:"+store+" "+act_store.jsId);
           if(!store)store=act_store;
           if(!item)item=act_item;
           var onlyNode=false;
@@ -539,4 +576,10 @@
                   eval(onloadscript);
               }
           }
+      }
+
+      function registerStore(store)
+      {
+          stores[stores.length]=store;
+          //alert(stores.length);
       }

@@ -72,7 +72,8 @@
         {
             frm.processForm(request);
             out.println("<script type=\"text/javascript\">");
-            out.println("updateTreeNode(treeStore,getItem(treeStore,'"+obj.getURI()+"'));");
+            //out.println("alert('mtreeStore:'+mtreeStore);");
+            out.println("updateTreeNodeByUri('"+obj.getURI()+"');");
             out.println("showStatus('"+obj.getSemanticClass().getDisplayName(lang)+" actualizado');");
             out.println("</script>");
         }

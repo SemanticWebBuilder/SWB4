@@ -10,15 +10,16 @@
             WebPage child=it.next();
             if(child.listVisibleChilds(null).hasNext())
             {
-                out.println("		<li dojoType=\"dijit.PopupMenuItem\" iconClass=\"swbIconWebPage\">");
+                out.println("		<div dojoType=\"dijit.PopupMenuItem\" iconClass_=\"swbIconWebPage\">");
                 out.println("			<span>"+child.getTitle()+"</span>");
-                out.println("		<ul dojoType=\"dijit.Menu\">");
+                out.println("		<div dojoType=\"dijit.Menu\">");
                 addChild(child,out);
-                out.println("		</ul>");
-                out.println("		</li>");
+                out.println("		</div>");
+                out.println("		</div>");
             }else
             {
-                out.println("            <li dojoType=\"dijit.MenuItem\" iconClass=\"swbIconWebPage\" onclick=\"addNewTab('"+child.getURI()+"','"+child.getTitle()+"','"+SWBPlatform.getContextPath()+"/swbadmin/jsp/menuTab.jsp"+"');\">"+child.getTitle()+"</li>");
+                    //out.println("            <div dojoType=\"dijit.MenuItem\" accelKey=\"Ctrl+S\" iconClass_=\"swbIconWebPage\" onclick=\"addNewTab('"+child.getURI()+"','"+child.getTitle()+"','"+SWBPlatform.getContextPath()+"/swbadmin/jsp/menuTab.jsp"+"');\">"+child.getTitle()+"</div>");
+                    out.println("            <div dojoType=\"dijit.MenuItem\" iconClass_=\"swbIconWebPage\" onclick=\"addNewTab('"+child.getURI()+"','"+child.getTitle()+"','"+SWBPlatform.getContextPath()+"/swbadmin/jsp/menuTab.jsp"+"');\">"+child.getTitle()+"</div>");
             }
         }
    }
@@ -42,12 +43,19 @@
         <script type="dojo/method" event="onClick">
         </script>
         <span><%=child.getTitle()%></span>
-        <ul dojoType="dijit.Menu">
+        <div dojoType="dijit.Menu">
 <%      addChild(child,out);%>
-        </ul>
+        </div>
     </div>
-    <span dojoType="dijit.Tooltip" connectId="<%=child.getId()%>">Click to download new mail.</span>
 <%
+        String desc=child.getDescription();
+        if(desc!=null)
+        {
+%>
+    <span dojoType="dijit.Tooltip" connectId="<%=child.getId()%>"><%=desc%></span>
+<%
+        }
+
     }
     
 %>

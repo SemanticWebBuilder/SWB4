@@ -56,14 +56,9 @@
         <!-- basic preloader: -->
         <div id="loader"><div id="loaderInner">Loading Semantic WebBuilder... </div></div>
 
-        <!-- data for tree and combobox -->
-        <div dojoType="dojo.data.ItemFileWriteStore" jsId="treeStore" url="/swb/swbadmin/jsp/Tree.jsp"></div>
 <!--
         <div dojoType="dojo.data.ItemFileWriteStore" jsId="sitesStore" url="/swb/swbadmin/jsp/Sites.jsp"></div>
 -->
-        <!-- ########## changed menu code here ########## -->
-        <ul dojoType="dijit.Menu" id="menuEmpty" style="display: none;"></ul>
-
         <!-- "main" BorderContainer just contains page title and another BorderContainer -->
         <div id="main" dojoType="dijit.layout.BorderContainer">
 
@@ -93,106 +88,11 @@
                     <div dojoType="dijit.layout.AccordionContainer"  id="leftAccordion" region="center" splitter="true">
 
                         <div dojoType="dijit.layout.AccordionPane" title="Sitios" selected="true">
-                            <!-- tree widget -->
-                            <div id="mtree" dojoType="dijit.Tree" refreshOnExpand_="true" model_="tmodel" store="treeStore" persist="false" query_="{type:'WebSite'}" showRoot="false" label="Sitios">
-<!--
-                                <script type="dojo/method" event="onClick" args="item">
-                                    if(item){
-                                        //var newTab = dijit.byId("vprop");
-                                        var id=treeStore.getValue(item, "id");
-                                        //newTab.href='/swb/swbadmin/jsp/viewProps.jsp';
-                                        getHtml('/swb/swbadmin/jsp/viewProps.jsp?id='+encodeURIComponent(id), "vprop");
-                                        //alert("onClick:"+id);
-                                    }
-                                </script>
--->
-                                <script type="dojo/method" event="onOpen" args="item">
-                                    if(item)
-                                    {
-                                        //alert("onOpen");
-                                        executeTreeNodeEvent(treeStore,item,"onOpen");
-                                    }
-                                </script>
-                                <script type="dojo/method" event="onDblClick" args="event">
-                                    //alert("onDblClick:"+event);
-                                    var domElement = event.target;
-                                    var nodeWidget = dijit.getEnclosingWidget(domElement);
-                                    if(nodeWidget && nodeWidget.isTreeNode){
-                                        executeTreeNodeEvent(treeStore,nodeWidget.item,"onDblClick");
-                                    }
-                                </script>
-                                <script type="dojo/method" event="onEnterKey" args="event">
-                                    alert("onEnterKey"+event);
-                                    var domElement = event.target;
-                                    var nodeWidget = dijit.getEnclosingWidget(domElement);
-                                    if(nodeWidget && nodeWidget.isTreeNode){
-                                        executeTreeNodeEvent(treeStore,nodeWidget.item,"onDblClick");
-                                    }
-                                </script>
-                                <script type="dojo/method" event="getIconClass" args="item, opened">
-                                    if(item)
-                                    {
-                                        return treeStore.getValue(item, "icon");
-                                    }
-                                </script>
-                                <script type="dojo/connect">
-                                    var menuEmpty = dijit.byId("menuEmpty");
-
-                                    menuEmpty.bindDomNode(this.domNode);
-
-                                    dojo.connect(menuEmpty, "_openMyself", this, function(e)
-                                    {
-                                        var treeNode = dijit.getEnclosingWidget(e.target);
-
-                                        var ch = menuEmpty.getChildren();
-                                        //console.log("menu children is "+ch);
-                                        if (ch && ch != "undefined")
-                                        {
-                                            dojo.forEach(ch, function(child)
-                                            {
-                                                //console.log("Remving old child "+child);
-                                                menuEmpty.removeChild(child);
-                                            });
-                                        }
-
-                                        if(treeNode.item.menus)
-                                        {
-                                            //console.log("Adding new submenus");
-                                            for (var m in treeNode.item.menus)
-                                            {
-                                                var menu = treeNode.item.menus[m];
-                                                //console.log("Adding submenu " + mstr);
-                                                var mi = document.createElement('div')
-                                                var sm;
-                                                if(menu.title=="_")
-                                                {
-                                                    sm = new dijit.MenuSeparator();
-                                                }else
-                                                {
-                                                    sm = new dijit.MenuItem(
-                                                    {
-                                                        label: menu.title,
-                                                        iconClass:menu.icon,
-                                                        action: menu.action
-                                                    }, mi);
-                                                    sm.onClick = function(ele)
-                                                    {
-                                                        var m=dijit.getEnclosingWidget(ele.target);
-                                                        //alert(m);
-                                                        executeAction(treeStore, treeNode.item, m.action)
-                                                    };
-                                                }
-                                                menuEmpty.addChild(sm);
-
-                                            }
-                                        }
-                                    });
-                                </script>
-                            </div>
+                            <include src="/swbadmin/jsp/treeWidget.jsp?id=mtree"/>
                         </div>
 
                         <div dojoType="dijit.layout.AccordionPane" title="Repositorios de Usuarios">
-
+                            <include src="/swbadmin/jsp/treeWidget.jsp?id=muser"/>
                         </div>
 
                         <div dojoType="dijit.layout.AccordionPane" title="Favoritos">

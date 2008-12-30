@@ -36,7 +36,10 @@
             out.println(obj.getSemanticClass().getDisplayName(lang)+" fue desactivado...");
         }
     }
-    out.println("<script type=\"text/javascript\">updateTreeNode();</script>");
+    out.println("<script type=\"text/javascript\">");
+    out.println("updateTreeNodeByUri('"+suri+"');");
+    out.println("reloadTab('"+suri+"');");
+    out.println("</script>");
     //out.println(obj.getDisplayName(lang)+" "+act);
 %>
 <!-- a href="#" onclick="submitUrl('/swb/swb',this); return false;">click</a -->
