@@ -5,7 +5,7 @@
 --%>
 <%
     String id=request.getParameter("id");
-    System.out.println("id:"+id);
+    //System.out.println("id:"+id);
     if(id==null)id="tree";
     String store=id+"Store";
     String menu=id+"Menu";
