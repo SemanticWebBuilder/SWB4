@@ -1,5 +1,6 @@
 <%@page contentType="text/html"%><%@page pageEncoding="ISO-8859-1"%><%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.model.*,java.util.*,org.semanticwb.base.util.*"%>
 <%
+
     String lang="es";
     response.setHeader("Cache-Control", "no-cache"); 
     response.setHeader("Pragma", "no-cache"); 
@@ -10,10 +11,11 @@
     if(res==null)return;
     SemanticClass cls=ont.getSemanticObjectClass(res);
     GenericObject obj=ont.getGenericObject(id,cls);
-    out.println("<div dojoType=\"dijit.layout.TabContainer\" region=\"center\" style=\"width=100%;height=100%;\" id=\""+id+"/tab2\" _tabPosition=\"bottom\" onSelected=\"alert('hola');\" nested=\"true\" _selectedChild=\"btab1\">");
-    //out.println("    <script type=\"dojo/method\" event=\"onClick\" args=\"item\">");
-    //out.println("       alert(item);");
-    //out.println("    </script>");
+
+    //Div dummy para detectar evento de carga y modificar titulo
+    out.println("<div dojoType=\"dijit.layout.ContentPane\" postCreate=\"setTabTitle('"+id+"','"+obj.getSemanticObject().getDisplayName(lang)+"','swbIconWebPage');\" />");
+
+    out.println("<div dojoType=\"dijit.layout.TabContainer\" region=\"center\" style=\"width=100%;height=100%;\" id=\""+id+"/tab2\" _tabPosition=\"bottom\" nested=\"true\" _selectedChild=\"btab1\" onLoad=\"alert('Hola');\">");
 
     Iterator<ObjectBehavior> obit=SWBComparator.sortSermanticObjects(ObjectBehavior.swbxf_ObjectBehavior.listGenericInstances(true));
     //Iterator<ObjectBehavior> obit=SWBComparator.sortSermanticObjects(new GenericIterator(ObjectBehavior.swbxf_ObjectBehavior, obj.getSemanticObject().getModel().listInstancesOfClass(ObjectBehavior.swbxf_ObjectBehavior)));
@@ -66,7 +68,7 @@
         if(addDiv)
         {
             //out.println("<div dojoType=\"dojox.layout.ContentPane\" title=\""+title+"\" _style=\"display:true;padding:10px;\" refreshOnShow=\""+refresh+"\" href=\""+url+"?"+params+"\" executeScripts=\"true\">");
-            out.println("<div dojoType=\"dijit.layout.ContentPane\" title=\""+title+"\" refreshOnShow=\""+refresh+"\" href=\""+url+"?"+params+"\" _onLoad=\"runScript(this);\">");
+            out.println("<div id=\""+obj.getURI()+"/"+ob.getId()+"\" dojoType=\"dijit.layout.ContentPane\" title=\""+title+"\" refreshOnShow=\""+refresh+"\" href=\""+url+"?"+params+"\" _onLoad=\"alert('test');\">");
             //request.getRequestDispatcher((url+"?"+params).substring(4)).include(request, response);
             out.println("</div>");
         }
