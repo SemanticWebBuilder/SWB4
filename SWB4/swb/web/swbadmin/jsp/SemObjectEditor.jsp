@@ -23,7 +23,6 @@
 <%
         return;
     }
-
     String smode=request.getParameter("smode");
     //out.println(smode+" "+Thread.currentThread().getName());
     SemanticOntology ont=SWBPlatform.getSemanticMgr().getOntology();
@@ -57,7 +56,7 @@
                 out.println("dijit.byId('swbDialog').hide();");
                 out.println("reloadTreeNode();");
                 out.println("showStatus('"+obj.getSemanticClass().getDisplayName(lang)+" creado');");
-                out.println("addNewTab('"+obj.getURI()+"','"+obj.getDisplayName(lang)+"','"+SWBPlatform.getContextPath()+"/swbadmin/jsp/objectTab.jsp');");
+                out.println("addNewTab('"+obj.getURI()+"','"+SWBPlatform.getContextPath()+"/swbadmin/jsp/objectTab.jsp"+"','"+obj.getDisplayName(lang)+"');");
                 out.println("</script>");
             }
         }
@@ -74,6 +73,13 @@
             out.println("<script type=\"text/javascript\">");
             //out.println("alert('mtreeStore:'+mtreeStore);");
             out.println("updateTreeNodeByUri('"+obj.getURI()+"');");
+            out.println("setTabTitle('"+obj.getURI()+"','"+obj.getDisplayName(lang)+"')");
+            Iterator<SemanticObject> it2=obj.listRelatedObjects();
+            while(it2.hasNext())
+            {
+                SemanticObject aux=it2.next();
+                out.println("reloadTab('"+aux.getURI()+"');");
+            }
             out.println("showStatus('"+obj.getSemanticClass().getDisplayName(lang)+" actualizado');");
             out.println("</script>");
         }

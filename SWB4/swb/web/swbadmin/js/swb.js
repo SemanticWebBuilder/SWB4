@@ -5,6 +5,8 @@
       var context="/swb";
       var stores= new Array();
 
+      var CONST_TAB="/tab";   //Constante sufijo para identificar al tab
+
       dojo.require("dijit.Menu");
       dojo.require("dijit._Calendar");
       dojo.require("dijit.ColorPalette");
@@ -75,9 +77,9 @@
 
 
             // assuming our tabContainer has id="bar"
-            //dojo.subscribe("tabs-selectChild", function(child){
-            //    alert("A new child was selected:"+child);
-            //});
+//            dojo.subscribe("tabs-addChild", function(child){
+//                alert("A new child was selected:"+child.id);
+//            });
 
 
       });
@@ -173,8 +175,14 @@
           //alert("panel:"+panel);
           dojo.xhrGet({
               url: url,
-              load: function(response, ioArgs){
-                  if(panel!=null)panel.attr('content',response);
+              load: function(response, ioArgs)
+              {
+                  if(panel!=null)
+                  {
+                      var aux=panel.href;
+                      panel.attr('content',response);
+                      panel.href=aux;
+                  }
                   return response;
               },
               error: function(response, ioArgs){
@@ -220,13 +228,18 @@
                   load: function (data)
                   {
                           var panel=getContentPanel(obj);
+                          //alert("div:"+panel.id);
                           //alert("div:"+panel.suportScripts);
                           if(panel)
                           {
                               try
                               {
-                              panel.attr('content',data);
-                              if(!panel.suportScripts)runScripts(data);
+                                  var aux=panel.href;
+                                  //alert("div1:"+panel.href);
+                                  panel.attr('content',data);
+                                  panel.href=aux;
+                                  //alert("div2:"+panel.href);
+                                if(!panel.suportScripts)runScripts(data);
                               }catch(e){alert(e.message);}
                           }
                           //dijit.byId('swbDialog').hide();
@@ -244,9 +257,9 @@
           }
       }
 
-      function addNewTab(id, title, url)
+      function addNewTab(id, url, title)
       {
-          var objid=id+"/tab";
+          var objid=id+CONST_TAB;
           var newTab = dijit.byId(objid);
           if(!url)url=context+"/swbadmin/jsp/objectTab.jsp";
           if(newTab==null)
@@ -287,21 +300,18 @@
 
       function reloadTab(uri)
       {
-          var objid=uri+"/tab";
+          //var aux;
+          var objid=uri+CONST_TAB+"2";
+          //alert("id:"+objid);
           var tab = dijit.byId(objid);
-          if(tab!=null)
+          if(tab)
           {
-              //close
-              var d=dijit.byId(objid+"2");
-              if(d)
+              var arr=tab.getChildren();
+              for (var n = 0; n < arr.length; n++)
               {
-                  var arr=d.getChildren();
-                  for (var n = 0; n < arr.length; n++)
-                  {
-                      arr[n].attr('content',null);
-                  }
+                  //arr[n].refresh();
+                  arr[n]._prepareLoad();
               }
-            tab.refresh();
           }
       }
 
@@ -319,7 +329,7 @@
               reloadTreeNode(store,item);
           }else if(action.name=="newTab")
           {
-              addNewTab(item.id, item.title, action.value);
+              addNewTab(item.id, action.value, item.title);
           }else if(action.name=="showDialog")
           {
                 showDialog(action.value);
@@ -425,7 +435,7 @@
       {
           if(!store)store=act_store;
           if(!item)item=act_item;
-          var objid=item.id+"/tab";
+          var objid=item.id+CONST_TAB;
           setWaitCursor();
           //alert("reload:"+item.id);
           removeChilds(store,item);
@@ -582,4 +592,16 @@
       {
           stores[stores.length]=store;
           //alert(stores.length);
+      }
+
+      function setTabTitle(uri,title,icon)
+      {
+          var objid=uri+CONST_TAB;
+          var tab = dijit.byId(objid);
+          if(tab!=null)
+          {
+              tab.title=title;
+              tab.controlButton.containerNode.innerHTML = title || "";
+              //alert(tab.title);
+          }
       }
