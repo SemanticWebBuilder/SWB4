@@ -114,11 +114,12 @@ public class SWBASearchUsers extends GenericResource
         String Group = request.getParameter("userGroups");
         UserRepository ur = SWBContext.getUserRepository(usrep);
         Iterator<String> itst = ur.searchUsersBy(usrFirstName, usrLastName, usrSecondLastName, usrEmail, Role, Group);
+        
         ret.append("<table><thead><tr><th>login</th><th>Nombre(s)</th><th>Primer Apellido</th><th>Segundo Apellido</th><th>Correo electr&oacute;nico</th></tr></thead><tbody>");
         while (itst.hasNext())
         {
             String[] valores = itst.next().split("\\|\\|");
-            ret.append("<tr><td><a href=\"javascript:addNewTab('" + valores[0] + "', '" + valores[5] + "');\">");
+            ret.append("<tr><td><a href=\"javascript:parent.addNewTab('" + valores[0] + "', '" + valores[5] + "');\">");
             ret.append(valores[5]);
             ret.append("</a></td><td>");
             ret.append(valores[1]);
