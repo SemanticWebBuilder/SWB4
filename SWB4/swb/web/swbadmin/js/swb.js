@@ -195,11 +195,6 @@
 
       function submitForm(formid)
       {
-          try
-          {
-            //dojo.fadeOut({node: formid, duration: 1000}).play();
-            dojo.fx.wipeOut({node: formid, duration: 1000}).play();
-          }catch(noe){}
           var obj=dojo.byId(formid);
           var objd=dijit.byId(formid);
           var fid=formid;
@@ -212,6 +207,12 @@
 
           if(!objd || objd.isValid())
           {
+              try
+              {
+                //dojo.fadeOut({node: formid, duration: 1000}).play();
+                dojo.fx.wipeOut({node: formid, duration: 1000}).play();
+              }catch(noe){}
+
               //alert("entra2");
               dojo.xhrPost({
                   // The page that parses the POST request
