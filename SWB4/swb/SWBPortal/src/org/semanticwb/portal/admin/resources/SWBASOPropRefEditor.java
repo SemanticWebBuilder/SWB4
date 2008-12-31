@@ -232,7 +232,7 @@ public class SWBASOPropRefEditor extends GenericResource {
                 if(idp!=null)urlchoose.setParameter("rsprop", idp);
                 if(idpref!=null)urlchoose.setParameter("rspropref", idpref);
                 urlchoose.setParameter("act", "edit");
-                out.println("<a href=\"#\"  onclick=\"addNewTab('" + sobj.getURI() + "','"+sobj.getDisplayName()+"','"+SWBPlatform.getContextPath()+"/swbadmin/jsp/objectTab.jsp');return false;\" >" + stitle + "</a>"); //onclick=\"submitUrl('"+urlchoose+"',this); return false;\"
+                out.println("<a href=\"#\"  onclick=\"addNewTab('" + sobj.getURI() +"','"+SWBPlatform.getContextPath()+"/swbadmin/jsp/objectTab.jsp"+ "','"+sobj.getDisplayName()+"');return false;\" >" + stitle + "</a>"); //onclick=\"submitUrl('"+urlchoose+"',this); return false;\"
                 out.println("</td>");
                 if(hmprop.get(Template.swb_language)!=null)
                 {

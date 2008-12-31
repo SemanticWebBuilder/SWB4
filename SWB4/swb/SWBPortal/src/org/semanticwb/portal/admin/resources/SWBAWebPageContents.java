@@ -70,7 +70,7 @@ public class SWBAWebPageContents extends GenericResource {
             SemanticObject snobj = ont.getSemanticObject(request.getParameter("nsuri"));
             if(snobj!=null)
                 out.println("<script type=\"text/javascript\">");
-                out.println("addNewTab('"+snobj.getURI()+"','"+snobj.getDisplayName()+"','"+SWBPlatform.getContextPath()+"/swbadmin/jsp/objectTab.jsp');");
+                out.println("addNewTab('"+snobj.getURI()+"','"+SWBPlatform.getContextPath()+"/swbadmin/jsp/objectTab.jsp"+"','"+snobj.getDisplayName()+"');");
                 out.println("</script>");
         }
         
@@ -176,7 +176,7 @@ public class SWBAWebPageContents extends GenericResource {
                 urlchoose.setParameter("sprop", idp);
                 urlchoose.setParameter("sobj", sobj.getURI());
                 urlchoose.setParameter("act", "edit");
-                out.println("<a href=\"#\"  onclick=\"addNewTab('" + sobj.getURI() + "','"+sobj.getDisplayName()+"','"+SWBPlatform.getContextPath()+"/swbadmin/jsp/objectTab.jsp');return false;\">" + stitle + "</a>");
+                out.println("<a href=\"#\"  onclick=\"addNewTab('" + sobj.getURI() +"','"+SWBPlatform.getContextPath()+"/swbadmin/jsp/objectTab.jsp"+"','"+sobj.getDisplayName()+"');return false;\">" + stitle + "</a>");
                 out.println("</td>");
                 if (hmprop.get(Traceable.swb_created) != null) {
                     semprop = (SemanticProperty) hmprop.get(Traceable.swb_created);
@@ -220,7 +220,7 @@ public class SWBAWebPageContents extends GenericResource {
                     urlu.setParameter("sprop", idp);
                     urlu.setParameter("sval", sobj.getURI());
                     urlu.setAction("updstatus");
-                    out.println("<input name=\"" + prop.getName() + sobj.getURI() + "\" type=\"checkbox\" value=\"1\" id=\"" + prop.getName() + sobj.getURI() + "\" onclick=\"submitUrl('" + urlu + "&val='+this.checked,this); return false;\"  " + (activo ? "checked='checked'" : "") + "/>");
+                    out.println("<input name=\"" + prop.getName() + sobj.getURI() + "\" type=\"checkbox\" value=\"1\" id=\"" + prop.getName() + sobj.getURI() + "\" onclick=\"submitUrl('" + urlu + "&val='+this.checked,this); reloadTab('"+sobj.getURI()+"'); return false;\"  " + (activo ? "checked='checked'" : "") + "/>");
                     out.println("</td>");
                 }
                 out.println("</tr>");
