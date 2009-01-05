@@ -40,7 +40,7 @@ public class SemanticProperty
                 m_inverse=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(((OntProperty)m_prop).getInverse());
                 m_inverse.isInverse=true;
                 m_inverse.m_inverse=this;
-                System.out.println(prop+" hasInverse "+m_inverse);
+                //System.out.println(prop+" hasInverse "+m_inverse);
             }
         }
     }
