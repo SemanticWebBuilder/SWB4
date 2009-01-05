@@ -8,7 +8,7 @@
 		<input type="FILE" name="template" label="Modelo (xsl, xslt):" showfile="true" msg="Modelo atual " bydefault="{@webpath}wbadmin/xsl/RSSResource/RSSResource.xslt" msgbydefault="Modelo do defeito " filetype="xsl|xslt" isshowfiletype="true" size="40"/>
                 </fieldset>
                 <fieldset>
-		<input type="SUBMIT" name="btnSave"  value="Enviar"/>
+		<input type="SUBMIT" name="btnSave"  value="Salvarr"/>
 		<input type="RESET"  name="btnReset" value="Cancelar"/>
                 </fieldset>
 	</form>
