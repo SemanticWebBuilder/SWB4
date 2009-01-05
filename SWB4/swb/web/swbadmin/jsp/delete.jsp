@@ -29,7 +29,7 @@
         obj.remove();
         out.println(type+" fue eliminado...");
     }
-    out.println("<script type=\"text/javascript\">removeTreeNode();</script>");
+    out.println("<script type=\"text/javascript\">removeTreeNodeByURI('"+obj.getURI()+"');</script>");
     //out.println(obj.getDisplayName(lang)+" "+act);
 %>
 <!-- a href="#" onclick="submitUrl('/swb/swb',this); return false;">click</a -->

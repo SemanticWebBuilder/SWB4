@@ -66,6 +66,7 @@
         while(it.hasNext())
         {
             WebSite site=it.next();
+            //System.out.println("site:"+site);
             //TODO: arreglar lista de sitios en SWBContext (estal ligados a ontologia)
             //site=SWBContext.getWebSite(site.getURI());
             addSemanticObject(arr, site.getSemanticObject(),false,true);
@@ -84,6 +85,22 @@
             //rep=SWBContext.getUserRepository(rep.getURI());
             addSemanticObject(arr, rep.getSemanticObject(),false,true);
             //addWebSite(arr, site);
+        }
+    }
+
+    public void addFavorites(JSONArray arr)  throws JSONException
+    {
+        //TODO:
+        User user=SWBContext.getDefaultRepository().getUserByLogin("admin");
+        UserFavorites fav=user.getUserFavorites();
+        if(fav!=null)
+        {
+            Iterator<SemanticObject> it=SWBComparator.sortSermanticObjects(fav.listObjects());
+            while(it.hasNext())
+            {
+                SemanticObject obj=it.next();
+                addSemanticObject(arr, obj,false,true);
+            }
         }
     }
 
@@ -159,19 +176,15 @@
         SemanticClass cls=obj.getSemanticClass();
         String type=cls.getName();
 
-        String icon="swbIcon"+type;
         //Active
         boolean active=false;
         SemanticProperty activeprop=cls.getProperty("active");
         if(activeprop!=null)
         {
             active=obj.getBooleanProperty(activeprop);
-            if(!active)
-            {
-                icon=icon+"U";
-            }
         }
 
+        String icon=SWBContext.UTILS.getIconClass(obj);
         JSONObject jobj=getNode(obj.getURI(), obj.getDisplayName(lang), type, icon);
         arr.put(jobj);
 
@@ -205,6 +218,17 @@
         menus.put(getMenuItem("Editar", "dijitEditorIcon dijitEditorIconCut", getNewTabAction()));
         menus.put(getMenuItem("Eliminar", "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/delete.jsp?suri="+obj.getEncodedURI(),null)));
         menus.put(getMenuSeparator());
+
+        //TODO:
+        User user=SWBContext.getDefaultRepository().getUserByLogin("admin");
+        boolean isfavo=user.hasFavorite(obj);
+        if(!isfavo)
+        {
+            menus.put(getMenuItem("Agragar a Favoritos", "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=active",null)));
+        }else
+        {
+            menus.put(getMenuItem("Eliminar de Favoritos", "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=unactive",null)));
+        }
         menus.put(getMenuItem("Recargar", "dijitEditorIcon dijitEditorIconCut", getReloadAction()));
 
         //eventos
@@ -221,25 +245,20 @@
         {
             addHerarquicalNodes(childs, obj);
 
-            Iterator<SemanticProperty> it=cls.listHerarquicalProperties();
-            while(it.hasNext())
+            Iterator<SemanticObject> it=obj.listHerarquicalChilds();
+            if(addChilds)
             {
-                SemanticProperty prop=it.next();
-                //System.out.println("prop:"+prop.getName());
-                Iterator<SemanticObject> it2=SWBComparator.sortSermanticObjects(obj.listObjectProperties(prop),lang);
-                if(addChilds)
+                Iterator<SemanticObject> it2=SWBComparator.sortSermanticObjects(it,lang);
+                while(it2.hasNext())
                 {
-                    while(it2.hasNext())
-                    {
-                        SemanticObject ch=it2.next();
-                        addSemanticObject(childs, ch,false);
-                    }
-                }else
+                    SemanticObject ch=it2.next();
+                    addSemanticObject(childs, ch,false);
+                }
+            }else
+            {
+                if(it.hasNext())
                 {
-                    if(it2.hasNext())
-                    {
-                        hasChilds=true;
-                    }
+                    hasChilds=true;
                 }
             }
         }
@@ -256,6 +275,8 @@
 
     
 %><%
+    String id=request.getParameter("id");
+    if(id==null)id="mtree";
     //System.out.println(new Date()+" Tree1");
     SemanticOntology ont=SWBPlatform.getSemanticMgr().getOntology();
 
@@ -271,12 +292,17 @@
         obj.put("label","title");
         JSONArray items=new JSONArray();
         obj.putOpt("items", items);
-        addWebSites(items);
-        //addUserReps(items);
+        if(id.equals("mtree"))addWebSites(items);
+        if(id.equals("muser"))addUserReps(items);
+        if(id.equals("mfavo"))addFavorites(items);
         out.print(obj.toString());
         //System.out.print(obj.toString());
     }else
     {
+        boolean addChilds=true;
+        String childs=request.getParameter("childs");
+        if(childs!=null && childs.equals("false"))addChilds=false;
+
         JSONArray items=new JSONArray();
         if(suri.startsWith("HN|"))
         {
@@ -291,14 +317,20 @@
                 SemanticObject nobj=ont.getSemanticObject(nuri);
                 //System.out.println("obj:"+obj+" node:"+nobj);
                 HerarquicalNode node=new HerarquicalNode(nobj);
-                addHerarquicalNode(items,node,obj,true);
+                addHerarquicalNode(items,node,obj,addChilds);
             }
         }else
         {
             SemanticObject sobj=ont.getSemanticObject(suri);
             if(sobj!=null)
             {
-                addSemanticObject(items, sobj,true);
+                addSemanticObject(items, sobj,addChilds);
+                Iterator<SemanticObject> it=sobj.listHerarquicalParents();
+                if(it.hasNext())
+                {
+                    JSONObject obj=items.getJSONObject(0);
+                    obj.put("parent", it.next().getURI());
+                }
             }
         }
         out.print(items.toString());

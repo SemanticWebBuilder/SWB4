@@ -370,9 +370,11 @@
 
       function removeChilds(store,item)
       {
+          //alert("removeChilds:"+item.children);
           var items=item.children;
           if(items)
           {
+              //alert("removeChilds2:"+item.children.length);
               for (var i=0; i<items.length;i++)
               {
                   removeChilds(store,items[i]);
@@ -382,7 +384,7 @@
           }
       }
 
-      function updateTreeNodeByUri(uri)
+      function updateTreeNodeByURI(uri)
       {
           for(x=0;x<stores.length;x++)
           {
@@ -432,23 +434,38 @@
           dojo.byId("leftAccordion").style.cursor="default";
       }
 
-      function removeTreeNode(store, item)
+      function removeTreeNodeByURI(uri)
+      {
+          for(x=0;x<stores.length;x++)
+          {
+              var s=stores[x];
+              var n=getItem(s,uri);
+              if(n)
+              {
+                 removeTreeNode(s,n);
+              }
+          }
+      }
+
+      function removeTreeNode(store, item, closetab)
       {
           if(!store)store=act_store;
           if(!item)item=act_item;
-          var objid=item.id+CONST_TAB;
+          if(!closetab)closetab=true;
           setWaitCursor();
-          //alert("reload:"+item.id);
           removeChilds(store,item);
           store.deleteItem(item);
           store.save();
 
-          var newTab = dijit.byId(objid);
-          if(newTab)
+          if(closetab)
           {
-              tabs.closeChild(newTab);
+              var objid=item.id+CONST_TAB;
+              var newTab = dijit.byId(objid);
+              if(newTab)
+              {
+                  tabs.closeChild(newTab);
+              }
           }
-
           setDefaultCursor();
       }
 
@@ -466,19 +483,54 @@
           //alert("nitem:"+items.length);
           for (var i=0; i<items.length;i++)
           {
-                //alert("item:"+i+" "+items[i].id);
-                var pInfo={parent:item, attribute:"children"};
-                var ite=store.newItem(items[i],pInfo);
-                if(items[i].hasChilds)
-                {
-                    //alert("hasChilds:"+items[i].id+" "+ite);
-                    pInfo={parent:ite, attribute:"children"};
-                    var dummy={"id":items[i].id+"_tmp_","icon":"swbIconWebSite","title":"dummy"};
-                    store.newItem(dummy,pInfo);
-                }
+              addItem(store,items[i],item);
           }
           store.save();
           setDefaultCursor();
+      }
+
+      function addItemByURI(store, parent, uri)
+      {
+          if(!store)store=act_store;
+          setWaitCursor();
+          //alert("reload:"+item.id);
+          var arr=getJSON(context+"/swbadmin/jsp/Tree.jsp?childs=false&suri="+encodeURIComponent(uri));
+          var item=arr[0];
+          addItem(store,item,parent);
+          store.save();
+          setDefaultCursor();
+      }
+
+      function addItem(store, item, parent)
+      {
+          if(getItem(store, item.id))return;
+            //alert("addItem:"+item+" "+parent);
+            var pInfo;
+            if(parent)
+            {
+                pInfo={parent:parent, attribute:"children"};
+            }else
+            {
+                pInfo={attribute:"children"};
+            }
+            //alert("addItem2:"+store+" "+pInfo);
+            var ite=store.newItem(item,pInfo);
+            //alert("hasChilds:"+item.hasChilds+" "+item.children.length);
+
+            var childs=item.children;
+            if(childs && childs.length>0)
+            {
+                for(var x=0;x<childs.length;x++)
+                {
+                    addItem(store, childs[x], ite);
+                }
+            }else if(item.hasChilds)
+            {
+                //alert("hasChilds:"+items[i].id+" "+ite);
+                pInfo={parent:ite, attribute:"children"};
+                var dummy={"id":item.id+"_tmp_","icon":"swbIconWebSite","title":"dummy"};
+                store.newItem(dummy,pInfo);
+            }
       }
 
       function actionDone(){
@@ -601,8 +653,11 @@
           var tab = dijit.byId(objid);
           if(tab!=null)
           {
-              tab.title=title;
-              tab.controlButton.containerNode.innerHTML = title || "";
+              var aux=title;
+              //if(icon)aux="<span><span style='position:fixed; margin:0px -3px; ' class='"+icon+"'></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+aux+"</span>";
+              if(icon)aux="<span style_='height:18px;' class='dijitReset dijitInline "+icon+"'></span><span class='dijitReset dijitInline dijitButtonText'>"+aux+"</span>";
+              tab.title=aux;
+              tab.controlButton.containerNode.innerHTML = aux || "";
               //alert(tab.title);
           }
       }

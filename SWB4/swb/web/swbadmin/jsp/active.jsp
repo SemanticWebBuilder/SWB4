@@ -37,8 +37,10 @@
         }
     }
     out.println("<script type=\"text/javascript\">");
-    out.println("updateTreeNodeByUri('"+suri+"');");
+    out.println("updateTreeNodeByURI('"+suri+"');");
     out.println("reloadTab('"+suri+"');");
+    String icon=SWBContext.UTILS.getIconClass(obj);
+    out.println("setTabTitle('"+obj.getURI()+"','"+obj.getDisplayName(lang)+"','"+icon+"');");
     out.println("</script>");
     //out.println(obj.getDisplayName(lang)+" "+act);
 %>
