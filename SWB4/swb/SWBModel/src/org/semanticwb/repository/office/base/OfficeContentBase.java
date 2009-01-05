@@ -10,9 +10,9 @@ public class OfficeContentBase extends org.semanticwb.repository.File implements
     public static final org.semanticwb.platform.SemanticProperty jcr_lockIsDeep=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#lockIsDeep");
     public static final org.semanticwb.platform.SemanticProperty cm_user=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org.mx/swb4/content#user");
     public static final org.semanticwb.platform.SemanticProperty jcr_lockOwner=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#lockOwner");
+    public static final org.semanticwb.platform.SemanticProperty jcr_isCheckedOut=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#isCheckedOut");
     public static final org.semanticwb.platform.SemanticClass nt_VersionHistory=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#versionHistory");
     public static final org.semanticwb.platform.SemanticProperty jcr_versionHistory=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#versionHistory");
-    public static final org.semanticwb.platform.SemanticProperty jcr_isCheckedOut=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#isCheckedOut");
     public static final org.semanticwb.platform.SemanticClass nt_Version=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#version");
     public static final org.semanticwb.platform.SemanticProperty jcr_baseVersion=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#baseVersion");
     public static final org.semanticwb.platform.SemanticProperty jcr_mergeFailed=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#mergeFailed");
@@ -94,6 +94,16 @@ public class OfficeContentBase extends org.semanticwb.repository.File implements
         getSemanticObject().setProperty(jcr_lockOwner, lockOwner);
     }
 
+    public boolean isCheckedOut()
+    {
+        return getSemanticObject().getBooleanProperty(jcr_isCheckedOut);
+    }
+
+    public void setCheckedOut(boolean isCheckedOut)
+    {
+        getSemanticObject().setBooleanProperty(jcr_isCheckedOut, isCheckedOut);
+    }
+
     public void setVersionHistory(org.semanticwb.repository.VersionHistory versionhistory)
     {
         getSemanticObject().setObjectProperty(jcr_versionHistory, versionhistory.getSemanticObject());
@@ -113,16 +123,6 @@ public class OfficeContentBase extends org.semanticwb.repository.File implements
              ret=(org.semanticwb.repository.VersionHistory)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
-    }
-
-    public boolean isCheckedOut()
-    {
-        return getSemanticObject().getBooleanProperty(jcr_isCheckedOut);
-    }
-
-    public void setCheckedOut(boolean isCheckedOut)
-    {
-        getSemanticObject().setBooleanProperty(jcr_isCheckedOut, isCheckedOut);
     }
 
     public void setBaseVersion(org.semanticwb.repository.Version version)
