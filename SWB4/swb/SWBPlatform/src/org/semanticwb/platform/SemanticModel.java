@@ -100,8 +100,6 @@ public class SemanticModel
 
     public SemanticObject createSemanticObject(String uri, SemanticClass cls)
     {
-        Principal user=SWBPlatform.getSemanticMgr().getSessionUser();
-        //System.out.println("createSemanticObject:"+user);
         Resource res=m_model.createResource(uri);
         res.addProperty(m_model.getProperty(SemanticVocabulary.RDF_TYPE), cls.getOntClass());
         return cls.newInstance(res);

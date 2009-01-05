@@ -41,7 +41,7 @@ public class SemanticLiteral
 
     public SemanticLiteral(Object value, String lang)
     {
-        System.out.println("Val:"+value+" lang:"+lang);
+        //System.out.println("Val:"+value+" lang:"+lang);
         m_obj=value;
         m_lang=lang;
     }

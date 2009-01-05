@@ -43,6 +43,7 @@ public class SemanticClass
     private Constructor m_constructor=null;
     private SemanticProperty displayNameProperty;
     List<SemanticProperty> herarquicalProps;
+    List<SemanticProperty> inverseHerarquicalProps;
     private String m_classID=null;
     private boolean m_isClassIDCheck=false;
 
@@ -63,6 +64,7 @@ public class SemanticClass
     {
         m_props=new HashMap();
         herarquicalProps=new ArrayList();
+        inverseHerarquicalProps=new ArrayList();
         // super-classes
         //System.out.println("m_class:"+m_class);
         int x=0;
@@ -70,9 +72,10 @@ public class SemanticClass
         {
             Property prop=(Property)i.next();
             x++;
-            SemanticProperty p=new SemanticProperty(prop);
+            SemanticProperty p=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(prop);
             if(p.isUsedAsName())displayNameProperty=p;
             if(p.isHeraquicalRelation())herarquicalProps.add(p);
+            if(p.isInverseHeraquicalRelation())inverseHerarquicalProps.add(p);
             //System.out.println("p.getName():"+x+" "+p.getName()+" "+p);
             m_props.put( p.getName(), p);
         }
@@ -132,12 +135,15 @@ public class SemanticClass
     {
         if(!m_isClassIDCheck)
         {
-            Property prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.SWB_PROP_CLASSID).getRDFProperty();
-            try
-            {
-                m_classID=m_class.getRequiredProperty(prop).getString();
-            }catch(PropertyNotFoundException noe){}
+            SemanticProperty prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.SWB_PROP_CLASSID);
+            SemanticLiteral lit=getRequiredProperty(prop);
+            if(lit!=null)m_classID=lit.getString();
             m_isClassIDCheck=true;
+            if(m_classID==null)
+            {
+                m_classID=getPrefix()+"_"+getName();
+            }
+
         }
         return m_classID;
     }
@@ -523,6 +529,11 @@ public class SemanticClass
     public Iterator<SemanticProperty> listHerarquicalProperties()
     {
         return herarquicalProps.iterator();
+    }
+
+    public Iterator<SemanticProperty> listInverseHerarquicalProperties()
+    {
+        return inverseHerarquicalProps.iterator();
     }
 
     public void addSuperClass(SemanticClass cls)

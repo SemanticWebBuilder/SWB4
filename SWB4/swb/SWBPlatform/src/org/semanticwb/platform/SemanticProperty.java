@@ -24,7 +24,11 @@ public class SemanticProperty
     private Boolean isObjectProperty=null;
     private Boolean isDataTypeProperty=null;
     private Boolean hasInverse=null;
+    private boolean isInverse=false;
     private Boolean isExternalInvocation=null;
+
+    private int cardinality=0;
+    private boolean cardinalityCheck=false;
     
     public SemanticProperty(Property prop)
     {
@@ -33,7 +37,10 @@ public class SemanticProperty
         {
             if(m_prop instanceof OntProperty)
             {
-                m_inverse=new SemanticProperty(((OntProperty)m_prop).getInverse());
+                m_inverse=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(((OntProperty)m_prop).getInverse());
+                m_inverse.isInverse=true;
+                m_inverse.m_inverse=this;
+                System.out.println(prop+" hasInverse "+m_inverse);
             }
         }
     }
@@ -118,6 +125,10 @@ public class SemanticProperty
         return false;
     }
 
+    /**
+     * Si esta propiedad se utiliza para definir la relacio padre-hijo en el arbol de navegacion
+     * @return
+     */
     public boolean isHeraquicalRelation()
     {
         Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_HERARQUICALRELATION));
@@ -127,6 +138,22 @@ public class SemanticProperty
         }
         return false;
     }
+
+    /**
+     * Si esta propiedad se utiliza para definir la relacio padre-hijo en el arbol de navegacion
+     * @return
+     */
+    public boolean isInverseHeraquicalRelation()
+    {
+        boolean ret=false;
+        SemanticProperty inv=getInverse();
+        if(inv!=null && inv.isHeraquicalRelation())
+        {
+            ret=true;
+        }
+        return ret;
+    }
+
 
     
     public boolean isExternalInvocation()
@@ -260,7 +287,20 @@ public class SemanticProperty
     
     public int getCardinality()
     {
-        return 0;
+        if(!cardinalityCheck)
+        {
+            String n=getLabel();
+            if(n==null)n=getName();
+            if(n.startsWith("has"))
+            {
+                cardinality=0;
+            }else
+            {
+                cardinality=1;
+            }
+            cardinalityCheck=true;
+        }
+        return cardinality;
     }
     
     public boolean isObjectProperty()
@@ -290,7 +330,11 @@ public class SemanticProperty
         }
         return isDataTypeProperty;
     }
-    
+
+    /**
+     * Esta propiedad es la inversa de otra (no genera statements)
+     * @return
+     */
     public boolean hasInverse()
     {
         if(hasInverse==null)
@@ -303,6 +347,16 @@ public class SemanticProperty
         }
         return hasInverse;
     }
+
+    /**
+     * Esta propiedad es normal pero tiene una inversa
+     * @return
+     */
+    public boolean isInverseOf()
+    {
+        return isInverse;
+    }
+
     
     public SemanticProperty getInverse()
     {
@@ -371,6 +425,4 @@ public class SemanticProperty
         if(res!=null && res.getURI().equals(SemanticVocabulary.XMLS_FLOAT))ret=true;
         return ret;        
     }       
-    
-    
 }

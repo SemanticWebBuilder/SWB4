@@ -7,6 +7,7 @@ package org.semanticwb.platform;
 
 import com.hp.hpl.jena.rdf.model.Property;
 import java.util.Iterator;
+import org.semanticwb.SWBPlatform;
 
 /**
  *
@@ -28,12 +29,12 @@ public class SemanticPropertyIterator implements Iterator
 
     public Object next()
     {
-        return new SemanticProperty((Property)it.next());
+        return SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty((Property)it.next());
     }
     
     public SemanticProperty nextSemanticProperty() 
     {
-        return new SemanticProperty((Property)it.next());
+        return SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty((Property)it.next());
     }
 
     public void remove()

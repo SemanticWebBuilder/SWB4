@@ -169,6 +169,17 @@ public class SemanticVocabulary
     {
         return properties.values().iterator();
     }
+
+    public SemanticProperty getSemanticProperty(Property property)
+    {
+        SemanticProperty prop=properties.get(property.getURI());
+        if(prop==null)
+        {
+            prop=new SemanticProperty(property);
+            addSemanticProperty(prop);
+        }
+        return prop;
+    }
     
     public SemanticProperty getSemanticProperty(String uri)
     {
