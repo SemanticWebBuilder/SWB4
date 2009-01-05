@@ -84,18 +84,20 @@ public class SemanticObject
 
     public static SemanticObject createSemanticObject(Resource res)
     {
-        SemanticObject ret=getSemanticObject(res.getURI());
+        String id=res.getURI();
+        if(id==null)id=res.getId().toString();
+        SemanticObject ret=getSemanticObject(id);
         if(ret==null)
         {
             if(hasCache)
             {
-                if(res.getModel()==SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel())
+                if(res.getURI()!=null && res.getModel()==SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel())
                 {
                     res=SWBPlatform.getSemanticMgr().getOntology().getResource(res.getURI());
                 }
             }
             ret=new SemanticObject(res);
-            m_objs.put(res.getURI(), ret);
+            m_objs.put(id, ret);
         }
         return ret;
     }
