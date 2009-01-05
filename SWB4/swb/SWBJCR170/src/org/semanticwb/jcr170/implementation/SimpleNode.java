@@ -871,6 +871,7 @@ public class SimpleNode implements Node
                 }
                 else
                 {
+                    log.event("Registring the property "+ prop.getName() +" for the class "+ prop.getSemanticClass().getURI() +"");
                     String type = SemanticVocabulary.XMLS_STRING;
                     SemanticProperty semanticProperty = node.registerCustomProperty(prop.getName(), type, prop.getSemanticClass());
                     node.setProperty(semanticProperty, prop.getString());
