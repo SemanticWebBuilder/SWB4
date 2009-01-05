@@ -68,7 +68,7 @@ public class SWBADevices extends GenericResource {
             dev.setTitle(strName);
             dev.setDescription(strDesc);
             dev.setModifiedBy(user);
-            dev.setValue(strMatch);
+            dev.setUserAgent(strMatch);
             response.setRenderParameter("confirm","updated");
         }
         if (act !=null && act.equals("add")) {
@@ -76,7 +76,7 @@ public class SWBADevices extends GenericResource {
             dev.setTitle(strName);
             dev.setDescription(strDesc);
             dev.setCreator(user);
-            dev.setValue(strMatch);
+            dev.setUserAgent(strMatch);
             iDev_Id=dev.getId();
             response.setRenderParameter("confirm","added");
         }
@@ -212,7 +212,7 @@ public class SWBADevices extends GenericResource {
                     recDev = SWBContext.getGlobalWebSite().getDevice(devId);
                     strDevName=recDev.getTitle();
                     strDevDesc=recDev.getDescription();
-                    strDevChain=recDev.getValue(); //String Match
+                    strDevChain=recDev.getUserAgent(); //String Match
                     out.println("<input type=hidden name=txtDevice value=\""+devId+"\"> \n");
                 }
                 out.println("<tr bgcolor=\"\"> \n");

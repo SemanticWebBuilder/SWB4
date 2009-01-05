@@ -4,6 +4,7 @@ import com.arthurdo.parser.HtmlStreamTokenizer;
 import com.arthurdo.parser.HtmlTag;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.security.Principal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -13,6 +14,7 @@ import java.util.Vector;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import org.semanticwb.model.*;
+import org.semanticwb.platform.SessionUser;
 import org.semanticwb.portal.SWBDBAdmLog;
 import org.semanticwb.portal.SWBMonitor;
 import org.semanticwb.portal.SWBResourceMgr;
@@ -48,6 +50,8 @@ public class SWBPortal {
     private static SWBMonitor monitor = null;
     private static SWBResourceMgr resmgr = null;
     private static SWBTemplateMgr templatemgr = null;
+
+    private HashMap<String,SessionUser> m_sessions;
 
     static public synchronized SWBPortal createInstance() {
         //System.out.println("Entra a createInstance");
@@ -110,6 +114,8 @@ public class SWBPortal {
             user.setLanguage("es");
             user.setActive(true);
         }
+
+        m_sessions=new HashMap();
 
         usrMgr = new SWBUserMgr();
         usrMgr.init();
@@ -848,5 +854,24 @@ public class SWBPortal {
         }
         return value;
     }
-     
+
+    public void addSessionUser(Principal user)
+    {
+        if(user!=null)
+        {
+            SessionUser sess=m_sessions.get(Thread.currentThread().getName());
+            if(sess==null)m_sessions.put(Thread.currentThread().getName(),new SessionUser(user));
+            else sess.setUser(user);
+        }
+    }
+
+    public Principal getSessionUser()
+    {
+        Principal user=null;
+        SessionUser sess=m_sessions.get(Thread.currentThread().getName());
+        if(sess!=null)user=sess.getUser();
+        return user;
+    }
+
+
 }
