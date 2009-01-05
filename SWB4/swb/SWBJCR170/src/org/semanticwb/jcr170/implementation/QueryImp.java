@@ -67,7 +67,12 @@ public class QueryImp implements Query
         {
             for (String prefix : BaseNode.listUris().keySet())
             {
-                prefixStatement.append("PREFIX " + prefix + ": <" + BaseNode.listUris().get(prefix) + ">" + NL);
+                String uri=BaseNode.listUris().get(prefix);
+                if(!uri.endsWith("#"))
+                {
+                    uri+="#";
+                }
+                prefixStatement.append("PREFIX " + prefix + ": <" + uri + ">" + NL);
             }
             prefixStatement.append(" PREFIX rdf: <" + SemanticVocabulary.RDF_URI + "> " + NL);
             prefixStatement.append(" PREFIX rdfs: <" + SemanticVocabulary.RDFS_URI + "> " + NL);
@@ -135,7 +140,7 @@ public class QueryImp implements Query
         {
             HashSet<SemanticObject> nodes = new HashSet<SemanticObject>();
             Model model = SWBContext.getWorkspace(workspaceName).getSemanticObject().getModel().getRDFModel();
-            String sparql = prefixStatement.toString() + NL + statement;
+            String sparql = prefixStatement.toString()  + statement;
             com.hp.hpl.jena.query.Query query = com.hp.hpl.jena.query.QueryFactory.create(sparql);
             QueryExecution qexec = QueryExecutionFactory.create(query, model);
             try
