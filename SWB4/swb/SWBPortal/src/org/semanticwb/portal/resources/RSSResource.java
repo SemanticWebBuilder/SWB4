@@ -58,12 +58,12 @@ import org.semanticwb.portal.api.SWBResourceException;
  */
 public class RSSResource extends GenericAdmResource
 {
+    private static Logger log = SWBUtils.getLogger(RSSResource.class);
     private javax.xml.transform.Templates tpl;
-    private static Logger log = SWBUtils.getLogger(Promo.class);
     
     /** Creates a new instance of RSSResource */    
-    public RSSResource() {
-    }
+    /*public RSSResource() {
+    }*/
 
     /**
      * @param base
@@ -75,11 +75,9 @@ public class RSSResource extends GenericAdmResource
             super.setResourceBase(base); 
         }catch(Exception e) { 
             log.error("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);
-        }
-        //System.out.println("******************************* veamos");
+        }        
         if(!"".equals(base.getAttribute("template","").trim()))
         {
-            //System.out.println("******************************* por el primer if");
             try { 
                 tpl = SWBUtils.XML.loadTemplateXSLT(SWBPlatform.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim())); 
             }catch(Exception e) { 
@@ -88,7 +86,6 @@ public class RSSResource extends GenericAdmResource
         }
         if(tpl==null)
         {
-            //System.out.println("******************************* por el segundo if");
             try { 
                 tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getAdminFileStream("/swbadmin/xsl/RSSResource/RSSResource.xslt")); 
             } catch(Exception e) { 
@@ -109,13 +106,14 @@ public class RSSResource extends GenericAdmResource
         Portlet base = getResourceBase();
         try
         {
-            URL url = new URL(base.getAttribute("url","").trim());
+            URL url = new URL(base.getAttribute("url","").trim());            
             URLConnection urlconn = url.openConnection();
-            InputStream is = urlconn.getInputStream();            
-            Document dom = SWBUtils.XML.xmlToDom(is);        
+            InputStream is = urlconn.getInputStream();
+            String rss=SWBUtils.IO.readInputStream(is);
+            Document dom = SWBUtils.XML.xmlToDom(rss);            
             return dom;
         }
-        catch (Exception e) { 
+        catch (Exception e) {
             log.error("Error while generating DOM in resource: "+base.getId() +"-"+ base.getTitle(), e);
         }
         return null;
@@ -152,18 +150,18 @@ public class RSSResource extends GenericAdmResource
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramReq) throws SWBResourceException, java.io.IOException 
     {
+        response.setContentType("text/html; charset=iso-8859-1");
         PrintWriter out = response.getWriter();
         try
         {
-            Document dom =getDom(request, response, paramReq);
-            //System.out.println(AFUtils.getInstance().DomtoXml(dom));
-            if(dom != null) {
-                out.print(SWBUtils.XML.transformDom(tpl, dom));
-            }            
+            Document dom = getDom(request, response, paramReq);
+            if(dom != null) {                
+                String content = SWBUtils.XML.transformDom(tpl, dom);
+                out.println(content);
+            }
         }
         catch (Exception e) { 
             log.error("Error while processing RSS for: "+getResourceBase().getAttribute("url"), e);
         }
-        out.println("<br><a href=\"" + paramReq.getRenderUrl().setMode(paramReq.Mode_ADMIN) + "\">admin rss resource</a>");
     }
 }

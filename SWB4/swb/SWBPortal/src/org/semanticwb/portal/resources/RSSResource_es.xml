@@ -8,7 +8,7 @@
 		<input type="FILE" name="template" label="Plantilla (xsl, xslt):" showfile="true" msg="Plantilla actual " bydefault="{@webpath}wbadmin/xsl/RSSResource/RSSResource.xslt" msgbydefault="Plantilla por defecto " filetype="xsl|xslt" isshowfiletype="true" size="40"/>
                 </fieldset>
                 <fieldset>
-		<input type="SUBMIT" name="btnSave"  value="Enviar"/>
+		<input type="SUBMIT" name="btnSave"  value="Guardar"/>
 		<input type="RESET"  name="btnReset" value="Cancelar"/>
                 </fieldset>
 	</form>
