@@ -964,36 +964,7 @@ public class BaseNode extends BaseNodeBase
         return isNodeType(FrozenNode.nt_FrozenNode);
     }
 
-    private void checkAbort() throws SWBException
-    {
-        Iterator<SemanticProperty> properties = this.getSemanticObject().getSemanticClass().listProperties();
-        boolean abort = false;
-        GenericIterator<BaseNode> nodes = this.listNodes();
-        while (nodes.hasNext())
-        {
-            BaseNode childNode = nodes.next();
-            String onParentVersion = getOnParentVersion(childNode, this);
-            if (onParentVersion.equals("ABORT"))
-            {
-                abort = true;
-                break;
-            }
-        }
-        while (properties.hasNext())
-        {
-            SemanticProperty property = properties.next();
-            String onParentVersion = getOnParentVersion(property);
-            if (onParentVersion.equals("ABORT"))
-            {
-                abort = true;
-                break;
-            }
-        }
-        if (abort)
-        {
-            throw new SWBException("A property has the onparentversion equals to abort");
-        }
-    }
+    
 
     private void doCopy(BaseNode targetNode, BaseNode destNode) throws SWBException
     {
@@ -1039,8 +1010,7 @@ public class BaseNode extends BaseNodeBase
     private void doCopyToFrozenNode(BaseNode frozenNode) throws SWBException
     {
         if (frozenNode.isFrozenNode())
-        {
-            checkAbort();
+        {            
             initializeFrozenProperties(frozenNode.getSemanticObject());
             doCopy(this, frozenNode);
             Iterator<SemanticProperty> properties = this.getSemanticObject().getSemanticClass().listProperties();
