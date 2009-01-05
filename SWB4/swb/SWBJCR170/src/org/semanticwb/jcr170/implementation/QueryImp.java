@@ -155,7 +155,11 @@ public class QueryImp implements Query
                         if(rb.get(name.toString()).isResource())
                         {
                             Resource res=rb.getResource(name.toString());
-                            nodes.add(SemanticObject.getSemanticObject(res.getURI()));
+                            SemanticObject obj=SemanticObject.createSemanticObject(res);
+                            if(obj!=null)
+                            {
+                                nodes.add(obj);
+                            }
                         }
                     }
 
