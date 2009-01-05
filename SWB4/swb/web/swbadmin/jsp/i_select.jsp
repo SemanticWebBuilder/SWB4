@@ -20,7 +20,7 @@
     String title=prop.getDisplayName();
 
     String wid=obj.getModel().getName()+"/"+obj.getId()+"/"+prop.getRDFProperty().getLocalName();
-    System.out.println("Title:"+title+" id:"+wid);
+    //System.out.println("Title:"+title+" id:"+wid);
 %>
     <div id="<%=wid%>" title="<%=title%>" class="panel" selected="true">
         <fieldset>

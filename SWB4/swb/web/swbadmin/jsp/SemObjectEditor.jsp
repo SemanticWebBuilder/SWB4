@@ -72,8 +72,10 @@
             frm.processForm(request);
             out.println("<script type=\"text/javascript\">");
             //out.println("alert('mtreeStore:'+mtreeStore);");
-            out.println("updateTreeNodeByUri('"+obj.getURI()+"');");
-            out.println("setTabTitle('"+obj.getURI()+"','"+obj.getDisplayName(lang)+"')");
+            out.println("updateTreeNodeByURI('"+obj.getURI()+"');");
+
+            String icon=SWBContext.UTILS.getIconClass(obj);
+            out.println("setTabTitle('"+obj.getURI()+"','"+obj.getDisplayName(lang)+"','"+icon+"');");
             Iterator<SemanticObject> it2=obj.listRelatedObjects();
             while(it2.hasNext())
             {

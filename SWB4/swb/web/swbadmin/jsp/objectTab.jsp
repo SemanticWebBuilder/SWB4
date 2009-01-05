@@ -13,7 +13,8 @@
     GenericObject obj=ont.getGenericObject(id,cls);
 
     //Div dummy para detectar evento de carga y modificar titulo
-    out.println("<div dojoType=\"dijit.layout.ContentPane\" postCreate=\"setTabTitle('"+id+"','"+obj.getSemanticObject().getDisplayName(lang)+"','swbIconWebPage');\" />");
+    String icon=SWBContext.UTILS.getIconClass(obj.getSemanticObject());
+    out.println("<div dojoType=\"dijit.layout.ContentPane\" postCreate=\"setTabTitle('"+id+"','"+obj.getSemanticObject().getDisplayName(lang)+"','"+icon+"');\" />");
 
     out.println("<div dojoType=\"dijit.layout.TabContainer\" region=\"center\" style=\"width=100%;height=100%;\" id=\""+id+"/tab2\" _tabPosition=\"bottom\" nested=\"true\" _selectedChild=\"btab1\" onLoad=\"alert('Hola');\">");
 

@@ -17,7 +17,7 @@
     String title=obj.getDisplayName(lang);
     
     String wid=obj.getModel().getName()+"/"+obj.getId();
-    System.out.println("Title:"+title+" id:"+wid);
+    //System.out.println("Title:"+title+" id:"+wid);
 %>
     <div id="<%=wid%>" title="<%=title%>" class="panel" selected="true">
         <h2>Propiedades</h2>

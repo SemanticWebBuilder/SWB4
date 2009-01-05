@@ -13,10 +13,10 @@
         sval=SWBUtils.TEXT.decode(request.getParameter("sval"),"UTF-8");
     }
     
-    System.out.println("suri="+suri);
-    System.out.println("sprop="+sprop);
-    System.out.println("sval="+sval);
-    System.out.println("sobj="+sobj);
+    //System.out.println("suri="+suri);
+    //System.out.println("sprop="+sprop);
+    //System.out.println("sval="+sval);
+    //System.out.println("sobj="+sobj);
     
     SemanticOntology ont=SWBPlatform.getSemanticMgr().getOntology();
     SemanticObject obj=ont.getSemanticObject(suri);

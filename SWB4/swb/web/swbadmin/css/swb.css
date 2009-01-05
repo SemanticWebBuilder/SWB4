@@ -9,7 +9,7 @@
 html, body, #main{	
 	width: 100%;
 	height: 100%;
-	_overflow: hidden;
+	overflow: hidden;
 	padding: 0 0 0 0;
 	margin: 0 0 0 0;
 	font: 10pt Arial,Myriad,Tahoma,Verdana,sans-serif;
@@ -18,7 +18,7 @@ html, body, #main{
 .soria .dijitTreeIcon
 {
 	width:20px;
-	height: 20px;
+	height: 18px;
 }
 
 
@@ -68,43 +68,43 @@ html, body, #main{
 {
 	background-repeat: no-repeat; 
 	width:20px;
-	height: 20px;
+	height: 18px;
 	text-align: center;
 	padding-right:0px;
     background-image: url('../icons/icons20x20.png'); background-position: -620px -20px;
 }
 
-.swbIconPortlets    { background-position: -340px -0px; }
-.swbIconPortlet     { background-position: -340px -20px; }
-.swbIconPortletU    { background-position: -340px -40px; }
-.swbIconPortletType { background-position: -260px -0px; }
-.swbIconTemplates   { background-position: -140px -0px; }
-.swbIconTemplate    { background-position: -140px -20px; }
-.swbIconTemplateU   { background-position: -140px -40px; }
-.swbIconWebSites    { background-position: -280px -0px; }
-.swbIconWebSite     { background-position: -280px -20px; }
-.swbIconWebSiteU    { background-position: -280px -40px; }
-.swbIconWebPage     { background-position: -420px -20px; }
-.swbIconWebPageU    { background-position: -420px -40px; }
-.swbIconDnss        { background-position: -80px -0px; }
-.swbIconDns         { background-position: -80px -20px; }
-.swbIconLanguages   { background-position: -20px -0px; }
-.swbIconLanguage    { background-position: -20px -20px; }
-.swbIconRoles       { background-position: -40px -0px; }
-.swbIconRole        { background-position: -40px -20px; }
-.swbIconUserGroups  { background-position: -320px -0px; }
-.swbIconUserGroup   { background-position: -320px -20px; }
-.swbIconCamps       { background-position: -160px -0px; }
-.swbIconCamp        { background-position: -160px -20px; }
-.swbIconCampU       { background-position: -160px -40px; }
-.swbIconRules       { background-position: -160px -0px; }
-.swbIconRule        { background-position: -160px -20px; }
-.swbIconRuleU       { background-position: -160px -40px; }
-.swbIconDevices     { background-position: -100px -0px; }
-.swbIconDevice      { background-position: -100px -20px; }
-.swbIconPFlows      { background-position: -120px -0px; }
-.swbIconPFlow       { background-position: -120px -20px; }
-.swbIconPFlowU      { background-position: -120px -40px; }
+.swbIconPortlets    { background-position: -340px -1px; }
+.swbIconPortlet     { background-position: -340px -21px; }
+.swbIconPortletU    { background-position: -340px -41px; }
+.swbIconPortletType { background-position: -260px -1px; }
+.swbIconTemplates   { background-position: -140px -1px; }
+.swbIconTemplate    { background-position: -140px -21px; }
+.swbIconTemplateU   { background-position: -140px -41px; }
+.swbIconWebSites    { background-position: -280px -1px; }
+.swbIconWebSite     { background-position: -280px -21px; }
+.swbIconWebSiteU    { background-position: -280px -41px; }
+.swbIconWebPage     { background-position: -420px -21px; }
+.swbIconWebPageU    { background-position: -420px -41px; }
+.swbIconDnss        { background-position: -80px -1px; }
+.swbIconDns         { background-position: -80px -21px; }
+.swbIconLanguages   { background-position: -20px -1px; }
+.swbIconLanguage    { background-position: -20px -21px; }
+.swbIconRoles       { background-position: -40px -1px; }
+.swbIconRole        { background-position: -40px -21px; }
+.swbIconUserGroups  { background-position: -320px -1px; }
+.swbIconUserGroup   { background-position: -320px -21px; }
+.swbIconCamps       { background-position: -160px -1px; }
+.swbIconCamp        { background-position: -160px -21px; }
+.swbIconCampU       { background-position: -160px -41px; }
+.swbIconRules       { background-position: -160px -1px; }
+.swbIconRule        { background-position: -160px -21px; }
+.swbIconRuleU       { background-position: -160px -41px; }
+.swbIconDevices     { background-position: -100px -1px; }
+.swbIconDevice      { background-position: -100px -21px; }
+.swbIconPFlows      { background-position: -120px -1px; }
+.swbIconPFlow       { background-position: -120px -21px; }
+.swbIconPFlowU      { background-position: -120px -41px; }
 
 .admViewProperties { width:100%; }
 
