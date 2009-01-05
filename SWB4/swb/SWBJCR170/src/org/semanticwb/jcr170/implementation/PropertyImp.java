@@ -55,8 +55,9 @@ public final class PropertyImp implements Property
     private String path;
     private final SimpleNode parent;
     private final SemanticClass clazz;
+    private boolean isNode=false;
 
-    PropertyImp(SimpleNode parent, SemanticClass clazz, String name, PropertyDefinitionImp propertyDefinition)
+    PropertyImp(SimpleNode parent, SemanticClass clazz, String name, PropertyDefinitionImp propertyDefinition,boolean isNode)
     {
         if (name == null)
         {
@@ -67,6 +68,7 @@ public final class PropertyImp implements Property
         path = parent.getSimplePath() + "/" + name;
         this.parent = parent;
         this.clazz = clazz;
+        this.isNode=isNode;
     }
 
     public SemanticClass getSemanticClass()
@@ -387,7 +389,7 @@ public final class PropertyImp implements Property
 
     public boolean isNode()
     {
-        return false;
+        return isNode;
     }
 
     public void setNew(boolean isNew)
