@@ -6,6 +6,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.base.SWBContextBase;
+import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.platform.SemanticVocabulary;
@@ -65,4 +66,30 @@ public class SWBContext extends SWBContextBase
         }
         return view;
     }
+
+    /**
+     *
+     */
+    public static class UTILS {
+
+        public static String getIconClass(SemanticObject obj)
+        {
+            String ret=null;
+            SemanticClass cls=obj.getSemanticClass();
+            if(cls.hasProperty(Iconable.swb_iconClass.getName()))
+            {
+                return obj.getProperty(Iconable.swb_iconClass);
+            }
+            ret="swbIcon"+cls.getName();
+            if(cls.hasProperty(Activeable.swb_active.getName()))
+            {
+                if(!obj.getBooleanProperty(Activeable.swb_active))
+                {
+                    ret+="U";
+                }
+            }
+            return ret;
+        }
+    }
+
 }

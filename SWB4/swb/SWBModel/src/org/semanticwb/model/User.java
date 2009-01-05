@@ -298,4 +298,15 @@ public class User extends UserBase implements Principal, java.io.Serializable
         }
         return userType.equals(current.getName());
     }
+
+    public boolean hasFavorite(SemanticObject obj)
+    {
+        boolean ret=false;
+        UserFavorites fav=getUserFavorites();
+        if(fav!=null)
+        {
+            ret=fav.getSemanticObject().hasObjectProperty(fav.swb_usrfHasObjects, obj);
+        }
+        return ret;
+    }
 }

@@ -1,9 +1,8 @@
 package org.semanticwb.model.base;
 
 
-public class ObjectActionBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.Iconable,org.semanticwb.model.Sortable
+public class ObjectActionBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.Iconable
 {
-    public static final org.semanticwb.platform.SemanticProperty swb_index=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#index");
     public static final org.semanticwb.platform.SemanticProperty swb_iconClass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#iconClass");
     public static final org.semanticwb.platform.SemanticProperty swbxf_actGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#actGroup");
     public static final org.semanticwb.platform.SemanticProperty swbxf_actionURL=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#actionURL");
@@ -12,16 +11,6 @@ public class ObjectActionBase extends org.semanticwb.model.WebPage implements or
     public ObjectActionBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
-    }
-
-    public int getIndex()
-    {
-        return getSemanticObject().getIntProperty(swb_index);
-    }
-
-    public void setIndex(int index)
-    {
-        getSemanticObject().setLongProperty(swb_index, index);
     }
 
     public String getIconClass()

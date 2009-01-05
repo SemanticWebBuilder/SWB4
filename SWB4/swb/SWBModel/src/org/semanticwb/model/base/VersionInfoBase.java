@@ -1,12 +1,12 @@
 package org.semanticwb.model.base;
 
 
-public class VersionInfoBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Valueable,org.semanticwb.model.Traceable
+public class VersionInfoBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
     public static final org.semanticwb.platform.SemanticProperty swb_modifiedBy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy");
-    public static final org.semanticwb.platform.SemanticProperty swb_value=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#value");
+    public static final org.semanticwb.platform.SemanticProperty swb_versionValue=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#versionValue");
     public static final org.semanticwb.platform.SemanticClass swb_VersionInfo=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#VersionInfo");
     public static final org.semanticwb.platform.SemanticProperty swb_previousVersion=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#previousVersion");
     public static final org.semanticwb.platform.SemanticProperty swb_versionLockedBy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#versionLockedBy");
@@ -53,14 +53,14 @@ public class VersionInfoBase extends org.semanticwb.model.SWBClass implements or
          return ret;
     }
 
-    public String getValue()
+    public String getVersionValue()
     {
-        return getSemanticObject().getProperty(swb_value);
+        return getSemanticObject().getProperty(swb_versionValue);
     }
 
-    public void setValue(String value)
+    public void setVersionValue(String versionValue)
     {
-        getSemanticObject().setProperty(swb_value, value);
+        getSemanticObject().setProperty(swb_versionValue, versionValue);
     }
 
     public void setPreviousVersion(org.semanticwb.model.VersionInfo versioninfo)
