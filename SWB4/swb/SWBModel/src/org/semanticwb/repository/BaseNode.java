@@ -38,6 +38,8 @@ public class BaseNode extends BaseNodeBase
         namespaces.put("jcr", "http://www.jcp.org/jcr/1.0");
         namespaces.put("nt", "http://www.jcp.org/jcr/nt/1.0");
         namespaces.put("cm", "http://www.semanticwb.org.mx/swb4/content");
+        namespaces.put("swbrep", "http://www.semanticwebbuilder.org/swb4/repository");
+        namespaces.put("swb", "http://www.semanticwebbuilder.org/swb4/ontology");
     }
     public BaseNode(SemanticObject base)
     {
