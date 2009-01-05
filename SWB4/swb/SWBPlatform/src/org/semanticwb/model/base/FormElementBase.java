@@ -61,7 +61,7 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
             String uri=request.getParameter(name);
             if(uri!=null)
             {
-                System.out.println("**** obj:"+obj+" uri:"+uri+" name:"+name);
+                //System.out.println("**** obj:"+obj+" uri:"+uri+" name:"+name);
                 if(name.startsWith("has"))
                 {
                     //TODO:

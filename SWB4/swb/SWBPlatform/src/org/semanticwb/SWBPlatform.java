@@ -381,18 +381,11 @@ public class SWBPlatform
         return servletContext;
     }    
 
-    public static SemanticMgr getSemanticMgr(Principal user)
-    {
-        semanticMgr.addSessionUser(user);
-        return semanticMgr;
-    }
-
     public static SemanticMgr getSemanticMgr()
     {
         return semanticMgr;
     }
 
-    
     public static String getVersion() {
         return version;
     }    

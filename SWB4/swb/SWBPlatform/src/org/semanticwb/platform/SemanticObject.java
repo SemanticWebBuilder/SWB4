@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map.Entry;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
 import org.semanticwb.SWBUtils;
@@ -46,6 +47,7 @@ public class SemanticObject
 
     private SemanticObject(Resource res)
     {
+        if(res==null)throw new NullPointerException("Resource is Null...");
         m_cacheprops=new HashMap();
         this.m_res = res;
         validateModel();
@@ -57,6 +59,11 @@ public class SemanticObject
         SemanticObject ret=null;
         if(hasCache)ret=m_objs.get(uri);
         return ret;
+    }
+
+    public GenericObject createGenericInstance()
+    {
+        return getSemanticClass().newGenericInstance(this);
     }
 
 
@@ -102,19 +109,48 @@ public class SemanticObject
     {
         if(value==null)value=NULL;
         if(value!=null)
+        {
             m_cacheprops.put(prop.getURI()+"|"+lang, value);
+        }
+    }
+
+    private void addPropertyValueCache(SemanticProperty prop, String lang, Object value)
+    {
+        removePropertyValueCache(prop, lang);
+        if(prop.isInverseOf() && value instanceof SemanticObject)
+        {
+            ((SemanticObject)value).removePropertyValueCache(prop.getInverse(), lang);
+        }
     }
 
     private Object getPropertyValueCache(SemanticProperty prop, String lang)
     {
         Object ret=null;
         if(hasPropertyCache)ret=m_cacheprops.get(prop.getURI()+"|"+lang);
-        //if(ret==NULL)ret=null;
         return ret;
     }
 
     private void removePropertyValueCache(SemanticProperty prop, String lang)
     {
+        System.out.println("removePropertyValueCache:"+this+" "+prop+" "+lang);
+        if(prop.isInverseOf())
+        {
+            Object aux=m_cacheprops.get(prop.getURI()+"|"+lang);
+            System.out.println("removePropertyValueCache2:"+aux);
+            if(aux!=null && aux!=NULL)
+            {
+                SemanticObject obj=(SemanticObject)aux;
+                SemanticProperty inv=prop.getInverse();
+                System.out.println("removePropertyValueCache3:"+obj+" "+inv+" "+inv.getCardinality());
+                if(inv.getCardinality()!=1)
+                {
+                    obj.m_cacheprops.remove(inv.getURI()+"|"+"list");
+                }else
+                {
+                    obj.m_cacheprops.remove(inv.getURI()+"|"+null);
+                }
+            }
+        }
         m_cacheprops.remove(prop.getURI()+"|"+lang);
     }
 
@@ -125,6 +161,16 @@ public class SemanticObject
         if(arr!=null)it=arr.iterator();
         return it;
     }
+
+    private Boolean hasObjectPropertyCache(SemanticProperty prop, SemanticObject obj)
+    {
+        Boolean ret=null;
+        ArrayList arr=(ArrayList)m_cacheprops.get(prop.getURI()+"|list");
+        if(arr!=null)ret=arr.contains(obj);
+        //System.out.println(this+" prop:"+prop+" obj:"+obj+" "+ret);
+        return ret;
+    }
+    
 
     private Iterator<SemanticObject> setListObjectPropertyCache(SemanticProperty prop, Iterator<SemanticObject> list)
     {
@@ -146,6 +192,7 @@ public class SemanticObject
             m_res = SWBPlatform.getSemanticMgr().getOntology().getResource(m_res.getURI());
             m_model = null;
         }
+        if(m_res==null)throw new NullPointerException("Resource is Null...");
     }
 
     public boolean isVirtual()
@@ -215,7 +262,7 @@ public class SemanticObject
      */
     public String getSID()
     {
-        return "/" + getModel().getName() + "/" + getSemanticClass().getName() + "/" + getId();
+        return "/" + getModel().getName() + "/" + getSemanticClass().getClassID() + ":" + getId();
     }
 
     /**
@@ -560,7 +607,19 @@ public class SemanticObject
         {
             m_res.addProperty(iprop, object.getRDFResource());
         }
+        removePropertyValueCache(prop, null);
         setPropertyValueCache(prop, null, object);
+        if(prop.isInverseOf())
+        {
+            SemanticProperty inv=prop.getInverse();
+            if(inv.getCardinality()==1)
+            {
+                object.removePropertyValueCache(prop.getInverse(), NULL);
+            }else
+            {
+                object.removePropertyValueCache(prop.getInverse(), "list");
+            }
+        }
         return this;
     }
 
@@ -579,7 +638,7 @@ public class SemanticObject
         }
         Property iprop = prop.getRDFProperty();
         m_res.addProperty(iprop, object.getRDFResource());
-        removePropertyValueCache(prop, "list");
+        addPropertyValueCache(prop, "list",object);
         return this;
     }
 
@@ -645,6 +704,38 @@ public class SemanticObject
             }
             ret=setListObjectPropertyCache(prop, ret);
         }
+        return ret;
+    }
+
+    public boolean hasObjectProperty(SemanticProperty prop, SemanticObject obj)
+    {
+
+        if (m_virtual)
+        {
+            ArrayList list = (ArrayList) m_virtprops.get(prop.getURI());
+            if (list != null)
+            {
+                return list.contains(obj);
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        Boolean ret = hasObjectPropertyCache(prop,obj);
+        if(ret==null)
+        {
+            if(hasPropertyCache)
+            {
+                listObjectProperties(prop);  //Cachar lista
+                ret=hasObjectPropertyCache(prop, obj);
+            }else
+            {
+                ret=getRDFResource().hasProperty(prop.getRDFProperty(), obj.getRDFResource());
+            }
+        }
+        if(ret==null)ret=false;
         return ret;
     }
 
@@ -732,6 +823,38 @@ public class SemanticObject
         return ret;
     }
 
+    private Object externalInvokerSet(SemanticProperty prop, Object... values)
+    {
+        Object ret = null;
+        if (!m_virtual)
+        {
+            GenericObject obj = getSemanticClass().newGenericInstance(this);
+            Class cls = obj.getClass();
+            String name = prop.getLabel();
+            if (name == null)
+            {
+                name = prop.getName();
+            }
+            name = "set" + name.substring(0, 1).toUpperCase() + name.substring(1);
+            try
+            {
+                Class types[]=new Class[values.length];
+                for(int x=0;x<values.length;x++)
+                {
+                    types[x]=values[x].getClass();
+                }
+                Method method = cls.getMethod(name,types);
+                ret = method.invoke(obj,values);
+            }
+            catch (Exception e)
+            {
+                log.error(e);
+            }
+        //System.out.println("externalInvoker:"+ret);
+        }
+        return ret;
+    }
+
     public void remove()
     {
         //TODO:revisar esto de vic
@@ -756,8 +879,17 @@ public class SemanticObject
         if(res!=null)
         {
             SemanticModel model=getModel();
+            //System.out.println("remove1:"+res+" model:"+model);
+            Iterator<Entry<String,SemanticModel>> it=SWBPlatform.getSemanticMgr().getModels().iterator();
+            while(it.hasNext())
+            {
+                Entry<String,SemanticModel> ent=it.next();
+                SemanticModel m=ent.getValue();
+                //System.out.println("remove2:"+res+" model:"+m);
+                m.getRDFModel().removeAll(null,null,res);
+            }
             model.getRDFModel().removeAll(res,null,null);
-            model.getRDFModel().removeAll(null,null,res);
+            //model.getRDFModel().removeAll(null,null,res);
         }
         removeCache(getURI());
     }
@@ -772,7 +904,13 @@ public class SemanticObject
      */
     public SemanticObject setProperty(SemanticProperty prop, String value)
     {
-        setProperty(prop, value,null);
+        if (prop.isExternalInvocation())
+        {
+            externalInvokerSet(prop,value);
+        }else
+        {
+            setProperty(prop, value,null);
+        }
         return this;
     }
 
@@ -784,7 +922,13 @@ public class SemanticObject
      */
     public SemanticObject setProperty(SemanticProperty prop, String value, String lang)
     {
-        setLiteralProperty(prop, new SemanticLiteral(value, lang));
+        if (prop.isExternalInvocation())
+        {
+            externalInvokerSet(prop,value,lang);
+        }else
+        {
+            setLiteralProperty(prop, new SemanticLiteral(value, lang));
+        }
         return this;
     }
 
@@ -1206,12 +1350,7 @@ public class SemanticObject
 
     public SemanticProperty transformToSemanticProperty()
     {
-        SemanticProperty ret = null;
-        Property pro = getModel().getRDFModel().getProperty(getURI());
-        if (pro != null)
-        {
-            ret = new SemanticProperty(pro);
-        }
+        SemanticProperty ret = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(getURI());
         return ret;
     }
 
@@ -1219,6 +1358,40 @@ public class SemanticObject
     {
         StmtIterator stit = getModel().getRDFModel().listStatements(null, null, getRDFResource());
         return new SemanticIterator(stit, true);
+    }
+
+    public Iterator<SemanticObject> listHerarquicalChilds()
+    {
+        ArrayList<SemanticObject> list=new ArrayList();
+        Iterator<SemanticProperty> it=getSemanticClass().listHerarquicalProperties();
+        while(it.hasNext())
+        {
+            SemanticProperty prop=it.next();
+            Iterator<SemanticObject> it2=listObjectProperties(prop);
+            while(it2.hasNext())
+            {
+                SemanticObject ch=it2.next();
+                list.add(ch);
+            }
+        }
+        return list.iterator();
+    }
+
+    public Iterator<SemanticObject> listHerarquicalParents()
+    {
+        ArrayList<SemanticObject> list=new ArrayList();
+        Iterator<SemanticProperty> it=getSemanticClass().listInverseHerarquicalProperties();
+        while(it.hasNext())
+        {
+            SemanticProperty prop=it.next();
+            Iterator<SemanticObject> it2=listObjectProperties(prop);
+            while(it2.hasNext())
+            {
+                SemanticObject ch=it2.next();
+                list.add(ch);
+            }
+        }
+        return list.iterator();
     }
 
 }
