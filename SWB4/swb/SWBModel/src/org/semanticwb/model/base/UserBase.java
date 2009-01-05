@@ -10,9 +10,11 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
     public static final org.semanticwb.platform.SemanticProperty swb_usrEmail=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrEmail");
     public static final org.semanticwb.platform.SemanticClass swb_UserGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserGroup");
     public static final org.semanticwb.platform.SemanticProperty swb_userGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userGroup");
-    public static final org.semanticwb.platform.SemanticProperty swb_updated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#updated");
     public static final org.semanticwb.platform.SemanticProperty swb_usrFirstName=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrFirstName");
+    public static final org.semanticwb.platform.SemanticProperty swb_updated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#updated");
     public static final org.semanticwb.platform.SemanticProperty swb_usrLanguage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrLanguage");
+    public static final org.semanticwb.platform.SemanticClass swb_UserFavorites=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserFavorites");
+    public static final org.semanticwb.platform.SemanticProperty swb_userFavorites=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userFavorites");
     public static final org.semanticwb.platform.SemanticClass swb_Calendar=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Calendar");
     public static final org.semanticwb.platform.SemanticProperty swb_hasCalendar=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasCalendar");
     public static final org.semanticwb.platform.SemanticProperty swb_usrPasswordChanged=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrPasswordChanged");
@@ -104,16 +106,6 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
          return ret;
     }
 
-    public java.util.Date getUpdated()
-    {
-        return getSemanticObject().getDateProperty(swb_updated);
-    }
-
-    public void setUpdated(java.util.Date updated)
-    {
-        getSemanticObject().setDateProperty(swb_updated, updated);
-    }
-
     public String getUsrFirstName()
     {
         return getSemanticObject().getProperty(swb_usrFirstName);
@@ -124,6 +116,16 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
         getSemanticObject().setProperty(swb_usrFirstName, usrFirstName);
     }
 
+    public java.util.Date getUpdated()
+    {
+        return getSemanticObject().getDateProperty(swb_updated);
+    }
+
+    public void setUpdated(java.util.Date updated)
+    {
+        getSemanticObject().setDateProperty(swb_updated, updated);
+    }
+
     public String getLanguage()
     {
         return getSemanticObject().getProperty(swb_usrLanguage);
@@ -132,6 +134,27 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
     public void setLanguage(String usrLanguage)
     {
         getSemanticObject().setProperty(swb_usrLanguage, usrLanguage);
+    }
+
+    public void setUserFavorites(org.semanticwb.model.UserFavorites userfavorites)
+    {
+        getSemanticObject().setObjectProperty(swb_userFavorites, userfavorites.getSemanticObject());
+    }
+
+    public void removeUserFavorites()
+    {
+        getSemanticObject().removeProperty(swb_userFavorites);
+    }
+
+    public org.semanticwb.model.UserFavorites getUserFavorites()
+    {
+         org.semanticwb.model.UserFavorites ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_userFavorites);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.UserFavorites)obj.getSemanticClass().newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.Calendar> listCalendars()

@@ -10,6 +10,7 @@ public class UserRepositoryBase extends org.semanticwb.model.SWBModel implements
     public static final org.semanticwb.platform.SemanticProperty swb_updated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#updated");
     public static final org.semanticwb.platform.SemanticProperty swb_creator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#creator");
     public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
+    public static final org.semanticwb.platform.SemanticClass swb_UserFavorites=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserFavorites");
     public static final org.semanticwb.platform.SemanticClass swb_UserGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserGroup");
     public static final org.semanticwb.platform.SemanticClass swb_Role=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Role");
     public static final org.semanticwb.platform.SemanticClass swb_UserRepository=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserRepository");
@@ -129,6 +130,38 @@ public class UserRepositoryBase extends org.semanticwb.model.SWBModel implements
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(swb_description, description, lang);
+    }
+
+    public org.semanticwb.model.UserFavorites getUserFavorites(String id)
+    {
+        return (org.semanticwb.model.UserFavorites)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,swb_UserFavorites),swb_UserFavorites);
+    }
+
+    public java.util.Iterator<org.semanticwb.model.UserFavorites> listUserFavoritess()
+    {
+        com.hp.hpl.jena.rdf.model.Property rdf=getSemanticObject().getModel().getRDFModel().getProperty( org.semanticwb.platform.SemanticVocabulary.RDF_TYPE);
+        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, swb_UserFavorites.getOntClass());
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserFavorites>(org.semanticwb.model.UserFavorites.class, stit, true);
+    }
+
+    public org.semanticwb.model.UserFavorites createUserFavorites(String id)
+    {
+        return (org.semanticwb.model.UserFavorites)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, swb_UserFavorites), swb_UserFavorites);
+    }
+
+    public org.semanticwb.model.UserFavorites createUserFavorites()
+    {
+        long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+swb_UserFavorites.getName());
+        return createUserFavorites(""+id);
+    } 
+
+    public void removeUserFavorites(String id)
+    {
+        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,swb_UserFavorites));
+    }
+    public boolean hasUserFavorites(String id)
+    {
+        return (getUserFavorites(id)!=null);
     }
 
     public org.semanticwb.model.UserGroup getUserGroup(String id)
