@@ -8,6 +8,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.HashSet;
+import java.util.Iterator;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -16,12 +17,18 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.WebPage;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.office.comunication.OfficeApplication;
 import org.semanticwb.office.comunication.OfficeDocument;
 import org.semanticwb.office.interfaces.CategoryInfo;
 import org.semanticwb.office.interfaces.ContentInfo;
 import org.semanticwb.office.interfaces.ContentType;
+import org.semanticwb.office.interfaces.PortletInfo;
 import org.semanticwb.office.interfaces.VersionInfo;
+import org.semanticwb.office.interfaces.WebPageInfo;
+import org.semanticwb.office.interfaces.WebSiteInfo;
 import org.semanticwb.xmlrpc.Part;
 
 /**
@@ -63,7 +70,6 @@ public class TestServices
     {
     }
 
-    
     @Test
     @Ignore
     public void getCategoriesTest()
@@ -196,9 +202,9 @@ public class TestServices
             document.updateContent(workspaceid, contentid, file.getName());
             for (VersionInfo info : document.getVersions(workspaceid, contentid))
             {
-                System.out.println("nameOfVersion: "+info.nameOfVersion);
-                System.out.println("Created: "+info.created);
-                System.out.println("user: " +info.user);
+                System.out.println("nameOfVersion: " + info.nameOfVersion);
+                System.out.println("Created: " + info.created);
+                System.out.println("user: " + info.user);
                 System.out.println("------------- Fin de version info  ------------");
             }
         }
@@ -210,14 +216,15 @@ public class TestServices
     }
 
     @Test
+    @Ignore
     public void searchTest()
     {
         OfficeApplication office = new OfficeApplication();
         office.setUser("admin");
         office.setPassword("password");
         try
-        {            
-            for (ContentInfo info : office.search(workspaceid, "*", "*", "*", "cm:OfficeContent","WORD"))
+        {
+            for (ContentInfo info : office.search(workspaceid, "*", "*", "*", "cm:OfficeContent", "WORD"))
             {
                 System.out.println("categoryTitle : " + info.categoryTitle);
                 System.out.println("descripcion : " + info.descripcion);
@@ -228,7 +235,66 @@ public class TestServices
             }
             System.out.println("-----------Fin de busqueda de varios contenido --------------------------------");
         }
-        catch (Exception e)
+        catch (Throwable e)
+        {
+            e.printStackTrace(System.out);
+            Assert.fail(e.getMessage());
+        }
+
+    }
+
+    @Test
+    public void getPageInformationTest()
+    {
+        OfficeDocument document = new OfficeDocument();
+        OfficeApplication application = new OfficeApplication();
+        document.setUser("admin");
+        document.setPassword("password");
+        application.setUser("admin");
+        application.setPassword("password");
+        try
+        {
+            String rep = "defaultWorkspace@swb";
+            String contentId = "3e56d36d-cfc7-44a9-a71b-b698d556759e";
+            if (application.getSites().length == 0)
+            {
+                WebSite newSite = SWBContext.createWebSite("Sep", "http://www.sep.gob.mx");
+                WebPage home = newSite.createWebPage("demo");
+                home.setTitle("Página demsotracion");
+                home.setDescription("Descripción del la página");
+                newSite.setHomePage(home);
+            }
+            else
+            {
+                Iterator<WebSite> sites = SWBContext.listWebSites();
+                while (sites.hasNext())
+                {
+                    WebSite website = sites.next();
+                    if (website.getHomePage() == null)
+                    {
+                        WebPage home = website.createWebPage("demo");
+                        home.setTitle("Página demsotracion");
+                        home.setDescription("Descripción del la página");
+                        website.setHomePage(home);
+                    }
+                }
+            }
+            WebSiteInfo site = application.getSites()[0];
+
+            WebPageInfo home = application.getHomePage(site);
+            document.publishToPortletContent(rep, contentId,"1.0",home);
+            for (PortletInfo info : document.getPageInformation(rep, contentId))
+            {
+                System.out.println("id : " + info.id);
+                System.out.println("title : " + info.title);
+                System.out.println("descripcion : " + info.description);
+                System.out.println("active : " + info.active);
+                System.out.println("version : " + info.version);
+                System.out.println("-------------------------------------------");
+            }
+
+        }
+        catch (Throwable e)
         {
             e.printStackTrace(System.out);
             Assert.fail(e.getMessage());
