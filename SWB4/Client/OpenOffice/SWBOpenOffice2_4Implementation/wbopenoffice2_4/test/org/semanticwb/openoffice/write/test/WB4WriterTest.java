@@ -45,7 +45,7 @@ public class WB4WriterTest
     XComponentContext xContext;
     XComponent xCompDest = null;
     XDesktop oDesktop = null;
-    File sUrlDestiny = new File("c:/temp/demo.odt");
+    File sUrlDestiny = new File("c:/temp/demo3.odt");
     File tempDir = new File("c:/temp/demo/");
 
     public WB4WriterTest()
@@ -59,10 +59,7 @@ public class WB4WriterTest
         File home=new File(System.getProperty("user.home"));
         System.setProperty(ConfigurationListURI.CONFIGURATION, home.getPath()+"/list.xml");
         System.setProperty(Configuration.CONFIGURATION_PROPERTY_NAME, home.getPath()+"/config.xml");
-        System.setProperty(ErrorLog.CONFIGURATION, home.getPath());
-        //System.setProperty(ConfigurationListURI.CONFIGURATION, "c:\\temp\\list.xml");
-        //System.setProperty(Configuration.CONFIGURATION_PROPERTY_NAME, "c:\\temp\\config.xml");
-        //System.setProperty(ErrorLog.CONFIGURATION, "c:\\temp");
+        System.setProperty(ErrorLog.CONFIGURATION, home.getPath());       
     }
 
     @AfterClass
@@ -262,7 +259,7 @@ public class WB4WriterTest
     }
 
     @Test 
-    //@Ignore
+    @Ignore
     public void openTest()
     {
         WB4WriterApplication writer = new WB4WriterApplication(this.xContext);        
@@ -312,6 +309,19 @@ public class WB4WriterTest
             WB4Writer writer = new WB4Writer(this.xContext);
             List<File> attachments = writer.getAllAttachments();
             Assert.assertEquals(attachments.size(), 2);
+        }
+        catch ( WBException wbe )
+        {
+            Assert.fail(wbe.getMessage());
+        }
+    }
+    @Test    
+    public void showInformationTest()
+    {
+        try
+        {
+            WB4Writer writer = new WB4Writer(this.xContext);
+            writer.showDocumentInfo();
         }
         catch ( WBException wbe )
         {
