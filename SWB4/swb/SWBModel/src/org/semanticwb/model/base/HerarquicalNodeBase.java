@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class HerarquicalNodeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Sortable,org.semanticwb.model.Iconable,org.semanticwb.model.Descriptiveable
+public class HerarquicalNodeBase extends org.semanticwb.model.base.GenericObjectBase implements org.semanticwb.model.Sortable,org.semanticwb.model.Iconable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_index=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#index");
     public static final org.semanticwb.platform.SemanticClass swb_SWBModel=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#SWBModel");
@@ -28,9 +28,9 @@ public class HerarquicalNodeBase extends org.semanticwb.model.SWBClass implement
         getSemanticObject().setLongProperty(swb_index, index);
     }
 
-    public void setModel(org.semanticwb.model.SWBModel swbmodel)
+    public void setModel(org.semanticwb.platform.SemanticObject semanticobject)
     {
-        getSemanticObject().setObjectProperty(swbxf_heModel, swbmodel.getSemanticObject());
+        getSemanticObject().setObjectProperty(swbxf_heModel, semanticobject);
     }
 
     public void removeModel()
@@ -38,14 +38,10 @@ public class HerarquicalNodeBase extends org.semanticwb.model.SWBClass implement
         getSemanticObject().removeProperty(swbxf_heModel);
     }
 
-    public org.semanticwb.model.SWBModel getModel()
+    public org.semanticwb.platform.SemanticObject getModel()
     {
-         org.semanticwb.model.SWBModel ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swbxf_heModel);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.SWBModel)obj.getSemanticClass().newGenericInstance(obj);
-         }
+         org.semanticwb.platform.SemanticObject ret=null;
+         ret=getSemanticObject().getObjectProperty(swbxf_heModel);
          return ret;
     }
 
@@ -124,5 +120,15 @@ public class HerarquicalNodeBase extends org.semanticwb.model.SWBClass implement
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(swb_description, description, lang);
+    }
+
+    public void remove()
+    {
+        getSemanticObject().remove();
+    }
+
+    public java.util.Iterator<org.semanticwb.model.GenericObject> listRelatedObjects()
+    {
+        return new org.semanticwb.model.GenericIterator((org.semanticwb.platform.SemanticClass)null, getSemanticObject().listRelatedObjects(),true);
     }
 }

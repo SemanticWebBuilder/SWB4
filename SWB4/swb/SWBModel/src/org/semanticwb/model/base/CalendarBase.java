@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class CalendarBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.XMLable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable
+public class CalendarBase extends org.semanticwb.model.base.GenericObjectBase implements org.semanticwb.model.Traceable,org.semanticwb.model.XMLable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticProperty swb_active=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#active");
@@ -149,6 +149,16 @@ public class CalendarBase extends org.semanticwb.model.SWBClass implements org.s
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(swb_description, description, lang);
+    }
+
+    public void remove()
+    {
+        getSemanticObject().remove();
+    }
+
+    public java.util.Iterator<org.semanticwb.model.GenericObject> listRelatedObjects()
+    {
+        return new org.semanticwb.model.GenericIterator((org.semanticwb.platform.SemanticClass)null, getSemanticObject().listRelatedObjects(),true);
     }
 
     public org.semanticwb.model.WebSite getWebSite()

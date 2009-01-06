@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class TextAreaBase extends org.semanticwb.model.SWBFormElement 
+public class TextAreaBase extends org.semanticwb.model.base.FormElementBase 
 {
     public static final org.semanticwb.platform.SemanticProperty swbxf_textAreaRows=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#textAreaRows");
     public static final org.semanticwb.platform.SemanticProperty swbxf_textAreaCols=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#textAreaCols");
@@ -30,5 +30,15 @@ public class TextAreaBase extends org.semanticwb.model.SWBFormElement
     public void setCols(int textAreaCols)
     {
         getSemanticObject().setLongProperty(swbxf_textAreaCols, textAreaCols);
+    }
+
+    public void remove()
+    {
+        getSemanticObject().remove();
+    }
+
+    public java.util.Iterator<org.semanticwb.model.GenericObject> listRelatedObjects()
+    {
+        return new org.semanticwb.model.GenericIterator((org.semanticwb.platform.SemanticClass)null, getSemanticObject().listRelatedObjects(),true);
     }
 }

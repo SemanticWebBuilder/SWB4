@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class CampBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Activeable,org.semanticwb.model.Deleteable,org.semanticwb.model.Ruleable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Calendarable,org.semanticwb.model.Roleable
+public class CampBase extends org.semanticwb.model.base.GenericObjectBase implements org.semanticwb.model.Activeable,org.semanticwb.model.Deleteable,org.semanticwb.model.Ruleable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Calendarable,org.semanticwb.model.Roleable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticProperty swb_deleted=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#deleted");
@@ -245,6 +245,16 @@ public class CampBase extends org.semanticwb.model.SWBClass implements org.seman
              ret=(org.semanticwb.model.Rule)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
+    }
+
+    public void remove()
+    {
+        getSemanticObject().remove();
+    }
+
+    public java.util.Iterator<org.semanticwb.model.GenericObject> listRelatedObjects()
+    {
+        return new org.semanticwb.model.GenericIterator((org.semanticwb.platform.SemanticClass)null, getSemanticObject().listRelatedObjects(),true);
     }
 
     public org.semanticwb.model.WebSite getWebSite()

@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class DisplayPropertyBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Sortable
+public class DisplayPropertyBase extends org.semanticwb.model.base.GenericObjectBase implements org.semanticwb.model.Sortable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_index=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#index");
     public static final org.semanticwb.platform.SemanticProperty swbxf_propSelectValues=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#propSelectValues");
@@ -136,9 +136,9 @@ public class DisplayPropertyBase extends org.semanticwb.model.SWBClass implement
         getSemanticObject().setProperty(swbxf_propInvalidMessage, propInvalidMessage, lang);
     }
 
-    public void setFormElement(org.semanticwb.model.SWBFormElement swbformelement)
+    public void setFormElement(org.semanticwb.platform.SemanticObject semanticobject)
     {
-        getSemanticObject().setObjectProperty(swbxf_formElement, swbformelement.getSemanticObject());
+        getSemanticObject().setObjectProperty(swbxf_formElement, semanticobject);
     }
 
     public void removeFormElement()
@@ -146,14 +146,10 @@ public class DisplayPropertyBase extends org.semanticwb.model.SWBClass implement
         getSemanticObject().removeProperty(swbxf_formElement);
     }
 
-    public org.semanticwb.model.SWBFormElement getFormElement()
+    public org.semanticwb.platform.SemanticObject getFormElement()
     {
-         org.semanticwb.model.SWBFormElement ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swbxf_formElement);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.SWBFormElement)obj.getSemanticClass().newGenericInstance(obj);
-         }
+         org.semanticwb.platform.SemanticObject ret=null;
+         ret=getSemanticObject().getObjectProperty(swbxf_formElement);
          return ret;
     }
 
@@ -165,5 +161,15 @@ public class DisplayPropertyBase extends org.semanticwb.model.SWBClass implement
     public void setEditable(boolean propEditable)
     {
         getSemanticObject().setBooleanProperty(swbxf_propEditable, propEditable);
+    }
+
+    public void remove()
+    {
+        getSemanticObject().remove();
+    }
+
+    public java.util.Iterator<org.semanticwb.model.GenericObject> listRelatedObjects()
+    {
+        return new org.semanticwb.model.GenericIterator((org.semanticwb.platform.SemanticClass)null, getSemanticObject().listRelatedObjects(),true);
     }
 }

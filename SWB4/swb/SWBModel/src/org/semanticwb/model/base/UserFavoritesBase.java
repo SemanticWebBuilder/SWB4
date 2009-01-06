@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class UserFavoritesBase extends org.semanticwb.model.SWBClass 
+public class UserFavoritesBase extends org.semanticwb.model.base.GenericObjectBase 
 {
     public static final org.semanticwb.platform.SemanticClass owl_Thing=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.w3.org/2002/07/owl#Thing");
     public static final org.semanticwb.platform.SemanticProperty swb_usrfHasObjects=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrfHasObjects");
@@ -38,6 +38,16 @@ public class UserFavoritesBase extends org.semanticwb.model.SWBClass
          org.semanticwb.platform.SemanticObject ret=null;
          ret=getSemanticObject().getObjectProperty(swb_usrfHasObjects);
          return ret;
+    }
+
+    public void remove()
+    {
+        getSemanticObject().remove();
+    }
+
+    public java.util.Iterator<org.semanticwb.model.GenericObject> listRelatedObjects()
+    {
+        return new org.semanticwb.model.GenericIterator((org.semanticwb.platform.SemanticClass)null, getSemanticObject().listRelatedObjects(),true);
     }
 
     public org.semanticwb.model.UserRepository getUserRepository()

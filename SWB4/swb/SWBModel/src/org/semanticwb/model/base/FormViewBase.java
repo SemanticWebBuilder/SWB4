@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class FormViewBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable
+public class FormViewBase extends org.semanticwb.model.base.GenericObjectBase implements org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_title=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#title");
     public static final org.semanticwb.platform.SemanticProperty swbxf_hasCreateProperty=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#hasCreateProperty");
@@ -147,5 +147,15 @@ public class FormViewBase extends org.semanticwb.model.SWBClass implements org.s
          org.semanticwb.platform.SemanticObject ret=null;
          ret=getSemanticObject().getObjectProperty(swbxf_hasEditProperty);
          return ret;
+    }
+
+    public void remove()
+    {
+        getSemanticObject().remove();
+    }
+
+    public java.util.Iterator<org.semanticwb.model.GenericObject> listRelatedObjects()
+    {
+        return new org.semanticwb.model.GenericIterator((org.semanticwb.platform.SemanticClass)null, getSemanticObject().listRelatedObjects(),true);
     }
 }
