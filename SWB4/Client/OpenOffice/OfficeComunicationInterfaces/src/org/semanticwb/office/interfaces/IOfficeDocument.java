@@ -46,7 +46,7 @@ public interface IOfficeDocument
     @XmlRpcMethod(methodName="OfficeDocument.getVersions")
     public VersionInfo[] getVersions(String repositoryName,String contentId) throws Exception;
     @XmlRpcMethod(methodName="OfficeDocument.publishToPortletContent")
-    public PortletInfo publishToPortletContent(String repositoryName, String contentId, WebPageInfo webpage) throws Exception;
+    public PortletInfo publishToPortletContent(String repositoryName, String contentId,String version,WebPageInfo webpage) throws Exception;
 
     @XmlRpcMethod(methodName="OfficeDocument.getProperties")
     public PropertyInfo[] getPortletProperties(PortletInfo info) throws Exception;
@@ -56,4 +56,11 @@ public interface IOfficeDocument
     
     @XmlRpcMethod(methodName="OfficeDocument.listPortlets")
     public PortletInfo[] listPortlets(PortletInfo portletInfo, WebPageInfo webpage) throws Exception;
+    
+    @XmlRpcMethod(methodName="OfficeDocument.getPageInformation")
+    public PortletInfo[] getPageInformation(String repositoryName,String contentId) throws Exception;
+    
+    @XmlRpcMethod(methodName="OfficeDocument.deleteContentOfPage")
+    public void deleteContentOfPage(PortletInfo info) throws Exception;
 }
+
