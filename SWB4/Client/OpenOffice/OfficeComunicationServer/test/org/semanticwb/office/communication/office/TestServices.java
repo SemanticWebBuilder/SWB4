@@ -291,6 +291,7 @@ public class TestServices
                 System.out.println("active : " + info.active);
                 System.out.println("version : " + info.version);
                 System.out.println("-------------------------------------------");
+                document.deleteContentOfPage(info);
             }
 
         }
