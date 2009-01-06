@@ -4,12 +4,19 @@
  */
 package org.semanticwb.office.comunication;
 
+import com.hp.hpl.jena.query.QueryExecution;
+import com.hp.hpl.jena.query.QueryExecutionFactory;
+import com.hp.hpl.jena.query.QuerySolution;
+import com.hp.hpl.jena.query.ResultSet;
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.Resource;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.UUID;
 import javax.jcr.ItemExistsException;
 import javax.jcr.ItemNotFoundException;
@@ -33,11 +40,14 @@ import org.semanticwb.office.interfaces.PortletInfo;
 import org.semanticwb.office.interfaces.PropertyInfo;
 import org.semanticwb.office.interfaces.VersionInfo;
 import org.semanticwb.office.interfaces.WebPageInfo;
+import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
+import org.semanticwb.platform.SemanticVocabulary;
 import org.semanticwb.portlet.office.ExcelPortlet;
 import org.semanticwb.portlet.office.OfficePortlet;
 import org.semanticwb.portlet.office.PPTPortlet;
 import org.semanticwb.portlet.office.WordPortlet;
+import org.semanticwb.repository.BaseNode;
 import org.semanticwb.repository.RepositoryManagerLoader;
 import org.semanticwb.xmlrpc.Part;
 import org.semanticwb.xmlrpc.XmlRpcObject;
@@ -55,6 +65,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     private static Logger log = SWBUtils.getLogger(OfficeDocument.class);
     private static final String DEFAULT_MIME_TYPE = "application/octet-stream";
     private static final RepositoryManagerLoader loader = RepositoryManagerLoader.getInstance();
+    private static final String NL = System.getProperty("line.separator");
 
     public String publish(String title, String description, String repositoryName, String categoryID, String type, String nodeType, String file) throws Exception
     {
@@ -591,8 +602,8 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     Node contentNode = session.getNodeByUUID(contentId);
                     String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
                     String cm_description = loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
-                    info.description=contentNode.getProperty(cm_description).getString();
-                    info.title=contentNode.getProperty(cm_title).getString();
+                    info.description = contentNode.getProperty(cm_description).getString();
+                    info.title = contentNode.getProperty(cm_title).getString();
                 }
                 catch (Exception e)
                 {
@@ -611,7 +622,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return listPortlets.toArray(new PortletInfo[listPortlets.size()]);
     }
 
-    public PortletInfo publishToPortletContent(String repositoryName, String contentId, WebPageInfo webpage) throws Exception
+    public PortletInfo publishToPortletContent(String repositoryName, String contentId, String version, WebPageInfo webpage) throws Exception
     {
         WebSite site = SWBContext.getWebSite(webpage.siteID);
         WebPage parent = site.getWebPage(webpage.id);
@@ -623,24 +634,30 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             Node contentNode = session.getNodeByUUID(contentId);
             String cm_officeType = loader.getOfficeManager(repositoryName).getPropertyType();
             String type = contentNode.getProperty(cm_officeType).getString();
-            Portlet portlet = null;
+            OfficePortlet portlet = null;
             String id = UUID.randomUUID().toString();
             if (type.equals("EXCEL"))
             {
-                portlet = new ExcelPortlet(ExcelPortlet.swbrep_ExcelPortlet.newInstance(id));
+                portlet = new ExcelPortlet(site.getSemanticObject().getModel().createSemanticObject(id, ExcelPortlet.swbrep_ExcelPortlet));
             }
             else if (type.equals("PPT"))
             {
-                portlet = new PPTPortlet(PPTPortlet.swbrep_PPTPortlet.newInstance(id));
+                portlet = new WordPortlet(site.getSemanticObject().getModel().createSemanticObject(id, PPTPortlet.swbrep_PPTPortlet));
             }
             else
             {
-                portlet = new WordPortlet(WordPortlet.swbrep_WordPortlet.newInstance(id));
+                portlet = new WordPortlet(site.getSemanticObject().getModel().createSemanticObject(id, WordPortlet.swbrep_WordPortlet));
             }
+            portlet.setContent(contentId);
+            portlet.setRepositoryName(repositoryName);
+            portlet.setVersionToShow(version);
             parent.addPortlet(portlet);
             PortletInfo PortletInfo = new PortletInfo();
             PortletInfo.id = id;
             PortletInfo.siteId = webpage.id;
+            PortletInfo.active = portlet.isActive();
+            PortletInfo.description = portlet.getDescription();
+            PortletInfo.version = version;
             return PortletInfo;
 
         }
@@ -665,6 +682,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(propertyInfo.id);
         portlet.getSemanticObject().setProperty(prop, value);
     }
+
     public PropertyInfo[] getPortletProperties(PortletInfo portletInfo) throws Exception
     {
         ArrayList<PropertyInfo> properties = new ArrayList<PropertyInfo>();
@@ -701,6 +719,76 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             }
         }
         return properties.toArray(new PropertyInfo[properties.size()]);
+    }
+
+    public PortletInfo[] getPageInformation(String repositoryName, String contentId) throws Exception
+    {
+        ArrayList<PortletInfo> information = new ArrayList<PortletInfo>();
+        Iterator<WebSite> sites = SWBContext.listWebSites();
+        while (sites.hasNext())
+        {
+            WebSite site = sites.next();
+            if (!(site.getId().equals(SWBContext.WEBSITE_GLOBAL) || site.getId().equals(SWBContext.WEBSITE_ADMIN)))
+            {
+                Model model = site.getSemanticObject().getModel().getRDFModel();
+                StringBuilder prefixStatement = new StringBuilder("");
+                for (String prefix : BaseNode.listUris().keySet())
+                {
+                    String uri = BaseNode.listUris().get(prefix);
+                    if (!uri.endsWith("#"))
+                    {
+                        uri += "#";
+                    }
+                    prefixStatement.append("PREFIX " + prefix + ": <" + uri + ">" + NL);
+                }
+                prefixStatement.append(" PREFIX rdf: <" + SemanticVocabulary.RDF_URI + "> " + NL);
+                prefixStatement.append(" PREFIX rdfs: <" + SemanticVocabulary.RDFS_URI + "> " + NL);
+                String sparql = prefixStatement.toString() + "SELECT DISTINCT ?x WHERE {?x swbrep:content ?content . FILTER (?content=\"" + contentId + "\") ?x swbrep:repositoryName ?rep . FILTER (?rep=\"" + repositoryName + "\")  }";
+                com.hp.hpl.jena.query.Query query = com.hp.hpl.jena.query.QueryFactory.create(sparql);
+                QueryExecution qexec = QueryExecutionFactory.create(query, model);
+                try
+                {
+                    ResultSet rs = qexec.execSelect();
+                    while (rs.hasNext())
+                    {
+                        QuerySolution rb = rs.nextSolution();
+                        List resultVars = rs.getResultVars();
+                        for (Object name : resultVars)
+                        {
+                            if (rb.get(name.toString()).isResource())
+                            {
+                                Resource res = rb.getResource(name.toString());
+                                SemanticObject obj = SemanticObject.createSemanticObject(res);
+                                OfficePortlet porlet = new OfficePortlet(obj);
+                                PortletInfo info = new PortletInfo();
+                                info.active = porlet.isActive();
+                                info.siteId = site.getId();
+                                info.title = porlet.getWebSite().getTitle();
+                                info.description = porlet.getWebSite().getDescription();
+                                info.id = porlet.getId();
+                                info.version = porlet.getVersionToShow();
+                                information.add(info);
+                            }
+                        }
+                    }
+                }
+                catch (Throwable e)
+                {
+                    log.error(e);
+                }
+                finally
+                {
+                    qexec.close();
+                }
+            }
+        }
+        return information.toArray(new PortletInfo[information.size()]);
+    }
+
+    public void deleteContentOfPage(PortletInfo info) throws Exception
+    {
+        WebSite site = SWBContext.getWebSite(info.siteId);
+        site.removePortlet(info.id);
     }
 }
 
