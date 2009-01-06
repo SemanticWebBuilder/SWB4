@@ -57,17 +57,17 @@ public class UserRepository extends UserRepositoryBase
      */
     }
 
-    public Iterator<String> searchUsersBy(String usrFirstName, String usrLastName, String usrSecondLastName, String usrEmail, String Role, String Group)
+    public Iterator<String> searchUsersBy(String usrFirstName, String usrLastName, String usrSecondLastName, String usrEmail, String Role, String Group, String Active)
     {
         System.out.println("Grp: "+Group);
 
         Iterator<String> ret = null;
-        Model model = SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
-
+        //Model model = SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
+        Model model = getSemanticObject().getModel().getRDFModel();
         // First part or the query string
-        String prolog = "PREFIX swb: <" + SemanticVocabulary.URI + ">";
-        prolog += "PREFIX rdf: <" + SemanticVocabulary.RDF_URI + ">";
-        prolog += "PREFIX rdfs: <" + SemanticVocabulary.RDFS_URI + ">";
+        String prolog = "PREFIX swb: <" + SemanticVocabulary.URI + ">\n";
+        prolog += "PREFIX rdf: <" + SemanticVocabulary.RDF_URI + ">\n";
+        prolog += "PREFIX rdfs: <" + SemanticVocabulary.RDFS_URI + ">\n";
 
 
         String _usrFirstName = usrFirstName!=null?usrFirstName:"";
@@ -94,21 +94,24 @@ public class UserRepository extends UserRepositoryBase
         //"SELECT ?title ?class WHERE {?x swb:title ?title. ?x rdf:type swb:WebPage}"
 
         String queryString = prolog + NL +
-                "SELECT ?x ?fname ?lname ?slname ?mail ?login WHERE {?x rdf:type swb:User. ";
-        if (null!=_Role)     queryString +=   "?x swb:hasRole <"+_Role+">." ;
-        if (null!=_Group)     queryString +=   "?x swb:userGroup <"+_Group+">." ;
-        if (!"".equals(_usrFirstName))     queryString +=   "?x swb:usrFirstName ?gfn .   FILTER regex(?gfn, \""+_usrFirstName+"\", \"i\"). " ;
-        if (!"".equals(_usrLastName))     queryString +=   "?x swb:usrLastName ?gln.   FILTER regex(?gln, \""+_usrLastName+"\", \"i\"). " ;
-        if (!"".equals(_usrSecondLastName))     queryString +=   "?x swb:usrSecondLastName ?gsln.   FILTER regex(?gsln, \""+_usrSecondLastName+"\", \"i\"). " ;
-        if (!"".equals(_usrEmail))     queryString +=   "?x swb:usrEmail ?gml.   FILTER regex(?gml, \""+_usrEmail+"\", \"i\"). " ;
-             queryString +=   "?x swb:usrLastName ?lname. " +
-                "?x swb:usrFirstName ?fname. " +
-                "?x swb:usrSecondLastName ?slname. " +
-                "?x swb:usrEmail ?mail. " +
-                "?x swb:usrLogin ?login " +
+                "SELECT \n?x ?fname ?lname ?slname ?mail ?login \nWHERE { \n?x rdf:type swb:User. \n";
+        queryString += "?x swb:usrLogin ?login. \n";
+        if (null!=_Role)     queryString +=   "?x swb:hasRole <"+_Role+">.\n" ;
+        if (null!=_Group)     queryString +=   "?x swb:userGroup <"+_Group+">.\n" ;
+        if (null!=Active) queryString+= "?x swb:active "+Active+"\n";
+        if (!"".equals(_usrFirstName))     queryString +=   "?x swb:usrFirstName ?gfn .   FILTER regex(?gfn, \""+_usrFirstName+"\", \"i\"). \n" ;
+        if (!"".equals(_usrLastName))     queryString +=   "?x swb:usrLastName ?gln.   FILTER regex(?gln, \""+_usrLastName+"\", \"i\"). \n" ;
+        if (!"".equals(_usrSecondLastName))     queryString +=   "?x swb:usrSecondLastName ?gsln.   FILTER regex(?gsln, \""+_usrSecondLastName+"\", \"i\"). \n" ;
+        if (!"".equals(_usrEmail))     queryString +=   "?x swb:usrEmail ?gml.   FILTER regex(?gml, \""+_usrEmail+"\", \"i\"). \n" ;
+             queryString +=  "OPTIONAL{\n ?x swb:usrFirstName ?fname. \n}\n" +
+                     "OPTIONAL{\n  ?x swb:usrLastName ?lname. \n}\n" +
+               
+                "OPTIONAL{\n?x swb:usrSecondLastName ?slname. \n}\n" +
+                "OPTIONAL{\n?x swb:usrEmail ?mail. \n}\n" +
+                
                 "}";
 
-
+                System.out.println(queryString);
         Query query = QueryFactory.create(queryString);
 
         System.out.println(getId());
@@ -124,12 +127,12 @@ public class UserRepository extends UserRepositoryBase
             for (; rs.hasNext();)
             {
                 QuerySolution rb = rs.nextSolution();
-                String current = rb.get("x").toString() + "||" +
-                        rb.get("fname").toString() + "||" +
-                        rb.get("lname").toString() + "||" +
-                        rb.get("slname").toString() + "||" +
-                        rb.get("mail").toString() + "||" +
-                        rb.get("login").toString();
+                String current = rb.get("x") + "||" +
+                        (null==rb.get("fname")?"":rb.get("fname")) + "||" +
+                        (null==rb.get("lname")?"":rb.get("lname")) + "||" +
+                        (null==rb.get("slname")?"":rb.get("slname")) + "||" +
+                        (null==rb.get("mail")?"":rb.get("mail")) + "||" +
+                        (null==rb.get("login")?"":rb.get("login"));
                 lista.add(current);
 
             }
