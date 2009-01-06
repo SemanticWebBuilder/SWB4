@@ -368,7 +368,11 @@ public class SWBFormMgr
         if(obj!=null)
         {
             DisplayProperty disp=new DisplayProperty(obj);
-            ele=disp.getFormElement();
+            SemanticObject feobj=disp.getFormElement();
+            if(feobj!=null)
+            {
+                ele=(FormElement)feobj.createGenericInstance();
+            }
         }
         //System.out.println("obj:"+obj+" prop:"+prop+" ele:"+ele);
         if(ele==null)ele=new GenericFormElement();
