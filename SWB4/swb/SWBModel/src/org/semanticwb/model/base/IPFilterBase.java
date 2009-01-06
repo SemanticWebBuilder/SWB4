@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class IPFilterBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable
+public class IPFilterBase extends org.semanticwb.model.base.GenericObjectBase implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticProperty swb_active=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#active");
@@ -160,6 +160,16 @@ public class IPFilterBase extends org.semanticwb.model.SWBClass implements org.s
     public void setIpNumber(String ipFilterNumber)
     {
         getSemanticObject().setProperty(swb_ipFilterNumber, ipFilterNumber);
+    }
+
+    public void remove()
+    {
+        getSemanticObject().remove();
+    }
+
+    public java.util.Iterator<org.semanticwb.model.GenericObject> listRelatedObjects()
+    {
+        return new org.semanticwb.model.GenericIterator((org.semanticwb.platform.SemanticClass)null, getSemanticObject().listRelatedObjects(),true);
     }
 
     public org.semanticwb.model.WebSite getWebSite()

@@ -6,7 +6,7 @@ import org.semanticwb.model.base.*;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 
-public class GenericFormElement extends SWBFormElement
+public class GenericFormElement extends FormElementBase
 {
     public GenericFormElement()
     {

@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class VersionInfoBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable
+public class VersionInfoBase extends org.semanticwb.model.base.GenericObjectBase implements org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
@@ -185,6 +185,16 @@ public class VersionInfoBase extends org.semanticwb.model.SWBClass implements or
     public void setVersionNumber(int versionNumber)
     {
         getSemanticObject().setLongProperty(swb_versionNumber, versionNumber);
+    }
+
+    public void remove()
+    {
+        getSemanticObject().remove();
+    }
+
+    public java.util.Iterator<org.semanticwb.model.GenericObject> listRelatedObjects()
+    {
+        return new org.semanticwb.model.GenericIterator((org.semanticwb.platform.SemanticClass)null, getSemanticObject().listRelatedObjects(),true);
     }
 
     public org.semanticwb.model.WebSite getWebSite()

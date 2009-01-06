@@ -1,7 +1,7 @@
 package org.semanticwb.repository.base;
 
 
-public class WorkspaceBase extends org.semanticwb.model.SWBModel 
+public class WorkspaceBase extends org.semanticwb.model.base.GenericObjectBase 
 {
     public static final org.semanticwb.platform.SemanticClass nt_BaseNode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#base");
     public static final org.semanticwb.platform.SemanticProperty jcr_root=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#root");

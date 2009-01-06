@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class WebPageBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Portletable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Indexable,org.semanticwb.model.Calendarable,org.semanticwb.model.Viewable,org.semanticwb.model.Activeable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Hiddenable,org.semanticwb.model.Deleteable,org.semanticwb.model.Traceable
+public class WebPageBase extends org.semanticwb.model.base.GenericObjectBase implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Portletable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Indexable,org.semanticwb.model.Calendarable,org.semanticwb.model.Viewable,org.semanticwb.model.Activeable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Hiddenable,org.semanticwb.model.Deleteable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
@@ -516,6 +516,16 @@ public class WebPageBase extends org.semanticwb.model.SWBClass implements org.se
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(swb_description, description, lang);
+    }
+
+    public void remove()
+    {
+        getSemanticObject().remove();
+    }
+
+    public java.util.Iterator<org.semanticwb.model.GenericObject> listRelatedObjects()
+    {
+        return new org.semanticwb.model.GenericIterator((org.semanticwb.platform.SemanticClass)null, getSemanticObject().listRelatedObjects(),true);
     }
 
     public org.semanticwb.model.WebSite getWebSite()
