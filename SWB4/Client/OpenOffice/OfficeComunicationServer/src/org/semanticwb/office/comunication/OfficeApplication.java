@@ -175,7 +175,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             Query query;
             if (session.getRepository().getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf("webbuilder") != -1)
             {                
-                String statement = "SELECT ?x WHERE {?x " + cm_title + " ?title FILTER regex(?title,\"^" + title + "\")  }";                
+                String statement = "SELECT DISTINCT ?x WHERE {?x " + cm_title + " ?title FILTER (?title=\"" + title + "\")  }";
                 query = session.getWorkspace().getQueryManager().createQuery(statement, "SPARQL");
             }
             else
@@ -282,7 +282,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             Query query;
             if (session.getRepository().getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf("webbuilder") != -1)
             {                
-                String statement = "SELECT ?x WHERE {?x " + cm_title + " ?title FILTER regex(?title,\"^" + title + "\") }";
+                String statement = "SELECT DISTINCT ?x WHERE {?x " + cm_title + " ?title FILTER (?title=\"" + title + "\") }";
                 query = session.getWorkspace().getQueryManager().createQuery(statement, "SPARQL");
             }
             else
@@ -390,21 +390,21 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             Query query = null;
             if (session.getRepository().getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf("webbuilder") != -1)
             {
-                StringBuilder statement = new StringBuilder("SELECT ?x ");
+                StringBuilder statement = new StringBuilder("SELECT DISTINCT ?x ");
 
                 statement.append(" WHERE {");
 
                 if (!(title.equals("") || title.equals("*")))
                 {
                     statement.append(" ?x " + cm_title + " ?title . ");
-                    statement.append("FILTER regex(?title, \"" + title + "\") ");
+                    statement.append("FILTER regex(?title,\"" + title + "\") ");
                 }
 
 
                 if (!(officeType.equals("") || officeType.equals("*")))
                 {
                     statement.append(" ?x " + cm_officeType + " ?officetype . ");
-                    statement.append(" FILTER regex(?officetype, \"" + officeType + "\") ");
+                    statement.append(" FILTER (?officetype=\"" + officeType + "\") ");
                 }
 
                 if (!(description.equals("") || description.equals("*")))
@@ -418,7 +418,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                 if (!(type.equals("") || type.equals("*")))
                 {
                     statement.append(" ?x jcr:primaryType ?type . ");
-                    statement.append(" FILTER regex(?type, \"" + type + "\") ");
+                    statement.append(" FILTER (?type=\"" + type + "\") ");
                 }
                 statement.append(" } ");
                 query = session.getWorkspace().getQueryManager().createQuery(statement.toString(), "SPARQL");
@@ -534,6 +534,10 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             WebSiteInfo info = new WebSiteInfo();
             info.title = site.getTitle();
             info.id = site.getId();
+            if(!(info.id.equals(SWBContext.WEBSITE_ADMIN) || info.id.equals(SWBContext.WEBSITE_GLOBAL)))
+            {
+                websites.add(info);
+            }
         }
         return websites.toArray(new WebSiteInfo[websites.size()]);
     }
