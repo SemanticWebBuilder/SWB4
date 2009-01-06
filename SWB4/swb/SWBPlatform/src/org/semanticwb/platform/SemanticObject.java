@@ -89,6 +89,7 @@ public class SemanticObject
         SemanticObject ret=getSemanticObject(id);
         if(ret==null)
         {
+            //System.out.println("res1:"+res+" "+id);
             if(hasCache)
             {
                 if(res.getURI()!=null && res.getModel()==SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel())
@@ -96,6 +97,7 @@ public class SemanticObject
                     res=SWBPlatform.getSemanticMgr().getOntology().getResource(res.getURI());
                 }
             }
+            //System.out.println("res2:"+res+" "+id);
             ret=new SemanticObject(res);
             m_objs.put(id, ret);
         }
@@ -191,6 +193,7 @@ public class SemanticObject
         String ns = getModel().getNameSpace();
         if (ns != null && !m_res.getURI().startsWith(ns))
         {
+            //System.out.println("ns:"+ns+" "+m_res.getURI());
             m_res = SWBPlatform.getSemanticMgr().getOntology().getResource(m_res.getURI());
             m_model = null;
         }
