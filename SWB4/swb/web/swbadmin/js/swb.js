@@ -7,6 +7,10 @@
 
       var CONST_TAB="/tab";   //Constante sufijo para identificar al tab
 
+      var act_item;
+      var act_store;
+      var act_treeNode;
+
       dojo.require("dijit.Menu");
       dojo.require("dijit._Calendar");
       dojo.require("dijit.ColorPalette");
@@ -54,6 +58,8 @@
       // for the Tree
       dojo.require("dojo.data.ItemFileWriteStore");
       dojo.require("dojo.data.ItemFileReadStore");
+
+      dojo.require("dijit._tree.dndSource");
 
       //dojo.require("dijit.PopupMenu");
 
@@ -316,9 +322,6 @@
           }
       }
 
-      var act_item;
-      var act_store;
-
       function executeAction(store, item, action)
       {
           act_item=item;
@@ -412,6 +415,19 @@
           store.setValues(item, "title", jsonNode.title);
           store.setValues(item, "type", jsonNode.type);
           store.setValues(item, "icon", jsonNode.icon);
+
+          if(jsonNode.parent)
+          {
+              var pite=getItem(store, jsonNode.parent)
+              if(pite)
+              {
+                  //TODO:
+                  //alert("Parent:"+jsonNode.parent+" "+pite);
+                  //store.setValues(pite, "children", item);
+                  //store.setValues(item, "parent", pite);
+              }
+          }
+
           if(!onlyNode)
           {
             if(jsonNode.events)store.setValues(item, "events", jsonNode.events);
@@ -424,6 +440,11 @@
 
       function setWaitCursor()
       {
+          if(act_treeNode && act_treeNode.isTreeNode)
+          {
+              //alert(act_treeNode);
+              act_treeNode.markProcessing();
+          }
           document.body.style.cursor="wait";
           dojo.byId("leftAccordion").style.cursor="wait";
       }
@@ -432,6 +453,10 @@
       {
           document.body.style.cursor="default";
           dojo.byId("leftAccordion").style.cursor="default";
+          if(act_treeNode && act_treeNode.isTreeNode)
+          {
+              act_treeNode.unmarkProcessing();
+          }
       }
 
       function removeTreeNodeByURI(uri)
@@ -486,7 +511,7 @@
               addItem(store,items[i],item);
           }
           store.save();
-          setDefaultCursor();
+          setDefaultCursor(item);
       }
 
       function addItemByURI(store, parent, uri)
