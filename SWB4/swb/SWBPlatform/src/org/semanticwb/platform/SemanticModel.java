@@ -166,14 +166,22 @@ public class SemanticModel
     
     public String getObjectUri(String id, SemanticClass cls)
     {
-        return getNameSpace()+"/"+cls.getName()+"#"+id;
+        String ret=getNameSpace();
+        if(cls!=null && !cls.isSWBModel())
+        {
+            ret+="/"+cls.getName()+"#"+id;
+        }else
+        {
+            ret+="#"+id;
+        }
+        return ret;
     }
     
     public SemanticObject getModelObject()
     {
         if(m_modelObject==null)
         {
-            m_modelObject=getSemanticObject(getName());
+            m_modelObject=getSemanticObject(getObjectUri(getName(), null));
         }
         return m_modelObject;
     }

@@ -355,13 +355,13 @@ public class CodeGenerator
                 javaClassContent.append("    public static final SemanticClass " + tpc.getPrefix() + "_" + getClassName(tpc) + "=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(\"" + tpc.getURI() + "\");" + ENTER);
                 javaClassContent.append(ENTER);
                 String className = getClassName(tpc);
-                javaClassContent.append("    public static " + className + " get" + className + "(String uri)" + ENTER);
+                javaClassContent.append("    public static " + className + " get" + className + "(String name)" + ENTER);
                 javaClassContent.append("    {" + ENTER);
                 javaClassContent.append("        " + getPackage(tpc) + "." + className + " ret=null;" + ENTER);
-                javaClassContent.append("        SemanticModel model=mgr.getModel(uri);" + ENTER);
+                javaClassContent.append("        SemanticModel model=mgr.getModel(name);" + ENTER);
                 javaClassContent.append("        if(model!=null)" + ENTER);
                 javaClassContent.append("        {" + ENTER);
-                javaClassContent.append("            org.semanticwb.platform.SemanticObject obj=model.getSemanticObject(uri);" + ENTER);
+                javaClassContent.append("            org.semanticwb.platform.SemanticObject obj=model.getSemanticObject(model.getObjectUri(name,"+ tpc.getPrefix() + "_" + className +"));" + ENTER);
                 javaClassContent.append("            if(obj!=null)" + ENTER);
                 javaClassContent.append("            {" + ENTER);
                 javaClassContent.append("                ret=(" + getPackage(tpc) + "." + className + ")new " + className + "(obj);" + ENTER);
@@ -376,15 +376,15 @@ public class CodeGenerator
                 javaClassContent.append("        return (java.util.Iterator<" + sPackageClass + "." + className + ">)" + tpc.getPrefix() + "_" + className + ".listGenericInstances();" + ENTER);
                 javaClassContent.append("    }" + ENTER);
                 javaClassContent.append(ENTER);
-                javaClassContent.append("    public static void remove" + className + "(String uri)" + ENTER);
+                javaClassContent.append("    public static void remove" + className + "(String name)" + ENTER);
                 javaClassContent.append("    {" + ENTER);
-                javaClassContent.append("        mgr.removeModel(uri);" + ENTER);
+                javaClassContent.append("        mgr.removeModel(name);" + ENTER);
                 javaClassContent.append("    }" + ENTER);
                 javaClassContent.append(ENTER);
                 javaClassContent.append("    public static " + className + " create" + className + "(String name, String namespace)" + ENTER);
                 javaClassContent.append("    {" + ENTER);
                 javaClassContent.append("        SemanticModel model=mgr.createModel(name, namespace);" + ENTER);
-                javaClassContent.append("        return (" + className + ")model.createGenericObject(name, " + tpc.getPrefix() + "_" + className + ");" + ENTER);
+                javaClassContent.append("        return (" + className + ")model.createGenericObject(model.getObjectUri(name, "+ tpc.getPrefix() + "_" + className +"), " + tpc.getPrefix() + "_" + className + ");" + ENTER);
                 javaClassContent.append("    }" + ENTER);
             }
         }
