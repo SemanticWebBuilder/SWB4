@@ -3,19 +3,25 @@
  *
  * Created on 29 de diciembre de 2008, 04:18 PM
  */
-
 package org.semanticwb.openoffice.ui.dialogs;
+
+import org.semanticwb.office.interfaces.PortletInfo;
 
 /**
  *
  * @author  victor.lorenzana
  */
-public class DialogContentPublicationInformation extends javax.swing.JDialog {
+public class DialogContentPublicationInformation extends javax.swing.JDialog
+{
+
+    private PortletInfo pageInformation;
 
     /** Creates new form DialogContentPublicationInformation */
-    public DialogContentPublicationInformation(java.awt.Frame parent, boolean modal) {
+    public DialogContentPublicationInformation(java.awt.Frame parent, boolean modal, PortletInfo pageInformation)
+    {
         super(parent, modal);
         initComponents();
+        this.pageInformation = pageInformation;
     }
 
     /** This method is called from within the constructor to
@@ -56,9 +62,19 @@ public class DialogContentPublicationInformation extends javax.swing.JDialog {
         jPanelOptions.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
         jButtonCancel.setText("Cancelar");
+        jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCancelActionPerformed(evt);
+            }
+        });
         jPanelOptions.add(jButtonCancel);
 
         jButtonOK.setText("Aceptar");
+        jButtonOK.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonOKActionPerformed(evt);
+            }
+        });
         jPanelOptions.add(jButtonOK);
 
         getContentPane().add(jPanelOptions, java.awt.BorderLayout.SOUTH);
@@ -197,30 +213,20 @@ public class DialogContentPublicationInformation extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
 private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
-this.jTableVersions.setEnabled(false);
+    this.jTableVersions.setEnabled(false);
 }//GEN-LAST:event_jRadioButton1ActionPerformed
 
 private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
-this.jTableVersions.setEnabled(true);
+    this.jTableVersions.setEnabled(true);
 }//GEN-LAST:event_jRadioButton2ActionPerformed
 
-    /**
-    * @param args the command line arguments
-    */
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                DialogContentPublicationInformation dialog = new DialogContentPublicationInformation(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
+private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelActionPerformed
+    this.setVisible(false);
+}//GEN-LAST:event_jButtonCancelActionPerformed
 
+private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOKActionPerformed
+    this.setVisible(false);
+}//GEN-LAST:event_jButtonOKActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButtonAddScheduler;
@@ -246,5 +252,4 @@ this.jTableVersions.setEnabled(true);
     private javax.swing.JTable jTableVersions;
     private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
-
 }
