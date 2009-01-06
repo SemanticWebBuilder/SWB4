@@ -56,6 +56,7 @@ public abstract class OfficeDocument
     private static final String TITLE_VERIFY = "Verificación de contenido";
     // By default the content is not published
     private String contentID = null;
+    private String workspaceID = null;
     
 
     static
@@ -446,15 +447,19 @@ public abstract class OfficeDocument
      */
     public final boolean isPublicated()
     {
-        boolean isPublicated = false;
-        if (this.contentID == null)
+        boolean isPublicated=false;
+        String id=this.getCustomProperties().get(OfficeDocument.CONTENT_ID_NAME);
+        String rep=this.getCustomProperties().get(OfficeDocument.WORKSPACE_ID_NAME);
+        if(id!=null && rep!=null && !rep.isEmpty() && !id.isEmpty())
         {
-            isPublicated = false;
+            this.contentID=id;
+            this.workspaceID=rep;
+            isPublicated = true;
         }
         else
         {
-            isPublicated = true;
-        }
+            isPublicated = false;
+        }        
         return isPublicated;
     }
 
