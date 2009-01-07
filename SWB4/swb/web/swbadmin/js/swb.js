@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
       var context="/swb";
-      var stores= new Array();
+      var trees= new Array();
 
       var CONST_TAB="/tab";   //Constante sufijo para identificar al tab
 
@@ -389,9 +389,10 @@
 
       function updateTreeNodeByURI(uri)
       {
-          for(x=0;x<stores.length;x++)
+          for(x=0;x<trees.length;x++)
           {
-              var s=stores[x];
+              var s=trees[x].store;
+              //alert("store:"+trees[x]+" "+trees[x].id);
               var n=getItem(s,uri);
               if(n)
               {
@@ -422,7 +423,7 @@
               if(pite)
               {
                   //TODO:
-                  //alert("Parent:"+jsonNode.parent+" "+pite);
+                  //alert("son:"+item.id+" newP:"+jsonNode.parent+" old:"+dijit.byId(item.id));
                   //store.setValues(pite, "children", item);
                   //store.setValues(item, "parent", pite);
               }
@@ -459,11 +460,26 @@
           }
       }
 
+      function pasteItemByURIs(uri, oldParentUri, newParentUri)
+      {
+          for(x=0;x<trees.length;x++)
+          {
+              var t=trees[x];
+              var childItem=getItem(t.store,uri);
+              var oldParentItem=getItem(t.store,oldParentUri);
+              var newParentItem=getItem(t.store,newParentUri);
+              if(childItem && oldParentItem && newParentItem)
+              {
+                  t.model.pasteItem(childItem, oldParentItem, newParentItem, false);
+              }
+          }
+      }
+
       function removeTreeNodeByURI(uri)
       {
-          for(x=0;x<stores.length;x++)
+          for(x=0;x<trees.length;x++)
           {
-              var s=stores[x];
+              var s=trees[x].store;
               var n=getItem(s,uri);
               if(n)
               {
@@ -610,18 +626,23 @@
          scroll();
      }
 
-      function showStatusURL(url)
+      function showStatusURL(url, sync)
       {
-          dojo.xhrGet({
+          var ret=false;
+          if(!sync)sync=false;
+          var obj=dojo.xhrGet({
               url: url,
+              sync: sync,
               load: function(response, ioArgs){
                 showStatus(response);
+                ret=true;
               },
               error: function(response, ioArgs){
                 showStatus("Error: "+response);
               },
               handleAs: "text"
           });
+          return ret;
       }
 
       function getItem(store,id)
@@ -666,9 +687,9 @@
           }
       }
 
-      function registerStore(store)
+      function registerTree(tree)
       {
-          stores[stores.length]=store;
+          trees[trees.length]=tree;
           //alert(stores.length);
       }
 
