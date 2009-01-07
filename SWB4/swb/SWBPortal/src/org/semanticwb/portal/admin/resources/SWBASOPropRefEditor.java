@@ -393,6 +393,7 @@ public class SWBASOPropRefEditor extends GenericResource {
 
             SemanticClass clsprop = propref.getRangeClass();
             title = clsprop.getName();
+            log.debug(title);
             
             HashMap hmSO = new HashMap();
             Iterator<SemanticObject> ite_so = obj.listObjectProperties(SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(idp));
@@ -401,9 +402,29 @@ public class SWBASOPropRefEditor extends GenericResource {
                 if (null != so) {
                     SemanticObject soref = so.getObjectProperty(propref);
                     hmSO.put(soref.getURI(), soref);
- //                   log.debug(soref.getURI()+" -- HashMap");
+//                    log.debug(soref.getURI()+" -- HashMap");
                 }
             }
+            SemanticObject obusrRep = null;
+            if(title.equalsIgnoreCase("role"))
+            {
+                GenericObject go = ont.getGenericObject(id);
+                if(go instanceof WebPage)
+                {
+                   obusrRep  = ((WebPage)go).getWebSite().getUserRepository().getSemanticObject();
+                }
+                else if(go instanceof Template)
+                {
+                   obusrRep  = ((Template)go).getWebSite().getUserRepository().getSemanticObject();
+                }
+                else if(go instanceof Portlet)
+                {
+                   obusrRep  = ((Portlet)go).getWebSite().getUserRepository().getSemanticObject();
+                }
+                
+            }
+
+            if(obusrRep!=null) obj = obusrRep;
             out.println("<div class=\"swbform\">");
             out.println("<form id=\""+id+"/chooseSO\" action=\"" + url + "\" method=\"get\"  onsubmit=\"submitUrl('"+url+"',this); return false;\">");
             out.println("<input type=\"hidden\" name=\"suri\" value=\"" + obj.getURI() + "\">");
@@ -412,6 +433,7 @@ public class SWBASOPropRefEditor extends GenericResource {
             //out.println("	<legend> Choose - " + prop.getDisplayName(user.getLanguage()) + " ( " + getDisplaySemObj(obj,user.getLanguage()) + " )</legend>");
             log.debug("Clase: "+clsprop.getName());
             Iterator<SemanticObject> itso = obj.getModel().listInstancesOfClass(clsprop);
+
             while (itso.hasNext()) {
                 SemanticObject sobj = itso.next();
                 String stitle = getDisplaySemObj(sobj,user.getLanguage());
