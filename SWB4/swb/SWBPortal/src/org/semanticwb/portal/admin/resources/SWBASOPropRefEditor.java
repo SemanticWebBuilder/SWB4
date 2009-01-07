@@ -406,22 +406,16 @@ public class SWBASOPropRefEditor extends GenericResource {
                 }
             }
             SemanticObject obusrRep = null;
-            if(title.equalsIgnoreCase("role"))
+            if(clsprop.equals(Role.swb_Role))
             {
-                GenericObject go = ont.getGenericObject(id);
-                if(go instanceof WebPage)
+                GenericObject go=obj.getModel().getModelObject().createGenericInstance();
+                if(go instanceof WebSite)
                 {
-                   obusrRep  = ((WebPage)go).getWebSite().getUserRepository().getSemanticObject();
-                }
-                else if(go instanceof Template)
+                   obusrRep=((WebSite)go).getUserRepository().getSemanticObject();
+                }else
                 {
-                   obusrRep  = ((Template)go).getWebSite().getUserRepository().getSemanticObject();
+                    obusrRep=go.getSemanticObject();
                 }
-                else if(go instanceof Portlet)
-                {
-                   obusrRep  = ((Portlet)go).getWebSite().getUserRepository().getSemanticObject();
-                }
-                
             }
 
             if(obusrRep!=null) obj = obusrRep;
