@@ -32,6 +32,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.Portlet;
+import org.semanticwb.model.PortletType;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
@@ -622,7 +623,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return listPortlets.toArray(new PortletInfo[listPortlets.size()]);
     }
 
-    public PortletInfo publishToPortletContent(String repositoryName, String contentId, String version, WebPageInfo webpage) throws Exception
+    public PortletInfo publishToPortletContent(String repositoryName, String contentId, String version,String title,String description,WebPageInfo webpage) throws Exception
     {
         WebSite site = SWBContext.getWebSite(webpage.siteID);
         WebPage parent = site.getWebPage(webpage.id);
@@ -651,6 +652,8 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             portlet.setContent(contentId);
             portlet.setRepositoryName(repositoryName);
             portlet.setVersionToShow(version);
+            portlet.setTitle(title);
+            portlet.setDescription(description);
             parent.addPortlet(portlet);
             PortletInfo PortletInfo = new PortletInfo();
             PortletInfo.id = id;
