@@ -200,10 +200,38 @@ public class SWBUtils {
             while (i >= 0) {
                 str = str.substring(0, i) + replace + str.substring(i + match.length());
                 y = i + replace.length();
-                i = str.indexOf(match, y);
+                i = str.indexOf(match);
             }
             return str;
         }
+           
+        
+        /**
+         * @param str
+         * @param match
+         * @param replace
+         * @param ignoreCase
+         * @Autor Jorge Jiménez
+         * @return
+         */
+        public static String replaceAllIgnoreCase(String str, String match, String replace) {
+            if (match == null || match.length() == 0) {
+                return str;
+            }
+            if (replace == null) {
+                replace = "";
+            }
+            int i = str.toLowerCase().indexOf(match.toLowerCase());
+            int y = 0;
+            while (i >= 0) {
+                str = str.substring(0, i) + replace + str.substring(i + match.length());
+                y = i + replace.length();
+                i = str.toLowerCase().indexOf(match.toLowerCase(), y);            
+            }
+            return str;
+        }
+        
+        
 
         public static String iso8601DateFormat(Date date) {
             return iso8601dateFormat.format(date);
