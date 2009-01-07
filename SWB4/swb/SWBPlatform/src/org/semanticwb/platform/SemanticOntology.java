@@ -136,7 +136,10 @@ public class SemanticOntology
     
     public GenericObject getGenericObject(String uri, SemanticClass cls)
     {
-        return cls.newGenericInstance(getSemanticObject(uri));        
+        GenericObject ret=null;
+        SemanticObject obj=getSemanticObject(uri);
+        if(obj!=null)ret=cls.newGenericInstance(obj);
+        return ret;
     }
     
     public SemanticClass createSemanticClass(String uri)
