@@ -10,6 +10,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.WebSite;
@@ -30,8 +31,7 @@ public class SWBExportWebSite extends GenericAdmResource {
         try {
             //Substituir x uri dinamica
             String uri = "sep";
-            //Substituir x ruta dinamica
-            String path = "C:/Archivos de programa/Apache Software Foundation/Tomcat 5.5/webapps/SWB4/swb/build/web/work/";
+            String path = SWBPlatform.getWorkPath()+"/";
             String zipdirectory = path + "sitetemplates/";
             //---------Generación de archivo zip de carpeta work de sitio especificado-------------
             java.util.zip.ZipOutputStream zos = new java.util.zip.ZipOutputStream(new FileOutputStream(zipdirectory + uri + ".zip"));
