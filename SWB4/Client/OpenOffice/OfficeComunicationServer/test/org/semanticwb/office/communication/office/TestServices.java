@@ -255,7 +255,7 @@ public class TestServices
         try
         {
             String rep = "defaultWorkspace@swb";
-            String contentId = "3e56d36d-cfc7-44a9-a71b-b698d556759e";
+            String contentId = "551fab79-a366-4498-ba6f-060cb92e6994";
             if (application.getSites().length == 0)
             {
                 WebSite newSite = SWBContext.createWebSite("Sep", "http://www.sep.gob.mx");
@@ -280,9 +280,8 @@ public class TestServices
                 }
             }
             WebSiteInfo site = application.getSites()[0];
-
             WebPageInfo home = application.getHomePage(site);
-            document.publishToPortletContent(rep, contentId,"1.0",home);
+            document.publishToPortletContent(rep, contentId,"1.0","demo","demo",home);
             for (PortletInfo info : document.getPageInformation(rep, contentId))
             {
                 System.out.println("id : " + info.id);
