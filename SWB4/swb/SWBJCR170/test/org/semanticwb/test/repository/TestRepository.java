@@ -81,14 +81,14 @@ public class TestRepository
     }
 
     @Test
+    @Ignore
     public void addNode()
     {
         String UUID = "";
         Session session = null;
         try
         {
-            RepositoryImp repository = new RepositoryImp();            
-            //repository.recreateDefaultWorkspace();
+            RepositoryImp repository = new RepositoryImp();                        
             SimpleCredentials credentials = new SimpleCredentials("victor", "victor".toCharArray());
             session = repository.login(credentials);
             String title = "Deportes";
@@ -105,7 +105,7 @@ public class TestRepository
             if(repository.getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf("webbuilder")!=-1)
             {
         
-                String statement="SELECT ?title WHERE {?x cm:title ?title FILTER regex(?title, \""+ title +"\")  }" ; 
+                String statement="SELECT ?x WHERE {?x cm:title ?title FILTER regex(?title, \""+ title +"\")  }" ;
                 query = qmanager.createQuery(statement, "SPARQL");
             }
             else
@@ -155,7 +155,6 @@ public class TestRepository
             }
             
         }
-
-
     }
+    
 }
