@@ -220,7 +220,7 @@ public class SWBAWebPageContents extends GenericResource {
                     urlu.setParameter("sprop", idp);
                     urlu.setParameter("sval", sobj.getURI());
                     urlu.setAction("updstatus");
-                    out.println("<input name=\"" + prop.getName() + sobj.getURI() + "\" type=\"checkbox\" value=\"1\" id=\"" + prop.getName() + sobj.getURI() + "\" onclick=\"submitUrl('" + urlu + "&val='+this.checked,this); reloadTab('"+sobj.getURI()+"'); return false;\"  " + (activo ? "checked='checked'" : "") + "/>");
+                    out.println("<input name=\"" + prop.getName() + sobj.getURI() + "\" type=\"checkbox\" value=\"1\" id=\"" + prop.getName() + sobj.getURI() + "\" onclick=\"showStatusUrl('" + urlu + "&val='+this.checked,true); reloadTab('"+sobj.getURI()+"'); setTabTitle('"+sobj.getURI()+"','"+sobj.getDisplayName(user.getLanguage())+"','"+SWBContext.UTILS.getIconClass(sobj)+"'); return false;\"  " + (activo ? "checked='checked'" : "") + "/>");
                     out.println("</td>");
                 }
                 out.println("</tr>");
