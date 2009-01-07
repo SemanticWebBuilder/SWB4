@@ -189,6 +189,9 @@
         arr.put(jobj);
 
         //System.out.println("obj:"+obj.getId());
+        //drop acceptance
+        JSONArray dropacc=new JSONArray();
+        jobj.putOpt("dropacc", dropacc);
 
         //menus
         JSONArray menus=new JSONArray();
