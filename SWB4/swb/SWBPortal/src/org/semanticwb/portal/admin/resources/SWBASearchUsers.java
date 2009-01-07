@@ -34,6 +34,13 @@ public class SWBASearchUsers extends GenericResource
         SWBResourceURL url = paramRequest.getRenderUrl();
         url.setMode("search");
         Iterator<UserRepository> itur = SWBContext.listUserRepositorys();
+      /*  ret.append("<script type=\"text/javascript\">\n"+
+        "           dojo.require(\"dojo.parser\");\n"+
+        "                   dojo.require(\"dijit.layout.ContentPane\");\n"+
+        "                   dojo.require(\"dijit.form.FilteringSelect\");\n"+
+        "                   dojo.require(\"dijit.form.RadioButton\");\n"+
+        "        </script>\n");
+*/
         ret.append("  <form id=\"SWBASearchUsers\" name=\"SWBASearchUsers\" method=\"post\" action=\"" + url + "\">\n");
         ret.append("<fieldset>\n");
         // ret.append("  <legend>Busqueda usuarios</legend>\n");
@@ -48,8 +55,11 @@ public class SWBASearchUsers extends GenericResource
             ret.append("        <option value=\"" + ur.getId() + "\">" + ur.getTitle() + "</option>\n"); //todo Add Language
         }
         ret.append("<script type=\"dojo/method\" event=\"onChange\" args=\"suri\">\n");
-        ret.append("    alert(suri);\n");
-        ret.append("getHtml('"+url+"?userRepository='+suri, 'SWBASearchUsers_GR');\n");
+       // ret.append("    alert(suri);\n");
+        //ret.append("getHtml('"+url+"?userRepository='+suri, 'SWBASearchUsers_GR');\n");
+        ret.append("    var lpan = dijit.byId('SWBASearchUsers_GR');\n");
+        ret.append("    lpan.attr('href', '"+url+"?userRepository='+suri);\n");
+        ret.append("    lpan.refresh();\n");
         ret.append("</script> \n");
 
         ret.append("    </select>\n");
@@ -74,7 +84,7 @@ public class SWBASearchUsers extends GenericResource
                 "</span>\n");
         ret.append("    </td></tr>\n");
         ret.append("</table>\n");
-        ret.append("<div id=\"SWBASearchUsers_GR\" name=\"SWBASearchUsers_GR\">\n");
+        ret.append("<div id=\"SWBASearchUsers_GR\" name=\"SWBASearchUsers_GR\" dojoType=\"dijit.layout.ContentPane\">\n");
         ret.append("<table>");
         Iterator<Role> itroles = SWBContext.getDefaultRepository().listRoles();
         ret.append("    <tr><td>Roles</td>\n");
@@ -102,7 +112,7 @@ public class SWBASearchUsers extends GenericResource
         ret.append("</div>\n");
         ret.append("</fieldset>\n");
         ret.append("<fieldset>\n");
-        ret.append("    <input name=\"search\" type=\"submit\" value=\"Buscar\" />\n");
+        ret.append("    <input name=\"search\" type=\"submit\" value=\"Buscar\" dojoType=\"dijit.form.Button\" />\n");
         ret.append("</fieldset>\n");
         ret.append("  </form>\n");
         response.getWriter().write(ret.toString());
