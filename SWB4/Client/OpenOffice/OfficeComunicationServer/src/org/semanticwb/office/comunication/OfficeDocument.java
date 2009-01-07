@@ -651,7 +651,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             }
             portlet.setContent(contentId);
             portlet.setRepositoryName(repositoryName);
-            portlet.setVersionToShow(version);
+            //portlet.setVersionToShow(version);
             portlet.setTitle(title);
             portlet.setDescription(description);
             parent.addPortlet(portlet);
@@ -769,7 +769,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                                 info.title = porlet.getWebSite().getTitle();
                                 info.description = porlet.getWebSite().getDescription();
                                 info.id = porlet.getId();
-                                info.version = porlet.getVersionToShow();
+                                //info.version = porlet.getVersionToShow();
                                 information.add(info);
                             }
                         }
