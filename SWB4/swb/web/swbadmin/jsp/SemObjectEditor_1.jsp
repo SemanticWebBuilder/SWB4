@@ -103,5 +103,5 @@
 </form>
 
 <%
-SWBFormMgr fmgr=new SWBFormMgr(obj, SWBFormMgr.MODE_VIEW);
+SWBFormMgr fmgr=new SWBFormMgr(obj, null, SWBFormMgr.MODE_VIEW);
 %><%=fmgr.renderForm()%>
