@@ -14,6 +14,8 @@ public class PortletInfo {
     public String siteId;
     public String title;
     public String description;
+    public boolean active;
+    public String version;
     @Override
     public String toString()
     {
