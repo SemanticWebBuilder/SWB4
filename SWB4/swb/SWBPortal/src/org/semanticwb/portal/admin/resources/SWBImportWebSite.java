@@ -26,9 +26,9 @@ import org.semanticwb.portal.api.SWBResourceURL;
  * @author jorge.jimenez
  */
 public class SWBImportWebSite extends GenericAdmResource {
-    
+
     private static Logger log = SWBUtils.getLogger(SWBImportWebSite.class);
-    
+
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
@@ -40,16 +40,19 @@ public class SWBImportWebSite extends GenericAdmResource {
                 WebSite site = SWBContext.createWebSite(request.getParameter("wsname"), request.getParameter("wsns"));
                 site.setCreated(new java.util.Date(System.currentTimeMillis()));
                 site.setTitle(request.getParameter("wstitle"));
-            } else { //creación de sitio mediante template
-                out.println(paramRequest.getLocaleLogString("sitetpl"));
+            } else { //creación de sitio mediante template                
                 out.println(directoryList(paramRequest, request.getParameter("wsname"), request.getParameter("wsns"), request.getParameter("wstitle")));
             }
         } else if (action != null && action.trim().equals("step3")) { //creación de sitio mediante template
-            out.println(createWebSite(response, request.getParameter("zipName"), request.getParameter("wsname"), request.getParameter("wsns")));
+            if (createWebSite(response, request.getParameter("zipName"), request.getParameter("wsname"), request.getParameter("wsns"))) {
+                out.println(paramRequest.getLocaleLogString("sitecreated"));
+            } else {
+                out.println(paramRequest.getLocaleLogString("sitenotcreated"));
+            }
         } else { //Forma de entrada(Datos iniciales)
             url.setAction("step2");
             getStep1(out, url, paramRequest);
-        }        
+        }
     }
 
     private String directoryList(SWBParamRequest paramRequest, String wsname, String wsns, String wstitle) {
@@ -59,28 +62,39 @@ public class SWBImportWebSite extends GenericAdmResource {
         url.setParameter("wsname", wsname);
         url.setParameter("wsns", wsns);
         url.setParameter("wstitle", wstitle);
-        File file = new File("C:/Archivos de programa/Apache Software Foundation/Tomcat 5.5/webapps/SWB4/swb/build/web/work/sitetemplates/");
+        File file = new File(SWBPlatform.getWorkPath()+"/sitetemplates/");
         File[] files = file.listFiles();
         strbf.append("<div class=\"swbform\">");
         strbf.append("<table width=\"100%\">");
+        strbf.append("<form>");
+        strbf.append("<tr>");
+        strbf.append("<td colspan=\"2\">");
         strbf.append("<fieldset>");
+        strbf.append("<table>");
+        strbf.append("<tr>");
+        strbf.append("<td>Template</td>");
+        strbf.append("<td>Tamaño</td>");
+        strbf.append("</tr>");
         for (int i = 0; i < files.length; i++) {
             File filex = files[i];
-            String fileName = files[i].getName();
+            String fileName = filex.getName();
             if (filex.isFile() && fileName.endsWith(".zip")) {
                 int pos = fileName.lastIndexOf(".");
                 if (pos > -1) {
                     fileName = fileName.substring(0, pos);
                 }
-                strbf.append("<tr>");
-                strbf.append("<td>");
+                strbf.append("<tr><td>");
                 url.setParameter("zipName", fileName);
                 strbf.append("<a href=\"" + url.toString() + "\">" + fileName + "</a>");
-                strbf.append("</td>");
-                strbf.append("</tr>");
+                strbf.append("</td><td>");
+                strbf.append(filex.length() + " bytes");
+                strbf.append("</td></tr>");
             }
         }
+        strbf.append("</table>");
         strbf.append("</fieldset>");
+        strbf.append("</td></tr>");
+        strbf.append("</form>");
         strbf.append("</table>");
         strbf.append("</div>");
         return strbf.toString();
@@ -89,7 +103,7 @@ public class SWBImportWebSite extends GenericAdmResource {
     private boolean createWebSite(HttpServletResponse response, String name, String newName, String newNS) {
         try {
             //Substituir x ruta dinamica
-            String path = "C:/Archivos de programa/Apache Software Foundation/Tomcat 5.5/webapps/SWB4/swb/build/web/work/";
+            String path = SWBPlatform.getWorkPath()+"/";
             String zipdirectory = path + "sitetemplates/";
             File zip = new File(zipdirectory + name + ".zip");
             java.io.File extractTo = new File(path + newName);
@@ -167,7 +181,7 @@ public class SWBImportWebSite extends GenericAdmResource {
             out.println("</table>");
             out.println("</fieldset>");
             out.println("</td></tr>");
-            out.append("<tr><td colspan=\"2\">");            
+            out.append("<tr><td colspan=\"2\">");
             out.println("<fieldset>");
             out.println("<table>");
             out.println("<tr><td><input type=\"submit\" value=\"" + paramRequest.getLocaleLogString("msgsend") + "\"></td></tr>");
