@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-//import org.semanticwb.office.comunication.OfficeServlet;
+import org.semanticwb.office.comunication.OfficeServlet;
 
 /**
  *
@@ -22,15 +22,15 @@ public class GateWayOffice implements InternalServlet
 {
     private static final String title="Gateway de Comunicación con Office INFOTEC Semantic WebBuilder 4";
     static Logger log = SWBUtils.getLogger(GateWayOffice.class);
-//    OfficeServlet officeServlet = new OfficeServlet()
-//    {
-//
-//        public boolean isAuthenticate(String pUserName, String pPassword)
-//        {
-//            //Todo:
-//            return true;
-//        }
-//    };
+    OfficeServlet officeServlet = new OfficeServlet()
+    {
+
+        public boolean isAuthenticate(String pUserName, String pPassword)
+        {
+            //Todo:
+            return true;
+        }
+    };
 
     public void init(ServletContext config) throws ServletException
     {
@@ -42,21 +42,12 @@ public class GateWayOffice implements InternalServlet
     {        
         if (request.getMethod().toLowerCase().equals("post"))
         {
-//            officeServlet.doPost(request, response);
+            officeServlet.doPost(request, response);
         }
         else
         {
 
-            PrintWriter out=response.getWriter();
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>"+ title +"</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>"+ title +"</h1>");
-            out.println("</body>");
-            out.println("</html>");
-            out.close();
+           officeServlet.doGet(request,response);
 
         }
     }
