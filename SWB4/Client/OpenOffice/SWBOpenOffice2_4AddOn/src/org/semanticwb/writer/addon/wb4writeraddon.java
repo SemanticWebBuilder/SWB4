@@ -6,6 +6,7 @@ import com.sun.star.lib.uno.helper.Factory;
 import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.registry.XRegistryKey;
 import com.sun.star.lib.uno.helper.WeakBase;
+import org.semanticwb.openoffice.DocumentType;
 import org.semanticwb.openoffice.OfficeDocument;
 import org.semanticwb.openoffice.WBException;
 import org.semanticwb.openoffice.writer.WB4WriterApplication;
@@ -204,7 +205,7 @@ public final class wb4writeraddon extends WeakBase
             if (aURL.Path.compareTo("open") == 0)
             {
                 WB4WriterApplication application = new WB4WriterApplication(this.m_xContext);
-                application.open();
+                application.open(DocumentType.WORD);
                 return;
             }
             if (aURL.Path.compareTo("delete") == 0)
