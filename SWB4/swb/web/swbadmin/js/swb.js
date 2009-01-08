@@ -188,6 +188,7 @@
                       var aux=panel.href;
                       panel.attr('content',response);
                       panel.href=aux;
+                      if(!panel.suportScripts)runScripts(data);
                   }
                   return response;
               },
@@ -246,7 +247,7 @@
                                   panel.attr('content',data);
                                   panel.href=aux;
                                   //alert("div2:"+panel.href);
-                                if(!panel.suportScripts)runScripts(data);
+                                  if(!panel.suportScripts)runScripts(data);
                               }catch(e){alert(e.message);}
                           }
                           //dijit.byId('swbDialog').hide();
@@ -340,6 +341,10 @@
           }else if(action.name=="showStatusURL")
           {
                 showStatusURL(action.value);
+          }else if(action.name=="getHtml")
+          {
+              //alert(action.value+" "+action.target);
+              getHtml(action.value, action.target);
           }
       }
 
