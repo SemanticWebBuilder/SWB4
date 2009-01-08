@@ -229,6 +229,22 @@
                     <file>${reference.OfficeComunicationInterfaces.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
+                <library>
+                    <file>${file.reference.jaxen-core.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library>
+                    <file>${file.reference.jaxen-jdom.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library>
+                    <file>${file.reference.jdom.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library>
+                    <file>${file.reference.saxpath.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
             </web-module-libraries>
             <web-module-additional-libraries/>
             <source-roots>
