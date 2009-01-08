@@ -136,7 +136,7 @@ public final class RepositoryImp implements Repository
             }
             names.add(uri);
         }
-        return names.toArray(new String[size]);
+        return names.toArray(new String[names.size()]);
     }
 
     public void setDefaultWorspaceName(String defaultWorkspaceName)
