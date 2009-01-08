@@ -500,14 +500,19 @@
 
           if(closetab)
           {
-              var objid=item.id+CONST_TAB;
-              var newTab = dijit.byId(objid);
-              if(newTab)
-              {
-                  tabs.closeChild(newTab);
-              }
+              closeTab(item.id);
           }
           setDefaultCursor();
+      }
+
+      function closeTab(uri)
+      {
+          var objid=uri+CONST_TAB;
+          var newTab = dijit.byId(objid);
+          if(newTab)
+          {
+              tabs.closeChild(newTab);
+          }
       }
 
       function reloadTreeNode(store, item)
