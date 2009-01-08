@@ -128,7 +128,13 @@ public final class RepositoryImp implements Repository
         while (it.hasNext())
         {
             size++;
-            names.add(it.next().getURI());
+            String uri=it.next().getURI();
+            if(uri.indexOf("#")!=-1)
+            {
+                int pos=uri.indexOf("#");
+                uri=uri.substring(pos+1);
+            }
+            names.add(uri);
         }
         return names.toArray(new String[size]);
     }
@@ -183,7 +189,7 @@ public final class RepositoryImp implements Repository
             if (credentials instanceof SimpleCredentials)
             {
                 SimpleCredentials simpleCredentials = (SimpleCredentials) credentials;
-                return new SessionImp(this, workspace.getURI(), simpleCredentials);
+                return new SessionImp(this, workspaceName, simpleCredentials);
             }
             else
             {
