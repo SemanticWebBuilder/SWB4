@@ -18,7 +18,8 @@ import org.semanticwb.office.comunication.OfficeServlet;
  * @author victor.lorenzana
  */
 public class GateWayOffice implements InternalServlet
-{    
+{
+
     static Logger log = SWBUtils.getLogger(GateWayOffice.class);
     private OfficeServlet officeServlet = new OfficeServlet()
     {
@@ -33,11 +34,11 @@ public class GateWayOffice implements InternalServlet
     public void init(ServletContext config) throws ServletException
     {
         log.event("Initializing GatewayOffice...");
-//        officeServlet.init();
+        officeServlet.init();
     }
 
     public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException, ServletException
-    {        
+    {
         if (request.getMethod().toLowerCase().equals("post"))
         {
             officeServlet.doPost(request, response);
@@ -45,7 +46,7 @@ public class GateWayOffice implements InternalServlet
         else
         {
 
-           officeServlet.doGet(request,response);
+            officeServlet.doGet(request, response);
 
         }
     }
