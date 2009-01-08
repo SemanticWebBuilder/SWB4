@@ -7,6 +7,7 @@ import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.registry.XRegistryKey;
 import com.sun.star.lib.uno.helper.WeakBase;
 import javax.swing.JOptionPane;
+import org.semanticwb.openoffice.DocumentType;
 import org.semanticwb.openoffice.OfficeDocument;
 import org.semanticwb.openoffice.WBException;
 import org.semanticwb.openoffice.WBOfficeException;
@@ -222,7 +223,7 @@ public final class wb4impressaddon extends WeakBase
             if (aURL.Path.compareTo("open") == 0)
             {
                 WB4ImpressApplication application = new WB4ImpressApplication(this.m_xContext);
-                application.open();
+                application.open(DocumentType.PPT);
                 return;
             }
             if (aURL.Path.compareTo("delete") == 0)
@@ -267,7 +268,7 @@ public final class wb4impressaddon extends WeakBase
             if (aURL.Path.compareTo("createSection") == 0)
             {
                 // add your own code here
-                WB4ImpressApplication.createPage();
+                //WB4ImpressApplication.createPage();
                 return;
             }
             if (aURL.Path.compareTo("changePassword") == 0)
