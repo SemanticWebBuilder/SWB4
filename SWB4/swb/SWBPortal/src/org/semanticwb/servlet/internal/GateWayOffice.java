@@ -5,7 +5,6 @@
 package org.semanticwb.servlet.internal;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -19,10 +18,9 @@ import org.semanticwb.office.comunication.OfficeServlet;
  * @author victor.lorenzana
  */
 public class GateWayOffice implements InternalServlet
-{
-    private static final String title="Gateway de Comunicación con Office INFOTEC Semantic WebBuilder 4";
+{    
     static Logger log = SWBUtils.getLogger(GateWayOffice.class);
-    OfficeServlet officeServlet = new OfficeServlet()
+    private OfficeServlet officeServlet = new OfficeServlet()
     {
 
         public boolean isAuthenticate(String pUserName, String pPassword)
