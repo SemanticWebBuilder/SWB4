@@ -687,6 +687,12 @@ public class WebSiteBase extends org.semanticwb.model.base.GenericObjectBase imp
         return (org.semanticwb.model.PFlowRef)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, swb_PFlowRef), swb_PFlowRef);
     }
 
+    public org.semanticwb.model.PFlowRef createPFlowRef()
+    {
+        long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+swb_PFlowRef.getName());
+        return createPFlowRef(""+id);
+    } 
+
     public void removePFlowRef(String id)
     {
         getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,swb_PFlowRef));
