@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.portal.api.GenericAdmResource;
+import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
@@ -23,12 +23,12 @@ import org.semanticwb.portal.util.WBFileUpload;
  *
  * @author jorge.jimenez
  */
-public class SWBWebSiteTpls extends GenericAdmResource {
+public class SWBWebSiteTpls extends GenericResource {
 
     private static Logger log = SWBUtils.getLogger(SWBImportWebSite.class);
 
     @Override
-    public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String action = paramRequest.getAction();
         if (action != null && action.equals("step2")) {
             String sdo = request.getParameter("do");

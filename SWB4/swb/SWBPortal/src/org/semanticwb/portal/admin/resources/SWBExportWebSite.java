@@ -14,7 +14,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.WebSite;
-import org.semanticwb.portal.api.GenericAdmResource;
+import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
@@ -22,12 +22,12 @@ import org.semanticwb.portal.api.SWBResourceException;
  *
  * @author jorge.jimenez
  */
-public class SWBExportWebSite extends GenericAdmResource {
+public class SWBExportWebSite extends GenericResource {
     
     private static Logger log = SWBUtils.getLogger(SWBExportWebSite.class);
 
     @Override
-    public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         try {
             //Substituir x uri dinamica
             String uri = "sep";
