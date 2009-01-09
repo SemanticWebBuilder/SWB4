@@ -50,7 +50,7 @@ import static org.semanticwb.openoffice.util.FileUtil.copyFile;
 public abstract class OfficeDocument
 {
 
-    private static final String TITLE = "Asistente de publicación";
+    private static final String TITLE = "Asistente para guardar contenido";
     public static final String CONTENT_ID_NAME = "contentID";
     public static final String WORKSPACE_ID_NAME = "workspaceID";
     private static final String TITLE_VERIFY = "Verificación de contenido";
