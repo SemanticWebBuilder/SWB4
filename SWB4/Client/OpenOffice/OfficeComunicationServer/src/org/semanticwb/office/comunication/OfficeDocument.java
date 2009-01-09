@@ -50,6 +50,7 @@ import org.semanticwb.portlet.office.PPTPortlet;
 import org.semanticwb.portlet.office.WordPortlet;
 import org.semanticwb.repository.BaseNode;
 import org.semanticwb.repository.RepositoryManagerLoader;
+import org.semanticwb.repository.WorkspaceNotFoudException;
 import org.semanticwb.xmlrpc.Part;
 import org.semanticwb.xmlrpc.XmlRpcObject;
 
@@ -332,6 +333,10 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             session = loader.openSession(repositoryName, this.user, this.password);
             session.getNodeByUUID(contentId);
             exists = true;
+        }
+        catch(WorkspaceNotFoudException wsnf)
+        {
+            exists = false;
         }
         catch (ItemNotFoundException pnfe)
         {
