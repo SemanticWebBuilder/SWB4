@@ -56,7 +56,7 @@
         }
     </script>
     <script type="dojo/method" event="onDndDrop" args="source,nodes,copy">
-        //alert(source+" "+nodes+" "+copy);
+        //alert(source+" "+nodes+" "+copy+" "+this.containerState);
 		// summary:
 		//		Topic event processor for /dnd/drop, called to finish the DnD operation..
 		//		Updates data store items according to where node was dragged from and dropped
@@ -85,7 +85,7 @@
 			if(source != this){
 				newItemsParams = this.itemCreator(nodes, target);
 			}
-
+            var expand=false;
 			dojo.forEach(nodes, function(node, idx)
             {
                 //alert(node+" "+idx);
@@ -109,6 +109,7 @@
                                     //model.pasteItem(childItem, oldParentItem, newParentItem, copy);
                                     pasteItemByURIs(childItem.id,oldParentItem.id,newParentItem.id);
                                     reloadTab(childItem.id);
+                                    expand=true;
                                 }
                             }
                         }
@@ -119,9 +120,10 @@
 
 			// Expand the target node (if it's currently collapsed) so the user can see
 			// where their node was dropped.   In particular since that node is still selected.
-			this.tree._expandNode(targetWidget);
+			if(expand)this.tree._expandNode(targetWidget);
 		}
 		this.onDndCancel();
+        this.containerState="";
     </script>
 
     <script type="dojo/method" event="checkItemAcceptance" args="node,source">
@@ -135,11 +137,19 @@
         {
             var dragItem=dragNode.item;
             var dropItem=dropNode.item;
-            //alert("("+dragItem.type.toString()+")("+dropItem.type.toString()+")");
-            if(dragItem!=dropItem && dragItem.type.toString()==dropItem.type.toString())
+            if(dragItem!=dropItem && !isParent(dragNode,dropNode))
             {
-                ret=true;
+                for (var m in dropItem.dropacc)
+                {
+                    //alert(dropItem.dropacc[m]);
+                    if(dragItem.type.toString()==dropItem.dropacc[m].toString())
+                    {
+                        ret=true;
+                    }
+                }
             }
+            //alert(dragItem.type+" "+dropItem.dropacc.length+" "+(dragItem.type.toString() in dropItem.dropacc));
+            //alert("("+dragItem.type.toString()+")("+dropItem.type.toString()+")");
         }
         //alert(this.current);
         return ret;

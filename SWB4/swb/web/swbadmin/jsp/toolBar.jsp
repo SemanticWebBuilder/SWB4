@@ -39,7 +39,7 @@
     {
         WebPage child=it.next();
 %>
-    <div id="<%=child.getId()%>" dojoType="dijit.form.DropDownButton" iconClass="swbIconWebPage">
+    <div id="<%=child.getId()%>" dojoType="dijit.form.DropDownButton" iconClass_="swbIconWebPage">
         <script type="dojo/method" event="onClick">
         </script>
         <span><%=child.getTitle()%></span>
