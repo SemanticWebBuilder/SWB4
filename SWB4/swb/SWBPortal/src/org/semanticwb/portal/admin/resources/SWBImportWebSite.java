@@ -16,7 +16,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.WebSite;
-import org.semanticwb.portal.api.GenericAdmResource;
+import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
@@ -26,12 +26,12 @@ import org.w3c.dom.Document;
  *
  * @author jorge.jimenez
  */
-public class SWBImportWebSite extends GenericAdmResource {
+public class SWBImportWebSite extends GenericResource {
 
     private static Logger log = SWBUtils.getLogger(SWBImportWebSite.class);
 
     @Override
-    public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         String action = paramRequest.getAction();
         SWBResourceURL url = paramRequest.getRenderUrl();
