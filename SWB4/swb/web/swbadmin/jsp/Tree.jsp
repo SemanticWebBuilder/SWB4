@@ -237,7 +237,8 @@
         //eventos
         JSONArray events=new JSONArray();
         jobj.putOpt("events", events);
-        events.put(getEvent("onDblClick", getAction("newTab", "/swb/swbadmin/jsp/objectTab.jsp", null)));
+        events.put(getEvent("onDblClick", getAction("newTab", SWBPlatform.getContextPath()+"/swbadmin/jsp/objectTab.jsp", null)));
+        events.put(getEvent("onClick", getAction("getHtml", SWBPlatform.getContextPath()+"/swbadmin/jsp/viewProps.jsp?id="+obj.getEncodedURI(), "vprop")));
 
         //hijos
         JSONArray childs=new JSONArray();

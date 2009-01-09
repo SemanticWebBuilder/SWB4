@@ -29,7 +29,7 @@
     response.setHeader("Pragma", "no-cache"); 
 %>
 
-<div id="semwblogo" dojoType="dijit.form.Button" style="width: 250px;"><font size="4">Semantic WebBuilder 4</font></div>
+<div id="semwblogo" class="dijitReset dijitInline swbLogo"></div>
     <span dojoType="dijit.Tooltip" connectId="semwblogo">Semantic WebBuilder</span>
 
 <%
