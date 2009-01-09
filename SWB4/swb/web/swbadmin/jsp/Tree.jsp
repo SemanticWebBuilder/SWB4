@@ -174,7 +174,7 @@
     {
         boolean hasChilds=false;
         SemanticClass cls=obj.getSemanticClass();
-        String type=cls.getName();
+        String type=cls.getClassID();
 
         //Active
         boolean active=false;
@@ -203,6 +203,14 @@
             SemanticProperty prop=pit.next();
             SemanticClass rcls=prop.getRangeClass();
             menus.put(getMenuItem("Agregar "+rcls.getDisplayName(lang), "dijitEditorIcon dijitEditorIconCut",getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+rcls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),null)));
+            dropacc.put(rcls.getClassID());
+            Iterator<SemanticClass> it=rcls.listSubClasses();
+            while(it.hasNext())
+            {
+                SemanticClass scls=it.next();
+                menus.put(getMenuItem("Agregar "+scls.getDisplayName(lang), "dijitEditorIcon dijitEditorIconCut",getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+scls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),null)));
+                dropacc.put(scls.getClassID());
+            }
         }
         menus.put(getMenuSeparator());
 
