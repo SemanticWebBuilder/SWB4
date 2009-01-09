@@ -96,7 +96,7 @@ public class RepositoryManagerLoader
         }
         else
         {
-            throw new IllegalArgumentException("The workspaceid is invalid");
+            throw new WorkspaceNotFoudException(workspaceId);
         }
     }
    
