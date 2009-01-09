@@ -29,7 +29,7 @@ public class SWBACreateUser extends GenericResource {
     {
         StringBuffer ret = new StringBuffer();
         SWBResourceURL url = paramRequest.getActionUrl();
-        ret.append("<form id=\"http://www.semanticwebbuilder.org/swb4/ontology#User/create\" dojoType=\"dijit.form.Form\" class=\"swbform\"");
+        ret.append("<form id=\"http://www.semanticwebbuilder.org/swb4/ontology#User/create\" dojoType=\"dijit.form.Form\" class=\"swbform\" ");
         ret.append("action=\""+url+"\" ");
         ret.append("onSubmit=\"submitForm('http://www.semanticwebbuilder.org/swb4/ontology#User/create');return false;\" method=\"POST\">");
         ret.append("\t<fieldset>\n\t<table>\n\t\t<tr>\n\t\t\t<td width=\"200px\" align=\"right\">\n\t\t\t\t<label>Repositorio de Usuarios</label>");
