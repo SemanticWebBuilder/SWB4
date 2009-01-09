@@ -1,6 +1,7 @@
 package org.semanticwb.model;
 
 import java.util.Iterator;
+import java.util.StringTokenizer;
 import org.semanticwb.model.base.*;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
@@ -42,11 +43,13 @@ public class SelectOne extends SelectOneBase
         boolean required=prop.isRequired();
         String pmsg=null;
         String imsg=null;
+        String selectValues=null;
         if(sobj!=null)
         {
             DisplayProperty dobj=new DisplayProperty(sobj);
             pmsg=dobj.getPromptMessage();
             imsg=dobj.getInvalidMessage();
+            selectValues=dobj.getSelectValues(lang);
         }
 
         if(imsg==null)
@@ -108,7 +111,28 @@ public class SelectOne extends SelectOneBase
             }
         }else
         {
-            ret="SelectOne: implementar...";
+            if(selectValues!=null)
+            {
+                String value=obj.getProperty(prop);
+                ret="<select name=\""+name+"\" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\""+imsg+"\">";
+                StringTokenizer st=new StringTokenizer(selectValues,"|");
+                while(st.hasMoreTokens())
+                {
+                    String tok=st.nextToken();
+                    int ind=tok.indexOf(':');
+                    String id=tok;
+                    String val=tok;
+                    if(ind>0)
+                    {
+                        id=tok.substring(0,ind);
+                        val=tok.substring(ind+1);
+                    }
+                    ret+="<option value=\""+id+"\" ";
+                    if(id.equals(value))ret+="selected";
+                    ret+=">"+val+"</option>";
+                }
+                ret+="</select>";
+            }
         }
 
         return ret;
