@@ -188,7 +188,7 @@
                       var aux=panel.href;
                       panel.attr('content',response);
                       panel.href=aux;
-                      if(!panel.suportScripts)runScripts(data);
+                      if(!panel.suportScripts)runScripts(response);
                   }
                   return response;
               },
