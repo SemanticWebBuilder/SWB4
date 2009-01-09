@@ -47,7 +47,7 @@ public class SWBASearchUsers extends GenericResource
         ret.append("<table>\n");
         url.setMode("roles");
         url.setCallMethod(SWBResourceURL.Call_DIRECT);
-        ret.append("    <tr><td>Repositorio de usuarios</td>\n");
+        ret.append("    <tr><td width=\"200px\" align=\"right\">Repositorio de usuarios</td>\n");
         ret.append("    <td><select dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"false\" name=\"userRepository\" id=\"userRepository\" >\n");
         while (itur.hasNext())
         {
