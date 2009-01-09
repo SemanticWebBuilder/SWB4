@@ -4,6 +4,7 @@ package org.semanticwb.portlet.office.base;
 public class OfficePortletBase extends org.semanticwb.model.Portlet 
 {
     public static final org.semanticwb.platform.SemanticProperty swbrep_content=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/repository#content");
+    public static final org.semanticwb.platform.SemanticProperty swbrep_versionToShow=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/repository#versionToShow");
     public static final org.semanticwb.platform.SemanticProperty swbrep_repositoryName=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/repository#repositoryName");
     public static final org.semanticwb.platform.SemanticClass swbrep_OfficePortlet=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/repository#OfficePortlet");
 
@@ -20,6 +21,16 @@ public class OfficePortletBase extends org.semanticwb.model.Portlet
     public void setContent(String content)
     {
         getSemanticObject().setProperty(swbrep_content, content);
+    }
+
+    public String getVersionToShow()
+    {
+        return getSemanticObject().getProperty(swbrep_versionToShow);
+    }
+
+    public void setVersionToShow(String versionToShow)
+    {
+        getSemanticObject().setProperty(swbrep_versionToShow, versionToShow);
     }
 
     public String getRepositoryName()
