@@ -449,7 +449,7 @@ public class SWBASOPropRefEditor extends GenericResource {
 
             out.println("<div class=\"swbform\">");
             out.println("<form id=\"" + id + "/chooseSO\" action=\"" + url + "\" method=\"get\"  onsubmit=\"submitUrl('" + url + "',this); return false;\">");
-            out.println("<input type=\"hidden\" name=\"suri\" value=\"" + obj.getURI() + "\">");
+            out.println("<input type=\"hidden\" name=\"suri\" value=\"" + id + "\">"); //obj.getURI()
             out.println("<fieldset>");
             out.println("<table width=\"98%\">");
             //out.println("	<legend> Choose - " + prop.getDisplayName(user.getLanguage()) + " ( " + getDisplaySemObj(obj,user.getLanguage()) + " )</legend>");
@@ -469,7 +469,7 @@ public class SWBASOPropRefEditor extends GenericResource {
                         urlchoose.setParameter("suri", id);
                     } else {
                         urlchoose.setAction("new");
-                        urlchoose.setParameter("suri", obj.getURI());
+                        urlchoose.setParameter("suri", id); //obj.getURI()
                     } //choose
 
                     urlchoose.setParameter("sprop", idp);
@@ -501,7 +501,7 @@ public class SWBASOPropRefEditor extends GenericResource {
                 urlBack.setParameter("spropref", idpref);
             }
             urlBack.setParameter("act", "");
-            out.println("<button dojoType=\"dijit.form.Button\" type=\"button\" onclick=\"submitUrl('" + url + "',this); return false;\" >Guardar</button>");
+            //out.println("<button dojoType=\"dijit.form.Button\" type=\"button\" onclick=\"submitUrl('" + url + "',this); return false;\" >Guardar</button>");
             if (id != null && idp != null && idpref != null) {
                 out.println("<button dojoType=\"dijit.form.Button\" type=\"button\" onclick=\"submitUrl('" + urlBack + "',document.getElementById('" + id + "/chooseSO')); return false;\" >Regresar</button>");
             }
