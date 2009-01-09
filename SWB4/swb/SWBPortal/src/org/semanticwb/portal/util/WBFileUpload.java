@@ -154,7 +154,7 @@ public class WBFileUpload
         return new ByteArrayInputStream(data);
     }
 
-    public boolean saveFile(String s, String s1)
+    public boolean saveFile(String filename, String path)
         throws IOException
     {
         boolean flag = false;
@@ -166,7 +166,7 @@ public class WBFileUpload
             if(!enumeration.hasMoreElements())
                 break;
             String s2 = (String)enumeration.nextElement();
-            if(s2.equals(s))
+            if(s2.equals(filename))
             {
                 flag = true;
                 Object obj = table.get(s2);
@@ -184,7 +184,7 @@ public class WBFileUpload
                         i = s3.lastIndexOf("/");
                         if(i != -1)
                             s3 = s3.substring(i + 1);
-                        FileOutputStream fileoutputstream = new FileOutputStream(String.valueOf(s1) + String.valueOf(s3));
+                        FileOutputStream fileoutputstream = new FileOutputStream(path + s3);
                         fileoutputstream.write(abyte0, 0, abyte0.length);
                         fileoutputstream.close();
                     }
@@ -224,7 +224,7 @@ public class WBFileUpload
                         i = s4.lastIndexOf("/");
                         if(i != -1)
                             s4 = s4.substring(i + 1);
-                        FileOutputStream fileoutputstream = new FileOutputStream(String.valueOf(s1) + String.valueOf(s2));
+                        FileOutputStream fileoutputstream = new FileOutputStream(s1 + s2);
                         fileoutputstream.write(abyte0, 0, abyte0.length);
                         fileoutputstream.close();
                     }
@@ -264,7 +264,7 @@ public class WBFileUpload
                         i = s3.lastIndexOf("/");
                         if(i != -1)
                             s3 = s3.substring(i + 1);
-                        FileOutputStream fileoutputstream = new FileOutputStream(String.valueOf(s1) + String.valueOf(s3) + String.valueOf(smod1) + String.valueOf(smod2));
+                        FileOutputStream fileoutputstream = new FileOutputStream(s1 + s3 + smod1 + smod2);
                         fileoutputstream.write(abyte0, 0, abyte0.length);
                         fileoutputstream.close();
                     }
@@ -311,7 +311,7 @@ public class WBFileUpload
                         else dataarc = SWBPortal.parseHTML(strNoparsed, s0);
                         
                         byte abyte1[] = dataarc.getBytes();
-                        FileOutputStream fileoutputstream = new FileOutputStream(String.valueOf(s1) + String.valueOf(s3));
+                        FileOutputStream fileoutputstream = new FileOutputStream(s1 + s3);
                         fileoutputstream.write(abyte1, 0, abyte1.length);
                         fileoutputstream.close();
                     }

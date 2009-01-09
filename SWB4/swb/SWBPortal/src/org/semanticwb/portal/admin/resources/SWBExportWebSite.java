@@ -45,10 +45,7 @@ public class SWBExportWebSite extends GenericAdmResource {
                 File file = new File(zipdirectory + uri + ".rdf");
                 //ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                 FileOutputStream out = new FileOutputStream(file);
-                String text = "<!--|ns|http://www.sep.gob.mx|ns|-->\n";
-                out.write(text.getBytes());
                 ws.getSemanticObject().getModel().write(out);
-
                 //System.out.println(outputStream.toByteArray());            
                 //outputStream.flush();
                 //outputStream.close();
@@ -57,14 +54,34 @@ public class SWBExportWebSite extends GenericAdmResource {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            //----------Generación de archivo siteInfo.xml del sitio especificado-----------
+            try {
+                StringBuffer strbr=new StringBuffer();
+                strbr.append("<siteinfo>\n");
+                strbr.append("<name>sep</name>\n");
+                strbr.append("<namespace>http://www.sep.gob.mx</namespace>\n");
+                strbr.append("<title>septitle</title>\n");
+                strbr.append("<description>sepdescription</description>\n");
+                strbr.append("</siteinfo>");
+                File file = new File(zipdirectory +"siteInfo.xml");                
+                FileOutputStream out = new FileOutputStream(file);
+                out.write(strbr.toString().getBytes());
+                out.flush();
+                out.close();
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
             //--------------Agregar archivo rdf generado a zip generado---------------------            
             File existingzip = new File(zipdirectory + uri + ".zip");
             File rdfFile = new File(zipdirectory + uri + ".rdf");
-            java.io.File[] files2add = {rdfFile};
+            File infoFile = new File(zipdirectory +"siteInfo.xml");
+            java.io.File[] files2add = {rdfFile, infoFile};
             org.semanticwb.SWBUtils.IO.addFilesToExistingZip(existingzip, files2add);
-            //Eliminar rdf generado y ya agregado a zip
+            //Eliminar rdf y xml generados y ya agregados a zip
             rdfFile.delete();
+            infoFile.delete();
         } catch (Exception e) {
+            e.printStackTrace();
             log.debug(e);
         }
     }
