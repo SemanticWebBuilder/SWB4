@@ -20,6 +20,7 @@ import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
+import org.w3c.dom.Document;
 
 /**
  *
@@ -45,7 +46,9 @@ public class SWBImportWebSite extends GenericAdmResource {
             }
         } else if (action != null && action.trim().equals("step3")) { //creación de sitio mediante template
             if (createWebSite(response, request.getParameter("zipName"), request.getParameter("wsname"), request.getParameter("wsns"))) {
-                out.println(paramRequest.getLocaleLogString("sitecreated"));
+                out.println("<script language=\"JavaScript\">");
+                out.println("  showStatus('"+paramRequest.getLocaleLogString("sitecreated")+"')");                
+                out.println("</script>");
             } else {
                 out.println(paramRequest.getLocaleLogString("sitenotcreated"));
             }
@@ -100,6 +103,7 @@ public class SWBImportWebSite extends GenericAdmResource {
         return strbf.toString();
     }
 
+    
     private boolean createWebSite(HttpServletResponse response, String name, String newName, String newNS) {
         try {
             //Substituir x ruta dinamica
@@ -110,25 +114,36 @@ public class SWBImportWebSite extends GenericAdmResource {
             //Descomprimir zip
             org.semanticwb.SWBUtils.IO.unzip(zip, extractTo);
 
-            //Tomar rdf ya descomprimido para parsearlo y crear nuevo sitio   
-            FileInputStream rdf = new FileInputStream(path + newName + "/" + name + ".rdf");
-            String content = SWBUtils.IO.readInputStream(rdf);
-            String oldNameSpace = null;
-            int pos1 = content.indexOf("|ns|");
-            int pos2 = content.indexOf("|ns|", pos1 + 1);
-            int pos3 = content.indexOf("-->", pos2);
-            if (pos1 > -1 && pos2 > -1) {
-                oldNameSpace = content.substring(pos1 + 4, pos2);
-                content = content.substring(pos3 + 3);
+            FileInputStream frdfio=new FileInputStream(path + newName + "/" + name + ".rdf");
+            String rdfcontent=SWBUtils.IO.readInputStream(frdfio);
+            FileInputStream fxmlio=new FileInputStream(path + newName + "/siteInfo.xml");
+            Document dom=SWBUtils.XML.xmlToDom(fxmlio);
+            String oldName=null;
+            String oldNamespace=null;
+            String oldTitle=null;
+            String olDescription =null;
+            
+            if(dom.getElementsByTagName("name").getLength()>0) {
+                oldName=dom.getElementsByTagName("name").item(0).getFirstChild().getNodeValue();
+            }
+            if(dom.getElementsByTagName("namespace").getLength()>0) {
+                oldNamespace=dom.getElementsByTagName("namespace").item(0).getFirstChild().getNodeValue();
+            }
+            if(dom.getElementsByTagName("title").getLength()>0) {
+                oldTitle=dom.getElementsByTagName("title").item(0).getFirstChild().getNodeValue();
+            }
+            if(dom.getElementsByTagName("description").getLength()>0) {
+                olDescription=dom.getElementsByTagName("description").item(0).getFirstChild().getNodeValue();
             }
             //Parseo de nombre de NameSpace anteriores por nuevos
-            content = content.replaceAll(oldNameSpace, newNS); //Reempplazar namespace anterior x nuevo
-            content = SWBUtils.TEXT.replaceAllIgnoreCase(content, name, newName); //Reemplazar nombre anterior x nuevo nombre
+            rdfcontent = rdfcontent.replaceAll(oldNamespace, newNS); //Reempplazar namespace anterior x nuevo
+            rdfcontent = SWBUtils.TEXT.replaceAllIgnoreCase(rdfcontent, oldName, newName); //Reemplazar nombre anterior x nuevo nombre
             //Mediante inputStream creado, generar sitio con metodo de jei, el cual no recuerdo su nombre :)
-            InputStream io = SWBUtils.IO.getStreamFromString(content);
+            InputStream io = SWBUtils.IO.getStreamFromString(rdfcontent);
             SWBPlatform.getSemanticMgr().createModelByRDF(newName, newNS, io);
-            //Eliminar archivo rdf
+            //Eliminar archivo rdf y archivo xml
             new File(path + newName + "/" + name + ".rdf").delete();
+            new File(path + newName + "/siteInfo.xml").delete();
             return true;
         } catch (Exception e) {
             log.debug(e);
