@@ -19,7 +19,7 @@
 <div dojoType="dojo.data.ItemFileWriteStore" jsId="<%=store%>" url="/swb/swbadmin/jsp/Tree.jsp?id=<%=id%>"></div>
 <!-- div dojoType="dijit.tree.ForestStoreModel" jsId="<%=model%>" store="<%=store%>" query_="{id: '0'}"></div -->
 <!-- tree widget -->
-<div id="<%=id%>" dojoType="dijit.Tree" refreshOnExpand_="true" model_="<%=model%>" store="<%=store%>" persist="false" query_="{type:'WebSite'}" dndController="dijit._tree.dndSource" betweenThreshold="5" showRoot="false" label_="Sitios">
+<div id="<%=id%>" dojoType="dijit.Tree" refreshOnExpand_="true" model_="<%=model%>" store="<%=store%>" persist="false" query_="{type:'WebSite'}" dndController="dijit._tree.dndSource" betweenThreshold="8" showRoot="false" label_="Sitios">
     <script type="dojo/method" event="onClick" args="item, node">
         if(item)
         {
@@ -98,12 +98,19 @@
 						childItem = childTreeNode.item,
 						oldParentItem = childTreeNode.getParent().item;
                         //alert(childItem.id+" "+newParentItem.id+" "+oldParentItem.id);
-                        var f=showStatusURL('<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/drop.jsp?suri='+encodeURIComponent(childItem.id)+'&newp='+encodeURIComponent(newParentItem.id)+'&oldp='+encodeURIComponent(oldParentItem.id),true);
-                        if(f)
+                        if(childItem && oldParentItem && newParentItem && oldParentItem!=newParentItem && childItem!=newParentItem)
                         {
-                            //model.pasteItem(childItem, oldParentItem, newParentItem, copy);
-                            pasteItemByURIs(childItem.id,oldParentItem.id,newParentItem.id);
-                            reloadTab(childItem.id);
+                            var ac=confirm("Aceptar el movimiento?");
+                            if(ac)
+                            {
+                                var f=showStatusURL('<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/drop.jsp?suri='+encodeURIComponent(childItem.id)+'&newp='+encodeURIComponent(newParentItem.id)+'&oldp='+encodeURIComponent(oldParentItem.id),true);
+                                if(f)
+                                {
+                                    //model.pasteItem(childItem, oldParentItem, newParentItem, copy);
+                                    pasteItemByURIs(childItem.id,oldParentItem.id,newParentItem.id);
+                                    reloadTab(childItem.id);
+                                }
+                            }
                         }
 				}else{
 					model.newItem(newItemsParams[idx], newParentItem);
@@ -129,11 +136,12 @@
             var dragItem=dragNode.item;
             var dropItem=dropNode.item;
             //alert("("+dragItem.type.toString()+")("+dropItem.type.toString()+")");
-            if(dragItem.type.toString()==dropItem.type.toString())
+            if(dragItem!=dropItem && dragItem.type.toString()==dropItem.type.toString())
             {
                 ret=true;
             }
         }
+        //alert(this.current);
         return ret;
     </script>
 
@@ -145,6 +153,9 @@
         {
             act_treeNode=dijit.getEnclosingWidget(node);
         }, this);
+        //var m=dojo.dnd.manager();
+        //m.canDrop(false);
+        //alert(act_treeNode.item.id);
         return true;
     </script>
 
