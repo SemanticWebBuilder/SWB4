@@ -66,21 +66,26 @@ public class SWBAWebPageContents extends GenericResource {
         SemanticObject obj = ont.getSemanticObject(id);
         SemanticClass cls = obj.getSemanticClass();
 
+        out.println("<script type=\"text/javascript\">");
         if (request.getParameter("nsuri") != null && request.getParameter("nsuri").trim().length() > 0) {
             SemanticObject snobj = ont.getSemanticObject(request.getParameter("nsuri"));
             if (snobj != null)
             {
-                out.println("<script type=\"text/javascript\">");
-                out.println("addNewTab('" + snobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + snobj.getDisplayName() + "');");
-                out.println("</script>");
+                log.debug("addNewTab");
+                out.println("  addNewTab('" + snobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + snobj.getDisplayName() + "');");
             }
         }
 
         if (request.getParameter("statmsg") != null && request.getParameter("statmsg").trim().length() > 0) {
-            out.println("<script type=\"text/javascript\">");
+            log.debug("showStatus");
             out.println("   showStatus('" + request.getParameter("statmsg") + "');");
-            out.println("</script>");
         }
+
+        if (request.getParameter("closetab") != null && request.getParameter("closetab").trim().length() > 0) {
+            log.debug("closeTab..."+request.getParameter("closetab"));
+            out.println("   closeTab('" + request.getParameter("closetab") + "');");
+        }
+        out.println("</script>");
 
         if (action.equals("")) { //lista de instancias de tipo propiedad existentes para selecionar
             SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(idp);
@@ -176,7 +181,7 @@ public class SWBAWebPageContents extends GenericResource {
                 urlr.setParameter("sval", sobj.getURI());
                 urlr.setParameter(prop.getName(), prop.getURI());
                 urlr.setAction("remove");
-                out.println("<a href=\"#\" onclick=\"submitUrl('" + urlr + "',this); return false;\">remove</a>");
+                out.println("<a href=\"#\" onclick=\"if(confirm('¿ Est&aacute;s seguro de querer eliminar el contenido ... ?')){ submitUrl('" + urlr + "',this); } else { return false;}\">remove</a>");
 //                SWBResourceURL urla = paramRequest.getRenderUrl();
 //                urla.setParameter("suri", id);
 //                urla.setParameter("id", id);
@@ -692,11 +697,13 @@ public class SWBAWebPageContents extends GenericResource {
         } else if ("remove".equals(action)) //suri, prop
         {
             log.debug("SWBAWebPageContents.processAction(remove)");
+
+            String sval = request.getParameter("sval");
             Iterator<SemanticProperty> it = cls.listProperties();
             while (it.hasNext()) {
                 SemanticProperty prop = it.next();
                 String value = request.getParameter(prop.getName());
-                String sval = request.getParameter("sval");
+                //String sval = request.getParameter("sval");
                 log.debug(prop.getURI() + ":" + sprop + "----" + (prop.getURI().equals(sprop) ? "true" : "false"));
                 if (value != null && value.equals(sprop)) { //se tiene que validar el valor por si es mÃ¡s de una
                     if (sval != null) {
@@ -705,12 +712,14 @@ public class SWBAWebPageContents extends GenericResource {
                         if (prop.getName().equalsIgnoreCase("userrepository")) {
                             obj.setObjectProperty(prop, ont.getSemanticObject("urswb"));
                         }
-                        SemanticModel model = obj.getModel();
-                        model.removeSemanticObject(so);
+                        so.remove();
+//                        SemanticModel model = obj.getModel();
+//                        model.removeSemanticObject(so);
                     }
                     break;
                 }
             }
+
             if (id != null) {
                 response.setRenderParameter("suri", id);
             }
@@ -720,7 +729,10 @@ public class SWBAWebPageContents extends GenericResource {
             if (sproptype != null) {
                 response.setRenderParameter("sproptype", sproptype);
             }
+            log.debug("remove-closetab:"+sval);
+            response.setRenderParameter("closetab", sval);
             response.setRenderParameter("statmsg", "Se eliminó correctamente el contenido.");
+            response.setMode(response.Mode_EDIT);
         }
     }
 
@@ -779,11 +791,11 @@ public class SWBAWebPageContents extends GenericResource {
                     }
                 }
                 so = obj;
-                actmsg="Se actualizo correctamente la prioridad del elemento.";
+                actmsg="Se actualiz&oacute; correctamente la prioridad del contenido.";
             } catch (Exception e)
             {
                 log.error(e);
-                errormsg = "Error al actualizar la prioridad del elemento.";
+                errormsg = "Error al actualizar la prioridad del contenido.";
             }
         } else if ("updstatus".equals(action)) {
             String soid = request.getParameter("sval");
@@ -798,10 +810,10 @@ public class SWBAWebPageContents extends GenericResource {
                 SemanticClass scls = sobj.getSemanticClass();
                 log.debug("doAction(updstatus):" + scls.getClassName() + ": " + value);
                 so=sobj;
-                actmsg="Se "+ (value.equals("true") ? "activo" : "desactivo") + " el elemento.";
+                actmsg="Se "+ (value.equals("true") ? "activ&oacute;" : "desactiv&oacute;") + " el contenido.";
             } catch (Exception e) {
                 log.error(e);
-                errormsg = "Error al " + (value.equals("true") ? "activar" : "desactivar") + " el elemento.";
+                errormsg = "Error al " + (value.equals("true") ? "activar" : "desactivar") + " el contenido.";
             }
         } // revisar para agregar nuevo semantic object
 
