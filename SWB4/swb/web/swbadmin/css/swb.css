@@ -79,7 +79,7 @@ html, body, #main{
 	height: 18px;
 	text-align: center;
 	padding-right:0px;
-    background-image: url('../icons/icons20x20.png'); background-position: -620px -18px;
+    background-image: url('../icons/icons20x20.png'); background-position: -620px -16px;
 }
 
 .swbIconPortlets    { background-position: -340px -0px; }
@@ -114,7 +114,8 @@ html, body, #main{
 .swbIconPFlow       { background-position: -120px -18px; }
 .swbIconPFlowU      { background-position: -120px -36px; }
 
-.admViewProperties { width:100%; }
+.admViewProperties table{ padding:0px; margin:-10px; width:100%; }
+.admViewProperties div div div{ padding:0px; margin:0px; width:100%; }
 
 caption {
 	background:#fafafa url(../js/dojo/dijit/themes/soria/images/titleBar.png) repeat-x top left;
@@ -128,7 +129,7 @@ th {
 	color: #666; 
 	font-weight: bold;
 	margin:0;
-	padding:1px 5px; 
+	padding:1px 5px;
 	background-image:url('../js/dojo/dijit/themes/soria/images/titleBar.png');
 	background-position:0px -1px; 
 }

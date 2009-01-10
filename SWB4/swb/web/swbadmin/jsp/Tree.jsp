@@ -136,21 +136,49 @@
         jobj.putOpt("children", childs);
         Iterator<SemanticObject> it=SWBComparator.sortSermanticObjects(obj.getModel().listInstancesOfClass(cls),lang);
 
+        //System.out.println("obj:"+obj.getId());
+        //drop acceptance
+        JSONArray dropacc=new JSONArray();
+        jobj.putOpt("dropacc", dropacc);
+
         //Menus
         JSONArray menus=new JSONArray();
         jobj.putOpt("menus", menus);
         String url=SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+cls.getEncodedURI()+"&sref="+obj.getEncodedURI();
         menus.put(getMenuItem("Agregar "+cls.getDisplayName(lang), "dijitEditorIcon dijitEditorIconCut",getAction("showDialog", url,null)));
+        dropacc.put(cls.getClassID());
+        //Iterator<SemanticClass> it2=cls.listSubClasses();
+        //while(it2.hasNext())
+        //{
+        //    SemanticClass scls=it2.next();
+        //    menus.put(getMenuItem("Agregar "+scls.getDisplayName(lang), "dijitEditorIcon dijitEditorIconCut",getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+scls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),null)));
+        //    dropacc.put(scls.getClassID());
+        //}
+
         menus.put(getMenuSeparator());
         menus.put(getMenuItem("Recargar", "dijitEditorIcon dijitEditorIconCut", getReloadAction()));
 
+        SemanticProperty herarprop=null;   //Herarquical property;
+        Iterator<SemanticProperty> hprops=cls.listInverseHerarquicalProperties();
+        if(hprops.hasNext())herarprop=hprops.next();
+
+        System.out.println("herarprop:"+herarprop);
 
         if(addChilds)
         {
             while(it.hasNext())
             {
                 SemanticObject so=it.next();
-                addSemanticObject(childs, so,false);
+                if(herarprop!=null)
+                {
+                    if(so.getObjectProperty(herarprop)==null)
+                    {
+                        addSemanticObject(childs, so,false);
+                    }
+                }else
+                {
+                    addSemanticObject(childs, so,false);
+                }
             }
         }else
         {

@@ -102,17 +102,47 @@
 
                     </div><!-- end AccordionContainer -->
 
-                    <div id="vprop" dojoType="dijit.TitlePane" title="View Properties" style="height:150px;" duration="150" minSize="20" splitter="true" region="bottom">
+                    <div id="vprop" dojoType="dijit.TitlePane" title="View Properties" class="admViewProperties" open="false" duration="150" minSize_="20" splitter_="true" region="bottom">
                         View Properties ...
+                        <script type="dojo/method" event="postCreate" args="">
+                            if(!this.open){
+                                this.hideNode.style.display=this.wipeNode.style.display="none";
+                            }
+                            this._setCss();
+                            dojo.setSelectable(this.titleNode,false);
+                            dijit.setWaiState(this.containerNode,"labelledby",this.titleNode.id);
+                            dijit.setWaiState(this.focusNode,"haspopup","true");
+                            var _1=this.hideNode,_2=this.wipeNode;
+                            this._wipeIn=dojo.fx.wipeIn({
+                                node:this.wipeNode,
+                                duration:this.duration,
+                                beforeBegin:function(){
+                                    _1.style.display="";
+                                },
+                                onEnd:function(){
+                                    //alert("open");
+                                    dijit.byId("leftSplit").layout();
+                                }
+                                });
+                            this._wipeOut=dojo.fx.wipeOut({
+                                node:this.wipeNode,
+                                duration:this.duration,
+                                onEnd:function(){
+                                    _1.style.display="none";
+                                    //alert("close");
+                                    dijit.byId("leftSplit").layout();
+                                }
+                                });
+                            //this.inherited(arguments);
+                        </script>
                     </div>
-
                 </div><!-- leftsplit -->
 
                         <!-- top tabs (marked as "center" to take up the main part of the BorderContainer) -->
                 <div dojoType="dijit.layout.TabContainer" region="center" id="tabs" jsId="tabs">
                     <!-- sixth upper tab -->
-                    <div dojoType="dijit.layout.ContentPane" title="Home" style="display:none; padding:10px; " closable="false" href_="/swb/swb">
-                        <iframe dojoType="dijit.layout.ContentPane" src="/swb/swb" width="100%" height="100%" frameborder="0"></iframe>
+                    <div id="swbPreviewTab" dojoType="dijit.layout.ContentPane" title="Preview" style="display:none; padding:10px; " closable="false" href_="/swb/swb">
+                        <iframe id="swbPreviewFrame" dojoType_="dijit.layout.ContentPane" src="/swb/swb" width="100%" height="100%" frameborder="0"></iframe>
                     </div>
                 </div><!-- end of region="center" TabContainer -->
             </div> <!-- end of "mainSplit" BorderContainer -->

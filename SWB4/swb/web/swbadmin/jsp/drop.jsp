@@ -24,11 +24,12 @@
             {
                 if(prop.getCardinality()==1)
                 {
-                    obj.setObjectProperty(prop, newp);
+                    if(newp!=null)obj.setObjectProperty(prop, newp);
+                    else obj.removeProperty(prop);
                 }else
                 {
                     obj.removeObjectProperty(prop, oldp);
-                    obj.addObjectProperty(prop, newp);
+                    if(newp!=null)obj.addObjectProperty(prop, newp);
                 }
                 ret=true;
             }else if(prop.hasInverse())
