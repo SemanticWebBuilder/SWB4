@@ -20,8 +20,8 @@ public class UserBase extends org.semanticwb.model.base.GenericObjectBase implem
     public static final org.semanticwb.platform.SemanticProperty swb_active=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#active");
     public static final org.semanticwb.platform.SemanticProperty swb_usrLastLogin=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrLastLogin");
     public static final org.semanticwb.platform.SemanticProperty swb_creator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#creator");
-    public static final org.semanticwb.platform.SemanticProperty swb_usrLogin=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrLogin");
     public static final org.semanticwb.platform.SemanticProperty swb_usrPassword=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrPassword");
+    public static final org.semanticwb.platform.SemanticProperty swb_usrLogin=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrLogin");
     public static final org.semanticwb.platform.SemanticClass swb_Role=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Role");
     public static final org.semanticwb.platform.SemanticProperty swb_hasRole=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasRole");
     public static final org.semanticwb.platform.SemanticProperty swb_usrSecurityQuestion=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrSecurityQuestion");
@@ -216,16 +216,6 @@ public class UserBase extends org.semanticwb.model.base.GenericObjectBase implem
          return ret;
     }
 
-    public String getUsrLogin()
-    {
-        return getSemanticObject().getProperty(swb_usrLogin);
-    }
-
-    public void setUsrLogin(String usrLogin)
-    {
-        getSemanticObject().setProperty(swb_usrLogin, usrLogin);
-    }
-
     public String getUsrPassword()
     {
         //Implement this method in User object
@@ -236,6 +226,16 @@ public class UserBase extends org.semanticwb.model.base.GenericObjectBase implem
     {
         //Implement this method in User object
         throw new org.semanticwb.SWBMethodImplementationRequiredException();
+    }
+
+    public String getUsrLogin()
+    {
+        return getSemanticObject().getProperty(swb_usrLogin);
+    }
+
+    public void setUsrLogin(String usrLogin)
+    {
+        getSemanticObject().setProperty(swb_usrLogin, usrLogin);
     }
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.Role> listRoles()

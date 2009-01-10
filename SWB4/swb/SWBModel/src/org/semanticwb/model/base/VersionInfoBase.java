@@ -9,11 +9,11 @@ public class VersionInfoBase extends org.semanticwb.model.base.GenericObjectBase
     public static final org.semanticwb.platform.SemanticProperty swb_versionValue=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#versionValue");
     public static final org.semanticwb.platform.SemanticClass swb_VersionInfo=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#VersionInfo");
     public static final org.semanticwb.platform.SemanticProperty swb_previousVersion=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#previousVersion");
-    public static final org.semanticwb.platform.SemanticProperty swb_versionLockedBy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#versionLockedBy");
-    public static final org.semanticwb.platform.SemanticProperty swb_versionFile=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#versionFile");
     public static final org.semanticwb.platform.SemanticProperty swb_versionComment=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#versionComment");
     public static final org.semanticwb.platform.SemanticProperty swb_updated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#updated");
     public static final org.semanticwb.platform.SemanticProperty swb_nextVersion=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#nextVersion");
+    public static final org.semanticwb.platform.SemanticProperty swb_versionLockedBy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#versionLockedBy");
+    public static final org.semanticwb.platform.SemanticProperty swb_versionFile=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#versionFile");
     public static final org.semanticwb.platform.SemanticProperty swb_creator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#creator");
     public static final org.semanticwb.platform.SemanticProperty swb_versionNumber=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#versionNumber");
 
@@ -84,37 +84,6 @@ public class VersionInfoBase extends org.semanticwb.model.base.GenericObjectBase
          return ret;
     }
 
-    public void setVersionLockedBy(org.semanticwb.model.User user)
-    {
-        getSemanticObject().setObjectProperty(swb_versionLockedBy, user.getSemanticObject());
-    }
-
-    public void removeVersionLockedBy()
-    {
-        getSemanticObject().removeProperty(swb_versionLockedBy);
-    }
-
-    public org.semanticwb.model.User getVersionLockedBy()
-    {
-         org.semanticwb.model.User ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_versionLockedBy);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
-         }
-         return ret;
-    }
-
-    public String getVersionFile()
-    {
-        return getSemanticObject().getProperty(swb_versionFile);
-    }
-
-    public void setVersionFile(String versionFile)
-    {
-        getSemanticObject().setProperty(swb_versionFile, versionFile);
-    }
-
     public String getVersionComment()
     {
         return getSemanticObject().getProperty(swb_versionComment);
@@ -154,6 +123,37 @@ public class VersionInfoBase extends org.semanticwb.model.base.GenericObjectBase
              ret=(org.semanticwb.model.VersionInfo)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
+    }
+
+    public void setVersionLockedBy(org.semanticwb.model.User user)
+    {
+        getSemanticObject().setObjectProperty(swb_versionLockedBy, user.getSemanticObject());
+    }
+
+    public void removeVersionLockedBy()
+    {
+        getSemanticObject().removeProperty(swb_versionLockedBy);
+    }
+
+    public org.semanticwb.model.User getVersionLockedBy()
+    {
+         org.semanticwb.model.User ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_versionLockedBy);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
+         }
+         return ret;
+    }
+
+    public String getVersionFile()
+    {
+        return getSemanticObject().getProperty(swb_versionFile);
+    }
+
+    public void setVersionFile(String versionFile)
+    {
+        getSemanticObject().setProperty(swb_versionFile, versionFile);
     }
 
     public void setCreator(org.semanticwb.model.User user)
