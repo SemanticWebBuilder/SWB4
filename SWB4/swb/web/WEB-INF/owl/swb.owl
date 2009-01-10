@@ -943,6 +943,7 @@
     <rdfs:range rdf:resource="#Calendar"/>
     <rdfs:domain rdf:resource="#Calendarable"/>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasWebPageVirtualChild"/>
   <owl:ObjectProperty rdf:ID="creator">
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_creator">
@@ -957,7 +958,6 @@
     <rdfs:domain rdf:resource="#Traceable"/>
     <rdfs:range rdf:resource="#User"/>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="hasWebPageVirtualChild"/>
   <owl:ObjectProperty rdf:ID="hasReference"/>
   <owl:ObjectProperty rdf:ID="versionLockedBy">
     <rdfs:range rdf:resource="#User"/>
@@ -977,6 +977,14 @@
     <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FormView"/>
     <rdfs:range rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="roleParent">
+    <rdfs:label>parent</rdfs:label>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasRoleChild"/>
+    </owl:inverseOf>
+    <rdfs:range rdf:resource="#Role"/>
+    <rdfs:domain rdf:resource="#Role"/>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasPortletRef">
     <rdfs:domain rdf:resource="#PortletRefable"/>
     <rdfs:range rdf:resource="#PortletRef"/>
@@ -993,6 +1001,14 @@
   <owl:ObjectProperty rdf:ID="hasHerarquicalNode">
     <rdfs:domain rdf:resource="#Model"/>
     <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#HerarquicalNode"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="usrgrpParent">
+    <rdfs:label>parent</rdfs:label>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasUsrGrpChild"/>
+    </owl:inverseOf>
+    <rdfs:range rdf:resource="#UserGroup"/>
+    <rdfs:domain rdf:resource="#UserGroup"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasTemplateRef">
     <rdfs:domain rdf:resource="#TemplateRefable"/>
@@ -1136,10 +1152,20 @@
       <owl:ObjectProperty rdf:ID="hasWebPageChild"/>
     </owl:inverseOf>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasUsrGrpChild">
+    <rdfs:label>hasChild</rdfs:label>
+    <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:herarquicalRelation>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="usrfHasObjects">
     <rdfs:label>hasObject</rdfs:label>
     <rdfs:domain rdf:resource="#UserFavorites"/>
     <rdfs:range rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasRoleChild">
+    <rdfs:label>hasChild</rdfs:label>
+    <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:herarquicalRelation>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="rule">
     <swb:canUsedAsName rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -1277,10 +1303,6 @@
     <rdfs:domain rdf:resource="#User"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#behaviorParams">
-    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectBehavior"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="xml">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#XMLable"/>
@@ -1290,6 +1312,10 @@
         >true</swbxf:propHidden>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#behaviorParams">
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectBehavior"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="portletClassName">
     <rdfs:domain rdf:resource="#PortletType"/>
@@ -1629,16 +1655,6 @@
     <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectAction"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="deleted">
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_deleted">
-        <swbxf:propHidden rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swbxf:propHidden>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-    <rdfs:domain rdf:resource="#Deleteable"/>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="title">
     <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:required>
@@ -1657,6 +1673,16 @@
     <swb:canUsedAsName rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:canUsedAsName>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="deleted">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_deleted">
+        <swbxf:propHidden rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swbxf:propHidden>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="#Deleteable"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="versionFile">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#VersionInfo"/>
@@ -1671,6 +1697,26 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FormViewRef"/>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="testCodeEditor">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_testCodeEditor">
+        <swbxf:formElement>
+          <swbxf:CodeEditor rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#CodeEditorTest">
+            <swbxf:textAreaRows rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >40</swbxf:textAreaRows>
+            <swbxf:textAreaCols rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >80</swbxf:textAreaCols>
+            <swbxf:codeEditorLanguage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >JSP</swbxf:codeEditorLanguage>
+          </swbxf:CodeEditor>
+        </swbxf:formElement>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >200</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Rule"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="propertyMode">
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_propertyMode">
@@ -1684,6 +1730,18 @@
   <owl:DatatypeProperty rdf:ID="portletCache">
     <rdfs:domain rdf:resource="#PortletType"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#codeEditorLanguage">
+    <rdfs:label>language</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain>
+      <swb:FormElement rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#CodeEditor">
+        <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >org.semanticwb.model.CodeEditor</swb:className>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:FormElement>
+    </rdfs:domain>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="usrLastLogin">
     <swb:displayProperty>
