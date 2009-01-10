@@ -225,11 +225,8 @@ public class SWBAWebPageContents extends GenericResource {
                     out.println("<script type=\"dojo/connect\" event=\"onBlur\">");
                     out.println(" var self=this;   ");
                     out.println(" showStatusURL('" + urlu + "&'+self.attr(\"name\")+'='+self.attr(\"value\"),true);");
-                    //out.println(" return submitUrl('" + urlu + "&" + semprop.getName() + "='+self.getValue(),self.domNode); ");
-                    //out.println(" return false; ");
                     out.println("</script>");
                     out.println("</div>");
-                    //out.println("<input id=\""+id+"/"+base.getId()+"/NS\" dojoType=\"dijit.form.NumberSpinner\" smallDelta=\"1\" constraints=\"{min:0,max:999,places:0}\" style=\"width:50px\" type=\"text\" name=\"" + semprop.getName() + "\" maxlength=\"3\" onchange=\"submitUrl('" + urlu + "&" + semprop.getName() + "='+dijit.byId('"+id+"/"+base.getId()+"/NS').getValue(),dijit.byId('"+id+"/"+base.getId()+"/NS')); return false;\" value=\"" + getValueSemProp(sobj, semprop) + "\" />");
                     out.println("</td>");
                 }
                 if (hmprop.get(Activeable.swb_active) != null) {
@@ -295,7 +292,7 @@ public class SWBAWebPageContents extends GenericResource {
             // Lista de Tipo de portlet disponibles de Global, separados por contenido y sistema
 
             out.println("<fieldset>");
-            out.println("	<legend> Choose (Global) - " + prop.getDisplayName(user.getLanguage()) + " ( " + getDisplaySemObj(obj, user.getLanguage()) + " )</legend>");
+            out.println("	<legend>Global</legend>");
             Iterator<SemanticObject> itgso = SWBContext.getGlobalWebSite().getSemanticObject().getModel().listInstancesOfClass(clsprop);
             HashMap<String, SemanticObject> hmContent = new HashMap();
             HashMap<String, SemanticObject> hmSystem = new HashMap();
@@ -400,7 +397,7 @@ public class SWBAWebPageContents extends GenericResource {
             // Lista de tipo de portlets disponibles del sitio, separados por contenido y sistema 
 
             out.println("<fieldset>");
-            out.println("	<legend> Choose (" + obj.getModel().getModelObject().getDisplayName() + ") - " + prop.getDisplayName(user.getLanguage()) + " ( " + getDisplaySemObj(obj, user.getLanguage()) + " )</legend>");
+            out.println("	<legend>" + obj.getModel().getModelObject().getDisplayName() + "</legend>");
 
             hmContent = new HashMap();
             hmSystem = new HashMap();
@@ -566,13 +563,11 @@ public class SWBAWebPageContents extends GenericResource {
             fmgr.addHiddenParameter("sobj", sobj);
             fmgr.addHiddenParameter("isGlobal", Boolean.toString(isGlobal));
 
-            out.println("<h1>");
-            out.println("Nuevo Portlet de tipo: <i>" + so.getDisplayName(paramRequest.getUser().getLanguage()) + "</i> del sitio " + so.getModel().getModelObject().getDisplayName(paramRequest.getUser().getId()));
-            out.println("</h1>");
+//            out.println("<h1>");
+//            out.println("Nuevo Portlet de tipo: <i>" + so.getDisplayName(paramRequest.getUser().getLanguage()) + "</i> del sitio " + so.getModel().getModelObject().getDisplayName(paramRequest.getUser().getId()));
+//            out.println("</h1>");
             out.println(fmgr.renderForm());
-
         }
-
     }
 
     @Override
@@ -586,74 +581,6 @@ public class SWBAWebPageContents extends GenericResource {
         SemanticObject obj = ont.getSemanticObject(id); //WebPage
         SemanticClass cls = obj.getSemanticClass();
 
-//        if ("update".equals(action)) {
-//            if (request.getParameter("sval") != null) {
-//                obj = ont.getSemanticObject(request.getParameter("sval"));
-//            }
-//            cls = obj.getSemanticClass();
-//            Iterator<SemanticProperty> it = cls.listProperties();
-//            while (it.hasNext()) {
-//                SemanticProperty prop = it.next();
-//                if (prop.isDataTypeProperty()) {
-//                    String value = request.getParameter(prop.getName());
-//                    log.debug("SWBAWebPageContents: ProcessAction(update): " + prop.getName() + " -- >" + value);
-//                    if (value != null) {
-//                        if (value.length() > 0) {
-//                            if (prop.isBoolean()) {
-//                                if (value.equals("true") || value.equals("1")) {
-//                                    obj.setBooleanProperty(prop, true);
-//                                } else if (value.equals("false") || value.equals("0")) {
-//                                    obj.setBooleanProperty(prop, false);
-//                                }
-//                            }
-//                            if (prop.isInt()) {
-//                                obj.setLongProperty(prop, Integer.parseInt(value));
-//                            }
-//                            if (prop.isString()) {
-//                                obj.setProperty(prop, value);
-//                            }
-//                            if (prop.isFloat()) {
-//                                obj.setFloatProperty(prop, Float.parseFloat(value));
-//                            }
-//                        } else {
-//                            obj.removeProperty(prop);
-//                        }
-//                    }
-//                }
-//            }
-//            if (id != null) {
-//                response.setRenderParameter("suri", id);
-//            }
-//            if (sprop != null) {
-//                response.setRenderParameter("sprop", sprop);
-//            }
-//            if (sproptype != null) {
-//                response.setRenderParameter("sproptype", sproptype);
-//            }
-//            response.setRenderParameter("act", "");
-//        } else if ("updstatus".equals(action)) {
-//            String soid = request.getParameter("sval");
-//            String value = request.getParameter("val");
-//            if (value == null) {
-//                value = "0";
-//            }
-//            SemanticObject sobj = ont.getSemanticObject(soid);
-//            sobj.setBooleanProperty(Activeable.swb_active, value.equals("true") ? true : false);
-//
-//            SemanticClass scls = sobj.getSemanticClass();
-//            log.debug("SWBAWebPageContents: ProcessAction(updstatus):" + scls.getClassName() + ": " + value);
-//
-//            if (id != null) {
-//                response.setRenderParameter("suri", id);
-//            }
-//            if (sprop != null) {
-//                response.setRenderParameter("sprop", sprop);
-//            }
-//            if (sproptype != null) {
-//                response.setRenderParameter("sproptype", sproptype);
-//            }
-//        } // revisar para agregar nuevo semantic object
-//        else
         if ("new".equals(action)) {
             log.debug("SWBAWebPageContents: ProcessAction(new) ");
 
@@ -713,8 +640,6 @@ public class SWBAWebPageContents extends GenericResource {
                             obj.setObjectProperty(prop, ont.getSemanticObject("urswb"));
                         }
                         so.remove();
-//                        SemanticModel model = obj.getModel();
-//                        model.removeSemanticObject(so);
                     }
                     break;
                 }
