@@ -30,7 +30,7 @@
 %>
 
 <div id="semwblogo" class="dijitReset dijitInline swbLogo"></div>
-    <span dojoType="dijit.Tooltip" connectId="semwblogo">Semantic WebBuilder</span>
+<!--    <span dojoType="dijit.Tooltip" connectId="semwblogo">Semantic WebBuilder</span>-->
 
 <%
     WebPage wp=SWBContext.getAdminWebSite().getWebPage("WBAd_mnu_Main");

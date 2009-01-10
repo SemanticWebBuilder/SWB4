@@ -4,10 +4,9 @@
     response.setHeader("Pragma", "no-cache"); 
     String id=request.getParameter("suri");
     SemanticOntology ont=SWBPlatform.getSemanticMgr().getOntology();
-    com.hp.hpl.jena.rdf.model.Resource res=ont.getResource(id);
-    //System.out.println("suri:"+id);
-    if(res==null)return;
-    SemanticClass cls=ont.getSemanticObjectClass(res);
-    GenericObject obj=ont.getGenericObject(id,cls);
+    WebPage obj=(WebPage)ont.getGenericObject(id);
+    if(obj==null)return;
+    //System.out.println(obj.getUrl());
     //String title=obj.getSemanticObject().getProperty(SWBContext.getVocabulary().title);
-%><iframe dojoType_="dijit.layout.ContentPane" style_="overflow:visible;" src="<%=((WebPage)obj).getUrl()%>" width="100%" height="100%" frameborder="0" scrolling="yes"></iframe>
+%>
+<iframe dojoType_="dijit.layout.ContentPane" src="<%=obj.getUrl()%>" width="100%" height="100%" frameborder="0" scrolling="yes"></iframe>
