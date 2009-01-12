@@ -8,11 +8,8 @@ package org.semanticwb.portal;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.platform.SWBInstanceObject;
-import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticObserver;
-import org.semanticwb.platform.SemanticProperty;
 
 /**
  *
