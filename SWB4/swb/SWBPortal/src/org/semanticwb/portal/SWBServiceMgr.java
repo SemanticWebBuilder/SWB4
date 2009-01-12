@@ -23,7 +23,7 @@ public class SWBServiceMgr implements SemanticObserver
     private static Logger log=SWBUtils.getLogger(SWBServiceMgr.class);
 
     public void notify(SemanticObject obj, Object prop, String action) {
-        System.out.println("obj:"+obj+" prop:"+prop+" action:"+action);
+        System.out.println("obj:"+obj+" prop:"+prop+" action:"+action+" "+Thread.currentThread().getName());
     }
 
     public void init()
