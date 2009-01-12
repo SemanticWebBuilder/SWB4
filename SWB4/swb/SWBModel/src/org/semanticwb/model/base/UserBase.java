@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class UserBase extends org.semanticwb.model.base.GenericObjectBase implements org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.Roleable
+public class UserBase extends org.semanticwb.model.base.GenericObjectBase implements org.semanticwb.model.Roleable,org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.model.Calendarable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
@@ -15,6 +15,8 @@ public class UserBase extends org.semanticwb.model.base.GenericObjectBase implem
     public static final org.semanticwb.platform.SemanticProperty swb_usrLanguage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrLanguage");
     public static final org.semanticwb.platform.SemanticClass swb_UserFavorites=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserFavorites");
     public static final org.semanticwb.platform.SemanticProperty swb_userFavorites=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userFavorites");
+    public static final org.semanticwb.platform.SemanticClass swb_Calendar=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Calendar");
+    public static final org.semanticwb.platform.SemanticProperty swb_hasCalendar=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasCalendar");
     public static final org.semanticwb.platform.SemanticProperty swb_usrPasswordChanged=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrPasswordChanged");
     public static final org.semanticwb.platform.SemanticProperty swb_usrLastName=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrLastName");
     public static final org.semanticwb.platform.SemanticProperty swb_active=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#active");
@@ -151,6 +153,36 @@ public class UserBase extends org.semanticwb.model.base.GenericObjectBase implem
          if(obj!=null)
          {
              ret=(org.semanticwb.model.UserFavorites)obj.getSemanticClass().newGenericInstance(obj);
+         }
+         return ret;
+    }
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.Calendar> listCalendars()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Calendar>(org.semanticwb.model.Calendar.class, getSemanticObject().listObjectProperties(swb_hasCalendar));    }
+
+    public void addCalendar(org.semanticwb.model.Calendar calendar)
+    {
+        getSemanticObject().addObjectProperty(swb_hasCalendar, calendar.getSemanticObject());
+    }
+
+    public void removeAllCalendar()
+    {
+        getSemanticObject().removeProperty(swb_hasCalendar);
+    }
+
+    public void removeCalendar(org.semanticwb.model.Calendar calendar)
+    {
+        getSemanticObject().removeObjectProperty(swb_hasCalendar,calendar.getSemanticObject());
+    }
+
+    public org.semanticwb.model.Calendar getCalendar()
+    {
+         org.semanticwb.model.Calendar ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasCalendar);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.Calendar)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
