@@ -67,7 +67,7 @@ INSERT INTO swb_g1t1_stmt VALUES("Uv::sep/Portlet:","Uv::swb:count:","Lv:0:37:ht
 INSERT INTO swb_g1t1_stmt VALUES("Uv::sep/Rule:","Uv::swb:count:","Lv:0:37:http://www.w3.org/2001/XMLSchema#long2:","1");
 INSERT INTO swb_g1t1_stmt VALUES("Uv::sep/RuleRef:","Uv::swb:count:","Lv:0:37:http://www.w3.org/2001/XMLSchema#long7:","1");
 INSERT INTO swb_g1t1_stmt VALUES("Uv::sep/RoleRef:","Uv::swb:count:","Lv:0:37:http://www.w3.org/2001/XMLSchema#long3:","1");
-INSERT INTO swb_g1t1_stmt VALUES("Uv::defaultWorkspace/unstructured:","Uv::swb:count:","Lv:0:37:http://www.w3.org/2001/XMLSchema#long6:","1");
+INSERT INTO swb_g1t1_stmt VALUES("Uv::defaultWorkspace/unstructured:","Uv::swb:count:","Lv:0:37:http://www.w3.org/2001/XMLSchema#long38:","1");
 
 
 #
@@ -220,6 +220,7 @@ INSERT INTO swb_g3t1_stmt VALUES("Uv::http://org.semanticwb.userrep/User#v:","Uv
 INSERT INTO swb_g3t1_stmt VALUES("Uv::http://org.semanticwb.userrep/User#v:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#usrPassword:","Lr:176","3");
 INSERT INTO swb_g3t1_stmt VALUES("Uv::http://org.semanticwb.userrep/User#v:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#usrPasswordChanged:","Lv:0::2009-01-09T12:27:18.218:","3");
 INSERT INTO swb_g3t1_stmt VALUES("Uv::http://org.semanticwb.userrep/User#1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#role:","Uv::http://org.semanticwb.userrep/Role#1:","3");
+INSERT INTO swb_g3t1_stmt VALUES("Uv::http://org.semanticwb.userrep/UserFavorites#2:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#usrfHasObjects:","Uv::http://org.semanticwb.userrep#urswb:","3");
 
 
 #
@@ -7131,12 +7132,6 @@ INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.sep.gob.mx/Portlet#11:","Uv::ht
 INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.sep.gob.mx/Portlet#12:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#priority:","Lv:0:37:http://www.w3.org/2001/XMLSchema#long1:","5");
 INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.sep.gob.mx/TemplateRef#1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#active:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleantrue:","5");
 INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.sep.gob.mx/WebPage#a:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#active:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleantrue:","5");
-INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.sep.gob.mx#sep:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#title:","Lv:0::Sep:","5");
-INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.sep.gob.mx#sep:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#userRepository:","Uv::http://org.semanticwb.userrep#urswb:","5");
-INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.sep.gob.mx#sep:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#deleted:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","5");
-INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.sep.gob.mx#sep:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#active:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleantrue:","5");
-INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.sep.gob.mx#sep:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#language:","Uv::http://www.sep.gob.mx/Language#es:","5");
-INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.sep.gob.mx#sep:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#description:","Lv:0::Sep:","5");
 INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.sep.gob.mx/WebPage#a:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#webPageParent:","Uv::http://www.sep.gob.mx/WebPage#y:","5");
 INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.sep.gob.mx/WebPage#x:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#title:","Lv:0::xx:","5");
 INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.sep.gob.mx/WebPage#x:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#hidden:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","5");
@@ -7199,6 +7194,12 @@ INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.sep.gob.mx/WebPage#home:","Uv::
 INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.sep.gob.mx/RoleRef#3:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#role:","Uv::http://org.semanticwb.userrep/Role#1:","5");
 INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.sep.gob.mx/Rule#1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#testCodeEditor:","Lv:0::javier\n\nasdf:","5");
 INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.sep.gob.mx/Rule#1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#title:","Lv:0::Regla 1:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.sep.gob.mx#sep:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#title:","Lv:0::Sep:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.sep.gob.mx#sep:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#userRepository:","Uv::http://org.semanticwb.userrep#urswb:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.sep.gob.mx#sep:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#deleted:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.sep.gob.mx#sep:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#active:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleantrue:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.sep.gob.mx#sep:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#language:","Uv::http://www.sep.gob.mx/Language#es:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.sep.gob.mx#sep:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#description:","Lv:0::Sep:","5");
 
 
 #
@@ -8161,9 +8162,10 @@ INSERT INTO swb_g6t1_stmt VALUES("Uv::ussrepext/UserGroup#CAT:","Uv::http://www.
 INSERT INTO swb_g6t1_stmt VALUES("Uv::ussrepext/UserGroup#SALES:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#title:","Lv:0::Ventas:","6");
 INSERT INTO swb_g6t1_stmt VALUES("Uv::ussrepext/UserGroup#INVEST:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#title:","Lv:0::Investigación:","6");
 INSERT INTO swb_g6t1_stmt VALUES("Uv::ussrepext/Role#2:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#roleParent:","Uv::ussrepext/Role#1:","6");
-INSERT INTO swb_g6t1_stmt VALUES("Uv::ussrepext/Role#3:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#roleParent:","Uv::ussrepext/Role#2:","6");
+INSERT INTO swb_g6t1_stmt VALUES("Uv::ussrepext/Role#3:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#roleParent:","Uv::ussrepext/Role#1:","6");
 INSERT INTO swb_g6t1_stmt VALUES("Uv::ussrepext/Role#4:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#roleParent:","Uv::ussrepext/Role#2:","6");
-INSERT INTO swb_g6t1_stmt VALUES("Uv::ussrepext/UserGroup#CAT:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#usrgrpParent:","Uv::ussrepext/UserGroup#INVEST:","6");
+INSERT INTO swb_g6t1_stmt VALUES("Uv::ussrepext/UserGroup#SALES:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#usrgrpParent:","Uv::ussrepext/UserGroup#OPER:","6");
+INSERT INTO swb_g6t1_stmt VALUES("Uv::ussrepext/UserGroup#INVEST:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#usrgrpParent:","Uv::ussrepext/UserGroup#OPER:","6");
 
 
 #
@@ -8232,7 +8234,129 @@ INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unst
 INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#6:","Uv::http://www.jcp.org/jcr/1.0#primaryType:","Lv:0::nt:unstructured:","7");
 INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#6:","Uv::http://www.semanticwebbuilder.org/swb4/repository#name:","Lv:0::jcr:root:","7");
 INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#6:","Uv::http://www.semanticwebbuilder.org/swb4/repository#path:","Lv:0::/:","7");
-INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository/#defaultWorkspace:","Uv::http://www.jcp.org/jcr/1.0#root:","Uv::http://www.semanticwb.org/repository//unstructured#6:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#7:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.jcp.org/jcr/nt/1.0#unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#7:","Uv::http://www.jcp.org/jcr/1.0#primaryType:","Lv:0::nt:unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#7:","Uv::http://www.semanticwebbuilder.org/swb4/repository#name:","Lv:0::jcr:root:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#7:","Uv::http://www.semanticwebbuilder.org/swb4/repository#path:","Lv:0::/:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#8:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.jcp.org/jcr/nt/1.0#unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#8:","Uv::http://www.jcp.org/jcr/1.0#primaryType:","Lv:0::nt:unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#8:","Uv::http://www.semanticwebbuilder.org/swb4/repository#name:","Lv:0::jcr:root:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#8:","Uv::http://www.semanticwebbuilder.org/swb4/repository#path:","Lv:0::/:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#9:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.jcp.org/jcr/nt/1.0#unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#9:","Uv::http://www.jcp.org/jcr/1.0#primaryType:","Lv:0::nt:unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#9:","Uv::http://www.semanticwebbuilder.org/swb4/repository#name:","Lv:0::jcr:root:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#9:","Uv::http://www.semanticwebbuilder.org/swb4/repository#path:","Lv:0::/:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#10:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.jcp.org/jcr/nt/1.0#unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#10:","Uv::http://www.jcp.org/jcr/1.0#primaryType:","Lv:0::nt:unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#10:","Uv::http://www.semanticwebbuilder.org/swb4/repository#name:","Lv:0::jcr:root:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#10:","Uv::http://www.semanticwebbuilder.org/swb4/repository#path:","Lv:0::/:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#11:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.jcp.org/jcr/nt/1.0#unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#11:","Uv::http://www.jcp.org/jcr/1.0#primaryType:","Lv:0::nt:unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#11:","Uv::http://www.semanticwebbuilder.org/swb4/repository#name:","Lv:0::jcr:root:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#11:","Uv::http://www.semanticwebbuilder.org/swb4/repository#path:","Lv:0::/:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#12:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.jcp.org/jcr/nt/1.0#unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#12:","Uv::http://www.jcp.org/jcr/1.0#primaryType:","Lv:0::nt:unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#12:","Uv::http://www.semanticwebbuilder.org/swb4/repository#name:","Lv:0::jcr:root:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#12:","Uv::http://www.semanticwebbuilder.org/swb4/repository#path:","Lv:0::/:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#13:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.jcp.org/jcr/nt/1.0#unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#13:","Uv::http://www.jcp.org/jcr/1.0#primaryType:","Lv:0::nt:unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#13:","Uv::http://www.semanticwebbuilder.org/swb4/repository#name:","Lv:0::jcr:root:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#13:","Uv::http://www.semanticwebbuilder.org/swb4/repository#path:","Lv:0::/:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#14:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.jcp.org/jcr/nt/1.0#unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#14:","Uv::http://www.jcp.org/jcr/1.0#primaryType:","Lv:0::nt:unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#14:","Uv::http://www.semanticwebbuilder.org/swb4/repository#name:","Lv:0::jcr:root:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#14:","Uv::http://www.semanticwebbuilder.org/swb4/repository#path:","Lv:0::/:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#15:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.jcp.org/jcr/nt/1.0#unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#15:","Uv::http://www.jcp.org/jcr/1.0#primaryType:","Lv:0::nt:unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#15:","Uv::http://www.semanticwebbuilder.org/swb4/repository#name:","Lv:0::jcr:root:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#15:","Uv::http://www.semanticwebbuilder.org/swb4/repository#path:","Lv:0::/:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#16:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.jcp.org/jcr/nt/1.0#unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#16:","Uv::http://www.jcp.org/jcr/1.0#primaryType:","Lv:0::nt:unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#16:","Uv::http://www.semanticwebbuilder.org/swb4/repository#name:","Lv:0::jcr:root:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#16:","Uv::http://www.semanticwebbuilder.org/swb4/repository#path:","Lv:0::/:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#17:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.jcp.org/jcr/nt/1.0#unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#17:","Uv::http://www.jcp.org/jcr/1.0#primaryType:","Lv:0::nt:unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#17:","Uv::http://www.semanticwebbuilder.org/swb4/repository#name:","Lv:0::jcr:root:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#17:","Uv::http://www.semanticwebbuilder.org/swb4/repository#path:","Lv:0::/:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#18:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.jcp.org/jcr/nt/1.0#unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#18:","Uv::http://www.jcp.org/jcr/1.0#primaryType:","Lv:0::nt:unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#18:","Uv::http://www.semanticwebbuilder.org/swb4/repository#name:","Lv:0::jcr:root:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#18:","Uv::http://www.semanticwebbuilder.org/swb4/repository#path:","Lv:0::/:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#19:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.jcp.org/jcr/nt/1.0#unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#19:","Uv::http://www.jcp.org/jcr/1.0#primaryType:","Lv:0::nt:unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#19:","Uv::http://www.semanticwebbuilder.org/swb4/repository#name:","Lv:0::jcr:root:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#19:","Uv::http://www.semanticwebbuilder.org/swb4/repository#path:","Lv:0::/:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#20:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.jcp.org/jcr/nt/1.0#unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#20:","Uv::http://www.jcp.org/jcr/1.0#primaryType:","Lv:0::nt:unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#20:","Uv::http://www.semanticwebbuilder.org/swb4/repository#name:","Lv:0::jcr:root:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#20:","Uv::http://www.semanticwebbuilder.org/swb4/repository#path:","Lv:0::/:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#21:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.jcp.org/jcr/nt/1.0#unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#21:","Uv::http://www.jcp.org/jcr/1.0#primaryType:","Lv:0::nt:unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#21:","Uv::http://www.semanticwebbuilder.org/swb4/repository#name:","Lv:0::jcr:root:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#21:","Uv::http://www.semanticwebbuilder.org/swb4/repository#path:","Lv:0::/:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#22:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.jcp.org/jcr/nt/1.0#unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#22:","Uv::http://www.jcp.org/jcr/1.0#primaryType:","Lv:0::nt:unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#22:","Uv::http://www.semanticwebbuilder.org/swb4/repository#name:","Lv:0::jcr:root:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#22:","Uv::http://www.semanticwebbuilder.org/swb4/repository#path:","Lv:0::/:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#23:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.jcp.org/jcr/nt/1.0#unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#23:","Uv::http://www.jcp.org/jcr/1.0#primaryType:","Lv:0::nt:unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#23:","Uv::http://www.semanticwebbuilder.org/swb4/repository#name:","Lv:0::jcr:root:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#23:","Uv::http://www.semanticwebbuilder.org/swb4/repository#path:","Lv:0::/:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#24:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.jcp.org/jcr/nt/1.0#unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#24:","Uv::http://www.jcp.org/jcr/1.0#primaryType:","Lv:0::nt:unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#24:","Uv::http://www.semanticwebbuilder.org/swb4/repository#name:","Lv:0::jcr:root:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#24:","Uv::http://www.semanticwebbuilder.org/swb4/repository#path:","Lv:0::/:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#25:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.jcp.org/jcr/nt/1.0#unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#25:","Uv::http://www.jcp.org/jcr/1.0#primaryType:","Lv:0::nt:unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#25:","Uv::http://www.semanticwebbuilder.org/swb4/repository#name:","Lv:0::jcr:root:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#25:","Uv::http://www.semanticwebbuilder.org/swb4/repository#path:","Lv:0::/:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#26:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.jcp.org/jcr/nt/1.0#unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#26:","Uv::http://www.jcp.org/jcr/1.0#primaryType:","Lv:0::nt:unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#26:","Uv::http://www.semanticwebbuilder.org/swb4/repository#name:","Lv:0::jcr:root:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#26:","Uv::http://www.semanticwebbuilder.org/swb4/repository#path:","Lv:0::/:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#27:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.jcp.org/jcr/nt/1.0#unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#27:","Uv::http://www.jcp.org/jcr/1.0#primaryType:","Lv:0::nt:unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#27:","Uv::http://www.semanticwebbuilder.org/swb4/repository#name:","Lv:0::jcr:root:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#27:","Uv::http://www.semanticwebbuilder.org/swb4/repository#path:","Lv:0::/:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#28:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.jcp.org/jcr/nt/1.0#unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#28:","Uv::http://www.jcp.org/jcr/1.0#primaryType:","Lv:0::nt:unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#28:","Uv::http://www.semanticwebbuilder.org/swb4/repository#name:","Lv:0::jcr:root:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#28:","Uv::http://www.semanticwebbuilder.org/swb4/repository#path:","Lv:0::/:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#29:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.jcp.org/jcr/nt/1.0#unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#29:","Uv::http://www.jcp.org/jcr/1.0#primaryType:","Lv:0::nt:unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#29:","Uv::http://www.semanticwebbuilder.org/swb4/repository#name:","Lv:0::jcr:root:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#29:","Uv::http://www.semanticwebbuilder.org/swb4/repository#path:","Lv:0::/:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#30:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.jcp.org/jcr/nt/1.0#unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#30:","Uv::http://www.jcp.org/jcr/1.0#primaryType:","Lv:0::nt:unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#30:","Uv::http://www.semanticwebbuilder.org/swb4/repository#name:","Lv:0::jcr:root:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#30:","Uv::http://www.semanticwebbuilder.org/swb4/repository#path:","Lv:0::/:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#31:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.jcp.org/jcr/nt/1.0#unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#31:","Uv::http://www.jcp.org/jcr/1.0#primaryType:","Lv:0::nt:unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#31:","Uv::http://www.semanticwebbuilder.org/swb4/repository#name:","Lv:0::jcr:root:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#31:","Uv::http://www.semanticwebbuilder.org/swb4/repository#path:","Lv:0::/:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#32:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.jcp.org/jcr/nt/1.0#unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#32:","Uv::http://www.jcp.org/jcr/1.0#primaryType:","Lv:0::nt:unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#32:","Uv::http://www.semanticwebbuilder.org/swb4/repository#name:","Lv:0::jcr:root:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#32:","Uv::http://www.semanticwebbuilder.org/swb4/repository#path:","Lv:0::/:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#33:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.jcp.org/jcr/nt/1.0#unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#33:","Uv::http://www.jcp.org/jcr/1.0#primaryType:","Lv:0::nt:unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#33:","Uv::http://www.semanticwebbuilder.org/swb4/repository#name:","Lv:0::jcr:root:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#33:","Uv::http://www.semanticwebbuilder.org/swb4/repository#path:","Lv:0::/:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#34:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.jcp.org/jcr/nt/1.0#unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#35:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.jcp.org/jcr/nt/1.0#unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#36:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.jcp.org/jcr/nt/1.0#unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#36:","Uv::http://www.jcp.org/jcr/1.0#primaryType:","Lv:0::nt:unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#36:","Uv::http://www.semanticwebbuilder.org/swb4/repository#name:","Lv:0::jcr:root:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#36:","Uv::http://www.semanticwebbuilder.org/swb4/repository#path:","Lv:0::/:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#37:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.jcp.org/jcr/nt/1.0#unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#37:","Uv::http://www.jcp.org/jcr/1.0#primaryType:","Lv:0::nt:unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#37:","Uv::http://www.semanticwebbuilder.org/swb4/repository#name:","Lv:0::jcr:root:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#37:","Uv::http://www.semanticwebbuilder.org/swb4/repository#path:","Lv:0::/:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#38:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.jcp.org/jcr/nt/1.0#unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#38:","Uv::http://www.jcp.org/jcr/1.0#primaryType:","Lv:0::nt:unstructured:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#38:","Uv::http://www.semanticwebbuilder.org/swb4/repository#name:","Lv:0::jcr:root:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository//unstructured#38:","Uv::http://www.semanticwebbuilder.org/swb4/repository#path:","Lv:0::/:","7");
+INSERT INTO swb_g7t1_stmt VALUES("Uv::http://www.semanticwb.org/repository/#defaultWorkspace:","Uv::http://www.jcp.org/jcr/1.0#root:","Uv::http://www.semanticwb.org/repository//unstructured#38:","7");
 
 
 #
