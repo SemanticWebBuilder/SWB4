@@ -50,7 +50,7 @@ import static org.semanticwb.openoffice.util.FileUtil.copyFile;
 public abstract class OfficeDocument
 {
 
-    private static final String TITLE = "Asistente para guardar contenido";
+    private static final String TITLE_SAVE_CONTENT_SITE = "Asistente para guardar contenido";
     public static final String CONTENT_ID_NAME = "contentID";
     public static final String WORKSPACE_ID_NAME = "workspaceID";
     private static final String TITLE_VERIFY = "Verificación de contenido";
@@ -493,7 +493,7 @@ public abstract class OfficeDocument
     {
         if (isReadOnly())
         {
-            JOptionPane.showMessageDialog(null, "El documento es de sólo lectura, por lo cuál no puede ser publicado", TITLE, JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "El documento es de sólo lectura, por lo cuál no puede ser publicado", TITLE_SAVE_CONTENT_SITE, JOptionPane.ERROR_MESSAGE);
         }
         else
         {
@@ -524,13 +524,13 @@ public abstract class OfficeDocument
                             }
                             catch (Exception e)
                             {
-                                JOptionPane.showMessageDialog(null, "No se puede actualizar el contenido la causa es: " + e.getMessage(), TITLE, JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "No se puede actualizar el contenido la causa es: " + e.getMessage(), TITLE_SAVE_CONTENT_SITE, JOptionPane.ERROR_MESSAGE);
                                 ErrorLog.log(e);
                             }
                         }
                         catch (WBException e)
                         {
-                            JOptionPane.showMessageDialog(null, e.getMessage(), TITLE, JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(null, e.getMessage(), TITLE_SAVE_CONTENT_SITE, JOptionPane.ERROR_MESSAGE);
                             ErrorLog.log(e);
                         }
                     }
@@ -567,7 +567,7 @@ public abstract class OfficeDocument
                                 break;
 
                         }
-                        Wizard wiz = WizardPage.createWizard(TITLE, clazz, resultProducer);
+                        Wizard wiz = WizardPage.createWizard(TITLE_SAVE_CONTENT_SITE, clazz, resultProducer);
                         wiz.show();
                     }
                 }
@@ -596,7 +596,7 @@ public abstract class OfficeDocument
         }
         if (file.exists())
         {
-            int resultOption = JOptionPane.showConfirmDialog(null, "El archivo ya existe, ¿Desea sobre escribir?", TITLE, JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION);
+            int resultOption = JOptionPane.showConfirmDialog(null, "El archivo ya existe, ¿Desea sobre escribir?", TITLE_SAVE_CONTENT_SITE, JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION);
             if (resultOption != JOptionPane.NO_OPTION)
             {
                 try
@@ -606,7 +606,7 @@ public abstract class OfficeDocument
                 }
                 catch (WBException wbe)
                 {
-                    JOptionPane.showMessageDialog(null, wbe.getMessage(), TITLE, JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, wbe.getMessage(), TITLE_SAVE_CONTENT_SITE, JOptionPane.ERROR_MESSAGE);
                 }
             }
         }
@@ -619,7 +619,7 @@ public abstract class OfficeDocument
             }
             catch (WBException wbe)
             {
-                JOptionPane.showMessageDialog(null, wbe.getMessage(), TITLE, JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, wbe.getMessage(), TITLE_SAVE_CONTENT_SITE, JOptionPane.ERROR_MESSAGE);
             }
         }
         return result;
