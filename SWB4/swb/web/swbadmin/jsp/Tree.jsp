@@ -162,7 +162,7 @@
         Iterator<SemanticProperty> hprops=cls.listInverseHerarquicalProperties();
         if(hprops.hasNext())herarprop=hprops.next();
 
-        System.out.println("herarprop:"+herarprop);
+        //System.out.println("herarprop:"+herarprop);
 
         if(addChilds)
         {
