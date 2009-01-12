@@ -53,7 +53,7 @@ public class SWBPortal {
     private static SWBTemplateMgr templatemgr = null;
     private static SWBServiceMgr servicemgr = null;
 
-    private HashMap<String,SessionUser> m_sessions;
+    private static HashMap<String,SessionUser> m_sessions;
 
     static public synchronized SWBPortal createInstance() {
         //System.out.println("Entra a createInstance");
@@ -860,7 +860,7 @@ public class SWBPortal {
         return value;
     }
 
-    public void addSessionUser(Principal user)
+    public static void addSessionUser(User user)
     {
         if(user!=null)
         {
@@ -870,12 +870,21 @@ public class SWBPortal {
         }
     }
 
-    public Principal getSessionUser()
+    public static User getSessionUser()
     {
         Principal user=null;
         SessionUser sess=m_sessions.get(Thread.currentThread().getName());
         if(sess!=null)user=sess.getUser();
-        return user;
+        return (User)user;
+    }
+
+    public static long getSessionUserID()
+    {
+        long ret=0;
+        Principal user=null;
+        SessionUser sess=m_sessions.get(Thread.currentThread().getName());
+        if(sess!=null)ret=sess.geRequestID();
+        return ret;
     }
 
 

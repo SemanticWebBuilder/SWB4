@@ -99,6 +99,7 @@ public class DistributorParams
         {
             user=_getUser(request,webpage.getWebSite());
         }
+        SWBPortal.addSessionUser(user);
         //System.out.println("user"+user);
         queryString=_getQueryString(request);
         //System.out.println("queryString:"+queryString);
