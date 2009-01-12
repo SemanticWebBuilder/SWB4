@@ -324,6 +324,7 @@ public class SemanticObject
 
     public void addSemanticClass(SemanticClass cls)
     {
+        SWBPlatform.getSemanticMgr().notifyChange(this, cls, "ADD");
         if (m_virtual)
         {
             //TODO:
@@ -336,6 +337,7 @@ public class SemanticObject
 
     public SemanticObject removeSemanticClass(SemanticClass cls)
     {
+        SWBPlatform.getSemanticMgr().notifyChange(this, cls, "REMOVE");
         if (m_virtual)
         {
             //TODO:
@@ -456,6 +458,7 @@ public class SemanticObject
 
     public void setLiteralProperty(SemanticProperty prop, SemanticLiteral literal)
     {
+        SWBPlatform.getSemanticMgr().notifyChange(this, prop, "SET");
         if(!m_virtual)
         {
             Object obj=literal.getValue();
@@ -542,6 +545,7 @@ public class SemanticObject
 
     public SemanticObject removeProperty(SemanticProperty prop)
     {
+        SWBPlatform.getSemanticMgr().notifyChange(this, prop, "REMOVE");
         if (!m_virtual)
         {
             try
@@ -571,6 +575,7 @@ public class SemanticObject
 
     public SemanticObject removeProperty(SemanticProperty prop, String lang)
     {
+        SWBPlatform.getSemanticMgr().notifyChange(this, prop, "REMOVE");
         if (!m_virtual)
         {
             StmtIterator stit = m_res.listProperties(prop.getRDFProperty());
@@ -590,6 +595,7 @@ public class SemanticObject
 
     public SemanticObject setObjectProperty(SemanticProperty prop, SemanticObject object)
     {
+        SWBPlatform.getSemanticMgr().notifyChange(this, prop, "SET");
         if (m_virtual)
         {
             ArrayList list = (ArrayList) m_virtprops.get(prop.getURI());
@@ -630,6 +636,7 @@ public class SemanticObject
 
     public SemanticObject addObjectProperty(SemanticProperty prop, SemanticObject object)
     {
+        SWBPlatform.getSemanticMgr().notifyChange(this, prop, "ADD");
         if (m_virtual)
         {
             ArrayList list = (ArrayList) m_virtprops.get(prop.getURI());
@@ -649,6 +656,7 @@ public class SemanticObject
 
     public SemanticObject removeObjectProperty(SemanticProperty prop, SemanticObject object)
     {
+        SWBPlatform.getSemanticMgr().notifyChange(this, prop, "REMOVE");
         if (m_virtual)
         {
             ArrayList list = (ArrayList) m_virtprops.get(prop.getURI());
@@ -873,6 +881,7 @@ public class SemanticObject
                 removeProperty(prop);
             }
         }
+        SWBPlatform.getSemanticMgr().notifyChange(this, null, "REMOVE");
         //TODO:mejorar
         Iterator<SemanticObject> rel=listRelatedObjects();
         while(rel.hasNext())
@@ -1063,6 +1072,7 @@ public class SemanticObject
 
     public SemanticObject setInputStreamProperty(SemanticProperty prop, InputStream value, String name) throws SWBException
     {
+        SWBPlatform.getSemanticMgr().notifyChange(this, prop, "SET");
         GenericObjectBase obj = new GenericObjectBase(this);
         String workPath = obj.getWorkPath();
         if (!(workPath.endsWith("\\") || workPath.equals("/")))
