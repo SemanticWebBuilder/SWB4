@@ -281,18 +281,17 @@ public class SWBAWebPageContents extends GenericResource {
                 }
             }
 
+            out.println("<div class=\"swbform\">");
             SWBResourceURL urlAdd = paramRequest.getRenderUrl();
             urlAdd.setMode(SWBResourceURL.Mode_EDIT);
             urlAdd.setParameter("act", "edit");
-            out.println("<form id=\"" + id + "/WPContent\" action=\"" + urlAdd + "\" method=\"post\" class=\"swbform\" onsubmit=\"submitForm('" + id + "/WPContent'); return false;\">");
+            out.println("<form id=\"" + id + "/WPContent\" action=\"" + urlAdd + "\" method=\"post\" onsubmit=\"submitForm('" + id + "/WPContent'); return false;\">");
             out.println("<input type=\"hidden\" id=\"" + id + "/suri\" name=\"suri\" value=\"" + id + "\">");
             out.println("<input type=\"hidden\" id=\"" + id + "/sprop\" name=\"sprop\" value=\"" + idp + "\">");
             out.println("<input type=\"hidden\" id=\"" + id + "/sproptype\" name=\"sproptype\" value=\"" + idptype + "\">");
 
             // Lista de Tipo de portlet disponibles de Global, separados por contenido y sistema
 
-            out.println("<fieldset>");
-            out.println("	<legend>Global</legend>");
             Iterator<SemanticObject> itgso = SWBContext.getGlobalWebSite().getSemanticObject().getModel().listInstancesOfClass(clsprop);
             HashMap<String, SemanticObject> hmContent = new HashMap();
             HashMap<String, SemanticObject> hmSystem = new HashMap();
@@ -306,6 +305,10 @@ public class SWBAWebPageContents extends GenericResource {
                 {
                     hmSystem.put(sobj.getId(), sobj);
                 }
+            }
+            if (hmContent.size() > 0 || hmSystem.size()>0) {
+                out.println("<fieldset>");
+                out.println("	<legend>Global</legend>");
             }
 
             itgso = hmContent.values().iterator();
@@ -392,7 +395,10 @@ public class SWBAWebPageContents extends GenericResource {
                 out.println("</tbody> ");
                 out.println("</table> ");
             }
-            out.println("</fieldset>");
+            if (hmContent.size() > 0 || hmSystem.size()>0)
+            {
+                out.println("</fieldset>");
+            }
 
             // Lista de tipo de portlets disponibles del sitio, separados por contenido y sistema 
 
@@ -506,7 +512,8 @@ public class SWBAWebPageContents extends GenericResource {
                 out.println("</tbody> ");
                 out.println("</table> ");
             }
-
+            out.println("</fieldset>");
+            out.println("<fieldset>");
             SWBResourceURL urlBack = paramRequest.getRenderUrl();
             if (id != null) {
                 urlBack.setParameter("suri", id);
@@ -521,17 +528,18 @@ public class SWBAWebPageContents extends GenericResource {
             out.println("<table width=\"98%\">");
             out.println("<tbody>");
             out.println("<tr>");
-            out.println("<th>");
+            out.println("<td>");
             out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitForm('" + id + "/WPContent'); return false;\">Guardar</button>");
             if (id != null && idp != null && idptype != null) {
                 out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlBack + "',document.getElementById('" + id + "/WPContent')); return false;\">Regresar</button>");
             }
-            out.println("</th>");
+            out.println("</td>");
             out.println("</tr>");
             out.println("</tbody>");
             out.println("</table>");
             out.println("</fieldset>");
             out.println("</form>");
+            out.println("</div>");
         } // Parte en donde se presenta la forma para dar de alta el nuevo portlet de tipo dontenido o de sistema
         else if (action.equals("edit")) {
 
@@ -618,7 +626,7 @@ public class SWBAWebPageContents extends GenericResource {
             if (nso != null) {
                 response.setRenderParameter("nsuri", nso.getURI());
             }
-            response.setRenderParameter("statmsg", "Se agregó correctamente el contenido.");
+            response.setRenderParameter("statmsg", "Se agreg%oacute; correctamente el contenido.");
             response.setMode(response.Mode_EDIT);
             response.setRenderParameter("act", "");
         } else if ("remove".equals(action)) //suri, prop
@@ -656,7 +664,7 @@ public class SWBAWebPageContents extends GenericResource {
             }
             log.debug("remove-closetab:"+sval);
             response.setRenderParameter("closetab", sval);
-            response.setRenderParameter("statmsg", "Se eliminó correctamente el contenido.");
+            response.setRenderParameter("statmsg", "Se elimin&oacute; correctamente el contenido.");
             response.setMode(response.Mode_EDIT);
         }
     }

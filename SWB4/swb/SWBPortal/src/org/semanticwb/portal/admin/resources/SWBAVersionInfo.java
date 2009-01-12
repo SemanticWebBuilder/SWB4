@@ -203,10 +203,10 @@ public class SWBAVersionInfo extends GenericResource {
             out.println("</table>");
             out.println("</filedset>");
             out.println("<filedset>");
-            out.println("<hr noshade>");
+            //out.println("<hr noshade>");
             out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitForm('"+id+"/"+idvi+"/"+base.getId()+"/FVIComment');return false;\">Guardar</button>");
-            out.println("<button dojoType=\"dijit.form.Button\">Favoritos</button>");
-            out.println("<button dojoType=\"dijit.form.Button\">Eliminar</button>");
+            //out.println("<button dojoType=\"dijit.form.Button\">Favoritos</button>");
+            //out.println("<button dojoType=\"dijit.form.Button\">Eliminar</button>");
             SWBResourceURL urlb = paramRequest.getRenderUrl();
             urlb.setMode(SWBResourceURL.Mode_VIEW);
             urlb.setParameter("act","");
