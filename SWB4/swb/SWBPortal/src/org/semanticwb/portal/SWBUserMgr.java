@@ -26,7 +26,7 @@ import org.semanticwb.platform.SemanticObject;
  */
 public class SWBUserMgr 
 {
-    private Logger log = SWBUtils.getLogger(SWBUserMgr.class);
+    private static Logger log = SWBUtils.getLogger(SWBUserMgr.class);
     private HashMap<String, SWBSessionObject> sessionobjects;
     private HashMap<String, HttpSession> sessions;
     

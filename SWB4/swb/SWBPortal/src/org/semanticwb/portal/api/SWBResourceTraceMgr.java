@@ -42,7 +42,7 @@ public class SWBResourceTraceMgr extends TimerTask
         if(SWBPlatform.getEnv("swb/resourceTrace","false").equalsIgnoreCase("true"))
         {
             resourceTrace=true;
-            log.error("Initializing SWBResourceTraceMgr...");
+            log.event("Initializing SWBResourceTraceMgr...");
         }
     }
 
