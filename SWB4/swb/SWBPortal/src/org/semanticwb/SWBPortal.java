@@ -18,6 +18,7 @@ import org.semanticwb.platform.SessionUser;
 import org.semanticwb.portal.SWBDBAdmLog;
 import org.semanticwb.portal.SWBMonitor;
 import org.semanticwb.portal.SWBResourceMgr;
+import org.semanticwb.portal.SWBServiceMgr;
 import org.semanticwb.portal.SWBTemplateMgr;
 import org.semanticwb.portal.SWBUserMgr;
 /*
@@ -50,6 +51,7 @@ public class SWBPortal {
     private static SWBMonitor monitor = null;
     private static SWBResourceMgr resmgr = null;
     private static SWBTemplateMgr templatemgr = null;
+    private static SWBServiceMgr servicemgr = null;
 
     private HashMap<String,SessionUser> m_sessions;
 
@@ -128,6 +130,9 @@ public class SWBPortal {
 
         templatemgr = new SWBTemplateMgr();
         templatemgr.init();
+
+        servicemgr = new SWBServiceMgr();
+        servicemgr.init();
 
         try {
             log.debug("Loading admin Files from: /WEB-INF/lib/SWBAdmin.jar");
