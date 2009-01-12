@@ -749,11 +749,11 @@
           return ret;
       }
 
-function selectAll(name)
+function selectAll(name,val)
    {
       var field = document.getElementsByName(name);
       for (i = 0; i < field.length; i++)
-       field[i].checked = true ;
+       field[i].checked = val ;
    }
 
    function validateChk(name)
