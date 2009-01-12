@@ -748,3 +748,32 @@
           }
           return ret;
       }
+
+function selectAll(name)
+   {
+      var field = document.getElementsByName(name);
+      for (i = 0; i < field.length; i++)
+       field[i].checked = true ;
+   }
+
+   function validateChk(name)
+   {
+      var field = document.getElementsByName(name);
+      var ok=false;
+      for (i = 0; i < field.length; i++)
+       {
+           if(field[i].checked)
+           {
+               ok= true;
+           }
+       }
+       if(ok)
+       {
+           return true;
+       }
+       else
+           {
+               alert('Debes de seleccionar por lo menos uno de la lista.')
+               return false;
+           }
+   }
