@@ -102,7 +102,9 @@ public class SemanticModel
     {
         Resource res=m_model.createResource(uri);
         res.addProperty(m_model.getProperty(SemanticVocabulary.RDF_TYPE), cls.getOntClass());
-        return cls.newInstance(res);
+        SemanticObject ret=cls.newInstance(res);
+        SWBPlatform.getSemanticMgr().notifyChange(ret, null, "CREATE");
+        return ret;
     }    
     
     public GenericObject getGenericObject(String uri)
@@ -212,6 +214,7 @@ public class SemanticModel
         
         cls=new SemanticClass(cls.getOntClass());
         SWBPlatform.getSemanticMgr().getVocabulary().registerClass(cls);
+        //TODO:notify this
         return new SemanticProperty(ontprop);
     }    
     
@@ -226,6 +229,7 @@ public class SemanticModel
             st = m.createStatement(res, m.getProperty(SemanticVocabulary.RDF_TYPE), m.getResource(SemanticVocabulary.OWL_CLASS));
             m.add(st);
         }
+        //TODO:notify this
         return registerClass(uri);
     }
     

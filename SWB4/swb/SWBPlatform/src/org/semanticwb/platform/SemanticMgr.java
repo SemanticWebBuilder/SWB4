@@ -18,6 +18,7 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.util.FileManager;
 import java.io.File;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -52,6 +53,8 @@ public class SemanticMgr implements SWBInstanceObject
     
     private SemanticVocabulary vocabulary;
 
+    private ArrayList<SemanticObserver> m_observers=null;
+
     public void init(SWBPlatform context) 
     {
         log.event("Initializing SemanticMgr...");
@@ -60,6 +63,7 @@ public class SemanticMgr implements SWBInstanceObject
         m_models=new HashMap();
         m_imodels=new HashMap();
         m_schemas=new HashMap();
+        m_observers=new ArrayList();
 
         // Create database connection
         conn = new DBConnection(SWBUtils.DB.getDefaultConnection(), SWBUtils.DB.getDatabaseName());
@@ -245,6 +249,7 @@ public class SemanticMgr implements SWBInstanceObject
     private SemanticModel loadDBModel(String name)
     {
         SemanticModel m=new SemanticModel(name, loadRDFDBModel(name));
+        //TODO:notify this
         m_models.put(name, m);
         m_imodels.put(m.getRDFModel(), m);
         //System.out.println("addModel:"+name+" hash:"+m.getRDFModel().toString());
@@ -272,6 +277,7 @@ public class SemanticMgr implements SWBInstanceObject
     public void removeModel(String name)
     {
         SemanticModel model=m_models.get(name);
+        //TODO:notify this
         m_models.remove(name);
         m_imodels.remove(model.getRDFModel());
         maker.removeModel(name);
@@ -357,5 +363,28 @@ public class SemanticMgr implements SWBInstanceObject
         Resource res=model.getRDFModel().createResource(name);
         Property prop=model.getRDFModel().createProperty("swb:count");
         model.getRDFModel().remove(res, prop, null);
+    }
+
+    public void registerObserver(SemanticObserver obs)
+    {
+        m_observers.add(obs);
+    }
+
+    public void removeObserver(SemanticObserver obs)
+    {
+        m_observers.remove(obs);
+    }
+
+    public void notifyChange(SemanticObject obj, Object prop, String action)
+    {
+        Iterator it=m_observers.iterator();
+        while(it.hasNext())
+        {
+            SemanticObserver obs=(SemanticObserver)it.next();
+            try
+            {
+                obs.notify(obj, prop, action);
+            }catch(Exception e){log.error(e);}
+        }
     }
 }
