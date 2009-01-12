@@ -64,20 +64,20 @@ public class IterRecHits implements java.util.Iterator
     /**
      * @return  */
     public Object next() {
-        try {
-            if (checked) {
-                checked = false;
-                return new SWBRecHit(rs, hasWBDate);
-            } else {
-                next = rs.next();
-                checked = false;
-                if (next) {
-                    return new SWBRecHit(rs, hasWBDate);
-                }
-            }
-        } catch (Exception e) {
-            log.error("Error in method IterRecHits:next()");
-        }
+//        try {
+//            if (checked) {
+//                checked = false;
+//                return new SWBRecHit(rs, hasWBDate);
+//            } else {
+//                next = rs.next();
+//                checked = false;
+//                if (next) {
+//                    return new SWBRecHit(rs, hasWBDate);
+//                }
+//            }
+//        } catch (Exception e) {
+//            log.error("Error in method IterRecHits:next()");
+//        }
         return null;
     }
 
