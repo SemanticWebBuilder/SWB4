@@ -14,10 +14,12 @@ import java.security.Principal;
 public class SessionUser {
 
     private Principal user;
+    private static long req=0;
 
     public SessionUser(Principal user)
     {
         this.user=user;
+        req++;
     }
 
     public Principal getUser()
@@ -27,6 +29,12 @@ public class SessionUser {
 
     public void setUser(Principal user) {
         this.user = user;
+        req++;
+    }
+
+    public long geRequestID()
+    {
+        return req;
     }
 
 }
