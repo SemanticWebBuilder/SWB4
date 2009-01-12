@@ -169,7 +169,7 @@ public class SWBASchedule extends GenericResource {
                 urlr.setParameter("sval", sobj.getURI());
                 urlr.setParameter(prop.getName(), prop.getURI());
                 urlr.setAction("remove");
-                out.println("<a href=\"#\" onclick=\"submitUrl('" + urlr + "',this); return false;\">remove</a>");
+                out.println("<a href=\"#\" onclick=\"if(confirm('¿Est&aacute;s seguro de querer eliminar esta calendarizaci&oacute;n?'))submitUrl('" + urlr + "',this); return false;\">remove</a>");
                 out.println("</td>");
                 out.println("<td>");
                 SWBResourceURL urlchoose = paramRequest.getRenderUrl();
@@ -1004,10 +1004,11 @@ public class SWBASchedule extends GenericResource {
                 out.println("               <input  id=\"" + id + "/text3\" type=\"text\" dojoType=\"dijit.form.TextBox\" maxLength=\"2\" size=\"2\" name=\"" + id + "/yyears2\" value=\"1\"  style=\"width:30px;\" disabled=\""+radio2cd+"\">");
                 out.println("               &nbsp;" + paramRequest.getLocaleString("frmYears") + "</td></tr></tbody></table></td></tr>");
             }
-            out.println("  <tr>");
-            out.println("    <td>");
-            out.println("      <hr size=\"1\" noshade>");
-            out.println("    </td></tr></tbody></table>");
+//            out.println("  <tr>");
+//            out.println("    <td>");
+//            out.println("      <hr size=\"1\" noshade>");
+//            out.println("    </td></tr>");
+            out.println("</tbody></table>");
 
             out.println("<input type=\"hidden\" name=\"id\" value=\"" + strId + "\">");
             out.println("<input type=\"hidden\" name=\"view\" value=\"" + view + "\"> ");
@@ -1025,7 +1026,9 @@ public class SWBASchedule extends GenericResource {
 
             //paramRequest.getActionUrl().setParameter("idp",Integer.toString(iId));
 
-            out.println("<p><button dojoType=\"dijit.form.Button\" name=\"enviar\" onclick=\"submitForm('" + id + "/calendar'); return false;\">" + paramRequest.getLocaleString("btnSend") + "</button>");
+            out.println("</fieldset>");
+            out.println("<fieldset>");
+            out.println("<button dojoType=\"dijit.form.Button\" name=\"enviar\" onclick=\"submitForm('" + id + "/calendar'); return false;\">" + paramRequest.getLocaleString("btnSend") + "</button>");
             if (id != null && idp != null) {
                 SWBResourceURL urlb = paramRequest.getRenderUrl();
                 urlb.setParameter("suri", id);
@@ -1036,7 +1039,7 @@ public class SWBASchedule extends GenericResource {
                 urlb.setMode(SWBResourceURL.Mode_VIEW);
                 out.println("<button dojoType=\"dijit.form.Button\" id=\"" + id + "/bckbutton\" name=\"bckbutton\" onclick=\"submitUrl('" + urlb + "',document.getElementById('"+id+"/calendar')); return false;\">Regresar</button>"); //dijit.byId('"+id+"/calendar').domNode
             }
-            out.println("</p>");
+//            out.println("</p>");
             out.println("</fieldset>");
             out.println("</form>");
             out.println("</div>");
@@ -1478,7 +1481,7 @@ public class SWBASchedule extends GenericResource {
                 }
                 if (prop.isDateTime()) {
                     try{
-                        ret = "" + obj.getDateProperty(prop);
+                        ret = "" + obj.getProperty(prop);
                     }
                     catch(Exception e1){ret = obj.getProperty(prop);}
                 }
