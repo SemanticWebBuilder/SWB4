@@ -215,7 +215,7 @@
     <Component class="javax.swing.JButton" name="jButtonDelete">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/org/semanticwb/openoffice/ui/wizard/delete32.png"/>
+          <Image iconType="3" name="/org/semanticwb/openoffice/ui/icons/delete32.png"/>
         </Property>
         <Property name="toolTipText" type="java.lang.String" value="Borrar conexi&#xf3;n"/>
         <Property name="borderPainted" type="boolean" value="false"/>
