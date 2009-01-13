@@ -32,10 +32,11 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
 
     public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
     {
-        //System.out.println("process...:"+obj.getURI()+" "+prop.getURI());
+        System.out.println("process...:"+obj.getURI()+" "+prop.getURI());
         if(prop.isDataTypeProperty())
         {
             String value=request.getParameter(prop.getName());
+            System.out.println("value:"+value);
             if(prop.isBoolean())
             {
                 if(value!=null)obj.setBooleanProperty(prop, true);
