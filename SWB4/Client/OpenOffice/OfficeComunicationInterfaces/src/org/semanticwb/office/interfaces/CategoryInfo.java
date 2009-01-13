@@ -13,6 +13,7 @@ public class CategoryInfo {
     public String UDDI;
     public String title;
     public String description;
+    public int childs;
     @Override
     public String toString()
     {
