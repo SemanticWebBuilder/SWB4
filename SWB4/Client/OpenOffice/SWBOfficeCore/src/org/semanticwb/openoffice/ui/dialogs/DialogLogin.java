@@ -221,13 +221,13 @@ public class DialogLogin extends javax.swing.JDialog
                     URI uri = new URI(sUri);
                     if (this.jTextFieldClave.getText().isEmpty())
                     {
-                        JOptionPane.showMessageDialog(null, "Debe indicar la clave de acceso", this.getTitle(), JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(this, "Debe indicar la clave de acceso", this.getTitle(), JOptionPane.ERROR_MESSAGE);
                         this.jTextFieldClave.requestFocus();
                         return;
                     }
                     if (this.jPassword.getPassword().length == 0)
                     {
-                        JOptionPane.showMessageDialog(null, "Debe indicar la contraseña de acceso", this.getTitle(), JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(this, "Debe indicar la contraseña de acceso", this.getTitle(), JOptionPane.ERROR_MESSAGE);
                         this.jPassword.requestFocus();
                         return;
                     }
