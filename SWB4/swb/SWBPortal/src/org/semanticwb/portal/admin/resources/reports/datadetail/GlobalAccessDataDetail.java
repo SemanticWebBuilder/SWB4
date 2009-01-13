@@ -4,7 +4,7 @@ package org.semanticwb.portal.admin.resources.reports.datadetail;
 import java.util.List;
 
 import org.semanticwb.portal.admin.resources.reports.beans.*;
-import org.semanticwb.util.db.SWBRecHits;
+import org.semanticwb.portal.db.SWBRecHits;
 
 public class GlobalAccessDataDetail extends SWBDataDetail{
     
