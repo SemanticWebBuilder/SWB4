@@ -340,8 +340,14 @@ public class SWBFormMgr
 
         ret.append("<fieldset><span align=\"center\">");
         ret.append("<button dojoType='dijit.form.Button' type=\"submit\">Guardar</button>");
-        ret.append("<button dojoType='dijit.form.Button' >Favoritos</button>");
-        ret.append("<button dojoType='dijit.form.Button' >Eliminar</button>");
+        if(m_mode.equals(MODE_CREATE))
+        {
+            ret.append("<button dojoType='dijit.form.Button' onclick=\"dijit.byId('swbDialog').hide();\">Cancelar</button>");
+        }else
+        {
+            ret.append("<button dojoType='dijit.form.Button' >Favoritos</button>");
+            ret.append("<button dojoType='dijit.form.Button' >Eliminar</button>");
+        }
         ret.append("</span></fieldset>");
         ret.append("</form>");
         return ret.toString();
