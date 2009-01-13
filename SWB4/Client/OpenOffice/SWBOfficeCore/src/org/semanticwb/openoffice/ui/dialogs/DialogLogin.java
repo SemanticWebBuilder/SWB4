@@ -97,20 +97,20 @@ public class DialogLogin extends javax.swing.JDialog
         setModal(true);
         setResizable(false);
 
-        jButtonCancel.setFont(new java.awt.Font("Tahoma", 0, 14));
+        jButtonCancel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jButtonCancel.setText("Cancelar");
         jButtonCancel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jButtonCancel.setNextFocusableComponent(jButtonAvanced);
+        jButtonCancel.setBorderPainted(false);
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCancelActionPerformed(evt);
             }
         });
 
-        jButtonAccept.setFont(new java.awt.Font("Tahoma", 0, 14));
+        jButtonAccept.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jButtonAccept.setText("Aceptar");
         jButtonAccept.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jButtonAccept.setNextFocusableComponent(jButtonCancel);
+        jButtonAccept.setBorderPainted(false);
         jButtonAccept.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonAcceptActionPerformed(evt);
@@ -124,16 +124,16 @@ public class DialogLogin extends javax.swing.JDialog
         jComboBoxWebAddress.setFont(new java.awt.Font("Tahoma", 0, 14));
         jComboBoxWebAddress.setAutoscrolls(true);
         jComboBoxWebAddress.setName("WebAddress"); // NOI18N
-        jComboBoxWebAddress.setNextFocusableComponent(jTextFieldClave);
         jComboBoxWebAddress.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBoxWebAddressActionPerformed(evt);
             }
         });
 
-        jButtonAvanced.setFont(new java.awt.Font("Tahoma", 0, 14));
+        jButtonAvanced.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jButtonAvanced.setText("Avanzado");
         jButtonAvanced.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jButtonAvanced.setBorderPainted(false);
         jButtonAvanced.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonAvancedActionPerformed(evt);
@@ -144,16 +144,15 @@ public class DialogLogin extends javax.swing.JDialog
         jLabelClave.setText("Clave de acceso:");
 
         jTextFieldClave.setFont(new java.awt.Font("Tahoma", 0, 14));
-        jTextFieldClave.setNextFocusableComponent(jPassword);
 
         jLabelPassword.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabelPassword.setText("Contraseña:");
 
         jPassword.setFont(new java.awt.Font("Tahoma", 0, 14));
-        jPassword.setNextFocusableComponent(jButtonAccept);
 
         jButtonDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/delete32.png"))); // NOI18N
         jButtonDelete.setToolTipText("Borrar conexión");
+        jButtonDelete.setBorderPainted(false);
         jButtonDelete.setEnabled(false);
         jButtonDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
