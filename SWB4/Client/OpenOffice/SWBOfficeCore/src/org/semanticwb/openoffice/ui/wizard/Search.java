@@ -375,6 +375,8 @@ private void jTableContentsKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:
 
     private void addCategory(String repository, CategoryInfo category)
     {
+        if(category.childs>0)
+        {
         try
         {
             for (CategoryInfo cat : OfficeApplication.getOfficeApplicationProxy().getCategories(repository, category.UDDI))
@@ -385,6 +387,7 @@ private void jTableContentsKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:
         }
         catch (Exception e)
         {
+        }
         }
     }
 
