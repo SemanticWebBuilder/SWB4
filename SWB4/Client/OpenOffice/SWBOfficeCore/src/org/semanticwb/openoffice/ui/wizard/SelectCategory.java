@@ -149,11 +149,14 @@ public class SelectCategory extends WizardPage
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
-        jButtonAddCategory.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/wizard/open.gif"))); // NOI18N
+        jButtonAddCategory.setBackground(new java.awt.Color(255, 255, 255));
+        jButtonAddCategory.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/wizard/close.png"))); // NOI18N
         jButtonAddCategory.setToolTipText("Agregar categoria");
+        jButtonAddCategory.setDebugGraphicsOptions(javax.swing.DebugGraphics.NONE_OPTION);
         jButtonAddCategory.setEnabled(false);
         jButtonAddCategory.setFocusable(false);
         jButtonAddCategory.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonAddCategory.setOpaque(false);
         jButtonAddCategory.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jButtonAddCategory.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -163,7 +166,7 @@ public class SelectCategory extends WizardPage
         jToolBar1.add(jButtonAddCategory);
         jToolBar1.add(jSeparator1);
 
-        jButtonDeletCategory.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/wizard/delete.GIF"))); // NOI18N
+        jButtonDeletCategory.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/wizard/delete.png"))); // NOI18N
         jButtonDeletCategory.setToolTipText("Borrar categoria");
         jButtonDeletCategory.setEnabled(false);
         jButtonDeletCategory.setFocusable(false);
@@ -465,11 +468,11 @@ class TreeRender extends JPanel implements TreeCellRenderer
             label.setFont(tree.getFont());
             if (expanded)
             {
-                label.setIcon(new javax.swing.ImageIcon(getClass().getResource("open.gif")));
+                label.setIcon(new javax.swing.ImageIcon(getClass().getResource("open.png")));
             }
             else
             {
-                label.setIcon(new javax.swing.ImageIcon(getClass().getResource("close.gif")));
+                label.setIcon(new javax.swing.ImageIcon(getClass().getResource("close.png")));
             }
             if (selected)
             {
