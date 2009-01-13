@@ -8,7 +8,6 @@ package org.semanticwb.openoffice.ui.wizard;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
-import java.net.URL;
 import java.util.Map;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -41,8 +40,8 @@ public class SelectCategory extends WizardPage
     public SelectCategory()
     {
         initComponents();
-        this.getWizardDataMap().put(CATEGORY_ID, null);
-        this.getWizardDataMap().put(REPOSITORY_ID, null);
+        this.getWizardDataMap().remove(CATEGORY_ID);
+        this.getWizardDataMap().remove(REPOSITORY_ID);
         loadTree();
 
     }
@@ -226,8 +225,8 @@ private void jButtonAddCategoryActionPerformed(java.awt.event.ActionEvent evt) {
 private void jTreeCategoryValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_jTreeCategoryValueChanged
     this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
     Object selected = this.jTreeCategory.getLastSelectedPathComponent();
-    this.getWizardDataMap().put(CATEGORY_ID, null);
-    this.getWizardDataMap().put(REPOSITORY_ID, null);
+    this.getWizardDataMap().remove(CATEGORY_ID);
+    this.getWizardDataMap().remove(REPOSITORY_ID);
     if (selected != null && selected instanceof RepositoryNode)
     {
         if (((RepositoryNode) selected).getName().equals("Repositorios"))
