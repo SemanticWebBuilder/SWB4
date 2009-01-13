@@ -97,7 +97,10 @@ public class DialogLogin extends javax.swing.JDialog
         setModal(true);
         setResizable(false);
 
+        jButtonCancel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jButtonCancel.setText("Cancelar");
+        jButtonCancel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jButtonCancel.setContentAreaFilled(false);
         jButtonCancel.setNextFocusableComponent(jButtonAvanced);
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -105,7 +108,10 @@ public class DialogLogin extends javax.swing.JDialog
             }
         });
 
+        jButtonAccept.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jButtonAccept.setText("Aceptar");
+        jButtonAccept.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jButtonAccept.setContentAreaFilled(false);
         jButtonAccept.setNextFocusableComponent(jButtonCancel);
         jButtonAccept.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -113,10 +119,11 @@ public class DialogLogin extends javax.swing.JDialog
             }
         });
 
+        jLabelWebAddress.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabelWebAddress.setText("Dirección Web:");
 
         jComboBoxWebAddress.setEditable(true);
-        jComboBoxWebAddress.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBoxWebAddress.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jComboBoxWebAddress.setAutoscrolls(true);
         jComboBoxWebAddress.setName("WebAddress"); // NOI18N
         jComboBoxWebAddress.setNextFocusableComponent(jTextFieldClave);
@@ -126,22 +133,32 @@ public class DialogLogin extends javax.swing.JDialog
             }
         });
 
+        jButtonAvanced.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jButtonAvanced.setText("Avanzado");
+        jButtonAvanced.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jButtonAvanced.setContentAreaFilled(false);
         jButtonAvanced.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonAvancedActionPerformed(evt);
             }
         });
 
+        jLabelClave.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabelClave.setText("Clave de acceso:");
 
+        jTextFieldClave.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jTextFieldClave.setNextFocusableComponent(jPassword);
 
-        jLabelPassword.setText("Contraseña de acceso:");
+        jLabelPassword.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabelPassword.setText("Contraseña:");
 
+        jPassword.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jPassword.setNextFocusableComponent(jButtonAccept);
 
-        jButtonDelete.setText("X");
+        jButtonDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/wizard/delete.GIF"))); // NOI18N
+        jButtonDelete.setToolTipText("Borrar conexión");
+        jButtonDelete.setBorderPainted(false);
+        jButtonDelete.setContentAreaFilled(false);
         jButtonDelete.setEnabled(false);
         jButtonDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -155,27 +172,27 @@ public class DialogLogin extends javax.swing.JDialog
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabelPassword)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabelWebAddress)
-                            .addComponent(jLabelClave))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextFieldClave, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE)
-                            .addComponent(jPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jComboBoxWebAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButtonDelete))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addComponent(jLabelClave)
+                            .addComponent(jLabelPassword))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jPassword)
+                            .addComponent(jTextFieldClave)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(jComboBoxWebAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jButtonDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jButtonAvanced, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(75, 75, 75)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButtonCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButtonAccept, javax.swing.GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)))
-                .addGap(22, 22, 22))
+                        .addComponent(jButtonAccept, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(38, 38, 38))
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButtonAvanced, jButtonCancel});
@@ -184,24 +201,27 @@ public class DialogLogin extends javax.swing.JDialog
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelWebAddress)
-                    .addComponent(jComboBoxWebAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonDelete))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabelWebAddress)
+                        .addGap(27, 27, 27)
+                        .addComponent(jLabelClave)
+                        .addGap(32, 32, 32)
+                        .addComponent(jLabelPassword))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jComboBoxWebAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButtonDelete))
+                        .addGap(27, 27, 27)
+                        .addComponent(jTextFieldClave, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(32, 32, 32)
+                        .addComponent(jPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(27, 27, 27)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabelClave)
-                    .addComponent(jTextFieldClave, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(32, 32, 32)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelPassword)
-                    .addComponent(jPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(27, 27, 27)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonAvanced)
                     .addComponent(jButtonAccept, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
-                    .addComponent(jButtonCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonAvanced))
-                .addGap(16, 16, 16))
+                    .addComponent(jButtonCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(111, 111, 111))
         );
 
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jButtonAvanced, jButtonCancel});
