@@ -8,6 +8,7 @@ package org.semanticwb.openoffice.ui.wizard;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
+import java.net.URL;
 import java.util.Map;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -23,6 +24,7 @@ import org.netbeans.spi.wizard.WizardPanelNavResult;
 import org.semanticwb.office.interfaces.CategoryInfo;
 import org.semanticwb.openoffice.OfficeApplication;
 import org.semanticwb.openoffice.ui.dialogs.DialogAddCategory;
+import org.semanticwb.openoffice.ui.icons.ImageLoader;
 
 /**
  *
@@ -468,11 +470,14 @@ class TreeRender extends JPanel implements TreeCellRenderer
             label.setFont(tree.getFont());
             if (expanded)
             {
-                label.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/open.png")));
+                label.setIcon(ImageLoader.images.get("open"));
             }
             else
             {
-                label.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/close.png")));
+                /*URL imageURL=getClass().getResource("/org/semanticwb/openoffice/ui/icons/close.png");
+                System.out.println(imageURL.toString());
+                javax.swing.ImageIcon icon=new javax.swing.ImageIcon(imageURL);*/
+                label.setIcon(ImageLoader.images.get("close"));
             }
             if (selected)
             {
