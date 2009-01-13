@@ -1212,7 +1212,7 @@ public class SemanticObject
 
     public java.util.Date getDateProperty(SemanticProperty prop)
     {
-        return getSQLDateProperty(prop, null);
+        return getDateProperty(prop, null);
     }
 
     public java.util.Date getDateProperty(SemanticProperty prop, java.util.Date defValue)
