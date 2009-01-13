@@ -96,6 +96,7 @@
         <Component class="javax.swing.JTree" name="jTreeCategory">
           <Events>
             <EventHandler event="valueChanged" listener="javax.swing.event.TreeSelectionListener" parameters="javax.swing.event.TreeSelectionEvent" handler="jTreeCategoryValueChanged"/>
+            <EventHandler event="treeWillExpand" listener="javax.swing.event.TreeWillExpandListener" parameters="javax.swing.event.TreeExpansionEvent" handler="jTreeCategoryTreeWillExpand"/>
           </Events>
         </Component>
       </SubComponents>
