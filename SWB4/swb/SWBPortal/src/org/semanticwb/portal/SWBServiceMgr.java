@@ -78,7 +78,7 @@ public class SWBServiceMgr implements SemanticObserver
                     Date date=new Date();
                     if(aux.getCreated()==null)aux.setCreated(date);
                     aux.setUpdated(date);
-                    if(usr.isRegistered())
+                    if(usr!=null && usr.isRegistered())
                     {
                         if(aux.getCreator()==null)aux.setCreator(usr);
                         aux.setModifiedBy(usr);
