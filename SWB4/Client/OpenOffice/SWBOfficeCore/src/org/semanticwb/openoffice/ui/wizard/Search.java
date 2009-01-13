@@ -27,7 +27,7 @@ public class Search extends WizardPage
 {
 
     public static final String CONTENT = "CONTENT";
-    public static final String WORKSPACE = "workspaceid";
+    public static final String WORKSPACE = "WORKSPACE";
     public static Map map;
     private DocumentType officeType;
 
