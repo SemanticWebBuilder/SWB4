@@ -149,7 +149,8 @@ public class SelectCategory extends WizardPage
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
-        jButtonAddCategory.setText("Agregar Categoria");
+        jButtonAddCategory.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/wizard/open.gif"))); // NOI18N
+        jButtonAddCategory.setToolTipText("Agregar categoria");
         jButtonAddCategory.setEnabled(false);
         jButtonAddCategory.setFocusable(false);
         jButtonAddCategory.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -162,7 +163,8 @@ public class SelectCategory extends WizardPage
         jToolBar1.add(jButtonAddCategory);
         jToolBar1.add(jSeparator1);
 
-        jButtonDeletCategory.setText("Borrar Categoria");
+        jButtonDeletCategory.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/wizard/delete.GIF"))); // NOI18N
+        jButtonDeletCategory.setToolTipText("Borrar categoria");
         jButtonDeletCategory.setEnabled(false);
         jButtonDeletCategory.setFocusable(false);
         jButtonDeletCategory.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
