@@ -37,6 +37,7 @@ import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.nodetype.NoSuchNodeTypeException;
 import javax.jcr.nodetype.NodeDefinition;
 import javax.jcr.nodetype.NodeType;
+import javax.jcr.query.QueryResult;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionException;
 import javax.jcr.version.VersionHistory;
@@ -118,7 +119,7 @@ public class SimpleNode implements Node
 
         if (clazz.equals(HierarchyNode.nt_HierarchyNode) || clazz.isSubClass(HierarchyNode.nt_HierarchyNode))
         {
-            PropertyImp prop = addProperty(getName(Traceable.jcr_created), clazz,false);
+            PropertyImp prop = addProperty(getName(Traceable.jcr_created), clazz, false);
             Value time = factory.createValue(Calendar.getInstance());
             prop.setValueInternal(time.getString());
         }
@@ -132,20 +133,20 @@ public class SimpleNode implements Node
                 SemanticClass superTypeClazz = session.getRootBaseNode().getSemanticClass(superType);
                 if (superTypeClazz.equals(Referenceable.mix_Referenceable) || superTypeClazz.isSubClass(Referenceable.mix_Referenceable))
                 {
-                    PropertyImp prop = addProperty(getName(Referenceable.jcr_uuid), superTypeClazz,false);
+                    PropertyImp prop = addProperty(getName(Referenceable.jcr_uuid), superTypeClazz, false);
                     prop.setValueInternal(UUID.randomUUID().toString());
                     session.addSimpleNode(this);
                 }
                 if (superTypeClazz.equals(Versionable.mix_Versionable) || superTypeClazz.isSubClass(Versionable.mix_Versionable))
                 {
-                    PropertyImp prop = addProperty(getName(Versionable.jcr_isCheckedOut), superTypeClazz,false);
+                    PropertyImp prop = addProperty(getName(Versionable.jcr_isCheckedOut), superTypeClazz, false);
                     prop.setValueInternal(true);
                 }
                 if (superTypeClazz.equals(Lockable.mix_Lockable) || superTypeClazz.isSubClass(Lockable.mix_Lockable))
                 {
-                    PropertyImp prop = addProperty(getName(Lockable.jcr_lockOwner), superTypeClazz,false);
+                    PropertyImp prop = addProperty(getName(Lockable.jcr_lockOwner), superTypeClazz, false);
                     prop.setValueInternal(null);
-                    prop = addProperty(getName(Lockable.jcr_lockIsDeep), superTypeClazz,false);
+                    prop = addProperty(getName(Lockable.jcr_lockIsDeep), superTypeClazz, false);
                     prop.setValueInternal(false);
                 }
                 if (session.getRootBaseNode().isMixIn(superTypeClazz))
@@ -167,15 +168,15 @@ public class SimpleNode implements Node
                 try
                 {
                     PropertyImp propImp;
-                    if(prop.isDataTypeProperty())
+                    if (prop.isDataTypeProperty())
                     {
-                        propImp = addProperty(getName(prop), clazz,false);
+                        propImp = addProperty(getName(prop), clazz, false);
                     }
                     else
                     {
-                        propImp = addProperty(getName(prop), clazz,true);
+                        propImp = addProperty(getName(prop), clazz, true);
                     }
-                    
+
                     if (prop.equals(BaseNode.jcr_primaryType) && propImp.getValue() == null)
                     {
                         propImp.setValueInternal(clazz.getPrefix() + ":" + clazz.getName());
@@ -214,15 +215,15 @@ public class SimpleNode implements Node
             {
                 if (parentClazz.equals(Referenceable.mix_Referenceable) || parentClazz.isSubClass(Referenceable.mix_Referenceable))
                 {
-                    addProperty(getName(Referenceable.jcr_uuid), parentClazz,false);
+                    addProperty(getName(Referenceable.jcr_uuid), parentClazz, false);
                 }
                 if (parentClazz.equals(Versionable.mix_Versionable) || parentClazz.isSubClass(Versionable.mix_Versionable))
                 {
-                    addProperty(getName(Versionable.jcr_isCheckedOut), parentClazz,false);
+                    addProperty(getName(Versionable.jcr_isCheckedOut), parentClazz, false);
                 }
                 if (parentClazz.equals(Lockable.mix_Lockable) || parentClazz.isSubClass(Lockable.mix_Lockable))
                 {
-                    addProperty(getName(Lockable.jcr_lockOwner), parentClazz,false);
+                    addProperty(getName(Lockable.jcr_lockOwner), parentClazz, false);
                 }
                 mixins.add(parentClazz);
             }
@@ -249,13 +250,13 @@ public class SimpleNode implements Node
             {
                 try
                 {
-                    if(prop.isObjectProperty())
+                    if (prop.isObjectProperty())
                     {
-                        addProperty(prop, node, false, clazz,true);
+                        addProperty(prop, node, false, clazz, true);
                     }
                     else
                     {
-                        addProperty(prop, node, false, clazz,false);
+                        addProperty(prop, node, false, clazz, false);
                     }
                 }
                 catch (Exception e)
@@ -295,15 +296,15 @@ public class SimpleNode implements Node
         return parent.removedchilds.contains(this);
     }
 
-    private PropertyImp addProperty(SemanticProperty property, BaseNode node, boolean isNew, SemanticClass clazz,boolean isNode) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
+    private PropertyImp addProperty(SemanticProperty property, BaseNode node, boolean isNew, SemanticClass clazz, boolean isNode) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        PropertyImp prop = addProperty(property, node, clazz,isNode);
+        PropertyImp prop = addProperty(property, node, clazz, isNode);
         prop.setNew(isNew);
         return prop;
 
     }
 
-    private PropertyImp addProperty(SemanticProperty property, BaseNode node, SemanticClass clazz,boolean isNode) throws RepositoryException
+    private PropertyImp addProperty(SemanticProperty property, BaseNode node, SemanticClass clazz, boolean isNode) throws RepositoryException
     {
         if (this.properties.containsKey(getName(property)))
         {
@@ -312,13 +313,13 @@ public class SimpleNode implements Node
         else
         {
             PropertyDefinitionImp propertyDefinition = new PropertyDefinitionImp(session, property);
-            PropertyImp prop = new PropertyImp(this, clazz, getName(property), propertyDefinition,isNode);
+            PropertyImp prop = new PropertyImp(this, clazz, getName(property), propertyDefinition, isNode);
             this.properties.put(prop.getName(), prop);
             return prop;
         }
     }
 
-    private PropertyImp addProperty(String name, SemanticClass clazz,boolean isNode) throws RepositoryException
+    private PropertyImp addProperty(String name, SemanticClass clazz, boolean isNode) throws RepositoryException
     {
         PropertyImp prop = null;
         if (!this.properties.containsKey(name))
@@ -327,13 +328,13 @@ public class SimpleNode implements Node
             {
                 SemanticProperty property = session.getRootBaseNode().getSemanticProperty(name, clazz);
                 PropertyDefinitionImp propertyDefinition = new PropertyDefinitionImp(session, property);
-                prop = new PropertyImp(this, clazz, name, propertyDefinition,isNode);
+                prop = new PropertyImp(this, clazz, name, propertyDefinition, isNode);
                 this.properties.put(name, prop);
             }
             else
             {
                 PropertyDefinitionImp propertyDefinition = new PropertyDefinitionImp(name);
-                prop = new PropertyImp(this, clazz, name, propertyDefinition,false);
+                prop = new PropertyImp(this, clazz, name, propertyDefinition, false);
                 this.properties.put(name, prop);
             }
         }
@@ -346,7 +347,7 @@ public class SimpleNode implements Node
 
     private PropertyImp addProperty(String name) throws RepositoryException
     {
-        return addProperty(name, clazz,false);
+        return addProperty(name, clazz, false);
 
     }
 
@@ -443,19 +444,19 @@ public class SimpleNode implements Node
             }
             if (mixinClazz.equals(Referenceable.mix_Referenceable) || mixinClazz.isSubClass(Referenceable.mix_Referenceable))
             {
-                PropertyImp prop = addProperty(getName(Referenceable.jcr_uuid), mixinClazz,false);
+                PropertyImp prop = addProperty(getName(Referenceable.jcr_uuid), mixinClazz, false);
                 prop.setValueInternal(UUID.randomUUID().toString());
             }
             if (mixinClazz.equals(Versionable.mix_Versionable) || mixinClazz.isSubClass(Versionable.mix_Versionable))
             {
-                PropertyImp prop = addProperty(getName(Versionable.jcr_isCheckedOut), mixinClazz,false);
+                PropertyImp prop = addProperty(getName(Versionable.jcr_isCheckedOut), mixinClazz, false);
                 prop.setValueInternal(true);
             }
             if (mixinClazz.equals(Lockable.mix_Lockable) || mixinClazz.isSubClass(Lockable.mix_Lockable))
             {
-                PropertyImp prop = addProperty(getName(Lockable.jcr_lockOwner), mixinClazz,false);
+                PropertyImp prop = addProperty(getName(Lockable.jcr_lockOwner), mixinClazz, false);
                 prop.setValueInternal(null);
-                prop = addProperty(getName(Lockable.jcr_lockIsDeep), mixinClazz,false);
+                prop = addProperty(getName(Lockable.jcr_lockIsDeep), mixinClazz, false);
                 prop.setValueInternal(false);
             }
 
@@ -634,13 +635,13 @@ public class SimpleNode implements Node
                     String value = node.getSemanticObject().getProperty(prop);
                     if (value != null)
                     {
-                        if(prop.isDataTypeProperty())
+                        if (prop.isDataTypeProperty())
                         {
-                            addProperty(prop, node, clazz,false);
+                            addProperty(prop, node, clazz, false);
                         }
                         else
                         {
-                            addProperty(prop, node, clazz,true);
+                            addProperty(prop, node, clazz, true);
                         }
                         existsProperty = true;
                     }
@@ -894,7 +895,7 @@ public class SimpleNode implements Node
                 }
                 else
                 {
-                    log.event("Registring the property "+ prop.getName() +" for the class "+ prop.getSemanticClass().getURI() +"");
+                    log.event("Registring the property " + prop.getName() + " for the class " + prop.getSemanticClass().getURI() + "");
                     String type = SemanticVocabulary.XMLS_STRING;
                     SemanticProperty semanticProperty = node.registerCustomProperty(prop.getName(), type, prop.getSemanticClass());
                     node.setProperty(semanticProperty, prop.getString());
@@ -1263,7 +1264,7 @@ public class SimpleNode implements Node
         }
         if (node != null)
         {
-            Iterator<BaseNode> childsBaseNodes = node.listNodes();
+            GenericIterator<BaseNode> childsBaseNodes = node.listNodes();
             while (childsBaseNodes.hasNext())
             {
                 BaseNode child = childsBaseNodes.next();
@@ -1289,7 +1290,7 @@ public class SimpleNode implements Node
                 }
             }
         }
-        throw new PathNotFoundException("The node "+relPath+" was not found");
+        throw new PathNotFoundException("The node " + relPath + " was not found");
     }
 
     public Node addNode(String relPath) throws ItemExistsException, PathNotFoundException, VersionException, ConstraintViolationException, LockException, RepositoryException
@@ -1640,7 +1641,10 @@ public class SimpleNode implements Node
 
     public NodeIterator getNodes(String namePattern) throws RepositoryException
     {
-        throw new UnsupportedOperationException(NOT_SUPPORTED_YET);
+        String statement = "SELECT ?x WHERE { ?x swbrep:name ?name FILTER regex(?name,\"" + namePattern + "\") }";
+        QueryImp query = new QueryImp(this.session, this.getSession().getWorkspace().getName(), statement, QueryImp.SPARQL);
+        QueryResult res = query.execute();
+        return res.getNodes();
     }
 
     @Override
