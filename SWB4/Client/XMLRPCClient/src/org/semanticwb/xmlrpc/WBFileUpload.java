@@ -465,7 +465,8 @@ public class WBFileUpload
         {
             throw new IllegalArgumentException("InputStream truncated");
         }
-        String s2 = new String(abyte0, 0, 0, i);
+        //String s2 = new String(abyte0, 0, 0, i);
+        String s2 = new String(abyte0, 0,  i);
         if (!s2.startsWith(s1))
         {
             throw new IllegalArgumentException("MIME boundary missing: ".concat(String.valueOf(String.valueOf(s2))));
@@ -488,7 +489,8 @@ public class WBFileUpload
                 {
                     return hashtable;
                 }
-                s3 = new String(abyte0, 0, 0, j - 2);
+                s3 = new String(abyte0, 0, j - 2);
+                //s3 = new String(abyte0, 0, 0, j - 2);
                 s6 = s3.toLowerCase();
             }
             while (!s6.startsWith("content-disposition"));
@@ -521,7 +523,8 @@ public class WBFileUpload
             {
                 return hashtable;
             }
-            s3 = new String(abyte0, 0, 0, k - 2);
+            s3 = new String(abyte0, 0, k - 2);
+            //s3 = new String(abyte0, 0, 0, k - 2);
             s6 = s3.toLowerCase();
             for (; sContentType == null; sContentType = s6)
             {
@@ -540,7 +543,8 @@ public class WBFileUpload
                 {
                     return hashtable;
                 }
-                s3 = new String(abyte0, 0, 0, k - 2);
+                s3 = new String(abyte0, 0, k - 2);
+                //s3 = new String(abyte0, 0, 0, k - 2);
                 if (s3.length() != 0)
                 {
                     throw new IllegalArgumentException("Unexpected line in MIMEpart header: ".concat(String.valueOf(String.valueOf(s3))));
@@ -562,7 +566,8 @@ public class WBFileUpload
             {
                 return hashtable;
             }
-            s3 = new String(abyte0, 0, 0, k);
+            s3 = new String(abyte0, 0, k);
+            //s3 = new String(abyte0, 0, 0, k);
             CParameter cparameter = FindParameter(s9.trim());
             if (cparameter != null)
             {
@@ -583,7 +588,8 @@ public class WBFileUpload
                 {
                     return hashtable;
                 }
-                String s4 = new String(abyte0, 0, 0, k);
+                String s4 = new String(abyte0, 0, k);
+                //String s4 = new String(abyte0, 0, 0, k);
                 flag1 = false;
                 if (s4.startsWith(s1))
                 {
@@ -609,7 +615,8 @@ public class WBFileUpload
                 {
                     return hashtable;
                 }
-                String s5 = new String(abyte0, 0, 0, k);
+                String s5 = new String(abyte0, 0, k);
+                //String s5 = new String(abyte0, 0, 0, k);
                 if (s5.startsWith(s1))
                 {
                     flag = false;
