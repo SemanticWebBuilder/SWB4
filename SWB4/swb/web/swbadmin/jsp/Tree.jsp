@@ -146,7 +146,7 @@
         jobj.putOpt("menus", menus);
         String url=SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+cls.getEncodedURI()+"&sref="+obj.getEncodedURI();
         menus.put(getMenuItem("Agregar "+cls.getDisplayName(lang), "dijitEditorIcon dijitEditorIconCut",getAction("showDialog", url,null)));
-        dropacc.put(cls.getClassID());
+        dropacc.put(cls.getClassId());
         //Iterator<SemanticClass> it2=cls.listSubClasses();
         //while(it2.hasNext())
         //{
@@ -202,7 +202,7 @@
     {
         boolean hasChilds=false;
         SemanticClass cls=obj.getSemanticClass();
-        String type=cls.getClassID();
+        String type=cls.getClassId();
 
         //Active
         boolean active=false;
@@ -231,13 +231,13 @@
             SemanticProperty prop=pit.next();
             SemanticClass rcls=prop.getRangeClass();
             menus.put(getMenuItem("Agregar "+rcls.getDisplayName(lang), "dijitEditorIcon dijitEditorIconCut",getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+rcls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),null)));
-            dropacc.put(rcls.getClassID());
+            dropacc.put(rcls.getClassId());
             Iterator<SemanticClass> it=rcls.listSubClasses();
             while(it.hasNext())
             {
                 SemanticClass scls=it.next();
                 menus.put(getMenuItem("Agregar "+scls.getDisplayName(lang), "dijitEditorIcon dijitEditorIconCut",getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+scls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),null)));
-                dropacc.put(scls.getClassID());
+                dropacc.put(scls.getClassId());
             }
         }
         menus.put(getMenuSeparator());
