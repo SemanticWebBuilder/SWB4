@@ -128,7 +128,8 @@ public class SelectPage extends WizardPage
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
-        jButtonAddPage.setText("Agregar página");
+        jButtonAddPage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/page.png"))); // NOI18N
+        jButtonAddPage.setToolTipText("Agregar página");
         jButtonAddPage.setEnabled(false);
         jButtonAddPage.setFocusable(false);
         jButtonAddPage.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -354,11 +355,11 @@ private void jButtonAddPageActionPerformed(java.awt.event.ActionEvent evt) {//GE
                 label.setFont(tree.getFont());
                 if (expanded)
                 {
-                    label.setIcon(new javax.swing.ImageIcon(getClass().getResource("open.gif")));
+                    label.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/page.png")));
                 }
                 else
                 {
-                    label.setIcon(new javax.swing.ImageIcon(getClass().getResource("close.gif")));
+                    label.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/page.png")));
                 }
                 if (selected)
                 {
