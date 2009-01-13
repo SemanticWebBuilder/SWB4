@@ -155,7 +155,7 @@ public class DialogLogin extends javax.swing.JDialog
         jPassword.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jPassword.setNextFocusableComponent(jButtonAccept);
 
-        jButtonDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/wizard/delete32.png"))); // NOI18N
+        jButtonDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/delete32.png"))); // NOI18N
         jButtonDelete.setToolTipText("Borrar conexión");
         jButtonDelete.setBorderPainted(false);
         jButtonDelete.setContentAreaFilled(false);
