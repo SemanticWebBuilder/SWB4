@@ -297,6 +297,11 @@ public class SWBPortal {
         return templatemgr;
     }
 
+    public static SWBServiceMgr getServiceMgr() {
+        return servicemgr;
+    }
+    
+
     /**
      * Logeo de acciones
      * @param userID
