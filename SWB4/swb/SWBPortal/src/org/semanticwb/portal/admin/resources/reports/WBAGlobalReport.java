@@ -28,18 +28,6 @@ import java.util.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
-/*import com.infotec.appfw.util.AFUtils;
-import com.infotec.topicmaps.bean.TopicMgr;
-import com.infotec.topicmaps.*;
-import com.infotec.wb.util.WBUtils;
-import com.infotec.wb.lib.WBParamRequest;
-import com.infotec.wb.core.Resource;
-import com.infotec.wb.core.AdmFilterMgr;
-import com.infotec.wb.core.db.*;
-import com.infotec.wb.admin.resources.beans.WBAFilterReportBean;
-import com.infotec.wb.admin.resources.jrresources.*;
-import com.infotec.wb.admin.resources.jrresources.data.JRGlobalAccessDataDetail;*/
-
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
