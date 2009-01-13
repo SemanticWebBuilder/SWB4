@@ -130,14 +130,18 @@ public class SWBPortal {
             try
             {
                 ResultSet rs=st.executeQuery("select count(*) from swb_admlog");
-                int x=rs.getInt(1);
+                if(rs.next())
+                {
+                    int x=rs.getInt(1);
+                }
                 rs.close();
             }catch(SQLException ne)
             {
+                //ne.printStackTrace();
                 log.event("Creating Logs Tables...");
                 GenericDB db=new GenericDB();
                 String xml=SWBUtils.IO.getFileFromPath(SWBUtils.getApplicationPath()+"/WEB-INF/xml/swb_logs.xml");
-                System.out.println("xml:"+xml);
+                //System.out.println("xml:"+xml);
                 db.executeSQLScript(xml,SWBUtils.DB.getDatabaseName(), null);
             }
             st.close();
