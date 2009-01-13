@@ -25,15 +25,17 @@ import org.semanticwb.openoffice.OfficeApplication;
  */
 public class Search extends WizardPage
 {
+
     public static final String CONTENT = "CONTENT";
     public static final String WORKSPACE = "workspaceid";
     public static Map map;
     private DocumentType officeType;
+
     /** Creates new form Search */
     public Search(DocumentType officeType)
     {
         initComponents();
-        this.officeType=officeType;
+        this.officeType = officeType;
         this.jComboBoxCategory.removeAllItems();
         this.jComboBoxType.removeAllItems();
         this.jComboBoxRepositorio.removeAllItems();
@@ -60,22 +62,22 @@ public class Search extends WizardPage
         }
         try
         {
-            
-            ContentInfo[] contens= OfficeApplication.getOfficeApplicationProxy().search(repositoryName, title, description, category, type,officeType.toString());
-            if(contens.length==0)
+
+            ContentInfo[] contens = OfficeApplication.getOfficeApplicationProxy().search(repositoryName, title, description, category, type, officeType.toString());
+            if (contens.length == 0)
             {
-                JOptionPane.showMessageDialog(this,"¡No se encontrarón coincidencias para la busqueda!",Search.getDescription(),JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "¡No se encontrarón coincidencias para la busqueda!", Search.getDescription(), JOptionPane.INFORMATION_MESSAGE);
             }
             else
             {
-                JOptionPane.showMessageDialog(this,"¡Se encontrarón "+ contens.length +" coincidencias para la busqueda!",Search.getDescription(),JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "¡Se encontrarón " + contens.length + " coincidencias para la busqueda!", Search.getDescription(), JOptionPane.INFORMATION_MESSAGE);
             }
             for (ContentInfo info : contens)
             {
-                String date=OfficeApplication.iso8601dateFormat.format(info.created);
+                String date = OfficeApplication.iso8601dateFormat.format(info.created);
                 Object[] values =
                 {
-                    info, info.descripcion, date,info.categoryTitle
+                    info, info.descripcion, date, info.categoryTitle
                 };
                 model.addRow(values);
             }
@@ -258,7 +260,7 @@ private void jButtonSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         JOptionPane.showMessageDialog(this, "¡Debe indicar un repositorio!", Search.getDescription(), JOptionPane.ERROR_MESSAGE);
         this.jComboBoxRepositorio.requestFocus();
         return;
-    }    
+    }
     if (this.jComboBoxCategory.getSelectedItem() == null)
     {
         JOptionPane.showMessageDialog(this, "¡Debe indicar una categoria!", Search.getDescription(), JOptionPane.ERROR_MESSAGE);
@@ -271,22 +273,22 @@ private void jButtonSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         this.jComboBoxType.requestFocus();
         return;
     }
-    CategoryInfo category=(CategoryInfo)this.jComboBoxCategory.getSelectedItem();
-    String title="*";
-    String description="*";
+    CategoryInfo category = (CategoryInfo) this.jComboBoxCategory.getSelectedItem();
+    String title = "*";
+    String description = "*";
     if (!this.jTextFieldTitle.getText().isEmpty())
     {
-        title=this.jTextFieldTitle.getText();
+        title = this.jTextFieldTitle.getText();
     }
     if (!this.jTextFieldDescription.getText().isEmpty())
     {
-        description=this.jTextFieldDescription.getText();
+        description = this.jTextFieldDescription.getText();
     }
-    ContentType type=(ContentType)jComboBoxType.getSelectedItem();
+    ContentType type = (ContentType) jComboBoxType.getSelectedItem();
     this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
     search(this.jComboBoxRepositorio.getSelectedItem().toString(), title, description, type.id, category.UDDI);
     this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-    
+
 }//GEN-LAST:event_jButtonSearchActionPerformed
 
 private void jComboBoxRepositorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxRepositorioActionPerformed
@@ -296,21 +298,22 @@ private void jComboBoxRepositorioActionPerformed(java.awt.event.ActionEvent evt)
         String rep = this.jComboBoxRepositorio.getSelectedItem().toString();
         try
         {
-            for(ContentType type : OfficeApplication.getOfficeApplicationProxy().getContentTypes(rep))
+            for (ContentType type : OfficeApplication.getOfficeApplicationProxy().getContentTypes(rep))
             {
                 this.jComboBoxType.addItem(type);
             }
             for (CategoryInfo cat : OfficeApplication.getOfficeApplicationProxy().getCategories(rep))
             {
                 this.jComboBoxCategory.addItem(cat);
+                addCategory(rep,cat);
             }
-            CategoryInfo all=new CategoryInfo();
-            all.UDDI="*";
-            all.title="Todas las categorias";
-            all.description="Todas las categorias del repositorio";
+            CategoryInfo all = new CategoryInfo();
+            all.UDDI = "*";
+            all.title = "Todas las categorias";
+            all.description = "Todas las categorias del repositorio";
             this.jComboBoxCategory.addItem(all);
             this.jComboBoxCategory.setSelectedItem(all);
-                   
+
         }
         catch (Exception e)
         {
@@ -320,14 +323,14 @@ private void jComboBoxRepositorioActionPerformed(java.awt.event.ActionEvent evt)
 
 private void jTableContentsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableContentsMouseClicked
     this.jButtonView.setEnabled(false);
-    if(jTableContents.getSelectedRow()!=-1)
+    if (jTableContents.getSelectedRow() != -1)
     {
         this.jButtonView.setEnabled(true);
     }
 }//GEN-LAST:event_jTableContentsMouseClicked
 
 private void jTableContentsKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTableContentsKeyPressed
-    if(evt.getKeyCode()==KeyEvent.VK_UP || evt.getKeyCode()==KeyEvent.VK_DOWN)
+    if (evt.getKeyCode() == KeyEvent.VK_UP || evt.getKeyCode() == KeyEvent.VK_DOWN)
     {
         jTableContentsMouseClicked(null);
     }
@@ -349,23 +352,40 @@ private void jTableContentsKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:
     private javax.swing.JTextField jTextFieldDescription;
     private javax.swing.JTextField jTextFieldTitle;
     // End of variables declaration//GEN-END:variables
+
     @Override
     public WizardPanelNavResult allowNext(String arg, Map map, Wizard wizard)
     {
         WizardPanelNavResult result = WizardPanelNavResult.PROCEED;
-        if (this.jTableContents.getSelectedRow()==-1)
+        if (this.jTableContents.getSelectedRow() == -1)
         {
             JOptionPane.showMessageDialog(this, "!Debe indicar un contenido!", Search.getDescription(), JOptionPane.ERROR_MESSAGE);
-            this.jTableContents.requestFocus();            
+            this.jTableContents.requestFocus();
             result = WizardPanelNavResult.REMAIN_ON_PAGE;
         }
         else
         {
-            Object selection=this.jTableContents.getModel().getValueAt(this.jTableContents.getSelectedRow(), 0);
-            map.put( CONTENT,selection);            
-            map.put( WORKSPACE,this.jComboBoxRepositorio.getSelectedItem().toString());            
-            Search.map=map;
+            Object selection = this.jTableContents.getModel().getValueAt(this.jTableContents.getSelectedRow(), 0);
+            map.put(CONTENT, selection);
+            map.put(WORKSPACE, this.jComboBoxRepositorio.getSelectedItem().toString());
+            Search.map = map;
         }
         return result;
     }
+
+    private void addCategory(String repository, CategoryInfo category)
+    {
+        try
+        {
+            for (CategoryInfo cat : OfficeApplication.getOfficeApplicationProxy().getCategories(repository, category.UDDI))
+            {
+                this.jComboBoxCategory.addItem(cat);
+                addCategory(repository, cat);
+            }
+        }
+        catch (Exception e)
+        {
+        }
+    }
+
 }
