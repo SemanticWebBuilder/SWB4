@@ -14,8 +14,8 @@ public class CodeEditor extends org.semanticwb.model.base.CodeEditorBase
     @Override
     public String renderXHTML(SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
     {
-        String ret="";
-        String name=prop.getName();
+        StringBuffer ret = new StringBuffer(250);
+        String name=prop.getURI()+"/"+prop.getName();
         String label=prop.getDisplayName(lang);
         SemanticObject sobj=prop.getDisplayProperty();
         boolean required=prop.isRequired();
@@ -53,17 +53,35 @@ public class CodeEditor extends org.semanticwb.model.base.CodeEditorBase
         if(value==null)value="";
         if(mode.equals("edit") || mode.equals("create") )
         {
-            ret="<textarea name=\""+name+"\" dojoType_=\"dijit.Editor\" rows=\""+getRows()+"\" cols=\""+getCols()+"\">"
-                + value
-                + "</textarea>";
-        }else if(mode.equals("view"))
+            ret.append("<script language=\"javascript\" type=\"text/javascript\">\n");
+            ret.append("editAreaLoader.init({\n");
+            ret.append("    id : \"" + name + "\"\n");
+            ret.append("    ,language: \"es\"\n");
+            ret.append("    ,syntax: \"" + getLanguage().toLowerCase() + "\"\n");
+            ret.append("    ,start_highlight: true\n");
+            ret.append("    ,toolbar: \"search, go_to_line,");
+            ret.append(" |, undo, redo, |, select_font,|, change_smooth_selection,");
+            ret.append(" highlight, reset_highlight, |, help\"\n");
+            ret.append("    ,is_multi_files: false\n");
+            ret.append("    ,allow_toggle: false\n");
+            ret.append("});\n");
+            ret.append("\n");
+            ret.append("  function my_save(id, content){\n");
+            ret.append("\n");
+            ret.append("  }\n");
+            ret.append("</script>\n");
+            ret.append("<textarea id=\"" + name + "\" name=\"" + name + "\" rows=\"");
+            ret.append(getRows()+"\" cols=\""+getCols()+"\">");
+            ret.append(value + "</textarea>\n");
+            ret.append("\n");
+        } else if (mode.equals("view"))
         {
-            ret="<span _id=\""+name+"\" name=\""+name+"\">"+value+"</span>";
+            ret.append("<span _id=\"" + name + "\" name=\"" + name + "\">" + value + "</span>\n");
         }
 
-        ret+="Test:"+getLanguage();
-
-        return ret;
+        ret.append("Test:" + getLanguage());
+        
+        return ret.toString();
     }
 
 
