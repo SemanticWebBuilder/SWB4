@@ -54,7 +54,11 @@ public class SelectCategory extends WizardPage
             {
                 CategoryNode categoryNode = new CategoryNode(category.UDDI, category.title, category.description, repository);
                 parent.add(categoryNode);
-                addCategory(repository, categoryNode);
+                if(category.childs>0)
+                {
+                    categoryNode.add(new DefaultMutableTreeNode(""));
+                }
+                //addCategory(repository, categoryNode);
             }
         }
         catch (Exception e)
@@ -74,7 +78,11 @@ public class SelectCategory extends WizardPage
                 {
                     CategoryNode categoryNode = new CategoryNode(category.UDDI, category.title, category.description, repository);
                     repositoryNode.add(categoryNode);
-                    addCategory(repository, categoryNode);
+                    if(category.childs>0)
+                    {
+                        categoryNode.add(new DefaultMutableTreeNode(""));
+                    }
+                    //addCategory(repository, categoryNode);
                 }
             }
         }
@@ -187,6 +195,13 @@ public class SelectCategory extends WizardPage
         jTreeCategory.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
             public void valueChanged(javax.swing.event.TreeSelectionEvent evt) {
                 jTreeCategoryValueChanged(evt);
+            }
+        });
+        jTreeCategory.addTreeWillExpandListener(new javax.swing.event.TreeWillExpandListener() {
+            public void treeWillCollapse(javax.swing.event.TreeExpansionEvent evt)throws javax.swing.tree.ExpandVetoException {
+            }
+            public void treeWillExpand(javax.swing.event.TreeExpansionEvent evt)throws javax.swing.tree.ExpandVetoException {
+                jTreeCategoryTreeWillExpand(evt);
             }
         });
         jScrollPane1.setViewportView(jTreeCategory);
@@ -302,6 +317,18 @@ private void jButtonDeletCategoryActionPerformed(java.awt.event.ActionEvent evt)
     }
     this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 }//GEN-LAST:event_jButtonDeletCategoryActionPerformed
+
+private void jTreeCategoryTreeWillExpand(javax.swing.event.TreeExpansionEvent evt)throws javax.swing.tree.ExpandVetoException//GEN-FIRST:event_jTreeCategoryTreeWillExpand
+{//GEN-HEADEREND:event_jTreeCategoryTreeWillExpand
+    DefaultMutableTreeNode treeNode=(DefaultMutableTreeNode)evt.getPath().getLastPathComponent();
+    if(treeNode instanceof CategoryNode && treeNode.getChildCount()==1 && !(treeNode.getChildAt(0) instanceof CategoryNode))
+    {
+        CategoryNode categoryNode=(CategoryNode)treeNode;
+        categoryNode.removeAllChildren();
+        addCategory(categoryNode.getRepository(), categoryNode);
+    }
+}//GEN-LAST:event_jTreeCategoryTreeWillExpand
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAddCategory;
     private javax.swing.JButton jButtonDeletCategory;
