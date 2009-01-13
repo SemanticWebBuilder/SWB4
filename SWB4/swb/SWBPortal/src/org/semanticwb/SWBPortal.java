@@ -5,6 +5,10 @@ import com.arthurdo.parser.HtmlTag;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.security.Principal;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -39,6 +43,7 @@ import org.semanticwb.portal.services.WebPageSrv;
 import org.semanticwb.portal.services.WebSiteSrv;
  */
 import org.semanticwb.util.JarFile;
+import org.semanticwb.util.db.GenericDB;
 
 public class SWBPortal {
 
@@ -115,6 +120,31 @@ public class SWBPortal {
             user.setUsrFirstName("Admin");
             user.setLanguage("es");
             user.setActive(true);
+        }
+
+        //Crear tablas LOGS
+        try
+        {
+            Connection con=SWBUtils.DB.getDefaultConnection();
+            Statement st=con.createStatement();
+            try
+            {
+                ResultSet rs=st.executeQuery("select count(*) from swb_admlog");
+                int x=rs.getInt(1);
+                rs.close();
+            }catch(SQLException ne)
+            {
+                log.event("Creating Logs Tables...");
+                GenericDB db=new GenericDB();
+                String xml=SWBUtils.IO.getFileFromPath(SWBUtils.getApplicationPath()+"/WEB-INF/xml/swb_logs.xml");
+                System.out.println("xml:"+xml);
+                db.executeSQLScript(xml,SWBUtils.DB.getDatabaseName(), null);
+            }
+            st.close();
+            con.close();
+        }catch(SQLException e)
+        {
+            log.error(e);
         }
 
         m_sessions=new HashMap();
