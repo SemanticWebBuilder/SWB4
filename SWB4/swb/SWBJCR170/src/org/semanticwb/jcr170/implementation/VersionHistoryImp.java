@@ -15,6 +15,7 @@ import javax.jcr.version.VersionException;
 import javax.jcr.version.VersionHistory;
 import javax.jcr.version.VersionIterator;
 import org.semanticwb.SWBException;
+import org.semanticwb.model.GenericIterator;
 import org.semanticwb.repository.BaseNode;
 
 /**
@@ -75,7 +76,7 @@ public class VersionHistoryImp extends SimpleNode implements VersionHistory
 
     public Version getRootVersion() throws RepositoryException
     {
-        Iterator<BaseNode> nodes = this.node.listNodes();
+        GenericIterator<BaseNode> nodes = this.node.listNodes();
         while (nodes.hasNext())
         {
             BaseNode child = nodes.next();
@@ -101,7 +102,7 @@ public class VersionHistoryImp extends SimpleNode implements VersionHistory
 
     public Version getVersion(String name) throws VersionException, RepositoryException
     {
-        Iterator<BaseNode> nodes = this.node.listNodes();
+        GenericIterator<BaseNode> nodes = this.node.listNodes();
         while (nodes.hasNext())
         {
             BaseNode child = nodes.next();
