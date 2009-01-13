@@ -694,45 +694,43 @@ public class TemplateImp extends Template
         long tini = 0;
         if (savelog)
         {
-            //TODO:implementar hits
-//            tini = System.currentTimeMillis();
+            tini = System.currentTimeMillis();
             resbuf = new StringBuffer(300);
             logbuf = new StringBuffer(300);
-//            logbuf.append("log|");
-//            logbuf.append(request.getRemoteAddr());
-//            logbuf.append("|");
-//            logbuf.append(SWBMessageCenter.getInstance().getAddress());
-//            logbuf.append("|");
-//            String sess=request.getSession().getId();
-//            if(sess!=null)
-//            {
-//                int p=sess.length()-10;
-//                if(p>-1)sess=sess.substring(p);
-//            }else sess="_";
-//            logbuf.append(sess);
-//            logbuf.append("|");
-//            logbuf.append(topic.getMap().getId());
-//            logbuf.append("|");
-//            logbuf.append(topic.getId());
-//            logbuf.append("|");
-//            logbuf.append(user.getRepository());
-//            logbuf.append("|");
-//            if (user.getLogin() != null)
-//                logbuf.append(user.getLogin());
-//            else
-//                logbuf.append("_");
-//            logbuf.append("|");
-//            if (user.getUserType() != null)
-//                logbuf.append(user.getUserType());
-//            else
-//                logbuf.append("_");
-//            logbuf.append("|");
-//            logbuf.append(user.getDevice());
-//            logbuf.append("|");
-//            if (user.getLanguage() != null && user.getLanguage().length() > 0)
-//                logbuf.append(user.getLanguage());
-//            else
-//                logbuf.append("_");
+            logbuf.append("log|");
+            logbuf.append(request.getRemoteAddr());
+            logbuf.append("|");
+            //TODO:implementar Message
+            //logbuf.append(SWBMessageCenter.getInstance().getAddress());
+            logbuf.append("_");
+            logbuf.append("|");
+            String sess=request.getSession().getId();
+            if(sess!=null)
+            {
+                int p=sess.length()-10;
+                if(p>-1)sess=sess.substring(p);
+            }else sess="_";
+            logbuf.append(sess);
+            logbuf.append("|");
+            logbuf.append(topic.getWebSiteId());
+            logbuf.append("|");
+            logbuf.append(topic.getSId());
+            logbuf.append("|");
+            logbuf.append(user.getUserRepository().getId());
+            logbuf.append("|");
+            if (user.getUsrLogin() != null)
+                logbuf.append(user.getUsrLogin());
+            else
+                logbuf.append("_");
+            logbuf.append("|");
+            logbuf.append(user.getSemanticObject().getSemanticClass().getClassId());
+            logbuf.append("|");
+            logbuf.append(user.getDevice());
+            logbuf.append("|");
+            if (user.getLanguage() != null && user.getLanguage().length() > 0)
+                logbuf.append(user.getLanguage());
+            else
+                logbuf.append("_");
         }
         log.debug("<!-- Template1:"+ (System.currentTimeMillis()-tini) +"ms -->");
         HashMap antresrc = new HashMap(5);                    //recursos evaluados anteriormente
@@ -939,11 +937,10 @@ public class TemplateImp extends Template
                                         }
                                         if(savelog)
                                         {
-                                            //TODO:Implementar
-//                                            resbuf.append("|");
-//                                            if(!wbres.getResourceBase().getWebSiteId().equals(topic.getWebSiteId()))
-//                                                resbuf.append("0");
-//                                            resbuf.append(wbres.getResourceBase().getId());
+                                            resbuf.append("|");
+                                            if(!wbres.getResourceBase().getWebSiteId().equals(topic.getWebSiteId()))
+                                                resbuf.append("0");
+                                            resbuf.append(wbres.getResourceBase().getId());
                                         }
                                         first = false;
                                     }
@@ -1011,11 +1008,10 @@ public class TemplateImp extends Template
                                     
                                     if (savelog)
                                     {
-                                        //TODO:Implementar
-//                                        resbuf.append("|");
-//                                        if(!wbres.getResourceBase().getWebSiteId().equals(topic.getWebSiteId()))
-//                                            resbuf.append("0");
-//                                        resbuf.append(wbres.getResourceBase().getId());
+                                        resbuf.append("|");
+                                        if(!wbres.getResourceBase().getWebSiteId().equals(topic.getWebSiteId()))
+                                            resbuf.append("0");
+                                        resbuf.append(wbres.getResourceBase().getId());
                                     }
                                 }
                                 if (it.hasNext()) antresrc.put(id, it);
@@ -1101,9 +1097,9 @@ public class TemplateImp extends Template
 
         if (savelog)
         {
-            //TODO:Implementar
-//            long tfin = System.currentTimeMillis() - tini;            
-//            WBMessageCenter.getInstance().sendMessage(logbuf.toString()+"|"+tfin+resbuf.toString());
+            long tfin = System.currentTimeMillis() - tini;            
+            //TODO:Implementar Message
+            //WBMessageCenter.getInstance().sendMessage(logbuf.toString()+"|"+tfin+resbuf.toString());
         }
         log.debug("<!-- TemplateFin:"+ (System.currentTimeMillis()-tini) +"ms -->");
     }
@@ -1119,45 +1115,43 @@ public class TemplateImp extends Template
         long tini = 0;
         if (savelog)
         {
-            //TODO:implementar hits
-//            tini = System.currentTimeMillis();
-//            resbuf = new StringBuffer(300);
-//            logbuf = new StringBuffer(300);
-//            logbuf.append("log|");
-//            logbuf.append(request.getRemoteAddr());
-//            logbuf.append("|");
-//            logbuf.append(WBMessageCenter.getInstance().getAddress());
-//            logbuf.append("|");
-//            String sess=request.getSession().getId();
-//            if(sess!=null)
-//            {
-//                int p=sess.length()-10;
-//                if(p>-1)sess=sess.substring(p);
-//            }else sess="_";
-//            logbuf.append(sess);
-//            logbuf.append("|");
-//            logbuf.append(topic.getMap().getId());
-//            logbuf.append("|");
-//            logbuf.append(topic.getId());
-//            logbuf.append("|");
-//            logbuf.append(user.getRepository());
-//            logbuf.append("|");
-//            if (user.getLogin() != null)
-//                logbuf.append(user.getLogin());
-//            else
-//                logbuf.append("_");
-//            logbuf.append("|");
-//            if (user.getUserType() != null)
-//                logbuf.append(user.getUserType());
-//            else
-//                logbuf.append("_");
-//            logbuf.append("|");
-//            logbuf.append(user.getDevice());
-//            logbuf.append("|");
-//            if (user.getLanguage() != null && user.getLanguage().length() > 0)
-//                logbuf.append(user.getLanguage());
-//            else
-//                logbuf.append("_");
+            tini = System.currentTimeMillis();
+            resbuf = new StringBuffer(300);
+            logbuf = new StringBuffer(300);
+            logbuf.append("log|");
+            logbuf.append(request.getRemoteAddr());
+            logbuf.append("|");
+            //TODO:implementar message
+            //logbuf.append(WBMessageCenter.getInstance().getAddress());
+            logbuf.append("_");
+            logbuf.append("|");
+            String sess=request.getSession().getId();
+            if(sess!=null)
+            {
+                int p=sess.length()-10;
+                if(p>-1)sess=sess.substring(p);
+            }else sess="_";
+            logbuf.append(sess);
+            logbuf.append("|");
+            logbuf.append(topic.getWebSiteId());
+            logbuf.append("|");
+            logbuf.append(topic.getSId());
+            logbuf.append("|");
+            logbuf.append(user.getUserRepository().getId());
+            logbuf.append("|");
+            if (user.getUsrLogin() != null)
+                logbuf.append(user.getUsrLogin());
+            else
+                logbuf.append("_");
+            logbuf.append("|");
+            logbuf.append(user.getSemanticObject().getSemanticClass().getClassId());
+            logbuf.append("|");
+            logbuf.append(user.getDevice());
+            logbuf.append("|");
+            if (user.getLanguage() != null && user.getLanguage().length() > 0)
+                logbuf.append(user.getLanguage());
+            else
+                logbuf.append("_");
         }
         
         try
