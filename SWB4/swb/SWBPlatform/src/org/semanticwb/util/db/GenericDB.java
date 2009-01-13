@@ -150,23 +150,20 @@ public class GenericDB {
         Statement st = null;
         StringTokenizer sto = null;
         String sqlScript = null;
-        String tmp_conn = null;
         String query = null;
         int x = 0;
         try
             {
                 sqlScript = getSQLScript(XML, dbname);
-                tmp_conn = null;
                 if(poolname==null)
                 {
-                    tmp_conn = (String) SWBPlatform.getEnv("wb/db/nameconn","wb");
+                    conn = SWBUtils.DB.getDefaultConnection("GenericDB.executeSQLScript()");
                 }
                 else
                 {
-                    tmp_conn = poolname;
+                    conn = SWBUtils.DB.getConnection(poolname,"GenericDB.executeSQLScript()");
                 }
                 
-                conn = SWBUtils.DB.getConnection(tmp_conn,"GenericDB.executeSQLScript()");
                 st = conn.createStatement();
                 if(sqlScript!=null)
                 {
@@ -234,7 +231,7 @@ public class GenericDB {
         String schema=null;
         try { 
             //schema = com.infotec.appfw.util.AFUtils.getInstance().readInputStream(WBUtils.getInstance().getAdminFileStream("/wbadmin/schema/GenericDB.xsd")); 
-            schema = SWBUtils.IO.readInputStream(new FileInputStream(SWBPlatform.getContextPath()+"/swbadmin/schema/GenericDB.xsd")); 
+            schema = SWBUtils.IO.getFileFromPath(SWBUtils.getApplicationPath()+"/WEB-INF/xsds/GenericDB.xsd");
         } 
         catch(Exception e) { return bOk; }
         //if (schema != null && xml !=null) bOk=com.infotec.wb.admin.admresources.util.WBAdmResourceUtils.getInstance().xmlVerifier(schema, xml);
@@ -246,8 +243,8 @@ public class GenericDB {
         StringBuffer strBuff = new StringBuffer();
         String LFCR = " ";
         
-        if(!validateXML(strXML))
-          throw new Exception("Error en la definición del XML de la base de datos. GenericDB.getSchema()");
+//        if(!validateXML(strXML))
+//          throw new Exception("Error en la definición del XML de la base de datos. GenericDB.getSchema()");
         
         if (DBName == null) {
             return null;
