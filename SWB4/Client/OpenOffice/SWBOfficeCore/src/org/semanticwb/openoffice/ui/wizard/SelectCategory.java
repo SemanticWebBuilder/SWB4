@@ -150,7 +150,7 @@ public class SelectCategory extends WizardPage
         jToolBar1.setRollover(true);
 
         jButtonAddCategory.setBackground(new java.awt.Color(255, 255, 255));
-        jButtonAddCategory.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/wizard/close.png"))); // NOI18N
+        jButtonAddCategory.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/close.png"))); // NOI18N
         jButtonAddCategory.setToolTipText("Agregar categoria");
         jButtonAddCategory.setDebugGraphicsOptions(javax.swing.DebugGraphics.NONE_OPTION);
         jButtonAddCategory.setEnabled(false);
@@ -166,7 +166,7 @@ public class SelectCategory extends WizardPage
         jToolBar1.add(jButtonAddCategory);
         jToolBar1.add(jSeparator1);
 
-        jButtonDeletCategory.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/wizard/delete.png"))); // NOI18N
+        jButtonDeletCategory.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/delete.png"))); // NOI18N
         jButtonDeletCategory.setToolTipText("Borrar categoria");
         jButtonDeletCategory.setEnabled(false);
         jButtonDeletCategory.setFocusable(false);
@@ -468,11 +468,11 @@ class TreeRender extends JPanel implements TreeCellRenderer
             label.setFont(tree.getFont());
             if (expanded)
             {
-                label.setIcon(new javax.swing.ImageIcon(getClass().getResource("open.png")));
+                label.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/open.png")));
             }
             else
             {
-                label.setIcon(new javax.swing.ImageIcon(getClass().getResource("close.png")));
+                label.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/close.png")));
             }
             if (selected)
             {
