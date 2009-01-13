@@ -97,10 +97,9 @@ public class DialogLogin extends javax.swing.JDialog
         setModal(true);
         setResizable(false);
 
-        jButtonCancel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jButtonCancel.setFont(new java.awt.Font("Tahoma", 0, 14));
         jButtonCancel.setText("Cancelar");
         jButtonCancel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jButtonCancel.setContentAreaFilled(false);
         jButtonCancel.setNextFocusableComponent(jButtonAvanced);
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -108,10 +107,9 @@ public class DialogLogin extends javax.swing.JDialog
             }
         });
 
-        jButtonAccept.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jButtonAccept.setFont(new java.awt.Font("Tahoma", 0, 14));
         jButtonAccept.setText("Aceptar");
         jButtonAccept.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jButtonAccept.setContentAreaFilled(false);
         jButtonAccept.setNextFocusableComponent(jButtonCancel);
         jButtonAccept.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -119,11 +117,11 @@ public class DialogLogin extends javax.swing.JDialog
             }
         });
 
-        jLabelWebAddress.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabelWebAddress.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabelWebAddress.setText("Dirección Web:");
 
         jComboBoxWebAddress.setEditable(true);
-        jComboBoxWebAddress.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jComboBoxWebAddress.setFont(new java.awt.Font("Tahoma", 0, 14));
         jComboBoxWebAddress.setAutoscrolls(true);
         jComboBoxWebAddress.setName("WebAddress"); // NOI18N
         jComboBoxWebAddress.setNextFocusableComponent(jTextFieldClave);
@@ -133,32 +131,29 @@ public class DialogLogin extends javax.swing.JDialog
             }
         });
 
-        jButtonAvanced.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jButtonAvanced.setFont(new java.awt.Font("Tahoma", 0, 14));
         jButtonAvanced.setText("Avanzado");
         jButtonAvanced.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jButtonAvanced.setContentAreaFilled(false);
         jButtonAvanced.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonAvancedActionPerformed(evt);
             }
         });
 
-        jLabelClave.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabelClave.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabelClave.setText("Clave de acceso:");
 
-        jTextFieldClave.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTextFieldClave.setFont(new java.awt.Font("Tahoma", 0, 14));
         jTextFieldClave.setNextFocusableComponent(jPassword);
 
-        jLabelPassword.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabelPassword.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabelPassword.setText("Contraseña:");
 
-        jPassword.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jPassword.setFont(new java.awt.Font("Tahoma", 0, 14));
         jPassword.setNextFocusableComponent(jButtonAccept);
 
         jButtonDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/delete32.png"))); // NOI18N
         jButtonDelete.setToolTipText("Borrar conexión");
-        jButtonDelete.setBorderPainted(false);
-        jButtonDelete.setContentAreaFilled(false);
         jButtonDelete.setEnabled(false);
         jButtonDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -192,9 +187,9 @@ public class DialogLogin extends javax.swing.JDialog
                         .addComponent(jButtonCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jButtonAccept, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(12, 12, 12)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButtonDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addContainerGap(35, Short.MAX_VALUE))
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButtonAvanced, jButtonCancel});
@@ -205,7 +200,6 @@ public class DialogLogin extends javax.swing.JDialog
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jComboBoxWebAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonDelete)
                     .addComponent(jLabelWebAddress))
                 .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -220,7 +214,10 @@ public class DialogLogin extends javax.swing.JDialog
                     .addComponent(jButtonAvanced)
                     .addComponent(jButtonAccept, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
                     .addComponent(jButtonCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(91, 91, 91))
+                .addGap(107, 107, 107))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jButtonDelete)
+                .addContainerGap(259, Short.MAX_VALUE))
         );
 
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jButtonAvanced, jButtonCancel});
