@@ -15,7 +15,8 @@ public class CodeEditor extends org.semanticwb.model.base.CodeEditorBase
     public String renderXHTML(SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
     {
         StringBuffer ret = new StringBuffer(250);
-        String name=prop.getURI()+"/"+prop.getName();
+        String id=obj.getURI()+"/"+prop.getName();
+        String name=prop.getName();
         String label=prop.getDisplayName(lang);
         SemanticObject sobj=prop.getDisplayProperty();
         boolean required=prop.isRequired();
@@ -55,7 +56,7 @@ public class CodeEditor extends org.semanticwb.model.base.CodeEditorBase
         {
             ret.append("<script language=\"javascript\" type=\"text/javascript\">\n");
             ret.append("editAreaLoader.init({\n");
-            ret.append("    id : \"" + name + "\"\n");
+            ret.append("    id : \"" + id + "\"\n");
             ret.append("    ,language: \"es\"\n");
             ret.append("    ,syntax: \"" + getLanguage().toLowerCase() + "\"\n");
             ret.append("    ,start_highlight: true\n");
@@ -70,13 +71,13 @@ public class CodeEditor extends org.semanticwb.model.base.CodeEditorBase
             ret.append("\n");
             ret.append("  }\n");
             ret.append("</script>\n");
-            ret.append("<textarea id=\"" + name + "\" name=\"" + name + "\" rows=\"");
+            ret.append("<textarea id=\"" + id + "\" name=\"" + name + "\" rows=\"");
             ret.append(getRows()+"\" cols=\""+getCols()+"\">");
             ret.append(value + "</textarea>\n");
             ret.append("\n");
         } else if (mode.equals("view"))
         {
-            ret.append("<span _id=\"" + name + "\" name=\"" + name + "\">" + value + "</span>\n");
+            ret.append("<span _id=\"" + id + "\" name=\"" + name + "\">" + value + "</span>\n");
         }
 
         ret.append("Test:" + getLanguage());
