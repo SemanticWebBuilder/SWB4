@@ -123,7 +123,7 @@ public class SemanticVocabulary
     void addSemanticClass(SemanticClass tpc)
     {
         classes.put(tpc.getURI(), tpc);
-        String clsid=tpc.getClassID();
+        String clsid=tpc.getClassId();
         if(clsid!=null)clsbyid.put(clsid, tpc);
     }
     
