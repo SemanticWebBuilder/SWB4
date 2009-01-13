@@ -13,8 +13,10 @@ import java.awt.event.WindowListener;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import org.semanticwb.openoffice.DocumentType;
 import org.semanticwb.openoffice.OfficeDocument;
+import org.semanticwb.openoffice.ui.dialogs.ErrorDialog;
 
 public final class wb4writeraddon extends WeakBase
         implements com.sun.star.lang.XServiceInfo,
@@ -300,54 +302,10 @@ public final class wb4writeraddon extends WeakBase
 
             }
         }
-        catch (Throwable e)
+        catch (Exception e)
         {
-            final JDialog f = new JDialog(new Frame(), "Error");
-            f.addWindowListener(new WindowListener()
-            {
-
-                public void windowOpened(WindowEvent e)
-                {
-                }
-
-                public void windowClosing(WindowEvent e)
-                {
-                    f.setVisible(false);
-                }
-
-                public void windowClosed(WindowEvent e)
-                {
-                }
-
-                public void windowIconified(WindowEvent e)
-                {
-                }
-
-                public void windowDeiconified(WindowEvent e)
-                {
-                }
-
-                public void windowActivated(WindowEvent e)
-                {
-                }
-
-                public void windowDeactivated(WindowEvent e)
-                {
-                }
-            });
-            TextArea area = new TextArea(e.getMessage());
-            f.add(area);
-            StringWriter writer = new StringWriter();
-            PrintWriter out = new PrintWriter(writer, true);
-            e.printStackTrace(out);
-            /*if(e.getCause()!=null)
-            {
-            e.getCause().printStackTrace(out);
-            }*/
-            area.setText(writer.toString());
-            f.setVisible(true);
-            f.setLocationRelativeTo(null);
-            f.setSize(300, 300);
+            ErrorDialog errDialog=new ErrorDialog(new JFrame(),true,e);
+            errDialog.setVisible(true);
             return;
         }
     }
