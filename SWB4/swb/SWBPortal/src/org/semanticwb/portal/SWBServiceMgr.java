@@ -13,6 +13,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericObject;
+import org.semanticwb.model.Portlet;
 import org.semanticwb.model.Traceable;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
@@ -93,6 +94,13 @@ public class SWBServiceMgr implements SemanticObserver
                 }else if(gen instanceof WebPage)
                 {
                      WebPage aux=(WebPage)gen;
+
+                     Iterator<Portlet> pit=aux.listPortlets();
+                     while(pit.hasNext())
+                     {
+                         pit.next().remove();
+                     }
+
                      Iterator<WebPage> it=aux.listChilds();
                      while(it.hasNext())
                      {
