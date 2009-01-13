@@ -13,7 +13,7 @@ import java.sql.Timestamp;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.portal.admin.resources.reports.beans.*;
-import org.semanticwb.util.db.SWBRecHit;
+import org.semanticwb.portal.db.SWBRecHit;
 /*import com.infotec.wb.core.db.DBCatalogs;
 import com.infotec.wb.core.db.RecDevice;*/
 
