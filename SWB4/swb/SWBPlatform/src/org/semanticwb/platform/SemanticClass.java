@@ -131,7 +131,7 @@ public class SemanticClass
         return m_autogenId;
     }
 
-    public String getClassID()
+    public String getClassId()
     {
         if(!m_isClassIDCheck)
         {

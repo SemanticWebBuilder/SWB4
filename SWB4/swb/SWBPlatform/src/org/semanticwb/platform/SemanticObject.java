@@ -267,7 +267,7 @@ public class SemanticObject
      */
     public String getSID()
     {
-        return "/" + getModel().getName() + "/" + getSemanticClass().getClassID() + ":" + getId();
+        return "/" + getModel().getName() + "/" + getSemanticClass().getClassId() + ":" + getId();
     }
 
     /**
