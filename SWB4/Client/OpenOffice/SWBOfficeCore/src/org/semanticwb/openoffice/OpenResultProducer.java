@@ -99,6 +99,11 @@ public class OpenResultProducer implements WizardResultProducer
                         contentfile.getParentFile().mkdirs();
                         if(contentfile.exists())
                         {
+                            int res=JOptionPane.showConfirmDialog(null,"¡Existe un documento con el nombre "+ fileName +"\r\n¿Desea sobre escribir el documento?","Apertura de contenido",JOptionPane.YES_NO_OPTION | JOptionPane.QUESTION_MESSAGE);
+                            if(res==JOptionPane.NO_OPTION)
+                            {
+                                return;
+                            }
                             if(!contentfile.delete())
                             {
                                 JOptionPane.showMessageDialog(null,"¡Existe un documento con el mismo nombre\r\nNo se puede borrar el documento para reemplazarlo por el contenido descargado!","Apertura de contenido",JOptionPane.ERROR_MESSAGE);
