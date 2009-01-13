@@ -83,7 +83,7 @@ public class XmlRpcProxyFactory implements java.lang.reflect.InvocationHandler, 
         this.attachments.clear();
     }
 
-    public static <T> T newInstance(java.lang.Class<? extends XmlProxy> clazz, URI webAddress)
+    public static <T extends XmlProxy> T newInstance(java.lang.Class<T> clazz, URI webAddress)
     {
         if ( webAddress == null )
         {
@@ -91,7 +91,7 @@ public class XmlRpcProxyFactory implements java.lang.reflect.InvocationHandler, 
         }
         Class[] interfaces = {clazz};
         Object obj = Proxy.newProxyInstance(clazz.getClassLoader(), interfaces, new XmlRpcProxyFactory(webAddress));
-        return ( T ) obj;
+        return clazz.cast(obj);
     }
 
     private XmlRpcProxyFactory(URI webAddress)
