@@ -353,13 +353,21 @@ private void jButtonAddPageActionPerformed(java.awt.event.ActionEvent evt) {//GE
                 JLabel label = (JLabel) component;
 
                 label.setFont(tree.getFont());
-                if (expanded)
+                if (object instanceof RepositoryNode)
                 {
-                    label.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/page.png")));
+                    label.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/site.png")));
                 }
                 else
                 {
                     label.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/page.png")));
+                }
+                if (expanded)
+                {
+                    
+                }
+                else
+                {
+                    
                 }
                 if (selected)
                 {
