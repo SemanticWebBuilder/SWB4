@@ -53,8 +53,7 @@ import org.semanticwb.portal.admin.resources.reports.beans.WBAFilterReportBean;
 import org.semanticwb.portal.admin.resources.reports.jrresources.*;
 import org.semanticwb.portal.admin.resources.reports.jrresources.data.JRGlobalAccessDataDetail;
 
-
-
+    
 /** Esta clase genera el reporte global de acceso, toma la informaci�n de los
  * objetos de WebBuilder de acuerdo con los par�metros recibidos del usuario. Este
  * archivo es usado en la parte de reportes.
