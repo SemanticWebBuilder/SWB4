@@ -65,8 +65,9 @@ public class PublishResultProducer implements WizardResultProducer
                 int res=JOptionPane.showConfirmDialog(null, "¿Desea publicar este contenido en una página web?","Publicación de contenido",JOptionPane.YES_NO_OPTION);
                 if(res==JOptionPane.YES_OPTION)
                 {
-                    PublishContentToWebPageResultProducer resultProducer = new PublishContentToWebPageResultProducer();
-                    WizardPage[] clazz = new WizardPage[]{new SelectPage(),new PublishVersion(contentID,repositoryName),new PropertyEditor()};
+                    PublishContentToWebPageResultProducer resultProducer = new PublishContentToWebPageResultProducer(contentID,repositoryName);
+                    //WizardPage[] clazz = new WizardPage[]{new SelectPage(),new PublishVersion(contentID,repositoryName),new PropertyEditor()};
+                    WizardPage[] clazz = new WizardPage[]{new SelectPage(),new PublishVersion(contentID,repositoryName)};
                     Wizard wiz = WizardPage.createWizard("Asistente de publicación de contenido en página web", clazz, resultProducer);        
                     wiz.show();
                 }
