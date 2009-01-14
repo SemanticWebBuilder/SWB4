@@ -4,7 +4,6 @@
  */
 package org.semanticwb.portal;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -23,7 +22,6 @@ import org.semanticwb.model.Language;
 import org.semanticwb.model.Portlet;
 import org.semanticwb.model.PortletSubType;
 import org.semanticwb.model.PortletType;
-import org.semanticwb.model.Reference;
 import org.semanticwb.model.Role;
 import org.semanticwb.model.Rule;
 import org.semanticwb.model.Template;
@@ -96,9 +94,9 @@ public class SWBServiceMgr implements SemanticObserver {
                 }
                 if (gen instanceof WebSite) {
                     WebSite aux = (WebSite) gen;
-                    java.io.File dir=new java.io.File(SWBPlatform.getWorkPath() + aux.getId() + "/Template");
+                    java.io.File dir=new java.io.File(SWBPlatform.getWorkPath() + "/"+ aux.getId() + "/Template");
                     dir.mkdirs();
-                    dir=new java.io.File(SWBPlatform.getWorkPath() + aux.getId() + "/Portlet");
+                    dir=new java.io.File(SWBPlatform.getWorkPath() + "/" + aux.getId() + "/Portlet");
                     dir.mkdirs();
                 }
             } else //REMOVES
@@ -106,13 +104,14 @@ public class SWBServiceMgr implements SemanticObserver {
                 if (gen instanceof WebSite) //Removes website
                 {
                     WebSite aux = (WebSite) gen;
+                    System.out.println("Entra a eliminar sitio:"+aux.getId()+"path:"+SWBPlatform.getWorkPath() + aux.getWorkPath());
                     SWBPlatform.getSemanticMgr().removeModel(aux.getId());
-                    SWBUtils.IO.removeDirectory(SWBUtils.getApplicationPath() + aux.getWorkPath());
+                    SWBUtils.IO.removeDirectory(SWBPlatform.getWorkPath() + aux.getWorkPath());
                 } else if (gen instanceof WebPage) // Removes webpage
                 {
                     WebPage aux = (WebPage) gen;
                     //Removes relations (roles, templates, rules, etc), assotiations 2 the webpage
-                    removeRelatedObject(aux.listRelatedObjects());
+                    //removeRelatedObject(aux.listRelatedObjects());
                     //Removes portlets associated to the webpage
                     Iterator<Portlet> pit = aux.listPortlets();
                     while (pit.hasNext()) {
@@ -133,73 +132,79 @@ public class SWBServiceMgr implements SemanticObserver {
                 } else if (gen instanceof Template) // Removes Template
                 {
                     Template aux = (Template) gen;
-                    removeRelatedObject(aux.listRelatedObjects());                    
+                    //removeRelatedObject(aux.listRelatedObjects());
                     SWBUtils.IO.removeDirectory(SWBPlatform.getWorkPath() + aux.getWorkPath());
                 } else if (gen instanceof Rule) // Removes Rule
                 {
                     Rule aux = (Rule) gen;
-                    removeRelatedObject(aux.listRelatedObjects());
+                    //removeRelatedObject(aux.listRelatedObjects());
                 } else if (gen instanceof Role) // Removes Role
                 {
                     Role aux = (Role) gen;
-                    removeRelatedObject(aux.listRelatedObjects());
+                    //removeRelatedObject(aux.listRelatedObjects());
                 } else if (gen instanceof Language) // Removes Language
                 {
                     Language aux = (Language) gen;
-                    removeRelatedObject(aux.listRelatedObjects());
+                    //removeRelatedObject(aux.listRelatedObjects());
                 } else if (gen instanceof Device) // Removes Device
                 {
                     Device aux = (Device) gen;
-                    removeRelatedObject(aux.listRelatedObjects());
+                    //removeRelatedObject(aux.listRelatedObjects());
                 } else if (gen instanceof IPFilter) // Removes IPFilter
                 {
                     IPFilter aux = (IPFilter) gen;
-                    removeRelatedObject(aux.listRelatedObjects());
+                    //removeRelatedObject(aux.listRelatedObjects());
                 } else if (gen instanceof Calendar) // Removes Calendar
                 {
                     Calendar aux = (Calendar) gen;
-                    removeRelatedObject(aux.listRelatedObjects());
+                    //removeRelatedObject(aux.listRelatedObjects());
                 } else if (gen instanceof Dns) // Removes Template
                 {
                     Dns aux = (Dns) gen;
-                    removeRelatedObject(aux.listRelatedObjects());
+                    //removeRelatedObject(aux.listRelatedObjects());
                 } else if (gen instanceof Camp) // Removes Dns
                 {
                     Camp aux = (Camp) gen;
-                    removeRelatedObject(aux.listRelatedObjects());
+                    //removeRelatedObject(aux.listRelatedObjects());
                 } else if (gen instanceof PortletType) // Removes Camp
                 {
                     PortletType aux = (PortletType) gen;
-                    removeRelatedObject(aux.listRelatedObjects());
+                    //removeRelatedObject(aux.listRelatedObjects());
+                    //Removes portlets associated directly to the PortletType
+                    GenericIterator <Portlet> itPortlet=aux.listPortlets();
+                    while(itPortlet.hasNext()){
+                        ((Portlet)itPortlet.next()).remove();
+                    }
+                    //Removes Subtypes associated to the PortletType
                     GenericIterator<PortletSubType> itPSubType = aux.listSubTypes();
                     while (itPSubType.hasNext()) {
-                        PortletSubType pSType = itPSubType.next();
-                        pSType.remove();
+                        ((PortletSubType)itPSubType.next()).remove();
                     }
                 } else if (gen instanceof PortletSubType) // Removes PortletSubType
                 {
                     PortletSubType aux = (PortletSubType) gen;
-                    removeRelatedObject(aux.listRelatedObjects());
+                    //removeRelatedObject(aux.listRelatedObjects());
                     GenericIterator<Portlet> itPortlet = aux.listPortlets();
                     while (itPortlet.hasNext()) {
                         Portlet portlet = itPortlet.next();
-                        removeRelatedObject(portlet.listRelatedObjects());
+                        //removeRelatedObject(portlet.listRelatedObjects());
                         portlet.remove();
                     }
                 } else if (gen instanceof Portlet) // Removes Portlet
                 {
                     Portlet aux = (Portlet) gen;
-                    removeRelatedObject(aux.listRelatedObjects());
+                    //removeRelatedObject(aux.listRelatedObjects());
                     SWBUtils.IO.removeDirectory(SWBPlatform.getWorkPath() + aux.getWorkPath());
                 } else if (gen instanceof User) // Removes User
                 {
                     User aux = (User) gen;
-                    removeRelatedObject(aux.listRelatedObjects());
+                    //removeRelatedObject(aux.listRelatedObjects());
                 }
             }
         }
     }
 
+    /*
     public void removeRelatedObject(Iterator<GenericObject> itgo) {
         while (itgo.hasNext()) {
             GenericObject go = itgo.next();
@@ -207,7 +212,7 @@ public class SWBServiceMgr implements SemanticObserver {
                 ((Reference) go).remove();
             }
         }
-    }
+    }**/
 
     public void init() {
         log.event("Initializing SWBServiceMgr...");
