@@ -347,7 +347,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                 String cm_description = loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
                 category.description = node.getProperty(cm_description).getValue().getString();
                 category.title = node.getProperty(cm_title).getValue().getString();
-                category.childs = (int) node.getNodes(cm_category).getSize();
+                //category.childs = (int) node.getNodes(cm_category).getSize();
                 categories.add(category);
 
             }
@@ -375,22 +375,20 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             session = loader.openSession(repositoryName, this.user, this.password);
             ArrayList<CategoryInfo> categories = new ArrayList<CategoryInfo>();
             Node categoryNode = session.getNodeByUUID(categoryId);
-            NodeIterator it = categoryNode.getNodes();
             String cm_category = loader.getOfficeManager(repositoryName).getCategoryType();
+            NodeIterator it = categoryNode.getNodes(cm_category);
             while (it.hasNext())
             {
                 Node node = it.nextNode();
-                if (node.getName().equals(cm_category))
-                {
-                    CategoryInfo category = new CategoryInfo();
-                    category.UDDI = node.getUUID();
-                    String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
-                    String cm_description = loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
-                    category.description = node.getProperty(cm_description).getValue().getString();
-                    category.title = node.getProperty(cm_title).getValue().getString();
-                    category.childs = (int) node.getNodes(cm_category).getSize();
-                    categories.add(category);
-                }
+                CategoryInfo category = new CategoryInfo();
+                category.UDDI = node.getUUID();
+                String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
+                String cm_description = loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
+                category.description = node.getProperty(cm_description).getValue().getString();
+                category.title = node.getProperty(cm_title).getValue().getString();
+                category.childs = (int) node.getNodes(cm_category).getSize();
+                categories.add(category);
+
             }
             return categories.toArray(new CategoryInfo[categories.size()]);
         }
