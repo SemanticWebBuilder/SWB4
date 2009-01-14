@@ -373,7 +373,7 @@ public class SWBALogs extends GenericResource
             StringBuffer strQuery = new StringBuffer("select log_user,log_action ,log_date from swb_admlog where  ");
             strQuery.append(" log_objuri=? ");
             strQuery.append(" and log_modelid=? ");
-            strQuery.append(" order by wbdate desc ");
+            strQuery.append(" order by log_date desc ");
             
 //            int paramNum=1;
             String strQuery2=strQuery.toString();
@@ -642,7 +642,7 @@ public class SWBALogs extends GenericResource
             StringBuffer strQuery = new StringBuffer("select log_user,log_action,log_date from swb_admlog where  ");
             strQuery.append(" log_objuri=? ");
             strQuery.append(" and log_modelid=? ");
-            strQuery.append(" order by wbdate desc ");
+            strQuery.append(" order by log_date desc ");
 
             String strQuery2=strQuery.toString();
             pst = conn.prepareStatement(strQuery2);
@@ -771,7 +771,7 @@ public class SWBALogs extends GenericResource
             StringBuffer strQuery = new StringBuffer("select log_user,log_action,log_date from swb_admlog where  ");
             strQuery.append(" log_objuri=? ");
             strQuery.append(" and log_modelid=? ");
-            strQuery.append(" order by wbdate desc ");
+            strQuery.append(" order by log_date desc ");
 
             String strQuery2=strQuery.toString();
             pst = conn.prepareStatement(strQuery2);
