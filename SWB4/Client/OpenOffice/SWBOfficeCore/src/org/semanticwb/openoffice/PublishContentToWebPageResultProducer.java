@@ -38,7 +38,7 @@ public class PublishContentToWebPageResultProducer implements WizardResultProduc
             {
                 IOpenOfficeDocument openOfficeDocument=OfficeApplication.getOfficeDocumentProxy();
                 WebPageInfo webpage=(WebPageInfo)wizardData.get(SelectPage.WEBPAGE);
-                openOfficeDocument.publishToPortletContent(repositoryName, contentID, "*", "", "", webpage);
+                openOfficeDocument.publishToPortletContent(repositoryName, contentID, "*", "Demo", "Demo", webpage);
             }
             catch(Exception e)
             {
