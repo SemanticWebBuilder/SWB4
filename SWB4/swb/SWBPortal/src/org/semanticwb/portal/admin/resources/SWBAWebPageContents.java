@@ -165,6 +165,8 @@ public class SWBAWebPageContents extends GenericResource {
             out.println("<tbody>");
 
             SemanticProperty semprop = null;
+            SemanticProperty sem_p = ont.getSemanticProperty(idp);
+            SemanticObject so = obj.getObjectProperty(sem_p);
             Iterator<SemanticObject> itso = obj.listObjectProperties(prop);
             while (itso.hasNext()) {
                 SemanticObject sobj = itso.next();
