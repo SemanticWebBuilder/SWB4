@@ -6,8 +6,12 @@
 
 package org.semanticwb.openoffice.ui.wizard;
 
+import java.util.Map;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import org.netbeans.spi.wizard.Wizard;
 import org.netbeans.spi.wizard.WizardPage;
+import org.netbeans.spi.wizard.WizardPanelNavResult;
 import org.semanticwb.office.interfaces.IOfficeDocument;
 import org.semanticwb.office.interfaces.VersionInfo;
 import org.semanticwb.openoffice.OfficeApplication;
@@ -18,6 +22,7 @@ import org.semanticwb.openoffice.OfficeApplication;
  */
 public class PublishVersion extends WizardPage {
 
+    public static final String VERSION = "version";
     private String contentId,repositoryName;
     /** Creates new form PublishVersion */
     public PublishVersion(String contentId, String repositoryName) {
@@ -50,7 +55,24 @@ public class PublishVersion extends WizardPage {
     }
     public static String getDescription()
     {
-        return "Publicación de versión";
+        return "Versión de Contenido";
+    }
+    @Override
+    public WizardPanelNavResult allowNext(String arg, Map map, Wizard wizard)
+    {
+        WizardPanelNavResult result = WizardPanelNavResult.PROCEED;
+        if (this.jTableVersions.getSelectedRow()==-1)
+        {
+            JOptionPane.showMessageDialog(this, "!Debe indicar una versión!", SelectVersionToOpen.getDescription(), JOptionPane.ERROR_MESSAGE);
+            this.jTableVersions.requestFocus();
+            result = WizardPanelNavResult.REMAIN_ON_PAGE;
+        }
+        else
+        {
+            Object selection=this.jTableVersions.getModel().getValueAt(this.jTableVersions.getSelectedRow(), 2);
+            map.put( VERSION,selection);
+        }
+        return result;
     }
     /** This method is called from within the constructor to
      * initialize the form.
