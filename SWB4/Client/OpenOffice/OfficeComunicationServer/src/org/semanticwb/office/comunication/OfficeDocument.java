@@ -32,6 +32,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.Portlet;
+import org.semanticwb.model.PortletType;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
@@ -59,7 +60,9 @@ import org.semanticwb.xmlrpc.XmlRpcObject;
  */
 public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 {
-
+    private static final String WORD_PORTLET_TYPE="word_resource";
+    private static final String PPT_PORTLET_TYPE="ppt_resource";
+    private static final String EXCEL_PORTLET_TYPE="excel_resource";
     private static final String CONTENT_NOT_FOUND = "El contenido no se encontró en el repositorio.";
     private static final String JCR_CONTENT = "jcr:content";
     private static final String JCR_DATA = "jcr:data";
@@ -642,21 +645,25 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             String type = contentNode.getProperty(cm_officeType).getString();
             OfficePortlet portlet = null;
             String id = UUID.randomUUID().toString();
+            PortletType portletType=null;
             if (type.equals("EXCEL"))
             {
                 portlet = new ExcelPortlet(site.getSemanticObject().getModel().createSemanticObject(id, ExcelPortlet.swbrep_ExcelPortlet));
+                portletType= site.getPortletType(EXCEL_PORTLET_TYPE);
             }
             else if (type.equals("PPT"))
             {
-                portlet = new WordPortlet(site.getSemanticObject().getModel().createSemanticObject(id, PPTPortlet.swbrep_PPTPortlet));
+                portlet = new PPTPortlet(site.getSemanticObject().getModel().createSemanticObject(id, PPTPortlet.swbrep_PPTPortlet));
+                portletType= site.getPortletType(PPT_PORTLET_TYPE);
             }
             else
             {
                 portlet = new WordPortlet(site.getSemanticObject().getModel().createSemanticObject(id, WordPortlet.swbrep_WordPortlet));
+                portletType= site.getPortletType(WORD_PORTLET_TYPE);
             }
             portlet.setContent(contentId);
-            portlet.setRepositoryName(repositoryName);
-            //portlet.setVersionToShow(version);
+            portlet.setPortletType(portletType);
+            portlet.setRepositoryName(repositoryName);            
             portlet.setTitle(title);
             portlet.setDescription(description);
             page.addPortlet(portlet);

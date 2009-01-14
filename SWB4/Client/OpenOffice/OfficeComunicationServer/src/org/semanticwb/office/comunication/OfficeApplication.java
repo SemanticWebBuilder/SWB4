@@ -593,6 +593,12 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         info.title = site.getHomePage().getTitle();
         info.siteID = website.id;
         info.description = site.getDescription();
+        int childs=0;
+        GenericIterator<WebPage> childWebPages=site.getHomePage().listChilds();
+        while(childWebPages.hasNext())
+        {
+
+        }
         return info;
     }
 
