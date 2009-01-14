@@ -882,6 +882,7 @@ public class SemanticObject
             }
         }
         SWBPlatform.getSemanticMgr().notifyChange(this, null, "REMOVE");
+
         //TODO:mejorar
         Iterator<SemanticObject> rel=listRelatedObjects();
         while(rel.hasNext())
@@ -889,6 +890,23 @@ public class SemanticObject
             SemanticObject obj=rel.next();
             removeCache(obj.getURI());
         }
+
+        //Borrar objetos dependientes
+        Iterator<SemanticProperty> itp=getSemanticClass().listProperties();
+        while(itp.hasNext())
+        {
+            SemanticProperty prop=itp.next();
+            if(prop.isRemoveDependency())
+            {
+                SemanticObject dep=getObjectProperty(prop);
+                try
+                {
+                    dep.remove();
+                }catch(Exception e){log.error(e);}
+            }
+        }
+
+        //Borrar objeto
         Resource res=getRDFResource();
         if(res!=null)
         {
