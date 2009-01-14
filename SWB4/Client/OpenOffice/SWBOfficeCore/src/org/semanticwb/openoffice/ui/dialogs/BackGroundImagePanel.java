@@ -29,15 +29,12 @@ import org.semanticwb.openoffice.ui.icons.ImageLoader;
 public class BackGroundImagePanel extends javax.swing.JPanel implements WindowFocusListener
 {
 
-    private int numTry = 0;
-    private boolean canceled = true;
-    private URI webAddress;
-    private String login,  password;
+    private int numTry = 0;        
     ConfigurationListURI configurationListURI = new ConfigurationListURI();
     private Image imgFondo;
-    private JDialog parent;
+    private DialogLogin parent;
     /** Creates new form BackGroundImagePanel */
-    public BackGroundImagePanel(JDialog parent)
+    public BackGroundImagePanel(DialogLogin parent)
     {
         this.parent=parent;
         parent.addWindowFocusListener(this);
@@ -257,7 +254,7 @@ public class BackGroundImagePanel extends javax.swing.JPanel implements WindowFo
     private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonCancelActionPerformed
     {//GEN-HEADEREND:event_jButtonCancelActionPerformed
         parent.setVisible(false);
-        this.canceled = true;
+        parent.canceled = true;
 }//GEN-LAST:event_jButtonCancelActionPerformed
 
     private void jButtonAcceptActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonAcceptActionPerformed
@@ -285,11 +282,11 @@ public class BackGroundImagePanel extends javax.swing.JPanel implements WindowFo
                         return;
                     }
                     configurationListURI.addUserConfiguration(uri, this.jTextFieldClave.getText());
-                    this.webAddress = uri;
-                    this.login = this.jTextFieldClave.getText();
-                    this.password = new String(this.jPassword.getPassword());
+                    parent.webAddress = uri;
+                    parent.login = this.jTextFieldClave.getText();
+                    parent.password = new String(this.jPassword.getPassword());
                     parent.setVisible(false);
-                    this.canceled = false;
+                    parent.canceled = false;
                 }
                 catch (URISyntaxException use)
                 {
@@ -307,7 +304,7 @@ public class BackGroundImagePanel extends javax.swing.JPanel implements WindowFo
         else
         {
             parent.setVisible(false);
-            this.canceled = true;
+            parent.canceled = true;
         }
     // TODO: Agregar logica de acceso
 }//GEN-LAST:event_jButtonAcceptActionPerformed
