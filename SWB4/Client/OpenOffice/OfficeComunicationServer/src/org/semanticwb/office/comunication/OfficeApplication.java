@@ -14,6 +14,7 @@ import javax.jcr.NodeIterator;
 import javax.jcr.Repository;
 import javax.jcr.Session;
 import javax.jcr.query.Query;
+import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionHistory;
@@ -51,17 +52,17 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         return IOfficeApplication.version >= version;
     }
 
-    public void createPage(WebPageInfo page,String pageid,String title,String description) throws Exception
+    public void createPage(WebPageInfo page, String pageid, String title, String description) throws Exception
     {
-        WebSite website=SWBContext.getWebSite(page.siteID);
-        if(website.getWebPage(pageid)==null)
+        WebSite website = SWBContext.getWebSite(page.siteID);
+        if (website.getWebPage(pageid) == null)
         {
             throw new Exception("The webpage already exists");
         }
-        WebPage newpage=website.createWebPage(pageid);
+        WebPage newpage = website.createWebPage(pageid);
         newpage.setTitle(title);
         newpage.setDescription(description);
-        WebPage parent=website.getWebPage(page.id);
+        WebPage parent = website.getWebPage(page.id);
         newpage.setParent(parent);
     }
 
@@ -69,7 +70,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
     {
     }
 
-    public boolean existsPage(WebSiteInfo site,WebPageInfo page,String pageid) throws Exception
+    public boolean existsPage(WebSiteInfo site, WebPageInfo page, String pageid) throws Exception
     {
         return false;
     }
@@ -143,6 +144,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                     String cm_description = loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
                     category.description = node.getProperty(cm_description).getValue().getString();
                     category.title = node.getProperty(cm_title).getValue().getString();
+                    category.childs = (int) node.getNodes(cm_category).getSize();
                     categories.add(category);
                 }
             }
@@ -174,7 +176,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
             Query query;
             if (session.getRepository().getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf("webbuilder") != -1)
-            {                
+            {
                 String statement = "SELECT DISTINCT ?x WHERE {?x " + cm_title + " ?title FILTER (?title=\"" + title + "\")  }";
                 query = session.getWorkspace().getQueryManager().createQuery(statement, "SPARQL");
             }
@@ -281,7 +283,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
             Query query;
             if (session.getRepository().getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf("webbuilder") != -1)
-            {                
+            {
                 String statement = "SELECT DISTINCT ?x WHERE {?x " + cm_title + " ?title FILTER (?title=\"" + title + "\") }";
                 query = session.getWorkspace().getQueryManager().createQuery(statement, "SPARQL");
             }
@@ -323,6 +325,47 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         return UUID;
     }
 
+    public CategoryInfo[] getAllCategories(String repositoryName) throws Exception
+    {
+        Session session = null;
+        try
+        {
+
+            session = loader.openSession(repositoryName, this.user, this.password);
+            ArrayList<CategoryInfo> categories = new ArrayList<CategoryInfo>();
+            String cm_category = loader.getOfficeManager(repositoryName).getCategoryType();
+            QueryManager manager = session.getWorkspace().getQueryManager();
+            Query query = manager.createQuery("SELECT ?x WHERE { ?x swbrep:name ?name FILTER (?name=\"" + cm_category + "\") }", "SPARQL");
+            QueryResult result = query.execute();
+            NodeIterator it = result.getNodes();
+            while (it.hasNext())
+            {
+                Node node = it.nextNode();
+                CategoryInfo category = new CategoryInfo();
+                category.UDDI = node.getUUID();
+                String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
+                String cm_description = loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
+                category.description = node.getProperty(cm_description).getValue().getString();
+                category.title = node.getProperty(cm_title).getValue().getString();
+                category.childs = (int) node.getNodes(cm_category).getSize();
+                categories.add(category);
+
+            }
+            return categories.toArray(new CategoryInfo[categories.size()]);
+        }
+        catch (Exception e)
+        {
+            throw e;
+        }
+        finally
+        {
+            if (session != null)
+            {
+                session.logout();
+            }
+        }
+    }
+
     public CategoryInfo[] getCategories(String repositoryName, String categoryId) throws Exception
     {
         Session session = null;
@@ -345,6 +388,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                     String cm_description = loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
                     category.description = node.getProperty(cm_description).getValue().getString();
                     category.title = node.getProperty(cm_title).getValue().getString();
+                    category.childs = (int) node.getNodes(cm_category).getSize();
                     categories.add(category);
                 }
             }
@@ -534,7 +578,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             WebSiteInfo info = new WebSiteInfo();
             info.title = site.getTitle();
             info.id = site.getId();
-            if(!(info.id.equals(SWBContext.WEBSITE_ADMIN) || info.id.equals(SWBContext.WEBSITE_GLOBAL)))
+            if (!(info.id.equals(SWBContext.WEBSITE_ADMIN) || info.id.equals(SWBContext.WEBSITE_GLOBAL)))
             {
                 websites.add(info);
             }
@@ -550,7 +594,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         info.id = site.getHomePage().getId();
         info.title = site.getHomePage().getTitle();
         info.siteID = website.id;
-        info.description=site.getDescription();
+        info.description = site.getDescription();
         return info;
     }
 
@@ -570,6 +614,4 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         }
         return pagesToReturn.toArray(new WebPageInfo[pagesToReturn.size()]);
     }
-
-   
 }
