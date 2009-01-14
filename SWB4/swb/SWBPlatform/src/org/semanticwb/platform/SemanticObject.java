@@ -899,10 +899,13 @@ public class SemanticObject
             if(prop.isRemoveDependency())
             {
                 SemanticObject dep=getObjectProperty(prop);
-                try
+                if(dep!=null)
                 {
-                    dep.remove();
-                }catch(Exception e){log.error(e);}
+                    try
+                    {
+                        dep.remove();
+                    }catch(Exception e){log.error(e);}
+                }
             }
         }
 
