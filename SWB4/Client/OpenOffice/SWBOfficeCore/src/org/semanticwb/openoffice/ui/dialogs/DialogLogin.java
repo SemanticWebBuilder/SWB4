@@ -62,6 +62,7 @@ public class DialogLogin extends javax.swing.JDialog implements ImageObserver
         setTitle("Acceso a servicio de publicación");
         setLocationByPlatform(true);
         setModal(true);
+        setResizable(false);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
