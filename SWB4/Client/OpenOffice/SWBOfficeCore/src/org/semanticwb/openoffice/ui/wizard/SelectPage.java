@@ -53,7 +53,11 @@ public class SelectPage extends WizardPage
                 WebPageInfo home = OfficeApplication.getOfficeApplicationProxy().getHomePage(website);
                 WebPage child = new WebPage(home.id, home.title, home.description, website.id);
                 repositoryNode.add(child);
-                addWebPage(home,child);
+                if(home.childs>0)
+                {
+
+                }
+                //addWebPage(home,child);
             }
         }
         catch (Exception wbe)

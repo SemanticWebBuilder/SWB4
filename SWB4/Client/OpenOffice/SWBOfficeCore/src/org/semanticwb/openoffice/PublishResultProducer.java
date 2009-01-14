@@ -60,7 +60,7 @@ public class PublishResultProducer implements WizardResultProducer
                 String nodeType=wizardData.get(TitleAndDescription.NODE_TYPE).toString();                
                 String name = document.getLocalPath().getName().replace(document.getDefaultExtension(), document.getPublicationExtension());                                
                 String contentID=openOfficeDocument.publish(title, description,repositoryName,categoryID,document.getDocumentType().toString(),nodeType,name);
-                document.SaveContentId(contentID,repositoryName);                
+                //document.SaveContentId(contentID,repositoryName);
                 Summary summary=Summary.create(new SummaryPublish(contentID,repositoryName),null);               
                 int res=JOptionPane.showConfirmDialog(null, "¿Desea publicar este contenido en una página web?","Publicación de contenido",JOptionPane.YES_NO_OPTION);
                 if(res==JOptionPane.YES_OPTION)
