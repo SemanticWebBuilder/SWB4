@@ -143,6 +143,21 @@ public class SemanticProperty
      * Si esta propiedad se utiliza para definir la relacio padre-hijo en el arbol de navegacion
      * @return
      */
+    public boolean isRemoveDependency()
+    {
+        Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_REMOVEDEPENDENCY));
+        if(st!=null)
+        {
+            return st.getBoolean();
+        }
+        return false;
+    }
+
+
+    /**
+     * Si esta propiedad se utiliza para definir la relacio padre-hijo en el arbol de navegacion
+     * @return
+     */
     public boolean isInverseHeraquicalRelation()
     {
         boolean ret=false;
@@ -154,8 +169,6 @@ public class SemanticProperty
         return ret;
     }
 
-
-    
     public boolean isExternalInvocation()
     {
         if(isExternalInvocation==null)
