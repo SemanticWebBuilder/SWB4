@@ -292,7 +292,7 @@ private void jButtonDeletCategoryActionPerformed(java.awt.event.ActionEvent evt)
     String repository = (String) this.getWizardDataMap().get(REPOSITORY_ID);
     try
     {
-        if (OfficeApplication.getOfficeApplicationProxy().deleteCategory(repository, categoryId))
+        if (OfficeApplication.getOfficeApplicationProxy().canDeleteCategory(repository, categoryId))
         {
             DefaultMutableTreeNode node = (DefaultMutableTreeNode) jTreeCategory.getLastSelectedPathComponent();
             if (node == null)
