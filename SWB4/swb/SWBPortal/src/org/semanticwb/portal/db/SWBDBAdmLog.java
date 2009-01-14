@@ -34,6 +34,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.platform.SemanticOntology;
 
 /** Objeto: Almacena a la base de datos los cambios desde la administracion.
  *
@@ -59,74 +60,36 @@ public class SWBDBAdmLog {
         log.event(SWBUtils.TEXT.getLocaleString("locale_core", "log_DBAdmLog_destroy_finalized"));
     }
 
-    /**
-     * @return  */
-    static public SWBDBAdmLog getInstance() {
-        if (instance == null) {
-            makeInstance();
-        }
-        return instance;
-    }
+//    /**
+//     * @return  */
+//    static public SWBDBAdmLog getInstance() {
+//        if (instance == null) {
+//            makeInstance();
+//        }
+//        return instance;
+//    }
+//
+//    static private synchronized void makeInstance() {
+//        if (instance == null) {
+//            instance = new SWBDBAdmLog();
+//            instance.init();
+//        }
+//    }
 
-    static private synchronized void makeInstance() {
-        if (instance == null) {
-            instance = new SWBDBAdmLog();
-            instance.init();
-        }
-    }
 
     /**
      * @param userid
-     * @param topicmapid
-     * @param topicid
-     * @param accion
-     * @param contentid
-     * @param comment  */
-    public void saveContentLog(String userid, String modelid, String objuri, String accion) {
+     * @param objuri
+     * @param accion  */
+    public void saveAdmLog(String userid, String objuri, String accion) {
         try {
+            SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+            String modelid = ont.getSemanticObject(objuri).getModel().getModelObject().getURI();
+
             SWBRecAdmLog rec = new SWBRecAdmLog(userid, accion, objuri, modelid, null);
             rec.create();
         } catch (Exception e) {
             log.error(SWBUtils.TEXT.getLocaleString("locale_core", "error_DBAdmLog_SaveContentLog_contentlogerror"), e);
-        }
-    }
-
-    /**
-     * @param userid
-     * @param topicmapid
-     * @param topicid
-     * @param accion
-     * @param resid
-     * @param comment  */
-    public void saveWebPageLog(String userid, String modelid, String objuri,String accion) {
-        try {
-            SWBRecAdmLog rec = new SWBRecAdmLog(userid, accion, objuri, modelid, null);
-            rec.create();
-        } catch (Exception e) {
-            log.error(SWBUtils.TEXT.getLocaleString("locale_core", "error_DBAdmLog_SaveTopicLog_TopicLogerror"), e);
-        }
-    }
-
-    public void saveFileLog(String userid, String modelid, String objuri, String accion) {
-        try {
-            SWBRecAdmLog rec = new SWBRecAdmLog(userid, accion, objuri, modelid,null);
-            rec.create();
-        } catch (Exception e) {
-            log.error(SWBUtils.TEXT.getLocaleString("locale_core", "error_DBAdmLog_SaveFileLog_filelogerror"), e);
-        }
-    }
-
-    /**
-     * @param userid
-     * @param topicmapid
-     * @param accion
-     * @param comment  */
-    public void saveWebSiteLog(String userid, String modelid, String objuri, String accion) {
-        try {
-            SWBRecAdmLog rec = new SWBRecAdmLog(userid, accion, objuri, modelid, null);
-            rec.create();
-        } catch (Exception e) {
-            log.error(SWBUtils.TEXT.getLocaleString("locale_core", "error_DBAdmLog_SaveTopicMap_topiclogerror"), e);
         }
     }
 
@@ -539,13 +502,13 @@ public class SWBDBAdmLog {
     public void refresh() {
     }
 
-    /** Avisa al observador de que se ha producido un cambio.
-     * @param s
-     * @param obj  */
-    public void sendDBNotify(String s, Object obj) {
-        if (s.equals("remove")) {
-        }
-        if (s.equals("create")) {
-        }
-    }
+//    /** Avisa al observador de que se ha producido un cambio.
+//     * @param s
+//     * @param obj  */
+//    public void sendDBNotify(String s, Object obj) {
+//        if (s.equals("remove")) {
+//        }
+//        if (s.equals("create")) {
+//        }
+//    }
 }
