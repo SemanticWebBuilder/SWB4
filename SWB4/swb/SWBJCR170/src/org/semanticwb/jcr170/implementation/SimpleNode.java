@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.jcr.AccessDeniedException;
 import javax.jcr.InvalidItemStateException;
 import javax.jcr.Item;
@@ -1641,10 +1643,20 @@ public class SimpleNode implements Node
 
     public NodeIterator getNodes(String namePattern) throws RepositoryException
     {
-        String statement = "SELECT ?x WHERE { ?x swbrep:name ?name FILTER regex(?name,\"" + namePattern + "\") }";
+        /*String statement = "SELECT ?x WHERE { ?x swbrep:name ?name FILTER regex(?name,\"" + namePattern + "\") }";
         QueryImp query = new QueryImp(this.session, this.getSession().getWorkspace().getName(), statement, QueryImp.SPARQL);
         QueryResult res = query.execute();
-        return res.getNodes();
+        return res.getNodes();*/
+        ArrayList<SimpleNode> childsToReturn=new ArrayList<SimpleNode>();
+        for(SimpleNode child : this.getSimpleNodes())
+        {
+            String Childname=child.getName();
+            if(Pattern.matches(namePattern,new SimpleCharSequence(Childname)))
+            {
+                childsToReturn.add(child);                
+            }
+        }
+        return new NodeIteratorImp(session, childsToReturn);
     }
 
     @Override
