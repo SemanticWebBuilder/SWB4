@@ -132,8 +132,8 @@ public class SWBServiceMgr implements SemanticObserver {
                 } else if (gen instanceof Template) // Removes Template
                 {
                     Template aux = (Template) gen;
-                    removeRelatedObject(aux.listRelatedObjects());
-                    SWBUtils.IO.removeDirectory(SWBUtils.getApplicationPath() + aux.getWorkPath());
+                    removeRelatedObject(aux.listRelatedObjects());                    
+                    SWBUtils.IO.removeDirectory(SWBPlatform.getWorkPath() + aux.getWorkPath());
                 } else if (gen instanceof Rule) // Removes Rule
                 {
                     Rule aux = (Rule) gen;
@@ -189,7 +189,7 @@ public class SWBServiceMgr implements SemanticObserver {
                 {
                     Portlet aux = (Portlet) gen;
                     removeRelatedObject(aux.listRelatedObjects());
-                    SWBUtils.IO.removeDirectory(SWBUtils.getApplicationPath() + aux.getWorkPath());
+                    SWBUtils.IO.removeDirectory(SWBPlatform.getWorkPath() + aux.getWorkPath());
                 } else if (gen instanceof User) // Removes User
                 {
                     User aux = (User) gen;
