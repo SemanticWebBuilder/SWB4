@@ -631,7 +631,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     public PortletInfo publishToPortletContent(String repositoryName, String contentId, String version, String title, String description, WebPageInfo webpage) throws Exception
     {
         WebSite site = SWBContext.getWebSite(webpage.siteID);
-        WebPage parent = site.getWebPage(webpage.id);
+        WebPage page = site.getWebPage(webpage.id);
 
         Session session = null;
         try
@@ -659,7 +659,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             //portlet.setVersionToShow(version);
             portlet.setTitle(title);
             portlet.setDescription(description);
-            parent.addPortlet(portlet);
+            page.addPortlet(portlet);
             PortletInfo PortletInfo = new PortletInfo();
             PortletInfo.id = id;
             PortletInfo.siteId = webpage.id;
