@@ -60,21 +60,21 @@ public class SWBDBAdmLog {
         log.event(SWBUtils.TEXT.getLocaleString("locale_core", "log_DBAdmLog_destroy_finalized"));
     }
 
-//    /**
-//     * @return  */
-//    static public SWBDBAdmLog getInstance() {
-//        if (instance == null) {
-//            makeInstance();
-//        }
-//        return instance;
-//    }
-//
-//    static private synchronized void makeInstance() {
-//        if (instance == null) {
-//            instance = new SWBDBAdmLog();
-//            instance.init();
-//        }
-//    }
+    /**
+     * @return  */
+    static public SWBDBAdmLog getInstance() {
+        if (instance == null) {
+            makeInstance();
+        }
+        return instance;
+    }
+
+    static private synchronized void makeInstance() {
+        if (instance == null) {
+            instance = new SWBDBAdmLog();
+            instance.init();
+        }
+    }
 
 
     /**
