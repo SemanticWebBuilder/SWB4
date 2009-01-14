@@ -32,7 +32,6 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.Portlet;
-import org.semanticwb.model.PortletType;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
@@ -63,6 +62,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 
     private static final String CONTENT_NOT_FOUND = "El contenido no se encontró en el repositorio.";
     private static final String JCR_CONTENT = "jcr:content";
+    private static final String JCR_DATA = "jcr:data";
     private static final String JCR_LASTMODIFIED = "jcr:lastModified";
     private static Logger log = SWBUtils.getLogger(OfficeDocument.class);
     private static final String DEFAULT_MIME_TYPE = "application/octet-stream";
@@ -113,7 +113,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     resNode.setProperty("jcr:mimeType", mimeType);
                     resNode.setProperty("jcr:encoding", "");
                     InputStream in = new ByteArrayInputStream(part.getContent());
-                    resNode.setProperty("jcr:data", in);
+                    resNode.setProperty(JCR_DATA, in);
                     in.close();
                     Calendar lastModified = Calendar.getInstance();
                     lastModified.setTimeInMillis(System.currentTimeMillis());
@@ -224,7 +224,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                         resNode.setProperty("jcr:mimeType", mimeType);
                         resNode.setProperty("jcr:encoding", "");
                         InputStream in = new ByteArrayInputStream(part.getContent());
-                        resNode.getProperty("jcr:data").setValue(in);
+                        resNode.getProperty(JCR_DATA).setValue(in);
                         Calendar lastModified = Calendar.getInstance();
                         lastModified.setTimeInMillis(System.currentTimeMillis());
                         resNode.setProperty(JCR_LASTMODIFIED, lastModified);
@@ -334,7 +334,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             session.getNodeByUUID(contentId);
             exists = true;
         }
-        catch(WorkspaceNotFoudException wsnf)
+        catch (WorkspaceNotFoudException wsnf)
         {
             exists = false;
         }
@@ -628,7 +628,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return listPortlets.toArray(new PortletInfo[listPortlets.size()]);
     }
 
-    public PortletInfo publishToPortletContent(String repositoryName, String contentId, String version,String title,String description,WebPageInfo webpage) throws Exception
+    public PortletInfo publishToPortletContent(String repositoryName, String contentId, String version, String title, String description, WebPageInfo webpage) throws Exception
     {
         WebSite site = SWBContext.getWebSite(webpage.siteID);
         WebPage parent = site.getWebPage(webpage.id);
@@ -797,6 +797,51 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     {
         WebSite site = SWBContext.getWebSite(info.siteId);
         site.removePortlet(info.id);
+    }
+
+    public InputStream getContent(String repositoryName, String contentId) throws Exception
+    {
+        Session session = null;
+        try
+        {
+            session = loader.openSession(repositoryName, this.user, this.password);
+            Node nodeContent = session.getNodeByUUID(contentId);
+            Node resNode = nodeContent.getNode(JCR_CONTENT);            
+            return resNode.getProperty(JCR_DATA).getStream();
+        }
+        catch (Exception e)
+        {
+            throw e;
+        }
+        finally
+        {
+            if (session != null)
+            {
+                session.logout();
+            }
+        }
+    }
+    public String getContentFile(String repositoryName, String contentId) throws Exception
+    {
+        Session session = null;
+        try
+        {
+            session = loader.openSession(repositoryName, this.user, this.password);
+            Node nodeContent = session.getNodeByUUID(contentId);
+            String cm_file = loader.getOfficeManager(repositoryName).getPropertyFileType();
+            return nodeContent.getProperty(cm_file).getString();
+        }
+        catch (Exception e)
+        {
+            throw e;
+        }
+        finally
+        {
+            if (session != null)
+            {
+                session.logout();
+            }
+        }
     }
 }
 
