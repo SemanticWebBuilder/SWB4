@@ -305,7 +305,7 @@ public class FileUpload
                         if (i != -1)
                             s3 = s3.substring(i + 1);
                         String strNoparsed = new String(abyte0);
-                        String dataarc = SWBPortal.parseHTML(strNoparsed, s0);
+                        String dataarc = SWBPortal.UTIL.parseHTML(strNoparsed, s0);
                         byte abyte1[] = dataarc.getBytes();
                         FileOutputStream fileoutputstream = new FileOutputStream(String.valueOf(s1) + String.valueOf(s3));
                         fileoutputstream.write(abyte1, 0, abyte1.length);
@@ -340,7 +340,7 @@ public class FileUpload
                     obj = hashtable.get("content");
                     byte abyte0[] = (byte[]) obj;
                     String strNoparsed = new String(abyte0);
-                    dataarc = SWBPortal.FindAttaches(strNoparsed);
+                    dataarc = SWBPortal.UTIL.FindAttaches(strNoparsed);
                 }
             }
         } while (true);

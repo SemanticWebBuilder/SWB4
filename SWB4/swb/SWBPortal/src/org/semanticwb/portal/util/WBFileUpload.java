@@ -307,8 +307,8 @@ public class WBFileUpload
                         String strNoparsed = new String(abyte0);
                         
                         String dataarc = "";
-                        if(s3.endsWith(".xsl") || s3.endsWith(".xslt")) dataarc=SWBPortal.parseXsl(strNoparsed, s0);
-                        else dataarc = SWBPortal.parseHTML(strNoparsed, s0);
+                        if(s3.endsWith(".xsl") || s3.endsWith(".xslt")) dataarc=SWBPortal.UTIL.parseXsl(strNoparsed, s0);
+                        else dataarc = SWBPortal.UTIL.parseHTML(strNoparsed, s0);
                         
                         byte abyte1[] = dataarc.getBytes();
                         FileOutputStream fileoutputstream = new FileOutputStream(s1 + s3);
@@ -344,7 +344,7 @@ public class WBFileUpload
                     obj = hashtable.get("content");
                     byte abyte0[] = (byte[])obj;
                     String strNoparsed = new String(abyte0);
-                    dataarc = SWBPortal.FindAttaches(strNoparsed);
+                    dataarc = SWBPortal.UTIL.FindAttaches(strNoparsed);
                 }
             }
         } while(true);

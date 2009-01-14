@@ -73,6 +73,7 @@ public class SWBServiceMgr implements SemanticObserver {
         //Actions CREATE UPDATE REMOVE
         User usr = SWBPortal.getSessionUser();
         System.out.println("-->obj:" + obj + " cls:" + obj.getSemanticClass() + " action:" + action + " " + usr);
+        SWBPortal.getDBAdmLog().saveAdmLog(usr, obj, action);
 
         SemanticClass cls = obj.getSemanticClass();
         if (cls.isSWB()) {
