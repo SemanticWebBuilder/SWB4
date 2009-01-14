@@ -14,11 +14,10 @@ import org.semanticwb.openoffice.*;
  * @author  victor.lorenzana
  */
 public class DialogLogin extends javax.swing.JDialog implements ImageObserver
-{    
-    private int numTry = 0;
-    private boolean canceled = true;
-    private URI webAddress;
-    private String login,  password;
+{   
+    public boolean canceled = true;
+    public URI webAddress;
+    public String login,  password;
     ConfigurationListURI configurationListURI = new ConfigurationListURI();
 
     /** Creates new form DialogLogin */
