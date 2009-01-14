@@ -26,7 +26,7 @@ public class DialogLogin extends javax.swing.JDialog implements ImageObserver
         super(parent, modal);
         initComponents();
         this.add(new BackGroundImagePanel(this));
-        this.setSize(510, 310);
+        this.setSize(540, 310);
 
     }
 
@@ -62,7 +62,6 @@ public class DialogLogin extends javax.swing.JDialog implements ImageObserver
         setTitle("Acceso a servicio de publicación");
         setLocationByPlatform(true);
         setModal(true);
-        setResizable(false);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
