@@ -48,7 +48,6 @@ import org.semanticwb.util.db.GenericDB;
 public class SWBPortal {
 
     private static Logger log = SWBUtils.getLogger(SWBPortal.class);
-    
     private static SWBPortal instance = null;
     private static HashMap hAnchors = null;
     private static HashMap admFiles = new HashMap();
@@ -57,8 +56,7 @@ public class SWBPortal {
     private static SWBResourceMgr resmgr = null;
     private static SWBTemplateMgr templatemgr = null;
     private static SWBServiceMgr servicemgr = null;
-
-    private static HashMap<String,SessionUser> m_sessions;
+    private static HashMap<String, SessionUser> m_sessions;
 
     static public synchronized SWBPortal createInstance() {
         //System.out.println("Entra a createInstance");
@@ -73,6 +71,7 @@ public class SWBPortal {
         init();
     }
     //Initialize context
+
     private void init() {
         //Check for GlobalWebSite
         WebSite site = SWBContext.getGlobalWebSite();
@@ -123,35 +122,30 @@ public class SWBPortal {
         }
 
         //Crear tablas LOGS
-        try
-        {
-            Connection con=SWBUtils.DB.getDefaultConnection();
-            Statement st=con.createStatement();
-            try
-            {
-                ResultSet rs=st.executeQuery("select count(*) from swb_admlog");
-                if(rs.next())
-                {
-                    int x=rs.getInt(1);
+        try {
+            Connection con = SWBUtils.DB.getDefaultConnection();
+            Statement st = con.createStatement();
+            try {
+                ResultSet rs = st.executeQuery("select count(*) from swb_admlog");
+                if (rs.next()) {
+                    int x = rs.getInt(1);
                 }
                 rs.close();
-            }catch(SQLException ne)
-            {
+            } catch (SQLException ne) {
                 //ne.printStackTrace();
                 log.event("Creating Logs Tables...");
-                GenericDB db=new GenericDB();
-                String xml=SWBUtils.IO.getFileFromPath(SWBUtils.getApplicationPath()+"/WEB-INF/xml/swb_logs.xml");
+                GenericDB db = new GenericDB();
+                String xml = SWBUtils.IO.getFileFromPath(SWBUtils.getApplicationPath() + "/WEB-INF/xml/swb_logs.xml");
                 //System.out.println("xml:"+xml);
-                db.executeSQLScript(xml,SWBUtils.DB.getDatabaseName(), null);
+                db.executeSQLScript(xml, SWBUtils.DB.getDatabaseName(), null);
             }
             st.close();
             con.close();
-        }catch(SQLException e)
-        {
+        } catch (SQLException e) {
             log.error(e);
         }
 
-        m_sessions=new HashMap();
+        m_sessions = new HashMap();
 
         usrMgr = new SWBUserMgr();
         usrMgr.init();
@@ -179,9 +173,9 @@ public class SWBPortal {
                 admFiles.put("/" + ze.getName(), new JarFile(ze, zipPath));
             }
             zf.close();
-            //log.event("-->Admin Files in Memory:\t" + admFiles.size());
+        //log.event("-->Admin Files in Memory:\t" + admFiles.size());
         } catch (Exception e) {
-            log.warn("Error loading files for Webbuilder Administration:" + SWBUtils.getApplicationPath() + "/WEB-INF/lib/SWBAdmin.jar",e);
+            log.warn("Error loading files for Webbuilder Administration:" + SWBUtils.getApplicationPath() + "/WEB-INF/lib/SWBAdmin.jar", e);
         }
 
         try {
@@ -197,7 +191,7 @@ public class SWBPortal {
             zf.close();
             log.event("-->Admin Files in Memory:\t" + admFiles.size());
         } catch (Exception e) {
-            log.warn("Error loading files for Webbuilder Administration:" + SWBUtils.getApplicationPath() + "/WEB-INF/lib/dojo.zip",e);
+            log.warn("Error loading files for Webbuilder Administration:" + SWBUtils.getApplicationPath() + "/WEB-INF/lib/dojo.zip", e);
         }
     }
 
@@ -205,82 +199,6 @@ public class SWBPortal {
         return SWBPlatform.getContextPath() + "/" + SWBPlatform.getEnv("swb/distributor", "swb");
     }
 
-/*
-    public static SWBServices getSWBServices() {
-        SWBServices swbServices = new SWBServices();
-        return swbServices;
-    }
-
-    public static DnsSrv getDnsSrv() {
-        DnsSrv dnsSrv = new DnsSrv();
-        return dnsSrv;
-    }
-
-    public static DeviceSrv getDeviceSrv() {
-        DeviceSrv deviceSrv = new DeviceSrv();
-        return deviceSrv;
-    }
-
-    public static CalendarSrv getCalendarSrv() {
-        CalendarSrv calendarSrv = new CalendarSrv();
-        return calendarSrv;
-    }
-
-    public static GroupSrv getGrouprv() {
-        GroupSrv groupSrv = new GroupSrv();
-        return groupSrv;
-    }
-
-    public static ResourceSrv getResourcerv() {
-        ResourceSrv resSrv = new ResourceSrv();
-        return resSrv;
-    }
-
-    public static IPFilterSrv getIPFilterSrv() {
-        IPFilterSrv iPFilterSrv = new IPFilterSrv();
-        return iPFilterSrv;
-    }
-
-    public static RoleSrv getRoleSrv() {
-        RoleSrv roleSrv = new RoleSrv();
-        return roleSrv;
-    }
-
-    public static RuleSrv getRuleSrv() {
-        RuleSrv ruleSrv = new RuleSrv();
-        return ruleSrv;
-    }
-
-    public static TemplateSrv getTemplateSrv() {
-        TemplateSrv templateSrv = new TemplateSrv();
-        return templateSrv;
-    }
-
-    public static WebPageSrv getWebPageSrv() {
-        WebPageSrv webPageSrv = new WebPageSrv();
-        return webPageSrv;
-    }
-
-    public static WebSiteSrv getWebSiteSrv() {
-        WebSiteSrv webSiteSrv = new WebSiteSrv();
-        return webSiteSrv;
-    }
-
-    public static LanguageSrv getLanguageSrv() {
-        LanguageSrv langSrv = new LanguageSrv();
-        return langSrv;
-    }
-
-    public static CampSrv getCampSrv() {
-        CampSrv campSrv = new CampSrv();
-        return campSrv;
-    }
-
-    public static PFlowSrv getPFlowSrv() {
-        PFlowSrv pFlowSrv = new PFlowSrv();
-        return pFlowSrv;
-    }
-*/
     public static SWBUserMgr getUserMgr() {
         return usrMgr;
     }
@@ -300,7 +218,6 @@ public class SWBPortal {
     public static SWBServiceMgr getServiceMgr() {
         return servicemgr;
     }
-    
 
     /**
      * Logeo de acciones
@@ -322,10 +239,11 @@ public class SWBPortal {
 
     public static JarFile getAdminFile(String path) {
         JarFile f = new JarFile(path);
-        if(!f.exists())
-        {
-            JarFile aux=(JarFile) admFiles.get(path);
-            if(aux!=null)f=aux;
+        if (!f.exists()) {
+            JarFile aux = (JarFile) admFiles.get(path);
+            if (aux != null) {
+                f = aux;
+            }
         }
 //        JarFile f = (JarFile) admFiles.get(path);
 //        if (f == null) {
@@ -360,571 +278,514 @@ public class SWBPortal {
         }
         return languages;
     }
-    
-    public static String parseHTML(String datos, String ruta)
-    {
-        return parseHTML(datos,ruta,0);
+
+    public static void addSessionUser(User user) {
+        if (user != null) {
+            SessionUser sess = m_sessions.get(Thread.currentThread().getName());
+            if (sess == null) {
+                m_sessions.put(Thread.currentThread().getName(), new SessionUser(user));
+            } else {
+                sess.setUser(user);
+            }
+        }
     }
 
-    /**
-     * @param datos
-     * @param ruta
-     * @return  */
-    public static String parseHTML(String datos, String ruta, int pages) {
-        hAnchors = new HashMap();
-        //detección de si el contenido es de word
-        boolean iswordcontent = false;
-        int posword = -1;
-        posword = datos.toLowerCase().indexOf("name=generator content=\"microsoft word");
-        if (posword > -1) {
-            iswordcontent = true;
+    public static User getSessionUser() {
+        Principal user = null;
+        SessionUser sess = m_sessions.get(Thread.currentThread().getName());
+        if (sess != null) {
+            user = sess.getUser();
         }
-        //termina detección de si es contenido de word
+        return (User) user;
+    }
 
-        HtmlTag tag = new HtmlTag();
-        int pos = -1;
-        int pos1 = -1;
-        StringBuffer ret = new StringBuffer();
-        try {
-            HtmlStreamTokenizer tok = new HtmlStreamTokenizer(new ByteArrayInputStream(datos.getBytes()));
-            while (tok.nextToken() != HtmlStreamTokenizer.TT_EOF) {
-                int ttype = tok.getTokenType();
-                //if (ttype==HtmlStreamTokenizer.TT_COMMENT) continue;
-                if (ttype == HtmlStreamTokenizer.TT_TAG || ttype == HtmlStreamTokenizer.TT_COMMENT) {
-                    if (ttype == HtmlStreamTokenizer.TT_COMMENT && tok.getRawString().equals("<!-- -->")) {
-                        continue;
-                    }
-                    tok.parseTag(tok.getStringValue(), tag);
+    public static long getSessionUserID() {
+        long ret = 0;
+        Principal user = null;
+        SessionUser sess = m_sessions.get(Thread.currentThread().getName());
+        if (sess != null) {
+            ret = sess.geRequestID();
+        }
+        return ret;
+    }
 
-                    if (tok.getRawString().toLowerCase().startsWith("<!--[if")) {
-                        continue;
-                    }
-                    if ((tag.getTagString().toLowerCase().equals("img") || tag.getTagString().toLowerCase().equals("applet") || tag.getTagString().toLowerCase().equals("script") || tag.getTagString().toLowerCase().equals("tr") || tag.getTagString().toLowerCase().equals("td") || tag.getTagString().toLowerCase().equals("table") || tag.getTagString().toLowerCase().equals("body") || tag.getTagString().toLowerCase().equals("input") || tag.getTagString().toLowerCase().equals("a") || tag.getTagString().toLowerCase().equals("form") || tag.getTagString().toLowerCase().equals("area") || tag.getTagString().toLowerCase().equals("meta") || tag.getTagString().toLowerCase().equals("bca") || tag.getTagString().toLowerCase().equals("link") || tag.getTagString().toLowerCase().equals("param") || tag.getTagString().toLowerCase().equals("embed") || tag.getTagString().toLowerCase().equals("iframe") || tag.getTagString().toLowerCase().equals("frame")) && !tok.getRawString().startsWith("<!--")) {
-                        if (!tag.isEndTag()) {
-                            ret.append("<");
-                            ret.append(tag.getTagString());
-                            ret.append(" ");
-                            Enumeration en = tag.getParamNames();
-                            String name = "";
-                            String value = "";
-                            String actionval = "";
-                            while (en.hasMoreElements()) {
-                                boolean bwritestyle = true;
-                                name = (String) en.nextElement();
-                                value = tag.getParam(name);
+    public static class UTIL {
 
-                                //revisar si no tiene repercuciones
-                                value = value.replace('\\', '/');
-                                value = SWBUtils.TEXT.replaceAll(value, "%3f", "?");
-                                value = SWBUtils.TEXT.replaceAll(value, "%3F", "?");
+        public static String parseHTML(String datos, String ruta) {
+            return parseHTML(datos, ruta, 0);
+        }
 
-                                String sruta = null;
-                                if ((name.toLowerCase().equals("src") || name.toLowerCase().equals("href") || name.toLowerCase().equals("background") || name.toLowerCase().equals("codebase") || name.toLowerCase().equals("value")) && !value.startsWith("http://") && !value.startsWith("https://") && !value.startsWith("mailto:") && !value.startsWith("javascript:") && !value.startsWith("ftp:") && !value.startsWith("rtsp:") && !value.startsWith("telnet:") && !value.startsWith("#") && !value.startsWith("/") && !value.startsWith("../") && !value.startsWith("{")) {
-                                    if (!tag.getTagString().toLowerCase().equals("input") && !value.toLowerCase().equals("true") && !value.toLowerCase().equals("false") && value.indexOf(".") > -1) {
-                                        sruta = ruta;
-                                    }
-                                    //poner solo archivo
-                                    if (((pos = value.indexOf("/")) > -1) || (pos = value.indexOf("\\")) > -1) {
-                                        value = findFileName(value);
-                                    }
-                                } else if (name.toLowerCase().equals("href") && value.startsWith("../")) {
-                                    value = "/" + takeOffString(value, "../");
-                                } else if (name.toLowerCase().equals("href") && value.startsWith("#_") && pages > 1) { //Es un ancla
-                                    int page = findAnchorInContent(datos, value, pages);
-                                    if (page > 0) {
-                                        value = "?page=" + page + "&" + value;
-                                    }
-                                } else if (name.toLowerCase().equals("onmouseover") || name.toLowerCase().equals("onload") || name.toLowerCase().equals("onmouseout") || name.toLowerCase().equals("onclick")) {
-                                    String out = findImagesInScript(value, ".gif'", ruta);
-                                    out = findImagesInScript(out, ".jpg'", ruta);
-                                    //ret.append(ruta);
-                                    if (!out.equals("")) {
-                                        value = out;
-                                    }
-                                } else if (tag.getTagString().toLowerCase().equals("body") && iswordcontent && (name.equals("link") || name.equals("vlink"))) { //elimina los liks
-                                    bwritestyle = false;
-                                }
-                                if (bwritestyle) {
-                                    ret.append(name);
-                                    ret.append("=\"");
-                                    if (sruta != null) {
-                                        ret.append(sruta);
-                                    }
-                                    ret.append(value);
-                                    ret.append("\" ");
-                                }
-                            }
-                            if (tag.isEmpty()) {
-                                ret.append("/");
-                            }
-                            ret.append(">");
-                            if (tag.getTagString().toLowerCase().equals("form")) {
-                                ret.append(actionval);
-                            }
-                        } else {
-                            ret.append(tok.getRawString());
+        /**
+         * @param datos
+         * @param ruta
+         * @return  */
+        public static String parseHTML(String datos, String ruta, int pages) {
+            hAnchors = new HashMap();
+            //detección de si el contenido es de word
+            boolean iswordcontent = false;
+            int posword = -1;
+            posword = datos.toLowerCase().indexOf("name=generator content=\"microsoft word");
+            if (posword > -1) {
+                iswordcontent = true;
+            }
+            //termina detección de si es contenido de word
+
+            HtmlTag tag = new HtmlTag();
+            int pos = -1;
+            int pos1 = -1;
+            StringBuffer ret = new StringBuffer();
+            try {
+                HtmlStreamTokenizer tok = new HtmlStreamTokenizer(new ByteArrayInputStream(datos.getBytes()));
+                while (tok.nextToken() != HtmlStreamTokenizer.TT_EOF) {
+                    int ttype = tok.getTokenType();
+                    //if (ttype==HtmlStreamTokenizer.TT_COMMENT) continue;
+                    if (ttype == HtmlStreamTokenizer.TT_TAG || ttype == HtmlStreamTokenizer.TT_COMMENT) {
+                        if (ttype == HtmlStreamTokenizer.TT_COMMENT && tok.getRawString().equals("<!-- -->")) {
+                            continue;
                         }
-                    } else {
-                        ret.append(tok.getRawString());
-                    }
-                } else if (ttype == HtmlStreamTokenizer.TT_TEXT) {
-                    ret.append(tok.getRawString());
-                }
-            }
-        } catch (NumberFormatException f) {
-            log.error(f);
-        } catch (Exception e) {
-            log.error(e);
-        }
-        return ret.toString();
-    }
+                        tok.parseTag(tok.getStringValue(), tag);
 
-     private static String findFileName(String value)
-    {
-        //System.out.println("value:"+value);
-        String out="";
-        if(value.startsWith("../"))
-        {
-            out=takeOffString(value,"../");
-            if(!out.equals(""))value=out;
-        }
-        int x=value.lastIndexOf(".");
-        if(x>-1)
-        {
-            int y=value.lastIndexOf("\\",x);
-            if(y>-1)
-            {
-                //System.out.println("entra a y:"+x);
-                value=value.substring(y+1);
-            }
-            y=value.lastIndexOf("/",x);
-            if(y>-1)
-            {
-                //System.out.println("entra a y :"+y);
-                value=value.substring(y+1);
-            }
-        }
-        //System.out.println("regresa:"+value);
-        return value;
-    }
-    
-    public static String takeOffString(String value, String takeOff) {
-        int pos = -1;
-        do {
-            pos = value.indexOf(takeOff);
-            if (pos != -1) {
-                value = value.substring(pos + takeOff.length());
-            }
-        } while (pos != -1);
-        return value;
-    }
-    
-    private static int findAnchorInContent(String content,String ancla,int pages)
-    {
-        ancla=ancla.substring(1);
-        Integer page=(Integer)hAnchors.get(ancla);
-        if(page!=null)
-        { //existe en hash de anclas
-            return page.intValue();
-        }
-        else
-        {
-            for(int i=0;i<=pages;i++)
-            {
-                if(findAnchorInContentPage(content,ancla,i,pages)) return i;
-            }
-        }
-        return 0;
-    }
-    
-    /**
-     * @param datos
-     * @param ruta
-     */
-    public static boolean findAnchorInContentPage(String datos,String ancla,int page,int itpages)
-    {
-        HtmlTag tag = new HtmlTag();
-        boolean flag=false;
-        boolean flag1=false;
-        boolean flag2=false;
-        try
-        {
-            HtmlStreamTokenizer tok = new HtmlStreamTokenizer(new java.io.ByteArrayInputStream(datos.getBytes()));
-            while(tok.nextToken()!=HtmlStreamTokenizer.TT_EOF)
-            {
-                int ttype = tok.getTokenType();
-                if (ttype == HtmlStreamTokenizer.TT_TAG || ttype==HtmlStreamTokenizer.TT_COMMENT)
-                {
-                    tok.parseTag(tok.getStringValue(), tag);
-                    if (tok.getRawString().toLowerCase().startsWith("<!--[if"))
-                    {continue;}
-                    if(tag.getTagString().toLowerCase().equals("div"))
-                    {
-                        flag1=true;
-                        if(!tag.isEndTag())
-                        {
-                            Enumeration en=tag.getParamNames();
-                            String name="";
-                            String value="";
-                            while(en.hasMoreElements())
-                            {
-                                name=(String)en.nextElement();
-                                value=tag.getParam(name);
-                                if(name.toLowerCase().equals("class"))
-                                {
-                                    if(value.toLowerCase().equals("section"+page))
-                                    {
-                                        flag=true;
-                                    }
-                                }else  if(flag)
-                                {
-                                    flag2=true;
-                                }
-                            }
+                        if (tok.getRawString().toLowerCase().startsWith("<!--[if")) {
+                            continue;
                         }
-                        else
-                        {
-                            if(flag && !flag2)
-                            {
-                                //entra a este if y se rompe el ciclo solo si la página actual es menos al total de páginas encontradas en el documento,
-                                //si es igual, entonces no lo rompe y se termina hasta que se acaba el html, para que funcionen los pie de página si existen 
-                                //al final del dicumento
-                                if(page<itpages){ 
-                                    break;
-                                }
-                            }else if(flag && flag2)
-                            {
-                                flag2=false;
-                            }
-                        }
-                    }
-                    else if(flag1 && flag)
-                    {
-                        if(tag.getTagString().toLowerCase().equals("a"))
-                        {
-                            if (!tag.isEndTag())
-                            {
+                        if ((tag.getTagString().toLowerCase().equals("img") || tag.getTagString().toLowerCase().equals("applet") || tag.getTagString().toLowerCase().equals("script") || tag.getTagString().toLowerCase().equals("tr") || tag.getTagString().toLowerCase().equals("td") || tag.getTagString().toLowerCase().equals("table") || tag.getTagString().toLowerCase().equals("body") || tag.getTagString().toLowerCase().equals("input") || tag.getTagString().toLowerCase().equals("a") || tag.getTagString().toLowerCase().equals("form") || tag.getTagString().toLowerCase().equals("area") || tag.getTagString().toLowerCase().equals("meta") || tag.getTagString().toLowerCase().equals("bca") || tag.getTagString().toLowerCase().equals("link") || tag.getTagString().toLowerCase().equals("param") || tag.getTagString().toLowerCase().equals("embed") || tag.getTagString().toLowerCase().equals("iframe") || tag.getTagString().toLowerCase().equals("frame")) && !tok.getRawString().startsWith("<!--")) {
+                            if (!tag.isEndTag()) {
+                                ret.append("<");
+                                ret.append(tag.getTagString());
+                                ret.append(" ");
                                 Enumeration en = tag.getParamNames();
                                 String name = "";
                                 String value = "";
                                 String actionval = "";
-                                while (en.hasMoreElements())
-                                {
+                                while (en.hasMoreElements()) {
+                                    boolean bwritestyle = true;
                                     name = (String) en.nextElement();
                                     value = tag.getParam(name);
-                                    if(name.toLowerCase().equals("name") && value.equals(ancla))
-                                    { //emcontrado
-                                        hAnchors.put(value, new Integer(page));
-                                        return true;
-                                    }
-                                    else if(name.toLowerCase().equals("name") && value.startsWith("_"))
-                                    { //es una ancla, guardarla en hash de anclas
-                                        if(hAnchors.get(value)==null) {
-                                            hAnchors.put(value, new Integer(page));
+
+                                    //revisar si no tiene repercuciones
+                                    value = value.replace('\\', '/');
+                                    value = SWBUtils.TEXT.replaceAll(value, "%3f", "?");
+                                    value = SWBUtils.TEXT.replaceAll(value, "%3F", "?");
+
+                                    String sruta = null;
+                                    if ((name.toLowerCase().equals("src") || name.toLowerCase().equals("href") || name.toLowerCase().equals("background") || name.toLowerCase().equals("codebase") || name.toLowerCase().equals("value")) && !value.startsWith("http://") && !value.startsWith("https://") && !value.startsWith("mailto:") && !value.startsWith("javascript:") && !value.startsWith("ftp:") && !value.startsWith("rtsp:") && !value.startsWith("telnet:") && !value.startsWith("#") && !value.startsWith("/") && !value.startsWith("../") && !value.startsWith("{")) {
+                                        if (!tag.getTagString().toLowerCase().equals("input") && !value.toLowerCase().equals("true") && !value.toLowerCase().equals("false") && value.indexOf(".") > -1) {
+                                            sruta = ruta;
                                         }
+                                        //poner solo archivo
+                                        if (((pos = value.indexOf("/")) > -1) || (pos = value.indexOf("\\")) > -1) {
+                                            value = findFileName(value);
+                                        }
+                                    } else if (name.toLowerCase().equals("href") && value.startsWith("../")) {
+                                        value = "/" + takeOffString(value, "../");
+                                    } else if (name.toLowerCase().equals("href") && value.startsWith("#_") && pages > 1) { //Es un ancla
+                                        int page = findAnchorInContent(datos, value, pages);
+                                        if (page > 0) {
+                                            value = "?page=" + page + "&" + value;
+                                        }
+                                    } else if (name.toLowerCase().equals("onmouseover") || name.toLowerCase().equals("onload") || name.toLowerCase().equals("onmouseout") || name.toLowerCase().equals("onclick")) {
+                                        String out = findImagesInScript(value, ".gif'", ruta);
+                                        out = findImagesInScript(out, ".jpg'", ruta);
+                                        //ret.append(ruta);
+                                        if (!out.equals("")) {
+                                            value = out;
+                                        }
+                                    } else if (tag.getTagString().toLowerCase().equals("body") && iswordcontent && (name.equals("link") || name.equals("vlink"))) { //elimina los liks
+                                        bwritestyle = false;
+                                    }
+                                    if (bwritestyle) {
+                                        ret.append(name);
+                                        ret.append("=\"");
+                                        if (sruta != null) {
+                                            ret.append(sruta);
+                                        }
+                                        ret.append(value);
+                                        ret.append("\" ");
                                     }
                                 }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        catch(Exception e)
-        {
-            log.error(e);
-        }
-        return false;
-    }
-    
-    private static String findImagesInScript(String value, String ext, String ruta)
-    {
-        StringBuffer aux = new StringBuffer(value.length());
-        int off = 0;
-        int f = 0;
-        int i = 0;
-        int j = 0;
-        do
-        {
-            f = value.indexOf(ext, off);
-            i = value.lastIndexOf("'", f);
-            j = value.lastIndexOf("/", f);
-            if (f > 0 && i >= 0)
-            {
-                i++;
-                if (value.startsWith("/", i) || value.startsWith("http://", i))
-                {
-                    aux.append(value.substring(off, f + ext.length()));
-                } else if (j > -1)
-                {
-                    aux.append(value.substring(off, i) + ruta + value.substring(j + 1, f + ext.length()));
-                } else
-                {
-                    aux.append(value.substring(off, i) + ruta + value.substring(i, f + ext.length()));
-                }
-                off = f + ext.length();
-            }
-        } while (f > 0 && i > 0);
-        aux.append(value.substring(off));
-        return aux.toString();
-    }
-    
-    /**
-     * @param datos
-     * @param ruta
-     * @return  */
-    public static String parseXsl(String datos, String ruta) {
-        HtmlTag tag = new HtmlTag();
-        int pos = -1;
-        int pos1 = -1;
-        StringBuffer ret = new StringBuffer();
-        try {
-            HtmlStreamTokenizer tok = new HtmlStreamTokenizer(new ByteArrayInputStream(datos.getBytes()));
-            while (tok.nextToken() != HtmlStreamTokenizer.TT_EOF) {
-                int ttype = tok.getTokenType();
-                //if (ttype==HtmlStreamTokenizer.TT_COMMENT) continue;
-                if (ttype == HtmlStreamTokenizer.TT_TAG || ttype == HtmlStreamTokenizer.TT_COMMENT) {
-                    if(ttype==HtmlStreamTokenizer.TT_COMMENT && tok.getRawString().equals("<!-- -->")) {
-                        continue;
-                    }
-                    tok.parseTag(tok.getStringValue(), tag);
-                    
-                    if (tok.getRawString().toLowerCase().startsWith("<!--[if")) {
-                        continue;
-                    }
-                    //if (tag.getTagString().toLowerCase().startsWith("o:")){System.out.println("o:Salto");   continue;}
-                    if (tag.getTagString().toLowerCase().equals("img")
-                    || tag.getTagString().toLowerCase().equals("applet")
-                    || tag.getTagString().toLowerCase().equals("script")
-                    || tag.getTagString().toLowerCase().equals("td")
-                    || tag.getTagString().toLowerCase().equals("table")
-                    || tag.getTagString().toLowerCase().equals("body")
-                    || tag.getTagString().toLowerCase().equals("input")
-                    || tag.getTagString().toLowerCase().equals("a")
-                    || tag.getTagString().toLowerCase().equals("form")
-                    || tag.getTagString().toLowerCase().equals("area")
-                    || tag.getTagString().toLowerCase().equals("meta")
-                    || tag.getTagString().toLowerCase().equals("bca")
-                    || tag.getTagString().toLowerCase().equals("link")
-                    || tag.getTagString().toLowerCase().equals("param")
-                    || tag.getTagString().toLowerCase().equals("embed")
-                    || tag.getTagString().toLowerCase().equals("iframe")
-                    || tag.getTagString().toLowerCase().equals("frame")
-                    ) {
-                        
-                        if (!tag.isEndTag()) {
-                            ret.append("<");
-                            ret.append(tag.getTagString());
-                            ret.append(" ");
-                            Enumeration en = tag.getParamNames();
-                            String name = "";
-                            String value = "";
-                            String actionval = "";
-                            while (en.hasMoreElements()) {
-                                name = (String) en.nextElement();
-                                value = tag.getParam(name);
-                                ret.append(name);
-                                ret.append("=\"");
-                                if((name.toLowerCase().equals("src")||name.toLowerCase().equals("href")||name.toLowerCase().equals("background")||name.toLowerCase().equals("codebase")||name.toLowerCase().equals("value"))&&!value.startsWith("http://")&&!value.startsWith("mailto:")&&!value.startsWith("javascript:")&&!value.startsWith("ftp:")&&!value.startsWith("rtsp:")&&!value.startsWith("telnet:")&&!value.startsWith("#")&&!value.startsWith("/")&&!value.startsWith("{")) {
-                                    if(!tag.getTagString().toLowerCase().equals("input") && !value.toLowerCase().equals("true") && !value.toLowerCase().equals("false") && value.indexOf(".")>-1)
-                                        ret.append(ruta);
-                                    //poner solo archivo
-                                    if(((pos=value.indexOf("/"))>-1) || (pos=value.indexOf("\\"))>-1)
-                                        value=findFileName(value);
+                                if (tag.isEmpty()) {
+                                    ret.append("/");
                                 }
-                                if(name.toLowerCase().equals("onmouseover") || name.toLowerCase().equals("onload")|| name.toLowerCase().equals("onmouseout")||name.toLowerCase().equals("onclick")) {
-                                    String out=findImagesInScript(value,".gif'",ruta);
-                                    out=findImagesInScript(out,".jpg'",ruta);
-                                    //ret.append(ruta);
-                                    if(!out.equals("")) value=out;
-                                    //System.out.println("out:"+out);
+                                ret.append(">");
+                                if (tag.getTagString().toLowerCase().equals("form")) {
+                                    ret.append(actionval);
                                 }
-                                ret.append(value);
-                                ret.append("\" ");
+                            } else {
+                                ret.append(tok.getRawString());
                             }
-                            //if(tag.getTagString().toLowerCase().equals("img") && tok.getStringValue().toString().endsWith("/")) {
-                            if(tag.isEmpty()) {
-                                ret.append("/");
-                            }
-                            
-                            ret.append(">");
-                            
-                            if (tag.getTagString().toLowerCase().equals("form")) ret.append(actionval);
                         } else {
                             ret.append(tok.getRawString());
                         }
-                    } else {
+                    } else if (ttype == HtmlStreamTokenizer.TT_TEXT) {
                         ret.append(tok.getRawString());
                     }
-                } else if (ttype == HtmlStreamTokenizer.TT_TEXT) {
-                    ret.append(tok.getRawString());
+                }
+            } catch (NumberFormatException f) {
+                log.error(f);
+            } catch (Exception e) {
+                log.error(e);
+            }
+            return ret.toString();
+        }
+
+        private static String findFileName(String value) {
+            //System.out.println("value:"+value);
+            String out = "";
+            if (value.startsWith("../")) {
+                out = takeOffString(value, "../");
+                if (!out.equals("")) {
+                    value = out;
                 }
             }
-        } catch (NumberFormatException f) {
-            log.error(SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBUtils_decodifica"), f);
-        } catch (Exception e) {
-            log.error(SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBUtils_IOHTML"), e);
+            int x = value.lastIndexOf(".");
+            if (x > -1) {
+                int y = value.lastIndexOf("\\", x);
+                if (y > -1) {
+                    //System.out.println("entra a y:"+x);
+                    value = value.substring(y + 1);
+                }
+                y = value.lastIndexOf("/", x);
+                if (y > -1) {
+                    //System.out.println("entra a y :"+y);
+                    value = value.substring(y + 1);
+                }
+            }
+            //System.out.println("regresa:"+value);
+            return value;
         }
-        return ret.toString();
-    }
-    
-    
-    /**
-     * @param datos
-     * @param ruta
-     */
-    public static String FindAttaches(String datos) {
-        HtmlTag tag = new HtmlTag();
-        StringBuffer ret = new StringBuffer();
-        Vector vvector = new Vector();
-        try {
-            HtmlStreamTokenizer tok = new HtmlStreamTokenizer(new ByteArrayInputStream(datos.getBytes()));
-            while (tok.nextToken() != HtmlStreamTokenizer.TT_EOF) {
-                
-                int ttype = tok.getTokenType();
-                if (ttype == HtmlStreamTokenizer.TT_TAG || ttype == HtmlStreamTokenizer.TT_COMMENT) {
-                    tok.parseTag(tok.getStringValue(), tag);
-                    
-                    if (tok.getRawString().toLowerCase().startsWith("<!--[if")) {
-                        continue;
+
+        public static String takeOffString(String value, String takeOff) {
+            int pos = -1;
+            do {
+                pos = value.indexOf(takeOff);
+                if (pos != -1) {
+                    value = value.substring(pos + takeOff.length());
+                }
+            } while (pos != -1);
+            return value;
+        }
+
+        private static int findAnchorInContent(String content, String ancla, int pages) {
+            ancla = ancla.substring(1);
+            Integer page = (Integer) hAnchors.get(ancla);
+            if (page != null) { //existe en hash de anclas
+                return page.intValue();
+            } else {
+                for (int i = 0; i <= pages; i++) {
+                    if (findAnchorInContentPage(content, ancla, i, pages)) {
+                        return i;
                     }
-                    //if (tag.getTagString().toLowerCase().startsWith("o:")){System.out.println("o:Salto");   continue;}
-                    if (tag.getTagString().toLowerCase().equals("img")
-                    || tag.getTagString().toLowerCase().equals("applet")
-                    || tag.getTagString().toLowerCase().equals("script")
-                    || tag.getTagString().toLowerCase().equals("td")
-                    || tag.getTagString().toLowerCase().equals("table")
-                    || tag.getTagString().toLowerCase().equals("body")
-                    || tag.getTagString().toLowerCase().equals("input")
-                    || tag.getTagString().toLowerCase().equals("a")
-                    || tag.getTagString().toLowerCase().equals("area")
-                    || tag.getTagString().toLowerCase().equals("link")
-                    || tag.getTagString().toLowerCase().equals("param")
-                    || tag.getTagString().toLowerCase().equals("embed")
-                    ) {
-                        if (!tag.isEndTag()) {
-                            //ret.append("<");
-                            //ret.append(tag.getTagString());
-                            //ret.append(" ");
-                            Enumeration en = tag.getParamNames();
-                            String name = "";
-                            String value = "";
-                            String actionval = "";
-                            while (en.hasMoreElements()) {
-                                name = (String) en.nextElement();
-                                value = tag.getParam(name);
-                                String out = null;
-                                if ((name.toLowerCase().equals("src") || name.toLowerCase().equals("href") || name.toLowerCase().equals("background") || name.toLowerCase().equals("codebase") || name.toLowerCase().equals("value")) && !value.startsWith("http://") && !value.startsWith("mailto:") && !value.startsWith("javascript:") && !value.startsWith("ftp:") && !value.startsWith("telnet:") && !value.startsWith("#") && !value.startsWith("/") && !value.startsWith("{")) {
-                                    String stype="";
-                                    if(tag.getTagString().toLowerCase().equals("input")) {
-                                        stype=tag.getParam("type").toLowerCase();
+                }
+            }
+            return 0;
+        }
+
+        /**
+         * @param datos
+         * @param ruta
+         */
+        public static boolean findAnchorInContentPage(String datos, String ancla, int page, int itpages) {
+            HtmlTag tag = new HtmlTag();
+            boolean flag = false;
+            boolean flag1 = false;
+            boolean flag2 = false;
+            try {
+                HtmlStreamTokenizer tok = new HtmlStreamTokenizer(new java.io.ByteArrayInputStream(datos.getBytes()));
+                while (tok.nextToken() != HtmlStreamTokenizer.TT_EOF) {
+                    int ttype = tok.getTokenType();
+                    if (ttype == HtmlStreamTokenizer.TT_TAG || ttype == HtmlStreamTokenizer.TT_COMMENT) {
+                        tok.parseTag(tok.getStringValue(), tag);
+                        if (tok.getRawString().toLowerCase().startsWith("<!--[if")) {
+                            continue;
+                        }
+                        if (tag.getTagString().toLowerCase().equals("div")) {
+                            flag1 = true;
+                            if (!tag.isEndTag()) {
+                                Enumeration en = tag.getParamNames();
+                                String name = "";
+                                String value = "";
+                                while (en.hasMoreElements()) {
+                                    name = (String) en.nextElement();
+                                    value = tag.getParam(name);
+                                    if (name.toLowerCase().equals("class")) {
+                                        if (value.toLowerCase().equals("section" + page)) {
+                                            flag = true;
+                                        }
+                                    } else if (flag) {
+                                        flag2 = true;
                                     }
-                                    if (!value.startsWith("http://") && !value.startsWith("https://") && (!tag.getTagString().toLowerCase().equals("input") || (tag.getTagString().toLowerCase().equals("input") && stype.equals("image")))) {
-                                        if(value.toLowerCase().endsWith(".gif") || value.toLowerCase().endsWith(".jpg") || value.toLowerCase().endsWith(".jpeg") || value.toLowerCase().endsWith(".bmp") ||
-                                        value.toLowerCase().endsWith(".doc") || value.toLowerCase().endsWith(".htm") || value.toLowerCase().endsWith(".html") || value.toLowerCase().endsWith(".zip") ||
-                                        value.toLowerCase().endsWith(".txt") || value.toLowerCase().endsWith(".pdf") || value.toLowerCase().endsWith(".xls") || value.toLowerCase().endsWith(".ppt") ||
-                                        value.toLowerCase().endsWith(".xsl") || value.toLowerCase().endsWith(".xslt") || value.toLowerCase().endsWith(".bin") || value.toLowerCase().endsWith(".tar")) {
-                                            out = value;
+                                }
+                            } else {
+                                if (flag && !flag2) {
+                                    //entra a este if y se rompe el ciclo solo si la página actual es menos al total de páginas encontradas en el documento,
+                                    //si es igual, entonces no lo rompe y se termina hasta que se acaba el html, para que funcionen los pie de página si existen
+                                    //al final del dicumento
+                                    if (page < itpages) {
+                                        break;
+                                    }
+                                } else if (flag && flag2) {
+                                    flag2 = false;
+                                }
+                            }
+                        } else if (flag1 && flag) {
+                            if (tag.getTagString().toLowerCase().equals("a")) {
+                                if (!tag.isEndTag()) {
+                                    Enumeration en = tag.getParamNames();
+                                    String name = "";
+                                    String value = "";
+                                    String actionval = "";
+                                    while (en.hasMoreElements()) {
+                                        name = (String) en.nextElement();
+                                        value = tag.getParam(name);
+                                        if (name.toLowerCase().equals("name") && value.equals(ancla)) { //emcontrado
+                                            hAnchors.put(value, new Integer(page));
+                                            return true;
+                                        } else if (name.toLowerCase().equals("name") && value.startsWith("_")) { //es una ancla, guardarla en hash de anclas
+                                            if (hAnchors.get(value) == null) {
+                                                hAnchors.put(value, new Integer(page));
+                                            }
                                         }
                                     }
-                                }else if ((name.toLowerCase().equals("src") || name.toLowerCase().equals("href") || name.toLowerCase().equals("background") || name.toLowerCase().equals("codebase") || name.toLowerCase().equals("value")) && !value.startsWith("http://") && !value.startsWith("mailto:") && !value.startsWith("javascript:") && !value.startsWith("ftp:") && !value.startsWith("telnet:") && !value.startsWith("#") && !value.startsWith("/") && value.startsWith("{")) {
-                                    int pos = -1;
-                                    pos = value.indexOf("}");
-                                    if (pos != -1) {
-                                        out = value.substring(pos + 1);
-                                    }
                                 }
-                                else if (name.toLowerCase().equals("href") && value.startsWith("/")) {
-                                    out = value;
-                                }
-                                else if (name.toLowerCase().equals("onmouseover")) {
-                                    //if(!value.startsWith("http://") && !value.startsWith("https://"))
-                                    int pos = -1,pos1 = -1;
-                                    pos = value.indexOf("http://");
-                                    pos1 = value.indexOf("https://");
-                                    if (pos < 0 && pos1 < 0) {
-                                        out = findImageInScript1(value, ".gif'", "");
-                                        out = findImageInScript1(out, ".jpg'", "");
-                                    }
-                                }
-                                if (out != null) {
-                                    boolean flag = false;
-                                    for (int i = 0; i < vvector.size(); i++) {
-                                        if (out.equals((String) vvector.elementAt(i)))
-                                            flag = true;
-                                    }
-                                    if (!flag) {
-                                        vvector.addElement(out);
-                                    }
-                                }
-                                
-                                //ret.append("\" ");
                             }
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                log.error(e);
+            }
+            return false;
+        }
+
+        private static String findImagesInScript(String value, String ext, String ruta) {
+            StringBuffer aux = new StringBuffer(value.length());
+            int off = 0;
+            int f = 0;
+            int i = 0;
+            int j = 0;
+            do {
+                f = value.indexOf(ext, off);
+                i = value.lastIndexOf("'", f);
+                j = value.lastIndexOf("/", f);
+                if (f > 0 && i >= 0) {
+                    i++;
+                    if (value.startsWith("/", i) || value.startsWith("http://", i)) {
+                        aux.append(value.substring(off, f + ext.length()));
+                    } else if (j > -1) {
+                        aux.append(value.substring(off, i) + ruta + value.substring(j + 1, f + ext.length()));
+                    } else {
+                        aux.append(value.substring(off, i) + ruta + value.substring(i, f + ext.length()));
+                    }
+                    off = f + ext.length();
+                }
+            } while (f > 0 && i > 0);
+            aux.append(value.substring(off));
+            return aux.toString();
+        }
+
+        /**
+         * @param datos
+         * @param ruta
+         * @return  */
+        public static String parseXsl(String datos, String ruta) {
+            HtmlTag tag = new HtmlTag();
+            int pos = -1;
+            int pos1 = -1;
+            StringBuffer ret = new StringBuffer();
+            try {
+                HtmlStreamTokenizer tok = new HtmlStreamTokenizer(new ByteArrayInputStream(datos.getBytes()));
+                while (tok.nextToken() != HtmlStreamTokenizer.TT_EOF) {
+                    int ttype = tok.getTokenType();
+                    //if (ttype==HtmlStreamTokenizer.TT_COMMENT) continue;
+                    if (ttype == HtmlStreamTokenizer.TT_TAG || ttype == HtmlStreamTokenizer.TT_COMMENT) {
+                        if (ttype == HtmlStreamTokenizer.TT_COMMENT && tok.getRawString().equals("<!-- -->")) {
+                            continue;
+                        }
+                        tok.parseTag(tok.getStringValue(), tag);
+
+                        if (tok.getRawString().toLowerCase().startsWith("<!--[if")) {
+                            continue;
+                        }
+                        //if (tag.getTagString().toLowerCase().startsWith("o:")){System.out.println("o:Salto");   continue;}
+                        if (tag.getTagString().toLowerCase().equals("img") || tag.getTagString().toLowerCase().equals("applet") || tag.getTagString().toLowerCase().equals("script") || tag.getTagString().toLowerCase().equals("td") || tag.getTagString().toLowerCase().equals("table") || tag.getTagString().toLowerCase().equals("body") || tag.getTagString().toLowerCase().equals("input") || tag.getTagString().toLowerCase().equals("a") || tag.getTagString().toLowerCase().equals("form") || tag.getTagString().toLowerCase().equals("area") || tag.getTagString().toLowerCase().equals("meta") || tag.getTagString().toLowerCase().equals("bca") || tag.getTagString().toLowerCase().equals("link") || tag.getTagString().toLowerCase().equals("param") || tag.getTagString().toLowerCase().equals("embed") || tag.getTagString().toLowerCase().equals("iframe") || tag.getTagString().toLowerCase().equals("frame")) {
+
+                            if (!tag.isEndTag()) {
+                                ret.append("<");
+                                ret.append(tag.getTagString());
+                                ret.append(" ");
+                                Enumeration en = tag.getParamNames();
+                                String name = "";
+                                String value = "";
+                                String actionval = "";
+                                while (en.hasMoreElements()) {
+                                    name = (String) en.nextElement();
+                                    value = tag.getParam(name);
+                                    ret.append(name);
+                                    ret.append("=\"");
+                                    if ((name.toLowerCase().equals("src") || name.toLowerCase().equals("href") || name.toLowerCase().equals("background") || name.toLowerCase().equals("codebase") || name.toLowerCase().equals("value")) && !value.startsWith("http://") && !value.startsWith("mailto:") && !value.startsWith("javascript:") && !value.startsWith("ftp:") && !value.startsWith("rtsp:") && !value.startsWith("telnet:") && !value.startsWith("#") && !value.startsWith("/") && !value.startsWith("{")) {
+                                        if (!tag.getTagString().toLowerCase().equals("input") && !value.toLowerCase().equals("true") && !value.toLowerCase().equals("false") && value.indexOf(".") > -1) {
+                                            ret.append(ruta);
+                                        }
+                                        //poner solo archivo
+                                        if (((pos = value.indexOf("/")) > -1) || (pos = value.indexOf("\\")) > -1) {
+                                            value = findFileName(value);
+                                        }
+                                    }
+                                    if (name.toLowerCase().equals("onmouseover") || name.toLowerCase().equals("onload") || name.toLowerCase().equals("onmouseout") || name.toLowerCase().equals("onclick")) {
+                                        String out = findImagesInScript(value, ".gif'", ruta);
+                                        out = findImagesInScript(out, ".jpg'", ruta);
+                                        //ret.append(ruta);
+                                        if (!out.equals("")) {
+                                            value = out;
+                                        }
+                                    //System.out.println("out:"+out);
+                                    }
+                                    ret.append(value);
+                                    ret.append("\" ");
+                                }
+                                //if(tag.getTagString().toLowerCase().equals("img") && tok.getStringValue().toString().endsWith("/")) {
+                                if (tag.isEmpty()) {
+                                    ret.append("/");
+                                }
+
+                                ret.append(">");
+
+                                if (tag.getTagString().toLowerCase().equals("form")) {
+                                    ret.append(actionval);
+                                }
+                            } else {
+                                ret.append(tok.getRawString());
+                            }
+                        } else {
+                            ret.append(tok.getRawString());
+                        }
+                    } else if (ttype == HtmlStreamTokenizer.TT_TEXT) {
+                        ret.append(tok.getRawString());
+                    }
+                }
+            } catch (NumberFormatException f) {
+                log.error(SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBUtils_decodifica"), f);
+            } catch (Exception e) {
+                log.error(SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBUtils_IOHTML"), e);
+            }
+            return ret.toString();
+        }
+
+        /**
+         * @param datos
+         * @param ruta
+         */
+        public static String FindAttaches(String datos) {
+            HtmlTag tag = new HtmlTag();
+            StringBuffer ret = new StringBuffer();
+            Vector vvector = new Vector();
+            try {
+                HtmlStreamTokenizer tok = new HtmlStreamTokenizer(new ByteArrayInputStream(datos.getBytes()));
+                while (tok.nextToken() != HtmlStreamTokenizer.TT_EOF) {
+
+                    int ttype = tok.getTokenType();
+                    if (ttype == HtmlStreamTokenizer.TT_TAG || ttype == HtmlStreamTokenizer.TT_COMMENT) {
+                        tok.parseTag(tok.getStringValue(), tag);
+
+                        if (tok.getRawString().toLowerCase().startsWith("<!--[if")) {
+                            continue;
+                        }
+                        //if (tag.getTagString().toLowerCase().startsWith("o:")){System.out.println("o:Salto");   continue;}
+                        if (tag.getTagString().toLowerCase().equals("img") || tag.getTagString().toLowerCase().equals("applet") || tag.getTagString().toLowerCase().equals("script") || tag.getTagString().toLowerCase().equals("td") || tag.getTagString().toLowerCase().equals("table") || tag.getTagString().toLowerCase().equals("body") || tag.getTagString().toLowerCase().equals("input") || tag.getTagString().toLowerCase().equals("a") || tag.getTagString().toLowerCase().equals("area") || tag.getTagString().toLowerCase().equals("link") || tag.getTagString().toLowerCase().equals("param") || tag.getTagString().toLowerCase().equals("embed")) {
+                            if (!tag.isEndTag()) {
+                                //ret.append("<");
+                                //ret.append(tag.getTagString());
+                                //ret.append(" ");
+                                Enumeration en = tag.getParamNames();
+                                String name = "";
+                                String value = "";
+                                String actionval = "";
+                                while (en.hasMoreElements()) {
+                                    name = (String) en.nextElement();
+                                    value = tag.getParam(name);
+                                    String out = null;
+                                    if ((name.toLowerCase().equals("src") || name.toLowerCase().equals("href") || name.toLowerCase().equals("background") || name.toLowerCase().equals("codebase") || name.toLowerCase().equals("value")) && !value.startsWith("http://") && !value.startsWith("mailto:") && !value.startsWith("javascript:") && !value.startsWith("ftp:") && !value.startsWith("telnet:") && !value.startsWith("#") && !value.startsWith("/") && !value.startsWith("{")) {
+                                        String stype = "";
+                                        if (tag.getTagString().toLowerCase().equals("input")) {
+                                            stype = tag.getParam("type").toLowerCase();
+                                        }
+                                        if (!value.startsWith("http://") && !value.startsWith("https://") && (!tag.getTagString().toLowerCase().equals("input") || (tag.getTagString().toLowerCase().equals("input") && stype.equals("image")))) {
+                                            if (value.toLowerCase().endsWith(".gif") || value.toLowerCase().endsWith(".jpg") || value.toLowerCase().endsWith(".jpeg") || value.toLowerCase().endsWith(".bmp") ||
+                                                    value.toLowerCase().endsWith(".doc") || value.toLowerCase().endsWith(".htm") || value.toLowerCase().endsWith(".html") || value.toLowerCase().endsWith(".zip") ||
+                                                    value.toLowerCase().endsWith(".txt") || value.toLowerCase().endsWith(".pdf") || value.toLowerCase().endsWith(".xls") || value.toLowerCase().endsWith(".ppt") ||
+                                                    value.toLowerCase().endsWith(".xsl") || value.toLowerCase().endsWith(".xslt") || value.toLowerCase().endsWith(".bin") || value.toLowerCase().endsWith(".tar")) {
+                                                out = value;
+                                            }
+                                        }
+                                    } else if ((name.toLowerCase().equals("src") || name.toLowerCase().equals("href") || name.toLowerCase().equals("background") || name.toLowerCase().equals("codebase") || name.toLowerCase().equals("value")) && !value.startsWith("http://") && !value.startsWith("mailto:") && !value.startsWith("javascript:") && !value.startsWith("ftp:") && !value.startsWith("telnet:") && !value.startsWith("#") && !value.startsWith("/") && value.startsWith("{")) {
+                                        int pos = -1;
+                                        pos = value.indexOf("}");
+                                        if (pos != -1) {
+                                            out = value.substring(pos + 1);
+                                        }
+                                    } else if (name.toLowerCase().equals("href") && value.startsWith("/")) {
+                                        out = value;
+                                    } else if (name.toLowerCase().equals("onmouseover")) {
+                                        //if(!value.startsWith("http://") && !value.startsWith("https://"))
+                                        int pos = -1, pos1 = -1;
+                                        pos = value.indexOf("http://");
+                                        pos1 = value.indexOf("https://");
+                                        if (pos < 0 && pos1 < 0) {
+                                            out = findImageInScript1(value, ".gif'", "");
+                                            out = findImageInScript1(out, ".jpg'", "");
+                                        }
+                                    }
+                                    if (out != null) {
+                                        boolean flag = false;
+                                        for (int i = 0; i < vvector.size(); i++) {
+                                            if (out.equals((String) vvector.elementAt(i))) {
+                                                flag = true;
+                                            }
+                                        }
+                                        if (!flag) {
+                                            vvector.addElement(out);
+                                        }
+                                    }
+
+                                //ret.append("\" ");
+                                }
                             //ret.append(">");
                             //if(tag.getTagString().toLowerCase().equals("form")) ret.append(actionval);
+                            } else {
+                                //ret.append(tok.getRawString());
+                            }
                         } else {
                             //ret.append(tok.getRawString());
                         }
-                    } else {
+                    } else if (ttype == HtmlStreamTokenizer.TT_TEXT) {
                         //ret.append(tok.getRawString());
                     }
-                } else if (ttype == HtmlStreamTokenizer.TT_TEXT) {
-                    //ret.append(tok.getRawString());
+                }
+                for (int i = 0; i < vvector.size(); i++) {
+                    ret.append((String) vvector.elementAt(i) + ";");
+                }
+            } catch (NumberFormatException f) {
+                log.error(SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBUtils_decodifica"), f);
+            } catch (Exception e) {
+                log.error(SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBUtils_IOHTML"), e);
+            }
+            //System.out.println("entra a FindAttaches regresando:"+ret.toString());
+            return ret.toString();
+        }
+
+        private static String findImageInScript1(String value, String ext, String ruta) {
+            int f = value.indexOf(ext);
+            int i = value.lastIndexOf("'", f);
+            int j = value.lastIndexOf("'");
+            if (f > 0 && i >= 0) {
+                i++;
+                if (value.startsWith("/", i) || value.startsWith("http://", i)) {
+                    return value;
+                } else {
+                    return value.substring(i, j);
                 }
             }
-            for (int i = 0; i < vvector.size(); i++) {
-                ret.append((String) vvector.elementAt(i) + ";");
-            }
-        } catch (NumberFormatException f) {
-            log.error(SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBUtils_decodifica"), f);
-        } catch (Exception e) {
-            log.error(SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBUtils_IOHTML"), e);
-        }
-        //System.out.println("entra a FindAttaches regresando:"+ret.toString());
-        return ret.toString();
-    }
-    
-     private static String findImageInScript1(String value, String ext, String ruta) {
-        int f = value.indexOf(ext);
-        int i = value.lastIndexOf("'", f);
-        int j = value.lastIndexOf("'");
-        if (f > 0 && i >= 0) {
-            i++;
-            if (value.startsWith("/", i) || value.startsWith("http://", i)) {
-                return value;
-            } else {
-                return value.substring(i, j);
-            }
-        }
-        return value;
-    }
-
-    public static void addSessionUser(User user)
-    {
-        if(user!=null)
-        {
-            SessionUser sess=m_sessions.get(Thread.currentThread().getName());
-            if(sess==null)m_sessions.put(Thread.currentThread().getName(),new SessionUser(user));
-            else sess.setUser(user);
+            return value;
         }
     }
-
-    public static User getSessionUser()
-    {
-        Principal user=null;
-        SessionUser sess=m_sessions.get(Thread.currentThread().getName());
-        if(sess!=null)user=sess.getUser();
-        return (User)user;
-    }
-
-    public static long getSessionUserID()
-    {
-        long ret=0;
-        Principal user=null;
-        SessionUser sess=m_sessions.get(Thread.currentThread().getName());
-        if(sess!=null)ret=sess.geRequestID();
-        return ret;
-    }
-
-
 }
