@@ -302,10 +302,9 @@ private void jComboBoxRepositorioActionPerformed(java.awt.event.ActionEvent evt)
             {
                 this.jComboBoxType.addItem(type);
             }
-            for (CategoryInfo cat : OfficeApplication.getOfficeApplicationProxy().getCategories(rep))
+            for (CategoryInfo cat : OfficeApplication.getOfficeApplicationProxy().getAllCategories(rep))
             {
-                this.jComboBoxCategory.addItem(cat);
-                addCategory(rep,cat);
+                this.jComboBoxCategory.addItem(cat);                
             }
             CategoryInfo all = new CategoryInfo();
             all.UDDI = "*";
