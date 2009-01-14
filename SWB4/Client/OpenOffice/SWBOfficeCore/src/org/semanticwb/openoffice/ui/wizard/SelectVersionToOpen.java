@@ -60,7 +60,7 @@ public class SelectVersionToOpen extends WizardPage
 
     public static String getDescription()
     {
-        return "Versión de Contenido a Abrir";
+        return "Versión de Contenido";
     }
     @Override
     public WizardPanelNavResult allowNext(String arg, Map map, Wizard wizard)
