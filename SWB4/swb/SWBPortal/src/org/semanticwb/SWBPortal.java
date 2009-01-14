@@ -9,7 +9,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -19,7 +18,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import org.semanticwb.model.*;
 import org.semanticwb.platform.SessionUser;
-import org.semanticwb.portal.SWBDBAdmLog;
 import org.semanticwb.portal.SWBMonitor;
 import org.semanticwb.portal.SWBResourceMgr;
 import org.semanticwb.portal.SWBServiceMgr;
@@ -42,6 +40,7 @@ import org.semanticwb.portal.services.TemplateSrv;
 import org.semanticwb.portal.services.WebPageSrv;
 import org.semanticwb.portal.services.WebSiteSrv;
  */
+import org.semanticwb.portal.db.SWBDBAdmLog;
 import org.semanticwb.util.JarFile;
 import org.semanticwb.util.db.GenericDB;
 
@@ -56,6 +55,7 @@ public class SWBPortal {
     private static SWBResourceMgr resmgr = null;
     private static SWBTemplateMgr templatemgr = null;
     private static SWBServiceMgr servicemgr = null;
+    private static SWBDBAdmLog admlog=null;
     private static HashMap<String, SessionUser> m_sessions;
 
     static public synchronized SWBPortal createInstance() {
@@ -162,6 +162,9 @@ public class SWBPortal {
         servicemgr = new SWBServiceMgr();
         servicemgr.init();
 
+        admlog = new SWBDBAdmLog();
+        admlog.init();
+
         try {
             log.debug("Loading admin Files from: /WEB-INF/lib/SWBAdmin.jar");
             String zipPath = SWBUtils.getApplicationPath() + "/WEB-INF/lib/SWBAdmin.jar";
@@ -219,22 +222,9 @@ public class SWBPortal {
         return servicemgr;
     }
 
-    /**
-     * Logeo de acciones
-     * @param userID
-     * @param action
-     * @param uri
-     * @param object
-     * @param description
-     * @param date
-     */
-    public static void log(String userID, String action, String uri, String object, String description, Timestamp date) {
-        SWBDBAdmLog swbAdmLog = new SWBDBAdmLog(userID, action, uri, object, description, date);
-        try {
-            swbAdmLog.create();
-        } catch (Exception e) {
-            log.error(e);
-        }
+    public static SWBDBAdmLog getDBAdmLog()
+    {
+        return admlog;
     }
 
     public static JarFile getAdminFile(String path) {

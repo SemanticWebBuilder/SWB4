@@ -196,14 +196,14 @@ public class Login implements InternalServlet {
             {
                 rutaSite = "/" + distributorParams.getWebPage().getWebSite().getId() + ruta;
                 login = SWBPlatform.readFileFromWorkPath(rutaSite);
-                login = SWBPortal.parseHTML(login, SWBPlatform.getWebWorkPath() + "/" + distributorParams.getWebPage().getWebSite().getId() + "/config/images/");
+                login = SWBPortal.UTIL.parseHTML(login, SWBPlatform.getWebWorkPath() + "/" + distributorParams.getWebPage().getWebSite().getId() + "/config/images/");
             } catch (Exception ignored)
             {
             }
             if (null == login || "".equals(login))
             {
                 login = SWBPlatform.readFileFromWorkPath(ruta);
-                login = SWBPortal.parseHTML(login, SWBPlatform.getWebWorkPath() + "/config/images/");
+                login = SWBPortal.UTIL.parseHTML(login, SWBPlatform.getWebWorkPath() + "/config/images/");
             }
             login = login.replaceFirst("<WBVERSION>", SWBPlatform.getVersion());
         } catch (Exception e)

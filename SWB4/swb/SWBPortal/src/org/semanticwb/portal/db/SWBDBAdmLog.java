@@ -34,6 +34,8 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.User;
+import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
 
 /** Objeto: Almacena a la base de datos los cambios desde la administracion.
@@ -50,7 +52,7 @@ public class SWBDBAdmLog {
     private Logger log = SWBUtils.getLogger(SWBDBAdmLog.class);
 
     /** Creates new DBUser */
-    private SWBDBAdmLog() {
+    public SWBDBAdmLog() {
         log.event(SWBUtils.TEXT.getLocaleString("locale_core", "log_DBAdmLog_DBAdmLog_init"));
         admlogEmail = (String) SWBPlatform.getEnv("wb/admlogEmail");
     }
@@ -61,39 +63,22 @@ public class SWBDBAdmLog {
     }
 
     /**
-     * @return  */
-    static public SWBDBAdmLog getInstance() {
-        if (instance == null) {
-            makeInstance();
-        }
-        return instance;
-    }
-
-    static private synchronized void makeInstance() {
-        if (instance == null) {
-            instance = new SWBDBAdmLog();
-            instance.init();
-        }
-    }
-
-
-    /**
      * @param userid
      * @param objuri
      * @param accion  */
-    public void saveAdmLog(String userid, String objuri, String accion) {
+    public void saveAdmLog(User user, SemanticObject obj, String accion) {
         try {
-            SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
-            String modelid = ont.getSemanticObject(objuri).getModel().getModelObject().getURI();
+            String modelid = obj.getModel().getName();
 
-            SWBRecAdmLog rec = new SWBRecAdmLog(userid, accion, objuri, modelid, null);
+            SWBRecAdmLog rec = new SWBRecAdmLog(user.getURI(), accion, obj.getURI(), modelid, null);
             rec.create();
         } catch (Exception e) {
             log.error(SWBUtils.TEXT.getLocaleString("locale_core", "error_DBAdmLog_SaveContentLog_contentlogerror"), e);
         }
     }
 
-    public void init() {
+    public void init()
+    {
     }
 
     /**

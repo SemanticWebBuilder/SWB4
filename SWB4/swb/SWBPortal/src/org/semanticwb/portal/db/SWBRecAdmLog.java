@@ -35,6 +35,7 @@ import java.sql.*;
 //import java.util.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.SWBMail;
 import org.semanticwb.model.SWBContext;
@@ -269,12 +270,12 @@ public class SWBRecAdmLog //implements WBDBRecord
 //            }
 
 
-            if (SWBDBAdmLog.getInstance().admlogEmail != null)
+            if (SWBPortal.getDBAdmLog().admlogEmail != null)
             {
                 String desc = SWBUtils.TEXT.getLocaleString("locale_core", "email_RecAdmLog_create_user") + SWBContext.getWebSite(modelid).getUserRepository().getUser(user).getName();
                 desc += desc = " " + SWBUtils.TEXT.getLocaleString("locale_core", "email_RecAdmLog_create_action") ;
                 SWBMail mail = new SWBMail();
-                mail.addAddress(SWBDBAdmLog.getInstance().admlogEmail);
+                mail.addAddress(SWBPortal.getDBAdmLog().admlogEmail);
                 mail.setSubject(SWBUtils.TEXT.getLocaleString("locale_core", "email_RecAdmLog_create_change"));
                 mail.setData(desc);
                 SWBUtils.EMAIL.sendBGEmail(mail); //SWBDBAdmLog.getInstance().admlogEmail, SWBUtils.TEXT.getLocaleString("locale_core", "email_RecAdmLog_create_change"), desc);
