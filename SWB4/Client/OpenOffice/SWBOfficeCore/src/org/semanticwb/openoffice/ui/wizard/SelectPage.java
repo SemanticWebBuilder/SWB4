@@ -290,7 +290,7 @@ private void jTreeSiteTreeWillExpand(javax.swing.event.TreeExpansionEvent evt)th
         }
     }
 
-    class WebPage extends DefaultMutableTreeNode implements ToolTipTreeNode
+    public class WebPage extends DefaultMutableTreeNode implements ToolTipTreeNode
     {
 
         private JLabel component = new JLabel();
