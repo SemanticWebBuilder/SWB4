@@ -1073,3 +1073,9 @@ if(!dojo._hasResource["dijit._tree.dndSource"]){
                return false;
            }
    }
+
+   function exportReport(url)
+   {
+       var sizze='width=600, height=550, scrollbars, resizable, alwaysRaised, menubar';
+       window.open(url,"RepWindow",sizze);
+   }
