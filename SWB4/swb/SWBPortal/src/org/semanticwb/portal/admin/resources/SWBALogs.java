@@ -500,19 +500,17 @@ public class SWBALogs extends GenericResource
         out.println("<fieldset>");
         out.println("<form method=post action=\""+paramRequest.getRenderUrl().toString()+"\" name=\""+pURI+"/frmContent\" id=\""+pURI+"/frmContent\">");
         SWBResourceURL url1 = paramRequest.getRenderUrl();
-        url1.setCallMethod(paramRequest.Call_DIRECT);
-        url1.setMode(paramRequest.Mode_XML);
-        if(pModelId!=null) url1.setParameter("tm",pModelId);
-        if(pURI!=null) url1.setParameter("id",pURI);
+        url1.setCallMethod(SWBResourceURL.Call_DIRECT);
+        url1.setMode(SWBResourceURL.Mode_XML);
+        if(pURI!=null) url1.setParameter("suri",pURI);
 
         SWBResourceURL url2 = paramRequest.getRenderUrl();
-        url2.setCallMethod(paramRequest.Call_DIRECT);
+        url2.setCallMethod(SWBResourceURL.Call_DIRECT);
         url2.setMode("Excel");
-        if(pModelId!=null) url2.setParameter("tm",pModelId);
-        if(pURI!=null) url2.setParameter("id",pURI);
+        if(pURI!=null) url2.setParameter("suri",pURI);
 
-        out.println("<button dojoType=\"dijit.form.Button\" type=\"button\"  onclick=\"exportReport('"+url1+"'); return false;\">Exportar XML</button>"); //submitUrl('#',this.domNode);
-        out.println("<button dojoType=\"dijit.form.Button\" type=\"button\"  onclick=\"exportReport('"+url2+"'); return false;\">Exportar Excel</button>"); //submitUrl('#',this.domNode);
+        out.println("<button dojoType=\"dijit.form.Button\" type=\"button\"  onclick=\"showDialog('"+url1+"'); return false;\">Exportar XML</button>"); //submitUrl('#',this.domNode);
+        out.println("<button dojoType=\"dijit.form.Button\" type=\"button\"  onclick=\"showDialog('"+url2+"'); return false;\">Exportar Excel</button>"); //submitUrl('#',this.domNode);
         
         SWBResourceURL url = paramRequest.getRenderUrl();
         url.setParameter("suri", pURI);
@@ -548,7 +546,7 @@ public class SWBALogs extends GenericResource
      */
     public void doExcel(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        response.setContentType("text/html; charset=ISO-8859-1");
+        //response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
         log.debug("doView()");
@@ -614,9 +612,7 @@ public class SWBALogs extends GenericResource
                 rowDate=true;
             }
         out.println("</tr>");
-        Connection conn=null;
-        ResultSet rs=null;
-        PreparedStatement pst=null;
+        
         int numReg = 0;
         try
         {
@@ -630,7 +626,7 @@ public class SWBALogs extends GenericResource
             }
 
             iter = SWBPortal.getDBAdmLog().getBitaObjURI(pModelId, pURI);
-            while(rs.next())
+            while(iter.hasNext())
             {
                 obj = iter.next();
                 out.println("<tr>");
@@ -652,17 +648,9 @@ public class SWBALogs extends GenericResource
                 if(rowDate) out.println("  <td>"+SWBUtils.TEXT.iso8601DateFormat(obj.getDate())+"</td>");
                 out.println("</tr>");
             }
-            conn.close();
         }
         catch(Exception e)
         {log.error(e);}
-        finally
-        {
-            pst=null;
-            rs=null;
-            conn=null;
-        }
-
         out.println("</table>");
 
     }
@@ -676,12 +664,11 @@ public class SWBALogs extends GenericResource
      */
     public void doXML(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        response.setContentType("text/html; charset=ISO-8859-1");
+        //response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
         log.debug("doXML()");
         Portlet base = paramRequest.getResourceBase();
-        PrintWriter out = response.getWriter();
         int rowNumber=0;
 
         String pURI = request.getParameter("suri");
@@ -738,9 +725,7 @@ public class SWBALogs extends GenericResource
                 rowNumber++;
                 rowDate=true;
             }
-        Connection conn=null;
-        ResultSet rs=null;
-        PreparedStatement pst=null;
+        
         int numReg = 0;
         try
         {
@@ -760,7 +745,7 @@ public class SWBALogs extends GenericResource
             reporte.setAttribute("Fecha", SWBUtils.TEXT.iso8601DateFormat(ts));
             dom.appendChild(reporte);
             iter = SWBPortal.getDBAdmLog().getBitaObjURI(pModelId, pURI);
-            while(rs.next())
+            while(iter.hasNext())
             {
                 obj = iter.next();
                 Element eleRec = dom.createElement("registro");
@@ -803,16 +788,11 @@ public class SWBALogs extends GenericResource
                 }
                 reporte.appendChild(eleRec);
             }
-            conn.close();
         }
         catch(Exception e)
         {log.error(e);}
-        finally
-        {
-            pst=null;
-            rs=null;
-            conn=null;
-        }
+
+        PrintWriter out = response.getWriter();
         out.println(SWBUtils.XML.domToXml(dom));
     }
 
