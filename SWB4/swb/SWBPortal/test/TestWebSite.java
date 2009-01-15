@@ -101,8 +101,8 @@ public class TestWebSite {
             versionws.setModifiedBy(user);
             versionws.setVersionComment("Versión inicial del sitio SEP para pruebas");
             versionws.setUpdated(new java.util.Date(System.currentTimeMillis()));
-            site.setActualVersion(versionws);
-            site.setLastVersion(versionws);
+//            site.setActualVersion(versionws);
+//            site.setLastVersion(versionws);
             site.setCreator(user);
             site.setModifiedBy(user);
             //Create DNS

@@ -265,8 +265,8 @@ public class SWBASOPropRefEditor extends GenericResource {
                     out.println("<td>");
                     if (null != so) { //
                         SemanticObject sem_o= so.getObjectProperty(semprop);
-                        log.debug("MODIFIEDBY-------"+sem_o.getURI());
                         if(null!=sem_o){
+                            log.debug("MODIFIEDBY-------"+sem_o.getURI());
                             out.println("<a href=\"#\"  onclick=\"addNewTab('" + sem_o.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + sem_o.getDisplayName() + "');return false;\" >");
                             out.println(sem_o.getProperty(User.swb_usrLogin));
                             out.println("</a>");
@@ -275,8 +275,8 @@ public class SWBASOPropRefEditor extends GenericResource {
                         //out.println(getValueSemProp(so.getObjectProperty(User.swb_usrLogin), Descriptiveable.swb_title)); //getValueSemProp(semobj.getObjectProperty(semprop), Descriptiveable.swb_title));
                     } else {
                         SemanticObject sem_o= sobj.getObjectProperty(semprop);
-                        log.debug("(else)MODIFIEDBY-------"+sem_o.getURI());
                         if(null!=sem_o){
+                            log.debug("(else)MODIFIEDBY-------"+sem_o.getURI());
                             out.println("<a href=\"#\"  onclick=\"addNewTab('" + sem_o.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + sem_o.getDisplayName() + "');return false;\" >");
                             out.println(sem_o.getProperty(User.swb_usrLogin));
                             out.println("</a>");
