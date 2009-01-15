@@ -665,7 +665,10 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             portlet.setPortletType(portletType);
             portlet.setRepositoryName(repositoryName);            
             portlet.setTitle(title);
+            portlet.setPriority(1);
             portlet.setDescription(description);
+            portlet.setCreated(new Date(System.currentTimeMillis()));
+            portlet.setUpdated(new Date(System.currentTimeMillis()));
             page.addPortlet(portlet);
             PortletInfo PortletInfo = new PortletInfo();
             PortletInfo.id = id;
