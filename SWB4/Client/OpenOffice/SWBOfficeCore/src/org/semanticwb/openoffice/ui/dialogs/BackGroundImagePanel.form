@@ -26,35 +26,31 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
+              <EmptySpace pref="39" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="jLabelClave" alignment="1" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabelWebAddress" alignment="1" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabelPassword" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="jLabelPassword" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabelClave" alignment="1" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabelWebAddress" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="jComboBoxWebAddress" pref="253" max="32767" attributes="1"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jButtonDelete" min="-2" pref="39" max="-2" attributes="0"/>
-                          </Group>
-                          <Component id="jPassword" pref="298" max="32767" attributes="1"/>
-                          <Component id="jTextFieldClave" alignment="0" pref="298" max="32767" attributes="1"/>
-                      </Group>
-                  </Group>
                   <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="jButtonAvanced" min="-2" pref="90" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <EmptySpace pref="35" max="32767" attributes="0"/>
                       <Component id="jButtonCancel" min="-2" pref="92" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                       <Component id="jButtonAccept" min="-2" pref="88" max="-2" attributes="0"/>
                   </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="jComboBoxWebAddress" min="-2" pref="270" max="-2" attributes="1"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jButtonDelete" min="-2" pref="39" max="-2" attributes="0"/>
+                  </Group>
+                  <Component id="jPassword" pref="315" max="32767" attributes="1"/>
+                  <Component id="jTextFieldClave" alignment="0" pref="315" max="32767" attributes="1"/>
               </Group>
-              <EmptySpace min="35" pref="35" max="-2" attributes="0"/>
+              <EmptySpace min="41" pref="41" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -79,17 +75,17 @@
                   <Component id="jLabelClave" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="jLabelPassword" min="-2" max="-2" attributes="0"/>
-                  <Component id="jPassword" alignment="1" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="jPassword" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabelPassword" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jButtonAccept" alignment="3" pref="27" max="32767" attributes="0"/>
-                  <Component id="jButtonAvanced" alignment="3" min="-2" pref="28" max="-2" attributes="0"/>
                   <Component id="jButtonCancel" alignment="3" min="-2" pref="27" max="-2" attributes="0"/>
+                  <Component id="jButtonAvanced" alignment="3" min="-2" pref="28" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="125" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="158" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -120,7 +116,7 @@
         <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
           <ComponentRef name="jComboBoxWebAddress"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Direcci&#xf3;n Web:"/>
+        <Property name="text" type="java.lang.String" value="Sitio:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabelClave">
@@ -134,7 +130,7 @@
         <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
           <ComponentRef name="jTextFieldClave"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Clave de acceso:"/>
+        <Property name="text" type="java.lang.String" value="Clave:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="jTextFieldClave">
@@ -235,7 +231,6 @@
         <Property name="contentAreaFilled" type="boolean" value="false"/>
         <Property name="enabled" type="boolean" value="false"/>
         <Property name="focusPainted" type="boolean" value="false"/>
-        <Property name="opaque" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonDeleteActionPerformed"/>
