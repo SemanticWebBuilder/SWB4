@@ -36,7 +36,6 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticObject;
-import org.semanticwb.platform.SemanticOntology;
 
 /** Objeto: Almacena a la base de datos los cambios desde la administracion.
  *
@@ -69,8 +68,12 @@ public class SWBDBAdmLog {
     public void saveAdmLog(User user, SemanticObject obj, String accion) {
         try {
             String modelid = obj.getModel().getName();
-
-            SWBRecAdmLog rec = new SWBRecAdmLog(user.getURI(), accion, obj.getURI(), modelid, null);
+            String userid=null;
+            if(user==null){
+                log.debug("User NULL");
+            }
+            else userid = user.getURI();
+            SWBRecAdmLog rec = new SWBRecAdmLog(userid, accion, obj.getURI(), modelid, null);
             rec.create();
         } catch (Exception e) {
             log.error(SWBUtils.TEXT.getLocaleString("locale_core", "error_DBAdmLog_SaveContentLog_contentlogerror"), e);
@@ -178,13 +181,13 @@ public class SWBDBAdmLog {
     /**
      * @param dbobjid
      * @return  */
-    public Iterator getBitaTopic(String modelid, String objuri) {
+    public Iterator getBitaObjURI(String modelid, String objuri) {
         Iterator ret = new ArrayList().iterator();
         try {
             Connection con = SWBUtils.DB.getDefaultConnection("SWBDBAdmLog.getUserObjectLog()");
             if (con != null) {
                 try {
-                    String query = "select * from swb_admlog where log_modelid=? and log_objuri=? order by log_date";
+                    String query = "select * from swb_admlog where log_modelid=? and log_objuri=? order by log_date desc";
                     PreparedStatement st = con.prepareStatement(query);
                     st.setString(1, modelid);
                     st.setString(2, objuri);

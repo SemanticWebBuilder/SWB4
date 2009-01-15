@@ -58,9 +58,7 @@ public class SWBRecAdmLog //implements WBDBRecord
     private String user;
     private String action;
     private String objuri;
-    //private long dbobjid;
     private String modelid;
-    //private String description;
     private Timestamp date;
 
     private Logger log = SWBUtils.getLogger(SWBRecAdmLog.class);
@@ -73,11 +71,6 @@ public class SWBRecAdmLog //implements WBDBRecord
         this.objuri = "_";
         this.modelid = null;
         this.date = null;
-//        if(WBLoader.getInstance().haveDBTables())
-//        {
-//            registerObserver(SWBDBAdmLog.getInstance());
-//            //registerObserver(PFlowMgr.getInstance());
-//        }
     }
 
     /**
@@ -98,14 +91,11 @@ public class SWBRecAdmLog //implements WBDBRecord
         }
     }
 
-    /** Creates new RecAdmLog
+    /** Creates new SWBRecAdmLog
      * @param user
      * @param action
-     * @param dbobject
-     * @param dbobjid
-     * @param topicmapid
-     * @param topicid
-     * @param description
+     * @param objuri
+     * @param modelid
      * @param date  */
     public SWBRecAdmLog(String user, String action, String objuri, String modelid, Timestamp date)
     {
@@ -149,8 +139,8 @@ public class SWBRecAdmLog //implements WBDBRecord
         this.action = action;
     }
 
-    /** Getter for property dbobject.
-     * @return Value of property dbobject.
+    /** Getter for property objURI.
+     * @return Value of property objURI.
      */
     public java.lang.String getDbobject()
     {
@@ -165,8 +155,8 @@ public class SWBRecAdmLog //implements WBDBRecord
         this.objuri = objuri;
     }
 
-    /** Getter for property tpicmapid.
-     * @return Value of property tpicmapid.
+    /** Getter for property modelid.
+     * @return Value of property modelid.
      */
     public java.lang.String getModelId()
     {
@@ -196,12 +186,6 @@ public class SWBRecAdmLog //implements WBDBRecord
         this.date = date;
     }
 
-    /** registra el objeto observador para que pueda recibir notoficaciones de cambios
-     * @param obs  */
-//    public void registerObserver(AFObserver obs)
-//    {
-//        if (!observers.contains(obs)) observers.add(obs);
-//    }
 
     /** Elimina el registro de la base de datos asi como todopublic void remove() throws AFException
      * @throws com.infotec.appfw.exception.AFException  */
@@ -211,7 +195,7 @@ public class SWBRecAdmLog //implements WBDBRecord
         Connection con=null;
         try
         {
-            con = SWBUtils.DB.getDefaultConnection("RecAdmLog.remove()");
+            con = SWBUtils.DB.getDefaultConnection("SWBRecAdmLog.remove()");
             String query = "delete from swb_admlog where log_user=? and log_action=? and log_date=?";
             PreparedStatement st = con.prepareStatement(query);
             st.setString(1, user);
@@ -220,11 +204,6 @@ public class SWBRecAdmLog //implements WBDBRecord
             st.executeUpdate();
             st.close();
             con.close();
-//            Iterator it = observers.iterator();
-//            while (it.hasNext())
-//            {
-//                ((AFObserver) it.next()).sendDBNotify("remove", this);
-//            }
 
         } catch (Exception e)
         {
@@ -252,7 +231,7 @@ public class SWBRecAdmLog //implements WBDBRecord
         try
         {
             if (date == null) date = new Timestamp(new java.util.Date().getTime());
-            con = SWBUtils.DB.getDefaultConnection("RecAdmLog.create()");
+            con = SWBUtils.DB.getDefaultConnection("SWBRecAdmLog.create()");
             String query = "insert into swb_admlog (log_user,log_action,log_objuri,log_modelid,log_date) values (?,?,?,?,?)";
             PreparedStatement st = con.prepareStatement(query);
             st.setString(1, user);
@@ -263,23 +242,17 @@ public class SWBRecAdmLog //implements WBDBRecord
             st.executeUpdate();
             st.close();
             con.close();
-//            Iterator it = observers.iterator();
-//            while (it.hasNext())
+
+//            if (SWBPortal.getDBAdmLog().admlogEmail != null)
 //            {
-//                ((AFObserver) it.next()).sendDBNotify("create", this);
+//                String desc = SWBUtils.TEXT.getLocaleString("locale_core", "email_RecAdmLog_create_user") + user;
+//                desc += desc = " " + SWBUtils.TEXT.getLocaleString("locale_core", "email_RecAdmLog_create_action") ;
+//                SWBMail mail = new SWBMail();
+//                mail.addAddress(SWBPortal.getDBAdmLog().admlogEmail);
+//                mail.setSubject(SWBUtils.TEXT.getLocaleString("locale_core", "email_RecAdmLog_create_change"));
+//                mail.setData(desc);
+//                SWBUtils.EMAIL.sendBGEmail(mail); //SWBDBAdmLog.getInstance().admlogEmail, SWBUtils.TEXT.getLocaleString("locale_core", "email_RecAdmLog_create_change"), desc);
 //            }
-
-
-            if (SWBPortal.getDBAdmLog().admlogEmail != null)
-            {
-                String desc = SWBUtils.TEXT.getLocaleString("locale_core", "email_RecAdmLog_create_user") + SWBContext.getWebSite(modelid).getUserRepository().getUser(user).getName();
-                desc += desc = " " + SWBUtils.TEXT.getLocaleString("locale_core", "email_RecAdmLog_create_action") ;
-                SWBMail mail = new SWBMail();
-                mail.addAddress(SWBPortal.getDBAdmLog().admlogEmail);
-                mail.setSubject(SWBUtils.TEXT.getLocaleString("locale_core", "email_RecAdmLog_create_change"));
-                mail.setData(desc);
-                SWBUtils.EMAIL.sendBGEmail(mail); //SWBDBAdmLog.getInstance().admlogEmail, SWBUtils.TEXT.getLocaleString("locale_core", "email_RecAdmLog_create_change"), desc);
-            }
 
         } catch (Exception e)
         {
