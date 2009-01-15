@@ -626,6 +626,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                 childs++;
             }
             info.childs = childs;
+            pagesToReturn.add(info);
         }
         return pagesToReturn.toArray(new WebPageInfo[pagesToReturn.size()]);
     }
