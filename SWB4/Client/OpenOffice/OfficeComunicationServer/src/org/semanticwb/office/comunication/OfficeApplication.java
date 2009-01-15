@@ -593,12 +593,14 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         info.title = site.getHomePage().getTitle();
         info.siteID = website.id;
         info.description = site.getDescription();
-        int childs=0;
-        GenericIterator<WebPage> childWebPages=site.getHomePage().listChilds();
-        while(childWebPages.hasNext())
+        int childs = 0;
+        GenericIterator<WebPage> childWebPages = site.getHomePage().listChilds();
+        while (childWebPages.hasNext())
         {
-
+            childWebPages.next();
+            childs++;
         }
+        info.childs = childs;
         return info;
     }
 
@@ -610,11 +612,20 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         GenericIterator<WebPage> pages = parent.listChilds();
         while (pages.hasNext())
         {
+            WebPage page = pages.next();
             WebPageInfo info = new WebPageInfo();
-            info.id = site.getHomePage().getId();
-            info.title = site.getHomePage().getTitle();
+            info.id = page.getId();
+            info.title = page.getTitle();
             info.siteID = webpage.siteID;
-            info.description = site.getHomePage().getDescription();
+            info.description = page.getDescription();
+            int childs = 0;
+            GenericIterator<WebPage> childWebPages = page.listChilds();
+            while (childWebPages.hasNext())
+            {
+                childWebPages.next();
+                childs++;
+            }
+            info.childs = childs;
         }
         return pagesToReturn.toArray(new WebPageInfo[pagesToReturn.size()]);
     }
