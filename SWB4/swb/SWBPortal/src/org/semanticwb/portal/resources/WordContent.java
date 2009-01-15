@@ -30,7 +30,7 @@ import org.semanticwb.portlet.office.WordPortlet;
  */
 public class WordContent extends GenericAdmResource
 {
-
+    
     private static Logger log = SWBUtils.getLogger(WordContent.class);
 
     @Override
