@@ -97,19 +97,19 @@ public class BackGroundImagePanel extends javax.swing.JPanel implements WindowFo
         jLabelWebAddress.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         jLabelWebAddress.setForeground(new java.awt.Color(51, 102, 153));
         jLabelWebAddress.setLabelFor(jComboBoxWebAddress);
-        jLabelWebAddress.setText("Dirección Web:");
+        jLabelWebAddress.setText("Sitio:");
 
         jLabelClave.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         jLabelClave.setForeground(new java.awt.Color(51, 102, 153));
         jLabelClave.setLabelFor(jTextFieldClave);
-        jLabelClave.setText("Clave de acceso:");
+        jLabelClave.setText("Clave:");
 
-        jTextFieldClave.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTextFieldClave.setFont(new java.awt.Font("Tahoma", 0, 14));
 
-        jPassword.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jPassword.setFont(new java.awt.Font("Tahoma", 0, 14));
 
         jComboBoxWebAddress.setEditable(true);
-        jComboBoxWebAddress.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jComboBoxWebAddress.setFont(new java.awt.Font("Tahoma", 0, 14));
         jComboBoxWebAddress.setAutoscrolls(true);
         jComboBoxWebAddress.setName("WebAddress"); // NOI18N
         jComboBoxWebAddress.addActionListener(new java.awt.event.ActionListener() {
@@ -119,7 +119,7 @@ public class BackGroundImagePanel extends javax.swing.JPanel implements WindowFo
         });
 
         jButtonAvanced.setBackground(new java.awt.Color(51, 102, 153));
-        jButtonAvanced.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jButtonAvanced.setFont(new java.awt.Font("Tahoma", 0, 14));
         jButtonAvanced.setText("Avanzado");
         jButtonAvanced.setToolTipText("Configuración de Proxy");
         jButtonAvanced.setBorder(null);
@@ -131,7 +131,7 @@ public class BackGroundImagePanel extends javax.swing.JPanel implements WindowFo
         });
 
         jButtonCancel.setBackground(new java.awt.Color(51, 102, 153));
-        jButtonCancel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jButtonCancel.setFont(new java.awt.Font("Tahoma", 0, 14));
         jButtonCancel.setText("Cancelar");
         jButtonCancel.setBorder(null);
         jButtonCancel.setBorderPainted(false);
@@ -144,7 +144,7 @@ public class BackGroundImagePanel extends javax.swing.JPanel implements WindowFo
         });
 
         jButtonAccept.setBackground(new java.awt.Color(51, 102, 153));
-        jButtonAccept.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jButtonAccept.setFont(new java.awt.Font("Tahoma", 0, 14));
         jButtonAccept.setText("Aceptar");
         jButtonAccept.setBorder(null);
         jButtonAccept.setBorderPainted(false);
@@ -159,7 +159,6 @@ public class BackGroundImagePanel extends javax.swing.JPanel implements WindowFo
         jButtonDelete.setContentAreaFilled(false);
         jButtonDelete.setEnabled(false);
         jButtonDelete.setFocusPainted(false);
-        jButtonDelete.setOpaque(false);
         jButtonDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonDeleteActionPerformed(evt);
@@ -171,29 +170,27 @@ public class BackGroundImagePanel extends javax.swing.JPanel implements WindowFo
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap(39, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabelClave)
+                    .addComponent(jLabelWebAddress)
+                    .addComponent(jLabelPassword))
+                .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(34, 34, 34)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabelPassword)
-                            .addComponent(jLabelClave)
-                            .addComponent(jLabelWebAddress))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jComboBoxWebAddress, 0, 253, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButtonDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 298, Short.MAX_VALUE)
-                            .addComponent(jTextFieldClave, javax.swing.GroupLayout.DEFAULT_SIZE, 298, Short.MAX_VALUE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap()
                         .addComponent(jButtonAvanced, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
                         .addComponent(jButtonCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(10, 10, 10)
-                        .addComponent(jButtonAccept, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(35, 35, 35))
+                        .addComponent(jButtonAccept, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jComboBoxWebAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE)
+                    .addComponent(jTextFieldClave, javax.swing.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE))
+                .addGap(41, 41, 41))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -212,15 +209,15 @@ public class BackGroundImagePanel extends javax.swing.JPanel implements WindowFo
                     .addComponent(jTextFieldClave, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabelClave))
                 .addGap(8, 8, 8)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabelPassword)
-                    .addComponent(jPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelPassword))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonAccept, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
-                    .addComponent(jButtonAvanced, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(125, 125, 125))
+                    .addComponent(jButtonCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonAvanced, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(158, 158, 158))
         );
     }// </editor-fold>//GEN-END:initComponents
 
