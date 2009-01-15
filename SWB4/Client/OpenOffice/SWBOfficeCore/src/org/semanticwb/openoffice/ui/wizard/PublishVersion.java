@@ -3,7 +3,6 @@
  *
  * Created on 29 de diciembre de 2008, 04:41 PM
  */
-
 package org.semanticwb.openoffice.ui.wizard;
 
 import java.util.Map;
@@ -20,32 +19,39 @@ import org.semanticwb.openoffice.OfficeApplication;
  *
  * @author  victor.lorenzana
  */
-public class PublishVersion extends WizardPage {
+public class PublishVersion extends WizardPage
+{
 
     public static final String VERSION = "version";
-    private String contentId,repositoryName;
+    private String contentId,  repositoryName;
+
     /** Creates new form PublishVersion */
-    public PublishVersion(String contentId, String repositoryName) {
+    public PublishVersion(String contentId, String repositoryName)
+    {
         initComponents();
-        this.contentId=contentId;
-        this.repositoryName=repositoryName;
+        this.contentId = contentId;
+        this.repositoryName = repositoryName;
         loadVersions(contentId, repositoryName);
     }
+
     public void loadVersions(String contentId, String repositoryName)
-    {        
+    {
         try
-        {            
-            DefaultTableModel model=(DefaultTableModel) jTableVersions.getModel(); 
-            int rows=model.getRowCount();
-            for(int i=1;i<=rows;i++)
+        {
+            DefaultTableModel model = (DefaultTableModel) jTableVersions.getModel();
+            int rows = model.getRowCount();
+            for (int i = 1; i <= rows; i++)
             {
                 model.removeRow(0);
             }
             IOfficeDocument document = OfficeApplication.getOfficeDocumentProxy();
             for (VersionInfo versionInfo : document.getVersions(repositoryName, contentId))
             {
-                String date=OfficeApplication.iso8601dateFormat.format(versionInfo.created);
-                String[] rowData={versionInfo.nameOfVersion,date,versionInfo.user};
+                String date = OfficeApplication.iso8601dateFormat.format(versionInfo.created);
+                String[] rowData =
+                {
+                    versionInfo.nameOfVersion, date, versionInfo.user
+                };
                 model.addRow(rowData);
             }
         }
@@ -53,27 +59,45 @@ public class PublishVersion extends WizardPage {
         {
         }
     }
+
     public static String getDescription()
     {
         return "Versión de Contenido";
     }
+
+    @Override
+    public WizardPanelNavResult allowFinish(String arg, Map map, Wizard wizard)
+    {
+        return this.allowNext(arg, map, wizard);
+    }
+
     @Override
     public WizardPanelNavResult allowNext(String arg, Map map, Wizard wizard)
     {
         WizardPanelNavResult result = WizardPanelNavResult.PROCEED;
-        if (this.jTableVersions.getSelectedRow()==-1)
+        if (this.jRadioButtonOneVersion.isSelected())
         {
-            JOptionPane.showMessageDialog(this, "!Debe indicar una versión!", SelectVersionToOpen.getDescription(), JOptionPane.ERROR_MESSAGE);
-            this.jTableVersions.requestFocus();
-            result = WizardPanelNavResult.REMAIN_ON_PAGE;
+            if (this.jTableVersions.getSelectedRow() == -1)
+            {
+                JOptionPane.showMessageDialog(this, "!Debe indicar una versión!", SelectVersionToOpen.getDescription(), JOptionPane.ERROR_MESSAGE);
+                this.jTableVersions.requestFocus();
+                result = WizardPanelNavResult.REMAIN_ON_PAGE;
+            }
+            else
+            {                
+                int row=jTableVersions.getSelectedRow();
+                DefaultTableModel model=(DefaultTableModel)jTableVersions.getModel();
+                String version=model.getValueAt(row, 0).toString();
+                map.put(VERSION, version);
+            }
         }
         else
         {
-            Object selection=this.jTableVersions.getModel().getValueAt(this.jTableVersions.getSelectedRow(), 2);
-            map.put( VERSION,selection);
+            map.put(VERSION, "*");
         }
         return result;
     }
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -87,8 +111,8 @@ public class PublishVersion extends WizardPage {
         jScrollPane3 = new javax.swing.JScrollPane();
         jTableVersions = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
+        jRadioButtonLasVersion = new javax.swing.JRadioButton();
+        jRadioButtonOneVersion = new javax.swing.JRadioButton();
 
         setLayout(new java.awt.BorderLayout());
 
@@ -117,51 +141,52 @@ public class PublishVersion extends WizardPage {
         });
         jTableVersions.setEnabled(false);
         jTableVersions.setFocusable(false);
-        jTableVersions.setRowSelectionAllowed(false);
+        jTableVersions.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane3.setViewportView(jTableVersions);
 
         add(jScrollPane3, java.awt.BorderLayout.CENTER);
 
-        buttonGroup1.add(jRadioButton1);
-        jRadioButton1.setSelected(true);
-        jRadioButton1.setText("Publica la última versión");
-        jRadioButton1.setToolTipText("Esta opción le permite que siempre que exista una nueva versión de contenido, esta sea mostrada.");
-        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
+        buttonGroup1.add(jRadioButtonLasVersion);
+        jRadioButtonLasVersion.setSelected(true);
+        jRadioButtonLasVersion.setText("Publica la última versión");
+        jRadioButtonLasVersion.setToolTipText("Esta opción le permite que siempre que exista una nueva versión de contenido, esta sea mostrada.");
+        jRadioButtonLasVersion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton1ActionPerformed(evt);
+                jRadioButtonLasVersionActionPerformed(evt);
             }
         });
-        jPanel1.add(jRadioButton1);
+        jPanel1.add(jRadioButtonLasVersion);
 
-        buttonGroup1.add(jRadioButton2);
-        jRadioButton2.setText("Publica una versión");
-        jRadioButton2.setToolTipText("Esta opción permite que sólo una versión sea mostrada en el sitio");
-        jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
+        buttonGroup1.add(jRadioButtonOneVersion);
+        jRadioButtonOneVersion.setText("Publica una versión");
+        jRadioButtonOneVersion.setToolTipText("Esta opción permite que sólo una versión sea mostrada en el sitio");
+        jRadioButtonOneVersion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton2ActionPerformed(evt);
+                jRadioButtonOneVersionActionPerformed(evt);
             }
         });
-        jPanel1.add(jRadioButton2);
+        jPanel1.add(jRadioButtonOneVersion);
 
         add(jPanel1, java.awt.BorderLayout.NORTH);
     }// </editor-fold>//GEN-END:initComponents
 
-private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
-    this.jTableVersions.setEnabled(false);
-}//GEN-LAST:event_jRadioButton1ActionPerformed
+    private void jRadioButtonLasVersionActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jRadioButtonLasVersionActionPerformed
+    {//GEN-HEADEREND:event_jRadioButtonLasVersionActionPerformed
+        this.jTableVersions.setVisible(false);
+        this.jTableVersions.setEnabled(false);
+}//GEN-LAST:event_jRadioButtonLasVersionActionPerformed
 
-private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
-    this.jTableVersions.setEnabled(true);
-}//GEN-LAST:event_jRadioButton2ActionPerformed
-
-
+    private void jRadioButtonOneVersionActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jRadioButtonOneVersionActionPerformed
+    {//GEN-HEADEREND:event_jRadioButtonOneVersionActionPerformed
+        this.jTableVersions.setVisible(true);
+        this.jTableVersions.setEnabled(true);
+}//GEN-LAST:event_jRadioButtonOneVersionActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
+    private javax.swing.JRadioButton jRadioButtonLasVersion;
+    private javax.swing.JRadioButton jRadioButtonOneVersion;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTableVersions;
     // End of variables declaration//GEN-END:variables
-
 }
