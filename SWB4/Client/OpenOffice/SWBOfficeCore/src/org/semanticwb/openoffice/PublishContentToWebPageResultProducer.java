@@ -13,6 +13,7 @@ import org.netbeans.spi.wizard.WizardException;
 import org.netbeans.spi.wizard.WizardPage.WizardResultProducer;
 import org.semanticwb.office.interfaces.WebPageInfo;
 import org.semanticwb.openoffice.interfaces.IOpenOfficeDocument;
+import org.semanticwb.openoffice.ui.wizard.PublishVersion;
 import org.semanticwb.openoffice.ui.wizard.SelectPage;
 
 /**
@@ -37,8 +38,13 @@ public class PublishContentToWebPageResultProducer implements WizardResultProduc
             try
             {
                 IOpenOfficeDocument openOfficeDocument=OfficeApplication.getOfficeDocumentProxy();
-                WebPageInfo webpage=(WebPageInfo)wizardData.get(SelectPage.WEBPAGE);
-                openOfficeDocument.publishToPortletContent(repositoryName, contentID, "*", "Demo", "Demo", webpage);
+                SelectPage.WebPage page=(SelectPage.WebPage)wizardData.get(SelectPage.WEBPAGE);
+                WebPageInfo webpage= new WebPageInfo();
+                webpage.id=page.getID();
+                webpage.siteID=page.getSite();
+                String version=wizardData.get(PublishVersion.VERSION).toString();
+                openOfficeDocument.publishToPortletContent(repositoryName, contentID, version, "Demo", "Demo", webpage);
+                progress.finished(null);
             }
             catch(Exception e)
             {
