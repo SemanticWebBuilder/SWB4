@@ -5,8 +5,8 @@ public class OfficeContentBase extends org.semanticwb.repository.File implements
 {
     public static final org.semanticwb.platform.SemanticProperty cm_title=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org.mx/swb4/content#title");
     public static final org.semanticwb.platform.SemanticProperty cm_file=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org.mx/swb4/content#file");
-    public static final org.semanticwb.platform.SemanticProperty jcr_uuid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#uuid");
     public static final org.semanticwb.platform.SemanticProperty cm_officetype=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org.mx/swb4/content#officetype");
+    public static final org.semanticwb.platform.SemanticProperty jcr_uuid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#uuid");
     public static final org.semanticwb.platform.SemanticProperty jcr_lockIsDeep=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#lockIsDeep");
     public static final org.semanticwb.platform.SemanticProperty cm_user=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org.mx/swb4/content#user");
     public static final org.semanticwb.platform.SemanticProperty jcr_lockOwner=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#lockOwner");
@@ -44,16 +44,6 @@ public class OfficeContentBase extends org.semanticwb.repository.File implements
         getSemanticObject().setProperty(cm_file, file);
     }
 
-    public String getUuid()
-    {
-        return getSemanticObject().getProperty(jcr_uuid);
-    }
-
-    public void setUuid(String uuid)
-    {
-        getSemanticObject().setProperty(jcr_uuid, uuid);
-    }
-
     public String getOfficetype()
     {
         return getSemanticObject().getProperty(cm_officetype);
@@ -62,6 +52,16 @@ public class OfficeContentBase extends org.semanticwb.repository.File implements
     public void setOfficetype(String officetype)
     {
         getSemanticObject().setProperty(cm_officetype, officetype);
+    }
+
+    public String getUuid()
+    {
+        return getSemanticObject().getProperty(jcr_uuid);
+    }
+
+    public void setUuid(String uuid)
+    {
+        getSemanticObject().setProperty(jcr_uuid, uuid);
     }
 
     public boolean isLockIsDeep()

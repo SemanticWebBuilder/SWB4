@@ -17,11 +17,11 @@ public class WebPageBase extends org.semanticwb.model.base.GenericObjectBase imp
     public static final org.semanticwb.platform.SemanticProperty swb_webPageURLType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#webPageURLType");
     public static final org.semanticwb.platform.SemanticProperty swb_webPageDiskUsage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#webPageDiskUsage");
     public static final org.semanticwb.platform.SemanticProperty swb_active=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#active");
+    public static final org.semanticwb.platform.SemanticClass swb_RoleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#RoleRef");
+    public static final org.semanticwb.platform.SemanticProperty swb_hasRoleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasRoleRef");
     public static final org.semanticwb.platform.SemanticClass swb_WebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebPage");
     public static final org.semanticwb.platform.SemanticProperty swb_hasWebPageVirtualParent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageVirtualParent");
     public static final org.semanticwb.platform.SemanticProperty swb_deleted=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#deleted");
-    public static final org.semanticwb.platform.SemanticClass swb_RoleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#RoleRef");
-    public static final org.semanticwb.platform.SemanticProperty swb_hasRoleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasRoleRef");
     public static final org.semanticwb.platform.SemanticProperty swb_hasWebPageVirtualChild=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageVirtualChild");
     public static final org.semanticwb.platform.SemanticProperty swb_views=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#views");
     public static final org.semanticwb.platform.SemanticClass swb_Portlet=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Portlet");
@@ -30,11 +30,11 @@ public class WebPageBase extends org.semanticwb.model.base.GenericObjectBase imp
     public static final org.semanticwb.platform.SemanticProperty swb_hasPFlowRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasPFlowRef");
     public static final org.semanticwb.platform.SemanticClass swb_TemplateRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#TemplateRef");
     public static final org.semanticwb.platform.SemanticProperty swb_hasTemplateRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasTemplateRef");
+    public static final org.semanticwb.platform.SemanticProperty swb_webPageURL=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#webPageURL");
     public static final org.semanticwb.platform.SemanticClass swb_RuleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#RuleRef");
     public static final org.semanticwb.platform.SemanticProperty swb_hasRuleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasRuleRef");
     public static final org.semanticwb.platform.SemanticProperty swb_creator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#creator");
     public static final org.semanticwb.platform.SemanticProperty swb_hasWebPageChild=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild");
-    public static final org.semanticwb.platform.SemanticProperty swb_webPageURL=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#webPageURL");
     public static final org.semanticwb.platform.SemanticProperty swb_webPageParent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#webPageParent");
     public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
 
@@ -211,6 +211,36 @@ public class WebPageBase extends org.semanticwb.model.base.GenericObjectBase imp
         getSemanticObject().setBooleanProperty(swb_active, active);
     }
 
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef> listRoleRefs()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef>(org.semanticwb.model.RoleRef.class, getSemanticObject().listObjectProperties(swb_hasRoleRef));    }
+
+    public void addRoleRef(org.semanticwb.model.RoleRef roleref)
+    {
+        getSemanticObject().addObjectProperty(swb_hasRoleRef, roleref.getSemanticObject());
+    }
+
+    public void removeAllRoleRef()
+    {
+        getSemanticObject().removeProperty(swb_hasRoleRef);
+    }
+
+    public void removeRoleRef(org.semanticwb.model.RoleRef roleref)
+    {
+        getSemanticObject().removeObjectProperty(swb_hasRoleRef,roleref.getSemanticObject());
+    }
+
+    public org.semanticwb.model.RoleRef getRoleRef()
+    {
+         org.semanticwb.model.RoleRef ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasRoleRef);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.RoleRef)obj.getSemanticClass().newGenericInstance(obj);
+         }
+         return ret;
+    }
+
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.WebPage> listVirtualParents()
     {
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.WebPage>(org.semanticwb.model.WebPage.class, getSemanticObject().listObjectProperties(swb_hasWebPageVirtualParent));    }
@@ -249,36 +279,6 @@ public class WebPageBase extends org.semanticwb.model.base.GenericObjectBase imp
     public void setDeleted(boolean deleted)
     {
         getSemanticObject().setBooleanProperty(swb_deleted, deleted);
-    }
-
-    public org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef> listRoleRefs()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef>(org.semanticwb.model.RoleRef.class, getSemanticObject().listObjectProperties(swb_hasRoleRef));    }
-
-    public void addRoleRef(org.semanticwb.model.RoleRef roleref)
-    {
-        getSemanticObject().addObjectProperty(swb_hasRoleRef, roleref.getSemanticObject());
-    }
-
-    public void removeAllRoleRef()
-    {
-        getSemanticObject().removeProperty(swb_hasRoleRef);
-    }
-
-    public void removeRoleRef(org.semanticwb.model.RoleRef roleref)
-    {
-        getSemanticObject().removeObjectProperty(swb_hasRoleRef,roleref.getSemanticObject());
-    }
-
-    public org.semanticwb.model.RoleRef getRoleRef()
-    {
-         org.semanticwb.model.RoleRef ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasRoleRef);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.RoleRef)obj.getSemanticClass().newGenericInstance(obj);
-         }
-         return ret;
     }
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.WebPage> listWebPageVirtualChilds()
@@ -396,6 +396,16 @@ public class WebPageBase extends org.semanticwb.model.base.GenericObjectBase imp
          return ret;
     }
 
+    public String getWebPageURL()
+    {
+        return getSemanticObject().getProperty(swb_webPageURL);
+    }
+
+    public void setWebPageURL(String webPageURL)
+    {
+        getSemanticObject().setProperty(swb_webPageURL, webPageURL);
+    }
+
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef> listRuleRefs()
     {
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef>(org.semanticwb.model.RuleRef.class, getSemanticObject().listObjectProperties(swb_hasRuleRef));    }
@@ -460,16 +470,6 @@ public class WebPageBase extends org.semanticwb.model.base.GenericObjectBase imp
              ret=(org.semanticwb.model.WebPage)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
-    }
-
-    public String getWebPageURL()
-    {
-        return getSemanticObject().getProperty(swb_webPageURL);
-    }
-
-    public void setWebPageURL(String webPageURL)
-    {
-        getSemanticObject().setProperty(swb_webPageURL, webPageURL);
     }
 
     public void setParent(org.semanticwb.model.WebPage webpage)

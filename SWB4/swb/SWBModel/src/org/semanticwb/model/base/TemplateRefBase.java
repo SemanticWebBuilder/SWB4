@@ -3,26 +3,16 @@ package org.semanticwb.model.base;
 
 public class TemplateRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.Deleteable,org.semanticwb.model.Activeable,org.semanticwb.model.Priorityable,org.semanticwb.model.Inheritable
 {
-    public static final org.semanticwb.platform.SemanticProperty swb_deleted=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#deleted");
     public static final org.semanticwb.platform.SemanticClass swb_Template=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Template");
     public static final org.semanticwb.platform.SemanticProperty swb_template=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#template");
-    public static final org.semanticwb.platform.SemanticProperty swb_inherita=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#inherita");
     public static final org.semanticwb.platform.SemanticProperty swb_priority=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#priority");
+    public static final org.semanticwb.platform.SemanticProperty swb_deleted=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#deleted");
+    public static final org.semanticwb.platform.SemanticProperty swb_inherita=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#inherita");
     public static final org.semanticwb.platform.SemanticClass swb_TemplateRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#TemplateRef");
 
     public TemplateRefBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
-    }
-
-    public boolean isDeleted()
-    {
-        return getSemanticObject().getBooleanProperty(swb_deleted);
-    }
-
-    public void setDeleted(boolean deleted)
-    {
-        getSemanticObject().setBooleanProperty(swb_deleted, deleted);
     }
 
     public void setTemplate(org.semanticwb.model.Template template)
@@ -46,16 +36,6 @@ public class TemplateRefBase extends org.semanticwb.model.Reference implements o
          return ret;
     }
 
-    public int getInherita()
-    {
-        return getSemanticObject().getIntProperty(swb_inherita);
-    }
-
-    public void setInherita(int inherita)
-    {
-        getSemanticObject().setLongProperty(swb_inherita, inherita);
-    }
-
     public int getPriority()
     {
         return getSemanticObject().getIntProperty(swb_priority);
@@ -64,6 +44,26 @@ public class TemplateRefBase extends org.semanticwb.model.Reference implements o
     public void setPriority(int priority)
     {
         getSemanticObject().setLongProperty(swb_priority, priority);
+    }
+
+    public boolean isDeleted()
+    {
+        return getSemanticObject().getBooleanProperty(swb_deleted);
+    }
+
+    public void setDeleted(boolean deleted)
+    {
+        getSemanticObject().setBooleanProperty(swb_deleted, deleted);
+    }
+
+    public int getInherita()
+    {
+        return getSemanticObject().getIntProperty(swb_inherita);
+    }
+
+    public void setInherita(int inherita)
+    {
+        getSemanticObject().setLongProperty(swb_inherita, inherita);
     }
 
     public org.semanticwb.model.WebSite getWebSite()

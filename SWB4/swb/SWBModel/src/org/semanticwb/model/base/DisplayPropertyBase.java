@@ -5,13 +5,13 @@ public class DisplayPropertyBase extends org.semanticwb.model.base.GenericObject
 {
     public static final org.semanticwb.platform.SemanticProperty swb_index=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#index");
     public static final org.semanticwb.platform.SemanticProperty swbxf_propSelectValues=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#propSelectValues");
-    public static final org.semanticwb.platform.SemanticClass swbxf_PropertyGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#PropertyGroup");
-    public static final org.semanticwb.platform.SemanticProperty swbxf_propGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#propGroup");
     public static final org.semanticwb.platform.SemanticProperty swbxf_propHidden=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#propHidden");
-    public static final org.semanticwb.platform.SemanticProperty swbxf_propPromptMessage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#propPromptMessage");
     public static final org.semanticwb.platform.SemanticProperty swbxf_propInvalidMessage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#propInvalidMessage");
     public static final org.semanticwb.platform.SemanticClass swb_SWBFormElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#SWBFormElement");
     public static final org.semanticwb.platform.SemanticProperty swbxf_formElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#formElement");
+    public static final org.semanticwb.platform.SemanticClass swbxf_PropertyGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#PropertyGroup");
+    public static final org.semanticwb.platform.SemanticProperty swbxf_propGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#propGroup");
+    public static final org.semanticwb.platform.SemanticProperty swbxf_propPromptMessage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#propPromptMessage");
     public static final org.semanticwb.platform.SemanticProperty swbxf_propEditable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#propEditable");
     public static final org.semanticwb.platform.SemanticClass swbxf_DisplayProperty=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#DisplayProperty");
 
@@ -55,27 +55,6 @@ public class DisplayPropertyBase extends org.semanticwb.model.base.GenericObject
         getSemanticObject().setProperty(swbxf_propSelectValues, propSelectValues, lang);
     }
 
-    public void setGroup(org.semanticwb.model.PropertyGroup propertygroup)
-    {
-        getSemanticObject().setObjectProperty(swbxf_propGroup, propertygroup.getSemanticObject());
-    }
-
-    public void removeGroup()
-    {
-        getSemanticObject().removeProperty(swbxf_propGroup);
-    }
-
-    public org.semanticwb.model.PropertyGroup getGroup()
-    {
-         org.semanticwb.model.PropertyGroup ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swbxf_propGroup);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.PropertyGroup)obj.getSemanticClass().newGenericInstance(obj);
-         }
-         return ret;
-    }
-
     public boolean isHidden()
     {
         return getSemanticObject().getBooleanProperty(swbxf_propHidden);
@@ -84,31 +63,6 @@ public class DisplayPropertyBase extends org.semanticwb.model.base.GenericObject
     public void setHidden(boolean propHidden)
     {
         getSemanticObject().setBooleanProperty(swbxf_propHidden, propHidden);
-    }
-
-    public String getPromptMessage()
-    {
-        return getSemanticObject().getProperty(swbxf_propPromptMessage);
-    }
-
-    public void setPromptMessage(String propPromptMessage)
-    {
-        getSemanticObject().setProperty(swbxf_propPromptMessage, propPromptMessage);
-    }
-
-    public String getPromptMessage(String lang)
-    {
-        return getSemanticObject().getProperty(swbxf_propPromptMessage, null, lang);
-    }
-
-    public String getDisplayPromptMessage(String lang)
-    {
-        return getSemanticObject().getLocaleProperty(swbxf_propPromptMessage, lang);
-    }
-
-    public void setPromptMessage(String propPromptMessage, String lang)
-    {
-        getSemanticObject().setProperty(swbxf_propPromptMessage, propPromptMessage, lang);
     }
 
     public String getInvalidMessage()
@@ -151,6 +105,52 @@ public class DisplayPropertyBase extends org.semanticwb.model.base.GenericObject
          org.semanticwb.platform.SemanticObject ret=null;
          ret=getSemanticObject().getObjectProperty(swbxf_formElement);
          return ret;
+    }
+
+    public void setGroup(org.semanticwb.model.PropertyGroup propertygroup)
+    {
+        getSemanticObject().setObjectProperty(swbxf_propGroup, propertygroup.getSemanticObject());
+    }
+
+    public void removeGroup()
+    {
+        getSemanticObject().removeProperty(swbxf_propGroup);
+    }
+
+    public org.semanticwb.model.PropertyGroup getGroup()
+    {
+         org.semanticwb.model.PropertyGroup ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swbxf_propGroup);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.PropertyGroup)obj.getSemanticClass().newGenericInstance(obj);
+         }
+         return ret;
+    }
+
+    public String getPromptMessage()
+    {
+        return getSemanticObject().getProperty(swbxf_propPromptMessage);
+    }
+
+    public void setPromptMessage(String propPromptMessage)
+    {
+        getSemanticObject().setProperty(swbxf_propPromptMessage, propPromptMessage);
+    }
+
+    public String getPromptMessage(String lang)
+    {
+        return getSemanticObject().getProperty(swbxf_propPromptMessage, null, lang);
+    }
+
+    public String getDisplayPromptMessage(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(swbxf_propPromptMessage, lang);
+    }
+
+    public void setPromptMessage(String propPromptMessage, String lang)
+    {
+        getSemanticObject().setProperty(swbxf_propPromptMessage, propPromptMessage, lang);
     }
 
     public boolean isEditable()
