@@ -69,5 +69,24 @@ public class WebSite extends WebSiteBase
         }
         return ret;
     }
+
+    @Override
+    public Portlet getPortlet(String id)
+    {
+        Portlet ret=null;
+        SemanticClass cls=swb_Portlet;
+        int i=id.indexOf(':');
+        if(i>0)
+        {
+            String clsid=id.substring(0,i);
+            cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassByID(clsid);
+            id=id.substring(i+1);
+        }
+        if(cls!=null)
+        {
+            ret=(Portlet)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,cls),cls);
+        }
+        return ret;
+    }
     
 }

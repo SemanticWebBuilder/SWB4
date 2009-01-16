@@ -29,17 +29,6 @@ public class WebPage extends WebPageBase
         return siteid;
     }
 
-    public String getSId()
-    {
-        String id=getId();
-        SemanticClass cls=getSemanticObject().getSemanticClass();
-        //if(cls!=swb_WebPage)
-        {
-            id=cls.getClassId()+":"+id;
-        }
-        return id;
-    }
-
     /**  Regresa el Url de la pagina
      *  Ejemplo: /wb2/jei/home
      * @return String
