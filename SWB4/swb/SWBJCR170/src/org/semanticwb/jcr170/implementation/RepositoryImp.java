@@ -27,9 +27,9 @@ import org.semanticwb.repository.Workspace;
 public final class RepositoryImp implements Repository
 {
 
-    static Logger log = SWBUtils.getLogger(RepositoryImp.class);    
+    static Logger log = SWBUtils.getLogger(RepositoryImp.class);
     private static Hashtable<String, String> descriptors = new Hashtable<String, String>();
-    
+
 
     static
     {
@@ -61,14 +61,6 @@ public final class RepositoryImp implements Repository
         {
             if (name.equals(defaultWorkspaceName))
             {
-                log.event("Creating a Default Workspace with name " + defaultWorkspaceName + " ...");
-                Workspace ws = SWBContext.createWorkspace(name, namespace);
-                if (ws.getRoot() == null)
-                {
-                    Unstructured root = ws.createUnstructured();
-                    root.setName("jcr:root");
-                    ws.setRoot(root);
-                }
                 exists = true;
                 break;
             }
@@ -128,11 +120,11 @@ public final class RepositoryImp implements Repository
         while (it.hasNext())
         {
             size++;
-            String uri=it.next().getURI();
-            if(uri.indexOf("#")!=-1)
+            String uri = it.next().getURI();
+            if (uri.indexOf("#") != -1)
             {
-                int pos=uri.indexOf("#");
-                uri=uri.substring(pos+1);
+                int pos = uri.indexOf("#");
+                uri = uri.substring(pos + 1);
             }
             names.add(uri);
         }
@@ -216,6 +208,4 @@ public final class RepositoryImp implements Repository
     {
         return login(null, null);
     }
-
-    
 }
