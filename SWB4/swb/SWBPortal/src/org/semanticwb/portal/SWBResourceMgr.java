@@ -74,6 +74,7 @@ public class SWBResourceMgr
             map=new HashMap<String,SWBResource>();
             resources.put(model, map);
         }
+        if(id.indexOf(':')==-1)id=Portlet.swb_Portlet.getClassId()+":"+id;
         SWBResource res=map.get(id);
         if(res==null)
         {
