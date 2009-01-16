@@ -71,6 +71,7 @@ public class SemanticVocabulary
     public static final String SWB_PROP_HERARQUICALRELATION=URI+"herarquicalRelation";
     public static final String SWB_PROP_REMOVEDEPENDENCY=URI+"removeDependency";
     public static final String SWB_PROP_HASHERARQUICALNODE=URI+"hasHerarquicalNode";
+    public static final String SWB_PROP_NOOBSERVABLE=URI+"noObservable";
 //    public static final String SWB_PROP_PROPGROUP=URI+"propGroup";
 //    public static final String SWB_PROP_PROPINDEX=URI+"propIndex";
     public static final String SWB_ANNOT_CLASSNAME=URI+"className";

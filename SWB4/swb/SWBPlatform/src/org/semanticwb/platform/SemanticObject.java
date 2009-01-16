@@ -891,20 +891,37 @@ public class SemanticObject
             removeCache(obj.getURI());
         }
 
-        //Borrar objetos dependientes
+        //Eliminar dependencias
         Iterator<SemanticProperty> itp=getSemanticClass().listProperties();
         while(itp.hasNext())
         {
             SemanticProperty prop=itp.next();
             if(prop.isRemoveDependency())
             {
-                SemanticObject dep=getObjectProperty(prop);
-                if(dep!=null)
+                //System.out.println(prop+" "+prop.isRemoveDependency());
+                if(prop.getCardinality()==1)
                 {
-                    try
+                    SemanticObject dep=getObjectProperty(prop);
+                    if(dep!=null)
                     {
-                        dep.remove();
-                    }catch(Exception e){log.error(e);}
+                        //System.out.println(dep);
+                        try
+                        {
+                            dep.remove();
+                        }catch(Exception e){log.error(e);}
+                    }
+                }else
+                {
+                    Iterator<SemanticObject> it=listObjectProperties(prop);
+                    while(it.hasNext())
+                    {
+                        SemanticObject dep=it.next();
+                        //System.out.println(dep);
+                        try
+                        {
+                            dep.remove();
+                        }catch(Exception e){log.error(e);}
+                    }
                 }
             }
         }
