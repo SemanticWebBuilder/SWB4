@@ -43,9 +43,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Portlet;
-import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
-import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.portal.api.GenericResource;
@@ -314,11 +312,8 @@ public class SWBALogs extends GenericResource
         if(base.getAttribute("date")!=null) dateRow = base.getAttribute("date");
         if(base.getAttribute("user")!=null) userRow = base.getAttribute("user");
         if(base.getAttribute("rows")!=null) rowsHistory=base.getAttribute("rows");
-        //if(base.getAttribute("next")!=null) nextHistory = base.getAttribute("next");
-        //if(base.getAttribute("back")!=null) backHistory = base.getAttribute("back");
         if(base.getAttribute("pages")!=null) pagesHistory = base.getAttribute("pages");
         if(base.getAttribute("showPages")!=null) showPages = base.getAttribute("showPages");
-//        if(base.getAttribute("tipo")!=null) pTipo = base.getAttribute("tipo");
         
         boolean rowAction=false;
         boolean rowDescription=false;
@@ -405,9 +400,8 @@ public class SWBALogs extends GenericResource
                         if(userId.length()> 1)
                         {
                             log.debug("Usuario: "+userId+" - "+so.getModel().getModelObject().getURI());
-                            //WebSite ws = SWBContext.getWebSite(so.getModel().getModelObject().getURI());
                             User rUser = (User)ont.getGenericObject(userId);
-                            out.println("  <td>"+rUser.getUsrFirstName()+" "+(rUser.getUsrLastName()!=null?rUser.getUsrLastName():"NAME:"+rUser.getName())+"</td>");
+                            out.println("  <td>"+rUser.getUsrFirstName()+" "+(rUser.getUsrLastName()!=null?rUser.getUsrLastName():" ")+"</td>");
                         }
                         else  out.println("  <td>"+userId+"</td>");
                     }
@@ -422,10 +416,6 @@ public class SWBALogs extends GenericResource
 
         out.println("</table>");
         out.println("</fieldset>");
-        out.println("<fieldset>");
-        out.println("<div align=\"center\">");
-//        out.println("<tr>");
-//        out.println("<td colspan=\""+rowNumber+"\" align=\"right\" class=\"valores\"><HR size=\"1\" noshade>");
         int numTotPages = (int)Math.round(numReg/ maxRows);
         if((numReg%maxRows)>0) numTotPages++;
         maximo=maximo-1;
@@ -487,16 +477,16 @@ public class SWBALogs extends GenericResource
         }
         else
         {
+            out.println("<fieldset>");
+            out.println("<div align=\"center\">");
             if(actualPage==1) out.println(numeros+"<a href=\"#\" onclick=\"submitUrl('"+urlNext+"',this); return false;\" >"+nextHistory+"</a>");
             else
                 if(actualPage==numTotPages) out.println("<a href=\"#\" onclick=\"submitUrl('"+urlBack+"',this); return false;\" >"+backHistory+"</a>&nbsp;"+numeros);
                 else out.println("<a href=\"#\" onclick=\"submitUrl('"+urlBack+"',this); return false;\" >"+backHistory+"</a>&nbsp;"+numeros+"<a href=\"#\" onclick=\"submitUrl('"+urlNext+"',this); return false;\" >"+nextHistory+"</a>");
+            out.println("</div>");
+            out.println("</fieldset>");
         }
-//        out.println("</td>");
-//        out.println("</tr>");
-//        out.println("</table>");
-        out.println("</div>");
-        out.println("</fieldset>");
+        
         out.println("<fieldset>");
         out.println("<form method=post action=\""+paramRequest.getRenderUrl().toString()+"\" name=\""+pURI+"/frmContent\" id=\""+pURI+"/frmContent\">");
         SWBResourceURL url1 = paramRequest.getRenderUrl();
@@ -509,8 +499,8 @@ public class SWBALogs extends GenericResource
         url2.setMode("Excel");
         if(pURI!=null) url2.setParameter("suri",pURI);
 
-        out.println("<button dojoType=\"dijit.form.Button\" type=\"button\"  onclick=\"showDialog('"+url1+"'); return false;\">Exportar XML</button>"); //submitUrl('#',this.domNode);
-        out.println("<button dojoType=\"dijit.form.Button\" type=\"button\"  onclick=\"showDialog('"+url2+"'); return false;\">Exportar Excel</button>"); //submitUrl('#',this.domNode);
+        out.println("<button dojoType=\"dijit.form.Button\" type=\"button\"  onclick=\"window.open('"+url1+"');\">Exportar XML</button>"); //submitUrl('#',this.domNode);  //_onclick=\"showDialog('"+url1+"'); return false;\"
+        out.println("<button dojoType=\"dijit.form.Button\" type=\"button\"  onclick=\"window.open('"+url2+"'); return false;\">Exportar Excel</button>"); //submitUrl('#',this.domNode);
         
         SWBResourceURL url = paramRequest.getRenderUrl();
         url.setParameter("suri", pURI);
@@ -518,23 +508,6 @@ public class SWBALogs extends GenericResource
         out.println("</form>");
         out.println("</fieldset>");
         out.println("</div>");
-        
-        
-        
-//        out.println("<script language=javascript>");
-//        out.println("   function selectType(frm,val)");
-//        out.println("     { ");
-//        out.println("       size='width=600, height=550, scrollbars, resizable, alwaysRaised, menubar';");
-//        out.println("        if(val==1)");
-//        out.println("           { ");
-//        out.println("               window.open(\""+url1.toString()+"\",\"RepWindow\",sizze);");
-//        out.println("           }");
-//        out.println("        else if(val==2)");
-//        out.println("           { ");
-//        out.println("               window.open(\""+url2.toString()+"\",\"RepWindow\",sizze);");
-//        out.println("           }");
-//        out.println("      }");
-//        out.println("</script>");
     }
     
      /** Generate the log in Excel format
@@ -549,6 +522,9 @@ public class SWBALogs extends GenericResource
         //response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
+        //response.setHeader("Content-Disposition", "inline; filename=\"Excel Report\";");
+        response.setHeader("Content-Disposition", "attachment; filename=\"Excel Report.xls\";");
+
         log.debug("doView()");
         Portlet base = getResourceBase(); //paramRequest
         PrintWriter out = response.getWriter();
