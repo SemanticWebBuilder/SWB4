@@ -14,7 +14,10 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.User;
 import org.semanticwb.servlet.internal.Admin;
 import org.semanticwb.servlet.internal.Distributor;
 import org.semanticwb.servlet.internal.DistributorParams;
@@ -92,9 +95,13 @@ public class SWBVirtualHostFilter implements Filter
         log.trace("path:"+path);
         log.trace("host:"+host);
         log.trace("iserv:"+iserv);
-        
+        boolean isjsp=false;
         InternalServlet serv=intServlets.get(iserv);
-        if(serv!=null && path.endsWith(".jsp"))serv=null;
+        if(serv!=null && path.endsWith(".jsp"))
+        {
+            serv=null;
+            isjsp=true;
+        }
         
 //        String real=WBVirtualHostMgr.getInstance().getVirtualHost(path,host);
 //        
@@ -124,6 +131,11 @@ public class SWBVirtualHostFilter implements Filter
                 }
             }else
             {
+                if(isjsp)
+                {
+                    User user=SWBPortal.getUserMgr().getUser(_request, SWBContext.getGlobalWebSite());
+                    SWBPortal.setSessionUser(user);
+                }
                 chain.doFilter(request, response);
             }
         }

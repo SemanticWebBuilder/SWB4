@@ -90,7 +90,7 @@ public class DistributorParams
             filtered=_getFiltered(request);
         }else
         {
-            log.equals("WebPage not Found:"+request.getRequestURI()+" Ref:"+request.getHeader("Referer"));
+            log.warn("WebPage not Found:"+request.getRequestURI()+" Ref:"+request.getHeader("Referer"));
         }
         if(webpage==null)
         {
@@ -99,7 +99,7 @@ public class DistributorParams
         {
             user=_getUser(request,webpage.getWebSite());
         }
-        SWBPortal.addSessionUser(user);
+        SWBPortal.setSessionUser(user);
         //System.out.println("user"+user);
         queryString=_getQueryString(request);
         //System.out.println("queryString:"+queryString);

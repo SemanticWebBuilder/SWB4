@@ -35,11 +35,7 @@ import java.sql.*;
 //import java.util.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
-import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.base.util.SWBMail;
-import org.semanticwb.model.SWBContext;
-
 
 
 /** objeto: cache de registro de base de datos de la tabla wbadmlog
@@ -56,9 +52,11 @@ public class SWBRecAdmLog //implements WBDBRecord
 //    private ArrayList notifys = new ArrayList();
 
     private String user;
-    private String action;
-    private String objuri;
     private String modelid;
+    private String objuri;
+    private String propid;
+
+    private String action;
     private Timestamp date;
 
     private Logger log = SWBUtils.getLogger(SWBRecAdmLog.class);
@@ -67,9 +65,10 @@ public class SWBRecAdmLog //implements WBDBRecord
     public SWBRecAdmLog()
     {
         this.user = "_";
-        this.action = "_";
-        this.objuri = "_";
         this.modelid = null;
+        this.objuri = "_";
+        this.propid = "_";
+        this.action = "_";
         this.date = null;
     }
 
@@ -81,9 +80,10 @@ public class SWBRecAdmLog //implements WBDBRecord
         try
         {
             this.user = rs.getString("log_user");
-            this.action = rs.getString("log_action");
-            this.objuri = rs.getString("log_objuri");
             this.modelid = rs.getString("log_modelid");
+            this.objuri = rs.getString("log_objuri");
+            this.propid = rs.getString("log_propid");
+            this.action = rs.getString("log_action");
             this.date = rs.getTimestamp("log_date");
         } catch (Exception e)
         {
@@ -97,13 +97,14 @@ public class SWBRecAdmLog //implements WBDBRecord
      * @param objuri
      * @param modelid
      * @param date  */
-    public SWBRecAdmLog(String user, String action, String objuri, String modelid, Timestamp date)
+    public SWBRecAdmLog(String user, String modelid, String objuri, String propid, String action, Timestamp date)
     {
         this();
         this.user = user;
-        this.action = action;
-        this.objuri = objuri;
         this.modelid = modelid;
+        this.objuri = objuri;
+        this.propid = propid;
+        this.action = action;
         this.date = date;
     }
 
@@ -121,6 +122,14 @@ public class SWBRecAdmLog //implements WBDBRecord
     public void setUser(String user)
     {
         this.user = user;
+    }
+
+    public String getPropId() {
+        return propid;
+    }
+
+    public void setPropId(String propid) {
+        this.propid = propid;
     }
 
     /** Getter for property action.
@@ -196,11 +205,14 @@ public class SWBRecAdmLog //implements WBDBRecord
         try
         {
             con = SWBUtils.DB.getDefaultConnection("SWBRecAdmLog.remove()");
-            String query = "delete from swb_admlog where log_user=? and log_action=? and log_date=?";
+            String query = "delete from swb_admlog where log_user=? and log_modelid=? and log_objuri=? and log_propid=? and log_action=? and log_date=?";
             PreparedStatement st = con.prepareStatement(query);
             st.setString(1, user);
-            st.setString(2, action);
-            st.setTimestamp(3, date);
+            st.setString(2, modelid);
+            st.setString(3, objuri);
+            st.setString(4, propid);
+            st.setString(5, action);
+            st.setTimestamp(6, date);
             st.executeUpdate();
             st.close();
             con.close();
@@ -232,13 +244,14 @@ public class SWBRecAdmLog //implements WBDBRecord
         {
             if (date == null) date = new Timestamp(new java.util.Date().getTime());
             con = SWBUtils.DB.getDefaultConnection("SWBRecAdmLog.create()");
-            String query = "insert into swb_admlog (log_user,log_action,log_objuri,log_modelid,log_date) values (?,?,?,?,?)";
+            String query = "insert into swb_admlog (log_user,log_modelid,log_objuri,log_propid,log_action,log_date) values (?,?,?,?,?,?)";
             PreparedStatement st = con.prepareStatement(query);
             st.setString(1, user);
-            st.setString(2, action);
+            st.setString(2, modelid);
             st.setString(3, objuri);
-            st.setString(4, modelid);
-            st.setTimestamp(5, date);
+            st.setString(4, propid);
+            st.setString(5, action);
+            st.setTimestamp(6, date);
             st.executeUpdate();
             st.close();
             con.close();

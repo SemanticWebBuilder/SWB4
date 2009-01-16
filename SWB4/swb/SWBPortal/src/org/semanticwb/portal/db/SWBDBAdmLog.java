@@ -35,7 +35,9 @@ import org.semanticwb.SWBException;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
+import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.platform.SemanticProperty;
 
 /** Objeto: Almacena a la base de datos los cambios desde la administracion.
  *
@@ -65,15 +67,24 @@ public class SWBDBAdmLog {
      * @param userid
      * @param objuri
      * @param accion  */
-    public void saveAdmLog(User user, SemanticObject obj, String accion) {
+    public void saveAdmLog(User user, SemanticObject obj, Object prop, String accion)
+    {
         try {
             String modelid = obj.getModel().getName();
-            String userid=null;
-            if(user==null){
-                log.debug("User NULL");
+            String userid=user!=null?user.getURI():"_";
+            if(userid==null)userid="_";
+            String propid="_";
+            if(prop!=null)
+            {
+                if(prop instanceof SemanticProperty)
+                {
+                    propid=((SemanticProperty)prop).getURI();
+                }else if(prop instanceof SemanticClass)
+                {
+                    propid=((SemanticClass)prop).getURI();
+                }
             }
-            else userid = user.getURI();
-            SWBRecAdmLog rec = new SWBRecAdmLog(userid, accion, obj.getURI(), modelid, null);
+            SWBRecAdmLog rec = new SWBRecAdmLog(userid, modelid, obj.getURI(),propid, accion, null);
             rec.create();
         } catch (Exception e) {
             log.error(SWBUtils.TEXT.getLocaleString("locale_core", "error_DBAdmLog_SaveContentLog_contentlogerror"), e);
