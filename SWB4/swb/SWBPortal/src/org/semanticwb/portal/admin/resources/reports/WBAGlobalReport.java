@@ -29,8 +29,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
 import org.semanticwb.Logger;
-import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.Portlet;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.model.SWBContext;
@@ -40,6 +40,7 @@ import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.admin.resources.reports.beans.WBAFilterReportBean;
 import org.semanticwb.portal.admin.resources.reports.jrresources.*;
 import org.semanticwb.portal.admin.resources.reports.jrresources.data.JRGlobalAccessDataDetail;
+import org.semanticwb.portal.api.SWBActionResponse;
 
     
 /** Esta clase genera el reporte global de acceso, toma la informaci�n de los
@@ -74,6 +75,9 @@ public class WBAGlobalReport extends GenericResource {
         catch (Exception e){
             strRscType = "WBAGlobalReport";
         }
+        
+        System.out.println("\nejecutando init.....\n");
+        log.debug("\nloggin  ejecutando init.....\n");
     }
     
     /**
@@ -90,7 +94,7 @@ public class WBAGlobalReport extends GenericResource {
             processRequest(request, response, paramsRequest);
         }
     }
-
+    
     /**
      * @param request
      * @param response
@@ -122,7 +126,7 @@ public class WBAGlobalReport extends GenericResource {
      * @throws SWBResourceException
      * @throws IOException
      */    
-    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException{        
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html;charset=iso-8859-1");
         final int I_ACCESS = 0;
         Portlet base = getResourceBase();
@@ -140,7 +144,7 @@ public class WBAGlobalReport extends GenericResource {
         boolean b_topic = false;
         String s_topic = null;
         String rtype = null;
-        String s_site = null;
+        String webSite = null;
         /*String s_color = null;*/
         String s_value = null;
         String s_tmid = null;
@@ -168,7 +172,7 @@ public class WBAGlobalReport extends GenericResource {
             // If there are sites continue
             if(hm_sites.size() > I_ACCESS){
                 address = paramsRequest.getTopic().getUrl();
-                s_site = request.getParameter("wb_site");
+                webSite = request.getParameter("wb_site");
                 s_topic = paramsRequest.getTopic().getId();
                 if(s_topic.lastIndexOf("Daily") != -1){
                     rtype="0";
@@ -417,8 +421,8 @@ public class WBAGlobalReport extends GenericResource {
                     s_tmid = s_value.substring(0,i_key);
                     s_tmtitle = s_value.substring(i_key + 1,s_value.length());
                     sb_ret.append("\n<option value=\""+ s_tmid + "\"");
-                    if(s_site != null){
-                        if(s_site.equals(s_tmid)){
+                    if(webSite != null){
+                        if(webSite.equals(s_tmid)){
                             sb_ret.append(" selected");
                         }
                     }
@@ -625,11 +629,16 @@ public class WBAGlobalReport extends GenericResource {
                         sb_ret.delete(0,sb_ret.length());
                         WBAFilterReportBean filter = buildFilter(request, paramsRequest);
                         JRDataSourceable dataDetail = new JRGlobalAccessDataDetail(filter);
-                        JasperTemplate jasperTemplate = JasperTemplate.GLOBAL_DAILY_HTML;                        
-                        try {
-                            JRResource jrResource = new JRHtmlResource(jasperTemplate.getTemplatePath(), dataDetail.orderJRReport());
+                        JasperTemplate jasperTemplate = JasperTemplate.GLOBAL_DAILY_HTML;                                                
+                        try {                            
+                            //"C:/desarrollo/SWB4/swb/build/web/swbadmin/images/swb-logo-hor.jpg"
+                            System.out.println("imagen swb="+SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");
+                            HashMap params = new HashMap();
+                            params.put("swb", SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");
+                            params.put("site", filter.getSite());
+                            JRResource jrResource = new JRHtmlResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
                             jrResource.prepareReport();
-                            jrResource.exportReport(response);                            
+                            jrResource.exportReport(response);
                         }catch (Exception e) {
                             throw new javax.servlet.ServletException(e);
                         }
@@ -665,14 +674,14 @@ public class WBAGlobalReport extends GenericResource {
                         sb_ret.append("&nbsp;");
                     }
                     else{
-                        if(!s_site.equals(null)){
+                        if(!webSite.equals(null)){
                             sb_ret.append("\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"600\">");                         
                             sb_ret.append("\n<tr><td>\n");
                             response.getWriter().print(sb_ret.toString());
                             sb_ret.delete(0,sb_ret.length());                           
                             
                             WBAFilterReportBean filter = new WBAFilterReportBean();
-                            filter.setSite(s_site);
+                            filter.setSite(webSite);
                             filter.setIdaux(S_REPORT_IDAUX);
                             filter. setType(I_REPORT_TYPE);
                             filter.setYearI(Integer.parseInt(s_year_13));                            
@@ -726,41 +735,43 @@ public class WBAGlobalReport extends GenericResource {
      * @throws SWBResourceException
      * @throws IOException
      */    
-    public void doGraph(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException{
+    public void doGraph(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
+        response.setContentType("application/pdf");
         Portlet base = getResourceBase();
         
-        try{            
-            String rtype = request.getParameter("wb_rtype");
-            if(rtype == null) rtype="0";
-
-            response.setContentType("application/pdf");
-            if(rtype.equals("0")){   // ********  Shows results by day
+        try {            
+            String webSite = request.getParameter("wb_site");
+            String rtype = request.getParameter("wb_rtype")==null ? "0" : request.getParameter("wb_rtype");
+            HashMap params = new HashMap();
+            params.put("swb", SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");
+            params.put("site", webSite);
+            
+            if(rtype.equals("0")) { // ********  Shows results by day
                 WBAFilterReportBean filter = buildFilter(request, paramsRequest);
                 JRDataSourceable dataDetail = new JRGlobalAccessDataDetail(filter);
                 JasperTemplate jasperTemplate = JasperTemplate.GLOBAL_DAILY_GRAPH;                
-                try {
-                    JRResource jrResource = new JRPdfResource(jasperTemplate.getTemplatePath(), dataDetail.orderJRReport());
+                try {                    
+                    JRResource jrResource = new JRPdfResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
                     jrResource.prepareReport();
                     jrResource.exportReport(response);                            
                 }catch (Exception e) {
                     throw new javax.servlet.ServletException(e);
                 }
             }
-            else{           // ********  Shows results by each month
-                String s_site = request.getParameter("wb_site");
+            else { // ********  Shows results by each month                
                 String s_year_13 = request.getParameter("wb_year_13");
-                if(!s_site.equals(null)){
+                if(!webSite.equals(null)){
                     s_year_13 = request.getParameter("wb_year_13");
                     if(!s_year_13.equals(null)){
                         WBAFilterReportBean filter = new WBAFilterReportBean();
-                        filter.setSite(s_site);
+                        filter.setSite(webSite);
                         filter.setIdaux(S_REPORT_IDAUX);
                         filter. setType(I_REPORT_TYPE);
                         filter.setYearI(Integer.parseInt(s_year_13));
                         JRDataSourceable dataDetail = new JRGlobalAccessDataDetail(filter);
                         JasperTemplate jasperTemplate = JasperTemplate.GLOBAL_MONTHLY_GRAPH;                        
                         try {
-                            JRResource jrResource = new JRPdfResource(jasperTemplate.getTemplatePath(), dataDetail.orderJRReport());
+                            JRResource jrResource = new JRPdfResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
                             jrResource.prepareReport();
                             jrResource.exportReport(response);                            
                         }catch (Exception e) {
@@ -782,42 +793,44 @@ public class WBAGlobalReport extends GenericResource {
      * @throws SWBResourceException
      * @throws IOException
      */    
-    public void doRepExcel(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException{
+    public void doRepExcel(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
+        response.setContentType("application/vnd.ms-excel");
+        response.setHeader("Content-Disposition", "inline; filename=\"gar.xls\"");
         Portlet base = getResourceBase();
         
-        try{            
-            String rtype = request.getParameter("wb_rtype");
-            if(rtype == null) rtype="0";
-
-            response.setContentType("application/vnd.ms-excel");
-            response.setHeader("Content-Disposition", "inline; filename=\"gar.xls\"");
-            if(rtype.equals("0")){   // ********  Shows results by day
+        try {
+            String webSite = request.getParameter("wb_site");
+            String rtype = request.getParameter("wb_rtype")==null ? "0" : request.getParameter("wb_rtype");
+            HashMap params = new HashMap();
+            params.put("swb", SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");
+            params.put("site", webSite);
+            
+            if(rtype.equals("0")) { // ********  Shows results by day
                 WBAFilterReportBean filter = buildFilter(request, paramsRequest);
                 JRDataSourceable dataDetail = new JRGlobalAccessDataDetail(filter);
                 JasperTemplate jasperTemplate = JasperTemplate.GLOBAL_DAILY;                
                 try {
-                    JRResource jrResource = new JRXlsResource(jasperTemplate.getTemplatePath(), dataDetail.orderJRReport());
+                    JRResource jrResource = new JRXlsResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
                     jrResource.prepareReport();
                     jrResource.exportReport(response);                            
                 }catch (Exception e) {
                     throw new javax.servlet.ServletException(e);
                 }
             }
-            else{           // ********  Shows results by each month
-                String s_site = request.getParameter("wb_site");
+            else { // ********  Shows results by each month
                 String s_year_13 = request.getParameter("wb_year_13");
-                if(!s_site.equals(null)){
+                if(!webSite.equals(null)){
                     s_year_13 = request.getParameter("wb_year_13");
                     if(!s_year_13.equals(null)){
                         WBAFilterReportBean filter = new WBAFilterReportBean();
-                        filter.setSite(s_site);
+                        filter.setSite(webSite);
                         filter.setIdaux(S_REPORT_IDAUX);
                         filter. setType(I_REPORT_TYPE);
                         filter.setYearI(Integer.parseInt(s_year_13));
                         JRDataSourceable dataDetail = new JRGlobalAccessDataDetail(filter);
                         JasperTemplate jasperTemplate = JasperTemplate.GLOBAL_MONTHLY;                        
                         try {
-                            JRResource jrResource = new JRXlsResource(jasperTemplate.getTemplatePath(), dataDetail.orderJRReport());
+                            JRResource jrResource = new JRXlsResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
                             jrResource.prepareReport();
                             jrResource.exportReport(response);                            
                         }catch (Exception e) {
@@ -839,41 +852,42 @@ public class WBAGlobalReport extends GenericResource {
      * @throws SWBResourceException
      * @throws IOException
      */    
-    public void doRepXml(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException{
+    public void doRepXml(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException { 
+        response.setContentType("text/xml;charset=iso-8859-1");
         Portlet base = getResourceBase();
         
-        try{            
-            String rtype = request.getParameter("wb_rtype");
-            if(rtype == null) rtype="0";
-
-            response.setContentType("text/xml;charset=iso-8859-1");
-            if(rtype.equals("0")){   // ********  Shows results by day
+        try{
+            String webSite = request.getParameter("wb_site");
+            String rtype = request.getParameter("wb_rtype")==null ? "0" : request.getParameter("wb_rtype");
+            HashMap params = new HashMap();
+            params.put("swb", SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");
+            params.put("site", webSite);
+            
+            if(rtype.equals("0")) { // ********  Shows results by day
                 WBAFilterReportBean filter = buildFilter(request, paramsRequest);
                 JRDataSourceable dataDetail = new JRGlobalAccessDataDetail(filter);
                 JasperTemplate jasperTemplate = JasperTemplate.GLOBAL_DAILY;                
                 try {
-                    JRResource jrResource = new JRXmlResource(jasperTemplate.getTemplatePath(), dataDetail.orderJRReport());
+                    JRResource jrResource = new JRXmlResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
                     jrResource.prepareReport();
                     jrResource.exportReport(response);                            
                 }catch (Exception e) {
                     throw new javax.servlet.ServletException(e);
                 }
-            }
-            else{           // ********  Shows results by each month
-                String s_site = request.getParameter("wb_site");
+            }else { // ********  Shows results by each month
                 String s_year_13 = request.getParameter("wb_year_13");
-                if(!s_site.equals(null)){
+                if(!webSite.equals(null)){
                     s_year_13 = request.getParameter("wb_year_13");
                     if(!s_year_13.equals(null)){
                         WBAFilterReportBean filter = new WBAFilterReportBean();
-                        filter.setSite(s_site);
+                        filter.setSite(webSite);
                         filter.setIdaux(S_REPORT_IDAUX);
                         filter. setType(I_REPORT_TYPE);
                         filter.setYearI(Integer.parseInt(s_year_13));
                         JRDataSourceable dataDetail = new JRGlobalAccessDataDetail(filter);
                         JasperTemplate jasperTemplate = JasperTemplate.GLOBAL_MONTHLY;                        
                         try {
-                            JRResource jrResource = new JRXmlResource(jasperTemplate.getTemplatePath(), dataDetail.orderJRReport());
+                            JRResource jrResource = new JRXmlResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
                             jrResource.prepareReport();
                             jrResource.exportReport(response);                            
                         }catch (Exception e) {
@@ -888,34 +902,36 @@ public class WBAGlobalReport extends GenericResource {
         }
     }
     
-    public void doRepPdf(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException{
+    public void doRepPdf(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
+        response.setContentType("application/pdf");
         Portlet base = getResourceBase();
         
-        try{            
-            String rtype = request.getParameter("wb_rtype");
-            if(rtype == null) rtype="0";
-
-            response.setContentType("application/pdf");
-            if(rtype.equals("0")){   // ********  Shows results by day
+        try {            
+            String webSite = request.getParameter("wb_site");
+            String rtype = request.getParameter("wb_rtype")==null ? "0" : request.getParameter("wb_rtype");
+            HashMap params = new HashMap();
+            params.put("swb", SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");
+            params.put("site", webSite);
+            
+            if(rtype.equals("0")) { // ********  Shows results by day
                 WBAFilterReportBean filter = buildFilter(request, paramsRequest);
                 JRDataSourceable dataDetail = new JRGlobalAccessDataDetail(filter);
                 JasperTemplate jasperTemplate = JasperTemplate.GLOBAL_DAILY;                
                 try {
-                    JRResource jrResource = new JRPdfResource(jasperTemplate.getTemplatePath(), dataDetail.orderJRReport());
+                    JRResource jrResource = new JRPdfResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
                     jrResource.prepareReport();
                     jrResource.exportReport(response);                            
                 }catch (Exception e) {
                     throw new javax.servlet.ServletException(e);
                 }
             }
-            else{           // ********  Shows results by each month
-                String s_site = request.getParameter("wb_site");
+            else { // ********  Shows results by each month
                 String s_year_13 = request.getParameter("wb_year_13");
-                if(!s_site.equals(null)){
+                if(!webSite.equals(null)){
                     s_year_13 = request.getParameter("wb_year_13");
                     if(!s_year_13.equals(null)){
                         WBAFilterReportBean filter = new WBAFilterReportBean();
-                        filter.setSite(s_site);
+                        filter.setSite(webSite);
                         filter.setIdaux(S_REPORT_IDAUX);
                         filter. setType(I_REPORT_TYPE);
                         filter.setYearI(Integer.parseInt(s_year_13));
@@ -923,7 +939,7 @@ public class WBAGlobalReport extends GenericResource {
                         JRDataSourceable dataDetail = new JRGlobalAccessDataDetail(filter);
                         JasperTemplate jasperTemplate = JasperTemplate.GLOBAL_MONTHLY;                        
                         try {
-                            JRResource jrResource = new JRPdfResource(jasperTemplate.getTemplatePath(), dataDetail.orderJRReport());
+                            JRResource jrResource = new JRPdfResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
                             jrResource.prepareReport();
                             jrResource.exportReport(response);                            
                         }catch (Exception e) {
@@ -938,42 +954,43 @@ public class WBAGlobalReport extends GenericResource {
         }
     }
     
-    public void doRepRtf(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException{
+    public void doRepRtf(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
+        response.setContentType("application/rtf");
+        response.setHeader("Content-Disposition", "inline; filename=\"gar.rtf\"");
         Portlet base = getResourceBase();
 
-        try{            
-            String rtype = request.getParameter("wb_rtype");
-            if(rtype == null) rtype="0";
-
-            response.setContentType("application/rtf");
-            response.setHeader("Content-Disposition", "inline; filename=\"gar.rtf\"");
-            if(rtype.equals("0")){   // ********  Shows results by day
+        try {
+            String webSite = request.getParameter("wb_site");
+            String rtype = request.getParameter("wb_rtype")==null ? "0" : request.getParameter("wb_rtype");
+            HashMap params = new HashMap();
+            params.put("swb", SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");
+            params.put("site", webSite);
+            
+            if(rtype.equals("0")) { // ********  Shows results by day
                 WBAFilterReportBean filter = buildFilter(request, paramsRequest);
                 JRDataSourceable dataDetail = new JRGlobalAccessDataDetail(filter);
                 JasperTemplate jasperTemplate = JasperTemplate.GLOBAL_DAILY;                
                 try {
-                    JRResource jrResource = new JRRtfResource(jasperTemplate.getTemplatePath(), dataDetail.orderJRReport());
+                    JRResource jrResource = new JRRtfResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
                     jrResource.prepareReport();
                     jrResource.exportReport(response);                            
                 }catch (Exception e) {
                     throw new javax.servlet.ServletException(e);
                 }
-            }
-            else{           // ********  Shows results by each month
-                String s_site = request.getParameter("wb_site");
+            }else { // ********  Shows results by each month
                 String s_year_13 = request.getParameter("wb_year_13");
-                if(!s_site.equals(null)){
+                if(!webSite.equals(null)){
                     s_year_13 = request.getParameter("wb_year_13");
                     if(!s_year_13.equals(null)){
                         WBAFilterReportBean filter = new WBAFilterReportBean();
-                        filter.setSite(s_site);
+                        filter.setSite(webSite);
                         filter.setIdaux(S_REPORT_IDAUX);
                         filter. setType(I_REPORT_TYPE);
                         filter.setYearI(Integer.parseInt(s_year_13));
                         JRDataSourceable dataDetail = new JRGlobalAccessDataDetail(filter);
                         JasperTemplate jasperTemplate = JasperTemplate.GLOBAL_MONTHLY;                        
                         try {
-                            JRResource jrResource = new JRRtfResource(jasperTemplate.getTemplatePath(), dataDetail.orderJRReport());
+                            JRResource jrResource = new JRRtfResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
                             jrResource.prepareReport();
                             jrResource.exportReport(response);                            
                         }catch (Exception e) {
@@ -1018,7 +1035,7 @@ public class WBAGlobalReport extends GenericResource {
         GregorianCalendar gc_now = new GregorianCalendar();
 
         // Receive parameters
-        String s_site = request.getParameter("wb_site");
+        String webSite = request.getParameter("wb_site");
         String rtype = request.getParameter("wb_rtype");
 
         String s_rep_type = request.getParameter("wb_rep_type");
@@ -1073,14 +1090,14 @@ public class WBAGlobalReport extends GenericResource {
                 if(s_year_1.equals("0")){
                     // Select all
                     filterReportBean = new WBAFilterReportBean();
-                    filterReportBean.setSite(s_site);
+                    filterReportBean.setSite(webSite);
                     filterReportBean.setIdaux(S_REPORT_IDAUX);
                     filterReportBean. setType(I_REPORT_TYPE);
                 }
                 else{
                     // Select by speceific year or month or day
                     filterReportBean = new WBAFilterReportBean();
-                    filterReportBean.setSite(s_site);
+                    filterReportBean.setSite(webSite);
                     filterReportBean.setIdaux(S_REPORT_IDAUX);
                     filterReportBean. setType(I_REPORT_TYPE);                            
                     filterReportBean.setYearI(Integer.parseInt(s_year_1));
@@ -1091,7 +1108,7 @@ public class WBAGlobalReport extends GenericResource {
             else{                       // radio button was 1
                 // Select between two dates
                 filterReportBean = new WBAFilterReportBean();
-                filterReportBean.setSite(s_site);
+                filterReportBean.setSite(webSite);
                 filterReportBean.setIdaux(S_REPORT_IDAUX);
                 filterReportBean.setType(I_REPORT_TYPE);                            
                 filterReportBean.setYearI(Integer.parseInt(s_year_11));
@@ -1119,7 +1136,7 @@ public class WBAGlobalReport extends GenericResource {
         GregorianCalendar gc_now = new GregorianCalendar();
 
         // Receive parameters
-        String s_site = request.getParameter("wb_site");
+        String webSite = request.getParameter("wb_site");
         String rtype = request.getParameter("wb_rtype");
 
         String s_rep_type = request.getParameter("wb_rep_type");
@@ -1173,16 +1190,16 @@ public class WBAGlobalReport extends GenericResource {
             if(s_rep_type.equals("0")){ // radio button was 0
                 if(s_year_1.equals("0")){
                     // Select all
-//                    iterHits = DBResHits.getInstance().getResHitsLog(s_site,S_REPORT_IDAUX,I_REPORT_TYPE);
+//                    iterHits = DBResHits.getInstance().getResHitsLog(webSite,S_REPORT_IDAUX,I_REPORT_TYPE);
                 }
                 else{
                     // Select by speceific year or month or day
-//                    iterHits = DBResHits.getInstance().getResHitsLog(s_site,S_REPORT_IDAUX,I_REPORT_TYPE,Integer.parseInt(s_year_1),Integer.parseInt(s_month_1),Integer.parseInt(s_day_1));
+//                    iterHits = DBResHits.getInstance().getResHitsLog(webSite,S_REPORT_IDAUX,I_REPORT_TYPE,Integer.parseInt(s_year_1),Integer.parseInt(s_month_1),Integer.parseInt(s_day_1));
                 }
             }
             else{                       // radio button was 1
                 // Select between two dates
-//                iterHits = DBResHits.getInstance().getResHitsLog(s_site,S_REPORT_IDAUX,I_REPORT_TYPE,Integer.parseInt(s_year_11),Integer.parseInt(s_month_11),Integer.parseInt(s_day_11),Integer.parseInt(s_year_12),Integer.parseInt(s_month_12),Integer.parseInt(s_day_12));
+//                iterHits = DBResHits.getInstance().getResHitsLog(webSite,S_REPORT_IDAUX,I_REPORT_TYPE,Integer.parseInt(s_year_11),Integer.parseInt(s_month_11),Integer.parseInt(s_day_11),Integer.parseInt(s_year_12),Integer.parseInt(s_month_12),Integer.parseInt(s_day_12));
             }
 
             // Init paging parameters
