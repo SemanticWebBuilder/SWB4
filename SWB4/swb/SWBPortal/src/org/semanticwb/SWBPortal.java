@@ -269,15 +269,15 @@ public class SWBPortal {
         return languages;
     }
 
-    public static void addSessionUser(User user) {
-        if (user != null) {
+    public static void setSessionUser(User user) {
+        //if (user != null) {
             SessionUser sess = m_sessions.get(Thread.currentThread().getName());
             if (sess == null) {
                 m_sessions.put(Thread.currentThread().getName(), new SessionUser(user));
             } else {
                 sess.setUser(user);
             }
-        }
+        //}
     }
 
     public static User getSessionUser() {
