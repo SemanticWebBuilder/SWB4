@@ -7,12 +7,14 @@ public class RoleBase extends org.semanticwb.model.base.GenericObjectBase implem
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
     public static final org.semanticwb.platform.SemanticProperty swb_modifiedBy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy");
     public static final org.semanticwb.platform.SemanticProperty swb_title=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#title");
+    public static final org.semanticwb.platform.SemanticClass swb_RoleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#RoleRef");
+    public static final org.semanticwb.platform.SemanticProperty swb_hasRoleRefInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasRoleRefInv");
     public static final org.semanticwb.platform.SemanticClass swb_Role=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Role");
     public static final org.semanticwb.platform.SemanticProperty swb_hasRoleChild=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasRoleChild");
     public static final org.semanticwb.platform.SemanticProperty swb_updated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#updated");
-    public static final org.semanticwb.platform.SemanticProperty swb_creator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#creator");
     public static final org.semanticwb.platform.SemanticClass swb_Permission=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Permission");
     public static final org.semanticwb.platform.SemanticProperty swb_hasPermission=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasPermission");
+    public static final org.semanticwb.platform.SemanticProperty swb_creator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#creator");
     public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
     public static final org.semanticwb.platform.SemanticProperty swb_roleParent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#roleParent");
 
@@ -77,6 +79,21 @@ public class RoleBase extends org.semanticwb.model.base.GenericObjectBase implem
         getSemanticObject().setProperty(swb_title, title, lang);
     }
 
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef> listRoleRefInvs()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef>(org.semanticwb.model.RoleRef.class, getSemanticObject().listObjectProperties(swb_hasRoleRefInv));    }
+
+    public org.semanticwb.model.RoleRef getRoleRefInv()
+    {
+         org.semanticwb.model.RoleRef ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasRoleRefInv);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.RoleRef)obj.getSemanticClass().newGenericInstance(obj);
+         }
+         return ret;
+    }
+
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.Role> listChilds()
     {
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Role>(org.semanticwb.model.Role.class, getSemanticObject().listObjectProperties(swb_hasRoleChild));    }
@@ -100,27 +117,6 @@ public class RoleBase extends org.semanticwb.model.base.GenericObjectBase implem
     public void setUpdated(java.util.Date updated)
     {
         getSemanticObject().setDateProperty(swb_updated, updated);
-    }
-
-    public void setCreator(org.semanticwb.model.User user)
-    {
-        getSemanticObject().setObjectProperty(swb_creator, user.getSemanticObject());
-    }
-
-    public void removeCreator()
-    {
-        getSemanticObject().removeProperty(swb_creator);
-    }
-
-    public org.semanticwb.model.User getCreator()
-    {
-         org.semanticwb.model.User ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
-         }
-         return ret;
     }
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.Permission> listPermissions()
@@ -149,6 +145,27 @@ public class RoleBase extends org.semanticwb.model.base.GenericObjectBase implem
          if(obj!=null)
          {
              ret=(org.semanticwb.model.Permission)obj.getSemanticClass().newGenericInstance(obj);
+         }
+         return ret;
+    }
+
+    public void setCreator(org.semanticwb.model.User user)
+    {
+        getSemanticObject().setObjectProperty(swb_creator, user.getSemanticObject());
+    }
+
+    public void removeCreator()
+    {
+        getSemanticObject().removeProperty(swb_creator);
+    }
+
+    public org.semanticwb.model.User getCreator()
+    {
+         org.semanticwb.model.User ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }

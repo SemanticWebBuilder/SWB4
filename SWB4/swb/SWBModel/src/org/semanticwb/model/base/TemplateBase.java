@@ -15,15 +15,17 @@ public class TemplateBase extends org.semanticwb.model.base.GenericObjectBase im
     public static final org.semanticwb.platform.SemanticProperty swb_lastVersion=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#lastVersion");
     public static final org.semanticwb.platform.SemanticClass swb_Calendar=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Calendar");
     public static final org.semanticwb.platform.SemanticProperty swb_hasCalendar=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasCalendar");
+    public static final org.semanticwb.platform.SemanticProperty swb_active=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#active");
     public static final org.semanticwb.platform.SemanticProperty swb_deleted=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#deleted");
     public static final org.semanticwb.platform.SemanticClass swb_RoleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#RoleRef");
     public static final org.semanticwb.platform.SemanticProperty swb_hasRoleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasRoleRef");
-    public static final org.semanticwb.platform.SemanticProperty swb_active=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#active");
     public static final org.semanticwb.platform.SemanticClass swb_Language=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Language");
     public static final org.semanticwb.platform.SemanticProperty swb_language=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#language");
-    public static final org.semanticwb.platform.SemanticProperty swb_creator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#creator");
+    public static final org.semanticwb.platform.SemanticClass swb_TemplateRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#TemplateRef");
+    public static final org.semanticwb.platform.SemanticProperty swb_hasTemplateRefInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasTemplateRefInv");
     public static final org.semanticwb.platform.SemanticClass swb_RuleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#RuleRef");
     public static final org.semanticwb.platform.SemanticProperty swb_hasRuleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasRuleRef");
+    public static final org.semanticwb.platform.SemanticProperty swb_creator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#creator");
     public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
     public static final org.semanticwb.platform.SemanticClass swb_Template=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Template");
 
@@ -191,6 +193,16 @@ public class TemplateBase extends org.semanticwb.model.base.GenericObjectBase im
          return ret;
     }
 
+    public boolean isActive()
+    {
+        return getSemanticObject().getBooleanProperty(swb_active);
+    }
+
+    public void setActive(boolean active)
+    {
+        getSemanticObject().setBooleanProperty(swb_active, active);
+    }
+
     public boolean isDeleted()
     {
         return getSemanticObject().getBooleanProperty(swb_deleted);
@@ -231,16 +243,6 @@ public class TemplateBase extends org.semanticwb.model.base.GenericObjectBase im
          return ret;
     }
 
-    public boolean isActive()
-    {
-        return getSemanticObject().getBooleanProperty(swb_active);
-    }
-
-    public void setActive(boolean active)
-    {
-        getSemanticObject().setBooleanProperty(swb_active, active);
-    }
-
     public void setLanguage(org.semanticwb.model.Language language)
     {
         getSemanticObject().setObjectProperty(swb_language, language.getSemanticObject());
@@ -262,23 +264,17 @@ public class TemplateBase extends org.semanticwb.model.base.GenericObjectBase im
          return ret;
     }
 
-    public void setCreator(org.semanticwb.model.User user)
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.TemplateRef> listTemplateRefInvs()
     {
-        getSemanticObject().setObjectProperty(swb_creator, user.getSemanticObject());
-    }
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.TemplateRef>(org.semanticwb.model.TemplateRef.class, getSemanticObject().listObjectProperties(swb_hasTemplateRefInv));    }
 
-    public void removeCreator()
+    public org.semanticwb.model.TemplateRef getTemplateRefInv()
     {
-        getSemanticObject().removeProperty(swb_creator);
-    }
-
-    public org.semanticwb.model.User getCreator()
-    {
-         org.semanticwb.model.User ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
+         org.semanticwb.model.TemplateRef ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasTemplateRefInv);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.TemplateRef)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -309,6 +305,27 @@ public class TemplateBase extends org.semanticwb.model.base.GenericObjectBase im
          if(obj!=null)
          {
              ret=(org.semanticwb.model.RuleRef)obj.getSemanticClass().newGenericInstance(obj);
+         }
+         return ret;
+    }
+
+    public void setCreator(org.semanticwb.model.User user)
+    {
+        getSemanticObject().setObjectProperty(swb_creator, user.getSemanticObject());
+    }
+
+    public void removeCreator()
+    {
+        getSemanticObject().removeProperty(swb_creator);
+    }
+
+    public org.semanticwb.model.User getCreator()
+    {
+         org.semanticwb.model.User ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }

@@ -3,25 +3,15 @@ package org.semanticwb.repository.office.base;
 
 public class OfficeCategoryBase extends org.semanticwb.repository.Folder implements org.semanticwb.repository.Referenceable,org.semanticwb.content.Descriptiveable
 {
-    public static final org.semanticwb.platform.SemanticProperty cm_user=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org.mx/swb4/content#user");
     public static final org.semanticwb.platform.SemanticProperty cm_title=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org.mx/swb4/content#title");
     public static final org.semanticwb.platform.SemanticProperty jcr_uuid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#uuid");
+    public static final org.semanticwb.platform.SemanticProperty cm_user=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org.mx/swb4/content#user");
     public static final org.semanticwb.platform.SemanticProperty cm_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org.mx/swb4/content#description");
     public static final org.semanticwb.platform.SemanticClass cm_OfficeCategory=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwb.org.mx/swb4/content#OfficeCategory");
 
     public OfficeCategoryBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
-    }
-
-    public String getUser()
-    {
-        return getSemanticObject().getProperty(cm_user);
-    }
-
-    public void setUser(String user)
-    {
-        getSemanticObject().setProperty(cm_user, user);
     }
 
     public String getTitle()
@@ -42,6 +32,16 @@ public class OfficeCategoryBase extends org.semanticwb.repository.Folder impleme
     public void setUuid(String uuid)
     {
         getSemanticObject().setProperty(jcr_uuid, uuid);
+    }
+
+    public String getUser()
+    {
+        return getSemanticObject().getProperty(cm_user);
+    }
+
+    public void setUser(String user)
+    {
+        getSemanticObject().setProperty(cm_user, user);
     }
 
     public String getDescription()

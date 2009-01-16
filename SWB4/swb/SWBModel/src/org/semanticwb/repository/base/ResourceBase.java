@@ -5,9 +5,9 @@ public class ResourceBase extends org.semanticwb.repository.BaseNode implements 
 {
     public static final org.semanticwb.platform.SemanticProperty jcr_mimeType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#mimeType");
     public static final org.semanticwb.platform.SemanticProperty jcr_encoding=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#encoding");
-    public static final org.semanticwb.platform.SemanticProperty jcr_data=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#data");
     public static final org.semanticwb.platform.SemanticProperty jcr_uuid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#uuid");
     public static final org.semanticwb.platform.SemanticProperty jcr_lastModified=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#lastModified");
+    public static final org.semanticwb.platform.SemanticProperty jcr_data=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#data");
     public static final org.semanticwb.platform.SemanticClass nt_Resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#resource");
 
     public ResourceBase(org.semanticwb.platform.SemanticObject base)
@@ -35,16 +35,6 @@ public class ResourceBase extends org.semanticwb.repository.BaseNode implements 
         getSemanticObject().setProperty(jcr_encoding, encoding);
     }
 
-    public java.io.InputStream getData() throws Exception
-    {
-        return getSemanticObject().getInputStreamProperty(jcr_data);
-    }
-
-    public void setData(java.io.InputStream data,String name) throws Exception
-    {
-        getSemanticObject().setInputStreamProperty(jcr_data, data,name);
-    }
-
     public String getUuid()
     {
         return getSemanticObject().getProperty(jcr_uuid);
@@ -63,5 +53,15 @@ public class ResourceBase extends org.semanticwb.repository.BaseNode implements 
     public void setLastModified(java.util.Date lastModified)
     {
         getSemanticObject().setDateProperty(jcr_lastModified, lastModified);
+    }
+
+    public java.io.InputStream getData() throws Exception
+    {
+        return getSemanticObject().getInputStreamProperty(jcr_data);
+    }
+
+    public void setData(java.io.InputStream data,String name) throws Exception
+    {
+        getSemanticObject().setInputStreamProperty(jcr_data, data,name);
     }
 }

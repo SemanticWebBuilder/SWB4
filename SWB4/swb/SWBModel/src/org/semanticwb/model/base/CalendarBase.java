@@ -3,13 +3,13 @@ package org.semanticwb.model.base;
 
 public class CalendarBase extends org.semanticwb.model.base.GenericObjectBase implements org.semanticwb.model.Traceable,org.semanticwb.model.XMLable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable
 {
-    public static final org.semanticwb.platform.SemanticProperty swb_active=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#active");
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
     public static final org.semanticwb.platform.SemanticProperty swb_modifiedBy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy");
     public static final org.semanticwb.platform.SemanticProperty swb_title=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#title");
     public static final org.semanticwb.platform.SemanticProperty swb_xml=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#xml");
     public static final org.semanticwb.platform.SemanticProperty swb_updated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#updated");
+    public static final org.semanticwb.platform.SemanticProperty swb_active=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#active");
     public static final org.semanticwb.platform.SemanticProperty swb_creator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#creator");
     public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
     public static final org.semanticwb.platform.SemanticClass swb_Calendar=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Calendar");
@@ -17,16 +17,6 @@ public class CalendarBase extends org.semanticwb.model.base.GenericObjectBase im
     public CalendarBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
-    }
-
-    public boolean isActive()
-    {
-        return getSemanticObject().getBooleanProperty(swb_active);
-    }
-
-    public void setActive(boolean active)
-    {
-        getSemanticObject().setBooleanProperty(swb_active, active);
     }
 
     public java.util.Date getCreated()
@@ -103,6 +93,16 @@ public class CalendarBase extends org.semanticwb.model.base.GenericObjectBase im
     public void setUpdated(java.util.Date updated)
     {
         getSemanticObject().setDateProperty(swb_updated, updated);
+    }
+
+    public boolean isActive()
+    {
+        return getSemanticObject().getBooleanProperty(swb_active);
+    }
+
+    public void setActive(boolean active)
+    {
+        getSemanticObject().setBooleanProperty(swb_active, active);
     }
 
     public void setCreator(org.semanticwb.model.User user)
