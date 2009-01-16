@@ -119,7 +119,7 @@ public class SWBResourceMgr
             //System.out.println("Occ:"+occ.getResourceData());
             //Portlet portlet=ref.getPortlet();
             Portlet portlet=it.next();
-            SWBResource res = getResource(portlet.getWebSiteId(), portlet.getId());
+            SWBResource res = getResource(portlet.getWebSiteId(), portlet.getSId());
             if (res != null)
             {
                 Portlet base = res.getResourceBase();
