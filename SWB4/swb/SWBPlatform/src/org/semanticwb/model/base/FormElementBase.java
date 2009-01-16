@@ -32,25 +32,26 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
 
     public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
     {
-        System.out.println("process...:"+obj.getURI()+" "+prop.getURI());
+        //System.out.println("process...:"+obj.getURI()+" "+prop.getURI());
         if(prop.isDataTypeProperty())
         {
             String value=request.getParameter(prop.getName());
-            System.out.println("value:"+value);
+            String old=obj.getProperty(prop);
+            //System.out.println("com:"+old+"-"+value+"-");
             if(prop.isBoolean())
             {
-                if(value!=null)obj.setBooleanProperty(prop, true);
-                else obj.setBooleanProperty(prop, false);
+                if(value!=null && old.equals("false"))obj.setBooleanProperty(prop, true);
+                else if(value==null && (old==null || old.equals("true"))) obj.setBooleanProperty(prop, false);
             }else
             {
                 if(value!=null)
                 {
-                    if(value.length()>0)
+                    if(value.length()>0 && !value.equals(old))
                     {
                         if(prop.isFloat())obj.setFloatProperty(prop, Float.parseFloat(value));
                         if(prop.isInt())obj.setLongProperty(prop, Integer.parseInt(value));
                         if(prop.isString())obj.setProperty(prop, value);
-                    }else
+                    }else if(value.length()==0 && old!=null)
                     {
                         obj.removeProperty(prop);
                     }
@@ -68,13 +69,20 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
                     //TODO:
                 }else
                 {
-                    SemanticObject aux=SWBPlatform.getSemanticMgr().getOntology().getSemanticObject(uri);
-                    if(aux!=null)
+                    String ouri="";
+                    SemanticObject old=obj.getObjectProperty(prop);
+                    if(old!=null)ouri=old.getURI();
+                    //System.out.println("uri:"+uri+" "+ouri);
+                    if(!(""+uri).equals(""+ouri))
                     {
-                        obj.setObjectProperty(prop, aux);
-                    }else
-                    {
-                        obj.removeProperty(prop);
+                        SemanticObject aux=SWBPlatform.getSemanticMgr().getOntology().getSemanticObject(uri);
+                        if(aux!=null)
+                        {
+                            obj.setObjectProperty(prop, aux);
+                        }else
+                        {
+                            obj.removeProperty(prop);
+                        }
                     }
                 }
             }

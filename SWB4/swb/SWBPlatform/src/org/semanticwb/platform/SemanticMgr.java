@@ -377,14 +377,22 @@ public class SemanticMgr implements SWBInstanceObject
 
     public void notifyChange(SemanticObject obj, Object prop, String action)
     {
-        Iterator it=m_observers.iterator();
-        while(it.hasNext())
+        log.trace("obj:"+obj+" prop:"+prop+" "+action);
+        if(obj.getURI()!=null)
         {
-            SemanticObserver obs=(SemanticObserver)it.next();
-            try
+            if(prop !=null && prop instanceof SemanticProperty)
             {
-                obs.notify(obj, prop, action);
-            }catch(Exception e){log.error(e);}
+                if(((SemanticProperty)prop).isNoObservable())return; //No es observable
+            }
+            Iterator it=m_observers.iterator();
+            while(it.hasNext())
+            {
+                SemanticObserver obs=(SemanticObserver)it.next();
+                try
+                {
+                    obs.notify(obj, prop, action);
+                }catch(Exception e){log.error(e);}
+            }
         }
     }
 }
