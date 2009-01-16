@@ -231,6 +231,18 @@
                 dojo.fx.wipeOut({node: formid, duration: 1000}).play();
               }catch(noe){}
 
+              try {
+                var framesNames = "";
+                for (var i = 0; i < window.frames.length; i++) {
+                    framesNames += window.frames[i].name;
+                    if (framesNames && framesNames.indexOf("_editArea") != -1) {
+                        area = window.frames[framesNames].editArea;
+                        id = framesNames.substr(6);
+                        document.getElementById(id).value = area.textarea.value;
+                    }
+                }
+              } catch (ex) {}
+              
               //alert("entra2");
               dojo.xhrPost({
                   // The page that parses the POST request
@@ -760,6 +772,7 @@ function include(script_filename) {
     document.write('<' + 'script');
     document.write(' language="javascript"');
     document.write(' type="text/javascript"');
+    document.write(' charset="UTF-8"');
     document.write(' src="' + script_filename + '">');
     document.write('</' + 'script' + '>');
 }
@@ -769,6 +782,7 @@ function include_dom(script_filename) {
     var js = document.createElement('script');
     js.setAttribute('language', 'javascript');
     js.setAttribute('type', 'text/javascript');
+    js.setAttribute('charset', 'UTF-8');
     js.setAttribute('src', script_filename);
     html_doc.appendChild(js);
     return false;
