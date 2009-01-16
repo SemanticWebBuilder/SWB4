@@ -7,8 +7,12 @@ package org.semanticwb.portal.admin.resources;
 import java.io.IOException;
 import java.text.Collator;
 import java.util.*;
+import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.semanticwb.*;
 import org.semanticwb.model.*;
 import org.semanticwb.portal.api.*;
@@ -21,7 +25,7 @@ public class SWBASearchUsers extends GenericResource
 {
 
     private Logger log = SWBUtils.getLogger(SWBASearchUsers.class);
-
+    private int pagezise = 10;
     public SWBASearchUsers()
     {
     }
@@ -137,12 +141,119 @@ public class SWBASearchUsers extends GenericResource
         System.out.println("active: "+active);
         UserRepository ur = SWBContext.getUserRepository(usrep);
         Iterator<String> itst = ur.searchUsersBy(usrFirstName, usrLastName, usrSecondLastName, usrEmail, Role, Group, active);
+        ArrayList<String> arusr = new ArrayList<String>();
+        while (itst.hasNext()){ arusr.add(itst.next());}
+        request.getSession(true).setAttribute("iteraUsers", arusr.toArray(new String[arusr.size()]));
+        SWBResourceURL url = paramRequest.getRenderUrl().setMode("jsonData").setCallMethod(SWBResourceURL.Call_DIRECT);
                 ret.append("<script type=\"text/javascript\">\n"+
-        "           dojo.require(\"dojo.parser\");\n"+
+        "           dojo.require(\"dojox.grid.DataGrid\");\n" +
+        "           dojo.require(\"dojox.data.QueryReadStore\");\n"+
+       // "                   dojo.require(\"dojox.grid.compat._grid.publicEvents\");\n"+
         //"                   dojo.require(\"dijit.layout.ContentPane\");\n"+
         //"                   dojo.require(\"dijit.form.FilteringSelect\");\n"+
         "                   dojo.require(\"dijit.form.CheckBox\");\n"+
+        "           dojo.require(\"dojo.parser\");\n"+
+        "       // data grid layout: a grid view is a group of columns\n" +
+        "       var page= 0;\n" +
+        "       var start= 0;\n" +
+        "       var batchSize="+pagezise+";                        \n" +
+        "               // Data Grid layout\n" +
+        "               // A grid view is a group of columns\n" +
+        "       var view1 = [\n" +
+   //     "            cells: [\n" +
+//        "                [\n" +
+        "                    {name: 'Login',width:'20%', field: \"login\"},\n" +
+        "                    {name: 'Nombre(s)',width:'20%', field: \"name\"},\n" +
+        "                    {name: 'Primer Apellido',width:'20%',field: \"papellid\"},\n " +
+        "                    {name: 'Segundo Apellido',width:'20%',field: \"sapellid\"},\n "+
+        "                    {name: 'Correo electr&oacute;nico',width:'20%',field: \"email\"}\n                " +
+//                        "]\n" +
+                        "            ]\n ;" +
+//                        "  };" +
+        "               // a grid layout is an array of views. \n" +
+        "       var layout = [ view1 ];\n" +
+
+
+        "               // the model will contain the data to be displayed in the view \n" +
+      //  "       model = new dojox.grid.data.Objects([{key: \"login\"}, {key: \"name\"},{key: \"papellid\"},{key: \"sapellid\"},{key: \"email\"}], null);\n" +
+
+        "       // Process the response from the customers web service \n" +
+        "       function handleResponse(responseObject, ioArgs){\n" +
+        "       \n" +
+        "           if(!responseObject.users || !responseObject.users.user){\n" +
+        "               return;\n" +
+        "           }\n" +
+        "           // set the model object with the returned users list to be displayed in grid \n" +
+        "           model.setData(responseObject.users.user);	\n" +
+
+        "       \n" +
+        "       }\n" +
+        "       \n" +
+        "       function handleError(){\n" +
+        "           dojo.debug(\"No data returned\");\n" +
+        "       }\n" +
+        "       function next() {\n" +
+        "           page =page + 1;\n" +
+        "           loadTable(page);\n" +
+        "       }\n" +
+        "       \n" +
+        "       function previous() {\n" +
+        "           page =page - 1;\n" +
+        "           if (page < 0) page = 0;\n" +
+        "           loadTable(page);\n" +
+        "       }\n" +
+
+        "       // make request to the users web call \n" +
+        "       function loadTable(page){\n" +
+        "           start = page * batchSize;\n" +
+        "           var targetURL = \""+url+"?start=\"+ encodeURIComponent(start);	\n" +
+        "           dojo.xhrGet({\n" +
+        "               url: targetURL,\n" +
+        "               handleAs: \"json\",\n" +
+        "               load: handleResponse,\n" +
+        "               error: handleError\n" +
+        "           });\n" +
+        "       }\n" +
+        "       \n" +
+        "       dojo.addOnLoad(function(){\n" +
+                      //  dojo.addOnLoad(function() {
+		"   	model = new dojox.data.QueryReadStore({\n" +
+        "				url:\""+url+"\",\n" +
+		"		requestMethod:\"post\"\n" +
+		"	});\n\n" +
+        //"           loadTable(0);\n" +
+//        "       grid1.setStore(model);\n" +
+        "       grid1.setStore(model);\n" +
+        "       grid1.setStructure(layout);\n" +
+        "       });\n" +
+        "       function openOther(evt){\n"+
+        "           var row=evt.rowIndex;\n"+
+        "           var curItem = grid1.getItem(row);\n" +
+//        "           var rowID=model.getDatum(row,\"@uri\");\n"+
+        "           var rowID=model.getValue(curItem,\"@uri\");\n"+
+        "           eval(rowID);\n"+
+        "           return false;\n"+
+        "       }\n"+
+        "           \n"+
         "        </script>\n");
+    /*    ret.append("<button dojoType=\"dijit.form.Button\" id=\"previous\">\n"+
+                "    <<\n"+
+                "    <script type=\"dojo/method\" event=\"onClick\">\n"+
+                "      previous();\n"+
+                "    </script>\n"+
+            "</button>\n"+
+            "<button dojoType=\"dijit.form.Button\" id=\"next\">\n"+
+            "    >>\n"+
+            "    <script type=\"dojo/method\" event=\"onClick\">\n"+
+            "      next();\n"+
+            "    </script>\n"+
+            "</button>\n");*/
+        ret.append("<div id=\"grid1\" jsid=\"grid1\" dojoType=\"dojox.grid.DataGrid\" model=\"model\" structure=\"layout\" onRowDblClick=\"openOther\" autoWidth_=\"true\" rowsPerPage=\"10\" >\n</div>");
+
+
+
+        
+        /*
         ret.append("<div class=\"swbform\"><table><thead><tr><th>login</th><th>Nombre(s)</th><th>Primer Apellido</th><th>Segundo Apellido</th><th>Correo electr&oacute;nico</th></tr></thead><tbody>");
         while (itst.hasNext())
         {
@@ -161,10 +272,60 @@ public class SWBASearchUsers extends GenericResource
 
         }
         ret.append("</tbody></table>");
-        SWBResourceURL url = paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_VIEW);
+         */
+        url = paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_VIEW);
         ret.append("<fieldset><button dojoType=\"dijit.form.Button\" onClick=location='"+url+"'>Otra B&uacute;squeda</button></fieldset></div>");
         response.getWriter().write(ret.toString());
     }
+
+
+    public void doJsonData(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
+        response.setContentType("text/html;charset=ISO-8859-1");
+        String[] lista = (String[])request.getSession(true).getAttribute("iteraUsers");
+       // StringBuffer ret = new StringBuffer("");
+        JSONObject jobj = new JSONObject();
+        JSONArray jarr = new JSONArray();
+        try {
+            JSONObject tjson = new JSONObject();
+            jobj.put("numRows",lista.length);
+            
+            jobj.put("items", jarr);
+        } catch (JSONException jse) {}
+   //     ret.append("{\"users\":{\"user\":[\n");
+        int start = 0;
+        int pag = pagezise;
+        try {start = Integer.parseInt(request.getParameter("start")); pag = Integer.parseInt(request.getParameter("count"));} catch (Exception ne){}
+        System.out.print("start:"+start);
+        int end = start+pag;
+        while (start<end && start <lista.length){
+            String[] valores = lista[start].split("\\|\\|");
+            JSONObject obj=new JSONObject();
+            try {
+            obj.put("@uri","javascript:parent.addNewTab('" + valores[0] + "',null,'"+valores[5]+"')");
+            obj.put("login", valores[5]);
+            obj.put("name", valores[1]);
+            obj.put("papellid", valores[2]);
+            obj.put("sapellid", valores[3]);
+            obj.put("email", valores[4]);
+            jarr.put(obj);
+            System.out.print(".");
+            } catch  (JSONException jsone) {}
+/*            ret.append("{\"@uri\":\"javascript:parent.addNewTab('" + valores[0] + "',null,'"+valores[5]+"')\",\n"+
+                    "\"login\":\""+valores[5]+"\"},\n"+
+                    "\"name\":\""+valores[1]+"\"},\n"+
+                    "\"papellid\":\""+valores[2]+"\"},\n"+
+                    "\"sapellid\":\""+valores[3]+"\"},\n"+
+                    "\"email\":\""+valores[4]+"\"},\n"
+                    );
+  */              start++;
+        }
+        System.out.println();
+    //    ret.append("]\n}\n}");
+        response.getOutputStream().println(jobj.toString());
+    }
+
+
 
     public void doRoles(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest)
             throws SWBResourceException, IOException
@@ -942,6 +1103,9 @@ public class SWBASearchUsers extends GenericResource
            } else
            if(paramRequest.getMode().equals("groups")){
            doGroups(request, response, paramRequest);
+           } else
+           if(paramRequest.getMode().equals("jsonData")){
+           doJsonData(request, response, paramRequest);
            }
         else
         {
