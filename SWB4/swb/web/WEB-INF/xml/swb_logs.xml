@@ -4,15 +4,18 @@
 		<column id="log_user" type="VARCHAR" size="100" acceptNulls="false"/>
 		<column id="log_modelid" type="VARCHAR" size="50" acceptNulls="false"/>
 		<column id="log_objuri" type="VARCHAR" size="100" acceptNulls="false"/>
+		<column id="log_propid" type="VARCHAR" size="100" acceptNulls="true"/>
 		<column id="log_action" type="VARCHAR" size="15" acceptNulls="false"/>
 		<column id="log_date" type="TIMESTAMP" size="14" acceptNulls="false"/>
 	</table>
+<!--
 	<primarykey table="swb_admlog">
 		<colpk id="log_user"/>
 	        <colpk id="log_modelid"/>
 		<colpk id="log_objuri"/>
 		<colpk id="log_date"/>
 	</primarykey>
+-->
 	<table name="swb_reshits">
 		<column id="hits_date" type="TIMESTAMP" size="14" acceptNulls="false"/>
 		<column id="hits_modelid" type="VARCHAR" size="50" acceptNulls="false"/>
@@ -20,10 +23,12 @@
 		<column id="hits_classid" type="VARCHAR" size="50" acceptNulls="false"/>
 		<column id="hits" type="INTEGER" size="20" default="0" acceptNulls="false"/>
 	</table>
+<!--
 	<primarykey table="swb_reshits">
 		<colpk id="hits_date"/>
 		<colpk id="hits_modelid"/>
 		<colpk id="hits_objuri"/>
 		<colpk id="hits_classid"/>
 	</primarykey>
+-->
 </db>
