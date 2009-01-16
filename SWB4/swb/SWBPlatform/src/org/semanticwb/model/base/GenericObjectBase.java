@@ -8,6 +8,7 @@ package org.semanticwb.model.base;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.base.util.URLEncoder;
 import org.semanticwb.model.GenericObject;
+import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 
@@ -41,6 +42,17 @@ public class GenericObjectBase implements GenericObject
     public String getId()
     {
         return m_obj.getId();
+    }
+
+    public String getSId()
+    {
+        String id=getId();
+        SemanticClass cls=getSemanticObject().getSemanticClass();
+        //if(cls!=swb_WebPage)
+        {
+            id=cls.getClassId()+":"+id;
+        }
+        return id;
     }
     
     public SemanticObject getSemanticObject()
