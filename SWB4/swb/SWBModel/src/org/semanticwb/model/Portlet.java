@@ -7,6 +7,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.base.*;
+import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.w3c.dom.*;
 
@@ -23,7 +24,7 @@ public class Portlet extends PortletBase
     {
         super(base);
     }
-    
+
     public String getWebSiteId()
     {
         if(siteid==null)
