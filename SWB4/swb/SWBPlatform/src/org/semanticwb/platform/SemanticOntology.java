@@ -15,7 +15,9 @@ import com.hp.hpl.jena.rdf.model.Model;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
+import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericObject;
 
 /**
@@ -24,6 +26,9 @@ import org.semanticwb.model.GenericObject;
  */
 public class SemanticOntology
 {
+    private static Logger log=SWBUtils.getLogger(SemanticOntology.class);
+
+
     private OntModel m_ontology;
     private String m_name;
 
@@ -107,6 +112,7 @@ public class SemanticOntology
                 ret=res;
             }
         }
+        if(ret==null)log.warn("Uri not Found:"+uri,new AssertionError());
         return ret;
     }
     

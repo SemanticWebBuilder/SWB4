@@ -140,7 +140,7 @@ public class SemanticProperty
     }
 
     /**
-     * Si esta propiedad se utiliza para definir la relacio padre-hijo en el arbol de navegacion
+     * Esta propiedad se utiliza para eliminar el objeto relacionado, si el objeto de dominio se elimina
      * @return
      */
     public boolean isRemoveDependency()
@@ -154,12 +154,26 @@ public class SemanticProperty
     }
 
     /**
-     * Si esta propiedad se utiliza para definir la relacio padre-hijo en el arbol de navegacion
+     * Esta propiedad se utiliza para desabilitar el log de cambios de la propiedad
      * @return
      */
     public boolean isNoObservable()
     {
         Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_NOOBSERVABLE));
+        if(st!=null)
+        {
+            return st.getBoolean();
+        }
+        return false;
+    }
+
+    /**
+     * Define si la apropiedad es heredable a los hijos
+     * @return
+     */
+    public boolean isInheritProperty()
+    {
+        Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_INHERITPROPERTY));
         if(st!=null)
         {
             return st.getBoolean();
