@@ -120,14 +120,18 @@ public class SWBResourceMgr
             //System.out.println("Occ:"+occ.getResourceData());
             //Portlet portlet=ref.getPortlet();
             Portlet portlet=it.next();
-            SWBResource res = getResource(portlet.getWebSiteId(), portlet.getSId());
+            //SWBResource res = getResource(portlet.getWebSiteId(), portlet.getSId());
+            SWBResource res = getResource(portlet.getWebSiteId(), portlet.getId());
             if (res != null)
             {
                 Portlet base = res.getResourceBase();
-                //TODO:CheckResource
-                //if (checkResource(base, user, 0, null, 0, today, topic))
+                if(user.haveAccess(base))
                 {
-                    ret.add(res);
+                    //TODO:CheckResource
+                    //if (checkResource(base, user, 0, null, 0, today, topic))
+                    {
+                        ret.add(res);
+                    }
                 }
             } else
             {
@@ -164,14 +168,16 @@ public class SWBResourceMgr
             while(it.hasNext())
             {
                 Portlet base=it.next();
-
-                //if (checkResource(base, user, stype, stypemap, camp, today, topic))
+                if(user.haveAccess(base))
                 {
-                    SWBResource wbr=getResource(base.getWebSiteId(),base.getId());
-                    //System.out.println("checkResource ok:"+wbr.getResourceBase().getId());
-                    if(wbr!=null)
+                    //if (checkResource(base, user, stype, stypemap, camp, today, topic))
                     {
-                        ret.add(wbr);
+                        SWBResource wbr=getResource(base.getWebSiteId(),base.getId());
+                        //System.out.println("checkResource ok:"+wbr.getResourceBase().getId());
+                        if(wbr!=null)
+                        {
+                            ret.add(wbr);
+                        }
                     }
                 }
             }

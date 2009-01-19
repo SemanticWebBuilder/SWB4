@@ -883,7 +883,8 @@ public class TemplateImp extends Template
                                         
                                         //System.out.println("tpl ok");
                                         //out.print(SWBResourceMgr.getInstance().getResourceTraceMgr().getHtmlTraced(wbres, request, response, user, topic, args));
-                                        String rid=wbres.getResourceBase().getId();
+                                        //String rid=wbres.getResourceBase().getId();
+                                        String rid=wbres.getResourceBase().getSId();
                                         String mdo=null;
                                         String wst=null;
                                         String act=null;
@@ -940,7 +941,7 @@ public class TemplateImp extends Template
                                             resbuf.append("|");
                                             if(!wbres.getResourceBase().getWebSiteId().equals(topic.getWebSiteId()))
                                                 resbuf.append("0");
-                                            resbuf.append(wbres.getResourceBase().getId());
+                                            resbuf.append(wbres.getResourceBase().getSId());
                                         }
                                         first = false;
                                     }
@@ -958,7 +959,7 @@ public class TemplateImp extends Template
                                     SWBResource wbres = (SWBResource) it.next();
                                     //System.out.println("rec:"+wbres.getResourceBase().getId()+" typemap="+wbres.getResourceBase().getTopicMapId());
                                     
-                                    String rid=wbres.getResourceBase().getId();
+                                    String rid=wbres.getResourceBase().getSId();
                                     String mdo=null;
                                     String wst=null;
                                     String act=null;
@@ -1011,7 +1012,7 @@ public class TemplateImp extends Template
                                         resbuf.append("|");
                                         if(!wbres.getResourceBase().getWebSiteId().equals(topic.getWebSiteId()))
                                             resbuf.append("0");
-                                        resbuf.append(wbres.getResourceBase().getId());
+                                        resbuf.append(wbres.getResourceBase().getSId());
                                     }
                                 }
                                 if (it.hasNext()) antresrc.put(id, it);
@@ -1021,7 +1022,7 @@ public class TemplateImp extends Template
                                 Iterator it = (Iterator) antresrc.get(id);
                                 SWBResource wbres = (SWBResource) it.next();
                                 
-                                String rid=wbres.getResourceBase().getId();
+                                String rid=wbres.getResourceBase().getSId();
                                 String mdo=null;
                                 String wst=null;
                                 String act=null;
@@ -1073,7 +1074,7 @@ public class TemplateImp extends Template
                                     resbuf.append("|");
                                     if(!wbres.getResourceBase().getWebSiteId().equals(topic.getWebSiteId()))
                                         resbuf.append("0");
-                                    resbuf.append(wbres.getResourceBase().getId());
+                                    resbuf.append(wbres.getResourceBase().getSId());
                                 }
                             }
                         }
@@ -1178,7 +1179,7 @@ public class TemplateImp extends Template
                     {
                         //System.out.println("tpl ok");
                         //out.print(SWBResourceMgr.getInstance().getResourceTraceMgr().getHtmlTraced(wbres, request, response, user, topic, args));
-                        String rid=wbres.getResourceBase().getId();
+                        String rid=wbres.getResourceBase().getSId();
                         String mdo=null;
                         String wst=null;
                         String act=null;
@@ -1236,7 +1237,7 @@ public class TemplateImp extends Template
                             resbuf.append("|");
                             if(!wbres.getResourceBase().getWebSiteId().equals(topic.getWebSiteId()))
                                 resbuf.append("0");
-                            resbuf.append(wbres.getResourceBase().getId());
+                            resbuf.append(wbres.getResourceBase().getSId());
                         }
                         first = false;
                     }

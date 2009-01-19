@@ -9,17 +9,14 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBException;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
-import org.semanticwb.model.Template;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
@@ -133,10 +130,10 @@ public class Distributor implements InternalServlet
                 return false;
             }
 
-            //TODO:validar permisos a paginas 
-//            if (!user.haveAccess(webpage)) 
-//            {
-//                log.debug("Distributor->Don't access");
+            if (!user.haveAccess(webpage)) 
+            {
+                log.debug("Distributor->Don't access");
+                //TODO:validar acciones
 //                Iterator it = webpage.getConfigData(TopicMap.CNF_WBSecAction);
 //                if (it.hasNext()) {
 //                    //System.out.println("hasData");
@@ -152,12 +149,12 @@ public class Distributor implements InternalServlet
 //                            response.sendError(err);
 //                    }
 //                } else {
-//                    log.debug("Distributor->send403");
-//                    sendError403(request, response);
+                    log.debug("Distributor->send403");
+                    sendError403(request, response);
 //                }
-//
-//                return false;
-//            }
+
+                return false;
+            }
 
             String content = null;
 
@@ -174,30 +171,27 @@ public class Distributor implements InternalServlet
                     String extParams=dparams.getNotAccResourceURI(rid);
 
                     SWBResource base = SWBPortal.getResourceMgr().getResource(idtm, rid);
-                    //TODO: Implementar
-//                    if (!webpage.getWebSite().equals(SWBContext.getAdminWebSite()))
-//                    {
-//                        if(base == null)
-//                        {
-//                            response.sendError(404, "No tiene permiso para accesar a la pagina " + request.getRequestURI() + ", (Control de IPs)... ");
-//                            log.debug("Distributor: SendError 404");
-//                            return false;
-//                        }else 
-//                            //TODO:Revisar seguridad
-//                            //if(!base.getResourceBase().haveAccess(user))
-//                        {
-//                            if(request.getMethod().equalsIgnoreCase("POST"))
-//                            {
-//                                response.sendRedirect(webpage.getUrl());
-//                                log.debug("Distributor: Resource "+base.getResourceBase().getId()+" restricted, send redirect to webpage:"+webpage.getUrl());
-//                            }else
-//                            {
-//                                response.sendError(403, "No tiene permiso para accesar a la pagina " + request.getRequestURI() + ", (Control de IPs)... ");
-//                                log.debug("Distributor: SendError 403");
-//                            }
-//                            return false;
-//                        }
-//                    }                    
+                    if (!webpage.getWebSite().equals(SWBContext.getAdminWebSite()))
+                    {
+                        if(base == null)
+                        {
+                            response.sendError(404, "No tiene permiso para accesar a la pagina " + request.getRequestURI() + ", (Control de IPs)... ");
+                            log.debug("Distributor: SendError 404");
+                            return false;
+                        }else if(!user.haveAccess(base.getResourceBase()))
+                        {
+                            if(request.getMethod().equalsIgnoreCase("POST"))
+                            {
+                                response.sendRedirect(webpage.getUrl());
+                                log.debug("Distributor: Resource "+base.getResourceBase().getId()+" restricted, send redirect to webpage:"+webpage.getUrl());
+                            }else
+                            {
+                                response.sendError(403, "No tiene permiso para accesar a la pagina " + request.getRequestURI() + ", (Control de IPs)... ");
+                                log.debug("Distributor: SendError 403");
+                            }
+                            return false;
+                        }
+                    }                    
 
                     if (mto == SWBResourceModes.Call_DIRECT) //call direct
                     {

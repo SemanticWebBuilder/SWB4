@@ -133,6 +133,7 @@ public class SWBResourceURLImp implements SWBResourceURL
             if(onlyContent)s+="/"+DistributorParams.URLP_ONLYCONTENT;            
             if(urlType==UrlType_RENDER)s+="/"+DistributorParams.URLP_RENDERID+"/";
             if(urlType==UrlType_ACTION)s+="/"+DistributorParams.URLP_ACTIONID+"/";
+            //s+=virtResource.getId();
             s+=virtResource.getSId();
             if(!virtResource.getWebSite().equals(topic.getWebSite()))s+="/"+DistributorParams.URLP_TOPICMAPID+"/"+virtResource.getWebSite().getId();
             if(callMethod==Call_DIRECT)s+="/"+DistributorParams.URLP_METHOD+"/"+callMethod;

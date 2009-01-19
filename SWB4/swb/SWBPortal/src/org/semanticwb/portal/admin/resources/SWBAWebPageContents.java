@@ -53,11 +53,12 @@ public class SWBAWebPageContents extends GenericResource {
         String id = request.getParameter("suri");
         String idp = request.getParameter("sprop");
         String idptype = request.getParameter("sproptype");
+        //System.out.println("suri:"+id+" sprop:"+idp+" sproptype:"+idptype);
 
         String action = request.getParameter("act");
 
         if (id == null) {
-            id = paramRequest.getTopic().getWebSiteId();
+            id = paramRequest.getTopic().getWebSite().getURI();
         }
         if (action == null) {
             action = "";
