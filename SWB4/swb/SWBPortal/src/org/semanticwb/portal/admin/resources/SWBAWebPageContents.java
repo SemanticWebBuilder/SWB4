@@ -593,7 +593,7 @@ public class SWBAWebPageContents extends GenericResource {
         SemanticClass cls = obj.getSemanticClass();
 
         if ("new".equals(action)) {
-            log.debug("SWBAWebPageContents: ProcessAction(new) ");
+            log.debug("ProcessAction(new) ");
 
             id = request.getParameter("suri");
             sprop = request.getParameter("sprop");
@@ -601,7 +601,7 @@ public class SWBAWebPageContents extends GenericResource {
             String sobj = request.getParameter("sobj");
 
             SemanticProperty prop = ont.getSemanticProperty(sprop);
-            log.debug("SWBAWebPageContents: ProcessAction(new): sobj: " + sobj);
+            log.debug("ProcessAction(new): sobj: " + sobj);
 
             SemanticObject wpage = null;
             wpage = ont.getSemanticObject(id);
@@ -629,12 +629,12 @@ public class SWBAWebPageContents extends GenericResource {
             if (nso != null) {
                 response.setRenderParameter("nsuri", nso.getURI());
             }
-            response.setRenderParameter("statmsg", "Se agreg%oacute; correctamente el contenido.");
+            response.setRenderParameter("statmsg", "Se agreg&oacute; correctamente el contenido.");
             response.setMode(response.Mode_EDIT);
             response.setRenderParameter("act", "");
         } else if ("remove".equals(action)) //suri, prop
         {
-            log.debug("SWBAWebPageContents.processAction(remove)");
+            log.debug("processAction(remove)");
 
             String sval = request.getParameter("sval");
             Iterator<SemanticProperty> it = cls.listProperties();
