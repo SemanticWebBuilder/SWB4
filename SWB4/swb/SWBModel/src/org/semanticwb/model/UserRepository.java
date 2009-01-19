@@ -278,6 +278,36 @@ public class UserRepository extends UserRepositoryBase
         return sp;
     }
 
+    public SemanticProperty createListExtendedAttribute(String name, String[] values) //values= ["value1:value2:value3:...:valuen","lang|label1:label2:label3:...:labeln",...,"lang|label1:label2:label3:...:labeln"]
+    {
+        return createListExtendedAttribute(name, null, values);
+    }
+    
+    public SemanticProperty createListExtendedAttribute(String name, String clsName, String[] values)//values= [value:label|value:label{@lang}]
+    {
+        SemanticClass cls = (null == clsName) ? getExtendedAttributesClass() : getUserType(clsName);
+        SemanticProperty sp = cls.getProperty(name);
+        if (null == sp)
+        {
+            sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, cls, SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_STRING);
+
+            SemanticObject dp = sp.getDisplayProperty();
+            if (dp==null) dp =  getSemanticObject().getModel().createSemanticObject("swbxff_"+name, DisplayProperty.swbxf_DisplayProperty);
+            DisplayProperty dobj=new DisplayProperty(dp);
+            String [] vals = values[0].split(":");
+            for (int i = 1; i <values.length;i++){
+            String lang = values[1].split("\\|")[0];
+            String [] labels = values[1].split("\\|")[1].split(":");
+            String cad = "";
+                for (int j=0;j<vals.length;j++){
+                    cad = cad + vals[j]+":"+labels[j]+(j+1==vals.length?"":"|");
+                }
+            dobj.setSelectValues(cad, lang); //value:label|value:label{@lang}
+            }
+        }
+        return sp;
+    }
+    
     public Iterator<SemanticProperty> listAttributesofUserType(String name)
     {
         ArrayList<SemanticProperty> alsp = new ArrayList<SemanticProperty>();

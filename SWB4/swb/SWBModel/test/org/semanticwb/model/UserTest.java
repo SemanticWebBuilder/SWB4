@@ -285,6 +285,15 @@ public class UserTest {
     }
 
     @Test
+    public void setAlist(){
+        String [] al = new String[3];
+        al[0] = "primaria:secundaria:preparatoria:universidad:maestria:doctorado";
+        al[1] = "es|primaria:secundaria:preparatoria:universidad:maestria:doctorado";
+        al[2] = "en|elementary:13-15grade:high:university:degree:doctordegre";
+        SWBContext.getDefaultRepository().createListExtendedAttribute("escolaridad", al);
+    }
+
+    //@Test
     public void putGroups(){
         Iterator<UserGroup> itro = SWBContext.getDefaultRepository().listUserGroups();
         ArrayList<UserGroup> arliro = new ArrayList<UserGroup>();
