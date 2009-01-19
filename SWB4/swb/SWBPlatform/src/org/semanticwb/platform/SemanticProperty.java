@@ -26,6 +26,16 @@ public class SemanticProperty
     private Boolean hasInverse=null;
     private boolean isInverse=false;
     private Boolean isExternalInvocation=null;
+    private Boolean isInheritProperty=null;
+    private Boolean isNoObservable=null;
+    private Boolean isRemoveDependency=null;
+    private Boolean isHeraquicalRelation=null;
+    private Boolean isRequired=null;
+    private Boolean isUsedAsName=null;
+    private Boolean isLocaleable=null;
+
+    private SemanticObject displayProperty=null;
+    private boolean dispProperty=false;
 
     private int cardinality=0;
     private boolean cardinalityCheck=false;
@@ -97,32 +107,44 @@ public class SemanticProperty
     
     public boolean isLocaleable()
     {
-        Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_LOCALEABLE));
-        if(st!=null)
+        if(isLocaleable==null)
         {
-            return st.getBoolean();
+            isLocaleable=false;
+            Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_LOCALEABLE));
+            if(st!=null)
+            {
+                isLocaleable=st.getBoolean();
+            }
         }
-        return false;
+        return isLocaleable;
     }
     
     public boolean isUsedAsName()
     {
-        Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_ANNOT_CANUSEDASNAME));
-        if(st!=null)
+        if(isUsedAsName==null)
         {
-            return st.getBoolean();
+            isUsedAsName=false;
+            Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_ANNOT_CANUSEDASNAME));
+            if(st!=null)
+            {
+                isUsedAsName=st.getBoolean();
+            }
         }
-        return false;
+        return isUsedAsName;
     }
 
     public boolean isRequired()
     {
-        Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_REQUIRED));
-        if(st!=null)
+        if(isRequired==null)
         {
-            return st.getBoolean();
+            isRequired=false;
+            Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_REQUIRED));
+            if(st!=null)
+            {
+                isRequired=st.getBoolean();
+            }
         }
-        return false;
+        return isRequired;
     }
 
     /**
@@ -131,12 +153,16 @@ public class SemanticProperty
      */
     public boolean isHeraquicalRelation()
     {
-        Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_HERARQUICALRELATION));
-        if(st!=null)
+        if(isHeraquicalRelation==null)
         {
-            return st.getBoolean();
+            isHeraquicalRelation=false;
+            Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_HERARQUICALRELATION));
+            if(st!=null)
+            {
+                isHeraquicalRelation=st.getBoolean();
+            }
         }
-        return false;
+        return isHeraquicalRelation;
     }
 
     /**
@@ -145,12 +171,16 @@ public class SemanticProperty
      */
     public boolean isRemoveDependency()
     {
-        Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_REMOVEDEPENDENCY));
-        if(st!=null)
+        if(isRemoveDependency==null)
         {
-            return st.getBoolean();
+            isRemoveDependency=false;
+            Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_REMOVEDEPENDENCY));
+            if(st!=null)
+            {
+                isRemoveDependency=st.getBoolean();
+            }
         }
-        return false;
+        return isRemoveDependency;
     }
 
     /**
@@ -159,12 +189,16 @@ public class SemanticProperty
      */
     public boolean isNoObservable()
     {
-        Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_NOOBSERVABLE));
-        if(st!=null)
+        if(isNoObservable==null)
         {
-            return st.getBoolean();
+            isNoObservable=false;
+            Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_NOOBSERVABLE));
+            if(st!=null)
+            {
+                isNoObservable=st.getBoolean();
+            }
         }
-        return false;
+        return isNoObservable;
     }
 
     /**
@@ -173,12 +207,16 @@ public class SemanticProperty
      */
     public boolean isInheritProperty()
     {
-        Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_INHERITPROPERTY));
-        if(st!=null)
+        if(isInheritProperty==null)
         {
-            return st.getBoolean();
+            isInheritProperty=false;
+            Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_INHERITPROPERTY));
+            if(st!=null)
+            {
+                isInheritProperty=st.getBoolean();
+            }
         }
-        return false;
+        return isInheritProperty;
     }
 
 
@@ -213,13 +251,16 @@ public class SemanticProperty
     
     public SemanticObject getDisplayProperty()
     {
-        SemanticObject disp=null;
-        Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYPROPERTY));
-        if(st!=null)
+        if(!dispProperty)
         {
-            disp=SemanticObject.createSemanticObject(st.getResource());
+            Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYPROPERTY));
+            if(st!=null)
+            {
+                displayProperty=SemanticObject.createSemanticObject(st.getResource());
+                dispProperty=true;
+            }
         }
-        return disp;
+        return displayProperty;
     }
     
     public String getDisplayName()
