@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class DisplayPropertyBase extends org.semanticwb.model.base.GenericObjectBase implements org.semanticwb.model.Sortable
+public class DisplayPropertyBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Sortable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_index=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#index");
     public static final org.semanticwb.platform.SemanticProperty swbxf_propSelectValues=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#propSelectValues");
@@ -161,15 +161,5 @@ public class DisplayPropertyBase extends org.semanticwb.model.base.GenericObject
     public void setEditable(boolean propEditable)
     {
         getSemanticObject().setBooleanProperty(swbxf_propEditable, propEditable);
-    }
-
-    public void remove()
-    {
-        getSemanticObject().remove();
-    }
-
-    public java.util.Iterator<org.semanticwb.model.GenericObject> listRelatedObjects()
-    {
-        return new org.semanticwb.model.GenericIterator((org.semanticwb.platform.SemanticClass)null, getSemanticObject().listRelatedObjects(),true);
     }
 }
