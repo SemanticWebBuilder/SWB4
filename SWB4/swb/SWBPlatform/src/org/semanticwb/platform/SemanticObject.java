@@ -45,6 +45,9 @@ public class SemanticObject
     private static boolean hasCache=true;
     private static boolean hasPropertyCache=true;
 
+    private static HashMap<SemanticProperty, Method> extGetMethods=new HashMap();
+    private static HashMap<SemanticProperty, Method> extSetMethods=new HashMap();
+
     private SemanticObject(Resource res)
     {
         if(res==null)throw new NullPointerException("Resource is Null...");
@@ -730,11 +733,10 @@ public class SemanticObject
         return ret;
     }
 
-    private Iterator<SemanticObject> filterActiveObjects(Iterator<SemanticObject> it)
+    private Iterator<SemanticObject> filterValidObjects(Iterator<SemanticObject> it)
     {
         SemanticClass cls=null;
-        SemanticProperty active=null;
-        SemanticProperty deleted=null;
+        SemanticProperty valid=null;
         ArrayList list=new ArrayList();
         while(it.hasNext())
         {
@@ -743,16 +745,11 @@ public class SemanticObject
             if(cls==null)
             {
                 cls=obj.getSemanticClass();
-                active=cls.getProperty("active");
-                deleted=cls.getProperty("deleted");
+                valid=cls.getProperty("valid");
             }
-            if(active!=null)
+            if(valid!=null)
             {
-                if(!obj.getBooleanProperty(active))add=false;
-            }
-            if(add && deleted!=null)
-            {
-                if(obj.getBooleanProperty(deleted))add=false;
+                if(!obj.getBooleanProperty(valid))add=false;
             }
             if(add)list.add(obj);
         }
@@ -770,7 +767,7 @@ public class SemanticObject
         Iterator it=listObjectProperties(prop);
         if(prop.isInheritProperty())
         {
-            it=filterActiveObjects(it);
+            it=filterValidObjects(it);
             if(!it.hasNext())
             {
                 SemanticObject parent=getHerarquicalParent();
@@ -879,16 +876,30 @@ public class SemanticObject
         if (!m_virtual)
         {
             GenericObject obj = getSemanticClass().newGenericInstance(this);
-            Class cls = obj.getClass();
-            String name = prop.getLabel();
-            if (name == null)
+            Method method=extGetMethods.get(prop);
+            if(method==null)
             {
-                name = prop.getName();
+                String pre="get";
+                if(prop.isBoolean())pre="is";
+                Class cls = obj.getClass();
+                String name = prop.getLabel();
+                if (name == null)
+                {
+                    name = prop.getName();
+                }
+                name = pre + name.substring(0, 1).toUpperCase() + name.substring(1);
+                try
+                {
+                    method = cls.getMethod(name);
+                    extGetMethods.put(prop, method);
+                }
+                catch (Exception e)
+                {
+                    log.error(e);
+                }
             }
-            name = "get" + name.substring(0, 1).toUpperCase() + name.substring(1);
             try
             {
-                Method method = cls.getMethod(name);
                 ret = method.invoke(obj);
             }
             catch (Exception e)
@@ -906,21 +917,33 @@ public class SemanticObject
         if (!m_virtual)
         {
             GenericObject obj = getSemanticClass().newGenericInstance(this);
-            Class cls = obj.getClass();
-            String name = prop.getLabel();
-            if (name == null)
+            Method method=extSetMethods.get(prop);
+            if(method==null)
             {
-                name = prop.getName();
+                Class cls = obj.getClass();
+                String name = prop.getLabel();
+                if (name == null)
+                {
+                    name = prop.getName();
+                }
+                name = "set" + name.substring(0, 1).toUpperCase() + name.substring(1);
+                try
+                {
+                    Class types[]=new Class[values.length];
+                    for(int x=0;x<values.length;x++)
+                    {
+                        types[x]=values[x].getClass();
+                    }
+                    method = cls.getMethod(name,types);
+                    extSetMethods.put(prop, method);
+                }
+                catch (Exception e)
+                {
+                    log.error(e);
+                }
             }
-            name = "set" + name.substring(0, 1).toUpperCase() + name.substring(1);
             try
             {
-                Class types[]=new Class[values.length];
-                for(int x=0;x<values.length;x++)
-                {
-                    types[x]=values[x].getClass();
-                }
-                Method method = cls.getMethod(name,types);
                 ret = method.invoke(obj,values);
             }
             catch (Exception e)
