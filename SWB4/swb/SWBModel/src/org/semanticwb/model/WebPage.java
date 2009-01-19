@@ -1,6 +1,7 @@
 package org.semanticwb.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.StringTokenizer;
@@ -287,9 +288,8 @@ public class WebPage extends WebPageBase
     
     /**
      * Lista templates activos y no borrados, si no existen en la pagina regresa las del padre
-     * 
      * @return
-     */
+     *
     public Iterator<TemplateRef> listConfigTemplateRefs()
     {
         boolean inherit=true;
@@ -313,7 +313,8 @@ public class WebPage extends WebPageBase
         }
         return ret.iterator();
     }
-    
+    */
+     
     public Iterator<WebPage> listVisibleChilds(String sortLang)
     {
         return listChilds(sortLang, true, false, false, true);

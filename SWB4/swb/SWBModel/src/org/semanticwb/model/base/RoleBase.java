@@ -81,7 +81,13 @@ public class RoleBase extends org.semanticwb.model.base.GenericObjectBase implem
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef> listRoleRefInvs()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef>(org.semanticwb.model.RoleRef.class, getSemanticObject().listObjectProperties(swb_hasRoleRefInv));    }
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef>(org.semanticwb.model.RoleRef.class, getSemanticObject().listObjectProperties(swb_hasRoleRefInv));
+    }
+
+    public boolean hasRoleRefInv(org.semanticwb.model.RoleRef roleref)
+    {
+        if(roleref==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasRoleRefInv,roleref.getSemanticObject());
+    }
 
     public org.semanticwb.model.RoleRef getRoleRefInv()
     {
@@ -96,7 +102,13 @@ public class RoleBase extends org.semanticwb.model.base.GenericObjectBase implem
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.Role> listChilds()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Role>(org.semanticwb.model.Role.class, getSemanticObject().listObjectProperties(swb_hasRoleChild));    }
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Role>(org.semanticwb.model.Role.class, getSemanticObject().listObjectProperties(swb_hasRoleChild));
+    }
+
+    public boolean hasChild(org.semanticwb.model.Role role)
+    {
+        if(role==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasRoleChild,role.getSemanticObject());
+    }
 
     public org.semanticwb.model.Role getChild()
     {
@@ -121,7 +133,13 @@ public class RoleBase extends org.semanticwb.model.base.GenericObjectBase implem
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.Permission> listPermissions()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Permission>(org.semanticwb.model.Permission.class, getSemanticObject().listObjectProperties(swb_hasPermission));    }
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Permission>(org.semanticwb.model.Permission.class, getSemanticObject().listObjectProperties(swb_hasPermission));
+    }
+
+    public boolean hasPermission(org.semanticwb.model.Permission permission)
+    {
+        if(permission==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasPermission,permission.getSemanticObject());
+    }
 
     public void addPermission(org.semanticwb.model.Permission permission)
     {

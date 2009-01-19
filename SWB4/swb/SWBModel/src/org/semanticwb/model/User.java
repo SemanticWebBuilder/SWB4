@@ -309,4 +309,31 @@ public class User extends UserBase implements Principal, java.io.Serializable
         }
         return ret;
     }
+
+    public boolean haveAccess(GenericObject obj)
+    {
+        boolean ret=true;
+        if(obj instanceof RoleRefable)
+        {
+            Iterator<RoleRef> it=((RoleRefable)obj).listInheritRoleRefs();
+            while(it.hasNext())
+            {
+                RoleRef ref=it.next();
+                //System.out.println("ref:"+ref+" role:"+ref.getRole());
+                if(!hasRole(ref.getRole()))
+                {
+                    ret=false;
+                    break;
+                }
+            }
+        }
+        if(ret && obj instanceof RuleRefable)
+        {
+            //TODO:
+        }
+        //System.out.println("User:"+this+" haveAccess:"+obj+" "+ret);
+        return ret;
+    }
+
+
 }

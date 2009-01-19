@@ -100,7 +100,13 @@ public class FormViewBase extends org.semanticwb.model.base.GenericObjectBase im
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.FormViewRef> listFormViewRefInvs()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.FormViewRef>(org.semanticwb.model.FormViewRef.class, getSemanticObject().listObjectProperties(swb_hasFormViewRefInv));    }
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.FormViewRef>(org.semanticwb.model.FormViewRef.class, getSemanticObject().listObjectProperties(swb_hasFormViewRefInv));
+    }
+
+    public boolean hasFormViewRefInv(org.semanticwb.model.FormViewRef formviewref)
+    {
+        if(formviewref==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasFormViewRefInv,formviewref.getSemanticObject());
+    }
 
     public org.semanticwb.model.FormViewRef getFormViewRefInv()
     {

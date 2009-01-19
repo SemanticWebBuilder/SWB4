@@ -89,7 +89,13 @@ public class PortletSubTypeBase extends org.semanticwb.model.base.GenericObjectB
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.Portlet> listPortlets()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Portlet>(org.semanticwb.model.Portlet.class, getSemanticObject().listObjectProperties(swb_hasPSTPortlets));    }
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Portlet>(org.semanticwb.model.Portlet.class, getSemanticObject().listObjectProperties(swb_hasPSTPortlets));
+    }
+
+    public boolean hasPortlet(org.semanticwb.model.Portlet portlet)
+    {
+        if(portlet==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasPSTPortlets,portlet.getSemanticObject());
+    }
 
     public org.semanticwb.model.Portlet getPortlet()
     {

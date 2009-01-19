@@ -7,6 +7,7 @@ public interface Portletable extends org.semanticwb.model.GenericObject
     public static final org.semanticwb.platform.SemanticClass swb_Portletable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Portletable");
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.Portlet> listPortlets();
+    public boolean hasPortlet(org.semanticwb.model.Portlet portlet);
 
     public void addPortlet(org.semanticwb.model.Portlet portlet);
 

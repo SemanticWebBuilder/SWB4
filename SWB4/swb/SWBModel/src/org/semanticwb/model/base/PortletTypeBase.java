@@ -93,7 +93,13 @@ public class PortletTypeBase extends org.semanticwb.model.base.GenericObjectBase
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.Portlet> listPortlets()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Portlet>(org.semanticwb.model.Portlet.class, getSemanticObject().listObjectProperties(swb_hasPTPortlet));    }
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Portlet>(org.semanticwb.model.Portlet.class, getSemanticObject().listObjectProperties(swb_hasPTPortlet));
+    }
+
+    public boolean hasPortlet(org.semanticwb.model.Portlet portlet)
+    {
+        if(portlet==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasPTPortlet,portlet.getSemanticObject());
+    }
 
     public org.semanticwb.model.Portlet getPortlet()
     {
@@ -128,7 +134,13 @@ public class PortletTypeBase extends org.semanticwb.model.base.GenericObjectBase
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.PortletSubType> listSubTypes()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PortletSubType>(org.semanticwb.model.PortletSubType.class, getSemanticObject().listObjectProperties(swb_hasPTSubType));    }
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PortletSubType>(org.semanticwb.model.PortletSubType.class, getSemanticObject().listObjectProperties(swb_hasPTSubType));
+    }
+
+    public boolean hasSubType(org.semanticwb.model.PortletSubType portletsubtype)
+    {
+        if(portletsubtype==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasPTSubType,portletsubtype.getSemanticObject());
+    }
 
     public org.semanticwb.model.PortletSubType getSubType()
     {

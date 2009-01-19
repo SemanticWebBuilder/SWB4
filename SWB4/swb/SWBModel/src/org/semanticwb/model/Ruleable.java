@@ -7,6 +7,7 @@ public interface Ruleable extends org.semanticwb.model.GenericObject
     public static final org.semanticwb.platform.SemanticClass swb_Ruleable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Ruleable");
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.Rule> listRules();
+    public boolean hasRule(org.semanticwb.model.Rule rule);
 
     public void addRule(org.semanticwb.model.Rule rule);
 

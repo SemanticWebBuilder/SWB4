@@ -156,7 +156,13 @@ public class RuleBase extends org.semanticwb.model.base.GenericObjectBase implem
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.Calendar> listCalendars()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Calendar>(org.semanticwb.model.Calendar.class, getSemanticObject().listObjectProperties(swb_hasCalendar));    }
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Calendar>(org.semanticwb.model.Calendar.class, getSemanticObject().listObjectProperties(swb_hasCalendar));
+    }
+
+    public boolean hasCalendar(org.semanticwb.model.Calendar calendar)
+    {
+        if(calendar==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasCalendar,calendar.getSemanticObject());
+    }
 
     public void addCalendar(org.semanticwb.model.Calendar calendar)
     {
@@ -186,7 +192,13 @@ public class RuleBase extends org.semanticwb.model.base.GenericObjectBase implem
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef> listRuleRefInvs()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef>(org.semanticwb.model.RuleRef.class, getSemanticObject().listObjectProperties(swb_hasRuleRefInv));    }
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef>(org.semanticwb.model.RuleRef.class, getSemanticObject().listObjectProperties(swb_hasRuleRefInv));
+    }
+
+    public boolean hasRuleRefInv(org.semanticwb.model.RuleRef ruleref)
+    {
+        if(ruleref==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasRuleRefInv,ruleref.getSemanticObject());
+    }
 
     public org.semanticwb.model.RuleRef getRuleRefInv()
     {

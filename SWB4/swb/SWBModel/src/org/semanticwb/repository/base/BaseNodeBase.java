@@ -69,7 +69,13 @@ public class BaseNodeBase extends org.semanticwb.model.base.GenericObjectBase
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.repository.BaseNode> listNodes()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.BaseNode>(org.semanticwb.repository.BaseNode.class, getSemanticObject().listObjectProperties(swbrep_hasNodes));    }
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.BaseNode>(org.semanticwb.repository.BaseNode.class, getSemanticObject().listObjectProperties(swbrep_hasNodes));
+    }
+
+    public boolean hasNode(org.semanticwb.repository.BaseNode basenode)
+    {
+        if(basenode==null)return false;        return getSemanticObject().hasObjectProperty(swbrep_hasNodes,basenode.getSemanticObject());
+    }
 
     public org.semanticwb.repository.BaseNode getNode()
     {

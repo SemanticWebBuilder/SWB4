@@ -133,7 +133,13 @@ public class TemplateGroupBase extends org.semanticwb.model.base.GenericObjectBa
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> listTemplates()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Template>(org.semanticwb.model.Template.class, getSemanticObject().listObjectProperties(swb_hasGroupedTemplate));    }
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Template>(org.semanticwb.model.Template.class, getSemanticObject().listObjectProperties(swb_hasGroupedTemplate));
+    }
+
+    public boolean hasTemplate(org.semanticwb.model.Template template)
+    {
+        if(template==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasGroupedTemplate,template.getSemanticObject());
+    }
 
     public org.semanticwb.model.Template getTemplate()
     {
