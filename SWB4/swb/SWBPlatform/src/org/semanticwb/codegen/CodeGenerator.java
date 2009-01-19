@@ -652,6 +652,12 @@ public class CodeGenerator
                         objectName = objectName.substring(3);
                         javaClassContent.append(ENTER);
                         javaClassContent.append("    public org.semanticwb.model.GenericIterator<" + pack + "." + valueToReturn + "> list" + objectName + "s();" + ENTER);
+                        javaClassContent.append("    public boolean has" + objectName + "("+ pack + "." + valueToReturn +" "+valueToReturn.toLowerCase()+");" + ENTER);
+                        if(tpp.isInheritProperty())
+                        {
+                            javaClassContent.append("    public org.semanticwb.model.GenericIterator<" + pack + "." + valueToReturn + "> listInherit" + objectName + "s();" + ENTER);
+                        }
+                        
                         if (!tpp.hasInverse())
                         {
                             javaClassContent.append(ENTER);
@@ -1182,16 +1188,22 @@ public class CodeGenerator
                 javaClassContent.append(ENTER);
                 javaClassContent.append("    public org.semanticwb.model.GenericIterator<" + getPackage(tpcToReturn) + "." + valueToReturn + "> list" + objectName + "s()" + ENTER);
                 javaClassContent.append(OPEN_BLOCK + ENTER);
-//                if (!tpp.hasInverse())
-//                {
-                    javaClassContent.append("        return new org.semanticwb.model.GenericIterator<" + getPackage(tpcToReturn) + "." + valueToReturn + ">(" + getPackage(tpcToReturn) + "." + valueToReturn + ".class, getSemanticObject().listObjectProperties(" + tpp.getPrefix() + "_" + tpp.getName() + "));");
-//                }
-//                else
-//                {
-//                    javaClassContent.append("        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, " + tpp.getPrefix() + "_" + tpp.getName() + ".getInverse().getRDFProperty(), getSemanticObject().getRDFResource());" + ENTER);
-//                    javaClassContent.append("        return new org.semanticwb.model.GenericIterator<" + sPackage + "." + valueToReturn + ">(" + sPackage + "." + valueToReturn + ".class, stit,true);" + ENTER);
-//                }
-                javaClassContent.append(CLOSE_BLOCK + ENTER);
+                javaClassContent.append("        return new org.semanticwb.model.GenericIterator<" + getPackage(tpcToReturn) + "." + valueToReturn + ">(" + getPackage(tpcToReturn) + "." + valueToReturn + ".class, getSemanticObject().listObjectProperties(" + tpp.getPrefix() + "_" + tpp.getName() + "));");
+                javaClassContent.append(ENTER + CLOSE_BLOCK + ENTER);
+                javaClassContent.append(ENTER);
+                javaClassContent.append("    public boolean has" + objectName + "("+ getPackage(tpcToReturn) + "." + valueToReturn +" "+valueToReturn.toLowerCase()+")" + ENTER);
+                javaClassContent.append(OPEN_BLOCK + ENTER);
+                javaClassContent.append("        if("+valueToReturn.toLowerCase()+"==null)return false;");
+                javaClassContent.append("        return getSemanticObject().hasObjectProperty(" + tpp.getPrefix() + "_" + tpp.getName() + ","+valueToReturn.toLowerCase()+".getSemanticObject());");
+                javaClassContent.append(ENTER + CLOSE_BLOCK + ENTER);
+                if(tpp.isInheritProperty())
+                {
+                    javaClassContent.append(ENTER);
+                    javaClassContent.append("    public org.semanticwb.model.GenericIterator<" + getPackage(tpcToReturn) + "." + valueToReturn + "> listInherit" + objectName + "s()" + ENTER);
+                    javaClassContent.append(OPEN_BLOCK + ENTER);
+                    javaClassContent.append("        return new org.semanticwb.model.GenericIterator<" + getPackage(tpcToReturn) + "." + valueToReturn + ">(" + getPackage(tpcToReturn) + "." + valueToReturn + ".class, getSemanticObject().listInheritProperties(" + tpp.getPrefix() + "_" + tpp.getName() + "));");
+                    javaClassContent.append(ENTER + CLOSE_BLOCK + ENTER);
+                }
 
                 if (!tpp.hasInverse())
                 {

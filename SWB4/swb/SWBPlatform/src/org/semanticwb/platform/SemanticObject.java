@@ -170,19 +170,29 @@ public class SemanticObject
     {
         Boolean ret=null;
         ArrayList arr=(ArrayList)m_cacheprops.get(prop.getURI()+"|list");
-        if(arr!=null)ret=arr.contains(obj);
-        //System.out.println(this+" prop:"+prop+" obj:"+obj+" "+ret);
+        if(arr!=null)
+        {
+//            Iterator it=arr.iterator();
+//            while(it.hasNext())
+//            {
+//                System.out.println("Ite:"+it.next());
+//            }
+            ret=arr.contains(obj);
+        }
+//        System.out.println("hasObjectPropertyCache:"+this+" prop:"+prop+" obj:"+obj+" "+ret);
         return ret;
     }
     
 
     private Iterator<SemanticObject> setListObjectPropertyCache(SemanticProperty prop, Iterator<SemanticObject> list)
     {
+        //System.out.println("setListObjectPropertyCache:"+this+" "+prop);
         ArrayList arr=new ArrayList();
         while(list.hasNext())
         {
             SemanticObject obj=list.next();
             arr.add(obj);
+            //System.out.println("-->add:"+obj);
         }
         m_cacheprops.put(prop.getURI()+"|list", arr);
         return arr.iterator();
@@ -720,9 +730,63 @@ public class SemanticObject
         return ret;
     }
 
+    private Iterator<SemanticObject> filterActiveObjects(Iterator<SemanticObject> it)
+    {
+        SemanticClass cls=null;
+        SemanticProperty active=null;
+        SemanticProperty deleted=null;
+        ArrayList list=new ArrayList();
+        while(it.hasNext())
+        {
+            SemanticObject obj=it.next();
+            boolean add=true;
+            if(cls==null)
+            {
+                cls=obj.getSemanticClass();
+                active=cls.getProperty("active");
+                deleted=cls.getProperty("deleted");
+            }
+            if(active!=null)
+            {
+                if(!obj.getBooleanProperty(active))add=false;
+            }
+            if(add && deleted!=null)
+            {
+                if(obj.getBooleanProperty(deleted))add=false;
+            }
+            if(add)list.add(obj);
+        }
+        return list.iterator();
+    }
+
+    /**
+     * Regresa lista de objetos activos y no borrados relacionados por la propiedad
+     * Si no encuentra en el objeto busca en los padres
+     * @param prop
+     * @return
+     */
+    public Iterator<SemanticObject> listInheritProperties(SemanticProperty prop)
+    {
+        Iterator it=listObjectProperties(prop);
+        if(prop.isInheritProperty())
+        {
+            it=filterActiveObjects(it);
+            if(!it.hasNext())
+            {
+                SemanticObject parent=getHerarquicalParent();
+                if(parent!=null)
+                {
+                    it=parent.listInheritProperties(prop);
+                }
+            }
+        }
+        return it;
+    }
+
     public boolean hasObjectProperty(SemanticProperty prop, SemanticObject obj)
     {
 
+        //System.out.println("hasObjectProperty:"+this+" prop:"+prop+" obj:"+obj);
         if (m_virtual)
         {
             ArrayList list = (ArrayList) m_virtprops.get(prop.getURI());
@@ -1445,6 +1509,14 @@ public class SemanticObject
             }
         }
         return list.iterator();
+    }
+    
+    public SemanticObject getHerarquicalParent()
+    {
+        SemanticObject ret=null;
+        Iterator<SemanticObject> it=listHerarquicalParents();
+        if(it.hasNext())ret=it.next();
+        return ret;
     }
 
 }
