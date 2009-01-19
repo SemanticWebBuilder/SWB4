@@ -129,7 +129,7 @@ public class SWBDBAdmLog {
         return ret;
     }
 
-    /**
+    /** Obtiene los registros de un determinado usuario y un tipo de objeto
      * @param user
      * @param object
      * @return  */
@@ -199,9 +199,16 @@ public class SWBDBAdmLog {
             if (con != null) {
                 try {
                     String query = "select * from swb_admlog where log_modelid=? and log_objuri=? order by log_date desc";
+                    if(null==objuri)
+                    {
+                        query = "select * from swb_admlog where log_modelid=? order by log_date desc";
+                    }
                     PreparedStatement st = con.prepareStatement(query);
                     st.setString(1, modelid);
-                    st.setString(2, objuri);
+                    if(null!=objuri)
+                    {
+                        st.setString(2, objuri);
+                    }
                     ResultSet rs = st.executeQuery();
                     ret = new SWBIterAdmLog(con, st, rs);
                 } catch (Exception e) {
@@ -248,7 +255,7 @@ public class SWBDBAdmLog {
         return ret;
     }
 
-    /**
+    /** Obtiene los registros de objUri y un tipo de accion
      * @param action
      * @param object
      * @return  */
@@ -278,7 +285,7 @@ public class SWBDBAdmLog {
         return ret;
     }
 
-    /**
+    /** Obtiene los registros de determinado usuario y un tipo de accion
      * @param user
      * @param action
      * @return  */
@@ -307,8 +314,8 @@ public class SWBDBAdmLog {
         return ret;
     }
 
-    /** Elimina todos los registros de la base de datos que cumplan con el Admuserid  throws AFException
-     * @throws WBException  */
+    /** Elimina todos los registros de la base de datos que cumplan con el UserId y menores a la Fecha  throws AFException
+     * @throws SWBException  */
     public void removeLogByAdmuserId(String Admuserid, Timestamp lastupdate) throws SWBException {
         Connection con = null;
         try {
@@ -333,35 +340,7 @@ public class SWBDBAdmLog {
         }
     }
 
-    /** Elimina todos los registros de la base de datos que cumplan con el topicid  throws AFException
-     * @throws WBException  */
-    public void removeLogByTopicId(String modelid, String objuri, Timestamp lastupdate) throws SWBException {
-
-        Connection con = null;
-        try {
-            con = SWBUtils.DB.getDefaultConnection("DBAdmLog.removeLogByTopicId()");
-            String query = "delete from swb_admlog where log_modelid=? and log_objuri=? and log_date<?";
-            PreparedStatement st = con.prepareStatement(query);
-            st.setString(1, modelid);
-            st.setString(2, objuri);
-            st.setTimestamp(3, lastupdate);
-            st.executeUpdate();
-            st.close();
-            con.close();
-        } catch (Exception e) {
-            throw new SWBException(SWBUtils.TEXT.getLocaleString("locale_core", "error_DBAdmLog_removeLogByAdmuserId_cannotremoveelements") + e.getMessage() + " SWBDBAdmLog:removeLogByTopicId()", e);
-        } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (Exception ex) {
-                log.error(ex);
-            }
-        }
-    }
-
-    /** Elimina todos los registros de la base de datos que cumplan con el topicmapid  throws AFException
+    /** Elimina todos los registros de la base de datos que cumplan con el modelid y menores a la Fecha throws AFException
      * @throws WBException  */
     public void removeLogByModelId(String modelid, Timestamp lastupdate) throws SWBException {
 
@@ -388,37 +367,9 @@ public class SWBDBAdmLog {
         }
     }
 
-    /** Elimina todos los registros de la base de datos que cumplan con el DBObject(para lenguaje y usuarios finales)  throws AFException
+    /** Elimina todos los registros de la base de datos que cumplan con el ObjURI,ModelId y menores a Fecha throws AFException
      * @throws WBException  */
-    public void removeLogByDBObject(String objuri, String modelid, Timestamp lastupdate) throws SWBException {
-
-        Connection con = null;
-        try {
-            con = SWBUtils.DB.getDefaultConnection("SWBDBAdmLog.removeLogByDBObject()");
-            String query = "delete from swb_admlog where log_objuri=? and log_modelid=? and log_date<?";
-            PreparedStatement st = con.prepareStatement(query);
-            st.setString(1, objuri);
-            st.setString(2, modelid);
-            st.setTimestamp(3, lastupdate);
-            st.executeUpdate();
-            st.close();
-            con.close();
-        } catch (Exception e) {
-            throw new SWBException(SWBUtils.TEXT.getLocaleString("locale_core", "error_DBAdmLog_removeLogByAdmuserId_cannotremoveelements") + e.getMessage() + " SWBDBAdmLog:removeLogByDBObject()", e);
-        } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (Exception ex) {
-                log.error(ex);
-            }
-        }
-    }
-
-    /** Elimina todos los registros de la base de datos que cumplan con el DBObject y   throws AFException
-     * @throws WBException  */
-    public void removeLogByDBObjectAndDBObjId(String objuri, String modelid, Timestamp lastupdate) throws SWBException {
+    public void removeLogByDBObjUriAndModelId(String objuri, String modelid, Timestamp lastupdate) throws SWBException {
 
         Connection con = null;
         try {
@@ -501,13 +452,4 @@ public class SWBDBAdmLog {
     public void refresh() {
     }
 
-//    /** Avisa al observador de que se ha producido un cambio.
-//     * @param s
-//     * @param obj  */
-//    public void sendDBNotify(String s, Object obj) {
-//        if (s.equals("remove")) {
-//        }
-//        if (s.equals("create")) {
-//        }
-//    }
 }
