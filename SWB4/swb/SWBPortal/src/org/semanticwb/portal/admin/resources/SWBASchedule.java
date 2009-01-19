@@ -67,6 +67,30 @@ public class SWBASchedule extends GenericResource {
         SemanticClass cls = obj.getSemanticClass();
         String title = cls.getName();
 
+        out.println("<script type=\"text/javascript\">");
+        if (request.getParameter("nsuri") != null && request.getParameter("nsuri").trim().length() > 0) {
+            SemanticObject snobj = ont.getSemanticObject(request.getParameter("nsuri"));
+            if (snobj != null)
+            {
+                log.debug("addNewTab");
+                out.println("  addNewTab('" + snobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + snobj.getDisplayName() + "');");
+            }
+        }
+
+        if (request.getParameter("statmsg") != null && request.getParameter("statmsg").trim().length() > 0) {
+            log.debug("showStatus");
+            out.println("   showStatus('" + request.getParameter("statmsg") + "');");
+        }
+
+        if (request.getParameter("closetab") != null && request.getParameter("closetab").trim().length() > 0) {
+            log.debug("closeTab..."+request.getParameter("closetab"));
+            out.println("   closeTab('" + request.getParameter("closetab") + "');");
+        }
+        out.println("</script>");
+
+
+
+
         SWBResourceURL url = paramRequest.getActionUrl();
         url.setAction("update");
 
@@ -1101,7 +1125,8 @@ public class SWBASchedule extends GenericResource {
         String idCalendar = request.getParameter("sval");
         
         if ("add".equals(action)) 
-        {    
+        {
+            String nsuri = null;
             SemanticProperty prop1 = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(sprop);
             SemanticClass ncls = prop1.getRangeClass();
             String id_usr_request = request.getParameter("id_usr_request");
@@ -1155,7 +1180,12 @@ public class SWBASchedule extends GenericResource {
                         }
                     }
                 }
+                nsuri = nobj.getURI();
             }
+            if (nsuri != null) {
+                response.setRenderParameter("nsuri", nsuri);
+            }
+            response.setRenderParameter("statmsg", "Se agreg&oacute; correctamente la calendarizaci&oacute;n.");
             response.setMode(response.Mode_VIEW);
         }
         else if ("update".equals(action)) {
@@ -1202,6 +1232,7 @@ public class SWBASchedule extends GenericResource {
             obj.setDateProperty(Traceable.swb_updated, mdate);
             strUserMod = user.getId();
             strModDate = Long.toString(mdate.getTime());
+            response.setRenderParameter("statmsg", "Se actualiz&oacute; correctamente la calendarizaci&oacute;n.");
             if (id != null)response.setRenderParameter("suri", id);
             if (sprop != null)response.setRenderParameter("sprop", sprop);
             if (spropref != null)response.setRenderParameter("spropref", spropref);
@@ -1219,6 +1250,7 @@ public class SWBASchedule extends GenericResource {
             strModDate = Long.toString(mdate.getTime());
             log.debug("SWBASchedule: ProcessAction(updstatus):"+sobj.getSemanticClass().getClassName()+": "+value);
 
+            response.setRenderParameter("statmsg", "Se actualiz&oacute; correctamente el estatus de la calendarizaci&oacute;n.");
             if (id != null)response.setRenderParameter("suri", id);
             if (sprop != null)response.setRenderParameter("sprop", sprop);
             if (spropref != null)response.setRenderParameter("spropref", spropref);
@@ -1241,6 +1273,7 @@ public class SWBASchedule extends GenericResource {
                     break;
                 }
             }
+            response.setRenderParameter("statmsg", "Se elimin&oacute; calendarizaci&oacute;n.");
         }
 
         if(("add".equals(action) || "update".equals(action)) && null!=idCalendar) 
