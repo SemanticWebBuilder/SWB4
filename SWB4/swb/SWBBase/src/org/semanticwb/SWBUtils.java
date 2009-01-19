@@ -48,6 +48,7 @@ import org.apache.commons.mail.EmailAttachment;
 import java.util.Collection;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -2134,4 +2135,20 @@ public class SWBUtils {
             return cipher.doFinal(data);
         }
     }
+
+
+    public static class Collections
+    {
+        public static List copyIterator(Iterator it)
+        {
+            ArrayList ret=new ArrayList();
+            while(it.hasNext())
+            {
+                Object ref=it.next();
+                ret.add(ref);
+            }
+            return ret;
+        }
+    }
+
 }
