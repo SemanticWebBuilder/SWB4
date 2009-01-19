@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class UserBase extends org.semanticwb.model.base.GenericObjectBase implements org.semanticwb.model.Roleable,org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.model.Calendarable
+public class UserBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Roleable,org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.model.Calendarable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
@@ -283,8 +283,7 @@ public class UserBase extends org.semanticwb.model.base.GenericObjectBase implem
 
     public boolean hasRole(org.semanticwb.model.Role role)
     {
-        if(role==null)return false;
-        return getSemanticObject().hasObjectProperty(swb_hasRole,role.getSemanticObject());
+        if(role==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasRole,role.getSemanticObject());
     }
 
     public void addRole(org.semanticwb.model.Role role)
@@ -331,16 +330,6 @@ public class UserBase extends org.semanticwb.model.base.GenericObjectBase implem
     public void setUsrSecurityAnswer(String usrSecurityAnswer)
     {
         getSemanticObject().setProperty(swb_usrSecurityAnswer, usrSecurityAnswer);
-    }
-
-    public void remove()
-    {
-        getSemanticObject().remove();
-    }
-
-    public java.util.Iterator<org.semanticwb.model.GenericObject> listRelatedObjects()
-    {
-        return new org.semanticwb.model.GenericIterator((org.semanticwb.platform.SemanticClass)null, getSemanticObject().listRelatedObjects(),true);
     }
 
     public org.semanticwb.model.UserRepository getUserRepository()
