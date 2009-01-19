@@ -123,4 +123,5 @@ public class GenericObjectBase implements GenericObject
     {
         return "/"+getSemanticObject().getModel().getName()+"/"+getSemanticObject().getSemanticClass().getName()+"/"+getId();
     }
+
 }
