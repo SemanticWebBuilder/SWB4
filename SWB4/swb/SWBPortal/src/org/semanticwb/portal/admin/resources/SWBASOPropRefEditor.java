@@ -327,8 +327,8 @@ public class SWBASOPropRefEditor extends GenericResource {
                     semprop = (SemanticProperty) hmprop.get(Inheritable.swb_inherita);
                     semobj = sobj.getObjectProperty(spref);
                     DisplayProperty dobj = new DisplayProperty(semprop.getDisplayProperty());
-                    String pmsg = dobj.getPromptMessage();
-                    String imsg = dobj.getInvalidMessage();
+                    //String pmsg = dobj.getPromptMessage();
+                    //String imsg = dobj.getInvalidMessage();
                     String selectValues = dobj.getSelectValues(user.getLanguage());
                     log.debug("selectValues: " + selectValues);
                     out.println("<td allign=\"center\">");
