@@ -7,6 +7,7 @@ public interface PortletRefable extends org.semanticwb.model.GenericObject
     public static final org.semanticwb.platform.SemanticClass swb_PortletRefable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PortletRefable");
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.PortletRef> listPortletRefs();
+    public boolean hasPortletRef(org.semanticwb.model.PortletRef portletref);
 
     public void addPortletRef(org.semanticwb.model.PortletRef portletref);
 

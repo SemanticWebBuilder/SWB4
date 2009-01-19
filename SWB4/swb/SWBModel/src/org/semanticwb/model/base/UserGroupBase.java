@@ -22,7 +22,13 @@ public class UserGroupBase extends org.semanticwb.model.base.GenericObjectBase i
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.User> listUsers()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.User>(org.semanticwb.model.User.class, getSemanticObject().listObjectProperties(swb_hasGroupedUser));    }
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.User>(org.semanticwb.model.User.class, getSemanticObject().listObjectProperties(swb_hasGroupedUser));
+    }
+
+    public boolean hasUser(org.semanticwb.model.User user)
+    {
+        if(user==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasGroupedUser,user.getSemanticObject());
+    }
 
     public org.semanticwb.model.User getUser()
     {
@@ -124,7 +130,13 @@ public class UserGroupBase extends org.semanticwb.model.base.GenericObjectBase i
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroup> listChilds()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroup>(org.semanticwb.model.UserGroup.class, getSemanticObject().listObjectProperties(swb_hasUsrGrpChild));    }
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroup>(org.semanticwb.model.UserGroup.class, getSemanticObject().listObjectProperties(swb_hasUsrGrpChild));
+    }
+
+    public boolean hasChild(org.semanticwb.model.UserGroup usergroup)
+    {
+        if(usergroup==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasUsrGrpChild,usergroup.getSemanticObject());
+    }
 
     public org.semanticwb.model.UserGroup getChild()
     {

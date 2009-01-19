@@ -7,6 +7,8 @@ public interface RuleRefable extends org.semanticwb.model.GenericObject
     public static final org.semanticwb.platform.SemanticClass swb_RuleRefable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#RuleRefable");
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef> listRuleRefs();
+    public boolean hasRuleRef(org.semanticwb.model.RuleRef ruleref);
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef> listInheritRuleRefs();
 
     public void addRuleRef(org.semanticwb.model.RuleRef ruleref);
 

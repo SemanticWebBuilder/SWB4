@@ -165,7 +165,13 @@ public class TemplateBase extends org.semanticwb.model.base.GenericObjectBase im
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.Calendar> listCalendars()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Calendar>(org.semanticwb.model.Calendar.class, getSemanticObject().listObjectProperties(swb_hasCalendar));    }
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Calendar>(org.semanticwb.model.Calendar.class, getSemanticObject().listObjectProperties(swb_hasCalendar));
+    }
+
+    public boolean hasCalendar(org.semanticwb.model.Calendar calendar)
+    {
+        if(calendar==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasCalendar,calendar.getSemanticObject());
+    }
 
     public void addCalendar(org.semanticwb.model.Calendar calendar)
     {
@@ -215,7 +221,18 @@ public class TemplateBase extends org.semanticwb.model.base.GenericObjectBase im
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef> listRoleRefs()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef>(org.semanticwb.model.RoleRef.class, getSemanticObject().listObjectProperties(swb_hasRoleRef));    }
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef>(org.semanticwb.model.RoleRef.class, getSemanticObject().listObjectProperties(swb_hasRoleRef));
+    }
+
+    public boolean hasRoleRef(org.semanticwb.model.RoleRef roleref)
+    {
+        if(roleref==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasRoleRef,roleref.getSemanticObject());
+    }
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef> listInheritRoleRefs()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef>(org.semanticwb.model.RoleRef.class, getSemanticObject().listInheritProperties(swb_hasRoleRef));
+    }
 
     public void addRoleRef(org.semanticwb.model.RoleRef roleref)
     {
@@ -266,7 +283,13 @@ public class TemplateBase extends org.semanticwb.model.base.GenericObjectBase im
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.TemplateRef> listTemplateRefInvs()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.TemplateRef>(org.semanticwb.model.TemplateRef.class, getSemanticObject().listObjectProperties(swb_hasTemplateRefInv));    }
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.TemplateRef>(org.semanticwb.model.TemplateRef.class, getSemanticObject().listObjectProperties(swb_hasTemplateRefInv));
+    }
+
+    public boolean hasTemplateRefInv(org.semanticwb.model.TemplateRef templateref)
+    {
+        if(templateref==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasTemplateRefInv,templateref.getSemanticObject());
+    }
 
     public org.semanticwb.model.TemplateRef getTemplateRefInv()
     {
@@ -281,7 +304,18 @@ public class TemplateBase extends org.semanticwb.model.base.GenericObjectBase im
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef> listRuleRefs()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef>(org.semanticwb.model.RuleRef.class, getSemanticObject().listObjectProperties(swb_hasRuleRef));    }
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef>(org.semanticwb.model.RuleRef.class, getSemanticObject().listObjectProperties(swb_hasRuleRef));
+    }
+
+    public boolean hasRuleRef(org.semanticwb.model.RuleRef ruleref)
+    {
+        if(ruleref==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasRuleRef,ruleref.getSemanticObject());
+    }
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef> listInheritRuleRefs()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef>(org.semanticwb.model.RuleRef.class, getSemanticObject().listInheritProperties(swb_hasRuleRef));
+    }
 
     public void addRuleRef(org.semanticwb.model.RuleRef ruleref)
     {

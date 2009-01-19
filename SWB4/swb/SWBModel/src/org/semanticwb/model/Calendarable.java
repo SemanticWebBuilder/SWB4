@@ -7,6 +7,7 @@ public interface Calendarable extends org.semanticwb.model.GenericObject
     public static final org.semanticwb.platform.SemanticClass swb_Calendarable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Calendarable");
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.Calendar> listCalendars();
+    public boolean hasCalendar(org.semanticwb.model.Calendar calendar);
 
     public void addCalendar(org.semanticwb.model.Calendar calendar);
 

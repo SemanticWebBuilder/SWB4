@@ -104,7 +104,13 @@ public class PFlowBase extends org.semanticwb.model.base.GenericObjectBase imple
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowRef> listPFlowRefInvs()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowRef>(org.semanticwb.model.PFlowRef.class, getSemanticObject().listObjectProperties(swb_hasPFlowRefInv));    }
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowRef>(org.semanticwb.model.PFlowRef.class, getSemanticObject().listObjectProperties(swb_hasPFlowRefInv));
+    }
+
+    public boolean hasPFlowRefInv(org.semanticwb.model.PFlowRef pflowref)
+    {
+        if(pflowref==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasPFlowRefInv,pflowref.getSemanticObject());
+    }
 
     public org.semanticwb.model.PFlowRef getPFlowRefInv()
     {

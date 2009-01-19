@@ -93,7 +93,13 @@ public class CampBase extends org.semanticwb.model.base.GenericObjectBase implem
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.Calendar> listCalendars()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Calendar>(org.semanticwb.model.Calendar.class, getSemanticObject().listObjectProperties(swb_hasCalendar));    }
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Calendar>(org.semanticwb.model.Calendar.class, getSemanticObject().listObjectProperties(swb_hasCalendar));
+    }
+
+    public boolean hasCalendar(org.semanticwb.model.Calendar calendar)
+    {
+        if(calendar==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasCalendar,calendar.getSemanticObject());
+    }
 
     public void addCalendar(org.semanticwb.model.Calendar calendar)
     {
@@ -123,7 +129,13 @@ public class CampBase extends org.semanticwb.model.base.GenericObjectBase implem
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.Rule> listRules()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Rule>(org.semanticwb.model.Rule.class, getSemanticObject().listObjectProperties(swb_hasRule));    }
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Rule>(org.semanticwb.model.Rule.class, getSemanticObject().listObjectProperties(swb_hasRule));
+    }
+
+    public boolean hasRule(org.semanticwb.model.Rule rule)
+    {
+        if(rule==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasRule,rule.getSemanticObject());
+    }
 
     public void addRule(org.semanticwb.model.Rule rule)
     {
@@ -194,7 +206,13 @@ public class CampBase extends org.semanticwb.model.base.GenericObjectBase implem
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.Role> listRoles()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Role>(org.semanticwb.model.Role.class, getSemanticObject().listObjectProperties(swb_hasRole));    }
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Role>(org.semanticwb.model.Role.class, getSemanticObject().listObjectProperties(swb_hasRole));
+    }
+
+    public boolean hasRole(org.semanticwb.model.Role role)
+    {
+        if(role==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasRole,role.getSemanticObject());
+    }
 
     public void addRole(org.semanticwb.model.Role role)
     {
