@@ -68,18 +68,17 @@ public class SWBTemplateMgr
 
 //        Date today = new Date();
         HashMap tplpri=new HashMap();
-        Iterator<TemplateRef> tpls = topic.listConfigTemplateRefs();
+        Iterator<TemplateRef> tpls = topic.listInheritTemplateRefs();
         while (tpls.hasNext())
         {
             TemplateRef ref=tpls.next();
             try
             {
                 Template tpl=getTemplateImp(ref.getTemplate());
-                //TODO:Implementar reglas
-//                boolean passrules = tpl.haveAccess(user);
-//                if (passrules == true && !intereval.eval(today, tpl)) passrules = false;
+                boolean passrules = user.haveAccess(tpl);
+                //if (passrules == true && !intereval.eval(today, tpl)) passrules = false;
                 //System.out.println("rule:"+passrules+" "+tpl.getId()+" "+tpl.getTopicMapId());
-//                if (passrules)
+                if (passrules)
                 {
                     ArrayList<Template> aux=(ArrayList)tplpri.get(new Integer(ref.getPriority()));
                     if(aux==null)

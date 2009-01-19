@@ -281,7 +281,7 @@ public class SWBASOPropRefEditor extends GenericResource {
                             out.println(sem_o.getProperty(User.swb_usrLogin));
                             out.println("</a>");
                         }
-                        else out.print(so.getProperty(semprop));
+                        else if(so!=null) out.print(so.getProperty(semprop));
                         
                     }
                     out.println("</td>");
