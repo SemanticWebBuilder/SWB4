@@ -291,6 +291,7 @@ public class UserTest {
         al[1] = "es|primaria:secundaria:preparatoria:universidad:maestria:doctorado";
         al[2] = "en|elementary:13-15grade:high:university:degree:doctordegre";
         SWBContext.getDefaultRepository().createListExtendedAttribute("escolaridad", al);
+        SWBContext.getDefaultRepository().getUserByLogin("admin").setProperty("escolaridad", "universidad");
     }
 
     //@Test
