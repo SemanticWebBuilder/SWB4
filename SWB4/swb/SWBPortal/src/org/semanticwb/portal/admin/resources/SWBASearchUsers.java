@@ -52,7 +52,7 @@ public class SWBASearchUsers extends GenericResource
         ret.append("<table>\n");
         url.setMode("roles");
         url.setCallMethod(SWBResourceURL.Call_DIRECT);
-        ret.append("    <tr><td width=\"200px\" align=\"right\">Repositorio de usuarios</td>\n");
+        ret.append("    <tr><td width=\"200px\">Repositorio de usuarios</td>\n");
         ret.append("    <td><select dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"false\" name=\"userRepository\" id=\"userRepository\" >\n");
         while (itur.hasNext())
         {
@@ -144,6 +144,7 @@ public class SWBASearchUsers extends GenericResource
             arusr.add(itst.next());
         }
         request.getSession(true).setAttribute("iteraUsers", arusr.toArray(new String[arusr.size()]));
+        request.getSession(true).setAttribute("iteraUsersRep", ur.getId());
         SWBResourceURL url = paramRequest.getRenderUrl().setMode("jsonData").setCallMethod(SWBResourceURL.Call_DIRECT);
         ret.append("<script type=\"text/javascript\">\n" +
                 "           dojo.require(\"dojox.grid.DataGrid\");\n" +
@@ -196,6 +197,8 @@ public class SWBASearchUsers extends GenericResource
     {
         response.setContentType("text/html;charset=ISO-8859-1");
         String[] lista = (String[]) request.getSession(true).getAttribute("iteraUsers");
+        //String repName = (String) request.getSession(true).getAttribute("iteraUsersRep");
+        //UserRepository ur = SWBContext.getUserRepository(repName);
         JSONObject jobj = new JSONObject();
         JSONArray jarr = new JSONArray();
         try
@@ -219,16 +222,19 @@ public class SWBASearchUsers extends GenericResource
         int end = start + pag;
         while (start < end && start < lista.length)
         {
-            String[] valores = lista[start].split("\\|\\|");
+           // String[] valores = lista[start].split("\\|\\|");
+
+            User usr = (User)SWBPlatform.getSemanticMgr().getOntology().getGenericObject(lista[start]);
+            System.out.println(""+lista[start]+" - "+usr);
             JSONObject obj = new JSONObject();
             try
             {
-                obj.put("@uri", "javascript:parent.addNewTab('" + valores[0] + "',null,'" + valores[5] + "')");
-                obj.put("login", valores[5]);
-                obj.put("name", valores[1]);
-                obj.put("papellid", valores[2]);
-                obj.put("sapellid", valores[3]);
-                obj.put("email", valores[4]);
+                obj.put("@uri", "javascript:parent.addNewTab('" + lista[start] + "',null,'" + usr.getUsrLogin() + "')");
+                obj.put("login", usr.getUsrLogin());
+                obj.put("name", usr.getUsrFirstName());
+                obj.put("papellid", usr.getUsrLastName());
+                obj.put("sapellid", usr.getUsrSecondLastName());
+                obj.put("email", usr.getUsrEmail());
                 jarr.put(obj);
             } catch (JSONException jsone)
             {
