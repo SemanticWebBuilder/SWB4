@@ -59,7 +59,7 @@ public class UserRepository extends UserRepositoryBase
 
     public Iterator<String> searchUsersBy(String usrFirstName, String usrLastName, String usrSecondLastName, String usrEmail, String Role, String Group, String Active)
     {
-        System.out.println("Grp: "+Group);
+        //System.out.println("Grp: "+Group);
 
         Iterator<String> ret = null;
         //Model model = SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
@@ -94,8 +94,9 @@ public class UserRepository extends UserRepositoryBase
         //"SELECT ?title ?class WHERE {?x swb:title ?title. ?x rdf:type swb:WebPage}"
 
         String queryString = prolog + NL +
-                "SELECT \n?x ?fname ?lname ?slname ?mail ?login \nWHERE { \n?x rdf:type swb:User. \n";
-        queryString += "?x swb:usrLogin ?login. \n";
+                "SELECT \n?x \nWHERE { \n?x rdf:type swb:User. \n";
+//                        "SELECT \n?x ?fname ?lname ?slname ?mail ?login \nWHERE { \n?x rdf:type swb:User. \n";
+//        queryString += "?x swb:usrLogin ?login. \n";
         if (null!=_Role)     queryString +=   "?x swb:hasRole <"+_Role+">.\n" ;
         if (null!=_Group)     queryString +=   "?x swb:userGroup <"+_Group+">.\n" ;
         if (null!=Active) queryString+= "?x swb:active "+Active+"\n";
@@ -103,21 +104,22 @@ public class UserRepository extends UserRepositoryBase
         if (!"".equals(_usrLastName))     queryString +=   "?x swb:usrLastName ?gln.   FILTER regex(?gln, \""+_usrLastName+"\", \"i\"). \n" ;
         if (!"".equals(_usrSecondLastName))     queryString +=   "?x swb:usrSecondLastName ?gsln.   FILTER regex(?gsln, \""+_usrSecondLastName+"\", \"i\"). \n" ;
         if (!"".equals(_usrEmail))     queryString +=   "?x swb:usrEmail ?gml.   FILTER regex(?gml, \""+_usrEmail+"\", \"i\"). \n" ;
-             queryString +=  "OPTIONAL{\n ?x swb:usrFirstName ?fname. \n}\n" +
-                     "OPTIONAL{\n  ?x swb:usrLastName ?lname. \n}\n" +
+             queryString += 
+//                     "OPTIONAL{\n ?x swb:usrFirstName ?fname. \n}\n" +
+//                     "OPTIONAL{\n  ?x swb:usrLastName ?lname. \n}\n" +
                
-                "OPTIONAL{\n?x swb:usrSecondLastName ?slname. \n}\n" +
-                "OPTIONAL{\n?x swb:usrEmail ?mail. \n}\n" +
+//                "OPTIONAL{\n?x swb:usrSecondLastName ?slname. \n}\n" +
+//                "OPTIONAL{\n?x swb:usrEmail ?mail. \n}\n" +
                 
                 "}";
 
-                System.out.println(queryString);
+            //    System.out.println(queryString);
         Query query = QueryFactory.create(queryString);
 
-        System.out.println(getId());
+       // System.out.println(getId());
         // Print with line numbers
-        query.serialize(new IndentedWriter(System.out,true)) ;
-        System.out.println() ;
+       // query.serialize(new IndentedWriter(System.out,true)) ;
+       // System.out.println() ;
 
         QueryExecution qexec = QueryExecutionFactory.create(query, model);
         try
@@ -127,12 +129,13 @@ public class UserRepository extends UserRepositoryBase
             for (; rs.hasNext();)
             {
                 QuerySolution rb = rs.nextSolution();
-                String current = rb.get("x") + "||" +
+                String current = rb.get("x").toString();
+                        /*+ "||" +
                         (null==rb.get("fname")?"":rb.get("fname")) + "||" +
                         (null==rb.get("lname")?"":rb.get("lname")) + "||" +
                         (null==rb.get("slname")?"":rb.get("slname")) + "||" +
                         (null==rb.get("mail")?"":rb.get("mail")) + "||" +
-                        (null==rb.get("login")?"":rb.get("login"));
+                        (null==rb.get("login")?"":rb.get("login"));*/
                 lista.add(current);
 
             }
