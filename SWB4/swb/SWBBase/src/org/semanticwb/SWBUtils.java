@@ -71,7 +71,7 @@ import org.semanticwb.base.util.SWBMailSender;
 import org.semanticwb.base.util.SWBMail;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import sun.misc.BASE64Encoder;
+//import sun.misc.BASE64Encoder;
 
 /**
  *
@@ -2095,7 +2095,8 @@ public class SWBUtils {
                 return toEncode;
             }
             MessageDigest messageDigest = MessageDigest.getInstance("SHA-512");
-            return "{SHA-512}" + new BASE64Encoder().encode(messageDigest.digest(toEncode.getBytes()));
+            //return "{SHA-512}" + new BASE64Encoder().encode(messageDigest.digest(toEncode.getBytes()));
+            return "{SHA-512}" + SFBase64.encodeString(new String(messageDigest.digest(toEncode.getBytes())), false);
         }
 
         public static String comparablePassword(String toEncode) throws NoSuchAlgorithmException {
@@ -2104,7 +2105,8 @@ public class SWBUtils {
 
         public static String comparablePassword(String toEncode, String digestAlgorithm) throws NoSuchAlgorithmException {
             MessageDigest messageDigest = MessageDigest.getInstance(digestAlgorithm);
-            return "{" + digestAlgorithm + "}" + new BASE64Encoder().encode(messageDigest.digest(toEncode.getBytes()));
+            //return "{SHA-512}" + new BASE64Encoder().encode(messageDigest.digest(toEncode.getBytes()));
+            return "{SHA-512}" + SFBase64.encodeString(new String(messageDigest.digest(toEncode.getBytes())), false);
         }
 
         public static byte[] PBEAES128Cipher(String passPhrese, byte[] data) throws GeneralSecurityException {
