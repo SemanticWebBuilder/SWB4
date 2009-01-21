@@ -22,4 +22,6 @@ public interface FormElement extends GenericObject
     public void validate(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) throws FormValidateException;
 
     public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang);
+
+    public void setAttribute(String name, String value);
 }

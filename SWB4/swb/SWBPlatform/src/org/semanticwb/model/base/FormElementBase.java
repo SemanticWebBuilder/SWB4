@@ -5,6 +5,10 @@
 
 package org.semanticwb.model.base;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
+import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.FormElement;
@@ -20,9 +24,12 @@ import org.semanticwb.platform.SemanticProperty;
  */
 public class FormElementBase extends GenericObjectBase implements FormElement, GenericObject
 {
+    protected HashMap attributes=null;
+
     public FormElementBase(SemanticObject obj)
     {
         super(obj);
+        attributes=new HashMap();
     }
 
     public void validate(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) throws FormValidateException 
@@ -106,6 +113,23 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
 
     public String renderElement(SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void setAttribute(String name, String value) {
+        attributes.put(name, value);
+    }
+
+    public String getAttributes()
+    {
+        StringBuffer ret=new StringBuffer();
+        Iterator<Entry<String,String>> it=attributes.entrySet().iterator();
+        while(it.hasNext())
+        {
+            Entry entry=it.next();
+            ret.append(entry.getKey()+"="+"\""+entry.getValue()+"\"");
+            if(it.hasNext())ret.append(" ");
+        }
+        return ret.toString();
     }
 
 }
