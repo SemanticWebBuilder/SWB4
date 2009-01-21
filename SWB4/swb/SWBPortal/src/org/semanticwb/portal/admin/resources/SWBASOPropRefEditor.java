@@ -90,6 +90,7 @@ public class SWBASOPropRefEditor extends GenericResource {
             //lista de instancias de tipo propiedad existentes para selecionar
             SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(idp);
             SemanticClass clsprop = prop.getRangeClass();
+
             log.debug("CLASE: " + clsprop.getClassName());
             HashMap hmprop = new HashMap();
             Iterator<SemanticProperty> ite_sp = clsprop.listProperties();
@@ -116,6 +117,7 @@ public class SWBASOPropRefEditor extends GenericResource {
             out.println("<div class=\"swbform\">");
             out.println("<fieldset>");
             inheritHeader.append("<fieldset>");
+            inheritHeader.append("<legend>Heredados</legend>");
             out.println("<table width=\"98%\">");
             inheritHeader.append("<table width=\"98%\">");
             out.println("<thead>");
@@ -123,14 +125,14 @@ public class SWBASOPropRefEditor extends GenericResource {
             out.println("<tr>");
             inheritHeader.append("<tr>");
             out.println("<th>");
-           // numcols++;
+            // numcols++;
             out.println("Action");
             out.println("</th>");
 
             out.println("<th>");
             inheritHeader.append("<th>");
             numcols++;
-            out.println("Name");
+            out.println(sclassref.getDisplayNameProperty().getDisplayName(user.getLanguage()));
             inheritHeader.append("Name");
             out.println("</th>");
             inheritHeader.append("</th>");
@@ -501,24 +503,17 @@ public class SWBASOPropRefEditor extends GenericResource {
                 }
                 out.println("</tr>");
             }
-
-            
-
             out.println("</tbody>");
-            out.println("<tfoot>");
-            out.println("<tr>");
-            out.println("<td colspan=\"4\">");
+            out.println("</table>");
+            out.println("</fieldset>");
+            out.println("<fieldset>");
             SWBResourceURL urlNew = paramRequest.getRenderUrl();
             urlNew.setParameter("suri", id);
             urlNew.setParameter("sprop", idp);
             urlNew.setParameter("spropref", idpref);
             urlNew.setParameter("act", "choose");
-            out.println("<p><a href=\"#\" onclick=\"submitUrl('" + urlNew + "',this); return false;\">Add New</a>");
-            out.println("</p>");
-            out.println("</td>");
-            out.println("</tr>");
-            out.println("</tfoot>");
-            out.println("</table>");
+            out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlNew + "',this.domNode); return false;\">Add New</button>");
+            //out.println("<a href=\"#\" onclick=\"submitUrl('" + urlNew + "',this); return false;\">Add New</a>");
             out.println("</fieldset>");
 
 
@@ -537,7 +532,6 @@ public class SWBASOPropRefEditor extends GenericResource {
 
                 if (itso.hasNext()) {
                     out.println(inheritHeader.toString());
-                    out.println("<tr><th colspan=\"" + numcols + "\">Heredados</th></tr>");
                     while (itso.hasNext()) {
                         SemanticObject sobj = itso.next();
                         SemanticClass clsobj = sobj.getSemanticClass();
@@ -697,21 +691,12 @@ public class SWBASOPropRefEditor extends GenericResource {
                             }
                             out.println("</td>");
                         }
-//                        if (hmprop.get(Activeable.swb_active) != null) {
-//                            out.println("<td align=\"center\">");
-//                            boolean activo = false;
-//                            if (sobj.getBooleanProperty(Activeable.swb_active)) {
-//                                activo = true;
-//                            }
-//                            out.println(activo ? "Activo" : "Inactivo");
-//                            out.println("</td>");
-//                        }
                         out.println("</tr>");
                     }
+                    out.println("</table>");
+                    out.println("</fieldset>");
                 }
             }
-            out.println("</table>");
-            out.println("</fieldset>");
             out.println("</div>");
 
         } else if (action.equals("choose")) //lista de instancias de tipo propiedad existentes para selecionar
