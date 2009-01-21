@@ -788,9 +788,16 @@ function include_dom(script_filename) {
     return false;
 }
 
+var oldreq="";
+var oldret=false;
 function canCreateSemanticObject(model, clsid, id)
 {
-    return getJSON(context+'/swbadmin/jsp/canCreate.jsp?id='+id+'&clsid='+clsid+'&model='+model);
+    if(oldreq!=(model+clsid+id))
+    {
+        oldret=getJSON(context+'/swbadmin/jsp/canCreate.jsp?id='+id+'&clsid='+clsid+'&model='+model);
+        oldreq=(model+clsid+id);
+    }
+    return oldret;
 }
 
 
