@@ -34,7 +34,9 @@ import org.semanticwb.openoffice.ui.dialogs.DialogContentInformation;
 import org.semanticwb.openoffice.ui.dialogs.DialogHistory;
 import org.semanticwb.openoffice.ui.dialogs.DialogSaveDocument;
 import org.semanticwb.openoffice.ui.dialogs.DialogSummaryPublish;
+import org.semanticwb.openoffice.ui.wizard.PublishVersion;
 import org.semanticwb.openoffice.ui.wizard.SelectCategory;
+import org.semanticwb.openoffice.ui.wizard.SelectPage;
 import org.semanticwb.openoffice.ui.wizard.TitleAndDescription;
 import org.semanticwb.openoffice.util.ExcelFileFilter;
 import org.semanticwb.openoffice.util.PPTFileFilter;
@@ -57,7 +59,7 @@ public abstract class OfficeDocument
     // By default the content is not published
     private String contentID = null;
     private String workspaceID = null;
-    
+
 
     static
     {
@@ -178,7 +180,7 @@ public abstract class OfficeDocument
      * @throws org.semanticwb.openoffice.WBException If the list of properties are more that four
      */
     public abstract Map<String, String> getCustomProperties();
-    
+
     public abstract String getPublicationExtension();
 
     /**
@@ -304,10 +306,10 @@ public abstract class OfficeDocument
 
     public final void showDocumentInfo()
     {
-        Map<String,String> properties=this.getCustomProperties();
-        String contentId=properties.get(CONTENT_ID_NAME);
-        String rep=properties.get(WORKSPACE_ID_NAME);
-        DialogContentInformation dialog = new DialogContentInformation(new javax.swing.JFrame(), true,contentId,rep);
+        Map<String, String> properties = this.getCustomProperties();
+        String contentId = properties.get(CONTENT_ID_NAME);
+        String rep = properties.get(WORKSPACE_ID_NAME);
+        DialogContentInformation dialog = new DialogContentInformation(new javax.swing.JFrame(), true, contentId, rep);
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
     }
@@ -447,19 +449,19 @@ public abstract class OfficeDocument
      */
     public final boolean isPublicated()
     {
-        boolean isPublicated=false;
-        String id=this.getCustomProperties().get(OfficeDocument.CONTENT_ID_NAME);
-        String rep=this.getCustomProperties().get(OfficeDocument.WORKSPACE_ID_NAME);
-        if(id!=null && rep!=null && !rep.isEmpty() && !id.isEmpty())
+        boolean isPublicated = false;
+        String id = this.getCustomProperties().get(OfficeDocument.CONTENT_ID_NAME);
+        String rep = this.getCustomProperties().get(OfficeDocument.WORKSPACE_ID_NAME);
+        if (id != null && rep != null && !rep.isEmpty() && !id.isEmpty())
         {
-            this.contentID=id;
-            this.workspaceID=rep;
+            this.contentID = id;
+            this.workspaceID = rep;
             isPublicated = true;
         }
         else
         {
             isPublicated = false;
-        }        
+        }
         return isPublicated;
     }
 
@@ -490,6 +492,22 @@ public abstract class OfficeDocument
     }
 
     public final void publish()
+    {
+        if (isPublicated())
+        {
+            contentID = this.getCustomProperties().get(CONTENT_ID_NAME);
+            String repositoryName = this.getCustomProperties().get(WORKSPACE_ID_NAME);
+            PublishContentToWebPageResultProducer resultProducer = new PublishContentToWebPageResultProducer(contentID, repositoryName);
+            WizardPage[] clazz = new WizardPage[]
+            {
+                new SelectPage(), new PublishVersion(contentID, repositoryName)
+            };
+            Wizard wiz = WizardPage.createWizard("Asistente de publicación de contenido en página web", clazz, resultProducer);
+            wiz.show();
+        }
+    }
+
+    public final void saveToSite()
     {
         if (isReadOnly())
         {
