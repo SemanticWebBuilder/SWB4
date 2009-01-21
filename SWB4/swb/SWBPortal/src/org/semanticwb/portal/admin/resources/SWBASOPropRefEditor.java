@@ -133,7 +133,7 @@ public class SWBASOPropRefEditor extends GenericResource {
             inheritHeader.append("<th>");
             numcols++;
             out.println(sclassref.getDisplayNameProperty().getDisplayName(user.getLanguage()));
-            inheritHeader.append("Name");
+            inheritHeader.append(sclassref.getDisplayNameProperty().getDisplayName(user.getLanguage()));
             out.println("</th>");
             inheritHeader.append("</th>");
             if (hmprop.get(Template.swb_language) != null) {
