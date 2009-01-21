@@ -81,4 +81,16 @@
         <welcome-file>index.jsp
         </welcome-file>
     </welcome-file-list>
-</web-app>
+        <error-page>
+    <error-code>403</error-code>
+    <location>/login?err=403</location>
+  </error-page>
+  <error-page>
+    <error-code>404</error-code>
+    <location>/errorMessage?err=404</location>
+  </error-page>
+  <error-page>
+    <error-code>500</error-code>
+    <location>/errorMessage?err=500</location>
+  </error-page>
+    </web-app>

@@ -21,6 +21,7 @@ import org.semanticwb.model.User;
 import org.semanticwb.servlet.internal.Admin;
 import org.semanticwb.servlet.internal.Distributor;
 import org.semanticwb.servlet.internal.DistributorParams;
+import org.semanticwb.servlet.internal.ErrorMessage;
 import org.semanticwb.servlet.internal.GateWayOffice;
 import org.semanticwb.servlet.internal.InternalServlet;
 import org.semanticwb.servlet.internal.Login;
@@ -194,7 +195,13 @@ public class SWBVirtualHostFilter implements Filter
         InternalServlet gtwOffice=new GateWayOffice();
         intServlets.put("gtw", gtwOffice);        
         gtwOffice.init(filterConfig.getServletContext());
-        
+
+        InternalServlet errorMessage=new ErrorMessage();
+        intServlets.put("errorMessage", errorMessage);
+        errorMessage.init(filterConfig.getServletContext());
+
+
+
         
         //TODO:Admin servlet
         InternalServlet admin=new Admin();
