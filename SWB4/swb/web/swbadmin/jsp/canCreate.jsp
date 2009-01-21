@@ -8,7 +8,7 @@
     if(id==null || id.length()==0 || id.indexOf(' ')>-1 || clsid==null || model==null)
     {
         out.println("false");
-        System.out.println("false");
+        //System.out.println("false");
     }else
     {
         SemanticModel m=SWBPlatform.getSemanticMgr().getModel(model);
@@ -19,11 +19,11 @@
         if(obj!=null)
         {
             out.println("false");
-            System.out.println("false");
+            //System.out.println("false");
         }else
         {
             out.println("true");
-            System.out.println("true");
+            //System.out.println("true");
         }
     }
 %>

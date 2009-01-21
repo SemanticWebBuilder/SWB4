@@ -1930,6 +1930,12 @@
     <rdfs:domain rdf:resource="#User"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_usrPassword">
+        <swbxf:formElement>
+          <swbxf:PasswordUpdate rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#usrPassword">
+            <swb:passUpdVerify xml:lang="en">Verify Password</swb:passUpdVerify>
+            <swb:passUpdVerify xml:lang="es">Verificar Contraseña</swb:passUpdVerify>
+          </swbxf:PasswordUpdate>
+        </swbxf:formElement>
         <swbxf:propGroup rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#pg_Identity"/>
         <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
         >true</swb:required>
@@ -2093,14 +2099,14 @@
     <swb:title xml:lang="en">Edit</swb:title>
     <swb:title xml:lang="es">Editar</swb:title>
   </swbxf:ObjectAction>
-  <swbxf:PasswordUpdate rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#usrPassword">
-    <swb:passUpdVerify xml:lang="en">Verify Password</swb:passUpdVerify>
-    <swb:passUpdVerify xml:lang="es">Verificar Contraseña</swb:passUpdVerify>
-  </swbxf:PasswordUpdate>
   <swbxf:ObjectAction rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#act_Delete">
     <swb:title xml:lang="es">Crear</swb:title>
     <swb:title xml:lang="en">Create</swb:title>
   </swbxf:ObjectAction>
+  <swb:FormElement rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#RichText">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:FormElement>
   <swb:Permission rdf:ID="PermAdmin">
     <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Administrator</swb:title>
