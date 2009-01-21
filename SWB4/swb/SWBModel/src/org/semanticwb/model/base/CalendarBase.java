@@ -14,6 +14,11 @@ public class CalendarBase extends org.semanticwb.model.SWBClass implements org.s
     public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
     public static final org.semanticwb.platform.SemanticClass swb_Calendar=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Calendar");
 
+    public static org.semanticwb.model.Calendar createCalendar(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.Calendar)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, swb_Calendar), swb_Calendar);
+    }
+
     public CalendarBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);

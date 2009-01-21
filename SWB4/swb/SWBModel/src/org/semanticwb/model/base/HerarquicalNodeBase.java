@@ -80,9 +80,9 @@ public class HerarquicalNodeBase extends org.semanticwb.model.SWBClass implement
          return ret;
     }
 
-    public void setModel(org.semanticwb.platform.SemanticObject semanticobject)
+    public void setModel(org.semanticwb.model.SWBModel swbmodel)
     {
-        getSemanticObject().setObjectProperty(swbxf_heModel, semanticobject);
+        getSemanticObject().setObjectProperty(swbxf_heModel, swbmodel.getSemanticObject());
     }
 
     public void removeModel()
@@ -90,10 +90,14 @@ public class HerarquicalNodeBase extends org.semanticwb.model.SWBClass implement
         getSemanticObject().removeProperty(swbxf_heModel);
     }
 
-    public org.semanticwb.platform.SemanticObject getModel()
+    public org.semanticwb.model.SWBModel getModel()
     {
-         org.semanticwb.platform.SemanticObject ret=null;
-         ret=getSemanticObject().getObjectProperty(swbxf_heModel);
+         org.semanticwb.model.SWBModel ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swbxf_heModel);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.SWBModel)obj.getSemanticClass().newGenericInstance(obj);
+         }
          return ret;
     }
 
