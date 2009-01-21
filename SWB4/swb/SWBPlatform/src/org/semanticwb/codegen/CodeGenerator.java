@@ -223,7 +223,7 @@ public class CodeGenerator
             SemanticClass clazz = it.next();
             if (clazz.isSWBInterface())
             {
-                interfaces.append(getPackage(clazz)+"."+ getClassName(clazz) + ",");
+                interfaces.append(getPackage(clazz) + "." + getClassName(clazz) + ",");
             }
         }
         if (interfaces.length() > 0)
@@ -361,7 +361,7 @@ public class CodeGenerator
                 javaClassContent.append("        SemanticModel model=mgr.getModel(name);" + ENTER);
                 javaClassContent.append("        if(model!=null)" + ENTER);
                 javaClassContent.append("        {" + ENTER);
-                javaClassContent.append("            org.semanticwb.platform.SemanticObject obj=model.getSemanticObject(model.getObjectUri(name,"+ tpc.getPrefix() + "_" + className +"));" + ENTER);
+                javaClassContent.append("            org.semanticwb.platform.SemanticObject obj=model.getSemanticObject(model.getObjectUri(name," + tpc.getPrefix() + "_" + className + "));" + ENTER);
                 javaClassContent.append("            if(obj!=null)" + ENTER);
                 javaClassContent.append("            {" + ENTER);
                 javaClassContent.append("                ret=(" + getPackage(tpc) + "." + className + ")new " + className + "(obj);" + ENTER);
@@ -384,7 +384,7 @@ public class CodeGenerator
                 javaClassContent.append("    public static " + className + " create" + className + "(String name, String namespace)" + ENTER);
                 javaClassContent.append("    {" + ENTER);
                 javaClassContent.append("        SemanticModel model=mgr.createModel(name, namespace);" + ENTER);
-                javaClassContent.append("        return (" + className + ")model.createGenericObject(model.getObjectUri(name, "+ tpc.getPrefix() + "_" + className +"), " + tpc.getPrefix() + "_" + className + ");" + ENTER);
+                javaClassContent.append("        return (" + className + ")model.createGenericObject(model.getObjectUri(name, " + tpc.getPrefix() + "_" + className + "), " + tpc.getPrefix() + "_" + className + ");" + ENTER);
                 javaClassContent.append("    }" + ENTER);
             }
         }
@@ -408,7 +408,7 @@ public class CodeGenerator
             parent = it.next();
             if (parent.isSWBClass() || parent.isSWBModel() || parent.isSWBFormElement())
             {
-                exts = getPackage(parent)+"."+getClassName(parent);
+                exts = getPackage(parent) + "." + getClassName(parent);
                 break;
             }
             else
@@ -503,6 +503,14 @@ public class CodeGenerator
             javaClassContent.append("    public static final org.semanticwb.platform.SemanticClass " + tpc.getPrefix() + "_" + getClassName(tpc) + "=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(\"" + tpc.getURI() + "\");" + ENTER);
             staticClasses.add(tpc);
         }
+
+        javaClassContent.append(ENTER);
+        javaClassContent.append(ENTER);
+        javaClassContent.append("    public static " + getPackage(tpc) + "." + getClassName(tpc) + " create" + getClassName(tpc) + "(String id, org.semanticwb.model.SWBModel model)" + ENTER);
+        javaClassContent.append("    {" + ENTER);
+        javaClassContent.append("        return (" + getPackage(tpc) + "." + getClassName(tpc) + ")model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, " + tpc.getPrefix() + "_" + getClassName(tpc) + "), " + tpc.getPrefix() + "_" + getClassName(tpc) + ");" + ENTER);
+        javaClassContent.append("    }" + ENTER);
+
         javaClassContent.append(ENTER);
         javaClassContent.append(PUBLIC + className + "Base(org.semanticwb.platform.SemanticObject base)" + ENTER);
         javaClassContent.append(OPEN_BLOCK + ENTER);
@@ -652,12 +660,12 @@ public class CodeGenerator
                         objectName = objectName.substring(3);
                         javaClassContent.append(ENTER);
                         javaClassContent.append("    public org.semanticwb.model.GenericIterator<" + pack + "." + valueToReturn + "> list" + objectName + "s();" + ENTER);
-                        javaClassContent.append("    public boolean has" + objectName + "("+ pack + "." + valueToReturn +" "+valueToReturn.toLowerCase()+");" + ENTER);
-                        if(tpp.isInheritProperty())
+                        javaClassContent.append("    public boolean has" + objectName + "(" + pack + "." + valueToReturn + " " + valueToReturn.toLowerCase() + ");" + ENTER);
+                        if (tpp.isInheritProperty())
                         {
                             javaClassContent.append("    public org.semanticwb.model.GenericIterator<" + pack + "." + valueToReturn + "> listInherit" + objectName + "s();" + ENTER);
                         }
-                        
+
                         if (!tpp.hasInverse())
                         {
                             javaClassContent.append(ENTER);
@@ -931,14 +939,14 @@ public class CodeGenerator
 //                if (!tpp.hasInverse())
 //                {
 
-                    javaClassContent.append("        java.util.ArrayList<" + type + "> values=new java.util.ArrayList<" + type + ">();" + ENTER);
-                    javaClassContent.append("        java.util.Iterator<org.semanticwb.platform.SemanticLiteral> it=getSemanticObject().listLiteralProperties(" + tpp.getPrefix() + "_" + tpp.getName() + ");" + ENTER);
-                    javaClassContent.append("        while(it.hasNext())" + ENTER);
-                    javaClassContent.append("        {" + ENTER);
-                    javaClassContent.append("                org.semanticwb.platform.SemanticLiteral literal=it.next();" + ENTER);
-                    javaClassContent.append("                values.add(literal.getString());" + ENTER);
-                    javaClassContent.append("        }" + ENTER);
-                    javaClassContent.append("        return values.iterator();" + ENTER);
+                javaClassContent.append("        java.util.ArrayList<" + type + "> values=new java.util.ArrayList<" + type + ">();" + ENTER);
+                javaClassContent.append("        java.util.Iterator<org.semanticwb.platform.SemanticLiteral> it=getSemanticObject().listLiteralProperties(" + tpp.getPrefix() + "_" + tpp.getName() + ");" + ENTER);
+                javaClassContent.append("        while(it.hasNext())" + ENTER);
+                javaClassContent.append("        {" + ENTER);
+                javaClassContent.append("                org.semanticwb.platform.SemanticLiteral literal=it.next();" + ENTER);
+                javaClassContent.append("                values.add(literal.getString());" + ENTER);
+                javaClassContent.append("        }" + ENTER);
+                javaClassContent.append("        return values.iterator();" + ENTER);
 //                }
 //                else
 //                {
@@ -1191,12 +1199,12 @@ public class CodeGenerator
                 javaClassContent.append("        return new org.semanticwb.model.GenericIterator<" + getPackage(tpcToReturn) + "." + valueToReturn + ">(" + getPackage(tpcToReturn) + "." + valueToReturn + ".class, getSemanticObject().listObjectProperties(" + tpp.getPrefix() + "_" + tpp.getName() + "));");
                 javaClassContent.append(ENTER + CLOSE_BLOCK + ENTER);
                 javaClassContent.append(ENTER);
-                javaClassContent.append("    public boolean has" + objectName + "("+ getPackage(tpcToReturn) + "." + valueToReturn +" "+valueToReturn.toLowerCase()+")" + ENTER);
+                javaClassContent.append("    public boolean has" + objectName + "(" + getPackage(tpcToReturn) + "." + valueToReturn + " " + valueToReturn.toLowerCase() + ")" + ENTER);
                 javaClassContent.append(OPEN_BLOCK + ENTER);
-                javaClassContent.append("        if("+valueToReturn.toLowerCase()+"==null)return false;");
-                javaClassContent.append("        return getSemanticObject().hasObjectProperty(" + tpp.getPrefix() + "_" + tpp.getName() + ","+valueToReturn.toLowerCase()+".getSemanticObject());");
+                javaClassContent.append("        if(" + valueToReturn.toLowerCase() + "==null)return false;");
+                javaClassContent.append("        return getSemanticObject().hasObjectProperty(" + tpp.getPrefix() + "_" + tpp.getName() + "," + valueToReturn.toLowerCase() + ".getSemanticObject());");
                 javaClassContent.append(ENTER + CLOSE_BLOCK + ENTER);
-                if(tpp.isInheritProperty())
+                if (tpp.isInheritProperty())
                 {
                     javaClassContent.append(ENTER);
                     javaClassContent.append("    public org.semanticwb.model.GenericIterator<" + getPackage(tpcToReturn) + "." + valueToReturn + "> listInherit" + objectName + "s()" + ENTER);
@@ -1273,8 +1281,8 @@ public class CodeGenerator
                 javaClassContent.append(OPEN_BLOCK + ENTER);
 //                if (!tpp.hasInverse())
 //                {
-                    javaClassContent.append("        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getRDFResource().listProperties(" + tpp.getPrefix() + "_" + tpp.getName() + ".getRDFProperty());" + ENTER);
-                    javaClassContent.append("        return new org.semanticwb.platform.SemanticIterator<" + pack + "." + valueToReturn + ">(stit);" + ENTER);
+                javaClassContent.append("        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getRDFResource().listProperties(" + tpp.getPrefix() + "_" + tpp.getName() + ".getRDFProperty());" + ENTER);
+                javaClassContent.append("        return new org.semanticwb.platform.SemanticIterator<" + pack + "." + valueToReturn + ">(stit);" + ENTER);
 //                }
 //                else
 //                {
@@ -1320,9 +1328,9 @@ public class CodeGenerator
             }
 
             javaClassContent.append(ENTER);
-            javaClassContent.append(PUBLIC + pack+"."+valueToReturn + " get" + objectName + "()" + ENTER);
+            javaClassContent.append(PUBLIC + pack + "." + valueToReturn + " get" + objectName + "()" + ENTER);
             javaClassContent.append(OPEN_BLOCK + ENTER);
-            javaClassContent.append("         " + pack+"."+valueToReturn + " ret=null;" + ENTER);
+            javaClassContent.append("         " + pack + "." + valueToReturn + " ret=null;" + ENTER);
             javaClassContent.append("         ret=getSemanticObject().getObjectProperty(" + tpp.getPrefix() + "_" + tpp.getName() + ");" + ENTER);
             javaClassContent.append("         return ret;" + ENTER);
             javaClassContent.append(CLOSE_BLOCK + ENTER);
