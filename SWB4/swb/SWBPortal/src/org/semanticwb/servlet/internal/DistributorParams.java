@@ -15,6 +15,7 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.SFBase64;
 import org.semanticwb.model.Dns;
+import org.semanticwb.model.Language;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
@@ -288,7 +289,13 @@ public class DistributorParams
         {
             if(!user.getLanguage().equals(lang))
             {
-                user.setLanguage(site.getLanguage(lang).getId());
+                if(site.hasLanguage(lang))
+                {
+                    user.setLanguage(lang);
+                }else
+                {
+                    log.warn("Language not found:"+site.getId()+":"+lang);
+                }
             }
         }
         if (device!=null) 
