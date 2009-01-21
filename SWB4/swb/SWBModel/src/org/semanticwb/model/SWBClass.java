@@ -11,7 +11,7 @@ public class SWBClass extends org.semanticwb.model.base.SWBClassBase
     @Override
     public boolean isValid()
     {
-        boolean ret=true;;
+        boolean ret=true;
         if(this instanceof Activeable)
         {
             if(!((Activeable)this).isActive())ret=false;
