@@ -284,7 +284,7 @@ public class UserTest {
         }
     }
 
-    @Test
+    //@Test
     public void setAlist(){
         String [] al = new String[3];
         al[0] = "primaria:secundaria:preparatoria:universidad:maestria:doctorado";
@@ -292,6 +292,21 @@ public class UserTest {
         al[2] = "en|elementary:13-15grade:high:university:degree:doctordegre";
         SWBContext.getDefaultRepository().createListExtendedAttribute("escolaridad", al);
         SWBContext.getDefaultRepository().getUserByLogin("admin").setProperty("escolaridad", "universidad");
+    }
+
+    @Test
+    public void fixPasswords(){
+        Iterator<UserRepository> iur = SWBContext.listUserRepositorys();
+        while(iur.hasNext()){
+            UserRepository ur = iur.next();
+            Iterator<User> itus = ur.listUsers();
+            while (itus.hasNext()){
+                User user = itus.next();
+                if (null==user.getUsrLogin()) user.remove();
+                else
+                user.setUsrPassword(user.getUsrLogin());
+            }
+        }
     }
 
     //@Test
