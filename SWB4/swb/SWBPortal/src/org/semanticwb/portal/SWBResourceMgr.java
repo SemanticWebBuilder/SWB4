@@ -150,6 +150,7 @@ public class SWBResourceMgr
      * @return  */
     public Iterator getResources(PortletType type, PortletSubType stype, User user, WebPage topic, HashMap params, Template tpl)
     {
+        Date today = new Date();
         TreeSet ret = new TreeSet(new SWBPriorityComparator());
         
         log.debug("getResource:");
@@ -168,16 +169,14 @@ public class SWBResourceMgr
             while(it.hasNext())
             {
                 Portlet base=it.next();
-                if(user.haveAccess(base))
+                int camp=0;
+                if(checkResource(base, user, stype, camp, today, topic))
                 {
-                    //if (checkResource(base, user, stype, stypemap, camp, today, topic))
+                    SWBResource wbr=getResource(base.getWebSiteId(),base.getId());
+                    //System.out.println("checkResource ok:"+wbr.getResourceBase().getId());
+                    if(wbr!=null)
                     {
-                        SWBResource wbr=getResource(base.getWebSiteId(),base.getId());
-                        //System.out.println("checkResource ok:"+wbr.getResourceBase().getId());
-                        if(wbr!=null)
-                        {
-                            ret.add(wbr);
-                        }
+                        ret.add(wbr);
                     }
                 }
             }
@@ -313,52 +312,51 @@ public class SWBResourceMgr
         return ret.iterator();
     }
 
-//    /**
-//     * @param base
-//     * @param user
-//     * @param stype
-//     * @param camp
-//     * @param today
-//     * @param topic
-//     * @return  */
-//    public boolean checkResource(Resource base, WBUser user, int stype,String stypemap, int camp, Date today, com.infotec.topicmaps.Topic topic)
-//    {
-//        //System.out.println("checkResource:"+base.getId()+" tmid:"+base.getTopicMapId()+" stype:"+stype+" stypemap:"+stypemap+" camp:"+camp+" topic:"+topic.getDisplayName());
+    /**
+     * @param base
+     * @param user
+     * @param stype
+     * @param camp
+     * @param today
+     * @param topic
+     * @return  */
+    public boolean checkResource(Portlet base, User user, PortletSubType stype, int camp, Date today, WebPage topic)
+    {
+        boolean passrules = true;
+        //System.out.println("checkResource:"+base.getId()+" tmid:"+base.getTopicMapId()+" stype:"+stype+" stypemap:"+stypemap+" camp:"+camp+" topic:"+topic.getDisplayName());
 //        RuleMgr ruleMgr = RuleMgr.getInstance();
-//        if(stypemap==null)stypemap=base.getTopicMapId();
-//        boolean passrules = true;
-//        
-//        //System.out.println(""+base.getActive()+" == 1 && "+base.getDeleted()+" == 0");
-//        //System.out.println("&& (("+base.getSubType()+" == "+stype+" && ("+base.getSubType()+"==0 ||"+base.getSubTypeMap()+".equals("+stypemap+"))))");
-//        //System.out.println("&& ("+camp+" < 3 || "+base.getCamp()+" == "+camp+")");
-//        //System.out.println("&& ("+base.getMaxViews()+" == -1 || "+base.getMaxViews()+" > "+base.getViews()+")");
-//        //System.out.println("&& ("+base.getCamp()+" == 0 || "+DBCatalogs.getInstance().getCamp(base.getTopicMapId(),base.getCamp()).getActive()+" == 1)");
-//        
-//        if (base.getActive() == 1 && base.getDeleted() == 0
-//                //&& (stype == 0 || (base.getSubType() == stype && base.getSubTypeMap().equals(stypemap)))
-//                && ((base.getSubType() == stype && (base.getSubType()==0 ||base.getSubTypeMap().equals(stypemap))))
-//                && (camp < 3 || base.getCamp() == camp)
-//                && (base.getMaxViews() == -1 || base.getMaxViews() > base.getViews())
-//                && (base.getCamp() == 0 || DBCatalogs.getInstance().getCamp(base.getTopicMapId(),base.getCamp()).getActive() == 1)
-//        )
-//        {
-//
-//            if (!base.evalFilterMap(topic)) return false;
-//
-//            passrules=base.haveAccess(user);
-//            
-//            if (passrules == true && !intereval.eval(today, base)) passrules = false;
-//            //System.out.println("passrules:"+passrules);
-//            if (passrules)
-//            {
-//                base.refreshRandPriority();
-//                //System.out.println("priority:"+base.getRandPriority());
-//            }
-//        } else
-//            passrules = false;
-//        //System.out.println("checkResource:"+passrules);
-//        return passrules;
-//    }    
+        
+        //System.out.println(""+base.getActive()+" == 1 && "+base.getDeleted()+" == 0");
+        //System.out.println("&& (("+base.getSubType()+" == "+stype+" && ("+base.getSubType()+"==0 ||"+base.getSubTypeMap()+".equals("+stypemap+"))))");
+        //System.out.println("&& ("+camp+" < 3 || "+base.getCamp()+" == "+camp+")");
+        //System.out.println("&& ("+base.getMaxViews()+" == -1 || "+base.getMaxViews()+" > "+base.getViews()+")");
+        //System.out.println("&& ("+base.getCamp()+" == 0 || "+DBCatalogs.getInstance().getCamp(base.getTopicMapId(),base.getCamp()).getActive()+" == 1)");
+        
+        if (base.isActive() && !base.isDeleted()
+                && base.getPortletSubType() == stype
+                //&& (camp < 3 || base.getCamp() == camp)
+                //&& (base.getMaxViews() == -1 || base.getMaxViews() > base.getViews())
+                //&& (base.getCamp() == 0 || DBCatalogs.getInstance().getCamp(base.getTopicMapId(),base.getCamp()).getActive() == 1)
+        )
+        {
+            //TODO:Filter
+            //if (!base.evalFilterMap(topic)) return false;
+
+            passrules=user.haveAccess(topic);
+
+            //TODO:calendar
+            //if (passrules == true && !intereval.eval(today, base)) passrules = false;
+            //System.out.println("passrules:"+passrules);
+            if (passrules)
+            {
+                base.refreshRandPriority();
+                //System.out.println("priority:"+base.getRandPriority());
+            }
+        } else
+            passrules = false;
+        //System.out.println("checkResource:"+passrules);
+        return passrules;
+    }    
     
     
 //    /** Valida carga de Recursos de versiones anteriore
