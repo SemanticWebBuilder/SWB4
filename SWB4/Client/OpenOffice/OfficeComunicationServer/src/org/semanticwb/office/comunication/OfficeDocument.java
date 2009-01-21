@@ -648,17 +648,17 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             PortletType portletType=null;
             if (type.equals("EXCEL"))
             {
-                portlet = new ExcelPortlet(site.getSemanticObject().getModel().createSemanticObject(id, ExcelPortlet.swbrep_ExcelPortlet));
+                portlet = ExcelPortlet.createOfficePortlet(id, site);
                 portletType= site.getPortletType(EXCEL_PORTLET_TYPE);
             }
             else if (type.equals("PPT"))
             {
-                portlet = new PPTPortlet(site.getSemanticObject().getModel().createSemanticObject(id, PPTPortlet.swbrep_PPTPortlet));
+                portlet = PPTPortlet.createOfficePortlet(id, site);
                 portletType= site.getPortletType(PPT_PORTLET_TYPE);
             }
             else
             {
-                portlet = new WordPortlet(site.getSemanticObject().getModel().createSemanticObject(id, WordPortlet.swbrep_WordPortlet));
+                portlet = WordPortlet.createWordPortlet(id, site);
                 portletType= site.getPortletType(WORD_PORTLET_TYPE);
             }
             portlet.setContent(contentId);
