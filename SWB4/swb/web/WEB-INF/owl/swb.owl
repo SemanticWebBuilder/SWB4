@@ -426,10 +426,6 @@
     <swb:classID rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >webpage</swb:classID>
   </owl:Class>
-  <owl:Class rdf:ID="SWBModel">
-    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >org.semanticwb.model.SWBModel</swb:className>
-  </owl:Class>
   <owl:Class rdf:about="#Deleteable">
     <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.model.Deleteable</swb:className>
@@ -585,7 +581,13 @@
         </swb:hasHerarquicalNode>
         <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >org.semanticwb.model.UserRepository</swb:className>
-        <rdfs:subClassOf rdf:resource="#SWBModel"/>
+        <rdfs:subClassOf>
+          <swb:Class rdf:ID="SWBModel">
+            <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >org.semanticwb.model.SWBModel</swb:className>
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+          </swb:Class>
+        </rdfs:subClassOf>
         <swb:hasClass rdf:resource="#Role"/>
         <swb:hasClass rdf:resource="#UserGroup"/>
         <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
