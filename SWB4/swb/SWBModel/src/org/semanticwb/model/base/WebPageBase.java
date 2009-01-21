@@ -7,7 +7,6 @@ public class WebPageBase extends org.semanticwb.model.SWBClass implements org.se
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
     public static final org.semanticwb.platform.SemanticProperty swb_modifiedBy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy");
     public static final org.semanticwb.platform.SemanticProperty swb_title=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#title");
-    public static final org.semanticwb.platform.SemanticProperty swb_hits=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hits");
     public static final org.semanticwb.platform.SemanticProperty swb_updated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#updated");
     public static final org.semanticwb.platform.SemanticClass swb_Calendar=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Calendar");
     public static final org.semanticwb.platform.SemanticProperty swb_hasCalendar=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasCalendar");
@@ -37,6 +36,7 @@ public class WebPageBase extends org.semanticwb.model.SWBClass implements org.se
     public static final org.semanticwb.platform.SemanticProperty swb_hasWebPageChild=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild");
     public static final org.semanticwb.platform.SemanticProperty swb_webPageParent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#webPageParent");
     public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
+    public static final org.semanticwb.platform.SemanticProperty swb_maxViews=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#maxViews");
 
     public WebPageBase(org.semanticwb.platform.SemanticObject base)
     {
@@ -97,16 +97,6 @@ public class WebPageBase extends org.semanticwb.model.SWBClass implements org.se
     public void setTitle(String title, String lang)
     {
         getSemanticObject().setProperty(swb_title, title, lang);
-    }
-
-    public int getHits()
-    {
-        return getSemanticObject().getIntProperty(swb_hits);
-    }
-
-    public void setHits(int hits)
-    {
-        getSemanticObject().setLongProperty(swb_hits, hits);
     }
 
     public java.util.Date getUpdated()
@@ -325,12 +315,12 @@ public class WebPageBase extends org.semanticwb.model.SWBClass implements org.se
          return ret;
     }
 
-    public int getViews()
+    public long getViews()
     {
-        return getSemanticObject().getIntProperty(swb_views);
+        return getSemanticObject().getLongProperty(swb_views);
     }
 
-    public void setViews(int views)
+    public void setViews(long views)
     {
         getSemanticObject().setLongProperty(swb_views, views);
     }
@@ -590,6 +580,16 @@ public class WebPageBase extends org.semanticwb.model.SWBClass implements org.se
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(swb_description, description, lang);
+    }
+
+    public long getMaxViews()
+    {
+        return getSemanticObject().getLongProperty(swb_maxViews);
+    }
+
+    public void setMaxViews(long maxViews)
+    {
+        getSemanticObject().setLongProperty(swb_maxViews, maxViews);
     }
 
     public org.semanticwb.model.WebSite getWebSite()

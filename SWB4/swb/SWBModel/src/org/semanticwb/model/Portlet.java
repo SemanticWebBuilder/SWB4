@@ -44,15 +44,16 @@ public class Portlet extends PortletBase
         return ret;
     }
     
-//    public void refreshRandPriority()
-//    {
+    public void refreshRandPriority()
+    {
+        //TODO:
 //        if (this.getCamp() == 1)
 //            randpriority = SWBPriorityCalculator.getInstance().calcPriority(0);
 //        else if (this.getCamp() == 2)
 //            randpriority = WBUtils.getInstance().calcPriority(6);
 //        else
 //            randpriority = WBUtils.getInstance().calcPriority(recResource.getPriority());
-//    }   
+    }   
     
     public void setRandPriority(int randpriority)
     {
@@ -276,4 +277,5 @@ public class Portlet extends PortletBase
     {
         setProperty("data/wp/"+page.getWebSiteId()+"/"+page.getId(),data);
     }
+
 }
