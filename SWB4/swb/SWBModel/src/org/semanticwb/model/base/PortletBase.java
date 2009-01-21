@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class PortletBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Versionable,org.semanticwb.model.Indexable,org.semanticwb.model.XMLable,org.semanticwb.model.XMLConfable,org.semanticwb.model.Editable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Viewable,org.semanticwb.model.Calendarable,org.semanticwb.model.Activeable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Traceable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Priorityable,org.semanticwb.model.Deleteable,org.semanticwb.model.Localeable
+public class PortletBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Versionable,org.semanticwb.model.Indexable,org.semanticwb.model.XMLable,org.semanticwb.model.XMLConfable,org.semanticwb.model.Editable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Viewable,org.semanticwb.model.Calendarable,org.semanticwb.model.Activeable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Traceable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Hitable,org.semanticwb.model.Priorityable,org.semanticwb.model.Deleteable,org.semanticwb.model.Localeable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
@@ -11,6 +11,7 @@ public class PortletBase extends org.semanticwb.model.SWBClass implements org.se
     public static final org.semanticwb.platform.SemanticProperty swb_title=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#title");
     public static final org.semanticwb.platform.SemanticClass swb_VersionInfo=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#VersionInfo");
     public static final org.semanticwb.platform.SemanticProperty swb_actualVersion=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#actualVersion");
+    public static final org.semanticwb.platform.SemanticProperty swb_maxHits=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#maxHits");
     public static final org.semanticwb.platform.SemanticClass swb_PortletRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PortletRef");
     public static final org.semanticwb.platform.SemanticProperty swb_hasPortletRefInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasPortletRefInv");
     public static final org.semanticwb.platform.SemanticProperty swb_xml=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#xml");
@@ -36,6 +37,7 @@ public class PortletBase extends org.semanticwb.model.SWBClass implements org.se
     public static final org.semanticwb.platform.SemanticClass swb_PortletSubType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PortletSubType");
     public static final org.semanticwb.platform.SemanticProperty swb_portletSubType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#portletSubType");
     public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
+    public static final org.semanticwb.platform.SemanticProperty swb_maxViews=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#maxViews");
     public static final org.semanticwb.platform.SemanticClass swb_PortletType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PortletType");
     public static final org.semanticwb.platform.SemanticProperty swb_portletType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#portletType");
     public static final org.semanticwb.platform.SemanticClass swb_Portlet=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Portlet");
@@ -143,6 +145,16 @@ public class PortletBase extends org.semanticwb.model.SWBClass implements org.se
          return ret;
     }
 
+    public long getMaxHits()
+    {
+        return getSemanticObject().getLongProperty(swb_maxHits);
+    }
+
+    public void setMaxHits(long maxHits)
+    {
+        getSemanticObject().setLongProperty(swb_maxHits, maxHits);
+    }
+
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.PortletRef> listPortletRefInvs()
     {
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PortletRef>(org.semanticwb.model.PortletRef.class, getSemanticObject().listObjectProperties(swb_hasPortletRefInv));
@@ -174,12 +186,12 @@ public class PortletBase extends org.semanticwb.model.SWBClass implements org.se
         getSemanticObject().setProperty(swb_xml, xml);
     }
 
-    public int getHits()
+    public long getHits()
     {
-        return getSemanticObject().getIntProperty(swb_hits);
+        return getSemanticObject().getLongProperty(swb_hits);
     }
 
-    public void setHits(int hits)
+    public void setHits(long hits)
     {
         getSemanticObject().setLongProperty(swb_hits, hits);
     }
@@ -352,12 +364,12 @@ public class PortletBase extends org.semanticwb.model.SWBClass implements org.se
         getSemanticObject().setBooleanProperty(swb_deleted, deleted);
     }
 
-    public int getViews()
+    public long getViews()
     {
-        return getSemanticObject().getIntProperty(swb_views);
+        return getSemanticObject().getLongProperty(swb_views);
     }
 
-    public void setViews(int views)
+    public void setViews(long views)
     {
         getSemanticObject().setLongProperty(swb_views, views);
     }
@@ -489,6 +501,16 @@ public class PortletBase extends org.semanticwb.model.SWBClass implements org.se
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(swb_description, description, lang);
+    }
+
+    public long getMaxViews()
+    {
+        return getSemanticObject().getLongProperty(swb_maxViews);
+    }
+
+    public void setMaxViews(long maxViews)
+    {
+        getSemanticObject().setLongProperty(swb_maxViews, maxViews);
     }
 
     public void setPortletType(org.semanticwb.model.PortletType portlettype)
