@@ -797,7 +797,7 @@ function canCreateSemanticObject(model, clsid, id)
    //EditArea
    include("editarea/edit_area/edit_area_full.js");
 
-   function validateChk(name)
+   function validateChk(name,msg)
    {
       var field = document.getElementsByName(name);
       var ok=false;
@@ -814,7 +814,7 @@ function canCreateSemanticObject(model, clsid, id)
        }
        else
            {
-               alert('Debes de seleccionar por lo menos uno de la lista.')
+               alert(msg);
                return false;
            }
    }
