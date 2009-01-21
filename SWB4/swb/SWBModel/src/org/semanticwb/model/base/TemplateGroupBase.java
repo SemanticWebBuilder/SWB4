@@ -14,6 +14,12 @@ public class TemplateGroupBase extends org.semanticwb.model.SWBClass implements 
     public static final org.semanticwb.platform.SemanticProperty swb_hasGroupedTemplate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasGroupedTemplate");
     public static final org.semanticwb.platform.SemanticClass swb_TemplateGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#TemplateGroup");
 
+
+    public static org.semanticwb.model.TemplateGroup createTemplateGroup(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.TemplateGroup)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, swb_TemplateGroup), swb_TemplateGroup);
+    }
+
     public TemplateGroupBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);

@@ -10,6 +10,12 @@ public class ResourceBase extends org.semanticwb.repository.BaseNode implements 
     public static final org.semanticwb.platform.SemanticProperty jcr_data=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#data");
     public static final org.semanticwb.platform.SemanticClass nt_Resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#resource");
 
+
+    public static org.semanticwb.repository.Resource createResource(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.repository.Resource)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, nt_Resource), nt_Resource);
+    }
+
     public ResourceBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);

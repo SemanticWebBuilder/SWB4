@@ -15,6 +15,12 @@ public class UserRepositoryBase extends org.semanticwb.model.SWBModel implements
     public static final org.semanticwb.platform.SemanticClass swb_Role=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Role");
     public static final org.semanticwb.platform.SemanticClass swb_UserRepository=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserRepository");
 
+
+    public static org.semanticwb.model.UserRepository createUserRepository(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.UserRepository)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, swb_UserRepository), swb_UserRepository);
+    }
+
     public UserRepositoryBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);

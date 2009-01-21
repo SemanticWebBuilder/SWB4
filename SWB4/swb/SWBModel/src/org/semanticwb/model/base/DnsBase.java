@@ -15,6 +15,12 @@ public class DnsBase extends org.semanticwb.model.SWBClass implements org.semant
     public static final org.semanticwb.platform.SemanticProperty swb_dnsDefault=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#dnsDefault");
     public static final org.semanticwb.platform.SemanticClass swb_Dns=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Dns");
 
+
+    public static org.semanticwb.model.Dns createDns(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.Dns)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, swb_Dns), swb_Dns);
+    }
+
     public DnsBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);

@@ -38,6 +38,12 @@ public class WebPageBase extends org.semanticwb.model.SWBClass implements org.se
     public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
     public static final org.semanticwb.platform.SemanticProperty swb_maxViews=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#maxViews");
 
+
+    public static org.semanticwb.model.WebPage createWebPage(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.WebPage)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, swb_WebPage), swb_WebPage);
+    }
+
     public WebPageBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);

@@ -11,6 +11,12 @@ public class BaseNodeBase extends org.semanticwb.model.base.GenericObjectBase
     public static final org.semanticwb.platform.SemanticProperty swbrep_hasNodes=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/repository#hasNodes");
     public static final org.semanticwb.platform.SemanticProperty jcr_mixinTypes=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#mixinTypes");
 
+
+    public static org.semanticwb.repository.BaseNode createBaseNode(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.repository.BaseNode)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, nt_BaseNode), nt_BaseNode);
+    }
+
     public BaseNodeBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);

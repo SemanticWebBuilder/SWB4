@@ -20,6 +20,12 @@ public class CampBase extends org.semanticwb.model.SWBClass implements org.seman
     public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
     public static final org.semanticwb.platform.SemanticClass swb_Camp=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Camp");
 
+
+    public static org.semanticwb.model.Camp createCamp(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.Camp)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, swb_Camp), swb_Camp);
+    }
+
     public CampBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);

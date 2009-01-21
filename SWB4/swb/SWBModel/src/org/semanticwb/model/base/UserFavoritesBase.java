@@ -7,6 +7,12 @@ public class UserFavoritesBase extends org.semanticwb.model.SWBClass
     public static final org.semanticwb.platform.SemanticProperty swb_usrfHasObjects=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrfHasObjects");
     public static final org.semanticwb.platform.SemanticClass swb_UserFavorites=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserFavorites");
 
+
+    public static org.semanticwb.model.UserFavorites createUserFavorites(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.UserFavorites)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, swb_UserFavorites), swb_UserFavorites);
+    }
+
     public UserFavoritesBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);

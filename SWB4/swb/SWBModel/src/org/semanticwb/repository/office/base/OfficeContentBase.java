@@ -19,6 +19,12 @@ public class OfficeContentBase extends org.semanticwb.repository.File implements
     public static final org.semanticwb.platform.SemanticProperty cm_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org.mx/swb4/content#description");
     public static final org.semanticwb.platform.SemanticClass cm_OfficeContent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwb.org.mx/swb4/content#OfficeContent");
 
+
+    public static org.semanticwb.repository.office.OfficeContent createOfficeContent(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.repository.office.OfficeContent)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, cm_OfficeContent), cm_OfficeContent);
+    }
+
     public OfficeContentBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);

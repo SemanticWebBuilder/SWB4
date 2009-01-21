@@ -20,6 +20,12 @@ public class PFlowBase extends org.semanticwb.model.SWBClass implements org.sema
     public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
     public static final org.semanticwb.platform.SemanticClass swb_PFlow=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PFlow");
 
+
+    public static org.semanticwb.model.PFlow createPFlow(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.PFlow)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, swb_PFlow), swb_PFlow);
+    }
+
     public PFlowBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);

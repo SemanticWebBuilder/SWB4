@@ -73,7 +73,7 @@ public class TextArea extends TextAreaBase
         if(value==null)value="";
         if(mode.equals("edit") || mode.equals("create") )
         {
-            ret="<textarea name=\""+name+"\" dojoType_=\"dijit.Editor\" rows=\""+getRows()+"\" cols=\""+getCols()+"\">"
+            ret="<textarea name=\""+name+"\" dojoType_=\"dijit.Editor\" rows=\""+getRows()+"\" cols=\""+getCols()+"\" "+getAttributes()+">"
                 + value
                 + "</textarea>";
         }else if(mode.equals("view"))

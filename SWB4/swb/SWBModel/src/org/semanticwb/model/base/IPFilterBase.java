@@ -15,6 +15,12 @@ public class IPFilterBase extends org.semanticwb.model.SWBClass implements org.s
     public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
     public static final org.semanticwb.platform.SemanticClass swb_IPFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#IPFilter");
 
+
+    public static org.semanticwb.model.IPFilter createIPFilter(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.IPFilter)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, swb_IPFilter), swb_IPFilter);
+    }
+
     public IPFilterBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);

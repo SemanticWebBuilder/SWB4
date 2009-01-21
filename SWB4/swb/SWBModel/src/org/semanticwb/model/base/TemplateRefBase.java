@@ -10,6 +10,12 @@ public class TemplateRefBase extends org.semanticwb.model.Reference implements o
     public static final org.semanticwb.platform.SemanticProperty swb_inherita=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#inherita");
     public static final org.semanticwb.platform.SemanticClass swb_TemplateRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#TemplateRef");
 
+
+    public static org.semanticwb.model.TemplateRef createTemplateRef(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.TemplateRef)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, swb_TemplateRef), swb_TemplateRef);
+    }
+
     public TemplateRefBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);

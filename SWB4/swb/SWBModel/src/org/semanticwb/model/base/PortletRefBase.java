@@ -9,6 +9,12 @@ public class PortletRefBase extends org.semanticwb.model.Reference implements or
     public static final org.semanticwb.platform.SemanticProperty swb_portlet=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#portlet");
     public static final org.semanticwb.platform.SemanticClass swb_PortletRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PortletRef");
 
+
+    public static org.semanticwb.model.PortletRef createPortletRef(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.PortletRef)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, swb_PortletRef), swb_PortletRef);
+    }
+
     public PortletRefBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);

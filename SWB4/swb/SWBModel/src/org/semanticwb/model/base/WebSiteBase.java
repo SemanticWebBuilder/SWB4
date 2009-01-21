@@ -40,6 +40,12 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
     public static final org.semanticwb.platform.SemanticClass swb_PortletSubType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PortletSubType");
     public static final org.semanticwb.platform.SemanticClass swb_WebSite=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebSite");
 
+
+    public static org.semanticwb.model.WebSite createWebSite(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.WebSite)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, swb_WebSite), swb_WebSite);
+    }
+
     public WebSiteBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);

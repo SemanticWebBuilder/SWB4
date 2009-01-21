@@ -7,6 +7,12 @@ public class SelectOneBase extends org.semanticwb.model.base.FormElementBase
     public static final org.semanticwb.platform.SemanticProperty swbxf_so_blankSuport=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#so_blankSuport");
     public static final org.semanticwb.platform.SemanticClass swbxf_SelectOne=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectOne");
 
+
+    public static org.semanticwb.model.SelectOne createSelectOne(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.SelectOne)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, swbxf_SelectOne), swbxf_SelectOne);
+    }
+
     public SelectOneBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
