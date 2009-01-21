@@ -117,7 +117,7 @@ public class SWBASOPropRefEditor extends GenericResource {
             out.println("<div class=\"swbform\">");
             out.println("<fieldset>");
             inheritHeader.append("<fieldset>");
-            inheritHeader.append("<legend>Heredados</legend>");
+            inheritHeader.append("<legend>" + paramRequest.getLocaleString("legend_Inherited") + "</legend>");
             out.println("<table width=\"98%\">");
             inheritHeader.append("<table width=\"98%\">");
             out.println("<thead>");
@@ -126,7 +126,7 @@ public class SWBASOPropRefEditor extends GenericResource {
             inheritHeader.append("<tr>");
             out.println("<th>");
             // numcols++;
-            out.println("Action");
+            out.println(paramRequest.getLocaleString("th_action"));
             out.println("</th>");
 
             out.println("<th>");
@@ -285,7 +285,7 @@ public class SWBASOPropRefEditor extends GenericResource {
                 urlr.setParameter("sval", sobj.getURI());
                 urlr.setParameter(prop.getName(), prop.getURI());
                 urlr.setAction("remove");
-                out.println("<a href=\"#\" onclick=\"if(confirm('¿Est&aacute;s seguro de querer eliminar " + sobj.getDisplayName(user.getLanguage()) + "?')){submitUrl('" + urlr + "',this);} else { return false;}\">remove</a>");
+                out.println("<a href=\"#\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " " + sobj.getDisplayName(user.getLanguage()) + "?')){submitUrl('" + urlr + "',this);} else { return false;}\">remove</a>");
                 out.println("</td>");
                 out.println("<td>");
 
@@ -416,7 +416,7 @@ public class SWBASOPropRefEditor extends GenericResource {
                         out.println("<script type=\"dojo/connect\" event=\"onChange\">");
                         out.println(" var self1=this;   ");
                         //out.println(" showStatusURL('" + urluinh + "&'+self1.attr(\"name\")+'='+self1.attr(\"value\"),true);");
-                        out.println(" submitUrl('" + urluinh + "&'+self1.attr(\"name\")+'='+self1.attr(\"value\"),self.domNode);");
+                        out.println(" submitUrl('" + urluinh + "&'+self1.attr(\"name\")+'='+self1.attr(\"value\"),self1.domNode);");
                         out.println("</script>");
 
                         StringTokenizer st = new StringTokenizer(selectValues, "|");
@@ -470,7 +470,7 @@ public class SWBASOPropRefEditor extends GenericResource {
                     out.println("<script type=\"dojo/connect\" event=\"onChange\">");
                     out.println(" var self=this;   ");
                     //out.println(" showStatusURL('" + urlu + "&'+self.attr(\"name\")+'='+self.attr(\"value\"),true);");
-                    out.println(" submitUrl('" + urlu + "&'+self1.attr(\"name\")+'='+self1.attr(\"value\"),self.domNode);");
+                    out.println(" submitUrl('" + urlu + "&'+self.attr(\"name\")+'='+self.attr(\"value\"),self.domNode);");
                     out.println("</script>");
 
                     out.println("                   <option value=\"1\" " + op1 + " >" + paramRequest.getLocaleString("defecto") + "</option>");
@@ -512,7 +512,7 @@ public class SWBASOPropRefEditor extends GenericResource {
             urlNew.setParameter("sprop", idp);
             urlNew.setParameter("spropref", idpref);
             urlNew.setParameter("act", "choose");
-            out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlNew + "',this.domNode); return false;\">Add New</button>");
+            out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlNew + "',this.domNode); return false;\">" + paramRequest.getLocaleString("btn_addnew") + "</button>");
             //out.println("<a href=\"#\" onclick=\"submitUrl('" + urlNew + "',this); return false;\">Add New</a>");
             out.println("</fieldset>");
 
@@ -758,7 +758,7 @@ public class SWBASOPropRefEditor extends GenericResource {
                 urladd.setAction("new");
             }
             out.println("<div class=\"swbform\">");
-            out.println("<form id=\"" + id + "/chooseSO\" name=\"" + id + "/chooseSO\" action=\"" + urladd + "\" method=\"post\"  onsubmit=\"if(validateChk('sobj')) submitForm('" + id + "/chooseSO'); return false;\">");
+            out.println("<form id=\"" + id + "/chooseSO\" name=\"" + id + "/chooseSO\" action=\"" + urladd + "\" method=\"post\"  onsubmit=\"if(validateChk('sobj','"+paramRequest.getLocaleString("alertMSG")+"')) submitForm('" + id + "/chooseSO'); return false;\">");
             out.println("<input type=\"hidden\" name=\"suri\" value=\"" + id + "\">"); //obj.getURI()
             out.println("<input type=\"hidden\" name=\"sprop\" value=\"" + idp + "\">");
             out.println("<input type=\"hidden\" name=\"spropref\" value=\"" + idpref + "\">");
@@ -768,14 +768,16 @@ public class SWBASOPropRefEditor extends GenericResource {
             out.println("<theader>");
             out.println("<tr>");
             out.println("<th>");
-            out.println("title");
+            out.println(paramRequest.getLocaleString("th_title"));
             out.println("</th>");
             out.println("<th>");
-            out.println("select");
+            out.println(paramRequest.getLocaleString("th_select"));
             out.println("</th>");
-            out.println("<th>");
-            out.println("check");
-            out.println("</th>");
+            if ((clsprop.equals(Role.swb_Role) || clsprop.equals(Rule.swb_Rule))) {
+                out.println("<th>");
+                out.println(paramRequest.getLocaleString("th_check"));
+                out.println("</th>");
+            }
             out.println("</tr>");
             out.println("</theader>");
             log.debug("Clase: " + clsprop.getName());
@@ -808,9 +810,11 @@ public class SWBASOPropRefEditor extends GenericResource {
                     out.println("<td>");
                     out.println("<a href=\"#\" onclick=\"submitUrl('" + urlchoose + "',this); return false;\">" + stitle + "</a>");
                     out.println("</td> ");
-                    out.println("<td>");
-                    out.println("<input type=\"checkbox\" value=\"" + sobj.getURI() + "\" name=\"sobj\">");
-                    out.println("</td>");
+                    if ((clsprop.equals(Role.swb_Role) || clsprop.equals(Rule.swb_Rule))) {
+                        out.println("<td>");
+                        out.println("<input type=\"checkbox\" value=\"" + sobj.getURI() + "\" name=\"sobj\">");
+                        out.println("</td>");
+                    }
                     out.println("</tr>");
                 }
             }
@@ -829,12 +833,12 @@ public class SWBASOPropRefEditor extends GenericResource {
             }
             urlBack.setParameter("act", "");
             if ((clsprop.equals(Role.swb_Role) || clsprop.equals(Rule.swb_Rule)) && numrols > 0) {
-                out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\"  >Agregar seleccionados</button>"); //submitUrl('" + url + "',this); onclick=\"return false;\"  onclick=\"document.getElementById('" + id + "/chooseSO').submit();\" _onclick=\"if(validateChk('sobj')){document.getElementById('" + id + "/chooseSO').submit(); return false;} else {return false;}\"
-                out.println("<button dojoType=\"dijit.form.Button\" type=\"button\"  onclick=\"selectAll('sobj',true);\">Seleccionar todos</button>"); //submitUrl('" + url + "',this);
-                out.println("<button dojoType=\"dijit.form.Button\" type=\"button\"  onclick=\"selectAll('sobj',false);\">Deseleccionar todos</button>"); //submitUrl('" + url + "',this);
+                out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\"  >" + paramRequest.getLocaleString("Add_Selected") + "</button>"); //submitUrl('" + url + "',this); onclick=\"return false;\"  onclick=\"document.getElementById('" + id + "/chooseSO').submit();\" _onclick=\"if(validateChk('sobj')){document.getElementById('" + id + "/chooseSO').submit(); return false;} else {return false;}\"
+                out.println("<button dojoType=\"dijit.form.Button\" type=\"button\"  onclick=\"selectAll('sobj',true);\">" + paramRequest.getLocaleString("Select_All") + "</button>"); //submitUrl('" + url + "',this);
+                out.println("<button dojoType=\"dijit.form.Button\" type=\"button\"  onclick=\"selectAll('sobj',false);\">" + paramRequest.getLocaleString("Unselect_All") + "</button>"); //submitUrl('" + url + "',this);
             }
             if (id != null && idp != null && idpref != null) {
-                out.println("<button dojoType=\"dijit.form.Button\" type=\"button\" onclick=\"submitUrl('" + urlBack + "',document.getElementById('" + id + "/chooseSO')); return false;\" >Regresar</button>");
+                out.println("<button dojoType=\"dijit.form.Button\" type=\"button\" onclick=\"submitUrl('" + urlBack + "',document.getElementById('" + id + "/chooseSO')); return false;\" >" + paramRequest.getLocaleString("btn_back") + "</button>");
             }
             out.println("</fieldset>");
             out.println("</form>");
@@ -926,7 +930,7 @@ public class SWBASOPropRefEditor extends GenericResource {
                 }
 
 
-                response.setRenderParameter("statmsg", "Se agreg&oacute; correctamente " + elementName);
+                response.setRenderParameter("statmsg", response.getLocaleString("statmsg1") + " " + elementName);
                 response.setMode(response.Mode_EDIT);
                 response.setRenderParameter("act", "");
             } else {
@@ -968,7 +972,7 @@ public class SWBASOPropRefEditor extends GenericResource {
             }
             log.debug("remove-closetab:" + sval);
             response.setRenderParameter("closetab", sval);
-            response.setRenderParameter("statmsg", "Se elimin&oacute; correctamente " + name + ".");
+            response.setRenderParameter("statmsg", response.getLocaleString("statmsg3")+" " + name + ".");
             response.setMode(response.Mode_EDIT);
 
         } else if ("choose".equals(action)) //suri, prop
@@ -1006,6 +1010,7 @@ public class SWBASOPropRefEditor extends GenericResource {
                 } else if (sobj != null) {
                     for (int i = 0; i < valores.length; i++) {
                         sobj = valores[i];
+                        log.debug("valor: "+sobj);
                         SemanticObject aux = ont.getSemanticObject(sobj);
                         if (sobj != null) {
                             obj.setObjectProperty(prop, aux); //actualizando el objectProperty a una instancia existente
@@ -1014,17 +1019,18 @@ public class SWBASOPropRefEditor extends GenericResource {
                         }
                     }
                 }
-            } else {
+            } else {   // empieza propiedad con has
                 if (sobj != null) {
                     for (int i = 0; i < valores.length; i++) {
                         sobj = valores[i];
-                        log.debug("Agregando un " + propref.getName() + " a " + obj.getURI());
+                        log.debug("Agregando un " + propref.getName() + " a " + obj.getURI()+" ---SOBJ--- "+sobj);
                         SemanticObject aux = ont.getSemanticObject(sobj); //agregando al objectProperty nueva instancia
-                        obj.addObjectProperty(propref, aux);
+                        log.debug("");
+                        if(sobj!=null) obj.addObjectProperty(propref, aux);
                     }
                 }
             }
-            response.setRenderParameter("statmsg", "Se agreg&oacute; correctamente " + propref.getName());
+            response.setRenderParameter("statmsg", response.getLocaleString("statmsg1") + " " + propref.getName());
             response.setRenderParameter("spropref", spropref);
             response.setRenderParameter("sprop", sprop);
             response.setRenderParameter("sobj", sobj);
@@ -1073,10 +1079,10 @@ public class SWBASOPropRefEditor extends GenericResource {
                     }
                 }
                 so = obj;
-                response.setRenderParameter("statmsg", "Se actualiz&oacute; correctamente la prioridad del elemento.");
+                response.setRenderParameter("statmsg", response.getLocaleString("statmsg2") );
             } catch (Exception e) {
                 log.error(e);
-                response.setRenderParameter("statmsg", "Error al actualizar la prioridad del elemento.");
+                response.setRenderParameter("statmsg", response.getLocaleString("statERRORmsg1"));
             }
             response.setRenderParameter("spropref", spropref);
             response.setRenderParameter("sprop", sprop);
@@ -1096,10 +1102,10 @@ public class SWBASOPropRefEditor extends GenericResource {
                 SemanticClass scls = sobj.getSemanticClass();
                 log.debug("doAction(updstatus):" + scls.getClassName() + ": " + value);
                 so = sobj;
-                response.setRenderParameter("statmsg", "Se " + (value.equals("true") ? "activ&oacute;" : "desactiv&oacute;") + " el elemento.");
+                response.setRenderParameter("statmsg", (value.equals("true") ? response.getLocaleString("statmsg4") : response.getLocaleString("statmsg5")));
             } catch (Exception e) {
                 log.error(e);
-                response.setRenderParameter("statmsg", "Error al " + (value.equals("true") ? "activar" : "desactivar") + " el elemento.");
+                response.setRenderParameter("statmsg",(value.equals("true") ? response.getLocaleString("statERRORmsg2") : response.getLocaleString("statERRORmsg3")) );
             }
             response.setRenderParameter("spropref", spropref);
             response.setRenderParameter("sprop", sprop);
@@ -1121,10 +1127,10 @@ public class SWBASOPropRefEditor extends GenericResource {
                 log.debug("doAction(updinherit):" + scls.getClassName() + ", value:" + value);
 
                 so = sobj;
-                response.setRenderParameter("statmsg", "Se actualiz&oacute; la herencia del elemento.");
+                response.setRenderParameter("statmsg", response.getLocaleString("statmsg6"));
             } catch (Exception e) {
                 log.error(e);
-                response.setRenderParameter("statmsg", "Error al actualizar la herencia del elemento.");
+                response.setRenderParameter("statmsg", response.getLocaleString("statERRORmsg4"));
             }
             response.setRenderParameter("spropref", spropref);
             response.setRenderParameter("sprop", sprop);
