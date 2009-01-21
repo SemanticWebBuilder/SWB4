@@ -22,7 +22,7 @@ public class ErrorMessage implements InternalServlet
     /** Initializes the servlet.
      */
     
-    public void init(ServletConfig config) throws ServletException
+    public void init(ServletContext config) throws ServletException
     {
         
     }
@@ -96,11 +96,6 @@ public class ErrorMessage implements InternalServlet
     public String getServletInfo()
     {
         return "Error Message";
-    }
-
-    public void init(ServletContext config) throws ServletException
-    {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException, ServletException
