@@ -20,6 +20,12 @@ public class RuleBase extends org.semanticwb.model.SWBClass implements org.seman
     public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
     public static final org.semanticwb.platform.SemanticClass swb_Rule=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Rule");
 
+
+    public static org.semanticwb.model.Rule createRule(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.Rule)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, swb_Rule), swb_Rule);
+    }
+
     public RuleBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);

@@ -16,6 +16,12 @@ public class PortletSubTypeBase extends org.semanticwb.model.SWBClass implements
     public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
     public static final org.semanticwb.platform.SemanticClass swb_PortletSubType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PortletSubType");
 
+
+    public static org.semanticwb.model.PortletSubType createPortletSubType(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.PortletSubType)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, swb_PortletSubType), swb_PortletSubType);
+    }
+
     public PortletSubTypeBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);

@@ -18,6 +18,12 @@ public class RoleBase extends org.semanticwb.model.SWBClass implements org.seman
     public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
     public static final org.semanticwb.platform.SemanticProperty swb_roleParent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#roleParent");
 
+
+    public static org.semanticwb.model.Role createRole(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.Role)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, swb_Role), swb_Role);
+    }
+
     public RoleBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);

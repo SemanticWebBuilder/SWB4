@@ -13,6 +13,12 @@ public class DeviceBase extends org.semanticwb.model.SWBClass implements org.sem
     public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
     public static final org.semanticwb.platform.SemanticClass swb_Device=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Device");
 
+
+    public static org.semanticwb.model.Device createDevice(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.Device)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, swb_Device), swb_Device);
+    }
+
     public DeviceBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);

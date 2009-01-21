@@ -7,6 +7,12 @@ public class PermissionBase extends org.semanticwb.model.SWBClass implements org
     public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
     public static final org.semanticwb.platform.SemanticClass swb_Permission=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Permission");
 
+
+    public static org.semanticwb.model.Permission createPermission(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.Permission)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, swb_Permission), swb_Permission);
+    }
+
     public PermissionBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);

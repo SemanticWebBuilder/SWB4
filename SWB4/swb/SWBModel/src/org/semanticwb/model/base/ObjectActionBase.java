@@ -8,6 +8,12 @@ public class ObjectActionBase extends org.semanticwb.model.WebPage implements or
     public static final org.semanticwb.platform.SemanticProperty swbxf_actionURL=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#actionURL");
     public static final org.semanticwb.platform.SemanticClass swbxf_ObjectAction=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectAction");
 
+
+    public static org.semanticwb.model.ObjectAction createObjectAction(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.ObjectAction)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, swbxf_ObjectAction), swbxf_ObjectAction);
+    }
+
     public ObjectActionBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);

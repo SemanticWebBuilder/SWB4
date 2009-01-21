@@ -141,6 +141,7 @@ public class GenericFormElement extends FormElementBase
     //                    + " propercase=\"true\""
                         + " promptMessage=\""+pmsg+"\""
                         + " invalidMessage=\""+imsg+"\""
+                        + " " + getAttributes()
     //                    + " trim=\"true\""
                     + "/>";
 //                }else if(mode.equals("edit"))
@@ -165,6 +166,7 @@ public class GenericFormElement extends FormElementBase
     //                    + " propercase=\"true\""
                         + " promptMessage=\""+pmsg+"\""
                         + " invalidMessage=\""+imsg+"\""
+                        + " " + getAttributes()
                         + " trim=\"true\""
                     + "/>";
                 }else if(mode.equals("view"))
@@ -189,6 +191,7 @@ public class GenericFormElement extends FormElementBase
                 ret+="</span>";
             }
         }
+        System.out.println("ret:"+ret);
         return ret;
     }
 

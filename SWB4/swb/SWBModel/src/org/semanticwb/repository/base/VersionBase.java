@@ -9,6 +9,12 @@ public class VersionBase extends org.semanticwb.repository.BaseNode implements o
     public static final org.semanticwb.platform.SemanticProperty jcr_uuid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#uuid");
     public static final org.semanticwb.platform.SemanticProperty jcr_predecessors=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#predecessors");
 
+
+    public static org.semanticwb.repository.Version createVersion(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.repository.Version)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, nt_Version), nt_Version);
+    }
+
     public VersionBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);

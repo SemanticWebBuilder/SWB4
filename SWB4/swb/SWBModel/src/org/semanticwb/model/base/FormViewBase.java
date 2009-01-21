@@ -12,6 +12,12 @@ public class FormViewBase extends org.semanticwb.model.SWBClass implements org.s
     public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
     public static final org.semanticwb.platform.SemanticClass swbxf_FormView=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#FormView");
 
+
+    public static org.semanticwb.model.FormView createFormView(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.FormView)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, swbxf_FormView), swbxf_FormView);
+    }
+
     public FormViewBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);

@@ -9,6 +9,12 @@ public class OfficeCategoryBase extends org.semanticwb.repository.Folder impleme
     public static final org.semanticwb.platform.SemanticProperty cm_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org.mx/swb4/content#description");
     public static final org.semanticwb.platform.SemanticClass cm_OfficeCategory=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwb.org.mx/swb4/content#OfficeCategory");
 
+
+    public static org.semanticwb.repository.office.OfficeCategory createOfficeCategory(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.repository.office.OfficeCategory)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, cm_OfficeCategory), cm_OfficeCategory);
+    }
+
     public OfficeCategoryBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
