@@ -236,6 +236,36 @@ public class SWBFormMgr
         return ret;
     }
     
+    private void renderProp(StringBuffer ret, SemanticProperty prop, FormElement ele)
+    {
+        String label=null;
+        String element=null;
+        if(m_propmap!=null)
+        {
+            label=ele.renderLabel(m_obj, prop, m_type, m_propmap.get(prop), m_lang);
+            element=ele.renderElement(m_obj, prop, m_type, m_propmap.get(prop), m_lang);
+        }else
+        {
+            label=ele.renderLabel(m_obj, prop, m_type, m_mode, m_lang);
+            element=ele.renderElement(m_obj, prop, m_type, m_mode, m_lang);
+        }
+        if(element!=null && element.length()>0)
+        {
+            if(!m_mode.equals(MODE_CREATE))
+            {
+                ret.append("<tr><td width=\"200px\" align=\"right\">");
+            }else
+            {
+                ret.append("<tr><td align=\"right\">");
+            }
+            ret.append(label.replaceAll(" ", "&nbsp;"));
+            ret.append("</td><td>");
+            ret.append(element);
+            ret.append("</td></tr>");
+        }
+    }
+
+    
     public String renderXHTMLForm()
     {
         StringBuffer ret=new StringBuffer();
@@ -265,18 +295,39 @@ public class SWBFormMgr
         if(!m_mode.equals(MODE_CREATE))
         {
             ret.append("	<fieldset>");
-//            ret.append("	    <ol>");
-//            ret.append("            <li>");
             ret.append("	    <table><tr><td width=\"200px\" align=\"right\">");
             ret.append("                <label>Identificador &nbsp;</label>");
             ret.append("        </td><td>");
             ret.append("                <span>"+m_obj.getId()+"</span>");
             ret.append("	    </td></tr></table>");
-//            ret.append("            </li>");
-//            ret.append("	    </ol>");
             ret.append("	</fieldset>");
-        }
 
+            Iterator<PropertyGroup> itgp=SWBComparator.sortSortableObject(groups.keySet().iterator());
+            while(itgp.hasNext())
+            {
+                PropertyGroup group=itgp.next();
+                ret.append("	<fieldset>");
+                ret.append("	    <legend>"+group.getSemanticObject().getDisplayName(m_lang)+"</legend>");
+                ret.append("	    <table>");
+
+                Iterator<SemanticProperty> it=groups.get(group).iterator();
+                while(it.hasNext())
+                {
+                    SemanticProperty prop=it.next();
+                    FormElement ele=getFormElement(prop);
+                    renderProp(ret, prop,ele);
+                }
+                ret.append("	    </table>");
+                ret.append("	</fieldset>");
+            }
+
+            ret.append("<fieldset><span align=\"center\">");
+            ret.append("<button dojoType='dijit.form.Button' type=\"submit\">Guardar</button>");
+            ret.append("<button dojoType='dijit.form.Button' >Favoritos</button>");
+            ret.append("<button dojoType='dijit.form.Button' >Eliminar</button>");
+            ret.append("</span></fieldset>");
+
+        }else
         {
             ret.append("	<fieldset>");
             //ret.append("	    <legend>"+group.getSemanticObject().getDisplayName(m_lang)+"</legend>");
@@ -290,53 +341,29 @@ public class SWBFormMgr
                 while(it.hasNext())
                 {
                     SemanticProperty prop=it.next();
-                    String label=null;
-                    String element=null;
                     FormElement ele=getFormElement(prop);
-                    if(m_propmap!=null)
-                    {
-                        label=ele.renderLabel(m_obj, prop, m_type, m_propmap.get(prop), m_lang);
-                        element=ele.renderElement(m_obj, prop, m_type, m_propmap.get(prop), m_lang);
-                    }else
-                    {
-                        label=ele.renderLabel(m_obj, prop, m_type, m_mode, m_lang);
-                        element=ele.renderElement(m_obj, prop, m_type, m_mode, m_lang);
-                    }
-                    if(element!=null && element.length()>0)
-                    {
-                        ret.append("<tr><td width=\"200px\" align=\"right\">");
-                        ret.append(label.replaceAll(" ", "&nbsp;"));
-                        ret.append("</td><td>");
-                        ret.append(element);
-                        ret.append("</td></tr>");
-                    }
+                    ele.setAttribute("onchange", "alert(this.value);dojo.byId('swb_create_id').value=this.value;");
+                    renderProp(ret, prop, ele);
                 }
             }
             if(m_mode.equals(MODE_CREATE) && !m_cls.isAutogenId())
             {
                 String model=m_ref.getModel().getName();
                 String clsid=m_cls.getClassId();
-                ret.append("	    <tr><td width=\"200px\" align=\"right\">");
+                ret.append("	    <tr><td align=\"right\">");
                 ret.append("                <label>Identificador <em>*</em></label>");
                 ret.append("        </td><td>");
-                ret.append("                <input type=\"text\" name=\""+PRM_ID+"\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura Identificador.\" isValid=\"return canCreateSemanticObject('"+model+"','"+clsid+"',this.textbox.value);\" invalidMessage=\"Identificador invalido.\" trim=\"true\"/>");
+                ret.append("                <input type=\"text\" id=\"swb_create_id\" name=\""+PRM_ID+"\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura Identificador.\" isValid=\"return canCreateSemanticObject('"+model+"','"+clsid+"',this.textbox.value);\" invalidMessage=\"Identificador invalido.\" trim=\"true\"/>");
                 ret.append("	    </td></tr>");
             }
+            //ret.append("        <tr><td align=\"center\" colspan=\"2\"><hr/></td></tr>");
+            ret.append("        <tr><td align=\"center\" colspan=\"2\">");
+            ret.append("            <button dojoType='dijit.form.Button' type=\"submit\">Guardar</button>");
+            ret.append("            <button dojoType='dijit.form.Button' onclick=\"dijit.byId('swbDialog').hide();\">Cancelar</button>");
+            ret.append("	    </td></tr>");
             ret.append("	    </table>");
             ret.append("	</fieldset>");
         }
-
-        ret.append("<fieldset><span align=\"center\">");
-        ret.append("<button dojoType='dijit.form.Button' type=\"submit\">Guardar</button>");
-        if(m_mode.equals(MODE_CREATE))
-        {
-            ret.append("<button dojoType='dijit.form.Button' onclick=\"dijit.byId('swbDialog').hide();\">Cancelar</button>");
-        }else
-        {
-            ret.append("<button dojoType='dijit.form.Button' >Favoritos</button>");
-            ret.append("<button dojoType='dijit.form.Button' >Eliminar</button>");
-        }
-        ret.append("</span></fieldset>");
         ret.append("</form>");
         return ret.toString();
     }    
