@@ -6,13 +6,6 @@ import com.sun.star.lib.uno.helper.Factory;
 import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.registry.XRegistryKey;
 import com.sun.star.lib.uno.helper.WeakBase;
-import java.awt.Frame;
-import java.awt.TextArea;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import org.semanticwb.openoffice.DocumentType;
 import org.semanticwb.openoffice.OfficeDocument;
@@ -107,13 +100,24 @@ public final class wb4writeraddon extends WeakBase
             try
             {
                 OfficeDocument document = new WB4Writer(this.m_xContext);
-                if (aURL.Path.compareTo("publish") == 0)
+                if (aURL.Path.compareTo("save") == 0)
                 {
                     return this;
                 }
                 if (aURL.Path.compareTo("open") == 0)
                 {
                     return this;
+                }
+                if (aURL.Path.compareTo("publish") == 0)
+                {
+                    if(document.isPublicated())
+                    {
+                        return this;
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
                 if (aURL.Path.compareTo("delete") == 0)
                 {                    
@@ -232,8 +236,14 @@ public final class wb4writeraddon extends WeakBase
             if (aURL.Protocol.compareTo("org.semanticwb.openoffice.writer.wb4writeraddon:") == 0)
             {
                 OfficeDocument document = new WB4Writer(this.m_xContext);
-                if (aURL.Path.compareTo("publish") == 0)
+                if (aURL.Path.compareTo("save") == 0)
                 {   
+                    document.saveToSite();
+
+                    return;
+                }
+                if (aURL.Path.compareTo("publish") == 0)
+                {
                     document.publish();
 
                     return;
