@@ -63,10 +63,31 @@ public class SelectCategory extends WizardPage
         }
         catch (Exception e)
         {
+            e.printStackTrace(System.out);
         }
     }
 
     private void addCategory(RepositoryNode parent)
+    {
+        try
+        {
+            for (CategoryInfo category : OfficeApplication.getOfficeApplicationProxy().getCategories(parent.getName()))
+            {
+                CategoryNode categoryNode = new CategoryNode(category.UDDI, category.title, category.description, parent.getName());
+                parent.add(categoryNode);
+                if(category.childs>0)
+                {
+                    categoryNode.add(new DefaultMutableTreeNode(""));
+                }
+                //addCategory(repository, categoryNode);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace(System.out);
+        }
+    }
+    private void addRepositories(RepositoryNode parent)
     {
         try
         {
@@ -107,7 +128,7 @@ public class SelectCategory extends WizardPage
         RepositoryNode repositories = new RepositoryNode("Repositorios");
         DefaultTreeModel model = new DefaultTreeModel(repositories);
         this.jTreeCategory.setModel(model);
-        addCategory(repositories);
+        addRepositories(repositories);
         if (this.jTreeCategory.getRowCount() > 0)
         {
             this.jTreeCategory.expandRow(0);
@@ -281,6 +302,7 @@ private void jTreeCategoryValueChanged(javax.swing.event.TreeSelectionEvent evt)
         }
         catch (Exception e)
         {
+            e.printStackTrace(System.out);
         }
     }
     this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
@@ -314,6 +336,7 @@ private void jButtonDeletCategoryActionPerformed(java.awt.event.ActionEvent evt)
     }
     catch (Exception e)
     {
+        e.printStackTrace(System.out);
     }
     this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 }//GEN-LAST:event_jButtonDeletCategoryActionPerformed
