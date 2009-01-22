@@ -264,9 +264,6 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <rdfs:label>FileSize</rdfs:label>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="created">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="attDescription">
     <rdfs:domain rdf:resource="#FrmAttachments"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
