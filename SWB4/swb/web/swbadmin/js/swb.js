@@ -806,7 +806,43 @@ function replaceChars4Id(value)
     var id="";
     if(value)
     {
-        id=value.toLowerCase().replace(' ','_');
+        value=value.toLowerCase();
+        for(var x=0;x<value.length;x++)
+        {
+            var ch=value.charAt(x);
+            if(ch==' ')ch='_';
+            else if(ch=='á')ch='a';
+            else if(ch=='à')ch='a';
+            else if(ch=='ã')ch='a';
+            else if(ch=='â')ch='a';
+            else if(ch=='ä')ch='a';
+            else if(ch=='å')ch='a';
+            else if(ch=='é')ch='e';
+            else if(ch=='è')ch='e';
+            else if(ch=='ê')ch='e';
+            else if(ch=='ë')ch='e';
+            else if(ch=='í')ch='i';
+            else if(ch=='ì')ch='i';
+            else if(ch=='î')ch='i';
+            else if(ch=='ï')ch='i';
+            else if(ch=='ó')ch='o';
+            else if(ch=='ò')ch='o';
+            else if(ch=='ô')ch='o';
+            else if(ch=='ö')ch='o';
+            else if(ch=='õ')ch='o';
+            else if(ch=='ú')ch='u';
+            else if(ch=='ù')ch='u';
+            else if(ch=='ü')ch='u';
+            else if(ch=='û')ch='u';
+            else if(ch=='ñ')ch='n';
+            else if(ch=='ç')ch='c';
+            else if(ch=='ÿ')ch='y';
+            else if(ch=='ý')ch='y';
+            if ((ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || ch == '_')
+            {
+                id+=ch;
+            }
+        }
     }
     return id;
 }

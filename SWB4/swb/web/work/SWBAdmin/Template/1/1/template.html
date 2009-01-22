@@ -92,14 +92,21 @@
                             <include src="/swbadmin/jsp/treeWidget.jsp?id=mtree"/>
                         </div>
 
+                        <div dojoType="dijit.layout.AccordionPane" title="Repositorios de Documentos">
+                            <include src="/swbadmin/jsp/treeWidget.jsp?id=mdoc"/>
+                        </div>
+
                         <div dojoType="dijit.layout.AccordionPane" title="Repositorios de Usuarios">
                             <include src="/swbadmin/jsp/treeWidget.jsp?id=muser"/>
+                        </div>
+
+                        <div dojoType="dijit.layout.AccordionPane" title="Papelera">
+                            <include src="/swbadmin/jsp/treeWidget.jsp?id=mtra"/>
                         </div>
 
                         <div dojoType="dijit.layout.AccordionPane" title="Favoritos">
                             <include src="/swbadmin/jsp/treeWidget.jsp?id=mfavo"/>
                         </div>
-
                     </div><!-- end AccordionContainer -->
 
                     <div id="vprop" dojoType="dijit.TitlePane" title="View Properties" class="admViewProperties" open="false" duration="150" minSize_="20" splitter_="true" region="bottom">

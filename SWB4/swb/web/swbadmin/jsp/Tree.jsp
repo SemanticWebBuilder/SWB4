@@ -91,15 +91,21 @@
     public void addFavorites(JSONArray arr)  throws JSONException
     {
         //TODO:
-        User user=SWBContext.getDefaultRepository().getUserByLogin("admin");
-        UserFavorites fav=user.getUserFavorites();
-        if(fav!=null)
+        //User user=SWBContext.getDefaultRepository().getUserByLogin("admin");
+        User user=SWBPortal.getSessionUser();
+        //System.out.println("user uri:"+user.getURI());
+        if(user!=null && user.getURI()!=null)
         {
-            Iterator<SemanticObject> it=SWBComparator.sortSermanticObjects(fav.listObjects());
-            while(it.hasNext())
+            UserFavorites fav=user.getUserFavorites();
+            if(fav!=null)
             {
-                SemanticObject obj=it.next();
-                addSemanticObject(arr, obj,false,true);
+                //System.out.println("user fav:"+user.getURI());
+                Iterator<SemanticObject> it=SWBComparator.sortSermanticObjects(fav.listObjects());
+                while(it.hasNext())
+                {
+                    SemanticObject obj=it.next();
+                    addSemanticObject(arr, obj,false,true);
+                }
             }
         }
     }

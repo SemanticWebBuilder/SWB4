@@ -1,4 +1,26 @@
-<%@page contentType="text/html"%><%@page pageEncoding="ISO-8859-1"%><%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.portal.*,org.semanticwb.model.*,java.util.*,org.semanticwb.base.util.*"%><%
+<%@page contentType="text/html"%><%@page pageEncoding="ISO-8859-1"%><%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.portal.*,org.semanticwb.model.*,java.util.*,org.semanticwb.base.util.*"%><%!
+    boolean isValidId(String id)
+    {
+        boolean ret=true;
+        if(id!=null)
+        {
+            for(int x=0;x<id.length();x++)
+            {
+                char ch=id.charAt(x);
+                if (!((ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || ch == '_'))
+                {
+                    ret=false;
+                    break;
+                }
+            }
+        }else
+        {
+            ret=false;
+        }
+        return ret;
+    }
+
+%><%
     response.setHeader("Cache-Control", "no-cache"); 
     response.setHeader("Pragma", "no-cache"); 
     String id=request.getParameter("id");
@@ -11,19 +33,25 @@
         //System.out.println("false");
     }else
     {
-        SemanticModel m=SWBPlatform.getSemanticMgr().getModel(model);
-        SemanticClass scls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassByID(clsid);
-        String uri=m.getObjectUri(id, scls);
-        //out.println(uri);
-        SemanticObject obj=SemanticObject.createSemanticObject(uri);
-        if(obj!=null)
+        if(isValidId(id))
         {
-            out.println("false");
-            //System.out.println("false");
+            SemanticModel m=SWBPlatform.getSemanticMgr().getModel(model);
+            SemanticClass scls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassByID(clsid);
+            String uri=m.getObjectUri(id, scls);
+            //out.println(uri);
+            SemanticObject obj=SemanticObject.createSemanticObject(uri);
+            if(obj!=null)
+            {
+                out.println("false");
+                //System.out.println("false");
+            }else
+            {
+                out.println("true");
+                //System.out.println("true");
+            }
         }else
         {
-            out.println("true");
-            //System.out.println("true");
+            out.println("false");
         }
     }
 %>
