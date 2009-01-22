@@ -3,6 +3,10 @@ package org.semanticwb.model.base;
 
 public class CampBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Activeable,org.semanticwb.model.Deleteable,org.semanticwb.model.Ruleable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Calendarable,org.semanticwb.model.Roleable
 {
+    public static final org.semanticwb.platform.SemanticClass swb_Rule=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Rule");
+    public static final org.semanticwb.platform.SemanticProperty swb_hasRule=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasRule");
+    public static final org.semanticwb.platform.SemanticProperty swb_deleted=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#deleted");
+    public static final org.semanticwb.platform.SemanticProperty swb_active=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#active");
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
     public static final org.semanticwb.platform.SemanticProperty swb_modifiedBy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy");
@@ -10,10 +14,6 @@ public class CampBase extends org.semanticwb.model.SWBClass implements org.seman
     public static final org.semanticwb.platform.SemanticProperty swb_updated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#updated");
     public static final org.semanticwb.platform.SemanticClass swb_Calendar=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Calendar");
     public static final org.semanticwb.platform.SemanticProperty swb_hasCalendar=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasCalendar");
-    public static final org.semanticwb.platform.SemanticClass swb_Rule=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Rule");
-    public static final org.semanticwb.platform.SemanticProperty swb_hasRule=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasRule");
-    public static final org.semanticwb.platform.SemanticProperty swb_deleted=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#deleted");
-    public static final org.semanticwb.platform.SemanticProperty swb_active=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#active");
     public static final org.semanticwb.platform.SemanticProperty swb_creator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#creator");
     public static final org.semanticwb.platform.SemanticClass swb_Role=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Role");
     public static final org.semanticwb.platform.SemanticProperty swb_hasRole=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasRole");
@@ -29,6 +29,62 @@ public class CampBase extends org.semanticwb.model.SWBClass implements org.seman
     public CampBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.Rule> listRules()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Rule>(org.semanticwb.model.Rule.class, getSemanticObject().listObjectProperties(swb_hasRule));
+    }
+
+    public boolean hasRule(org.semanticwb.model.Rule rule)
+    {
+        if(rule==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasRule,rule.getSemanticObject());
+    }
+
+    public void addRule(org.semanticwb.model.Rule rule)
+    {
+        getSemanticObject().addObjectProperty(swb_hasRule, rule.getSemanticObject());
+    }
+
+    public void removeAllRule()
+    {
+        getSemanticObject().removeProperty(swb_hasRule);
+    }
+
+    public void removeRule(org.semanticwb.model.Rule rule)
+    {
+        getSemanticObject().removeObjectProperty(swb_hasRule,rule.getSemanticObject());
+    }
+
+    public org.semanticwb.model.Rule getRule()
+    {
+         org.semanticwb.model.Rule ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasRule);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.Rule)obj.getSemanticClass().newGenericInstance(obj);
+         }
+         return ret;
+    }
+
+    public boolean isDeleted()
+    {
+        return getSemanticObject().getBooleanProperty(swb_deleted);
+    }
+
+    public void setDeleted(boolean deleted)
+    {
+        getSemanticObject().setBooleanProperty(swb_deleted, deleted);
+    }
+
+    public boolean isActive()
+    {
+        return getSemanticObject().getBooleanProperty(swb_active);
+    }
+
+    public void setActive(boolean active)
+    {
+        getSemanticObject().setBooleanProperty(swb_active, active);
     }
 
     public java.util.Date getCreated()
@@ -131,62 +187,6 @@ public class CampBase extends org.semanticwb.model.SWBClass implements org.seman
              ret=(org.semanticwb.model.Calendar)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
-    }
-
-    public org.semanticwb.model.GenericIterator<org.semanticwb.model.Rule> listRules()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Rule>(org.semanticwb.model.Rule.class, getSemanticObject().listObjectProperties(swb_hasRule));
-    }
-
-    public boolean hasRule(org.semanticwb.model.Rule rule)
-    {
-        if(rule==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasRule,rule.getSemanticObject());
-    }
-
-    public void addRule(org.semanticwb.model.Rule rule)
-    {
-        getSemanticObject().addObjectProperty(swb_hasRule, rule.getSemanticObject());
-    }
-
-    public void removeAllRule()
-    {
-        getSemanticObject().removeProperty(swb_hasRule);
-    }
-
-    public void removeRule(org.semanticwb.model.Rule rule)
-    {
-        getSemanticObject().removeObjectProperty(swb_hasRule,rule.getSemanticObject());
-    }
-
-    public org.semanticwb.model.Rule getRule()
-    {
-         org.semanticwb.model.Rule ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasRule);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.Rule)obj.getSemanticClass().newGenericInstance(obj);
-         }
-         return ret;
-    }
-
-    public boolean isDeleted()
-    {
-        return getSemanticObject().getBooleanProperty(swb_deleted);
-    }
-
-    public void setDeleted(boolean deleted)
-    {
-        getSemanticObject().setBooleanProperty(swb_deleted, deleted);
-    }
-
-    public boolean isActive()
-    {
-        return getSemanticObject().getBooleanProperty(swb_active);
-    }
-
-    public void setActive(boolean active)
-    {
-        getSemanticObject().setBooleanProperty(swb_active, active);
     }
 
     public void setCreator(org.semanticwb.model.User user)

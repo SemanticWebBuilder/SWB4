@@ -3,9 +3,9 @@ package org.semanticwb.model.base;
 
 public class ObjectActionBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.Iconable
 {
-    public static final org.semanticwb.platform.SemanticProperty swb_iconClass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#iconClass");
     public static final org.semanticwb.platform.SemanticProperty swbxf_actGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#actGroup");
     public static final org.semanticwb.platform.SemanticProperty swbxf_actionURL=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#actionURL");
+    public static final org.semanticwb.platform.SemanticProperty swb_iconClass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#iconClass");
     public static final org.semanticwb.platform.SemanticClass swbxf_ObjectAction=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectAction");
 
 
@@ -17,16 +17,6 @@ public class ObjectActionBase extends org.semanticwb.model.WebPage implements or
     public ObjectActionBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
-    }
-
-    public String getIconClass()
-    {
-        return getSemanticObject().getProperty(swb_iconClass);
-    }
-
-    public void setIconClass(String iconClass)
-    {
-        getSemanticObject().setProperty(swb_iconClass, iconClass);
     }
 
     public String getActGroup()
@@ -47,5 +37,15 @@ public class ObjectActionBase extends org.semanticwb.model.WebPage implements or
     public void setActionURL(String actionURL)
     {
         getSemanticObject().setProperty(swbxf_actionURL, actionURL);
+    }
+
+    public String getIconClass()
+    {
+        return getSemanticObject().getProperty(swb_iconClass);
+    }
+
+    public void setIconClass(String iconClass)
+    {
+        getSemanticObject().setProperty(swb_iconClass, iconClass);
     }
 }

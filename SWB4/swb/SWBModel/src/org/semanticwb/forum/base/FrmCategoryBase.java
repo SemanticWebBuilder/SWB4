@@ -1,59 +1,29 @@
-package org.semanticwb.model.base;
+package org.semanticwb.forum.base;
 
 
-public class IPFilterBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable
+public class FrmCategoryBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
-    public static final org.semanticwb.platform.SemanticProperty swb_ipFilterNumber=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#ipFilterNumber");
-    public static final org.semanticwb.platform.SemanticProperty swb_active=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#active");
-    public static final org.semanticwb.platform.SemanticProperty swb_ipFilterAction=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#ipFilterAction");
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
     public static final org.semanticwb.platform.SemanticProperty swb_modifiedBy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy");
     public static final org.semanticwb.platform.SemanticProperty swb_title=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#title");
     public static final org.semanticwb.platform.SemanticProperty swb_updated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#updated");
+    public static final org.semanticwb.platform.SemanticProperty swb_active=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#active");
     public static final org.semanticwb.platform.SemanticProperty swb_creator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#creator");
     public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
-    public static final org.semanticwb.platform.SemanticClass swb_IPFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#IPFilter");
+    public static final org.semanticwb.platform.SemanticClass frm_FrmForum=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/forum#FrmForum");
+    public static final org.semanticwb.platform.SemanticProperty frm_hasForum=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/forum#hasForum");
+    public static final org.semanticwb.platform.SemanticClass frm_FrmCategory=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/forum#FrmCategory");
 
 
-    public static org.semanticwb.model.IPFilter createIPFilter(String id, org.semanticwb.model.SWBModel model)
+    public static org.semanticwb.forum.FrmCategory createFrmCategory(String id, org.semanticwb.model.SWBModel model)
     {
-        return (org.semanticwb.model.IPFilter)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, swb_IPFilter), swb_IPFilter);
+        return (org.semanticwb.forum.FrmCategory)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, frm_FrmCategory), frm_FrmCategory);
     }
 
-    public IPFilterBase(org.semanticwb.platform.SemanticObject base)
+    public FrmCategoryBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
-    }
-
-    public String getIpNumber()
-    {
-        return getSemanticObject().getProperty(swb_ipFilterNumber);
-    }
-
-    public void setIpNumber(String ipFilterNumber)
-    {
-        getSemanticObject().setProperty(swb_ipFilterNumber, ipFilterNumber);
-    }
-
-    public boolean isActive()
-    {
-        return getSemanticObject().getBooleanProperty(swb_active);
-    }
-
-    public void setActive(boolean active)
-    {
-        getSemanticObject().setBooleanProperty(swb_active, active);
-    }
-
-    public int getAction()
-    {
-        return getSemanticObject().getIntProperty(swb_ipFilterAction);
-    }
-
-    public void setAction(int ipFilterAction)
-    {
-        getSemanticObject().setLongProperty(swb_ipFilterAction, ipFilterAction);
     }
 
     public java.util.Date getCreated()
@@ -122,6 +92,16 @@ public class IPFilterBase extends org.semanticwb.model.SWBClass implements org.s
         getSemanticObject().setDateProperty(swb_updated, updated);
     }
 
+    public boolean isActive()
+    {
+        return getSemanticObject().getBooleanProperty(swb_active);
+    }
+
+    public void setActive(boolean active)
+    {
+        getSemanticObject().setBooleanProperty(swb_active, active);
+    }
+
     public void setCreator(org.semanticwb.model.User user)
     {
         getSemanticObject().setObjectProperty(swb_creator, user.getSemanticObject());
@@ -168,8 +148,24 @@ public class IPFilterBase extends org.semanticwb.model.SWBClass implements org.s
         getSemanticObject().setProperty(swb_description, description, lang);
     }
 
-    public org.semanticwb.model.WebSite getWebSite()
+    public org.semanticwb.model.GenericIterator<org.semanticwb.forum.FrmForum> listForums()
     {
-        return new org.semanticwb.model.WebSite(getSemanticObject().getModel().getModelObject());
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.forum.FrmForum>(org.semanticwb.forum.FrmForum.class, getSemanticObject().listObjectProperties(frm_hasForum));
+    }
+
+    public boolean hasForum(org.semanticwb.forum.FrmForum frmforum)
+    {
+        if(frmforum==null)return false;        return getSemanticObject().hasObjectProperty(frm_hasForum,frmforum.getSemanticObject());
+    }
+
+    public org.semanticwb.forum.FrmForum getForum()
+    {
+         org.semanticwb.forum.FrmForum ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(frm_hasForum);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.forum.FrmForum)obj.getSemanticClass().newGenericInstance(obj);
+         }
+         return ret;
     }
 }

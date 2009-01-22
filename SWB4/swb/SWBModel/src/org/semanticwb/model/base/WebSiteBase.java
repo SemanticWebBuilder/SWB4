@@ -3,6 +3,10 @@ package org.semanticwb.model.base;
 
 public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Localeable,org.semanticwb.model.Activeable,org.semanticwb.model.Deleteable
 {
+    public static final org.semanticwb.platform.SemanticProperty swb_deleted=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#deleted");
+    public static final org.semanticwb.platform.SemanticProperty swb_active=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#active");
+    public static final org.semanticwb.platform.SemanticClass swb_Language=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Language");
+    public static final org.semanticwb.platform.SemanticProperty swb_language=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#language");
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
     public static final org.semanticwb.platform.SemanticProperty swb_modifiedBy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy");
@@ -10,10 +14,6 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
     public static final org.semanticwb.platform.SemanticProperty swb_updated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#updated");
     public static final org.semanticwb.platform.SemanticClass swb_UserRepository=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserRepository");
     public static final org.semanticwb.platform.SemanticProperty swb_userRepository=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userRepository");
-    public static final org.semanticwb.platform.SemanticProperty swb_deleted=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#deleted");
-    public static final org.semanticwb.platform.SemanticProperty swb_active=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#active");
-    public static final org.semanticwb.platform.SemanticClass swb_Language=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Language");
-    public static final org.semanticwb.platform.SemanticProperty swb_language=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#language");
     public static final org.semanticwb.platform.SemanticProperty swb_creator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#creator");
     public static final org.semanticwb.platform.SemanticClass swb_WebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebPage");
     public static final org.semanticwb.platform.SemanticProperty swb_homePage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#homePage");
@@ -49,6 +49,47 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
     public WebSiteBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+    public boolean isDeleted()
+    {
+        return getSemanticObject().getBooleanProperty(swb_deleted);
+    }
+
+    public void setDeleted(boolean deleted)
+    {
+        getSemanticObject().setBooleanProperty(swb_deleted, deleted);
+    }
+
+    public boolean isActive()
+    {
+        return getSemanticObject().getBooleanProperty(swb_active);
+    }
+
+    public void setActive(boolean active)
+    {
+        getSemanticObject().setBooleanProperty(swb_active, active);
+    }
+
+    public void setLanguage(org.semanticwb.model.Language language)
+    {
+        getSemanticObject().setObjectProperty(swb_language, language.getSemanticObject());
+    }
+
+    public void removeLanguage()
+    {
+        getSemanticObject().removeProperty(swb_language);
+    }
+
+    public org.semanticwb.model.Language getLanguage()
+    {
+         org.semanticwb.model.Language ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_language);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.Language)obj.getSemanticClass().newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public java.util.Date getCreated()
@@ -134,47 +175,6 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
          if(obj!=null)
          {
              ret=(org.semanticwb.model.UserRepository)obj.getSemanticClass().newGenericInstance(obj);
-         }
-         return ret;
-    }
-
-    public boolean isDeleted()
-    {
-        return getSemanticObject().getBooleanProperty(swb_deleted);
-    }
-
-    public void setDeleted(boolean deleted)
-    {
-        getSemanticObject().setBooleanProperty(swb_deleted, deleted);
-    }
-
-    public boolean isActive()
-    {
-        return getSemanticObject().getBooleanProperty(swb_active);
-    }
-
-    public void setActive(boolean active)
-    {
-        getSemanticObject().setBooleanProperty(swb_active, active);
-    }
-
-    public void setLanguage(org.semanticwb.model.Language language)
-    {
-        getSemanticObject().setObjectProperty(swb_language, language.getSemanticObject());
-    }
-
-    public void removeLanguage()
-    {
-        getSemanticObject().removeProperty(swb_language);
-    }
-
-    public org.semanticwb.model.Language getLanguage()
-    {
-         org.semanticwb.model.Language ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_language);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.Language)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }

@@ -3,9 +3,9 @@ package org.semanticwb.model.base;
 
 public class FormViewRefBase extends org.semanticwb.model.Reference 
 {
-    public static final org.semanticwb.platform.SemanticProperty swb_formMode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#formMode");
     public static final org.semanticwb.platform.SemanticClass swbxf_FormView=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#FormView");
     public static final org.semanticwb.platform.SemanticProperty swb_formView=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#formView");
+    public static final org.semanticwb.platform.SemanticProperty swb_formMode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#formMode");
     public static final org.semanticwb.platform.SemanticClass swbxf_FormViewRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#FormViewRef");
 
 
@@ -17,16 +17,6 @@ public class FormViewRefBase extends org.semanticwb.model.Reference
     public FormViewRefBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
-    }
-
-    public String getFormMode()
-    {
-        return getSemanticObject().getProperty(swb_formMode);
-    }
-
-    public void setFormMode(String formMode)
-    {
-        getSemanticObject().setProperty(swb_formMode, formMode);
     }
 
     public void setFormView(org.semanticwb.model.FormView formview)
@@ -48,5 +38,15 @@ public class FormViewRefBase extends org.semanticwb.model.Reference
              ret=(org.semanticwb.model.FormView)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
+    }
+
+    public String getFormMode()
+    {
+        return getSemanticObject().getProperty(swb_formMode);
+    }
+
+    public void setFormMode(String formMode)
+    {
+        getSemanticObject().setProperty(swb_formMode, formMode);
     }
 }

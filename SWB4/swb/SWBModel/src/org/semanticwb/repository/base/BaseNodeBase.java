@@ -3,9 +3,9 @@ package org.semanticwb.repository.base;
 
 public class BaseNodeBase extends org.semanticwb.model.base.GenericObjectBase 
 {
-    public static final org.semanticwb.platform.SemanticProperty jcr_primaryType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#primaryType");
     public static final org.semanticwb.platform.SemanticClass nt_BaseNode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#base");
     public static final org.semanticwb.platform.SemanticProperty swbrep_parentNode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/repository#parentNode");
+    public static final org.semanticwb.platform.SemanticProperty jcr_primaryType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#primaryType");
     public static final org.semanticwb.platform.SemanticProperty swbrep_path=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/repository#path");
     public static final org.semanticwb.platform.SemanticProperty swbrep_name=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/repository#name");
     public static final org.semanticwb.platform.SemanticProperty swbrep_hasNodes=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/repository#hasNodes");
@@ -20,16 +20,6 @@ public class BaseNodeBase extends org.semanticwb.model.base.GenericObjectBase
     public BaseNodeBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
-    }
-
-    public String getPrimaryType()
-    {
-        return getSemanticObject().getProperty(jcr_primaryType);
-    }
-
-    public void setPrimaryType(String primaryType)
-    {
-        getSemanticObject().setProperty(jcr_primaryType, primaryType);
     }
 
     public void setParent(org.semanticwb.repository.BaseNode basenode)
@@ -51,6 +41,16 @@ public class BaseNodeBase extends org.semanticwb.model.base.GenericObjectBase
              ret=(org.semanticwb.repository.BaseNode)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
+    }
+
+    public String getPrimaryType()
+    {
+        return getSemanticObject().getProperty(jcr_primaryType);
+    }
+
+    public void setPrimaryType(String primaryType)
+    {
+        getSemanticObject().setProperty(jcr_primaryType, primaryType);
     }
 
     public String getPath()
