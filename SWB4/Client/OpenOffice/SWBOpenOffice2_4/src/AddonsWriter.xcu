@@ -51,7 +51,7 @@
                                     <value xml:lang="es">Guadar contenido</value>
                                 </prop>
                             </node>
-                            <node oor:name="m10" oor:op="replace">
+                            <node oor:name="m11" oor:op="replace">
                                 <prop oor:name="URL" oor:type="xs:string">
                                     <value>org.semanticwb.openoffice.writer.wb4writeraddon:publish</value>
                                 </prop>
@@ -70,7 +70,7 @@
                                     <value xml:lang="es">Publicar</value>
                                 </prop>
                             </node>
-                            <node oor:name="m11" oor:op="replace">
+                            <node oor:name="m12" oor:op="replace">
                                 <prop oor:name="URL" oor:type="xs:string">
                                     <value>org.semanticwb.openoffice.writer.wb4writeraddon:open</value>
                                 </prop>
@@ -89,7 +89,7 @@
                                     <value xml:lang="es">Abrir contenido</value>
                                 </prop>
                             </node>                            
-                            <node oor:name="m12" oor:op="replace">
+                            <node oor:name="m13" oor:op="replace">
                                 <prop oor:name="URL" oor:type="xs:string">
                                     <value>org.semanticwb.openoffice.writer.wb4writeraddon:view</value>
                                 </prop>
@@ -108,7 +108,7 @@
                                     <value xml:lang="es">Ver contenido</value>
                                 </prop>
                             </node>
-                            <node oor:name="m13" oor:op="replace">
+                            <node oor:name="m14" oor:op="replace">
                                 <prop oor:name="URL" oor:type="xs:string">
                                     <value>org.semanticwb.openoffice.writer.wb4writeraddon:information</value>
                                 </prop>
@@ -127,7 +127,7 @@
                                     <value xml:lang="es">Información del contenido</value>
                                 </prop>
                             </node>
-                            <node oor:name="m14" oor:op="replace">
+                            <node oor:name="m15" oor:op="replace">
                                 <prop oor:name="URL" oor:type="xs:string">
                                     <value>private:separator</value>
                                 </prop>
@@ -135,7 +135,7 @@
                                     <value>com.sun.star.text.TextDocument</value>
                                 </prop>
                             </node>
-                            <node oor:name="m15" oor:op="replace">
+                            <node oor:name="m16" oor:op="replace">
                                 <prop oor:name="URL" oor:type="xs:string">
                                     <value>org.semanticwb.openoffice.writer.wb4writeraddon:delete</value>
                                 </prop>
@@ -154,7 +154,7 @@
                                     <value xml:lang="es">Borrar contenido</value>
                                 </prop>
                             </node>
-                            <node oor:name="m16" oor:op="replace">
+                            <node oor:name="m17" oor:op="replace">
                                 <prop oor:name="URL" oor:type="xs:string">
                                     <value>private:separator</value>
                                 </prop>
@@ -162,7 +162,7 @@
                                     <value>com.sun.star.text.TextDocument</value>
                                 </prop>
                             </node>
-                            <node oor:name="m17" oor:op="replace">
+                            <node oor:name="m18" oor:op="replace">
                                 <prop oor:name="URL" oor:type="xs:string">
                                     <value>org.semanticwb.openoffice.writer.wb4writeraddon:rules</value>
                                 </prop>
@@ -181,7 +181,7 @@
                                     <value xml:lang="es">Agregar reglas</value>
                                 </prop>
                             </node>
-                            <node oor:name="m18" oor:op="replace">
+                            <node oor:name="m19" oor:op="replace">
                                 <prop oor:name="URL" oor:type="xs:string">
                                     <value>private:separator</value>
                                 </prop>
@@ -189,7 +189,7 @@
                                     <value>com.sun.star.text.TextDocument</value>
                                 </prop>
                             </node>
-                            <node oor:name="m19" oor:op="replace">
+                            <node oor:name="m20" oor:op="replace">
                                 <prop oor:name="URL" oor:type="xs:string">
                                     <value>org.semanticwb.openoffice.writer.wb4writeraddon:deleteAssociation</value>
                                 </prop>
@@ -208,7 +208,7 @@
                                     <value xml:lang="es">Borrar Asociación</value>
                                 </prop>
                             </node>
-                            <node oor:name="m20" oor:op="replace">
+                            <node oor:name="m21" oor:op="replace">
                                 <prop oor:name="URL" oor:type="xs:string">
                                     <value>private:separator</value>
                                 </prop>
@@ -216,7 +216,7 @@
                                     <value>com.sun.star.text.TextDocument</value>
                                 </prop>
                             </node>
-                            <node oor:name="m21" oor:op="replace">
+                            <node oor:name="m22" oor:op="replace">
                                 <prop oor:name="URL" oor:type="xs:string">
                                     <value>org.semanticwb.openoffice.writer.wb4writeraddon:addLink</value>
                                 </prop>
