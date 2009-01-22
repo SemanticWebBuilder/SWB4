@@ -136,7 +136,7 @@ public class SemanticMgr implements SWBInstanceObject
 //        debugModel(m_system);
         m_ontology.addSubModel(m_system,false);
 
-        loadDBModels();
+        if(SWBPlatform.isUseDB())loadDBModels();
         m_ontology.rebind();
     }
     

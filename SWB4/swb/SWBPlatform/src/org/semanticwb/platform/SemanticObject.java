@@ -306,19 +306,10 @@ public class SemanticObject
         //System.out.print("getSemanticClass:"+getURI());
         if (m_cls == null)
         {
-            StmtIterator stmit = m_res.listProperties(getModel().getSemanticProperty(SemanticVocabulary.RDF_TYPE).getRDFProperty());
-            while(stmit.hasNext())
+            Statement stm = m_res.getProperty(getModel().getSemanticProperty(SemanticVocabulary.RDF_TYPE).getRDFProperty());
+            if(stm!=null)
             {
-                Statement stm=stmit.nextStatement();
-                try
-                {
-                    m_cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(stm.getResource().getURI());
-                    if(m_cls!=null)break;
-                }
-                catch (Exception e)
-                {
-                    log.error(e);
-                }
+                m_cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(stm.getResource().getURI());
             }
         }
         //System.out.println(" m_cls:"+m_cls);
@@ -1448,42 +1439,39 @@ public class SemanticObject
     {
         String ret = null;
         SemanticClass cls = getSemanticClass();
+        SemanticProperty prop=null;
         if (cls != null)
         {
-            SemanticProperty prop = cls.getDisplayNameProperty();
-            if (prop != null)
+             prop= cls.getDisplayNameProperty();
+        }
+        if (prop != null)
+        {
+            if (prop.isDataTypeProperty())
             {
-                if (prop.isDataTypeProperty())
-                {
-                    ret = getLocaleProperty(prop, lang);
-                }
-                else if (prop.isObjectProperty())
-                {
-                    SemanticObject obj = getObjectProperty(prop);
-                    ret = obj.getDisplayName(lang);
-                }
+                ret = getLocaleProperty(prop, lang);
             }
-            else
+            else if (prop.isObjectProperty())
             {
-                ret = getLocaleProperty(getModel().getSemanticProperty(SemanticVocabulary.RDFS_LABEL), lang);
-                if(ret==null)
-                {
-                    int x=getURI().indexOf('#');
-                    if(x>0)
-                    {
-                        ret=getURI().substring(0,x+1);
-                        ret=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getNsURIPrefix(ret);
-                        ret+=":"+getId();
-                    }else
-                    {
-                        ret+=":"+getId();
-                    }
-                }
+                SemanticObject obj = getObjectProperty(prop);
+                ret = obj.getDisplayName(lang);
             }
         }
         else
         {
-            log.warn("Object does not have cls:" + getURI());
+            ret = getLocaleProperty(getModel().getSemanticProperty(SemanticVocabulary.RDFS_LABEL), lang);
+            if(ret==null)
+            {
+                int x=getURI().indexOf('#');
+                if(x>0)
+                {
+                    ret=getURI().substring(0,x+1);
+                    ret=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getNsURIPrefix(ret);
+                    ret+=":"+getId();
+                }else
+                {
+                    ret+=":"+getId();
+                }
+            }
         }
         return ret;
     }
