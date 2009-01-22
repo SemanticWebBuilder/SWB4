@@ -35,7 +35,8 @@ public class SWBPlatform
 
     private static boolean haveDB=false;
     private static boolean haveDBTables=false;
-    
+    private static boolean useDB=true;
+
 
     private static SemanticMgr semanticMgr=null;
 
@@ -518,6 +519,14 @@ public class SWBPlatform
     public static Properties getWebProperties()
     {
         return props;
+    }
+    
+    public static boolean isUseDB() {
+        return useDB;
+    }
+
+    public static void setUseDB(boolean useDB) {
+        SWBPlatform.useDB = useDB;
     }
     
 //    /** La instancia de WB esta configurada como cliente?.
