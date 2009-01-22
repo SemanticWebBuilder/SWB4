@@ -191,7 +191,7 @@ public class GenericFormElement extends FormElementBase
                 ret+="</span>";
             }
         }
-        System.out.println("ret:"+ret);
+        //System.out.println("ret:"+ret);
         return ret;
     }
 
