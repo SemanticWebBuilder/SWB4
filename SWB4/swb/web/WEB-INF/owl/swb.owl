@@ -594,7 +594,6 @@
         >false</swb:autogenId>
         <swb:hasClass>
           <swb:Class rdf:ID="User">
-            <rdfs:subClassOf rdf:resource="#Calendarable"/>
             <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
             >true</swb:autogenId>
             <rdfs:subClassOf rdf:resource="#SWBClass"/>
