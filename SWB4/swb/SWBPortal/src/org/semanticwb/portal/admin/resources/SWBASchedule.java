@@ -66,7 +66,6 @@ public class SWBASchedule extends GenericResource {
         SemanticObject obj = ont.getSemanticObject(id);
         SemanticClass cls = obj.getSemanticClass();
         String title = cls.getName();
-
         out.println("<script type=\"text/javascript\">");
         if (request.getParameter("nsuri") != null && request.getParameter("nsuri").trim().length() > 0) {
             SemanticObject snobj = ont.getSemanticObject(request.getParameter("nsuri"));
@@ -76,24 +75,17 @@ public class SWBASchedule extends GenericResource {
                 out.println("  addNewTab('" + snobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + snobj.getDisplayName() + "');");
             }
         }
-
         if (request.getParameter("statmsg") != null && request.getParameter("statmsg").trim().length() > 0) {
             log.debug("showStatus");
             out.println("   showStatus('" + request.getParameter("statmsg") + "');");
         }
-
         if (request.getParameter("closetab") != null && request.getParameter("closetab").trim().length() > 0) {
             log.debug("closeTab..."+request.getParameter("closetab"));
             out.println("   closeTab('" + request.getParameter("closetab") + "');");
         }
         out.println("</script>");
-
-
-
-
         SWBResourceURL url = paramRequest.getActionUrl();
         url.setAction("update");
-
         if (action.equals("")) { //lista de instancias de tipo propiedad existentes para selecionar
             SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(idp);
             SemanticClass clsprop = prop.getRangeClass();
@@ -106,26 +98,17 @@ public class SWBASchedule extends GenericResource {
                 hmprop.put(sp, sp);
             }
             SemanticProperty sptemp = null;
-
-
             title = clsprop.getName();
-//            out.println("<script language=\"javascript\">");
-//            out.println("function updPriority(location,txt){");
-//            out.println("  var urlupd = location+txt.value;");
-//            out.println("  alert(txt.value);");
-//            out.println("  window.location=urlupd;");
-//            out.println(" }");
-//            out.println("</script>");
             out.println("<div class=\"swbform\">");
             out.println("<fieldset>");
             out.println("<table width=\"98%\">");
             out.println("<thead>");
             out.println("<tr>");
             out.println("<th>");
-            out.println("Action");
+            out.println(paramRequest.getLocaleString("th_action"));
             out.println("</th>");
             out.println("<th>");
-            out.println("Name");
+            out.println(clsprop.getDisplayNameProperty().getDisplayName(user.getLanguage()));
             out.println("</th>");
             if (hmprop.get(Traceable.swb_created) != null) {
                 sptemp = (SemanticProperty) hmprop.get(Traceable.swb_created);
@@ -169,9 +152,6 @@ public class SWBASchedule extends GenericResource {
                 out.println("<th>");
                 out.println(propname);
                 out.println("</th>");
-//                out.println("<th>");
-//                out.println("Status<br>Active/Unactive");
-//                out.println("</th>");
             }
             out.println("</tr>");
             out.println("</thead>");
@@ -193,7 +173,7 @@ public class SWBASchedule extends GenericResource {
                 urlr.setParameter("sval", sobj.getURI());
                 urlr.setParameter(prop.getName(), prop.getURI());
                 urlr.setAction("remove");
-                out.println("<a href=\"#\" onclick=\"if(confirm('¿Est&aacute;s seguro de querer eliminar esta calendarizaci&oacute;n?'))submitUrl('" + urlr + "',this); return false;\">remove</a>");
+                out.println("<a href=\"#\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " " + sobj.getDisplayName(user.getLanguage()) + "?'))submitUrl('" + urlr + "',this); return false;\">remove</a>");
                 out.println("</td>");
                 out.println("<td>");
                 SWBResourceURL urlchoose = paramRequest.getRenderUrl();
@@ -214,7 +194,6 @@ public class SWBASchedule extends GenericResource {
                 }
                 urlchoose.setParameter("act", "edit");
                 out.println("<a href=\"#\"  onclick=\"submitUrl('" + urlchoose + "',this); return false;\">" + stitle + "</a>");
-                //out.println(stitle); 
                 out.println("</td>");
                 if (hmprop.get(Priorityable.swb_priority) != null) {
                     SemanticProperty semprop = (SemanticProperty) hmprop.get(Priorityable.swb_priority);
@@ -253,37 +232,22 @@ public class SWBASchedule extends GenericResource {
                     urlu.setParameter("sval", sobj.getURI());
                     urlu.setParameter("spropref", idp);
                     urlu.setAction("updstatus");
-                    //urlu.setParameter("val", "1");
                     out.println("<input name=\""+prop.getName()+sobj.getURI()+"\" type=\"checkbox\" value=\"1\" id=\""+prop.getName()+sobj.getURI()+"\" onclick=\"submitUrl('"+urlu+"&val='+this.checked,this); return false;\"  "+(activo?"checked='checked'":"")+"/>"); 
-//                    out.println("<input name=\"" + prop.getName() + sobj.getURI() + "\" type=\"radio\" value=\"true\" id=\"" + prop.getName() + sobj.getURI() + "\" onclick=\"submitUrl('" + urlu + "',this); return false;\"  " + (activo ? "checked='checked'" : "") + "/>"); //onclick=\"window.location='"+urlu+"'\"
-//                    SWBResourceURL urlun = paramRequest.getActionUrl();
-//                    urlun.setParameter("suri", id);
-//                    urlun.setParameter("sprop", idp);
-//                    urlun.setParameter("sval", sobj.getURI());
-//                    urlun.setParameter("spropref", idp);
-//                    urlun.setAction("updstatus");
-//                    urlun.setParameter("val", "0");
-//                    out.println("<input name=\"" + prop.getName() + sobj.getURI() + "\" type=\"radio\" value=\"false\" id=\"" + prop.getName() + sobj.getURI() + "\" onclick=\"submitUrl('" + urlun + "',this); return false;\" " + (!activo ? "checked='checked'" : "") + " />"); //onclick=\"window.location='"+urlun+"'\"
                     out.println("</td>");
                 }
                 out.println("</tr>");
             }
             out.println("</tbody>");
-            out.println("<tfoot>");
-            out.println("<tr>");
-            out.println("<td colspan=\"4\">");
+            out.println("</table>");
+            out.println("</fieldset>");
+            out.println("<fieldset>");
             SWBResourceURL urlNew = paramRequest.getRenderUrl();
             urlNew.setParameter("suri", id);
             urlNew.setParameter("sprop", idp);
             urlNew.setParameter("spropref", idp);
             urlNew.setMode(SWBResourceURL.Mode_EDIT);
             urlNew.setParameter("act", "add");
-            out.println("<p><a href=\"#\" onclick=\"submitUrl('" + urlNew + "',this); return false;\">Add New</a>");
-            out.println("</p>");
-            out.println("</td>");
-            out.println("</tr>");
-            out.println("</tfoot>");
-            out.println("</table>");
+            out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlNew + "',this.domNode); return false;\">" + paramRequest.getLocaleString("btn_addnew") + "</button>");
             out.println("</fieldset>");
             out.println("</div>");
         }
@@ -330,11 +294,9 @@ public class SWBASchedule extends GenericResource {
         String title = cls.getName();
 
         SWBResourceURL url = paramRequest.getActionUrl();
-        //url.setAction("add");
         if(action.equals("edit")) url.setAction("update");
         else url.setAction("add");
         log.debug("Action: "+action);
-        //out.println("<script tyte=\"text/javascript\">loadScript('SWBASchedule','"+SWBPlatform.getContextPath()+"/swbadmin/js/schedule.js');</script>"); //loadScript(id, filepath)
         out.println("<div class=\"swbform\">");
         out.println("<form  action=\"" + url + "\"  id=\"" + id + "/calendar\" name=\"" + id + "/calendar\" method=\"post\" onsubmit=\"submitForm('" + id + "/calendar'); return false;\">"); //id=\"calendar\" name=\"calendar\" dojoType=\"dijit.form.Form\"
         out.println("<fieldset>");
@@ -358,30 +320,32 @@ public class SWBASchedule extends GenericResource {
                 out.println("<input type=\"hidden\" name=\"" + id + "/sval\" value=\"" + idCalendar + "\">");
             }
 
-            out.println("	<ol>");
             //boolean haveObjProp = false;
+            out.println("<table width=\"98%\">");
             Iterator<SemanticProperty> ite_sp = clsprop.listProperties();
             while (ite_sp.hasNext()) {
                 SemanticProperty sp = ite_sp.next();
                 log.debug("prop:" + sp.getDisplayName() + "---" + sp.getName());
+                out.println("<tr>");
                 if (sp.isDataTypeProperty()) {
                     String value = "";
                     if(null!=so_cal) value = getValueSemProp(so_cal, sp);
                     String label = sp.getDisplayName();
                     String name = sp.getName();
                     if (sp.isBoolean()) {
-                        out.println("		<li><label for=\"" + name + "\">" + label + " <em>*</em></label> <input type=\"checkbox\"  id=\"" + id + "/" + name + "\" name=\"" + id + "/" + name + "\" value=\"true\" " + (value != null && value.equals("true") ? "checked" : "") + "/></li>"); // 
+                        out.println("		<td><label for=\"" + name + "\">" + label + " </label></td><td><input type=\"checkbox\"  id=\"" + id + "/" + name + "\" name=\"" + id + "/" + name + "\" value=\"true\" " + (value != null && value.equals("true") ? "checked" : "") + "/></td>"); //
                     } else if ("edit".equals(action)&&(sp.isDate()||sp.isDateTime())) {
-                        out.println("		<li><label for=\"" + name + "\">" + label + " <em>*</em></label> " + value + " </li>");
+                        out.println("		<td><label for=\"" + name + "\">" + label + " </label></td><td> " + value+"</td>");
                         
                     } else if ("add".equals(action)&&(sp.isDate()||sp.isDateTime())) {
                         //out.println("		<li><label for=\"" + name + "\">" + label + " <em>*</em></label> " + value + " </li>");
                     } else if(!sp.equals(XMLable.swb_xml)){
-                        out.println("		<li><label for=\"" + name + "\">" + label + " <em>*</em></label> <input type=\"text\" id=\"" + id + "/" + name + "\" name=\"" + id + "/" + name + "\" value=\"" + value + "\"/></li>");
+                        out.println("		<td><label for=\"" + name + "\">" + label + " </label></td><td><input type=\"text\" id=\"" + id + "/" + name + "\" name=\"" + id + "/" + name + "\" value=\"" + value + "\"/></td>");
                     }
                 }
             }
-            out.println("	</ol>");
+            out.println("</tr>");
+            out.println("</table>");
             out.println("</fieldset>");
         } 
         // Recurso de calendarización
@@ -1185,7 +1149,7 @@ public class SWBASchedule extends GenericResource {
             if (nsuri != null) {
                 response.setRenderParameter("nsuri", nsuri);
             }
-            response.setRenderParameter("statmsg", "Se agreg&oacute; correctamente la calendarizaci&oacute;n.");
+            response.setRenderParameter("statmsg", response.getLocaleString("statmsg1"));
             response.setMode(response.Mode_VIEW);
         }
         else if ("update".equals(action)) {
@@ -1232,7 +1196,7 @@ public class SWBASchedule extends GenericResource {
             obj.setDateProperty(Traceable.swb_updated, mdate);
             strUserMod = user.getId();
             strModDate = Long.toString(mdate.getTime());
-            response.setRenderParameter("statmsg", "Se actualiz&oacute; correctamente la calendarizaci&oacute;n.");
+            response.setRenderParameter("statmsg", response.getLocaleString("statmsg2"));
             if (id != null)response.setRenderParameter("suri", id);
             if (sprop != null)response.setRenderParameter("sprop", sprop);
             if (spropref != null)response.setRenderParameter("spropref", spropref);
@@ -1250,7 +1214,7 @@ public class SWBASchedule extends GenericResource {
             strModDate = Long.toString(mdate.getTime());
             log.debug("SWBASchedule: ProcessAction(updstatus):"+sobj.getSemanticClass().getClassName()+": "+value);
 
-            response.setRenderParameter("statmsg", "Se actualiz&oacute; correctamente el estatus de la calendarizaci&oacute;n.");
+            response.setRenderParameter("statmsg", response.getLocaleString("statmsg3"));
             if (id != null)response.setRenderParameter("suri", id);
             if (sprop != null)response.setRenderParameter("sprop", sprop);
             if (spropref != null)response.setRenderParameter("spropref", spropref);
@@ -1273,7 +1237,7 @@ public class SWBASchedule extends GenericResource {
                     break;
                 }
             }
-            response.setRenderParameter("statmsg", "Se elimin&oacute; calendarizaci&oacute;n.");
+            response.setRenderParameter("statmsg", response.getLocaleString("statmsg4"));
         }
 
         if(("add".equals(action) || "update".equals(action)) && null!=idCalendar) 
