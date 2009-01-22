@@ -30,7 +30,8 @@ import org.semanticwb.model.WebSite;
  *
  * @author Sergio Martínez  (sergio.martinez@acm.org)
  */
-public class TripleStoreLoginModule implements LoginModule {
+public class TripleStoreLoginModule implements LoginModule
+{
 
     static Logger log = SWBUtils.getLogger(TripleStoreLoginModule.class);
     protected Subject subject;
@@ -42,7 +43,8 @@ public class TripleStoreLoginModule implements LoginModule {
     protected Object credential = null;
     protected String website = null;
 
-    public void initialize(Subject subject, CallbackHandler callbackHandler, Map<String, ?> sharedState, Map<String, ?> options) {
+    public void initialize(Subject subject, CallbackHandler callbackHandler, Map<String, ?> sharedState, Map<String, ?> options)
+    {
         this.subject = subject;
         this.callbackHandler = callbackHandler;
         this.sharedState = sharedState;
@@ -50,8 +52,10 @@ public class TripleStoreLoginModule implements LoginModule {
         log.debug("Initialized...");
     }
 
-    public boolean login() throws LoginException {
-        if (callbackHandler == null && !(callbackHandler instanceof SWB4CallbackHandler)) {
+    public boolean login() throws LoginException
+    {
+        if (callbackHandler == null && !(callbackHandler instanceof SWB4CallbackHandler))
+        {
             throw new LoginException("No callbackHandler or not adecuate callbackHandler supplied");
         }
 
@@ -60,38 +64,58 @@ public class TripleStoreLoginModule implements LoginModule {
         callbacks[0] = new NameCallback("login");
         callbacks[1] = new PasswordCallback("password", false);
         callbacks[2] = new TextInputCallback("Site");
-        try {
+        try
+        {
 
             callbackHandler.handle(callbacks);
             login = ((NameCallback) callbacks[0]).getName();
             credential = ((PasswordCallback) callbacks[1]).getPassword();
             ((PasswordCallback) callbacks[1]).clearPassword();
-            website = ((TextInputCallback)callbacks[2]).getText();
-        } catch (IOException ex) {
+            website = ((TextInputCallback) callbacks[2]).getText();
+        } catch (IOException ex)
+        {
             log.error("IO Error Login a user", ex);
             throw new LoginException("IO Error: " + ex.getMessage());
-        } catch (UnsupportedCallbackException ex) {
+        } catch (UnsupportedCallbackException ex)
+        {
             log.error("UnsupportedCallbackException Error Login a user", ex);
             throw new LoginException("UnsupportedCallbackException Error: " + ex.getMessage());
         }
         WebSite ws = SWBContext.getWebSite(website);
         UserRepository ur = ws.getUserRepository();
-        principal = ur.getUserByLogin(login); 
+        principal = ur.getUserByLogin(login);
         //TODO Checar lo del repositorio de usuarios
-        if (null==principal) throw new LoginException("User inexistent");
-        
+        if (null == principal)
+        {
+            throw new LoginException("User inexistent");
+        }
+
         //System.out.println(principal.getClass().getName());
-        if (!principal.isActive()) throw new LoginException("User innactive");
-        if (null==principal.getUsrPassword()) {
-            if (null!=credential) throw new LoginException("Password Mistmatch");
-        } else {
-            try {
-                if (!principal.getUsrPassword().equals(SWBUtils.CryptoWrapper.comparablePassword(new String((char[]) credential)))) {
-                    throw new LoginException("Password Mistmatch");
+        if (!principal.isActive())
+        {
+            throw new LoginException("User innactive");
+        }
+        if (null == principal.getUsrPassword())
+        {
+            if (null != credential)
+            {
+                throw new LoginException("Password Mistmatch");
+            }
+        } else
+        {
+            try
+            {    //TODO quitar siguiente trace
+                log.trace("passwords (u/c/t): " + principal.getUsrPassword() +
+                        " " + SWBUtils.CryptoWrapper.comparablePassword(new String((char[]) credential)) +
+                        " - " + (new String((char[]) credential)));
+                if (!principal.getUsrPassword().equals(SWBUtils.CryptoWrapper.comparablePassword(new String((char[]) credential))))
+                {
+                    throw new LoginException("Password Mistmatch:");
                 }
-            } catch (NoSuchAlgorithmException ex) {
-                    log.error("User: Can't set a crypted Password", ex);
-                    throw new LoginException("Digest Failed");
+            } catch (NoSuchAlgorithmException ex)
+            {
+                log.error("User: Can't set a crypted Password", ex);
+                throw new LoginException("Digest Failed");
             }
         }
         loginflag = true;
@@ -99,16 +123,23 @@ public class TripleStoreLoginModule implements LoginModule {
         return loginflag;
     }
 
-    public boolean commit() throws LoginException {
-        if (!loginflag) {
+    public boolean commit() throws LoginException
+    {
+        if (!loginflag)
+        {
             return false;
         }
         Iterator it = subject.getPrincipals().iterator();
         User tmp = null;
-        if (it.hasNext()) tmp = (User)it.next();
-        if (null!=tmp) {
+        if (it.hasNext())
+        {
+            tmp = (User) it.next();
+        }
+        if (null != tmp)
+        {
             tmp.getSemanticObject().setRDFResource(principal.getSemanticObject().getRDFResource());
-        } else {
+        } else
+        {
             subject.getPrincipals().add(principal);
         }
         subject.getPrivateCredentials().add(credential);
@@ -122,8 +153,10 @@ public class TripleStoreLoginModule implements LoginModule {
         return loginflag;
     }
 
-    public boolean abort() throws LoginException {
-        if (subject != null) {
+    public boolean abort() throws LoginException
+    {
+        if (subject != null)
+        {
             subject.getPrincipals().clear();
             subject.getPrivateCredentials().clear();
             subject.getPublicCredentials().clear();
@@ -131,8 +164,10 @@ public class TripleStoreLoginModule implements LoginModule {
         return true;
     }
 
-    public boolean logout() throws LoginException {
-        if (subject != null) {
+    public boolean logout() throws LoginException
+    {
+        if (subject != null)
+        {
             subject.getPrincipals().clear();
             subject.getPrivateCredentials().clear();
             subject.getPublicCredentials().clear();
