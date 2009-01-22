@@ -66,6 +66,8 @@ public class SWBAWebPageContents extends GenericResource {
         SemanticObject obj = ont.getSemanticObject(id);
         SemanticClass cls = obj.getSemanticClass();
 
+        StringBuffer inheritHeader = new StringBuffer();
+
         out.println("<script type=\"text/javascript\">");
         if (request.getParameter("nsuri") != null && request.getParameter("nsuri").trim().length() > 0) {
             SemanticObject snobj = ont.getSemanticObject(request.getParameter("nsuri"));
@@ -100,17 +102,28 @@ public class SWBAWebPageContents extends GenericResource {
             }
             SemanticProperty sptemp = null;
 
+            int numcols = 0;
             out.println("<div class=\"swbform\">");
             out.println("<fieldset>");
             out.println("<table width=\"98%\" >");
             out.println("<thead>");
+            inheritHeader.append("<fieldset>");
+            inheritHeader.append("<legend>" + paramRequest.getLocaleString("legend_Inherited") + "</legend>");
+            inheritHeader.append("<table width=\"98%\">");
+            inheritHeader.append("<thead>");
+            inheritHeader.append("<tr>");
+            inheritHeader.append("<tr>");
             out.println("<tr>");
             out.println("<th>");
             out.println(paramRequest.getLocaleString("th_action"));
             out.println("</th>");
+            inheritHeader.append("<th>");
             out.println("<th>");
+            numcols++;
             out.println(clsprop.getDisplayNameProperty().getDisplayName(user.getLanguage()));
+            inheritHeader.append(clsprop.getDisplayNameProperty().getDisplayName(user.getLanguage()));
             out.println("</th>");
+            inheritHeader.append("</th>");
             String propname = "";
             sptemp = hmprop.get(Traceable.swb_created);
             if (sptemp != null) {
@@ -121,8 +134,12 @@ public class SWBAWebPageContents extends GenericResource {
                     propname = "";
                 }
                 out.println("<th>");
+                inheritHeader.append("<th>");
+                numcols++;
                 out.println(propname);
+                inheritHeader.append(propname);
                 out.println("</th>");
+                inheritHeader.append("</th>");
             }
             sptemp = hmprop.get(Traceable.swb_updated);
             if (sptemp != null) {
@@ -133,8 +150,12 @@ public class SWBAWebPageContents extends GenericResource {
                     propname = "";
                 }
                 out.println("<th>");
+                inheritHeader.append("<th>");
+                numcols++;
                 out.println(propname);
+                inheritHeader.append(propname);
                 out.println("</th>");
+                inheritHeader.append("</th>");
             }
             sptemp = hmprop.get(Priorityable.swb_priority);
             if (hmprop.get(Priorityable.swb_priority) != null) {
@@ -145,8 +166,12 @@ public class SWBAWebPageContents extends GenericResource {
                     propname = "";
                 }
                 out.println("<th>");
+                inheritHeader.append("<th>");
+                numcols++;
                 out.println(propname);
+                inheritHeader.append(propname);
                 out.println("</th>");
+                inheritHeader.append("</th>");
             }
             sptemp = hmprop.get(Activeable.swb_active);
             if (sptemp != null) {
@@ -164,6 +189,7 @@ public class SWBAWebPageContents extends GenericResource {
             out.println("</thead>");
             out.println("<tbody>");
 
+            boolean isInherit = true;
             SemanticProperty semprop = null;
             SemanticProperty sem_p = ont.getSemanticProperty(idp);
             SemanticObject so = obj.getObjectProperty(sem_p);
@@ -228,6 +254,7 @@ public class SWBAWebPageContents extends GenericResource {
                     boolean activo = false;
                     if (sobj.getBooleanProperty(Activeable.swb_active)) {
                         activo = true;
+                        isInherit = false;
                     }
                     SWBResourceURL urlu = paramRequest.getRenderUrl();
                     urlu.setMode(Mode_Action);
@@ -251,6 +278,57 @@ public class SWBAWebPageContents extends GenericResource {
             urlNew.setParameter("act", "choose");
             out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlNew + "',this.domNode); return false;\">" + paramRequest.getLocaleString("btn_addnew") + "</button>");
             out.println("</fieldset>");
+
+            // Para mostrar heredados
+
+            log.debug("PRO: " + sem_p.getName() + " es inheritable " + sem_p.isInheritProperty());
+
+            if (isInherit && sem_p.isInheritProperty()) {
+                itso = null;
+                itso = obj.listInheritProperties(sem_p);
+                if (itso.hasNext()) {
+                    out.println(inheritHeader.toString());
+                    while (itso.hasNext()) {
+                        SemanticObject sobj = itso.next();
+                        SemanticClass clsobj = sobj.getSemanticClass();
+                        log.debug("Clase:" + clsobj.getName());
+
+                        String stitle = getDisplaySemObj(sobj, user.getLanguage());
+                        out.println("<tr>");
+                        out.println("<td>");
+                        SWBResourceURL urlchoose = paramRequest.getRenderUrl();
+                        urlchoose.setParameter("suri", id);
+                        urlchoose.setParameter("sprop", idp);
+                        urlchoose.setParameter("sobj", sobj.getURI());
+                        urlchoose.setParameter("act", "edit");
+                        out.println("<a href=\"#\"  onclick=\"addNewTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + sobj.getDisplayName() + "');return false;\">" + stitle + "</a>");
+                        out.println("</td>");
+                        if (hmprop.get(Traceable.swb_created) != null) {
+                            semprop = (SemanticProperty) hmprop.get(Traceable.swb_created);
+                            out.println("<td>");
+                            out.println(getValueSemProp(sobj, semprop));
+                            out.println("</td>");
+                        }
+                        if (hmprop.get(Traceable.swb_updated) != null) {
+                            semprop = (SemanticProperty) hmprop.get(Traceable.swb_updated);
+                            out.println("<td>");
+                            out.println(getValueSemProp(sobj, semprop));
+                            out.println("</td>");
+                        }
+                        if (hmprop.get(Priorityable.swb_priority) != null) {
+                            semprop = (SemanticProperty) hmprop.get(Priorityable.swb_priority);
+                            out.println("<td align=\"center\">");
+                            out.println(getValueSemProp(sobj, semprop));
+                            out.println("</td>");
+                        }
+                        out.println("</tr>");
+                    }
+                    out.println("</table>");
+                    out.println("</fieldset>");
+                }
+            }
+
+
             out.println("</div>");
 
         } else if (action.equals("choose")) { //lista de instancias de tipo propiedad existentes para selecionar
