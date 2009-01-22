@@ -554,7 +554,7 @@ public class SWBAPortlet extends GenericResource  {
             out.println("<td align=\"right\" class=\"datos\">"+paramRequest.getLocaleString("monitorResourceHits")+"</td>");
             
             //int ihitlog=recRes.getHitLog();
-            int ihitlog=recRes.getHits();
+            long ihitlog=recRes.getHits();
             checked="";
             if(ihitlog==1){
                 checked="checked";
