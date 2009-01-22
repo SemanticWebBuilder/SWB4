@@ -252,8 +252,6 @@
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:removeDependency>
   </owl:ObjectProperty>
-  <rdf:Property rdf:ID="frmuser"/>
-  <rdf:Property rdf:ID="user"/>
   <owl:DatatypeProperty rdf:ID="postParentPost">
     <rdfs:label>ParentPost</rdfs:label>
     <rdfs:domain rdf:resource="#FrmPost"/>
