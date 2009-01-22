@@ -78,14 +78,17 @@ public class SWBContext extends SWBContextBase
             SemanticClass cls=obj.getSemanticClass();
             if(cls.hasProperty(Iconable.swb_iconClass.getName()))
             {
-                return obj.getProperty(Iconable.swb_iconClass);
+                ret=obj.getProperty(Iconable.swb_iconClass);
             }
-            ret="swbIcon"+cls.getName();
-            if(cls.hasProperty(Activeable.swb_active.getName()))
+            if(ret==null)
             {
-                if(!obj.getBooleanProperty(Activeable.swb_active))
+                ret="swbIcon"+cls.getName();
+                if(cls.hasProperty(Activeable.swb_active.getName()))
                 {
-                    ret+="U";
+                    if(!obj.getBooleanProperty(Activeable.swb_active))
+                    {
+                        ret+="U";
+                    }
                 }
             }
             return ret;

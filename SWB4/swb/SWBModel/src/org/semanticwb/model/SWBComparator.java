@@ -35,19 +35,21 @@ public class SWBComparator implements Comparator
         if(obj2 instanceof GenericObject) sobj2=((GenericObject)obj2).getSemanticObject();
         else sobj2 = (SemanticObject) obj2;
 
-        SemanticClass cls1=sobj1.getSemanticClass();
-        SemanticClass cls2=sobj1.getSemanticClass();
-
-        if(cls1.hasProperty(Sortable.swb_index.getName()) && cls2.hasProperty(Sortable.swb_index.getName()))
-        {
-            return compareSortable(obj1, obj2);
-        }
-
         String name1=null;
         String name2=null;
 
-        if(cls1.hasProperty(WebPage.swb_webPageSortName.getName()))name1=sobj1.getProperty(WebPage.swb_webPageSortName);
-        if(cls2.hasProperty(WebPage.swb_webPageSortName.getName()))name2=sobj2.getProperty(WebPage.swb_webPageSortName);
+        SemanticClass cls1=sobj1.getSemanticClass();
+        SemanticClass cls2=sobj1.getSemanticClass();
+        if(cls1!=null || cls2!=null)
+        {
+            if(cls1.hasProperty(Sortable.swb_index.getName()) && cls2.hasProperty(Sortable.swb_index.getName()))
+            {
+                return compareSortable(obj1, obj2);
+            }
+
+            if(cls1.hasProperty(WebPage.swb_webPageSortName.getName()))name1=sobj1.getProperty(WebPage.swb_webPageSortName);
+            if(cls2.hasProperty(WebPage.swb_webPageSortName.getName()))name2=sobj2.getProperty(WebPage.swb_webPageSortName);
+        }
 
         if(name1==null)name1=sobj1.getDisplayName(lang);
         if(name2==null)name2=sobj2.getDisplayName(lang);
@@ -68,7 +70,9 @@ public class SWBComparator implements Comparator
         TreeSet set=new TreeSet(new SWBComparator(lang));
         while(it.hasNext())
         {
-            set.add(it.next());
+            Object obj=it.next();
+            if(obj!=null)set.add(obj);
+            else System.out.println("Warn: obj==null");
         }
         return set.iterator();        
     }
