@@ -1341,7 +1341,7 @@
     <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#HerarquicalNode"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#interface">
-    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectBehavior"/>
+    <rdfs:range rdf:resource="#Interface"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_interface">
         <swbxf:formElement>
@@ -1354,7 +1354,7 @@
         </swbxf:formElement>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:range rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectBehavior"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasRuleRef">
     <swb:inheritProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"

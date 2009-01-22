@@ -25,6 +25,8 @@
     }
     String smode=request.getParameter("smode");
     //out.println(smode+" "+Thread.currentThread().getName());
+try
+{
     SemanticOntology ont=SWBPlatform.getSemanticMgr().getOntology();
     if(suri==null) //es una creacion
     {
@@ -88,5 +90,6 @@
         frm.setAction("/swb/swbadmin/jsp/SemObjectEditor.jsp");
         out.println(frm.renderForm());
      }
+}catch(Exception e){e.printStackTrace();}
 %>
 <!-- a href="#" onclick="submitUrl('/swb/swb',this); return false;">click</a -->

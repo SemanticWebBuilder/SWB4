@@ -25,9 +25,10 @@
     SemanticObject obj=ont.getSemanticObject(suri);
 
     //TODO:
-    User user=SWBContext.getDefaultRepository().getUserByLogin("admin");
+    //User user=SWBContext.getDefaultRepository().getUserByLogin("admin");
+    User user=SWBPortal.getSessionUser();
 
-    if(obj!=null && act!=null)
+    if(obj!=null && act!=null && user!=null && user.getURI()!=null)
     {
         if(act.equals("active"))
         {

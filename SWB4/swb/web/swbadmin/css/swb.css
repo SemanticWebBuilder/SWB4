@@ -72,7 +72,9 @@ html, body, #main{
 .swbIconUserGroups,
 .swbIconUserGroup,
 .swbIconObjectBehaviors,
-.swbIconObjectBehavior
+.swbIconObjectBehavior,
+.swbIconMenus,
+.swbIconMenu
 {
 	background-repeat: no-repeat; 
 	width:20px;
