@@ -53,7 +53,6 @@ public class SWBAWebPageContents extends GenericResource {
         String id = request.getParameter("suri");
         String idp = request.getParameter("sprop");
         String idptype = request.getParameter("sproptype");
-        //System.out.println("suri:"+id+" sprop:"+idp+" sproptype:"+idptype);
 
         String action = request.getParameter("act");
 
@@ -107,10 +106,10 @@ public class SWBAWebPageContents extends GenericResource {
             out.println("<thead>");
             out.println("<tr>");
             out.println("<th>");
-            out.println("Action");
+            out.println(paramRequest.getLocaleString("th_action"));
             out.println("</th>");
             out.println("<th>");
-            out.println("Name");
+            out.println(clsprop.getDisplayNameProperty().getDisplayName(user.getLanguage()));
             out.println("</th>");
             String propname = "";
             sptemp = hmprop.get(Traceable.swb_created);
@@ -184,15 +183,7 @@ public class SWBAWebPageContents extends GenericResource {
                 urlr.setParameter("sval", sobj.getURI());
                 urlr.setParameter(prop.getName(), prop.getURI());
                 urlr.setAction("remove");
-                out.println("<a href=\"#\" onclick=\"if(confirm('¿ Est&aacute;s seguro de querer eliminar el contenido ... ?')){ submitUrl('" + urlr + "',this); } else { return false;}\">remove</a>");
-//                SWBResourceURL urla = paramRequest.getRenderUrl();
-//                urla.setParameter("suri", id);
-//                urla.setParameter("id", id);
-//                urla.setParameter("sprop", idp);
-//                urla.setParameter("sval", sobj.getURI());
-//                urla.setParameter(prop.getName(), prop.getURI());
-//                urla.setMode(SWBResourceURL.Mode_EDIT);
-//                out.println("&nbsp;<a href=\"#\" onclick=\"submitUrl('" + urla + "',this); return false;\">Adm</a>");
+                out.println("<a href=\"#\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " " + sobj.getDisplayName(user.getLanguage()) + "?')){ submitUrl('" + urlr + "',this); } else { return false;}\">remove</a>");
                 out.println("</td>");
                 out.println("<td>");
                 SWBResourceURL urlchoose = paramRequest.getRenderUrl();
@@ -250,21 +241,15 @@ public class SWBAWebPageContents extends GenericResource {
                 out.println("</tr>");
             }
             out.println("</tbody>");
-            out.println("<tfoot>");
-            out.println("<tr>");
-            out.println("<td colspan=\"4\">");
+            out.println("</table>");
+            out.println("</fieldset>");
+            out.println("<fieldset>");
             SWBResourceURL urlNew = paramRequest.getRenderUrl();
             urlNew.setParameter("suri", id);
             urlNew.setParameter("sprop", idp);
             urlNew.setParameter("sproptype", idptype);
             urlNew.setParameter("act", "choose");
-            out.println("<p><a href=\"#\" onclick=\"submitUrl('" + urlNew + "',this); return false;\">Add New</a>");
-            out.println("</p>");
-            out.println("</td>");
-            out.println("</tr>");
-            out.println("</tfoot>");
-            out.println("</table>");
-
+            out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlNew + "',this.domNode); return false;\">" + paramRequest.getLocaleString("btn_addnew") + "</button>");
             out.println("</fieldset>");
             out.println("</div>");
 
@@ -320,7 +305,7 @@ public class SWBAWebPageContents extends GenericResource {
                 out.println("<thead>");
                 out.println("<tr>");
                 out.println("<th colspan=\"3\">");
-                out.println("Tipo Contenido");
+                out.println(paramRequest.getLocaleString("content_type"));
                 out.println("</th>");
                 out.println("</tr>");
                 out.println("<tr>");
@@ -328,10 +313,10 @@ public class SWBAWebPageContents extends GenericResource {
                 out.println("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
                 out.println("</th>");
                 out.println("<th width=\"30%\">");
-                out.println("Nombre");
+                out.println(paramRequest.getLocaleString("content_name"));
                 out.println("</th>");
                 out.println("<th  width=\"60%\">");
-                out.println("Descripci&oacute;n");
+                out.println(paramRequest.getLocaleString("content_description"));
                 out.println("</th>");
                 out.println("</tr>");
                 out.println("</thead>");
@@ -362,7 +347,7 @@ public class SWBAWebPageContents extends GenericResource {
                 out.println("<thead>");
                 out.println("<tr>");
                 out.println("<th colspan=\"3\">");
-                out.println("Tipo Sistema");
+                out.println(paramRequest.getLocaleString("content_system"));
                 out.println("</th>");
                 out.println("</tr>");
                 out.println("<tr>");
@@ -370,10 +355,10 @@ public class SWBAWebPageContents extends GenericResource {
                 out.println("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
                 out.println("</th>");
                 out.println("<th width=\"30%\">");
-                out.println("Nombre");
+                out.println(paramRequest.getLocaleString("content_name"));
                 out.println("</th>");
                 out.println("<th  width=\"60%\">");
-                out.println("Descripci&oacute;n");
+                out.println(paramRequest.getLocaleString("content_description"));
                 out.println("</th>");
                 out.println("</tr>");
                 out.println("</thead>");
@@ -437,7 +422,7 @@ public class SWBAWebPageContents extends GenericResource {
                 out.println("<thead>");
                 out.println("<tr>");
                 out.println("<th colspan=\"3\">");
-                out.println("Tipo Contenido");
+                out.println(paramRequest.getLocaleString("content_type"));
                 out.println("</th>");
                 out.println("</tr>");
                 out.println("<tr>");
@@ -445,10 +430,10 @@ public class SWBAWebPageContents extends GenericResource {
                 out.println("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
                 out.println("</th>");
                 out.println("<th width=\"30%\">");
-                out.println("Nombre");
+                out.println(paramRequest.getLocaleString("content_name"));
                 out.println("</th>");
                 out.println("<th  width=\"60%\">");
-                out.println("Descripci&oacute;n");
+                out.println(paramRequest.getLocaleString("content_description"));
                 out.println("</th>");
                 out.println("</tr>");
                 out.println("</thead>");
@@ -479,7 +464,7 @@ public class SWBAWebPageContents extends GenericResource {
                 out.println("<thead>");
                 out.println("<tr>");
                 out.println("<th colspan=\"3\">");
-                out.println("Tipo Sistema");
+                out.println(paramRequest.getLocaleString("content_system"));
                 out.println("</th>");
                 out.println("</tr>");
                 out.println("<tr>");
@@ -487,10 +472,10 @@ public class SWBAWebPageContents extends GenericResource {
                 out.println("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
                 out.println("</th>");
                 out.println("<th width=\"30%\">");
-                out.println("Nombre");
+                out.println(paramRequest.getLocaleString("content_name"));
                 out.println("</th>");
                 out.println("<th  width=\"60%\">");
-                out.println("Descripci&oacute;n");
+                out.println(paramRequest.getLocaleString("content_description"));
                 out.println("</th>");
                 out.println("</tr>");
                 out.println("</thead>");
@@ -532,9 +517,9 @@ public class SWBAWebPageContents extends GenericResource {
             out.println("<tbody>");
             out.println("<tr>");
             out.println("<td>");
-            out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitForm('" + id + "/WPContent'); return false;\">Guardar</button>");
+            out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitForm('" + id + "/WPContent'); return false;\">"+paramRequest.getLocaleString("btn_send")+"</button>");
             if (id != null && idp != null && idptype != null) {
-                out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlBack + "',document.getElementById('" + id + "/WPContent')); return false;\">Regresar</button>");
+                out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlBack + "',document.getElementById('" + id + "/WPContent')); return false;\">"+paramRequest.getLocaleString("btn_back")+"</button>");
             }
             out.println("</td>");
             out.println("</tr>");
@@ -561,6 +546,7 @@ public class SWBAWebPageContents extends GenericResource {
             cls = obj.getSemanticClass();
             SemanticObject so = ont.getSemanticObject(sobj);
             SWBFormMgr fmgr = new SWBFormMgr(Portlet.swb_Portlet, obj, null);
+            fmgr.setLang(user.getLanguage());
             fmgr.setAction(urlPA.toString());
 
             log.debug("new: suri: " + id);
@@ -573,10 +559,6 @@ public class SWBAWebPageContents extends GenericResource {
             fmgr.addHiddenParameter("sproptype", idptype);
             fmgr.addHiddenParameter("sobj", sobj);
             fmgr.addHiddenParameter("isGlobal", Boolean.toString(isGlobal));
-
-//            out.println("<h1>");
-//            out.println("Nuevo Portlet de tipo: <i>" + so.getDisplayName(paramRequest.getUser().getLanguage()) + "</i> del sitio " + so.getModel().getModelObject().getDisplayName(paramRequest.getUser().getId()));
-//            out.println("</h1>");
             out.println(fmgr.renderForm());
         }
     }
@@ -629,7 +611,7 @@ public class SWBAWebPageContents extends GenericResource {
             if (nso != null) {
                 response.setRenderParameter("nsuri", nso.getURI());
             }
-            response.setRenderParameter("statmsg", "Se agreg&oacute; correctamente el contenido.");
+            response.setRenderParameter("statmsg", response.getLocaleString("statmsg1"));
             response.setMode(response.Mode_EDIT);
             response.setRenderParameter("act", "");
         } else if ("remove".equals(action)) //suri, prop
@@ -667,7 +649,7 @@ public class SWBAWebPageContents extends GenericResource {
             }
             log.debug("remove-closetab:"+sval);
             response.setRenderParameter("closetab", sval);
-            response.setRenderParameter("statmsg", "Se elimin&oacute; correctamente el contenido.");
+            response.setRenderParameter("statmsg", response.getLocaleString("statmsg2"));
             response.setMode(response.Mode_EDIT);
         }
     }
@@ -727,11 +709,11 @@ public class SWBAWebPageContents extends GenericResource {
                     }
                 }
                 so = obj;
-                actmsg="Se actualiz&oacute; correctamente la prioridad del contenido.";
+                actmsg=paramRequest.getLocaleString("upd_priority");
             } catch (Exception e)
             {
                 log.error(e);
-                errormsg = "Error al actualizar la prioridad del contenido.";
+                errormsg = paramRequest.getLocaleString("statERRORmsg1");
             }
         } else if ("updstatus".equals(action)) {
             String soid = request.getParameter("sval");
@@ -746,10 +728,10 @@ public class SWBAWebPageContents extends GenericResource {
                 SemanticClass scls = sobj.getSemanticClass();
                 log.debug("doAction(updstatus):" + scls.getClassName() + ": " + value);
                 so=sobj;
-                actmsg="Se "+ (value.equals("true") ? "activ&oacute;" : "desactiv&oacute;") + " el contenido.";
+                actmsg=(value.equals("true") ? paramRequest.getLocaleString("upd_active") : paramRequest.getLocaleString("upd_unactive"));
             } catch (Exception e) {
                 log.error(e);
-                errormsg = "Error al " + (value.equals("true") ? "activar" : "desactivar") + " el contenido.";
+                errormsg = (value.equals("true") ? paramRequest.getLocaleString("statERRORmsg2") : paramRequest.getLocaleString("statERRORmsg3")) ;
             }
         } // revisar para agregar nuevo semantic object
 
