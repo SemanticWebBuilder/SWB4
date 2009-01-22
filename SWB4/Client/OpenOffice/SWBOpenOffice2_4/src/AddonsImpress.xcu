@@ -34,6 +34,25 @@
                         <node oor:name="Submenu">                            
                             <node oor:name="m10" oor:op="replace">
                                 <prop oor:name="URL" oor:type="xs:string">
+                                    <value>org.semanticwb.openoffice.impress.wb4impressaddon:save</value>
+                                </prop>
+                                <prop oor:name="ImageIdentifier" oor:type="xs:string">
+                                    <value/>
+                                </prop>
+                                <prop oor:name="Target" oor:type="xs:string">
+                                    <value>_self</value>
+                                </prop>
+                                <prop oor:name="Context" oor:type="xs:string">
+                                    <value>com.sun.star.presentation.PresentationDocument</value>
+                                </prop>
+                                <prop oor:name="Title" oor:type="xs:string">
+                                    <value/>
+                                    <value xml:lang="en">Save content</value>
+                                    <value xml:lang="es">Guardar contenido</value>
+                                </prop>
+                            </node>
+                            <node oor:name="m10" oor:op="replace">
+                                <prop oor:name="URL" oor:type="xs:string">
                                     <value>org.semanticwb.openoffice.impress.wb4impressaddon:publish</value>
                                 </prop>
                                 <prop oor:name="ImageIdentifier" oor:type="xs:string">
@@ -47,8 +66,8 @@
                                 </prop>
                                 <prop oor:name="Title" oor:type="xs:string">
                                     <value/>
-                                    <value xml:lang="en">Publish content</value>
-                                    <value xml:lang="es">Publicar contenido</value>
+                                    <value xml:lang="en">Publish</value>
+                                    <value xml:lang="es">Publicar</value>
                                 </prop>
                             </node>
                             <node oor:name="m11" oor:op="replace">
