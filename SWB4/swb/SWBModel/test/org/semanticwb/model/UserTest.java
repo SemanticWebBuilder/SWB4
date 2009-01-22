@@ -31,6 +31,7 @@ import com.hp.hpl.jena.sparql.util.IndentedWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import org.junit.*;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.platform.SemanticVocabulary;
 
 /**
@@ -294,7 +295,7 @@ public class UserTest {
         SWBContext.getDefaultRepository().getUserByLogin("admin").setProperty("escolaridad", "universidad");
     }
 
-    @Test
+    //@Test
     public void fixPasswords(){
         Iterator<UserRepository> iur = SWBContext.listUserRepositorys();
         while(iur.hasNext()){
@@ -307,6 +308,11 @@ public class UserTest {
                 user.setUsrPassword(user.getUsrLogin());
             }
         }
+    }
+
+    @Test
+    public void encode() throws Exception{
+    System.out.println(SWBUtils.CryptoWrapper.comparablePassword("TOOMANYSECRETS", "MD5"));
     }
 
     //@Test
