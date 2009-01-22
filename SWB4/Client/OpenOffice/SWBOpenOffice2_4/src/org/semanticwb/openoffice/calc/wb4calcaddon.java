@@ -6,11 +6,8 @@ import com.sun.star.lib.uno.helper.Factory;
 import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.registry.XRegistryKey;
 import com.sun.star.lib.uno.helper.WeakBase;
-import javax.swing.JOptionPane;
 import org.semanticwb.openoffice.DocumentType;
 import org.semanticwb.openoffice.OfficeDocument;
-import org.semanticwb.openoffice.WBException;
-import org.semanticwb.openoffice.WBOfficeException;
 
 public final class wb4calcaddon extends WeakBase
         implements com.sun.star.lang.XServiceInfo,
@@ -86,6 +83,13 @@ public final class wb4calcaddon extends WeakBase
             {
                 WB4Calc document = new WB4Calc(this.m_xContext);
                 if (aURL.Path.compareTo("publish") == 0)
+                {
+                    if (document.isPublicated())
+                    {
+                        return this;
+                    }
+                }
+                if (aURL.Path.compareTo("save") == 0)
                 {
                     return this;
                 }
@@ -197,7 +201,12 @@ public final class wb4calcaddon extends WeakBase
                 if (aURL.Path.compareTo("publish") == 0)
                 {
                     document.publish();
-                    return;                    
+                    return;
+                }
+                if (aURL.Path.compareTo("save") == 0)
+                {
+                    document.saveToSite();
+                    return;
                 }
                 if (aURL.Path.compareTo("open") == 0)
                 {
