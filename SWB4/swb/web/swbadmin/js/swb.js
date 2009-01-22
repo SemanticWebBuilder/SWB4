@@ -801,6 +801,16 @@ function canCreateSemanticObject(model, clsid, id)
 }
 
 
+function replaceChars4Id(value)
+{
+    var id="";
+    if(value)
+    {
+        id=value.toLowerCase().replace(' ','_');
+    }
+    return id;
+}
+
    //EditArea
    include("editarea/edit_area/edit_area_full.js");
 
