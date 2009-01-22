@@ -342,11 +342,14 @@ public class SWBFormMgr
                 {
                     SemanticProperty prop=it.next();
                     FormElement ele=getFormElement(prop);
-                    ele.setAttribute("onkeyup", "dojo.byId('swb_create_id').value=replaceChars4Id(this.textbox.value);dijit.byId('swb_create_id').validate()");
+                    if(!m_cls.isAutogenId() && prop.equals(m_cls.getDisplayNameProperty()))
+                    {
+                        ele.setAttribute("onkeyup", "dojo.byId('swb_create_id').value=replaceChars4Id(this.textbox.value);dijit.byId('swb_create_id').validate()");
+                    }
                     renderProp(ret, prop, ele);
                 }
             }
-            if(m_mode.equals(MODE_CREATE) && !m_cls.isAutogenId())
+            if(!m_cls.isAutogenId())
             {
                 String model=m_ref.getModel().getName();
                 String clsid=m_cls.getClassId();
