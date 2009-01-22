@@ -278,6 +278,16 @@
     <rdf:type rdf:resource="#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="Role">
+    <rdfs:subClassOf>
+      <swb:Interface rdf:ID="Unmodifiable">
+        <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >org.semanticwb.model.Unmodifiable</swb:className>
+        <rdfs:subClassOf>
+          <owl:Class rdf:about="#SWBInterface"/>
+        </rdfs:subClassOf>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Interface>
+    </rdfs:subClassOf>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
     <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -1307,6 +1317,13 @@
     <rdfs:range rdf:resource="#WebPage"/>
     <rdfs:label>hasVirtualParent</rdfs:label>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasGroupedTemplate">
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+    <rdfs:label>hasTemplate</rdfs:label>
+    <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:herarquicalRelation>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="modifiedBy">
     <swb:noObservable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:noObservable>
@@ -1322,13 +1339,6 @@
         >false</swbxf:propEditable>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:about="#hasGroupedTemplate">
-    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:removeDependency>
-    <rdfs:label>hasTemplate</rdfs:label>
-    <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:herarquicalRelation>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:about="#hasRuleRefInv">
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -1543,6 +1553,10 @@
     >true</swb:localeable>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#DisplayProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="readOnly">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="#Unmodifiable"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="herarquicalRelation">
     <rdfs:comment>La propiedad se utilizara como relacion padre hijo para la herarquia del arbol de administracion</rdfs:comment>
@@ -1833,6 +1847,18 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:label>language</rdfs:label>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="valid">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_valid">
+        <swbxf:propHidden rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swbxf:propHidden>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <swb:externalInvocation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:externalInvocation>
+    <rdfs:domain rdf:resource="#SWBClass"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="usrLastLogin">
     <swb:noObservable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:noObservable>
@@ -1860,18 +1886,6 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:label>showAs</rdfs:label>
     <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#MenuItem"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="valid">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_valid">
-        <swbxf:propHidden rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swbxf:propHidden>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-    <swb:externalInvocation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:externalInvocation>
-    <rdfs:domain rdf:resource="#SWBClass"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#textAreaRows">
     <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea"/>
