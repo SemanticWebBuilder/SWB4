@@ -83,9 +83,16 @@ public final class wb4impressaddon extends WeakBase
             try
             {
                 WB4Impress document = new WB4Impress(this.m_xContext);
-                if (aURL.Path.compareTo("publish") == 0)
+                if (aURL.Path.compareTo("save") == 0)
                 {
                     return this;
+                }
+                if (aURL.Path.compareTo("publish") == 0)
+                {
+                    if (document.isPublicated())
+                    {
+                        return this;
+                    }
                 }
                 if (aURL.Path.compareTo("open") == 0)
                 {
@@ -202,6 +209,11 @@ public final class wb4impressaddon extends WeakBase
                 if (aURL.Path.compareTo("publish") == 0)
                 {
                     document.publish();
+                    return;
+                }
+                if (aURL.Path.compareTo("save") == 0)
+                {
+                    document.saveToSite();
                     return;
                 }
                 if (aURL.Path.compareTo("open") == 0)
