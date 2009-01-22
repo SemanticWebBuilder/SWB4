@@ -607,8 +607,8 @@ public class SWBALogs extends GenericResource {
             url2.setParameter("suri", pURI);
         }
 
-        out.println("<button dojoType=\"dijit.form.Button\" type=\"button\"  onclick=\"window.open('" + url1 + "');\">Exportar XML</button>"); //submitUrl('#',this.domNode);  //_onclick=\"showDialog('"+url1+"'); return false;\"
-        out.println("<button dojoType=\"dijit.form.Button\" type=\"button\"  onclick=\"window.open('" + url2 + "'); return false;\">Exportar Excel</button>"); //submitUrl('#',this.domNode);
+        out.println("<button dojoType=\"dijit.form.Button\" type=\"button\"  onclick=\"window.open('" + url1 + "');\">"+paramRequest.getLocaleString("msg_export")+" XML</button>"); //submitUrl('#',this.domNode);  //_onclick=\"showDialog('"+url1+"'); return false;\"
+        out.println("<button dojoType=\"dijit.form.Button\" type=\"button\"  onclick=\"window.open('" + url2 + "'); return false;\">"+paramRequest.getLocaleString("msg_export")+" Excel</button>"); //submitUrl('#',this.domNode);
 
         SWBResourceURL url = paramRequest.getRenderUrl();
         if (null != pURI) {
@@ -617,17 +617,17 @@ public class SWBALogs extends GenericResource {
         if (showAllLog) {
             url.setParameter("all", "showAllLog");
         }
-        out.println("<button dojoType=\"dijit.form.Button\" type=\"button\"  onclick=\"submitUrl('" + url + "',this.domNode); return false;\">Reload</button>");
+        out.println("<button dojoType=\"dijit.form.Button\" type=\"button\"  onclick=\"submitUrl('" + url + "',this.domNode); return false;\">"+paramRequest.getLocaleString("msg_reload")+"</button>");
         if (isModel && !showAllLog) {
             SWBResourceURL urlsall = paramRequest.getRenderUrl();
             urlsall.setParameter("suri", pURI);
             urlsall.setParameter("all", "showAllLog");
-            out.println("<button dojoType=\"dijit.form.Button\" type=\"button\"  onclick=\"submitUrl('" + urlsall + "',this.domNode); return false;\">Show All Log</button>");
+            out.println("<button dojoType=\"dijit.form.Button\" type=\"button\"  onclick=\"submitUrl('" + urlsall + "',this.domNode); return false;\">"+paramRequest.getLocaleString("msg_allLog")+"</button>");
         } else if (isModel && showAllLog) {
             SWBResourceURL urlsalln = paramRequest.getRenderUrl();
             urlsalln.setParameter("suri", pURI);
             urlsalln.setParameter("all", "no");
-            out.println("<button dojoType=\"dijit.form.Button\" type=\"button\"  onclick=\"submitUrl('" + urlsalln + "',this.domNode); return false;\">Model Log only</button>");
+            out.println("<button dojoType=\"dijit.form.Button\" type=\"button\"  onclick=\"submitUrl('" + urlsalln + "',this.domNode); return false;\">"+paramRequest.getLocaleString("msg_modelLog")+"</button>");
         }
         out.println("</form>");
         out.println("</fieldset>");
