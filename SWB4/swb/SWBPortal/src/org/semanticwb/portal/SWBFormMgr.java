@@ -342,7 +342,7 @@ public class SWBFormMgr
                 {
                     SemanticProperty prop=it.next();
                     FormElement ele=getFormElement(prop);
-                    ele.setAttribute("onchange", "alert(this.value);dojo.byId('swb_create_id').value=this.value;");
+                    ele.setAttribute("onkeyup", "dojo.byId('swb_create_id').value=replaceChars4Id(this.textbox.value);dijit.byId('swb_create_id').validate()");
                     renderProp(ret, prop, ele);
                 }
             }
