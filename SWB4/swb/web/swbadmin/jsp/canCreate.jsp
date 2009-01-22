@@ -4,7 +4,7 @@
     String id=request.getParameter("id");
     String clsid=request.getParameter("clsid");
     String model=request.getParameter("model");
-    System.out.println("id:"+id+" clsid:"+clsid+" model:"+model);
+    //System.out.println("id:"+id+" clsid:"+clsid+" model:"+model);
     if(id==null || id.length()==0 || id.indexOf(' ')>-1 || clsid==null || model==null)
     {
         out.println("false");
