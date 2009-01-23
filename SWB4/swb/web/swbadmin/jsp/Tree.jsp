@@ -261,7 +261,10 @@
         }
 
         menus.put(getMenuItem("Editar", "dijitEditorIcon dijitEditorIconCut", getNewTabAction()));
-        menus.put(getMenuItem("Eliminar", "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/delete.jsp?suri="+obj.getEncodedURI(),null)));
+        if(!obj.instanceOf(Unmodifiable.swb_Unmodifiable) ||  (obj.instanceOf(Unmodifiable.swb_Unmodifiable) && obj.getBooleanProperty(Unmodifiable.swb_readOnly)==false))
+        {
+            menus.put(getMenuItem("Eliminar", "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/delete.jsp?suri="+obj.getEncodedURI(),null)));
+        }
         menus.put(getMenuSeparator());
 
         //TODO:
