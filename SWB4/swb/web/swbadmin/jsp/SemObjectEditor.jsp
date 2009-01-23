@@ -67,7 +67,13 @@ try
     }else
     {
         SemanticObject obj=ont.getSemanticObject(suri);
-        SWBFormMgr frm=new SWBFormMgr(obj, null,SWBFormMgr.MODE_EDIT);
+        String mode=SWBFormMgr.MODE_EDIT;
+        if(obj.instanceOf(Unmodifiable.swb_Unmodifiable))
+        {
+            boolean read=obj.getBooleanProperty(Unmodifiable.swb_readOnly);
+            if(read)mode=SWBFormMgr.MODE_VIEW;
+        }
+        SWBFormMgr frm=new SWBFormMgr(obj, null,mode);
         frm.setLang(lang);
         if(smode!=null)
         {
