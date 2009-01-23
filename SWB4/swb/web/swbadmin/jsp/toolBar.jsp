@@ -26,7 +26,9 @@
 %>
 <%
     response.setHeader("Cache-Control", "no-cache"); 
-    response.setHeader("Pragma", "no-cache"); 
+    response.setHeader("Pragma", "no-cache");
+    User user=SWBPortal.getSessionUser();
+    String lang=user.getLanguage();
 %>
 
 <div id="semwblogo" class="dijitReset dijitInline swbLogo"></div>
@@ -34,7 +36,7 @@
 
 <%
     WebPage wp=SWBContext.getAdminWebSite().getWebPage("WBAd_mnu_Main");
-    Iterator<WebPage> it=wp.listVisibleChilds(null);
+    Iterator<WebPage> it=wp.listVisibleChilds(lang);
     while(it.hasNext())
     {
         WebPage child=it.next();
@@ -42,13 +44,13 @@
     <div id="<%=child.getId()%>" dojoType="dijit.form.DropDownButton" iconClass_="swbIconWebPage">
         <script type="dojo/method" event="onClick">
         </script>
-        <span><%=child.getTitle()%></span>
+        <span><%=child.getDisplayName(lang)%></span>
         <div dojoType="dijit.Menu">
 <%      addChild(child,out);%>
         </div>
     </div>
 <%
-        String desc=child.getDescription();
+        String desc=child.getDescription(lang);
         if(desc!=null)
         {
 %>
@@ -57,9 +59,8 @@
         }
 
     }
-    
 %>
-    
+<span id="swblogout"><%=user.getUsrFullName()%> | <a href="<%=SWBPlatform.getContextPath()%>/login?_wb_logout=true">logout</a></span>
 <!--    
 
     <div id="getMail" dojoType="dijit.form.ComboButton" optionsTitle="Mail Source Options">

@@ -365,6 +365,8 @@
     <rdf:type rdf:resource="#Class"/>
   </owl:Class>
   <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#RichText">
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model.RichText</swb:className>
     <rdfs:subClassOf>
       <swb:FormElement rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea">
         <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -1635,12 +1637,12 @@
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_description">
         <swbxf:formElement>
-          <swbxf:TextArea rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description">
+          <swbxf:RichText rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#RichTextEditor">
             <swbxf:textAreaCols rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
             >40</swbxf:textAreaCols>
             <swbxf:textAreaRows rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >5</swbxf:textAreaRows>
-          </swbxf:TextArea>
+            >10</swbxf:textAreaRows>
+          </swbxf:RichText>
         </swbxf:formElement>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >20</swb:index>
@@ -2135,6 +2137,12 @@
     <swb:title xml:lang="en">Create</swb:title>
     <swb:title xml:lang="es">Crear</swb:title>
   </swbxf:ObjectAction>
+  <swbxf:TextArea rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description">
+    <swbxf:textAreaCols rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >40</swbxf:textAreaCols>
+    <swbxf:textAreaRows rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >5</swbxf:textAreaRows>
+  </swbxf:TextArea>
   <swb:Permission rdf:ID="PermAdmin">
     <swb:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Administrator Permission</swb:description>
