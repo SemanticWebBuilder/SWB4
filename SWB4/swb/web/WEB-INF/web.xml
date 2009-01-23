@@ -81,7 +81,7 @@
     <!--WB-->
     <servlet-mapping>
         <servlet-name>ErrorHandler</servlet-name>
-        <url-pattern>/errorMessage</url-pattern>
+        <url-pattern>/ErrorMessage/*</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>30</session-timeout>
@@ -92,14 +92,14 @@
     </welcome-file-list>
   <error-page>
     <error-code>403</error-code>
-    <location>/errorMessage?err=403</location>
+    <location>/ErrorMessage/403</location>
   </error-page>
   <error-page>
     <error-code>404</error-code>
-    <location>/errorMessage?err=404</location>
+    <location>/ErrorMessage/404</location>
   </error-page>
   <error-page>
     <error-code>500</error-code>
-    <location>/errorMessage?err=500</location>
+    <location>/ErrorMessage/500</location>
   </error-page>
     </web-app>

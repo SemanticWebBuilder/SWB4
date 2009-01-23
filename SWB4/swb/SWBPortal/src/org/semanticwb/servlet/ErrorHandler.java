@@ -7,6 +7,7 @@ package org.semanticwb.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Enumeration;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -32,11 +33,24 @@ public class ErrorHandler extends HttpServlet
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        int err=500;
+     /*   System.out.println("******************************************");
+        Enumeration en1 = request.getHeaderNames();
+        while (en1.hasMoreElements()){
+            String head= (String)en1.nextElement();
+            Enumeration en2 = request.getHeaders(head);
+            while (en2.hasMoreElements()){
+                System.out.println(head+":"+en2.nextElement());
+            }
+        }
+        System.out.println(request.getPathInfo());
+        System.out.println("******************************************");
+     */   int err=500;
         try
         {
-            String serr=request.getParameter("err");
-            System.out.println("err:"+serr);
+            //String serr=request.getParameter("err");
+            String serr=request.getPathInfo().substring(1);
+      //      System.out.println("err:"+serr);
+        //    System.out.println("query:"+request.getQueryString());
             if(serr!=null)
             {
                 err=Integer.parseInt(serr);

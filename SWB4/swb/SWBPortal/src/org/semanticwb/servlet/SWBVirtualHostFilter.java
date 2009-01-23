@@ -196,10 +196,10 @@ public class SWBVirtualHostFilter implements Filter
         intServlets.put("gtw", gtwOffice);        
         gtwOffice.init(filterConfig.getServletContext());
 
-        InternalServlet errorMessage=new ErrorMessage();
+      /*  InternalServlet errorMessage=new ErrorMessage();
         intServlets.put("errorMessage", errorMessage);
         errorMessage.init(filterConfig.getServletContext());
-
+*/
 
 
         
