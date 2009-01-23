@@ -243,6 +243,15 @@ _form.swbform fieldset li {
     _background: url('../js/dojo/dijit/themes/soria/images/titleBar.png') left bottom repeat-x;
 	}
 
+
+#swblogout {
+    padding:5px;
+    position:absolute;
+    right:0px;
+    font-weight:bold;
+    z-index:999;
+}
+
 /************* Version 3 ****************/
 
 .selected {
