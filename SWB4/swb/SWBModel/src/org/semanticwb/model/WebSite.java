@@ -60,7 +60,7 @@ public class WebSite extends WebSiteBase
         if(i>0)
         {
             String clsid=id.substring(0,i);
-            cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassByID(clsid);
+            cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassById(clsid);
             id=id.substring(i+1);
         }
         if(cls!=null)
@@ -79,7 +79,7 @@ public class WebSite extends WebSiteBase
         if(i>0)
         {
             String clsid=id.substring(0,i);
-            cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassByID(clsid);
+            cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassById(clsid);
             id=id.substring(i+1);
         }
         if(cls!=null)
