@@ -14,16 +14,52 @@ public class CalendarBase extends org.semanticwb.model.SWBClass implements org.s
     public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
     public static final org.semanticwb.platform.SemanticClass swb_Calendar=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Calendar");
 
-
-    public static org.semanticwb.model.Calendar createCalendar(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.model.Calendar)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, swb_Calendar), swb_Calendar);
-    }
-
     public CalendarBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
+
+    /********************************************************************************/
+
+    public static org.semanticwb.model.Calendar getInstance(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.Calendar)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,swb_Calendar),swb_Calendar);
+    }
+
+    public static java.util.Iterator<org.semanticwb.model.Calendar> listInstances(org.semanticwb.model.SWBModel model)
+    {
+        java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(swb_Calendar);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Calendar>(org.semanticwb.model.Calendar.class, it, true);
+    }
+
+    public static java.util.Iterator<org.semanticwb.model.Calendar> listInstances()
+    {
+        java.util.Iterator it=swb_Calendar.listInstances();
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Calendar>(org.semanticwb.model.Calendar.class, it, true);
+    }
+
+    public static org.semanticwb.model.Calendar createInstance(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.Calendar)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, swb_Calendar), swb_Calendar);
+    }
+
+    public static org.semanticwb.model.Calendar createInstance(org.semanticwb.model.SWBModel model)
+    {
+        long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(model.getSemanticObject().getModel().getName()+"/"+swb_Calendar.getName());
+        return createInstance(""+id,model);
+    }
+
+    public static void removeInstance(String id, org.semanticwb.model.SWBModel model)
+    {
+        model.getSemanticObject().getModel().removeSemanticObject(model.getSemanticObject().getModel().getObjectUri(id,swb_Calendar));
+    }
+
+    public static boolean hasInstance(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (getInstance(id, model)!=null);
+    }
+
+    //****************************************************************************************//
 
     public java.util.Date getCreated()
     {
