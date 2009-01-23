@@ -224,7 +224,15 @@ public class User extends UserBase implements Principal, java.io.Serializable
 
     public String getUsrFullName()
     {
-        return getUsrFirstName()+" "+getUsrLastName()+" "+getUsrSecondLastName();
+        String fn=getUsrFirstName();
+        if(fn==null)fn="";
+        String ln=getUsrLastName();
+        if(ln==null)ln="";
+        else ln=" "+ln;
+        String sln=getUsrSecondLastName();
+        if(sln==null)sln="";
+        else ln=" "+ln;
+        return fn+ln+sln;
     }
 
     public Object getExtendedAttribute(SemanticProperty prop)
