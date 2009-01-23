@@ -28,16 +28,43 @@ public class FrmThreadBase extends org.semanticwb.model.SWBClass implements org.
     public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
     public static final org.semanticwb.platform.SemanticProperty frm_thlastpostdate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/forum#thlastpostdate");
     public static final org.semanticwb.platform.SemanticClass frm_FrmThread=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/forum#FrmThread");
-
-
-    public static org.semanticwb.forum.FrmThread createFrmThread(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.forum.FrmThread)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, frm_FrmThread), frm_FrmThread);
-    }
+    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/forum#FrmThread");
 
     public FrmThreadBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+    public static org.semanticwb.forum.FrmThread getFrmThread(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.forum.FrmThread)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+    }
+
+    public static java.util.Iterator<org.semanticwb.forum.FrmThread> listFrmThreads(org.semanticwb.model.SWBModel model)
+    {
+        java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.forum.FrmThread>(org.semanticwb.forum.FrmThread.class, it, true);
+    }
+
+    public static java.util.Iterator<org.semanticwb.forum.FrmThread> listFrmThreads()
+    {
+        java.util.Iterator it=sclass.listInstances();
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.forum.FrmThread>(org.semanticwb.forum.FrmThread.class, it, true);
+    }
+
+    public static org.semanticwb.forum.FrmThread createFrmThread(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.forum.FrmThread)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+    }
+
+    public static void removeFrmThread(String id, org.semanticwb.model.SWBModel model)
+    {
+        model.getSemanticObject().getModel().removeSemanticObject(model.getSemanticObject().getModel().getObjectUri(id,sclass));
+    }
+
+    public static boolean hasFrmThread(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (getFrmThread(id, model)!=null);
     }
 
     public void setLastpostmember(org.semanticwb.model.User user)

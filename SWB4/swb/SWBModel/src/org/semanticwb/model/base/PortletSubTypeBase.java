@@ -15,16 +15,43 @@ public class PortletSubTypeBase extends org.semanticwb.model.SWBClass implements
     public static final org.semanticwb.platform.SemanticProperty swb_creator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#creator");
     public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
     public static final org.semanticwb.platform.SemanticClass swb_PortletSubType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PortletSubType");
-
-
-    public static org.semanticwb.model.PortletSubType createPortletSubType(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.model.PortletSubType)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, swb_PortletSubType), swb_PortletSubType);
-    }
+    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PortletSubType");
 
     public PortletSubTypeBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+    public static org.semanticwb.model.PortletSubType getPortletSubType(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.PortletSubType)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+    }
+
+    public static java.util.Iterator<org.semanticwb.model.PortletSubType> listPortletSubTypes(org.semanticwb.model.SWBModel model)
+    {
+        java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PortletSubType>(org.semanticwb.model.PortletSubType.class, it, true);
+    }
+
+    public static java.util.Iterator<org.semanticwb.model.PortletSubType> listPortletSubTypes()
+    {
+        java.util.Iterator it=sclass.listInstances();
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PortletSubType>(org.semanticwb.model.PortletSubType.class, it, true);
+    }
+
+    public static org.semanticwb.model.PortletSubType createPortletSubType(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.PortletSubType)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+    }
+
+    public static void removePortletSubType(String id, org.semanticwb.model.SWBModel model)
+    {
+        model.getSemanticObject().getModel().removeSemanticObject(model.getSemanticObject().getModel().getObjectUri(id,sclass));
+    }
+
+    public static boolean hasPortletSubType(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (getPortletSubType(id, model)!=null);
     }
 
     public java.util.Date getCreated()

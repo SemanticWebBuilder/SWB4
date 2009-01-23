@@ -7,16 +7,43 @@ public class WorkspaceBase extends org.semanticwb.model.SWBModel
     public static final org.semanticwb.platform.SemanticProperty jcr_root=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#root");
     public static final org.semanticwb.platform.SemanticClass nt_Unstructured=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#unstructured");
     public static final org.semanticwb.platform.SemanticClass swbrep_Workspace=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/repository#Workspace");
-
-
-    public static org.semanticwb.repository.Workspace createWorkspace(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.repository.Workspace)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, swbrep_Workspace), swbrep_Workspace);
-    }
+    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/repository#Workspace");
 
     public WorkspaceBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+    public static org.semanticwb.repository.Workspace getWorkspace(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.repository.Workspace)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+    }
+
+    public static java.util.Iterator<org.semanticwb.repository.Workspace> listWorkspaces(org.semanticwb.model.SWBModel model)
+    {
+        java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.Workspace>(org.semanticwb.repository.Workspace.class, it, true);
+    }
+
+    public static java.util.Iterator<org.semanticwb.repository.Workspace> listWorkspaces()
+    {
+        java.util.Iterator it=sclass.listInstances();
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.Workspace>(org.semanticwb.repository.Workspace.class, it, true);
+    }
+
+    public static org.semanticwb.repository.Workspace createWorkspace(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.repository.Workspace)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+    }
+
+    public static void removeWorkspace(String id, org.semanticwb.model.SWBModel model)
+    {
+        model.getSemanticObject().getModel().removeSemanticObject(model.getSemanticObject().getModel().getObjectUri(id,sclass));
+    }
+
+    public static boolean hasWorkspace(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (getWorkspace(id, model)!=null);
     }
 
     public void setRoot(org.semanticwb.repository.BaseNode basenode)
@@ -42,59 +69,55 @@ public class WorkspaceBase extends org.semanticwb.model.SWBModel
 
     public org.semanticwb.repository.BaseNode getBaseNode(String id)
     {
-        return (org.semanticwb.repository.BaseNode)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,nt_BaseNode),nt_BaseNode);
+        return org.semanticwb.repository.BaseNode.getBaseNode(id, this);
     }
 
     public java.util.Iterator<org.semanticwb.repository.BaseNode> listBaseNodes()
     {
-        com.hp.hpl.jena.rdf.model.Property rdf=getSemanticObject().getModel().getRDFModel().getProperty( org.semanticwb.platform.SemanticVocabulary.RDF_TYPE);
-        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, nt_BaseNode.getOntClass());
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.BaseNode>(org.semanticwb.repository.BaseNode.class, stit, true);
+        return org.semanticwb.repository.BaseNode.listBaseNodes();
     }
 
     public org.semanticwb.repository.BaseNode createBaseNode(String id)
     {
-        return (org.semanticwb.repository.BaseNode)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, nt_BaseNode), nt_BaseNode);
+        return org.semanticwb.repository.BaseNode.createBaseNode(id,this);
     }
 
     public void removeBaseNode(String id)
     {
-        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,nt_BaseNode));
+        org.semanticwb.repository.BaseNode.removeBaseNode(id, this);
     }
     public boolean hasBaseNode(String id)
     {
-        return (getBaseNode(id)!=null);
+        return org.semanticwb.repository.BaseNode.hasBaseNode(id, this);
     }
 
     public org.semanticwb.repository.Unstructured getUnstructured(String id)
     {
-        return (org.semanticwb.repository.Unstructured)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,nt_Unstructured),nt_Unstructured);
+        return org.semanticwb.repository.Unstructured.getUnstructured(id, this);
     }
 
     public java.util.Iterator<org.semanticwb.repository.Unstructured> listUnstructureds()
     {
-        com.hp.hpl.jena.rdf.model.Property rdf=getSemanticObject().getModel().getRDFModel().getProperty( org.semanticwb.platform.SemanticVocabulary.RDF_TYPE);
-        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, nt_Unstructured.getOntClass());
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.Unstructured>(org.semanticwb.repository.Unstructured.class, stit, true);
+        return org.semanticwb.repository.Unstructured.listUnstructureds();
     }
 
     public org.semanticwb.repository.Unstructured createUnstructured(String id)
     {
-        return (org.semanticwb.repository.Unstructured)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, nt_Unstructured), nt_Unstructured);
+        return org.semanticwb.repository.Unstructured.createUnstructured(id,this);
     }
 
     public org.semanticwb.repository.Unstructured createUnstructured()
     {
         long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+nt_Unstructured.getName());
-        return createUnstructured(""+id);
+        return org.semanticwb.repository.Unstructured.createUnstructured(String.valueOf(id),this);
     } 
 
     public void removeUnstructured(String id)
     {
-        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,nt_Unstructured));
+        org.semanticwb.repository.Unstructured.removeUnstructured(id, this);
     }
     public boolean hasUnstructured(String id)
     {
-        return (getUnstructured(id)!=null);
+        return org.semanticwb.repository.Unstructured.hasUnstructured(id, this);
     }
 }
