@@ -68,7 +68,12 @@ public class SemanticProperty
     public String getPrefix()
     {
         return m_prop.getModel().getNsURIPrefix(m_prop.getNameSpace());
-    }    
+    }
+
+    public String getPropId()
+    {
+        return getPrefix()+":"+getName();
+    }
     
     public String getLabel()
     {

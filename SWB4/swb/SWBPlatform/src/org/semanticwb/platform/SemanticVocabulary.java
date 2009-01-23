@@ -154,9 +154,9 @@ public class SemanticVocabulary
         return cls;
     }
 
-    public SemanticClass getSemanticClassByID(String classID)
+    public SemanticClass getSemanticClassById(String classId)
     {
-        return clsbyid.get(classID);
+        return clsbyid.get(classId);
     }
 
     
@@ -171,6 +171,12 @@ public class SemanticVocabulary
     public Iterator<SemanticProperty> listSemanticProperties()
     {
         return properties.values().iterator();
+    }
+
+    public SemanticProperty getSemanticPropertyById(String propId)
+    {
+        //TODO
+        return null;
     }
 
     public SemanticProperty getSemanticProperty(Property property)
