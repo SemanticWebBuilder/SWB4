@@ -24,16 +24,43 @@ public class FrmForumBase extends org.semanticwb.model.SWBClass implements org.s
     public static final org.semanticwb.platform.SemanticProperty swb_creator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#creator");
     public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
     public static final org.semanticwb.platform.SemanticClass frm_FrmForum=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/forum#FrmForum");
-
-
-    public static org.semanticwb.forum.FrmForum createFrmForum(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.forum.FrmForum)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, frm_FrmForum), frm_FrmForum);
-    }
+    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/forum#FrmForum");
 
     public FrmForumBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+    public static org.semanticwb.forum.FrmForum getFrmForum(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.forum.FrmForum)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+    }
+
+    public static java.util.Iterator<org.semanticwb.forum.FrmForum> listFrmForums(org.semanticwb.model.SWBModel model)
+    {
+        java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.forum.FrmForum>(org.semanticwb.forum.FrmForum.class, it, true);
+    }
+
+    public static java.util.Iterator<org.semanticwb.forum.FrmForum> listFrmForums()
+    {
+        java.util.Iterator it=sclass.listInstances();
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.forum.FrmForum>(org.semanticwb.forum.FrmForum.class, it, true);
+    }
+
+    public static org.semanticwb.forum.FrmForum createFrmForum(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.forum.FrmForum)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+    }
+
+    public static void removeFrmForum(String id, org.semanticwb.model.SWBModel model)
+    {
+        model.getSemanticObject().getModel().removeSemanticObject(model.getSemanticObject().getModel().getObjectUri(id,sclass));
+    }
+
+    public static boolean hasFrmForum(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (getFrmForum(id, model)!=null);
     }
 
     public void setModerationMode(org.semanticwb.forum.FrmModererationCat frmmodererationcat)

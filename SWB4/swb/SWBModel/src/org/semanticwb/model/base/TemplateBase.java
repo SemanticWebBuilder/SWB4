@@ -28,16 +28,49 @@ public class TemplateBase extends org.semanticwb.model.SWBClass implements org.s
     public static final org.semanticwb.platform.SemanticProperty swb_hasRuleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasRuleRef");
     public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
     public static final org.semanticwb.platform.SemanticClass swb_Template=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Template");
-
-
-    public static org.semanticwb.model.Template createTemplate(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.model.Template)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, swb_Template), swb_Template);
-    }
+    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Template");
 
     public TemplateBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+    public static org.semanticwb.model.Template getTemplate(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.Template)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+    }
+
+    public static java.util.Iterator<org.semanticwb.model.Template> listTemplates(org.semanticwb.model.SWBModel model)
+    {
+        java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Template>(org.semanticwb.model.Template.class, it, true);
+    }
+
+    public static java.util.Iterator<org.semanticwb.model.Template> listTemplates()
+    {
+        java.util.Iterator it=sclass.listInstances();
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Template>(org.semanticwb.model.Template.class, it, true);
+    }
+
+    public static org.semanticwb.model.Template createTemplate(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.Template)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+    }
+
+    public static org.semanticwb.model.Template createTemplate(org.semanticwb.model.SWBModel model)
+    {
+        long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(model.getSemanticObject().getModel().getName()+"/"+sclass.getName());
+        return org.semanticwb.model.Template.createTemplate(String.valueOf(id), model);
+    }
+
+    public static void removeTemplate(String id, org.semanticwb.model.SWBModel model)
+    {
+        model.getSemanticObject().getModel().removeSemanticObject(model.getSemanticObject().getModel().getObjectUri(id,sclass));
+    }
+
+    public static boolean hasTemplate(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (getTemplate(id, model)!=null);
     }
 
     public void setGroup(org.semanticwb.model.TemplateGroup templategroup)

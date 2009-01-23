@@ -8,16 +8,49 @@ public class PortletRefBase extends org.semanticwb.model.Reference implements or
     public static final org.semanticwb.platform.SemanticClass swb_Portlet=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Portlet");
     public static final org.semanticwb.platform.SemanticProperty swb_portlet=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#portlet");
     public static final org.semanticwb.platform.SemanticClass swb_PortletRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PortletRef");
-
-
-    public static org.semanticwb.model.PortletRef createPortletRef(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.model.PortletRef)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, swb_PortletRef), swb_PortletRef);
-    }
+    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PortletRef");
 
     public PortletRefBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+    public static org.semanticwb.model.PortletRef getPortletRef(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.PortletRef)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+    }
+
+    public static java.util.Iterator<org.semanticwb.model.PortletRef> listPortletRefs(org.semanticwb.model.SWBModel model)
+    {
+        java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PortletRef>(org.semanticwb.model.PortletRef.class, it, true);
+    }
+
+    public static java.util.Iterator<org.semanticwb.model.PortletRef> listPortletRefs()
+    {
+        java.util.Iterator it=sclass.listInstances();
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PortletRef>(org.semanticwb.model.PortletRef.class, it, true);
+    }
+
+    public static org.semanticwb.model.PortletRef createPortletRef(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.PortletRef)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+    }
+
+    public static org.semanticwb.model.PortletRef createPortletRef(org.semanticwb.model.SWBModel model)
+    {
+        long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(model.getSemanticObject().getModel().getName()+"/"+sclass.getName());
+        return org.semanticwb.model.PortletRef.createPortletRef(String.valueOf(id), model);
+    }
+
+    public static void removePortletRef(String id, org.semanticwb.model.SWBModel model)
+    {
+        model.getSemanticObject().getModel().removeSemanticObject(model.getSemanticObject().getModel().getObjectUri(id,sclass));
+    }
+
+    public static boolean hasPortletRef(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (getPortletRef(id, model)!=null);
     }
 
     public int getPriority()

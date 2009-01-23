@@ -39,16 +39,43 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
     public static final org.semanticwb.platform.SemanticClass swb_RoleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#RoleRef");
     public static final org.semanticwb.platform.SemanticClass swb_PortletSubType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PortletSubType");
     public static final org.semanticwb.platform.SemanticClass swb_WebSite=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebSite");
-
-
-    public static org.semanticwb.model.WebSite createWebSite(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.model.WebSite)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, swb_WebSite), swb_WebSite);
-    }
+    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebSite");
 
     public WebSiteBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+    public static org.semanticwb.model.WebSite getWebSite(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.WebSite)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+    }
+
+    public static java.util.Iterator<org.semanticwb.model.WebSite> listWebSites(org.semanticwb.model.SWBModel model)
+    {
+        java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.WebSite>(org.semanticwb.model.WebSite.class, it, true);
+    }
+
+    public static java.util.Iterator<org.semanticwb.model.WebSite> listWebSites()
+    {
+        java.util.Iterator it=sclass.listInstances();
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.WebSite>(org.semanticwb.model.WebSite.class, it, true);
+    }
+
+    public static org.semanticwb.model.WebSite createWebSite(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.WebSite)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+    }
+
+    public static void removeWebSite(String id, org.semanticwb.model.SWBModel model)
+    {
+        model.getSemanticObject().getModel().removeSemanticObject(model.getSemanticObject().getModel().getObjectUri(id,sclass));
+    }
+
+    public static boolean hasWebSite(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (getWebSite(id, model)!=null);
     }
 
     public java.util.Date getCreated()
@@ -248,669 +275,625 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
 
     public org.semanticwb.model.Community getCommunity(String id)
     {
-        return (org.semanticwb.model.Community)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,swb_Community),swb_Community);
+        return org.semanticwb.model.Community.getCommunity(id, this);
     }
 
     public java.util.Iterator<org.semanticwb.model.Community> listCommunitys()
     {
-        com.hp.hpl.jena.rdf.model.Property rdf=getSemanticObject().getModel().getRDFModel().getProperty( org.semanticwb.platform.SemanticVocabulary.RDF_TYPE);
-        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, swb_Community.getOntClass());
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Community>(org.semanticwb.model.Community.class, stit, true);
+        return org.semanticwb.model.Community.listCommunitys();
     }
 
     public org.semanticwb.model.Community createCommunity(String id)
     {
-        return (org.semanticwb.model.Community)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, swb_Community), swb_Community);
+        return org.semanticwb.model.Community.createCommunity(id,this);
     }
 
     public void removeCommunity(String id)
     {
-        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,swb_Community));
+        org.semanticwb.model.Community.removeCommunity(id, this);
     }
     public boolean hasCommunity(String id)
     {
-        return (getCommunity(id)!=null);
+        return org.semanticwb.model.Community.hasCommunity(id, this);
     }
 
     public org.semanticwb.model.PortletType getPortletType(String id)
     {
-        return (org.semanticwb.model.PortletType)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,swb_PortletType),swb_PortletType);
+        return org.semanticwb.model.PortletType.getPortletType(id, this);
     }
 
     public java.util.Iterator<org.semanticwb.model.PortletType> listPortletTypes()
     {
-        com.hp.hpl.jena.rdf.model.Property rdf=getSemanticObject().getModel().getRDFModel().getProperty( org.semanticwb.platform.SemanticVocabulary.RDF_TYPE);
-        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, swb_PortletType.getOntClass());
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PortletType>(org.semanticwb.model.PortletType.class, stit, true);
+        return org.semanticwb.model.PortletType.listPortletTypes();
     }
 
     public org.semanticwb.model.PortletType createPortletType(String id)
     {
-        return (org.semanticwb.model.PortletType)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, swb_PortletType), swb_PortletType);
+        return org.semanticwb.model.PortletType.createPortletType(id,this);
     }
 
     public void removePortletType(String id)
     {
-        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,swb_PortletType));
+        org.semanticwb.model.PortletType.removePortletType(id, this);
     }
     public boolean hasPortletType(String id)
     {
-        return (getPortletType(id)!=null);
+        return org.semanticwb.model.PortletType.hasPortletType(id, this);
     }
 
     public org.semanticwb.model.RuleRef getRuleRef(String id)
     {
-        return (org.semanticwb.model.RuleRef)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,swb_RuleRef),swb_RuleRef);
+        return org.semanticwb.model.RuleRef.getRuleRef(id, this);
     }
 
     public java.util.Iterator<org.semanticwb.model.RuleRef> listRuleRefs()
     {
-        com.hp.hpl.jena.rdf.model.Property rdf=getSemanticObject().getModel().getRDFModel().getProperty( org.semanticwb.platform.SemanticVocabulary.RDF_TYPE);
-        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, swb_RuleRef.getOntClass());
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef>(org.semanticwb.model.RuleRef.class, stit, true);
+        return org.semanticwb.model.RuleRef.listRuleRefs();
     }
 
     public org.semanticwb.model.RuleRef createRuleRef(String id)
     {
-        return (org.semanticwb.model.RuleRef)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, swb_RuleRef), swb_RuleRef);
+        return org.semanticwb.model.RuleRef.createRuleRef(id,this);
     }
 
     public org.semanticwb.model.RuleRef createRuleRef()
     {
         long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+swb_RuleRef.getName());
-        return createRuleRef(""+id);
+        return org.semanticwb.model.RuleRef.createRuleRef(String.valueOf(id),this);
     } 
 
     public void removeRuleRef(String id)
     {
-        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,swb_RuleRef));
+        org.semanticwb.model.RuleRef.removeRuleRef(id, this);
     }
     public boolean hasRuleRef(String id)
     {
-        return (getRuleRef(id)!=null);
+        return org.semanticwb.model.RuleRef.hasRuleRef(id, this);
     }
 
     public org.semanticwb.model.Language getLanguage(String id)
     {
-        return (org.semanticwb.model.Language)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,swb_Language),swb_Language);
+        return org.semanticwb.model.Language.getLanguage(id, this);
     }
 
     public java.util.Iterator<org.semanticwb.model.Language> listLanguages()
     {
-        com.hp.hpl.jena.rdf.model.Property rdf=getSemanticObject().getModel().getRDFModel().getProperty( org.semanticwb.platform.SemanticVocabulary.RDF_TYPE);
-        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, swb_Language.getOntClass());
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Language>(org.semanticwb.model.Language.class, stit, true);
+        return org.semanticwb.model.Language.listLanguages();
     }
 
     public org.semanticwb.model.Language createLanguage(String id)
     {
-        return (org.semanticwb.model.Language)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, swb_Language), swb_Language);
+        return org.semanticwb.model.Language.createLanguage(id,this);
     }
 
     public void removeLanguage(String id)
     {
-        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,swb_Language));
+        org.semanticwb.model.Language.removeLanguage(id, this);
     }
     public boolean hasLanguage(String id)
     {
-        return (getLanguage(id)!=null);
+        return org.semanticwb.model.Language.hasLanguage(id, this);
     }
 
     public org.semanticwb.model.Dns getDns(String id)
     {
-        return (org.semanticwb.model.Dns)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,swb_Dns),swb_Dns);
+        return org.semanticwb.model.Dns.getDns(id, this);
     }
 
     public java.util.Iterator<org.semanticwb.model.Dns> listDnss()
     {
-        com.hp.hpl.jena.rdf.model.Property rdf=getSemanticObject().getModel().getRDFModel().getProperty( org.semanticwb.platform.SemanticVocabulary.RDF_TYPE);
-        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, swb_Dns.getOntClass());
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Dns>(org.semanticwb.model.Dns.class, stit, true);
+        return org.semanticwb.model.Dns.listDnss();
     }
 
     public org.semanticwb.model.Dns createDns(String id)
     {
-        return (org.semanticwb.model.Dns)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, swb_Dns), swb_Dns);
+        return org.semanticwb.model.Dns.createDns(id,this);
     }
 
     public void removeDns(String id)
     {
-        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,swb_Dns));
+        org.semanticwb.model.Dns.removeDns(id, this);
     }
     public boolean hasDns(String id)
     {
-        return (getDns(id)!=null);
+        return org.semanticwb.model.Dns.hasDns(id, this);
     }
 
     public org.semanticwb.model.Rule getRule(String id)
     {
-        return (org.semanticwb.model.Rule)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,swb_Rule),swb_Rule);
+        return org.semanticwb.model.Rule.getRule(id, this);
     }
 
     public java.util.Iterator<org.semanticwb.model.Rule> listRules()
     {
-        com.hp.hpl.jena.rdf.model.Property rdf=getSemanticObject().getModel().getRDFModel().getProperty( org.semanticwb.platform.SemanticVocabulary.RDF_TYPE);
-        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, swb_Rule.getOntClass());
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Rule>(org.semanticwb.model.Rule.class, stit, true);
+        return org.semanticwb.model.Rule.listRules();
     }
 
     public org.semanticwb.model.Rule createRule(String id)
     {
-        return (org.semanticwb.model.Rule)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, swb_Rule), swb_Rule);
+        return org.semanticwb.model.Rule.createRule(id,this);
     }
 
     public org.semanticwb.model.Rule createRule()
     {
         long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+swb_Rule.getName());
-        return createRule(""+id);
+        return org.semanticwb.model.Rule.createRule(String.valueOf(id),this);
     } 
 
     public void removeRule(String id)
     {
-        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,swb_Rule));
+        org.semanticwb.model.Rule.removeRule(id, this);
     }
     public boolean hasRule(String id)
     {
-        return (getRule(id)!=null);
+        return org.semanticwb.model.Rule.hasRule(id, this);
     }
 
     public org.semanticwb.model.Camp getCamp(String id)
     {
-        return (org.semanticwb.model.Camp)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,swb_Camp),swb_Camp);
+        return org.semanticwb.model.Camp.getCamp(id, this);
     }
 
     public java.util.Iterator<org.semanticwb.model.Camp> listCamps()
     {
-        com.hp.hpl.jena.rdf.model.Property rdf=getSemanticObject().getModel().getRDFModel().getProperty( org.semanticwb.platform.SemanticVocabulary.RDF_TYPE);
-        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, swb_Camp.getOntClass());
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Camp>(org.semanticwb.model.Camp.class, stit, true);
+        return org.semanticwb.model.Camp.listCamps();
     }
 
     public org.semanticwb.model.Camp createCamp(String id)
     {
-        return (org.semanticwb.model.Camp)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, swb_Camp), swb_Camp);
+        return org.semanticwb.model.Camp.createCamp(id,this);
     }
 
     public org.semanticwb.model.Camp createCamp()
     {
         long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+swb_Camp.getName());
-        return createCamp(""+id);
+        return org.semanticwb.model.Camp.createCamp(String.valueOf(id),this);
     } 
 
     public void removeCamp(String id)
     {
-        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,swb_Camp));
+        org.semanticwb.model.Camp.removeCamp(id, this);
     }
     public boolean hasCamp(String id)
     {
-        return (getCamp(id)!=null);
+        return org.semanticwb.model.Camp.hasCamp(id, this);
     }
 
     public org.semanticwb.model.VersionInfo getVersionInfo(String id)
     {
-        return (org.semanticwb.model.VersionInfo)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,swb_VersionInfo),swb_VersionInfo);
+        return org.semanticwb.model.VersionInfo.getVersionInfo(id, this);
     }
 
     public java.util.Iterator<org.semanticwb.model.VersionInfo> listVersionInfos()
     {
-        com.hp.hpl.jena.rdf.model.Property rdf=getSemanticObject().getModel().getRDFModel().getProperty( org.semanticwb.platform.SemanticVocabulary.RDF_TYPE);
-        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, swb_VersionInfo.getOntClass());
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.VersionInfo>(org.semanticwb.model.VersionInfo.class, stit, true);
+        return org.semanticwb.model.VersionInfo.listVersionInfos();
     }
 
     public org.semanticwb.model.VersionInfo createVersionInfo(String id)
     {
-        return (org.semanticwb.model.VersionInfo)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, swb_VersionInfo), swb_VersionInfo);
+        return org.semanticwb.model.VersionInfo.createVersionInfo(id,this);
     }
 
     public org.semanticwb.model.VersionInfo createVersionInfo()
     {
         long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+swb_VersionInfo.getName());
-        return createVersionInfo(""+id);
+        return org.semanticwb.model.VersionInfo.createVersionInfo(String.valueOf(id),this);
     } 
 
     public void removeVersionInfo(String id)
     {
-        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,swb_VersionInfo));
+        org.semanticwb.model.VersionInfo.removeVersionInfo(id, this);
     }
     public boolean hasVersionInfo(String id)
     {
-        return (getVersionInfo(id)!=null);
+        return org.semanticwb.model.VersionInfo.hasVersionInfo(id, this);
     }
 
     public org.semanticwb.model.Portlet getPortlet(String id)
     {
-        return (org.semanticwb.model.Portlet)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,swb_Portlet),swb_Portlet);
+        return org.semanticwb.model.Portlet.getPortlet(id, this);
     }
 
     public java.util.Iterator<org.semanticwb.model.Portlet> listPortlets()
     {
-        com.hp.hpl.jena.rdf.model.Property rdf=getSemanticObject().getModel().getRDFModel().getProperty( org.semanticwb.platform.SemanticVocabulary.RDF_TYPE);
-        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, swb_Portlet.getOntClass());
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Portlet>(org.semanticwb.model.Portlet.class, stit, true);
+        return org.semanticwb.model.Portlet.listPortlets();
     }
 
     public org.semanticwb.model.Portlet createPortlet(String id)
     {
-        return (org.semanticwb.model.Portlet)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, swb_Portlet), swb_Portlet);
+        return org.semanticwb.model.Portlet.createPortlet(id,this);
     }
 
     public org.semanticwb.model.Portlet createPortlet()
     {
         long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+swb_Portlet.getName());
-        return createPortlet(""+id);
+        return org.semanticwb.model.Portlet.createPortlet(String.valueOf(id),this);
     } 
 
     public void removePortlet(String id)
     {
-        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,swb_Portlet));
+        org.semanticwb.model.Portlet.removePortlet(id, this);
     }
     public boolean hasPortlet(String id)
     {
-        return (getPortlet(id)!=null);
+        return org.semanticwb.model.Portlet.hasPortlet(id, this);
     }
 
     public org.semanticwb.model.WebPage getWebPage(String id)
     {
-        return (org.semanticwb.model.WebPage)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,swb_WebPage),swb_WebPage);
+        return org.semanticwb.model.WebPage.getWebPage(id, this);
     }
 
     public java.util.Iterator<org.semanticwb.model.WebPage> listWebPages()
     {
-        com.hp.hpl.jena.rdf.model.Property rdf=getSemanticObject().getModel().getRDFModel().getProperty( org.semanticwb.platform.SemanticVocabulary.RDF_TYPE);
-        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, swb_WebPage.getOntClass());
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.WebPage>(org.semanticwb.model.WebPage.class, stit, true);
+        return org.semanticwb.model.WebPage.listWebPages();
     }
 
     public org.semanticwb.model.WebPage createWebPage(String id)
     {
-        return (org.semanticwb.model.WebPage)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, swb_WebPage), swb_WebPage);
+        return org.semanticwb.model.WebPage.createWebPage(id,this);
     }
 
     public void removeWebPage(String id)
     {
-        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,swb_WebPage));
+        org.semanticwb.model.WebPage.removeWebPage(id, this);
     }
     public boolean hasWebPage(String id)
     {
-        return (getWebPage(id)!=null);
+        return org.semanticwb.model.WebPage.hasWebPage(id, this);
     }
 
     public org.semanticwb.model.Calendar getCalendar(String id)
     {
-        return (org.semanticwb.model.Calendar)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,swb_Calendar),swb_Calendar);
+        return org.semanticwb.model.Calendar.getCalendar(id, this);
     }
 
     public java.util.Iterator<org.semanticwb.model.Calendar> listCalendars()
     {
-        com.hp.hpl.jena.rdf.model.Property rdf=getSemanticObject().getModel().getRDFModel().getProperty( org.semanticwb.platform.SemanticVocabulary.RDF_TYPE);
-        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, swb_Calendar.getOntClass());
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Calendar>(org.semanticwb.model.Calendar.class, stit, true);
+        return org.semanticwb.model.Calendar.listCalendars();
     }
 
     public org.semanticwb.model.Calendar createCalendar(String id)
     {
-        return (org.semanticwb.model.Calendar)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, swb_Calendar), swb_Calendar);
+        return org.semanticwb.model.Calendar.createCalendar(id,this);
     }
 
     public org.semanticwb.model.Calendar createCalendar()
     {
         long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+swb_Calendar.getName());
-        return createCalendar(""+id);
+        return org.semanticwb.model.Calendar.createCalendar(String.valueOf(id),this);
     } 
 
     public void removeCalendar(String id)
     {
-        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,swb_Calendar));
+        org.semanticwb.model.Calendar.removeCalendar(id, this);
     }
     public boolean hasCalendar(String id)
     {
-        return (getCalendar(id)!=null);
+        return org.semanticwb.model.Calendar.hasCalendar(id, this);
     }
 
     public org.semanticwb.model.Device getDevice(String id)
     {
-        return (org.semanticwb.model.Device)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,swb_Device),swb_Device);
+        return org.semanticwb.model.Device.getDevice(id, this);
     }
 
     public java.util.Iterator<org.semanticwb.model.Device> listDevices()
     {
-        com.hp.hpl.jena.rdf.model.Property rdf=getSemanticObject().getModel().getRDFModel().getProperty( org.semanticwb.platform.SemanticVocabulary.RDF_TYPE);
-        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, swb_Device.getOntClass());
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Device>(org.semanticwb.model.Device.class, stit, true);
+        return org.semanticwb.model.Device.listDevices();
     }
 
     public org.semanticwb.model.Device createDevice(String id)
     {
-        return (org.semanticwb.model.Device)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, swb_Device), swb_Device);
+        return org.semanticwb.model.Device.createDevice(id,this);
     }
 
     public org.semanticwb.model.Device createDevice()
     {
         long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+swb_Device.getName());
-        return createDevice(""+id);
+        return org.semanticwb.model.Device.createDevice(String.valueOf(id),this);
     } 
 
     public void removeDevice(String id)
     {
-        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,swb_Device));
+        org.semanticwb.model.Device.removeDevice(id, this);
     }
     public boolean hasDevice(String id)
     {
-        return (getDevice(id)!=null);
+        return org.semanticwb.model.Device.hasDevice(id, this);
     }
 
     public org.semanticwb.model.IPFilter getIPFilter(String id)
     {
-        return (org.semanticwb.model.IPFilter)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,swb_IPFilter),swb_IPFilter);
+        return org.semanticwb.model.IPFilter.getIPFilter(id, this);
     }
 
     public java.util.Iterator<org.semanticwb.model.IPFilter> listIPFilters()
     {
-        com.hp.hpl.jena.rdf.model.Property rdf=getSemanticObject().getModel().getRDFModel().getProperty( org.semanticwb.platform.SemanticVocabulary.RDF_TYPE);
-        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, swb_IPFilter.getOntClass());
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.IPFilter>(org.semanticwb.model.IPFilter.class, stit, true);
+        return org.semanticwb.model.IPFilter.listIPFilters();
     }
 
     public org.semanticwb.model.IPFilter createIPFilter(String id)
     {
-        return (org.semanticwb.model.IPFilter)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, swb_IPFilter), swb_IPFilter);
+        return org.semanticwb.model.IPFilter.createIPFilter(id,this);
     }
 
     public org.semanticwb.model.IPFilter createIPFilter()
     {
         long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+swb_IPFilter.getName());
-        return createIPFilter(""+id);
+        return org.semanticwb.model.IPFilter.createIPFilter(String.valueOf(id),this);
     } 
 
     public void removeIPFilter(String id)
     {
-        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,swb_IPFilter));
+        org.semanticwb.model.IPFilter.removeIPFilter(id, this);
     }
     public boolean hasIPFilter(String id)
     {
-        return (getIPFilter(id)!=null);
+        return org.semanticwb.model.IPFilter.hasIPFilter(id, this);
     }
 
     public org.semanticwb.model.PFlowRef getPFlowRef(String id)
     {
-        return (org.semanticwb.model.PFlowRef)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,swb_PFlowRef),swb_PFlowRef);
+        return org.semanticwb.model.PFlowRef.getPFlowRef(id, this);
     }
 
     public java.util.Iterator<org.semanticwb.model.PFlowRef> listPFlowRefs()
     {
-        com.hp.hpl.jena.rdf.model.Property rdf=getSemanticObject().getModel().getRDFModel().getProperty( org.semanticwb.platform.SemanticVocabulary.RDF_TYPE);
-        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, swb_PFlowRef.getOntClass());
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowRef>(org.semanticwb.model.PFlowRef.class, stit, true);
+        return org.semanticwb.model.PFlowRef.listPFlowRefs();
     }
 
     public org.semanticwb.model.PFlowRef createPFlowRef(String id)
     {
-        return (org.semanticwb.model.PFlowRef)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, swb_PFlowRef), swb_PFlowRef);
+        return org.semanticwb.model.PFlowRef.createPFlowRef(id,this);
     }
 
     public org.semanticwb.model.PFlowRef createPFlowRef()
     {
         long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+swb_PFlowRef.getName());
-        return createPFlowRef(""+id);
+        return org.semanticwb.model.PFlowRef.createPFlowRef(String.valueOf(id),this);
     } 
 
     public void removePFlowRef(String id)
     {
-        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,swb_PFlowRef));
+        org.semanticwb.model.PFlowRef.removePFlowRef(id, this);
     }
     public boolean hasPFlowRef(String id)
     {
-        return (getPFlowRef(id)!=null);
+        return org.semanticwb.model.PFlowRef.hasPFlowRef(id, this);
     }
 
     public org.semanticwb.model.PortletRef getPortletRef(String id)
     {
-        return (org.semanticwb.model.PortletRef)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,swb_PortletRef),swb_PortletRef);
+        return org.semanticwb.model.PortletRef.getPortletRef(id, this);
     }
 
     public java.util.Iterator<org.semanticwb.model.PortletRef> listPortletRefs()
     {
-        com.hp.hpl.jena.rdf.model.Property rdf=getSemanticObject().getModel().getRDFModel().getProperty( org.semanticwb.platform.SemanticVocabulary.RDF_TYPE);
-        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, swb_PortletRef.getOntClass());
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PortletRef>(org.semanticwb.model.PortletRef.class, stit, true);
+        return org.semanticwb.model.PortletRef.listPortletRefs();
     }
 
     public org.semanticwb.model.PortletRef createPortletRef(String id)
     {
-        return (org.semanticwb.model.PortletRef)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, swb_PortletRef), swb_PortletRef);
+        return org.semanticwb.model.PortletRef.createPortletRef(id,this);
     }
 
     public org.semanticwb.model.PortletRef createPortletRef()
     {
         long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+swb_PortletRef.getName());
-        return createPortletRef(""+id);
+        return org.semanticwb.model.PortletRef.createPortletRef(String.valueOf(id),this);
     } 
 
     public void removePortletRef(String id)
     {
-        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,swb_PortletRef));
+        org.semanticwb.model.PortletRef.removePortletRef(id, this);
     }
     public boolean hasPortletRef(String id)
     {
-        return (getPortletRef(id)!=null);
+        return org.semanticwb.model.PortletRef.hasPortletRef(id, this);
     }
 
     public org.semanticwb.model.Permission getPermission(String id)
     {
-        return (org.semanticwb.model.Permission)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,swb_Permission),swb_Permission);
+        return org.semanticwb.model.Permission.getPermission(id, this);
     }
 
     public java.util.Iterator<org.semanticwb.model.Permission> listPermissions()
     {
-        com.hp.hpl.jena.rdf.model.Property rdf=getSemanticObject().getModel().getRDFModel().getProperty( org.semanticwb.platform.SemanticVocabulary.RDF_TYPE);
-        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, swb_Permission.getOntClass());
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Permission>(org.semanticwb.model.Permission.class, stit, true);
+        return org.semanticwb.model.Permission.listPermissions();
     }
 
     public org.semanticwb.model.Permission createPermission(String id)
     {
-        return (org.semanticwb.model.Permission)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, swb_Permission), swb_Permission);
+        return org.semanticwb.model.Permission.createPermission(id,this);
     }
 
     public org.semanticwb.model.Permission createPermission()
     {
         long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+swb_Permission.getName());
-        return createPermission(""+id);
+        return org.semanticwb.model.Permission.createPermission(String.valueOf(id),this);
     } 
 
     public void removePermission(String id)
     {
-        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,swb_Permission));
+        org.semanticwb.model.Permission.removePermission(id, this);
     }
     public boolean hasPermission(String id)
     {
-        return (getPermission(id)!=null);
+        return org.semanticwb.model.Permission.hasPermission(id, this);
     }
 
     public org.semanticwb.model.Template getTemplate(String id)
     {
-        return (org.semanticwb.model.Template)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,swb_Template),swb_Template);
+        return org.semanticwb.model.Template.getTemplate(id, this);
     }
 
     public java.util.Iterator<org.semanticwb.model.Template> listTemplates()
     {
-        com.hp.hpl.jena.rdf.model.Property rdf=getSemanticObject().getModel().getRDFModel().getProperty( org.semanticwb.platform.SemanticVocabulary.RDF_TYPE);
-        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, swb_Template.getOntClass());
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Template>(org.semanticwb.model.Template.class, stit, true);
+        return org.semanticwb.model.Template.listTemplates();
     }
 
     public org.semanticwb.model.Template createTemplate(String id)
     {
-        return (org.semanticwb.model.Template)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, swb_Template), swb_Template);
+        return org.semanticwb.model.Template.createTemplate(id,this);
     }
 
     public org.semanticwb.model.Template createTemplate()
     {
         long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+swb_Template.getName());
-        return createTemplate(""+id);
+        return org.semanticwb.model.Template.createTemplate(String.valueOf(id),this);
     } 
 
     public void removeTemplate(String id)
     {
-        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,swb_Template));
+        org.semanticwb.model.Template.removeTemplate(id, this);
     }
     public boolean hasTemplate(String id)
     {
-        return (getTemplate(id)!=null);
+        return org.semanticwb.model.Template.hasTemplate(id, this);
     }
 
     public org.semanticwb.model.PFlow getPFlow(String id)
     {
-        return (org.semanticwb.model.PFlow)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,swb_PFlow),swb_PFlow);
+        return org.semanticwb.model.PFlow.getPFlow(id, this);
     }
 
     public java.util.Iterator<org.semanticwb.model.PFlow> listPFlows()
     {
-        com.hp.hpl.jena.rdf.model.Property rdf=getSemanticObject().getModel().getRDFModel().getProperty( org.semanticwb.platform.SemanticVocabulary.RDF_TYPE);
-        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, swb_PFlow.getOntClass());
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlow>(org.semanticwb.model.PFlow.class, stit, true);
+        return org.semanticwb.model.PFlow.listPFlows();
     }
 
     public org.semanticwb.model.PFlow createPFlow(String id)
     {
-        return (org.semanticwb.model.PFlow)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, swb_PFlow), swb_PFlow);
+        return org.semanticwb.model.PFlow.createPFlow(id,this);
     }
 
     public org.semanticwb.model.PFlow createPFlow()
     {
         long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+swb_PFlow.getName());
-        return createPFlow(""+id);
+        return org.semanticwb.model.PFlow.createPFlow(String.valueOf(id),this);
     } 
 
     public void removePFlow(String id)
     {
-        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,swb_PFlow));
+        org.semanticwb.model.PFlow.removePFlow(id, this);
     }
     public boolean hasPFlow(String id)
     {
-        return (getPFlow(id)!=null);
+        return org.semanticwb.model.PFlow.hasPFlow(id, this);
     }
 
     public org.semanticwb.model.TemplateRef getTemplateRef(String id)
     {
-        return (org.semanticwb.model.TemplateRef)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,swb_TemplateRef),swb_TemplateRef);
+        return org.semanticwb.model.TemplateRef.getTemplateRef(id, this);
     }
 
     public java.util.Iterator<org.semanticwb.model.TemplateRef> listTemplateRefs()
     {
-        com.hp.hpl.jena.rdf.model.Property rdf=getSemanticObject().getModel().getRDFModel().getProperty( org.semanticwb.platform.SemanticVocabulary.RDF_TYPE);
-        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, swb_TemplateRef.getOntClass());
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.TemplateRef>(org.semanticwb.model.TemplateRef.class, stit, true);
+        return org.semanticwb.model.TemplateRef.listTemplateRefs();
     }
 
     public org.semanticwb.model.TemplateRef createTemplateRef(String id)
     {
-        return (org.semanticwb.model.TemplateRef)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, swb_TemplateRef), swb_TemplateRef);
+        return org.semanticwb.model.TemplateRef.createTemplateRef(id,this);
     }
 
     public org.semanticwb.model.TemplateRef createTemplateRef()
     {
         long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+swb_TemplateRef.getName());
-        return createTemplateRef(""+id);
+        return org.semanticwb.model.TemplateRef.createTemplateRef(String.valueOf(id),this);
     } 
 
     public void removeTemplateRef(String id)
     {
-        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,swb_TemplateRef));
+        org.semanticwb.model.TemplateRef.removeTemplateRef(id, this);
     }
     public boolean hasTemplateRef(String id)
     {
-        return (getTemplateRef(id)!=null);
+        return org.semanticwb.model.TemplateRef.hasTemplateRef(id, this);
     }
 
     public org.semanticwb.model.TemplateGroup getTemplateGroup(String id)
     {
-        return (org.semanticwb.model.TemplateGroup)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,swb_TemplateGroup),swb_TemplateGroup);
+        return org.semanticwb.model.TemplateGroup.getTemplateGroup(id, this);
     }
 
     public java.util.Iterator<org.semanticwb.model.TemplateGroup> listTemplateGroups()
     {
-        com.hp.hpl.jena.rdf.model.Property rdf=getSemanticObject().getModel().getRDFModel().getProperty( org.semanticwb.platform.SemanticVocabulary.RDF_TYPE);
-        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, swb_TemplateGroup.getOntClass());
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.TemplateGroup>(org.semanticwb.model.TemplateGroup.class, stit, true);
+        return org.semanticwb.model.TemplateGroup.listTemplateGroups();
     }
 
     public org.semanticwb.model.TemplateGroup createTemplateGroup(String id)
     {
-        return (org.semanticwb.model.TemplateGroup)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, swb_TemplateGroup), swb_TemplateGroup);
+        return org.semanticwb.model.TemplateGroup.createTemplateGroup(id,this);
     }
 
     public org.semanticwb.model.TemplateGroup createTemplateGroup()
     {
         long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+swb_TemplateGroup.getName());
-        return createTemplateGroup(""+id);
+        return org.semanticwb.model.TemplateGroup.createTemplateGroup(String.valueOf(id),this);
     } 
 
     public void removeTemplateGroup(String id)
     {
-        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,swb_TemplateGroup));
+        org.semanticwb.model.TemplateGroup.removeTemplateGroup(id, this);
     }
     public boolean hasTemplateGroup(String id)
     {
-        return (getTemplateGroup(id)!=null);
+        return org.semanticwb.model.TemplateGroup.hasTemplateGroup(id, this);
     }
 
     public org.semanticwb.model.RoleRef getRoleRef(String id)
     {
-        return (org.semanticwb.model.RoleRef)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,swb_RoleRef),swb_RoleRef);
+        return org.semanticwb.model.RoleRef.getRoleRef(id, this);
     }
 
     public java.util.Iterator<org.semanticwb.model.RoleRef> listRoleRefs()
     {
-        com.hp.hpl.jena.rdf.model.Property rdf=getSemanticObject().getModel().getRDFModel().getProperty( org.semanticwb.platform.SemanticVocabulary.RDF_TYPE);
-        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, swb_RoleRef.getOntClass());
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef>(org.semanticwb.model.RoleRef.class, stit, true);
+        return org.semanticwb.model.RoleRef.listRoleRefs();
     }
 
     public org.semanticwb.model.RoleRef createRoleRef(String id)
     {
-        return (org.semanticwb.model.RoleRef)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, swb_RoleRef), swb_RoleRef);
+        return org.semanticwb.model.RoleRef.createRoleRef(id,this);
     }
 
     public org.semanticwb.model.RoleRef createRoleRef()
     {
         long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+swb_RoleRef.getName());
-        return createRoleRef(""+id);
+        return org.semanticwb.model.RoleRef.createRoleRef(String.valueOf(id),this);
     } 
 
     public void removeRoleRef(String id)
     {
-        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,swb_RoleRef));
+        org.semanticwb.model.RoleRef.removeRoleRef(id, this);
     }
     public boolean hasRoleRef(String id)
     {
-        return (getRoleRef(id)!=null);
+        return org.semanticwb.model.RoleRef.hasRoleRef(id, this);
     }
 
     public org.semanticwb.model.PortletSubType getPortletSubType(String id)
     {
-        return (org.semanticwb.model.PortletSubType)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,swb_PortletSubType),swb_PortletSubType);
+        return org.semanticwb.model.PortletSubType.getPortletSubType(id, this);
     }
 
     public java.util.Iterator<org.semanticwb.model.PortletSubType> listPortletSubTypes()
     {
-        com.hp.hpl.jena.rdf.model.Property rdf=getSemanticObject().getModel().getRDFModel().getProperty( org.semanticwb.platform.SemanticVocabulary.RDF_TYPE);
-        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, rdf, swb_PortletSubType.getOntClass());
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PortletSubType>(org.semanticwb.model.PortletSubType.class, stit, true);
+        return org.semanticwb.model.PortletSubType.listPortletSubTypes();
     }
 
     public org.semanticwb.model.PortletSubType createPortletSubType(String id)
     {
-        return (org.semanticwb.model.PortletSubType)getSemanticObject().getModel().createGenericObject(getSemanticObject().getModel().getObjectUri(id, swb_PortletSubType), swb_PortletSubType);
+        return org.semanticwb.model.PortletSubType.createPortletSubType(id,this);
     }
 
     public void removePortletSubType(String id)
     {
-        getSemanticObject().getModel().removeSemanticObject(getSemanticObject().getModel().getObjectUri(id,swb_PortletSubType));
+        org.semanticwb.model.PortletSubType.removePortletSubType(id, this);
     }
     public boolean hasPortletSubType(String id)
     {
-        return (getPortletSubType(id)!=null);
+        return org.semanticwb.model.PortletSubType.hasPortletSubType(id, this);
     }
 }

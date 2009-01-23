@@ -15,16 +15,43 @@ public class FrmFavoriteThreadBase extends org.semanticwb.model.SWBClass impleme
     public static final org.semanticwb.platform.SemanticClass frm_FrmThread=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/forum#FrmThread");
     public static final org.semanticwb.platform.SemanticProperty frm_ftThread=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/forum#ftThread");
     public static final org.semanticwb.platform.SemanticClass frm_FrmFavoriteThread=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/forum#FrmFavoriteThread");
-
-
-    public static org.semanticwb.forum.FrmFavoriteThread createFrmFavoriteThread(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.forum.FrmFavoriteThread)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, frm_FrmFavoriteThread), frm_FrmFavoriteThread);
-    }
+    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/forum#FrmFavoriteThread");
 
     public FrmFavoriteThreadBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+    public static org.semanticwb.forum.FrmFavoriteThread getFrmFavoriteThread(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.forum.FrmFavoriteThread)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+    }
+
+    public static java.util.Iterator<org.semanticwb.forum.FrmFavoriteThread> listFrmFavoriteThreads(org.semanticwb.model.SWBModel model)
+    {
+        java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.forum.FrmFavoriteThread>(org.semanticwb.forum.FrmFavoriteThread.class, it, true);
+    }
+
+    public static java.util.Iterator<org.semanticwb.forum.FrmFavoriteThread> listFrmFavoriteThreads()
+    {
+        java.util.Iterator it=sclass.listInstances();
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.forum.FrmFavoriteThread>(org.semanticwb.forum.FrmFavoriteThread.class, it, true);
+    }
+
+    public static org.semanticwb.forum.FrmFavoriteThread createFrmFavoriteThread(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.forum.FrmFavoriteThread)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+    }
+
+    public static void removeFrmFavoriteThread(String id, org.semanticwb.model.SWBModel model)
+    {
+        model.getSemanticObject().getModel().removeSemanticObject(model.getSemanticObject().getModel().getObjectUri(id,sclass));
+    }
+
+    public static boolean hasFrmFavoriteThread(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (getFrmFavoriteThread(id, model)!=null);
     }
 
     public java.util.Date getCreated()
