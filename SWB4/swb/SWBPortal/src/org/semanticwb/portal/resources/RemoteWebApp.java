@@ -322,6 +322,22 @@ public class RemoteWebApp extends GenericAdmResource
                         Template tpl=SWBPortal.getTemplateMgr().getTemplate(user, topic);
                         
                         DistributorParams distparams=new DistributorParams(request);
+                        Iterator pit=distparams.getExtURIParams().iterator();
+                        while(pit.hasNext())
+                        {
+                            String param=(String)pit.next();
+                            //System.out.println("param:"+param);
+                            if(param.equals("_tpl") && pit.hasNext())
+                            {
+                                try
+                                {
+                                    Template t=topic.getWebSite().getTemplate((String)pit.next());
+                                    Template aux=SWBPortal.getTemplateMgr().getTemplateImp(t);
+                                    if(aux!=null)tpl=aux;
+                                    //System.out.println("tpl:"+t+" "+tpl);
+                                }catch(Exception e){log.error(e);}
+                            }
+                        }
                         boolean onlyContent = distparams.isOnlyContent();
                         
                         //other contents
