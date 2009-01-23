@@ -62,7 +62,9 @@ public class Main {
         //m.getDocumentManager().addAltEntry( "http://www.w3.org/2001/sw/WebOnt/guide-src/food",
         //                                    "file:E:/programming/proys/swb4/swb/SWBTripleStore/src/food.owl" );
         m.getDocumentManager().addAltEntry( "http://www.semanticwebbuilder.org/swb4/ontology",
-                                            "file:E:/programming/proys/swb4/swb/web/WEB-INF/owl/swb.owl" );
+                                            "file:d:/programming/proys/swb4/swb/web/WEB-INF/owl/swb.owl" );
+        m.getDocumentManager().addAltEntry( "http://www.semanticwebbuilder.org/swb4/repository",
+                                            "file:d:/programming/proys/swb4/swb/web/WEB-INF/owl/swb_rep.owl" );
 
         //m.read( "http://www.w3.org/2001/sw/WebOnt/guide-src/wine" );
         m.read( "http://www.semanticwebbuilder.org/swb4/ontology" );
