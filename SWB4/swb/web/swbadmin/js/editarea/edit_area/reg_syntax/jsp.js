@@ -1,6 +1,6 @@
 editAreaLoader.load_syntax["jsp"] = {
 	'COMMENT_SINGLE' : {1 : '//'}
-	,'COMMENT_MULTI' : {'<!--' : '-->'}   //  '/*' : '*/', 
+	,'COMMENT_MULTI' : {'<!--' : '-->', '/*' : '*/'}
 	,'QUOTEMARKS' : {1: "'", 2: '"'}
 	,'KEYWORD_CASE_SENSITIVE' : true
 	,'KEYWORDS' : {
@@ -38,6 +38,24 @@ editAreaLoader.load_syntax["jsp"] = {
 			,'modifiers' : 'g'
 			,'execute' : 'before'
 		}
+		,'directives' : {
+			'search' : '(<%@)([a-z][^ \r\n\t>]*)([^(%>)]*(%>))'
+			,'class' : 'scripts'
+			,'modifiers' : 'gi'
+			,'execute' : 'before' // before or after
+		}
+		,'scriptlets' : {
+			'search' : '(<%=)([a-z][^ \r\n\t>]*)([^(>)]*(%>))'
+			,'class' : 'scriptlets'
+			,'modifiers' : 'gi'
+			,'execute' : 'before' // before or after
+		}
+		,'scripts' : {
+			'search' : '(<%)([a-z][^ \r\n\t>]*)([^(>)]*(%>))'
+			,'class' : 'scripts'
+			,'modifiers' : 'gi'
+			,'execute' : 'before' // before or after
+		}
 		,'tags' : {
 			'search' : '(<)(/?[a-z][^ \r\n\t>]*)([^>]*>)'
 			,'class' : 'tags'
@@ -50,12 +68,6 @@ editAreaLoader.load_syntax["jsp"] = {
 			,'modifiers' : 'g'
 			,'execute' : 'before' // before or after
 		}
-		,'scripts' : {
-			'search' : '(<%)(/?[a-z][^ \r\n\t>]*)([^(%>)]*(&>))'
-			,'class' : 'scripts'
-			,'modifiers' : 'gi'
-			,'execute' : 'before' // before or after
-		}
 /*		,'precompilerstring' : {
 			'search' : '(#[\t ]*include[\t ]*)([^\r\n]*)([^\r\n]*[\r\n])'
 			,'class' : 'precompilerstring'
@@ -64,17 +76,17 @@ editAreaLoader.load_syntax["jsp"] = {
 		}*/
 	}
 	,'STYLES' : {
-		'COMMENTS': 'color: #AAAAAA;'
+		'COMMENTS': 'color: #CCCCCC;'
 		,'QUOTESMARKS': 'color: #6381F8;'
 		,'KEYWORDS' : {
-			'constants' : 'color: #EE0000;'
-			,'types' : 'color: #0000EE;'
+			'constants' : 'color: #9933FF;'
+			,'types' : 'color: #996633;'
 			,'statements' : 'color: #60CA00;'
-			,'keywords' : 'color: #48BDDF;'
+			,'keywords' : 'color: #3333FF;'
                         ,'objects' : 'color: #22BB22; font-weight:bold'
 		}
 		,'OPERATORS' : 'color: #FF00FF;'
-		,'DELIMITERS' : 'color: #0038E1;'
+		,'DELIMITERS' : 'color: #FF9933;'
 		,'REGEXPS' : {
 			'precompiler' : 'color: #009900;'
 			,'attributes': 'color: #B1AC41;'
