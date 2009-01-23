@@ -125,6 +125,22 @@ public class SWBAWebPageContents extends GenericResource {
             out.println("</th>");
             inheritHeader.append("</th>");
             String propname = "";
+            sptemp = hmprop.get(Portlet.swb_portletType);
+            if (sptemp != null) {
+                propname = sptemp.getName();
+                try {
+                    propname = sptemp.getDisplayName(user.getLanguage());
+                } catch (Exception e) {
+                    propname = "";
+                }
+                out.println("<th>");
+                inheritHeader.append("<th>");
+                numcols++;
+                out.println(propname);
+                inheritHeader.append(propname);
+                out.println("</th>");
+                inheritHeader.append("</th>");
+            }
             sptemp = hmprop.get(Traceable.swb_created);
             if (sptemp != null) {
                 propname = sptemp.getName();
@@ -219,6 +235,12 @@ public class SWBAWebPageContents extends GenericResource {
                 urlchoose.setParameter("act", "edit");
                 out.println("<a href=\"#\"  onclick=\"addNewTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + sobj.getDisplayName() + "');return false;\">" + stitle + "</a>");
                 out.println("</td>");
+                 if (hmprop.get(Portlet.swb_portletType) != null) {
+                    semprop = (SemanticProperty) hmprop.get(Portlet.swb_portletType);
+                    out.println("<td>");
+                    out.println(sobj.getObjectProperty(semprop).getDisplayName(user.getLanguage()));
+                    out.println("</td>");
+                }
                 if (hmprop.get(Traceable.swb_created) != null) {
                     semprop = (SemanticProperty) hmprop.get(Traceable.swb_created);
                     out.println("<td>");
