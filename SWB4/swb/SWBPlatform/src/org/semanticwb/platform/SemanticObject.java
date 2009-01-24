@@ -19,7 +19,6 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.base.util.URLEncoder;
 import org.semanticwb.model.GenericObject;
-import org.semanticwb.model.base.GenericObjectBase;
 
 /**
  *
@@ -559,8 +558,7 @@ public class SemanticObject
                     String value = getProperty(prop);
                     if (value != null)
                     {
-                        GenericObjectBase obj = new GenericObjectBase(this);
-                        String workPath = obj.getWorkPath();
+                        String workPath = this.getWorkPath();
                         if (!(workPath.endsWith("\\") || workPath.equals("/")))
                         {
                             workPath += "/" + value;
@@ -1189,8 +1187,7 @@ public class SemanticObject
     public SemanticObject setInputStreamProperty(SemanticProperty prop, InputStream value, String name) throws SWBException
     {
         SWBPlatform.getSemanticMgr().notifyChange(this, prop, "SET");
-        GenericObjectBase obj = new GenericObjectBase(this);
-        String workPath = obj.getWorkPath();
+        String workPath = this.getWorkPath();
         if (!(workPath.endsWith("\\") || workPath.equals("/")))
         {
             workPath += "/" + name;
@@ -1202,8 +1199,7 @@ public class SemanticObject
     public InputStream getInputStreamProperty(SemanticProperty prop) throws SWBException
     {
         String value = getProperty(prop);
-        GenericObjectBase obj = new GenericObjectBase(this);
-        String workPath = obj.getWorkPath();
+        String workPath = this.getWorkPath();
         if (!(workPath.endsWith("\\") || workPath.equals("/")))
         {
             workPath += "/" + value;
@@ -1528,6 +1524,11 @@ public class SemanticObject
         Iterator<SemanticObject> it=listHerarquicalParents();
         if(it.hasNext())ret=it.next();
         return ret;
+    }
+
+    public String getWorkPath()
+    {
+        return "/"+getModel().getName()+"/"+getSemanticClass().getName()+"/"+getId();
     }
 
 }

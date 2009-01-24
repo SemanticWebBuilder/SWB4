@@ -121,7 +121,7 @@ public class GenericObjectBase implements GenericObject
      */
     public String getWorkPath()
     {
-        return "/"+getSemanticObject().getModel().getName()+"/"+getSemanticObject().getSemanticClass().getName()+"/"+getId();
+        return m_obj.getWorkPath();
     }
 
 }
