@@ -4,6 +4,12 @@
 <pre>
 <%
     String lang="es";
+    Iterator<Device> itd=SWBContext.getWebSite("sep").listDevices();
+    while(itd.hasNext())
+    {
+        out.println("Device:"+itd.next().getTitle());
+    }
+
     Iterator<SemanticClass> it=SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClasses();
     while(it.hasNext())
     {
