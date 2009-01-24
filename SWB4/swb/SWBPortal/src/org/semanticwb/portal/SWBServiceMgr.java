@@ -37,43 +37,36 @@ public class SWBServiceMgr implements SemanticObserver {
         SemanticClass cls = obj.getSemanticClass();
         if(cls.isSWB())
         {
-            GenericObject gen = obj.createGenericInstance();
             if (prop == null) //se modifico un objeto CREATE o REMOVE
             {
                 if (action.equals("CREATE")) //CREATE
                 {
-                    updateTraceable(gen,usr);
-                    if (gen instanceof WebSite) {
-                        WebSite aux = (WebSite) gen;
-                        java.io.File dir=new java.io.File(SWBPlatform.getWorkPath() + "/"+ aux.getId() + "/Template");
+                    updateTraceable(obj,usr);
+                    if(obj.instanceOf(WebSite.sclass))
+                    {
+                        java.io.File dir=new java.io.File(SWBPlatform.getWorkPath() + "/"+ obj.getId() + "/Template");
                         dir.mkdirs();
-                        dir=new java.io.File(SWBPlatform.getWorkPath() + "/" + aux.getId() + "/Portlet");
+                        dir=new java.io.File(SWBPlatform.getWorkPath() + "/" + obj.getId() + "/Portlet");
                         dir.mkdirs();
                     }
                 } else //REMOVES
                 {
-                    if (gen instanceof WebSite) //Removes website
+                    if (obj.instanceOf(WebSite.sclass)) //Removes website
                     {
-                        WebSite aux = (WebSite) gen;
-                        System.out.println("Entra a eliminar sitio:"+aux.getId()+"path:"+SWBPlatform.getWorkPath() + aux.getWorkPath());
-                        SWBPlatform.getSemanticMgr().removeModel(aux.getId());
-                        SWBUtils.IO.removeDirectory(SWBPlatform.getWorkPath() + aux.getWorkPath());
-                    } else if (gen instanceof Template) // Removes Template
+                        //System.out.println("Entra a eliminar sitio:"+aux.getId()+"path:"+SWBPlatform.getWorkPath() + aux.getWorkPath());
+                        SWBPlatform.getSemanticMgr().removeModel(obj.getId());
+                        SWBUtils.IO.removeDirectory(SWBPlatform.getWorkPath() + obj.getWorkPath());
+                    } else if (obj.instanceOf(Template.sclass)) // Removes Template
                     {
-                        Template aux = (Template) gen;
-                        SWBUtils.IO.removeDirectory(SWBPlatform.getWorkPath() + aux.getWorkPath());
-                    } else if (gen instanceof Portlet) // Removes Portlet
+                        SWBUtils.IO.removeDirectory(SWBPlatform.getWorkPath() + obj.getWorkPath());
+                    } else if (obj.instanceOf(Portlet.sclass)) // Removes Portlet
                     {
-                        Portlet aux = (Portlet) gen;
-                        SWBUtils.IO.removeDirectory(SWBPlatform.getWorkPath() + aux.getWorkPath());
+                        SWBUtils.IO.removeDirectory(SWBPlatform.getWorkPath() + obj.getWorkPath());
                     }
                 }
-            } else if (prop instanceof SemanticProperty) {
-                if (obj.instanceOf(Traceable.swb_Traceable) && Traceable.swb_Traceable.hasProperty(((SemanticProperty) prop).getName())) {
-                    return;
-                } else {
-                    updateTraceable(gen,usr);
-                }
+            } else if (prop instanceof SemanticProperty)
+            {
+                updateTraceable(obj,usr);
             }else
             {
                 //TODO: SemanticClass
@@ -81,21 +74,23 @@ public class SWBServiceMgr implements SemanticObserver {
         }
     }
 
-    public void updateTraceable(GenericObject gen, User usr)
+    public void updateTraceable(SemanticObject obj, User usr)
     {
-        if (gen instanceof Traceable)
+        if (obj.instanceOf(Traceable.swb_Traceable))
         {
-            Traceable aux = (Traceable) gen;
             Date date = new Date();
-            if (aux.getCreated() == null) {
-                aux.setCreated(date);
+            if (obj.getDateProperty(Traceable.swb_created) == null)
+            {
+                obj.setDateProperty(Traceable.swb_created, date);
             }
-            aux.setUpdated(date);
-            if (usr != null && usr.isRegistered()) {
-                if (aux.getCreator() == null) {
-                    aux.setCreator(usr);
+            obj.setDateProperty(Traceable.swb_updated, date);
+            if (usr != null && usr.isRegistered())
+            {
+                if (obj.getObjectProperty(Traceable.swb_creator) == null)
+                {
+                    obj.setObjectProperty(Traceable.swb_creator, usr.getSemanticObject());
                 }
-                aux.setModifiedBy(usr);
+                obj.setObjectProperty(Traceable.swb_modifiedBy, usr.getSemanticObject());
             }
         }
     }
