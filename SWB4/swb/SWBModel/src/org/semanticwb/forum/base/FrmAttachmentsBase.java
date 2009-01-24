@@ -15,16 +15,43 @@ public class FrmAttachmentsBase extends org.semanticwb.model.SWBClass implements
     public static final org.semanticwb.platform.SemanticClass frm_FrmPost=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/forum#FrmPost");
     public static final org.semanticwb.platform.SemanticProperty frm_attPost=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/forum#attPost");
     public static final org.semanticwb.platform.SemanticClass frm_FrmAttachments=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/forum#FrmAttachments");
-
-
-    public static org.semanticwb.forum.FrmAttachments createFrmAttachments(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.forum.FrmAttachments)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, frm_FrmAttachments), frm_FrmAttachments);
-    }
+    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/forum#FrmAttachments");
 
     public FrmAttachmentsBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+    public static org.semanticwb.forum.FrmAttachments getFrmAttachments(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.forum.FrmAttachments)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+    }
+
+    public static java.util.Iterator<org.semanticwb.forum.FrmAttachments> listFrmAttachmentss(org.semanticwb.model.SWBModel model)
+    {
+        java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.forum.FrmAttachments>(org.semanticwb.forum.FrmAttachments.class, it, true);
+    }
+
+    public static java.util.Iterator<org.semanticwb.forum.FrmAttachments> listFrmAttachmentss()
+    {
+        java.util.Iterator it=sclass.listInstances();
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.forum.FrmAttachments>(org.semanticwb.forum.FrmAttachments.class, it, true);
+    }
+
+    public static org.semanticwb.forum.FrmAttachments createFrmAttachments(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.forum.FrmAttachments)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+    }
+
+    public static void removeFrmAttachments(String id, org.semanticwb.model.SWBModel model)
+    {
+        model.getSemanticObject().getModel().removeSemanticObject(model.getSemanticObject().getModel().getObjectUri(id,sclass));
+    }
+
+    public static boolean hasFrmAttachments(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (getFrmAttachments(id, model)!=null);
     }
 
     public java.util.Date getCreated()
