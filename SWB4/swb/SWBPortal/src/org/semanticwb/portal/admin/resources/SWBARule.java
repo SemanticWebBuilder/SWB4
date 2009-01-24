@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.*;
 import org.semanticwb.model.*;
+import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.api.*;
 import org.w3c.dom.*;
@@ -335,9 +337,12 @@ public class SWBARule extends GenericResource {
 //        }
 //
 //    }
-
     private String getApplet(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         StringBuffer ret = new StringBuffer();
+        String suri = request.getParameter("suri");
+        log.debug("getApplet: " + suri);
+        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+        Rule rRule = (Rule) ont.getGenericObject(suri);
         WebPage tp = paramRequest.getTopic();
         String tmparam = request.getParameter("tm");
         if (tmparam == null) {
@@ -351,16 +356,19 @@ public class SWBARule extends GenericResource {
         SWBResourceURL urlapp = paramRequest.getRenderUrl();
         urlapp.setMode("gateway");
         urlapp.setCallMethod(urlapp.Call_DIRECT);
+        urlapp.setParameter("id", suri);
+        urlapp.setParameter("suri", suri);
         ret.append("\n<PARAM NAME =\"cgipath\" VALUE=\"" + urlapp + "\">");
-        ret.append("\n<PARAM NAME =\"tm\" VALUE=\"" + tmparam + "\">");
-        if (null != request.getParameter("id")) {
-            ret.append("\n<PARAM NAME =\"id\" VALUE=\"" + request.getParameter("id") + "\">");
+        ret.append("\n<PARAM NAME =\"tm\" VALUE=\"" + rRule.getWebSite().getId() + "\">");
+        if (null != request.getParameter("suri")) {
+            ret.append("\n<PARAM NAME =\"id\" VALUE=\"" + rRule.getId() + "\">");
+            ret.append("\n<PARAM NAME =\"suri\" VALUE=\"" + rRule.getId() + "\">");
         } else {
             ret.append("\n<PARAM NAME =\"id\" VALUE=\"0\">");
         }
-        if (null != request.getParameter("act")) {
-            ret.append("\n<PARAM NAME =\"act\" VALUE=\"" + request.getParameter("act") + "\">");
-        }
+//        if (null != request.getParameter("act")) {
+        ret.append("\n<PARAM NAME =\"act\" VALUE=\"edit\">");
+//        }
         ret.append("\n<PARAM NAME =\"locale\" VALUE=\"" + paramRequest.getUser().getLanguage() + "\">");
         //out.println("<PARAM NAME =\"jsess\" VALUE=\""+request.getSession().getId()+"\">");
         ret.append("\n</APPLET>");
@@ -502,29 +510,21 @@ public class SWBARule extends GenericResource {
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
 
-        String tmsid = request.getParameter("tm");
-        String rrid = request.getParameter("id");
+        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
 
+        String rrid = request.getParameter("suri");
+
+        Rule rRule = (Rule) ont.getGenericObject(rrid);
+
+        String tmsid = rRule.getWebSite().getId();
         if (tmsid == null) {
             tmsid = paramRequest.getTopic().getWebSiteId();
         }
         comboAtt = null;
         vecOrderAtt = null;
-        loadComboAttr(tmsid, rrid, paramRequest);
-        //WebPage WebPage = paramRequest.getTopic();
+        loadComboAttr(tmsid, rRule.getId(), paramRequest);
+
         StringBuffer ret = new StringBuffer("");
-        WebPage tp = paramRequest.getTopic();
-        if (request.getParameter("tm") != null && request.getParameter("tp") != null) {
-            tp = SWBContext.getWebSite(request.getParameter("tm")).getWebPage(request.getParameter("tp"));
-        }
-        //WebSite tm = tp.getWebSite();
-//        String tree = request.getParameter("tree");
-//        if (tree != null && tree.equals("reload")) {
-//            if (request.getParameter("lastTM") != null) {
-//                ret.append("\n<script>wbTree_executeAction('gotopath." + request.getParameter("lastTM") + ".rules');wbTree_reload();</script>");
-//            }
-//            ret.append("\n<script>wbTree_executeAction('gotopath." + request.getParameter("tmsid") + ".rules');wbTree_reload();wbTree_executeAction('gotopath." + request.getParameter("tmsid") + ".rules." + request.getParameter("id") + "');</script>");
-//        }
 
         String accion = request.getParameter("act");
         if (accion == null) {
@@ -532,15 +532,14 @@ public class SWBARule extends GenericResource {
         }
         String id = "0";
         SWBResourceURL url = paramRequest.getActionUrl();
-        if (tmsid != null) {
-            url.setParameter("tm", tmsid);
+
+        if (request.getParameter("suri") != null) {
+            id = request.getParameter("suri");
         }
-        if (request.getParameter("id") != null) {
-            id = request.getParameter("id");
-        }
+
         try {
             if (!id.equals("0")) {
-                Rule rRule = SWBContext.getWebSite(tmsid).getRule(id);
+//                Rule rRule = (Rule)ont.getGenericObject(id);
                 SWBResourceURL urlEdit = paramRequest.getRenderUrl().setMode(paramRequest.Mode_EDIT);
                 urlEdit.setParameter("act", "edit");
                 urlEdit.setParameter("id", id);
@@ -550,15 +549,16 @@ public class SWBARule extends GenericResource {
                 SWBResourceURL urlHistory = paramRequest.getRenderUrl().setMode(paramRequest.Mode_EDIT);
                 urlHistory.setParameter("act", "history");
                 urlHistory.setParameter("id", id);
-                ret.append("\n<p align=center class=\"box\">");
-                ret.append("\n<TABLE width=\"100%\"  border=\"0\" cellpadding=\"5\" cellspacing=\"0\" bgcolor=\"#FFFFFF\">");
+                ret.append("\n<div class=\"swbform\">");
+                ret.append("\n<fieldset>");
+                ret.append("\n<TABLE width=\"98%\"  border=\"0\" cellpadding=\"5\" cellspacing=\"0\">");
                 ret.append("\n<TR>");
-                ret.append("\n<TD width=\"150\" align=\"right\" class=\"datos\"> " + paramRequest.getLocaleString("msgIdentifier") + "</TD>");
-                ret.append("\n<TD class=\"valores\">");
-                ret.append(id);
+                ret.append("\n<TD width=\"150\" align=\"right\"> " + paramRequest.getLocaleString("msgIdentifier") + "&nbsp;&nbsp;&nbsp;</TD>");
+                ret.append("\n<TD>");
+                ret.append(rRule.getId());
                 ret.append("\n</TD>");
                 ret.append("\n</TR>");
-                ret.append("\n</TABLE></P>");
+                ret.append("\n</TABLE></fieldset>");
 //                if (request.getParameter("act") == null) {
 //                    ret.append("\n<p align=center class=\"box\">");
 //                    ret.append("\n<table width=\"100%\"  border=\"0\" cellpadding=\"5\" cellspacing=\"0\" bgcolor=\"#FFFFFF\">");
@@ -587,8 +587,8 @@ public class SWBARule extends GenericResource {
 //                } else
 
                 if (accion.equals("edit") | accion.equals("details")) {
-                    ret.append("\n<form name=\"addruleform\" action=\"" + url.toString() + "\" method=\"post\" class=\"box\">");
-                    ret.append("\n<table width=\"100%\"  border=\"0\" cellpadding=\"5\" cellspacing=\"0\" bgcolor=\"#FFFFFF\">");
+//                    ret.append("\n<form name=\""+id+"/addruleform\" action=\"" + url.toString() + "\" method=\"post\">");
+//                    ret.append("\n<table width=\"98%\"  border=\"0\" cellpadding=\"5\" cellspacing=\"0\">");
 //                    ret.append("\n<tr><TD width=\"150\" align=\"right\" class=\"datos\">" + paramRequest.getLocaleString("msgTitle") + "</td><td ><input type=text size=67 name=\"title\" class=\"campos\" value=\"" + rRule.getTitle() + "\"></td></tr>");
 //                    ret.append("\n<tr><TD width=\"150\" align=\"right\" class=\"datos\">" + paramRequest.getLocaleString("msgDescription") + "</td><td ><textarea name=\"description\" class=\"campos\" cols=50 rows=6>" + rRule.getDescription() + "</textarea></td></tr>");
 //                    //TODO: dateformat
@@ -609,35 +609,47 @@ public class SWBARule extends GenericResource {
 //                    }
 //                    ret.append("\n<input type=hidden name=tmsid value=\"" + tmsid + "\"><input type=hidden name=lastTM value=\"" + lastTM + "\"></td></tr>");
                     //ret.append("\n<tr><td colspan=2 class=\"valores\" align=right><input type=hidden name=act value=\"update\"><input type=hidden name=id value=\"" + rRule.getId() + "\">");
-                    ret.append("\n<tr><td colspan=2 align=right><input type=hidden name=\"suri\" value=\"" + rRule.getId() + "\">");
-                    ret.append("\n<HR size=\"1\" noshade><input type=button class=\"boton\" value=\"" + paramRequest.getLocaleString("btnUpdate") + "\" onclick=\"addruleform.submit();\" title=\"" + paramRequest.getLocaleString("titleUpdateTitleDescription") + "\"></td></tr></table></form>");
-                    Document docxml = SWBUtils.XML.xmlToDom(rRule.getXml());
+//                    ret.append("\n<input type=hidden name=\"suri\" value=\"" + rRule.getId() + "\">");
+                    String xml = null;
+                    xml = rRule.getXml();
+                    if (null == xml) {
+                        xml = "<rule/>";
+                        rRule.setXml(xml);
+
+
+                    }
+                    Document docxml = SWBUtils.XML.xmlToDom(xml);
+
                     sbTree = new StringBuffer();
                     if (docxml != null) {
                         Element rule = (Element) docxml.getFirstChild();
                         elemNum = 0;
                         rRule = null;
-                        ret.append("\n<p class=\"box\">");
-                        ret.append("\n<table width=\"100%\"  border=\"0\" cellpadding=\"5\" cellspacing=\"0\" bgcolor=\"#FFFFFF\">");
-                        ret.append("\n<tr><td class=\"datos\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + paramRequest.getLocaleString("msgCriteriaDefinition") + "</td></tr>");
-                        ret.append("\n<tr><td class=\"datos\">");
+                        //ret.append("\n<p class=\"box\">");
+                        ret.append("\n<fieldset>");
+                        ret.append("\n<table width=\"100%\"  border=\"0\" cellpadding=\"5\" cellspacing=\"0\" >");
+                        ret.append("\n<tr><td >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + paramRequest.getLocaleString("msgCriteriaDefinition") + "</td></tr>");
+                        ret.append("\n<tr><td >");
                         ret.append(getApplet(request, response, paramRequest));
                         ret.append("\n</td></tr>");
-                        ret.append("\n</td></tr></table></p>");
+                        ret.append("\n</table>");
+                        ret.append("\n</fieldset>");
                     }
                     sbTree = null;
                     docxml = null;
                 }
-            } else {
-                if (accion.equals("edit") || accion.equals("add")) {
-                    ret.append("\n<form name=\"addruleform\" action=\"" + url.toString() + "\" method=\"post\" class=\"box\">");
-                    ret.append("\n<table width=\"100%\"  border=\"0\" cellpadding=\"5\" cellspacing=\"0\" bgcolor=\"#FFFFFF\">");
-                    ret.append("\n<tr><td width=\"150\" align=\"right\" class=\"datos\">" + paramRequest.getLocaleString("msgTitle") + ":</td><td><input type=text size=67 name=\"title\" class=\"campos\" value=\"\"></td></tr>");
-                    ret.append("\n<tr><td width=\"150\" align=\"right\" class=\"datos\">" + paramRequest.getLocaleString("msgDescription") + ":</td><td><textarea name=\"description\" class=\"campos\" cols=50 rows=6></textarea></td></tr>");
-                    ret.append("\n<tr><td colspan=2 align=right class=\"valores\"><input type=hidden name=act value=\"editadd\"><input type=hidden name=id value=\"0\">");
-                    ret.append("\n<input type=hidden name=tmsid value=\"" + request.getParameter("tm") + "\"><HR size=\"1\" noshade><input type=\"submit\" class=\"boton\" name=\"btn_next\" value=\"" + paramRequest.getLocaleString("btnAdd") + "\" ></td></tr></table></form>");
-                }
+                ret.append("\n</div>");
             }
+//            else {
+//                if (accion.equals("edit") || accion.equals("add")) {
+//                    ret.append("\n<form name=\"addruleform\" action=\"" + url.toString() + "\" method=\"post\" class=\"box\">");
+//                    ret.append("\n<table width=\"100%\"  border=\"0\" cellpadding=\"5\" cellspacing=\"0\" bgcolor=\"#FFFFFF\">");
+//                    ret.append("\n<tr><td width=\"150\" align=\"right\" class=\"datos\">" + paramRequest.getLocaleString("msgTitle") + ":</td><td><input type=text size=67 name=\"title\" class=\"campos\" value=\"\"></td></tr>");
+//                    ret.append("\n<tr><td width=\"150\" align=\"right\" class=\"datos\">" + paramRequest.getLocaleString("msgDescription") + ":</td><td><textarea name=\"description\" class=\"campos\" cols=50 rows=6></textarea></td></tr>");
+//                    ret.append("\n<tr><td colspan=2 align=right class=\"valores\"><input type=hidden name=act value=\"editadd\"><input type=hidden name=id value=\"0\">");
+//                    ret.append("\n<input type=hidden name=tmsid value=\"" + request.getParameter("tm") + "\"><HR size=\"1\" noshade><input type=\"submit\" class=\"boton\" name=\"btn_next\" value=\"" + paramRequest.getLocaleString("btnAdd") + "\" ></td></tr></table></form>");
+//                }
+//            }
 
         } catch (Exception e) {
             log.error(paramRequest.getLocaleString("msgErrorEditRule") + ", WBARules.doEdit", e);
@@ -651,6 +663,10 @@ public class SWBARule extends GenericResource {
      * @param paramRequest lista de objetos (WebPage, user, action, ...)
      */
     private void loadComboAttr(String tmid, String ruleid, SWBParamRequest paramRequest) throws SWBResourceException, java.io.IOException {
+
+        log.debug("loadComboAttr ruleid: " + ruleid + ", tmid: " + tmid);
+
+        User user = paramRequest.getUser();
         UserRepository usrRepo = SWBContext.getWebSite(tmid).getUserRepository();
         comboAtt = new HashMap();
         vecOrderAtt = new Vector(1, 1);
@@ -668,6 +684,7 @@ public class SWBARule extends GenericResource {
         hmAttr.put("Valor", hmValues);
         comboAtt.put("isregistered", hmAttr);
 
+
         hmAttr = new HashMap();
         hmOper = new HashMap();
         hmValues = new HashMap();
@@ -681,212 +698,258 @@ public class SWBARule extends GenericResource {
         hmAttr.put("Valor", hmValues);
         comboAtt.put("isloged", hmAttr);
 
-        {
-            hmAttr = new HashMap();
-            hmOper = new HashMap();
-            hmValues = new HashMap();
-            hmAttr.put("Etiqueta", paramRequest.getLocaleString("msgDevice"));   ///////////////////////////
-            hmAttr.put("Tipo", "select");
-            Iterator<Device> eleDev = SWBContext.getGlobalWebSite().listDevices();
-            while (eleDev.hasNext()) {
-                Device rDev = eleDev.next();
-                hmValues.put(rDev.getId(), rDev.getTitle());
-            }
-            hmAttr.put("Valor", hmValues);
-            hmOper.put("=", paramRequest.getLocaleString("msgSameAs"));
-            hmOper.put("!=", paramRequest.getLocaleString("msgNotEqual"));
-            hmAttr.put("Operador", hmOper);
-            comboAtt.put("device", hmAttr);
-        }
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        int numero = 0;
-//        try {
-//            String repId = SWBContext.getWebSite(tmid).getUserRepository().getId();
-//            UserRepository urep = SWBContext.getWebSite(tmid).getUserRepository();
-//            //TODO: UserRepository AttrsList()
-//            //int numatt = DBUser.getInstance(repId).getUserAttrsList().size();
-//            Iterator<SemanticProperty> iteExAtt = urep.listExtendedAttributes();
-//
-//            int numatt = ((Collection)iteExAtt).size();
-//
-//            hmAttr = new HashMap();
-//            hmOper = new HashMap();
-//            hmValues = new HashMap();
-//            hmAttr.put("Etiqueta", paramRequest.getLocaleString("msgUserType"));   ///////////////////////////
-//            hmAttr.put("Tipo", "select");
-//            hmOper.put("=", paramRequest.getLocaleString("msgSameAs"));
-//            hmOper.put("!=", paramRequest.getLocaleString("msgNotEqual"));
-//            hmAttr.put("Operador", hmOper);
-////            HashMap hmUsrTypeList = DBUser.getInstance(repId).getUserAttrsList();
-////            Iterator iteruserType = hmUsrTypeList.values().iterator();
-//            //urep.
-//            Iterator<SemanticProperty> iteruserType = urep.listAttributes();
-//            while (iteruserType.hasNext()) {
-//                SemanticProperty usrTypeAtt = iteruserType.next();
-//                //if (usrTypeAtt.getType() == WBUserAttribute.USER_TYPE) {
-//                    hmValues.put(usrTypeAtt.getName(), usrTypeAtt.getValueLocalized(usrTypeAtt.getName(), paramRequest.getUser().getLanguage()));
-//                //}
-//            }
-//
-//            hmAttr.put("Valor", hmValues);
-//            if (!tmid.equals(SWBContext.getGlobalWebSite().getId())) {
-//                comboAtt.put("USERTYPE", hmAttr);
-//            }
-//            vecOrderAtt.add(numero++, "isregistered");
-//            vecOrderAtt.add(numero++, "isloged");
-//
-//            vecOrderAtt.add(numero++, "device");
-//            if (!tmid.equals(SWBContext.getGlobalWebSite().getId())) {
-//                vecOrderAtt.add(numero++, "USERTYPE");
-//            }
-//            if (numatt > 0) {
-////                HashMap hmAttUsrList = DBUser.getInstance(repId).getUserAttrsList();
-////                Iterator iteratt = hmAttUsrList.values().iterator();
-//                Iterator<SemanticProperty> iteratt = urep.listExtendedAttributes();
-//                while (iteratt.hasNext()) {
-//                    SemanticProperty usrAtt = iteratt.next();
-//                    hmAttr = new HashMap();
-//                    hmOper = new HashMap();
-//                    if (usrAtt.getType() != WBUserAttribute.USER_TYPE) {
-//                        String tipoControl = "select";
-//                        if ((usrAtt.isDataTypeProperty()&&usrAtt.isInt()) || (usrAtt.isDataTypeProperty()&&usrAtt.isString())) {
-//                            tipoControl = "TEXT";
-//                        }
-//                        if (!comboAtt.containsKey(usrAtt.getName()) && !usrAtt.getName().equals("PASSWORD")) {
-//                            //buscando valores si el control es de tipo select
-//                            if (usrAtt.getKind() == WBUserAttribute.LIST_ATTRIBUTE) {
-//                                hmValues = new HashMap();
-//                                if (usrAtt.getName().equals("LANGUAGE")) {
-//                                    // obtener los lenguajes de la base de datos
-//
-////                                    Hashtable htlang = DBCatalogs.getInstance().getLanguages(tmid);
-////                                    Enumeration enulang = htlang.elements();
-//                                    Iterator<Language> enulang = SWBContext.getWebSite(tmid).listLanguages();
-//
-//                                    while (enulang.hasNext()) {
-//                                        Language rLang = enulang.next();
-//                                        String valor = rLang.getId();
-//                                        //TODO: getTopicLang
-//                                        Language tpLang = SWBContext.getWebSite(tmid).getLanguage(rLang.getId());
-//                                        hmValues.put(valor, rLang.getTitle(paramRequest.getUser().getLanguage()));
-//                                    }
-//
-//                                } else {
-//                                    Iterator itt = usrAtt.getList().iterator();
-//                                    while (itt.hasNext()) {
-//                                        String valor = (String) itt.next();
-//                                        hmValues.put(valor, usrAtt.getValueLocalized(valor, paramRequest.getUser().getLanguage()));
-//                                    }
-//                                }
-//
-//                                hmAttr.put("Valor", hmValues);
-//                            } else if (usrAtt.getKind() == WBUserAttribute.USER_TYPE_ATTRIBUTE) {
-//                                Iterator itt = usrAtt.getAttrs().iterator();
-//                                hmValues = new HashMap();
-//                                int numAttr = 0;
-//                                while (itt.hasNext()) {
-//                                    WBUserAttribute usrAttValues = (WBUserAttribute) itt.next();
-//                                    hmValues.put(usrAttValues.getName(), usrAttValues.getValueLocalized(usrAttValues.getName(), paramRequest.getUser().getLanguage()));
-//                                    numAttr++;
-//                                }
-//                                if (numAttr > 0) {
-//                                    hmAttr.put("Valor", hmValues);
-//                                } else {
-//                                    tipoControl = "TEXT";
-//                                }
-//                            }
-//                            //  SI NO EXISTE EL LOCALE PONE EL NOMBRE DEL ATRIBUTO
-//                            String msgDisplay = usrAtt.getDisplayName(paramRequest.getUser().getLanguage());
-//                            if (msgDisplay != null && msgDisplay.trim().length() == 0) {
-//                                msgDisplay = usrAtt.getName();
-//                            }
-//                            hmAttr.put("Etiqueta", msgDisplay); ///////////////////////////
-//                            hmAttr.put("Tipo", tipoControl);
-//                            String Attr = null;
-//                            Attr = usrAtt.getDisplayName(paramRequest.getUser().getLanguage());//getDescription();
-//                            if (!Attr.equals(null)) {
-//                                hmAttr.put("MENSAJE", Attr);
-//                            }
-//                            if (usrAtt.isDataTypeProperty()&&usrAtt.isInt()) { //getKind() == WBUserAttribute.INTEGER_ATTRIBUTE) {
-//                                hmOper.put("&gt;", paramRequest.getLocaleString("msgGreaterThan"));
-//                                hmOper.put("&lt;", paramRequest.getLocaleString("msgLessThan"));
-//                            }
-//                            hmOper.put("=", paramRequest.getLocaleString("msgSameAs"));
-//                            hmOper.put("!=", paramRequest.getLocaleString("msgNotEqual"));
-//                            hmAttr.put("Operador", hmOper);
-//                            if (usrAtt.getType() == WBUserAttribute.BASIC_TYPE && tmid.equals(SWBContext.getGlobalWebSite().getId())) {
-//                                comboAtt.put(usrAtt.getName(), hmAttr);
-//                                vecOrderAtt.add(numero++, usrAtt.getName());
-//
-//                            } else {
-//                                if (!tmid.equals(SWBContext.getGlobalWebSite().getId())) {
-//                                    comboAtt.put(usrAtt.getDisplayName(), hmAttr);
-//                                    vecOrderAtt.add(numero++, usrAtt.getDisplayName());
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        } catch (Exception e) {
-//            log.error(paramRequest.getLocaleString("msgErrorLoadingUserAttributeList") + ". WBARules.loadComboAttr", e);
-//        }
-
-        // Se agrega la parte de roles
-
+        // DISPOSITIVOS POR SITIO
         hmAttr = new HashMap();
         hmOper = new HashMap();
         hmValues = new HashMap();
-        hmAttr.put("Etiqueta", paramRequest.getLocaleString("msgRoles"));   ///////////////////////////
+        hmAttr.put("Etiqueta", paramRequest.getLocaleString("msgDevice"));   ///////////////////////////
         hmAttr.put("Tipo", "select");
-        hmOper.put("=", paramRequest.getLocaleString("msgHave"));
-        hmOper.put("!=", paramRequest.getLocaleString("msgNotHave"));
-        hmAttr.put("Operador", hmOper);
-        //Enumeration enumRoles = DBRole.getInstance().getRoles(TopicMgr.getInstance().getTopicMap(tmid).getDbdata().getRepository());
-        Iterator<Role> enumRoles = SWBContext.getWebSite(tmid).getUserRepository().listRoles();
-        while (enumRoles.hasNext()) {
-            Role role = enumRoles.next();
-            hmValues.put(role.getId(), role.getTitle());
+        Iterator<Device> eleDev = SWBContext.getWebSite(tmid).listDevices();
+        while (eleDev.hasNext()) {
+            Device rDev = eleDev.next();
+            hmValues.put(rDev.getId(), rDev.getTitle());
         }
-        
         hmAttr.put("Valor", hmValues);
-        //TODO: RuleMgr ???ROLE
-        comboAtt.put("ROLE", hmAttr); //RuleMgr.TAG_INT_ROLE
-        vecOrderAtt.add(numero++, "ROLE"); //RuleMgr.TAG_INT_ROLE
+        hmOper.put("=", paramRequest.getLocaleString("msgSameAs"));
+        hmOper.put("!=", paramRequest.getLocaleString("msgNotEqual"));
+        hmAttr.put("Operador", hmOper);
+        comboAtt.put("device", hmAttr);
 
-        // Se agrega la parte de reglas
-        if (ruleid == null) {
-            ruleid = "";
-        }
-        int numreglas = 0;
-        Iterator<Rule> numrules = SWBContext.getWebSite(tmid).listRules();
-        while (numrules.hasNext()) {
-            Rule rule = numrules.next();
-            if (!ruleid.equals(rule.getId())) {
-                numreglas++;
-            }
-        }
-        if (numreglas > 0) {
+        int numero = 0;
+        vecOrderAtt.add(numero++, "isregistered");
+        vecOrderAtt.add(numero++, "isloged");
+        vecOrderAtt.add(numero++, "device");
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        try {
+
             hmAttr = new HashMap();
             hmOper = new HashMap();
             hmValues = new HashMap();
-            hmAttr.put("Etiqueta", paramRequest.getLocaleString("msgRules"));   ///////////////////////////
+            hmAttr.put("Etiqueta", paramRequest.getLocaleString("msgUserGroups"));   ///////////////////////////
             hmAttr.put("Tipo", "select");
-            hmOper.put("=", paramRequest.getLocaleString("msgCumpla"));
-            hmOper.put("!=", paramRequest.getLocaleString("msgNoCumpla"));
+            hmOper.put("=", paramRequest.getLocaleString("msgHave"));
+            hmOper.put("!=", paramRequest.getLocaleString("msgNotHave"));
             hmAttr.put("Operador", hmOper);
-            Iterator<Rule> enumRules = SWBContext.getWebSite(tmid).listRules();
-            while (enumRules.hasNext()) {
-                Rule rule = enumRules.next();
+            //Enumeration enumRoles = DBRole.getInstance().getRoles(TopicMgr.getInstance().getTopicMap(tmid).getDbdata().getRepository());
+            Iterator<UserGroup> enumUsrG = usrRepo.listUserGroups();
+            while (enumUsrG.hasNext()) {
+                UserGroup usrGroup = enumUsrG.next();
+                hmValues.put(usrGroup.getId(), usrGroup.getTitle());
+            }
+
+            hmAttr.put("Valor", hmValues);
+            //TODO: RuleMgr ???ROLE
+            comboAtt.put("UserGroup", hmAttr); //RuleMgr.TAG_INT_ROLE
+            vecOrderAtt.add(numero++, "UserGroup"); //RuleMgr.TAG_INT_ROLE
+
+            // Se agrega la parte de roles
+
+            hmAttr = new HashMap();
+            hmOper = new HashMap();
+            hmValues = new HashMap();
+            hmAttr.put("Etiqueta", paramRequest.getLocaleString("msgRoles"));   ///////////////////////////
+            hmAttr.put("Tipo", "select");
+            hmOper.put("=", paramRequest.getLocaleString("msgHave"));
+            hmOper.put("!=", paramRequest.getLocaleString("msgNotHave"));
+            hmAttr.put("Operador", hmOper);
+            //Enumeration enumRoles = DBRole.getInstance().getRoles(TopicMgr.getInstance().getTopicMap(tmid).getDbdata().getRepository());
+            Iterator<Role> enumRoles = SWBContext.getWebSite(tmid).getUserRepository().listRoles();
+            while (enumRoles.hasNext()) {
+                Role role = enumRoles.next();
+                hmValues.put(role.getId(), role.getTitle());
+            }
+
+            hmAttr.put("Valor", hmValues);
+            //TODO: RuleMgr ???ROLE
+            comboAtt.put("ROLE", hmAttr); //RuleMgr.TAG_INT_ROLE
+            vecOrderAtt.add(numero++, "ROLE"); //RuleMgr.TAG_INT_ROLE
+
+            // Se agrega la parte de reglas
+            if (ruleid == null) {
+                ruleid = "";
+            }
+
+            int numreglas = 0;
+            Iterator<Rule> numrules = SWBContext.getWebSite(tmid).listRules();
+            while (numrules.hasNext()) {
+                Rule rule = numrules.next();
                 if (!ruleid.equals(rule.getId())) {
-                    hmValues.put(rule.getId(), rule.getTitle());
+                    numreglas++;
                 }
             }
-            hmAttr.put("Valor", hmValues);
-            comboAtt.put("RULE", hmAttr); //RuleMgr.TAG_INT_RULE
-            vecOrderAtt.add(numero++, "RULE"); //RuleMgr.TAG_INT_RULE
+            log.debug("numReglas:" + numreglas);
+            if (numreglas > 0) {
+                hmAttr = new HashMap();
+                hmOper = new HashMap();
+                hmValues = new HashMap();
+                hmAttr.put("Etiqueta", paramRequest.getLocaleString("msgRules"));   ///////////////////////////
+                hmAttr.put("Tipo", "select");
+                hmOper.put("=", paramRequest.getLocaleString("msgCumpla"));
+                hmOper.put("!=", paramRequest.getLocaleString("msgNoCumpla"));
+                hmAttr.put("Operador", hmOper);
+                Iterator<Rule> enumRules = SWBContext.getWebSite(tmid).listRules();
+                while (enumRules.hasNext()) {
+                    Rule rule = enumRules.next();
+                    if (!ruleid.equals(rule.getId())) {
+                        hmValues.put(rule.getId(), rule.getTitle());
+                    }
+                }
+                hmAttr.put("Valor", hmValues);
+                comboAtt.put("RULE", hmAttr); //RuleMgr.TAG_INT_RULE
+                vecOrderAtt.add(numero++, "RULE"); //RuleMgr.TAG_INT_RULE
+            }
+
+
+
+            //Tipo de usuario
+            Iterator<String> usrTypes = usrRepo.getUserTypes();
+            log.debug("usrTypes:" + usrTypes.hasNext());
+            while (usrTypes.hasNext()) {
+
+                String uType = usrTypes.next();
+                log.debug("UType: " + uType);
+
+                hmAttr = new HashMap();
+                hmOper = new HashMap();
+                hmValues = new HashMap();
+                hmAttr.put("Etiqueta", uType);   ///////////////////////////
+                hmAttr.put("Tipo", "select");
+                hmOper.put("=", paramRequest.getLocaleString("msgSameAs"));
+                hmOper.put("!=", paramRequest.getLocaleString("msgNotEqual"));
+                hmAttr.put("Operador", hmOper);
+                Iterator<SemanticProperty> iteruserType = usrRepo.listAttributesofUserType(uType);
+                while (iteruserType.hasNext()) {
+                    SemanticProperty usrTypeAtt = iteruserType.next();
+                    hmValues.put(usrTypeAtt.getName(), usrTypeAtt.getDisplayName(user.getLanguage()));
+                }
+                hmAttr.put("Valor", hmValues);
+                if (!tmid.equals(SWBContext.getGlobalWebSite().getId())) {
+                    comboAtt.put(uType, hmAttr);
+                }
+                vecOrderAtt.add(numero++, uType); //RuleMgr.TAG_INT_ROLE
+                log.debug("tipo de usuario: " + uType);
+            }
+
+
+            Iterator<SemanticProperty> iteratt = usrRepo.listAttributes();
+            int attnum = 0;
+            while (iteratt.hasNext()) {
+
+                String tipoControl = "TEXT";
+                SemanticProperty usrAtt = iteratt.next();
+                attnum++;
+                log.debug("ListAttributes:" + usrAtt.getName() + ", " + attnum + ", objProp: " + usrAtt.isObjectProperty());
+                hmAttr = new HashMap();
+                hmOper = new HashMap();
+                hmValues = new HashMap();
+
+                hmAttr.put("Etiqueta", usrAtt.getDisplayName(user.getLanguage()));
+                if (usrAtt.getDisplayProperty() != null) {
+                    log.debug("DisplayProperty");
+                    DisplayProperty dobj = new DisplayProperty(usrAtt.getDisplayProperty());
+                    String selectValues = dobj.getSelectValues(user.getLanguage());
+                    ///////////////////////////
+                    if (selectValues != null) {
+                        tipoControl = "select";
+                        StringTokenizer st = new StringTokenizer(selectValues, "|");
+                        while (st.hasMoreTokens()) {
+                            String tok = st.nextToken();
+                            int ind = tok.indexOf(':');
+                            String idt = tok;
+                            String val = tok;
+                            if (ind > 0) {
+                                idt = tok.substring(0, ind);
+                                val = tok.substring(ind + 1);
+                            }
+                            hmValues.put(idt, val);
+                        }
+                    } else {
+                        if (usrAtt.isDataTypeProperty()) {
+                            log.debug("DP: DataTypeProperty");
+                            if (usrAtt.isInt()) {
+                                tipoControl = "TEXT";
+                                hmOper.put("&gt;", paramRequest.getLocaleString("msgGreaterThan"));
+                                hmOper.put("&lt;", paramRequest.getLocaleString("msgLessThan"));
+                            } else if (usrAtt.isBoolean()) {
+                                tipoControl = "select";
+                                hmOper.put("=", paramRequest.getLocaleString("msgIs"));
+                                hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
+                                hmValues.put("true", paramRequest.getLocaleString("msgTrue"));
+                                hmValues.put("false", paramRequest.getLocaleString("msgFalse"));
+                                hmAttr.put("Valor", hmValues);
+                            } else if (usrAtt.isString()) {
+                                tipoControl = "TEXT";
+                            } else {
+                                tipoControl = "TEXT";
+                            }
+                        } else if (usrAtt.isObjectProperty()) {
+                            log.debug("DP: ObjectProperty");
+                            tipoControl = "select";
+                            if (usrAtt == User.swb_hasRole) {
+                                Iterator<Role> itRol = usrRepo.listRoles();
+                                while (itRol.hasNext()) {
+                                    Role rol = itRol.next();
+                                    hmValues.put(rol.getId(), rol.getDisplayTitle(user.getLanguage()));
+                                }
+                            }
+                        }
+                    }
+                    log.debug("DP:Tipo --- " + tipoControl);
+                    hmAttr.put("Tipo", tipoControl);
+                } else {
+                    if (usrAtt.isDataTypeProperty()) {
+                        log.debug("DataTypeProperty");
+
+                        if (usrAtt.isInt()) {
+                            tipoControl = "TEXT";
+                            hmOper.put("&gt;", paramRequest.getLocaleString("msgGreaterThan"));
+                            hmOper.put("&lt;", paramRequest.getLocaleString("msgLessThan"));
+                        } else if (usrAtt.isBoolean()) {
+                            tipoControl = "select";
+                            hmOper.put("=", paramRequest.getLocaleString("msgIs"));
+                            hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
+
+                            hmValues.put("true", paramRequest.getLocaleString("msgTrue"));
+                            hmValues.put("false", paramRequest.getLocaleString("msgFalse"));
+                            hmAttr.put("Valor", hmValues);
+                        } else {
+                            tipoControl = "TEXT";
+                            hmOper.put("=", paramRequest.getLocaleString("msgIs"));
+                            hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
+
+                        }
+                    } else if (usrAtt.isObjectProperty()) {
+                        log.debug("DP: ObjectProperty");
+                        tipoControl = "select";
+                        if (usrAtt.equals(User.swb_hasRole)) {
+                            Iterator<Role> itRol = usrRepo.listRoles();
+                            while (itRol.hasNext()) {
+                                Role rol = itRol.next();
+                                hmValues.put(rol.getId(), rol.getDisplayTitle(user.getLanguage()));
+                            }
+                        }
+                    }
+
+                }
+                hmAttr.put("Tipo", tipoControl);
+                hmOper.put("=", paramRequest.getLocaleString("msgSameAs"));
+                hmOper.put("!=", paramRequest.getLocaleString("msgNotEqual"));
+                hmAttr.put("Operador", hmOper);
+                if (!hmValues.isEmpty()) {
+                    hmAttr.put("Valor", hmValues);
+                }
+                comboAtt.put(usrAtt.getName(), hmAttr);
+                vecOrderAtt.add(numero++, usrAtt.getName());
+            }
+
+        //////////////////////////////////////////////////////////////////////
+
+        } catch (Exception e) {
+            log.error(paramRequest.getLocaleString("msgErrorLoadingUserAttributeList") + ". SWBARules.loadComboAttr", e);
         }
+
+
     }
 
     /** Gets the document with the user attributes
@@ -894,70 +957,71 @@ public class SWBARule extends GenericResource {
      */
     private Document getXMLComboAttr() throws SWBResourceException, java.io.IOException {
         Document dom = null;
-        try{
-        dom = SWBUtils.XML.getNewDocument();
-        Element attributes = dom.createElement("attributes");
-        dom.appendChild(attributes);
+        try {
+            dom = SWBUtils.XML.getNewDocument();
+            Element attributes = dom.createElement("attributes");
+            dom.appendChild(attributes);
 
-        for (int i = 0; i < vecOrderAtt.size(); i++) {
-            String valor = (String) vecOrderAtt.get(i);
-            HashMap hmAttr = (HashMap) comboAtt.get(valor);
-            String label = (String) hmAttr.get("Etiqueta");
-            String seleccionado = "";
-            // armando combo de operadores
+            for (int i = 0; i < vecOrderAtt.size(); i++) {
+                String valor = (String) vecOrderAtt.get(i);
+                HashMap hmAttr = (HashMap) comboAtt.get(valor);
+                String label = (String) hmAttr.get("Etiqueta");
+                String seleccionado = "";
+                // armando combo de operadores
 
-            Element attribute = dom.createElement("attribute");
-            attribute.setAttribute("type", (String) hmAttr.get("Tipo"));
-            attribute.setAttribute("name", valor);
-            attribute.setAttribute("title", label);
+                Element attribute = dom.createElement("attribute");
+                attribute.setAttribute("type", (String) hmAttr.get("Tipo"));
+                attribute.setAttribute("name", valor);
+                attribute.setAttribute("title", label);
 
-            HashMap hmOper = (HashMap) hmAttr.get("Operador");
-            //Set keysOper = hmOper.keySet().iterator();
-            Iterator itOper = hmOper.keySet().iterator();
+                HashMap hmOper = (HashMap) hmAttr.get("Operador");
+                //Set keysOper = hmOper.keySet().iterator();
+                Iterator itOper = hmOper.keySet().iterator();
 
-            Element operators = dom.createElement("operators");
+                Element operators = dom.createElement("operators");
 
-            while (itOper.hasNext()) {
-                String thisValue = (String) itOper.next();
-                String thisLabel = (String) hmOper.get(thisValue);
-                Element operator = dom.createElement("operator");
-                operator.setAttribute("value", thisValue);
-                operator.setAttribute("title", thisLabel);
-                operators.appendChild(operator);
-            }
-
-            attribute.appendChild(operators);
-
-            hmOper = null;
-
-            Element attValues = dom.createElement("catalog");
-            attValues.setAttribute("name", "attValues");
-
-            // armando combo para armar valores posibles del elemento
-            if (!hmAttr.get("Tipo").equals("TEXT")) {
-                HashMap valoresCombo = (HashMap) hmAttr.get("Valor");
-                //Set keyValSet = valoresCombo.keySet();
-                Iterator itValCombo = valoresCombo.keySet().iterator();
-                while (itValCombo.hasNext()) {
-                    String nomValCombo = (String) itValCombo.next();
-                    String labelValCombo = (String) valoresCombo.get(nomValCombo);
-                    Element attValue = dom.createElement("option");
-                    attValue.setAttribute("title", labelValCombo);
-                    attValue.setAttribute("value", nomValCombo);
-                    attValues.appendChild(attValue);
+                while (itOper.hasNext()) {
+                    String thisValue = (String) itOper.next();
+                    String thisLabel = (String) hmOper.get(thisValue);
+                    Element operator = dom.createElement("operator");
+                    operator.setAttribute("value", thisValue);
+                    operator.setAttribute("title", thisLabel);
+                    operators.appendChild(operator);
                 }
-                attribute.appendChild(attValues);
-            } else {
-                //armar text para pedir/mostrar valor
-                Element attValue = dom.createElement("option");
-                attValue.setAttribute("title", "");
-                attValue.setAttribute("value", "TEXT");
-                attValues.appendChild(attValue);
-                attribute.appendChild(attValues);
+
+                attribute.appendChild(operators);
+
+                hmOper = null;
+
+                Element attValues = dom.createElement("catalog");
+                attValues.setAttribute("name", "attValues");
+
+                // armando combo para armar valores posibles del elemento
+                if (!hmAttr.get("Tipo").equals("TEXT")) {
+                    HashMap valoresCombo = (HashMap) hmAttr.get("Valor");
+                    //Set keyValSet = valoresCombo.keySet();
+                    Iterator itValCombo = valoresCombo.keySet().iterator();
+                    while (itValCombo.hasNext()) {
+                        String nomValCombo = (String) itValCombo.next();
+                        String labelValCombo = (String) valoresCombo.get(nomValCombo);
+                        Element attValue = dom.createElement("option");
+                        attValue.setAttribute("title", labelValCombo);
+                        attValue.setAttribute("value", nomValCombo);
+                        attValues.appendChild(attValue);
+                    }
+                    attribute.appendChild(attValues);
+                } else {
+                    //armar text para pedir/mostrar valor
+                    Element attValue = dom.createElement("option");
+                    attValue.setAttribute("title", "");
+                    attValue.setAttribute("value", "TEXT");
+                    attValues.appendChild(attValue);
+                    attribute.appendChild(attValues);
+                }
+                attributes.appendChild(attribute);
             }
-            attributes.appendChild(attribute);
+        } catch (Exception e) {
         }
-        }catch(Exception e){}
         return dom;
     }
 
@@ -1025,6 +1089,7 @@ public class SWBARule extends GenericResource {
      */
     public void doGateway(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
+        //log.debug("doGateway: URI"+request.getParameter("suri")+", id:"+request.getParameter("id"));
         ServletInputStream in = request.getInputStream();
         Document dom = SWBUtils.XML.xmlToDom(in);
 
@@ -1062,12 +1127,16 @@ public class SWBARule extends GenericResource {
     }
 
     private Document getService(String cmd, Document src, User user, HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) {
+        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         String tmpcmd = cmd, tm = null, id = null;
         if (null != cmd && cmd.indexOf('.') != -1) {
             tmpcmd = cmd.substring(0, cmd.indexOf('.'));
             tm = cmd.substring(cmd.indexOf('.') + 1, cmd.lastIndexOf('.'));
             id = cmd.substring(cmd.lastIndexOf('.') + 1);
         }
+
+        log.debug("getService: " + request.getParameter("suri"));
+
         if (tmpcmd.equals("getXMLAttr")) {
             try {
                 return getXMLComboAttr();
@@ -1076,11 +1145,11 @@ public class SWBARule extends GenericResource {
             }
         } else if (tmpcmd.equals("getXMLRule")) {
             Rule rRule = null;
-            rRule = SWBContext.getWebSite(tm).getRule(id);
+            rRule = (Rule) ont.getGenericObject(request.getParameter("suri"));
             return SWBUtils.XML.xmlToDom(rRule.getXml());
         } else if (tmpcmd.equals("updateRule")) {
             Document dom = null;
-            Rule rRule = SWBContext.getWebSite(tm).getRule(id);
+            Rule rRule = (Rule) ont.getGenericObject(request.getParameter("suri"));
             String strXMLRule = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
             String strTmp = SWBUtils.XML.domToXml(src);
             if (strTmp.indexOf("<rule>") != -1) {
@@ -1090,7 +1159,7 @@ public class SWBARule extends GenericResource {
             }
             try {
                 rRule.setXml(strXMLRule);
-                rRule.setModifiedBy(user);
+//                rRule.setModifiedBy(user);
                 //rRule.update(paramRequest.getUser().getId(),paramRequest.getLocaleString("msgLogRuleCriteriaModificationID")+": "+id);
                 rRule = null;
                 dom = SWBUtils.XML.xmlToDom(strXMLRule);
