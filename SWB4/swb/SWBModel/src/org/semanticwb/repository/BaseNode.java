@@ -44,7 +44,7 @@ public class BaseNode extends BaseNodeBase
     public BaseNode(SemanticObject base)
     {
         super(base);
-        addPrimaryType(getSemanticObject().getSemanticClass());
+        //addPrimaryType(getSemanticObject().getSemanticClass());
     }
 
     private BaseNode(SemanticObject base, SemanticClass clazz) throws SWBException
@@ -1487,6 +1487,7 @@ public class BaseNode extends BaseNodeBase
             BaseNode newBaseNode;
             String uri = getSemanticObject().getModel().getObjectUri(UUID.randomUUID().toString(), clazz);
             SemanticObject object = getSemanticObject().getModel().createSemanticObject(uri, clazz);
+            addPrimaryType(object.getSemanticClass());
             newBaseNode = new BaseNode(object, clazz);
             newBaseNode.setName(name);
             String path = getPath();
