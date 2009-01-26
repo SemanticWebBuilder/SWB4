@@ -31,8 +31,10 @@ public class SWBComparator implements Comparator
         SemanticObject sobj2 = null;
         //System.out.println("obj1:"+obj1.getClass()+" obj2:"+obj2.getClass());
         if(obj1 instanceof GenericObject) sobj1=((GenericObject)obj1).getSemanticObject();
+        else if(obj1 instanceof SemanticClass)sobj1=((SemanticClass)obj1).getSemanticObject();
         else sobj1 = (SemanticObject) obj1;
         if(obj2 instanceof GenericObject) sobj2=((GenericObject)obj2).getSemanticObject();
+        else if(obj2 instanceof SemanticClass)sobj2=((SemanticClass)obj2).getSemanticObject();
         else sobj2 = (SemanticObject) obj2;
 
         String name1=null;
