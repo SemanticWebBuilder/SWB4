@@ -102,7 +102,7 @@ public class SelectOne extends SelectOneBase
                     }
                 }else
                 {
-                    it=SWBComparator.sortSermanticObjects(obj.getModel().listInstancesOfClass(cls),lang);
+                    if(!obj.isVirtual())it=SWBComparator.sortSermanticObjects(obj.getModel().listInstancesOfClass(cls),lang);
                 }
                 while(it.hasNext())
                 {
