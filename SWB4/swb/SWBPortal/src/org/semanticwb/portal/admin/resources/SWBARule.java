@@ -555,6 +555,9 @@ public class SWBARule extends GenericResource {
                 if (usrAtt.getDisplayProperty() != null) {
                     log.debug("DisplayProperty");
                     DisplayProperty dobj = new DisplayProperty(usrAtt.getDisplayProperty());
+
+                    if(!dobj.isHidden())
+                    {
                     String selectValues = dobj.getSelectValues(user.getLanguage());
                     ///////////////////////////
                     if (selectValues != null) {
@@ -639,42 +642,35 @@ public class SWBARule extends GenericResource {
                     }
                     log.debug("DP:Tipo --- " + tipoControl);
                     //hmAttr.put("Tipo", tipoControl);
-                } else {
-                    if (usrAtt.isDataTypeProperty()) {
-                        log.debug("------------- DataTypeProperty ------------------");
+                  }
+                }
 
-                        if (usrAtt.isInt()||usrAtt.isFloat()||usrAtt.isLong()) {
-                            tipoControl = "TEXT";
-                            hmAttr.put("Tipo", tipoControl);
-                            hmOper.put("=", paramRequest.getLocaleString("msgIs"));
-                            hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
-                            hmOper.put("&gt;", paramRequest.getLocaleString("msgGreaterThan"));
-                            hmOper.put("&lt;", paramRequest.getLocaleString("msgLessThan"));
-                            hmAttr.put("Operador", hmOper);
-                            comboAtt.put(usrAtt.getName(), hmAttr);
-                            vecOrderAtt.add(numero++, usrAtt.getName());
-                        } else if (usrAtt.isBoolean()) {
-                            tipoControl = "select";
-                            hmAttr.put("Tipo", tipoControl);
-                            hmOper.put("=", paramRequest.getLocaleString("msgIs"));
-                            hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
-                            hmAttr.put("Operador", hmOper);
-                            hmValues.put("true", paramRequest.getLocaleString("msgTrue"));
-                            hmValues.put("false", paramRequest.getLocaleString("msgFalse"));
-                            hmAttr.put("Valor", hmValues);
-                            comboAtt.put(usrAtt.getName(), hmAttr);
-                            vecOrderAtt.add(numero++, usrAtt.getName());
-                        } else if (usrAtt.isString()) {
-                            tipoControl = "TEXT";
-                            hmAttr.put("Tipo", tipoControl);
-                            hmOper.put("=", paramRequest.getLocaleString("msgIs"));
-                            hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
-                            hmAttr.put("Operador", hmOper);
-                            comboAtt.put(usrAtt.getName(), hmAttr);
-                            vecOrderAtt.add(numero++, usrAtt.getName());
-                        }
-                        // PARA TIPO Object Type
-//                        else {
+//                else {
+//                    if (usrAtt.isDataTypeProperty()) {
+//                        log.debug("------------- DataTypeProperty ------------------");
+//
+//                        if (usrAtt.isInt()||usrAtt.isFloat()||usrAtt.isLong()) {
+//                            tipoControl = "TEXT";
+//                            hmAttr.put("Tipo", tipoControl);
+//                            hmOper.put("=", paramRequest.getLocaleString("msgIs"));
+//                            hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
+//                            hmOper.put("&gt;", paramRequest.getLocaleString("msgGreaterThan"));
+//                            hmOper.put("&lt;", paramRequest.getLocaleString("msgLessThan"));
+//                            hmAttr.put("Operador", hmOper);
+//                            comboAtt.put(usrAtt.getName(), hmAttr);
+//                            vecOrderAtt.add(numero++, usrAtt.getName());
+//                        } else if (usrAtt.isBoolean()) {
+//                            tipoControl = "select";
+//                            hmAttr.put("Tipo", tipoControl);
+//                            hmOper.put("=", paramRequest.getLocaleString("msgIs"));
+//                            hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
+//                            hmAttr.put("Operador", hmOper);
+//                            hmValues.put("true", paramRequest.getLocaleString("msgTrue"));
+//                            hmValues.put("false", paramRequest.getLocaleString("msgFalse"));
+//                            hmAttr.put("Valor", hmValues);
+//                            comboAtt.put(usrAtt.getName(), hmAttr);
+//                            vecOrderAtt.add(numero++, usrAtt.getName());
+//                        } else if (usrAtt.isString()) {
 //                            tipoControl = "TEXT";
 //                            hmAttr.put("Tipo", tipoControl);
 //                            hmOper.put("=", paramRequest.getLocaleString("msgIs"));
@@ -683,21 +679,32 @@ public class SWBARule extends GenericResource {
 //                            comboAtt.put(usrAtt.getName(), hmAttr);
 //                            vecOrderAtt.add(numero++, usrAtt.getName());
 //                        }
-                    }
-//                    else if (usrAtt.isObjectProperty()) {
-//                        log.debug("DP: ObjectProperty");
-//                        tipoControl = "select";
-//                        if (usrAtt.equals(User.swb_hasRole)) {
-//                            Iterator<Role> itRol = usrRepo.listRoles();
-//                            while (itRol.hasNext()) {
-//                                Role rol = itRol.next();
-//                                hmValues.put(rol.getId(), rol.getDisplayTitle(user.getLanguage()));
-//                            }
-//                            hmAttr.put("Valor", hmValues);
-//                        }
+//                        // PARA TIPO Object Type
+////                        else {
+////                            tipoControl = "TEXT";
+////                            hmAttr.put("Tipo", tipoControl);
+////                            hmOper.put("=", paramRequest.getLocaleString("msgIs"));
+////                            hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
+////                            hmAttr.put("Operador", hmOper);
+////                            comboAtt.put(usrAtt.getName(), hmAttr);
+////                            vecOrderAtt.add(numero++, usrAtt.getName());
+////                        }
 //                    }
-
-                }
+////                    else if (usrAtt.isObjectProperty()) {
+////                        log.debug("DP: ObjectProperty");
+////                        tipoControl = "select";
+////                        if (usrAtt.equals(User.swb_hasRole)) {
+////                            Iterator<Role> itRol = usrRepo.listRoles();
+////                            while (itRol.hasNext()) {
+////                                Role rol = itRol.next();
+////                                hmValues.put(rol.getId(), rol.getDisplayTitle(user.getLanguage()));
+////                            }
+////                            hmAttr.put("Valor", hmValues);
+////                        }
+////                    }
+//
+//                }
+//
             }
 
             // Atributos Extendidos
@@ -715,129 +722,124 @@ public class SWBARule extends GenericResource {
                 hmValues = new HashMap();
 
                 hmAttr.put("Etiqueta", "EX: "+usrAtt.getDisplayName(user.getLanguage()));
-                if (usrAtt.getDisplayProperty() != null) {
+                if (usrAtt.getDisplayProperty() != null ) {
                     log.debug("DisplayProperty");
                     DisplayProperty dobj = new DisplayProperty(usrAtt.getDisplayProperty());
-                    String selectValues = dobj.getSelectValues(user.getLanguage());
-                    ///////////////////////////
-                    if (selectValues != null) {
-                        tipoControl = "select";
-                        hmAttr.put("Tipo", tipoControl);
-                        hmOper.put("=", paramRequest.getLocaleString("msgSameAs"));
-                        hmOper.put("!=", paramRequest.getLocaleString("msgNotEqual"));
-                        hmAttr.put("Operador", hmOper);
-                        StringTokenizer st = new StringTokenizer(selectValues, "|");
-                        while (st.hasMoreTokens()) {
-                            String tok = st.nextToken();
-                            int ind = tok.indexOf(':');
-                            String idt = tok;
-                            String val = tok;
-                            if (ind > 0) {
-                                idt = tok.substring(0, ind);
-                                val = tok.substring(ind + 1);
-                            }
-                            hmValues.put(idt, val);
-                        }
-                        hmAttr.put("Valor", hmValues);
-                        comboAtt.put(usrAtt.getName(), hmAttr);
-                        vecOrderAtt.add(numero++, usrAtt.getName());
-                    } else {
-                        if (usrAtt.isDataTypeProperty()) {
-                            log.debug("DP: DataTypeProperty");
-                            if (usrAtt.isInt()||usrAtt.isFloat()||usrAtt.isLong()) {
-                                tipoControl = "TEXT";
-                                hmAttr.put("Tipo", tipoControl);
-                                hmOper.put("&gt;", paramRequest.getLocaleString("msgGreaterThan"));
-                                hmOper.put("&lt;", paramRequest.getLocaleString("msgLessThan"));
-                                hmOper.put("=", paramRequest.getLocaleString("msgIs"));
-                                hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
-                                hmAttr.put("Operador", hmOper);
-                                comboAtt.put(usrAtt.getName(), hmAttr);
-                                vecOrderAtt.add(numero++, usrAtt.getName());
-                            } else if (usrAtt.isBoolean()) {
-                                tipoControl = "select";
-                                hmAttr.put("Tipo", tipoControl);
-                                hmOper.put("=", paramRequest.getLocaleString("msgIs"));
-                                hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
-                                hmAttr.put("Operador", hmOper);
-                                hmValues.put("true", paramRequest.getLocaleString("msgTrue"));
-                                hmValues.put("false", paramRequest.getLocaleString("msgFalse"));
-                                hmAttr.put("Valor", hmValues);
-                                comboAtt.put(usrAtt.getName(), hmAttr);
-                                vecOrderAtt.add(numero++, usrAtt.getName());
-                            } else if (usrAtt.isString()) {
-                                tipoControl = "TEXT";
-                                hmAttr.put("Tipo", tipoControl);
-                                hmOper.put("=", paramRequest.getLocaleString("msgIs"));
-                                hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
-                                hmAttr.put("Operador", hmOper);
-                                comboAtt.put(usrAtt.getName(), hmAttr);
-                                vecOrderAtt.add(numero++, usrAtt.getName());
-                            }
-
-                            // PARA ObjectType
-
-//                            else {
-//                                tipoControl = "TEXT";
-//                                hmAttr.put("Tipo", tipoControl);
-//                                hmOper.put("=", paramRequest.getLocaleString("msgIs"));
-//                                hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
-//                                hmAttr.put("Operador", hmOper);
-//                                comboAtt.put(usrAtt.getName(), hmAttr);
-//                                vecOrderAtt.add(numero++, usrAtt.getName());
-//                            }
-                        }
-//                        else if (usrAtt.isObjectProperty()) {
-//                            log.debug("DP: ObjectProperty");
-//                            tipoControl = "select";
-//                            if (usrAtt == User.swb_hasRole) {
-//                                Iterator<Role> itRol = usrRepo.listRoles();
-//                                while (itRol.hasNext()) {
-//                                    Role rol = itRol.next();
-//                                    hmValues.put(rol.getId(), rol.getDisplayTitle(user.getLanguage()));
-//                                }
-//                                hmAttr.put("Valor", hmValues);
-//                            }
-//                        }
-                    }
-                    log.debug("DP:Tipo --- " + tipoControl);
-                    //hmAttr.put("Tipo", tipoControl);
-                } else {
-                    if (usrAtt.isDataTypeProperty()) {
-                        log.debug("------------- DataTypeProperty ------------------");
-
-                        if (usrAtt.isInt()||usrAtt.isFloat()||usrAtt.isLong()) {
-                            tipoControl = "TEXT";
-                            hmAttr.put("Tipo", tipoControl);
-                            hmOper.put("=", paramRequest.getLocaleString("msgIs"));
-                            hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
-                            hmOper.put("&gt;", paramRequest.getLocaleString("msgGreaterThan"));
-                            hmOper.put("&lt;", paramRequest.getLocaleString("msgLessThan"));
-                            hmAttr.put("Operador", hmOper);
-                            comboAtt.put(usrAtt.getName(), hmAttr);
-                            vecOrderAtt.add(numero++, usrAtt.getName());
-                        } else if (usrAtt.isBoolean()) {
+                    if(!dobj.isHidden())
+                    {
+                        String selectValues = dobj.getSelectValues(user.getLanguage());
+                        ///////////////////////////
+                        if (selectValues != null) {
                             tipoControl = "select";
                             hmAttr.put("Tipo", tipoControl);
-                            hmOper.put("=", paramRequest.getLocaleString("msgIs"));
-                            hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
+                            hmOper.put("=", paramRequest.getLocaleString("msgSameAs"));
+                            hmOper.put("!=", paramRequest.getLocaleString("msgNotEqual"));
                             hmAttr.put("Operador", hmOper);
-                            hmValues.put("true", paramRequest.getLocaleString("msgTrue"));
-                            hmValues.put("false", paramRequest.getLocaleString("msgFalse"));
+                            StringTokenizer st = new StringTokenizer(selectValues, "|");
+                            while (st.hasMoreTokens()) {
+                                String tok = st.nextToken();
+                                int ind = tok.indexOf(':');
+                                String idt = tok;
+                                String val = tok;
+                                if (ind > 0) {
+                                    idt = tok.substring(0, ind);
+                                    val = tok.substring(ind + 1);
+                                }
+                                hmValues.put(idt, val);
+                            }
                             hmAttr.put("Valor", hmValues);
                             comboAtt.put(usrAtt.getName(), hmAttr);
                             vecOrderAtt.add(numero++, usrAtt.getName());
-                        } else if (usrAtt.isString()) {
-                            tipoControl = "TEXT";
-                            hmAttr.put("Tipo", tipoControl);
-                            hmOper.put("=", paramRequest.getLocaleString("msgIs"));
-                            hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
-                            hmAttr.put("Operador", hmOper);
-                            comboAtt.put(usrAtt.getName(), hmAttr);
-                            vecOrderAtt.add(numero++, usrAtt.getName());
+                        } else {
+                            if (usrAtt.isDataTypeProperty()) {
+                                log.debug("DP: DataTypeProperty");
+                                if (usrAtt.isInt()||usrAtt.isFloat()||usrAtt.isLong()) {
+                                    tipoControl = "TEXT";
+                                    hmAttr.put("Tipo", tipoControl);
+                                    hmOper.put("&gt;", paramRequest.getLocaleString("msgGreaterThan"));
+                                    hmOper.put("&lt;", paramRequest.getLocaleString("msgLessThan"));
+                                    hmOper.put("=", paramRequest.getLocaleString("msgIs"));
+                                    hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
+                                    hmAttr.put("Operador", hmOper);
+                                    comboAtt.put(usrAtt.getName(), hmAttr);
+                                    vecOrderAtt.add(numero++, usrAtt.getName());
+                                } else if (usrAtt.isBoolean()) {
+                                    tipoControl = "select";
+                                    hmAttr.put("Tipo", tipoControl);
+                                    hmOper.put("=", paramRequest.getLocaleString("msgIs"));
+                                    hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
+                                    hmAttr.put("Operador", hmOper);
+                                    hmValues.put("true", paramRequest.getLocaleString("msgTrue"));
+                                    hmValues.put("false", paramRequest.getLocaleString("msgFalse"));
+                                    hmAttr.put("Valor", hmValues);
+                                    comboAtt.put(usrAtt.getName(), hmAttr);
+                                    vecOrderAtt.add(numero++, usrAtt.getName());
+                                } else if (usrAtt.isString()) {
+                                    tipoControl = "TEXT";
+                                    hmAttr.put("Tipo", tipoControl);
+                                    hmOper.put("=", paramRequest.getLocaleString("msgIs"));
+                                    hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
+                                    hmAttr.put("Operador", hmOper);
+                                    comboAtt.put(usrAtt.getName(), hmAttr);
+                                    vecOrderAtt.add(numero++, usrAtt.getName());
+                                }
+
+                                // PARA ObjectType
+
+    //                            else {
+    //                                tipoControl = "TEXT";
+    //                                hmAttr.put("Tipo", tipoControl);
+    //                                hmOper.put("=", paramRequest.getLocaleString("msgIs"));
+    //                                hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
+    //                                hmAttr.put("Operador", hmOper);
+    //                                comboAtt.put(usrAtt.getName(), hmAttr);
+    //                                vecOrderAtt.add(numero++, usrAtt.getName());
+    //                            }
+                            }
+    //                        else if (usrAtt.isObjectProperty()) {
+    //                            log.debug("DP: ObjectProperty");
+    //                            tipoControl = "select";
+    //                            if (usrAtt == User.swb_hasRole) {
+    //                                Iterator<Role> itRol = usrRepo.listRoles();
+    //                                while (itRol.hasNext()) {
+    //                                    Role rol = itRol.next();
+    //                                    hmValues.put(rol.getId(), rol.getDisplayTitle(user.getLanguage()));
+    //                                }
+    //                                hmAttr.put("Valor", hmValues);
+    //                            }
+    //                        }
                         }
-                        // PARA TIPO Object Type
-//                        else {
+                        log.debug("DP:Tipo --- " + tipoControl);
+                    }
+                    //hmAttr.put("Tipo", tipoControl);
+                }
+
+//                else {
+//                    if (usrAtt.isDataTypeProperty()) {
+//                        log.debug("------------- DataTypeProperty ------------------");
+//
+//                        if (usrAtt.isInt()||usrAtt.isFloat()||usrAtt.isLong()) {
+//                            tipoControl = "TEXT";
+//                            hmAttr.put("Tipo", tipoControl);
+//                            hmOper.put("=", paramRequest.getLocaleString("msgIs"));
+//                            hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
+//                            hmOper.put("&gt;", paramRequest.getLocaleString("msgGreaterThan"));
+//                            hmOper.put("&lt;", paramRequest.getLocaleString("msgLessThan"));
+//                            hmAttr.put("Operador", hmOper);
+//                            comboAtt.put(usrAtt.getName(), hmAttr);
+//                            vecOrderAtt.add(numero++, usrAtt.getName());
+//                        } else if (usrAtt.isBoolean()) {
+//                            tipoControl = "select";
+//                            hmAttr.put("Tipo", tipoControl);
+//                            hmOper.put("=", paramRequest.getLocaleString("msgIs"));
+//                            hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
+//                            hmAttr.put("Operador", hmOper);
+//                            hmValues.put("true", paramRequest.getLocaleString("msgTrue"));
+//                            hmValues.put("false", paramRequest.getLocaleString("msgFalse"));
+//                            hmAttr.put("Valor", hmValues);
+//                            comboAtt.put(usrAtt.getName(), hmAttr);
+//                            vecOrderAtt.add(numero++, usrAtt.getName());
+//                        } else if (usrAtt.isString()) {
 //                            tipoControl = "TEXT";
 //                            hmAttr.put("Tipo", tipoControl);
 //                            hmOper.put("=", paramRequest.getLocaleString("msgIs"));
@@ -846,21 +848,31 @@ public class SWBARule extends GenericResource {
 //                            comboAtt.put(usrAtt.getName(), hmAttr);
 //                            vecOrderAtt.add(numero++, usrAtt.getName());
 //                        }
-                    }
-//                    else if (usrAtt.isObjectProperty()) {
-//                        log.debug("DP: ObjectProperty");
-//                        tipoControl = "select";
-//                        if (usrAtt.equals(User.swb_hasRole)) {
-//                            Iterator<Role> itRol = usrRepo.listRoles();
-//                            while (itRol.hasNext()) {
-//                                Role rol = itRol.next();
-//                                hmValues.put(rol.getId(), rol.getDisplayTitle(user.getLanguage()));
-//                            }
-//                            hmAttr.put("Valor", hmValues);
-//                        }
+//                        // PARA TIPO Object Type
+////                        else {
+////                            tipoControl = "TEXT";
+////                            hmAttr.put("Tipo", tipoControl);
+////                            hmOper.put("=", paramRequest.getLocaleString("msgIs"));
+////                            hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
+////                            hmAttr.put("Operador", hmOper);
+////                            comboAtt.put(usrAtt.getName(), hmAttr);
+////                            vecOrderAtt.add(numero++, usrAtt.getName());
+////                        }
 //                    }
-
-                }
+////                    else if (usrAtt.isObjectProperty()) {
+////                        log.debug("DP: ObjectProperty");
+////                        tipoControl = "select";
+////                        if (usrAtt.equals(User.swb_hasRole)) {
+////                            Iterator<Role> itRol = usrRepo.listRoles();
+////                            while (itRol.hasNext()) {
+////                                Role rol = itRol.next();
+////                                hmValues.put(rol.getId(), rol.getDisplayTitle(user.getLanguage()));
+////                            }
+////                            hmAttr.put("Valor", hmValues);
+////                        }
+////                    }
+//
+//                }
             }
         //////////////////////////////////////////////////////////////////////
 
