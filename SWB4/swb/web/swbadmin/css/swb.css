@@ -29,6 +29,7 @@ html, body, #main{
     margin: expression('0px 0px -7px 0px'); /*IE*/
 }
 
+/*  20x18 */
 
 .swbIconMnuView,
 .swbIconMnuReload,
@@ -115,6 +116,65 @@ html, body, #main{
 .swbIconPFlows      { background-position: -120px -0px; }
 .swbIconPFlow       { background-position: -120px -18px; }
 .swbIconPFlowU      { background-position: -120px -36px; }
+
+
+
+/*  48x48 */
+
+.swbIcon2MnuView,
+.swbIcon2MnuReload,
+.swbIcon2MnuDelete,
+.swbIcon2MnuAdd,
+.swbIcon2MnuActive,
+.swbIcon2MnuEdit,
+.swbIcon2Portlets,
+.swbIcon2PortletType,
+.swbIcon2Portlet,
+.swbIcon2PortletU,
+.swbIcon2TemplateGroup,
+.swbIcon2Templates,
+.swbIcon2Template,
+.swbIcon2TemplateU,
+.swbIcon2WebSites,
+.swbIcon2WebSite,
+.swbIcon2WebSiteU,
+.swbIcon2UserRespositorys,
+.swbIcon2UserRepository,
+.swbIcon2WebPage,
+.swbIcon2WebPageU,
+.swbIcon2Camps,
+.swbIcon2Camp,
+.swbIcon2CampU,
+.swbIcon2PFlows,
+.swbIcon2PFlow,
+.swbIcon2PFlowU,
+.swbIcon2Languages,
+.swbIcon2Language,
+.swbIcon2Devices,
+.swbIcon2Device,
+.swbIcon2Rules,
+.swbIcon2Rule,
+.swbIcon2RuleU,
+.swbIcon2Roles,
+.swbIcon2Role,
+.swbIcon2RoleU,
+.swbIcon2Dnss,
+.swbIcon2Dns,
+.swbIcon2UserGroups,
+.swbIcon2UserGroup,
+.swbIcon2ObjectBehaviors,
+.swbIcon2ObjectBehavior,
+.swbIcon2Menus,
+.swbIcon2Menu
+{
+	background-repeat: no-repeat;
+	width:48px;
+	height:48px;
+	text-align: center;
+	padding-right:0px;
+    background-image: url('../icons/icons48x48.png'); background-position: -0px 1px;
+}
+
 
 .admViewProperties table{ padding:0px; margin:-10px; width:100%; }
 .admViewProperties div div div{ padding:0px; margin:0px; width:100%; }
