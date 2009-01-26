@@ -47,7 +47,7 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
             //System.out.println("com:"+old+"-"+value+"-");
             if(prop.isBoolean())
             {
-                if(value!=null && old.equals("false"))obj.setBooleanProperty(prop, true);
+                if(value!=null && (old==null || old.equals("false")))obj.setBooleanProperty(prop, true);
                 else if(value==null && (old==null || old.equals("true"))) obj.setBooleanProperty(prop, false);
             }else
             {

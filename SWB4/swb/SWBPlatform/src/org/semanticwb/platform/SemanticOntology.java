@@ -12,6 +12,7 @@ import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.StmtIterator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -148,13 +149,21 @@ public class SemanticOntology
         return ret;
     }
     
-    public SemanticClass createSemanticClass(String uri)
+//    public SemanticClass createSemanticClass(String uri)
+//    {
+//        OntModel m=m_ontology;
+//        m.createStatement(m.getResource(uri), m.getProperty(SemanticVocabulary.RDF_TYPE), m.getResource(SemanticVocabulary.OWL_CLASS));
+//        OntClass ontcls=m_ontology.getOntClass(uri);
+//        return new SemanticClass(ontcls);
+//    }
+
+    public Iterator<SemanticObject> listInstancesOfClass(SemanticClass cls)
     {
-        OntModel m=m_ontology;
-        m.createStatement(m.getResource(uri), m.getProperty(SemanticVocabulary.RDF_TYPE), m.getResource(SemanticVocabulary.OWL_CLASS));
-        OntClass ontcls=m_ontology.getOntClass(uri);
-        return new SemanticClass(ontcls);    
+        Property rdf=m_ontology.getProperty(SemanticVocabulary.RDF_TYPE);
+        StmtIterator stit=m_ontology.listStatements(null, rdf, cls.getOntClass());
+        return new SemanticIterator(stit, true);
     }
+
 
     public SemanticProperty getSemanticProperty(String uri)
     {

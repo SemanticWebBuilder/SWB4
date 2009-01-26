@@ -45,7 +45,7 @@ public class SemanticObjectIterator implements Iterator
         {
             return SemanticObject.createSemanticObject(((Statement)obj).getResource());
         }
-        throw new AssertionError("No type found...");
+        throw new AssertionError("No type found...:"+obj.getClass());
     }
     
     public SemanticObject nextSemanticObject() 

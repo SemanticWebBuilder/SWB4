@@ -44,7 +44,8 @@ public class SemanticMgr implements SWBInstanceObject
     
     private SemanticOntology m_ontology;
     private SemanticModel m_system;
-    private HashMap<String,SemanticModel> m_schemas;
+    //private HashMap<String,SemanticModel> m_schemas;
+    private SemanticOntology m_schema;
     private HashMap<String,SemanticModel>m_models=null;
     private HashMap<Model,SemanticModel>m_imodels=null;
 
@@ -60,9 +61,9 @@ public class SemanticMgr implements SWBInstanceObject
         log.event("Initializing SemanticMgr...");
         this.m_context=context;
         
-        m_models=new HashMap();
-        m_imodels=new HashMap();
-        m_schemas=new HashMap();
+        m_models=new HashMap();                     //Arreglo de SemanticModel
+        m_imodels=new HashMap();                    //Arreglo de RDFModel
+        //m_schemas=new HashMap();
         m_observers=new ArrayList();
 
         // Create database connection
@@ -79,40 +80,42 @@ public class SemanticMgr implements SWBInstanceObject
             String swbowl="file:"+SWBUtils.getApplicationPath()+file;
             File owlf=new File(swbowl);
             log.debug("Loading Model:"+owlf.getName());
-            m_schemas.put(owlf.getName(),new SemanticModel("SWBSchema",loadRDFFileModel(swbowl)));
+            Model model=loadRDFFileModel(swbowl);
+            SemanticModel smodel=new SemanticModel("SWBSchema",model);
+            m_models.put(owlf.getName(),smodel);
+            m_imodels.put(model, smodel);
             //debugModel(swbSquema);
         }
-        
-        OntModelSpec spec = OntModelSpec.OWL_MEM;
-//        OntModelSpec spec = new OntModelSpec( OntModelSpec.OWL_MEM );
-//        spec.setBaseModelMaker(maker);
-//        spec.setImportModelMaker(maker);
-        
+
+        //Create Schema
+        m_schema = new SemanticOntology("SWBSquema",ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM));
         //Create Ontology
-        m_ontology = new SemanticOntology("SWB",ModelFactory.createOntologyModel(spec));
-        Iterator<SemanticModel> it=m_schemas.values().iterator();
+        m_ontology = new SemanticOntology("SWBOntology",ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM));
+        Iterator<SemanticModel> it=m_models.values().iterator();
         while(it.hasNext())
         {
             SemanticModel model=it.next();
+            m_schema.addSubModel(model,false);
             m_ontology.addSubModel(model,false);
-            //m_ontology.getRDFOntModel().add(model.getRDFModel());
         }
         
         //Agrega ontologia a los modelos
         SemanticModel ontModel=new SemanticModel("swb_ontology", m_ontology.getRDFOntModel());
         m_models.put("swb_ontology", ontModel);
         m_imodels.put(ontModel.getRDFModel(), ontModel);
+
+        //Agrega squema a los modelos
+        SemanticModel ontSchemaModel=new SemanticModel("swb_schema", m_schema.getRDFOntModel());
+        m_models.put("swb_schema", ontSchemaModel);
+        m_imodels.put(ontSchemaModel.getRDFModel(), ontSchemaModel);
         
         //Create Vocabulary
         vocabulary=new SemanticVocabulary();
-        Iterator<SemanticClass> tpcit=new SemanticClassIterator(m_ontology.getRDFOntModel().listClasses(),true);
+        Iterator<SemanticClass> tpcit=new SemanticClassIterator(m_schema.getRDFOntModel().listClasses());
         while(tpcit.hasNext())
         {
             SemanticClass cls=tpcit.next();
-            //if(cls.getName()!=null)
-            {
-                vocabulary.registerClass(cls);
-            }
+            vocabulary.registerClass(cls);
         }
         vocabulary.init();
         
@@ -134,9 +137,9 @@ public class SemanticMgr implements SWBInstanceObject
         log.debug("Loading DBModel:"+"SWBSystem");
         m_system=new SemanticModel("SWBSystem",loadRDFDBModel("SWBSystem"));
 //        debugModel(m_system);
-        m_ontology.addSubModel(m_system,false);
+        if(SWBPlatform.isUseDB())m_ontology.addSubModel(m_system,false);
 
-        if(SWBPlatform.isUseDB())loadDBModels();
+        loadDBModels();
         m_ontology.rebind();
     }
     
@@ -253,7 +256,7 @@ public class SemanticMgr implements SWBInstanceObject
         m_models.put(name, m);
         m_imodels.put(m.getRDFModel(), m);
         //System.out.println("addModel:"+name+" hash:"+m.getRDFModel().toString());
-        m_ontology.addSubModel(m,false);
+        if(SWBPlatform.isUseDB())m_ontology.addSubModel(m,false);
         return m;
     }    
     
@@ -289,10 +292,15 @@ public class SemanticMgr implements SWBInstanceObject
         return m_ontology;
     }
     
-    public SemanticModel getSchemaModel(String name)
+    public SemanticOntology getSchema()
     {
-        return m_schemas.get(name);
-    }    
+        return m_schema;
+    }
+
+//    public SemanticModel getSchemaModel(String name)
+//    {
+//        return m_schemas.get(name);
+//    }
     
     public SemanticModel getSystemModel() 
     {

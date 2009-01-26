@@ -41,18 +41,18 @@ public class SemanticIterator<T extends SemanticObject> implements Iterator
         {
             if(obj instanceof Statement)
             {
-                try
-                {
+                //try
+                //{
                     if(invert)
                     {
                         return (T)SemanticObject.createSemanticObject(((Statement)obj).getSubject());
                     }
                     return (T)SemanticObject.createSemanticObject(((Statement)obj).getResource());
-                }
-                catch(Exception ie)
-                {
-                    throw new AssertionError(ie.getMessage());        
-                }
+                //}
+                //catch(Exception ie)
+                //{
+                //    throw new AssertionError(ie.getMessage());
+                //}
             }
             else if(obj instanceof Resource)
             {

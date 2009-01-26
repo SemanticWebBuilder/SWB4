@@ -31,7 +31,8 @@ public class SemanticClass
 {
     private static Logger log=SWBUtils.getLogger(SemanticClass.class);
 
-    private OntClass m_class;
+    private OntClass m_class;                           //clase ontologia schema
+    private OntClass m_ontclass;                        //clase ontologia glonal
     private HashMap<String,SemanticProperty> m_props;
     private Boolean m_isSWBClass=null;
     private Boolean m_isSWBInterface=null;
@@ -60,8 +61,15 @@ public class SemanticClass
         init();
     }
 
+    public SemanticObject getSemanticObject()
+    {
+        return SWBPlatform.getSemanticMgr().getOntology().getSemanticObject(getURI());
+    }
+
     private void init()
     {
+        m_ontclass=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getOntClass(m_class.getURI());
+        //System.out.println(m_class+" "+m_ontclass);
         m_props=new HashMap();
         herarquicalProps=new ArrayList();
         inverseHerarquicalProps=new ArrayList();
@@ -357,8 +365,14 @@ public class SemanticClass
 
     public Iterator listInstances(boolean direct)
     {
-        //return new SemanticIterator(this,m_class.listInstances(direct));
-        return new SemanticObjectIterator(m_class.listInstances(direct));
+        //return SWBPlatform.getSemanticMgr().getOntology().listInstancesOfClass(this);
+        if(m_ontclass!=null)
+        {
+            return new SemanticObjectIterator(m_ontclass.listInstances(direct));
+        }else
+        {
+            return new SemanticObjectIterator(m_class.listInstances(direct));
+        }
     }
 
     public Iterator listGenericInstances()
@@ -368,7 +382,7 @@ public class SemanticClass
 
     public Iterator listGenericInstances(boolean direct)
     {
-        return new GenericIterator(this,m_class.listInstances(direct));
+        return new GenericIterator(this,listInstances(direct));
     }
 
     public SemanticProperty getProperty(String name)
