@@ -42,301 +42,7 @@ public class SWBARule extends GenericResource {
      * @throws AFException an AF Exception
      * @throws IOException an IO Exception
      */
-//    @Override
-//    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-//        Portlet base = getResourceBase();
-//        WebPage topic = paramRequest.getTopic();
-//        User user = paramRequest.getUser();
-//        StringBuffer ret = new StringBuffer("");
-//        PrintWriter out = response.getWriter();
-//        WebPage tp = paramRequest.getTopic();
-//        String tmparam = request.getParameter("tm");
-//        if (tmparam == null) {
-//            tmparam = paramRequest.getTopic().getWebSiteId();
-//        }
-//        if (request.getParameter("tm") != null && request.getParameter("tp") != null) {
-//            tp = SWBContext.getWebSite(request.getParameter("tm")).getWebPage(request.getParameter("tp"));
-//            tmparam = request.getParameter("tm");
-//        }
-//        WebSite tm = tp.getWebSite();
-//
-//        if (request.getParameter("id") != null || request.getParameter("act") != null) {
-//            String rA = request.getParameter("act");
-//            if (rA != null && rA.equals("removemsg")) {
-//                out.println("<script>wbTree_remove();</script>");
-//                //out.println("<font face=\"Verdana\" size=\"1\">");
-//                out.println(paramRequest.getLocaleString("msgStatusRuleRemoved"));
-//                //out.println("</font>");
-//                rA = "";
-//            }
-//            if (rA != null && rA.equals("notremovemsg")) {
-//                //out.println("<script>wbTree_remove();</script>");
-//                //out.println("<font face=\"Verdana\" size=\"1\">");
-//                out.println(paramRequest.getLocaleString("msgStatusRuleNotRemoved"));
-//                //out.println("</font>");
-//                rA = "";
-//            }
-//            if (rA == null) {
-//                rA = "details";
-//            }
-//            if (rA.equals("add") || rA.equals("edit") || rA.equals("details") || rA.equals("history") || rA.equals("editcondition") || rA.equals("agregar") || rA.equals("insertcondition")) {
-//
-//                doEdit(request, response, paramRequest);
-//            }
-//            if (rA.equals("remove") || rA.equals("removeit") || rA.equals("removes") || rA.equals("update") || rA.equals("updatecondition") || rA.equals("addcondition") || rA.equals("deletecondition") || rA.equals("editadd")) {
-//
-//                String tmreq = request.getParameter("tm");
-//                String idreq = request.getParameter("id");
-//                String tpreq = request.getParameter("tp");
-//                if (rA.equals("remove")) {
-//                    try {
-//
-//                        Rule rul = SWBContext.getWebSite(tmreq).getRule(idreq);
-//                        Iterator iobjs = rul.listRelatedObjects();
-//
-//                        if (iobjs.hasNext()) {
-//                            SWBResourceURL urlWin = paramRequest.getRenderUrl();
-//                            urlWin.setCallMethod(urlWin.Call_DIRECT);
-//                            urlWin.setParameter("act", "removes");
-//                            urlWin.setParameter("id", idreq);
-//                            urlWin.setParameter("tm", tmreq);
-//                            urlWin.setParameter("tp", tpreq);
-//                            out.println("<script language=javascript>");
-//                            out.println("window.open('" + urlWin.toString() + "','relatedElements','height=400,location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,toolbar=no,width=400');");
-//                            out.println("</script>");
-//                        } else {
-//                            SWBResourceURL url = paramRequest.getActionUrl();
-//                            url.setParameter("act", "removeit");
-//                            if (request.getParameter("id") != null) {
-//                                url.setParameter("id", idreq);
-//                            }
-//                            url.setParameter("tm", tmreq);
-//                            url.setParameter("tp", tpreq);
-//                            out.println("<META HTTP-EQUIV=\"Refresh\" CONTENT=\"0; URL=" + url.toString() + "\">");
-//                        }
-//                    } catch (Exception e) {
-//                        log.error("Error while display asociated elements with the rule with id:" + idreq + " in WebSite:" + tmreq, e);
-//                    }
-//                } else if (rA.equals("removes")) {
-//                    try {
-//
-//                        Rule recRule = SWBContext.getWebSite(tmreq).getRule(idreq);
-//                        Iterator iobjs = recRule.listRelatedObjects();
-//                        if (iobjs.hasNext()) { // si existen elementos asociados a la regla se muestran
-//                            //Rule recRule = SWBContext.getWebSite(tmreq).getRule(idreq);
-//                            SWBResourceURL url = paramRequest.getActionUrl();
-//                            url.setCallMethod(url.Call_CONTENT);
-//                            out.println("<HTML>");
-//                            out.println("<META HTTP-EQUIV=\"CONTENT-TYPE\" CONTENT=\"text/html\" >");
-//                            out.println("<META HTTP-EQUIV=\"CACHE-CONTROL\" CONTENT=\"NO-CACHE\" >");
-//                            out.println("<META HTTP-EQUIV=\"PRAGMA\" CONTENT=\"NO-CACHE\" >");
-//                            out.println("<HEAD>");
-//                            out.println("<TITLE>INFOTEC WebBuilder</TITLE>");
-//
-//                            out.println("<LINK REL=\"SHORTCUT ICON\" HREF=\"/wbadmin/images/wb.ico\" >");
-//                            out.println("<LINK href=\"/work/sites/WBAdmin/templates/3/1/images/wb3.css\" rel=\"stylesheet\" type=\"text/css\" >");
-//                            out.println("<body>");
-//                            out.println("<table border=0 cellpadding=5 cellspacing=0 width=\"100%\" align=center class=box>");
-//                            out.println("<tr>");
-//                            out.println("<td colspan=2 class=tabla>");
-//                            out.println(paramRequest.getLocaleString("msgAsocElementsList") + " - <b>" + recRule.getTitle() + "</b>");
-//                            out.println("</td>");
-//                            out.println("</tr>");
-//
-//                            boolean entroTopic = false;
-//                            boolean entroTemplate = false;
-//                            boolean entroRecurso = false;
-//                            boolean entroRegla = false;
-//                            String rowColor = "";
-//                            boolean cambiaColor = true;
-//                            while (iobjs.hasNext()) { //esta siendo usado por objetos
-//
-//                                Object obj = (Object) iobjs.next();
-//                                if (obj instanceof WebPage) { //el objeto en el que esta siendo usado es un WebPage
-//                                    WebPage recOcc = (WebPage) obj;
-//                                    if (!entroTopic) {
-//                                        out.println("<tr>");
-//                                        out.println("<td colspan=2 class=tabla><HR size=2 noshade>");
-//                                        out.println(paramRequest.getLocaleString("msgAsocTopics"));
-//                                        out.println("</td>");
-//                                        out.println("</tr>");
-//                                        entroTopic = true;
-//                                        cambiaColor = true;
-//                                    }
-//                                    rowColor = "#EFEDEC";
-//                                    if (!cambiaColor) {
-//                                        rowColor = "#FFFFFF";
-//                                    }
-//                                    cambiaColor = !(cambiaColor);
-//                                    out.println("<tr bgcolor=\"" + rowColor + "\">");
-//                                    out.println("<td colspan=2 class=valores>");
-//                                    //WebPage tpAsoc = SWBContext.getWebSite(recOcc.getWebSiteId()).getWebPage(recOcc.getIdtp());
-//                                    out.println(recOcc.getTitle(user.getLanguage()));
-//                                    out.println("</td>");
-//                                    out.println("</tr>");
-//
-//                                } else if (obj instanceof Template) { //el objeto en el que esta siendo usado es un Template
-//                                    Template recTpl = (Template) obj;
-//                                    if (!entroTemplate) {
-//                                        out.println("<tr>");
-//                                        out.println("<td colspan=2 class=tabla><HR size=2 noshade>");
-//                                        out.println(paramRequest.getLocaleString("msgAsocTemplates"));
-//                                        out.println("</td>");
-//                                        out.println("</tr>");
-//                                        entroTemplate = true;
-//                                        cambiaColor = true;
-//                                    }
-//                                    rowColor = "#EFEDEC";
-//                                    if (!cambiaColor) {
-//                                        rowColor = "#FFFFFF";
-//                                    }
-//                                    cambiaColor = !(cambiaColor);
-//                                    out.println("<tr bgcolor=\"" + rowColor + "\">");
-//                                    out.println("<td colspan=2 class=valores>");
-//                                    out.println(recTpl.getTitle());
-//                                    out.println("</td>");
-//                                    out.println("</tr>");
-//                                } else if (obj instanceof Portlet) { //el objeto en el que esta siendo usado es un Portlet
-//                                    Portlet recRes = (Portlet) obj;
-//                                    if (!entroRecurso) {
-//                                        out.println("<tr>");
-//                                        out.println("<td colspan=2 class=tabla><HR size=2 noshade>");
-//                                        out.println(paramRequest.getLocaleString("msgAsocResources"));
-//                                        out.println("</td>");
-//                                        out.println("</tr>");
-//                                        entroRecurso = true;
-//                                        cambiaColor = true;
-//                                    }
-//                                    rowColor = "#EFEDEC";
-//                                    if (!cambiaColor) {
-//                                        rowColor = "#FFFFFF";
-//                                    }
-//                                    cambiaColor = !(cambiaColor);
-//                                    out.println("<tr bgcolor=\"" + rowColor + "\">");
-//                                    out.println("<td colspan=2 class=valores>");
-//                                    out.println(recRes.getTitle());
-//                                    out.println("</td>");
-//                                    out.println("</tr>");
-//                                } else if (obj instanceof Rule) { //el objeto en el que esta siendo usado es un Portlet
-//                                    Rule rRule = (Rule) obj;
-//                                    if (!entroRegla) {
-//                                        out.println("<tr>");
-//                                        out.println("<td colspan=2 class=tabla><HR size=2 noshade>");
-//                                        out.println(paramRequest.getLocaleString("msgAsocRules"));
-//                                        out.println("</td>");
-//                                        out.println("</tr>");
-//                                        entroRegla = true;
-//                                        cambiaColor = true;
-//                                    }
-//                                    rowColor = "#EFEDEC";
-//                                    if (!cambiaColor) {
-//                                        rowColor = "#FFFFFF";
-//                                    }
-//                                    cambiaColor = !(cambiaColor);
-//                                    out.println("<tr bgcolor=\"" + rowColor + "\">");
-//                                    out.println("<td colspan=2 class=valores>");
-//                                    out.println(rRule.getTitle());
-//                                    out.println("</td>");
-//                                    out.println("</tr>");
-//                                }
-//                            }
-//                            out.println("<tr>");
-//                            out.println("<td colspan=2 align=right><HR size=2 noshade>");
-//
-//                            url.setParameter("id", idreq);
-//                            url.setParameter("tm", tmreq);
-//                            url.setParameter("tp", tpreq);
-//                            url.setParameter("act", "removeit");
-//
-//                            out.println("<A href=\"\" class=boton style=\"text-decoration:none;\" onclick=\"javascript:window.close();\">&nbsp;&nbsp;" + paramRequest.getLocaleString("msgLinkCancel") + "&nbsp;&nbsp;</A>&nbsp;<A target=\"status\" href=\"" + url.toString() + "\"class=boton style=\"text-decoration:none;\" name=btn_submit  onclick=\"javascript:if(confirm('" + paramRequest.getLocaleString("msgConfirmShureRemoveRule") + "?')) { window.close(); return (true);} else { window.close(); return (false);} \" >&nbsp;&nbsp;" + paramRequest.getLocaleString("msgBTNEliminateRule") + "&nbsp;&nbsp;</A>");
-//
-//                            out.println("</td>");
-//                            out.println("</tr>");
-//                            out.println("<td colspan=2 class=datos>");
-//                            out.println("* " + paramRequest.getLocaleString("msgNote") + ": " + paramRequest.getLocaleString("msgNoteMsg"));
-//                            out.println("</td>");
-//                            out.println("</tr>");
-//                            out.println("</table></body></html>");
-//                        } else {
-//
-//                            SWBResourceURL url = paramRequest.getActionUrl();
-//                            url.setParameter("act", "removeit");
-//                            if (request.getParameter("id") != null) {
-//                                url.setParameter("id", idreq);
-//                            }
-//                            url.setParameter("tm", tmreq);
-//                            url.setParameter("tp", tpreq);
-//                            out.println("<META HTTP-EQUIV=\"Refresh\" CONTENT=\"0; URL=" + url.toString() + "\">");
-//
-//                        }
-//
-//
-//                    } catch (Exception e) {
-//                        log.error("Error while display asociated elements with the rule with id:" + idreq + " in WebSite:" + tmreq);
-//                    }
-//
-//                } else {
-//                    SWBResourceURL url = paramRequest.getActionUrl();
-//                    url.setParameter("act", rA);
-//                    if (request.getParameter("id") != null) {
-//                        url.setParameter("id", request.getParameter("id"));
-//                    }
-//                    url.setParameter("tm", request.getParameter("tm"));
-//                    url.setParameter("tp", request.getParameter("tp"));
-//                    out.println("<META HTTP-EQUIV=\"Refresh\" CONTENT=\"0; URL=" + url.toString() + "\">");
-//                }
-//            }
-//        } else {
-//
-//            out.println("<p class=\"box\"><table border=\"0\" width=100% cellpadding=5 cellspacing=0>");
-//            String accion = request.getParameter("act");
-//            if (accion == null) {
-//                accion = "";
-//            // presentación de reglas existentes
-//            //System.out.println("parametro"+request.getParameter("tm"));
-//            }
-//            Iterator<Rule> enuRules = SWBContext.getWebSite(tmparam).listRules();//getRule(idreq).getRules(tmparam);
-//            int numRules = 0;
-//            out.println("<tr><td class=\"tabla\">" + paramRequest.getLocaleString("thID") + "</td><td class=\"tabla\">" + paramRequest.getLocaleString("thTitle") + "</td><td class=\"tabla\">" + paramRequest.getLocaleString("thDescription") + "</td><td class=\"tabla\">" + paramRequest.getLocaleString("thCreated") + "</td><td class=\"tabla\"><image src=\"" + SWBPlatform.getContextPath() + "/admin/images/trash_vacio.gif\" border=0 width=\"25\" heigth=\"25\" title=\"" + paramRequest.getLocaleString("titleEliminate") + "\"></a></td></tr>");
-//            String rowColor = "";
-//            boolean cambiaColor = true;
-//            while (enuRules.hasNext()) {
-//                Rule rRule = enuRules.next();
-//                SWBResourceURL urlEdit = paramRequest.getRenderUrl().setMode(paramRequest.Mode_EDIT);
-//                urlEdit.setParameter("act", "edit");
-//                urlEdit.setParameter("id", rRule.getId());
-//                if (tmparam != null) {
-//                    urlEdit.setParameter("tm", tmparam);
-//                }
-//                SWBResourceURL urlDel = paramRequest.getActionUrl();
-//                urlDel.setParameter("act", "remove");
-//                urlDel.setParameter("id", rRule.getId());
-//                if (tmparam != null) {
-//                    urlDel.setParameter("tm", tmparam);
-//                }
-//                rowColor = "#EFEDEC";
-//                if (!cambiaColor) {
-//                    rowColor = "#FFFFFF";
-//                }
-//                cambiaColor = !(cambiaColor);
-//                out.println("<tr bgcolor=\"" + rowColor + "\"><td align=\"center\" class=\"valores\">");
-//                out.println("<a href=\"" + urlEdit.toString() + "\" class=\"link\"><image src=\"" + SWBUtils.getApplicationPath() + "/admin/images/rules.gif\" border=\"0\"></a>&nbsp;" + rRule.getId() + "</td>");
-//                out.println("<td align=\"left\" class=\"valores\">" + rRule.getTitle() + "</td><td class=\"valores\">" + rRule.getDescription() + "</td><td>" + rRule.getCreated().toString() + "</td>");
-//                out.println("<td align=center class=\"valores\"><a href=\"" + urlDel.toString() + "\" class=\"link\"><image src=\"" + SWBUtils.getApplicationPath() + "/admin/images/b_eliminar2.gif\" border=0  title=\"" + paramRequest.getLocaleString("titleEliminate") + "\" onclick=\"javascript:if(confirm('" + paramRequest.getLocaleString("confirmShureDeleteRule") + "?'))return true; else return false;\"></a></td></tr>\n\n");
-//                numRules++;
-//            }
-//            if (numRules == 0) {
-//                out.println("\n<tr><td colspan=2 align=center>" + paramRequest.getLocaleString("msgNoRulesDefined") + "</td></tr>");
-//            }
-//            out.println("<tr><td colspan=2 align=left class=\"valores\">");
-//            SWBResourceURL url = paramRequest.getRenderUrl().setMode(paramRequest.Mode_EDIT);
-//            url.setParameter("act", "edit");
-//            out.println("<a href=\"" + url.toString() + "\" class=\"link\"><image src=\"" + SWBUtils.getApplicationPath() + "/admin/images/ico_agregar.gif\" border=\"0\" title=\"" + paramRequest.getLocaleString("titleAddRule") + "\" ></a>");
-//            out.println("</td></tr>");
-//            out.println("</table></p>");
-//        }
-//
-//    }
+
     private String getApplet(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         StringBuffer ret = new StringBuffer();
         String suri = request.getParameter("suri");
@@ -666,8 +372,9 @@ public class SWBARule extends GenericResource {
 
         log.debug("loadComboAttr ruleid: " + ruleid + ", tmid: " + tmid);
 
+        WebSite ws = SWBContext.getWebSite(tmid);
         User user = paramRequest.getUser();
-        UserRepository usrRepo = SWBContext.getWebSite(tmid).getUserRepository();
+        UserRepository usrRepo = ws.getUserRepository();
         comboAtt = new HashMap();
         vecOrderAtt = new Vector(1, 1);
         // Agreando valores iniciales al HashMap como son isloged, isregistered, language, device
@@ -832,7 +539,7 @@ public class SWBARule extends GenericResource {
             }
 
 
-            Iterator<SemanticProperty> iteratt = usrRepo.listAttributes();
+            Iterator<SemanticProperty> iteratt = usrRepo.listBasicAttributes();
             int attnum = 0;
             while (iteratt.hasNext()) {
 
@@ -852,6 +559,10 @@ public class SWBARule extends GenericResource {
                     ///////////////////////////
                     if (selectValues != null) {
                         tipoControl = "select";
+                        hmAttr.put("Tipo", tipoControl);
+                        hmOper.put("=", paramRequest.getLocaleString("msgSameAs"));
+                        hmOper.put("!=", paramRequest.getLocaleString("msgNotEqual"));
+                        hmAttr.put("Operador", hmOper);
                         StringTokenizer st = new StringTokenizer(selectValues, "|");
                         while (st.hasMoreTokens()) {
                             String tok = st.nextToken();
@@ -864,91 +575,304 @@ public class SWBARule extends GenericResource {
                             }
                             hmValues.put(idt, val);
                         }
+                        hmAttr.put("Valor", hmValues);
+                        comboAtt.put(usrAtt.getName(), hmAttr);
+                        vecOrderAtt.add(numero++, usrAtt.getName());
                     } else {
                         if (usrAtt.isDataTypeProperty()) {
                             log.debug("DP: DataTypeProperty");
-                            if (usrAtt.isInt()) {
+                            if (usrAtt.isInt()||usrAtt.isFloat()||usrAtt.isLong()) {
                                 tipoControl = "TEXT";
+                                hmAttr.put("Tipo", tipoControl);
                                 hmOper.put("&gt;", paramRequest.getLocaleString("msgGreaterThan"));
                                 hmOper.put("&lt;", paramRequest.getLocaleString("msgLessThan"));
-                            } else if (usrAtt.isBoolean()) {
-                                tipoControl = "select";
                                 hmOper.put("=", paramRequest.getLocaleString("msgIs"));
                                 hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
+                                hmAttr.put("Operador", hmOper);
+                                comboAtt.put(usrAtt.getName(), hmAttr);
+                                vecOrderAtt.add(numero++, usrAtt.getName());
+                            } else if (usrAtt.isBoolean()) {
+                                tipoControl = "select";
+                                hmAttr.put("Tipo", tipoControl);
+                                hmOper.put("=", paramRequest.getLocaleString("msgIs"));
+                                hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
+                                hmAttr.put("Operador", hmOper);
                                 hmValues.put("true", paramRequest.getLocaleString("msgTrue"));
                                 hmValues.put("false", paramRequest.getLocaleString("msgFalse"));
                                 hmAttr.put("Valor", hmValues);
+                                comboAtt.put(usrAtt.getName(), hmAttr);
+                                vecOrderAtt.add(numero++, usrAtt.getName());
                             } else if (usrAtt.isString()) {
                                 tipoControl = "TEXT";
-                            } else {
-                                tipoControl = "TEXT";
+                                hmAttr.put("Tipo", tipoControl);
+                                hmOper.put("=", paramRequest.getLocaleString("msgIs"));
+                                hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
+                                hmAttr.put("Operador", hmOper);
+                                comboAtt.put(usrAtt.getName(), hmAttr);
+                                vecOrderAtt.add(numero++, usrAtt.getName());
                             }
-                        } else if (usrAtt.isObjectProperty()) {
-                            log.debug("DP: ObjectProperty");
-                            tipoControl = "select";
-                            if (usrAtt == User.swb_hasRole) {
-                                Iterator<Role> itRol = usrRepo.listRoles();
-                                while (itRol.hasNext()) {
-                                    Role rol = itRol.next();
-                                    hmValues.put(rol.getId(), rol.getDisplayTitle(user.getLanguage()));
-                                }
-                            }
+
+                            // PARA ObjectType
+
+//                            else {
+//                                tipoControl = "TEXT";
+//                                hmAttr.put("Tipo", tipoControl);
+//                                hmOper.put("=", paramRequest.getLocaleString("msgIs"));
+//                                hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
+//                                hmAttr.put("Operador", hmOper);
+//                                comboAtt.put(usrAtt.getName(), hmAttr);
+//                                vecOrderAtt.add(numero++, usrAtt.getName());
+//                            }
                         }
+//                        else if (usrAtt.isObjectProperty()) {
+//                            log.debug("DP: ObjectProperty");
+//                            tipoControl = "select";
+//                            if (usrAtt == User.swb_hasRole) {
+//                                Iterator<Role> itRol = usrRepo.listRoles();
+//                                while (itRol.hasNext()) {
+//                                    Role rol = itRol.next();
+//                                    hmValues.put(rol.getId(), rol.getDisplayTitle(user.getLanguage()));
+//                                }
+//                                hmAttr.put("Valor", hmValues);
+//                            }
+//                        }
                     }
                     log.debug("DP:Tipo --- " + tipoControl);
-                    hmAttr.put("Tipo", tipoControl);
+                    //hmAttr.put("Tipo", tipoControl);
                 } else {
                     if (usrAtt.isDataTypeProperty()) {
-                        log.debug("DataTypeProperty");
+                        log.debug("------------- DataTypeProperty ------------------");
 
-                        if (usrAtt.isInt()) {
+                        if (usrAtt.isInt()||usrAtt.isFloat()||usrAtt.isLong()) {
                             tipoControl = "TEXT";
-                            hmOper.put("&gt;", paramRequest.getLocaleString("msgGreaterThan"));
-                            hmOper.put("&lt;", paramRequest.getLocaleString("msgLessThan"));
-                        } else if (usrAtt.isBoolean()) {
-                            tipoControl = "select";
+                            hmAttr.put("Tipo", tipoControl);
                             hmOper.put("=", paramRequest.getLocaleString("msgIs"));
                             hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
-
+                            hmOper.put("&gt;", paramRequest.getLocaleString("msgGreaterThan"));
+                            hmOper.put("&lt;", paramRequest.getLocaleString("msgLessThan"));
+                            hmAttr.put("Operador", hmOper);
+                            comboAtt.put(usrAtt.getName(), hmAttr);
+                            vecOrderAtt.add(numero++, usrAtt.getName());
+                        } else if (usrAtt.isBoolean()) {
+                            tipoControl = "select";
+                            hmAttr.put("Tipo", tipoControl);
+                            hmOper.put("=", paramRequest.getLocaleString("msgIs"));
+                            hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
+                            hmAttr.put("Operador", hmOper);
                             hmValues.put("true", paramRequest.getLocaleString("msgTrue"));
                             hmValues.put("false", paramRequest.getLocaleString("msgFalse"));
                             hmAttr.put("Valor", hmValues);
-                        } else {
+                            comboAtt.put(usrAtt.getName(), hmAttr);
+                            vecOrderAtt.add(numero++, usrAtt.getName());
+                        } else if (usrAtt.isString()) {
                             tipoControl = "TEXT";
+                            hmAttr.put("Tipo", tipoControl);
                             hmOper.put("=", paramRequest.getLocaleString("msgIs"));
                             hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
-
+                            hmAttr.put("Operador", hmOper);
+                            comboAtt.put(usrAtt.getName(), hmAttr);
+                            vecOrderAtt.add(numero++, usrAtt.getName());
                         }
-                    } else if (usrAtt.isObjectProperty()) {
-                        log.debug("DP: ObjectProperty");
-                        tipoControl = "select";
-                        if (usrAtt.equals(User.swb_hasRole)) {
-                            Iterator<Role> itRol = usrRepo.listRoles();
-                            while (itRol.hasNext()) {
-                                Role rol = itRol.next();
-                                hmValues.put(rol.getId(), rol.getDisplayTitle(user.getLanguage()));
-                            }
-                        }
+                        // PARA TIPO Object Type
+//                        else {
+//                            tipoControl = "TEXT";
+//                            hmAttr.put("Tipo", tipoControl);
+//                            hmOper.put("=", paramRequest.getLocaleString("msgIs"));
+//                            hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
+//                            hmAttr.put("Operador", hmOper);
+//                            comboAtt.put(usrAtt.getName(), hmAttr);
+//                            vecOrderAtt.add(numero++, usrAtt.getName());
+//                        }
                     }
+//                    else if (usrAtt.isObjectProperty()) {
+//                        log.debug("DP: ObjectProperty");
+//                        tipoControl = "select";
+//                        if (usrAtt.equals(User.swb_hasRole)) {
+//                            Iterator<Role> itRol = usrRepo.listRoles();
+//                            while (itRol.hasNext()) {
+//                                Role rol = itRol.next();
+//                                hmValues.put(rol.getId(), rol.getDisplayTitle(user.getLanguage()));
+//                            }
+//                            hmAttr.put("Valor", hmValues);
+//                        }
+//                    }
 
                 }
-                hmAttr.put("Tipo", tipoControl);
-                hmOper.put("=", paramRequest.getLocaleString("msgSameAs"));
-                hmOper.put("!=", paramRequest.getLocaleString("msgNotEqual"));
-                hmAttr.put("Operador", hmOper);
-                if (!hmValues.isEmpty()) {
-                    hmAttr.put("Valor", hmValues);
-                }
-                comboAtt.put(usrAtt.getName(), hmAttr);
-                vecOrderAtt.add(numero++, usrAtt.getName());
             }
 
+            // Atributos Extendidos
+
+            iteratt = usrRepo.listExtendedAttributes();
+            attnum = 0;
+            while (iteratt.hasNext()) {
+
+                String tipoControl = "TEXT";
+                SemanticProperty usrAtt = iteratt.next();
+                attnum++;
+                log.debug("ListAttributes:" + usrAtt.getName() + ", " + attnum + ", objProp: " + usrAtt.isObjectProperty());
+                hmAttr = new HashMap();
+                hmOper = new HashMap();
+                hmValues = new HashMap();
+
+                hmAttr.put("Etiqueta", "EX: "+usrAtt.getDisplayName(user.getLanguage()));
+                if (usrAtt.getDisplayProperty() != null) {
+                    log.debug("DisplayProperty");
+                    DisplayProperty dobj = new DisplayProperty(usrAtt.getDisplayProperty());
+                    String selectValues = dobj.getSelectValues(user.getLanguage());
+                    ///////////////////////////
+                    if (selectValues != null) {
+                        tipoControl = "select";
+                        hmAttr.put("Tipo", tipoControl);
+                        hmOper.put("=", paramRequest.getLocaleString("msgSameAs"));
+                        hmOper.put("!=", paramRequest.getLocaleString("msgNotEqual"));
+                        hmAttr.put("Operador", hmOper);
+                        StringTokenizer st = new StringTokenizer(selectValues, "|");
+                        while (st.hasMoreTokens()) {
+                            String tok = st.nextToken();
+                            int ind = tok.indexOf(':');
+                            String idt = tok;
+                            String val = tok;
+                            if (ind > 0) {
+                                idt = tok.substring(0, ind);
+                                val = tok.substring(ind + 1);
+                            }
+                            hmValues.put(idt, val);
+                        }
+                        hmAttr.put("Valor", hmValues);
+                        comboAtt.put(usrAtt.getName(), hmAttr);
+                        vecOrderAtt.add(numero++, usrAtt.getName());
+                    } else {
+                        if (usrAtt.isDataTypeProperty()) {
+                            log.debug("DP: DataTypeProperty");
+                            if (usrAtt.isInt()||usrAtt.isFloat()||usrAtt.isLong()) {
+                                tipoControl = "TEXT";
+                                hmAttr.put("Tipo", tipoControl);
+                                hmOper.put("&gt;", paramRequest.getLocaleString("msgGreaterThan"));
+                                hmOper.put("&lt;", paramRequest.getLocaleString("msgLessThan"));
+                                hmOper.put("=", paramRequest.getLocaleString("msgIs"));
+                                hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
+                                hmAttr.put("Operador", hmOper);
+                                comboAtt.put(usrAtt.getName(), hmAttr);
+                                vecOrderAtt.add(numero++, usrAtt.getName());
+                            } else if (usrAtt.isBoolean()) {
+                                tipoControl = "select";
+                                hmAttr.put("Tipo", tipoControl);
+                                hmOper.put("=", paramRequest.getLocaleString("msgIs"));
+                                hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
+                                hmAttr.put("Operador", hmOper);
+                                hmValues.put("true", paramRequest.getLocaleString("msgTrue"));
+                                hmValues.put("false", paramRequest.getLocaleString("msgFalse"));
+                                hmAttr.put("Valor", hmValues);
+                                comboAtt.put(usrAtt.getName(), hmAttr);
+                                vecOrderAtt.add(numero++, usrAtt.getName());
+                            } else if (usrAtt.isString()) {
+                                tipoControl = "TEXT";
+                                hmAttr.put("Tipo", tipoControl);
+                                hmOper.put("=", paramRequest.getLocaleString("msgIs"));
+                                hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
+                                hmAttr.put("Operador", hmOper);
+                                comboAtt.put(usrAtt.getName(), hmAttr);
+                                vecOrderAtt.add(numero++, usrAtt.getName());
+                            }
+
+                            // PARA ObjectType
+
+//                            else {
+//                                tipoControl = "TEXT";
+//                                hmAttr.put("Tipo", tipoControl);
+//                                hmOper.put("=", paramRequest.getLocaleString("msgIs"));
+//                                hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
+//                                hmAttr.put("Operador", hmOper);
+//                                comboAtt.put(usrAtt.getName(), hmAttr);
+//                                vecOrderAtt.add(numero++, usrAtt.getName());
+//                            }
+                        }
+//                        else if (usrAtt.isObjectProperty()) {
+//                            log.debug("DP: ObjectProperty");
+//                            tipoControl = "select";
+//                            if (usrAtt == User.swb_hasRole) {
+//                                Iterator<Role> itRol = usrRepo.listRoles();
+//                                while (itRol.hasNext()) {
+//                                    Role rol = itRol.next();
+//                                    hmValues.put(rol.getId(), rol.getDisplayTitle(user.getLanguage()));
+//                                }
+//                                hmAttr.put("Valor", hmValues);
+//                            }
+//                        }
+                    }
+                    log.debug("DP:Tipo --- " + tipoControl);
+                    //hmAttr.put("Tipo", tipoControl);
+                } else {
+                    if (usrAtt.isDataTypeProperty()) {
+                        log.debug("------------- DataTypeProperty ------------------");
+
+                        if (usrAtt.isInt()||usrAtt.isFloat()||usrAtt.isLong()) {
+                            tipoControl = "TEXT";
+                            hmAttr.put("Tipo", tipoControl);
+                            hmOper.put("=", paramRequest.getLocaleString("msgIs"));
+                            hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
+                            hmOper.put("&gt;", paramRequest.getLocaleString("msgGreaterThan"));
+                            hmOper.put("&lt;", paramRequest.getLocaleString("msgLessThan"));
+                            hmAttr.put("Operador", hmOper);
+                            comboAtt.put(usrAtt.getName(), hmAttr);
+                            vecOrderAtt.add(numero++, usrAtt.getName());
+                        } else if (usrAtt.isBoolean()) {
+                            tipoControl = "select";
+                            hmAttr.put("Tipo", tipoControl);
+                            hmOper.put("=", paramRequest.getLocaleString("msgIs"));
+                            hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
+                            hmAttr.put("Operador", hmOper);
+                            hmValues.put("true", paramRequest.getLocaleString("msgTrue"));
+                            hmValues.put("false", paramRequest.getLocaleString("msgFalse"));
+                            hmAttr.put("Valor", hmValues);
+                            comboAtt.put(usrAtt.getName(), hmAttr);
+                            vecOrderAtt.add(numero++, usrAtt.getName());
+                        } else if (usrAtt.isString()) {
+                            tipoControl = "TEXT";
+                            hmAttr.put("Tipo", tipoControl);
+                            hmOper.put("=", paramRequest.getLocaleString("msgIs"));
+                            hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
+                            hmAttr.put("Operador", hmOper);
+                            comboAtt.put(usrAtt.getName(), hmAttr);
+                            vecOrderAtt.add(numero++, usrAtt.getName());
+                        }
+                        // PARA TIPO Object Type
+//                        else {
+//                            tipoControl = "TEXT";
+//                            hmAttr.put("Tipo", tipoControl);
+//                            hmOper.put("=", paramRequest.getLocaleString("msgIs"));
+//                            hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
+//                            hmAttr.put("Operador", hmOper);
+//                            comboAtt.put(usrAtt.getName(), hmAttr);
+//                            vecOrderAtt.add(numero++, usrAtt.getName());
+//                        }
+                    }
+//                    else if (usrAtt.isObjectProperty()) {
+//                        log.debug("DP: ObjectProperty");
+//                        tipoControl = "select";
+//                        if (usrAtt.equals(User.swb_hasRole)) {
+//                            Iterator<Role> itRol = usrRepo.listRoles();
+//                            while (itRol.hasNext()) {
+//                                Role rol = itRol.next();
+//                                hmValues.put(rol.getId(), rol.getDisplayTitle(user.getLanguage()));
+//                            }
+//                            hmAttr.put("Valor", hmValues);
+//                        }
+//                    }
+
+                }
+            }
         //////////////////////////////////////////////////////////////////////
 
         } catch (Exception e) {
             log.error(paramRequest.getLocaleString("msgErrorLoadingUserAttributeList") + ". SWBARules.loadComboAttr", e);
         }
 
+//        Iterator<String> itkeys = comboAtt.keySet().iterator();
+//        while(itkeys.hasNext())
+//        {
+//            log.debug("---- "+itkeys.next());
+//        }
 
     }
 
@@ -1022,6 +946,7 @@ public class SWBARule extends GenericResource {
             }
         } catch (Exception e) {
         }
+        log.debug("XML: "+SWBUtils.XML.domToXml(dom));
         return dom;
     }
 
