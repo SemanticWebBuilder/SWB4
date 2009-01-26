@@ -2,6 +2,7 @@ package org.semanticwb.model;
 
 import java.util.Iterator;
 import java.util.StringTokenizer;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.base.*;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
@@ -92,7 +93,13 @@ public class SelectOne extends SelectOneBase
                 Iterator<SemanticObject> it=null;
                 if(isGlobalScope())
                 {
-                    it=SWBComparator.sortSermanticObjects(cls.listInstances(),lang);
+                    if(cls!=null)
+                    {
+                        it=SWBComparator.sortSermanticObjects(cls.listInstances(),lang);
+                    }else
+                    {
+                        it=SWBComparator.sortSermanticObjects(SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClassesAsSemanticObjects(),lang);
+                    }
                 }else
                 {
                     it=SWBComparator.sortSermanticObjects(obj.getModel().listInstancesOfClass(cls),lang);
