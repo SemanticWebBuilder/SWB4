@@ -32,7 +32,7 @@ public class WBMenuMap extends GenericAdmResource
     private static Logger log = SWBUtils.getLogger(WBMenuMap.class);
     javax.xml.transform.Templates tpl;
     String webWorkPath = "/work";
-    String path = SWBPlatform.getContextPath() + "swbadmin/xsl/WBMenuMap/";
+    String path = SWBPlatform.getContextPath() + "/swbadmin/xsl/WBMenuMap/";
     private int ancho = 10;
     private int nsup = 0;
     private int ninf = 0;
@@ -104,7 +104,7 @@ public class WBMenuMap extends GenericAdmResource
             basetp = paramRequest.getTopic().getWebSite().getHomePage();
         }
         try {
-            org.semanticwb.model.Language lang = topic.getWebSite().getLanguage(user.getLanguage());
+            String lang = user.getLanguage();
 
             Document dom = SWBUtils.XML.getNewDocument();
             Element el = dom.createElement("menu");
@@ -126,7 +126,7 @@ public class WBMenuMap extends GenericAdmResource
     
     public int getLimits(WebPage aux, WebPage topic, int level, User user) {
         int max = level;
-        Iterator<WebPage> it = aux.listChilds();
+        Iterator<WebPage> it = aux.listVisibleChilds(user.getLanguage());
         while (it.hasNext()) {
             WebPage tp = it.next();
             if (tp.isActive() && (tp.isVisible() || tp == topic || tp.isParentof(topic))) {
@@ -143,9 +143,9 @@ public class WBMenuMap extends GenericAdmResource
         return max;
     }
 
-    public boolean getChilds(Document dom, Element nodo, WebPage aux, WebPage topic, org.semanticwb.model.Language lang, int level, int rlevel, User user, int max) {
+    public boolean getChilds(Document dom, Element nodo, WebPage aux, WebPage topic, String lang, int level, int rlevel, User user, int max) {
         boolean childs = false;
-        Iterator<WebPage> itwp = aux.listChilds(lang.getId(), null, null, null, null);
+        Iterator<WebPage> itwp = aux.listVisibleChilds(user.getLanguage());
         while (itwp.hasNext()) {
             WebPage wbtp = itwp.next();
             if (wbtp.isActive() && (wbtp.isVisible() || wbtp == topic || wbtp.isParentof(topic))) {
@@ -155,7 +155,7 @@ public class WBMenuMap extends GenericAdmResource
 
                     Element ele = dom.createElement("node");
                     ele.setAttribute("id", wbtp.getUrl());
-                    ele.setAttribute("name", wbtp.getTitle(lang.getId()));
+                    ele.setAttribute("name", wbtp.getDisplayName(lang));
                     ele.setAttribute("path", wbtp.getUrl());
                     ele.setAttribute("realLevel", "" + rlevel);
                     ele.setAttribute("level", "" + level);
@@ -217,7 +217,7 @@ public class WBMenuMap extends GenericAdmResource
     }
 
     public boolean haveChilds(WebPage aux, User user) {
-        Iterator<WebPage> it = aux.listChilds();
+        Iterator<WebPage> it = aux.listVisibleChilds(null);
         while (it.hasNext()) {
             WebPage tp = it.next();
             //if(user.haveAccess(tp))
