@@ -1984,7 +1984,7 @@ public class SWBUtils {
         private static DBConnectionManager manager = null;
         private static String defaultPoolName = "swb";
 
-        private static DBConnectionManager getConnectionManager() {
+        public static DBConnectionManager getConnectionManager() {
             if (manager == null) {
                 manager = new DBConnectionManager();
             }
