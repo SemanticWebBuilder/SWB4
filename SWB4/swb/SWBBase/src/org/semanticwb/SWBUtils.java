@@ -30,6 +30,7 @@ import javax.xml.transform.stream.StreamSource;
 import org.apache.log4j.PropertyConfigurator;
 import org.semanticwb.base.db.DBConnectionManager;
 import org.semanticwb.base.db.DBConnectionPool;
+import org.semanticwb.base.db.PoolConnectionTimeLock;
 import org.semanticwb.base.util.imp.Logger4jImpl;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -1984,15 +1985,15 @@ public class SWBUtils {
         private static DBConnectionManager manager = null;
         private static String defaultPoolName = "swb";
 
-        public static DBConnectionManager getConnectionManager() {
+        private static DBConnectionManager getConnectionManager() {
             if (manager == null) {
                 manager = new DBConnectionManager();
             }
             return manager;
         }
 
-        /** Return a enumeration of DBConnectionPool
-         * @return Return a enumeration of DBConnectionPool
+        /** Returns an enumeration of DBConnectionPool
+         * @return an enumeration of DBConnectionPool
          */
         public static Enumeration<DBConnectionPool> getPools() {
             return getConnectionManager().getPools().elements();
@@ -2080,6 +2081,14 @@ public class SWBUtils {
 
         public static int getFreeConnections(String poolName) {
             return getConnectionManager().getFreeConnections(poolName);
+        }
+        
+        /**
+         * Obtains the DBConnectionManager's PoolConnectionTimeLock.
+         * @return a reference to the PoolConnectionTimeLock used by the DBConnectionManager
+         */
+        public static PoolConnectionTimeLock getTimeLock() {
+            return getConnectionManager().getTimeLock();
         }
     }
 
