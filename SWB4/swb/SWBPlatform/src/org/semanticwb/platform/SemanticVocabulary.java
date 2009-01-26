@@ -93,7 +93,7 @@ public class SemanticVocabulary
         clsbyid=new HashMap();
         properties=new HashMap();
     }
-    
+   
     public void init()
     {
         //SWBClass=getSemanticClass(URI+"SWBClass");
@@ -134,13 +134,24 @@ public class SemanticVocabulary
     {
         return new ArrayList(classes.values()).iterator();
     }
+
+    public Iterator<SemanticClass> listSemanticClassesAsSemanticObjects()
+    {
+        ArrayList arr=new ArrayList();
+        Iterator<SemanticClass> it=classes.values().iterator();
+        while(it.hasNext())
+        {
+            arr.add(it.next().getSemanticObject());
+        }
+        return arr.iterator();
+    }
     
     public SemanticClass getSemanticClass(String uri)
     {
         SemanticClass cls=classes.get(uri);
         if(cls==null)
         {
-            OntModel ont=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
+            OntModel ont=SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel();
             try
             {
                 OntClass c=ont.getOntClass(uri);
@@ -195,7 +206,7 @@ public class SemanticVocabulary
         SemanticProperty prop=properties.get(uri);
         if(prop==null)
         {
-            OntModel ont=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
+            OntModel ont=SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel();
             try
             {
                 Property p=ont.getProperty(uri);

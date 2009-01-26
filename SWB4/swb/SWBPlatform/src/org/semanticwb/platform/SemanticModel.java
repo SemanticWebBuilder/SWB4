@@ -212,8 +212,8 @@ public class SemanticModel
         StmtIterator sit = ont.listStatements(m.getResource(ontprop.getURI()), null, (RDFNode)null);
         m.add(sit);
         
-        cls=new SemanticClass(cls.getOntClass());
-        SWBPlatform.getSemanticMgr().getVocabulary().registerClass(cls);
+        cls=new SemanticClass(cls.getOntClass());                         //actualizar clase
+        SWBPlatform.getSemanticMgr().getVocabulary().registerClass(cls);  //
         //TODO:notify this
         return new SemanticProperty(ontprop);
     }    

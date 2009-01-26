@@ -15,6 +15,7 @@ import javax.servlet.ServletContext;
 import org.semanticwb.platform.SemanticMgr;
 import org.semanticwb.base.util.SWBProperties;
 import org.semanticwb.base.util.URLEncoder;
+import org.semanticwb.util.IDGenerator;
 
 
 /**
@@ -36,6 +37,8 @@ public class SWBPlatform
     private static boolean haveDB=false;
     private static boolean haveDBTables=false;
     private static boolean useDB=true;
+
+    private static IDGenerator idgen=null;
 
 
     private static SemanticMgr semanticMgr=null;
@@ -238,8 +241,14 @@ public class SWBPlatform
         } catch (Exception e) {
             log.error("Can't read the context path...",e);
             workPath = "";
-        }        
-        
+        }
+
+        idgen=new IDGenerator();
+    }
+
+    public static IDGenerator getIDGenerator()
+    {
+        return idgen;
     }
     
     /**

@@ -25,13 +25,7 @@ public class SemanticClassIterator<T extends SemanticClass> implements Iterator
     
     public SemanticClassIterator(Iterator it)
     {
-        this(it,false);
-    }   
-    
-    public SemanticClassIterator(Iterator it, boolean create)
-    {
         this.m_it=it;
-        this.create=create;
     }
 
     public boolean hasNext() 
@@ -57,10 +51,6 @@ public class SemanticClassIterator<T extends SemanticClass> implements Iterator
         {
             OntClass ocls=(OntClass)obj;
             cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(ocls.getURI());
-            if(create && cls==null)
-            {
-                cls=new SemanticClass(ocls);
-            }
         }            
         return cls;
     }
