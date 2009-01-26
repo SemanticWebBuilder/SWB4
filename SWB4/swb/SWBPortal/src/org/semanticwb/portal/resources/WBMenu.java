@@ -129,8 +129,7 @@ public class WBMenu extends GenericAdmResource
             dom.appendChild(el);
             Element topicCurrent = dom.createElement("currenttopic");
             topicCurrent.setAttribute("id", tpid.getUrl());
-            //topicCurrent.setAttribute("name", tpid.getTitle(lang)); //TODO: AUMENTAR EL LANGUAJE, AHORA NO SE MUESTRA
-            topicCurrent.setAttribute("name", tpid.getTitle(lang));
+            topicCurrent.setAttribute("name", tpid.getDisplayName(lang));
             topicCurrent.setAttribute("path", tpid.getUrl());
             el.appendChild(topicCurrent);
             WebPage padre=padre = tpid.getParent();
@@ -139,14 +138,14 @@ public class WBMenu extends GenericAdmResource
             {
                 Element epadre = dom.createElement("parent");
                 epadre.setAttribute("id", padre.getId());
-                epadre.setAttribute("name", padre.getTitle(lang));
+                epadre.setAttribute("name", padre.getDisplayName(lang));
                 epadre.setAttribute("path", padre.getUrl());
                 el.appendChild(epadre);
             }
             Element ehermanos = dom.createElement("brothers");
             if(!onlychilds && padre!=null)
             {
-                Iterator <WebPage>itehermanos=padre.listChilds();
+                Iterator <WebPage>itehermanos=padre.listVisibleChilds(lang);
                 while(itehermanos.hasNext())
                 {
                     WebPage tphermano=itehermanos.next();
@@ -154,14 +153,14 @@ public class WBMenu extends GenericAdmResource
                     {
                         Element ehermano = dom.createElement("brother");
                         ehermano.setAttribute("id", tphermano.getId());
-                        ehermano.setAttribute("name", tphermano.getTitle(lang));
+                        ehermano.setAttribute("name", tphermano.getDisplayName(lang));
                         ehermano.setAttribute("path", tphermano.getUrl());
                         if (tphermano.equals(tpid)) 
                         {
                             ehermano.setAttribute("current", "1");
                             ehermanos.appendChild(ehermano);
 
-                            Iterator <WebPage> hijos = tpid.listChilds();
+                            Iterator <WebPage> hijos = tpid.listVisibleChilds(lang);
                             while (hijos.hasNext()) 
                             {
                                 WebPage hijo =  hijos.next();
@@ -169,7 +168,7 @@ public class WBMenu extends GenericAdmResource
                                 {
                                     Element ehijo = dom.createElement("child");
                                     ehijo.setAttribute("id", hijo.getId());
-                                    ehijo.setAttribute("name", hijo.getTitle(lang));
+                                    ehijo.setAttribute("name", hijo.getDisplayName(lang));
                                     ehijo.setAttribute("path", hijo.getUrl());
                                     ehermano.appendChild(ehijo);
                                 }
@@ -188,12 +187,12 @@ public class WBMenu extends GenericAdmResource
             {
                 Element ehermano = dom.createElement("brother");
                 ehermano.setAttribute("id", tpid.getId());
-                ehermano.setAttribute("name", tpid.getTitle(lang));
+                ehermano.setAttribute("name", tpid.getDisplayName(lang));
                 ehermano.setAttribute("path", tpid.getUrl());
                 ehermano.setAttribute("current", "1");
                 ehermanos.appendChild(ehermano);
 
-                Iterator <WebPage> hijos = tpid.listChilds();
+                Iterator <WebPage> hijos = tpid.listVisibleChilds(lang);
                 while (hijos.hasNext()) 
                 {
                     WebPage hijo = hijos.next();
@@ -201,7 +200,7 @@ public class WBMenu extends GenericAdmResource
                     {
                         Element ehijo = dom.createElement("child");
                         ehijo.setAttribute("id", hijo.getId());
-                        ehijo.setAttribute("name", hijo.getTitle(lang));
+                        ehijo.setAttribute("name", hijo.getDisplayName(lang));
                         ehijo.setAttribute("path", hijo.getUrl());
                         ehermano.appendChild(ehijo);
                     }
