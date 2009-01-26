@@ -36,7 +36,7 @@
         if(isValidId(id))
         {
             SemanticModel m=SWBPlatform.getSemanticMgr().getModel(model);
-            SemanticClass scls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassByID(clsid);
+            SemanticClass scls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassById(clsid);
             String uri=m.getObjectUri(id, scls);
             //out.println(uri);
             SemanticObject obj=SemanticObject.createSemanticObject(uri);

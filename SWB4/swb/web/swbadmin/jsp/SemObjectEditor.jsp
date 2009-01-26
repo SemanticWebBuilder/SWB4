@@ -24,7 +24,6 @@
         return;
     }
     String smode=request.getParameter("smode");
-    //out.println(smode+" "+Thread.currentThread().getName());
 try
 {
     SemanticOntology ont=SWBPlatform.getSemanticMgr().getOntology();
@@ -67,6 +66,12 @@ try
     }else
     {
         SemanticObject obj=ont.getSemanticObject(suri);
+        SemanticClass cls=obj.getSemanticClass();
+
+        //out.println("<fieldset>");
+        //out.println("<div class=\"swbIcon2"+cls.getName()+"\"></div>");
+        //out.println("</fieldset>");
+
         String mode=SWBFormMgr.MODE_EDIT;
         if(obj.instanceOf(Unmodifiable.swb_Unmodifiable))
         {

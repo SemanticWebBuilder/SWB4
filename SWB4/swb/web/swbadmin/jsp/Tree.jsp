@@ -90,8 +90,6 @@
 
     public void addFavorites(JSONArray arr)  throws JSONException
     {
-        //TODO:
-        //User user=SWBContext.getDefaultRepository().getUserByLogin("admin");
         User user=SWBPortal.getSessionUser();
         //System.out.println("user uri:"+user.getURI());
         if(user!=null && user.getURI()!=null)
@@ -267,8 +265,7 @@
         }
         menus.put(getMenuSeparator());
 
-        //TODO:
-        User user=SWBContext.getDefaultRepository().getUserByLogin("admin");
+        User user=SWBPortal.getSessionUser();
         boolean isfavo=user.hasFavorite(obj);
         if(!isfavo)
         {
