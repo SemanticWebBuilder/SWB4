@@ -100,7 +100,7 @@ public final class WorkspaceImp implements Workspace
 
     public ObservationManager getObservationManager() throws UnsupportedRepositoryOperationException, RepositoryException
     {
-        throw new UnsupportedOperationException(NOT_SUPPORTED_YET);
+        return this.session.getRepositoryImp().getObservationManagerImp();
     }
 
     public String[] getAccessibleWorkspaceNames() throws RepositoryException

@@ -895,4 +895,8 @@ public class SessionImp implements Session
     {
         return root.getBaseNode();
     }
+    RepositoryImp getRepositoryImp()
+    {
+        return repository;
+    }
 }
