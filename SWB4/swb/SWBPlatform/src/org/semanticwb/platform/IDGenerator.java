@@ -28,7 +28,7 @@
  * Created on 2 de julio de 2002, 14:41
  */
 
-package org.semanticwb.util;
+package org.semanticwb.platform;
 
 import org.semanticwb.SWBUtils;
 
