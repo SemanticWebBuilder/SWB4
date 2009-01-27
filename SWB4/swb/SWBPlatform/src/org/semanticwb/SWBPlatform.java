@@ -15,7 +15,7 @@ import javax.servlet.ServletContext;
 import org.semanticwb.platform.SemanticMgr;
 import org.semanticwb.base.util.SWBProperties;
 import org.semanticwb.base.util.URLEncoder;
-import org.semanticwb.util.IDGenerator;
+import org.semanticwb.platform.IDGenerator;
 
 
 /**
