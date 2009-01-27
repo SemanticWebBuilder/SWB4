@@ -30,7 +30,8 @@ public class SWBExportWebSite extends GenericResource {
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         try {
             //Substituir x uri dinamica
-            String uri = "sep";
+            String uri = "wiki";
+            WebSite site=SWBContext.getWebSite(uri);
             String path = SWBPlatform.getWorkPath()+"/";
             String zipdirectory = path + "sitetemplates/";
             //---------Generación de archivo zip de carpeta work de sitio especificado-------------
@@ -58,10 +59,10 @@ public class SWBExportWebSite extends GenericResource {
             try {
                 StringBuffer strbr=new StringBuffer();
                 strbr.append("<siteinfo>\n");
-                strbr.append("<name>sep</name>\n");
-                strbr.append("<namespace>http://www.sep.gob.mx</namespace>\n");
-                strbr.append("<title>septitle</title>\n");
-                strbr.append("<description>sepdescription</description>\n");
+                strbr.append("<name>"+site.getId()+"</name>\n");
+                strbr.append("<namespace>"+site.getNameSpace()+"</namespace>\n");
+                strbr.append("<title>"+site.getTitle()+"</title>\n");
+                strbr.append("<description>"+site.getDescription()+"</description>\n");
                 strbr.append("</siteinfo>");
                 File file = new File(zipdirectory +"siteInfo.xml");                
                 FileOutputStream out = new FileOutputStream(file);
