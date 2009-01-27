@@ -92,10 +92,11 @@ public class SWBAMMemory extends GenericResource {
         PrintWriter out = response.getWriter();
         String act = request.getParameter("act");
         //out.println("<META HTTP-EQUIV=\"Refresh\" CONTENT=\"10; URL="+paramsRequest.getTopic().getUrl()+"/\">");        
-        out.println("<p class=box>");
+        out.println("<div class=\"swbform\">");
         
         if (SWBPlatform.getEnv("wb/systemMonitor", "false").equals("true")) {
-            out.println("<table width=100% cellpadding=10 cellspacing=0 border=0>");
+            out.println("<fieldset>");
+            out.println("<table width=\"98%\" cellpadding=10 cellspacing=0 border=0>");
             out.println("<tr><td>");
 
             out.println("<APPLET code=\"applets.graph.WBGraph.class\" archive=\""
@@ -107,22 +108,20 @@ public class SWBAMMemory extends GenericResource {
             out.println("<param name=\"cgi\" value=\"" + url + "\">");
             out.println("<param name=\"reload\" value=\"5\">");
             out.println("</APPLET>");
-            out.println("</td></tr>");            
-
-            out.println("<tr><td align=\"right\">");
-            out.println("<HR size=1 noshade>");
-            out.println("  <form action=\"" + paramsRequest.getActionUrl() + "\" method=\"POST\">");
-            out.print("      <input class=\"boton\" type=submit name=\"gc\" value=\"");
-            out.print(paramsRequest.getLocaleString("gc"));
-            out.print("\">&nbsp;&nbsp;");
-            out.println("  </form>");
-
             out.println("</td></tr>");
             out.println("</table>");
+            out.println("</fieldset>");
+            out.println("<fieldset>");
+            out.println("  <form action=\"" + paramsRequest.getActionUrl() + "\" method=\"POST\">");
+            out.println("  <button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + paramsRequest.getActionUrl() + "',this.domNode); return false;\" name=\"gc\">" + paramsRequest.getLocaleString("gc") + "</button>");
+//            out.print("      <input type=submit name=\"gc\" value=\"");
+//            out.print(paramsRequest.getLocaleString("gc"));
+//            out.print("\">&nbsp;&nbsp;");
+            out.println("&nbsp;&nbsp;</form>");
+            out.println("</fieldset>");
         } else {
             out.println(paramsRequest.getLocaleString("msgIsNotActive"));
         }
-        out.println("</p>");
     }
     
     public void getData(HttpServletRequest request, HttpServletResponse response,
