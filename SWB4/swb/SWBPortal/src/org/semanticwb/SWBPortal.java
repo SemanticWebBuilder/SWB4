@@ -182,8 +182,8 @@ public class SWBPortal {
         }
 
         try {
-            log.debug("Loading admin Files from: /WEB-INF/lib/dojo.zip");
-            String zipPath = SWBUtils.getApplicationPath() + "/WEB-INF/lib/dojo.zip";
+            log.debug("Loading admin Files from: /WEB-INF/lib/dojo.jar");
+            String zipPath = SWBUtils.getApplicationPath() + "/WEB-INF/lib/dojo.jar";
             ZipFile zf = new ZipFile(zipPath);
             Enumeration e = zf.entries();
             while (e.hasMoreElements()) {
