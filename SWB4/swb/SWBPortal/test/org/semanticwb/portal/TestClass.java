@@ -94,6 +94,7 @@ public class TestClass {
 
     @Test
     public void doTest(){
+/*
         out.println("<pre>");
         SemanticClass clase=SWBPlatform.getSemanticMgr().getModel("urswb").createSemanticClass("urswb/clsUserType#publico");
         Iterator<SemanticProperty>itsp = clase.listProperties();
@@ -115,5 +116,6 @@ public class TestClass {
     while(itsp.hasNext()){
         out.println(itsp.next());
     }
+ */
     }
 }
