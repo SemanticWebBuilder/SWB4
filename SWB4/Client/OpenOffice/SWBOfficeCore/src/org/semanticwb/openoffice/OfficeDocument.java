@@ -277,10 +277,15 @@ public abstract class OfficeDocument
 
     public final void deleteAssociation()
     {
-        /*try
+        try
         {
-        HashMap<String, String> properties = new HashMap<String, String>();
-        document.saveCustomProperties(properties);
+            HashMap<String, String> properties = new HashMap<String, String>();
+            properties.put("Information 4", "");
+            properties.put("Information 3", "");
+            properties.put("Information 2", "");
+            properties.put("Information 1", "");
+            saveCustomProperties(properties);            
+            JOptionPane.showMessageDialog(null, "¡Se ha borrado la asociación de publicación de contenidos!","Borrado de asociación de contenido",JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
         }
         catch (WBAlertException wba)
         {
@@ -290,7 +295,7 @@ public abstract class OfficeDocument
         }
         catch (WBException wbe)
         {
-        }*/
+        }
     }
 
     public final void showDocumentInSite()
