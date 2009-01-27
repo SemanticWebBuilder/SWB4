@@ -1362,6 +1362,7 @@ public class SimpleNode implements Node
                 SemanticClass primaryNodeClazz = session.getRootBaseNode().getSemanticClass(primaryNodeTypeName);
                 SimpleNode tmp = new SimpleNode(session, nameNode, primaryNodeClazz, this, 0, UUID.randomUUID().toString());
                 modified = true;
+                //this.getSessionImp().getRepositoryImp().getObservationManagerImp().onAddNode(tmp,session);
                 return tmp;
             }
             catch (SWBException swbe)

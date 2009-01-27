@@ -52,10 +52,12 @@ public final class RepositoryImp implements Repository
     }
     private String defaultWorkspaceName = "defaultWorkspace";
     private static final String namespace = "http://www.semanticwb.org/repository/";
-
+    private ObservationManagerImp observationManager;
     public RepositoryImp() throws RepositoryException
     {
+
         log.event("Initializing repository with namespace " + namespace + " ...");
+        observationManager=new ObservationManagerImp();
         boolean exists = false;
         for (String name : listWorkspaces())
         {
@@ -97,7 +99,10 @@ public final class RepositoryImp implements Repository
             createWorkspace(defaultWorkspaceName);
         }
     }
-
+    public ObservationManagerImp getObservationManagerImp()
+    {
+        return observationManager;
+    }
     public void recreateDefaultWorkspace() throws RepositoryException
     {
         for (String name : listWorkspaces())
