@@ -88,7 +88,7 @@ public class SemanticMgr implements SWBInstanceObject
         }
 
         //Create Schema
-        m_schema = new SemanticOntology("SWBSquema",ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM));
+        m_schema = new SemanticOntology("SWBSquema",ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM_TRANS_INF));
         //Create Ontology
         m_ontology = new SemanticOntology("SWBOntology",ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM));
         Iterator<SemanticModel> it=m_models.values().iterator();
