@@ -108,6 +108,47 @@
         }
     }
 
+    public void addWebSitesTrash(JSONArray arr)  throws JSONException
+    {
+        Iterator<WebSite> it=SWBComparator.sortSermanticObjects(SWBContext.listWebSites(),lang);
+        while(it.hasNext())
+        {
+            WebSite site=it.next();
+            if(!site.isDeleted())
+            {
+                Iterator<Portlet> itp = site.listPortlets();
+                while(itp.hasNext())
+                {
+                    Portlet por = itp.next();
+                    if(por.isDeleted())
+                    {
+                        addSemanticObject(arr, por.getSemanticObject(),false,true);
+                    }
+                }
+                Iterator<WebPage> itwp = site.listWebPages();
+                while(itwp.hasNext())
+                {
+                    WebPage wp = itwp.next();
+                    if(wp.getId().equals("y")) wp.setDeleted(true);
+                    if(wp.isDeleted())  //wp.isDeleted()
+                    {
+                        addSemanticObject(arr, wp.getSemanticObject(),false,true);
+                    }
+                }
+            }
+        }
+
+        it=SWBComparator.sortSermanticObjects(SWBContext.listWebSites(),lang);
+        while(it.hasNext())
+        {
+            WebSite site=it.next();
+            if(site.isDeleted())
+            {
+                addSemanticObject(arr, site.getSemanticObject(),false,true);
+            }
+        }
+    }
+
     public boolean hasHerarquicalNodes(SemanticObject obj) throws JSONException
     {
         boolean ret=false;
@@ -269,7 +310,7 @@
         boolean isfavo=user.hasFavorite(obj);
         if(!isfavo)
         {
-            menus.put(getMenuItem("Agragar a Favoritos", "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=active",null)));
+            menus.put(getMenuItem("Agregar a Favoritos", "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=active",null)));
         }else
         {
             menus.put(getMenuItem("Eliminar de Favoritos", "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=unactive",null)));
@@ -341,8 +382,9 @@
         if(id.equals("mtree"))addWebSites(items);
         if(id.equals("muser"))addUserReps(items);
         if(id.equals("mfavo"))addFavorites(items);
+        if(id.equals("mtra")) addWebSitesTrash(items);
         out.print(obj.toString());
-        //System.out.print(obj.toString());
+        //System.out.print(id);
     }else
     {
         boolean addChilds=true;
