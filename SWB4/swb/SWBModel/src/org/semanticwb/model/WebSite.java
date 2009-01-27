@@ -88,5 +88,10 @@ public class WebSite extends WebSiteBase
         }
         return ret;
     }
+
+    public String getNameSpace()
+    {
+        return getSemanticObject().getModel().getNameSpace();
+    }
     
 }
