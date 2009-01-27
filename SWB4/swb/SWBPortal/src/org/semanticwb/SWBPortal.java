@@ -2,7 +2,13 @@ package org.semanticwb;
 
 import com.arthurdo.parser.HtmlStreamTokenizer;
 import com.arthurdo.parser.HtmlTag;
+import java.awt.AWTException;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.security.Principal;
 import java.sql.Connection;
@@ -16,6 +22,9 @@ import java.util.Iterator;
 import java.util.Vector;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.model.*;
 import org.semanticwb.platform.SessionUser;
 import org.semanticwb.portal.SWBMonitor;
@@ -776,6 +785,48 @@ public class SWBPortal {
                 }
             }
             return value;
+        }
+
+        private final String ALPHABETH = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+
+        private String getRandString(int size) {
+            StringBuilder sb = new StringBuilder(size);
+            for (int i = 0; i < size; i++) {
+                sb.append(ALPHABETH.charAt((int) (Math.random() * ALPHABETH.length())));
+            }
+            return sb.toString();
+        }
+
+        public void sendValidateImage(HttpServletRequest request, HttpServletResponse response, int size, String cad) throws ServletException, IOException {
+            String cadena = null;
+            if (null==cad) cadena = getRandString(size);
+            else cadena = cad;
+            request.getSession(true).setAttribute("swb_valCad", cadena);
+            BufferedImage buffer = new BufferedImage(150, 40, BufferedImage.TYPE_INT_RGB);
+            Graphics2D g = buffer.createGraphics();
+            g.setBackground(new Color(255, 255, 255));
+            g.clearRect(0, 0, 150, 40);
+            g.setColor(new Color(0, 0, 0));
+            Font f = new Font("Serif",Font.BOLD,25);
+            //g.setFont(g.getFont().deriveFont(Font.ROMAN_BASELINE, 25.0f));
+            g.setFont(f);
+            g.drawString(cadena, 15, 30);
+
+            for (int i = 0; i < 150; i += 10) {
+                g.drawLine(i, 0, i, 39);
+            }
+            for (int i = 0; i < 40; i += 10) {
+                g.drawLine(0, i, 149, i);
+            }
+
+            try {
+                org.semanticwb.base.util.GIFEncoder encoder = new org.semanticwb.base.util.GIFEncoder(buffer);
+               // AFUtils.log("Cadena: "+cadena);
+                response.setContentType("image/gif");
+                encoder.Write(response.getOutputStream());
+            } catch (AWTException e) {
+                log.error(e);
+            }
         }
     }
 }
