@@ -69,6 +69,7 @@ public class TestRepository
             Repository repository = new RepositoryImp();
             SimpleCredentials credentials = new SimpleCredentials("victor", "victor".toCharArray());
             Session session = repository.login(credentials);
+            //session.getWorkspace().getObservationManager().addEventListener(arg0, arg1, arg2, arg3, arg4, arg5, arg6)
             Node root = session.getRootNode();
             System.out.println(session.getWorkspace().getName());
             System.out.println(root.getName());
