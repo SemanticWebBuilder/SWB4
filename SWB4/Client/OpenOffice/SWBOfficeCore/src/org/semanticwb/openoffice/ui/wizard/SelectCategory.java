@@ -512,7 +512,7 @@ class TreeRender extends JPanel implements TreeCellRenderer
             component = ((RepositoryNode) object).getComponent();
         //component.setFont(tree.getFont());
         }
-        if (component != null)
+        if (component != null && component instanceof JLabel)
         {
             JLabel label = (JLabel) component;
 
