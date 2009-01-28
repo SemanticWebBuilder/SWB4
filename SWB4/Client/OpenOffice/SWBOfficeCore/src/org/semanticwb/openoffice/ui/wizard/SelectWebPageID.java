@@ -10,16 +10,12 @@
  */
 package org.semanticwb.openoffice.ui.wizard;
 
-import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.util.Map;
 import javax.swing.JOptionPane;
 import org.netbeans.spi.wizard.Wizard;
 import org.netbeans.spi.wizard.WizardPage;
 import org.netbeans.spi.wizard.WizardPanelNavResult;
-import org.semanticwb.office.interfaces.WebPageInfo;
-import org.semanticwb.office.interfaces.WebSiteInfo;
-import org.semanticwb.openoffice.OfficeApplication;
 
 /**
  *
@@ -185,7 +181,7 @@ public class SelectWebPageID extends WizardPage
             return;
         }
 
-        if(jTextFieldWebPageID.getText().length()>50)
+        if (jTextFieldWebPageID.getText().length() > 50)
         {
             evt.consume();
         }
@@ -209,7 +205,7 @@ public class SelectWebPageID extends WizardPage
         else
         {
             evt.consume();
-        
+
         }
     }//GEN-LAST:event_jTextFieldWebPageIDKeyTyped
 
