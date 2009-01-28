@@ -41,6 +41,8 @@ import org.semanticwb.openoffice.ui.wizard.TitleAndDescription;
 import org.semanticwb.openoffice.util.ExcelFileFilter;
 import org.semanticwb.openoffice.util.PPTFileFilter;
 import org.semanticwb.openoffice.util.WordFileFilter;
+//import org.semanticwb.xmlrpc.HttpException;
+//import org.semanticwb.xmlrpc.XmlRpcException;
 import org.semanticwb.xmlrpc.HttpException;
 import org.semanticwb.xmlrpc.XmlRpcException;
 import static org.semanticwb.openoffice.util.FileUtil.copyFile;
