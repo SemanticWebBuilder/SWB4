@@ -63,14 +63,7 @@ public class SWBADBPool extends GenericResource {
     /** Creates a new instance of WBADBQuery */
     public SWBADBPool() {
     }
-    
-    /**
-     * @throws SWBResourceException
-     */
-    @Override
-    public void init() throws SWBResourceException {
-    }
-    
+        
     /**
      * @param request
      * @param response
@@ -115,14 +108,15 @@ public class SWBADBPool extends GenericResource {
         DBConnectionPool selectedPool = null;
         
         if (dbcon == null) {
-            dbcon = SWBPlatform.getEnv("wb/db/nameconn", "wb");
+            dbcon = SWBPlatform.getEnv("wb/db/nameconn", "swb");
         }
         
-        out.println("<p class=\"box\">");
-        out.println("<table border=\"0\" cellspacing=\"2\" cellpadding=\"0\" width=\"100%\">");
-        out.println("<tr><td class=\"tabla\" width=\"200\">");
+        out.println("<div class=\"swbform\">");
+        out.println("<fieldset>");
+        out.println("<table border=\"0\" cellspacing=\"2\" cellpadding=\"0\" width=\"98%\">");
+        out.println("<tr><td width=\"200\">");
         out.println(paramsRequest.getLocaleString("connPool"));
-        out.println("</td><td class=\"tabla\">");
+        out.println("</td><td>");
         out.println("<form action=\"" + paramsRequest.getRenderUrl() + "\" method=\"post\">");
         out.println("<select name=\"dbcon\" onChange=\"this.form.submit();\">");
         //Enumeration en = DBConnectionManager.getInstance().getPools().elements();
@@ -141,7 +135,8 @@ public class SWBADBPool extends GenericResource {
         out.println("</form>");
         out.println("</td></tr>");
         out.println("</table>");
-        out.println("</p>");
+        out.println("</fieldset>");
+        out.println("</div>");
         
         PoolConnectionTimeLock timelock = SWBUtils.DB.getTimeLock();
         
@@ -162,21 +157,22 @@ public class SWBADBPool extends GenericResource {
             
             int tot = SWBUtils.DB.getConnections(selectedPool.getName());
             int free=+SWBUtils.DB.getFreeConnections(selectedPool.getName());
-            out.println("<p class=\"box\">");
-            out.println("  <table width=\"100%\" border=0>");
-            out.println("    <tr><td class=\"tabla\">DBName:</td><td class=\"valores\">" + dbname + " (" + dbversion + ")</td>");
-            out.println("        <td class=\"tabla\">" + paramsRequest.getLocaleString("total") + ":</td><td class=\"valores\">" + tot + "</td></tr>");
-            out.println("    <tr><td class=\"tabla\">Driver:</td><td class=\"valores\">" + drivername + " (" + driverversion + ")</td>");
-            out.println("       <td class=\"tabla\">" + paramsRequest.getLocaleString("used") + ":</td><td class=\"valores\">" + (tot - free) + "</td></tr>");
-            out.println("    <tr><td class=\"tabla\">URL:</td><td class=\"valores\">" + selectedPool.getURL() + "</td>");
-            out.println("        <td class=\"tabla\">" + paramsRequest.getLocaleString("free") + ":</td><td class=\"valores\">" + free + "</td></tr>");
-            out.println("    <tr><td class=\"tabla\">" + paramsRequest.getLocaleString("user") + ":</td><td class=\"valores\">" + selectedPool.getUser() + "</td>");
-            out.println("        <td class=\"tabla\">" + paramsRequest.getLocaleString("max") + ":</td><td class=\"valores\">" + selectedPool.getMaxConn() + "</td></tr>");
-            out.println("    <tr><td colspan=4 class=\"tabla\" align=right>");
-            //out.println("        <table border=\"0\" width=\"100%\" cellpadding=0 cellspacing=0><tr><td class=\"tabla\"><B>ConnectionPool "+pool.getName()+"</B></td><td align=right><input type=submit name=\"clear\" value=\"Clear "+pool.getName()+"\"></td></tr></table>");
+            out.println("<div class=\"swbform\">");
+            out.println("<fieldset>");
+            out.println("  <table width=\"98%\" border=0>");
+            out.println("    <tr><td>DBName:</td><td>" + dbname + " (" + dbversion + ")</td>");
+            out.println("        <td>" + paramsRequest.getLocaleString("total") + ":</td><td>" + tot + "</td></tr>");
+            out.println("    <tr><td>Driver:</td><td>" + drivername + " (" + driverversion + ")</td>");
+            out.println("       <td>" + paramsRequest.getLocaleString("used") + ":</td><td>" + (tot - free) + "</td></tr>");
+            out.println("    <tr><td>URL:</td><td>" + selectedPool.getURL() + "</td>");
+            out.println("        <td>" + paramsRequest.getLocaleString("free") + ":</td><td>" + free + "</td></tr>");
+            out.println("    <tr><td>" + paramsRequest.getLocaleString("user") + ":</td><td>" + selectedPool.getUser() + "</td>");
+            out.println("        <td>" + paramsRequest.getLocaleString("max") + ":</td><td>" + selectedPool.getMaxConn() + "</td></tr>");
+            out.println("    <tr><td colspan=4 align=right>");
+            //out.println("        <table border=\"0\" width=\"100%\" cellpadding=0 cellspacing=0><tr><td><B>ConnectionPool "+pool.getName()+"</B></td><td align=right><input type=submit name=\"clear\" value=\"Clear "+pool.getName()+"\"></td></tr></table>");
             out.println("        <HR size=1 noshade>");
             out.println("    </td></tr>");
-            out.println("    <tr><td colspan=4 class=\"tabla\" align=right>");
+            out.println("    <tr><td colspan=4 align=right>");
             out.println("      <table border=0><tr><td>");
             out.println("      <form action=\"" + paramsRequest.getActionUrl() + "\" method=\"post\">");
             out.println("        <input type=hidden name=\"dbcon\" value=\"" + dbcon + "\">");
@@ -191,11 +187,13 @@ public class SWBADBPool extends GenericResource {
             out.println("    </td></tr>");
             out.println("  </table>");
 
-            out.println("</p>");
+            out.println("</fieldset>");
+            out.println("</div>");
             
             if (SWBPlatform.getEnv("wb/systemMonitor", "false").equals("true")) {
-                out.println("<p class=\"box\">");
-                out.println("<table width=100% cellpadding=10 cellspacing=0 border=0>");
+                out.println("<div class=\"swbform\">");
+                out.println("<fieldset>");
+                out.println("<table width=98% cellpadding=10 cellspacing=0 border=0>");
                 out.println("<tr><td>");
                 out.println("<APPLET code=\"applets.graph.WBGraph.class\" archive=\""
                         + SWBPlatform.getContextPath()
@@ -237,7 +235,8 @@ public class SWBADBPool extends GenericResource {
                 out.println("</td></tr>");
                 
                 out.println("</table>");
-                out.println("</p>");
+                out.println("</fieldset>");
+                out.println("</div>");
             }
 
             HashMap timepool = (HashMap) timelock.getPools().get(selectedPool.getName());
@@ -245,16 +244,17 @@ public class SWBADBPool extends GenericResource {
                 HashMap pool2 = new HashMap(timepool);
                 int ps = pool2.size();
                 if (ps > 0) {
-                    out.println("<p class=\"box\">");
+                    out.println("<div class=\"swbform\">");
+                    out.println("<fieldset>");
                     out.println("  <table width=\"100%\" border=0>");
-                    out.println("    <tr><td colspan=4 class=\"tabla\"><B>"
+                    out.println("    <tr><td colspan=4><B>"
                             + paramsRequest.getLocaleString("connDetails")
                             + "</B></td></tr>");
                     out.println("    <tr><td colspan=4>");
                     out.println("      <table width=\"100%\" border=0>");
-                    out.println("        <tr><td class=\"tabla\">ID</td><td class=\"tabla\">"
+                    out.println("        <tr><td>ID</td><td>"
                             + paramsRequest.getLocaleString("description")
-                            + "</td><td class=\"tabla\">"
+                            + "</td><td>"
                             + paramsRequest.getLocaleString("time")
                             + "</td></tr>");
 
@@ -268,15 +268,16 @@ public class SWBADBPool extends GenericResource {
                         if ((time.longValue() + 300000L) < actual) {
                             out.print("bgcolor=\"#FFA0A0\"");
                         }
-                        out.println("><td class=\"valores\">" + time
-                                + "</td><td class=\"valores\">" + desc
-                                + "</td><td class=\"valores\">" + seg
+                        out.println("><td>" + time
+                                + "</td><td>" + desc
+                                + "</td><td>" + seg
                                 + "s</td></tr>");
                     }
                     out.println("      </table>");
                     out.println("    </td></tr>");
                     out.println("  </table>");
-                    out.println("</p>");
+                    out.println("</fieldset>");
+                    out.println("</div>");
                 }        
             }
             //out.println("</form>");
@@ -294,7 +295,7 @@ public class SWBADBPool extends GenericResource {
         PrintWriter out = response.getWriter();
         String dbcon = request.getParameter("dbcon");
         if (dbcon == null) {
-            dbcon = SWBPlatform.getEnv("wb/db/nameconn", "wb");
+            dbcon = SWBPlatform.getEnv("wb/db/nameconn", "swb");
         }
 
         int max = 100;
@@ -346,7 +347,7 @@ public class SWBADBPool extends GenericResource {
         PrintWriter out = response.getWriter();
         String dbcon = request.getParameter("dbcon");
         if (dbcon == null) {
-            dbcon = SWBPlatform.getEnv("wb/db/nameconn", "wb");
+            dbcon = SWBPlatform.getEnv("wb/db/nameconn", "swb");
         }
 
         int max = 100;

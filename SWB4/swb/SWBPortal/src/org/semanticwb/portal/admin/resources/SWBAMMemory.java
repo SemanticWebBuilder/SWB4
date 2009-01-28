@@ -113,11 +113,9 @@ public class SWBAMMemory extends GenericResource {
             out.println("</fieldset>");
             out.println("<fieldset>");
             out.println("  <form action=\"" + paramsRequest.getActionUrl() + "\" method=\"POST\">");
-            out.println("  <button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + paramsRequest.getActionUrl() + "',this.domNode); return false;\" name=\"gc\">" + paramsRequest.getLocaleString("gc") + "</button>");
-//            out.print("      <input type=submit name=\"gc\" value=\"");
-//            out.print(paramsRequest.getLocaleString("gc"));
-//            out.print("\">&nbsp;&nbsp;");
-            out.println("&nbsp;&nbsp;</form>");
+            //out.println("  <button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + paramsRequest.getActionUrl() + "',this.domNode); return false;\" name=\"gc\">" + paramsRequest.getLocaleString("gc") + "</button>");
+            out.print("      <input type=\"submit\" name=\"gc\" value=\""+paramsRequest.getLocaleString("gc")+"\">&nbsp;&nbsp;");
+            out.println("</form>");
             out.println("</fieldset>");
         } else {
             out.println(paramsRequest.getLocaleString("msgIsNotActive"));
