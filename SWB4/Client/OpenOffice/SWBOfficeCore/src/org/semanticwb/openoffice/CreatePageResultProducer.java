@@ -13,6 +13,7 @@ import org.netbeans.spi.wizard.WizardPage.WizardResultProducer;
 import org.semanticwb.office.interfaces.IOfficeApplication;
 import org.semanticwb.office.interfaces.WebPageInfo;
 import org.semanticwb.openoffice.ui.wizard.SelectPage;
+import org.semanticwb.openoffice.ui.wizard.SelectWebPageID;
 import org.semanticwb.openoffice.ui.wizard.TitleAndDescription;
 
 /**
@@ -47,7 +48,7 @@ public class CreatePageResultProducer implements WizardResultProducer
             try
             {
                 IOfficeApplication openOfficeApplication = OfficeApplication.getOfficeApplicationProxy();
-                String pageid = wizardData.get("").toString();
+                String pageid = wizardData.get(SelectWebPageID.WEBPAGEID).toString();
                 String title = wizardData.get(TitleAndDescription.TITLE).toString();
                 String description = wizardData.get(TitleAndDescription.DESCRIPTION).toString();
                 if(parent==null)
