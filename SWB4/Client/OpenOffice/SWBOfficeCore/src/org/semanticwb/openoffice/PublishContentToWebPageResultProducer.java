@@ -7,6 +7,7 @@ package org.semanticwb.openoffice;
 
 import java.awt.EventQueue;
 import java.util.Map;
+import javax.swing.JOptionPane;
 import org.netbeans.spi.wizard.DeferredWizardResult;
 import org.netbeans.spi.wizard.ResultProgressHandle;
 import org.netbeans.spi.wizard.WizardException;
@@ -57,6 +58,7 @@ public class PublishContentToWebPageResultProducer implements WizardResultProduc
                 webpage.siteID=page.getSite();
                 String version=wizardData.get(PublishVersion.VERSION).toString();                
                 openOfficeDocument.publishToPortletContent(repositoryName, contentID, version, title, description, webpage);
+                JOptionPane.showMessageDialog(null, "¡Se ha publicado el documento!","Publicación de contenido",JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
                 progress.finished(null);
             }
             catch(Exception e)
