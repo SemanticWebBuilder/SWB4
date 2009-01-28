@@ -70,9 +70,18 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
     {
     }
 
-    public boolean existsPage(WebSiteInfo site, WebPageInfo page, String pageid) throws Exception
+    public boolean existsPage(WebSiteInfo site,String pageid) throws Exception
     {
-        return false;
+        WebSite website = SWBContext.getWebSite(site.id);
+        WebPage page=website.getWebPage(pageid);
+        if(page==null)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
 
     public String[] getContents(String repositoryName, String categoryID) throws Exception
@@ -205,9 +214,9 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            log.error(e);
             throw e;
-        }
+        }        
         finally
         {
             if (session != null)
