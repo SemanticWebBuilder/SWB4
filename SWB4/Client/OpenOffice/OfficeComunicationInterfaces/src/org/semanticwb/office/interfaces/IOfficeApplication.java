@@ -25,7 +25,7 @@ public interface IOfficeApplication
     public void createPage(WebPageInfo page,String pageid,String title, String description) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeApplication.existPage")
-    public boolean existsPage(WebSiteInfo site,WebPageInfo page,String pageid) throws Exception;
+    public boolean existsPage(WebSiteInfo site,String pageid) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeApplication.createCategory")
     public String createCategory(String repositoryName, String title, String description) throws Exception;
