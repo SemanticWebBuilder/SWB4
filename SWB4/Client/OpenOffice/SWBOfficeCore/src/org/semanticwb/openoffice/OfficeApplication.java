@@ -22,7 +22,9 @@ import org.semanticwb.openoffice.ui.dialogs.DialogChangePassword;
 import org.semanticwb.openoffice.ui.dialogs.DialogLogin;
 import org.semanticwb.openoffice.ui.wizard.Search;
 import org.semanticwb.openoffice.ui.wizard.SelectDirectory;
+import org.semanticwb.openoffice.ui.wizard.SelectPage;
 import org.semanticwb.openoffice.ui.wizard.SelectVersionToOpen;
+import org.semanticwb.openoffice.ui.wizard.SelectWebPageID;
 import org.semanticwb.openoffice.ui.wizard.TitleAndDescription;
 import org.semanticwb.xmlrpc.XmlRpcProxyFactory;
 
@@ -53,7 +55,7 @@ public abstract class OfficeApplication
             System.out.println(ue.getMessage());
         }
     }
-
+    
     public static IOpenOfficeApplication getOfficeApplicationProxy() throws WBException
     {
         if ( application == null )
@@ -224,10 +226,17 @@ public abstract class OfficeApplication
         }
     }
 
+    public static final void createPage()
+    {
+        CreatePageResultProducer resultProducer = new CreatePageResultProducer();
+        WizardPage[] clazz = new WizardPage[]{new SelectPage(),new TitleAndDescription(false),new SelectWebPageID()};
+        Wizard wiz = WizardPage.createWizard("Asistente de creación de página", clazz, resultProducer);
+        wiz.show();
+    }
     public static final void createPage(WebPageInfo parent)
     {
         CreatePageResultProducer resultProducer = new CreatePageResultProducer(parent);
-        WizardPage[] clazz = new WizardPage[]{new TitleAndDescription()};
+        WizardPage[] clazz = new WizardPage[]{new TitleAndDescription(false),new SelectWebPageID()};
         Wizard wiz = WizardPage.createWizard("Asistente de creación de página", clazz, resultProducer);        
         wiz.show();
     }
