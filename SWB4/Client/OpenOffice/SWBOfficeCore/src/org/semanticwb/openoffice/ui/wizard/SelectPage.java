@@ -123,6 +123,7 @@ public class SelectPage extends WizardPage
         jToolBar1 = new javax.swing.JToolBar();
         jButtonAddPage = new javax.swing.JButton();
 
+        setPreferredSize(new java.awt.Dimension(500, 322));
         setLayout(new java.awt.BorderLayout());
 
         jTreeSite.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
