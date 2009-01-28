@@ -503,7 +503,7 @@ public abstract class OfficeDocument
         {
             contentID = this.getCustomProperties().get(CONTENT_ID_NAME);
             String repositoryName = this.getCustomProperties().get(WORKSPACE_ID_NAME);
-            PublishContentToWebPageResultProducer resultProducer = new PublishContentToWebPageResultProducer(contentID, repositoryName);
+            PublishContentToWebPageResultProducer resultProducer = new PublishContentToWebPageResultProducer(contentID, repositoryName,title,description);
             WizardPage[] clazz = new WizardPage[]
             {
                 new SelectPage(), new PublishVersion(contentID, repositoryName)
