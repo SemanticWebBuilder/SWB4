@@ -7,6 +7,7 @@ package org.semanticwb.office.comunication;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import javax.jcr.Node;
@@ -62,6 +63,8 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         WebPage newpage = website.createWebPage(pageid);
         newpage.setTitle(title);
         newpage.setDescription(description);
+        newpage.setCreated(new Date(System.currentTimeMillis()));
+        newpage.setUpdated(new Date(System.currentTimeMillis()));
         WebPage parent = website.getWebPage(page.id);
         newpage.setParent(parent);
     }
