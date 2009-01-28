@@ -39,23 +39,25 @@ public class SWBAListAllUsers extends GenericResource {
     
         PrintWriter out = response.getWriter();
         Iterator<UserRepository> iteRep = SWBContext.listUserRepositorys();//DBUser.getInstance().getRepositories();
-        out.println("<div class=box>");
-        out.println("<table width=100% cellpadding=10 cellspacing=0 border=0>");
-        out.println("<tr class=tabla>");
-        out.println("<td>"+"id"+"</td>");
-        out.println("<td>"+"Nombre"+"</td>");
-        out.println("<td>"+"A. Paterno"+"</td>");
-        out.println("<td>"+"A. Materno"+"</td>");
-        out.println("<td>"+"E-mail"+"</td>");
-        out.println("<td>"+"Lenguaje"+"</td>");
-        out.println("<td>"+"Activo"+"</td>");
-        out.println("<td>"+"Creado"+"</td>");
-        out.println("<td>"+"Modificado"+"</td>");
-        out.println("<td>"+"Repositorio"+"</td></tr>");
+        out.println("<div class=\"swbform\">");
+        out.println("<fieldset>");
+        out.println("<table width=98% cellpadding=10 cellspacing=0 border=0>");
+        out.println("<tr >");
+        out.println("<th>"+"id"+"</th>");
+        out.println("<th>"+"Nombre"+"</th>");
+        out.println("<th>"+"A. Paterno"+"</th>");
+        out.println("<th>"+"A. Materno"+"</th>");
+        out.println("<th>"+"E-mail"+"</th>");
+        out.println("<th>"+"Lenguaje"+"</th>");
+        out.println("<th>"+"Activo"+"</th>");
+        out.println("<th>"+"Creado"+"</th>");
+        out.println("<th>"+"Modificado"+"</th>");
+        out.println("<th>"+"Repositorio"+"</th></tr>");
         String rowColor="";
         boolean cambiaColor = true;
         while(iteRep.hasNext()){
             UserRepository repository = iteRep.next();
+
             Iterator<User> enuUsers = repository.listUsers();
             while(enuUsers.hasNext()){
                 rowColor="#EFEDEC";
@@ -78,6 +80,7 @@ public class SWBAListAllUsers extends GenericResource {
             }
         }
         out.println("</table>");
+        out.println("</fieldset>");
         out.println("</div>");
     }
 }
