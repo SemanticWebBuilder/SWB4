@@ -56,7 +56,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
     public void createPage(WebPageInfo page, String pageid, String title, String description) throws Exception
     {
         WebSite website = SWBContext.getWebSite(page.siteID);
-        if (website.getWebPage(pageid) == null)
+        if (website.getWebPage(pageid) != null)
         {
             throw new Exception("The webpage already exists");
         }
