@@ -13,6 +13,7 @@ import java.util.Locale;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import org.netbeans.spi.wizard.Wizard;
+import org.netbeans.spi.wizard.WizardObserver;
 import org.netbeans.spi.wizard.WizardPage;
 import org.semanticwb.office.interfaces.WebPageInfo;
 import org.semanticwb.openoffice.interfaces.IOpenOfficeApplication;
@@ -229,8 +230,10 @@ public abstract class OfficeApplication
     public static final void createPage()
     {
         CreatePageResultProducer resultProducer = new CreatePageResultProducer();
-        WizardPage[] clazz = new WizardPage[]{new SelectPage(),new TitleAndDescription(false),new SelectWebPageID()};
+        SelectWebPageID selectWebPageID=new SelectWebPageID();
+        WizardPage[] clazz = new WizardPage[]{new SelectPage(),new TitleAndDescription(false),selectWebPageID};
         Wizard wiz = WizardPage.createWizard("Asistente de creación de página", clazz, resultProducer);
+        wiz.addWizardObserver(new CreatePageObserver(selectWebPageID));
         wiz.show();
     }
     public static final void createPage(WebPageInfo parent)
