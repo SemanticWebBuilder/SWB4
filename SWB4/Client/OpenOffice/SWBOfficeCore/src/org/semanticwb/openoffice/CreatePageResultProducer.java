@@ -12,6 +12,7 @@ import org.netbeans.spi.wizard.WizardException;
 import org.netbeans.spi.wizard.WizardPage.WizardResultProducer;
 import org.semanticwb.office.interfaces.IOfficeApplication;
 import org.semanticwb.office.interfaces.WebPageInfo;
+import org.semanticwb.openoffice.ui.wizard.SelectPage;
 import org.semanticwb.openoffice.ui.wizard.TitleAndDescription;
 
 /**
@@ -26,6 +27,10 @@ public class CreatePageResultProducer implements WizardResultProducer
     public CreatePageResultProducer(WebPageInfo parent)
     {
         this.parent = parent;
+    }
+    public CreatePageResultProducer()
+    {
+
     }
 
     public Object finish(Map arg0) throws WizardException
@@ -45,6 +50,10 @@ public class CreatePageResultProducer implements WizardResultProducer
                 String pageid = wizardData.get("").toString();
                 String title = wizardData.get(TitleAndDescription.TITLE).toString();
                 String description = wizardData.get(TitleAndDescription.DESCRIPTION).toString();
+                if(parent==null)
+                {
+                    parent=(WebPageInfo)wizardData.get(SelectPage.WEBPAGE);
+                }
                 openOfficeApplication.createPage(parent, pageid, title, description);
             }
             catch (Exception e)
