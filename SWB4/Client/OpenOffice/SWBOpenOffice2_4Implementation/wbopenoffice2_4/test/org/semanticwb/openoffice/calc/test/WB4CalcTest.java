@@ -276,7 +276,7 @@ public class WB4CalcTest
         try
         {
             WB4Calc writer = new WB4Calc(this.xContext);            
-            writer.publish();            
+            writer.saveToSite();
         }
         catch (WBException wbe)
         {
