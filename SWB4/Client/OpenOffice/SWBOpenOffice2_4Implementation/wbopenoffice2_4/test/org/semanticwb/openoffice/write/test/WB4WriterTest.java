@@ -267,7 +267,7 @@ public class WB4WriterTest
 
     }
     @Test  
-    //@Ignore
+    @Ignore
     public void publishTest()
     {
         try
@@ -281,6 +281,19 @@ public class WB4WriterTest
         }
     }
 
+    @Test
+    //@Ignore
+    public void createWebTest()
+    {
+        try
+        {
+           WB4WriterApplication.createPage();
+        }
+        catch ( Throwable wbe )
+        {
+            Assert.fail(wbe.getMessage());
+        }
+    }
     
 
     @Test
