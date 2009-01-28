@@ -45,7 +45,7 @@ public class WB4WriterTest
     XComponentContext xContext;
     XComponent xCompDest = null;
     XDesktop oDesktop = null;
-    File sUrlDestiny = new File("c:/temp/demo3.odt");
+    File sUrlDestiny = new File("c:/temp/demo8.odt");
     File tempDir = new File("c:/temp/demo/");
 
     public WB4WriterTest()
@@ -267,13 +267,13 @@ public class WB4WriterTest
 
     }
     @Test  
-    @Ignore
+    //@Ignore
     public void publishTest()
     {
         try
         {
             WB4Writer writer = new WB4Writer(this.xContext);
-            writer.publish();
+            writer.saveToSite();
         }
         catch ( Throwable wbe )
         {
@@ -315,7 +315,8 @@ public class WB4WriterTest
             Assert.fail(wbe.getMessage());
         }
     }
-    @Test    
+    @Test
+    @Ignore
     public void showInformationTest()
     {
         try
