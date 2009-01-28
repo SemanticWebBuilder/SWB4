@@ -24,24 +24,27 @@ public class TitleAndDescription extends WizardPage
     public static final String TITLE = "title";
     public static final String DESCRIPTION = "description";
     public static final String NODE_TYPE = "NODE_TYPE";
+    boolean showTypeOfcontent = true;
 
     /** Creates new form TitleAndDescription */
     public TitleAndDescription(boolean showTypeOfcontent)
     {
         this();
+        this.showTypeOfcontent = showTypeOfcontent;
         this.jComboBoxType.setVisible(showTypeOfcontent);
         this.jLabelType.setVisible(showTypeOfcontent);
 
     }
+
     public TitleAndDescription()
-    {  
-        initComponents();                
+    {
+        initComponents();
         this.jTextFieldName.setDocument(new FixedLengthPlainDocument(255));
         this.jTextAreaDescription.setDocument(new FixedLengthPlainDocument(255));
-        this.jComboBoxType.removeAllItems();        
+        this.jComboBoxType.removeAllItems();
         try
-        {            
-            String repository=SelectCategory.map.get(SelectCategory.REPOSITORY_ID).toString();
+        {
+            String repository = SelectCategory.map.get(SelectCategory.REPOSITORY_ID).toString();
             for (ContentType type : OfficeApplication.getOfficeApplicationProxy().getContentTypes(repository))
             {
                 this.jComboBoxType.addItem(type);
@@ -62,7 +65,8 @@ public class TitleAndDescription extends WizardPage
     {
         return allowFinish(arg, map, wizard);
     }
-    /**     * 
+
+    /**     *
      * @param arg
      * @param map
      * @param wizard
@@ -70,7 +74,7 @@ public class TitleAndDescription extends WizardPage
      */
     @Override
     public WizardPanelNavResult allowFinish(String arg, Map map, Wizard wizard)
-    {        
+    {
         WizardPanelNavResult result = WizardPanelNavResult.REMAIN_ON_PAGE;
         if (this.jTextFieldName.getText().trim().equals(""))
         {
@@ -82,16 +86,24 @@ public class TitleAndDescription extends WizardPage
             JOptionPane.showMessageDialog(null, "¡Debe indicar la descripción del contenido!", getDescription(), JOptionPane.ERROR_MESSAGE);
             this.jTextAreaDescription.requestFocus();
         }
-        else if (this.jComboBoxType.getSelectedItem() == null)
+        if (showTypeOfcontent)
         {
-            JOptionPane.showMessageDialog(null, "¡Debe indicar el tipo de contenido!", getDescription(), JOptionPane.ERROR_MESSAGE);
-            this.jComboBoxType.requestFocus();
+            if (this.jComboBoxType.getSelectedItem() == null)
+            {
+                JOptionPane.showMessageDialog(null, "¡Debe indicar el tipo de contenido!", getDescription(), JOptionPane.ERROR_MESSAGE);
+                this.jComboBoxType.requestFocus();
+            }
+            else
+            {
+                map.put(TITLE, this.jTextFieldName.getText().trim());
+                map.put(DESCRIPTION, this.jTextAreaDescription.getText().trim());
+                map.put(NODE_TYPE, ((ContentType) this.jComboBoxType.getSelectedItem()).id);
+            }
         }
         else
         {
             map.put(TITLE, this.jTextFieldName.getText().trim());
-            map.put(DESCRIPTION, this.jTextAreaDescription.getText().trim());
-            map.put(NODE_TYPE, ((ContentType) this.jComboBoxType.getSelectedItem()).id);
+            map.put(DESCRIPTION, this.jTextAreaDescription.getText().trim());            
             result = WizardPanelNavResult.PROCEED;
         }
         return result;
