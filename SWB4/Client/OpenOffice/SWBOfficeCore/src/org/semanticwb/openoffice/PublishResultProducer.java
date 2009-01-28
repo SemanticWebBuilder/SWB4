@@ -59,7 +59,7 @@ public class PublishResultProducer implements WizardResultProducer
                 int res = JOptionPane.showConfirmDialog(null, "¿Desea publicar este contenido en una página web?", "Publicación de contenido", JOptionPane.YES_NO_OPTION);
                 if (res == JOptionPane.YES_OPTION)
                 {
-                    document.publish();
+                    document.publish(title,description);
                 }
                 progress.finished(summary);
             }
