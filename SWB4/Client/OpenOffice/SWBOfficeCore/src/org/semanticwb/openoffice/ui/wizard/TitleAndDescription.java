@@ -98,6 +98,7 @@ public class TitleAndDescription extends WizardPage
                 map.put(TITLE, this.jTextFieldName.getText().trim());
                 map.put(DESCRIPTION, this.jTextAreaDescription.getText().trim());
                 map.put(NODE_TYPE, ((ContentType) this.jComboBoxType.getSelectedItem()).id);
+                result = WizardPanelNavResult.PROCEED;
             }
         }
         else
