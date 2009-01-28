@@ -84,7 +84,10 @@ public class SelectWebPageID extends WizardPage
                 .addContainerGap(228, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
-
+    public void setId()
+    {
+        this.jTextFieldWebPageIDFocusGained(null);
+    }
     private String getId(String titulo)
     {
         String newtitulo = "";
