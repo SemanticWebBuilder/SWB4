@@ -497,7 +497,21 @@ public abstract class OfficeDocument
         }
         return result;
     }
-
+    public final void publish(String title,String description)
+    {
+        if (isPublicated())
+        {
+            contentID = this.getCustomProperties().get(CONTENT_ID_NAME);
+            String repositoryName = this.getCustomProperties().get(WORKSPACE_ID_NAME);
+            PublishContentToWebPageResultProducer resultProducer = new PublishContentToWebPageResultProducer(contentID, repositoryName);
+            WizardPage[] clazz = new WizardPage[]
+            {
+                new SelectPage(), new PublishVersion(contentID, repositoryName)
+            };
+            Wizard wiz = WizardPage.createWizard("Asistente de publicación de contenido en página web", clazz, resultProducer);
+            wiz.show();
+        }
+    }
     public final void publish()
     {
         if (isPublicated())
