@@ -41,14 +41,10 @@ import org.semanticwb.portal.api.SWBResourceTraceMgr;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
-//import com.infotec.wb.core.db.RecResourceType;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.util.*;
-import org.semanticwb.model.PortletType;
-
-
 
 /** Muestra el pool de conexiones a la base de datos seleccionada por el usuario
  * administrador.
@@ -124,45 +120,50 @@ public class SWBAResTrace extends GenericResource {
         SWBResourceTraceMgr restracer = SWBPortal.getResourceMgr().getResourceTraceMgr();
         long actual = System.currentTimeMillis();
         
-        out.println("<p class=\"box\">");
-        out.println("<TABLE width=\"100%\" border=\"0\" cellpadding=\"10\" cellspacing=\"0\" bgcolor=\"#FFFFFF\">");
-        out.println("<TR><TD width=\"30%\" align=\"right\" class=\"tabla\">");
+        out.println("<div class=\"swbform\">");
+        out.println("<fieldset>");
+        out.println("<TABLE width=\"98%\" border=\"0\" cellpadding=\"10\" cellspacing=\"0\">");
+        out.println("<TR><TD width=\"30%\" align=\"right\" >");
         out.println(paramsRequest.getLocaleString("active")+":");
-        out.println("</TD><TD class=\"valores\" align=\"left\">");
+        out.println("</TD><TD align=\"left\">");
         if (restracer.isResourceTrace()) {
             out.println(paramsRequest.getLocaleString("yes"));
         } else {
             out.println(paramsRequest.getLocaleString("no"));
         }
         out.println("</TD></TR>");
-        out.println("<TR><TD width=\"30%\" align=\"right\" class=\"tabla\">");
+        out.println("<TR><TD width=\"30%\" align=\"right\" >");
         out.println(paramsRequest.getLocaleString("restypes")+":");
-        out.println("</TD><TD class=\"valores\" align=\"left\">");
+        out.println("</TD><TD  align=\"left\">");
         out.println(restracer.getTypes().size());
         out.println("</TD></TR>");
         out.println("</TD></TR>");
-        out.println("<TR><TD width=\"30%\" align=\"right\" class=\"tabla\">");
+        out.println("<TR><TD width=\"30%\" align=\"right\" >");
         out.println(paramsRequest.getLocaleString("totalres")+":");
-        out.println("</TD><TD class=\"valores\" align=\"left\">");
+        out.println("</TD><TD align=\"left\">");
         out.println(restracer.getResourceTracedSize());
         out.println("</TD></TR>");
-        out.println("<TR><TD colspan=2 align=\"right\">");
-        out.println("<HR size=1 noshade>");
+        out.println("</TABLE>");
+        out.println("<fieldset>");
+        out.println("</fieldset>");
+
         out.println("    <form action=\""+paramsRequest.getActionUrl()+"\" method=\"post\">");
         out.println("        <input type=submit class=\"boton\" name=\"start\" value=\""+paramsRequest.getLocaleString("start")+"\">");
         out.println("        <input type=submit class=\"boton\" name=\"stop\" value=\""+paramsRequest.getLocaleString("stop")+"\">");
         out.println("        <input type=submit class=\"boton\" name=\"clear\" value=\""+paramsRequest.getLocaleString("clear")+"\">");
         out.println("        <input type=submit class=\"boton\" name=\"update\" value=\""+paramsRequest.getLocaleString("update")+"\">");
         out.println("  </form>");
-        out.println("</TD></TR>");
-        out.println("</TABLE>");
-        out.println("</p>");
+
+        
+        out.println("</fieldset>");
+        out.println("</div>");
         
         Hashtable types = restracer.getTypes();
         int s = types.size();
         
         if (s > 0) {
-            out.println("<p class=\"box\">");
+            out.println("<div class=\"swbform\">");
+            out.println("<fieldset>");
         }
         
         Enumeration en = types.keys();
@@ -170,20 +171,20 @@ public class SWBAResTrace extends GenericResource {
             String stype = (String) en.nextElement();
             Hashtable type = (Hashtable) types.get(stype);
             if (type.size() > 0) {
-                out.println("  <table width=\"100%\" border=0>");
-                out.println("    <tr><td colspan=4 class=\"tabla\"><B>"+stype+" "+type.size()+"</B></td></tr>");
+                out.println("  <table width=\"98%\" border=0>");
+                out.println("    <tr><th colspan=4 >"+stype+" "+type.size()+"</th></tr>");
                 out.println("    <tr><td colspan=4>");
                 out.println("      <table width=\"100%\" border=0>");
                 out.println("        <tr>");
-                out.println("          <td class=\"tabla\">"+paramsRequest.getLocaleString("id")+"</td>");
-                out.println("          <td class=\"tabla\">"+paramsRequest.getLocaleString("resid")+"</td>");
-                out.println("          <td class=\"tabla\">"+paramsRequest.getLocaleString("description")+"</td>");
-                out.println("          <td class=\"tabla\">"+paramsRequest.getLocaleString("site")+"</td>");
-                out.println("          <td class=\"tabla\">"+paramsRequest.getLocaleString("topic")+"</td>");
-                out.println("          <td class=\"tabla\">"+paramsRequest.getLocaleString("user")+"</td>");
-                out.println("          <td class=\"tabla\">"+paramsRequest.getLocaleString("thread")+"</td>");
-                out.println("          <td class=\"tabla\">"+paramsRequest.getLocaleString("time")+"</td>");
-                out.println("          <td class=\"tabla\"></td>");
+                out.println("          <th>"+paramsRequest.getLocaleString("id")+"</th>");
+                out.println("          <th>"+paramsRequest.getLocaleString("resid")+"</th>");
+                out.println("          <th>"+paramsRequest.getLocaleString("description")+"</th>");
+                out.println("          <th>"+paramsRequest.getLocaleString("site")+"</th>");
+                out.println("          <th>"+paramsRequest.getLocaleString("topic")+"</th>");
+                out.println("          <th>"+paramsRequest.getLocaleString("user")+"</th>");
+                out.println("          <th>"+paramsRequest.getLocaleString("thread")+"</th>");
+                out.println("          <th>"+paramsRequest.getLocaleString("time")+"</th>");
+                out.println("          <th></th>");
                 out.println("        </tr>");
                 
                 Enumeration en2 = type.elements();
@@ -196,26 +197,26 @@ public class SWBAResTrace extends GenericResource {
                     } else {
                         out.println("        <tr>");
                     }
-                    out.println("          <td class=\"valores\">" + t.getId() + "</td>");
-                    out.println("          <td class=\"valores\">" + t.getResource().getId() + "</td>");
-                    out.println("          <td class=\"valores\">" + t.getDescription() + "</td>");
+                    out.println("          <td >" + t.getId() + "</td>");
+                    out.println("          <td >" + t.getResource().getId() + "</td>");
+                    out.println("          <td >" + t.getDescription() + "</td>");
                     //out.println("          <td class=\"valores\">"+t.getWBParamRequest().getTopic().getMap().getDbdata().getTitle()+"</td>");
-                    out.println("          <td class=\"valores\">"
+                    out.println("          <td >"
                             + t.getWBParamRequest().getTopic().getWebSite().getTitle() + "</td>");
-                    out.println("          <td class=\"valores\">"
+                    out.println("          <td >"
                             + t.getWBParamRequest().getTopic().getDisplayName() + "</td>");
-                    out.println("          <td class=\"valores\">"
+                    out.println("          <td >"
                             + t.getWBParamRequest().getUser().getId() + "</td>");
-                    out.println("          <td class=\"valores\">"
+                    out.println("          <td >"
                             + t.getThread() + "</td>");
-                    out.println("          <td class=\"valores\">"
+                    out.println("          <td >"
                             + (actual - t.getTime()) + "ms</td>");
                     SWBResourceURL url = paramsRequest.getActionUrl();
                     url.setParameter("kill", "" + t.getId());
                     url.setParameter("stype", "" + stype);
-                    out.println("          <td class=\"valores\"><a href=\""
+                    out.println("          <td ><a href=\""
                             + url + "\"><img src=\"" + SWBPlatform.getContextPath()
-                            + "/swbadmin/images/eliminar.gif\" border=0></a></td>");
+                            + "/swbadmin/images/delete.gif\" border=0></a></td>");
                     out.println("        </tr>");
                 }
                 out.println("      </table>");
@@ -226,7 +227,8 @@ public class SWBAResTrace extends GenericResource {
         }        
 
         if (s > 0) {
-            out.println("</p>");
+            out.println("</fieldset>");
+            out.println("</div>");
         }
         
         //Types Meter
@@ -244,20 +246,20 @@ public class SWBAResTrace extends GenericResource {
         
         if(s>0)
         {
-            out.println("<p class=\"box\">");
-        
-            out.println("  <table width=\"100%\" border=0>");
-            out.println("    <tr><td colspan=4 class=\"tabla\"><B>Resource Trace</B></td></tr>");
+            out.println("<div class=\"swbform\">");
+            out.println("<fieldset>");
+            out.println("  <table width=\"98%\" border=0>");
+            out.println("    <tr><th colspan=4 >Resource Trace</th></tr>");
             out.println("    <tr><td colspan=4>");
             out.println("      <table width=\"100%\" border=0>");
             out.println("        <tr>");
-            out.println("          <td class=\"tabla\">"+paramsRequest.getLocaleString("id")+"</td>");
-            out.println("          <td class=\"tabla\">"+paramsRequest.getLocaleString("site")+"</td>");
-            out.println("          <td class=\"tabla\">"+paramsRequest.getLocaleString("description")+"</td>");
-            out.println("          <td class=\"tabla\">"+paramsRequest.getLocaleString("min")+"</td>");
-            out.println("          <td class=\"tabla\">"+paramsRequest.getLocaleString("max")+"</td>");
-            out.println("          <td class=\"tabla\">"+paramsRequest.getLocaleString("avg")+"</td>");
-            out.println("          <td class=\"tabla\">"+paramsRequest.getLocaleString("hits")+"</td>");
+            out.println("          <th>"+paramsRequest.getLocaleString("id")+"</th>");
+            out.println("          <th>"+paramsRequest.getLocaleString("site")+"</th>");
+            out.println("          <th>"+paramsRequest.getLocaleString("description")+"</th>");
+            out.println("          <th>"+paramsRequest.getLocaleString("min")+"</th>");
+            out.println("          <th>"+paramsRequest.getLocaleString("max")+"</th>");
+            out.println("          <th>"+paramsRequest.getLocaleString("avg")+"</th>");
+            out.println("          <th>"+paramsRequest.getLocaleString("hits")+"</th>");
             out.println("        </tr>");
 
             Iterator it = set.iterator();
@@ -278,13 +280,13 @@ public class SWBAResTrace extends GenericResource {
                             colf = true;
                         }
                     }
-                    out.println("          <td class=\"valores\">"+t.getId()+"</td>");
-                    out.println("          <td class=\"valores\">"+t.getTypeMap()+"</td>");
-                    out.println("          <td class=\"valores\">"+t.getName()+"</td>");
-                    out.println("          <td class=\"valores\">"+t.getMinTime()+"</td>");
-                    out.println("          <td class=\"valores\">"+t.getMaxTime()+"</td>");
-                    out.println("          <td class=\"valores\">"+t.getAvgTime()+"</td>");
-                    out.println("          <td class=\"valores\">"+t.getCount()+"</td>");
+                    out.println("          <td >"+t.getId()+"</td>");
+                    out.println("          <td >"+t.getTypeMap()+"</td>");
+                    out.println("          <td >"+t.getName()+"</td>");
+                    out.println("          <td >"+t.getMinTime()+"</td>");
+                    out.println("          <td >"+t.getMaxTime()+"</td>");
+                    out.println("          <td >"+t.getAvgTime()+"</td>");
+                    out.println("          <td >"+t.getCount()+"</td>");
                     out.println("        </tr>");
                 }
             }        
@@ -293,54 +295,8 @@ public class SWBAResTrace extends GenericResource {
             out.println("    </td></tr>");
             out.println("  </table>");
 
-            out.println("</p>");
+            out.println("</fieldset>");
+            out.println("</div>");
         }        
     }
-    
-    /**
-     * @param request
-     * @param response
-     * @param paramsRequest
-     * @throws SWBResourceException
-     * @throws IOException
-     */    
-    @Override
-    public void render(HttpServletRequest request, HttpServletResponse response,
-            SWBParamRequest paramsRequest)
-            throws SWBResourceException, IOException {
-        
-        super.render(request, response, paramsRequest);
-    }
-    
-    /**
-     * @param request
-     * @param response
-     * @param paramsRequest
-     * @throws SWBResourceException
-     * @throws IOException
-     */    
-    @Override
-    public void processRequest(HttpServletRequest request,
-            HttpServletResponse response, SWBParamRequest paramsRequest)
-            throws SWBResourceException, IOException {
-        
-        super.processRequest(request, response, paramsRequest);
-    }
-    
-    /**
-     * @param recobj
-     * @throws SWBResourceException
-     */    
-    @Override
-    public void install(PortletType recobj) throws SWBResourceException {
-    }
-    
-    /**
-     * @param recobj
-     * @throws SWBResourceException
-     */    
-    @Override
-    public void uninstall(PortletType recobj) throws SWBResourceException {
-    }
-    
 }

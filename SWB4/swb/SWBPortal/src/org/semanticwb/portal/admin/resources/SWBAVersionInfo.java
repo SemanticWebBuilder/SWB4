@@ -101,7 +101,7 @@ public class SWBAVersionInfo extends GenericResource {
                             urlr.setParameter("suri", id);
                             urlr.setParameter("sval", vio.getURI());
                             urlr.setAction("remove");
-                            out.println("&nbsp;<a href=\"#\" onclick=\"submitUrl('" + urlr + "',this); return false;\">remove</a>");
+                            out.println("&nbsp;<a href=\"#\" onclick=\"submitUrl('" + urlr + "',this); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" border=0></a>");
                             if (!vio.equals(via)) {
                                 SWBResourceURL urlsa = paramRequest.getActionUrl();
                                 urlsa.setParameter("suri", id);

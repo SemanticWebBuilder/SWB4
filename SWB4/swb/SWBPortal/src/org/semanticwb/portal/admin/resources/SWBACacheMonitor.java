@@ -71,10 +71,11 @@ public class SWBACacheMonitor extends GenericResource {
         PrintWriter out = response.getWriter();
         //String act = request.getParameter("act");
         
-        out.println("<p class=box>");
+        out.println("<div class=\"swbform\">");
         
         if (SWBPlatform.getEnv("wb/systemMonitor", "false").equals("true")) {
-            out.println("<table width=100% cellpadding=10 cellspacing=0 border=0>");
+            out.println("<fieldset>");
+            out.println("<table width=98% cellpadding=10 cellspacing=0 border=0>");
             out.println("<tr><td>");
             out.println("<APPLET code=\"applets.graph.WBGraph.class\" archive=\""
                     + SWBPlatform.getContextPath()
@@ -88,10 +89,11 @@ public class SWBACacheMonitor extends GenericResource {
 
             out.println("</td></tr>");            
             out.println("</table>");
+            out.println("</fieldset>");
         } else {
             out.println(paramsRequest.getLocaleString("msgIsNotActive"));
         }
-        out.println("</p>");
+        out.println("</div>");
     }
     
     public void getData(HttpServletRequest request, HttpServletResponse response,

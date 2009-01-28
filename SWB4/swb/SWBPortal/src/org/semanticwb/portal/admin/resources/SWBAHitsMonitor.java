@@ -75,8 +75,8 @@ public class SWBAHitsMonitor extends GenericResource {
         PrintWriter out = response.getWriter();
         String act = request.getParameter("act");
         
-        out.println("<p class=box>");
-        
+        out.println("<div class=\"swbform\">");
+        out.println("<fieldset>");
         if (SWBPlatform.getEnv("wb/systemMonitor","false").equals("true")) {
             out.println("<table width=100% cellpadding=10 cellspacing=0 border=0>");
             out.println("<tr><td>");
@@ -122,7 +122,8 @@ public class SWBAHitsMonitor extends GenericResource {
         } else {
             out.println(paramsRequest.getLocaleString("msgIsNotActive"));
         }
-        out.println("</p>");
+        out.println("</fieldset>");
+        out.println("</div>");
     }
     
     /* * Generate a graph of the hits
@@ -283,21 +284,7 @@ public class SWBAHitsMonitor extends GenericResource {
         }
     }
     */
-    /** Render
-     * @param request input parameters
-     * @param response an answer to the request
-     * @param paramsRequest a list of objects (topic, user, action, ...)
-     * @throws SWBResourceException an AF Exception
-     * @throws IOException an IO Exception
-     */
-    @Override
-    public void render(HttpServletRequest request, HttpServletResponse response,
-            SWBParamRequest paramsRequest)
-            throws SWBResourceException, IOException {
-        
-        super.render(request, response, paramsRequest);
-    }
-    
+   
    
     /**  Process the user request
      * @param request input parameters
