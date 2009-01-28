@@ -146,6 +146,7 @@ public class DistributorParams
         while(st.hasMoreTokens())
         {
             String tok=st.nextToken();
+            //System.out.println("Token :"+x+"="+tok);
             arr.add(tok);
             
             if(x==0)smodel=tok;

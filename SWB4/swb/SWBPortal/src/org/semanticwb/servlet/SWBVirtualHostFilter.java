@@ -1,4 +1,3 @@
-
 package org.semanticwb.servlet;
 
 //import com.infotec.wb.core.WBVirtualHostMgr;
@@ -21,7 +20,6 @@ import org.semanticwb.model.User;
 import org.semanticwb.servlet.internal.Admin;
 import org.semanticwb.servlet.internal.Distributor;
 import org.semanticwb.servlet.internal.DistributorParams;
-import org.semanticwb.servlet.internal.ErrorMessage;
 import org.semanticwb.servlet.internal.GateWayOffice;
 import org.semanticwb.servlet.internal.InternalServlet;
 import org.semanticwb.servlet.internal.Login;
@@ -30,22 +28,19 @@ import org.semanticwb.servlet.internal.Login;
  *
  * @author  Javier Solis Gonzalez (jsolis@infotec.com.mx)
  */
-
 public class SWBVirtualHostFilter implements Filter
 {
-    static Logger log=SWBUtils.getLogger(SWBVirtualHostFilter.class);    
-    private SWBPlatform swbPlatform=null;
-    
-    private HashMap<String,InternalServlet> intServlets=new HashMap();
-    
-    
+
+    static Logger log = SWBUtils.getLogger(SWBVirtualHostFilter.class);
+    private SWBPlatform swbPlatform = null;
+    private HashMap<String, InternalServlet> intServlets = new HashMap();
+    private Login loginInternalServlet = new Login();
     // The filter configuration object we are associated with.  If
     // this value is null, this filter instance is not currently
     // configured.
     private FilterConfig filterConfig = null;
-    
-    private boolean fistCall=true;
-    
+    private boolean fistCall = true;
+
     /**
      *
      * @param request The servlet request we are processing
@@ -59,51 +54,50 @@ public class SWBVirtualHostFilter implements Filter
             FilterChain chain)
             throws IOException, ServletException
     {
-        HttpServletRequest _request=(HttpServletRequest)request;
-        HttpServletResponse _response=(HttpServletResponse)response;
-        
+        HttpServletRequest _request = (HttpServletRequest) request;
+        HttpServletResponse _response = (HttpServletResponse) response;
         log.trace("VirtualHostFilter:doFilter()");
-        
-        if(fistCall)
+
+        if (fistCall)
         {
             swbPlatform.setContextPath(_request.getContextPath());
-            fistCall=false;
+            fistCall = false;
         }
-        
-        String uri=_request.getRequestURI();
-        String cntx=_request.getContextPath();
-        String path=uri.substring(cntx.length());
-        String host=request.getServerName();
-        String iserv="";
-        
-        if(path==null || path.length()==0)
+
+        String uri = _request.getRequestURI();
+        String cntx = _request.getContextPath();
+        String path = uri.substring(cntx.length());
+        String host = request.getServerName();
+        String iserv = "";
+
+        if (path == null || path.length() == 0)
         {
-            path="/";
-        }else
+            path = "/";
+        } else
         {
-            int j=path.indexOf('/',1);
-            if(j>0)
+            int j = path.indexOf('/', 1);
+            if (j > 0)
             {
-                iserv=path.substring(1,j);
-            }else 
+                iserv = path.substring(1, j);
+            } else
             {
-                iserv=path.substring(1);
+                iserv = path.substring(1);
             }
         }
 
-        log.trace("uri:"+uri);
-        log.trace("cntx:"+cntx);
-        log.trace("path:"+path);
-        log.trace("host:"+host);
-        log.trace("iserv:"+iserv);
-        boolean isjsp=false;
-        InternalServlet serv=intServlets.get(iserv);
-        if(serv!=null && path.endsWith(".jsp"))
+//        log.trace("uri:"+uri);
+//        log.trace("cntx:"+cntx);
+//        log.trace("path:"+path);
+//        log.trace("host:"+host);
+//        log.trace("iserv:"+iserv);
+        boolean isjsp = false;
+        InternalServlet serv = intServlets.get(iserv);
+        if (serv != null && path.endsWith(".jsp"))
         {
-            serv=null;
-            isjsp=true;
+            serv = null;
+            isjsp = true;
         }
-        
+
 //        String real=WBVirtualHostMgr.getInstance().getVirtualHost(path,host);
 //        
 //        if(real!=null)
@@ -114,33 +108,52 @@ public class SWBVirtualHostFilter implements Filter
 //            rd.forward(request, response);
 //            return;
 //        }
-        
+
         Throwable problem = null;
         try
         {
-            if(serv!=null)
+            if (serv != null)
             {
-                if(validateDB(_response))
+                if (validateDB(_response))
                 {
-                    String auri=path.substring(iserv.length()+1);
-                    DistributorParams dparams=null;
-                    if(!(serv instanceof Admin))
+                    String auri = path.substring(iserv.length() + 1);
+                    DistributorParams dparams = null;
+                    if (!(serv instanceof Admin))
                     {
-                        dparams=new DistributorParams(_request,auri);
+                        dparams = new DistributorParams(_request, auri);
                     }
-                    serv.doProcess(_request, _response, dparams);
+                    SWBHttpServletResponseWrapper resp = new SWBHttpServletResponseWrapper(_response);
+                    resp.setTrapSendError(true);
+                    serv.doProcess(_request, resp, dparams);
+                    if (resp.isSendError())
+                    {
+                        switch (resp.getError())
+                        {
+                            case 500:
+                            case 404:
+                                processError(resp.getError(), resp.getErrorMsg(), _response);
+                                break;
+                            case 403:
+                                loginInternalServlet.doProcess(_request, _response, dparams);
+                                break;
+                            default:
+                                _response.sendError(resp.getError(), resp.getErrorMsg());
+                        }
+                    } else
+                    {
+                        _response.getWriter().print(resp.toString());
+                    }
                 }
-            }else
+            } else
             {
-                if(isjsp)
+                if (isjsp)
                 {
-                    User user=SWBPortal.getUserMgr().getUser(_request, SWBContext.getGlobalWebSite());
+                    User user = SWBPortal.getUserMgr().getUser(_request, SWBContext.getGlobalWebSite());
                     SWBPortal.setSessionUser(user);
                 }
                 chain.doFilter(request, response);
             }
-        }
-        catch(Throwable t)
+        } catch (Throwable t)
         {
             problem = t;
         }
@@ -150,12 +163,18 @@ public class SWBVirtualHostFilter implements Filter
         //
         if (problem != null)
         {
-            if (problem instanceof ServletException) throw (ServletException)problem;
-            if (problem instanceof IOException) throw (IOException)problem;
+            if (problem instanceof ServletException)
+            {
+                throw (ServletException) problem;
+            }
+            if (problem instanceof IOException)
+            {
+                throw (IOException) problem;
+            }
             log.error(problem);
         }
     }
-    
+
     /**
      * Destroy method for this filter
      *
@@ -163,7 +182,7 @@ public class SWBVirtualHostFilter implements Filter
     public void destroy()
     {
     }
-    
+
     /**
      * Init method for this filter
      *
@@ -172,79 +191,100 @@ public class SWBVirtualHostFilter implements Filter
     public void init(FilterConfig filterConfig) throws ServletException
     {
         log.event("************************************");
-        log.event("Initializing SemanticWebBuilder...");        
+        log.event("Initializing SemanticWebBuilder...");
         this.filterConfig = filterConfig;
         if (filterConfig != null)
         {
             log.event("Initializing VirtualHostFilter...");
-            String prefix =  filterConfig.getServletContext().getRealPath("/");
+            String prefix = filterConfig.getServletContext().getRealPath("/");
             SWBUtils.createInstance(prefix);
-            swbPlatform=SWBPlatform.createInstance(filterConfig.getServletContext());
+            swbPlatform = SWBPlatform.createInstance(filterConfig.getServletContext());
         }
-        
-        InternalServlet serv=new Distributor();
+
+        InternalServlet serv = new Distributor();
         intServlets.put("swb", serv);
         intServlets.put("wb", serv);
         intServlets.put("wb2", serv);
         serv.init(filterConfig.getServletContext());
 
-        InternalServlet login=new Login();
+        InternalServlet login = new Login();
         intServlets.put("login", login);
         login.init(filterConfig.getServletContext());
+        loginInternalServlet.init(filterConfig.getServletContext());
+        loginInternalServlet.setHandleError(true);
 
-        InternalServlet gtwOffice=new GateWayOffice();
-        intServlets.put("gtw", gtwOffice);        
+        InternalServlet gtwOffice = new GateWayOffice();
+        intServlets.put("gtw", gtwOffice);
         gtwOffice.init(filterConfig.getServletContext());
 
-      /*  InternalServlet errorMessage=new ErrorMessage();
-        intServlets.put("errorMessage", errorMessage);
-        errorMessage.init(filterConfig.getServletContext());
-*/
-
-
-        
         //TODO:Admin servlet
-        InternalServlet admin=new Admin();
+        InternalServlet admin = new Admin();
         intServlets.put("wbadmin", admin);
         intServlets.put("swbadmin", admin);
         admin.init(filterConfig.getServletContext());
-        log.event("SemanticWebBuilder started...");        
+        log.event("SemanticWebBuilder started...");
         log.event("************************************");
-        
-        
+
+
     }
-    
+
     /**
      * Return a String representation of this object.
      */
     public String toString()
     {
-        
-        if (filterConfig == null) return ("VirtualHostFilter()");
+
+        if (filterConfig == null)
+        {
+            return ("VirtualHostFilter()");
+        }
         StringBuffer sb = new StringBuffer("VirtualHostFilter(");
         sb.append(filterConfig);
         sb.append(")");
         return (sb.toString());
-        
+
     }
-    
+
     private boolean validateDB(HttpServletResponse response) throws IOException
     {
-        boolean ret=true;
-        if(!SWBPlatform.haveDB())
+        boolean ret = true;
+        if (!SWBPlatform.haveDB())
         {
             log.debug("SendError 500: Default SemanticWebBuilder database not found...");
             response.sendError(500, "Default WebBuilder database not found...");
-            ret=false;
+            ret = false;
         }
-        if(!SWBPlatform.haveDBTables())
+        if (!SWBPlatform.haveDBTables())
         {
             log.debug("SendError 500: Default SemanticWebBuilder database tables not found...");
             response.sendError(500, "Default WebBuilder database tables not found...");
-            ret=false;
-        }       
+            ret = false;
+        }
         return ret;
     }
-    
 
+    public void processError(int err, String errMsg, HttpServletResponse response)
+            throws ServletException, IOException
+    {
+        log.debug("SendError " + err + ": " + errMsg);
+        String path = "/config/" + err + ".html";
+        String msg = null;
+        try
+        {
+            //msg = WBUtils.getInstance().getFileFromWorkPath2(path);
+            msg = SWBUtils.IO.getFileFromPath(SWBUtils.getApplicationPath() + "/work/" + path);
+            //msg = WBUtils.getInstance().parseHTML(msg, WBUtils.getInstance().getWebWorkPath() + "/config/images/");
+            msg = SWBPortal.UTIL.parseHTML(msg, SWBPlatform.getWebWorkPath() + "/config/images/");
+        } catch (Exception e)
+        {
+            log.error("Error lo load error message...", e);
+        }
+        response.setStatus(err);
+        response.setContentType("text/html");
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Cache-Control", "no-cache");
+        PrintWriter out = response.getWriter();
+        out.println(msg);
+        out.close();
+    }
 }
