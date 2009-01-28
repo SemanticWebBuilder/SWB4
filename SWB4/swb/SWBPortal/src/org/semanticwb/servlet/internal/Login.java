@@ -7,6 +7,7 @@ package org.semanticwb.servlet.internal;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Constructor;
+import java.util.Iterator;
 import javax.security.auth.Subject;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.LoginContext;
@@ -19,6 +20,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
 import org.semanticwb.security.auth.SWB4CallbackHandler;
 
@@ -33,10 +35,15 @@ public class Login implements InternalServlet {
     private static String CALLBACK = "swb4-callback";
     private static String _realm = "Semantic Web Builder";
     private String _name = "login";
+    private boolean handleError = false;
     //Constantes para primer implementación
     public void init(ServletContext config) {
         log.event("Initializing InternalServlet Login...");
     //TODO: preparar los aspectos configurables de la autenticación
+    }
+
+    public void setHandleError(boolean handleError){
+        this.handleError=handleError;
     }
 
     public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException {
@@ -53,6 +60,9 @@ public class Login implements InternalServlet {
         String enAuto = (String) session.getAttribute(VALSESS);
         String uri = request.getRequestURI();
         String path = SWBPlatform.getContextPath();
+        User user = null;
+        Iterator it=subject.getPrincipals().iterator();
+        if(it.hasNext()) user = (User)it.next();
         if (request.getParameter("_wb_logout") != null)
         {
             LoginContext lc;
@@ -79,64 +89,65 @@ public class Login implements InternalServlet {
         {
             path = uri.replaceFirst(_name, SWBPlatform.getEnv("swb/distributor"));
         }
-        CallbackHandler callbackHandler = (CallbackHandler) session.getAttribute(CALLBACK);
-        if (null == callbackHandler)
-        {
-            try
+        if (handleError ||user==null || !user.isSigned()){
+            CallbackHandler callbackHandler = (CallbackHandler) session.getAttribute(CALLBACK);
+            if (null == callbackHandler)
             {
-                log.debug("New callbackHandler...");
-                Constructor[] constructor =  Class.forName(CBHClassName).getConstructors();
-                int method = 0;
-                for (int i=0; i<constructor.length; i++)
+                try
                 {
-                    if (constructor[i].getParameterTypes().length==4) method = i;
+                    log.debug("New callbackHandler...");
+                    Constructor[] constructor =  Class.forName(CBHClassName).getConstructors();
+                    int method = 0;
+                    for (int i=0; i<constructor.length; i++)
+                    {
+                        if (constructor[i].getParameterTypes().length==4) method = i;
+                    }
+                    callbackHandler = (CallbackHandler) constructor[method].newInstance(request, response, authMethod, dparams);
+                    //callbackHandler = new SWB4CallbackHandlerLoginPasswordImp(request, response, authMethod, dparams); //TODO proveer otros métodos
+                    session.setAttribute(CALLBACK, callbackHandler);
+                } catch (Exception ex)
+                {
+                    log.error("Can't Instanciate a CallBackHandler for UserRepository "+ur.getId(), ex);
+                    response.sendError(500, "Authentication System failure!!!");
+                    return;
                 }
-                callbackHandler = (CallbackHandler) constructor[method].newInstance(request, response, authMethod, dparams);
-                //callbackHandler = new SWB4CallbackHandlerLoginPasswordImp(request, response, authMethod, dparams); //TODO proveer otros métodos
-                session.setAttribute(CALLBACK, callbackHandler);
-            } catch (Exception ex)
+            } else
             {
-                log.error("Can't Instanciate a CallBackHandler for UserRepository "+ur.getId(), ex);
-                response.sendError(500, "Authentication System failure!!!");
+                if (null == request.getParameter("_wb_username")){
+                log.debug("Request a new username...");
+                doResponse(request, response, dparams, null, authMethod);
+                session.setAttribute(VALSESS, "Working");
+                return;
+                }
+                ((SWB4CallbackHandler) callbackHandler).setRequest(request);
+                ((SWB4CallbackHandler) callbackHandler).setResponse(response);
+            }
+            if (null == enAuto)
+            {
+                log.debug("Starts new Authentication process...");
+                doResponse(request, response, dparams, null, authMethod);
+                session.setAttribute(VALSESS, "Working");
                 return;
             }
-        } else
-        {
-            if (null == request.getParameter("_wb_username")){
-            log.debug("Request a new username...");
-            doResponse(request, response, dparams, null, authMethod);
-            session.setAttribute(VALSESS, "Working");
-            return;
+            LoginContext lc;
+            try
+            {
+                request.getSession(true).invalidate();
+                subject = SWBPortal.getUserMgr().getSubject(request);
+                lc = new LoginContext(context, subject, callbackHandler);
+                lc.login();
+            // session.removeAttribute(VALSESS);
+            // session.removeAttribute(CALLBACK);
+             //   System.out.println(subject.toString());
+             //   System.out.println(lc.getSubject().toString());
+             //   System.out.println(((User)lc.getSubject().getPrincipals().iterator().next()).isSigned());
+            } catch (LoginException ex)
+            {
+                log.error("Can't log User", ex);
+                doResponse(request, response, dparams, "User non existent", authMethod);
+                return;
             }
-            ((SWB4CallbackHandler) callbackHandler).setRequest(request);
-            ((SWB4CallbackHandler) callbackHandler).setResponse(response);
         }
-        if (null == enAuto)
-        {
-            log.debug("Starts new Authentication process...");
-            doResponse(request, response, dparams, null, authMethod);
-            session.setAttribute(VALSESS, "Working");
-            return;
-        }
-        LoginContext lc;
-        try
-        {
-            request.getSession(true).invalidate();
-            subject = SWBPortal.getUserMgr().getSubject(request);
-            lc = new LoginContext(context, subject, callbackHandler);
-            lc.login();
-        // session.removeAttribute(VALSESS);
-        // session.removeAttribute(CALLBACK);
-         //   System.out.println(subject.toString());
-         //   System.out.println(lc.getSubject().toString());
-         //   System.out.println(((User)lc.getSubject().getPrincipals().iterator().next()).isSigned());
-        } catch (LoginException ex)
-        {
-            log.error("Can't log User", ex);
-            doResponse(request, response, dparams, "User non existent", authMethod);
-            return;
-        }
-
         String url = request.getParameter("_wb_goto");
         if ((url == null || url.equals("/")))
         {
@@ -172,15 +183,11 @@ public class Login implements InternalServlet {
     private void formChallenge(HttpServletRequest request, HttpServletResponse response, DistributorParams distributorParams, String alert) throws IOException {
         String ruta = "/config/";
         //TODO: Obtener objetivo del siguiente código
-        /*if (request.getParameter("err") != null) {
-        if (user.isRegistered()) {
-        ruta += request.getParameter("err");
+        if (handleError) {
+        ruta += "403";
         } else {
-        ruta += "login";
+         ruta += "login";
         }
-        } else {
-        */ ruta += "login";
-        //}
 
 
 
@@ -211,7 +218,7 @@ public class Login implements InternalServlet {
             log.error("Error to load login page...", e);
         }
 
-        if (request.getParameter("err") != null)
+        if (handleError)
         {
             response.setStatus(403);
         }
