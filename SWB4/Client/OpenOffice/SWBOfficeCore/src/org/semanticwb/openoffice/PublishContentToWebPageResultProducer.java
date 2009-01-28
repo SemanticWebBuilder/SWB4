@@ -15,6 +15,7 @@ import org.semanticwb.office.interfaces.WebPageInfo;
 import org.semanticwb.openoffice.interfaces.IOpenOfficeDocument;
 import org.semanticwb.openoffice.ui.wizard.PublishVersion;
 import org.semanticwb.openoffice.ui.wizard.SelectPage;
+import org.semanticwb.openoffice.ui.wizard.TitleAndDescription;
 
 /**
  *
@@ -22,16 +23,28 @@ import org.semanticwb.openoffice.ui.wizard.SelectPage;
  */
 public class PublishContentToWebPageResultProducer implements WizardResultProducer{
 
-    private String contentID,repositoryName;
+    private String contentID,repositoryName,title,description;
     public PublishContentToWebPageResultProducer(String contentID,String repositoryName)
     {
         this.contentID=contentID;
         this.repositoryName=repositoryName;
     }
+    public PublishContentToWebPageResultProducer(String contentID,String repositoryName,String title,String description)
+    {
+        this(contentID, repositoryName);
+        this.title=title;
+        this.description=description;
+    }
+
 
     class BackgroundResultCreator extends DeferredWizardResult
     {
-
+        String title, description;
+        public BackgroundResultCreator(String title,String description)
+        {
+            this.title=title;
+            this.description=description;
+        }
         public void start(Map wizardData, ResultProgressHandle progress)
         {
             assert !EventQueue.isDispatchThread();
@@ -42,20 +55,25 @@ public class PublishContentToWebPageResultProducer implements WizardResultProduc
                 WebPageInfo webpage= new WebPageInfo();
                 webpage.id=page.getID();
                 webpage.siteID=page.getSite();
-                String version=wizardData.get(PublishVersion.VERSION).toString();
-                openOfficeDocument.publishToPortletContent(repositoryName, contentID, version, "Demo", "Demo", webpage);
+                String version=wizardData.get(PublishVersion.VERSION).toString();                
+                openOfficeDocument.publishToPortletContent(repositoryName, contentID, version, title, description, webpage);
                 progress.finished(null);
             }
             catch(Exception e)
             {
-                
+                e.printStackTrace();
             }
 
         }
     }
-    public Object finish(Map arg0) throws WizardException
+    public Object finish(Map map) throws WizardException
     {
-        return new BackgroundResultCreator();
+        if(title==null || description==null)
+        {
+            title=map.get(TitleAndDescription.TITLE).toString();
+            description=map.get(TitleAndDescription.DESCRIPTION).toString();
+        }
+        return new BackgroundResultCreator(title,description);
     }
 
     public boolean cancel(Map arg0)
