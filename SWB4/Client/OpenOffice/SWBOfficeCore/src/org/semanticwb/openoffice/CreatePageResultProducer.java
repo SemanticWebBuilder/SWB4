@@ -6,6 +6,7 @@ package org.semanticwb.openoffice;
 
 import java.awt.EventQueue;
 import java.util.Map;
+import javax.swing.JOptionPane;
 import org.netbeans.spi.wizard.DeferredWizardResult;
 import org.netbeans.spi.wizard.ResultProgressHandle;
 import org.netbeans.spi.wizard.WizardException;
@@ -34,7 +35,7 @@ public class CreatePageResultProducer implements WizardResultProducer
 
     }
 
-    public Object finish(Map arg0) throws WizardException
+    public Object finish(Map map) throws WizardException
     {
         return new BackgroundResultCreator();
     }
@@ -53,17 +54,23 @@ public class CreatePageResultProducer implements WizardResultProducer
                 String description = wizardData.get(TitleAndDescription.DESCRIPTION).toString();
                 if(parent==null)
                 {
-                    parent=(WebPageInfo)wizardData.get(SelectPage.WEBPAGE);
+                    SelectPage.WebPage pageSelected=(SelectPage.WebPage)wizardData.get(SelectPage.WEBPAGE);
+                    parent=new WebPageInfo();
+                    parent.siteID=pageSelected.getSite();
+                    parent.id=pageSelected.getID();
                 }
                 openOfficeApplication.createPage(parent, pageid, title, description);
+                JOptionPane.showMessageDialog(null,"¡Se ha creado la página "+ title +"!" ,"Asistente de creación de página",JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+                progress.finished(null);
             }
             catch (Exception e)
             {
+                e.printStackTrace();
             }
         }
     }
 
-    public boolean cancel(Map arg0)
+    public boolean cancel(Map map)
     {
         return true;
     }
