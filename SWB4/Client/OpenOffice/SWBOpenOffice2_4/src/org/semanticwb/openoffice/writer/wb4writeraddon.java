@@ -286,7 +286,7 @@ public final class wb4writeraddon extends WeakBase
                 }
                 if (aURL.Path.compareTo("createSection") == 0)
                 {
-                    // add your own code here
+                    WB4WriterApplication.createPage();
                     return;
                 }
                 if (aURL.Path.compareTo("changePassword") == 0)
