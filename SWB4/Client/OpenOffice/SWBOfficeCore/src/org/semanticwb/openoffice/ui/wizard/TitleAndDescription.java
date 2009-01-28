@@ -26,6 +26,13 @@ public class TitleAndDescription extends WizardPage
     public static final String NODE_TYPE = "NODE_TYPE";
 
     /** Creates new form TitleAndDescription */
+    public TitleAndDescription(boolean showTypeOfcontent)
+    {
+        this();
+        this.jComboBoxType.setVisible(showTypeOfcontent);
+        this.jLabelType.setVisible(showTypeOfcontent);
+
+    }
     public TitleAndDescription()
     {  
         initComponents();                
