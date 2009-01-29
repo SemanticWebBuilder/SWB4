@@ -122,19 +122,26 @@ public class SWBAVersionInfo extends GenericResource {
                         }
                     }
                     out.println("</tbody>");
-                    out.println("<tfoot>");
-                    out.println("<tr>");
-                    out.println("<td colspan=\"3\">");
+//                    out.println("<tfoot>");
+//                    out.println("<tr>");
+//                    out.println("<td colspan=\"3\">");
+//                    SWBResourceURL urlNew = paramRequest.getRenderUrl();
+//                    urlNew.setParameter("suri", id);
+//                    urlNew.setParameter("act","newversion");
+//                    urlNew.setMode(SWBResourceURL.Mode_EDIT);
+//                    out.println("<p><a href=\"#\" onclick=\"submitUrl('" + urlNew + "',this); return false;\">Add New</a>");
+//                    out.println("</p>");
+//                    out.println("</td>");
+//                    out.println("</tr>");
+//                    out.println("</tfoot>");
+                    out.println("</table>");
+                    out.println("</fieldset>");
+                    out.println("<fieldset>");
                     SWBResourceURL urlNew = paramRequest.getRenderUrl();
                     urlNew.setParameter("suri", id);
                     urlNew.setParameter("act","newversion");
                     urlNew.setMode(SWBResourceURL.Mode_EDIT);
-                    out.println("<p><a href=\"#\" onclick=\"submitUrl('" + urlNew + "',this); return false;\">Add New</a>");
-                    out.println("</p>");
-                    out.println("</td>");
-                    out.println("</tr>");
-                    out.println("</tfoot>");
-                    out.println("</table>");
+                    out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlNew + "',this.domNode); return false;\">" + paramRequest.getLocaleString("btn_addnew") + "</button>");
                     out.println("</fieldset>");
                     out.println("</div>");
                 }
