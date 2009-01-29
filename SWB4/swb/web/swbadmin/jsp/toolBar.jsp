@@ -45,7 +45,7 @@
         <script type="dojo/method" event="onClick">
         </script>
         <span><%=child.getDisplayName(lang)%></span>
-        <div dojoType="dijit.Menu">
+        <div dojoType="dijit.Menu" onOpen="hideApplet(true);" onClose="hideApplet(false);">
 <%      addChild(child,out);%>
         </div>
     </div>

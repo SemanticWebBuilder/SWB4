@@ -228,7 +228,7 @@
               try
               {
                 //dojo.fadeOut({node: formid, duration: 1000}).play();
-                dojo.fx.wipeOut({node: formid, duration: 1000}).play();
+                dojo.fx.wipeOut({node: formid, duration: 500}).play();
               }catch(noe){}
 
               try {
@@ -636,7 +636,7 @@
 
      var ini=-30;
      var sy=ini;
-     var si=5;
+     var si=10;
      function scroll()
      {
         var t=30;
@@ -644,7 +644,7 @@
         if(sy>0)
         {
             si=-2;
-            t=5000;
+            t=3000;
         }
         sy+=si;
         ele.style.bottom=sy+'px';
@@ -876,4 +876,10 @@ function replaceChars4Id(value)
    {
        var sizze='width=600, height=550, scrollbars, resizable, alwaysRaised, menubar';
        window.open(url,"RepWindow",sizze);
+   }
+
+   function hideApplet(flag)
+   {
+       if(flag)dojo.query(".applet", "main").style('visibility', 'hidden');
+       else dojo.query(".applet", "main").style('visibility', 'visible');
    }

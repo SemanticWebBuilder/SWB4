@@ -14,7 +14,7 @@
 %>
 <%@page contentType="text/html" pageEncoding="ISO-8859-1"%>
 <!-- menu -->
-<ul dojoType="dijit.Menu" id="<%=menu%>" style="display: none;"></ul>
+<ul dojoType="dijit.Menu" id="<%=menu%>" style="display: none;" onOpen="hideApplet(true);" onClose="hideApplet(false);"></ul>
 <!-- data for tree and combobox -->
 <div dojoType="dojo.data.ItemFileWriteStore" jsId="<%=store%>" url="/swb/swbadmin/jsp/Tree.jsp?id=<%=id%>"></div>
 <!-- div dojoType="dijit.tree.ForestStoreModel" jsId="<%=model%>" store="<%=store%>" query_="{id: '0'}"></div -->
