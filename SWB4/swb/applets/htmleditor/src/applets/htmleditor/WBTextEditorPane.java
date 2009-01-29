@@ -31,6 +31,7 @@
 
 package applets.htmleditor;
 
+import java.applet.Applet;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.text.*;
@@ -40,12 +41,14 @@ import java.util.*;
 import java.util.regex.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.net.URL;
+import netscape.javascript.JSObject;
 
 /**
  *
  * @author Javier Solis Gonzalez
  */
-public class WBTextEditorPane extends JTextPane implements CaretListener, KeyListener
+public class WBTextEditorPane extends JTextPane implements CaretListener, KeyListener, MouseListener, MouseMotionListener
 {
     private Style STYLE_HTMLTAG;
     private Style STYLE_HTMLATT;
@@ -69,7 +72,9 @@ public class WBTextEditorPane extends JTextPane implements CaretListener, KeyLis
     private ArrayList resarr=new ArrayList();    
     
     private Cursor waitCursor = Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR);
-    
+
+    Applet applet=null;
+
     /** Creates a new instance of WBTextEditorPane */
     public WBTextEditorPane()
     {
@@ -79,6 +84,8 @@ public class WBTextEditorPane extends JTextPane implements CaretListener, KeyLis
         setStyle();
         addKeyListener(this);
         addCaretListener(this);
+        addMouseListener(this);
+        addMouseMotionListener(this);
         
         /* Set up the undo features */
         undoMngr = new UndoManager();
@@ -115,6 +122,14 @@ public class WBTextEditorPane extends JTextPane implements CaretListener, KeyLis
         resarr.add("request/");
         resarr.add("response/");
         resarr.add("include/");
+    }
+
+    public Applet getApplet() {
+        return applet;
+    }
+
+    public void setApplet(Applet applet) {
+        this.applet = applet;
     }
     
     public void setStyle()
@@ -225,6 +240,7 @@ public class WBTextEditorPane extends JTextPane implements CaretListener, KeyLis
      *
      * @see setSize
      */
+    @Override
     public boolean getScrollableTracksViewportWidth()
     {
         return false;
@@ -324,7 +340,7 @@ public class WBTextEditorPane extends JTextPane implements CaretListener, KeyLis
             }
         }catch(Exception ex){System.out.println(ex);}        
     }
-    
+
     public void keyPressed(KeyEvent e)
     {
         oldPos=getCaretPosition();
@@ -362,7 +378,42 @@ public class WBTextEditorPane extends JTextPane implements CaretListener, KeyLis
          **/
         //updateSyntax();
     }
-    
+
+    public void mouseClicked(MouseEvent e) {
+        //System.out.println("mouseClicked:"+e);
+    }
+
+    public void mousePressed(MouseEvent e) {
+        //System.out.println("mousePressed:"+e);
+    }
+
+    public void mouseReleased(MouseEvent e) {
+        //System.out.println("mouseReleased:"+e);
+    }
+
+    public void mouseEntered(MouseEvent e) {
+        System.out.println("mouseEntered:"+e.getModifiersEx()+" "+e.BUTTON1);
+        try
+        {
+            if(e.getModifiersEx()>0)
+            JSObject.getWindow(applet).eval("alert('netscape')");
+            //applet.getAppletContext().showDocument(new URL("javascript:alert(\"hola\")"));
+        }catch(Exception ex){ex.printStackTrace();}
+
+    }
+
+    public void mouseExited(MouseEvent e) {
+        //System.out.println("mouseExited:"+e);
+    }
+
+    public void mouseDragged(MouseEvent e) {
+        //System.out.println("mouseDragged:"+e);
+    }
+
+    public void mouseMoved(MouseEvent e) {
+        //System.out.println("mouseMoved:"+e);
+    }
+
     /**
      * StyleUpdater does the actual syntax highlighting work
      * and can be used in SwingUtilities.invokeLater()

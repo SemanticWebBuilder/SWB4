@@ -175,6 +175,7 @@ public class WBHtmlEditorPane  extends JTextPane implements CaretListener, Actio
      */
     protected InputStream getStreamAndSetURL(URL page) throws IOException {
 	URLConnection conn = page.openConnection();
+    conn.setUseCaches(false);
 	if (conn instanceof HttpURLConnection) {
 	    HttpURLConnection hconn = (HttpURLConnection) conn;
 	    hconn.setInstanceFollowRedirects(false);
@@ -185,15 +186,15 @@ public class WBHtmlEditorPane  extends JTextPane implements CaretListener, Actio
 	     * In the case of a redirect, we want to actually change the URL
 	     * that was input to the new, redirected URL
 	     */
-	    if (redirect) {
-		String loc = conn.getHeaderField("Location");
-		if (loc.startsWith("http", 0)) {
-		    page = new URL(loc);
-		} else {
-		    page = new URL(page, loc);
-		}
-		return getStream(page);
-	    }
+        if (redirect) {
+            String loc = conn.getHeaderField("Location");
+            if (loc.startsWith("http", 0)) {
+                page = new URL(loc);
+            } else {
+                page = new URL(page, loc);
+            }
+            return getStream(page);
+        }
 	}
 	String type = conn.getContentType();
 	if (type != null) {
@@ -264,7 +265,7 @@ public class WBHtmlEditorPane  extends JTextPane implements CaretListener, Actio
     public void keyReleased(KeyEvent e)
     {
     }
-    
+
     public void keyTyped(KeyEvent e)
     {
         /*
