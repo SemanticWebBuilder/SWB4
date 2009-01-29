@@ -309,8 +309,14 @@ _form.swbform fieldset li {
     position:absolute;
     right:0px;
     font-weight:bold;
-    z-index:999;
+    z-index:auto;
 }
+
+.applet{
+    visibility:visible;
+    z-index:10000
+}
+
 
 /************* Version 3 ****************/
 

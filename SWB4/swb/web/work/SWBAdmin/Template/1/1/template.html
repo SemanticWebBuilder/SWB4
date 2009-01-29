@@ -155,7 +155,7 @@
             </div> <!-- end of "mainSplit" BorderContainer -->
         </div><!-- end of "main" BorderContainer -->
         <!-- dialog -->
-        <div dojoType="dijit.Dialog" style="display:none;" id="swbDialog" title="Agregar">
+        <div dojoType="dijit.Dialog" style="display:none;" id="swbDialog" title="Agregar" onFocus="hideApplet(true);" onBlur="if(!this.open)hideApplet(false);" >
             <div dojoType="dojox.layout.ContentPane" id="swbDialogImp" executeScripts="true">
                 Cargando...
             </div>
