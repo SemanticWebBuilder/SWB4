@@ -1,7 +1,7 @@
 package org.semanticwb.portlet.office.base;
 
 
-public class ExcelPortletBase extends org.semanticwb.portlet.office.OfficePortlet 
+public class ExcelPortletBase extends org.semanticwb.portlet.office.OfficePortlet implements org.semanticwb.model.RoleRefable,org.semanticwb.model.Priorityable,org.semanticwb.model.Referensable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.Hitable,org.semanticwb.model.Localeable,org.semanticwb.model.Calendarable,org.semanticwb.model.XMLConfable,org.semanticwb.model.Indexable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Viewable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.XMLable,org.semanticwb.model.Deleteable,org.semanticwb.model.Versionable
 {
     public static final org.semanticwb.platform.SemanticClass swbrep_ExcelPortlet=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/repository#ExcelPortlet");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/repository#ExcelPortlet");

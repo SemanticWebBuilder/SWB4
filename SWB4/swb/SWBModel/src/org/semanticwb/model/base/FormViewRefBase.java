@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class FormViewRefBase extends org.semanticwb.model.Reference 
+public class FormViewRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.Activeable
 {
     public static final org.semanticwb.platform.SemanticClass swbxf_FormView=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#FormView");
     public static final org.semanticwb.platform.SemanticProperty swb_formView=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#formView");
