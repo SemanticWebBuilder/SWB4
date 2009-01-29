@@ -70,23 +70,33 @@ public class UserRepository extends UserRepositoryBase
         prolog += "PREFIX rdfs: <" + SemanticVocabulary.RDFS_URI + ">\n";
 
 
-        String _usrFirstName = usrFirstName!=null?usrFirstName:"";
-        String _usrLastName = usrLastName!=null?usrLastName:"";
-        String _usrSecondLastName = usrSecondLastName!=null?usrSecondLastName:"";
-        String _usrEmail = usrEmail!=null?usrEmail:"";
-        String _Role = Role!=null?Role:null;
-        String _Group = Group!=null?Group:null;
+        String _usrFirstName = usrFirstName != null ? usrFirstName : "";
+        String _usrLastName = usrLastName != null ? usrLastName : "";
+        String _usrSecondLastName = usrSecondLastName != null ? usrSecondLastName : "";
+        String _usrEmail = usrEmail != null ? usrEmail : "";
+        String _Role = Role != null ? Role : null;
+        String _Group = Group != null ? Group : null;
 
-        if (null!=_Role){
-            if (hasRole(_Role)){
+        if (null != _Role)
+        {
+            if (hasRole(_Role))
+            {
                 _Role = getRole(_Role).getURI();
-            } else _Role = null;
+            } else
+            {
+                _Role = null;
+            }
         }
 
-        if (null!=_Group){
-            if (hasUserGroup(_Group)){
+        if (null != _Group)
+        {
+            if (hasUserGroup(_Group))
+            {
                 _Group = getUserGroup(_Group).getURI();
-            } else _Group = null;
+            } else
+            {
+                _Group = null;
+            }
         }
 
 
@@ -97,29 +107,50 @@ public class UserRepository extends UserRepositoryBase
                 "SELECT \n?x \nWHERE { \n?x rdf:type swb:User. \n";
 //                        "SELECT \n?x ?fname ?lname ?slname ?mail ?login \nWHERE { \n?x rdf:type swb:User. \n";
 //        queryString += "?x swb:usrLogin ?login. \n";
-        if (null!=_Role)     queryString +=   "?x swb:hasRole <"+_Role+">.\n" ;
-        if (null!=_Group)     queryString +=   "?x swb:userGroup <"+_Group+">.\n" ;
-        if (null!=Active) queryString+= "?x swb:active "+Active+"\n";
-        if (!"".equals(_usrFirstName))     queryString +=   "?x swb:usrFirstName ?gfn .   FILTER regex(?gfn, \""+_usrFirstName+"\", \"i\"). \n" ;
-        if (!"".equals(_usrLastName))     queryString +=   "?x swb:usrLastName ?gln.   FILTER regex(?gln, \""+_usrLastName+"\", \"i\"). \n" ;
-        if (!"".equals(_usrSecondLastName))     queryString +=   "?x swb:usrSecondLastName ?gsln.   FILTER regex(?gsln, \""+_usrSecondLastName+"\", \"i\"). \n" ;
-        if (!"".equals(_usrEmail))     queryString +=   "?x swb:usrEmail ?gml.   FILTER regex(?gml, \""+_usrEmail+"\", \"i\"). \n" ;
-             queryString += 
-//                     "OPTIONAL{\n ?x swb:usrFirstName ?fname. \n}\n" +
-//                     "OPTIONAL{\n  ?x swb:usrLastName ?lname. \n}\n" +
-               
-//                "OPTIONAL{\n?x swb:usrSecondLastName ?slname. \n}\n" +
-//                "OPTIONAL{\n?x swb:usrEmail ?mail. \n}\n" +
-                
+        if (null != _Role)
+        {
+            queryString += "?x swb:hasRole <" + _Role + ">.\n";
+        }
+        if (null != _Group)
+        {
+            queryString += "?x swb:userGroup <" + _Group + ">.\n";
+        }
+        if (null != Active)
+        {
+            queryString += "?x swb:active " + Active + "\n";
+        }
+        if (!"".equals(_usrFirstName))
+        {
+            queryString += "?x swb:usrFirstName ?gfn .   FILTER regex(?gfn, \"" + _usrFirstName + "\", \"i\"). \n";
+        }
+        if (!"".equals(_usrLastName))
+        {
+            queryString += "?x swb:usrLastName ?gln.   FILTER regex(?gln, \"" + _usrLastName + "\", \"i\"). \n";
+        }
+        if (!"".equals(_usrSecondLastName))
+        {
+            queryString += "?x swb:usrSecondLastName ?gsln.   FILTER regex(?gsln, \"" + _usrSecondLastName + "\", \"i\"). \n";
+        }
+        if (!"".equals(_usrEmail))
+        {
+            queryString += "?x swb:usrEmail ?gml.   FILTER regex(?gml, \"" + _usrEmail + "\", \"i\"). \n";
+        }
+        queryString +=
+                //                     "OPTIONAL{\n ?x swb:usrFirstName ?fname. \n}\n" +
+                //                     "OPTIONAL{\n  ?x swb:usrLastName ?lname. \n}\n" +
+
+                //                "OPTIONAL{\n?x swb:usrSecondLastName ?slname. \n}\n" +
+                //                "OPTIONAL{\n?x swb:usrEmail ?mail. \n}\n" +
+
                 "}";
 
-            //    System.out.println(queryString);
+        //    System.out.println(queryString);
         Query query = QueryFactory.create(queryString);
 
-       // System.out.println(getId());
+        // System.out.println(getId());
         // Print with line numbers
-       // query.serialize(new IndentedWriter(System.out,true)) ;
-       // System.out.println() ;
+        // query.serialize(new IndentedWriter(System.out,true)) ;
+        // System.out.println() ;
 
         QueryExecution qexec = QueryExecutionFactory.create(query, model);
         try
@@ -130,12 +161,12 @@ public class UserRepository extends UserRepositoryBase
             {
                 QuerySolution rb = rs.nextSolution();
                 String current = rb.get("x").toString();
-                        /*+ "||" +
-                        (null==rb.get("fname")?"":rb.get("fname")) + "||" +
-                        (null==rb.get("lname")?"":rb.get("lname")) + "||" +
-                        (null==rb.get("slname")?"":rb.get("slname")) + "||" +
-                        (null==rb.get("mail")?"":rb.get("mail")) + "||" +
-                        (null==rb.get("login")?"":rb.get("login"));*/
+                /*+ "||" +
+                (null==rb.get("fname")?"":rb.get("fname")) + "||" +
+                (null==rb.get("lname")?"":rb.get("lname")) + "||" +
+                (null==rb.get("slname")?"":rb.get("slname")) + "||" +
+                (null==rb.get("mail")?"":rb.get("mail")) + "||" +
+                (null==rb.get("login")?"":rb.get("login"));*/
                 lista.add(current);
 
             }
@@ -182,8 +213,11 @@ public class UserRepository extends UserRepositoryBase
         {
             sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, cls, SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_INT);
             SemanticObject dp = sp.getDisplayProperty();
-            if (dp==null) dp =  getSemanticObject().getModel().createSemanticObject("swbxff_i_"+name, DisplayProperty.swbxf_DisplayProperty);
-            DisplayProperty dobj=new DisplayProperty(dp);
+            if (dp == null)
+            {
+                dp = getSemanticObject().getModel().createSemanticObject("swbxff_i_" + name, DisplayProperty.swbxf_DisplayProperty);
+            }
+            DisplayProperty dobj = new DisplayProperty(dp);
             Statement stmt = getSemanticObject().getModel().getRDFModel().createStatement(getSemanticObject().getModel().getRDFModel().getResource(sp.getURI()),
                     SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYPROPERTY),
                     dobj.getSemanticObject().getRDFName());
@@ -205,8 +239,11 @@ public class UserRepository extends UserRepositoryBase
         {
             sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, cls, SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_LONG);
             SemanticObject dp = sp.getDisplayProperty();
-            if (dp==null) dp =  getSemanticObject().getModel().createSemanticObject("swbxff_l_"+name, DisplayProperty.swbxf_DisplayProperty);
-            DisplayProperty dobj=new DisplayProperty(dp);
+            if (dp == null)
+            {
+                dp = getSemanticObject().getModel().createSemanticObject("swbxff_l_" + name, DisplayProperty.swbxf_DisplayProperty);
+            }
+            DisplayProperty dobj = new DisplayProperty(dp);
             Statement stmt = getSemanticObject().getModel().getRDFModel().createStatement(getSemanticObject().getModel().getRDFModel().getResource(sp.getURI()),
                     SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYPROPERTY),
                     dobj.getSemanticObject().getRDFName());
@@ -228,8 +265,11 @@ public class UserRepository extends UserRepositoryBase
         {
             sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, cls, SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_BOOLEAN);
             SemanticObject dp = sp.getDisplayProperty();
-            if (dp==null) dp =  getSemanticObject().getModel().createSemanticObject("swbxff_b_"+name, DisplayProperty.swbxf_DisplayProperty);
-            DisplayProperty dobj=new DisplayProperty(dp);
+            if (dp == null)
+            {
+                dp = getSemanticObject().getModel().createSemanticObject("swbxff_b_" + name, DisplayProperty.swbxf_DisplayProperty);
+            }
+            DisplayProperty dobj = new DisplayProperty(dp);
             Statement stmt = getSemanticObject().getModel().getRDFModel().createStatement(getSemanticObject().getModel().getRDFModel().getResource(sp.getURI()),
                     SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYPROPERTY),
                     dobj.getSemanticObject().getRDFName());
@@ -251,8 +291,11 @@ public class UserRepository extends UserRepositoryBase
         {
             sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, cls, SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_DATETIME);
             SemanticObject dp = sp.getDisplayProperty();
-            if (dp==null) dp =  getSemanticObject().getModel().createSemanticObject("swbxff_t_"+name, DisplayProperty.swbxf_DisplayProperty);
-            DisplayProperty dobj=new DisplayProperty(dp);
+            if (dp == null)
+            {
+                dp = getSemanticObject().getModel().createSemanticObject("swbxff_t_" + name, DisplayProperty.swbxf_DisplayProperty);
+            }
+            DisplayProperty dobj = new DisplayProperty(dp);
             Statement stmt = getSemanticObject().getModel().getRDFModel().createStatement(getSemanticObject().getModel().getRDFModel().getResource(sp.getURI()),
                     SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYPROPERTY),
                     dobj.getSemanticObject().getRDFName());
@@ -274,8 +317,11 @@ public class UserRepository extends UserRepositoryBase
         {
             sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, cls, SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_DOUBLE);
             SemanticObject dp = sp.getDisplayProperty();
-            if (dp==null) dp =  getSemanticObject().getModel().createSemanticObject("swbxff_d_"+name, DisplayProperty.swbxf_DisplayProperty);
-            DisplayProperty dobj=new DisplayProperty(dp);
+            if (dp == null)
+            {
+                dp = getSemanticObject().getModel().createSemanticObject("swbxff_d_" + name, DisplayProperty.swbxf_DisplayProperty);
+            }
+            DisplayProperty dobj = new DisplayProperty(dp);
             Statement stmt = getSemanticObject().getModel().getRDFModel().createStatement(getSemanticObject().getModel().getRDFModel().getResource(sp.getURI()),
                     SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYPROPERTY),
                     dobj.getSemanticObject().getRDFName());
@@ -297,8 +343,11 @@ public class UserRepository extends UserRepositoryBase
         {
             sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, cls, SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_FLOAT);
             SemanticObject dp = sp.getDisplayProperty();
-            if (dp==null) dp =  getSemanticObject().getModel().createSemanticObject("swbxff_f_"+name, DisplayProperty.swbxf_DisplayProperty);
-            DisplayProperty dobj=new DisplayProperty(dp);
+            if (dp == null)
+            {
+                dp = getSemanticObject().getModel().createSemanticObject("swbxff_f_" + name, DisplayProperty.swbxf_DisplayProperty);
+            }
+            DisplayProperty dobj = new DisplayProperty(dp);
             Statement stmt = getSemanticObject().getModel().getRDFModel().createStatement(getSemanticObject().getModel().getRDFModel().getResource(sp.getURI()),
                     SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYPROPERTY),
                     dobj.getSemanticObject().getRDFName());
@@ -320,8 +369,11 @@ public class UserRepository extends UserRepositoryBase
         {
             sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, cls, SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_STRING);
             SemanticObject dp = sp.getDisplayProperty();
-            if (dp==null) dp =  getSemanticObject().getModel().createSemanticObject("swbxff_s_"+name, DisplayProperty.swbxf_DisplayProperty);
-            DisplayProperty dobj=new DisplayProperty(dp);
+            if (dp == null)
+            {
+                dp = getSemanticObject().getModel().createSemanticObject("swbxff_s_" + name, DisplayProperty.swbxf_DisplayProperty);
+            }
+            DisplayProperty dobj = new DisplayProperty(dp);
             Statement stmt = getSemanticObject().getModel().getRDFModel().createStatement(getSemanticObject().getModel().getRDFModel().getResource(sp.getURI()),
                     SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYPROPERTY),
                     dobj.getSemanticObject().getRDFName());
@@ -334,7 +386,7 @@ public class UserRepository extends UserRepositoryBase
     {
         return createListExtendedAttribute(name, null, values);
     }
-    
+
     public SemanticProperty createListExtendedAttribute(String name, String clsName, String[] values)//values= [value:label|value:label{@lang}]
     {
         SemanticClass cls = (null == clsName) ? getExtendedAttributesClass() : getUserType(clsName);
@@ -343,28 +395,32 @@ public class UserRepository extends UserRepositoryBase
         {
             sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, cls, SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_STRING);
             SemanticObject dp = sp.getDisplayProperty();
-            if (dp==null) 
-                dp =  getSemanticObject().getModel().createSemanticObject("swbxff_l_"+name, DisplayProperty.swbxf_DisplayProperty);
-            DisplayProperty dobj=new DisplayProperty(dp);
+            if (dp == null)
+            {
+                dp = getSemanticObject().getModel().createSemanticObject("swbxff_l_" + name, DisplayProperty.swbxf_DisplayProperty);
+            }
+            DisplayProperty dobj = new DisplayProperty(dp);
 
             Statement stmt = getSemanticObject().getModel().getRDFModel().createStatement(getSemanticObject().getModel().getRDFModel().getResource(sp.getURI()),
                     SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYPROPERTY),
                     dobj.getSemanticObject().getRDFName());
             getSemanticObject().getModel().getRDFModel().add(stmt);
-            String [] vals = values[0].split(":");
-            for (int i = 1; i <values.length;i++){
+            String[] vals = values[0].split(":");
+            for (int i = 1; i < values.length; i++)
+            {
                 String lang = values[1].split("\\|")[0];
-                String [] labels = values[1].split("\\|")[1].split(":");
+                String[] labels = values[1].split("\\|")[1].split(":");
                 String cad = "";
-                    for (int j=0;j<vals.length;j++){
-                        cad = cad + vals[j]+":"+labels[j]+(j+1==vals.length?"":"|");
-                    }
+                for (int j = 0; j < vals.length; j++)
+                {
+                    cad = cad + vals[j] + ":" + labels[j] + (j + 1 == vals.length ? "" : "|");
+                }
                 dobj.setSelectValues(cad, lang); //value:label|value:label{@lang}
             }
         }
         return sp;
     }
-    
+
     public Iterator<SemanticProperty> listAttributesofUserType(String name)
     {
         ArrayList<SemanticProperty> alsp = new ArrayList<SemanticProperty>();
@@ -479,7 +535,8 @@ public class UserRepository extends UserRepositoryBase
     public SemanticClass getExtendedAttributesClass()
     {
         SemanticClass cls = null;
-        String uri = getProperty(SWBUR_ClassHold); System.out.println("EAURI:"+uri);
+        String uri = getProperty(SWBUR_ClassHold);
+        System.out.println("EAURI:" + uri);
         if (uri == null)
         {
             uri = getId() + SWBUR_ClassPost;
@@ -488,9 +545,12 @@ public class UserRepository extends UserRepositoryBase
         } else
         {
             cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(uri);
-            if (null==cls) {removeProperty(SWBUR_ClassHold);
-            cls = getExtendedAttributesClass();}
-        }System.out.println("EA:"+cls);
+            if (null == cls)
+            {
+                removeProperty(SWBUR_ClassHold);
+                cls = getExtendedAttributesClass();
+            }
+        }
         return cls;
     }
 
@@ -507,7 +567,12 @@ public class UserRepository extends UserRepositoryBase
         } else
         {
             cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(uri);
-        } System.out.println("UT:"+cls);
+            if (null == cls)
+            {
+                removeProperty(SWBUR_ClassUserTypeHold);
+                cls = getUserType(name);
+            }
+        }
         return cls;
     }
 

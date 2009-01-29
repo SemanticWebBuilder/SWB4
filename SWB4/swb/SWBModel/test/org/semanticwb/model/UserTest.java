@@ -285,7 +285,7 @@ public class UserTest {
         }
     }
 
-    //@Test
+    @Test
     public void setAlist(){
         String [] al = new String[3];
         al[0] = "primaria:secundaria:preparatoria:universidad:maestria:doctorado";
@@ -303,7 +303,7 @@ public class UserTest {
                 //setProperty("escolaridad", "universidad");
     }
 
-    @Test
+    //@Test
     public void getAlist(){
         User usr = SWBContext.getDefaultRepository().getUserByLogin("admin");
         //System.out.println(usr.getProperty("escolaridad"));
@@ -320,7 +320,7 @@ public class UserTest {
         }
     }
 
-    //@Test
+    @Test
     public void fixPasswords(){
         Iterator<UserRepository> iur = SWBContext.listUserRepositorys();
         while(iur.hasNext()){
