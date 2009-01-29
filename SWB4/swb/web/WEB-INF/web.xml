@@ -53,11 +53,6 @@
         <servlet-name>SubmissionResponse</servlet-name>
         <servlet-class>org.chiba.web.servlet.SubmissionResponseServlet</servlet-class>
     </servlet>
-    <servlet>
-        <servlet-name>ErrorHandler</servlet-name>
-        <description>Error message Handler</description>
-        <servlet-class>org.semanticwb.servlet.ErrorHandler</servlet-class>
-    </servlet>
     <servlet-mapping>
         <servlet-name>Flux</servlet-name>
         <url-pattern>/Flux/*</url-pattern>
@@ -79,10 +74,6 @@
         <url-pattern>/SubmissionResponse</url-pattern>
     </servlet-mapping>
     <!--WB-->
-    <servlet-mapping>
-        <servlet-name>ErrorHandler</servlet-name>
-        <url-pattern>/ErrorMessage/*</url-pattern>
-    </servlet-mapping>
     <session-config>
         <session-timeout>30</session-timeout>
     </session-config>
@@ -90,16 +81,4 @@
         <welcome-file>index.jsp
         </welcome-file>
     </welcome-file-list>
-  <error-page>
-    <error-code>403</error-code>
-    <location>/ErrorMessage/403</location>
-  </error-page>
-  <error-page>
-    <error-code>404</error-code>
-    <location>/ErrorMessage/404</location>
-  </error-page>
-  <error-page>
-    <error-code>500</error-code>
-    <location>/ErrorMessage/500</location>
-  </error-page>
-    </web-app>
+  </web-app>
