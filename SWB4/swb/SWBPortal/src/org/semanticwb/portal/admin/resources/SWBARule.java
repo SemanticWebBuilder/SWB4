@@ -448,7 +448,7 @@ public class SWBARule extends GenericResource {
                 log.debug("tipo de usuario: " + uType);
             }
 
-            Iterator<SemanticProperty> iteratt = usrRepo.listBasicAttributes();
+            Iterator<SemanticProperty> iteratt = usrRepo.listAttributes(); //listBasicAttributes
             int attnum = 0;
             while (iteratt.hasNext()) {
 
@@ -490,7 +490,7 @@ public class SWBARule extends GenericResource {
                         hmAttr.put("Valor", hmValues);
                         comboAtt.put(usrAtt.getName(), hmAttr);
                         vecOrderAtt.add(numero++, usrAtt.getName());
-                    } else {
+                    } else if (!usrAtt.equals(User.swb_usrPassword)){
                         if (usrAtt.isDataTypeProperty()) {
                             log.debug("DP: DataTypeProperty");
                             if (usrAtt.isInt()||usrAtt.isFloat()||usrAtt.isLong()) {
