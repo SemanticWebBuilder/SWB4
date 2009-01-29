@@ -61,8 +61,21 @@ import org.semanticwb.xmlrpc.XmlRpcObject;
 public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 {
     private static final String WORD_PORTLET_TYPE="word_resource";
+    private static final String WORD_PORTLET_DESCRIPTION="Recurso Word";
+    private static final String WORD_PORTLET_CLASS="org.semanticwb.portal.resources.office.WordResource";
+    private static final String WORD_PORTLET_TITLE=WORD_PORTLET_DESCRIPTION;
+
     private static final String PPT_PORTLET_TYPE="ppt_resource";
+    private static final String PPT_PORTLET_DESCRIPTION="Recurso Power Point";
+    private static final String PPT_PORTLET_CLASS="org.semanticwb.portal.resources.office.PowerPointResource";
+    private static final String PPT_PORTLET_TITLE=PPT_PORTLET_DESCRIPTION;
+
+
     private static final String EXCEL_PORTLET_TYPE="excel_resource";
+    private static final String EXCEL_PORTLET_DESCRIPTION="Recurso Excel";
+    private static final String EXCEL_PORTLET_CLASS="org.semanticwb.portal.resources.office.ExcelResource";
+    private static final String EXCEL_PORTLET_TITLE=EXCEL_PORTLET_DESCRIPTION;
+
     private static final String CONTENT_NOT_FOUND = "El contenido no se encontró en el repositorio.";
     private static final String JCR_CONTENT = "jcr:content";
     private static final String JCR_DATA = "jcr:data";
@@ -650,16 +663,46 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             {
                 portlet = ExcelPortlet.createExcelPortlet(id, site);
                 portletType= site.getPortletType(EXCEL_PORTLET_TYPE);
+                if(portletType==null)
+                {
+                    portletType=site.createPortletType(EXCEL_PORTLET_TYPE);
+                    portletType.setCreated(new Date(System.currentTimeMillis()));
+                    portletType.setDescription(EXCEL_PORTLET_DESCRIPTION);
+                    portletType.setTitle(EXCEL_PORTLET_TITLE);
+                    portletType.setPortletMode(1);
+                    portletType.setPortletClassName(EXCEL_PORTLET_CLASS);
+                    portletType.setUpdated(new Date(System.currentTimeMillis()));
+                }
             }
             else if (type.equals("PPT"))
             {
                 portlet = PPTPortlet.createPPTPortlet(id, site);
                 portletType= site.getPortletType(PPT_PORTLET_TYPE);
+                if(portletType==null)
+                {
+                    portletType=site.createPortletType(PPT_PORTLET_TYPE);
+                    portletType.setCreated(new Date(System.currentTimeMillis()));
+                    portletType.setDescription(PPT_PORTLET_DESCRIPTION);
+                    portletType.setTitle(PPT_PORTLET_TITLE);
+                    portletType.setPortletMode(1);
+                    portletType.setPortletClassName(PPT_PORTLET_CLASS);
+                    portletType.setUpdated(new Date(System.currentTimeMillis()));
+                }
             }
             else
             {
                 portlet = WordPortlet.createWordPortlet(id, site);
                 portletType= site.getPortletType(WORD_PORTLET_TYPE);
+                if(portletType==null)
+                {
+                    portletType=site.createPortletType(WORD_PORTLET_TYPE);
+                    portletType.setCreated(new Date(System.currentTimeMillis()));
+                    portletType.setDescription(WORD_PORTLET_DESCRIPTION);
+                    portletType.setTitle(WORD_PORTLET_TITLE);
+                    portletType.setPortletMode(1);
+                    portletType.setPortletClassName(WORD_PORTLET_CLASS);
+                    portletType.setUpdated(new Date(System.currentTimeMillis()));
+                }
             }
             portlet.setContent(contentId);
             portlet.setPortletType(portletType);
