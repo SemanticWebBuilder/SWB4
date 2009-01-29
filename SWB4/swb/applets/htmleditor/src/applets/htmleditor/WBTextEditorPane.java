@@ -396,7 +396,21 @@ public class WBTextEditorPane extends JTextPane implements CaretListener, KeyLis
         try
         {
             if(e.getModifiersEx()>0)
-            JSObject.getWindow(applet).eval("alert('netscape')");
+            {
+                System.out.println("cur:"+JSObject.getWindow(applet).eval("dojo.dnd.manager().source.tree"));
+                System.out.println("cur:"+JSObject.getWindow(applet).eval("dijit.getEnclosingWidget(dojo.dnd.manager().nodes[0]).item.id"));
+                JSObject.getWindow(applet).eval("dojo.dnd.manager().source.onDndCancel()");
+                JSObject.getWindow(applet).eval("dojo.dnd.manager().source.containerState=''");
+
+                //JSObject.getWindow(applet).eval("dojo.dnd.manager().events=[]");
+                //JSObject.getWindow(applet).eval("dojo.dnd.manager().avatar.destroy()");
+                //JSObject.getWindow(applet).eval("dojo.dnd.manager().avatar=null");
+                //JSObject.getWindow(applet).eval("dojo.dnd.manager().source=null");
+                //JSObject.getWindow(applet).eval("dojo.dnd.manager().target=null");
+                //JSObject.getWindow(applet).eval("dojo.publish(\"/dnd/cancel\")");
+                //JSObject.getWindow(applet).eval("dojo.dnd.manager().stopDrag()");
+                //JSObject.getWindow(applet).eval("dojo.dnd.manager().nodes=[]");
+            }
             //applet.getAppletContext().showDocument(new URL("javascript:alert(\"hola\")"));
         }catch(Exception ex){ex.printStackTrace();}
 
