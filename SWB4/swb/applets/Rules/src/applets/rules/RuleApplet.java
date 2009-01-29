@@ -43,6 +43,8 @@ import applets.modeler.elements.EmptyElement;
 import applets.modeler.elements.GraphElement;
 import applets.modeler.elements.ScopedElement;
 import applets.modeler.elements.StartElement;
+import java.awt.MediaTracker;
+import java.awt.Image;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -124,7 +126,15 @@ public class RuleApplet extends javax.swing.JApplet implements CommandListener
         xmlRule = conn.getData(comando);
         
         GraphElement se = ((GraphView)jPanel1).getStartElement();
-        se.setImage(getImage(getClass().getResource("/applets/rules/images/start.gif")));        
+        Image img=getImage(getClass().getResource("/applets/rules/images/start.gif"));
+        MediaTracker tracker = new MediaTracker( this );
+        tracker.addImage(img, 1);
+        try
+        {
+            tracker.waitForAll();
+        }catch( InterruptedException noe ) {}
+
+        se.setImage(img);
         se.setWidth(85);
         se.setHeight(74);
         se.setX((int)getSize().getWidth()/2);
