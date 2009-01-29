@@ -4,14 +4,8 @@
  */
 package org.semanticwb.office.comunication;
 
+
 import java.io.*;
-import java.util.Enumeration;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-import javax.jcr.Node;
-import javax.jcr.Session;
-import javax.jcr.version.Version;
-import javax.jcr.version.VersionHistory;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import org.semanticwb.Logger;
@@ -27,7 +21,7 @@ import static org.semanticwb.office.comunication.Base64.*;
 public abstract class OfficeServlet extends XMLRPCServlet
 {
 
-    private static final String title = "Gateway de Comunicación con Office INFOTEC Semantic WebBuilder 4";
+    private static final String title = "Gateway de ComunicaciÃ³n con Office INFOTEC Semantic WebBuilder 4";
     static Logger log = SWBUtils.getLogger(OfficeServlet.class);
     private static String REALM = "Secure Area";
     private static String PREFIX_BASIC = "Basic ";
