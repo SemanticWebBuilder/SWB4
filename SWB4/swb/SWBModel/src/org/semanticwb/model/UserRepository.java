@@ -181,6 +181,13 @@ public class UserRepository extends UserRepositoryBase
         if (null == sp)
         {
             sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, cls, SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_INT);
+            SemanticObject dp = sp.getDisplayProperty();
+            if (dp==null) dp =  getSemanticObject().getModel().createSemanticObject("swbxff_i_"+name, DisplayProperty.swbxf_DisplayProperty);
+            DisplayProperty dobj=new DisplayProperty(dp);
+            Statement stmt = getSemanticObject().getModel().getRDFModel().createStatement(getSemanticObject().getModel().getRDFModel().getResource(sp.getURI()),
+                    SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYPROPERTY),
+                    dobj.getSemanticObject().getRDFName());
+            getSemanticObject().getModel().getRDFModel().add(stmt);
         }
         return sp;
     }
@@ -197,6 +204,13 @@ public class UserRepository extends UserRepositoryBase
         if (null == sp)
         {
             sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, cls, SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_LONG);
+            SemanticObject dp = sp.getDisplayProperty();
+            if (dp==null) dp =  getSemanticObject().getModel().createSemanticObject("swbxff_l_"+name, DisplayProperty.swbxf_DisplayProperty);
+            DisplayProperty dobj=new DisplayProperty(dp);
+            Statement stmt = getSemanticObject().getModel().getRDFModel().createStatement(getSemanticObject().getModel().getRDFModel().getResource(sp.getURI()),
+                    SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYPROPERTY),
+                    dobj.getSemanticObject().getRDFName());
+            getSemanticObject().getModel().getRDFModel().add(stmt);
         }
         return sp;
     }
@@ -213,6 +227,13 @@ public class UserRepository extends UserRepositoryBase
         if (null == sp)
         {
             sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, cls, SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_BOOLEAN);
+            SemanticObject dp = sp.getDisplayProperty();
+            if (dp==null) dp =  getSemanticObject().getModel().createSemanticObject("swbxff_b_"+name, DisplayProperty.swbxf_DisplayProperty);
+            DisplayProperty dobj=new DisplayProperty(dp);
+            Statement stmt = getSemanticObject().getModel().getRDFModel().createStatement(getSemanticObject().getModel().getRDFModel().getResource(sp.getURI()),
+                    SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYPROPERTY),
+                    dobj.getSemanticObject().getRDFName());
+            getSemanticObject().getModel().getRDFModel().add(stmt);
         }
         return sp;
     }
@@ -229,6 +250,13 @@ public class UserRepository extends UserRepositoryBase
         if (null == sp)
         {
             sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, cls, SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_DATETIME);
+            SemanticObject dp = sp.getDisplayProperty();
+            if (dp==null) dp =  getSemanticObject().getModel().createSemanticObject("swbxff_t_"+name, DisplayProperty.swbxf_DisplayProperty);
+            DisplayProperty dobj=new DisplayProperty(dp);
+            Statement stmt = getSemanticObject().getModel().getRDFModel().createStatement(getSemanticObject().getModel().getRDFModel().getResource(sp.getURI()),
+                    SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYPROPERTY),
+                    dobj.getSemanticObject().getRDFName());
+            getSemanticObject().getModel().getRDFModel().add(stmt);
         }
         return sp;
     }
@@ -245,6 +273,13 @@ public class UserRepository extends UserRepositoryBase
         if (null == sp)
         {
             sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, cls, SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_DOUBLE);
+            SemanticObject dp = sp.getDisplayProperty();
+            if (dp==null) dp =  getSemanticObject().getModel().createSemanticObject("swbxff_d_"+name, DisplayProperty.swbxf_DisplayProperty);
+            DisplayProperty dobj=new DisplayProperty(dp);
+            Statement stmt = getSemanticObject().getModel().getRDFModel().createStatement(getSemanticObject().getModel().getRDFModel().getResource(sp.getURI()),
+                    SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYPROPERTY),
+                    dobj.getSemanticObject().getRDFName());
+            getSemanticObject().getModel().getRDFModel().add(stmt);
         }
         return sp;
     }
@@ -261,6 +296,13 @@ public class UserRepository extends UserRepositoryBase
         if (null == sp)
         {
             sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, cls, SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_FLOAT);
+            SemanticObject dp = sp.getDisplayProperty();
+            if (dp==null) dp =  getSemanticObject().getModel().createSemanticObject("swbxff_f_"+name, DisplayProperty.swbxf_DisplayProperty);
+            DisplayProperty dobj=new DisplayProperty(dp);
+            Statement stmt = getSemanticObject().getModel().getRDFModel().createStatement(getSemanticObject().getModel().getRDFModel().getResource(sp.getURI()),
+                    SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYPROPERTY),
+                    dobj.getSemanticObject().getRDFName());
+            getSemanticObject().getModel().getRDFModel().add(stmt);
         }
         return sp;
     }
@@ -277,6 +319,13 @@ public class UserRepository extends UserRepositoryBase
         if (null == sp)
         {
             sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, cls, SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_STRING);
+            SemanticObject dp = sp.getDisplayProperty();
+            if (dp==null) dp =  getSemanticObject().getModel().createSemanticObject("swbxff_s_"+name, DisplayProperty.swbxf_DisplayProperty);
+            DisplayProperty dobj=new DisplayProperty(dp);
+            Statement stmt = getSemanticObject().getModel().getRDFModel().createStatement(getSemanticObject().getModel().getRDFModel().getResource(sp.getURI()),
+                    SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYPROPERTY),
+                    dobj.getSemanticObject().getRDFName());
+            getSemanticObject().getModel().getRDFModel().add(stmt);
         }
         return sp;
     }
@@ -293,19 +342,24 @@ public class UserRepository extends UserRepositoryBase
         if (null == sp)
         {
             sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, cls, SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_STRING);
-
             SemanticObject dp = sp.getDisplayProperty();
-            if (dp==null) dp =  getSemanticObject().getModel().createSemanticObject("swbxff_"+name, DisplayProperty.swbxf_DisplayProperty);
+            if (dp==null) 
+                dp =  getSemanticObject().getModel().createSemanticObject("swbxff_l_"+name, DisplayProperty.swbxf_DisplayProperty);
             DisplayProperty dobj=new DisplayProperty(dp);
+
+            Statement stmt = getSemanticObject().getModel().getRDFModel().createStatement(getSemanticObject().getModel().getRDFModel().getResource(sp.getURI()),
+                    SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYPROPERTY),
+                    dobj.getSemanticObject().getRDFName());
+            getSemanticObject().getModel().getRDFModel().add(stmt);
             String [] vals = values[0].split(":");
             for (int i = 1; i <values.length;i++){
-            String lang = values[1].split("\\|")[0];
-            String [] labels = values[1].split("\\|")[1].split(":");
-            String cad = "";
-                for (int j=0;j<vals.length;j++){
-                    cad = cad + vals[j]+":"+labels[j]+(j+1==vals.length?"":"|");
-                }
-            dobj.setSelectValues(cad, lang); //value:label|value:label{@lang}
+                String lang = values[1].split("\\|")[0];
+                String [] labels = values[1].split("\\|")[1].split(":");
+                String cad = "";
+                    for (int j=0;j<vals.length;j++){
+                        cad = cad + vals[j]+":"+labels[j]+(j+1==vals.length?"":"|");
+                    }
+                dobj.setSelectValues(cad, lang); //value:label|value:label{@lang}
             }
         }
         return sp;
@@ -425,7 +479,7 @@ public class UserRepository extends UserRepositoryBase
     public SemanticClass getExtendedAttributesClass()
     {
         SemanticClass cls = null;
-        String uri = getProperty(SWBUR_ClassHold);
+        String uri = getProperty(SWBUR_ClassHold); System.out.println("EAURI:"+uri);
         if (uri == null)
         {
             uri = getId() + SWBUR_ClassPost;
@@ -434,7 +488,9 @@ public class UserRepository extends UserRepositoryBase
         } else
         {
             cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(uri);
-        }
+            if (null==cls) {removeProperty(SWBUR_ClassHold);
+            cls = getExtendedAttributesClass();}
+        }System.out.println("EA:"+cls);
         return cls;
     }
 
@@ -451,7 +507,7 @@ public class UserRepository extends UserRepositoryBase
         } else
         {
             cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(uri);
-        }
+        } System.out.println("UT:"+cls);
         return cls;
     }
 

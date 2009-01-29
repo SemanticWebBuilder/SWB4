@@ -35,12 +35,12 @@ public class User extends UserBase implements Principal, java.io.Serializable
     @Override
     public void setUsrPassword(String password)
     {
-        System.out.println("setPassword:"+password);
+        //System.out.println("setPassword:"+password);
         String tmpPasswd = null;
         try
         {
             tmpPasswd = SWBUtils.CryptoWrapper.passwordDigest(password);
-            System.out.println("tmpPasswd:"+tmpPasswd);
+            //System.out.println("tmpPasswd:"+tmpPasswd);
 
             Statement stm = getSemanticObject().getRDFResource().getProperty(User.swb_usrPassword.getRDFProperty());
             if (stm != null)
@@ -68,7 +68,7 @@ public class User extends UserBase implements Principal, java.io.Serializable
         {
             ret=st.getString();
         }
-        System.out.println("getPassword:"+ret);
+        //System.out.println("getPassword:"+ret);
         return ret;
     }
 
@@ -131,11 +131,12 @@ public class User extends UserBase implements Principal, java.io.Serializable
     public void setExtendedAttribute(String name, Object value) throws SWBException
     {
         SemanticProperty prop = getSemanticObject().getSemanticClass().getProperty(name);
+        if ( null == prop) prop = getSemanticObject().getModel().getSemanticProperty(getUserRepository().getId()+"#" + name);
         setExtendedAttribute(prop, value);
     }
 
     public void setExtendedAttribute(SemanticProperty prop, Object value) throws SWBException
-    {
+    {   
         if (null == value)
         {
             throw new SWBException("Can't set a null value");
@@ -218,6 +219,7 @@ public class User extends UserBase implements Principal, java.io.Serializable
     public Object getExtendedAttribute(String name)
     {
         SemanticProperty prop = getSemanticObject().getSemanticClass().getProperty(name);
+        if ( null == prop) prop = new SemanticProperty(getSemanticObject().getModel().getRDFModel().getProperty(getUserRepository().getId()+"#" + name));
 
         return getExtendedAttribute(prop);
     }
@@ -237,7 +239,7 @@ public class User extends UserBase implements Principal, java.io.Serializable
 
     public Object getExtendedAttribute(SemanticProperty prop)
     {
-        Object obj = null;
+        Object obj = null; 
         if (null != prop && null != prop.getRange())
         {
             if (SemanticVocabulary.XMLS_BOOLEAN.equals(prop.getRange().toString()))
