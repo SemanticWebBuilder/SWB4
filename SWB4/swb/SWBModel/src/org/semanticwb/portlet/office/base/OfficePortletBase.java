@@ -1,7 +1,7 @@
 package org.semanticwb.portlet.office.base;
 
 
-public class OfficePortletBase extends org.semanticwb.model.Portlet 
+public class OfficePortletBase extends org.semanticwb.model.Portlet implements org.semanticwb.model.RoleRefable,org.semanticwb.model.Priorityable,org.semanticwb.model.Referensable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.Hitable,org.semanticwb.model.Localeable,org.semanticwb.model.Calendarable,org.semanticwb.model.XMLConfable,org.semanticwb.model.Indexable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Viewable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.XMLable,org.semanticwb.model.Deleteable,org.semanticwb.model.Versionable
 {
     public static final org.semanticwb.platform.SemanticProperty swbrep_content=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/repository#content");
     public static final org.semanticwb.platform.SemanticProperty swbrep_versionToShow=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/repository#versionToShow");
