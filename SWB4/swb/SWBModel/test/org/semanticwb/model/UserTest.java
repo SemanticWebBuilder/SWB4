@@ -292,7 +292,32 @@ public class UserTest {
         al[1] = "es|primaria:secundaria:preparatoria:universidad:maestria:doctorado";
         al[2] = "en|elementary:13-15grade:high:university:degree:doctordegre";
         SWBContext.getDefaultRepository().createListExtendedAttribute("escolaridad", al);
-        SWBContext.getDefaultRepository().getUserByLogin("admin").setProperty("escolaridad", "universidad");
+        try
+        {
+            SWBContext.getDefaultRepository().getUserByLogin("admin").setExtendedAttribute("escolaridad", "universidad");
+            //setProperty("escolaridad", "universidad");
+        } catch (SWBException ex)
+        {
+           ex.printStackTrace();
+        }
+                //setProperty("escolaridad", "universidad");
+    }
+
+    @Test
+    public void getAlist(){
+        User usr = SWBContext.getDefaultRepository().getUserByLogin("admin");
+        //System.out.println(usr.getProperty("escolaridad"));
+        Object obj = usr.getExtendedAttribute("escolaridads");
+        obj = usr.getExtendedAttribute("escolaridad");
+        System.out.println(obj);
+        System.out.println(obj.getClass().getName());
+        Iterator<SemanticProperty>itsp=SWBContext.getDefaultRepository().listAttributes();
+        while (itsp.hasNext()) {
+            SemanticProperty sp = itsp.next();
+            if (sp.getDisplayProperty()!=null){
+                System.out.println(sp+""+sp.getDisplayProperty().getRDFName());
+            }
+        }
     }
 
     //@Test
@@ -310,7 +335,7 @@ public class UserTest {
         }
     }
 
-    @Test
+    //@Test
     public void encode() throws Exception{
     System.out.println(SWBUtils.CryptoWrapper.comparablePassword("TOOMANYSECRETS", "MD5"));
     }
