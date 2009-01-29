@@ -40,8 +40,11 @@ public class TemplateImp extends Template
     private ArrayList parts;
     private HashMap objects = new HashMap();
 
+    private String webPath;
+    private String workPath;
     private String actPath;
     private String actWorkPath;
+    private String actRelWorkPath;
     
     public TemplateImp(Template base)
     {
@@ -55,8 +58,12 @@ public class TemplateImp extends Template
         objects.put("webpath", SWBPlatform.getContextPath());
         objects.put("distpath", SWBPortal.getDistributorPath());
         
-        actPath = SWBPlatform.getWebWorkPath()+getWorkPath()+ "/" + getActualVersion().getVersionNumber() + "/";
-        actWorkPath=getWorkPath() + "/" + getActualVersion().getVersionNumber();
+        webPath = SWBPlatform.getWebWorkPath()+super.getWorkPath();
+        actPath = webPath+ "/" + getActualVersion().getVersionNumber() + "/";
+        workPath = SWBPlatform.getWorkPath()+super.getWorkPath();
+        actWorkPath=workPath + "/" + getActualVersion().getVersionNumber();
+        actRelWorkPath=super.getWorkPath()+ "/" + getActualVersion().getVersionNumber();
+
         if (isActive() && !isDeleted())
         {
             parts = parse(getFileName(getActualVersion()));
@@ -160,7 +167,7 @@ public class TemplateImp extends Template
             if (filename.startsWith("/"))
                 tok = new HtmlStreamTokenizer(SWBPlatform.getFileFromWorkPath(filename));
             else
-                tok = new HtmlStreamTokenizer(SWBPlatform.getFileFromWorkPath(getActualWorkPath() + "/" + filename));
+                tok = new HtmlStreamTokenizer(SWBPlatform.getFileFromWorkPath(actRelWorkPath + "/" + filename));
             HtmlTag tag = new HtmlTag();
             StringBuffer auxpart = new StringBuffer();
             boolean textpart = false;
@@ -1423,7 +1430,18 @@ public class TemplateImp extends Template
     public java.lang.String getActualWorkPath()
     {
         return actWorkPath;
-    }    
+    }
+
+    /**
+     * Regresa ruta fisica de la de la paltilla.
+     * @return Value of property actPath.
+     */
+    @Override
+    public java.lang.String getWorkPath()
+    {
+        return workPath;
+    }
+
 
     public String getFileName(VersionInfo version)
     {

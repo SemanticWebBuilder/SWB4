@@ -69,7 +69,7 @@ public class Wiki extends GenericResource
         String content=getContent(readFile(paramsRequest));
         String lang=paramsRequest.getUser().getLanguage();
         
-        //out.println("<div aling=\"rigth\"><a href=\""+paramsRequest.getRenderUrl().setMode(WBParamRequest.Mode_EDIT)+"\">editar</a></div>");
+        out.println("<div aling=\"rigth\"><a href=\""+paramsRequest.getRenderUrl().setMode(SWBParamRequest.Mode_EDIT)+"\">editar</a></div>");
         String pre="<div class=\"wikiContent\">";
         String post="</div>";
         if(content!=null)

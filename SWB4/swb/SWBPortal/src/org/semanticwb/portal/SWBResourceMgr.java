@@ -128,7 +128,7 @@ public class SWBResourceMgr
                 if(user.haveAccess(base))
                 {
                     //TODO:CheckResource
-                    //if (checkResource(base, user, 0, null, 0, today, topic))
+                    if(checkResource(base, user, null, 0, today, topic))
                     {
                         ret.add(res);
                     }

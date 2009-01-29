@@ -107,6 +107,7 @@ public class SWBAEditor extends GenericResource
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException
     {
+        System.out.println("Mode:"+paramsRequest.getMode());
         if(paramsRequest.getMode().equals("gateway"))
         {
             doGateway(request,response,paramsRequest);
@@ -662,6 +663,14 @@ public class SWBAEditor extends GenericResource
             String work=null;
             String webWork=null;
             FileOutputStream fout=null;
+
+            System.out.println("TM:"+tm);
+            System.out.println("ID:"+id);
+            System.out.println("TP:"+tp);
+            System.out.println("VER:"+ver);
+            System.out.println("TYPE:"+type);
+            System.out.println("PATHFILEWB:"+name);
+            System.out.println("DOCUMENT:"+doc);
             
             if(type.equalsIgnoreCase("Template"))
             {
@@ -678,11 +687,12 @@ public class SWBAEditor extends GenericResource
                     File fpath=new File(work);
                     fpath.mkdirs();
                     File file=new File(work+name);
+                    System.out.println("file:"+file);
                     fout=new FileOutputStream(file);
                 }
                 
                 String ret=writeFile(in, fout);
-                
+                System.out.println("ret:"+ret);
                 if(doc!=null)
                 {
                     if(doc.equals("RELOAD"))
@@ -950,7 +960,7 @@ public class SWBAEditor extends GenericResource
     public static void getTemplateApplet(PrintWriter out, String topicmapid, String templateid, int version, User user)
     {
         out.println("<APPLET id=\"apptpleditor\" name=\"apptpleditor\" code=\"applets.htmleditor.TemplateEditor\" codebase=\""+SWBPlatform.getContextPath()+"\" ARCHIVE=\"swbadmin/lib/htmleditor.jar, swbadmin/lib/WBCommons.jar\" width=\"100%\" height=\"100%\">");
-        String url=SWBPortal.getDistributorPath()+"/SWBAdmin/WBAd_utl_HTMLEditor/_rid/1/_mto/3/_mod/";
+        String url=SWBPortal.getDistributorPath()+"/SWBAdmin/WBAd_utl_HTMLEditor/_rid/swb_Portlet:1/_mto/3/_mod/";
 
         out.println("<PARAM NAME =\"upload\" VALUE=\""+url+"upload"+"\">");
         out.println("<PARAM NAME =\"download\" VALUE=\""+url+"download"+"\">");
