@@ -250,7 +250,8 @@ public class SWBRuleMgr
             if (att != null) cond = att.getNodeValue();
             String value = aux.getNodeValue();
             
-            //System.out.println("cond:"+cond +" value:"+value);
+            //System.out.println("name:"+name+" cond:"+cond +" value:"+value);
+            //new Exception().printStackTrace();
             
             //validacion de Reglas
             if(name.equals(TAG_INT_RULE))
@@ -293,15 +294,21 @@ public class SWBRuleMgr
                 return user.getDevice().equals(value);
             }else //se busca en el xml del usuario
             {
-                Iterator<SemanticProperty> it=user.getSemanticObject().getSemanticClass().listProperties();
-                while(it.hasNext())
+                SemanticProperty prop=user.getSemanticObject().getSemanticClass().getProperty(name);
+                if(prop!=null)
                 {
-                    SemanticProperty prop=it.next();
+                    //SemanticProperty prop=it.next();
                     if(prop.isDataTypeProperty())
                     {
                         String usrval = user.getSemanticObject().getProperty(prop);
-                        System.out.println(usrval+cond+value);
-                        if (cond.equals("="))
+                        //System.out.println(usrval+cond+value);
+                        if(usrval==null && value==null)
+                        {
+                            ret=true;
+                        }else if(usrval==null)
+                        {
+                            ret=false;
+                        }else if (cond.equals("="))
                         {
                             if (usrval.equals(value)) ret = true;
                         } else if (cond.equals("!="))
@@ -331,7 +338,7 @@ public class SWBRuleMgr
                             }
                         }
                         //System.out.println(ret);
-                        if (ret) return true;
+                        //if (ret) return true;
                     }
                 }
             }
@@ -339,7 +346,7 @@ public class SWBRuleMgr
         {
             log.error(e);
         }
-        System.out.println(ret);
+        //System.out.println(ret);
         return ret;
     }
 
