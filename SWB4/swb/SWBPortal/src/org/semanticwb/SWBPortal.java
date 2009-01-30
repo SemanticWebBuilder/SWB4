@@ -29,26 +29,10 @@ import org.semanticwb.model.*;
 import org.semanticwb.platform.SessionUser;
 import org.semanticwb.portal.SWBMonitor;
 import org.semanticwb.portal.SWBResourceMgr;
+import org.semanticwb.portal.SWBRuleMgr;
 import org.semanticwb.portal.SWBServiceMgr;
 import org.semanticwb.portal.SWBTemplateMgr;
 import org.semanticwb.portal.SWBUserMgr;
-/*
-import org.semanticwb.portal.services.CalendarSrv;
-import org.semanticwb.portal.services.CampSrv;
-import org.semanticwb.portal.services.DeviceSrv;
-import org.semanticwb.portal.services.DnsSrv;
-import org.semanticwb.portal.services.GroupSrv;
-import org.semanticwb.portal.services.IPFilterSrv;
-import org.semanticwb.portal.services.LanguageSrv;
-import org.semanticwb.portal.services.PFlowSrv;
-import org.semanticwb.portal.services.ResourceSrv;
-import org.semanticwb.portal.services.RoleSrv;
-import org.semanticwb.portal.services.RuleSrv;
-import org.semanticwb.portal.services.SWBServices;
-import org.semanticwb.portal.services.TemplateSrv;
-import org.semanticwb.portal.services.WebPageSrv;
-import org.semanticwb.portal.services.WebSiteSrv;
- */
 import org.semanticwb.portal.db.SWBDBAdmLog;
 import org.semanticwb.util.JarFile;
 import org.semanticwb.util.db.GenericDB;
@@ -63,6 +47,7 @@ public class SWBPortal {
     private static SWBMonitor monitor = null;
     private static SWBResourceMgr resmgr = null;
     private static SWBTemplateMgr templatemgr = null;
+    private static SWBRuleMgr rulemgr = null;
     private static SWBServiceMgr servicemgr = null;
     private static SWBDBAdmLog admlog=null;
     private static HashMap<String, SessionUser> m_sessions;
@@ -173,6 +158,9 @@ public class SWBPortal {
 
         admlog = new SWBDBAdmLog();
         admlog.init();
+
+        rulemgr=new SWBRuleMgr();
+        rulemgr.init();
 
         try {
             log.debug("Loading admin Files from: /WEB-INF/lib/SWBAdmin.jar");
