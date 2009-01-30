@@ -13,7 +13,6 @@ import org.semanticwb.*;
 import org.semanticwb.model.*;
 import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.platform.SemanticProperty;
-import org.semanticwb.portal.SWBRuleMgr;
 import org.semanticwb.portal.api.*;
 import org.w3c.dom.*;
 
