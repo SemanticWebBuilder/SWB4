@@ -344,7 +344,18 @@ public class User extends UserBase implements Principal, java.io.Serializable
         }
         if(ret && obj instanceof RuleRefable)
         {
-            //TODO:
+            Iterator<RuleRef> it=((RuleRefable)obj).listInheritRuleRefs();
+            while(it.hasNext())
+            {
+                RuleRef ref=it.next();
+                //System.out.println("ref:"+ref+" role:"+ref.getRole());
+                Rule rule=ref.getRule();
+                if(rule!=null)
+                {
+                    ret=Rule.getRuleMgr().eval(this, rule.getURI());
+                    if(!ret)break;
+                }
+            }
         }
         //System.out.println("User:"+this+" haveAccess:"+obj+" "+ret);
         return ret;
