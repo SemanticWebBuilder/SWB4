@@ -21,4 +21,12 @@ public class Rule extends RuleBase
         }
         return rulemgr;
     }
+
+    @Override
+    public void setXml(String xml) {
+        super.setXml(xml);
+        rulemgr.reloadRule(this);
+    }
+
+
 }
