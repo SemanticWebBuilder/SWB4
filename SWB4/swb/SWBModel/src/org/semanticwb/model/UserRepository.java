@@ -1,5 +1,6 @@
 package org.semanticwb.model;
 
+import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
@@ -8,12 +9,15 @@ import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
+import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.sparql.util.IndentedWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
+import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.model.base.*;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
@@ -23,6 +27,7 @@ import org.semanticwb.platform.SemanticVocabulary;
 public class UserRepository extends UserRepositoryBase
 {
 
+    static Logger log = SWBUtils.getLogger(UserRepository.class);
     public static final String SWBUR_AuthMethod = "SWBUR_AuthMethod";
     public static final String SWBUR_LoginContext = "SWBUR_LoginContext";
     public static final String SWBUR_CallBackHandlerClassName = "SWBUR_CallBackHandlerClassName";
@@ -30,12 +35,24 @@ public class UserRepository extends UserRepositoryBase
     public static final String SWBUR_ClassPost = "#clsExtendedAttibutes";
     public static final String SWBUR_ClassUserTypeHold = "userType";
     public static final String SWBUR_ClassUserTypePost = "/clsUserType";
-    private static ArrayList<String> userTypes = new ArrayList<String>();
+    private static ArrayList<String> userTypes = null;
     private static final String NL = System.getProperty("line.separator");
 
     public UserRepository(SemanticObject base)
     {
         super(base);
+        userTypes = new ArrayList<String>();
+        StmtIterator ptopIt = getSemanticObject().getModel().getRDFModel().listStatements(getSemanticObject().getRDFResource(), null, (String) null);
+        while (ptopIt.hasNext())
+        {
+            Statement sp = (Statement) ptopIt.next();
+            if (sp.getPredicate().getLocalName().startsWith(SWBUR_ClassUserTypeHold))
+            {
+                String uri = sp.getObject().toString();
+                userTypes.add(uri.split("#")[1]);
+            //getSemanticObject().getModel().registerClass(uri);
+            }
+        }
     /*
     String uri = getProperty(SWBUR_ClassHold);
     if (uri != null)
@@ -220,7 +237,7 @@ public class UserRepository extends UserRepositoryBase
             DisplayProperty dobj = new DisplayProperty(dp);
             Statement stmt = getSemanticObject().getModel().getRDFModel().createStatement(getSemanticObject().getModel().getRDFModel().getResource(sp.getURI()),
                     SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYPROPERTY),
-                    dobj.getSemanticObject().getRDFName());
+                    dobj.getSemanticObject().getRDFResource().as(Resource.class));
             getSemanticObject().getModel().getRDFModel().add(stmt);
         }
         return sp;
@@ -246,7 +263,7 @@ public class UserRepository extends UserRepositoryBase
             DisplayProperty dobj = new DisplayProperty(dp);
             Statement stmt = getSemanticObject().getModel().getRDFModel().createStatement(getSemanticObject().getModel().getRDFModel().getResource(sp.getURI()),
                     SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYPROPERTY),
-                    dobj.getSemanticObject().getRDFName());
+                    dobj.getSemanticObject().getRDFResource().as(Resource.class));
             getSemanticObject().getModel().getRDFModel().add(stmt);
         }
         return sp;
@@ -272,7 +289,7 @@ public class UserRepository extends UserRepositoryBase
             DisplayProperty dobj = new DisplayProperty(dp);
             Statement stmt = getSemanticObject().getModel().getRDFModel().createStatement(getSemanticObject().getModel().getRDFModel().getResource(sp.getURI()),
                     SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYPROPERTY),
-                    dobj.getSemanticObject().getRDFName());
+                    dobj.getSemanticObject().getRDFResource().as(Resource.class));
             getSemanticObject().getModel().getRDFModel().add(stmt);
         }
         return sp;
@@ -298,7 +315,7 @@ public class UserRepository extends UserRepositoryBase
             DisplayProperty dobj = new DisplayProperty(dp);
             Statement stmt = getSemanticObject().getModel().getRDFModel().createStatement(getSemanticObject().getModel().getRDFModel().getResource(sp.getURI()),
                     SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYPROPERTY),
-                    dobj.getSemanticObject().getRDFName());
+                    dobj.getSemanticObject().getRDFResource().as(Resource.class));
             getSemanticObject().getModel().getRDFModel().add(stmt);
         }
         return sp;
@@ -324,7 +341,7 @@ public class UserRepository extends UserRepositoryBase
             DisplayProperty dobj = new DisplayProperty(dp);
             Statement stmt = getSemanticObject().getModel().getRDFModel().createStatement(getSemanticObject().getModel().getRDFModel().getResource(sp.getURI()),
                     SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYPROPERTY),
-                    dobj.getSemanticObject().getRDFName());
+                    dobj.getSemanticObject().getRDFResource().as(Resource.class));
             getSemanticObject().getModel().getRDFModel().add(stmt);
         }
         return sp;
@@ -350,7 +367,7 @@ public class UserRepository extends UserRepositoryBase
             DisplayProperty dobj = new DisplayProperty(dp);
             Statement stmt = getSemanticObject().getModel().getRDFModel().createStatement(getSemanticObject().getModel().getRDFModel().getResource(sp.getURI()),
                     SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYPROPERTY),
-                    dobj.getSemanticObject().getRDFName());
+                    dobj.getSemanticObject().getRDFResource().as(Resource.class));
             getSemanticObject().getModel().getRDFModel().add(stmt);
         }
         return sp;
@@ -376,7 +393,7 @@ public class UserRepository extends UserRepositoryBase
             DisplayProperty dobj = new DisplayProperty(dp);
             Statement stmt = getSemanticObject().getModel().getRDFModel().createStatement(getSemanticObject().getModel().getRDFModel().getResource(sp.getURI()),
                     SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYPROPERTY),
-                    dobj.getSemanticObject().getRDFName());
+                    dobj.getSemanticObject().getRDFResource().as(Resource.class));
             getSemanticObject().getModel().getRDFModel().add(stmt);
         }
         return sp;
@@ -403,7 +420,7 @@ public class UserRepository extends UserRepositoryBase
 
             Statement stmt = getSemanticObject().getModel().getRDFModel().createStatement(getSemanticObject().getModel().getRDFModel().getResource(sp.getURI()),
                     SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYPROPERTY),
-                    dobj.getSemanticObject().getRDFName());
+                    dobj.getSemanticObject().getRDFResource().as(Resource.class));
             getSemanticObject().getModel().getRDFModel().add(stmt);
             String[] vals = values[0].split(":");
             for (int i = 1; i < values.length; i++)
@@ -428,10 +445,12 @@ public class UserRepository extends UserRepositoryBase
         while (itsp.hasNext())
         {
             SemanticProperty sp = itsp.next();
+            log.trace("Encontrada... " + sp);
             if (null == sp.getRange())
             {
                 continue;
             }
+            log.trace("Agregada... " + sp);
             alsp.add(sp);
         }
         return alsp.iterator();
@@ -444,10 +463,12 @@ public class UserRepository extends UserRepositoryBase
         while (itsp.hasNext())
         {
             SemanticProperty sp = itsp.next();
+            log.trace("Encontrada... " + sp);
             if (null == sp.getRange())
             {
                 continue;
             }
+            log.trace("Agregada... " + sp);
             alsp.add(sp);
         }
         return alsp.iterator();
@@ -463,10 +484,12 @@ public class UserRepository extends UserRepositoryBase
             while (itsp.hasNext())
             {
                 SemanticProperty sp = itsp.next();
+                log.trace("Encontrada... " + sp);
                 if (null == sp.getRange())
                 {
                     continue;
                 }
+                log.trace("Agregada... " + sp);
                 alsp.add(sp);
             }
         }
@@ -484,49 +507,44 @@ public class UserRepository extends UserRepositoryBase
             while (itsp.hasNext())
             {
                 SemanticProperty sp = itsp.next();
+                log.trace("Encontrada..B. " + sp);
                 if (null == sp.getRange())
                 {
                     continue;
                 }
+                log.trace("Agregada..B. " + sp);
                 alsp.add(sp);
             }
         }
-        uri = getProperty(SWBUR_ClassHold);
-        sc = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(uri);
-        if (null != sc)
+        sc = getExtendedAttributesClass();
+        Iterator<SemanticProperty> itsp = sc.listProperties();
+        while (itsp.hasNext())
         {
-            Iterator<SemanticProperty> itsp = sc.listProperties();
+            SemanticProperty sp = itsp.next();
+            log.trace("Encontrada..E. " + sp);
+            if (null == sp.getRange())
+            {
+                continue;
+            }
+            log.trace("Agregada..E. " + sp);
+            alsp.add(sp);
+        }
+        Iterator<String> itut = getUserTypes();
+        while (itut.hasNext())
+        {
+            sc = getUserType(itut.next());
+            log.trace("Clase de usuario: " + sc);
+            itsp = sc.listProperties();
             while (itsp.hasNext())
             {
                 SemanticProperty sp = itsp.next();
+                log.trace("Encontrada..U. " + sp);
                 if (null == sp.getRange())
                 {
                     continue;
                 }
+                log.trace("Agregada..U. " + sp);
                 alsp.add(sp);
-            }
-        }
-        StmtIterator ptopIt = getSemanticObject().getModel().getRDFModel().listStatements(getSemanticObject().getRDFResource(), null, (String) null);
-        while (ptopIt.hasNext())
-        {
-            Statement st = (Statement) ptopIt.next();
-            if (st.getPredicate().getLocalName().startsWith(SWBUR_ClassUserTypeHold))
-            {
-                uri = st.getObject().toString();
-                sc = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(uri);
-                if (null != sc)
-                {
-                    Iterator<SemanticProperty> itsp = sc.listProperties();
-                    while (itsp.hasNext())
-                    {
-                        SemanticProperty sp = itsp.next();
-                        if (null == sp.getRange())
-                        {
-                            continue;
-                        }
-                        alsp.add(sp);
-                    }
-                }
             }
         }
         return alsp.iterator();
@@ -536,7 +554,6 @@ public class UserRepository extends UserRepositoryBase
     {
         SemanticClass cls = null;
         String uri = getProperty(SWBUR_ClassHold);
-        System.out.println("EAURI:" + uri);
         if (uri == null)
         {
             uri = getId() + SWBUR_ClassPost;
@@ -544,12 +561,7 @@ public class UserRepository extends UserRepositoryBase
             setProperty(SWBUR_ClassHold, uri);
         } else
         {
-            cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(uri);
-            if (null == cls)
-            {
-                removeProperty(SWBUR_ClassHold);
-                cls = getExtendedAttributesClass();
-            }
+            cls = getSemanticObject().getModel().createSemanticClass(uri);
         }
         return cls;
     }
@@ -566,12 +578,7 @@ public class UserRepository extends UserRepositoryBase
             userTypes.add(uri.split("#")[1]);
         } else
         {
-            cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(uri);
-            if (null == cls)
-            {
-                removeProperty(SWBUR_ClassUserTypeHold);
-                cls = getUserType(name);
-            }
+            cls = getSemanticObject().getModel().createSemanticClass(uri);
         }
         return cls;
     }
@@ -580,4 +587,5 @@ public class UserRepository extends UserRepositoryBase
     {
         return userTypes.iterator();
     }
+
 }
