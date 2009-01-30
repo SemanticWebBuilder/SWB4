@@ -37,6 +37,7 @@ import java.awt.Graphics;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Image;
+import java.awt.MediaTracker;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -1014,6 +1015,12 @@ public class GraphElement
     public void setImage(java.awt.Image image)
     {
         this.image = image;
+        MediaTracker tracker = new MediaTracker(getContainer().getApplet());
+        tracker.addImage(image, 1);
+        try
+        {
+            tracker.waitForAll();
+        }catch( InterruptedException noe ) {}
     }
     
     /**
