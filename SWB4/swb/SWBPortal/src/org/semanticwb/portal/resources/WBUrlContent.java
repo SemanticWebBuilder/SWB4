@@ -65,13 +65,7 @@ public class WBUrlContent extends GenericAdmResource {
     String file = "";
     String paramfromUrl = "";    
     String nameClass="WBUrlContent";
-    
-    /**
-     * Creates a new instance of WBUrlContent.
-     */
-    public WBUrlContent() {
-    }
-    
+       
     /**
      * Inicializa el recurso
      */    
@@ -186,7 +180,6 @@ public class WBUrlContent extends GenericAdmResource {
         
         PrintWriter out = response.getWriter();
         out.println(ret.toString());
-        out.println("<br><a href=\"" + paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN) + "\">admin wburlcontent</a>");
     }
     
     

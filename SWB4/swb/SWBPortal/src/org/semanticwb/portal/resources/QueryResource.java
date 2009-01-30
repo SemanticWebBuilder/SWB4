@@ -46,25 +46,15 @@ import org.semanticwb.portal.api.SWBResourceException;
  * @version 1.1
  */
 public class QueryResource extends GenericAdmResource {
-    
-    /**
-     * Format data template.
-     */
     private javax.xml.transform.Templates tpl;
 
     /**
      * XML form definition data.
      */
-    private String xml;
+    /*private String xml;*/
     String path = SWBPlatform.getContextPath() + "/swbadmin/xsl/QueryResource/";
     private static Logger log = SWBUtils.getLogger(QueryResource.class);
     
-    /** 
-     * Creates a new instance of QueryResource
-     */
-    public QueryResource() {
-    }
-
     @Override
     public void processRequest(HttpServletRequest request,
             HttpServletResponse response, SWBParamRequest paramsRequest) 
@@ -198,11 +188,7 @@ public class QueryResource extends GenericAdmResource {
      * @throws IOException if streaming causes an I/O problem.
      */    
     @Override
-    public void doView(HttpServletRequest request,
-                       HttpServletResponse response,
-                       SWBParamRequest paramsRequest)
-                       throws SWBResourceException, IOException {
-        
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {        
         ByteArrayOutputStream bout = new ByteArrayOutputStream();
         PrintWriter out = new PrintWriter(bout);
         try {
@@ -215,7 +201,7 @@ public class QueryResource extends GenericAdmResource {
                     "usrmsg_QueryResource_queryError"));
         }
         out.flush();
-        //response.getWriter().print(new String(bout.toByteArray()));
+        
         PrintWriter webOut = response.getWriter();
         String excelFile = (String) request.getAttribute("excelFile");
         
@@ -278,16 +264,13 @@ public class QueryResource extends GenericAdmResource {
                 a = f + 1;
                 String com = query.substring(i + 1, f);
                 if (com.equals("topicmap")) {
-                    //ret += paramsRequest.getTopic().getMap().getId();
                     ret += paramsRequest.getTopic().getWebSiteId();
                 } else if (com.equals("topicid")) {
                     ret += paramsRequest.getTopic().getId();
                 } else if (com.equals("userid")) {
-                    //ret += paramsRequest.getUser().getEmail();
                     ret += paramsRequest.getUser().getUsrEmail();
                 } else if (com.startsWith("getUserAttribute(") && com.endsWith(")")) {
                     String aux = com.substring(17, com.length() - 1);
-                    //ret += paramsRequest.getUser().getAttribute(aux);
                     ret += paramsRequest.getUser().getProperty(aux);
                 } else if (com.startsWith("getParameter(") && com.endsWith(")")) {
                     String aux = com.substring(13, com.length() - 1);
@@ -310,10 +293,7 @@ public class QueryResource extends GenericAdmResource {
         return ret;
     }
     
-    public void doExcel(HttpServletRequest request,
-                       HttpServletResponse response,
-                       SWBParamRequest paramsRequest)
-                       throws SWBResourceException, IOException {
+    public void doExcel(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         
         request.setAttribute("excelFile", "yes");
         doView(request, response, paramsRequest);

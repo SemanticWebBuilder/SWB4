@@ -68,9 +68,9 @@ public class VirtualResource extends GenericAdmResource
         String tmid=base.getAttribute("tmid","0");
         String id=base.getAttribute("resid","0");
         //TODO quitar la siguiente línea
-        SWBResource res=SWBPortal.getResourceMgr().getResource( base.getURI());
+        //SWBResource res=SWBPortal.getResourceMgr().getResource( base.getURI());
         //TODO descomentar la siguiente línea
-        //SWBResource res=SWBPortal.getResourceMgr().getResource(tmid, id);
+        SWBResource res=SWBPortal.getResourceMgr().getResource(tmid, id);
                 
         if(res!=null) {
             //base=res.getResourceBase();
@@ -83,7 +83,6 @@ public class VirtualResource extends GenericAdmResource
             }
         }else {
             out.println(paramRequest.getLocaleString("notfound") + "...");
-        }       
-        out.println("<br><a href=\"" + paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN) + "\">admin virtual resource</a>");
+        }
     }
 }
