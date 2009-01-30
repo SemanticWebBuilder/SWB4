@@ -316,7 +316,18 @@ is divided into following sections:
                 COMPILATION SECTION
                 ===================
             -->
-    <target depends="init" name="deps-jar" unless="no.deps"/>
+    <target depends="init" name="deps-jar" unless="no.deps">
+        <ant antfile="${project.EditFilters}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.GenericTree}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.Modeler}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.Rules}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.WBABar}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.WBCommons}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.WBGraph}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.filterSection}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.ftp}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.htmleditor}/build.xml" inheritall="false" target="jar"/>
+    </target>
     <target depends="init,-check-automatic-build,-clean-after-automatic-build" name="-verify-automatic-build"/>
     <target depends="init" name="-check-automatic-build">
         <available file="${build.classes.dir}/.netbeans_automatic_build" property="netbeans.automatic.build"/>
@@ -629,7 +640,18 @@ is divided into following sections:
                 CLEANUP SECTION
                 ===============
             -->
-    <target depends="init" name="deps-clean" unless="no.deps"/>
+    <target depends="init" name="deps-clean" unless="no.deps">
+        <ant antfile="${project.EditFilters}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.GenericTree}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.Modeler}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.Rules}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.WBABar}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.WBCommons}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.WBGraph}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.filterSection}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.ftp}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.htmleditor}/build.xml" inheritall="false" target="clean"/>
+    </target>
     <target depends="init" name="-do-clean">
         <delete dir="${build.dir}"/>
         <delete dir="${dist.dir}"/>

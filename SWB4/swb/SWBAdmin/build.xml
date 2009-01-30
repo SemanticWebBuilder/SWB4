@@ -97,5 +97,7 @@
         <signjar jar="${build.classes.dir}//swbadmin/lib/htmleditor.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
         <signjar jar="${build.classes.dir}//swbadmin/lib/ftp.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
         <signjar jar="${build.classes.dir}//swbadmin/lib/GenericTree.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
+        <signjar jar="${build.classes.dir}//swbadmin/lib/Modeler.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
+        <signjar jar="${build.classes.dir}//swbadmin/lib/Rules.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
         </target>
 </project>
