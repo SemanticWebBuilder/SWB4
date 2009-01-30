@@ -13,6 +13,7 @@ import org.semanticwb.*;
 import org.semanticwb.model.*;
 import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.platform.SemanticProperty;
+import org.semanticwb.portal.SWBRuleMgr;
 import org.semanticwb.portal.api.*;
 import org.w3c.dom.*;
 
@@ -213,7 +214,7 @@ public class SWBARule extends GenericResource {
         }
         comboAtt = null;
         vecOrderAtt = null;
-        loadComboAttr(tmsid, rRule.getId(), paramRequest);
+        loadComboAttr(tmsid, rRule.getURI(), paramRequest);
         StringBuffer ret = new StringBuffer("");
         String accion = request.getParameter("act");
         if (accion == null) {
@@ -308,7 +309,7 @@ public class SWBARule extends GenericResource {
         hmValues.put("true", paramRequest.getLocaleString("msgYes"));
         hmValues.put("false", paramRequest.getLocaleString("msgNo"));
         hmAttr.put("Valor", hmValues);
-        comboAtt.put("isregistered", hmAttr);
+        comboAtt.put(SWBRuleMgr.TAG_INT_ISREGISTERED, hmAttr); //RuleMgr.TAG_INT_ISREGISTERED
 
         hmAttr = new HashMap();
         hmOper = new HashMap();
@@ -321,7 +322,7 @@ public class SWBARule extends GenericResource {
         hmValues.put("true", paramRequest.getLocaleString("msgYes"));
         hmValues.put("false", paramRequest.getLocaleString("msgNo"));
         hmAttr.put("Valor", hmValues);
-        comboAtt.put("isloged", hmAttr);
+        comboAtt.put(SWBRuleMgr.TAG_INT_ISSIGNED, hmAttr); //RuleMgr.TAG_INT_ISLOGED
 
         // DISPOSITIVOS POR SITIO
         hmAttr = new HashMap();
@@ -332,20 +333,21 @@ public class SWBARule extends GenericResource {
         Iterator<Device> eleDev = SWBContext.getWebSite(tmid).listDevices();
         while (eleDev.hasNext()) {
             Device rDev = eleDev.next();
-            hmValues.put(rDev.getId(), rDev.getTitle());
+            hmValues.put(rDev.getURI(), rDev.getTitle());
         }
         hmAttr.put("Valor", hmValues);
         hmOper.put("=", paramRequest.getLocaleString("msgSameAs"));
         hmOper.put("!=", paramRequest.getLocaleString("msgNotEqual"));
         hmAttr.put("Operador", hmOper);
-        comboAtt.put("device", hmAttr);
+        comboAtt.put(SWBRuleMgr.TAG_INT_DEVICE, hmAttr); //RuleMgr.TAG_INT_DEVICE
 
         int numero = 0;
-        vecOrderAtt.add(numero++, "isregistered");
-        vecOrderAtt.add(numero++, "isloged");
-        vecOrderAtt.add(numero++, "device");
+        vecOrderAtt.add(numero++, SWBRuleMgr.TAG_INT_ISREGISTERED); //RuleMgr.TAG_INT_ISREGISTERED
+        vecOrderAtt.add(numero++, SWBRuleMgr.TAG_INT_ISSIGNED); //RuleMgr.TAG_INT_ISLOGED
+        vecOrderAtt.add(numero++, SWBRuleMgr.TAG_INT_DEVICE); //RuleMgr.TAG_INT_DEVICE
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Grupo de usuarios
         try {
             hmAttr = new HashMap();
             hmOper = new HashMap();
@@ -358,12 +360,12 @@ public class SWBARule extends GenericResource {
             Iterator<UserGroup> enumUsrG = usrRepo.listUserGroups();
             while (enumUsrG.hasNext()) {
                 UserGroup usrGroup = enumUsrG.next();
-                hmValues.put(usrGroup.getId(), usrGroup.getTitle());
+                hmValues.put(usrGroup.getURI(), usrGroup.getTitle());
             }
             hmAttr.put("Valor", hmValues);
             //TODO: RuleMgr ???ROLE
-            comboAtt.put("UserGroup", hmAttr); //RuleMgr.TAG_INT_ROLE
-            vecOrderAtt.add(numero++, "UserGroup"); //RuleMgr.TAG_INT_ROLE
+            comboAtt.put(SWBRuleMgr.TAG_INT_USERGROUP, hmAttr); //RuleMgr.TAG_INT_USERGROUP
+            vecOrderAtt.add(numero++, SWBRuleMgr.TAG_INT_USERGROUP); //RuleMgr.TAG_INT_USERGROUP
 
             // Se agrega la parte de roles
             hmAttr = new HashMap();
@@ -378,12 +380,12 @@ public class SWBARule extends GenericResource {
             Iterator<Role> enumRoles = SWBContext.getWebSite(tmid).getUserRepository().listRoles();
             while (enumRoles.hasNext()) {
                 Role role = enumRoles.next();
-                hmValues.put(role.getId(), role.getTitle());
+                hmValues.put(role.getURI(), role.getTitle());
             }
             hmAttr.put("Valor", hmValues);
             //TODO: RuleMgr ???ROLE
-            comboAtt.put("ROLE", hmAttr); //RuleMgr.TAG_INT_ROLE
-            vecOrderAtt.add(numero++, "ROLE"); //RuleMgr.TAG_INT_ROLE
+            comboAtt.put(SWBRuleMgr.TAG_INT_ROLE, hmAttr); //SWBRuleMgr.TAG_INT_ROLE
+            vecOrderAtt.add(numero++, SWBRuleMgr.TAG_INT_ROLE); //RuleMgr.TAG_INT_ROLE
 
             // Se agrega la parte de reglas
             if (ruleid == null) {
@@ -394,7 +396,7 @@ public class SWBARule extends GenericResource {
             Iterator<Rule> numrules = SWBContext.getWebSite(tmid).listRules();
             while (numrules.hasNext()) {
                 Rule rule = numrules.next();
-                if (!ruleid.equals(rule.getId())) {
+                if (!ruleid.equals(rule.getURI())) {
                     numreglas++;
                 }
             }
@@ -411,13 +413,13 @@ public class SWBARule extends GenericResource {
                 Iterator<Rule> enumRules = SWBContext.getWebSite(tmid).listRules();
                 while (enumRules.hasNext()) {
                     Rule rule = enumRules.next();
-                    if (!ruleid.equals(rule.getId())) {
-                        hmValues.put(rule.getId(), rule.getTitle());
+                    if (!ruleid.equals(rule.getURI())) {
+                        hmValues.put(rule.getURI(), rule.getTitle());
                     }
                 }
                 hmAttr.put("Valor", hmValues);
-                comboAtt.put("RULE", hmAttr); //RuleMgr.TAG_INT_RULE
-                vecOrderAtt.add(numero++, "RULE"); //RuleMgr.TAG_INT_RULE
+                comboAtt.put(SWBRuleMgr.TAG_INT_RULE, hmAttr); //RuleMgr.TAG_INT_RULE
+                vecOrderAtt.add(numero++, SWBRuleMgr.TAG_INT_RULE); //RuleMgr.TAG_INT_RULE
             }
 
             //Tipo de usuario
@@ -444,7 +446,7 @@ public class SWBARule extends GenericResource {
                 if (!tmid.equals(SWBContext.getGlobalWebSite().getId())) {
                     comboAtt.put(uType, hmAttr);
                 }
-                vecOrderAtt.add(numero++, uType); //RuleMgr.TAG_INT_ROLE
+                vecOrderAtt.add(numero++, uType); 
                 log.debug("tipo de usuario: " + uType);
             }
 
