@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Portlet;
 import org.semanticwb.model.PortletRef;
@@ -32,28 +33,28 @@ import org.semanticwb.portal.util.SWBPriorityComparator;
  *
  * @author Jei
  */
-public class SWBResourceMgr 
+public class SWBResourceMgr
 {
     private static Logger log = SWBUtils.getLogger(SWBResourceMgr.class);
-    
-    private HashMap<String,HashMap> resources;                  //WBResource
-    private HashMap<String,ClassLoader> resourceLoaders;                                //Resources ClassLoaders
+
+    private HashMap<String,SWBResource> resources;                  //WBResource
+    private HashMap<String,ClassLoader> resourceLoaders;            //Resources ClassLoaders
     private boolean resReloader = false;
 
 //    private SWBIntervalEvaluation intereval;
     private SWBResourceCachedMgr cache;
     private SWBResourceTraceMgr tracer;
-    
+
     public SWBResourceMgr()
     {
         log.event("Initializing SWBResourceMgr...");
     }
-    
-    
+
+
     public void init()
     {
         resources=new HashMap();
-        resourceLoaders = new HashMap();     
+        resourceLoaders = new HashMap();
         int time = 100;
         try
         {
@@ -61,33 +62,32 @@ public class SWBResourceMgr
         } catch (Exception e)
         {
             log.error("Error getting swb/resourceCached variable...",e);
-        }        
+        }
         cache = new SWBResourceCachedMgr(time);
-        tracer = new SWBResourceTraceMgr();        
+        tracer = new SWBResourceTraceMgr();
     }
-    
+
     public SWBResource getResource(String model, String id)
     {
-        HashMap<String,SWBResource> map=(HashMap)resources.get(model);
-        if(map==null)
-        {
-            map=new HashMap<String,SWBResource>();
-            resources.put(model, map);
-        }
-        if(id.indexOf(':')==-1)id=Portlet.swb_Portlet.getClassId()+":"+id;
-        SWBResource res=map.get(id);
+        Portlet portlet=SWBContext.getWebSite(model).getPortlet(id);
+        return getResource(portlet.getURI());
+    }
+
+    public SWBResource getResource(String uri)
+    {
+        SWBResource res=resources.get(uri);
         if(res==null)
         {
-            Portlet portlet=SWBContext.getWebSite(model).getPortlet(id);
+            Portlet portlet=(Portlet)SWBPlatform.getSemanticMgr().getOntology().getGenericObject(uri);
             if(portlet!=null)
             {
                 res=createSWBResource(portlet);
-                map.put(id, res);
+                resources.put(uri, res);
             }
         }
         return res;
     }
-    
+
     public SWBResource getResourceCached(SWBResource res, HttpServletRequest request, SWBParamRequest paramsRequest)
     {
         cache.incResourceHits();
@@ -98,9 +98,9 @@ public class SWBResourceMgr
         {
             return res;
         }
-    }    
-    
-    
+    }
+
+
     /**
      * @param user
      * @param topic
@@ -121,7 +121,7 @@ public class SWBResourceMgr
             //Portlet portlet=ref.getPortlet();
             Portlet portlet=it.next();
             //SWBResource res = getResource(portlet.getWebSiteId(), portlet.getSId());
-            SWBResource res = getResource(portlet.getWebSiteId(), portlet.getId());
+            SWBResource res = getResource(portlet.getURI());
             if (res != null)
             {
                 Portlet base = res.getResourceBase();
@@ -139,8 +139,8 @@ public class SWBResourceMgr
             }
         }
         return ret.iterator();
-    }    
-    
+    }
+
     /**
      * @param type
      * @param user
@@ -152,7 +152,7 @@ public class SWBResourceMgr
     {
         Date today = new Date();
         TreeSet ret = new TreeSet(new SWBPriorityComparator());
-        
+
         log.debug("getResource:");
         log.debug(" -->topic:"+topic.getTitle());
         log.debug("  -->name:"+params.get("name"));
@@ -161,7 +161,7 @@ public class SWBResourceMgr
         log.debug("  -->type:"+type);
         log.debug("  -->stype:"+stype);
         log.debug("  -->params:"+params);
-        
+
         if(type!=null)
         {
             //TODO:check stype
@@ -172,7 +172,7 @@ public class SWBResourceMgr
                 int camp=0;
                 if(checkResource(base, user, stype, camp, today, topic))
                 {
-                    SWBResource wbr=getResource(base.getWebSiteId(),base.getId());
+                    SWBResource wbr=getResource(base.getURI());
                     //System.out.println("checkResource ok:"+wbr.getResourceBase().getId());
                     if(wbr!=null)
                     {
@@ -181,14 +181,14 @@ public class SWBResourceMgr
                 }
             }
         }
-        
-        
+
+
 //        Date today = new Date();
         //today = new Date(today.getYear(), today.getMonth(), today.getDate());
 
-        
-        
-        
+
+
+
 //        //separar tipo de recurso
 //        int itype=0;
 //        String typemap=tpl.getWebSiteId();
@@ -205,9 +205,9 @@ public class SWBResourceMgr
 //                    itype=Integer.parseInt(type);
 //                }
 //            }catch(Exception e){log.error(e);}
-//        }        
+//        }
         //System.out.println("itype:"+itype+" typemap:"+typemap);
-        
+
         //separar subtypo de recurso
 //        int stype=0;
 //        String stypemap=tpl.getWebSiteId();
@@ -226,8 +226,8 @@ public class SWBResourceMgr
 //                }
 //            }catch(Exception e){log.error(e);}
 //        }
-//        
-//        
+//
+//
 //
 //        String name = (String) params.get("name");
 //
@@ -239,7 +239,7 @@ public class SWBResourceMgr
 //        }
 //        System.out.println("camp-->"+name+":"+camp);
         //OK_TODO: revisar recursos de global
-//        
+//
 //        ArrayList tp=null;
 //        if(topic.getWebSiteId().equals(tpl.getWebSiteId()))
 //        {
@@ -258,7 +258,7 @@ public class SWBResourceMgr
 //                HashMap aux=((HashMap) map.get(""+itype+"|"+tpl.getTopicMapId()));
 //                if(aux!=null)tp=new ArrayList(aux.values());
 //            }
-//            
+//
 //            map=(HashMap)resourcesbase.get(tpl.getTopicMapId());
 //            if(map!=null)
 //            {
@@ -268,9 +268,9 @@ public class SWBResourceMgr
 //                    if(tp==null)tp=new ArrayList(aux.values());
 //                    else tp.addAll(aux.values());
 //                }
-//            }            
+//            }
 //        }
-//        
+//
 //        if(type.endsWith(TopicMgr.TM_GLOBAL))
 //        {
 //            HashMap mapg=(HashMap)resourcesbase.get(TopicMgr.TM_GLOBAL);
@@ -325,13 +325,13 @@ public class SWBResourceMgr
         boolean passrules = true;
         //System.out.println("checkResource:"+base.getId()+" tmid:"+base.getTopicMapId()+" stype:"+stype+" stypemap:"+stypemap+" camp:"+camp+" topic:"+topic.getDisplayName());
 //        RuleMgr ruleMgr = RuleMgr.getInstance();
-        
+
         //System.out.println(""+base.getActive()+" == 1 && "+base.getDeleted()+" == 0");
         //System.out.println("&& (("+base.getSubType()+" == "+stype+" && ("+base.getSubType()+"==0 ||"+base.getSubTypeMap()+".equals("+stypemap+"))))");
         //System.out.println("&& ("+camp+" < 3 || "+base.getCamp()+" == "+camp+")");
         //System.out.println("&& ("+base.getMaxViews()+" == -1 || "+base.getMaxViews()+" > "+base.getViews()+")");
         //System.out.println("&& ("+base.getCamp()+" == 0 || "+DBCatalogs.getInstance().getCamp(base.getTopicMapId(),base.getCamp()).getActive()+" == 1)");
-        
+
         if (base.isActive() && !base.isDeleted()
                 && base.getPortletSubType() == stype
                 //&& (camp < 3 || base.getCamp() == camp)
@@ -342,7 +342,7 @@ public class SWBResourceMgr
             //TODO:Filter
             //if (!base.evalFilterMap(topic)) return false;
 
-            passrules=user.haveAccess(topic);
+            passrules=user.haveAccess(base);
 
             //TODO:calendar
             //if (passrules == true && !intereval.eval(today, base)) passrules = false;
@@ -356,9 +356,9 @@ public class SWBResourceMgr
             passrules = false;
         //System.out.println("checkResource:"+passrules);
         return passrules;
-    }    
-    
-    
+    }
+
+
 //    /** Valida carga de Recursos de versiones anteriore
 //     *
 //     */
@@ -368,7 +368,7 @@ public class SWBResourceMgr
 //    }
 
 //    /** Valida carga de Recursos de versiones anteriore
-//     *  Si el recursos es de una version anterior 
+//     *  Si el recursos es de una version anterior
 //     *  asigna setWb2Resource(true) del recursos
 //     */
 //    public Object convertOldWBResource(Object obj, Resource base)
@@ -396,8 +396,8 @@ public class SWBResourceMgr
 //            }
 //        }
 //        return aux;
-//    }    
-    
+//    }
+
     public Class createSWBResourceClass(String clsname) throws ClassNotFoundException
     {
         return createSWBResourceClass(clsname, false);
@@ -432,8 +432,8 @@ public class SWBResourceMgr
         }
         //System.out.println("createWBResourceClass:"+clsname+"->"+cls);
         return cls;
-    }    
-    
+    }
+
     public SWBResource createSWBResource(Portlet portlet)
     {
         SWBResource obj = null;
@@ -449,20 +449,11 @@ public class SWBResourceMgr
                 obj.setResourceBase(portlet);
                 if(obj.getResourceBase()==null)throw new SWBException(clsname+": if you override method setResourceBase, you have to invoke super.setResourceBase(base);");
                 obj.init();
-                
+
                 //HashMap basemap=(HashMap)resourcesbase.get(portlet.getTopicMapId());
-                HashMap<String,SWBResource> map=(HashMap)resources.get(portlet.getWebSiteId());
-                if(map==null)
-                {
-                    map=new HashMap();
-                    resources.put(portlet.getWebSiteId(), map);
-                    
-                    //basemap=new HashMap();
-                    //resourcesbase.put(portlet.getTopicMapId(), basemap);
-                }
-                map.put(portlet.getId(), obj);
+                //resources.put(portlet.getURI(), obj);
                 //if(base.isWb2Resource())oldresources.put(new Long(base.getId()), obj);
-                
+
 //                String typekey=""+portlet.getType();
 //                if(!portlet.getTypeMap().equals(portlet.getTopicMapId()))typekey+="|"+portlet.getTypeMap();
 //                HashMap tp = (HashMap) basemap.get(typekey);
@@ -482,7 +473,7 @@ public class SWBResourceMgr
         //System.out.println("createWBResource:"+obj);
         return obj;
     }
-    
+
     /** Getter for property resReloader.
      * @return Value of property resReloader.
      *
@@ -509,7 +500,7 @@ public class SWBResourceMgr
     {
         return tracer;
     }
-    
+
     /** Getter for property timeLock.
      * @return Value of property timeLock.
      *
@@ -517,8 +508,8 @@ public class SWBResourceMgr
     public SWBResourceCachedMgr getResourceCacheMgr()
     {
         return cache;
-    }        
-    
+    }
+
     /** Regresa el ClassLoader utilizado para cargar el tipo de recurso
      * @param className nombre de la clase del recurso
      * @return ClassLoader del recurso
@@ -527,8 +518,8 @@ public class SWBResourceMgr
     public ClassLoader getResourceLoader(String className)
     {
         return resourceLoaders.get(className);
-    }    
-    
+    }
+
     /** Getter for property resourceLoaders.
      * @return Value of property resourceLoaders.
      *
@@ -545,8 +536,8 @@ public class SWBResourceMgr
     public void setResourceLoaders(java.util.HashMap resourceLoaders)
     {
         this.resourceLoaders = resourceLoaders;
-    }    
-    
+    }
+
     private String getClassBase(String classname)
     {
         String ret=null;
@@ -556,6 +547,7 @@ public class SWBResourceMgr
             ret=classname.substring(0,i);
         }
         return ret;
-    }    
+    }
 
 }
+    
