@@ -68,7 +68,7 @@ public class VirtualResource extends GenericAdmResource
         String tmid=base.getAttribute("tmid","0");
         String id=base.getAttribute("resid","0");
         //TODO quitar la siguiente línea
-        SWBResource res=SWBPortal.getResourceMgr().getResource( paramRequest.getTopic().getWebSiteId(), id);
+        SWBResource res=SWBPortal.getResourceMgr().getResource( base.getURI());
         //TODO descomentar la siguiente línea
         //SWBResource res=SWBPortal.getResourceMgr().getResource(tmid, id);
                 
