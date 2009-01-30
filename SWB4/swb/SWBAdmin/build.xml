@@ -7,8 +7,8 @@
 <!-- the Compile on Save feature is turned off for the project. -->
 <!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
 <!-- in the project's Project Properties dialog box.-->
-<project name="SWBAdmin" default="default" basedir=".">
-    <description>Builds, tests, and runs the project SWBAdmin.</description>
+<project name="Sswbadmin" default="default" basedir=".">
+    <description>Builds, tests, and runs the project Sswbadmin.</description>
     <import file="nbproject/build-impl.xml"/>
     <!--
 
@@ -59,7 +59,7 @@
 
     An example of overriding the target for project execution could look like this:
 
-        <target name="run" depends="SWBAdmin-impl.jar">
+        <target name="run" depends="Sswbadmin-impl.jar">
             <exec dir="bin" executable="launcher.exe">
                 <arg file="${dist.jar}"/>
             </exec>
@@ -69,6 +69,33 @@
     the compile target as the regular run target does. Again, for a list of available 
     properties which you can use, check the target you are overriding in the
     nbproject/build-impl.xml file. 
-
+        <copy file="../applets/appletChat/dist/appletChat.jar" todir="${build.classes.dir}//swbadmin/lib"/>
+        <copy file="../applets/DragDrop/dist/DragDrop.jar" todir="${build.classes.dir}//swbadmin/lib"/>
+        <copy file="../applets/clock/dist/clock.jar" todir="${build.classes.dir}//swbadmin/lib"/>
+        <copy file="../applets/GenericWorkflow/dist/GenericWorkflow.jar" todir="${build.classes.dir}//swbadmin/lib"/>
+        <copy file="../applets/mapviews/dist/mapviews.jar" todir="${build.classes.dir}//swbadmin/lib"/>
+        <copy file="../applets/messenger/dist/messenger.jar" todir="${build.classes.dir}//swbadmin/lib"/>
+        <copy file="../applets/Noticias/dist/Noticias.jar" todir="${build.classes.dir}//swbadmin/lib"/>
+        <copy file="../applets/PermissRole/dist/PermissRole.jar" todir="${build.classes.dir}//swbadmin/lib"/>
+        <copy file="../applets/SelColor/dist/SelColor.jar" todir="${build.classes.dir}//swbadmin/lib"/>
+        <copy file="../applets/TMswbadmin/dist/TMswbadmin.jar" todir="${build.classes.dir}//swbadmin/lib"/>
+        <copy file="../applets/TMWBView/dist/TMWBView.jar" todir="${build.classes.dir}//swbadmin/lib"/>
+        <copy file="../applets/WorkFlowAdmin/dist/WorkFlowAdmin.jar" todir="${build.classes.dir}//swbadmin/lib"/>
+        <signjar jar="${build.classes.dir}//swbadmin/lib/DragDrop.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
     -->
+        <target name="-post-compile">
+        <copy file="../applets/EditFilters/dist/EditFilters.jar" todir="${build.classes.dir}//swbadmin/lib"/>
+        <copy file="../applets/filterSection/dist/filterSection.jar" todir="${build.classes.dir}//swbadmin/lib"/>
+        <copy file="../applets/ftp/dist/ftp.jar" todir="${build.classes.dir}//swbadmin/lib"/>
+        <copy file="../applets/GenericTree/dist/GenericTree.jar" todir="${build.classes.dir}//swbadmin/lib"/>
+        <copy file="../applets/htmleditor/dist/htmleditor.jar" todir="${build.classes.dir}//swbadmin/lib"/>
+        <copy file="../applets/Modeler/dist/Modeler.jar" todir="${build.classes.dir}//swbadmin/lib"/>
+        <copy file="../applets/Rules/dist/Rules.jar" todir="${build.classes.dir}//swbadmin/lib"/>
+        <copy file="../applets/WBABar/dist/WBABar.jar" todir="${build.classes.dir}//swbadmin/lib"/>
+        <copy file="../applets/WBCommons/dist/WBCommons.jar" todir="${build.classes.dir}//swbadmin/lib"/>
+        <copy file="../applets/WBGraph/dist/WBGraph.jar" todir="${build.classes.dir}//swbadmin/lib"/>
+        <signjar jar="${build.classes.dir}//swbadmin/lib/htmleditor.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
+        <signjar jar="${build.classes.dir}//swbadmin/lib/ftp.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
+        <signjar jar="${build.classes.dir}//swbadmin/lib/GenericTree.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
+        </target>
 </project>
