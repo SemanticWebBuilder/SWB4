@@ -91,7 +91,7 @@ public class IFrameContent extends GenericAdmResource
                     if("center".equals(align)) {
                         ret.append("<p align=center>");
                     }
-                    ret.append("<IFRAME ID=\"WBIFrame_\""+base.getId()+" SRC=\"" + base.getAttribute("url").trim());
+                    ret.append("<iframe id=\"WBIFrame_\""+base.getId()+" src=\"" + base.getAttribute("url").trim());
                     Enumeration en = request.getParameterNames();
                     for (int i=0; en.hasMoreElements(); i++)
                     {
@@ -124,7 +124,7 @@ public class IFrameContent extends GenericAdmResource
                     }
                     ret.append(">");
                     ret.append(paramRequest.getLocaleString("msgRequiredInternetExplorer"));
-                    ret.append("</IFRAME>");
+                    ret.append("</iframe>");
                     if("center".equals(align)) {
                         ret.append("</p>");
                     }

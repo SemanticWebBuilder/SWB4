@@ -69,11 +69,10 @@ public class StaticText extends GenericAdmResource
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         Portlet base=getResourceBase();
         base.getAttribute("text");
-        String staticText = replaceTags(base.getAttribute("text"), request,paramRequest);
+        String staticText = replaceTags(base.getAttribute("text"), request, paramRequest);
 
         PrintWriter out = response.getWriter();
         out.println(staticText);
-        out.println("<br><a href=\"" + paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN) + "\">admin static text</a>");
     }
 
     public String replaceTags(String str, HttpServletRequest request, SWBParamRequest paramRequest)

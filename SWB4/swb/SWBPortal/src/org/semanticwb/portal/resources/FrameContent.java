@@ -75,13 +75,7 @@ public class FrameContent extends GenericAdmResource
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        Portlet base=getResourceBase();
-        if("".equals(base.getAttribute("url","").trim())) 
-        { 
-            //response.getWriter().print(""); 
-            response.getWriter().println("<br><a href=\"" + paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN) + "\">admin</a>");
-            return; 
-        }
+        Portlet base=getResourceBase();        
 
         StringBuffer ret = new StringBuffer("");        
         String ind = request.getParameter("WBIndexer");
@@ -91,7 +85,7 @@ public class FrameContent extends GenericAdmResource
             {
                 if (paramRequest.getArguments().get("adm") == null)
                 {
-                    ret.append("<FRAME SRC=\"" + base.getAttribute("url").trim());
+                    ret.append("<frame src=\"" + base.getAttribute("url").trim());
                      Enumeration en = request.getParameterNames();
                     for (int i=0; en.hasMoreElements(); i++)
                     {
@@ -110,7 +104,7 @@ public class FrameContent extends GenericAdmResource
                             ret.append(param +"=" + request.getParameter(param));
                         }
                     }
-                    ret.append("\" NAME=\"bottom\" SCROLLING=\"Auto\" noresize BORDER=0 frameborder=\"NO\">");
+                    ret.append("\" name=\"bottom\" scrolling=\"Auto\" noresize=\"noresize\" border=\"0\" frameborder=\"no\" />");
                 } 
                 else if (paramRequest.getArguments().get("adm") != null )
                 {

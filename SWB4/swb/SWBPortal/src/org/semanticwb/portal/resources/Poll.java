@@ -134,6 +134,7 @@ public class Poll extends GenericResource
                 NodeList node = dom.getElementsByTagName("option");            
                 if (!"".equals(base.getAttribute("question", "").trim()) && node.getLength() > 1)            
                 {
+                    ret.append("<div id=\"swb-encuesta\">");
                     ret.append("<form action=\""+paramRequest.getRenderUrl()+"\" method=\"POST\" name=\"frmEncuesta\" id=\"frmEncuesta\"> \n");
                     ret.append("<table width=\"100%\" border=\"0\" cellpadding=\"0\" style=\"color:");
                     ret.append(base.getAttribute("textcolor", "#000000").trim()+"\"> \n");
@@ -198,6 +199,7 @@ public class Poll extends GenericResource
                         ret.append("</table> \n");
                         ret.append("<input type=\"hidden\" name=\"NombreCookie\" value=\"VotosEncuesta"+ base.getId() +"\"/> \n");
                         ret.append("</form> \n");
+                        ret.append("</div>");
                     }
 
                     String win = "menubar="+ base.getAttribute("menubar", "no").trim();
@@ -286,28 +288,7 @@ public class Poll extends GenericResource
 
                     ret.append("function getHtml(url, tagid) {\n");
                     ret.append("    $('#'+tagid).load(url);");                    
-                    /*ret.append("  dojo.xhrGet({\n");
-                    ret.append("      url: url,\n");
-                    ret.append("      load: function(response, ioArgs){\n");
-                    ret.append("        if(dojo.byId(tagid)) {\n");
-                    ret.append("          dojo.byId(tagid).innerHTML = response;\n");
-                    ret.append("        }else {\n");
-                    ret.append("          alert('No existe ningún elemento con id ' + tagid);\n");
-                    ret.append("        }\n");
-                    ret.append("        return response;\n");
-                    ret.append("      },\n");
-                    ret.append("      error: function(response, ioArgs){\n");
-                    ret.append("          if(dojo.byId(tagid)) {\n");
-                    ret.append("            dojo.byId(tagid).innerHTML = '<p>Ocurrió un error con respuesta:<br />' + response + '</p>';\n");
-                    ret.append("          }else {\n");
-                    ret.append("            alert('No existe ningún elemento con id ' + tagid);\n");
-                    ret.append("          }\n");
-                    ret.append("          return response;\n");
-                    ret.append("      },\n");
-                    ret.append("      handleAs: 'text'\n");
-                    ret.append("  });\n");*/
                     ret.append("}\n");
-
                     ret.append("</script> \n");
                 }
             }

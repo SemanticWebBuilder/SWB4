@@ -101,11 +101,6 @@ public class PDFContent extends GenericAdmResource {
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramReq) throws SWBResourceException, IOException 
     {        
         Portlet base=getResourceBase();
-        if("".equals(base.getAttribute("archive","").trim())) {
-            response.getWriter().println("<br><a href=\"" + paramReq.getRenderUrl().setMode(paramReq.Mode_ADMIN) + "\">admin pdf content</a>");
-            return; 
-        }
-
         StringBuffer ret = new StringBuffer("");        
         String ind = request.getParameter("WBIndexer");
         if (!"indexing".equals(ind))
@@ -116,7 +111,7 @@ public class PDFContent extends GenericAdmResource {
                 if("center".equals(align)) {
                     ret.append("<p align=center>");
                 }
-                ret.append("<IFRAME ID=\"WBIFrame_"+base.getId()+"\" SRC=\""+ SWBPlatform.getWebWorkPath() + base.getWorkPath() +"/"+ base.getAttribute("archive").trim() + "\"");
+                ret.append("<iframe id=\"WBIFrame_"+base.getId()+"\" src=\""+ SWBPlatform.getWebWorkPath() + base.getWorkPath() +"/"+ base.getAttribute("archive").trim() + "\"");
                 ret.append(" width=\""+base.getAttribute("width", "100%").trim() +"\"");
                 ret.append(" height=\""+base.getAttribute("height", "100%").trim() +"\"");
                 ret.append(" marginwidth=\""+base.getAttribute("marginwidth", "0").trim() +"\"");
@@ -131,7 +126,7 @@ public class PDFContent extends GenericAdmResource {
                 }
                 ret.append(">");
                 ret.append(paramReq.getLocaleString("msgRequiredInternetExplorer"));
-                ret.append("</IFRAME>");
+                ret.append("</iframe>");
                 if("center".equals(align)){
                     ret.append("</p>");
                 }

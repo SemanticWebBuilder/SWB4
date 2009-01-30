@@ -28,7 +28,7 @@ import org.w3c.dom.NodeList;
  * @author Administrador
  */
 public class ImageGallery extends GenericAdmResource {
-    private static Logger log = SWBUtils.getLogger(WBSiteMap.class);
+    private static Logger log = SWBUtils.getLogger(ImageGallery.class);
     private WBAdmResourceUtils admResUtils=new WBAdmResourceUtils();
     private String workPath;
     private String webWorkPath;
@@ -111,8 +111,8 @@ public class ImageGallery extends GenericAdmResource {
             ret.append("); \n");            
             ret.append("</script> \n");
             ret.append("<div>");
-            ret.append("<span>"+base.getAttribute("title","")+"</span>");
-            ret.append("<div class=\"imagegallery\" id=\"imggallery_"+base.getId()+"\"></div> \n");
+            ret.append("<span>"+base.getAttribute("title","")+"</span>\n");
+            ret.append("<div id=\"imggallery_"+base.getId()+"\" style=\"position:relative; visibility:hidden\"></div> \n");
             ret.append("</div>");
         }catch(Exception e) {
             log.error(e);
