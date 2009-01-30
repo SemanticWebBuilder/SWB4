@@ -127,13 +127,6 @@ public class RuleApplet extends javax.swing.JApplet implements CommandListener
         
         GraphElement se = ((GraphView)jPanel1).getStartElement();
         Image img=getImage(getClass().getResource("/applets/rules/images/start.gif"));
-        MediaTracker tracker = new MediaTracker( this );
-        tracker.addImage(img, 1);
-        try
-        {
-            tracker.waitForAll();
-        }catch( InterruptedException noe ) {}
-
         se.setImage(img);
         se.setWidth(85);
         se.setHeight(74);
@@ -242,6 +235,7 @@ public class RuleApplet extends javax.swing.JApplet implements CommandListener
 
         jToolBar1.setBackground(new java.awt.Color(225, 235, 251));
 
+        jButton1.setBackground(new java.awt.Color(213, 227, 248));
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("applets/rules/RuleApplet",locale); // NOI18N
         jButton1.setText(bundle.getString("Save")); // NOI18N
         jButton1.setToolTipText(bundle.getString("Save")); // NOI18N
@@ -256,6 +250,7 @@ public class RuleApplet extends javax.swing.JApplet implements CommandListener
         });
         jToolBar1.add(jButton1);
 
+        jToggleButton1.setBackground(new java.awt.Color(213, 227, 248));
         Elements.add(jToggleButton1);
         jToggleButton1.setToolTipText(bundle.getString("Pointer")); // NOI18N
         jToggleButton1.setActionCommand("POINT");
@@ -265,6 +260,7 @@ public class RuleApplet extends javax.swing.JApplet implements CommandListener
         jToggleButton1.setPreferredSize(new java.awt.Dimension(50, 25));
         jToolBar1.add(jToggleButton1);
 
+        jToggleButton2.setBackground(new java.awt.Color(213, 227, 248));
         Elements.add(jToggleButton2);
         jToggleButton2.setText(bundle.getString("Cond")); // NOI18N
         jToggleButton2.setToolTipText(bundle.getString("Condition")); // NOI18N
@@ -279,6 +275,7 @@ public class RuleApplet extends javax.swing.JApplet implements CommandListener
         });
         jToolBar1.add(jToggleButton2);
 
+        jToggleButton3.setBackground(new java.awt.Color(213, 227, 248));
         Elements.add(jToggleButton3);
         jToggleButton3.setText(bundle.getString("And")); // NOI18N
         jToggleButton3.setToolTipText(bundle.getString("And")); // NOI18N
@@ -288,6 +285,7 @@ public class RuleApplet extends javax.swing.JApplet implements CommandListener
         jToggleButton3.setPreferredSize(new java.awt.Dimension(50, 25));
         jToolBar1.add(jToggleButton3);
 
+        jToggleButton4.setBackground(new java.awt.Color(213, 227, 248));
         Elements.add(jToggleButton4);
         jToggleButton4.setText(bundle.getString("Or")); // NOI18N
         jToggleButton4.setToolTipText(bundle.getString("Or")); // NOI18N
@@ -297,6 +295,7 @@ public class RuleApplet extends javax.swing.JApplet implements CommandListener
         jToggleButton4.setPreferredSize(new java.awt.Dimension(50, 25));
         jToolBar1.add(jToggleButton4);
 
+        jToggleButton5.setBackground(new java.awt.Color(213, 227, 248));
         Elements.add(jToggleButton5);
         jToggleButton5.setText(bundle.getString("Not")); // NOI18N
         jToggleButton5.setToolTipText(bundle.getString("Negation")); // NOI18N
