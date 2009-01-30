@@ -57,6 +57,7 @@ public class SWBARule extends GenericResource {
             tp = SWBContext.getWebSite(request.getParameter("tm")).getWebPage(request.getParameter("tp"));
             tmparam = request.getParameter("tm");
         }
+        ret.append("\n<div class=\"applet\">");
         ret.append("\n<APPLET id=\"rulesApplet\" name=\"rulesApplet\" code=\"applets.rules.RuleApplet.class\" codebase=\"" + SWBPlatform.getContextPath() + "\"  ARCHIVE=\"swbadmin/lib/Modeler.jar, swbadmin/lib/WBCommons.jar, swbadmin/lib/Rules.jar\" width=\"100%\" height=\"400\">");  //ARCHIVE=\"wbadmin/lib/GenericTree.jar, wbadmin/lib/WBCommons.jar\"
         SWBResourceURL urlapp = paramRequest.getRenderUrl();
         urlapp.setMode("gateway");
@@ -74,6 +75,7 @@ public class SWBARule extends GenericResource {
         ret.append("\n<PARAM NAME =\"act\" VALUE=\"edit\">");
         ret.append("\n<PARAM NAME =\"locale\" VALUE=\"" + paramRequest.getUser().getLanguage() + "\">");
         ret.append("\n</APPLET>");
+        ret.append("\n</div>");
         return ret.toString();
     }
 
