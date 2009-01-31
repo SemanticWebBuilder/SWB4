@@ -86,8 +86,7 @@ public class SWBATreeDBQuery extends GenericResource
         agzip = SWBPlatform.getEnv("wb/responseGZIPEncoding","true").equalsIgnoreCase("true");
         try
         {
-            BufferedReader in=new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/org/semanticwb/portal/admin/resources/wbtree/WBTree.properties")));
-            String str=null;
+            BufferedReader in=new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/org/semanticwb/portal/admin/resources/SWBATree.properties")));            String str=null;
             while((str=in.readLine())!=null)
             {
                 try
@@ -506,7 +505,7 @@ public class SWBATreeDBQuery extends GenericResource
         
         Element poolconn=addNode("node",dbcon,dbcon,root);
         poolconn.setAttribute("view","showurl="+tma.getWebPage(STATUS_TOPIC).getUrl()+"?pool="+dbcon+"&act=jsupdpool&status=true");
-        poolconn.setAttribute("vtarget","status");
+        poolconn.setAttribute("vtarget","");//status
         poolconn.setAttribute("reload","getPool."+dbcon);
         //        poolconn.setAttribute("view","showurl="+tma.getTopic("WBAd_infoi_TopicMapInfo").getUrl()+"?tm="+dbcon);
         //poolconn.setAttribute("vtarget","info");
@@ -576,7 +575,7 @@ public class SWBATreeDBQuery extends GenericResource
         
         Element table=addNode("node",tablename,tablename,res);
         table.setAttribute("view","showurl="+tma.getWebPage(STATUS_TOPIC).getUrl()+"?pool="+dbcon+"&act=jsupdpool&status=true&table="+tablename);
-        table.setAttribute("vtarget","status");
+        table.setAttribute("vtarget","");//status
         table.setAttribute("reload","getTable."+dbcon+"."+tablename);
         //        topic.setAttribute("view","showurl="+tma.getTopic("WBAd_infoi_TopicInfo").getUrl(tp));
         //topic.setAttribute("vtarget","info");
@@ -596,7 +595,7 @@ public class SWBATreeDBQuery extends GenericResource
                 {
                     option=addNode("option",thisToken,thisToken,menu);
                     option.setAttribute("action","showurl="+tma.getWebPage(STATUS_TOPIC).getUrl()+"?pool="+dbcon+"&act=jsupdpool&status=true&table="+tablename+"&cmd="+thisToken);
-                    option.setAttribute("target","status");
+                    option.setAttribute("target","");//status
                 }
                 
             }
@@ -670,7 +669,7 @@ public class SWBATreeDBQuery extends GenericResource
         
         Element node=addNode("node",""+dbcon+"_"+columnname,columnname,res);
         node.setAttribute("view","showurl="+tma.getWebPage(STATUS_TOPIC).getUrl()+"?pool="+dbcon+"&act=jsupdpool&status=true");
-        node.setAttribute("vtarget","status");
+        node.setAttribute("vtarget","");//status
         node.setAttribute("reload","getColumn."+dbcon+"."+tablename+"."+columnname);
         //        node.setAttribute("view","showurl="+tma.getTopic("WBAd_sysi_DBQuery").getUrl()+"?pool="+dbcon+"&act=jsupdpool&status=true&cmd="+thisToken);
         //        node.setAttribute("vtarget","info");
