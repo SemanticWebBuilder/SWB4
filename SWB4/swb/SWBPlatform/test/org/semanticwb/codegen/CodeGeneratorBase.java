@@ -49,6 +49,27 @@ public class CodeGeneratorBase
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     //
+    //@Test
+    public void generateCode()
+    {
+        try
+        {
+            String path=getClass().getResource("/").getPath().replaceAll("%20", " ");
+            File dir = new File(path+"../../../SWBModel/src");
+            String sPakage = "org.semanticwb.model";
+            CodeGenerator codeGeneration = new CodeGenerator(dir, sPakage);
+            codeGeneration.generateCode();
+            System.out.println("Generación de clases completa");
+        }
+        catch ( CodeGeneratorException cge )
+        {
+            fail(cge.getMessage());
+        }
+    }
+
+    // TODO add test methods here.
+    // The methods must be annotated with annotation @Test. For example:
+    //
     @Test
     public void generateCodeSwb()
     {
@@ -77,6 +98,24 @@ public class CodeGeneratorBase
             String sPakage = "org.semanticwb.model";
             CodeGenerator codeGeneration = new CodeGenerator(dir, sPakage);
             codeGeneration.generateCode("swbxf");
+            System.out.println("Generación de clases completa");
+        }
+        catch ( CodeGeneratorException cge )
+        {
+            fail(cge.getMessage());
+        }
+    }
+
+    //@Test
+    public void generateCodeForum()
+    {
+        try
+        {
+            String path=getClass().getResource("/").getPath().replaceAll("%20", " ");
+            File dir = new File(path+"../../../SWBModel/src");
+            String sPakage = "org.semanticwb.model";
+            CodeGenerator codeGeneration = new CodeGenerator(dir, sPakage);
+            codeGeneration.generateCode("frm");
             System.out.println("Generación de clases completa");
         }
         catch ( CodeGeneratorException cge )
