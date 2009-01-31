@@ -176,12 +176,12 @@ public class SWBADBPool extends GenericResource {
             out.println("      <table border=0><tr><td>");
             out.println("      <form action=\"" + paramsRequest.getActionUrl() + "\" method=\"post\">");
             out.println("        <input type=hidden name=\"dbcon\" value=\"" + dbcon + "\">");
-            out.println("        <input type=submit class=\"boton\" name=\"clear\" value=\"" + paramsRequest.getLocaleString("clear") + " " + selectedPool.getName() + "\">");
+            out.println("        <input type=submit name=\"clear\" value=\"" + paramsRequest.getLocaleString("clear") + " " + selectedPool.getName() + "\">");
             out.println("      </form>");
             out.println("      </td><td>");
             out.println("      <form action=\"" + paramsRequest.getRenderUrl() + "\" method=\"post\">");
             out.println("        <input type=hidden name=\"dbcon\" value=\"" + dbcon + "\">");
-            out.println("        <input type=submit class=\"boton\" name=\"reload\" value=\"" + paramsRequest.getLocaleString("update") + "\">");
+            out.println("        <input type=submit name=\"reload\" value=\"" + paramsRequest.getLocaleString("update") + "\">");
             out.println("      </form>");
             out.println("      </td></tr></table>");
             out.println("    </td></tr>");
