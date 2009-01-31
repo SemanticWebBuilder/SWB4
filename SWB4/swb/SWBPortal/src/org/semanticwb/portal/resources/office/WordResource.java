@@ -18,6 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
+import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Portlet;
 import org.semanticwb.office.comunication.OfficeDocument;
@@ -67,8 +69,7 @@ public class WordResource extends GenericAdmResource
     {
         if (base instanceof WordPortlet)
         {
-            String basePath = SWBUtils.getApplicationPath() + base.getWorkPath() + "/";
-            clean(base);
+            //clean(base);
             WordPortlet portlet = (WordPortlet) base;
             String contentId = portlet.getContent();
             String repositoryName = portlet.getRepositoryName();
@@ -77,20 +78,12 @@ public class WordResource extends GenericAdmResource
             File zipFile = null;
             try
             {
+                document.setUser("user");
+                document.setPassword("password");
                 InputStream in = document.getContent(repositoryName, contentId);
-                String name = UUID.randomUUID().toString();
-                String zipPath = basePath + name + ".zip";
-                zipFile = new File(zipPath);
-                FileOutputStream out = new FileOutputStream(zipFile);
-                byte[] buffer = new byte[2048];
-                int read = in.read(buffer);
-                while (read != -1)
-                {
-                    out.write(buffer, 0, read);
-                    read = in.read(buffer);
-                }
-                in.close();
-                out.close();
+                String name = UUID.randomUUID().toString()+".zip";
+                SWBPlatform.writeFileToWorkPath(base.getWorkPath()+"\\"+name, in, "");
+                zipFile=new File(SWBPlatform.getWorkPath() + base.getWorkPath()+"\\"+name);
                 ZipFile zip = new ZipFile(zipFile);
                 Enumeration entries = zip.entries();
                 while (entries.hasMoreElements())
@@ -99,20 +92,13 @@ public class WordResource extends GenericAdmResource
                     if (!entry.isDirectory())
                     {
                         InputStream inEntry = zip.getInputStream(entry);
-                        out = new FileOutputStream(basePath + entry.getName());
-                        read = inEntry.read(buffer);
-                        while (read != -1)
-                        {
-                            out.write(buffer, 0, read);
-                            read = inEntry.read(buffer);
-                        }
-                        inEntry.close();
-                        out.close();
+                        SWBPlatform.writeFileToWorkPath(base.getWorkPath()+"\\"+entry.getName(), inEntry, "");
                     }
                 }
             }
             catch (Exception e)
             {
+                log.error(e);
             }
             finally
             {
@@ -128,8 +114,7 @@ public class WordResource extends GenericAdmResource
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramReq) throws SWBResourceException, IOException
     {
         if (this.getResourceBase() instanceof WordPortlet)
-        {
-            String basePath = SWBUtils.getApplicationPath() + this.getResourceBase().getWorkPath() + "/";
+        {                        
             WordPortlet portlet = (WordPortlet) this.getResourceBase();
             String contentId = portlet.getContent();
             String repositoryName = portlet.getRepositoryName();
@@ -139,15 +124,19 @@ public class WordResource extends GenericAdmResource
                 PrintWriter out=response.getWriter();
                 String file=document.getContentFile(repositoryName, contentId);
                 file=file.replace(".doc",".html");
-                String path=basePath+file;
+                String path=SWBPlatform.getWorkPath() + getResourceBase().getWorkPath()+"\\"+file;
+                StringBuffer html=new StringBuffer();
                 FileInputStream in=new FileInputStream(path);
                 byte[] buffer = new byte[2048];
                 int read=in.read(buffer);
                 while(read!=-1)
-                {
-                    out.write(new String(buffer,0,read));
+                {                    
+                    html.append(new String(buffer,0,read));
                     read=in.read(buffer);
                 }
+                String workpath=SWBPlatform.getWebWorkPath()+getResourceBase().getWorkPath()+"/";
+                String htmlOut=SWBPortal.UTIL.parseHTML(html.toString(),workpath);
+                out.write(htmlOut);
             }
             catch(Exception e)
             {
