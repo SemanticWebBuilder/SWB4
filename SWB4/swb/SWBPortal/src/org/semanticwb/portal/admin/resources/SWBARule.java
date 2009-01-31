@@ -240,15 +240,15 @@ public class SWBARule extends GenericResource {
                 urlHistory.setParameter("act", "history");
                 urlHistory.setParameter("id", id);
                 ret.append("\n<div class=\"swbform\">");
-                ret.append("\n<fieldset>");
-                ret.append("\n<TABLE width=\"98%\"  border=\"0\" cellpadding=\"5\" cellspacing=\"0\">");
-                ret.append("\n<TR>");
-                ret.append("\n<TD width=\"150\" align=\"right\"> " + paramRequest.getLocaleString("msgIdentifier") + "&nbsp;&nbsp;&nbsp;</TD>");
-                ret.append("\n<TD>");
-                ret.append(rRule.getId());
-                ret.append("\n</TD>");
-                ret.append("\n</TR>");
-                ret.append("\n</TABLE></fieldset>");
+//                ret.append("\n<fieldset>");
+//                ret.append("\n<TABLE width=\"98%\"  border=\"0\" cellpadding=\"5\" cellspacing=\"0\">");
+//                ret.append("\n<TR>");
+//                ret.append("\n<TD width=\"150\" align=\"right\"> " + paramRequest.getLocaleString("msgIdentifier") + "&nbsp;&nbsp;&nbsp;</TD>");
+//                ret.append("\n<TD>");
+//                ret.append(rRule.getId());
+//                ret.append("\n</TD>");
+//                ret.append("\n</TR>");
+//                ret.append("\n</TABLE></fieldset>");
 
                 if (accion.equals("edit") | accion.equals("details")) {
                     String xml = null;

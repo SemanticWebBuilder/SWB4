@@ -80,7 +80,7 @@ public class SWBAHitsMonitor extends GenericResource {
         if (SWBPlatform.getEnv("wb/systemMonitor","false").equals("true")) {
             out.println("<table width=100% cellpadding=10 cellspacing=0 border=0>");
             out.println("<tr><td>");
-            
+            out.println("<div class=\"applet\">");
             out.println("<APPLET code=\"applets.graph.WBGraph.class\" archive=\""
                     + SWBPlatform.getContextPath()
                     + "/swbadmin/lib/WBGraph.jar\" width=\"100%\" height=\"200\">");
@@ -90,10 +90,10 @@ public class SWBAHitsMonitor extends GenericResource {
             out.println("<param name=\"cgi\" value=\"" + url + "\">");
             out.println("<param name=\"reload\" value=\"5\">");
             out.println("</APPLET>");
-
+            out.println("</div>");
             out.println("</td></tr>");
             out.println("<tr><td>");
-
+            out.println("<div class=\"applet\">");
             out.println("<APPLET code=\"applets.graph.WBGraph.class\" archive=\""
                     + SWBPlatform.getContextPath()
                     + "/swbadmin/lib/WBGraph.jar\" width=\"100%\" height=\"200\">");
@@ -103,10 +103,10 @@ public class SWBAHitsMonitor extends GenericResource {
             out.println("<param name=\"cgi\" value=\"" + url + "\">");
             out.println("<param name=\"reload\" value=\"5\">");
             out.println("</APPLET>");
-
+            out.println("</div>");
             out.println("</td></tr>");
             out.println("<tr><td>");
-
+            out.println("<div class=\"applet\">");
             out.println("<APPLET code=\"applets.graph.WBGraph.class\" archive=\""
                     + SWBPlatform.getContextPath()
                     + "/swbadmin/lib/WBGraph.jar\" width=\"100%\" height=\"200\">");            
@@ -116,7 +116,7 @@ public class SWBAHitsMonitor extends GenericResource {
             out.println("<param name=\"cgi\" value=\"" + url + "\">");            
             out.println("<param name=\"reload\" value=\"5\">");
             out.println("</APPLET>");
-
+            out.println("</div>");
             out.println("</td></tr>");            
             out.println("</table>");
         } else {
