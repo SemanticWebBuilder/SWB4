@@ -887,7 +887,7 @@ public class CodeGenerator
 
             javaClassContent.append("    public java.util.Iterator<" + getPackage(tpc) + "." + className + "> list" + className + "s()" + ENTER);
             javaClassContent.append("    {" + ENTER);
-            javaClassContent.append("        return "+getPackage(tpc) + "." + className+".list"+ className +"s();" + ENTER);
+            javaClassContent.append("        return "+getPackage(tpc) + "." + className+".list"+ className +"s(this);" + ENTER);
             javaClassContent.append("    }" + ENTER);
             
             javaClassContent.append(ENTER);
