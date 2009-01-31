@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class UserRepositoryBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public class UserRepositoryBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
@@ -172,7 +172,7 @@ public class UserRepositoryBase extends org.semanticwb.model.SWBModel implements
 
     public java.util.Iterator<org.semanticwb.model.UserFavorites> listUserFavoritess()
     {
-        return org.semanticwb.model.UserFavorites.listUserFavoritess();
+        return org.semanticwb.model.UserFavorites.listUserFavoritess(this);
     }
 
     public org.semanticwb.model.UserFavorites createUserFavorites(String id)
@@ -202,7 +202,7 @@ public class UserRepositoryBase extends org.semanticwb.model.SWBModel implements
 
     public java.util.Iterator<org.semanticwb.model.UserGroup> listUserGroups()
     {
-        return org.semanticwb.model.UserGroup.listUserGroups();
+        return org.semanticwb.model.UserGroup.listUserGroups(this);
     }
 
     public org.semanticwb.model.UserGroup createUserGroup(String id)
@@ -226,7 +226,7 @@ public class UserRepositoryBase extends org.semanticwb.model.SWBModel implements
 
     public java.util.Iterator<org.semanticwb.model.User> listUsers()
     {
-        return org.semanticwb.model.User.listUsers();
+        return org.semanticwb.model.User.listUsers(this);
     }
 
     public org.semanticwb.model.User createUser(String id)
@@ -256,7 +256,7 @@ public class UserRepositoryBase extends org.semanticwb.model.SWBModel implements
 
     public java.util.Iterator<org.semanticwb.model.Role> listRoles()
     {
-        return org.semanticwb.model.Role.listRoles();
+        return org.semanticwb.model.Role.listRoles(this);
     }
 
     public org.semanticwb.model.Role createRole(String id)
