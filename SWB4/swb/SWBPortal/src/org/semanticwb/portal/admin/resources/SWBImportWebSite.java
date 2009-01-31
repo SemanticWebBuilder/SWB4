@@ -31,7 +31,7 @@ public class SWBImportWebSite extends GenericResource {
     private static Logger log = SWBUtils.getLogger(SWBImportWebSite.class);
 
     @Override
-    public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         String action = paramRequest.getAction();
         SWBResourceURL url = paramRequest.getRenderUrl();
