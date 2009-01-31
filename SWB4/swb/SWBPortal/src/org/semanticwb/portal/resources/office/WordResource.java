@@ -95,6 +95,7 @@ public class WordResource extends GenericAdmResource
                         SWBPlatform.writeFileToWorkPath(base.getWorkPath()+"\\"+entry.getName(), inEntry, "");
                     }
                 }
+                zip.close();
             }
             catch (Exception e)
             {
