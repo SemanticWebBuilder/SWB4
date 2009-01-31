@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Localeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Deleteable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable
+public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Traceable,org.semanticwb.model.Deleteable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Localeable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
@@ -280,7 +280,7 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
 
     public java.util.Iterator<org.semanticwb.model.Community> listCommunitys()
     {
-        return org.semanticwb.model.Community.listCommunitys();
+        return org.semanticwb.model.Community.listCommunitys(this);
     }
 
     public org.semanticwb.model.Community createCommunity(String id)
@@ -304,7 +304,7 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
 
     public java.util.Iterator<org.semanticwb.model.PortletType> listPortletTypes()
     {
-        return org.semanticwb.model.PortletType.listPortletTypes();
+        return org.semanticwb.model.PortletType.listPortletTypes(this);
     }
 
     public org.semanticwb.model.PortletType createPortletType(String id)
@@ -328,7 +328,7 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
 
     public java.util.Iterator<org.semanticwb.model.RuleRef> listRuleRefs()
     {
-        return org.semanticwb.model.RuleRef.listRuleRefs();
+        return org.semanticwb.model.RuleRef.listRuleRefs(this);
     }
 
     public org.semanticwb.model.RuleRef createRuleRef(String id)
@@ -358,7 +358,7 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
 
     public java.util.Iterator<org.semanticwb.model.Language> listLanguages()
     {
-        return org.semanticwb.model.Language.listLanguages();
+        return org.semanticwb.model.Language.listLanguages(this);
     }
 
     public org.semanticwb.model.Language createLanguage(String id)
@@ -382,7 +382,7 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
 
     public java.util.Iterator<org.semanticwb.model.Dns> listDnss()
     {
-        return org.semanticwb.model.Dns.listDnss();
+        return org.semanticwb.model.Dns.listDnss(this);
     }
 
     public org.semanticwb.model.Dns createDns(String id)
@@ -406,7 +406,7 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
 
     public java.util.Iterator<org.semanticwb.model.Rule> listRules()
     {
-        return org.semanticwb.model.Rule.listRules();
+        return org.semanticwb.model.Rule.listRules(this);
     }
 
     public org.semanticwb.model.Rule createRule(String id)
@@ -436,7 +436,7 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
 
     public java.util.Iterator<org.semanticwb.model.Camp> listCamps()
     {
-        return org.semanticwb.model.Camp.listCamps();
+        return org.semanticwb.model.Camp.listCamps(this);
     }
 
     public org.semanticwb.model.Camp createCamp(String id)
@@ -466,7 +466,7 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
 
     public java.util.Iterator<org.semanticwb.model.VersionInfo> listVersionInfos()
     {
-        return org.semanticwb.model.VersionInfo.listVersionInfos();
+        return org.semanticwb.model.VersionInfo.listVersionInfos(this);
     }
 
     public org.semanticwb.model.VersionInfo createVersionInfo(String id)
@@ -496,7 +496,7 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
 
     public java.util.Iterator<org.semanticwb.model.Portlet> listPortlets()
     {
-        return org.semanticwb.model.Portlet.listPortlets();
+        return org.semanticwb.model.Portlet.listPortlets(this);
     }
 
     public org.semanticwb.model.Portlet createPortlet(String id)
@@ -526,7 +526,7 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
 
     public java.util.Iterator<org.semanticwb.model.WebPage> listWebPages()
     {
-        return org.semanticwb.model.WebPage.listWebPages();
+        return org.semanticwb.model.WebPage.listWebPages(this);
     }
 
     public org.semanticwb.model.WebPage createWebPage(String id)
@@ -550,7 +550,7 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
 
     public java.util.Iterator<org.semanticwb.model.Calendar> listCalendars()
     {
-        return org.semanticwb.model.Calendar.listCalendars();
+        return org.semanticwb.model.Calendar.listCalendars(this);
     }
 
     public org.semanticwb.model.Calendar createCalendar(String id)
@@ -580,7 +580,7 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
 
     public java.util.Iterator<org.semanticwb.model.Device> listDevices()
     {
-        return org.semanticwb.model.Device.listDevices();
+        return org.semanticwb.model.Device.listDevices(this);
     }
 
     public org.semanticwb.model.Device createDevice(String id)
@@ -610,7 +610,7 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
 
     public java.util.Iterator<org.semanticwb.model.IPFilter> listIPFilters()
     {
-        return org.semanticwb.model.IPFilter.listIPFilters();
+        return org.semanticwb.model.IPFilter.listIPFilters(this);
     }
 
     public org.semanticwb.model.IPFilter createIPFilter(String id)
@@ -640,7 +640,7 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
 
     public java.util.Iterator<org.semanticwb.model.PFlowRef> listPFlowRefs()
     {
-        return org.semanticwb.model.PFlowRef.listPFlowRefs();
+        return org.semanticwb.model.PFlowRef.listPFlowRefs(this);
     }
 
     public org.semanticwb.model.PFlowRef createPFlowRef(String id)
@@ -670,7 +670,7 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
 
     public java.util.Iterator<org.semanticwb.model.PortletRef> listPortletRefs()
     {
-        return org.semanticwb.model.PortletRef.listPortletRefs();
+        return org.semanticwb.model.PortletRef.listPortletRefs(this);
     }
 
     public org.semanticwb.model.PortletRef createPortletRef(String id)
@@ -700,7 +700,7 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
 
     public java.util.Iterator<org.semanticwb.model.Permission> listPermissions()
     {
-        return org.semanticwb.model.Permission.listPermissions();
+        return org.semanticwb.model.Permission.listPermissions(this);
     }
 
     public org.semanticwb.model.Permission createPermission(String id)
@@ -730,7 +730,7 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
 
     public java.util.Iterator<org.semanticwb.model.Template> listTemplates()
     {
-        return org.semanticwb.model.Template.listTemplates();
+        return org.semanticwb.model.Template.listTemplates(this);
     }
 
     public org.semanticwb.model.Template createTemplate(String id)
@@ -760,7 +760,7 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
 
     public java.util.Iterator<org.semanticwb.model.PFlow> listPFlows()
     {
-        return org.semanticwb.model.PFlow.listPFlows();
+        return org.semanticwb.model.PFlow.listPFlows(this);
     }
 
     public org.semanticwb.model.PFlow createPFlow(String id)
@@ -790,7 +790,7 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
 
     public java.util.Iterator<org.semanticwb.model.TemplateRef> listTemplateRefs()
     {
-        return org.semanticwb.model.TemplateRef.listTemplateRefs();
+        return org.semanticwb.model.TemplateRef.listTemplateRefs(this);
     }
 
     public org.semanticwb.model.TemplateRef createTemplateRef(String id)
@@ -820,7 +820,7 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
 
     public java.util.Iterator<org.semanticwb.model.TemplateGroup> listTemplateGroups()
     {
-        return org.semanticwb.model.TemplateGroup.listTemplateGroups();
+        return org.semanticwb.model.TemplateGroup.listTemplateGroups(this);
     }
 
     public org.semanticwb.model.TemplateGroup createTemplateGroup(String id)
@@ -850,7 +850,7 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
 
     public java.util.Iterator<org.semanticwb.model.RoleRef> listRoleRefs()
     {
-        return org.semanticwb.model.RoleRef.listRoleRefs();
+        return org.semanticwb.model.RoleRef.listRoleRefs(this);
     }
 
     public org.semanticwb.model.RoleRef createRoleRef(String id)
@@ -880,7 +880,7 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
 
     public java.util.Iterator<org.semanticwb.model.PortletSubType> listPortletSubTypes()
     {
-        return org.semanticwb.model.PortletSubType.listPortletSubTypes();
+        return org.semanticwb.model.PortletSubType.listPortletSubTypes(this);
     }
 
     public org.semanticwb.model.PortletSubType createPortletSubType(String id)
