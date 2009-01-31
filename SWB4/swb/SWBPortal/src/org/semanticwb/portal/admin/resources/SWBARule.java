@@ -58,7 +58,7 @@ public class SWBARule extends GenericResource {
             tmparam = request.getParameter("tm");
         }
         ret.append("\n<div class=\"applet\">");
-        ret.append("\n<APPLET id=\"rulesApplet\" name=\"rulesApplet\" code=\"applets.rules.RuleApplet.class\" codebase=\"" + SWBPlatform.getContextPath() + "\"  ARCHIVE=\"swbadmin/lib/Modeler.jar, swbadmin/lib/WBCommons.jar, swbadmin/lib/Rules.jar\" width=\"100%\" height=\"400\">");  //ARCHIVE=\"wbadmin/lib/GenericTree.jar, wbadmin/lib/WBCommons.jar\"
+        ret.append("\n<APPLET id=\"rulesApplet\" name=\"rulesApplet\" code=\"applets.rules.RuleApplet.class\" codebase=\"" + SWBPlatform.getContextPath() + "\"  ARCHIVE=\"swbadmin/lib/Modeler.jar, swbadmin/lib/WBCommons.jar, swbadmin/lib/Rules.jar\" width=\"100%\" height=\"600\">");  //ARCHIVE=\"wbadmin/lib/GenericTree.jar, wbadmin/lib/WBCommons.jar\"
         SWBResourceURL urlapp = paramRequest.getRenderUrl();
         urlapp.setMode("gateway");
         urlapp.setCallMethod(urlapp.Call_DIRECT);
@@ -264,14 +264,14 @@ public class SWBARule extends GenericResource {
                         Element rule = (Element) docxml.getFirstChild();
                         elemNum = 0;
                         rRule = null;
-                        ret.append("\n<fieldset>");
+                        //ret.append("\n<fieldset>");
                         ret.append("\n<table width=\"100%\"  border=\"0\" cellpadding=\"5\" cellspacing=\"0\" >");
                         //ret.append("\n<tr><td >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + paramRequest.getLocaleString("msgCriteriaDefinition") + "</td></tr>");
                         ret.append("\n<tr><td >");
                         ret.append(getApplet(request, response, paramRequest));
                         ret.append("\n</td></tr>");
                         ret.append("\n</table>");
-                        ret.append("\n</fieldset>");
+                        //ret.append("\n</fieldset>");
                     }
                     sbTree = null;
                     docxml = null;
