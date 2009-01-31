@@ -29,7 +29,7 @@ public class SWBExportWebSite extends GenericResource {
     private static Logger log = SWBUtils.getLogger(SWBExportWebSite.class);
 
     @Override
-    public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         System.out.println("Entra a SWBExportWebSite/doAdmin:"+request.getParameter("wsid"));
         StringBuffer strbr = new StringBuffer();
         String lang = paramRequest.getUser().getLanguage();
