@@ -6,6 +6,7 @@ package org.semanticwb.portal.admin.resources;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -21,6 +22,9 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  *
@@ -137,18 +141,52 @@ public class SWBImportWebSite extends GenericResource {
             }
             //Parseo de nombre de NameSpace anteriores por nuevos
             rdfcontent = rdfcontent.replaceAll(oldNamespace, newNS); //Reempplazar namespace anterior x nuevo
-            rdfcontent = SWBUtils.TEXT.replaceAllIgnoreCase(rdfcontent, oldName, newName); //Reemplazar nombre anterior x nuevo nombre
+            //rdfcontent = SWBUtils.TEXT.replaceAllIgnoreCase(rdfcontent, oldName, newName); //Reemplazar nombre anterior x nuevo nombre
+            rdfcontent = parseRdfContent(rdfcontent, oldName, newName,  newNS);
+
+            FileOutputStream out = new FileOutputStream(path + newName + "/" + name + ".rdf");
+            out.write(rdfcontent.getBytes());
+            out.flush();
+            out.close();
+
             //Mediante inputStream creado, generar sitio con metodo de jei, el cual no recuerdo su nombre :)
             InputStream io = SWBUtils.IO.getStreamFromString(rdfcontent);
             SWBPlatform.getSemanticMgr().createModelByRDF(newName, newNS, io);
             //Eliminar archivo rdf y archivo xml
-            new File(path + newName + "/" + name + ".rdf").delete();
+            //new File(path + newName + "/" + name + ".rdf").delete();
             new File(path + newName + "/siteInfo.xml").delete();
             return true;
         } catch (Exception e) {
             log.debug(e);
         }
         return false;
+    }
+
+    private String parseRdfContent(String rdfcontent, String oldName, String newName, String newNS){
+        Document dom=null;
+        try{
+        dom=SWBUtils.XML.xmlToDom(rdfcontent);
+        NodeList nodeList=dom.getElementsByTagName("rdf:Description");
+        for(int i=0; i<nodeList.getLength();i++){
+            Node nodeDescr=nodeList.item(i);
+            NamedNodeMap nodeMap=nodeDescr.getAttributes();
+            for(int j=0;j<nodeMap.getLength();j++){
+                String nvalue=nodeMap.item(j).getNodeValue();
+                if(nvalue!=null && nvalue.equalsIgnoreCase(newNS+"#"+oldName)){
+                    nodeMap.item(j).setNodeValue(newNS+"#"+newName); //ver como tengo que poner el newName, si debe ser con minusculas
+                    NodeList nlist=nodeDescr.getChildNodes();
+                    for(int k=0;k<nlist.getLength();k++){
+                        if(nlist.item(k).getNodeName().endsWith("title")){
+                            nlist.item(k).getFirstChild().setNodeValue(newName);
+                        }
+                    }
+                }
+            }
+        }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return SWBUtils.TEXT.replaceFirstIgnoreCase(SWBUtils.XML.domToXml(dom), "xmlns:"+oldName, "xmlns:"+newName);
     }
 
     private void getStep1(PrintWriter out, SWBResourceURL url, SWBParamRequest paramRequest) {
