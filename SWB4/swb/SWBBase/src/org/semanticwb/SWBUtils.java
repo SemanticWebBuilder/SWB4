@@ -232,6 +232,28 @@ public class SWBUtils {
             }
             return str;
         }
+
+         /**
+         * @param str
+         * @param match
+         * @param replace
+         * @param ignoreCase
+         * @Autor Jorge Jiménez
+         * @return
+         */
+        public static String replaceFirstIgnoreCase(String str, String match, String replace) {
+            if (match == null || match.length() == 0) {
+                return str;
+            }
+            if (replace == null) {
+                replace = "";
+            }
+            int i = str.toLowerCase().indexOf(match.toLowerCase());
+            if (i >= 0) {
+                str = str.substring(0, i) + replace + str.substring(i + match.length());
+            }
+            return str;
+        }
         
         
 
