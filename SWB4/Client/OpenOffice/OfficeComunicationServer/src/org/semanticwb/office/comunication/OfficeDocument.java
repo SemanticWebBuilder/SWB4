@@ -314,19 +314,26 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                         {
                             log.error(nfe);
                         }
-                    }                    
+                    }
+
+
+
                     // actualiza version
                     Iterator<WebSite> sites=SWBContext.listWebSites();
                     while(sites.hasNext())
-                    {                        
-                        Iterator<OfficePortlet> officePortlets=OfficePortlet.listOfficePortlets(sites.next());
-                        while(officePortlets.hasNext())
+                    {
+                        Iterator<SemanticObject> it = sites.next().getSemanticObject().getModel().listSubjects(OfficePortlet.swbrep_content, contentId);
+                        while(it.hasNext())
                         {
-                            OfficePortlet officePortlet=officePortlets.next();
-                            if(officePortlet.getContent()!=null && officePortlet.getContent().equals(contentId) && officePortlet.getVersionToShow()!=null && officePortlet.getVersionToShow().equals("*"))
+                            SemanticObject obj=it.next();
+                            if(obj.getSemanticClass().isSubClass(OfficePortlet.sclass) || obj.getSemanticClass().equals(OfficePortlet.sclass))
                             {
-                                InputStream in=getContent(repositoryName, contentId,officePortlet.getVersionToShow());
-                                officePortlet.loadContent(in);
+                                OfficePortlet officePortlet=new OfficePortlet(obj);
+                                if(officePortlet.getRepositoryName().equals(repositoryName))
+                                {
+                                    InputStream in=getContent(repositoryName, contentId,officePortlet.getVersionToShow());
+                                    officePortlet.loadContent(in);
+                                }
                             }
                         }
                     }
