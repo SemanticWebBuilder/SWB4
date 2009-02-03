@@ -38,7 +38,8 @@ public class DialogSummaryPublish extends javax.swing.JDialog
             {                
                 jLabel1.setText("Enviando archivo de publicación "+zipFile.getName());
                 jLabel1.repaint();
-                document.getOfficeDocumentProxy().updateContent(workspaceid, contentid, document.getLocalPath().getName());
+                String name = document.getLocalPath().getName().replace(document.getDefaultExtension(), document.getPublicationExtension());
+                document.getOfficeDocumentProxy().updateContent(workspaceid, contentid, name);
                 jProgressBar.setValue(2);
                 jLabel1.setText("Actualización terminada");
                 //summaryPublish1.setVisible(true);
@@ -141,6 +142,8 @@ public class DialogSummaryPublish extends javax.swing.JDialog
         );
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.SOUTH);
+
+        summaryPublish1.setPreferredSize(new java.awt.Dimension(300, 400));
         getContentPane().add(summaryPublish1, java.awt.BorderLayout.CENTER);
 
         pack();
