@@ -60,22 +60,20 @@ import org.semanticwb.xmlrpc.XmlRpcObject;
  */
 public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 {
-    private static final String WORD_PORTLET_TYPE="word_resource";
-    private static final String WORD_PORTLET_DESCRIPTION="Recurso Word";
-    private static final String WORD_PORTLET_CLASS="org.semanticwb.portal.resources.office.WordResource";
-    private static final String WORD_PORTLET_TITLE=WORD_PORTLET_DESCRIPTION;
+    private static final String JCR_FROZEN_NODE = "jcr:frozenNode";
 
-    private static final String PPT_PORTLET_TYPE="ppt_resource";
-    private static final String PPT_PORTLET_DESCRIPTION="Recurso Power Point";
-    private static final String PPT_PORTLET_CLASS="org.semanticwb.portal.resources.office.PowerPointResource";
-    private static final String PPT_PORTLET_TITLE=PPT_PORTLET_DESCRIPTION;
-
-
-    private static final String EXCEL_PORTLET_TYPE="excel_resource";
-    private static final String EXCEL_PORTLET_DESCRIPTION="Recurso Excel";
-    private static final String EXCEL_PORTLET_CLASS="org.semanticwb.portal.resources.office.ExcelResource";
-    private static final String EXCEL_PORTLET_TITLE=EXCEL_PORTLET_DESCRIPTION;
-
+    private static final String WORD_PORTLET_TYPE = "word_resource";
+    private static final String WORD_PORTLET_DESCRIPTION = "Recurso Word";
+    private static final String WORD_PORTLET_CLASS = "org.semanticwb.portal.resources.office.WordResource";
+    private static final String WORD_PORTLET_TITLE = WORD_PORTLET_DESCRIPTION;
+    private static final String PPT_PORTLET_TYPE = "ppt_resource";
+    private static final String PPT_PORTLET_DESCRIPTION = "Recurso Power Point";
+    private static final String PPT_PORTLET_CLASS = "org.semanticwb.portal.resources.office.PowerPointResource";
+    private static final String PPT_PORTLET_TITLE = PPT_PORTLET_DESCRIPTION;
+    private static final String EXCEL_PORTLET_TYPE = "excel_resource";
+    private static final String EXCEL_PORTLET_DESCRIPTION = "Recurso Excel";
+    private static final String EXCEL_PORTLET_CLASS = "org.semanticwb.portal.resources.office.ExcelResource";
+    private static final String EXCEL_PORTLET_TITLE = EXCEL_PORTLET_DESCRIPTION;
     private static final String CONTENT_NOT_FOUND = "El contenido no se encontró en el repositorio.";
     private static final String JCR_CONTENT = "jcr:content";
     private static final String JCR_DATA = "jcr:data";
@@ -446,7 +444,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     info.nameOfVersion = version.getName();
                     info.created = version.getProperty("jcr:created").getDate().getTime();
                     String cm_user = loader.getOfficeManager(repositoryName).getUserType();
-                    info.user = version.getNode("jcr:frozenNode").getProperty(cm_user).getString();
+                    info.user = version.getNode(JCR_FROZEN_NODE).getProperty(cm_user).getString();
                     versions.add(info);
                 }
             }
@@ -658,14 +656,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             String type = contentNode.getProperty(cm_officeType).getString();
             OfficePortlet portlet = null;
             String id = UUID.randomUUID().toString();
-            PortletType portletType=null;
+            PortletType portletType = null;
             if (type.equals("EXCEL"))
             {
                 portlet = ExcelPortlet.createExcelPortlet(id, site);
-                portletType= site.getPortletType(EXCEL_PORTLET_TYPE);
-                if(portletType==null)
+                portletType = site.getPortletType(EXCEL_PORTLET_TYPE);
+                if (portletType == null)
                 {
-                    portletType=site.createPortletType(EXCEL_PORTLET_TYPE);
+                    portletType = site.createPortletType(EXCEL_PORTLET_TYPE);
                     portletType.setCreated(new Date(System.currentTimeMillis()));
                     portletType.setDescription(EXCEL_PORTLET_DESCRIPTION);
                     portletType.setTitle(EXCEL_PORTLET_TITLE);
@@ -677,10 +675,10 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             else if (type.equals("PPT"))
             {
                 portlet = PPTPortlet.createPPTPortlet(id, site);
-                portletType= site.getPortletType(PPT_PORTLET_TYPE);
-                if(portletType==null)
+                portletType = site.getPortletType(PPT_PORTLET_TYPE);
+                if (portletType == null)
                 {
-                    portletType=site.createPortletType(PPT_PORTLET_TYPE);
+                    portletType = site.createPortletType(PPT_PORTLET_TYPE);
                     portletType.setCreated(new Date(System.currentTimeMillis()));
                     portletType.setDescription(PPT_PORTLET_DESCRIPTION);
                     portletType.setTitle(PPT_PORTLET_TITLE);
@@ -692,10 +690,10 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             else
             {
                 portlet = WordPortlet.createWordPortlet(id, site);
-                portletType= site.getPortletType(WORD_PORTLET_TYPE);
-                if(portletType==null)
+                portletType = site.getPortletType(WORD_PORTLET_TYPE);
+                if (portletType == null)
                 {
-                    portletType=site.createPortletType(WORD_PORTLET_TYPE);
+                    portletType = site.createPortletType(WORD_PORTLET_TYPE);
                     portletType.setCreated(new Date(System.currentTimeMillis()));
                     portletType.setDescription(WORD_PORTLET_DESCRIPTION);
                     portletType.setTitle(WORD_PORTLET_TITLE);
@@ -706,7 +704,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             }
             portlet.setContent(contentId);
             portlet.setPortletType(portletType);
-            portlet.setRepositoryName(repositoryName);            
+            portlet.setRepositoryName(repositoryName);
             portlet.setTitle(title);
             portlet.setPriority(1);
             portlet.setDescription(description);
@@ -853,15 +851,34 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         site.removePortlet(info.id);
     }
 
-    public InputStream getContent(String repositoryName, String contentId) throws Exception
+    public InputStream getContent(String repositoryName, String contentId, String version) throws Exception
     {
         Session session = null;
         try
         {
             session = loader.openSession(repositoryName, this.user, this.password);
             Node nodeContent = session.getNodeByUUID(contentId);
-            Node resNode = nodeContent.getNode(JCR_CONTENT);            
-            return resNode.getProperty(JCR_DATA).getStream();
+            if (version.equals("*"))
+            {
+
+                Node resNode = nodeContent.getNode(JCR_CONTENT);
+                return resNode.getProperty(JCR_DATA).getStream();
+            }
+            else
+            {
+                Version versionNode = nodeContent.getVersionHistory().getVersion(version);
+                if (versionNode != null)
+                {
+                    Node frozenNode = versionNode.getNode(JCR_FROZEN_NODE);
+                    Node resNode=frozenNode.getNode(JCR_CONTENT);
+                    return resNode.getProperty(JCR_DATA).getStream();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+
         }
         catch (Exception e)
         {
@@ -875,15 +892,34 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             }
         }
     }
-    public String getContentFile(String repositoryName, String contentId) throws Exception
+
+    public String getContentFile(String repositoryName, String contentId, String version) throws Exception
     {
         Session session = null;
         try
         {
+            this.user = "demo";
+            this.password = "demo";
             session = loader.openSession(repositoryName, this.user, this.password);
             Node nodeContent = session.getNodeByUUID(contentId);
             String cm_file = loader.getOfficeManager(repositoryName).getPropertyFileType();
-            return nodeContent.getProperty(cm_file).getString();
+            if (version.equals("*"))
+            {
+                return nodeContent.getProperty(cm_file).getString();
+            }
+            else
+            {
+                Version versionNode = nodeContent.getVersionHistory().getVersion(version);
+                if (versionNode != null)
+                {
+                    Node frozenNode = versionNode.getNode(JCR_FROZEN_NODE);
+                    return frozenNode.getProperty(cm_file).getString();
+                }
+                else
+                {
+                    return null;
+                }
+            }
         }
         catch (Exception e)
         {
