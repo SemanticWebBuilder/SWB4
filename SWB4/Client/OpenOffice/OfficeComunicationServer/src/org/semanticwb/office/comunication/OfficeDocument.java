@@ -4,12 +4,16 @@
  */
 package org.semanticwb.office.comunication;
 
+
+
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
+
+
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -18,6 +22,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
+
 import javax.jcr.ItemExistsException;
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
@@ -34,6 +39,7 @@ import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.Portlet;
 import org.semanticwb.model.PortletType;
 import org.semanticwb.model.SWBContext;
+
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.office.interfaces.IOfficeDocument;
@@ -53,6 +59,8 @@ import org.semanticwb.repository.RepositoryManagerLoader;
 import org.semanticwb.repository.WorkspaceNotFoudException;
 import org.semanticwb.xmlrpc.Part;
 import org.semanticwb.xmlrpc.XmlRpcObject;
+
+
 
 /**
  *
@@ -310,15 +318,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     // actualiza version
                     Iterator<WebSite> sites=SWBContext.listWebSites();
                     while(sites.hasNext())
-                    {
-                        WebSite site=sites.next();
-                        Iterator<OfficePortlet> officePortlets=OfficePortlet.listOfficePortlets(site);
+                    {                        
+                        Iterator<WordPortlet> officePortlets=WordPortlet.listWordPortlets(sites.next());
                         while(officePortlets.hasNext())
                         {
                             OfficePortlet officePortlet=officePortlets.next();
-                            if(officePortlet.getVersionToShow()!=null && officePortlet.getVersionToShow().equals("*"))
+                            if(officePortlet.getContent()!=null && officePortlet.getContent().equals(contentId) && officePortlet.getVersionToShow()!=null && officePortlet.getVersionToShow().equals("*"))
                             {
-                                InputStream in=getContent(repositoryName, contentId, cm_file);
+                                InputStream in=getContent(repositoryName, contentId,officePortlet.getVersionToShow());
                                 officePortlet.loadContent(in);
                             }
                         }
