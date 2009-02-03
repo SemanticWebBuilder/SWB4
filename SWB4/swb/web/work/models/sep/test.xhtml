@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <title>TODO supply a title</title>
+    </head>
+    <body>
+        <form id="http://www.semanticwebbuilder.org/swb4/ontology#WebPage/form"
+              dojoType="dijit.form.Form" class="swbform" action="/swb/swbadmin/jsp/SemObjectEditor.jsp"
+              onSubmit="submitForm('http://www.semanticwebbuilder.org/swb4/ontology#WebPage/form');return false;" method="POST">
+            <input type="hidden" name="scls" value="http://www.semanticwebbuilder.org/swb4/ontology#WebPage">
+            <input type="hidden" name="smode" value="create">
+            <input type="hidden" name="sref" value="http://www.sep.gob.mx#sep">
+            <input type="hidden" name="sprop" value="http://www.semanticwebbuilder.org/swb4/ontology#homePage">
+            <fieldset>
+                <table>
+                    <tr>
+                        <td width="200px" align="right">
+                            <label>Identificador <em>*</em></label>
+                        </td>
+                        <td>
+                            <input type="text" name="id" dojoType="dijit.form.ValidationTextBox"
+                                   required="true" promptMessage="Captura Identificador."
+                                   invalidMessage="Identificador es requerido." trim="true" />
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+            <fieldset>
+                <legend>Datos Generales</legend>
+                <table>
+                    <tr>
+                        <td width="200px" align="right">
+                            <label for="title">Titulo&nbsp;<em>*</em></label>
+                        </td>
+                        <td>
+                            <input id="title" name="title" size="30" value="" dojoType="dijit.form.ValidationTextBox"
+                                   required="true" promptMessage="Captura Titulo." invalidMessage="Titulo es requerido." trim="true"/>
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+            <fieldset>
+                <span align="center">
+                    <button dojoType='dijit.form.Button' type="submit">Guardar</button>
+                    <button dojoType='dijit.form.Button' >Favoritos</button>
+                    <button dojoType='dijit.form.Button' >Eliminar</button>
+                </span>
+            </fieldset>
+        </form>
+
+
+    </body>
+</html>
