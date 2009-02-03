@@ -29,10 +29,8 @@ public class SWBExportWebSite extends GenericResource {
     private static Logger log = SWBUtils.getLogger(SWBExportWebSite.class);
 
     @Override
-    public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        System.out.println("Entra a SWBExportWebSite/doAdmin:"+request.getParameter("wsid"));
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         StringBuffer strbr = new StringBuffer();
-        String lang = paramRequest.getUser().getLanguage();
         String action = paramRequest.getAction();
         try {
             if (action != null && action.equals("step2")) {
@@ -71,7 +69,7 @@ public class SWBExportWebSite extends GenericResource {
                     strbr.append("</siteinfo>");
                     File file = new File(zipdirectory + "siteInfo.xml");
                     FileOutputStream out = new FileOutputStream(file);
-                    out.write(strbr.toString().getBytes());
+                    out.write(strbr.toString().getBytes("utf-8"));
                     out.flush();
                     out.close();
                 } catch (Exception e) {
