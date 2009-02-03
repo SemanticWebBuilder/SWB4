@@ -4,14 +4,12 @@
  */
 package org.semanticwb.openoffice;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
-import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import org.netbeans.spi.wizard.Wizard;
