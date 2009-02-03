@@ -82,7 +82,7 @@ public class DocumentExcelContent extends GenericAdmResource
             File zipFile = null;
             try
             {
-                InputStream in = document.getContent(repositoryName, contentId);
+                InputStream in = document.getContent(repositoryName, contentId,portlet.getVersionToShow());
                 String name = UUID.randomUUID().toString();
                 String zipPath = basePath + name + ".zip";
                 zipFile = new File(zipPath);
@@ -132,17 +132,17 @@ public class DocumentExcelContent extends GenericAdmResource
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramReq) throws SWBResourceException, IOException
     {
-        if (this.getResourceBase() instanceof WordPortlet)
+        if (this.getResourceBase() instanceof ExcelPortlet)
         {
             String basePath = SWBUtils.getApplicationPath() + this.getResourceBase().getWorkPath() + "/";
-            WordPortlet portlet = (WordPortlet) this.getResourceBase();
+            ExcelPortlet portlet = (ExcelPortlet) this.getResourceBase();
             String contentId = portlet.getContent();
             String repositoryName = portlet.getRepositoryName();
             OfficeDocument document = new OfficeDocument();
             try
             {
                 PrintWriter out = response.getWriter();
-                String file = document.getContentFile(repositoryName, contentId);
+                String file = document.getContentFile(repositoryName, contentId,portlet.getVersionToShow());
                 file = file.replace(".doc", ".html");
                 String path = basePath + file;
                 FileInputStream in = new FileInputStream(path);
