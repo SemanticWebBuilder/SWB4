@@ -22,7 +22,7 @@
  */
 
 
-/** WBAFilterResource.java
+/** SWBAFilterResource.java
  *
   * User: Alberto Reyes
  * Date: 5/10/2004
@@ -373,6 +373,9 @@ public class SWBAFilterPortlet extends SWBATree{
      * @throws IOException
      */    
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        response.setContentType("text/html; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
         String strWBAction=request.getParameter("act");
         if (strWBAction==null || strWBAction!=null && strWBAction.equals("") || strWBAction!=null && strWBAction.equals("view")) {
             getIniForm(request,response,paramRequest,paramRequest.getUser());
@@ -475,6 +478,9 @@ public class SWBAFilterPortlet extends SWBATree{
      */    
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        response.setContentType("text/html; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
         PrintWriter out=response.getWriter();
         out.println("<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"1\" bgcolor=\"#CCCCCC\">");
         out.println("<tr>");
