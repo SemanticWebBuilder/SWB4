@@ -306,10 +306,24 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                         {
                             log.error(nfe);
                         }
+                    }                    
+                    // actualiza version
+                    Iterator<WebSite> sites=SWBContext.listWebSites();
+                    while(sites.hasNext())
+                    {
+                        WebSite site=sites.next();
+                        Iterator<OfficePortlet> officePortlets=OfficePortlet.listOfficePortlets(site);
+                        while(officePortlets.hasNext())
+                        {
+                            OfficePortlet officePortlet=officePortlets.next();
+                            if(officePortlet.getVersionToShow()!=null && officePortlet.getVersionToShow().equals("*"))
+                            {
+                                InputStream in=getContent(repositoryName, contentId, cm_file);
+                                officePortlet.loadContent(in);
+                            }
+                        }
                     }
 
-                    //nodeContent.unlock();
-                    log.debug("version created " + version.getName());
                     session.save();
                     return version.getName();
                 }
@@ -712,6 +726,8 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             portlet.setCreated(new Date(System.currentTimeMillis()));
             portlet.setUpdated(new Date(System.currentTimeMillis()));
             page.addPortlet(portlet);
+            InputStream in = getContent(repositoryName, contentId, version);
+            portlet.loadContent(in);
             PortletInfo PortletInfo = new PortletInfo();
             PortletInfo.id = id;
             PortletInfo.siteId = webpage.id;
