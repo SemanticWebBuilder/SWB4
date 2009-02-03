@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <db xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<table name="swb_admlog">
-		<column id="log_user" type="VARCHAR" size="100" acceptNulls="false"/>
+		<column id="log_user" type="VARCHAR" size="250" acceptNulls="false"/>
 		<column id="log_modelid" type="VARCHAR" size="50" acceptNulls="false"/>
-		<column id="log_objuri" type="VARCHAR" size="100" acceptNulls="false"/>
-		<column id="log_propid" type="VARCHAR" size="100" acceptNulls="true"/>
+		<column id="log_objuri" type="VARCHAR" size="250" acceptNulls="false"/>
+		<column id="log_propid" type="VARCHAR" size="250" acceptNulls="true"/>
 		<column id="log_action" type="VARCHAR" size="15" acceptNulls="false"/>
 		<column id="log_date" type="TIMESTAMP" size="14" acceptNulls="false"/>
 	</table>
@@ -19,7 +19,7 @@
 	<table name="swb_reshits">
 		<column id="hits_date" type="TIMESTAMP" size="14" acceptNulls="false"/>
 		<column id="hits_modelid" type="VARCHAR" size="50" acceptNulls="false"/>
-		<column id="hits_objuri" type="VARCHAR" size="100" acceptNulls="true"/>
+		<column id="hits_objuri" type="VARCHAR" size="250" acceptNulls="true"/>
 		<column id="hits_classid" type="VARCHAR" size="50" acceptNulls="false"/>
 		<column id="hits" type="INTEGER" size="20" default="0" acceptNulls="false"/>
 	</table>
