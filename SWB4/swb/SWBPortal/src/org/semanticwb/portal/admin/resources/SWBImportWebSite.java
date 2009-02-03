@@ -17,7 +17,11 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.WebSite;
+import org.semanticwb.platform.SemanticModel;
+import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.GenericResource;
+import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
@@ -45,13 +49,22 @@ public class SWBImportWebSite extends GenericResource {
                 WebSite site = SWBContext.createWebSite(request.getParameter("wsname"), request.getParameter("wsns"));
                 site.setCreated(new java.util.Date(System.currentTimeMillis()));
                 site.setTitle(request.getParameter("wstitle"));
+                //Edición de website
+                SemanticObject semObject = SemanticObject.createSemanticObject(site.getURI());
+                SWBFormMgr mgr = new SWBFormMgr(semObject, null, SWBFormMgr.MODE_EDIT);
+                mgr.setLang(paramRequest.getUser().getLanguage());
+                mgr.setType(mgr.TYPE_XHTML);
+                SWBResourceURL urlAction = paramRequest.getActionUrl();
+                urlAction.setParameter("webSiteUri", semObject.getURI());
+                mgr.setAction(urlAction.toString());
+                out.println(mgr.renderForm());
             } else { //creación de sitio mediante template                
                 out.println(directoryList(paramRequest, request.getParameter("wsname"), request.getParameter("wsns"), request.getParameter("wstitle")));
             }
         } else if (action != null && action.trim().equals("step3")) { //creación de sitio mediante template
             if (createWebSite(response, request.getParameter("zipName"), request.getParameter("wsname"), request.getParameter("wsns"))) {
                 out.println("<script language=\"JavaScript\">");
-                out.println("  showStatus('"+paramRequest.getLocaleLogString("sitecreated")+"')");                
+                out.println("  showStatus('" + paramRequest.getLocaleLogString("sitecreated") + "')");
                 out.println("</script>");
             } else {
                 out.println(paramRequest.getLocaleLogString("sitenotcreated"));
@@ -69,7 +82,7 @@ public class SWBImportWebSite extends GenericResource {
         url.setParameter("wsname", wsname);
         url.setParameter("wsns", wsns);
         url.setParameter("wstitle", wstitle);
-        File file = new File(SWBPlatform.getWorkPath()+"/sitetemplates/");
+        File file = new File(SWBPlatform.getWorkPath() + "/sitetemplates/");
         File[] files = file.listFiles();
         strbf.append("<div class=\"swbform\">");
         strbf.append("<table width=\"100%\">");
@@ -107,51 +120,53 @@ public class SWBImportWebSite extends GenericResource {
         return strbf.toString();
     }
 
-    
     private boolean createWebSite(HttpServletResponse response, String name, String newName, String newNS) {
         try {
             //Substituir x ruta dinamica
-            String path = SWBPlatform.getWorkPath()+"/";
+            String path = SWBPlatform.getWorkPath() + "/";
             String zipdirectory = path + "sitetemplates/";
             File zip = new File(zipdirectory + name + ".zip");
             java.io.File extractTo = new File(path + newName);
             //Descomprimir zip
             org.semanticwb.SWBUtils.IO.unzip(zip, extractTo);
 
-            FileInputStream frdfio=new FileInputStream(path + newName + "/" + name + ".rdf");
-            String rdfcontent=SWBUtils.IO.readInputStream(frdfio);
-            FileInputStream fxmlio=new FileInputStream(path + newName + "/siteInfo.xml");
-            Document dom=SWBUtils.XML.xmlToDom(fxmlio);
-            String oldName=null;
-            String oldNamespace=null;
-            String oldTitle=null;
-            String olDescription =null;
-            
-            if(dom.getElementsByTagName("name").getLength()>0) {
-                oldName=dom.getElementsByTagName("name").item(0).getFirstChild().getNodeValue();
+            FileInputStream frdfio = new FileInputStream(path + newName + "/" + name + ".rdf");
+            String rdfcontent = SWBUtils.IO.readInputStream(frdfio);
+            FileInputStream fxmlio = new FileInputStream(path + newName + "/siteInfo.xml");
+            Document dom = SWBUtils.XML.xmlToDom(fxmlio);
+            String oldName = null;
+            String oldNamespace = null;
+            String oldTitle = null;
+            String olDescription = null;
+
+            if (dom.getElementsByTagName("name").getLength() > 0) {
+                oldName = dom.getElementsByTagName("name").item(0).getFirstChild().getNodeValue();
             }
-            if(dom.getElementsByTagName("namespace").getLength()>0) {
-                oldNamespace=dom.getElementsByTagName("namespace").item(0).getFirstChild().getNodeValue();
+            if (dom.getElementsByTagName("namespace").getLength() > 0) {
+                oldNamespace = dom.getElementsByTagName("namespace").item(0).getFirstChild().getNodeValue();
             }
-            if(dom.getElementsByTagName("title").getLength()>0) {
-                oldTitle=dom.getElementsByTagName("title").item(0).getFirstChild().getNodeValue();
+            if (dom.getElementsByTagName("title").getLength() > 0) {
+                oldTitle = dom.getElementsByTagName("title").item(0).getFirstChild().getNodeValue();
             }
-            if(dom.getElementsByTagName("description").getLength()>0) {
-                olDescription=dom.getElementsByTagName("description").item(0).getFirstChild().getNodeValue();
+            if (dom.getElementsByTagName("description").getLength() > 0) {
+                olDescription = dom.getElementsByTagName("description").item(0).getFirstChild().getNodeValue();
             }
             //Parseo de nombre de NameSpace anteriores por nuevos
             rdfcontent = rdfcontent.replaceAll(oldNamespace, newNS); //Reempplazar namespace anterior x nuevo
             //rdfcontent = SWBUtils.TEXT.replaceAllIgnoreCase(rdfcontent, oldName, newName); //Reemplazar nombre anterior x nuevo nombre
-            rdfcontent = parseRdfContent(rdfcontent, oldName, newName,  newNS);
+            rdfcontent = parseRdfContent(rdfcontent, oldName, newName, newNS);
 
             FileOutputStream out = new FileOutputStream(path + newName + "/" + name + ".rdf");
             out.write(rdfcontent.getBytes());
             out.flush();
             out.close();
 
-            //Mediante inputStream creado, generar sitio con metodo de jei, el cual no recuerdo su nombre :)
+            //Mediante inputStream creado generar sitio
             InputStream io = SWBUtils.IO.getStreamFromString(rdfcontent);
-            SWBPlatform.getSemanticMgr().createModelByRDF(newName, newNS, io);
+            SemanticModel model=SWBPlatform.getSemanticMgr().createModelByRDF(newName, newNS, io);
+            WebSite website=SWBContext.getWebSite(newName);
+            website.setDescription(olDescription);
+
             //Eliminar archivo rdf y archivo xml
             //new File(path + newName + "/" + name + ".rdf").delete();
             new File(path + newName + "/siteInfo.xml").delete();
@@ -162,31 +177,31 @@ public class SWBImportWebSite extends GenericResource {
         return false;
     }
 
-    private String parseRdfContent(String rdfcontent, String oldName, String newName, String newNS){
-        Document dom=null;
-        try{
-        dom=SWBUtils.XML.xmlToDom(rdfcontent);
-        NodeList nodeList=dom.getElementsByTagName("rdf:Description");
-        for(int i=0; i<nodeList.getLength();i++){
-            Node nodeDescr=nodeList.item(i);
-            NamedNodeMap nodeMap=nodeDescr.getAttributes();
-            for(int j=0;j<nodeMap.getLength();j++){
-                String nvalue=nodeMap.item(j).getNodeValue();
-                if(nvalue!=null && nvalue.equalsIgnoreCase(newNS+"#"+oldName)){
-                    nodeMap.item(j).setNodeValue(newNS+"#"+newName); //ver como tengo que poner el newName, si debe ser con minusculas
-                    NodeList nlist=nodeDescr.getChildNodes();
-                    for(int k=0;k<nlist.getLength();k++){
-                        if(nlist.item(k).getNodeName().endsWith("title")){
-                            nlist.item(k).getFirstChild().setNodeValue(newName);
+    private String parseRdfContent(String rdfcontent, String oldName, String newName, String newNS) {
+        Document dom = null;
+        try {
+            dom = SWBUtils.XML.xmlToDom(rdfcontent);
+            NodeList nodeList = dom.getElementsByTagName("rdf:Description");
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                Node nodeDescr = nodeList.item(i);
+                NamedNodeMap nodeMap = nodeDescr.getAttributes();
+                for (int j = 0; j < nodeMap.getLength(); j++) {
+                    String nvalue = nodeMap.item(j).getNodeValue();
+                    if (nvalue != null && nvalue.equalsIgnoreCase(newNS + "#" + oldName)) {
+                        nodeMap.item(j).setNodeValue(newNS + "#" + newName); //ver como tengo que poner el newName, si debe ser con minusculas
+                        NodeList nlist = nodeDescr.getChildNodes();
+                        for (int k = 0; k < nlist.getLength(); k++) {
+                            if (nlist.item(k).getNodeName().endsWith("title")) {
+                                nlist.item(k).getFirstChild().setNodeValue(newName);
+                            }
                         }
                     }
                 }
             }
-        }
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return SWBUtils.TEXT.replaceFirstIgnoreCase(SWBUtils.XML.domToXml(dom), "xmlns:"+oldName, "xmlns:"+newName);
+        return SWBUtils.TEXT.replaceFirstIgnoreCase(SWBUtils.XML.domToXml(dom), "xmlns:" + oldName, "xmlns:" + newName);
     }
 
     private void getStep1(PrintWriter out, SWBResourceURL url, SWBParamRequest paramRequest) {
@@ -247,5 +262,12 @@ public class SWBImportWebSite extends GenericResource {
         } catch (Exception e) {
             log.debug(e);
         }
+    }
+
+    @Override
+    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
+        SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("webSiteUri"));
+        SWBFormMgr mgr = new SWBFormMgr(semObject, null, SWBFormMgr.MODE_EDIT);
+        mgr.processForm(request);
     }
 }
