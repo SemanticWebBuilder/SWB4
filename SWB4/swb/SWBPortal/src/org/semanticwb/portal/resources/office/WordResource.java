@@ -45,6 +45,7 @@ public class WordResource extends GenericAdmResource
                 {
 
                     file = file.replace(".doc", ".html");
+                    file = file.replace(".odt", ".html");
                     String path = SWBPlatform.getWorkPath() + getResourceBase().getWorkPath() + "\\" + file;
                     StringBuffer html = new StringBuffer();
                     FileInputStream in = new FileInputStream(path);
