@@ -275,22 +275,25 @@ public abstract class OfficeDocument
 
     public final void delete()
     {
-        if (isPublicated())
+        if (OfficeApplication.tryLogin() && setupDocument())
         {
-            int res = JOptionPane.showConfirmDialog(null, "¿Desea borrar el contenido?", "Borrado de contenido", JOptionPane.YES_NO_OPTION | JOptionPane.QUESTION_MESSAGE);
-            if (res == JOptionPane.YES_OPTION)
+            if (isPublicated())
             {
-                contentID = this.getCustomProperties().get(CONTENT_ID_NAME);
-                String repositoryName = this.getCustomProperties().get(WORKSPACE_ID_NAME);
-                try
+                int res = JOptionPane.showConfirmDialog(null, "¿Desea borrar el contenido?", "Borrado de contenido", JOptionPane.YES_NO_OPTION);
+                if (res == JOptionPane.YES_OPTION)
                 {
-                    IOpenOfficeDocument doc = OfficeApplication.getOfficeDocumentProxy();
-                    doc.delete(contentID, repositoryName);
-                    deleteAssociation(false);
-                }
-                catch(Exception e)
-                {
-                    e.printStackTrace();
+                    contentID = this.getCustomProperties().get(CONTENT_ID_NAME);
+                    String repositoryName = this.getCustomProperties().get(WORKSPACE_ID_NAME);
+                    try
+                    {
+                        IOpenOfficeDocument doc = OfficeApplication.getOfficeDocumentProxy();
+                        doc.delete(contentID, repositoryName);
+                        deleteAssociation(false);
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
