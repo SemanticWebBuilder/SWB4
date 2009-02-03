@@ -82,24 +82,24 @@ public class BackGroundImagePanel extends javax.swing.JPanel implements WindowFo
         jButtonDelete = new javax.swing.JButton();
 
         setDebugGraphicsOptions(javax.swing.DebugGraphics.NONE_OPTION);
-        setPreferredSize(new java.awt.Dimension(500, 300));
+        setPreferredSize(new java.awt.Dimension(500, 310));
         addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 formFocusGained(evt);
             }
         });
 
-        jLabelPassword.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
+        jLabelPassword.setFont(new java.awt.Font("Verdana", 1, 14));
         jLabelPassword.setForeground(new java.awt.Color(51, 102, 153));
         jLabelPassword.setLabelFor(jPassword);
         jLabelPassword.setText("Contraseña:");
 
-        jLabelWebAddress.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
+        jLabelWebAddress.setFont(new java.awt.Font("Verdana", 1, 14));
         jLabelWebAddress.setForeground(new java.awt.Color(51, 102, 153));
         jLabelWebAddress.setLabelFor(jComboBoxWebAddress);
         jLabelWebAddress.setText("Sitio:");
 
-        jLabelClave.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
+        jLabelClave.setFont(new java.awt.Font("Verdana", 1, 14));
         jLabelClave.setForeground(new java.awt.Color(51, 102, 153));
         jLabelClave.setLabelFor(jTextFieldClave);
         jLabelClave.setText("Clave:");
