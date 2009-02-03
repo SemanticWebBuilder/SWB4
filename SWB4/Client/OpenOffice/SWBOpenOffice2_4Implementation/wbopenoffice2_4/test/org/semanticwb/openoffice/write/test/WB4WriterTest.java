@@ -45,7 +45,7 @@ public class WB4WriterTest
     XComponentContext xContext;
     XComponent xCompDest = null;
     XDesktop oDesktop = null;
-    File sUrlDestiny = new File("c:/temp/demo8.odt");
+    File sUrlDestiny = new File("c:/temp/demo4.odt");
     File tempDir = new File("c:/temp/demo/");
 
     public WB4WriterTest()
@@ -267,7 +267,7 @@ public class WB4WriterTest
 
     }
     @Test  
-    @Ignore
+    //@Ignore
     public void publishTest()
     {
         try
@@ -282,7 +282,7 @@ public class WB4WriterTest
     }
 
     @Test
-    //@Ignore
+    @Ignore
     public void createWebTest()
     {
         try
