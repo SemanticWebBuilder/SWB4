@@ -4,8 +4,6 @@
  */
 package org.semanticwb.office.comunication;
 
-
-
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QuerySolution;
@@ -60,16 +58,14 @@ import org.semanticwb.repository.WorkspaceNotFoudException;
 import org.semanticwb.xmlrpc.Part;
 import org.semanticwb.xmlrpc.XmlRpcObject;
 
-
-
 /**
  *
  * @author victor.lorenzana
  */
 public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 {
-    private static final String JCR_FROZEN_NODE = "jcr:frozenNode";
 
+    private static final String JCR_FROZEN_NODE = "jcr:frozenNode";
     private static final String WORD_PORTLET_TYPE = "word_resource";
     private static final String WORD_PORTLET_DESCRIPTION = "Recurso Word";
     private static final String WORD_PORTLET_CLASS = "org.semanticwb.portal.resources.office.WordResource";
@@ -319,19 +315,19 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 
 
                     // actualiza version
-                    Iterator<WebSite> sites=SWBContext.listWebSites();
-                    while(sites.hasNext())
+                    Iterator<WebSite> sites = SWBContext.listWebSites();
+                    while (sites.hasNext())
                     {
                         Iterator<SemanticObject> it = sites.next().getSemanticObject().getModel().listSubjects(OfficePortlet.swbrep_content, contentId);
-                        while(it.hasNext())
+                        while (it.hasNext())
                         {
-                            SemanticObject obj=it.next();
-                            if(obj.getSemanticClass().isSubClass(OfficePortlet.sclass) || obj.getSemanticClass().equals(OfficePortlet.sclass))
+                            SemanticObject obj = it.next();
+                            if (obj.getSemanticClass().isSubClass(OfficePortlet.sclass) || obj.getSemanticClass().equals(OfficePortlet.sclass))
                             {
-                                OfficePortlet officePortlet=new OfficePortlet(obj);
-                                if(officePortlet.getRepositoryName().equals(repositoryName))
+                                OfficePortlet officePortlet = new OfficePortlet(obj);
+                                if (officePortlet.getRepositoryName().equals(repositoryName))
                                 {
-                                    InputStream in=getContent(repositoryName, contentId,officePortlet.getVersionToShow());
+                                    InputStream in = getContent(repositoryName, contentId, officePortlet.getVersionToShow());
                                     officePortlet.loadContent(in);
                                 }
                             }
@@ -428,7 +424,23 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             session = loader.openSession(repositoryName, this.user, this.password);
             Node nodeContent = session.getNodeByUUID(contentID);
             Node parent = nodeContent.getParent();
+            Iterator<WebSite> sites = SWBContext.listWebSites();
+            while (sites.hasNext())
+            {
+                Iterator<SemanticObject> it = sites.next().getSemanticObject().getModel().listSubjects(OfficePortlet.swbrep_content, contentID);
+                while (it.hasNext())
+                {
+                    SemanticObject obj = it.next();
+                    if (obj.getSemanticClass().isSubClass(OfficePortlet.sclass) || obj.getSemanticClass().equals(OfficePortlet.sclass))
+                    {
+                        OfficePortlet officePortlet = new OfficePortlet(obj);
+                        officePortlet.remove();
+                    }
+                }
+            }
             nodeContent.remove();
+
+
             parent.save();
 
         }
@@ -900,7 +912,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 if (versionNode != null)
                 {
                     Node frozenNode = versionNode.getNode(JCR_FROZEN_NODE);
-                    Node resNode=frozenNode.getNode(JCR_CONTENT);
+                    Node resNode = frozenNode.getNode(JCR_CONTENT);
                     return resNode.getProperty(JCR_DATA).getStream();
                 }
                 else
