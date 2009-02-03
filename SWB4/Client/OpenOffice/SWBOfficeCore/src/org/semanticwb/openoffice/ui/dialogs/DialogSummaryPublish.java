@@ -7,6 +7,8 @@ package org.semanticwb.openoffice.ui.dialogs;
 
 import java.awt.Cursor;
 import java.io.File;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import org.semanticwb.openoffice.OfficeDocument;
 import org.semanticwb.xmlrpc.Attachment;
 
@@ -25,10 +27,11 @@ public class DialogSummaryPublish extends javax.swing.JDialog
     {
 
         File zipFile;
-
-        public Update(File zipFile)
+        JDialog dialog;
+        public Update(File zipFile,JDialog dialog)
         {
             this.zipFile = zipFile;
+            this.dialog=dialog;
         }
 
         @Override
@@ -45,7 +48,7 @@ public class DialogSummaryPublish extends javax.swing.JDialog
                 //summaryPublish1.setVisible(true);
                 summaryPublish1.loadVersions(contentid, workspaceid);
                 jButtonUpdate.setEnabled(false);
-                
+                JOptionPane.showMessageDialog(dialog, "","",JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
             }
             catch (Exception e)
             {
@@ -169,7 +172,7 @@ private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN
             jLabel1.repaint();
             jProgressBar.setValue(1);
             document.getOfficeDocumentProxy().addAttachment(new Attachment(zipFile, zipFile.getName()));            
-            Update up = new Update(zipFile);
+            Update up = new Update(zipFile,this);
             up.start();
         }
         catch (Exception e)
