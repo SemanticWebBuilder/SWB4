@@ -92,9 +92,8 @@ public class DialogSummaryPublish extends javax.swing.JDialog
         setTitle("Resumen de publicación");
         setLocationByPlatform(true);
         setModal(true);
-        setResizable(false);
 
-        jPanel1.setPreferredSize(new java.awt.Dimension(100, 50));
+        jPanel1.setPreferredSize(new java.awt.Dimension(350, 50));
 
         jButtonClose.setText("Cerrar");
         jButtonClose.addActionListener(new java.awt.event.ActionListener() {
@@ -143,7 +142,7 @@ public class DialogSummaryPublish extends javax.swing.JDialog
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.SOUTH);
 
-        summaryPublish1.setPreferredSize(new java.awt.Dimension(300, 400));
+        summaryPublish1.setPreferredSize(new java.awt.Dimension(400, 250));
         getContentPane().add(summaryPublish1, java.awt.BorderLayout.CENTER);
 
         pack();
