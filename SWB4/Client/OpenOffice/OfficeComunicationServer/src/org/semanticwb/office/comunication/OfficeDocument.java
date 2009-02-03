@@ -439,8 +439,6 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 }
             }
             nodeContent.remove();
-
-
             parent.save();
 
         }
