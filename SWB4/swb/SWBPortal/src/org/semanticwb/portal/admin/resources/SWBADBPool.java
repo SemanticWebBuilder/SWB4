@@ -102,7 +102,9 @@ public class SWBADBPool extends GenericResource {
     public void doView(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramsRequest)
             throws SWBResourceException, IOException {
-        
+        response.setContentType("text/html; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
         PrintWriter out = response.getWriter();
         String dbcon = request.getParameter("dbcon");
         DBConnectionPool selectedPool = null;
@@ -117,8 +119,9 @@ public class SWBADBPool extends GenericResource {
         out.println("<tr><td width=\"200\">");
         out.println(paramsRequest.getLocaleString("connPool"));
         out.println("</td><td>");
-        out.println("<form action=\"" + paramsRequest.getRenderUrl() + "\" method=\"post\">");
-        out.println("<select name=\"dbcon\" onChange=\"this.form.submit();\">");
+        SWBResourceURL urlOC = paramsRequest.getRenderUrl();
+        out.println("<form id=\""+getResourceBase().getId()+"/ocDB\" action=\"" + urlOC + "\" method=\"post\">");
+        out.println("<select name=\"dbcon\" onChange=\"submitForm('"+getResourceBase().getId()+"/ocDB');return false;\">");
         //Enumeration en = DBConnectionManager.getInstance().getPools().elements();
         Enumeration<DBConnectionPool> en = SWBUtils.DB.getPools();
         while (en.hasMoreElements()) {
@@ -168,25 +171,24 @@ public class SWBADBPool extends GenericResource {
             out.println("        <td>" + paramsRequest.getLocaleString("free") + ":</td><td>" + free + "</td></tr>");
             out.println("    <tr><td>" + paramsRequest.getLocaleString("user") + ":</td><td>" + selectedPool.getUser() + "</td>");
             out.println("        <td>" + paramsRequest.getLocaleString("max") + ":</td><td>" + selectedPool.getMaxConn() + "</td></tr>");
-            out.println("    <tr><td colspan=4 align=right>");
-            //out.println("        <table border=\"0\" width=\"100%\" cellpadding=0 cellspacing=0><tr><td><B>ConnectionPool "+pool.getName()+"</B></td><td align=right><input type=submit name=\"clear\" value=\"Clear "+pool.getName()+"\"></td></tr></table>");
-            out.println("        <HR size=1 noshade>");
-            out.println("    </td></tr>");
-            out.println("    <tr><td colspan=4 align=right>");
-            out.println("      <table border=0><tr><td>");
-            out.println("      <form action=\"" + paramsRequest.getActionUrl() + "\" method=\"post\">");
-            out.println("        <input type=hidden name=\"dbcon\" value=\"" + dbcon + "\">");
-            out.println("        <input type=submit name=\"clear\" value=\"" + paramsRequest.getLocaleString("clear") + " " + selectedPool.getName() + "\">");
-            out.println("      </form>");
-            out.println("      </td><td>");
-            out.println("      <form action=\"" + paramsRequest.getRenderUrl() + "\" method=\"post\">");
-            out.println("        <input type=hidden name=\"dbcon\" value=\"" + dbcon + "\">");
-            out.println("        <input type=submit name=\"reload\" value=\"" + paramsRequest.getLocaleString("update") + "\">");
-            out.println("      </form>");
-            out.println("      </td></tr></table>");
-            out.println("    </td></tr>");
             out.println("  </table>");
+            out.println("</fieldset>");
+            out.println("<fieldset>");
 
+            SWBResourceURL url1 =  paramsRequest.getActionUrl();
+            url1.setParameter("dbcon", dbcon);
+            url1.setParameter("clear", "clear");
+
+            out.println("        <button dojoType=\"dijit.form.Button\" name=\"clear\" onclick=\"submitUrl('"+url1+"', this.domNode); return false;\" >" + paramsRequest.getLocaleString("clear") +" " + selectedPool.getName() + "</button>");
+            //out.println("        <input type=submit name=\"clear\" value=\"" + paramsRequest.getLocaleString("clear") + " " + selectedPool.getName() + "\">");
+
+            SWBResourceURL url2 =  paramsRequest.getRenderUrl();
+            url2.setParameter("dbcon", dbcon);
+            url2.setParameter("reload", "reload");
+
+            out.println("  <button dojoType=\"dijit.form.Button\" name=\"reload\" onclick=\"submitUrl('"+url2+"',this.domNode); return false;\" name=\"gc\">" + paramsRequest.getLocaleString("update") + "</button>");
+            //out.println("        <input type=submit name=\"reload\" value=\"" + paramsRequest.getLocaleString("update") + "\">");
+            
             out.println("</fieldset>");
             out.println("</div>");
             
