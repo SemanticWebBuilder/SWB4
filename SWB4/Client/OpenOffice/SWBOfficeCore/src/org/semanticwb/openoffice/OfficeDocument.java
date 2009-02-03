@@ -275,9 +275,33 @@ public abstract class OfficeDocument
 
     public final void delete()
     {
+        if (isPublicated())
+        {
+            int res = JOptionPane.showConfirmDialog(null, "¿Desea borrar el contenido?", "Borrado de contenido", JOptionPane.YES_NO_OPTION | JOptionPane.QUESTION_MESSAGE);
+            if (res == JOptionPane.YES_OPTION)
+            {
+                contentID = this.getCustomProperties().get(CONTENT_ID_NAME);
+                String repositoryName = this.getCustomProperties().get(WORKSPACE_ID_NAME);
+                try
+                {
+                    IOpenOfficeDocument doc = OfficeApplication.getOfficeDocumentProxy();
+                    doc.delete(contentID, repositoryName);
+                    deleteAssociation(false);
+                }
+                catch(Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     public final void deleteAssociation()
+    {
+        deleteAssociation(true);
+    }
+
+    public final void deleteAssociation(boolean showMessage)
     {
         try
         {
@@ -286,8 +310,11 @@ public abstract class OfficeDocument
             properties.put("Information 3", "");
             properties.put("Information 2", "");
             properties.put("Information 1", "");
-            saveCustomProperties(properties);            
-            JOptionPane.showMessageDialog(null, "¡Se ha borrado la asociación de publicación de contenidos!","Borrado de asociación de contenido",JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+            saveCustomProperties(properties);
+            if (showMessage)
+            {
+                JOptionPane.showMessageDialog(null, "¡Se ha borrado la asociación de publicación de contenidos!", "Borrado de asociación de contenido", JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+            }
         }
         catch (WBAlertException wba)
         {
@@ -497,13 +524,14 @@ public abstract class OfficeDocument
         }
         return result;
     }
-    public final void publish(String title,String description)
+
+    public final void publish(String title, String description)
     {
         if (isPublicated())
         {
             contentID = this.getCustomProperties().get(CONTENT_ID_NAME);
             String repositoryName = this.getCustomProperties().get(WORKSPACE_ID_NAME);
-            PublishContentToWebPageResultProducer resultProducer = new PublishContentToWebPageResultProducer(contentID, repositoryName,title,description);
+            PublishContentToWebPageResultProducer resultProducer = new PublishContentToWebPageResultProducer(contentID, repositoryName, title, description);
             WizardPage[] clazz = new WizardPage[]
             {
                 new SelectPage(), new PublishVersion(contentID, repositoryName)
@@ -512,6 +540,7 @@ public abstract class OfficeDocument
             wiz.show();
         }
     }
+
     public final void publish()
     {
         if (isPublicated())
