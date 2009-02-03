@@ -156,7 +156,7 @@ public abstract class OfficeApplication
             }
             catch ( Exception e )
             {
-                throw new WBException("No se puede validar la compatibilidad de versiones", e);
+                throw new WBException("No se puede validar la compatibilidad de versiones\r\n"+e.getMessage(), e);
             }
         }
         return document;
