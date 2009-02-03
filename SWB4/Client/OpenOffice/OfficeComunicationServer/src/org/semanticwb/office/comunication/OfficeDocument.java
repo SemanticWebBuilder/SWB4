@@ -319,7 +319,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     Iterator<WebSite> sites=SWBContext.listWebSites();
                     while(sites.hasNext())
                     {                        
-                        Iterator<WordPortlet> officePortlets=WordPortlet.listWordPortlets(sites.next());
+                        Iterator<OfficePortlet> officePortlets=OfficePortlet.listOfficePortlets(sites.next());
                         while(officePortlets.hasNext())
                         {
                             OfficePortlet officePortlet=officePortlets.next();
