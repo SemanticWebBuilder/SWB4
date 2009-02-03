@@ -58,7 +58,7 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
 
     public static org.semanticwb.model.User createUser(org.semanticwb.model.SWBModel model)
     {
-        long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(model.getSemanticObject().getModel().getName()+"/"+sclass.getName());
+        long id=model.getSemanticObject().getModel().getCounter(sclass);
         return org.semanticwb.model.User.createUser(String.valueOf(id), model);
     }
 

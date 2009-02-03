@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class CalendarBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.XMLable,org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable
+public class CalendarBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.XMLable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
@@ -44,7 +44,7 @@ public class CalendarBase extends org.semanticwb.model.SWBClass implements org.s
 
     public static org.semanticwb.model.Calendar createCalendar(org.semanticwb.model.SWBModel model)
     {
-        long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(model.getSemanticObject().getModel().getName()+"/"+sclass.getName());
+        long id=model.getSemanticObject().getModel().getCounter(sclass);
         return org.semanticwb.model.Calendar.createCalendar(String.valueOf(id), model);
     }
 

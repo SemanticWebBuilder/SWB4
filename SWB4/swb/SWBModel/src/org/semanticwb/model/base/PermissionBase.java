@@ -37,7 +37,7 @@ public class PermissionBase extends org.semanticwb.model.SWBClass implements org
 
     public static org.semanticwb.model.Permission createPermission(org.semanticwb.model.SWBModel model)
     {
-        long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(model.getSemanticObject().getModel().getName()+"/"+sclass.getName());
+        long id=model.getSemanticObject().getModel().getCounter(sclass);
         return org.semanticwb.model.Permission.createPermission(String.valueOf(id), model);
     }
 

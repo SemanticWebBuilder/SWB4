@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class TemplateBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.RoleRefable,org.semanticwb.model.Traceable,org.semanticwb.model.Referensable,org.semanticwb.model.Versionable,org.semanticwb.model.Deleteable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Localeable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Calendarable
+public class TemplateBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Localeable,org.semanticwb.model.Calendarable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Versionable,org.semanticwb.model.Traceable,org.semanticwb.model.Referensable,org.semanticwb.model.Deleteable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.RoleRefable
 {
     public static final org.semanticwb.platform.SemanticClass swb_TemplateGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#TemplateGroup");
     public static final org.semanticwb.platform.SemanticProperty swb_templateGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#templateGroup");
@@ -59,7 +59,7 @@ public class TemplateBase extends org.semanticwb.model.SWBClass implements org.s
 
     public static org.semanticwb.model.Template createTemplate(org.semanticwb.model.SWBModel model)
     {
-        long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(model.getSemanticObject().getModel().getName()+"/"+sclass.getName());
+        long id=model.getSemanticObject().getModel().getCounter(sclass);
         return org.semanticwb.model.Template.createTemplate(String.valueOf(id), model);
     }
 

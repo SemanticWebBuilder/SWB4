@@ -1,7 +1,7 @@
 package org.semanticwb.portlet.office.base;
 
 
-public class WordPortletBase extends org.semanticwb.portlet.office.OfficePortlet implements org.semanticwb.model.Priorityable,org.semanticwb.model.Referensable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.Hitable,org.semanticwb.model.Localeable,org.semanticwb.model.Calendarable,org.semanticwb.model.XMLConfable,org.semanticwb.model.Indexable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Viewable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.XMLable,org.semanticwb.model.Deleteable,org.semanticwb.model.Versionable
+public class WordPortletBase extends org.semanticwb.portlet.office.OfficePortlet implements org.semanticwb.model.Localeable,org.semanticwb.model.Traceable,org.semanticwb.model.Versionable,org.semanticwb.model.Deleteable,org.semanticwb.model.Indexable,org.semanticwb.model.Activeable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Calendarable,org.semanticwb.model.Hitable,org.semanticwb.model.XMLConfable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Referensable,org.semanticwb.model.XMLable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Priorityable,org.semanticwb.model.Viewable
 {
     public static final org.semanticwb.platform.SemanticProperty word_paginated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/content/office/word#paginated");
     public static final org.semanticwb.platform.SemanticProperty word_NumberOfPages=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/content/office/word#NumberOfPages");

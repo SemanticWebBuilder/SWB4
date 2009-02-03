@@ -37,7 +37,7 @@ public class RoleRefBase extends org.semanticwb.model.Reference implements org.s
 
     public static org.semanticwb.model.RoleRef createRoleRef(org.semanticwb.model.SWBModel model)
     {
-        long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(model.getSemanticObject().getModel().getName()+"/"+sclass.getName());
+        long id=model.getSemanticObject().getModel().getCounter(sclass);
         return org.semanticwb.model.RoleRef.createRoleRef(String.valueOf(id), model);
     }
 

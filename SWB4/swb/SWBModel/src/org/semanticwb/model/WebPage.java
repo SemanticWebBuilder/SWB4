@@ -36,7 +36,8 @@ public class WebPage extends WebPageBase
      */
     public String getRealUrl()
     {
-        String id=getSId();
+        //String id=getSId();
+        String id=getId();
         return SWBPlatform.getContextPath() + "/" + SWBPlatform.getEnv("swb/distributor","swb") + "/" + getWebSiteId() + "/" + id;
     }    
     
