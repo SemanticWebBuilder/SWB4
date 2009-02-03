@@ -44,16 +44,16 @@ public class GenericObjectBase implements GenericObject
         return m_obj.getId();
     }
 
-    public String getSId()
-    {
-        String id=getId();
-        SemanticClass cls=getSemanticObject().getSemanticClass();
-        //if(cls!=swb_WebPage)
-        {
-            id=cls.getClassId()+":"+id;
-        }
-        return id;
-    }
+//    public String getSId()
+//    {
+//        String id=getSemanticObject().getRDFName();//getId();
+//        //SemanticClass cls=getSemanticObject().getSemanticClass();
+//        //if(cls!=swb_WebPage)
+//        //{
+//        //    id=cls.getClassId()+":"+id;
+//        //}
+//        return id;
+//    }
     
     public SemanticObject getSemanticObject()
     {

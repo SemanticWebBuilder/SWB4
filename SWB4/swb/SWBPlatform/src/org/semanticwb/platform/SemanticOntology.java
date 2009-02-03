@@ -77,7 +77,7 @@ public class SemanticOntology
             if(ns!=null && uri.startsWith(ns))
             {
                 Resource res=model.getRDFModel().getResource(uri);
-                Property type=model.getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
+                Property type=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.RDF_TYPE).getRDFProperty();
                 if(model.getRDFModel().contains(res, type))
                 {
                     ret=res;
@@ -94,7 +94,7 @@ public class SemanticOntology
                 if(model.getRDFModel()!=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel())
                 {
                     Resource res=model.getRDFModel().getResource(uri);
-                    Property type=model.getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
+                    Property type=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.RDF_TYPE).getRDFProperty();
                     if(model.getRDFModel().contains(res, type))
                     {
                         ret=res;
@@ -107,7 +107,7 @@ public class SemanticOntology
         {
             Model model=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
             Resource res=model.getResource(uri);
-            Property type=model.getProperty(SemanticVocabulary.RDF_TYPE);
+            Property type=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.RDF_TYPE).getRDFProperty();
             if(model.contains(res, type))
             {
                 ret=res;
@@ -119,7 +119,7 @@ public class SemanticOntology
     
     public SemanticClass getSemanticObjectClass(Resource res)
     {
-        Statement stm=res.getRequiredProperty(res.getModel().getProperty(SemanticVocabulary.RDF_TYPE));
+        Statement stm=res.getRequiredProperty(SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.RDF_TYPE).getRDFProperty());
         if(stm!=null)
         {
             return SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(stm.getResource().getURI());

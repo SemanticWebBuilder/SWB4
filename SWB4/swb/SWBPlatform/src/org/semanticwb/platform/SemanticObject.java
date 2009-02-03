@@ -260,27 +260,34 @@ public class SemanticObject
 
     public String getId()
     {
+        String id=null;
         if (m_virtual)
         {
             return null;
         }
-        String uri = getURI();
-        int x = uri.indexOf('#');
+        id = getURI();
+        int x = id.indexOf('#');
         if (x > -1)
         {
-            return uri.substring(x + 1);
+            id=id.substring(x + 1);
+            x = id.indexOf(':');
+            if (x > -1)
+            {
+                id=id.substring(x + 1);
+            }
         }
-        return uri;
+        return id;
     }
 
-    /**
-     * Regreasa SemanticID compuesto por /[model name]/[cls name]/[id]
-     * @return
-     */
-    public String getSID()
-    {
-        return "/" + getModel().getName() + "/" + getSemanticClass().getClassId() + ":" + getId();
-    }
+//    /**
+//     * Regreasa SemanticID compuesto por /[model name]/[cls name]/[id]
+//     * @return
+//     */
+//    public String getSID()
+//    {
+//        //return "/" + getModel().getName() + "/" + getSemanticClass().getClassId() + ":" + getId();
+//        return "/" + getModel().getName() + "/" + getRDFName();
+//    }
 
     /**
      * Regresa URI codificado para utilizar en ligas de html
@@ -1480,8 +1487,25 @@ public class SemanticObject
 
     public Iterator<SemanticObject> listRelatedObjects()
     {
+        ArrayList arr=new ArrayList();
         StmtIterator stit = getModel().getRDFModel().listStatements(null, null, getRDFResource());
-        return new SemanticIterator(stit, true);
+        Iterator it=new SemanticIterator(stit, true);
+        while(it.hasNext())
+        {
+            arr.add(it.next());
+        }
+        SemanticClass cls=getSemanticClass();
+        it=cls.listProperties();
+        while(it.hasNext())
+        {
+            SemanticProperty prop=(SemanticProperty)it.next();
+            if(prop.isObjectProperty() && prop.isInverseOf())
+            {
+               SemanticObject obj=getObjectProperty(prop);
+               if(obj!=null)arr.add(obj);
+            }
+        }
+        return arr.iterator();
     }
 
     public Iterator<SemanticObject> listHerarquicalChilds()
@@ -1528,7 +1552,7 @@ public class SemanticObject
 
     public String getWorkPath()
     {
-        return "/"+getModel().getName()+"/"+getSemanticClass().getName()+"/"+getId();
+        return "/models/"+getModel().getName()+"/"+getSemanticClass().getClassId()+"/"+getId();
     }
 
 }

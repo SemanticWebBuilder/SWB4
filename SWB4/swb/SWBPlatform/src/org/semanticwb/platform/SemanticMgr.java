@@ -67,7 +67,7 @@ public class SemanticMgr implements SWBInstanceObject
         m_observers=new ArrayList();
 
         // Create database connection
-        conn = new DBConnection(SWBUtils.DB.getDefaultConnection(), SWBUtils.DB.getDatabaseName());
+        conn = new DBConnection(SWBUtils.DB.getDefaultConnection(), SWBUtils.DB.getDatabaseName()+"_SWB");
         conn.getDriver().setTableNamePrefix("swb_");
         //conn.getDriver().setDoDuplicateCheck(false);
         maker = ModelFactory.createModelRDBMaker(conn);
@@ -267,6 +267,7 @@ public class SemanticMgr implements SWBInstanceObject
 //        model.setNsPrefix(name+"_"+SemanticVocabulary.SWB_NS, nameSpace);
 //        model.setNsPrefix(name, SemanticVocabulary.URI+SemanticVocabulary.SWB_NS);
         model.setNsPrefix(name, nameSpace);
+        //model.setNsPrefixes(m_schema.getRDFOntModel().getNsPrefixMap());
         return ret;
     }
 
@@ -314,63 +315,6 @@ public class SemanticMgr implements SWBInstanceObject
     
     public SemanticVocabulary getVocabulary() {
         return vocabulary;
-    }
-    
-    /**
-     * Regresa contador en base a la cadena <i>name</i>, sin incrementar el valor del mismo
-     */
-    public synchronized long getCounterValue(String name)
-    {
-        SemanticModel model=getSystemModel();
-        Resource res=model.getRDFModel().createResource(name);
-        Property prop=model.getRDFModel().createProperty("swb:count");
-        StmtIterator it=model.getRDFModel().listStatements(res, prop, (String)null);
-        if(it.hasNext())
-        {
-            Statement stmt=it.nextStatement();
-            return stmt.getLong();
-        }
-        return 0;
-    }
-    
-    /**
-     * Asigna el valor <i>val</a> al contador de nombre <i>name</i>
-     */
-    public synchronized void setCounterValue(String name, long val)
-    {
-        SemanticModel model=getSystemModel();
-        Resource res=model.getRDFModel().createResource(name);
-        Property prop=model.getRDFModel().createProperty("swb:count");
-        StmtIterator it=model.getRDFModel().listStatements(res, prop, (String)null);
-        if(it.hasNext())
-        {
-            Statement stmt=it.nextStatement();
-            stmt.changeLiteralObject(val);
-        }else
-        {
-            Statement stmt=model.getRDFModel().createLiteralStatement(res, prop, val);
-            model.getRDFModel().add(stmt);
-        }
-    }
-    
-    
-    /**
-     * Regresa contador en base a la cadena <i>name</i>, e incrementa el valor en uno
-     */
-    public synchronized long getCounter(String name)
-    {
-        long ret=getCounterValue(name);
-        ret++;
-        setCounterValue(name, ret);
-        return ret;
-    }
-    
-    public synchronized void deleteCounterValue(String name)
-    {
-        SemanticModel model=getSystemModel();
-        Resource res=model.getRDFModel().createResource(name);
-        Property prop=model.getRDFModel().createProperty("swb:count");
-        model.getRDFModel().remove(res, prop, null);
     }
 
     public void registerObserver(SemanticObserver obs)

@@ -567,7 +567,7 @@ public class CodeGenerator
             javaClassContent.append(ENTER);
             javaClassContent.append("    public static " + fullpathClass + " create"+className+"(org.semanticwb.model.SWBModel model)" + ENTER);
             javaClassContent.append("    {" + ENTER);
-            javaClassContent.append("        long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(model.getSemanticObject().getModel().getName()+\"/\"+sclass.getName());" + ENTER);
+            javaClassContent.append("        long id=model.getSemanticObject().getModel().getCounter(sclass);" + ENTER);
             javaClassContent.append("        return "+fullpathClass+".create"+className+"(String.valueOf(id), model);" + ENTER);
             javaClassContent.append("    }" + ENTER);
 
@@ -901,7 +901,7 @@ public class CodeGenerator
                 javaClassContent.append(ENTER);
                 javaClassContent.append("    public " + getPackage(tpc) + "." + className + " create" + className + "()" + ENTER);
                 javaClassContent.append("    {" + ENTER);
-                javaClassContent.append("        long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+\"/\"+" + tpc.getPrefix() + "_" + className + ".getName());" + ENTER);
+                javaClassContent.append("        long id=getSemanticObject().getModel().getCounter(" + tpc.getPrefix() + "_" + className + ");" + ENTER);
                 javaClassContent.append("        return "+getPackage(tpc) + "." + className+".create"+className+"(String.valueOf(id),this);" + ENTER);
                 javaClassContent.append("    } " + ENTER);
 

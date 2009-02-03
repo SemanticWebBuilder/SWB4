@@ -171,7 +171,8 @@ public class SemanticModel
         String ret=getNameSpace();
         if(cls!=null && !cls.isSWBModel())
         {
-            ret+="/"+cls.getName()+"#"+id;
+            cls=cls.getRootClass(); //busca la clase raiz
+            ret+="#"+cls.getClassId()+":"+id;
         }else
         {
             ret+="#"+id;
@@ -190,7 +191,7 @@ public class SemanticModel
     
     public Iterator<SemanticObject> listInstancesOfClass(SemanticClass cls)
     {
-        Property rdf=getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE);
+        Property rdf=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.RDF_TYPE).getRDFProperty();
         StmtIterator stit=getRDFModel().listStatements(null, rdf, cls.getOntClass());
         return new SemanticIterator(stit, true);
     }
@@ -261,4 +262,71 @@ public class SemanticModel
     {
         m_model.write(out);
     }
+
+    /**
+     * Regresa contador en base a la cadena <i>name</i>, sin incrementar el valor del mismo
+     */
+    public synchronized long getCounterValue(String name)
+    {
+        String uri=getNameSpace()+"#counter";
+        Resource res=getRDFModel().createResource(uri+":"+name);
+        Property prop=getRDFModel().createProperty(uri);
+        StmtIterator it=getRDFModel().listStatements(res, prop, (String)null);
+        if(it.hasNext())
+        {
+            Statement stmt=it.nextStatement();
+            return stmt.getLong();
+        }
+        return 0;
+    }
+
+    /**
+     * Asigna el valor <i>val</a> al contador de nombre <i>name</i>
+     */
+    public synchronized void setCounterValue(String name, long val)
+    {
+        String uri=getNameSpace()+"#counter";
+        Resource res=getRDFModel().createResource(uri+":"+name);
+        Property prop=getRDFModel().createProperty(uri);
+        StmtIterator it=getRDFModel().listStatements(res, prop, (String)null);
+        if(it.hasNext())
+        {
+            Statement stmt=it.nextStatement();
+            stmt.changeLiteralObject(val);
+        }else
+        {
+            Statement stmt=getRDFModel().createLiteralStatement(res, prop, val);
+            getRDFModel().add(stmt);
+        }
+    }
+
+    /**
+     * Regresa contador en base a la cadena <i>name</i>, e incrementa el valor en uno
+     */
+    public synchronized long getCounter(SemanticClass cls)
+    {
+        //System.out.println("cls:"+cls+" "+cls.getRootClass());
+        return getCounter(cls.getRootClass().getClassId());
+    }
+
+    /**
+     * Regresa contador en base a la cadena <i>name</i>, e incrementa el valor en uno
+     */
+    public synchronized long getCounter(String name)
+    {
+        //System.out.println("counter:"+name);
+        long ret=getCounterValue(name);
+        ret++;
+        setCounterValue(name, ret);
+        return ret;
+    }
+
+    public synchronized void deleteCounterValue(String name)
+    {
+        String uri=getNameSpace()+"#counter";
+        Resource res=getRDFModel().createResource(uri+":"+name);
+        Property prop=getRDFModel().createProperty(uri);
+        getRDFModel().remove(res, prop, null);
+    }
+
 }
