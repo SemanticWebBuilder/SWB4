@@ -7,4 +7,5 @@ public class WordPortlet extends org.semanticwb.portlet.office.base.WordPortletB
     {
         super(base);
     }
+    
 }
