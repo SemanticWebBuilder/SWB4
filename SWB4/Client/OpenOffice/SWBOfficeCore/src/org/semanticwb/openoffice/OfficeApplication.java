@@ -4,16 +4,17 @@
  */
 package org.semanticwb.openoffice;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
+import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import org.netbeans.spi.wizard.Wizard;
-import org.netbeans.spi.wizard.WizardObserver;
 import org.netbeans.spi.wizard.WizardPage;
 import org.semanticwb.office.interfaces.WebPageInfo;
 import org.semanticwb.openoffice.interfaces.IOpenOfficeApplication;
@@ -45,6 +46,16 @@ public abstract class OfficeApplication
 
     static
     {
+        /*try
+        {
+            BufferedImage sidebar = ImageIO.read (OfficeApplication.class.getResource ("MySideImage.png"));
+            UIManager.put("wizard.sidebar.image", sidebar);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }*/
+        System.setProperty("wizard.sidebar.image", "org/semanticwb/openoffice/ui/icons/sidebar.png");
         Locale.setDefault(new Locale("es"));
         try
         {
