@@ -38,7 +38,7 @@ public class PFlowRefBase extends org.semanticwb.model.Reference implements org.
 
     public static org.semanticwb.model.PFlowRef createPFlowRef(org.semanticwb.model.SWBModel model)
     {
-        long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(model.getSemanticObject().getModel().getName()+"/"+sclass.getName());
+        long id=model.getSemanticObject().getModel().getCounter(sclass);
         return org.semanticwb.model.PFlowRef.createPFlowRef(String.valueOf(id), model);
     }
 

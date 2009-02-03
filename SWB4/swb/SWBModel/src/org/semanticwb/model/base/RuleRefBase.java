@@ -37,7 +37,7 @@ public class RuleRefBase extends org.semanticwb.model.Reference implements org.s
 
     public static org.semanticwb.model.RuleRef createRuleRef(org.semanticwb.model.SWBModel model)
     {
-        long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(model.getSemanticObject().getModel().getName()+"/"+sclass.getName());
+        long id=model.getSemanticObject().getModel().getCounter(sclass);
         return org.semanticwb.model.RuleRef.createRuleRef(String.valueOf(id), model);
     }
 

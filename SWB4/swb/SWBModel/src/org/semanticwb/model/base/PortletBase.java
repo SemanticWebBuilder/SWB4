@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class PortletBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.XMLable,org.semanticwb.model.Hitable,org.semanticwb.model.Referensable,org.semanticwb.model.XMLConfable,org.semanticwb.model.Indexable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Localeable,org.semanticwb.model.Calendarable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Traceable,org.semanticwb.model.Versionable,org.semanticwb.model.Deleteable,org.semanticwb.model.Activeable,org.semanticwb.model.Priorityable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Viewable
+public class PortletBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Localeable,org.semanticwb.model.Traceable,org.semanticwb.model.Versionable,org.semanticwb.model.Indexable,org.semanticwb.model.Deleteable,org.semanticwb.model.Activeable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Calendarable,org.semanticwb.model.Hitable,org.semanticwb.model.XMLConfable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Referensable,org.semanticwb.model.XMLable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Priorityable,org.semanticwb.model.Viewable
 {
     public static final org.semanticwb.platform.SemanticClass swb_Camp=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Camp");
     public static final org.semanticwb.platform.SemanticProperty swb_camp=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#camp");
@@ -72,7 +72,7 @@ public class PortletBase extends org.semanticwb.model.SWBClass implements org.se
 
     public static org.semanticwb.model.Portlet createPortlet(org.semanticwb.model.SWBModel model)
     {
-        long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(model.getSemanticObject().getModel().getName()+"/"+sclass.getName());
+        long id=model.getSemanticObject().getModel().getCounter(sclass);
         return org.semanticwb.model.Portlet.createPortlet(String.valueOf(id), model);
     }
 

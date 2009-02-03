@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Traceable,org.semanticwb.model.Deleteable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Localeable
+public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Localeable,org.semanticwb.model.Traceable,org.semanticwb.model.Deleteable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
@@ -338,7 +338,7 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
 
     public org.semanticwb.model.RuleRef createRuleRef()
     {
-        long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+swb_RuleRef.getName());
+        long id=getSemanticObject().getModel().getCounter(swb_RuleRef);
         return org.semanticwb.model.RuleRef.createRuleRef(String.valueOf(id),this);
     } 
 
@@ -416,7 +416,7 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
 
     public org.semanticwb.model.Rule createRule()
     {
-        long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+swb_Rule.getName());
+        long id=getSemanticObject().getModel().getCounter(swb_Rule);
         return org.semanticwb.model.Rule.createRule(String.valueOf(id),this);
     } 
 
@@ -446,7 +446,7 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
 
     public org.semanticwb.model.Camp createCamp()
     {
-        long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+swb_Camp.getName());
+        long id=getSemanticObject().getModel().getCounter(swb_Camp);
         return org.semanticwb.model.Camp.createCamp(String.valueOf(id),this);
     } 
 
@@ -476,7 +476,7 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
 
     public org.semanticwb.model.VersionInfo createVersionInfo()
     {
-        long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+swb_VersionInfo.getName());
+        long id=getSemanticObject().getModel().getCounter(swb_VersionInfo);
         return org.semanticwb.model.VersionInfo.createVersionInfo(String.valueOf(id),this);
     } 
 
@@ -506,7 +506,7 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
 
     public org.semanticwb.model.Portlet createPortlet()
     {
-        long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+swb_Portlet.getName());
+        long id=getSemanticObject().getModel().getCounter(swb_Portlet);
         return org.semanticwb.model.Portlet.createPortlet(String.valueOf(id),this);
     } 
 
@@ -560,7 +560,7 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
 
     public org.semanticwb.model.Calendar createCalendar()
     {
-        long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+swb_Calendar.getName());
+        long id=getSemanticObject().getModel().getCounter(swb_Calendar);
         return org.semanticwb.model.Calendar.createCalendar(String.valueOf(id),this);
     } 
 
@@ -590,7 +590,7 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
 
     public org.semanticwb.model.Device createDevice()
     {
-        long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+swb_Device.getName());
+        long id=getSemanticObject().getModel().getCounter(swb_Device);
         return org.semanticwb.model.Device.createDevice(String.valueOf(id),this);
     } 
 
@@ -620,7 +620,7 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
 
     public org.semanticwb.model.IPFilter createIPFilter()
     {
-        long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+swb_IPFilter.getName());
+        long id=getSemanticObject().getModel().getCounter(swb_IPFilter);
         return org.semanticwb.model.IPFilter.createIPFilter(String.valueOf(id),this);
     } 
 
@@ -650,7 +650,7 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
 
     public org.semanticwb.model.PFlowRef createPFlowRef()
     {
-        long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+swb_PFlowRef.getName());
+        long id=getSemanticObject().getModel().getCounter(swb_PFlowRef);
         return org.semanticwb.model.PFlowRef.createPFlowRef(String.valueOf(id),this);
     } 
 
@@ -680,7 +680,7 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
 
     public org.semanticwb.model.PortletRef createPortletRef()
     {
-        long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+swb_PortletRef.getName());
+        long id=getSemanticObject().getModel().getCounter(swb_PortletRef);
         return org.semanticwb.model.PortletRef.createPortletRef(String.valueOf(id),this);
     } 
 
@@ -710,7 +710,7 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
 
     public org.semanticwb.model.Permission createPermission()
     {
-        long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+swb_Permission.getName());
+        long id=getSemanticObject().getModel().getCounter(swb_Permission);
         return org.semanticwb.model.Permission.createPermission(String.valueOf(id),this);
     } 
 
@@ -740,7 +740,7 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
 
     public org.semanticwb.model.Template createTemplate()
     {
-        long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+swb_Template.getName());
+        long id=getSemanticObject().getModel().getCounter(swb_Template);
         return org.semanticwb.model.Template.createTemplate(String.valueOf(id),this);
     } 
 
@@ -770,7 +770,7 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
 
     public org.semanticwb.model.PFlow createPFlow()
     {
-        long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+swb_PFlow.getName());
+        long id=getSemanticObject().getModel().getCounter(swb_PFlow);
         return org.semanticwb.model.PFlow.createPFlow(String.valueOf(id),this);
     } 
 
@@ -800,7 +800,7 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
 
     public org.semanticwb.model.TemplateRef createTemplateRef()
     {
-        long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+swb_TemplateRef.getName());
+        long id=getSemanticObject().getModel().getCounter(swb_TemplateRef);
         return org.semanticwb.model.TemplateRef.createTemplateRef(String.valueOf(id),this);
     } 
 
@@ -830,7 +830,7 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
 
     public org.semanticwb.model.TemplateGroup createTemplateGroup()
     {
-        long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+swb_TemplateGroup.getName());
+        long id=getSemanticObject().getModel().getCounter(swb_TemplateGroup);
         return org.semanticwb.model.TemplateGroup.createTemplateGroup(String.valueOf(id),this);
     } 
 
@@ -860,7 +860,7 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
 
     public org.semanticwb.model.RoleRef createRoleRef()
     {
-        long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+swb_RoleRef.getName());
+        long id=getSemanticObject().getModel().getCounter(swb_RoleRef);
         return org.semanticwb.model.RoleRef.createRoleRef(String.valueOf(id),this);
     } 
 

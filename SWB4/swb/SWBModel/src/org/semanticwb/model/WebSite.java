@@ -51,43 +51,45 @@ public class WebSite extends WebSiteBase
 //        return super.getPortletType(id.toLowerCase());
 //    }
 
-    @Override
-    public WebPage getWebPage(String id)
-    {
-        WebPage ret=null;
-        SemanticClass cls=swb_WebPage;
-        int i=id.indexOf(':');
-        if(i>0)
-        {
-            String clsid=id.substring(0,i);
-            cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassById(clsid);
-            id=id.substring(i+1);
-        }
-        if(cls!=null)
-        {
-            ret=(org.semanticwb.model.WebPage)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,cls),cls);
-        }
-        return ret;
-    }
+//    @Override
+//    public WebPage getWebPage(String id)
+//    {
+//        WebPage ret=null;
+//        SemanticClass cls=swb_WebPage;
+//        int i=id.indexOf(':');
+//        if(i>0)
+//        {
+//            String clsid=id.substring(0,i);
+//            cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassById(clsid);
+//            id=id.substring(i+1);
+//        }
+//        if(cls!=null)
+//        {
+//            ret=(org.semanticwb.model.WebPage)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,cls),cls);
+//        }
+//        return ret;
+//    }
 
-    @Override
-    public Portlet getPortlet(String id)
-    {
-        Portlet ret=null;
-        SemanticClass cls=swb_Portlet;
-        int i=id.indexOf(':');
-        if(i>0)
-        {
-            String clsid=id.substring(0,i);
-            cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassById(clsid);
-            id=id.substring(i+1);
-        }
-        if(cls!=null)
-        {
-            ret=(Portlet)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,cls),cls);
-        }
-        return ret;
-    }
+//    @Override
+//    public Portlet getPortlet(String id)
+//    {
+//        Portlet ret=super.getPortlet(id);
+//        //System.out.println("id:"+id+" ret:"+ret);
+//        Portlet ret=null;
+//        SemanticClass cls=swb_Portlet;
+//        int i=id.indexOf(':');
+//        if(i>0)
+//        {
+//            String clsid=id.substring(0,i);
+//            cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassById(clsid);
+//            id=id.substring(i+1);
+//        }
+//        if(cls!=null)
+//        {
+//            ret=(Portlet)getSemanticObject().getModel().getGenericObject(getSemanticObject().getModel().getObjectUri(id,cls),cls);
+//        }
+//        return ret;
+//    }
 
     public String getNameSpace()
     {

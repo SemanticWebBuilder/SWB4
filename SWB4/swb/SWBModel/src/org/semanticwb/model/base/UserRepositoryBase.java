@@ -182,7 +182,7 @@ public class UserRepositoryBase extends org.semanticwb.model.SWBModel implements
 
     public org.semanticwb.model.UserFavorites createUserFavorites()
     {
-        long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+swb_UserFavorites.getName());
+        long id=getSemanticObject().getModel().getCounter(swb_UserFavorites);
         return org.semanticwb.model.UserFavorites.createUserFavorites(String.valueOf(id),this);
     } 
 
@@ -210,6 +210,12 @@ public class UserRepositoryBase extends org.semanticwb.model.SWBModel implements
         return org.semanticwb.model.UserGroup.createUserGroup(id,this);
     }
 
+    public org.semanticwb.model.UserGroup createUserGroup()
+    {
+        long id=getSemanticObject().getModel().getCounter(swb_UserGroup);
+        return org.semanticwb.model.UserGroup.createUserGroup(String.valueOf(id),this);
+    } 
+
     public void removeUserGroup(String id)
     {
         org.semanticwb.model.UserGroup.removeUserGroup(id, this);
@@ -236,7 +242,7 @@ public class UserRepositoryBase extends org.semanticwb.model.SWBModel implements
 
     public org.semanticwb.model.User createUser()
     {
-        long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+swb_User.getName());
+        long id=getSemanticObject().getModel().getCounter(swb_User);
         return org.semanticwb.model.User.createUser(String.valueOf(id),this);
     } 
 
@@ -266,7 +272,7 @@ public class UserRepositoryBase extends org.semanticwb.model.SWBModel implements
 
     public org.semanticwb.model.Role createRole()
     {
-        long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+swb_Role.getName());
+        long id=getSemanticObject().getModel().getCounter(swb_Role);
         return org.semanticwb.model.Role.createRole(String.valueOf(id),this);
     } 
 
