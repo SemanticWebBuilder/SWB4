@@ -18,8 +18,22 @@
                 out.println("		</div>");
             }else
             {
+                //System.out.println("mnu:"+child.getClass());
+                if(child.getSemanticObject().instanceOf(MenuItem.sclass))
+                {
+                    String show=((MenuItem)child.getSemanticObject().createGenericInstance()).getShowAs();
+                    if(show!=null && show.equals("DIALOG"))
+                    {
+                        out.println("            <div dojoType=\"dijit.MenuItem\" iconClass_=\"swbIconWebPage\" onclick=\"showDialog('"+child.getUrl()+"');\">"+child.getTitle()+"</div>");
+                    }else
+                    {
+                        out.println("            <div dojoType=\"dijit.MenuItem\" iconClass_=\"swbIconWebPage\" onclick=\"addNewTab('"+child.getURI()+"','"+SWBPlatform.getContextPath()+"/swbadmin/jsp/menuTab.jsp"+"','"+child.getTitle()+"');\">"+child.getTitle()+"</div>");
+                    }
+                }else
+                {
                     //out.println("            <div dojoType=\"dijit.MenuItem\" accelKey=\"Ctrl+S\" iconClass_=\"swbIconWebPage\" onclick=\"addNewTab('"+child.getURI()+"','"+child.getTitle()+"','"+SWBPlatform.getContextPath()+"/swbadmin/jsp/menuTab.jsp"+"');\">"+child.getTitle()+"</div>");
                     out.println("            <div dojoType=\"dijit.MenuItem\" iconClass_=\"swbIconWebPage\" onclick=\"addNewTab('"+child.getURI()+"','"+SWBPlatform.getContextPath()+"/swbadmin/jsp/menuTab.jsp"+"','"+child.getTitle()+"');\">"+child.getTitle()+"</div>");
+                }
             }
         }
    }

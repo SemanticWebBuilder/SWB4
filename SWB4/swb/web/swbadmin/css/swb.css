@@ -74,8 +74,10 @@ html, body, #main{
 .swbIconUserGroup,
 .swbIconObjectBehaviors,
 .swbIconObjectBehavior,
-.swbIconMenus,
-.swbIconMenu
+.swbIconObjectBehaviorU,
+.swbIconMenuItems,
+.swbIconMenuItem,
+.swbIconMenuItemU
 {
 	background-repeat: no-repeat; 
 	width:20px;
