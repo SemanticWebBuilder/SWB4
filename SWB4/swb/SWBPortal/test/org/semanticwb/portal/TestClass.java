@@ -25,6 +25,7 @@ import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.platform.SemanticProperty;
+import org.semanticwb.portal.admin.resources.SWBWebSiteTpls;
 import static org.junit.Assert.*;
 /**
  *
@@ -117,5 +118,21 @@ public class TestClass {
         out.println(itsp.next());
     }
  */
+    }
+
+    @Test
+    public void testClassRoot()
+    {
+        System.out.println("WebPage:"+WebPage.sclass.getRootClass());
+        System.out.println("MenuItem:"+MenuItem.sclass.getRootClass());
+        WebSite site=SWBContext.getWebSite("sep");
+        TemplateRef ref=site.createTemplateRef();
+        System.out.println(ref.getPriority());
+        ref.setPriority(3);
+        int ret=ref.getPriority();
+        System.out.println(ret);
+        ref.setActive(true);
+        System.out.println(ref.getPriority());
+        ref.remove();
     }
 }

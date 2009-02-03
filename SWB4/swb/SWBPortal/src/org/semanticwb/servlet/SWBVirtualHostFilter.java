@@ -58,6 +58,8 @@ public class SWBVirtualHostFilter implements Filter
         HttpServletResponse _response = (HttpServletResponse) response;
         log.trace("VirtualHostFilter:doFilter()");
 
+        boolean catchErrors=true;
+
         if (fistCall)
         {
             swbPlatform.setContextPath(_request.getContextPath());
@@ -122,26 +124,33 @@ public class SWBVirtualHostFilter implements Filter
                     {
                         dparams = new DistributorParams(_request, auri);
                     }
-                    SWBHttpServletResponseWrapper resp = new SWBHttpServletResponseWrapper(_response);
-                    resp.setTrapSendError(true);
-                    serv.doProcess(_request, resp, dparams);
-                    if (resp.isSendError())
+                    if(catchErrors)
                     {
-                        switch (resp.getError())
+                        SWBHttpServletResponseWrapper resp = new SWBHttpServletResponseWrapper(_response);
+                        resp.setTrapSendError(true);
+                        serv.doProcess(_request, resp, dparams);
+                        if (resp.isSendError())
                         {
-                            case 500:
-                            case 404:
-                                processError(resp.getError(), resp.getErrorMsg(), _response);
-                                break;
-                            case 403:
-                                loginInternalServlet.doProcess(_request, _response, dparams);
-                                break;
-                            default:
-                                _response.sendError(resp.getError(), resp.getErrorMsg());
+                            switch (resp.getError())
+                            {
+                                case 500:
+                                case 404:
+                                    processError(resp.getError(), resp.getErrorMsg(), _response);
+                                    log.error(path+" - "+resp.getError()+":"+resp.getErrorMsg());
+                                    break;
+                                case 403:
+                                    loginInternalServlet.doProcess(_request, _response, dparams);
+                                    break;
+                                default:
+                                    _response.sendError(resp.getError(), resp.getErrorMsg());
+                            }
+                        } else
+                        {
+                            _response.getWriter().print(resp.toString());
                         }
-                    } else
+                    }else
                     {
-                        _response.getWriter().print(resp.toString());
+                        serv.doProcess(_request, _response, dparams);
                     }
                 }
             } else

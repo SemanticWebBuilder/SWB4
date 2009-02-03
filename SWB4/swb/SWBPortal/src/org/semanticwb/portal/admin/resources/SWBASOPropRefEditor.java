@@ -881,7 +881,7 @@ public class SWBASOPropRefEditor extends GenericResource {
                     if (id_usr_request == null) {
                         id_usr_request = "";
                     }
-                    long lid = SWBPlatform.getSemanticMgr().getCounter(obj.getModel().getName() + "/" + ncls.getName());
+                    long lid = obj.getModel().getCounter(ncls);
                     String str_lid = id_usr_request + lid;
                     SemanticObject nobj = obj.getModel().createSemanticObject(obj.getModel().getObjectUri(str_lid, ncls), ncls);
                     if (prop.getName().startsWith("has")) {

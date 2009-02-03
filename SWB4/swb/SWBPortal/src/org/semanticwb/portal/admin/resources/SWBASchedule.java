@@ -1096,7 +1096,7 @@ public class SWBASchedule extends GenericResource {
             String id_usr_request = request.getParameter("id_usr_request");
             log.debug("id_recibido: " + id_usr_request);
             if (ncls.isAutogenId() ) { //|| (id_usr_request != null && id_usr_request.trim().length() > 0)
-                long lid = SWBPlatform.getSemanticMgr().getCounter(obj.getModel().getName() + "/" + ncls.getName());
+                long lid = obj.getModel().getCounter(ncls);
                 String str_lid = "" + lid;
                 SemanticObject nobj = obj.getModel().createSemanticObject(obj.getModel().getObjectUri(str_lid, ncls), ncls);
                 Date cdate = new Date(System.currentTimeMillis());

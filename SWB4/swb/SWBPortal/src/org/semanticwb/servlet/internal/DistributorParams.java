@@ -171,6 +171,7 @@ public class DistributorParams
                         aux.put(URLP_NUMBERID, val);
                         ordresparams.add(val);
                         resparams.put(val,aux);
+                        //System.out.println("val:"+val+" aux:"+aux);
 
                         adicaux=new ArrayList();
                         adicparams.put(val,adicaux);  
@@ -490,11 +491,13 @@ public class DistributorParams
      */
     public String getNotAccResourceURI(String resid)
     {
+        //new Exception().printStackTrace();
         StringBuffer ret=new StringBuffer();
         Iterator it=getResourceIDs();
         while(it.hasNext())
         {
             String id=(String)it.next();
+            //System.out.println("id:"+id+" resid:"+resid);
             if(!id.equals(resid))
             {
                 HashMap params=getResourceURI(id);
