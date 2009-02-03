@@ -35,7 +35,7 @@ public class UnstructuredBase extends org.semanticwb.repository.BaseNode
 
     public static org.semanticwb.repository.Unstructured createUnstructured(org.semanticwb.model.SWBModel model)
     {
-        long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(model.getSemanticObject().getModel().getName()+"/"+sclass.getName());
+        long id=model.getSemanticObject().getModel().getCounter(sclass);
         return org.semanticwb.repository.Unstructured.createUnstructured(String.valueOf(id), model);
     }
 

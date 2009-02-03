@@ -74,7 +74,7 @@ public class WorkspaceBase extends org.semanticwb.model.SWBModel
 
     public java.util.Iterator<org.semanticwb.repository.BaseNode> listBaseNodes()
     {
-        return org.semanticwb.repository.BaseNode.listBaseNodes();
+        return org.semanticwb.repository.BaseNode.listBaseNodes(this);
     }
 
     public org.semanticwb.repository.BaseNode createBaseNode(String id)
@@ -98,7 +98,7 @@ public class WorkspaceBase extends org.semanticwb.model.SWBModel
 
     public java.util.Iterator<org.semanticwb.repository.Unstructured> listUnstructureds()
     {
-        return org.semanticwb.repository.Unstructured.listUnstructureds();
+        return org.semanticwb.repository.Unstructured.listUnstructureds(this);
     }
 
     public org.semanticwb.repository.Unstructured createUnstructured(String id)
@@ -108,7 +108,7 @@ public class WorkspaceBase extends org.semanticwb.model.SWBModel
 
     public org.semanticwb.repository.Unstructured createUnstructured()
     {
-        long id=org.semanticwb.SWBPlatform.getSemanticMgr().getCounter(getSemanticObject().getModel().getName()+"/"+nt_Unstructured.getName());
+        long id=getSemanticObject().getModel().getCounter(nt_Unstructured);
         return org.semanticwb.repository.Unstructured.createUnstructured(String.valueOf(id),this);
     } 
 
