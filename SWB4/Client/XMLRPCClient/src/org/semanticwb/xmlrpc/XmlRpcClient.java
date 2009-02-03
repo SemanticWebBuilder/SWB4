@@ -11,6 +11,7 @@ import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.Proxy.Type;
+import java.net.URL;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -29,6 +30,7 @@ import static org.semanticwb.xmlrpc.XmlRpcSerializer.*;
  */
 class XmlRpcClient
 {
+    public static final String SUFIX_GATEWAY = "gtw";
 
     private Map<String, List<String>> responseProperties = new HashMap<String, List<String>>();
     private static String boundary = "gc0p4Jq0M2Yt08jU534c0p";
@@ -164,7 +166,17 @@ class XmlRpcClient
             {
                 proxy = Proxy.NO_PROXY;
             }
-            HttpURLConnection connection = (HttpURLConnection) config.getWebAddress().toURL().openConnection(proxy);
+            String url=config.getWebAddress().toURL().toString();
+            if(!url.endsWith(SUFIX_GATEWAY))
+            {
+                if(!url.endsWith("/"))
+                {
+                    url+="/";
+                }
+                url+=SUFIX_GATEWAY;
+            }
+            URL urlToConnect=new URL(url);
+            HttpURLConnection connection = (HttpURLConnection) urlToConnect.openConnection(proxy);
             HttpURLConnection.setFollowRedirects(true);
             if (config.hasUserPassWord())
             {
