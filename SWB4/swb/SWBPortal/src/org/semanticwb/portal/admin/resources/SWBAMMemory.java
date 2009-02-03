@@ -88,7 +88,9 @@ public class SWBAMMemory extends GenericResource {
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
-        
+        response.setContentType("text/html; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
         PrintWriter out = response.getWriter();
         String act = request.getParameter("act");
         //out.println("<META HTTP-EQUIV=\"Refresh\" CONTENT=\"10; URL="+paramsRequest.getTopic().getUrl()+"/\">");        
@@ -114,9 +116,10 @@ public class SWBAMMemory extends GenericResource {
             out.println("</table>");
             out.println("</fieldset>");
             out.println("<fieldset>");
-            out.println("  <form action=\"" + paramsRequest.getActionUrl() + "\" method=\"POST\">");
-            //out.println("  <button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + paramsRequest.getActionUrl() + "',this.domNode); return false;\" name=\"gc\">" + paramsRequest.getLocaleString("gc") + "</button>");
-            out.print("      <input type=\"submit\" name=\"gc\" value=\""+paramsRequest.getLocaleString("gc")+"\">&nbsp;&nbsp;");
+            SWBResourceURL urlS = paramsRequest.getActionUrl();
+            out.println("  <form id=\""+getResourceBase().getId()+"/MMemory\" action=\"" + paramsRequest.getActionUrl() + "\" method=\"POST\">");
+            out.println("  <button dojoType=\"dijit.form.Button\" name=\"gc\" onclick=\"submitForm('"+getResourceBase().getId()+"/MMemory'); return false;\" name=\"gc\">" + paramsRequest.getLocaleString("gc") + "</button>");
+            //out.print("      <input type=\"submit\" name=\"gc\" value=\""+paramsRequest.getLocaleString("gc")+"\">&nbsp;&nbsp;");
             out.println("</form>");
             out.println("</fieldset>");
         } else {

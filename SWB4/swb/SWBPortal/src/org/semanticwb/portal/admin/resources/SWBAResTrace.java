@@ -114,7 +114,9 @@ public class SWBAResTrace extends GenericResource {
     public void doView(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramsRequest)
             throws SWBResourceException, IOException {
-        
+        response.setContentType("text/html; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
         PrintWriter out = response.getWriter();
 
         SWBResourceTraceMgr restracer = SWBPortal.getResourceMgr().getResourceTraceMgr();
@@ -144,17 +146,21 @@ public class SWBAResTrace extends GenericResource {
         out.println(restracer.getResourceTracedSize());
         out.println("</TD></TR>");
         out.println("</TABLE>");
-        out.println("<fieldset>");
         out.println("</fieldset>");
 
-        out.println("    <form action=\""+paramsRequest.getActionUrl()+"\" method=\"post\">");
-        out.println("        <input type=submit class=\"boton\" name=\"start\" value=\""+paramsRequest.getLocaleString("start")+"\">");
-        out.println("        <input type=submit class=\"boton\" name=\"stop\" value=\""+paramsRequest.getLocaleString("stop")+"\">");
-        out.println("        <input type=submit class=\"boton\" name=\"clear\" value=\""+paramsRequest.getLocaleString("clear")+"\">");
-        out.println("        <input type=submit class=\"boton\" name=\"update\" value=\""+paramsRequest.getLocaleString("update")+"\">");
-        out.println("  </form>");
-
-        
+        out.println("<fieldset>");
+        SWBResourceURL urlA = paramsRequest.getActionUrl();
+        urlA.setParameter("start", "start");
+        out.println("        <button dojoType=\"dijit.form.Button\" name=\"start\" onclick=\"submitUrl('"+urlA+"',this.domNode); return false;\" >" + paramsRequest.getLocaleString("start") + "</button>");
+        SWBResourceURL urlB = paramsRequest.getActionUrl();
+        urlB.setParameter("stop", "stop");
+        out.println("        <button dojoType=\"dijit.form.Button\" name=\"stop\" onclick=\"submitUrl('"+urlB+"',this.domNode); return false;\" >" + paramsRequest.getLocaleString("stop") +"</button>");
+        SWBResourceURL urlC = paramsRequest.getActionUrl();
+        urlC.setParameter("clear", "clear");
+        out.println("        <button dojoType=\"dijit.form.Button\" name=\"clear\" onclick=\"submitUrl('"+urlC+"',this.domNode); return false;\" >" + paramsRequest.getLocaleString("clear") +"</button>");
+        SWBResourceURL urlU = paramsRequest.getActionUrl();
+        urlU.setParameter("update", "update");
+        out.println("        <button dojoType=\"dijit.form.Button\" name=\"update\" onclick=\"submitUrl('"+urlU+"',this.domNode); return false;\" >" + paramsRequest.getLocaleString("update") +"</button>");
         out.println("</fieldset>");
         out.println("</div>");
         

@@ -206,6 +206,9 @@ public class SWBARule extends GenericResource {
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
 
+        response.setContentType("text/html; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         String rrid = request.getParameter("suri");
         Rule rRule = (Rule) ont.getGenericObject(rrid);
