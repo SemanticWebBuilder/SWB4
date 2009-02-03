@@ -287,8 +287,9 @@ public abstract class OfficeDocument
                     try
                     {
                         IOpenOfficeDocument doc = OfficeApplication.getOfficeDocumentProxy();
-                        doc.delete(contentID, repositoryName);
+                        doc.delete(repositoryName,contentID);
                         deleteAssociation(false);
+                        JOptionPane.showMessageDialog(null,"¡Se ha borrado el contenido!","Borrado de contenido",JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
                     }
                     catch (Exception e)
                     {
