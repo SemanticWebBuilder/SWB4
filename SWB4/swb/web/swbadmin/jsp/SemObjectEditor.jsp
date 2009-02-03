@@ -14,7 +14,7 @@
     if(suri==null && scls==null)
     {
         String code=SWBUtils.IO.readInputStream(request.getInputStream());
-        System.out.println(code);
+        //System.out.println(code);
         String uri=SWBContext.getAdminWebSite().getHomePage().getEncodedURI();
         String cls=SWBContext.getAdminWebSite().getHomePage().getSemanticObject().getSemanticClass().getEncodedURI();
 %>

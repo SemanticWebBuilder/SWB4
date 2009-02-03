@@ -23,6 +23,7 @@
     while(obit.hasNext())
     {
         ObjectBehavior ob=obit.next();
+        //System.out.println("ob:"+ob);
         if(!ob.isVisible())continue;
 
         String title=ob.getDisplayName(lang);
@@ -69,6 +70,7 @@
         if(addDiv)
         {
             //out.println("<div dojoType=\"dojox.layout.ContentPane\" title=\""+title+"\" _style=\"display:true;padding:10px;\" refreshOnShow=\""+refresh+"\" href=\""+url+"?"+params+"\" executeScripts=\"true\">");
+            //System.out.println("url:"+url+"?"+params);
             out.println("<div id=\""+obj.getURI()+"/"+ob.getId()+"\" dojoType=\"dijit.layout.ContentPane\" title=\""+title+"\" refreshOnShow=\""+refresh+"\" href=\""+url+"?"+params+"\" _onLoad=\"alert('test');\">");
             //request.getRequestDispatcher((url+"?"+params).substring(4)).include(request, response);
             out.println("</div>");

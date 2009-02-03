@@ -151,16 +151,19 @@
 
       function showDialog(url)
       {
+          //alert("url:"+url);
           dojo.xhrGet({
               url: url,
               load: function(response, ioArgs){
+                  //alert(response);
                   dijit.byId('swbDialogImp').attr('content',response);
                   dijit.byId('swbDialog').show();
                   return response;
               },
               error: function(response, ioArgs){
-                  dijit.byId('swbDialogImp').attr('content','Error: '+response);
-                  dijit.byId('swbDialog').show();
+                  showStatus('Error:'+response);
+                  //dijit.byId('swbDialogImp').attr('content','Error: '+response);
+                  //dijit.byId('swbDialog').show();
                   return response;
               },
               handleAs: "text"
