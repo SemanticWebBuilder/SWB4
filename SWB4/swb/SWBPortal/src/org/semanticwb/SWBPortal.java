@@ -194,6 +194,37 @@ public class SWBPortal {
         }
     }
 
+    private void createAdminSite()
+    {
+        WebSite site = SWBContext.getAdminWebSite();
+        if (site == null)
+        {
+            log.event("Creating Admin WebSite...");
+            site = SWBContext.createWebSite(SWBContext.WEBSITE_ADMIN, "http://www.semanticwb.org/SWBAdmin");
+            site.setTitle("Admin");
+            site.setDescription("Admin WebSite");
+            site.setActive(true);
+            //Crear lenguajes por defecto
+            Language lang = site.createLanguage("es");
+            lang.setTitle("Español", "es");
+            lang.setTitle("Spanish", "en");
+            lang = site.createLanguage("en");
+            lang.setTitle("Ingles", "es");
+            lang.setTitle("English", "en");
+            //Create HomePage
+            WebPage home = site.createWebPage("home");
+            site.setHomePage(home);
+            home.setActive(true);
+            //Create DNS
+            Dns dns = site.createDns("localhost");
+            dns.setTitle("localhost");
+            dns.setDescription("DNS por default", "es");
+            dns.setDescription("Default DNS", "en");
+            dns.setDefault(true);
+            dns.setWebPage(home);
+        }
+    }
+
     public static String getDistributorPath() {
         return SWBPlatform.getContextPath() + "/" + SWBPlatform.getEnv("swb/distributor", "swb");
     }

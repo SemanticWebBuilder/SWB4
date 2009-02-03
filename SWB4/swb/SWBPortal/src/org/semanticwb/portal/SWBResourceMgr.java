@@ -69,6 +69,7 @@ public class SWBResourceMgr
 
     public SWBResource getResource(String model, String id)
     {
+        //System.out.println("model:"+model+" id:"+id);
         Portlet portlet=SWBContext.getWebSite(model).getPortlet(id);
         return getResource(portlet.getURI());
     }

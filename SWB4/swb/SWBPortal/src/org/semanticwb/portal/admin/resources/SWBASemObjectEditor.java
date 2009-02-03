@@ -308,7 +308,7 @@ public class SWBASemObjectEditor extends GenericResource {
             String id_usr_request = request.getParameter("id_usr_request");
             log.debug("id_recibido: "+id_usr_request);
             if (ncls.isAutogenId() || (id_usr_request != null && id_usr_request.trim().length() > 0)) {
-                long lid = SWBPlatform.getSemanticMgr().getCounter(obj.getModel().getName() + "/" + ncls.getName());
+                long lid = obj.getModel().getCounter(ncls);
                 String str_lid = "" + lid;
                 if (id_usr_request != null && id_usr_request.trim().length() > 0) {
                     str_lid = id_usr_request;

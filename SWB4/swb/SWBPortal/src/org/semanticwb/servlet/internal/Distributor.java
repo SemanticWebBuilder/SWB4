@@ -162,6 +162,7 @@ public class Distributor implements InternalServlet
             {
                 try {
                     String rid = dparams.getAccResourceID();
+                    //System.out.println("rid:"+rid);
                     HashMap resp = dparams.getResourceURI(rid);
                     int mto = SWBUtils.TEXT.getInt((String)resp.get(DistributorParams.URLP_METHOD), SWBResourceModes.Call_CONTENT);
                     String mdo = (String) resp.get(DistributorParams.URLP_MODE);

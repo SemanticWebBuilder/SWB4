@@ -8,6 +8,7 @@ import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.model.DisplayProperty;
 import org.semanticwb.model.FormElement;
 import org.semanticwb.model.FormView;
@@ -218,7 +219,7 @@ public class SWBFormMgr
                     ret=model.createSemanticObjectById(id, m_cls);
                 }else
                 {
-                    long id=SWBPlatform.getSemanticMgr().getCounter(model.getName()+"/"+m_cls.getName());
+                    long id=model.getCounter(m_cls);
                     ret=model.createSemanticObjectById(""+id,m_cls);
                 }
                 m_obj=ret;
@@ -323,8 +324,15 @@ public class SWBFormMgr
 
             ret.append("<fieldset><span align=\"center\">");
             ret.append("<button dojoType='dijit.form.Button' type=\"submit\">Guardar</button>");
-            ret.append("<button dojoType='dijit.form.Button' >Favoritos</button>");
-            ret.append("<button dojoType='dijit.form.Button' >Eliminar</button>");
+            boolean isfavo=SWBPortal.getSessionUser().hasFavorite(m_obj);
+            if(!isfavo)
+            {
+                ret.append("<button dojoType='dijit.form.Button' onclick=\"showStatusURL('"+SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+m_obj.getEncodedURI()+"&act=active"+"');\">Agregar a Favoritos</button>");
+            }else
+            {
+                ret.append("<button dojoType='dijit.form.Button' onclick=\"showStatusURL('"+SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+m_obj.getEncodedURI()+"&act=unactive"+"');\">Eliminar de Favoritos</button>");
+            }
+            ret.append("<button dojoType='dijit.form.Button' onclick=\"if(confirm('Eliminar el elemento?'))showStatusURL('"+SWBPlatform.getContextPath()+"/swbadmin/jsp/delete.jsp?suri="+m_obj.getEncodedURI()+"');\">Eliminar</button>");
             ret.append("</span></fieldset>");
 
         }else

@@ -77,7 +77,7 @@ public class SWBTemplateMgr
                 Template tpl=getTemplateImp(ref.getTemplate());
                 boolean passrules = user.haveAccess(tpl);
                 //if (passrules == true && !intereval.eval(today, tpl)) passrules = false;
-                //System.out.println("rule:"+passrules+" "+tpl.getId()+" "+tpl.getTopicMapId());
+                //System.out.println("ref:"+ ref+" rule:"+passrules+" "+tpl.getURI());
                 if (passrules)
                 {
                     ArrayList<Template> aux=(ArrayList)tplpri.get(new Integer(ref.getPriority()));
@@ -87,6 +87,7 @@ public class SWBTemplateMgr
                         tplpri.put(new Integer(ref.getPriority()),aux);
                     }
                     aux.add(tpl);
+                    //System.out.println("add:"+tpl.getURI()+" "+ref.getPriority());
                 }
             } catch (Exception e)
             {
@@ -94,10 +95,11 @@ public class SWBTemplateMgr
             }
         }
         
-        for(int x=5;x>0;x--)
+        for(int x=5;x>=0;x--)
         {
             ret=(ArrayList)tplpri.get(new Integer(x));
-            if(ret!=null)break;
+            //System.out.println("x:"+x+" ret:"+ret);
+            if(ret!=null && !ret.isEmpty())break;
         }
         
         if (ret!=null && !ret.isEmpty())

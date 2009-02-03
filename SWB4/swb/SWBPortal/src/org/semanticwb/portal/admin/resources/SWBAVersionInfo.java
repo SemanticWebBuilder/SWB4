@@ -274,7 +274,7 @@ public class SWBAVersionInfo extends GenericResource {
                 SemanticClass sc = VersionInfo.swb_VersionInfo;
                 long lid = 0;
                 if (sc.isAutogenId()) {
-                    lid = SWBPlatform.getSemanticMgr().getCounter(sobase.getModel().getName() + "/" + sc.getName());
+                    lid = sobase.getModel().getCounter(sc);
                 }
                 SemanticObject nvinf = sobase.getModel().createSemanticObject(sobase.getModel().getObjectUri("" + lid, sc), sc);
                 GenericObject ngo = ont.getGenericObject(nvinf.getURI());
