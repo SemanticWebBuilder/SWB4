@@ -148,6 +148,9 @@ public class SemanticLiteral
         if(literal!=null)
         {
             ret=literal.getInt();
+        }else if(m_obj instanceof Long)
+        {
+            ret=((Long)m_obj).intValue();
         }else if(m_obj instanceof Integer)
         {
             ret=(Integer)m_obj;

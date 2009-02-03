@@ -405,16 +405,25 @@ public class SemanticClass
         return m_class;
     }
 
-
     public boolean isSuperClass(SemanticClass cls)
     {
-        return cls.isSubClass(this);
+        return isSuperClass(cls, false);
+    }
+
+    public boolean isSuperClass(SemanticClass cls, boolean direct)
+    {
+        return cls.isSubClass(this, direct);
     }
 
     public boolean isSubClass(SemanticClass cls)
     {
+        return isSubClass(cls, false);
+    }
+
+    public boolean isSubClass(SemanticClass cls, boolean direct)
+    {
         boolean ret=false;
-        Iterator it=m_class.listSuperClasses(false);
+        Iterator it=m_class.listSuperClasses(direct);
         while(it.hasNext())
         {
             OntClass cl=(OntClass)it.next();
@@ -480,17 +489,17 @@ public class SemanticClass
         {
             Resource res=(Resource)i.next();
             String uri=res.getURI();
-            if(uri.equals(SemanticVocabulary.SWB_CLASS))
+            if(uri.equals(SemanticVocabulary.SWB_MODEL))
+            {
+                m_isSWBModel = true;
+                break;
+            }else if(uri.equals(SemanticVocabulary.SWB_CLASS))
             {
                 m_isSWBClass = true;
                 break;
             }else if(uri.equals(SemanticVocabulary.SWB_INTERFACE))
             {
                 m_isSWBInterface = true;
-                break;
-            }else if(uri.equals(SemanticVocabulary.SWB_MODEL))
-            {
-                m_isSWBModel = true;
                 break;
             }else if(uri.equals(SemanticVocabulary.SWB_FORMELEMENT))
             {
@@ -560,5 +569,31 @@ public class SemanticClass
     public boolean isSWB()
     {
         return isSWBClass() || isSWBModel() || isSWBFormElement() || isSWBInterface();
+    }
+
+    public SemanticClass getRootClass()
+    {
+        SemanticClass ret=this;
+        if(isSWBClass())
+        {
+            SemanticClass swbcls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(SemanticVocabulary.SWB_SWBCLASS);
+            if(this==swbcls || this.isSubClass(swbcls, true))
+            {
+                ret=this;
+            }else
+            {
+                Iterator<SemanticClass> it=listSuperClasses();
+                while(it.hasNext())
+                {
+                    SemanticClass cls=it.next();
+                    if(cls.isSubClass(swbcls,true))
+                    {
+                        ret=cls;
+                        break;
+                    }
+                }
+            }
+        }
+        return ret;
     }
 }
