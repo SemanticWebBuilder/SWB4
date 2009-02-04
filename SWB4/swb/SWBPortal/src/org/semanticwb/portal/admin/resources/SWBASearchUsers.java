@@ -71,7 +71,7 @@ public class SWBASearchUsers extends GenericResource
 
         ret.append("    </select>\n");
         ret.append("    </td></tr>\n");
-        ret.append("    <tr><td>Correo Electrónico</td>\n");
+        ret.append("    <tr><td>Correo Electr&oacute;nico</td>\n");
         ret.append("    <td><input type=\"text\" name=\"usrEMail\" id=\"usrEMail\" dojoType=\"dijit.form.TextBox\" />\n");
         ret.append("    </td></tr>\n");
         ret.append("    <tr><td>Nombre(s)</td>\n");
@@ -135,7 +135,7 @@ public class SWBASearchUsers extends GenericResource
         String Role = request.getParameter("userRoles");
         String Group = request.getParameter("userGroups");
         String active = request.getParameter("active");
-        System.out.println("active: " + active);
+        //System.out.println("active: " + active);
         UserRepository ur = SWBContext.getUserRepository(usrep);
         Iterator<String> itst = ur.searchUsersBy(usrFirstName, usrLastName, usrSecondLastName, usrEmail, Role, Group, active);
         ArrayList<String> arusr = new ArrayList<String>();
@@ -225,7 +225,7 @@ public class SWBASearchUsers extends GenericResource
            // String[] valores = lista[start].split("\\|\\|");
 
             User usr = (User)SWBPlatform.getSemanticMgr().getOntology().getGenericObject(lista[start]);
-            System.out.println(""+lista[start]+" - "+usr);
+            //System.out.println(""+lista[start]+" - "+usr);
             JSONObject obj = new JSONObject();
             try
             {
