@@ -116,7 +116,7 @@ public class SWBImportWebSite extends GenericResource {
                 }
                 strbf.append("<tr><td>");
                 url.setParameter("zipName", fileName);
-                strbf.append("<a href=\"" + url.toString() + "\">" + fileName + "</a>");
+                strbf.append("<a href=\"" + url.toString() + "\" onclick=\"submitUrl('" + url.toString() + "',this);return false;\">" + fileName + "</a>");
                 strbf.append("</td><td>");
                 strbf.append(filex.length() + " bytes");
                 strbf.append("</td></tr>");
@@ -178,6 +178,13 @@ public class SWBImportWebSite extends GenericResource {
             //Eliminar archivo rdf y archivo xml
             new File(models + newName + "/" + name + ".rdf").delete();
             new File(models + newName + "/siteInfo.xml").delete();
+
+            PrintWriter out=response.getWriter();
+            out.println("<script type=\"text/javascript\">");
+            out.println("hideDialog();");
+            out.println("showStatus('Sitio Creado');");
+            out.println("</script>");
+
             return true;
         } catch (Exception e) {
             log.debug(e);
