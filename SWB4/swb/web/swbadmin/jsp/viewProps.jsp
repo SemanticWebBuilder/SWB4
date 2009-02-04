@@ -34,7 +34,7 @@
     }
 %>
     <tr><td>Class</td><td><%=cls.getName()%></td></tr>
-    <tr><td><%=cls.getDisplayNameProperty().getDisplayName(lang)%></td><td><%=title%></td></tr>
+    <%if(cls.getDisplayNameProperty()!=null){%><tr><td><%=cls.getDisplayNameProperty().getDisplayName(lang)%></td><td><%=title%></td></tr><%}%>
     <%if(sortname!=null){%><tr><td><%=WebPage.swb_webPageSortName.getDisplayName(lang)%></td><td><%=sortname%></td></tr><%}%>
     <%if(active!=null){%><tr><td><%=Activeable.swb_active.getDisplayName(lang)%></td><td><%=active%></td></tr><%}%>
     <%if(description!=null){%><tr><td><%=Descriptiveable.swb_description.getDisplayName(lang)%></td><td><%=description%></td></tr><%}%>

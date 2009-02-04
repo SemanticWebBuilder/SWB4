@@ -1,5 +1,5 @@
 <%@page contentType="text/html"%><%@page pageEncoding="ISO-8859-1"%>
-<%@page import="org.json.*,org.semanticwb.*,org.semanticwb.model.*,org.semanticwb.platform.*,java.util.*"%>
+<%@page import="org.json.*,org.semanticwb.*,org.semanticwb.model.*,org.semanticwb.repository.*,org.semanticwb.platform.*,java.util.*"%>
 <%!
     int nullnode=0;
     String lang="es";
@@ -81,6 +81,20 @@
         while(it.hasNext())
         {
             UserRepository rep=it.next();
+            //TODO: arreglar lista de sitios en SWBContext (estal ligados a ontologia)
+            //rep=SWBContext.getUserRepository(rep.getURI());
+            addSemanticObject(arr, rep.getSemanticObject(),false,true);
+            //addWebSite(arr, site);
+        }
+    }
+
+    public void addDocRepositories(JSONArray arr)  throws JSONException
+    {
+        //System.out.println("addWebSites");
+        Iterator<Workspace> it=SWBComparator.sortSermanticObjects(SWBContext.listWorkspaces(),lang);
+        while(it.hasNext())
+        {
+            Workspace rep=it.next();
             //TODO: arreglar lista de sitios en SWBContext (estal ligados a ontologia)
             //rep=SWBContext.getUserRepository(rep.getURI());
             addSemanticObject(arr, rep.getSemanticObject(),false,true);
@@ -190,7 +204,7 @@
         JSONArray menus=new JSONArray();
         jobj.putOpt("menus", menus);
         String url=SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+cls.getEncodedURI()+"&sref="+obj.getEncodedURI();
-        menus.put(getMenuItem("Agregar "+cls.getDisplayName(lang), "dijitEditorIcon dijitEditorIconCut",getAction("showDialog", url,null)));
+        menus.put(getMenuItem("Agregar "+cls.getDisplayName(lang), "dijitEditorIcon dijitEditorIconCut",getAction("showDialog", url,"Agregar "+cls.getDisplayName(lang))));
         dropacc.put(cls.getClassId());
         //Iterator<SemanticClass> it2=cls.listSubClasses();
         //while(it2.hasNext())
@@ -275,13 +289,13 @@
         {
             SemanticProperty prop=pit.next();
             SemanticClass rcls=prop.getRangeClass();
-            menus.put(getMenuItem("Agregar "+rcls.getDisplayName(lang), "dijitEditorIcon dijitEditorIconCut",getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+rcls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),null)));
+            menus.put(getMenuItem("Agregar "+rcls.getDisplayName(lang), "dijitEditorIcon dijitEditorIconCut",getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+rcls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),"Agregar "+rcls.getDisplayName(lang))));
             dropacc.put(rcls.getClassId());
             Iterator<SemanticClass> it=rcls.listSubClasses();
             while(it.hasNext())
             {
                 SemanticClass scls=it.next();
-                menus.put(getMenuItem("Agregar "+scls.getDisplayName(lang), "dijitEditorIcon dijitEditorIconCut",getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+scls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),null)));
+                menus.put(getMenuItem("Agregar "+scls.getDisplayName(lang), "dijitEditorIcon dijitEditorIconCut",getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+scls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),"Agregar "+scls.getDisplayName(lang))));
                 dropacc.put(scls.getClassId());
             }
         }
@@ -383,6 +397,7 @@
         if(id.equals("muser"))addUserReps(items);
         if(id.equals("mfavo"))addFavorites(items);
         if(id.equals("mtra")) addWebSitesTrash(items);
+        if(id.equals("mdoc")) addDocRepositories(items);
         out.print(obj.toString());
         //System.out.print(id);
     }else

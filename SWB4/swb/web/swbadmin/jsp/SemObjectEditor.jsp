@@ -54,7 +54,7 @@ try
                 //}
                 
                 out.println("<script type=\"text/javascript\">");
-                out.println("dijit.byId('swbDialog').hide();");
+                out.println("hideDialog();");
                 out.println("reloadTreeNode();");
                 out.println("showStatus('"+obj.getSemanticClass().getDisplayName(lang)+" creado');");
                 out.println("addNewTab('"+obj.getURI()+"','"+SWBPlatform.getContextPath()+"/swbadmin/jsp/objectTab.jsp"+"','"+obj.getDisplayName(lang)+"');");

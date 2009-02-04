@@ -24,7 +24,7 @@
                     String show=((MenuItem)child.getSemanticObject().createGenericInstance()).getShowAs();
                     if(show!=null && show.equals("DIALOG"))
                     {
-                        out.println("            <div dojoType=\"dijit.MenuItem\" iconClass_=\"swbIconWebPage\" onclick=\"showDialog('"+child.getUrl()+"');\">"+child.getTitle()+"</div>");
+                        out.println("            <div dojoType=\"dijit.MenuItem\" iconClass_=\"swbIconWebPage\" onclick=\"showDialog('"+child.getUrl()+"','"+child.getTitle()+"');\">"+child.getTitle()+"</div>");
                     }else
                     {
                         out.println("            <div dojoType=\"dijit.MenuItem\" iconClass_=\"swbIconWebPage\" onclick=\"addNewTab('"+child.getURI()+"','"+SWBPlatform.getContextPath()+"/swbadmin/jsp/menuTab.jsp"+"','"+child.getTitle()+"');\">"+child.getTitle()+"</div>");

@@ -149,7 +149,7 @@
       }
 
 
-      function showDialog(url)
+      function showDialog(url, title)
       {
           //alert("url:"+url);
           dojo.xhrGet({
@@ -158,6 +158,7 @@
                   //alert(response);
                   dijit.byId('swbDialogImp').attr('content',response);
                   dijit.byId('swbDialog').show();
+                  setDialogTitle(title);
                   return response;
               },
               error: function(response, ioArgs){
@@ -168,6 +169,16 @@
               },
               handleAs: "text"
           });
+      }
+
+      function setDialogTitle(title)
+      {
+          if(title)dijit.byId('swbDialog').titleNode.innerHTML=title;
+      }
+
+      function hideDialog()
+      {
+          dijit.byId('swbDialog').hide();
       }
 
       function getContentPanel(reference)
@@ -363,7 +374,7 @@
               addNewTab(item.id, action.value, item.title);
           }else if(action.name=="showDialog")
           {
-                showDialog(action.value);
+                showDialog(action.value, action.target);
           }else if(action.name=="showStatusURL")
           {
                 showStatusURL(action.value);
