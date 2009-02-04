@@ -32,7 +32,9 @@
         {
             String value=obj.getProperty(prop);
             if(prop.isInt())value=""+obj.getIntProperty(prop);
+            if(prop.isDateTime() && value!=null)value=value.substring(0,10);
             if(value==null)value="";
+
             
             String label=prop.getDisplayName(lang);
 %>
