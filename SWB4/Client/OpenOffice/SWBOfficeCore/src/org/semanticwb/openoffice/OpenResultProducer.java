@@ -100,7 +100,7 @@ public class OpenResultProducer implements WizardResultProducer
                         contentfile.getParentFile().mkdirs();
                         if(contentfile.exists())
                         {
-                            int res=JOptionPane.showConfirmDialog(null,"¡Existe un documento con el nombre "+ fileName +"\r\n¿Desea sobre escribir el documento?","Apertura de contenido",JOptionPane.YES_NO_OPTION | JOptionPane.QUESTION_MESSAGE);
+                            int res=JOptionPane.showConfirmDialog(null,"¡Existe un documento con el nombre "+ fileName +"\r\n¿Desea sobre escribir el documento?","Apertura de contenido",JOptionPane.YES_NO_OPTION);
                             if(res==JOptionPane.NO_OPTION)
                             {
                                 return;
