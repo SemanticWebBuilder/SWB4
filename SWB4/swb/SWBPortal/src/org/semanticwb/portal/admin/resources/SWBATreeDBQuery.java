@@ -375,7 +375,7 @@ public class SWBATreeDBQuery extends GenericResource
     
     private void addOptRefresh(Element menu, User user)
     {
-        SWBTreeUtil.addOptRefresh(menu,user);
+        //SWBTreeUtil.addOptRefresh(menu,user);
     }
     
     private void addSeparator(Element menu)
@@ -504,8 +504,8 @@ public class SWBATreeDBQuery extends GenericResource
         Element event=null;
         
         Element poolconn=addNode("node",dbcon,dbcon,root);
-        poolconn.setAttribute("view","showurl="+tma.getWebPage(STATUS_TOPIC).getUrl()+"?pool="+dbcon+"&act=jsupdpool&status=true");
-        poolconn.setAttribute("vtarget","");//status
+//        poolconn.setAttribute("view","showurl="+tma.getWebPage(STATUS_TOPIC).getUrl()+"?pool="+dbcon+"&act=jsupdpool&status=true");
+//        poolconn.setAttribute("vtarget","");//status
         poolconn.setAttribute("reload","getPool."+dbcon);
         //        poolconn.setAttribute("view","showurl="+tma.getTopic("WBAd_infoi_TopicMapInfo").getUrl()+"?tm="+dbcon);
         //poolconn.setAttribute("vtarget","info");
@@ -574,8 +574,8 @@ public class SWBATreeDBQuery extends GenericResource
         Element event=null;
         
         Element table=addNode("node",tablename,tablename,res);
-        table.setAttribute("view","showurl="+tma.getWebPage(STATUS_TOPIC).getUrl()+"?pool="+dbcon+"&act=jsupdpool&status=true&table="+tablename);
-        table.setAttribute("vtarget","");//status
+        //table.setAttribute("view","showurl="+tma.getWebPage(STATUS_TOPIC).getUrl()+"?pool="+dbcon+"&act=jsupdpool&status=true&table="+tablename);
+        //table.setAttribute("vtarget","");//status
         table.setAttribute("reload","getTable."+dbcon+"."+tablename);
         //        topic.setAttribute("view","showurl="+tma.getTopic("WBAd_infoi_TopicInfo").getUrl(tp));
         //topic.setAttribute("vtarget","info");
@@ -594,8 +594,8 @@ public class SWBATreeDBQuery extends GenericResource
                 if(!"create".equals(thisToken.toLowerCase()))
                 {
                     option=addNode("option",thisToken,thisToken,menu);
-                    option.setAttribute("action","showurl="+tma.getWebPage(STATUS_TOPIC).getUrl()+"?pool="+dbcon+"&act=jsupdpool&status=true&table="+tablename+"&cmd="+thisToken);
-                    option.setAttribute("target","");//status
+//                    option.setAttribute("action","showurl="+tma.getWebPage(STATUS_TOPIC).getUrl()+"?pool="+dbcon+"&act=jsupdpool&status=true&table="+tablename+"&cmd="+thisToken);
+//                    option.setAttribute("target","");//status
                 }
                 
             }
@@ -668,8 +668,8 @@ public class SWBATreeDBQuery extends GenericResource
         Element option=null;
         
         Element node=addNode("node",""+dbcon+"_"+columnname,columnname,res);
-        node.setAttribute("view","showurl="+tma.getWebPage(STATUS_TOPIC).getUrl()+"?pool="+dbcon+"&act=jsupdpool&status=true");
-        node.setAttribute("vtarget","");//status
+//        node.setAttribute("view","showurl="+tma.getWebPage(STATUS_TOPIC).getUrl()+"?pool="+dbcon+"&act=jsupdpool&status=true");
+//        node.setAttribute("vtarget","");//status
         node.setAttribute("reload","getColumn."+dbcon+"."+tablename+"."+columnname);
         //        node.setAttribute("view","showurl="+tma.getTopic("WBAd_sysi_DBQuery").getUrl()+"?pool="+dbcon+"&act=jsupdpool&status=true&cmd="+thisToken);
         //        node.setAttribute("vtarget","info");
@@ -1053,6 +1053,8 @@ public class SWBATreeDBQuery extends GenericResource
             out.println("   forma.query.value=strquery;");
             out.println("}");
             out.println("</script>");
+            out.println("<div class=\"swbform\">");
+            out.println("<fieldset>");
             out.println("<table cellpadding=5 cellspacing=0 border=0 width=100%>");
             out.println("<tr><td width=200 valign=top>");
             out.println("<div class=\"applet\">");
@@ -1111,7 +1113,7 @@ public class SWBATreeDBQuery extends GenericResource
             out.println("<td valign=top align=left>");
             
             
-            out.println("<form name=\"forma\" action=\""+paramRequest.getRenderUrl()+"\" method=\"post\">");
+            out.println("<form dojoType=\"dijit.form.Form\" id=\""+getResourceBase().getId()+"/treeDBQuery\" name=\"forma\" action=\""+paramRequest.getRenderUrl()+"\" method=\"post\" onsubmit=\"submitForm('"+getResourceBase().getId()+"/treeDBQuery'); return false;\">");
             //  out.println("<p >");
             out.println("<table border=\"0\"cellspacing=\"0\" height=\"100%\" cellpadding=\"5\" width=\"100%\">");
             out.println("<tr><td valign=top>");
@@ -1155,8 +1157,9 @@ public class SWBATreeDBQuery extends GenericResource
                 }
             }
             
-            out.println("</select><hr noshade size=1>");
-            out.println("<input type=button name=copyQuery onclick=\"copyQueryVal(querys)\" value=\"utilizar query\">");
+            out.println("</select><br>");
+            out.println("<button dojoType=\"dijit.form.Button\" type=\"button\" name=\"copyQuery\" onclick=\"copyQueryVal(querys);\">utilizar query</button>");
+            //out.println("<input type=button name=copyQuery onclick=\"copyQueryVal(querys)\" value=\"utilizar query\">");
             request.getSession().setAttribute(""+base.getId()+paramRequest.getTopic().getWebSiteId(), queryList);
             
             out.println("<input type=hidden name=\"dbcon\" value=\""+dbcon+"\">");
@@ -1174,19 +1177,13 @@ public class SWBATreeDBQuery extends GenericResource
             //out.print(query);
             out.println("</textarea>");
             out.println("</td></tr>");
-            out.println("<tr><td>");
-            out.println("<HR size=1 noshade>");
-            out.println("</td></tr>");
-            out.println("<tr><td align=\"LEFT\">");
-            //out.println("<input type=\"reset\" name=\"reset\" value=\"limpiar\">");
-            out.println("<input type=\"submit\" name=\"btnsubmit\" value=\""+paramRequest.getLocaleString("send")+"\">");
-            out.println("</td></tr>");
             out.println("</table>");
-            //out.println("</p>");
+            out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\" name=\"btnsubmit\" >"+paramRequest.getLocaleString("send")+"</button>");
             out.println("</form>");
-            out.println("</td>");
-            out.println("</tr>");
+            out.println("</td></tr>");
             out.println("</table>");
+            out.println("</fieldset>");
+            out.println("</div>");
             
             
             try
@@ -1203,7 +1200,7 @@ public class SWBATreeDBQuery extends GenericResource
                     out.println("} ");
                     out.println("</script>");
                     out.println("<div class=\"swbform\">");
-                    out.println("<fieldset>");
+                    //out.println("<fieldset>");
                     out.println("<table border=0 width=100% valign=top cellpadding=5 cellspacing=0>");
                     out.println("<tr>");
                     out.println("<td>");
@@ -1256,10 +1253,10 @@ public class SWBATreeDBQuery extends GenericResource
                                 out.println("<tr>");
                                 for (int x = 1; x <= col; x++)
                                 {
-                                    out.println("<td>");
+                                    out.println("<th>");
                                     out.println(md.getColumnName(x));
                                     out.println("<font size=1>("+md.getColumnTypeName(x)+")</font>");
-                                    out.println("</td>");
+                                    out.println("</th>");
                                 }
                                 out.println("</tr>");
                                 int ch=0;
@@ -1308,7 +1305,7 @@ public class SWBATreeDBQuery extends GenericResource
                         st.close();
                         con.close();
                         out.println("</table>");
-                        out.println("</fieldset>");
+                        //out.println("</fieldset>");
                         out.println("</div>");
                     }
                     else
