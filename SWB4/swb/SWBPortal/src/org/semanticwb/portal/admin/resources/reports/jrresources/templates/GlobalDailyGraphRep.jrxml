@@ -23,6 +23,8 @@
 	<import value="net.sf.jasperreports.engine.*" />
 	<import value="net.sf.jasperreports.engine.data.*" />
 
+	<parameter name="swb" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="site" isForPrompting="false" class="java.lang.String"/>
 
 	<field name="topicmap" class="java.lang.String">
 		<fieldDescription><![CDATA[topicmap]]></fieldDescription>
@@ -51,38 +53,22 @@
 						forecolor="#EAEAF6"
 						key="staticText-7"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement>
-						<font fontName="MS Reference Sans Serif" pdfFontName="Helvetica-Bold" size="80" isBold="true"/>
+					<textElement textAlignment="Center">
+						<font fontName="MS Reference Sans Serif" pdfFontName="Helvetica-Bold" size="165" isBold="true"/>
 					</textElement>
-				<text><![CDATA[Infotec      WebBuilder]]></text>
+				<text><![CDATA[SWB]]></text>
 				</staticText>
 			</band>
 		</background>
 		<title>
-			<band height="340"  isSplitAllowed="true" >
-				<staticText>
-					<reportElement
-						mode="Opaque"
-						x="0"
-						y="0"
-						width="552"
-						height="24"
-						forecolor="#FFFFFF"
-						backcolor="#336600"
-						key="staticText-1"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="14" isBold="true"/>
-					</textElement>
-				<text><![CDATA[Reporte de accesos globales por día]]></text>
-				</staticText>
+			<band height="364"  isSplitAllowed="true" >
 				<barChart>
 					<chart evaluationTime="Report"  hyperlinkTarget="Self" >
 					<reportElement
 						x="0"
-						y="37"
+						y="108"
 						width="552"
-						height="303"
+						height="253"
 						key="element-1"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 						<chartTitle color="#000000" >
@@ -115,21 +101,109 @@
 						</valueAxisFormat>
 					</barPlot>
 				</barChart>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="57"
+						width="552"
+						height="18"
+						forecolor="#336699"
+						key="textField-2"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" size="14" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{site}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="0"
+						y="76"
+						width="552"
+						height="24"
+						forecolor="#FFFFFF"
+						backcolor="#336699"
+						key="staticText-8"
+						positionType="FixRelativeToBottom"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="14" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Reporte de accesos globales por día]]></text>
+				</staticText>
+				<image  hAlign="Left" isUsingCache="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="0"
+						width="552"
+						height="50"
+						key="image-1"
+						stretchType="RelativeToBandHeight"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<graphicElement stretchType="RelativeToBandHeight" pen="None"/>
+					<imageExpression class="java.lang.String"><![CDATA[$P{swb}]]></imageExpression>
+				</image>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="52"
+						width="552"
+						height="0"
+						key="line-4"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
 			</band>
 		</title>
 		<pageHeader>
-			<band height="12"  isSplitAllowed="true" >
+			<band height="26"  isSplitAllowed="true" >
+				<printWhenExpression><![CDATA[$V{PAGE_NUMBER}.intValue()>1]]></printWhenExpression>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="21"
+						width="552"
+						height="0"
+						key="line-3"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="3"
+						width="552"
+						height="14"
+						forecolor="#336699"
+						key="textField-3"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font fontName="Arial" size="11" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{site} + " Reporte de accesos globales por día"]]></textFieldExpression>
+				</textField>
 			</band>
 		</pageHeader>
 		<columnHeader>
 			<band height="23"  isSplitAllowed="true" >
+				<rectangle>
+					<reportElement
+						x="0"
+						y="0"
+						width="552"
+						height="23"
+						backcolor="#C5E2FF"
+						key="rectangle-1"/>
+					<graphicElement stretchType="NoStretch" pen="None"/>
+				</rectangle>
 				<staticText>
 					<reportElement
+						mode="Transparent"
 						x="14"
 						y="3"
 						width="162"
 						height="17"
-						forecolor="#006699"
+						forecolor="#336699"
+						backcolor="#FFFFFF"
 						key="staticText-2"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Left">
@@ -143,7 +217,7 @@
 						y="3"
 						width="63"
 						height="17"
-						forecolor="#006699"
+						forecolor="#336699"
 						key="staticText-3"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Left">
@@ -157,7 +231,7 @@
 						y="3"
 						width="95"
 						height="17"
-						forecolor="#006699"
+						forecolor="#336699"
 						key="staticText-4"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Left">
@@ -171,7 +245,7 @@
 						y="3"
 						width="109"
 						height="17"
-						forecolor="#006699"
+						forecolor="#336699"
 						key="staticText-5"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Right">
@@ -185,7 +259,7 @@
 						y="3"
 						width="52"
 						height="17"
-						forecolor="#006699"
+						forecolor="#336699"
 						key="staticText-6"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement>
@@ -200,7 +274,7 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="14"
-						y="3"
+						y="2"
 						width="162"
 						height="18"
 						key="textField"/>
@@ -213,7 +287,7 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="187"
-						y="3"
+						y="2"
 						width="63"
 						height="18"
 						key="textField"/>
@@ -226,7 +300,7 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="261"
-						y="3"
+						y="2"
 						width="95"
 						height="18"
 						key="textField"/>
@@ -239,7 +313,7 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="428"
-						y="3"
+						y="2"
 						width="109"
 						height="18"
 						key="textField"/>
@@ -252,7 +326,7 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="367"
-						y="3"
+						y="2"
 						width="52"
 						height="18"
 						key="textField"/>
@@ -262,6 +336,16 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.Integer"><![CDATA[$F{day}]]></textFieldExpression>
 				</textField>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="22"
+						width="552"
+						height="0"
+						forecolor="#CCCCCC"
+						key="line-2"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
 			</band>
 		</detail>
 		<columnFooter>
@@ -273,13 +357,13 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="225"
-						y="8"
+						y="5"
 						width="103"
 						height="13"
 						forecolor="#999999"
 						key="textField-1"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement>
+					<textElement textAlignment="Center">
 						<font size="9"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.Integer"><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
@@ -287,7 +371,7 @@
 				<line direction="TopDown">
 					<reportElement
 						x="0"
-						y="4"
+						y="3"
 						width="552"
 						height="0"
 						forecolor="#CCCCCC"

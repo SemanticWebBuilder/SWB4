@@ -65,17 +65,14 @@ import org.semanticwb.SWBUtils;
  */
 public class SWBRecHits //implements AFAppObject, AFObserver
 {
-    private static Logger log = SWBUtils.getLogger(SWBRecHits.class);
-    
+    private static Logger log = SWBUtils.getLogger(SWBRecHits.class);    
     static private SWBRecHits instance;
 
     private SWBRecHits() {
-        log.error("log_DBResHits_DBResHits_initialized");
     }
 
     public void destroy() {
         instance=null;
-        log.error("log_DBResHits_destroy_finalized");
     }
 
     static synchronized public SWBRecHits getInstance() {
@@ -754,7 +751,7 @@ public class SWBRecHits //implements AFAppObject, AFObserver
         List resumeRecHits = new ArrayList();
         ResultSet rs = null;
         PreparedStatement st = null;
-        
+
         Connection con = SWBUtils.DB.getDefaultConnection();
         if (con != null)
         {               
@@ -762,26 +759,25 @@ public class SWBRecHits //implements AFAppObject, AFObserver
             {
                 GregorianCalendar date;
                 String query = "select wbdate,topicmap,idaux,type,hits from wbreshits where topicmap=? and type=? and (wbdate>=? and wbdate<=?)";
-                if (idaux != null)
+                if (idaux != null) {
                     query = query + " and idaux=?";
+                }
                 query = query + " order by wbdate";
                 st = con.prepareStatement(query);
                 st.setString(1, topicmap);
                 st.setInt(2, type);
-                
                 date = new GregorianCalendar(year1, month1-1, day1, 0, 0, 0);                    
                 st.setTimestamp(3, new Timestamp(date.getTimeInMillis()));
                 date = new GregorianCalendar(year2, month2-1, day2, 23, 59, 59);
                 st.setTimestamp(4, new Timestamp(date.getTimeInMillis()));
-
-                if (idaux != null)
+                if (idaux != null) {
                     st.setString(5, idaux);
-                
+                }                
                 SWBRecHit detail;
                 rs = st.executeQuery();
                 while(rs.next()){                   
                     detail = new SWBRecHit(rs.getTimestamp("wbdate"),rs.getString("topicmap"),rs.getString("idaux"),rs.getInt("type"),rs.getLong("hits"));
-                    detail.setItem(item);
+                    detail.setItem(item);                 
                     resumeRecHits.add(detail);
                 }
             } catch (Exception e)

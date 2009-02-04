@@ -1,31 +1,31 @@
 
 package org.semanticwb.portal.admin.resources.reports.datadetail;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.PreparedStatement;
 
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.portal.admin.resources.reports.beans.*;
+import org.semanticwb.model.Device;
 import org.semanticwb.portal.db.SWBRecHit;
-/*import com.infotec.wb.core.db.DBCatalogs;
-import com.infotec.wb.core.db.RecDevice;*/
-
+import org.semanticwb.portal.db.SWBRecHits;
+import org.semanticwb.portal.admin.resources.reports.beans.*;
 
 public class DeviceAccessDataDetail extends SWBDataDetail {
     private static Logger log = SWBUtils.getLogger(DeviceAccessDataDetail.class);
     
-    public DeviceAccessDataDetail(WBAFilterReportBean filterReportBean){
+    public DeviceAccessDataDetail(WBAFilterReportBean filterReportBean) {
         super(filterReportBean);
     }
     
-    protected List getUnknownHits(String topicmap, int type, String item){
+    protected List getUnknownHits(String topicmap, int type, String item) {
         List resumeUnRecHits = new ArrayList();
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -68,7 +68,7 @@ public class DeviceAccessDataDetail extends SWBDataDetail {
         return resumeUnRecHits;
     }
     
-    protected List getUnknownHits(String topicmap, int type, int year, String item){
+    protected List getUnknownHits(String topicmap, int type, int year, String item) {
         List resumeRecHits = new ArrayList();
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -125,7 +125,7 @@ public class DeviceAccessDataDetail extends SWBDataDetail {
         return resumeRecHits;
     }
     
-    protected List getUnknownHits(String topicmap, int type, int year, int month, int day, String item){
+    protected List getUnknownHits(String topicmap, int type, int year, int month, int day, String item) {
         List resumeUnRecHits = new ArrayList();
         Timestamp fecha = null;
         Timestamp fecha2 = null;
@@ -207,7 +207,7 @@ public class DeviceAccessDataDetail extends SWBDataDetail {
         return resumeUnRecHits;
     }
     
-    protected List getUnknownHits(String topicmap, int type, int year1, int month1, int day1, int year2, int month2, int day2, String item){
+    protected List getUnknownHits(String topicmap, int type, int year1, int month1, int day1, int year2, int month2, int day2, String item) {
         List resumeRecHits = new ArrayList();
         ResultSet rs = null;
         PreparedStatement st = null;
@@ -253,125 +253,51 @@ public class DeviceAccessDataDetail extends SWBDataDetail {
         return resumeRecHits;
     }
        
-    protected List doDataList(String site, String rfilter, int type) throws IncompleteFilterException{
-        List resumeRecHits = null;
-//        Enumeration enum_device = DBCatalogs.getInstance().getDevices().elements();                
-//        String deviceName = null;
-//        RecDevice recDevice;
-//        
-//        if(rfilter!=null){
-//            while (enum_device.hasMoreElements()) {
-//                 recDevice = (RecDevice) enum_device.nextElement();
-//                if (rfilter.equals(Integer.toString(recDevice.getId()))) {
-//                    deviceName = recDevice.getName();
-//                    break;
-//                }
-//            }
-//            resumeRecHits = SWBRecHits.getInstance().getResHitsLog(site,rfilter,type, deviceName);
-//        }else{
-//            resumeRecHits = new ArrayList();
-//            while (enum_device.hasMoreElements()) {
-//                recDevice = (RecDevice) enum_device.nextElement();
-//                rfilter = Integer.toString(recDevice.getId());
-//                deviceName = recDevice.getName();
-//                resumeRecHits.addAll(SWBRecHits.getInstance().getResHitsLog(site,rfilter,type, deviceName));
-//            }
-//        }
-//        if(resumeRecHits != null){
-//            resumeRecHits.addAll(getUnknownHits(site,type, "Desconocido"));
-//        }
+    protected List doDataList(String site, Iterator rfilter, int type) throws IncompleteFilterException {
+        List resumeRecHits = new ArrayList();
+        Device device;
+        
+        while (rfilter.hasNext()) {
+            device = (Device)rfilter.next();
+            resumeRecHits.addAll(SWBRecHits.getInstance().getResHitsLog(site, device.getId(), type, device.getTitle()));
+        }
+        resumeRecHits.addAll(getUnknownHits(site, type, "Desconocido"));
         return resumeRecHits;
     }
     
-    protected List doDataList(String site,String rfilter,int type,int year) throws IncompleteFilterException{
-        List resumeRecHits = null;
-//        Enumeration enum_device = DBCatalogs.getInstance().getDevices().elements();                
-//        String deviceName = null;
-//        RecDevice recDevice;
-//        
-//        if(rfilter!=null){
-//            while (enum_device.hasMoreElements()) {
-//                 recDevice = (RecDevice) enum_device.nextElement();
-//                if (rfilter.equals(Integer.toString(recDevice.getId()))) {
-//                    deviceName = recDevice.getName();
-//                    break;
-//                }
-//            }
-//            resumeRecHits = SWBRecHits.getInstance().getResHitsLog(site,rfilter,type,year, deviceName);
-//        }else{
-//            resumeRecHits = new ArrayList();
-//            while (enum_device.hasMoreElements()) {
-//                recDevice = (RecDevice) enum_device.nextElement();
-//                rfilter = Integer.toString(recDevice.getId());
-//                deviceName = recDevice.getName();
-//                resumeRecHits.addAll(SWBRecHits.getInstance().getResHitsLog(site,rfilter,type,year, deviceName));
-//            }
-//        }
-//        if(resumeRecHits != null){
-//            resumeRecHits.addAll(getUnknownHits(site,type,year, "Desconocido"));
-//        }
+    protected List doDataList(String site, Iterator rfilter,int type,int year) throws IncompleteFilterException {
+        List resumeRecHits = new ArrayList();
+        Device device;
+        
+        while (rfilter.hasNext()) {
+            device = (Device)rfilter.next();
+            resumeRecHits.addAll(SWBRecHits.getInstance().getResHitsLog(site, device.getId(), type, year, device.getTitle()));
+        }
+        resumeRecHits.addAll(getUnknownHits(site, type, year, "Desconocido"));
         return resumeRecHits;
     }
     
-    protected List doDataList(String site, String rfilter, int type, int year, int month, int day) throws IncompleteFilterException{
-        List resumeRecHits = null;
-//        Enumeration enum_device = DBCatalogs.getInstance().getDevices().elements();                
-//        String deviceName = null;
-//        RecDevice recDevice;
-//        
-//        if(rfilter!=null){
-//            while (enum_device.hasMoreElements()) {
-//                 recDevice = (RecDevice) enum_device.nextElement();
-//                if (rfilter.equals(Integer.toString(recDevice.getId()))) {
-//                    deviceName = recDevice.getName();
-//                    break;
-//                }
-//            }
-//            resumeRecHits = SWBRecHits.getInstance().getResHitsLog(site,rfilter,type,year,month,day, deviceName);
-//        }else{
-//            resumeRecHits = new ArrayList();
-//            while (enum_device.hasMoreElements()) {
-//                recDevice = (RecDevice) enum_device.nextElement();
-//                rfilter = Integer.toString(recDevice.getId());
-//                deviceName = recDevice.getName();
-//                resumeRecHits.addAll(SWBRecHits.getInstance().getResHitsLog(site,rfilter,type,year,month,day, deviceName));
-//            }
-//        }
-//        if(resumeRecHits != null){
-//            resumeRecHits.addAll(getUnknownHits(site,type,year,month,day, "Desconocido"));
-//        }
+    protected List doDataList(String site, Iterator rfilter, int type, int year, int month, int day) throws IncompleteFilterException {
+        List resumeRecHits = new ArrayList();
+        Device device;
+        
+        while (rfilter.hasNext()) {
+            device = (Device)rfilter.next();
+            resumeRecHits.addAll(SWBRecHits.getInstance().getResHitsLog(site, device.getId(), type, year, month, day, device.getTitle()));
+        }
+        resumeRecHits.addAll(getUnknownHits(site, type, year, month, day, "Desconocido"));
         return resumeRecHits;
     }
         
-    protected List doDataList(String site, String rfilter, int type, int yearI, int monthI, int dayI, int yearF, int monthF, int dayF) throws IncompleteFilterException{
-        List resumeRecHits = null;
-//        Enumeration enum_device = DBCatalogs.getInstance().getDevices().elements();
-//        String deviceName = null;
-//        RecDevice recDevice;
-//        
-//        if(rfilter!=null){
-//            while (enum_device.hasMoreElements()) {
-//                 recDevice = (RecDevice) enum_device.nextElement();
-//                if (rfilter.equals(Integer.toString(recDevice.getId()))) {
-//                    deviceName = recDevice.getName();
-//                    break;
-//                }
-//            }
-//            resumeRecHits = SWBRecHits.getInstance().getResHitsLog(site,rfilter,type,yearI,monthI,dayI,yearF,monthF,dayF, deviceName);
-//        }else{
-//            resumeRecHits = new ArrayList();
-//            while (enum_device.hasMoreElements()) {
-//                recDevice = (RecDevice) enum_device.nextElement();
-//                rfilter = Integer.toString(recDevice.getId());
-//                deviceName = recDevice.getName();
-//                resumeRecHits.addAll(SWBRecHits.getInstance().getResHitsLog(site,rfilter,type,yearI,monthI,dayI,yearF,monthF,dayF, deviceName));
-//            }
-//        }
-//        
-//        if(resumeRecHits != null){
-//            resumeRecHits.addAll(getUnknownHits(site,type,yearI,monthI,dayI,yearF,monthF,dayF, "Desconocido"));
-//        }
-        return resumeRecHits;        
+    protected List doDataList(String site, Iterator rfilter, int type, int yearI, int monthI, int dayI, int yearF, int monthF, int dayF) throws IncompleteFilterException {
+        List resumeRecHits = new ArrayList();
+        Device device;
+        
+        while (rfilter.hasNext()) {
+            device = (Device)rfilter.next();
+            resumeRecHits.addAll(SWBRecHits.getInstance().getResHitsLog(site, device.getId(), type, yearI, monthI, dayI, yearF, monthF, dayF, device.getTitle()));
+        }
+        resumeRecHits.addAll(getUnknownHits(site, type, yearI, monthI, dayI, yearF, monthF, dayF, "Desconocido"));
+        return resumeRecHits;
     }
-
 }

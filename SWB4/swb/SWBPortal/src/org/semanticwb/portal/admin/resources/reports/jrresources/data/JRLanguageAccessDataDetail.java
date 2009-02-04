@@ -24,12 +24,12 @@ public class JRLanguageAccessDataDetail implements JRDataSourceable{
         dataDetail = new LanguageAccessDataDetail(filterReportBean);
     }
     
-    public JRDataSource orderJRReport() throws IncompleteFilterException{
+    public JRDataSource orderJRReport() throws IncompleteFilterException {
         List dataList = dataDetail.execute();
         JRDataSource dataSource = null;
-        
-        if(!dataList.isEmpty())
+        if(!dataList.isEmpty()) {
             dataSource = new JRBeanCollectionDataSource(dataList);
+        }
         return dataSource;
     }
     
