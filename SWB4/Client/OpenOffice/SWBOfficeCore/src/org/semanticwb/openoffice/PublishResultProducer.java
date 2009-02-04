@@ -17,6 +17,7 @@ import org.semanticwb.openoffice.interfaces.IOpenOfficeDocument;
 import org.semanticwb.openoffice.ui.wizard.SelectCategory;
 import org.semanticwb.openoffice.ui.wizard.SummaryPublish;
 import org.semanticwb.openoffice.ui.wizard.TitleAndDescription;
+import org.semanticwb.openoffice.util.StackTraceUtil;
 import org.semanticwb.xmlrpc.Attachment;
 
 /**
@@ -65,7 +66,7 @@ public class PublishResultProducer implements WizardResultProducer
             }
             catch (Exception e)
             {
-                progress.failed(e.getMessage(), false);
+                progress.failed(e.getMessage()+"\r\n"+StackTraceUtil.getStackTrace(e), false);
             }
             finally
             {
