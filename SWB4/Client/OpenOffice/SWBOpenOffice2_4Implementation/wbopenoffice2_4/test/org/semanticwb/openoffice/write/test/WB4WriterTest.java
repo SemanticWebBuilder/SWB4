@@ -267,7 +267,7 @@ public class WB4WriterTest
 
     }
     @Test  
-    //@Ignore
+    @Ignore
     public void publishTest()
     {
         try
@@ -312,19 +312,19 @@ public class WB4WriterTest
     
 
     @Test
-    @Ignore
+    //@Ignore
     public void openDocumentTest()
     {
 
         WB4WriterApplication writer = new WB4WriterApplication(this.xContext);
-        try
-        {
-            writer.open(sUrlDestiny);
-        }
-        catch ( WBException wbe )
-        {
-            Assert.fail(wbe.getMessage());
-        }
+        //try
+        //{
+            writer.open(DocumentType.WORD);
+        //}
+        //catch ( WBException wbe )
+        //{
+        //    Assert.fail(wbe.getMessage());
+        //}
 
     }
 
