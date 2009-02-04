@@ -674,6 +674,8 @@ public class Comment extends GenericResource {
                         ArrayList<InternetAddress> aAddress = new ArrayList<InternetAddress>();
                         aAddress.add(address1);
                         
+                        //TODO: Quitar la siguiente linea para ambientes de produccion
+                        SWBUtils.EMAIL.setSMTPServer("webmail.infotec.com.mx");
                         if ((from != null && to != null && subject != null)
                                 && (SWBUtils.EMAIL.sendMail(from, fromname, aAddress,
                                         null, null, subject, "HTML",
