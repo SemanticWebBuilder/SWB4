@@ -287,9 +287,9 @@ public abstract class OfficeDocument
                     try
                     {
                         IOpenOfficeDocument doc = OfficeApplication.getOfficeDocumentProxy();
-                        doc.delete(repositoryName,contentID);
+                        doc.delete(repositoryName, contentID);
                         deleteAssociation(false);
-                        JOptionPane.showMessageDialog(null,"¡Se ha borrado el contenido!","Borrado de contenido",JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "¡Se ha borrado el contenido!", "Borrado de contenido", JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
                     }
                     catch (Exception e)
                     {
@@ -375,7 +375,9 @@ public abstract class OfficeDocument
 
     public final File saveOnGuidDirectoryAsHtml(String guid) throws WBException
     {
-        File file = new File(this.getLocalPath().getParentFile().getPath() + File.separator + guid);
+        String path = this.getLocalPath().getParentFile().getPath() + File.separator + guid;
+        path = path.replace("%20", " ");
+        File file = new File(path);
         file = this.saveAsHtml(file);
         return file;
 
@@ -422,7 +424,10 @@ public abstract class OfficeDocument
             String guid = createGuid();
             File fileHtml = saveHtmlPrepareAndGetFiles(guid);
             tempotalDir = fileHtml.getParentFile();
-            tempotalZipFile = new File(tempotalDir.getParentFile().getPath() + File.separatorChar + guid + ".zip");
+            String path = tempotalDir.getParentFile().getPath() + File.separatorChar + guid + ".zip";
+            path = path.replace("%20", " ");
+            tempotalZipFile = new File(path);
+
             FileOutputStream fout = new FileOutputStream(tempotalZipFile);
             ZipOutputStream zipFile = new ZipOutputStream(fout);
             BufferedInputStream origin = null;
@@ -450,11 +455,15 @@ public abstract class OfficeDocument
         }
         catch (FileNotFoundException fnfe)
         {
-            throw new WBException("No se puede crear el archivo zip", fnfe);
+            deleteTemporalDirectory(tempotalDir);
+            throw new WBException("No se puede crear el archivo zip\r\n" + fnfe.getLocalizedMessage(), fnfe);
+
         }
         catch (IOException ioe)
         {
-            throw new WBException("No se puede crear el archivo zip", ioe);
+            deleteTemporalDirectory(tempotalDir);
+            throw new WBException("No se puede crear el archivo zip\r\n" + ioe.getLocalizedMessage(), ioe);
+
         }
     }
 
