@@ -16,6 +16,7 @@ import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import java.io.OutputStream;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.Iterator;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.GenericObject;
@@ -188,12 +189,28 @@ public class SemanticModel
         }
         return m_modelObject;
     }
-    
+
     public Iterator<SemanticObject> listInstancesOfClass(SemanticClass cls)
     {
+        return listInstancesOfClass(cls,true);
+    }
+
+    public Iterator<SemanticObject> listInstancesOfClass(SemanticClass cls, boolean subclasses)
+    {
+        Iterator<SemanticObject>ret=null;
         Property rdf=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.RDF_TYPE).getRDFProperty();
-        StmtIterator stit=getRDFModel().listStatements(null, rdf, cls.getOntClass());
-        return new SemanticIterator(stit, true);
+//        Iterator clsit=cls.listSubClasses();
+//        if(subclasses && clsit.hasNext())
+//        {
+//            ArrayList<Statement> arr=new ArrayList();
+//            StmtIterator stit=getRDFModel().listStatements(null, rdf, cls.getOntClass());
+//            //TODO
+//        }else
+//        {
+            StmtIterator stit=getRDFModel().listStatements(null, rdf, cls.getOntClass());
+            ret=new SemanticIterator(stit, true);
+//        }
+        return ret;
     }
     
     public SemanticProperty createSemanticProperty(String uri, SemanticClass cls, String uriType, String uriRang)
