@@ -86,21 +86,21 @@ public class Promo extends GenericAdmResource
         {
             String position = base.getAttribute("pos", "3").trim();
             ret.append("<div class=\"swb-promo\">");
-            ret.append("<table border=0  width=\"99%\"> \n");
+            ret.append("<table border=\"0\"  width=\"99%\"> \n");
             ret.append("<tr> \n");
             if (!"".equals(base.getAttribute("title", "").trim())) {
                 if ("5".equals(position)) {
-                    ret.append("<td colspan=2> \n");
+                    ret.append("<td colspan=\"2\"> \n");
                     ret.append("<h1>" + base.getAttribute("title").trim() + "</h1>");
-                    ret.append("</td></tr><tr><td valign=top> \n");
+                    ret.append("</td></tr><tr><td valign=\"top\"> \n");
                 }else {
                     ret.append("<td> \n");
                     ret.append("<h1>" + base.getAttribute("title").trim() + "</h1>");
-                    ret.append("<br> \n");
+                    ret.append("<br /> \n");
                 }
             }else {
                 if ("5".equals(position)) {
-                    ret.append("<td valign=top> \n");
+                    ret.append("<td valign=\"top\"> \n");
                 }else {
                     ret.append("<td> \n");
                 }
@@ -114,7 +114,7 @@ public class Promo extends GenericAdmResource
                 ret.append(getTextHtml(base));
             }
             if (!"".equals(base.getAttribute("url", "").trim())) {
-                ret.append("</a> \n");
+                ret.append("</a>\n");
             }
             ret.append("</td></tr></table> \n"); 
             ret.append("</div>");
@@ -135,7 +135,7 @@ public class Promo extends GenericAdmResource
         SWBResourceURL wburl=reqParams.getActionUrl();
         ret.append("<a href=\"" + wburl.toString() + "\"");
         if ("0".equals(base.getAttribute("uline", "0").trim())) {
-            ret.append(" style=\"TEXT-DECORATION: none\"");
+            ret.append(" style=\"text-decoration:none\"");
         }
         if ("1".equals(base.getAttribute("target", "0").trim())) {
             ret.append(" target=\"_newprm\"");
@@ -159,7 +159,7 @@ public class Promo extends GenericAdmResource
         {
             ret.append(getImgHtml(reqParams, base));
             if (!img.endsWith(".swf")) {
-                ret.append(" align=left vspace=1 hspace=5> \n");
+                ret.append(" align=\"left\" vspace=\"1\" hspace=\"5\" /> \n");
             }
             ret.append(getTextHtml(base));
         }
@@ -175,7 +175,7 @@ public class Promo extends GenericAdmResource
             }
             ret.append(getImgHtml(reqParams, base));
             if (!img.endsWith(".swf")) {
-                ret.append(" align=left vspace=1 hspace=5> \n");
+                ret.append(" align=\"left\" vspace=\"1\" hspace=\"5\" /> \n");
             }
         }
         else if ("3".equals(position))
@@ -183,12 +183,13 @@ public class Promo extends GenericAdmResource
             ret.append("<center> \n");
             ret.append(getImgHtml(reqParams, base));
             if (!img.endsWith(".swf")) {
-                ret.append(" align=left> \n");
+                ret.append(" align=\"left\" /> \n");
             }
+            ret.append("</center> \n");
             if (!"".equals(url)) {
                 ret.append("</a> \n");
             }
-            ret.append("</center></td></tr><tr><td> \n");
+            ret.append("</td></tr><tr><td> \n");
             if (!"".equals(url)) {
                 ret.append(getUrlHtml(reqParams, base));
             }
@@ -198,7 +199,7 @@ public class Promo extends GenericAdmResource
         {
             ret.append(getImgHtml(reqParams, base));
             if (!img.endsWith(".swf")) {
-                ret.append(" align=right vspace=1 hspace=\"10\"> \n");
+                ret.append(" align=\"right\" vspace=\"1\" hspace=\"10\" /> \n");
             }
             ret.append(getTextHtml(base));
         }
@@ -206,7 +207,7 @@ public class Promo extends GenericAdmResource
         {
             ret.append(getImgHtml(reqParams, base));
             if (!img.endsWith(".swf")) {
-                ret.append("> \n");
+                ret.append(" /> \n");
             }
             if (!"".equals(url)) {
                 ret.append("</a> \n");
@@ -237,7 +238,7 @@ public class Promo extends GenericAdmResource
             ret.append(getTextHtml(base));
             ret.append(getImgHtml(reqParams, base));
             if (!img.endsWith(".swf")) {
-                ret.append(" align=left vspace=1 hspace=5> \n");
+                ret.append(" align=\"left\" vspace=\"1\" hspace=\"5\" /> \n");
             }
         }
         else if ("8".equals(position))
@@ -245,7 +246,7 @@ public class Promo extends GenericAdmResource
             ret.append(getTextHtml(base));
             ret.append(getImgHtml(reqParams, base));
             if (!img.endsWith(".swf")) {
-                ret.append(" align=right vspace=1 hspace=\"10\"> \n");
+                ret.append(" align=\"right\" vspace=\"1\" hspace=\"10\" /> \n");
             }
         }
         return ret.toString();
@@ -297,15 +298,16 @@ public class Promo extends GenericAdmResource
     /**
      * Obtiene el texto del promocional ya armado
      */    
-    private String getTextHtml(Portlet base)
-    {
+    private String getTextHtml(Portlet base) {
         StringBuffer ret = new StringBuffer("");
-        if (!"".equals(base.getAttribute("text", "").trim())) 
-        {
-            if (!"".equals(base.getAttribute("textcolor", "").trim())) 
+        if (!"".equals(base.getAttribute("text", "").trim())) {
+            if (!"".equals(base.getAttribute("textcolor", "").trim())) {
                 ret.append("<font color=\""+ base.getAttribute("textcolor").trim() +"\"> \n");
-            ret.append(base.getAttribute("text").trim());
-            if (!"".equals(base.getAttribute("textcolor", "").trim())) ret.append("</font> \n");
+            }
+            ret.append("<p>" + base.getAttribute("text").trim() + "</p>");
+            if (!"".equals(base.getAttribute("textcolor", "").trim())) {
+                ret.append("</font> \n");
+            }
         }
         return ret.toString();
     }
