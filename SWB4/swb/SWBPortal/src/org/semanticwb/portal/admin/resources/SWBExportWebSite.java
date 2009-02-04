@@ -7,6 +7,7 @@ package org.semanticwb.portal.admin.resources;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -82,16 +83,16 @@ public class SWBExportWebSite extends GenericResource {
                 //Eliminar rdf y xml generados y ya agregados a zip
                 rdfFile.delete();
                 infoFile.delete();
+                PrintWriter out=response.getWriter();
+                out.println("<script type=\"text/javascript\">");
+                out.println("hideDialog();");
+                out.println("showStatus('Sitio Exportado');");
+                out.println("</script>");               
             } else {
                 strbr.append("<div class=\"swbform\">");
-                strbr.append("<table>");
-                strbr.append("<tr>");
-                strbr.append("<td colspan=\"2\">");
                 strbr.append("<fieldset>");
+                strbr.append("Seleccione el sitio a guardar como plantilla:");
                 strbr.append("<table>");
-                strbr.append("<tr>");
-                strbr.append("<td><h1>Seleccione el sitio a exportar</h1></td>");
-                strbr.append("</tr>");
                 SWBResourceURL url = paramRequest.getRenderUrl();
                 url.setAction("step2");
                 Iterator<WebSite> itws = SWBContext.listWebSites();
@@ -99,13 +100,11 @@ public class SWBExportWebSite extends GenericResource {
                     WebSite ws = itws.next();
                     strbr.append("<tr><td>");
                     url.setParameter("wsid", ws.getId());
-                    strbr.append("<a href=\"" + url.toString() + "\">" + ws.getTitle() + "</a>");
+                    strbr.append("<a href=\"" + url.toString() + "\" onclick=\"submitUrl('" + url.toString() + "',this);return false;\">" + ws.getTitle() + "</a>");
                     strbr.append("</td></tr>");
                 }
                 strbr.append("</table>");
                 strbr.append("</fieldset>");
-                strbr.append("</td></tr>");
-                strbr.append("</table>");
                 strbr.append("</div>");
                 response.getWriter().println(strbr.toString());
             }
