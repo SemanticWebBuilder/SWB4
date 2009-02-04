@@ -229,15 +229,15 @@ public class SWBAProperties extends GenericResource {
                 SWBResourceURL urlCommit = paramRequest.getActionUrl();
                 urlCommit.setParameter("act","commit");
                 
-                out.println("<button dojoType=\"dijit.form.Button\" type=\"button\" name=\""+base.getId()+"/btnCommit\" onclick=\"if(confirm('"+paramRequest.getLocaleString("msgAlertSaveallChanges")+"?')) {window.location='" + urlCommit + "';} return false;\">"+paramRequest.getLocaleString("msgBtnCommit")+"</button>");
-                out.println("<button dojoType=\"dijit.form.Button\" type=\"button\" name=\""+base.getId()+"/btnRollback\" onclick=\"if(confirm('"+paramRequest.getLocaleString("msgAlertRestoreAllValues")+"?')) {window.location='" + urlRoll + "';} return false;\">"+paramRequest.getLocaleString("msgBtnRollback")+"</button>");
+                out.println("<button dojoType=\"dijit.form.Button\" type=\"button\" name=\""+base.getId()+"/btnCommit\" onclick=\"if(confirm('"+paramRequest.getLocaleString("msgAlertSaveallChanges")+"?')) {submitUrl('" + urlCommit + "',this.domNode);} return false;\">"+paramRequest.getLocaleString("msgBtnCommit")+"</button>");
+                out.println("<button dojoType=\"dijit.form.Button\" type=\"button\" name=\""+base.getId()+"/btnRollback\" onclick=\"if(confirm('"+paramRequest.getLocaleString("msgAlertRestoreAllValues")+"?')) {submitUrl('" + urlRoll + "',this.domNode);} return false;\">"+paramRequest.getLocaleString("msgBtnRollback")+"</button>");
                // out.println("<input type=button class=\"boton\" name=btnRollback value=\""+paramRequest.getLocaleString("msgBtnRollback")+"\" onclick=\"if(confirm('"+paramRequest.getLocaleString("msgAlertRestoreAllValues")+"?')) {window.location='"+urlRoll.toString()+"';}\">");
             }
             
             SWBResourceURL urlAdd = paramRequest.getRenderUrl();
             urlAdd.setMode(paramRequest.Mode_EDIT);
             urlAdd.setParameter("act","add");
-            if(!prop.isReadOnly())out.println("<button dojoType=\"dijit.form.Button\" type=button name=\""+base.getId()+"/btnAdd\" onclick=\"window.location='"+urlAdd.toString()+"';\">"+paramRequest.getLocaleString("msgBtnAdd")+"</button>");
+            if(!prop.isReadOnly())out.println("<button dojoType=\"dijit.form.Button\" type=button name=\""+base.getId()+"/btnAdd\" onclick=\"submitUrl('"+urlAdd.toString()+"',this.domNode); return false;\">"+paramRequest.getLocaleString("msgBtnAdd")+"</button>");
 //            out.println("</td>");
 //            out.println("</tr>");
 //            out.println("</tfoot>");
@@ -331,7 +331,7 @@ public class SWBAProperties extends GenericResource {
 //            out.println("<a href=\"#\" onclick=\"window.location='"+urla+"'\">view</a>");
             out.println("<div class=\"swbform\">");
             //out.println("	<legend> Properties file edition. "+fileSelected+"</legend>");
-            out.println("<form name=\"frmAdd\" method=post action=\""+paramRequest.getActionUrl().setAction("update").toString()+"\" onsubmit=\"return (valida(frmAdd));\" >");
+            out.println("<form dojoType=\"dijit.form.Form\" id=\""+id+"/fnewkey\" name=\"frmAdd\" method=post action=\""+paramRequest.getActionUrl().setAction("update").toString()+"\" onsubmit=\"if(valida(frmAdd)) submitForm('"+id+"/fnewkey'); return false; \" >");
             out.println("<fieldset>");
             out.println("<table cellpadding=10 cellspacing=0 width=98%>");
             out.println("<tr>");
@@ -359,7 +359,7 @@ public class SWBAProperties extends GenericResource {
             urlBack.setMode(paramRequest.Mode_VIEW);
             
             out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\" name=\""+base.getId()+"/btnSend\" >"+paramRequest.getLocaleString("msgBtnSend")+"</button>");
-            out.println("<button dojoType=\"dijit.form.Button\" type=\"button\" name=\""+base.getId()+"/btnCancel\" onclick=\"window.location='"+urlBack.toString()+"';\">"+paramRequest.getLocaleString("msgBtnCancel")+"</button>");
+            out.println("<button dojoType=\"dijit.form.Button\" type=\"button\" name=\""+base.getId()+"/btnCancel\" onclick=\"submitUrl('"+urlBack.toString()+"',this.domNode); return false;\">"+paramRequest.getLocaleString("msgBtnCancel")+"</button>");
 //            out.println("</td>");
 //            out.println("</tr>");
 //            out.println("</table>");
@@ -388,7 +388,7 @@ public class SWBAProperties extends GenericResource {
         String fileSelect = "";
         if(base.getProperty("uptPropFile")!=null) fileSelect=base.getProperty("uptPropFile");
         out.println("<div class=\"swbform\">");
-        out.println("<form method=post action=\""+paramRequest.getActionUrl().setAction("uptPropFile").toString()+"\" >");
+        out.println("<form dojoType=\"dijit.form.Form\" id=\""+getResourceBase().getId()+"/doAdmin\" method=post action=\""+paramRequest.getActionUrl().setAction("uptPropFile").toString()+"\" onsubmit=\"submitForm('"+getResourceBase().getId()+"/doAdmin'); return false;\">");
         out.println("<fieldset>");
         //out.println("	<legend> Properties file edition. "+fileSelect+"</legend>");
         out.println("<table cellpadding=10 cellspacing=0 width=98%>");
