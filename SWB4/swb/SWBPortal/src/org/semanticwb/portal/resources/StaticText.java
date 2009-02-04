@@ -26,6 +26,7 @@ package org.semanticwb.portal.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Enumeration;
 import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,8 +36,10 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Portlet;
 import org.semanticwb.portal.api.GenericAdmResource;
+import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
+import org.semanticwb.portal.api.SWBResourceURL;
 
 
 /** Objeto que se encarga de desplegar y administrar un texto est�tico, este texto
@@ -48,13 +51,9 @@ import org.semanticwb.portal.api.SWBResourceException;
  * aspect.
  * @author Javier Solis Gonzalez
  */
-public class StaticText extends GenericAdmResource 
-{
-    /** 
-     * Creates a new instance of Static Text 
-     */
-    public StaticText() {
-    }
+public class StaticText extends GenericAdmResource {
+
+    
 
     /** Obtiene la vista del recurso.
      *
@@ -66,13 +65,35 @@ public class StaticText extends GenericAdmResource
      * @throws IOException
      * @exception com.infotec.appfw.exception.AFException Si se origina cualquier error en el recurso al traer el html.
      */
+    @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         Portlet base=getResourceBase();
-        base.getAttribute("text");
         String staticText = replaceTags(base.getAttribute("text"), request, paramRequest);
-
-        PrintWriter out = response.getWriter();
+        
+        SWBResourceURL url=paramRequest.getActionUrl();
+        url.setCallMethod(url.Call_DIRECT);
+        url.setMode(url.Mode_EDIT);
+        
+        PrintWriter out = response.getWriter();                
+        out.println("<script src=\"/swb/swbadmin/js/jquery/jquery.jeditable.js\" type=\"text/javascript\"></script>");
+        out.println("<script type=\"text/javascript\">");
+        out.println(" $(document).ready(function() {");
+        //out.println("     $('.editable_textarea').editable('" + url.toString() + "', {");
+        out.println("     $('#" + "statictext_"+base.getId()+ "').editable('" + url.toString() + "', {");
+        out.println("         type:'textarea',");
+        out.println("         cancel:'Cancelar',");
+        out.println("         submit:'Aceptar',");
+        //out.println("         indicator:'<img src=\"img/indicator.gif\">',");        
+        out.println("         id:'inlineid_" + base.getId() + "',");
+        out.println("         name:'value_" + base.getId() + "',");        
+        out.println("         tooltip   : 'Click para editar...'");
+        out.println("     });");
+        out.println(" });");
+        out.println(" </script>");
+        out.println("<div class=\"editable_textarea\" id=\"statictext_" + base.getId() + "\">");
         out.println(staticText);
+        out.println("</div>");        
+        out.flush();
     }
 
     public String replaceTags(String str, HttpServletRequest request, SWBParamRequest paramRequest)
@@ -112,6 +133,26 @@ public class StaticText extends GenericAdmResource
         str=SWBUtils.TEXT.replaceAll(str, "{webworkpath}", SWBPlatform.getWebWorkPath());
         str=SWBUtils.TEXT.replaceAll(str, "{workpath}", SWBPlatform.getWorkPath());
         return str;
+    }
+    
+    @Override
+    public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        Portlet base=getResourceBase();
+        String staticText = replaceTags(base.getAttribute("text"), request, paramRequest);
+        PrintWriter out = response.getWriter();
+        out.print(staticText);
+        out.flush();
+    }
+
+    @Override
+    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
+        Portlet base = response.getResourceBase();
+        base.setAttribute("text", request.getParameter("value_"+base.getId()));
+        try{
+            base.updateAttributesToDB();
+        }catch(Exception e){
+            
+        }
     }
     
 }
