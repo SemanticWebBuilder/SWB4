@@ -34,6 +34,7 @@ import org.semanticwb.xmlrpc.XmlRpcProxyFactory;
  */
 public abstract class OfficeApplication
 {
+
     public static SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     private static final String DELETE_CONFIGURATION_ERROR = "Error trying to get the proxy server, delete the file ";
     private static MenuListener menuListener;
@@ -42,16 +43,17 @@ public abstract class OfficeApplication
     private static IOpenOfficeDocument document;
     private static IOpenOfficeApplication application;
 
+
     static
     {
         /*try
         {
-            BufferedImage sidebar = ImageIO.read (OfficeApplication.class.getResource ("MySideImage.png"));
-            UIManager.put("wizard.sidebar.image", sidebar);
+        BufferedImage sidebar = ImageIO.read (OfficeApplication.class.getResource ("MySideImage.png"));
+        UIManager.put("wizard.sidebar.image", sidebar);
         }
         catch(Exception e)
         {
-            e.printStackTrace();
+        e.printStackTrace();
         }*/
         System.setProperty("wizard.sidebar.image", "org/semanticwb/openoffice/ui/icons/sidebar.png");
         Locale.setDefault(new Locale("es"));
@@ -59,43 +61,43 @@ public abstract class OfficeApplication
         {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         }
-        catch ( Exception ue )
+        catch (Exception ue)
         {
             // No debe hacer nada
             System.out.println(ue.getMessage());
         }
     }
-    
+
     public static IOpenOfficeApplication getOfficeApplicationProxy() throws WBException
     {
-        if ( application == null )
+        if (application == null)
         {
             application = XmlRpcProxyFactory.newInstance(IOpenOfficeApplication.class, OfficeApplication.getWebAddress());
             application.setUser(OfficeApplication.userInfo.getLogin());
             application.setPassword(OfficeApplication.userInfo.getPassword());
             String proxyServer = new Configuration().get(Configuration.PROXY_SERVER);
             String proxyPort = new Configuration().get(Configuration.PROXY_PORT);
-            if ( proxyServer == null )
+            if (proxyServer == null)
             {
                 proxyServer = "";
             }
-            if ( proxyPort == null )
+            if (proxyPort == null)
             {
                 proxyServer = "";
             }
-            if ( !proxyServer.equals("") && !proxyPort.equals("") )
+            if (!proxyServer.equals("") && !proxyPort.equals(""))
             {
                 try
                 {
                     application.setProxyAddress(new URI(proxyServer));
                     application.setProxyPort(Integer.parseInt(proxyPort));
                 }
-                catch ( URISyntaxException e )
+                catch (URISyntaxException e)
                 {
                     String message = DELETE_CONFIGURATION_ERROR + new Configuration().getPath();
                     throw new WBException(message, e);
                 }
-                catch ( NumberFormatException e )
+                catch (NumberFormatException e)
                 {
                     String message = "Error trying to get the proxy port, delete the file " + new Configuration().getPath();
                     throw new WBException(message, e);
@@ -103,15 +105,15 @@ public abstract class OfficeApplication
             }
             try
             {
-                if ( !application.isValidVersion(IOpenOfficeApplication.version) )
+                if (!application.isValidVersion(IOpenOfficeApplication.version))
                 {
                     throw new WBException("La versión entre la aplicación de publicación y el sitio no es compatible");
                 }
             }
-            catch ( Exception e )
-            {                
+            catch (Exception e)
+            {
                 throw new WBException("Error al tratar de verificar compatibilidad de versiones entre el publicador y el servidor", e);
-                
+
             }
         }
         return application;
@@ -121,27 +123,27 @@ public abstract class OfficeApplication
     {
         String proxyServer = new Configuration().get(Configuration.PROXY_SERVER);
         String proxyPort = new Configuration().get(Configuration.PROXY_PORT);
-        if ( proxyServer == null )
+        if (proxyServer == null)
         {
             proxyServer = "";
         }
-        if ( proxyPort == null )
+        if (proxyPort == null)
         {
             proxyServer = "";
         }
-        if ( !proxyServer.equals("") && !proxyPort.equals("") )
+        if (!proxyServer.equals("") && !proxyPort.equals(""))
         {
             try
             {
                 document.setProxyAddress(new URI(proxyServer));
                 document.setProxyPort(Integer.parseInt(proxyPort));
             }
-            catch ( URISyntaxException e )
+            catch (URISyntaxException e)
             {
                 String message = DELETE_CONFIGURATION_ERROR + new Configuration().getPath() + " or fix it.";
                 throw new WBException(message, e);
             }
-            catch ( NumberFormatException e )
+            catch (NumberFormatException e)
             {
                 String message = "Error trying to get the proxy port, delete the file " + new Configuration().getPath() + " or fix it.";
                 throw new WBException(message, e);
@@ -151,11 +153,11 @@ public abstract class OfficeApplication
 
     public static IOpenOfficeDocument getOfficeDocumentProxy() throws WBException
     {
-        if ( document == null )
+        if (document == null)
         {
             try
             {
-                if ( getOfficeApplicationProxy().isValidVersion(IOpenOfficeApplication.version) )
+                if (getOfficeApplicationProxy().isValidVersion(IOpenOfficeApplication.version))
                 {
                     document = XmlRpcProxyFactory.newInstance(IOpenOfficeDocument.class, OfficeApplication.getWebAddress());
                     document.setUser(OfficeApplication.userInfo.getLogin());
@@ -163,9 +165,9 @@ public abstract class OfficeApplication
                     setProxy();
                 }
             }
-            catch ( Exception e )
+            catch (Exception e)
             {
-                throw new WBException("No se puede validar la compatibilidad de versiones\r\n"+e.getMessage(), e);
+                throw new WBException("No se puede validar la compatibilidad de versiones\r\n" + e.getMessage(), e);
             }
         }
         return document;
@@ -178,7 +180,6 @@ public abstract class OfficeApplication
 
     protected OfficeApplication()
     {
-
     }
 
     /*private void verifyVersion()
@@ -216,19 +217,19 @@ public abstract class OfficeApplication
 
     public static final void changePassword()
     {
-        if ( OfficeApplication.tryLogin() )
+        if (OfficeApplication.tryLogin())
         {
             DialogChangePassword dialog = new DialogChangePassword(new javax.swing.JFrame(), true);
             dialog.setLocationRelativeTo(null);
             dialog.setVisible(true);
-            if ( !dialog.isCanceled() )
+            if (!dialog.isCanceled())
             {
                 try
                 {
                     getOfficeApplicationProxy().changePassword(dialog.getNewPassword());
                     userInfo.changePassword(dialog.getNewPassword());
                 }
-                catch ( Exception e )
+                catch (Exception e)
                 {
                     JOptionPane.showMessageDialog(null, e.getLocalizedMessage(), "Cambiar contraseña", JOptionPane.ERROR);
                 }
@@ -239,26 +240,39 @@ public abstract class OfficeApplication
     public static final void createPage()
     {
         CreatePageResultProducer resultProducer = new CreatePageResultProducer();
-        SelectWebPageID selectWebPageID=new SelectWebPageID();
-        WizardPage[] clazz = new WizardPage[]{new SelectPage(),new TitleAndDescription(false),selectWebPageID};
+        SelectWebPageID selectWebPageID = new SelectWebPageID();
+        WizardPage[] clazz = new WizardPage[]
+        {
+            new SelectPage(), new TitleAndDescription(false), selectWebPageID
+        };
         Wizard wiz = WizardPage.createWizard("Asistente de creación de página", clazz, resultProducer);
         wiz.addWizardObserver(new CreatePageObserver(selectWebPageID));
         wiz.show();
     }
+
     public static final void createPage(WebPageInfo parent)
     {
         CreatePageResultProducer resultProducer = new CreatePageResultProducer(parent);
-        WizardPage[] clazz = new WizardPage[]{new TitleAndDescription(false),new SelectWebPageID()};
-        Wizard wiz = WizardPage.createWizard("Asistente de creación de página", clazz, resultProducer);        
+        WizardPage[] clazz = new WizardPage[]
+        {
+            new TitleAndDescription(false), new SelectWebPageID()
+        };
+        Wizard wiz = WizardPage.createWizard("Asistente de creación de página", clazz, resultProducer);
         wiz.show();
     }
 
     public final void open(DocumentType type)
     {
-        OpenResultProducer resultProducer = new OpenResultProducer(this);
-        WizardPage[] clazz = new WizardPage[]{new Search(type), new SelectVersionToOpen(), new SelectDirectory()};
-        Wizard wiz = WizardPage.createWizard("Asistente de apertura de contenido", clazz, resultProducer);        
-        wiz.show();
+        if (OfficeApplication.tryLogin())
+        {
+            OpenResultProducer resultProducer = new OpenResultProducer(this);
+            WizardPage[] clazz = new WizardPage[]
+            {
+                new Search(type), new SelectVersionToOpen(), new SelectDirectory()
+            };
+            Wizard wiz = WizardPage.createWizard("Asistente de apertura de contenido", clazz, resultProducer);
+            wiz.show();
+        }
     }
 
     public static final void showAbout()
@@ -271,9 +285,9 @@ public abstract class OfficeApplication
     public static URI getWebAddress() throws WBException
     {
 
-        if ( webAddress == null )
+        if (webAddress == null)
         {
-            if ( !tryLogin() )
+            if (!tryLogin())
             {
                 throw new WBException("The user can be logged");
             }
@@ -281,15 +295,15 @@ public abstract class OfficeApplication
         return webAddress;
     }
 
-    static String setupDocument(String workspace,String contentId) throws Exception
+    static String setupDocument(String workspace, String contentId) throws Exception
     {
         String contentIdToReturn = null;
-        if ( contentId != null && !contentId.trim().equals("") && OfficeApplication.tryLogin() )
+        if (contentId != null && !contentId.trim().equals("") && OfficeApplication.tryLogin())
         {
             document = getOfficeDocumentProxy();
             try
-            {                
-                if ( document.exists(workspace,contentId) )
+            {
+                if (document.exists(workspace, contentId))
                 {
                     contentIdToReturn = contentId;
                 }
@@ -299,7 +313,7 @@ public abstract class OfficeApplication
                     JOptionPane.showMessageDialog(null, "El contenido parace haberse publicado en un sitio web.\r\nAl sitio donde se está intentando conectar, indica que este contenido no existe.\r\nSi desea continuar se perdra esta información, de lo contrario, cierre este documento.", "Verificación de contenido en sitio web", JOptionPane.WARNING_MESSAGE);
                 }
             }
-            catch ( NumberFormatException nfe )
+            catch (NumberFormatException nfe)
             {
                 ErrorLog.log(nfe);
             }
@@ -319,7 +333,7 @@ public abstract class OfficeApplication
         frmlogin.setAlwaysOnTop(true);
         frmlogin.setLocationRelativeTo(null);
         frmlogin.setVisible(true);
-        if ( !frmlogin.isCanceled() )
+        if (!frmlogin.isCanceled())
         {
             String login = frmlogin.getLogin();
             String password = frmlogin.getPassword();
@@ -337,10 +351,10 @@ public abstract class OfficeApplication
     public static boolean tryLogin()
     {
         boolean tryLogin = false;
-        if ( userInfo == null || webAddress == null )
+        if (userInfo == null || webAddress == null)
         {
             logOn();
-            if ( userInfo == null || webAddress == null )
+            if (userInfo == null || webAddress == null)
             {
                 logOff();
                 tryLogin = false;
@@ -360,7 +374,7 @@ public abstract class OfficeApplication
     public static final boolean isLogged()
     {
         boolean isLogged = false;
-        if ( userInfo == null )
+        if (userInfo == null)
         {
             isLogged = false;
         }
@@ -369,14 +383,13 @@ public abstract class OfficeApplication
 
     public static final void closeSession()
     {
-
     }
 
     public final static void logOff()
     {
         userInfo = null;
         webAddress = null;
-        if ( menuListener != null )
+        if (menuListener != null)
         {
             menuListener.onLogout();
         }
