@@ -1121,21 +1121,29 @@ public class SWBUtils {
          * @throws java.io.IOException
          */
         public static final void zip(File directory, File base, ZipOutputStream zos) throws IOException {
-            File[] files = directory.listFiles();
-            byte[] buffer = new byte[8192];
-            int read = 0;
-            for (int i = 0, n = files.length; i < n; i++) {
-                if (files[i].isDirectory()) {
-                    zip(files[i], base, zos);
-                } else {
-                    FileInputStream in = new FileInputStream(files[i]);
-                    ZipEntry entry = new ZipEntry(files[i].getPath().substring(base.getPath().length() + 1));
-                    zos.putNextEntry(entry);
-                    while (-1 != (read = in.read(buffer))) {
-                        zos.write(buffer, 0, read);
+            File[] files=directory.listFiles();
+            if(files==null) {
+                ZipEntry entry = new ZipEntry("vacio.txt");
+                zos.putNextEntry(entry);
+                zos.write("vacio".getBytes());
+                zos.closeEntry();
+            }else
+            {
+                byte[] buffer = new byte[8192];
+                int read = 0;
+                for (int i = 0, n = files.length; i < n; i++) {
+                    if (files[i].isDirectory()) {
+                        zip(files[i], base, zos);
+                    } else {
+                        FileInputStream in = new FileInputStream(files[i]);
+                        ZipEntry entry = new ZipEntry(files[i].getPath().substring(base.getPath().length() + 1));
+                        zos.putNextEntry(entry);
+                        while (-1 != (read = in.read(buffer))) {
+                            zos.write(buffer, 0, read);
+                        }
+                        zos.closeEntry();
+                        in.close();
                     }
-                    zos.closeEntry();
-                    in.close();
                 }
             }
         }
