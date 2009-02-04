@@ -16,6 +16,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBVocabulary;
 import org.semanticwb.model.User;
+import org.semanticwb.model.UserRepository;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SWBInstanceObject;
 import org.semanticwb.platform.SemanticObject;
@@ -68,12 +69,15 @@ public class SWBUserMgr
     public User getUser(HttpServletRequest request, WebSite site)
     {
         User ret=null;
+        UserRepository rep=site.getUserRepository();
+        if(rep==null)rep=SWBContext.getDefaultRepository();
         Subject sub=getSubject(request);
         Iterator it=sub.getPrincipals().iterator();
         while(it.hasNext())
         {
             User usr=(User)it.next();
-            if(site.getUserRepository().getId().equals(usr.getUserRepository().getId()))
+
+            if(rep.equals(usr.getUserRepository()))
             {
                 ret=usr;
                 break;
@@ -84,7 +88,7 @@ public class SWBUserMgr
             String language = request.getLocale().getLanguage().trim();
             //language=DBUser.getInstance(repository).getProperty("defaultLanguage",language);        
             
-            ret=new User(new SemanticObject(site.getUserRepository().getSemanticObject().getModel(),User.swb_User));
+            ret=new User(new SemanticObject(rep.getSemanticObject().getModel(),User.swb_User));
             sub.getPrincipals().add(ret);
             ret.setLanguage(language);
             //TODO: validar dispositivo

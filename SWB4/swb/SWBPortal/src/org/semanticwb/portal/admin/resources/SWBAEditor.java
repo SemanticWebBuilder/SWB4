@@ -960,7 +960,7 @@ public class SWBAEditor extends GenericResource
     public static void getTemplateApplet(PrintWriter out, String topicmapid, String templateid, int version, User user)
     {
         out.println("<APPLET id=\"apptpleditor\" name=\"apptpleditor\" code=\"applets.htmleditor.TemplateEditor\" codebase=\""+SWBPlatform.getContextPath()+"\" ARCHIVE=\"swbadmin/lib/htmleditor.jar, swbadmin/lib/WBCommons.jar\" width=\"100%\" height=\"100%\">");
-        String url=SWBPortal.getDistributorPath()+"/SWBAdmin/WBAd_utl_HTMLEditor/_rid/swb_Portlet:1/_mto/3/_mod/";
+        String url=SWBPortal.getDistributorPath()+"/SWBAdmin/WBAd_utl_HTMLEditor/_rid/1/_mto/3/_mod/";
 
         out.println("<PARAM NAME =\"upload\" VALUE=\""+url+"upload"+"\">");
         out.println("<PARAM NAME =\"download\" VALUE=\""+url+"download"+"\">");

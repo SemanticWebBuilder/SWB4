@@ -121,16 +121,19 @@ public class SWBResourceMgr
             //System.out.println("Occ:"+occ.getResourceData());
             //Portlet portlet=ref.getPortlet();
             Portlet portlet=it.next();
+            //System.out.println("Portlet:"+portlet);
             //SWBResource res = getResource(portlet.getWebSiteId(), portlet.getSId());
             SWBResource res = getResource(portlet.getURI());
             if (res != null)
             {
                 Portlet base = res.getResourceBase();
+                //System.out.println("base:"+base);
                 if(user.haveAccess(base))
                 {
                     //TODO:CheckResource
                     if(checkResource(base, user, null, 0, today, topic))
                     {
+                        //System.out.println("Add:"+res);
                         ret.add(res);
                     }
                 }
