@@ -42,7 +42,7 @@ public class XmlRpcSerializer
                         if (eName.getText().equals("faultString"))
                         {
                             Element eValue = (Element) XPath.selectSingleNode(requestDocument, "/methodResponse/fault/value/struct/member[2]/value/string");
-                            if(eValue!=null)
+                            if(eValue!=null && eValue.getText()!=null)
                             {
                                 throw new XmlRpcException(eValue.getText());
                             }
