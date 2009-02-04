@@ -232,7 +232,7 @@ public class WBGraph extends java.applet.Applet implements Runnable
     
     public void reload()
     {
-        //System.out.println("reload");
+        System.out.println("reload");
         if(!drag && drag_x1==0 && drag_x2==0)
         {
             getParams();
