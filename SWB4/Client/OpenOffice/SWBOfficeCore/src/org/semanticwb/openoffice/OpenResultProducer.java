@@ -69,9 +69,9 @@ public class OpenResultProducer implements WizardResultProducer
             try
             {
                 //progress.setProgress("Descargando documento", 0, 3);                
-                progress.setProgress("Descargando documento ...", 1, 3);
+                //progress.setProgress("Descargando documento...", 1, 5);
                 IOfficeApplication openOfficeDocument = OfficeApplication.getOfficeApplicationProxy();
-                progress.setProgress("Abriendo Documento", 2, 3);
+                progress.setProgress("Descargando Documento...", 1, 5);
                 String repositoryName = wizardData.get(Search.WORKSPACE).toString();
                 VersionInfo versioninfo = (VersionInfo) wizardData.get(SelectVersionToOpen.VERSION);
                 String fileName = openOfficeDocument.openContent(repositoryName, versioninfo);
@@ -93,6 +93,7 @@ public class OpenResultProducer implements WizardResultProducer
                 // unzip the content
                 try
                 {
+                    progress.setProgress("Descomprimiendo archivo...", 2, 5);
                     ZipFile zip = new ZipFile(zipFile);
                     ZipEntry entry = zip.getEntry(fileName);
                     if (entry != null)
@@ -123,13 +124,14 @@ public class OpenResultProducer implements WizardResultProducer
                         in.close();
                         out.close();
                         zip.close();
+                        progress.setProgress("Abriendo archivo "+contentfile.getPath()+"...", 3, 5);
                         OfficeDocument document = application.open(contentfile);
                         HashMap<String, String> properties = new HashMap<String, String>();
                         properties.put(OfficeDocument.CONTENT_ID_NAME, versioninfo.contentId);
                         properties.put(OfficeDocument.WORKSPACE_ID_NAME, wizardData.get(Search.WORKSPACE).toString());
-                        document.saveCustomProperties(properties);
-                        //document.save();
-                        progress.setProgress("Documento completo", 2, 3);
+                        progress.setProgress("Salvando archivo...", 4, 5);
+                        document.saveCustomProperties(properties);                        
+                        progress.setProgress("Documento completo", 5, 5);
                     }
                 }
                 catch (ZipException ioe)
