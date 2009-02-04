@@ -58,7 +58,7 @@ public class SWBARule extends GenericResource {
             tmparam = request.getParameter("tm");
         }
         ret.append("\n<div class=\"applet\">");
-        ret.append("\n<APPLET id=\"rulesApplet\" name=\"rulesApplet\" code=\"applets.rules.RuleApplet.class\" codebase=\"" + SWBPlatform.getContextPath() + "\"  ARCHIVE=\"swbadmin/lib/Modeler.jar, swbadmin/lib/WBCommons.jar, swbadmin/lib/Rules.jar\" width=\"100%\" height=\"600\">");  //ARCHIVE=\"wbadmin/lib/GenericTree.jar, wbadmin/lib/WBCommons.jar\"
+        ret.append("\n<APPLET id=\"rulesApplet\" name=\"rulesApplet\" code=\"applets.rules.RuleApplet.class\" codebase=\"" + SWBPlatform.getContextPath() + "\"  ARCHIVE=\"swbadmin/lib/Modeler.jar, swbadmin/lib/WBCommons.jar, swbadmin/lib/Rules.jar\" width=\"100%\" height=\"500\">");  //ARCHIVE=\"wbadmin/lib/GenericTree.jar, wbadmin/lib/WBCommons.jar\"
         SWBResourceURL urlapp = paramRequest.getRenderUrl();
         urlapp.setMode("gateway");
         urlapp.setCallMethod(urlapp.Call_DIRECT);
