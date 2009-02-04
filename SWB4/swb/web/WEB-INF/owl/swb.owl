@@ -332,13 +332,6 @@
     <rdfs:subClassOf rdf:resource="#SWBClass"/>
     <rdf:type rdf:resource="#Class"/>
   </owl:Class>
-  <owl:Class rdf:ID="UserGroupable">
-    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >org.semanticwb.model.UserGroupable</swb:className>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#SWBInterface"/>
-    </rdfs:subClassOf>
-  </owl:Class>
   <owl:Class rdf:ID="PortletRef">
     <rdfs:subClassOf rdf:resource="#Deleteable"/>
     <rdfs:subClassOf rdf:resource="#Activeable"/>
@@ -425,7 +418,16 @@
     <rdf:type rdf:resource="#Interface"/>
   </owl:Class>
   <owl:Class rdf:ID="User">
-    <rdfs:subClassOf rdf:resource="#UserGroupable"/>
+    <rdfs:subClassOf>
+      <swb:Interface rdf:ID="UserGroupable">
+        <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >org.semanticwb.model.UserGroupable</swb:className>
+        <rdfs:subClassOf>
+          <owl:Class rdf:about="#SWBInterface"/>
+        </rdfs:subClassOf>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Interface>
+    </rdfs:subClassOf>
     <rdfs:subClassOf>
       <swb:Interface rdf:ID="Roleable">
         <rdfs:subClassOf>
