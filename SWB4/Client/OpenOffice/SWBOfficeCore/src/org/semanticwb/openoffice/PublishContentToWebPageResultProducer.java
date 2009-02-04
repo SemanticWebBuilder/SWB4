@@ -12,6 +12,7 @@ import org.netbeans.spi.wizard.DeferredWizardResult;
 import org.netbeans.spi.wizard.ResultProgressHandle;
 import org.netbeans.spi.wizard.WizardException;
 import org.netbeans.spi.wizard.WizardPage.WizardResultProducer;
+import org.semanticwb.office.interfaces.PortletInfo;
 import org.semanticwb.office.interfaces.WebPageInfo;
 import org.semanticwb.openoffice.interfaces.IOpenOfficeDocument;
 import org.semanticwb.openoffice.ui.wizard.PublishVersion;
@@ -57,7 +58,12 @@ public class PublishContentToWebPageResultProducer implements WizardResultProduc
                 webpage.id=page.getID();
                 webpage.siteID=page.getSite();
                 String version=wizardData.get(PublishVersion.VERSION).toString();                
-                openOfficeDocument.publishToPortletContent(repositoryName, contentID, version, title, description, webpage);
+                PortletInfo info=openOfficeDocument.publishToPortletContent(repositoryName, contentID, version, title, description, webpage);
+                int res=JOptionPane.showConfirmDialog(null, "¿Desea activar el contenido?","Publicación de contenido",JOptionPane.YES_NO_OPTION);
+                if(res==JOptionPane.YES_OPTION)
+                {
+                    openOfficeDocument.activatePortlet(info,true);
+                }
                 JOptionPane.showMessageDialog(null, "¡Se ha publicado el documento!","Publicación de contenido",JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
                 progress.finished(null);
             }
