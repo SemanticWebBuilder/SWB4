@@ -50,6 +50,7 @@ public class SWBImportWebSite extends GenericResource {
                 WebSite site = SWBContext.createWebSite(request.getParameter("wsname"), request.getParameter("wsns"));
                 site.setCreated(new java.util.Date(System.currentTimeMillis()));
                 site.setTitle(request.getParameter("wstitle"));
+                site.setHomePage(site.createWebPage("home"));
                 //Edición de website
                 SemanticObject semObject = SemanticObject.createSemanticObject(site.getURI());
                 SWBFormMgr mgr = new SWBFormMgr(semObject, null, SWBFormMgr.MODE_EDIT);
@@ -163,6 +164,7 @@ public class SWBImportWebSite extends GenericResource {
             SWBPlatform.getSemanticMgr().createModelByRDF(newName, newNS, io);
             WebSite website=SWBContext.getWebSite(newName);
             website.setDescription(olDescription);
+            
 
             //Eliminar archivo rdf y archivo xml
             new File(models + newName + "/" + name + ".rdf").delete();
