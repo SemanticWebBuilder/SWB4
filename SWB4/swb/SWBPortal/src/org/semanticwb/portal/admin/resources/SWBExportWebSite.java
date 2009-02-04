@@ -37,11 +37,12 @@ public class SWBExportWebSite extends GenericResource {
                 String uri = request.getParameter("wsid");
                 WebSite site=SWBContext.getWebSite(uri);
                 String path = SWBPlatform.getWorkPath() + "/";
+                String modelspath=path + "models/";
                 String zipdirectory = path + "sitetemplates/";
                 //---------Generación de archivo zip de carpeta work de sitio especificado-------------
                 java.util.zip.ZipOutputStream zos = new java.util.zip.ZipOutputStream(new FileOutputStream(zipdirectory + uri + ".zip"));
-                java.io.File directory = new File(path + uri + "/");
-                java.io.File base = new File(path + uri);
+                java.io.File directory = new File(modelspath + uri + "/");
+                java.io.File base = new File(modelspath + uri);
                 org.semanticwb.SWBUtils.IO.zip(directory, base, zos);
                 zos.close();
                 //-------------Generación de archivo rdf del sitio especificado----------------
@@ -51,9 +52,6 @@ public class SWBExportWebSite extends GenericResource {
                     //ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                     FileOutputStream out = new FileOutputStream(file);
                     ws.getSemanticObject().getModel().write(out);
-                    //System.out.println(outputStream.toByteArray());
-                    //outputStream.flush();
-                    //outputStream.close();
                     out.flush();
                     out.close();
                 } catch (Exception e) {
@@ -86,13 +84,13 @@ public class SWBExportWebSite extends GenericResource {
                 infoFile.delete();
             } else {
                 strbr.append("<div class=\"swbform\">");
-                strbr.append("<table width=\"100%\">");
+                strbr.append("<table>");
                 strbr.append("<tr>");
                 strbr.append("<td colspan=\"2\">");
                 strbr.append("<fieldset>");
                 strbr.append("<table>");
                 strbr.append("<tr>");
-                strbr.append("<td>Sitio a exportar</td>");
+                strbr.append("<td><h1>Seleccione el sitio a exportar</h1></td>");
                 strbr.append("</tr>");
                 SWBResourceURL url = paramRequest.getRenderUrl();
                 url.setAction("step2");
