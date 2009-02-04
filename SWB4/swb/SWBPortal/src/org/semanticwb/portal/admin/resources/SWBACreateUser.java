@@ -36,7 +36,7 @@ public class SWBACreateUser extends GenericResource {
         "                   dojo.require(\"dijit.form.CheckBox\");\n"+
         "        </script>\n");
       //http://www.semanticwebbuilder.org/swb4/ontology#User
-        ret.append("<form id=\""+User.swb_User.getClassName()+"/create\" class=\"swbform\" ");
+        ret.append("<form id=\""+User.swb_User.getClassName()+"/create\" dojoType=\"dijit.form.Form\" class=\"swbform\" ");
         ret.append("action=\""+url+"\" ");
         ret.append("onSubmit=\"submitForm('"+User.swb_User.getClassName()+"/create');return false;\" method=\"POST\">");
         ret.append("\t<fieldset>\n\t<table>\n\t\t<tr>\n\t\t\t<td width=\"200px\" align=\"right\">\n\t\t\t\t<label>Repositorio de Usuarios</label>");
@@ -51,7 +51,7 @@ public class SWBACreateUser extends GenericResource {
         ret.append("\n\t\t\t\t</select>\n\t\t\t</td>\n\t\t</tr>");
         ret.append("\n\t\t<tr>\n\t\t\t<td width=\"200px\" align=\"right\">\n\t\t\t\t<label>Usuario <em>*</em></label>\n\t\t\t</td>\n\t\t\t<td>");
         ret.append("<input type=\"text\" name=\"login\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" " +
-                "promptMessage=\"Captura identificador de usuario.\" invalidMessage=\"El identificador de usuario es requerido.\" trim=\"true\" />");
+                "promptMessage=\"Captura identificador de usuario.\" invalidMessage=\"El identificador de usuario es requerido.\" isValid=\"return canAddLogin(dijit.byId('userRepository').value,this.textbox.value);\" trim=\"true\" />");
         ret.append("\n\t\t\t</td>\n\t\t</tr>");
         ret.append("\n\t\t<tr>\n\t\t\t<td width=\"200px\" align=\"right\">\n\t\t\t\t<label>Contrase&ntilde;a <em>*</em></label>\n\t\t\t</td>\n\t\t\t<td>");
         ret.append("<input type=\"password\" name=\"passwd\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" ");
@@ -72,7 +72,7 @@ public class SWBACreateUser extends GenericResource {
         String usrep = request.getParameter("userRepository");
         String login = request.getParameter("login");
         String password = request.getParameter("passwd");
-        if (null==usrep||null==login||null==password) {
+        if (null==usrep||null==login||login.length()==0||null==password||password.length()==0) {
             response.setMode(SWBResourceURL.Mode_VIEW);
             return;
         }

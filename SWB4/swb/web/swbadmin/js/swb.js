@@ -814,6 +814,17 @@ function canCreateSemanticObject(model, clsid, id)
     return oldret;
 }
 
+var oldlog="";
+var oldlret=false;
+function canAddLogin(model, slogin)
+{
+    if (oldlog!=(model+slogin))
+    {
+        oldlret=getJSON(context+'/swbadmin/jsp/canAddLogin.jsp?login='+slogin+'&model='+model);
+        oldlog=(model+slogin);
+    }
+    return oldlret;
+}
 
 function replaceChars4Id(value)
 {
