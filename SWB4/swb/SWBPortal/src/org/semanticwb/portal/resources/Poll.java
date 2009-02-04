@@ -123,10 +123,16 @@ public class Poll extends GenericResource
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
     {
-        StringBuffer ret = new StringBuffer("");
-        String action = null != request.getParameter("enc_act") && !"".equals(request.getParameter("enc_act").trim()) ? request.getParameter("enc_act").trim() : "enc_step1";
-
+        response.setContentType("text/html; charset=iso-8859-1");
+        response.setHeader("Cache-Control","no-cache"); //HTTP 1.1
+        response.setHeader("Pragma","no-cache"); //HTTP 1.0
+        response.setDateHeader ("Expires", 0); //prevents caching at the proxy server
+        
         Portlet base=getResourceBase();
+        
+        StringBuffer ret = new StringBuffer("");
+        //String action = null != request.getParameter("enc_act") && !"".equals(request.getParameter("enc_act").trim()) ? request.getParameter("enc_act").trim() : "enc_step1";
+        
         try 
         {
             Document dom=SWBUtils.XML.xmlToDom(base.getXml());
@@ -134,32 +140,31 @@ public class Poll extends GenericResource
                 NodeList node = dom.getElementsByTagName("option");            
                 if (!"".equals(base.getAttribute("question", "").trim()) && node.getLength() > 1)            
                 {
-                    ret.append("<div id=\"swb-encuesta\">");
-                    ret.append("<form action=\""+paramRequest.getRenderUrl()+"\" method=\"POST\" name=\"frmEncuesta\" id=\"frmEncuesta\"> \n");
-                    ret.append("<table width=\"100%\" border=\"0\" cellpadding=\"0\" style=\"color:");
-                    ret.append(base.getAttribute("textcolor", "#000000").trim()+"\"> \n");
+                    ret.append("\n<div id=\"swb-encuesta\">");
+                    ret.append("\n<form action=\""+paramRequest.getRenderUrl()+"\" method=\"POST\" name=\"frmEncuesta\" id=\"frmEncuesta\">\n");
                     if (!"".equals(base.getAttribute("imgencuesta", "").trim()))
                     {
-                        ret.append("<tr><td colspan=\"2\"> \n");
+                        ret.append("<p>");
                         ret.append("<img src=\"");
                         ret.append(webWorkPath +"/"+ base.getAttribute("imgencuesta").trim());
-                        ret.append("\" border=\"0\"/> \n");
-                        ret.append("</td></tr> \n");
+                        ret.append("\" border=\"0\"/>");
+                        ret.append("</p>");
                     }
-                    ret.append("<tr><td colspan=\"2\"> \n");
-                    ret.append(base.getAttribute("question").trim() + "</td></tr> \n");
+                    ret.append("<h1>");
+                    ret.append(base.getAttribute("question").trim());
+                    ret.append("</h1>");
                     for (int i = 0; i < node.getLength(); i++)
                     {
-                        ret.append("<tr><td width=\"5\"><input type=\"radio\" name=\"radiobutton\" value=\"enc_votos" + (i + 1) + "\"/></td> \n");
-                        ret.append("<td>" + node.item(i).getChildNodes().item(0).getNodeValue().trim() +"</td></tr> \n");
+                        ret.append("<label><input type=\"radio\" name=\"radiobutton\" value=\"enc_votos" + (i + 1) + "\" />");
+                        ret.append(node.item(i).getChildNodes().item(0).getNodeValue().trim() +"</label><br />");
                     }
-                    ret.append("<tr><td align=\"center\" colspan=\"2\"> \n");
+                    ret.append("<p>");
                     if (!"".equals(base.getAttribute("button", "").trim())) {
-                        ret.append("<input type=\"image\" name=\"votar\" src=\"" + webWorkPath +"/"+ base.getAttribute("button").trim() +"\" onClick=\"buscaCookie(this.form); return false;\"/> \n");
+                        ret.append("<input type=\"image\" name=\"votar\" src=\"" + webWorkPath +"/"+ base.getAttribute("button").trim() +"\" onClick=\"buscaCookie(this.form); return false;\"/>");
                     }else {
-                        ret.append("<input type=\"button\" name=\"votar\" value=\"" + base.getAttribute("msg_tovote",paramRequest.getLocaleString("msg_tovote")) +"\" onClick=\"buscaCookie(this.form);\"/> \n");
+                        ret.append("<input type=\"button\" name=\"votar\" value=\"" + base.getAttribute("msg_tovote",paramRequest.getLocaleString("msg_tovote")) +"\" onClick=\"buscaCookie(this.form);\"/>");
                     }
-                    ret.append("</td></tr> \n");                    
+                    ret.append("</p>");
 
                     SWBResourceURLImp url=new SWBResourceURLImp(request, base, paramRequest.getTopic(),SWBResourceURL.UrlType_RENDER);
                     url.setResourceBase(base);
@@ -171,35 +176,37 @@ public class Poll extends GenericResource
 
                     boolean display = Boolean.valueOf(base.getAttribute("display","true")).booleanValue();
                     if(display){
-                        ret.append("<tr><td align=\"center\" colspan=\"2\"> \n");
-                        ret.append("\n<a href=\"javascript:abreresultados(\'" + url.toString(true) + "\')\">" + base.getAttribute("msg_viewresults",paramRequest.getLocaleString("msg_viewresults")) + "</a> \n");
-                        ret.append("<br /><br /></td></tr> \n");
-                        ret.append("<tr><td align=\"center\" colspan=\"2\"> \n");
-                        if("1".equals(base.getAttribute("wherelinks", "").trim()) || "3".equals(base.getAttribute("wherelinks", "").trim()))                         {
+                        ret.append("<p>");
+                        ret.append("<a href=\"javascript:abreresultados(\'" + url.toString(true) + "\')\">" + base.getAttribute("msg_viewresults",paramRequest.getLocaleString("msg_viewresults")) + "</a>");
+                        ret.append("</p>");
+                        
+                        if("1".equals(base.getAttribute("wherelinks", "").trim()) || "3".equals(base.getAttribute("wherelinks", "").trim())) {
+                            ret.append("<p>");
                             ret.append(getLinks(dom.getElementsByTagName("link"), paramRequest.getLocaleString("usrmsg_Encuesta_doView_relatedLink")));
-                        }
-                        ret.append("</td></tr> \n");
-                        ret.append("</table> \n");
-                        ret.append("<input type=\"hidden\" name=\"NombreCookie\" value=\"VotosEncuesta"+ base.getId() +"\"/> \n");
-                        ret.append("</form> \n");
+                            ret.append("</p>");
+                        }                        
+                        ret.append("<p>");
+                        ret.append("<input type=\"hidden\" name=\"NombreCookie\" value=\"VotosEncuesta"+ base.getId() +"\"/>");
+                        ret.append("</p>");
+                        ret.append("</form>");
                     }else {
-                        ret.append("<tr><td align=\"center\" colspan=\"2\"> \n");
-                        ret.append("\n<a href=\"javascript:;\" onmousedown=\"getHtml('"+url.toString(true)+"','"+poll+base.getId()+"');slidedown('"+poll+base.getId()+"');\">" + base.getAttribute("msg_viewresults",paramRequest.getLocaleString("msg_viewresults")) + "</a> \n");
-                        //ret.append("\n<a href=\"javascript:;\" onmousedown=\"$('#"+poll+base.getId()+"').load('"+url.toString(true)+"');slidedown('"+poll+base.getId()+"');\">" + base.getAttribute("msg_viewresults",paramRequest.getLocaleString("msg_viewresults")) + "</a> \n");
-                        ret.append("\n<div id=\""+poll+base.getId()+"\" ");
+                        ret.append("<p>");
+                        ret.append("<a href=\"javascript:;\" onmousedown=\"getHtml('"+url.toString(true)+"','"+poll+base.getId()+"');slidedown('"+poll+base.getId()+"');\">" + base.getAttribute("msg_viewresults",paramRequest.getLocaleString("msg_viewresults")) + "</a>");
+                        ret.append("<div id=\""+poll+base.getId()+"\" ");
                         ret.append("style=\"display:none; overflow:hidden; height:"+base.getAttribute("height", "350").trim()+"px; ");
                         ret.append("\">");
                         ret.append("</div>");
-                        ret.append("<br /></td></tr> \n");
-                        ret.append("<tr><td align=\"center\" colspan=\"2\"> \n");
-                        if("1".equals(base.getAttribute("wherelinks", "").trim()) || "3".equals(base.getAttribute("wherelinks", "").trim()))                         {
+                        ret.append("<br /></p>");                        
+                        if("1".equals(base.getAttribute("wherelinks", "").trim()) || "3".equals(base.getAttribute("wherelinks", "").trim())) {
+                            ret.append("<p>");
                             ret.append(getLinks(dom.getElementsByTagName("link"), paramRequest.getLocaleString("usrmsg_Encuesta_doView_relatedLink")));
-                        }
-                        ret.append("</td></tr> \n");
-                        ret.append("</table> \n");
-                        ret.append("<input type=\"hidden\" name=\"NombreCookie\" value=\"VotosEncuesta"+ base.getId() +"\"/> \n");
-                        ret.append("</form> \n");
-                        ret.append("</div>");
+                            ret.append("</p>");
+                        }                        
+                        ret.append("<p>");
+                        ret.append("<input type=\"hidden\" name=\"NombreCookie\" value=\"VotosEncuesta"+ base.getId() +"\"/>");
+                        ret.append("</p>");
+                        ret.append("\n</form>");
+                        ret.append("\n</div>");
                     }
 
                     String win = "menubar="+ base.getAttribute("menubar", "no").trim();
@@ -214,93 +221,89 @@ public class Poll extends GenericResource
                     win += ",top="+ base.getAttribute("top", "125").trim();
                     win += ",left="+ base.getAttribute("left", "220").trim();
 
-                    ret.append("<script type=\"text/javascript\" src=\"/swb/swbadmin/js/wb/motion/collapsibleDiv.js\"></script>");
-                    ret.append("<script type=\"text/javascript\"> \n");
+                    ret.append("\n<script type=\"text/javascript\" src=\"/swb/swbadmin/js/wb/motion/collapsibleDiv.js\"></script>");
+                    ret.append("\n<script type=\"text/javascript\">");
 
-                    ret.append("function buscaCookie(forma) \n");
-                    ret.append("{ \n");
-                    ret.append("    var numcom = getCookie(forma.NombreCookie.value); \n");
-                    ret.append("    if (numcom == \"SI\") { \n");
+                    ret.append("\nfunction buscaCookie(forma)");
+                    ret.append("{");
+                    ret.append("    var numcom = getCookie(forma.NombreCookie.value); ");
+                    ret.append("    if (numcom == \"SI\") { ");
                     if("true".equals(base.getAttribute("oncevote", "true").trim()) && !"0".equals(base.getAttribute("vmode", "0").trim())) {
-                        ret.append("    alert('"+ paramRequest.getLocaleString("usrmsg_Encuesta_doView_msgVote") +"'); \n");
+                        ret.append("    alert('"+ paramRequest.getLocaleString("usrmsg_Encuesta_doView_msgVote") +"'); ");
                     }
                     ret.append("     } ");
-                    ret.append("    else \n");
-                    ret.append("    { \n");
-                    ret.append("    } \n");
-                    ret.append("        Grabaencuesta(forma); \n");
-                    ret.append("} \n");
-                    ret.append("function setCookie(name) \n");
-                    ret.append("{ \n");
-                    ret.append("    document.cookie = name; \n");
-                    ret.append("    var expDate = new Date(); \n");
-                    ret.append("    expDate.setTime(expDate.getTime() + ( 720 * 60 * 60 * 1000) ); \n");
-                    ret.append("    expDate = expDate.toGMTString(); \n");
-                    ret.append("    var str1 = name +\"=SI; expires=\" + expDate + \";Path=/\"; \n");
-                    ret.append("    document.cookie = str1; \n");
-                    ret.append("} \n");
-                    ret.append("function getCookie (name) \n");
-                    ret.append("{ \n");
-                    ret.append("    var arg = name + \"=\"; \n");
-                    ret.append("    var alen = arg.length; \n");
-                    ret.append("    var clen = document.cookie.length; \n");
-                    ret.append("    var i = 0; \n");
-                    ret.append("    while (i < clen)\n");
-                    ret.append("    { \n");
-                    ret.append("        var j = i + alen; \n");
-                    ret.append("        if (document.cookie.substring(i, j) == arg) \n");
-                    ret.append("            return getCookieVal (j); \n");
-                    ret.append("        i = document.cookie.indexOf(\" \", i) + 1; \n");
-                    ret.append("        if (i == 0) break; \n");
-                    ret.append("    } \n");
-                    ret.append("    return null; \n");
-                    ret.append("} \n");
-                    ret.append("function getCookieVal (offset) \n");
-                    ret.append("{ \n");
-                    ret.append("    var endstr = document.cookie.indexOf (\";\", offset); \n");
-                    ret.append("    if (endstr == -1) \n");
-                    ret.append("        endstr = document.cookie.length; \n");
-                    ret.append("    return unescape(document.cookie.substring(offset, endstr)); \n");
-                    ret.append("} \n");
-                    ret.append("function Grabaencuesta(forma) \n");
-                    ret.append("{ \n");
-                    ret.append("    var radiobutton; \n");
-                    ret.append("    for(var i=0; i< forma.length; i++) \n");
-                    ret.append("    { \n");
-                    ret.append("        if(forma.elements[i].type == \"radio\") \n");
-                    ret.append("            if(forma.elements[i].checked) \n");
-                    ret.append("                radiobutton=forma.elements[i].value; \n");
-                    ret.append("    } \n");
-                    ret.append("    if(radiobutton!=null) { \n");
+                    ret.append("    else ");
+                    ret.append("    { ");
+                    ret.append("    } ");
+                    ret.append("    Grabaencuesta(forma); ");
+                    ret.append("} ");
+                    ret.append("\nfunction setCookie(name) ");
+                    ret.append("{ ");
+                    ret.append("    document.cookie = name; ");
+                    ret.append("    var expDate = new Date(); ");
+                    ret.append("    expDate.setTime(expDate.getTime() + ( 720 * 60 * 60 * 1000) ); ");
+                    ret.append("    expDate = expDate.toGMTString(); ");
+                    ret.append("    var str1 = name +\"=SI; expires=\" + expDate + \";Path=/\"; ");
+                    ret.append("    document.cookie = str1; ");
+                    ret.append("} ");
+                    ret.append("\nfunction getCookie (name) ");
+                    ret.append("{ ");
+                    ret.append("    var arg = name + \"=\"; ");
+                    ret.append("    var alen = arg.length; ");
+                    ret.append("    var clen = document.cookie.length; ");
+                    ret.append("    var i = 0; ");
+                    ret.append("    while (i < clen) ");
+                    ret.append("    { ");
+                    ret.append("        var j = i + alen; ");
+                    ret.append("        if (document.cookie.substring(i, j) == arg) ");
+                    ret.append("            return getCookieVal (j); ");
+                    ret.append("        i = document.cookie.indexOf(\" \", i) + 1; ");
+                    ret.append("        if (i == 0) break; ");
+                    ret.append("    } ");
+                    ret.append("    return null; ");
+                    ret.append("} ");
+                    ret.append("\nfunction getCookieVal (offset) ");
+                    ret.append("{ ");
+                    ret.append("    var endstr = document.cookie.indexOf (\";\", offset); ");
+                    ret.append("    if (endstr == -1) ");
+                    ret.append("        endstr = document.cookie.length; ");
+                    ret.append("    return unescape(document.cookie.substring(offset, endstr)); ");
+                    ret.append("} ");
+                    ret.append("\nfunction Grabaencuesta(forma) ");
+                    ret.append("{ ");
+                    ret.append("    var radiobutton; ");
+                    ret.append("    for(var i=0; i< forma.length; i++) ");
+                    ret.append("    { ");
+                    ret.append("        if(forma.elements[i].type == \"radio\") ");
+                    ret.append("            if(forma.elements[i].checked) ");
+                    ret.append("                radiobutton=forma.elements[i].value; ");
+                    ret.append("    } ");
+                    ret.append("    if(radiobutton!=null) { ");
                     if(display) {
-                        ret.append("  window.open(\'"+ url.toString() +"&radiobutton=\' + radiobutton,\'_newenc\',\'"+ win + "\'); \n");
+                        ret.append("  window.open(\'"+ url.toString() +"&radiobutton=\' + radiobutton,\'_newenc\',\'"+ win + "\'); ");
                     }else {
-                        ret.append("  getHtml('"+url.toString()+"&radiobutton='+radiobutton,'"+poll+base.getId()+"'); slidedown('"+poll+base.getId()+"');");
+                        ret.append("  getHtml('"+url.toString()+"&radiobutton='+radiobutton,'"+poll+base.getId()+"'); slidedown('"+poll+base.getId()+"'); ");
                     }
-                    ret.append("    } \n");
-                    ret.append("    else { alert('"+ paramRequest.getLocaleString("usrmsg_Encuesta_doView_msgAnswer") +"'); } \n");
-                    ret.append("} \n");
+                    ret.append("    } ");
+                    ret.append("    else { alert('"+ paramRequest.getLocaleString("usrmsg_Encuesta_doView_msgAnswer") +"'); } ");
+                    ret.append("} ");
 
-                    ret.append("function abreresultados(ruta) \n");
-                    ret.append("{ \n");
-                    ret.append("    window.open(ruta,\'_newenc\',\'"+ win +"\'); \n");
-                    ret.append("} \n");
+                    ret.append("\nfunction abreresultados(ruta) ");
+                    ret.append("{ ");
+                    ret.append("    window.open(ruta,\'_newenc\',\'"+ win +"\'); ");
+                    ret.append("} ");
 
-                    ret.append("function getHtml(url, tagid) {\n");
-                    ret.append("    $('#'+tagid).load(url);");                    
-                    ret.append("}\n");
-                    ret.append("</script> \n");
+                    ret.append("\nfunction getHtml(url, tagid) { ");
+                    ret.append("    $('#'+tagid).load(url);");
+                    ret.append("} ");
+                    ret.append("\n</script>");
                 }
             }
         }catch (Exception e) {
             log.error(paramRequest.getLocaleString("error_Encuesta_doView_resource") +" "+ restype +" "+ paramRequest.getLocaleString("error_Encuesta_doView_method"), e);
-        }
-        response.setContentType("text/html; charset=iso-8859-1");
-        response.setHeader("Cache-Control","no-cache"); //HTTP 1.1
-        response.setHeader("Pragma","no-cache"); //HTTP 1.0
-        response.setDateHeader ("Expires", 0); //prevents caching at the proxy server
+        }        
         PrintWriter out=response.getWriter();        
-        out.print(ret.toString());        
+        out.print(ret.toString());
     }
     
     /**
@@ -505,11 +508,11 @@ public class Poll extends GenericResource
             if(dom==null) {
                 return ret.toString();
             }
-            if(display){
-                ret.append("<html> \n");
-                ret.append("<head> \n");
-                ret.append("<title>" + paramRequest.getLocaleString("usrmsg_Encuesta_getResultEnc_title") + "</title> \n");
-                ret.append("</head> \n");
+            if(display) {
+                ret.append("<html> ");
+                ret.append("<head> ");
+                ret.append("<title>" + paramRequest.getLocaleString("usrmsg_Encuesta_getResultEnc_title") + "</title> ");
+                ret.append("</head> ");
                 ret.append("<body leftmargin=\"0\" topmargin=\"0\" marginwidth=\"0\" marginheight=\"0\"");
                 if (!"".equals(base.getAttribute("textcolorres", "").trim())) {
                     ret.append(" text=\"" + base.getAttribute("textcolorres").trim() + "\"");
@@ -517,7 +520,7 @@ public class Poll extends GenericResource
                 if (!"".equals(base.getAttribute("backimgres", "").trim())) {
                     ret.append(" background=\"" + webWorkPath +"/"+ base.getAttribute("backimgres").trim() + "\"");
                 }
-                ret.append(">\n");
+                ret.append("> ");
                 /*
                  * Se calcula el n?mero de saltos que se proporcion? en la admon. del recurso
                  * y se procede a generar la cadena de <BR> respectivos.
@@ -534,8 +537,9 @@ public class Poll extends GenericResource
             }
 
             NodeList node = dom.getElementsByTagName("option");
+            
             if(display) {
-                ret.append("<table border=\"0\" cellpadding=\"5\" cellspacing=\"5\" align=\"center\"> \n");
+                ret.append("<table border=\"0\" cellpadding=\"5\" cellspacing=\"5\" align=\"center\"> ");
             }else {
                 ret.append("<table border=\"0\" cellpadding=\"5\" cellspacing=\"5\" align=\"center\" style=\"");
                 if (!"".equals(base.getAttribute("textcolorres", "").trim())) {
@@ -544,12 +548,12 @@ public class Poll extends GenericResource
                 if (!"".equals(base.getAttribute("backimgres", "").trim())) {
                     ret.append("background-image:url(" + webWorkPath +"/"+ base.getAttribute("backimgres").trim() + "); ");
                 }
-                ret.append("\"> \n");
+                ret.append("\"> ");
             }
             
             if (!"".equals(base.getAttribute("question", "").trim()) && node.getLength() > 1)            
             {
-                ret.append("<tr><td><strong>" + base.getAttribute("question").trim() + "</strong></td></tr> \n");
+                ret.append("<tr><td><strong>" + base.getAttribute("question").trim() + "</strong></td></tr> ");
                 if (data != null)
                 {
                     //Suma el total de votos para calcular el porcentaje
@@ -574,9 +578,9 @@ public class Poll extends GenericResource
                     long falta;
                     float intPorcentaje = 0;
                     float largo = 0;
-                    ret.append("<tr><td> \n");                    
+                    ret.append("<tr><td> ");                    
                     if(display) {
-                        ret.append("  <table width=\"100%\" border=\"0\" cellpadding=\"5\" cellspacing=\"3\"> \n");
+                        ret.append("  <table width=\"100%\" border=\"0\" cellpadding=\"5\" cellspacing=\"3\"> ");
                     }else {
                         ret.append("  <table width=\"100%\" border=\"0\" cellpadding=\"5\" cellspacing=\"3\" style=\"");
                         if (!"".equals(base.getAttribute("textcolorres", "").trim())) {
@@ -585,7 +589,7 @@ public class Poll extends GenericResource
                         if (!"".equals(base.getAttribute("backimgres", "").trim())) {
                             ret.append("background-image:url(" + webWorkPath +"/"+ base.getAttribute("backimgres").trim() + "); ");
                         }
-                        ret.append("\"> \n");
+                        ret.append("\"> ");
                     }
                     
                     boolean porcent = Boolean.valueOf(base.getAttribute("porcent","true")).booleanValue();
@@ -593,9 +597,9 @@ public class Poll extends GenericResource
                     for (int i = 0; i < node.getLength(); i++)
                     {
                         int num = i + 1;
-                        ret.append("<tr valign=\"top\"><td align=\"right\"> \n");
+                        ret.append("<tr valign=\"top\"><td align=\"right\"> ");
                         ret.append(node.item(i).getChildNodes().item(0).getNodeValue());
-                        ret.append(":</td><td width=\"150\"> \n");
+                        ret.append(":</td><td width=\"150\"> ");
                         String varia = "enc_votos";
                         NodeList nlist = data.getElementsByTagName(varia + num);
                         for (int j = 0; j < nlist.getLength(); j++)
@@ -614,9 +618,9 @@ public class Poll extends GenericResource
                             {
                                 largo = intPorcentaje;
                                 falta = 100 - (int) largo;
-                                ret.append("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/linealleno.gif\" width=\"" + largo + "\" height=\"5\"/> \n");
-                                ret.append("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/lineavacio.gif\" width=\"" + falta + "\" height=\"5\"/> \n");
-                                ret.append("<br /><center><strong> \n");
+                                ret.append("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/linealleno.gif\" width=\"" + largo + "\" height=\"5\"/> ");
+                                ret.append("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/lineavacio.gif\" width=\"" + falta + "\" height=\"5\"/> ");
+                                ret.append("<br /><center><strong> ");
                                 if (porcent) {
                                     ret.append(largo + "%");
                                 }
@@ -626,29 +630,29 @@ public class Poll extends GenericResource
                                 if (totvote) {
                                     ret.append(intVotos + " " + base.getAttribute("msg_vote",paramRequest.getLocaleString("msg_vote")) + "(s)");
                                 }
-                                ret.append("</strong></center> \n");
+                                ret.append("</strong></center> ");
                             }
                         }
-                        ret.append("</td></tr> \n");
+                        ret.append("</td></tr> ");
                     }
                     intAjuste = 0;
-                    ret.append("  </table> \n");
-                    ret.append("</td></tr> \n");
-                    if (totvote) ret.append("<tr><td align=\"right\">"+ base.getAttribute("msg_totvotes",paramRequest.getLocaleString("msg_totvotes")) + ": " + intTotalVotos + "</td></tr>");
+                    ret.append("  </table> ");
+                    ret.append("</td></tr> ");
+                    if (totvote) ret.append("<tr><td align=\"right\">"+ base.getAttribute("msg_totvotes",paramRequest.getLocaleString("msg_totvotes")) + ": " + intTotalVotos + "</td></tr> ");
                 }else {
-                    ret.append("<tr><td>" + paramRequest.getLocaleString("usrmsg_Encuesta_getResultEnc_noVotes") +"</td></tr> \n");
+                    ret.append("<tr><td>" + paramRequest.getLocaleString("usrmsg_Encuesta_getResultEnc_noVotes") +"</td></tr> ");
                 }
-                ret.append("<tr><td align=\"center\"> \n");
+                ret.append("<tr><td align=\"center\"> ");
                 if("2".equals(base.getAttribute("wherelinks", "").trim()) || "3".equals(base.getAttribute("wherelinks", "").trim()))
                 {
                     ret.append("<br />"+getLinks(dom.getElementsByTagName("link"), paramRequest.getLocaleString("usrmsg_Encuesta_doView_relatedLink")));
                 }
-                ret.append("</td></tr> \n");
+                ret.append("</td></tr> ");
                                 
                 if(display){
-                    ret.append("<tr><td align=\"center\"><br /><a href=\"javascript:window.close();\">" + base.getAttribute("msg_closewin",paramRequest.getLocaleString("msg_closewin")) + "</a></td></tr> \n");
+                    ret.append("<tr><td align=\"center\"><br /><a href=\"javascript:window.close();\">" + base.getAttribute("msg_closewin",paramRequest.getLocaleString("msg_closewin")) + "</a></td></tr> ");
                 }else {
-                    ret.append("<tr><td align=\"center\"><br /><a href=\"javascript:;\" onmousedown=\"slideup('"+poll+base.getId()+"');\">" + base.getAttribute("msg_closewin",paramRequest.getLocaleString("msg_closewin")) + "</a></td></tr> \n");
+                    ret.append("<tr><td align=\"center\"><br /><a href=\"javascript:;\" onmousedown=\"slideup('"+poll+base.getId()+"');\">" + base.getAttribute("msg_closewin",paramRequest.getLocaleString("msg_closewin")) + "</a></td></tr> ");
                 }
                 ret.append("</table>");
                 
@@ -659,7 +663,7 @@ public class Poll extends GenericResource
             }
         } 
         catch (Exception e) { 
-            log.error(paramRequest.getLocaleString("error_Encuesta_doView_resource") +" "+ restype +" "+ paramRequest.getLocaleString("error_Encuesta_doView_method"), e); 
+            log.error(paramRequest.getLocaleString("getPollResults") + " " + restype + " " + paramRequest.getLocaleString("error_Encuesta_doView_method"), e); 
         }
         return ret.toString();
     }

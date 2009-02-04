@@ -85,17 +85,17 @@ public class Promo extends GenericAdmResource
         try 
         {
             String position = base.getAttribute("pos", "3").trim();
-            
+            ret.append("<div class=\"swb-promo\">");
             ret.append("<table border=0  width=\"99%\"> \n");
             ret.append("<tr> \n");
             if (!"".equals(base.getAttribute("title", "").trim())) {
                 if ("5".equals(position)) {
                     ret.append("<td colspan=2> \n");
-                    ret.append(base.getAttribute("title").trim());
+                    ret.append("<h1>" + base.getAttribute("title").trim() + "</h1>");
                     ret.append("</td></tr><tr><td valign=top> \n");
                 }else {
                     ret.append("<td> \n");
-                    ret.append(base.getAttribute("title").trim());
+                    ret.append("<h1>" + base.getAttribute("title").trim() + "</h1>");
                     ret.append("<br> \n");
                 }
             }else {
@@ -116,7 +116,8 @@ public class Promo extends GenericAdmResource
             if (!"".equals(base.getAttribute("url", "").trim())) {
                 ret.append("</a> \n");
             }
-            ret.append("</td></tr></table> \n");            
+            ret.append("</td></tr></table> \n"); 
+            ret.append("</div>");
         } 
         catch (Exception e) {
             log.error("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);

@@ -279,52 +279,6 @@ public class WBSiteMap extends GenericAdmResource
         }
         return data.toString();      
     }
-
-    /*public String getJSONDynamically(WebSite webSite, WebPage webPage, User user) throws SWBResourceException, IOException
-    {
-        Portlet base=getResourceBase();
-        StringBuffer data = new StringBuffer();
-        try {
-            WebPage tpsite = webPage;                        
-            //if (user.haveAccess(tpsite)) TODO: VER4
-            {
-                String lang = user.getLanguage();
-                Iterator <WebPage> it = tpsite.listChilds(lang, true, false, false, null);
-                boolean hasChilds;
-                while (it.hasNext()) {
-                    WebPage tp = it.next();
-                    //if(tp!=null && tp.getId()!=null && user.haveAccess(tp)) //TODO VER 4.0
-                    if(tp!=null && tp.getId()!=null)
-                    {
-                        data.append(" {");
-                        data.append("id:'"+tp.getId()+"', ");
-                        hasChilds = tp.listChilds(lang, true, false, false, null).hasNext();
-                        if(hasChilds) {
-                            data.append("carpeta:'true', loaded:'false', ");
-                        }else {
-                            data.append("carpeta:'false', loaded:'true', ");
-                        }
-                        data.append(" name:'"+tp.getTitle(lang)+"', ");
-                        data.append(" tpurl:'"+tp.getUrl()+"', ");
-                        data.append(" type:'webpage' ");
-                        if(hasChilds) {
-                                data.append(", children: []");
-                        }                          
-                        if(it.hasNext()) {
-                            data.append("},");
-                        }else {
-                            data.append("}");
-                        }                        
-                    }
-                }
-            }
-            //return data.toString();
-        }catch(Exception e) { 
-            log.error("Error while generating DOM in resource "+ base.getPortletType().getPortletClassName() +" with identifier " + base.getId() + " - " + base.getTitle(), e); 
-            data.append(e.toString());
-        }
-        return data.toString();      
-    }*/
         
     /**
      * @param request
@@ -341,9 +295,7 @@ public class WBSiteMap extends GenericAdmResource
         StringBuffer ret = new StringBuffer("");
         Portlet base=getResourceBase();
         
-        //if(paramRequest.getCallMethod()==paramRequest.Call_STRATEGY)
-        if(paramRequest.getCallMethod()==100)
-        {
+        if(paramRequest.getCallMethod()==paramRequest.Call_STRATEGY) {
             String surl="";
             if (!"".equals(base.getAttribute("url", "").trim())) {
                 surl=base.getAttribute("url").trim();
