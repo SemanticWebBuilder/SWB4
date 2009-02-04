@@ -1469,10 +1469,16 @@ public class SemanticObject
                 {
                     ret=getURI().substring(0,x+1);
                     ret=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getNsURIPrefix(ret);
-                    ret+=":"+getId();
+                    if(ret!=null)
+                    {
+                        ret+=":"+getId();
+                    }else
+                    {
+                        ret=getId();
+                    }
                 }else
                 {
-                    ret+=":"+getId();
+                    ret=getId();
                 }
             }
         }
