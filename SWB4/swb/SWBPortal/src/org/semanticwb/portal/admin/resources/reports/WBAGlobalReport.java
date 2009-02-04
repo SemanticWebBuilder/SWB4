@@ -176,23 +176,21 @@ public class WBAGlobalReport extends GenericResource {
                 }
                 
                 // javascript
-                sb_ret.append("\n<link type=\"text/css\" href=\"/swb/swbadmin/js/jquery/themes/ui.all.css\" rel=\"Stylesheet\" />");
-
+                /*sb_ret.append("\n<link type=\"text/css\" href=\"/swb/swbadmin/js/jquery/themes/ui.all.css\" rel=\"Stylesheet\" />");
                 sb_ret.append("\n<script type=\"text/javascript\" src=\"/swb/swbadmin/js/jquery/jquery-1.3.js\"></script>");
                 sb_ret.append("\n<script type=\"text/javascript\" src=\"/swb/swbadmin/js/jquery/jquery.ui.all.js\"></script>");
                 sb_ret.append("\n<script type=\"text/javascript\" src=\"/swb/swbadmin/js/jquery/ui/i18n/ui.datepicker-pt-BR.js\"></script>");
                 sb_ret.append("\n<script type=\"text/javascript\" src=\"/swb/swbadmin/js/jquery/ui/i18n/ui.datepicker-es.js\"></script>");
                 sb_ret.append("\n<script type=\"text/javascript\">");
                 sb_ret.append("\n   $(function() {");
-                sb_ret.append("\n       $(\"#wb_fecha1\").datepicker({changeMonth:true, changeYear:true, showOn:'button', buttonImage:'/swb/swbadmin/images/calendar.gif', buttonImageOnly:true}, $.datepicker.regional['es']);");
+                //sb_ret.append("\n       $(\"#wb_fecha1\").datepicker({changeMonth:true, changeYear:true, showOn:'button', buttonImage:'/swb/swbadmin/images/calendar.gif', buttonImageOnly:true}, $.datepicker.regional['es']);");
                 sb_ret.append("\n       $(\"#wb_fecha11\").datepicker({changeMonth:true, changeYear:true, showOn:'button', buttonImage:'/swb/swbadmin/images/calendar.gif', buttonImageOnly:true}, $.datepicker.regional['es']);");
                 sb_ret.append("\n       $(\"#wb_fecha12\").datepicker({changeMonth:true, changeYear:true, showOn:'button', buttonImage:'/swb/swbadmin/images/calendar.gif', buttonImageOnly:true}, $.datepicker.regional['es']);");
                 sb_ret.append("\n   });");
-                sb_ret.append("\n</script>");
+                sb_ret.append("\n</script>");*/
                 
                 
-                sb_ret.append("\n<script type=\"text/javascript\">");
-                
+                sb_ret.append("\n<script type=\"text/javascript\">");                
                 sb_ret.append("\nfunction getParams(accion) { ");
                 sb_ret.append("\n   var params = \"?\";");
                 sb_ret.append("\n   params = params + \"wb_site=\" + window.document.frmrep.wb_site.value;");
@@ -274,7 +272,7 @@ public class WBAGlobalReport extends GenericResource {
                 sb_ret.append("\n }");
                 sb_ret.append("\n</script>");
                 
-                sb_ret.append("\n<div id=\"swb-admin\">");
+                sb_ret.append("\n<div id=\"swbform\">");
                 sb_ret.append("\n<fieldset>");
                 sb_ret.append("\n<legend>" + paramsRequest.getLocaleString("global_report") + "</legend>");
                 
@@ -335,7 +333,10 @@ public class WBAGlobalReport extends GenericResource {
                     sb_ret.append("&nbsp;" + paramsRequest.getLocaleString("by_day"));
                     sb_ret.append("</label></td>");
                     sb_ret.append("\n<td colspan=\"2\">");
-                    sb_ret.append("<input type=\"text\" id=\"wb_fecha1\" name=\"wb_fecha1\" size=\"10\" maxlength=\"10\" value=\"" + fecha1 + "\" />");                        
+                    
+                    sb_ret.append("<input type=\"text\" name=\"wb_fecha1\" id=\"wb_fecha1\" dojoType=\"dijit.form.DateTextBox\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha1+"\">");                    
+                    //sb_ret.append("<input type=\"text\" id=\"wb_fecha1\" name=\"wb_fecha1\" size=\"10\" maxlength=\"10\" value=\"" + fecha1 + "\" />");                        
+                    
                     sb_ret.append("</td>");
                     sb_ret.append("<td><input type=\"hidden\" id=\"wb_rtype\" name=\"wb_rtype\" value=\"0\" /></td>");
                     sb_ret.append("\n</tr>");
