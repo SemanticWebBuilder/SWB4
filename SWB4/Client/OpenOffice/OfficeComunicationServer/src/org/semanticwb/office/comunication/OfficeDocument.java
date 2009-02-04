@@ -754,7 +754,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             portlet.loadContent(in);
             PortletInfo PortletInfo = new PortletInfo();
             PortletInfo.id = id;
-            PortletInfo.siteId = webpage.id;
+            PortletInfo.siteId = webpage.siteID;
             PortletInfo.active = portlet.isActive();
             PortletInfo.description = portlet.getDescription();
             PortletInfo.version = version;
