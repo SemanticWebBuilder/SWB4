@@ -52,17 +52,18 @@
 			</band>
 		</background>
 		<title>
-			<band height="32"  isSplitAllowed="true" >
+			<band height="23"  isSplitAllowed="true" >
 				<staticText>
 					<reportElement
 						mode="Opaque"
 						x="0"
 						y="0"
 						width="552"
-						height="24"
+						height="23"
 						forecolor="#FFFFFF"
-						backcolor="#336600"
-						key="staticText-1"/>
+						backcolor="#336699"
+						key="staticText-6"
+						positionType="FixRelativeToBottom"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="14" isBold="true"/>
@@ -72,18 +73,28 @@
 			</band>
 		</title>
 		<pageHeader>
-			<band height="12"  isSplitAllowed="true" >
+			<band height="0"  isSplitAllowed="true" >
 			</band>
 		</pageHeader>
 		<columnHeader>
 			<band height="23"  isSplitAllowed="true" >
+				<rectangle>
+					<reportElement
+						x="0"
+						y="0"
+						width="552"
+						height="23"
+						backcolor="#C5E2FF"
+						key="rectangle-1"/>
+					<graphicElement stretchType="NoStretch" pen="None"/>
+				</rectangle>
 				<staticText>
 					<reportElement
 						x="17"
 						y="3"
 						width="162"
 						height="17"
-						forecolor="#006699"
+						forecolor="#336699"
 						key="staticText-2"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Left">
@@ -97,7 +108,7 @@
 						y="3"
 						width="80"
 						height="17"
-						forecolor="#006699"
+						forecolor="#336699"
 						key="staticText-3"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Left">
@@ -111,7 +122,7 @@
 						y="3"
 						width="106"
 						height="17"
-						forecolor="#006699"
+						forecolor="#336699"
 						key="staticText-4"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Left">
@@ -125,7 +136,7 @@
 						y="3"
 						width="109"
 						height="17"
-						forecolor="#006699"
+						forecolor="#336699"
 						key="staticText-5"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Right">
@@ -140,7 +151,7 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="17"
-						y="3"
+						y="2"
 						width="162"
 						height="18"
 						key="textField"/>
@@ -153,7 +164,7 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="201"
-						y="3"
+						y="2"
 						width="80"
 						height="18"
 						key="textField"/>
@@ -166,7 +177,7 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="298"
-						y="3"
+						y="2"
 						width="106"
 						height="18"
 						key="textField"/>
@@ -179,7 +190,7 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="422"
-						y="3"
+						y="2"
 						width="109"
 						height="18"
 						key="textField"/>
@@ -189,6 +200,16 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.Long"><![CDATA[$F{hits}]]></textFieldExpression>
 				</textField>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="21"
+						width="552"
+						height="0"
+						forecolor="#CCCCCC"
+						key="line-1"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
 			</band>
 		</detail>
 		<columnFooter>

@@ -6,6 +6,7 @@
 package org.semanticwb.portal.admin.resources.reports.beans;
 
 import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  *
@@ -19,7 +20,7 @@ public class WBAFilterReportBean {
     private int monthF;
     private int yearF;
     private String site;
-    private String idaux;
+    private Iterator idaux;
     private int type;       
     
     private HashMap userTypes;
@@ -39,11 +40,11 @@ public class WBAFilterReportBean {
         this.dayI = dayI;
     }
     
-    public String getIdaux() {
+    public Iterator getIdaux() {
         return idaux;
     }
 
-    public void setIdaux(String idaux) {
+    public void setIdaux(Iterator idaux) {
         this.idaux = idaux;
     }
 
@@ -109,5 +110,22 @@ public class WBAFilterReportBean {
     
     public void setUserTypes(HashMap userTypes) {
         this.userTypes = userTypes;
+    }
+    
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("WBAFilterReportBean instance to String\n");
+        sb.append("dayI=" + dayI);
+        sb.append(", monthI=" + monthI);
+        sb.append(", yearI=" + yearI);
+        sb.append(", dayF=" + dayF);
+        sb.append(", monthF=" + monthF);
+        sb.append(", yearF=" + yearF);
+        sb.append(", site=" + site);
+        sb.append(", idaux=" + idaux);
+        sb.append(", type=" + type);
+        
+        return sb.toString();
     }
 }

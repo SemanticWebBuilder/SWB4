@@ -3,6 +3,7 @@ package org.semanticwb.portal.admin.resources.reports.datadetail;
 
 import java.util.List;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import org.semanticwb.portal.admin.resources.reports.beans.*;
 
@@ -29,11 +30,11 @@ public abstract class SWBDataDetail {
         return resumeRecHits;     
     }
     
-    protected abstract List doDataList(String topicmap, String rfilter, int type) throws IncompleteFilterException;
+    protected abstract List doDataList(String topicmap, Iterator rfilter, int type) throws IncompleteFilterException;
     
-    protected abstract List doDataList(String topicmap, String rfilter, int type, int year) throws IncompleteFilterException;
+    protected abstract List doDataList(String topicmap, Iterator rfilter, int type, int year) throws IncompleteFilterException;
     
-    protected abstract List doDataList(String topicmap, String rfilter, int type, int year, int month, int day) throws IncompleteFilterException;
+    protected abstract List doDataList(String topicmap, Iterator rfilter, int type, int year, int month, int day) throws IncompleteFilterException;
     
-    protected abstract List doDataList(String topicmap, String rfilter, int type, int yearI, int monthI, int dayI, int yearF, int monthF, int dayF) throws IncompleteFilterException;
+    protected abstract List doDataList(String topicmap, Iterator rfilter, int type, int yearI, int monthI, int dayI, int yearF, int monthF, int dayF) throws IncompleteFilterException;
 }

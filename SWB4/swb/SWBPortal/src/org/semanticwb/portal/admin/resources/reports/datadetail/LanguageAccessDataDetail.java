@@ -1,27 +1,22 @@
 
 package org.semanticwb.portal.admin.resources.reports.datadetail;
 
-import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
+import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.sql.ResultSet;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.PreparedStatement;
 
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.portal.admin.resources.reports.beans.*;
+import org.semanticwb.model.Language;
 import org.semanticwb.portal.db.SWBRecHit;
 import org.semanticwb.portal.db.SWBRecHits;
-/*import com.infotec.appfw.util.AFUtils;
-import com.infotec.wb.core.db.DBCatalogs;
-import com.infotec.wb.core.db.RecLanguage;
-import com.infotec.wb.core.db.SWBRecHit;
-import com.infotec.wb.core.db.SWBRecHits;*/
-
+import org.semanticwb.portal.admin.resources.reports.beans.*;
 
 public class LanguageAccessDataDetail extends SWBDataDetail {
     private static Logger log = SWBUtils.getLogger(LanguageAccessDataDetail.class);
@@ -29,12 +24,6 @@ public class LanguageAccessDataDetail extends SWBDataDetail {
     public LanguageAccessDataDetail(WBAFilterReportBean filterReportBean) {
         super(filterReportBean);
     }
-    
-    /*public URL getJasperResource(){
-        URL urlJR = null;
-        urlJR = this.getClass().getResource("templates/dailyRepLanguages.jasper");
-        return urlJR;
-    }*/
     
     public List getUnknownHits(String topicmap, int type, String item){
         List resumeUnRecHits = new ArrayList();
@@ -234,12 +223,12 @@ public class LanguageAccessDataDetail extends SWBDataDetail {
                 String query = "select * from wbreshits where topicmap=? and idaux not in(select lang from wblanguage where idtm=?) and type=? and (wbdate>=? and wbdate<=?) order by wbdate asc";
                 st = con.prepareStatement(query);
                 st.setString(1, topicmap);
-                st.setInt(2, type);
-                
+                st.setString(2, topicmap);
+                st.setInt(3, type);                
                 date = new GregorianCalendar(year1, month1-1, day1, 0, 0, 0);                    
-                st.setTimestamp(3, new Timestamp(date.getTimeInMillis()));
-                date = new GregorianCalendar(year2, month2-1, day2, 23, 59, 59);
                 st.setTimestamp(4, new Timestamp(date.getTimeInMillis()));
+                date = new GregorianCalendar(year2, month2-1, day2, 23, 59, 59);
+                st.setTimestamp(5, new Timestamp(date.getTimeInMillis()));
                
                 SWBRecHit detail;
                 rs = st.executeQuery();
@@ -266,124 +255,47 @@ public class LanguageAccessDataDetail extends SWBDataDetail {
         return resumeRecHits;
     }
             
-    public List doDataList(String site, String rfilter, int type) throws IncompleteFilterException{
-        List resumeRecHits = null;
-//        Enumeration enum_language = DBCatalogs.getInstance().getLanguages(site).elements();
-//        String languageName = null;
-//        RecLanguage recLanguage;
-//        
-//        if(rfilter!=null){
-//            while(enum_language.hasMoreElements()) {
-//                recLanguage = (RecLanguage)enum_language.nextElement();                
-//                if (rfilter.equalsIgnoreCase(recLanguage.getLang())) {
-//                    languageName = recLanguage.getTitle();
-//                    break;
-//                }
-//            }
-//            resumeRecHits = SWBRecHits.getInstance().getResHitsLog(site,rfilter,type, languageName);
-//        }else{
-//            resumeRecHits = new ArrayList();
-//            while (enum_language.hasMoreElements()) {
-//                recLanguage = (RecLanguage) enum_language.nextElement();
-//                rfilter = recLanguage.getLang();
-//                languageName = recLanguage.getTitle();
-//                resumeRecHits.addAll(SWBRecHits.getInstance().getResHitsLog(site,rfilter,type, languageName));
-//            }
-//        }
-//        if(resumeRecHits != null){
-//            resumeRecHits.addAll(getUnknownHits(site,type, "Desconocido"));
-//        }        
+    public List doDataList(String site, Iterator rfilter, int type) throws IncompleteFilterException {
+        List resumeRecHits = new ArrayList();
+        Language language;        
+        while (rfilter.hasNext()) {
+            language = (Language)rfilter.next();
+            resumeRecHits.addAll(SWBRecHits.getInstance().getResHitsLog(site, language.getId(), type, language.getTitle()));
+        }
+        resumeRecHits.addAll(getUnknownHits(site, type, "Desconocido"));
         return resumeRecHits;
     }
     
-    public List doDataList(String site, String rfilter, int type, int year) throws IncompleteFilterException{
-        List resumeRecHits = null;
-//        Enumeration enum_language = DBCatalogs.getInstance().getLanguages(site).elements();
-//        String languageName = null;
-//        RecLanguage recLanguage;
-//        
-//        if(rfilter!=null){
-//            while (enum_language.hasMoreElements()) {
-//                 recLanguage = (RecLanguage) enum_language.nextElement();
-//                if (rfilter.equalsIgnoreCase(recLanguage.getLang())) {
-//                    languageName = recLanguage.getTitle();
-//                    break;
-//                }
-//            }
-//            resumeRecHits = SWBRecHits.getInstance().getResHitsLog(site,rfilter,type,year, languageName);
-//        }else{
-//            resumeRecHits = new ArrayList();
-//            while (enum_language.hasMoreElements()) {
-//                recLanguage = (RecLanguage) enum_language.nextElement();
-//                rfilter = recLanguage.getLang();
-//                languageName = recLanguage.getTitle();
-//                resumeRecHits.addAll(SWBRecHits.getInstance().getResHitsLog(site,rfilter,type,year, languageName));
-//            }
-//        }
-//        if(resumeRecHits != null){
-//            resumeRecHits.addAll(getUnknownHits(site,type,year, "Desconocido"));
-//        }
+    public List doDataList(String site, Iterator rfilter, int type, int year) throws IncompleteFilterException {
+        List resumeRecHits = new ArrayList();
+        Language language;        
+        while (rfilter.hasNext()) {
+            language = (Language)rfilter.next();
+            resumeRecHits.addAll(SWBRecHits.getInstance().getResHitsLog(site, language.getId(), type, year, language.getTitle()));
+        }
+        resumeRecHits.addAll(getUnknownHits(site, type, year, "Desconocido"));        
         return resumeRecHits;
     }
     
-    public List doDataList(String site, String rfilter, int type, int year, int month, int day) throws IncompleteFilterException{
-        List resumeRecHits = null;
-//        Enumeration enum_language = DBCatalogs.getInstance().getLanguages(site).elements();
-//        String languageName = null;
-//        RecLanguage recLanguage;
-//        
-//        if(rfilter!=null){
-//            while(enum_language.hasMoreElements()) {
-//                recLanguage = (RecLanguage)enum_language.nextElement();                
-//                if (rfilter.equalsIgnoreCase(recLanguage.getLang())) {
-//                    languageName = recLanguage.getTitle();
-//                    break;
-//                }
-//            }
-//            resumeRecHits = SWBRecHits.getInstance().getResHitsLog(site,rfilter,type,year,month,day, languageName);
-//        }else{
-//            resumeRecHits = new ArrayList();
-//            while (enum_language.hasMoreElements()) {
-//                recLanguage = (RecLanguage) enum_language.nextElement();
-//                rfilter = recLanguage.getLang();
-//                languageName = recLanguage.getTitle();
-//                resumeRecHits.addAll(SWBRecHits.getInstance().getResHitsLog(site,rfilter,type,year,month,day, languageName));
-//            }
-//        }
-//        if(resumeRecHits != null){
-//            resumeRecHits.addAll(getUnknownHits(site,type,year,month,day, "Desconocido"));
-//        }
+    public List doDataList(String site, Iterator rfilter, int type, int year, int month, int day) throws IncompleteFilterException {        
+        List resumeRecHits = new ArrayList();
+        Language language;        
+        while (rfilter.hasNext()) {
+            language = (Language)rfilter.next();
+            resumeRecHits.addAll(SWBRecHits.getInstance().getResHitsLog(site, language.getId(), type, year, month, day, language.getTitle()));
+        }
+        resumeRecHits.addAll(getUnknownHits(site, type, year, month, day, "Desconocido"));        
         return resumeRecHits;
     }
     
-    public List doDataList(String site, String rfilter, int type, int yearI, int monthI, int dayI, int yearF, int monthF, int dayF) throws IncompleteFilterException{
-        List resumeRecHits = null;
-//        Enumeration enum_language = DBCatalogs.getInstance().getLanguages(site).elements();
-//        String languageName = null;
-//        RecLanguage recLanguage;
-//        
-//        if(rfilter!=null){
-//            while (enum_language.hasMoreElements()) {
-//                recLanguage = (RecLanguage) enum_language.nextElement();
-//                if (rfilter.equalsIgnoreCase(recLanguage.getLang())) {
-//                    languageName = recLanguage.getTitle();
-//                    break;
-//                }
-//            }
-//            resumeRecHits = SWBRecHits.getInstance().getResHitsLog(site,rfilter,type,yearI,monthI,dayI,yearF,monthF,dayF, languageName);
-//        }else{
-//            resumeRecHits = new ArrayList();
-//            while (enum_language.hasMoreElements()) {
-//                recLanguage = (RecLanguage) enum_language.nextElement();
-//                rfilter = recLanguage.getLang();
-//                languageName = recLanguage.getTitle();
-//                resumeRecHits.addAll(SWBRecHits.getInstance().getResHitsLog(site,rfilter,type,yearI,monthI,dayI,yearF,monthF,dayF, languageName));
-//            }
-//        }
-//        
-//        if(resumeRecHits != null){
-//            resumeRecHits.addAll(getUnknownHits(site,type,yearI,monthI,dayI,yearF,monthF,dayF, "Desconocido"));
-//        }
-        return resumeRecHits;        
+    public List doDataList(String site, Iterator rfilter, int type, int yearI, int monthI, int dayI, int yearF, int monthF, int dayF) throws IncompleteFilterException {
+        List resumeRecHits = new ArrayList();
+        Language language;        
+        while (rfilter.hasNext()) {
+            language = (Language)rfilter.next();
+            resumeRecHits.addAll(SWBRecHits.getInstance().getResHitsLog(site, language.getId(), type, yearI, monthI, dayI, yearF, monthF, dayF, language.getTitle()));
+        }
+        resumeRecHits.addAll(getUnknownHits(site, type, yearI, monthI, dayI, yearF, monthF, dayF, "Desconocido"));        
+        return resumeRecHits;
     }
 }

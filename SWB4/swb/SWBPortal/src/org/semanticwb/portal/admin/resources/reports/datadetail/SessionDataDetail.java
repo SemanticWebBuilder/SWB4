@@ -2,9 +2,11 @@
 package org.semanticwb.portal.admin.resources.reports.datadetail;
 
 import java.util.List;
+import java.util.Iterator;
+import java.util.ArrayList;
 
-import org.semanticwb.portal.admin.resources.reports.beans.*;
 import org.semanticwb.portal.db.SWBRecHits;
+import org.semanticwb.portal.admin.resources.reports.beans.*;
 
 public class SessionDataDetail extends SWBDataDetail{
 
@@ -12,29 +14,35 @@ public class SessionDataDetail extends SWBDataDetail{
         super(filterReportBean);
     }
         
-    /*public URL getJasperResource(){
-        URL urlJR = null;        
-        urlJR = this.getClass().getResource("templates/dailyRepSessions.jasper");
-        return urlJR;
-    }*/
-        
-    public List doDataList(String repository, String rfilter, int type) throws IncompleteFilterException{
-        List resumeRecHits = SWBRecHits.getInstance().getResHitsLog(repository,rfilter,type);
+    public List doDataList(String repository, Iterator rfilter, int type) throws IncompleteFilterException {
+        List resumeRecHits = new ArrayList();
+        if(rfilter.hasNext()) {
+            resumeRecHits = SWBRecHits.getInstance().getResHitsLog(repository, (String)rfilter.next(), type);
+        }
         return resumeRecHits;
     }
     
-    public List doDataList(String repository, String rfilter, int type, int year) throws IncompleteFilterException {
-        List resumeRecHits = SWBRecHits.getInstance().getResHitsLog(repository, rfilter, type, year);
+    public List doDataList(String repository, Iterator rfilter, int type, int year) throws IncompleteFilterException {
+        List resumeRecHits = new ArrayList();
+        if(rfilter.hasNext()) {
+            resumeRecHits = SWBRecHits.getInstance().getResHitsLog(repository, (String)rfilter.next(), type, year);
+        }
         return resumeRecHits;
     }
     
-    public List doDataList(String repository, String rfilter, int type, int year, int month, int day) throws IncompleteFilterException{
-        List resumeRecHits = SWBRecHits.getInstance().getResHitsLog(repository,rfilter,type,year,month,day);
+    public List doDataList(String repository, Iterator rfilter, int type, int year, int month, int day) throws IncompleteFilterException {
+        List resumeRecHits = new ArrayList();
+        if(rfilter.hasNext()) {
+            resumeRecHits = SWBRecHits.getInstance().getResHitsLog(repository, (String)rfilter.next(), type, year, month, day);
+        }
         return resumeRecHits;
     }
     
-    public List doDataList(String repository, String rfilter, int type, int yearI, int monthI, int dayI, int yearF, int monthF, int dayF) throws IncompleteFilterException{
-        List resumeRecHits = SWBRecHits.getInstance().getResHitsLog(repository,rfilter,type,yearI,monthI,dayI,yearF,monthF,dayF);
+    public List doDataList(String repository, Iterator rfilter, int type, int yearI, int monthI, int dayI, int yearF, int monthF, int dayF) throws IncompleteFilterException {
+        List resumeRecHits = new ArrayList();
+        if(rfilter.hasNext()) {
+            resumeRecHits = SWBRecHits.getInstance().getResHitsLog(repository, (String)rfilter.next(), type, yearI, monthI, dayI, yearF, monthF, dayF);
+        }
         return resumeRecHits;
     }
 }
