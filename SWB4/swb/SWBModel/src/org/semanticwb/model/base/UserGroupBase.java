@@ -60,6 +60,27 @@ public class UserGroupBase extends org.semanticwb.model.SWBClass implements org.
         return (getUserGroup(id, model)!=null);
     }
 
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupable> listUsers()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupable>(org.semanticwb.model.UserGroupable.class, getSemanticObject().listObjectProperties(swb_hasGroupedUser));
+    }
+
+    public boolean hasUser(org.semanticwb.model.UserGroupable usergroupable)
+    {
+        if(usergroupable==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasGroupedUser,usergroupable.getSemanticObject());
+    }
+
+    public org.semanticwb.model.UserGroupable getUser()
+    {
+         org.semanticwb.model.UserGroupable ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasGroupedUser);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.UserGroupable)obj.getSemanticClass().newGenericInstance(obj);
+         }
+         return ret;
+    }
+
     public java.util.Date getCreated()
     {
         return getSemanticObject().getDateProperty(swb_created);
