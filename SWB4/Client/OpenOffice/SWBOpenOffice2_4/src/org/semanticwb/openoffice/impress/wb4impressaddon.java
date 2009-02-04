@@ -1,5 +1,6 @@
 package org.semanticwb.openoffice.impress;
 
+import com.sun.star.frame.FeatureStateEvent;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.lib.uno.helper.Factory;
@@ -288,7 +289,17 @@ public final class wb4impressaddon extends WeakBase
     public void addStatusListener(com.sun.star.frame.XStatusListener xControl,
             com.sun.star.util.URL aURL)
     {
-        // add your own code here
+        FeatureStateEvent aState = new FeatureStateEvent();
+        aState.FeatureURL = aURL;
+        if(queryDispatch(aURL,"",0)==null)
+        {
+            aState.IsEnabled = false;
+        }
+        else
+        {
+            aState.IsEnabled = true;
+        }
+        xControl.statusChanged(aState);
     }
 
     public void removeStatusListener(com.sun.star.frame.XStatusListener xControl,
