@@ -876,7 +876,7 @@ public class TemplateImp extends Template
                                         continue;
                                     }                                    
 */                                    
-                                    if (!(!first && wbres.getResourceBase().getPriority() <= 1))
+                                    if (!(!first && wbres.getResourceBase().getPriority() <= 0))
                                     {
                                         String resCont=(String)args.get("getcontent");
                                         if(resCont!=null)
@@ -1188,8 +1188,8 @@ public class TemplateImp extends Template
                 while (it.hasNext())
                 {
                     SWBResource wbres = (SWBResource) it.next();
-                    //System.out.println("tpl id:"+wbres.getResourceBase().getId()+" prt:"+wbres.getResourceBase().getPriority()+wbres.getResourceBase().getRandPriority());
-                    if (!(!first && wbres.getResourceBase().getPriority() <= 1))
+                    //System.out.println("tpl id:"+wbres.getResourceBase().getId()+" prt:"+wbres.getResourceBase().getPriority()+" "+wbres.getResourceBase().getRandPriority());
+                    if (!(!first && wbres.getResourceBase().getPriority() <= 0))
                     {
                         //System.out.println("tpl ok");
                         //out.print(SWBResourceMgr.getInstance().getResourceTraceMgr().getHtmlTraced(wbres, request, response, user, topic, args));

@@ -350,7 +350,7 @@ public class RemoteWebApp extends GenericAdmResource
                             while (it.hasNext())
                             {
                                 SWBResource wbres = (SWBResource) it.next();
-                                if (wbres != this && wbres.getResourceBase().getPriority() > 1)
+                                if (wbres != this && wbres.getResourceBase().getPriority() > 0)
                                 {
                                     String rid=wbres.getResourceBase().getId();
                                     String mdo=null;
