@@ -1,5 +1,10 @@
 package org.semanticwb.openoffice.writer;
 
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.frame.FeatureStateEvent;
+import com.sun.star.frame.XDispatchHelper;
+import com.sun.star.frame.XLayoutManager;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.lib.uno.helper.Factory;
@@ -20,12 +25,35 @@ public final class wb4writeraddon extends WeakBase
 
     private final XComponentContext m_xContext;
     private com.sun.star.frame.XFrame m_xFrame;
+    private XLayoutManager xLayoutManager = null;
     private static final String m_implementationName = wb4writeraddon.class.getName();
     private static final String[] m_serviceNames =
     {
         "com.sun.star.frame.ProtocolHandler"
     };
     //private EventListener listener=new EventListener();
+
+    /*protected XLayoutManager getLayoutManager()
+    {
+
+    XPropertySet xps = (XPropertySet)
+    UnoRuntime.queryInterface(XPropertySet.class, this.m_xFrame);
+
+    try
+    {
+    this.xLayoutManager = (XLayoutManager)
+    UnoRuntime.queryInterface(XLayoutManager.class,
+    xps.getPropertyValue("LayoutManager"));
+
+
+    }
+    catch (com.sun.star.uno.Exception e)
+    {
+    System.out.println("Cannot get Layout Manager:");
+    System.out.println(e.getLocalizedMessage());
+    }
+    return this.xLayoutManager;
+    }*/
     public wb4writeraddon(XComponentContext context)
     {
 
@@ -94,9 +122,10 @@ public final class wb4writeraddon extends WeakBase
             String sTargetFrameName,
             int iSearchFlags)
     {
+
         if (aURL.Protocol.compareTo("org.semanticwb.openoffice.writer.wb4writeraddon:") == 0)
         {
-            
+
             try
             {
                 OfficeDocument document = new WB4Writer(this.m_xContext);
@@ -110,7 +139,7 @@ public final class wb4writeraddon extends WeakBase
                 }
                 if (aURL.Path.compareTo("publish") == 0)
                 {
-                    if(document.isPublicated())
+                    if (document.isPublicated())
                     {
                         return this;
                     }
@@ -120,8 +149,8 @@ public final class wb4writeraddon extends WeakBase
                     }
                 }
                 if (aURL.Path.compareTo("delete") == 0)
-                {                    
-                    if(document.isPublicated())
+                {
+                    if (document.isPublicated())
                     {
                         return this;
                     }
@@ -131,8 +160,8 @@ public final class wb4writeraddon extends WeakBase
                     }
                 }
                 if (aURL.Path.compareTo("view") == 0)
-                {                    
-                    if(document.isPublicated())
+                {
+                    if (document.isPublicated())
                     {
                         return this;
                     }
@@ -143,8 +172,8 @@ public final class wb4writeraddon extends WeakBase
                 }
                 if (aURL.Path.compareTo("information") == 0)
                 {
-                    
-                    if(document.isPublicated())
+
+                    if (document.isPublicated())
                     {
                         return this;
                     }
@@ -158,8 +187,8 @@ public final class wb4writeraddon extends WeakBase
                     return this;
                 }
                 if (aURL.Path.compareTo("deleteAssociation") == 0)
-                {                    
-                    if(document.isPublicated())
+                {
+                    if (document.isPublicated())
                     {
                         return this;
                     }
@@ -228,6 +257,7 @@ public final class wb4writeraddon extends WeakBase
         }
     }
     // com.sun.star.frame.XDispatch:
+
     public void dispatch(com.sun.star.util.URL aURL,
             com.sun.star.beans.PropertyValue[] aArguments)
     {
@@ -235,17 +265,34 @@ public final class wb4writeraddon extends WeakBase
         {
             if (aURL.Protocol.compareTo("org.semanticwb.openoffice.writer.wb4writeraddon:") == 0)
             {
+
                 OfficeDocument document = new WB4Writer(this.m_xContext);
                 if (aURL.Path.compareTo("save") == 0)
-                {   
+                {
                     document.saveToSite();
+                    /*Object oDispatchHelper = null;
+
+                    XMultiServiceFactory xMultiServiceManager =
+                            (XMultiServiceFactory) UnoRuntime.queryInterface(
+                            XMultiServiceFactory.class, this.m_xContext.getServiceManager());
+                    oDispatchHelper =
+                            xMultiServiceManager.createInstance("com.sun.star.frame.DispatchHelper");
+                    XDispatchHelper xDispatchHelper =
+                            (XDispatchHelper) UnoRuntime.queryInterface(XDispatchHelper.class,
+                            oDispatchHelper);
+
+                    // Executing the commandURL
+                    PropertyValue[] saveProperties=new PropertyValue[0];
+                   xDispatchHelper.executeDispatch(this,"org.semanticwb.openoffice.writer.wb4writeraddon:publish","_self",0,saveProperties);*/
+
+
 
                     return;
                 }
                 if (aURL.Path.compareTo("publish") == 0)
                 {
                     document.publish();
-
+                    this.m_xFrame.contextChanged();
                     return;
                 }
                 if (aURL.Path.compareTo("open") == 0)
@@ -255,7 +302,7 @@ public final class wb4writeraddon extends WeakBase
                     return;
                 }
                 if (aURL.Path.compareTo("delete") == 0)
-                {   
+                {
                     document.delete();
                     return;
                 }
@@ -314,7 +361,7 @@ public final class wb4writeraddon extends WeakBase
         }
         catch (Exception e)
         {
-            ErrorDialog errDialog=new ErrorDialog(new JFrame(),true,e);
+            ErrorDialog errDialog = new ErrorDialog(new JFrame(), true, e);
             errDialog.setVisible(true);
             return;
         }
@@ -323,7 +370,17 @@ public final class wb4writeraddon extends WeakBase
     public void addStatusListener(com.sun.star.frame.XStatusListener xControl,
             com.sun.star.util.URL aURL)
     {
-        // add your own code here
+        FeatureStateEvent aState = new FeatureStateEvent();        
+        aState.FeatureURL = aURL;
+        if(queryDispatch(aURL,"",0)==null)
+        {
+            aState.IsEnabled = false;
+        }
+        else
+        {
+            aState.IsEnabled = true;
+        }
+        xControl.statusChanged(aState);        
     }
 
     public void removeStatusListener(com.sun.star.frame.XStatusListener xControl,
