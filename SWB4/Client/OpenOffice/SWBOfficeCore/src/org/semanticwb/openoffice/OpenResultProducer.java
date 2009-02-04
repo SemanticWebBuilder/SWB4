@@ -46,43 +46,23 @@ public class OpenResultProducer implements WizardResultProducer
     class BackgroundResultCreator extends DeferredWizardResult
     {
 
-        private void openFileDirect(File dir, String fileName, XmlProxy proxy, VersionInfo versioninfo, Map wizardData, ResultProgressHandle progress) throws FileNotFoundException,IOException,WBException
-        {
-            File contentfile = new File(dir.getAbsolutePath() + "/" + fileName);
-            for (Part part : proxy.getResponseParts())
-            {
-                FileOutputStream out = new FileOutputStream(contentfile);
-                out.write(part.getContent());
-                out.close();
-            }
-            OfficeDocument document = application.open(contentfile);
-            HashMap<String, String> properties = new HashMap<String, String>();
-            properties.put(OfficeDocument.CONTENT_ID_NAME, versioninfo.contentId);
-            properties.put(OfficeDocument.WORKSPACE_ID_NAME, wizardData.get(Search.WORKSPACE).toString());
-            document.saveCustomProperties(properties);
-            progress.setProgress("Documento completo", 2, 3);
-        }
+        public File contentfile;
+       
 
         public void start(Map wizardData, ResultProgressHandle progress)
         {
             assert !EventQueue.isDispatchThread();
             try
-            {
-                //progress.setProgress("Descargando documento", 0, 3);                
-                //progress.setProgress("Descargando documento...", 1, 5);
+            {                
                 IOfficeApplication openOfficeDocument = OfficeApplication.getOfficeApplicationProxy();
-                progress.setProgress("Descargando Documento...", 1, 5);
+                progress.setProgress("Descargando Documento...", 1, 4);
                 String repositoryName = wizardData.get(Search.WORKSPACE).toString();
                 VersionInfo versioninfo = (VersionInfo) wizardData.get(SelectVersionToOpen.VERSION);
                 String fileName = openOfficeDocument.openContent(repositoryName, versioninfo);
                 XmlProxy proxy = (XmlProxy) openOfficeDocument;
                 File dir = (File) wizardData.get(SelectDirectory.DIRECTORY);
-                File contentfile = new File(dir.getAbsolutePath() + "/" + fileName);
-                if(contentfile.exists())
-                {
-                    
-                }                
-                String guid = java.util.UUID.randomUUID().toString().replace('-', '_');                
+                contentfile = new File(dir.getAbsolutePath() + "/" + fileName);
+                String guid = java.util.UUID.randomUUID().toString().replace('-', '_');
                 File zipFile = new File(dir.getAbsolutePath() + "/" + guid + ".zip");
                 for (Part part : proxy.getResponseParts())
                 {
@@ -93,22 +73,22 @@ public class OpenResultProducer implements WizardResultProducer
                 // unzip the content
                 try
                 {
-                    progress.setProgress("Descomprimiendo archivo...", 2, 5);
+                    progress.setProgress("Descomprimiendo archivo...", 2, 4);
                     ZipFile zip = new ZipFile(zipFile);
                     ZipEntry entry = zip.getEntry(fileName);
                     if (entry != null)
-                    {                        
+                    {
                         contentfile.getParentFile().mkdirs();
-                        if(contentfile.exists())
+                        if (contentfile.exists())
                         {
-                            int res=JOptionPane.showConfirmDialog(null,"¡Existe un documento con el nombre "+ fileName +"\r\n¿Desea sobre escribir el documento?","Apertura de contenido",JOptionPane.YES_NO_OPTION);
-                            if(res==JOptionPane.NO_OPTION)
+                            int res = JOptionPane.showConfirmDialog(null, "¡Existe un documento con el nombre " + fileName + "\r\n¿Desea sobre escribir el documento?", "Apertura de contenido", JOptionPane.YES_NO_OPTION);
+                            if (res == JOptionPane.NO_OPTION)
                             {
                                 return;
                             }
-                            if(!contentfile.delete())
+                            if (!contentfile.delete())
                             {
-                                JOptionPane.showMessageDialog(null,"¡Existe un documento con el mismo nombre\r\nNo se puede borrar el documento para reemplazarlo por el contenido descargado!","Apertura de contenido",JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "¡Existe un documento con el mismo nombre\r\nNo se puede borrar el documento para reemplazarlo por el contenido descargado!", "Apertura de contenido", JOptionPane.ERROR_MESSAGE);
                                 return;
                             }
                         }
@@ -124,30 +104,34 @@ public class OpenResultProducer implements WizardResultProducer
                         in.close();
                         out.close();
                         zip.close();
-                        progress.setProgress("Abriendo archivo "+contentfile.getPath()+"...", 3, 5);
-                        JOptionPane.showMessageDialog(null, contentfile.getPath());
+                        progress.setProgress("Abriendo archivo " + contentfile.getPath() + "...", 3, 4);
+                        progress.finished(null);
                         OfficeDocument document = application.open(contentfile);
-                        HashMap<String, String> properties = new HashMap<String, String>();
+                        progress.setProgress("Documento abierto " + contentfile.getPath() + "...", 4, 4);
+                        HashMap<String, String> properties = new HashMap<String, String>();                        
                         properties.put(OfficeDocument.CONTENT_ID_NAME, versioninfo.contentId);
                         properties.put(OfficeDocument.WORKSPACE_ID_NAME, wizardData.get(Search.WORKSPACE).toString());
-                        progress.setProgress("Salvando archivo...", 4, 5);
-                        document.saveCustomProperties(properties);                        
-                        progress.setProgress("Documento completo", 5, 5);
+                        document.saveCustomProperties(properties);
+                        
                     }
                 }
                 catch (ZipException ioe)
                 {                    
-                    progress.failed(ioe.getMessage()+"\r\n"+StackTraceUtil.getStackTrace(ioe), false);
+                    progress.failed(ioe.getMessage() + "\r\n" + StackTraceUtil.getStackTrace(ioe), false);
                 }
                 catch (IOException ioe)
-                {
-                    progress.failed(ioe.getMessage()+"\r\n"+StackTraceUtil.getStackTrace(ioe), false);
+                {                    
+                    progress.failed(ioe.getMessage() + "\r\n" + StackTraceUtil.getStackTrace(ioe), false);
+                }
+                catch (Exception ioe)
+                {                    
+                    progress.failed(ioe.getMessage() + "\r\n" + StackTraceUtil.getStackTrace(ioe), false);
                 }
                 finally
                 {
                     zipFile.delete();
                 }
-                progress.finished(null);
+
             }
             catch (WBOfficeException e)
             {
@@ -178,6 +162,7 @@ public class OpenResultProducer implements WizardResultProducer
 
     public Object finish(Map map) throws WizardException
     {
-        return new BackgroundResultCreator();
+        BackgroundResultCreator res = new BackgroundResultCreator();
+        return res;
     }
 }
