@@ -728,7 +728,7 @@ public class SWBASOPropRefEditor extends GenericResource {
             }
 
             SemanticObject obusrRep = null;
-            if (clsprop.equals(Role.swb_Role)) {
+            if (clsprop.equals(Role.swb_Role)) { //||clsprop.equals(UserGroup.swb_UserGroupable)
                 GenericObject go = obj.getModel().getModelObject().createGenericInstance();
                 if (go instanceof WebSite) {
                     obusrRep = ((WebSite) go).getUserRepository().getSemanticObject();
@@ -752,7 +752,7 @@ public class SWBASOPropRefEditor extends GenericResource {
             }
 
             SWBResourceURL urladd = paramRequest.getActionUrl();
-            if (idp.endsWith("hasRole") && clsprop.equals(Role.swb_Role)) {
+            if ((idp.endsWith("hasRole") && clsprop.equals(Role.swb_Role))||idp.endsWith("hasUserGroup")&& clsprop.equals(UserGroup.swb_UserGroupable)) {
                 urladd.setAction("choose");
             } else {
                 urladd.setAction("new");
