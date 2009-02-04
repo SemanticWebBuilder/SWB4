@@ -758,6 +758,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             PortletInfo.active = portlet.isActive();
             PortletInfo.description = portlet.getDescription();
             PortletInfo.version = version;
+            PortletInfo.title=title;
             return PortletInfo;
 
         }
@@ -977,7 +978,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     public void activatePortlet(PortletInfo info, boolean active) throws Exception
     {
         WebSite site = SWBContext.getWebSite(info.siteId);
-        Portlet portlet=site.getPortlet(info.id);
+        Portlet portlet=SWBContext.getWebSite(info.siteId).getPortlet(info.id);
         portlet.setActive(active);
     }
 }
