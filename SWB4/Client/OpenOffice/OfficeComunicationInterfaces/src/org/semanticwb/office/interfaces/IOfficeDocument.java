@@ -62,5 +62,8 @@ public interface IOfficeDocument
     
     @XmlRpcMethod(methodName="OfficeDocument.deleteContentOfPage")
     public void deleteContentOfPage(PortletInfo info) throws Exception;
+
+     @XmlRpcMethod(methodName="OfficeDocument.activatePortlet")
+    public void activatePortlet(PortletInfo info,boolean active) throws Exception;
 }
 
