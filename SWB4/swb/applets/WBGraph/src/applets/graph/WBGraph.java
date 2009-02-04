@@ -173,6 +173,8 @@ public class WBGraph extends java.applet.Applet implements Runnable
     DecimalFormat formatterInt = new DecimalFormat("0");
     DecimalFormat formatterFloat = new DecimalFormat("0");
     
+    Timer timer=null;
+    
     /** Initializes the applet JeiBar */
     public void init()
     {
@@ -196,11 +198,51 @@ public class WBGraph extends java.applet.Applet implements Runnable
         f2=new Font("Arial", Font.PLAIN,9);
         
         composite=AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2f);        
+
+        //antes del getParams y cgi
+        String sreload=getParameter("reload");
+        cgi=getParameter("cgi");
         
         getParams();
         if(graphtype==PIE)
             Grabber();
         render();
+        
+        //*********** reload ********************************
+        if(sreload!=null && sreload.trim().length()>0)
+        {
+            try
+            {
+                int reload=Integer.parseInt(sreload);
+
+                TimerTask t=new TimerTask()
+                {
+                    public void run()
+                    {
+                        reload();
+                    }
+                };
+                timer = new Timer();
+                timer.schedule(t, reload*1000, reload*1000);     
+                //System.out.println("timer:"+reload);
+                
+            }catch(Exception e){e.printStackTrace();}
+        }        
+    }
+    
+    public void reload()
+    {
+        //System.out.println("reload");
+        if(!drag && drag_x1==0 && drag_x2==0)
+        {
+            getParams();
+            if(graphtype==PIE)
+                Grabber();
+            pad.setColor(Color.white);
+            pad.fillRect(0,0,size().width,Maxy);
+            render();
+            repaint();
+        }
     }
     
     public Graphics2D createGraphics2D(BufferedImage buf) {
@@ -266,8 +308,6 @@ public class WBGraph extends java.applet.Applet implements Runnable
     
     public void getParams()
     {
-        cgi=getParameter("cgi");
-        
         if(cgi!=null)
         {
             try
@@ -276,7 +316,6 @@ public class WBGraph extends java.applet.Applet implements Runnable
                 prop.load(new URL(getDocumentBase(),cgi).openStream());
             }catch(Exception e){e.printStackTrace();}
         }
-        
         setZoomData(drag_x1,drag_x2);
     }
     
@@ -465,28 +504,28 @@ public class WBGraph extends java.applet.Applet implements Runnable
                 xneg=0;
             }
         }
-        System.out.println("*********************************************");
-        System.out.println("md:"+md);
-        System.out.println("mind:"+mind);
-        System.out.println("sd:"+sd);
-        System.out.println("mbs:"+mbs);
-        System.out.println("minbs:"+minbs);
-        System.out.println("mindif:"+mindif);
-        System.out.println("xneg:"+xneg);
+        //System.out.println("*********************************************");
+        //System.out.println("md:"+md);
+        //System.out.println("mind:"+mind);
+        //System.out.println("sd:"+sd);
+        //System.out.println("mbs:"+mbs);
+        //System.out.println("minbs:"+minbs);
+        //System.out.println("mindif:"+mindif);
+        //System.out.println("xneg:"+xneg);
         
         ma=(Maxy-2*sy);
         yrel=ma/(mbs-minbs);
         
         
-        System.out.println("ma:"+ma);
+        //System.out.println("ma:"+ma);
         
         ycero=(int)(Maxy-sy-(yrel*sd)*(-xneg));
         
         ycerod=ycero;
         if(ycerod>Maxy-sy)ycerod=Maxy-sy;
 
-        System.out.println("ycero:"+ycero);
-        System.out.println("ycerod:"+ycerod);
+        //System.out.println("ycero:"+ycero);
+        //System.out.println("ycerod:"+ycerod);
         
         sx=pad.getFontMetrics(f2).stringWidth(formatNum(mbs))+7;
         if(allpercent)sx+=10;
