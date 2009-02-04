@@ -10,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
@@ -85,7 +86,7 @@ public class SWBImportWebSite extends GenericResource {
         File file = new File(SWBPlatform.getWorkPath() + "/sitetemplates/");
         File[] files = file.listFiles();
         strbf.append("<div class=\"swbform\">");
-        strbf.append("<table width=\"100%\">");
+        strbf.append("<table>");
         strbf.append("<form>");
         strbf.append("<tr>");
         strbf.append("<td colspan=\"2\">");
@@ -124,15 +125,16 @@ public class SWBImportWebSite extends GenericResource {
         try {
             //Substituir x ruta dinamica
             String path = SWBPlatform.getWorkPath() + "/";
+            String models = path + "models/";
             String zipdirectory = path + "sitetemplates/";
             File zip = new File(zipdirectory + name + ".zip");
-            java.io.File extractTo = new File(path + newName);
+            java.io.File extractTo = new File(models + newName);
             //Descomprimir zip
             org.semanticwb.SWBUtils.IO.unzip(zip, extractTo);
 
-            FileInputStream frdfio = new FileInputStream(path + newName + "/" + name + ".rdf");
+            FileInputStream frdfio = new FileInputStream(models + newName + "/" + name + ".rdf");
             String rdfcontent = SWBUtils.IO.readInputStream(frdfio);
-            FileInputStream fxmlio = new FileInputStream(path + newName + "/siteInfo.xml");
+            FileInputStream fxmlio = new FileInputStream(models + newName + "/siteInfo.xml");
             Document dom = SWBUtils.XML.xmlToDom(fxmlio);
             String oldName = null;
             String oldNamespace = null;
@@ -156,20 +158,15 @@ public class SWBImportWebSite extends GenericResource {
             //rdfcontent = SWBUtils.TEXT.replaceAllIgnoreCase(rdfcontent, oldName, newName); //Reemplazar nombre anterior x nuevo nombre
             rdfcontent = parseRdfContent(rdfcontent, oldName, newName, newNS);
 
-            FileOutputStream out = new FileOutputStream(path + newName + "/" + name + ".rdf");
-            out.write(rdfcontent.getBytes());
-            out.flush();
-            out.close();
-
             //Mediante inputStream creado generar sitio
             InputStream io = SWBUtils.IO.getStreamFromString(rdfcontent);
-            SemanticModel model=SWBPlatform.getSemanticMgr().createModelByRDF(newName, newNS, io);
+            SWBPlatform.getSemanticMgr().createModelByRDF(newName, newNS, io);
             WebSite website=SWBContext.getWebSite(newName);
             website.setDescription(olDescription);
 
             //Eliminar archivo rdf y archivo xml
-            //new File(path + newName + "/" + name + ".rdf").delete();
-            new File(path + newName + "/siteInfo.xml").delete();
+            new File(models + newName + "/" + name + ".rdf").delete();
+            new File(models + newName + "/siteInfo.xml").delete();
             return true;
         } catch (Exception e) {
             log.debug(e);
@@ -206,11 +203,8 @@ public class SWBImportWebSite extends GenericResource {
 
     private void getStep1(PrintWriter out, SWBResourceURL url, SWBParamRequest paramRequest) {
         try {
-            out.println("<div class=\"swbform\">");
-            out.println("<table width=\"100%\">");
-            out.println("<form name=\"frm1\" action=\"" + url.toString() + "\" method=\"post\">");
-            out.append("<tr>");
-            out.append("<td colspan=\"2\">");
+            
+            out.println("<form class=\"swbform\" name=\"frmImport1\" action=\"" + url.toString() + "\" dojoType=\"dijit.form.Form\" onSubmit=\"submitForm('frmImport1');return false;\" method=\"post\">");
             out.println("<fieldset>");
             out.println("<table>");
             out.append("<tr>");
@@ -246,19 +240,17 @@ public class SWBImportWebSite extends GenericResource {
             out.println("<option value=\"2\">" + paramRequest.getLocaleLogString("msgwstype2") + "</option>");
             out.println("</select>");
             out.println("</td></tr>");
+            out.println("<tr><td><button dojoType='dijit.form.Button' type=\"submit\">Guardar</button></td>");
+            out.println("<td><button dojoType='dijit.form.Button' onclick=\"dijit.byId('swbDialog').hide();\">Cancelar</button>");
+            out.println("</td></tr>");
             out.println("</table>");
             out.println("</fieldset>");
-            out.println("</td></tr>");
-            out.append("<tr><td colspan=\"2\">");
-            out.println("<fieldset>");
-            out.println("<table>");
-            out.println("<tr><td><input type=\"submit\" value=\"" + paramRequest.getLocaleLogString("msgsend") + "\"></td></tr>");
-            out.println("</table>");
-            out.println("</fieldset>");
-            out.println("</td></tr>");
             out.println("</form>");
-            out.println("</table>");
-            out.println("</DIV>");
+           
+            //out.println("</div>");
+
+            //out.println("<form id=\"http://www.semanticwebbuilder.org/swb4/ontology#WebPage/formJorge\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\"/swb/swbadmin/jsp/SemObjectEditor.jsp\" onSubmit=\"submitForm('http://www.semanticwebbuilder.org/swb4/ontology#WebPage/formJorge');return false;\" method=\"POST\">    <input type=\"hidden\" name=\"scls\" value=\"http://www.semanticwebbuilder.org/swb4/ontology#WebPage\">    <input type=\"hidden\" name=\"smode\" value=\"create\">    <input type=\"hidden\" name=\"sref\" value=\"http://www.semanticwb.org/SWBAdmin#WebPage:home\">	<fieldset>	    <table><tr><td align=\"right\"><label&nbsp;for=\"title\">Titulo&nbsp;<em>*</em></label></td><td><input _id=\"title\" name=\"title\" size=\"30\" value=\"\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura Titulo.\" invalidMessage=\"Titulo es requerido.\" onkeyup=\"dojo.byId('swb_create_id').value=replaceChars4Id(this.textbox.value);dijit.byId('swb_create_id').validate()\" trim=\"true\"/></td></tr>	    <tr><td align=\"right\">                <label>Identificador <em>*</em></label>        </td><td>                <input type=\"text\" id=\"swb_create_id\" name=\"id\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura Identificador.\" isValid=\"return canCreateSemanticObject('SWBAdmin','WebPage',this.textbox.value);\" invalidMessage=\"Identificador invalido.\" trim=\"true\"/>	    </td></tr>        <tr><td align=\"center\" colspan=\"2\">            <button dojoType='dijit.form.Button' type=\"submit\">Guardar</button>            <button dojoType='dijit.form.Button' onclick=\"dijit.byId('swbDialog').hide();\">Cancelar</button>	    </td></tr>	    </table>	</fieldset></form>");
+
         } catch (Exception e) {
             log.debug(e);
         }
