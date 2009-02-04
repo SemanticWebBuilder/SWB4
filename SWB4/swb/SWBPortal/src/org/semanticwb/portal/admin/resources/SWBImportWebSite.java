@@ -39,6 +39,15 @@ public class SWBImportWebSite extends GenericResource {
 
     private static Logger log = SWBUtils.getLogger(SWBImportWebSite.class);
 
+//    @Override
+//    public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+//        if (paramRequest.getMode().equals("editSite")) {
+//            doEditWebSite(request, response, paramRequest);
+//        }else {
+//            super.processRequest(request, response, paramRequest);
+//        }
+//    }
+
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
@@ -51,7 +60,7 @@ public class SWBImportWebSite extends GenericResource {
                 site.setCreated(new java.util.Date(System.currentTimeMillis()));
                 site.setTitle(request.getParameter("wstitle"));
                 site.setHomePage(site.createWebPage("home"));
-                //Edición de website
+
                 SemanticObject semObject = SemanticObject.createSemanticObject(site.getURI());
                 SWBFormMgr mgr = new SWBFormMgr(semObject, null, SWBFormMgr.MODE_EDIT);
                 mgr.setLang(paramRequest.getUser().getLanguage());
@@ -207,6 +216,7 @@ public class SWBImportWebSite extends GenericResource {
         try {
             
             out.println("<form class=\"swbform\" name=\"frmImport1\" action=\"" + url.toString() + "\" dojoType=\"dijit.form.Form\" onSubmit=\"submitForm('frmImport1');return false;\" method=\"post\">");
+            //out.println("<form  class=\"swbform\" name=\"frmImport1\"  method=\"post\">");
             out.println("<fieldset>");
             out.println("<table>");
             out.append("<tr>");
@@ -242,8 +252,8 @@ public class SWBImportWebSite extends GenericResource {
             out.println("<option value=\"2\">" + paramRequest.getLocaleLogString("msgwstype2") + "</option>");
             out.println("</select>");
             out.println("</td></tr>");
-            out.println("<tr><td><button dojoType='dijit.form.Button' type=\"submit\">Guardar</button></td>");
-            out.println("<td><button dojoType='dijit.form.Button' onclick=\"dijit.byId('swbDialog').hide();\">Cancelar</button>");
+            out.println("<tr><td><input type=\"button\" onclick=\"send(this.form)\" value=\"Enviar\"></td>");
+            //out.println("<td><button dojoType='dijit.form.Button' onclick=\"send(this.form)\">Enviar</button>");
             out.println("</td></tr>");
             out.println("</table>");
             out.println("</fieldset>");
@@ -251,7 +261,16 @@ public class SWBImportWebSite extends GenericResource {
            
             //out.println("</div>");
 
-            //out.println("<form id=\"http://www.semanticwebbuilder.org/swb4/ontology#WebPage/formJorge\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\"/swb/swbadmin/jsp/SemObjectEditor.jsp\" onSubmit=\"submitForm('http://www.semanticwebbuilder.org/swb4/ontology#WebPage/formJorge');return false;\" method=\"POST\">    <input type=\"hidden\" name=\"scls\" value=\"http://www.semanticwebbuilder.org/swb4/ontology#WebPage\">    <input type=\"hidden\" name=\"smode\" value=\"create\">    <input type=\"hidden\" name=\"sref\" value=\"http://www.semanticwb.org/SWBAdmin#WebPage:home\">	<fieldset>	    <table><tr><td align=\"right\"><label&nbsp;for=\"title\">Titulo&nbsp;<em>*</em></label></td><td><input _id=\"title\" name=\"title\" size=\"30\" value=\"\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura Titulo.\" invalidMessage=\"Titulo es requerido.\" onkeyup=\"dojo.byId('swb_create_id').value=replaceChars4Id(this.textbox.value);dijit.byId('swb_create_id').validate()\" trim=\"true\"/></td></tr>	    <tr><td align=\"right\">                <label>Identificador <em>*</em></label>        </td><td>                <input type=\"text\" id=\"swb_create_id\" name=\"id\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura Identificador.\" isValid=\"return canCreateSemanticObject('SWBAdmin','WebPage',this.textbox.value);\" invalidMessage=\"Identificador invalido.\" trim=\"true\"/>	    </td></tr>        <tr><td align=\"center\" colspan=\"2\">            <button dojoType='dijit.form.Button' type=\"submit\">Guardar</button>            <button dojoType='dijit.form.Button' onclick=\"dijit.byId('swbDialog').hide();\">Cancelar</button>	    </td></tr>	    </table>	</fieldset></form>");
+            out.println("<script type=\"text/javascript\">");
+            out.println("function send(forma){");
+            out.println("if(forma.wstype.value==1){");
+            out.println("hideDialog();");
+            out.println("addNewTab('prueba','"+url.toString()+"');");
+            out.println("}else{");
+            out.println("forma.submit();");
+            out.println("}");
+            out.println("}");
+            out.println("</script>");
 
         } catch (Exception e) {
             log.debug(e);
