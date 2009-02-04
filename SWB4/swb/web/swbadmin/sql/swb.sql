@@ -4081,6 +4081,223 @@ INSERT INTO swb_admlog VALUES("_","defaultWorkspace","http://www.semanticwb.org/
 INSERT INTO swb_admlog VALUES("_","defaultWorkspace","http://www.semanticwb.org/repository/#nt_frozenNode:9881b485-5c06-47b2-ae2a-dde3f67eddf4","http://www.semanticwb.org.mx/swb4/content#user","SET","2009-02-03 21:57:53");
 INSERT INTO swb_admlog VALUES("_","defaultWorkspace","http://www.semanticwb.org/repository/#cm_OfficeContent:4ee538c5-4e6c-4c90-9f19-23018b55b93d","http://www.jcp.org/jcr/1.0#baseVersion","SET","2009-02-03 21:57:53");
 INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","sep","http://www.sep.gob.mx#WebPage:y","http://www.semanticwebbuilder.org/swb4/ontology#deleted","SET","2009-02-03 22:08:46");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#wiki","_","CREATE","2009-02-03 22:12:00");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#wiki","http://www.semanticwebbuilder.org/swb4/ontology#title","SET","2009-02-03 22:12:00");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#WebPage:home","_","CREATE","2009-02-03 22:12:00");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#wiki","http://www.semanticwebbuilder.org/swb4/ontology#homePage","SET","2009-02-03 22:12:00");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","sep","http://www.sep.gob.mx#WebPage:y","http://www.semanticwebbuilder.org/swb4/ontology#deleted","SET","2009-02-03 22:13:14");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#WebPage:home","http://www.semanticwebbuilder.org/swb4/ontology#active","SET","2009-02-03 22:13:22");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#wiki","http://www.semanticwebbuilder.org/swb4/ontology#active","SET","2009-02-03 22:13:24");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#WebPage:home","http://www.semanticwebbuilder.org/swb4/ontology#deleted","SET","2009-02-03 22:13:38");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#WebPage:home","http://www.semanticwebbuilder.org/swb4/ontology#valid","SET","2009-02-03 22:13:38");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#WebPage:home","http://www.semanticwebbuilder.org/swb4/ontology#title","SET","2009-02-03 22:13:38");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#WebPage:home","http://www.semanticwebbuilder.org/swb4/ontology#hidden","SET","2009-02-03 22:13:38");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#WebPage:home","http://www.semanticwebbuilder.org/swb4/ontology#indexable","SET","2009-02-03 22:13:38");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#swb_Language:es","_","CREATE","2009-02-03 22:13:56");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#swb_Language:es","http://www.semanticwebbuilder.org/swb4/ontology#title","SET","2009-02-03 22:13:56");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#swb_Language:es","http://www.semanticwebbuilder.org/swb4/ontology#valid","SET","2009-02-03 22:13:56");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#swb_Language:en","_","CREATE","2009-02-03 22:14:08");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#swb_Language:en","http://www.semanticwebbuilder.org/swb4/ontology#title","SET","2009-02-03 22:14:08");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#swb_Language:en","http://www.semanticwebbuilder.org/swb4/ontology#valid","SET","2009-02-03 22:14:08");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#WebPage:home","http://www.semanticwebbuilder.org/swb4/ontology#valid","SET","2009-02-03 22:14:59");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#swb_TemplateGroup:1","_","CREATE","2009-02-03 22:15:18");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#swb_TemplateGroup:1","http://www.semanticwebbuilder.org/swb4/ontology#title","SET","2009-02-03 22:15:18");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#swb_TemplateGroup:1","http://www.semanticwebbuilder.org/swb4/ontology#valid","SET","2009-02-03 22:15:18");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#Template:1","_","CREATE","2009-02-03 22:15:28");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#Template:1","http://www.semanticwebbuilder.org/swb4/ontology#deleted","SET","2009-02-03 22:15:28");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#Template:1","http://www.semanticwebbuilder.org/swb4/ontology#active","SET","2009-02-03 22:15:29");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#Template:1","http://www.semanticwebbuilder.org/swb4/ontology#title","SET","2009-02-03 22:15:29");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#Template:1","http://www.semanticwebbuilder.org/swb4/ontology#templateGroup","SET","2009-02-03 22:15:29");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#swb_VersionInfo:1","_","CREATE","2009-02-03 22:15:43");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#Template:1","http://www.semanticwebbuilder.org/swb4/ontology#actualVersion","SET","2009-02-03 22:15:44");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#swb_VersionInfo:1","http://www.semanticwebbuilder.org/swb4/ontology#versionNumber","SET","2009-02-03 22:15:44");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#swb_VersionInfo:1","http://www.semanticwebbuilder.org/swb4/ontology#versionComment","SET","2009-02-03 22:15:44");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#Template:1","http://www.semanticwebbuilder.org/swb4/ontology#lastVersion","SET","2009-02-03 22:15:44");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#Template:1","http://www.semanticwebbuilder.org/swb4/ontology#active","SET","2009-02-03 22:17:11");
+INSERT INTO swb_admlog VALUES("_","sep","http://www.sep.gob.mx#WebPage:y","http://www.semanticwebbuilder.org/swb4/ontology#deleted","SET","2009-02-03 22:22:42");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","sep","http://www.sep.gob.mx#WebPage:y","http://www.semanticwebbuilder.org/swb4/ontology#deleted","SET","2009-02-03 22:25:06");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#swb_Reference:1","_","CREATE","2009-02-03 22:26:56");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#WebPage:home","http://www.semanticwebbuilder.org/swb4/ontology#hasTemplateRef","ADD","2009-02-03 22:26:56");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#swb_Reference:1","http://www.semanticwebbuilder.org/swb4/ontology#template","SET","2009-02-03 22:26:56");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#swb_Reference:1","http://www.semanticwebbuilder.org/swb4/ontology#priority","SET","2009-02-03 22:26:56");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#swb_Reference:1","http://www.semanticwebbuilder.org/swb4/ontology#active","SET","2009-02-03 22:26:58");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","sep","http://www.sep.gob.mx#WebPage:y","http://www.semanticwebbuilder.org/swb4/ontology#deleted","SET","2009-02-03 22:27:23");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#swb_PortletType:Wiki","_","CREATE","2009-02-03 22:28:24");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#swb_PortletType:Wiki","http://www.semanticwebbuilder.org/swb4/ontology#valid","SET","2009-02-03 22:28:24");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#swb_PortletType:Wiki","http://www.semanticwebbuilder.org/swb4/ontology#title","SET","2009-02-03 22:28:24");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#swb_PortletType:Wiki","http://www.semanticwebbuilder.org/swb4/ontology#portletBundle","SET","2009-02-03 22:29:11");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#swb_PortletType:Wiki","http://www.semanticwebbuilder.org/swb4/ontology#portletMode","SET","2009-02-03 22:29:12");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#swb_PortletType:Wiki","http://www.semanticwebbuilder.org/swb4/ontology#valid","SET","2009-02-03 22:29:12");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#swb_PortletType:Wiki","http://www.semanticwebbuilder.org/swb4/ontology#portletClassName","SET","2009-02-03 22:29:12");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#swb_PortletType:Wiki","http://www.semanticwebbuilder.org/swb4/ontology#portletMode","SET","2009-02-03 22:29:31");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#swb_PortletType:Wiki","http://www.semanticwebbuilder.org/swb4/ontology#valid","SET","2009-02-03 22:29:31");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#swb_PortletType:Wiki","http://www.semanticwebbuilder.org/swb4/ontology#portletMode","SET","2009-02-03 22:29:43");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#swb_PortletType:Wiki","http://www.semanticwebbuilder.org/swb4/ontology#valid","SET","2009-02-03 22:29:43");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#swb_PortletType:Wiki","http://www.semanticwebbuilder.org/swb4/ontology#portletMode","SET","2009-02-03 22:29:47");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#swb_PortletType:Wiki","http://www.semanticwebbuilder.org/swb4/ontology#valid","SET","2009-02-03 22:29:47");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#Portlet:1","_","CREATE","2009-02-03 22:30:02");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#Portlet:1","http://www.semanticwebbuilder.org/swb4/ontology#deleted","SET","2009-02-03 22:30:03");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#Portlet:1","http://www.semanticwebbuilder.org/swb4/ontology#active","SET","2009-02-03 22:30:03");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#Portlet:1","http://www.semanticwebbuilder.org/swb4/ontology#title","SET","2009-02-03 22:30:03");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#Portlet:1","http://www.semanticwebbuilder.org/swb4/ontology#indexable","SET","2009-02-03 22:30:03");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#Portlet:1","http://www.semanticwebbuilder.org/swb4/ontology#portletWindow","SET","2009-02-03 22:30:03");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#Portlet:1","http://www.semanticwebbuilder.org/swb4/ontology#portletType","SET","2009-02-03 22:30:03");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#Portlet:1","http://www.semanticwebbuilder.org/swb4/ontology#active","SET","2009-02-03 22:30:10");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#Portlet:1","http://www.semanticwebbuilder.org/swb4/ontology#valid","SET","2009-02-03 22:30:10");
+INSERT INTO swb_admlog VALUES("_","sep","http://www.sep.gob.mx#WebPage:y","http://www.semanticwebbuilder.org/swb4/ontology#deleted","SET","2009-02-03 22:35:15");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","sep","http://www.sep.gob.mx#WebPage:y","http://www.semanticwebbuilder.org/swb4/ontology#deleted","SET","2009-02-03 22:37:06");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","SWBAdmin","http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_utils","_","CREATE","2009-02-03 22:37:46");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","SWBAdmin","http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_utils","http://www.semanticwebbuilder.org/swb4/ontology#deleted","SET","2009-02-03 22:37:46");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","SWBAdmin","http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_utils","http://www.semanticwebbuilder.org/swb4/ontology#active","SET","2009-02-03 22:37:46");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","SWBAdmin","http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_utils","http://www.semanticwebbuilder.org/swb4/ontology#title","SET","2009-02-03 22:37:46");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","SWBAdmin","http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_utils","http://www.semanticwebbuilder.org/swb4/ontology#hidden","SET","2009-02-03 22:37:46");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","SWBAdmin","http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_utils","http://www.semanticwebbuilder.org/swb4/ontology#indexable","SET","2009-02-03 22:37:46");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","SWBAdmin","http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_utils","http://www.semanticwebbuilder.org/swb4/ontology#webPageParent","SET","2009-02-03 22:37:46");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","SWBAdmin","http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_utils","http://www.semanticwebbuilder.org/swb4/ontology#active","SET","2009-02-03 22:37:52");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","SWBAdmin","http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_utl_HTMLEditor","_","CREATE","2009-02-03 22:38:05");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","SWBAdmin","http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_utl_HTMLEditor","http://www.semanticwebbuilder.org/swb4/ontology#deleted","SET","2009-02-03 22:38:05");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","SWBAdmin","http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_utl_HTMLEditor","http://www.semanticwebbuilder.org/swb4/ontology#active","SET","2009-02-03 22:38:06");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","SWBAdmin","http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_utl_HTMLEditor","http://www.semanticwebbuilder.org/swb4/ontology#title","SET","2009-02-03 22:38:06");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","SWBAdmin","http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_utl_HTMLEditor","http://www.semanticwebbuilder.org/swb4/ontology#hidden","SET","2009-02-03 22:38:06");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","SWBAdmin","http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_utl_HTMLEditor","http://www.semanticwebbuilder.org/swb4/ontology#indexable","SET","2009-02-03 22:38:06");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","SWBAdmin","http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_utl_HTMLEditor","http://www.semanticwebbuilder.org/swb4/ontology#webPageParent","SET","2009-02-03 22:38:06");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","SWBAdmin","http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_utl_HTMLEditor","http://www.semanticwebbuilder.org/swb4/ontology#active","SET","2009-02-03 22:38:13");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#swb_Reference:1","http://www.semanticwebbuilder.org/swb4/ontology#active","SET","2009-02-03 22:39:51");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","wiki","http://wiki.semanticwb.org#swb_Reference:1","http://www.semanticwebbuilder.org/swb4/ontology#active","SET","2009-02-03 22:40:51");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","sep","http://www.sep.gob.mx#WebPage:y","http://www.semanticwebbuilder.org/swb4/ontology#deleted","SET","2009-02-03 23:46:17");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","sep","http://www.sep.gob.mx#Portlet:2217b8b2-899a-425b-b615-17d8f39d286a","http://www.semanticwebbuilder.org/swb4/ontology#priority","SET","2009-02-03 23:48:13");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","sep","http://www.sep.gob.mx#Portlet:e560b0a4-2053-4f3f-aa9d-edce48be1216","http://www.semanticwebbuilder.org/swb4/ontology#priority","SET","2009-02-03 23:48:17");
+INSERT INTO swb_admlog VALUES("_","sep","http://www.sep.gob.mx#WebPage:y","http://www.semanticwebbuilder.org/swb4/ontology#deleted","SET","2009-02-04 00:24:34");
+INSERT INTO swb_admlog VALUES("_","sep","http://www.sep.gob.mx#WebPage:y","http://www.semanticwebbuilder.org/swb4/ontology#deleted","SET","2009-02-04 00:29:01");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#swb_PortletType:Banner","_","CREATE","2009-02-04 00:35:41");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#swb_PortletType:Banner","http://www.semanticwebbuilder.org/swb4/ontology#valid","SET","2009-02-04 00:35:41");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#swb_PortletType:Banner","http://www.semanticwebbuilder.org/swb4/ontology#title","SET","2009-02-04 00:35:41");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#swb_PortletType:Banner","http://www.semanticwebbuilder.org/swb4/ontology#portletBundle","SET","2009-02-04 00:35:53");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#swb_PortletType:Banner","http://www.semanticwebbuilder.org/swb4/ontology#portletMode","SET","2009-02-04 00:35:53");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#swb_PortletType:Banner","http://www.semanticwebbuilder.org/swb4/ontology#valid","SET","2009-02-04 00:35:53");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#swb_PortletType:Banner","http://www.semanticwebbuilder.org/swb4/ontology#portletClassName","SET","2009-02-04 00:35:53");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#Portlet:2","_","CREATE","2009-02-04 00:36:23");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#Portlet:2","http://www.semanticwebbuilder.org/swb4/ontology#deleted","SET","2009-02-04 00:36:23");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#Portlet:2","http://www.semanticwebbuilder.org/swb4/ontology#active","SET","2009-02-04 00:36:24");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#Portlet:2","http://www.semanticwebbuilder.org/swb4/ontology#title","SET","2009-02-04 00:36:24");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#Portlet:2","http://www.semanticwebbuilder.org/swb4/ontology#indexable","SET","2009-02-04 00:36:24");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#Portlet:2","http://www.semanticwebbuilder.org/swb4/ontology#portletWindow","SET","2009-02-04 00:36:24");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#Portlet:2","http://www.semanticwebbuilder.org/swb4/ontology#portletType","SET","2009-02-04 00:36:24");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#Portlet:2","http://www.semanticwebbuilder.org/swb4/ontology#active","SET","2009-02-04 00:36:37");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#Portlet:2","http://www.semanticwebbuilder.org/swb4/ontology#valid","SET","2009-02-04 00:36:37");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#Portlet:2","http://www.semanticwebbuilder.org/swb4/ontology#active","SET","2009-02-04 00:38:55");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#swb_PortletType:WBMenuMap","_","CREATE","2009-02-04 00:41:20");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#swb_PortletType:WBMenuMap","http://www.semanticwebbuilder.org/swb4/ontology#valid","SET","2009-02-04 00:41:20");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#swb_PortletType:WBMenuMap","http://www.semanticwebbuilder.org/swb4/ontology#title","SET","2009-02-04 00:41:20");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#swb_PortletType:WBMenuMap","http://www.semanticwebbuilder.org/swb4/ontology#portletBundle","SET","2009-02-04 00:41:33");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#swb_PortletType:WBMenuMap","http://www.semanticwebbuilder.org/swb4/ontology#portletMode","SET","2009-02-04 00:41:33");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#swb_PortletType:WBMenuMap","http://www.semanticwebbuilder.org/swb4/ontology#valid","SET","2009-02-04 00:41:33");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#swb_PortletType:WBMenuMap","http://www.semanticwebbuilder.org/swb4/ontology#portletClassName","SET","2009-02-04 00:41:34");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#Portlet:3","_","CREATE","2009-02-04 00:41:44");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#Portlet:3","http://www.semanticwebbuilder.org/swb4/ontology#deleted","SET","2009-02-04 00:41:44");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#Portlet:3","http://www.semanticwebbuilder.org/swb4/ontology#active","SET","2009-02-04 00:41:44");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#Portlet:3","http://www.semanticwebbuilder.org/swb4/ontology#title","SET","2009-02-04 00:41:44");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#Portlet:3","http://www.semanticwebbuilder.org/swb4/ontology#indexable","SET","2009-02-04 00:41:44");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#Portlet:3","http://www.semanticwebbuilder.org/swb4/ontology#portletWindow","SET","2009-02-04 00:41:44");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#Portlet:3","http://www.semanticwebbuilder.org/swb4/ontology#portletType","SET","2009-02-04 00:41:44");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#Portlet:3","http://www.semanticwebbuilder.org/swb4/ontology#active","SET","2009-02-04 00:41:51");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#Portlet:3","http://www.semanticwebbuilder.org/swb4/ontology#valid","SET","2009-02-04 00:41:51");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#WebPage:page_1","_","CREATE","2009-02-04 00:42:21");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#WebPage:page_1","http://www.semanticwebbuilder.org/swb4/ontology#deleted","SET","2009-02-04 00:42:21");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#WebPage:page_1","http://www.semanticwebbuilder.org/swb4/ontology#active","SET","2009-02-04 00:42:21");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#WebPage:page_1","http://www.semanticwebbuilder.org/swb4/ontology#title","SET","2009-02-04 00:42:21");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#WebPage:page_1","http://www.semanticwebbuilder.org/swb4/ontology#hidden","SET","2009-02-04 00:42:21");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#WebPage:page_1","http://www.semanticwebbuilder.org/swb4/ontology#indexable","SET","2009-02-04 00:42:21");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#WebPage:page_1","http://www.semanticwebbuilder.org/swb4/ontology#webPageParent","SET","2009-02-04 00:42:21");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#WebPage:page_1","http://www.semanticwebbuilder.org/swb4/ontology#active","SET","2009-02-04 00:42:32");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#Portlet:2","http://www.semanticwebbuilder.org/swb4/ontology#xml","SET","2009-02-04 00:44:41");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#Portlet:2","http://www.semanticwebbuilder.org/swb4/ontology#active","SET","2009-02-04 00:44:47");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#swb_PortletType:JSPResource","_","CREATE","2009-02-04 00:46:04");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#swb_PortletType:JSPResource","http://www.semanticwebbuilder.org/swb4/ontology#valid","SET","2009-02-04 00:46:04");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#swb_PortletType:JSPResource","http://www.semanticwebbuilder.org/swb4/ontology#title","SET","2009-02-04 00:46:04");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#swb_PortletType:JSPResource","http://www.semanticwebbuilder.org/swb4/ontology#portletBundle","SET","2009-02-04 00:46:12");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#swb_PortletType:JSPResource","http://www.semanticwebbuilder.org/swb4/ontology#portletMode","SET","2009-02-04 00:46:12");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#swb_PortletType:JSPResource","http://www.semanticwebbuilder.org/swb4/ontology#valid","SET","2009-02-04 00:46:12");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#swb_PortletType:JSPResource","http://www.semanticwebbuilder.org/swb4/ontology#portletClassName","SET","2009-02-04 00:46:12");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#swb_PortletType:JSPResource","http://www.semanticwebbuilder.org/swb4/ontology#portletMode","SET","2009-02-04 00:46:27");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#swb_PortletType:JSPResource","http://www.semanticwebbuilder.org/swb4/ontology#valid","SET","2009-02-04 00:46:27");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#Portlet:4","_","CREATE","2009-02-04 00:47:24");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#Portlet:4","http://www.semanticwebbuilder.org/swb4/ontology#deleted","SET","2009-02-04 00:47:24");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#Portlet:4","http://www.semanticwebbuilder.org/swb4/ontology#active","SET","2009-02-04 00:47:24");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#Portlet:4","http://www.semanticwebbuilder.org/swb4/ontology#title","SET","2009-02-04 00:47:24");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#Portlet:4","http://www.semanticwebbuilder.org/swb4/ontology#indexable","SET","2009-02-04 00:47:24");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#Portlet:4","http://www.semanticwebbuilder.org/swb4/ontology#portletWindow","SET","2009-02-04 00:47:24");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#Portlet:4","http://www.semanticwebbuilder.org/swb4/ontology#portletType","SET","2009-02-04 00:47:24");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#Portlet:4","http://www.semanticwebbuilder.org/swb4/ontology#active","SET","2009-02-04 00:47:32");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#Portlet:4","http://www.semanticwebbuilder.org/swb4/ontology#valid","SET","2009-02-04 00:47:32");
+INSERT INTO swb_admlog VALUES("_","wiki","http://wiki.semanticwb.org#Portlet:4","http://www.semanticwebbuilder.org/swb4/ontology#xml","SET","2009-02-04 00:52:53");
+INSERT INTO swb_admlog VALUES("_","sep","http://www.sep.gob.mx#WebPage:y","http://www.semanticwebbuilder.org/swb4/ontology#deleted","SET","2009-02-04 11:06:57");
+INSERT INTO swb_admlog VALUES("_","SWBAdmin","http://www.semanticwb.org/SWBAdmin#swb_PortletType:PortletFilter","_","CREATE","2009-02-04 11:15:13");
+INSERT INTO swb_admlog VALUES("_","SWBAdmin","http://www.semanticwb.org/SWBAdmin#swb_PortletType:PortletFilter","http://www.semanticwebbuilder.org/swb4/ontology#valid","SET","2009-02-04 11:15:13");
+INSERT INTO swb_admlog VALUES("_","SWBAdmin","http://www.semanticwb.org/SWBAdmin#swb_PortletType:PortletFilter","http://www.semanticwebbuilder.org/swb4/ontology#title","SET","2009-02-04 11:15:13");
+INSERT INTO swb_admlog VALUES("_","SWBAdmin","http://www.semanticwb.org/SWBAdmin#swb_PortletType:PortletFilter","http://www.semanticwebbuilder.org/swb4/ontology#portletBundle","SET","2009-02-04 11:15:56");
+INSERT INTO swb_admlog VALUES("_","SWBAdmin","http://www.semanticwb.org/SWBAdmin#swb_PortletType:PortletFilter","http://www.semanticwebbuilder.org/swb4/ontology#portletMode","SET","2009-02-04 11:15:56");
+INSERT INTO swb_admlog VALUES("_","SWBAdmin","http://www.semanticwb.org/SWBAdmin#swb_PortletType:PortletFilter","http://www.semanticwebbuilder.org/swb4/ontology#valid","SET","2009-02-04 11:15:56");
+INSERT INTO swb_admlog VALUES("_","SWBAdmin","http://www.semanticwb.org/SWBAdmin#swb_PortletType:PortletFilter","http://www.semanticwebbuilder.org/swb4/ontology#portletClassName","SET","2009-02-04 11:15:56");
+INSERT INTO swb_admlog VALUES("_","sep","http://www.sep.gob.mx#swb_PortletType:word_resource","http://www.semanticwebbuilder.org/swb4/ontology#portletBundle","SET","2009-02-04 11:16:46");
+INSERT INTO swb_admlog VALUES("_","sep","http://www.sep.gob.mx#swb_PortletType:word_resource","http://www.semanticwebbuilder.org/swb4/ontology#portletCache","SET","2009-02-04 11:16:46");
+INSERT INTO swb_admlog VALUES("_","sep","http://www.sep.gob.mx#swb_PortletType:word_resource","http://www.semanticwebbuilder.org/swb4/ontology#valid","SET","2009-02-04 11:16:46");
+INSERT INTO swb_admlog VALUES("_","sep","http://www.sep.gob.mx#WebPage:y","http://www.semanticwebbuilder.org/swb4/ontology#deleted","SET","2009-02-04 11:17:13");
+INSERT INTO swb_admlog VALUES("_","SWBAdmin","http://www.semanticwb.org/SWBAdmin#WebPage:bh_UserGroup","http://www.semanticwebbuilder.org/swb4/xforms/ontology#interface","SET","2009-02-04 11:18:45");
+INSERT INTO swb_admlog VALUES("_","SWBAdmin","http://www.semanticwb.org/SWBAdmin#WebPage:bh_UserGroup","http://www.semanticwebbuilder.org/swb4/ontology#active","SET","2009-02-04 11:18:46");
+INSERT INTO swb_admlog VALUES("_","SWBAdmin","http://www.semanticwb.org/SWBAdmin#WebPage:bh_UserGroup","http://www.semanticwebbuilder.org/swb4/ontology#valid","SET","2009-02-04 11:18:46");
+INSERT INTO swb_admlog VALUES("_","SWBAdmin","http://www.semanticwb.org/SWBAdmin#WebPage:bh_UserGroup","http://www.semanticwebbuilder.org/swb4/ontology#active","SET","2009-02-04 11:20:09");
+INSERT INTO swb_admlog VALUES("_","sep","http://www.sep.gob.mx#WebPage:y","http://www.semanticwebbuilder.org/swb4/ontology#deleted","SET","2009-02-04 11:20:31");
+INSERT INTO swb_admlog VALUES("_","sep","http://www.sep.gob.mx#WebPage:y","http://www.semanticwebbuilder.org/swb4/ontology#deleted","SET","2009-02-04 11:20:47");
+INSERT INTO swb_admlog VALUES("_","SWBAdmin","http://www.semanticwb.org/SWBAdmin#WebPage:bh_UserGroup","http://www.semanticwebbuilder.org/swb4/ontology#active","SET","2009-02-04 11:21:23");
+INSERT INTO swb_admlog VALUES("_","SWBAdmin","http://www.semanticwb.org/SWBAdmin#WebPage:bh_UserGroup","http://www.semanticwebbuilder.org/swb4/ontology#valid","SET","2009-02-04 11:21:23");
+INSERT INTO swb_admlog VALUES("_","urswb","http://org.semanticwb.userrep#swb_UserGroup:6","_","CREATE","2009-02-04 11:25:56");
+INSERT INTO swb_admlog VALUES("_","urswb","http://org.semanticwb.userrep#swb_User:1","http://www.semanticwebbuilder.org/swb4/ontology#hasUserGroup","ADD","2009-02-04 11:25:56");
+INSERT INTO swb_admlog VALUES("_","sep","http://www.sep.gob.mx#WebPage:y","http://www.semanticwebbuilder.org/swb4/ontology#deleted","SET","2009-02-04 11:27:27");
+INSERT INTO swb_admlog VALUES("_","urswb","http://org.semanticwb.userrep#swb_User:1","http://www.semanticwebbuilder.org/swb4/ontology#hasUserGroup","REMOVE","2009-02-04 11:27:42");
+INSERT INTO swb_admlog VALUES("_","urswb","http://org.semanticwb.userrep#swb_UserGroup:6","_","REMOVE","2009-02-04 11:28:06");
+INSERT INTO swb_admlog VALUES("_","urswb","http://org.semanticwb.userrep#swb_User:11","_","CREATE","2009-02-04 11:34:00");
+INSERT INTO swb_admlog VALUES("_","urswb","http://org.semanticwb.userrep#swb_User:11","http://www.semanticwebbuilder.org/swb4/ontology#usrLogin","SET","2009-02-04 11:34:01");
+INSERT INTO swb_admlog VALUES("_","urswb","http://org.semanticwb.userrep#swb_User:11","http://www.semanticwebbuilder.org/swb4/ontology#usrPasswordChanged","SET","2009-02-04 11:34:01");
+INSERT INTO swb_admlog VALUES("_","urswb","http://org.semanticwb.userrep#swb_User:11","http://www.semanticwebbuilder.org/swb4/ontology#usrLastName","SET","2009-02-04 11:34:12");
+INSERT INTO swb_admlog VALUES("_","urswb","http://org.semanticwb.userrep#swb_User:11","http://www.semanticwebbuilder.org/swb4/ontology#active","SET","2009-02-04 11:34:12");
+INSERT INTO swb_admlog VALUES("_","urswb","http://org.semanticwb.userrep#swb_User:11","http://www.semanticwebbuilder.org/swb4/ontology#valid","SET","2009-02-04 11:34:12");
+INSERT INTO swb_admlog VALUES("_","urswb","http://org.semanticwb.userrep#swb_User:11","http://www.semanticwebbuilder.org/swb4/ontology#usrSecondLastName","SET","2009-02-04 11:34:12");
+INSERT INTO swb_admlog VALUES("_","urswb","http://org.semanticwb.userrep#swb_User:11","http://www.semanticwebbuilder.org/swb4/ontology#usrFirstName","SET","2009-02-04 11:34:12");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","sep","http://www.sep.gob.mx#WebPage:y","http://www.semanticwebbuilder.org/swb4/ontology#deleted","SET","2009-02-04 11:34:52");
+INSERT INTO swb_admlog VALUES("http://org.semanticwb.userrep#swb_User:2","sep","http://www.sep.gob.mx#WebPage:y","http://www.semanticwebbuilder.org/swb4/ontology#deleted","SET","2009-02-04 11:35:21");
+INSERT INTO swb_admlog VALUES("_","sep","http://www.sep.gob.mx#WebPage:y","http://www.semanticwebbuilder.org/swb4/ontology#deleted","SET","2009-02-04 11:50:50");
+INSERT INTO swb_admlog VALUES("_","urswb","http://org.semanticwb.userrep#swb_User:11","http://www.semanticwebbuilder.org/swb4/ontology#valid","SET","2009-02-04 11:51:21");
+INSERT INTO swb_admlog VALUES("_","urswb","http://org.semanticwb.userrep#swb_User:11","http://www.semanticwebbuilder.org/swb4/ontology#usrLanguage","SET","2009-02-04 11:51:21");
+INSERT INTO swb_admlog VALUES("_","urswb","http://org.semanticwb.userrep#swb_UserGroup:7","_","CREATE","2009-02-04 11:51:29");
+INSERT INTO swb_admlog VALUES("_","urswb","http://org.semanticwb.userrep#swb_User:11","http://www.semanticwebbuilder.org/swb4/ontology#hasUserGroup","ADD","2009-02-04 11:51:29");
+INSERT INTO swb_admlog VALUES("_","urswb","http://org.semanticwb.userrep#swb_UserGroup:7","_","REMOVE","2009-02-04 11:52:38");
+INSERT INTO swb_admlog VALUES("_","urswb","http://org.semanticwb.userrep#swb_UserGroup:8","_","CREATE","2009-02-04 11:53:20");
+INSERT INTO swb_admlog VALUES("_","urswb","http://org.semanticwb.userrep#swb_User:11","http://www.semanticwebbuilder.org/swb4/ontology#hasUserGroup","ADD","2009-02-04 11:53:20");
+INSERT INTO swb_admlog VALUES("_","urswb","http://org.semanticwb.userrep#swb_UserGroup:8","_","REMOVE","2009-02-04 11:53:30");
+INSERT INTO swb_admlog VALUES("_","SWBAdmin","http://www.semanticwb.org/SWBAdmin#WebPage:bh_PortletFilter","_","CREATE","2009-02-04 11:54:27");
+INSERT INTO swb_admlog VALUES("_","SWBAdmin","http://www.semanticwb.org/SWBAdmin#WebPage:bh_PortletFilter","http://www.semanticwebbuilder.org/swb4/ontology#active","SET","2009-02-04 11:54:27");
+INSERT INTO swb_admlog VALUES("_","SWBAdmin","http://www.semanticwb.org/SWBAdmin#WebPage:bh_PortletFilter","http://www.semanticwebbuilder.org/swb4/ontology#deleted","SET","2009-02-04 11:54:27");
+INSERT INTO swb_admlog VALUES("_","SWBAdmin","http://www.semanticwb.org/SWBAdmin#WebPage:bh_PortletFilter","http://www.semanticwebbuilder.org/swb4/ontology#title","SET","2009-02-04 11:54:27");
+INSERT INTO swb_admlog VALUES("_","SWBAdmin","http://www.semanticwb.org/SWBAdmin#WebPage:bh_PortletFilter","http://www.semanticwebbuilder.org/swb4/xforms/ontology#behaviorRefreshOnShow","SET","2009-02-04 11:54:27");
+INSERT INTO swb_admlog VALUES("_","SWBAdmin","http://www.semanticwb.org/SWBAdmin#WebPage:bh_PortletFilter","http://www.semanticwebbuilder.org/swb4/ontology#hidden","SET","2009-02-04 11:54:27");
+INSERT INTO swb_admlog VALUES("_","SWBAdmin","http://www.semanticwb.org/SWBAdmin#WebPage:bh_PortletFilter","http://www.semanticwebbuilder.org/swb4/ontology#indexable","SET","2009-02-04 11:54:27");
+INSERT INTO swb_admlog VALUES("_","SWBAdmin","http://www.semanticwb.org/SWBAdmin#WebPage:bh_PortletFilter","http://www.semanticwebbuilder.org/swb4/ontology#webPageParent","SET","2009-02-04 11:54:27");
+INSERT INTO swb_admlog VALUES("_","SWBAdmin","http://www.semanticwb.org/SWBAdmin#WebPage:bh_PortletFilter","http://www.semanticwebbuilder.org/swb4/xforms/ontology#interface","SET","2009-02-04 11:54:56");
+INSERT INTO swb_admlog VALUES("_","SWBAdmin","http://www.semanticwb.org/SWBAdmin#WebPage:bh_PortletFilter","http://www.semanticwebbuilder.org/swb4/ontology#webPageSortName","SET","2009-02-04 11:54:56");
+INSERT INTO swb_admlog VALUES("_","SWBAdmin","http://www.semanticwb.org/SWBAdmin#WebPage:bh_PortletFilter","http://www.semanticwebbuilder.org/swb4/ontology#active","SET","2009-02-04 11:54:56");
+INSERT INTO swb_admlog VALUES("_","SWBAdmin","http://www.semanticwb.org/SWBAdmin#WebPage:bh_PortletFilter","http://www.semanticwebbuilder.org/swb4/ontology#valid","SET","2009-02-04 11:54:56");
+INSERT INTO swb_admlog VALUES("_","SWBAdmin","http://www.semanticwb.org/SWBAdmin#Portlet:33","_","CREATE","2009-02-04 11:55:11");
+INSERT INTO swb_admlog VALUES("_","SWBAdmin","http://www.semanticwb.org/SWBAdmin#Portlet:33","http://www.semanticwebbuilder.org/swb4/ontology#deleted","SET","2009-02-04 11:55:11");
+INSERT INTO swb_admlog VALUES("_","SWBAdmin","http://www.semanticwb.org/SWBAdmin#Portlet:33","http://www.semanticwebbuilder.org/swb4/ontology#active","SET","2009-02-04 11:55:11");
+INSERT INTO swb_admlog VALUES("_","SWBAdmin","http://www.semanticwb.org/SWBAdmin#Portlet:33","http://www.semanticwebbuilder.org/swb4/ontology#title","SET","2009-02-04 11:55:11");
+INSERT INTO swb_admlog VALUES("_","SWBAdmin","http://www.semanticwb.org/SWBAdmin#Portlet:33","http://www.semanticwebbuilder.org/swb4/ontology#indexable","SET","2009-02-04 11:55:11");
+INSERT INTO swb_admlog VALUES("_","SWBAdmin","http://www.semanticwb.org/SWBAdmin#Portlet:33","http://www.semanticwebbuilder.org/swb4/ontology#portletWindow","SET","2009-02-04 11:55:11");
+INSERT INTO swb_admlog VALUES("_","SWBAdmin","http://www.semanticwb.org/SWBAdmin#Portlet:33","http://www.semanticwebbuilder.org/swb4/ontology#portletType","SET","2009-02-04 11:55:12");
+INSERT INTO swb_admlog VALUES("_","SWBAdmin","http://www.semanticwb.org/SWBAdmin#WebPage:bh_PortletFilter","http://www.semanticwebbuilder.org/swb4/ontology#hasPortlet","ADD","2009-02-04 11:55:12");
+INSERT INTO swb_admlog VALUES("_","SWBAdmin","http://www.semanticwb.org/SWBAdmin#Portlet:33","http://www.semanticwebbuilder.org/swb4/ontology#active","SET","2009-02-04 11:55:20");
+INSERT INTO swb_admlog VALUES("_","SWBAdmin","http://www.semanticwb.org/SWBAdmin#Portlet:33","http://www.semanticwebbuilder.org/swb4/ontology#valid","SET","2009-02-04 11:55:20");
+INSERT INTO swb_admlog VALUES("_","SWBAdmin","http://www.semanticwb.org/SWBAdmin#Portlet:33","http://www.semanticwebbuilder.org/swb4/ontology#priority","SET","2009-02-04 11:55:20");
 
 
 #
@@ -4326,7 +4543,6 @@ INSERT INTO swb_g3t1_stmt VALUES("Uv::http://org.semanticwb.userrep#swb_UserGrou
 INSERT INTO swb_g3t1_stmt VALUES("Uv::http://org.semanticwb.userrep#swb_UserGroup:4:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#valid:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","3");
 INSERT INTO swb_g3t1_stmt VALUES("Uv::http://org.semanticwb.userrep#swb_UserGroup:4:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#updated:","Lv:0::2009-02-02T22:26:53.453:","3");
 INSERT INTO swb_g3t1_stmt VALUES("Uv::http://org.semanticwb.userrep#swb_UserGroup:4:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#usrgrpParent:","Uv::http://org.semanticwb.userrep#swb_UserGroup:2:","3");
-INSERT INTO swb_g3t1_stmt VALUES("Uv::http://org.semanticwb.userrep#counter:swb_UserGroup:","Uv::http://org.semanticwb.userrep#counter:","Lv:0:37:http://www.w3.org/2001/XMLSchema#long5:","3");
 INSERT INTO swb_g3t1_stmt VALUES("Uv::http://org.semanticwb.userrep#swb_UserGroup:5:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#UserGroup:","3");
 INSERT INTO swb_g3t1_stmt VALUES("Uv::http://org.semanticwb.userrep#swb_UserGroup:5:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#created:","Lv:0::2009-02-02T22:27:20.343:","3");
 INSERT INTO swb_g3t1_stmt VALUES("Uv::http://org.semanticwb.userrep#swb_UserGroup:5:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#title:","Lv:0::Dirección de Administración:","3");
@@ -4347,10 +4563,26 @@ INSERT INTO swb_g3t1_stmt VALUES("Uv::urswb#Edad:","Uv::http://www.w3.org/2000/0
 INSERT INTO swb_g3t1_stmt VALUES("Uv::urswb#Edad:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.w3.org/2002/07/owl#DatatypeProperty:","3");
 INSERT INTO swb_g3t1_stmt VALUES("Uv::swbxff_i_Edad:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.semanticwebbuilder.org/swb4/xforms/ontology#DisplayProperty:","3");
 INSERT INTO swb_g3t1_stmt VALUES("Uv::urswb#Edad:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#displayProperty:","Uv::swbxff_i_Edad:","3");
-INSERT INTO swb_g3t1_stmt VALUES("Uv::http://org.semanticwb.userrep#counter:swb_User:","Uv::http://org.semanticwb.userrep#counter:","Lv:0:37:http://www.w3.org/2001/XMLSchema#long10:","3");
 INSERT INTO swb_g3t1_stmt VALUES("Uv::http://org.semanticwb.userrep#swb_User:2:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#updated:","Lv:0::2009-02-03T20:23:31.328:","3");
 INSERT INTO swb_g3t1_stmt VALUES("Uv::http://org.semanticwb.userrep#swb_User:2:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#hasRole:","Uv::http://org.semanticwb.userrep#swb_Role:2:","3");
-INSERT INTO swb_g3t1_stmt VALUES("Uv::http://org.semanticwb.userrep#swb_User:2:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#usrLastLogin:","Lv:0::2009-02-03T21:55:22.328:","3");
+INSERT INTO swb_g3t1_stmt VALUES("Uv::http://org.semanticwb.userrep#swb_User:1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#created:","Lv:0::2009-02-04T11:25:56.406:","3");
+INSERT INTO swb_g3t1_stmt VALUES("Uv::http://org.semanticwb.userrep#swb_User:1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#updated:","Lv:0::2009-02-04T11:27:42.703:","3");
+INSERT INTO swb_g3t1_stmt VALUES("Uv::http://org.semanticwb.userrep#counter:swb_User:","Uv::http://org.semanticwb.userrep#counter:","Lv:0:37:http://www.w3.org/2001/XMLSchema#long11:","3");
+INSERT INTO swb_g3t1_stmt VALUES("Uv::http://org.semanticwb.userrep#swb_User:11:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#User:","3");
+INSERT INTO swb_g3t1_stmt VALUES("Uv::http://org.semanticwb.userrep#swb_User:11:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#created:","Lv:0::2009-02-04T11:34:00.953:","3");
+INSERT INTO swb_g3t1_stmt VALUES("Uv::http://org.semanticwb.userrep#swb_User:11:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#usrLogin:","Lv:0::x:","3");
+INSERT INTO swb_g3t1_stmt VALUES("Uv::http://org.semanticwb.userrep#swb_User:11:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#usrPassword:","Lv:0::{SHA-512}pKvURIxJVi2CgRXROh/M6pJ/UrTVRZKX+LQ+QtqJI4vBNibkPcs43bCCSIkn7JBPtCBXRDmD6IWFF51QVRr+Yg==:","3");
+INSERT INTO swb_g3t1_stmt VALUES("Uv::http://org.semanticwb.userrep#swb_User:11:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#usrPasswordChanged:","Lv:0::2009-02-04T11:34:01.109:","3");
+INSERT INTO swb_g3t1_stmt VALUES("Uv::http://org.semanticwb.userrep#swb_User:11:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#usrLastName:","Lv:0::x:","3");
+INSERT INTO swb_g3t1_stmt VALUES("Uv::http://org.semanticwb.userrep#swb_User:11:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#active:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleantrue:","3");
+INSERT INTO swb_g3t1_stmt VALUES("Uv::http://org.semanticwb.userrep#swb_User:11:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#usrSecondLastName:","Lv:0::x:","3");
+INSERT INTO swb_g3t1_stmt VALUES("Uv::http://org.semanticwb.userrep#swb_User:11:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#usrFirstName:","Lv:0::x:","3");
+INSERT INTO swb_g3t1_stmt VALUES("Uv::http://org.semanticwb.userrep#swb_User:2:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#usrLastLogin:","Lv:0::2009-02-04T11:34:46.921:","3");
+INSERT INTO swb_g3t1_stmt VALUES("Uv::http://org.semanticwb.userrep#swb_User:11:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#usrLastLogin:","Lv:0::2009-02-04T11:50:05.859:","3");
+INSERT INTO swb_g3t1_stmt VALUES("Uv::http://org.semanticwb.userrep#swb_User:11:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#valid:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","3");
+INSERT INTO swb_g3t1_stmt VALUES("Uv::http://org.semanticwb.userrep#swb_User:11:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#usrLanguage:","Lv:0::es:","3");
+INSERT INTO swb_g3t1_stmt VALUES("Uv::http://org.semanticwb.userrep#counter:swb_UserGroup:","Uv::http://org.semanticwb.userrep#counter:","Lv:0:37:http://www.w3.org/2001/XMLSchema#long8:","3");
+INSERT INTO swb_g3t1_stmt VALUES("Uv::http://org.semanticwb.userrep#swb_User:11:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#updated:","Lv:0::2009-02-04T11:53:20.765:","3");
 
 
 #
@@ -7514,7 +7746,6 @@ INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#Portlet
 INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#Portlet:31:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#priority:","Lv:0:37:http://www.w3.org/2001/XMLSchema#long3:","5");
 INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:bh_UserGroup:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectBehavior:","5");
 INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:bh_UserGroup:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#created:","Lv:0::2009-02-03T20:27:03.593:","5");
-INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:bh_UserGroup:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#active:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","5");
 INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:bh_UserGroup:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#deleted:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","5");
 INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:bh_UserGroup:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#title:","Lv:0::Grupos de Usuarios:","5");
 INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:bh_UserGroup:","Uv::http://www.semanticwebbuilder.org/swb4/xforms/ontology#behaviorRefreshOnShow:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","5");
@@ -7523,7 +7754,6 @@ INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage
 INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:bh_UserGroup:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#webPageParent:","Uv::http://www.semanticwb.org/SWBAdmin#WebPage:ObjectBehavior:","5");
 INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:bh_UserGroup:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#webPageSortName:","Lv:0::70:","5");
 INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:bh_UserGroup:","Uv::http://www.semanticwebbuilder.org/swb4/xforms/ontology#behaviorParams:","Lv:0::sprop=swb:hasUserGroup&spropref=swb:hasUserGroup:","5");
-INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#counter:Portlet:","Uv::http://www.semanticwb.org/SWBAdmin#counter:","Lv:0:37:http://www.w3.org/2001/XMLSchema#long32:","5");
 INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#Portlet:32:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#Portlet:","5");
 INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#Portlet:32:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#created:","Lv:0::2009-02-03T20:28:06.890:","5");
 INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#Portlet:32:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#deleted:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","5");
@@ -7531,11 +7761,70 @@ INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#Portlet
 INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#Portlet:32:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#indexable:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","5");
 INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#Portlet:32:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#portletWindow:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","5");
 INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#Portlet:32:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#portletType:","Uv::http://www.semanticwb.org/SWBAdmin#swb_PortletType:SemObjPropRefEditor:","5");
-INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:bh_UserGroup:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#updated:","Lv:0::2009-02-03T20:28:07.468:","5");
 INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:bh_UserGroup:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#hasPortlet:","Uv::http://www.semanticwb.org/SWBAdmin#Portlet:32:","5");
 INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#Portlet:32:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#active:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleantrue:","5");
 INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#Portlet:32:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#updated:","Lv:0::2009-02-03T20:28:11.046:","5");
 INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#Portlet:32:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#valid:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_utils:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#WebPage:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_utils:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#created:","Lv:0::2009-02-03T22:37:46.109:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_utils:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#creator:","Uv::http://org.semanticwb.userrep#swb_User:2:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_utils:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#deleted:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_utils:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#title:","Lv:0::Utils:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_utils:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#hidden:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_utils:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#indexable:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_utils:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#webPageParent:","Uv::http://www.semanticwb.org/SWBAdmin#WebPage:home:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_utils:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#updated:","Lv:0::2009-02-03T22:37:52.484:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_utils:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy:","Uv::http://org.semanticwb.userrep#swb_User:2:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_utils:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#active:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleantrue:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_utl_HTMLEditor:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#WebPage:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_utl_HTMLEditor:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#created:","Lv:0::2009-02-03T22:38:05.843:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_utl_HTMLEditor:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#creator:","Uv::http://org.semanticwb.userrep#swb_User:2:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_utl_HTMLEditor:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#deleted:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_utl_HTMLEditor:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#title:","Lv:0::HTML Editor:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_utl_HTMLEditor:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#hidden:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_utl_HTMLEditor:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#indexable:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_utl_HTMLEditor:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#webPageParent:","Uv::http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_utils:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_utl_HTMLEditor:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#updated:","Lv:0::2009-02-03T22:38:13.453:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_utl_HTMLEditor:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy:","Uv::http://org.semanticwb.userrep#swb_User:2:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_utl_HTMLEditor:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#active:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleantrue:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#swb_PortletType:PortletFilter:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#PortletType:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#swb_PortletType:PortletFilter:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#created:","Lv:0::2009-02-04T11:15:13.687:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#swb_PortletType:PortletFilter:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#title:","Lv:0::PortletFilter:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#swb_PortletType:PortletFilter:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#portletBundle:","Lv:0::org.semanticwb.portal.admin.resources.SWBAFilterPortlet:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#swb_PortletType:PortletFilter:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#portletMode:","Lv:0:37:http://www.w3.org/2001/XMLSchema#long1:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#swb_PortletType:PortletFilter:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#valid:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#swb_PortletType:PortletFilter:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#updated:","Lv:0::2009-02-04T11:15:56.531:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#swb_PortletType:PortletFilter:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#portletClassName:","Lv:0::org.semanticwb.portal.admin.resources.SWBAFilterPortlet:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:bh_UserGroup:","Uv::http://www.semanticwebbuilder.org/swb4/xforms/ontology#interface:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#UserGroupable:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:bh_UserGroup:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#active:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleantrue:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:bh_UserGroup:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#updated:","Lv:0::2009-02-04T11:21:23.906:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:bh_UserGroup:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#valid:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:bh_PortletFilter:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectBehavior:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:bh_PortletFilter:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#created:","Lv:0::2009-02-04T11:54:27.203:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:bh_PortletFilter:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#deleted:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:bh_PortletFilter:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#title:","Lv:0::Filtro:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:bh_PortletFilter:","Uv::http://www.semanticwebbuilder.org/swb4/xforms/ontology#behaviorRefreshOnShow:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:bh_PortletFilter:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#hidden:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:bh_PortletFilter:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#indexable:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:bh_PortletFilter:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#webPageParent:","Uv::http://www.semanticwb.org/SWBAdmin#WebPage:ObjectBehavior:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:bh_PortletFilter:","Uv::http://www.semanticwebbuilder.org/swb4/xforms/ontology#interface:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#Portlet:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:bh_PortletFilter:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#webPageSortName:","Lv:0::80:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:bh_PortletFilter:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#active:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleantrue:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:bh_PortletFilter:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#valid:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#counter:Portlet:","Uv::http://www.semanticwb.org/SWBAdmin#counter:","Lv:0:37:http://www.w3.org/2001/XMLSchema#long33:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#Portlet:33:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#Portlet:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#Portlet:33:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#created:","Lv:0::2009-02-04T11:55:11.609:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#Portlet:33:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#deleted:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#Portlet:33:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#title:","Lv:0::Filter:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#Portlet:33:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#indexable:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#Portlet:33:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#portletWindow:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#Portlet:33:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#portletType:","Uv::http://www.semanticwb.org/SWBAdmin#swb_PortletType:PortletFilter:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:bh_PortletFilter:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#updated:","Lv:0::2009-02-04T11:55:12.140:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#WebPage:bh_PortletFilter:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#hasPortlet:","Uv::http://www.semanticwb.org/SWBAdmin#Portlet:33:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#Portlet:33:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#active:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleantrue:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#Portlet:33:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#valid:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#Portlet:33:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#updated:","Lv:0::2009-02-04T11:55:20.359:","5");
+INSERT INTO swb_g5t1_stmt VALUES("Uv::http://www.semanticwb.org/SWBAdmin#Portlet:33:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#priority:","Lv:0:37:http://www.w3.org/2001/XMLSchema#long3:","5");
 
 
 #
@@ -8709,7 +8998,6 @@ INSERT INTO swb_g6t1_stmt VALUES("Uv::http://www.sep.gob.mx#swb_PortletType:word
 INSERT INTO swb_g6t1_stmt VALUES("Uv::http://www.sep.gob.mx#swb_PortletType:word_resource:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#title:","Lv:0::Recurso Word:","6");
 INSERT INTO swb_g6t1_stmt VALUES("Uv::http://www.sep.gob.mx#swb_PortletType:word_resource:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#portletMode:","Lv:0:37:http://www.w3.org/2001/XMLSchema#long1:","6");
 INSERT INTO swb_g6t1_stmt VALUES("Uv::http://www.sep.gob.mx#swb_PortletType:word_resource:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#portletClassName:","Lv:0::org.semanticwb.portal.resources.office.WordResource:","6");
-INSERT INTO swb_g6t1_stmt VALUES("Uv::http://www.sep.gob.mx#swb_PortletType:word_resource:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#updated:","Lv:0::2009-02-03T20:53:57.500:","6");
 INSERT INTO swb_g6t1_stmt VALUES("Uv::http://www.sep.gob.mx#Portlet:e560b0a4-2053-4f3f-aa9d-edce48be1216:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.semanticwebbuilder.org/swb4/repository#WordPortlet:","6");
 INSERT INTO swb_g6t1_stmt VALUES("Uv::http://www.sep.gob.mx#Portlet:e560b0a4-2053-4f3f-aa9d-edce48be1216:","Uv::http://www.semanticwebbuilder.org/swb4/repository#content:","Lv:0::b8f3923f-a254-4a66-bfaa-2964f6860c7d:","6");
 INSERT INTO swb_g6t1_stmt VALUES("Uv::http://www.sep.gob.mx#Portlet:e560b0a4-2053-4f3f-aa9d-edce48be1216:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#portletType:","Uv::http://www.sep.gob.mx#swb_PortletType:word_resource:","6");
@@ -8733,15 +9021,218 @@ INSERT INTO swb_g6t1_stmt VALUES("Uv::http://www.sep.gob.mx#WebPage:home:","Uv::
 INSERT INTO swb_g6t1_stmt VALUES("Uv::http://www.sep.gob.mx#WebPage:home:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#hasPortlet:","Uv::http://www.sep.gob.mx#Portlet:2217b8b2-899a-425b-b615-17d8f39d286a:","6");
 INSERT INTO swb_g6t1_stmt VALUES("Uv::http://www.sep.gob.mx#Portlet:2217b8b2-899a-425b-b615-17d8f39d286a:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#creator:","Uv::http://org.semanticwb.userrep#swb_User:2:","6");
 INSERT INTO swb_g6t1_stmt VALUES("Uv::http://www.sep.gob.mx#Portlet:2217b8b2-899a-425b-b615-17d8f39d286a:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#active:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleantrue:","6");
-INSERT INTO swb_g6t1_stmt VALUES("Uv::http://www.sep.gob.mx#Portlet:2217b8b2-899a-425b-b615-17d8f39d286a:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#updated:","Lv:0::2009-02-03T21:56:29.156:","6");
+INSERT INTO swb_g6t1_stmt VALUES("Uv::http://www.sep.gob.mx#Portlet:2217b8b2-899a-425b-b615-17d8f39d286a:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#updated:","Lv:0::2009-02-03T23:48:13.093:","6");
 INSERT INTO swb_g6t1_stmt VALUES("Uv::http://www.sep.gob.mx#Portlet:2217b8b2-899a-425b-b615-17d8f39d286a:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy:","Uv::http://org.semanticwb.userrep#swb_User:2:","6");
-INSERT INTO swb_g6t1_stmt VALUES("Uv::http://www.sep.gob.mx#Portlet:2217b8b2-899a-425b-b615-17d8f39d286a:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#priority:","Lv:0:37:http://www.w3.org/2001/XMLSchema#long2:","6");
-INSERT INTO swb_g6t1_stmt VALUES("Uv::http://www.sep.gob.mx#Portlet:e560b0a4-2053-4f3f-aa9d-edce48be1216:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#updated:","Lv:0::2009-02-03T21:56:32.062:","6");
+INSERT INTO swb_g6t1_stmt VALUES("Uv::http://www.sep.gob.mx#Portlet:2217b8b2-899a-425b-b615-17d8f39d286a:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#priority:","Lv:0:37:http://www.w3.org/2001/XMLSchema#long1:","6");
+INSERT INTO swb_g6t1_stmt VALUES("Uv::http://www.sep.gob.mx#Portlet:e560b0a4-2053-4f3f-aa9d-edce48be1216:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#updated:","Lv:0::2009-02-03T23:48:17.187:","6");
 INSERT INTO swb_g6t1_stmt VALUES("Uv::http://www.sep.gob.mx#Portlet:e560b0a4-2053-4f3f-aa9d-edce48be1216:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy:","Uv::http://org.semanticwb.userrep#swb_User:2:","6");
-INSERT INTO swb_g6t1_stmt VALUES("Uv::http://www.sep.gob.mx#Portlet:e560b0a4-2053-4f3f-aa9d-edce48be1216:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#priority:","Lv:0:37:http://www.w3.org/2001/XMLSchema#long2:","6");
-INSERT INTO swb_g6t1_stmt VALUES("Uv::http://www.sep.gob.mx#WebPage:y:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#updated:","Lv:0::2009-02-03T22:08:46.156:","6");
+INSERT INTO swb_g6t1_stmt VALUES("Uv::http://www.sep.gob.mx#Portlet:e560b0a4-2053-4f3f-aa9d-edce48be1216:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#priority:","Lv:0:37:http://www.w3.org/2001/XMLSchema#long1:","6");
+INSERT INTO swb_g6t1_stmt VALUES("Uv::http://www.sep.gob.mx#swb_PortletType:word_resource:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#portletBundle:","Lv:0::org.semanticwb.portal.resources.office.WordResource:","6");
+INSERT INTO swb_g6t1_stmt VALUES("Uv::http://www.sep.gob.mx#swb_PortletType:word_resource:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#portletCache:","Lv:0:37:http://www.w3.org/2001/XMLSchema#long600:","6");
+INSERT INTO swb_g6t1_stmt VALUES("Uv::http://www.sep.gob.mx#swb_PortletType:word_resource:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#updated:","Lv:0::2009-02-04T11:16:46.718:","6");
+INSERT INTO swb_g6t1_stmt VALUES("Uv::http://www.sep.gob.mx#swb_PortletType:word_resource:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#valid:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","6");
 INSERT INTO swb_g6t1_stmt VALUES("Uv::http://www.sep.gob.mx#WebPage:y:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy:","Uv::http://org.semanticwb.userrep#swb_User:2:","6");
+INSERT INTO swb_g6t1_stmt VALUES("Uv::http://www.sep.gob.mx#WebPage:y:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#updated:","Lv:0::2009-02-04T11:50:50.890:","6");
 INSERT INTO swb_g6t1_stmt VALUES("Uv::http://www.sep.gob.mx#WebPage:y:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#deleted:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleantrue:","6");
+
+
+#
+# Table structure for table 'swb_g8t0_reif'
+#
+
+CREATE TABLE `swb_g8t0_reif` (
+  `Subj` varchar(250) character set latin1 collate latin1_bin default NULL,
+  `Prop` varchar(250) character set latin1 collate latin1_bin default NULL,
+  `Obj` varchar(250) character set latin1 collate latin1_bin default NULL,
+  `GraphID` int(11) default NULL,
+  `Stmt` varchar(250) character set latin1 collate latin1_bin NOT NULL default '',
+  `HasType` char(1) NOT NULL default '',
+  UNIQUE KEY `swb_g8t0_reifXSTMT` (`Stmt`,`HasType`),
+  KEY `swb_g8t0_reifXSP` (`Subj`,`Prop`),
+  KEY `swb_g8t0_reifXO` (`Obj`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+
+#
+# Dumping data for table 'swb_g8t0_reif'
+#
+
+
+#
+# Table structure for table 'swb_g8t1_stmt'
+#
+
+CREATE TABLE `swb_g8t1_stmt` (
+  `Subj` varchar(250) character set latin1 collate latin1_bin NOT NULL default '',
+  `Prop` varchar(250) character set latin1 collate latin1_bin NOT NULL default '',
+  `Obj` varchar(250) character set latin1 collate latin1_bin NOT NULL default '',
+  `GraphID` int(11) default NULL,
+  KEY `swb_g8t1_stmtXSP` (`Subj`,`Prop`),
+  KEY `swb_g8t1_stmtXO` (`Obj`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+
+#
+# Dumping data for table 'swb_g8t1_stmt'
+#
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#wiki:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#WebSite:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#wiki:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#creator:","Uv::http://org.semanticwb.userrep#swb_User:2:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#wiki:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#created:","Lv:0::2009-02-03T22:12:00.218:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#wiki:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#title:","Lv:0::Wiki:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#WebPage:home:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#WebPage:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#WebPage:home:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#created:","Lv:0::2009-02-03T22:12:00.484:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#WebPage:home:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#creator:","Uv::http://org.semanticwb.userrep#swb_User:2:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#wiki:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#homePage:","Uv::http://wiki.semanticwb.org#WebPage:home:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#WebPage:home:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#active:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleantrue:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#wiki:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#updated:","Lv:0::2009-02-03T22:13:24.500:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#wiki:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy:","Uv::http://org.semanticwb.userrep#swb_User:2:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#wiki:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#active:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleantrue:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#WebPage:home:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#deleted:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#WebPage:home:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#title:","Lv:0::Home:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#WebPage:home:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#hidden:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#WebPage:home:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#indexable:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_Language:es:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#Language:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_Language:es:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#created:","Lv:0::2009-02-03T22:13:56.546:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_Language:es:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#creator:","Uv::http://org.semanticwb.userrep#swb_User:2:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_Language:es:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#title:","Lv:0::Español:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_Language:es:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#updated:","Lv:0::2009-02-03T22:13:56.812:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_Language:es:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy:","Uv::http://org.semanticwb.userrep#swb_User:2:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_Language:es:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#valid:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_Language:en:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#Language:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_Language:en:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#created:","Lv:0::2009-02-03T22:14:08.125:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_Language:en:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#creator:","Uv::http://org.semanticwb.userrep#swb_User:2:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_Language:en:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#title:","Lv:0::Ingles:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_Language:en:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#updated:","Lv:0::2009-02-03T22:14:08.343:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_Language:en:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy:","Uv::http://org.semanticwb.userrep#swb_User:2:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_Language:en:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#valid:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#WebPage:home:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#valid:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#counter:swb_TemplateGroup:","Uv::http://wiki.semanticwb.org#counter:","Lv:0:37:http://www.w3.org/2001/XMLSchema#long1:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_TemplateGroup:1:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#TemplateGroup:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_TemplateGroup:1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#created:","Lv:0::2009-02-03T22:15:18.359:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_TemplateGroup:1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#creator:","Uv::http://org.semanticwb.userrep#swb_User:2:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_TemplateGroup:1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#title:","Lv:0::Default:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_TemplateGroup:1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#updated:","Lv:0::2009-02-03T22:15:18.578:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_TemplateGroup:1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy:","Uv::http://org.semanticwb.userrep#swb_User:2:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_TemplateGroup:1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#valid:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#counter:Template:","Uv::http://wiki.semanticwb.org#counter:","Lv:0:37:http://www.w3.org/2001/XMLSchema#long1:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Template:1:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#Template:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Template:1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#created:","Lv:0::2009-02-03T22:15:28.796:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Template:1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#creator:","Uv::http://org.semanticwb.userrep#swb_User:2:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Template:1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#deleted:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Template:1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#title:","Lv:0::Template1:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Template:1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#templateGroup:","Uv::http://wiki.semanticwb.org#swb_TemplateGroup:1:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#counter:swb_VersionInfo:","Uv::http://wiki.semanticwb.org#counter:","Lv:0:37:http://www.w3.org/2001/XMLSchema#long1:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_VersionInfo:1:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#VersionInfo:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_VersionInfo:1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#created:","Lv:0::2009-02-03T22:15:43.906:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_VersionInfo:1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#creator:","Uv::http://org.semanticwb.userrep#swb_User:2:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Template:1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#actualVersion:","Uv::http://wiki.semanticwb.org#swb_VersionInfo:1:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_VersionInfo:1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#versionNumber:","Lv:0:36:http://www.w3.org/2001/XMLSchema#int1:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_VersionInfo:1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#updated:","Lv:0::2009-02-03T22:15:44.296:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_VersionInfo:1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy:","Uv::http://org.semanticwb.userrep#swb_User:2:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_VersionInfo:1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#versionComment:","Lv:0::version 1:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Template:1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#lastVersion:","Uv::http://wiki.semanticwb.org#swb_VersionInfo:1:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Template:1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#updated:","Lv:0::2009-02-03T22:17:11.562:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Template:1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy:","Uv::http://org.semanticwb.userrep#swb_User:2:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Template:1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#active:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleantrue:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_VersionInfo:1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#versionFile:","Lv:0::template.html:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#counter:swb_Reference:","Uv::http://wiki.semanticwb.org#counter:","Lv:0:37:http://www.w3.org/2001/XMLSchema#long1:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_Reference:1:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#TemplateRef:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#WebPage:home:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#updated:","Lv:0::2009-02-03T22:26:56.312:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#WebPage:home:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy:","Uv::http://org.semanticwb.userrep#swb_User:2:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#WebPage:home:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#hasTemplateRef:","Uv::http://wiki.semanticwb.org#swb_Reference:1:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_Reference:1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#template:","Uv::http://wiki.semanticwb.org#Template:1:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_Reference:1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#priority:","Lv:0:37:http://www.w3.org/2001/XMLSchema#long3:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_PortletType:Wiki:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#PortletType:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_PortletType:Wiki:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#created:","Lv:0::2009-02-03T22:28:24.093:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_PortletType:Wiki:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#creator:","Uv::http://org.semanticwb.userrep#swb_User:2:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_PortletType:Wiki:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#title:","Lv:0::Wiki:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_PortletType:Wiki:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#portletBundle:","Lv:0::org.semanticwb.portal.resources.wiki.Wiki:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_PortletType:Wiki:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#portletClassName:","Lv:0::org.semanticwb.portal.resources.wiki.Wiki:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_PortletType:Wiki:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#portletMode:","Lv:0:37:http://www.w3.org/2001/XMLSchema#long1:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_PortletType:Wiki:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#updated:","Lv:0::2009-02-03T22:29:47.343:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_PortletType:Wiki:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy:","Uv::http://org.semanticwb.userrep#swb_User:2:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_PortletType:Wiki:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#valid:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Portlet:1:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#Portlet:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Portlet:1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#created:","Lv:0::2009-02-03T22:30:02.984:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Portlet:1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#creator:","Uv::http://org.semanticwb.userrep#swb_User:2:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Portlet:1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#deleted:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Portlet:1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#title:","Lv:0::Wiki:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Portlet:1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#indexable:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Portlet:1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#portletWindow:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Portlet:1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#portletType:","Uv::http://wiki.semanticwb.org#swb_PortletType:Wiki:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Portlet:1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#active:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleantrue:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Portlet:1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#updated:","Lv:0::2009-02-03T22:30:10.312:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Portlet:1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy:","Uv::http://org.semanticwb.userrep#swb_User:2:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Portlet:1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#valid:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_Reference:1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#active:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleantrue:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_PortletType:Banner:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#PortletType:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_PortletType:Banner:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#created:","Lv:0::2009-02-04T00:35:41.640:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_PortletType:Banner:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#title:","Lv:0::Banner:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_PortletType:Banner:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#portletBundle:","Lv:0::org.semanticwb.portal.resources.Banner:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_PortletType:Banner:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#portletMode:","Lv:0:37:http://www.w3.org/2001/XMLSchema#long2:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_PortletType:Banner:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#valid:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_PortletType:Banner:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#updated:","Lv:0::2009-02-04T00:35:53.687:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_PortletType:Banner:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#portletClassName:","Lv:0::org.semanticwb.portal.resources.Banner:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Portlet:2:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#Portlet:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Portlet:2:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#created:","Lv:0::2009-02-04T00:36:23.875:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Portlet:2:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#deleted:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Portlet:2:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#title:","Lv:0::Banner:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Portlet:2:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#indexable:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Portlet:2:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#portletWindow:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Portlet:2:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#portletType:","Uv::http://wiki.semanticwb.org#swb_PortletType:Banner:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Portlet:2:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#valid:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_PortletType:WBMenuMap:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#PortletType:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_PortletType:WBMenuMap:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#created:","Lv:0::2009-02-04T00:41:20.453:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_PortletType:WBMenuMap:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#title:","Lv:0::WBMenuMap:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_PortletType:WBMenuMap:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#portletBundle:","Lv:0::org.semanticwb.portal.resources.WBMenuMap:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_PortletType:WBMenuMap:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#portletMode:","Lv:0:37:http://www.w3.org/2001/XMLSchema#long2:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_PortletType:WBMenuMap:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#valid:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_PortletType:WBMenuMap:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#updated:","Lv:0::2009-02-04T00:41:34.046:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_PortletType:WBMenuMap:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#portletClassName:","Lv:0::org.semanticwb.portal.resources.WBMenuMap:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Portlet:3:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#Portlet:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Portlet:3:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#created:","Lv:0::2009-02-04T00:41:44.062:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Portlet:3:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#deleted:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Portlet:3:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#title:","Lv:0::Menu:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Portlet:3:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#indexable:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Portlet:3:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#portletWindow:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Portlet:3:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#portletType:","Uv::http://wiki.semanticwb.org#swb_PortletType:WBMenuMap:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Portlet:3:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#active:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleantrue:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Portlet:3:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#updated:","Lv:0::2009-02-04T00:41:51.546:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Portlet:3:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#valid:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#WebPage:page_1:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#WebPage:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#WebPage:page_1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#created:","Lv:0::2009-02-04T00:42:21.015:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#WebPage:page_1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#deleted:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#WebPage:page_1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#title:","Lv:0::Page 1:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#WebPage:page_1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#hidden:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#WebPage:page_1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#indexable:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#WebPage:page_1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#webPageParent:","Uv::http://wiki.semanticwb.org#WebPage:home:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#WebPage:page_1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#updated:","Lv:0::2009-02-04T00:42:32.734:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#WebPage:page_1:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#active:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleantrue:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Portlet:2:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#xml:","Lr:1","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Portlet:2:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#updated:","Lv:0::2009-02-04T00:44:47.265:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Portlet:2:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#active:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleantrue:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_PortletType:JSPResource:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#PortletType:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_PortletType:JSPResource:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#created:","Lv:0::2009-02-04T00:46:04.687:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_PortletType:JSPResource:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#title:","Lv:0::JSPResource:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_PortletType:JSPResource:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#portletBundle:","Lv:0::org.semanticwb.portal.resources.JSPResource:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_PortletType:JSPResource:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#portletClassName:","Lv:0::org.semanticwb.portal.resources.JSPResource:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_PortletType:JSPResource:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#portletMode:","Lv:0:37:http://www.w3.org/2001/XMLSchema#long3:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_PortletType:JSPResource:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#updated:","Lv:0::2009-02-04T00:46:27.953:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#swb_PortletType:JSPResource:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#valid:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#counter:Portlet:","Uv::http://wiki.semanticwb.org#counter:","Lv:0:37:http://www.w3.org/2001/XMLSchema#long4:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Portlet:4:","Uv::http://www.w3.org/1999/02/22-rdf-syntax-ns#type:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#Portlet:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Portlet:4:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#created:","Lv:0::2009-02-04T00:47:24.234:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Portlet:4:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#deleted:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Portlet:4:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#title:","Lv:0::addPage:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Portlet:4:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#indexable:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Portlet:4:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#portletWindow:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Portlet:4:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#portletType:","Uv::http://wiki.semanticwb.org#swb_PortletType:JSPResource:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Portlet:4:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#active:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleantrue:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Portlet:4:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#valid:","Lv:0:40:http://www.w3.org/2001/XMLSchema#booleanfalse:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Portlet:4:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#updated:","Lv:0::2009-02-04T00:52:53.218:","8");
+INSERT INTO swb_g8t1_stmt VALUES("Uv::http://wiki.semanticwb.org#Portlet:4:","Uv::http://www.semanticwebbuilder.org/swb4/ontology#xml:","Lv:0::<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n<resource>\n   <btnSave>Guardar</btnSave>\n   <jsppath>/work/models/wiki/jsps/CreateSection.jsp</jsppath>\n   <jspactpath>/work/models/wiki/jsps/CreateSectionAction.jsp</jspactpath>\n</resource>:","8");
 
 
 #
@@ -8765,6 +9256,7 @@ INSERT INTO swb_graph VALUES("3","urswb");
 INSERT INTO swb_graph VALUES("4","defaultWorkspace");
 INSERT INTO swb_graph VALUES("5","SWBAdmin");
 INSERT INTO swb_graph VALUES("6","sep");
+INSERT INTO swb_graph VALUES("8","wiki");
 
 
 #
@@ -8785,6 +9277,7 @@ CREATE TABLE `swb_long_lit` (
 #
 # Dumping data for table 'swb_long_lit'
 #
+INSERT INTO swb_long_lit VALUES("1","Lv:0::<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n<resource>\n   <img>interna_01.gif</img>\n   <code></code>\n   <width></width>\n   <btnSave>Guardar</btnSave>\n   <height></height>\n   <local>0</local>\n   <target>0</target>\n   <url></url>\n   <alt></alt>\n:","4137939527","</resource>");
 
 
 #
@@ -9012,3 +9505,26 @@ INSERT INTO swb_sys_stmt VALUES("Uv::http://jena.hpl.hp.com/2003/04/DB#192_168_1
 INSERT INTO swb_sys_stmt VALUES("Uv::http://jena.hpl.hp.com/2003/04/DB#192_168_1_65_182abc36_11f395941fb__7ffd:","Uv::http://jena.hpl.hp.com/2003/04/DB#GraphPrefix:","Bv::-182abc36:11f395941fb:-7ff6:","0");
 INSERT INTO swb_sys_stmt VALUES("Bv::-182abc36:11f395941fb:-7ff6:","Uv::http://jena.hpl.hp.com/2003/04/DB#PrefixURI:","Lv:0::http://www.sep.gob.mx:","0");
 INSERT INTO swb_sys_stmt VALUES("Bv::-182abc36:11f395941fb:-7ff6:","Uv::http://jena.hpl.hp.com/2003/04/DB#PrefixValue:","Lv:0::sep:","0");
+INSERT INTO swb_sys_stmt VALUES("Uv::http://jena.hpl.hp.com/2003/04/DB#192_168_5_119_351a72da_11f3f6cae94__7ff1:","Uv::http://jena.hpl.hp.com/2003/04/DB#GraphName:","Lv:0::wiki:","0");
+INSERT INTO swb_sys_stmt VALUES("Uv::http://jena.hpl.hp.com/2003/04/DB#192_168_5_119_351a72da_11f3f6cae94__7ff1:","Uv::http://jena.hpl.hp.com/2003/04/DB#GraphType:","Lv:0::generic:","0");
+INSERT INTO swb_sys_stmt VALUES("Uv::http://jena.hpl.hp.com/2003/04/DB#192_168_5_119_351a72da_11f3f6cae94__7ff1:","Uv::http://jena.hpl.hp.com/2003/04/DB#GraphId:","Lv:0::8:","0");
+INSERT INTO swb_sys_stmt VALUES("Uv::http://jena.hpl.hp.com/2003/04/DB#192_168_5_119_351a72da_11f3f6cae94__7ff1:","Uv::http://jena.hpl.hp.com/2003/04/DB#StmtTable:","Lv:0::swb_g8t1_stmt:","0");
+INSERT INTO swb_sys_stmt VALUES("Uv::http://jena.hpl.hp.com/2003/04/DB#192_168_5_119_351a72da_11f3f6cae94__7ff1:","Uv::http://jena.hpl.hp.com/2003/04/DB#ReifTable:","Lv:0::swb_g8t0_reif:","0");
+INSERT INTO swb_sys_stmt VALUES("Uv::http://jena.hpl.hp.com/2003/04/DB#192_168_1_65fab46a_11f393aa167__7ff1:","Uv::http://jena.hpl.hp.com/2003/04/DB#Graph:","Uv::http://jena.hpl.hp.com/2003/04/DB#192_168_5_119_351a72da_11f3f6cae94__7ff1:","0");
+INSERT INTO swb_sys_stmt VALUES("Uv::http://jena.hpl.hp.com/2003/04/DB#192_168_5_119_351a72da_11f3f6cae94__7ff0:","Uv::http://jena.hpl.hp.com/2003/04/DB#PSetName:","Lv:0::192_168_5_119_351a72da_11f3f6cae94__7fef:","0");
+INSERT INTO swb_sys_stmt VALUES("Uv::http://jena.hpl.hp.com/2003/04/DB#192_168_5_119_351a72da_11f3f6cae94__7ff0:","Uv::http://jena.hpl.hp.com/2003/04/DB#PSetType:","Lv:0::com.hp.hpl.jena.db.impl.PSet_ReifStore_RDB:","0");
+INSERT INTO swb_sys_stmt VALUES("Uv::http://jena.hpl.hp.com/2003/04/DB#192_168_5_119_351a72da_11f3f6cae94__7ff0:","Uv::http://jena.hpl.hp.com/2003/04/DB#PSetTable:","Lv:0::swb_g8t0_reif:","0");
+INSERT INTO swb_sys_stmt VALUES("Uv::http://jena.hpl.hp.com/2003/04/DB#192_168_5_119_351a72da_11f3f6cae94__7fee:","Uv::http://jena.hpl.hp.com/2003/04/DB#LSetName:","Lv:0::LSET_wiki_REIFIER:","0");
+INSERT INTO swb_sys_stmt VALUES("Uv::http://jena.hpl.hp.com/2003/04/DB#192_168_5_119_351a72da_11f3f6cae94__7fee:","Uv::http://jena.hpl.hp.com/2003/04/DB#LSetType:","Lv:0::com.hp.hpl.jena.db.impl.SpecializedGraphReifier_RDB:","0");
+INSERT INTO swb_sys_stmt VALUES("Uv::http://jena.hpl.hp.com/2003/04/DB#192_168_5_119_351a72da_11f3f6cae94__7fee:","Uv::http://jena.hpl.hp.com/2003/04/DB#LSetPSet:","Uv::http://jena.hpl.hp.com/2003/04/DB#192_168_5_119_351a72da_11f3f6cae94__7ff0:","0");
+INSERT INTO swb_sys_stmt VALUES("Uv::http://jena.hpl.hp.com/2003/04/DB#192_168_5_119_351a72da_11f3f6cae94__7ff1:","Uv::http://jena.hpl.hp.com/2003/04/DB#GraphLSet:","Uv::http://jena.hpl.hp.com/2003/04/DB#192_168_5_119_351a72da_11f3f6cae94__7fee:","0");
+INSERT INTO swb_sys_stmt VALUES("Uv::http://jena.hpl.hp.com/2003/04/DB#192_168_5_119_351a72da_11f3f6cae94__7fed:","Uv::http://jena.hpl.hp.com/2003/04/DB#PSetName:","Lv:0::192_168_5_119_351a72da_11f3f6cae94__7fec:","0");
+INSERT INTO swb_sys_stmt VALUES("Uv::http://jena.hpl.hp.com/2003/04/DB#192_168_5_119_351a72da_11f3f6cae94__7fed:","Uv::http://jena.hpl.hp.com/2003/04/DB#PSetType:","Lv:0::com.hp.hpl.jena.db.impl.PSet_TripleStore_RDB:","0");
+INSERT INTO swb_sys_stmt VALUES("Uv::http://jena.hpl.hp.com/2003/04/DB#192_168_5_119_351a72da_11f3f6cae94__7fed:","Uv::http://jena.hpl.hp.com/2003/04/DB#PSetTable:","Lv:0::swb_g8t1_stmt:","0");
+INSERT INTO swb_sys_stmt VALUES("Uv::http://jena.hpl.hp.com/2003/04/DB#192_168_5_119_351a72da_11f3f6cae94__7feb:","Uv::http://jena.hpl.hp.com/2003/04/DB#LSetName:","Lv:0::LSET_wiki:","0");
+INSERT INTO swb_sys_stmt VALUES("Uv::http://jena.hpl.hp.com/2003/04/DB#192_168_5_119_351a72da_11f3f6cae94__7feb:","Uv::http://jena.hpl.hp.com/2003/04/DB#LSetType:","Lv:0::com.hp.hpl.jena.db.impl.SpecializedGraph_TripleStore_RDB:","0");
+INSERT INTO swb_sys_stmt VALUES("Uv::http://jena.hpl.hp.com/2003/04/DB#192_168_5_119_351a72da_11f3f6cae94__7feb:","Uv::http://jena.hpl.hp.com/2003/04/DB#LSetPSet:","Uv::http://jena.hpl.hp.com/2003/04/DB#192_168_5_119_351a72da_11f3f6cae94__7fed:","0");
+INSERT INTO swb_sys_stmt VALUES("Uv::http://jena.hpl.hp.com/2003/04/DB#192_168_5_119_351a72da_11f3f6cae94__7ff1:","Uv::http://jena.hpl.hp.com/2003/04/DB#GraphLSet:","Uv::http://jena.hpl.hp.com/2003/04/DB#192_168_5_119_351a72da_11f3f6cae94__7feb:","0");
+INSERT INTO swb_sys_stmt VALUES("Uv::http://jena.hpl.hp.com/2003/04/DB#192_168_5_119_351a72da_11f3f6cae94__7ff1:","Uv::http://jena.hpl.hp.com/2003/04/DB#GraphPrefix:","Bv::-351a72da:11f3f6cae94:-7fea:","0");
+INSERT INTO swb_sys_stmt VALUES("Bv::-351a72da:11f3f6cae94:-7fea:","Uv::http://jena.hpl.hp.com/2003/04/DB#PrefixURI:","Lv:0::http://wiki.semanticwb.org:","0");
+INSERT INTO swb_sys_stmt VALUES("Bv::-351a72da:11f3f6cae94:-7fea:","Uv::http://jena.hpl.hp.com/2003/04/DB#PrefixValue:","Lv:0::wiki:","0");
