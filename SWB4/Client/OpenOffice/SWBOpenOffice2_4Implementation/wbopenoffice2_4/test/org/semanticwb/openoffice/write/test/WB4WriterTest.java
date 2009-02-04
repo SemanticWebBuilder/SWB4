@@ -45,7 +45,7 @@ public class WB4WriterTest
     XComponentContext xContext;
     XComponent xCompDest = null;
     XDesktop oDesktop = null;
-    File sUrlDestiny = new File("C:\\Documents and Settings\\victor.lorenzana\\Mis documentos\\test.odt");
+    File sUrlDestiny = new File("C:\\temp\\articulo.odt");
     File tempDir = new File("c:/temp/demo/");
 
     public WB4WriterTest()
