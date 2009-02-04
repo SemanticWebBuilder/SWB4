@@ -48,7 +48,7 @@ public class DialogSummaryPublish extends javax.swing.JDialog
                 //summaryPublish1.setVisible(true);
                 summaryPublish1.loadVersions(contentid, workspaceid);
                 jButtonUpdate.setEnabled(false);
-                JOptionPane.showMessageDialog(dialog, "","",JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(dialog, "¡Contenido actualizado!",dialog.getTitle(),JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
             }
             catch (Exception e)
             {
@@ -92,7 +92,7 @@ public class DialogSummaryPublish extends javax.swing.JDialog
         summaryPublish1 = new org.semanticwb.openoffice.ui.wizard.SummaryPublish();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Resumen de publicación");
+        setTitle("Actualizacón de contenido");
         setLocationByPlatform(true);
         setModal(true);
 
