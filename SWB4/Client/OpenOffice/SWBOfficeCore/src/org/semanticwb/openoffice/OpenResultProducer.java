@@ -25,6 +25,7 @@ import org.semanticwb.office.interfaces.VersionInfo;
 import org.semanticwb.openoffice.ui.wizard.Search;
 import org.semanticwb.openoffice.ui.wizard.SelectDirectory;
 import org.semanticwb.openoffice.ui.wizard.SelectVersionToOpen;
+import org.semanticwb.openoffice.util.StackTraceUtil;
 import org.semanticwb.xmlrpc.Part;
 import org.semanticwb.xmlrpc.XmlProxy;
 
@@ -133,10 +134,11 @@ public class OpenResultProducer implements WizardResultProducer
                 }
                 catch (ZipException ioe)
                 {                    
-                    //openFileDirect(dir, fileName, proxy, versioninfo, wizardData, progress);
+                    progress.failed(ioe.getMessage()+"\r\n"+StackTraceUtil.getStackTrace(ioe), false);
                 }
                 catch (IOException ioe)
                 {
+                    progress.failed(ioe.getMessage()+"\r\n"+StackTraceUtil.getStackTrace(ioe), false);
                 }
                 finally
                 {
