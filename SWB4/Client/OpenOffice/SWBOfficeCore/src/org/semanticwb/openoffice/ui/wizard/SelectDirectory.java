@@ -35,12 +35,20 @@ public class SelectDirectory extends WizardPage {
         WizardPanelNavResult result = WizardPanelNavResult.PROCEED;
         if (this.jFileChooser1.getSelectedFile()==null || !this.jFileChooser1.getSelectedFile().exists())
         {
-            JOptionPane.showMessageDialog(this, "!Debe indicar un directorio!", SelectDirectory.getDescription(), JOptionPane.ERROR_MESSAGE);
-            this.jFileChooser1.requestFocus();            
-            result = WizardPanelNavResult.REMAIN_ON_PAGE;
+            if(this.jFileChooser1.getCurrentDirectory()!=null)
+            {
+                map.put(DIRECTORY, this.jFileChooser1.getCurrentDirectory());
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(this, "!Debe indicar un directorio!", SelectDirectory.getDescription(), JOptionPane.ERROR_MESSAGE);
+                this.jFileChooser1.requestFocus();
+                result = WizardPanelNavResult.REMAIN_ON_PAGE;
+            }
         }
         else
         {
+
             map.put(DIRECTORY, this.jFileChooser1.getSelectedFile());
         }
         return result;
