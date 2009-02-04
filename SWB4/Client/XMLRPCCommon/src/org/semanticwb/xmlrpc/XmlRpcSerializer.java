@@ -42,7 +42,14 @@ public class XmlRpcSerializer
                         if (eName.getText().equals("faultString"))
                         {
                             Element eValue = (Element) XPath.selectSingleNode(requestDocument, "/methodResponse/fault/value/struct/member[2]/value/string");
-                            throw new XmlRpcException(eValue.getText());
+                            if(eValue!=null)
+                            {
+                                throw new XmlRpcException(eValue.getText());
+                            }
+                            else
+                            {
+                                throw new XmlRpcException("Error al obtener error en XMLRPC");
+                            }
                         }
                         throw new XmlRpcException("The faultString tag was not found");
                     }
