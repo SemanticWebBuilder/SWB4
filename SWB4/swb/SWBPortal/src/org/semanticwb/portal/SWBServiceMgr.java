@@ -5,15 +5,19 @@
 package org.semanticwb.portal;
 
 import java.util.Date;
+import java.util.Iterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.GenericObject;
+import org.semanticwb.model.Language;
 import org.semanticwb.model.Portlet;
+import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.Template;
 import org.semanticwb.model.Traceable;
 import org.semanticwb.model.User;
+import org.semanticwb.model.VersionInfo;
+import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
@@ -44,16 +48,41 @@ public class SWBServiceMgr implements SemanticObserver {
                     updateTraceable(obj,usr);
                     if(obj.instanceOf(WebSite.sclass))
                     {
-                        java.io.File dir=new java.io.File(SWBPlatform.getWorkPath() + "/"+ obj.getId() + "/Template");
+                        WebSite website=(WebSite)obj.createGenericInstance();
+                        //Crea repositorio x defecto
+                        website.setUserRepository(SWBContext.getDefaultRepository());
+                        WebPage wp=website.createWebPage("home");
+                        wp.setTitle("home");
+                        website.setHomePage(wp);
+                        //Crea lenguages x defecto
+                        Iterator <Language> itLangs=SWBContext.getGlobalWebSite().listLanguages();
+                        while(itLangs.hasNext()){
+                            Language langNext=itLangs.next();
+                            Language lang=website.createLanguage(langNext.getId());
+                            lang.setTitle(langNext.getTitle());
+                            lang.setDescription(langNext.getDescription());
+                        }
+                        java.io.File dir=new java.io.File(SWBPlatform.getWorkPath() + "/models/"+ obj.getId() + "/Template");
                         dir.mkdirs();
-                        dir=new java.io.File(SWBPlatform.getWorkPath() + "/" + obj.getId() + "/Portlet");
+                        dir=new java.io.File(SWBPlatform.getWorkPath() + "/models" + obj.getId() + "/Portlet");
                         dir.mkdirs();
+                        //
+                    }if(obj.instanceOf(Template.sclass))
+                    {
+                        Template tpl=(Template)obj.createGenericInstance();
+                        VersionInfo vi=new VersionInfo(tpl.getSemanticObject());
+                        vi.setVersionNumber(1);
+                        tpl.setActualVersion(vi);
+                        tpl.setLastVersion(vi);
+                        if(tpl.getActualVersion()==null || tpl.getActualVersion().getVersionFile()==null)
+                        {
+                            vi.setVersionFile("template.html");
+                        }
                     }
                 } else //REMOVES
                 {
                     if (obj.instanceOf(WebSite.sclass)) //Removes website
                     {
-                        //System.out.println("Entra a eliminar sitio:"+aux.getId()+"path:"+SWBPlatform.getWorkPath() + aux.getWorkPath());
                         SWBUtils.IO.removeDirectory(SWBPlatform.getWorkPath() + obj.getWorkPath());
                         SWBPlatform.getSemanticMgr().removeModel(obj.getId());
                     } else if (obj.instanceOf(Template.sclass)) // Removes Template
