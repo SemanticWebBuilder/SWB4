@@ -125,6 +125,7 @@ public class OpenResultProducer implements WizardResultProducer
                         out.close();
                         zip.close();
                         progress.setProgress("Abriendo archivo "+contentfile.getPath()+"...", 3, 5);
+                        JOptionPane.showMessageDialog(null, contentfile.getPath());
                         OfficeDocument document = application.open(contentfile);
                         HashMap<String, String> properties = new HashMap<String, String>();
                         properties.put(OfficeDocument.CONTENT_ID_NAME, versioninfo.contentId);
