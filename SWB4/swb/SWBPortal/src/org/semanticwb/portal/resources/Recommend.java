@@ -653,6 +653,8 @@ public class Recommend extends GenericAdmResource {
                                 new ArrayList<InternetAddress>();
                         aAddress.add(address1);
                         
+                        //TODO: Quitar la siguiente linea para ambientes de produccion
+                        SWBUtils.EMAIL.setSMTPServer("webmail.infotec.com.mx");
                         if ((from != null && to != null && subject != null)
                                 && SWBUtils.EMAIL.sendMail(from, from, aAddress,
                                    null, null, subject, "html",  ret.toString(),
