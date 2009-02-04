@@ -188,4 +188,9 @@ public class FrmFavoriteThreadBase extends org.semanticwb.model.SWBClass impleme
          }
          return ret;
     }
+
+    public org.semanticwb.model.WebSite getWebSite()
+    {
+        return new org.semanticwb.model.WebSite(getSemanticObject().getModel().getModelObject());
+    }
 }

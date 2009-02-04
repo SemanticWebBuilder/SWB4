@@ -3,9 +3,10 @@ package org.semanticwb.model.base;
 
 public class UserGroupBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
-    public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
+    public static final org.semanticwb.platform.SemanticClass swb_UserGroupable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserGroupable");
     public static final org.semanticwb.platform.SemanticProperty swb_hasGroupedUser=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasGroupedUser");
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
+    public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
     public static final org.semanticwb.platform.SemanticProperty swb_modifiedBy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy");
     public static final org.semanticwb.platform.SemanticProperty swb_title=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#title");
     public static final org.semanticwb.platform.SemanticProperty swb_updated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#updated");
@@ -57,27 +58,6 @@ public class UserGroupBase extends org.semanticwb.model.SWBClass implements org.
     public static boolean hasUserGroup(String id, org.semanticwb.model.SWBModel model)
     {
         return (getUserGroup(id, model)!=null);
-    }
-
-    public org.semanticwb.model.GenericIterator<org.semanticwb.model.User> listUsers()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.User>(org.semanticwb.model.User.class, getSemanticObject().listObjectProperties(swb_hasGroupedUser));
-    }
-
-    public boolean hasUser(org.semanticwb.model.User user)
-    {
-        if(user==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasGroupedUser,user.getSemanticObject());
-    }
-
-    public org.semanticwb.model.User getUser()
-    {
-         org.semanticwb.model.User ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasGroupedUser);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
-         }
-         return ret;
     }
 
     public java.util.Date getCreated()
