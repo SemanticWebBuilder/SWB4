@@ -266,9 +266,23 @@ public class WB4WriterTest
         writer.open(DocumentType.WORD);
 
     }
+    @Test
+    //@Ignore
+    public void publishTest()
+    {
+        try
+        {
+            WB4Writer writer = new WB4Writer(this.xContext);
+            writer.publish();
+        }
+        catch ( Throwable wbe )
+        {
+            Assert.fail(wbe.getMessage());
+        }
+    }
     @Test  
     @Ignore
-    public void publishTest()
+    public void saveToSiteTest()
     {
         try
         {
