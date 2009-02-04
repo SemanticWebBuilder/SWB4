@@ -35,10 +35,10 @@ public class SWBACreateUser extends GenericResource {
         "                   dojo.require(\"dijit.form.FilteringSelect\");\n"+
         "                   dojo.require(\"dijit.form.CheckBox\");\n"+
         "        </script>\n");
-      
-        ret.append("<form id=\"http://www.semanticwebbuilder.org/swb4/ontology#User/create\" class=\"swbform\" ");
+      //http://www.semanticwebbuilder.org/swb4/ontology#User
+        ret.append("<form id=\""+User.swb_User.getClassName()+"/create\" class=\"swbform\" ");
         ret.append("action=\""+url+"\" ");
-        ret.append("onSubmit=\"submitForm('http://www.semanticwebbuilder.org/swb4/ontology#User/create');return false;\" method=\"POST\">");
+        ret.append("onSubmit=\"submitForm('"+User.swb_User.getClassName()+"/create');return false;\" method=\"POST\">");
         ret.append("\t<fieldset>\n\t<table>\n\t\t<tr>\n\t\t\t<td width=\"200px\" align=\"right\">\n\t\t\t\t<label>Repositorio de Usuarios</label>");
         ret.append("\n\t\t\t</td>\n\t\t\t<td>");
         Iterator<UserRepository> itur = SWBContext.listUserRepositorys();
@@ -56,8 +56,10 @@ public class SWBACreateUser extends GenericResource {
         ret.append("\n\t\t<tr>\n\t\t\t<td width=\"200px\" align=\"right\">\n\t\t\t\t<label>Contrase&ntilde;a <em>*</em></label>\n\t\t\t</td>\n\t\t\t<td>");
         ret.append("<input type=\"password\" name=\"passwd\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" ");
         ret.append("promptMessage=\"Captura contrase&ntilde;a de usuario.\" invalidMessage=\"La contrase&ntilde;a de usuario es requerido.\" trim=\"true\" />");
-        ret.append("\n\t\t\t</td>\n\t\t</tr>\n\t</table>\n\t</fieldset>\n\t<fieldset>\n\t\t<span align=\"center\">");
-        ret.append("\n\t\t\t<button dojoType='dijit.form.Button' type=\"submit\">Guardar</button>\n\t\t</span>\n\t</fieldset>\n</form>");
+        ret.append("\n\t\t\t</td>\n\t\t</tr>\n\t<tr>\n\t\t<td align=\"center\" colspan=\"2\">");
+        ret.append("<button dojoType='dijit.form.Button' type=\"submit\">Guardar</button>\n");
+        ret.append("<button dojoType='dijit.form.Button' onclick=\"dijit.byId('swbDialog').hide();\">Cancelar</button>\n");
+        ret.append("\n\t\t\t</td>\n\t\t</tr>\n\t</table>\n\t</fieldset>\n</form>");
         response.getWriter().write(ret.toString());
     }
 
