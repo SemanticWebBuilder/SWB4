@@ -966,5 +966,15 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             }
         }
     }
+
+    public void changeVersionPorlet(PortletInfo info, String newVersion) throws Exception
+    {
+        WebSite site = SWBContext.getWebSite(info.page.site.id);
+        Portlet portlet = site.getPortlet(info.id);
+        if(portlet instanceof OfficePortlet)
+        {
+            ((OfficePortlet)portlet).setVersionToShow(newVersion);
+        }
+    }
 }
 
