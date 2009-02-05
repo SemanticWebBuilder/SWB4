@@ -61,21 +61,29 @@ public class SWBImportWebSite extends GenericResource {
                 site.setTitle(request.getParameter("wstitle"));
                 site.setHomePage(site.createWebPage("home"));
 
-                SemanticObject semObject = SemanticObject.createSemanticObject(site.getURI());
-                SWBFormMgr mgr = new SWBFormMgr(semObject, null, SWBFormMgr.MODE_EDIT);
-                mgr.setLang(paramRequest.getUser().getLanguage());
-                mgr.setType(mgr.TYPE_XHTML);
-                SWBResourceURL urlAction = paramRequest.getActionUrl();
-                urlAction.setParameter("webSiteUri", semObject.getURI());
-                mgr.setAction(urlAction.toString());
-                out.println(mgr.renderForm());
+                out.println("<script type=\"text/javascript\">");
+                out.println("hideDialog();");
+//                out.println("addNewTab('"+site.getURI()+"');");
+                out.println("showStatus('Sitio Creado');");
+                out.println("</script>");
+
+//                SemanticObject semObject = SemanticObject.createSemanticObject(site.getURI());
+//                SWBFormMgr mgr = new SWBFormMgr(semObject, null, SWBFormMgr.MODE_EDIT);
+//                mgr.setLang(paramRequest.getUser().getLanguage());
+//                mgr.setType(mgr.TYPE_XHTML);
+//                SWBResourceURL urlAction = paramRequest.getActionUrl();
+//                urlAction.setParameter("webSiteUri", semObject.getURI());
+//                mgr.setAction(urlAction.toString());
+//                out.println(mgr.renderForm());
             } else { //creación de sitio mediante template                
                 out.println(directoryList(paramRequest, request.getParameter("wsname"), request.getParameter("wsns"), request.getParameter("wstitle")));
             }
         } else if (action != null && action.trim().equals("step3")) { //creación de sitio mediante template
-            if (createWebSite(response, request.getParameter("zipName"), request.getParameter("wsname"), request.getParameter("wsns"))) {
-                out.println("<script language=\"JavaScript\">");
-                out.println("  showStatus('" + paramRequest.getLocaleLogString("sitecreated") + "')");
+            if (createWebSite(response, request.getParameter("zipName"), request.getParameter("wsname"), request.getParameter("wsns")))
+            {
+                out.println("<script type=\"text/javascript\">");
+                out.println("hideDialog();");
+                out.println("showStatus('Sitio Creado');");
                 out.println("</script>");
             } else {
                 out.println(paramRequest.getLocaleLogString("sitenotcreated"));
@@ -179,11 +187,11 @@ public class SWBImportWebSite extends GenericResource {
             new File(models + newName + "/" + name + ".rdf").delete();
             new File(models + newName + "/siteInfo.xml").delete();
 
-            PrintWriter out=response.getWriter();
-            out.println("<script type=\"text/javascript\">");
-            out.println("hideDialog();");
-            out.println("showStatus('Sitio Creado');");
-            out.println("</script>");
+//            PrintWriter out=response.getWriter();
+//            out.println("<script type=\"text/javascript\">");
+//            out.println("hideDialog();");
+//            out.println("showStatus('Sitio Creado');");
+//            out.println("</script>");
 
             return true;
         } catch (Exception e) {
@@ -222,7 +230,7 @@ public class SWBImportWebSite extends GenericResource {
     private void getStep1(PrintWriter out, SWBResourceURL url, SWBParamRequest paramRequest) {
         try {
             
-            out.println("<form class=\"swbform\" name=\"frmImport1\" action=\"" + url.toString() + "\" dojoType=\"dijit.form.Form\" onSubmit=\"submitForm('frmImport1');return false;\" method=\"post\">");
+            out.println("<form class=\"swbform\" id=\"frmImport1\" action=\"" + url.toString() + "\" dojoType=\"dijit.form.Form\" onSubmit=\"submitForm('frmImport1');return false;\" method=\"post\">");
             //out.println("<form  class=\"swbform\" name=\"frmImport1\"  method=\"post\">");
             out.println("<fieldset>");
             out.println("<table>");
@@ -259,8 +267,8 @@ public class SWBImportWebSite extends GenericResource {
             out.println("<option value=\"2\">" + paramRequest.getLocaleLogString("msgwstype2") + "</option>");
             out.println("</select>");
             out.println("</td></tr>");
-            out.println("<tr><td><input type=\"button\" onclick=\"send(this.form)\" value=\"Enviar\"></td>");
-            //out.println("<td><button dojoType='dijit.form.Button' onclick=\"send(this.form)\">Enviar</button>");
+            //out.println("<tr><td><input type=\"button\" onclick=\"send(this.form)\" value=\"Enviar\"></td>");
+            out.println("<td><button dojoType='dijit.form.Button' type=\"submit\">Enviar</button>");
             out.println("</td></tr>");
             out.println("</table>");
             out.println("</fieldset>");
@@ -268,16 +276,7 @@ public class SWBImportWebSite extends GenericResource {
            
             //out.println("</div>");
 
-            out.println("<script type=\"text/javascript\">");
-            out.println("function send(forma){");
-            out.println("if(forma.wstype.value==1){");
-            out.println("hideDialog();");
-            out.println("addNewTab('prueba','"+url.toString()+"');");
-            out.println("}else{");
-            out.println("forma.submit();");
-            out.println("}");
-            out.println("}");
-            out.println("</script>");
+            
 
         } catch (Exception e) {
             log.debug(e);
