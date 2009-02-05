@@ -5,8 +5,15 @@
  */
 package org.semanticwb.openoffice.ui.dialogs;
 
+import com.sun.star.deployment.VersionException;
+import java.awt.Component;
 import java.awt.Cursor;
+import javax.swing.AbstractCellEditor;
+import javax.swing.JComboBox;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableColumn;
 import org.netbeans.spi.wizard.Wizard;
 import org.netbeans.spi.wizard.WizardPage;
 import org.semanticwb.office.interfaces.PortletInfo;
@@ -34,6 +41,9 @@ public class DialogContentInformation extends javax.swing.JDialog
         this.contentId = contentId;
         this.repository = repository;
         this.document = document;
+        TableColumn column = this.jTablePages.getColumnModel().getColumn(4);
+        column.setCellEditor(new VersionEditor(repository,contentId));
+
         try
         {
             this.jTextFieldTitle.setText(OfficeApplication.getOfficeDocumentProxy().getTitle(repository, contentId));
@@ -88,14 +98,14 @@ public class DialogContentInformation extends javax.swing.JDialog
         {
             for (PortletInfo portletInfo : OfficeApplication.getOfficeDocumentProxy().listPortlets(repositoryName, contentId))
             {
-                String version=portletInfo.version;
-                if(version.equals("*"))
+                String version = portletInfo.version;
+                if (version.equals("*"))
                 {
-                    version="Mostrar la última versión";
+                    version = "Mostrar la última versión";
                 }
                 Object[] rowData =
                 {
-                    portletInfo,portletInfo.page.site.title,portletInfo.page.title, portletInfo.active, version
+                    portletInfo, portletInfo.page.site.title, portletInfo.page.title, portletInfo.active, version
                 };
                 model.addRow(rowData);
             }
@@ -283,6 +293,7 @@ public class DialogContentInformation extends javax.swing.JDialog
         jToolBar1.add(jSeparator2);
 
         jButtonCambiarVersion.setText("Cambiar version a Mostrar");
+        jButtonCambiarVersion.setEnabled(false);
         jButtonCambiarVersion.setFocusable(false);
         jButtonCambiarVersion.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonCambiarVersion.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -290,6 +301,7 @@ public class DialogContentInformation extends javax.swing.JDialog
         jToolBar1.add(jSeparator4);
 
         jButton5.setText("Eliminar");
+        jButton5.setEnabled(false);
         jButton5.setFocusable(false);
         jButton5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton5.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -309,7 +321,7 @@ public class DialogContentInformation extends javax.swing.JDialog
                 java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, true, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -433,4 +445,45 @@ public class DialogContentInformation extends javax.swing.JDialog
     private javax.swing.JTextField jTextFieldTitle;
     private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
+}
+
+class VersionEditor extends AbstractCellEditor implements TableCellEditor
+{
+
+    private String repositoryName,  contentId;
+
+    public VersionEditor(String repositoryName, String contentId)
+    {
+        this.repositoryName = repositoryName;
+        this.contentId = contentId;
+    }
+
+    public Object getCellEditorValue()
+    {
+        return "a";
+    }
+
+    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column)
+    {
+
+        JComboBox combo = new JComboBox();
+        Object obj = table.getModel().getValueAt(row, 0);
+        if (obj instanceof PortletInfo)
+        {
+            PortletInfo PortletInfo = (PortletInfo) obj;
+            try
+            {
+                for(VersionInfo versionInfo : OfficeApplication.getOfficeDocumentProxy().getVersions(repositoryName, contentId))
+                {
+                    combo.addItem(versionInfo);
+                }
+            }
+            catch(Exception e)
+            {
+
+            }
+        }
+
+        return combo;
+    }
 }

@@ -267,6 +267,7 @@
                 <Component class="javax.swing.JButton" name="jButtonCambiarVersion">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Cambiar version a Mostrar"/>
+                    <Property name="enabled" type="boolean" value="false"/>
                     <Property name="focusable" type="boolean" value="false"/>
                     <Property name="horizontalTextPosition" type="int" value="0"/>
                     <Property name="verticalTextPosition" type="int" value="3"/>
@@ -277,6 +278,7 @@
                 <Component class="javax.swing.JButton" name="jButton5">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Eliminar"/>
+                    <Property name="enabled" type="boolean" value="false"/>
                     <Property name="focusable" type="boolean" value="false"/>
                     <Property name="horizontalTextPosition" type="int" value="0"/>
                     <Property name="verticalTextPosition" type="int" value="3"/>
@@ -303,8 +305,8 @@
                         <Column editable="false" title="Title" type="java.lang.Object"/>
                         <Column editable="false" title="Sitio" type="java.lang.String"/>
                         <Column editable="false" title="P&#xe1;gina" type="java.lang.String"/>
-                        <Column editable="false" title="Activo" type="java.lang.Boolean"/>
-                        <Column editable="false" title="Version" type="java.lang.String"/>
+                        <Column editable="true" title="Activo" type="java.lang.Boolean"/>
+                        <Column editable="true" title="Version" type="java.lang.String"/>
                       </Table>
                     </Property>
                     <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
