@@ -67,6 +67,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Aceptar"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonAcceptActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="jButtonCancel">
           <Properties>
@@ -262,17 +265,6 @@
                     <Property name="verticalTextPosition" type="int" value="3"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JToolBar$Separator" name="jSeparator2">
-                </Component>
-                <Component class="javax.swing.JButton" name="jButtonCambiarVersion">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Cambiar version a Mostrar"/>
-                    <Property name="enabled" type="boolean" value="false"/>
-                    <Property name="focusable" type="boolean" value="false"/>
-                    <Property name="horizontalTextPosition" type="int" value="0"/>
-                    <Property name="verticalTextPosition" type="int" value="3"/>
-                  </Properties>
-                </Component>
                 <Component class="javax.swing.JToolBar$Separator" name="jSeparator4">
                 </Component>
                 <Component class="javax.swing.JButton" name="jButton5">
@@ -306,7 +298,7 @@
                         <Column editable="false" title="Sitio" type="java.lang.String"/>
                         <Column editable="false" title="P&#xe1;gina" type="java.lang.String"/>
                         <Column editable="true" title="Activo" type="java.lang.Boolean"/>
-                        <Column editable="true" title="Version" type="java.lang.String"/>
+                        <Column editable="true" title="Version" type="java.lang.Object"/>
                       </Table>
                     </Property>
                     <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
