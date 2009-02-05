@@ -74,5 +74,10 @@ public interface IOfficeDocument
 
     @XmlRpcMethod(methodName = "OfficeDocument.changeCategory")
     public void changeCategory(String repositoryName, String contentId, String newCategoryId) throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeDocument.activatePortlet")
+    public void changeVersionPorlet(PortletInfo info, String newVersion) throws Exception;
+
+
 }
 
