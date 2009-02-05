@@ -774,6 +774,7 @@
         <swb:hasClass rdf:resource="#WebPage"/>
         <swb:hasClass rdf:resource="#Permission"/>
         <swb:hasClass rdf:resource="#Camp"/>
+        <swb:hasClass rdf:resource="#PortletFilter"/>
         <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
         <rdfs:subClassOf rdf:resource="#Activeable"/>
         <rdfs:subClassOf rdf:resource="#SWBModel"/>
