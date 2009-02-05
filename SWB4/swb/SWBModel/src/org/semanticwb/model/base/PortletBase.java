@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class PortletBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Localeable,org.semanticwb.model.Versionable,org.semanticwb.model.Indexable,org.semanticwb.model.Deleteable,org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Calendarable,org.semanticwb.model.Hitable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Referensable,org.semanticwb.model.XMLable,org.semanticwb.model.XMLConfable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Priorityable,org.semanticwb.model.Viewable
+public class PortletBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.RoleRefable,org.semanticwb.model.Versionable,org.semanticwb.model.XMLConfable,org.semanticwb.model.Hitable,org.semanticwb.model.Deleteable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Calendarable,org.semanticwb.model.XMLable,org.semanticwb.model.Viewable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Localeable,org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.model.Indexable,org.semanticwb.model.Priorityable,org.semanticwb.model.Referensable
 {
     public static final org.semanticwb.platform.SemanticClass swb_Camp=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Camp");
     public static final org.semanticwb.platform.SemanticProperty swb_camp=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#camp");
@@ -12,8 +12,10 @@ public class PortletBase extends org.semanticwb.model.SWBClass implements org.se
     public static final org.semanticwb.platform.SemanticClass swb_VersionInfo=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#VersionInfo");
     public static final org.semanticwb.platform.SemanticProperty swb_lastVersion=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#lastVersion");
     public static final org.semanticwb.platform.SemanticProperty swb_xmlConf=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#xmlConf");
-    public static final org.semanticwb.platform.SemanticProperty swb_deleted=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#deleted");
+    public static final org.semanticwb.platform.SemanticClass swb_PortletFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PortletFilter");
+    public static final org.semanticwb.platform.SemanticProperty swb_portletFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#portletFilter");
     public static final org.semanticwb.platform.SemanticProperty swb_active=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#active");
+    public static final org.semanticwb.platform.SemanticProperty swb_deleted=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#deleted");
     public static final org.semanticwb.platform.SemanticClass swb_Language=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Language");
     public static final org.semanticwb.platform.SemanticProperty swb_language=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#language");
     public static final org.semanticwb.platform.SemanticProperty swb_maxViews=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#maxViews");
@@ -181,14 +183,25 @@ public class PortletBase extends org.semanticwb.model.SWBClass implements org.se
         getSemanticObject().setProperty(swb_xmlConf, xmlConf);
     }
 
-    public boolean isDeleted()
+    public void setPortletFilter(org.semanticwb.model.PortletFilter portletfilter)
     {
-        return getSemanticObject().getBooleanProperty(swb_deleted);
+        getSemanticObject().setObjectProperty(swb_portletFilter, portletfilter.getSemanticObject());
     }
 
-    public void setDeleted(boolean deleted)
+    public void removePortletFilter()
     {
-        getSemanticObject().setBooleanProperty(swb_deleted, deleted);
+        getSemanticObject().removeProperty(swb_portletFilter);
+    }
+
+    public org.semanticwb.model.PortletFilter getPortletFilter()
+    {
+         org.semanticwb.model.PortletFilter ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_portletFilter);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.PortletFilter)obj.getSemanticClass().newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public boolean isActive()
@@ -199,6 +212,16 @@ public class PortletBase extends org.semanticwb.model.SWBClass implements org.se
     public void setActive(boolean active)
     {
         getSemanticObject().setBooleanProperty(swb_active, active);
+    }
+
+    public boolean isDeleted()
+    {
+        return getSemanticObject().getBooleanProperty(swb_deleted);
+    }
+
+    public void setDeleted(boolean deleted)
+    {
+        getSemanticObject().setBooleanProperty(swb_deleted, deleted);
     }
 
     public void setLanguage(org.semanticwb.model.Language language)
