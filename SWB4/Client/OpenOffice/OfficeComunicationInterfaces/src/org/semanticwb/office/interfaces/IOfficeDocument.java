@@ -65,8 +65,6 @@ public interface IOfficeDocument
     @XmlRpcMethod(methodName = "OfficeDocument.listPortlets")
     public PortletInfo[] listPortlets(String repositoryName, String contentid) throws Exception;
 
-    @XmlRpcMethod(methodName = "OfficeDocument.getPageInformation")
-    public PortletInfo[] getPageInformation(String repositoryName, String contentId) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.deleteContentOfPage")
     public void deleteContentOfPage(PortletInfo info) throws Exception;

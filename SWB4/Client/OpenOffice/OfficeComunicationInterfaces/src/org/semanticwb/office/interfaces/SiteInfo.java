@@ -9,9 +9,8 @@ package org.semanticwb.office.interfaces;
  *
  * @author victor.lorenzana
  */
-public class PageInfo {
+public class SiteInfo {
     public String id;
     public String title;
     public String description;
-    public SiteInfo site;
 }
