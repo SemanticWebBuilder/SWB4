@@ -1,8 +1,9 @@
 package org.semanticwb.model.base;
 
 
-public class DnsBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.WebPageable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public class DnsBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.WebPageable,org.semanticwb.model.Descriptiveable
 {
+    public static final org.semanticwb.platform.SemanticProperty swb_dnsDefault=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#dnsDefault");
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
     public static final org.semanticwb.platform.SemanticProperty swb_modifiedBy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy");
@@ -12,7 +13,6 @@ public class DnsBase extends org.semanticwb.model.SWBClass implements org.semant
     public static final org.semanticwb.platform.SemanticProperty swb_webPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#webPage");
     public static final org.semanticwb.platform.SemanticProperty swb_creator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#creator");
     public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
-    public static final org.semanticwb.platform.SemanticProperty swb_dnsDefault=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#dnsDefault");
     public static final org.semanticwb.platform.SemanticClass swb_Dns=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Dns");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Dns");
 
@@ -51,6 +51,16 @@ public class DnsBase extends org.semanticwb.model.SWBClass implements org.semant
     public static boolean hasDns(String id, org.semanticwb.model.SWBModel model)
     {
         return (getDns(id, model)!=null);
+    }
+
+    public boolean isDefault()
+    {
+        return getSemanticObject().getBooleanProperty(swb_dnsDefault);
+    }
+
+    public void setDefault(boolean dnsDefault)
+    {
+        getSemanticObject().setBooleanProperty(swb_dnsDefault, dnsDefault);
     }
 
     public java.util.Date getCreated()
@@ -184,16 +194,6 @@ public class DnsBase extends org.semanticwb.model.SWBClass implements org.semant
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(swb_description, description, lang);
-    }
-
-    public boolean isDefault()
-    {
-        return getSemanticObject().getBooleanProperty(swb_dnsDefault);
-    }
-
-    public void setDefault(boolean dnsDefault)
-    {
-        getSemanticObject().setBooleanProperty(swb_dnsDefault, dnsDefault);
     }
 
     public org.semanticwb.model.WebSite getWebSite()
