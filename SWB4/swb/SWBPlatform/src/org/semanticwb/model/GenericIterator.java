@@ -135,7 +135,13 @@ public class GenericIterator<T extends GenericObject> implements Iterator
             {
                 try
                 {
-                    return (T)constructor.newInstance((SemanticObject)obj);
+                    if(constructor!=null)
+                    {
+                        return (T)constructor.newInstance((SemanticObject)obj);
+                    }else
+                    {
+                        return (T)((SemanticObject)obj).createGenericInstance();
+                    }
                 }
                 catch(Exception ie)
                 {
