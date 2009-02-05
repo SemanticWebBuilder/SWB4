@@ -36,11 +36,13 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.Portlet;
 import org.semanticwb.model.PortletType;
+import org.semanticwb.model.Portletable;
 import org.semanticwb.model.SWBContext;
 
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.office.interfaces.IOfficeDocument;
+import org.semanticwb.office.interfaces.PageInfo;
 import org.semanticwb.office.interfaces.PortletInfo;
 import org.semanticwb.office.interfaces.PropertyInfo;
 import org.semanticwb.office.interfaces.VersionInfo;
@@ -636,43 +638,42 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
-    public PortletInfo[] listPortlets(PortletInfo portletInfo, WebPageInfo webpage) throws Exception
+    public PortletInfo[] listPortlets(String repositoryName, String contentid) throws Exception
     {
         ArrayList<PortletInfo> listPortlets = new ArrayList<PortletInfo>();
-        WebSite site = SWBContext.getWebSite(portletInfo.siteId);
-        WebPage parent = site.getWebPage(webpage.id);
-        GenericIterator<Portlet> portlets = parent.listPortlets();
-        while (portlets.hasNext())
+        Iterator<WebSite> sites = SWBContext.listWebSites();
+        while (sites.hasNext())
         {
-            Portlet portlet = portlets.next();
-            if (portlet instanceof OfficePortlet)
+            WebSite site = sites.next();
+            Iterator<SemanticObject> it = site.getSemanticObject().getModel().listSubjects(OfficePortlet.swbrep_content, contentid);
+            while (it.hasNext())
             {
-                OfficePortlet officePortlet = (OfficePortlet) portlet;
-                PortletInfo info = new PortletInfo();
-                info.id = officePortlet.getId();
-                info.siteId = webpage.siteID;
-                String repositoryName = officePortlet.getRepositoryName();
-                String contentId = officePortlet.getContent();
-                Session session = null;
-                try
+                SemanticObject obj = it.next();
+                if (obj.getSemanticClass().isSubClass(OfficePortlet.sclass) || obj.getSemanticClass().equals(OfficePortlet.sclass))
                 {
-                    session = loader.openSession(repositoryName, this.user, this.password);
-                    Node contentNode = session.getNodeByUUID(contentId);
-                    String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
-                    String cm_description = loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
-                    info.description = contentNode.getProperty(cm_description).getString();
-                    info.title = contentNode.getProperty(cm_title).getString();
-                }
-                catch (Exception e)
-                {
-                    log.error(e);
-                    throw e;
-                }
-                finally
-                {
-                    if (session != null)
+                    OfficePortlet officePortlet = new OfficePortlet(obj);
+                    if (officePortlet.getRepositoryName().equals(repositoryName))
                     {
-                        session.logout();
+                        Portletable portletable = officePortlet.getPortletable();
+                        if (portletable != null)
+                        {
+                            if (portletable instanceof WebPage)
+                            {
+                                PortletInfo info = new PortletInfo();
+                                info.active = officePortlet.isActive();
+                                info.description = officePortlet.getDescription();
+                                info.id = officePortlet.getId();
+                                info.siteId = site.getId();
+                                info.title = officePortlet.getTitle();
+                                info.version = officePortlet.getVersionToShow();
+                                info.page = new PageInfo();
+                                WebPage page = (WebPage) portletable;
+                                info.page.title=page.getTitle();
+                                info.page.id=page.getId();
+                                info.page.description=page.getDescription();
+                                listPortlets.add(info);
+                            }
+                        }
                     }
                 }
             }
@@ -758,7 +759,11 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             PortletInfo.active = portlet.isActive();
             PortletInfo.description = portlet.getDescription();
             PortletInfo.version = version;
-            PortletInfo.title=title;
+            PortletInfo.title = title;
+            PortletInfo.page=new PageInfo();
+            PortletInfo.page.description=page.getDescription();
+            PortletInfo.page.id=page.getId();
+            PortletInfo.page.title=page.getTitle();
             return PortletInfo;
 
         }
@@ -978,8 +983,55 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     public void activatePortlet(PortletInfo info, boolean active) throws Exception
     {
         WebSite site = SWBContext.getWebSite(info.siteId);
-        Portlet portlet=site.getPortlet(info.id);
+        Portlet portlet = site.getPortlet(info.id);
         portlet.setActive(active);
+    }
+
+    public String getCategory(String repositoryName, String contentID) throws Exception
+    {
+        Session session = null;
+        try
+        {
+            session = loader.openSession(repositoryName, this.user, this.password);
+            Node nodeContent = session.getNodeByUUID(contentID);
+            Node parent = nodeContent.getParent();
+            String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
+            return parent.getProperty(cm_title).getString();
+        }
+        catch (ItemNotFoundException infe)
+        {
+            throw new Exception(CONTENT_NOT_FOUND, infe);
+        }
+        finally
+        {
+            if (session != null)
+            {
+                session.logout();
+            }
+        }
+    }
+
+    public void changeCategory(String repositoryName, String contentId, String newCategoryId) throws Exception
+    {
+        Session session = null;
+        try
+        {
+            session = loader.openSession(repositoryName, this.user, this.password);
+            Node nodeContent = session.getNodeByUUID(contentId);
+            Node newCategory = session.getNodeByUUID(newCategoryId);
+            session.move(nodeContent.getPath(), newCategory.getPath());
+        }
+        catch (ItemNotFoundException infe)
+        {
+            throw new Exception(CONTENT_NOT_FOUND, infe);
+        }
+        finally
+        {
+            if (session != null)
+            {
+                session.logout();
+            }
+        }
     }
 }
 
