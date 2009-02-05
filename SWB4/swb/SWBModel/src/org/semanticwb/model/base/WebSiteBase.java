@@ -42,6 +42,7 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
     public static final org.semanticwb.platform.SemanticClass swb_PFlowRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PFlowRef");
     public static final org.semanticwb.platform.SemanticClass swb_PortletRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PortletRef");
     public static final org.semanticwb.platform.SemanticClass swb_Permission=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Permission");
+    public static final org.semanticwb.platform.SemanticClass swb_PortletFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PortletFilter");
     public static final org.semanticwb.platform.SemanticClass swb_Template=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Template");
     public static final org.semanticwb.platform.SemanticClass swb_PFlow=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PFlow");
     public static final org.semanticwb.platform.SemanticClass swb_TemplateRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#TemplateRef");
@@ -1001,6 +1002,30 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
     public boolean hasPermission(String id)
     {
         return org.semanticwb.model.Permission.hasPermission(id, this);
+    }
+
+    public org.semanticwb.model.PortletFilter getPortletFilter(String id)
+    {
+        return org.semanticwb.model.PortletFilter.getPortletFilter(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.model.PortletFilter> listPortletFilters()
+    {
+        return org.semanticwb.model.PortletFilter.listPortletFilters(this);
+    }
+
+    public org.semanticwb.model.PortletFilter createPortletFilter(String id)
+    {
+        return org.semanticwb.model.PortletFilter.createPortletFilter(id,this);
+    }
+
+    public void removePortletFilter(String id)
+    {
+        org.semanticwb.model.PortletFilter.removePortletFilter(id, this);
+    }
+    public boolean hasPortletFilter(String id)
+    {
+        return org.semanticwb.model.PortletFilter.hasPortletFilter(id, this);
     }
 
     public org.semanticwb.model.Template getTemplate(String id)

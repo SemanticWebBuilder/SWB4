@@ -120,4 +120,9 @@ public class PortletFilterBase extends org.semanticwb.model.SWBClass implements 
          }
          return ret;
     }
+
+    public org.semanticwb.model.WebSite getWebSite()
+    {
+        return new org.semanticwb.model.WebSite(getSemanticObject().getModel().getModelObject());
+    }
 }
