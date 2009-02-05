@@ -89,13 +89,14 @@ public class DialogContentInformation extends javax.swing.JDialog
             {                
                 Object[] rowData =
                 {
-                    portletInfo.page.title, portletInfo.active, portletInfo.version
+                    portletInfo.page.site.title,portletInfo.page.title, portletInfo.active, portletInfo.version
                 };
                 model.addRow(rowData);
             }
         }
         catch (Exception e)
         {
+            e.printStackTrace();
         }
     }
 
@@ -295,14 +296,14 @@ public class DialogContentInformation extends javax.swing.JDialog
 
             },
             new String [] {
-                "Página", "Activo", "Version"
+                "Sitio", "Página", "Activo", "Version"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Boolean.class, java.lang.String.class
+                java.lang.String.class, java.lang.Object.class, java.lang.Boolean.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, true
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
