@@ -347,7 +347,7 @@ public abstract class OfficeDocument
         Map<String, String> properties = this.getCustomProperties();
         String contentId = properties.get(CONTENT_ID_NAME);
         String rep = properties.get(WORKSPACE_ID_NAME);
-        DialogContentInformation dialog = new DialogContentInformation(new javax.swing.JFrame(), true, contentId, rep);
+        DialogContentInformation dialog = new DialogContentInformation(new javax.swing.JFrame(), true, contentId, rep,this);
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
     }
