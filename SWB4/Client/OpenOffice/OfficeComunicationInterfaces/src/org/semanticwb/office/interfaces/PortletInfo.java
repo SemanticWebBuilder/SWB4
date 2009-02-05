@@ -16,6 +16,7 @@ public class PortletInfo {
     public String description;
     public boolean active;
     public String version;
+    public PageInfo page;
     @Override
     public String toString()
     {
