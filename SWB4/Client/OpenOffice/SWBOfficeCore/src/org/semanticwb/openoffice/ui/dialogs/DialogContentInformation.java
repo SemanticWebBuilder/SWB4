@@ -5,7 +5,15 @@
  */
 package org.semanticwb.openoffice.ui.dialogs;
 
+import javax.swing.table.DefaultTableModel;
+import org.netbeans.spi.wizard.Wizard;
+import org.netbeans.spi.wizard.WizardPage;
+import org.semanticwb.office.interfaces.PortletInfo;
+import org.semanticwb.office.interfaces.VersionInfo;
+import org.semanticwb.openoffice.ChangeCategoryResultProducer;
 import org.semanticwb.openoffice.OfficeApplication;
+import org.semanticwb.openoffice.OfficeDocument;
+import org.semanticwb.openoffice.ui.wizard.SelectCategory;
 
 /**
  *
@@ -14,24 +22,80 @@ import org.semanticwb.openoffice.OfficeApplication;
 public class DialogContentInformation extends javax.swing.JDialog
 {
 
-    private String contentId,repository;
+    private String contentId,  repository;
+    private OfficeDocument document;
+
     /** Creates new form DialogContentInformation */
-    public DialogContentInformation(java.awt.Frame parent, boolean modal,String contentId,String repository)
+    public DialogContentInformation(java.awt.Frame parent, boolean modal, String contentId, String repository, OfficeDocument document)
     {
         super(parent, modal);
         initComponents();
-        this.contentId=contentId;
-        this.repository=repository;
+        this.contentId = contentId;
+        this.repository = repository;
+        this.document = document;
         try
         {
             this.jTextFieldTitle.setText(OfficeApplication.getOfficeDocumentProxy().getTitle(repository, contentId));
             this.jTextAreaDescription.setText(OfficeApplication.getOfficeDocumentProxy().getDescription(repository, contentId));
-            String date=OfficeApplication.iso8601dateFormat.format(OfficeApplication.getOfficeDocumentProxy().getLasUpdate(repository, contentId));
+            String date = OfficeApplication.iso8601dateFormat.format(OfficeApplication.getOfficeDocumentProxy().getLasUpdate(repository, contentId));
             this.jLabel1DisplayDateOfModification.setText(date);
+            jLabelCategoryName.setText(OfficeApplication.getOfficeDocumentProxy().getCategory(repository, contentId));
+            loadVersions(contentId, repository);
+            loadPorlets(contentId, repository);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
-            
+            e.printStackTrace();
+        }
+    }
+
+    public void loadVersions(String contentId, String repositoryName)
+    {
+        try
+        {
+            DefaultTableModel model = (DefaultTableModel) jTableSummary1.getModel();
+            int rows = model.getRowCount();
+            for (int i = 1; i <= rows; i++)
+            {
+                model.removeRow(0);
+            }
+            for (VersionInfo versionInfo : OfficeApplication.getOfficeDocumentProxy().getVersions(repositoryName, contentId))
+            {
+                String date = OfficeApplication.iso8601dateFormat.format(versionInfo.created);
+                String[] rowData =
+                {
+                    versionInfo.nameOfVersion, date, versionInfo.user
+                };
+                model.addRow(rowData);
+            }
+        }
+        catch (Exception e)
+        {
+        }
+
+    }
+
+    private void loadPorlets(String contentId, String repositoryName)
+    {
+        DefaultTableModel model = (DefaultTableModel) jTablePages.getModel();
+        int rows = model.getRowCount();
+        for (int i = 1; i <= rows; i++)
+        {
+            model.removeRow(0);
+        }
+        try
+        {
+            for (PortletInfo portletInfo : OfficeApplication.getOfficeDocumentProxy().listPortlets(repositoryName, contentId))
+            {                
+                Object[] rowData =
+                {
+                    portletInfo.page.title, portletInfo.active, portletInfo.version
+                };
+                model.addRow(rowData);
+            }
+        }
+        catch (Exception e)
+        {
         }
     }
 
@@ -55,6 +119,9 @@ public class DialogContentInformation extends javax.swing.JDialog
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextAreaDescription = new javax.swing.JTextArea();
         jLabel1DisplayDateOfModification = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabelCategoryName = new javax.swing.JLabel();
+        jButtonChangeCategory = new javax.swing.JButton();
         jPanelPublishInformation = new javax.swing.JPanel();
         jToolBar1 = new javax.swing.JToolBar();
         jButtonEdit = new javax.swing.JButton();
@@ -65,14 +132,10 @@ public class DialogContentInformation extends javax.swing.JDialog
         jSeparator2 = new javax.swing.JToolBar.Separator();
         jButton5 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTablePages = new javax.swing.JTable();
         jPanelVersions = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTableSummary1 = new javax.swing.JTable();
-        jToolBar2 = new javax.swing.JToolBar();
-        jButton1 = new javax.swing.JButton();
-        jSeparator4 = new javax.swing.JToolBar.Separator();
-        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Información del Contenido");
@@ -95,7 +158,7 @@ public class DialogContentInformation extends javax.swing.JDialog
         jPanelButtonsLayout.setHorizontalGroup(
             jPanelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelButtonsLayout.createSequentialGroup()
-                .addContainerGap(319, Short.MAX_VALUE)
+                .addContainerGap(309, Short.MAX_VALUE)
                 .addComponent(jButtonCancel)
                 .addGap(18, 18, 18)
                 .addComponent(jButtonAccept)
@@ -113,6 +176,8 @@ public class DialogContentInformation extends javax.swing.JDialog
 
         getContentPane().add(jPanelButtons, java.awt.BorderLayout.SOUTH);
 
+        jTabbedPane1.setPreferredSize(new java.awt.Dimension(471, 250));
+
         jLabel1.setText("Título:");
 
         jLabel2.setText("Descripción:");
@@ -125,6 +190,17 @@ public class DialogContentInformation extends javax.swing.JDialog
 
         jLabel1DisplayDateOfModification.setText("18 de Diciembre de 1973 20:30");
 
+        jLabel4.setText("Categoria");
+
+        jLabelCategoryName.setText("Categoria");
+
+        jButtonChangeCategory.setText("...");
+        jButtonChangeCategory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonChangeCategoryActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanelContentInformationLayout = new javax.swing.GroupLayout(jPanelContentInformation);
         jPanelContentInformation.setLayout(jPanelContentInformationLayout);
         jPanelContentInformationLayout.setHorizontalGroup(
@@ -134,12 +210,17 @@ public class DialogContentInformation extends javax.swing.JDialog
                 .addGroup(jPanelContentInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
                     .addComponent(jLabel2)
-                    .addComponent(jLabel3))
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel4))
                 .addGap(30, 30, 30)
                 .addGroup(jPanelContentInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
-                    .addComponent(jTextFieldTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
-                    .addComponent(jLabel1DisplayDateOfModification, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
+                    .addComponent(jTextFieldTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
+                    .addComponent(jLabel1DisplayDateOfModification, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelContentInformationLayout.createSequentialGroup()
+                        .addComponent(jLabelCategoryName, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButtonChangeCategory)))
                 .addContainerGap())
         );
         jPanelContentInformationLayout.setVerticalGroup(
@@ -153,11 +234,16 @@ public class DialogContentInformation extends javax.swing.JDialog
                 .addGroup(jPanelContentInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
                 .addGroup(jPanelContentInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(jLabel1DisplayDateOfModification))
-                .addGap(96, 96, 96))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanelContentInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabelCategoryName)
+                    .addComponent(jButtonChangeCategory))
+                .addGap(71, 71, 71))
         );
 
         jTabbedPane1.addTab("Información del Contenido", jPanelContentInformation);
@@ -180,6 +266,11 @@ public class DialogContentInformation extends javax.swing.JDialog
         jButtonPublish.setFocusable(false);
         jButtonPublish.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonPublish.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonPublish.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonPublishActionPerformed(evt);
+            }
+        });
         jToolBar1.add(jButtonPublish);
         jToolBar1.add(jSeparator3);
 
@@ -199,19 +290,19 @@ public class DialogContentInformation extends javax.swing.JDialog
 
         jPanelPublishInformation.add(jToolBar1, java.awt.BorderLayout.NORTH);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTablePages.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Página", "Activo", "Tipo de presentación", "Version"
+                "Página", "Activo", "Version"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Boolean.class, java.lang.String.class, java.lang.String.class
+                java.lang.Object.class, java.lang.Boolean.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, true
+                false, false, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -222,9 +313,9 @@ public class DialogContentInformation extends javax.swing.JDialog
                 return canEdit [columnIndex];
             }
         });
-        jTable1.setColumnSelectionAllowed(true);
-        jScrollPane2.setViewportView(jTable1);
-        jTable1.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jTablePages.setColumnSelectionAllowed(true);
+        jScrollPane2.setViewportView(jTablePages);
+        jTablePages.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
         jPanelPublishInformation.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
@@ -258,30 +349,11 @@ public class DialogContentInformation extends javax.swing.JDialog
         jTableSummary1.setColumnSelectionAllowed(true);
         jTableSummary1.setFocusable(false);
         jTableSummary1.setRowSelectionAllowed(false);
+        jTableSummary1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane3.setViewportView(jTableSummary1);
         jTableSummary1.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
         jPanelVersions.add(jScrollPane3, java.awt.BorderLayout.CENTER);
-
-        jToolBar2.setFloatable(false);
-        jToolBar2.setRollover(true);
-
-        jButton1.setText("Ver");
-        jButton1.setEnabled(false);
-        jButton1.setFocusable(false);
-        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar2.add(jButton1);
-        jToolBar2.add(jSeparator4);
-
-        jButton3.setText("Eliminar versión");
-        jButton3.setEnabled(false);
-        jButton3.setFocusable(false);
-        jButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar2.add(jButton3);
-
-        jPanelVersions.add(jToolBar2, java.awt.BorderLayout.PAGE_START);
 
         jTabbedPane1.addTab("Versiones del contenido", jPanelVersions);
 
@@ -294,13 +366,36 @@ public class DialogContentInformation extends javax.swing.JDialog
     {//GEN-HEADEREND:event_jButtonCancelActionPerformed
         this.setVisible(false);
     }//GEN-LAST:event_jButtonCancelActionPerformed
-   
+
+    private void jButtonPublishActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonPublishActionPerformed
+    {//GEN-HEADEREND:event_jButtonPublishActionPerformed
+        document.publish();
+    }//GEN-LAST:event_jButtonPublishActionPerformed
+
+    private void jButtonChangeCategoryActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonChangeCategoryActionPerformed
+    {//GEN-HEADEREND:event_jButtonChangeCategoryActionPerformed
+        ChangeCategoryResultProducer resultProducer = new ChangeCategoryResultProducer(this.contentId, this.repository);
+        WizardPage[] pages =
+        {
+            new SelectCategory(this.repository)
+        };
+        Wizard wiz = WizardPage.createWizard("Cambiar contenido de categoria", pages, resultProducer);
+        wiz.show();
+        try
+        {
+            String category = OfficeApplication.getOfficeDocumentProxy().getCategory(repository, contentId);
+            jLabelCategoryName.setText(category);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_jButtonChangeCategoryActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButtonAccept;
     private javax.swing.JButton jButtonCancel;
+    private javax.swing.JButton jButtonChangeCategory;
     private javax.swing.JButton jButtonEdit;
     private javax.swing.JButton jButtonPublish;
     private javax.swing.JButton jButtonViewPage;
@@ -308,6 +403,8 @@ public class DialogContentInformation extends javax.swing.JDialog
     private javax.swing.JLabel jLabel1DisplayDateOfModification;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabelCategoryName;
     private javax.swing.JPanel jPanelButtons;
     private javax.swing.JPanel jPanelContentInformation;
     private javax.swing.JPanel jPanelPublishInformation;
@@ -318,13 +415,11 @@ public class DialogContentInformation extends javax.swing.JDialog
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator3;
-    private javax.swing.JToolBar.Separator jSeparator4;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTablePages;
     private javax.swing.JTable jTableSummary1;
     private javax.swing.JTextArea jTextAreaDescription;
     private javax.swing.JTextField jTextFieldTitle;
     private javax.swing.JToolBar jToolBar1;
-    private javax.swing.JToolBar jToolBar2;
     // End of variables declaration//GEN-END:variables
 }
