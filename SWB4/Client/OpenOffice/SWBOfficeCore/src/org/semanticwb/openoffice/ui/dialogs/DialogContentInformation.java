@@ -42,7 +42,7 @@ public class DialogContentInformation extends javax.swing.JDialog
         this.repository = repository;
         this.document = document;
         TableColumn column = this.jTablePages.getColumnModel().getColumn(4);
-        column.setCellEditor(new VersionEditor(repository,contentId));
+        column.setCellEditor(new VersionEditor(repository, contentId));
 
         try
         {
@@ -98,14 +98,16 @@ public class DialogContentInformation extends javax.swing.JDialog
         {
             for (PortletInfo portletInfo : OfficeApplication.getOfficeDocumentProxy().listPortlets(repositoryName, contentId))
             {
-                String version = portletInfo.version;
-                if (version.equals("*"))
+                Version objVersion=new Version();
+                objVersion.id=portletInfo.version;
+                objVersion.title=portletInfo.version;
+                if (objVersion.id.equals("*"))
                 {
-                    version = "Mostrar la última versión";
+                    objVersion.title = "Mostrar la última versión";
                 }
                 Object[] rowData =
                 {
-                    portletInfo, portletInfo.page.site.title, portletInfo.page.title, portletInfo.active, version
+                    portletInfo, portletInfo.page.site.title, portletInfo.page.title, portletInfo.active, objVersion
                 };
                 model.addRow(rowData);
             }
@@ -145,8 +147,6 @@ public class DialogContentInformation extends javax.swing.JDialog
         jButtonPublish = new javax.swing.JButton();
         jSeparator3 = new javax.swing.JToolBar.Separator();
         jButtonViewPage = new javax.swing.JButton();
-        jSeparator2 = new javax.swing.JToolBar.Separator();
-        jButtonCambiarVersion = new javax.swing.JButton();
         jSeparator4 = new javax.swing.JToolBar.Separator();
         jButton5 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -163,6 +163,11 @@ public class DialogContentInformation extends javax.swing.JDialog
         jPanelButtons.setPreferredSize(new java.awt.Dimension(100, 50));
 
         jButtonAccept.setText("Aceptar");
+        jButtonAccept.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAcceptActionPerformed(evt);
+            }
+        });
 
         jButtonCancel.setText("Cerrar");
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
@@ -290,14 +295,6 @@ public class DialogContentInformation extends javax.swing.JDialog
         jButtonViewPage.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonViewPage.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar1.add(jButtonViewPage);
-        jToolBar1.add(jSeparator2);
-
-        jButtonCambiarVersion.setText("Cambiar version a Mostrar");
-        jButtonCambiarVersion.setEnabled(false);
-        jButtonCambiarVersion.setFocusable(false);
-        jButtonCambiarVersion.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButtonCambiarVersion.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButtonCambiarVersion);
         jToolBar1.add(jSeparator4);
 
         jButton5.setText("Eliminar");
@@ -318,7 +315,7 @@ public class DialogContentInformation extends javax.swing.JDialog
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class, java.lang.String.class
+                java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false, true, true
@@ -413,10 +410,40 @@ public class DialogContentInformation extends javax.swing.JDialog
             e.printStackTrace();
         }
     }//GEN-LAST:event_jButtonChangeCategoryActionPerformed
+
+    private void jButtonAcceptActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonAcceptActionPerformed
+    {//GEN-HEADEREND:event_jButtonAcceptActionPerformed
+
+        //update porlets
+        DefaultTableModel model = (DefaultTableModel) jTablePages.getModel();
+        int rows = model.getRowCount();
+        for (int i = 1; i <= rows; i++)
+        {
+            Object originalValue=model.getValueAt(i, 0);
+            if(originalValue instanceof PortletInfo)
+            {
+                PortletInfo portletInfo=(PortletInfo)originalValue;
+                Version newVersion=(Version)model.getValueAt(i, 4);
+                if(!newVersion.id.equals(portletInfo.version))
+                {
+                    try
+                    {
+                        OfficeApplication.getOfficeDocumentProxy().changeVersionPorlet(portletInfo,newVersion.id);
+                    }
+                    catch(Exception e)
+                    {
+
+                    }
+                }
+            }
+        }
+        this.setVisible(true);
+
+    }//GEN-LAST:event_jButtonAcceptActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButtonAccept;
-    private javax.swing.JButton jButtonCambiarVersion;
     private javax.swing.JButton jButtonCancel;
     private javax.swing.JButton jButtonChangeCategory;
     private javax.swing.JButton jButtonPublish;
@@ -435,7 +462,6 @@ public class DialogContentInformation extends javax.swing.JDialog
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JToolBar.Separator jSeparator1;
-    private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator3;
     private javax.swing.JToolBar.Separator jSeparator4;
     private javax.swing.JTabbedPane jTabbedPane1;
@@ -451,39 +477,48 @@ class VersionEditor extends AbstractCellEditor implements TableCellEditor
 {
 
     private String repositoryName,  contentId;
+    private JComboBox combo = new JComboBox();
 
     public VersionEditor(String repositoryName, String contentId)
     {
         this.repositoryName = repositoryName;
         this.contentId = contentId;
+        Version objVersion=new Version();
+        objVersion.id="*";
+        objVersion.title="Mostrar la última versión";
+        combo.addItem(objVersion);
+        try
+        {
+            for (VersionInfo versionInfo : OfficeApplication.getOfficeDocumentProxy().getVersions(repositoryName, contentId))
+            {
+                combo.addItem(versionInfo);
+            }
+        }
+        catch (Exception e)
+        {
+        }
     }
 
     public Object getCellEditorValue()
     {
-        return "a";
+        return combo.getSelectedItem();
     }
 
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column)
     {
-
-        JComboBox combo = new JComboBox();
-        Object obj = table.getModel().getValueAt(row, 0);
-        if (obj instanceof PortletInfo)
-        {
-            PortletInfo PortletInfo = (PortletInfo) obj;
-            try
-            {
-                for(VersionInfo versionInfo : OfficeApplication.getOfficeDocumentProxy().getVersions(repositoryName, contentId))
-                {
-                    combo.addItem(versionInfo);
-                }
-            }
-            catch(Exception e)
-            {
-
-            }
-        }
-
+        combo.setSelectedItem(value);
         return combo;
     }
+}
+class Version
+{
+
+    @Override
+    public String toString()
+    {
+        return title;
+    }
+    String id;
+    String title;
+
 }
