@@ -35,6 +35,7 @@ public class SelectCategory extends WizardPage
     public static Map map = null;
     public static final String CATEGORY_ID = "categoryID";
     public static final String REPOSITORY_ID = "repositoryID";
+    private String repositoryID;
 
     /** Creates new form SelectCategory */
     public SelectCategory()
@@ -46,6 +47,17 @@ public class SelectCategory extends WizardPage
 
     }
 
+    public SelectCategory(String repositoryID)
+    {
+        initComponents();
+        this.repositoryID = repositoryID;
+        this.getWizardDataMap().remove(CATEGORY_ID);
+        this.getWizardDataMap().remove(REPOSITORY_ID);
+        loadTree();
+
+
+    }
+
     private void addCategory(String repository, CategoryNode parent)
     {
         try
@@ -54,11 +66,11 @@ public class SelectCategory extends WizardPage
             {
                 CategoryNode categoryNode = new CategoryNode(category.UDDI, category.title, category.description, repository);
                 parent.add(categoryNode);
-                if(category.childs>0)
+                if (category.childs > 0)
                 {
                     categoryNode.add(new DefaultMutableTreeNode(""));
                 }
-                //addCategory(repository, categoryNode);
+            //addCategory(repository, categoryNode);
             }
         }
         catch (Exception e)
@@ -75,11 +87,11 @@ public class SelectCategory extends WizardPage
             {
                 CategoryNode categoryNode = new CategoryNode(category.UDDI, category.title, category.description, parent.getName());
                 parent.add(categoryNode);
-                if(category.childs>0)
+                if (category.childs > 0)
                 {
                     categoryNode.add(new DefaultMutableTreeNode(""));
                 }
-                //addCategory(repository, categoryNode);
+            //addCategory(repository, categoryNode);
             }
         }
         catch (Exception e)
@@ -87,23 +99,31 @@ public class SelectCategory extends WizardPage
             e.printStackTrace(System.out);
         }
     }
+
     private void addRepositories(RepositoryNode parent)
     {
         try
         {
             for (String repository : OfficeApplication.getOfficeApplicationProxy().getRepositories())
             {
-                RepositoryNode repositoryNode = new RepositoryNode(repository);
-                parent.add(repositoryNode);
-                for (CategoryInfo category : OfficeApplication.getOfficeApplicationProxy().getCategories(repository))
+                boolean showRepository = false;
+                if (this.repositoryID == null || repositoryID.equals(repository))
                 {
-                    CategoryNode categoryNode = new CategoryNode(category.UDDI, category.title, category.description, repository);
-                    repositoryNode.add(categoryNode);
-                    if(category.childs>0)
+                    showRepository = true;
+                }                
+                if (showRepository)
+                {
+                    RepositoryNode repositoryNode = new RepositoryNode(repository);
+                    parent.add(repositoryNode);
+                    for (CategoryInfo category : OfficeApplication.getOfficeApplicationProxy().getCategories(repository))
                     {
-                        categoryNode.add(new DefaultMutableTreeNode(""));
+                        CategoryNode categoryNode = new CategoryNode(category.UDDI, category.title, category.description, repository);
+                        repositoryNode.add(categoryNode);
+                        if (category.childs > 0)
+                        {
+                            categoryNode.add(new DefaultMutableTreeNode(""));
+                        }
                     }
-                    //addCategory(repository, categoryNode);
                 }
             }
         }
@@ -153,6 +173,12 @@ public class SelectCategory extends WizardPage
         }
         SelectCategory.map = map;
         return result;
+    }
+
+    @Override
+    public WizardPanelNavResult allowFinish(String arg, Map map, Wizard wizard)
+    {
+        return this.allowNext(arg, map, wizard);
     }
 
     /** This method is called from within the constructor to
@@ -343,10 +369,10 @@ private void jButtonDeletCategoryActionPerformed(java.awt.event.ActionEvent evt)
 
 private void jTreeCategoryTreeWillExpand(javax.swing.event.TreeExpansionEvent evt)throws javax.swing.tree.ExpandVetoException//GEN-FIRST:event_jTreeCategoryTreeWillExpand
 {//GEN-HEADEREND:event_jTreeCategoryTreeWillExpand
-    DefaultMutableTreeNode treeNode=(DefaultMutableTreeNode)evt.getPath().getLastPathComponent();
-    if(treeNode instanceof CategoryNode && treeNode.getChildCount()==1 && !(treeNode.getChildAt(0) instanceof CategoryNode))
+    DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) evt.getPath().getLastPathComponent();
+    if (treeNode instanceof CategoryNode && treeNode.getChildCount() == 1 && !(treeNode.getChildAt(0) instanceof CategoryNode))
     {
-        CategoryNode categoryNode=(CategoryNode)treeNode;
+        CategoryNode categoryNode = (CategoryNode) treeNode;
         categoryNode.removeAllChildren();
         addCategory(categoryNode.getRepository(), categoryNode);
     }
