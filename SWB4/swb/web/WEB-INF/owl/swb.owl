@@ -202,6 +202,14 @@
       </swb:Interface>
     </rdfs:subClassOf>
   </owl:Class>
+  <owl:Class rdf:ID="PortletFilter">
+    <rdfs:subClassOf rdf:resource="#Traceable"/>
+    <rdfs:subClassOf rdf:resource="#XMLable"/>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model.PortletFilter</swb:className>
+    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <rdf:type rdf:resource="#Class"/>
+  </owl:Class>
   <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectAction">
     <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.model.ObjectAction</swb:className>
@@ -1081,6 +1089,10 @@
     </swb:displayProperty>
     <rdfs:range rdf:resource="#VersionInfo"/>
     <rdfs:domain rdf:resource="#Versionable"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="portletFilter">
+    <rdfs:range rdf:resource="#PortletFilter"/>
+    <rdfs:domain rdf:resource="#Portlet"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#resParamValue">
     <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
