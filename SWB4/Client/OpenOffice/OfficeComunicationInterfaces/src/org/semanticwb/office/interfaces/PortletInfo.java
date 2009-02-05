@@ -10,8 +10,7 @@ package org.semanticwb.office.interfaces;
  * @author victor.lorenzana
  */
 public class PortletInfo {
-    public String id;
-    public String siteId;
+    public String id;    
     public String title;
     public String description;
     public boolean active;
