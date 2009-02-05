@@ -5,6 +5,7 @@
  */
 package org.semanticwb.openoffice.ui.dialogs;
 
+import java.awt.Cursor;
 import javax.swing.table.DefaultTableModel;
 import org.netbeans.spi.wizard.Wizard;
 import org.netbeans.spi.wizard.WizardPage;
@@ -376,7 +377,9 @@ public class DialogContentInformation extends javax.swing.JDialog
     private void jButtonPublishActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonPublishActionPerformed
     {//GEN-HEADEREND:event_jButtonPublishActionPerformed
         document.publish();
+        this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
         loadPorlets(contentId, repository);
+        this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_jButtonPublishActionPerformed
 
     private void jButtonChangeCategoryActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonChangeCategoryActionPerformed
