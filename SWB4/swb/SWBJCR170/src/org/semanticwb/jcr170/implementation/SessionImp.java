@@ -767,7 +767,18 @@ public class SessionImp implements Session
 
     public void move(String srcAbsPath, String destAbsPath) throws ItemExistsException, PathNotFoundException, VersionException, ConstraintViolationException, LockException, RepositoryException
     {
-        throw new UnsupportedOperationException(NOT_SUPPORTED_YET);
+        //TODO: revisar esto para los demas tipos de moviemntos, este moviento debería ser temporal, pero por tiempo se deja así
+        Item srcItem=this.getItem(srcAbsPath);
+        Item destItem=this.getItem(destAbsPath);
+        if(srcItem instanceof SimpleNode && destItem instanceof SimpleNode)
+        {
+            SimpleNode srcSimpleNode=(SimpleNode)srcItem;
+            SimpleNode destSimpleNode=(SimpleNode)destItem;
+            if(srcSimpleNode.node!=null && destSimpleNode.node!=null)
+            {
+                srcSimpleNode.node.setParent(destSimpleNode.node);
+            }
+        }
     }
 
     public void save() throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
