@@ -503,6 +503,8 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
                 nodeContent.checkout();
                 nodeContent.setProperty(cm_title, title);
+                Node resource = nodeContent.getNode(JCR_CONTENT);
+                resource.getProperty(JCR_LASTMODIFIED).setValue(Calendar.getInstance());
                 nodeContent.save();
                 nodeContent.checkin();
             }
@@ -583,6 +585,8 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 String cm_description = loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
                 nodeContent.checkout();
                 nodeContent.setProperty(cm_description, description);
+                Node resource = nodeContent.getNode(JCR_CONTENT);
+                resource.getProperty(JCR_LASTMODIFIED).setValue(Calendar.getInstance());
                 nodeContent.save();
                 nodeContent.checkin();
             }
