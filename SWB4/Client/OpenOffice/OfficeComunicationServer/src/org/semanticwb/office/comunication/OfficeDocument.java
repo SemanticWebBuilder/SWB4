@@ -88,14 +88,6 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         {
             session = loader.openSession(repositoryName, this.user, this.password);
             categoryNode = session.getNodeByUUID(categoryID);
-            if (!categoryNode.isLocked())
-            {
-                //categoryNode.lock(false, false); // blocks the nodeContent
-            }
-            else
-            {
-                throw new Exception("The node is locked");
-            }
             try
             {
                 String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
@@ -201,14 +193,6 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         {
             session = loader.openSession(repositoryName, this.user, this.password);
             Node nodeContent = session.getNodeByUUID(contentId);
-            if (!nodeContent.isLocked())
-            {
-                //nodeContent.lock(false, false); // blocks the nodeContent for all
-            }
-            else
-            {
-                throw new Exception("The content is locked");
-            }
             if (!nodeContent.isCheckedOut())
             {
                 nodeContent.checkout();
@@ -217,7 +201,6 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 nodeContent.setProperty(cm_file, file);
                 nodeContent.setProperty(cm_user, this.user);
                 nodeContent.save();
-
                 try
                 {
                     for (Part part : requestParts)
@@ -384,10 +367,6 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 
     }
 
-    
-
-  
-
     public void sendToAuthorize()
     {
     }
@@ -451,7 +430,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         try
         {
             session = loader.openSession(repositoryName, this.user, this.password);
-            Node nodeContent = session.getNodeByUUID(contentId);            
+            Node nodeContent = session.getNodeByUUID(contentId);
             VersionIterator it = nodeContent.getVersionHistory().getAllVersions();
             while (it.hasNext())
             {
@@ -466,7 +445,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     info.user = version.getNode(JCR_FROZEN_NODE).getProperty(cm_user).getString();
                     versions.add(info);
                 }
-            }        
+            }
         }
         catch (ItemNotFoundException infe)
         {
@@ -489,20 +468,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         {
             session = loader.openSession(repositoryName, this.user, this.password);
             Node nodeContent = session.getNodeByUUID(contentID);
-            if (!nodeContent.isLocked())
-            {
-                String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
-                nodeContent.checkout();
-                nodeContent.setProperty(cm_title, title);
-                Node resource = nodeContent.getNode(JCR_CONTENT);
-                resource.getProperty(JCR_LASTMODIFIED).setValue(Calendar.getInstance());
-                nodeContent.save();
-                nodeContent.checkin();
-            }
-            else
-            {
-                throw new Exception("The content is locked");
-            }
+
+            String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
+            nodeContent.checkout();
+            nodeContent.setProperty(cm_title, title);
+            Node resource = nodeContent.getNode(JCR_CONTENT);
+            resource.getProperty(JCR_LASTMODIFIED).setValue(Calendar.getInstance());
+            nodeContent.save();
+            nodeContent.checkin();
 
         }
         catch (ItemNotFoundException infe)
@@ -571,8 +544,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         {
             session = loader.openSession(repositoryName, this.user, this.password);
             Node nodeContent = session.getNodeByUUID(contentID);
-            if (!nodeContent.isLocked())
-            {
+           
                 String cm_description = loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
                 nodeContent.checkout();
                 nodeContent.setProperty(cm_description, description);
@@ -580,11 +552,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 resource.getProperty(JCR_LASTMODIFIED).setValue(Calendar.getInstance());
                 nodeContent.save();
                 nodeContent.checkin();
-            }
-            else
-            {
-                throw new Exception("The content is locked");
-            }
+            
 
         }
         catch (ItemNotFoundException infe)
@@ -912,7 +880,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     public void activatePortlet(PortletInfo info, boolean active) throws Exception
     {
         WebSite site = SWBContext.getWebSite(info.page.site.id);
-        OfficePortlet portlet = OfficePortlet.getOfficePortlet(info.id,site);
+        OfficePortlet portlet = OfficePortlet.getOfficePortlet(info.id, site);
         portlet.setActive(active);
     }
 
@@ -982,11 +950,11 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             Node parent = nodeContent.getParent();
             String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
             String cm_description = loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
-            CategoryInfo info=new CategoryInfo();
-            info.UDDI=parent.getUUID();
-            info.childs=0;
-            info.description=parent.getProperty(cm_description).getString();
-            info.title=parent.getProperty(cm_title).getString();
+            CategoryInfo info = new CategoryInfo();
+            info.UDDI = parent.getUUID();
+            info.childs = 0;
+            info.description = parent.getProperty(cm_description).getString();
+            info.title = parent.getProperty(cm_title).getString();
             return info;
         }
         catch (ItemNotFoundException infe)
