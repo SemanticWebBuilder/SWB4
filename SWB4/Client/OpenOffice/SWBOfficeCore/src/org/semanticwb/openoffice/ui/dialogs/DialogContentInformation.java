@@ -566,8 +566,9 @@ class ComboVersiones extends JComboBox
     String repositoryName,contentId;
     public ComboVersiones(String repositoryName, String contentId,VersionInfo selected)
     {
-        
-        this.addItem("*");
+        VersionInfo info=new VersionInfo();
+        info.nameOfVersion="*";
+        this.addItem(info);
         try
         {
             for (VersionInfo versionInfo : OfficeApplication.getOfficeDocumentProxy().getVersions(repositoryName, contentId))
