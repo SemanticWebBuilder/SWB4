@@ -347,7 +347,7 @@ public abstract class OfficeDocument
         Map<String, String> properties = this.getCustomProperties();
         String contentId = properties.get(CONTENT_ID_NAME);
         String rep = properties.get(WORKSPACE_ID_NAME);
-        DialogContentInformation dialog = new DialogContentInformation(new javax.swing.JFrame(), true, contentId, rep,this);
+        DialogContentInformation dialog = new DialogContentInformation(new javax.swing.JFrame(), true, contentId, rep, this);
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
     }
@@ -591,65 +591,72 @@ public abstract class OfficeDocument
                 }
                 if (canbepublished)
                 {
-                    if (isPublicated())
+                    try
                     {
-                        try
+                        if (isPublicated() && OfficeApplication.getOfficeDocumentProxy().exists(this.workspaceID, this.contentID))
                         {
-                            if (isModified())
-                            {
-                                save();
-                            }
                             try
                             {
-                                updateContent();
+                                if (isModified())
+                                {
+                                    save();
+                                }
+                                try
+                                {
+                                    updateContent();
+                                }
+                                catch (Exception e)
+                                {
+                                    JOptionPane.showMessageDialog(null, "No se puede actualizar el contenido la causa es: " + e.getMessage(), TITLE_SAVE_CONTENT_SITE, JOptionPane.ERROR_MESSAGE);
+                                    ErrorLog.log(e);
+                                }
                             }
-                            catch (Exception e)
+                            catch (WBException e)
                             {
-                                JOptionPane.showMessageDialog(null, "No se puede actualizar el contenido la causa es: " + e.getMessage(), TITLE_SAVE_CONTENT_SITE, JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(null, e.getMessage(), TITLE_SAVE_CONTENT_SITE, JOptionPane.ERROR_MESSAGE);
                                 ErrorLog.log(e);
                             }
                         }
-                        catch (WBException e)
+                        else
                         {
-                            JOptionPane.showMessageDialog(null, e.getMessage(), TITLE_SAVE_CONTENT_SITE, JOptionPane.ERROR_MESSAGE);
-                            ErrorLog.log(e);
+                            PublishResultProducer resultProducer = new PublishResultProducer(this);
+                            Class[] clazz;
+                            switch (getDocumentType())
+                            {
+                                case WORD:
+                                    clazz = new Class[]
+                                            {
+                                                //TitleAndDescription.class, SelectCategory.class, PagContenido.class, SelectTypeToShow.class
+                                                SelectCategory.class, TitleAndDescription.class
+                                            };
+                                    break;
+                                case EXCEL:
+                                    clazz = new Class[]
+                                            {
+                                                SelectCategory.class, TitleAndDescription.class
+                                            };
+                                    break;
+                                case PPT:
+                                    clazz = new Class[]
+                                            {
+                                                SelectCategory.class, TitleAndDescription.class
+                                            };
+                                    break;
+                                default:
+                                    clazz = new Class[]
+                                            {
+                                                TitleAndDescription.class, SelectCategory.class
+                                            };
+                                    break;
+
+                            }
+                            Wizard wiz = WizardPage.createWizard(TITLE_SAVE_CONTENT_SITE, clazz, resultProducer);
+                            wiz.show();
                         }
                     }
-                    else
+                    catch (Exception e)
                     {
-                        PublishResultProducer resultProducer = new PublishResultProducer(this);
-                        Class[] clazz;
-                        switch (getDocumentType())
-                        {
-                            case WORD:
-                                clazz = new Class[]
-                                        {
-                                            //TitleAndDescription.class, SelectCategory.class, PagContenido.class, SelectTypeToShow.class
-                                            SelectCategory.class, TitleAndDescription.class
-                                        };
-                                break;
-                            case EXCEL:
-                                clazz = new Class[]
-                                        {
-                                            SelectCategory.class, TitleAndDescription.class
-                                        };
-                                break;
-                            case PPT:
-                                clazz = new Class[]
-                                        {
-                                            SelectCategory.class, TitleAndDescription.class
-                                        };
-                                break;
-                            default:
-                                clazz = new Class[]
-                                        {
-                                            TitleAndDescription.class, SelectCategory.class
-                                        };
-                                break;
-
-                        }
-                        Wizard wiz = WizardPage.createWizard(TITLE_SAVE_CONTENT_SITE, clazz, resultProducer);
-                        wiz.show();
+                        e.printStackTrace();
                     }
                 }
             }
