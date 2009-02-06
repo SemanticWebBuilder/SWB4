@@ -74,7 +74,7 @@
 
     }
 %>
-<span id="swblogout"><%=user.getUsrFullName()%> | <a href="<%=SWBPlatform.getContextPath()%>/login?_wb_logout=true">logout</a></span>
+<span id="swblogout"><%=user.getUsrFullName()%> | <a href="<%=SWBPlatform.getContextPath()%>/login?wb_logout=true">logout</a></span>
 <!--    
 
     <div id="getMail" dojoType="dijit.form.ComboButton" optionsTitle="Mail Source Options">
