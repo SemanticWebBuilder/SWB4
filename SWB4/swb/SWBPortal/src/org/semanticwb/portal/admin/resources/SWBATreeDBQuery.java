@@ -193,7 +193,7 @@ public class SWBATreeDBQuery extends GenericResource
             icon.setAttribute("path","images/icon-pagweba.gif");
             
             icon=addNode("icon","folder","Folder",icons);
-            icon.setAttribute("path","images/f_general.gif");
+            icon.setAttribute("path","images/icon-foldera.gif");
             icon=addNode("icon","root","Root",icons);
             icon.setAttribute("path","images/icon-servera.gif");
             icon=addNode("icon","global","Global",icons);
@@ -401,7 +401,7 @@ public class SWBATreeDBQuery extends GenericResource
         
         menu=addNode("menu","menu","Menu",poolconn);
         
-        poolconn.setAttribute("icon","dns");
+        poolconn.setAttribute("icon","folder");
         
         addSeparator(menu);
         addOptRefresh(menu,user);
@@ -500,7 +500,7 @@ public class SWBATreeDBQuery extends GenericResource
         
         //add primary keys table
         Element  primaryKeys=addNode("node","PK_"+dbcon+tablename,"Primary Keys",table);
-        //primaryKeys.setAttribute("icon","sitev");
+        primaryKeys.setAttribute("icon","sitev");
         try
         {
             Connection conn = SWBUtils.DB.getConnection(dbcon,"SWBATreeDBQuery.addTable(PK)");
