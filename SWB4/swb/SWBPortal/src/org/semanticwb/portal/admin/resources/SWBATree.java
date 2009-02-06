@@ -167,13 +167,13 @@ public class SWBATree extends GenericResource
             Element icons=addNode("icons","icons","Icons",config);
 
             Element icon=addNode("icon","sitev","Site",icons);
-            icon.setAttribute("path","images/f_site_verde.gif");
+            icon.setAttribute("path","images/icon-sitioa.gif");
             icon=addNode("icon","siter","Site",icons);
-            icon.setAttribute("path","images/f_site_rojo.gif");
+            icon.setAttribute("path","images/icon-sitior.gif");
             icon=addNode("icon","hijor","Topic",icons);
-            icon.setAttribute("path","images/i_general_rojo.gif");
+            icon.setAttribute("path","images/icon-pagwebr.gif");
             icon=addNode("icon","hijov","Topic",icons);
-            icon.setAttribute("path","images/i_general_verde.gif");
+            icon.setAttribute("path","images/icon-pagweba.gif");
             icon=addNode("icon","homer","Topic",icons);
             icon.setAttribute("path","images/i_home_rojo.gif");
             icon=addNode("icon","homev","Topic",icons);
@@ -184,9 +184,9 @@ public class SWBATree extends GenericResource
             icon=addNode("icon","folder","Folder",icons);
             icon.setAttribute("path","images/f_general.gif");
             icon=addNode("icon","root","Root",icons);
-            icon.setAttribute("path","images/i_root.gif");
+            icon.setAttribute("path","images/icon-servera.gif");
             icon=addNode("icon","global","Global",icons);
-            icon.setAttribute("path","images/f_global.gif");
+            icon.setAttribute("path","images/icon-servera.gif");
 //            icon=addNode("icon","devices","Devices",icons);
 //            icon.setAttribute("path","images/f_dispositivos.gif");
 //            icon=addNode("icon","device","Device",icons);
