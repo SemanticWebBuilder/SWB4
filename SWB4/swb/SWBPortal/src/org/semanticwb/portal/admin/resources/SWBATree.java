@@ -182,7 +182,7 @@ public class SWBATree extends GenericResource
             icon.setAttribute("path","images/ico_virtual.gif");
 
             icon=addNode("icon","folder","Folder",icons);
-            icon.setAttribute("path","images/f_general.gif");
+            icon.setAttribute("path","images/icon-foldera.gif");
             icon=addNode("icon","root","Root",icons);
             icon.setAttribute("path","images/icon-servera.gif");
             icon=addNode("icon","global","Global",icons);
