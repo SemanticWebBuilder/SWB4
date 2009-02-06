@@ -257,7 +257,7 @@ public class WB4WriterTest
     }
 
     @Test 
-    //@Ignore
+    @Ignore
     public void openTest()
     {
         WB4WriterApplication writer = new WB4WriterApplication(this.xContext);        
@@ -301,6 +301,21 @@ public class WB4WriterTest
         {
             WB4Writer writer = new WB4Writer(this.xContext);
             writer.delete();
+        }
+        catch ( Throwable wbe )
+        {
+            Assert.fail(wbe.getMessage());
+        }
+    }
+
+    @Test
+    //@Ignore
+    public void showDocumentInfoTest()
+    {
+        try
+        {
+            WB4Writer writer = new WB4Writer(this.xContext);
+            writer.showDocumentInfo();
         }
         catch ( Throwable wbe )
         {
