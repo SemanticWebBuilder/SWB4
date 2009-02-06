@@ -451,15 +451,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         try
         {
             session = loader.openSession(repositoryName, this.user, this.password);
-            Node nodeContent = session.getNodeByUUID(contentId);
-            if (!nodeContent.isLocked())
-            {
-                //nodeContent.lock(false, false); // blocks the nodeContent for all
-            }
-            else
-            {
-                throw new Exception("The content is locked");
-            }
+            Node nodeContent = session.getNodeByUUID(contentId);            
             VersionIterator it = nodeContent.getVersionHistory().getAllVersions();
             while (it.hasNext())
             {
@@ -474,8 +466,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     info.user = version.getNode(JCR_FROZEN_NODE).getProperty(cm_user).getString();
                     versions.add(info);
                 }
-            }
-        //nodeContent.unlock();
+            }        
         }
         catch (ItemNotFoundException infe)
         {
