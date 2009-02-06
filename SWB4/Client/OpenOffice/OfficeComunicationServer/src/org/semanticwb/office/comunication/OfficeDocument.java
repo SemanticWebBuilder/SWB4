@@ -975,11 +975,8 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     public void changeVersionPorlet(PortletInfo info, String newVersion) throws Exception
     {
         WebSite site = SWBContext.getWebSite(info.page.site.id);
-        Portlet portlet = site.getPortlet(info.id);
-        if(portlet instanceof OfficePortlet)
-        {
-            ((OfficePortlet)portlet).setVersionToShow(newVersion);
-        }
+        OfficePortlet portlet = OfficePortlet.getOfficePortlet(info.id, site);
+        portlet.setVersionToShow(newVersion);
     }
 
     public CategoryInfo getCategoryInfo(String repositoryName, String contentid) throws Exception
