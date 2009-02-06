@@ -7,6 +7,8 @@ package org.semanticwb.openoffice.ui.dialogs;
 
 import java.awt.Component;
 import java.awt.Cursor;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.AbstractCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
@@ -39,7 +41,7 @@ public class DialogContentInformation extends javax.swing.JDialog
         this.repository = repository;
         this.document = document;
         TableColumn column = this.jTablePages.getColumnModel().getColumn(4);
-        column.setCellEditor(new VersionEditor(repository, contentId));
+        column.setCellEditor(new VersionEditor(this.jTablePages));
         try
         {
             this.jTextFieldTitle.setText(OfficeApplication.getOfficeDocumentProxy().getTitle(repository, contentId));
@@ -47,7 +49,7 @@ public class DialogContentInformation extends javax.swing.JDialog
             String date = OfficeApplication.iso8601dateFormat.format(OfficeApplication.getOfficeDocumentProxy().getLasUpdate(repository, contentId));
             this.jLabel1DisplayDateOfModification.setText(date);
             loadCategories();
-            CategoryInfo actualCategory=OfficeApplication.getOfficeDocumentProxy().getCategoryInfo(repository, contentId);
+            CategoryInfo actualCategory = OfficeApplication.getOfficeDocumentProxy().getCategoryInfo(repository, contentId);
             jComboBoxCategory.setSelectedItem(actualCategory);
             loadVersions(contentId, repository);
             loadPorlets(contentId, repository);
@@ -111,17 +113,12 @@ public class DialogContentInformation extends javax.swing.JDialog
         try
         {
             for (PortletInfo portletInfo : OfficeApplication.getOfficeDocumentProxy().listPortlets(repositoryName, contentId))
-            {
-                Version objVersion = new Version();
-                objVersion.id = portletInfo.version;
-                objVersion.title = portletInfo.version;
-                if (objVersion.id.equals("*"))
-                {
-                    objVersion.title = "Mostrar la última versión";
-                }
+            {                
+                VersionInfo selected=new VersionInfo();
+                selected.nameOfVersion=portletInfo.version;
                 Object[] rowData =
                 {
-                    portletInfo, portletInfo.page.site.title, portletInfo.page.title, portletInfo.active, objVersion
+                    portletInfo, portletInfo.page.site.title, portletInfo.page.title, portletInfo.active, new ComboVersiones(repositoryName, contentId,selected)
                 };
                 model.addRow(rowData);
             }
@@ -443,29 +440,44 @@ public class DialogContentInformation extends javax.swing.JDialog
             {
                 OfficeApplication.getOfficeDocumentProxy().setDescription(repository, contentId, this.jTextAreaDescription.getText());
             }
-            CategoryInfo oldCategory=OfficeApplication.getOfficeDocumentProxy().getCategoryInfo(repository, contentId);
-            CategoryInfo newCategory=(CategoryInfo)this.jComboBoxCategory.getSelectedItem();
-            if(!oldCategory.equals(newCategory))
+            CategoryInfo oldCategory = OfficeApplication.getOfficeDocumentProxy().getCategoryInfo(repository, contentId);
+            CategoryInfo newCategory = (CategoryInfo) this.jComboBoxCategory.getSelectedItem();
+            if (!oldCategory.equals(newCategory))
             {
                 OfficeApplication.getOfficeDocumentProxy().changeCategory(repository, contentId, newCategory.UDDI);
             }
             //update porlets
             DefaultTableModel model = (DefaultTableModel) jTablePages.getModel();
             int rows = model.getRowCount();
-            for (int i = 1; i <= rows; i++)
+            for (int i = 0; i < rows; i++)
             {
                 Object originalValue = model.getValueAt(i, 0);
                 if (originalValue instanceof PortletInfo)
                 {
                     PortletInfo portletInfo = (PortletInfo) originalValue;
-                    Version newVersion = (Version) model.getValueAt(i, 4);
-                    if (!newVersion.id.equals(portletInfo.version))
+                    boolean newactive = portletInfo.active;
+                    for (PortletInfo actualPortletInfo : OfficeApplication.getOfficeDocumentProxy().listPortlets(repository, contentId))
                     {
-                        OfficeApplication.getOfficeDocumentProxy().changeVersionPorlet(portletInfo, newVersion.id);
+                        if (actualPortletInfo.id.equals(portletInfo.id))
+                        {
+                            if (actualPortletInfo.active != newactive)
+                            {
+                                OfficeApplication.getOfficeDocumentProxy().activatePortlet(actualPortletInfo, newactive);
+                            }
+                        }
+                    }
+                    ComboVersiones combo = (ComboVersiones) model.getValueAt(i, 4);
+                    String newVersion=((VersionInfo)combo.getSelectedItem()).nameOfVersion;
+                    if (!newVersion.equals(portletInfo.version))
+                    {
+                        OfficeApplication.getOfficeDocumentProxy().changeVersionPorlet(portletInfo, newVersion);
                     }
 
                 }
             }
+            String date = OfficeApplication.iso8601dateFormat.format(OfficeApplication.getOfficeDocumentProxy().getLasUpdate(repository, contentId));
+            this.jLabel1DisplayDateOfModification.setText(date);
+            loadPorlets(contentId, repository);
             JOptionPane.showMessageDialog(this, "¡Se han realizado correctamente los cambios!", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
         }
         catch (Exception e)
@@ -523,49 +535,55 @@ public class DialogContentInformation extends javax.swing.JDialog
 class VersionEditor extends AbstractCellEditor implements TableCellEditor
 {
 
-    private String repositoryName,  contentId;
-    private JComboBox combo = new JComboBox();
+    private JTable table;
+    
 
-    public VersionEditor(String repositoryName, String contentId)
+    public VersionEditor(JTable table)
     {
-        this.repositoryName = repositoryName;
-        this.contentId = contentId;
-        Version objVersion = new Version();
-        objVersion.id = "*";
-        objVersion.title = "Mostrar la última versión";
-        combo.addItem(objVersion);
+        this.table=table;
+    }
+
+    public Object getCellEditorValue()
+    {
+        int row=table.getSelectedRow();
+        if(row!=-1)
+        {
+            ComboVersiones combo=(ComboVersiones)table.getModel().getValueAt(row, 4);
+            return combo;
+        }
+        return "";
+    }
+
+    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column)
+    {
+        ComboVersiones combo=(ComboVersiones)table.getModel().getValueAt(row, 4);
+        return combo;
+    }
+}
+
+class ComboVersiones extends JComboBox
+{
+    String repositoryName,contentId;
+    public ComboVersiones(String repositoryName, String contentId,VersionInfo selected)
+    {
+        
+        this.addItem("*");
         try
         {
             for (VersionInfo versionInfo : OfficeApplication.getOfficeDocumentProxy().getVersions(repositoryName, contentId))
             {
-                combo.addItem(versionInfo);
+                this.addItem(versionInfo);
             }
+            this.setSelectedItem(selected);
         }
         catch (Exception e)
         {
         }
     }
-
-    public Object getCellEditorValue()
-    {
-        return combo.getSelectedItem();
-    }
-
-    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column)
-    {
-        combo.setSelectedItem(value);
-        return combo;
-    }
-}
-
-class Version
-{
-
     @Override
     public String toString()
     {
-        return title;
+        return this.getSelectedItem().toString();
     }
-    String id;
-    String title;
+
 }
