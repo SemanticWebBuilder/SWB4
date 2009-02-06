@@ -4,9 +4,12 @@
  */
 package org.semanticwb.openoffice.write.test;
 
+import com.sun.star.beans.PropertyValue;
 import com.sun.star.comp.helper.Bootstrap;
 import com.sun.star.comp.helper.BootstrapException;
+import com.sun.star.frame.XComponentLoader;
 import com.sun.star.frame.XDesktop;
+import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
@@ -17,6 +20,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.semanticwb.openoffice.DocumentType;
 import org.semanticwb.openoffice.writer.WB4WriterApplication;
 
 /**
@@ -26,8 +30,9 @@ import org.semanticwb.openoffice.writer.WB4WriterApplication;
 public class WB4WriterApplicationTest
 {
     XComponentContext xContext;
+    XComponent xCompDest = null;
     XDesktop oDesktop = null;
-    File sUrlDestiny = new File("c:/temp/demo.odt");
+    File sUrlDestiny = new File("C:\\temp\\articulo.odt");
     public WB4WriterApplicationTest()
     {
     }
@@ -53,6 +58,18 @@ public class WB4WriterApplicationTest
             // Obtener la ventana principal (Desktop) de OpenOffice   
             Object oRawDesktop = xMCF.createInstanceWithContext("com.sun.star.frame.Desktop", xContext);
             oDesktop = (XDesktop) UnoRuntime.queryInterface(XDesktop.class, oRawDesktop);
+
+            // Obtener interfaz XComponentLoader del XDesktop
+            XComponentLoader xCompLoader = ( XComponentLoader ) UnoRuntime.queryInterface(com.sun.star.frame.XComponentLoader.class, oDesktop);
+
+            // Cargar el documento en una nueva ventana oculta del XDesktop
+            PropertyValue[] loadProps = new PropertyValue[0];
+            /*loadProps[0] = new PropertyValue();
+            loadProps[0].Name = "Hidden";
+            loadProps[0].Value = new Boolean(false);*/
+            String url = "file:///" + sUrlDestiny.getPath().replace('\\', '/');
+            xCompDest = xCompLoader.loadComponentFromURL(url, "_blank", 0, loadProps);
+
 
         }
         catch (com.sun.star.uno.Exception e)
@@ -82,7 +99,8 @@ public class WB4WriterApplicationTest
         try
         {
             WB4WriterApplication application=new WB4WriterApplication(xContext);            
-            application.open(sUrlDestiny);
+            //application.open(sUrlDestiny);
+            application.open(DocumentType.WORD);
             Assert.assertEquals(application.getDocuments().size(),1);
         }
         catch(Exception e)
