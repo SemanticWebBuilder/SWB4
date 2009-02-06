@@ -65,7 +65,14 @@ public final class PropertyImp implements Property
         }
         this.name = name;
         this.propertyDefinition = propertyDefinition;
-        path = parent.getSimplePath() + "/" + name;
+        if(parent.toString().endsWith("/"))
+        {
+            path = parent.toString()+ name;
+        }
+        else
+        {
+            path = parent.toString() + "/" + name;
+        }
         this.parent = parent;
         this.clazz = clazz;
         this.isNode=isNode;
