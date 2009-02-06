@@ -39,6 +39,12 @@ public class PortletFilterBase extends org.semanticwb.model.SWBClass implements 
         return (org.semanticwb.model.PortletFilter)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
     }
 
+    public static org.semanticwb.model.PortletFilter createPortletFilter(org.semanticwb.model.SWBModel model)
+    {
+        long id=model.getSemanticObject().getModel().getCounter(sclass);
+        return org.semanticwb.model.PortletFilter.createPortletFilter(String.valueOf(id), model);
+    }
+
     public static void removePortletFilter(String id, org.semanticwb.model.SWBModel model)
     {
         model.getSemanticObject().getModel().removeSemanticObject(model.getSemanticObject().getModel().getObjectUri(id,sclass));
