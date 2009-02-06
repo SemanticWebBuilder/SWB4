@@ -113,12 +113,12 @@ public class DialogContentInformation extends javax.swing.JDialog
         try
         {
             for (PortletInfo portletInfo : OfficeApplication.getOfficeDocumentProxy().listPortlets(repositoryName, contentId))
-            {                
-                VersionInfo selected=new VersionInfo();
-                selected.nameOfVersion=portletInfo.version;
+            {
+                VersionInfo selected = new VersionInfo();
+                selected.nameOfVersion = portletInfo.version;
                 Object[] rowData =
                 {
-                    portletInfo, portletInfo.page.site.title, portletInfo.page.title, portletInfo.active, new ComboVersiones(repositoryName, contentId,selected)
+                    portletInfo, portletInfo.page.site.title, portletInfo.page.title, portletInfo.active, new ComboVersiones(repositoryName, contentId, selected)
                 };
                 model.addRow(rowData);
             }
@@ -451,33 +451,25 @@ public class DialogContentInformation extends javax.swing.JDialog
             int rows = model.getRowCount();
             for (int i = 0; i < rows; i++)
             {
-                Object originalValue = model.getValueAt(i, 0);
-                if (originalValue instanceof PortletInfo)
+                PortletInfo portletInfo = (PortletInfo) model.getValueAt(i, 0);
+                boolean newactive = (Boolean) model.getValueAt(i, 3);
+                if (portletInfo.active != newactive)
                 {
-                    PortletInfo portletInfo = (PortletInfo) originalValue;
-                    boolean newactive = portletInfo.active;
-                    for (PortletInfo actualPortletInfo : OfficeApplication.getOfficeDocumentProxy().listPortlets(repository, contentId))
-                    {
-                        if (actualPortletInfo.id.equals(portletInfo.id))
-                        {
-                            if (actualPortletInfo.active != newactive)
-                            {
-                                OfficeApplication.getOfficeDocumentProxy().activatePortlet(actualPortletInfo, newactive);
-                            }
-                        }
-                    }
-                    ComboVersiones combo = (ComboVersiones) model.getValueAt(i, 4);
-                    String newVersion=((VersionInfo)combo.getSelectedItem()).nameOfVersion;
-                    if (!newVersion.equals(portletInfo.version))
-                    {
-                        OfficeApplication.getOfficeDocumentProxy().changeVersionPorlet(portletInfo, newVersion);
-                    }
-
+                    OfficeApplication.getOfficeDocumentProxy().activatePortlet(portletInfo, newactive);
                 }
+                ComboVersiones combo = (ComboVersiones) model.getValueAt(i, 4);
+                String newVersion = ((VersionInfo) combo.getSelectedItem()).nameOfVersion;
+                if (!newVersion.equals(portletInfo.version))
+                {
+                    OfficeApplication.getOfficeDocumentProxy().changeVersionPorlet(portletInfo, newVersion);
+                }
+
+
             }
             String date = OfficeApplication.iso8601dateFormat.format(OfficeApplication.getOfficeDocumentProxy().getLasUpdate(repository, contentId));
             this.jLabel1DisplayDateOfModification.setText(date);
             loadPorlets(contentId, repository);
+            loadVersions(contentId, repository);
             JOptionPane.showMessageDialog(this, "¡Se han realizado correctamente los cambios!", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
         }
         catch (Exception e)
@@ -536,19 +528,18 @@ class VersionEditor extends AbstractCellEditor implements TableCellEditor
 {
 
     private JTable table;
-    
 
     public VersionEditor(JTable table)
     {
-        this.table=table;
+        this.table = table;
     }
 
     public Object getCellEditorValue()
     {
-        int row=table.getSelectedRow();
-        if(row!=-1)
+        int row = table.getSelectedRow();
+        if (row != -1)
         {
-            ComboVersiones combo=(ComboVersiones)table.getModel().getValueAt(row, 4);
+            ComboVersiones combo = (ComboVersiones) table.getModel().getValueAt(row, 4);
             return combo;
         }
         return "";
@@ -556,18 +547,20 @@ class VersionEditor extends AbstractCellEditor implements TableCellEditor
 
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column)
     {
-        ComboVersiones combo=(ComboVersiones)table.getModel().getValueAt(row, 4);
+        ComboVersiones combo = (ComboVersiones) table.getModel().getValueAt(row, 4);
         return combo;
     }
 }
 
 class ComboVersiones extends JComboBox
 {
-    String repositoryName,contentId;
-    public ComboVersiones(String repositoryName, String contentId,VersionInfo selected)
+
+    String repositoryName, contentId;
+
+    public ComboVersiones(String repositoryName, String contentId, VersionInfo selected)
     {
-        VersionInfo info=new VersionInfo();
-        info.nameOfVersion="*";
+        VersionInfo info = new VersionInfo();
+        info.nameOfVersion = "*";
         this.addItem(info);
         try
         {
@@ -581,10 +574,10 @@ class ComboVersiones extends JComboBox
         {
         }
     }
+
     @Override
     public String toString()
     {
         return this.getSelectedItem().toString();
     }
-
 }
