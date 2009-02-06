@@ -921,7 +921,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     public void activatePortlet(PortletInfo info, boolean active) throws Exception
     {
         WebSite site = SWBContext.getWebSite(info.page.site.id);
-        Portlet portlet = site.getPortlet(info.id);
+        OfficePortlet portlet = OfficePortlet.getOfficePortlet(info.id,site);
         portlet.setActive(active);
     }
 
@@ -958,6 +958,8 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             Node nodeContent = session.getNodeByUUID(contentId);
             Node newCategory = session.getNodeByUUID(newCategoryId);
             session.move(nodeContent.getPath(), newCategory.getPath());
+            Node resource = nodeContent.getNode(JCR_CONTENT);
+            resource.getProperty(JCR_LASTMODIFIED).setValue(Calendar.getInstance());
         }
         catch (ItemNotFoundException infe)
         {
