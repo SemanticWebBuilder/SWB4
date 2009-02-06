@@ -33,7 +33,7 @@ import org.semanticwb.openoffice.ui.dialogs.DialogAddLink;
 import org.semanticwb.openoffice.ui.dialogs.DialogContentInformation;
 import org.semanticwb.openoffice.ui.dialogs.DialogHistory;
 import org.semanticwb.openoffice.ui.dialogs.DialogSaveDocument;
-import org.semanticwb.openoffice.ui.dialogs.DialogSummaryPublish;
+import org.semanticwb.openoffice.ui.dialogs.DialogUpdateContent;
 import org.semanticwb.openoffice.ui.wizard.PublishVersion;
 import org.semanticwb.openoffice.ui.wizard.SelectCategory;
 import org.semanticwb.openoffice.ui.wizard.SelectPage;
@@ -730,7 +730,7 @@ public abstract class OfficeDocument
     private void updateContent() throws Exception
     {
         String workspace = this.getCustomProperties().get(WORKSPACE_ID_NAME);
-        DialogSummaryPublish summary = new DialogSummaryPublish(new Frame(), true, workspace, contentID, this);
+        DialogUpdateContent summary = new DialogUpdateContent(new Frame(), true, workspace, contentID, this);
         summary.setLocationRelativeTo(null);
         summary.setAlwaysOnTop(true);
         summary.setVisible(true);
