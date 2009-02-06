@@ -16,7 +16,7 @@ import org.semanticwb.xmlrpc.Attachment;
  *
  * @author  victor.lorenzana
  */
-public class DialogSummaryPublish extends javax.swing.JDialog
+public class DialogUpdateContent extends javax.swing.JDialog
 {
 
     private boolean updated = false;
@@ -65,7 +65,7 @@ public class DialogSummaryPublish extends javax.swing.JDialog
     }
 
     /** Creates new form DialogSummaryPublish */
-    public DialogSummaryPublish(java.awt.Frame parent, boolean modal, String wokspaceid, String contentid, OfficeDocument document)
+    public DialogUpdateContent(java.awt.Frame parent, boolean modal, String wokspaceid, String contentid, OfficeDocument document)
     {
         super(parent, modal);
         initComponents();
