@@ -32,6 +32,7 @@ import org.semanticwb.model.SWBContext;
 
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
+import org.semanticwb.office.interfaces.CategoryInfo;
 import org.semanticwb.office.interfaces.IOfficeDocument;
 import org.semanticwb.office.interfaces.PageInfo;
 import org.semanticwb.office.interfaces.PortletInfo;
@@ -383,13 +384,9 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 
     }
 
-    public void setTitle(String contentID, String title)
-    {
-    }
+    
 
-    public void setDescription(String contentID, String description)
-    {
-    }
+  
 
     public void sendToAuthorize()
     {
@@ -504,8 +501,10 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             if (!nodeContent.isLocked())
             {
                 String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
+                nodeContent.checkout();
                 nodeContent.setProperty(cm_title, title);
                 nodeContent.save();
+                nodeContent.checkin();
             }
             else
             {
@@ -582,8 +581,10 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             if (!nodeContent.isLocked())
             {
                 String cm_description = loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
+                nodeContent.checkout();
                 nodeContent.setProperty(cm_description, description);
                 nodeContent.save();
+                nodeContent.checkin();
             }
             else
             {
@@ -974,6 +975,36 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         if(portlet instanceof OfficePortlet)
         {
             ((OfficePortlet)portlet).setVersionToShow(newVersion);
+        }
+    }
+
+    public CategoryInfo getCategoryInfo(String repositoryName, String contentid) throws Exception
+    {
+        Session session = null;
+        try
+        {
+            session = loader.openSession(repositoryName, this.user, this.password);
+            Node nodeContent = session.getNodeByUUID(contentid);
+            Node parent = nodeContent.getParent();
+            String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
+            String cm_description = loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
+            CategoryInfo info=new CategoryInfo();
+            info.UDDI=parent.getUUID();
+            info.childs=0;
+            info.description=parent.getProperty(cm_description).getString();
+            info.title=parent.getProperty(cm_title).getString();
+            return info;
+        }
+        catch (ItemNotFoundException infe)
+        {
+            throw new Exception(CONTENT_NOT_FOUND, infe);
+        }
+        finally
+        {
+            if (session != null)
+            {
+                session.logout();
+            }
         }
     }
 }
