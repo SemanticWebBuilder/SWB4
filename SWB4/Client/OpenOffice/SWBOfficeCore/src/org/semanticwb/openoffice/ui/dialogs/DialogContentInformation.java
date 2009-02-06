@@ -9,10 +9,14 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import javax.swing.AbstractCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
@@ -41,6 +45,19 @@ public class DialogContentInformation extends javax.swing.JDialog
         this.repository = repository;
         this.document = document;
         TableColumn column = this.jTablePages.getColumnModel().getColumn(4);
+        ListSelectionModel listSelectionModel = jTablePages.getSelectionModel();
+        listSelectionModel.addListSelectionListener(new ListSelectionListener() {
+
+            public void valueChanged(ListSelectionEvent e)
+            {
+                jButtonDeletePage.setEnabled(false);
+                if(e.getFirstIndex()!=-1)
+                {
+                    jButtonDeletePage.setEnabled(true);
+                }
+            }
+        });
+
         column.setCellEditor(new VersionEditor(this.jTablePages));
         try
         {
@@ -158,7 +175,7 @@ public class DialogContentInformation extends javax.swing.JDialog
         jSeparator3 = new javax.swing.JToolBar.Separator();
         jButtonViewPage = new javax.swing.JButton();
         jSeparator4 = new javax.swing.JToolBar.Separator();
-        jButton5 = new javax.swing.JButton();
+        jButtonDeletePage = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTablePages = new javax.swing.JTable();
         jPanelVersions = new javax.swing.JPanel();
@@ -299,12 +316,17 @@ public class DialogContentInformation extends javax.swing.JDialog
         jToolBar1.add(jButtonViewPage);
         jToolBar1.add(jSeparator4);
 
-        jButton5.setText("Eliminar");
-        jButton5.setEnabled(false);
-        jButton5.setFocusable(false);
-        jButton5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton5.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButton5);
+        jButtonDeletePage.setText("Eliminar");
+        jButtonDeletePage.setEnabled(false);
+        jButtonDeletePage.setFocusable(false);
+        jButtonDeletePage.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonDeletePage.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonDeletePage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonDeletePageActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(jButtonDeletePage);
 
         jPanelPublishInformation.add(jToolBar1, java.awt.BorderLayout.NORTH);
 
@@ -333,6 +355,11 @@ public class DialogContentInformation extends javax.swing.JDialog
         });
         jTablePages.setRowSelectionAllowed(false);
         jTablePages.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jTablePages.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTablePagesKeyReleased(evt);
+            }
+        });
         jScrollPane2.setViewportView(jTablePages);
         jTablePages.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
@@ -490,10 +517,45 @@ public class DialogContentInformation extends javax.swing.JDialog
         document.saveToSite();
     }//GEN-LAST:event_jButtonUpdateActionPerformed
 
+    private void jButtonDeletePageActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonDeletePageActionPerformed
+    {//GEN-HEADEREND:event_jButtonDeletePageActionPerformed
+        if(jTablePages.getSelectedRow()!=-1)
+        {
+            PortletInfo porlet=(PortletInfo)jTablePages.getModel().getValueAt(jTablePages.getSelectedRow(), 0);
+            try
+            {
+                int res=JOptionPane.showConfirmDialog(this,"¿Desea eliminar la publicación del contenido con titulo "+ porlet.title +" de la página "+ porlet.page.title +"?",this.getTitle(),JOptionPane.YES_NO_OPTION);
+                if(res==JOptionPane.YES_OPTION)
+                {
+                    this.jButtonDeletePage.setEnabled(false);
+                    this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+                    OfficeApplication.getOfficeDocumentProxy().deletePortlet(porlet);
+                    loadPorlets(contentId, repository);
+                }
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+            finally
+            {
+                this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+        }
+    }//GEN-LAST:event_jButtonDeletePageActionPerformed
+
+    private void jTablePagesKeyReleased(java.awt.event.KeyEvent evt)//GEN-FIRST:event_jTablePagesKeyReleased
+    {//GEN-HEADEREND:event_jTablePagesKeyReleased
+        if(evt.getKeyCode()==KeyEvent.VK_DELETE && jTablePages.getSelectedRow()!=-1)
+        {
+            jButtonDeletePageActionPerformed(null);
+        }
+}//GEN-LAST:event_jTablePagesKeyReleased
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton5;
     private javax.swing.JButton jButtonAccept;
     private javax.swing.JButton jButtonCancel;
+    private javax.swing.JButton jButtonDeletePage;
     private javax.swing.JButton jButtonPublish;
     private javax.swing.JButton jButtonUpdate;
     private javax.swing.JButton jButtonViewPage;
