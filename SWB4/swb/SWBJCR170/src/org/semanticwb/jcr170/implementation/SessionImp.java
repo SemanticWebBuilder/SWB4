@@ -110,7 +110,7 @@ public class SessionImp implements Session
 
     public Document getDocumentView() throws RepositoryException
     {
-        Document document = new Document();        
+        Document document = new Document();
         appendNodeInternalView(root, document, false);
         return document;
     }
@@ -129,43 +129,40 @@ public class SessionImp implements Session
 
     }
 
-    public SimpleNode[] getSimpleNodeByPath(String path, SimpleNode parent, boolean all) throws RepositoryException
+    public SimpleNode getSimpleNodeByPath(String path, SimpleNode parent) throws RepositoryException
     {
-
-        ArrayList<SimpleNode> nodes = new ArrayList<SimpleNode>();
-        String[] values = path.split("/");
-        if (values.length == 0 || values.length == 1)
+        SimpleNode getSimpleNodeByPath = null;
+        if (path.equals("/"))
         {
-            nodes.add(root);
+            return root;
         }
         else
         {
-            SimpleNode[] parents =
-            {
-                root
-            };
-
-            ArrayList<SimpleNode> childNodes = new ArrayList<SimpleNode>();
+            String[] values = path.split("/");
             for (String value : values)
             {
-                if (!value.equals(""))
+                if (value.equals(""))
                 {
-
-                    childNodes = new ArrayList<SimpleNode>();
-                    for (SimpleNode parentNode : parents)
+                    getSimpleNodeByPath = root;
+                }
+                else
+                {
+                    for (SimpleNode child : getSimpleNodeByPath.getSimpleNodes())
                     {
-                        SimpleNode[] childs = parentNode.getSimpleNodeByName(value);
-                        for (SimpleNode child : childs)
+                        if (child.getPath().endsWith(value))
                         {
-                            childNodes.add(child);
+                            getSimpleNodeByPath=child;
+                            break;
                         }
                     }
-                    parents = childNodes.toArray(new SimpleNode[childNodes.size()]);
                 }
             }
-            nodes = childNodes;
         }
-        return nodes.toArray(new SimpleNode[nodes.size()]);
+        if(getSimpleNodeByPath!=null && !getSimpleNodeByPath.getPath().equals(path))
+        {
+            getSimpleNodeByPath=null;
+        }
+        return getSimpleNodeByPath;
     }
 
     private static String getPrefix(String name)
@@ -714,8 +711,8 @@ public class SessionImp implements Session
             Iterator<SemanticObject> it = SWBContext.getWorkspace(workspaceName).getSemanticObject().getModel().listSubjects(Referenceable.jcr_uuid, uuid);
             while (it.hasNext())
             {
-                SemanticObject obj=it.next();
-                BaseNode node=new BaseNode(obj);
+                SemanticObject obj = it.next();
+                BaseNode node = new BaseNode(obj);
                 return new SimpleNode(node, this);
             }
         }
@@ -738,12 +735,22 @@ public class SessionImp implements Session
     {
         // TODO, no trae propiedades y la ruta puede indicar el segundo o el primero
         // ejemplo /Categorty[0]/Deportes[1]
-        SimpleNode[] nodes = getSimpleNodeByPath(absPath, root, false);
-        if (nodes.length == 0)
+        /*String baspath=absPath;
+        int index=0;
+        if(absPath.endsWith("]"))
+        {
+        int pos=absPath.lastIndexOf("[");
+        String sindex=absPath.substring(pos+1);
+        index=Integer.parseInt(sindex.substring(0,sindex.length()-1));
+        baspath=absPath.substring(0,pos);
+        }*/
+
+        SimpleNode node = getSimpleNodeByPath(absPath, root);
+        if (node == null)
         {
             throw new PathNotFoundException();
         }
-        return nodes[0];
+        return node;
 
     }
 
@@ -768,13 +775,13 @@ public class SessionImp implements Session
     public void move(String srcAbsPath, String destAbsPath) throws ItemExistsException, PathNotFoundException, VersionException, ConstraintViolationException, LockException, RepositoryException
     {
         //TODO: revisar esto para los demas tipos de moviemntos, este moviento debería ser temporal, pero por tiempo se deja así
-        Item srcItem=this.getItem(srcAbsPath);
-        Item destItem=this.getItem(destAbsPath);
-        if(srcItem instanceof SimpleNode && destItem instanceof SimpleNode)
+        Item srcItem = this.getItem(srcAbsPath);
+        Item destItem = this.getItem(destAbsPath);
+        if (srcItem instanceof SimpleNode && destItem instanceof SimpleNode)
         {
-            SimpleNode srcSimpleNode=(SimpleNode)srcItem;
-            SimpleNode destSimpleNode=(SimpleNode)destItem;
-            if(srcSimpleNode.node!=null && destSimpleNode.node!=null)
+            SimpleNode srcSimpleNode = (SimpleNode) srcItem;
+            SimpleNode destSimpleNode = (SimpleNode) destItem;
+            if (srcSimpleNode.node != null && destSimpleNode.node != null)
             {
                 srcSimpleNode.node.setParent(destSimpleNode.node);
             }
@@ -784,7 +791,7 @@ public class SessionImp implements Session
     public void save() throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
     {
         getRootNode().save();
-        for(SimpleNode node : nodes.values())
+        for (SimpleNode node : nodes.values())
         {
             node.save();
         }
@@ -906,6 +913,7 @@ public class SessionImp implements Session
     {
         return root.getBaseNode();
     }
+
     RepositoryImp getRepositoryImp()
     {
         return repository;
