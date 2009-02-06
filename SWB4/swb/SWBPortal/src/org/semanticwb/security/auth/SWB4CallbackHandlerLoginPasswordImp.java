@@ -105,8 +105,8 @@ private static Logger log = SWBUtils.getLogger(SWB4CallbackHandlerLoginPasswordI
     }
 
     private void getFormCredentials(Callback[] callbacks) {
-        String login = request.getParameter("_wb_username");
-        String password = request.getParameter("_wb_password");
+        String login = request.getParameter("wb_username");
+        String password = request.getParameter("wb_password");
         for (int i = 0; i < callbacks.length; i++) {
             if (callbacks[i] instanceof NameCallback) {
                 NameCallback nameCallback = (NameCallback) callbacks[i];

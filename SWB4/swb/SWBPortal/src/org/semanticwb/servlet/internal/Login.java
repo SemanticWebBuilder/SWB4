@@ -63,7 +63,7 @@ public class Login implements InternalServlet {
         User user = null;
         Iterator it=subject.getPrincipals().iterator();
         if(it.hasNext()) user = (User)it.next();
-        if (request.getParameter("_wb_logout") != null)
+        if (request.getParameter("wb_logout") != null)
         {
             LoginContext lc;
             try
@@ -71,7 +71,7 @@ public class Login implements InternalServlet {
                 lc = new LoginContext(context, subject);
                 lc.logout();
                 request.getSession(true).invalidate();
-                String url = request.getParameter("_wb_goto");
+                String url = request.getParameter("wb_goto");
                 if ((url == null || url.equals("/")))
                 {
                     url = path +"/"+SWBPlatform.getEnv("swb/distributor")+ "/" +dparams.getWebPage().getWebSiteId() + "/" + dparams.getWebPage().getId() + "/_lang/" + dparams.getUser().getLanguage();
@@ -113,7 +113,7 @@ public class Login implements InternalServlet {
                 }
             } else
             {
-                if (null == request.getParameter("_wb_username")){
+                if (null == request.getParameter("wb_username")){
                 log.debug("Request a new username...");
                 doResponse(request, response, dparams, null, authMethod);
                 session.setAttribute(VALSESS, "Working");
@@ -148,7 +148,7 @@ public class Login implements InternalServlet {
                 return;
             }
         }
-        String url = request.getParameter("_wb_goto");
+        String url = request.getParameter("wb_goto");
         if ((url == null || url.equals("/")))
         {
             log.debug("PATHs: Path:" + path + " - " + dparams.getWebPage().getWebSiteId() + " - " + dparams.getWebPage().getId());
