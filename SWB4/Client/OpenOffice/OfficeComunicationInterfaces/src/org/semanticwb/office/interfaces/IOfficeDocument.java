@@ -34,9 +34,7 @@ public interface IOfficeDocument
 
     @XmlRpcMethod(methodName = "OfficeDocument.getDescription")
     public String getDescription(String repositoryName, String contentID) throws Exception;
-
-    @XmlRpcMethod(methodName = "OfficeDocument.setDescription")
-    public void setDescription(String contentID, String description) throws Exception;
+   
 
     @XmlRpcMethod(methodName = "OfficeDocument.delete")
     public void delete(String repositoryName, String contentID) throws Exception;
@@ -71,6 +69,9 @@ public interface IOfficeDocument
 
     @XmlRpcMethod(methodName = "OfficeDocument.activatePortlet")
     public void activatePortlet(PortletInfo info, boolean active) throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeDocument.getCategoryInfo")
+    public CategoryInfo getCategoryInfo(String repositoryName, String contentid) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.changeCategory")
     public void changeCategory(String repositoryName, String contentId, String newCategoryId) throws Exception;
