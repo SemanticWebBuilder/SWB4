@@ -7,8 +7,6 @@ package org.semanticwb.openoffice.ui.dialogs;
 
 import java.awt.Component;
 import java.awt.Cursor;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import javax.swing.AbstractCellEditor;
 import javax.swing.JComboBox;
@@ -244,8 +242,6 @@ public class DialogContentInformation extends javax.swing.JDialog
         jLabel1DisplayDateOfModification.setText("18 de Diciembre de 1973 20:30");
 
         jLabel4.setText("Categoria");
-
-        jComboBoxCategory.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout jPanelContentInformationLayout = new javax.swing.GroupLayout(jPanelContentInformation);
         jPanelContentInformation.setLayout(jPanelContentInformationLayout);
@@ -542,6 +538,7 @@ public class DialogContentInformation extends javax.swing.JDialog
                 this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
         }
+        this.jButtonDeletePage.setEnabled(false);
     }//GEN-LAST:event_jButtonDeletePageActionPerformed
 
     private void jTablePagesKeyReleased(java.awt.event.KeyEvent evt)//GEN-FIRST:event_jTablePagesKeyReleased
