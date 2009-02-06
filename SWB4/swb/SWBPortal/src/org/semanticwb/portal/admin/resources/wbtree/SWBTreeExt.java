@@ -50,7 +50,7 @@ public interface SWBTreeExt
     
     public void addGlobal(User user, Element global, int access, boolean isFilter);
     
-    public void addWebSite(User user, Element topicmap, WebSite tm, int access, boolean isFilter);
+    public void addTopicMap(User user, Element topicmap, WebSite tm, int access, boolean isFilter);
     
     public boolean executeCommand(User user, Element res, String cmd, String id);
     

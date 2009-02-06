@@ -44,8 +44,8 @@ import org.w3c.dom.Element;
  */
 public class MenuElement
 {
-    String WebPage=null;
-    String WebPage_action=null;
+    String webPage=null;
+    String webPage_action=null;
     User user=null;
     String target="work";
     HashMap parameters=new HashMap();
@@ -58,25 +58,25 @@ public class MenuElement
     private Logger log = SWBUtils.getLogger(MenuElement.class);
 
     
-    public MenuElement(String WebPage, String WebPage_action, User user)
+    public MenuElement(String webPage, String WebPage_action, User user)
     {
-        this.WebPage=WebPage;
-        this.WebPage_action=WebPage_action;
+        this.webPage=webPage;
+        this.webPage_action=WebPage_action;
         this.user=user;
     }
     
     public Element addElement(Element menu)
     {
-        if(!user.haveAccess(tma.getWebPage(WebPage)))return null;
+        if(!user.haveAccess(tma.getWebPage(webPage)))return null;
         Element option=null;
         if(variantName)
         {
-            option=SWBTreeUtil.addNode("option",WebPage,getVariantName(),menu);
+            option=SWBTreeUtil.addNode("option",webPage,getVariantName(),menu);
         }else
         {
-            option=SWBTreeUtil.addNode("option",WebPage,getDisplayName(),menu);
+            option=SWBTreeUtil.addNode("option",webPage,getDisplayName(),menu);
         }
-        if(WebPage_action!=null)
+        if(webPage_action!=null)
         {
             String local_params="";
             if(this.params!=null)local_params=this.params;
@@ -97,7 +97,7 @@ public class MenuElement
             }
             if(local_params.length()>0)local_params="?"+local_params.substring(1);
             if(uri!=null)local_params=uri+local_params;
-            WebPage tpacc=tma.getWebPage(WebPage_action);
+            WebPage tpacc=tma.getWebPage(webPage_action);
             if(option!=null && tpacc!=null)option.setAttribute("action","showurl="+tpacc.getUrl(vitualTopic)+local_params);
         }
         if(option!=null)option.setAttribute("target", target);        
@@ -106,7 +106,11 @@ public class MenuElement
     
     public String getDisplayName()
     {
-        return tma.getWebPage(WebPage).getDisplayName(user.getLanguage());
+        String ret = webPage;
+        WebPage wp = tma.getWebPage(webPage);
+        if(null!=wp)
+            ret = tma.getWebPage(webPage).getDisplayName(user.getLanguage());
+        return ret;
     }
     
     public String getVariantName()
@@ -115,14 +119,26 @@ public class MenuElement
         try
         {
             //str=((Variant)tma.getWebPage(WebPage).getDisplayBaseName(user.getLanguage()).getVariants().get(0)).getVariantName().getResourceData();
-            str=tma.getWebPage(WebPage).getDisplayName(user.getLanguage());
+            WebPage wp = tma.getWebPage(webPage);
+            if(null!=wp) str=wp.getDisplayName(user.getLanguage());
         }catch(Exception e){log.error(e);}
         return str;
     }    
     
     private String getConfirm(String webPage_msg, String webPage_name)
     {
-        return tma.getWebPage(webPage_msg).getDisplayName(user.getLanguage())+" "+tma.getWebPage(webPage_name).getDisplayName(user.getLanguage())+"?";
+        String str=webPage_msg+" "+webPage_name;
+        WebPage wp = tma.getWebPage(webPage_msg);
+        if(null!=wp)
+        {
+            str = wp.getDisplayName(user.getLanguage());
+        }
+        wp = tma.getWebPage(webPage_name);
+        if(null!=wp)
+        {
+            str += " " + wp.getDisplayName(user.getLanguage());
+        }
+        return str + "?";
     }    
 
     public static Element add(Element menu, String webPage, String WebPage_action, WebPage vtp, User user, String tm, String id)
@@ -130,9 +146,9 @@ public class MenuElement
         return add(menu, webPage, WebPage_action, vtp, user, tm, id, null);
     }
     
-    public static Element add(Element menu, String webPage, String WebPage_action, WebPage vtp, User user, String tm, String id, String params)
+    public static Element add(Element menu, String webPage, String webPage_action, WebPage vtp, User user, String tm, String id, String params)
     {
-        MenuElement ele=new MenuElement(webPage, WebPage_action, user);
+        MenuElement ele=new MenuElement(webPage, webPage_action, user);
         ele.setAction("add");
         ele.setVitualTopic(vtp);
         ele.setParams(params);
@@ -145,15 +161,15 @@ public class MenuElement
         return option;
     }
     
-    public static Element edit(Element menu, String webPage, String WebPage_action, WebPage vtp, User user, String tm, String id)
+    public static Element edit(Element menu, String webPage, String webPage_action, WebPage vtp, User user, String tm, String id)
     {
-        return edit(menu, webPage, WebPage_action, vtp, user, tm, id, null);
+        return edit(menu, webPage, webPage_action, vtp, user, tm, id, null);
     }
     
     
-    public static Element edit(Element menu, String webPage, String WebPage_action, WebPage vtp, User user, String tm, String id, String params)
+    public static Element edit(Element menu, String webPage, String webPage_action, WebPage vtp, User user, String tm, String id, String params)
     {
-        MenuElement ele=new MenuElement(webPage, WebPage_action, user);
+        MenuElement ele=new MenuElement(webPage, webPage_action, user);
         ele.setAction("edit");
         ele.setVitualTopic(vtp);
         ele.setParams(params);
@@ -165,9 +181,9 @@ public class MenuElement
         return option;
     }  
     
-    public static Element active(Element menu, String webPage, String WebPage_action, WebPage vtp, User user, String tm, String id)
+    public static Element active(Element menu, String webPage, String webPage_action, WebPage vtp, User user, String tm, String id)
     {
-        MenuElement ele=new MenuElement(webPage, WebPage_action, user);
+        MenuElement ele=new MenuElement(webPage, webPage_action, user);
         ele.setAction("active");
         ele.setVitualTopic(vtp);
         ele.setParameter("tm",tm);
@@ -179,9 +195,9 @@ public class MenuElement
         return option;
     }  
     
-    public static Element unactive(Element menu, String webPage, String WebPage_action, WebPage vtp, User user, String tm, String id)
+    public static Element unactive(Element menu, String webPage, String webPage_action, WebPage vtp, User user, String tm, String id)
     {
-        MenuElement ele=new MenuElement(webPage, WebPage_action, user);
+        MenuElement ele=new MenuElement(webPage, webPage_action, user);
         ele.setAction("unactive");
         ele.setVitualTopic(vtp);
         ele.setParameter("tm",tm);
@@ -194,15 +210,15 @@ public class MenuElement
         return option;
     }      
     
-    public static Element remove(Element menu, String webPage, String WebPage_action, WebPage vtp, User user, String WebPage_confirm, String tm, String id)
+    public static Element remove(Element menu, String webPage, String webPage_action, WebPage vtp, User user, String webPage_confirm, String tm, String id)
     {
-        return remove(menu, webPage, WebPage_action, vtp, user, WebPage_confirm, tm, id, null);
+        return remove(menu, webPage, webPage_action, vtp, user, webPage_confirm, tm, id, null);
     }
     
     
-    public static Element remove(Element menu, String webPage, String WebPage_action, WebPage vtp, User user, String WebPage_confirm, String tm, String id, String params)
+    public static Element remove(Element menu, String webPage, String webPage_action, WebPage vtp, User user, String webPage_confirm, String tm, String id, String params)
     {
-        MenuElement ele=new MenuElement(webPage, WebPage_action, user);
+        MenuElement ele=new MenuElement(webPage, webPage_action, user);
         ele.setAction("remove");
         ele.setVitualTopic(vtp);
         ele.setParams(params);
@@ -212,20 +228,20 @@ public class MenuElement
         ele.setTarget("status");
         Element option=ele.addElement(menu);
         if(option==null)return null;
-        option.setAttribute("confirm",ele.getConfirm("WBAd_glos_RemoveConfirm",WebPage_confirm));
+        option.setAttribute("confirm",ele.getConfirm("WBAd_glos_RemoveConfirm",webPage_confirm));
         option.setAttribute("shortCut","DELETE");
         option.setAttribute("icon","remove");
         return option;
     }      
     
-    public static Element copy(Element menu, String webPage, String WebPage_action, WebPage vtp, User user, String WebPage_confirm, String tm, String id)
+    public static Element copy(Element menu, String webPage, String webPage_action, WebPage vtp, User user, String webPage_confirm, String tm, String id)
     {
-        return copy(menu, webPage, WebPage_action, vtp, user, WebPage_confirm, tm, id, null,"status");
+        return copy(menu, webPage, webPage_action, vtp, user, webPage_confirm, tm, id, null,"status");
     }
     
-    public static Element copy(Element menu, String webPage, String WebPage_action, WebPage vtp, User user, String WebPage_confirm, String tm, String id, String params, String target)
+    public static Element copy(Element menu, String webPage, String webPage_action, WebPage vtp, User user, String webPage_confirm, String tm, String id, String params, String target)
     {
-        MenuElement ele=new MenuElement(webPage, WebPage_action, user);
+        MenuElement ele=new MenuElement(webPage, webPage_action, user);
         ele.setAction("copy");
         ele.setVitualTopic(vtp);
         ele.setParams(params);
@@ -242,7 +258,7 @@ public class MenuElement
         ele.setTarget(target);
         Element option=ele.addElement(menu);
         if(option==null)return null;
-        option.setAttribute("confirm",ele.getConfirm("WBAd_glos_CopyConfirm",WebPage_confirm));
+        option.setAttribute("confirm",ele.getConfirm("WBAd_glos_CopyConfirm",webPage_confirm));
         option.setAttribute("shortCut","COPY");
         option.setAttribute("icon","trans");
         return option;

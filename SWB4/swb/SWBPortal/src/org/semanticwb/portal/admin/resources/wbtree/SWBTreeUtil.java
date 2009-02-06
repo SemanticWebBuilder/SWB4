@@ -84,7 +84,7 @@ public class SWBTreeUtil
     public static void addOptRefresh(Element menu, User user)
     {
         WebSite tma=SWBContext.getAdminWebSite();
-        Element option=addNode("option","refresh",tma.getWebPage("WBAd_glos_refresh").getDisplayName(user.getLanguage()),menu);
+        Element option=addNode("option","refresh","Refresh",menu); //tma.getWebPage("WBAd_glos_refresh").getDisplayName(user.getLanguage())
         option.setAttribute("action","reload");
         option.setAttribute("shortCut","F5");      
         option.setAttribute("icon","refresh");
