@@ -261,7 +261,7 @@
                 </Component>
                 <Component class="javax.swing.JToolBar$Separator" name="jSeparator4">
                 </Component>
-                <Component class="javax.swing.JButton" name="jButton5">
+                <Component class="javax.swing.JButton" name="jButtonDeletePage">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Eliminar"/>
                     <Property name="enabled" type="boolean" value="false"/>
@@ -269,6 +269,9 @@
                     <Property name="horizontalTextPosition" type="int" value="0"/>
                     <Property name="verticalTextPosition" type="int" value="3"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonDeletePageActionPerformed"/>
+                  </Events>
                 </Component>
               </SubComponents>
             </Container>
@@ -332,6 +335,9 @@
                       <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                     </Property>
                   </Properties>
+                  <Events>
+                    <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTablePagesKeyReleased"/>
+                  </Events>
                 </Component>
               </SubComponents>
             </Container>
