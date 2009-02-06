@@ -70,7 +70,6 @@
     properties which you can use, check the target you are overriding in the
     nbproject/build-impl.xml file. 
         <copy file="../applets/appletChat/dist/appletChat.jar" todir="${build.classes.dir}//swbadmin/lib"/>
-        <copy file="../applets/DragDrop/dist/DragDrop.jar" todir="${build.classes.dir}//swbadmin/lib"/>
         <copy file="../applets/clock/dist/clock.jar" todir="${build.classes.dir}//swbadmin/lib"/>
         <copy file="../applets/GenericWorkflow/dist/GenericWorkflow.jar" todir="${build.classes.dir}//swbadmin/lib"/>
         <copy file="../applets/mapviews/dist/mapviews.jar" todir="${build.classes.dir}//swbadmin/lib"/>
@@ -81,9 +80,9 @@
         <copy file="../applets/TMswbadmin/dist/TMswbadmin.jar" todir="${build.classes.dir}//swbadmin/lib"/>
         <copy file="../applets/TMWBView/dist/TMWBView.jar" todir="${build.classes.dir}//swbadmin/lib"/>
         <copy file="../applets/WorkFlowAdmin/dist/WorkFlowAdmin.jar" todir="${build.classes.dir}//swbadmin/lib"/>
-        <signjar jar="${build.classes.dir}//swbadmin/lib/DragDrop.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
     -->
         <target name="-post-compile">
+        <copy file="../applets/DragDrop/dist/DragDrop.jar" todir="${build.classes.dir}//swbadmin/lib"/>
         <copy file="../applets/EditFilters/dist/EditFilters.jar" todir="${build.classes.dir}//swbadmin/lib"/>
         <copy file="../applets/filterSection/dist/filterSection.jar" todir="${build.classes.dir}//swbadmin/lib"/>
         <copy file="../applets/ftp/dist/ftp.jar" todir="${build.classes.dir}//swbadmin/lib"/>
@@ -94,6 +93,7 @@
         <copy file="../applets/WBABar/dist/WBABar.jar" todir="${build.classes.dir}//swbadmin/lib"/>
         <copy file="../applets/WBCommons/dist/WBCommons.jar" todir="${build.classes.dir}//swbadmin/lib"/>
         <copy file="../applets/WBGraph/dist/WBGraph.jar" todir="${build.classes.dir}//swbadmin/lib"/>
+        <signjar jar="${build.classes.dir}//swbadmin/lib/DragDrop.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
         <signjar jar="${build.classes.dir}//swbadmin/lib/htmleditor.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
         <signjar jar="${build.classes.dir}//swbadmin/lib/ftp.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
         <signjar jar="${build.classes.dir}//swbadmin/lib/GenericTree.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
