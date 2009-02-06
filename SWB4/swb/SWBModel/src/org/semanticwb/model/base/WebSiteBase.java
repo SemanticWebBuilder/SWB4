@@ -1019,6 +1019,12 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
         return org.semanticwb.model.PortletFilter.createPortletFilter(id,this);
     }
 
+    public org.semanticwb.model.PortletFilter createPortletFilter()
+    {
+        long id=getSemanticObject().getModel().getCounter(swb_PortletFilter);
+        return org.semanticwb.model.PortletFilter.createPortletFilter(String.valueOf(id),this);
+    } 
+
     public void removePortletFilter(String id)
     {
         org.semanticwb.model.PortletFilter.removePortletFilter(id, this);
