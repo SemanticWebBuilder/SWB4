@@ -5,23 +5,20 @@
  */
 package org.semanticwb.openoffice.ui.dialogs;
 
-import com.sun.star.deployment.VersionException;
 import java.awt.Component;
 import java.awt.Cursor;
 import javax.swing.AbstractCellEditor;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
-import org.netbeans.spi.wizard.Wizard;
-import org.netbeans.spi.wizard.WizardPage;
+import org.semanticwb.office.interfaces.CategoryInfo;
 import org.semanticwb.office.interfaces.PortletInfo;
 import org.semanticwb.office.interfaces.VersionInfo;
-import org.semanticwb.openoffice.ChangeCategoryResultProducer;
 import org.semanticwb.openoffice.OfficeApplication;
 import org.semanticwb.openoffice.OfficeDocument;
-import org.semanticwb.openoffice.ui.wizard.SelectCategory;
 
 /**
  *
@@ -43,16 +40,33 @@ public class DialogContentInformation extends javax.swing.JDialog
         this.document = document;
         TableColumn column = this.jTablePages.getColumnModel().getColumn(4);
         column.setCellEditor(new VersionEditor(repository, contentId));
-
         try
         {
             this.jTextFieldTitle.setText(OfficeApplication.getOfficeDocumentProxy().getTitle(repository, contentId));
             this.jTextAreaDescription.setText(OfficeApplication.getOfficeDocumentProxy().getDescription(repository, contentId));
             String date = OfficeApplication.iso8601dateFormat.format(OfficeApplication.getOfficeDocumentProxy().getLasUpdate(repository, contentId));
             this.jLabel1DisplayDateOfModification.setText(date);
-            jLabelCategoryName.setText(OfficeApplication.getOfficeDocumentProxy().getCategory(repository, contentId));
+            loadCategories();
+            CategoryInfo actualCategory=OfficeApplication.getOfficeDocumentProxy().getCategoryInfo(repository, contentId);
+            jComboBoxCategory.setSelectedItem(actualCategory);
             loadVersions(contentId, repository);
             loadPorlets(contentId, repository);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadCategories()
+    {
+        try
+        {
+            this.jComboBoxCategory.removeAllItems();
+            for (CategoryInfo category : OfficeApplication.getOfficeApplicationProxy().getAllCategories(repository))
+            {
+                this.jComboBoxCategory.addItem(category);
+            }
         }
         catch (Exception e)
         {
@@ -98,9 +112,9 @@ public class DialogContentInformation extends javax.swing.JDialog
         {
             for (PortletInfo portletInfo : OfficeApplication.getOfficeDocumentProxy().listPortlets(repositoryName, contentId))
             {
-                Version objVersion=new Version();
-                objVersion.id=portletInfo.version;
-                objVersion.title=portletInfo.version;
+                Version objVersion = new Version();
+                objVersion.id = portletInfo.version;
+                objVersion.title = portletInfo.version;
                 if (objVersion.id.equals("*"))
                 {
                     objVersion.title = "Mostrar la última versión";
@@ -139,8 +153,7 @@ public class DialogContentInformation extends javax.swing.JDialog
         jTextAreaDescription = new javax.swing.JTextArea();
         jLabel1DisplayDateOfModification = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jLabelCategoryName = new javax.swing.JLabel();
-        jButtonChangeCategory = new javax.swing.JButton();
+        jComboBoxCategory = new javax.swing.JComboBox();
         jPanelPublishInformation = new javax.swing.JPanel();
         jToolBar1 = new javax.swing.JToolBar();
         jSeparator1 = new javax.swing.JToolBar.Separator();
@@ -154,6 +167,9 @@ public class DialogContentInformation extends javax.swing.JDialog
         jPanelVersions = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTableSummary1 = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
+        jToolBar2 = new javax.swing.JToolBar();
+        jButtonUpdate = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Información del Contenido");
@@ -215,14 +231,7 @@ public class DialogContentInformation extends javax.swing.JDialog
 
         jLabel4.setText("Categoria");
 
-        jLabelCategoryName.setText("Categoria");
-
-        jButtonChangeCategory.setText("...");
-        jButtonChangeCategory.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonChangeCategoryActionPerformed(evt);
-            }
-        });
+        jComboBoxCategory.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout jPanelContentInformationLayout = new javax.swing.GroupLayout(jPanelContentInformation);
         jPanelContentInformation.setLayout(jPanelContentInformationLayout);
@@ -240,10 +249,7 @@ public class DialogContentInformation extends javax.swing.JDialog
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
                     .addComponent(jTextFieldTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
                     .addComponent(jLabel1DisplayDateOfModification, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelContentInformationLayout.createSequentialGroup()
-                        .addComponent(jLabelCategoryName, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButtonChangeCategory)))
+                    .addComponent(jComboBoxCategory, 0, 276, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanelContentInformationLayout.setVerticalGroup(
@@ -257,16 +263,15 @@ public class DialogContentInformation extends javax.swing.JDialog
                 .addGroup(jPanelContentInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
                 .addGroup(jPanelContentInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(jLabel1DisplayDateOfModification))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanelContentInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jLabelCategoryName)
-                    .addComponent(jButtonChangeCategory))
-                .addGap(71, 71, 71))
+                    .addComponent(jComboBoxCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(62, 62, 62))
         );
 
         jTabbedPane1.addTab("Información del Contenido", jPanelContentInformation);
@@ -329,7 +334,8 @@ public class DialogContentInformation extends javax.swing.JDialog
                 return canEdit [columnIndex];
             }
         });
-        jTablePages.setColumnSelectionAllowed(true);
+        jTablePages.setRowSelectionAllowed(false);
+        jTablePages.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane2.setViewportView(jTablePages);
         jTablePages.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
@@ -362,14 +368,32 @@ public class DialogContentInformation extends javax.swing.JDialog
                 return canEdit [columnIndex];
             }
         });
-        jTableSummary1.setColumnSelectionAllowed(true);
         jTableSummary1.setFocusable(false);
-        jTableSummary1.setRowSelectionAllowed(false);
         jTableSummary1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane3.setViewportView(jTableSummary1);
         jTableSummary1.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
         jPanelVersions.add(jScrollPane3, java.awt.BorderLayout.CENTER);
+
+        jPanel1.setPreferredSize(new java.awt.Dimension(466, 25));
+        jPanel1.setLayout(new java.awt.BorderLayout());
+
+        jToolBar2.setRollover(true);
+
+        jButtonUpdate.setText("Actualizar");
+        jButtonUpdate.setFocusable(false);
+        jButtonUpdate.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonUpdate.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonUpdateActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(jButtonUpdate);
+
+        jPanel1.add(jToolBar2, java.awt.BorderLayout.CENTER);
+
+        jPanelVersions.add(jPanel1, java.awt.BorderLayout.PAGE_START);
 
         jTabbedPane1.addTab("Versiones del contenido", jPanelVersions);
 
@@ -391,69 +415,91 @@ public class DialogContentInformation extends javax.swing.JDialog
         this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_jButtonPublishActionPerformed
 
-    private void jButtonChangeCategoryActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonChangeCategoryActionPerformed
-    {//GEN-HEADEREND:event_jButtonChangeCategoryActionPerformed
-        ChangeCategoryResultProducer resultProducer = new ChangeCategoryResultProducer(this.contentId, this.repository);
-        WizardPage[] pages =
+    private void jButtonAcceptActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonAcceptActionPerformed
+    {//GEN-HEADEREND:event_jButtonAcceptActionPerformed
+
+        if (this.jTextFieldTitle.getText().isEmpty())
         {
-            new SelectCategory(this.repository)
-        };
-        Wizard wiz = WizardPage.createWizard("Cambiar contenido de categoria", pages, resultProducer);
-        wiz.show();
+            JOptionPane.showMessageDialog(this, "¡Debe indicar un título de contenido!", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+            this.jTextFieldTitle.requestFocus();
+            return;
+        }
+        if (this.jTextAreaDescription.getText().isEmpty())
+        {
+            JOptionPane.showMessageDialog(this, "¡Debe indicar una descripción de contenido!", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+            this.jTextAreaDescription.requestFocus();
+            return;
+        }
         try
         {
-            String category = OfficeApplication.getOfficeDocumentProxy().getCategory(repository, contentId);
-            jLabelCategoryName.setText(category);
+            this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+            String oldTitle = OfficeApplication.getOfficeDocumentProxy().getTitle(repository, contentId);
+            if (!oldTitle.equals(jTextFieldTitle.getText()))
+            {
+                OfficeApplication.getOfficeDocumentProxy().setTitle(repository, contentId, this.jTextFieldTitle.getText());
+            }
+            String oldDescription = OfficeApplication.getOfficeDocumentProxy().getDescription(repository, contentId);
+            if (!oldDescription.equals(this.jTextAreaDescription.getText()))
+            {
+                OfficeApplication.getOfficeDocumentProxy().setDescription(repository, contentId, this.jTextAreaDescription.getText());
+            }
+            CategoryInfo oldCategory=OfficeApplication.getOfficeDocumentProxy().getCategoryInfo(repository, contentId);
+            CategoryInfo newCategory=(CategoryInfo)this.jComboBoxCategory.getSelectedItem();
+            if(!oldCategory.equals(newCategory))
+            {
+                OfficeApplication.getOfficeDocumentProxy().changeCategory(repository, contentId, newCategory.UDDI);
+            }
+            //update porlets
+            DefaultTableModel model = (DefaultTableModel) jTablePages.getModel();
+            int rows = model.getRowCount();
+            for (int i = 1; i <= rows; i++)
+            {
+                Object originalValue = model.getValueAt(i, 0);
+                if (originalValue instanceof PortletInfo)
+                {
+                    PortletInfo portletInfo = (PortletInfo) originalValue;
+                    Version newVersion = (Version) model.getValueAt(i, 4);
+                    if (!newVersion.id.equals(portletInfo.version))
+                    {
+                        OfficeApplication.getOfficeDocumentProxy().changeVersionPorlet(portletInfo, newVersion.id);
+                    }
+
+                }
+            }
+            JOptionPane.showMessageDialog(this, "¡Se han realizado correctamente los cambios!", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
         }
         catch (Exception e)
         {
             e.printStackTrace();
+            return;
         }
-    }//GEN-LAST:event_jButtonChangeCategoryActionPerformed
-
-    private void jButtonAcceptActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonAcceptActionPerformed
-    {//GEN-HEADEREND:event_jButtonAcceptActionPerformed
-
-        //update porlets
-        DefaultTableModel model = (DefaultTableModel) jTablePages.getModel();
-        int rows = model.getRowCount();
-        for (int i = 1; i <= rows; i++)
+        finally
         {
-            Object originalValue=model.getValueAt(i, 0);
-            if(originalValue instanceof PortletInfo)
-            {
-                PortletInfo portletInfo=(PortletInfo)originalValue;
-                Version newVersion=(Version)model.getValueAt(i, 4);
-                if(!newVersion.id.equals(portletInfo.version))
-                {
-                    try
-                    {
-                        OfficeApplication.getOfficeDocumentProxy().changeVersionPorlet(portletInfo,newVersion.id);
-                    }
-                    catch(Exception e)
-                    {
-
-                    }
-                }
-            }
+            this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
         this.setVisible(true);
 
     }//GEN-LAST:event_jButtonAcceptActionPerformed
 
+    private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonUpdateActionPerformed
+    {//GEN-HEADEREND:event_jButtonUpdateActionPerformed
+        document.saveToSite();
+    }//GEN-LAST:event_jButtonUpdateActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButtonAccept;
     private javax.swing.JButton jButtonCancel;
-    private javax.swing.JButton jButtonChangeCategory;
     private javax.swing.JButton jButtonPublish;
+    private javax.swing.JButton jButtonUpdate;
     private javax.swing.JButton jButtonViewPage;
+    private javax.swing.JComboBox jComboBoxCategory;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel1DisplayDateOfModification;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabelCategoryName;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanelButtons;
     private javax.swing.JPanel jPanelContentInformation;
     private javax.swing.JPanel jPanelPublishInformation;
@@ -470,6 +516,7 @@ public class DialogContentInformation extends javax.swing.JDialog
     private javax.swing.JTextArea jTextAreaDescription;
     private javax.swing.JTextField jTextFieldTitle;
     private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JToolBar jToolBar2;
     // End of variables declaration//GEN-END:variables
 }
 
@@ -483,9 +530,9 @@ class VersionEditor extends AbstractCellEditor implements TableCellEditor
     {
         this.repositoryName = repositoryName;
         this.contentId = contentId;
-        Version objVersion=new Version();
-        objVersion.id="*";
-        objVersion.title="Mostrar la última versión";
+        Version objVersion = new Version();
+        objVersion.id = "*";
+        objVersion.title = "Mostrar la última versión";
         combo.addItem(objVersion);
         try
         {
@@ -510,6 +557,7 @@ class VersionEditor extends AbstractCellEditor implements TableCellEditor
         return combo;
     }
 }
+
 class Version
 {
 
@@ -520,5 +568,4 @@ class Version
     }
     String id;
     String title;
-
 }
