@@ -25,22 +25,34 @@ public class VersionInfo {
             return false;
         }
         final VersionInfo other = (VersionInfo) obj;
+        if ((this.nameOfVersion == null) ? (other.nameOfVersion != null) : !this.nameOfVersion.equals(other.nameOfVersion))
+        {
+            return false;
+        }
         return true;
-    }
-
-    @Override
-    public String toString()
-    {
-        return nameOfVersion;
     }
 
     @Override
     public int hashCode()
     {
-        int hash = 7;
-        hash = 71 * hash + (this.nameOfVersion != null ? this.nameOfVersion.hashCode() : 0);
+        int hash = 3;
+        hash = 73 * hash + (this.nameOfVersion != null ? this.nameOfVersion.hashCode() : 0);
         return hash;
     }
+
+    
+
+    @Override
+    public String toString()
+    {
+        if(nameOfVersion.equals("*"))
+        {
+            return "Mostrar la última version";
+        }
+        return nameOfVersion;
+    }
+
+    
     public String contentId;    
     public String nameOfVersion;
     public Date created;
