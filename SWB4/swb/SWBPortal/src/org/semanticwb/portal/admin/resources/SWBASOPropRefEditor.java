@@ -752,7 +752,7 @@ public class SWBASOPropRefEditor extends GenericResource {
             }
 
             SWBResourceURL urladd = paramRequest.getActionUrl();
-            if ((idp.endsWith("hasRole") && clsprop.equals(Role.swb_Role))||idp.endsWith("hasUserGroup")&& clsprop.equals(UserGroup.swb_UserGroupable)) {
+            if ((idp.endsWith("hasRole") && clsprop.equals(Role.swb_Role))||idp.endsWith("hasUserGroup")&& clsprop.equals(UserGroup.swb_UserGroup)) {
                 urladd.setAction("choose");
             } else {
                 urladd.setAction("new");
@@ -794,7 +794,7 @@ public class SWBASOPropRefEditor extends GenericResource {
                     out.println("<tr>");
                     out.println("<td>" + stitle + "</td> ");
                     SWBResourceURL urlchoose = paramRequest.getActionUrl();
-                    if (idp.endsWith("hasRole") && clsprop.equals(Role.swb_Role)) {
+                    if ((idp.endsWith("hasRole") && clsprop.equals(Role.swb_Role))||idp.endsWith("hasUserGroup")&& clsprop.equals(UserGroup.swb_UserGroup)) {
                         urlchoose.setAction("choose");
                         urlchoose.setParameter("suri", id);
                     } else {
@@ -1020,13 +1020,16 @@ public class SWBASOPropRefEditor extends GenericResource {
                     }
                 }
             } else {   // empieza propiedad con has
-                if (sobj != null) {
+                if (sobj != null&&obj!=null) {
                     for (int i = 0; i < valores.length; i++) {
                         sobj = valores[i];
                         log.debug("Agregando un " + propref.getName() + " a " + obj.getURI()+" ---SOBJ--- "+sobj);
-                        SemanticObject aux = ont.getSemanticObject(sobj); //agregando al objectProperty nueva instancia
-                        log.debug("");
-                        if(sobj!=null) obj.addObjectProperty(propref, aux);
+                        if(sobj!=null)
+                        {
+                            SemanticObject aux = ont.getSemanticObject(sobj.trim()); //agregando al objectProperty nueva instancia
+                            log.debug(aux.getURI()+"---"+propref.getRangeClass().getName());
+                            if(aux!=null) obj.addObjectProperty(propref, aux);
+                        }
                     }
                 }
             }
