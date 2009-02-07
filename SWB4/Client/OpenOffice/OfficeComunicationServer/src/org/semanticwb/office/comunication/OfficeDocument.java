@@ -938,6 +938,9 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         WebSite site = SWBContext.getWebSite(info.page.site.id);
         OfficePortlet portlet = OfficePortlet.getOfficePortlet(info.id, site);
         portlet.setVersionToShow(newVersion);
+        InputStream in = getContent(portlet.getRepositoryName(), portlet.getContent(), newVersion);
+        portlet.loadContent(in);
+
     }
 
     public CategoryInfo getCategoryInfo(String repositoryName, String contentid) throws Exception
