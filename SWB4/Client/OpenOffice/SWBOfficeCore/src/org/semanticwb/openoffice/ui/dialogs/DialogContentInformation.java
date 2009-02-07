@@ -511,6 +511,7 @@ public class DialogContentInformation extends javax.swing.JDialog
     private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonUpdateActionPerformed
     {//GEN-HEADEREND:event_jButtonUpdateActionPerformed
         document.saveToSite();
+        loadVersions(contentId, repository);
     }//GEN-LAST:event_jButtonUpdateActionPerformed
 
     private void jButtonDeletePageActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonDeletePageActionPerformed
