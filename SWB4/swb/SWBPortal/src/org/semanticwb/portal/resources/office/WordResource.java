@@ -4,6 +4,7 @@
  */
 package org.semanticwb.portal.resources.office;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -25,8 +26,7 @@ public class WordResource extends GenericAdmResource
 {
 
     private static Logger log = SWBUtils.getLogger(WordResource.class);
-    
-    
+
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramReq) throws SWBResourceException, IOException
     {
@@ -46,19 +46,36 @@ public class WordResource extends GenericAdmResource
 
                     file = file.replace(".doc", ".html");
                     file = file.replace(".odt", ".html");
-                    String path = SWBPlatform.getWorkPath() + getResourceBase().getWorkPath() + "\\" + file;
-                    StringBuffer html = new StringBuffer();
-                    FileInputStream in = new FileInputStream(path);
-                    byte[] buffer = new byte[2048];
-                    int read = in.read(buffer);
-                    while (read != -1)
+                    String path = SWBPlatform.getWorkPath();
+                    if (path.endsWith("/"))
                     {
-                        html.append(new String(buffer, 0, read));
-                        read = in.read(buffer);
+                        path = path.substring(0, path.length() - 1);
+                        path += getResourceBase().getWorkPath() + "\\" + file;
                     }
-                    String workpath = SWBPlatform.getWebWorkPath() + getResourceBase().getWorkPath() + "/";
-                    String htmlOut = SWBPortal.UTIL.parseHTML(html.toString(), workpath);
-                    out.write(htmlOut);
+                    else
+                    {
+                        path += getResourceBase().getWorkPath() + "\\" + file;
+                    }
+                    StringBuffer html = new StringBuffer();
+                    File filecontent = new File(path);
+                    if (filecontent.exists())
+                    {
+                        FileInputStream in = new FileInputStream(path);
+                        byte[] buffer = new byte[2048];
+                        int read = in.read(buffer);
+                        while (read != -1)
+                        {
+                            html.append(new String(buffer, 0, read));
+                            read = in.read(buffer);
+                        }
+                        String workpath = SWBPlatform.getWebWorkPath() + getResourceBase().getWorkPath() + "/";
+                        String htmlOut = SWBPortal.UTIL.parseHTML(html.toString(), workpath);
+                        out.write(htmlOut);
+                    }
+                    else
+                    {
+                        log.error("Contenido no encontrado en ruta: " + filecontent.getAbsolutePath() + ": " + portlet.getRepositoryName() + "@" + portlet.getContent());
+                    }
                 }
             }
             catch (Exception e)
