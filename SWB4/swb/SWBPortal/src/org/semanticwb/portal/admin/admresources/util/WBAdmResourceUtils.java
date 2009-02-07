@@ -641,7 +641,7 @@ public class WBAdmResourceUtils {
                             strb = new StringBuffer();
                             strb.append("\n");
                             //strb.append("<OBJECT WIDTH=100% HEIGHT=100% classid=\"clsid:8AD9C840-044E-11D1-B3E9-00805F499D93\" codebase=\"http://java.sun.com/products/plugin/autodl/jinstall-1_4_0-win.cab#Version=1,4,0,0\" border=0><NOEMBED><XMP>\n");
-                            strb.append("<APPLET  WIDTH=100% HEIGHT=100% CODE=\"applets.dragdrop.DragDrop.class\" codebase=\"" + SWBPlatform.getContextPath() + "\" archive=\"wbadmin/lib/DragDrop.jar, wbadmin/lib/WBCommons.jar\" border=0>");
+                            strb.append("<APPLET  WIDTH=100% HEIGHT=100% CODE=\"applets.dragdrop.DragDrop.class\" codebase=\"" + SWBPlatform.getContextPath() + "\" archive=\"swbadmin/lib/DragDrop.jar, swbadmin/lib/WBCommons.jar\" border=0>");
                             //strb.append("<APPLET  WIDTH=100% HEIGHT=100% CODE=\"DragDrop.class\" archive=\""+ webPath + "admin/DragDrop.jar\" border=0></XMP>");
                             //strb.append("<PARAM NAME=CODE VALUE=\"DragDrop.class\">\n");
                             //strb.append("<PARAM NAME=ARCHIVE VALUE=\""+ webPath + "admin/DragDrop.jar\">\n");
@@ -651,7 +651,8 @@ public class WBAdmResourceUtils {
                             //strb.append("<PARAM NAME=\"type\" VALUE=\"application/x-java-applet;version=1.4\">\n");
                             //strb.append("<PARAM NAME=\"scriptable\" VALUE=\"false\">\n");
                             //strb.append("<PARAM NAME =\"JSESS\" VALUE=\""+idsession+"\">\n");
-                            strb.append("<PARAM NAME=\"webpath\" VALUE=\"" + SWBPlatform.getContextPath() + "\">\n");
+                            System.out.println("SWBPlatform.getContextPath():"+SWBPlatform.getContextPath());
+                            strb.append("<PARAM NAME=\"webpath\" VALUE=\"" + SWBPlatform.getContextPath() + "/\">\n");
                             strb.append("<PARAM NAME=\"foreground\" VALUE=\"000000\">\n");
                             strb.append("<PARAM NAME=\"background\" VALUE=\"979FC3\">\n");
                             strb.append("<PARAM NAME=\"foregroundSelection\" VALUE=\"ffffff\">\n");
