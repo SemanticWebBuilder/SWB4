@@ -138,11 +138,11 @@ public class SemanticObject
 
     private void removePropertyValueCache(SemanticProperty prop, String lang)
     {
-        System.out.println("removePropertyValueCache:"+this+" "+prop+" "+lang);
+        //System.out.println("removePropertyValueCache:"+this+" "+prop+" "+lang);
         if(prop.isInverseOf())
         {
             Object aux=m_cacheprops.get(prop.getURI()+"|"+lang);
-            System.out.println("removePropertyValueCache2:"+aux);
+            //System.out.println("removePropertyValueCache2:"+aux);
             if(aux!=null && aux!=NULL)
             {
                 SemanticProperty inv=prop.getInverse();
