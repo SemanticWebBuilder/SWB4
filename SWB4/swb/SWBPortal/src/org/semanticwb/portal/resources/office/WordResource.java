@@ -74,7 +74,7 @@ public class WordResource extends GenericAdmResource
                     }
                     else
                     {
-                        log.error("Contenido no encontrado en ruta: " + filecontent.getAbsolutePath() + ": " + portlet.getRepositoryName() + "@" + portlet.getContent());
+                        log.error("Contenido no encontrado en ruta: " + filecontent.getAbsolutePath() + ": " + portlet.getContent() + "@" + portlet.getRepositoryName());
                     }
                 }
             }
