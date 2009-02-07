@@ -95,7 +95,16 @@ public class SimpleNode implements Node
         nodeDefinition = this.getNodeDefinition(session.getRootBaseNode(), clazz, name, session);
         this.session = session;
         this.index = index;
-        this.parent = parent;        
+        this.parent = parent;
+        this.path=parent.getPath();
+        if(path.endsWith("/"))
+        {
+            path+=name;
+        }
+        else
+        {
+            path+="/"+name;
+        }
         if (parent != null && !parent.childs.containsKey(id))
         {
             parent.childs.put(this.id, this);
