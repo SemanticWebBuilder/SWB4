@@ -5,6 +5,7 @@
  */
 package org.semanticwb.openoffice.ui.dialogs;
 
+import java.awt.BorderLayout;
 import java.awt.image.ImageObserver;
 import java.net.URI;
 import org.semanticwb.openoffice.*;
@@ -25,8 +26,8 @@ public class DialogLogin extends javax.swing.JDialog implements ImageObserver
     {
         super(parent, modal);
         initComponents();
-        this.add(new BackGroundImagePanel(this));
-        this.setSize(500, 310);
+        this.add(new BackGroundImagePanel(this),BorderLayout.CENTER);
+        this.setSize(500, 300);
 
     }
 
