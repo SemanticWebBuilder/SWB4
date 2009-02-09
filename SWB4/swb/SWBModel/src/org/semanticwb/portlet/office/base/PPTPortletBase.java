@@ -1,7 +1,7 @@
 package org.semanticwb.portlet.office.base;
 
 
-public class PPTPortletBase extends org.semanticwb.portlet.office.OfficePortlet implements org.semanticwb.model.RoleRefable,org.semanticwb.model.Versionable,org.semanticwb.model.XMLConfable,org.semanticwb.model.Hitable,org.semanticwb.model.Deleteable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.XMLable,org.semanticwb.model.Viewable,org.semanticwb.model.Priorityable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Localeable,org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.model.Calendarable,org.semanticwb.model.Indexable,org.semanticwb.model.Referensable
+public class PPTPortletBase extends org.semanticwb.portlet.office.OfficePortlet implements org.semanticwb.model.XMLConfable,org.semanticwb.model.Hitable,org.semanticwb.model.Deleteable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.RoleRefable,org.semanticwb.model.XMLable,org.semanticwb.model.Viewable,org.semanticwb.model.Priorityable,org.semanticwb.model.Versionable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Localeable,org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.model.Calendarable,org.semanticwb.model.Indexable,org.semanticwb.model.Referensable
 {
     public static final org.semanticwb.platform.SemanticClass swbrep_PPTPortlet=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/repository#PPTPortlet");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/repository#PPTPortlet");
