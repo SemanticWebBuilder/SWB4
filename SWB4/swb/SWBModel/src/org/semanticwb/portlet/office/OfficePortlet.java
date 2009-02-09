@@ -18,9 +18,28 @@ public class OfficePortlet extends org.semanticwb.portlet.office.base.OfficePort
     {
         super(base);
     }
+    private void clean(File dir)
+    {
+        for(File file : dir.listFiles())
+        {
+            if(file.isDirectory())
+            {
+                clean(file);
+            }
+            else
+            {
+                file.delete();
+            }
+        }
+    }
+    public void clean()
+    {
+        File dir = new File(SWBPlatform.getWorkPath() + getWorkPath());
+        clean(dir);
+    }
     public void loadContent(InputStream in)
     {
-           
+            clean();
             File zipFile = null;
             try
             {   
