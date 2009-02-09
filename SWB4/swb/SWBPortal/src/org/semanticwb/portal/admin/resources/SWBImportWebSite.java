@@ -64,6 +64,7 @@ public class SWBImportWebSite extends GenericResource {
                 out.println("<script type=\"text/javascript\">");
                 out.println("hideDialog();");
 //                out.println("addNewTab('"+site.getURI()+"');");
+                out.println("addItemByURI(mtreeStore, null, '"+site.getURI()+"');");
                 out.println("showStatus('Sitio Creado');");
                 out.println("</script>");
 
@@ -81,12 +82,16 @@ public class SWBImportWebSite extends GenericResource {
         } else if (action != null && action.trim().equals("step3")) { //creación de sitio mediante template
             if (createWebSite(response, request.getParameter("zipName"), request.getParameter("wsname"), request.getParameter("wsns")))
             {
+//                out.println("<script type=\"text/javascript\">");
+//                out.println("hideDialog();");
+//                //out.println("addItemByURI(mtreeStore, null, '"+site.getURI()+"');");
+//                out.println("showStatus('Sitio Creado');");
+//                out.println("</script>");
+            } else {
                 out.println("<script type=\"text/javascript\">");
                 out.println("hideDialog();");
-                out.println("showStatus('Sitio Creado');");
+                out.println("showError('"+paramRequest.getLocaleLogString("sitenotcreated")+"');");
                 out.println("</script>");
-            } else {
-                out.println(paramRequest.getLocaleLogString("sitenotcreated"));
             }
         } else { //Forma de entrada(Datos iniciales)
             url.setAction("step2");
@@ -187,11 +192,12 @@ public class SWBImportWebSite extends GenericResource {
             new File(models + newName + "/" + name + ".rdf").delete();
             new File(models + newName + "/siteInfo.xml").delete();
 
-//            PrintWriter out=response.getWriter();
-//            out.println("<script type=\"text/javascript\">");
-//            out.println("hideDialog();");
-//            out.println("showStatus('Sitio Creado');");
-//            out.println("</script>");
+            PrintWriter out=response.getWriter();
+            out.println("<script type=\"text/javascript\">");
+            out.println("hideDialog();");
+            out.println("addItemByURI(mtreeStore, null, '"+website.getURI()+"');");
+            out.println("showStatus('Sitio Creado');");
+            out.println("</script>");
 
             return true;
         } catch (Exception e) {
