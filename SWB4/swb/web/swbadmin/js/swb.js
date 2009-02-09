@@ -431,12 +431,13 @@
           }
       }
 
+      //recargo nodo sin hijos de todos los stores
       function updateTreeNodeByURI(uri)
       {
           for(x=0;x<trees.length;x++)
           {
-              var s=trees[x].store;
-              //alert("store:"+trees[x]+" "+trees[x].id);
+              var s=trees[x].model.store;
+              //alert("store:"+trees[x].store+" "+trees[x].model+" "+trees[x].model.store);
               var n=getItem(s,uri);
               if(n)
               {
@@ -445,6 +446,7 @@
           }
       }
 
+      //recarga nodo sin hijos
       function updateTreeNode(store, item, jsonNode)
       {
           //alert("Store:"+store+" "+act_store.jsId);
@@ -509,9 +511,9 @@
           for(x=0;x<trees.length;x++)
           {
               var t=trees[x];
-              var childItem=getItem(t.store,uri);
-              var oldParentItem=getItem(t.store,oldParentUri);
-              var newParentItem=getItem(t.store,newParentUri);
+              var childItem=getItem(t.model.store,uri);
+              var oldParentItem=getItem(t.model.store,oldParentUri);
+              var newParentItem=getItem(t.model.store,newParentUri);
               if(childItem && oldParentItem && newParentItem)
               {
                   t.model.pasteItem(childItem, oldParentItem, newParentItem, false);
@@ -523,7 +525,7 @@
       {
           for(x=0;x<trees.length;x++)
           {
-              var s=trees[x].store;
+              var s=trees[x].model.store;
               var n=getItem(s,uri);
               if(n)
               {
@@ -559,6 +561,22 @@
           }
       }
 
+      //recarga nodo e hijos
+      function reloadTreeNodeByURI(uri)
+      {
+          for(x=0;x<trees.length;x++)
+          {
+              var s=trees[x].model.store;
+              //alert("store:"+trees[x]+" "+trees[x].id);
+              var n=getItem(s,uri);
+              if(n)
+              {
+                 reloadTreeNode(s,n);
+              }
+          }
+      }
+
+      //recarca nodo e hijos
       function reloadTreeNode(store, item)
       {
           if(!store)store=act_store;
@@ -663,6 +681,11 @@
         sy+=si;
         ele.style.bottom=sy+'px';
         if(sy>ini)setTimeout(scroll,t);
+     }
+
+     function showError(msg)
+     {
+        showStatus(msg);
      }
 
      function showStatus(msg)
@@ -873,7 +896,7 @@ function replaceChars4Id(value)
 }
 
    //EditArea
-   include("editarea/edit_area/edit_area_full.js");
+   include(context+"/swbadmin/js/editarea/edit_area/edit_area_full.js");
 
    function validateChk(name,msg)
    {

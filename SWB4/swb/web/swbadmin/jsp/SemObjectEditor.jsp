@@ -55,7 +55,7 @@ try
                 
                 out.println("<script type=\"text/javascript\">");
                 out.println("hideDialog();");
-                out.println("reloadTreeNode();");
+                out.println("reloadTreeNodeByURI('"+ref.getURI()+"');");
                 out.println("showStatus('"+obj.getSemanticClass().getDisplayName(lang)+" creado');");
                 out.println("addNewTab('"+obj.getURI()+"','"+SWBPlatform.getContextPath()+"/swbadmin/jsp/objectTab.jsp"+"','"+obj.getDisplayName(lang)+"');");
                 out.println("</script>");

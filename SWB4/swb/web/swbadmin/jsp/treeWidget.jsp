@@ -17,9 +17,10 @@
 <ul dojoType="dijit.Menu" id="<%=menu%>" style="display: none;" onOpen="hideApplet(true);" onClose="hideApplet(false);"></ul>
 <!-- data for tree and combobox -->
 <div dojoType="dojo.data.ItemFileWriteStore" jsId="<%=store%>" url="/swb/swbadmin/jsp/Tree.jsp?id=<%=id%>"></div>
-<!-- div dojoType="dijit.tree.ForestStoreModel" jsId="<%=model%>" store="<%=store%>" query_="{id: '0'}"></div -->
+<div dojoType="dijit.tree.ForestStoreModel" jsId="<%=model%>"
+  store="<%=store%>" rootId="root" rootLabel="Root" childrenAttrs="children"></div>
 <!-- tree widget -->
-<div id="<%=id%>" dojoType="dijit.Tree" refreshOnExpand_="true" model_="<%=model%>" store="<%=store%>" persist="false" query_="{type:'WebSite'}" dndController="dijit._tree.dndSource" betweenThreshold="8" showRoot="false" label_="Sitios">
+<div dojoType="dijit.Tree" id="<%=id%>" model="<%=model%>" dndController="dijit._tree.dndSource" betweenThreshold="8" persist="false" showRoot="false">
     <script type="dojo/method" event="onClick" args="item, node">
         if(item)
         {
@@ -172,16 +173,20 @@
     <script type="dojo/method" event="getIconClass" args="item, opened">
         if(item)
         {
-            return <%=store%>.getValue(item, "icon");
+            try
+            {
+                return <%=store%>.getValue(item, "icon");
+            }catch(err){}
         }
     </script>
+<!--
     <script type="dojo/method" event="getLabel" args="item">
         if(item)
         {
             return <%=store%>.getLabel(item);
         }
     </script>
-
+-->
     <script type="dojo/connect">
         var menuEmpty = dijit.byId("<%=menu%>");
 
