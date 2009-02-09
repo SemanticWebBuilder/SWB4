@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.portal.api.*;
 
@@ -24,6 +25,7 @@ public class Menu extends GenericResource
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
     {
         PrintWriter out=response.getWriter();
+        User user=paramRequest.getUser();
         WebPage topic=paramRequest.getTopic();
         WebPage parent=topic.getParent();
         if(parent!=null)
@@ -31,7 +33,7 @@ public class Menu extends GenericResource
             out.println("<BR><a href='"+parent.getUrl()+"'>"+parent.getTitle()+"</a>");
         }
         out.println("<BR>--><a href='"+topic.getUrl()+"'>"+topic.getTitle()+"</a>");
-        Iterator<WebPage> it=topic.listChilds();
+        Iterator<WebPage> it=topic.listVisibleChilds(user.getLanguage());
         while(it.hasNext())
         {
             WebPage child=it.next();

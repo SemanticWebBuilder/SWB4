@@ -130,6 +130,7 @@ public class Distributor implements InternalServlet
                 return false;
             }
 
+            log.debug("User:"+user+" webpage:"+webpage);
             if (!user.haveAccess(webpage)) 
             {
                 log.debug("Distributor->Don't access");
