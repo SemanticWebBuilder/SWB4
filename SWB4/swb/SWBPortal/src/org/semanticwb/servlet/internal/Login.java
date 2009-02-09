@@ -93,8 +93,11 @@ public class Login implements InternalServlet {
             CallbackHandler callbackHandler = (CallbackHandler) session.getAttribute(CALLBACK);
             if (null == callbackHandler)
             {
+                if (null != request.getParameter("wb_username")){
+                        enAuto = "Working";
+                    }
                 try
-                {
+                {   
                     log.debug("New callbackHandler...");
                     Constructor[] constructor =  Class.forName(CBHClassName).getConstructors();
                     int method = 0;
