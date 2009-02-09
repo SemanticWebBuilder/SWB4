@@ -603,8 +603,10 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         WebPageInfo info = new WebPageInfo();
         info.id = site.getHomePage().getId();
         info.title = site.getHomePage().getTitle();
+        site.getHomePage().getUrl();
         info.siteID = website.id;
         info.description = site.getDescription();
+        info.url=site.getHomePage().getUrl();
         int childs = 0;
         GenericIterator<WebPage> childWebPages = site.getHomePage().listChilds();
         while (childWebPages.hasNext())
@@ -630,6 +632,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             info.title = page.getTitle();
             info.siteID = webpage.siteID;
             info.description = page.getDescription();
+            info.url=page.getUrl();
             int childs = 0;
             GenericIterator<WebPage> childWebPages = page.listChilds();
             while (childWebPages.hasNext())
