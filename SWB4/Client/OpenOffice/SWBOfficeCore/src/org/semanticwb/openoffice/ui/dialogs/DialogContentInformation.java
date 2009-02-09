@@ -7,8 +7,11 @@ package org.semanticwb.openoffice.ui.dialogs;
 
 import java.awt.Cursor;
 import java.awt.event.KeyEvent;
+import java.net.URI;
+import java.net.URL;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
@@ -45,10 +48,27 @@ public class DialogContentInformation extends javax.swing.JDialog
 
             public void valueChanged(ListSelectionEvent e)
             {
+                jButtonViewPage.setEnabled(false);
                 jButtonDeletePage.setEnabled(false);
                 if (e.getFirstIndex() != -1)
                 {
                     jButtonDeletePage.setEnabled(true);
+                    jButtonViewPage.setEnabled(true);
+                }
+            }
+        });
+
+
+        listSelectionModel = jTableSummary1.getSelectionModel();
+        listSelectionModel.addListSelectionListener(new ListSelectionListener()
+        {
+
+            public void valueChanged(ListSelectionEvent e)
+            {
+                jButtonViewVersion.setEnabled(false);
+                if (e.getFirstIndex() != -1)
+                {
+                    jButtonViewVersion.setEnabled(true);
                 }
             }
         });
@@ -180,6 +200,8 @@ public class DialogContentInformation extends javax.swing.JDialog
         jPanel1 = new javax.swing.JPanel();
         jToolBar2 = new javax.swing.JToolBar();
         jButtonUpdate = new javax.swing.JButton();
+        jSeparator2 = new javax.swing.JToolBar.Separator();
+        jButtonViewVersion = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Información del Contenido");
@@ -307,6 +329,11 @@ public class DialogContentInformation extends javax.swing.JDialog
         jButtonViewPage.setFocusable(false);
         jButtonViewPage.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonViewPage.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonViewPage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonViewPageActionPerformed(evt);
+            }
+        });
         jToolBar1.add(jButtonViewPage);
         jToolBar1.add(jSeparator4);
 
@@ -408,6 +435,19 @@ public class DialogContentInformation extends javax.swing.JDialog
             }
         });
         jToolBar2.add(jButtonUpdate);
+        jToolBar2.add(jSeparator2);
+
+        jButtonViewVersion.setText("Ver");
+        jButtonViewVersion.setEnabled(false);
+        jButtonViewVersion.setFocusable(false);
+        jButtonViewVersion.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonViewVersion.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonViewVersion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonViewVersionActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(jButtonViewVersion);
 
         jPanel1.add(jToolBar2, java.awt.BorderLayout.CENTER);
 
@@ -563,6 +603,59 @@ public class DialogContentInformation extends javax.swing.JDialog
         }
 }//GEN-LAST:event_jTablePagesKeyReleased
 
+    private void jButtonViewPageActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonViewPageActionPerformed
+    {//GEN-HEADEREND:event_jButtonViewPageActionPerformed
+        int row=jTablePages.getSelectedRow();
+        if(row!=-1)
+        {
+            DefaultTableModel model = (DefaultTableModel) jTablePages.getModel();
+
+            PortletInfo portletInfo = (PortletInfo) model.getValueAt(row, 0);
+            try
+            {
+                URI uri=document.getOfficeDocumentProxy().getWebAddress();
+                URL url=new URL(uri.getScheme()+"://"+uri.getHost()+":"+uri.getPort()+portletInfo.page.url);
+                DialogPreview preview=new DialogPreview(new JFrame(), true, url);                
+                preview.setVisible(true);
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+
+        }
+    }//GEN-LAST:event_jButtonViewPageActionPerformed
+
+    private void jButtonViewVersionActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonViewVersionActionPerformed
+    {//GEN-HEADEREND:event_jButtonViewVersionActionPerformed
+        if(jTableSummary1.getSelectedRow()!=-1)
+        {
+            DefaultTableModel model = (DefaultTableModel) jTableSummary1.getModel();
+            VersionInfo versionInfo = (VersionInfo) model.getValueAt(jTableSummary1.getSelectedRow(), 0);
+            String version=versionInfo.nameOfVersion;
+            try
+            {
+                String urlproxy=OfficeApplication.getOfficeApplicationProxy().getWebAddress().toString();
+                if(!urlproxy.endsWith("/gtw"))
+                {
+                    if(!urlproxy.endsWith("/"))
+                    {
+                        urlproxy+="/";
+                    }
+                    urlproxy+="gtw";
+                }
+                URL url=new URL(urlproxy+"?contentId="+ contentId +"&versionName="+ version +"&repositoryName="+repository);
+                DialogPreview preview=new DialogPreview(new JFrame(), true, url);                
+                preview.setVisible(true);
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+
+        }
+    }//GEN-LAST:event_jButtonViewVersionActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAccept;
     private javax.swing.JButton jButtonCancel;
@@ -570,6 +663,7 @@ public class DialogContentInformation extends javax.swing.JDialog
     private javax.swing.JButton jButtonPublish;
     private javax.swing.JButton jButtonUpdate;
     private javax.swing.JButton jButtonViewPage;
+    private javax.swing.JButton jButtonViewVersion;
     private javax.swing.JComboBox jComboBoxCategory;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel1DisplayDateOfModification;
@@ -585,6 +679,7 @@ public class DialogContentInformation extends javax.swing.JDialog
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JToolBar.Separator jSeparator1;
+    private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator3;
     private javax.swing.JToolBar.Separator jSeparator4;
     private javax.swing.JTabbedPane jTabbedPane1;
