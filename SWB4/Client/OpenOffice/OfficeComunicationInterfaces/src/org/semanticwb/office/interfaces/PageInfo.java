@@ -14,4 +14,5 @@ public class PageInfo {
     public String title;
     public String description;
     public SiteInfo site;
+    public String url;
 }
