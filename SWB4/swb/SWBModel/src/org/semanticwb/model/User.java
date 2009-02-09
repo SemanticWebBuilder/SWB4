@@ -327,6 +327,7 @@ public class User extends UserBase implements Principal, java.io.Serializable
 
     public boolean haveAccess(GenericObject obj)
     {
+        //System.out.println(this+" haveAccess:"+obj);
         boolean ret=true;
         if(obj instanceof RoleRefable)
         {
@@ -338,6 +339,7 @@ public class User extends UserBase implements Principal, java.io.Serializable
                 if(!hasRole(ref.getRole()))
                 {
                     ret=false;
+                    //System.out.println("hasRole:false");
                     break;
                 }
             }
@@ -361,5 +363,22 @@ public class User extends UserBase implements Principal, java.io.Serializable
         return ret;
     }
 
+    @Override
+    public boolean hasRole(org.semanticwb.model.Role role)
+    {
+        boolean ret=false;
+        while(role!=null)
+        {
+            if(super.hasRole(role))
+            {
+                ret=true;
+                break;
+            }else
+            {
+                role=role.getParent();
+            }
+        }
+        return ret;
+    }
 
 }
