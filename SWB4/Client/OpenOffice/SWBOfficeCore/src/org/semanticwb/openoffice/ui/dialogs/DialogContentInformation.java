@@ -38,8 +38,7 @@ public class DialogContentInformation extends javax.swing.JDialog
         initComponents();
         this.contentId = contentId;
         this.repository = repository;
-        this.document = document;
-        TableColumn column = this.jTablePages.getColumnModel().getColumn(4);
+        this.document = document;        
         ListSelectionModel listSelectionModel = jTablePages.getSelectionModel();
         listSelectionModel.addListSelectionListener(new ListSelectionListener()
         {
@@ -53,8 +52,7 @@ public class DialogContentInformation extends javax.swing.JDialog
                 }
             }
         });
-
-        column.setCellEditor(new VersionEditor(this.repository, this.contentId));
+        
         try
         {
             this.jTextFieldTitle.setText(OfficeApplication.getOfficeDocumentProxy().getTitle(repository, contentId));
@@ -123,6 +121,8 @@ public class DialogContentInformation extends javax.swing.JDialog
         {
             model.removeRow(0);
         }
+        TableColumn column = this.jTablePages.getColumnModel().getColumn(4);
+        column.setCellEditor(new VersionEditor(this.repository, this.contentId));
         try
         {
             for (PortletInfo portletInfo : OfficeApplication.getOfficeDocumentProxy().listPortlets(repository, contentId))
