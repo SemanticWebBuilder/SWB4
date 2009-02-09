@@ -479,12 +479,25 @@ public class DialogContentInformation extends javax.swing.JDialog
                     OfficeApplication.getOfficeDocumentProxy().activatePortlet(portletInfo, newactive);
                 }
 
-                VersionInfo versionInfo = (VersionInfo) model.getValueAt(i, 4);
-                String newVersion = versionInfo.nameOfVersion;
-                String oldVersion = OfficeApplication.getOfficeDocumentProxy().getVersionToShow(portletInfo);
-                if (oldVersion == null || !newVersion.equals(oldVersion))
+                if(model.getValueAt(i, 4) instanceof VersionInfo)
                 {
-                    OfficeApplication.getOfficeDocumentProxy().changeVersionPorlet(portletInfo, newVersion);
+                    VersionInfo versionInfo = (VersionInfo) model.getValueAt(i, 4);
+                    String newVersion = versionInfo.nameOfVersion;
+                    String oldVersion = OfficeApplication.getOfficeDocumentProxy().getVersionToShow(portletInfo);
+                    if (oldVersion == null || !newVersion.equals(oldVersion))
+                    {
+                        OfficeApplication.getOfficeDocumentProxy().changeVersionPorlet(portletInfo, newVersion);
+                    }
+                }
+                if(model.getValueAt(i, 4) instanceof ComboVersiones)
+                {
+                    ComboVersiones combo = (ComboVersiones) model.getValueAt(i, 4);
+                    String newVersion = ((VersionInfo)combo.getSelectedItem()).nameOfVersion;
+                    String oldVersion = OfficeApplication.getOfficeDocumentProxy().getVersionToShow(portletInfo);
+                    if (oldVersion == null || !newVersion.equals(oldVersion))
+                    {
+                        OfficeApplication.getOfficeDocumentProxy().changeVersionPorlet(portletInfo, newVersion);
+                    }
                 }
 
 
