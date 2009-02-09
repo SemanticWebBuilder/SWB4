@@ -715,7 +715,7 @@ public class WBAdmResourceUtils {
                 intPos=strFile.lastIndexOf("/");
                 if(intPos != -1) 
                 {
-                    strClientPath=strFile.substring(0, intPos);
+//                    strClientPath=strFile.substring(0, intPos);
                     strFile=strFile.substring(intPos+1).trim();
                 }
                 if(!strClientPath.endsWith("/")) strClientPath=strClientPath+"/";
