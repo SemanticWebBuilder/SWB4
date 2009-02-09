@@ -58,6 +58,11 @@ public class SemanticOntology
     {
         m_ontology.addSubModel(model.getRDFModel(),rebind);
     }
+
+    public void removeSubModel(SemanticModel model, boolean rebind)
+    {
+        m_ontology.removeSubModel(model.getRDFModel(),rebind);
+    }
     
     public void rebind()
     {

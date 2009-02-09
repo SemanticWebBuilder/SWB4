@@ -284,6 +284,7 @@ public class SemanticMgr implements SWBInstanceObject
         //TODO:notify this
         m_models.remove(name);
         m_imodels.remove(model.getRDFModel());
+        m_ontology.removeSubModel(model,true);
         maker.removeModel(name);
     }
         

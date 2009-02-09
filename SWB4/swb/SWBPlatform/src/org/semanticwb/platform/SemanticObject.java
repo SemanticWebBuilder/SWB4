@@ -146,8 +146,8 @@ public class SemanticObject
             if(aux!=null && aux!=NULL)
             {
                 SemanticProperty inv=prop.getInverse();
-                //System.out.println("removePropertyValueCache3:"+obj+" "+inv+" "+inv.getCardinality());
-                if(inv.getCardinality()!=1)
+                //System.out.println("removePropertyValueCache3:"+aux+" "+inv+" "+inv.getCardinality());
+                if(aux instanceof ArrayList)
                 {
                     Iterator it=((ArrayList)aux).iterator();
                     while(it.hasNext())
@@ -622,6 +622,7 @@ public class SemanticObject
             list.add(object);
             return this;
         }
+        Object old=getPropertyValueCache(prop, null);
         Property iprop = prop.getRDFProperty();
         Statement stm = m_res.getProperty(iprop);
         if (stm != null)
@@ -640,9 +641,11 @@ public class SemanticObject
             if(inv.getCardinality()==1)
             {
                 object.removePropertyValueCache(prop.getInverse(), NULL);
+                if(old!=null && old instanceof SemanticObject)((SemanticObject)old).removePropertyValueCache(prop.getInverse(), NULL);
             }else
             {
                 object.removePropertyValueCache(prop.getInverse(), "list");
+                if(old!=null && old instanceof SemanticObject)((SemanticObject)old).removePropertyValueCache(prop.getInverse(), "list");
             }
         }
         return this;
@@ -958,78 +961,85 @@ public class SemanticObject
 
     public void remove()
     {
-        //TODO:revisar esto de vic
-        Iterator<SemanticProperty> properties = this.getSemanticClass().listProperties();
-        while (properties.hasNext())
+        if(getModel().getModelObject().equals(this))    //es un modelo
         {
-            SemanticProperty prop = properties.next();
-            if (prop.isBinary())
+            SWBPlatform.getSemanticMgr().removeModel(getId());
+            SWBPlatform.getSemanticMgr().notifyChange(this, null, "REMOVE");
+        }else                                           //es un objeto
+        {
+            //TODO:revisar esto de vic
+            Iterator<SemanticProperty> properties = this.getSemanticClass().listProperties();
+            while (properties.hasNext())
             {
-                // removida manualmente por ser binaria
-                removeProperty(prop);
+                SemanticProperty prop = properties.next();
+                if (prop.isBinary())
+                {
+                    // removida manualmente por ser binaria
+                    removeProperty(prop);
+                }
             }
-        }
-        SWBPlatform.getSemanticMgr().notifyChange(this, null, "REMOVE");
+            SWBPlatform.getSemanticMgr().notifyChange(this, null, "REMOVE");
 
-        //TODO:mejorar
-        Iterator<SemanticObject> rel=listRelatedObjects();
-        while(rel.hasNext())
-        {
-            SemanticObject obj=rel.next();
-            removeCache(obj.getURI());
-        }
-
-        //Eliminar dependencias
-        Iterator<SemanticProperty> itp=getSemanticClass().listProperties();
-        while(itp.hasNext())
-        {
-            SemanticProperty prop=itp.next();
-            if(prop.isRemoveDependency())
+            //TODO:mejorar
+            Iterator<SemanticObject> rel=listRelatedObjects();
+            while(rel.hasNext())
             {
-                //System.out.println(prop+" "+prop.isRemoveDependency());
-                if(prop.getCardinality()==1)
+                SemanticObject obj=rel.next();
+                removeCache(obj.getURI());
+            }
+
+            //Eliminar dependencias
+            Iterator<SemanticProperty> itp=getSemanticClass().listProperties();
+            while(itp.hasNext())
+            {
+                SemanticProperty prop=itp.next();
+                if(prop.isRemoveDependency())
                 {
-                    SemanticObject dep=getObjectProperty(prop);
-                    if(dep!=null)
+                    //System.out.println(prop+" "+prop.isRemoveDependency());
+                    if(prop.getCardinality()==1)
                     {
-                        //System.out.println(dep);
-                        try
+                        SemanticObject dep=getObjectProperty(prop);
+                        if(dep!=null)
                         {
-                            dep.remove();
-                        }catch(Exception e){log.error(e);}
-                    }
-                }else
-                {
-                    Iterator<SemanticObject> it=listObjectProperties(prop);
-                    while(it.hasNext())
+                            //System.out.println(dep);
+                            try
+                            {
+                                dep.remove();
+                            }catch(Exception e){log.error(e);}
+                        }
+                    }else
                     {
-                        SemanticObject dep=it.next();
-                        //System.out.println(dep);
-                        try
+                        Iterator<SemanticObject> it=listObjectProperties(prop);
+                        while(it.hasNext())
                         {
-                            dep.remove();
-                        }catch(Exception e){log.error(e);}
+                            SemanticObject dep=it.next();
+                            //System.out.println(dep);
+                            try
+                            {
+                                dep.remove();
+                            }catch(Exception e){log.error(e);}
+                        }
                     }
                 }
             }
-        }
 
-        //Borrar objeto
-        Resource res=getRDFResource();
-        if(res!=null)
-        {
-            SemanticModel model=getModel();
-            //System.out.println("remove1:"+res+" model:"+model);
-            Iterator<Entry<String,SemanticModel>> it=SWBPlatform.getSemanticMgr().getModels().iterator();
-            while(it.hasNext())
+            //Borrar objeto
+            Resource res=getRDFResource();
+            if(res!=null)
             {
-                Entry<String,SemanticModel> ent=it.next();
-                SemanticModel m=ent.getValue();
-                //System.out.println("remove2:"+res+" model:"+m);
-                m.getRDFModel().removeAll(null,null,res);
+                SemanticModel model=getModel();
+                //System.out.println("remove1:"+res+" model:"+model);
+                Iterator<Entry<String,SemanticModel>> it=SWBPlatform.getSemanticMgr().getModels().iterator();
+                while(it.hasNext())
+                {
+                    Entry<String,SemanticModel> ent=it.next();
+                    SemanticModel m=ent.getValue();
+                    //System.out.println("remove2:"+res+" model:"+m);
+                    m.getRDFModel().removeAll(null,null,res);
+                }
+                model.getRDFModel().removeAll(res,null,null);
+                //model.getRDFModel().removeAll(null,null,res);
             }
-            model.getRDFModel().removeAll(res,null,null);
-            //model.getRDFModel().removeAll(null,null,res);
         }
         removeCache(getURI());
     }
