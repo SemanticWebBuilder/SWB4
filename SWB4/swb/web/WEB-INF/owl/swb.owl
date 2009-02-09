@@ -767,12 +767,13 @@
                 <rdfs:subClassOf rdf:resource="#SWBClass"/>
                 <rdfs:subClassOf rdf:resource="#XMLable"/>
                 <rdfs:subClassOf rdf:resource="#Traceable"/>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
                 <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
                 >true</swb:autogenId>
                 <rdfs:subClassOf rdf:resource="#Versionable"/>
+                <rdfs:subClassOf rdf:resource="#Calendarable"/>
                 <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
                 >org.semanticwb.model.Rule</swb:className>
-                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
               </swb:Class>
             </swbxf:heClass>
             <swb:title xml:lang="es">Reglas</swb:title>
@@ -1583,14 +1584,14 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     <rdfs:comment>La propiedad se utilizara como relacion padre hijo para la herarquia del arbol de administracion</rdfs:comment>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#fileMaxSize">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#long"/>
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FileUpload"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#so_globalScope">
     <rdfs:label>globalScope</rdfs:label>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectOne"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#fileContentType">
-    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FileUpload"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="webPageURLType">
     <swb:displayProperty>
@@ -1842,10 +1843,6 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#VersionInfo"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#filePath">
-    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FileUpload"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="formMode">
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_formMode">
@@ -2077,10 +2074,6 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#fileName">
-    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FileUpload"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="priority">
     <rdfs:domain rdf:resource="#Priorityable"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
@@ -2165,6 +2158,12 @@
     <swb:title xml:lang="es">Editar</swb:title>
     <swb:title xml:lang="en">Edit</swb:title>
   </swbxf:ObjectAction>
+  <swbxf:FileUpload rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FileUploadHTML">
+    <swbxf:fileMaxSize rdf:datatype="http://www.w3.org/2001/XMLSchema#long"
+    >10000000</swbxf:fileMaxSize>
+    <swbxf:fileFilter rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >.gif,.jpg,.bmp,.jpeg,.png</swbxf:fileFilter>
+  </swbxf:FileUpload>
   <swbxf:RichText rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#RichTextEditor">
     <swbxf:textAreaCols rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
     >40</swbxf:textAreaCols>
