@@ -617,6 +617,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     info.page.site = new SiteInfo();
                     info.page.site.title = page.getWebSite().getTitle();
                     info.page.site.description = page.getWebSite().getDescription();
+                    info.page.url=page.getUrl();
                     info.page.site.id = page.getWebSite().getId();
                 }
             }
