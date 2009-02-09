@@ -107,7 +107,7 @@ public class XmlRpcProxyFactory implements java.lang.reflect.InvocationHandler, 
         {
             ObjectToreturn = this.getResponseParts();
         }
-        else if ( m.getName().equals("getWebAddress") && args.length == 0 )
+        else if ( m.getName().equals("getWebAddress") && args==null)
         {
             ObjectToreturn = this.webAddress;
         }
@@ -126,7 +126,7 @@ public class XmlRpcProxyFactory implements java.lang.reflect.InvocationHandler, 
             String pPassword = ( String ) args[0];
             this.setPassword(pPassword);
         }
-        else if ( m.getName().equals("getUser") && args.length == 0 )
+        else if ( m.getName().equals("getUser") && args==null)
         {
             ObjectToreturn = this.getUser();
         }
