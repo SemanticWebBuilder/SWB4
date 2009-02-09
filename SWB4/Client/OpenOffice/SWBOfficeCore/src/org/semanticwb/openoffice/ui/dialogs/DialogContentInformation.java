@@ -9,6 +9,7 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.event.KeyEvent;
 import javax.swing.AbstractCellEditor;
+import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -44,19 +45,20 @@ public class DialogContentInformation extends javax.swing.JDialog
         this.document = document;
         TableColumn column = this.jTablePages.getColumnModel().getColumn(4);
         ListSelectionModel listSelectionModel = jTablePages.getSelectionModel();
-        listSelectionModel.addListSelectionListener(new ListSelectionListener() {
+        listSelectionModel.addListSelectionListener(new ListSelectionListener()
+        {
 
             public void valueChanged(ListSelectionEvent e)
             {
                 jButtonDeletePage.setEnabled(false);
-                if(e.getFirstIndex()!=-1)
+                if (e.getFirstIndex() != -1)
                 {
                     jButtonDeletePage.setEnabled(true);
                 }
             }
         });
 
-        column.setCellEditor(new VersionEditor(this.jTablePages));
+        column.setCellEditor(new VersionEditor(this.repository, this.contentId));
         try
         {
             this.jTextFieldTitle.setText(OfficeApplication.getOfficeDocumentProxy().getTitle(repository, contentId));
@@ -480,9 +482,11 @@ public class DialogContentInformation extends javax.swing.JDialog
                 {
                     OfficeApplication.getOfficeDocumentProxy().activatePortlet(portletInfo, newactive);
                 }
-                ComboVersiones combo = (ComboVersiones) model.getValueAt(i, 4);
-                String newVersion = ((VersionInfo) combo.getSelectedItem()).nameOfVersion;
-                if (!newVersion.equals(portletInfo.version))
+
+                VersionInfo versionInfo = (VersionInfo) model.getValueAt(i, 4);
+                String newVersion = versionInfo.nameOfVersion;
+                String oldVersion = OfficeApplication.getOfficeDocumentProxy().getVersionToShow(portletInfo);
+                if (oldVersion == null || !newVersion.equals(oldVersion))
                 {
                     OfficeApplication.getOfficeDocumentProxy().changeVersionPorlet(portletInfo, newVersion);
                 }
@@ -517,13 +521,13 @@ public class DialogContentInformation extends javax.swing.JDialog
 
     private void jButtonDeletePageActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonDeletePageActionPerformed
     {//GEN-HEADEREND:event_jButtonDeletePageActionPerformed
-        if(jTablePages.getSelectedRow()!=-1)
+        if (jTablePages.getSelectedRow() != -1)
         {
-            PortletInfo porlet=(PortletInfo)jTablePages.getModel().getValueAt(jTablePages.getSelectedRow(), 0);
+            PortletInfo porlet = (PortletInfo) jTablePages.getModel().getValueAt(jTablePages.getSelectedRow(), 0);
             try
             {
-                int res=JOptionPane.showConfirmDialog(this,"¿Desea eliminar la publicación del contenido con titulo "+ porlet.title +" de la página "+ porlet.page.title +"?",this.getTitle(),JOptionPane.YES_NO_OPTION);
-                if(res==JOptionPane.YES_OPTION)
+                int res = JOptionPane.showConfirmDialog(this, "¿Desea eliminar la publicación del contenido con titulo " + porlet.title + " de la página " + porlet.page.title + "?", this.getTitle(), JOptionPane.YES_NO_OPTION);
+                if (res == JOptionPane.YES_OPTION)
                 {
                     this.jButtonDeletePage.setEnabled(false);
                     this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
@@ -531,7 +535,7 @@ public class DialogContentInformation extends javax.swing.JDialog
                     loadPorlets(contentId, repository);
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 e.printStackTrace();
             }
@@ -545,7 +549,7 @@ public class DialogContentInformation extends javax.swing.JDialog
 
     private void jTablePagesKeyReleased(java.awt.event.KeyEvent evt)//GEN-FIRST:event_jTablePagesKeyReleased
     {//GEN-HEADEREND:event_jTablePagesKeyReleased
-        if(evt.getKeyCode()==KeyEvent.VK_DELETE && jTablePages.getSelectedRow()!=-1)
+        if (evt.getKeyCode() == KeyEvent.VK_DELETE && jTablePages.getSelectedRow() != -1)
         {
             jButtonDeletePageActionPerformed(null);
         }
@@ -585,43 +589,22 @@ public class DialogContentInformation extends javax.swing.JDialog
     // End of variables declaration//GEN-END:variables
 }
 
-class VersionEditor extends AbstractCellEditor implements TableCellEditor
+class VersionEditor extends DefaultCellEditor
 {
-
-    private JTable table;
-
-    public VersionEditor(JTable table)
+    public VersionEditor(String repositoryName, String contentId)
     {
-        this.table = table;
-    }
-
-    public Object getCellEditorValue()
-    {
-        int row = table.getSelectedRow();
-        if (row != -1)
-        {
-            ComboVersiones combo = (ComboVersiones) table.getModel().getValueAt(row, 4);
-            return combo;
-        }
-        return "";
-    }
-
-    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column)
-    {
-        ComboVersiones combo = (ComboVersiones) table.getModel().getValueAt(row, 4);
-        return combo;
+        super(new ComboVersiones(repositoryName, contentId, null));
     }
 }
 
 class ComboVersiones extends JComboBox
 {
 
-    String repositoryName, contentId;
-
     public ComboVersiones(String repositoryName, String contentId, VersionInfo selected)
     {
         VersionInfo info = new VersionInfo();
         info.nameOfVersion = "*";
+        this.setEditable(false);
         this.addItem(info);
         try
         {
@@ -629,10 +612,14 @@ class ComboVersiones extends JComboBox
             {
                 this.addItem(versionInfo);
             }
-            this.setSelectedItem(selected);
+            if (selected != null)
+            {
+                this.setSelectedItem(selected);
+            }
         }
         catch (Exception e)
         {
+            e.printStackTrace();
         }
     }
 
