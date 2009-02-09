@@ -3,9 +3,8 @@ package org.semanticwb.model.base;
 
 public class FileUploadBase extends org.semanticwb.model.base.FormElementBase 
 {
-    public static final org.semanticwb.platform.SemanticProperty swbxf_filePath=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#filePath");
+    public static final org.semanticwb.platform.SemanticProperty swbxf_fileMaxSize=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#fileMaxSize");
     public static final org.semanticwb.platform.SemanticProperty swbxf_fileFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#fileFilter");
-    public static final org.semanticwb.platform.SemanticProperty swbxf_fileContentType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#fileContentType");
     public static final org.semanticwb.platform.SemanticClass swbxf_FileUpload=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#FileUpload");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#FileUpload");
 
@@ -46,14 +45,14 @@ public class FileUploadBase extends org.semanticwb.model.base.FormElementBase
         return (getFileUpload(id, model)!=null);
     }
 
-    public String getFilePath()
+    public long getFileMaxSize()
     {
-        return getSemanticObject().getProperty(swbxf_filePath);
+        return getSemanticObject().getLongProperty(swbxf_fileMaxSize);
     }
 
-    public void setFilePath(String filePath)
+    public void setFileMaxSize(long fileMaxSize)
     {
-        getSemanticObject().setProperty(swbxf_filePath, filePath);
+        getSemanticObject().setLongProperty(swbxf_fileMaxSize, fileMaxSize);
     }
 
     public String getFileFilter()
@@ -64,16 +63,6 @@ public class FileUploadBase extends org.semanticwb.model.base.FormElementBase
     public void setFileFilter(String fileFilter)
     {
         getSemanticObject().setProperty(swbxf_fileFilter, fileFilter);
-    }
-
-    public String getFileContentType()
-    {
-        return getSemanticObject().getProperty(swbxf_fileContentType);
-    }
-
-    public void setFileContentType(String fileContentType)
-    {
-        getSemanticObject().setProperty(swbxf_fileContentType, fileContentType);
     }
 
     public void remove()
