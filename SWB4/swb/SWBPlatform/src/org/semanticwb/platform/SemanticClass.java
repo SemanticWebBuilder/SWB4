@@ -32,7 +32,7 @@ public class SemanticClass
     private static Logger log=SWBUtils.getLogger(SemanticClass.class);
 
     private OntClass m_class;                           //clase ontologia schema
-    private OntClass m_ontclass;                        //clase ontologia glonal
+    private OntClass m_ontclass;                        //clase ontologia global
     private HashMap<String,SemanticProperty> m_props;
     private Boolean m_isSWBClass=null;
     private Boolean m_isSWBInterface=null;
