@@ -5,8 +5,10 @@
  */
 package org.semanticwb.openoffice.ui.dialogs;
 
+import java.awt.Frame;
 import java.io.IOException;
 import java.net.URL;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
@@ -17,24 +19,89 @@ public class DialogPreview extends javax.swing.JDialog
 {
 
     private final URL url;
+    private String tooltip = "No se puede navegar a través de la misma";
 
     /** Creates new form DialogPreview */
     public DialogPreview(java.awt.Frame parent, boolean modal, URL url)
     {
-        super(parent, modal);
+        super(parent, modal);        
         this.url = url;
         initComponents();
+        this.setURL(url);
+        setLocationRelativeTo(null);
     }
+
     public void setURL(URL url)
     {
         try
         {
-            this.jEditorPane1.setPage(url);            
+            this.jEditorPane1.setPage(url);
+            this.jTextFieldURL.setText(url.toString());
         }
         catch (IOException ioe)
         {
-            JOptionPane.showMessageDialog(null, "Error al mostrar contenido","La página Web no puede ser vista",JOptionPane.ERROR);
+            ioe.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error al mostrar contenido", "La página Web no puede ser vista", JOptionPane.ERROR);
         }
+    }
+
+    static boolean showInBrowser(String url, Frame frame)
+    {
+        //minimizes the app
+        if (frame != null)
+        {
+            frame.setExtendedState(JFrame.ICONIFIED);
+        }
+
+        String os = System.getProperty("os.name").toLowerCase();
+        Runtime rt = Runtime.getRuntime();
+        try
+        {
+            if (os.indexOf("win") >= 0)
+            {
+                String[] cmd = new String[4];
+                cmd[0] = "cmd.exe";
+                cmd[1] = "/C";
+                cmd[2] = "start";
+                cmd[3] = url;
+                rt.exec(cmd);
+            }
+            else if (os.indexOf("mac") >= 0)
+            {
+                rt.exec("open " + url);
+            }
+            else
+            {
+                //prioritized 'guess' of users' preference
+                String[] browsers =
+                {
+                    "epiphany", "firefox", "mozilla", "konqueror",
+                    "netscape", "opera", "links", "lynx"
+                };
+
+                StringBuffer cmd = new StringBuffer();
+                for (int i = 0; i < browsers.length; i++)
+                {
+                    cmd.append((i == 0 ? "" : " || ") + browsers[i] + " \"" + url + "\" ");
+                }
+
+                rt.exec(new String[]
+                        {
+                            "sh", "-c", cmd.toString()
+                        });
+            }
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(frame,
+                    "\n\n El sistema falló al tratr de invocar su navegador por defecto intentando acceder a: \n\n " + url + "\n\n",
+                    "Error de navegador",
+                    JOptionPane.WARNING_MESSAGE);
+
+            return false;
+        }
+        return true;
     }
 
     /** This method is called from within the constructor to
@@ -47,6 +114,9 @@ public class DialogPreview extends javax.swing.JDialog
 
         jPanel1 = new javax.swing.JPanel();
         jButtonClose = new javax.swing.JButton();
+        jTextFieldURL = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        jButtonOpenBrowser = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jEditorPane1 = new javax.swing.JEditorPane();
 
@@ -60,7 +130,7 @@ public class DialogPreview extends javax.swing.JDialog
             }
         });
 
-        jPanel1.setPreferredSize(new java.awt.Dimension(100, 50));
+        jPanel1.setPreferredSize(new java.awt.Dimension(600, 50));
 
         jButtonClose.setText("Cerrar");
         jButtonClose.addActionListener(new java.awt.event.ActionListener() {
@@ -69,12 +139,29 @@ public class DialogPreview extends javax.swing.JDialog
             }
         });
 
+        jTextFieldURL.setEditable(false);
+
+        jLabel1.setText("Dirección Web:");
+
+        jButtonOpenBrowser.setText("Abrir en un navegador");
+        jButtonOpenBrowser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonOpenBrowserActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(327, Short.MAX_VALUE)
+                .addGap(10, 10, 10)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextFieldURL, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButtonOpenBrowser)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButtonClose)
                 .addContainerGap())
         );
@@ -82,13 +169,20 @@ public class DialogPreview extends javax.swing.JDialog
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(16, Short.MAX_VALUE)
-                .addComponent(jButtonClose)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonClose)
+                    .addComponent(jButtonOpenBrowser)
+                    .addComponent(jTextFieldURL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
                 .addContainerGap())
         );
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.SOUTH);
 
+        jEditorPane1.setContentType("text/html");
         jEditorPane1.setEditable(false);
+        jEditorPane1.setToolTipText("");
+        jEditorPane1.setPreferredSize(new java.awt.Dimension(600, 450));
         jScrollPane1.setViewportView(jEditorPane1);
 
         getContentPane().add(jScrollPane1, java.awt.BorderLayout.CENTER);
@@ -102,16 +196,24 @@ public class DialogPreview extends javax.swing.JDialog
     }//GEN-LAST:event_formWindowOpened
 
     private void jButtonCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCloseActionPerformed
+        
         this.setVisible(false);
     }//GEN-LAST:event_jButtonCloseActionPerformed
+
+    private void jButtonOpenBrowserActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonOpenBrowserActionPerformed
+    {//GEN-HEADEREND:event_jButtonOpenBrowserActionPerformed
+        showInBrowser(this.url.toString(), new Frame());
+}//GEN-LAST:event_jButtonOpenBrowserActionPerformed
     /**
      * @param args the command line arguments
      */
-   
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonClose;
+    private javax.swing.JButton jButtonOpenBrowser;
     private javax.swing.JEditorPane jEditorPane1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField jTextFieldURL;
     // End of variables declaration//GEN-END:variables
 }
