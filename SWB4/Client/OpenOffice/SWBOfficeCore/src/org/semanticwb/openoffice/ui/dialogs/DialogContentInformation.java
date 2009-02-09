@@ -516,8 +516,7 @@ public class DialogContentInformation extends javax.swing.JDialog
         finally
         {
             this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        }
-        this.setVisible(true);
+        }        
 
     }//GEN-LAST:event_jButtonAcceptActionPerformed
 
