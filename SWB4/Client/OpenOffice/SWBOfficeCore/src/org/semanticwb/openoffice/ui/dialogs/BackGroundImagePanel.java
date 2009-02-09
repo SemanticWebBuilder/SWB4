@@ -10,6 +10,7 @@
  */
 package org.semanticwb.openoffice.ui.dialogs;
 
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.WindowEvent;
@@ -39,6 +40,7 @@ public class BackGroundImagePanel extends javax.swing.JPanel implements WindowFo
         parent.addWindowFocusListener(this);
         preInit();
         initComponents();
+        this.setPreferredSize(new Dimension(500, 300));
         this.jComboBoxWebAddress.removeAllItems();
         for (URI uri : configurationListURI.getAddresses())
         {
@@ -82,7 +84,7 @@ public class BackGroundImagePanel extends javax.swing.JPanel implements WindowFo
         jButtonDelete = new javax.swing.JButton();
 
         setDebugGraphicsOptions(javax.swing.DebugGraphics.NONE_OPTION);
-        setPreferredSize(new java.awt.Dimension(500, 310));
+        setPreferredSize(new java.awt.Dimension(500, 300));
         addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 formFocusGained(evt);
