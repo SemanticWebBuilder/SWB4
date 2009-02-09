@@ -8,7 +8,7 @@ package org.semanticwb.xmlrpc;
  *
  * @author victor.lorenzana
  */
-class Base64
+public class Base64
 {
 
 // Mapping table from 6-bit nibbles to Base64 characters.
