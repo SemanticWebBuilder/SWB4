@@ -121,7 +121,7 @@ public class DialogPreview extends javax.swing.JDialog
         jEditorPane1 = new javax.swing.JEditorPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Ver contenido publicado");
+        setTitle("Ver página");
         setModal(true);
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
