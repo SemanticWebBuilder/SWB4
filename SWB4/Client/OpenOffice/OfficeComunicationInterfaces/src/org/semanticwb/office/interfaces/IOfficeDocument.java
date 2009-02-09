@@ -82,5 +82,8 @@ public interface IOfficeDocument
     @XmlRpcMethod(methodName = "OfficeDocument.deletePortlet")
     public void deletePortlet(PortletInfo info) throws Exception;
 
+     @XmlRpcMethod(methodName = "OfficeDocument.getVersionToShow")
+    public String getVersionToShow(PortletInfo info) throws Exception;
+
 }
 
