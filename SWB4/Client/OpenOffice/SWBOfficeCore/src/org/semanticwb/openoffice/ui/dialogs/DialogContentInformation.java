@@ -64,8 +64,8 @@ public class DialogContentInformation extends javax.swing.JDialog
             loadCategories();
             CategoryInfo actualCategory = OfficeApplication.getOfficeDocumentProxy().getCategoryInfo(repository, contentId);
             jComboBoxCategory.setSelectedItem(actualCategory);
-            loadVersions(contentId, repository);
-            loadPorlets(contentId, repository);
+            loadVersions();
+            loadPorlets();
         }
         catch (Exception e)
         {
@@ -89,7 +89,7 @@ public class DialogContentInformation extends javax.swing.JDialog
         }
     }
 
-    public void loadVersions(String contentId, String repositoryName)
+    public void loadVersions()
     {
         try
         {
@@ -99,7 +99,7 @@ public class DialogContentInformation extends javax.swing.JDialog
             {
                 model.removeRow(0);
             }
-            for (VersionInfo versionInfo : OfficeApplication.getOfficeDocumentProxy().getVersions(repositoryName, contentId))
+            for (VersionInfo versionInfo : OfficeApplication.getOfficeDocumentProxy().getVersions(this.repository, contentId))
             {
                 String date = OfficeApplication.iso8601dateFormat.format(versionInfo.created);
                 String[] rowData =
@@ -115,7 +115,7 @@ public class DialogContentInformation extends javax.swing.JDialog
 
     }
 
-    private void loadPorlets(String contentId, String repositoryName)
+    private void loadPorlets()
     {
         DefaultTableModel model = (DefaultTableModel) jTablePages.getModel();
         int rows = model.getRowCount();
@@ -125,13 +125,13 @@ public class DialogContentInformation extends javax.swing.JDialog
         }
         try
         {
-            for (PortletInfo portletInfo : OfficeApplication.getOfficeDocumentProxy().listPortlets(repositoryName, contentId))
+            for (PortletInfo portletInfo : OfficeApplication.getOfficeDocumentProxy().listPortlets(repository, contentId))
             {
                 VersionInfo selected = new VersionInfo();
                 selected.nameOfVersion = portletInfo.version;
                 Object[] rowData =
                 {
-                    portletInfo, portletInfo.page.site.title, portletInfo.page.title, portletInfo.active, new ComboVersiones(repositoryName, contentId, selected)
+                    portletInfo, portletInfo.page.site.title, portletInfo.page.title, portletInfo.active, new ComboVersiones(repository, contentId, selected)
                 };
                 model.addRow(rowData);
             }
@@ -429,7 +429,7 @@ public class DialogContentInformation extends javax.swing.JDialog
     {//GEN-HEADEREND:event_jButtonPublishActionPerformed
         document.publish();
         this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-        loadPorlets(contentId, repository);
+        loadPorlets();
         this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_jButtonPublishActionPerformed
 
@@ -504,8 +504,8 @@ public class DialogContentInformation extends javax.swing.JDialog
             }
             String date = OfficeApplication.iso8601dateFormat.format(OfficeApplication.getOfficeDocumentProxy().getLasUpdate(repository, contentId));
             this.jLabel1DisplayDateOfModification.setText(date);
-            loadPorlets(contentId, repository);
-            loadVersions(contentId, repository);
+            loadPorlets();
+            loadVersions();
             JOptionPane.showMessageDialog(this, "¡Se han realizado correctamente los cambios!", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
         }
         catch (Exception e)
@@ -524,8 +524,8 @@ public class DialogContentInformation extends javax.swing.JDialog
     private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonUpdateActionPerformed
     {//GEN-HEADEREND:event_jButtonUpdateActionPerformed
         document.saveToSite();
-        loadVersions(contentId, repository);
-        loadPorlets(contentId, repository);
+        loadVersions();
+        loadPorlets();
     }//GEN-LAST:event_jButtonUpdateActionPerformed
 
     private void jButtonDeletePageActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonDeletePageActionPerformed
@@ -541,7 +541,7 @@ public class DialogContentInformation extends javax.swing.JDialog
                     this.jButtonDeletePage.setEnabled(false);
                     this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
                     OfficeApplication.getOfficeDocumentProxy().deletePortlet(porlet);
-                    loadPorlets(contentId, repository);
+                    loadPorlets();
                 }
             }
             catch (Exception e)
