@@ -979,5 +979,12 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         OfficePortlet portlet = OfficePortlet.getOfficePortlet(info.id, site);
         portlet.remove();
     }
+
+    public String getVersionToShow(PortletInfo info) throws Exception
+    {
+        WebSite site = SWBContext.getWebSite(info.page.site.id);
+        OfficePortlet portlet = OfficePortlet.getOfficePortlet(info.id, site);
+        return portlet.getVersionToShow();
+    }
 }
 
