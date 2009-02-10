@@ -544,15 +544,15 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         {
             session = loader.openSession(repositoryName, this.user, this.password);
             Node nodeContent = session.getNodeByUUID(contentID);
-           
-                String cm_description = loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
-                nodeContent.checkout();
-                nodeContent.setProperty(cm_description, description);
-                Node resource = nodeContent.getNode(JCR_CONTENT);
-                resource.getProperty(JCR_LASTMODIFIED).setValue(Calendar.getInstance());
-                nodeContent.save();
-                nodeContent.checkin();
-            
+
+            String cm_description = loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
+            nodeContent.checkout();
+            nodeContent.setProperty(cm_description, description);
+            Node resource = nodeContent.getNode(JCR_CONTENT);
+            resource.getProperty(JCR_LASTMODIFIED).setValue(Calendar.getInstance());
+            nodeContent.save();
+            nodeContent.checkin();
+
 
         }
         catch (ItemNotFoundException infe)
@@ -617,7 +617,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     info.page.site = new SiteInfo();
                     info.page.site.title = page.getWebSite().getTitle();
                     info.page.site.description = page.getWebSite().getDescription();
-                    info.page.url=page.getUrl();
+                    info.page.url = page.getUrl();
                     info.page.site.id = page.getWebSite().getId();
                 }
             }
@@ -878,6 +878,16 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
+    public String createPreview(String repositoryName, String contentId, String version) throws Exception
+    {
+        String name = UUID.randomUUID().toString();
+        String dir = "/" + name;
+        InputStream in = getContent(repositoryName, contentId, version);
+        OfficePortlet.loadContent(in, dir);
+        in.close();
+        return name;
+    }
+
     public String getContentType(String repositoryName, String contentId, String version) throws Exception
     {
         Session session = null;
@@ -1011,6 +1021,15 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         WebSite site = SWBContext.getWebSite(info.page.site.id);
         OfficePortlet portlet = OfficePortlet.getOfficePortlet(info.id, site);
         return portlet.getVersionToShow();
+    }
+
+    public void deletePreview(String dir) throws Exception
+    {
+        if(!dir.startsWith("/"))
+        {
+            dir="/"+dir;
+        }
+        OfficePortlet.clean(dir);
     }
 }
 
