@@ -644,10 +644,11 @@ public class DialogContentInformation extends javax.swing.JDialog
                     }
                     urlproxy+="gtw";
                 }
-                URL url=new URL(urlproxy+"?contentId="+ contentId +"&versionName="+ version +"&repositoryName="+repository);
-                //DialogPreview.showInBrowser(url.toString(), new Frame());
-                DialogPreview preview=new DialogPreview(new JFrame(), true, url);
+                String name=OfficeApplication.getOfficeDocumentProxy().createPreview(repository, contentId, version);
+                URL url=new URL(urlproxy+"?contentId="+ contentId +"&versionName="+ version +"&repositoryName="+repository+"&name="+name);
+                DialogPreview preview=new DialogPreview(new JFrame(), true, url,false);
                 preview.setVisible(true);
+                OfficeApplication.getOfficeDocumentProxy().deletePreview(name);
             }
             catch(Exception e)
             {
