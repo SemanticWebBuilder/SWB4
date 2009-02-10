@@ -17,6 +17,8 @@ import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.sheet.*;
 import com.sun.star.table.XCell;
+import com.sun.star.text.XText;
+import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextFieldsSupplier;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
@@ -49,7 +51,7 @@ import static org.semanticwb.openoffice.util.FileUtil.getFileFromURL;
  */
 public class WB4Calc extends OfficeDocument
 {
-
+    private static final String HYPERLINK_VALUE = "HyperLinkURL";
     private static final String ERROR_DOCUMENT_NOT_FOUND = "There is not a document active in the desktop";
     private static final String CALC_FORMAT = "Calc8";
     private static final String DESKTOP_NOT_FOUND = "The desktop was not found";
@@ -70,10 +72,12 @@ public class WB4Calc extends OfficeDocument
     private static final NumberFormat formatter = new DecimalFormat("000");
     private final XComponent document;
 
+
     static
     {
         tabstrip = loadResourceAsString(WB4Calc.class, "tabstrip.htm");
-    }    
+    }
+
     /**
      * Create a representation of a Calc Document
      * @param document Representation of a Calc Document
@@ -81,7 +85,7 @@ public class WB4Calc extends OfficeDocument
      */
     public WB4Calc(XComponent document)
     {
-        this.document = document;        
+        this.document = document;
     }
 
     /**
@@ -98,7 +102,7 @@ public class WB4Calc extends OfficeDocument
             Object desktop = serviceManager.createInstanceWithContext(
                     DESKTOP_PATH, m_xContext);
             XDesktop xdesktop = (XDesktop) UnoRuntime.queryInterface(XDesktop.class, desktop);
-            document = xdesktop.getCurrentComponent();            
+            document = xdesktop.getCurrentComponent();
             if (document == null)
             {
                 throw new WBOfficeException(ERROR_DOCUMENT_NOT_FOUND);
@@ -107,7 +111,7 @@ public class WB4Calc extends OfficeDocument
         catch (com.sun.star.uno.Exception e)
         {
             throw new WBOfficeException(DESKTOP_NOT_FOUND, e);
-        }         
+        }
     }
 
     /**
@@ -693,9 +697,28 @@ public class WB4Calc extends OfficeDocument
     {
         return EXCEL_EXTENSION;
     }
-     public void insertLink(String url,String text)
+
+    public void insertLink(String url, String text)
     {
-        /*XSpreadsheetDocument xSpreadsheetDocument = (XSpreadsheetDocument) UnoRuntime.queryInterface(XSpreadsheetDocument.class, this.document);
-        xSpreadsheetDocument.getSheets().*/
+        XSpreadsheetDocument xSheetDocument =
+                (XSpreadsheetDocument) UnoRuntime.queryInterface(XSpreadsheetDocument.class,
+                this.document);
+        XModel xModel = (XModel) UnoRuntime.queryInterface(XModel.class,
+                xSheetDocument);
+
+        XCell xCell = (XCell) UnoRuntime.queryInterface(XCell.class, xModel.getCurrentSelection());
+        XText xCellText = (XText)UnoRuntime.queryInterface(XText.class, xCell);
+        XTextCursor xTextCursor = xCellText.createTextCursor();
+        XPropertySet xTextCursorProps = (XPropertySet) UnoRuntime.queryInterface(
+                XPropertySet.class, xTextCursor);
+        try
+        {
+            xTextCursorProps.setPropertyValue(HYPERLINK_VALUE, url);
+            xCellText.insertString(xTextCursor, text, false);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 }
