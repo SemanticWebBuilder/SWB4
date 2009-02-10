@@ -35,13 +35,6 @@
               <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
-                      <Component id="jButtonAvanced" min="-2" pref="90" max="-2" attributes="0"/>
-                      <EmptySpace pref="35" max="32767" attributes="0"/>
-                      <Component id="jButtonCancel" min="-2" pref="92" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                      <Component id="jButtonAccept" min="-2" pref="88" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="1" attributes="0">
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="jComboBoxWebAddress" min="-2" pref="270" max="-2" attributes="1"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -49,6 +42,13 @@
                   </Group>
                   <Component id="jPassword" pref="315" max="32767" attributes="1"/>
                   <Component id="jTextFieldClave" alignment="0" pref="315" max="32767" attributes="1"/>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Component id="jButtonAvanced" min="-2" pref="90" max="-2" attributes="0"/>
+                      <EmptySpace pref="39" max="32767" attributes="0"/>
+                      <Component id="jButtonAccept" min="-2" pref="88" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jButtonCancel" min="-2" pref="92" max="-2" attributes="0"/>
+                  </Group>
               </Group>
               <EmptySpace min="41" pref="41" max="-2" attributes="0"/>
           </Group>
@@ -81,11 +81,11 @@
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jButtonAccept" alignment="3" pref="27" max="32767" attributes="0"/>
-                  <Component id="jButtonCancel" alignment="3" min="-2" pref="27" max="-2" attributes="0"/>
                   <Component id="jButtonAvanced" alignment="3" min="-2" pref="28" max="-2" attributes="0"/>
+                  <Component id="jButtonCancel" alignment="3" min="-2" pref="27" max="-2" attributes="0"/>
+                  <Component id="jButtonAccept" alignment="3" pref="27" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="158" max="-2" attributes="0"/>
+              <EmptySpace pref="125" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>

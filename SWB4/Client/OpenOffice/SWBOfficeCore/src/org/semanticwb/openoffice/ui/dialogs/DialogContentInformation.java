@@ -231,9 +231,9 @@ public class DialogContentInformation extends javax.swing.JDialog
             jPanelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelButtonsLayout.createSequentialGroup()
                 .addContainerGap(309, Short.MAX_VALUE)
-                .addComponent(jButtonCancel)
-                .addGap(18, 18, 18)
                 .addComponent(jButtonAccept)
+                .addGap(18, 18, 18)
+                .addComponent(jButtonCancel)
                 .addContainerGap())
         );
         jPanelButtonsLayout.setVerticalGroup(
@@ -241,8 +241,8 @@ public class DialogContentInformation extends javax.swing.JDialog
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelButtonsLayout.createSequentialGroup()
                 .addContainerGap(16, Short.MAX_VALUE)
                 .addGroup(jPanelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonAccept)
-                    .addComponent(jButtonCancel))
+                    .addComponent(jButtonCancel)
+                    .addComponent(jButtonAccept))
                 .addContainerGap())
         );
 

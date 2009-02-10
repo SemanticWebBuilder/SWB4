@@ -95,9 +95,9 @@ public class DialogAddCategory extends javax.swing.JDialog
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
                             .addComponent(jTextFieldName, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButtonCancel)
+                        .addComponent(jButtonAccept)
                         .addGap(18, 18, 18)
-                        .addComponent(jButtonAccept)))
+                        .addComponent(jButtonCancel)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
