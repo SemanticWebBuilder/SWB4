@@ -36,6 +36,7 @@ import org.semanticwb.openoffice.ui.dialogs.DialogUpdateContent;
 import org.semanticwb.openoffice.ui.wizard.PublishVersion;
 import org.semanticwb.openoffice.ui.wizard.SelectCategory;
 import org.semanticwb.openoffice.ui.wizard.SelectPage;
+import org.semanticwb.openoffice.ui.wizard.SelectTitle;
 import org.semanticwb.openoffice.ui.wizard.TitleAndDescription;
 import org.semanticwb.openoffice.util.ExcelFileFilter;
 import org.semanticwb.openoffice.util.PPTFileFilter;
@@ -727,8 +728,14 @@ public abstract class OfficeDocument
     {
     }
 
-    public final void addLink()
+    public final void insertLink()
     {
-        
+        AddLinkProducer resultProducer = new AddLinkProducer(this);
+        WizardPage[] clazz = new WizardPage[]
+        {
+            new SelectPage(), new SelectTitle()
+        };
+        Wizard wiz = WizardPage.createWizard("Asistente de inserción de liga de página", clazz, resultProducer);
+        wiz.show();
     }
 }
