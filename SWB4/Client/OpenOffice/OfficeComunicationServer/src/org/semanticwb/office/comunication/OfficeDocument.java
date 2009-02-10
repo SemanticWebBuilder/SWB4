@@ -1013,7 +1013,18 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     {
         WebSite site = SWBContext.getWebSite(info.page.site.id);
         OfficePortlet portlet = OfficePortlet.getOfficePortlet(info.id, site);
-        portlet.remove();
+        try
+        {
+            portlet.clean();
+        }
+        catch(Exception e)
+        {
+            log.event(e);
+        }
+        finally
+        {
+            portlet.remove();
+        }
     }
 
     public String getVersionToShow(PortletInfo info) throws Exception
