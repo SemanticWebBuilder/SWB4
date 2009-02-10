@@ -7,9 +7,7 @@ package org.semanticwb.servlet.internal;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
-import java.util.UUID;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +18,6 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.office.comunication.OfficeDocument;
 import org.semanticwb.office.comunication.OfficeServlet;
-import org.semanticwb.portlet.office.OfficePortlet;
 
 /**
  *
@@ -65,8 +62,6 @@ public class GateWayOffice implements InternalServlet
         return userName;
     }
 
-    
-
     public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException, ServletException
     {
         if (request.getMethod().toLowerCase().equals("post"))
@@ -100,24 +95,24 @@ public class GateWayOffice implements InternalServlet
                 OfficeDocument doc = new OfficeDocument();
                 doc.setUser("");
                 doc.setPassword("");
-                dir="/"+dir;
+                dir = "/" + dir;
                 try
-                {                    
+                {
                     String file = doc.getContentFile(repositoryName, contentId, versionName);
                     String type = doc.getContentType(repositoryName, contentId, versionName);
                     if (file != null)
                     {
-                        if(type.equalsIgnoreCase("word"))
+                        if (type.equalsIgnoreCase("word"))
                         {
-                            file = file.replace(".doc", ".html");                            
+                            file = file.replace(".doc", ".html");
                         }
-                        String path = SWBPlatform.getWorkPath()+dir + "\\" + file;
+                        String path = SWBPlatform.getWorkPath() + dir + "\\" + file;
                         StringBuffer html = new StringBuffer();
                         File filecontent = new File(path);
                         if (filecontent.exists())
                         {
                             FileInputStream inFile = new FileInputStream(path);
-                            byte[] buffer = new byte[1024*8];
+                            byte[] buffer = new byte[1024 * 8];
                             int read = inFile.read(buffer);
                             while (read != -1)
                             {
@@ -125,11 +120,11 @@ public class GateWayOffice implements InternalServlet
                                 read = inFile.read(buffer);
                             }
                             inFile.close();
-                            if(!dir.endsWith("/"))
+                            if (!dir.endsWith("/"))
                             {
-                                dir+="/";
+                                dir += "/";
                             }
-                            String workpath = SWBPlatform.getWebWorkPath()+dir;
+                            String workpath = SWBPlatform.getWebWorkPath() + dir;
                             String htmlOut = SWBPortal.UTIL.parseHTML(html.toString(), workpath);
                             PrintWriter out = response.getWriter();
                             out.write(htmlOut);
@@ -139,7 +134,7 @@ public class GateWayOffice implements InternalServlet
                         {
                             //log.error("Contenido no encontrado en ruta: " + filecontent.getAbsolutePath() + ": " + portlet.getContent() + "@" + portlet.getRepositoryName());
                         }
-                    }                    
+                    }
                 }
                 catch (Exception e)
                 {
@@ -156,7 +151,7 @@ public class GateWayOffice implements InternalServlet
                 }
                 finally
                 {
-                   // OfficePortlet.clean(dir);
+                    // OfficePortlet.clean(dir);
                 }
             }
 
