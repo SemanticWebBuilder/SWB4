@@ -81,7 +81,6 @@ public class WordResource extends GenericAdmResource
             {
                 log.error(e);
             }
-
         }
     }
 }
