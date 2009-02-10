@@ -35,8 +35,8 @@ public class DialogContentPublicationInformation extends javax.swing.JDialog
 
         buttonGroup1 = new javax.swing.ButtonGroup();
         jPanelOptions = new javax.swing.JPanel();
-        jButtonCancel = new javax.swing.JButton();
         jButtonOK = new javax.swing.JButton();
+        jButtonCancel = new javax.swing.JButton();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanelInformation = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -61,14 +61,6 @@ public class DialogContentPublicationInformation extends javax.swing.JDialog
 
         jPanelOptions.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
-        jButtonCancel.setText("Cancelar");
-        jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonCancelActionPerformed(evt);
-            }
-        });
-        jPanelOptions.add(jButtonCancel);
-
         jButtonOK.setText("Aceptar");
         jButtonOK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -76,6 +68,14 @@ public class DialogContentPublicationInformation extends javax.swing.JDialog
             }
         });
         jPanelOptions.add(jButtonOK);
+
+        jButtonCancel.setText("Cancelar");
+        jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCancelActionPerformed(evt);
+            }
+        });
+        jPanelOptions.add(jButtonCancel);
 
         getContentPane().add(jPanelOptions, java.awt.BorderLayout.SOUTH);
 
@@ -207,7 +207,7 @@ public class DialogContentPublicationInformation extends javax.swing.JDialog
 
         jTabbedPane1.addTab("Calendarización", jPanelSchedule);
 
-        getContentPane().add(jTabbedPane1, java.awt.BorderLayout.PAGE_START);
+        getContentPane().add(jTabbedPane1, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

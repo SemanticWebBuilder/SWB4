@@ -34,7 +34,6 @@ public class DialogAddLink extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         jButtonAccept = new javax.swing.JButton();
         jButtonCancel = new javax.swing.JButton();
-        selectPage1 = new org.semanticwb.openoffice.ui.wizard.SelectCategory();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Insertar liga de una Página");
@@ -62,9 +61,9 @@ public class DialogAddLink extends javax.swing.JDialog {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(226, Short.MAX_VALUE)
-                .addComponent(jButtonCancel)
-                .addGap(18, 18, 18)
                 .addComponent(jButtonAccept)
+                .addGap(18, 18, 18)
+                .addComponent(jButtonCancel)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -72,13 +71,12 @@ public class DialogAddLink extends javax.swing.JDialog {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(16, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonAccept)
-                    .addComponent(jButtonCancel))
+                    .addComponent(jButtonCancel)
+                    .addComponent(jButtonAccept))
                 .addContainerGap())
         );
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.SOUTH);
-        getContentPane().add(selectPage1, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -114,7 +112,6 @@ public class DialogAddLink extends javax.swing.JDialog {
     private javax.swing.JButton jButtonAccept;
     private javax.swing.JButton jButtonCancel;
     private javax.swing.JPanel jPanel1;
-    private org.semanticwb.openoffice.ui.wizard.SelectCategory selectPage1;
     // End of variables declaration//GEN-END:variables
     
 }
