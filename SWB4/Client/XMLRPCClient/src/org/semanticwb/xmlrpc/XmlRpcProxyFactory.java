@@ -130,7 +130,7 @@ public class XmlRpcProxyFactory implements java.lang.reflect.InvocationHandler, 
         {
             ObjectToreturn = this.getUser();
         }
-        else if ( m.getName().equals("getPassword") && args.length == 0 )
+        else if ( m.getName().equals("getPassword") && args==null)
         {
             ObjectToreturn = this.getPassword();
         }
