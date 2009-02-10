@@ -270,23 +270,6 @@ public final class wb4writeraddon extends WeakBase
                 if (aURL.Path.compareTo("save") == 0)
                 {
                     document.saveToSite();
-                    /*Object oDispatchHelper = null;
-
-                    XMultiServiceFactory xMultiServiceManager =
-                            (XMultiServiceFactory) UnoRuntime.queryInterface(
-                            XMultiServiceFactory.class, this.m_xContext.getServiceManager());
-                    oDispatchHelper =
-                            xMultiServiceManager.createInstance("com.sun.star.frame.DispatchHelper");
-                    XDispatchHelper xDispatchHelper =
-                            (XDispatchHelper) UnoRuntime.queryInterface(XDispatchHelper.class,
-                            oDispatchHelper);
-
-                    // Executing the commandURL
-                    PropertyValue[] saveProperties=new PropertyValue[0];
-                   xDispatchHelper.executeDispatch(this,"org.semanticwb.openoffice.writer.wb4writeraddon:publish","_self",0,saveProperties);*/
-
-
-
                     return;
                 }
                 if (aURL.Path.compareTo("publish") == 0)
@@ -328,7 +311,7 @@ public final class wb4writeraddon extends WeakBase
                 }
                 if (aURL.Path.compareTo("addLink") == 0)
                 {
-                    // add your own code here
+                    document.insertLink();
                     return;
                 }
                 if (aURL.Path.compareTo("createSection") == 0)
