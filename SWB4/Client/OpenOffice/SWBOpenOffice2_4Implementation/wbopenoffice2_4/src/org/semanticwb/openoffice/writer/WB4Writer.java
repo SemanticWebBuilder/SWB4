@@ -184,7 +184,7 @@ public class WB4Writer extends OfficeDocument
         try
         {
             xTextCursorProps.setPropertyValue(HYPERLINK_VALUE, url);
-            xText.insertString(xText, text, false);
+            xText.insertString(xTextCursor, text, false);
         }
         catch (Exception e)
         {
