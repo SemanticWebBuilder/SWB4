@@ -42,7 +42,7 @@ public class DialogPreview extends javax.swing.JDialog
         setLocationRelativeTo(null);
         this.jTextFieldURL.setVisible(showAddress);
         this.jLabelWebAddress.setVisible(showAddress);
-        
+        this.jButtonOpenBrowser.setVisible(showAddress);
     }
 
     public void setURL(URL url)
