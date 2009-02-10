@@ -16,6 +16,7 @@ public class DialogAbout extends javax.swing.JDialog {
     public DialogAbout(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        setLocationRelativeTo(null);
     }
     
     /** This method is called from within the constructor to
@@ -45,7 +46,7 @@ public class DialogAbout extends javax.swing.JDialog {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(319, Short.MAX_VALUE)
+                .addContainerGap(330, Short.MAX_VALUE)
                 .addComponent(jButtonClose, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
