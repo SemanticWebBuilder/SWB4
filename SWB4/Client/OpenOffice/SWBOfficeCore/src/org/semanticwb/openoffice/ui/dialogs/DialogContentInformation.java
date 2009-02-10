@@ -633,6 +633,7 @@ public class DialogContentInformation extends javax.swing.JDialog
         {
             DefaultTableModel model = (DefaultTableModel) jTableSummary1.getModel();
             String version=model.getValueAt(jTableSummary1.getSelectedRow(), 0).toString();
+            String name=null;
             try
             {
                 String urlproxy=OfficeApplication.getOfficeApplicationProxy().getWebAddress().toString();
@@ -644,15 +645,29 @@ public class DialogContentInformation extends javax.swing.JDialog
                     }
                     urlproxy+="gtw";
                 }
-                String name=OfficeApplication.getOfficeDocumentProxy().createPreview(repository, contentId, version);
+                name=OfficeApplication.getOfficeDocumentProxy().createPreview(repository, contentId, version);
                 URL url=new URL(urlproxy+"?contentId="+ contentId +"&versionName="+ version +"&repositoryName="+repository+"&name="+name);
                 DialogPreview preview=new DialogPreview(new JFrame(), true, url,false);
-                preview.setVisible(true);
-                OfficeApplication.getOfficeDocumentProxy().deletePreview(name);
+                preview.setVisible(true);                
             }
             catch(Exception e)
             {
                 e.printStackTrace();
+            }
+            finally
+            {
+                if(name!=null)
+                {
+                    try
+                    {
+                        OfficeApplication.getOfficeDocumentProxy().deletePreview(name);
+                    }
+                    catch(Exception e)
+                    {
+                        // no imprimir al usuario
+                        e.printStackTrace();
+                    }
+                }
             }
 
         }
