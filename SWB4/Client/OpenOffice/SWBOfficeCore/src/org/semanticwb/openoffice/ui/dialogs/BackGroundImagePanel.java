@@ -365,7 +365,7 @@ public class BackGroundImagePanel extends javax.swing.JPanel implements WindowFo
     {
         if (imgFondo != null)
         {
-            g.drawImage(imgFondo, 0, 0, getWidth(), getHeight(), this);
+            g.drawImage(imgFondo, 0, 0, 500, 300, this);
         }
     }
 
