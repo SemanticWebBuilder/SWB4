@@ -22,15 +22,18 @@ public class OfficePortlet extends org.semanticwb.portlet.office.base.OfficePort
 
     private void clean(File dir)
     {
-        for (File file : dir.listFiles())
+        if (dir.exists() && dir.listFiles() != null)
         {
-            if (file.isDirectory())
+            for (File file : dir.listFiles())
             {
-                clean(file);
-            }
-            else
-            {
-                file.delete();
+                if (file.isDirectory())
+                {
+                    clean(file);
+                }
+                else
+                {
+                    file.delete();
+                }
             }
         }
     }
