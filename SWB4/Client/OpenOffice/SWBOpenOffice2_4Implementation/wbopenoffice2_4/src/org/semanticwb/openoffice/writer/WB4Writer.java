@@ -8,7 +8,9 @@ import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.document.XDocumentInfo;
 import com.sun.star.document.XDocumentInfoSupplier;
+import com.sun.star.frame.XController;
 import com.sun.star.frame.XDesktop;
+import com.sun.star.frame.XModel;
 import com.sun.star.frame.XStorable;
 import com.sun.star.io.IOException;
 import com.sun.star.lang.XComponent;
@@ -23,6 +25,7 @@ import com.sun.star.util.XModifiable;
 import com.sun.star.util.XPropertyReplace;
 import com.sun.star.util.XSearchDescriptor;
 import com.sun.star.util.XSearchable;
+import com.sun.star.view.XSelectionSupplier;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -175,41 +178,67 @@ public class WB4Writer extends OfficeDocument
 
     public void insertLink(String url, String text)
     {
-        XTextDocument xTextDocument = (XTextDocument) UnoRuntime.queryInterface(
-                com.sun.star.text.XTextDocument.class, this.document);
-        XText xText = xTextDocument.getText();
-        XTextCursor xTextCursor = xText.createTextCursor();
-        XPropertySet xTextCursorProps = (XPropertySet) UnoRuntime.queryInterface(
-                XPropertySet.class, xTextCursor);
-        try
+        XTextDocument xTextDocument = (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, this.document);
+        //Object selection = xTextDocument.getCurrentSelection()
+        XText range = xTextDocument.getText();
+        if (range != null)
         {
-            xTextCursorProps.setPropertyValue(HYPERLINK_VALUE, url);
-            xText.insertString(xTextCursor, text, false);
+            XText xText = range.getText();
+            XTextCursor xTextCursor = xText.createTextCursor();
+            XPropertySet xTextCursorProps = (XPropertySet) UnoRuntime.queryInterface(
+                    XPropertySet.class, xTextCursor);
+            try
+            {
+                xTextCursorProps.setPropertyValue(HYPERLINK_VALUE, url);
+                xText.insertString(xTextCursor, text, false);
+            }
+            catch(Exception e){}
         }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-
-
-
     }
 
-    /**
-     * Gets al the custom properties of the document
-     * @return A Map of custum properties
-     * @throws org.semanticwb.openoffice.WBException If the list of properties are more that four
-     */
-    @Override
-    public Map<String, String> getCustomProperties()
+
+/**
+ * Gets al the custom properties of the document
+ * @return A Map of custum properties
+ * @throws org.semanticwb.openoffice.WBException If the list of properties are more that four
+ */
+@Override
+    public Map<String
+
+, String> getCustomProperties()
     {
         HashMap<String, String> properties = new HashMap<String, String>();
-        XTextDocument xtd =
-                (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, this.document);
-        XDocumentInfoSupplier xdis =
+        XTextDocument xtd
+
+
+
+
+      =
+            (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, this
+       .document);
+    XDocumentInfoSupplier xdis =
                 (XDocumentInfoSupplier) UnoRuntime.queryInterface(XDocumentInfoSupplier.class, xtd);
         XDocumentInfo xdi = xdis.getDocumentInfo();
-        for (short i = 0; i < xdi.getUserFieldCount(); i++)
+        
+       for (short i = 0;
+
+    i<xdi.getUserFieldCount ();
+    i
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    ++)
         {
             try
             {
@@ -222,7 +251,11 @@ public class WB4Writer extends OfficeDocument
                 ErrorLog.log(aibe);
             }
         }
-        return properties;
+
+
+
+
+return properties;
     }
 
     /**
@@ -231,27 +264,49 @@ public class WB4Writer extends OfficeDocument
      * @see DocumentType
      */
     @Override
-    public DocumentType getDocumentType()
+    public DocumentType getDocumentType(
+
+)
     {
         return DocumentType.WORD;
     }
 
-    /**
-     * Gets the path of the fisical document
-     * @return A File with the fisical path of the document
-     * @throws org.semanticwb.openoffice.NoHasLocationException If the document has not been saved
-     */
-    @Override
-    public File getLocalPath() throws NoHasLocationException
+/**
+ * Gets the path of the fisical document
+ * @return A File with the fisical path of the document
+ * @throws org.semanticwb.openoffice.NoHasLocationException If the document has not been saved
+ */
+@Override
+    public File getLocalPath(
+
+
+
+
+       )
+    throws NoHasLocationException
     {
 
         XTextDocument xtd = (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, this.document);
         XStorable xStorable = (XStorable) UnoRuntime.queryInterface(XStorable.class, document);
-        if (xStorable.hasLocation())
+
+
+
+
+
+
+    if (xStorable.hasLocation())
         {
             return getFileFromURL(xtd.getURL());
         }
-        else
+
+
+
+
+
+
+
+
+else
         {
             throw new NoHasLocationException();
         }
@@ -262,14 +317,38 @@ public class WB4Writer extends OfficeDocument
      * @throws org.semanticwb.openoffice.WBException If the document has not been saved before, if the document has not been modified, or if the document is read only
      */
     @Override
-    public final void save() throws WBException
+    public final void
+
+
+
+
+    save() throws WBException
     {
         try
         {
             XModifiable xModified = (XModifiable) UnoRuntime.queryInterface(XModifiable.class, document);
-            if (xModified.isModified())
-            {
-                XStorable xStorable = (XStorable) UnoRuntime.queryInterface(XStorable.class, document);
+
+
+
+
+
+        if (xModified.isModified())
+        {
+             XStorable xStorable=
+
+                (
+
+
+
+                  XStorable)
+
+
+
+
+              UnoRuntime
+
+
+    .queryInterface(XStorable.class, document);
                 if (xStorable.hasLocation())
                 {
                     if (!xStorable.isReadonly())
@@ -286,17 +365,28 @@ public class WB4Writer extends OfficeDocument
                     throw new WBAlertException(ERROR_DOCUMENT_NOT_SAVED_BEFORE);
                 }
             }
-            else
+
+
+
+
+
+
+
+
+else
             {
                 throw new WBAlertException(ERROR_DOCUMENT_NOT_MODIFIED);
             }
         }
-        catch (IOException ioe)
+        catch
+
+(IOException ioe)
         {
             throw new WBOfficeException(ERROR_NO_SAVE, ioe);
 
         }
-    }
+
+}
 
     /**
      * Save the document in default format
@@ -305,32 +395,60 @@ public class WB4Writer extends OfficeDocument
      * @throws IllegalArgumentException If the path is a directory
      */
     @Override
-    public void save(File file) throws WBException
+    public void
+
+save(File file) throws WBException
     {
         if (file.isDirectory())
         {
             throw new IllegalArgumentException();
         }
-        try
+
+try
         {
             PropertyValue[] storeProps = new PropertyValue[2];
-            storeProps[0] = new PropertyValue();
-            storeProps[0].Name = FILTER_NAME;
-            storeProps[0].Value = WRITER_FORMAT;
+            storeProps[0
 
-            storeProps[1] = new PropertyValue();
-            storeProps[1].Name = OVERWRITE;
-            storeProps[1].Value = true;
+] = new PropertyValue();
+            storeProps[0
 
-            XStorable xStorable = (XStorable) UnoRuntime.queryInterface(XStorable.class, document);
+].Name = FILTER_NAME;
+            storeProps[0
+
+].Value = WRITER_FORMAT;
+
+            storeProps[1
+
+] = new PropertyValue();
+            storeProps[1
+
+].Name = OVERWRITE;
+            storeProps[1
+
+].Value = true;
+
+            XStorable xStorable
+
+
+
+
+      = (XStorable)
+
+    UnoRuntime.queryInterface (XStorable
+
+
+.class, document);
             String url = getPathURL(file);
             xStorable.storeAsURL(url, storeProps);
         }
-        catch (IOException wbe)
+        catch
+
+(IOException wbe)
         {
             throw new WBOfficeException(ERROR_NO_SAVE, wbe);
         }
-    }
+
+}
 
     /**
      * Save the document in selected a format
@@ -341,73 +459,127 @@ public class WB4Writer extends OfficeDocument
      * @throws IllegalArgumentException If the parameter is a file, must be a directory
      */
     @Override
-    public File saveAs(File dir, SaveDocumentFormat format) throws WBException
+    public File saveAs(
+
+File dir, SaveDocumentFormat format) throws WBException
     {
         File result;
-        switch (format)
+        switch
+
+(format)
         {
             case HTML:
                 result = this.saveAsHtml(dir);
                 break;
-            case OFFICE_2003:
+
+case
+
+OFFICE_2003:
                 result = saveAsOffice2003(dir);
                 break;
-            default:
-                result = saveAsOpenOffice(dir);
+
+default:
+
+result = saveAsOpenOffice(dir);
         }
-        return result;
+
+return result;
     }
 
-    /**
-     * Save the couemnt in Open Office format (.ods)
-     * @param dir The directory to save the document
-     * @return the full path of the new document
-     * @throws org.semanticwb.openoffice.WBException If the document can not be saved
-     * @throws IllegalArgumentException If the parameter is a file, must be a directory
-     */
-    private File saveAsOpenOffice(File dir) throws WBException
+/**
+ * Save the couemnt in Open Office format (.ods)
+ * @param dir The directory to save the document
+ * @return the full path of the new document
+ * @throws org.semanticwb.openoffice.WBException If the document can not be saved
+ * @throws IllegalArgumentException If the parameter is a file, must be a directory
+ */
+private File saveAsOpenOffice(File dir) throws WBException
     {
         if (dir.isFile())
         {
             throw new IllegalArgumentException();
         }
-        try
+
+try
         {
             File docFile = this.getLocalPath();
-            String extension = getExtension(docFile);
-            String name = null;
-            if (extension == null)
+            String extension
+
+= getExtension(docFile);
+            String name
+
+= null;
+            if
+
+(extension == null)
             {
                 name = docFile.getName();
             }
-            else
+
+else
             {
                 name = docFile.getName().replace(extension, OPENOFFICE_EXTENSION);
             }
-            // guarda el documento en .doc en directorio Temporal            
-            File DocFile = new File(dir.getPath() + File.separatorChar + name);
-            PropertyValue[] storeProps = new PropertyValue[2];
-            storeProps[0] = new PropertyValue();
-            storeProps[0].Name = FILTER_NAME;
-            storeProps[0].Value = WRITER_FORMAT;
+// guarda el documento en .doc en directorio Temporal            
 
-            storeProps[1] = new PropertyValue();
-            storeProps[1].Name = OVERWRITE;
-            storeProps[1].Value = true;
-            XStorable xStorable = (XStorable) UnoRuntime.queryInterface(XStorable.class, document);
-            if (!dir.exists())
+File DocFile = new File(dir.getPath() + File.separatorChar + name);
+            PropertyValue[]
+
+storeProps = new PropertyValue[2];
+            storeProps[0
+
+] = new PropertyValue();
+            storeProps[0
+
+].Name = FILTER_NAME;
+            storeProps[0
+
+].Value = WRITER_FORMAT;
+
+            storeProps[1
+
+] = new PropertyValue();
+            storeProps[1
+
+].Name = OVERWRITE;
+            storeProps[1
+
+].Value = true;
+            XStorable xStorable
+
+
+
+
+    = (XStorable) UnoRuntime.queryInterface(XStorable.class, document);
+
+
+
+
+
+
+
+
+
+    if (!dir.exists())
             {
                 dir.mkdirs();
             }
             String url = getPathURL(DocFile);
             xStorable.storeToURL(url, storeProps);
-            return DocFile;
+
+
+
+
+return DocFile;
         }
-        catch (IOException ioe)
+        catch
+
+(IOException ioe)
         {
             throw new WBOfficeException(ERROR_NO_SAVE, ioe);
         }
-    }
+
+}
 
     /**
      * Save the document in Office 2003 format
@@ -422,43 +594,87 @@ public class WB4Writer extends OfficeDocument
         {
             throw new IllegalArgumentException();
         }
-        try
+
+try
         {
             File docFile = this.getLocalPath();
-            String extension = getExtension(docFile);
-            String name = null;
-            if (extension == null)
+            String extension
+
+= getExtension(docFile);
+            String name
+
+= null;
+            if
+
+(extension == null)
             {
                 name = docFile.getName();
             }
-            else
+
+else
             {
                 name = docFile.getName().replace(extension, WORD_EXTENSION);
             }
-            // guarda el documento en .doc en directorio Temporal
-            File DocFile = new File(dir.getPath() + File.separatorChar + name);
-            PropertyValue[] storeProps = new PropertyValue[2];
-            storeProps[0] = new PropertyValue();
-            storeProps[0].Name = FILTER_NAME;
-            storeProps[0].Value = OFFICE97_FORMAT;
+// guarda el documento en .doc en directorio Temporal
 
-            storeProps[1] = new PropertyValue();
-            storeProps[1].Name = OVERWRITE;
-            storeProps[1].Value = true;
-            XStorable xStorable = (XStorable) UnoRuntime.queryInterface(XStorable.class, document);
-            if (!dir.exists())
+File DocFile = new File(dir.getPath() + File.separatorChar + name);
+            PropertyValue[]
+
+storeProps = new PropertyValue[2];
+            storeProps[0
+
+] = new PropertyValue();
+            storeProps[0
+
+].Name = FILTER_NAME;
+            storeProps[0
+
+].Value = OFFICE97_FORMAT;
+
+            storeProps[1
+
+] = new PropertyValue();
+            storeProps[1
+
+].Name = OVERWRITE;
+            storeProps[1
+
+].Value = true;
+            XStorable xStorable
+
+
+
+
+    = (XStorable) UnoRuntime.queryInterface(XStorable.class, document);
+
+
+
+
+
+
+
+
+
+    if (!dir.exists())
             {
                 dir.mkdirs();
             }
             String url = getPathURL(DocFile);
             xStorable.storeToURL(url, storeProps);
-            return DocFile;
+
+
+
+
+return DocFile;
         }
-        catch (IOException ioe)
+        catch
+
+(IOException ioe)
         {
             throw new WBOfficeException(ERROR_NO_SAVE, ioe);
         }
-    }
+
+}
 
     /**
      * Save the document in Html format
@@ -468,32 +684,72 @@ public class WB4Writer extends OfficeDocument
      * @throws IllegalArgumentException If the File is a file and not a directory
      */
     @Override
-    public File saveAsHtml(File dir) throws WBException
+    public File saveAsHtml(
+
+File dir) throws WBException
     {
         if (dir.isFile())
         {
             throw new IllegalArgumentException();
         }
-        try
+
+try
         {
             File docFile = this.getLocalPath();
             File HTMLfile;
-            if (docFile.getName().endsWith(OPENOFFICE_EXTENSION))
+
+if
+
+(docFile.getName().endsWith(OPENOFFICE_EXTENSION))
             {
                 HTMLfile = new File(dir.getPath() + File.separatorChar + docFile.getName().replace(OPENOFFICE_EXTENSION, HTML_EXTENSION));
-                String name = docFile.getName().replace(OPENOFFICE_EXTENSION, WORD_EXTENSION);
-                // guarda el documento en .doc en directorio Temporal
-                File DocFile = new File(dir.getPath() + File.separatorChar + name);
-                PropertyValue[] storeProps = new PropertyValue[2];
-                storeProps[0] = new PropertyValue();
-                storeProps[0].Name = FILTER_NAME;
-                storeProps[0].Value = OFFICE97_FORMAT;
+                String name
 
-                storeProps[1] = new PropertyValue();
-                storeProps[1].Name = OVERWRITE;
-                storeProps[1].Value = true;
-                XStorable xStorable = (XStorable) UnoRuntime.queryInterface(XStorable.class, document);
-                if (!dir.exists())
+= docFile.getName().replace(OPENOFFICE_EXTENSION, WORD_EXTENSION);
+                // guarda el documento en .doc en directorio Temporal
+                File DocFile
+
+= new File(dir.getPath() + File.separatorChar + name);
+                PropertyValue[]
+
+storeProps = new PropertyValue[2];
+                storeProps[0
+
+] = new PropertyValue();
+                storeProps[0
+
+].Name = FILTER_NAME;
+                storeProps[0
+
+].Value = OFFICE97_FORMAT;
+
+                storeProps[1
+
+] = new PropertyValue();
+                storeProps[1
+
+].Name = OVERWRITE;
+                storeProps[1
+
+].Value = true;
+                XStorable xStorable
+
+
+
+
+    = (XStorable) UnoRuntime.queryInterface(XStorable.class, document);
+
+
+
+
+
+
+
+
+
+
+
+if (!dir.exists())
                 {
                     dir.mkdirs();
                 }
@@ -501,32 +757,66 @@ public class WB4Writer extends OfficeDocument
                 xStorable.storeToURL(url, storeProps);
             }
             else
-            {
+
+{
                 HTMLfile = new File(dir.getPath() + File.separatorChar + docFile.getName().replace(WORD_EXTENSION, HTML_EXTENSION));
             }
 
-            PropertyValue[] storeProps = new PropertyValue[2];
-            storeProps[0] = new PropertyValue();
-            storeProps[0].Name = FILTER_NAME;
-            storeProps[0].Value = HTML_EXPORT_FORMAT;
+PropertyValue[] storeProps = new PropertyValue[2];
+            storeProps[0
 
-            storeProps[1] = new PropertyValue();
-            storeProps[1].Name = OVERWRITE;
-            storeProps[1].Value = true;
-            XStorable xStorable = (XStorable) UnoRuntime.queryInterface(XStorable.class, document);
-            if (!dir.exists())
+] = new PropertyValue();
+            storeProps[0
+
+].Name = FILTER_NAME;
+            storeProps[0
+
+].Value = HTML_EXPORT_FORMAT;
+
+            storeProps[1
+
+] = new PropertyValue();
+            storeProps[1
+
+].Name = OVERWRITE;
+            storeProps[1
+
+].Value = true;
+            XStorable xStorable
+
+
+
+
+    = (XStorable) UnoRuntime.queryInterface(XStorable.class, document);
+
+
+
+
+
+
+
+
+
+    if (!dir.exists())
             {
                 dir.mkdirs();
             }
             String url = getPathURL(HTMLfile);
             xStorable.storeToURL(url, storeProps);
-            return HTMLfile;
+
+
+
+
+return HTMLfile;
         }
-        catch (IOException ioe)
+        catch
+
+(IOException ioe)
         {
             throw new WBOfficeException(ERROR_NO_SAVE, ioe);
         }
-    }
+
+}
 
     /**
      * Save the properties in custom properties in the document
@@ -534,7 +824,14 @@ public class WB4Writer extends OfficeDocument
      * @throws org.semanticwb.openoffice.WBException if the properties are more than four
      */
     @Override
-    public void saveCustomProperties(Map<String, String> properties) throws WBException
+    public void
+
+
+
+
+    saveCustomProperties   (Map
+
+       <String, String> properties) throws WBException
     {
         XTextDocument xtd =
                 (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, this.document);
@@ -542,8 +839,25 @@ public class WB4Writer extends OfficeDocument
                 (XDocumentInfoSupplier) UnoRuntime.queryInterface(XDocumentInfoSupplier.class, xtd);
         XDocumentInfo xdi = xdis.getDocumentInfo();
         short index = 0;
-        // solo puede tener 4 propiedades
-        for (String key : properties.keySet())
+    // solo puede tener 4 propiedades
+    for
+
+
+     (
+
+        String key
+
+
+
+
+
+
+
+
+
+        :properties
+
+    .keySet())
         {
             String value = properties.get(key);
             try
@@ -557,7 +871,12 @@ public class WB4Writer extends OfficeDocument
             }
             index++;
         }
-        this.save();
+
+
+
+
+
+this.save();
     }
 
     /**
@@ -565,56 +884,93 @@ public class WB4Writer extends OfficeDocument
      * @param htmlFile The full path of the Html document exported by the application
      * @throws IllegalArgumentException If the path is a directory
      */
-    public final void prepareHtmlFileToSend(File htmlFile)
+    public final void
+
+prepareHtmlFileToSend(File htmlFile)
     {
         if (htmlFile.isDirectory())
         {
             throw new IllegalArgumentException();
         }
-    // TODO: Falta implementar    
-    }
+// TODO: Falta implementar    
+
+}
 
     /**
      * Gets is the document is new, it means that the document has not been saved before
      * @return True if the document is new, false otherwise
      */
-    public boolean isNewDocument()
+    public boolean
+
+
+
+
+    isNewDocument()
     {
         XStorable xStorable = (XStorable) UnoRuntime.queryInterface(XStorable.class, document);
-        return !xStorable.hasLocation();
+
+
+
+
+
+return !xStorable.hasLocation();
     }
 
     /**
      * Gets if the document is readonly or not
      * @return True if the document is readonly or not
      */
-    public boolean isReadOnly()
+    public boolean
+
+
+
+
+    isReadOnly()
     {
         XStorable xStorable = (XStorable) UnoRuntime.queryInterface(XStorable.class, document);
-        return xStorable.isReadonly();
+
+
+
+
+
+return xStorable.isReadonly();
     }
 
     /**
      * Gets if the document has been modified and can be saves
      * @return True if the document has been modified, false otherwise
      */
-    public boolean isModified()
+    public boolean
+
+
+
+
+    isModified()
     {
         XModifiable xModified = (XModifiable) UnoRuntime.queryInterface(XModifiable.class, document);
-        return xModified.isModified();
+
+
+
+
+
+return xModified.isModified();
     }
 
     /**
      * Gets the Default extension used by the application
      * @return A string with the default extension, allways returns .odt
      */
-    public String getDefaultExtension()
+    public String getDefaultExtension(
+
+)
     {
         return OPENOFFICE_EXTENSION;
     }
 
-    @Override
-    public String getPublicationExtension()
+@Override
+    public String getPublicationExtension(
+
+)
     {
         return WORD_EXTENSION;
     }
