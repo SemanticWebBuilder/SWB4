@@ -749,8 +749,6 @@ public abstract class OfficeDocument
 
     public final void addLink()
     {
-        DialogAddLink dialog = new DialogAddLink(new javax.swing.JFrame(), true);
-        dialog.setLocationRelativeTo(null);
-        dialog.setVisible(true);
+        
     }
 }
