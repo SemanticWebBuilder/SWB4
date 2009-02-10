@@ -4,12 +4,14 @@
  */
 package org.semanticwb.office.comunication;
 
-
 import java.io.*;
+import java.util.UUID;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.portlet.office.OfficePortlet;
 import org.semanticwb.repository.RepositoryManagerLoader;
 import org.semanticwb.xmlrpc.XMLRPCServlet;
 import static org.semanticwb.office.comunication.Base64.*;
@@ -21,7 +23,7 @@ import static org.semanticwb.office.comunication.Base64.*;
 public abstract class OfficeServlet extends XMLRPCServlet
 {
 
-    private static final String title = "Gateway de Comunicación con Office INFOTEC Semantic WebBuilder 4";
+    private static final String title = "Gateway de Comunicacion con Office INFOTEC Semantic WebBuilder 4";
     static Logger log = SWBUtils.getLogger(OfficeServlet.class);
     private static String REALM = "Secure Area";
     private static String PREFIX_BASIC = "Basic ";
@@ -53,7 +55,7 @@ public abstract class OfficeServlet extends XMLRPCServlet
         return userName;
     }
 
-    private void checkSecurity(HttpServletRequest request, HttpServletResponse response) throws IOException
+    public void checkSecurity(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
         try
         {
@@ -127,48 +129,62 @@ public abstract class OfficeServlet extends XMLRPCServlet
         }
         else
         {
-            /*try
+            OfficeDocument doc = new OfficeDocument();
+            doc.setUser("");
+            doc.setPassword("");
+            try
             {
-                Session session = loader.openSession(repositoryName, "", "");
-                Node contentNode = session.getNodeByUUID(contentId);
-                VersionHistory history = contentNode.getVersionHistory();
-                Version versiontoReturn = history.getVersion(versionName);
-                if (versiontoReturn != null)
+                InputStream in = doc.getContent(repositoryName, contentId, versionName);
+                String name=UUID.randomUUID().toString();
+                String dir=SWBPlatform.getWorkPath()+"/"+name;
+                OfficePortlet.loadContent(in,dir);
+                String file = doc.getContentFile(repositoryName, contentId, versionName);
+                if (file != null)
                 {
-                    Node frozenNode = versiontoReturn.getNode("jcr:frozenNode");
-                    String cm_file = loader.getOfficeManager(repositoryName).getPropertyFileType();
-                    String file = frozenNode.getProperty(cm_file).getString();
-                    Node resNode = frozenNode.getNode("jcr:content");
-                    InputStream in = resNode.getProperty("jcr:data").getStream();
-                    File fileTemp=File.createTempFile("", "");
-                    FileOutputStream writer=new FileOutputStream(fileTemp);
-                    byte[] buffer=new byte[2048];
 
-                    int read=in.read(buffer);
-                    while(read!=-1)
+                    file = file.replace(".doc", ".html");
+                    file = file.replace(".odt", ".html");
+                    String path = dir+ "\\" + file;
+                    StringBuffer html = new StringBuffer();
+                    File filecontent = new File(path);
+                    if (filecontent.exists())
                     {
-                        writer.write(buffer,0,read);
-                        read=in.read(buffer);
+                        FileInputStream inFile = new FileInputStream(path);
+                        byte[] buffer = new byte[2048];
+                        int read = inFile.read(buffer);
+                        while (read != -1)
+                        {
+                            html.append(new String(buffer, 0, read));
+                            read = inFile.read(buffer);
+                        }
+                        inFile.close();
+                        String workpath = dir + "/";
+                        //String htmlOut = SWBPortal.UTIL.parseHTML(html.toString(), workpath);
+                        //PrintWriter out = response.getWriter();
+                        //out.write(htmlOut);
+                        //out.close();
                     }
-                    ZipFile zip=new ZipFile(fileTemp);
-                    Enumeration<ZipEntry> entries=zip.entries();
-                    while(entries.hasMoreElements())
+                    else
                     {
+                        //log.error("Contenido no encontrado en ruta: " + filecontent.getAbsolutePath() + ": " + portlet.getContent() + "@" + portlet.getRepositoryName());
+                    }
+                }
 
-                    }
-                    writer.close();
-                    PrintWriter out=response.getWriter();
-                    out.close();
-                }
-                else
-                {
-                    throw new Exception("The version " + versionName + " does not exist");
-                }
+                in.close();
             }
             catch (Exception e)
             {
-                e.printStackTrace(response.getWriter());
-            }*/
+                PrintWriter out = response.getWriter();
+                out.println("<html>");
+                out.println("<head>");
+                out.println("<title>" + title + "</title>");
+                out.println("</head>");
+                out.println("<body>");
+                out.println("<h1>" + e.getLocalizedMessage() + "</h1>");
+                out.println("</body>");
+                out.println("</html>");
+                out.close();
+            }
         }
 
     }
