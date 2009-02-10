@@ -29,7 +29,6 @@ import javax.swing.UIManager;
 import org.netbeans.spi.wizard.Wizard;
 import org.netbeans.spi.wizard.WizardPage;
 import org.semanticwb.openoffice.interfaces.IOpenOfficeDocument;
-import org.semanticwb.openoffice.ui.dialogs.DialogAddLink;
 import org.semanticwb.openoffice.ui.dialogs.DialogContentInformation;
 import org.semanticwb.openoffice.ui.dialogs.DialogHistory;
 import org.semanticwb.openoffice.ui.dialogs.DialogSaveDocument;
@@ -212,6 +211,8 @@ public abstract class OfficeDocument
     public abstract DocumentType getDocumentType();
 
     public abstract void prepareHtmlFileToSend(File htmlFile);
+
+    public abstract void insertLink(String url,String text);
 
     protected static File getFile(URI uri)
     {
@@ -712,28 +713,7 @@ public abstract class OfficeDocument
         }
         return result;
     }
-
-    /*private void changeActive(boolean active) throws WBException
-    {
-    File zipFile = this.createZipFile();
-    getOfficeDocumentProxy().addAttachment(new Attachment(zipFile, zipFile.getName()));
-    getOfficeDocumentProxy().setActive(this.contentID, active);
-    }*/
-
-    /*private boolean isActive() throws WBException
-    {
-    return getOfficeDocumentProxy().getActive(this.contentID);
-    }*/
-
-    /*private void changeDescription(String description) throws WBException
-    {
-    getOfficeDocumentProxy().setDescription(this.contentID, description);
-    }*/
-
-    /*private void changeTitle(String title) throws WBException
-    {        
-    getOfficeDocumentProxy().setTitle(this.contentID, title);
-    }*/
+    
     private void updateContent() throws Exception
     {
         String workspace = this.getCustomProperties().get(WORKSPACE_ID_NAME);
