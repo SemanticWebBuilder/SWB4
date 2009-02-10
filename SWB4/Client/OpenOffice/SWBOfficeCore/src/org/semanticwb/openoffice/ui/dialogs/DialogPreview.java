@@ -31,40 +31,18 @@ public class DialogPreview extends javax.swing.JDialog
     {
         super(parent, modal);
         this.url = url;
-        initComponents();
-        /*URL.setURLStreamHandlerFactory(new URLStreamHandlerFactory()
-        {
-
-        public URLStreamHandler createURLStreamHandler(String protocol)
-        {
-        return new URLStreamHandler()
-        {
-
-        @Override
-        protected URLConnection openConnection(URL u) throws IOException
-        {
-        URLConnection connection = u.openConnection();
-        HttpURLConnection.setFollowRedirects(true);
-        try
-        {
-        if (OfficeApplication.getOfficeApplicationProxy().getUser() != null)
-        {
-        String userPassword = OfficeApplication.getOfficeDocumentProxy().getUser() + ":" + OfficeApplication.getOfficeDocumentProxy().getPassword();
-        String encoded = new String(encode(userPassword.getBytes()));
-        connection.setRequestProperty("Authorization", "Basic " + encoded);
-        }
-        }
-        catch (Exception e)
-        {
-        }
-        return connection;
-        }
-        };
-        }
-        });*/
-
-        //this.setURL(url);
+        initComponents();        
         setLocationRelativeTo(null);
+    }
+    public DialogPreview(java.awt.Frame parent, boolean modal, URL url,boolean showAddress)
+    {
+        super(parent, modal);
+        this.url = url;
+        initComponents();
+        setLocationRelativeTo(null);
+        this.jTextFieldURL.setVisible(showAddress);
+        this.jLabelWebAddress.setVisible(showAddress);
+        
     }
 
     public void setURL(URL url)
@@ -155,7 +133,7 @@ public class DialogPreview extends javax.swing.JDialog
         jPanel1 = new javax.swing.JPanel();
         jButtonClose = new javax.swing.JButton();
         jTextFieldURL = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
+        jLabelWebAddress = new javax.swing.JLabel();
         jButtonOpenBrowser = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jEditorPane1 = new javax.swing.JEditorPane();
@@ -181,7 +159,7 @@ public class DialogPreview extends javax.swing.JDialog
 
         jTextFieldURL.setEditable(false);
 
-        jLabel1.setText("Dirección Web:");
+        jLabelWebAddress.setText("Dirección Web:");
 
         jButtonOpenBrowser.setText("Abrir en un navegador");
         jButtonOpenBrowser.addActionListener(new java.awt.event.ActionListener() {
@@ -196,7 +174,7 @@ public class DialogPreview extends javax.swing.JDialog
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(10, 10, 10)
-                .addComponent(jLabel1)
+                .addComponent(jLabelWebAddress)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextFieldURL, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -213,7 +191,7 @@ public class DialogPreview extends javax.swing.JDialog
                     .addComponent(jButtonClose)
                     .addComponent(jButtonOpenBrowser)
                     .addComponent(jTextFieldURL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
+                    .addComponent(jLabelWebAddress))
                 .addContainerGap())
         );
 
@@ -251,7 +229,7 @@ public class DialogPreview extends javax.swing.JDialog
     private javax.swing.JButton jButtonClose;
     private javax.swing.JButton jButtonOpenBrowser;
     private javax.swing.JEditorPane jEditorPane1;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabelWebAddress;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextFieldURL;
