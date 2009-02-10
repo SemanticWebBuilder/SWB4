@@ -309,13 +309,43 @@ public class WB4WriterTest
     }
 
     @Test
-    //@Ignore
+    @Ignore
     public void showDocumentInfoTest()
     {
         try
         {
             WB4Writer writer = new WB4Writer(this.xContext);
             writer.showDocumentInfo();
+        }
+        catch ( Throwable wbe )
+        {
+            Assert.fail(wbe.getMessage());
+        }
+    }
+
+    @Test
+    //@Ignore
+    public void addLinkTest()
+    {
+        try
+        {
+            WB4Writer writer = new WB4Writer(this.xContext);
+            writer.insertLink();
+        }
+        catch ( Throwable wbe )
+        {
+            Assert.fail(wbe.getMessage());
+        }
+    }
+
+    @Test
+    @Ignore
+    public void showAbout()
+    {
+        try
+        {
+            WB4WriterApplication.showAbout();
+
         }
         catch ( Throwable wbe )
         {
@@ -369,21 +399,7 @@ public class WB4WriterTest
         {
             Assert.fail(wbe.getMessage());
         }
-    }
-    @Test
-    @Ignore
-    public void showInformationTest()
-    {
-        try
-        {
-            WB4Writer writer = new WB4Writer(this.xContext);
-            writer.showDocumentInfo();
-        }
-        catch ( WBException wbe )
-        {
-            Assert.fail(wbe.getMessage());
-        }
-    }
+    }    
 
     @Test(expected = WBException.class)
     @Ignore
