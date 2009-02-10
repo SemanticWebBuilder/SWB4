@@ -99,11 +99,11 @@ public class GateWayOffice implements InternalServlet
                 OfficeDocument doc = new OfficeDocument();
                 doc.setUser("");
                 doc.setPassword("");
+                String name = UUID.randomUUID().toString();
+                String dir = "/" + name;
                 try
                 {
-                    InputStream in = doc.getContent(repositoryName, contentId, versionName);
-                    String name = UUID.randomUUID().toString();
-                    String dir = SWBPlatform.getWorkPath() + "/" + name;
+                    InputStream in = doc.getContent(repositoryName, contentId, versionName);                                        
                     OfficePortlet.loadContent(in, dir);
                     String file = doc.getContentFile(repositoryName, contentId, versionName);
                     String type = doc.getContentType(repositoryName, contentId, versionName);
@@ -114,13 +114,13 @@ public class GateWayOffice implements InternalServlet
                             file = file.replace(".doc", ".html");
                             file = file.replace(".odt", ".html");
                         }
-                        String path = dir + "\\" + file;
+                        String path = SWBPlatform.getWorkPath()+dir + "\\" + file;
                         StringBuffer html = new StringBuffer();
                         File filecontent = new File(path);
                         if (filecontent.exists())
                         {
                             FileInputStream inFile = new FileInputStream(path);
-                            byte[] buffer = new byte[2048];
+                            byte[] buffer = new byte[1024*8];
                             int read = inFile.read(buffer);
                             while (read != -1)
                             {
@@ -128,7 +128,7 @@ public class GateWayOffice implements InternalServlet
                                 read = inFile.read(buffer);
                             }
                             inFile.close();
-                            String workpath = dir + "/";
+                            String workpath = SWBPlatform.getWebWorkPath()+dir;
                             String htmlOut = SWBPortal.UTIL.parseHTML(html.toString(), workpath);
                             PrintWriter out = response.getWriter();
                             out.write(htmlOut);
@@ -154,6 +154,10 @@ public class GateWayOffice implements InternalServlet
                     out.println("</body>");
                     out.println("</html>");
                     out.close();
+                }
+                finally
+                {
+                    OfficePortlet.clean(dir);
                 }
             }
 
