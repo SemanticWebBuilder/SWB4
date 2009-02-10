@@ -6,6 +6,7 @@
 package org.semanticwb.openoffice.ui.dialogs;
 
 import java.awt.Cursor;
+import java.awt.Frame;
 import java.awt.event.KeyEvent;
 import java.net.URI;
 import java.net.URL;
@@ -631,8 +632,7 @@ public class DialogContentInformation extends javax.swing.JDialog
         if(jTableSummary1.getSelectedRow()!=-1)
         {
             DefaultTableModel model = (DefaultTableModel) jTableSummary1.getModel();
-            VersionInfo versionInfo = (VersionInfo) model.getValueAt(jTableSummary1.getSelectedRow(), 0);
-            String version=versionInfo.nameOfVersion;
+            String version=model.getValueAt(jTableSummary1.getSelectedRow(), 0).toString();
             try
             {
                 String urlproxy=OfficeApplication.getOfficeApplicationProxy().getWebAddress().toString();
@@ -645,7 +645,8 @@ public class DialogContentInformation extends javax.swing.JDialog
                     urlproxy+="gtw";
                 }
                 URL url=new URL(urlproxy+"?contentId="+ contentId +"&versionName="+ version +"&repositoryName="+repository);
-                DialogPreview preview=new DialogPreview(new JFrame(), true, url);                
+                //DialogPreview.showInBrowser(url.toString(), new Frame());
+                DialogPreview preview=new DialogPreview(new JFrame(), true, url);
                 preview.setVisible(true);
             }
             catch(Exception e)
