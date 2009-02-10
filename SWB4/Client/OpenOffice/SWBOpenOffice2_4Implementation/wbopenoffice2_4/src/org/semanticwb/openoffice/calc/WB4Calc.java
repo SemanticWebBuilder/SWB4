@@ -695,6 +695,7 @@ public class WB4Calc extends OfficeDocument
     }
      public void insertLink(String url,String text)
     {
-
+        /*XSpreadsheetDocument xSpreadsheetDocument = (XSpreadsheetDocument) UnoRuntime.queryInterface(XSpreadsheetDocument.class, this.document);
+        xSpreadsheetDocument.getSheets().*/
     }
 }
