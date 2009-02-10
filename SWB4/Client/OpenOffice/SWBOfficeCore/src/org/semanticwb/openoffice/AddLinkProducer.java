@@ -7,6 +7,7 @@ package org.semanticwb.openoffice;
 
 import java.net.URI;
 import java.util.Map;
+import javax.swing.JOptionPane;
 import org.netbeans.spi.wizard.WizardException;
 import org.netbeans.spi.wizard.WizardPage.WizardResultProducer;
 import org.semanticwb.openoffice.ui.wizard.SelectPage;
@@ -38,6 +39,7 @@ public class AddLinkProducer implements WizardResultProducer {
             String url=uri.getScheme()+"://"+uri.getHost()+":"+uri.getPort()+""+page.getURL();
             String title=map.get(SelectTitle.TITLE).toString();
             document.insertLink(url, title);
+            JOptionPane.showMessageDialog(null, "Liga a la página "+ page.toString() +" insertada con éxito","Inserción liga de página",JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
         }
         catch(Exception e)
         {
