@@ -878,6 +878,31 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
+    public String getContentType(String repositoryName, String contentId, String version) throws Exception
+    {
+        Session session = null;
+        try
+        {
+            this.user = "demo";
+            this.password = "demo";
+            session = loader.openSession(repositoryName, this.user, this.password);
+            Node nodeContent = session.getNodeByUUID(contentId);
+            String cm_Type = loader.getOfficeManager(repositoryName).getPropertyType();
+            return nodeContent.getProperty(cm_Type).getString();
+        }
+        catch (Exception e)
+        {
+            throw e;
+        }
+        finally
+        {
+            if (session != null)
+            {
+                session.logout();
+            }
+        }
+    }
+
     public void activatePortlet(PortletInfo info, boolean active) throws Exception
     {
         WebSite site = SWBContext.getWebSite(info.page.site.id);
