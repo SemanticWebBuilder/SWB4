@@ -44,8 +44,7 @@ public class WordResource extends GenericAdmResource
                 if (file != null)
                 {
 
-                    file = file.replace(".doc", ".html");
-                    file = file.replace(".odt", ".html");
+                    file = file.replace(".doc", ".html");                    
                     String path = SWBPlatform.getWorkPath();
                     if (path.endsWith("/"))
                     {
