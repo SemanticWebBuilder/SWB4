@@ -277,8 +277,7 @@ public abstract class OfficeApplication
 
     public static final void showAbout()
     {
-        DialogAbout dialog = new DialogAbout(new javax.swing.JFrame(), true);
-        dialog.setLocationRelativeTo(null);
+        DialogAbout dialog = new DialogAbout(new javax.swing.JFrame(), true);        
         dialog.setVisible(true);
     }
 
