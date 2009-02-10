@@ -80,6 +80,7 @@ public class GateWayOffice implements InternalServlet
             String contentId = request.getParameter("contentId");
             String versionName = request.getParameter("versionName");
             String repositoryName = request.getParameter("repositoryName");
+            String dir = request.getParameter("name");
             if (contentId == null || versionName == null || repositoryName == null)
             {
                 PrintWriter out = response.getWriter();
@@ -99,12 +100,9 @@ public class GateWayOffice implements InternalServlet
                 OfficeDocument doc = new OfficeDocument();
                 doc.setUser("");
                 doc.setPassword("");
-                String name = UUID.randomUUID().toString();
-                String dir = "/" + name;
+                dir="/"+dir;
                 try
-                {
-                    InputStream in = doc.getContent(repositoryName, contentId, versionName);                                        
-                    OfficePortlet.loadContent(in, dir);
+                {                    
                     String file = doc.getContentFile(repositoryName, contentId, versionName);
                     String type = doc.getContentType(repositoryName, contentId, versionName);
                     if (file != null)
@@ -128,6 +126,10 @@ public class GateWayOffice implements InternalServlet
                                 read = inFile.read(buffer);
                             }
                             inFile.close();
+                            if(!dir.endsWith("/"))
+                            {
+                                dir+="/";
+                            }
                             String workpath = SWBPlatform.getWebWorkPath()+dir;
                             String htmlOut = SWBPortal.UTIL.parseHTML(html.toString(), workpath);
                             PrintWriter out = response.getWriter();
@@ -138,9 +140,7 @@ public class GateWayOffice implements InternalServlet
                         {
                             //log.error("Contenido no encontrado en ruta: " + filecontent.getAbsolutePath() + ": " + portlet.getContent() + "@" + portlet.getRepositoryName());
                         }
-                    }
-
-                    in.close();
+                    }                    
                 }
                 catch (Exception e)
                 {
@@ -157,7 +157,7 @@ public class GateWayOffice implements InternalServlet
                 }
                 finally
                 {
-                    OfficePortlet.clean(dir);
+                   // OfficePortlet.clean(dir);
                 }
             }
 
