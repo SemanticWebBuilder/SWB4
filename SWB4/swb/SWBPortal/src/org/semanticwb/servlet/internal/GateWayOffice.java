@@ -76,7 +76,7 @@ public class GateWayOffice implements InternalServlet
             String versionName = request.getParameter("versionName");
             String repositoryName = request.getParameter("repositoryName");
             String dir = request.getParameter("name");
-            if (contentId == null || versionName == null || repositoryName == null)
+            if (contentId == null || versionName == null || repositoryName == null || dir==null)
             {
                 PrintWriter out = response.getWriter();
                 out.println("<html>");
