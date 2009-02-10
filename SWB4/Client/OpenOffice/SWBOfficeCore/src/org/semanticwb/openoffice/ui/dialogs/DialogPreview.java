@@ -151,6 +151,7 @@ public class DialogPreview extends javax.swing.JDialog
         jPanel1.setPreferredSize(new java.awt.Dimension(600, 50));
 
         jButtonClose.setText("Cerrar");
+        jButtonClose.setToolTipText("No se puede navegar con esta vista");
         jButtonClose.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCloseActionPerformed(evt);
