@@ -7,9 +7,14 @@ package org.semanticwb.openoffice.ui.dialogs;
 
 import java.awt.Frame;
 import java.io.IOException;
+import java.net.Authenticator;
+import java.net.HttpURLConnection;
+import java.net.PasswordAuthentication;
 import java.net.URL;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import org.semanticwb.openoffice.OfficeApplication;
+import static org.semanticwb.xmlrpc.Base64.encode;
 
 /**
  *
@@ -24,10 +29,41 @@ public class DialogPreview extends javax.swing.JDialog
     /** Creates new form DialogPreview */
     public DialogPreview(java.awt.Frame parent, boolean modal, URL url)
     {
-        super(parent, modal);        
+        super(parent, modal);
         this.url = url;
         initComponents();
-        this.setURL(url);
+        /*URL.setURLStreamHandlerFactory(new URLStreamHandlerFactory()
+        {
+
+        public URLStreamHandler createURLStreamHandler(String protocol)
+        {
+        return new URLStreamHandler()
+        {
+
+        @Override
+        protected URLConnection openConnection(URL u) throws IOException
+        {
+        URLConnection connection = u.openConnection();
+        HttpURLConnection.setFollowRedirects(true);
+        try
+        {
+        if (OfficeApplication.getOfficeApplicationProxy().getUser() != null)
+        {
+        String userPassword = OfficeApplication.getOfficeDocumentProxy().getUser() + ":" + OfficeApplication.getOfficeDocumentProxy().getPassword();
+        String encoded = new String(encode(userPassword.getBytes()));
+        connection.setRequestProperty("Authorization", "Basic " + encoded);
+        }
+        }
+        catch (Exception e)
+        {
+        }
+        return connection;
+        }
+        };
+        }
+        });*/
+
+        //this.setURL(url);
         setLocationRelativeTo(null);
     }
 
@@ -35,17 +71,21 @@ public class DialogPreview extends javax.swing.JDialog
     {
         try
         {
-            this.jEditorPane1.setPage(url);
+            HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+            connection.setFollowRedirects(true);
+            Authenticator.setDefault(new MyAuthenticator());
+            connection.setInstanceFollowRedirects(true);            
+            this.jEditorPane1.setPage(connection.getURL());
             this.jTextFieldURL.setText(url.toString());
         }
         catch (IOException ioe)
         {
             ioe.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error al mostrar contenido", "La página Web no puede ser vista", JOptionPane.ERROR);
+            JOptionPane.showMessageDialog(null, "Error al mostrar contenido\r\n" + ioe.getLocalizedMessage(), "La página Web no puede ser vista", JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    static boolean showInBrowser(String url, Frame frame)
+    public static boolean showInBrowser(String url, Frame frame)
     {
         //minimizes the app
         if (frame != null)
@@ -196,7 +236,7 @@ public class DialogPreview extends javax.swing.JDialog
     }//GEN-LAST:event_formWindowOpened
 
     private void jButtonCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCloseActionPerformed
-        
+
         this.setVisible(false);
     }//GEN-LAST:event_jButtonCloseActionPerformed
 
@@ -216,4 +256,29 @@ public class DialogPreview extends javax.swing.JDialog
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextFieldURL;
     // End of variables declaration//GEN-END:variables
+}
+class MyAuthenticator extends java.net.Authenticator
+{
+    @Override
+    protected PasswordAuthentication getPasswordAuthentication()
+    {
+        String user="";
+        String password="";
+        try
+            {
+                if (OfficeApplication.getOfficeApplicationProxy().getUser() != null)
+                {
+                    /*String userPassword = OfficeApplication.getOfficeDocumentProxy().getUser() + ":" + OfficeApplication.getOfficeDocumentProxy().getPassword();
+                    String encoded = new String(encode(userPassword.getBytes()));
+                    connection.setRequestProperty("Authorization", "Basic " + encoded);*/
+                    user=OfficeApplication.getOfficeDocumentProxy().getUser();
+                    password=OfficeApplication.getOfficeDocumentProxy().getPassword();
+                }
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        return new PasswordAuthentication(user, password.toCharArray());
+    }
 }
