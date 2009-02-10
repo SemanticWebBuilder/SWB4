@@ -85,5 +85,10 @@ public interface IOfficeDocument
      @XmlRpcMethod(methodName = "OfficeDocument.getVersionToShow")
     public String getVersionToShow(PortletInfo info) throws Exception;
 
+     @XmlRpcMethod(methodName = "OfficeDocument.createPreview")
+    public String createPreview(String repositoryName, String contentId, String version) throws Exception;
+
+     @XmlRpcMethod(methodName = "OfficeDocument.deletePreview")
+    public void deletePreview(String dir) throws Exception;
 }
 
