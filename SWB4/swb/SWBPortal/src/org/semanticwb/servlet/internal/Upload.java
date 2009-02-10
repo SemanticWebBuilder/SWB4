@@ -76,7 +76,7 @@ public class Upload implements InternalServlet
     }
 
     public void init(ServletContext config) throws ServletException {
-        log.event("Initializing InternalServlet Login...");
+        log.event("Initializing InternalServlet Upload...");
     }
 }
 
