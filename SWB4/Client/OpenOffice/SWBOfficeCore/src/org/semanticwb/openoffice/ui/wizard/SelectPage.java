@@ -51,7 +51,7 @@ public class SelectPage extends WizardPage
                 Site repositoryNode = new Site(website.id, website.title);
                 model.insertNodeInto(repositoryNode, repositories, 0);
                 WebPageInfo home = OfficeApplication.getOfficeApplicationProxy().getHomePage(website);
-                WebPage child = new WebPage(home.id, home.title, home.description, website.id);
+                WebPage child = new WebPage(home.id, home.title, home.description, website.id,home.url);
                 repositoryNode.add(child);
                 if(home.childs>0)
                 {
@@ -89,7 +89,7 @@ public class SelectPage extends WizardPage
             parent.siteID=nodeParent.webSite;
             for (WebPageInfo webpage : OfficeApplication.getOfficeApplicationProxy().getPages(parent))
             {
-                WebPage child = new WebPage(webpage.id, webpage.title, webpage.description, webpage.siteID);
+                WebPage child = new WebPage(webpage.id, webpage.title, webpage.description, webpage.siteID,webpage.url);
                 nodeParent.add(child);
                 if(webpage.childs>0)
                 {
@@ -299,18 +299,22 @@ private void jTreeSiteTreeWillExpand(javax.swing.event.TreeExpansionEvent evt)th
         private String title;
         private String description;
         private String webSite;
-
-        public WebPage(String id, String title, String description, String webSite)
+        private String url;
+        public WebPage(String id, String title, String description, String webSite,String url)
         {
             this.id = id;
             this.title = title;
             this.description = description;
             this.webSite = webSite;
+            this.url=url;
             component.setText(title);
             component.setToolTipText(description);
             component.setOpaque(true);
         }
-
+        public String getURL()
+        {
+            return url;
+        }
         public String getSite()
         {
             return this.webSite;
