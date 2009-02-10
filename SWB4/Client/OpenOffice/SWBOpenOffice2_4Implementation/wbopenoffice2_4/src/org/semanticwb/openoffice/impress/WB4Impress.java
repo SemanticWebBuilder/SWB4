@@ -912,4 +912,8 @@ public class WB4Impress extends OfficeDocument
     {
         return PPT_EXTENSION;
     }
+     public void insertLink(String url,String text)
+    {
+
+    }
 }

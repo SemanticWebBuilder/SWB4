@@ -13,6 +13,7 @@ import com.sun.star.frame.XStorable;
 import com.sun.star.io.IOException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiComponentFactory;
+import com.sun.star.text.XText;
 import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.text.XTextRange;
@@ -45,6 +46,7 @@ import static org.semanticwb.openoffice.util.FileUtil.getPathURL;
  */
 public class WB4Writer extends OfficeDocument
 {
+
     private static final String ERROR_DOCUMENT_NOT_FOUND = "There is not a document active in the desktop";
     private static final String HTML_EXPORT_FORMAT = "HTML (StarWriter)";
     private static final String OFFICE97_FORMAT = "MS Word 97";
@@ -83,7 +85,7 @@ public class WB4Writer extends OfficeDocument
      */
     public WB4Writer(XComponent document)
     {
-        this.document = document;        
+        this.document = document;
     }
 
     /**
@@ -101,7 +103,7 @@ public class WB4Writer extends OfficeDocument
                     DESKTOP_PATH, m_xContext);
             XDesktop xdesktop = (XDesktop) UnoRuntime.queryInterface(XDesktop.class, desktop);
             document = xdesktop.getCurrentComponent();
-            if(document==null)
+            if (document == null)
             {
                 throw new WBOfficeException(ERROR_DOCUMENT_NOT_FOUND);
             }
@@ -109,7 +111,7 @@ public class WB4Writer extends OfficeDocument
         catch (com.sun.star.uno.Exception e)
         {
             throw new WBOfficeException(DESKTOP_NOT_FOUND, e);
-        }        
+        }
     }
 
     /**
@@ -171,6 +173,28 @@ public class WB4Writer extends OfficeDocument
         return attachments;
     }
 
+    public void insertLink(String url, String text)
+    {
+        XTextDocument xTextDocument = (XTextDocument) UnoRuntime.queryInterface(
+                com.sun.star.text.XTextDocument.class, this.document);
+        XText xText = xTextDocument.getText();
+        XTextCursor xTextCursor = xText.createTextCursor();
+        XPropertySet xTextCursorProps = (XPropertySet) UnoRuntime.queryInterface(
+                XPropertySet.class, xTextCursor);
+        try
+        {
+            xTextCursorProps.setPropertyValue(HYPERLINK_VALUE, url);
+            xText.insertString(xText, "text", false);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+
+
+    }
+
     /**
      * Gets al the custom properties of the document
      * @return A Map of custum properties
@@ -184,7 +208,7 @@ public class WB4Writer extends OfficeDocument
                 (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, this.document);
         XDocumentInfoSupplier xdis =
                 (XDocumentInfoSupplier) UnoRuntime.queryInterface(XDocumentInfoSupplier.class, xtd);
-        XDocumentInfo xdi = xdis.getDocumentInfo();        
+        XDocumentInfo xdi = xdis.getDocumentInfo();
         for (short i = 0; i < xdi.getUserFieldCount(); i++)
         {
             try
@@ -194,7 +218,7 @@ public class WB4Writer extends OfficeDocument
                 properties.put(name, value);
             }
             catch (com.sun.star.lang.ArrayIndexOutOfBoundsException aibe)
-            {                
+            {
                 ErrorLog.log(aibe);
             }
         }

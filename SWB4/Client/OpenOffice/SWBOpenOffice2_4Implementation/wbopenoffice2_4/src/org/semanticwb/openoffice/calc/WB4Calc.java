@@ -693,4 +693,8 @@ public class WB4Calc extends OfficeDocument
     {
         return EXCEL_EXTENSION;
     }
+     public void insertLink(String url,String text)
+    {
+
+    }
 }
