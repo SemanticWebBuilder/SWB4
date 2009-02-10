@@ -75,6 +75,7 @@
         <Component class="javax.swing.JButton" name="jButtonClose">
           <Properties>
             <Property name="text" type="java.lang.String" value="Cerrar"/>
+            <Property name="toolTipText" type="java.lang.String" value="No se puede navegar con esta vista"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonCloseActionPerformed"/>
