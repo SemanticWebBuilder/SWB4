@@ -109,8 +109,7 @@ public class GateWayOffice implements InternalServlet
                     {
                         if(type.equalsIgnoreCase("word"))
                         {
-                            file = file.replace(".doc", ".html");
-                            file = file.replace(".odt", ".html");
+                            file = file.replace(".doc", ".html");                            
                         }
                         String path = SWBPlatform.getWorkPath()+dir + "\\" + file;
                         StringBuffer html = new StringBuffer();
