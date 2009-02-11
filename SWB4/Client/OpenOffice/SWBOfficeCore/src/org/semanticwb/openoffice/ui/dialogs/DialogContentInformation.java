@@ -568,6 +568,7 @@ public class DialogContentInformation extends javax.swing.JDialog
     private void jButtonPublishActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonPublishActionPerformed
     {//GEN-HEADEREND:event_jButtonPublishActionPerformed
         document.publish();
+        this.repaint();
         this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
         loadPorlets();
         this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
