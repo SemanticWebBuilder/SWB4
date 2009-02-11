@@ -16,7 +16,6 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.AbstractCellEditor;
@@ -26,6 +25,8 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
@@ -37,7 +38,6 @@ import org.netbeans.spi.wizard.WizardPage;
 import org.netbeans.spi.wizard.WizardPanelNavResult;
 import org.semanticwb.office.interfaces.PropertyInfo;
 import org.semanticwb.openoffice.OfficeApplication;
-import org.semanticwb.openoffice.util.NumericPlainDocument;
 
 /**
  *
@@ -335,6 +335,8 @@ public class ViewProperties extends WizardPage
         {
             this.row = row;
             this.col = col;
+            SpinnerModel model =new SpinnerNumberModel(0,0,9999,1);      
+            this.setModel(model);
         }
     }
     class StringEditor extends JTextField
