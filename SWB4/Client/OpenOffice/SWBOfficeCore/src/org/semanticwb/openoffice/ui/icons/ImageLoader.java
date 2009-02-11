@@ -32,6 +32,10 @@ public class ImageLoader
             url = ImageLoader.class.getResource("splash.jpg");
             image = new ImageIcon(url);
             images.put("splash", image);
+
+            url = ImageLoader.class.getResource("see.jpg");
+            image = new ImageIcon(url);
+            images.put("splash", image);
         }
         catch (Exception e)
         {
