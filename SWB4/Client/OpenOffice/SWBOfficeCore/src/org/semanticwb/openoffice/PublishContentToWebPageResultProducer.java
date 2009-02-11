@@ -6,15 +6,15 @@
 package org.semanticwb.openoffice;
 
 import java.awt.EventQueue;
+import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JOptionPane;
 import org.netbeans.spi.wizard.DeferredWizardResult;
 import org.netbeans.spi.wizard.ResultProgressHandle;
-import org.netbeans.spi.wizard.Wizard;
 import org.netbeans.spi.wizard.WizardException;
-import org.netbeans.spi.wizard.WizardPage;
 import org.netbeans.spi.wizard.WizardPage.WizardResultProducer;
 import org.semanticwb.office.interfaces.PortletInfo;
+import org.semanticwb.office.interfaces.PropertyInfo;
 import org.semanticwb.office.interfaces.WebPageInfo;
 import org.semanticwb.openoffice.interfaces.IOpenOfficeDocument;
 import org.semanticwb.openoffice.ui.wizard.PublishVersion;
@@ -62,7 +62,12 @@ public class PublishContentToWebPageResultProducer implements WizardResultProduc
                 webpage.siteID=page.getSite();
                 String version=wizardData.get(PublishVersion.VERSION).toString();                
                 PortletInfo info=openOfficeDocument.publishToPortletContent(repositoryName, contentID, version, title, description, webpage);
-                
+                HashMap<PropertyInfo,String> properties=(HashMap<PropertyInfo,String>)wizardData.get(ViewProperties.PROPERTIES);
+                for(PropertyInfo prop : properties.keySet())
+                {
+                    String value=properties.get(prop);
+                    openOfficeDocument.setPropertyValue(info, prop, value);
+                }
                 int res=JOptionPane.showConfirmDialog(null, "¿Desea activar el contenido?","Publicación de contenido",JOptionPane.YES_NO_OPTION);
                 if(res==JOptionPane.YES_OPTION)
                 {
