@@ -99,7 +99,7 @@ public class GateWayOffice implements InternalServlet
                 try
                 {
                     String file = doc.getContentFile(repositoryName, contentId, versionName);
-                    String type = doc.getContentType(repositoryName, contentId, versionName);
+                    String type = doc.getContentType(repositoryName, contentId);
                     if (file != null)
                     {
                         if (type.equalsIgnoreCase("word"))
