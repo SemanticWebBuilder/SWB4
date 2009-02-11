@@ -141,7 +141,14 @@ public final class wb4impressaddon extends WeakBase
                 }
                 if (aURL.Path.compareTo("addLink") == 0)
                 {
-                    return this;
+                    if (document.isPublicated())
+                    {
+                        return this;
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
                 if (aURL.Path.compareTo("createSection") == 0)
                 {
@@ -297,7 +304,7 @@ public final class wb4impressaddon extends WeakBase
     {
         FeatureStateEvent aState = new FeatureStateEvent();
         aState.FeatureURL = aURL;
-        if(queryDispatch(aURL,"",0)==null)
+        if (queryDispatch(aURL, "", 0) == null)
         {
             aState.IsEnabled = false;
         }
