@@ -767,7 +767,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     {
         ArrayList<PropertyInfo> properties = new ArrayList<PropertyInfo>();
         WebSite site = SWBContext.getWebSite(portletInfo.page.site.id);
-        Portlet portlet = site.getPortlet(portletInfo.id);
+        OfficePortlet portlet = OfficePortlet.getOfficePortlet(portletInfo.id,site);
         Iterator<SemanticProperty> propertiesClazz = portlet.getSemanticObject().getSemanticClass().listProperties();
         while (propertiesClazz.hasNext())
         {
