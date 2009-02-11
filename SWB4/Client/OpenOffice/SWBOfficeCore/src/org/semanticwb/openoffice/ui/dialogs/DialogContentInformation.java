@@ -5,6 +5,7 @@
  */
 package org.semanticwb.openoffice.ui.dialogs;
 
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Frame;
 import java.awt.event.KeyEvent;
@@ -14,10 +15,12 @@ import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import org.semanticwb.office.interfaces.CategoryInfo;
 import org.semanticwb.office.interfaces.PortletInfo;
@@ -42,7 +45,7 @@ public class DialogContentInformation extends javax.swing.JDialog
         initComponents();
         this.contentId = contentId;
         this.repository = repository;
-        this.document = document;        
+        this.document = document;
         ListSelectionModel listSelectionModel = jTablePages.getSelectionModel();
         listSelectionModel.addListSelectionListener(new ListSelectionListener()
         {
@@ -75,7 +78,7 @@ public class DialogContentInformation extends javax.swing.JDialog
                 }
             }
         });
-        
+
         try
         {
             this.jTextFieldTitle.setText(OfficeApplication.getOfficeDocumentProxy().getTitle(repository, contentId));
@@ -91,6 +94,73 @@ public class DialogContentInformation extends javax.swing.JDialog
         catch (Exception e)
         {
             e.printStackTrace();
+        }
+    }
+
+    class VersionEditor extends DefaultCellEditor
+    {
+
+        public VersionEditor(String repositoryName, String contentId)
+        {
+            super(new ComboVersiones(repositoryName, contentId, null));
+        }
+    }
+
+    class ComboVersiones extends JComboBox
+    {
+
+        public ComboVersiones(String repositoryName, String contentId, VersionInfo selected)
+        {
+            VersionInfo info = new VersionInfo();
+            info.nameOfVersion = "*";
+            this.setEditable(false);
+            this.addItem(info);
+            try
+            {
+                for (VersionInfo versionInfo : OfficeApplication.getOfficeDocumentProxy().getVersions(repositoryName, contentId))
+                {
+                    this.addItem(versionInfo);
+                }
+                if (selected != null)
+                {
+                    this.setSelectedItem(selected);
+                }
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public String toString()
+        {
+            return this.getSelectedItem().toString();
+        }
+    }
+
+    class VersionRender implements TableCellRenderer
+    {
+
+        private String repositoryName,  contentId;
+
+        public VersionRender(String repositoryName, String contentId)
+        {
+            this.repositoryName = repositoryName;
+            this.contentId = contentId;
+        }
+
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                boolean isSelected, boolean hasFocus, int row, int column)
+        {
+            if (value instanceof VersionInfo)
+            {
+                return new ComboVersiones(repositoryName, contentId, (VersionInfo) value);
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 
@@ -146,6 +216,7 @@ public class DialogContentInformation extends javax.swing.JDialog
         }
         TableColumn column = this.jTablePages.getColumnModel().getColumn(4);
         column.setCellEditor(new VersionEditor(this.repository, this.contentId));
+        column.setCellRenderer(new VersionRender(repository, contentId));
         try
         {
             for (PortletInfo portletInfo : OfficeApplication.getOfficeDocumentProxy().listPortlets(repository, contentId))
@@ -537,7 +608,7 @@ public class DialogContentInformation extends javax.swing.JDialog
                     OfficeApplication.getOfficeDocumentProxy().activatePortlet(portletInfo, newactive);
                 }
 
-                if(model.getValueAt(i, 4) instanceof VersionInfo)
+                if (model.getValueAt(i, 4) instanceof VersionInfo)
                 {
                     VersionInfo versionInfo = (VersionInfo) model.getValueAt(i, 4);
                     String newVersion = versionInfo.nameOfVersion;
@@ -547,10 +618,10 @@ public class DialogContentInformation extends javax.swing.JDialog
                         OfficeApplication.getOfficeDocumentProxy().changeVersionPorlet(portletInfo, newVersion);
                     }
                 }
-                if(model.getValueAt(i, 4) instanceof ComboVersiones)
+                if (model.getValueAt(i, 4) instanceof ComboVersiones)
                 {
                     ComboVersiones combo = (ComboVersiones) model.getValueAt(i, 4);
-                    String newVersion = ((VersionInfo)combo.getSelectedItem()).nameOfVersion;
+                    String newVersion = ((VersionInfo) combo.getSelectedItem()).nameOfVersion;
                     String oldVersion = OfficeApplication.getOfficeDocumentProxy().getVersionToShow(portletInfo);
                     if (oldVersion == null || !newVersion.equals(oldVersion))
                     {
@@ -574,7 +645,7 @@ public class DialogContentInformation extends javax.swing.JDialog
         finally
         {
             this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        }        
+        }
 
     }//GEN-LAST:event_jButtonAcceptActionPerformed
 
@@ -623,20 +694,20 @@ public class DialogContentInformation extends javax.swing.JDialog
 
     private void jButtonViewPageActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonViewPageActionPerformed
     {//GEN-HEADEREND:event_jButtonViewPageActionPerformed
-        int row=jTablePages.getSelectedRow();
-        if(row!=-1)
+        int row = jTablePages.getSelectedRow();
+        if (row != -1)
         {
             DefaultTableModel model = (DefaultTableModel) jTablePages.getModel();
 
             PortletInfo portletInfo = (PortletInfo) model.getValueAt(row, 0);
             try
             {
-                URI uri=document.getOfficeDocumentProxy().getWebAddress();
-                URL url=new URL(uri.getScheme()+"://"+uri.getHost()+":"+uri.getPort()+portletInfo.page.url);
-                DialogPreview preview=new DialogPreview(new JFrame(), true, url);                
+                URI uri = document.getOfficeDocumentProxy().getWebAddress();
+                URL url = new URL(uri.getScheme() + "://" + uri.getHost() + ":" + uri.getPort() + portletInfo.page.url);
+                DialogPreview preview = new DialogPreview(new JFrame(), true, url);
                 preview.setVisible(true);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 e.printStackTrace();
             }
@@ -646,40 +717,40 @@ public class DialogContentInformation extends javax.swing.JDialog
 
     private void jButtonViewVersionActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonViewVersionActionPerformed
     {//GEN-HEADEREND:event_jButtonViewVersionActionPerformed
-        if(jTableSummary1.getSelectedRow()!=-1)
+        if (jTableSummary1.getSelectedRow() != -1)
         {
             DefaultTableModel model = (DefaultTableModel) jTableSummary1.getModel();
-            String version=model.getValueAt(jTableSummary1.getSelectedRow(), 0).toString();
-            String name=null;
+            String version = model.getValueAt(jTableSummary1.getSelectedRow(), 0).toString();
+            String name = null;
             try
             {
-                String urlproxy=OfficeApplication.getOfficeApplicationProxy().getWebAddress().toString();
-                if(!urlproxy.endsWith("/gtw"))
+                String urlproxy = OfficeApplication.getOfficeApplicationProxy().getWebAddress().toString();
+                if (!urlproxy.endsWith("/gtw"))
                 {
-                    if(!urlproxy.endsWith("/"))
+                    if (!urlproxy.endsWith("/"))
                     {
-                        urlproxy+="/";
+                        urlproxy += "/";
                     }
-                    urlproxy+="gtw";
+                    urlproxy += "gtw";
                 }
-                name=OfficeApplication.getOfficeDocumentProxy().createPreview(repository, contentId, version);
-                URL url=new URL(urlproxy+"?contentId="+ contentId +"&versionName="+ version +"&repositoryName="+repository+"&name="+name);
-                DialogPreview preview=new DialogPreview(new JFrame(), true, url,false);
-                preview.setVisible(true);                
+                name = OfficeApplication.getOfficeDocumentProxy().createPreview(repository, contentId, version);
+                URL url = new URL(urlproxy + "?contentId=" + contentId + "&versionName=" + version + "&repositoryName=" + repository + "&name=" + name);
+                DialogPreview preview = new DialogPreview(new JFrame(), true, url, false);
+                preview.setVisible(true);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 e.printStackTrace();
             }
             finally
             {
-                if(name!=null)
+                if (name != null)
                 {
                     try
                     {
                         OfficeApplication.getOfficeDocumentProxy().deletePreview(name);
                     }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
                         // no imprimir al usuario
                         e.printStackTrace();
@@ -692,10 +763,10 @@ public class DialogContentInformation extends javax.swing.JDialog
 
     private void jButtonEditActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonEditActionPerformed
     {//GEN-HEADEREND:event_jButtonEditActionPerformed
-        if(jTablePages.getSelectedRow()!=-1)
+        if (jTablePages.getSelectedRow() != -1)
         {
-            PortletInfo portletInfo=(PortletInfo)jTablePages.getModel().getValueAt(jTablePages.getSelectedRow(), 0);
-            DialogEditPorlet dialogEditPorlet=new DialogEditPorlet(new Frame(),true,portletInfo,repository, contentId);
+            PortletInfo portletInfo = (PortletInfo) jTablePages.getModel().getValueAt(jTablePages.getSelectedRow(), 0);
+            DialogEditPorlet dialogEditPorlet = new DialogEditPorlet(new Frame(), true, portletInfo, repository, contentId);
             dialogEditPorlet.setVisible(true);
             loadPorlets();
         }
@@ -739,43 +810,4 @@ public class DialogContentInformation extends javax.swing.JDialog
     // End of variables declaration//GEN-END:variables
 }
 
-class VersionEditor extends DefaultCellEditor
-{
-    public VersionEditor(String repositoryName, String contentId)
-    {
-        super(new ComboVersiones(repositoryName, contentId, null));
-    }
-}
 
-class ComboVersiones extends JComboBox
-{
-
-    public ComboVersiones(String repositoryName, String contentId, VersionInfo selected)
-    {
-        VersionInfo info = new VersionInfo();
-        info.nameOfVersion = "*";
-        this.setEditable(false);
-        this.addItem(info);
-        try
-        {
-            for (VersionInfo versionInfo : OfficeApplication.getOfficeDocumentProxy().getVersions(repositoryName, contentId))
-            {
-                this.addItem(versionInfo);
-            }
-            if (selected != null)
-            {
-                this.setSelectedItem(selected);
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public String toString()
-    {
-        return this.getSelectedItem().toString();
-    }
-}
