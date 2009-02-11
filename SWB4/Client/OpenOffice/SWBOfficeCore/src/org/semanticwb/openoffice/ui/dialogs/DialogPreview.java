@@ -31,7 +31,8 @@ public class DialogPreview extends javax.swing.JDialog
     {
         super(parent, modal);
         this.url = url;
-        initComponents();        
+        initComponents();
+        setURL(url);
         setLocationRelativeTo(null);
     }
     public DialogPreview(java.awt.Frame parent, boolean modal, URL url,boolean showAddress)
@@ -211,7 +212,7 @@ public class DialogPreview extends javax.swing.JDialog
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
-        this.setURL(url);
+        //this.setURL(url);
     }//GEN-LAST:event_formWindowOpened
 
     private void jButtonCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCloseActionPerformed
