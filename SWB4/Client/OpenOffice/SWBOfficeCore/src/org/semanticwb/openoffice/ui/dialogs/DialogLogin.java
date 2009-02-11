@@ -27,7 +27,7 @@ public class DialogLogin extends javax.swing.JDialog implements ImageObserver
         super(parent, modal);
         initComponents();
         this.add(new BackGroundImagePanel(this),BorderLayout.CENTER);
-        this.setSize(510, 335);
+        this.setSize(505, 335);
 
     }
 
