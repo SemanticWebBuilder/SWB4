@@ -56,6 +56,78 @@ public class ViewProperties extends WizardPage
         loadProperties();
     }
 
+    class PropertyRender implements TableCellRenderer
+    {
+
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                boolean isSelected, boolean hasFocus, int row, int column)
+        {
+            Object prop = table.getModel().getValueAt(row, 0);
+            if (prop instanceof PropertyInfo)
+            {
+                PropertyInfo PropertyInfo = (PropertyInfo) prop;
+                if (PropertyInfo.type.equalsIgnoreCase("boolean"))
+                {
+                    JCheckBox jCheckBox = new JCheckBox();
+                    jCheckBox.setBackground(new Color(255, 255, 255));
+                    JPanel panel = new JPanel();
+                    panel.add(jCheckBox);
+                    panel.setBackground(new Color(255, 255, 255));
+                    if (value == null)
+                    {
+                        jCheckBox.setSelected(false);
+                    }
+                    else
+                    {
+                        if (value instanceof Boolean)
+                        {
+                            jCheckBox.setSelected((Boolean) value);
+                        }
+                    }
+                    return panel;
+                }
+                if (PropertyInfo.type.equalsIgnoreCase("integer"))
+                {
+                    JTextField JTextField = new JTextField();
+                    JTextField.setDocument(new NumericPlainDocument(4, new DecimalFormat("####")));
+                    if (value == null)
+                    {
+                        JTextField.setText("0");
+                    }
+                    else
+                    {
+                        int ivalue = 0;
+                        try
+                        {
+                            ivalue = Integer.parseInt(value.toString());
+
+                        }
+                        catch (NumberFormatException nfe)
+                        {
+                            nfe.printStackTrace();
+                        }
+                        JTextField.setText(String.valueOf(ivalue));
+                    }
+                    return JTextField;
+                }
+                if (PropertyInfo.type.equalsIgnoreCase("String"))
+                {
+                    JTextField JTextField = new JTextField();
+                    if (value == null)
+                    {
+                        JTextField.setText("");
+                    }
+                    else
+                    {
+                        JTextField.setText(value.toString());
+                    }
+                    return JTextField;
+                }
+            }
+            return null;
+        }
+    }
+
     @Override
     public WizardPanelNavResult allowNext(String arg, Map map, Wizard wizard)
     {
@@ -72,9 +144,9 @@ public class ViewProperties extends WizardPage
         {
             PropertyInfo prop = (PropertyInfo) jTableProperties.getModel().getValueAt(i, 0);
             String value = jTableProperties.getModel().getValueAt(i, 0).toString();
-            if(value.isEmpty() && prop.isRequired)
+            if (value.isEmpty() && prop.isRequired)
             {
-                JOptionPane.showMessageDialog(this,"¡Debe indicar "+  prop +"!",getDescription(),JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "¡Debe indicar " + prop + "!", getDescription(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
                 jTableProperties.changeSelection(i, 1, false, false);
                 return WizardPanelNavResult.REMAIN_ON_PAGE;
             }
@@ -341,74 +413,3 @@ public class ViewProperties extends WizardPage
     // End of variables declaration//GEN-END:variables
 }
 
-class PropertyRender implements TableCellRenderer
-{
-
-    public Component getTableCellRendererComponent(JTable table, Object value,
-            boolean isSelected, boolean hasFocus, int row, int column)
-    {
-        Object prop = table.getModel().getValueAt(row, 0);
-        if (prop instanceof PropertyInfo)
-        {
-            PropertyInfo PropertyInfo = (PropertyInfo) prop;
-            if (PropertyInfo.type.equalsIgnoreCase("boolean"))
-            {
-                JCheckBox jCheckBox = new JCheckBox();
-                jCheckBox.setBackground(new Color(255, 255, 255));
-                JPanel panel = new JPanel();
-                panel.add(jCheckBox);
-                panel.setBackground(new Color(255, 255, 255));
-                if (value == null)
-                {
-                    jCheckBox.setSelected(false);
-                }
-                else
-                {
-                    if (value instanceof Boolean)
-                    {
-                        jCheckBox.setSelected((Boolean) value);
-                    }
-                }
-                return panel;
-            }
-            if (PropertyInfo.type.equalsIgnoreCase("integer"))
-            {
-                JTextField JTextField = new JTextField();
-                JTextField.setDocument(new NumericPlainDocument(4, new DecimalFormat("####")));
-                if (value == null)
-                {
-                    JTextField.setText("0");
-                }
-                else
-                {
-                    int ivalue = 0;
-                    try
-                    {
-                        ivalue = Integer.parseInt(value.toString());
-
-                    }
-                    catch (NumberFormatException nfe)
-                    {
-                        nfe.printStackTrace();
-                    }
-                    JTextField.setText(String.valueOf(ivalue));
-                }
-                return JTextField;
-            }
-            if (PropertyInfo.type.equalsIgnoreCase("String"))
-            {
-                JTextField JTextField = new JTextField();
-                if (value == null)
-                {
-                    JTextField.setText("");
-                }
-                else
-                {
-                    JTextField.setText(value.toString());
-                }
-                return JTextField;
-            }
-        }
-        return null;
-    }
-}
