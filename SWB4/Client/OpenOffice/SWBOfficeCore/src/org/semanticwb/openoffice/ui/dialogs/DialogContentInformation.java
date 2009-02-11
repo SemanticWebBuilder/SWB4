@@ -155,7 +155,13 @@ public class DialogContentInformation extends javax.swing.JDialog
         {
             if (value instanceof VersionInfo)
             {
-                return new ComboVersiones(repositoryName, contentId, (VersionInfo) value);
+                ComboVersiones comboVersiones = new ComboVersiones(repositoryName, contentId, (VersionInfo) value);
+                comboVersiones.setSelectedItem(value);
+                return comboVersiones;
+            }
+            else if (value instanceof ComboVersiones)
+            {
+                return (ComboVersiones) value;
             }
             else
             {
@@ -216,7 +222,7 @@ public class DialogContentInformation extends javax.swing.JDialog
         }
         TableColumn column = this.jTablePages.getColumnModel().getColumn(4);
         column.setCellEditor(new VersionEditor(this.repository, this.contentId));
-        column.setCellRenderer(new VersionRender(repository, contentId));
+        //column.setCellRenderer(new VersionRender(repository, contentId));
         try
         {
             for (PortletInfo portletInfo : OfficeApplication.getOfficeDocumentProxy().listPortlets(repository, contentId))
@@ -388,7 +394,8 @@ public class DialogContentInformation extends javax.swing.JDialog
         jToolBar1.setRollover(true);
         jToolBar1.add(jSeparator1);
 
-        jButtonEdit.setText("Editar");
+        jButtonEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/edit.png"))); // NOI18N
+        jButtonEdit.setToolTipText("Editar Propiedades");
         jButtonEdit.setEnabled(false);
         jButtonEdit.setFocusable(false);
         jButtonEdit.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -413,7 +420,8 @@ public class DialogContentInformation extends javax.swing.JDialog
         jToolBar1.add(jButtonPublish);
         jToolBar1.add(jSeparator3);
 
-        jButtonViewPage.setText("Ver página");
+        jButtonViewPage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/see.png"))); // NOI18N
+        jButtonViewPage.setToolTipText("Ver página");
         jButtonViewPage.setEnabled(false);
         jButtonViewPage.setFocusable(false);
         jButtonViewPage.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -463,6 +471,8 @@ public class DialogContentInformation extends javax.swing.JDialog
                 return canEdit [columnIndex];
             }
         });
+        jTablePages.setToolTipText("Puede editar la versión selecionando la columna correspondiente");
+        jTablePages.setRowHeight(20);
         jTablePages.setRowSelectionAllowed(false);
         jTablePages.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jTablePages.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -514,7 +524,7 @@ public class DialogContentInformation extends javax.swing.JDialog
 
         jToolBar2.setRollover(true);
 
-        jButtonUpdate.setText("Actualizar");
+        jButtonUpdate.setText("Guardar");
         jButtonUpdate.setFocusable(false);
         jButtonUpdate.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonUpdate.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -526,7 +536,8 @@ public class DialogContentInformation extends javax.swing.JDialog
         jToolBar2.add(jButtonUpdate);
         jToolBar2.add(jSeparator2);
 
-        jButtonViewVersion.setText("Ver");
+        jButtonViewVersion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/see.png"))); // NOI18N
+        jButtonViewVersion.setToolTipText("Ver versión");
         jButtonViewVersion.setEnabled(false);
         jButtonViewVersion.setFocusable(false);
         jButtonViewVersion.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -768,7 +779,22 @@ public class DialogContentInformation extends javax.swing.JDialog
             PortletInfo portletInfo = (PortletInfo) jTablePages.getModel().getValueAt(jTablePages.getSelectedRow(), 0);
             DialogEditPorlet dialogEditPorlet = new DialogEditPorlet(new Frame(), true, portletInfo, repository, contentId);
             dialogEditPorlet.setVisible(true);
-            loadPorlets();
+            if (!dialogEditPorlet.isCancel)
+            {
+                this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+                try
+                {
+                    loadPorlets();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+                finally
+                {
+                    this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                }
+            }
         }
     }//GEN-LAST:event_jButtonEditActionPerformed
 
