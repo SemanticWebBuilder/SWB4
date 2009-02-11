@@ -185,7 +185,14 @@ public final class wb4writeraddon extends WeakBase
                 }
                 if (aURL.Path.compareTo("rules") == 0)
                 {
-                    return this;
+                    if (document.isPublicated())
+                    {
+                        return this;
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
                 if (aURL.Path.compareTo("deleteAssociation") == 0)
                 {
