@@ -49,12 +49,14 @@ public class DialogContentInformation extends javax.swing.JDialog
 
             public void valueChanged(ListSelectionEvent e)
             {
+                jButtonEdit.setEnabled(false);
                 jButtonViewPage.setEnabled(false);
                 jButtonDeletePage.setEnabled(false);
                 if (e.getFirstIndex() != -1)
                 {
                     jButtonDeletePage.setEnabled(true);
                     jButtonViewPage.setEnabled(true);
+                    jButtonEdit.setEnabled(true);
                 }
             }
         });
@@ -188,6 +190,8 @@ public class DialogContentInformation extends javax.swing.JDialog
         jPanelPublishInformation = new javax.swing.JPanel();
         jToolBar1 = new javax.swing.JToolBar();
         jSeparator1 = new javax.swing.JToolBar.Separator();
+        jButtonEdit = new javax.swing.JButton();
+        jSeparator5 = new javax.swing.JToolBar.Separator();
         jButtonPublish = new javax.swing.JButton();
         jSeparator3 = new javax.swing.JToolBar.Separator();
         jButtonViewPage = new javax.swing.JButton();
@@ -312,6 +316,19 @@ public class DialogContentInformation extends javax.swing.JDialog
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
         jToolBar1.add(jSeparator1);
+
+        jButtonEdit.setText("Editar");
+        jButtonEdit.setEnabled(false);
+        jButtonEdit.setFocusable(false);
+        jButtonEdit.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonEdit.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEditActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(jButtonEdit);
+        jToolBar1.add(jSeparator5);
 
         jButtonPublish.setText("Publicar en una página");
         jButtonPublish.setFocusable(false);
@@ -673,10 +690,22 @@ public class DialogContentInformation extends javax.swing.JDialog
         }
     }//GEN-LAST:event_jButtonViewVersionActionPerformed
 
+    private void jButtonEditActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonEditActionPerformed
+    {//GEN-HEADEREND:event_jButtonEditActionPerformed
+        if(jTablePages.getSelectedRow()!=-1)
+        {
+            PortletInfo portletInfo=(PortletInfo)jTablePages.getModel().getValueAt(jTablePages.getSelectedRow(), 0);
+            DialogEditPorlet dialogEditPorlet=new DialogEditPorlet(new Frame(),true,portletInfo,repository, contentId);
+            dialogEditPorlet.setVisible(true);
+            loadPorlets();
+        }
+    }//GEN-LAST:event_jButtonEditActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAccept;
     private javax.swing.JButton jButtonCancel;
     private javax.swing.JButton jButtonDeletePage;
+    private javax.swing.JButton jButtonEdit;
     private javax.swing.JButton jButtonPublish;
     private javax.swing.JButton jButtonUpdate;
     private javax.swing.JButton jButtonViewPage;
@@ -699,6 +728,7 @@ public class DialogContentInformation extends javax.swing.JDialog
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator3;
     private javax.swing.JToolBar.Separator jSeparator4;
+    private javax.swing.JToolBar.Separator jSeparator5;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTablePages;
     private javax.swing.JTable jTableSummary1;
