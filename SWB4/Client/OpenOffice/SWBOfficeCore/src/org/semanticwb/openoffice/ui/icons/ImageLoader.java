@@ -35,7 +35,11 @@ public class ImageLoader
 
             url = ImageLoader.class.getResource("see.jpg");
             image = new ImageIcon(url);
-            images.put("splash", image);
+            images.put("see", image);
+
+            url = ImageLoader.class.getResource("edit.jpg");
+            image = new ImageIcon(url);
+            images.put("edit", image);
         }
         catch (Exception e)
         {
