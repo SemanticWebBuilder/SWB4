@@ -278,7 +278,7 @@ public class Portlet extends PortletBase
         setProperty("data/wp/"+page.getWebSiteId()+"/"+page.getId(),data);
     }
 
-//    /**
+//    /**  org.semanticwb.model.Inheritable
 //     * @param topic
 //     * @return  */
 //    public boolean evalFilterMap(WebPage topic)
