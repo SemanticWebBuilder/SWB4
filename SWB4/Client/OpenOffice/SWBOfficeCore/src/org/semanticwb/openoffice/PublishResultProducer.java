@@ -11,9 +11,12 @@ import javax.swing.JOptionPane;
 import org.netbeans.spi.wizard.DeferredWizardResult;
 import org.netbeans.spi.wizard.ResultProgressHandle;
 import org.netbeans.spi.wizard.Summary;
+import org.netbeans.spi.wizard.Wizard;
 import org.netbeans.spi.wizard.WizardException;
+import org.netbeans.spi.wizard.WizardPage;
 import org.netbeans.spi.wizard.WizardPage.WizardResultProducer;
 import org.semanticwb.openoffice.interfaces.IOpenOfficeDocument;
+import org.semanticwb.openoffice.ui.wizard.ContentProperties;
 import org.semanticwb.openoffice.ui.wizard.SelectCategory;
 import org.semanticwb.openoffice.ui.wizard.SummaryPublish;
 import org.semanticwb.openoffice.ui.wizard.TitleAndDescription;
@@ -57,6 +60,12 @@ public class PublishResultProducer implements WizardResultProducer
                 String contentID = openOfficeDocument.publish(title, description, repositoryName, categoryID, document.getDocumentType().toString(), nodeType, name);
                 document.SaveContentId(contentID, repositoryName);
                 Summary summary = Summary.create(new SummaryPublish(contentID, repositoryName), null);
+                if(openOfficeDocument.getContentPropeties(repositoryName, contentID).length>0)
+                {
+                    WizardPage[] pages={ new ContentProperties(repositoryName, contentID)};
+                    Wizard wizard=WizardPage.createWizard("Propiedades del documento",pages);
+                    wizard.show();
+                }
                 int res = JOptionPane.showConfirmDialog(null, "¿Desea publicar este contenido en una página web?", "Publicación de contenido", JOptionPane.YES_NO_OPTION);
                 if (res == JOptionPane.YES_OPTION)
                 {
