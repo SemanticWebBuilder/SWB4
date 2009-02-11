@@ -722,7 +722,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             portlet.setVersionToShow(version);
             portlet.setCreated(new Date(System.currentTimeMillis()));
             portlet.setUpdated(new Date(System.currentTimeMillis()));
-            page.addPortlet(portlet);
+            try
+            {
+                page.addPortlet(portlet);
+            }
+            catch(Exception e)
+            {
+                log.error(e);
+            }
             InputStream in = getContent(repositoryName, contentId, version);
             portlet.loadContent(in);
             PortletInfo info = getPortletInfo(portlet);
