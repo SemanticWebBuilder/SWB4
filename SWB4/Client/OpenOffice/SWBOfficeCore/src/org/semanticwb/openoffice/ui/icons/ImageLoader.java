@@ -33,11 +33,11 @@ public class ImageLoader
             image = new ImageIcon(url);
             images.put("splash", image);
 
-            url = ImageLoader.class.getResource("see.jpg");
+            url = ImageLoader.class.getResource("see.png");
             image = new ImageIcon(url);
             images.put("see", image);
 
-            url = ImageLoader.class.getResource("edit.jpg");
+            url = ImageLoader.class.getResource("edit.png");
             image = new ImageIcon(url);
             images.put("edit", image);
         }
