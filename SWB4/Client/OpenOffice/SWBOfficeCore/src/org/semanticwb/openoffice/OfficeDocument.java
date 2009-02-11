@@ -38,6 +38,7 @@ import org.semanticwb.openoffice.ui.wizard.SelectCategory;
 import org.semanticwb.openoffice.ui.wizard.SelectPage;
 import org.semanticwb.openoffice.ui.wizard.SelectTitle;
 import org.semanticwb.openoffice.ui.wizard.TitleAndDescription;
+import org.semanticwb.openoffice.ui.wizard.ViewProperties;
 import org.semanticwb.openoffice.util.ExcelFileFilter;
 import org.semanticwb.openoffice.util.PPTFileFilter;
 import org.semanticwb.openoffice.util.WordFileFilter;
@@ -565,7 +566,7 @@ public abstract class OfficeDocument
             PublishContentToWebPageResultProducer resultProducer = new PublishContentToWebPageResultProducer(contentID, repositoryName);
             WizardPage[] clazz = new WizardPage[]
             {
-                new TitleAndDescription(false), new SelectPage(), new PublishVersion(contentID, repositoryName)
+                new TitleAndDescription(false), new SelectPage(), new PublishVersion(contentID, repositoryName),new ViewProperties(repositoryName, contentID)
             };
             Wizard wiz = WizardPage.createWizard("Asistente de publicación de contenido en página web", clazz, resultProducer);
             wiz.show();
