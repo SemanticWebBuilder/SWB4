@@ -44,10 +44,13 @@ public class TitleAndDescription extends WizardPage
         this.jComboBoxType.removeAllItems();
         try
         {
-            String repository = SelectCategory.map.get(SelectCategory.REPOSITORY_ID).toString();
-            for (ContentType type : OfficeApplication.getOfficeApplicationProxy().getContentTypes(repository))
+            if (SelectCategory.map.get(SelectCategory.REPOSITORY_ID) != null)
             {
-                this.jComboBoxType.addItem(type);
+                String repository = SelectCategory.map.get(SelectCategory.REPOSITORY_ID).toString();
+                for (ContentType type : OfficeApplication.getOfficeApplicationProxy().getContentTypes(repository))
+                {
+                    this.jComboBoxType.addItem(type);
+                }
             }
         }
         catch (Exception e)
@@ -105,7 +108,7 @@ public class TitleAndDescription extends WizardPage
         else
         {
             map.put(TITLE, this.jTextFieldName.getText().trim());
-            map.put(DESCRIPTION, this.jTextAreaDescription.getText().trim());            
+            map.put(DESCRIPTION, this.jTextAreaDescription.getText().trim());
             result = WizardPanelNavResult.PROCEED;
         }
         return result;
