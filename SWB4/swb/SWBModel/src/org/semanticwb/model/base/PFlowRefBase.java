@@ -1,11 +1,10 @@
 package org.semanticwb.model.base;
 
 
-public class PFlowRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.Activeable,org.semanticwb.model.Deleteable
+public class PFlowRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.Activeable
 {
     public static final org.semanticwb.platform.SemanticClass swb_PFlow=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PFlow");
     public static final org.semanticwb.platform.SemanticProperty swb_pflow=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#pflow");
-    public static final org.semanticwb.platform.SemanticProperty swb_deleted=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#deleted");
     public static final org.semanticwb.platform.SemanticClass swb_PFlowRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PFlowRef");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PFlowRef");
 
@@ -71,16 +70,6 @@ public class PFlowRefBase extends org.semanticwb.model.Reference implements org.
              ret=(org.semanticwb.model.PFlow)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
-    }
-
-    public boolean isDeleted()
-    {
-        return getSemanticObject().getBooleanProperty(swb_deleted);
-    }
-
-    public void setDeleted(boolean deleted)
-    {
-        getSemanticObject().setBooleanProperty(swb_deleted, deleted);
     }
 
     public org.semanticwb.model.WebSite getWebSite()

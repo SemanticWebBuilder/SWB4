@@ -1,14 +1,16 @@
 package org.semanticwb.model.base;
 
 
-public class PortletBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.XMLConfable,org.semanticwb.model.Hitable,org.semanticwb.model.Deleteable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.RoleRefable,org.semanticwb.model.XMLable,org.semanticwb.model.Viewable,org.semanticwb.model.Priorityable,org.semanticwb.model.Versionable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Localeable,org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.model.Calendarable,org.semanticwb.model.Indexable,org.semanticwb.model.Referensable
+public class PortletBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Hitable,org.semanticwb.model.Deleteable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.RoleRefable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.XMLable,org.semanticwb.model.Viewable,org.semanticwb.model.Priorityable,org.semanticwb.model.Versionable,org.semanticwb.model.Referensable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Localeable,org.semanticwb.model.XMLConfable,org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.model.Calendarable,org.semanticwb.model.Indexable
 {
+    public static final org.semanticwb.platform.SemanticClass swb_UserGroupRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserGroupRef");
+    public static final org.semanticwb.platform.SemanticProperty swb_hasUserGroupRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasUserGroupRef");
     public static final org.semanticwb.platform.SemanticClass swb_Camp=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Camp");
     public static final org.semanticwb.platform.SemanticProperty swb_camp=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#camp");
     public static final org.semanticwb.platform.SemanticClass swb_Portletable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Portletable");
     public static final org.semanticwb.platform.SemanticProperty swb_hasPortletable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasPortletable");
-    public static final org.semanticwb.platform.SemanticProperty swb_hits=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hits");
     public static final org.semanticwb.platform.SemanticProperty swb_xml=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#xml");
+    public static final org.semanticwb.platform.SemanticProperty swb_hits=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hits");
     public static final org.semanticwb.platform.SemanticClass swb_VersionInfo=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#VersionInfo");
     public static final org.semanticwb.platform.SemanticProperty swb_lastVersion=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#lastVersion");
     public static final org.semanticwb.platform.SemanticProperty swb_xmlConf=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#xmlConf");
@@ -38,9 +40,9 @@ public class PortletBase extends org.semanticwb.model.SWBClass implements org.se
     public static final org.semanticwb.platform.SemanticClass swb_RoleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#RoleRef");
     public static final org.semanticwb.platform.SemanticProperty swb_hasRoleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasRoleRef");
     public static final org.semanticwb.platform.SemanticProperty swb_views=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#views");
-    public static final org.semanticwb.platform.SemanticProperty swb_creator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#creator");
     public static final org.semanticwb.platform.SemanticClass swb_RuleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#RuleRef");
     public static final org.semanticwb.platform.SemanticProperty swb_hasRuleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasRuleRef");
+    public static final org.semanticwb.platform.SemanticProperty swb_creator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#creator");
     public static final org.semanticwb.platform.SemanticClass swb_PortletSubType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PortletSubType");
     public static final org.semanticwb.platform.SemanticProperty swb_portletSubType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#portletSubType");
     public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
@@ -90,6 +92,47 @@ public class PortletBase extends org.semanticwb.model.SWBClass implements org.se
         return (getPortlet(id, model)!=null);
     }
 
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupRef> listUserGroupRefs()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupRef>(org.semanticwb.model.UserGroupRef.class, getSemanticObject().listObjectProperties(swb_hasUserGroupRef));
+    }
+
+    public boolean hasUserGroupRef(org.semanticwb.model.UserGroupRef usergroupref)
+    {
+        if(usergroupref==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasUserGroupRef,usergroupref.getSemanticObject());
+    }
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupRef> listInheritUserGroupRefs()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupRef>(org.semanticwb.model.UserGroupRef.class, getSemanticObject().listInheritProperties(swb_hasUserGroupRef));
+    }
+
+    public void addUserGroupRef(org.semanticwb.model.UserGroupRef usergroupref)
+    {
+        getSemanticObject().addObjectProperty(swb_hasUserGroupRef, usergroupref.getSemanticObject());
+    }
+
+    public void removeAllUserGroupRef()
+    {
+        getSemanticObject().removeProperty(swb_hasUserGroupRef);
+    }
+
+    public void removeUserGroupRef(org.semanticwb.model.UserGroupRef usergroupref)
+    {
+        getSemanticObject().removeObjectProperty(swb_hasUserGroupRef,usergroupref.getSemanticObject());
+    }
+
+    public org.semanticwb.model.UserGroupRef getUserGroupRef()
+    {
+         org.semanticwb.model.UserGroupRef ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasUserGroupRef);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.UserGroupRef)obj.getSemanticClass().newGenericInstance(obj);
+         }
+         return ret;
+    }
+
     public void setCamp(org.semanticwb.model.Camp camp)
     {
         getSemanticObject().setObjectProperty(swb_camp, camp.getSemanticObject());
@@ -132,16 +175,6 @@ public class PortletBase extends org.semanticwb.model.SWBClass implements org.se
          return ret;
     }
 
-    public long getHits()
-    {
-        return getSemanticObject().getLongProperty(swb_hits);
-    }
-
-    public void setHits(long hits)
-    {
-        getSemanticObject().setLongProperty(swb_hits, hits);
-    }
-
     public String getXml()
     {
         return getSemanticObject().getProperty(swb_xml);
@@ -150,6 +183,16 @@ public class PortletBase extends org.semanticwb.model.SWBClass implements org.se
     public void setXml(String xml)
     {
         getSemanticObject().setProperty(swb_xml, xml);
+    }
+
+    public long getHits()
+    {
+        return getSemanticObject().getLongProperty(swb_hits);
+    }
+
+    public void setHits(long hits)
+    {
+        getSemanticObject().setLongProperty(swb_hits, hits);
     }
 
     public void setLastVersion(org.semanticwb.model.VersionInfo versioninfo)
@@ -511,27 +554,6 @@ public class PortletBase extends org.semanticwb.model.SWBClass implements org.se
         getSemanticObject().setLongProperty(swb_views, views);
     }
 
-    public void setCreator(org.semanticwb.model.User user)
-    {
-        getSemanticObject().setObjectProperty(swb_creator, user.getSemanticObject());
-    }
-
-    public void removeCreator()
-    {
-        getSemanticObject().removeProperty(swb_creator);
-    }
-
-    public org.semanticwb.model.User getCreator()
-    {
-         org.semanticwb.model.User ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
-         }
-         return ret;
-    }
-
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef> listRuleRefs()
     {
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef>(org.semanticwb.model.RuleRef.class, getSemanticObject().listObjectProperties(swb_hasRuleRef));
@@ -569,6 +591,27 @@ public class PortletBase extends org.semanticwb.model.SWBClass implements org.se
          if(obj!=null)
          {
              ret=(org.semanticwb.model.RuleRef)obj.getSemanticClass().newGenericInstance(obj);
+         }
+         return ret;
+    }
+
+    public void setCreator(org.semanticwb.model.User user)
+    {
+        getSemanticObject().setObjectProperty(swb_creator, user.getSemanticObject());
+    }
+
+    public void removeCreator()
+    {
+        getSemanticObject().removeProperty(swb_creator);
+    }
+
+    public org.semanticwb.model.User getCreator()
+    {
+         org.semanticwb.model.User ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
