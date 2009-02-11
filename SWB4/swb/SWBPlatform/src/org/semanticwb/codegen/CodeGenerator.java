@@ -770,80 +770,72 @@ public class CodeGenerator
             }
             else if (tpp.isDataTypeProperty())
             {
-                try
+                String type = TYPE_VOID;
+                String prefix = "get";
+                if (tpp.isString() || tpp.isXML())
                 {
-                    URI uri = new URI(tpp.getRange().getURI());
-                    String type = TYPE_VOID;
-                    String prefix = "get";
-                    if (uri.getFragment().equals("string"))
-                    {
-                        type = "String";
-                    }
-                    else if (uri.getFragment().equals(TYPE_INT))
-                    {
-                        type = TYPE_INT;
-
-                    }
-                    else if (uri.getFragment().equals(TYPE_FLOAT))
-                    {
-                        type = TYPE_FLOAT;
-
-                    }
-                    else if (uri.getFragment().equals(TYPE_DOUBLE))
-                    {
-                        type = TYPE_DOUBLE;
-
-                    }
-                    else if (uri.getFragment().equals(TYPE_LONG))
-                    {
-                        type = TYPE_LONG;
-
-                    }
-                    else if (uri.getFragment().equals(TYPE_BYTE))
-                    {
-                        type = TYPE_BYTE;
-
-                    }
-                    else if (uri.getFragment().equals(TYPE_SHORT))
-                    {
-                        type = TYPE_SHORT;
-
-                    }
-                    else if (uri.getFragment().equals(TYPE_BOOLEAN))
-                    {
-                        type = TYPE_BOOLEAN;
-                        prefix = "is";
-                    }
-                    else if (uri.getFragment().equals(TYPE_DATE_TIME) || uri.getFragment().equals(TYPE_DATE))
-                    {
-                        type = "java.util.Date";
-                    }
-                    else
-                    {
-                        type = TYPE_VOID;
-                    }
-                    String label = tpp.getLabel();
-                    if (label == null)
-                    {
-                        label = tpp.getName();
-                    }
-                    String methodName = toUpperCase(label);
-                    javaClassContent.append(PUBLIC + type + " " + prefix + methodName + END_OF_METHOD + ENTER);
-                    String parameterName = tpp.getName();
-                    if (parameterName.equals("protected"))
-                    {
-                        parameterName = "_" + parameterName;
-                    }
-                    javaClassContent.append(PUBLIC + "void set" + methodName + "(" + type + " " + parameterName + ");" + ENTER);
-                    if (tpp.isLocaleable())
-                    {
-                        javaClassContent.append(PUBLIC + type + " " + prefix + methodName + "(String lang);" + ENTER);
-                        javaClassContent.append(PUBLIC + "void set" + methodName + "(" + type + " " + parameterName + ", String lang);" + ENTER);
-                    }
+                    type = "String";
                 }
-                catch (URISyntaxException usie)
+                else if (tpp.isInt())
                 {
-                    log.error(usie);
+                    type = TYPE_INT;
+
+                }
+                else if (tpp.isFloat())
+                {
+                    type = TYPE_FLOAT;
+
+                }
+                else if (tpp.isDouble())
+                {
+                    type = TYPE_DOUBLE;
+
+                }
+                else if (tpp.isLong())
+                {
+                    type = TYPE_LONG;
+
+                }
+                else if (tpp.isByte())
+                {
+                    type = TYPE_BYTE;
+
+                }
+                else if (tpp.isShort())
+                {
+                    type = TYPE_SHORT;
+
+                }
+                else if (tpp.isBoolean())
+                {
+                    type = TYPE_BOOLEAN;
+                    prefix = "is";
+                }
+                else if (tpp.isDateTime() || tpp.isDate())
+                {
+                    type = "java.util.Date";
+                }
+                else
+                {
+                    type = TYPE_VOID;
+                }
+                String label = tpp.getLabel();
+                if (label == null)
+                {
+                    label = tpp.getName();
+                }
+                String methodName = toUpperCase(label);
+                javaClassContent.append(PUBLIC + type + " " + prefix + methodName + END_OF_METHOD + ENTER);
+                String parameterName = tpp.getName();
+                if (parameterName.equals("protected"))
+                {
+                    parameterName = "_" + parameterName;
+                }
+                javaClassContent.append(PUBLIC + "void set" + methodName + "(" + type + " " + parameterName + ");" + ENTER);
+                if (tpp.isLocaleable())
+                {
+                    javaClassContent.append(PUBLIC + type + " " + prefix + methodName + "(String lang);" + ENTER);
+                    javaClassContent.append(PUBLIC + "void set" + methodName + "(" + type + " " + parameterName + ", String lang);" + ENTER);
                 }
             }
         }
@@ -962,289 +954,273 @@ public class CodeGenerator
 
         if (objectName.toLowerCase().startsWith("has"))
         {
-            try
+            String type = TYPE_VOID;
+            if (tpp.isString() || tpp.isXML())
             {
-                URI uri = new URI(tpp.getRange().getURI());
-                String type = TYPE_VOID;
-                if (uri.getFragment().equals("string"))
-                {
-                    type = "String";
-                }
-                else if (uri.getFragment().equals(TYPE_INT))
-                {
-                    type = TYPE_INT;
-                }
-                else if (uri.getFragment().equals(TYPE_FLOAT))
-                {
-                    type = TYPE_FLOAT;
-                }
-                else if (uri.getFragment().equals(TYPE_DOUBLE))
-                {
-                    type = TYPE_DOUBLE;
-                }
-                else if (uri.getFragment().equals(TYPE_LONG))
-                {
-                    type = TYPE_LONG;
-                }
-                else if (uri.getFragment().equals(TYPE_BYTE))
-                {
-                    type = TYPE_BYTE;
-                }
-                else if (uri.getFragment().equals(TYPE_SHORT))
-                {
-                    type = TYPE_SHORT;
-                }
-                else if (uri.getFragment().equals(TYPE_BOOLEAN))
-                {
-                    type = TYPE_BOOLEAN;
-                }
-                else if (uri.getFragment().equals(TYPE_DATE_TIME) || uri.getFragment().equals(TYPE_DATE))
-                {
-                    type = "java.util.Date";
-                }
-                else
-                {
-                    throw new IllegalArgumentException("Data type '" + uri.getFragment() + "' is no supported");
-                }
-                // son varios
+                type = "String";
+            }
+            else if (tpp.isInt())
+            {
+                type = TYPE_INT;
+            }
+            else if (tpp.isFloat())
+            {
+                type = TYPE_FLOAT;
+            }
+            else if (tpp.isDouble())
+            {
+                type = TYPE_DOUBLE;
+            }
+            else if (tpp.isLong())
+            {
+                type = TYPE_LONG;
+            }
+            else if (tpp.isByte())
+            {
+                type = TYPE_BYTE;
+            }
+            else if (tpp.isShort())
+            {
+                type = TYPE_SHORT;
+            }
+            else if (tpp.isBoolean())
+            {
+                type = TYPE_BOOLEAN;
+            }
+            else if (tpp.isDateTime() || tpp.isDate())
+            {
+                type = "java.util.Date";
+            }
+            else
+            {
+                throw new IllegalArgumentException("Data type '" + tpp.getRange() + "' is no supported");
+            }
+            // son varios
 
-                objectName = objectName.substring(3);
-                javaClassContent.append(ENTER);
-                javaClassContent.append("    public java.util.Iterator<" + type + "> list" + objectName + "s()" + ENTER);
-                javaClassContent.append(OPEN_BLOCK + ENTER);
+            objectName = objectName.substring(3);
+            javaClassContent.append(ENTER);
+            javaClassContent.append("    public java.util.Iterator<" + type + "> list" + objectName + "s()" + ENTER);
+            javaClassContent.append(OPEN_BLOCK + ENTER);
 //                if (!tpp.hasInverse())
 //                {
 
-                javaClassContent.append("        java.util.ArrayList<" + type + "> values=new java.util.ArrayList<" + type + ">();" + ENTER);
-                javaClassContent.append("        java.util.Iterator<org.semanticwb.platform.SemanticLiteral> it=getSemanticObject().listLiteralProperties(" + tpp.getPrefix() + "_" + tpp.getName() + ");" + ENTER);
-                javaClassContent.append("        while(it.hasNext())" + ENTER);
-                javaClassContent.append("        {" + ENTER);
-                javaClassContent.append("                org.semanticwb.platform.SemanticLiteral literal=it.next();" + ENTER);
-                javaClassContent.append("                values.add(literal.getString());" + ENTER);
-                javaClassContent.append("        }" + ENTER);
-                javaClassContent.append("        return values.iterator();" + ENTER);
+            javaClassContent.append("        java.util.ArrayList<" + type + "> values=new java.util.ArrayList<" + type + ">();" + ENTER);
+            javaClassContent.append("        java.util.Iterator<org.semanticwb.platform.SemanticLiteral> it=getSemanticObject().listLiteralProperties(" + tpp.getPrefix() + "_" + tpp.getName() + ");" + ENTER);
+            javaClassContent.append("        while(it.hasNext())" + ENTER);
+            javaClassContent.append("        {" + ENTER);
+            javaClassContent.append("                org.semanticwb.platform.SemanticLiteral literal=it.next();" + ENTER);
+            javaClassContent.append("                values.add(literal.getString());" + ENTER);
+            javaClassContent.append("        }" + ENTER);
+            javaClassContent.append("        return values.iterator();" + ENTER);
 //                }
 //                else
 //                {
 //                    javaClassContent.append("        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getModel().getRDFModel().listStatements(null, " + tpp.getPrefix() + "_" + tpp.getName() + ".getInverse().getRDFProperty(), getSemanticObject().getRDFResource());" + ENTER);
 //                    javaClassContent.append("        return new java.util.Iterator<" + type + ">(" + type + ".class, stit,true);" + ENTER);
 //                }
-                javaClassContent.append(CLOSE_BLOCK + ENTER);
+            javaClassContent.append(CLOSE_BLOCK + ENTER);
 
-                if (!tpp.hasInverse())
-                {
-                    javaClassContent.append(ENTER);
-                    javaClassContent.append("    public void add" + objectName + "(" + type + " " + objectName.toLowerCase() + ")" + ENTER);
-                    javaClassContent.append(OPEN_BLOCK + ENTER);
-                    javaClassContent.append("        getSemanticObject().set" + (type.equals("String") ? "" : type) + "Property(" + tpp.getPrefix() + "_" + tpp.getName() + ", " + objectName.toLowerCase() + ");" + ENTER);
-                    javaClassContent.append(CLOSE_BLOCK + ENTER);
-                    javaClassContent.append(ENTER);
-                    javaClassContent.append("    public void removeAll" + objectName + "()" + ENTER);
-                    javaClassContent.append(OPEN_BLOCK + ENTER);
-                    javaClassContent.append("        getSemanticObject().removeProperty(" + tpp.getPrefix() + "_" + tpp.getName() + ");" + ENTER);
-                    javaClassContent.append(CLOSE_BLOCK + ENTER);
-                    javaClassContent.append(ENTER);
-                    javaClassContent.append("    public void remove" + objectName + "(" + type + " " + objectName.toLowerCase() + ")" + ENTER);
-                    javaClassContent.append(OPEN_BLOCK + ENTER);
-                    javaClassContent.append("        getSemanticObject().removeProperty(" + tpp.getPrefix() + "_" + tpp.getName() + "," + objectName.toLowerCase() + ");" + ENTER);
-                    javaClassContent.append(CLOSE_BLOCK + ENTER);
-                }
-            }
-            catch (URISyntaxException usie)
+            if (!tpp.hasInverse())
             {
-                log.error(usie);
+                javaClassContent.append(ENTER);
+                javaClassContent.append("    public void add" + objectName + "(" + type + " " + objectName.toLowerCase() + ")" + ENTER);
+                javaClassContent.append(OPEN_BLOCK + ENTER);
+                javaClassContent.append("        getSemanticObject().set" + (type.equals("String") ? "" : type) + "Property(" + tpp.getPrefix() + "_" + tpp.getName() + ", " + objectName.toLowerCase() + ");" + ENTER);
+                javaClassContent.append(CLOSE_BLOCK + ENTER);
+                javaClassContent.append(ENTER);
+                javaClassContent.append("    public void removeAll" + objectName + "()" + ENTER);
+                javaClassContent.append(OPEN_BLOCK + ENTER);
+                javaClassContent.append("        getSemanticObject().removeProperty(" + tpp.getPrefix() + "_" + tpp.getName() + ");" + ENTER);
+                javaClassContent.append(CLOSE_BLOCK + ENTER);
+                javaClassContent.append(ENTER);
+                javaClassContent.append("    public void remove" + objectName + "(" + type + " " + objectName.toLowerCase() + ")" + ENTER);
+                javaClassContent.append(OPEN_BLOCK + ENTER);
+                javaClassContent.append("        getSemanticObject().removeProperty(" + tpp.getPrefix() + "_" + tpp.getName() + "," + objectName.toLowerCase() + ");" + ENTER);
+                javaClassContent.append(CLOSE_BLOCK + ENTER);
             }
         }
         else
         {
-            try
+            String type = TYPE_VOID;
+            String prefix = "get";
+            String getMethod = "getProperty";
+            String setMethod = "setProperty";
+            if (tpp.isString() || tpp.isXML())
             {
-                URI uri = new URI(tpp.getRange().getURI());
-                String type = TYPE_VOID;
-                String prefix = "get";
-                String getMethod = "getProperty";
-                String setMethod = "setProperty";
-                if (uri.getFragment().equals("string"))
-                {
-                    type = "String";
-                    getMethod = "getProperty";
-                    setMethod = "setProperty";
-                }
-                else if (uri.getFragment().equals(TYPE_INT))
-                {
-                    type = TYPE_INT;
-                    getMethod = "getIntProperty";
-                    setMethod = "setLongProperty";
-                }
-                else if (uri.getFragment().equals(TYPE_FLOAT))
-                {
-                    type = TYPE_FLOAT;
-                    getMethod = "getFloatProperty";
-                    setMethod = "setFloatProperty";
-                }
-                else if (uri.getFragment().equals(TYPE_DOUBLE))
-                {
-                    type = TYPE_DOUBLE;
-                    getMethod = "getDoubleProperty";
-                    setMethod = "setDoubleProperty";
-                }
-                else if (uri.getFragment().equals(TYPE_LONG))
-                {
-                    type = TYPE_LONG;
-                    getMethod = "getLongProperty";
-                    setMethod = "setLongProperty";
-                }
-                else if (uri.getFragment().equals(TYPE_BYTE))
-                {
-                    type = TYPE_BYTE;
-                    getMethod = "getByteProperty";
-                    setMethod = "setByteProperty";
-                }
-                else if (uri.getFragment().equals(TYPE_SHORT))
-                {
-                    type = TYPE_SHORT;
-                    getMethod = "getShortProperty";
-                    setMethod = "setShortProperty";
-                }
-                else if (uri.getFragment().equals(TYPE_BOOLEAN))
-                {
-                    type = TYPE_BOOLEAN;
-                    prefix = "is";
-                    getMethod = "getBooleanProperty";
-                    setMethod = "setBooleanProperty";
-                }
-                else if (uri.getFragment().equals(TYPE_DATE_TIME) || uri.getFragment().equals(TYPE_DATE))
-                {
-                    type = "java.util.Date";
-                    getMethod = "getDateProperty";
-                    setMethod = "setDateProperty";
-                }
-                else if (uri.getFragment().equals(TYPE_BINARY))
-                {
-                    type = "java.io.InputStream";
-                    getMethod = "getInputStreamProperty";
-                    setMethod = "setInputStreamProperty";
-                }
-                else
-                {
-                    throw new IllegalArgumentException("Data type '" + uri.getFragment() + "' is no supported");
-                }
+                type = "String";
+                getMethod = "getProperty";
+                setMethod = "setProperty";
+            }
+            else if (tpp.isInt())
+            {
+                type = TYPE_INT;
+                getMethod = "getIntProperty";
+                setMethod = "setLongProperty";
+            }
+            else if (tpp.isFloat())
+            {
+                type = TYPE_FLOAT;
+                getMethod = "getFloatProperty";
+                setMethod = "setFloatProperty";
+            }
+            else if (tpp.isDouble())
+            {
+                type = TYPE_DOUBLE;
+                getMethod = "getDoubleProperty";
+                setMethod = "setDoubleProperty";
+            }
+            else if (tpp.isLong())
+            {
+                type = TYPE_LONG;
+                getMethod = "getLongProperty";
+                setMethod = "setLongProperty";
+            }
+            else if (tpp.isByte())
+            {
+                type = TYPE_BYTE;
+                getMethod = "getByteProperty";
+                setMethod = "setByteProperty";
+            }
+            else if (tpp.isShort())
+            {
+                type = TYPE_SHORT;
+                getMethod = "getShortProperty";
+                setMethod = "setShortProperty";
+            }
+            else if (tpp.isBoolean())
+            {
+                type = TYPE_BOOLEAN;
+                prefix = "is";
+                getMethod = "getBooleanProperty";
+                setMethod = "setBooleanProperty";
+            }
+            else if (tpp.isDateTime() || tpp.isDate())
+            {
+                type = "java.util.Date";
+                getMethod = "getDateProperty";
+                setMethod = "setDateProperty";
+            }
+            else if (tpp.isBinary())
+            {
+                type = "java.io.InputStream";
+                getMethod = "getInputStreamProperty";
+                setMethod = "setInputStreamProperty";
+            }
+            else
+            {
+                throw new IllegalArgumentException("Data type '" + tpp.getRange() + "' is no supported");
+            }
 
-                getMethod = "getSemanticObject()." + getMethod;
-                setMethod = "getSemanticObject()." + setMethod;
+            getMethod = "getSemanticObject()." + getMethod;
+            setMethod = "getSemanticObject()." + setMethod;
 
-                String label = tpp.getLabel();
-                if (label == null)
-                {
-                    label = tpp.getName();
-                }
-                String methodName = toUpperCase(label);
-                String propertyName = tpp.getName();
-                if (propertyName.equals("protected"))
-                {
-                    propertyName = "_" + propertyName;
-                }
-                javaClassContent.append(ENTER);
+            String label = tpp.getLabel();
+            if (label == null)
+            {
+                label = tpp.getName();
+            }
+            String methodName = toUpperCase(label);
+            String propertyName = tpp.getName();
+            if (propertyName.equals("protected"))
+            {
+                propertyName = "_" + propertyName;
+            }
+            javaClassContent.append(ENTER);
+            if (type.equals("java.io.InputStream"))
+            {
+                javaClassContent.append(PUBLIC + type + " " + prefix + methodName + "() throws Exception" + ENTER);
+            }
+            else
+            {
+                javaClassContent.append(PUBLIC + type + " " + prefix + methodName + "()" + ENTER);
+            }
+            javaClassContent.append(OPEN_BLOCK + ENTER);
+            if (tpp.isExternalInvocation())
+            {
+                String className = getClassName(tpc);
+                javaClassContent.append("        //Implement this method in " + className + " object" + ENTER);
+                javaClassContent.append("        throw new org.semanticwb.SWBMethodImplementationRequiredException();" + ENTER);
+
+            }
+            else
+            {
+                javaClassContent.append("        return " + getMethod + "(" + tpp.getPrefix() + "_" + tpp.getName() + ");" + ENTER);
+
+            }
+            javaClassContent.append(CLOSE_BLOCK + ENTER);
+
+            javaClassContent.append(ENTER);
+            if (type.equals("java.io.InputStream"))
+            {
+                javaClassContent.append(PUBLIC + "void set" + methodName + "(" + type + " " + propertyName + ",String name) throws Exception" + ENTER);
+            }
+            else
+            {
+                javaClassContent.append(PUBLIC + "void set" + methodName + "(" + type + " " + propertyName + ")" + ENTER);
+            }
+            javaClassContent.append(OPEN_BLOCK + ENTER);
+            if (tpp.isExternalInvocation())
+            {
+                String className = getClassName(tpc);
+                javaClassContent.append("        //Implement this method in " + className + " object" + ENTER);
+                javaClassContent.append("        throw new org.semanticwb.SWBMethodImplementationRequiredException();" + ENTER);
+
+            }
+            else
+            {
                 if (type.equals("java.io.InputStream"))
                 {
-                    javaClassContent.append(PUBLIC + type + " " + prefix + methodName + "() throws Exception" + ENTER);
+                    javaClassContent.append("        " + setMethod + "(" + tpp.getPrefix() + "_" + tpp.getName() + ", " + propertyName + ",name);" + ENTER);
                 }
                 else
                 {
-                    javaClassContent.append(PUBLIC + type + " " + prefix + methodName + "()" + ENTER);
-                }
-                javaClassContent.append(OPEN_BLOCK + ENTER);
-                if (tpp.isExternalInvocation())
-                {
-                    String className = getClassName(tpc);
-                    javaClassContent.append("        //Implement this method in " + className + " object" + ENTER);
-                    javaClassContent.append("        throw new org.semanticwb.SWBMethodImplementationRequiredException();" + ENTER);
-
-                }
-                else
-                {
-                    javaClassContent.append("        return " + getMethod + "(" + tpp.getPrefix() + "_" + tpp.getName() + ");" + ENTER);
-
-                }
-                javaClassContent.append(CLOSE_BLOCK + ENTER);
-
-                javaClassContent.append(ENTER);
-                if (type.equals("java.io.InputStream"))
-                {
-                    javaClassContent.append(PUBLIC + "void set" + methodName + "(" + type + " " + propertyName + ",String name) throws Exception" + ENTER);
-                }
-                else
-                {
-                    javaClassContent.append(PUBLIC + "void set" + methodName + "(" + type + " " + propertyName + ")" + ENTER);
-                }
-                javaClassContent.append(OPEN_BLOCK + ENTER);
-                if (tpp.isExternalInvocation())
-                {
-                    String className = getClassName(tpc);
-                    javaClassContent.append("        //Implement this method in " + className + " object" + ENTER);
-                    javaClassContent.append("        throw new org.semanticwb.SWBMethodImplementationRequiredException();" + ENTER);
-
-                }
-                else
-                {
-                    if (type.equals("java.io.InputStream"))
-                    {
-                        javaClassContent.append("        " + setMethod + "(" + tpp.getPrefix() + "_" + tpp.getName() + ", " + propertyName + ",name);" + ENTER);
-                    }
-                    else
-                    {
-                        javaClassContent.append("        " + setMethod + "(" + tpp.getPrefix() + "_" + tpp.getName() + ", " + propertyName + ");" + ENTER);
-                    }
-                }
-                javaClassContent.append(CLOSE_BLOCK + ENTER);
-
-                if (tpp.isLocaleable())
-                {
-                    javaClassContent.append(ENTER);
-                    javaClassContent.append(PUBLIC + type + " " + prefix + methodName + "(String lang)" + ENTER);
-                    javaClassContent.append(OPEN_BLOCK + ENTER);
-                    if (tpp.isExternalInvocation())
-                    {
-                        String className = getClassName(tpc);
-                        javaClassContent.append("        //Implement this method in " + className + " object" + ENTER);
-                        javaClassContent.append("        throw new org.semanticwb.SWBMethodImplementationRequiredException();" + ENTER);
-
-                    }
-                    else
-                    {
-                        javaClassContent.append("        return " + getMethod + "(" + tpp.getPrefix() + "_" + tpp.getName() + ", null, lang);" + ENTER);
-                    }
-                    javaClassContent.append(CLOSE_BLOCK + ENTER);
-
-                    if (type.equals("String"))
-                    {
-                        javaClassContent.append(ENTER);
-                        javaClassContent.append(PUBLIC + type + " " + prefix + "Display" + methodName + "(String lang)" + ENTER);
-                        javaClassContent.append(OPEN_BLOCK + ENTER);
-                        javaClassContent.append("        return " + "getSemanticObject().getLocaleProperty" + "(" + tpp.getPrefix() + "_" + tpp.getName() + ", lang);" + ENTER);
-                        javaClassContent.append(CLOSE_BLOCK + ENTER);
-                    }
-
-                    javaClassContent.append(ENTER);
-                    javaClassContent.append(PUBLIC + "void set" + methodName + "(" + type + " " + tpp.getName() + ", String lang)" + ENTER);
-                    javaClassContent.append(OPEN_BLOCK + ENTER);
-                    if (tpp.isExternalInvocation())
-                    {
-                        String className = getClassName(tpc);
-                        javaClassContent.append("        //Implement this method in " + className + " object" + ENTER);
-                        javaClassContent.append("        throw new org.semanticwb.SWBMethodImplementationRequiredException();" + ENTER);
-
-                    }
-                    else
-                    {
-                        javaClassContent.append("        " + setMethod + "(" + tpp.getPrefix() + "_" + tpp.getName() + ", " + tpp.getName() + ", lang);" + ENTER);
-                    }
-                    javaClassContent.append(CLOSE_BLOCK + ENTER);
+                    javaClassContent.append("        " + setMethod + "(" + tpp.getPrefix() + "_" + tpp.getName() + ", " + propertyName + ");" + ENTER);
                 }
             }
-            catch (URISyntaxException usie)
+            javaClassContent.append(CLOSE_BLOCK + ENTER);
+
+            if (tpp.isLocaleable())
             {
-                log.error(usie);
+                javaClassContent.append(ENTER);
+                javaClassContent.append(PUBLIC + type + " " + prefix + methodName + "(String lang)" + ENTER);
+                javaClassContent.append(OPEN_BLOCK + ENTER);
+                if (tpp.isExternalInvocation())
+                {
+                    String className = getClassName(tpc);
+                    javaClassContent.append("        //Implement this method in " + className + " object" + ENTER);
+                    javaClassContent.append("        throw new org.semanticwb.SWBMethodImplementationRequiredException();" + ENTER);
+
+                }
+                else
+                {
+                    javaClassContent.append("        return " + getMethod + "(" + tpp.getPrefix() + "_" + tpp.getName() + ", null, lang);" + ENTER);
+                }
+                javaClassContent.append(CLOSE_BLOCK + ENTER);
+
+                if (type.equals("String"))
+                {
+                    javaClassContent.append(ENTER);
+                    javaClassContent.append(PUBLIC + type + " " + prefix + "Display" + methodName + "(String lang)" + ENTER);
+                    javaClassContent.append(OPEN_BLOCK + ENTER);
+                    javaClassContent.append("        return " + "getSemanticObject().getLocaleProperty" + "(" + tpp.getPrefix() + "_" + tpp.getName() + ", lang);" + ENTER);
+                    javaClassContent.append(CLOSE_BLOCK + ENTER);
+                }
+
+                javaClassContent.append(ENTER);
+                javaClassContent.append(PUBLIC + "void set" + methodName + "(" + type + " " + tpp.getName() + ", String lang)" + ENTER);
+                javaClassContent.append(OPEN_BLOCK + ENTER);
+                if (tpp.isExternalInvocation())
+                {
+                    String className = getClassName(tpc);
+                    javaClassContent.append("        //Implement this method in " + className + " object" + ENTER);
+                    javaClassContent.append("        throw new org.semanticwb.SWBMethodImplementationRequiredException();" + ENTER);
+
+                }
+                else
+                {
+                    javaClassContent.append("        " + setMethod + "(" + tpp.getPrefix() + "_" + tpp.getName() + ", " + tpp.getName() + ", lang);" + ENTER);
+                }
+                javaClassContent.append(CLOSE_BLOCK + ENTER);
             }
         }
 
