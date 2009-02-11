@@ -52,6 +52,7 @@ public class TitleAndDescription extends WizardPage
         }
         catch (Exception e)
         {
+            e.printStackTrace();
         }
     }
 
