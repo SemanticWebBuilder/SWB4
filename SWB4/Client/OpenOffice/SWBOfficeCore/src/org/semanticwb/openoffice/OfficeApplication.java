@@ -4,6 +4,7 @@
  */
 package org.semanticwb.openoffice;
 
+import java.awt.Frame;
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -20,6 +21,7 @@ import org.semanticwb.openoffice.interfaces.IOpenOfficeDocument;
 import org.semanticwb.openoffice.ui.dialogs.DialogAbout;
 import org.semanticwb.openoffice.ui.dialogs.DialogChangePassword;
 import org.semanticwb.openoffice.ui.dialogs.DialogLogin;
+import org.semanticwb.openoffice.ui.dialogs.DialogPreview;
 import org.semanticwb.openoffice.ui.wizard.Search;
 import org.semanticwb.openoffice.ui.wizard.SelectDirectory;
 import org.semanticwb.openoffice.ui.wizard.SelectPage;
@@ -37,6 +39,7 @@ public abstract class OfficeApplication
 
     public static SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     private static final String DELETE_CONFIGURATION_ERROR = "Error trying to get the proxy server, delete the file ";
+    private static final String HELP_URL = "http://www.webbuilder.org.mx";
     private static MenuListener menuListener;
     private static UserInfo userInfo = null;
     private static URI webAddress = null;
@@ -279,6 +282,10 @@ public abstract class OfficeApplication
     {
         DialogAbout dialog = new DialogAbout(new javax.swing.JFrame(), true);        
         dialog.setVisible(true);
+    }
+    public static final void showHelp()
+    {
+        DialogPreview.showInBrowser(HELP_URL,new Frame());
     }
 
     public static URI getWebAddress() throws WBException
