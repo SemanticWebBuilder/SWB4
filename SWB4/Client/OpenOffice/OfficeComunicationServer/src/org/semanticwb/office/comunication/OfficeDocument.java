@@ -40,6 +40,7 @@ import org.semanticwb.office.interfaces.PropertyInfo;
 import org.semanticwb.office.interfaces.SiteInfo;
 import org.semanticwb.office.interfaces.VersionInfo;
 import org.semanticwb.office.interfaces.WebPageInfo;
+import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portlet.office.ExcelPortlet;
@@ -763,12 +764,38 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         ArrayList<PropertyInfo> properties = new ArrayList<PropertyInfo>();
         return properties.toArray(new PropertyInfo[properties.size()]);
     }
-    public PropertyInfo[] getPortletProperties(PortletInfo portletInfo) throws Exception
+    public void setPropertyValue(PortletInfo portletInfo, PropertyInfo propertyInfo, String value) throws Exception
+    {
+        WebSite site=SWBContext.getWebSite(portletInfo.page.site.id);
+        OfficePortlet portlet=OfficePortlet.getOfficePortlet(portletInfo.id, site);
+        SemanticProperty prop=site.getSemanticObject().getModel().getSemanticProperty(propertyInfo.id);
+        portlet.getSemanticObject().setProperty(prop, value);
+    }
+    public String getPropertyValue(PortletInfo portletInfo,PropertyInfo propertyInfo) throws Exception
+    {
+        WebSite site=SWBContext.getWebSite(portletInfo.page.site.id);
+        OfficePortlet portlet=OfficePortlet.getOfficePortlet(portletInfo.id, site);
+        SemanticProperty prop=site.getSemanticObject().getModel().getSemanticProperty(propertyInfo.id);
+        return portlet.getSemanticObject().getProperty(prop);
+    }
+    public PropertyInfo[] getPortletProperties(String repositoryName, String contentID) throws Exception
     {
         ArrayList<PropertyInfo> properties = new ArrayList<PropertyInfo>();
-        WebSite site = SWBContext.getWebSite(portletInfo.page.site.id);
-        OfficePortlet portlet = OfficePortlet.getOfficePortlet(portletInfo.id,site);
-        Iterator<SemanticProperty> propertiesClazz = portlet.getSemanticObject().getSemanticClass().listProperties();
+        String type=getContentType(repositoryName, contentID);
+        SemanticClass clazz=null;
+        if(type.equalsIgnoreCase("excel"))
+        {
+            clazz=ExcelPortlet.sclass;
+        }
+        else if(type.equalsIgnoreCase("ppt"))
+        {
+            clazz=PPTPortlet.sclass;
+        }
+        else
+        {
+            clazz=WordPortlet.sclass;
+        }
+        Iterator<SemanticProperty> propertiesClazz = clazz.listProperties();
         while (propertiesClazz.hasNext())
         {
             SemanticProperty prop = propertiesClazz.next();
@@ -899,7 +926,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return name;
     }
 
-    public String getContentType(String repositoryName, String contentId, String version) throws Exception
+    public String getContentType(String repositoryName, String contentId) throws Exception
     {
         Session session = null;
         try
@@ -1053,6 +1080,10 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
         OfficePortlet.clean(dir);
     }
+
+
+
+
 
 
 }
