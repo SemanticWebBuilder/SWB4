@@ -265,7 +265,7 @@ public class WB4WriterTest
 
     }
     @Test
-    @Ignore
+    //@Ignore
     public void publishTest()
     {
         try
@@ -324,7 +324,7 @@ public class WB4WriterTest
     }
 
     @Test
-    //@Ignore
+    @Ignore
     public void addLinkTest()
     {
         try
