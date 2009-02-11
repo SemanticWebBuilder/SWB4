@@ -14,6 +14,7 @@ public class PropertyInfo {
     public String title;
     public String type;
     public boolean isRequired;
+    public String id;
     @Override
     public String toString()
     {
@@ -38,9 +39,12 @@ public class PropertyInfo {
     @Override
     public int hashCode()
     {
-        int hash = 3;
-        hash = 59 * hash + (this.id != null ? this.id.hashCode() : 0);
+        int hash = 7;
+        hash = 71 * hash + (this.id != null ? this.id.hashCode() : 0);
         return hash;
     }
-    public String id;
+
+
+    
+    
 }
