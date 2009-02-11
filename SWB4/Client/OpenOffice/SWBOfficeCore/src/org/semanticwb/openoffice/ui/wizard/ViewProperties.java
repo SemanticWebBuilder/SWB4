@@ -337,6 +337,7 @@ public class ViewProperties extends WizardPage
             this.col = col;
             SpinnerModel model =new SpinnerNumberModel(0,0,9999,1);      
             this.setModel(model);
+            this.setEditor(new JSpinner.NumberEditor(this,"####"));
         }
     }
     class StringEditor extends JTextField
