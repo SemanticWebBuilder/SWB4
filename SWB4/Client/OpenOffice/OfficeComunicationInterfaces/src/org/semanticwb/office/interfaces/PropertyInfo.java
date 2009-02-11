@@ -33,16 +33,22 @@ public class PropertyInfo {
             return false;
         }
         final PropertyInfo other = (PropertyInfo) obj;
+        if ((this.id == null) ? (other.id != null) : !this.id.equals(other.id))
+        {
+            return false;
+        }
         return true;
     }
 
     @Override
     public int hashCode()
     {
-        int hash = 7;
-        hash = 71 * hash + (this.id != null ? this.id.hashCode() : 0);
+        int hash = 5;
+        hash = 41 * hash + (this.id != null ? this.id.hashCode() : 0);
         return hash;
     }
+
+   
 
 
     
