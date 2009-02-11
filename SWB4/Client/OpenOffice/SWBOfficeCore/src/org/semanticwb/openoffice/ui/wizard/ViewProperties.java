@@ -23,6 +23,7 @@ import javax.swing.AbstractCellEditor;
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
@@ -88,11 +89,11 @@ public class ViewProperties extends WizardPage
                 }
                 if (PropertyInfo.type.equalsIgnoreCase("integer"))
                 {
-                    JTextField JTextField = new JTextField();
-                    JTextField.setDocument(new NumericPlainDocument(4, new DecimalFormat("####")));
+                    IntegerEditor JTextField = new IntegerEditor(row,column);
+                    
                     if (value == null)
                     {
-                        JTextField.setText("0");
+                        JTextField.setValue(0);
                     }
                     else
                     {
@@ -106,13 +107,13 @@ public class ViewProperties extends WizardPage
                         {
                             nfe.printStackTrace();
                         }
-                        JTextField.setText(String.valueOf(ivalue));
+                        JTextField.setValue(ivalue);
                     }
                     return JTextField;
                 }
                 if (PropertyInfo.type.equalsIgnoreCase("String"))
                 {
-                    JTextField JTextField = new JTextField();
+                    StringEditor JTextField = new StringEditor(row, column);
                     if (value == null)
                     {
                         JTextField.setText("");
@@ -186,7 +187,7 @@ public class ViewProperties extends WizardPage
                 PropertyInfo PropertyInfo = (PropertyInfo) prop;
                 if (PropertyInfo.type.equalsIgnoreCase("boolean"))
                 {
-                    CellComboBox jCheckBox = new CellComboBox(row, column);
+                    BooleanEditor jCheckBox = new BooleanEditor(row, column);
                     jCheckBox.setBackground(new Color(255, 255, 255));
                     JPanel panel = new JPanel();
                     panel.add(jCheckBox);
@@ -207,30 +208,12 @@ public class ViewProperties extends WizardPage
                 }
                 if (PropertyInfo.type.equalsIgnoreCase("integer"))
                 {
-                    CellTextBox JTextField = new CellTextBox(row, column);
-                    JTextField.addKeyListener(this);
-                    JTextField.addFocusListener(new FocusListener()
-                    {
-
-                        public void focusGained(FocusEvent e)
-                        {
-                            if (e.getSource() instanceof CellTextBox)
-                            {
-                                CellTextBox CellTextBox = (CellTextBox) e.getSource();
-                                CellTextBox.setSelectionStart(0);
-                                CellTextBox.setSelectionEnd(CellTextBox.getText().length());
-                            }
-                        }
-
-                        public void focusLost(FocusEvent e)
-                        {
-                        }
-                    });
-
-                    JTextField.setDocument(new NumericPlainDocument(4, new DecimalFormat("####")));
+                    IntegerEditor integerEditor = new IntegerEditor(row, column);
+                    integerEditor.addChangeListener(this);
+                    integerEditor.addKeyListener(this);
                     if (value == null)
                     {
-                        JTextField.setText("0");
+                        integerEditor.setValue(0);
                     }
                     else
                     {
@@ -244,25 +227,25 @@ public class ViewProperties extends WizardPage
                         {
                             nfe.printStackTrace();
                         }
-                        JTextField.setText(String.valueOf(ivalue));
+                        integerEditor.setValue(ivalue);
                     }
 
-                    return JTextField;
+                    return integerEditor;
                 }
                 if (PropertyInfo.type.equalsIgnoreCase("string"))
                 {
-                    CellTextBox JTextField = new CellTextBox(row, column);
-                    JTextField.addKeyListener(this);
-                    JTextField.addFocusListener(new FocusListener()
+                    StringEditor stringEditor = new StringEditor(row, column);
+                    stringEditor.addKeyListener(this);
+                    stringEditor.addFocusListener(new FocusListener()
                     {
 
                         public void focusGained(FocusEvent e)
                         {
-                            if (e.getSource() instanceof CellTextBox)
+                            if (e.getSource() instanceof StringEditor)
                             {
-                                CellTextBox CellTextBox = (CellTextBox) e.getSource();
-                                CellTextBox.setSelectionStart(0);
-                                CellTextBox.setSelectionEnd(CellTextBox.getText().length());
+                                StringEditor stringEditor = (StringEditor) e.getSource();
+                                stringEditor.setSelectionStart(0);
+                                stringEditor.setSelectionEnd(stringEditor.getText().length());
                             }
                         }
 
@@ -273,14 +256,14 @@ public class ViewProperties extends WizardPage
 
                     if (value == null)
                     {
-                        JTextField.setText("");
+                        stringEditor.setText("");
                     }
                     else
                     {
-                        JTextField.setText(value.toString());
+                        stringEditor.setText(value.toString());
                     }
 
-                    return JTextField;
+                    return stringEditor;
                 }
             }
             return null;
@@ -288,10 +271,15 @@ public class ViewProperties extends WizardPage
 
         public void stateChanged(ChangeEvent e)
         {
-            if (e.getSource() instanceof CellComboBox)
+            if (e.getSource() instanceof BooleanEditor)
             {
-                CellComboBox CellComboBox = (CellComboBox) e.getSource();
-                jTableProperties.setValueAt(CellComboBox.isSelected(), CellComboBox.row, CellComboBox.col);
+                BooleanEditor booleanEditor = (BooleanEditor) e.getSource();
+                jTableProperties.setValueAt(booleanEditor.isSelected(), booleanEditor.row, booleanEditor.col);
+            }
+            if (e.getSource() instanceof IntegerEditor)
+            {
+                IntegerEditor integerEditor = (IntegerEditor) e.getSource();
+                jTableProperties.setValueAt(integerEditor.getValue(), integerEditor.row, integerEditor.col);
             }
 
         }
@@ -306,39 +294,55 @@ public class ViewProperties extends WizardPage
 
         public void keyReleased(KeyEvent e)
         {
-            if (e.getSource() instanceof CellTextBox)
+            if (e.getSource() instanceof IntegerEditor)
             {
-                CellTextBox CellTextBox = (CellTextBox) e.getSource();
-                if (CellTextBox.getText().isEmpty())
+                IntegerEditor CellTextBox = (IntegerEditor) e.getSource();
+                if (CellTextBox.getValue()==null)
                 {
-                    jTableProperties.setValueAt("0", CellTextBox.row, CellTextBox.col);
+                    jTableProperties.setValueAt(0, CellTextBox.row, CellTextBox.col);
                 }
                 else
                 {
-                    jTableProperties.setValueAt(CellTextBox.getText(), CellTextBox.row, CellTextBox.col);
+                    jTableProperties.setValueAt(CellTextBox.getValue(), CellTextBox.row, CellTextBox.col);
                 }
+            }
+            if (e.getSource() instanceof IntegerEditor)
+            {
+                IntegerEditor integerEditor = (IntegerEditor) e.getSource();
+                jTableProperties.setValueAt(integerEditor.getValue(), integerEditor.row, integerEditor.col);
             }
         }
     }
 
-    class CellComboBox extends JCheckBox
+    class BooleanEditor extends JCheckBox
     {
 
         int row, col;
 
-        public CellComboBox(int row, int col)
+        public BooleanEditor(int row, int col)
         {
             this.row = row;
             this.col = col;
         }
     }
 
-    class CellTextBox extends JTextField
+    class IntegerEditor extends JSpinner
     {
 
         int row, col;
 
-        public CellTextBox(int row, int col)
+        public IntegerEditor(int row, int col)
+        {
+            this.row = row;
+            this.col = col;
+        }
+    }
+    class StringEditor extends JTextField
+    {
+
+        int row, col;
+
+        public StringEditor(int row, int col)
         {
             this.row = row;
             this.col = col;
