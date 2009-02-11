@@ -232,6 +232,20 @@
               <SubComponents>
                 <Component class="javax.swing.JToolBar$Separator" name="jSeparator1">
                 </Component>
+                <Component class="javax.swing.JButton" name="jButtonEdit">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Editar"/>
+                    <Property name="enabled" type="boolean" value="false"/>
+                    <Property name="focusable" type="boolean" value="false"/>
+                    <Property name="horizontalTextPosition" type="int" value="0"/>
+                    <Property name="verticalTextPosition" type="int" value="3"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonEditActionPerformed"/>
+                  </Events>
+                </Component>
+                <Component class="javax.swing.JToolBar$Separator" name="jSeparator5">
+                </Component>
                 <Component class="javax.swing.JButton" name="jButtonPublish">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Publicar en una p&#xe1;gina"/>
