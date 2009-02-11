@@ -34,6 +34,9 @@
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
         <Component class="javax.swing.JTree" name="jTreeSite">
+          <Properties>
+            <Property name="rowHeight" type="int" value="20"/>
+          </Properties>
           <Events>
             <EventHandler event="valueChanged" listener="javax.swing.event.TreeSelectionListener" parameters="javax.swing.event.TreeSelectionEvent" handler="jTreeSiteValueChanged"/>
             <EventHandler event="treeWillExpand" listener="javax.swing.event.TreeWillExpandListener" parameters="javax.swing.event.TreeExpansionEvent" handler="jTreeSiteTreeWillExpand"/>

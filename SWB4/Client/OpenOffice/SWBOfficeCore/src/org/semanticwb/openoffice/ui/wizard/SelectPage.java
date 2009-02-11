@@ -14,7 +14,9 @@ import javax.swing.JPanel;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.DefaultTreeSelectionModel;
 import javax.swing.tree.TreeCellRenderer;
+import javax.swing.tree.TreeSelectionModel;
 import org.netbeans.spi.wizard.WizardPage;
 import org.semanticwb.office.interfaces.WebPageInfo;
 import org.semanticwb.office.interfaces.WebSiteInfo;
@@ -33,14 +35,82 @@ public class SelectPage extends WizardPage
     public SelectPage()
     {
         initComponents();
+        DefaultTreeSelectionModel selectionModel = new DefaultTreeSelectionModel();
+        selectionModel.setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+        jTreeSite.setSelectionModel(selectionModel);
         loadTree();
+    }
+
+    class TreeRender extends JPanel implements TreeCellRenderer
+    {
+
+        public Component getTreeCellRendererComponent(JTree tree, Object object, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus)
+        {
+            Component component = this;
+            tree.setToolTipText("");
+            if (object instanceof Site)
+            {
+                component = ((Site) object).getComponent();
+                if (hasFocus)
+                {
+                    //tree.setToolTipText(((Site) object).);
+                }
+            }
+            if (object instanceof WebPage)
+            {
+                component = ((WebPage) object).getComponent();
+                if (hasFocus)
+                {
+                    tree.setToolTipText(((WebPage) object).description);
+                }
+            }
+            if (component != null && component instanceof JLabel)
+            {
+                JLabel label = (JLabel) component;
+
+                label.setFont(tree.getFont());
+                if (object instanceof WebPage)
+                {
+                    if (object instanceof HomeWebPage)
+                    {
+                        label.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/home.png")));
+                    }
+                    else
+                    {
+                        label.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/page.png")));
+                    }
+                }
+                else
+                {
+                    label.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/site.png")));
+                }
+                if (expanded)
+                {
+                }
+                else
+                {
+                }
+                if (selected)
+                {
+                    label.setBackground(Color.BLUE);
+                    label.setForeground(Color.WHITE);
+                }
+                else
+                {
+                    label.setBackground(tree.getBackground());
+                    label.setForeground(tree.getForeground());
+                }
+            }
+            return component;
+
+        }
     }
 
     private void loadTree()
     {
         this.jTreeSite.setCellRenderer(new TreeRender());
         this.jTreeSite.setEditable(false);
-        DefaultMutableTreeNode repositories = new Site("","Sitios");
+        DefaultMutableTreeNode repositories = new Site("", "Sitios");
         DefaultTreeModel model = new DefaultTreeModel(repositories);
         this.jTreeSite.setModel(model);
 
@@ -51,14 +121,14 @@ public class SelectPage extends WizardPage
                 Site repositoryNode = new Site(website.id, website.title);
                 model.insertNodeInto(repositoryNode, repositories, 0);
                 WebPageInfo home = OfficeApplication.getOfficeApplicationProxy().getHomePage(website);
-                WebPage child = new WebPage(home.id, home.title, home.description, website.id,home.url);
+                HomeWebPage child = new HomeWebPage(home.id, home.title, home.description, website.id, home.url);
                 repositoryNode.add(child);
-                if(home.childs>0)
+                if (home.childs > 0)
                 {
-                    DefaultMutableTreeNode dummy=new DefaultMutableTreeNode();
+                    DefaultMutableTreeNode dummy = new DefaultMutableTreeNode();
                     child.add(dummy);
                 }
-                //addWebPage(home,child);
+            //addWebPage(home,child);
             }
         }
         catch (Exception wbe)
@@ -84,16 +154,16 @@ public class SelectPage extends WizardPage
     {
         try
         {
-            WebPageInfo parent=new WebPageInfo();
-            parent.id=nodeParent.id;
-            parent.siteID=nodeParent.webSite;
+            WebPageInfo parent = new WebPageInfo();
+            parent.id = nodeParent.id;
+            parent.siteID = nodeParent.webSite;
             for (WebPageInfo webpage : OfficeApplication.getOfficeApplicationProxy().getPages(parent))
             {
-                WebPage child = new WebPage(webpage.id, webpage.title, webpage.description, webpage.siteID,webpage.url);
+                WebPage child = new WebPage(webpage.id, webpage.title, webpage.description, webpage.siteID, webpage.url);
                 nodeParent.add(child);
-                if(webpage.childs>0)
+                if (webpage.childs > 0)
                 {
-                     DefaultMutableTreeNode dummy=new DefaultMutableTreeNode();
+                    DefaultMutableTreeNode dummy = new DefaultMutableTreeNode();
                     child.add(dummy);
                 }
             }
@@ -126,6 +196,7 @@ public class SelectPage extends WizardPage
         setPreferredSize(new java.awt.Dimension(500, 322));
         setLayout(new java.awt.BorderLayout());
 
+        jTreeSite.setRowHeight(20);
         jTreeSite.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
             public void valueChanged(javax.swing.event.TreeSelectionEvent evt) {
                 jTreeSiteValueChanged(evt);
@@ -169,7 +240,7 @@ public class SelectPage extends WizardPage
 private void jTreeSiteValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_jTreeSiteValueChanged
     this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
     Object selected = this.jTreeSite.getLastSelectedPathComponent();
-    this.getWizardDataMap().put(WEBPAGE, null);    
+    this.getWizardDataMap().put(WEBPAGE, null);
     if (selected != null && selected instanceof Site)
     {
         if (((Site) selected).toString().equals("Sitios"))
@@ -180,49 +251,51 @@ private void jTreeSiteValueChanged(javax.swing.event.TreeSelectionEvent evt) {//
         {
 
             Site rep = (Site) selected;
-            if(rep.getChildCount()==0)
+            if (rep.getChildCount() == 0)
             {
-                JOptionPane.showMessageDialog(this, "¡No existen páginas en este sitio!\r\nDebe crear una pagina para poder publicar el contenido",getDescription(),JOptionPane.ERROR_MESSAGE);
-            }            
+                JOptionPane.showMessageDialog(this, "¡No existen páginas en este sitio!\r\nDebe crear una pagina para poder publicar el contenido", getDescription(), JOptionPane.ERROR_MESSAGE);
+            }
             this.jButtonAddPage.setEnabled(true);
         }
-    }
-    else
-    {
-        this.jButtonAddPage.setEnabled(true);
     }
     this.jButtonAddPage.setEnabled(false);
     if (selected != null && selected instanceof WebPage)
     {
-        WebPage siteNode = (WebPage) selected;        
-        this.getWizardDataMap().put(WEBPAGE, siteNode);        
+        WebPage siteNode = (WebPage) selected;
+        this.getWizardDataMap().put(WEBPAGE, siteNode);
+        this.jButtonAddPage.setEnabled(true);
     }
     this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 }//GEN-LAST:event_jTreeSiteValueChanged
 
 private void jButtonAddPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddPageActionPerformed
-    Object selected = this.jTreeSite.getLastSelectedPathComponent();
+    Object selected = this.jTreeSite.getSelectionPath().getLastPathComponent();
     if (selected != null && selected instanceof WebPage)
     {
-        WebPage siteNode = (WebPage) selected; 
-        WebPageInfo info=new WebPageInfo();
-        info.id=siteNode.id;
-        info.siteID=siteNode.webSite;
-        OfficeApplication.createPage(info);    
+        boolean isExpanded=jTreeSite.isExpanded(this.jTreeSite.getSelectionPath());
+        WebPage siteNode = (WebPage) selected;
+        WebPageInfo info = new WebPageInfo();
+        info.id = siteNode.id;
+        info.siteID = siteNode.webSite;
+        OfficeApplication.createPage(info);
         siteNode.removeAllChildren();
-        info.title=siteNode.title;
-        info.description=siteNode.description;
+        info.title = siteNode.title;
+        info.description = siteNode.description;
         addWebPage(siteNode);
+        if(isExpanded)
+        {
+            jTreeSite.expandPath(this.jTreeSite.getSelectionPath());
+        }
     }
 }//GEN-LAST:event_jButtonAddPageActionPerformed
 
 private void jTreeSiteTreeWillExpand(javax.swing.event.TreeExpansionEvent evt)throws javax.swing.tree.ExpandVetoException//GEN-FIRST:event_jTreeSiteTreeWillExpand
 {//GEN-HEADEREND:event_jTreeSiteTreeWillExpand
-    Object selected=evt.getPath().getLastPathComponent();
-    if(selected instanceof WebPage && ((WebPage)selected).getChildCount()==1 && !(((WebPage)selected).getChildAt(0) instanceof WebPage))
+    Object selected = evt.getPath().getLastPathComponent();
+    if (selected instanceof WebPage && ((WebPage) selected).getChildCount() == 1 && !(((WebPage) selected).getChildAt(0) instanceof WebPage))
     {
         this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-        WebPage node=(WebPage)selected;
+        WebPage node = (WebPage) selected;
         node.removeAllChildren();
         addWebPage(node);
         this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
@@ -236,6 +309,7 @@ private void jTreeSiteTreeWillExpand(javax.swing.event.TreeExpansionEvent evt)th
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JTree jTreeSite;
     // End of variables declaration//GEN-END:variables
+
     interface ToolTipTreeNode
     {
 
@@ -291,6 +365,15 @@ private void jTreeSiteTreeWillExpand(javax.swing.event.TreeExpansionEvent evt)th
         }
     }
 
+    public class HomeWebPage extends WebPage
+    {
+
+        public HomeWebPage(String id, String title, String description, String webSite, String url)
+        {
+            super(id, title, description, webSite, url);
+        }
+    }
+
     public class WebPage extends DefaultMutableTreeNode implements ToolTipTreeNode
     {
 
@@ -300,21 +383,24 @@ private void jTreeSiteTreeWillExpand(javax.swing.event.TreeExpansionEvent evt)th
         private String description;
         private String webSite;
         private String url;
-        public WebPage(String id, String title, String description, String webSite,String url)
+
+        public WebPage(String id, String title, String description, String webSite, String url)
         {
             this.id = id;
             this.title = title;
             this.description = description;
             this.webSite = webSite;
-            this.url=url;
+            this.url = url;
             component.setText(title);
             component.setToolTipText(description);
             component.setOpaque(true);
         }
+
         public String getURL()
         {
             return url;
         }
+
         public String getSite()
         {
             return this.webSite;
@@ -362,66 +448,6 @@ private void jTreeSiteTreeWillExpand(javax.swing.event.TreeExpansionEvent evt)th
         public JLabel getComponent()
         {
             return component;
-        }
-    }
-
-    class TreeRender extends JPanel implements TreeCellRenderer
-    {
-
-        public Component getTreeCellRendererComponent(JTree tree, Object object, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus)
-        {
-            Component component = this;
-            tree.setToolTipText("");
-            if (object instanceof Site)
-            {
-                component = ((Site) object).getComponent();
-                if (hasFocus)
-                {
-                    //tree.setToolTipText(((Site) object).);
-                }
-            }
-            if (object instanceof WebPage)
-            {
-                component = ((WebPage) object).getComponent();
-                if (hasFocus)
-                {
-                    tree.setToolTipText(((WebPage) object).description);
-                }
-            }
-            if (component != null && component instanceof JLabel)
-            {
-                JLabel label = (JLabel) component;
-
-                label.setFont(tree.getFont());
-                if (object instanceof WebPage)
-                {
-                    label.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/page.png")));
-                }
-                else
-                {
-                    label.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/site.png")));
-                }
-                if (expanded)
-                {
-                    
-                }
-                else
-                {
-                    
-                }
-                if (selected)
-                {
-                    label.setBackground(Color.BLUE);
-                    label.setForeground(Color.WHITE);
-                }
-                else
-                {
-                    label.setBackground(tree.getBackground());
-                    label.setForeground(tree.getForeground());
-                }
-            }
-            return component;
-
         }
     }
 }
