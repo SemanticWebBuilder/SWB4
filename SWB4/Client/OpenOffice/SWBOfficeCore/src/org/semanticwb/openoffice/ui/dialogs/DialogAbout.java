@@ -20,7 +20,7 @@ public class DialogAbout extends javax.swing.JDialog {
         initComponents();
         setLocationRelativeTo(null);
         this.add(new AboutBackGound(this),BorderLayout.CENTER);
-        this.setSize(510, 335);
+        this.setSize(505, 335);
     }
     
     /** This method is called from within the constructor to
