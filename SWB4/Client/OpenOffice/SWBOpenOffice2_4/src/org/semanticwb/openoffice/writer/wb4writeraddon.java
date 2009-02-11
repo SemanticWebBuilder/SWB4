@@ -206,11 +206,18 @@ public final class wb4writeraddon extends WeakBase
                     }
                 }
                 if (aURL.Path.compareTo("addLink") == 0)
-                {                    
-                    return this;
+                {
+                    if (document.isPublicated())
+                    {
+                        return this;
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
                 if (aURL.Path.compareTo("createSection") == 0)
-                {                 
+                {
                     return this;
                 }
                 if (aURL.Path.compareTo("changePassword") == 0)
@@ -218,11 +225,11 @@ public final class wb4writeraddon extends WeakBase
                     return this;
                 }
                 if (aURL.Path.compareTo("help") == 0)
-                {                 
+                {
                     return this;
                 }
                 if (aURL.Path.compareTo("about") == 0)
-                {                    
+                {
                     return this;
                 }
                 if (aURL.Path.compareTo("closeSession") == 0)
@@ -361,9 +368,9 @@ public final class wb4writeraddon extends WeakBase
     public void addStatusListener(com.sun.star.frame.XStatusListener xControl,
             com.sun.star.util.URL aURL)
     {
-        FeatureStateEvent aState = new FeatureStateEvent();        
+        FeatureStateEvent aState = new FeatureStateEvent();
         aState.FeatureURL = aURL;
-        if(queryDispatch(aURL,"",0)==null)
+        if (queryDispatch(aURL, "", 0) == null)
         {
             aState.IsEnabled = false;
         }
@@ -371,7 +378,7 @@ public final class wb4writeraddon extends WeakBase
         {
             aState.IsEnabled = true;
         }
-        xControl.statusChanged(aState);        
+        xControl.statusChanged(aState);
     }
 
     public void removeStatusListener(com.sun.star.frame.XStatusListener xControl,
