@@ -34,11 +34,12 @@ import org.semanticwb.openoffice.util.NumericPlainDocument;
  */
 public class DialogEditPorlet extends javax.swing.JDialog
 {
+
     private String repositoryName,  contentID;
     private PortletInfo pageInformation;
 
     /** Creates new form DialogContentPublicationInformation */
-    public DialogEditPorlet(java.awt.Frame parent, boolean modal, PortletInfo pageInformation,String repositoryName, String contentID)
+    public DialogEditPorlet(java.awt.Frame parent, boolean modal, PortletInfo pageInformation, String repositoryName, String contentID)
     {
         super(parent, modal);
         initComponents();
@@ -47,6 +48,79 @@ public class DialogEditPorlet extends javax.swing.JDialog
         this.contentID = contentID;
         loadProperties();
     }
+
+    class VersionRender implements TableCellRenderer
+    {
+
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                boolean isSelected, boolean hasFocus, int row, int column)
+        {
+            Object prop = table.getModel().getValueAt(row, 0);
+            if (prop instanceof PropertyInfo)
+            {
+                PropertyInfo PropertyInfo = (PropertyInfo) prop;
+                if (PropertyInfo.type.equalsIgnoreCase("boolean"))
+                {
+                    JCheckBox jCheckBox = new JCheckBox();
+                    jCheckBox.setBackground(new Color(255, 255, 255));
+                    JPanel panel = new JPanel();
+                    panel.add(jCheckBox);
+                    panel.setBackground(new Color(255, 255, 255));
+                    if (value == null)
+                    {
+                        jCheckBox.setSelected(false);
+                    }
+                    else
+                    {
+                        if (value instanceof Boolean)
+                        {
+                            jCheckBox.setSelected((Boolean) value);
+                        }
+                    }
+                    return panel;
+                }
+                if (PropertyInfo.type.equalsIgnoreCase("integer"))
+                {
+                    JTextField JTextField = new JTextField();
+                    JTextField.setDocument(new NumericPlainDocument(4, new DecimalFormat("####")));
+                    if (value == null)
+                    {
+                        JTextField.setText("0");
+                    }
+                    else
+                    {
+                        int ivalue = 0;
+                        try
+                        {
+                            ivalue = Integer.parseInt(value.toString());
+
+                        }
+                        catch (NumberFormatException nfe)
+                        {
+                            nfe.printStackTrace();
+                        }
+                        JTextField.setText(String.valueOf(ivalue));
+                    }
+                    return JTextField;
+                }
+                if (PropertyInfo.type.equalsIgnoreCase("String"))
+                {
+                    JTextField JTextField = new JTextField();
+                    if (value == null)
+                    {
+                        JTextField.setText("");
+                    }
+                    else
+                    {
+                        JTextField.setText(value.toString());
+                    }
+                    return JTextField;
+                }
+            }
+            return null;
+        }
+    }
+
     class PropertyEditor extends AbstractCellEditor implements TableCellEditor, ChangeListener, KeyListener
     {
 
@@ -230,12 +304,13 @@ public class DialogEditPorlet extends javax.swing.JDialog
             this.col = col;
         }
     }
+
     private void loadProperties()
     {
         DefaultTableModel model = (DefaultTableModel) jTableProperties.getModel();
         TableColumn col = jTableProperties.getColumnModel().getColumn(1);
         col.setCellEditor(new PropertyEditor());
-        col.setCellRenderer(new PropertyRender());
+        col.setCellRenderer(new VersionRender());
         int rows = model.getRowCount();
         for (int i = 1; i <= rows; i++)
         {
@@ -488,75 +563,4 @@ private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
     private javax.swing.JTable jTableVersions;
     private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
-}
-class PropertyRender implements TableCellRenderer
-{
-
-    public Component getTableCellRendererComponent(JTable table, Object value,
-            boolean isSelected, boolean hasFocus, int row, int column)
-    {
-        Object prop = table.getModel().getValueAt(row, 0);
-        if (prop instanceof PropertyInfo)
-        {
-            PropertyInfo PropertyInfo = (PropertyInfo) prop;
-            if (PropertyInfo.type.equalsIgnoreCase("boolean"))
-            {
-                JCheckBox jCheckBox = new JCheckBox();
-                jCheckBox.setBackground(new Color(255, 255, 255));
-                JPanel panel = new JPanel();
-                panel.add(jCheckBox);
-                panel.setBackground(new Color(255, 255, 255));
-                if (value == null)
-                {
-                    jCheckBox.setSelected(false);
-                }
-                else
-                {
-                    if (value instanceof Boolean)
-                    {
-                        jCheckBox.setSelected((Boolean) value);
-                    }
-                }
-                return panel;
-            }
-            if (PropertyInfo.type.equalsIgnoreCase("integer"))
-            {
-                JTextField JTextField = new JTextField();
-                JTextField.setDocument(new NumericPlainDocument(4, new DecimalFormat("####")));
-                if (value == null)
-                {
-                    JTextField.setText("0");
-                }
-                else
-                {
-                    int ivalue = 0;
-                    try
-                    {
-                        ivalue = Integer.parseInt(value.toString());
-
-                    }
-                    catch (NumberFormatException nfe)
-                    {
-                        nfe.printStackTrace();
-                    }
-                    JTextField.setText(String.valueOf(ivalue));
-                }
-                return JTextField;
-            }
-            if (PropertyInfo.type.equalsIgnoreCase("String"))
-            {
-                JTextField JTextField = new JTextField();
-                if (value == null)
-                {
-                    JTextField.setText("");
-                }
-                else
-                {
-                    JTextField.setText(value.toString());
-                }
-                return JTextField;
-            }
-        }
-        return null;
-    }
 }
