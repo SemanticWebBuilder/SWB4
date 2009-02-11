@@ -364,7 +364,7 @@ public class User extends UserBase implements Principal, java.io.Serializable
     }
 
     @Override
-    public boolean hasRole(org.semanticwb.model.Role role)
+    public boolean hasRole(Role role)
     {
         boolean ret=false;
         while(role!=null)
@@ -380,5 +380,29 @@ public class User extends UserBase implements Principal, java.io.Serializable
         }
         return ret;
     }
+
+    @Override
+    public boolean hasUserGroup(UserGroup group)
+    {
+        boolean ret=false;
+        Iterator<UserGroup> grpit=listUserGroups();
+        while(grpit.hasNext())
+        {
+            UserGroup grp=grpit.next();
+            while(grp!=null)
+            {
+                if(grp.equals(group))
+                {
+                    ret=true;
+                    break;
+                }else
+                {
+                    grp=grp.getParent();
+                }
+            }
+        }
+        return ret;
+    }
+
 
 }

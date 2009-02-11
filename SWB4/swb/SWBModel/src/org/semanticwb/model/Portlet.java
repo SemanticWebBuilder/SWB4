@@ -278,4 +278,38 @@ public class Portlet extends PortletBase
         setProperty("data/wp/"+page.getWebSiteId()+"/"+page.getId(),data);
     }
 
+//    /**
+//     * @param topic
+//     * @return  */
+//    public boolean evalFilterMap(WebPage topic)
+//    {
+//        boolean ret = false;
+//        NodeList fi = getFilterMap();
+//        if (fi == null) return true;
+//        for (int x = 0; x < fi.getLength(); x++)
+//        {
+//            Element el = (Element) fi.item(x);
+//            if (topic.getWebSiteId().equals(el.getAttribute("id")))
+//            {
+//                NodeList ti = el.getElementsByTagName("topic");
+//                for (int y = 0; y < ti.getLength(); y++)
+//                {
+//                    Element eltp = (Element) ti.item(y);
+//                    WebPage atopic = topic.getWebSite().getWebPage(eltp.getAttribute("id"));
+//                    if (atopic != null)
+//                    {
+//                        if (topic == atopic)
+//                            ret = true;
+//                        else if (eltp.getAttribute("childs").equals("true"))
+//                        {
+//                            if (topic.isChildof(atopic)) ret = true;
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        return ret;
+//    }
+
+
 }
