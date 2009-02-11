@@ -11,24 +11,24 @@ public class Role extends RoleBase
     {
         super(base);
     }
-
-    public Iterator<Role> listAllChilds()
-    {
-        ArrayList<Role> arr=new ArrayList();
-        addChilds(arr);
-        return arr.iterator();
-    }
-
-    private void addChilds(ArrayList<Role> arr)
-    {
-        arr.add(this);
-        Iterator<Role> it=listChilds();
-        while(it.hasNext())
-        {
-            Role aux=it.next();
-            aux.addChilds(arr);
-        }
-    }
+//
+//    public Iterator<Role> listAllChilds()
+//    {
+//        ArrayList<Role> arr=new ArrayList();
+//        addChilds(arr);
+//        return arr.iterator();
+//    }
+//
+//    private void addChilds(ArrayList<Role> arr)
+//    {
+//        arr.add(this);
+//        Iterator<Role> it=listChilds();
+//        while(it.hasNext())
+//        {
+//            Role aux=it.next();
+//            aux.addChilds(arr);
+//        }
+//    }
 
 
 }
