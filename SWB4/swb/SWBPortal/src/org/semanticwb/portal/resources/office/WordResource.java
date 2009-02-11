@@ -68,7 +68,15 @@ public class WordResource extends GenericAdmResource
                             read = in.read(buffer);
                         }
                         String workpath = SWBPlatform.getWebWorkPath() + getResourceBase().getWorkPath() + "/";
-                        String htmlOut = SWBPortal.UTIL.parseHTML(html.toString(), workpath);
+                        String htmlOut =null;
+                        if(portlet.isPaginated() && portlet.getNumberOfPages()>0)
+                        {
+                            htmlOut = SWBPortal.UTIL.parseHTML(html.toString(), workpath,portlet.getNumberOfPages());
+                        }
+                        else
+                        {
+                            htmlOut = SWBPortal.UTIL.parseHTML(html.toString(), workpath);
+                        }
                         out.write(htmlOut);
                     }
                     else
