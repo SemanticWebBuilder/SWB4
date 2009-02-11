@@ -110,28 +110,20 @@ public class ViewProperties extends WizardPage
 
         public void keyTyped(KeyEvent e)
         {
-            if(e.getSource() instanceof CellTextBox)
-            {
-                CellComboBox CellComboBox=(CellComboBox)e.getSource();
-                jTableProperties.setValueAt(CellComboBox.getText(), CellComboBox.row, CellComboBox.col);
-            }
+            
         }
 
         public void keyPressed(KeyEvent e)
         {
-            if(e.getSource() instanceof CellTextBox)
-            {
-                CellComboBox CellComboBox=(CellComboBox)e.getSource();
-                jTableProperties.setValueAt(CellComboBox.getText(), CellComboBox.row, CellComboBox.col);
-            }
+            
         }
 
         public void keyReleased(KeyEvent e)
         {
             if(e.getSource() instanceof CellTextBox)
             {
-                CellComboBox CellComboBox=(CellComboBox)e.getSource();
-                jTableProperties.setValueAt(CellComboBox.getText(), CellComboBox.row, CellComboBox.col);
+                CellTextBox CellTextBox=(CellTextBox)e.getSource();
+                jTableProperties.setValueAt(CellTextBox.getText(), CellTextBox.row, CellTextBox.col);
             }
         }
 
