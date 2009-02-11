@@ -212,8 +212,8 @@ public class SWBASOPropRefEditor extends GenericResource {
                 out.println("</th>");
                 inheritHeader.append("</th>");
             }
-            if (hmprop.get(Inheritable.swb_inherita) != null) {
-                sptemp = (SemanticProperty) hmprop.get(Inheritable.swb_inherita);
+            if (hmprop.get(Inheritable.swb_inherit) != null) {
+                sptemp = (SemanticProperty) hmprop.get(Inheritable.swb_inherit);
                 String propname = sptemp.getName();
                 try {
                     propname = sptemp.getDisplayName(user.getLanguage());
@@ -391,8 +391,8 @@ public class SWBASOPropRefEditor extends GenericResource {
                     }
                     out.println("</td>");
                 }
-                if (hmprop.get(Inheritable.swb_inherita) != null) {
-                    semprop = (SemanticProperty) hmprop.get(Inheritable.swb_inherita);
+                if (hmprop.get(Inheritable.swb_inherit) != null) {
+                    semprop = (SemanticProperty) hmprop.get(Inheritable.swb_inherit);
                     semobj = sobj.getObjectProperty(spref);
                     DisplayProperty dobj = new DisplayProperty(semprop.getDisplayProperty());
                     String selectValues = dobj.getSelectValues(user.getLanguage());
@@ -640,8 +640,8 @@ public class SWBASOPropRefEditor extends GenericResource {
                             }
                             out.println("</td>");
                         }
-                        if (hmprop.get(Inheritable.swb_inherita) != null) {
-                            semprop = (SemanticProperty) hmprop.get(Inheritable.swb_inherita);
+                        if (hmprop.get(Inheritable.swb_inherit) != null) {
+                            semprop = (SemanticProperty) hmprop.get(Inheritable.swb_inherit);
                             semobj = sobj.getObjectProperty(spref);
                             DisplayProperty dobj = new DisplayProperty(semprop.getDisplayProperty());
                             String selectValues = dobj.getSelectValues(user.getLanguage());
@@ -1124,7 +1124,7 @@ public class SWBASOPropRefEditor extends GenericResource {
                     value = "1";
                 }
                 SemanticObject sobj = ont.getSemanticObject(soid);
-                sobj.setLongProperty(Inheritable.swb_inherita, Long.parseLong(value));
+                sobj.setLongProperty(Inheritable.swb_inherit, Long.parseLong(value));
 
                 SemanticClass scls = sobj.getSemanticClass();
                 log.debug("doAction(updinherit):" + scls.getClassName() + ", value:" + value);

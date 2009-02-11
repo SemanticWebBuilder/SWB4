@@ -9,10 +9,12 @@ import org.junit.*;
  */
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
+import org.semanticwb.model.Activity;
 import org.semanticwb.model.Dns;
 import org.semanticwb.model.Language;
 import org.semanticwb.model.PortletType;
 import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Project;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.Template;
 import org.semanticwb.model.TemplateGroup;
@@ -59,7 +61,7 @@ public class TestWebSite {
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     //
-    @Test
+    //@Test
     public void Test1()
     {
         if(SWBContext.getWebSite("sep")==null)
@@ -135,7 +137,7 @@ public class TestWebSite {
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     //
-    @Test
+    //@Test
     public void Test2()
     {
         WebSite site=SWBContext.getWebSite("sep");
@@ -173,7 +175,7 @@ public class TestWebSite {
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     //
-    @Test
+    //@Test
     public void Test3()
     {
         WebSite site=SWBContext.getWebSite("sep");
@@ -710,6 +712,19 @@ public class TestWebSite {
 
     }
       
+    @Test
+    public void setProject()
+    {
+        WebSite site=SWBContext.getWebSite("sep");
+        Project p=site.createProject("proyecto1");
+        p.setTitle("Proyecto 1");
+
+        Activity act=site.createActivity("actividad1");
+        p.addActivity(act);
+
+        p.addParticipant(SWBContext.getDefaultRepository().getUserByLogin("jei"));
+    }
+
     //@Test
     public void write()
     {
