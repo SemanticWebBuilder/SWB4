@@ -61,13 +61,8 @@ public class PublishContentToWebPageResultProducer implements WizardResultProduc
                 webpage.id=page.getID();
                 webpage.siteID=page.getSite();
                 String version=wizardData.get(PublishVersion.VERSION).toString();                
-                PortletInfo info=openOfficeDocument.publishToPortletContent(repositoryName, contentID, version, title, description, webpage);                
-                if(openOfficeDocument.getPortletProperties(info).length>0)
-                {
-                    WizardPage[] pages={new ViewProperties(info)};
-                    Wizard wizard=WizardPage.createWizard("Propiedades de la presentación",pages);
-                    wizard.show();
-                }
+                PortletInfo info=openOfficeDocument.publishToPortletContent(repositoryName, contentID, version, title, description, webpage);
+                
                 int res=JOptionPane.showConfirmDialog(null, "¿Desea activar el contenido?","Publicación de contenido",JOptionPane.YES_NO_OPTION);
                 if(res==JOptionPane.YES_OPTION)
                 {
