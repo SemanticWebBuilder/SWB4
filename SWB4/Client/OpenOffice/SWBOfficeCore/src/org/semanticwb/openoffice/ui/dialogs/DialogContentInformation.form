@@ -234,7 +234,10 @@
                 </Component>
                 <Component class="javax.swing.JButton" name="jButtonEdit">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Editar"/>
+                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                      <Image iconType="3" name="/org/semanticwb/openoffice/ui/icons/edit.png"/>
+                    </Property>
+                    <Property name="toolTipText" type="java.lang.String" value="Editar Propiedades"/>
                     <Property name="enabled" type="boolean" value="false"/>
                     <Property name="focusable" type="boolean" value="false"/>
                     <Property name="horizontalTextPosition" type="int" value="0"/>
@@ -261,7 +264,10 @@
                 </Component>
                 <Component class="javax.swing.JButton" name="jButtonViewPage">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Ver p&#xe1;gina"/>
+                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                      <Image iconType="3" name="/org/semanticwb/openoffice/ui/icons/see.png"/>
+                    </Property>
+                    <Property name="toolTipText" type="java.lang.String" value="Ver p&#xe1;gina"/>
                     <Property name="enabled" type="boolean" value="false"/>
                     <Property name="focusable" type="boolean" value="false"/>
                     <Property name="horizontalTextPosition" type="int" value="0"/>
@@ -310,6 +316,7 @@
                         <Column editable="true" title="Version" type="java.lang.Object"/>
                       </Table>
                     </Property>
+                    <Property name="toolTipText" type="java.lang.String" value="Puede editar la versi&#xf3;n selecionando la columna correspondiente"/>
                     <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                       <TableColumnModel selectionModel="1">
                         <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
@@ -339,6 +346,7 @@
                         </Column>
                       </TableColumnModel>
                     </Property>
+                    <Property name="rowHeight" type="int" value="20"/>
                     <Property name="rowSelectionAllowed" type="boolean" value="false"/>
                     <Property name="selectionModel" type="javax.swing.ListSelectionModel" editor="org.netbeans.modules.form.editors2.JTableSelectionModelEditor">
                       <JTableSelectionModel selectionMode="0"/>
@@ -445,7 +453,7 @@
                   <SubComponents>
                     <Component class="javax.swing.JButton" name="jButtonUpdate">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="Actualizar"/>
+                        <Property name="text" type="java.lang.String" value="Guardar"/>
                         <Property name="focusable" type="boolean" value="false"/>
                         <Property name="horizontalTextPosition" type="int" value="0"/>
                         <Property name="verticalTextPosition" type="int" value="3"/>
@@ -458,7 +466,10 @@
                     </Component>
                     <Component class="javax.swing.JButton" name="jButtonViewVersion">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="Ver"/>
+                        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                          <Image iconType="3" name="/org/semanticwb/openoffice/ui/icons/see.png"/>
+                        </Property>
+                        <Property name="toolTipText" type="java.lang.String" value="Ver versi&#xf3;n"/>
                         <Property name="enabled" type="boolean" value="false"/>
                         <Property name="focusable" type="boolean" value="false"/>
                         <Property name="horizontalTextPosition" type="int" value="0"/>
