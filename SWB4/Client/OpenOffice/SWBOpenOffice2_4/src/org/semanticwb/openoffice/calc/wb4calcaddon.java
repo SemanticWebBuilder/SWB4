@@ -227,7 +227,7 @@ public final class wb4calcaddon extends WeakBase
                 }
                 if (aURL.Path.compareTo("information") == 0)
                 {
-                    // add your own code here
+                    document.showDocumentInfo();
                     return;
                 }
                 if (aURL.Path.compareTo("rules") == 0)
@@ -242,12 +242,12 @@ public final class wb4calcaddon extends WeakBase
                 }
                 if (aURL.Path.compareTo("addLink") == 0)
                 {
-                    // add your own code here
+                    document.insertLink();
                     return;
                 }
                 if (aURL.Path.compareTo("createSection") == 0)
                 {
-                    // add your own code here
+                    WB4CalcApplication.createPage();
                     return;
                 }
                 if (aURL.Path.compareTo("changePassword") == 0)
@@ -257,7 +257,7 @@ public final class wb4calcaddon extends WeakBase
                 }
                 if (aURL.Path.compareTo("help") == 0)
                 {
-                    // add your own code here
+                    WB4CalcApplication.showHelp();
                     return;
                 }
                 if (aURL.Path.compareTo("about") == 0)

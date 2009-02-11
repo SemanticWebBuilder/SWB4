@@ -13,6 +13,7 @@ import com.sun.star.registry.XRegistryKey;
 import com.sun.star.lib.uno.helper.WeakBase;
 import javax.swing.JFrame;
 import org.semanticwb.openoffice.DocumentType;
+import org.semanticwb.openoffice.OfficeApplication;
 import org.semanticwb.openoffice.OfficeDocument;
 import org.semanticwb.openoffice.ui.dialogs.ErrorDialog;
 
@@ -198,11 +199,11 @@ public final class wb4writeraddon extends WeakBase
                     }
                 }
                 if (aURL.Path.compareTo("addLink") == 0)
-                {
+                {                    
                     return this;
                 }
                 if (aURL.Path.compareTo("createSection") == 0)
-                {
+                {                 
                     return this;
                 }
                 if (aURL.Path.compareTo("changePassword") == 0)
@@ -210,11 +211,11 @@ public final class wb4writeraddon extends WeakBase
                     return this;
                 }
                 if (aURL.Path.compareTo("help") == 0)
-                {
+                {                 
                     return this;
                 }
                 if (aURL.Path.compareTo("about") == 0)
-                {
+                {                    
                     return this;
                 }
                 if (aURL.Path.compareTo("closeSession") == 0)
@@ -326,12 +327,12 @@ public final class wb4writeraddon extends WeakBase
                 }
                 if (aURL.Path.compareTo("help") == 0)
                 {
-                    // add your own code here
+                    WB4WriterApplication.showHelp();
                     return;
                 }
                 if (aURL.Path.compareTo("about") == 0)
                 {
-                    // add your own code here
+                    WB4WriterApplication.showAbout();
                     return;
                 }
                 if (aURL.Path.compareTo("closeSession") == 0)
