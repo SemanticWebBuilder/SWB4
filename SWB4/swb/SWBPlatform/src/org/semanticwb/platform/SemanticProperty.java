@@ -39,6 +39,9 @@ public class SemanticProperty
 
     private int cardinality=0;
     private boolean cardinalityCheck=false;
+
+    private boolean rangeCheck=false;
+    private Resource range=null;
     
     public SemanticProperty(Property prop)
     {
@@ -363,13 +366,17 @@ public class SemanticProperty
     
     public Resource getRange()
     {
-        Resource ret=null;
-        Statement stm=m_prop.getProperty(m_prop.getModel().getProperty(SemanticVocabulary.RDFS_RANGE));
-        if(stm!=null)
+        if(!rangeCheck)
         {
-            ret=stm.getResource();
+            Statement stm=m_prop.getProperty(m_prop.getModel().getProperty(SemanticVocabulary.RDFS_RANGE));
+            if(stm!=null)
+            {
+                range=stm.getResource();
+
+            }
+            rangeCheck=true;
         }
-        return ret;          
+        return range;
     }
     
     public int getCardinality()
@@ -512,4 +519,36 @@ public class SemanticProperty
         if(res!=null && res.getURI().equals(SemanticVocabulary.XMLS_FLOAT))ret=true;
         return ret;        
     }       
+
+    public boolean isXML()
+    {
+        boolean ret=false;
+        Resource res=getRange();
+        if(res!=null && res.getURI().equals(SemanticVocabulary.RDF_XMLLITERAL))ret=true;
+        return ret;
+    }
+
+    public boolean isDouble()
+    {
+        boolean ret=false;
+        Resource res=getRange();
+        if(res!=null && res.getURI().equals(SemanticVocabulary.XMLS_DOUBLE))ret=true;
+        return ret;
+    }
+
+    public boolean isByte()
+    {
+        boolean ret=false;
+        Resource res=getRange();
+        if(res!=null && res.getURI().equals(SemanticVocabulary.XMLS_BYTE))ret=true;
+        return ret;
+    }
+
+    public boolean isShort()
+    {
+        boolean ret=false;
+        Resource res=getRange();
+        if(res!=null && res.getURI().equals(SemanticVocabulary.XMLS_SHORT))ret=true;
+        return ret;
+    }
 }
