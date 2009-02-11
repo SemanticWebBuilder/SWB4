@@ -765,7 +765,6 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         while (propertiesClazz.hasNext())
         {
             SemanticProperty prop = propertiesClazz.next();
-
             if (prop.isDataTypeProperty() && !prop.isBinary() && prop.getPrefix() != null)
             {
                 String label = prop.getLabel();
