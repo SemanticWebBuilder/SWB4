@@ -37,7 +37,7 @@ public class DialogEditPorlet extends javax.swing.JDialog
 
     private String repositoryName,  contentID;
     private PortletInfo pageInformation;
-
+    public boolean isCancel=true;
     /** Creates new form DialogContentPublicationInformation */
     public DialogEditPorlet(java.awt.Frame parent, boolean modal, PortletInfo pageInformation, String repositoryName, String contentID)
     {
@@ -47,6 +47,7 @@ public class DialogEditPorlet extends javax.swing.JDialog
         this.repositoryName = repositoryName;
         this.contentID = contentID;
         loadProperties();
+        setLocationRelativeTo(null);        
     }
 
     class VersionRender implements TableCellRenderer
@@ -320,9 +321,10 @@ public class DialogEditPorlet extends javax.swing.JDialog
         {
             for (PropertyInfo info : OfficeApplication.getOfficeDocumentProxy().getPortletProperties(repositoryName, contentID))
             {
+                String value=OfficeApplication.getOfficeDocumentProxy().getPropertyValue(pageInformation, info);
                 Object[] data =
                 {
-                    info, null
+                    info, value
                 };
                 model.addRow(data);
             }
@@ -351,12 +353,6 @@ public class DialogEditPorlet extends javax.swing.JDialog
         jPanelInformation = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableProperties = new javax.swing.JTable();
-        jPanelVersion = new javax.swing.JPanel();
-        jPanel5 = new javax.swing.JPanel();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jTableVersions = new javax.swing.JTable();
         jPanelSchedule = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTableScheduler = new javax.swing.JTable();
@@ -368,6 +364,8 @@ public class DialogEditPorlet extends javax.swing.JDialog
         jButtonDeleteScheduler = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Editar Propiedades");
+        setResizable(false);
 
         jPanelOptions.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
@@ -379,7 +377,7 @@ public class DialogEditPorlet extends javax.swing.JDialog
         });
         jPanelOptions.add(jButtonOK);
 
-        jButtonCancel.setText("Cancelar");
+        jButtonCancel.setText("Cerrar");
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCancelActionPerformed(evt);
@@ -389,89 +387,26 @@ public class DialogEditPorlet extends javax.swing.JDialog
 
         getContentPane().add(jPanelOptions, java.awt.BorderLayout.SOUTH);
 
+        jTabbedPane1.setPreferredSize(new java.awt.Dimension(457, 300));
+
         jPanelInformation.setLayout(new java.awt.BorderLayout());
 
         jTableProperties.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+
             },
             new String [] {
                 "Propiedad", "Valor"
             }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
+        ));
+        jTableProperties.setCellSelectionEnabled(true);
+        jTableProperties.setRowHeight(24);
+        jTableProperties.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTableProperties);
 
         jPanelInformation.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
         jTabbedPane1.addTab("Propiedades de publicación", jPanelInformation);
-
-        jPanelVersion.setLayout(new java.awt.BorderLayout());
-
-        buttonGroup1.add(jRadioButton1);
-        jRadioButton1.setSelected(true);
-        jRadioButton1.setText("Publica la última versión");
-        jRadioButton1.setToolTipText("Esta opción le permite que siempre que exista una nueva versión de contenido, esta sea mostrada.");
-        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton1ActionPerformed(evt);
-            }
-        });
-        jPanel5.add(jRadioButton1);
-
-        buttonGroup1.add(jRadioButton2);
-        jRadioButton2.setText("Publica una versión");
-        jRadioButton2.setToolTipText("Esta opción permite que sólo una versión sea mostrada en el sitio");
-        jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton2ActionPerformed(evt);
-            }
-        });
-        jPanel5.add(jRadioButton2);
-
-        jPanelVersion.add(jPanel5, java.awt.BorderLayout.NORTH);
-
-        jTableVersions.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Versión", "Fecha de creación", "Creador"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jTableVersions.setEnabled(false);
-        jTableVersions.setFocusable(false);
-        jTableVersions.setRowSelectionAllowed(false);
-        jScrollPane3.setViewportView(jTableVersions);
-
-        jPanelVersion.add(jScrollPane3, java.awt.BorderLayout.CENTER);
-
-        jTabbedPane1.addTab("Versión publicada", jPanelVersion);
 
         jPanelSchedule.setLayout(new java.awt.BorderLayout());
 
@@ -523,18 +458,20 @@ public class DialogEditPorlet extends javax.swing.JDialog
     }// </editor-fold>//GEN-END:initComponents
 
 private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
-    this.jTableVersions.setEnabled(false);
+    
 }//GEN-LAST:event_jRadioButton1ActionPerformed
 
 private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
-    this.jTableVersions.setEnabled(true);
+    
 }//GEN-LAST:event_jRadioButton2ActionPerformed
 
 private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelActionPerformed
+    isCancel=true;
     this.setVisible(false);
 }//GEN-LAST:event_jButtonCancelActionPerformed
 
 private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOKActionPerformed
+    isCancel=false;
     this.setVisible(false);
 }//GEN-LAST:event_jButtonOKActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -545,22 +482,16 @@ private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
     private javax.swing.JButton jButtonEditEcheduler;
     private javax.swing.JButton jButtonOK;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanelInformation;
     private javax.swing.JPanel jPanelOptions;
     private javax.swing.JPanel jPanelSchedule;
-    private javax.swing.JPanel jPanelVersion;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTableProperties;
     private javax.swing.JTable jTableScheduler;
-    private javax.swing.JTable jTableVersions;
     private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
 }
