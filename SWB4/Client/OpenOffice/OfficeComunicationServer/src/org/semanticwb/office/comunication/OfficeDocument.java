@@ -751,6 +751,11 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         portlet.getSemanticObject().setProperty(prop, value);
     }
 
+    public PropertyInfo[] getContentPropeties(String repositoryName, String contentid) throws Exception
+    {
+        ArrayList<PropertyInfo> properties = new ArrayList<PropertyInfo>();
+        return properties.toArray(new PropertyInfo[properties.size()]);
+    }
     public PropertyInfo[] getPortletProperties(PortletInfo portletInfo) throws Exception
     {
         ArrayList<PropertyInfo> properties = new ArrayList<PropertyInfo>();
@@ -1042,5 +1047,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
         OfficePortlet.clean(dir);
     }
+
+
 }
 
