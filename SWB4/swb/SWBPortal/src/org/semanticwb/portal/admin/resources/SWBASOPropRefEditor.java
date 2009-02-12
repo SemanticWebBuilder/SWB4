@@ -264,6 +264,8 @@ public class SWBASOPropRefEditor extends GenericResource {
 
             boolean isInherit = true;
 
+            log.debug("obj sem class"+obj.getSemanticClass().getName());
+
             Iterator<SemanticObject> itso = null;
             if (obj.getSemanticClass().equals(User.swb_User)) {
                 itso = obj.listObjectProperties(spref);
@@ -274,8 +276,20 @@ public class SWBASOPropRefEditor extends GenericResource {
             while (itso.hasNext()) {
                 SemanticObject sobj = itso.next();
                 SemanticClass clsobj = sobj.getSemanticClass();
-                log.debug("Clase:" + clsobj.getName());
+                //log.debug("Clase: " + clsobj.getName()+" -- "+sobj.getObjectProperty(UserGroupRef.swb_userGroup).getProperty(UserGroup.swb_title));
                 String stitle = getDisplaySemObj(sobj, user.getLanguage());
+                if(clsobj.getName().trim().equals("UserGroupRef"))
+                    title=sobj.getObjectProperty(UserGroupRef.swb_userGroup).getProperty(UserGroup.swb_title);
+
+                SemanticProperty semprop = ont.getSemanticProperty(idpref);
+                SemanticProperty sem_p = ont.getSemanticProperty(idpref);
+                SemanticObject semobj = null;
+                SemanticObject so = sobj.getObjectProperty(semprop);
+                semobj = sobj.getObjectProperty(semprop);
+                if (semobj == null) {
+                    semobj = sobj;
+                }
+
                 out.println("<tr>");
                 out.println("<td>");
                 SWBResourceURL urlr = paramRequest.getActionUrl();
@@ -285,7 +299,7 @@ public class SWBASOPropRefEditor extends GenericResource {
                 urlr.setParameter("sval", sobj.getURI());
                 urlr.setParameter(prop.getName(), prop.getURI());
                 urlr.setAction("remove");
-                out.println("<a href=\"#\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " " + sobj.getDisplayName(user.getLanguage()) + "?')){submitUrl('" + urlr + "',this);} else { return false;}\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" border=0></a>");
+                out.println("<a href=\"#\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " " + semobj.getDisplayName(user.getLanguage()) + "?')){submitUrl('" + urlr + "',this);} else { return false;}\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" border=0></a>");
                 out.println("</td>");
                 out.println("<td>");
 
@@ -305,16 +319,9 @@ public class SWBASOPropRefEditor extends GenericResource {
                     urlchoose.setParameter("rspropref", idpref);
                 }
                 urlchoose.setParameter("act", "edit");
-                SemanticProperty semprop = ont.getSemanticProperty(idpref);
-                SemanticProperty sem_p = ont.getSemanticProperty(idpref);
-                SemanticObject semobj = null;
-                SemanticObject so = sobj.getObjectProperty(semprop);
-                semobj = sobj.getObjectProperty(semprop);
-                if (semobj == null) {
-                    semobj = sobj;
-                }
+                
                 //out.println("<a href=\"#\"  onclick=\"addNewTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + sobj.getDisplayName() + "');return false;\" >" + stitle + "</a>"); //onclick=\"submitUrl('"+urlchoose+"',this); return false;\"
-                out.println("<a href=\"#\"  onclick=\"addNewTab('" + semobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + sobj.getDisplayName() + "');return false;\" >" + stitle + "</a>"); //onclick=\"submitUrl('"+urlchoose+"',this); return false;\"
+                out.println("<a href=\"#\"  onclick=\"addNewTab('" + semobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + sobj.getDisplayName() + "');return false;\" >" + semobj.getDisplayName(user.getLanguage()) + "</a>"); //onclick=\"submitUrl('"+urlchoose+"',this); return false;\"
                 out.println("</td>");
                 if (hmprop.get(Template.swb_language) != null) {
                     semprop = (SemanticProperty) hmprop.get(Template.swb_language);
@@ -535,8 +542,9 @@ public class SWBASOPropRefEditor extends GenericResource {
                     while (itso.hasNext()) {
                         SemanticObject sobj = itso.next();
                         SemanticClass clsobj = sobj.getSemanticClass();
-                        log.debug("Clase:" + clsobj.getName());
+                        log.debug("Clase:" + clsobj.getName()+", SO: "+sobj.getDisplayName(user.getLanguage()));
                         String stitle = getDisplaySemObj(sobj, user.getLanguage());
+
                         out.println("<tr>");
                         out.println("<td>");
 
@@ -728,7 +736,7 @@ public class SWBASOPropRefEditor extends GenericResource {
             }
 
             SemanticObject obusrRep = null;
-            if (clsprop.equals(Role.swb_Role)) { //||clsprop.equals(UserGroup.swb_UserGroupable)
+            if (clsprop.equals(Role.swb_Role)||clsprop.equals(User.swb_UserGroup)) { //||clsprop.equals(UserGroup.swb_UserGroupable)
                 GenericObject go = obj.getModel().getModelObject().createGenericInstance();
                 if (go instanceof WebSite) {
                     obusrRep = ((WebSite) go).getUserRepository().getSemanticObject();
@@ -750,6 +758,10 @@ public class SWBASOPropRefEditor extends GenericResource {
             if (obusrRep != null) {
                 obj = obusrRep;
             }
+
+            //:hasUserGroupRef&spropref=swb:userGroup
+
+            log.debug("choose:"+clsprop.getName()+", "+idp );
 
             SWBResourceURL urladd = paramRequest.getActionUrl();
             if ((idp.endsWith("hasRole") && clsprop.equals(Role.swb_Role))||idp.endsWith("hasUserGroup")&& clsprop.equals(UserGroup.swb_UserGroup)) {
@@ -773,7 +785,7 @@ public class SWBASOPropRefEditor extends GenericResource {
             out.println("<th>");
             out.println(paramRequest.getLocaleString("th_select"));
             out.println("</th>");
-            if ((clsprop.equals(Role.swb_Role) || clsprop.equals(Rule.swb_Rule))) {
+            if(clsprop.equals(Role.swb_Role) || clsprop.equals(Rule.swb_Rule)||clsprop.equals(UserGroup.swb_UserGroup)) {
                 out.println("<th>");
                 out.println(paramRequest.getLocaleString("th_check"));
                 out.println("</th>");
@@ -810,7 +822,7 @@ public class SWBASOPropRefEditor extends GenericResource {
                     out.println("<td>");
                     out.println("<a href=\"#\" onclick=\"submitUrl('" + urlchoose + "',this); return false;\">" + stitle + "</a>");
                     out.println("</td> ");
-                    if ((clsprop.equals(Role.swb_Role) || clsprop.equals(Rule.swb_Rule))) {
+                    if (clsprop.equals(Role.swb_Role) || clsprop.equals(Rule.swb_Rule) || clsprop.equals(UserGroup.swb_UserGroup)) {
                         out.println("<td>");
                         out.println("<input type=\"checkbox\" value=\"" + sobj.getURI() + "\" name=\"sobj\">");
                         out.println("</td>");
@@ -832,7 +844,7 @@ public class SWBASOPropRefEditor extends GenericResource {
                 urlBack.setParameter("spropref", idpref);
             }
             urlBack.setParameter("act", "");
-            if ((clsprop.equals(Role.swb_Role) || clsprop.equals(Rule.swb_Rule)) && numrols > 0) {
+            if ((clsprop.equals(Role.swb_Role) || clsprop.equals(Rule.swb_Rule) ||clsprop.equals(UserGroup.swb_UserGroup)) && numrols > 0) {
                 out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\"  >" + paramRequest.getLocaleString("Add_Selected") + "</button>"); //submitUrl('" + url + "',this); onclick=\"return false;\"  onclick=\"document.getElementById('" + id + "/chooseSO').submit();\" _onclick=\"if(validateChk('sobj')){document.getElementById('" + id + "/chooseSO').submit(); return false;} else {return false;}\"
                 out.println("<button dojoType=\"dijit.form.Button\" type=\"button\"  onclick=\"selectAll('sobj',true);\">" + paramRequest.getLocaleString("Select_All") + "</button>"); //submitUrl('" + url + "',this);
                 out.println("<button dojoType=\"dijit.form.Button\" type=\"button\"  onclick=\"selectAll('sobj',false);\">" + paramRequest.getLocaleString("Unselect_All") + "</button>"); //submitUrl('" + url + "',this);
