@@ -246,7 +246,9 @@ public class FileFE extends WBJsInputFEAbs
                 {
                     if(msgfile!=null) xml+=msgfile;
                     else xml+="Archivo: ";
-                    xml+="<A href=\""+ SWBPlatform.getWebWorkPath() + base.getWorkPath() +"/"+ filename +"\">"+filename+"</A>";
+                    if(filename.endsWith(".html") || filename.endsWith(".htm") || filename.endsWith(".xml") || filename.endsWith(".xsl") || filename.endsWith(".xslt") || filename.endsWith(".jsp")){
+                        xml+="<A href=\""+ SWBPlatform.getContextPath()+"/editfile?file="+ base.getWorkPath() + "/" + filename + "&pathType=res&resUri="+base.getEncodedURI()+"\">"+filename+"</A>";
+                    }else xml+="<A href=\""+ SWBPlatform.getWebWorkPath() + base.getWorkPath() +"/"+ filename +"\">"+filename+"</A>";
                     Element root = dom.createElement("wbmsg");
                     root.appendChild(dom.createTextNode(xml));
                     dom.appendChild(root);
@@ -325,7 +327,16 @@ public class FileFE extends WBJsInputFEAbs
                 {
                     if(msgbydefault!=null) xml+=msgbydefault;
                     else msgbydefault+="Default: ";
-                    xml+="<A href=\""+bydefault+"\">"+bydefault.substring(bydefault.lastIndexOf("/")+1)+"</A>";
+                    System.out.println("a punto de");
+                    if(bydefault.endsWith(".html") || bydefault.endsWith(".htm") || bydefault.endsWith(".xml") || bydefault.endsWith(".xsl") || bydefault.endsWith(".xslt") || bydefault.endsWith(".jsp")){
+                        System.out.println("path manda:"+SWBUtils.getApplicationPath()+"/"+ bydefault);
+                        String defFileName=bydefault.substring(bydefault.lastIndexOf("/")+1);
+                        Portlet base=dbconnmgr.getBase();
+                        System.out.println("base.getURI():"+base.getURI());
+                        xml+="<A href=\""+ SWBPlatform.getContextPath()+"/editfile?file="+ bydefault +"&pathType=def&resUri="+base.getEncodedURI()+"&attr="+getName()+"\">"+defFileName+"</A>";
+                    }else{
+                        xml+="<A href=\""+bydefault+"\">"+bydefault.substring(bydefault.lastIndexOf("/")+1)+"</A>";
+                    }
                     child=dom.createElement("wbmsg");
                     child.appendChild(dom.createTextNode(xml));
                     root.appendChild(child);

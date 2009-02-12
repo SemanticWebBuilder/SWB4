@@ -191,9 +191,10 @@ public class FormFE extends WBContainerFE
         strb.append(xml);
         strb.append(show());
         strb.append("\n</form>");
-        
-        //para desplegar valifaciones
-        if(getSizeJsFE()>0) strb.append(getValHtml());
+        //para desplegar validaciones
+        if(getSizeJsFE()>0) {
+            strb.append(getValHtml());
+        }
         return strb.toString();
     }
     
@@ -275,6 +276,17 @@ public class FormFE extends WBContainerFE
            for(int i=0;i<js_Objs.length;i++){
                if(js_Objs[i] instanceof WBJsValidationsFE){
                    WBJsValidationsFE js_valfe=(WBJsValidationsFE)js_Objs[i]; 
+                   js_valfe.setFormFEName(getName());
+                   ajsfe.add(js_valfe);
+               }
+           }
+         }else if(obj instanceof WBContainerFE){
+           WBContainerFE objInJs=(WBContainerFE)obj;
+           Iterator itJs=objInJs.getJscripsFE();
+           while(itJs.hasNext()){
+               Object objJs=(Object)itJs.next();
+               if(objJs instanceof WBJsValidationsFE){
+                   WBJsValidationsFE js_valfe=(WBJsValidationsFE)objJs;
                    js_valfe.setFormFEName(getName());
                    ajsfe.add(js_valfe);
                }

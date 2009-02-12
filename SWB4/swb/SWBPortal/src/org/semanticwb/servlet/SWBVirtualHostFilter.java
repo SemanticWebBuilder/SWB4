@@ -20,6 +20,7 @@ import org.semanticwb.model.User;
 import org.semanticwb.servlet.internal.Admin;
 import org.semanticwb.servlet.internal.Distributor;
 import org.semanticwb.servlet.internal.DistributorParams;
+import org.semanticwb.servlet.internal.EditFile;
 import org.semanticwb.servlet.internal.GateWayOffice;
 import org.semanticwb.servlet.internal.InternalServlet;
 import org.semanticwb.servlet.internal.Login;
@@ -229,6 +230,10 @@ public class SWBVirtualHostFilter implements Filter
 
         InternalServlet upload = new Upload();
         intServlets.put("wbupload", upload);
+        upload.init(filterConfig.getServletContext());
+
+        InternalServlet editFile = new EditFile();
+        intServlets.put("editfile", editFile);
         upload.init(filterConfig.getServletContext());
 
         //TODO:Admin servlet

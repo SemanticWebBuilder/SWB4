@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<xslfile>admresource.xslt</xslfile>
+	<form name="frmWBBanner" action="true" method="POST" enctype="multipart/form-data">
+		<admdbconnmgr defconn="true"/>
+                <fieldset>
+		<input type="FILE" name="template" label="Plantilla (xsl, xslt):" filetype="jsp" size="40" showfile="true" />
+		</fieldset>
+                <fieldset>
+		<input type="SUBMIT" name="btnSave"  value="Guardar" onclick="if(jsValida(this.form)) return true; else return false;"/>
+		<input type="RESET"  name="btnReset" value="Cancelar"/>
+                </fieldset>
+	</form>	
+</admresource>

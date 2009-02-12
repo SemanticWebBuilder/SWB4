@@ -39,8 +39,10 @@ import org.semanticwb.portal.admin.admresources.*;
 public abstract class WBContainerFE extends WBAdmResourceAbs {
     
     protected ArrayList formelements;
+    private ArrayList ajsfe;
     public WBContainerFE() {
         formelements = new ArrayList();
+        ajsfe = new ArrayList();
     }
     
     public void add(Object obj) {
@@ -110,6 +112,10 @@ public abstract class WBContainerFE extends WBAdmResourceAbs {
     }
     
     public void setAttributes() {
+    }
+
+    public Iterator getJscripsFE(){
+        return ajsfe.iterator();
     }
     
 }

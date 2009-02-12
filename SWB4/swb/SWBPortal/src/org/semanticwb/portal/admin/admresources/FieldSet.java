@@ -5,6 +5,8 @@
 package org.semanticwb.portal.admin.admresources;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Locale;
 import org.semanticwb.portal.admin.admresources.lib.*;
 import org.w3c.dom.*;
 import org.semanticwb.Logger;
@@ -22,6 +24,8 @@ public class FieldSet extends WBContainerFE {
     protected Node tag = null;
     protected Portlet base = null;
     FormFE form=null;
+    private ArrayList ajsfe=new ArrayList();
+    private Locale locale=null;
     
     public FieldSet(String id) {
         this.id = id;
@@ -93,6 +97,54 @@ public class FieldSet extends WBContainerFE {
         ret.append(show());
         ret.append("\n</fieldset>");
         return ret.toString();        
+    }
+
+    public Iterator getJscripsFE(){
+        return ajsfe.iterator();
+    }
+
+    public int getSizeJsFE(){
+        return ajsfe.size();
+    }
+
+    //Sets
+    public void setLocale(Locale locale){
+        this.locale=locale;
+    }
+
+    //gets
+    /** agrega el action del elemento forma */
+    public Locale getLocale(){
+        return this.locale;
+    }
+
+     public String getJsFE(){
+        StringBuffer strb=new StringBuffer();
+        Iterator ijsfeObj=ajsfe.iterator();
+        while(ijsfeObj.hasNext()){
+            WBJsValidationsFE js_valfe=(WBJsValidationsFE)ijsfeObj.next();
+            strb.append(js_valfe.getHtml(getLocale()));
+        }
+        return strb.toString();
+    }
+
+     public void add(Object obj){
+       super.add(obj);
+       addJSFormFE(obj);
+    }
+
+     private void addJSFormFE(Object obj){
+         if(obj instanceof WBJsInputFE){
+           WBJsInputFE objInJs=(WBJsInputFE)obj;
+           Object[] js_Objs=objInJs.getJsValObj();
+           for(int i=0;i<js_Objs.length;i++){
+               if(js_Objs[i] instanceof WBJsValidationsFE){
+                   WBJsValidationsFE js_valfe=(WBJsValidationsFE)js_Objs[i];
+                   js_valfe.setFormFEName(getName());
+                   ajsfe.add(js_valfe);
+               }
+           }
+         }
     }
     
     @Override
