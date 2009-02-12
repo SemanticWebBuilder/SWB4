@@ -95,7 +95,7 @@ class XmlRpcClient
 
     private static Document getDocument(InputStream in) throws XmlRpcException
     {
-        SAXBuilder builder = new SAXBuilder();
+        SAXBuilder builder = new SAXBuilder();        
         try
         {
             return builder.build(in);
