@@ -122,7 +122,9 @@ public abstract class XMLRPCServlet extends HttpServlet
     {
         try
         {
-            XMLOutputter xMLOutputter = new XMLOutputter();
+            Format format = Format.getPrettyFormat();
+            format.setEncoding("UTF-8");
+            XMLOutputter xMLOutputter = new XMLOutputter(format);
             xMLOutputter.output(document, System.out);
         }
         catch (Exception ex)
@@ -164,7 +166,7 @@ public abstract class XMLRPCServlet extends HttpServlet
         throw new NoSuchMethodException("The method " + methodName + " was not found");
     }
 
-    private static void sendPart(byte[] content, String name,String filename, OutputStream out) throws IOException
+    private static void sendPart(byte[] content, String name, String filename, OutputStream out) throws IOException
     {
         String newBoundary = "\r\n--" + boundary + "\r\n";
         String contentDisposition = "Content-Disposition: form-data; name=\"" + name + "\"; filename=\"" + filename + "\"\r\n\r\n";
@@ -192,37 +194,41 @@ public abstract class XMLRPCServlet extends HttpServlet
     }
 
     private static void sendResponse(ServletResponse response, Document docResponse, Response objToResponse) throws IOException
-    {                   
-            if (objToResponse.getResponseParts() == null || objToResponse.getResponseParts().size() == 0)
+    {
+        if (objToResponse.getResponseParts() == null || objToResponse.getResponseParts().size() == 0)
+        {
+            response.setContentType("text/xml");
+            ServletOutputStream out = response.getOutputStream();
+            Format format = Format.getPrettyFormat();
+            format.setEncoding("UTF-8");
+            XMLOutputter xMLOutputter = new XMLOutputter(format);
+            xMLOutputter.output(docResponse, out);
+            out.flush();
+            out.close();
+        }
+        else
+        {
+            response.setContentType("multipart/form-data; boundary=" + boundary);
+            OutputStream out = response.getOutputStream();
+            sendXmlDocumentPart(docResponse, out);
+            for (Part attachment : objToResponse.getResponseParts())
             {
-                response.setContentType("text/xml");
-                ServletOutputStream out = response.getOutputStream();
-                XMLOutputter xMLOutputter = new XMLOutputter();
-                xMLOutputter.output(docResponse, out);
-                out.flush();
-                out.close();
+                sendPart(attachment.getContent(), attachment.getName(), attachment.getFileName(), out);
             }
-            else
-            {
-                response.setContentType("multipart/form-data; boundary=" + boundary);
-                OutputStream out = response.getOutputStream();
-                sendXmlDocumentPart(docResponse, out);
-                for (Part attachment : objToResponse.getResponseParts())
-                {                    
-                    sendPart(attachment.getContent(), attachment.getName(),attachment.getFileName(), out);
-                }
-                writeEnd(out);
-                out.flush();
-                out.close();
-            }
-       
+            writeEnd(out);
+            out.flush();
+            out.close();
+        }
+
     }
 
     private static void sendResponse(ServletResponse response, Document docResponse) throws IOException
     {
         response.setContentType("text/xml");
         ServletOutputStream out = response.getOutputStream();
-        XMLOutputter xMLOutputter = new XMLOutputter();
+        Format format = Format.getPrettyFormat();
+        format.setEncoding("UTF-8");
+        XMLOutputter xMLOutputter = new XMLOutputter(format);
         xMLOutputter.output(docResponse, out);
         out.flush();
         out.close();
@@ -261,14 +267,14 @@ public abstract class XMLRPCServlet extends HttpServlet
         {
             Object objectToReturn = method.invoke(objToExecute, parameters);
             afterExecute(objToExecute);
-            Response resp=null;
-            if(objToExecute instanceof XmlRpcObject)
+            Response resp = null;
+            if (objToExecute instanceof XmlRpcObject)
             {
-                resp=new Response(objectToReturn,((XmlRpcObject)objToExecute).responseParts);
+                resp = new Response(objectToReturn, ((XmlRpcObject) objToExecute).responseParts);
             }
             else
             {
-                resp=new Response(objectToReturn);
+                resp = new Response(objectToReturn);
             }
             return resp;
         }
