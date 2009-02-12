@@ -245,14 +245,13 @@ public class AdmResourceMgr extends WBContainerFE
                                             forma.setAdmDBConnMgr(admdbconnmgr);
                                         }else
                                             if((tag.getNodeName().equalsIgnoreCase("statictext") || tag.getNodeName().equalsIgnoreCase("script")) && forma != null) {
-                                                //HtmlFE htmlfe = new HtmlFE(tag);
-                                                //TODO:check if the base needs to be passed to other tags, if yes it need to be declared in the WBAdmResource interface
                                                 HtmlFE htmlfe = new HtmlFE(tag, base);
                                                 forma.add(htmlfe);
                                             }else if(tag.getNodeName().equalsIgnoreCase("fieldset") && forma != null) {
-                                                //HtmlFE htmlfe = new HtmlFE(tag);
-                                                //TODO:check if the base needs to be passed to other tags, if yes it need to be declared in the WBAdmResource interface
                                                 FieldSet fieldset = new FieldSet(tag, base, forma);
+                                                if(user!=null) fieldset.setLocale(new java.util.Locale(user.getLanguage()));
+                                                else fieldset.setLocale(SWBUtils.TEXT.getLocale());
+                                                fieldset.setName(forma.getName());
                                                 forma.add(fieldset);
                                             }
             }

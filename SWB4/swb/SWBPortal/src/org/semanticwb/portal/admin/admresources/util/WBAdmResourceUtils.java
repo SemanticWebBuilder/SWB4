@@ -651,7 +651,6 @@ public class WBAdmResourceUtils {
                             //strb.append("<PARAM NAME=\"type\" VALUE=\"application/x-java-applet;version=1.4\">\n");
                             //strb.append("<PARAM NAME=\"scriptable\" VALUE=\"false\">\n");
                             //strb.append("<PARAM NAME =\"JSESS\" VALUE=\""+idsession+"\">\n");
-                            System.out.println("SWBPlatform.getContextPath():"+SWBPlatform.getContextPath());
                             strb.append("<PARAM NAME=\"webpath\" VALUE=\"" + SWBPlatform.getContextPath() + "/\">\n");
                             strb.append("<PARAM NAME=\"foreground\" VALUE=\"000000\">\n");
                             strb.append("<PARAM NAME=\"background\" VALUE=\"979FC3\">\n");
