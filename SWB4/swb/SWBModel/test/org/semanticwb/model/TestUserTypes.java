@@ -100,7 +100,7 @@ public class TestUserTypes {
             User usr = itus.next();
             i++;
             if (i == arliro.size()) i = 0;
-            usr.setGroup(arliro.get(i));
+            usr.addUserGroup(arliro.get(i));
         }
     }
 
