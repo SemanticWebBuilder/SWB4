@@ -453,7 +453,7 @@ public class DialogContentInformation extends javax.swing.JDialog
 
             },
             new String [] {
-                "Title", "Sitio", "Página", "Activo", "Version"
+                "Título", "Sitio", "Página", "Activo", "Version"
             }
         ) {
             Class[] types = new Class [] {
@@ -472,6 +472,7 @@ public class DialogContentInformation extends javax.swing.JDialog
             }
         });
         jTablePages.setToolTipText("Puede editar la versión selecionando la columna correspondiente");
+        jTablePages.setColumnSelectionAllowed(true);
         jTablePages.setRowHeight(20);
         jTablePages.setRowSelectionAllowed(false);
         jTablePages.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
