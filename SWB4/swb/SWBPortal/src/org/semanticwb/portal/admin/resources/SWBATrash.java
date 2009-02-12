@@ -702,7 +702,7 @@ public class SWBATrash extends GenericResource {
                                         thisToken=localToken.nextToken();
                                     }
                                     PortletRef rOcc = SWBContext.getWebSite(viewSite).getPortletRef(thisToken);
-                                    rOcc.setDeleted(false);
+                                    //rOcc.setDeleted(false);
                                     //rOcc.update();
                                     rOcc=null;
                                 }
