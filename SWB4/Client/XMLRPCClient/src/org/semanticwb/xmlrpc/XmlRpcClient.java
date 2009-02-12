@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Set;
 import org.jdom.Document;
 import org.jdom.input.SAXBuilder;
+import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import static org.semanticwb.xmlrpc.Base64.encode;
 import static java.net.HttpURLConnection.*;
@@ -141,7 +142,9 @@ class XmlRpcClient
         String contentDisposition = "Content-Disposition: form-data; name=\"xmlrpc\"; filename=\"xmlrpc.xml\"\r\n\r\n";
         out.write(newBoundary.getBytes());
         out.write(contentDisposition.getBytes());
-        XMLOutputter outp = new XMLOutputter();
+        Format format = Format.getPrettyFormat();
+        format.setEncoding("UTF-8");
+        XMLOutputter outp = new XMLOutputter(format);
         outp.output(requestDoc, out);
     }
 
