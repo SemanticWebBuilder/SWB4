@@ -18,8 +18,8 @@
         String uri=SWBContext.getAdminWebSite().getHomePage().getEncodedURI();
         String cls=SWBContext.getAdminWebSite().getHomePage().getSemanticObject().getSemanticClass().getEncodedURI();
 
-        uri=SWBContext.getWebSite("sep").getProject("proyecto1").getEncodedURI();
-        cls=SWBContext.getWebSite("sep").getProject("proyecto1").getSemanticObject().getSemanticClass().getEncodedURI();
+        //uri=SWBContext.getWebSite("sep").getProject("proyecto1").getEncodedURI();
+        //cls=SWBContext.getWebSite("sep").getProject("proyecto1").getSemanticObject().getSemanticClass().getEncodedURI();
 %>
         <a href="?suri=<%=uri%>">edit</a>
         <a href="?scls=<%=cls%>&sref=<%=uri%>">create</a>
