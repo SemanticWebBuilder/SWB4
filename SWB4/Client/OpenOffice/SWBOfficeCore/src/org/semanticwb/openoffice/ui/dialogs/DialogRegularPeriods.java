@@ -11,18 +11,60 @@
 
 package org.semanticwb.openoffice.ui.dialogs;
 
+import org.w3c.dom.Document;
+
 /**
  *
  * @author victor.lorenzana
  */
 public class DialogRegularPeriods extends java.awt.Dialog {
 
+    private Document document;
     /** Creates new form DialogRegularPeriods */
     public DialogRegularPeriods(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        this.setLocationRelativeTo(null);
     }
+    public Document getDocument()
+    {
+        if(document==null)
+        {
+            org.jdom.output.DOMOutputter out=new org.jdom.output.DOMOutputter();
+            try
+            {
+                document=out.output(new org.jdom.Document());
+            }
+            catch(Exception e)
+            {
 
+            }
+        }
+        return document;
+    }
+    public void setDocument(Document document)
+    {
+        this.document=document;
+        init();
+    }
+    private void init()
+    {
+        if(document!=null)
+        {
+            if(document.getElementsByTagName("weekly").getLength()>0)
+            {
+                jRadioButtonWeek.setSelected(true);
+            }
+            if(document.getElementsByTagName("monthly").getLength()>0)
+            {
+                jRadioButtonWeek.setSelected(true);
+            }
+            if(document.getElementsByTagName("yearly").getLength()>0)
+            {
+                jRadioButtonYear.setSelected(true);
+            }
+        }
+    }
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -34,47 +76,47 @@ public class DialogRegularPeriods extends java.awt.Dialog {
         buttonGroupPeriodicidad = new javax.swing.ButtonGroup();
         buttonGroupMensual = new javax.swing.ButtonGroup();
         buttonGroupAnual = new javax.swing.ButtonGroup();
-        jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
+        jPanelBody = new javax.swing.JPanel();
+        jPanelCommands = new javax.swing.JPanel();
         jButtonok = new javax.swing.JButton();
         jButtonCancel = new javax.swing.JButton();
-        jPanel3 = new javax.swing.JPanel();
-        jPanel4 = new javax.swing.JPanel();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jCheckBox1 = new javax.swing.JCheckBox();
-        jCheckBox2 = new javax.swing.JCheckBox();
-        jCheckBox3 = new javax.swing.JCheckBox();
-        jCheckBox4 = new javax.swing.JCheckBox();
-        jCheckBox5 = new javax.swing.JCheckBox();
-        jCheckBox6 = new javax.swing.JCheckBox();
-        jCheckBox7 = new javax.swing.JCheckBox();
-        jPanel5 = new javax.swing.JPanel();
-        jPanel6 = new javax.swing.JPanel();
-        jRadioButton2 = new javax.swing.JRadioButton();
+        jPanelConfigurations = new javax.swing.JPanel();
+        jPanelWeek = new javax.swing.JPanel();
+        jRadioButtonWeek = new javax.swing.JRadioButton();
+        jCheckBoxWeekMonday = new javax.swing.JCheckBox();
+        jCheckBoxWeekTuesday = new javax.swing.JCheckBox();
+        jCheckBoxWeekWednesday = new javax.swing.JCheckBox();
+        jCheckBoxWeekThursday = new javax.swing.JCheckBox();
+        jCheckBoxWeekFriday = new javax.swing.JCheckBox();
+        jCheckBoxWeekSaturday = new javax.swing.JCheckBox();
+        jCheckBoxWeekSunday = new javax.swing.JCheckBox();
+        jPanelOthers = new javax.swing.JPanel();
+        jPanelMonth = new javax.swing.JPanel();
+        jRadioButtonMonth = new javax.swing.JRadioButton();
         jLabel1 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox();
-        jCheckBox8 = new javax.swing.JCheckBox();
-        jCheckBox9 = new javax.swing.JCheckBox();
-        jCheckBox10 = new javax.swing.JCheckBox();
-        jCheckBox11 = new javax.swing.JCheckBox();
-        jCheckBox12 = new javax.swing.JCheckBox();
-        jCheckBox13 = new javax.swing.JCheckBox();
-        jCheckBox14 = new javax.swing.JCheckBox();
-        jRadioButton3 = new javax.swing.JRadioButton();
-        jRadioButton4 = new javax.swing.JRadioButton();
+        jComboBoxMonthDay = new javax.swing.JComboBox();
+        jCheckBoxMonthMonday = new javax.swing.JCheckBox();
+        jCheckBoxMonthTuesday = new javax.swing.JCheckBox();
+        jCheckBoxMonthWednesday = new javax.swing.JCheckBox();
+        jCheckBoxMonthThursday = new javax.swing.JCheckBox();
+        jCheckBoxMonthFriday = new javax.swing.JCheckBox();
+        jCheckBoxMonthSaturday = new javax.swing.JCheckBox();
+        jCheckBoxMonthSunday = new javax.swing.JCheckBox();
+        jRadioButtonMonthOption1 = new javax.swing.JRadioButton();
+        jRadioButtonMonthOption2 = new javax.swing.JRadioButton();
         jLabel2 = new javax.swing.JLabel();
-        jSpinner1 = new javax.swing.JSpinner();
+        jSpinnerMonthDay = new javax.swing.JSpinner();
         jLabel3 = new javax.swing.JLabel();
         jSpinner2 = new javax.swing.JSpinner();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jSpinner3 = new javax.swing.JSpinner();
         jLabel6 = new javax.swing.JLabel();
-        jPanel7 = new javax.swing.JPanel();
-        jRadioButton5 = new javax.swing.JRadioButton();
+        jPanelYear = new javax.swing.JPanel();
+        jRadioButtonYear = new javax.swing.JRadioButton();
         jRadioButton6 = new javax.swing.JRadioButton();
         jLabel7 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox();
+        jComboBoxYearDay = new javax.swing.JComboBox();
         jCheckBox15 = new javax.swing.JCheckBox();
         jCheckBox16 = new javax.swing.JCheckBox();
         jCheckBox17 = new javax.swing.JCheckBox();
@@ -86,12 +128,14 @@ public class DialogRegularPeriods extends java.awt.Dialog {
         jComboBox3 = new javax.swing.JComboBox();
         jRadioButton7 = new javax.swing.JRadioButton();
         jLabel9 = new javax.swing.JLabel();
-        jSpinner4 = new javax.swing.JSpinner();
+        jSpinnerYearDay = new javax.swing.JSpinner();
         jLabel10 = new javax.swing.JLabel();
         jComboBox4 = new javax.swing.JComboBox();
         jLabel11 = new javax.swing.JLabel();
         jSpinner5 = new javax.swing.JSpinner();
         jLabel12 = new javax.swing.JLabel();
+        jPanelUseRegularPeriods = new javax.swing.JPanel();
+        jCheckBoxUseRegularPeriods = new javax.swing.JCheckBox();
 
         setLocationRelativeTo(null);
         setModal(true);
@@ -103,122 +147,132 @@ public class DialogRegularPeriods extends java.awt.Dialog {
             }
         });
 
-        jPanel1.setLayout(new java.awt.BorderLayout());
+        jPanelBody.setLayout(new java.awt.BorderLayout());
 
-        jPanel2.setPreferredSize(new java.awt.Dimension(100, 30));
-        jPanel2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
+        jPanelCommands.setPreferredSize(new java.awt.Dimension(100, 30));
+        jPanelCommands.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
         jButtonok.setText("Aceptar");
-        jPanel2.add(jButtonok);
+        jButtonok.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonokActionPerformed(evt);
+            }
+        });
+        jPanelCommands.add(jButtonok);
 
         jButtonCancel.setText("Cancelar");
-        jPanel2.add(jButtonCancel);
+        jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCancelActionPerformed(evt);
+            }
+        });
+        jPanelCommands.add(jButtonCancel);
 
-        jPanel1.add(jPanel2, java.awt.BorderLayout.SOUTH);
+        jPanelBody.add(jPanelCommands, java.awt.BorderLayout.SOUTH);
 
-        jPanel3.setLayout(new java.awt.BorderLayout());
+        jPanelConfigurations.setLayout(new java.awt.BorderLayout());
 
-        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Periodicidad Semanal"));
-        jPanel4.setPreferredSize(new java.awt.Dimension(100, 90));
+        jPanelWeek.setBorder(javax.swing.BorderFactory.createTitledBorder("Periodicidad Semanal"));
+        jPanelWeek.setPreferredSize(new java.awt.Dimension(100, 90));
 
-        buttonGroupPeriodicidad.add(jRadioButton1);
-        jRadioButton1.setSelected(true);
-        jRadioButton1.setText("Semanal");
+        buttonGroupPeriodicidad.add(jRadioButtonWeek);
+        jRadioButtonWeek.setSelected(true);
+        jRadioButtonWeek.setText("Semanal");
 
-        jCheckBox1.setText("Lunes");
+        jCheckBoxWeekMonday.setText("Lunes");
 
-        jCheckBox2.setText("Martes");
+        jCheckBoxWeekTuesday.setText("Martes");
 
-        jCheckBox3.setText("Miércoles");
+        jCheckBoxWeekWednesday.setText("Miércoles");
 
-        jCheckBox4.setText("Jueves");
+        jCheckBoxWeekThursday.setText("Jueves");
 
-        jCheckBox5.setText("Viernes");
+        jCheckBoxWeekFriday.setText("Viernes");
 
-        jCheckBox6.setText("Sabado");
+        jCheckBoxWeekSaturday.setText("Sabado");
 
-        jCheckBox7.setText("Domingo");
+        jCheckBoxWeekSunday.setText("Domingo");
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(jRadioButton1)
+        javax.swing.GroupLayout jPanelWeekLayout = new javax.swing.GroupLayout(jPanelWeek);
+        jPanelWeek.setLayout(jPanelWeekLayout);
+        jPanelWeekLayout.setHorizontalGroup(
+            jPanelWeekLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelWeekLayout.createSequentialGroup()
+                .addComponent(jRadioButtonWeek)
                 .addGap(52, 52, 52)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jCheckBox1)
-                    .addComponent(jCheckBox6))
+                .addGroup(jPanelWeekLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jCheckBoxWeekMonday)
+                    .addComponent(jCheckBoxWeekSaturday))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jCheckBox2)
+                .addGroup(jPanelWeekLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelWeekLayout.createSequentialGroup()
+                        .addComponent(jCheckBoxWeekTuesday)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jCheckBox3)
+                        .addComponent(jCheckBoxWeekWednesday)
                         .addGap(2, 2, 2)
-                        .addComponent(jCheckBox4)
+                        .addComponent(jCheckBoxWeekThursday)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jCheckBox5))
-                    .addComponent(jCheckBox7))
+                        .addComponent(jCheckBoxWeekFriday))
+                    .addComponent(jCheckBoxWeekSunday))
                 .addContainerGap(52, Short.MAX_VALUE))
         );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
+        jPanelWeekLayout.setVerticalGroup(
+            jPanelWeekLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelWeekLayout.createSequentialGroup()
+                .addGroup(jPanelWeekLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelWeekLayout.createSequentialGroup()
                         .addGap(18, 18, 18)
-                        .addComponent(jRadioButton1))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jCheckBox1)
-                            .addComponent(jCheckBox2)
-                            .addComponent(jCheckBox3)
-                            .addComponent(jCheckBox4)
-                            .addComponent(jCheckBox5))
+                        .addComponent(jRadioButtonWeek))
+                    .addGroup(jPanelWeekLayout.createSequentialGroup()
+                        .addGroup(jPanelWeekLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jCheckBoxWeekMonday)
+                            .addComponent(jCheckBoxWeekTuesday)
+                            .addComponent(jCheckBoxWeekWednesday)
+                            .addComponent(jCheckBoxWeekThursday)
+                            .addComponent(jCheckBoxWeekFriday))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jCheckBox6)
-                            .addComponent(jCheckBox7))))
+                        .addGroup(jPanelWeekLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jCheckBoxWeekSaturday)
+                            .addComponent(jCheckBoxWeekSunday))))
                 .addContainerGap(11, Short.MAX_VALUE))
         );
 
-        jPanel3.add(jPanel4, java.awt.BorderLayout.NORTH);
+        jPanelConfigurations.add(jPanelWeek, java.awt.BorderLayout.NORTH);
 
-        jPanel5.setLayout(new java.awt.BorderLayout());
+        jPanelOthers.setLayout(new java.awt.BorderLayout());
 
-        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder("Periodicidad Mensual"));
-        jPanel6.setPreferredSize(new java.awt.Dimension(100, 130));
+        jPanelMonth.setBorder(javax.swing.BorderFactory.createTitledBorder("Periodicidad Mensual"));
+        jPanelMonth.setPreferredSize(new java.awt.Dimension(100, 130));
 
-        buttonGroupPeriodicidad.add(jRadioButton2);
-        jRadioButton2.setText("Mensual");
+        buttonGroupPeriodicidad.add(jRadioButtonMonth);
+        jRadioButtonMonth.setText("Mensual");
 
         jLabel1.setText("El:");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Primer", "Segundo", "Tercer", "Cuarto", "Último" }));
+        jComboBoxMonthDay.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Primer", "Segundo", "Tercer", "Cuarto", "Último" }));
 
-        jCheckBox8.setText("Lu");
+        jCheckBoxMonthMonday.setText("Lu");
 
-        jCheckBox9.setText("Ma");
+        jCheckBoxMonthTuesday.setText("Ma");
 
-        jCheckBox10.setText("Mi");
+        jCheckBoxMonthWednesday.setText("Mi");
 
-        jCheckBox11.setText("Ju");
+        jCheckBoxMonthThursday.setText("Ju");
 
-        jCheckBox12.setText("Vi");
+        jCheckBoxMonthFriday.setText("Vi");
 
-        jCheckBox13.setText("Sa");
+        jCheckBoxMonthSaturday.setText("Sa");
 
-        jCheckBox14.setText("Do");
+        jCheckBoxMonthSunday.setText("Do");
 
-        buttonGroupMensual.add(jRadioButton3);
-        jRadioButton3.setSelected(true);
+        buttonGroupMensual.add(jRadioButtonMonthOption1);
+        jRadioButtonMonthOption1.setSelected(true);
 
-        buttonGroupMensual.add(jRadioButton4);
+        buttonGroupMensual.add(jRadioButtonMonthOption2);
 
         jLabel2.setText("El:");
 
-        jSpinner1.setModel(new javax.swing.SpinnerNumberModel(1, 1, 31, 1));
+        jSpinnerMonthDay.setModel(new javax.swing.SpinnerNumberModel(1, 1, 31, 1));
 
         jLabel3.setText("de cada:");
 
@@ -232,20 +286,20 @@ public class DialogRegularPeriods extends java.awt.Dialog {
 
         jLabel6.setText("Meses");
 
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
-        jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                .addComponent(jRadioButton2)
+        javax.swing.GroupLayout jPanelMonthLayout = new javax.swing.GroupLayout(jPanelMonth);
+        jPanelMonth.setLayout(jPanelMonthLayout);
+        jPanelMonthLayout.setHorizontalGroup(
+            jPanelMonthLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelMonthLayout.createSequentialGroup()
+                .addComponent(jRadioButtonMonth)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addComponent(jRadioButton4)
+                .addGroup(jPanelMonthLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanelMonthLayout.createSequentialGroup()
+                        .addComponent(jRadioButtonMonthOption2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel2)
                         .addGap(10, 10, 10)
-                        .addComponent(jSpinner1)
+                        .addComponent(jSpinnerMonthDay)
                         .addGap(18, 18, 18)
                         .addComponent(jLabel3)
                         .addGap(18, 18, 18)
@@ -253,88 +307,88 @@ public class DialogRegularPeriods extends java.awt.Dialog {
                         .addGap(18, 18, 18)
                         .addComponent(jLabel4)
                         .addGap(41, 41, 41))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                        .addComponent(jRadioButton3)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelMonthLayout.createSequentialGroup()
+                        .addComponent(jRadioButtonMonthOption1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel1)
                         .addGap(10, 10, 10)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jComboBoxMonthDay, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jCheckBox12)
-                            .addComponent(jCheckBox8))
+                        .addGroup(jPanelMonthLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jCheckBoxMonthFriday)
+                            .addComponent(jCheckBoxMonthMonday))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jCheckBox13)
-                            .addComponent(jCheckBox9))
+                        .addGroup(jPanelMonthLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jCheckBoxMonthSaturday)
+                            .addComponent(jCheckBoxMonthTuesday))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel6Layout.createSequentialGroup()
-                                .addComponent(jCheckBox10)
+                        .addGroup(jPanelMonthLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanelMonthLayout.createSequentialGroup()
+                                .addComponent(jCheckBoxMonthWednesday)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jCheckBox11)
+                                .addComponent(jCheckBoxMonthThursday)
                                 .addGap(2, 2, 2)
                                 .addComponent(jLabel5)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jSpinner3, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jLabel6))
-                            .addComponent(jCheckBox14))
+                            .addComponent(jCheckBoxMonthSunday))
                         .addGap(8, 8, 8)))
                 .addContainerGap())
         );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
+        jPanelMonthLayout.setVerticalGroup(
+            jPanelMonthLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelMonthLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanelMonthLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelMonthLayout.createSequentialGroup()
+                        .addGroup(jPanelMonthLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5)
                             .addComponent(jSpinner3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel6))
                         .addGap(5, 5, 5)
-                        .addComponent(jRadioButton2))
-                    .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jRadioButton3)
+                        .addComponent(jRadioButtonMonth))
+                    .addGroup(jPanelMonthLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jComboBoxMonthDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jRadioButtonMonthOption1)
                         .addComponent(jLabel1))
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jCheckBox8)
-                            .addComponent(jCheckBox10)
-                            .addComponent(jCheckBox11)
-                            .addComponent(jCheckBox9))
+                    .addGroup(jPanelMonthLayout.createSequentialGroup()
+                        .addGroup(jPanelMonthLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jCheckBoxMonthMonday)
+                            .addComponent(jCheckBoxMonthWednesday)
+                            .addComponent(jCheckBoxMonthThursday)
+                            .addComponent(jCheckBoxMonthTuesday))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jCheckBox12)
-                            .addComponent(jCheckBox14)
-                            .addComponent(jCheckBox13))))
+                        .addGroup(jPanelMonthLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jCheckBoxMonthFriday)
+                            .addComponent(jCheckBoxMonthSunday)
+                            .addComponent(jCheckBoxMonthSaturday))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanelMonthLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jSpinnerMonthDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3)
                     .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
-                    .addComponent(jRadioButton4)
+                    .addComponent(jRadioButtonMonthOption2)
                     .addComponent(jLabel2))
                 .addContainerGap())
         );
 
-        jPanel5.add(jPanel6, java.awt.BorderLayout.NORTH);
+        jPanelOthers.add(jPanelMonth, java.awt.BorderLayout.NORTH);
 
-        jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder("Periodicidad Anual"));
-        jPanel7.setPreferredSize(new java.awt.Dimension(500, 160));
+        jPanelYear.setBorder(javax.swing.BorderFactory.createTitledBorder("Periodicidad Anual"));
+        jPanelYear.setPreferredSize(new java.awt.Dimension(500, 160));
 
-        buttonGroupPeriodicidad.add(jRadioButton5);
-        jRadioButton5.setText("Anual");
+        buttonGroupPeriodicidad.add(jRadioButtonYear);
+        jRadioButtonYear.setText("Anual");
 
         buttonGroupAnual.add(jRadioButton6);
         jRadioButton6.setSelected(true);
 
         jLabel7.setText("El:");
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Primer", "Segundo", "Tercer", "Cuarto", "Último" }));
+        jComboBoxYearDay.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Primer", "Segundo", "Tercer", "Cuarto", "Último" }));
 
         jCheckBox15.setText("Lu");
 
@@ -358,7 +412,7 @@ public class DialogRegularPeriods extends java.awt.Dialog {
 
         jLabel9.setText("El:");
 
-        jSpinner4.setModel(new javax.swing.SpinnerNumberModel(1, 1, 31, 1));
+        jSpinnerYearDay.setModel(new javax.swing.SpinnerNumberModel(1, 1, 31, 1));
 
         jLabel10.setText("de:");
 
@@ -370,33 +424,33 @@ public class DialogRegularPeriods extends java.awt.Dialog {
 
         jLabel12.setText("años");
 
-        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
-        jPanel7.setLayout(jPanel7Layout);
-        jPanel7Layout.setHorizontalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel7Layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanelYearLayout = new javax.swing.GroupLayout(jPanelYear);
+        jPanelYear.setLayout(jPanelYearLayout);
+        jPanelYearLayout.setHorizontalGroup(
+            jPanelYearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelYearLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jRadioButton5)
+                .addComponent(jRadioButtonYear)
                 .addGap(8, 8, 8)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel7Layout.createSequentialGroup()
+                .addGroup(jPanelYearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelYearLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jRadioButton6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jComboBoxYearDay, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(6, 6, 6)
-                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanelYearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jCheckBox17)
                             .addComponent(jCheckBox15))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanelYearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jCheckBox18)
                             .addComponent(jCheckBox16))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addGroup(jPanelYearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanelYearLayout.createSequentialGroup()
                                 .addComponent(jCheckBox20)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jCheckBox21)
@@ -405,12 +459,12 @@ public class DialogRegularPeriods extends java.awt.Dialog {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jCheckBox19)))
-                    .addGroup(jPanel7Layout.createSequentialGroup()
+                    .addGroup(jPanelYearLayout.createSequentialGroup()
                         .addComponent(jRadioButton7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel9)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSpinner4, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jSpinnerYearDay, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel10)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -423,49 +477,49 @@ public class DialogRegularPeriods extends java.awt.Dialog {
                 .addComponent(jLabel12)
                 .addContainerGap())
         );
-        jPanel7Layout.setVerticalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel7Layout.createSequentialGroup()
+        jPanelYearLayout.setVerticalGroup(
+            jPanelYearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelYearLayout.createSequentialGroup()
                 .addGap(11, 11, 11)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanelYearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jCheckBox21)
-                    .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addGroup(jPanelYearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jComboBox3, javax.swing.GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE)
                         .addComponent(jLabel8)))
-                .addContainerGap(77, Short.MAX_VALUE))
-            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap(72, Short.MAX_VALUE))
+            .addGroup(jPanelYearLayout.createSequentialGroup()
                 .addGap(18, 18, 18)
-                .addComponent(jRadioButton5)
+                .addComponent(jRadioButtonYear)
                 .addGap(75, 75, 75))
-            .addGroup(jPanel7Layout.createSequentialGroup()
+            .addGroup(jPanelYearLayout.createSequentialGroup()
                 .addGap(11, 11, 11)
                 .addComponent(jCheckBox15)
                 .addContainerGap(82, Short.MAX_VALUE))
-            .addGroup(jPanel7Layout.createSequentialGroup()
+            .addGroup(jPanelYearLayout.createSequentialGroup()
                 .addGap(11, 11, 11)
                 .addComponent(jCheckBox16)
                 .addContainerGap(82, Short.MAX_VALUE))
-            .addGroup(jPanel7Layout.createSequentialGroup()
+            .addGroup(jPanelYearLayout.createSequentialGroup()
                 .addGap(11, 11, 11)
                 .addComponent(jCheckBox20)
                 .addContainerGap(82, Short.MAX_VALUE))
-            .addGroup(jPanel7Layout.createSequentialGroup()
+            .addGroup(jPanelYearLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanelYearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBoxYearDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jRadioButton6))
                 .addGap(3, 3, 3)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanelYearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelYearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jCheckBox19)
                         .addComponent(jCheckBox18))
                     .addComponent(jCheckBox17, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addGap(25, 25, 25)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanelYearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jRadioButton7)
                     .addComponent(jLabel9)
-                    .addComponent(jSpinner4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSpinnerYearDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel10)
                     .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel11)
@@ -474,13 +528,21 @@ public class DialogRegularPeriods extends java.awt.Dialog {
                 .addContainerGap())
         );
 
-        jPanel5.add(jPanel7, java.awt.BorderLayout.CENTER);
+        jPanelOthers.add(jPanelYear, java.awt.BorderLayout.CENTER);
 
-        jPanel3.add(jPanel5, java.awt.BorderLayout.CENTER);
+        jPanelConfigurations.add(jPanelOthers, java.awt.BorderLayout.CENTER);
 
-        jPanel1.add(jPanel3, java.awt.BorderLayout.CENTER);
+        jPanelBody.add(jPanelConfigurations, java.awt.BorderLayout.CENTER);
 
-        add(jPanel1, java.awt.BorderLayout.CENTER);
+        add(jPanelBody, java.awt.BorderLayout.CENTER);
+
+        jPanelUseRegularPeriods.setPreferredSize(new java.awt.Dimension(100, 30));
+        jPanelUseRegularPeriods.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+
+        jCheckBoxUseRegularPeriods.setText("Usar Periodos Regulares");
+        jPanelUseRegularPeriods.add(jCheckBoxUseRegularPeriods);
+
+        add(jPanelUseRegularPeriods, java.awt.BorderLayout.NORTH);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -490,6 +552,16 @@ public class DialogRegularPeriods extends java.awt.Dialog {
         setVisible(false);
         dispose();
     }//GEN-LAST:event_closeDialog
+
+    private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonCancelActionPerformed
+    {//GEN-HEADEREND:event_jButtonCancelActionPerformed
+        this.setVisible(false);
+    }//GEN-LAST:event_jButtonCancelActionPerformed
+
+    private void jButtonokActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonokActionPerformed
+    {//GEN-HEADEREND:event_jButtonokActionPerformed
+        this.setVisible(false);        
+    }//GEN-LAST:event_jButtonokActionPerformed
 
     /**
     * @param args the command line arguments
@@ -515,31 +587,32 @@ public class DialogRegularPeriods extends java.awt.Dialog {
     private javax.swing.ButtonGroup buttonGroupPeriodicidad;
     private javax.swing.JButton jButtonCancel;
     private javax.swing.JButton jButtonok;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox10;
-    private javax.swing.JCheckBox jCheckBox11;
-    private javax.swing.JCheckBox jCheckBox12;
-    private javax.swing.JCheckBox jCheckBox13;
-    private javax.swing.JCheckBox jCheckBox14;
     private javax.swing.JCheckBox jCheckBox15;
     private javax.swing.JCheckBox jCheckBox16;
     private javax.swing.JCheckBox jCheckBox17;
     private javax.swing.JCheckBox jCheckBox18;
     private javax.swing.JCheckBox jCheckBox19;
-    private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox20;
     private javax.swing.JCheckBox jCheckBox21;
-    private javax.swing.JCheckBox jCheckBox3;
-    private javax.swing.JCheckBox jCheckBox4;
-    private javax.swing.JCheckBox jCheckBox5;
-    private javax.swing.JCheckBox jCheckBox6;
-    private javax.swing.JCheckBox jCheckBox7;
-    private javax.swing.JCheckBox jCheckBox8;
-    private javax.swing.JCheckBox jCheckBox9;
-    private javax.swing.JComboBox jComboBox1;
-    private javax.swing.JComboBox jComboBox2;
+    private javax.swing.JCheckBox jCheckBoxMonthFriday;
+    private javax.swing.JCheckBox jCheckBoxMonthMonday;
+    private javax.swing.JCheckBox jCheckBoxMonthSaturday;
+    private javax.swing.JCheckBox jCheckBoxMonthSunday;
+    private javax.swing.JCheckBox jCheckBoxMonthThursday;
+    private javax.swing.JCheckBox jCheckBoxMonthTuesday;
+    private javax.swing.JCheckBox jCheckBoxMonthWednesday;
+    private javax.swing.JCheckBox jCheckBoxUseRegularPeriods;
+    private javax.swing.JCheckBox jCheckBoxWeekFriday;
+    private javax.swing.JCheckBox jCheckBoxWeekMonday;
+    private javax.swing.JCheckBox jCheckBoxWeekSaturday;
+    private javax.swing.JCheckBox jCheckBoxWeekSunday;
+    private javax.swing.JCheckBox jCheckBoxWeekThursday;
+    private javax.swing.JCheckBox jCheckBoxWeekTuesday;
+    private javax.swing.JCheckBox jCheckBoxWeekWednesday;
     private javax.swing.JComboBox jComboBox3;
     private javax.swing.JComboBox jComboBox4;
+    private javax.swing.JComboBox jComboBoxMonthDay;
+    private javax.swing.JComboBox jComboBoxYearDay;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -552,25 +625,26 @@ public class DialogRegularPeriods extends java.awt.Dialog {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel7;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
-    private javax.swing.JRadioButton jRadioButton3;
-    private javax.swing.JRadioButton jRadioButton4;
-    private javax.swing.JRadioButton jRadioButton5;
+    private javax.swing.JPanel jPanelBody;
+    private javax.swing.JPanel jPanelCommands;
+    private javax.swing.JPanel jPanelConfigurations;
+    private javax.swing.JPanel jPanelMonth;
+    private javax.swing.JPanel jPanelOthers;
+    private javax.swing.JPanel jPanelUseRegularPeriods;
+    private javax.swing.JPanel jPanelWeek;
+    private javax.swing.JPanel jPanelYear;
     private javax.swing.JRadioButton jRadioButton6;
     private javax.swing.JRadioButton jRadioButton7;
-    private javax.swing.JSpinner jSpinner1;
+    private javax.swing.JRadioButton jRadioButtonMonth;
+    private javax.swing.JRadioButton jRadioButtonMonthOption1;
+    private javax.swing.JRadioButton jRadioButtonMonthOption2;
+    private javax.swing.JRadioButton jRadioButtonWeek;
+    private javax.swing.JRadioButton jRadioButtonYear;
     private javax.swing.JSpinner jSpinner2;
     private javax.swing.JSpinner jSpinner3;
-    private javax.swing.JSpinner jSpinner4;
     private javax.swing.JSpinner jSpinner5;
+    private javax.swing.JSpinner jSpinnerMonthDay;
+    private javax.swing.JSpinner jSpinnerYearDay;
     // End of variables declaration//GEN-END:variables
 
 }
