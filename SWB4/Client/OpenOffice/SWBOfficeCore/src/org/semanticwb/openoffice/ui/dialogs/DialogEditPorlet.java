@@ -7,6 +7,7 @@ package org.semanticwb.openoffice.ui.dialogs;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Frame;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
@@ -364,7 +365,7 @@ public class DialogEditPorlet extends javax.swing.JDialog
         jScrollPane2 = new javax.swing.JScrollPane();
         jTableScheduler = new javax.swing.JTable();
         jToolBar1 = new javax.swing.JToolBar();
-        jButtonAddScheduler = new javax.swing.JButton();
+        jButtonAddCalendar = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JToolBar.Separator();
         jButtonEditEcheduler = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JToolBar.Separator();
@@ -419,15 +420,13 @@ public class DialogEditPorlet extends javax.swing.JDialog
 
         jTableScheduler.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+
             },
             new String [] {
                 "Titulo", "Activo"
             }
         ));
+        jTableScheduler.setColumnSelectionAllowed(true);
         jScrollPane2.setViewportView(jTableScheduler);
         jTableScheduler.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
@@ -435,11 +434,16 @@ public class DialogEditPorlet extends javax.swing.JDialog
 
         jToolBar1.setRollover(true);
 
-        jButtonAddScheduler.setText("Agregar");
-        jButtonAddScheduler.setFocusable(false);
-        jButtonAddScheduler.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButtonAddScheduler.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButtonAddScheduler);
+        jButtonAddCalendar.setText("Agregar");
+        jButtonAddCalendar.setFocusable(false);
+        jButtonAddCalendar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonAddCalendar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonAddCalendar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAddCalendarActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(jButtonAddCalendar);
         jToolBar1.add(jSeparator1);
 
         jButtonEditEcheduler.setText("Editar");
@@ -481,9 +485,16 @@ private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
     isCancel=false;
     this.setVisible(false);
 }//GEN-LAST:event_jButtonOKActionPerformed
+
+private void jButtonAddCalendarActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonAddCalendarActionPerformed
+{//GEN-HEADEREND:event_jButtonAddCalendarActionPerformed
+    DialogCalendar dialogCalendar=new DialogCalendar(new Frame(), true);
+    dialogCalendar.setVisible(true);
+}//GEN-LAST:event_jButtonAddCalendarActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.JButton jButtonAddScheduler;
+    private javax.swing.JButton jButtonAddCalendar;
     private javax.swing.JButton jButtonCancel;
     private javax.swing.JButton jButtonDeleteScheduler;
     private javax.swing.JButton jButtonEditEcheduler;
