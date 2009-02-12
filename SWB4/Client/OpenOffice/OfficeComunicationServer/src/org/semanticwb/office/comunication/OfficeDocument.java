@@ -24,14 +24,17 @@ import javax.jcr.version.VersionIterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.DisplayProperty;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.Portlet;
 import org.semanticwb.model.PortletType;
 import org.semanticwb.model.Portletable;
+import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.SWBContext;
 
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
+import org.semanticwb.office.interfaces.CalendarInfo;
 import org.semanticwb.office.interfaces.CategoryInfo;
 import org.semanticwb.office.interfaces.IOfficeDocument;
 import org.semanticwb.office.interfaces.PageInfo;
@@ -727,7 +730,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             {
                 page.addPortlet(portlet);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 log.error(e);
             }
@@ -764,36 +767,57 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         ArrayList<PropertyInfo> properties = new ArrayList<PropertyInfo>();
         return properties.toArray(new PropertyInfo[properties.size()]);
     }
+
     public void setPropertyValue(PortletInfo portletInfo, PropertyInfo propertyInfo, String value) throws Exception
     {
-        WebSite site=SWBContext.getWebSite(portletInfo.page.site.id);
-        OfficePortlet portlet=OfficePortlet.getOfficePortlet(portletInfo.id, site);
-        SemanticProperty prop=site.getSemanticObject().getModel().getSemanticProperty(propertyInfo.id);
+        WebSite site = SWBContext.getWebSite(portletInfo.page.site.id);
+        OfficePortlet portlet = OfficePortlet.getOfficePortlet(portletInfo.id, site);
+        SemanticProperty prop = site.getSemanticObject().getModel().getSemanticProperty(propertyInfo.id);
         portlet.getSemanticObject().setProperty(prop, value);
     }
-    public String getPropertyValue(PortletInfo portletInfo,PropertyInfo propertyInfo) throws Exception
+
+    public CalendarInfo[] getCalendars(PortletInfo portletInfo) throws Exception
     {
-        WebSite site=SWBContext.getWebSite(portletInfo.page.site.id);
-        OfficePortlet portlet=OfficePortlet.getOfficePortlet(portletInfo.id, site);
-        SemanticProperty prop=site.getSemanticObject().getModel().getSemanticProperty(propertyInfo.id);
+        ArrayList<CalendarInfo> getCalendarInfo = new ArrayList<CalendarInfo>();
+        WebSite site = SWBContext.getWebSite(portletInfo.page.site.id);
+        OfficePortlet portlet = OfficePortlet.getOfficePortlet(portletInfo.id, site);
+        Iterator<org.semanticwb.model.Calendar> calendars = portlet.listCalendars();
+        while (calendars.hasNext())
+        {
+            org.semanticwb.model.Calendar cal = calendars.next();
+            CalendarInfo info=new CalendarInfo();
+            info.id=cal.getId();
+            info.xml=cal.getXml();
+            info.active=cal.isActive();
+            getCalendarInfo.add(info);
+        }
+        return getCalendarInfo.toArray(new CalendarInfo[getCalendarInfo.size()]);
+    }
+
+    public String getPropertyValue(PortletInfo portletInfo, PropertyInfo propertyInfo) throws Exception
+    {
+        WebSite site = SWBContext.getWebSite(portletInfo.page.site.id);
+        OfficePortlet portlet = OfficePortlet.getOfficePortlet(portletInfo.id, site);
+        SemanticProperty prop = site.getSemanticObject().getModel().getSemanticProperty(propertyInfo.id);
         return portlet.getSemanticObject().getProperty(prop);
     }
+
     public PropertyInfo[] getPortletProperties(String repositoryName, String contentID) throws Exception
     {
         ArrayList<PropertyInfo> properties = new ArrayList<PropertyInfo>();
-        String type=getContentType(repositoryName, contentID);
-        SemanticClass clazz=null;
-        if(type.equalsIgnoreCase("excel"))
+        String type = getContentType(repositoryName, contentID);
+        SemanticClass clazz = null;
+        if (type.equalsIgnoreCase("excel"))
         {
-            clazz=ExcelPortlet.sclass;
+            clazz = ExcelPortlet.sclass;
         }
-        else if(type.equalsIgnoreCase("ppt"))
+        else if (type.equalsIgnoreCase("ppt"))
         {
-            clazz=PPTPortlet.sclass;
+            clazz = PPTPortlet.sclass;
         }
         else
         {
-            clazz=WordPortlet.sclass;
+            clazz = WordPortlet.sclass;
         }
         Iterator<SemanticProperty> propertiesClazz = clazz.listProperties();
         while (propertiesClazz.hasNext())
@@ -801,26 +825,31 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             SemanticProperty prop = propertiesClazz.next();
             if (prop.isDataTypeProperty() && !prop.isBinary() && prop.getPrefix() != null)
             {
-                String label = prop.getLabel();
-                if (label != null)
+                SemanticObject displayObj = prop.getDisplayProperty();
+                if (displayObj != null)
                 {
-                    PropertyInfo info = new PropertyInfo();
-                    info.id = prop.getURI();
-                    info.isRequired = prop.isRequired();
-                    info.title = label;
-                    if (prop.isString())
+                    DisplayProperty propDisplay = new DisplayProperty(displayObj);
+                    if (!propDisplay.isHidden())
                     {
-                        info.type = "String";
+                        PropertyInfo info = new PropertyInfo();
+                        info.id = prop.getURI();
+                        info.isRequired = prop.isRequired();
+                        info.title = prop.getDisplayName();
+                        if (prop.isString())
+                        {
+                            info.type = "String";
+                        }
+                        if (prop.isBoolean())
+                        {
+                            info.type = "Boolean";
+                        }
+                        if (prop.isInt())
+                        {
+                            info.type = "Integer";
+                        }
+
+                        properties.add(info);
                     }
-                    if (prop.isBoolean())
-                    {
-                        info.type = "Boolean";
-                    }
-                    if (prop.isInt())
-                    {
-                        info.type = "Integer";
-                    }
-                    properties.add(info);
                 }
             }
         }
@@ -1055,7 +1084,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         {
             portlet.clean();
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             log.event(e);
         }
@@ -1074,17 +1103,11 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 
     public void deletePreview(String dir) throws Exception
     {
-        if(!dir.startsWith("/"))
+        if (!dir.startsWith("/"))
         {
-            dir="/"+dir;
+            dir = "/" + dir;
         }
         OfficePortlet.clean(dir);
     }
-
-
-
-
-
-
 }
 
