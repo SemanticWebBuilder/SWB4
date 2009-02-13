@@ -49,12 +49,6 @@ public class EditFile implements InternalServlet {
             String newcontent = request.getParameter("content");
             PrintWriter out = response.getWriter();
             if (newcontent == null) {
-                out.println("<html>");
-                out.println("<head>");
-                out.println("<title>EditArea Test</title>");
-                out.println("<script language=\"javascript\" type=\"text/javascript\" src=\"/swb/swbadmin/js/editarea/edit_area/edit_area_full.js\"></script>");
-                out.println("</head>");
-                out.println("<body>");
                 String ext=null;
                 int pos=path.lastIndexOf(".");
                 if(pos>-1){
@@ -71,6 +65,13 @@ public class EditFile implements InternalServlet {
                     content=SWBUtils.IO.readInputStream(fileInput);
                 }
                 long time = new Date().getTime();
+
+                out.println("<html>");
+                out.println("<head>");
+                out.println("<title>EditArea Test</title>");
+                out.println("<script language=\"javascript\" type=\"text/javascript\" src=\"/swb/swbadmin/js/editarea/edit_area/edit_area_full.js\"></script>");
+                out.println("</head>");
+                out.println("<body>");
                 out.println("<form method=\"post\" name=\"editor_"+time+"\" action=\""+SWBPlatform.getContextPath()+"/editfile"+"\"> \n" +
                         "<script language=\"javascript\" type=\"text/javascript\"> editAreaLoader.init({ \n" +
                         "id : \"textarea_" + time + "\" \n" + // id of the textarea to transform
