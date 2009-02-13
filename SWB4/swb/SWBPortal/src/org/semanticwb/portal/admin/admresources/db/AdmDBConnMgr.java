@@ -215,7 +215,6 @@ public class AdmDBConnMgr {
                                 }
                             }
                         } else { //Para parametros tipo file tiene que parsear y subir imagenes..
-                            //System.out.println("entra a subir archivo con uploadFileParsed");
                             String filename = fUpload.getFileName(paramN);
                             int i = filename.lastIndexOf("\\");
                             if (i != -1) {
@@ -230,7 +229,8 @@ public class AdmDBConnMgr {
                             child.appendChild(dom.createTextNode(filename.trim()));
                             root.appendChild(child);
 
-                            afiles.put(filename.trim(), "1");
+                            afiles.put(paramN, filename.trim());
+
                             String tmp = admResUtils.uploadFileParsed(base, fUpload, paramN, req.getSession().getId());
                             if (tmp != null) {
                                 imgapplet += tmp;
@@ -259,8 +259,9 @@ public class AdmDBConnMgr {
                             child.appendChild(dom.createTextNode(value.trim()));
                             root.appendChild(child);
                         } else if (pname.startsWith("wbReplacefile_")) { //remover de filesystem archivo anterior
-                            String hiddenFile = (String) hparams.get(pname);
-                            if (afiles.get(hiddenFile) == null) { //si no existe en el hash de archivos , eliminalo de filesystem
+                            String hiddenFile = (String) hparams.get(pname); //archivo anterior
+                            String field=pname.substring(14);  //valor de campo de archivo anterior
+                            if(afiles.get(field)!=null){
                                 admResUtils.removeFileFromFS(SWBPlatform.getWorkPath() + base.getWorkPath() + "/" + hiddenFile);
                             }
                         }
@@ -316,7 +317,6 @@ public class AdmDBConnMgr {
                     }
                 }
             }
-        //System.out.println("grabando -update res...");
         } catch (SWBException e) {
             log.error(e);
         }
@@ -794,7 +794,6 @@ public class AdmDBConnMgr {
                     }
                 }
             }
-            //System.out.println("query loadXmlRes:" + query);
             PreparedStatement st = con.prepareStatement(query);
             st.setString(1, base.getId());
             st.setString(2, base.getWebSiteId());
@@ -846,7 +845,6 @@ public class AdmDBConnMgr {
         } catch (Exception e) {
             log.error(e);
         }
-        //System.out.println("loadxml:" + loadxml);
         return loadxml;
     }
 
