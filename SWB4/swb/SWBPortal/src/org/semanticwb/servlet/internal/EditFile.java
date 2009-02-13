@@ -19,8 +19,8 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Portlet;
-import org.semanticwb.portal.SWBResourceMgr;
-import org.semanticwb.portal.api.SWBResource;
+import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.portal.api.SWBResourceURLImp;
 
 /**
  *
@@ -98,7 +98,7 @@ public class EditFile implements InternalServlet {
                         "<input type=\"hidden\" name=\"resUri\" value=\""+resUri+"\">"+
                         "<input type=\"hidden\" name=\"file\" value=\""+path2Save+"\">"+
                         "<input type=\"hidden\" name=\"attr\" value=\""+request.getParameter("attr")+"\">"+
-                        "input type=\"button\" name=\"return\" onclick=\"history.back(1);\">"+
+                        "<br/><input type=\"button\" name=\"return\" onclick=\"history.go(-1); value=\"Regresar\"\">"+
                         "</form> \n");
                 out.println("</body> \n");
                 out.println("</html> \n");
@@ -111,7 +111,21 @@ public class EditFile implements InternalServlet {
                 String attr=request.getParameter("attr");
                 if(attr!=null){
                     base.setAttribute(request.getParameter("attr"), fileName);
-                    base.updateAttributesToDB();
+                    base.updateAttributesToDB();                    
+                }
+                System.out.println("antes de redireccionar");
+                if(base!=null){
+                    System.out.println("entra a redireccionar");
+                    //Redireccionamiento a la administración del recurso en cuestion
+                    SWBResourceURLImp url=new SWBResourceURLImp(request, base, dparams.getWebPage(), SWBResourceURL.UrlType_RENDER);
+                    url.setResourceBase(base);
+                    url.setMode(url.Mode_ADMIN);
+                    url.setWindowState(url.WinState_MAXIMIZED);
+                    url.setAction("add");
+                    out.println("<script type=\"text/javascript\">");
+                    out.println("showStatus('Archivo modificado y guardado');");
+                    out.println("addNewTab('"+url.toString()+"');");
+                    out.println("</script>");
                 }
             }
         } catch (Exception e) {
