@@ -32,6 +32,7 @@ public class EditFile implements InternalServlet {
 
     public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException, ServletException {
         try {
+            String lang=dparams.getUser().getLanguage();
             String path = request.getParameter("file");
             String fileName=null;
             int posfileName=path.lastIndexOf("/");
@@ -78,7 +79,7 @@ public class EditFile implements InternalServlet {
                         ",font_family: \"verdana, monospace\" \n" +
                         ",allow_resize: \"y\" \n" +
                         ",allow_toggle: false \n" +
-                        ",language: \"es\" \n" +
+                        ",language: \""+lang+"\" \n" +
                         ",syntax: \""+ext+"\"	\n" +
                         ",toolbar: \"save, search, go_to_line, |, undo, redo, |, highlight, reset_highlight, |, help\" \n" +
                         ",load_callback: \"my_load\" \n" +
@@ -87,18 +88,17 @@ public class EditFile implements InternalServlet {
                         ",charmap_default: \"arrows\" \n" +
                         "}); \n" +
                         "function my_save(id, content){ \n" +
-                            " alert('id:'+id+',content:'+content);" +
                             "document.editor_"+time+".content.value=content; \n"+
                             "document.editor_"+time+".submit(); \n" +
                         "} \n" +
                         "</script> \n" +
-                        "<textarea id=\"textarea_" + time + "\" name=\"content\" cols=\"100\" rows=\"45\"> \n" +
-                        content+"\n"+
-                        "</textarea> \n" +
+                        "<textarea id=\"textarea_" + time + "\" name=\"content\" cols=\"100\" rows=\"45\">" +
+                        content+
+                        "</textarea>" +
                         "<input type=\"hidden\" name=\"resUri\" value=\""+resUri+"\">"+
                         "<input type=\"hidden\" name=\"file\" value=\""+path2Save+"\">"+
                         "<input type=\"hidden\" name=\"attr\" value=\""+request.getParameter("attr")+"\">"+
-                        "<br/><input type=\"button\" name=\"return\" onclick=\"history.go(-1); value=\"Regresar\"\">"+
+                        "<br/><input type=\"button\" name=\"return\" onclick=\"history.go(-1);\" value=\"Regresar\">"+
                         "</form> \n");
                 out.println("</body> \n");
                 out.println("</html> \n");
@@ -113,19 +113,19 @@ public class EditFile implements InternalServlet {
                     base.setAttribute(request.getParameter("attr"), fileName);
                     base.updateAttributesToDB();                    
                 }
-                System.out.println("antes de redireccionar");
                 if(base!=null){
-                    System.out.println("entra a redireccionar");
                     //Redireccionamiento a la administración del recurso en cuestion
                     SWBResourceURLImp url=new SWBResourceURLImp(request, base, dparams.getWebPage(), SWBResourceURL.UrlType_RENDER);
                     url.setResourceBase(base);
                     url.setMode(url.Mode_ADMIN);
                     url.setWindowState(url.WinState_MAXIMIZED);
-                    url.setAction("add");
-                    out.println("<script type=\"text/javascript\">");
-                    out.println("showStatus('Archivo modificado y guardado');");
-                    out.println("addNewTab('"+url.toString()+"');");
-                    out.println("</script>");
+                    url.setAction("edit");
+                    response.sendRedirect(url.toString());
+
+//                    out.println("<script type=\"text/javascript\">");
+//                    out.println("showStatus('Archivo modificado y guardado');");
+//                    out.println("addNewTab('"+url.toString()+"');");
+//                    out.println("</script>");
                 }
             }
         } catch (Exception e) {
