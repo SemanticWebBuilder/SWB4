@@ -130,7 +130,6 @@ public class SWBResourceMgr
                 //System.out.println("base:"+base);
                 if(user.haveAccess(base))
                 {
-                    //TODO:CheckResource
                     if(checkResource(base, user, null, 0, today, topic))
                     {
                         //System.out.println("Add:"+res);
@@ -343,8 +342,8 @@ public class SWBResourceMgr
                 //&& (base.getCamp() == 0 || DBCatalogs.getInstance().getCamp(base.getTopicMapId(),base.getCamp()).getActive() == 1)
         )
         {
-            //TODO:Filter
-            //if (!base.evalFilterMap(topic)) return false;
+            //Filter
+            if(!base.evalFilterMap(topic)) return false;
 
             passrules=user.haveAccess(base);
 
