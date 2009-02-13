@@ -48,6 +48,9 @@ public class SemanticClass
     private String m_classID=null;
     private boolean m_isClassIDCheck=false;
 
+    private Boolean isdragSupport=null;
+
+
     public SemanticClass(OntClass oclass)
     {
         this.m_class=oclass;
@@ -138,6 +141,25 @@ public class SemanticClass
         //log.trace("isAutogenId:"+m_autogenId);
         return m_autogenId;
     }
+
+    /**
+     * si el objeto relacionado soporta drag and drop
+     * @return
+     */
+    public boolean isdragSupport()
+    {
+        if(isdragSupport==null)
+        {
+            isdragSupport=false;
+            Statement st=m_class.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DRAGSUPPORT));
+            if(st!=null)
+            {
+                isdragSupport=st.getBoolean();
+            }
+        }
+        return isdragSupport;
+    }
+
 
     public String getClassId()
     {
