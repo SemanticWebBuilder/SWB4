@@ -327,12 +327,9 @@ public class FileFE extends WBJsInputFEAbs
                 {
                     if(msgbydefault!=null) xml+=msgbydefault;
                     else msgbydefault+="Default: ";
-                    System.out.println("a punto de");
                     if(bydefault.endsWith(".html") || bydefault.endsWith(".htm") || bydefault.endsWith(".xml") || bydefault.endsWith(".xsl") || bydefault.endsWith(".xslt") || bydefault.endsWith(".jsp")){
-                        System.out.println("path manda:"+SWBUtils.getApplicationPath()+"/"+ bydefault);
                         String defFileName=bydefault.substring(bydefault.lastIndexOf("/")+1);
                         Portlet base=dbconnmgr.getBase();
-                        System.out.println("base.getURI():"+base.getURI());
                         xml+="<A href=\""+ SWBPlatform.getContextPath()+"/editfile?file="+ bydefault +"&pathType=def&resUri="+base.getEncodedURI()+"&attr="+getName()+"\">"+defFileName+"</A>";
                     }else{
                         xml+="<A href=\""+bydefault+"\">"+bydefault.substring(bydefault.lastIndexOf("/")+1)+"</A>";
