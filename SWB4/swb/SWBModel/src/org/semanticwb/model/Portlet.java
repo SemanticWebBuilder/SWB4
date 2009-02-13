@@ -7,7 +7,6 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.base.*;
-import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.w3c.dom.*;
 
@@ -18,7 +17,9 @@ public class Portlet extends PortletBase
     private String siteid=null;
     protected int randpriority;    
     
-    private Document dom=null;
+    private Document m_dom=null;
+    private Document m_filter=null;
+    private NodeList m_filternode=null;
     
     public Portlet(SemanticObject base)
     {
@@ -69,18 +70,11 @@ public class Portlet extends PortletBase
     
     public Document getDom() throws SWBException
     {
-       if(dom==null)
+       if(m_dom==null)
        {
-           String xml=getXml();
-           if(xml!=null && xml.length()>0)
-           {
-               dom=SWBUtils.XML.xmlToDom(getXml());
-           }else
-           {
-               dom=SWBUtils.XML.getNewDocument();
-           }
+           m_dom=getSemanticObject().getDomProperty(swb_xml);
        }
-       return dom;
+       return m_dom;
     }    
     
     
@@ -184,6 +178,7 @@ public class Portlet extends PortletBase
     /** Actualiza los atributos del DOM a base de datos. */
     public void updateAttributesToDB() throws SWBException
     {
+        Document dom=getDom();
         if(dom!=null)
         {
             String xml = SWBUtils.XML.domToXml(dom);
@@ -198,7 +193,7 @@ public class Portlet extends PortletBase
     public void setXml(String xml) 
     {
         super.setXml(xml);
-        dom=null;
+        m_dom=null;
     }
     
     public void addHit(HttpServletRequest request, User user, WebPage page)
@@ -278,38 +273,70 @@ public class Portlet extends PortletBase
         setProperty("data/wp/"+page.getWebSiteId()+"/"+page.getId(),data);
     }
 
-//    /**  org.semanticwb.model.Inheritable
-//     * @param topic
-//     * @return  */
-//    public boolean evalFilterMap(WebPage topic)
-//    {
-//        boolean ret = false;
-//        NodeList fi = getFilterMap();
-//        if (fi == null) return true;
-//        for (int x = 0; x < fi.getLength(); x++)
-//        {
-//            Element el = (Element) fi.item(x);
-//            if (topic.getWebSiteId().equals(el.getAttribute("id")))
-//            {
-//                NodeList ti = el.getElementsByTagName("topic");
-//                for (int y = 0; y < ti.getLength(); y++)
-//                {
-//                    Element eltp = (Element) ti.item(y);
-//                    WebPage atopic = topic.getWebSite().getWebPage(eltp.getAttribute("id"));
-//                    if (atopic != null)
-//                    {
-//                        if (topic == atopic)
-//                            ret = true;
-//                        else if (eltp.getAttribute("childs").equals("true"))
-//                        {
-//                            if (topic.isChildof(atopic)) ret = true;
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        return ret;
-//    }
+    /** Getter for property filterMap.
+     * @return Value of property filterMap.
+     */
+    public org.w3c.dom.NodeList getFilterNode()
+    {
+        PortletFilter pfilter=getPortletFilter();
+        if(pfilter!=null)
+        {
+            Document aux=pfilter.getSemanticObject().getDomProperty(swb_xml);
+            if(aux!=m_filter)
+            {
+                m_filter=aux;
+                NodeList nl = aux.getElementsByTagName("topicmap");
+                int n = nl.getLength();
+                if (n > 0)
+                {
+                    m_filternode = nl;
+                } else
+                {
+                    m_filternode = null;
+                }
+            }
+        }else
+        {
+            m_filternode=null;
+        }
+        //System.out.println("getFilterNode:"+getURI()+" "+m_filternode);
+        return m_filternode;
+    }
+
+
+    /**  org.semanticwb.model.Inheritable
+     * @param topic
+     * @return  */
+    public boolean evalFilterMap(WebPage topic)
+    {
+        boolean ret = false;
+        NodeList fi = getFilterNode();
+        if (fi == null) return true;
+        for (int x = 0; x < fi.getLength(); x++)
+        {
+            Element el = (Element) fi.item(x);
+            //System.out.println("evalFilterMap:"+topic.getWebSiteId()+"="+el.getAttribute("id"));
+            if (topic.getWebSiteId().equals(el.getAttribute("id")))
+            {
+                NodeList ti = el.getElementsByTagName("topic");
+                for (int y = 0; y < ti.getLength(); y++)
+                {
+                    Element eltp = (Element) ti.item(y);
+                    WebPage atopic = topic.getWebSite().getWebPage(eltp.getAttribute("id"));
+                    if (atopic != null)
+                    {
+                        if (topic.equals(atopic))
+                            ret = true;
+                        else if (eltp.getAttribute("childs").equals("true"))
+                        {
+                            if (topic.isChildof(atopic)) ret = true;
+                        }
+                    }
+                }
+            }
+        }
+        return ret;
+    }
 
 
 }
