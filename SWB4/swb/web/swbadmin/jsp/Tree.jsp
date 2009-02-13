@@ -275,6 +275,9 @@
         JSONObject jobj=getNode(obj.getURI(), obj.getDisplayName(lang), type, icon);
         arr.put(jobj);
 
+        //dragSupport
+        jobj.put("dragSupport", cls.isdragSupport());
+
         //System.out.println("obj:"+obj.getId());
         //drop acceptance
         JSONArray dropacc=new JSONArray();

@@ -167,8 +167,25 @@
         //var m=dojo.dnd.manager();
         //m.canDrop(false);
         //alert(act_treeNode.item.id);
-        return true;
+        if(act_treeNode.item.dragSupport)return true;
+        return false;
     </script>
+
+    <script type="dojo/method" event="onDndStart" args="_1a,_1b,_1c">
+        alert("Hola");
+        /*
+        if(this.isSource){
+            this._changeState("Source",this==_1a?(_1c?"Copied":"Moved"):"");
+        }
+        var _1d=this.checkAcceptance(_1a,_1b);
+        this._changeState("Target",_1d?"":"Disabled");
+        if(_1d){
+            dojo.dnd.manager().overSource(this);
+        }
+        this.isDragging=true;
+        */
+    </script>
+
 
     <script type="dojo/method" event="getIconClass" args="item, opened">
         if(item)
