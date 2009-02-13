@@ -9,7 +9,6 @@ import java.lang.reflect.Method;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -19,6 +18,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.base.util.URLEncoder;
 import org.semanticwb.model.GenericObject;
+import org.w3c.dom.Document;
 
 /**
  *
@@ -38,6 +38,7 @@ public class SemanticObject
     private HashMap m_virtprops;
 
     private HashMap m_cacheprops;
+    private HashMap m_cachepropsrel;
 
     private static String NULL="__NULL__";
 
@@ -51,6 +52,7 @@ public class SemanticObject
     {
         if(res==null)throw new NullPointerException("Resource is Null...");
         m_cacheprops=new HashMap();
+        m_cachepropsrel=new HashMap();
         this.m_res = res;
         validateModel();
         //System.out.println("SemanticObject:"+res);
@@ -106,6 +108,19 @@ public class SemanticObject
         return ret;
     }
 
+    /**
+     * elimina cache
+     */
+    public void resetCache()
+    {
+        if(!m_virtual)
+        {
+            m_cls = null;
+            m_cacheprops=new HashMap();
+            m_cachepropsrel=new HashMap();
+        }
+    }
+
     public static void removeCache(String uri)
     {
         m_objs.remove(uri);
@@ -117,6 +132,7 @@ public class SemanticObject
         if(value!=null)
         {
             m_cacheprops.put(prop.getURI()+"|"+lang, value);
+            m_cachepropsrel.remove(prop.getURI());
         }
     }
 
@@ -163,6 +179,7 @@ public class SemanticObject
             }
         }
         m_cacheprops.remove(prop.getURI()+"|"+lang);
+        m_cachepropsrel.remove(prop.getURI());
     }
 
     private Iterator<SemanticObject> getListObjectPropertyCache(SemanticProperty prop)
@@ -252,6 +269,7 @@ public class SemanticObject
         m_virtual = true;
         m_virtprops = new HashMap();
         m_cacheprops=new HashMap();
+        m_cachepropsrel=new HashMap();
     }
 
     public String getURI()
@@ -433,6 +451,24 @@ public class SemanticObject
 
 
 //***********************************************************************************************************************/
+
+    public Document getDomProperty(SemanticProperty prop)
+    {
+        Document dom=(Document)m_cachepropsrel.get(prop.getURI());
+        if(dom==null)
+        {
+            String xml=getProperty(prop);
+            if(xml!=null)
+            {
+                dom=SWBUtils.XML.xmlToDom(xml);
+            }else
+            {
+                dom=SWBUtils.XML.getNewDocument();
+            }
+            m_cachepropsrel.put(prop.getURI(), dom);
+        }
+        return dom;
+    }
 
 
     public SemanticLiteral getLiteralProperty(SemanticProperty prop)
@@ -985,7 +1021,7 @@ public class SemanticObject
             while(rel.hasNext())
             {
                 SemanticObject obj=rel.next();
-                removeCache(obj.getURI());
+                obj.resetCache();
             }
 
             //Eliminar dependencias
