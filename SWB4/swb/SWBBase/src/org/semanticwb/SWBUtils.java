@@ -1635,7 +1635,8 @@ public class SWBUtils {
          * Creates a new object document
          * @throws com.infotec.appfw.exception.AFException
          * @return  */
-        public static Document getNewDocument() throws SWBException {
+        public static Document getNewDocument() //throws SWBException
+        {
             DocumentBuilderFactory dbf = getDocumentBuilderFactory();
             DocumentBuilder db = null;
             Document dom = null;
@@ -1646,7 +1647,7 @@ public class SWBUtils {
                 dom = db.newDocument();
             } catch (Exception e) {
                 log.error(e);
-                throw new SWBException("Error getting new XML Document", e);
+                //throw new SWBException("Error getting new XML Document", e);
             }
             return dom;
         }
