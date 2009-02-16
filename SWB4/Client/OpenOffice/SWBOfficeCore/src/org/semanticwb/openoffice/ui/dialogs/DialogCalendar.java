@@ -23,7 +23,7 @@ import org.w3c.dom.Element;
  */
 public class DialogCalendar extends java.awt.Dialog
 {
-
+    DialogRegularPeriods dialogRegularPeriods = new DialogRegularPeriods(new Frame(), true);
     private Document document;
     private static final String DATE_FORMAT="dd/MM/yyyy";
     private static final String TIME_FORMAT="HH:mm:ss";
@@ -40,6 +40,7 @@ public class DialogCalendar extends java.awt.Dialog
         this.jSpinnerInitTime.setEditor(new JSpinner.DateEditor(jSpinnerInitTime, TIME_FORMAT));
         this.jSpinnerEndTime.setEditor(new JSpinner.DateEditor(jSpinnerEndTime, TIME_FORMAT));
         this.setLocationRelativeTo(null);
+        dialogRegularPeriods.setDocument(document);
     }
 
     private void init()
@@ -328,11 +329,7 @@ public class DialogCalendar extends java.awt.Dialog
 
     private void jButtonRegularPeriodsActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonRegularPeriodsActionPerformed
     {//GEN-HEADEREND:event_jButtonRegularPeriodsActionPerformed
-        DialogRegularPeriods dialogRegularPeriods = new DialogRegularPeriods(new Frame(), true);
-        dialogRegularPeriods.setDocument(document);
         dialogRegularPeriods.setVisible(true);
-        org.jdom.Element interval=dialogRegularPeriods.getElement();
-
     }//GEN-LAST:event_jButtonRegularPeriodsActionPerformed
 
     private void jCheckBoxByTimeStateChanged(javax.swing.event.ChangeEvent evt)//GEN-FIRST:event_jCheckBoxByTimeStateChanged
