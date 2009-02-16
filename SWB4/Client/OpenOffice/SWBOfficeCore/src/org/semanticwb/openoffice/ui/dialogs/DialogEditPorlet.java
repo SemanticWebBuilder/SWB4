@@ -352,6 +352,11 @@ public class DialogEditPorlet extends javax.swing.JDialog
         {
             for (CalendarInfo info : OfficeApplication.getOfficeDocumentProxy().getCalendars(pageInformation))
             {
+                Object[] data =
+                {
+                    info, info.active
+                };
+                model.addRow(data);
             }
         }
         catch (Exception e)
@@ -473,7 +478,22 @@ public class DialogEditPorlet extends javax.swing.JDialog
             new String [] {
                 "Titulo", "Activo"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.Boolean.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jTableScheduler.setColumnSelectionAllowed(true);
         jTableScheduler.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane2.setViewportView(jTableScheduler);
