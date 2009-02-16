@@ -8,63 +8,540 @@
  *
  * Created on 12/02/2009, 03:45:09 PM
  */
-
 package org.semanticwb.openoffice.ui.dialogs;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 /**
  *
  * @author victor.lorenzana
  */
-public class DialogRegularPeriods extends java.awt.Dialog {
+public class DialogRegularPeriods extends java.awt.Dialog
+{
 
     private Document document;
+
     /** Creates new form DialogRegularPeriods */
-    public DialogRegularPeriods(java.awt.Frame parent, boolean modal) {
+    public DialogRegularPeriods(java.awt.Frame parent, boolean modal)
+    {
         super(parent, modal);
         initComponents();
         this.setLocationRelativeTo(null);
     }
-    public Document getDocument()
-    {
-        if(document==null)
-        {
-            org.jdom.output.DOMOutputter out=new org.jdom.output.DOMOutputter();
-            try
-            {
-                document=out.output(new org.jdom.Document());
-            }
-            catch(Exception e)
-            {
 
+    public org.jdom.Element getElement()
+    {
+        org.jdom.Element interval=null;
+        if (this.jCheckBoxUseRegularPeriods.isSelected())
+        {
+            interval=new org.jdom.Element("interval");
+            org.jdom.Element elem=null;
+            org.jdom.Element iterations = new org.jdom.Element("iterations");
+            interval.addContent(iterations);
+            if (this.periodweek.isSelected())
+            {
+                int x = 0;
+                org.jdom.Element weekly = new org.jdom.Element("weekly");
+                iterations.addContent(weekly);
+                if (this.wday1.isSelected())
+                {
+                    x += 1;
+                }
+                if (this.wday2.isSelected())
+                {
+                    x += 2;
+                }
+                if (this.wday3.isSelected())
+                {
+                    x += 4;
+                }
+                if (this.wday4.isSelected())
+                {
+                    x += 8;
+                }
+                if (this.wday5.isSelected())
+                {
+                    x += 16;
+                }
+                if (this.wday6.isSelected())
+                {
+                    x += 32;
+                }
+                if (this.wday7.isSelected())
+                {
+                    x += 64;
+                }
+                elem = new org.jdom.Element("wdays");
+                elem.setText(String.valueOf(x));
+                weekly.addContent(elem);
+            }
+            if (this.periodmonth.isSelected())
+            {
+                org.jdom.Element monthly = new org.jdom.Element("monthly");
+                iterations.addContent(monthly);
+                if (this.periodmont1.isSelected())
+                {
+                    if (this.mday.getValue() != null)
+                    {
+                        elem = new org.jdom.Element("day");
+                        elem.setText(mday.getValue().toString());
+                        monthly.addContent(elem);
+                    }
+                    if (this.mmonth.getValue() != null)
+                    {
+                        elem = new org.jdom.Element("months");
+                        elem.setText(mmonth.getValue().toString());
+                        monthly.addContent(elem);
+                    }
+                }
+                else if (this.periodmont2.isSelected())
+                {
+                    int x = 0;
+                    if (this.mweek.getSelectedItem() != null)
+                    {
+                        elem = new org.jdom.Element("week");
+                        elem.setText("" + (mweek.getSelectedIndex() + 1));
+                        monthly.addContent(elem);
+                    }
+                    if (this.mday1.isSelected())
+                    {
+                        x += 1;
+                    }
+                    if (this.mday2.isSelected())
+                    {
+                        x += 2;
+                    }
+                    if (this.mday3.isSelected())
+                    {
+                        x += 4;
+                    }
+                    if (this.mday4.isSelected())
+                    {
+                        x += 8;
+                    }
+                    if (this.mday5.isSelected())
+                    {
+                        x += 16;
+                    }
+                    if (this.mday6.isSelected())
+                    {
+                        x += 32;
+                    }
+                    if (this.mday7.isSelected())
+                    {
+                        x += 64;
+                    }
+                    elem = new org.jdom.Element("wdays");
+                    elem.setText(String.valueOf(x));
+                    monthly.addContent(elem);
+                    if (this.mmonth2.getValue() != null)
+                    {
+                        elem = new org.jdom.Element("months");
+                        elem.setText(mmonth2.getValue().toString());
+                        monthly.addContent(elem);
+                    }
+                }
+            }
+            if (this.periodyear.isSelected())
+            {
+                org.jdom.Element yearly = new org.jdom.Element("yearly");
+                iterations.addContent(yearly);
+                if (this.periodyear1.isSelected())
+                {
+                    if (this.yday.getValue() != null)
+                    {
+                        elem = new org.jdom.Element("day");
+                        elem.setText(yday.getValue().toString());
+                        yearly.addContent(elem);
+                    }
+                    elem = new org.jdom.Element("month");
+                    elem.setText("" + (ymonth.getSelectedIndex() + 1));
+                    yearly.addContent(elem);
+
+                    if (this.yyear.getValue() != null)
+                    {
+                        elem = new org.jdom.Element("years");
+                        elem.setText(yyear.getValue().toString());
+                        yearly.addContent(elem);
+                    }
+                }
+                else if (this.periodyear2.isSelected())
+                {
+                    int x = 0;
+                    if (this.yweek.getSelectedItem() != null)
+                    {
+                        elem = new org.jdom.Element("week");
+                        elem.setText("" + (yweek.getSelectedIndex() + 1));
+                        yearly.addContent(elem);
+                    }
+                    if (this.yday1.isSelected())
+                    {
+                        x += 1;
+                    }
+                    if (this.yday2.isSelected())
+                    {
+                        x += 2;
+                    }
+                    if (this.yday3.isSelected())
+                    {
+                        x += 4;
+                    }
+                    if (this.yday4.isSelected())
+                    {
+                        x += 8;
+                    }
+                    if (this.yday5.isSelected())
+                    {
+                        x += 16;
+                    }
+                    if (this.yday6.isSelected())
+                    {
+                        x += 32;
+                    }
+                    if (this.yday7.isSelected())
+                    {
+                        x += 64;
+                    }
+                    elem = new org.jdom.Element("wdays");
+                    elem.setText(String.valueOf(x));
+                    yearly.addContent(elem);
+                    if (this.ymonth2.getSelectedItem() != null)
+                    {
+                        elem = new org.jdom.Element("month");
+                        elem.setText("" + (ymonth2.getSelectedIndex() + 1));
+                        yearly.addContent(elem);
+                    }
+                    if (this.yyear2.getValue() != null)
+                    {
+                        elem = new org.jdom.Element("years");
+                        elem.setText(yyear2.getValue().toString());
+                        yearly.addContent(elem);
+                    }
+                }
             }
         }
-        return document;
+        return interval;
     }
+
     public void setDocument(Document document)
     {
-        this.document=document;
+        this.document = document;
         init();
     }
+
     private void init()
     {
-        if(document!=null)
+        if (document != null)
         {
-            if(document.getElementsByTagName("weekly").getLength()>0)
+
+            if (document.getElementsByTagName("iterations").getLength() > 0)
             {
-                jRadioButtonWeek.setSelected(true);
+                this.jCheckBoxUseRegularPeriods.setSelected(true);
             }
-            if(document.getElementsByTagName("monthly").getLength()>0)
+            if (document.getElementsByTagName("iterations").getLength() > 0)
             {
-                jRadioButtonWeek.setSelected(true);
-            }
-            if(document.getElementsByTagName("yearly").getLength()>0)
-            {
-                jRadioButtonYear.setSelected(true);
+                String[] siteminterval = new String[9];
+                String tipo = "0";
+                NodeList nodosweekly = document.getElementsByTagName("weekly");
+                if (nodosweekly.getLength() > 0)
+                {
+                    tipo = "1";
+                }
+                NodeList nodosmonthly = document.getElementsByTagName("monthly");
+                if (nodosmonthly.getLength() > 0)
+                {
+                    tipo = "2";
+                }
+                NodeList nodosyearly = document.getElementsByTagName("yearly");
+                if (nodosyearly.getLength() > 0)
+                {
+                    tipo = "3";
+                }
+
+                if (document.getElementsByTagName("weekly").getLength() > 0)
+                {
+                    periodweek.setSelected(true);
+
+                }
+                if (document.getElementsByTagName("monthly").getLength() > 0)
+                {
+                    periodweek.setSelected(true);
+                }
+                if (document.getElementsByTagName("yearly").getLength() > 0)
+                {
+                    periodyear.setSelected(true);
+                }
+
+                NodeList nodositera = document.getElementsByTagName("iterations");
+                for (int i = 0; i < nodositera.getLength(); i++)
+                {
+                    Element xmlitera = (Element) nodositera.item(i);
+                    for (int l = 0; l < xmlitera.getChildNodes().getLength(); l++)
+                    {
+                        NodeList nodosit = xmlitera.getElementsByTagName("weekly");
+                        for (int j = 0; j < nodosit.getLength(); j++)
+                        {
+                            Element xmlit = (Element) nodosit.item(j);
+                            for (int k = 0; k < xmlit.getChildNodes().getLength(); k++)
+                            {
+                                if (xmlit.getChildNodes().item(l).getNodeName().equals("wdays")) //días
+                                {
+                                    siteminterval[2] = xmlit.getChildNodes().item(k).getNodeValue();
+                                }
+                            }
+                        }
+                        NodeList nodosit1 = xmlitera.getElementsByTagName("monthly");
+                        for (int j = 0; j < nodosit1.getLength(); j++)
+                        {
+                            Element xmlit = (Element) nodosit1.item(j);
+                            for (int k = 0; k < xmlit.getChildNodes().getLength(); k++)
+                            {
+                                if (xmlit.getChildNodes().item(k).getNodeName().equals("wdays")) //días
+                                {
+                                    siteminterval[2] = xmlit.getChildNodes().item(k).getNodeValue();
+                                }
+                                if (xmlit.getChildNodes().item(k).getNodeName().equals("week")) //semanas
+                                {
+                                    siteminterval[3] = xmlit.getChildNodes().item(k).getNodeValue();
+                                }
+                                if (xmlit.getChildNodes().item(k).getNodeName().equals("months")) //meses
+                                {
+                                    siteminterval[4] = xmlit.getChildNodes().item(k).getNodeValue();
+                                }
+                                if (xmlit.getChildNodes().item(k).getNodeName().equals("day")) //día específico
+                                {
+                                    siteminterval[6] = xmlit.getChildNodes().item(k).getNodeValue();
+                                }
+                            }
+                        }
+                        NodeList nodosit2 = xmlitera.getElementsByTagName("yearly");
+                        for (int j = 0; j < nodosit2.getLength(); j++)
+                        {
+                            Element xmlit = (Element) nodosit2.item(j);
+                            for (int k = 0; k < xmlit.getChildNodes().getLength(); k++)
+                            {
+                                if (xmlit.getChildNodes().item(k).getNodeName().equals("wdays")) //días
+                                {
+                                    siteminterval[2] = xmlit.getChildNodes().item(k).getNodeValue();
+                                }
+                                if (xmlit.getChildNodes().item(k).getNodeName().equals("week")) //semanas
+                                {
+                                    siteminterval[3] = xmlit.getChildNodes().item(k).getNodeValue();
+                                }
+                                if (xmlit.getChildNodes().item(k).getNodeName().equals("months")) //meses
+                                {
+                                    siteminterval[4] = xmlit.getChildNodes().item(k).getNodeValue();
+                                }
+                                if (xmlit.getChildNodes().item(k).getNodeName().equals("years")) //años
+                                {
+                                    siteminterval[5] = xmlit.getChildNodes().item(k).getNodeValue();
+                                }
+                                if (xmlit.getChildNodes().item(k).getNodeName().equals("day")) //día específico
+                                {
+                                    siteminterval[6] = xmlit.getChildNodes().item(k).getNodeValue();
+                                }
+                                if (xmlit.getChildNodes().item(k).getNodeName().equals("month")) //mes específico
+                                {
+                                    siteminterval[7] = xmlit.getChildNodes().item(k).getNodeValue();
+                                }
+                            }
+                        }
+                    }
+                }
+                if (tipo.equals("1"))
+                {
+                    this.periodweek.setSelected(true);
+                    String[] days =
+                    {
+                        "", "", "", "", "", "", ""
+                    };
+                    int dias = Integer.parseInt(siteminterval[2]);
+                    int res = 0;
+                    int cdias = 0;
+                    while (dias > 0)
+                    {
+                        res = dias % 2;
+                        days[cdias] = String.valueOf(res);
+                        dias = dias / 2;
+                        cdias++;
+                    }
+                    for (int i = 0; i < days.length; i++)
+                    {
+                        if (days[i] != null)
+                        {
+                            if (i == 0 && days[i].equals("1"))
+                            {
+                                this.wday1.setSelected(true);
+                            }
+                            if (i == 1 && days[i].equals("1"))
+                            {
+                                this.wday2.setSelected(true);
+                            }
+                            if (i == 2 && days[i].equals("1"))
+                            {
+                                this.wday3.setSelected(true);
+                            }
+                            if (i == 3 && days[i].equals("1"))
+                            {
+                                this.wday4.setSelected(true);
+                            }
+                            if (i == 4 && days[i].equals("1"))
+                            {
+                                this.wday5.setSelected(true);
+                            }
+                            if (i == 5 && days[i].equals("1"))
+                            {
+                                this.wday6.setSelected(true);
+                            }
+                            if (i == 6 && days[i].equals("1"))
+                            {
+                                this.wday7.setSelected(true);
+                            }
+                        }
+                    }
+                }
+                if (tipo.equals("2"))
+                {
+                    this.periodmonth.setSelected(true);
+                    if (siteminterval[6] != null)
+                    {
+                        this.periodmont1.setSelected(true);
+                        this.mday.setValue(Integer.parseInt(siteminterval[6]));
+                        this.mmonth.setValue(Integer.parseInt(siteminterval[4]));
+                    }
+                    else
+                    {
+                        this.periodmont2.setSelected(true);
+                        String[] days =
+                        {
+                            "", "", "", "", "", "", ""
+                        };
+                        int dias = Integer.parseInt(siteminterval[2]);
+                        int res = 0;
+                        int cdias = 0;
+                        while (dias > 0)
+                        {
+                            res = dias % 2;
+                            days[cdias] = String.valueOf(res);
+                            dias = dias / 2;
+                            cdias++;
+                        }
+                        for (int i = 0; i < days.length; i++)
+                        {
+                            if (i == 0 && days[i].equals("1"))
+                            {
+                                this.mday1.setSelected(true);
+                            }
+                            if (i == 1 && days[i].equals("1"))
+                            {
+                                this.mday2.setSelected(true);
+                            }
+                            if (i == 2 && days[i].equals("1"))
+                            {
+                                this.mday3.setSelected(true);
+                            }
+                            if (i == 3 && days[i].equals("1"))
+                            {
+                                this.mday4.setSelected(true);
+                            }
+                            if (i == 4 && days[i].equals("1"))
+                            {
+                                this.mday5.setSelected(true);
+                            }
+                            if (i == 5 && days[i].equals("1"))
+                            {
+                                this.mday6.setSelected(true);
+                            }
+                            if (i == 6 && days[i].equals("1"))
+                            {
+                                this.mday7.setSelected(true);
+                            }
+                        }
+                        if (siteminterval[3] != null)
+                        {
+                            this.mweek.setSelectedItem(Integer.parseInt(siteminterval[3]) - 1);
+                        }
+                    }
+                }
+                if (tipo.equals("3"))
+                {
+                    this.periodyear.setSelected(true);
+                    if (siteminterval[6] != null)
+                    {
+                        this.periodyear1.setSelected(true);
+                        this.yday.setValue(Integer.parseInt(siteminterval[6]));
+                        if (siteminterval[7] != null)
+                        {
+                            this.ymonth.setSelectedIndex(Integer.parseInt(siteminterval[7]) - 1);
+                        }
+                        this.yyear.setValue(Integer.parseInt(siteminterval[5]));
+                    }
+                    else
+                    {
+                        this.periodyear2.setSelected(true);
+
+                        String[] days =
+                        {
+                            "", "", "", "", "", "", ""
+                        };
+                        int dias = Integer.parseInt(siteminterval[2]);
+                        int res = 0;
+                        int cdias = 0;
+                        while (dias > 0)
+                        {
+                            res = dias % 2;
+                            days[cdias] = String.valueOf(res);
+                            dias = dias / 2;
+                            cdias++;
+                        }
+                        for (int i = 0; i < days.length; i++)
+                        {
+                            if (i == 0 && days[i].equals("1"))
+                            {
+                                this.yday1.setSelected(true);
+                            }
+                            if (i == 1 && days[i].equals("1"))
+                            {
+                                this.yday2.setSelected(true);
+                            }
+                            if (i == 2 && days[i].equals("1"))
+                            {
+                                this.yday3.setSelected(true);
+                            }
+                            if (i == 3 && days[i].equals("1"))
+                            {
+                                this.yday4.setSelected(true);
+                            }
+                            if (i == 4 && days[i].equals("1"))
+                            {
+                                this.yday5.setSelected(true);
+                            }
+                            if (i == 5 && days[i].equals("1"))
+                            {
+                                this.yday6.setSelected(true);
+                            }
+                            if (i == 6 && days[i].equals("1"))
+                            {
+                                this.yday7.setSelected(true);
+                            }
+                        }
+                        if (siteminterval[3] != null)
+                        {
+                            this.yweek.setSelectedIndex(Integer.parseInt(siteminterval[3]) - 1);
+                        }
+                        if (siteminterval[7] != null)
+                        {
+                            this.ymonth2.setSelectedIndex(Integer.parseInt(siteminterval[7]) - 1);
+                        }
+                        this.yyear2.setValue(Integer.parseInt(siteminterval[5]));
+                    }
+                }
             }
         }
     }
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -82,58 +559,61 @@ public class DialogRegularPeriods extends java.awt.Dialog {
         jButtonCancel = new javax.swing.JButton();
         jPanelConfigurations = new javax.swing.JPanel();
         jPanelWeek = new javax.swing.JPanel();
-        jRadioButtonWeek = new javax.swing.JRadioButton();
-        jCheckBoxWeekMonday = new javax.swing.JCheckBox();
-        jCheckBoxWeekTuesday = new javax.swing.JCheckBox();
-        jCheckBoxWeekWednesday = new javax.swing.JCheckBox();
-        jCheckBoxWeekThursday = new javax.swing.JCheckBox();
-        jCheckBoxWeekFriday = new javax.swing.JCheckBox();
-        jCheckBoxWeekSaturday = new javax.swing.JCheckBox();
-        jCheckBoxWeekSunday = new javax.swing.JCheckBox();
+        periodweek = new javax.swing.JRadioButton();
+        wday2 = new javax.swing.JCheckBox();
+        wday3 = new javax.swing.JCheckBox();
+        wday4 = new javax.swing.JCheckBox();
+        wday5 = new javax.swing.JCheckBox();
+        wday6 = new javax.swing.JCheckBox();
+        wday7 = new javax.swing.JCheckBox();
+        wday1 = new javax.swing.JCheckBox();
         jPanelOthers = new javax.swing.JPanel();
         jPanelMonth = new javax.swing.JPanel();
-        jRadioButtonMonth = new javax.swing.JRadioButton();
+        periodmonth = new javax.swing.JRadioButton();
         jLabel1 = new javax.swing.JLabel();
-        jComboBoxMonthDay = new javax.swing.JComboBox();
-        jCheckBoxMonthMonday = new javax.swing.JCheckBox();
-        jCheckBoxMonthTuesday = new javax.swing.JCheckBox();
-        jCheckBoxMonthWednesday = new javax.swing.JCheckBox();
-        jCheckBoxMonthThursday = new javax.swing.JCheckBox();
-        jCheckBoxMonthFriday = new javax.swing.JCheckBox();
-        jCheckBoxMonthSaturday = new javax.swing.JCheckBox();
-        jCheckBoxMonthSunday = new javax.swing.JCheckBox();
-        jRadioButtonMonthOption1 = new javax.swing.JRadioButton();
-        jRadioButtonMonthOption2 = new javax.swing.JRadioButton();
+        mweek = new javax.swing.JComboBox();
+        mday2 = new javax.swing.JCheckBox();
+        mday3 = new javax.swing.JCheckBox();
+        mday4 = new javax.swing.JCheckBox();
+        mday5 = new javax.swing.JCheckBox();
+        mday6 = new javax.swing.JCheckBox();
+        mday7 = new javax.swing.JCheckBox();
+        mday1 = new javax.swing.JCheckBox();
+        periodmont2 = new javax.swing.JRadioButton();
+        periodmont1 = new javax.swing.JRadioButton();
         jLabel2 = new javax.swing.JLabel();
-        jSpinnerMonthDay = new javax.swing.JSpinner();
+        mday = new javax.swing.JSpinner();
         jLabel3 = new javax.swing.JLabel();
-        jSpinner2 = new javax.swing.JSpinner();
+        mmonth = new javax.swing.JSpinner();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jSpinner3 = new javax.swing.JSpinner();
+        mmonth2 = new javax.swing.JSpinner();
         jLabel6 = new javax.swing.JLabel();
         jPanelYear = new javax.swing.JPanel();
-        jRadioButtonYear = new javax.swing.JRadioButton();
-        jRadioButton6 = new javax.swing.JRadioButton();
+        periodyear = new javax.swing.JRadioButton();
+        periodyear2 = new javax.swing.JRadioButton();
         jLabel7 = new javax.swing.JLabel();
-        jComboBoxYearDay = new javax.swing.JComboBox();
-        jCheckBox15 = new javax.swing.JCheckBox();
-        jCheckBox16 = new javax.swing.JCheckBox();
-        jCheckBox17 = new javax.swing.JCheckBox();
-        jCheckBox18 = new javax.swing.JCheckBox();
-        jCheckBox19 = new javax.swing.JCheckBox();
-        jCheckBox20 = new javax.swing.JCheckBox();
-        jCheckBox21 = new javax.swing.JCheckBox();
+        yweek = new javax.swing.JComboBox();
+        yday2 = new javax.swing.JCheckBox();
+        yday3 = new javax.swing.JCheckBox();
+        yday6 = new javax.swing.JCheckBox();
+        yday7 = new javax.swing.JCheckBox();
+        yday1 = new javax.swing.JCheckBox();
+        yday4 = new javax.swing.JCheckBox();
+        yday5 = new javax.swing.JCheckBox();
         jLabel8 = new javax.swing.JLabel();
-        jComboBox3 = new javax.swing.JComboBox();
-        jRadioButton7 = new javax.swing.JRadioButton();
+        ymonth2 = new javax.swing.JComboBox();
+        periodyear1 = new javax.swing.JRadioButton();
         jLabel9 = new javax.swing.JLabel();
-        jSpinnerYearDay = new javax.swing.JSpinner();
+        yday = new javax.swing.JSpinner();
         jLabel10 = new javax.swing.JLabel();
-        jComboBox4 = new javax.swing.JComboBox();
+        ymonth = new javax.swing.JComboBox();
         jLabel11 = new javax.swing.JLabel();
-        jSpinner5 = new javax.swing.JSpinner();
+        yyear = new javax.swing.JSpinner();
         jLabel12 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        yyear2 = new javax.swing.JSpinner();
+        jLabel14 = new javax.swing.JLabel();
         jPanelUseRegularPeriods = new javax.swing.JPanel();
         jCheckBoxUseRegularPeriods = new javax.swing.JCheckBox();
 
@@ -175,46 +655,46 @@ public class DialogRegularPeriods extends java.awt.Dialog {
         jPanelWeek.setBorder(javax.swing.BorderFactory.createTitledBorder("Periodicidad Semanal"));
         jPanelWeek.setPreferredSize(new java.awt.Dimension(100, 90));
 
-        buttonGroupPeriodicidad.add(jRadioButtonWeek);
-        jRadioButtonWeek.setSelected(true);
-        jRadioButtonWeek.setText("Semanal");
+        buttonGroupPeriodicidad.add(periodweek);
+        periodweek.setSelected(true);
+        periodweek.setText("Semanal");
 
-        jCheckBoxWeekMonday.setText("Lunes");
+        wday2.setText("Lunes");
 
-        jCheckBoxWeekTuesday.setText("Martes");
+        wday3.setText("Martes");
 
-        jCheckBoxWeekWednesday.setText("Miércoles");
+        wday4.setText("Miércoles");
 
-        jCheckBoxWeekThursday.setText("Jueves");
+        wday5.setText("Jueves");
 
-        jCheckBoxWeekFriday.setText("Viernes");
+        wday6.setText("Viernes");
 
-        jCheckBoxWeekSaturday.setText("Sabado");
+        wday7.setText("Sabado");
 
-        jCheckBoxWeekSunday.setText("Domingo");
+        wday1.setText("Domingo");
 
         javax.swing.GroupLayout jPanelWeekLayout = new javax.swing.GroupLayout(jPanelWeek);
         jPanelWeek.setLayout(jPanelWeekLayout);
         jPanelWeekLayout.setHorizontalGroup(
             jPanelWeekLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelWeekLayout.createSequentialGroup()
-                .addComponent(jRadioButtonWeek)
+                .addComponent(periodweek)
                 .addGap(52, 52, 52)
                 .addGroup(jPanelWeekLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jCheckBoxWeekMonday)
-                    .addComponent(jCheckBoxWeekSaturday))
+                    .addComponent(wday2)
+                    .addComponent(wday7))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanelWeekLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanelWeekLayout.createSequentialGroup()
-                        .addComponent(jCheckBoxWeekTuesday)
+                        .addComponent(wday3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jCheckBoxWeekWednesday)
+                        .addComponent(wday4)
                         .addGap(2, 2, 2)
-                        .addComponent(jCheckBoxWeekThursday)
+                        .addComponent(wday5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jCheckBoxWeekFriday))
-                    .addComponent(jCheckBoxWeekSunday))
-                .addContainerGap(52, Short.MAX_VALUE))
+                        .addComponent(wday6))
+                    .addComponent(wday1))
+                .addContainerGap(62, Short.MAX_VALUE))
         );
         jPanelWeekLayout.setVerticalGroup(
             jPanelWeekLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -222,18 +702,18 @@ public class DialogRegularPeriods extends java.awt.Dialog {
                 .addGroup(jPanelWeekLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanelWeekLayout.createSequentialGroup()
                         .addGap(18, 18, 18)
-                        .addComponent(jRadioButtonWeek))
+                        .addComponent(periodweek))
                     .addGroup(jPanelWeekLayout.createSequentialGroup()
                         .addGroup(jPanelWeekLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jCheckBoxWeekMonday)
-                            .addComponent(jCheckBoxWeekTuesday)
-                            .addComponent(jCheckBoxWeekWednesday)
-                            .addComponent(jCheckBoxWeekThursday)
-                            .addComponent(jCheckBoxWeekFriday))
+                            .addComponent(wday2)
+                            .addComponent(wday3)
+                            .addComponent(wday4)
+                            .addComponent(wday5)
+                            .addComponent(wday6))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanelWeekLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jCheckBoxWeekSaturday)
-                            .addComponent(jCheckBoxWeekSunday))))
+                            .addComponent(wday7)
+                            .addComponent(wday1))))
                 .addContainerGap(11, Short.MAX_VALUE))
         );
 
@@ -244,45 +724,45 @@ public class DialogRegularPeriods extends java.awt.Dialog {
         jPanelMonth.setBorder(javax.swing.BorderFactory.createTitledBorder("Periodicidad Mensual"));
         jPanelMonth.setPreferredSize(new java.awt.Dimension(100, 130));
 
-        buttonGroupPeriodicidad.add(jRadioButtonMonth);
-        jRadioButtonMonth.setText("Mensual");
+        buttonGroupPeriodicidad.add(periodmonth);
+        periodmonth.setText("Mensual");
 
         jLabel1.setText("El:");
 
-        jComboBoxMonthDay.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Primer", "Segundo", "Tercer", "Cuarto", "Último" }));
+        mweek.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Primer", "Segundo", "Tercer", "Cuarto", "Último" }));
 
-        jCheckBoxMonthMonday.setText("Lu");
+        mday2.setText("Lu");
 
-        jCheckBoxMonthTuesday.setText("Ma");
+        mday3.setText("Ma");
 
-        jCheckBoxMonthWednesday.setText("Mi");
+        mday4.setText("Mi");
 
-        jCheckBoxMonthThursday.setText("Ju");
+        mday5.setText("Ju");
 
-        jCheckBoxMonthFriday.setText("Vi");
+        mday6.setText("Vi");
 
-        jCheckBoxMonthSaturday.setText("Sa");
+        mday7.setText("Sa");
 
-        jCheckBoxMonthSunday.setText("Do");
+        mday1.setText("Do");
 
-        buttonGroupMensual.add(jRadioButtonMonthOption1);
-        jRadioButtonMonthOption1.setSelected(true);
+        buttonGroupMensual.add(periodmont2);
+        periodmont2.setSelected(true);
 
-        buttonGroupMensual.add(jRadioButtonMonthOption2);
+        buttonGroupMensual.add(periodmont1);
 
         jLabel2.setText("El:");
 
-        jSpinnerMonthDay.setModel(new javax.swing.SpinnerNumberModel(1, 1, 31, 1));
+        mday.setModel(new javax.swing.SpinnerNumberModel(1, 1, 31, 1));
 
         jLabel3.setText("de cada:");
 
-        jSpinner2.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), null, Integer.valueOf(12), Integer.valueOf(1)));
+        mmonth.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), null, Integer.valueOf(12), Integer.valueOf(1)));
 
         jLabel4.setText("Meses");
 
         jLabel5.setText("de cada:");
 
-        jSpinner3.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), null, Integer.valueOf(12), Integer.valueOf(1)));
+        mmonth2.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), null, Integer.valueOf(12), Integer.valueOf(1)));
 
         jLabel6.setText("Meses");
 
@@ -291,49 +771,49 @@ public class DialogRegularPeriods extends java.awt.Dialog {
         jPanelMonthLayout.setHorizontalGroup(
             jPanelMonthLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelMonthLayout.createSequentialGroup()
-                .addComponent(jRadioButtonMonth)
+                .addComponent(periodmonth)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanelMonthLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanelMonthLayout.createSequentialGroup()
-                        .addComponent(jRadioButtonMonthOption2)
+                        .addComponent(periodmont1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel2)
                         .addGap(10, 10, 10)
-                        .addComponent(jSpinnerMonthDay)
+                        .addComponent(mday)
                         .addGap(18, 18, 18)
                         .addComponent(jLabel3)
                         .addGap(18, 18, 18)
-                        .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(mmonth, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jLabel4)
                         .addGap(41, 41, 41))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelMonthLayout.createSequentialGroup()
-                        .addComponent(jRadioButtonMonthOption1)
+                        .addComponent(periodmont2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel1)
                         .addGap(10, 10, 10)
-                        .addComponent(jComboBoxMonthDay, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(mweek, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanelMonthLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jCheckBoxMonthFriday)
-                            .addComponent(jCheckBoxMonthMonday))
+                            .addComponent(mday6)
+                            .addComponent(mday2))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanelMonthLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jCheckBoxMonthSaturday)
-                            .addComponent(jCheckBoxMonthTuesday))
+                            .addComponent(mday7)
+                            .addComponent(mday3))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanelMonthLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanelMonthLayout.createSequentialGroup()
-                                .addComponent(jCheckBoxMonthWednesday)
+                                .addComponent(mday4)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jCheckBoxMonthThursday)
+                                .addComponent(mday5)
                                 .addGap(2, 2, 2)
                                 .addComponent(jLabel5)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jSpinner3, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(mmonth2, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jLabel6))
-                            .addComponent(jCheckBoxMonthSunday))
+                            .addComponent(mday1))
                         .addGap(8, 8, 8)))
                 .addContainerGap())
         );
@@ -345,32 +825,32 @@ public class DialogRegularPeriods extends java.awt.Dialog {
                     .addGroup(jPanelMonthLayout.createSequentialGroup()
                         .addGroup(jPanelMonthLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5)
-                            .addComponent(jSpinner3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(mmonth2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel6))
                         .addGap(5, 5, 5)
-                        .addComponent(jRadioButtonMonth))
+                        .addComponent(periodmonth))
                     .addGroup(jPanelMonthLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jComboBoxMonthDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jRadioButtonMonthOption1)
+                        .addComponent(mweek, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(periodmont2)
                         .addComponent(jLabel1))
                     .addGroup(jPanelMonthLayout.createSequentialGroup()
                         .addGroup(jPanelMonthLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jCheckBoxMonthMonday)
-                            .addComponent(jCheckBoxMonthWednesday)
-                            .addComponent(jCheckBoxMonthThursday)
-                            .addComponent(jCheckBoxMonthTuesday))
+                            .addComponent(mday2)
+                            .addComponent(mday4)
+                            .addComponent(mday5)
+                            .addComponent(mday3))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanelMonthLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jCheckBoxMonthFriday)
-                            .addComponent(jCheckBoxMonthSunday)
-                            .addComponent(jCheckBoxMonthSaturday))))
+                            .addComponent(mday6)
+                            .addComponent(mday1)
+                            .addComponent(mday7))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
                 .addGroup(jPanelMonthLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jSpinnerMonthDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(mday, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3)
-                    .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(mmonth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
-                    .addComponent(jRadioButtonMonthOption2)
+                    .addComponent(periodmont1)
                     .addComponent(jLabel2))
                 .addContainerGap())
         );
@@ -380,49 +860,55 @@ public class DialogRegularPeriods extends java.awt.Dialog {
         jPanelYear.setBorder(javax.swing.BorderFactory.createTitledBorder("Periodicidad Anual"));
         jPanelYear.setPreferredSize(new java.awt.Dimension(500, 160));
 
-        buttonGroupPeriodicidad.add(jRadioButtonYear);
-        jRadioButtonYear.setText("Anual");
+        buttonGroupPeriodicidad.add(periodyear);
+        periodyear.setText("Anual");
 
-        buttonGroupAnual.add(jRadioButton6);
-        jRadioButton6.setSelected(true);
+        buttonGroupAnual.add(periodyear2);
+        periodyear2.setSelected(true);
 
         jLabel7.setText("El:");
 
-        jComboBoxYearDay.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Primer", "Segundo", "Tercer", "Cuarto", "Último" }));
+        yweek.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Primer", "Segundo", "Tercer", "Cuarto", "Último" }));
 
-        jCheckBox15.setText("Lu");
+        yday2.setText("Lu");
 
-        jCheckBox16.setText("Ma");
+        yday3.setText("Ma");
 
-        jCheckBox17.setText("Vi");
+        yday6.setText("Vi");
 
-        jCheckBox18.setText("Sa");
+        yday7.setText("Sa");
 
-        jCheckBox19.setText("Do");
+        yday1.setText("Do");
 
-        jCheckBox20.setText("Mi");
+        yday4.setText("Mi");
 
-        jCheckBox21.setText("Ju");
+        yday5.setText("Ju");
 
         jLabel8.setText("de:");
 
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" }));
+        ymonth2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" }));
 
-        buttonGroupAnual.add(jRadioButton7);
+        buttonGroupAnual.add(periodyear1);
 
         jLabel9.setText("El:");
 
-        jSpinnerYearDay.setModel(new javax.swing.SpinnerNumberModel(1, 1, 31, 1));
+        yday.setModel(new javax.swing.SpinnerNumberModel(1, 1, 31, 1));
 
         jLabel10.setText("de:");
 
-        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" }));
+        ymonth.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" }));
 
         jLabel11.setText("de cada:");
 
-        jSpinner5.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), null, Integer.valueOf(999), Integer.valueOf(1)));
+        yyear.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), null, Integer.valueOf(999), Integer.valueOf(1)));
 
         jLabel12.setText("años");
+
+        jLabel13.setText("de cada:");
+
+        yyear2.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), null, Integer.valueOf(999), Integer.valueOf(1)));
+
+        jLabel14.setText("años");
 
         javax.swing.GroupLayout jPanelYearLayout = new javax.swing.GroupLayout(jPanelYear);
         jPanelYear.setLayout(jPanelYearLayout);
@@ -430,100 +916,114 @@ public class DialogRegularPeriods extends java.awt.Dialog {
             jPanelYearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelYearLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jRadioButtonYear)
+                .addComponent(periodyear)
                 .addGap(8, 8, 8)
                 .addGroup(jPanelYearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanelYearLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jRadioButton6)
+                        .addComponent(periodyear2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBoxYearDay, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(yweek, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(6, 6, 6)
                         .addGroup(jPanelYearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jCheckBox17)
-                            .addComponent(jCheckBox15))
+                            .addComponent(yday6)
+                            .addComponent(yday2))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanelYearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jCheckBox18)
-                            .addComponent(jCheckBox16))
+                            .addComponent(yday7)
+                            .addComponent(yday3))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanelYearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanelYearLayout.createSequentialGroup()
-                                .addComponent(jCheckBox20)
+                                .addComponent(yday4)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jCheckBox21)
+                                .addComponent(yday5)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jLabel8)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jCheckBox19)))
+                                .addComponent(ymonth2, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanelYearLayout.createSequentialGroup()
+                                .addComponent(yday1)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel13)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(yyear2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel14))))
                     .addGroup(jPanelYearLayout.createSequentialGroup()
-                        .addComponent(jRadioButton7)
+                        .addComponent(periodyear1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel9)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSpinnerYearDay, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(yday, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel10)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(ymonth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel11)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSpinner5, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel12)
-                .addContainerGap())
+                        .addComponent(yyear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel12)))
+                .addGap(35, 35, 35))
         );
         jPanelYearLayout.setVerticalGroup(
             jPanelYearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelYearLayout.createSequentialGroup()
-                .addGap(11, 11, 11)
-                .addGroup(jPanelYearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jCheckBox21)
-                    .addGroup(jPanelYearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jComboBox3, javax.swing.GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE)
-                        .addComponent(jLabel8)))
-                .addContainerGap(72, Short.MAX_VALUE))
-            .addGroup(jPanelYearLayout.createSequentialGroup()
                 .addGap(18, 18, 18)
-                .addComponent(jRadioButtonYear)
+                .addComponent(periodyear)
                 .addGap(75, 75, 75))
             .addGroup(jPanelYearLayout.createSequentialGroup()
                 .addGap(11, 11, 11)
-                .addComponent(jCheckBox15)
+                .addComponent(yday2)
                 .addContainerGap(82, Short.MAX_VALUE))
             .addGroup(jPanelYearLayout.createSequentialGroup()
                 .addGap(11, 11, 11)
-                .addComponent(jCheckBox16)
+                .addComponent(yday3)
                 .addContainerGap(82, Short.MAX_VALUE))
             .addGroup(jPanelYearLayout.createSequentialGroup()
                 .addGap(11, 11, 11)
-                .addComponent(jCheckBox20)
+                .addComponent(yday4)
                 .addContainerGap(82, Short.MAX_VALUE))
             .addGroup(jPanelYearLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanelYearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(jComboBoxYearDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jRadioButton6))
-                .addGap(3, 3, 3)
                 .addGroup(jPanelYearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelYearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jCheckBox19)
-                        .addComponent(jCheckBox18))
-                    .addComponent(jCheckBox17, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addGap(25, 25, 25)
+                    .addGroup(jPanelYearLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanelYearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel7)
+                            .addComponent(yweek, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(periodyear2))
+                        .addGap(3, 3, 3)
+                        .addGroup(jPanelYearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelYearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(yday1)
+                                .addComponent(yday7))
+                            .addComponent(yday6, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addGap(25, 25, 25))
+                    .addGroup(jPanelYearLayout.createSequentialGroup()
+                        .addGap(11, 11, 11)
+                        .addGroup(jPanelYearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(yday5)
+                            .addGroup(jPanelYearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(ymonth2, javax.swing.GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE)
+                                .addComponent(jLabel8)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanelYearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel13)
+                            .addComponent(yyear2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel14))
+                        .addGap(24, 24, 24)))
                 .addGroup(jPanelYearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jRadioButton7)
+                    .addComponent(periodyear1)
                     .addComponent(jLabel9)
-                    .addComponent(jSpinnerYearDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(yday, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel10)
-                    .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ymonth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel11)
-                    .addComponent(jSpinner5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(yyear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel12))
                 .addContainerGap())
         );
@@ -560,63 +1060,21 @@ public class DialogRegularPeriods extends java.awt.Dialog {
 
     private void jButtonokActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonokActionPerformed
     {//GEN-HEADEREND:event_jButtonokActionPerformed
-        this.setVisible(false);        
+        this.setVisible(false);
     }//GEN-LAST:event_jButtonokActionPerformed
-
-    /**
-    * @param args the command line arguments
-    */
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                DialogRegularPeriods dialog = new DialogRegularPeriods(new java.awt.Frame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
-
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroupAnual;
     private javax.swing.ButtonGroup buttonGroupMensual;
     private javax.swing.ButtonGroup buttonGroupPeriodicidad;
     private javax.swing.JButton jButtonCancel;
     private javax.swing.JButton jButtonok;
-    private javax.swing.JCheckBox jCheckBox15;
-    private javax.swing.JCheckBox jCheckBox16;
-    private javax.swing.JCheckBox jCheckBox17;
-    private javax.swing.JCheckBox jCheckBox18;
-    private javax.swing.JCheckBox jCheckBox19;
-    private javax.swing.JCheckBox jCheckBox20;
-    private javax.swing.JCheckBox jCheckBox21;
-    private javax.swing.JCheckBox jCheckBoxMonthFriday;
-    private javax.swing.JCheckBox jCheckBoxMonthMonday;
-    private javax.swing.JCheckBox jCheckBoxMonthSaturday;
-    private javax.swing.JCheckBox jCheckBoxMonthSunday;
-    private javax.swing.JCheckBox jCheckBoxMonthThursday;
-    private javax.swing.JCheckBox jCheckBoxMonthTuesday;
-    private javax.swing.JCheckBox jCheckBoxMonthWednesday;
     private javax.swing.JCheckBox jCheckBoxUseRegularPeriods;
-    private javax.swing.JCheckBox jCheckBoxWeekFriday;
-    private javax.swing.JCheckBox jCheckBoxWeekMonday;
-    private javax.swing.JCheckBox jCheckBoxWeekSaturday;
-    private javax.swing.JCheckBox jCheckBoxWeekSunday;
-    private javax.swing.JCheckBox jCheckBoxWeekThursday;
-    private javax.swing.JCheckBox jCheckBoxWeekTuesday;
-    private javax.swing.JCheckBox jCheckBoxWeekWednesday;
-    private javax.swing.JComboBox jComboBox3;
-    private javax.swing.JComboBox jComboBox4;
-    private javax.swing.JComboBox jComboBoxMonthDay;
-    private javax.swing.JComboBox jComboBoxYearDay;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -633,18 +1091,43 @@ public class DialogRegularPeriods extends java.awt.Dialog {
     private javax.swing.JPanel jPanelUseRegularPeriods;
     private javax.swing.JPanel jPanelWeek;
     private javax.swing.JPanel jPanelYear;
-    private javax.swing.JRadioButton jRadioButton6;
-    private javax.swing.JRadioButton jRadioButton7;
-    private javax.swing.JRadioButton jRadioButtonMonth;
-    private javax.swing.JRadioButton jRadioButtonMonthOption1;
-    private javax.swing.JRadioButton jRadioButtonMonthOption2;
-    private javax.swing.JRadioButton jRadioButtonWeek;
-    private javax.swing.JRadioButton jRadioButtonYear;
-    private javax.swing.JSpinner jSpinner2;
-    private javax.swing.JSpinner jSpinner3;
-    private javax.swing.JSpinner jSpinner5;
-    private javax.swing.JSpinner jSpinnerMonthDay;
-    private javax.swing.JSpinner jSpinnerYearDay;
+    private javax.swing.JSpinner mday;
+    private javax.swing.JCheckBox mday1;
+    private javax.swing.JCheckBox mday2;
+    private javax.swing.JCheckBox mday3;
+    private javax.swing.JCheckBox mday4;
+    private javax.swing.JCheckBox mday5;
+    private javax.swing.JCheckBox mday6;
+    private javax.swing.JCheckBox mday7;
+    private javax.swing.JSpinner mmonth;
+    private javax.swing.JSpinner mmonth2;
+    private javax.swing.JComboBox mweek;
+    private javax.swing.JRadioButton periodmont1;
+    private javax.swing.JRadioButton periodmont2;
+    private javax.swing.JRadioButton periodmonth;
+    private javax.swing.JRadioButton periodweek;
+    private javax.swing.JRadioButton periodyear;
+    private javax.swing.JRadioButton periodyear1;
+    private javax.swing.JRadioButton periodyear2;
+    private javax.swing.JCheckBox wday1;
+    private javax.swing.JCheckBox wday2;
+    private javax.swing.JCheckBox wday3;
+    private javax.swing.JCheckBox wday4;
+    private javax.swing.JCheckBox wday5;
+    private javax.swing.JCheckBox wday6;
+    private javax.swing.JCheckBox wday7;
+    private javax.swing.JSpinner yday;
+    private javax.swing.JCheckBox yday1;
+    private javax.swing.JCheckBox yday2;
+    private javax.swing.JCheckBox yday3;
+    private javax.swing.JCheckBox yday4;
+    private javax.swing.JCheckBox yday5;
+    private javax.swing.JCheckBox yday6;
+    private javax.swing.JCheckBox yday7;
+    private javax.swing.JComboBox ymonth;
+    private javax.swing.JComboBox ymonth2;
+    private javax.swing.JComboBox yweek;
+    private javax.swing.JSpinner yyear;
+    private javax.swing.JSpinner yyear2;
     // End of variables declaration//GEN-END:variables
-
 }
