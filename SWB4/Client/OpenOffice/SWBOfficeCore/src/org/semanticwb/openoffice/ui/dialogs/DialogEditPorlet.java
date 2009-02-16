@@ -39,7 +39,8 @@ public class DialogEditPorlet extends javax.swing.JDialog
 
     private String repositoryName,  contentID;
     private PortletInfo pageInformation;
-    public boolean isCancel=true;
+    public boolean isCancel = true;
+
     /** Creates new form DialogContentPublicationInformation */
     public DialogEditPorlet(java.awt.Frame parent, boolean modal, PortletInfo pageInformation, String repositoryName, String contentID)
     {
@@ -49,10 +50,10 @@ public class DialogEditPorlet extends javax.swing.JDialog
         this.repositoryName = repositoryName;
         this.contentID = contentID;
         loadProperties();
-        setLocationRelativeTo(null);        
+        setLocationRelativeTo(null);
     }
 
-     class PropertyRender implements TableCellRenderer
+    class PropertyRender implements TableCellRenderer
     {
 
         public Component getTableCellRendererComponent(JTable table, Object value,
@@ -84,7 +85,7 @@ public class DialogEditPorlet extends javax.swing.JDialog
                 }
                 if (PropertyInfo.type.equalsIgnoreCase("integer"))
                 {
-                    IntegerEditor JTextField = new IntegerEditor(row,column);
+                    IntegerEditor JTextField = new IntegerEditor(row, column);
 
                     if (value == null)
                     {
@@ -259,7 +260,7 @@ public class DialogEditPorlet extends javax.swing.JDialog
             if (e.getSource() instanceof IntegerEditor)
             {
                 IntegerEditor CellTextBox = (IntegerEditor) e.getSource();
-                if (CellTextBox.getValue()==null)
+                if (CellTextBox.getValue() == null)
                 {
                     jTableProperties.setValueAt(0, CellTextBox.row, CellTextBox.col);
                 }
@@ -297,11 +298,12 @@ public class DialogEditPorlet extends javax.swing.JDialog
         {
             this.row = row;
             this.col = col;
-            SpinnerModel model =new SpinnerNumberModel(0,0,9999,1);
+            SpinnerModel model = new SpinnerNumberModel(0, 0, 9999, 1);
             this.setModel(model);
-            this.setEditor(new JSpinner.NumberEditor(this,"####"));
+            this.setEditor(new JSpinner.NumberEditor(this, "####"));
         }
     }
+
     class StringEditor extends JTextField
     {
 
@@ -329,7 +331,7 @@ public class DialogEditPorlet extends javax.swing.JDialog
         {
             for (PropertyInfo info : OfficeApplication.getOfficeDocumentProxy().getPortletProperties(repositoryName, contentID))
             {
-                String value=OfficeApplication.getOfficeDocumentProxy().getPropertyValue(pageInformation, info);
+                String value = OfficeApplication.getOfficeDocumentProxy().getPropertyValue(pageInformation, info);
                 Object[] data =
                 {
                     info, value
@@ -469,26 +471,24 @@ public class DialogEditPorlet extends javax.swing.JDialog
     }// </editor-fold>//GEN-END:initComponents
 
 private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
-    
 }//GEN-LAST:event_jRadioButton1ActionPerformed
 
 private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
-    
 }//GEN-LAST:event_jRadioButton2ActionPerformed
 
 private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelActionPerformed
-    isCancel=true;
+    isCancel = true;
     this.setVisible(false);
 }//GEN-LAST:event_jButtonCancelActionPerformed
 
 private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOKActionPerformed
-    isCancel=false;
+    isCancel = false;
     this.setVisible(false);
 }//GEN-LAST:event_jButtonOKActionPerformed
 
 private void jButtonAddCalendarActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonAddCalendarActionPerformed
 {//GEN-HEADEREND:event_jButtonAddCalendarActionPerformed
-    DialogCalendar dialogCalendar=new DialogCalendar(new Frame(), true);
+    DialogCalendar dialogCalendar = new DialogCalendar(new Frame(), true);
     dialogCalendar.setVisible(true);
 }//GEN-LAST:event_jButtonAddCalendarActionPerformed
 
