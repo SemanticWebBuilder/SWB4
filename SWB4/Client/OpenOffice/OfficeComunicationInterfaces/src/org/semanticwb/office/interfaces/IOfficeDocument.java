@@ -100,5 +100,17 @@ public interface IOfficeDocument
 
     @XmlRpcMethod(methodName = "OfficeDocument.getCalendars")
     public CalendarInfo[] getCalendars(PortletInfo portletInfo) throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeDocument.updateCalendar")
+    public void updateCalendar(PortletInfo portletInfo,CalendarInfo calendarInfo) throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeDocument.insertCalendar")
+    public CalendarInfo insertCalendar(PortletInfo portletInfo,String title,String xml) throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeDocument.deleteCalendar")
+    public void deleteCalendar(PortletInfo portletInfo,CalendarInfo calendarInfo) throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeDocument.activeCalendar")
+    public void activeCalendar(PortletInfo portletInfo,CalendarInfo calendarInfo,boolean active) throws Exception;
 }
 
