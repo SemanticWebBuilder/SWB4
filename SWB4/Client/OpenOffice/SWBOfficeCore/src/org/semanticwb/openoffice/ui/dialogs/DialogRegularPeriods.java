@@ -10,6 +10,7 @@
  */
 package org.semanticwb.openoffice.ui.dialogs;
 
+import org.jdom.output.DOMOutputter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -21,8 +22,6 @@ import org.w3c.dom.NodeList;
 public class DialogRegularPeriods extends java.awt.Dialog
 {
 
-    private Document document;
-
     /** Creates new form DialogRegularPeriods */
     public DialogRegularPeriods(java.awt.Frame parent, boolean modal)
     {
@@ -33,11 +32,11 @@ public class DialogRegularPeriods extends java.awt.Dialog
 
     public org.jdom.Element getElement()
     {
-        org.jdom.Element interval=null;
+        org.jdom.Element interval = null;
         if (this.jCheckBoxUseRegularPeriods.isSelected())
         {
-            interval=new org.jdom.Element("interval");
-            org.jdom.Element elem=null;
+            interval = new org.jdom.Element("interval");
+            org.jdom.Element elem = null;
             org.jdom.Element iterations = new org.jdom.Element("iterations");
             interval.addContent(iterations);
             if (this.periodweek.isSelected())
@@ -225,195 +224,136 @@ public class DialogRegularPeriods extends java.awt.Dialog
         return interval;
     }
 
-    public void setDocument(Document document)
+    public void setDocument(org.jdom.Document document)
     {
-        this.document = document;
-        init();
+        init(document);
     }
 
-    private void init()
+    private void init(org.jdom.Document document)
     {
-        if (document != null)
+        DOMOutputter out = new DOMOutputter();
+        try
         {
-
-            if (document.getElementsByTagName("iterations").getLength() > 0)
+            org.w3c.dom.Document xml = out.output(document);
+            if (document != null)
             {
-                this.jCheckBoxUseRegularPeriods.setSelected(true);
-            }
-            if (document.getElementsByTagName("iterations").getLength() > 0)
-            {
-                String[] siteminterval = new String[9];
-                String tipo = "0";
-                NodeList nodosweekly = document.getElementsByTagName("weekly");
-                if (nodosweekly.getLength() > 0)
+                if (xml.getElementsByTagName("iterations").getLength() > 0)
                 {
-                    tipo = "1";
+                    this.jCheckBoxUseRegularPeriods.setSelected(true);
                 }
-                NodeList nodosmonthly = document.getElementsByTagName("monthly");
-                if (nodosmonthly.getLength() > 0)
+                if (xml.getElementsByTagName("iterations").getLength() > 0)
                 {
-                    tipo = "2";
-                }
-                NodeList nodosyearly = document.getElementsByTagName("yearly");
-                if (nodosyearly.getLength() > 0)
-                {
-                    tipo = "3";
-                }
+                    String[] siteminterval = new String[9];
+                    String tipo = "0";
+                    NodeList nodosweekly = xml.getElementsByTagName("weekly");
+                    if (nodosweekly.getLength() > 0)
+                    {
+                        tipo = "1";
+                    }
+                    NodeList nodosmonthly = xml.getElementsByTagName("monthly");
+                    if (nodosmonthly.getLength() > 0)
+                    {
+                        tipo = "2";
+                    }
+                    NodeList nodosyearly = xml.getElementsByTagName("yearly");
+                    if (nodosyearly.getLength() > 0)
+                    {
+                        tipo = "3";
+                    }
 
-                if (document.getElementsByTagName("weekly").getLength() > 0)
-                {
-                    periodweek.setSelected(true);
+                    if (xml.getElementsByTagName("weekly").getLength() > 0)
+                    {
+                        periodweek.setSelected(true);
 
-                }
-                if (document.getElementsByTagName("monthly").getLength() > 0)
-                {
-                    periodweek.setSelected(true);
-                }
-                if (document.getElementsByTagName("yearly").getLength() > 0)
-                {
-                    periodyear.setSelected(true);
-                }
+                    }
+                    if (xml.getElementsByTagName("monthly").getLength() > 0)
+                    {
+                        periodweek.setSelected(true);
+                    }
+                    if (xml.getElementsByTagName("yearly").getLength() > 0)
+                    {
+                        periodyear.setSelected(true);
+                    }
 
-                NodeList nodositera = document.getElementsByTagName("iterations");
-                for (int i = 0; i < nodositera.getLength(); i++)
-                {
-                    Element xmlitera = (Element) nodositera.item(i);
-                    for (int l = 0; l < xmlitera.getChildNodes().getLength(); l++)
+                    NodeList nodositera = xml.getElementsByTagName("iterations");
+                    for (int i = 0; i < nodositera.getLength(); i++)
                     {
-                        NodeList nodosit = xmlitera.getElementsByTagName("weekly");
-                        for (int j = 0; j < nodosit.getLength(); j++)
+                        Element xmlitera = (Element) nodositera.item(i);
+                        for (int l = 0; l < xmlitera.getChildNodes().getLength(); l++)
                         {
-                            Element xmlit = (Element) nodosit.item(j);
-                            for (int k = 0; k < xmlit.getChildNodes().getLength(); k++)
+                            NodeList nodosit = xmlitera.getElementsByTagName("weekly");
+                            for (int j = 0; j < nodosit.getLength(); j++)
                             {
-                                if (xmlit.getChildNodes().item(l).getNodeName().equals("wdays")) //días
+                                Element xmlit = (Element) nodosit.item(j);
+                                for (int k = 0; k < xmlit.getChildNodes().getLength(); k++)
                                 {
-                                    siteminterval[2] = xmlit.getChildNodes().item(k).getNodeValue();
+                                    if (xmlit.getChildNodes().item(l).getNodeName().equals("wdays")) //días
+                                    {
+                                        siteminterval[2] = xmlit.getChildNodes().item(k).getNodeValue();
+                                    }
+                                }
+                            }
+                            NodeList nodosit1 = xmlitera.getElementsByTagName("monthly");
+                            for (int j = 0; j < nodosit1.getLength(); j++)
+                            {
+                                Element xmlit = (Element) nodosit1.item(j);
+                                for (int k = 0; k < xmlit.getChildNodes().getLength(); k++)
+                                {
+                                    if (xmlit.getChildNodes().item(k).getNodeName().equals("wdays")) //días
+                                    {
+                                        siteminterval[2] = xmlit.getChildNodes().item(k).getNodeValue();
+                                    }
+                                    if (xmlit.getChildNodes().item(k).getNodeName().equals("week")) //semanas
+                                    {
+                                        siteminterval[3] = xmlit.getChildNodes().item(k).getNodeValue();
+                                    }
+                                    if (xmlit.getChildNodes().item(k).getNodeName().equals("months")) //meses
+                                    {
+                                        siteminterval[4] = xmlit.getChildNodes().item(k).getNodeValue();
+                                    }
+                                    if (xmlit.getChildNodes().item(k).getNodeName().equals("day")) //día específico
+                                    {
+                                        siteminterval[6] = xmlit.getChildNodes().item(k).getNodeValue();
+                                    }
+                                }
+                            }
+                            NodeList nodosit2 = xmlitera.getElementsByTagName("yearly");
+                            for (int j = 0; j < nodosit2.getLength(); j++)
+                            {
+                                Element xmlit = (Element) nodosit2.item(j);
+                                for (int k = 0; k < xmlit.getChildNodes().getLength(); k++)
+                                {
+                                    if (xmlit.getChildNodes().item(k).getNodeName().equals("wdays")) //días
+                                    {
+                                        siteminterval[2] = xmlit.getChildNodes().item(k).getNodeValue();
+                                    }
+                                    if (xmlit.getChildNodes().item(k).getNodeName().equals("week")) //semanas
+                                    {
+                                        siteminterval[3] = xmlit.getChildNodes().item(k).getNodeValue();
+                                    }
+                                    if (xmlit.getChildNodes().item(k).getNodeName().equals("months")) //meses
+                                    {
+                                        siteminterval[4] = xmlit.getChildNodes().item(k).getNodeValue();
+                                    }
+                                    if (xmlit.getChildNodes().item(k).getNodeName().equals("years")) //años
+                                    {
+                                        siteminterval[5] = xmlit.getChildNodes().item(k).getNodeValue();
+                                    }
+                                    if (xmlit.getChildNodes().item(k).getNodeName().equals("day")) //día específico
+                                    {
+                                        siteminterval[6] = xmlit.getChildNodes().item(k).getNodeValue();
+                                    }
+                                    if (xmlit.getChildNodes().item(k).getNodeName().equals("month")) //mes específico
+                                    {
+                                        siteminterval[7] = xmlit.getChildNodes().item(k).getNodeValue();
+                                    }
                                 }
                             }
                         }
-                        NodeList nodosit1 = xmlitera.getElementsByTagName("monthly");
-                        for (int j = 0; j < nodosit1.getLength(); j++)
-                        {
-                            Element xmlit = (Element) nodosit1.item(j);
-                            for (int k = 0; k < xmlit.getChildNodes().getLength(); k++)
-                            {
-                                if (xmlit.getChildNodes().item(k).getNodeName().equals("wdays")) //días
-                                {
-                                    siteminterval[2] = xmlit.getChildNodes().item(k).getNodeValue();
-                                }
-                                if (xmlit.getChildNodes().item(k).getNodeName().equals("week")) //semanas
-                                {
-                                    siteminterval[3] = xmlit.getChildNodes().item(k).getNodeValue();
-                                }
-                                if (xmlit.getChildNodes().item(k).getNodeName().equals("months")) //meses
-                                {
-                                    siteminterval[4] = xmlit.getChildNodes().item(k).getNodeValue();
-                                }
-                                if (xmlit.getChildNodes().item(k).getNodeName().equals("day")) //día específico
-                                {
-                                    siteminterval[6] = xmlit.getChildNodes().item(k).getNodeValue();
-                                }
-                            }
-                        }
-                        NodeList nodosit2 = xmlitera.getElementsByTagName("yearly");
-                        for (int j = 0; j < nodosit2.getLength(); j++)
-                        {
-                            Element xmlit = (Element) nodosit2.item(j);
-                            for (int k = 0; k < xmlit.getChildNodes().getLength(); k++)
-                            {
-                                if (xmlit.getChildNodes().item(k).getNodeName().equals("wdays")) //días
-                                {
-                                    siteminterval[2] = xmlit.getChildNodes().item(k).getNodeValue();
-                                }
-                                if (xmlit.getChildNodes().item(k).getNodeName().equals("week")) //semanas
-                                {
-                                    siteminterval[3] = xmlit.getChildNodes().item(k).getNodeValue();
-                                }
-                                if (xmlit.getChildNodes().item(k).getNodeName().equals("months")) //meses
-                                {
-                                    siteminterval[4] = xmlit.getChildNodes().item(k).getNodeValue();
-                                }
-                                if (xmlit.getChildNodes().item(k).getNodeName().equals("years")) //años
-                                {
-                                    siteminterval[5] = xmlit.getChildNodes().item(k).getNodeValue();
-                                }
-                                if (xmlit.getChildNodes().item(k).getNodeName().equals("day")) //día específico
-                                {
-                                    siteminterval[6] = xmlit.getChildNodes().item(k).getNodeValue();
-                                }
-                                if (xmlit.getChildNodes().item(k).getNodeName().equals("month")) //mes específico
-                                {
-                                    siteminterval[7] = xmlit.getChildNodes().item(k).getNodeValue();
-                                }
-                            }
-                        }
                     }
-                }
-                if (tipo.equals("1"))
-                {
-                    this.periodweek.setSelected(true);
-                    String[] days =
+                    if (tipo.equals("1"))
                     {
-                        "", "", "", "", "", "", ""
-                    };
-                    int dias = Integer.parseInt(siteminterval[2]);
-                    int res = 0;
-                    int cdias = 0;
-                    while (dias > 0)
-                    {
-                        res = dias % 2;
-                        days[cdias] = String.valueOf(res);
-                        dias = dias / 2;
-                        cdias++;
-                    }
-                    for (int i = 0; i < days.length; i++)
-                    {
-                        if (days[i] != null)
-                        {
-                            if (i == 0 && days[i].equals("1"))
-                            {
-                                this.wday1.setSelected(true);
-                            }
-                            if (i == 1 && days[i].equals("1"))
-                            {
-                                this.wday2.setSelected(true);
-                            }
-                            if (i == 2 && days[i].equals("1"))
-                            {
-                                this.wday3.setSelected(true);
-                            }
-                            if (i == 3 && days[i].equals("1"))
-                            {
-                                this.wday4.setSelected(true);
-                            }
-                            if (i == 4 && days[i].equals("1"))
-                            {
-                                this.wday5.setSelected(true);
-                            }
-                            if (i == 5 && days[i].equals("1"))
-                            {
-                                this.wday6.setSelected(true);
-                            }
-                            if (i == 6 && days[i].equals("1"))
-                            {
-                                this.wday7.setSelected(true);
-                            }
-                        }
-                    }
-                }
-                if (tipo.equals("2"))
-                {
-                    this.periodmonth.setSelected(true);
-                    if (siteminterval[6] != null)
-                    {
-                        this.periodmont1.setSelected(true);
-                        this.mday.setValue(Integer.parseInt(siteminterval[6]));
-                        this.mmonth.setValue(Integer.parseInt(siteminterval[4]));
-                    }
-                    else
-                    {
-                        this.periodmont2.setSelected(true);
+                        this.periodweek.setSelected(true);
                         String[] days =
                         {
                             "", "", "", "", "", "", ""
@@ -430,115 +370,181 @@ public class DialogRegularPeriods extends java.awt.Dialog
                         }
                         for (int i = 0; i < days.length; i++)
                         {
-                            if (i == 0 && days[i].equals("1"))
+                            if (days[i] != null)
                             {
-                                this.mday1.setSelected(true);
+                                if (i == 0 && days[i].equals("1"))
+                                {
+                                    this.wday1.setSelected(true);
+                                }
+                                if (i == 1 && days[i].equals("1"))
+                                {
+                                    this.wday2.setSelected(true);
+                                }
+                                if (i == 2 && days[i].equals("1"))
+                                {
+                                    this.wday3.setSelected(true);
+                                }
+                                if (i == 3 && days[i].equals("1"))
+                                {
+                                    this.wday4.setSelected(true);
+                                }
+                                if (i == 4 && days[i].equals("1"))
+                                {
+                                    this.wday5.setSelected(true);
+                                }
+                                if (i == 5 && days[i].equals("1"))
+                                {
+                                    this.wday6.setSelected(true);
+                                }
+                                if (i == 6 && days[i].equals("1"))
+                                {
+                                    this.wday7.setSelected(true);
+                                }
                             }
-                            if (i == 1 && days[i].equals("1"))
-                            {
-                                this.mday2.setSelected(true);
-                            }
-                            if (i == 2 && days[i].equals("1"))
-                            {
-                                this.mday3.setSelected(true);
-                            }
-                            if (i == 3 && days[i].equals("1"))
-                            {
-                                this.mday4.setSelected(true);
-                            }
-                            if (i == 4 && days[i].equals("1"))
-                            {
-                                this.mday5.setSelected(true);
-                            }
-                            if (i == 5 && days[i].equals("1"))
-                            {
-                                this.mday6.setSelected(true);
-                            }
-                            if (i == 6 && days[i].equals("1"))
-                            {
-                                this.mday7.setSelected(true);
-                            }
-                        }
-                        if (siteminterval[3] != null)
-                        {
-                            this.mweek.setSelectedItem(Integer.parseInt(siteminterval[3]) - 1);
                         }
                     }
-                }
-                if (tipo.equals("3"))
-                {
-                    this.periodyear.setSelected(true);
-                    if (siteminterval[6] != null)
+                    if (tipo.equals("2"))
                     {
-                        this.periodyear1.setSelected(true);
-                        this.yday.setValue(Integer.parseInt(siteminterval[6]));
-                        if (siteminterval[7] != null)
+                        this.periodmonth.setSelected(true);
+                        if (siteminterval[6] != null)
                         {
-                            this.ymonth.setSelectedIndex(Integer.parseInt(siteminterval[7]) - 1);
+                            this.periodmont1.setSelected(true);
+                            this.mday.setValue(Integer.parseInt(siteminterval[6]));
+                            this.mmonth.setValue(Integer.parseInt(siteminterval[4]));
                         }
-                        this.yyear.setValue(Integer.parseInt(siteminterval[5]));
+                        else
+                        {
+                            this.periodmont2.setSelected(true);
+                            String[] days =
+                            {
+                                "", "", "", "", "", "", ""
+                            };
+                            int dias = Integer.parseInt(siteminterval[2]);
+                            int res = 0;
+                            int cdias = 0;
+                            while (dias > 0)
+                            {
+                                res = dias % 2;
+                                days[cdias] = String.valueOf(res);
+                                dias = dias / 2;
+                                cdias++;
+                            }
+                            for (int i = 0; i < days.length; i++)
+                            {
+                                if (i == 0 && days[i].equals("1"))
+                                {
+                                    this.mday1.setSelected(true);
+                                }
+                                if (i == 1 && days[i].equals("1"))
+                                {
+                                    this.mday2.setSelected(true);
+                                }
+                                if (i == 2 && days[i].equals("1"))
+                                {
+                                    this.mday3.setSelected(true);
+                                }
+                                if (i == 3 && days[i].equals("1"))
+                                {
+                                    this.mday4.setSelected(true);
+                                }
+                                if (i == 4 && days[i].equals("1"))
+                                {
+                                    this.mday5.setSelected(true);
+                                }
+                                if (i == 5 && days[i].equals("1"))
+                                {
+                                    this.mday6.setSelected(true);
+                                }
+                                if (i == 6 && days[i].equals("1"))
+                                {
+                                    this.mday7.setSelected(true);
+                                }
+                            }
+                            if (siteminterval[3] != null)
+                            {
+                                this.mweek.setSelectedItem(Integer.parseInt(siteminterval[3]) - 1);
+                            }
+                        }
                     }
-                    else
+                    if (tipo.equals("3"))
                     {
-                        this.periodyear2.setSelected(true);
+                        this.periodyear.setSelected(true);
+                        if (siteminterval[6] != null)
+                        {
+                            this.periodyear1.setSelected(true);
+                            this.yday.setValue(Integer.parseInt(siteminterval[6]));
+                            if (siteminterval[7] != null)
+                            {
+                                this.ymonth.setSelectedIndex(Integer.parseInt(siteminterval[7]) - 1);
+                            }
+                            this.yyear.setValue(Integer.parseInt(siteminterval[5]));
+                        }
+                        else
+                        {
+                            this.periodyear2.setSelected(true);
 
-                        String[] days =
-                        {
-                            "", "", "", "", "", "", ""
-                        };
-                        int dias = Integer.parseInt(siteminterval[2]);
-                        int res = 0;
-                        int cdias = 0;
-                        while (dias > 0)
-                        {
-                            res = dias % 2;
-                            days[cdias] = String.valueOf(res);
-                            dias = dias / 2;
-                            cdias++;
+                            String[] days =
+                            {
+                                "", "", "", "", "", "", ""
+                            };
+                            int dias = Integer.parseInt(siteminterval[2]);
+                            int res = 0;
+                            int cdias = 0;
+                            while (dias > 0)
+                            {
+                                res = dias % 2;
+                                days[cdias] = String.valueOf(res);
+                                dias = dias / 2;
+                                cdias++;
+                            }
+                            for (int i = 0; i < days.length; i++)
+                            {
+                                if (i == 0 && days[i].equals("1"))
+                                {
+                                    this.yday1.setSelected(true);
+                                }
+                                if (i == 1 && days[i].equals("1"))
+                                {
+                                    this.yday2.setSelected(true);
+                                }
+                                if (i == 2 && days[i].equals("1"))
+                                {
+                                    this.yday3.setSelected(true);
+                                }
+                                if (i == 3 && days[i].equals("1"))
+                                {
+                                    this.yday4.setSelected(true);
+                                }
+                                if (i == 4 && days[i].equals("1"))
+                                {
+                                    this.yday5.setSelected(true);
+                                }
+                                if (i == 5 && days[i].equals("1"))
+                                {
+                                    this.yday6.setSelected(true);
+                                }
+                                if (i == 6 && days[i].equals("1"))
+                                {
+                                    this.yday7.setSelected(true);
+                                }
+                            }
+                            if (siteminterval[3] != null)
+                            {
+                                this.yweek.setSelectedIndex(Integer.parseInt(siteminterval[3]) - 1);
+                            }
+                            if (siteminterval[7] != null)
+                            {
+                                this.ymonth2.setSelectedIndex(Integer.parseInt(siteminterval[7]) - 1);
+                            }
+                            this.yyear2.setValue(Integer.parseInt(siteminterval[5]));
                         }
-                        for (int i = 0; i < days.length; i++)
-                        {
-                            if (i == 0 && days[i].equals("1"))
-                            {
-                                this.yday1.setSelected(true);
-                            }
-                            if (i == 1 && days[i].equals("1"))
-                            {
-                                this.yday2.setSelected(true);
-                            }
-                            if (i == 2 && days[i].equals("1"))
-                            {
-                                this.yday3.setSelected(true);
-                            }
-                            if (i == 3 && days[i].equals("1"))
-                            {
-                                this.yday4.setSelected(true);
-                            }
-                            if (i == 4 && days[i].equals("1"))
-                            {
-                                this.yday5.setSelected(true);
-                            }
-                            if (i == 5 && days[i].equals("1"))
-                            {
-                                this.yday6.setSelected(true);
-                            }
-                            if (i == 6 && days[i].equals("1"))
-                            {
-                                this.yday7.setSelected(true);
-                            }
-                        }
-                        if (siteminterval[3] != null)
-                        {
-                            this.yweek.setSelectedIndex(Integer.parseInt(siteminterval[3]) - 1);
-                        }
-                        if (siteminterval[7] != null)
-                        {
-                            this.ymonth2.setSelectedIndex(Integer.parseInt(siteminterval[7]) - 1);
-                        }
-                        this.yyear2.setValue(Integer.parseInt(siteminterval[5]));
                     }
                 }
             }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
         }
     }
 
