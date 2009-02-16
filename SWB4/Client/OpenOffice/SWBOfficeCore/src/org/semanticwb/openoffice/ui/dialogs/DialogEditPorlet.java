@@ -12,6 +12,8 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import javax.swing.AbstractCellEditor;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
@@ -22,13 +24,20 @@ import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import org.jdom.Document;
+import org.jdom.input.SAXBuilder;
+import org.jdom.output.XMLOutputter;
+import org.semanticwb.office.interfaces.CalendarInfo;
 import org.semanticwb.office.interfaces.PortletInfo;
 import org.semanticwb.office.interfaces.PropertyInfo;
 import org.semanticwb.openoffice.OfficeApplication;
+
 
 /**
  *
@@ -50,7 +59,22 @@ public class DialogEditPorlet extends javax.swing.JDialog
         this.repositoryName = repositoryName;
         this.contentID = contentID;
         loadProperties();
+        loadCalendars();
         setLocationRelativeTo(null);
+        this.jTableScheduler.getSelectionModel().addListSelectionListener(new ListSelectionListener()
+        {
+
+            public void valueChanged(ListSelectionEvent e)
+            {
+                jButtonDeleteScheduler.setEnabled(false);
+                jButtonEditEcheduler.setEnabled(false);
+                if (e.getFirstIndex() != -1)
+                {
+                    jButtonDeleteScheduler.setEnabled(true);
+                    jButtonEditEcheduler.setEnabled(true);
+                }
+            }
+        });
     }
 
     class PropertyRender implements TableCellRenderer
@@ -316,6 +340,27 @@ public class DialogEditPorlet extends javax.swing.JDialog
         }
     }
 
+    private void loadCalendars()
+    {
+        DefaultTableModel model = (DefaultTableModel) jTableScheduler.getModel();
+        int rows = model.getRowCount();
+        for (int i = 1; i <= rows; i++)
+        {
+            model.removeRow(0);
+        }
+        try
+        {
+            for (CalendarInfo info : OfficeApplication.getOfficeDocumentProxy().getCalendars(pageInformation))
+            {
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+    }
+
     private void loadProperties()
     {
         DefaultTableModel model = (DefaultTableModel) jTableProperties.getModel();
@@ -411,6 +456,7 @@ public class DialogEditPorlet extends javax.swing.JDialog
         ));
         jTableProperties.setCellSelectionEnabled(true);
         jTableProperties.setRowHeight(24);
+        jTableProperties.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jTableProperties.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTableProperties);
 
@@ -429,6 +475,7 @@ public class DialogEditPorlet extends javax.swing.JDialog
             }
         ));
         jTableScheduler.setColumnSelectionAllowed(true);
+        jTableScheduler.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane2.setViewportView(jTableScheduler);
         jTableScheduler.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
@@ -436,7 +483,8 @@ public class DialogEditPorlet extends javax.swing.JDialog
 
         jToolBar1.setRollover(true);
 
-        jButtonAddCalendar.setText("Agregar");
+        jButtonAddCalendar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/add.png"))); // NOI18N
+        jButtonAddCalendar.setToolTipText("Agregar");
         jButtonAddCalendar.setFocusable(false);
         jButtonAddCalendar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonAddCalendar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -448,17 +496,31 @@ public class DialogEditPorlet extends javax.swing.JDialog
         jToolBar1.add(jButtonAddCalendar);
         jToolBar1.add(jSeparator1);
 
-        jButtonEditEcheduler.setText("Editar");
+        jButtonEditEcheduler.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/edit.png"))); // NOI18N
+        jButtonEditEcheduler.setToolTipText("Editar");
+        jButtonEditEcheduler.setEnabled(false);
         jButtonEditEcheduler.setFocusable(false);
         jButtonEditEcheduler.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonEditEcheduler.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonEditEcheduler.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEditEchedulerActionPerformed(evt);
+            }
+        });
         jToolBar1.add(jButtonEditEcheduler);
         jToolBar1.add(jSeparator2);
 
-        jButtonDeleteScheduler.setText("Eliminar");
+        jButtonDeleteScheduler.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/delete.png"))); // NOI18N
+        jButtonDeleteScheduler.setToolTipText("Eliminar");
+        jButtonDeleteScheduler.setEnabled(false);
         jButtonDeleteScheduler.setFocusable(false);
         jButtonDeleteScheduler.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonDeleteScheduler.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonDeleteScheduler.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonDeleteSchedulerActionPerformed(evt);
+            }
+        });
         jToolBar1.add(jButtonDeleteScheduler);
 
         jPanelSchedule.add(jToolBar1, java.awt.BorderLayout.PAGE_START);
@@ -491,6 +553,55 @@ private void jButtonAddCalendarActionPerformed(java.awt.event.ActionEvent evt)//
     DialogCalendar dialogCalendar = new DialogCalendar(new Frame(), true);
     dialogCalendar.setVisible(true);
 }//GEN-LAST:event_jButtonAddCalendarActionPerformed
+
+private void jButtonEditEchedulerActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonEditEchedulerActionPerformed
+{//GEN-HEADEREND:event_jButtonEditEchedulerActionPerformed
+    if (jTableScheduler.getSelectedRow() != -1)
+    {
+        CalendarInfo cal = (CalendarInfo) jTableScheduler.getModel().getValueAt(jTableScheduler.getSelectedRow(), 0);
+        DialogCalendar dialogCalendar = new DialogCalendar(new Frame(), true);
+        SAXBuilder SAXBuilder = new SAXBuilder();
+        ByteArrayInputStream in = new ByteArrayInputStream(cal.xml.getBytes());
+        try
+        {
+            Document document = SAXBuilder.build(in);            
+            dialogCalendar.setDocument(document);
+            dialogCalendar.setVisible(true);
+            if (!dialogCalendar.isCanceled)
+            {
+                Document doc=dialogCalendar.getDocument();
+                java.io.ByteArrayOutputStream out=new ByteArrayOutputStream();
+                XMLOutputter xMLOutputter=new XMLOutputter();
+                xMLOutputter.output(doc, out);
+                String xml=new String(out.toByteArray());
+                String title=dialogCalendar.jTextFieldTitle.getText();
+                OfficeApplication.getOfficeDocumentProxy().insertCalendar(pageInformation, title, xml);
+                loadCalendars();
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+}//GEN-LAST:event_jButtonEditEchedulerActionPerformed
+
+private void jButtonDeleteSchedulerActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonDeleteSchedulerActionPerformed
+{//GEN-HEADEREND:event_jButtonDeleteSchedulerActionPerformed
+    if (jTableScheduler.getSelectedRow() != -1)
+    {
+        CalendarInfo cal = (CalendarInfo) jTableScheduler.getModel().getValueAt(jTableScheduler.getSelectedRow(), 0);
+        try
+        {
+            OfficeApplication.getOfficeDocumentProxy().deleteCalendar(pageInformation, cal);
+            loadProperties();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+}//GEN-LAST:event_jButtonDeleteSchedulerActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
