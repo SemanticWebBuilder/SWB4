@@ -16,6 +16,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import javax.swing.AbstractCellEditor;
 import javax.swing.JCheckBox;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
@@ -37,7 +38,6 @@ import org.semanticwb.office.interfaces.CalendarInfo;
 import org.semanticwb.office.interfaces.PortletInfo;
 import org.semanticwb.office.interfaces.PropertyInfo;
 import org.semanticwb.openoffice.OfficeApplication;
-
 
 /**
  *
@@ -584,17 +584,17 @@ private void jButtonEditEchedulerActionPerformed(java.awt.event.ActionEvent evt)
         ByteArrayInputStream in = new ByteArrayInputStream(cal.xml.getBytes());
         try
         {
-            Document document = SAXBuilder.build(in);            
+            Document document = SAXBuilder.build(in);
             dialogCalendar.setDocument(document);
             dialogCalendar.setVisible(true);
             if (!dialogCalendar.isCanceled)
             {
-                Document doc=dialogCalendar.getDocument();
-                java.io.ByteArrayOutputStream out=new ByteArrayOutputStream();
-                XMLOutputter xMLOutputter=new XMLOutputter();
+                Document doc = dialogCalendar.getDocument();
+                java.io.ByteArrayOutputStream out = new ByteArrayOutputStream();
+                XMLOutputter xMLOutputter = new XMLOutputter();
                 xMLOutputter.output(doc, out);
-                String xml=new String(out.toByteArray());
-                String title=dialogCalendar.jTextFieldTitle.getText();
+                String xml = new String(out.toByteArray());
+                String title = dialogCalendar.jTextFieldTitle.getText();
                 OfficeApplication.getOfficeDocumentProxy().insertCalendar(pageInformation, title, xml);
                 loadCalendars();
             }
@@ -610,15 +610,19 @@ private void jButtonDeleteSchedulerActionPerformed(java.awt.event.ActionEvent ev
 {//GEN-HEADEREND:event_jButtonDeleteSchedulerActionPerformed
     if (jTableScheduler.getSelectedRow() != -1)
     {
-        CalendarInfo cal = (CalendarInfo) jTableScheduler.getModel().getValueAt(jTableScheduler.getSelectedRow(), 0);
-        try
+        int res = JOptionPane.showConfirmDialog(this, "¿Desea eliminar la calendarización?", this.getTitle(), JOptionPane.YES_NO_OPTION);
+        if (res == JOptionPane.YES_OPTION)
         {
-            OfficeApplication.getOfficeDocumentProxy().deleteCalendar(pageInformation, cal);
-            loadProperties();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
+            CalendarInfo cal = (CalendarInfo) jTableScheduler.getModel().getValueAt(jTableScheduler.getSelectedRow(), 0);
+            try
+            {
+                OfficeApplication.getOfficeDocumentProxy().deleteCalendar(pageInformation, cal);
+                loadProperties();
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 }//GEN-LAST:event_jButtonDeleteSchedulerActionPerformed
