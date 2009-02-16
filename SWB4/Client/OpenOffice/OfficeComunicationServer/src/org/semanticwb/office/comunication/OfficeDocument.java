@@ -29,7 +29,6 @@ import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.Portlet;
 import org.semanticwb.model.PortletType;
 import org.semanticwb.model.Portletable;
-import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.SWBContext;
 
 import org.semanticwb.model.WebPage;
@@ -1108,6 +1107,43 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             dir = "/" + dir;
         }
         OfficePortlet.clean(dir);
+    }
+
+    public void updateCalendar(PortletInfo portletInfo, CalendarInfo calendarInfo) throws Exception
+    {
+        WebSite site = SWBContext.getWebSite(portletInfo.page.site.id);
+        org.semanticwb.model.Calendar cal=site.getCalendar(calendarInfo.id);
+        cal.setXml(calendarInfo.xml);
+        cal.setUpdated(new Date(System.currentTimeMillis()));
+    }
+
+    public CalendarInfo insertCalendar(PortletInfo portletInfo, String title, String xml) throws Exception
+    {
+        WebSite site = SWBContext.getWebSite(portletInfo.page.site.id);
+        org.semanticwb.model.Calendar cal=site.createCalendar();
+        cal.setXml(xml);
+        cal.setTitle(title);
+        cal.setCreated(new Date(System.currentTimeMillis()));
+        cal.setUpdated(new Date(System.currentTimeMillis()));
+        CalendarInfo info=new CalendarInfo();
+        info.id=cal.getId();
+        info.active=cal.isActive();
+        info.xml=cal.getXml();
+        return info;
+    }
+
+    public void deleteCalendar(PortletInfo portletInfo, CalendarInfo calendarInfo) throws Exception
+    {
+        WebSite site = SWBContext.getWebSite(portletInfo.page.site.id);
+        org.semanticwb.model.Calendar cal=site.getCalendar(calendarInfo.id);
+        cal.remove();
+    }
+
+    public void activeCalendar(PortletInfo portletInfo, CalendarInfo calendarInfo, boolean active) throws Exception
+    {
+        WebSite site = SWBContext.getWebSite(portletInfo.page.site.id);
+        org.semanticwb.model.Calendar cal=site.getCalendar(calendarInfo.id);
+        cal.setActive(active);
     }
 }
 
