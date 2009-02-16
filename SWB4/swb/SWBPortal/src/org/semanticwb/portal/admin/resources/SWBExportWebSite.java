@@ -31,7 +31,7 @@ public class SWBExportWebSite extends GenericResource {
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        StringBuffer strbr = new StringBuffer();
+        StringBuffer strbr = new StringBuffer();       
         String action = paramRequest.getAction();
         try {
             if (action != null && action.equals("step2")) {
