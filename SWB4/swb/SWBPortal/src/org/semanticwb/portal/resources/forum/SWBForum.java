@@ -6,6 +6,7 @@ package org.semanticwb.portal.resources.forum;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 import java.util.Enumeration;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +18,7 @@ import org.semanticwb.forum.FrmCategory;
 import org.semanticwb.forum.FrmForum;
 import org.semanticwb.forum.FrmPost;
 import org.semanticwb.forum.FrmThread;
+import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.GenericResource;
@@ -38,6 +40,8 @@ public class SWBForum extends GenericResource {
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         if (paramRequest.getMode().equals("addCategory")) {
             doAddCategory(request, response, paramRequest);
+        } else if (paramRequest.getMode().equals("editCategory")) {
+            doEditCategory(request, response, paramRequest);
         } else if (paramRequest.getMode().equals("addForum")) {
             doAddForum(request, response, paramRequest);
         } else if (paramRequest.getMode().equals("editForum")) {
@@ -58,10 +62,9 @@ public class SWBForum extends GenericResource {
         PrintWriter out = response.getWriter();
         String action=paramRequest.getAction();
         try{
-            System.out.println("doView/action:"+action);
             if(action!=null){request.setAttribute("action", action);}
             request.setAttribute("paramRequest", paramRequest);
-            RequestDispatcher rd=request.getRequestDispatcher("/forum/swbForum.jsp");
+            RequestDispatcher rd=request.getRequestDispatcher("/resources/jsp/forum/swbForum.jsp");
             rd.include(request, response);
 
             SWBResourceURL url=paramRequest.getRenderUrl();
@@ -76,7 +79,7 @@ public class SWBForum extends GenericResource {
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         try{
             request.setAttribute("paramRequest", paramRequest);
-            RequestDispatcher rd=request.getRequestDispatcher("/forum/swbForumAdm.jsp");
+            RequestDispatcher rd=request.getRequestDispatcher("/resources/jsp/forum/swbForumAdm.jsp");
             rd.forward(request, response);
         }catch(Exception e){
             e.printStackTrace();
@@ -110,9 +113,21 @@ public class SWBForum extends GenericResource {
         out.println(mgr.renderForm());
     }
 
+    public void doEditCategory(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        PrintWriter out=response.getWriter();
+        SemanticObject semObject=SemanticObject.createSemanticObject(request.getParameter("categoryUri"));
+        SWBFormMgr mgr = new SWBFormMgr(semObject, null, SWBFormMgr.MODE_EDIT);
+        mgr.setLang("es");
+        mgr.setType(mgr.TYPE_XHTML);
+        SWBResourceURL url=paramRequest.getActionUrl();
+        url.setParameter("categoryUri", semObject.getURI());
+        url.setAction("editCategory");
+        mgr.setAction(url.toString());
+        out.println(mgr.renderForm());
+    }
+
     public void doEditForum(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out=response.getWriter();
-        System.out.println("doEditForum Uri:"+request.getParameter("forumUri"));
         SemanticObject semObject=SemanticObject.createSemanticObject(request.getParameter("forumUri"));
         SWBFormMgr mgr = new SWBFormMgr(semObject, null, SWBFormMgr.MODE_EDIT);
         mgr.setLang("es");
@@ -135,32 +150,6 @@ public class SWBForum extends GenericResource {
         url.setParameter("forumUri", request.getParameter("forumUri"));
         mgr.setAction(url.toString());
         String path=SWBPlatform.getContextPath()+"/forum/images/emotion/";
-        out.println("<table class=\"noborder\" cellspacing=\"0\" cellpadding=\"3\" align=\"center\">");
-//        out.println("<tr>");
-//        out.println("  <td colspan=\"3\" align=\"center\" bgcolor=\"#F5F5F5\" style=\"BORDER-RIGHT: 1px inset; BORDER-TOP: 1px inset; BORDER-LEFT: 1px inset; BORDER-BOTTOM: 1px inset\">");
-//        out.println("    <span class=\"messageTextBold\">Smilies</span>");
-//        out.println("  </td>");
-//        out.println("</tr>");
-        out.println("<tr align=\"center\">");
-        out.println("  <td><a href=\"javascript:smilie('[:)]');\"><img src=\""+path+"smile.gif\" alt=\"smile\" border=\"0\" /></a>&nbsp;</td>");
-        out.println("  <td><a href=\"javascript:smilie('[:(]');\"><img src=\""+path+"sad.gif\" alt=\"sad\" border=\"0\" /></a>&nbsp;</td>");
-        out.println("  <td><a href=\"javascript:smilie('[:D]');\"><img src=\""+path+"biggrin.gif\" alt=\"big grin\" border=\"0\" /></a>&nbsp;</td>");
-        out.println("</tr>");
-        out.println("<tr align=\"center\">");
-        out.println("  <td><a href=\"javascript:smilie('[:))]');\"><img src=\""+path+"laughing.gif\" alt=\"laughing\" border=\"0\" /></a>&nbsp;</td>");
-        out.println("  <td><a href=\"javascript:smilie('[:((]');\"><img src=\""+path+"crying.gif\" alt=\"crying\" border=\"0\" /></a>&nbsp;</td>");
-        out.println("  <td><a href=\"javascript:smilie('[;)]');\"><img src=\""+path+"wink.gif\" alt=\"wink\" border=\"0\" /></a>&nbsp;</td>");
-        out.println("</tr>");
-        out.println("<tr align=\"center\">");
-        out.println("  <td><a href=\"javascript:smilie('[:&quot;&gt;]');\"><img src=\""+path+"blushing.gif\" alt=\"blushing\" border=\"0\" /></a>&nbsp;</td>");
-        out.println("  <td><a href=\"javascript:smilie('[:p]');\"><img src=\""+path+"tongue.gif\" alt=\"tongue\" border=\"0\" /></a>&nbsp;</td>");
-        out.println("  <td><a href=\"javascript:smilie('[B-)]');\"><img src=\""+path+"cool.gif\" alt=\"cool\" border=\"0\" /></a>&nbsp;</td>");
-        out.println(" </tr>");
-        out.println("<tr align=\"center\">");
-        out.println("  <td><a href=\"javascript:smilie('[:x]');\"><img src=\""+path+"love.gif\" alt=\"love struck\" border=\"0\" /></a>&nbsp;</td>");
-        out.println("  <td><a href=\"javascript:smilie('[:-/]');\"><img src=\""+path+"confused.gif\" alt=\"confused\" border=\"0\" /></a>&nbsp;</td>");
-        out.println("  <td><a href=\"javascript:smilie('[&gt;:)]');\"><img src=\""+path+"devilish.gif\" alt=\"devilish\" border=\"0\" /></a>&nbsp;</td>");
-        out.println("</tr>");
 
 //        out.println("<tr>");
 //        out.println("  <td colspan=\"3\" align=\"center\" bgcolor=\"#F5F5F5\" style=\"BORDER-RIGHT: 1px inset; BORDER-TOP: 1px inset; BORDER-LEFT: 1px inset; BORDER-BOTTOM: 1px inset\">");
@@ -176,13 +165,15 @@ public class SWBForum extends GenericResource {
 //        out.println("  </td>");
 //        out.println("</tr>");
 
-        out.println("</table>");
+//        out.println("</table>");
 
         out.println(mgr.renderForm());
     }
 
+
+
+
     public void doReplyPost(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        System.out.println("Entra a doReplyPost");
         PrintWriter out=response.getWriter();
         SemanticObject soThread = SemanticObject.createSemanticObject(request.getParameter("threadUri"));
         SemanticObject soPost=null;
@@ -208,7 +199,6 @@ public class SWBForum extends GenericResource {
 
     public void doEditPost(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out=response.getWriter();
-        System.out.println("doPost Uri:"+request.getParameter("postUri"));
         SemanticObject semObject=SemanticObject.createSemanticObject(request.getParameter("postUri"));
         SWBFormMgr mgr = new SWBFormMgr(semObject, null, SWBFormMgr.MODE_EDIT);
         mgr.setLang("es");
@@ -223,6 +213,7 @@ public class SWBForum extends GenericResource {
 
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
+        User user=response.getUser();
         Enumeration enP=request.getParameterNames();
         while(enP.hasMoreElements()){
             String paramN=(String)enP.nextElement();
@@ -234,14 +225,18 @@ public class SWBForum extends GenericResource {
         if(action.equals("addCategory")){
             SWBFormMgr mgr=new SWBFormMgr(FrmCategory.frm_FrmCategory, response.getTopic().getSemanticObject(), null);
             mgr.processForm(request);
+            response.setMode(response.Mode_ADMIN);
+        }else if(action.equals("editCategory")){
+            SemanticObject semObject=SemanticObject.createSemanticObject(request.getParameter("categoryUri"));
+            SWBFormMgr mgr=new SWBFormMgr(semObject, null, SWBFormMgr.MODE_EDIT);
+            mgr.processForm(request);
+            response.setMode(response.Mode_ADMIN);
         }else if(action.equals("addForum")){
-            System.out.println("entra a addForum");
             SWBFormMgr mgr=new SWBFormMgr(FrmForum.frm_FrmForum, response.getTopic().getSemanticObject(), null);
             SemanticObject semObj=mgr.processForm(request);
             response.setMode("editForum");
             response.setRenderParameter("forumUri", semObj.getURI());
         }else if(action.equals("editForum")){
-            System.out.println("entra a editForum:"+request.getParameter("forumUri"));
             SemanticObject semObject=SemanticObject.createSemanticObject(request.getParameter("forumUri"));
             SWBFormMgr mgr=new SWBFormMgr(semObject, null, SWBFormMgr.MODE_EDIT);
             mgr.processForm(request);
@@ -253,6 +248,8 @@ public class SWBForum extends GenericResource {
             SemanticObject semObj=mgr.processForm(request);
             FrmThread thread = FrmThread.getFrmThread(semObj.getId(), response.getTopic().getWebSite());
             thread.setForum(forum);
+            thread.setCreator(user);
+            forum.setThreadcount(forum.getThreadcount()+1);
             response.setMode(response.Mode_VIEW);
             response.setAction("viewThreads");
             response.setRenderParameter("forumUri", forum.getURI());
@@ -275,18 +272,54 @@ public class SWBForum extends GenericResource {
             if(post!=null){
                 newPost.setParentPost(post);
             }
+            thread.setReplyCount(thread.getReplyCount()+1);
+            thread.setLastpostdate(new Date());
+            thread.setLastpostmember(user);
+            FrmForum forum=thread.getForum();
+            forum.setPostcount(forum.getPostcount()+1);
             response.setMode(response.Mode_VIEW);
             response.setAction("viewPost");
             response.setRenderParameter("threadUri", thread.getURI());
         }else if(action.equals("editPost")){
-            System.out.println("entra a editPost:"+request.getParameter("postUri"));
             SemanticObject semObject=SemanticObject.createSemanticObject(request.getParameter("postUri"));
             SWBFormMgr mgr=new SWBFormMgr(semObject, null, SWBFormMgr.MODE_EDIT);
             mgr.processForm(request);
             response.setMode(response.Mode_VIEW);
-            System.out.println("threadUri:"+request.getParameter("threadUri"));
             response.setRenderParameter("threadUri", request.getParameter("threadUri"));
             response.setAction("viewPost");
-        }
+        }else if(action.equals("removeThread")){
+            SemanticObject semObject=SemanticObject.createSemanticObject(request.getParameter("threadUri"));
+            FrmThread thread = FrmThread.getFrmThread(semObject.getId(), response.getTopic().getWebSite());
+            int threadReplyCount=thread.getReplyCount();
+            semObject.remove();
+            //Resta los post del thread al foro
+            SemanticObject semObjectForum=SemanticObject.createSemanticObject(request.getParameter("forumUri"));
+            FrmForum forum = FrmForum.getFrmForum(semObjectForum.getId(), response.getTopic().getWebSite());
+            forum.setPostcount(forum.getPostcount() - threadReplyCount);
+            forum.setThreadcount(forum.getThreadcount()-1);
+            //Redirecciona
+            response.setRenderParameter("forumUri", request.getParameter("forumUri"));
+            response.setMode(response.Mode_VIEW);
+        }else if(action.equals("removePost")){
+            SemanticObject semObject=SemanticObject.createSemanticObject(request.getParameter("postUri"));
+            semObject.remove();
+            //Resta el post al contador del thread
+            SemanticObject soThread=SemanticObject.createSemanticObject(request.getParameter("threadUri"));
+            FrmThread thread = FrmThread.getFrmThread(soThread.getId(), response.getTopic().getWebSite());
+            thread.setReplyCount(thread.getReplyCount()-1);
+            FrmForum forum=thread.getForum();
+            forum.setPostcount(forum.getPostcount()-1);
+            //Redirecciona
+            response.setRenderParameter("threadUri", thread.getURI());
+            response.setRenderParameter("forumUri", request.getParameter("forumUri"));
+            response.setMode(response.Mode_VIEW);
+            response.setAction("viewPost");
+        } else if(action.equals("removeForum")){
+            SemanticObject semObject=SemanticObject.createSemanticObject(request.getParameter("forumUri"));
+            semObject.remove();
+        } else if(action.equals("removeCategory")){
+            SemanticObject semObject=SemanticObject.createSemanticObject(request.getParameter("categoryUri"));
+            semObject.remove();
+        }        
     }
 }
