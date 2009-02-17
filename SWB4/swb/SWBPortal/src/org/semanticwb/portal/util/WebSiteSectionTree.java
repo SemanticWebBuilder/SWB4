@@ -60,10 +60,10 @@ public class WebSiteSectionTree {
     
     protected static final String webpath = SWBPlatform.getContextPath();
 
-    protected Templates plt;
+    /*protected Templates plt;
     protected Transformer trans;
     protected DocumentBuilderFactory dbf=null;
-    protected DocumentBuilder db=null;
+    protected DocumentBuilder db=null;*/
     protected String strRes="";
     protected String strWorkPath="";
     protected Vector vTopic= new Vector();
@@ -81,7 +81,7 @@ public class WebSiteSectionTree {
      * @throws IOException
      * @return
      */    
-    public String getTree4Report(String p_selectedsite, HttpServletRequest request, HttpServletResponse response, User user, WebPage topicrec, Map arguments,WebPage topic) throws SWBResourceException, IOException{
+    public String render(String p_selectedsite, HttpServletRequest request, HttpServletResponse response, User user, WebPage topicrec, Map arguments,WebPage topic) throws SWBResourceException, IOException {
         StringBuffer sb_ret = new StringBuffer();
         String strResmaptopic=null;
         String params="";
@@ -108,7 +108,8 @@ public class WebSiteSectionTree {
             int widthsize=25;
             String backg="";
 
-            String path1=""+webpath+"wbadmin/icons/";
+            String path1 = webpath + "/swbadmin/icons/";
+            System.out.println("path1="+path1);
 
             if(topic!=null){
                 strUrl =(String)SWBPlatform.getContextPath() + SWBPlatform.getEnv("wb/distributor") + "/" + topic.getWebSiteId() + "/";
@@ -127,7 +128,7 @@ public class WebSiteSectionTree {
                 }
             }
             
-            sb_ret.append("<TABLE border=\"0\" cellPadding=\"0\" cellSpacing=\"0\" width=\"100%\">");
+            sb_ret.append("<table border=\"0\" cellPadding=\"0\" cellSpacing=\"0\" width=\"100%\">");
 
             if((tpid!=null && tpid.getId().equals(topic.getId())) || (tpid==null)) {
                 backg=" bgcolor=\"#2A5216\"";
@@ -144,37 +145,37 @@ public class WebSiteSectionTree {
                 //color="#FFFFFF";
             }
 
-            sb_ret.append("<TR>");
-            sb_ret.append("<TD>");
-            sb_ret.append("<IMG border=\"0\" src=\""+path1+"f_site_verde.gif\"></IMG>");
-            sb_ret.append("<FONT face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"1\" style=\"text-decoration: none\">&nbsp;&nbsp;"+tmit.getId());
-            sb_ret.append("</TD>");
-            sb_ret.append("</TR>");
+            sb_ret.append("<tr>");
+            sb_ret.append("<td>");
+            sb_ret.append("<img border=\"0\" src=\""+path1+"f_site_verde.gif\" />");
+            sb_ret.append("<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"1\" style=\"text-decoration: none\">&nbsp;&nbsp;"+tmit.getId());
+            sb_ret.append("</td>");
+            sb_ret.append("</tr>");
 
             if((tm!=null && tpid!=null && !tm.getId().equalsIgnoreCase(tmit.getId())) || (tm==null && tpsite==null) || (tm!=null && tpsite!=null)){
-                sb_ret.append("<TR>");
-                sb_ret.append("<TD>");
-                sb_ret.append("<TABLE border=\"0\" cellPadding=\"0\" cellSpacing=\"0\">");
-                sb_ret.append("<TR>");
-                sb_ret.append("<TD>");
-                sb_ret.append("	<IMG height=\"5\" width=\"5\" border=\"0\" src=\""+path1+"trans.gif\"></IMG>");
+                sb_ret.append("<tr>");
+                sb_ret.append("<td>");
+                sb_ret.append("<table border=\"0\" cellPadding=\"0\" cellSpacing=\"0\">");
+                sb_ret.append("<tr>");
+                sb_ret.append("<td>");
+                sb_ret.append("	<img height=\"5\" width=\"5\" border=\"0\" src=\""+path1+"trans.gif\" />");
 
-                sb_ret.append("<A href=\""+strUrl + strResmaptopic + "/?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"\">");
-                sb_ret.append("<IMG height=\"10\" width=\"10\" border=\"0\" src=\""+path1+"trans.gif\"></IMG>");
-                sb_ret.append("<IMG border=\"0\" src=\""+path1+"plus.gif\"></IMG>");
-                sb_ret.append("<IMG border=\"0\" src=\""+path1+"i_home_verde.gif\"></IMG>");
-                sb_ret.append("</A>");
-                sb_ret.append("</TD>");
-                sb_ret.append("<TD"+backg+">");
-                sb_ret.append("<A href=\""+strUrl + strResmaptopic + "/?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params.replaceAll("&step=map","")+"&sel=1"+"\" style=\"text-decoration:none\">");
-                sb_ret.append("<FONT face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"1\" color=\"black\">&nbsp;&nbsp;"+tmhome.getDisplayName());
-                sb_ret.append("</FONT>");
-                sb_ret.append("</A>");
-                sb_ret.append("</TD>");
-                sb_ret.append("</TR>");
-                sb_ret.append("</TABLE>");
-                sb_ret.append("</TD>");
-                sb_ret.append("</TR>");
+                sb_ret.append("<a href=\""+strUrl + strResmaptopic + "/?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"\">");
+                sb_ret.append("<img height=\"10\" width=\"10\" border=\"0\" src=\""+path1+"trans.gif\" />");
+                sb_ret.append("<img border=\"0\" src=\""+path1+"plus.gif\" />");
+                sb_ret.append("<img border=\"0\" src=\""+path1+"i_home_verde.gif\" />");
+                sb_ret.append("</a>");
+                sb_ret.append("</td>");
+                sb_ret.append("<td"+backg+">");
+                sb_ret.append("<a href=\""+strUrl + strResmaptopic + "/?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params.replaceAll("&step=map","")+"&sel=1"+"\" style=\"text-decoration:none\">");
+                sb_ret.append("<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"1\" color=\"black\">&nbsp;&nbsp;"+tmhome.getDisplayName());
+                sb_ret.append("</font>");
+                sb_ret.append("</a>");
+                sb_ret.append("</td>");
+                sb_ret.append("</tr>");
+                sb_ret.append("</table>");
+                sb_ret.append("</td>");
+                sb_ret.append("</tr>");
             }
 
             if( tpsite!=null && tpid!=null && tpid.getWebSiteId().equalsIgnoreCase(tmit.getId()) ) {
@@ -189,58 +190,58 @@ public class WebSiteSectionTree {
                             backg=" bgcolor=\"#B8CFE5\"";
                             //color="#FFFFFF";
                         }
-                        sb_ret.append("<TR>");
-                        sb_ret.append("<TD>");
-                        sb_ret.append("<TABLE border=\"0\" cellPadding=\"0\" cellSpacing=\"0\">");
-                        sb_ret.append("<TR>");
-                        sb_ret.append("<TD>");
-                        sb_ret.append("	<IMG height=\"20\" width=\"20\" border=\"0\" src=\""+path1+"trans.gif\"></IMG>");
-                        sb_ret.append("</TD>");
-                        sb_ret.append("<TD width=\"50\">");
+                        sb_ret.append("<tr>");
+                        sb_ret.append("<td>");
+                        sb_ret.append("<table border=\"0\" cellPadding=\"0\" cellSpacing=\"0\">");
+                        sb_ret.append("<tr>");
+                        sb_ret.append("<td>");
+                        sb_ret.append("	<img height=\"20\" width=\"20\" border=\"0\" src=\""+path1+"trans.gif\" />");
+                        sb_ret.append("</td>");
+                        sb_ret.append("<td width=\"50\">");
                         if(tp.listChilds().hasNext() || vctPath.contains(tp.getId())){
                             if(tpid!=null && (tpid.getId().equals(tp.getId()) || vctPath.contains(tp.getId()))){
-                                sb_ret.append("<A href=\""+strUrl + strResmaptopic + "/?reptm="+tmit.getId()+"&reptp=" + tp.getWebSiteId()+params+"\">");
-                                sb_ret.append("<IMG height=\"10\" width=\"10\" border=\"0\" src=\""+path1+"trans.gif\"></IMG>");
-                                sb_ret.append("<IMG border=\"0\" src=\""+path1+"minus.gif\"/>");
-                                sb_ret.append("<IMG border=\"0\" src=\""+path1+"i_general_verde.gif\"></IMG>");
-                                sb_ret.append("</A>");
+                                sb_ret.append("<a href=\""+strUrl + strResmaptopic + "/?reptm="+tmit.getId()+"&reptp=" + tp.getWebSiteId()+params+"\">");
+                                sb_ret.append("<img height=\"10\" width=\"10\" border=\"0\" src=\""+path1+"trans.gif\" />");
+                                sb_ret.append("<img border=\"0\" src=\""+path1+"minus.gif\" />");
+                                sb_ret.append("<img border=\"0\" src=\""+path1+"i_general_verde.gif\" />");
+                                sb_ret.append("</a>");
                             }else{
-                                sb_ret.append("<A href=\""+strUrl + strResmaptopic + "/?reptm="+tmit.getId()+"&reptp=" + tp.getId()+params+"\">");
-                                sb_ret.append("<IMG height=\"10\" width=\"10\" border=\"0\" src=\""+path1+"trans.gif\"></IMG>");
-                                sb_ret.append("<IMG border=\"0\" src=\""+path1+"plus.gif\"></IMG>");
-                                sb_ret.append("<IMG border=\"0\" src=\""+path1+"i_general_verde.gif\"></IMG>");
-                                sb_ret.append("</A>");
+                                sb_ret.append("<a href=\""+strUrl + strResmaptopic + "/?reptm="+tmit.getId()+"&reptp=" + tp.getId()+params+"\">");
+                                sb_ret.append("<img height=\"10\" width=\"10\" border=\"0\" src=\""+path1+"trans.gif\" />");
+                                sb_ret.append("<img border=\"0\" src=\""+path1+"plus.gif\" />");
+                                sb_ret.append("<img border=\"0\" src=\""+path1+"i_general_verde.gif\" />");
+                                sb_ret.append("</a>");
                             }
 
                         }
                         else{
-                            sb_ret.append("<A href=\""+strUrl + strResmaptopic + "/?reptm="+tmit.getId()+"&reptp=" + tp.getId()+params+"\">");
-                            sb_ret.append("<IMG height=\"10\" width=\"10\" border=\"0\" src=\""+path1+"trans.gif\"></IMG>");
-                            sb_ret.append("<IMG height=\"10\" width=\"15\" border=\"0\" src=\""+path1+"trans.gif\"></IMG>");
-                            sb_ret.append("<IMG border=\"0\" src=\""+path1+"i_general_verde.gif\"></IMG>");
-                            sb_ret.append("</A>");
+                            sb_ret.append("<a href=\""+strUrl + strResmaptopic + "/?reptm="+tmit.getId()+"&reptp=" + tp.getId()+params+"\">");
+                            sb_ret.append("<img height=\"10\" width=\"10\" border=\"0\" src=\""+path1+"trans.gif\" />");
+                            sb_ret.append("<img height=\"10\" width=\"15\" border=\"0\" src=\""+path1+"trans.gif\" />");
+                            sb_ret.append("<img border=\"0\" src=\""+path1+"i_general_verde.gif\" />");
+                            sb_ret.append("</a>");
                         }
-                        sb_ret.append("</TD>");
+                        sb_ret.append("</td>");
 
-                        sb_ret.append("<TD"+backg+">");
-                        sb_ret.append("<A href=\""+strUrl + strResmaptopic + "/?reptm="+tmit.getId()+"&reptp=" + tp.getId()+params.replaceAll("&step=map","")+"&sel=1"+"\" style=\"text-decoration:none\">");
-                        sb_ret.append("<FONT face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"1\" color=\"black\">&nbsp;"+tp.getDisplayName()+"</FONT></A>");
-                        sb_ret.append("</TD>");
-                        sb_ret.append("</TR>");
-                        sb_ret.append("</TABLE>");
-                        sb_ret.append("</TD>");
-                        sb_ret.append("</TR>");
+                        sb_ret.append("<td"+backg+">");
+                        sb_ret.append("<a href=\""+strUrl + strResmaptopic + "/?reptm="+tmit.getId()+"&reptp=" + tp.getId()+params.replaceAll("&step=map","")+"&sel=1"+"\" style=\"text-decoration:none\">");
+                        sb_ret.append("<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"1\" color=\"black\">&nbsp;"+tp.getDisplayName()+"</font></a>");
+                        sb_ret.append("</td>");
+                        sb_ret.append("</tr>");
+                        sb_ret.append("</table>");
+                        sb_ret.append("</td>");
+                        sb_ret.append("</tr>");
                         if((intLevel < intMaxLevel || (tpid!=null && tp.getId().equals(tpid.getId())) ||
                                 vctPath.contains(tp.getId())) && tp.listChilds().hasNext()){
-                            sb_ret.append(getChilds4Report(response,tmredirec,tmit,tpid, tp, user, vctPath, intLevel+1, intWidth,strResmaptopic,widthsize,params));
+                            sb_ret.append(getChilds(response,tmredirec,tmit,tpid, tp, user, vctPath, intLevel+1, intWidth,strResmaptopic,widthsize,params));
                         }
                     }
                 }
             }
-            sb_ret.append("</TABLE>");
+            sb_ret.append("</table>");
         }
         catch(Exception e) {
-            log.error("Error on method WebSiteSectionTree.getTree4Report()", e);
+            log.error("Error on method WebSiteSectionTree.render()", e);
         }
         return sb_ret.toString();
     }
@@ -261,7 +262,7 @@ public class WebSiteSectionTree {
      * @throws IOException
      * @return
      */    
-    public String getChilds4Report(HttpServletResponse response, WebSite tmredirec, WebSite tmit, WebPage tpid, WebPage tpc, User user, Vector vctPath, int intLevel, int intWidth,String topicrec,int widthsize,String params) throws IOException{
+    protected String getChilds(HttpServletResponse response, WebSite tmredirec, WebSite tmit, WebPage tpid, WebPage tpc, User user, Vector vctPath, int intLevel, int intWidth,String topicrec,int widthsize,String params) throws IOException{
         //PrintWriter out=response.getWriter();
         StringBuffer sb_ret = new StringBuffer();
         String strResmaptopic=null;
@@ -287,60 +288,60 @@ public class WebSiteSectionTree {
                         //color="#FFFFFF";
                     }
 
-                    sb_ret.append("<TR>");
-                    sb_ret.append("<TD>");
-                    sb_ret.append("<TABLE border=\"0\" cellPadding=\"0\" cellSpacing=\"0\">");
-                    sb_ret.append("<TR>");
+                    sb_ret.append("<tr>");
+                    sb_ret.append("<td>");
+                    sb_ret.append("<table border=\"0\" cellPadding=\"0\" cellSpacing=\"0\">");
+                    sb_ret.append("<tr>");
 
                     for(int i=0; i < intLevel-1; i++)
                     {
-                        sb_ret.append("<TD>");
-                        sb_ret.append("<IMG height=\"5\" width=\""+widthsize+"\" border=\"0\" src=\""+path1+"trans.gif></IMG>");
-                        sb_ret.append("</TD>");
+                        sb_ret.append("<td>");
+                        sb_ret.append("<img height=\"5\" width=\""+widthsize+"\" border=\"0\" src=\""+path1+"trans.gif />");
+                        sb_ret.append("</td>");
                     }
-                    sb_ret.append("<TD width=\"30\">");
+                    sb_ret.append("<td width=\"30\">");
 
                     if(isMapParent(tpid, tpsub, vctPath) || vctPath.contains(tpsub.getId())){
                         if((tpid!=null && tpsub.getId().equals(tpid.getId()) || vctPath.contains(tpsub.getId()))){
-                            sb_ret.append("<A href=\""+strUrl + strResmaptopic + "/?reptm="+tmit.getId()+"&reptp=" + tpsub.getParent().getId()+params+"\">");
-                            sb_ret.append("<IMG height=\"10\" width=\""+widthsize+"\" border=\"0\" src=\""+path1+"trans.gif\"></IMG>");
-                            sb_ret.append("<IMG border=\"0\" src=\""+path1+"minus.gif\"/>");
-                            sb_ret.append("<IMG border=\"0\" src=\""+path1+"i_general_verde.gif\"></IMG>");
-                            sb_ret.append("</A>");
+                            sb_ret.append("<a href=\""+strUrl + strResmaptopic + "/?reptm="+tmit.getId()+"&reptp=" + tpsub.getParent().getId()+params+"\">");
+                            sb_ret.append("<img height=\"10\" width=\""+widthsize+"\" border=\"0\" src=\""+path1+"trans.gif\" />");
+                            sb_ret.append("<img border=\"0\" src=\""+path1+"minus.gif\"/>");
+                            sb_ret.append("<img border=\"0\" src=\""+path1+"i_general_verde.gif\" />");
+                            sb_ret.append("</a>");
                         }else{
-                            sb_ret.append("<A href=\""+strUrl + strResmaptopic + "/?reptm="+tmit.getId()+"&reptp=" + tpsub.getId()+params+"\">");
-                            sb_ret.append("<IMG height=\"10\" width=\""+widthsize+"\" border=\"0\" src=\""+path1+"trans.gif\"></IMG>");
-                            sb_ret.append("<IMG border=\"0\" src=\""+path1+"plus.gif\"/>");
-                            sb_ret.append("<IMG border=\"0\" src=\""+path1+"i_general_verde.gif\"></IMG>");
-                            sb_ret.append("</A>");
+                            sb_ret.append("<a href=\""+strUrl + strResmaptopic + "/?reptm="+tmit.getId()+"&reptp=" + tpsub.getId()+params+"\">");
+                            sb_ret.append("<img height=\"10\" width=\""+widthsize+"\" border=\"0\" src=\""+path1+"trans.gif\" />");
+                            sb_ret.append("<img border=\"0\" src=\""+path1+"plus.gif\"/>");
+                            sb_ret.append("<img border=\"0\" src=\""+path1+"i_general_verde.gif\" />");
+                            sb_ret.append("</a>");
                         }
                     }
                     else{
-                        sb_ret.append("<A href=\""+strUrl + strResmaptopic + "/?reptm="+tmit.getId()+"&reptp=" + tpsub.getId()+params+"\">");
-                        sb_ret.append("<IMG height=\"10\" width=\""+15+"\" border=\"0\" src=\""+path1+"trans.gif\"></IMG>");
-                        sb_ret.append("<IMG height=\"10\" width=\""+widthsize+"\" border=\"0\" src=\""+path1+"trans.gif\"></IMG>");
-                        sb_ret.append("<IMG border=\"0\" src=\""+path1+"i_general_verde.gif\"></IMG>");
-                        sb_ret.append("</A>");
+                        sb_ret.append("<a href=\""+strUrl + strResmaptopic + "/?reptm="+tmit.getId()+"&reptp=" + tpsub.getId()+params+"\">");
+                        sb_ret.append("<img height=\"10\" width=\""+15+"\" border=\"0\" src=\""+path1+"trans.gif\" />");
+                        sb_ret.append("<img height=\"10\" width=\""+widthsize+"\" border=\"0\" src=\""+path1+"trans.gif\" />");
+                        sb_ret.append("<img border=\"0\" src=\""+path1+"i_general_verde.gif\" />");
+                        sb_ret.append("</a>");
                     }
-                    sb_ret.append("<IMG height=\"10\" width=\""+5+"\" border=\"0\" src=\""+path1+"trans.gif\"></IMG>");
-                    sb_ret.append("</TD>");
-                    sb_ret.append("<TD"+backg+">");
-                    sb_ret.append("<A href=\""+strUrl + strResmaptopic + "/?reptm="+tmit.getId()+"&reptp=" + tpsub.getId()+params.replaceAll("&step=map","")+"&sel=1"+"\" style=\"text-decoration:none\">");
-                    sb_ret.append("<FONT face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"1\" color=\"black\">&nbsp;"+tpsub.getDisplayName()+"</FONT></A>");
-                    sb_ret.append("</TD>");
-                    sb_ret.append("</TR>");
-                    sb_ret.append("</TABLE>");
-                    sb_ret.append("</TD>");
-                    sb_ret.append("</TR>");
+                    sb_ret.append("<img height=\"10\" width=\""+5+"\" border=\"0\" src=\""+path1+"trans.gif\" />");
+                    sb_ret.append("</td>");
+                    sb_ret.append("<td"+backg+">");
+                    sb_ret.append("<a href=\""+strUrl + strResmaptopic + "/?reptm="+tmit.getId()+"&reptp=" + tpsub.getId()+params.replaceAll("&step=map","")+"&sel=1"+"\" style=\"text-decoration:none\">");
+                    sb_ret.append("<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"1\" color=\"black\">&nbsp;"+tpsub.getDisplayName()+"</font></a>");
+                    sb_ret.append("</td>");
+                    sb_ret.append("</tr>");
+                    sb_ret.append("</table>");
+                    sb_ret.append("</td>");
+                    sb_ret.append("</tr>");
                     if((intLevel < intMaxLevel ||  (tpid!=null && tpsub.getId().equals(tpid.getId())) ||
                             vctPath.contains(tpsub.getId())) && tpsub.listChilds().hasNext()){
-                        sb_ret.append(getChilds4Report(response, tmredirec,tmit,tpid, tpsub, user, vctPath, intLevel+1, intWidth,strResmaptopic,widthsize+10,params));
+                        sb_ret.append(getChilds(response, tmredirec,tmit,tpid, tpsub, user, vctPath, intLevel+1, intWidth,strResmaptopic,widthsize+10,params));
                     }
                     vTopic.removeElement(tpsub);
                 }
             }
         }catch(Exception e){
-            log.error("Error on method WebSiteSectionTree.getTree4Report()", e);
+            log.error("Error on method WebSiteSectionTree.render()", e);
         }
         return sb_ret.toString();
     }
