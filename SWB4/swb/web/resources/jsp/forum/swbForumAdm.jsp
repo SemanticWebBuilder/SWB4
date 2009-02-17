@@ -10,6 +10,7 @@
 
 <%
         SWBResourceURL url = paramRequest.getRenderUrl();
+        SWBResourceURL urlAction = paramRequest.getActionUrl();
         String lang=paramRequest.getUser().getLanguage();
 %>
 <table>
@@ -63,8 +64,11 @@
                             url.setParameter("caturi", category.getURI());
                         %>
                             <td align="center">&nbsp</td><td>&nbsp</td><td><a href="<%=url.toString()%>">Agregar nuevo foro</a></td>
-                            <td align="center">Editar</td>
-                            <td align="center">Borrar</td>
+                            <%urlAction.setParameter("categoryUri", category.getURI());
+                              url.setParameter("categoryUri", category.getURI());
+                            %>
+                            <td align="center"><a href="<%=url.setMode("editCategory").toString()%>">Editar</a></td>
+                            <td align="center"><a href="<%=urlAction.setAction("removeCategory").toString()%>">Borrar</a></td>
                     </tr>
                     <%
                    
@@ -90,8 +94,12 @@
                                 <td align="center"><%=forum.getCreated()%></td>
                                 <td align="center"><%=forum.getType().getTitle(lang)%></td>
                                 <td align="center"><%=forum.getModerationMode().getTitle(lang)%></td>
-                                <td align="center">Editar</td>
-                                <td align="center">Borrar</td>
+                                <td align="center">&nbsp;</td>
+                                <%urlAction.setParameter("forumUri", forum.getURI());
+                                  url.setParameter("forumUri", forum.getURI());
+                                %>
+                                <td align="center"><a href="<%=url.setMode("editForum").toString()%>">Editar</a></td>
+                                <td align="center"><a href="<%=urlAction.setAction("removeForum").toString()%>">Borrar</a></td>
                             </tr>
                     <%
                         }                    
