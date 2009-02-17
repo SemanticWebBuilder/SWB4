@@ -266,12 +266,9 @@ public class SWBFormMgr
         }
     }
 
-    
-    public String renderXHTMLForm()
+    public String getFormName()
     {
-        StringBuffer ret=new StringBuffer();
         String uri;
-        String name;
         String frmname=null;
         if(m_mode.equals(MODE_CREATE))
         {
@@ -280,8 +277,15 @@ public class SWBFormMgr
         {
             uri=m_obj.getURI();
         }
-        frmname=uri+"/form";
-        ret.append("<form id=\""+frmname+"\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\""+m_action+"\" onSubmit=\"submitForm('"+frmname+"');return false;\" method=\""+m_method+"\">");
+        return frmname=uri+"/form";
+    }
+
+    
+    public String renderXHTMLForm()
+    {
+        StringBuffer ret=new StringBuffer();
+        String frmname=getFormName();
+        ret.append("<form id=\""+frmname+"\" name=\""+frmname+"\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\""+m_action+"\" onSubmit=\"submitForm('"+frmname+"');return false;\" method=\""+m_method+"\">");
         if(m_obj!=null)ret.append("    <input type=\"hidden\" name=\""+PRM_URI+"\" value=\""+m_obj.getURI()+"\">");
         if(m_cls!=null)ret.append("    <input type=\"hidden\" name=\""+PRM_CLS+"\" value=\""+m_cls.getURI()+"\">");
         if(m_mode!=null)ret.append("    <input type=\"hidden\" name=\""+PRM_MODE+"\" value=\""+m_mode+"\">");
