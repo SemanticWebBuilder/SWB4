@@ -219,9 +219,9 @@
                         <form name="removeThread" action="<%=actionURL.toString()%>">
                         <input type="hidden" name="threadUri" value="<%=thread.getURI()%>">
                         <input type="hidden" name="forumUri" value="<%=request.getParameter("forumUri")%>">
-                         <tr><td>
-                            <input type="submit" value="eliminar">
-                         </tr></td>
+                         <tr><td><input type="submit" value="eliminar"></td>
+                             <td><input type="button" value="cancelar" onClick="retorna(this.form);"></td>
+                         </tr>
                          </form>
                     </table>
                 <%}else{
@@ -275,14 +275,21 @@
                          <form name="removePost" action="<%=actionURL.toString()%>">
                         <input type="hidden" name="postUri" value="<%=post.getURI()%>">
                         <input type="hidden" name="threadUri" value="<%=request.getParameter("threadUri")%>">
-                         <tr><td>
-                            <input type="submit" value="eliminar">
-                         </tr></td>
-                         </form>
+                         <tr><td><input type="submit" value="eliminar"></td>
+                             <td><input type="button" value="cancelar" onClick="retorna(this.form);"></td>
+                         </tr>
+                         </form>                         
                     </table>
                     <%
                 }
-            %>
+                         url.setAction("viewPost");
+                %>
+                         <script type="text/javascript">
+                            function retorna(forma){
+                                forma.action="<%=url.toString()%>";
+                                forma.submit();
+                            }
+                         </script>
             <%} else {
             %>
             <table border="1" width="95%" cellspacing="0" cellpadding="3" align="center">
@@ -297,6 +304,7 @@
                 Iterator<FrmCategory> itCategories = FrmCategory.listFrmCategorys(website);
                 while (itCategories.hasNext()) {
                     FrmCategory category = itCategories.next();
+                    if(category.isActive()){
                 %>
                 <tr bgcolor="#C0C0C0" font-size="12px" font-weight="normal" ine-height="20px">
                     <td colspan="5"><b><%=category.getName()%></b><br/><%=category.getDescription()%><br/></td>
@@ -305,6 +313,7 @@
         GenericIterator<FrmForum> gitForums = category.listForums();
         while (gitForums.hasNext()) {
             FrmForum forum = gitForums.next();
+                    if(forum.isActive()){
                 %>
                 <tr bgcolor="#FFFFFF" font-size="12px">
                     <td width="20" align="center" nowrap="nowrap">&nbsp</td>
@@ -320,19 +329,21 @@
                         <%=forum.getPostcount()%>
                     </td>
                     <td align="center">
-                        <%=forum.getUpdated()%><br/>by
-                        <%if (forum.getModifiedBy() != null) {%>
+                        <%if (forum.getLastpostdate()!=null && forum.getModifiedBy() != null) {%>
+                        <%=forum.getLastpostdate()%>
                         <%=forum.getModifiedBy().getName()%>
-                        <%}%>
+                        <%}else{%> &nbsp; <%}%>
                     </td>
                 </tr>
                 <%
                     }
+                  }
                 }
                 %>
             </table>
             <%
-        }
+                }
+                }
             %>
     </td></tr>
 </table>
