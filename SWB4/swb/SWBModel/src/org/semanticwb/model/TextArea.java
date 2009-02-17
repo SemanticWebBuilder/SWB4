@@ -119,9 +119,9 @@ public class TextArea extends TextAreaBase {
                     "<a href=\"javascript:smilie('[B-)]');\"><img src=\"" + path + "cool.gif\" alt=\"cool\" border=\"0\" /></a>" +
                     "<a href=\"javascript:smilie('[:x]');\"><img src=\"" + path + "love.gif\" alt=\"love struck\" border=\"0\" /></a>" +
                     "<a href=\"javascript:smilie('[:-/]');\"><img src=\"" + path + "confused.gif\" alt=\"confused\" border=\"0\" />" +
-                    "<a href=\"javascript:smilie('[&gt;:)]');\"><img src=\"" + path + "devilish.gif\" alt=\"devilish\" border=\"0\" />";
+                    "<a href=\"javascript:smilie('[&gt;:)]');\"><img src=\"" + path + "devilish.gif\" alt=\"devilish\" border=\"0\" /><br/>";
                     
-                    ret=ret+ "<br/><textarea name=\"" + name + "\" dojoType_=\"dijit.Editor\" rows=\"" + getRows() + "\" cols=\"" + getCols() + "\" " + getAttributes() + ">" + value + "</textarea>";
+                    ret="<textarea name=\"" + name + "\" dojoType_=\"dijit.Editor\" rows=\"" + getRows() + "\" cols=\"" + getCols() + "\" " + getAttributes() + ">" + value + "</textarea>";
         } else if (mode.equals("view")) {
             ret = "<span _id=\"" + name + "\" name=\"" + name + "\">" + value + "</span>";
         }
