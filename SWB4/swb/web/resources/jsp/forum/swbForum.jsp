@@ -75,7 +75,7 @@
                         <%if (thread.getLastpostdate() != null) {%>
                         <%=thread.getLastpostdate()%><br/> by
                         <%}%>
-                        <%if (thread.getCreator() != null) {%>
+                        <%if (thread.getLastpostmember() != null) {%>
                         <%=thread.getLastpostmember().getName()%>
                         <%} else {%>&nbsp;<%}%>
                     </td>
@@ -90,7 +90,9 @@
             } else if (action != null && action.equals("viewPost")) {
                 SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("threadUri"));
                 FrmThread thread = FrmThread.getFrmThread(semObject.getId(), website);
+                thread.setViewcount(thread.getViewcount()+1);
                 url.setParameter("threadUri", thread.getURI());
+                url.setParameter("forumUri",request.getParameter("forumUri"));
             %>
 
             <table border="1" width="95%" cellspacing="0" cellpadding="3" align="center">
@@ -124,11 +126,12 @@
                     <%url.setMode("replyPost");%>
                     <a href="<%=url.toString()%>">replicar</a>/
                     <%url.setMode("editPost");
-                    url.setParameter("postUri", thread.getURI());
+                     url.setParameter("postUri", thread.getURI());
                     %>
                     <a href="<%=url.toString()%>">Editar</a>/
                     <%url.setMode(url.Mode_VIEW);
-                    url.setAction("removePost");%>
+                    url.setAction("removePost");
+                    %>
                     <a href="<%=url.toString()%>&isthread=1">Eliminar Tema</a>
                     </td>
                 </tr>
@@ -141,7 +144,7 @@
                 <tr>
                 <td colspan="2">
                     <%if(post.getCreator()!=null){%>
-                        <%=post.getCreator()%>
+                        <%=post.getCreator().getName()%>
                     <%}%>
                 </td>
                 <td colspan="4">
@@ -176,16 +179,15 @@
             </table>
 
             <%} else if (action != null && action.equals("removePost")) {
-                System.out.println("thread Uri:"+request.getParameter("threadUri"));
-                System.out.println("doPost Uri:"+request.getParameter("postUri"));
-                System.out.println("isthread:"+request.getParameter("isthread"));
+                SWBResourceURL actionURL = paramRequest.getActionUrl();
                 if(request.getParameter("isthread")!=null){
                     SemanticObject soThread=SemanticObject.createSemanticObject(request.getParameter("threadUri"));
                     FrmThread thread = FrmThread.getFrmThread(soThread.getId(), paramRequest.getTopic().getWebSite());
+                    actionURL.setAction("removeThread");
                     %>
                     <table>
                         <tr>
-                            <td colspan="2">Usted esta a punto de eliminar el siguiente tema:<%=thread.getTitle(lang)%></td>
+                            <td colspan="2">Usted esta a punto de eliminar el siguiente tema:<%=thread.getTitle()%></td>
                         </tr>
                         <tr>
                             <td>Cuerpo</td>
@@ -195,7 +197,7 @@
                             <td>Autor</td>
                             <td>
                                 <%if(thread.getCreator()!=null){%>
-                                    <%=thread.getCreator()%>
+                                    <%=thread.getCreator().getName()%>
                                 <%}%>
                                 &nbsp;
                             </td>
@@ -214,8 +216,16 @@
                                 <%=postSize%>
                             </td>
                         </tr>
+                        <form name="removeThread" action="<%=actionURL.toString()%>">
+                        <input type="hidden" name="threadUri" value="<%=thread.getURI()%>">
+                        <input type="hidden" name="forumUri" value="<%=request.getParameter("forumUri")%>">
+                         <tr><td>
+                            <input type="submit" value="eliminar">
+                         </tr></td>
+                         </form>
                     </table>
                 <%}else{
+                    actionURL.setAction("removePost");
                     SemanticObject semObject=SemanticObject.createSemanticObject(request.getParameter("postUri"));
                     FrmPost post = FrmPost.getFrmPost(semObject.getId(), paramRequest.getTopic().getWebSite());
                     %>
@@ -231,7 +241,7 @@
                             <td>Autor</td>
                             <td>
                                 <%if(post.getCreator()!=null){%>
-                                    <%=post.getCreator()%>
+                                    <%=post.getCreator().getName()%>
                                 <%}%>
                                 &nbsp;
                             </td>
@@ -262,6 +272,13 @@
                                 <%=attchmentsSize%>
                             </td>
                         </tr>
+                         <form name="removePost" action="<%=actionURL.toString()%>">
+                        <input type="hidden" name="postUri" value="<%=post.getURI()%>">
+                        <input type="hidden" name="threadUri" value="<%=request.getParameter("threadUri")%>">
+                         <tr><td>
+                            <input type="submit" value="eliminar">
+                         </tr></td>
+                         </form>
                     </table>
                     <%
                 }
