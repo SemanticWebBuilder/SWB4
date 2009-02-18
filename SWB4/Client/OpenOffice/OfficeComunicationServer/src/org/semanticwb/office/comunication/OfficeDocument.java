@@ -837,17 +837,18 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                         if (prop.isString())
                         {
                             info.type = "String";
+                            properties.add(info);
                         }
-                        if (prop.isBoolean())
+                        else if (prop.isBoolean())
                         {
                             info.type = "Boolean";
+                            properties.add(info);
                         }
-                        if (prop.isInt())
+                        else if (prop.isInt())
                         {
                             info.type = "Integer";
+                            properties.add(info);
                         }
-
-                        properties.add(info);
                     }
                 }
             }
