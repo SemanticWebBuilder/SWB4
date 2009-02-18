@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
 import java.util.Enumeration;
-import java.util.Iterator;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,8 +18,10 @@ import org.semanticwb.forum.FrmCategory;
 import org.semanticwb.forum.FrmForum;
 import org.semanticwb.forum.FrmPost;
 import org.semanticwb.forum.FrmThread;
+import org.semanticwb.forum.FrmUserThread;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.User;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.GenericResource;
@@ -215,6 +216,7 @@ public class SWBForum extends GenericResource {
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         User user = response.getUser();
+        WebSite website=response.getTopic().getWebSite();
         Enumeration enP = request.getParameterNames();
         while (enP.hasMoreElements()) {
             String paramN = (String) enP.nextElement();
@@ -244,10 +246,10 @@ public class SWBForum extends GenericResource {
             response.setMode(response.Mode_ADMIN);
         } else if (action.equals("addThread")) {
             SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("forumUri"));
-            FrmForum forum = FrmForum.getFrmForum(semObject.getId(), response.getTopic().getWebSite());
+            FrmForum forum = FrmForum.getFrmForum(semObject.getId(), website);
             SWBFormMgr mgr = new SWBFormMgr(FrmThread.frm_FrmThread, response.getTopic().getSemanticObject(), null);
             SemanticObject semObj = mgr.processForm(request);
-            FrmThread thread = FrmThread.getFrmThread(semObj.getId(), response.getTopic().getWebSite());
+            FrmThread thread = FrmThread.getFrmThread(semObj.getId(), website);
             thread.setForum(forum);
             thread.setCreator(user);
             forum.setThreadcount(forum.getThreadcount() + 1);
@@ -256,18 +258,18 @@ public class SWBForum extends GenericResource {
             response.setRenderParameter("forumUri", forum.getURI());
         } else if (action.equals("replyPost")) {
             SemanticObject soThread = SemanticObject.createSemanticObject(request.getParameter("threadUri"));
-            FrmThread thread = FrmThread.getFrmThread(soThread.getId(), response.getTopic().getWebSite());
+            FrmThread thread = FrmThread.getFrmThread(soThread.getId(), website);
 
             SemanticObject soPost = null;
             FrmPost post = null;
             if (request.getParameter("postUri") != null) {
                 soPost = SemanticObject.createSemanticObject(request.getParameter("postUri"));
-                post = FrmPost.getFrmPost(soPost.getId(), response.getTopic().getWebSite());
+                post = FrmPost.getFrmPost(soPost.getId(), website);
             }
 
             SWBFormMgr mgr = new SWBFormMgr(FrmPost.frm_FrmPost, response.getTopic().getSemanticObject(), null);
             SemanticObject semObj = mgr.processForm(request);
-            FrmPost newPost = FrmPost.getFrmPost(semObj.getId(), response.getTopic().getWebSite());
+            FrmPost newPost = FrmPost.getFrmPost(semObj.getId(), website);
             newPost.setForum(thread.getForum());
             newPost.setThread(thread);
             if (post != null) {
@@ -293,12 +295,12 @@ public class SWBForum extends GenericResource {
             response.setAction("viewPost");
         } else if (action.equals("removeThread")) {
             SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("threadUri"));
-            FrmThread thread = FrmThread.getFrmThread(semObject.getId(), response.getTopic().getWebSite());
+            FrmThread thread = FrmThread.getFrmThread(semObject.getId(), website);
             int threadReplyCount = thread.getReplyCount();
             semObject.remove();
             //Resta los post del thread al foro
             SemanticObject semObjectForum = SemanticObject.createSemanticObject(request.getParameter("forumUri"));
-            FrmForum forum = FrmForum.getFrmForum(semObjectForum.getId(), response.getTopic().getWebSite());
+            FrmForum forum = FrmForum.getFrmForum(semObjectForum.getId(), website);
             forum.setPostcount(forum.getPostcount() - threadReplyCount);
             forum.setThreadcount(forum.getThreadcount() - 1);
             //Redirecciona
@@ -307,7 +309,7 @@ public class SWBForum extends GenericResource {
         } else if (action.equals("removePost")) {
             SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("postUri"));
 
-            FrmPost Post2remove = FrmPost.getFrmPost(semObject.getId(), response.getTopic().getWebSite());
+            FrmPost Post2remove = FrmPost.getFrmPost(semObject.getId(), website);
             int childPost = 0;
             GenericIterator<FrmPost> gitPost = Post2remove.listchildPosts();
             while (gitPost.hasNext()) {
@@ -317,7 +319,7 @@ public class SWBForum extends GenericResource {
             semObject.remove();
             //Resta el post al contador del thread
             SemanticObject soThread = SemanticObject.createSemanticObject(request.getParameter("threadUri"));
-            FrmThread thread = FrmThread.getFrmThread(soThread.getId(), response.getTopic().getWebSite());
+            FrmThread thread = FrmThread.getFrmThread(soThread.getId(), website);
             thread.setReplyCount(thread.getReplyCount() - (childPost + 1));
             FrmForum forum = thread.getForum();
             forum.setPostcount(forum.getPostcount() - (childPost + 1));
@@ -332,6 +334,17 @@ public class SWBForum extends GenericResource {
         } else if (action.equals("removeCategory")) {
             SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("categoryUri"));
             semObject.remove();
+        }else if (action.equals("addFavoriteThread")) {
+           System.out.println("entra a addFavoriteThread");
+           SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("threadUri"));
+           FrmThread favThread = FrmThread.getFrmThread(semObject.getId(), response.getTopic().getWebSite());
+
+           FrmUserThread frmUserThread=FrmUserThread.createFrmUserThread(website);
+           frmUserThread.setThread(favThread);
+           frmUserThread.setUser(user);
+
+           System.out.println("termina:"+frmUserThread.getURI());
+           
         }
     }
 
