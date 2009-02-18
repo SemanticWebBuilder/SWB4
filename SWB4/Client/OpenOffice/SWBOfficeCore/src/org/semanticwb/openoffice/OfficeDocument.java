@@ -362,7 +362,7 @@ public abstract class OfficeDocument
         properties = this.getCustomProperties();
         contentId = properties.get(CONTENT_ID_NAME);
         rep = properties.get(WORKSPACE_ID_NAME);
-        if(contentId!=null && rep ==null)
+        if(contentId!=null && rep !=null)
         {
             DialogContentInformation dialog = new DialogContentInformation(new javax.swing.JFrame(), true, contentId, rep, this);
             dialog.setLocationRelativeTo(null);
