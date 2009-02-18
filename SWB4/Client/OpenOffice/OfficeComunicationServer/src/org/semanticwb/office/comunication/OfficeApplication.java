@@ -208,10 +208,8 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                 String cm_description = loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
                 String cm_user = loader.getOfficeManager(repositoryName).getUserType();
                 newNode.setProperty(cm_user, this.user);
-                newNode.setProperty(cm_title, title);
-                System.out.println("Categoría:"+title);
+                newNode.setProperty(cm_title, title);                
                 newNode.setProperty(cm_description, description);
-
                 root.save();
                 UUID = newNode.getUUID();
             }
