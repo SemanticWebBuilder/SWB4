@@ -7,7 +7,7 @@ package org.semanticwb.portal.admin.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.DateFormat;
+//import java.text.DateFormat;
 import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -211,25 +211,6 @@ public class SWBAListRelatedObjects extends GenericResource {
 
         }
 
-    }
-
-    public String getDateFormat(long dateTime, String lang) {
-        if (null == lang) {
-            lang = "es";
-        }
-        Locale local = new Locale(lang);
-        DateFormat df = DateFormat.getDateInstance(DateFormat.FULL, local);
-        return df.format(new Date(dateTime));
-    }
-
-    public String getDisplaySemObj(SemanticObject obj, String lang) {
-        String ret = obj.getRDFName();
-        try {
-            ret = obj.getDisplayName(lang);
-        } catch (Exception e) {
-            ret = obj.getProperty(Descriptiveable.swb_title);
-        }
-        return ret;
     }
 
     public String getValueSemProp(SemanticObject obj, SemanticProperty prop) {
