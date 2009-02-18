@@ -472,7 +472,6 @@ public class DialogContentInformation extends javax.swing.JDialog
             }
         });
         jTablePages.setToolTipText("Puede editar la versión selecionando la columna correspondiente");
-        jTablePages.setColumnSelectionAllowed(true);
         jTablePages.setRowHeight(20);
         jTablePages.setRowSelectionAllowed(false);
         jTablePages.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
