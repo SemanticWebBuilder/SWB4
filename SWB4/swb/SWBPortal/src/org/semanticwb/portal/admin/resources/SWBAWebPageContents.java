@@ -225,7 +225,18 @@ public class SWBAWebPageContents extends GenericResource {
                 urlr.setParameter("sval", sobj.getURI());
                 urlr.setParameter(prop.getName(), prop.getURI());
                 urlr.setAction("remove");
-                out.println("<a href=\"#\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " " + sobj.getDisplayName(user.getLanguage()) + "?')){ submitUrl('" + urlr + "',this); } else { return false;}\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" border=0></a>");
+                out.println("<a href=\"#\" alt=\"remove\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " " + sobj.getDisplayName(user.getLanguage()) + "?')){ submitUrl('" + urlr + "',this); } else { return false;}\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/TRASH.png\" border=0></a>");
+
+                SWBResourceURL urlpre = paramRequest.getRenderUrl();
+                urlpre.setParameter("suri", id);
+                urlpre.setParameter("sprop", idp);
+                urlpre.setParameter("act", "");
+                urlpre.setParameter("sval", sobj.getURI());
+                if(idptype!=null)urlpre.setParameter("sproptype", idptype);
+                urlpre.setParameter("preview", "true");
+                out.println("<a href=\"#\" alt=\"Preview\" onclick=\"submitUrl('" + urlpre + "',this); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/SEARCH.png\" border=0></a>");
+
+                out.println("<a href=\"#\"  alt=\"Admin\" onclick=\"addNewTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + sobj.getDisplayName() + "');adminTab('"+sobj.getURI()+"');return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/Portlet.png\" border=0></a>");
                 out.println("</td>");
                 out.println("<td>");
                 SWBResourceURL urlchoose = paramRequest.getRenderUrl();
@@ -661,7 +672,40 @@ public class SWBAWebPageContents extends GenericResource {
             fmgr.addHiddenParameter("isGlobal", Boolean.toString(isGlobal));
             out.println(fmgr.renderForm());
         }
+
+        if(request.getParameter("preview")!=null&&request.getParameter("preview").equals("true"))
+        {
+            //out.println("<div class=\"swbform\">");
+            out.println("<fieldset>");
+            out.println("<legend>Preview</legend>");
+            if(request.getParameter("sval")!=null)
+                try
+                {
+                    doPreview(request,response,paramRequest);
+                }
+                catch(Exception e)
+                {
+                    out.println("Preview not available...");
+                }
+            else
+                out.println("Preview not available...");
+            out.println("</fieldset>");
+            //out.println("</div>");
+        }
     }
+
+
+    public void doPreview(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        String id=request.getParameter("sval");
+        try{
+            SWBResource res=SWBPortal.getResourceMgr().getResource(id);
+            res.render(request, response, paramRequest);
+        }catch(Exception e){
+            log.error("Error while getting content string ,id:"+id , e);        }
+
+    }
+
+
 
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
