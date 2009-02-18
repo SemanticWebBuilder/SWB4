@@ -541,6 +541,7 @@ public class GenericTree extends javax.swing.JApplet implements DragGestureListe
         {
             //URL gurl=new URL(this.url,cgi);
             URLConnection urlconn=url.openConnection();
+            urlconn.setUseCaches(false);
             if(jsess!=null)urlconn.setRequestProperty("Cookie", "JSESSIONID="+jsess);
             urlconn.setRequestProperty("Accept-Encoding", "gzip");
             //System.out.println("JSESSIONID="+jsess);

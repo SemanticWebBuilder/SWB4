@@ -1719,6 +1719,7 @@ public class WBGraph extends java.applet.Applet implements Runnable
         try
         {
             URLConnection urlconn=dir.openConnection();
+            urlconn.setUseCaches(false);
             //if(jsess!=null)urlconn.setRequestProperty("Cookie", "JSESSIONID="+jsess);
             //urlconn.setRequestProperty("Accept-Encoding", "gzip");
             urlconn.setDoOutput(true);

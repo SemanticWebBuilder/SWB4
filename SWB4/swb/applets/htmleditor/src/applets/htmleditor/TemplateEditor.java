@@ -2118,6 +2118,7 @@ Action:caret-previous-word
         try
         {
             URLConnection urlconn=upurl.openConnection();
+            urlconn.setUseCaches(false);
             if(jsess!=null)urlconn.setRequestProperty("Cookie", "JSESSIONID="+jsess);
             urlconn.setRequestProperty("PATHFILEWB",name);
             if(replace)

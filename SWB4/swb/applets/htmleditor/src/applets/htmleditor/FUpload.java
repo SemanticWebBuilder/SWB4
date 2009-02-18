@@ -238,7 +238,8 @@ public class FUpload extends javax.swing.JDialog implements FileUploadListener{
                 {
                     try
                     {
-                        URLConnection con=url.openConnection();                        
+                        URLConnection con=url.openConnection();
+                        con.setUseCaches(false);
                         con.setDefaultUseCaches(false);                        
                         if(jsess!=null)con.setRequestProperty("Cookie","JSESSIONID="+jsess);
                         con.addRequestProperty("PATHFILEWB",path);

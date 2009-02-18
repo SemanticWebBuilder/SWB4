@@ -197,6 +197,7 @@ public class InsertResource extends javax.swing.JDialog {
         {
             //URL gurl=new URL(this.url,cgi);
             URLConnection urlconn=gateway.openConnection();
+            urlconn.setUseCaches(false);
             if(jsess!=null)urlconn.setRequestProperty("Cookie", "JSESSIONID="+jsess);            
             urlconn.setRequestProperty("TM", this.topicMap);
             urlconn.setRequestProperty("ID", "1");

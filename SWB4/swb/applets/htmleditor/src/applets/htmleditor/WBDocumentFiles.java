@@ -899,6 +899,7 @@ public class WBDocumentFiles extends javax.swing.JDialog
         {
             //URL gurl=new URL(this.url,cgi);
             URLConnection urlconn=gateway.openConnection();
+            urlconn.setUseCaches(false);
             if(jsess!=null)urlconn.setRequestProperty("Cookie", "JSESSIONID="+jsess);
             urlconn.setRequestProperty("TM", topicMap);
             urlconn.setRequestProperty("ID", id);
