@@ -788,6 +788,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             info.id=cal.getId();
             info.xml=cal.getXml();
             info.active=cal.isActive();
+            info.title=cal.getTitle();
             getCalendarInfo.add(info);
         }
         return getCalendarInfo.toArray(new CalendarInfo[getCalendarInfo.size()]);
@@ -1127,6 +1128,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         cal.setCreated(new Date(System.currentTimeMillis()));
         cal.setUpdated(new Date(System.currentTimeMillis()));
         CalendarInfo info=new CalendarInfo();
+        info.title=title;
         info.id=cal.getId();
         info.active=cal.isActive();
         info.xml=cal.getXml();
