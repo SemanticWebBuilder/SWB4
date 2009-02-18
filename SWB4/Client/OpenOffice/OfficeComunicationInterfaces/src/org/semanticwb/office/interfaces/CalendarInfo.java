@@ -13,7 +13,7 @@ public class CalendarInfo {
     public String id;
     public String xml;
     public boolean active;
-
+    public String title;
     @Override
     public boolean equals(Object obj)
     {
@@ -44,7 +44,7 @@ public class CalendarInfo {
     @Override
     public String toString()
     {
-        return super.toString();
+        return title.toString();
     }
 
 
