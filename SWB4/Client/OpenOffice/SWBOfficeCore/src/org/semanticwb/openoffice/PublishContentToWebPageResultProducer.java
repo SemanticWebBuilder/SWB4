@@ -71,8 +71,11 @@ public class PublishContentToWebPageResultProducer implements WizardResultProduc
                 {
                     for (PropertyInfo prop : properties.keySet())
                     {
-                        String value = properties.get(prop);
-                        openOfficeDocument.setPropertyValue(info, prop, value);
+                        if(prop!=null)
+                        {
+                            String value = properties.get(prop);
+                            openOfficeDocument.setPropertyValue(info, prop, value);
+                        }
                     }
                 }
                 int res = JOptionPane.showConfirmDialog(null, "¿Desea activar el contenido?", "Publicación de contenido", JOptionPane.YES_NO_OPTION);
