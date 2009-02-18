@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class PFlowBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.XMLable,org.semanticwb.model.Versionable,org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.model.Deleteable,org.semanticwb.model.Descriptiveable
+public class PFlowBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Versionable,org.semanticwb.model.Traceable,org.semanticwb.model.XMLable,org.semanticwb.model.Activeable,org.semanticwb.model.Deleteable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticClass swb_PFlowRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PFlowRef");
     public static final org.semanticwb.platform.SemanticProperty swb_hasPFlowRefInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasPFlowRefInv");
