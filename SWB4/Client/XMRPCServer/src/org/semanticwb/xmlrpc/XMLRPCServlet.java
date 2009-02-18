@@ -199,10 +199,11 @@ public abstract class XMLRPCServlet extends HttpServlet
         {
             response.setContentType("text/xml;charset=utf-8");
             ServletOutputStream out = response.getOutputStream();
-            Format format = Format.getPrettyFormat();
-            format.setEncoding("UTF-8");
-            XMLOutputter xMLOutputter = new XMLOutputter(format);
+            //Format format = Format.getPrettyFormat();
+            //format.setEncoding("UTF-8");
+            XMLOutputter xMLOutputter = new XMLOutputter();
             xMLOutputter.output(docResponse, out);
+            xMLOutputter.output(docResponse, System.out);
             out.flush();
             out.close();
         }
