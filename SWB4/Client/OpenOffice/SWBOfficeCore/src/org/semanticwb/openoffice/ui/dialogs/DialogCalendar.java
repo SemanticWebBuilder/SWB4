@@ -13,6 +13,7 @@ package org.semanticwb.openoffice.ui.dialogs;
 import java.awt.Frame;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import org.jdom.Document;
@@ -60,16 +61,16 @@ public class DialogCalendar extends java.awt.Dialog
                     this.jCheckBoxByTimeStateChanged(null);
                     if (xml.getElementsByTagName("starthour").getLength() > 0)
                     {
-                        this.jSpinnerInitTime.setValue(TIME_SIMPLEFORMAT.parse(((org.w3c.dom.Element) xml.getElementsByTagName("starthour").item(0)).getNodeValue()));
+                        this.jSpinnerInitTime.setValue(TIME_SIMPLEFORMAT.parse(((org.w3c.dom.Element) xml.getElementsByTagName("starthour").item(0)).getTextContent()));
                     }
                     if (xml.getElementsByTagName("endhour").getLength() > 0)
                     {
-                        this.jSpinnerEndTime.setValue(TIME_SIMPLEFORMAT.parse(((org.w3c.dom.Element) xml.getElementsByTagName("endhour").item(0)).getNodeValue()));
+                        this.jSpinnerEndTime.setValue(TIME_SIMPLEFORMAT.parse(((org.w3c.dom.Element) xml.getElementsByTagName("endhour").item(0)).getTextContent()));
                     }
                 }
                 if (xml.getElementsByTagName("inidate").getLength() > 0)
                 {
-                    this.jSpinnerInitDate.setValue(DATE_SIMPLEFORMAT.parse(((org.w3c.dom.Element) xml.getElementsByTagName("inidate").item(0)).getNodeValue()));
+                    this.jSpinnerInitDate.setValue(DATE_SIMPLEFORMAT.parse(((org.w3c.dom.Element) xml.getElementsByTagName("inidate").item(0)).getTextContent()));
                 }
                 if (xml.getElementsByTagName("enddate").getLength() == 0)
                 {
@@ -79,7 +80,7 @@ public class DialogCalendar extends java.awt.Dialog
                 }
                 else
                 {
-                    this.jSpinnerInitDate.setValue(DATE_SIMPLEFORMAT.parse(((org.w3c.dom.Element) xml.getElementsByTagName("enddate").item(0)).getNodeValue()));
+                    this.jSpinnerEndDate.setValue(DATE_SIMPLEFORMAT.parse(((org.w3c.dom.Element) xml.getElementsByTagName("enddate").item(0)).getTextContent()));
                     jRadioButtonNotEndDate.setSelected(false);
                     jSpinnerEndTime.setEnabled(true);
                     jRadioButtonEndSelect.setSelected(true);
@@ -206,14 +207,14 @@ public class DialogCalendar extends java.awt.Dialog
             }
         });
 
-        jSpinnerInitTime.setModel(new javax.swing.SpinnerDateModel());
+        jSpinnerInitTime.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(), null, null, java.util.Calendar.SECOND));
         jSpinnerInitTime.setEnabled(false);
 
         jLabel2.setText("Hora de inicio:");
 
         jLabel3.setText("Hora final:");
 
-        jSpinnerEndTime.setModel(new javax.swing.SpinnerDateModel());
+        jSpinnerEndTime.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(), null, null, java.util.Calendar.SECOND));
         jSpinnerEndTime.setEnabled(false);
 
         javax.swing.GroupLayout jPanelByTimeLayout = new javax.swing.GroupLayout(jPanelByTime);
@@ -315,7 +316,7 @@ public class DialogCalendar extends java.awt.Dialog
                 .addComponent(jPanelByTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(65, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -380,7 +381,7 @@ public class DialogCalendar extends java.awt.Dialog
     {//GEN-HEADEREND:event_jButtonOkActionPerformed
         if(jTextFieldTitle.getText().isEmpty())
         {
-            JOptionPane.showMessageDialog(this, "¡Debe indicar el ´titulo!",this.getTitle(),JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "¡Debe indicar el título!",this.getTitle(),JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
             jTextFieldTitle.requestFocus();
             return;
         }
@@ -395,10 +396,39 @@ public class DialogCalendar extends java.awt.Dialog
     public Document getDocument()
     {
         Document doc = new Document();
+
+        Element resource=new Element("Resource");
+        doc.setRootElement(resource);
+
+        Element inidate=new Element("inidate");
+        String date=DATE_SIMPLEFORMAT.format(((Date)jSpinnerInitDate.getValue()));
+        inidate.setText(date);
+        resource.addContent(inidate);
+        if(jRadioButtonEndSelect.isSelected())
+        {
+            date=DATE_SIMPLEFORMAT.format(((Date)jSpinnerEndTime.getValue()));
+            Element enddate=new Element("enddate");
+            enddate.setText(date);
+            resource.addContent(enddate);
+        }
+        if(jCheckBoxByTime.isSelected())
+        {
+            Element starthour=new Element("starthour");
+            date=TIME_SIMPLEFORMAT.format(((Date)jSpinnerInitTime.getValue()));
+            starthour.setText(date);
+            resource.addContent(starthour);
+
+            Element endhour=new Element("endhour");
+            date=TIME_SIMPLEFORMAT.format(((Date)jSpinnerEndTime.getValue()));
+            endhour.setText(date);
+
+            resource.addContent(endhour);
+
+        }
         Element periods = this.dialogRegularPeriods.getElement();
         if (periods != null)
         {
-            doc.addContent(periods);
+            resource.addContent(periods);
         }
         return doc;
     }
