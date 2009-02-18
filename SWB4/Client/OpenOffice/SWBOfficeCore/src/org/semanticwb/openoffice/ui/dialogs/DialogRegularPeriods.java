@@ -10,6 +10,7 @@
  */
 package org.semanticwb.openoffice.ui.dialogs;
 
+import javax.swing.JOptionPane;
 import org.jdom.output.DOMOutputter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -1066,6 +1067,34 @@ public class DialogRegularPeriods extends java.awt.Dialog
 
     private void jButtonokActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonokActionPerformed
     {//GEN-HEADEREND:event_jButtonokActionPerformed
+        if(this.periodweek.isSelected())
+        {            
+            if(!(wday1.isSelected() || wday2.isSelected() || wday3.isSelected() || wday4.isSelected() || wday5.isSelected() || wday6.isSelected() || wday7.isSelected()))
+            {
+                JOptionPane.showMessageDialog(this, "Debe indicar por lo menos un día de la semana para un periodo semanal",this.getTitle(),JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                this.periodweek.requestFocus();
+                return;
+            }
+        }
+        if(this.periodmonth.isSelected() && periodmont2.isSelected())
+        {
+            if(!(mday1.isSelected() || mday2.isSelected() || mday3.isSelected() || mday4.isSelected() || mday5.isSelected() || mday6.isSelected() || mday7.isSelected()))
+            {
+                JOptionPane.showMessageDialog(this, "Debe indicar por lo menos un día de la semana para un periodo mensual",this.getTitle(),JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                this.periodmont2.requestFocus();
+                return;
+            }
+        }
+
+        if(this.periodyear.isSelected() && periodyear2.isSelected())
+        {
+            if(!(mday1.isSelected() || mday2.isSelected() || mday3.isSelected() || mday4.isSelected() || mday5.isSelected() || mday6.isSelected() || mday7.isSelected()))
+            {
+                JOptionPane.showMessageDialog(this, "Debe indicar por lo menos un día de la semana para un periodo anual",this.getTitle(),JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                this.periodyear2.requestFocus();
+                return;
+            }
+        }
         this.setVisible(false);
     }//GEN-LAST:event_jButtonokActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
