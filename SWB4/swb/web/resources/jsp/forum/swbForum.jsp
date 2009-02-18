@@ -5,6 +5,7 @@
 <%@page import="org.semanticwb.model.GenericIterator"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="org.semanticwb.forum.FrmCategory"%>
+<%@page import="org.semanticwb.forum.FrmUserThread"%>
 <%@page import="org.semanticwb.forum.FrmForum"%>
 <%@page import="org.semanticwb.forum.FrmThread"%>
 <%@page import="org.semanticwb.forum.FrmPost"%>
@@ -19,7 +20,9 @@
             <%
         WebSite website = paramRequest.getTopic().getWebSite();
         SWBResourceURL url = paramRequest.getRenderUrl();
-        String lang = paramRequest.getUser().getLanguage();
+        SWBResourceURL actionURL = paramRequest.getActionUrl();
+        User user=paramRequest.getUser();
+        String lang = user.getLanguage();
         String action = (String) request.getAttribute("action");
         if (action != null && action.equals("viewThreads")) {
             url.setMode("addThread");
@@ -33,6 +36,7 @@
                     <td align="center"><font color="#FFFFFF">Replicas</font></td>
                     <td align="center"><font color="#FFFFFF">Vistas</font></td>
                     <td align="center"><font color="#FFFFFF">Ultimo mensaje</font></td>
+                    <td align="center"><font color="#FFFFFF">Favorito</font></td>
                 </tr>
                 <%
                 url.setMode(url.Mode_VIEW);
@@ -78,6 +82,30 @@
                         <%if (thread.getLastpostmember() != null) {%>
                         <%=thread.getLastpostmember().getName()%>
                         <%} else {%>&nbsp;<%}%>
+                    </td>
+                    <td>
+                        <%
+                            boolean isFavThread=false;
+                            Iterator <FrmUserThread> itFrmUserThread=FrmUserThread.listFrmUserThreads(website);
+                            while(itFrmUserThread.hasNext()){
+                                System.out.println("entra jsp-2");
+                                FrmUserThread usrThread=itFrmUserThread.next();
+                                if(usrThread.getThread().getURI().equals(thread.getURI()) && usrThread.getUser().getURI().equals(user.getURI()))
+                                {
+                                    System.out.println("entra jsp-3");
+                                    isFavThread=true;
+                                    break;
+                                }
+                            }
+                            if(!isFavThread){
+                                actionURL.setAction("addFavoriteThread");
+                                actionURL.setParameter("forumUri", forum.getURI());
+                                actionURL.setParameter("threadUri", thread.getURI());
+                            %>
+                                <a href="<%=actionURL.toString()%>">Favorito</a>
+                            <%
+                                }
+                            %>
                     </td>
                 </tr>
                 <%
@@ -179,7 +207,6 @@
             </table>
 
             <%} else if (action != null && action.equals("removePost")) {
-                SWBResourceURL actionURL = paramRequest.getActionUrl();
                 if(request.getParameter("isthread")!=null){
                     SemanticObject soThread=SemanticObject.createSemanticObject(request.getParameter("threadUri"));
                     FrmThread thread = FrmThread.getFrmThread(soThread.getId(), paramRequest.getTopic().getWebSite());
