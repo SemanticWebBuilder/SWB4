@@ -16,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
+import javax.swing.SpinnerDateModel;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.output.DOMOutputter;
@@ -39,16 +40,17 @@ public class DialogCalendar extends java.awt.Dialog
     {
         super(parent, modal);
         initComponents();
-        this.jSpinnerInitDate.setEditor(new JSpinner.DateEditor(jSpinnerEndDate, DATE_FORMAT));
+        this.jSpinnerInitDate.setEditor(new JSpinner.DateEditor(jSpinnerInitDate, DATE_FORMAT));
         this.jSpinnerEndDate.setEditor(new JSpinner.DateEditor(jSpinnerEndDate, DATE_FORMAT));
-
+        
         this.jSpinnerInitTime.setEditor(new JSpinner.DateEditor(jSpinnerInitTime, TIME_FORMAT));
         this.jSpinnerEndTime.setEditor(new JSpinner.DateEditor(jSpinnerEndTime, TIME_FORMAT));
         this.setLocationRelativeTo(null);
     }
 
-    private void init(Document document)
+    private void init(Document document,String title)
     {
+        this.jTextFieldTitle.setText(title);
         DOMOutputter out = new DOMOutputter();
         try
         {
@@ -61,16 +63,19 @@ public class DialogCalendar extends java.awt.Dialog
                     this.jCheckBoxByTimeStateChanged(null);
                     if (xml.getElementsByTagName("starthour").getLength() > 0)
                     {
-                        this.jSpinnerInitTime.setValue(TIME_SIMPLEFORMAT.parse(((org.w3c.dom.Element) xml.getElementsByTagName("starthour").item(0)).getTextContent()));
+                        Date date=TIME_SIMPLEFORMAT.parse(((org.w3c.dom.Element) xml.getElementsByTagName("starthour").item(0)).getTextContent());
+                        this.jSpinnerInitTime.setValue(date);
                     }
                     if (xml.getElementsByTagName("endhour").getLength() > 0)
                     {
-                        this.jSpinnerEndTime.setValue(TIME_SIMPLEFORMAT.parse(((org.w3c.dom.Element) xml.getElementsByTagName("endhour").item(0)).getTextContent()));
+                        Date date=TIME_SIMPLEFORMAT.parse(((org.w3c.dom.Element) xml.getElementsByTagName("endhour").item(0)).getTextContent());
+                        this.jSpinnerEndTime.setValue(date);
                     }
                 }
                 if (xml.getElementsByTagName("inidate").getLength() > 0)
                 {
-                    this.jSpinnerInitDate.setValue(DATE_SIMPLEFORMAT.parse(((org.w3c.dom.Element) xml.getElementsByTagName("inidate").item(0)).getTextContent()));
+                    Date date=DATE_SIMPLEFORMAT.parse(((org.w3c.dom.Element) xml.getElementsByTagName("inidate").item(0)).getTextContent());
+                    this.jSpinnerInitDate.setValue(date);
                 }
                 if (xml.getElementsByTagName("enddate").getLength() == 0)
                 {
@@ -80,7 +85,8 @@ public class DialogCalendar extends java.awt.Dialog
                 }
                 else
                 {
-                    this.jSpinnerEndDate.setValue(DATE_SIMPLEFORMAT.parse(((org.w3c.dom.Element) xml.getElementsByTagName("enddate").item(0)).getTextContent()));
+                    Date date=DATE_SIMPLEFORMAT.parse(((org.w3c.dom.Element) xml.getElementsByTagName("enddate").item(0)).getTextContent());
+                    this.jSpinnerEndDate.setValue(date);
                     jRadioButtonNotEndDate.setSelected(false);
                     jSpinnerEndTime.setEnabled(true);
                     jRadioButtonEndSelect.setSelected(true);
@@ -128,10 +134,10 @@ public class DialogCalendar extends java.awt.Dialog
         jSpinnerEndTime = new javax.swing.JSpinner();
         jPanel6 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        jSpinnerInitDate = new javax.swing.JSpinner();
-        jSpinnerEndDate = new javax.swing.JSpinner();
         jRadioButtonNotEndDate = new javax.swing.JRadioButton();
         jRadioButtonEndSelect = new javax.swing.JRadioButton();
+        jSpinnerEndDate = new javax.swing.JSpinner();
+        jSpinnerInitDate = new javax.swing.JSpinner();
 
         setResizable(false);
         setTitle("Calendarización");
@@ -254,10 +260,6 @@ public class DialogCalendar extends java.awt.Dialog
 
         jLabel4.setText("Feha de inicio:");
 
-        jSpinnerInitDate.setModel(new javax.swing.SpinnerDateModel());
-
-        jSpinnerEndDate.setModel(new javax.swing.SpinnerDateModel());
-
         buttonGroupendDate.add(jRadioButtonNotEndDate);
         jRadioButtonNotEndDate.setText("Sin fecha de finalización");
         jRadioButtonNotEndDate.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -275,6 +277,10 @@ public class DialogCalendar extends java.awt.Dialog
             }
         });
 
+        jSpinnerEndDate.setModel(new javax.swing.SpinnerDateModel());
+
+        jSpinnerInitDate.setModel(new javax.swing.SpinnerDateModel());
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
@@ -288,10 +294,10 @@ public class DialogCalendar extends java.awt.Dialog
                             .addComponent(jRadioButtonEndSelect)
                             .addComponent(jLabel4))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jSpinnerInitDate, javax.swing.GroupLayout.PREFERRED_SIZE, 101, Short.MAX_VALUE)
-                            .addComponent(jSpinnerEndDate, 0, 0, Short.MAX_VALUE))))
-                .addContainerGap())
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jSpinnerEndDate, 0, 0, Short.MAX_VALUE)
+                            .addComponent(jSpinnerInitDate, javax.swing.GroupLayout.PREFERRED_SIZE, 90, Short.MAX_VALUE))))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -301,8 +307,8 @@ public class DialogCalendar extends java.awt.Dialog
                     .addComponent(jSpinnerInitDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jSpinnerEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jRadioButtonEndSelect))
+                    .addComponent(jRadioButtonEndSelect)
+                    .addComponent(jSpinnerEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
                 .addComponent(jRadioButtonNotEndDate)
                 .addContainerGap())
@@ -406,7 +412,7 @@ public class DialogCalendar extends java.awt.Dialog
         resource.addContent(inidate);
         if(jRadioButtonEndSelect.isSelected())
         {
-            date=DATE_SIMPLEFORMAT.format(((Date)jSpinnerEndTime.getValue()));
+            date=DATE_SIMPLEFORMAT.format(((Date)jSpinnerEndDate.getValue()));
             Element enddate=new Element("enddate");
             enddate.setText(date);
             resource.addContent(enddate);
@@ -433,9 +439,9 @@ public class DialogCalendar extends java.awt.Dialog
         return doc;
     }
 
-    public void setDocument(Document document)
+    public void setDocument(Document document,String title)
     {
-        init(document);
+        init(document,title);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
