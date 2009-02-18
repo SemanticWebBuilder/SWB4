@@ -4,9 +4,13 @@
  */
 package org.semanticwb.xmlrpc;
 
+import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -198,12 +202,17 @@ public abstract class XMLRPCServlet extends HttpServlet
         if (objToResponse.getResponseParts() == null || objToResponse.getResponseParts().size() == 0)
         {
             response.setContentType("text/xml;charset=utf-8");
-            ServletOutputStream out = response.getOutputStream();
-            //Format format = Format.getPrettyFormat();
-            //format.setEncoding("UTF-8");
-            XMLOutputter xMLOutputter = new XMLOutputter();
-            xMLOutputter.output(docResponse, out);
-            xMLOutputter.output(docResponse, System.out);
+            ServletOutputStream out = response.getOutputStream();            
+            XMLOutputter xMLOutputter = new XMLOutputter();            
+            //xMLOutputter.output(docResponse, out);
+            
+            String xml=xMLOutputter.outputString(docResponse);
+            out.write(xml.getBytes());
+            /*Writer writer = new BufferedWriter((new OutputStreamWriter(new BufferedOutputStream(out),"utf-8")));
+            writer.write(xml);
+            writer.flush();
+            writer.close();*/
+
             out.flush();
             out.close();
         }
