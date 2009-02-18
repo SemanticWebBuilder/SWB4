@@ -87,62 +87,65 @@ public class DialogEditPorlet extends javax.swing.JDialog
             if (prop instanceof PropertyInfo)
             {
                 PropertyInfo PropertyInfo = (PropertyInfo) prop;
-                if (PropertyInfo.type.equalsIgnoreCase("boolean"))
+                if (PropertyInfo.type != null)
                 {
-                    JCheckBox jCheckBox = new JCheckBox();
-                    jCheckBox.setBackground(new Color(255, 255, 255));
-                    JPanel panel = new JPanel();
-                    panel.add(jCheckBox);
-                    panel.setBackground(new Color(255, 255, 255));
-                    if (value == null)
+                    if (PropertyInfo.type.equalsIgnoreCase("boolean"))
                     {
-                        jCheckBox.setSelected(false);
-                    }
-                    else
-                    {
-                        if (value instanceof Boolean)
+                        JCheckBox jCheckBox = new JCheckBox();
+                        jCheckBox.setBackground(new Color(255, 255, 255));
+                        JPanel panel = new JPanel();
+                        panel.add(jCheckBox);
+                        panel.setBackground(new Color(255, 255, 255));
+                        if (value == null)
                         {
-                            jCheckBox.setSelected((Boolean) value);
+                            jCheckBox.setSelected(false);
                         }
+                        else
+                        {
+                            if (value instanceof Boolean)
+                            {
+                                jCheckBox.setSelected((Boolean) value);
+                            }
+                        }
+                        return panel;
                     }
-                    return panel;
-                }
-                if (PropertyInfo.type.equalsIgnoreCase("integer"))
-                {
-                    IntegerEditor JTextField = new IntegerEditor(row, column);
+                    if (PropertyInfo.type.equalsIgnoreCase("integer"))
+                    {
+                        IntegerEditor JTextField = new IntegerEditor(row, column);
 
-                    if (value == null)
-                    {
-                        JTextField.setValue(0);
-                    }
-                    else
-                    {
-                        int ivalue = 0;
-                        try
+                        if (value == null)
                         {
-                            ivalue = Integer.parseInt(value.toString());
+                            JTextField.setValue(0);
+                        }
+                        else
+                        {
+                            int ivalue = 0;
+                            try
+                            {
+                                ivalue = Integer.parseInt(value.toString());
 
+                            }
+                            catch (NumberFormatException nfe)
+                            {
+                                nfe.printStackTrace();
+                            }
+                            JTextField.setValue(ivalue);
                         }
-                        catch (NumberFormatException nfe)
+                        return JTextField;
+                    }
+                    if (PropertyInfo.type.equalsIgnoreCase("String"))
+                    {
+                        StringEditor JTextField = new StringEditor(row, column);
+                        if (value == null)
                         {
-                            nfe.printStackTrace();
+                            JTextField.setText("");
                         }
-                        JTextField.setValue(ivalue);
+                        else
+                        {
+                            JTextField.setText(value.toString());
+                        }
+                        return JTextField;
                     }
-                    return JTextField;
-                }
-                if (PropertyInfo.type.equalsIgnoreCase("String"))
-                {
-                    StringEditor JTextField = new StringEditor(row, column);
-                    if (value == null)
-                    {
-                        JTextField.setText("");
-                    }
-                    else
-                    {
-                        JTextField.setText(value.toString());
-                    }
-                    return JTextField;
                 }
             }
             return null;
