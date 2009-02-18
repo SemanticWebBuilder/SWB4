@@ -1,8 +1,9 @@
 package org.semanticwb.forum.base;
 
 
-public class FrmThreadBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.Iconable
+public class FrmThreadBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
+    public static final org.semanticwb.platform.SemanticProperty frm_thIcon=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/forum#thIcon");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
     public static final org.semanticwb.platform.SemanticProperty frm_thlastpostuser=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/forum#thlastpostuser");
     public static final org.semanticwb.platform.SemanticProperty frm_thuser=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/forum#thuser");
@@ -10,14 +11,13 @@ public class FrmThreadBase extends org.semanticwb.model.SWBClass implements org.
     public static final org.semanticwb.platform.SemanticClass frm_FrmThreadTypeCat=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/forum#FrmThreadTypeCat");
     public static final org.semanticwb.platform.SemanticProperty frm_thType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/forum#thType");
     public static final org.semanticwb.platform.SemanticProperty swb_active=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#active");
-    public static final org.semanticwb.platform.SemanticClass frm_FrmFavoriteThread=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/forum#FrmFavoriteThread");
-    public static final org.semanticwb.platform.SemanticProperty frm_hasFavThread=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/forum#hasFavThread");
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticProperty swb_modifiedBy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy");
     public static final org.semanticwb.platform.SemanticProperty swb_title=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#title");
-    public static final org.semanticwb.platform.SemanticProperty swb_iconClass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#iconClass");
     public static final org.semanticwb.platform.SemanticProperty swb_updated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#updated");
     public static final org.semanticwb.platform.SemanticProperty frm_thReplyCount=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/forum#thReplyCount");
+    public static final org.semanticwb.platform.SemanticClass frm_FrmUserThread=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/forum#FrmUserFavThread");
+    public static final org.semanticwb.platform.SemanticProperty frm_hasFavThreads=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/forum#hasFavThreads");
     public static final org.semanticwb.platform.SemanticProperty frm_thBody=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/forum#thBody");
     public static final org.semanticwb.platform.SemanticProperty frm_thViewcount=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/forum#thViewcount");
     public static final org.semanticwb.platform.SemanticClass frm_FrmForum=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/forum#FrmForum");
@@ -73,6 +73,16 @@ public class FrmThreadBase extends org.semanticwb.model.SWBClass implements org.
     public static boolean hasFrmThread(String id, org.semanticwb.model.SWBModel model)
     {
         return (getFrmThread(id, model)!=null);
+    }
+
+    public String getIcon()
+    {
+        return getSemanticObject().getProperty(frm_thIcon);
+    }
+
+    public void setIcon(String thIcon)
+    {
+        getSemanticObject().setProperty(frm_thIcon, thIcon);
     }
 
     public void setLastpostmember(org.semanticwb.model.User user)
@@ -158,27 +168,6 @@ public class FrmThreadBase extends org.semanticwb.model.SWBClass implements org.
         getSemanticObject().setBooleanProperty(swb_active, active);
     }
 
-    public org.semanticwb.model.GenericIterator<org.semanticwb.forum.FrmFavoriteThread> listFavThreads()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.forum.FrmFavoriteThread>(org.semanticwb.forum.FrmFavoriteThread.class, getSemanticObject().listObjectProperties(frm_hasFavThread));
-    }
-
-    public boolean hasFavThread(org.semanticwb.forum.FrmFavoriteThread frmfavoritethread)
-    {
-        if(frmfavoritethread==null)return false;        return getSemanticObject().hasObjectProperty(frm_hasFavThread,frmfavoritethread.getSemanticObject());
-    }
-
-    public org.semanticwb.forum.FrmFavoriteThread getFavThread()
-    {
-         org.semanticwb.forum.FrmFavoriteThread ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(frm_hasFavThread);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.forum.FrmFavoriteThread)obj.getSemanticClass().newGenericInstance(obj);
-         }
-         return ret;
-    }
-
     public java.util.Date getCreated()
     {
         return getSemanticObject().getDateProperty(swb_created);
@@ -235,16 +224,6 @@ public class FrmThreadBase extends org.semanticwb.model.SWBClass implements org.
         getSemanticObject().setProperty(swb_title, title, lang);
     }
 
-    public String getIconClass()
-    {
-        return getSemanticObject().getProperty(swb_iconClass);
-    }
-
-    public void setIconClass(String iconClass)
-    {
-        getSemanticObject().setProperty(swb_iconClass, iconClass);
-    }
-
     public java.util.Date getUpdated()
     {
         return getSemanticObject().getDateProperty(swb_updated);
@@ -263,6 +242,27 @@ public class FrmThreadBase extends org.semanticwb.model.SWBClass implements org.
     public void setReplyCount(int thReplyCount)
     {
         getSemanticObject().setLongProperty(frm_thReplyCount, thReplyCount);
+    }
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.forum.FrmUserThread> listFavThreadss()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.forum.FrmUserThread>(org.semanticwb.forum.FrmUserThread.class, getSemanticObject().listObjectProperties(frm_hasFavThreads));
+    }
+
+    public boolean hasFavThreads(org.semanticwb.forum.FrmUserThread frmuserthread)
+    {
+        if(frmuserthread==null)return false;        return getSemanticObject().hasObjectProperty(frm_hasFavThreads,frmuserthread.getSemanticObject());
+    }
+
+    public org.semanticwb.forum.FrmUserThread getFavThreads()
+    {
+         org.semanticwb.forum.FrmUserThread ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(frm_hasFavThreads);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.forum.FrmUserThread)obj.getSemanticClass().newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public String getBody()
