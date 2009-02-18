@@ -350,9 +350,28 @@ public abstract class OfficeDocument
         Map<String, String> properties = this.getCustomProperties();
         String contentId = properties.get(CONTENT_ID_NAME);
         String rep = properties.get(WORKSPACE_ID_NAME);
-        DialogContentInformation dialog = new DialogContentInformation(new javax.swing.JFrame(), true, contentId, rep, this);
-        dialog.setLocationRelativeTo(null);
-        dialog.setVisible(true);
+        if(contentId==null || rep ==null)
+        {
+            deleteAssociation(false);
+            int resp=JOptionPane.showConfirmDialog(null, "El contenido no ha sido publicado.\r\n¿Desea publicar el contenido?","Mostrar información del contenido",JOptionPane.YES_NO_OPTION);
+            if(resp==JOptionPane.YES_OPTION)
+            {
+                saveToSite();
+            }
+        }
+        properties = this.getCustomProperties();
+        contentId = properties.get(CONTENT_ID_NAME);
+        rep = properties.get(WORKSPACE_ID_NAME);
+        if(contentId!=null && rep ==null)
+        {
+            DialogContentInformation dialog = new DialogContentInformation(new javax.swing.JFrame(), true, contentId, rep, this);
+            dialog.setLocationRelativeTo(null);
+            dialog.setVisible(true);
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(null, "El contenido no ha sido publicado.","Mostrar información del contenido",JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     final void deleteTemporalDirectory(File dir)
