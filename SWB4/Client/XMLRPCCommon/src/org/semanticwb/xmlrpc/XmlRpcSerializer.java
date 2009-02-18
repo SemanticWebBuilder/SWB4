@@ -361,8 +361,7 @@ public class XmlRpcSerializer
         {
             Element elementType = new Element(type);
             value.setContent(elementType);
-            elementType.setText(svalue);
-
+            elementType.setText(svalue);            
         }
     }
 
