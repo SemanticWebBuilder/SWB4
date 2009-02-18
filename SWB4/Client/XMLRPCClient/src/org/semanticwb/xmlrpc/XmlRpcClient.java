@@ -31,8 +31,8 @@ import static org.semanticwb.xmlrpc.XmlRpcSerializer.*;
  */
 class XmlRpcClient
 {
-    public static final String SUFIX_GATEWAY = "gtw";
 
+    public static final String SUFIX_GATEWAY = "gtw";
     private Map<String, List<String>> responseProperties = new HashMap<String, List<String>>();
     private static String boundary = "gc0p4Jq0M2Yt08jU534c0p";
     private XmlRpcClientConfig config;
@@ -81,10 +81,10 @@ class XmlRpcClient
         try
         {
 
-            Object obj=deserializeResponse(clazz, response.getDocument());
-            Response responseToReturn=new Response(obj,response.getResponseParts());
-            
-            
+            Object obj = deserializeResponse(clazz, response.getDocument());
+            Response responseToReturn = new Response(obj, response.getResponseParts());
+
+
             return responseToReturn;
         }
         catch (ParseException pe)
@@ -95,10 +95,17 @@ class XmlRpcClient
 
     private static Document getDocument(InputStream in) throws XmlRpcException
     {
-        SAXBuilder builder = new SAXBuilder();        
+
+
+        SAXBuilder builder = new SAXBuilder();
         try
         {
-            return builder.build(in);
+            Document doc = builder.build(in);
+            /*Format format = org.jdom.output.Format.getCompactFormat();
+            format.setEncoding("utf-8");
+            XMLOutputter xMLOutputter = new XMLOutputter(format);
+            String xml = xMLOutputter.outputString(doc);*/
+            return doc;
         }
         catch (Exception jde)
         {
@@ -169,16 +176,16 @@ class XmlRpcClient
             {
                 proxy = Proxy.NO_PROXY;
             }
-            String url=config.getWebAddress().toURL().toString();
-            if(!url.endsWith(SUFIX_GATEWAY))
+            String url = config.getWebAddress().toURL().toString();
+            if (!url.endsWith(SUFIX_GATEWAY))
             {
-                if(!url.endsWith("/"))
+                if (!url.endsWith("/"))
                 {
-                    url+="/";
+                    url += "/";
                 }
-                url+=SUFIX_GATEWAY;
+                url += SUFIX_GATEWAY;
             }
-            URL urlToConnect=new URL(url);
+            URL urlToConnect = new URL(url);
             HttpURLConnection connection = (HttpURLConnection) urlToConnect.openConnection(proxy);
             HttpURLConnection.setFollowRedirects(true);
             if (config.hasUserPassWord())
@@ -303,17 +310,17 @@ class XmlRpcClient
                 {
                     throw new XmlRpcException("Error getting the response document", ioe);
                 }
-                HashSet<Part> parts=new HashSet<Part>();
-                for(String name : upload.getFileNames())
+                HashSet<Part> parts = new HashSet<Part>();
+                for (String name : upload.getFileNames())
                 {
-                    if(!name.equals("xmlrpc"))
+                    if (!name.equals("xmlrpc"))
                     {
                         byte[] content = upload.getFileData(name);
                         Part part = new Part(content, name, upload.getFileName(name));
                         parts.add(part);
                     }
                 }
-                XmlResponse response=new XmlResponse(doc,parts);
+                XmlResponse response = new XmlResponse(doc, parts);
                 return response;
             }
             catch (Exception e)
