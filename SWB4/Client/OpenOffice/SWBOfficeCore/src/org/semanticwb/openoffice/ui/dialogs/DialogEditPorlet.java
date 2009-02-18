@@ -13,7 +13,7 @@ import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import javax.swing.AbstractCellEditor;
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
@@ -49,6 +49,7 @@ public class DialogEditPorlet extends javax.swing.JDialog
     private String repositoryName,  contentID;
     private PortletInfo pageInformation;
     public boolean isCancel = true;
+    ArrayList<CalendarInfo> added = new ArrayList<CalendarInfo>();
 
     /** Creates new form DialogContentPublicationInformation */
     public DialogEditPorlet(java.awt.Frame parent, boolean modal, PortletInfo pageInformation, String repositoryName, String contentID)
@@ -361,6 +362,14 @@ public class DialogEditPorlet extends javax.swing.JDialog
                 };
                 model.addRow(data);
             }
+            for (CalendarInfo info : added)
+            {
+                Object[] data =
+                {
+                    info, info.active
+                };
+                model.addRow(data);
+            }
         }
         catch (Exception e)
         {
@@ -390,6 +399,7 @@ public class DialogEditPorlet extends javax.swing.JDialog
                     info, value
                 };
                 model.addRow(data);
+
             }
         }
         catch (Exception e)
@@ -575,6 +585,21 @@ private void jButtonAddCalendarActionPerformed(java.awt.event.ActionEvent evt)//
 {//GEN-HEADEREND:event_jButtonAddCalendarActionPerformed
     DialogCalendar dialogCalendar = new DialogCalendar(new Frame(), true);
     dialogCalendar.setVisible(true);
+    if (!dialogCalendar.isCanceled)
+    {
+        Document xmlCalendar = dialogCalendar.getDocument();
+        XMLOutputter out = new XMLOutputter();
+        CalendarInfo cal = new CalendarInfo();
+        cal.xml = out.outputString(xmlCalendar);
+        cal.title = dialogCalendar.jTextFieldTitle.getText();
+        DefaultTableModel model = (DefaultTableModel) jTableScheduler.getModel();
+        Object[] data =
+        {
+            cal, cal.active
+        };
+        added.add(cal);
+        model.addRow(data);
+    }
 }//GEN-LAST:event_jButtonAddCalendarActionPerformed
 
 private void jButtonEditEchedulerActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonEditEchedulerActionPerformed
@@ -588,17 +613,14 @@ private void jButtonEditEchedulerActionPerformed(java.awt.event.ActionEvent evt)
         try
         {
             Document document = SAXBuilder.build(in);
-            dialogCalendar.setDocument(document);
+            dialogCalendar.setDocument(document, cal.title);
             dialogCalendar.setVisible(true);
             if (!dialogCalendar.isCanceled)
             {
-                Document doc = dialogCalendar.getDocument();
-                java.io.ByteArrayOutputStream out = new ByteArrayOutputStream();
-                XMLOutputter xMLOutputter = new XMLOutputter();
-                xMLOutputter.output(doc, out);
-                String xml = new String(out.toByteArray());
-                String title = dialogCalendar.jTextFieldTitle.getText();
-                OfficeApplication.getOfficeDocumentProxy().insertCalendar(pageInformation, title, xml);
+                cal.title = dialogCalendar.jTextFieldTitle.getText();
+                XMLOutputter out = new XMLOutputter();
+                document = dialogCalendar.getDocument();
+                cal.xml = out.outputString(document);
                 loadCalendars();
             }
         }
@@ -617,14 +639,28 @@ private void jButtonDeleteSchedulerActionPerformed(java.awt.event.ActionEvent ev
         if (res == JOptionPane.YES_OPTION)
         {
             CalendarInfo cal = (CalendarInfo) jTableScheduler.getModel().getValueAt(jTableScheduler.getSelectedRow(), 0);
-            try
+            if (cal.id == null)
             {
-                OfficeApplication.getOfficeDocumentProxy().deleteCalendar(pageInformation, cal);
-                loadProperties();
+                DefaultTableModel model = (DefaultTableModel) jTableScheduler.getModel();
+                model.removeRow(jTableScheduler.getSelectedRow());
+                added.remove(cal);
+                if (model.getRowCount() == 0 || jTableScheduler.getSelectedRow() == -1)
+                {
+                    this.jButtonDeleteScheduler.setEnabled(false);
+                    this.jButtonEditEcheduler.setEnabled(false);
+                }
             }
-            catch (Exception e)
+            else
             {
-                e.printStackTrace();
+                try
+                {
+                    OfficeApplication.getOfficeDocumentProxy().deleteCalendar(pageInformation, cal);
+                    loadCalendars();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
             }
         }
     }
