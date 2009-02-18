@@ -105,6 +105,7 @@ public class FDownload extends javax.swing.JDialog {
 
                 FileOutputStream out=new FileOutputStream(f);
                 URLConnection con=url.openConnection();
+                con.setUseCaches(false);
                 if(jsess!=null)con.setRequestProperty("Cookie","JSESSIONID="+jsess);
                 con.addRequestProperty("PATHFILEWB",path);
                 con.setDoInput(true);

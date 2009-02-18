@@ -76,7 +76,8 @@ public class FileUpload {
 
                 try
                 {
-                    HttpURLConnection con=(HttpURLConnection)url.openConnection();                        
+                    HttpURLConnection con=(HttpURLConnection)url.openConnection();
+                    con.setUseCaches(false);
                     con.setDefaultUseCaches(false);   
                     con.setFixedLengthStreamingMode((int)f.length());
                     if(jsess!=null)con.setRequestProperty("Cookie","JSESSIONID="+jsess);

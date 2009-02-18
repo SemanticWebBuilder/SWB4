@@ -470,6 +470,7 @@ public class DragDrop extends javax.swing.JDialog
         try
         {
             URLConnection urlconn=upload.openConnection();
+            urlconn.setUseCaches(false);
             if(jsess!=null)urlconn.setRequestProperty("Cookie", "JSESSIONID="+jsess);
             
             //System.out.println("PATHFILEWB:"+file);

@@ -582,6 +582,7 @@ public class DragDrop extends javax.swing.JApplet
                 gurl=new URL(this.url,cgi);
             }
             URLConnection urlconn=gurl.openConnection();
+            urlconn.setUseCaches(false);
             if(jsess!=null)urlconn.setRequestProperty("Cookie", "JSESSIONID="+jsess);
             //System.out.println("JSESSIONID="+jsess);
             urlconn.setDoOutput(true);
@@ -621,6 +622,7 @@ public class DragDrop extends javax.swing.JApplet
             System.out.println(gurl.getFile());
             
             URLConnection urlconn=gurl.openConnection();
+            urlconn.setUseCaches(false);
             if(jsess!=null)urlconn.setRequestProperty("Cookie", "JSESSIONID="+jsess);
             urlconn.setRequestProperty("Content-Type","multipart/form-data; boundary=---------------------------7d121ca241196");
             

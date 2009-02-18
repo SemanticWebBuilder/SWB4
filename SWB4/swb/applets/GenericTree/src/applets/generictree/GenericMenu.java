@@ -228,6 +228,7 @@ public class GenericMenu extends javax.swing.JApplet
         {
             //URL gurl=new URL(this.url,cgi);
             URLConnection urlconn=url.openConnection();
+            urlconn.setUseCaches(false);
             if(jsess!=null)urlconn.setRequestProperty("Cookie", "JSESSIONID="+jsess);
             //System.out.println("JSESSIONID="+jsess);
             urlconn.setDoOutput(true);

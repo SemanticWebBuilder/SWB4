@@ -819,6 +819,7 @@ public class EditFilter extends javax.swing.JApplet {
         try {           
             
             URLConnection urlconn=url.openConnection();
+            urlconn.setUseCaches(false);
             if(jsess!=null)urlconn.setRequestProperty("Cookie", "JSESSIONID="+jsess);
             urlconn.setRequestProperty("Content-Type","application/xml");
             urlconn.setDoOutput(true);
