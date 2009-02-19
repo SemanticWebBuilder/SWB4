@@ -764,13 +764,13 @@ public class DialogRegularPeriods extends java.awt.Dialog
 
         jLabel3.setText("de cada:");
 
-        mmonth.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), null, Integer.valueOf(12), Integer.valueOf(1)));
+        mmonth.setModel(new javax.swing.SpinnerNumberModel(1, 1, 12, 1));
 
         jLabel4.setText("Meses");
 
         jLabel5.setText("de cada:");
 
-        mmonth2.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), null, Integer.valueOf(12), Integer.valueOf(1)));
+        mmonth2.setModel(new javax.swing.SpinnerNumberModel(1, 1, 12, 1));
 
         jLabel6.setText("Meses");
 
@@ -909,13 +909,13 @@ public class DialogRegularPeriods extends java.awt.Dialog
 
         jLabel11.setText("de cada:");
 
-        yyear.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), null, Integer.valueOf(999), Integer.valueOf(1)));
+        yyear.setModel(new javax.swing.SpinnerNumberModel(1, 1, 100, 1));
 
         jLabel12.setText("años");
 
         jLabel13.setText("de cada:");
 
-        yyear2.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), null, Integer.valueOf(999), Integer.valueOf(1)));
+        yyear2.setModel(new javax.swing.SpinnerNumberModel(1, 1, 100, 1));
 
         jLabel14.setText("años");
 
