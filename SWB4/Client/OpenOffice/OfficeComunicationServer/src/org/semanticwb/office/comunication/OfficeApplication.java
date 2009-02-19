@@ -71,14 +71,16 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
 
     public void changePassword(String newPassword) throws Exception
     {
-
+        org.semanticwb.model.User userModel = SWBContext.getAdminWebSite().getUserRepository().getUserByLogin(this.user);
+        userModel.setUsrPassword(newPassword);
+        userModel.setUsrPasswordChanged(new Date(System.currentTimeMillis()));
     }
 
-    public boolean existsPage(WebSiteInfo site,String pageid) throws Exception
+    public boolean existsPage(WebSiteInfo site, String pageid) throws Exception
     {
         WebSite website = SWBContext.getWebSite(site.id);
-        WebPage page=website.getWebPage(pageid);
-        if(page==null)
+        WebPage page = website.getWebPage(pageid);
+        if (page == null)
         {
             return false;
         }
@@ -209,7 +211,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                 String cm_description = loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
                 String cm_user = loader.getOfficeManager(repositoryName).getUserType();
                 newNode.setProperty(cm_user, this.user);
-                newNode.setProperty(cm_title, title);                
+                newNode.setProperty(cm_title, title);
                 newNode.setProperty(cm_description, description);
                 root.save();
                 UUID = newNode.getUUID();
@@ -219,7 +221,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         {
             log.error(e);
             throw e;
-        }        
+        }
         finally
         {
             if (session != null)
@@ -606,7 +608,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         site.getHomePage().getUrl();
         info.siteID = website.id;
         info.description = site.getDescription();
-        info.url=site.getHomePage().getUrl();
+        info.url = site.getHomePage().getUrl();
         int childs = 0;
         GenericIterator<WebPage> childWebPages = site.getHomePage().listChilds();
         while (childWebPages.hasNext())
@@ -632,7 +634,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             info.title = page.getTitle();
             info.siteID = webpage.siteID;
             info.description = page.getDescription();
-            info.url=page.getUrl();
+            info.url = page.getUrl();
             int childs = 0;
             GenericIterator<WebPage> childWebPages = page.listChilds();
             while (childWebPages.hasNext())
