@@ -4,7 +4,7 @@ import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 
 
-public class FileUpload extends org.semanticwb.model.base.RichTextBase
+public class FileUpload extends org.semanticwb.model.base.FileUploadBase
 {
     public FileUpload(org.semanticwb.platform.SemanticObject base)
     {
@@ -12,6 +12,24 @@ public class FileUpload extends org.semanticwb.model.base.RichTextBase
     }
 
     @Override
+    public String renderElement(SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) {
+        if (obj == null) {
+            obj = new SemanticObject();
+        }
+        String ret = "";
+
+        if (type.endsWith("iphone")) {
+            ret = renderIphone(obj, prop, type, mode, lang);
+        } else {
+            ret = renderXHTML(obj, prop, type, mode, lang);
+        }
+        return ret;
+    }
+
+    public String renderIphone(SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) {
+        return "";
+    }
+
     public String renderXHTML(SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) {
         String ret="";
         String name=prop.getName();
