@@ -6,11 +6,11 @@ public class FrmPostBase extends org.semanticwb.model.SWBClass implements org.se
     public static final org.semanticwb.platform.SemanticClass frm_FrmThread=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/forum#FrmThread");
     public static final org.semanticwb.platform.SemanticProperty frm_postThread=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/forum#postThread");
     public static final org.semanticwb.platform.SemanticProperty frm_postBody=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/forum#postBody");
-    public static final org.semanticwb.platform.SemanticClass frm_FrmAttachments=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/forum#FrmAttachments");
-    public static final org.semanticwb.platform.SemanticProperty frm_hasAttach=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/forum#hasAttach");
     public static final org.semanticwb.platform.SemanticProperty swb_active=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#active");
     public static final org.semanticwb.platform.SemanticClass frm_FrmForum=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/forum#FrmForum");
     public static final org.semanticwb.platform.SemanticProperty frm_postForum=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/forum#postForum");
+    public static final org.semanticwb.platform.SemanticClass frm_FrmAttachments=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/forum#FrmAttachment");
+    public static final org.semanticwb.platform.SemanticProperty frm_hasAttachments=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/forum#hasAttachments");
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
     public static final org.semanticwb.platform.SemanticProperty swb_modifiedBy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy");
@@ -96,27 +96,6 @@ public class FrmPostBase extends org.semanticwb.model.SWBClass implements org.se
         getSemanticObject().setProperty(frm_postBody, postBody);
     }
 
-    public org.semanticwb.model.GenericIterator<org.semanticwb.forum.FrmAttachments> listAttachs()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.forum.FrmAttachments>(org.semanticwb.forum.FrmAttachments.class, getSemanticObject().listObjectProperties(frm_hasAttach));
-    }
-
-    public boolean hasAttach(org.semanticwb.forum.FrmAttachments frmattachments)
-    {
-        if(frmattachments==null)return false;        return getSemanticObject().hasObjectProperty(frm_hasAttach,frmattachments.getSemanticObject());
-    }
-
-    public org.semanticwb.forum.FrmAttachments getAttach()
-    {
-         org.semanticwb.forum.FrmAttachments ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(frm_hasAttach);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.forum.FrmAttachments)obj.getSemanticClass().newGenericInstance(obj);
-         }
-         return ret;
-    }
-
     public boolean isActive()
     {
         return getSemanticObject().getBooleanProperty(swb_active);
@@ -144,6 +123,27 @@ public class FrmPostBase extends org.semanticwb.model.SWBClass implements org.se
          if(obj!=null)
          {
              ret=(org.semanticwb.forum.FrmForum)obj.getSemanticClass().newGenericInstance(obj);
+         }
+         return ret;
+    }
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.forum.FrmAttachments> listAttachmentss()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.forum.FrmAttachments>(org.semanticwb.forum.FrmAttachments.class, getSemanticObject().listObjectProperties(frm_hasAttachments));
+    }
+
+    public boolean hasAttachments(org.semanticwb.forum.FrmAttachments frmattachments)
+    {
+        if(frmattachments==null)return false;        return getSemanticObject().hasObjectProperty(frm_hasAttachments,frmattachments.getSemanticObject());
+    }
+
+    public org.semanticwb.forum.FrmAttachments getAttachments()
+    {
+         org.semanticwb.forum.FrmAttachments ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(frm_hasAttachments);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.forum.FrmAttachments)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
