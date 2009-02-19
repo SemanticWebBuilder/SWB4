@@ -230,8 +230,6 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
               <SubComponents>
-                <Component class="javax.swing.JToolBar$Separator" name="jSeparator1">
-                </Component>
                 <Component class="javax.swing.JButton" name="jButtonEdit">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
