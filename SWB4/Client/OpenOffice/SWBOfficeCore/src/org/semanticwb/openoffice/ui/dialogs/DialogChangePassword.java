@@ -144,10 +144,14 @@ public final class DialogChangePassword extends javax.swing.JDialog {
         }
         try
         {
-            OfficeApplication.getOfficeApplicationProxy().changePassword(new String(this.jPasswordFieldNewPassword.getPassword()));
+            OfficeApplication.getOfficeApplicationProxy().changePassword(newPassWord);
+            OfficeApplication.getOfficeApplicationProxy().setPassword(newPassWord);
+            OfficeApplication.getOfficeDocumentProxy().setPassword(newPassWord);
+            JOptionPane.showMessageDialog(this, "¡Se ha cambiado la contraseña!",this.getTitle(),JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
         }
         catch(Exception e)
         {
+            JOptionPane.showMessageDialog(this, e.getLocalizedMessage(),this.getTitle(),JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
             e.printStackTrace();
         }
 
