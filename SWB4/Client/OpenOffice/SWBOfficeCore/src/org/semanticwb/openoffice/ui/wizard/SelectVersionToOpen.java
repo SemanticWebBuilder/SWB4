@@ -6,9 +6,14 @@
 package org.semanticwb.openoffice.ui.wizard;
 
 import java.awt.Cursor;
-import java.awt.event.KeyEvent;
+import java.awt.Frame;
+import java.net.URI;
+import java.net.URL;
 import java.util.Map;
 import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import org.netbeans.spi.wizard.Wizard;
 import org.netbeans.spi.wizard.WizardPage;
@@ -16,6 +21,7 @@ import org.netbeans.spi.wizard.WizardPanelNavResult;
 import org.semanticwb.office.interfaces.ContentInfo;
 import org.semanticwb.office.interfaces.VersionInfo;
 import org.semanticwb.openoffice.OfficeApplication;
+import org.semanticwb.openoffice.ui.dialogs.DialogPreview;
 
 /**
  *
@@ -23,32 +29,49 @@ import org.semanticwb.openoffice.OfficeApplication;
  */
 public class SelectVersionToOpen extends WizardPage
 {
+
     public static final String VERSION = "version";
 
     /** Creates new form SelectVersionToOpen */
     public SelectVersionToOpen()
-    {        
+    {
         initComponents();
-        
+        ListSelectionModel listSelectionModel = jTableVersion.getSelectionModel();
+        listSelectionModel.addListSelectionListener(new ListSelectionListener()
+        {
+
+            public void valueChanged(ListSelectionEvent e)
+            {
+                jButtonView.setEnabled(false);
+                if (e.getFirstIndex() != -1)
+                {
+                    jButtonView.setEnabled(true);
+                }
+            }
+        });
     }
+
     @Override
     protected void renderingPage()
     {
         this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-        ContentInfo content=(ContentInfo)Search.map.get(Search.CONTENT);
-        DefaultTableModel model=(DefaultTableModel)this.jTableVersion.getModel();
-        int rows=model.getRowCount();
-        for(int i=0;i<rows;i++)
+        ContentInfo content = (ContentInfo) Search.map.get(Search.CONTENT);
+        DefaultTableModel model = (DefaultTableModel) this.jTableVersion.getModel();
+        int rows = model.getRowCount();
+        for (int i = 0; i < rows; i++)
         {
             model.removeRow(0);
         }
         try
         {
-            String workspace=Search.map.get(Search.WORKSPACE).toString();
+            String workspace = Search.map.get(Search.WORKSPACE).toString();
             for (VersionInfo info : OfficeApplication.getOfficeDocumentProxy().getVersions(workspace, content.id))
             {
-                String date=OfficeApplication.iso8601dateFormat.format(info.created);
-                Object[] value={content,content.descripcion,info,date};
+                String date = OfficeApplication.iso8601dateFormat.format(info.created);
+                Object[] value =
+                {
+                    content, content.descripcion, info, date
+                };
                 model.addRow(value);
             }
         }
@@ -62,20 +85,21 @@ public class SelectVersionToOpen extends WizardPage
     {
         return "Versión de Contenido";
     }
+
     @Override
     public WizardPanelNavResult allowNext(String arg, Map map, Wizard wizard)
     {
         WizardPanelNavResult result = WizardPanelNavResult.PROCEED;
-        if (this.jTableVersion.getSelectedRow()==-1)
+        if (this.jTableVersion.getSelectedRow() == -1)
         {
             JOptionPane.showMessageDialog(this, "!Debe indicar una versión!", SelectVersionToOpen.getDescription(), JOptionPane.ERROR_MESSAGE);
-            this.jTableVersion.requestFocus();            
+            this.jTableVersion.requestFocus();
             result = WizardPanelNavResult.REMAIN_ON_PAGE;
         }
         else
         {
-            Object selection=this.jTableVersion.getModel().getValueAt(this.jTableVersion.getSelectedRow(), 2);
-            map.put( VERSION,selection);                                    
+            Object selection = this.jTableVersion.getModel().getValueAt(this.jTableVersion.getSelectedRow(), 2);
+            map.put(VERSION, selection);
         }
         return result;
     }
@@ -91,7 +115,8 @@ public class SelectVersionToOpen extends WizardPage
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableVersion = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
-        jButtonViewVersion = new javax.swing.JButton();
+        jToolBar1 = new javax.swing.JToolBar();
+        jButtonView = new javax.swing.JButton();
 
         setLayout(new java.awt.BorderLayout());
 
@@ -118,46 +143,77 @@ public class SelectVersionToOpen extends WizardPage
                 return canEdit [columnIndex];
             }
         });
-        jTableVersion.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jTableVersionKeyPressed(evt);
-            }
-        });
-        jTableVersion.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTableVersionMouseClicked(evt);
-            }
-        });
         jScrollPane1.setViewportView(jTableVersion);
 
         add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
-        jButtonViewVersion.setText("Ver versión");
-        jButtonViewVersion.setEnabled(false);
-        jPanel1.add(jButtonViewVersion);
+        jPanel1.setLayout(new java.awt.BorderLayout());
+
+        jToolBar1.setFloatable(false);
+        jToolBar1.setRollover(true);
+        jToolBar1.setPreferredSize(new java.awt.Dimension(100, 25));
+
+        jButtonView.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/see.png"))); // NOI18N
+        jButtonView.setToolTipText("Ver Contenido");
+        jButtonView.setEnabled(false);
+        jButtonView.setFocusable(false);
+        jButtonView.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonView.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonView.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonViewActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(jButtonView);
+
+        jPanel1.add(jToolBar1, java.awt.BorderLayout.CENTER);
 
         add(jPanel1, java.awt.BorderLayout.PAGE_START);
     }// </editor-fold>//GEN-END:initComponents
 
-private void jTableVersionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableVersionMouseClicked
-    this.jButtonViewVersion.setEnabled(false);
-    if(jTableVersion.getSelectedRow()!=-1)
+private void jButtonViewActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonViewActionPerformed
+{//GEN-HEADEREND:event_jButtonViewActionPerformed
+    if(Search.map.get(Search.WORKSPACE)!=null && jTableVersion.getSelectedRow()!=-1)
     {
-        this.jButtonViewVersion.setEnabled(true);
-    }
-}//GEN-LAST:event_jTableVersionMouseClicked
+        String workspace = Search.map.get(Search.WORKSPACE).toString();
+        DefaultTableModel model=(DefaultTableModel)jTableVersion.getModel();
+        VersionInfo version=(VersionInfo)model.getValueAt(jTableVersion.getSelectedRow(), 0);
+        String name=null;
+        try
+        {
+            name=OfficeApplication.getOfficeDocumentProxy().createPreview(workspace, version.contentId, version.nameOfVersion);
+            String urlproxy = OfficeApplication.getOfficeApplicationProxy().getWebAddress().toString();
+            URL url = new URL(urlproxy + "?contentId=" + version.contentId + "&versionName=" + version.nameOfVersion + "&repositoryName=" + workspace + "&name=" + name);
+            DialogPreview dialogPreview=new DialogPreview(new Frame(), true, url);
+            dialogPreview.setVisible(true);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if(name!=null)
+            {
+                try
+                {
+                    OfficeApplication.getOfficeDocumentProxy().deletePreview(name);
+                }
+                catch(Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
 
-private void jTableVersionKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTableVersionKeyPressed
-if(evt.getKeyCode()==KeyEvent.VK_UP || evt.getKeyCode()==KeyEvent.VK_DOWN)
-    {
-        jTableVersionMouseClicked(null);
-    }// TODO add your handling code here:
-}//GEN-LAST:event_jTableVersionKeyPressed
+    }
+}//GEN-LAST:event_jButtonViewActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonViewVersion;
+    private javax.swing.JButton jButtonView;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableVersion;
+    private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
 }
