@@ -406,7 +406,7 @@ public class DialogContentInformation extends javax.swing.JDialog
         jToolBar1.add(jButtonEdit);
         jToolBar1.add(jSeparator5);
 
-        jButtonPublish.setText("Publicar en una página");
+        jButtonPublish.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/envpaga.png"))); // NOI18N
         jButtonPublish.setToolTipText("Permite publicar el contenido en una página");
         jButtonPublish.setFocusable(false);
         jButtonPublish.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -433,7 +433,7 @@ public class DialogContentInformation extends javax.swing.JDialog
         jToolBar1.add(jButtonViewPage);
         jToolBar1.add(jSeparator4);
 
-        jButtonDeletePage.setText("Eliminar");
+        jButtonDeletePage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/delete.png"))); // NOI18N
         jButtonDeletePage.setToolTipText("Eliminar la publicación de un contenido en una página");
         jButtonDeletePage.setEnabled(false);
         jButtonDeletePage.setFocusable(false);
@@ -529,7 +529,7 @@ public class DialogContentInformation extends javax.swing.JDialog
         jToolBar2.setFloatable(false);
         jToolBar2.setRollover(true);
 
-        jButtonUpdate.setText("Guardar");
+        jButtonUpdate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/save.png"))); // NOI18N
         jButtonUpdate.setToolTipText("Actualizar el contenido, está opcion crea una nueva versión de contenido");
         jButtonUpdate.setFocusable(false);
         jButtonUpdate.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);

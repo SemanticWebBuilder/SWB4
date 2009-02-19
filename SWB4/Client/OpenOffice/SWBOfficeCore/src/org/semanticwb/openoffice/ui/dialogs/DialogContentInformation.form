@@ -249,7 +249,9 @@
                 </Component>
                 <Component class="javax.swing.JButton" name="jButtonPublish">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Publicar en una p&#xe1;gina"/>
+                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                      <Image iconType="3" name="/org/semanticwb/openoffice/ui/icons/envpaga.png"/>
+                    </Property>
                     <Property name="toolTipText" type="java.lang.String" value="Permite publicar el contenido en una p&#xe1;gina"/>
                     <Property name="focusable" type="boolean" value="false"/>
                     <Property name="horizontalTextPosition" type="int" value="0"/>
@@ -280,7 +282,9 @@
                 </Component>
                 <Component class="javax.swing.JButton" name="jButtonDeletePage">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Eliminar"/>
+                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                      <Image iconType="3" name="/org/semanticwb/openoffice/ui/icons/delete.png"/>
+                    </Property>
                     <Property name="toolTipText" type="java.lang.String" value="Eliminar la publicaci&#xf3;n de un contenido en una p&#xe1;gina"/>
                     <Property name="enabled" type="boolean" value="false"/>
                     <Property name="focusable" type="boolean" value="false"/>
@@ -456,7 +460,9 @@
                   <SubComponents>
                     <Component class="javax.swing.JButton" name="jButtonUpdate">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="Guardar"/>
+                        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                          <Image iconType="3" name="/org/semanticwb/openoffice/ui/icons/save.png"/>
+                        </Property>
                         <Property name="toolTipText" type="java.lang.String" value="Actualizar el contenido, est&#xe1; opcion crea una nueva versi&#xf3;n de contenido"/>
                         <Property name="focusable" type="boolean" value="false"/>
                         <Property name="horizontalTextPosition" type="int" value="0"/>
