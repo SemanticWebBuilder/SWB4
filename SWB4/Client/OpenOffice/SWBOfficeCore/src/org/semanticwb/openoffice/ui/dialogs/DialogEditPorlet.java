@@ -519,7 +519,7 @@ public class DialogEditPorlet extends javax.swing.JDialog
 
         jLabelPage.setText("Página");
 
-        jLabel8.setText("Versión publicada:");
+        jLabel8.setText("Versión a publicar:");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
