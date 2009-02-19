@@ -37,6 +37,7 @@ import org.jdom.output.XMLOutputter;
 import org.semanticwb.office.interfaces.CalendarInfo;
 import org.semanticwb.office.interfaces.PortletInfo;
 import org.semanticwb.office.interfaces.PropertyInfo;
+import org.semanticwb.office.interfaces.VersionInfo;
 import org.semanticwb.openoffice.OfficeApplication;
 
 /**
@@ -59,6 +60,11 @@ public class DialogEditPorlet extends javax.swing.JDialog
         this.pageInformation = pageInformation;
         this.repositoryName = repositoryName;
         this.contentID = contentID;
+        this.jTextFieldTitle.setText(pageInformation.title);
+        this.jTextAreaDescription.setText(pageInformation.description);
+        this.jCheckBoxActive.setSelected(pageInformation.active);
+        this.jLabelSite.setText(pageInformation.page.site.title);
+        this.jLabelPage.setText(pageInformation.page.title);
         loadProperties();
         loadCalendars();
         setLocationRelativeTo(null);
@@ -76,6 +82,25 @@ public class DialogEditPorlet extends javax.swing.JDialog
                 }
             }
         });
+
+        VersionInfo info = new VersionInfo();
+        info.nameOfVersion = "*";
+        jComboBoxVersion.setEditable(false);
+        jComboBoxVersion.addItem(info);
+        try
+        {
+            for (VersionInfo versionInfo : OfficeApplication.getOfficeDocumentProxy().getVersions(repositoryName, contentID))
+            {
+                jComboBoxVersion.addItem(versionInfo);
+            }
+            VersionInfo selected = new VersionInfo();
+            selected.nameOfVersion = pageInformation.version;
+            jComboBoxVersion.setSelectedItem(selected);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     class PropertyRender implements TableCellRenderer
@@ -425,18 +450,18 @@ public class DialogEditPorlet extends javax.swing.JDialog
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        jTextFieldTitle = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        jTextAreaDescription = new javax.swing.JTextArea();
         jLabel3 = new javax.swing.JLabel();
-        jCheckBox1 = new javax.swing.JCheckBox();
+        jCheckBoxActive = new javax.swing.JCheckBox();
         jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        jLabelSite = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
+        jLabelPage = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox();
+        jComboBoxVersion = new javax.swing.JComboBox();
         jPanelInformation = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableProperties = new javax.swing.JTable();
@@ -480,19 +505,19 @@ public class DialogEditPorlet extends javax.swing.JDialog
 
         jLabel2.setText("Descripción:");
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane3.setViewportView(jTextArea1);
+        jTextAreaDescription.setColumns(20);
+        jTextAreaDescription.setRows(5);
+        jScrollPane3.setViewportView(jTextAreaDescription);
 
         jLabel3.setText("Activo:");
 
         jLabel4.setText("Sitio:");
 
-        jLabel5.setText("Sitio de prueba");
+        jLabelSite.setText("Sitio de prueba");
 
         jLabel6.setText("Página:");
 
-        jLabel7.setText("Página");
+        jLabelPage.setText("Página");
 
         jLabel8.setText("Versión publicada:");
 
@@ -503,26 +528,29 @@ public class DialogEditPorlet extends javax.swing.JDialog
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jTextFieldTitle, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)))
                     .addComponent(jLabel8)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel4)
                             .addComponent(jLabel3)
-                            .addComponent(jLabel6))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel4))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 68, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jCheckBoxActive, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelSite, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)
-                                .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(1, 1, 1)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jCheckBox1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jComboBox1, 0, 270, Short.MAX_VALUE))))))
+                                .addGroup(jPanel2Layout.createSequentialGroup()
+                                    .addGap(1, 1, 1)
+                                    .addComponent(jComboBoxVersion, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jLabelPage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -531,33 +559,28 @@ public class DialogEditPorlet extends javax.swing.JDialog
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextFieldTitle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addGap(5, 5, 5)))
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel6))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(11, 11, 11)
-                        .addComponent(jLabel7)))
-                .addGap(9, 9, 9)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabelSite)
+                    .addComponent(jLabel4))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabelPage))
+                .addGap(5, 5, 5)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel3)
-                    .addComponent(jCheckBox1))
+                    .addComponent(jCheckBoxActive))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(7, 7, 7))
+                    .addComponent(jComboBoxVersion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Información", jPanel2);
@@ -571,12 +594,21 @@ public class DialogEditPorlet extends javax.swing.JDialog
             new String [] {
                 "Propiedad", "Valor"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jTableProperties.setCellSelectionEnabled(true);
         jTableProperties.setRowHeight(24);
         jTableProperties.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jTableProperties.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTableProperties);
+        jTableProperties.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
         jPanelInformation.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
@@ -596,7 +628,7 @@ public class DialogEditPorlet extends javax.swing.JDialog
                 java.lang.Object.class, java.lang.Boolean.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false
+                false, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -609,11 +641,13 @@ public class DialogEditPorlet extends javax.swing.JDialog
         });
         jTableScheduler.setColumnSelectionAllowed(true);
         jTableScheduler.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jTableScheduler.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(jTableScheduler);
         jTableScheduler.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
         jPanelSchedule.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
+        jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
         jButtonAddCalendar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/add.png"))); // NOI18N
@@ -678,7 +712,62 @@ private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN
 
 private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOKActionPerformed
     isCancel = false;
-    this.setVisible(false);
+    if (this.jTextFieldTitle.getText().isEmpty())
+    {
+        JOptionPane.showMessageDialog(this, "¡Debe indicar el título de la públicación!", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+        jTextFieldTitle.requestFocus();
+        return;
+    }
+    if (this.jTextAreaDescription.getText().isEmpty())
+    {
+        JOptionPane.showMessageDialog(this, "¡Debe indicar una descripción de la públicación!", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+        jTextAreaDescription.requestFocus();
+        return;
+    }
+    int res = JOptionPane.showConfirmDialog(this, "Se va a realizar los cambios de la información de publicación.\r\n¿Desea continuar?", this.getTitle(), JOptionPane.YES_NO_OPTION);
+    if (res == JOptionPane.YES_OPTION)
+    {
+        pageInformation.title = this.jTextFieldTitle.getText();
+        pageInformation.description = this.jTextAreaDescription.getText();
+        pageInformation.version = ((VersionInfo) this.jComboBoxVersion.getSelectedItem()).nameOfVersion;
+        pageInformation.active = this.jCheckBoxActive.isSelected();
+        try
+        {
+            OfficeApplication.getOfficeDocumentProxy().updatePorlet(pageInformation);
+            DefaultTableModel model=(DefaultTableModel)jTableScheduler.getModel();
+            for(int i=0;i<jTableScheduler.getRowCount();i++)
+            {
+                CalendarInfo cal=(CalendarInfo)model.getValueAt(i,0);
+                if(cal.id==null)
+                {
+                    // insert
+                    OfficeApplication.getOfficeDocumentProxy().insertCalendar(pageInformation, cal.title,cal.xml);
+                }
+                else
+                {
+                    // update
+                    OfficeApplication.getOfficeDocumentProxy().updateCalendar(pageInformation, cal);
+                }
+            }
+            model=(DefaultTableModel)jTableProperties.getModel();
+            for(int i=0;i<jTableProperties.getRowCount();i++)
+            {
+                PropertyInfo prop=(PropertyInfo)model.getValueAt(i, 0);
+                Object obj=model.getValueAt(i, 1);
+                String value=null;
+                if(obj!=null)
+                {
+                    value=obj.toString();
+                }
+                OfficeApplication.getOfficeDocumentProxy().setPortletProperties(pageInformation, prop, value);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
 }//GEN-LAST:event_jButtonOKActionPerformed
 
 private void jButtonAddCalendarActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonAddCalendarActionPerformed
@@ -773,16 +862,16 @@ private void jButtonDeleteSchedulerActionPerformed(java.awt.event.ActionEvent ev
     private javax.swing.JButton jButtonDeleteScheduler;
     private javax.swing.JButton jButtonEditEcheduler;
     private javax.swing.JButton jButtonOK;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JComboBox jComboBox1;
+    private javax.swing.JCheckBox jCheckBoxActive;
+    private javax.swing.JComboBox jComboBoxVersion;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabelPage;
+    private javax.swing.JLabel jLabelSite;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanelInformation;
@@ -796,8 +885,8 @@ private void jButtonDeleteSchedulerActionPerformed(java.awt.event.ActionEvent ev
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTableProperties;
     private javax.swing.JTable jTableScheduler;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextArea jTextAreaDescription;
+    private javax.swing.JTextField jTextFieldTitle;
     private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
 }

@@ -526,6 +526,7 @@ public class DialogContentInformation extends javax.swing.JDialog
         jPanel1.setPreferredSize(new java.awt.Dimension(466, 25));
         jPanel1.setLayout(new java.awt.BorderLayout());
 
+        jToolBar2.setFloatable(false);
         jToolBar2.setRollover(true);
 
         jButtonUpdate.setText("Guardar");
