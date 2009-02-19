@@ -16,7 +16,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
-import javax.swing.SpinnerDateModel;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.output.DOMOutputter;
@@ -42,13 +41,13 @@ public class DialogCalendar extends java.awt.Dialog
         initComponents();
         this.jSpinnerInitDate.setEditor(new JSpinner.DateEditor(jSpinnerInitDate, DATE_FORMAT));
         this.jSpinnerEndDate.setEditor(new JSpinner.DateEditor(jSpinnerEndDate, DATE_FORMAT));
-        
+
         this.jSpinnerInitTime.setEditor(new JSpinner.DateEditor(jSpinnerInitTime, TIME_FORMAT));
         this.jSpinnerEndTime.setEditor(new JSpinner.DateEditor(jSpinnerEndTime, TIME_FORMAT));
         this.setLocationRelativeTo(null);
     }
 
-    private void init(Document document,String title)
+    private void init(Document document, String title)
     {
         this.jTextFieldTitle.setText(title);
         DOMOutputter out = new DOMOutputter();
@@ -63,32 +62,30 @@ public class DialogCalendar extends java.awt.Dialog
                     this.jCheckBoxByTimeStateChanged(null);
                     if (xml.getElementsByTagName("starthour").getLength() > 0)
                     {
-                        Date date=TIME_SIMPLEFORMAT.parse(((org.w3c.dom.Element) xml.getElementsByTagName("starthour").item(0)).getTextContent());
+                        Date date = TIME_SIMPLEFORMAT.parse(((org.w3c.dom.Element) xml.getElementsByTagName("starthour").item(0)).getTextContent());
                         this.jSpinnerInitTime.setValue(date);
                     }
                     if (xml.getElementsByTagName("endhour").getLength() > 0)
                     {
-                        Date date=TIME_SIMPLEFORMAT.parse(((org.w3c.dom.Element) xml.getElementsByTagName("endhour").item(0)).getTextContent());
+                        Date date = TIME_SIMPLEFORMAT.parse(((org.w3c.dom.Element) xml.getElementsByTagName("endhour").item(0)).getTextContent());
                         this.jSpinnerEndTime.setValue(date);
                     }
                 }
                 if (xml.getElementsByTagName("inidate").getLength() > 0)
                 {
-                    Date date=DATE_SIMPLEFORMAT.parse(((org.w3c.dom.Element) xml.getElementsByTagName("inidate").item(0)).getTextContent());
+                    Date date = DATE_SIMPLEFORMAT.parse(((org.w3c.dom.Element) xml.getElementsByTagName("inidate").item(0)).getTextContent());
                     this.jSpinnerInitDate.setValue(date);
                 }
                 if (xml.getElementsByTagName("enddate").getLength() == 0)
                 {
                     jRadioButtonNotEndDate.setSelected(true);
-                    jSpinnerEndTime.setEnabled(false);
                     jRadioButtonEndSelect.setSelected(false);
                 }
                 else
                 {
-                    Date date=DATE_SIMPLEFORMAT.parse(((org.w3c.dom.Element) xml.getElementsByTagName("enddate").item(0)).getTextContent());
+                    Date date = DATE_SIMPLEFORMAT.parse(((org.w3c.dom.Element) xml.getElementsByTagName("enddate").item(0)).getTextContent());
                     this.jSpinnerEndDate.setValue(date);
                     jRadioButtonNotEndDate.setSelected(false);
-                    jSpinnerEndTime.setEnabled(true);
                     jRadioButtonEndSelect.setSelected(true);
 
                 }
@@ -385,11 +382,58 @@ public class DialogCalendar extends java.awt.Dialog
 
     private void jButtonOkActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonOkActionPerformed
     {//GEN-HEADEREND:event_jButtonOkActionPerformed
-        if(jTextFieldTitle.getText().isEmpty())
+        if (jTextFieldTitle.getText().isEmpty())
         {
-            JOptionPane.showMessageDialog(this, "¡Debe indicar el título!",this.getTitle(),JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "¡Debe indicar el título!", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
             jTextFieldTitle.requestFocus();
             return;
+        }
+        if (this.jCheckBoxByTime.isSelected())
+        {
+            Date timeInit = (Date) this.jSpinnerInitTime.getValue();
+            Date timeEnd = (Date) this.jSpinnerEndTime.getValue();
+            if (timeInit.after(timeEnd))
+            {
+                JOptionPane.showMessageDialog(this, "¡La hora de inicio es mayor que la hora de terminación!", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                jSpinnerInitTime.requestFocus();
+                return;
+            }
+            if (timeInit.equals(timeEnd))
+            {
+                JOptionPane.showMessageDialog(this, "¡La hora de inicio es iagual que la hora de terminación!", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                jSpinnerInitTime.requestFocus();
+                return;
+            }
+        }
+        if (this.jRadioButtonEndSelect.isSelected())
+        {
+            Date dateInit = (Date) this.jSpinnerInitDate.getValue();
+            Date dateEnd = (Date) this.jSpinnerEndDate.getValue();
+            if (dateInit.after(dateEnd))
+            {
+                JOptionPane.showMessageDialog(this, "¡La fecha de inicio es mayor que la fecha de terminación!", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                jSpinnerInitDate.requestFocus();
+                return;
+            }
+            Date now = new Date(System.currentTimeMillis());
+            if (dateInit.before(now))
+            {
+                int res = JOptionPane.showConfirmDialog(this, "¡La fecha de inicio es anterior al día de hoy!\r\n¿Desea continuar?", this.getTitle(), JOptionPane.YES_NO_OPTION);
+                if (res == JOptionPane.NO_OPTION)
+                {
+                    jSpinnerInitDate.requestFocus();
+                    return;
+                }
+            }
+            if (dateEnd.before(now))
+            {
+                int res = JOptionPane.showConfirmDialog(this, "¡La fecha de terminación es anterior al día de hoy!\r\n¿Desea continuar?", this.getTitle(), JOptionPane.YES_NO_OPTION);
+                if (res == JOptionPane.NO_OPTION)
+                {
+                    jSpinnerEndDate.requestFocus();
+                    return;
+                }
+            }
         }
         isCanceled = false;
         this.setVisible(false);
@@ -403,29 +447,29 @@ public class DialogCalendar extends java.awt.Dialog
     {
         Document doc = new Document();
 
-        Element resource=new Element("Resource");
+        Element resource = new Element("Resource");
         doc.setRootElement(resource);
 
-        Element inidate=new Element("inidate");
-        String date=DATE_SIMPLEFORMAT.format(((Date)jSpinnerInitDate.getValue()));
+        Element inidate = new Element("inidate");
+        String date = DATE_SIMPLEFORMAT.format(((Date) jSpinnerInitDate.getValue()));
         inidate.setText(date);
         resource.addContent(inidate);
-        if(jRadioButtonEndSelect.isSelected())
+        if (jRadioButtonEndSelect.isSelected())
         {
-            date=DATE_SIMPLEFORMAT.format(((Date)jSpinnerEndDate.getValue()));
-            Element enddate=new Element("enddate");
+            date = DATE_SIMPLEFORMAT.format(((Date) jSpinnerEndDate.getValue()));
+            Element enddate = new Element("enddate");
             enddate.setText(date);
             resource.addContent(enddate);
         }
-        if(jCheckBoxByTime.isSelected())
+        if (jCheckBoxByTime.isSelected())
         {
-            Element starthour=new Element("starthour");
-            date=TIME_SIMPLEFORMAT.format(((Date)jSpinnerInitTime.getValue()));
+            Element starthour = new Element("starthour");
+            date = TIME_SIMPLEFORMAT.format(((Date) jSpinnerInitTime.getValue()));
             starthour.setText(date);
             resource.addContent(starthour);
 
-            Element endhour=new Element("endhour");
-            date=TIME_SIMPLEFORMAT.format(((Date)jSpinnerEndTime.getValue()));
+            Element endhour = new Element("endhour");
+            date = TIME_SIMPLEFORMAT.format(((Date) jSpinnerEndTime.getValue()));
             endhour.setText(date);
 
             resource.addContent(endhour);
@@ -439,9 +483,9 @@ public class DialogCalendar extends java.awt.Dialog
         return doc;
     }
 
-    public void setDocument(Document document,String title)
+    public void setDocument(Document document, String title)
     {
-        init(document,title);
+        init(document, title);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
