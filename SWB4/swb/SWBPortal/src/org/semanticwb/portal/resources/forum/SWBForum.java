@@ -217,12 +217,6 @@ public class SWBForum extends GenericResource {
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         User user = response.getUser();
         WebSite website=response.getTopic().getWebSite();
-        Enumeration enP = request.getParameterNames();
-        while (enP.hasMoreElements()) {
-            String paramN = (String) enP.nextElement();
-            String paramV = request.getParameter(paramN);
-            System.out.println("paramN:" + paramN + ",paramV:" + paramV);
-        }
         String action = response.getAction();
         String scls = request.getParameter("scls");
         if (action.equals("addCategory")) {
@@ -335,16 +329,14 @@ public class SWBForum extends GenericResource {
             SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("categoryUri"));
             semObject.remove();
         }else if (action.equals("addFavoriteThread")) {
-           System.out.println("entra a addFavoriteThread");
            SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("threadUri"));
            FrmThread favThread = FrmThread.getFrmThread(semObject.getId(), response.getTopic().getWebSite());
-
            FrmUserThread frmUserThread=FrmUserThread.createFrmUserThread(website);
            frmUserThread.setThread(favThread);
            frmUserThread.setUser(user);
-
-           System.out.println("termina:"+frmUserThread.getURI());
-           
+           response.setMode(response.Mode_VIEW);
+           response.setAction("viewThreads");
+           response.setRenderParameter("forumUri",request.getParameter("forumUri"));
         }
     }
 
