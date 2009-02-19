@@ -39,6 +39,7 @@
                       <Component id="jComboBoxWebAddress" min="-2" pref="270" max="-2" attributes="1"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jButtonDelete" min="-2" pref="39" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
                   <Component id="jPassword" pref="315" max="32767" attributes="1"/>
                   <Component id="jTextFieldClave" alignment="0" pref="315" max="32767" attributes="1"/>
@@ -57,19 +58,13 @@
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="48" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jComboBoxWebAddress" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabelWebAddress" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace pref="6" max="-2" attributes="0"/>
-                  </Group>
-                  <Component id="jButtonDelete" alignment="1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="58" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="jComboBoxWebAddress" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabelWebAddress" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jButtonDelete" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jTextFieldClave" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabelClave" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -85,7 +80,7 @@
                   <Component id="jButtonCancel" alignment="3" min="-2" pref="27" max="-2" attributes="0"/>
                   <Component id="jButtonAccept" alignment="3" pref="27" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace pref="125" max="32767" attributes="0"/>
+              <EmptySpace pref="123" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -225,7 +220,7 @@
     <Component class="javax.swing.JButton" name="jButtonDelete">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/org/semanticwb/openoffice/ui/icons/delete32.png"/>
+          <Image iconType="3" name="/org/semanticwb/openoffice/ui/icons/delete.png"/>
         </Property>
         <Property name="toolTipText" type="java.lang.String" value="Borrar conexi&#xf3;n"/>
         <Property name="contentAreaFilled" type="boolean" value="false"/>
