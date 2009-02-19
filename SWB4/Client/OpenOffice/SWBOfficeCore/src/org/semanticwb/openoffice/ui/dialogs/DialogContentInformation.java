@@ -393,7 +393,7 @@ public class DialogContentInformation extends javax.swing.JDialog
         jToolBar1.setRollover(true);
 
         jButtonEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/edit.png"))); // NOI18N
-        jButtonEdit.setToolTipText("Editar Propiedades");
+        jButtonEdit.setToolTipText("Editar Propiedades y Calendarización");
         jButtonEdit.setEnabled(false);
         jButtonEdit.setFocusable(false);
         jButtonEdit.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -407,6 +407,7 @@ public class DialogContentInformation extends javax.swing.JDialog
         jToolBar1.add(jSeparator5);
 
         jButtonPublish.setText("Publicar en una página");
+        jButtonPublish.setToolTipText("Permite publicar el contenido en una página");
         jButtonPublish.setFocusable(false);
         jButtonPublish.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonPublish.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -433,6 +434,7 @@ public class DialogContentInformation extends javax.swing.JDialog
         jToolBar1.add(jSeparator4);
 
         jButtonDeletePage.setText("Eliminar");
+        jButtonDeletePage.setToolTipText("Eliminar la publicación de un contenido en una página");
         jButtonDeletePage.setEnabled(false);
         jButtonDeletePage.setFocusable(false);
         jButtonDeletePage.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -528,6 +530,7 @@ public class DialogContentInformation extends javax.swing.JDialog
         jToolBar2.setRollover(true);
 
         jButtonUpdate.setText("Guardar");
+        jButtonUpdate.setToolTipText("Actualizar el contenido, está opcion crea una nueva versión de contenido");
         jButtonUpdate.setFocusable(false);
         jButtonUpdate.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonUpdate.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -540,7 +543,7 @@ public class DialogContentInformation extends javax.swing.JDialog
         jToolBar2.add(jSeparator2);
 
         jButtonViewVersion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/see.png"))); // NOI18N
-        jButtonViewVersion.setToolTipText("Ver versión");
+        jButtonViewVersion.setToolTipText("Ver versión del contenido");
         jButtonViewVersion.setEnabled(false);
         jButtonViewVersion.setFocusable(false);
         jButtonViewVersion.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);

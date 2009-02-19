@@ -235,7 +235,7 @@
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/org/semanticwb/openoffice/ui/icons/edit.png"/>
                     </Property>
-                    <Property name="toolTipText" type="java.lang.String" value="Editar Propiedades"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Editar Propiedades y Calendarizaci&#xf3;n"/>
                     <Property name="enabled" type="boolean" value="false"/>
                     <Property name="focusable" type="boolean" value="false"/>
                     <Property name="horizontalTextPosition" type="int" value="0"/>
@@ -250,6 +250,7 @@
                 <Component class="javax.swing.JButton" name="jButtonPublish">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Publicar en una p&#xe1;gina"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Permite publicar el contenido en una p&#xe1;gina"/>
                     <Property name="focusable" type="boolean" value="false"/>
                     <Property name="horizontalTextPosition" type="int" value="0"/>
                     <Property name="verticalTextPosition" type="int" value="3"/>
@@ -280,6 +281,7 @@
                 <Component class="javax.swing.JButton" name="jButtonDeletePage">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Eliminar"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Eliminar la publicaci&#xf3;n de un contenido en una p&#xe1;gina"/>
                     <Property name="enabled" type="boolean" value="false"/>
                     <Property name="focusable" type="boolean" value="false"/>
                     <Property name="horizontalTextPosition" type="int" value="0"/>
@@ -455,6 +457,7 @@
                     <Component class="javax.swing.JButton" name="jButtonUpdate">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Guardar"/>
+                        <Property name="toolTipText" type="java.lang.String" value="Actualizar el contenido, est&#xe1; opcion crea una nueva versi&#xf3;n de contenido"/>
                         <Property name="focusable" type="boolean" value="false"/>
                         <Property name="horizontalTextPosition" type="int" value="0"/>
                         <Property name="verticalTextPosition" type="int" value="3"/>
@@ -470,7 +473,7 @@
                         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                           <Image iconType="3" name="/org/semanticwb/openoffice/ui/icons/see.png"/>
                         </Property>
-                        <Property name="toolTipText" type="java.lang.String" value="Ver versi&#xf3;n"/>
+                        <Property name="toolTipText" type="java.lang.String" value="Ver versi&#xf3;n del contenido"/>
                         <Property name="enabled" type="boolean" value="false"/>
                         <Property name="focusable" type="boolean" value="false"/>
                         <Property name="horizontalTextPosition" type="int" value="0"/>
