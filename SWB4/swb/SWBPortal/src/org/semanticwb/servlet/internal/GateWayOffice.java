@@ -52,7 +52,7 @@ public class GateWayOffice implements InternalServlet
             }
             catch (Exception e)
             {
-                log.error("Can't log User", e);
+                log.debug("Can't log User", e);
             }
             return true;
         }
