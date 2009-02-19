@@ -6,6 +6,9 @@
 
 package org.semanticwb.openoffice.ui.dialogs;
 
+import javax.swing.JOptionPane;
+import org.semanticwb.openoffice.OfficeApplication;
+
 /**
  *
  * @author  victor.lorenzana
@@ -18,6 +21,7 @@ public final class DialogChangePassword extends javax.swing.JDialog {
     public DialogChangePassword(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        this.setLocationRelativeTo(null);
     }
     public String getNewPassword()
     {
@@ -116,6 +120,37 @@ public final class DialogChangePassword extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAcceptActionPerformed
+
+        if(this.jPasswordFieldNewPassword.getPassword()==null || this.jPasswordFieldNewPassword.getPassword().length==0)
+        {
+            JOptionPane.showMessageDialog(this, "¡Debe indicar la nueva contraseña!",this.getTitle(),JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+            jPasswordFieldNewPassword.requestFocus();
+            return;
+        }
+
+        if(this.jPasswordFieldConfirm.getPassword()==null || this.jPasswordFieldConfirm.getPassword().length==0)
+        {
+            JOptionPane.showMessageDialog(this, "¡Debe indicar la confirmación de la nueva contraseña!",this.getTitle(),JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+            jPasswordFieldConfirm.requestFocus();
+            return;
+        }
+        String newPassWord=new String(this.jPasswordFieldNewPassword.getPassword());
+        String confirm=new String(this.jPasswordFieldConfirm.getPassword());
+        if(!confirm.equals(newPassWord))
+        {
+            JOptionPane.showMessageDialog(this, "¡La nueva contraseña no corresponde con la confirmación!",this.getTitle(),JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+            jPasswordFieldNewPassword.requestFocus();
+            return;
+        }
+        try
+        {
+            OfficeApplication.getOfficeApplicationProxy().changePassword(new String(this.jPasswordFieldNewPassword.getPassword()));
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_jButtonAcceptActionPerformed
