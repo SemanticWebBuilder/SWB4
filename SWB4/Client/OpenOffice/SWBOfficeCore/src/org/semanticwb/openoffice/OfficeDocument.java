@@ -340,9 +340,12 @@ public abstract class OfficeDocument
 
     public final void showChanges()
     {
-        DialogHistory dialog = new DialogHistory(new javax.swing.JFrame(), true);
-        dialog.setLocationRelativeTo(null);
-        dialog.setVisible(true);
+        if (OfficeApplication.tryLogin())
+        {
+            DialogHistory dialog = new DialogHistory(new javax.swing.JFrame(), true);
+            dialog.setLocationRelativeTo(null);
+            dialog.setVisible(true);
+        }
     }
 
     public final void showDocumentInfo()
@@ -567,15 +570,18 @@ public abstract class OfficeDocument
     {
         if (isPublicated())
         {
-            contentID = this.getCustomProperties().get(CONTENT_ID_NAME);
-            String repositoryName = this.getCustomProperties().get(WORKSPACE_ID_NAME);
-            PublishContentToWebPageResultProducer resultProducer = new PublishContentToWebPageResultProducer(contentID, repositoryName, title, description);
-            WizardPage[] clazz = new WizardPage[]
+            if (OfficeApplication.tryLogin())
             {
-                new SelectPage(), new PublishVersion(contentID, repositoryName)
-            };
-            Wizard wiz = WizardPage.createWizard("Asistente de publicación de contenido en página web", clazz, resultProducer);
-            wiz.show();
+                contentID = this.getCustomProperties().get(CONTENT_ID_NAME);
+                String repositoryName = this.getCustomProperties().get(WORKSPACE_ID_NAME);
+                PublishContentToWebPageResultProducer resultProducer = new PublishContentToWebPageResultProducer(contentID, repositoryName, title, description);
+                WizardPage[] clazz = new WizardPage[]
+                {
+                    new SelectPage(), new PublishVersion(contentID, repositoryName)
+                };
+                Wizard wiz = WizardPage.createWizard("Asistente de publicación de contenido en página web", clazz, resultProducer);
+                wiz.show();
+            }
         }
     }
 
@@ -741,10 +747,13 @@ public abstract class OfficeDocument
     private void updateContent() throws Exception
     {
         String workspace = this.getCustomProperties().get(WORKSPACE_ID_NAME);
-        DialogUpdateContent summary = new DialogUpdateContent(new Frame(), true, workspace, contentID, this);
-        summary.setLocationRelativeTo(null);
-        summary.setAlwaysOnTop(true);
-        summary.setVisible(true);
+        if (workspace!=null && OfficeApplication.tryLogin())
+        {
+            DialogUpdateContent summary = new DialogUpdateContent(new Frame(), true, workspace, contentID, this);
+            summary.setLocationRelativeTo(null);
+            summary.setAlwaysOnTop(true);
+            summary.setVisible(true);
+        }
     }
 
     public final void addRule()
@@ -753,12 +762,15 @@ public abstract class OfficeDocument
 
     public final void insertLink()
     {
-        AddLinkProducer resultProducer = new AddLinkProducer(this);
-        WizardPage[] clazz = new WizardPage[]
+        if (OfficeApplication.tryLogin())
         {
-            new SelectPage(), new SelectTitle()
-        };
-        Wizard wiz = WizardPage.createWizard("Asistente de inserción de liga de página", clazz, resultProducer);
-        wiz.show();
+            AddLinkProducer resultProducer = new AddLinkProducer(this);
+            WizardPage[] clazz = new WizardPage[]
+            {
+                new SelectPage(), new SelectTitle()
+            };
+            Wizard wiz = WizardPage.createWizard("Asistente de inserción de liga de página", clazz, resultProducer);
+            wiz.show();
+        }
     }
 }
