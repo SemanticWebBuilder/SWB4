@@ -4,6 +4,8 @@
 <%@page import="org.semanticwb.model.User"%>
 <%@page import="org.semanticwb.model.GenericIterator"%>
 <%@page import="java.util.Iterator"%>
+<%@page import="java.util.HashMap"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="org.semanticwb.forum.FrmCategory"%>
 <%@page import="org.semanticwb.forum.FrmUserThread"%>
 <%@page import="org.semanticwb.forum.FrmForum"%>
@@ -13,6 +15,7 @@
 <%@page import="org.semanticwb.forum.FrmThreadTypeCat"%>
 <%@page import="org.semanticwb.platform.SemanticObject"%>
 <%@page import="org.semanticwb.SWBPlatform"%>
+<%@page import="org.semanticwb.model.SWBModel"%>
 
 
 <table>
@@ -70,7 +73,7 @@
                         <%} else {%>&nbsp;<%}%>
                     </td>
                     <td align="center">
-                        <%=thread.getReplyCount()%>
+                        <%=thread.getViewcount()%>
                     </td>
                     <td align="center">
                         <%=thread.getReplyCount()%>
@@ -88,11 +91,9 @@
                             boolean isFavThread=false;
                             Iterator <FrmUserThread> itFrmUserThread=FrmUserThread.listFrmUserThreads(website);
                             while(itFrmUserThread.hasNext()){
-                                System.out.println("entra jsp-2");
                                 FrmUserThread usrThread=itFrmUserThread.next();
                                 if(usrThread.getThread().getURI().equals(thread.getURI()) && usrThread.getUser().getURI().equals(user.getURI()))
-                                {
-                                    System.out.println("entra jsp-3");
+                                {                                    
                                     isFavThread=true;
                                     break;
                                 }
@@ -319,6 +320,9 @@
                          </script>
             <%} else {
             %>
+            <p align="center">
+                    <b>Foros</b>
+            </p>
             <table border="1" width="95%" cellspacing="0" cellpadding="3" align="center">
                 <tr bgcolor="#666669">
                     <td colspan="2"><font color="#FFFFFF">Foro/Descripción</font></td>
@@ -369,8 +373,83 @@
                 }
                 %>
                 </table>
+                <br/>
+                <p align="center">
+                    <b>Temas Favoritos</b>
+                </p>
+                <br/>
+                <table border="1">
+                <tr bgcolor="#666669">
+                    <td align="center">Nombre</td>
+                    <td align="center">Vistas</td>
+                    <td align="center">Replicas</td>
+                    <td align="center">Ultimo mensaje</td>
+                    <td align="center">Foro</td>
+                </tr>
                 <%
+                    HashMap hmapForos=getFavoriteThreads(user, website);
+                    Iterator itForos=hmapForos.keySet().iterator();
+                    while(itForos.hasNext()){
+                        String strForo=(String)itForos.next();
+                        Iterator <FrmThread>itThreads=((ArrayList)hmapForos.get(strForo)).iterator();
+                        while(itThreads.hasNext())
+                        {
+                        FrmThread frmThread=itThreads.next();
+                        FrmForum forum=frmThread.getForum();
+                        url.setParameter("forumUri", forum.getURI());
+                        url.setParameter("threadUri", frmThread.getURI());
+                        url.setAction("viewPost");
+                        %>
+
+                            <tr>
+                            <td align="center"><a href="<%=url.toString()%>"><%=frmThread.getTitle()%></a></td>
+                            <td align="center"><%=frmThread.getViewcount()%></td>
+                            <td align="center"><%=frmThread.getReplyCount()%></td>
+                            <td align="center">
+                                <%if (frmThread.getLastpostdate() != null) {%>
+                                <%=frmThread.getLastpostdate()%><br/> by
+                                <%}%>
+                                <%if (frmThread.getLastpostmember() != null) {%>
+                                <%=frmThread.getLastpostmember().getName()%>
+                                <%} else {%>&nbsp;<%}%>
+                            </td>
+                            <td align="center">
+                                <%url.setAction("viewThreads");%>
+                                <a href="<%=url.toString()%>"><%=forum.getTitle()%></a>
+                            </td>
+                            </tr>
+                        <%
+                        }
+                    }
+                    %>
+                    </table>
+                    <%
                 }
-            %>
+              %>
     </td></tr>
 </table>
+
+<%!
+    private HashMap getFavoriteThreads(User user, SWBModel model){
+        HashMap hmapForos=new HashMap();
+        Iterator <FrmUserThread> itFrmUserThread=FrmUserThread.listFrmUserThreads(model);
+        while(itFrmUserThread.hasNext()){
+            FrmUserThread usrThread=itFrmUserThread.next();
+            if(usrThread.getUser().getURI().equals(user.getURI()))
+            {
+                SemanticObject semObject = SemanticObject.createSemanticObject(usrThread.getThread().getURI());
+                FrmThread favThread = FrmThread.getFrmThread(semObject.getId(), model);
+                FrmForum forum=favThread.getForum();
+                if(!hmapForos.containsKey(forum.getURI())){
+                    ArrayList <FrmThread> aThreads=new ArrayList();
+                    aThreads.add(favThread);
+                    hmapForos.put(forum.getURI(), aThreads);
+                }else{
+                    ArrayList aThreads=(ArrayList)hmapForos.get(forum.getURI());
+                    aThreads.add(favThread);
+                }
+            }
+        }
+        return hmapForos;
+    }
+%>
