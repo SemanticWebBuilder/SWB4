@@ -289,7 +289,7 @@
                             <td>Número de Archivos adjuntos</td>
                             <%
                             int attchmentsSize=0;
-                            GenericIterator <FrmAttachments> itattach=post.listAttachs();
+                            GenericIterator <FrmAttachments> itattach=post.listAttachmentss();
                             while(itattach.hasNext()){
                                 itattach.next();
                                 attchmentsSize++;
@@ -342,7 +342,7 @@
             FrmForum forum = gitForums.next();
                     if(forum.isActive()){
                 %>
-                <tr bgcolor="#FFFFFF" font-size="12px">
+                    <tr bgcolor="#FFFFFF" font-size="12px">                     
                     <td width="20" align="center" nowrap="nowrap">&nbsp</td>
                     <%url.setParameter("forumUri", forum.getURI());%>
                     <td width="30%"><a href="<%=url.toString()%>"><b><%=forum.getTitle()%></b></a><br/>
@@ -361,15 +361,15 @@
                         <%=forum.getModifiedBy().getName()%>
                         <%}else{%> &nbsp; <%}%>
                     </td>
-                </tr>
+                    </tr>
                 <%
                     }
                   }
                 }
-                %>
-            </table>
-            <%
                 }
+                %>
+                </table>
+                <%
                 }
             %>
     </td></tr>
