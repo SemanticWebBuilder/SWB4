@@ -215,8 +215,10 @@ class XmlRpcClient
                     return getResponse(connection.getInputStream(), contentType);
                 case HTTP_NOT_FOUND:
                     throw new HttpException("The path " + connection.getURL() + " was not found", HTTP_NOT_FOUND, getDetail(error, contentType));
+                case HTTP_FORBIDDEN:
+                    throw new HttpException("Clave o contraseña incorrecta", HTTP_FORBIDDEN, getDetail(error, contentType));
                 default:
-                    throw new HttpException(connection.getResponseMessage(), HTTP_NOT_FOUND, getDetail(error, contentType));
+                    throw new HttpException(connection.getResponseMessage(), responseCode, getDetail(error, contentType));
             }
         }
         catch (MalformedURLException mfe)
