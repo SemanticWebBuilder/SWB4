@@ -23,7 +23,6 @@ import org.semanticwb.model.UserRepository;
 import org.semanticwb.office.comunication.OfficeDocument;
 import org.semanticwb.office.comunication.OfficeServlet;
 import org.semanticwb.security.auth.SWB4CallbackHandlerGateWayOffice;
-import org.semanticwb.security.auth.SWB4CallbackHandlerLoginPasswordImp;
 
 /**
  *
