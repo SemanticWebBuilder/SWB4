@@ -1148,5 +1148,15 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         org.semanticwb.model.Calendar cal=site.getCalendar(calendarInfo.id);
         cal.setActive(active);
     }
+
+    public void updatePorlet(PortletInfo portletInfo) throws Exception
+    {
+        WebSite site = SWBContext.getWebSite(portletInfo.page.site.id);
+        OfficePortlet portlet = OfficePortlet.getOfficePortlet(portletInfo.id, site);
+        portlet.setTitle(portletInfo.title);
+        portlet.setDescription(portletInfo.description);
+        portlet.setActive(portletInfo.active);
+        portlet.setVersionToShow(portletInfo.version);
+    }
 }
 
