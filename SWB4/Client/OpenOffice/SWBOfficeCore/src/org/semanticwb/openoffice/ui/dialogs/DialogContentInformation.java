@@ -266,7 +266,6 @@ public class DialogContentInformation extends javax.swing.JDialog
         jComboBoxCategory = new javax.swing.JComboBox();
         jPanelPublishInformation = new javax.swing.JPanel();
         jToolBar1 = new javax.swing.JToolBar();
-        jSeparator1 = new javax.swing.JToolBar.Separator();
         jButtonEdit = new javax.swing.JButton();
         jSeparator5 = new javax.swing.JToolBar.Separator();
         jButtonPublish = new javax.swing.JButton();
@@ -392,7 +391,6 @@ public class DialogContentInformation extends javax.swing.JDialog
 
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
-        jToolBar1.add(jSeparator1);
 
         jButtonEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/edit.png"))); // NOI18N
         jButtonEdit.setToolTipText("Editar Propiedades");
@@ -827,7 +825,6 @@ public class DialogContentInformation extends javax.swing.JDialog
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator3;
     private javax.swing.JToolBar.Separator jSeparator4;
