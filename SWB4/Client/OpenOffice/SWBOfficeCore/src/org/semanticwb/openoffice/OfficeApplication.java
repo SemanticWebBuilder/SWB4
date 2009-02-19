@@ -28,6 +28,7 @@ import org.semanticwb.openoffice.ui.wizard.SelectPage;
 import org.semanticwb.openoffice.ui.wizard.SelectVersionToOpen;
 import org.semanticwb.openoffice.ui.wizard.SelectWebPageID;
 import org.semanticwb.openoffice.ui.wizard.TitleAndDescription;
+import org.semanticwb.xmlrpc.HttpException;
 import org.semanticwb.xmlrpc.XmlRpcProxyFactory;
 
 /**
@@ -113,6 +114,19 @@ public abstract class OfficeApplication
                     throw new WBException("La versión entre la aplicación de publicación y el sitio no es compatible");
                 }
             }
+            catch (HttpException e)
+            {
+                if (e.getCode() == 403)
+                {
+                    JOptionPane.showMessageDialog(null, e.getLocalizedMessage(), "Error de acceso", JOptionPane.OK_OPTION |
+                            JOptionPane.ERROR_MESSAGE);
+                    throw new WBException("No se puede validar la compatibilidad de versiones\r\n" + e.getMessage(), e);
+                }
+                else
+                {
+                    throw new WBException("No se puede validar la compatibilidad de versiones\r\n" + e.getMessage(), e);
+                }
+            }
             catch (Exception e)
             {
                 throw new WBException("Error al tratar de verificar compatibilidad de versiones entre el publicador y el servidor", e);
@@ -166,6 +180,19 @@ public abstract class OfficeApplication
                     document.setUser(OfficeApplication.userInfo.getLogin());
                     document.setPassword(OfficeApplication.userInfo.getPassword());
                     setProxy();
+                }
+            }
+            catch (HttpException e)
+            {
+                if (e.getCode() == 403)
+                {
+                    JOptionPane.showMessageDialog(null, e.getLocalizedMessage(), "Error de acceso", JOptionPane.OK_OPTION |
+                            JOptionPane.ERROR_MESSAGE);
+                    throw new WBException("No se puede validar la compatibilidad de versiones\r\n" + e.getMessage(), e);
+                }
+                else
+                {
+                    throw new WBException("No se puede validar la compatibilidad de versiones\r\n" + e.getMessage(), e);
                 }
             }
             catch (Exception e)
@@ -280,12 +307,13 @@ public abstract class OfficeApplication
 
     public static final void showAbout()
     {
-        DialogAbout dialog = new DialogAbout(new javax.swing.JFrame(), true);        
+        DialogAbout dialog = new DialogAbout(new javax.swing.JFrame(), true);
         dialog.setVisible(true);
     }
+
     public static final void showHelp()
     {
-        DialogPreview.showInBrowser(HELP_URL,new Frame());
+        DialogPreview.showInBrowser(HELP_URL, new Frame());
     }
 
     public static URI getWebAddress() throws WBException
