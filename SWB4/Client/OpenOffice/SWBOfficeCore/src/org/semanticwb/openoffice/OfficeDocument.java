@@ -214,7 +214,7 @@ public abstract class OfficeDocument
 
     public abstract void prepareHtmlFileToSend(File htmlFile);
 
-    public abstract void insertLink(String url,String text);
+    public abstract void insertLink(String url, String text);
 
     protected static File getFile(URI uri)
     {
@@ -347,30 +347,33 @@ public abstract class OfficeDocument
 
     public final void showDocumentInfo()
     {
-        Map<String, String> properties = this.getCustomProperties();
-        String contentId = properties.get(CONTENT_ID_NAME);
-        String rep = properties.get(WORKSPACE_ID_NAME);
-        if(contentId==null || rep ==null)
+        if (OfficeApplication.tryLogin())
         {
-            deleteAssociation(false);
-            int resp=JOptionPane.showConfirmDialog(null, "El contenido no ha sido publicado.\r\n¿Desea publicar el contenido?","Mostrar información del contenido",JOptionPane.YES_NO_OPTION);
-            if(resp==JOptionPane.YES_OPTION)
+            Map<String, String> properties = this.getCustomProperties();
+            String contentId = properties.get(CONTENT_ID_NAME);
+            String rep = properties.get(WORKSPACE_ID_NAME);
+            if (contentId == null || rep == null)
             {
-                saveToSite();
+                deleteAssociation(false);
+                int resp = JOptionPane.showConfirmDialog(null, "El contenido no ha sido publicado.\r\n¿Desea publicar el contenido?", "Mostrar información del contenido", JOptionPane.YES_NO_OPTION);
+                if (resp == JOptionPane.YES_OPTION)
+                {
+                    saveToSite();
+                }
             }
-        }
-        properties = this.getCustomProperties();
-        contentId = properties.get(CONTENT_ID_NAME);
-        rep = properties.get(WORKSPACE_ID_NAME);
-        if(contentId!=null && rep !=null)
-        {
-            DialogContentInformation dialog = new DialogContentInformation(new javax.swing.JFrame(), true, contentId, rep, this);
-            dialog.setLocationRelativeTo(null);
-            dialog.setVisible(true);
-        }
-        else
-        {
-            JOptionPane.showMessageDialog(null, "El contenido no ha sido publicado.","Mostrar información del contenido",JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+            properties = this.getCustomProperties();
+            contentId = properties.get(CONTENT_ID_NAME);
+            rep = properties.get(WORKSPACE_ID_NAME);
+            if (contentId != null && rep != null)
+            {
+                DialogContentInformation dialog = new DialogContentInformation(new javax.swing.JFrame(), true, contentId, rep, this);
+                dialog.setLocationRelativeTo(null);
+                dialog.setVisible(true);
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "El contenido no ha sido publicado.", "Mostrar información del contenido", JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 
@@ -585,7 +588,7 @@ public abstract class OfficeDocument
             PublishContentToWebPageResultProducer resultProducer = new PublishContentToWebPageResultProducer(contentID, repositoryName);
             WizardPage[] clazz = new WizardPage[]
             {
-                new TitleAndDescription(false), new SelectPage(), new PublishVersion(contentID, repositoryName),new ViewProperties(repositoryName, contentID)
+                new TitleAndDescription(false), new SelectPage(), new PublishVersion(contentID, repositoryName), new ViewProperties(repositoryName, contentID)
             };
             Wizard wiz = WizardPage.createWizard("Asistente de publicación de contenido en página web", clazz, resultProducer);
             wiz.show();
@@ -734,7 +737,7 @@ public abstract class OfficeDocument
         }
         return result;
     }
-    
+
     private void updateContent() throws Exception
     {
         String workspace = this.getCustomProperties().get(WORKSPACE_ID_NAME);
