@@ -112,5 +112,9 @@ public interface IOfficeDocument
 
     @XmlRpcMethod(methodName = "OfficeDocument.activeCalendar")
     public void activeCalendar(PortletInfo portletInfo,CalendarInfo calendarInfo,boolean active) throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeDocument.updatePorlet")
+    public void updatePorlet(PortletInfo portletInfo) throws Exception;
 }
+
 
