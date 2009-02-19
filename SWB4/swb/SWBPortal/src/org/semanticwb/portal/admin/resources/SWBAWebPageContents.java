@@ -236,7 +236,7 @@ public class SWBAWebPageContents extends GenericResource {
                 urlpre.setParameter("preview", "true");
                 out.println("<a href=\"#\" alt=\"Preview\" onclick=\"submitUrl('" + urlpre + "',this); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/SEARCH.png\" border=0></a>");
 
-                out.println("<a href=\"#\"  alt=\"Admin\" onclick=\"addNewTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + sobj.getDisplayName() + "');adminTab('"+sobj.getURI()+"');return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/Portlet.png\" border=0></a>");
+                out.println("<a href=\"#\"  alt=\"Admin\" onclick=\"selectTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + sobj.getDisplayName() + "','bh_AdminPorltet');return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/Portlet.png\" border=0></a>");
                 out.println("</td>");
                 out.println("<td>");
                 SWBResourceURL urlchoose = paramRequest.getRenderUrl();
