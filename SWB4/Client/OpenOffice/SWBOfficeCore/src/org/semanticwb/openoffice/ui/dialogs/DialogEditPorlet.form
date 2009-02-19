@@ -221,7 +221,7 @@
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel8">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Versi&#xf3;n publicada:"/>
+                <Property name="text" type="java.lang.String" value="Versi&#xf3;n a publicar:"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JComboBox" name="jComboBoxVersion">
