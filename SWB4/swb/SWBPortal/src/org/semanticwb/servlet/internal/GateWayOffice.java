@@ -27,9 +27,7 @@ public class GateWayOffice implements InternalServlet
 {
 
     private static final String title = "Gateway de Comunicación con Office INFOTEC Semantic WebBuilder 4";
-    static Logger log = SWBUtils.getLogger(GateWayOffice.class);
-    private static String REALM = "Secure Area";
-    private static String PREFIX_BASIC = "Basic ";
+    static Logger log = SWBUtils.getLogger(GateWayOffice.class);    
     private OfficeServlet officeServlet = new OfficeServlet()
     {
 
