@@ -146,7 +146,7 @@ public class Login implements InternalServlet {
              //   System.out.println(((User)lc.getSubject().getPrincipals().iterator().next()).isSigned());
             } catch (LoginException ex)
             {
-                log.error("Can't log User", ex);
+                log.debug("Can't log User", ex);
                 doResponse(request, response, dparams, "User non existent", authMethod);
                 return;
             }
