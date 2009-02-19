@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.security.auth.Subject;
+import javax.security.auth.login.LoginContext;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -16,8 +18,12 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.UserRepository;
 import org.semanticwb.office.comunication.OfficeDocument;
 import org.semanticwb.office.comunication.OfficeServlet;
+import org.semanticwb.security.auth.SWB4CallbackHandlerGateWayOffice;
+import org.semanticwb.security.auth.SWB4CallbackHandlerLoginPasswordImp;
 
 /**
  *
@@ -27,13 +33,27 @@ public class GateWayOffice implements InternalServlet
 {
 
     private static final String title = "Gateway de Comunicación con Office INFOTEC Semantic WebBuilder 4";
-    static Logger log = SWBUtils.getLogger(GateWayOffice.class);    
+    static Logger log = SWBUtils.getLogger(GateWayOffice.class);
     private OfficeServlet officeServlet = new OfficeServlet()
     {
 
         public boolean isAuthenticate(String pUserName, String pPassword)
         {
-            //Todo:
+            UserRepository ur = SWBContext.getAdminWebSite().getUserRepository();
+            String context = ur.getProperty(UserRepository.SWBUR_LoginContext);
+            Subject subject = new Subject();
+            LoginContext lc;
+            try
+            {
+                SWB4CallbackHandlerGateWayOffice callbackHandler = new SWB4CallbackHandlerGateWayOffice(pUserName,pPassword);
+                lc = new LoginContext(context, subject, callbackHandler);
+                lc.login();
+                return true;
+            }
+            catch (Exception e)
+            {
+                log.error("Can't log User", e);
+            }
             return true;
         }
     };
@@ -42,22 +62,6 @@ public class GateWayOffice implements InternalServlet
     {
         log.event("Initializing GatewayOffice...");
         officeServlet.init();
-    }
-
-    private static String getPassword(String userpassDecoded) throws IOException
-    {
-        String password = "";
-        String[] values = userpassDecoded.split(":");
-        password = values[1];
-        return password;
-    }
-
-    private static String getUserName(String userpassDecoded) throws IOException
-    {
-        String userName = "";
-        String[] values = userpassDecoded.split(":");
-        userName = values[0];
-        return userName;
     }
 
     public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException, ServletException
@@ -74,7 +78,7 @@ public class GateWayOffice implements InternalServlet
             String versionName = request.getParameter("versionName");
             String repositoryName = request.getParameter("repositoryName");
             String dir = request.getParameter("name");
-            if (contentId == null || versionName == null || repositoryName == null || dir==null)
+            if (contentId == null || versionName == null || repositoryName == null || dir == null)
             {
                 PrintWriter out = response.getWriter();
                 out.println("<html>");
