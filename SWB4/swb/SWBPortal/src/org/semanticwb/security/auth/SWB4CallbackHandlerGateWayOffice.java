@@ -9,7 +9,9 @@ import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.NameCallback;
 import javax.security.auth.callback.PasswordCallback;
+import javax.security.auth.callback.TextInputCallback;
 import javax.security.auth.callback.UnsupportedCallbackException;
+import org.semanticwb.model.SWBContext;
 
 /**
  *
@@ -40,6 +42,11 @@ public final class SWB4CallbackHandlerGateWayOffice implements CallbackHandler
             {
                 PasswordCallback passwordCallback = (PasswordCallback) callbacks[i];
                 passwordCallback.setPassword(password.toCharArray());
+            }
+            else if (callbacks[i] instanceof TextInputCallback)
+            {
+                TextInputCallback textInputCallback = (TextInputCallback) callbacks[i];
+                textInputCallback.setText(SWBContext.getAdminWebSite().getId());
             }
         }
     }
