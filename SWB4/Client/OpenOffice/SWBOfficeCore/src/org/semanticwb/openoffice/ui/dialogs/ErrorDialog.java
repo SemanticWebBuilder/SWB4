@@ -126,8 +126,7 @@ public class ErrorDialog extends javax.swing.JDialog {
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("WB Error");
-        setMinimumSize(new java.awt.Dimension(500, 356));
+        setTitle("Informe de error");
         setResizable(false);
 
         jTextArea1.setColumns(20);
@@ -147,7 +146,7 @@ public class ErrorDialog extends javax.swing.JDialog {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(195, 195, 195)
-                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE)
                 .addGap(177, 177, 177))
         );
         jPanel1Layout.setVerticalGroup(
