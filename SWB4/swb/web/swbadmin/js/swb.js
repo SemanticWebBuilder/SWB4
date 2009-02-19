@@ -302,6 +302,85 @@
           }
       }
 
+        function selectTab(id,url,title,tabName)
+        {
+
+          var objid=id+CONST_TAB;
+          var newTab = dijit.byId(objid);
+          if(!url)url=context+"/swbadmin/jsp/objectTab.jsp";
+          if(newTab==null)
+          {
+              newTab = new dojox.layout.ContentPane(
+              {
+                  id: objid,
+                  closeable:'true',
+                  onClose: function()
+                  {
+                      var ret=true;
+                      //ret=confirm("Do you really want to Close this?");
+                      if(ret)
+                      {
+                          var d=dijit.byId(objid+"2");
+                          if(d)
+                          {
+                              var arr=d.getChildren();
+                              for (var n = 0; n < arr.length; n++)
+                              {
+                                  arr[n].attr('content',null);
+                              }
+                          }
+                      }
+                      return ret;
+                  },
+                  onDownloadEnd: function()
+                  {
+                      var ret=true;
+                      //ret=confirm("Do you really want to Close this?");
+                      if(ret)
+                      {
+                          var d=dijit.byId(objid+"2");
+                          if(d)
+                          {
+                              var arr=d.getChildren();
+                              for (var n = 0; n < arr.length; n++)
+                              {
+                                  if(arr[n].id==(id+"/"+tabName))
+                                  {
+                                       d.selectChild(arr[n]);
+                                       break;
+                                  }
+                              }
+                          }
+                      }
+                      return ret;
+                  },
+                  title: title,
+                  href: url+"?suri="+encodeURIComponent(id)
+              });
+              newTab.closable=true;
+              tabs.addChild(newTab);
+              tabs.selectChild(newTab);
+          }else
+          {
+              tabs.selectChild(newTab);
+              objid=id+CONST_TAB+"2";
+              var tab = dijit.byId(objid);
+              if(tab)
+              {
+                  var arr=tab.getChildren();
+                  //alert(arr.length);
+                  for (var n = 0; n < arr.length; n++)
+                  {
+                      if(arr[n].id==(id+"/"+tabName))
+                      {
+                           tab.selectChild(arr[n]);
+                           break;
+                      }
+                  }
+              }
+          }
+        }
+
       function addNewTab(id, url, title)
       {
           var objid=id+CONST_TAB;
