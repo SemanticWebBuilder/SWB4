@@ -366,7 +366,7 @@
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/org/semanticwb/openoffice/ui/icons/add.png"/>
                     </Property>
-                    <Property name="toolTipText" type="java.lang.String" value="Agregar"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Agregar una calendarizacin para la publicaci&#xf3;n actual"/>
                     <Property name="focusable" type="boolean" value="false"/>
                     <Property name="horizontalTextPosition" type="int" value="0"/>
                     <Property name="verticalTextPosition" type="int" value="3"/>
@@ -382,7 +382,7 @@
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/org/semanticwb/openoffice/ui/icons/edit.png"/>
                     </Property>
-                    <Property name="toolTipText" type="java.lang.String" value="Editar"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Editar la calendarizaci&#xf3;n seleccionada"/>
                     <Property name="enabled" type="boolean" value="false"/>
                     <Property name="focusable" type="boolean" value="false"/>
                     <Property name="horizontalTextPosition" type="int" value="0"/>
@@ -399,7 +399,7 @@
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/org/semanticwb/openoffice/ui/icons/delete.png"/>
                     </Property>
-                    <Property name="toolTipText" type="java.lang.String" value="Eliminar"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Eliminar la calendarizaci&#xf3;n seleccionada"/>
                     <Property name="enabled" type="boolean" value="false"/>
                     <Property name="focusable" type="boolean" value="false"/>
                     <Property name="horizontalTextPosition" type="int" value="0"/>
