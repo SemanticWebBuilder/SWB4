@@ -737,6 +737,7 @@ public class DialogRegularPeriods extends java.awt.Dialog
         jLabel1.setText("El:");
 
         mweek.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Primer", "Segundo", "Tercer", "Cuarto", "Último" }));
+        mweek.setToolTipText("Selecione la semana");
 
         mday2.setText("Lu");
 
@@ -876,6 +877,7 @@ public class DialogRegularPeriods extends java.awt.Dialog
         jLabel7.setText("El:");
 
         yweek.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Primer", "Segundo", "Tercer", "Cuarto", "Último" }));
+        yweek.setToolTipText("Seleccione la semana");
 
         yday2.setText("Lu");
 

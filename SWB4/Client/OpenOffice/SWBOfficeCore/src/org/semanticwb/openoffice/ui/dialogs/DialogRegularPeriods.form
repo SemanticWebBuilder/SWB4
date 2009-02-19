@@ -367,6 +367,7 @@
                             <StringItem index="4" value="&#xda;ltimo"/>
                           </StringArray>
                         </Property>
+                        <Property name="toolTipText" type="java.lang.String" value="Selecione la semana"/>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JCheckBox" name="mday2">
@@ -660,6 +661,7 @@
                             <StringItem index="4" value="&#xda;ltimo"/>
                           </StringArray>
                         </Property>
+                        <Property name="toolTipText" type="java.lang.String" value="Seleccione la semana"/>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JCheckBox" name="yday2">
