@@ -472,9 +472,11 @@ public class DialogContentInformation extends javax.swing.JDialog
             }
         });
         jTablePages.setToolTipText("Puede editar la versión selecionando la columna correspondiente");
+        jTablePages.setColumnSelectionAllowed(true);
         jTablePages.setRowHeight(20);
         jTablePages.setRowSelectionAllowed(false);
         jTablePages.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jTablePages.getTableHeader().setReorderingAllowed(false);
         jTablePages.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTablePagesKeyReleased(evt);
@@ -512,8 +514,10 @@ public class DialogContentInformation extends javax.swing.JDialog
                 return canEdit [columnIndex];
             }
         });
+        jTableSummary1.setColumnSelectionAllowed(true);
         jTableSummary1.setFocusable(false);
         jTableSummary1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jTableSummary1.getTableHeader().setReorderingAllowed(false);
         jScrollPane3.setViewportView(jTableSummary1);
         jTableSummary1.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
