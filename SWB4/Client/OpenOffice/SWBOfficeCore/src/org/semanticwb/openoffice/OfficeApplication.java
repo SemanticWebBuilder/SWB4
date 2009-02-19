@@ -269,15 +269,18 @@ public abstract class OfficeApplication
 
     public static final void createPage()
     {
-        CreatePageResultProducer resultProducer = new CreatePageResultProducer();
-        SelectWebPageID selectWebPageID = new SelectWebPageID();
-        WizardPage[] clazz = new WizardPage[]
+        if (OfficeApplication.tryLogin())
         {
-            new SelectPage(), new TitleAndDescription(false), selectWebPageID
-        };
-        Wizard wiz = WizardPage.createWizard("Asistente de creación de página", clazz, resultProducer);
-        wiz.addWizardObserver(new CreatePageObserver(selectWebPageID));
-        wiz.show();
+            CreatePageResultProducer resultProducer = new CreatePageResultProducer();
+            SelectWebPageID selectWebPageID = new SelectWebPageID();
+            WizardPage[] clazz = new WizardPage[]
+            {
+                new SelectPage(), new TitleAndDescription(false), selectWebPageID
+            };
+            Wizard wiz = WizardPage.createWizard("Asistente de creación de página", clazz, resultProducer);
+            wiz.addWizardObserver(new CreatePageObserver(selectWebPageID));
+            wiz.show();
+        }
     }
 
     public static final void createPage(WebPageInfo parent)
@@ -395,7 +398,15 @@ public abstract class OfficeApplication
             }
             else
             {
-                tryLogin = true;
+                try
+                {
+                    OfficeApplication.getOfficeApplicationProxy().isValidVersion(IOpenOfficeApplication.version);
+                    tryLogin = true;
+                }
+                catch (Exception e)
+                {
+                    tryLogin = false;
+                }
             }
         }
         else
