@@ -651,7 +651,7 @@ public class DialogEditPorlet extends javax.swing.JDialog
         jToolBar1.setRollover(true);
 
         jButtonAddCalendar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/add.png"))); // NOI18N
-        jButtonAddCalendar.setToolTipText("Agregar");
+        jButtonAddCalendar.setToolTipText("Agregar una calendarizacin para la publicación actual");
         jButtonAddCalendar.setFocusable(false);
         jButtonAddCalendar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonAddCalendar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -664,7 +664,7 @@ public class DialogEditPorlet extends javax.swing.JDialog
         jToolBar1.add(jSeparator1);
 
         jButtonEditEcheduler.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/edit.png"))); // NOI18N
-        jButtonEditEcheduler.setToolTipText("Editar");
+        jButtonEditEcheduler.setToolTipText("Editar la calendarización seleccionada");
         jButtonEditEcheduler.setEnabled(false);
         jButtonEditEcheduler.setFocusable(false);
         jButtonEditEcheduler.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -678,7 +678,7 @@ public class DialogEditPorlet extends javax.swing.JDialog
         jToolBar1.add(jSeparator2);
 
         jButtonDeleteScheduler.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/delete.png"))); // NOI18N
-        jButtonDeleteScheduler.setToolTipText("Eliminar");
+        jButtonDeleteScheduler.setToolTipText("Eliminar la calendarización seleccionada");
         jButtonDeleteScheduler.setEnabled(false);
         jButtonDeleteScheduler.setFocusable(false);
         jButtonDeleteScheduler.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
