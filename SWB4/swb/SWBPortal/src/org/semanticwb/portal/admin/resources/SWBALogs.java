@@ -800,12 +800,7 @@ public class SWBALogs extends GenericResource {
         }
         String pModelId = so.getModel().getName();
 
-        Document dom = null;
-        try {
-            dom = SWBUtils.XML.getNewDocument();
-        } catch (SWBException ex) {
-            java.util.logging.Logger.getLogger(SWBALogs.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        Document dom = SWBUtils.XML.getNewDocument();
         String actionRow = "1";
         String descriptionRow = "1";
         String dateRow = "1";
