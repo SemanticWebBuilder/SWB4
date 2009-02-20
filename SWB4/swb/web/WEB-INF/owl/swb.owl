@@ -1234,6 +1234,22 @@
     >true</swb:herarquicalRelation>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="webPage">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_webPage">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >30</swb:index>
+        <rdfs:label xml:lang="en">WebPage</rdfs:label>
+        <rdfs:label xml:lang="es">Página Web</rdfs:label>
+        <swbxf:formElement>
+          <swbxf:SelectTree rdf:ID="SelectTree_Model">
+            <swbxf:so_globalScope rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >false</swbxf:so_globalScope>
+            <swbxf:so_blankSuport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swbxf:so_blankSuport>
+          </swbxf:SelectTree>
+        </swbxf:formElement>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
     <rdfs:range rdf:resource="#WebPage"/>
     <rdfs:domain rdf:resource="#WebPageable"/>
   </owl:ObjectProperty>
@@ -2264,6 +2280,12 @@
     >view</swb:formMode>
     <swb:formView rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#vi_info"/>
   </swbxf:FormViewRef>
+  <swb:FormElement rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectTree">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectOne"/>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model.SelectTree</swb:className>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:FormElement>
   <swbxf:PropertyGroup rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#pg_General">
     <rdfs:label xml:lang="en">General Data</rdfs:label>
     <rdfs:label xml:lang="es">Datos Generales</rdfs:label>
