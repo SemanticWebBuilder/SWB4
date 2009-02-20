@@ -1,12 +1,12 @@
 package org.semanticwb.model.base;
 
 
-public class PortletFilterBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.XMLable
+public class PortletFilterBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.XMLable,org.semanticwb.model.Traceable
 {
+    public static final org.semanticwb.platform.SemanticProperty swb_xml=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#xml");
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
     public static final org.semanticwb.platform.SemanticProperty swb_modifiedBy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy");
-    public static final org.semanticwb.platform.SemanticProperty swb_xml=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#xml");
     public static final org.semanticwb.platform.SemanticProperty swb_updated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#updated");
     public static final org.semanticwb.platform.SemanticProperty swb_creator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#creator");
     public static final org.semanticwb.platform.SemanticClass swb_PortletFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PortletFilter");
@@ -55,6 +55,16 @@ public class PortletFilterBase extends org.semanticwb.model.SWBClass implements 
         return (getPortletFilter(id, model)!=null);
     }
 
+    public String getXml()
+    {
+        return getSemanticObject().getProperty(swb_xml);
+    }
+
+    public void setXml(String xml)
+    {
+        getSemanticObject().setProperty(swb_xml, xml);
+    }
+
     public java.util.Date getCreated()
     {
         return getSemanticObject().getDateProperty(swb_created);
@@ -84,16 +94,6 @@ public class PortletFilterBase extends org.semanticwb.model.SWBClass implements 
              ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
-    }
-
-    public String getXml()
-    {
-        return getSemanticObject().getProperty(swb_xml);
-    }
-
-    public void setXml(String xml)
-    {
-        getSemanticObject().setProperty(swb_xml, xml);
     }
 
     public java.util.Date getUpdated()

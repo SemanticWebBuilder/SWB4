@@ -3,12 +3,12 @@ package org.semanticwb.repository.base;
 
 public class BaseNodeBase extends org.semanticwb.model.base.GenericObjectBase 
 {
-    public static final org.semanticwb.platform.SemanticClass nt_BaseNode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#base");
-    public static final org.semanticwb.platform.SemanticProperty swbrep_parentNode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/repository#parentNode");
     public static final org.semanticwb.platform.SemanticProperty jcr_primaryType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#primaryType");
     public static final org.semanticwb.platform.SemanticProperty swbrep_path=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/repository#path");
-    public static final org.semanticwb.platform.SemanticProperty swbrep_name=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/repository#name");
+    public static final org.semanticwb.platform.SemanticClass nt_BaseNode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#base");
     public static final org.semanticwb.platform.SemanticProperty swbrep_hasNodes=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/repository#hasNodes");
+    public static final org.semanticwb.platform.SemanticProperty swbrep_parentNode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/repository#parentNode");
+    public static final org.semanticwb.platform.SemanticProperty swbrep_name=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/repository#name");
     public static final org.semanticwb.platform.SemanticProperty jcr_mixinTypes=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#mixinTypes");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#base");
 
@@ -49,27 +49,6 @@ public class BaseNodeBase extends org.semanticwb.model.base.GenericObjectBase
         return (getBaseNode(id, model)!=null);
     }
 
-    public void setParent(org.semanticwb.repository.BaseNode basenode)
-    {
-        getSemanticObject().setObjectProperty(swbrep_parentNode, basenode.getSemanticObject());
-    }
-
-    public void removeParent()
-    {
-        getSemanticObject().removeProperty(swbrep_parentNode);
-    }
-
-    public org.semanticwb.repository.BaseNode getParent()
-    {
-         org.semanticwb.repository.BaseNode ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swbrep_parentNode);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.repository.BaseNode)obj.getSemanticClass().newGenericInstance(obj);
-         }
-         return ret;
-    }
-
     public String getPrimaryType()
     {
         return getSemanticObject().getProperty(jcr_primaryType);
@@ -88,16 +67,6 @@ public class BaseNodeBase extends org.semanticwb.model.base.GenericObjectBase
     public void setPath(String path)
     {
         getSemanticObject().setProperty(swbrep_path, path);
-    }
-
-    public String getName()
-    {
-        return getSemanticObject().getProperty(swbrep_name);
-    }
-
-    public void setName(String name)
-    {
-        getSemanticObject().setProperty(swbrep_name, name);
     }
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.repository.BaseNode> listNodes()
@@ -119,6 +88,37 @@ public class BaseNodeBase extends org.semanticwb.model.base.GenericObjectBase
              ret=(org.semanticwb.repository.BaseNode)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
+    }
+
+    public void setParent(org.semanticwb.repository.BaseNode basenode)
+    {
+        getSemanticObject().setObjectProperty(swbrep_parentNode, basenode.getSemanticObject());
+    }
+
+    public void removeParent()
+    {
+        getSemanticObject().removeProperty(swbrep_parentNode);
+    }
+
+    public org.semanticwb.repository.BaseNode getParent()
+    {
+         org.semanticwb.repository.BaseNode ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swbrep_parentNode);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.repository.BaseNode)obj.getSemanticClass().newGenericInstance(obj);
+         }
+         return ret;
+    }
+
+    public String getName()
+    {
+        return getSemanticObject().getProperty(swbrep_name);
+    }
+
+    public void setName(String name)
+    {
+        getSemanticObject().setProperty(swbrep_name, name);
     }
 
     public java.util.Iterator<String> listMixinTypes()

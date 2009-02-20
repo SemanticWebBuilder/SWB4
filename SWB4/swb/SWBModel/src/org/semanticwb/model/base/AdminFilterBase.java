@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class AdminFilterBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.XMLable,org.semanticwb.model.Descriptiveable
+public class AdminFilterBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.XMLable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_xml=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#xml");
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
@@ -39,6 +39,12 @@ public class AdminFilterBase extends org.semanticwb.model.SWBClass implements or
     public static org.semanticwb.model.AdminFilter createAdminFilter(String id, org.semanticwb.model.SWBModel model)
     {
         return (org.semanticwb.model.AdminFilter)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+    }
+
+    public static org.semanticwb.model.AdminFilter createAdminFilter(org.semanticwb.model.SWBModel model)
+    {
+        long id=model.getSemanticObject().getModel().getCounter(sclass);
+        return org.semanticwb.model.AdminFilter.createAdminFilter(String.valueOf(id), model);
     }
 
     public static void removeAdminFilter(String id, org.semanticwb.model.SWBModel model)
@@ -171,5 +177,10 @@ public class AdminFilterBase extends org.semanticwb.model.SWBClass implements or
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(swb_description, description, lang);
+    }
+
+    public org.semanticwb.model.WebSite getWebSite()
+    {
+        return new org.semanticwb.model.WebSite(getSemanticObject().getModel().getModelObject());
     }
 }

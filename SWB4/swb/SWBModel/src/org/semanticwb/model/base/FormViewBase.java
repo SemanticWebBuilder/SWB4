@@ -3,12 +3,12 @@ package org.semanticwb.model.base;
 
 public class FormViewBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable
 {
+    public static final org.semanticwb.platform.SemanticClass swbxf_FormViewRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#FormViewRef");
+    public static final org.semanticwb.platform.SemanticProperty swb_hasFormViewRefInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasFormViewRefInv");
     public static final org.semanticwb.platform.SemanticProperty swb_title=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#title");
     public static final org.semanticwb.platform.SemanticClass rdf_Property=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.w3.org/1999/02/22-rdf-syntax-ns#Property");
     public static final org.semanticwb.platform.SemanticProperty swbxf_hasCreateProperty=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#hasCreateProperty");
     public static final org.semanticwb.platform.SemanticProperty swbxf_hasViewProperty=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#hasViewProperty");
-    public static final org.semanticwb.platform.SemanticClass swbxf_FormViewRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#FormViewRef");
-    public static final org.semanticwb.platform.SemanticProperty swb_hasFormViewRefInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasFormViewRefInv");
     public static final org.semanticwb.platform.SemanticProperty swbxf_hasEditProperty=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#hasEditProperty");
     public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
     public static final org.semanticwb.platform.SemanticClass swbxf_FormView=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#FormView");
@@ -49,6 +49,27 @@ public class FormViewBase extends org.semanticwb.model.SWBClass implements org.s
     public static boolean hasFormView(String id, org.semanticwb.model.SWBModel model)
     {
         return (getFormView(id, model)!=null);
+    }
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.FormViewRef> listFormViewRefInvs()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.FormViewRef>(org.semanticwb.model.FormViewRef.class, getSemanticObject().listObjectProperties(swb_hasFormViewRefInv));
+    }
+
+    public boolean hasFormViewRefInv(org.semanticwb.model.FormViewRef formviewref)
+    {
+        if(formviewref==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasFormViewRefInv,formviewref.getSemanticObject());
+    }
+
+    public org.semanticwb.model.FormViewRef getFormViewRefInv()
+    {
+         org.semanticwb.model.FormViewRef ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasFormViewRefInv);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.FormViewRef)obj.getSemanticClass().newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public String getTitle()
@@ -129,27 +150,6 @@ public class FormViewBase extends org.semanticwb.model.SWBClass implements org.s
     {
          org.semanticwb.platform.SemanticObject ret=null;
          ret=getSemanticObject().getObjectProperty(swbxf_hasViewProperty);
-         return ret;
-    }
-
-    public org.semanticwb.model.GenericIterator<org.semanticwb.model.FormViewRef> listFormViewRefInvs()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.FormViewRef>(org.semanticwb.model.FormViewRef.class, getSemanticObject().listObjectProperties(swb_hasFormViewRefInv));
-    }
-
-    public boolean hasFormViewRefInv(org.semanticwb.model.FormViewRef formviewref)
-    {
-        if(formviewref==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasFormViewRefInv,formviewref.getSemanticObject());
-    }
-
-    public org.semanticwb.model.FormViewRef getFormViewRefInv()
-    {
-         org.semanticwb.model.FormViewRef ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasFormViewRefInv);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.FormViewRef)obj.getSemanticClass().newGenericInstance(obj);
-         }
          return ret;
     }
 
