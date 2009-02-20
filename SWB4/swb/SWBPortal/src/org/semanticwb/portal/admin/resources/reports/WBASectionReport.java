@@ -115,8 +115,9 @@ public class WBASectionReport extends GenericResource {
         
         String webSiteId = request.getParameter("site");
         System.out.println("websiteid= "+webSiteId);
-        
-        out.println(tree.render(webSiteId, request, response, paramsRequest.getUser(), paramsRequest.getTopic(), paramsRequest.getArguments(),paramsRequest.getTopic().getWebSite().getHomePage()));
+
+        //TODO: No compila esta linea
+        //out.println(tree.render(webSiteId, request, response, paramsRequest.getUser(), paramsRequest.getTopic(), paramsRequest.getArguments(),paramsRequest.getTopic().getWebSite().getHomePage()));
                 
         /*
         WebSite webSite = SWBContext.getWebSite(webSiteId);        
