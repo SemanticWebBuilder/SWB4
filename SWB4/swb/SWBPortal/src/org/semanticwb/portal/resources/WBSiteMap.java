@@ -51,7 +51,6 @@ public class WBSiteMap extends GenericAdmResource
 {
     private static Logger log = SWBUtils.getLogger(WBSiteMap.class);
     
-    javax.xml.transform.Templates tpl; 
     String webWorkPath;  
     int maxLevel;
     String path = SWBPlatform.getContextPath() +"/swbadmin/xsl/WBSiteMap/";
