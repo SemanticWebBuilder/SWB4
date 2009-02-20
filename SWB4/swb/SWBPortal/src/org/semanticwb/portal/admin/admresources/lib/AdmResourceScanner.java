@@ -86,12 +86,7 @@ public class AdmResourceScanner
             log.error("Admresource XmltoDom()", e);
         }
         
-        try{ this.outdom=SWBUtils.XML.getNewDocument(); }
-        catch(SWBException e)
-        {
-            bError=true;
-            log.error("Admresource getNewDocument()", e);            
-        }
+        this.outdom=SWBUtils.XML.getNewDocument();
     }
     
     /** Create new AdmResourceScanner with org.w3c.dom.Document.
@@ -99,8 +94,7 @@ public class AdmResourceScanner
      */
     public AdmResourceScanner(org.w3c.dom.Document indocument) {
         this.indom=indocument;
-        try{outdom=SWBUtils.XML.getNewDocument();}
-        catch(SWBException e){bError=true;}
+        outdom=SWBUtils.XML.getNewDocument();
     }
    
     /** Scan through org.w3c.dom.Document document. */
