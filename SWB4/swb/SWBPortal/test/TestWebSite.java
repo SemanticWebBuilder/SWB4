@@ -9,12 +9,10 @@ import org.junit.*;
  */
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
-import org.semanticwb.model.Activity;
 import org.semanticwb.model.Dns;
 import org.semanticwb.model.Language;
 import org.semanticwb.model.PortletType;
 import org.semanticwb.model.Portlet;
-import org.semanticwb.model.Project;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.Template;
 import org.semanticwb.model.TemplateGroup;
@@ -712,19 +710,6 @@ public class TestWebSite {
 
     }
       
-    @Test
-    public void setProject()
-    {
-        WebSite site=SWBContext.getWebSite("sep");
-        Project p=site.createProject("proyecto1");
-        p.setTitle("Proyecto 1");
-
-        Activity act=site.createActivity("actividad1");
-        p.addActivity(act);
-
-        p.addParticipant(SWBContext.getDefaultRepository().getUserByLogin("jei"));
-    }
-
     //@Test
     public void write()
     {
