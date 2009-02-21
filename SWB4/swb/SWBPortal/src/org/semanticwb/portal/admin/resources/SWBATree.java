@@ -187,77 +187,90 @@ public class SWBATree extends GenericResource
             icon.setAttribute("path","images/icon-servera.gif");
             icon=addNode("icon","global","Global",icons);
             icon.setAttribute("path","images/icon-servera.gif");
-//            icon=addNode("icon","devices","Devices",icons);
-//            icon.setAttribute("path","images/f_dispositivos.gif");
-//            icon=addNode("icon","device","Device",icons);
-//            icon.setAttribute("path","images/i_dispositivo.gif");
-//            icon=addNode("icon","dnss","DNS",icons);
-//            icon.setAttribute("path","images/f_dns.gif");
-//            icon=addNode("icon","dns","DNS",icons);
-//            icon.setAttribute("path","images/i_dns.gif");
-//            icon=addNode("icon","resources","Resources",icons);
-//            icon.setAttribute("path","images/f_estrategias.gif");
-//            icon=addNode("icon","resourcetype","ResourceType",icons);
-//            icon.setAttribute("path","images/f_resourcetype.gif");
-//            icon=addNode("icon","sysresources","SysResources",icons);
-//            icon.setAttribute("path","images/f_sistema.gif");
-//            icon=addNode("icon","resourcer","Resource",icons);
-//            icon.setAttribute("path","images/i_recurso_rojo.gif");
-//            icon=addNode("icon","resourcev","Resource",icons);
-//            icon.setAttribute("path","images/i_recurso_verde.gif");
+            ///////
+            icon=addNode("icon","devices","Devices",icons);
+            icon.setAttribute("path","images/f_dispositivos.gif");
+            icon=addNode("icon","device","Device",icons);
+            icon.setAttribute("path","images/i_dispositivo.gif");
+            icon=addNode("icon","dnss","DNS",icons);
+            icon.setAttribute("path","images/f_dns.gif");
+            icon=addNode("icon","dns","DNS",icons);
+            icon.setAttribute("path","images/i_dns.gif");
+            icon=addNode("icon","resources","Resources",icons);
+            icon.setAttribute("path","images/f_estrategias.gif");
+            icon=addNode("icon","resourcetype","ResourceType",icons);
+            icon.setAttribute("path","images/f_resourcetype.gif");
+            icon=addNode("icon","sysresources","SysResources",icons);
+            icon.setAttribute("path","images/f_sistema.gif");
+            icon=addNode("icon","resourcer","Resource",icons);
+            icon.setAttribute("path","images/i_recurso_rojo.gif");
+            icon=addNode("icon","resourcev","Resource",icons);
+            icon.setAttribute("path","images/i_recurso_verde.gif");
+
+            ////////////////////
+
             icon=addNode("icon","flows","Flows",icons);
             icon.setAttribute("path","images/f_flujos.gif");
             icon=addNode("icon","flow","Flow",icons);
             icon.setAttribute("path","images/i_flujo.gif");
-//            icon=addNode("icon","languages","Languages",icons);
-//            icon.setAttribute("path","images/f_idioma.gif");
-//            icon=addNode("icon","language","Language",icons);
-//            icon.setAttribute("path","images/i_idioma.gif");
-//            icon=addNode("icon","metadatas","Metadatas",icons);
-//            icon.setAttribute("path","images/f_metadatos.gif");
-//            icon=addNode("icon","metadata","Metadata",icons);
-//            icon.setAttribute("path","images/i_metadata.gif");
-//            icon=addNode("icon","camps","Camps",icons);
-//            icon.setAttribute("path","images/f_camp.gif");
-//            icon=addNode("icon","campv","Camp",icons);
-//            icon.setAttribute("path","images/i_camp.gif");
-//            icon=addNode("icon","campr","Camp",icons);
-//            icon.setAttribute("path","images/i_camp_r.gif");
-//            icon=addNode("icon","templates","Templates",icons);
-//            icon.setAttribute("path","images/f_plantillas.gif");
-//            icon=addNode("icon","templater","Template",icons);
-//            icon.setAttribute("path","images/i_plantilla_rojo.gif");
-//            icon=addNode("icon","templatev","Template",icons);
-//            icon.setAttribute("path","images/i_plantilla_verde.gif");
-//            icon=addNode("icon","rules","Rules",icons);
-//            icon.setAttribute("path","images/f_reglas.gif");
-//            icon=addNode("icon","rule","Rule",icons);
-//            icon.setAttribute("path","images/i_regla.gif");
-//            icon=addNode("icon","userreps","UserReps",icons);
-//            icon.setAttribute("path","images/f_usuarios.gif");
-//            icon=addNode("icon","userrep","UserRep",icons);
-//            icon.setAttribute("path","images/i_repositoriousuarios.gif");
-//            icon=addNode("icon","role","Role",icons);
-//            icon.setAttribute("path","images/i_rol.gif");
+
+            /////////////////
+
+            icon=addNode("icon","languages","Languages",icons);
+            icon.setAttribute("path","images/f_idioma.gif");
+            icon=addNode("icon","language","Language",icons);
+            icon.setAttribute("path","images/i_idioma.gif");
+            icon=addNode("icon","metadatas","Metadatas",icons);
+            icon.setAttribute("path","images/f_metadatos.gif");
+            icon=addNode("icon","metadata","Metadata",icons);
+            icon.setAttribute("path","images/i_metadata.gif");
+            icon=addNode("icon","camps","Camps",icons);
+            icon.setAttribute("path","images/f_camp.gif");
+            icon=addNode("icon","campv","Camp",icons);
+            icon.setAttribute("path","images/i_camp.gif");
+            icon=addNode("icon","campr","Camp",icons);
+            icon.setAttribute("path","images/i_camp_r.gif");
+            icon=addNode("icon","templates","Templates",icons);
+            icon.setAttribute("path","images/f_plantillas.gif");
+            icon=addNode("icon","templater","Template",icons);
+            icon.setAttribute("path","images/i_plantilla_rojo.gif");
+            icon=addNode("icon","templatev","Template",icons);
+            icon.setAttribute("path","images/i_plantilla_verde.gif");
+            icon=addNode("icon","rules","Rules",icons);
+            icon.setAttribute("path","images/f_reglas.gif");
+            icon=addNode("icon","rule","Rule",icons);
+            icon.setAttribute("path","images/i_regla.gif");
+            icon=addNode("icon","userreps","UserReps",icons);
+            icon.setAttribute("path","images/f_usuarios.gif");
+            icon=addNode("icon","userrep","UserRep",icons);
+            icon.setAttribute("path","images/i_repositoriousuarios.gif");
+            icon=addNode("icon","role","Role",icons);
+            icon.setAttribute("path","images/i_rol.gif");
+
+            ///////////////////////////
+
             //menus
             icon=addNode("icon","trans","Transparent",icons);
             icon.setAttribute("path","images/trans.gif");
-//            icon=addNode("icon","refresh","Refresh",icons);
-//            icon.setAttribute("path","images/refresh.gif");
-//            icon=addNode("icon","edit","Edit",icons);
-//            icon.setAttribute("path","images/edit.gif");
-//            icon=addNode("icon","remove","Remove",icons);
-//            icon.setAttribute("path","images/remove.gif");
-//            icon=addNode("icon","add","Add",icons);
-//            icon.setAttribute("path","images/add.gif");
-//            icon=addNode("icon","active","Active",icons);
-//            icon.setAttribute("path","images/active.gif");
-//            icon=addNode("icon","unactive","Unactive",icons);
-//            icon.setAttribute("path","images/unactive.gif");
-//            icon=addNode("icon","trash","Trash",icons);
-//            icon.setAttribute("path","images/papelera.gif");
-//            icon=addNode("icon","catalog","Catalog",icons);
-//            icon.setAttribute("path","images/catalogo.gif");
+
+            //////////////////
+
+            icon=addNode("icon","refresh","Refresh",icons);
+            icon.setAttribute("path","images/refresh.gif");
+            icon=addNode("icon","edit","Edit",icons);
+            icon.setAttribute("path","images/edit.gif");
+            icon=addNode("icon","remove","Remove",icons);
+            icon.setAttribute("path","images/remove.gif");
+            icon=addNode("icon","add","Add",icons);
+            icon.setAttribute("path","images/add.gif");
+            icon=addNode("icon","active","Active",icons);
+            icon.setAttribute("path","images/active.gif");
+            icon=addNode("icon","unactive","Unactive",icons);
+            icon.setAttribute("path","images/unactive.gif");
+            icon=addNode("icon","trash","Trash",icons);
+            icon.setAttribute("path","images/papelera.gif");
+            icon=addNode("icon","catalog","Catalog",icons);
+            icon.setAttribute("path","images/catalogo.gif");
 
             Iterator it=ext.iterator();
             while(it.hasNext())
