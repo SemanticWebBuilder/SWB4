@@ -25,7 +25,9 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.semanticwb.openoffice.Configuration;
+import org.semanticwb.openoffice.ConfigurationListURI;
 import org.semanticwb.openoffice.DocumentType;
+import org.semanticwb.openoffice.ErrorLog;
 import org.semanticwb.openoffice.SaveDocumentFormat;
 import org.semanticwb.openoffice.WBException;
 import org.semanticwb.openoffice.calc.WB4Calc;
@@ -52,7 +54,10 @@ public class WB4CalcTest
     @BeforeClass
     public static void setUpClass() throws Exception
     {
-        System.setProperty(Configuration.CONFIGURATION_PROPERTY_NAME, "c:\\temp\\config.xml");        
+        File home = new File(System.getProperty("user.home"));
+        System.setProperty(ConfigurationListURI.CONFIGURATION, home.getPath() + "/list.xml");
+        System.setProperty(Configuration.CONFIGURATION_PROPERTY_NAME, home.getPath() + "/config.xml");
+        System.setProperty(ErrorLog.CONFIGURATION, home.getPath());
     }
 
     @AfterClass
@@ -213,6 +218,21 @@ public class WB4CalcTest
         {
             WB4Calc writer = new WB4Calc(this.xContext);
             writer.save();
+        }
+        catch (WBException wbe)
+        {
+            Assert.fail(wbe.getMessage());
+        }
+    }
+
+    @Test
+    //@Ignore
+    public void saveToSiteTest()
+    {
+        try
+        {
+            WB4Calc writer = new WB4Calc(this.xContext);
+            writer.saveToSite();
         }
         catch (WBException wbe)
         {
