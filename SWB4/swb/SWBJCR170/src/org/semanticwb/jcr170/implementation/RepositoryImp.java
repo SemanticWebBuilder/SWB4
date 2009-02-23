@@ -5,7 +5,6 @@
 package org.semanticwb.jcr170.implementation;
 
 import java.security.Principal;
-import org.semanticwb.jcr170.implementation.SWBCredentials;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
