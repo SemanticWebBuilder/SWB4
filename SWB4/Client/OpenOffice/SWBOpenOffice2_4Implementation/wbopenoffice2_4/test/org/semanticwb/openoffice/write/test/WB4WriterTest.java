@@ -265,7 +265,7 @@ public class WB4WriterTest
 
     }
     @Test
-    //@Ignore
+    @Ignore
     public void publishTest()
     {
         try
@@ -279,13 +279,28 @@ public class WB4WriterTest
         }
     }
     @Test  
-    @Ignore
+    //@Ignore
     public void saveToSiteTest()
     {
         try
         {
             WB4Writer writer = new WB4Writer(this.xContext);
             writer.saveToSite();
+        }
+        catch ( Throwable wbe )
+        {
+            Assert.fail(wbe.getMessage());
+        }
+    }
+
+    @Test
+    @Ignore
+    public void deleteAssociationTest()
+    {
+        try
+        {
+            WB4Writer writer = new WB4Writer(this.xContext);
+            writer.deleteAssociation();
         }
         catch ( Throwable wbe )
         {
@@ -316,6 +331,20 @@ public class WB4WriterTest
         {
             WB4Writer writer = new WB4Writer(this.xContext);
             writer.showDocumentInfo();
+        }
+        catch ( Throwable wbe )
+        {
+            Assert.fail(wbe.getMessage());
+        }
+    }
+
+    @Test
+    @Ignore
+    public void changePasswordTest()
+    {
+        try
+        {
+            WB4WriterApplication.changePassword();
         }
         catch ( Throwable wbe )
         {
