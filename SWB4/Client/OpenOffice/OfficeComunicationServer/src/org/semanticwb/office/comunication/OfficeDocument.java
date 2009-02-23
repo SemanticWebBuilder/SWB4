@@ -1033,9 +1033,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     {
         Session session = null;
         try
-        {
-            this.user = "demo";
-            this.password = "demo";
+        {            
             session = loader.openSession(repositoryName, this.user, this.password);
             Node nodeContent = session.getNodeByUUID(contentId);
             String cm_file = loader.getOfficeManager(repositoryName).getPropertyFileType();
@@ -1095,9 +1093,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     {
         Session session = null;
         try
-        {
-            this.user = "demo";
-            this.password = "demo";
+        {            
             session = loader.openSession(repositoryName, this.user, this.password);
             Node nodeContent = session.getNodeByUUID(contentId);
             String cm_Type = loader.getOfficeManager(repositoryName).getPropertyType();
