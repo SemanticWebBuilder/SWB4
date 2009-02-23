@@ -37,6 +37,8 @@ public class WordResource extends GenericAdmResource
             String contentId = portlet.getContent();
             String repositoryName = portlet.getRepositoryName();
             OfficeDocument document = new OfficeDocument();
+            document.setUser("");
+            document.setPassword("");
             try
             {
                 PrintWriter out = response.getWriter();
