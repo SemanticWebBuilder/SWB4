@@ -25,7 +25,10 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import org.semanticwb.openoffice.Configuration;
+import org.semanticwb.openoffice.ConfigurationListURI;
 import org.semanticwb.openoffice.DocumentType;
+import org.semanticwb.openoffice.ErrorLog;
 import org.semanticwb.openoffice.SaveDocumentFormat;
 import org.semanticwb.openoffice.WBException;
 import org.semanticwb.openoffice.impress.WB4Impress;
@@ -41,7 +44,7 @@ public class WB4ImpressTest
     private XComponent xCompDest = null;
     private XComponent xCompSrc = null;
     private XDesktop oDesktop = null;
-    private File sUrlDestiny = new File("c:/temp/demo.odp");
+    private File sUrlDestiny = new File("c:/temp/demo_presentacion.odp");
     private File tempDir = new File("c:/temp/demo/");
 
     public WB4ImpressTest()
@@ -51,6 +54,10 @@ public class WB4ImpressTest
     @BeforeClass
     public static void setUpClass() throws Exception
     {
+        File home = new File(System.getProperty("user.home"));
+        System.setProperty(ConfigurationListURI.CONFIGURATION, home.getPath() + "/list.xml");
+        System.setProperty(Configuration.CONFIGURATION_PROPERTY_NAME, home.getPath() + "/config.xml");
+        System.setProperty(ErrorLog.CONFIGURATION, home.getPath());
     }
 
     @AfterClass
@@ -220,13 +227,28 @@ public class WB4ImpressTest
     }
 
     @Test
+    //@Ignore
+    public void saveToSiteTest()
+    {
+        try
+        {
+            WB4Impress writer = new WB4Impress(this.xContext);
+            writer.saveToSite();
+        }
+        catch (WBException wbe)
+        {
+            Assert.fail(wbe.getMessage());
+        }
+    }
+
+    @Test
     @Ignore
     public void saveAsSaveDocumentFormatHTMLTest()
     {
         try
         {
             WB4Impress writer = new WB4Impress(this.xContext);
-            File actual=writer.saveAs(tempDir, SaveDocumentFormat.HTML);            
+            File actual = writer.saveAs(tempDir, SaveDocumentFormat.HTML);
             Assert.assertTrue(actual.exists());
         }
         catch (WBException wbe)
@@ -253,22 +275,6 @@ public class WB4ImpressTest
         }
     }
 
-    /*@Test    
-    public void SaveHtmlPrepareAndGetFilesTest()
-    {
-        try
-        {
-            WB4Impress writer = new WB4Impress(this.xContext);
-            String guid = writer.getGuid();
-            File file = writer.saveHtmlPrepareAndGetFiles(guid);
-            Assert.assertEquals(file.exists(), true);
-        }
-        catch (WBException wbe)
-        {
-            Assert.fail(wbe.getMessage());
-        }
-    }*/
-   
     @Test
     @Ignore
     public void getAllAttachmentsTest()
@@ -277,7 +283,7 @@ public class WB4ImpressTest
         {
             WB4Impress writer = new WB4Impress(this.xContext);
             List<File> attachments = writer.getAllAttachments();
-            Assert.assertEquals(2,attachments.size());
+            Assert.assertEquals(2, attachments.size());
         }
         catch (WBException wbe)
         {
