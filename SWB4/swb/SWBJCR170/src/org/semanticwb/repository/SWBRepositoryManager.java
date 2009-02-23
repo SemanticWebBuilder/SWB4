@@ -4,6 +4,7 @@
  */
 package org.semanticwb.repository;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import org.semanticwb.jcr170.implementation.RepositoryImp;
 import javax.jcr.Repository;
@@ -13,6 +14,7 @@ import javax.jcr.SimpleCredentials;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.jcr170.implementation.SWBCredentials;
 
 /**
  *
@@ -59,5 +61,10 @@ public final class SWBRepositoryManager implements RepositoryManager
     public OfficeManager getOfficeManager()
     {
         return officeManager;
+    }
+
+    public Session openSession(String workspace, Principal user) throws Exception
+    {
+        return repository.login(new SWBCredentials(user), workspace);
     }
 }
