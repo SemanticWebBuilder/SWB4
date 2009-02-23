@@ -4,6 +4,7 @@
  */
 package org.semanticwb.jcr170.implementation;
 
+import java.security.Principal;
 import org.semanticwb.jcr170.implementation.SWBCredentials;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -178,7 +179,7 @@ public final class RepositoryImp implements Repository
         ws.setRoot(root);
     }
 
-    private boolean isAuthenticate(String pUserName, String pPassword)
+    private Principal authenticate(String pUserName, String pPassword)
     {
         UserRepository ur = SWBContext.getAdminWebSite().getUserRepository();
         String context = ur.getProperty(UserRepository.SWBUR_LoginContext);
@@ -189,13 +190,14 @@ public final class RepositoryImp implements Repository
             SWB4CallbackHandlerGateWayOffice callbackHandler = new SWB4CallbackHandlerGateWayOffice(pUserName, pPassword);
             lc = new LoginContext(context, subject, callbackHandler);
             lc.login();
-            return true;
+            Principal principal=subject.getPrincipals().iterator().next();
+            return principal;
         }
         catch (Exception e)
         {
             log.debug("Can't log User", e);
         }
-        return false;
+        return null;
     }
 
     public Session login(Credentials credentials, String workspaceName) throws LoginException, NoSuchWorkspaceException, RepositoryException
@@ -213,16 +215,21 @@ public final class RepositoryImp implements Repository
         {
             if (credentials instanceof SimpleCredentials)
             {
-                SimpleCredentials simpleCredentials = (SimpleCredentials) credentials;                
-                if(!isAuthenticate(simpleCredentials.getUserID(),new String(simpleCredentials.getPassword())))
+                SimpleCredentials simpleCredentials = (SimpleCredentials) credentials;
+                Principal principal=authenticate(simpleCredentials.getUserID(),new String(simpleCredentials.getPassword()));
+                if(principal==null)
                 {
                     throw new LoginException("The user can not be authenticated");
                 }
-                return new SessionImp(this, workspaceName, simpleCredentials);
+                return new SessionImp(this, workspaceName, principal);
             }
             if (credentials instanceof SWBCredentials)
             {
-                return new SessionImp(this, workspaceName, (SWBCredentials)credentials);
+                return new SessionImp(this, workspaceName, ((SWBCredentials)credentials).getPrincipal());
+            }
+            if (credentials instanceof Principal)
+            {
+                return new SessionImp(this, workspaceName, (Principal)credentials);
             }
             else
             {
