@@ -58,8 +58,7 @@ public class PublishResultProducer implements WizardResultProducer
                 String nodeType = wizardData.get(TitleAndDescription.NODE_TYPE).toString();
                 String name = document.getLocalPath().getName().replace(document.getDefaultExtension(), document.getPublicationExtension());
                 String contentID = openOfficeDocument.publish(title, description, repositoryName, categoryID, document.getDocumentType().toString(), nodeType, name);
-                document.SaveContentId(contentID, repositoryName);
-                Summary summary = Summary.create(new SummaryPublish(contentID, repositoryName), null);
+                document.SaveContentId(contentID, repositoryName);                
                 if(openOfficeDocument.getContentPropeties(repositoryName, contentID).length>0)
                 {
                     WizardPage[] pages={ new ContentProperties(repositoryName, contentID)};
@@ -71,6 +70,7 @@ public class PublishResultProducer implements WizardResultProducer
                 {
                     document.publish(title,description);
                 }
+                Summary summary = Summary.create(new SummaryPublish(contentID, repositoryName), null);
                 progress.finished(summary);
             }
             catch (Exception e)
