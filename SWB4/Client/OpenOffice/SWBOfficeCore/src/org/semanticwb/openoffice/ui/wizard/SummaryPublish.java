@@ -134,13 +134,13 @@ public class SummaryPublish extends javax.swing.JPanel
                 return canEdit [columnIndex];
             }
         });
+        jTableSummary1.setColumnSelectionAllowed(true);
         jTableSummary1.setFocusable(false);
         jTableSummary1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jTableSummary1.getTableHeader().setReorderingAllowed(false);
         jScrollPane3.setViewportView(jTableSummary1);
         jTableSummary1.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jTableSummary1.getColumnModel().getColumn(0).setPreferredWidth(40);
-        jTableSummary1.getColumnModel().getColumn(3).setResizable(false);
+        jTableSummary1.getColumnModel().getColumn(0).setPreferredWidth(30);
         jTableSummary1.getColumnModel().getColumn(3).setPreferredWidth(30);
 
         jPanelPreview.add(jScrollPane3);
