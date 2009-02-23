@@ -444,6 +444,61 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
+    private String getLastVersionOfcontent(String repositoryName, String contentId,Principal principal) throws Exception
+    {
+        String getLastVersionOfcontent = null;
+        Session session = null;
+        ArrayList<Version> versions = new ArrayList<Version>();
+        try
+        {
+            session = loader.openSession(repositoryName, principal);
+            Node nodeContent = session.getNodeByUUID(contentId);
+            VersionIterator it = nodeContent.getVersionHistory().getAllVersions();
+            while (it.hasNext())
+            {
+                Version version = it.nextVersion();
+                if (!version.getName().equals("jcr:rootVersion"))
+                {
+                    versions.add(version);
+                }
+            }
+            for (Version version : versions)
+            {
+                if (getLastVersionOfcontent == null)
+                {
+                    getLastVersionOfcontent = version.getName();
+                }
+                else
+                {
+                    try
+                    {
+                        float currentVersion = Float.parseFloat(version.getName());
+                        if (Float.parseFloat(getLastVersionOfcontent) < currentVersion)
+                        {
+                            getLastVersionOfcontent = version.getName();
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        log.error(e);
+                    }
+                }
+            }
+
+        }
+        catch (ItemNotFoundException infe)
+        {
+            throw new Exception(CONTENT_NOT_FOUND, infe);
+        }
+        finally
+        {
+            if (session != null)
+            {
+                session.logout();
+            }
+        }
+        return getLastVersionOfcontent;
+    }
     private String getLastVersionOfcontent(String repositoryName, String contentId) throws Exception
     {
         String getLastVersionOfcontent = null;
@@ -1040,7 +1095,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             String cm_file = loader.getOfficeManager(repositoryName).getPropertyFileType();
             if (version.equals("*"))
             {
-                String lastVersion = getLastVersionOfcontent(repositoryName, contentId);
+                String lastVersion = getLastVersionOfcontent(repositoryName, contentId,principal);
                 Version versionNode = nodeContent.getVersionHistory().getVersion(lastVersion);
                 if (versionNode != null)
                 {
