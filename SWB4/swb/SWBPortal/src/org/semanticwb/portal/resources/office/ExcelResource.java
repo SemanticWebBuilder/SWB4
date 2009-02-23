@@ -49,16 +49,16 @@ public class ExcelResource extends GenericAdmResource{
                     if (path.endsWith("/"))
                     {
                         path = path.substring(0, path.length() - 1);
-                        path += getResourceBase().getWorkPath() + "\\" + file;
+                        path += getResourceBase().getWorkPath() + "/" + file;
                     }
                     else
                     {
-                        path += getResourceBase().getWorkPath() + "\\" + file;
+                        path += getResourceBase().getWorkPath() + "/" + file;
                     }
 
                     String with=WITH;
                     String height=HEIGHT;
-                    out.println("<iframe frameborder=\"0\" src=\""+ path +"\" width=\""+with+"\" height=\""+height+"\">");
+                    out.println("<iframe frameborder=\"0\" src=\""+ path +"\" width=\""+with+"\" height=\""+height+"\"></iframe>");
                 }
             }
             catch (Exception e)
