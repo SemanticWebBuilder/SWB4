@@ -443,14 +443,12 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
-    private String getLastVersionOfcontent(String repositoryName, String contentId,org.semanticwb.model.User user) throws Exception
+    private String getLastVersionOfcontent(Session session, String repositoryName, String contentId) throws Exception
     {
         String getLastVersionOfcontent = null;
-        Session session = null;
         ArrayList<Version> versions = new ArrayList<Version>();
         try
         {
-            session = loader.openSession(repositoryName, user);
             Node nodeContent = session.getNodeByUUID(contentId);
             VersionIterator it = nodeContent.getVersionHistory().getAllVersions();
             while (it.hasNext())
@@ -497,48 +495,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             }
         }
         return getLastVersionOfcontent;
-    }
+    }    
     private String getLastVersionOfcontent(String repositoryName, String contentId) throws Exception
-    {
-        String getLastVersionOfcontent = null;
-        Session session = null;
-        ArrayList<Version> versions = new ArrayList<Version>();
+    {        
+        Session session = null;        
         try
         {
             session = loader.openSession(repositoryName, this.user, this.password);
-            Node nodeContent = session.getNodeByUUID(contentId);
-            VersionIterator it = nodeContent.getVersionHistory().getAllVersions();
-            while (it.hasNext())
-            {
-                Version version = it.nextVersion();
-                if (!version.getName().equals("jcr:rootVersion"))
-                {
-                    versions.add(version);
-                }
-            }
-            for (Version version : versions)
-            {
-                if (getLastVersionOfcontent == null)
-                {
-                    getLastVersionOfcontent = version.getName();
-                }
-                else
-                {
-                    try
-                    {
-                        float currentVersion = Float.parseFloat(version.getName());
-                        if (Float.parseFloat(getLastVersionOfcontent) < currentVersion)
-                        {
-                            getLastVersionOfcontent = version.getName();
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        log.error(e);
-                    }
-                }
-            }
-
+            return getLastVersionOfcontent(session,repositoryName, contentId);
         }
         catch (ItemNotFoundException infe)
         {
@@ -550,8 +514,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             {
                 session.logout();
             }
-        }
-        return getLastVersionOfcontent;
+        }        
     }
 
     public VersionInfo[] getVersions(String repositoryName, String contentId) throws Exception
@@ -1084,17 +1047,15 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
-    public String getContentFile(String repositoryName, String contentId, String version,org.semanticwb.model.User user) throws Exception
+    private String getContentFile(Session session,String repositoryName,String contentId, String version) throws Exception
     {
-        Session session = null;
         try
         {
-            session = loader.openSession(repositoryName,user);
             Node nodeContent = session.getNodeByUUID(contentId);
             String cm_file = loader.getOfficeManager(repositoryName).getPropertyFileType();
             if (version.equals("*"))
             {
-                String lastVersion = getLastVersionOfcontent(repositoryName, contentId,user);
+                String lastVersion = getLastVersionOfcontent(session, repositoryName, contentId);
                 Version versionNode = nodeContent.getVersionHistory().getVersion(lastVersion);
                 if (versionNode != null)
                 {
@@ -1133,42 +1094,33 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             }
         }
     }
+    public String getContentFile(String repositoryName, String contentId, String version,org.semanticwb.model.User user) throws Exception
+    {
+        Session session = null;
+        try
+        {
+            session = loader.openSession(repositoryName,user);
+            return getContentFile(session, repositoryName, contentId, version);
+        }
+        catch (Exception e)
+        {
+            throw e;
+        }
+        finally
+        {
+            if (session != null)
+            {
+                session.logout();
+            }
+        }
+    }
     public String getContentFile(String repositoryName, String contentId, String version) throws Exception
     {
         Session session = null;
         try
         {            
             session = loader.openSession(repositoryName, this.user, this.password);
-            Node nodeContent = session.getNodeByUUID(contentId);
-            String cm_file = loader.getOfficeManager(repositoryName).getPropertyFileType();
-            if (version.equals("*"))
-            {
-                String lastVersion = getLastVersionOfcontent(repositoryName, contentId);
-                Version versionNode = nodeContent.getVersionHistory().getVersion(lastVersion);
-                if (versionNode != null)
-                {
-                    Node frozenNode = versionNode.getNode(JCR_FROZEN_NODE);
-                    return frozenNode.getProperty(cm_file).getString();
-                }
-                else
-                {
-                    return null;
-                }
-
-            }
-            else
-            {
-                Version versionNode = nodeContent.getVersionHistory().getVersion(version);
-                if (versionNode != null)
-                {
-                    Node frozenNode = versionNode.getNode(JCR_FROZEN_NODE);
-                    return frozenNode.getProperty(cm_file).getString();
-                }
-                else
-                {
-                    return null;
-                }
-            }
+            return getContentFile(session, repositoryName, contentId, version);
         }
         catch (Exception e)
         {
