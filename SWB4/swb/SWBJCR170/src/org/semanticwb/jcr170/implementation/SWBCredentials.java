@@ -18,8 +18,8 @@ public class SWBCredentials implements Credentials {
     {
         this.principal=principal;
     }
-    public String getUserID()
+    public Principal getPrincipal()
     {
-        return principal.getName();
+        return principal;
     }
 }
