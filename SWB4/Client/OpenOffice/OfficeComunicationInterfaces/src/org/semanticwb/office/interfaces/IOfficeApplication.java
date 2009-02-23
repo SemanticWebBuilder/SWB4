@@ -68,4 +68,7 @@ public interface IOfficeApplication
 
     @XmlRpcMethod(methodName = "OfficeApplication.getPages")
     public WebPageInfo[] getPages(WebPageInfo webpage) throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeApplication.getLimitOfVersions")
+    public int getLimitOfVersions() throws Exception;
 }
