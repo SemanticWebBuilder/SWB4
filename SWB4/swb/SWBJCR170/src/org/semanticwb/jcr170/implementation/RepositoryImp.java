@@ -4,6 +4,7 @@
  */
 package org.semanticwb.jcr170.implementation;
 
+import org.semanticwb.jcr170.implementation.SWBCredentials;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -212,12 +213,16 @@ public final class RepositoryImp implements Repository
         {
             if (credentials instanceof SimpleCredentials)
             {
-                SimpleCredentials simpleCredentials = (SimpleCredentials) credentials;
+                SimpleCredentials simpleCredentials = (SimpleCredentials) credentials;                
                 if(!isAuthenticate(simpleCredentials.getUserID(),new String(simpleCredentials.getPassword())))
                 {
                     throw new LoginException("The user can not be authenticated");
                 }
                 return new SessionImp(this, workspaceName, simpleCredentials);
+            }
+            if (credentials instanceof SWBCredentials)
+            {
+                return new SessionImp(this, workspaceName, (SWBCredentials)credentials);
             }
             else
             {
