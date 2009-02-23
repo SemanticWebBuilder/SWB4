@@ -172,17 +172,68 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
-    /*private static Node getNodeFromVersion(Version version) throws Exception
+    public int getNumberOfVersions(String repositoryName, String contentId) throws Exception
     {
-    NodeIterator frozenNodes = version.getNodes();
-    while (frozenNodes.hasNext())
-    {
-    Node frozenNode = frozenNodes.nextNode();
-    Node contentNode = frozenNode.getNodes().nextNode();
-    return contentNode;
+        Session session = null;
+        try
+        {
+            session = loader.openSession(repositoryName, this.user, this.password);
+            Node nodeContent = session.getNodeByUUID(contentId);
+            VersionHistory history = nodeContent.getVersionHistory();
+            return (int) history.getAllVersions().getSize();
+        }
+        catch (ItemNotFoundException infe)
+        {
+            throw new Exception("El contenido no se encuentró en el repositorio.", infe);
+        }
+        finally
+        {
+            if (session != null)
+            {
+                session.logout();
+            }
+        }
     }
-    throw new Exception("Node not found from a version");
-    }*/
+
+    public boolean allVersionsArePublished(String repositoryName, String contentId) throws Exception
+    {
+        for (VersionInfo version : getVersions(repositoryName, contentId))
+        {
+            if (!version.published)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void deleteVersionOfContent(String repositoryName, String contentId, String versionName) throws Exception
+    {
+        Session session = null;
+        try
+        {
+            session = loader.openSession(repositoryName, this.user, this.password);
+            Node nodeContent = session.getNodeByUUID(contentId);
+            VersionHistory history = nodeContent.getVersionHistory();
+            Version version = history.getVersion(versionName);
+            version.remove();
+            history.save();
+            nodeContent.save();
+
+        }
+        catch (ItemNotFoundException infe)
+        {
+            throw new Exception("El contenido no se encuentró en el repositorio.", infe);
+        }
+        finally
+        {
+            if (session != null)
+            {
+                session.logout();
+            }
+        }
+    }
+
     /**
      * Update a Content
      * @param contentId ID of the content, the id is a UUID
@@ -236,63 +287,6 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 finally
                 {
                     Version version = nodeContent.checkin();
-                    String snumberOfVersions = SWBPlatform.getEnv("swbrep/maxNumberOfVersions");
-                    if (snumberOfVersions != null && !snumberOfVersions.trim().equals(""))
-                    {
-                        try
-                        {
-                            // debe haber una más por la versión raiz
-                            long numberOfVersions = Long.parseLong(snumberOfVersions);
-                            if (numberOfVersions <= 0)
-                            {
-                                log.error("The configuration of swb/numberOfVersions is invalid, the value must be greater than 0, the value will be omited");
-                            }
-                            else
-                            {
-                                numberOfVersions++;
-                                VersionHistory history = nodeContent.getVersionHistory();
-                                VersionIterator versions = history.getAllVersions();
-                                if (versions.getSize() > numberOfVersions)
-                                {
-                                    long dif = versions.getSize() - numberOfVersions;
-                                    Version root = history.getRootVersion();
-                                    while (dif != 0)
-                                    {
-                                        for (Version upperVersion : root.getSuccessors())
-                                        {
-                                            boolean isRootBefore = false;
-                                            for (Version lowerVersion : upperVersion.getPredecessors())
-                                            {
-                                                if (lowerVersion.getName().equals(root.getName()))
-                                                {
-                                                    isRootBefore = true;
-                                                    break;
-                                                }
-                                            }
-                                            if (isRootBefore)
-                                            {
-                                                upperVersion.remove();
-                                                history.save();
-                                                break;
-                                            }
-
-                                        }
-
-                                        versions = history.getAllVersions();
-                                        dif = versions.getSize() - numberOfVersions;
-                                    }
-
-                                }
-                            }
-                        }
-                        catch (NumberFormatException nfe)
-                        {
-                            log.error(nfe);
-                        }
-                    }
-
-
-
                     // actualiza version
                     Iterator<WebSite> sites = SWBContext.listWebSites();
                     while (sites.hasNext())
@@ -426,6 +420,62 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
+    public String getLastVersionOfcontent(String repositoryName, String contentId) throws Exception
+    {
+        String getLastVersionOfcontent = null;
+        Session session = null;
+        ArrayList<Version> versions = new ArrayList<Version>();
+        try
+        {
+            session = loader.openSession(repositoryName, this.user, this.password);
+            Node nodeContent = session.getNodeByUUID(contentId);
+            VersionIterator it = nodeContent.getVersionHistory().getAllVersions();
+            while (it.hasNext())
+            {
+                Version version = it.nextVersion();
+                if (!version.getName().equals("jcr:rootVersion"))
+                {
+                    versions.add(version);
+                }
+            }
+            for(Version version : versions)
+            {
+                if(getLastVersionOfcontent==null)
+                {
+                    getLastVersionOfcontent=version.getName();
+                }
+                else
+                {
+                    try
+                    {
+                        float currentVersion=Float.parseFloat(version.getName());
+                        if(Float.parseFloat(getLastVersionOfcontent)<currentVersion)
+                        {
+                            getLastVersionOfcontent=version.getName();
+                        }
+                    }
+                    catch(Exception e)
+                    {
+                        log.error(e);
+                    }
+                }
+            }
+
+        }
+        catch (ItemNotFoundException infe)
+        {
+            throw new Exception(CONTENT_NOT_FOUND, infe);
+        }
+        finally
+        {
+            if (session != null)
+            {
+                session.logout();
+            }
+        }
+        return getLastVersionOfcontent;
+    }
+
     public VersionInfo[] getVersions(String repositoryName, String contentId) throws Exception
     {
         Session session = null;
@@ -446,6 +496,48 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     info.created = version.getProperty("jcr:created").getDate().getTime();
                     String cm_user = loader.getOfficeManager(repositoryName).getUserType();
                     info.user = version.getNode(JCR_FROZEN_NODE).getProperty(cm_user).getString();
+                    info.published = false;
+                    Iterator<WebSite> sites = SWBContext.listWebSites();
+                    while (sites.hasNext())
+                    {
+                        if (info.published)
+                        {
+                            break;
+                        }
+                        Iterator<SemanticObject> itSubjects = sites.next().getSemanticObject().getModel().listSubjects(OfficePortlet.swbrep_content, contentId);
+                        while (itSubjects.hasNext())
+                        {
+                            SemanticObject obj = itSubjects.next();
+                            if (obj.getSemanticClass().isSubClass(OfficePortlet.sclass) || obj.getSemanticClass().equals(OfficePortlet.sclass))
+                            {
+                                OfficePortlet officePortlet = new OfficePortlet(obj);
+                                if (officePortlet.getRepositoryName().equals(repositoryName) && officePortlet.getVersionToShow() != null)
+                                {
+                                    if (officePortlet.getVersionToShow().equals("*"))
+                                    {
+                                        String maxversion = getLastVersionOfcontent(repositoryName, contentId);
+                                        if (maxversion != null)
+                                        {
+                                            if (maxversion.equals(info.nameOfVersion))
+                                            {
+                                                info.published = true;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (officePortlet.getVersionToShow().equals(info.nameOfVersion))
+                                        {
+                                            info.published = true;
+                                            break;
+                                        }
+                                    }
+                                }
+
+                            }
+                        }
+                    }
                     versions.add(info);
                 }
             }
@@ -784,11 +876,11 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         while (calendars.hasNext())
         {
             org.semanticwb.model.Calendar cal = calendars.next();
-            CalendarInfo info=new CalendarInfo();
-            info.id=cal.getId();
-            info.xml=cal.getXml();
-            info.active=cal.isActive();
-            info.title=cal.getTitle();
+            CalendarInfo info = new CalendarInfo();
+            info.id = cal.getId();
+            info.xml = cal.getXml();
+            info.active = cal.isActive();
+            info.title = cal.getTitle();
             getCalendarInfo.add(info);
         }
         return getCalendarInfo.toArray(new CalendarInfo[getCalendarInfo.size()]);
@@ -1114,7 +1206,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     public void updateCalendar(PortletInfo portletInfo, CalendarInfo calendarInfo) throws Exception
     {
         WebSite site = SWBContext.getWebSite(portletInfo.page.site.id);
-        org.semanticwb.model.Calendar cal=site.getCalendar(calendarInfo.id);
+        org.semanticwb.model.Calendar cal = site.getCalendar(calendarInfo.id);
         cal.setXml(calendarInfo.xml);
         cal.setUpdated(new Date(System.currentTimeMillis()));
     }
@@ -1122,30 +1214,30 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     public CalendarInfo insertCalendar(PortletInfo portletInfo, String title, String xml) throws Exception
     {
         WebSite site = SWBContext.getWebSite(portletInfo.page.site.id);
-        org.semanticwb.model.Calendar cal=site.createCalendar();
+        org.semanticwb.model.Calendar cal = site.createCalendar();
         cal.setXml(xml);
         cal.setTitle(title);
         cal.setCreated(new Date(System.currentTimeMillis()));
         cal.setUpdated(new Date(System.currentTimeMillis()));
-        CalendarInfo info=new CalendarInfo();
-        info.title=title;
-        info.id=cal.getId();
-        info.active=cal.isActive();
-        info.xml=cal.getXml();
+        CalendarInfo info = new CalendarInfo();
+        info.title = title;
+        info.id = cal.getId();
+        info.active = cal.isActive();
+        info.xml = cal.getXml();
         return info;
     }
 
     public void deleteCalendar(PortletInfo portletInfo, CalendarInfo calendarInfo) throws Exception
     {
         WebSite site = SWBContext.getWebSite(portletInfo.page.site.id);
-        org.semanticwb.model.Calendar cal=site.getCalendar(calendarInfo.id);
+        org.semanticwb.model.Calendar cal = site.getCalendar(calendarInfo.id);
         cal.remove();
     }
 
     public void activeCalendar(PortletInfo portletInfo, CalendarInfo calendarInfo, boolean active) throws Exception
     {
         WebSite site = SWBContext.getWebSite(portletInfo.page.site.id);
-        org.semanticwb.model.Calendar cal=site.getCalendar(calendarInfo.id);
+        org.semanticwb.model.Calendar cal = site.getCalendar(calendarInfo.id);
         cal.setActive(active);
     }
 
