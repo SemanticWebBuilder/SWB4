@@ -98,6 +98,9 @@ public interface IOfficeDocument
     @XmlRpcMethod(methodName = "OfficeDocument.deletePreview")
     public void deletePreview(String dir) throws Exception;
 
+    @XmlRpcMethod(methodName = "OfficeDocument.getNumberOfVersions")
+    public int getNumberOfVersions(String repositoryName, String contentId) throws Exception;
+
     @XmlRpcMethod(methodName = "OfficeDocument.getCalendars")
     public CalendarInfo[] getCalendars(PortletInfo portletInfo) throws Exception;
 
@@ -115,6 +118,12 @@ public interface IOfficeDocument
 
     @XmlRpcMethod(methodName = "OfficeDocument.updatePorlet")
     public void updatePorlet(PortletInfo portletInfo) throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeDocument.deleteVersionOfContent")
+    public void deleteVersionOfContent(String repositoryName, String contentId, String versionName) throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeDocument.allVersionsArePublished")
+    public boolean allVersionsArePublished(String repositoryName, String contentId) throws Exception;
 }
 
 
