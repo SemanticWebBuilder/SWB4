@@ -44,7 +44,7 @@ public class TitleAndDescription extends WizardPage
         this.jComboBoxType.removeAllItems();
         try
         {
-            if (SelectCategory.map.get(SelectCategory.REPOSITORY_ID) != null)
+            if (SelectCategory.map!=null && SelectCategory.map.get(SelectCategory.REPOSITORY_ID) != null)
             {
                 String repository = SelectCategory.map.get(SelectCategory.REPOSITORY_ID).toString();
                 for (ContentType type : OfficeApplication.getOfficeApplicationProxy().getContentTypes(repository))
