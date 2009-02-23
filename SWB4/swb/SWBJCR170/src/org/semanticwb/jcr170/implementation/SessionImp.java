@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.AccessControlException;
-import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
 import javax.jcr.AccessDeniedException;
