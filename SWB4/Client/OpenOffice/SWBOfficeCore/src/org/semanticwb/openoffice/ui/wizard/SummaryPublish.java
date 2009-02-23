@@ -76,14 +76,14 @@ public class SummaryPublish extends javax.swing.JPanel
 
             },
             new String [] {
-                "Versión", "Fecha de creación", "Creador"
+                "Versión", "Fecha de creación", "Creador", "Publicada"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -94,9 +94,13 @@ public class SummaryPublish extends javax.swing.JPanel
                 return canEdit [columnIndex];
             }
         });
+        jTableSummary1.setColumnSelectionAllowed(true);
         jTableSummary1.setFocusable(false);
         jTableSummary1.setRowSelectionAllowed(false);
+        jTableSummary1.getTableHeader().setReorderingAllowed(false);
         jScrollPane3.setViewportView(jTableSummary1);
+        jTableSummary1.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jTableSummary1.getColumnModel().getColumn(3).setResizable(false);
 
         jPanelPreview.add(jScrollPane3);
 
