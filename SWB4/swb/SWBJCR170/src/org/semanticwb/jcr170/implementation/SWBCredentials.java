@@ -7,6 +7,7 @@ package org.semanticwb.jcr170.implementation;
 
 import java.security.Principal;
 import javax.jcr.Credentials;
+import org.semanticwb.model.User;
 
 /**
  *
@@ -14,7 +15,7 @@ import javax.jcr.Credentials;
  */
 public class SWBCredentials implements Credentials {
     private Principal principal;
-    public SWBCredentials(Principal principal)
+    public SWBCredentials(User principal)
     {
         this.principal=principal;
     }
