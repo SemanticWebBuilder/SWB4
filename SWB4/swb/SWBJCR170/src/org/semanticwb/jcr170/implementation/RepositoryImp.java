@@ -232,7 +232,7 @@ public final class RepositoryImp implements Repository
             }
             else
             {
-                throw new LoginException("The credentials are not SimpleCredentials");
+                throw new LoginException("The credentials are not valid");
             }
         }
         else
