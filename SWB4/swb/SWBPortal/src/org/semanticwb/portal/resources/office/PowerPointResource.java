@@ -54,7 +54,7 @@ public class PowerPointResource extends GenericAdmResource
                         path += getResourceBase().getWorkPath() + "\\" + "frame.html";
                     }
 
-                    out.println("<iframe src=\""+ path +"\" width=\"100%\" height=\"300\">>");
+                    out.println("<iframe frameborder=\"0\" src=\""+ path +"\" width=\"100%\" height=\"300\">");
                 }
             }
             catch (Exception e)
