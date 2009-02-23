@@ -5,6 +5,7 @@
  */
 package org.semanticwb.openoffice.ui.wizard;
 
+import java.awt.Cursor;
 import java.awt.Frame;
 import java.net.URL;
 import javax.swing.JOptionPane;
@@ -238,8 +239,20 @@ public class SummaryPublish extends javax.swing.JPanel
                 int res=JOptionPane.showConfirmDialog(this, "¿Desea borrar la versión "+ versionInfo +"?","Borrado de versión de contenido",JOptionPane.YES_NO_OPTION);
                 if(res==JOptionPane.YES_OPTION)
                 {
-                    OfficeApplication.getOfficeDocumentProxy().deleteVersionOfContent(repositoryName, contentId, versionInfo);
-                    loadVersions(contentId, repositoryName);
+                    try
+                    {
+                        this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+                        OfficeApplication.getOfficeDocumentProxy().deleteVersionOfContent(repositoryName, contentId, versionInfo);
+                        loadVersions(contentId, repositoryName);
+                    }
+                    catch(Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                    finally
+                    {
+                        this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                    }
                 }
             }
             catch(Exception e)
