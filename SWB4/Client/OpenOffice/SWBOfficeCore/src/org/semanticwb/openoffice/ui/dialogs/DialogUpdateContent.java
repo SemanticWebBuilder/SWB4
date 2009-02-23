@@ -166,12 +166,23 @@ private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN
             int limit = OfficeApplication.getOfficeApplicationProxy().getLimitOfVersions();
             if (limit > 0)
             {
-                if (!OfficeApplication.getOfficeDocumentProxy().allVersionsArePublished(workspaceid, contentid))
+                int versions = OfficeApplication.getOfficeDocumentProxy().getNumberOfVersions(workspaceid, contentid);
+                if (OfficeApplication.getOfficeDocumentProxy().allVersionsArePublished(workspaceid, contentid))
                 {
-                    int versions = OfficeApplication.getOfficeDocumentProxy().getNumberOfVersions(workspaceid, contentid);
                     if (versions >= limit)
                     {
-                        JOptionPane.showMessageDialog(this, "¡El limite maximo de versiones es de " + limit + "!\r\nSi desea crear una nueva version, debe borrar alguna de las existentes, que no este publicada.", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                        int resp=JOptionPane.showConfirmDialog(this, "¡El limite máximo de versiones es de " + limit + "!\r\nPuede publicar este contenido, debido a que tiene todas las versiones publicadas, pero excederá del límite de versiones\r\n¿Desea continuar?", this.getTitle(), JOptionPane.YES_NO_OPTION);
+                        if(resp==JOptionPane.NO_OPTION)
+                        {
+                            return;
+                        }
+                    }
+                }
+                else
+                {                    
+                    if (versions >= limit)
+                    {
+                        JOptionPane.showMessageDialog(this, "¡El limite máximo de versiones es de " + limit + "!\r\nSi desea crear una nueva version, debe borrar alguna de las existentes, que no este publicada.", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
                         return;
                     }
                 }
