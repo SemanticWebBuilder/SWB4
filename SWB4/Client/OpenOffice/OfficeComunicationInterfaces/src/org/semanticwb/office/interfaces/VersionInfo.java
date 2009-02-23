@@ -52,7 +52,7 @@ public class VersionInfo {
         return nameOfVersion;
     }
 
-    
+    public boolean published;
     public String contentId;    
     public String nameOfVersion;
     public Date created;
