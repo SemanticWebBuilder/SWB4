@@ -233,7 +233,7 @@ public class SummaryPublish extends javax.swing.JPanel
             boolean published=(Boolean) model.getValueAt(this.jTableSummary1.getSelectedRow(), 3);
             if(published)
             {
-                JOptionPane.showMessageDialog(this,"¡No se puede borrar una versión que ha sido publicada.\r\nDebe borrar primero la publicación del contenido!","Borrado de versión de contenido",JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this,"¡No se puede borrar una versión que ha sido publicada.!\r\nDebe borrar primero la publicación del contenido.","Borrado de versión de contenido",JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
                 return;
             }
             try
