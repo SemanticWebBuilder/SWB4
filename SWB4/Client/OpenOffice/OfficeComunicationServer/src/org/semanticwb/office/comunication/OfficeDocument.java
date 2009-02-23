@@ -181,7 +181,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             Node nodeContent = session.getNodeByUUID(contentId);
             VersionHistory history = nodeContent.getVersionHistory();
             // the version minus the root version
-            return (int) history.getAllVersions().getSize()-1;
+            return (int) history.getAllVersions().getSize() - 1;
         }
         catch (ItemNotFoundException infe)
         {
