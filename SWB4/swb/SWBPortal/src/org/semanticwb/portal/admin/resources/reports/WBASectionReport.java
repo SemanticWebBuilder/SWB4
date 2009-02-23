@@ -107,29 +107,18 @@ public class WBASectionReport extends GenericResource {
     }
     
     public void doBind(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
-        System.out.println("inicia doBind");
-        response.setContentType("text/json;charset=iso-8859-1");
+        response.setContentType("text/html;charset=iso-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
         PrintWriter out = response.getWriter();
         
         String webSiteId = request.getParameter("site");
-        System.out.println("websiteid= "+webSiteId);
-
-        //TODO: No compila esta linea
-        //out.println(tree.render(webSiteId, request, response, paramsRequest.getUser(), paramsRequest.getTopic(), paramsRequest.getArguments(),paramsRequest.getTopic().getWebSite().getHomePage()));
-                
-        /*
-        WebSite webSite = SWBContext.getWebSite(webSiteId);        
-        System.out.println("website= "+webSite.toString());
         
-        out.println("<select id=\"wb_lang\" name=\"wb_lang\" size=\"1\">");
-        Iterator<Language> itLanguages = webSite.listLanguages();
-        while (itLanguages.hasNext()) {
-            Language language = itLanguages.next();
-            out.println("<option value=\"" + language.getId() + "\">" + language.getTitle() + "</option>");
-        }
-        out.println("</select>");*/
+        SWBResourceURL url=paramsRequest.getRenderUrl();
+        url.setCallMethod(url.Call_DIRECT);
+        url.setMode("bind");
+        
+        out.println(tree.render(webSiteId, request, paramsRequest.getUser(), url.toString()));
         out.flush();
     }
 
