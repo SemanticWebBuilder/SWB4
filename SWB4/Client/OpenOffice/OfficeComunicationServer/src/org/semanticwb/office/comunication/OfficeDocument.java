@@ -6,7 +6,6 @@ package org.semanticwb.office.comunication;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -444,14 +443,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
-    private String getLastVersionOfcontent(String repositoryName, String contentId,Principal principal) throws Exception
+    private String getLastVersionOfcontent(String repositoryName, String contentId,org.semanticwb.model.User user) throws Exception
     {
         String getLastVersionOfcontent = null;
         Session session = null;
         ArrayList<Version> versions = new ArrayList<Version>();
         try
         {
-            session = loader.openSession(repositoryName, principal);
+            session = loader.openSession(repositoryName, user);
             Node nodeContent = session.getNodeByUUID(contentId);
             VersionIterator it = nodeContent.getVersionHistory().getAllVersions();
             while (it.hasNext())
@@ -1085,17 +1084,17 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
-    public String getContentFile(String repositoryName, String contentId, String version,Principal principal) throws Exception
+    public String getContentFile(String repositoryName, String contentId, String version,org.semanticwb.model.User user) throws Exception
     {
         Session session = null;
         try
         {
-            session = loader.openSession(repositoryName,principal);
+            session = loader.openSession(repositoryName,user);
             Node nodeContent = session.getNodeByUUID(contentId);
             String cm_file = loader.getOfficeManager(repositoryName).getPropertyFileType();
             if (version.equals("*"))
             {
-                String lastVersion = getLastVersionOfcontent(repositoryName, contentId,principal);
+                String lastVersion = getLastVersionOfcontent(repositoryName, contentId,user);
                 Version versionNode = nodeContent.getVersionHistory().getVersion(lastVersion);
                 if (versionNode != null)
                 {
