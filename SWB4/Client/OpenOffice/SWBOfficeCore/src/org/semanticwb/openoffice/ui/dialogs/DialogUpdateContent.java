@@ -169,7 +169,7 @@ private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                 if (!OfficeApplication.getOfficeDocumentProxy().allVersionsArePublished(workspaceid, contentid))
                 {
                     int versions = OfficeApplication.getOfficeDocumentProxy().getNumberOfVersions(workspaceid, contentid);
-                    if (versions == limit)
+                    if (versions >= limit)
                     {
                         JOptionPane.showMessageDialog(this, "¡El limite maximo de versiones es de " + limit + "!\r\nSi desea crear una nueva version, debe borrar alguna de las existentes, que no este publicada", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
                         return;
