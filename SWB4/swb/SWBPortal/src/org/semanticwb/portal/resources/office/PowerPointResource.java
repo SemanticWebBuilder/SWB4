@@ -26,7 +26,8 @@ public class PowerPointResource extends GenericAdmResource
 {
 
     private static Logger log = SWBUtils.getLogger(PowerPointResource.class);
-    
+    public static final String WITH="100%"; // VALUE WIDTH  BY DEFAULT
+    public static final String HEIGHT="500"; // VALUE HEIGHT BY DEFAULT
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramReq) throws SWBResourceException, IOException
     {
@@ -53,8 +54,9 @@ public class PowerPointResource extends GenericAdmResource
                     {
                         path += getResourceBase().getWorkPath() + "\\" + "frame.html";
                     }
-
-                    out.println("<iframe frameborder=\"0\" src=\""+ path +"\" width=\"100%\" height=\"300\">");
+                    String with=WITH;
+                    String height=HEIGHT;
+                    out.println("<iframe frameborder=\"0\" src=\""+ path +"\" width=\""+with+"\" height=\""+height+"\">");
                 }
             }
             catch (Exception e)
