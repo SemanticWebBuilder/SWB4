@@ -152,7 +152,7 @@ is divided into following sections:
             <attribute default="${includes}" name="includes"/>
             <attribute default="${excludes}" name="excludes"/>
             <attribute default="${javac.debug}" name="debug"/>
-            <attribute default="" name="sourcepath"/>
+            <attribute default="/does/not/exist" name="sourcepath"/>
             <element name="customize" optional="true"/>
             <sequential>
                 <javac debug="@{debug}" deprecation="${javac.deprecation}" destdir="@{destdir}" encoding="${source.encoding}" excludes="@{excludes}" includeantruntime="false" includes="@{includes}" source="${javac.source}" sourcepath="@{sourcepath}" srcdir="@{srcdir}" target="${javac.target}">
@@ -318,6 +318,7 @@ is divided into following sections:
             -->
     <target depends="init" name="deps-jar" unless="no.deps">
         <ant antfile="${project.SWBBase}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.SWBModel}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.SWBPlatform}/build.xml" inheritall="false" target="jar"/>
     </target>
     <target depends="init,-check-automatic-build,-clean-after-automatic-build" name="-verify-automatic-build"/>
@@ -634,6 +635,7 @@ is divided into following sections:
             -->
     <target depends="init" name="deps-clean" unless="no.deps">
         <ant antfile="${project.SWBBase}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.SWBModel}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBPlatform}/build.xml" inheritall="false" target="clean"/>
     </target>
     <target depends="init" name="-do-clean">
