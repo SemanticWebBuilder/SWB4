@@ -14,11 +14,15 @@ import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.SimpleCredentials;
+import javax.security.auth.Subject;
+import javax.security.auth.login.LoginContext;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.UserRepository;
 import org.semanticwb.repository.Unstructured;
 import org.semanticwb.repository.Workspace;
+import org.semanticwb.security.auth.SWB4CallbackHandlerGateWayOffice;
 
 /**
  *
@@ -53,11 +57,12 @@ public final class RepositoryImp implements Repository
     private String defaultWorkspaceName = "defaultWorkspace";
     private static final String namespace = "http://www.semanticwb.org/repository/";
     private ObservationManagerImp observationManager;
+
     public RepositoryImp() throws RepositoryException
     {
 
         log.event("Initializing repository with namespace " + namespace + " ...");
-        observationManager=new ObservationManagerImp();
+        observationManager = new ObservationManagerImp();
         boolean exists = false;
         for (String name : listWorkspaces())
         {
@@ -99,10 +104,12 @@ public final class RepositoryImp implements Repository
             createWorkspace(defaultWorkspaceName);
         }
     }
+
     public ObservationManagerImp getObservationManagerImp()
     {
         return observationManager;
     }
+
     public void recreateDefaultWorkspace() throws RepositoryException
     {
         for (String name : listWorkspaces())
@@ -168,6 +175,26 @@ public final class RepositoryImp implements Repository
         root.setName("jcr:root");
         root.setPath("/");
         ws.setRoot(root);
+    }
+
+    private boolean isAuthenticate(String pUserName, String pPassword)
+    {
+        UserRepository ur = SWBContext.getAdminWebSite().getUserRepository();
+        String context = ur.getProperty(UserRepository.SWBUR_LoginContext);
+        Subject subject = new Subject();
+        LoginContext lc;
+        try
+        {
+            SWB4CallbackHandlerGateWayOffice callbackHandler = new SWB4CallbackHandlerGateWayOffice(pUserName, pPassword);
+            lc = new LoginContext(context, subject, callbackHandler);
+            lc.login();
+            return true;
+        }
+        catch (Exception e)
+        {
+            log.debug("Can't log User", e);
+        }
+        return false;
     }
 
     public Session login(Credentials credentials, String workspaceName) throws LoginException, NoSuchWorkspaceException, RepositoryException
