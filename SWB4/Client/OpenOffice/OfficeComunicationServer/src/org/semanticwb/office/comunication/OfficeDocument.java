@@ -1041,7 +1041,18 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             String cm_file = loader.getOfficeManager(repositoryName).getPropertyFileType();
             if (version.equals("*"))
             {
-                return nodeContent.getProperty(cm_file).getString();
+                String lastVersion = getLastVersionOfcontent(repositoryName, contentId);
+                Version versionNode = nodeContent.getVersionHistory().getVersion(lastVersion);
+                if (versionNode != null)
+                {
+                    Node frozenNode = versionNode.getNode(JCR_FROZEN_NODE);
+                    return frozenNode.getProperty(cm_file).getString();
+                }
+                else
+                {
+                    return null;
+                }
+
             }
             else
             {
