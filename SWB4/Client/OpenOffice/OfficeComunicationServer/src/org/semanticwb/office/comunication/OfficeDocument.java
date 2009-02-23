@@ -180,7 +180,8 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             session = loader.openSession(repositoryName, this.user, this.password);
             Node nodeContent = session.getNodeByUUID(contentId);
             VersionHistory history = nodeContent.getVersionHistory();
-            return (int) history.getAllVersions().getSize();
+            // the version minus the root version
+            return (int) history.getAllVersions().getSize()-1;
         }
         catch (ItemNotFoundException infe)
         {
@@ -214,11 +215,33 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         {
             session = loader.openSession(repositoryName, this.user, this.password);
             Node nodeContent = session.getNodeByUUID(contentId);
+            String lastVersion = getLastVersionOfcontent(repositoryName, contentId);
             VersionHistory history = nodeContent.getVersionHistory();
             Version version = history.getVersion(versionName);
             version.remove();
             history.save();
             nodeContent.save();
+            if (lastVersion != null && lastVersion.equals(versionName))
+            {
+                Iterator<WebSite> sites = SWBContext.listWebSites();
+                while (sites.hasNext())
+                {
+                    Iterator<SemanticObject> it = sites.next().getSemanticObject().getModel().listSubjects(OfficePortlet.swbrep_content, contentId);
+                    while (it.hasNext())
+                    {
+                        SemanticObject obj = it.next();
+                        if (obj.getSemanticClass().isSubClass(OfficePortlet.sclass) || obj.getSemanticClass().equals(OfficePortlet.sclass))
+                        {
+                            OfficePortlet officePortlet = new OfficePortlet(obj);
+                            if (officePortlet.getRepositoryName().equals(repositoryName) && officePortlet.getVersionToShow().equals("*"))
+                            {
+                                InputStream in = getContent(repositoryName, contentId, officePortlet.getVersionToShow());
+                                officePortlet.loadContent(in);
+                            }
+                        }
+                    }
+                }
+            }
 
         }
         catch (ItemNotFoundException infe)
@@ -438,23 +461,23 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     versions.add(version);
                 }
             }
-            for(Version version : versions)
+            for (Version version : versions)
             {
-                if(getLastVersionOfcontent==null)
+                if (getLastVersionOfcontent == null)
                 {
-                    getLastVersionOfcontent=version.getName();
+                    getLastVersionOfcontent = version.getName();
                 }
                 else
                 {
                     try
                     {
-                        float currentVersion=Float.parseFloat(version.getName());
-                        if(Float.parseFloat(getLastVersionOfcontent)<currentVersion)
+                        float currentVersion = Float.parseFloat(version.getName());
+                        if (Float.parseFloat(getLastVersionOfcontent) < currentVersion)
                         {
-                            getLastVersionOfcontent=version.getName();
+                            getLastVersionOfcontent = version.getName();
                         }
                     }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
                         log.error(e);
                     }
@@ -964,9 +987,18 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             Node nodeContent = session.getNodeByUUID(contentId);
             if (version.equals("*"))
             {
-
-                Node resNode = nodeContent.getNode(JCR_CONTENT);
-                return resNode.getProperty(JCR_DATA).getStream();
+                String lastVersion = getLastVersionOfcontent(repositoryName, contentId);
+                Version versionNode = nodeContent.getVersionHistory().getVersion(lastVersion);
+                if (versionNode != null)
+                {
+                    Node frozenNode = versionNode.getNode(JCR_FROZEN_NODE);
+                    Node resNode = frozenNode.getNode(JCR_CONTENT);
+                    return resNode.getProperty(JCR_DATA).getStream();
+                }
+                else
+                {
+                    return null;
+                }
             }
             else
             {
