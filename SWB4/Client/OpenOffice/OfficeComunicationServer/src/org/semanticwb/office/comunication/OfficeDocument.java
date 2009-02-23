@@ -443,7 +443,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
-    public String getLastVersionOfcontent(String repositoryName, String contentId) throws Exception
+    private String getLastVersionOfcontent(String repositoryName, String contentId) throws Exception
     {
         String getLastVersionOfcontent = null;
         Session session = null;
