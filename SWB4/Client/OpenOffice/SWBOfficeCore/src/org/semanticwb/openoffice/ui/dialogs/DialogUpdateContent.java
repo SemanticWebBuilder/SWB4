@@ -41,6 +41,7 @@ public class DialogUpdateContent extends javax.swing.JDialog
         {
             try
             {
+                dialog.setCursor(new Cursor(Cursor.WAIT_CURSOR));
                 jLabel1.setText("Enviando archivo de publicación " + zipFile.getName());
                 jLabel1.repaint();
                 String name = document.getLocalPath().getName().replace(document.getDefaultExtension(), document.getPublicationExtension());
