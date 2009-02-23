@@ -213,6 +213,10 @@ public final class RepositoryImp implements Repository
             if (credentials instanceof SimpleCredentials)
             {
                 SimpleCredentials simpleCredentials = (SimpleCredentials) credentials;
+                if(!isAuthenticate(simpleCredentials.getUserID(),new String(simpleCredentials.getPassword())))
+                {
+                    throw new LoginException("The user can not be authenticated");
+                }
                 return new SessionImp(this, workspaceName, simpleCredentials);
             }
             else
