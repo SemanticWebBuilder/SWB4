@@ -5,20 +5,18 @@
 
 package org.semanticwb.portal.resources.office;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
-import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.office.comunication.OfficeDocument;
 import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
-import org.semanticwb.portlet.office.WordPortlet;
+import org.semanticwb.portlet.office.ExcelPortlet;
 
 /**
  *
@@ -27,12 +25,14 @@ import org.semanticwb.portlet.office.WordPortlet;
 public class ExcelResource extends GenericAdmResource{
 
     private static Logger log = SWBUtils.getLogger(ExcelResource.class);
+    public static final String WITH="100%"; // VALUE WIDTH  BY DEFAULT
+    public static final String HEIGHT="500"; // VALUE HEIGHT BY DEFAULT
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramReq) throws SWBResourceException, IOException
     {
-        if (this.getResourceBase() instanceof WordPortlet)
+        if (this.getResourceBase() instanceof ExcelPortlet)
         {
-            WordPortlet portlet = (WordPortlet) this.getResourceBase();
+            ExcelPortlet portlet = (ExcelPortlet) this.getResourceBase();
             String version = portlet.getVersionToShow();
             String contentId = portlet.getContent();
             String repositoryName = portlet.getRepositoryName();
@@ -44,20 +44,21 @@ public class ExcelResource extends GenericAdmResource{
                 if (file != null)
                 {
 
-                    file = file.replace(".doc", ".html");
-                    String path = SWBPlatform.getWorkPath() + getResourceBase().getWorkPath() + "\\" + file;
-                    StringBuffer html = new StringBuffer();
-                    FileInputStream in = new FileInputStream(path);
-                    byte[] buffer = new byte[2048];
-                    int read = in.read(buffer);
-                    while (read != -1)
+                    file = file.replace(".xls", ".html");
+                    String path = SWBPlatform.getWebWorkPath();
+                    if (path.endsWith("/"))
                     {
-                        html.append(new String(buffer, 0, read));
-                        read = in.read(buffer);
+                        path = path.substring(0, path.length() - 1);
+                        path += getResourceBase().getWorkPath() + "\\" + file;
                     }
-                    String workpath = SWBPlatform.getWebWorkPath() + getResourceBase().getWorkPath() + "/";
-                    String htmlOut = SWBPortal.UTIL.parseHTML(html.toString(), workpath);
-                    out.write(htmlOut);
+                    else
+                    {
+                        path += getResourceBase().getWorkPath() + "\\" + file;
+                    }
+
+                    String with=WITH;
+                    String height=HEIGHT;
+                    out.println("<iframe frameborder=\"0\" src=\""+ path +"\" width=\""+with+"\" height=\""+height+"\">");
                 }
             }
             catch (Exception e)
