@@ -6,6 +6,7 @@ package org.semanticwb.office.comunication;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -1029,6 +1030,55 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
+    public String getContentFile(String repositoryName, String contentId, String version,Principal principal) throws Exception
+    {
+        Session session = null;
+        try
+        {
+            session = loader.openSession(repositoryName,principal);
+            Node nodeContent = session.getNodeByUUID(contentId);
+            String cm_file = loader.getOfficeManager(repositoryName).getPropertyFileType();
+            if (version.equals("*"))
+            {
+                String lastVersion = getLastVersionOfcontent(repositoryName, contentId);
+                Version versionNode = nodeContent.getVersionHistory().getVersion(lastVersion);
+                if (versionNode != null)
+                {
+                    Node frozenNode = versionNode.getNode(JCR_FROZEN_NODE);
+                    return frozenNode.getProperty(cm_file).getString();
+                }
+                else
+                {
+                    return null;
+                }
+
+            }
+            else
+            {
+                Version versionNode = nodeContent.getVersionHistory().getVersion(version);
+                if (versionNode != null)
+                {
+                    Node frozenNode = versionNode.getNode(JCR_FROZEN_NODE);
+                    return frozenNode.getProperty(cm_file).getString();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            throw e;
+        }
+        finally
+        {
+            if (session != null)
+            {
+                session.logout();
+            }
+        }
+    }
     public String getContentFile(String repositoryName, String contentId, String version) throws Exception
     {
         Session session = null;
