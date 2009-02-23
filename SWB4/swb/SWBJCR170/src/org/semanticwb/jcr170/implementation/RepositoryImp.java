@@ -203,7 +203,7 @@ public final class RepositoryImp implements Repository
     {
         if (credentials == null)
         {
-            throw new LoginException("The simple credential is null");
+            throw new LoginException("The credentials are null");
         }
         if (workspaceName == null)
         {
