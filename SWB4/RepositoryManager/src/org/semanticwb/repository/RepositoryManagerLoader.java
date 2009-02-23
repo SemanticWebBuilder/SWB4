@@ -4,8 +4,8 @@
  */
 package org.semanticwb.repository;
 
+import java.security.Principal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Hashtable;
 import javax.jcr.Session;
 import org.semanticwb.Logger;
@@ -85,6 +85,20 @@ public class RepositoryManagerLoader
         return workspaces.toArray(new String[workspaces.size()]);
     }
 
+    public Session openSession(String workspaceId, Principal principal) throws Exception
+    {
+        String[] values = workspaceId.split("@");
+        if (values.length == 2)
+        {
+            String workspace = values[0];
+            String repository = values[1];
+            return repositoryManagers.get(repository).openSession(workspace, principal);
+        }
+        else
+        {
+            throw new WorkspaceNotFoudException(workspaceId);
+        }
+    }
     public Session openSession(String workspaceId, String id, String password) throws Exception
     {
         String[] values = workspaceId.split("@");
