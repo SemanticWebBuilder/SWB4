@@ -4,7 +4,6 @@
  */
 package org.semanticwb.portal.resources.office;
 
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
@@ -26,8 +25,9 @@ public class PowerPointResource extends GenericAdmResource
 {
 
     private static Logger log = SWBUtils.getLogger(PowerPointResource.class);
-    public static final String WITH="100%"; // VALUE WIDTH  BY DEFAULT
-    public static final String HEIGHT="500"; // VALUE HEIGHT BY DEFAULT
+    public static final String WITH = "100%"; // VALUE WIDTH  BY DEFAULT
+    public static final String HEIGHT = "500"; // VALUE HEIGHT BY DEFAULT
+
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramReq) throws SWBResourceException, IOException
     {
@@ -38,6 +38,8 @@ public class PowerPointResource extends GenericAdmResource
             String contentId = portlet.getContent();
             String repositoryName = portlet.getRepositoryName();
             OfficeDocument document = new OfficeDocument();
+            document.setUser("");
+            document.setPassword("");
             try
             {
                 PrintWriter out = response.getWriter();
@@ -54,9 +56,9 @@ public class PowerPointResource extends GenericAdmResource
                     {
                         path += getResourceBase().getWorkPath() + "/" + "frame.html";
                     }
-                    String with=WITH;
-                    String height=HEIGHT;
-                    out.println("<iframe frameborder=\"0\" src=\""+ path +"\" width=\""+with+"\" height=\""+height+"\"></iframe>");
+                    String with = WITH;
+                    String height = HEIGHT;
+                    out.println("<iframe frameborder=\"0\" src=\"" + path + "\" width=\"" + with + "\" height=\"" + height + "\"></iframe>");
                 }
             }
             catch (Exception e)
