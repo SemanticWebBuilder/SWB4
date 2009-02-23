@@ -78,6 +78,19 @@ public class SessionImp implements Session
     private final Hashtable<String, SimpleNode> nodes = new Hashtable<String, SimpleNode>();
     private final SimpleNode root;
 
+    SessionImp(RepositoryImp repository, String workspaceName, SWBCredentials credentials) throws RepositoryException
+    {
+        if (repository == null || workspaceName == null || credentials == null)
+        {
+            throw new IllegalArgumentException("The repository is null or workspace is null or credentials is null");
+        }
+        this.repository = repository;
+        this.workspaceName = workspaceName;
+        this.credentials = new SimpleCredentials(credentials.getUserID(),null);
+        this.workspace = new WorkspaceImp(this, workspaceName);
+        BaseNode rootBaseNode = SWBContext.getWorkspace(this.workspace.getName()).getRoot();
+        root = new SimpleNode(rootBaseNode, this);
+    }
     SessionImp(RepositoryImp repository, String workspaceName, SimpleCredentials credentials) throws RepositoryException
     {
         if (repository == null || workspaceName == null || credentials == null)
