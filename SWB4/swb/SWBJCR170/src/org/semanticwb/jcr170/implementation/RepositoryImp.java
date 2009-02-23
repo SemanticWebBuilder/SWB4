@@ -223,11 +223,11 @@ public final class RepositoryImp implements Repository
                 }
                 return new SessionImp(this, workspaceName, principal);
             }
-            if (credentials instanceof SWBCredentials)
+            else if (credentials instanceof SWBCredentials)
             {
                 return new SessionImp(this, workspaceName, ((SWBCredentials)credentials).getPrincipal());
             }
-            if (credentials instanceof Principal)
+            else if (credentials instanceof Principal)
             {
                 return new SessionImp(this, workspaceName, (Principal)credentials);
             }
