@@ -21,6 +21,7 @@ import javax.jcr.version.Version;
 import javax.jcr.version.VersionHistory;
 import javax.jcr.version.VersionIterator;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.SWBContext;
@@ -646,5 +647,30 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             pagesToReturn.add(info);
         }
         return pagesToReturn.toArray(new WebPageInfo[pagesToReturn.size()]);
+    }
+    public int getLimitOfVersions() throws Exception
+    {
+        String snumberOfVersions = SWBPlatform.getEnv("swbrep/maxNumberOfVersions");
+        int getLimitOfVersions = 0;
+        if (snumberOfVersions == null)
+        {
+            log.debug("The variable swbrep/maxNumberOfVersions is null");
+        }
+        else
+        {
+            try
+            {
+                getLimitOfVersions = Integer.parseInt(snumberOfVersions);
+                if(getLimitOfVersions<=0)
+                {
+                    log.debug("The variable swbrep/maxNumberOfVersions is "+getLimitOfVersions);
+                }
+            }
+            catch (NumberFormatException e)
+            {
+                log.error(e);
+            }
+        }
+        return getLimitOfVersions;
     }
 }
