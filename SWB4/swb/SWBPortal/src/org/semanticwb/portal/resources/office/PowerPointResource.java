@@ -48,15 +48,15 @@ public class PowerPointResource extends GenericAdmResource
                     if (path.endsWith("/"))
                     {
                         path = path.substring(0, path.length() - 1);
-                        path += getResourceBase().getWorkPath() + "\\" + "frame.html";
+                        path += getResourceBase().getWorkPath() + "/" + "frame.html";
                     }
                     else
                     {
-                        path += getResourceBase().getWorkPath() + "\\" + "frame.html";
+                        path += getResourceBase().getWorkPath() + "/" + "frame.html";
                     }
                     String with=WITH;
                     String height=HEIGHT;
-                    out.println("<iframe frameborder=\"0\" src=\""+ path +"\" width=\""+with+"\" height=\""+height+"\">");
+                    out.println("<iframe frameborder=\"0\" src=\""+ path +"\" width=\""+with+"\" height=\""+height+"\"></iframe>");
                 }
             }
             catch (Exception e)
