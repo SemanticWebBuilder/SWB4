@@ -225,11 +225,7 @@ public final class RepositoryImp implements Repository
             else if (credentials instanceof SWBCredentials)
             {
                 return new SessionImp(this, workspaceName, ((SWBCredentials)credentials).getPrincipal());
-            }
-            else if (credentials instanceof Principal)
-            {
-                return new SessionImp(this, workspaceName, (Principal)credentials);
-            }
+            }            
             else
             {
                 throw new LoginException("The credentials are not valid");
