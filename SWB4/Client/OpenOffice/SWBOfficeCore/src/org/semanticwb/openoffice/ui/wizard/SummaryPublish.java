@@ -60,6 +60,8 @@ public class SummaryPublish extends javax.swing.JPanel
 
     public void loadVersions(String contentId, String repositoryName)
     {
+        this.jButtonDelete.setEnabled(false);
+        this.jButtonViewContent.setEnabled(false);
         this.contentId=contentId;
         this.repositoryName=repositoryName;
         try
