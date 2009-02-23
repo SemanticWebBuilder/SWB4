@@ -9,6 +9,7 @@ import java.awt.Cursor;
 import java.io.File;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import org.semanticwb.openoffice.OfficeApplication;
 import org.semanticwb.openoffice.OfficeDocument;
 import org.semanticwb.xmlrpc.Attachment;
 
@@ -28,31 +29,31 @@ public class DialogUpdateContent extends javax.swing.JDialog
 
         File zipFile;
         JDialog dialog;
-        public Update(File zipFile,JDialog dialog)
+
+        public Update(File zipFile, JDialog dialog)
         {
             this.zipFile = zipFile;
-            this.dialog=dialog;
+            this.dialog = dialog;
         }
 
         @Override
         public void run()
         {
             try
-            {                
-                jLabel1.setText("Enviando archivo de publicación "+zipFile.getName());
+            {
+                jLabel1.setText("Enviando archivo de publicación " + zipFile.getName());
                 jLabel1.repaint();
                 String name = document.getLocalPath().getName().replace(document.getDefaultExtension(), document.getPublicationExtension());
                 document.getOfficeDocumentProxy().updateContent(workspaceid, contentid, name);
                 jProgressBar.setValue(2);
                 jLabel1.setText("Actualización terminada");
-                //summaryPublish1.setVisible(true);
                 summaryPublish1.loadVersions(contentid, workspaceid);
                 jButtonUpdate.setEnabled(false);
-                JOptionPane.showMessageDialog(dialog, "¡Contenido actualizado!",dialog.getTitle(),JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(dialog, "¡Contenido actualizado!", dialog.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
             }
             catch (Exception e)
             {
-                JOptionPane.showMessageDialog(null, e.getLocalizedMessage(),"Actualización de contenido",JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, e.getLocalizedMessage(), "Actualización de contenido", JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
             }
             finally
             {
@@ -72,7 +73,6 @@ public class DialogUpdateContent extends javax.swing.JDialog
         initComponents();
         this.workspaceid = wokspaceid;
         this.contentid = contentid;
-        //summaryPublish1.setVisible(false);
         summaryPublish1.loadVersions(contentid, wokspaceid);
         this.document = document;
     }
@@ -96,6 +96,7 @@ public class DialogUpdateContent extends javax.swing.JDialog
         setTitle("Actualizacón de contenido");
         setLocationByPlatform(true);
         setModal(true);
+        setResizable(false);
 
         jPanel1.setPreferredSize(new java.awt.Dimension(350, 50));
 
@@ -162,7 +163,19 @@ private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         File zipFile = null;
         try
         {
-
+            int limit = OfficeApplication.getOfficeApplicationProxy().getLimitOfVersions();
+            if (limit > 0)
+            {
+                if (!OfficeApplication.getOfficeDocumentProxy().allVersionsArePublished(workspaceid, contentid))
+                {
+                    int versions = OfficeApplication.getOfficeDocumentProxy().getNumberOfVersions(workspaceid, contentid);
+                    if (versions == limit)
+                    {
+                        JOptionPane.showMessageDialog(this, "¡El limite maximo de versiones es de " + limit + "!\r\nSi desea crear una nueva version, debe borrar alguna de las existentes, que no este publicada", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                }
+            }
             jProgressBar.setMaximum(2);
             this.jLabel1.setText("Creando archivo para publicación ...");
             jLabel1.repaint();
@@ -172,13 +185,13 @@ private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN
             this.jLabel1.setText("Archivo de publicación creado");
             jLabel1.repaint();
             jProgressBar.setValue(1);
-            document.getOfficeDocumentProxy().addAttachment(new Attachment(zipFile, zipFile.getName()));            
-            Update up = new Update(zipFile,this);
+            document.getOfficeDocumentProxy().addAttachment(new Attachment(zipFile, zipFile.getName()));
+            Update up = new Update(zipFile, this);
             up.start();
         }
         catch (Exception e)
         {
-            JOptionPane.showMessageDialog(this, e.getLocalizedMessage(),this.getTitle(),JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, e.getLocalizedMessage(), this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
         }
 
     }
