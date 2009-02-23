@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.User;
 import org.semanticwb.office.comunication.OfficeDocument;
 import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -41,7 +42,8 @@ public class PowerPointResource extends GenericAdmResource
             try
             {
                 PrintWriter out = response.getWriter();
-                String file = document.getContentFile(repositoryName, contentId, version,paramReq.getUser());
+                User user=paramReq.getUser();
+                String file = document.getContentFile(repositoryName, contentId, version,user);
                 if (file != null)
                 {
                     String path = SWBPlatform.getWebWorkPath();
