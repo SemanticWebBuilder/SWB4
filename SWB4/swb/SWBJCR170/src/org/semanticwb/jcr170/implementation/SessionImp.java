@@ -77,8 +77,7 @@ public class SessionImp implements Session
     private final Hashtable<String, SimpleNode> nodesByUUID = new Hashtable<String, SimpleNode>();
     private final Hashtable<String, SimpleNode> nodes = new Hashtable<String, SimpleNode>();
     private final SimpleNode root;
-
-    
+   
     SessionImp(RepositoryImp repository, String workspaceName, Principal principal) throws RepositoryException
     {
         if (repository == null || workspaceName == null || principal == null)
