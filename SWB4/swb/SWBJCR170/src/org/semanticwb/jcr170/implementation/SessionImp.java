@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.AccessControlException;
+import java.security.Principal;
 import java.util.Hashtable;
 import java.util.Iterator;
 import javax.jcr.AccessDeniedException;
@@ -70,7 +71,7 @@ public class SessionImp implements Session
     private static final String NOT_SUPPORTED_YET = "Not supported yet.";
     private final RepositoryImp repository;
     private final WorkspaceImp workspace;
-    private final SimpleCredentials credentials;
+    private final Principal principal;
     private final String workspaceName;
     private final Hashtable<Node, LockImp> locksSessions = new Hashtable<Node, LockImp>();
     private SimpleLockUserComparator simpleLockUserComparator = new SimpleLockUserComparator();
@@ -78,28 +79,16 @@ public class SessionImp implements Session
     private final Hashtable<String, SimpleNode> nodes = new Hashtable<String, SimpleNode>();
     private final SimpleNode root;
 
-    SessionImp(RepositoryImp repository, String workspaceName, SWBCredentials credentials) throws RepositoryException
+    
+    SessionImp(RepositoryImp repository, String workspaceName, Principal principal) throws RepositoryException
     {
-        if (repository == null || workspaceName == null || credentials == null)
+        if (repository == null || workspaceName == null || principal == null)
         {
             throw new IllegalArgumentException("The repository is null or workspace is null or credentials is null");
         }
         this.repository = repository;
         this.workspaceName = workspaceName;
-        this.credentials = new SimpleCredentials(credentials.getUserID(),null);
-        this.workspace = new WorkspaceImp(this, workspaceName);
-        BaseNode rootBaseNode = SWBContext.getWorkspace(this.workspace.getName()).getRoot();
-        root = new SimpleNode(rootBaseNode, this);
-    }
-    SessionImp(RepositoryImp repository, String workspaceName, SimpleCredentials credentials) throws RepositoryException
-    {
-        if (repository == null || workspaceName == null || credentials == null)
-        {
-            throw new IllegalArgumentException("The repository is null or workspace is null or credentials is null");
-        }
-        this.repository = repository;
-        this.workspaceName = workspaceName;
-        this.credentials = credentials;
+        this.principal = principal;
         this.workspace = new WorkspaceImp(this, workspaceName);
         BaseNode rootBaseNode = SWBContext.getWorkspace(this.workspace.getName()).getRoot();
         root = new SimpleNode(rootBaseNode, this);
@@ -655,7 +644,7 @@ public class SessionImp implements Session
 
     public String getUserID()
     {
-        return credentials.getUserID();
+        return principal.getName();
     }
 
     public Object getAttribute(String arg0)
