@@ -1047,7 +1047,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
-    private String getContentFile(Session session,String repositoryName,String contentId, String version) throws Exception
+    public String getContentFile(Session session,String repositoryName,String contentId, String version) throws Exception
     {
         try
         {
