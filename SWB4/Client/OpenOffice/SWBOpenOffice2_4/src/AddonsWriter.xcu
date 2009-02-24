@@ -31,7 +31,7 @@
                             <value xml:lang="en">Content</value>
                             <value xml:lang="es">Contenido</value>
                         </prop>
-                        <node oor:name="Submenu">                            
+                        <node oor:name="Submenu">
                             <node oor:name="m10" oor:op="replace">
                                 <prop oor:name="URL" oor:type="xs:string">
                                     <value>org.semanticwb.openoffice.writer.wb4writeraddon:save</value>
@@ -88,7 +88,7 @@
                                     <value xml:lang="en">Open content</value>
                                     <value xml:lang="es">Abrir contenido</value>
                                 </prop>
-                            </node>                                                        
+                            </node>
                             <node oor:name="m14" oor:op="replace">
                                 <prop oor:name="URL" oor:type="xs:string">
                                     <value>org.semanticwb.openoffice.writer.wb4writeraddon:information</value>
@@ -217,7 +217,7 @@
                                 </prop>
                             </node>
                         </node>
-                    </node>                    
+                    </node>
                     
                     <node oor:name="m2" oor:op="replace">
                         <prop oor:name="URL" oor:type="xs:string">
@@ -280,7 +280,7 @@
                                     <value xml:lang="en">Close Sessión Sessión</value>
                                     <value xml:lang="es">Cerrar Sessión</value>
                                 </prop>
-                            </node> 
+                            </node>
                             <node oor:name="m6" oor:op="replace">
                                 <prop oor:name="URL" oor:type="xs:string">
                                     <value>private:separator</value>
@@ -309,7 +309,7 @@
                                 </prop>
                             </node>
                         </node>
-                    </node>              
+                    </node>
                     
                     <node oor:name="m8" oor:op="replace">
                         <prop oor:name="URL" oor:type="xs:string">
@@ -484,13 +484,156 @@
                     </prop>
                 </node>
             </node>
-            <node oor:name="org.semanticwb.openoffice.writer.wb4writeraddon.about.images" oor:op="replace">
+            <node oor:name="org.semanticwb.openoffice.writer.wb4writeraddon.save.images" oor:op="replace">
                 <prop oor:name="URL" oor:type="xs:string">
-                    <value>org.semanticwb.openoffice.writer.wb4writeraddon:about</value>
+                    <value>org.semanticwb.openoffice.writer.wb4writeraddon:save</value>
                 </prop>
                 <node oor:name="UserDefinedImages">
                     <prop oor:name="ImageSmallURL">
-                        <value/>
+                        <value>%origin%/images/save.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigURL">
+                        <value>%origin%/images/save.png</value>
+                    </prop>
+                    <prop oor:name="ImageSmallHCURL">
+                        <value>%origin%/images/save.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigHCURL">
+                        <value>%origin%/images/save.png</value>
+                    </prop>
+                </node>
+            </node>
+
+            <node oor:name="org.semanticwb.openoffice.writer.wb4writeraddon.publish" oor:op="replace">
+                <prop oor:name="URL" oor:type="xs:string">
+                    <value>org.semanticwb.openoffice.writer.wb4writeraddon:publish</value>
+                </prop>
+                <node oor:name="UserDefinedImages">
+                    <prop oor:name="ImageSmallURL">
+                        <value>%origin%/images/envpaga.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigURL">
+                        <value>%origin%/images/envpaga.png</value>
+                    </prop>
+                    <prop oor:name="ImageSmallHCURL">
+                        <value>%origin%/images/envpaga.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigHCURL">
+                        <value>%origin%/images/envpaga.png</value>
+                    </prop>
+                </node>
+            </node>
+            <node oor:name="org.semanticwb.openoffice.writer.wb4writeraddon.open" oor:op="replace">
+                <prop oor:name="URL" oor:type="xs:string">
+                    <value>org.semanticwb.openoffice.writer.wb4writeraddon:open</value>
+                </prop>
+                <node oor:name="UserDefinedImages">
+                    <prop oor:name="ImageSmallURL">
+                        <value>%origin%/images/open.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigURL">
+                        <value>%origin%/images/open.png</value>
+                    </prop>
+                    <prop oor:name="ImageSmallHCURL">
+                        <value>%origin%/images/open.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigHCURL">
+                        <value>%origin%/images/open.png</value>
+                    </prop>
+                </node>
+            </node>
+            <node oor:name="org.semanticwb.openoffice.writer.wb4writeraddon.information" oor:op="replace">
+                <prop oor:name="URL" oor:type="xs:string">
+                    <value>org.semanticwb.openoffice.writer.wb4writeraddon:information</value>
+                </prop>
+                <node oor:name="UserDefinedImages">
+                    <prop oor:name="ImageSmallURL">
+                        <value>%origin%/images/icon_inf32.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigURL">
+                        <value>%origin%/images/icon_inf32.png</value>
+                    </prop>
+                    <prop oor:name="ImageSmallHCURL">
+                        <value>%origin%/images/icon_inf32.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigHCURL">
+                        <value>%origin%/images/icon_inf32.png</value>
+                    </prop>
+                </node>
+            </node>
+            <node oor:name="org.semanticwb.openoffice.writer.wb4writeraddon.delete" oor:op="replace">
+                <prop oor:name="URL" oor:type="xs:string">
+                    <value>org.semanticwb.openoffice.writer.wb4writeraddon:delete</value>
+                </prop>
+                <node oor:name="UserDefinedImages">
+                    <prop oor:name="ImageSmallURL">
+                        <value>%origin%/images/delete.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigURL">
+                        <value>%origin%/images/delete.png</value>
+                    </prop>
+                    <prop oor:name="ImageSmallHCURL">
+                        <value>%origin%/images/delete.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigHCURL">
+                        <value>%origin%/images/delete.png</value>
+                    </prop>
+                </node>
+            </node>
+            <node oor:name="org.semanticwb.openoffice.writer.wb4writeraddon.createSection" oor:op="replace">
+                <prop oor:name="URL" oor:type="xs:string">
+                    <value>org.semanticwb.openoffice.writer.wb4writeraddon:createSection</value>
+                </prop>
+                <node oor:name="UserDefinedImages">
+                    <prop oor:name="ImageSmallURL">
+                        <value>%origin%/images/icon_agregarpag32.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigURL">
+                        <value>%origin%/images/icon_agregarpag32.png</value>
+                    </prop>
+                    <prop oor:name="ImageSmallHCURL">
+                        <value>%origin%/images/icon_agregarpag32.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigHCURL">
+                        <value>%origin%/images/icon_agregarpag32.png</value>
+                    </prop>
+                </node>
+            </node>
+            <node oor:name="org.semanticwb.openoffice.writer.wb4writeraddon.changePassword" oor:op="replace">
+                <prop oor:name="URL" oor:type="xs:string">
+                    <value>org.semanticwb.openoffice.writer.wb4writeraddon:changePassword</value>
+                </prop>
+                <node oor:name="UserDefinedImages">
+                    <prop oor:name="ImageSmallURL">
+                        <value>%origin%/images/icon_pass32.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigURL">
+                        <value>%origin%/images/icon_pass32.png</value>
+                    </prop>
+                    <prop oor:name="ImageSmallHCURL">
+                        <value>%origin%/images/icon_pass32.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigHCURL">
+                        <value>%origin%/images/icon_pass32.png</value>
+                    </prop>
+                </node>
+            </node>
+            <node oor:name="org.semanticwb.openoffice.writer.wb4writeraddon.help" oor:op="replace">
+                <prop oor:name="URL" oor:type="xs:string">
+                    <value>org.semanticwb.openoffice.writer.wb4writeraddon:help</value>
+                </prop>
+                <node oor:name="UserDefinedImages">
+                    <prop oor:name="ImageSmallURL">
+                        <value>%origin%/images/icon_ayuda32.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigURL">
+                        <value>%origin%/images/icon_ayuda32.png</value>
+                    </prop>
+                    <prop oor:name="ImageSmallHCURL">
+                        <value>%origin%/images/icon_ayuda32.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigHCURL">
+                        <value>%origin%/images/icon_ayuda32.png</value>
                     </prop>
                 </node>
             </node>

@@ -484,13 +484,156 @@
                     </prop>
                 </node>
             </node>
-            <node oor:name="org.semanticwb.openoffice.impress.wb4impressaddon.about.images" oor:op="replace">
+            <node oor:name="org.semanticwb.openoffice.impress.wb4impressaddon.save.images" oor:op="replace">
                 <prop oor:name="URL" oor:type="xs:string">
-                    <value>org.semanticwb.openoffice.impress.wb4impressaddon:about</value>
+                    <value>org.semanticwb.openoffice.impress.wb4impressaddon:save</value>
                 </prop>
                 <node oor:name="UserDefinedImages">
                     <prop oor:name="ImageSmallURL">
-                        <value/>
+                        <value>%origin%/images/save.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigURL">
+                        <value>%origin%/images/save.png</value>
+                    </prop>
+                    <prop oor:name="ImageSmallHCURL">
+                        <value>%origin%/images/save.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigHCURL">
+                        <value>%origin%/images/save.png</value>
+                    </prop>
+                </node>
+            </node>
+
+            <node oor:name="org.semanticwb.openoffice.impress.wb4impressaddon.publish" oor:op="replace">
+                <prop oor:name="URL" oor:type="xs:string">
+                    <value>org.semanticwb.openoffice.impress.wb4impressaddon:publish</value>
+                </prop>
+                <node oor:name="UserDefinedImages">
+                    <prop oor:name="ImageSmallURL">
+                        <value>%origin%/images/envpaga.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigURL">
+                        <value>%origin%/images/envpaga.png</value>
+                    </prop>
+                    <prop oor:name="ImageSmallHCURL">
+                        <value>%origin%/images/envpaga.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigHCURL">
+                        <value>%origin%/images/envpaga.png</value>
+                    </prop>
+                </node>
+            </node>
+            <node oor:name="org.semanticwb.openoffice.impress.wb4impressaddon.open" oor:op="replace">
+                <prop oor:name="URL" oor:type="xs:string">
+                    <value>org.semanticwb.openoffice.impress.wb4impressaddon:open</value>
+                </prop>
+                <node oor:name="UserDefinedImages">
+                    <prop oor:name="ImageSmallURL">
+                        <value>%origin%/images/open.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigURL">
+                        <value>%origin%/images/open.png</value>
+                    </prop>
+                    <prop oor:name="ImageSmallHCURL">
+                        <value>%origin%/images/open.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigHCURL">
+                        <value>%origin%/images/open.png</value>
+                    </prop>
+                </node>
+            </node>
+            <node oor:name="org.semanticwb.openoffice.impress.wb4impressaddon.information" oor:op="replace">
+                <prop oor:name="URL" oor:type="xs:string">
+                    <value>org.semanticwb.openoffice.impress.wb4impressaddon:information</value>
+                </prop>
+                <node oor:name="UserDefinedImages">
+                    <prop oor:name="ImageSmallURL">
+                        <value>%origin%/images/icon_inf32.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigURL">
+                        <value>%origin%/images/icon_inf32.png</value>
+                    </prop>
+                    <prop oor:name="ImageSmallHCURL">
+                        <value>%origin%/images/icon_inf32.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigHCURL">
+                        <value>%origin%/images/icon_inf32.png</value>
+                    </prop>
+                </node>
+            </node>
+            <node oor:name="org.semanticwb.openoffice.impress.wb4impressaddon.delete" oor:op="replace">
+                <prop oor:name="URL" oor:type="xs:string">
+                    <value>org.semanticwb.openoffice.impress.wb4impressaddon:delete</value>
+                </prop>
+                <node oor:name="UserDefinedImages">
+                    <prop oor:name="ImageSmallURL">
+                        <value>%origin%/images/delete.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigURL">
+                        <value>%origin%/images/delete.png</value>
+                    </prop>
+                    <prop oor:name="ImageSmallHCURL">
+                        <value>%origin%/images/delete.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigHCURL">
+                        <value>%origin%/images/delete.png</value>
+                    </prop>
+                </node>
+            </node>
+            <node oor:name="org.semanticwb.openoffice.impress.wb4impressaddon.createSection" oor:op="replace">
+                <prop oor:name="URL" oor:type="xs:string">
+                    <value>org.semanticwb.openoffice.impress.wb4impressaddon:createSection</value>
+                </prop>
+                <node oor:name="UserDefinedImages">
+                    <prop oor:name="ImageSmallURL">
+                        <value>%origin%/images/icon_agregarpag32.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigURL">
+                        <value>%origin%/images/icon_agregarpag32.png</value>
+                    </prop>
+                    <prop oor:name="ImageSmallHCURL">
+                        <value>%origin%/images/icon_agregarpag32.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigHCURL">
+                        <value>%origin%/images/icon_agregarpag32.png</value>
+                    </prop>
+                </node>
+            </node>
+            <node oor:name="org.semanticwb.openoffice.impress.wb4impressaddon.changePassword" oor:op="replace">
+                <prop oor:name="URL" oor:type="xs:string">
+                    <value>org.semanticwb.openoffice.impress.wb4impressaddon:changePassword</value>
+                </prop>
+                <node oor:name="UserDefinedImages">
+                    <prop oor:name="ImageSmallURL">
+                        <value>%origin%/images/icon_pass32.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigURL">
+                        <value>%origin%/images/icon_pass32.png</value>
+                    </prop>
+                    <prop oor:name="ImageSmallHCURL">
+                        <value>%origin%/images/icon_pass32.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigHCURL">
+                        <value>%origin%/images/icon_pass32.png</value>
+                    </prop>
+                </node>
+            </node>
+            <node oor:name="org.semanticwb.openoffice.impress.wb4impressaddon.help" oor:op="replace">
+                <prop oor:name="URL" oor:type="xs:string">
+                    <value>org.semanticwb.openoffice.impress.wb4impressaddon:help</value>
+                </prop>
+                <node oor:name="UserDefinedImages">
+                    <prop oor:name="ImageSmallURL">
+                        <value>%origin%/images/icon_ayuda32.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigURL">
+                        <value>%origin%/images/icon_ayuda32.png</value>
+                    </prop>
+                    <prop oor:name="ImageSmallHCURL">
+                        <value>%origin%/images/icon_ayuda32.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigHCURL">
+                        <value>%origin%/images/icon_ayuda32.png</value>
                     </prop>
                 </node>
             </node>
