@@ -33,7 +33,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Language;
 import org.semanticwb.model.Portlet;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.model.SWBContext;
@@ -68,6 +67,7 @@ public class WBASectionReport extends GenericResource {
     private final int I_REPORT_TYPE = 3;   // Type 3 of reports "Export"
     public String strRscType;
 
+    String sectionId;
     WebSiteSectionTree tree = new WebSiteSectionTree();
 
     @Override
@@ -118,6 +118,16 @@ public class WBASectionReport extends GenericResource {
         url.setCallMethod(url.Call_DIRECT);
         url.setMode("bind");
         
+        System.out.println("\n");
+        Enumeration<String> e = request.getParameterNames();
+        while(e.hasMoreElements()){
+            String key = e.nextElement();
+            System.out.print("parametro="+key+" value="+request.getParameter(key)+", ");
+        }        
+        
+        sectionId = request.getParameter("reptp");
+        System.out.println("sectionId="+sectionId);
+        
         out.println(tree.render(webSiteId, request, paramsRequest.getUser(), url.toString()));
         out.flush();
     }
@@ -140,34 +150,12 @@ public class WBASectionReport extends GenericResource {
         ArrayList idaux = new ArrayList();
         
         final int I_ACCESS = 0;
-        
-        
-        
-        //Resource base=paramsRequest.getResourceBase();
-        //StringBuffer sb_ret = new StringBuffer();
-        //String[] arr_month = DoArrMonth(paramsRequest);
+
         GregorianCalendar gc_now = new GregorianCalendar();
         HashMap hm_sites = new HashMap();
-        /*TopicMap tpm = null;
-        Topic tp = null;*/
-        //String address = null;
+
         String rtype = null;
-        /*String s_topic = null;
-        String s_site = null;
-        String s_reptp = null;
-        String s_color = null;
-        String s_value = null;
-        String s_rfilter = null;
-        String s_tmid = null;
-        String s_tmtitle = null;*/
-        /*int i_key = 0;
-        int i_month = 0;
-        int i_size = 0;
-        int i_access = 0;
-        int i_range = 0;
-        int i_maxp = 0;
-        int i_minp = 0;
-        boolean b_topic = false;*/
+
 
         try{
             // Evaluates if there are sites
@@ -193,12 +181,12 @@ public class WBASectionReport extends GenericResource {
                 String webSiteId = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
                 String lang = request.getParameter("wb_lang")==null ? "":request.getParameter("wb_lang");
                 
-                int deleteFilter;
+                /*int deleteFilter;
                 try {
                     deleteFilter = request.getParameter("wb_deletefilter")==null ? 0:Integer.parseInt(request.getParameter("wb_deletefilter"));
                 }catch(NumberFormatException e) {
                     deleteFilter = 0;
-                }
+                }*/
                 
                 int groupDates;
                 try {
@@ -237,9 +225,9 @@ public class WBASectionReport extends GenericResource {
                 out.println("   var params = \"?\";");
                 out.println("   params = params + \"wb_site=\" + window.document.frmrep.wb_site.value;");
                 out.println("   params = params + \"&wb_lang=\" + document.getElementById('wb_lang').options[document.getElementById('wb_lang').selectedIndex].value;");
-                out.println("   if(document.getElementById('wb_deletefilter').checked) { ");
+                /*out.println("   if(document.getElementById('wb_deletefilter').checked) { ");
                 out.println("       params = params + \"&wb_deletefilter=\" + document.getElementById('wb_deletefilter').value; ");
-                out.println("   } ");
+                out.println("   } ");*/
                 out.println("   params = params + \"&wb_rtype=\" + document.getElementById('wb_rtype').value;");
                 out.println("   if(accion == 0) {");                    
                 out.println("       params = params + \"&wb_rep_type=\" + getTypeSelected();");
@@ -358,9 +346,9 @@ public class WBASectionReport extends GenericResource {
                 out.println("<td>" + paramsRequest.getLocaleString("section") + ":</td>");
                 
                 out.println("<td colspan=\"2\"><div id=\"slave\">");
-                if(deleteFilter==1) {                    
+                /*if(deleteFilter==1) {                    
                     out.println("<script type=\"text/javascript\">dojo.byId('wb_section').disabled=true;</script>");
-                }
+                }*/
                 out.println("</div>");
                 out.println("</td>");
                 out.println("<td>&nbsp;</td>");
@@ -368,12 +356,12 @@ public class WBASectionReport extends GenericResource {
 
                 out.println("<tr>");
                 out.println("<td colspan=\"4\">");
-                out.println(paramsRequest.getLocaleString("all_sections") + "&nbsp;&nbsp;");
-                out.println("<input type=\"checkbox\" id=\"wb_deletefilter\" name=\"wb_deletefilter\" value=\"1\" onclick=\"dojo.byId('wb_lang').disabled=!(dojo.byId('wb_lang').disabled);\"");
-                if(deleteFilter==1) {
+                /*out.println(paramsRequest.getLocaleString("all_sections") + "&nbsp;&nbsp;");
+                out.println("<input type=\"checkbox\" id=\"wb_deletefilter\" name=\"wb_deletefilter\" value=\"1\" onclick=\"dojo.byId('wb_lang').disabled=!(dojo.byId('wb_lang').disabled);\"");*/
+                /*if(deleteFilter==1) {
                     out.println(" checked=\"checked\"");
                 }
-                out.println(" />");
+                out.println(" />");*/
                 out.println("</td>");
                 out.println("</tr>");
                 
@@ -696,17 +684,18 @@ public class WBASectionReport extends GenericResource {
         
     private WBAFilterReportBean buildFilter(HttpServletRequest request, SWBParamRequest paramsRequest) throws SWBResourceException, IncompleteFilterException {
         WBAFilterReportBean filterReportBean = null;
-        GregorianCalendar gc_now = new GregorianCalendar();
+        /*GregorianCalendar gc_now = new GregorianCalendar();*/
         ArrayList idaux = new ArrayList();
+        idaux.add(sectionId);
         
         String webSiteId = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
-        String lang = request.getParameter("wb_lang")==null ? "":request.getParameter("wb_lang");
-        int deleteFilter;
+        /*String lang = request.getParameter("wb_lang")==null ? "":request.getParameter("wb_lang");*/
+        /*int deleteFilter;
         try {
             deleteFilter = request.getParameter("wb_deletefilter")==null ? 0:Integer.parseInt(request.getParameter("wb_deletefilter"));
         }catch(NumberFormatException e) {
             deleteFilter = 0;
-        }
+        }*/
         int groupDates;
         try {
             groupDates = request.getParameter("wb_rep_type")==null ? 0:Integer.parseInt(request.getParameter("wb_rep_type"));
@@ -724,15 +713,15 @@ public class WBASectionReport extends GenericResource {
         }
         
         try {
-            if(deleteFilter==0) {
-                Iterator<Language> itLanguages = paramsRequest.getTopic().getWebSite().listLanguages();
+            /*if(deleteFilter==0) {*/
+                /*Iterator<Language> itLanguages = paramsRequest.getTopic().getWebSite().listLanguages();
                 while(itLanguages.hasNext()) {
                     Language language = itLanguages.next();
                     if(language.getId().equalsIgnoreCase(lang)) {
                         idaux.add(language);
                         break;
                     }
-                }                
+                }*/
                 if(groupDates==0) { // radio button was 0. Select only one date
                     String[] numFecha = fecha1.split("-");
                     filterReportBean = new WBAFilterReportBean();
@@ -758,7 +747,7 @@ public class WBASectionReport extends GenericResource {
                     filterReportBean.setMonthF(Integer.parseInt(numFecha[1]));
                     filterReportBean.setDayF(Integer.parseInt(numFecha[2]));
                 }
-            }else {
+            /*}else {
                 Iterator<Language> itLanguages = paramsRequest.getTopic().getWebSite().listLanguages();
                 if(groupDates==0) { // radio button was 0. Select only one date
                     String[] numFecha = fecha1.split("-");
@@ -785,7 +774,7 @@ public class WBASectionReport extends GenericResource {
                     filterReportBean.setMonthF(Integer.parseInt(numFecha[1]));
                     filterReportBean.setDayF(Integer.parseInt(numFecha[2]));
                 }
-            }            
+            }*/
         }catch (Exception e) {
             log.error("Error on method buildFilter() resource " + strRscType + " with id " + getResourceBase().getId(), e);
             throw(new SWBResourceException(e.getMessage()));
