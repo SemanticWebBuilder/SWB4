@@ -71,7 +71,7 @@
             <Component class="javax.swing.JButton" name="jButtonAddPage">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/org/semanticwb/openoffice/ui/icons/page.png"/>
+                  <Image iconType="3" name="/org/semanticwb/openoffice/ui/icons/icon_agregarpag.png"/>
                 </Property>
                 <Property name="toolTipText" type="java.lang.String" value="Agregar p&#xe1;gina al sitio web"/>
                 <Property name="enabled" type="boolean" value="false"/>
