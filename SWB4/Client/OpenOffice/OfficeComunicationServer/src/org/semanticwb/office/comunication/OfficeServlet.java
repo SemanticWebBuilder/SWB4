@@ -39,7 +39,7 @@ public abstract class OfficeServlet extends XMLRPCServlet
         RepositoryManagerLoader.getInstance();
     }
 
-    public static String getPassword(String userpassDecoded) throws IOException
+    private static String getPassword(String userpassDecoded) throws IOException
     {
         String password = "";
         String[] values = userpassDecoded.split(":");
@@ -47,7 +47,7 @@ public abstract class OfficeServlet extends XMLRPCServlet
         return password;
     }
 
-    public static String getUserName(String userpassDecoded) throws IOException
+    private static String getUserName(String userpassDecoded) throws IOException
     {
         String userName = "";
         String[] values = userpassDecoded.split(":");
