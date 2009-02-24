@@ -18,7 +18,7 @@ import org.semanticwb.portal.api.SWBResourceException;
 public class WebSiteSectionTree {
     private static Logger log = SWBUtils.getLogger(WebSiteSectionTree.class);
     
-    protected static final String webcontext = SWBPlatform.getContextPath() + "/swbadmin/icons/";
+    protected static final String pathImages = SWBPlatform.getContextPath() + "/swbadmin/icons/";
     
     public String render(String selectedsite, HttpServletRequest request, User user, String url) throws SWBResourceException, IOException {
         StringBuilder sb_ret = new StringBuilder();
@@ -52,7 +52,7 @@ public class WebSiteSectionTree {
             sb_ret.append("<div id=\"sitesectiontree\">");
             sb_ret.append("<ul class=\"treeres\">");
             sb_ret.append("<li>");
-            sb_ret.append("<img src=\""+webcontext+"/icon_sitea.gif\" />");
+            sb_ret.append("<img src=\""+pathImages+"/icon_sitea.gif\" />");
             sb_ret.append(tmit.getId());
             sb_ret.append("<ul class=\"treeres\">");
             sb_ret.append("<li>");
@@ -61,26 +61,26 @@ public class WebSiteSectionTree {
                 style=" style=\"color:#FF6600; font-weight:bold\" ";                
                 if(toggleopen) {
                     params.append("&"+tmhome.getId()+"=0");
-                    sb_ret.append("<img src=\""+webcontext+"/plus.gif\"  onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','slave')\" />");
+                    sb_ret.append("<img src=\""+pathImages+"/plus.gif\"  onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','slave')\" />");
                     toggleopen = false;
                 }else {
                     params.append("&"+tmhome.getId()+"=1");
-                    sb_ret.append("<img src=\""+webcontext+"/minus.gif\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','slave')\" />");
+                    sb_ret.append("<img src=\""+pathImages+"/minus.gif\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','slave')\" />");
                     toggleopen = true;
                 }
             }else {
                 style="";
                 if(toggleopen) {
                     params.append("&"+tmhome.getId()+"=1");
-                    sb_ret.append("<img src=\""+webcontext+"/minus.gif\"  onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','slave')\" />");
+                    sb_ret.append("<img src=\""+pathImages+"/minus.gif\"  onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','slave')\" />");
                 }else {
                     params.append("&"+tmhome.getId()+"=0");
-                    sb_ret.append("<img src=\""+webcontext+"/plus.gif\"  onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','slave')\" />");
+                    sb_ret.append("<img src=\""+pathImages+"/plus.gif\"  onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','slave')\" />");
                 }
             }
             
             sb_ret.append("<a class=\"treeres\" onclick=\"getHtml('"+url+"/?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+whoOpen+params+"','slave')\""+style+">");
-            sb_ret.append("<img src=\""+webcontext+"/icon_homea.gif\" />");
+            sb_ret.append("<img src=\""+pathImages+"/icon_homea.gif\" />");
             sb_ret.append(tmhome.getDisplayName());            
             sb_ret.append("</a>");
             
@@ -99,26 +99,26 @@ public class WebSiteSectionTree {
                                 style=" style=\"color:#FF6600; font-weight:bold\" ";
                                 if(toggleopen) {
                                     params.append("&"+webpage.getId()+"=0");
-                                    sb_ret.append("<img src=\""+webcontext+"/plus.gif\"  onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','slave')\" />");
+                                    sb_ret.append("<img src=\""+pathImages+"/plus.gif\"  onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','slave')\" />");
                                     toggleopen = false;
                                 }else {
                                     params.append("&"+webpage.getId()+"=1");
-                                    sb_ret.append("<img src=\""+webcontext+"/minus.gif\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','slave')\" />");
+                                    sb_ret.append("<img src=\""+pathImages+"/minus.gif\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','slave')\" />");
                                     toggleopen = true;
                                 }
                             }else {
                                 style="";
                                 if(toggleopen) {
                                     params.append("&"+webpage.getId()+"=1");
-                                    sb_ret.append("<img src=\""+webcontext+"/minus.gif\"  onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + webpage.getId()+params+"','slave')\" />");
+                                    sb_ret.append("<img src=\""+pathImages+"/minus.gif\"  onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + webpage.getId()+params+"','slave')\" />");
                                 }else {
                                     params.append("&"+webpage.getId()+"=0");
-                                    sb_ret.append("<img src=\""+webcontext+"/plus.gif\"  onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + webpage.getId()+params+"','slave')\" />");
+                                    sb_ret.append("<img src=\""+pathImages+"/plus.gif\"  onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + webpage.getId()+params+"','slave')\" />");
                                 }                                
                             }                            
                             
                             sb_ret.append("<a class=\"treeres\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','slave')\""+style+">");
-                            sb_ret.append("<img src=\""+webcontext+"/icon-section.gif\" />");
+                            sb_ret.append("<img src=\""+pathImages+"/icon-section.gif\" />");
                             sb_ret.append(webpage.getDisplayName());
                             sb_ret.append("</a>");
                             
@@ -135,9 +135,9 @@ public class WebSiteSectionTree {
                             }
                             
                             sb_ret.append("<li>");
-                            sb_ret.append("<img src=\""+webcontext+"/trans.gif\" />");
+                            sb_ret.append("<img src=\""+pathImages+"/trans.gif\" />");
                             sb_ret.append("<a class=\"treeres\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','slave')\""+style+">");
-                            sb_ret.append("<img src=\""+webcontext+"/icon-section.gif\" />");
+                            sb_ret.append("<img src=\""+pathImages+"/icon-section.gif\" />");
                             sb_ret.append(webpage.getDisplayName());
                             sb_ret.append("</a>");
                             sb_ret.append("</li>");
@@ -177,26 +177,26 @@ public class WebSiteSectionTree {
                         style=" style=\"color:#FF6600; font-weight:bold\" ";
                         if(toggleopen) {
                             params.append("&"+webpage.getId()+"=0");
-                            sb_ret.append("<img src=\""+webcontext+"/plus.gif\"  onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','slave')\" />");
+                            sb_ret.append("<img src=\""+pathImages+"/plus.gif\"  onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','slave')\" />");
                             toggleopen = false;
                         }else {
                             params.append("&"+webpage.getId()+"=1");
-                            sb_ret.append("<img src=\""+webcontext+"/minus.gif\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','slave')\" />");
+                            sb_ret.append("<img src=\""+pathImages+"/minus.gif\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','slave')\" />");
                             toggleopen = true;
                         }
                     }else {
                         style="";
                         if(toggleopen) {
                             params.append("&"+webpage.getId()+"=1");
-                            sb_ret.append("<img src=\""+webcontext+"/minus.gif\"  onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','slave')\" />");
+                            sb_ret.append("<img src=\""+pathImages+"/minus.gif\"  onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','slave')\" />");
                         }else {
                             params.append("&"+webpage.getId()+"=0");
-                            sb_ret.append("<img src=\""+webcontext+"/plus.gif\"  onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','slave')\" />");
+                            sb_ret.append("<img src=\""+pathImages+"/plus.gif\"  onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','slave')\" />");
                         }                        
                     }                            
 
                     sb_ret.append("<a class=\"treeres\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','slave')\""+style+">");
-                    sb_ret.append("<img src=\""+webcontext+"/icon-section.gif\" />");
+                    sb_ret.append("<img src=\""+pathImages+"/icon-section.gif\" />");
                     sb_ret.append(webpage.getDisplayName());
                     sb_ret.append("</a>");
 
@@ -213,9 +213,9 @@ public class WebSiteSectionTree {
                     }
                     
                     sb_ret.append("<li>");
-                    sb_ret.append("<img src=\""+webcontext+"/trans.gif\" />");
+                    sb_ret.append("<img src=\""+pathImages+"/trans.gif\" />");
                     sb_ret.append("<a class=\"treeres\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','slave')\""+style+">");
-                    sb_ret.append("<img src=\""+webcontext+"/icon-section.gif\" />");
+                    sb_ret.append("<img src=\""+pathImages+"/icon-section.gif\" />");
                     sb_ret.append(webpage.getDisplayName());
                     sb_ret.append("</a>");
                     sb_ret.append("</li>");
