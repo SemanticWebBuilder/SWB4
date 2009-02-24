@@ -212,7 +212,7 @@ public class GateWayOffice implements InternalServlet
                                 {
                                     showExcelContent(out, file, dir, contentId, repositoryName);
                                 }
-                                else if (type.equalsIgnoreCase("powerpoint"))
+                                else if (type.equalsIgnoreCase("ppt"))
                                 {
                                     showPPTContent(out, file, dir, contentId, repositoryName);
                                 }
