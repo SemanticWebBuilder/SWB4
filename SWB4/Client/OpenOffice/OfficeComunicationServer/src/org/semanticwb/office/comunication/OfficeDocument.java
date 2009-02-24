@@ -804,7 +804,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             OfficePortlet portlet = null;
             String id = UUID.randomUUID().toString();
             PortletType portletType = null;
-            if (type.equals("EXCEL"))
+            if (type.equalsIgnoreCase("EXCEL"))
             {
                 portlet = ExcelPortlet.createExcelPortlet(id, site);
                 portletType = site.getPortletType(EXCEL_PORTLET_TYPE);
@@ -819,7 +819,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     portletType.setUpdated(new Date(System.currentTimeMillis()));
                 }
             }
-            else if (type.equals("PPT"))
+            else if (type.equalsIgnoreCase("PPT"))
             {
                 portlet = PPTPortlet.createPPTPortlet(id, site);
                 portletType = site.getPortletType(PPT_PORTLET_TYPE);
