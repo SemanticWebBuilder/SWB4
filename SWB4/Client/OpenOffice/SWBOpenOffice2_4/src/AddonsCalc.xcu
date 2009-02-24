@@ -373,7 +373,7 @@
             </node>
         </node>
         
-        <node oor:name="Images">
+         <node oor:name="Images">
             <node oor:name="org.semanticwb.openoffice.calc.wb4calcaddon.publish.images" oor:op="replace">
                 <prop oor:name="URL" oor:type="xs:string">
                     <value>org.semanticwb.openoffice.calc.wb4calcaddon:publish</value>
@@ -484,13 +484,156 @@
                     </prop>
                 </node>
             </node>
-            <node oor:name="org.semanticwb.openoffice.calc.wb4calcaddon.about.images" oor:op="replace">
+            <node oor:name="org.semanticwb.openoffice.calc.wb4calcaddon.save.images" oor:op="replace">
                 <prop oor:name="URL" oor:type="xs:string">
-                    <value>org.semanticwb.openoffice.calc.wb4calcaddon:about</value>
+                    <value>org.semanticwb.openoffice.calc.wb4calcaddon:save</value>
                 </prop>
                 <node oor:name="UserDefinedImages">
                     <prop oor:name="ImageSmallURL">
-                        <value/>
+                        <value>%origin%/images/save.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigURL">
+                        <value>%origin%/images/save.png</value>
+                    </prop>
+                    <prop oor:name="ImageSmallHCURL">
+                        <value>%origin%/images/save.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigHCURL">
+                        <value>%origin%/images/save.png</value>
+                    </prop>
+                </node>
+            </node>
+
+            <node oor:name="org.semanticwb.openoffice.calc.wb4calcaddon.publish" oor:op="replace">
+                <prop oor:name="URL" oor:type="xs:string">
+                    <value>org.semanticwb.openoffice.calc.wb4calcaddon:publish</value>
+                </prop>
+                <node oor:name="UserDefinedImages">
+                    <prop oor:name="ImageSmallURL">
+                        <value>%origin%/images/envpaga.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigURL">
+                        <value>%origin%/images/envpaga.png</value>
+                    </prop>
+                    <prop oor:name="ImageSmallHCURL">
+                        <value>%origin%/images/envpaga.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigHCURL">
+                        <value>%origin%/images/envpaga.png</value>
+                    </prop>
+                </node>
+            </node>
+            <node oor:name="org.semanticwb.openoffice.calc.wb4calcaddon.open" oor:op="replace">
+                <prop oor:name="URL" oor:type="xs:string">
+                    <value>org.semanticwb.openoffice.calc.wb4calcaddon:open</value>
+                </prop>
+                <node oor:name="UserDefinedImages">
+                    <prop oor:name="ImageSmallURL">
+                        <value>%origin%/images/open.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigURL">
+                        <value>%origin%/images/open.png</value>
+                    </prop>
+                    <prop oor:name="ImageSmallHCURL">
+                        <value>%origin%/images/open.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigHCURL">
+                        <value>%origin%/images/open.png</value>
+                    </prop>
+                </node>
+            </node>
+            <node oor:name="org.semanticwb.openoffice.calc.wb4calcaddon.information" oor:op="replace">
+                <prop oor:name="URL" oor:type="xs:string">
+                    <value>org.semanticwb.openoffice.calc.wb4calcaddon:information</value>
+                </prop>
+                <node oor:name="UserDefinedImages">
+                    <prop oor:name="ImageSmallURL">
+                        <value>%origin%/images/icon_inf32.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigURL">
+                        <value>%origin%/images/icon_inf32.png</value>
+                    </prop>
+                    <prop oor:name="ImageSmallHCURL">
+                        <value>%origin%/images/icon_inf32.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigHCURL">
+                        <value>%origin%/images/icon_inf32.png</value>
+                    </prop>
+                </node>
+            </node>
+            <node oor:name="org.semanticwb.openoffice.calc.wb4calcaddon.delete" oor:op="replace">
+                <prop oor:name="URL" oor:type="xs:string">
+                    <value>org.semanticwb.openoffice.calc.wb4calcaddon:delete</value>
+                </prop>
+                <node oor:name="UserDefinedImages">
+                    <prop oor:name="ImageSmallURL">
+                        <value>%origin%/images/delete.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigURL">
+                        <value>%origin%/images/delete.png</value>
+                    </prop>
+                    <prop oor:name="ImageSmallHCURL">
+                        <value>%origin%/images/delete.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigHCURL">
+                        <value>%origin%/images/delete.png</value>
+                    </prop>
+                </node>
+            </node>
+            <node oor:name="org.semanticwb.openoffice.calc.wb4calcaddon.createSection" oor:op="replace">
+                <prop oor:name="URL" oor:type="xs:string">
+                    <value>org.semanticwb.openoffice.calc.wb4calcaddon:createSection</value>
+                </prop>
+                <node oor:name="UserDefinedImages">
+                    <prop oor:name="ImageSmallURL">
+                        <value>%origin%/images/icon_agregarpag32.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigURL">
+                        <value>%origin%/images/icon_agregarpag32.png</value>
+                    </prop>
+                    <prop oor:name="ImageSmallHCURL">
+                        <value>%origin%/images/icon_agregarpag32.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigHCURL">
+                        <value>%origin%/images/icon_agregarpag32.png</value>
+                    </prop>
+                </node>
+            </node>
+            <node oor:name="org.semanticwb.openoffice.calc.wb4calcaddon.changePassword" oor:op="replace">
+                <prop oor:name="URL" oor:type="xs:string">
+                    <value>org.semanticwb.openoffice.calc.wb4calcaddon:changePassword</value>
+                </prop>
+                <node oor:name="UserDefinedImages">
+                    <prop oor:name="ImageSmallURL">
+                        <value>%origin%/images/icon_pass32.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigURL">
+                        <value>%origin%/images/icon_pass32.png</value>
+                    </prop>
+                    <prop oor:name="ImageSmallHCURL">
+                        <value>%origin%/images/icon_pass32.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigHCURL">
+                        <value>%origin%/images/icon_pass32.png</value>
+                    </prop>
+                </node>
+            </node>
+            <node oor:name="org.semanticwb.openoffice.calc.wb4calcaddon.help" oor:op="replace">
+                <prop oor:name="URL" oor:type="xs:string">
+                    <value>org.semanticwb.openoffice.calc.wb4calcaddon:help</value>
+                </prop>
+                <node oor:name="UserDefinedImages">
+                    <prop oor:name="ImageSmallURL">
+                        <value>%origin%/images/icon_ayuda32.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigURL">
+                        <value>%origin%/images/icon_ayuda32.png</value>
+                    </prop>
+                    <prop oor:name="ImageSmallHCURL">
+                        <value>%origin%/images/icon_ayuda32.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigHCURL">
+                        <value>%origin%/images/icon_ayuda32.png</value>
                     </prop>
                 </node>
             </node>
