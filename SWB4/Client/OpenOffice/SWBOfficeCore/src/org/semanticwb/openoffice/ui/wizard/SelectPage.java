@@ -219,7 +219,7 @@ public class SelectPage extends WizardPage
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
-        jButtonAddPage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/page.png"))); // NOI18N
+        jButtonAddPage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/icon_agregarpag.png"))); // NOI18N
         jButtonAddPage.setToolTipText("Agregar página al sitio web");
         jButtonAddPage.setEnabled(false);
         jButtonAddPage.setFocusable(false);
