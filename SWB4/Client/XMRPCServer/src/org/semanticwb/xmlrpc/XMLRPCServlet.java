@@ -201,6 +201,7 @@ public abstract class XMLRPCServlet extends HttpServlet
             ServletOutputStream out = response.getOutputStream();            
             XMLOutputter xMLOutputter = new XMLOutputter();            
             //xMLOutputter.output(docResponse, out);
+
             
             String xml=xMLOutputter.outputString(docResponse);
             out.write(xml.getBytes());
