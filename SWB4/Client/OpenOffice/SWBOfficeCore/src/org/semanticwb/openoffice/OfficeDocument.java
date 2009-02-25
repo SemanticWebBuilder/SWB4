@@ -762,6 +762,11 @@ public abstract class OfficeDocument
 
     public final void insertLink()
     {
+        if(this.isReadOnly())
+        {
+            JOptionPane.showMessageDialog(null, "¡El documento es de sólo lectura!","Insertar liga a página",JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         if (OfficeApplication.tryLogin())
         {
             AddLinkProducer resultProducer = new AddLinkProducer(this);
