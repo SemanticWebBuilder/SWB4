@@ -176,59 +176,7 @@ public class WB4Writer extends OfficeDocument
 
         return attachments;
     }
-
-    public void insertLink(String url, String text)
-    {
-
-        XTextDocument xTextDocument = (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, this.document);
-
-        Object selection = xTextDocument.getCurrentSelection();
-        XTextRange xTextRange = (XTextRange) UnoRuntime.queryInterface(XTextRange.class, selection);
-        if (xTextRange == null)
-        {
-            XModel xModel = (XModel) UnoRuntime.queryInterface(XModel.class, this.document);
-            XController xController = xModel.getCurrentController();
-            XTextViewCursorSupplier xViewCursorSupplier = (XTextViewCursorSupplier) UnoRuntime.queryInterface(XTextViewCursorSupplier.class, xController);
-            XTextViewCursor xViewCursor = xViewCursorSupplier.getViewCursor();
-            XText xDocumentText = xViewCursor.getText();
-
-            XTextCursor xTextCursor = xDocumentText.createTextCursorByRange(xViewCursor.getStart());
-            XText xText = xTextCursor.getText();
-            XPropertySet xTextCursorProps = (XPropertySet) UnoRuntime.queryInterface(
-                    XPropertySet.class, xTextCursor);
-            try
-            {
-                xTextCursorProps.setPropertyValue(HYPERLINK_VALUE, url);
-                xText.insertString(xTextCursor, text, false);
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-
-        }
-        else
-        {
-
-            XText range = xTextRange.getText();
-            if (range != null)
-            {
-                XText xText = range.getText();
-                XTextCursor xTextCursor = xText.createTextCursor();
-                XPropertySet xTextCursorProps = (XPropertySet) UnoRuntime.queryInterface(
-                        XPropertySet.class, xTextCursor);
-                try
-                {
-                    xTextCursorProps.setPropertyValue(HYPERLINK_VALUE, url);
-                    xText.insertString(xTextCursor, text, false);
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
+    
 
     /**
      * Gets al the custom properties of the document
@@ -761,5 +709,57 @@ public class WB4Writer extends OfficeDocument
     public String getPublicationExtension()
     {
         return WORD_EXTENSION;
+    }
+    public void insertLink(String url, String text)
+    {
+
+        XTextDocument xTextDocument = (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, this.document);
+
+        Object selection = xTextDocument.getCurrentSelection();
+        XTextRange xTextRange = (XTextRange) UnoRuntime.queryInterface(XTextRange.class, selection);
+        if (xTextRange == null)
+        {
+            XModel xModel = (XModel) UnoRuntime.queryInterface(XModel.class, this.document);
+            XController xController = xModel.getCurrentController();
+            XTextViewCursorSupplier xViewCursorSupplier = (XTextViewCursorSupplier) UnoRuntime.queryInterface(XTextViewCursorSupplier.class, xController);
+            XTextViewCursor xViewCursor = xViewCursorSupplier.getViewCursor();
+            XText xDocumentText = xViewCursor.getText();
+
+            XTextCursor xTextCursor = xDocumentText.createTextCursorByRange(xViewCursor.getStart());
+            XText xText = xTextCursor.getText();
+            XPropertySet xTextCursorProps = (XPropertySet) UnoRuntime.queryInterface(
+                    XPropertySet.class, xTextCursor);
+            try
+            {
+                xTextCursorProps.setPropertyValue(HYPERLINK_VALUE, url);
+                xText.insertString(xTextCursor, text, false);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+
+        }
+        else
+        {
+
+            XText range = xTextRange.getText();
+            if (range != null)
+            {
+                XText xText = range.getText();
+                XTextCursor xTextCursor = xText.createTextCursor();
+                XPropertySet xTextCursorProps = (XPropertySet) UnoRuntime.queryInterface(
+                        XPropertySet.class, xTextCursor);
+                try
+                {
+                    xTextCursorProps.setPropertyValue(HYPERLINK_VALUE, url);
+                    xText.insertString(xTextCursor, text, false);
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }
