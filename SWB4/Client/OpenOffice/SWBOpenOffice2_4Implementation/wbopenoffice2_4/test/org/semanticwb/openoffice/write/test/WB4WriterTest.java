@@ -107,9 +107,7 @@ public class WB4WriterTest
     @After
     public void tearDown()
     {
-        xCompDest.dispose();
-
-        // Opcionalmente, cerrar el ejecutable de OpenOffice (solo si no vamos a extraer nada mas)   
+        xCompDest.dispose();        
         oDesktop.terminate();
         xCompDest = null;
         oDesktop = null;
@@ -279,7 +277,7 @@ public class WB4WriterTest
         }
     }
     @Test  
-    //@Ignore
+    @Ignore
     public void saveToSiteTest()
     {
         try
@@ -353,7 +351,7 @@ public class WB4WriterTest
     }
 
     @Test
-    @Ignore
+    //@Ignore
     public void addLinkTest()
     {
         try
