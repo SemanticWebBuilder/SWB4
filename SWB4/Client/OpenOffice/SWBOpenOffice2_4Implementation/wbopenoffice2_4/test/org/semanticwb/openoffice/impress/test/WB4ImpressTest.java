@@ -227,13 +227,28 @@ public class WB4ImpressTest
     }
 
     @Test
-    //@Ignore
+    @Ignore
     public void saveToSiteTest()
     {
         try
         {
             WB4Impress writer = new WB4Impress(this.xContext);
             writer.saveToSite();
+        }
+        catch (WBException wbe)
+        {
+            Assert.fail(wbe.getMessage());
+        }
+    }
+
+    @Test
+    //@Ignore
+    public void insertLinkTest()
+    {
+        try
+        {
+            WB4Impress writer = new WB4Impress(this.xContext);
+            writer.insertLink();
         }
         catch (WBException wbe)
         {
