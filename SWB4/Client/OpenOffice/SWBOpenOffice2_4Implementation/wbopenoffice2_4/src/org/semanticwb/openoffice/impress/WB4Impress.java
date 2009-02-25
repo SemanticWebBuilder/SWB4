@@ -55,6 +55,7 @@ import static org.semanticwb.openoffice.util.FileUtil.getPathURL;
  */
 public class WB4Impress extends OfficeDocument
 {
+
     private static final String ERROR_DOCUMENT_NOT_MODIFIED = "The document has not been modified";
     private static final String ERROR_DOCUMENT_NOT_SAVED_BEFORE = "The document has not been saved before";
     private static final String ERROR_DOCUMENT_NOT_FOUND = "There is not a document active in the desktop";
@@ -81,6 +82,7 @@ public class WB4Impress extends OfficeDocument
     private static final String script;
     private final XComponent document;
 
+
     static
     {
         frameContentHTML = loadResourceAsString(WB4Impress.class, "frame.html");
@@ -97,7 +99,7 @@ public class WB4Impress extends OfficeDocument
      */
     public WB4Impress(XComponent document)
     {
-        this.document = document;        
+        this.document = document;
     }
 
     /**
@@ -115,7 +117,7 @@ public class WB4Impress extends OfficeDocument
                     DESKTOP_PATH, m_xContext);
             XDesktop xdesktop = (XDesktop) UnoRuntime.queryInterface(XDesktop.class, desktop);
             document = xdesktop.getCurrentComponent();
-            if(document==null)
+            if (document == null)
             {
                 throw new WBOfficeException(ERROR_DOCUMENT_NOT_FOUND);
             }
@@ -123,7 +125,7 @@ public class WB4Impress extends OfficeDocument
         catch (com.sun.star.uno.Exception e)
         {
             throw new WBOfficeException(ERROR_DESKTOP_NOT_FOUND, e);
-        }        
+        }
     }
 
     /**
@@ -285,13 +287,13 @@ public class WB4Impress extends OfficeDocument
      * @throws org.semanticwb.openoffice.WBException If the list of properties are more that four
      */
     @Override
-    public final Map<String, String> getCustomProperties() 
+    public final Map<String, String> getCustomProperties()
     {
         HashMap<String, String> properties = new HashMap<String, String>();
 
         XDocumentInfoSupplier xdis =
                 (XDocumentInfoSupplier) UnoRuntime.queryInterface(XDocumentInfoSupplier.class, document);
-        XDocumentInfo xdi = xdis.getDocumentInfo();        
+        XDocumentInfo xdi = xdis.getDocumentInfo();
         for (short i = 0; i < xdi.getUserFieldCount(); i++)
         {
             try
@@ -301,7 +303,7 @@ public class WB4Impress extends OfficeDocument
                 properties.put(name, value);
             }
             catch (com.sun.star.lang.ArrayIndexOutOfBoundsException aibe)
-            {                
+            {
                 ErrorLog.log(aibe);
             }
         }
@@ -852,7 +854,7 @@ public class WB4Impress extends OfficeDocument
             outlineFile.delete();
         }
         String newOutLine = outline.replace("[esquema]", esquema);
-        newOutLine=newOutLine.replace("[file]", htmlFile.getName());
+        newOutLine = newOutLine.replace("[file]", htmlFile.getName());
         saveContent(newOutLine, outlineFile);
     }
 
@@ -912,8 +914,8 @@ public class WB4Impress extends OfficeDocument
     {
         return PPT_EXTENSION;
     }
-     public void insertLink(String url,String text)
-    {
 
+    public void insertLink(String url, String text)
+    {
     }
 }
