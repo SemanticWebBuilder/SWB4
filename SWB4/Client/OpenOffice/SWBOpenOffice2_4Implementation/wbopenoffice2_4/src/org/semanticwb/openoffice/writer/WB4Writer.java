@@ -23,7 +23,6 @@ import com.sun.star.text.XTextViewCursor;
 import com.sun.star.text.XTextViewCursorSupplier;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
-import com.sun.star.uno.XInterface;
 import com.sun.star.util.XModifiable;
 import com.sun.star.util.XPropertyReplace;
 import com.sun.star.util.XSearchDescriptor;
