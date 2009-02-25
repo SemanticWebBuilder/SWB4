@@ -15,8 +15,10 @@ import com.sun.star.document.XDocumentInfoSupplier;
 import com.sun.star.drawing.XDrawPage;
 import com.sun.star.drawing.XDrawPages;
 import com.sun.star.drawing.XDrawPagesSupplier;
+import com.sun.star.drawing.XDrawView;
 import com.sun.star.drawing.XShape;
 import com.sun.star.drawing.XShapes;
+import com.sun.star.frame.XController;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XModel;
 import com.sun.star.frame.XStorable;
@@ -917,5 +919,12 @@ public class WB4Impress extends OfficeDocument
 
     public void insertLink(String url, String text)
     {
+        XModel xModel = (XModel) UnoRuntime.queryInterface(XModel.class, this.document);
+        XController xController = xModel.getCurrentController();
+        XDrawView view =(XDrawView) UnoRuntime.queryInterface(XDrawView.class, xController);
+        XDrawPage page=view.getCurrentPage();
+        XShapes xShapes = (XShapes) UnoRuntime.queryInterface(XShapes.class, page);
+        
+        //XTextRange textRange = (XTextRange) UnoRuntime.queryInterface(XTextRange.class, view);
     }
 }
