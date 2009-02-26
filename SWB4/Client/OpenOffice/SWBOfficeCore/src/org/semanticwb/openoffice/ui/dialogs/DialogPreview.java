@@ -14,7 +14,6 @@ import java.net.URL;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import org.semanticwb.openoffice.OfficeApplication;
-import static org.semanticwb.xmlrpc.Base64.encode;
 
 /**
  *
@@ -23,7 +22,7 @@ import static org.semanticwb.xmlrpc.Base64.encode;
 public class DialogPreview extends javax.swing.JDialog
 {
 
-    private final URL url;    
+    private final URL url;
 
     /** Creates new form DialogPreview */
     public DialogPreview(java.awt.Frame parent, boolean modal, URL url)
@@ -34,7 +33,8 @@ public class DialogPreview extends javax.swing.JDialog
         setURL(url);
         setLocationRelativeTo(null);
     }
-    public DialogPreview(java.awt.Frame parent, boolean modal, URL url,boolean showAddress)
+
+    public DialogPreview(java.awt.Frame parent, boolean modal, URL url, boolean showAddress)
     {
         super(parent, modal);
         this.url = url;
@@ -49,10 +49,10 @@ public class DialogPreview extends javax.swing.JDialog
     {
         try
         {
-            HttpURLConnection connection = (HttpURLConnection)url.openConnection();
-            connection.setFollowRedirects(true);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            HttpURLConnection.setFollowRedirects(true);
             Authenticator.setDefault(new MyAuthenticator());
-            connection.setInstanceFollowRedirects(true);            
+            connection.setInstanceFollowRedirects(true);
             this.jEditorPane1.setPage(connection.getURL());
             this.jTextFieldURL.setText(url.toString());
         }
@@ -236,28 +236,30 @@ public class DialogPreview extends javax.swing.JDialog
     private javax.swing.JTextField jTextFieldURL;
     // End of variables declaration//GEN-END:variables
 }
+
 class MyAuthenticator extends java.net.Authenticator
 {
+
     @Override
     protected PasswordAuthentication getPasswordAuthentication()
     {
-        String user="";
-        String password="";
+        String user = "";
+        String password = "";
         try
+        {
+            if (OfficeApplication.getOfficeApplicationProxy().getUser() != null)
             {
-                if (OfficeApplication.getOfficeApplicationProxy().getUser() != null)
-                {
-                    /*String userPassword = OfficeApplication.getOfficeDocumentProxy().getUser() + ":" + OfficeApplication.getOfficeDocumentProxy().getPassword();
-                    String encoded = new String(encode(userPassword.getBytes()));
-                    connection.setRequestProperty("Authorization", "Basic " + encoded);*/
-                    user=OfficeApplication.getOfficeDocumentProxy().getUser();
-                    password=OfficeApplication.getOfficeDocumentProxy().getPassword();
-                }
+                /*String userPassword = OfficeApplication.getOfficeDocumentProxy().getUser() + ":" + OfficeApplication.getOfficeDocumentProxy().getPassword();
+                String encoded = new String(encode(userPassword.getBytes()));
+                connection.setRequestProperty("Authorization", "Basic " + encoded);*/
+                user = OfficeApplication.getOfficeDocumentProxy().getUser();
+                password = OfficeApplication.getOfficeDocumentProxy().getPassword();
             }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
         return new PasswordAuthentication(user, password.toCharArray());
     }
 }
