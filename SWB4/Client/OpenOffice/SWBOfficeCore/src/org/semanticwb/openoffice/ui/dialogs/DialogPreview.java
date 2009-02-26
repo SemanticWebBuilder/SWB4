@@ -23,8 +23,7 @@ import static org.semanticwb.xmlrpc.Base64.encode;
 public class DialogPreview extends javax.swing.JDialog
 {
 
-    private final URL url;
-    private String tooltip = "No se puede navegar a través de la misma";
+    private final URL url;    
 
     /** Creates new form DialogPreview */
     public DialogPreview(java.awt.Frame parent, boolean modal, URL url)
@@ -201,7 +200,7 @@ public class DialogPreview extends javax.swing.JDialog
 
         jEditorPane1.setContentType("text/html");
         jEditorPane1.setEditable(false);
-        jEditorPane1.setToolTipText("");
+        jEditorPane1.setToolTipText("Esta página no es navegable");
         jEditorPane1.setPreferredSize(new java.awt.Dimension(600, 450));
         jScrollPane1.setViewportView(jEditorPane1);
 

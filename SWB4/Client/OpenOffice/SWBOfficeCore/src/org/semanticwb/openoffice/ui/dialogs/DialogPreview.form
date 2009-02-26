@@ -117,7 +117,7 @@
           <Properties>
             <Property name="contentType" type="java.lang.String" value="text/html"/>
             <Property name="editable" type="boolean" value="false"/>
-            <Property name="toolTipText" type="java.lang.String" value=""/>
+            <Property name="toolTipText" type="java.lang.String" value="Esta p&#xe1;gina no es navegable"/>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[600, 450]"/>
             </Property>
