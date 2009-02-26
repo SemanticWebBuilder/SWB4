@@ -46,7 +46,7 @@ public class DialogUpdateContent extends javax.swing.JDialog
                 jLabel1.repaint();
                 String name = document.getLocalPath().getName().replace(document.getDefaultExtension(), document.getPublicationExtension());
                 document.getOfficeDocumentProxy().updateContent(workspaceid, contentid, name);
-                jProgressBar.setValue(3);
+                jProgressBar.setValue(2);
                 jLabel1.setText("Actualización terminada");
                 summaryPublish1.loadVersions(contentid, workspaceid);
                 jButtonUpdate.setEnabled(false);
@@ -107,6 +107,11 @@ public class DialogUpdateContent extends javax.swing.JDialog
                 jButtonCloseActionPerformed(evt);
             }
         });
+
+        jProgressBar.setMaximum(2);
+        jProgressBar.setBorderPainted(false);
+        jProgressBar.setOpaque(true);
+        jProgressBar.setStringPainted(true);
 
         jButtonUpdate.setText("Actualizar");
         jButtonUpdate.addActionListener(new java.awt.event.ActionListener() {
