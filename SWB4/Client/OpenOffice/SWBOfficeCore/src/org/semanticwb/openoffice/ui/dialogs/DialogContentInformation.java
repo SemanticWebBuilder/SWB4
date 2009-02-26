@@ -754,7 +754,7 @@ public class DialogContentInformation extends javax.swing.JDialog
                 }
                 name = OfficeApplication.getOfficeDocumentProxy().createPreview(repository, contentId, version);
                 URL url = new URL(urlproxy + "?contentId=" + contentId + "&versionName=" + version + "&repositoryName=" + repository + "&name=" + name);
-                String title=OfficeApplication.getOfficeDocumentProxy().getTitle(repository, contentId);
+                String title=OfficeApplication.getOfficeDocumentProxy().getTitle(repository, contentId)+" ("+version+") ";
                 DialogPreview preview = new DialogPreview(url, false,title);
                 preview.setVisible(true);
             }
