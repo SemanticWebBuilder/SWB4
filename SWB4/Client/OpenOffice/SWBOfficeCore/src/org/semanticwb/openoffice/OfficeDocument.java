@@ -749,9 +749,7 @@ public abstract class OfficeDocument
         String workspace = this.getCustomProperties().get(WORKSPACE_ID_NAME);
         if (workspace!=null && OfficeApplication.tryLogin())
         {
-            DialogUpdateContent summary = new DialogUpdateContent(new Frame(), true, workspace, contentID, this);
-            summary.setLocationRelativeTo(null);
-            summary.setAlwaysOnTop(true);
+            DialogUpdateContent summary = new DialogUpdateContent(new Frame(), true, workspace, contentID, this);            
             summary.setVisible(true);
         }
     }
