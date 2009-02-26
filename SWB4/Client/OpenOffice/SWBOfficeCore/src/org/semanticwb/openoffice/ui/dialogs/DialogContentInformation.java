@@ -717,13 +717,13 @@ public class DialogContentInformation extends javax.swing.JDialog
         if (row != -1)
         {
             DefaultTableModel model = (DefaultTableModel) jTablePages.getModel();
-
             PortletInfo portletInfo = (PortletInfo) model.getValueAt(row, 0);
             try
             {
+                String title=portletInfo.title;
                 URI uri = document.getOfficeDocumentProxy().getWebAddress();
                 URL url = new URL(uri.getScheme() + "://" + uri.getHost() + ":" + uri.getPort() + portletInfo.page.url);
-                DialogPreview preview = new DialogPreview(url);
+                DialogPreview preview = new DialogPreview(url,title);
                 preview.setVisible(true);
             }
             catch (Exception e)
@@ -754,7 +754,8 @@ public class DialogContentInformation extends javax.swing.JDialog
                 }
                 name = OfficeApplication.getOfficeDocumentProxy().createPreview(repository, contentId, version);
                 URL url = new URL(urlproxy + "?contentId=" + contentId + "&versionName=" + version + "&repositoryName=" + repository + "&name=" + name);
-                DialogPreview preview = new DialogPreview(url, false);
+                String title=OfficeApplication.getOfficeDocumentProxy().getTitle(repository, contentId);
+                DialogPreview preview = new DialogPreview(url, false,title);
                 preview.setVisible(true);
             }
             catch (Exception e)

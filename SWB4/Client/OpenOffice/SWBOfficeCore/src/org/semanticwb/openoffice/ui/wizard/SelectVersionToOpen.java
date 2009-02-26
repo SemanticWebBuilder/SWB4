@@ -182,7 +182,8 @@ private void jButtonViewActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIR
             name=OfficeApplication.getOfficeDocumentProxy().createPreview(workspace, version.contentId, version.nameOfVersion);
             String urlproxy = OfficeApplication.getOfficeApplicationProxy().getWebAddress().toString();
             URL url = new URL(urlproxy + "?contentId=" + version.contentId + "&versionName=" + version.nameOfVersion + "&repositoryName=" + workspace + "&name=" + name);
-            DialogPreview dialogPreview=new DialogPreview(url,false);
+            String title=OfficeApplication.getOfficeDocumentProxy().getTitle(workspace, version.contentId);
+            DialogPreview dialogPreview=new DialogPreview(url,false,title);
             dialogPreview.setVisible(true);
         }
         catch(Exception e)
