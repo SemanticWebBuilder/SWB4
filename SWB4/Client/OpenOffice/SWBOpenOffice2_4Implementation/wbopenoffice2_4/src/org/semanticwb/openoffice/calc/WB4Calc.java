@@ -15,10 +15,13 @@ import com.sun.star.frame.XStorable;
 import com.sun.star.io.IOException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiComponentFactory;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sheet.*;
 import com.sun.star.table.XCell;
 import com.sun.star.text.XText;
+import com.sun.star.text.XTextContent;
 import com.sun.star.text.XTextCursor;
+import com.sun.star.text.XTextField;
 import com.sun.star.text.XTextFieldsSupplier;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
@@ -51,6 +54,7 @@ import static org.semanticwb.openoffice.util.FileUtil.getFileFromURL;
  */
 public class WB4Calc extends OfficeDocument
 {
+
     private static final String HYPERLINK_VALUE = "HyperLinkURL";
     private static final String ERROR_DOCUMENT_NOT_FOUND = "There is not a document active in the desktop";
     private static final String CALC_FORMAT = "Calc8";
@@ -707,14 +711,21 @@ public class WB4Calc extends OfficeDocument
                 xSheetDocument);
 
         XCell xCell = (XCell) UnoRuntime.queryInterface(XCell.class, xModel.getCurrentSelection());
-        XText xCellText = (XText)UnoRuntime.queryInterface(XText.class, xCell);
+        XText xCellText = (XText) UnoRuntime.queryInterface(XText.class, xCell);
         XTextCursor xTextCursor = xCellText.createTextCursor();
-        XPropertySet xTextCursorProps = (XPropertySet) UnoRuntime.queryInterface(
-                XPropertySet.class, xTextCursor);
+        XMultiServiceFactory xDocFactory = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, this.document);
         try
         {
-            xTextCursorProps.setPropertyValue(HYPERLINK_VALUE, url);
-            xCellText.insertString(xTextCursor, text, false);
+            Object objtextfied = xDocFactory.createInstance("com.sun.star.text.TextField.URL");
+            XTextField textfield = (XTextField) UnoRuntime.queryInterface(XTextField.class, objtextfied);
+            XPropertySet xTextFieldProps = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, objtextfied);
+            xTextFieldProps.setPropertyValue("Representation", text);
+            xTextFieldProps.setPropertyValue("TargetFrame", "_blank");
+            xTextFieldProps.setPropertyValue("URL", url);
+            XText xShapeText = (XText) UnoRuntime.queryInterface(XText.class, xCell);
+            XTextCursor xShapeTextCursor = xShapeText.getText().createTextCursorByRange(xShapeText.getStart());
+            XTextContent xFieldTextContent = (XTextContent) UnoRuntime.queryInterface(XTextContent.class, xTextFieldProps);
+            xShapeText.insertTextContent(xTextCursor, xFieldTextContent, false);
         }
         catch (Exception e)
         {
