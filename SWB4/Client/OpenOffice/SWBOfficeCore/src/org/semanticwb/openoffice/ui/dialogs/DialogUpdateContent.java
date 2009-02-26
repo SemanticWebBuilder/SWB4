@@ -76,6 +76,7 @@ public class DialogUpdateContent extends javax.swing.JDialog
         this.contentid = contentid;
         summaryPublish1.loadVersions(contentid, wokspaceid);
         this.document = document;
+        this.setLocationRelativeTo(null);
     }
 
     /** This method is called from within the constructor to
@@ -95,7 +96,6 @@ public class DialogUpdateContent extends javax.swing.JDialog
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Actualizacón de contenido");
-        setLocationByPlatform(true);
         setModal(true);
         setResizable(false);
 
