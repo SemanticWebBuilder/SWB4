@@ -289,7 +289,7 @@ public class WB4ImpressTest
             Assert.fail(wbe.getMessage());
         }
     }
-
+    
     @Test
     @Ignore
     public void getAllAttachmentsTest()
