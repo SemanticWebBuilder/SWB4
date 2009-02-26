@@ -6,6 +6,7 @@
 
 package org.semanticwb.openoffice.ui.dialogs;
 
+import java.awt.Frame;
 import java.io.File;
 import javax.swing.filechooser.FileFilter;
 
@@ -17,9 +18,10 @@ public class DialogSaveDocument extends javax.swing.JDialog {
     
     private boolean isCanceled=true;
     /** Creates new form DialogSaveDocument */
-    public DialogSaveDocument(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
-        initComponents(); 
+    public DialogSaveDocument() {
+        super((Frame)null, ModalityType.TOOLKIT_MODAL);
+        initComponents();
+        this.setModal(true);
         this.setAlwaysOnTop(true);
         this.setLocationRelativeTo(null);
         

@@ -9,7 +9,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.util.Map;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -262,7 +261,7 @@ private void jButtonAddCategoryActionPerformed(java.awt.event.ActionEvent evt) {
     if (selected != null && selected instanceof CategoryNode)
     {
         CategoryNode categoryNode = (CategoryNode) selected;
-        DialogAddCategory addCategory = new DialogAddCategory(new JFrame(), true, categoryNode.getRepository(), categoryNode.getID());
+        DialogAddCategory addCategory = new DialogAddCategory(categoryNode.getRepository(), categoryNode.getID());
         addCategory.setVisible(true);
         if (!addCategory.isCancel())
         {
@@ -273,7 +272,7 @@ private void jButtonAddCategoryActionPerformed(java.awt.event.ActionEvent evt) {
     if (selected != null && selected instanceof RepositoryNode)
     {
         RepositoryNode repositoryNode = (RepositoryNode) selected;
-        DialogAddCategory addCategory = new DialogAddCategory(new JFrame(), true, repositoryNode.getName());
+        DialogAddCategory addCategory = new DialogAddCategory(repositoryNode.getName());
         addCategory.setVisible(true);
         if (!addCategory.isCancel())
         {

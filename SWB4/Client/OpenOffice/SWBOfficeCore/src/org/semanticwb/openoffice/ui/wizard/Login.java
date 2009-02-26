@@ -176,7 +176,7 @@ private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN
 }//GEN-LAST:event_jButtonDeleteActionPerformed
 
 private void jButtonAvancedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAvancedActionPerformed
-    DialogConfigProxy dialogConfigProxy = new DialogConfigProxy(new JFrame(), true);
+    DialogConfigProxy dialogConfigProxy = new DialogConfigProxy();
     dialogConfigProxy.setLocationRelativeTo(this);
     dialogConfigProxy.setVisible(true);
 }//GEN-LAST:event_jButtonAvancedActionPerformed

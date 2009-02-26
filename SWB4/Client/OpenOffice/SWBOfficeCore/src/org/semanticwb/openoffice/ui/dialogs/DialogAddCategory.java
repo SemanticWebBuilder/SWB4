@@ -6,6 +6,7 @@
 package org.semanticwb.openoffice.ui.dialogs;
 
 import java.awt.Cursor;
+import java.awt.Frame;
 import javax.swing.JOptionPane;
 import org.semanticwb.office.interfaces.CategoryInfo;
 import org.semanticwb.openoffice.OfficeApplication;
@@ -22,19 +23,20 @@ public class DialogAddCategory extends javax.swing.JDialog
     private final String repository;
     private final String categoryId;
 
-    public DialogAddCategory(java.awt.Frame parent, boolean modal, String repository, String categoryid)
+    public DialogAddCategory(String repository, String categoryid)
     {
-        super(parent, modal);
+        super((Frame)null, ModalityType.TOOLKIT_MODAL);
         initComponents();
+        this.setModal(true);
         this.repository = repository;
         this.setTitle("Agregar categoria a repositorio " + repository);
         this.setLocationRelativeTo(null);
         this.categoryId = categoryid;
     }
 
-    public DialogAddCategory(java.awt.Frame parent, boolean modal, String repository)
+    public DialogAddCategory(String repository)
     {
-        this(parent, modal, repository, null);
+        this(repository, null);
     }
 
     /** This method is called from within the constructor to

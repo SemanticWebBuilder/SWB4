@@ -5,6 +5,7 @@
  */
 package org.semanticwb.openoffice.ui.dialogs;
 
+import java.awt.Frame;
 import java.text.DecimalFormat;
 import javax.swing.JOptionPane;
 import org.semanticwb.openoffice.Configuration;
@@ -22,10 +23,11 @@ public class DialogConfigProxy extends javax.swing.JDialog
     Configuration configuration=new Configuration();
 
     /** Creates new form DialogConfigProxy */
-    public DialogConfigProxy(java.awt.Frame parent, boolean modal)
+    public DialogConfigProxy()
     {
-        super(parent, modal);
+        super((Frame)null, ModalityType.TOOLKIT_MODAL);
         initComponents();
+        this.setModal(true);
         jTextFieldPort.setDocument(new NumericPlainDocument(4, new DecimalFormat("####")));
         jTextFieldServer.setDocument(new FixedLengthPlainDocument(255));
         String proxyServer=configuration.get(PROXY_SERVER);

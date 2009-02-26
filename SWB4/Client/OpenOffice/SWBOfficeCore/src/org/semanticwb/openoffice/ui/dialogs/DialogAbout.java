@@ -7,6 +7,7 @@
 package org.semanticwb.openoffice.ui.dialogs;
 
 import java.awt.BorderLayout;
+import java.awt.Frame;
 
 /**
  *
@@ -15,9 +16,10 @@ import java.awt.BorderLayout;
 public class DialogAbout extends javax.swing.JDialog {
     
     /** Creates new form DialogAbout */
-    public DialogAbout(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+    public DialogAbout() {
+        super((Frame)null, ModalityType.TOOLKIT_MODAL);
         initComponents();
+        this.setModal(true);
         setLocationRelativeTo(null);
         this.add(new AboutBackGound(this),BorderLayout.CENTER);
         this.setSize(505, 335);

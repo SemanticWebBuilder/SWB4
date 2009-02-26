@@ -241,7 +241,7 @@ public class BackGroundImagePanel extends javax.swing.JPanel implements WindowFo
 
     private void jButtonAvancedActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonAvancedActionPerformed
     {//GEN-HEADEREND:event_jButtonAvancedActionPerformed
-        DialogConfigProxy dialogConfigProxy = new DialogConfigProxy(new JFrame(), true);
+        DialogConfigProxy dialogConfigProxy = new DialogConfigProxy();
         dialogConfigProxy.setLocationRelativeTo(this);
         dialogConfigProxy.setVisible(true);
 }//GEN-LAST:event_jButtonAvancedActionPerformed

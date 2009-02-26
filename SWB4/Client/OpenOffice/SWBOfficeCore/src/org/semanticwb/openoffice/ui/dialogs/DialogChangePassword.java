@@ -6,6 +6,7 @@
 
 package org.semanticwb.openoffice.ui.dialogs;
 
+import java.awt.Frame;
 import javax.swing.JOptionPane;
 import org.semanticwb.openoffice.OfficeApplication;
 
@@ -18,9 +19,10 @@ public final class DialogChangePassword extends javax.swing.JDialog {
     private boolean isCanceled=true;
     private String newPassword;
     /** Creates new form DialogChangePassword */
-    public DialogChangePassword(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+    public DialogChangePassword() {
+        super((Frame)null, ModalityType.TOOLKIT_MODAL);
         initComponents();
+        this.setModal(true);
         this.setLocationRelativeTo(null);
     }
     public String getNewPassword()

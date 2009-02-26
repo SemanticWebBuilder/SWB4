@@ -6,6 +6,7 @@
 package org.semanticwb.openoffice.ui.dialogs;
 
 import java.awt.Cursor;
+import java.awt.Frame;
 import java.io.File;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
@@ -68,10 +69,11 @@ public class DialogUpdateContent extends javax.swing.JDialog
     }
 
     /** Creates new form DialogSummaryPublish */
-    public DialogUpdateContent(java.awt.Frame parent, boolean modal, String wokspaceid, String contentid, OfficeDocument document)
+    public DialogUpdateContent(String wokspaceid, String contentid, OfficeDocument document)
     {
-        super(parent, modal);
+        super((Frame)null, ModalityType.TOOLKIT_MODAL);
         initComponents();
+        this.setModal(true);
         this.workspaceid = wokspaceid;
         this.contentid = contentid;
         summaryPublish1.loadVersions(contentid, wokspaceid);
