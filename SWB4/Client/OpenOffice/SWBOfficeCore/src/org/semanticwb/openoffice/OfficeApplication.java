@@ -366,8 +366,7 @@ public abstract class OfficeApplication
     private final static boolean logOn()
     {
         boolean logOn = false;
-        DialogLogin frmlogin = new DialogLogin(new javax.swing.JFrame(), true);
-        frmlogin.setAlwaysOnTop(true);
+        DialogLogin frmlogin = new DialogLogin(new javax.swing.JFrame(), true);        
         frmlogin.setLocationRelativeTo(null);
         frmlogin.setVisible(true);
         if (!frmlogin.isCanceled())
