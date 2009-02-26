@@ -46,7 +46,7 @@ public class DialogUpdateContent extends javax.swing.JDialog
                 jLabel1.repaint();
                 String name = document.getLocalPath().getName().replace(document.getDefaultExtension(), document.getPublicationExtension());
                 document.getOfficeDocumentProxy().updateContent(workspaceid, contentid, name);
-                jProgressBar.setValue(2);
+                jProgressBar.setValue(3);
                 jLabel1.setText("Actualización terminada");
                 summaryPublish1.loadVersions(contentid, workspaceid);
                 jButtonUpdate.setEnabled(false);
