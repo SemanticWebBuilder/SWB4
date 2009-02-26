@@ -70,26 +70,45 @@ public class FileUpload extends org.semanticwb.model.base.FileUploadBase
         if(value==null)value="";
         if(mode.equals("edit") || mode.equals("create") )
         {
-            ret="<script type=\"text/javascript\" src=\"/swb/swbadmin/jsp/upload/jquery-1.2.1.min.js\"></script>" +
-            "<script type=\"text/javascript\" src=\"/swb/swbadmin/jsp/upload/jquery.flash.js\"></script>" +
-            "<script type=\"text/javascript\" src=\"/swb/swbadmin/jsp/upload/jquery.jqUploader.js\"></script>" +
+            //upload request is made with a dummy target (an embedded invisible iframe)
+            //The iframe is used to swallow the response to the upload request.
+            //The form contains the upload fields and the button. The uploadStatus div will hold the progress monitor.
+            //Talvez tenga que cambiar el enctype de la forma x multipart/form-data con javascript (this.form.encoding=multipart/form-data)
+            //Cambiar tbn el metodo de la forma this.form.method=post
+            //Poner una liga que tenga onsubmit=\"return startUploadMonitoring();\" (cambiar el onsubmit x OnClick)
+            //Poner el target a la liga (target="target_upload")
+//                ret="<iframe id='target_upload' name='target_upload' src='' style='display: none'></iframe>"+
+//                "<form enctype=\"multipart/form-data\" name=\"form\" method=\"post\" action=\"Upload\"  onsubmit=\"return startUploadMonitoring();\" target=\"target_upload\">"+
+//                   "<input id=\"importFile\" name=\"importFile\" type=\"file\"> <br/>"+
+//                    "<input id=\"submitButton\" type=\"submit\" value=\"Upload\"/>"+ //En lugar de este boton p
+//                "</form>"+
+//                "<div id=\"uploadStatus\">"+
+//                    "<div id=\"uploadProgressBar\" style=\"width:200px;\">"+
+//                        "<div id=\"uploadIndicator\"></div>"+
+//                    "</div>"+
+//                    "<div id=\"uploadPercentage\"></div>"+
+//                "</div>";
 
-            "<script type=\"text/javascript\">" +
-            "$(document).ready(function(){"+
-                "$('#example1').jqUploader({background:'FFFFDF',barColor:'FFDD00',allowedExt:'*.doc; *.jpg; *.jpeg; *.txt',allowedExtDescr: 'what you want',validFileMessage: 'Thanks, now hit Upload!',endMessage: 'and don\'t you come back ;)',hideSubmit: false});"+
-                "$(\"#example2\").jqUploader({"+
-                    "afterScript:	\"<%=url.setAction(\"redirect\").toString()%>\","+
-                    "background:	\"FFFFDF\","+
-                    "barColor:	\"64A9F6\","+
-                    "allowedExt:     \"*.txt; *.doc; *.jpeg; *.png\","+
-                    "allowedExtDescr: \"Images and movies (*.avi; *.jpg; *.jpeg; *.png)\""+
-                "});"+
-                "$(\"#example3\").jqUploader({background:	\"FFFFDF\",barColor:	\"FF00FF\"});"+
-            "});"+
-            "</script>";
+                   ret="<iframe id='target_upload' name='target_upload' src='' style='display: none'></iframe>"+
+                   "<input id=\"importFile\" name=\"importFile\" type=\"file\"> <br/>"+
+                    "<a href=\"#\" onClick=\"javascript:if(uploadjs(document.forms[0])) {alert('para ir');return startUploadMonitoring();}\">Subir</a>"+ //En lugar de este boton p
+                "<div id=\"uploadStatus\">"+
+                    "<div id=\"uploadProgressBar\" style=\"width:200px;\">"+
+                        "<div id=\"uploadIndicator\"></div>"+
+                    "</div>"+
+                    "<div id=\"uploadPercentage\"></div>"+
+                "</div>";
 
-            ret+="<input name=\"MAX_FILE_SIZE\" value=\"1048576\" type=\"hidden\" />"+
-            "<input name=\"myFile\"  id=\"example1_field\"  type=\"file\" />";
+                ret+="<script type=\"text/javascript\">"+
+                     "function uploadjs(forma){"+
+                     "  forma.encoding='multipart/form-data';"+
+                     "  forma.method='post';"+
+                     "  forma.action='/swb/Upload';"+
+                     "  forma.target='target_upload';"+
+                     "  forma.submit();"+
+                     "  return true;"+
+                     "}"+
+                     "</script>";                
         }else if(mode.equals("view"))
         {
             ret="<span _id=\""+name+"\" name=\""+name+"\">"+value+"</span>";
