@@ -243,6 +243,21 @@ public class WB4ImpressTest
 
     @Test
     //@Ignore
+    public void showDocumentInfoTest()
+    {
+        try
+        {
+            WB4Impress writer = new WB4Impress(this.xContext);
+            writer.showDocumentInfo();
+        }
+        catch ( Throwable wbe )
+        {
+            Assert.fail(wbe.getMessage());
+        }
+    }
+
+    @Test
+    @Ignore
     public void insertLinkTest()
     {
         try
