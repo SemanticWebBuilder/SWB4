@@ -58,6 +58,7 @@ public class DialogPreview extends javax.swing.JDialog
             connection.setInstanceFollowRedirects(true);
             this.jEditorPane1.setPage(connection.getURL());
             this.jTextFieldURL.setText(url.toString());
+            
         }
         catch (IOException ioe)
         {
