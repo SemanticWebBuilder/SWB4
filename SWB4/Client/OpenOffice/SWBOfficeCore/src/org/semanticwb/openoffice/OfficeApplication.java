@@ -49,17 +49,9 @@ public abstract class OfficeApplication
 
 
     static
-    {
-        /*try
-        {
-        BufferedImage sidebar = ImageIO.read (OfficeApplication.class.getResource ("MySideImage.png"));
-        UIManager.put("wizard.sidebar.image", sidebar);
-        }
-        catch(Exception e)
-        {
-        e.printStackTrace();
-        }*/
+    {       
         System.setProperty("wizard.sidebar.image", "org/semanticwb/openoffice/ui/icons/sidebar.png");
+        System.setProperty("WizardDisplayer.default","org.semanticwb.openoffice.util.WBWizardDisplayerImpl");
         Locale.setDefault(new Locale("es"));
         try
         {
@@ -249,7 +241,7 @@ public abstract class OfficeApplication
     {
         if (OfficeApplication.tryLogin())
         {
-            DialogChangePassword dialog = new DialogChangePassword(new javax.swing.JFrame(), true);
+            DialogChangePassword dialog = new DialogChangePassword();
             dialog.setLocationRelativeTo(null);
             dialog.setVisible(true);
             if (!dialog.isCanceled())
@@ -310,7 +302,7 @@ public abstract class OfficeApplication
 
     public static final void showAbout()
     {
-        DialogAbout dialog = new DialogAbout(new javax.swing.JFrame(), true);
+        DialogAbout dialog = new DialogAbout();
         dialog.setVisible(true);
     }
 
@@ -366,8 +358,8 @@ public abstract class OfficeApplication
     private final static boolean logOn()
     {
         boolean logOn = false;
-        DialogLogin frmlogin = new DialogLogin(new javax.swing.JFrame(), true);        
-        frmlogin.setLocationRelativeTo(null);
+        DialogLogin frmlogin = new DialogLogin();        
+        
         frmlogin.setVisible(true);
         if (!frmlogin.isCanceled())
         {

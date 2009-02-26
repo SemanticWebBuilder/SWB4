@@ -6,8 +6,6 @@
 package org.semanticwb.openoffice.ui.wizard;
 
 import java.awt.Cursor;
-import java.awt.Frame;
-import java.net.URI;
 import java.net.URL;
 import java.util.Map;
 import javax.swing.JOptionPane;
@@ -184,7 +182,7 @@ private void jButtonViewActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIR
             name=OfficeApplication.getOfficeDocumentProxy().createPreview(workspace, version.contentId, version.nameOfVersion);
             String urlproxy = OfficeApplication.getOfficeApplicationProxy().getWebAddress().toString();
             URL url = new URL(urlproxy + "?contentId=" + version.contentId + "&versionName=" + version.nameOfVersion + "&repositoryName=" + workspace + "&name=" + name);
-            DialogPreview dialogPreview=new DialogPreview(new Frame(), true, url);
+            DialogPreview dialogPreview=new DialogPreview(url,false);
             dialogPreview.setVisible(true);
         }
         catch(Exception e)

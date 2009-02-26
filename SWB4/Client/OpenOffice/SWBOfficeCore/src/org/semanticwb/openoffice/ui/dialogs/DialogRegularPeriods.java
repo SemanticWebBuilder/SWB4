@@ -10,9 +10,9 @@
  */
 package org.semanticwb.openoffice.ui.dialogs;
 
+import java.awt.Frame;
 import javax.swing.JOptionPane;
 import org.jdom.output.DOMOutputter;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -24,10 +24,11 @@ public class DialogRegularPeriods extends java.awt.Dialog
 {
 
     /** Creates new form DialogRegularPeriods */
-    public DialogRegularPeriods(java.awt.Frame parent, boolean modal)
+    public DialogRegularPeriods()
     {
-        super(parent, modal);
+        super((Frame)null, ModalityType.TOOLKIT_MODAL);
         initComponents();
+        this.setModal(true);
         this.setLocationRelativeTo(null);
     }
 

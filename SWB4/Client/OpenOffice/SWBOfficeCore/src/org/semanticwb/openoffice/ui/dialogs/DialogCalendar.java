@@ -27,7 +27,7 @@ import org.jdom.output.DOMOutputter;
 public class DialogCalendar extends java.awt.Dialog
 {
 
-    DialogRegularPeriods dialogRegularPeriods = new DialogRegularPeriods(new Frame(), true);
+    DialogRegularPeriods dialogRegularPeriods = new DialogRegularPeriods();
     boolean isCanceled = true;
     private static final String DATE_FORMAT = "dd/MM/yyyy";
     private static final String TIME_FORMAT = "HH:mm:ss";
@@ -35,10 +35,11 @@ public class DialogCalendar extends java.awt.Dialog
     private static final SimpleDateFormat TIME_SIMPLEFORMAT = new SimpleDateFormat(TIME_FORMAT);
 
     /** Creates new form DialogCalendar */
-    public DialogCalendar(java.awt.Frame parent, boolean modal)
+    public DialogCalendar()
     {
-        super(parent, modal);
+        super((Frame)null, ModalityType.TOOLKIT_MODAL);
         initComponents();
+        this.setModal(true);
         this.jSpinnerInitDate.setEditor(new JSpinner.DateEditor(jSpinnerInitDate, DATE_FORMAT));
         this.jSpinnerEndDate.setEditor(new JSpinner.DateEditor(jSpinnerEndDate, DATE_FORMAT));
 

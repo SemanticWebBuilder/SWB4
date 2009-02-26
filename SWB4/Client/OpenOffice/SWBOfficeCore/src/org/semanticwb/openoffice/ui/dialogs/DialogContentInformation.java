@@ -39,10 +39,11 @@ public class DialogContentInformation extends javax.swing.JDialog
     private OfficeDocument document;
 
     /** Creates new form DialogContentInformation */
-    public DialogContentInformation(java.awt.Frame parent, boolean modal, String contentId, String repository, OfficeDocument document)
+    public DialogContentInformation(String contentId, String repository, OfficeDocument document)
     {
-        super(parent, modal);
+        super((Frame)null, ModalityType.TOOLKIT_MODAL);
         initComponents();
+        this.setModal(true);
         this.contentId = contentId;
         this.repository = repository;
         this.document = document;
@@ -722,7 +723,7 @@ public class DialogContentInformation extends javax.swing.JDialog
             {
                 URI uri = document.getOfficeDocumentProxy().getWebAddress();
                 URL url = new URL(uri.getScheme() + "://" + uri.getHost() + ":" + uri.getPort() + portletInfo.page.url);
-                DialogPreview preview = new DialogPreview(new JFrame(), true, url);
+                DialogPreview preview = new DialogPreview(url);
                 preview.setVisible(true);
             }
             catch (Exception e)
@@ -753,7 +754,7 @@ public class DialogContentInformation extends javax.swing.JDialog
                 }
                 name = OfficeApplication.getOfficeDocumentProxy().createPreview(repository, contentId, version);
                 URL url = new URL(urlproxy + "?contentId=" + contentId + "&versionName=" + version + "&repositoryName=" + repository + "&name=" + name);
-                DialogPreview preview = new DialogPreview(new JFrame(), true, url, false);
+                DialogPreview preview = new DialogPreview(url, false);
                 preview.setVisible(true);
             }
             catch (Exception e)
@@ -784,7 +785,7 @@ public class DialogContentInformation extends javax.swing.JDialog
         if (jTablePages.getSelectedRow() != -1)
         {
             PortletInfo portletInfo = (PortletInfo) jTablePages.getModel().getValueAt(jTablePages.getSelectedRow(), 0);
-            DialogEditPorlet dialogEditPorlet = new DialogEditPorlet(new Frame(), true, portletInfo, repository, contentId);
+            DialogEditPorlet dialogEditPorlet = new DialogEditPorlet(portletInfo, repository, contentId);
             dialogEditPorlet.setVisible(true);
             if (!dialogEditPorlet.isCancel)
             {

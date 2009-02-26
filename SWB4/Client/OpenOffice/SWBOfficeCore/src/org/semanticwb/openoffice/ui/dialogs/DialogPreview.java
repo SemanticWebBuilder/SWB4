@@ -25,24 +25,27 @@ public class DialogPreview extends javax.swing.JDialog
     private final URL url;
 
     /** Creates new form DialogPreview */
-    public DialogPreview(java.awt.Frame parent, boolean modal, URL url)
+    public DialogPreview(URL url)
     {
-        super(parent, modal);
+        super((Frame)null, ModalityType.TOOLKIT_MODAL);
         this.url = url;
         initComponents();
+        this.setModal(true);
         setURL(url);
         setLocationRelativeTo(null);
     }
 
-    public DialogPreview(java.awt.Frame parent, boolean modal, URL url, boolean showAddress)
+    public DialogPreview(URL url, boolean showAddress)
     {
-        super(parent, modal);
+        super((Frame)null, ModalityType.TOOLKIT_MODAL);
         this.url = url;
         initComponents();
+        this.setModal(true);
         setLocationRelativeTo(null);
         this.jTextFieldURL.setVisible(showAddress);
         this.jLabelWebAddress.setVisible(showAddress);
         this.jButtonOpenBrowser.setVisible(showAddress);
+        setLocationRelativeTo(null);
     }
 
     public void setURL(URL url)

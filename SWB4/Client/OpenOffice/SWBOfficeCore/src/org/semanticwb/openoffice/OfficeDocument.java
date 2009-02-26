@@ -4,7 +4,6 @@
  */
 package org.semanticwb.openoffice;
 
-import java.awt.Frame;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,7 +22,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import org.netbeans.spi.wizard.Wizard;
@@ -66,6 +64,8 @@ public abstract class OfficeDocument
 
     static
     {
+        System.setProperty("wizard.sidebar.image", "org/semanticwb/openoffice/ui/icons/sidebar.png");
+        System.setProperty("WizardDisplayer.default","org.semanticwb.openoffice.util.WBWizardDisplayerImpl");
         Locale.setDefault(new Locale("es"));
         try
         {
@@ -369,7 +369,7 @@ public abstract class OfficeDocument
             rep = properties.get(WORKSPACE_ID_NAME);
             if (contentId != null && rep != null)
             {
-                DialogContentInformation dialog = new DialogContentInformation(new javax.swing.JFrame(), true, contentId, rep, this);
+                DialogContentInformation dialog = new DialogContentInformation(contentId, rep, this);
                 dialog.setLocationRelativeTo(null);
                 dialog.setVisible(true);
             }
@@ -543,7 +543,7 @@ public abstract class OfficeDocument
     private final boolean showSaveDialog(OfficeDocument document)
     {
         boolean result = false;
-        DialogSaveDocument fileChooser = new DialogSaveDocument(new JFrame(), true);
+        DialogSaveDocument fileChooser = new DialogSaveDocument();
         if (document.getDocumentType() == DocumentType.WORD)
         {
             fileChooser.setFileFilter(new WordFileFilter());
@@ -749,7 +749,7 @@ public abstract class OfficeDocument
         String workspace = this.getCustomProperties().get(WORKSPACE_ID_NAME);
         if (workspace!=null && OfficeApplication.tryLogin())
         {
-            DialogUpdateContent summary = new DialogUpdateContent(new Frame(), true, workspace, contentID, this);            
+            DialogUpdateContent summary = new DialogUpdateContent(workspace, contentID, this);            
             summary.setVisible(true);
         }
     }

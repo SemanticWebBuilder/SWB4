@@ -53,10 +53,11 @@ public class DialogEditPorlet extends javax.swing.JDialog
     ArrayList<CalendarInfo> added = new ArrayList<CalendarInfo>();
 
     /** Creates new form DialogContentPublicationInformation */
-    public DialogEditPorlet(java.awt.Frame parent, boolean modal, PortletInfo pageInformation, String repositoryName, String contentID)
+    public DialogEditPorlet(PortletInfo pageInformation, String repositoryName, String contentID)
     {
-        super(parent, modal);
+        super((Frame)null, ModalityType.TOOLKIT_MODAL);
         initComponents();
+        this.setModal(true);
         this.pageInformation = pageInformation;
         this.repositoryName = repositoryName;
         this.contentID = contentID;
@@ -772,7 +773,7 @@ private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
 
 private void jButtonAddCalendarActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonAddCalendarActionPerformed
 {//GEN-HEADEREND:event_jButtonAddCalendarActionPerformed
-    DialogCalendar dialogCalendar = new DialogCalendar(new Frame(), true);
+    DialogCalendar dialogCalendar = new DialogCalendar();
     dialogCalendar.setVisible(true);
     if (!dialogCalendar.isCanceled)
     {
@@ -796,7 +797,7 @@ private void jButtonEditEchedulerActionPerformed(java.awt.event.ActionEvent evt)
     if (jTableScheduler.getSelectedRow() != -1)
     {
         CalendarInfo cal = (CalendarInfo) jTableScheduler.getModel().getValueAt(jTableScheduler.getSelectedRow(), 0);
-        DialogCalendar dialogCalendar = new DialogCalendar(new Frame(), true);
+        DialogCalendar dialogCalendar = new DialogCalendar();
         SAXBuilder SAXBuilder = new SAXBuilder();
         ByteArrayInputStream in = new ByteArrayInputStream(cal.xml.getBytes());
         try

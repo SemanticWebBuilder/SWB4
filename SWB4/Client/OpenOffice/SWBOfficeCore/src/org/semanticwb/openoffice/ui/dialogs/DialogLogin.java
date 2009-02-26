@@ -6,6 +6,7 @@
 package org.semanticwb.openoffice.ui.dialogs;
 
 import java.awt.BorderLayout;
+import java.awt.Frame;
 import java.awt.image.ImageObserver;
 import java.net.URI;
 import org.semanticwb.openoffice.*;
@@ -22,12 +23,14 @@ public class DialogLogin extends javax.swing.JDialog implements ImageObserver
     ConfigurationListURI configurationListURI = new ConfigurationListURI();
 
     /** Creates new form DialogLogin */
-    public DialogLogin(java.awt.Frame parent, boolean modal)
+    public DialogLogin()
     {
-        super(parent, modal);
+        super((Frame)null, ModalityType.TOOLKIT_MODAL);
         initComponents();
+        this.setModal(true);
         this.add(new BackGroundImagePanel(this),BorderLayout.CENTER);
         this.setSize(505, 335);
+        setLocationRelativeTo(null);
 
     }
 
