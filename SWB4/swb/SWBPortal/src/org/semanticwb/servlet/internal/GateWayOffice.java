@@ -81,7 +81,13 @@ public class GateWayOffice implements InternalServlet
         }
         String with = "100%";
         String height = "500";
-        out.println("<iframe frameborder=\"0\" src=\"" + path + "\" width=\"" + with + "\" height=\"" + height + "\"></iframe>");
+        out.println("<html>");
+        out.println("<body>");
+        out.println("<iframe frameborder=\"0\" src=\"" + path + "\" width=\"" + with + "\" height=\"" + height + "\">Este navegador no soporta ifrae</iframe>");
+        out.println("</body>");
+        out.println("</html>");
+        out.close();
+        
     }
 
     private void showPPTContent(PrintWriter out, String file, String dir, String contentId, String repositoryName) throws IOException
@@ -98,7 +104,12 @@ public class GateWayOffice implements InternalServlet
         }
         String with = "100%";
         String height = "500";
-        out.println("<iframe frameborder=\"0\" src=\"" + path + "\" width=\"" + with + "\" height=\"" + height + "\"></iframe>");
+        out.println("<html>");
+        out.println("<body>");
+        out.println("<iframe frameborder=\"0\" src=\"" + path + "\" width=\"" + with + "\" height=\"" + height + "\">Este navegador no soporta iframe</iframe>");
+        out.println("</body>");
+        out.println("</html>");
+        out.close();
     }
 
     private void showWordContent(PrintWriter out, String file, String dir, String contentId, String repositoryName) throws IOException
