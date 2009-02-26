@@ -25,6 +25,7 @@ import org.semanticwb.servlet.internal.GateWayOffice;
 import org.semanticwb.servlet.internal.InternalServlet;
 import org.semanticwb.servlet.internal.Login;
 import org.semanticwb.servlet.internal.Upload;
+import org.semanticwb.servlet.internal.UploadFormElement;
 
 /**
  *
@@ -234,7 +235,11 @@ public class SWBVirtualHostFilter implements Filter
 
         InternalServlet editFile = new EditFile();
         intServlets.put("editfile", editFile);
-        upload.init(filterConfig.getServletContext());
+        editFile.init(filterConfig.getServletContext());
+
+        InternalServlet UploadFormElement = new UploadFormElement();
+        intServlets.put("Upload", UploadFormElement);
+        UploadFormElement.init(filterConfig.getServletContext());
 
         //TODO:Admin servlet
         InternalServlet admin = new Admin();
