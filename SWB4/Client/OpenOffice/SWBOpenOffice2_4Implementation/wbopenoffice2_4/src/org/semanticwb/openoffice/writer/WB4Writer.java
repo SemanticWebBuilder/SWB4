@@ -724,7 +724,6 @@ public class WB4Writer extends OfficeDocument
             XTextViewCursorSupplier xViewCursorSupplier = (XTextViewCursorSupplier) UnoRuntime.queryInterface(XTextViewCursorSupplier.class, xController);
             XTextViewCursor xViewCursor = xViewCursorSupplier.getViewCursor();
             XText xDocumentText = xViewCursor.getText();
-
             XTextCursor xTextCursor = xDocumentText.createTextCursorByRange(xViewCursor.getStart());
             XText xText = xTextCursor.getText();
             XPropertySet xTextCursorProps = (XPropertySet) UnoRuntime.queryInterface(
