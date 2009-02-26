@@ -28,7 +28,6 @@ import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextContent;
-import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextField;
 import com.sun.star.text.XTextRange;
 import com.sun.star.uno.UnoRuntime;
@@ -926,8 +925,7 @@ public class WB4Impress extends OfficeDocument
 
     public void insertLink(String url, String text)
     {
-        XModel xModel = (XModel) UnoRuntime.queryInterface(XModel.class, this.document);        
-        
+        XModel xModel = (XModel) UnoRuntime.queryInterface(XModel.class, this.document);                
         XController xController = xModel.getCurrentController();
         XSelectionSupplier xSelection = (XSelectionSupplier) UnoRuntime.queryInterface(XSelectionSupplier.class, xController);
         Object temp = xSelection.getSelection();
