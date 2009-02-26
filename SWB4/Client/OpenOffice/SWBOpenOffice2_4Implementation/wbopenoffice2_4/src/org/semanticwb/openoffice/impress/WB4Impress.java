@@ -15,7 +15,6 @@ import com.sun.star.document.XDocumentInfoSupplier;
 import com.sun.star.drawing.XDrawPage;
 import com.sun.star.drawing.XDrawPages;
 import com.sun.star.drawing.XDrawPagesSupplier;
-import com.sun.star.drawing.XDrawView;
 import com.sun.star.drawing.XShape;
 import com.sun.star.drawing.XShapes;
 import com.sun.star.frame.XController;
@@ -26,11 +25,16 @@ import com.sun.star.io.IOException;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiComponentFactory;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.text.XText;
+import com.sun.star.text.XTextContent;
+import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextField;
 import com.sun.star.text.XTextRange;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.util.XModifiable;
+import com.sun.star.view.XSelectionSupplier;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -77,13 +81,15 @@ public class WB4Impress extends OfficeDocument
     private static final String FILTER_NAME = "FilterName";
     private static final String OVERWRITE = "Overwrite";
     private static final String SLIDE_PREFIX = "img";
+    private static final String TEXTFIELD = "TextField";
+    private static final String URL = "URL";
     private static final String frameContentHTML;
     private static final String ContentHTML;
     private static final String fullscreenHTML;
     private static final String outline;
     private static final String script;
     private final XComponent document;
-
+    
 
     static
     {
@@ -102,6 +108,7 @@ public class WB4Impress extends OfficeDocument
     public WB4Impress(XComponent document)
     {
         this.document = document;
+        
     }
 
     /**
@@ -111,7 +118,7 @@ public class WB4Impress extends OfficeDocument
      * @see XComponentContext
      */
     public WB4Impress(XComponentContext m_xContext) throws WBOfficeException
-    {
+    {        
         XMultiComponentFactory serviceManager = m_xContext.getServiceManager();
         try
         {
@@ -199,12 +206,12 @@ public class WB4Impress extends OfficeDocument
                     {
                         XTextRange xRange = (XTextRange) UnoRuntime.queryInterface(com.sun.star.text.XTextRange.class, xPortionEnum.nextElement());
                         XPropertySet xPropSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xRange);
-                        Object oTextfield = xPropSet.getPropertyValue("TextField");
+                        Object oTextfield = xPropSet.getPropertyValue(TEXTFIELD);
                         XTextField xTextField = (XTextField) UnoRuntime.queryInterface(XTextField.class, oTextfield);
                         if (xTextField != null)
                         {
                             xPropSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xTextField);
-                            String path = xPropSet.getPropertyValue("URL").toString();
+                            String path = xPropSet.getPropertyValue(URL).toString();
                             attachments.addAll(this.addLink(path));
                         }
                     }
@@ -919,12 +926,33 @@ public class WB4Impress extends OfficeDocument
 
     public void insertLink(String url, String text)
     {
-        XModel xModel = (XModel) UnoRuntime.queryInterface(XModel.class, this.document);
-        XController xController = xModel.getCurrentController();
-        XDrawView view =(XDrawView) UnoRuntime.queryInterface(XDrawView.class, xController);
-        XDrawPage page=view.getCurrentPage();
-        XShapes xShapes = (XShapes) UnoRuntime.queryInterface(XShapes.class, page);
+        XModel xModel = (XModel) UnoRuntime.queryInterface(XModel.class, this.document);        
         
-        //XTextRange textRange = (XTextRange) UnoRuntime.queryInterface(XTextRange.class, view);
+        XController xController = xModel.getCurrentController();
+        XSelectionSupplier xSelection = (XSelectionSupplier) UnoRuntime.queryInterface(XSelectionSupplier.class, xController);
+        Object temp = xSelection.getSelection();
+        XShapes getShapes = (XShapes) UnoRuntime.queryInterface(XShapes.class, temp);
+        if (getShapes.getCount() == 1)
+        {
+            try
+            {
+                XShape xShape = (XShape) UnoRuntime.queryInterface(XShape.class, getShapes.getByIndex(0));
+                XMultiServiceFactory xDocFactory = (XMultiServiceFactory)UnoRuntime.queryInterface(XMultiServiceFactory.class, this.document);
+                Object objtextfied=xDocFactory.createInstance("com.sun.star.text.TextField.URL");                
+                XPropertySet xTextFieldProps = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class,objtextfied);
+                xTextFieldProps.setPropertyValue("Representation", text);
+                xTextFieldProps.setPropertyValue("TargetFrame", "_blank");
+                xTextFieldProps.setPropertyValue("URL", url);
+                XText xShapeText = (XText) UnoRuntime.queryInterface(XText.class, xShape);                
+                XTextContent xFieldTextContent = (XTextContent) UnoRuntime.queryInterface(XTextContent.class, xTextFieldProps );                
+                xShapeText.insertTextContent(xShapeText, xFieldTextContent, false);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+
+        }
+    
     }
 }
