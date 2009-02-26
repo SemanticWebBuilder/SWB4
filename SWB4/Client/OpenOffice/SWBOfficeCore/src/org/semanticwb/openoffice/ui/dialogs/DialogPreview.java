@@ -46,6 +46,7 @@ public class DialogPreview extends javax.swing.JDialog
         this.jButtonOpenBrowser.setVisible(showAddress);
         setLocationRelativeTo(null);
         setURL(url);
+
     }
 
     public void setURL(URL url)
