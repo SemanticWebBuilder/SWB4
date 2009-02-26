@@ -226,13 +226,27 @@ public class WB4CalcTest
     }
 
     @Test
-    //@Ignore
+    @Ignore
     public void saveToSiteTest()
     {
         try
         {
             WB4Calc writer = new WB4Calc(this.xContext);
             writer.saveToSite();
+        }
+        catch (WBException wbe)
+        {
+            Assert.fail(wbe.getMessage());
+        }
+    }
+    @Test
+    //@Ignore
+    public void insertLinkText()
+    {
+        try
+        {
+            WB4Calc writer = new WB4Calc(this.xContext);
+            writer.insertLink();
         }
         catch (WBException wbe)
         {
