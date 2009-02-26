@@ -6,7 +6,6 @@
 package org.semanticwb.openoffice.ui.wizard;
 
 import java.awt.Cursor;
-import java.awt.Frame;
 import java.net.URL;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
