@@ -1,10 +1,7 @@
 package org.semanticwb.openoffice.writer;
 
-import com.sun.star.beans.PropertyValue;
 import com.sun.star.frame.FeatureStateEvent;
-import com.sun.star.frame.XDispatchHelper;
 import com.sun.star.frame.XLayoutManager;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.lib.uno.helper.Factory;
@@ -13,7 +10,6 @@ import com.sun.star.registry.XRegistryKey;
 import com.sun.star.lib.uno.helper.WeakBase;
 import javax.swing.JFrame;
 import org.semanticwb.openoffice.DocumentType;
-import org.semanticwb.openoffice.OfficeApplication;
 import org.semanticwb.openoffice.OfficeDocument;
 import org.semanticwb.openoffice.ui.dialogs.ErrorDialog;
 
@@ -207,14 +203,7 @@ public final class wb4writeraddon extends WeakBase
                 }
                 if (aURL.Path.compareTo("addLink") == 0)
                 {
-                    if (document.isPublicated())
-                    {
-                        return this;
-                    }
-                    else
-                    {
-                        return null;
-                    }
+                    return this;
                 }
                 if (aURL.Path.compareTo("createSection") == 0)
                 {

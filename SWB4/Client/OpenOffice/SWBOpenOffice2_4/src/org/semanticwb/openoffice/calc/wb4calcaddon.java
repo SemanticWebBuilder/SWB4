@@ -139,14 +139,7 @@ public final class wb4calcaddon extends WeakBase
                 }
                 if (aURL.Path.compareTo("addLink") == 0)
                 {
-                    if (document.isPublicated())
-                    {
-                        return this;
-                    }
-                    else
-                    {
-                        return null;
-                    }
+                    return this;
                 }
                 if (aURL.Path.compareTo("createSection") == 0)
                 {
