@@ -58,7 +58,7 @@ public class PowerPointResource extends GenericAdmResource
                     }
                     String with = WITH;
                     String height = HEIGHT;
-                    out.println("<iframe frameborder=\"0\" src=\"" + path + "\" width=\"" + with + "\" height=\"" + height + "\"></iframe>");
+                    out.println("<iframe frameborder=\"0\" src=\"" + path + "\" width=\"" + with + "\" height=\"" + height + "\">Este navegador no soporta iframe</iframe>");
                 }
             }
             catch (Exception e)
