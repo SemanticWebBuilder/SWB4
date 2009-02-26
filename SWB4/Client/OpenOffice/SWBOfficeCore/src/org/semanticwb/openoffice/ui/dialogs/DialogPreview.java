@@ -33,12 +33,12 @@ public class DialogPreview extends javax.swing.JDialog
     public DialogPreview(URL url, boolean showAddress,String title)
     {
         super((Frame)null, ModalityType.TOOLKIT_MODAL);
+        initComponents();
         this.url = url;
         if(title!=null)
         {
             this.setTitle(title);
-        }
-        initComponents();
+        }        
         this.setModal(true);
         setLocationRelativeTo(null);
         this.jTextFieldURL.setVisible(showAddress);
