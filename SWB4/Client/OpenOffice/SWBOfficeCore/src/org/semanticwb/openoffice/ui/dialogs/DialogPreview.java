@@ -27,12 +27,7 @@ public class DialogPreview extends javax.swing.JDialog
     /** Creates new form DialogPreview */
     public DialogPreview(URL url)
     {
-        super((Frame)null, ModalityType.TOOLKIT_MODAL);
-        this.url = url;
-        initComponents();
-        this.setModal(true);
-        setURL(url);
-        setLocationRelativeTo(null);
+        this(url,true);
     }
 
     public DialogPreview(URL url, boolean showAddress)
@@ -46,6 +41,7 @@ public class DialogPreview extends javax.swing.JDialog
         this.jLabelWebAddress.setVisible(showAddress);
         this.jButtonOpenBrowser.setVisible(showAddress);
         setLocationRelativeTo(null);
+        setURL(url);
     }
 
     public void setURL(URL url)
