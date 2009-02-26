@@ -198,8 +198,8 @@ public class SummaryPublish extends javax.swing.JPanel
 
                 name = OfficeApplication.getOfficeDocumentProxy().createPreview(this.repositoryName, this.contentId, versionInfo);
                 String urlproxy = OfficeApplication.getOfficeApplicationProxy().getWebAddress().toString();
-                URL url = new URL(urlproxy + "?contentId=" + contentId+ "&versionName=" + repositoryName + "&repositoryName=" + repositoryName + "&name=" + name);
-                String title=OfficeApplication.getOfficeDocumentProxy().getTitle(repositoryName, contentId);
+                URL url = new URL(urlproxy + "?contentId=" + contentId+ "&versionName=" + versionInfo + "&repositoryName=" + repositoryName + "&name=" + name);
+                String title=OfficeApplication.getOfficeDocumentProxy().getTitle(repositoryName, contentId)+" ("+ versionInfo+") ";
                 DialogPreview dialogPreview = new DialogPreview(url,false,title);
                 dialogPreview.setVisible(true);
             }
