@@ -21,7 +21,6 @@ import com.sun.star.table.XCell;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextContent;
 import com.sun.star.text.XTextCursor;
-import com.sun.star.text.XTextField;
 import com.sun.star.text.XTextFieldsSupplier;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
@@ -716,14 +715,12 @@ public class WB4Calc extends OfficeDocument
         XMultiServiceFactory xDocFactory = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, this.document);
         try
         {
-            Object objtextfied = xDocFactory.createInstance("com.sun.star.text.TextField.URL");
-            XTextField textfield = (XTextField) UnoRuntime.queryInterface(XTextField.class, objtextfied);
+            Object objtextfied = xDocFactory.createInstance("com.sun.star.text.TextField.URL");            
             XPropertySet xTextFieldProps = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, objtextfied);
             xTextFieldProps.setPropertyValue("Representation", text);
             xTextFieldProps.setPropertyValue("TargetFrame", "_blank");
             xTextFieldProps.setPropertyValue("URL", url);
-            XText xShapeText = (XText) UnoRuntime.queryInterface(XText.class, xCell);
-            XTextCursor xShapeTextCursor = xShapeText.getText().createTextCursorByRange(xShapeText.getStart());
+            XText xShapeText = (XText) UnoRuntime.queryInterface(XText.class, xCell);            
             XTextContent xFieldTextContent = (XTextContent) UnoRuntime.queryInterface(XTextContent.class, xTextFieldProps);
             xShapeText.insertTextContent(xTextCursor, xFieldTextContent, false);
         }
