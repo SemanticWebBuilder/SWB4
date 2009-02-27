@@ -8,6 +8,7 @@ import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.registry.XRegistryKey;
 import com.sun.star.lib.uno.helper.WeakBase;
 import org.semanticwb.openoffice.DocumentType;
+import org.semanticwb.openoffice.OfficeApplication;
 import org.semanticwb.openoffice.OfficeDocument;
 
 public final class wb4calcaddon extends WeakBase
@@ -157,9 +158,28 @@ public final class wb4calcaddon extends WeakBase
                 {
                     return this;
                 }
+                if (aURL.Path.compareTo("openSession") == 0)
+                {
+                    if(OfficeApplication.isLogged())
+                    {
+                        return null;
+                    }
+                    else
+                    {
+                        return this;
+                    }
+                }
+
                 if (aURL.Path.compareTo("closeSession") == 0)
                 {
-                    return this;
+                    if(!OfficeApplication.isLogged())
+                    {
+                        return null;
+                    }
+                    else
+                    {
+                        return this;
+                    }
                 }
             }
             catch (Exception e)
@@ -272,9 +292,13 @@ public final class wb4calcaddon extends WeakBase
                     WB4CalcApplication.showAbout();
                     return;
                 }
+                if (aURL.Path.compareTo("openSession") == 0)
+                {
+                    OfficeApplication.openSession();
+                }
                 if (aURL.Path.compareTo("closeSession") == 0)
                 {
-                    WB4CalcApplication.closeSession();
+                    OfficeApplication.closeSession();
                     return;
                 }
             }
