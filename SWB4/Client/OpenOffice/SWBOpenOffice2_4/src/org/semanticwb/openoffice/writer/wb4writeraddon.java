@@ -10,6 +10,7 @@ import com.sun.star.registry.XRegistryKey;
 import com.sun.star.lib.uno.helper.WeakBase;
 import javax.swing.JFrame;
 import org.semanticwb.openoffice.DocumentType;
+import org.semanticwb.openoffice.OfficeApplication;
 import org.semanticwb.openoffice.OfficeDocument;
 import org.semanticwb.openoffice.ui.dialogs.ErrorDialog;
 
@@ -221,9 +222,28 @@ public final class wb4writeraddon extends WeakBase
                 {
                     return this;
                 }
+                if (aURL.Path.compareTo("openSession") == 0)
+                {
+                    if(OfficeApplication.isLogged())
+                    {
+                        return null;
+                    }
+                    else
+                    {
+                        return this;
+                    }
+                }
+
                 if (aURL.Path.compareTo("closeSession") == 0)
                 {
-                    return this;
+                    if(!OfficeApplication.isLogged())
+                    {
+                        return null;
+                    }
+                    else
+                    {
+                        return this;
+                    }
                 }
             }
             catch (Exception e)
