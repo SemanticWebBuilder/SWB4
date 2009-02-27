@@ -8,6 +8,7 @@ package org.semanticwb.openoffice.ui.dialogs;
 
 import java.awt.BorderLayout;
 import java.awt.Frame;
+import org.semanticwb.openoffice.ui.icons.ImageLoader;
 
 /**
  *
@@ -19,6 +20,7 @@ public class DialogAbout extends javax.swing.JDialog {
     public DialogAbout() {
         super((Frame)null, ModalityType.TOOLKIT_MODAL);
         initComponents();
+        this.setIconImage(ImageLoader.images.get("semius").getImage());
         this.setModal(true);
         setLocationRelativeTo(null);
         this.add(new AboutBackGound(this),BorderLayout.CENTER);

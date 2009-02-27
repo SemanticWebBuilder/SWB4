@@ -13,7 +13,6 @@ import java.net.URI;
 import java.net.URL;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -27,6 +26,7 @@ import org.semanticwb.office.interfaces.PortletInfo;
 import org.semanticwb.office.interfaces.VersionInfo;
 import org.semanticwb.openoffice.OfficeApplication;
 import org.semanticwb.openoffice.OfficeDocument;
+import org.semanticwb.openoffice.ui.icons.ImageLoader;
 
 /**
  *
@@ -43,6 +43,7 @@ public class DialogContentInformation extends javax.swing.JDialog
     {
         super((Frame)null, ModalityType.TOOLKIT_MODAL);
         initComponents();
+        this.setIconImage(ImageLoader.images.get("semius").getImage());
         this.setModal(true);
         this.contentId = contentId;
         this.repository = repository;

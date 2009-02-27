@@ -10,6 +10,7 @@ import java.awt.Frame;
 import javax.swing.JOptionPane;
 import org.semanticwb.office.interfaces.CategoryInfo;
 import org.semanticwb.openoffice.OfficeApplication;
+import org.semanticwb.openoffice.ui.icons.ImageLoader;
 
 /**
  *
@@ -27,6 +28,7 @@ public class DialogAddCategory extends javax.swing.JDialog
     {
         super((Frame)null, ModalityType.TOOLKIT_MODAL);
         initComponents();
+        this.setIconImage(ImageLoader.images.get("semius").getImage());
         this.setModal(true);
         this.repository = repository;
         this.setTitle("Agregar categoria a repositorio " + repository);

@@ -40,6 +40,11 @@ public class ImageLoader
             url = ImageLoader.class.getResource("edit.png");
             image = new ImageIcon(url);
             images.put("edit", image);
+
+            url = ImageLoader.class.getResource("semius.png");
+            image = new ImageIcon(url);
+            images.put("semius", image);
+
         }
         catch (Exception e)
         {

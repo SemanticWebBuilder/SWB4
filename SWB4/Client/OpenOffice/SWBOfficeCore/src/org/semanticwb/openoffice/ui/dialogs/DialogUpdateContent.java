@@ -12,6 +12,7 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import org.semanticwb.openoffice.OfficeApplication;
 import org.semanticwb.openoffice.OfficeDocument;
+import org.semanticwb.openoffice.ui.icons.ImageLoader;
 import org.semanticwb.xmlrpc.Attachment;
 
 /**
@@ -73,6 +74,7 @@ public class DialogUpdateContent extends javax.swing.JDialog
     {
         super((Frame)null, ModalityType.TOOLKIT_MODAL);
         initComponents();
+        this.setIconImage(ImageLoader.images.get("semius").getImage());
         this.setModal(true);
         this.workspaceid = wokspaceid;
         this.contentid = contentid;

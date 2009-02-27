@@ -10,6 +10,7 @@ import java.awt.Frame;
 import java.awt.image.ImageObserver;
 import java.net.URI;
 import org.semanticwb.openoffice.*;
+import org.semanticwb.openoffice.ui.icons.ImageLoader;
 
 /**
  *
@@ -27,6 +28,7 @@ public class DialogLogin extends javax.swing.JDialog implements ImageObserver
     {
         super((Frame)null, ModalityType.TOOLKIT_MODAL);
         initComponents();
+        this.setIconImage(ImageLoader.images.get("semius").getImage());
         this.setModal(true);
         this.add(new BackGroundImagePanel(this),BorderLayout.CENTER);
         this.setSize(505, 335);
