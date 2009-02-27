@@ -22,7 +22,7 @@
             </table>
     </td></tr>
     <tr><td>
-     <%
+        <%
         url.setMode("addForum");
         url.setAction("newCatForum");
         WebSite website = paramRequest.getTopic().getWebSite();
@@ -70,8 +70,7 @@
                             <td align="center"><a href="<%=url.setMode("editCategory").toString()%>">Editar</a></td>
                             <td align="center"><a href="<%=urlAction.setAction("removeCategory").toString()%>">Borrar</a></td>
                     </tr>
-                    <%
-                   
+                    <%                   
                         GenericIterator<FrmForum> gitForums = category.listForums();
                         while (gitForums.hasNext()) 
                         {
