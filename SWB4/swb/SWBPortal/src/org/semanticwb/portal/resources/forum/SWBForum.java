@@ -296,11 +296,9 @@ public class SWBForum extends GenericResource {
                         fichero.mkdirs();
                     }
                     fichero=new File(SWBPlatform.getWorkPath()+base.getWorkPath()+"/replies/"+newPost.getId()+"/"+value);
-                    try{
-                        System.out.println("graba archivo:"+SWBPlatform.getWorkPath()+base.getWorkPath()+"/replies/"+newPost.getId()+"/"+value);
+                    try{                        
                         item.write(fichero);
                     }catch(Exception e){
-                        System.out.println("ERROR JORGE");
                         e.printStackTrace();
                         log.debug(e);
                     }
