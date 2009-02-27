@@ -13,8 +13,12 @@ import java.net.PasswordAuthentication;
 import java.net.URL;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
 import org.semanticwb.openoffice.OfficeApplication;
 import org.semanticwb.openoffice.ui.icons.ImageLoader;
+
+
 
 /**
  *
@@ -128,6 +132,8 @@ public class DialogPreview extends javax.swing.JDialog
         }
         return true;
     }
+
+    
 
     /** This method is called from within the constructor to
      * initialize the form.
