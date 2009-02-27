@@ -4,13 +4,16 @@
  */
 package org.semanticwb.portal.resources.forum;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
-import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.fileupload.FileItem;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
@@ -20,6 +23,7 @@ import org.semanticwb.forum.FrmPost;
 import org.semanticwb.forum.FrmThread;
 import org.semanticwb.forum.FrmUserThread;
 import org.semanticwb.model.GenericIterator;
+import org.semanticwb.model.Portlet;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
@@ -30,6 +34,7 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.portal.resources.Banner;
+import org.semanticwb.servlet.internal.UploadFormElement;
 
 /**
  *
@@ -216,7 +221,8 @@ public class SWBForum extends GenericResource {
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         User user = response.getUser();
-        WebSite website=response.getTopic().getWebSite();
+        Portlet base=response.getResourceBase();
+        WebSite website = response.getTopic().getWebSite();
         String action = response.getAction();
         String scls = request.getParameter("scls");
         if (action.equals("addCategory")) {
@@ -263,12 +269,46 @@ public class SWBForum extends GenericResource {
 
             SWBFormMgr mgr = new SWBFormMgr(FrmPost.frm_FrmPost, response.getTopic().getSemanticObject(), null);
             SemanticObject semObj = mgr.processForm(request);
+
             FrmPost newPost = FrmPost.getFrmPost(semObj.getId(), website);
             newPost.setForum(thread.getForum());
             newPost.setThread(thread);
             if (post != null) {
                 newPost.setParentPost(post);
             }
+
+            //Procesa archivo attachado
+            String name=null;
+            String value=null;
+            String workpath=SWBPlatform.getWorkPath();
+            Iterator itfilesUploaded = ((List) request.getSession().getAttribute(UploadFormElement.FILES_UPLOADED)).iterator();
+            while (itfilesUploaded.hasNext()) {
+                FileItem item = (FileItem) itfilesUploaded.next();
+                if (!item.isFormField()) { //Es un campo de tipo file
+                    value = item.getName();
+                    value=value.replace("\\", "/");
+                    int pos=value.lastIndexOf("/");
+                    if(pos>-1){
+                        value=value.substring(pos+1);
+                    }
+                    File fichero = new  File(SWBPlatform.getWorkPath()+base.getWorkPath()+"/replies/"+newPost.getId()+"/");
+                    if(!fichero.exists()){
+                        fichero.mkdirs();
+                    }
+                    fichero=new File(SWBPlatform.getWorkPath()+base.getWorkPath()+"/replies/"+newPost.getId()+"/"+value);
+                    try{
+                        System.out.println("graba archivo:"+SWBPlatform.getWorkPath()+base.getWorkPath()+"/replies/"+newPost.getId()+"/"+value);
+                        item.write(fichero);
+                    }catch(Exception e){
+                        System.out.println("ERROR JORGE");
+                        e.printStackTrace();
+                        log.debug(e);
+                    }
+                } 
+            }
+
+            //Termina de procesar archivo attachado
+
             thread.setReplyCount(thread.getReplyCount() + 1);
             Date date = new Date();
             thread.setLastpostdate(date);
@@ -308,7 +348,7 @@ public class SWBForum extends GenericResource {
             GenericIterator<FrmPost> gitPost = Post2remove.listchildPosts();
             while (gitPost.hasNext()) {
                 childPost++;
-                childPost=getChilds2Remove(gitPost.next(), childPost);
+                childPost = getChilds2Remove(gitPost.next(), childPost);
             }
             semObject.remove();
             //Resta el post al contador del thread
@@ -328,15 +368,15 @@ public class SWBForum extends GenericResource {
         } else if (action.equals("removeCategory")) {
             SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("categoryUri"));
             semObject.remove();
-        }else if (action.equals("addFavoriteThread")) {
-           SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("threadUri"));
-           FrmThread favThread = FrmThread.getFrmThread(semObject.getId(), response.getTopic().getWebSite());
-           FrmUserThread frmUserThread=FrmUserThread.createFrmUserThread(website);
-           frmUserThread.setThread(favThread);
-           frmUserThread.setUser(user);
-           response.setMode(response.Mode_VIEW);
-           response.setAction("viewThreads");
-           response.setRenderParameter("forumUri",request.getParameter("forumUri"));
+        } else if (action.equals("addFavoriteThread")) {
+            SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("threadUri"));
+            FrmThread favThread = FrmThread.getFrmThread(semObject.getId(), response.getTopic().getWebSite());
+            FrmUserThread frmUserThread = FrmUserThread.createFrmUserThread(website);
+            frmUserThread.setThread(favThread);
+            frmUserThread.setUser(user);
+            response.setMode(response.Mode_VIEW);
+            response.setAction("viewThreads");
+            response.setRenderParameter("forumUri", request.getParameter("forumUri"));
         }
     }
 
@@ -344,7 +384,7 @@ public class SWBForum extends GenericResource {
         GenericIterator<FrmPost> gitPost = post.listchildPosts();
         while (gitPost.hasNext()) {
             childPost++;
-            childPost=getChilds2Remove(gitPost.next(), childPost);
+            childPost = getChilds2Remove(gitPost.next(), childPost);
         }
         return childPost;
     }
