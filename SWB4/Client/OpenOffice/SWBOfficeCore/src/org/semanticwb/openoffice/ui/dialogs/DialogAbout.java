@@ -20,11 +20,12 @@ public class DialogAbout extends javax.swing.JDialog {
     public DialogAbout() {
         super((Frame)null, ModalityType.TOOLKIT_MODAL);
         initComponents();
-        this.setIconImage(ImageLoader.images.get("semius").getImage());
-        this.setModal(true);
-        setLocationRelativeTo(null);
-        this.add(new AboutBackGound(this),BorderLayout.CENTER);
+        AboutBackGound panel=new AboutBackGound(this);
         this.setSize(505, 335);
+        this.add(panel,BorderLayout.CENTER);
+        this.setIconImage(ImageLoader.images.get("semius").getImage());
+        this.setModal(true);                
+        setLocationRelativeTo(null);                
     }
     
     /** This method is called from within the constructor to
@@ -42,7 +43,11 @@ public class DialogAbout extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
-  
+    public static void main(String[] args)
+    {
+        DialogAbout DialogAbout=new DialogAbout();
+        DialogAbout.setVisible(true);
+    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
