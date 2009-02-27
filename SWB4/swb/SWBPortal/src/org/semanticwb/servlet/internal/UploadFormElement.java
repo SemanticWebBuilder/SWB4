@@ -37,8 +37,7 @@ public class UploadFormElement implements InternalServlet {
     public static final String UNIQUE_IDENTIFIER = "uniqueFileIdentifier";
 
     public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException, ServletException {
-            HttpSession session = request.getSession();
-         System.out.println("entra a doProcess J");
+        HttpSession session = request.getSession();
         UploadStatus status = new UploadStatus();
         session.setAttribute(UploadFormElement.UPLOAD_STATUS, null);
 
@@ -78,7 +77,8 @@ public class UploadFormElement implements InternalServlet {
     private void storeFilesOnSession(HttpServletRequest request, List items) {
         // check if there's a request to identify the file to be uploaded
         String uniqueIdentifier = request.getParameter(UNIQUE_IDENTIFIER);
-        if (uniqueIdentifier != null) {
+        
+        //if (uniqueIdentifier != null) { //comentado Jorge Jiménez
             // if an identifier for these files has been passed, make the FileItem objects available
             // in the session
             List<FileItem> files = (List<FileItem>) request.getSession().getAttribute(uniqueIdentifier);
@@ -93,7 +93,7 @@ public class UploadFormElement implements InternalServlet {
                 }
             }
             request.getSession().setAttribute(FILES_UPLOADED, files);
-        }
+        //}
     }
 
 }
