@@ -72,7 +72,7 @@ public class LoginTest
     public void DialogLoginTest()
     {
         ConfigurationListURI conf = new ConfigurationListURI();
-        DialogLogin login = new DialogLogin(new JFrame(), true);
+        DialogLogin login = new DialogLogin();
         login.setVisible(true);
     }
 
