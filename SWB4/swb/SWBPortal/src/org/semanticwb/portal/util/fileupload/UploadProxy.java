@@ -19,7 +19,6 @@ import org.semanticwb.servlet.internal.UploadFormElement;
 public class UploadProxy {
 
     public UploadStatus getStatus() {
-        System.out.println("entra a UploadProxy/getStatus-J:"+UploadFormElement.UPLOAD_STATUS);
         WebContext webCtx = WebContextFactory.get();
         HttpSession session = webCtx.getSession();
 
@@ -33,10 +32,8 @@ public class UploadProxy {
 
         // otherwise continue gathering info
         FileUploadListener.FileUploadStats fileUploadStats = (FileUploadListener.FileUploadStats) session.getAttribute(UploadFormElement.FILE_UPLOAD_STATS);
-        System.out.println("entra a UploadProxy/getStatus-J1");
         status = new UploadStatus();
         if (fileUploadStats != null) {
-            System.out.println("entra a UploadProxy/getStatus-J2");
             long bytesProcessed = fileUploadStats.getBytesRead();
             long sizeTotal = fileUploadStats.getTotalSize();
             long percentComplete = (long) Math.floor(((double) bytesProcessed / (double) sizeTotal) * 100.0);
@@ -54,15 +51,13 @@ public class UploadProxy {
                 status.setUploadRate(uploadRate);
             } else {
                 status.setStatus(UploadStatus.STATUS_OK);
-            }
-            System.out.println("entra a UploadProxy/getStatus-J3");
+            }            
             if (fileUploadStats != null && fileUploadStats.getBytesRead() == fileUploadStats.getTotalSize()) {
                 status.setStatus(UploadStatus.STATUS_OK);
             }
         } else {
             status.setStatus(UploadStatus.STATUS_RETRY);
         }
-        System.out.println("entra a UploadProxy/getStatus-J4:"+status);
         return status;
     }
 }
