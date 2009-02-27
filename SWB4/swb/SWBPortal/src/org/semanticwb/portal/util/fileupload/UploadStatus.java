@@ -38,7 +38,6 @@ public class UploadStatus {
     private double estimatedRuntime;
 
     public int getStatus() {
-        System.out.println("entra a UploadStatus/getStatus-J");
         return status;
     }
 
