@@ -182,6 +182,23 @@
           //alert(url+" "+ret);
           return ret;
       }
+      
+      function postJSON(url)
+      {
+          var ret=[];
+          var obj=dojo.xhrPost({
+              url: url,
+              sync: true,
+              load: function(data){
+                  ret=data;
+              },
+              error: function(data){
+                  alert("An error occurred, with response: " + data);
+              },
+              handleAs: "json"
+          });
+          return ret;
+      }
 
 
       function showDialog(url, title)
