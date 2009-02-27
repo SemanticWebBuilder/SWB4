@@ -62,8 +62,7 @@ public abstract class OfficeApplication
             // No debe hacer nada
             System.out.println(ue.getMessage());
         }
-    }
-
+    }    
     public static IOpenOfficeApplication getOfficeApplicationProxy() throws WBException
     {
         if (application == null)
@@ -410,15 +409,19 @@ public abstract class OfficeApplication
     public static final boolean isLogged()
     {
         boolean isLogged = false;
-        if (userInfo == null)
+        if (userInfo != null)
         {
-            isLogged = false;
+            isLogged = true;
         }
         return isLogged;
     }
-
+    public static final void openSession()
+    {
+        tryLogin();
+    }
     public static final void closeSession()
     {
+        logOff();
     }
 
     public final static void logOff()
