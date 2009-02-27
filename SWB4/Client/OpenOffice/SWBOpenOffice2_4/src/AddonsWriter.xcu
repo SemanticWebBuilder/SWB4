@@ -48,7 +48,7 @@
                                 <prop oor:name="Title" oor:type="xs:string">
                                     <value/>
                                     <value xml:lang="en">Open Session</value>
-                                    <value xml:lang="es">Abrir Sessión</value>
+                                    <value xml:lang="es">Abrir Sesión</value>
                                 </prop>
                             </node>
                             <node oor:name="m6" oor:op="replace">
@@ -75,7 +75,7 @@
                                 <prop oor:name="Title" oor:type="xs:string">
                                     <value/>
                                     <value xml:lang="en">Close Session</value>
-                                    <value xml:lang="es">Cerrar Session</value>
+                                    <value xml:lang="es">Cerrar Sesión</value>
                                 </prop>
                             </node>
                         </node>
