@@ -17,6 +17,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.forum.FrmAttachments;
 import org.semanticwb.forum.FrmCategory;
 import org.semanticwb.forum.FrmForum;
 import org.semanticwb.forum.FrmPost;
@@ -223,6 +224,7 @@ public class SWBForum extends GenericResource {
         User user = response.getUser();
         Portlet base=response.getResourceBase();
         WebSite website = response.getTopic().getWebSite();
+        Date date = new Date();
         String action = response.getAction();
         String scls = request.getParameter("scls");
         if (action.equals("addCategory")) {
@@ -278,24 +280,30 @@ public class SWBForum extends GenericResource {
             }
 
             //Procesa archivo attachado
-            String name=null;
-            String value=null;
-            String workpath=SWBPlatform.getWorkPath();
+            String basepath=SWBPlatform.getWorkPath()+base.getWorkPath()+"/replies/"+newPost.getId()+"/";
             Iterator itfilesUploaded = ((List) request.getSession().getAttribute(UploadFormElement.FILES_UPLOADED)).iterator();
             while (itfilesUploaded.hasNext()) {
                 FileItem item = (FileItem) itfilesUploaded.next();
                 if (!item.isFormField()) { //Es un campo de tipo file
-                    value = item.getName();
+                    int fileSize=((Long)item.getSize()).intValue();
+                    String value = item.getName();
                     value=value.replace("\\", "/");
                     int pos=value.lastIndexOf("/");
                     if(pos>-1){
                         value=value.substring(pos+1);
                     }
-                    File fichero = new  File(SWBPlatform.getWorkPath()+base.getWorkPath()+"/replies/"+newPost.getId()+"/");
+                    File fichero = new  File(basepath);
                     if(!fichero.exists()){
                         fichero.mkdirs();
                     }
-                    fichero=new File(SWBPlatform.getWorkPath()+base.getWorkPath()+"/replies/"+newPost.getId()+"/"+value);
+                    fichero=new File(basepath+value);
+                    FrmAttachments frmAttachment = FrmAttachments.createFrmAttachments(website);
+                    frmAttachment.setCreator(user);
+                    frmAttachment.setCreated(date);
+                    frmAttachment.setFileName(value);
+                    frmAttachment.setFileSize(fileSize);
+                    frmAttachment.setMimeType(item.getContentType());
+                    frmAttachment.setPost(newPost);
                     try{                        
                         item.write(fichero);
                     }catch(Exception e){
@@ -304,11 +312,9 @@ public class SWBForum extends GenericResource {
                     }
                 } 
             }
-
             //Termina de procesar archivo attachado
 
             thread.setReplyCount(thread.getReplyCount() + 1);
-            Date date = new Date();
             thread.setLastpostdate(date);
             thread.setLastpostmember(user);
             FrmForum forum = thread.getForum();
