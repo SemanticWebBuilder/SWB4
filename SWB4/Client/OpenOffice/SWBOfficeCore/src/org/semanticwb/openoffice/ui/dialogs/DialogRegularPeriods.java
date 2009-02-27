@@ -13,6 +13,7 @@ package org.semanticwb.openoffice.ui.dialogs;
 import java.awt.Frame;
 import javax.swing.JOptionPane;
 import org.jdom.output.DOMOutputter;
+import org.semanticwb.openoffice.ui.icons.ImageLoader;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -28,6 +29,7 @@ public class DialogRegularPeriods extends java.awt.Dialog
     {
         super((Frame)null, ModalityType.TOOLKIT_MODAL);
         initComponents();
+        this.setIconImage(ImageLoader.images.get("semius").getImage());
         this.setModal(true);
         this.setLocationRelativeTo(null);
     }

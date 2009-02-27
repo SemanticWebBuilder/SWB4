@@ -19,6 +19,7 @@ import javax.swing.JSpinner;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.output.DOMOutputter;
+import org.semanticwb.openoffice.ui.icons.ImageLoader;
 
 /**
  *
@@ -39,6 +40,7 @@ public class DialogCalendar extends java.awt.Dialog
     {
         super((Frame)null, ModalityType.TOOLKIT_MODAL);
         initComponents();
+        this.setIconImage(ImageLoader.images.get("semius").getImage());
         this.setModal(true);
         this.jSpinnerInitDate.setEditor(new JSpinner.DateEditor(jSpinnerInitDate, DATE_FORMAT));
         this.jSpinnerEndDate.setEditor(new JSpinner.DateEditor(jSpinnerEndDate, DATE_FORMAT));

@@ -9,6 +9,7 @@ package org.semanticwb.openoffice.ui.dialogs;
 import java.awt.Frame;
 import javax.swing.JOptionPane;
 import org.semanticwb.openoffice.OfficeApplication;
+import org.semanticwb.openoffice.ui.icons.ImageLoader;
 
 /**
  *
@@ -22,6 +23,7 @@ public final class DialogChangePassword extends javax.swing.JDialog {
     public DialogChangePassword() {
         super((Frame)null, ModalityType.TOOLKIT_MODAL);
         initComponents();
+        this.setIconImage(ImageLoader.images.get("semius").getImage());
         this.setModal(true);
         this.setLocationRelativeTo(null);
     }

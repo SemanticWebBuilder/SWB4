@@ -9,6 +9,7 @@ import java.awt.Frame;
 import java.text.DecimalFormat;
 import javax.swing.JOptionPane;
 import org.semanticwb.openoffice.Configuration;
+import org.semanticwb.openoffice.ui.icons.ImageLoader;
 import org.semanticwb.openoffice.util.FixedLengthPlainDocument;
 import org.semanticwb.openoffice.util.NumericPlainDocument;
 import static org.semanticwb.openoffice.Configuration.PROXY_PORT;
@@ -27,6 +28,7 @@ public class DialogConfigProxy extends javax.swing.JDialog
     {
         super((Frame)null, ModalityType.TOOLKIT_MODAL);
         initComponents();
+        this.setIconImage(ImageLoader.images.get("semius").getImage());
         this.setModal(true);
         jTextFieldPort.setDocument(new NumericPlainDocument(4, new DecimalFormat("####")));
         jTextFieldServer.setDocument(new FixedLengthPlainDocument(255));

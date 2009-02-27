@@ -14,6 +14,7 @@ import java.net.URL;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import org.semanticwb.openoffice.OfficeApplication;
+import org.semanticwb.openoffice.ui.icons.ImageLoader;
 
 /**
  *
@@ -34,6 +35,7 @@ public class DialogPreview extends javax.swing.JDialog
     {
         super((Frame)null, ModalityType.TOOLKIT_MODAL);
         initComponents();
+        this.setIconImage(ImageLoader.images.get("semius").getImage());
         this.url = url;
         if(title!=null)
         {

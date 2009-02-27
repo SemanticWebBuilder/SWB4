@@ -39,6 +39,7 @@ import org.semanticwb.office.interfaces.PortletInfo;
 import org.semanticwb.office.interfaces.PropertyInfo;
 import org.semanticwb.office.interfaces.VersionInfo;
 import org.semanticwb.openoffice.OfficeApplication;
+import org.semanticwb.openoffice.ui.icons.ImageLoader;
 
 /**
  *
@@ -57,6 +58,7 @@ public class DialogEditPorlet extends javax.swing.JDialog
     {
         super((Frame)null, ModalityType.TOOLKIT_MODAL);
         initComponents();
+        this.setIconImage(ImageLoader.images.get("semius").getImage());
         this.setModal(true);
         this.pageInformation = pageInformation;
         this.repositoryName = repositoryName;
