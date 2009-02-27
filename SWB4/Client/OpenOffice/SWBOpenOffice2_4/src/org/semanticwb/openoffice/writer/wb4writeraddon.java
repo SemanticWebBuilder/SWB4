@@ -358,9 +358,13 @@ public final class wb4writeraddon extends WeakBase
                     WB4WriterApplication.showAbout();
                     return;
                 }
+                if (aURL.Path.compareTo("openSession") == 0)
+                {
+                    OfficeApplication.openSession();
+                }
                 if (aURL.Path.compareTo("closeSession") == 0)
                 {
-                    // add your own code here
+                    OfficeApplication.closeSession();
                     return;
                 }
 
