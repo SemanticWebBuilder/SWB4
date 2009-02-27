@@ -1,5 +1,6 @@
 package org.semanticwb.model;
 
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 
@@ -65,10 +66,16 @@ public class FileUpload extends org.semanticwb.model.base.FileUploadBase {
         if (mode.equals("edit") || mode.equals("create")) {
             //Página ejemplo de implementación:http://blog.tremend.ro/2007/03/01/ajax-file-upload-monitoring-monitor-your-file-upload-with-dwr-and-commons-fileupload/
             //Fecha de implemetación:26/Febrero/2009
-            ret = "<iframe id='target_upload' name='target_upload' src='' style='display: none'></iframe>" +
+            ret = "<link rel=\"stylesheet\" type=\"text/css\" media=\"screen\" href=\"/swb/swbadmin/css/upload/upload.css\"/>"+
+                  "<script type='text/javascript' src=\"/swb/dwr/util.js\"></script>"+
+                  "<script type='text/javascript' src=\"/swb/dwr/engine.js\"></script>"+
+                  "<script type=\"text/javascript\" src=\"/swb/dwr/interface/uploadProxy.js\"></script>"+
+                  "<script type='text/javascript' src=\"/swb/swbadmin/js/upload/upload.js\"></script>";
+
+            ret += "<iframe id='target_upload' name='target_upload' src='' style='display: none'></iframe>" +
                     "<input id=\"importFile\" name=\"importFile\" type=\"file\"> <br/>" +
                     "<input type=\"hidden\" name=\"uniqueFileIdentifier\" value=\"1234\"/>" +
-                    "<a href=\"#\" onClick=\"javascript:if(uploadjs(document.forms[0])) {alert('para ir');return startUploadMonitoring();}\">Subir</a>" + //En lugar de este boton p
+                    "<a href=\"#\" onClick=\"javascript:if(uploadjs(document.forms[0])) {return startUploadMonitoring();}\">Subir</a>" + //En lugar de este boton p
                     "<div id=\"uploadStatus\">" +
                     "<div id=\"uploadProgressBar\" style=\"width:200px;\">" +
                     "<div id=\"uploadIndicator\"></div>" +
@@ -83,7 +90,7 @@ public class FileUpload extends org.semanticwb.model.base.FileUploadBase {
                     "  var method=forma.method;" +
                     "  forma.method='post';" +
                     "  var action=forma.action;" +
-                    "  forma.action='/swb/Upload';" +
+                    "  forma.action='"+SWBPlatform.getContextPath()+"/Upload';" +
                     "  var target=forma.target;" +
                     "  forma.target='target_upload';" +
                     "  forma.submit();" +
