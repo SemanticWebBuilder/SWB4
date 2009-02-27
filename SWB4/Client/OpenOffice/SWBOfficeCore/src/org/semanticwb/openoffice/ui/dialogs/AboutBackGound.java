@@ -11,6 +11,7 @@
 
 package org.semanticwb.openoffice.ui.dialogs;
 
+import java.awt.Dialog;
 import java.awt.Graphics;
 import java.awt.Image;
 import org.semanticwb.openoffice.ui.icons.ImageLoader;
@@ -21,14 +22,13 @@ import org.semanticwb.openoffice.ui.icons.ImageLoader;
  */
 public class AboutBackGound extends javax.swing.JPanel {
 
-    private Image imgFondo;
-    DialogAbout parent;
+    private Image imgFondo=ImageLoader.images.get("splash").getImage();
+    Dialog parent;
     /** Creates new form AboutBackGound */
-    public AboutBackGound(DialogAbout parent) {
-        this.parent=parent;
-        preInit();
+    public AboutBackGound(Dialog parent) {
+        this.parent=parent;        
         initComponents();
-    }
+    }    
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -82,11 +82,7 @@ public class AboutBackGound extends javax.swing.JPanel {
     private javax.swing.JButton jButtonClose;
     // End of variables declaration//GEN-END:variables
 
-    private void preInit()
-    {
-        imgFondo = ImageLoader.images.get("splash").getImage();
-    }
-
+   
     @Override
     public void paintComponent(Graphics g)
     {
