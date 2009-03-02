@@ -113,14 +113,14 @@ public class DialogDocumentsAtuhorize extends java.awt.Dialog
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
-        jPanel1 = new javax.swing.JPanel();
+        jPanelCommands = new javax.swing.JPanel();
         jButtonClose = new javax.swing.JButton();
-        jPanel2 = new javax.swing.JPanel();
+        jPanelTools = new javax.swing.JPanel();
         jToolBar1 = new javax.swing.JToolBar();
         jButtonSee = new javax.swing.JButton();
         jButtonAuthorize = new javax.swing.JButton();
         jButtonReject = new javax.swing.JButton();
-        jPanel3 = new javax.swing.JPanel();
+        jPanelContents = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jComboBoxSites = new javax.swing.JComboBox();
         jRadioButton1 = new javax.swing.JRadioButton();
@@ -137,8 +137,8 @@ public class DialogDocumentsAtuhorize extends java.awt.Dialog
             }
         });
 
-        jPanel1.setPreferredSize(new java.awt.Dimension(100, 30));
-        jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
+        jPanelCommands.setPreferredSize(new java.awt.Dimension(100, 30));
+        jPanelCommands.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
         jButtonClose.setText("Cerrar");
         jButtonClose.addActionListener(new java.awt.event.ActionListener() {
@@ -146,12 +146,12 @@ public class DialogDocumentsAtuhorize extends java.awt.Dialog
                 jButtonCloseActionPerformed(evt);
             }
         });
-        jPanel1.add(jButtonClose);
+        jPanelCommands.add(jButtonClose);
 
-        add(jPanel1, java.awt.BorderLayout.SOUTH);
+        add(jPanelCommands, java.awt.BorderLayout.SOUTH);
 
-        jPanel2.setPreferredSize(new java.awt.Dimension(100, 30));
-        jPanel2.setLayout(new java.awt.BorderLayout());
+        jPanelTools.setPreferredSize(new java.awt.Dimension(100, 30));
+        jPanelTools.setLayout(new java.awt.BorderLayout());
 
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
@@ -195,11 +195,11 @@ public class DialogDocumentsAtuhorize extends java.awt.Dialog
         });
         jToolBar1.add(jButtonReject);
 
-        jPanel2.add(jToolBar1, java.awt.BorderLayout.CENTER);
+        jPanelTools.add(jToolBar1, java.awt.BorderLayout.CENTER);
 
-        add(jPanel2, java.awt.BorderLayout.NORTH);
+        add(jPanelTools, java.awt.BorderLayout.NORTH);
 
-        jPanel3.setLayout(new java.awt.BorderLayout());
+        jPanelContents.setLayout(new java.awt.BorderLayout());
 
         jPanel4.setPreferredSize(new java.awt.Dimension(100, 30));
 
@@ -239,7 +239,7 @@ public class DialogDocumentsAtuhorize extends java.awt.Dialog
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel3.add(jPanel4, java.awt.BorderLayout.NORTH);
+        jPanelContents.add(jPanel4, java.awt.BorderLayout.NORTH);
 
         jTableContents.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -262,9 +262,9 @@ public class DialogDocumentsAtuhorize extends java.awt.Dialog
         });
         jScrollPane1.setViewportView(jTableContents);
 
-        jPanel3.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+        jPanelContents.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
-        add(jPanel3, java.awt.BorderLayout.CENTER);
+        add(jPanelContents, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -313,10 +313,10 @@ public class DialogDocumentsAtuhorize extends java.awt.Dialog
     private javax.swing.JButton jButtonReject;
     private javax.swing.JButton jButtonSee;
     private javax.swing.JComboBox jComboBoxSites;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanelCommands;
+    private javax.swing.JPanel jPanelContents;
+    private javax.swing.JPanel jPanelTools;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JRadioButton jRadioButton3;
