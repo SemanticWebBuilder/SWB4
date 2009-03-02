@@ -17,6 +17,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import org.semanticwb.office.interfaces.FlowContentInformation;
 import org.semanticwb.office.interfaces.PortletInfo;
+import org.semanticwb.office.interfaces.WebSiteInfo;
 import org.semanticwb.openoffice.OfficeApplication;
 import org.semanticwb.openoffice.ui.icons.ImageLoader;
 
@@ -50,7 +51,24 @@ public class DialogDocumentsAtuhorize extends java.awt.Dialog
                 }
             }
         });
+        loadSites();
         loadContents();
+    }
+
+    private void loadSites()
+    {
+        this.jComboBoxSites.removeAllItems();
+        try
+        {
+            for (WebSiteInfo site : OfficeApplication.getOfficeApplicationProxy().getSites())
+            {
+                jComboBoxSites.addItem(site);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     private void loadContents()
@@ -65,11 +83,11 @@ public class DialogDocumentsAtuhorize extends java.awt.Dialog
         {
             for (FlowContentInformation flowContentInformation : OfficeApplication.getOfficeApplicationProxy().getContentsForAuthorize())
             {
-                PortletInfo portletInfo=flowContentInformation.portletInfo;
-                String version=flowContentInformation.portletInfo.version;
-                if(version.equals("*"))
+                PortletInfo portletInfo = flowContentInformation.portletInfo;
+                String version = flowContentInformation.portletInfo.version;
+                if (version.equals("*"))
                 {
-                    version="Mostrar la última version";
+                    version = "Mostrar la última version";
                 }
                 Object[] rowData =
                 {
@@ -80,6 +98,7 @@ public class DialogDocumentsAtuhorize extends java.awt.Dialog
         }
         catch (Exception e)
         {
+            e.printStackTrace();
         }
     }
 
@@ -101,7 +120,7 @@ public class DialogDocumentsAtuhorize extends java.awt.Dialog
         jButton1 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
-        jComboBox1 = new javax.swing.JComboBox();
+        jComboBoxSites = new javax.swing.JComboBox();
         jRadioButton1 = new javax.swing.JRadioButton();
         jRadioButton2 = new javax.swing.JRadioButton();
         jRadioButton3 = new javax.swing.JRadioButton();
@@ -180,7 +199,7 @@ public class DialogDocumentsAtuhorize extends java.awt.Dialog
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jComboBoxSites, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jRadioButton1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -194,7 +213,7 @@ public class DialogDocumentsAtuhorize extends java.awt.Dialog
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(5, 5, 5)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBoxSites, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jRadioButton1)
                     .addComponent(jRadioButton2)
                     .addComponent(jRadioButton3))
@@ -241,15 +260,13 @@ public class DialogDocumentsAtuhorize extends java.awt.Dialog
     {//GEN-HEADEREND:event_jButtonCloseActionPerformed
         this.setVisible(false);
     }//GEN-LAST:event_jButtonCloseActionPerformed
-
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButtonAuthorize;
     private javax.swing.JButton jButtonClose;
     private javax.swing.JButton jButtonSee;
-    private javax.swing.JComboBox jComboBox1;
+    private javax.swing.JComboBox jComboBoxSites;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
