@@ -43,11 +43,13 @@ public class DialogDocumentsAtuhorize extends java.awt.Dialog
             public void valueChanged(ListSelectionEvent e)
             {
                 jButtonAuthorize.setEnabled(false);
+                jButtonReject.setEnabled(false);
                 jButtonSee.setEnabled(false);
                 if (e.getFirstIndex() != -1)
                 {
                     jButtonAuthorize.setEnabled(true);
                     jButtonSee.setEnabled(true);
+                    jButtonReject.setEnabled(true);
                 }
             }
         });
@@ -117,7 +119,7 @@ public class DialogDocumentsAtuhorize extends java.awt.Dialog
         jToolBar1 = new javax.swing.JToolBar();
         jButtonSee = new javax.swing.JButton();
         jButtonAuthorize = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        jButtonReject = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jComboBoxSites = new javax.swing.JComboBox();
@@ -128,6 +130,7 @@ public class DialogDocumentsAtuhorize extends java.awt.Dialog
         jTableContents = new javax.swing.JTable();
 
         setResizable(false);
+        setTitle("Documentos por autorizar");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 closeDialog(evt);
@@ -159,6 +162,11 @@ public class DialogDocumentsAtuhorize extends java.awt.Dialog
         jButtonSee.setFocusable(false);
         jButtonSee.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonSee.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonSee.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSeeActionPerformed(evt);
+            }
+        });
         jToolBar1.add(jButtonSee);
 
         jButtonAuthorize.setText("Autorizar");
@@ -167,14 +175,25 @@ public class DialogDocumentsAtuhorize extends java.awt.Dialog
         jButtonAuthorize.setFocusable(false);
         jButtonAuthorize.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonAuthorize.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonAuthorize.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAuthorizeActionPerformed(evt);
+            }
+        });
         jToolBar1.add(jButtonAuthorize);
 
-        jButton1.setText("Rechazar");
-        jButton1.setToolTipText("Rechazar contenido");
-        jButton1.setFocusable(false);
-        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButton1);
+        jButtonReject.setText("Rechazar");
+        jButtonReject.setToolTipText("Rechazar contenido");
+        jButtonReject.setEnabled(false);
+        jButtonReject.setFocusable(false);
+        jButtonReject.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonReject.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonReject.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonRejectActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(jButtonReject);
 
         jPanel2.add(jToolBar1, java.awt.BorderLayout.CENTER);
 
@@ -260,11 +279,38 @@ public class DialogDocumentsAtuhorize extends java.awt.Dialog
     {//GEN-HEADEREND:event_jButtonCloseActionPerformed
         this.setVisible(false);
     }//GEN-LAST:event_jButtonCloseActionPerformed
+
+    private void jButtonSeeActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonSeeActionPerformed
+    {//GEN-HEADEREND:event_jButtonSeeActionPerformed
+        if(this.jTableContents.getSelectedRow()!=-1)
+        {
+            DefaultTableModel model=(DefaultTableModel)this.jTableContents.getModel();
+            PortletInfo info=(PortletInfo)model.getValueAt(this.jTableContents.getSelectedRow(), 0);
+            String version=info.version;
+        }
+    }//GEN-LAST:event_jButtonSeeActionPerformed
+
+    private void jButtonAuthorizeActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonAuthorizeActionPerformed
+    {//GEN-HEADEREND:event_jButtonAuthorizeActionPerformed
+        if(this.jTableContents.getSelectedRow()!=-1)
+        {
+            DefaultTableModel model=(DefaultTableModel)this.jTableContents.getModel();
+        }
+    }//GEN-LAST:event_jButtonAuthorizeActionPerformed
+
+    private void jButtonRejectActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonRejectActionPerformed
+    {//GEN-HEADEREND:event_jButtonRejectActionPerformed
+        if(this.jTableContents.getSelectedRow()!=-1)
+        {
+            DefaultTableModel model=(DefaultTableModel)this.jTableContents.getModel();
+        }
+    }//GEN-LAST:event_jButtonRejectActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButtonAuthorize;
     private javax.swing.JButton jButtonClose;
+    private javax.swing.JButton jButtonReject;
     private javax.swing.JButton jButtonSee;
     private javax.swing.JComboBox jComboBoxSites;
     private javax.swing.JPanel jPanel1;
