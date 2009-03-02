@@ -382,7 +382,7 @@ public class ViewProperties extends WizardPage
 
     public static String getDescription()
     {
-        return "Indicar propiedades de presentación";
+        return "Propiedades de presentación";
     }
 
     /** This method is called from within the constructor to
