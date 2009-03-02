@@ -19,8 +19,12 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
+import org.semanticwb.openoffice.Configuration;
+import org.semanticwb.openoffice.ConfigurationListURI;
 import org.semanticwb.openoffice.DocumentType;
+import org.semanticwb.openoffice.ErrorLog;
 import org.semanticwb.openoffice.writer.WB4WriterApplication;
 
 /**
@@ -40,6 +44,10 @@ public class WB4WriterApplicationTest
     @BeforeClass
     public static void setUpClass() throws Exception
     {
+        File home=new File(System.getProperty("user.home"));
+        System.setProperty(ConfigurationListURI.CONFIGURATION, home.getPath()+"/list.xml");
+        System.setProperty(Configuration.CONFIGURATION_PROPERTY_NAME, home.getPath()+"/config.xml");
+        System.setProperty(ErrorLog.CONFIGURATION, home.getPath());
     }
 
     @AfterClass
@@ -94,6 +102,7 @@ public class WB4WriterApplicationTest
 
     
     @Test
+    @Ignore
     public void openTest()
     {
         try
@@ -108,5 +117,19 @@ public class WB4WriterApplicationTest
             Assert.fail();
         }
         
+    }
+
+    @Test
+    public void openSession()
+    {
+        try
+        {
+            WB4WriterApplication.openSession();
+        }
+        catch(Exception e)
+        {
+            Assert.fail();
+        }
+
     }
 }
