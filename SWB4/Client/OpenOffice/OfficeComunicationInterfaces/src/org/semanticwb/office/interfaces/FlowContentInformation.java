@@ -10,10 +10,10 @@ package org.semanticwb.office.interfaces;
  * @author victor.lorenzana
  */
 public class FlowContentInformation {
-    PortletInfo portletInfo;
-    String id;
-    String title;
-    String step;
+    public PortletInfo portletInfo;
+    public String id;
+    public String title;
+    public String step;
 
     @Override
     public String toString()
