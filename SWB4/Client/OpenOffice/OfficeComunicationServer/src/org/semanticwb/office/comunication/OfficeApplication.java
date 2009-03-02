@@ -31,6 +31,7 @@ import org.semanticwb.office.interfaces.CategoryInfo;
 import org.semanticwb.office.interfaces.ContentInfo;
 import org.semanticwb.office.interfaces.ContentType;
 import org.semanticwb.office.interfaces.IOfficeApplication;
+import org.semanticwb.office.interfaces.PortletInfo;
 import org.semanticwb.office.interfaces.VersionInfo;
 import org.semanticwb.office.interfaces.WebPageInfo;
 import org.semanticwb.office.interfaces.WebSiteInfo;
@@ -672,5 +673,11 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             }
         }
         return getLimitOfVersions;
+    }
+
+    public PortletInfo[] getContentsForAuthorize() throws Exception
+    {
+        ArrayList<String> contents = new ArrayList<String>();
+        return contents.toArray(new PortletInfo[contents.size()]);
     }
 }
