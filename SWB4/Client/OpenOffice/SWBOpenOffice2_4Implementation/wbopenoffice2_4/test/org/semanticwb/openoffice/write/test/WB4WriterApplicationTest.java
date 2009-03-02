@@ -120,11 +120,25 @@ public class WB4WriterApplicationTest
     }
 
     @Test
-    public void openSession()
+    public void openSessionTest()
     {
         try
         {
             WB4WriterApplication.openSession();
+        }
+        catch(Exception e)
+        {
+            Assert.fail();
+        }
+
+    }
+
+     @Test
+    public void showContentsToAuthorizeTest()
+    {
+        try
+        {
+            WB4WriterApplication.showContentsToAuthorize();
         }
         catch(Exception e)
         {
