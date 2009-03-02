@@ -729,7 +729,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
-    private PortletInfo getPortletInfo(OfficePortlet officePortlet)
+    public static PortletInfo getPortletInfo(OfficePortlet officePortlet)
     {
         PortletInfo info = null;
         GenericIterator<Portletable> portlables = officePortlet.listPortletables();
