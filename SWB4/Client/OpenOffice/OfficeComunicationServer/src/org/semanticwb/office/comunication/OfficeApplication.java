@@ -30,6 +30,7 @@ import org.semanticwb.model.WebSite;
 import org.semanticwb.office.interfaces.CategoryInfo;
 import org.semanticwb.office.interfaces.ContentInfo;
 import org.semanticwb.office.interfaces.ContentType;
+import org.semanticwb.office.interfaces.FlowContentInformation;
 import org.semanticwb.office.interfaces.IOfficeApplication;
 import org.semanticwb.office.interfaces.PortletInfo;
 import org.semanticwb.office.interfaces.VersionInfo;
@@ -678,9 +679,9 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         return getLimitOfVersions;
     }
 
-    public PortletInfo[] getContentsForAuthorize() throws Exception
+    public FlowContentInformation[] getContentsForAuthorize() throws Exception
     {
-        ArrayList<PortletInfo> contents = new ArrayList<PortletInfo>();
+        ArrayList<FlowContentInformation> contents = new ArrayList<FlowContentInformation>();
         Iterator<WebSite> sites = SWBContext.listWebSites();
         while (sites.hasNext())
         {
@@ -693,10 +694,11 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                 {
                     OfficePortlet officePortlet = new OfficePortlet(obj);
                     PortletInfo info=OfficeDocument.getPortletInfo(officePortlet);
-                    contents.add(info);
+                    FlowContentInformation flowContentInformation=new FlowContentInformation();
+                    contents.add(flowContentInformation);
                 }
             }
         }
-        return contents.toArray(new PortletInfo[contents.size()]);
+        return contents.toArray(new FlowContentInformation[contents.size()]);
     }
 }
