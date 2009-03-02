@@ -20,7 +20,7 @@ import org.semanticwb.openoffice.interfaces.IOpenOfficeApplication;
 import org.semanticwb.openoffice.interfaces.IOpenOfficeDocument;
 import org.semanticwb.openoffice.ui.dialogs.DialogAbout;
 import org.semanticwb.openoffice.ui.dialogs.DialogChangePassword;
-import org.semanticwb.openoffice.ui.dialogs.DialogDocumentsAtuhorize;
+import org.semanticwb.openoffice.ui.dialogs.DialogDocumentsAuthorize;
 import org.semanticwb.openoffice.ui.dialogs.DialogLogin;
 import org.semanticwb.openoffice.ui.dialogs.DialogPreview;
 import org.semanticwb.openoffice.ui.wizard.Search;
@@ -431,7 +431,7 @@ public abstract class OfficeApplication
     {
         if(tryLogin())
         {
-            DialogDocumentsAtuhorize dialogDocumentsAtuhorize=new DialogDocumentsAtuhorize();
+            DialogDocumentsAuthorize dialogDocumentsAtuhorize=new DialogDocumentsAuthorize();
             dialogDocumentsAtuhorize.setVisible(true);
         }
     }
