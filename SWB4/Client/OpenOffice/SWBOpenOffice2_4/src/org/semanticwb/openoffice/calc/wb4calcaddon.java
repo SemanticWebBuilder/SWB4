@@ -148,7 +148,10 @@ public final class wb4calcaddon extends WeakBase
                 }
                 if (aURL.Path.compareTo("changePassword") == 0)
                 {
-                    return this;
+                    if (WB4CalcApplication.isLogged())
+                    {
+                        return this;
+                    }
                 }
                 if (aURL.Path.compareTo("help") == 0)
                 {
