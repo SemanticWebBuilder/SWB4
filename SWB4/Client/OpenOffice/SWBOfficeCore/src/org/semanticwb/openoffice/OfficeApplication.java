@@ -396,6 +396,7 @@ public abstract class OfficeApplication
                 catch (Exception e)
                 {
                     tryLogin = false;
+                    logOff();
                 }
             }
         }
