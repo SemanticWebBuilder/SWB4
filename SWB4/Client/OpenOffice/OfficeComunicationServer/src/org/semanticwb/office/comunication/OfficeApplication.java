@@ -678,6 +678,11 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
     public PortletInfo[] getContentsForAuthorize() throws Exception
     {
         ArrayList<String> contents = new ArrayList<String>();
+        Iterator<WebSite> sites=SWBContext.listWebSites();
+        while(sites.hasNext())
+        {
+            WebSite site=sites.next();            
+        }
         return contents.toArray(new PortletInfo[contents.size()]);
     }
 }
