@@ -13,8 +13,6 @@ import java.net.PasswordAuthentication;
 import java.net.URL;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
 import org.semanticwb.openoffice.OfficeApplication;
 import org.semanticwb.openoffice.ui.icons.ImageLoader;
 
