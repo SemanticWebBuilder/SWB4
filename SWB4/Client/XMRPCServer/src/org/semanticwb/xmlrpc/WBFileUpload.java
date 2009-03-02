@@ -22,12 +22,12 @@ public class WBFileUpload
     {
 
         public String parametro;
-        public ArrayList Valor;
+        public ArrayList<String> Valor;
 
         CParameter()
         {
             parametro = null;
-            Valor = new ArrayList();
+            Valor = new ArrayList<String>();
         }
     }
 
@@ -35,7 +35,7 @@ public class WBFileUpload
     {
         sContentType = null;
         table = null;
-        parametros = new Vector();
+        parametros = new Vector<CParameter>();
         //maxSize = 0x2000000;
         maxSize = 0;
     }
@@ -426,7 +426,7 @@ public class WBFileUpload
 
     public ArrayList getParamNames() throws IOException
     {
-        ArrayList aparams = new ArrayList();
+        ArrayList<String> aparams = new ArrayList<String>();
         for (int i = 0; i < parametros.size(); i++)
         {
             CParameter cparameter = (CParameter) parametros.elementAt(i);
@@ -439,7 +439,7 @@ public class WBFileUpload
     {
 
         char c = '\u2000';
-        Hashtable hashtable = new Hashtable();
+        Hashtable<String,Object> hashtable = new Hashtable<String,Object>();
         String s1 = "--".concat(String.valueOf(String.valueOf(s)));
         byte abyte0[] = new byte[c];
         int i = servletinputstream.readLine(abyte0, 0, abyte0.length);
@@ -447,7 +447,7 @@ public class WBFileUpload
         {
             throw new IllegalArgumentException("InputStream truncated");
         }
-        String s2 = new String(abyte0, 0, 0, i);
+        String s2 = new String(abyte0, 0, i);
         if (!s2.startsWith(s1))
         {
             throw new IllegalArgumentException("MIME boundary missing: ".concat(String.valueOf(String.valueOf(s2))));
@@ -470,7 +470,7 @@ public class WBFileUpload
                 {
                     return hashtable;
                 }
-                s3 = new String(abyte0, 0, 0, j - 2);
+                s3 = new String(abyte0, 0, j - 2);
                 s6 = s3.toLowerCase();
             }
             while (!s6.startsWith("content-disposition"));
@@ -503,7 +503,7 @@ public class WBFileUpload
             {
                 return hashtable;
             }
-            s3 = new String(abyte0, 0, 0, k - 2);
+            s3 = new String(abyte0, 0, k - 2);
             s6 = s3.toLowerCase();
             for (; sContentType == null; sContentType = s6)
             {
@@ -522,7 +522,7 @@ public class WBFileUpload
                 {
                     return hashtable;
                 }
-                s3 = new String(abyte0, 0, 0, k - 2);
+                s3 = new String(abyte0, 0, k - 2);
                 if (s3.length() != 0)
                 {
                     throw new IllegalArgumentException("Unexpected line in MIMEpart header: ".concat(String.valueOf(String.valueOf(s3))));
@@ -544,7 +544,7 @@ public class WBFileUpload
             {
                 return hashtable;
             }
-            s3 = new String(abyte0, 0, 0, k);
+            s3 = new String(abyte0, 0, k);
             CParameter cparameter = FindParameter(s9.trim());
             if (cparameter != null)
             {
@@ -565,7 +565,7 @@ public class WBFileUpload
                 {
                     return hashtable;
                 }
-                String s4 = new String(abyte0, 0, 0, k);
+                String s4 = new String(abyte0,  0, k);
                 flag1 = false;
                 if (s4.startsWith(s1))
                 {
@@ -591,7 +591,7 @@ public class WBFileUpload
                 {
                     return hashtable;
                 }
-                String s5 = new String(abyte0, 0, 0, k);
+                String s5 = new String(abyte0, 0, k);
                 if (s5.startsWith(s1))
                 {
                     flag = false;
@@ -635,7 +635,7 @@ public class WBFileUpload
             }
             else
             {
-                Hashtable hashtable1 = new Hashtable(4);
+                Hashtable<String,Object> hashtable1 = new Hashtable<String,Object>(4);
                 hashtable1.put("name", s9);
                 hashtable1.put( FILENAME,s7);
                 if (s8 == null)
@@ -695,7 +695,7 @@ public class WBFileUpload
         return sessid;
     }
     private String sContentType;
-    Vector parametros;
+    Vector<CParameter> parametros;
     Hashtable table;
     protected int maxSize;
 }
