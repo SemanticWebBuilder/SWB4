@@ -212,7 +212,10 @@ public final class wb4writeraddon extends WeakBase
                 }
                 if (aURL.Path.compareTo("changePassword") == 0)
                 {
-                    return this;
+                    if (WB4WriterApplication.isLogged())
+                    {
+                        return this;
+                    }
                 }
                 if (aURL.Path.compareTo("help") == 0)
                 {
@@ -345,7 +348,7 @@ public final class wb4writeraddon extends WeakBase
                 }
                 if (aURL.Path.compareTo("changePassword") == 0)
                 {
-
+                    WB4WriterApplication.changePassword();
                     return;
                 }
                 if (aURL.Path.compareTo("help") == 0)

@@ -151,7 +151,7 @@ public final class wb4impressaddon extends WeakBase
                 if (aURL.Path.compareTo("changePassword") == 0)
                 {
                     if (WB4ImpressApplication.isLogged())
-                    {
+                    {                        
                         return this;
                     }
                 }
