@@ -120,6 +120,7 @@ public class WB4WriterApplicationTest
     }
 
     @Test
+    @Ignore
     public void openSessionTest()
     {
         try
