@@ -25,11 +25,11 @@ import org.semanticwb.openoffice.ui.icons.ImageLoader;
  *
  * @author victor.lorenzana
  */
-public class DialogDocumentsAtuhorize extends java.awt.Dialog
+public class DialogDocumentsAuthorize extends java.awt.Dialog
 {
 
     /** Creates new form DialogDocumentsAtuhorize */
-    public DialogDocumentsAtuhorize()
+    public DialogDocumentsAuthorize()
     {
         super((Frame) null, ModalityType.TOOLKIT_MODAL);
         this.setIconImage(ImageLoader.images.get("semius").getImage());
@@ -218,14 +218,14 @@ public class DialogDocumentsAtuhorize extends java.awt.Dialog
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(jComboBoxSites, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jComboBoxSites, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jRadioButton1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jRadioButton2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jRadioButton3)
-                .addGap(42, 42, 42))
+                .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -233,9 +233,9 @@ public class DialogDocumentsAtuhorize extends java.awt.Dialog
                 .addGap(5, 5, 5)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jComboBoxSites, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jRadioButton1)
+                    .addComponent(jRadioButton3)
                     .addComponent(jRadioButton2)
-                    .addComponent(jRadioButton3))
+                    .addComponent(jRadioButton1))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -287,6 +287,7 @@ public class DialogDocumentsAtuhorize extends java.awt.Dialog
             DefaultTableModel model=(DefaultTableModel)this.jTableContents.getModel();
             PortletInfo info=(PortletInfo)model.getValueAt(this.jTableContents.getSelectedRow(), 0);
             String version=info.version;
+            
         }
     }//GEN-LAST:event_jButtonSeeActionPerformed
 
