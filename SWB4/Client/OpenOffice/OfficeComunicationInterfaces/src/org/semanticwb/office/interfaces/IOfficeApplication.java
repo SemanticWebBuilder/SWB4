@@ -22,10 +22,10 @@ public interface IOfficeApplication
     public void changePassword(String newPassword) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeApplication.createPage")
-    public void createPage(WebPageInfo page,String pageid,String title, String description) throws Exception;
+    public void createPage(WebPageInfo page, String pageid, String title, String description) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeApplication.existPage")
-    public boolean existsPage(WebSiteInfo site,String pageid) throws Exception;
+    public boolean existsPage(WebSiteInfo site, String pageid) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeApplication.createCategory")
     public String createCategory(String repositoryName, String title, String description) throws Exception;
@@ -55,10 +55,10 @@ public interface IOfficeApplication
     public ContentType[] getContentTypes(String repositoryName) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeApplication.search")
-    public ContentInfo[] search(String repositoryName, String title, String description, String category,String type,String officeType) throws Exception;
+    public ContentInfo[] search(String repositoryName, String title, String description, String category, String type, String officeType) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeApplication.openContent")
-    public String openContent(String repositoryName,VersionInfo versioninfo) throws Exception;
+    public String openContent(String repositoryName, VersionInfo versioninfo) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeApplication.getSites")
     public WebSiteInfo[] getSites() throws Exception;
@@ -71,4 +71,7 @@ public interface IOfficeApplication
 
     @XmlRpcMethod(methodName = "OfficeApplication.getLimitOfVersions")
     public int getLimitOfVersions() throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeApplication.getContentsForAuthorize")
+    public PortletInfo[] getContentsForAuthorize() throws Exception;
 }
