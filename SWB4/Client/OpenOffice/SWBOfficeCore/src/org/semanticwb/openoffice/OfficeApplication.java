@@ -380,7 +380,8 @@ public abstract class OfficeApplication
         boolean tryLogin = false;
         if (userInfo == null || webAddress == null)
         {
-            logOn();
+            logOn();            
+            
             if (userInfo == null || webAddress == null)
             {
                 logOff();
@@ -388,6 +389,8 @@ public abstract class OfficeApplication
             }
             else
             {
+                JOptionPane.showMessageDialog(null, "userInfo.getLogin()  "+userInfo.getLogin(),"userInfo.getPassword()"+userInfo.getPassword(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "userInfo.getPassword()   "+userInfo.getPassword(),"userInfo.getLogin()"+userInfo.getLogin(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
                 try
                 {
                     OfficeApplication.getOfficeApplicationProxy().isValidVersion(IOpenOfficeApplication.version);
@@ -395,6 +398,7 @@ public abstract class OfficeApplication
                 }
                 catch (Exception e)
                 {
+                    JOptionPane.showMessageDialog(null, e.getMessage(), "Error de acceso", JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
                     tryLogin = false;
                     logOff();
                 }
@@ -429,6 +433,7 @@ public abstract class OfficeApplication
     {
         userInfo = null;
         webAddress = null;
+        application=null;
         if (menuListener != null)
         {
             menuListener.onLogout();
