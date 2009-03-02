@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.2" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.DialogFormInfo">
+<Form version="1.6" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.DialogFormInfo">
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
   </SyntheticProperties>
@@ -87,6 +87,16 @@
                 <Property name="verticalTextPosition" type="int" value="3"/>
               </Properties>
             </Component>
+            <Component class="javax.swing.JButton" name="jButtonAuthorize">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Autorizar"/>
+                <Property name="toolTipText" type="java.lang.String" value="Autorizar contenido"/>
+                <Property name="enabled" type="boolean" value="false"/>
+                <Property name="focusable" type="boolean" value="false"/>
+                <Property name="horizontalTextPosition" type="int" value="0"/>
+                <Property name="verticalTextPosition" type="int" value="3"/>
+              </Properties>
+            </Component>
           </SubComponents>
         </Container>
       </SubComponents>
@@ -106,11 +116,12 @@
         <Component class="javax.swing.JTable" name="jTableContents">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="4" rowCount="0">
+              <Table columnCount="5" rowCount="0">
                 <Column editable="false" title="T&#xed;tulo" type="java.lang.Object"/>
                 <Column editable="false" title="P&#xe1;gina" type="java.lang.String"/>
                 <Column editable="false" title="Paso" type="java.lang.String"/>
                 <Column editable="false" title="Flujo" type="java.lang.Object"/>
+                <Column editable="false" title="Versi&#xf3;n" type="java.lang.Object"/>
               </Table>
             </Property>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -135,7 +146,15 @@
                   <Editor/>
                   <Renderer/>
                 </Column>
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
               </TableColumnModel>
+            </Property>
+            <Property name="selectionModel" type="javax.swing.ListSelectionModel" editor="org.netbeans.modules.form.editors2.JTableSelectionModelEditor">
+              <JTableSelectionModel selectionMode="0"/>
             </Property>
             <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
               <TableHeader reorderingAllowed="true" resizingAllowed="true"/>

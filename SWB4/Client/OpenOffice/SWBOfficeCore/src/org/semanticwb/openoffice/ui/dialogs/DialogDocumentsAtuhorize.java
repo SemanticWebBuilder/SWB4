@@ -8,40 +8,56 @@
  *
  * Created on 2/03/2009, 03:28:19 PM
  */
-
 package org.semanticwb.openoffice.ui.dialogs;
 
 import java.awt.Frame;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
 import org.semanticwb.openoffice.ui.icons.ImageLoader;
 
 /**
  *
  * @author victor.lorenzana
  */
-public class DialogDocumentsAtuhorize extends java.awt.Dialog {
+public class DialogDocumentsAtuhorize extends java.awt.Dialog
+{
 
     /** Creates new form DialogDocumentsAtuhorize */
-    public DialogDocumentsAtuhorize() {
-        super((Frame)null, ModalityType.TOOLKIT_MODAL);
+    public DialogDocumentsAtuhorize()
+    {
+        super((Frame) null, ModalityType.TOOLKIT_MODAL);
         this.setIconImage(ImageLoader.images.get("semius").getImage());
         this.setModal(true);
         initComponents();
+        this.setLocationRelativeTo(null);
         ListSelectionModel listSelectionModel = jTableContents.getSelectionModel();
         listSelectionModel.addListSelectionListener(new ListSelectionListener()
         {
 
             public void valueChanged(ListSelectionEvent e)
             {
+                jButtonAuthorize.setEnabled(false);
                 jButtonSee.setEnabled(false);
                 if (e.getFirstIndex() != -1)
                 {
+                    jButtonAuthorize.setEnabled(true);
                     jButtonSee.setEnabled(true);
                 }
             }
         });
+        loadContents();
+    }
+
+    private void loadContents()
+    {
+        DefaultTableModel model = (DefaultTableModel) jTableContents.getModel();
+        int rows = model.getRowCount();
+        for (int i = 1; i <= rows; i++)
+        {
+            model.removeRow(0);
+        }
     }
 
     /** This method is called from within the constructor to
@@ -57,6 +73,7 @@ public class DialogDocumentsAtuhorize extends java.awt.Dialog {
         jPanel2 = new javax.swing.JPanel();
         jToolBar1 = new javax.swing.JToolBar();
         jButtonSee = new javax.swing.JButton();
+        jButtonAuthorize = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableContents = new javax.swing.JTable();
 
@@ -93,6 +110,14 @@ public class DialogDocumentsAtuhorize extends java.awt.Dialog {
         jButtonSee.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar1.add(jButtonSee);
 
+        jButtonAuthorize.setText("Autorizar");
+        jButtonAuthorize.setToolTipText("Autorizar contenido");
+        jButtonAuthorize.setEnabled(false);
+        jButtonAuthorize.setFocusable(false);
+        jButtonAuthorize.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonAuthorize.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jButtonAuthorize);
+
         jPanel2.add(jToolBar1, java.awt.BorderLayout.CENTER);
 
         add(jPanel2, java.awt.BorderLayout.NORTH);
@@ -102,14 +127,14 @@ public class DialogDocumentsAtuhorize extends java.awt.Dialog {
 
             },
             new String [] {
-                "Título", "Página", "Paso", "Flujo"
+                "Título", "Página", "Paso", "Flujo", "Versión"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
+                java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -120,6 +145,7 @@ public class DialogDocumentsAtuhorize extends java.awt.Dialog {
                 return canEdit [columnIndex];
             }
         });
+        jTableContents.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(jTableContents);
 
         add(jScrollPane1, java.awt.BorderLayout.CENTER);
@@ -135,18 +161,25 @@ public class DialogDocumentsAtuhorize extends java.awt.Dialog {
 
     private void jButtonCloseActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonCloseActionPerformed
     {//GEN-HEADEREND:event_jButtonCloseActionPerformed
-        this.setVisible(false);        
+        this.setVisible(false);
     }//GEN-LAST:event_jButtonCloseActionPerformed
 
     /**
-    * @param args the command line arguments
-    */
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
+     * @param args the command line arguments
+     */
+    public static void main(String args[])
+    {
+        java.awt.EventQueue.invokeLater(new Runnable()
+        {
+
+            public void run()
+            {
                 DialogDocumentsAtuhorize dialog = new DialogDocumentsAtuhorize();
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    public void windowClosing(java.awt.event.WindowEvent e) {
+                dialog.addWindowListener(new java.awt.event.WindowAdapter()
+                {
+
+                    public void windowClosing(java.awt.event.WindowEvent e)
+                    {
                         System.exit(0);
                     }
                 });
@@ -154,9 +187,8 @@ public class DialogDocumentsAtuhorize extends java.awt.Dialog {
             }
         });
     }
-
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonAuthorize;
     private javax.swing.JButton jButtonClose;
     private javax.swing.JButton jButtonSee;
     private javax.swing.JPanel jPanel1;
@@ -165,5 +197,4 @@ public class DialogDocumentsAtuhorize extends java.awt.Dialog {
     private javax.swing.JTable jTableContents;
     private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
-
 }
