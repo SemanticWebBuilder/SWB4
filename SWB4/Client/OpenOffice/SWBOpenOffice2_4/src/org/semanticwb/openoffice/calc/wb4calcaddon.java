@@ -7,6 +7,7 @@ import com.sun.star.lib.uno.helper.Factory;
 import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.registry.XRegistryKey;
 import com.sun.star.lib.uno.helper.WeakBase;
+import javax.swing.JOptionPane;
 import org.semanticwb.openoffice.DocumentType;
 import org.semanticwb.openoffice.OfficeApplication;
 import org.semanticwb.openoffice.OfficeDocument;
@@ -297,7 +298,12 @@ public final class wb4calcaddon extends WeakBase
                 }
                 if (aURL.Path.compareTo("openSession") == 0)
                 {
+                    boolean logged=OfficeApplication.isLogged();
                     OfficeApplication.openSession();
+                    if(OfficeApplication.isLogged()==true && logged==false)
+                    {
+                        JOptionPane.showMessageDialog(null, "¡Ha iniciado una sesión","Iniciar sessión",JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+                    }
                 }
                 if (aURL.Path.compareTo("closeSession") == 0)
                 {
