@@ -124,7 +124,7 @@ public class DialogPreview extends javax.swing.JDialog
         {
             e.printStackTrace();
             JOptionPane.showMessageDialog(frame,
-                    "\n\n El sistema falló al tratr de invocar su navegador por defecto intentando acceder a: \n\n " + url + "\n\n",
+                    "\n\n El sistema falló al tratar de invocar su navegador por defecto intentando acceder a: \n\n " + url + "\n\n",
                     "Error de navegador",
                     JOptionPane.WARNING_MESSAGE);
 
