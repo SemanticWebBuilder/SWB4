@@ -693,8 +693,9 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                 if (obj.getSemanticClass().isSubClass(OfficePortlet.sclass) || obj.getSemanticClass().equals(OfficePortlet.sclass))
                 {
                     OfficePortlet officePortlet = new OfficePortlet(obj);
-                    PortletInfo info=OfficeDocument.getPortletInfo(officePortlet);
+                    PortletInfo portletInfo=OfficeDocument.getPortletInfo(officePortlet);
                     FlowContentInformation flowContentInformation=new FlowContentInformation();
+                    flowContentInformation.portletInfo=portletInfo;
                     contents.add(flowContentInformation);
                 }
             }
