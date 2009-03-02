@@ -73,5 +73,5 @@ public interface IOfficeApplication
     public int getLimitOfVersions() throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeApplication.getContentsForAuthorize")
-    public PortletInfo[] getContentsForAuthorize() throws Exception;
+    public FlowContentInformation[] getContentsForAuthorize() throws Exception;
 }
