@@ -43,12 +43,7 @@ public class DialogAbout extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    
-    public static void main(String[] args)
-    {
-        DialogAbout DialogAbout=new DialogAbout();
-        DialogAbout.setVisible(true);
-    }
+        
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
