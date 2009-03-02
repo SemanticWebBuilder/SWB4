@@ -85,6 +85,28 @@ public class WBAUserReport extends GenericResource {
         }
     }
     
+    public void doBind(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
+        System.out.println("inicia doBind");
+        response.setContentType("text/json;charset=iso-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+        PrintWriter out = response.getWriter();
+        
+        String webSiteId = request.getParameter("site");
+        System.out.println("websiteid= "+webSiteId);
+        WebSite webSite = SWBContext.getWebSite(webSiteId);        
+        System.out.println("website= "+webSiteId.toString());
+        
+        out.println("<select id=\"wb_usertype\" name=\"wb_usertype\" size=\"1\">");
+        Iterator<String> itUserTypes = paramsRequest.getTopic().getWebSite().getUserRepository().getUserTypes();
+        while(itUserTypes.hasNext()) {
+            String key = itUserTypes.next();
+            out.println("<option value=\"" + key + "\">" + key + "</option>");
+        }                    
+        out.println("</select>");
+        out.flush();
+    }
+    
     /**
      * @param request
      * @param response
@@ -93,7 +115,9 @@ public class WBAUserReport extends GenericResource {
      * @throws IOException
      */
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
-        if(paramsRequest.getMode().equals("graph")) {
+        if(paramsRequest.getMode().equalsIgnoreCase("bind")) {
+            doBind(request,response,paramsRequest);
+        }else if(paramsRequest.getMode().equals("graph")) {
             doGraph(request,response,paramsRequest);
         }else if(paramsRequest.getMode().equals("report_excel")) {
             doRepExcel(request,response,paramsRequest);
@@ -147,7 +171,7 @@ public class WBAUserReport extends GenericResource {
             // If there are sites continue
             if(hm_sites.size() > I_ACCESS) {   
                 String address = paramsRequest.getTopic().getUrl();
-                String webSiteId = request.getParameter("wb_site");
+                String webSiteId = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
                 String userTypeId = request.getParameter("wb_usertype");
                 
                 int deleteFilter;
@@ -183,7 +207,9 @@ public class WBAUserReport extends GenericResource {
                 out.println("<script type=\"text/javascript\">");                
                 
                 out.println("dojo.require(\"dijit.form.DateTextBox\");");
+                out.println("dojo.require(\"dijit.form.ComboBox\");");
                 out.println("dojo.addOnLoad(doBlockade);");
+                out.println("dojo.addOnLoad(function(){getHtml('"+url.toString()+"'+'?site="+webSiteId+"','slave')});");
                 
                 out.println("function getParams(accion) {");
                 out.println("   var params = '?';");
@@ -288,7 +314,7 @@ public class WBAUserReport extends GenericResource {
                 
                 out.println("<tr>");
                 out.println("<td>" + paramsRequest.getLocaleString("site") + ":</td>");
-                out.println("<td colspan=\"2\"><select id=\"wb_site\" name=\"wb_site\">");
+                out.println("<td colspan=\"2\"><select id=\"wb_site\" name=\"wb_site\" onchange=\"getHtml('"+url.toString()+"'+'?site='+this.value,'slave');\">");
                 Iterator<String> itKeys = hm_sites.keySet().iterator();                    
                 while(itKeys.hasNext()) {
                     String key = itKeys.next();
@@ -305,17 +331,10 @@ public class WBAUserReport extends GenericResource {
                 
                 out.println("<tr>");
                 out.println("<td>" + paramsRequest.getLocaleString("user_type") + ":</td>");
-                out.println("<td colspan=\"2\"><select id=\"wb_usertype\" name=\"wb_usertype\" size=\"4\">");
-                Iterator<String> itUserTypes = paramsRequest.getTopic().getWebSite().getUserRepository().getUserTypes();
-                while(itUserTypes.hasNext()) {
-                    String key = itUserTypes.next();
-                    out.println("<option value=\"" + key + "\"");
-                    if(key.equalsIgnoreCase(userTypeId)) {
-                        out.println(" selected=\"selected\"");
-                    }
-                    out.println(">" + key + "</option>");
-                }                    
-                out.println("</select>");
+                out.println("<td colspan=\"2\"><div id=\"slave\"></div>");
+                if(deleteFilter==1) {                    
+                    out.println("<script type=\"text/javascript\">dojo.byId('wb_device').disabled=true;</script>");
+                }
                 out.println("</td>");
                 out.println("<td>&nbsp;</td>");
                 out.println("</tr>");
@@ -385,8 +404,11 @@ public class WBAUserReport extends GenericResource {
                         WBAFilterReportBean filter = buildFilter(request, paramsRequest);
                         JRDataSourceable dataDetail = new JRUserTypesAccessDataDetail(filter);
                         JasperTemplate jasperTemplate = JasperTemplate.USER_TYPES_DAILY_HTML;
+                        HashMap params = new HashMap();
+                        params.put("swb", SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");
+                        params.put("site", filter.getSite());
                         try {
-                            JRResource jrResource = new JRHtmlResource(jasperTemplate.getTemplatePath(), dataDetail.orderJRReport());
+                            JRResource jrResource = new JRHtmlResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
                             jrResource.prepareReport();
                             jrResource.exportReport(response);
                         }catch (Exception e) {
@@ -430,8 +452,7 @@ public class WBAUserReport extends GenericResource {
 
                         WBAFilterReportBean filter = new WBAFilterReportBean();
                         filter.setSite(webSiteId);
-                        //itLanguages = paramsRequest.getTopic().getWebSite().listLanguages();
-                        itUserTypes = paramsRequest.getTopic().getWebSite().getUserRepository().getUserTypes();
+                        Iterator<String> itUserTypes = paramsRequest.getTopic().getWebSite().getUserRepository().getUserTypes();
                         if(deleteFilter==0) {
                             while(itUserTypes.hasNext()) {
                                 String val = itUserTypes.next();
@@ -447,9 +468,12 @@ public class WBAUserReport extends GenericResource {
                         filter. setType(I_REPORT_TYPE);
                         filter.setYearI(year13);
                         JRDataSourceable dataDetail = new JRUserTypesAccessDataDetail(filter);
-                        JasperTemplate jasperTemplate = JasperTemplate.USER_TYPES_MONTHLY_HTML;                        
+                        JasperTemplate jasperTemplate = JasperTemplate.USER_TYPES_MONTHLY_HTML;
+                        HashMap params = new HashMap();
+                        params.put("swb", SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");
+                        params.put("site", filter.getSite());
                         try {
-                            JRResource jrResource = new JRHtmlResource(jasperTemplate.getTemplatePath(), dataDetail.orderJRReport());
+                            JRResource jrResource = new JRHtmlResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
                             jrResource.prepareReport();
                             jrResource.exportReport(response);                            
                         }catch (Exception e) {
@@ -828,7 +852,7 @@ public class WBAUserReport extends GenericResource {
         return hm_type;
     }
                 
-    public WBAFilterReportBean buildFilter(HttpServletRequest request, SWBParamRequest paramsRequest) throws SWBResourceException, IncompleteFilterException {
+    private WBAFilterReportBean buildFilter(HttpServletRequest request, SWBParamRequest paramsRequest) throws SWBResourceException, IncompleteFilterException {
         WBAFilterReportBean filterReportBean = null;
         GregorianCalendar gc_now = new GregorianCalendar();
         ArrayList idaux = new ArrayList();
