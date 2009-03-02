@@ -495,14 +495,15 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             }
         }
         return getLastVersionOfcontent;
-    }    
+    }
+
     private String getLastVersionOfcontent(String repositoryName, String contentId) throws Exception
-    {        
-        Session session = null;        
+    {
+        Session session = null;
         try
         {
             session = loader.openSession(repositoryName, this.user, this.password);
-            return getLastVersionOfcontent(session,repositoryName, contentId);
+            return getLastVersionOfcontent(session, repositoryName, contentId);
         }
         catch (ItemNotFoundException infe)
         {
@@ -514,7 +515,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             {
                 session.logout();
             }
-        }        
+        }
     }
 
     public VersionInfo[] getVersions(String repositoryName, String contentId) throws Exception
@@ -1047,7 +1048,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
-    public String getContentFile(Session session,String repositoryName,String contentId, String version) throws Exception
+    public String getContentFile(Session session, String repositoryName, String contentId, String version) throws Exception
     {
         try
         {
@@ -1094,12 +1095,13 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             }
         }
     }
-    public String getContentFile(String repositoryName, String contentId, String version,org.semanticwb.model.User user) throws Exception
+
+    public String getContentFile(String repositoryName, String contentId, String version, org.semanticwb.model.User user) throws Exception
     {
         Session session = null;
         try
         {
-            session = loader.openSession(repositoryName,user);
+            session = loader.openSession(repositoryName, user);
             return getContentFile(session, repositoryName, contentId, version);
         }
         catch (Exception e)
@@ -1114,11 +1116,12 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             }
         }
     }
+
     public String getContentFile(String repositoryName, String contentId, String version) throws Exception
     {
         Session session = null;
         try
-        {            
+        {
             session = loader.openSession(repositoryName, this.user, this.password);
             return getContentFile(session, repositoryName, contentId, version);
         }
@@ -1149,7 +1152,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     {
         Session session = null;
         try
-        {            
+        {
             session = loader.openSession(repositoryName, this.user, this.password);
             Node nodeContent = session.getNodeByUUID(contentId);
             String cm_Type = loader.getOfficeManager(repositoryName).getPropertyType();
