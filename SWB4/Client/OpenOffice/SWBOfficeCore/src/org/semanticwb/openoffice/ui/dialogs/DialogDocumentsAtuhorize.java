@@ -102,14 +102,14 @@ public class DialogDocumentsAtuhorize extends java.awt.Dialog {
 
             },
             new String [] {
-                "Título", "Página", "Paso"
+                "Título", "Página", "Paso", "Flujo"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.String.class, java.lang.String.class
+                java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, true
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
