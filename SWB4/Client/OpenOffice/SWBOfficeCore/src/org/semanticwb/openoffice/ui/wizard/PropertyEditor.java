@@ -91,8 +91,28 @@ public class PropertyEditor extends WizardPage
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTableProperties = new javax.swing.JTable();
+
         setLayout(new java.awt.BorderLayout());
+
+        jTableProperties.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Propiedad", "Valor"
+            }
+        ));
+        jTableProperties.setCellSelectionEnabled(true);
+        jTableProperties.setRowHeight(24);
+        jTableProperties.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(jTableProperties);
+
+        add(jScrollPane1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTableProperties;
     // End of variables declaration//GEN-END:variables
 }
