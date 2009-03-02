@@ -15,6 +15,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import org.semanticwb.office.interfaces.PortletInfo;
+import org.semanticwb.openoffice.OfficeApplication;
 import org.semanticwb.openoffice.ui.icons.ImageLoader;
 
 /**
@@ -57,6 +59,25 @@ public class DialogDocumentsAtuhorize extends java.awt.Dialog
         for (int i = 1; i <= rows; i++)
         {
             model.removeRow(0);
+        }
+        try
+        {
+            for (PortletInfo portletInfo : OfficeApplication.getOfficeApplicationProxy().getContentsForAuthorize())
+            {
+                String version=portletInfo.version;
+                if(version.equals("*"))
+                {
+                    version="Mostrar la última version";
+                }
+                Object[] rowData =
+                {
+                    portletInfo, portletInfo.page.site.title, portletInfo.page.title, version
+                };
+                model.addRow(rowData);
+            }
+        }
+        catch (Exception e)
+        {
         }
     }
 
@@ -127,14 +148,14 @@ public class DialogDocumentsAtuhorize extends java.awt.Dialog
 
             },
             new String [] {
-                "Título", "Página", "Paso", "Flujo", "Versión"
+                "Título", "Sitio", "Página", "Paso", "Flujo", "Versión"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.Object.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -164,29 +185,7 @@ public class DialogDocumentsAtuhorize extends java.awt.Dialog
         this.setVisible(false);
     }//GEN-LAST:event_jButtonCloseActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[])
-    {
-        java.awt.EventQueue.invokeLater(new Runnable()
-        {
-
-            public void run()
-            {
-                DialogDocumentsAtuhorize dialog = new DialogDocumentsAtuhorize();
-                dialog.addWindowListener(new java.awt.event.WindowAdapter()
-                {
-
-                    public void windowClosing(java.awt.event.WindowEvent e)
-                    {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAuthorize;
     private javax.swing.JButton jButtonClose;
