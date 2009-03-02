@@ -46,21 +46,6 @@ import org.semanticwb.portal.admin.resources.reports.beans.IncompleteFilterExcep
 import org.semanticwb.portal.admin.resources.reports.jrresources.*;
 import org.semanticwb.portal.admin.resources.reports.jrresources.data.JRSectionAccessDataDetail;
 
-
-
-
-/** Esta clase genera el reporte de secciones, toma la informaci�n de los
- * objetos de WebBuilder de acuerdo con los par�metros recibidos del usuario. Este
- * archivo es usado en la parte de reportes.
- *
- * This class generates the section report, takes information from
- * WebBuilder objects according with user parameters. this file is used in report
- * sections.
- *
- * WBASectionReport.java
- * Created on October 8th, 2004 6:30 PM
- * @author Jorge R�os - IDT
- */
 public class WBASectionReport extends GenericResource {
     private static Logger log = SWBUtils.getLogger(WBASectionReport.class);
 
@@ -76,7 +61,7 @@ public class WBASectionReport extends GenericResource {
         try {
             strRscType = base.getPortletType().getPortletClassName();
         }catch (Exception e) {
-            strRscType = "WBALanguageReport";
+            strRscType = "WBASectionReport";
         }
     }
 

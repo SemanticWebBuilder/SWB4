@@ -24,6 +24,7 @@
 package org.semanticwb.portal.admin.resources.reports;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
@@ -123,11 +124,12 @@ public class WBAGlobalReport extends GenericResource {
      */    
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html;charset=iso-8859-1");
+        response.setHeader("Cache-Control", "no-cache"); 
+        response.setHeader("Pragma", "no-cache"); 
+        PrintWriter out = response.getWriter();
         Portlet base = getResourceBase();
         
-        final int I_ACCESS = 0;        
-        StringBuffer sb_ret = new StringBuffer();
-        GregorianCalendar gc_now = new GregorianCalendar();
+        final int I_ACCESS = 0;
         HashMap hm_sites = new HashMap();
         int i_access = 0;
         String rtype;
@@ -153,6 +155,7 @@ public class WBAGlobalReport extends GenericResource {
             if(hm_sites.size() > I_ACCESS){
                 String address = paramsRequest.getTopic().getUrl();
                 String webSite = request.getParameter("wb_site");
+                
                 int groupDates;
                 try {
                     groupDates = request.getParameter("wb_rep_type")==null ? 0:Integer.parseInt(request.getParameter("wb_rep_type"));
@@ -175,204 +178,179 @@ public class WBAGlobalReport extends GenericResource {
                     rtype = "0";
                 }
                 
-                // javascript
-                /*sb_ret.append("\n<link type=\"text/css\" href=\"/swb/swbadmin/js/jquery/themes/ui.all.css\" rel=\"Stylesheet\" />");
-                sb_ret.append("\n<script type=\"text/javascript\" src=\"/swb/swbadmin/js/jquery/jquery-1.3.js\"></script>");
-                sb_ret.append("\n<script type=\"text/javascript\" src=\"/swb/swbadmin/js/jquery/jquery.ui.all.js\"></script>");
-                sb_ret.append("\n<script type=\"text/javascript\" src=\"/swb/swbadmin/js/jquery/ui/i18n/ui.datepicker-pt-BR.js\"></script>");
-                sb_ret.append("\n<script type=\"text/javascript\" src=\"/swb/swbadmin/js/jquery/ui/i18n/ui.datepicker-es.js\"></script>");
-                sb_ret.append("\n<script type=\"text/javascript\">");
-                sb_ret.append("\n   $(function() {");
-                //sb_ret.append("\n       $(\"#wb_fecha1\").datepicker({changeMonth:true, changeYear:true, showOn:'button', buttonImage:'/swb/swbadmin/images/calendar.gif', buttonImageOnly:true}, $.datepicker.regional['es']);");
-                sb_ret.append("\n       $(\"#wb_fecha11\").datepicker({changeMonth:true, changeYear:true, showOn:'button', buttonImage:'/swb/swbadmin/images/calendar.gif', buttonImageOnly:true}, $.datepicker.regional['es']);");
-                sb_ret.append("\n       $(\"#wb_fecha12\").datepicker({changeMonth:true, changeYear:true, showOn:'button', buttonImage:'/swb/swbadmin/images/calendar.gif', buttonImageOnly:true}, $.datepicker.regional['es']);");
-                sb_ret.append("\n   });");
-                sb_ret.append("\n</script>");*/
+                // javascript                
+                out.println("<script type=\"text/javascript\">");
                 
+                out.println("dojo.require(\"dijit.form.DateTextBox\");");
+                out.println("dojo.addOnLoad(doBlockade);");
                 
-                sb_ret.append("\n<script type=\"text/javascript\">");                
-                sb_ret.append("\nfunction getParams(accion) { ");
-                sb_ret.append("\n   var params = \"?\";");
-                sb_ret.append("\n   params = params + \"wb_site=\" + window.document.frmrep.wb_site.value;");
-                sb_ret.append("\n   params = params + \"&wb_rtype=\" + document.getElementById('wb_rtype').value;");
-                sb_ret.append("\n   if(accion == 0) {");                    
-                sb_ret.append("\n       params = params + \"&wb_rep_type=\" + GetTypeSelected();");
-                sb_ret.append("\n       params = params + \"&wb_fecha1=\" + document.getElementById('wb_fecha1').value; ");
-                sb_ret.append("\n       params = params + \"&wb_fecha11=\" + document.getElementById('wb_fecha11').value; ");
-                sb_ret.append("\n       params = params + \"&wb_fecha12=\" + document.getElementById('wb_fecha12').value; ");                    
+                out.println("function getParams(accion) {");
+                out.println("   var params = '?';");
+                out.println("   params = params + 'wb_site=' + dojo.byId('wb_site').value;");
+                out.println("   params = params + '&wb_rtype=' + dojo.byId('wb_rtype').value;");
+                out.println("   if(accion == 0) {");
+                out.println("       params = params + '&wb_rep_type=' + getTypeSelected();");
+                out.println("       params = params + '&wb_fecha1=' + dojo.byId('wb_fecha1').value;");
+                out.println("       params = params + '&wb_fecha11=' + dojo.byId('wb_fecha11').value;");
+                out.println("       params = params + '&wb_fecha12=' + dojo.byId('wb_fecha12').value;");
+                out.println("   }else {");
+                out.println("       params = params + '&wb_year13=' + dojo.byId('wb_year13').options[dojo.byId('wb_year13').selectedIndex].value;");
+                out.println("   }");
+                out.println("   return params;");
+                out.println("}");
+                
+                out.println("function doXml(accion, size) { ");
+                out.println("   var params = getParams(accion);");
+                out.println("   window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_xml")+"\"+params,\"graphWindow\",size);    ");
+                out.println("}");
+                
+                out.println("function doExcel(accion, size) { ");
+                out.println("   var params = getParams(accion);");
+                out.println("   window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_excel")+"\"+params,\"graphWindow\",size);    ");
+                out.println("}");
+                
+                out.println("function doGraph(accion, size) { ");
+                out.println("   var params = getParams(accion);");
+                out.println("   window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("graph")+"\"+params,\"graphWindow\",size);    ");
+                out.println(" }");
+                
+                out.println("function doPdf(accion, size) { ");
+                out.println("   var params = getParams(accion);");
+                out.println("   window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_pdf")+"\"+params,\"graphWindow\",size);    ");
+                out.println("}");
+                
+                out.println("function doRtf(accion, size) { ");
+                out.println("   var params = getParams(accion);");
+                out.println("   window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_rtf")+"\"+params,\"graphWindow\",size);    ");
+                out.println("}");
+                
+                out.println(" function getTypeSelected(){");
+                out.println("     var strType = \"0\";");
+                out.println("     for(i=0;i<window.document.frmrep.wb_rep_type.length;i++){");
+                out.println("       if(window.document.frmrep.wb_rep_type[i].checked==true){");
+                out.println("           strType=window.document.frmrep.wb_rep_type[i].value;");
+                out.println("       }");
+                out.println("     }");
+                out.println("     return strType;");
+                out.println(" }");
+                
+                out.println(" function doApply() { ");                
+                out.println("     window.document.frmrep.submit(); ");
+                out.println(" }");                
 
-                sb_ret.append("\n   }else {");
-                sb_ret.append("\n       params = params + \"&wb_year13=\" + document.getElementById('wb_year13').options[document.getElementById('wb_year13').selectedIndex].value;");
-                sb_ret.append("\n   }");
-                sb_ret.append("\n   return params;");
-                sb_ret.append("\n} ");
+                out.println(" function doBlockade() {");
+                out.println("     if(window.document.frmrep.wb_rep_type[0].checked){");
+                out.println("       dojo.byId('wb_fecha1').disabled = false;");
+                out.println("       dojo.byId('wb_fecha11').disabled = true;");
+                out.println("       dojo.byId('wb_fecha12').disabled = true;");                
+                out.println("     }");
+                out.println("     if(window.document.frmrep.wb_rep_type[1].checked){");
+                out.println("       dojo.byId('wb_fecha1').disabled = true;");
+                out.println("       dojo.byId('wb_fecha11').disabled = false;");
+                out.println("       dojo.byId('wb_fecha12').disabled = false;");
+                out.println("     }");
+                out.println(" }");
+                out.println("</script>");
                 
-                sb_ret.append("\nfunction DoXml(accion, size) { ");
-                sb_ret.append("\n   var params = getParams(accion);");
-                sb_ret.append("\n   window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_xml")+"\"+params,\"graphWindow\",size);    ");
-                sb_ret.append("\n}");
+                out.println("<div id=\"swbform\">");
+                out.println("<fieldset>");
+                out.println("<legend>" + paramsRequest.getLocaleString("global_report") + "</legend>");
                 
-                sb_ret.append("\nfunction DoExcel(accion, size) { ");
-                sb_ret.append("\n   var params = getParams(accion);");
-                sb_ret.append("\n   window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_excel")+"\"+params,\"graphWindow\",size);    ");
-                sb_ret.append("\n}");
-                
-                sb_ret.append("\nfunction DoGraph(accion, size) { ");
-                sb_ret.append("\n   var params = getParams(accion);");
-                sb_ret.append("\n   window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("graph")+"\"+params,\"graphWindow\",size);    ");
-                sb_ret.append("\n }");
-                
-                sb_ret.append("\nfunction DoPdf(accion, size) { ");
-                sb_ret.append("\n   var params = getParams(accion);");
-                sb_ret.append("\n   window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_pdf")+"\"+params,\"graphWindow\",size);    ");
-                sb_ret.append("\n}");
-                
-                sb_ret.append("\nfunction DoRtf(accion, size) { ");
-                sb_ret.append("\n   var params = getParams(accion);");
-                sb_ret.append("\n   window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_rtf")+"\"+params,\"graphWindow\",size);    ");
-                sb_ret.append("\n}");
-                
-                sb_ret.append("\n function GetTypeSelected(){");
-                sb_ret.append("\n     var strType = \"0\";");
-                sb_ret.append("\n     for(i=0;i<window.document.frmrep.wb_rep_type.length;i++){");
-                sb_ret.append("\n       if(window.document.frmrep.wb_rep_type[i].checked==true){");
-                sb_ret.append("\n           strType=window.document.frmrep.wb_rep_type[i].value;");
-                sb_ret.append("\n       }");
-                sb_ret.append("\n     }");
-                sb_ret.append("\n     return strType;");
-                sb_ret.append("\n }");
-                
-                sb_ret.append("\n function DoApply() { ");
-                sb_ret.append("\n     window.document.frmrep.submit(); ");
-                sb_ret.append("\n }");                
-
-                sb_ret.append("\n function DoBlockade() {");
-//                sb_ret.append("\n     if(window.document.frmrep.wb_rep_type[0].checked){");
-//                sb_ret.append("\n         window.document.frmrep.wb_year_1.disabled = false;");
-//                sb_ret.append("\n         window.document.frmrep.wb_month_1.disabled = false;");
-//                sb_ret.append("\n         window.document.frmrep.wb_day_1.disabled = false;");
-//                sb_ret.append("\n         window.document.frmrep.wb_year_11.disabled = true;");
-//                sb_ret.append("\n         window.document.frmrep.wb_year_12.disabled = true;");
-//                sb_ret.append("\n         window.document.frmrep.wb_month_11.disabled = true;");
-//                sb_ret.append("\n         window.document.frmrep.wb_month_12.disabled = true;");
-//                sb_ret.append("\n         window.document.frmrep.wb_day_11.disabled = true;");
-//                sb_ret.append("\n         window.document.frmrep.wb_day_12.disabled = true;");
-//                sb_ret.append("\n     }");
-//                sb_ret.append("\n     if(window.document.frmrep.wb_rep_type[1].checked){");
-//                sb_ret.append("\n         window.document.frmrep.wb_year_1.disabled = true;");
-//                sb_ret.append("\n         window.document.frmrep.wb_month_1.disabled = true;");
-//                sb_ret.append("\n         window.document.frmrep.wb_day_1.disabled = true;");
-//                sb_ret.append("\n         window.document.frmrep.wb_year_11.disabled = false;");
-//                sb_ret.append("\n         window.document.frmrep.wb_year_12.disabled = false;");
-//                sb_ret.append("\n         window.document.frmrep.wb_month_11.disabled = false;");
-//                sb_ret.append("\n         window.document.frmrep.wb_month_12.disabled = false;");
-//                sb_ret.append("\n         window.document.frmrep.wb_day_11.disabled = false;");
-//                sb_ret.append("\n         window.document.frmrep.wb_day_12.disabled = false;");
-//                sb_ret.append("\n     }");
-                sb_ret.append("\n }");
-                sb_ret.append("\n</script>");
-                
-                sb_ret.append("\n<div id=\"swbform\">");
-                sb_ret.append("\n<fieldset>");
-                sb_ret.append("\n<legend>" + paramsRequest.getLocaleString("global_report") + "</legend>");
-                
-                sb_ret.append("\n<form id=\"frmrep\" name=\"frmrep\" method=\"post\" action=\"" + address + "\">");
-                sb_ret.append("\n<table border=\"0\" width=\"95%\" align=\"center\">");
-                sb_ret.append("\n<tr><td width=\"100\"></td><td width=\"120\"></td><td></td><td></td></tr>");
-                sb_ret.append("\n<tr>");
-                sb_ret.append("\n<td colspan=4>");
+                out.println("<form id=\"frmrep\" name=\"frmrep\" method=\"post\" action=\"" + address + "\">");
+                out.println("<table border=\"0\" width=\"95%\" align=\"center\">");
+                out.println("<tr><td width=\"12%\"></td><td width=\"12%\"></td><td width=\"26%\"></td><td width=\"50%\"></td></tr>");
+                out.println("<tr>");
+                out.println("<td colspan=4>");
                 if(rtype.equals("0")){
-                    sb_ret.append(paramsRequest.getLocaleString("description_daily"));
+                    out.println(paramsRequest.getLocaleString("description_daily"));
                 }
                 else{
-                    sb_ret.append(paramsRequest.getLocaleString("description_monthly"));
+                    out.println(paramsRequest.getLocaleString("description_monthly"));
                 }
-                sb_ret.append("\n</td>");
-                sb_ret.append("\n</tr>");
+                out.println("</td>");
+                out.println("</tr>");
                 
-                sb_ret.append("\n<tr><td colspan=\"4\">&nbsp;</td></tr>");                
-                sb_ret.append("\n<tr>");
-                sb_ret.append("\n <td colspan=\"4\">&nbsp;&nbsp;&nbsp;");
-                sb_ret.append("   <input type=\"button\" onClick=\"DoXml('"+ rtype +"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\" value=\"XML\" name=\"btnXml\" />&nbsp;");
-                sb_ret.append("   <input type=\"button\" onClick=\"DoExcel('"+ rtype +"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\" value=\"Excel\" name=\"btnExcel\" />&nbsp;");                
-                sb_ret.append("   <input type=\"button\" onClick=\"DoPdf('"+ rtype +"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\" value=\"PDF\" name=\"btnPdf\" />&nbsp;");
-                sb_ret.append("   <input type=\"button\" onClick=\"DoRtf('"+ rtype +"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\" value=\"RTF\" name=\"btnRtf\" />&nbsp;");                
-                sb_ret.append("   <input type=\"button\" onClick=\"DoGraph('"+ rtype +"','width=600, height=550, scrollbars, resizable')\" value=\"" + paramsRequest.getLocaleString("graph") + "\" name=\"btnGraph\" />&nbsp;");
-                sb_ret.append("   <input type=\"button\" onClick=\"DoApply()\" value=\"" + paramsRequest.getLocaleString("apply") + "\" name=\"btnApply\" />");
-                sb_ret.append("\n </td>");
-                sb_ret.append("\n</tr>");                
-                sb_ret.append("\n<tr><td colspan=\"4\">&nbsp;</td></tr>");
+                out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");                
+                out.println("<tr>");
+                out.println(" <td colspan=\"4\">&nbsp;&nbsp;&nbsp;");
+                out.println("   <input type=\"button\" onclick=\"doXml('"+ rtype +"', 'width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\" value=\"XML\" name=\"btnXml\" />&nbsp;");
+                out.println("   <input type=\"button\" onclick=\"doExcel('"+ rtype +"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\" value=\"Excel\" name=\"btnExcel\" />&nbsp;");                
+                out.println("   <input type=\"button\" onclick=\"doPdf('"+ rtype +"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\" value=\"PDF\" name=\"btnPdf\" />&nbsp;");
+                out.println("   <input type=\"button\" onclick=\"doRtf('"+ rtype +"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\" value=\"RTF\" name=\"btnRtf\" />&nbsp;");                
+                out.println("   <input type=\"button\" onclick=\"doGraph('"+ rtype +"','width=600, height=550, scrollbars, resizable')\" value=\"" + paramsRequest.getLocaleString("graph") + "\" name=\"btnGraph\" />&nbsp;");
+                out.println("   <input type=\"button\" onclick=\"doApply()\" value=\"" + paramsRequest.getLocaleString("apply") + "\" name=\"btnApply\" />");
+                out.println(" </td>");
+                out.println("</tr>");                
+                out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
                 
-                sb_ret.append("\n<tr>");
-                sb_ret.append("<td>" + paramsRequest.getLocaleString("site") + ":</td>");
-                sb_ret.append("<td colspan=\"2\"><select id=\"wb_site\" name=\"wb_site\">");
+                out.println("<tr>");
+                out.println("<td>" + paramsRequest.getLocaleString("site") + ":</td>");
+                out.println("<td colspan=\"2\"><select id=\"wb_site\" name=\"wb_site\"> size=\"1\"");
                 Iterator<String> itKeys = hm_sites.keySet().iterator();                    
                 while(itKeys.hasNext()) {
                     String key = itKeys.next();
-                    sb_ret.append("\n<option value=\"" + key + "\"");
+                    out.println("<option value=\"" + key + "\"");
                     if(key.equalsIgnoreCase(webSite)) {
-                        sb_ret.append(" selected=\"selected\"");
+                        out.println(" selected=\"selected\"");
                     }
-                    sb_ret.append(">" + (String)hm_sites.get(key) + "</option>");
+                    out.println(">" + (String)hm_sites.get(key) + "</option>");
                 }                    
-                sb_ret.append("</select>");
-                sb_ret.append("</td>");
-                sb_ret.append("\n<td>&nbsp;</td>");
-                sb_ret.append("\n</tr>");
+                out.println("</select>");
+                out.println("</td>");
+                out.println("<td>&nbsp;</td>");
+                out.println("</tr>");
 
 
                 if(rtype.equals("0")) { // REPORTE DIARIO
-                    sb_ret.append("\n<tr>");
-                    sb_ret.append("\n<td>");
-                    sb_ret.append("<label>");
-                    sb_ret.append("<input type=\"radio\" value=\"0\" name=\"wb_rep_type\" id=\"wb_rep_type_0\" onclick=\"javascript: DoBlockade();\"");
+                    out.println("<tr>");
+                    out.println("<td>");
+                    out.println("<label>");
+                    out.println("<input type=\"radio\" value=\"0\" name=\"wb_rep_type\" id=\"wb_rep_type_0\" onclick=\"javascript: doBlockade();\"");
                     if(groupDates==0) {
-                        sb_ret.append(" checked=\"checked\"");
+                        out.println(" checked=\"checked\"");
                     }
-                    sb_ret.append(" />");
-                    sb_ret.append("&nbsp;" + paramsRequest.getLocaleString("by_day"));
-                    sb_ret.append("</label></td>");
-                    sb_ret.append("\n<td colspan=\"2\">");
+                    out.println(" />");
+                    out.println("&nbsp;" + paramsRequest.getLocaleString("by_day"));
+                    out.println("</label></td>");
+                    out.println("<td colspan=\"2\">");
                     
-                    sb_ret.append("<input type=\"text\" name=\"wb_fecha1\" id=\"wb_fecha1\" dojoType=\"dijit.form.DateTextBox\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha1+"\">");                    
-                    //sb_ret.append("<input type=\"text\" id=\"wb_fecha1\" name=\"wb_fecha1\" size=\"10\" maxlength=\"10\" value=\"" + fecha1 + "\" />");                        
+                    out.println("<input type=\"text\" name=\"wb_fecha1\" id=\"wb_fecha1\" dojoType=\"dijit.form.DateTextBox\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha1+"\">");
+                    //out.println("<input type=\"text\" id=\"wb_fecha1\" name=\"wb_fecha1\" size=\"10\" maxlength=\"10\" value=\"" + fecha1 + "\" />");                        
                     
-                    sb_ret.append("</td>");
-                    sb_ret.append("<td><input type=\"hidden\" id=\"wb_rtype\" name=\"wb_rtype\" value=\"0\" /></td>");
-                    sb_ret.append("\n</tr>");
-                    sb_ret.append("\n<tr>");
-                    sb_ret.append("\n<td colspan=4>&nbsp;</td>");
-                    sb_ret.append("\n</tr>");
+                    out.println("</td>");
+                    out.println("<td><input type=\"hidden\" id=\"wb_rtype\" name=\"wb_rtype\" value=\"0\" /></td>");
+                    out.println("</tr>");
+                    out.println("<tr>");
+                    out.println("<td colspan=4>&nbsp;</td>");
+                    out.println("</tr>");
 
-                    sb_ret.append("\n<tr>");
-                    sb_ret.append("\n<td>");
-                    sb_ret.append("\n<label>");
-                    sb_ret.append("\n<input type=\"radio\" value=\"1\" name=\"wb_rep_type\" id=\"wb_rep_type_1\" onclick=\"javascript: DoBlockade();\"");
+                    out.println("<tr>");
+                    out.println("<td>");
+                    out.println("<label>");
+                    out.println("<input type=\"radio\" value=\"1\" name=\"wb_rep_type\" id=\"wb_rep_type_1\" onclick=\"javascript: doBlockade();\"");
                     if(groupDates!=0) {
-                        sb_ret.append(" checked=\"checked\"");
+                        out.println(" checked=\"checked\"");
                     }
-                    sb_ret.append(" />");
-                    sb_ret.append("&nbsp;" + paramsRequest.getLocaleString("by_interval_dates"));
-                    sb_ret.append("</label></td>");
-                    sb_ret.append("\n<td>");
-                    sb_ret.append("<input type=\"text\" id=\"wb_fecha11\" name=\"wb_fecha11\" size=\"10\" maxlength=\"10\" value=\"" + fecha11 + "\" />");
-                    sb_ret.append("</td>");
-                    sb_ret.append("\n<td>");
-                    sb_ret.append("<input type=\"text\" id=\"wb_fecha12\" name=\"wb_fecha12\" size=\"10\" maxlength=\"10\" value=\"" + fecha12 + "\" />");
-                    sb_ret.append("</td>");
-                    sb_ret.append("\n<td>&nbsp;</td>");
-                    sb_ret.append("\n</tr>");
+                    out.println(" />");
+                    out.println("&nbsp;" + paramsRequest.getLocaleString("by_interval_dates"));
+                    out.println("</label></td>");
+                    out.println("<td>");
+                    out.println("<input type=\"text\" name=\"wb_fecha11\" id=\"wb_fecha11\" dojoType=\"dijit.form.DateTextBox\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha11+"\">");
+                    out.println("</td>");
+                    out.println("<td>");
+                    out.println("<input type=\"text\" name=\"wb_fecha12\" id=\"wb_fecha12\" dojoType=\"dijit.form.DateTextBox\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha12+"\">");
+                    out.println("</td>");
+                    out.println("<td>&nbsp;</td>");
+                    out.println("</tr>");
                     
-                    sb_ret.append("\n<tr>");
-                    sb_ret.append("<td colspan=\"4\" align=\"left\">");
+                    out.println("<tr>");
+                    out.println("<td colspan=\"4\" align=\"left\">");
                     if(request.getParameter("wb_rtype")==null || webSite==null ) {
-                        sb_ret.append("&nbsp;");
+                        out.println("&nbsp;");
                     }else {
-                        sb_ret.append("\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"600\">");                            
-                        sb_ret.append("\n<tr>");
-                        sb_ret.append("\n<td>");
-                        response.getWriter().print(sb_ret.toString());
-                        sb_ret.delete(0,sb_ret.length());
+                        out.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"98%\">");                            
+                        out.println("<tr>");
+                        out.println("<td>");
                         WBAFilterReportBean filter = buildFilter(request, paramsRequest);
                         JRDataSourceable dataDetail = new JRGlobalAccessDataDetail(filter);
                         JasperTemplate jasperTemplate = JasperTemplate.GLOBAL_DAILY_HTML;
@@ -386,39 +364,38 @@ public class WBAGlobalReport extends GenericResource {
                         }catch (Exception e) {
                             throw new javax.servlet.ServletException(e);
                         }
-                        sb_ret.append("\n</td>");
-                        sb_ret.append("\n</tr>");
-                        sb_ret.append("\n</table>");
-                        sb_ret.append("<hr size=\"1\" noshade>");
+                        out.println("</td>");
+                        out.println("</tr>");
+                        out.println("</table>");
+                        out.println("<hr size=\"1\" noshade>");
                     }
-                    sb_ret.append("\n</td>");
-                    sb_ret.append("\n</tr>");
+                    out.println("</td>");
+                    out.println("</tr>");
                 }else { // REPORTE MENSUAL
+                    GregorianCalendar gc_now = new GregorianCalendar();
                     int year13 = request.getParameter("wb_year13")==null ? gc_now.get(Calendar.YEAR):Integer.parseInt(request.getParameter("wb_year13"));
-                    sb_ret.append("\n<tr>");
-                    sb_ret.append("\n<td>" + paramsRequest.getLocaleString("year") + ":</td>");                    
-                    sb_ret.append("\n<td colspan=\"2\"><select id=\"wb_year13\" name=\"wb_year13\">");
+                    out.println("<tr>");
+                    out.println("<td>" + paramsRequest.getLocaleString("year") + ":</td>");                    
+                    out.println("<td colspan=\"2\"><select id=\"wb_year13\" name=\"wb_year13\">");
                     for (int i = 2000; i < 2021; i++) {
-                        sb_ret.append("<option value=\"" + i + "\"");
+                        out.println("<option value=\"" + i + "\"");
                         if (year13==i) {
-                            sb_ret.append(" selected=\"selected\"");
+                            out.println(" selected=\"selected\"");
                         }
-                        sb_ret.append(">" + i + "</option>");
+                        out.println(">" + i + "</option>");
                     }
-                    sb_ret.append("\n</select>");
-                    sb_ret.append("\n</td>");                    
-                    sb_ret.append("\n<td><input type=\"hidden\" id=\"wb_rtype\" name=\"wb_rtype\" value=\"1\" /></td>");                        
-                    sb_ret.append("\n</tr>");
+                    out.println("</select>");
+                    out.println("</td>");                    
+                    out.println("<td><input type=\"hidden\" id=\"wb_rtype\" name=\"wb_rtype\" value=\"1\" /></td>");                        
+                    out.println("</tr>");
                     
-                    sb_ret.append("\n<tr>");
-                    sb_ret.append("<td colspan=\"4\">");
+                    out.println("<tr>");
+                    out.println("<td colspan=\"4\">");
                     if(request.getParameter("wb_rtype")==null || webSite==null ) {
-                        sb_ret.append("&nbsp;");
+                        out.println("&nbsp;");
                     }else {
-                        sb_ret.append("\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"98%\">");                         
-                        sb_ret.append("\n<tr><td>\n");
-                        response.getWriter().print(sb_ret.toString());
-                        sb_ret.delete(0,sb_ret.length());                           
+                        out.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"98%\">");
+                        out.println("<tr><td>");
 
                         WBAFilterReportBean filter = new WBAFilterReportBean();
                         filter.setSite(webSite);
@@ -437,37 +414,38 @@ public class WBAGlobalReport extends GenericResource {
                         }catch (Exception e) {
                             throw new javax.servlet.ServletException(e);
                         }
-                        sb_ret.append("\n</td></tr>");                            
-                        sb_ret.append("\n</table>");
-                        sb_ret.append("<hr size=\"1\" noshade>");
+                        out.println("</td></tr>");                            
+                        out.println("</table>");
+                        out.println("<hr size=\"1\" noshade>");
                     }
-                    sb_ret.append("\n</td>");
-                    sb_ret.append("\n</tr>");
+                    out.println("</td>");
+                    out.println("</tr>");
                 }
-                sb_ret.append("\n</table></form>");
-                sb_ret.append("\n</fieldset></div>");
+                out.println("</table></form>");
+                out.println("</fieldset></div>");
             }
             else{   // There are not sites and displays a message
-                sb_ret.append("\n<form method=\"Post\" action=\"" + paramsRequest.getTopic().getUrl() + "\" id=\"frmrep\" name=\"frmrep\">");
-                sb_ret.append("\n<table border=0 width=\"100%\">");
-                sb_ret.append("\n<tr><td colspan=\"4\">&nbsp;</td></tr>");
-                sb_ret.append("\n<tr><td colspan=\"4\">&nbsp;</td></tr>");
-                sb_ret.append("\n<tr><td colspan=\"4\">&nbsp;</td></tr>");
-                sb_ret.append("\n<tr>");
-                sb_ret.append("\n<td>&nbsp;</td>");
-                sb_ret.append("\n<td colspan=\"2\" align=\"center\">" + paramsRequest.getLocaleString("no_sites_found") + "</td>");
-                sb_ret.append("\n<td>&nbsp;</td>");
-                sb_ret.append("\n</tr>");
-                sb_ret.append("\n<tr><td colspan=\"4\">&nbsp;</td></tr>");
-                sb_ret.append("\n<tr><td colspan=\"4\">&nbsp;</td></tr>");
-                sb_ret.append("\n<tr><td colspan=\"4\">&nbsp;</td></tr>");
-                sb_ret.append("\n</table></form>");
+                out.println("<form method=\"Post\" action=\"" + paramsRequest.getTopic().getUrl() + "\" id=\"frmrep\" name=\"frmrep\">");
+                out.println("<table border=0 width=\"100%\">");
+                out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
+                out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
+                out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
+                out.println("<tr>");
+                out.println("<td>&nbsp;</td>");
+                out.println("<td colspan=\"2\" align=\"center\">" + paramsRequest.getLocaleString("no_sites_found") + "</td>");
+                out.println("<td>&nbsp;</td>");
+                out.println("</tr>");
+                out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
+                out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
+                out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
+                out.println("</table></form>");
             }
         }
         catch (Exception e){
             log.error("Error on method doView() resource " + strRscType +  " with id " + base.getId(), e);
         }
-        response.getWriter().print(sb_ret.toString());
+        /*response.getWriter().print(sb_ret.toString());*/
+        out.flush();
     }
 
     /**
@@ -713,7 +691,7 @@ public class WBAGlobalReport extends GenericResource {
         }
     }
 
-    public WBAFilterReportBean buildFilter(HttpServletRequest request, SWBParamRequest paramsRequest) throws SWBResourceException, IncompleteFilterException {
+    private WBAFilterReportBean buildFilter(HttpServletRequest request, SWBParamRequest paramsRequest) throws SWBResourceException, IncompleteFilterException {
         WBAFilterReportBean filterReportBean = null;        
         String webSite = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
         int groupDates;
@@ -723,8 +701,11 @@ public class WBAGlobalReport extends GenericResource {
             groupDates = 0;
         }
         String fecha1 = request.getParameter("wb_fecha1");
+        System.out.println("fecha1="+fecha1);
         String fecha11 = request.getParameter("wb_fecha11");
-        String fecha12 = request.getParameter("wb_fecha12");        
+        System.out.println("fecha11="+fecha11);
+        String fecha12 = request.getParameter("wb_fecha12");
+        System.out.println("fecha12="+fecha12);
         if(groupDates==0 && fecha1==null) {
             throw new IncompleteFilterException("Falta la fecha");
         }
@@ -734,29 +715,33 @@ public class WBAGlobalReport extends GenericResource {
 
         try {
             if(groupDates==0) { // radio button was 0. Select only one date
-                String[] numFecha = fecha1.split("/");
+                String[] numFecha = fecha1.split("-");
                 filterReportBean = new WBAFilterReportBean();
                 filterReportBean.setSite(webSite);
                 filterReportBean.setIdaux(idaux.iterator());
                 filterReportBean.setType(I_REPORT_TYPE);
-                filterReportBean.setYearI(Integer.parseInt(numFecha[2]));
+                filterReportBean.setYearI(Integer.parseInt(numFecha[0]));
                 filterReportBean.setMonthI(Integer.parseInt(numFecha[1]));
-                filterReportBean.setDayI(Integer.parseInt(numFecha[0]));
+                filterReportBean.setDayI(Integer.parseInt(numFecha[2]));
                 
             }else { // radio button was 1. Select between two dates
                 filterReportBean = new WBAFilterReportBean();
                 filterReportBean.setSite(webSite);
                 filterReportBean.setIdaux(idaux.iterator());
                 filterReportBean.setType(I_REPORT_TYPE);
-                String[] numFecha = fecha11.split("/");
-                filterReportBean.setYearI(Integer.parseInt(numFecha[2]));
+                String[] numFecha = fecha11.split("-");
+                
+                for(int i=0; i<numFecha.length; i++){System.out.println("numFecha["+i+"]="+numFecha[i]);}
+                
+                filterReportBean.setYearI(Integer.parseInt(numFecha[0]));
                 filterReportBean.setMonthI(Integer.parseInt(numFecha[1]));
-                filterReportBean.setDayI(Integer.parseInt(numFecha[0]));
+                filterReportBean.setDayI(Integer.parseInt(numFecha[2]));
 
-                numFecha = fecha12.split("/");
-                filterReportBean.setYearF(Integer.parseInt(numFecha[2]));
+                numFecha = fecha12.split("-");
+                for(int i=0; i<numFecha.length; i++){System.out.println("numFecha["+i+"]="+numFecha[i]);}
+                filterReportBean.setYearF(Integer.parseInt(numFecha[0]));
                 filterReportBean.setMonthF(Integer.parseInt(numFecha[1]));
-                filterReportBean.setDayF(Integer.parseInt(numFecha[0]));
+                filterReportBean.setDayF(Integer.parseInt(numFecha[2]));
             }
         }
         catch (Exception e){
