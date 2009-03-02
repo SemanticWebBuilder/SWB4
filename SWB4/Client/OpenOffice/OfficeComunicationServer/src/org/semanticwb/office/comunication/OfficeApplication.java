@@ -35,6 +35,8 @@ import org.semanticwb.office.interfaces.PortletInfo;
 import org.semanticwb.office.interfaces.VersionInfo;
 import org.semanticwb.office.interfaces.WebPageInfo;
 import org.semanticwb.office.interfaces.WebSiteInfo;
+import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.portlet.office.OfficePortlet;
 import org.semanticwb.repository.RepositoryManagerLoader;
 import org.semanticwb.xmlrpc.Part;
 import org.semanticwb.xmlrpc.XmlRpcObject;
@@ -649,6 +651,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         }
         return pagesToReturn.toArray(new WebPageInfo[pagesToReturn.size()]);
     }
+
     public int getLimitOfVersions() throws Exception
     {
         String snumberOfVersions = SWBPlatform.getEnv("swbrep/maxNumberOfVersions");
@@ -662,9 +665,9 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             try
             {
                 getLimitOfVersions = Integer.parseInt(snumberOfVersions);
-                if(getLimitOfVersions<=0)
+                if (getLimitOfVersions <= 0)
                 {
-                    log.debug("The variable swbrep/maxNumberOfVersions is "+getLimitOfVersions);
+                    log.debug("The variable swbrep/maxNumberOfVersions is " + getLimitOfVersions);
                 }
             }
             catch (NumberFormatException e)
@@ -677,11 +680,22 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
 
     public PortletInfo[] getContentsForAuthorize() throws Exception
     {
-        ArrayList<String> contents = new ArrayList<String>();
-        Iterator<WebSite> sites=SWBContext.listWebSites();
-        while(sites.hasNext())
+        ArrayList<PortletInfo> contents = new ArrayList<PortletInfo>();
+        Iterator<WebSite> sites = SWBContext.listWebSites();
+        while (sites.hasNext())
         {
-            WebSite site=sites.next();            
+            WebSite site = sites.next();
+            Iterator<SemanticObject> it = site.getSemanticObject().getModel().listSubjects(OfficePortlet.swbrep_content, "1");
+            while (it.hasNext())
+            {
+                SemanticObject obj = it.next();
+                if (obj.getSemanticClass().isSubClass(OfficePortlet.sclass) || obj.getSemanticClass().equals(OfficePortlet.sclass))
+                {
+                    OfficePortlet officePortlet = new OfficePortlet(obj);
+                    PortletInfo info=OfficeDocument.getPortletInfo(officePortlet);
+                    contents.add(info);
+                }
+            }
         }
         return contents.toArray(new PortletInfo[contents.size()]);
     }
