@@ -1,7 +1,6 @@
 package org.semanticwb.openoffice.writer;
 
 import com.sun.star.frame.FeatureStateEvent;
-import com.sun.star.frame.XLayoutManager;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.lib.uno.helper.Factory;
@@ -24,53 +23,15 @@ public final class wb4writeraddon extends WeakBase
 
     private final XComponentContext m_xContext;
     private com.sun.star.frame.XFrame m_xFrame;
-    private XLayoutManager xLayoutManager = null;
     private static final String m_implementationName = wb4writeraddon.class.getName();
     private static final String[] m_serviceNames =
     {
         "com.sun.star.frame.ProtocolHandler"
     };
-    //private EventListener listener=new EventListener();
 
-    /*protected XLayoutManager getLayoutManager()
-    {
-
-    XPropertySet xps = (XPropertySet)
-    UnoRuntime.queryInterface(XPropertySet.class, this.m_xFrame);
-
-    try
-    {
-    this.xLayoutManager = (XLayoutManager)
-    UnoRuntime.queryInterface(XLayoutManager.class,
-    xps.getPropertyValue("LayoutManager"));
-
-
-    }
-    catch (com.sun.star.uno.Exception e)
-    {
-    System.out.println("Cannot get Layout Manager:");
-    System.out.println(e.getLocalizedMessage());
-    }
-    return this.xLayoutManager;
-    }*/
     public wb4writeraddon(XComponentContext context)
     {
-
         m_xContext = context;
-    /*XMultiComponentFactory serviceManager = m_xContext.getServiceManager();
-    try
-    {
-    Object xGlobalBroadCaster = serviceManager.createInstanceWithContext("com.sun.star.frame.GlobalEventBroadcaster", m_xContext);
-    
-    XEventBroadcaster xEventBroad = (XEventBroadcaster) UnoRuntime.queryInterface(XEventBroadcaster.class, xGlobalBroadCaster);
-    
-    xEventBroad.addEventListener(listener);
-    }
-    catch (com.sun.star.uno.Exception e)
-    {
-    System.out.println(e.getMessage());
-    }*/
-
     }
 
     public static XSingleComponentFactory __getComponentFactory(String sImplementationName)
@@ -191,6 +152,10 @@ public final class wb4writeraddon extends WeakBase
                     {
                         return null;
                     }
+                }
+                if (aURL.Path.compareTo("showDocumentsToAuthorize") == 0)
+                {
+                    return this;
                 }
                 if (aURL.Path.compareTo("deleteAssociation") == 0)
                 {
@@ -377,6 +342,10 @@ public final class wb4writeraddon extends WeakBase
                     OfficeApplication.closeSession();
                     JOptionPane.showMessageDialog(null, "¡Se ha cerrado la sesión", "Cerrar sesión", JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
                     return;
+                }
+                if (aURL.Path.compareTo("showDocumentsToAuthorize") == 0)
+                {
+                    OfficeApplication.showContentsToAuthorize();
                 }
 
             }
