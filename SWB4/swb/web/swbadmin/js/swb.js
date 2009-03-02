@@ -985,7 +985,7 @@ function replaceChars4Id(value)
     var id="";
     if(value)
     {
-        value=value.toLowerCase();
+        //value=value.toLowerCase();
         for(var x=0;x<value.length;x++)
         {
             var ch=value.charAt(x);
@@ -1017,6 +1017,32 @@ function replaceChars4Id(value)
             else if(ch=='ç')ch='c';
             else if(ch=='ÿ')ch='y';
             else if(ch=='ý')ch='y';
+            else if(ch=='Á')ch='A';
+            else if(ch=='À')ch='A';
+            else if(ch=='Ã')ch='A';
+            else if(ch=='Â')ch='A';
+            else if(ch=='Ä')ch='A';
+            else if(ch=='Å')ch='A';
+            else if(ch=='É')ch='E';
+            else if(ch=='È')ch='E';
+            else if(ch=='Ê')ch='E';
+            else if(ch=='Ë')ch='E';
+            else if(ch=='Í')ch='I';
+            else if(ch=='Ì')ch='I';
+            else if(ch=='Î')ch='I';
+            else if(ch=='Ï')ch='I';
+            else if(ch=='Ó')ch='O';
+            else if(ch=='Ò')ch='O';
+            else if(ch=='Ô')ch='O';
+            else if(ch=='Ö')ch='O';
+            else if(ch=='Õ')ch='O';
+            else if(ch=='Ú')ch='U';
+            else if(ch=='Ù')ch='U';
+            else if(ch=='Ü')ch='U';
+            else if(ch=='Û')ch='U';
+            else if(ch=='Ñ')ch='N';
+            else if(ch=='Ç')ch='C';
+            else if(ch=='Ý')ch='Y';
             if ((ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || ch == '_')
             {
                 id+=ch;
@@ -1024,6 +1050,12 @@ function replaceChars4Id(value)
         }
     }
     return id;
+}
+
+function hideApplet(flag)
+{
+   if(flag)dojo.query(".applet", "main").style('visibility', 'hidden');
+   else dojo.query(".applet", "main").style('visibility', 'visible');
 }
 
    //EditArea
@@ -1057,8 +1089,3 @@ function replaceChars4Id(value)
        window.open(url,"RepWindow",sizze);
    }
 
-   function hideApplet(flag)
-   {
-       if(flag)dojo.query(".applet", "main").style('visibility', 'hidden');
-       else dojo.query(".applet", "main").style('visibility', 'visible');
-   }
