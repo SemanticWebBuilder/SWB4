@@ -35,7 +35,7 @@ public class PropertyEditor extends WizardPage
     }
     public static String getDescription()
     {
-        return "Propiedades adicionales del contenido";
+        return "Propiedades del contenido";
     }
 
     public static void main(String[] args)
