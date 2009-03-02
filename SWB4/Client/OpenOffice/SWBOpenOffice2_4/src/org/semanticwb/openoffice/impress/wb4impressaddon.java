@@ -194,6 +194,10 @@ public final class wb4impressaddon extends WeakBase
                         return this;
                     }
                 }
+                if (aURL.Path.compareTo("showDocumentsToAuthorize") == 0)
+                {
+                    return this;
+                }
             }
             catch (Exception e)
             {
@@ -319,6 +323,10 @@ public final class wb4impressaddon extends WeakBase
                     OfficeApplication.closeSession();
                     JOptionPane.showMessageDialog(null, "¡Se ha cerrado la sesión", "Cerrar sesión", JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
                     return;
+                }
+                if (aURL.Path.compareTo("showDocumentsToAuthorize") == 0)
+                {
+                    OfficeApplication.showContentsToAuthorize();
                 }
             }
             catch (Exception e)

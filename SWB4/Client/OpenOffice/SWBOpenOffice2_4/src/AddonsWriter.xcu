@@ -29,7 +29,7 @@
                         <prop oor:name="Title" oor:type="xs:string">
                             <value/>
                             <value xml:lang="en">Session</value>
-                            <value xml:lang="es">Sessión</value>
+                            <value xml:lang="es">Sesión</value>
                         </prop>
                         <node oor:name="Submenu">
                             <node oor:name="m5" oor:op="replace">
@@ -326,7 +326,34 @@
                                     <value>com.sun.star.text.TextDocument</value>
                                 </prop>
                             </node>
-                            <node oor:name="m8" oor:op="replace">
+                            <node oor:name="m5" oor:op="replace">
+                                <prop oor:name="URL" oor:type="xs:string">
+                                    <value>org.semanticwb.openoffice.writer.wb4writeraddon:showDocumentsToAuthorize</value>
+                                </prop>
+                                <prop oor:name="ImageIdentifier" oor:type="xs:string">
+                                    <value/>
+                                </prop>
+                                <prop oor:name="Target" oor:type="xs:string">
+                                    <value>_self</value>
+                                </prop>
+                                <prop oor:name="Context" oor:type="xs:string">
+                                    <value>com.sun.star.text.TextDocument</value>
+                                </prop>
+                                <prop oor:name="Title" oor:type="xs:string">
+                                    <value/>
+                                    <value xml:lang="en">Documents to Authorize</value>
+                                    <value xml:lang="es">Documentos por autorizar</value>
+                                </prop>
+                            </node>
+                            <node oor:name="m6" oor:op="replace">
+                                <prop oor:name="URL" oor:type="xs:string">
+                                    <value>private:separator</value>
+                                </prop>
+                                <prop oor:name="Context" oor:type="xs:string">
+                                    <value>com.sun.star.text.TextDocument</value>
+                                </prop>
+                            </node>
+                            <node oor:name="m7" oor:op="replace">
                                 <prop oor:name="URL" oor:type="xs:string">
                                     <value>org.semanticwb.openoffice.writer.wb4writeraddon:changePassword</value>
                                 </prop>
