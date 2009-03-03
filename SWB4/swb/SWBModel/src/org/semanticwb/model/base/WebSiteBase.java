@@ -7,6 +7,8 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
     public static final org.semanticwb.platform.SemanticProperty swb_active=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#active");
     public static final org.semanticwb.platform.SemanticClass swb_Language=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Language");
     public static final org.semanticwb.platform.SemanticProperty swb_language=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#language");
+    public static final org.semanticwb.platform.SemanticClass swb_Model=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Model");
+    public static final org.semanticwb.platform.SemanticProperty swb_hasSubModel=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasSubModel");
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
     public static final org.semanticwb.platform.SemanticProperty swb_modifiedBy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy");
@@ -127,6 +129,34 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
          {
              ret=(org.semanticwb.model.Language)obj.getSemanticClass().newGenericInstance(obj);
          }
+         return ret;
+    }
+
+    public org.semanticwb.platform.SemanticIterator<org.semanticwb.platform.SemanticObject> listSubModels()
+    {
+        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getRDFResource().listProperties(swb_hasSubModel.getRDFProperty());
+        return new org.semanticwb.platform.SemanticIterator<org.semanticwb.platform.SemanticObject>(stit);
+    }
+
+    public void addSubModel(org.semanticwb.platform.SemanticObject semanticobject)
+    {
+        getSemanticObject().addObjectProperty(swb_hasSubModel, semanticobject);
+    }
+
+    public void removeAllSubModel()
+    {
+        getSemanticObject().removeProperty(swb_hasSubModel);
+    }
+
+    public void removeSubModel(org.semanticwb.platform.SemanticObject semanticobject)
+    {
+        getSemanticObject().removeObjectProperty(swb_hasSubModel,semanticobject);
+    }
+
+    public org.semanticwb.platform.SemanticObject getSubModel()
+    {
+         org.semanticwb.platform.SemanticObject ret=null;
+         ret=getSemanticObject().getObjectProperty(swb_hasSubModel);
          return ret;
     }
 
