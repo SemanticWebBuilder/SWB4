@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.hp.hpl.jena.db.*;
+import com.hp.hpl.jena.db.impl.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 
@@ -23,7 +24,7 @@ import org.semanticwb.SWBUtils;
  */
 public class Driver_MySQL_SWB extends DriverRDB {
 
-    private static Logger log = SWBUtils.getLogger(Driver_MySQL.class);
+    private static Logger log = SWBUtils.getLogger(Driver_MySQL_SWB.class);
 	/** The name of the database type this driver supports */
 
 	/**
@@ -234,6 +235,7 @@ public class Driver_MySQL_SWB extends DriverRDB {
 	public String genSQLStringMatchLHS_IC(String var) {
 		return "cast(" + var + " as char)";
 	}
+
 
 }
 
