@@ -16,6 +16,7 @@ import org.netbeans.spi.wizard.WizardPanelNavResult;
 import org.semanticwb.office.interfaces.CategoryInfo;
 import org.semanticwb.office.interfaces.ContentInfo;
 import org.semanticwb.office.interfaces.ContentType;
+import org.semanticwb.office.interfaces.RepositoryInfo;
 import org.semanticwb.openoffice.DocumentType;
 import org.semanticwb.openoffice.OfficeApplication;
 
@@ -41,13 +42,14 @@ public class Search extends WizardPage
         this.jComboBoxRepositorio.removeAllItems();
         try
         {
-            for (String rep : OfficeApplication.getOfficeApplicationProxy().getRepositories())
+            for (RepositoryInfo rep : OfficeApplication.getOfficeApplicationProxy().getRepositories())
             {
                 this.jComboBoxRepositorio.addItem(rep);
             }
         }
         catch (Exception e)
         {
+            e.printStackTrace();
         }
 
     }
