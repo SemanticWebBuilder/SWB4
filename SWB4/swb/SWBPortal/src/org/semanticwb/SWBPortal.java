@@ -114,6 +114,13 @@ public class SWBPortal {
             user.setActive(true);
         }
 
+        site = SWBContext.getAdminWebSite();
+        if (site == null)
+        {
+            log.event("Creating Admin WebSite...");
+            SWBPlatform.getSemanticMgr().createModel(SWBContext.WEBSITE_ADMIN, "http://www.semanticwb.org/SWBAdmin");
+        }
+
         //Crear tablas LOGS
         try {
             Connection con = SWBUtils.DB.getDefaultConnection();

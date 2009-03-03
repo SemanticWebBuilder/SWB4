@@ -1,4 +1,6 @@
 
+import java.io.FileOutputStream;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import org.junit.*;
@@ -9,6 +11,7 @@ import org.junit.*;
  */
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Dns;
 import org.semanticwb.model.Language;
 import org.semanticwb.model.PortletType;
@@ -704,10 +707,23 @@ public class TestWebSite {
             System.out.println(arr);
     }     
 
-    @Test
+    //@Test
     public void setXml()
     {
 
+    }
+
+    @Test
+    public void writeAdmin()
+    {
+        WebSite site=SWBContext.getAdminWebSite();
+        File file=new File(SWBUtils.getApplicationPath()+"../web/swbadmin/rdf/SWBAdmin.rdf");
+        try
+        {
+            System.out.println("file:"+file.getCanonicalPath());
+            FileOutputStream out=new FileOutputStream(file);
+            site.getSemanticObject().getModel().write(out);
+        }catch(Exception e){e.printStackTrace();}
     }
       
     //@Test
