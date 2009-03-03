@@ -3,6 +3,8 @@ package org.semanticwb.forum.base;
 
 public class FrmForumBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
+    public static final org.semanticwb.platform.SemanticClass swb_Role=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Role");
+    public static final org.semanticwb.platform.SemanticProperty frm_userPostRole=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/forum#userPostRole");
     public static final org.semanticwb.platform.SemanticClass frm_FrmModererationCat=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/forum#FrmModererationCat");
     public static final org.semanticwb.platform.SemanticProperty frm_moderationMode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/forum#moderationMode");
     public static final org.semanticwb.platform.SemanticProperty swb_active=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#active");
@@ -16,6 +18,7 @@ public class FrmForumBase extends org.semanticwb.model.SWBClass implements org.s
     public static final org.semanticwb.platform.SemanticProperty frm_hasthread=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/forum#hasthread");
     public static final org.semanticwb.platform.SemanticProperty frm_postcount=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/forum#postcount");
     public static final org.semanticwb.platform.SemanticProperty swb_updated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#updated");
+    public static final org.semanticwb.platform.SemanticProperty frm_userThreadRole=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/forum#userThreadRole");
     public static final org.semanticwb.platform.SemanticProperty frm_lastpostdate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/forum#lastpostdate");
     public static final org.semanticwb.platform.SemanticClass frm_FrmTypeCat=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/forum#FrmTypeCat");
     public static final org.semanticwb.platform.SemanticProperty frm_type=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/forum#type");
@@ -67,6 +70,27 @@ public class FrmForumBase extends org.semanticwb.model.SWBClass implements org.s
     public static boolean hasFrmForum(String id, org.semanticwb.model.SWBModel model)
     {
         return (getFrmForum(id, model)!=null);
+    }
+
+    public void setPostRole(org.semanticwb.model.Role role)
+    {
+        getSemanticObject().setObjectProperty(frm_userPostRole, role.getSemanticObject());
+    }
+
+    public void removePostRole()
+    {
+        getSemanticObject().removeProperty(frm_userPostRole);
+    }
+
+    public org.semanticwb.model.Role getPostRole()
+    {
+         org.semanticwb.model.Role ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(frm_userPostRole);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.Role)obj.getSemanticClass().newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public void setModerationMode(org.semanticwb.forum.FrmModererationCat frmmodererationcat)
@@ -226,6 +250,27 @@ public class FrmForumBase extends org.semanticwb.model.SWBClass implements org.s
     public void setUpdated(java.util.Date updated)
     {
         getSemanticObject().setDateProperty(swb_updated, updated);
+    }
+
+    public void setThreadRole(org.semanticwb.model.Role role)
+    {
+        getSemanticObject().setObjectProperty(frm_userThreadRole, role.getSemanticObject());
+    }
+
+    public void removeThreadRole()
+    {
+        getSemanticObject().removeProperty(frm_userThreadRole);
+    }
+
+    public org.semanticwb.model.Role getThreadRole()
+    {
+         org.semanticwb.model.Role ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(frm_userThreadRole);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.Role)obj.getSemanticClass().newGenericInstance(obj);
+         }
+         return ret;
     }
 
     public java.util.Date getLastpostdate()
