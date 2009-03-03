@@ -20,6 +20,7 @@ import org.netbeans.spi.wizard.Wizard;
 import org.netbeans.spi.wizard.WizardPage;
 import org.netbeans.spi.wizard.WizardPanelNavResult;
 import org.semanticwb.office.interfaces.CategoryInfo;
+import org.semanticwb.office.interfaces.RepositoryInfo;
 import org.semanticwb.openoffice.OfficeApplication;
 import org.semanticwb.openoffice.ui.dialogs.DialogAddCategory;
 import org.semanticwb.openoffice.ui.icons.ImageLoader;
@@ -57,11 +58,11 @@ public class SelectCategory extends WizardPage
 
     }
 
-    private void addCategory(String repository, CategoryNode parent)
+    private void addCategory(RepositoryInfo repository, CategoryNode parent)
     {
         try
         {
-            for (CategoryInfo category : OfficeApplication.getOfficeApplicationProxy().getCategories(repository, parent.getID()))
+            for (CategoryInfo category : OfficeApplication.getOfficeApplicationProxy().getCategories(repository.name, parent.getID()))
             {
                 CategoryNode categoryNode = new CategoryNode(category.UDDI, category.title, category.description, repository);
                 parent.add(categoryNode);
@@ -84,13 +85,12 @@ public class SelectCategory extends WizardPage
         {
             for (CategoryInfo category : OfficeApplication.getOfficeApplicationProxy().getCategories(parent.getName()))
             {
-                CategoryNode categoryNode = new CategoryNode(category.UDDI, category.title, category.description, parent.getName());
+                CategoryNode categoryNode = new CategoryNode(category.UDDI, category.title, category.description, parent.repositoryInfo);
                 parent.add(categoryNode);
                 if (category.childs > 0)
                 {
                     categoryNode.add(new DefaultMutableTreeNode(""));
                 }
-            //addCategory(repository, categoryNode);
             }
         }
         catch (Exception e)
@@ -103,18 +103,18 @@ public class SelectCategory extends WizardPage
     {
         try
         {
-            for (String repository : OfficeApplication.getOfficeApplicationProxy().getRepositories())
+            for (RepositoryInfo repository : OfficeApplication.getOfficeApplicationProxy().getRepositories())
             {
                 boolean showRepository = false;
                 if (this.repositoryID == null || repositoryID.equals(repository))
                 {
                     showRepository = true;
-                }                
+                }
                 if (showRepository)
                 {
                     RepositoryNode repositoryNode = new RepositoryNode(repository);
                     parent.add(repositoryNode);
-                    for (CategoryInfo category : OfficeApplication.getOfficeApplicationProxy().getCategories(repository))
+                    for (CategoryInfo category : OfficeApplication.getOfficeApplicationProxy().getCategories(repository.name))
                     {
                         CategoryNode categoryNode = new CategoryNode(category.UDDI, category.title, category.description, repository);
                         repositoryNode.add(categoryNode);
@@ -144,7 +144,7 @@ public class SelectCategory extends WizardPage
     {
         this.jTreeCategory.setCellRenderer(new TreeRender());
         this.jTreeCategory.setEditable(false);
-        RepositoryNode repositories = new RepositoryNode("Repositorios");
+        RepositoryNode repositories = new RepositoryRootNode();
         DefaultTreeModel model = new DefaultTreeModel(repositories);
         this.jTreeCategory.setModel(model);
         addRepositories(repositories);
@@ -164,11 +164,29 @@ public class SelectCategory extends WizardPage
     public WizardPanelNavResult allowNext(String arg, Map map, Wizard wizard)
     {
         WizardPanelNavResult result = WizardPanelNavResult.PROCEED;
-        if (this.getWizardDataMap().get(CATEGORY_ID) == null)
+        if (this.getWizardDataMap().get(CATEGORY_ID) == null || this.getWizardDataMap().get(REPOSITORY_ID) == null)
         {
             javax.swing.JOptionPane.showMessageDialog(null, "¡Debe seleccionar una categoria!", getDescription(), JOptionPane.ERROR_MESSAGE);
             this.jTreeCategory.requestFocus();
             result = WizardPanelNavResult.REMAIN_ON_PAGE;
+        }
+        RepositoryInfo rep = (RepositoryInfo) this.getWizardDataMap().get(REPOSITORY_ID);
+        if (rep.exclusive)
+        {
+            int res = JOptionPane.showConfirmDialog(this, "¡El repositorio selecionado sólo puede publicar contenidos en el sitio " + rep.siteInfo.title + "!\r\n¿Desea continuar?", getDescription(), JOptionPane.YES_NO_OPTION);
+            if (res == JOptionPane.NO_OPTION)
+            {
+                result = WizardPanelNavResult.REMAIN_ON_PAGE;
+            }
+                       
+        }
+        else
+        {
+            int res = JOptionPane.showConfirmDialog(this, "¡El repositorio selecionado permite publicar en cualquier sitio", getDescription(), JOptionPane.YES_NO_OPTION);
+            if (res == JOptionPane.NO_OPTION)
+            {
+                result = WizardPanelNavResult.REMAIN_ON_PAGE;
+            }            
         }
         SelectCategory.map = map;
         return result;
@@ -261,7 +279,7 @@ private void jButtonAddCategoryActionPerformed(java.awt.event.ActionEvent evt) {
     if (selected != null && selected instanceof CategoryNode)
     {
         CategoryNode categoryNode = (CategoryNode) selected;
-        DialogAddCategory addCategory = new DialogAddCategory(categoryNode.getRepository(), categoryNode.getID());
+        DialogAddCategory addCategory = new DialogAddCategory(categoryNode.getRepository().name, categoryNode.getID());
         addCategory.setVisible(true);
         if (!addCategory.isCancel())
         {
@@ -290,7 +308,7 @@ private void jTreeCategoryValueChanged(javax.swing.event.TreeSelectionEvent evt)
     this.getWizardDataMap().remove(REPOSITORY_ID);
     if (selected != null && selected instanceof RepositoryNode)
     {
-        if (((RepositoryNode) selected).getName().equals("Repositorios"))
+        if (selected instanceof RepositoryRootNode)
         {
             this.jButtonAddCategory.setEnabled(false);
         }
@@ -315,12 +333,12 @@ private void jTreeCategoryValueChanged(javax.swing.event.TreeSelectionEvent evt)
         CategoryNode categoryNode = (CategoryNode) selected;
         String categoryId = categoryNode.getID();
 
-        String repository = categoryNode.getRepository();
+        RepositoryInfo repository = categoryNode.getRepository();
         this.getWizardDataMap().put(CATEGORY_ID, categoryId);
         this.getWizardDataMap().put(REPOSITORY_ID, repository);
         try
         {
-            if (OfficeApplication.getOfficeApplicationProxy().canDeleteCategory(repository, categoryId))
+            if (OfficeApplication.getOfficeApplicationProxy().canDeleteCategory(repository.name, categoryId))
             {
                 this.jButtonDeletCategory.setEnabled(true);
             }
@@ -336,10 +354,10 @@ private void jTreeCategoryValueChanged(javax.swing.event.TreeSelectionEvent evt)
 private void jButtonDeletCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeletCategoryActionPerformed
     this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
     String categoryId = (String) this.getWizardDataMap().get(CATEGORY_ID);
-    String repository = (String) this.getWizardDataMap().get(REPOSITORY_ID);
+    RepositoryInfo repository = (RepositoryInfo) this.getWizardDataMap().get(REPOSITORY_ID);
     try
     {
-        if (OfficeApplication.getOfficeApplicationProxy().canDeleteCategory(repository, categoryId))
+        if (OfficeApplication.getOfficeApplicationProxy().canDeleteCategory(repository.name, categoryId))
         {
             DefaultMutableTreeNode node = (DefaultMutableTreeNode) jTreeCategory.getLastSelectedPathComponent();
             if (node == null)
@@ -394,40 +412,61 @@ interface ToolTipTreeNode
     public String getToolTipText();
 }
 
+class RepositoryRootNode extends RepositoryNode
+{
+
+    public RepositoryRootNode()
+    {
+        repositoryInfo = new RepositoryInfo();
+        repositoryInfo.name = "Repositorios";
+        repositoryInfo.exclusive = false;
+    }
+}
+
 class RepositoryNode extends DefaultMutableTreeNode implements ToolTipTreeNode
 {
 
     private JLabel component = new JLabel();
-    private String name;
+    protected RepositoryInfo repositoryInfo;
 
-    public RepositoryNode(String name)
+    protected RepositoryNode()
     {
-        this.name = name;
-        component.setText(name);
+    }
+
+    public RepositoryNode(RepositoryInfo repositoryInfo)
+    {
+        component.setText(repositoryInfo.name);
         component.setOpaque(true);
     }
 
     public String getToolTipText()
     {
-        return this.name;
+        if (repositoryInfo.exclusive)
+        {
+            return "Repositorio exclusivo para el sitio " + repositoryInfo.siteInfo.title;
+        }
+        else
+        {
+            return "Repositorio compartido, puede publicar en cualquier sitio";
+        }
     }
 
     public String getName()
     {
-        return name;
+        return this.repositoryInfo.name;
     }
 
     @Override
     public String toString()
     {
         this.hashCode();
-        return name;
+        return repositoryInfo.name;
     }
 
     @Override
     public int hashCode()
     {
-        return this.name.hashCode();
+        return repositoryInfo.name.hashCode();
     }
 
     @Override
@@ -436,7 +475,7 @@ class RepositoryNode extends DefaultMutableTreeNode implements ToolTipTreeNode
         boolean equals = false;
         if (obj instanceof RepositoryNode)
         {
-            equals = ((RepositoryNode) obj).name.equals(this.name);
+            equals = ((RepositoryNode) obj).repositoryInfo.name.equals(this.repositoryInfo.name);
         }
         return equals;
     }
@@ -454,9 +493,9 @@ class CategoryNode extends DefaultMutableTreeNode implements ToolTipTreeNode
     private String id;
     private String title;
     private String description;
-    private String repository;
+    private RepositoryInfo repository;
 
-    public CategoryNode(String id, String title, String description, String repository)
+    public CategoryNode(String id, String title, String description, RepositoryInfo repository)
     {
         this.id = id;
         this.title = title;
@@ -467,7 +506,7 @@ class CategoryNode extends DefaultMutableTreeNode implements ToolTipTreeNode
         component.setOpaque(true);
     }
 
-    public String getRepository()
+    public RepositoryInfo getRepository()
     {
         return this.repository;
     }
