@@ -1076,6 +1076,13 @@
     <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#HerarquicalNode"/>
     <rdfs:domain rdf:resource="#Model"/>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasSubModel">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="parentWebSite"/>
+    </owl:inverseOf>
+    <rdfs:domain rdf:resource="#WebSite"/>
+    <rdfs:range rdf:resource="#Model"/>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="usrgrpParent">
     <rdfs:domain rdf:resource="#UserGroup"/>
     <rdfs:range rdf:resource="#UserGroup"/>
