@@ -514,7 +514,7 @@ public class SWBATree extends GenericResource
 
         WebSite tm=SWBContext.getGlobalWebSite();
 
-        Element ele=addNode("node",tm.getId(),tm.getTitle(user.getLanguage()),root);
+        Element ele=addNode("node",tm.getId(),tm.getTitle(),root);
         //ele.setAttribute("action","showurl="+tma.getTopic("WBAd_sysi_ResourcesInfo").getUrl()+"?id="+rec.getId()+"&stype="+rec.getIdSubType());
         //ele.setAttribute("target","work");
         ele.setAttribute("reload","getGlobal");
