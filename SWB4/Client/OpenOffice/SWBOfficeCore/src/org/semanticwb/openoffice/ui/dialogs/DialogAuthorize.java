@@ -22,12 +22,13 @@ import org.semanticwb.openoffice.ui.icons.ImageLoader;
 public class DialogAuthorize extends java.awt.Dialog {
 
     /** Creates new form DialogAuthorize */
-    public DialogAuthorize() {
+    public DialogAuthorize(String title) {
         super((Frame) null, ModalityType.TOOLKIT_MODAL);
         this.setIconImage(ImageLoader.images.get("semius").getImage());
         this.setModal(true);
         initComponents();
         this.setLocationRelativeTo(null);
+        this.setTitle(title);
     }
 
     /** This method is called from within the constructor to
@@ -120,22 +121,7 @@ public class DialogAuthorize extends java.awt.Dialog {
         this.setVisible(false);
     }//GEN-LAST:event_jButtonCancelActionPerformed
 
-    /**
-    * @param args the command line arguments
-    */
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                DialogAuthorize dialog = new DialogAuthorize();
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
+   
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
