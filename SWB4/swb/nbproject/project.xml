@@ -269,6 +269,12 @@
                     <file>${file.reference.SWBAdmin.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
+                <library>
+                    <file>${file.reference.commons-logging.jar-1}</file>
+                </library>
+                <library>
+                    <file>${file.reference.fileupload-ext.jar}</file>
+                </library>
             </web-module-libraries>
             <web-module-additional-libraries/>
             <source-roots>
