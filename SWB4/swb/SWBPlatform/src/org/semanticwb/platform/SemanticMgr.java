@@ -7,6 +7,9 @@ package org.semanticwb.platform;
 
 import com.hp.hpl.jena.db.DBConnection;
 import com.hp.hpl.jena.db.IDBConnection;
+import com.hp.hpl.jena.db.impl.Driver_MySQL_SWB;
+import com.hp.hpl.jena.db.impl.IRDBDriver;
+import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.ModelMaker;
@@ -17,6 +20,7 @@ import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.util.FileManager;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -67,7 +71,13 @@ public class SemanticMgr implements SWBInstanceObject
         m_observers=new ArrayList();
 
         // Create database connection
-        conn = new DBConnection(SWBUtils.DB.getDefaultConnection(), SWBUtils.DB.getDatabaseName()+"_SWB");
+        conn = new DBConnection(SWBUtils.DB.getDefaultConnection(), SWBUtils.DB.getDatabaseName());
+        if(SWBUtils.DB.getDatabaseName().equalsIgnoreCase("mysql"))
+        {
+            IRDBDriver driver=new Driver_MySQL_SWB();
+            driver.setConnection(conn);
+            conn.setDriver(driver);
+        }
         conn.getDriver().setTableNamePrefix("swb_");
         //conn.getDriver().setDoDuplicateCheck(false);
         maker = ModelFactory.createModelRDBMaker(conn);
@@ -251,7 +261,20 @@ public class SemanticMgr implements SWBInstanceObject
      */
     private SemanticModel loadDBModel(String name)
     {
-        SemanticModel m=new SemanticModel(name, loadRDFDBModel(name));
+        Model model=loadRDFDBModel(name);
+        if(name.equals(SWBAdmin) && !SWBPlatform.getEnv("swb/adminDev", "false").equalsIgnoreCase("true"))
+        {
+            OntModel omodel=ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM,model);
+            try
+            {
+                Model m = ModelFactory.createDefaultModel() ;
+                FileInputStream in=new FileInputStream(SWBUtils.getApplicationPath()+"/swbadmin/rdf/SWBAdmin.rdf");
+                m.read(in, null);
+                omodel.addSubModel(m,true);
+            }catch(Exception e){log.error(e);}
+            model=omodel;
+        }
+        SemanticModel m=new SemanticModel(name, model);
         //TODO:notify this
         m_models.put(name, m);
         m_imodels.put(m.getRDFModel(), m);
