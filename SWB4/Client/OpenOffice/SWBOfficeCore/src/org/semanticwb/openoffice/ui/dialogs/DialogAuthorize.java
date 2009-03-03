@@ -54,7 +54,7 @@ public class DialogAuthorize extends java.awt.Dialog {
             }
         });
 
-        jPanel1.setPreferredSize(new java.awt.Dimension(100, 30));
+        jPanel1.setPreferredSize(new java.awt.Dimension(100, 40));
         jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
         jButtonOK.setText("Aceptar");
@@ -75,6 +75,7 @@ public class DialogAuthorize extends java.awt.Dialog {
 
         add(jPanel1, java.awt.BorderLayout.SOUTH);
 
+        jPanel2.setPreferredSize(new java.awt.Dimension(250, 200));
         jPanel2.setLayout(new java.awt.BorderLayout());
 
         jPanel3.setPreferredSize(new java.awt.Dimension(100, 20));
