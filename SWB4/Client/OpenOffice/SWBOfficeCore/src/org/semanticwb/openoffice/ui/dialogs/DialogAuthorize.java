@@ -12,6 +12,7 @@
 package org.semanticwb.openoffice.ui.dialogs;
 
 import java.awt.Frame;
+import javax.swing.JOptionPane;
 import org.semanticwb.openoffice.ui.icons.ImageLoader;
 
 /**
@@ -44,7 +45,7 @@ public class DialogAuthorize extends java.awt.Dialog {
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        jTextAreaMessage = new javax.swing.JTextArea();
 
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -57,9 +58,19 @@ public class DialogAuthorize extends java.awt.Dialog {
         jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
         jButtonOK.setText("Aceptar");
+        jButtonOK.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonOKActionPerformed(evt);
+            }
+        });
         jPanel1.add(jButtonOK);
 
         jButtonCancel.setText("Cencelar");
+        jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCancelActionPerformed(evt);
+            }
+        });
         jPanel1.add(jButtonCancel);
 
         add(jPanel1, java.awt.BorderLayout.SOUTH);
@@ -74,9 +85,9 @@ public class DialogAuthorize extends java.awt.Dialog {
 
         jPanel2.add(jPanel3, java.awt.BorderLayout.NORTH);
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        jTextAreaMessage.setColumns(20);
+        jTextAreaMessage.setRows(5);
+        jScrollPane1.setViewportView(jTextAreaMessage);
 
         jPanel2.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
@@ -90,6 +101,23 @@ public class DialogAuthorize extends java.awt.Dialog {
         setVisible(false);
         dispose();
     }//GEN-LAST:event_closeDialog
+
+    private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonOKActionPerformed
+    {//GEN-HEADEREND:event_jButtonOKActionPerformed
+        if(this.jTextAreaMessage.getText().trim().isEmpty())
+        {
+            JOptionPane.showMessageDialog(this, "¡Debe indicar el mensaje!",this.getTitle(),JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+            this.jTextAreaMessage.requestFocus();
+            return;
+        }
+        this.setVisible(false);
+
+    }//GEN-LAST:event_jButtonOKActionPerformed
+
+    private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonCancelActionPerformed
+    {//GEN-HEADEREND:event_jButtonCancelActionPerformed
+        this.setVisible(false);
+    }//GEN-LAST:event_jButtonCancelActionPerformed
 
     /**
     * @param args the command line arguments
@@ -117,7 +145,7 @@ public class DialogAuthorize extends java.awt.Dialog {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextArea jTextAreaMessage;
     // End of variables declaration//GEN-END:variables
 
 }
