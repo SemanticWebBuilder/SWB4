@@ -200,7 +200,7 @@ public class SWBImportWebSite extends GenericResource {
                 if (repository.equals("0")) { //Utilizara un repositorio exclusivo
                     newUsrRep = SWBContext.createUserRepository(newTitle, "http://users." + newId + "_usr.swb");
                     newUsrRep.setTitle("Repositorio de usuarios("+newTitle+")","es");
-                        newUsrRep.setTitle("Users Repository("+newTitle+")","en");
+                    newUsrRep.setTitle("Users Repository("+newTitle+")","en");
                     website.addSubModel(newUsrRep.getSemanticObject());
                     website.setUserRepository(newUsrRep);
                 } else { //Utilizara un repositorio existente
