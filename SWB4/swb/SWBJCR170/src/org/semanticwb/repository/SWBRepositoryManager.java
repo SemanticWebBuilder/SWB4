@@ -28,7 +28,7 @@ public final class SWBRepositoryManager implements RepositoryManager
     public SWBRepositoryManager() throws SWBException,RepositoryException
     {
         repository=new RepositoryImp();
-        officeManager=new SWBOfficeManager();
+        officeManager=new SWBOfficeManager(this);
     }
 
     public void init()
