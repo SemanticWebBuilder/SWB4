@@ -30,7 +30,7 @@ import org.semanticwb.portal.util.fileupload.UploadStatus;
  */
 public class UploadFormElement implements InternalServlet {
 
-    private static Logger log = SWBUtils.getLogger(Upload.class);
+    private static Logger log = SWBUtils.getLogger(UploadFormElement.class);
     public static final String UPLOAD_STATUS = "uploadStatus";
     public static final String FILE_UPLOAD_STATS = "fileUploadStats";
     public static final String FILES_UPLOADED = "FILES_UPLOADED";
