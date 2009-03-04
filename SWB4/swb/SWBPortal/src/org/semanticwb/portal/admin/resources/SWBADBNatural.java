@@ -59,7 +59,7 @@ public class SWBADBNatural extends GenericResource {
                 "});" +
             "});</script>");
         out.println("<div class=\"swbform\">");
-        out.println("<form action=\"" + paramRequest.getRenderUrl() + "\" method=\"post\">");
+        out.println("<form dojoType=\"dijit.form.Form\" id=\""+getResourceBase().getId()+"/sparql\" action=\""+paramRequest.getRenderUrl()+"\" method=\"post\" onsubmit=\"submitForm('"+getResourceBase().getId()+"/sparql'); return false;\">");
         out.println("<fieldset>");
         out.println("<table border=\"0\" cellspacing=\"2\" cellpadding=\"0\" >");
         out.println("<tr><td >");
@@ -79,7 +79,7 @@ public class SWBADBNatural extends GenericResource {
         out.println("</table>");
         out.println("</fieldset>");
         out.println("<fieldset>");
-        out.println("<input type=\"submit\" name=\"submit\" value=\"" + paramRequest.getLocaleString("send") + "\">");
+        out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\" name=\"submit/btnSend\" >"+paramRequest.getLocaleString("send")+"</button>");
         out.println("</fieldset>");
 
         long time=System.currentTimeMillis();
