@@ -28,7 +28,7 @@ import org.semanticwb.portal.api.SWBResourceURLImp;
  */
 public class EditFile implements InternalServlet {
 
-    private static Logger log = SWBUtils.getLogger(Upload.class);
+    private static Logger log = SWBUtils.getLogger(EditFile.class);
 
     public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException, ServletException {
         try {
