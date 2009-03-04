@@ -234,7 +234,7 @@ offsetterm //returns [String term]
 ;
 
 ordterm //returns [String term]
-:	MODO LPAR ordlist {mod = "ORDER BY " + $ordlist.terms.replace(' ', '_');} RPAR -> ^(ORDER ordlist)
+:	MODO LPAR ordlist {mod = "ORDER BY " + $ordlist.terms.trim().replace(' ', '_');} RPAR -> ^(ORDER ordlist)
 ;
 
 ordlist returns [String terms]
