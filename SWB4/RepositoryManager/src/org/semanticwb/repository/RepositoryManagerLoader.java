@@ -5,12 +5,14 @@
 package org.semanticwb.repository;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Hashtable;
 import javax.jcr.Session;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
+import org.semanticwb.office.interfaces.RepositoryInfo;
 
 /**
  *
@@ -55,21 +57,19 @@ public class RepositoryManagerLoader
         return instance;
     }
 
-    public String[] getWorkspacesForOffice()
+    public RepositoryInfo[] getWorkspacesForOffice()
     {
-        ArrayList<String> workspaces = new ArrayList<String>();
+        ArrayList<RepositoryInfo> workspaces = new ArrayList<RepositoryInfo>();
         for (RepositoryManager manager : repositoryManagers.values())
         {
             OfficeManager officemanager=manager.getOfficeManager();
             if (officemanager!=null)
             {
-                for (String workspace : manager.getWorkspaces())
-                {
-                    workspaces.add(workspace + "@" + manager.getName());
-                }
+                Collection<RepositoryInfo> officeworkspaces=officemanager.getWorkspaces();
+                workspaces.addAll(officeworkspaces);
             }
         }
-        return workspaces.toArray(new String[workspaces.size()]);
+        return workspaces.toArray(new RepositoryInfo[workspaces.size()]);
     }
 
     public String[] getWorkspaces()

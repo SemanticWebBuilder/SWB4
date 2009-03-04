@@ -5,7 +5,9 @@
 
 package org.semanticwb.repository;
 
+import java.util.Collection;
 import java.util.HashMap;
+import org.semanticwb.office.interfaces.RepositoryInfo;
 
 /**
  *
@@ -19,4 +21,5 @@ public interface OfficeManager {
     public String getUserType();
     public HashMap<String, String> getContentTypes();
     public String getPropertyFileType();
+    public Collection<RepositoryInfo> getWorkspaces();
 }
