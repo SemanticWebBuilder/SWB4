@@ -22,6 +22,8 @@ String end = request.getParameter("end");
 String tempcDn = "";
 boolean lPar = false;
 boolean rPar = false;
+
+//TODO: pasar el lenguaje en la cadena de llamada
 if (word.indexOf("(") != -1) {
     lPar = true;
     word = word.replace("(", "");
