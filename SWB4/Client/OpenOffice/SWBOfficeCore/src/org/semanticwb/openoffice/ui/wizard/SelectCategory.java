@@ -106,7 +106,7 @@ public class SelectCategory extends WizardPage
             for (RepositoryInfo repository : OfficeApplication.getOfficeApplicationProxy().getRepositories())
             {
                 boolean showRepository = false;
-                if (this.repositoryID == null || repositoryID.equals(repository))
+                if (this.repositoryID == null || repositoryID.equals(repository.name))
                 {
                     showRepository = true;
                 }
@@ -182,7 +182,7 @@ public class SelectCategory extends WizardPage
         }
         else
         {
-            int res = JOptionPane.showConfirmDialog(this, "¡El repositorio selecionado permite publicar en cualquier sitio", getDescription(), JOptionPane.YES_NO_OPTION);
+            int res = JOptionPane.showConfirmDialog(this, "¡El repositorio selecionado permite publicar en cualquier sitio!\r\n¿Desea continuar?", getDescription(), JOptionPane.YES_NO_OPTION);
             if (res == JOptionPane.NO_OPTION)
             {
                 result = WizardPanelNavResult.REMAIN_ON_PAGE;
@@ -417,26 +417,31 @@ class RepositoryRootNode extends RepositoryNode
 
     public RepositoryRootNode()
     {
-        repositoryInfo = new RepositoryInfo();
-        repositoryInfo.name = "Repositorios";
+        super(new RepositoryInfo("Repositorios"));
         repositoryInfo.exclusive = false;
+        component.setText(repositoryInfo.name);
+        component.setOpaque(true);
+    }
+    @Override
+    public String getToolTipText()
+    {
+        return "Este no es un repositorio";
     }
 }
 
 class RepositoryNode extends DefaultMutableTreeNode implements ToolTipTreeNode
 {
 
-    private JLabel component = new JLabel();
+    protected JLabel component = new JLabel();
     protected RepositoryInfo repositoryInfo;
 
-    protected RepositoryNode()
-    {
-    }
-
+    
     public RepositoryNode(RepositoryInfo repositoryInfo)
     {
+        this.repositoryInfo=repositoryInfo;
         component.setText(repositoryInfo.name);
         component.setOpaque(true);
+        component.setToolTipText(this.getToolTipText());
     }
 
     public String getToolTipText()
@@ -459,7 +464,7 @@ class RepositoryNode extends DefaultMutableTreeNode implements ToolTipTreeNode
     @Override
     public String toString()
     {
-        this.hashCode();
+        
         return repositoryInfo.name;
     }
 
