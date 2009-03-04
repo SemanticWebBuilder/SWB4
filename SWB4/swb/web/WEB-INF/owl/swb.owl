@@ -79,6 +79,16 @@
     <rdf:type rdf:resource="#FormElement"/>
   </owl:Class>
   <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#HerarquicalNode">
+    <rdfs:subClassOf>
+      <swb:Interface rdf:ID="Filterable">
+        <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >org.semanticwb.model.Filterable</swb:className>
+        <rdfs:subClassOf>
+          <owl:Class rdf:about="#SWBInterface"/>
+        </rdfs:subClassOf>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Interface>
+    </rdfs:subClassOf>
     <rdfs:subClassOf rdf:resource="#SWBClass"/>
     <rdfs:subClassOf>
       <swb:Interface rdf:ID="Descriptiveable">
@@ -131,6 +141,7 @@
     <rdf:type rdf:resource="#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="PortletType">
+    <rdfs:subClassOf rdf:resource="#Filterable"/>
     <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.model.PortletType</swb:className>
     <rdfs:subClassOf rdf:resource="#SWBClass"/>
@@ -484,6 +495,7 @@
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Interface>
     </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#Filterable"/>
   </owl:Class>
   <owl:Class rdf:about="#Deleteable">
     <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -528,6 +540,7 @@
           </swb:Interface>
         </rdfs:subClassOf>
         <rdfs:subClassOf rdf:resource="#Roleable"/>
+        <rdfs:subClassOf rdf:resource="#Filterable"/>
         <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
         >true</swb:autogenId>
         <rdfs:subClassOf rdf:resource="#Traceable"/>
@@ -592,6 +605,7 @@
     </owl:inverseOf>
     <rdfs:domain>
       <swb:Class rdf:ID="PortletSubType">
+        <rdfs:subClassOf rdf:resource="#Filterable"/>
         <rdfs:subClassOf rdf:resource="#SWBClass"/>
         <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
         <rdfs:subClassOf rdf:resource="#Traceable"/>
@@ -610,6 +624,7 @@
     </owl:inverseOf>
     <rdfs:range>
       <swb:Class rdf:ID="UserGroup">
+        <rdfs:subClassOf rdf:resource="#Filterable"/>
         <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
         >true</swb:autogenId>
         <rdfs:subClassOf rdf:resource="#SWBClass"/>
@@ -699,6 +714,7 @@
         <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
         >false</swb:autogenId>
         <swb:hasClass rdf:resource="#User"/>
+        <rdfs:subClassOf rdf:resource="#Filterable"/>
       </swb:Model>
     </rdfs:range>
     <rdfs:domain>
@@ -730,6 +746,7 @@
         </swb:hasClass>
         <swb:hasClass>
           <swb:Class rdf:ID="TemplateGroup">
+            <rdfs:subClassOf rdf:resource="#Filterable"/>
             <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
             >true</swb:autogenId>
             <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -869,6 +886,7 @@
         </swb:hasHerarquicalNode>
         <swb:hasClass>
           <swb:Class rdf:ID="Community">
+            <rdfs:subClassOf rdf:resource="#Filterable"/>
             <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
             >false</swb:autogenId>
             <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -922,6 +940,7 @@
           </swbxf:HerarquicalNode>
         </swb:hasHerarquicalNode>
         <swb:hasClass rdf:resource="#AdminFilter"/>
+        <rdfs:subClassOf rdf:resource="#Filterable"/>
         <swb:hasClass rdf:resource="#Dns"/>
         <swb:hasHerarquicalNode>
           <swbxf:HerarquicalNode rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Languages">
