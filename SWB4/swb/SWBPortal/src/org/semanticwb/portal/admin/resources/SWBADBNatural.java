@@ -33,19 +33,17 @@ public class SWBADBNatural extends GenericResource {
     {
     }
 
-    /**
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws AFException
-     * @throws IOException
-     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        PrintWriter out=response.getWriter();
-        String _query=request.getParameter("query");
-        if(_query==null)_query="";
-        else _query=_query.trim();
+        PrintWriter out = response.getWriter();
+        String _query = request.getParameter("query");
+        String lang = paramRequest.getUser().getLanguage();
+
+        if (_query == null) {
+            _query="";
+        } else {
+            _query=_query.trim();
+        }
 
         out.println("<script src=\"/swb/swbadmin/js/acTextArea.js\"></script>");
         out.println("<script type=\"text/javascript\">" +
@@ -60,9 +58,8 @@ public class SWBADBNatural extends GenericResource {
                         "dojo.byId(\"suggestions\").innerHTML = \"\"; displayed=false;" +
                 "});" +
             "});</script>");
-
         out.println("<div class=\"swbform\">");
-        out.println("<form action=\""+paramRequest.getRenderUrl()+"\" method=\"post\">");
+        out.println("<form action=\"" + paramRequest.getRenderUrl() + "\" method=\"post\">");
         out.println("<fieldset>");
         out.println("<table border=\"0\" cellspacing=\"2\" cellpadding=\"0\" >");
         out.println("<tr><td >");
@@ -82,29 +79,26 @@ public class SWBADBNatural extends GenericResource {
         out.println("</table>");
         out.println("</fieldset>");
         out.println("<fieldset>");
-        out.println("<input type=\"submit\" name=\"submit\" value=\""+paramRequest.getLocaleString("send")+"\">");
+        out.println("<input type=\"submit\" name=\"submit\" value=\"" + paramRequest.getLocaleString("send") + "\">");
         out.println("</fieldset>");
 
         long time=System.currentTimeMillis();
         try
         {
-            if(_query.length()>0)
+            if (_query.length() > 0)
             {
                 out.println("<fieldset>");
                 out.println("<table border=0>");
 
-                Model model=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
-                //String queryString = _query;
-
-                //String lang = SWBContext.getWebSite("wiki").getLanguage().getId();
+                Model model = SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
                 List prefixes = new ArrayList();
                 List namespaces = new ArrayList();
 
-                //Crear el diccionario con el archivo de palabras reservadas
+                //Create a new word dictionary instance
                 Lexicon dict = new Lexicon();
                 Iterator<SemanticClass> its = SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClasses();
 
-                //Recorrer la ontología para obtener el vocabulario faltante
+                //Traverse the ontology model to fill the dictionary
                 while(its.hasNext()) {
                     SemanticClass sc = its.next();
 
@@ -113,7 +107,7 @@ public class SWBADBNatural extends GenericResource {
                     if(!namespaces.contains(sc.getOntClass().getNameSpace()))
                         namespaces.add(sc.getOntClass().getNameSpace());
 
-                    dict.addWord(new Word(sc.getDisplayName("es"),
+                    dict.addWord(new Word(sc.getDisplayName(lang),
                             new WordTag("OBJ", sc.getPrefix() + ":" + sc.getName())));
 
                     Iterator<SemanticProperty> ip = sc.listProperties();
@@ -126,11 +120,12 @@ public class SWBADBNatural extends GenericResource {
                         if(!namespaces.contains(prop.getRDFProperty().getNameSpace()))
                             namespaces.add(prop.getRDFProperty().getNameSpace());
 
-                        dict.addWord(new Word(prop.getDisplayName("es"),
+                        dict.addWord(new Word(prop.getDisplayName(lang),
                                 new WordTag("PRO", prop.getPropId())));
                     }
                 }
 
+                //Get the SPARQL query prefixes
                 String prex = "";
                 prex += "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n";
                 prex += "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n";
@@ -138,10 +133,11 @@ public class SWBADBNatural extends GenericResource {
                     prex = prex + "PREFIX " + prefixes.get(i) + ": " + "<" + namespaces.get(i) + ">\n";
                 }
 
+                //Translate the Natural Language Sentence to SPARQL
                 Translator tr = new Translator(dict);
                 String queryString = prex + tr.translateSentence(_query);
 
-                out.println("<textarea cols=80>"+queryString+"</textarea>");
+                //out.println("<textarea cols=80>" + queryString + "</textarea>");
                 Query query = QueryFactory.create(queryString);
                 query.serialize(); //new IndentedWriter(response.getOutputStream(),true)) ;
                 // Create a single execution of this query, apply to a model
@@ -152,7 +148,6 @@ public class SWBADBNatural extends GenericResource {
                     // Assumption: it's a SELECT query.
                     ResultSet rs = qexec.execSelect() ;
                     int col = rs.getResultVars().size();
-                    //log.debug("cols:"+col);
                     out.println("<thead>");
                     out.println("<tr>");
 
@@ -182,7 +177,6 @@ public class SWBADBNatural extends GenericResource {
                             out.println("<tr>");
                         }
 
-
                         Iterator<String> it=rs.getResultVars().iterator();
                         while(it.hasNext())
                         {
@@ -193,11 +187,8 @@ public class SWBADBNatural extends GenericResource {
                             out.println("</td>");
                         }
                         out.println("</tr>");
-
-
                     }
                     out.println("</tbody>");
-
                 }
                 finally
                 {
@@ -205,7 +196,6 @@ public class SWBADBNatural extends GenericResource {
 
                     qexec.close() ;
                 }
-
                 out.println("</table>");
                 out.println("</fieldset>");
                 out.println("<fieldset>");
