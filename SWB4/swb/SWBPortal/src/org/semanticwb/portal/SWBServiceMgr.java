@@ -64,7 +64,7 @@ public class SWBServiceMgr implements SemanticObserver {
                         }
                         java.io.File dir=new java.io.File(SWBPlatform.getWorkPath() + "/models/"+ obj.getId() + "/Template");
                         dir.mkdirs();
-                        dir=new java.io.File(SWBPlatform.getWorkPath() + "/models" + obj.getId() + "/Portlet");
+                        dir=new java.io.File(SWBPlatform.getWorkPath() + "/models/" + obj.getId() + "/Portlet");
                         dir.mkdirs();
                         //
                     }if(obj.instanceOf(Template.sclass))
