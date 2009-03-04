@@ -16,6 +16,8 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.WebSite;
+import org.semanticwb.platform.SemanticIterator;
+import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
@@ -74,6 +76,28 @@ public class SWBExportWebSite extends GenericResource {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                //Generación de submodelos
+                File file=new File(zipdirectory + "submodels/");
+                if(!file.exists()){
+                    file.mkdirs();
+                }
+                System.out.println("sitio exp:"+site.getId());
+
+                SemanticIterator <SemanticObject> sitSubModels=site.listSubModels();
+                while(sitSubModels.hasNext()){
+                    SemanticObject sObj=sitSubModels.next();
+                    System.out.println("sObjSMOdel:"+sObj.getId());
+                    File filesModel=new File(zipdirectory + "submodels/"+sObj.getId());
+                    if(!filesModel.exists()){
+                        filesModel.mkdirs();
+                    }
+                    filesModel=new File(zipdirectory + "submodels/"+sObj.getId()+"/"+sObj.getId()+".rdf");
+                    FileOutputStream out = new FileOutputStream(filesModel);
+                    sObj.getModel().write(out);
+                    out.flush();
+                    out.close();
+                }
+
                 //--------------Agregar archivo rdf generado a zip generado---------------------
                 File existingzip = new File(zipdirectory + uri + ".zip");
                 File rdfFile = new File(zipdirectory + uri + ".rdf");
@@ -83,6 +107,7 @@ public class SWBExportWebSite extends GenericResource {
                 //Eliminar rdf y xml generados y ya agregados a zip
                 rdfFile.delete();
                 infoFile.delete();
+
                 PrintWriter out=response.getWriter();
                 out.println("<script type=\"text/javascript\">");
                 out.println("hideDialog();");
