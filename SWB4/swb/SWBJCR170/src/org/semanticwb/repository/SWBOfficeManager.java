@@ -129,7 +129,7 @@ public class SWBOfficeManager implements OfficeManager
             String name = manager.getName() + "@" + repository;
             if (!workspaces.containsKey(name))
             {
-                RepositoryInfo info = new RepositoryInfo();
+                RepositoryInfo info = new RepositoryInfo(repository);
                 info.exclusive = false;
                 workspaces.put(name, info);
             }
