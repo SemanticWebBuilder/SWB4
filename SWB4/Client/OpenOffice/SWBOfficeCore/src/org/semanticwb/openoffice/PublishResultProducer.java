@@ -15,6 +15,7 @@ import org.netbeans.spi.wizard.Wizard;
 import org.netbeans.spi.wizard.WizardException;
 import org.netbeans.spi.wizard.WizardPage;
 import org.netbeans.spi.wizard.WizardPage.WizardResultProducer;
+import org.semanticwb.office.interfaces.RepositoryInfo;
 import org.semanticwb.openoffice.interfaces.IOpenOfficeDocument;
 import org.semanticwb.openoffice.ui.wizard.ContentProperties;
 import org.semanticwb.openoffice.ui.wizard.SelectCategory;
@@ -55,6 +56,7 @@ public class PublishResultProducer implements WizardResultProducer
                 String description = wizardData.get(TitleAndDescription.DESCRIPTION).toString();
                 String categoryID = wizardData.get(SelectCategory.CATEGORY_ID).toString();
                 String repositoryName = wizardData.get(SelectCategory.REPOSITORY_ID).toString();
+                RepositoryInfo info=(RepositoryInfo)wizardData.get(SelectCategory.REPOSITORY_ID);
                 String nodeType = wizardData.get(TitleAndDescription.NODE_TYPE).toString();
                 String name = document.getLocalPath().getName().replace(document.getDefaultExtension(), document.getPublicationExtension());
                 String contentID = openOfficeDocument.publish(title, description, repositoryName, categoryID, document.getDocumentType().toString(), nodeType, name);
@@ -68,7 +70,14 @@ public class PublishResultProducer implements WizardResultProducer
                 int res = JOptionPane.showConfirmDialog(null, "¿Desea publicar este contenido en una página web?", "Publicación de contenido", JOptionPane.YES_NO_OPTION);
                 if (res == JOptionPane.YES_OPTION)
                 {
-                    document.publish(title,description);
+                    if(info.exclusive && info.siteInfo!=null)
+                    {
+                        document.publish(title,description,info.siteInfo.id);
+                    }
+                    else
+                    {
+                        document.publish(title,description,null);
+                    }
                 }
                 Summary summary = Summary.create(new SummaryPublish(contentID, repositoryName), null);
                 progress.finished(summary);

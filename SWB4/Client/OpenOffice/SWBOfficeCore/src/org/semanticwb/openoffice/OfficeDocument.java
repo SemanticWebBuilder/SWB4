@@ -566,7 +566,7 @@ public abstract class OfficeDocument
         return result;
     }
 
-    public final void publish(String title, String description)
+    public final void publish(String title, String description,String siteid)
     {
         if (isPublicated())
         {
@@ -577,7 +577,7 @@ public abstract class OfficeDocument
                 PublishContentToWebPageResultProducer resultProducer = new PublishContentToWebPageResultProducer(contentID, repositoryName, title, description);
                 WizardPage[] clazz = new WizardPage[]
                 {
-                    new SelectPage(), new PublishVersion(contentID, repositoryName)
+                    new SelectPage(siteid), new PublishVersion(contentID, repositoryName)
                 };
                 Wizard wiz = WizardPage.createWizard("Asistente de publicación de contenido en página web", clazz, resultProducer);
                 wiz.show();
