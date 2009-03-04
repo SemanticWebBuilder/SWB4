@@ -1122,7 +1122,7 @@ public class SWBUtils {
          */
         public static final void zip(File directory, File base, ZipOutputStream zos) throws IOException {
             File[] files=directory.listFiles();
-            if(files==null) {
+            if(files==null || files.length==0) {
                 ZipEntry entry = new ZipEntry("vacio.txt");
                 zos.putNextEntry(entry);
                 zos.write("vacio".getBytes());
