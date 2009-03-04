@@ -33,12 +33,15 @@ import org.semanticwb.office.interfaces.ContentType;
 import org.semanticwb.office.interfaces.FlowContentInformation;
 import org.semanticwb.office.interfaces.IOfficeApplication;
 import org.semanticwb.office.interfaces.PortletInfo;
+import org.semanticwb.office.interfaces.RepositoryInfo;
+import org.semanticwb.office.interfaces.SiteInfo;
 import org.semanticwb.office.interfaces.VersionInfo;
 import org.semanticwb.office.interfaces.WebPageInfo;
 import org.semanticwb.office.interfaces.WebSiteInfo;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portlet.office.OfficePortlet;
 import org.semanticwb.repository.RepositoryManagerLoader;
+import org.semanticwb.repository.Workspace;
 import org.semanticwb.xmlrpc.Part;
 import org.semanticwb.xmlrpc.XmlRpcObject;
 
@@ -137,9 +140,40 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         }
     }
 
-    public String[] getRepositories() throws Exception
+    public RepositoryInfo[] getRepositories() throws Exception
     {
-        return loader.getWorkspacesForOffice();
+        HashMap<String, RepositoryInfo> reps = new HashMap<String, RepositoryInfo>();
+        Iterator<WebSite> sites = SWBContext.listWebSites();
+        while (sites.hasNext())
+        {
+            WebSite site = sites.next();
+            Iterator<SemanticObject> models = site.listSubModels();
+            while (models.hasNext())
+            {
+                SemanticObject model = models.next();
+                if (model.getSemanticClass().equals(Workspace.sclass))
+                {
+                    RepositoryInfo repositoryInfo = new RepositoryInfo( model.getId());
+                    repositoryInfo.exclusive = false;
+                    repositoryInfo.siteInfo = new SiteInfo();
+                    repositoryInfo.siteInfo.title = site.getTitle();
+                    repositoryInfo.siteInfo.id = site.getId();
+                    repositoryInfo.siteInfo.description = site.getDescription();
+                    reps.put(repositoryInfo.name, repositoryInfo);
+                }
+            }
+        }
+
+        for (String repository : loader.getWorkspacesForOffice())
+        {
+            if (!reps.containsKey(repository))
+            {
+                RepositoryInfo repositoryInfo = new RepositoryInfo(repository);
+                repositoryInfo.exclusive = false;
+                reps.put(repository, repositoryInfo);
+            }
+        }
+        return reps.values().toArray(new RepositoryInfo[reps.size()]);
     }
 
     public CategoryInfo[] getCategories(String repositoryName) throws Exception
@@ -693,13 +727,25 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                 if (obj.getSemanticClass().isSubClass(OfficePortlet.sclass) || obj.getSemanticClass().equals(OfficePortlet.sclass))
                 {
                     OfficePortlet officePortlet = new OfficePortlet(obj);
-                    PortletInfo portletInfo=OfficeDocument.getPortletInfo(officePortlet);
-                    FlowContentInformation flowContentInformation=new FlowContentInformation();
-                    flowContentInformation.portletInfo=portletInfo;
+                    PortletInfo portletInfo = OfficeDocument.getPortletInfo(officePortlet);
+                    FlowContentInformation flowContentInformation = new FlowContentInformation();
+                    flowContentInformation.portletInfo = portletInfo;
                     contents.add(flowContentInformation);
                 }
             }
         }
         return contents.toArray(new FlowContentInformation[contents.size()]);
+    }
+
+    public void sendContentToAuthorize(PortletInfo portletInfo, String message) throws Exception
+    {
+    }
+
+    public void authorize(PortletInfo portletInfo, String message) throws Exception
+    {
+    }
+
+    public void reject(PortletInfo portletInfo, String message) throws Exception
+    {
     }
 }
