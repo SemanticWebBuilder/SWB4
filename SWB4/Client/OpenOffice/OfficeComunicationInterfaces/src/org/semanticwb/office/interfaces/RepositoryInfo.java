@@ -52,7 +52,7 @@ public class RepositoryInfo {
     @Override
     public String toString()
     {
-        return name.toString();
+        return name;
     }
 
 
