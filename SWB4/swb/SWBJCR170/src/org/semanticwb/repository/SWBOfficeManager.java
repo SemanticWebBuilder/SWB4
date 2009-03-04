@@ -112,7 +112,7 @@ public class SWBOfficeManager implements OfficeManager
                 SemanticObject model = models.next();
                 if (model.getSemanticClass().equals(Workspace.sclass) || model.getSemanticClass().isSubClass(Workspace.sclass))
                 {
-                    String name = manager.getName() + "@" + model.getId();
+                    String name = model.getId()+"@"+manager.getName();
                     RepositoryInfo info = new RepositoryInfo(name);
                     info.exclusive = true;
                     info.siteInfo = new SiteInfo();
@@ -126,7 +126,7 @@ public class SWBOfficeManager implements OfficeManager
         // Shared
         for (String repository : manager.getWorkspaces())
         {
-            String name = manager.getName() + "@" + repository;
+            String name = repository+"@"+manager.getName() ;
             if (!workspaces.containsKey(name))
             {
                 RepositoryInfo info = new RepositoryInfo(name);
