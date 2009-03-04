@@ -13,6 +13,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Language;
 import org.semanticwb.model.Portlet;
 import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.Template;
 import org.semanticwb.model.Traceable;
 import org.semanticwb.model.User;
@@ -46,6 +47,11 @@ public class SWBServiceMgr implements SemanticObserver {
                 if (action.equals("CREATE")) //CREATE
                 {
                     updateTraceable(obj,usr);
+                    if(obj.instanceOf(SWBModel.sclass))
+                    {
+                        java.io.File dir=new java.io.File(SWBPlatform.getWorkPath() + "/models/"+ obj.getId());
+                        dir.mkdirs();
+                    }
                     if(obj.instanceOf(WebSite.sclass))
                     {
                         WebSite website=(WebSite)obj.createGenericInstance();
@@ -67,7 +73,8 @@ public class SWBServiceMgr implements SemanticObserver {
                         dir=new java.io.File(SWBPlatform.getWorkPath() + "/models/" + obj.getId() + "/Portlet");
                         dir.mkdirs();
                         //
-                    }if(obj.instanceOf(Template.sclass))
+                    }
+                    if(obj.instanceOf(Template.sclass))
                     {
                         Template tpl=(Template)obj.createGenericInstance();
                         VersionInfo vi=new VersionInfo(tpl.getSemanticObject());
@@ -81,7 +88,7 @@ public class SWBServiceMgr implements SemanticObserver {
                     }
                 } else //REMOVES
                 {
-                    if (obj.instanceOf(WebSite.sclass)) //Removes website
+                    if (obj.instanceOf(SWBModel.sclass)) //Removes website
                     {
                         SWBUtils.IO.removeDirectory(SWBPlatform.getWorkPath() + "/models/"+obj.getId());
                     } else if (obj.instanceOf(Template.sclass)) // Removes Template
