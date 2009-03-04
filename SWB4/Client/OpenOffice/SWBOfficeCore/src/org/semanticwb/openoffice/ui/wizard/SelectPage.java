@@ -30,6 +30,7 @@ public class SelectPage extends WizardPage
 {
 
     public static final String WEBPAGE = "WEBPAGE";
+    String siteId;
 
     /** Creates new form SelectPage */
     public SelectPage()
@@ -39,6 +40,12 @@ public class SelectPage extends WizardPage
         selectionModel.setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         jTreeSite.setSelectionModel(selectionModel);
         loadTree();
+    }
+
+    public SelectPage(String siteId)
+    {
+        this();
+        this.siteId = siteId;
     }
 
     class TreeRender extends JPanel implements TreeCellRenderer
@@ -118,17 +125,36 @@ public class SelectPage extends WizardPage
         {
             for (WebSiteInfo website : OfficeApplication.getOfficeApplicationProxy().getSites())
             {
-                Site repositoryNode = new Site(website.id, website.title);
-                model.insertNodeInto(repositoryNode, repositories, 0);
-                WebPageInfo home = OfficeApplication.getOfficeApplicationProxy().getHomePage(website);
-                HomeWebPage child = new HomeWebPage(home.id, home.title, home.description, website.id, home.url);
-                repositoryNode.add(child);
-                if (home.childs > 0)
+                if (siteId == null)
                 {
-                    DefaultMutableTreeNode dummy = new DefaultMutableTreeNode();
-                    child.add(dummy);
+                    Site repositoryNode = new Site(website.id, website.title);
+                    model.insertNodeInto(repositoryNode, repositories, 0);
+                    WebPageInfo home = OfficeApplication.getOfficeApplicationProxy().getHomePage(website);
+                    HomeWebPage child = new HomeWebPage(home.id, home.title, home.description, website.id, home.url);
+                    repositoryNode.add(child);
+                    if (home.childs > 0)
+                    {
+                        DefaultMutableTreeNode dummy = new DefaultMutableTreeNode();
+                        child.add(dummy);
+                    }
                 }
-            //addWebPage(home,child);
+                else
+                {
+                    if (siteId.equals(website.id))
+                    {
+                        Site repositoryNode = new Site(website.id, website.title);
+                        model.insertNodeInto(repositoryNode, repositories, 0);
+                        WebPageInfo home = OfficeApplication.getOfficeApplicationProxy().getHomePage(website);
+                        HomeWebPage child = new HomeWebPage(home.id, home.title, home.description, website.id, home.url);
+                        repositoryNode.add(child);
+                        if (home.childs > 0)
+                        {
+                            DefaultMutableTreeNode dummy = new DefaultMutableTreeNode();
+                            child.add(dummy);
+                        }
+                    }
+                }
+
             }
         }
         catch (Exception wbe)
@@ -272,7 +298,7 @@ private void jButtonAddPageActionPerformed(java.awt.event.ActionEvent evt) {//GE
     Object selected = this.jTreeSite.getSelectionPath().getLastPathComponent();
     if (selected != null && selected instanceof WebPage)
     {
-        boolean isExpanded=jTreeSite.isExpanded(this.jTreeSite.getSelectionPath());
+        boolean isExpanded = jTreeSite.isExpanded(this.jTreeSite.getSelectionPath());
         WebPage siteNode = (WebPage) selected;
         WebPageInfo info = new WebPageInfo();
         info.id = siteNode.id;
@@ -282,7 +308,7 @@ private void jButtonAddPageActionPerformed(java.awt.event.ActionEvent evt) {//GE
         info.title = siteNode.title;
         info.description = siteNode.description;
         addWebPage(siteNode);
-        if(isExpanded)
+        if (isExpanded)
         {
             jTreeSite.expandPath(this.jTreeSite.getSelectionPath());
         }
