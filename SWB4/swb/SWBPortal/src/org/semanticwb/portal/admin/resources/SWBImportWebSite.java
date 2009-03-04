@@ -61,9 +61,12 @@ public class SWBImportWebSite extends GenericResource {
                     if (usrRep.equals("0")) { //Utilizara un repositorio exclusivo
                         newUsrRep = SWBContext.createUserRepository(title, "http://users." + id + "_usr.swb");
                         newUsrRep.setTitle(title);
+                        newUsrRep.setTitle("Repositorio de usuarios("+title+")","es");
+                        newUsrRep.setTitle("Users Repository("+title+")","en");
                         if (user != null) {
                             newUsrRep.setCreator(user);
                         }
+                        System.out.println("site creado:"+site.getTitle());
                         site.addSubModel(newUsrRep.getSemanticObject());
                         site.setUserRepository(newUsrRep);
                     } else { //Utilizara un repositorio existente
@@ -196,7 +199,8 @@ public class SWBImportWebSite extends GenericResource {
             if (repository != null) {
                 if (repository.equals("0")) { //Utilizara un repositorio exclusivo
                     newUsrRep = SWBContext.createUserRepository(newTitle, "http://users." + newId + "_usr.swb");
-                    newUsrRep.setTitle(newTitle);
+                    newUsrRep.setTitle("Repositorio de usuarios("+newTitle+")","es");
+                        newUsrRep.setTitle("Users Repository("+newTitle+")","en");
                     website.addSubModel(newUsrRep.getSemanticObject());
                     website.setUserRepository(newUsrRep);
                 } else { //Utilizara un repositorio existente
