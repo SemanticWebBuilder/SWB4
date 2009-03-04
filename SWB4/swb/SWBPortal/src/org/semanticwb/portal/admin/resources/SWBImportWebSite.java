@@ -26,6 +26,7 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.repository.Workspace;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -55,9 +56,10 @@ public class SWBImportWebSite extends GenericResource {
                 site.setCreated(new java.util.Date(System.currentTimeMillis()));
                 site.setTitle(request.getParameter("wstitle"));
 
+                UserRepository newUsrRep = null;
                 if (usrRep != null) {
                     if (usrRep.equals("0")) { //Utilizara un repositorio exclusivo
-                        UserRepository newUsrRep = SWBContext.createUserRepository(title, "http://users." + id + "_usr.swb");
+                        newUsrRep = SWBContext.createUserRepository(title, "http://users." + id + "_usr.swb");
                         newUsrRep.setTitle(title);
                         if (user != null) {
                             newUsrRep.setCreator(user);
@@ -70,13 +72,16 @@ public class SWBImportWebSite extends GenericResource {
                     }
                 }
 
-                //Bien
-                site.addSubModel(SWBContext.createWorkspace(title, "http://repository." + id + "_rep.swb").getSemanticObject());
+                //creación de repositorio de documentoss
+                Workspace workspace = SWBContext.createWorkspace(title, "http://repository." + id + "_rep.swb");
+                site.addSubModel(workspace.getSemanticObject());
 
                 site.setHomePage(site.createWebPage("home"));
 
                 out.println("<script type=\"text/javascript\">");
                 out.println("hideDialog();");
+                out.println("addItemByURI(muserStore, null, '" + newUsrRep.getURI() + "');");
+                out.println("addItemByURI(mdocStore, null, '" + workspace.getURI() + "');");
                 out.println("addItemByURI(mtreeStore, null, '" + site.getURI() + "');");
                 out.println("showStatus('Sitio Creado');");
                 out.println("</script>");
@@ -187,19 +192,21 @@ public class SWBImportWebSite extends GenericResource {
             website.setDescription(olDescription);
 
             //Crea repositorio de usuarios para el nuevo sitio
+            UserRepository newUsrRep = null;
             if (repository != null) {
                 if (repository.equals("0")) { //Utilizara un repositorio exclusivo
-                    UserRepository newUsrRep = SWBContext.createUserRepository(newTitle, "http://users." + newId + "_usr.swb");
+                    newUsrRep = SWBContext.createUserRepository(newTitle, "http://users." + newId + "_usr.swb");
                     newUsrRep.setTitle(newTitle);
                     website.addSubModel(newUsrRep.getSemanticObject());
                     website.setUserRepository(newUsrRep);
                 } else { //Utilizara un repositorio existente
-                    UserRepository exitUsrRep = SWBContext.getUserRepository(repository);
-                    website.setUserRepository(exitUsrRep);
+                    UserRepository existUsrRep = SWBContext.getUserRepository(repository);
+                    website.setUserRepository(existUsrRep);
                 }
             }
             //Crea repositorio de documentos para el nuevo sitio
-            website.addSubModel(SWBContext.createWorkspace(newTitle, "http://repository." + newId + "_rep.swb").getSemanticObject());
+            Workspace workspace = SWBContext.createWorkspace(newTitle, "http://repository." + newId + "_rep.swb");
+            website.addSubModel(workspace.getSemanticObject());
 
             //Eliminar archivo rdf y archivo xml
             new File(models + newTitle + "/" + name + ".rdf").delete();
@@ -208,6 +215,8 @@ public class SWBImportWebSite extends GenericResource {
             PrintWriter out = response.getWriter();
             out.println("<script type=\"text/javascript\">");
             out.println("hideDialog();");
+            out.println("addItemByURI(muserStore, null, '" + newUsrRep.getURI() + "');");
+            out.println("addItemByURI(mdocStore, null, '" + workspace.getURI() + "');");
             out.println("addItemByURI(mtreeStore, null, '" + website.getURI() + "');");
             out.println("showStatus('Sitio Creado');");
             out.println("</script>");
@@ -282,7 +291,7 @@ public class SWBImportWebSite extends GenericResource {
             out.println(paramRequest.getLocaleLogString("usrRep"));
             out.println("</td><td>");
             out.println("<select name=\"wsrepository\">");
-            out.println("<option value=\"0\">"+paramRequest.getLocaleLogString("Exclusive")+"</option>");
+            out.println("<option value=\"0\">" + paramRequest.getLocaleLogString("Exclusive") + "</option>");
             Iterator<UserRepository> itUsrReps = SWBContext.listUserRepositorys();
             while (itUsrReps.hasNext()) {
                 UserRepository usrRep = itUsrReps.next();
