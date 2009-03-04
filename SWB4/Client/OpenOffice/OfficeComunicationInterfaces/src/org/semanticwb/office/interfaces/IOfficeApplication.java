@@ -40,7 +40,7 @@ public interface IOfficeApplication
     public boolean deleteCategory(String repositoryName, String id) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeApplication.getRepositories")
-    public String[] getRepositories() throws Exception;
+    public RepositoryInfo[] getRepositories() throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeApplication.getCategories")
     public CategoryInfo[] getCategories(String repositoryName) throws Exception;
@@ -74,4 +74,13 @@ public interface IOfficeApplication
 
     @XmlRpcMethod(methodName = "OfficeApplication.getContentsForAuthorize")
     public FlowContentInformation[] getContentsForAuthorize() throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeApplication.sendContentToAuthorize")
+    public void sendContentToAuthorize(PortletInfo portletInfo, String message) throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeApplication.authorize")
+    public void authorize(PortletInfo portletInfo, String message) throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeApplication.reject")
+    public void reject(PortletInfo portletInfo, String message) throws Exception;
 }
