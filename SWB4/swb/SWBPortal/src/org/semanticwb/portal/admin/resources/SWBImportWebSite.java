@@ -83,8 +83,6 @@ public class SWBImportWebSite extends GenericResource {
 
                 out.println("<script type=\"text/javascript\">");
                 out.println("hideDialog();");
-                out.println("addItemByURI(muserStore, null, '" + newUsrRep.getURI() + "');");
-                out.println("addItemByURI(mdocStore, null, '" + workspace.getURI() + "');");
                 out.println("addItemByURI(mtreeStore, null, '" + site.getURI() + "');");
                 out.println("showStatus('Sitio Creado');");
                 out.println("</script>");
@@ -210,6 +208,8 @@ public class SWBImportWebSite extends GenericResource {
             }
             //Crea repositorio de documentos para el nuevo sitio
             Workspace workspace = SWBContext.createWorkspace(newTitle, "http://repository." + newId + "_rep.swb");
+            workspace.setTitle("Repositorio de documentos", "es");
+            workspace.setTitle("Documents Repository", "en");
             website.addSubModel(workspace.getSemanticObject());
 
             //Eliminar archivo rdf y archivo xml
@@ -219,8 +219,6 @@ public class SWBImportWebSite extends GenericResource {
             PrintWriter out = response.getWriter();
             out.println("<script type=\"text/javascript\">");
             out.println("hideDialog();");
-            out.println("addItemByURI(muserStore, null, '" + newUsrRep.getURI() + "');");
-            out.println("addItemByURI(mdocStore, null, '" + workspace.getURI() + "');");
             out.println("addItemByURI(mtreeStore, null, '" + website.getURI() + "');");
             out.println("showStatus('Sitio Creado');");
             out.println("</script>");
