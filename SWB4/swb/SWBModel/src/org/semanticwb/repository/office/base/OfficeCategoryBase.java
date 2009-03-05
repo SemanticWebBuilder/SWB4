@@ -1,7 +1,7 @@
 package org.semanticwb.repository.office.base;
 
 
-public class OfficeCategoryBase extends org.semanticwb.repository.Folder implements org.semanticwb.repository.Traceable,org.semanticwb.repository.Referenceable,org.semanticwb.content.Descriptiveable
+public class OfficeCategoryBase extends org.semanticwb.repository.Folder implements org.semanticwb.repository.Referenceable,org.semanticwb.content.Descriptiveable,org.semanticwb.repository.Traceable
 {
     public static final org.semanticwb.platform.SemanticProperty jcr_uuid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#uuid");
     public static final org.semanticwb.platform.SemanticProperty cm_title=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org.mx/swb4/content#title");
