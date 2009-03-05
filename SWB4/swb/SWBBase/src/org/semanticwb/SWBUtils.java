@@ -1121,15 +1121,17 @@ public class SWBUtils {
          * @throws java.io.IOException
          */
         public static final void zip(File directory, File base, ZipOutputStream zos) throws IOException {
-            
+            System.out.println("zip-1");
             File[] files=directory.listFiles();
             if(files==null || files.length==0) {
+                System.out.println("zip-2");
                 ZipEntry entry = new ZipEntry("vacio.txt");
                 zos.putNextEntry(entry);
                 zos.write("vacio".getBytes());
                 zos.closeEntry();
             }else
             {
+                System.out.println("zip-3");
                 byte[] buffer = new byte[8192];
                 int read = 0;
                 for (int i = 0, n = files.length; i < n; i++) {
