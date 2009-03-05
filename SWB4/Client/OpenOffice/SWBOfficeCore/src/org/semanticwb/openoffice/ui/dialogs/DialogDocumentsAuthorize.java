@@ -169,7 +169,7 @@ public class DialogDocumentsAuthorize extends java.awt.Dialog
         });
         jToolBar1.add(jButtonSee);
 
-        jButtonAuthorize.setText("Autorizar");
+        jButtonAuthorize.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/icono_autorizar.png"))); // NOI18N
         jButtonAuthorize.setToolTipText("Autorizar contenido");
         jButtonAuthorize.setEnabled(false);
         jButtonAuthorize.setFocusable(false);
@@ -182,7 +182,7 @@ public class DialogDocumentsAuthorize extends java.awt.Dialog
         });
         jToolBar1.add(jButtonAuthorize);
 
-        jButtonReject.setText("Rechazar");
+        jButtonReject.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/icon_rechazar.png"))); // NOI18N
         jButtonReject.setToolTipText("Rechazar contenido");
         jButtonReject.setEnabled(false);
         jButtonReject.setFocusable(false);
