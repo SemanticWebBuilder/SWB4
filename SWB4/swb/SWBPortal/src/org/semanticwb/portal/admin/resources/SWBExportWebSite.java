@@ -53,7 +53,7 @@ public class SWBExportWebSite extends GenericResource {
                  //Graba archivo cualquiera
                 ZipEntry entry = new ZipEntry("vacio.txt");
                 zos.putNextEntry(entry);
-                zos.write("vacio".getBytes());
+                zos.write("".getBytes());
                 zos.closeEntry();
                 zos.close();
                 //-------------Generación de archivo rdf del sitio especificado----------------
