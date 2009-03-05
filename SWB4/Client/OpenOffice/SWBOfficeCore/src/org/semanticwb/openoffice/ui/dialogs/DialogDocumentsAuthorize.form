@@ -100,7 +100,9 @@
             </Component>
             <Component class="javax.swing.JButton" name="jButtonAuthorize">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Autorizar"/>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/org/semanticwb/openoffice/ui/icons/icono_autorizar.png"/>
+                </Property>
                 <Property name="toolTipText" type="java.lang.String" value="Autorizar contenido"/>
                 <Property name="enabled" type="boolean" value="false"/>
                 <Property name="focusable" type="boolean" value="false"/>
@@ -113,7 +115,9 @@
             </Component>
             <Component class="javax.swing.JButton" name="jButtonReject">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Rechazar"/>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/org/semanticwb/openoffice/ui/icons/icon_rechazar.png"/>
+                </Property>
                 <Property name="toolTipText" type="java.lang.String" value="Rechazar contenido"/>
                 <Property name="enabled" type="boolean" value="false"/>
                 <Property name="focusable" type="boolean" value="false"/>
