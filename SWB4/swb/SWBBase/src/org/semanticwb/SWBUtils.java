@@ -1121,6 +1121,7 @@ public class SWBUtils {
          * @throws java.io.IOException
          */
         public static final void zip(File directory, File base, ZipOutputStream zos) throws IOException {
+            
             File[] files=directory.listFiles();
             if(files==null || files.length==0) {
                 ZipEntry entry = new ZipEntry("vacio.txt");
