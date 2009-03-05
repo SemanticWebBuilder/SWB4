@@ -67,9 +67,10 @@ public class SWBADBNatural extends GenericResource {
         out.println("</td></tr>");
         out.println("<tr><td ><PRE >");
         out.println("10 User con Active=true, Primer Apellido ordenar (Primer Apellido)");
+        out.println("*Use CTRL + SPACE to show suggestions, ESC to hide suggestions.");
         out.println("</PRE></td></tr>");
         out.println("<tr><td class=\"tabla\">");
-        out.println("SPARQL:");
+        out.println("Natural Language Query:");
         out.println("</td></tr>");
         out.println("<tr><td>");
         out.print("<textarea id=\"query\" name=\"query\" rows=5 cols=70>");
