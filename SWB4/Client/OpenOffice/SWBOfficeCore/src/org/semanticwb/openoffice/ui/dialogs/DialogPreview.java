@@ -10,7 +10,6 @@
  */
 package org.semanticwb.openoffice.ui.dialogs;
 
-import chrriis.dj.nativeswing.NSOption;
 import chrriis.dj.nativeswing.NativeSwing;
 import chrriis.dj.nativeswing.swtimpl.NativeInterface;
 import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
@@ -242,7 +241,7 @@ public class DialogPreview extends java.awt.Dialog
                     DialogPreview dialog = new DialogPreview(url, "Demo");
                     dialog.addWindowListener(new java.awt.event.WindowAdapter()
                     {
-
+                        @Override
                         public void windowClosing(java.awt.event.WindowEvent e)
                         {
                             System.exit(0);
