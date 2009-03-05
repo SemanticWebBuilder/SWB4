@@ -63,7 +63,7 @@ public class SWBImportWebSite extends GenericResource {
                         newUsrRep.setTitle(title);
                         newUsrRep.setTitle("Repositorio de usuarios("+title+")","es");
                         newUsrRep.setTitle("Users Repository("+title+")","en");
-                        if (user != null) {
+                        if (user != null && user.isRegistered()) {
                             newUsrRep.setCreator(user);
                         }
                         System.out.println("site creado:"+site.getTitle());
