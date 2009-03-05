@@ -936,6 +936,54 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return portlet.getSemanticObject().getProperty(prop);
     }
 
+    public void validateValue(String repositoryName, String contentID, PropertyInfo prop, Object value) throws Exception
+    {
+        String type = getContentType(repositoryName, contentID);
+        SemanticClass clazz = null;
+        if (type.equalsIgnoreCase("excel"))
+        {
+            clazz = ExcelPortlet.sclass;
+        }
+        else if (type.equalsIgnoreCase("ppt"))
+        {
+            clazz = PPTPortlet.sclass;
+        }
+        else
+        {
+            clazz = WordPortlet.sclass;
+        }
+    }
+
+    private boolean isSuperProperty(SemanticProperty prop, SemanticClass clazz)
+    {
+        Iterator<SemanticClass> classes = clazz.listSuperClasses();
+        while (classes.hasNext())
+        {
+            SemanticClass superClazz = classes.next();
+            if (superClazz.isSWBClass())
+            {
+                Iterator<SemanticProperty> propertiesClazz = superClazz.listProperties();
+                while (propertiesClazz.hasNext())
+                {
+                    SemanticProperty propSuperClazz = propertiesClazz.next();
+                    if (propSuperClazz.getURI().equals(prop.getURI()))
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        boolean res = isSuperProperty(prop, superClazz);
+                        if (res == true)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     public PropertyInfo[] getPortletProperties(String repositoryName, String contentID) throws Exception
     {
         ArrayList<PropertyInfo> properties = new ArrayList<PropertyInfo>();
@@ -957,13 +1005,15 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         while (propertiesClazz.hasNext())
         {
             SemanticProperty prop = propertiesClazz.next();
-            if (prop.isDataTypeProperty() && !prop.isBinary() && prop.getPrefix() != null)
+
+            if (!isSuperProperty(prop, clazz) && prop.isDataTypeProperty() && !prop.isBinary() && prop.getPrefix() != null)
             {
+
                 SemanticObject displayObj = prop.getDisplayProperty();
                 if (displayObj != null)
                 {
                     DisplayProperty propDisplay = new DisplayProperty(displayObj);
-                    if (!propDisplay.isHidden())
+                    if (!propDisplay.isHidden() && propDisplay.isEditable())
                     {
                         PropertyInfo info = new PropertyInfo();
                         info.id = prop.getURI();
