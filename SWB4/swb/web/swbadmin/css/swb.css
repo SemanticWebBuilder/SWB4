@@ -93,7 +93,7 @@ html, body, #main{
 .swbIconPortlets    { background-position: -340px -0px; }
 .swbIconPortlet     { background-position: -340px -18px; }
 .swbIconPortletU    { background-position: -340px -36px; }
-.swbIconPortletType { background-position: -260px -0px; }
+.swbIconPortletType { background-position: -340px -0px; }
 .swbIconTemplates   { background-position: -140px -0px; }
 .swbIconTemplate    { background-position: -140px -18px; }
 .swbIconTemplateU   { background-position: -140px -36px; }
@@ -110,12 +110,14 @@ html, body, #main{
 .swbIconRole        { background-position: -40px -18px; }
 .swbIconUserGroups  { background-position: -320px -0px; }
 .swbIconUserGroup   { background-position: -320px -18px; }
+.swbIconWorkspace   { background-position: -360px -18px; }
+.swbIconUserRepository   { background-position: -0px -0px; }
 .swbIconCamps       { background-position: -160px -0px; }
 .swbIconCamp        { background-position: -160px -18px; }
 .swbIconCampU       { background-position: -160px -36px; }
-.swbIconRules       { background-position: -160px -0px; }
-.swbIconRule        { background-position: -160px -18px; }
-.swbIconRuleU       { background-position: -160px -36px; }
+.swbIconRules       { background-position: -260px -0px; }
+.swbIconRule        { background-position: -260px -18px; }
+.swbIconRuleU       { background-position: -260px -36px; }
 .swbIconDevices     { background-position: -100px -0px; }
 .swbIconDevice      { background-position: -100px -18px; }
 .swbIconPFlows      { background-position: -120px -0px; }
