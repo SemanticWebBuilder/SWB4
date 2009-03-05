@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Iterator;
+import java.util.zip.ZipEntry;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
@@ -46,7 +47,14 @@ public class SWBExportWebSite extends GenericResource {
                 java.util.zip.ZipOutputStream zos = new java.util.zip.ZipOutputStream(new FileOutputStream(zipdirectory + uri + ".zip"));
                 java.io.File directory = new File(modelspath + uri + "/");
                 java.io.File base = new File(modelspath + uri);
+                System.out.println("antes de enviar a zipear");
                 org.semanticwb.SWBUtils.IO.zip(directory, base, zos);
+                System.out.println("despues de enviar a zipear");
+                 //Graba archivo cualquiera
+                ZipEntry entry = new ZipEntry("vacio.txt");
+                zos.putNextEntry(entry);
+                zos.write("vacio".getBytes());
+                zos.closeEntry();
                 zos.close();
                 //-------------Generación de archivo rdf del sitio especificado----------------
                 try {
@@ -98,12 +106,17 @@ public class SWBExportWebSite extends GenericResource {
                     out.close();
                 }
 
-                //--------------Agregar archivo rdf generado a zip generado---------------------
+                //--------------Agregar archivo rdf y xml generados a zip generado---------------------
                 File existingzip = new File(zipdirectory + uri + ".zip");
                 File rdfFile = new File(zipdirectory + uri + ".rdf");
                 File infoFile = new File(zipdirectory + "siteInfo.xml");
                 java.io.File[] files2add = {rdfFile, infoFile};
                 org.semanticwb.SWBUtils.IO.addFilesToExistingZip(existingzip, files2add);
+
+                //--------------Agregar archivo rdf de submodelos a zip generado---------------------
+
+                
+
                 //Eliminar rdf y xml generados y ya agregados a zip
                 rdfFile.delete();
                 infoFile.delete();
