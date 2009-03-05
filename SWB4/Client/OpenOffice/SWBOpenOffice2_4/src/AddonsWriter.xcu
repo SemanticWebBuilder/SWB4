@@ -759,6 +759,25 @@
                     </prop>
                 </node>
             </node>
+            <node oor:name="org.semanticwb.openoffice.writer.wb4writeraddon.showDocumentsToAuthorize" oor:op="replace">
+                <prop oor:name="URL" oor:type="xs:string">
+                    <value>org.semanticwb.openoffice.writer.wb4writeraddon:showDocumentsToAuthorize</value>
+                </prop>
+                <node oor:name="UserDefinedImages">
+                    <prop oor:name="ImageSmallURL">
+                        <value>%origin%/images/icon_docauto.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigURL">
+                        <value>%origin%/images/icon_docauto.png</value>
+                    </prop>
+                    <prop oor:name="ImageSmallHCURL">
+                        <value>%origin%/images/icon_docauto.png</value>
+                    </prop>
+                    <prop oor:name="ImageBigHCURL">
+                        <value>%origin%/images/icon_docauto.png</value>
+                    </prop>
+                </node>
+            </node>
         </node>
     </node>
 </oor:component-data>
