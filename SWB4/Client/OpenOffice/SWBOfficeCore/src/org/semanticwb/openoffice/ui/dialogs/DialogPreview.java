@@ -56,6 +56,10 @@ public class DialogPreview extends java.awt.Dialog
         {
             this.setTitle(title);
         }
+        if(!showAddress)
+        {
+            JOptionPane.showMessageDialog(null, "Para ver contenido, se solicitará su clave y contraseña",this.getTitle(),JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+        }
         this.setIconImage(ImageLoader.images.get("semius").getImage());
         NativeSwing.initialize();
         NativeInterface.open();
