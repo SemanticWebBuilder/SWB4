@@ -446,7 +446,7 @@ public class UserRepository extends UserRepositoryBase
         {
             SemanticProperty sp = itsp.next();
             log.trace("Encontrada... " + sp);
-            if (null == sp.getRange())
+            if (null == sp.getRange() || null == sp.getDisplayProperty())
             {
                 continue;
             }
@@ -464,7 +464,7 @@ public class UserRepository extends UserRepositoryBase
         {
             SemanticProperty sp = itsp.next();
             log.trace("Encontrada... " + sp);
-            if (null == sp.getRange())
+            if (null == sp.getRange() || null == sp.getDisplayProperty())
             {
                 continue;
             }
@@ -485,11 +485,12 @@ public class UserRepository extends UserRepositoryBase
             {
                 SemanticProperty sp = itsp.next();
                 log.trace("Encontrada... " + sp);
-                if (null == sp.getRange())
+                log.trace("DisplayProperty: " + sp.getDisplayProperty());
+                if (null == sp.getRange() || null == sp.getDisplayProperty())
                 {
                     continue;
                 }
-                log.trace("Agregada... " + sp);
+                log.debug("Agregada... " + sp);
                 alsp.add(sp);
             }
         }
@@ -508,7 +509,7 @@ public class UserRepository extends UserRepositoryBase
             {
                 SemanticProperty sp = itsp.next();
                 log.trace("Encontrada..B. " + sp);
-                if (null == sp.getRange())
+                if (null == sp.getRange() || null == sp.getDisplayProperty())
                 {
                     continue;
                 }
@@ -522,7 +523,7 @@ public class UserRepository extends UserRepositoryBase
         {
             SemanticProperty sp = itsp.next();
             log.trace("Encontrada..E. " + sp);
-            if (null == sp.getRange())
+            if (null == sp.getRange() || null == sp.getDisplayProperty())
             {
                 continue;
             }
@@ -539,7 +540,7 @@ public class UserRepository extends UserRepositoryBase
             {
                 SemanticProperty sp = itsp.next();
                 log.trace("Encontrada..U. " + sp);
-                if (null == sp.getRange())
+                if (null == sp.getRange() || null == sp.getDisplayProperty())
                 {
                     continue;
                 }
@@ -568,17 +569,21 @@ public class UserRepository extends UserRepositoryBase
 
     public SemanticClass getUserType(String name)
     {
+
         SemanticClass cls = null;
-        String uri = getProperty(SWBUR_ClassUserTypeHold + name);
-        if (uri == null)
+        if (null != name && !"".equals(name.trim()))
         {
-            uri = getId() + SWBUR_ClassUserTypePost + "#" + name;
-            cls = getSemanticObject().getModel().createSemanticClass(uri);
-            setProperty(SWBUR_ClassUserTypeHold + name, uri);
-            userTypes.add(uri.split("#")[1]);
-        } else
-        {
-            cls = getSemanticObject().getModel().createSemanticClass(uri);
+            String uri = getProperty(SWBUR_ClassUserTypeHold + name);
+            if (uri == null)
+            {
+                uri = getId() + SWBUR_ClassUserTypePost + "#" + name;
+                cls = getSemanticObject().getModel().createSemanticClass(uri);
+                setProperty(SWBUR_ClassUserTypeHold + name, uri);
+                userTypes.add(uri.split("#")[1]);
+            } else
+            {
+                cls = getSemanticObject().getModel().createSemanticClass(uri);
+            }
         }
         return cls;
     }
@@ -588,4 +593,8 @@ public class UserRepository extends UserRepositoryBase
         return userTypes.iterator();
     }
 
+    public boolean hasUserType(String name)
+    {
+        return userTypes.contains(name);
+    }
 }
