@@ -41,6 +41,8 @@ public class SemanticIterator<T extends SemanticObject> implements Iterator
         {
             if(obj instanceof Statement)
             {
+                //System.out.println("res:"+((Statement)obj).getResource());
+                //System.out.println("sub:"+((Statement)obj).getSubject());
                 //try
                 //{
                     if(invert)
