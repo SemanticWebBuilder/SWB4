@@ -2,13 +2,16 @@ package org.semanticwb.portlet.office;
 
 import java.io.File;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.UUID;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.platform.SemanticProperty;
 
 public class OfficePortlet extends org.semanticwb.portlet.office.base.OfficePortletBase
 {
@@ -18,6 +21,10 @@ public class OfficePortlet extends org.semanticwb.portlet.office.base.OfficePort
     public OfficePortlet(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+    public void validatePropertyValue(HashMap<SemanticProperty, Object> values) throws Exception
+    {
     }
 
     private void clean(File dir)
@@ -37,6 +44,8 @@ public class OfficePortlet extends org.semanticwb.portlet.office.base.OfficePort
             }
         }
     }
+
+
 
     public void clean()
     {
@@ -62,6 +71,18 @@ public class OfficePortlet extends org.semanticwb.portlet.office.base.OfficePort
             }
             fdir.delete();
         }
+    }
+
+    public void beforePrintDocument(PrintWriter out)
+    {
+    }
+
+    public void afterPrintDocument(PrintWriter out)
+    {
+    }
+
+    public void printDocument(PrintWriter out, String path, String workpath,String html)
+    {
     }
 
     public static void loadContent(InputStream in, String dir)
