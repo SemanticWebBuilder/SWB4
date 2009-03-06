@@ -124,6 +124,9 @@ public interface IOfficeDocument
 
     @XmlRpcMethod(methodName = "OfficeDocument.allVersionsArePublished")
     public boolean allVersionsArePublished(String repositoryName, String contentId) throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeDocument.validateValue")
+    public void validateValue(String repositoryName, String contentID, PropertyInfo[] properties, Object[] values) throws Exception;
 }
 
 
