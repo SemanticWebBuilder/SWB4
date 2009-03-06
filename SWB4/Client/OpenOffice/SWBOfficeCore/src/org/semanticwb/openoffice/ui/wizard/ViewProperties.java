@@ -89,8 +89,8 @@ public class ViewProperties extends WizardPage
                 }
                 if (PropertyInfo.type.equalsIgnoreCase("integer"))
                 {
-                    IntegerEditor JTextField = new IntegerEditor(row,column);
-                    
+                    IntegerEditor JTextField = new IntegerEditor(row, column);
+
                     if (value == null)
                     {
                         JTextField.setValue(0);
@@ -152,10 +152,28 @@ public class ViewProperties extends WizardPage
                 return WizardPanelNavResult.REMAIN_ON_PAGE;
             }
         }
+        PropertyInfo[] props = new PropertyInfo[rows];
+        Object[] values = new Object[rows];
         for (int i = 0; i < rows; i++)
         {
             PropertyInfo prop = (PropertyInfo) jTableProperties.getModel().getValueAt(i, 0);
-            String value = jTableProperties.getModel().getValueAt(i, 0).toString();
+            Object value = jTableProperties.getModel().getValueAt(i, 1);
+            props[i] = prop;
+            values[i] = value;
+        }
+        try
+        {
+            OfficeApplication.getOfficeDocumentProxy().validateValue(repositoryName, contentID, props, values);
+        }
+        catch (Exception e)
+        {
+            JOptionPane.showMessageDialog(this, e.getMessage(), getDescription(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+            return WizardPanelNavResult.REMAIN_ON_PAGE;
+        }
+        for (int i = 0; i < rows; i++)
+        {
+            PropertyInfo prop = (PropertyInfo) jTableProperties.getModel().getValueAt(i, 0);
+            String value = jTableProperties.getModel().getValueAt(i, 1).toString();
             properties.put(prop, value);
         }
         map.put(PROPERTIES, properties);
@@ -297,7 +315,7 @@ public class ViewProperties extends WizardPage
             if (e.getSource() instanceof IntegerEditor)
             {
                 IntegerEditor CellTextBox = (IntegerEditor) e.getSource();
-                if (CellTextBox.getValue()==null)
+                if (CellTextBox.getValue() == null)
                 {
                     jTableProperties.setValueAt(0, CellTextBox.row, CellTextBox.col);
                 }
@@ -335,11 +353,12 @@ public class ViewProperties extends WizardPage
         {
             this.row = row;
             this.col = col;
-            SpinnerModel model =new SpinnerNumberModel(0,0,9999,1);      
+            SpinnerModel model = new SpinnerNumberModel(0, 0, 9999, 1);
             this.setModel(model);
-            this.setEditor(new JSpinner.NumberEditor(this,"####"));
+            this.setEditor(new JSpinner.NumberEditor(this, "####"));
         }
     }
+
     class StringEditor extends JTextField
     {
 
@@ -367,9 +386,22 @@ public class ViewProperties extends WizardPage
         {
             for (PropertyInfo info : OfficeApplication.getOfficeDocumentProxy().getPortletProperties(repositoryName, contentID))
             {
+                Object defaultValue = null;
+                if (info.type.equalsIgnoreCase("string"))
+                {
+                    defaultValue = "";
+                }
+                if (info.type.equalsIgnoreCase("integer"))
+                {
+                    defaultValue = 0;
+                }
+                if (info.type.equalsIgnoreCase("boolean"))
+                {
+                    defaultValue = false;
+                }
                 Object[] data =
                 {
-                    info, null
+                    info, defaultValue
                 };
                 model.addRow(data);
             }
