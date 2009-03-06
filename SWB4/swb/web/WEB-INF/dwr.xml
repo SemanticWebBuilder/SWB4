@@ -6,4 +6,11 @@
             <param name="class" value="org.chiba.web.flux.FluxFacade"/>
         </create>
     </allow>
+    <allow>
+        <create creator="new" javascript="uploadProxy">
+            <param name="class" value="org.semanticwb.portal.util.fileupload.UploadProxy"/>
+        </create>
+
+        <convert converter="bean" match="org.semanticwb.portal.util.fileupload.UploadStatus"/>
+    </allow>
 </dwr>
