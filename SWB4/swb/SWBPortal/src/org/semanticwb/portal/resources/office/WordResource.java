@@ -28,8 +28,23 @@ public class WordResource extends GenericAdmResource
 
     private static Logger log = SWBUtils.getLogger(WordResource.class);
 
+    protected void beforePrintDocument(WordPortlet porlet, PrintWriter out)
+    {
+
+    }
+
+    protected void afterPrintDocument(WordPortlet porlet, PrintWriter out)
+    {
+
+    }
+
+    protected void printDocument(WordPortlet porlet, PrintWriter out, String html)
+    {
+        out.write(html);
+    }
+
     @Override
-    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramReq) throws SWBResourceException, IOException
+    public final void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramReq) throws SWBResourceException, IOException
     {
         if (this.getResourceBase() instanceof WordPortlet)
         {
@@ -37,17 +52,15 @@ public class WordResource extends GenericAdmResource
             String version = portlet.getVersionToShow();
             String contentId = portlet.getContent();
             String repositoryName = portlet.getRepositoryName();
-            OfficeDocument document = new OfficeDocument();      
-            
+            OfficeDocument document = new OfficeDocument();
             try
             {
-                PrintWriter out = response.getWriter();
-                User user=paramReq.getUser();
-                String file = document.getContentFile(repositoryName, contentId, version,user);
+                User user = paramReq.getUser();
+                String file = document.getContentFile(repositoryName, contentId, version, user);
                 if (file != null)
                 {
 
-                    file = file.replace(".doc", ".html");                    
+                    file = file.replace(".doc", ".html");
                     String path = SWBPlatform.getWorkPath();
                     if (path.endsWith("/"))
                     {
@@ -71,16 +84,20 @@ public class WordResource extends GenericAdmResource
                             read = in.read(buffer);
                         }
                         String workpath = SWBPlatform.getWebWorkPath() + getResourceBase().getWorkPath() + "/";
-                        String htmlOut =null;
-                        if(portlet.isPaginated() && portlet.getNumberOfPages()>0)
+                        String htmlOut = null;
+                        if (portlet.isPaginated() && portlet.getNumberOfPages() > 0)
                         {
-                            htmlOut = SWBPortal.UTIL.parseHTML(html.toString(), workpath,portlet.getNumberOfPages());
+                            htmlOut = SWBPortal.UTIL.parseHTML(html.toString(), workpath, portlet.getNumberOfPages());
                         }
                         else
                         {
                             htmlOut = SWBPortal.UTIL.parseHTML(html.toString(), workpath);
                         }
-                        out.write(htmlOut);
+                        PrintWriter out = response.getWriter();
+                        beforePrintDocument(portlet, out);
+                        printDocument(portlet, out, htmlOut);
+                        afterPrintDocument(portlet, out);
+                        out.close();
                     }
                     else
                     {
