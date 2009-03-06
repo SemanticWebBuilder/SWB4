@@ -45,7 +45,7 @@ public class SWBADBNatural extends GenericResource {
             _query=_query.trim();
         }
 
-        out.println("<script src=\"/swb/swbadmin/js/acTextArea.js\"></script>");
+        out.println("<script src=\""+SWBPlatform.getContextPath()+"/swbadmin/js/acTextArea.js\"></script>");
         out.println("<script type=\"text/javascript\">" +
                 "dojo.require(\"dijit.form.Textarea\");" +
                 "dojo.require(\"dijit.form.Form\");" +
