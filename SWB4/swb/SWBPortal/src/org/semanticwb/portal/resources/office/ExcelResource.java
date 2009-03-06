@@ -28,8 +28,20 @@ public class ExcelResource extends GenericAdmResource{
     private static Logger log = SWBUtils.getLogger(ExcelResource.class);
     public static final String WITH="100%"; // VALUE WIDTH  BY DEFAULT
     public static final String HEIGHT="500"; // VALUE HEIGHT BY DEFAULT
+    protected void beforePrintDocument(ExcelPortlet porlet, PrintWriter out)
+    {
+    }
+
+    protected void afterPrintDocument(ExcelPortlet porlet, PrintWriter out)
+    {
+    }
+
+    protected void printDocument(ExcelPortlet porlet, PrintWriter out, String html)
+    {
+        out.write(html);
+    }
     @Override
-    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramReq) throws SWBResourceException, IOException
+    public final void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramReq) throws SWBResourceException, IOException
     {
         if (this.getResourceBase() instanceof ExcelPortlet)
         {
@@ -39,8 +51,7 @@ public class ExcelResource extends GenericAdmResource{
             String repositoryName = portlet.getRepositoryName();
             OfficeDocument document = new OfficeDocument();            
             try
-            {
-                PrintWriter out = response.getWriter();
+            {                
                 User user=paramReq.getUser();
                 String file = document.getContentFile(repositoryName, contentId, version,user);
                 if (file != null)
@@ -60,7 +71,12 @@ public class ExcelResource extends GenericAdmResource{
 
                     String with=WITH;
                     String height=HEIGHT;
-                    out.println("<iframe frameborder=\"0\" src=\""+ path +"\" width=\""+with+"\" height=\""+height+"\">Este navegador no soporta iframe</iframe>");
+                    PrintWriter out = response.getWriter();
+                    beforePrintDocument(portlet, out);
+                    printDocument(portlet, out, "<iframe frameborder=\"0\" src=\""+ path +"\" width=\""+with+"\" height=\""+height+"\">Este navegador no soporta iframe</iframe>");
+                    afterPrintDocument(portlet, out);
+                    out.close();
+                    
                 }
             }
             catch (Exception e)
