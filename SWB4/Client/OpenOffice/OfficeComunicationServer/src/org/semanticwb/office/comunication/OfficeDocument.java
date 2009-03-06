@@ -6,9 +6,13 @@ package org.semanticwb.office.comunication;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.UUID;
 
@@ -936,21 +940,63 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return portlet.getSemanticObject().getProperty(prop);
     }
 
-    public void validateValue(String repositoryName, String contentID, PropertyInfo prop, Object value) throws Exception
+    public void validateValue(String repositoryName, String contentID, PropertyInfo[] properties, Object[] values) throws Exception
     {
-        String type = getContentType(repositoryName, contentID);
-        SemanticClass clazz = null;
-        if (type.equalsIgnoreCase("excel"))
+        String contentType = getContentType(repositoryName, contentID);
+        SemanticClass clazz;
+        Class type = null;
+        if (contentType.equalsIgnoreCase("excel"))
         {
+            type = ExcelPortlet.class;
             clazz = ExcelPortlet.sclass;
         }
-        else if (type.equalsIgnoreCase("ppt"))
+        else if (contentType.equalsIgnoreCase("ppt"))
         {
+            type = PPTPortlet.class;
             clazz = PPTPortlet.sclass;
         }
         else
         {
+            type = WordPortlet.class;
             clazz = WordPortlet.sclass;
+        }
+        if (properties.length == values.length)
+        {
+            HashMap<SemanticProperty, Object> valuesToValidate = new HashMap<SemanticProperty, Object>();
+            int i = 0;
+            for (PropertyInfo propertyInfo : properties)
+            {
+                Object value = values[i];
+                Iterator<SemanticProperty> propertiesClazz = clazz.listProperties();
+                while (propertiesClazz.hasNext())
+                {
+                    SemanticProperty prop = propertiesClazz.next();
+                    if (prop.getURI().equals(propertyInfo.id))
+                    {
+                        valuesToValidate.put(prop, value);
+                    }
+                }
+                i++;
+            }
+
+            Constructor c = type.getConstructor(clazz.getSemanticObject().getClass());
+            Object obj = c.newInstance(clazz.getSemanticObject());
+            Method m = type.getMethod("validatePropertyValue", valuesToValidate.getClass());
+            try
+            {
+                m.invoke(obj, values);
+            }
+            catch (InvocationTargetException ite)
+            {
+                if (ite.getTargetException() != null)
+                {
+                    throw new Exception(ite.getTargetException());
+                }
+            }
+        }
+        else
+        {
+            throw new Exception("The number of properties is not equals to the number of values");
         }
     }
 
