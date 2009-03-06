@@ -79,7 +79,6 @@
         <copy file="../applets/SelColor/dist/SelColor.jar" todir="${build.classes.dir}//swbadmin/lib"/>
         <copy file="../applets/TMswbadmin/dist/TMswbadmin.jar" todir="${build.classes.dir}//swbadmin/lib"/>
         <copy file="../applets/TMWBView/dist/TMWBView.jar" todir="${build.classes.dir}//swbadmin/lib"/>
-        <copy file="../applets/WorkFlowAdmin/dist/WorkFlowAdmin.jar" todir="${build.classes.dir}//swbadmin/lib"/>
     -->
         <target name="-post-compile">
         <copy file="../applets/DragDrop/dist/DragDrop.jar" todir="${build.classes.dir}//swbadmin/lib"/>
@@ -93,11 +92,14 @@
         <copy file="../applets/WBABar/dist/WBABar.jar" todir="${build.classes.dir}//swbadmin/lib"/>
         <copy file="../applets/WBCommons/dist/WBCommons.jar" todir="${build.classes.dir}//swbadmin/lib"/>
         <copy file="../applets/WBGraph/dist/WBGraph.jar" todir="${build.classes.dir}//swbadmin/lib"/>
+        <copy file="../applets/WorkFlowAdmin/dist/WorkFlowAdmin.jar" todir="${build.classes.dir}//swbadmin/lib"/>
         <signjar jar="${build.classes.dir}//swbadmin/lib/DragDrop.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
         <signjar jar="${build.classes.dir}//swbadmin/lib/htmleditor.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
         <signjar jar="${build.classes.dir}//swbadmin/lib/ftp.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
         <signjar jar="${build.classes.dir}//swbadmin/lib/GenericTree.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
         <signjar jar="${build.classes.dir}//swbadmin/lib/Modeler.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
         <signjar jar="${build.classes.dir}//swbadmin/lib/Rules.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
+        <signjar jar="${build.classes.dir}//swbadmin/lib/filterSection.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
+        <signjar jar="${build.classes.dir}//swbadmin/lib/WorkFlowAdmin.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
         </target>
 </project>
