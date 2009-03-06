@@ -6,6 +6,7 @@
 package org.semanticwb.servlet.internal;
 
 import com.missiondata.fileupload.MonitoredDiskFileItemFactory;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -16,9 +17,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.portal.util.fileupload.FileUploadListener;
 import org.semanticwb.portal.util.fileupload.UploadStatus;
@@ -44,8 +45,11 @@ public class UploadFormElement implements InternalServlet {
         try {
             FileUploadListener listener = new FileUploadListener(request.getContentLength());
             session.setAttribute(FILE_UPLOAD_STATS, listener.getFileUploadStats());
-            FileItemFactory factory = new MonitoredDiskFileItemFactory(listener);
+            MonitoredDiskFileItemFactory factory = new MonitoredDiskFileItemFactory(listener);
+            factory.setSizeThreshold(4096); // 4Kb tamaño por encima del cual los ficheros son escritos directamente en disco
+            factory.setRepository(new File(SWBPlatform.getWorkPath()));
             ServletFileUpload upload = new ServletFileUpload(factory);
+            upload.setSizeMax(1024*512); //512 Kb tamaño maximo de archivo a subir
             List items = upload.parseRequest(request);
             boolean hasError = false;
 
