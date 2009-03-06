@@ -87,7 +87,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     private static final RepositoryManagerLoader loader = RepositoryManagerLoader.getInstance();
     private static final String NL = System.getProperty("line.separator");
 
-    public String publish(String title, String description, String repositoryName, String categoryID, String type, String nodeType, String file) throws Exception
+    public String save(String title, String description, String repositoryName, String categoryID, String type, String nodeType, String file) throws Exception
     {
         Session session = null;
         Node categoryNode = null;
@@ -394,10 +394,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     public void sendToAuthorize()
     {
     }
-
-    public void setPagination(String contentId) throws Exception
-    {
-    }
+    
 
     public void setActive(String contentID, boolean active)
     {
@@ -899,13 +896,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         portlet.getSemanticObject().setProperty(prop, value);
     }
 
-    public PropertyInfo[] getContentPropeties(String repositoryName, String contentid) throws Exception
-    {
-        ArrayList<PropertyInfo> properties = new ArrayList<PropertyInfo>();
-        return properties.toArray(new PropertyInfo[properties.size()]);
-    }
-
-    public void setPropertyValue(PortletInfo portletInfo, PropertyInfo propertyInfo, String value) throws Exception
+    public void setViewPropertyValue(PortletInfo portletInfo, PropertyInfo propertyInfo, String value) throws Exception
     {
         WebSite site = SWBContext.getWebSite(portletInfo.page.site.id);
         OfficePortlet portlet = OfficePortlet.getOfficePortlet(portletInfo.id, site);
@@ -932,7 +923,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return getCalendarInfo.toArray(new CalendarInfo[getCalendarInfo.size()]);
     }
 
-    public String getPropertyValue(PortletInfo portletInfo, PropertyInfo propertyInfo) throws Exception
+    public String getViewPropertyValue(PortletInfo portletInfo, PropertyInfo propertyInfo) throws Exception
     {
         WebSite site = SWBContext.getWebSite(portletInfo.page.site.id);
         OfficePortlet portlet = OfficePortlet.getOfficePortlet(portletInfo.id, site);
@@ -940,7 +931,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return portlet.getSemanticObject().getProperty(prop);
     }
 
-    public void validateValue(String repositoryName, String contentID, PropertyInfo[] properties, Object[] values) throws Exception
+    public void validateViewValues(String repositoryName, String contentID, PropertyInfo[] properties, Object[] values) throws Exception
     {
         String contentType = getContentType(repositoryName, contentID);
         SemanticClass clazz;
@@ -1028,6 +1019,11 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             }
         }
         return false;
+    }
+
+    public PropertyInfo[] getContentProperties(String repositoryName, String type) throws Exception
+    {        
+        return loader.getOfficeManager(repositoryName).getContentProperties(type);
     }
 
     public PropertyInfo[] getPortletProperties(String repositoryName, String contentID) throws Exception
@@ -1443,6 +1439,16 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         portlet.setDescription(portletInfo.description);
         portlet.setActive(portletInfo.active);
         portlet.setVersionToShow(portletInfo.version);
+    }
+
+    public void validateContentValues(String repositoryName, String contentID, PropertyInfo[] properties, Object[] values) throws Exception
+    {
+        
+    }
+
+    public void setContentPropertyValue(String repositoryName, String contentID, PropertyInfo propertyInfo, String value) throws Exception
+    {
+        
     }
 }
 
