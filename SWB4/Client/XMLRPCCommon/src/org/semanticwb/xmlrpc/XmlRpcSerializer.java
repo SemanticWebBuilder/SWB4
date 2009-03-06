@@ -403,11 +403,15 @@ public class XmlRpcSerializer
         }
     }
 
-    private static Boolean convertBoolean(Class clazz, boolean data) throws XmlRpcException
+    private static Boolean convertBoolean(Class<?> clazz, boolean data) throws XmlRpcException
     {
         if (clazz == Boolean.class || clazz == boolean.class)
         {
             return new Boolean(data);
+        }
+        else if(clazz.isAssignableFrom(Boolean.class))
+        {
+            return data;
         }
         else
         {
@@ -415,11 +419,15 @@ public class XmlRpcSerializer
         }
     }
 
-    private static Float convertFloat(Class clazz, float data) throws XmlRpcException
+    private static Float convertFloat(Class<?> clazz, float data) throws XmlRpcException
     {
         if (clazz == Float.class || clazz == float.class)
         {
             return new Float(data);
+        }
+        else if(clazz.isAssignableFrom(Float.class))
+        {
+            return data;
         }
         else
         {
@@ -427,11 +435,15 @@ public class XmlRpcSerializer
         }
     }
 
-    private static Double convertDouble(Class clazz, double data) throws XmlRpcException
+    private static Double convertDouble(Class<?> clazz, double data) throws XmlRpcException
     {
         if (clazz == Double.class || clazz == double.class)
         {
             return new Double(data);
+        }
+        else if(clazz.isAssignableFrom(Double.class))
+        {
+            return data;
         }
         else
         {
@@ -439,20 +451,28 @@ public class XmlRpcSerializer
         }
     }
 
-    private static String convertString(Class clazz, String data) throws XmlRpcException
+    private static String convertString(Class<?> clazz, String data) throws XmlRpcException
     {
         if (clazz == String.class)
+        {
+            return data;
+        }
+        else if(clazz.isAssignableFrom(data.getClass()))
         {
             return data;
         }
         throw new XmlRpcException("The data are incopatibles, can not be converted String to " + clazz.getName());
     }
 
-    private static Integer convertInteger(Class clazz, int data) throws XmlRpcException
-    {
+    private static Integer convertInteger(Class<?> clazz, int data) throws XmlRpcException
+    {        
         if (clazz == Integer.class || clazz == int.class)
         {
             return new Integer(data);
+        }
+        else if(clazz.isAssignableFrom(Integer.class))
+        {
+            return data;
         }
         else
         {
@@ -472,9 +492,13 @@ public class XmlRpcSerializer
         }
     }
 
-    private static Date convertDate(Class clazz, Date data) throws XmlRpcException
+    private static Date convertDate(Class<?> clazz, Date data) throws XmlRpcException
     {
         if (clazz == data.getClass())
+        {
+            return data;
+        }
+        else if(clazz.isAssignableFrom(data.getClass()))
         {
             return data;
         }
