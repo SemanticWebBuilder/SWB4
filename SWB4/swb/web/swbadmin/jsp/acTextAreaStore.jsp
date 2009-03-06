@@ -17,12 +17,14 @@
 SortedSet objOptions = new TreeSet();
 SortedSet proOptions = new TreeSet();
 String word = request.getParameter("word");
-String start = request.getParameter("start");
-String end = request.getParameter("end");
+String lang = request.getParameter("lang");
 String tempcDn = "";
 boolean lPar = false;
 boolean rPar = false;
 
+if (lang == null || lang == "") {
+    lang = "es";
+}
 //TODO: pasar el lenguaje en la cadena de llamada
 if (word.indexOf("(") != -1) {
     lPar = true;
@@ -38,7 +40,7 @@ Iterator<SemanticClass> cit = SWBPlatform.getSemanticMgr().getVocabulary().listS
 
 while (cit.hasNext()) {
     SemanticClass tempc = cit.next();
-    tempcDn = tempc.getDisplayName("es");
+    tempcDn = tempc.getDisplayName(lang);
 
     if (tempcDn.toLowerCase().indexOf(word.toLowerCase()) != -1) {
         objOptions.add(tempcDn);
@@ -47,7 +49,7 @@ while (cit.hasNext()) {
     Iterator<SemanticProperty> sit = tempc.listProperties();
     while (sit.hasNext()) {
         SemanticProperty tempp = sit.next();
-        tempcDn = tempp.getDisplayName("es");
+        tempcDn = tempp.getDisplayName(lang);
 
         if (tempcDn.toLowerCase().indexOf(word.toLowerCase()) != -1) {
             proOptions.add(tempcDn);
@@ -60,20 +62,19 @@ if (proOptions.size() != 0 || objOptions.size() != 0) {
     int index;
     Iterator<String> rit = objOptions.iterator();
 
-    out.println("<ul id=\"suggestionsList\" class=\"resultlist\">");
+    out.println("<ul id=\"resultlist\" class=\"resultlist\" style=\"list-style-type:none;" +
+                    "position:absolute;margin:0;padding:0;overflow:auto;height:300px;max-height:" +
+                    "200px;width:300px;border:1px solid #a0a0ff;\">");
     while (rit.hasNext()) {
         String tempi = (String) rit.next();
         index = tempi.toLowerCase().indexOf(word.toLowerCase());
 
-        out.print("<li id=\"id"+ idCounter + "\" class=\"link\" " +
-                "onmouseover=\"dojo.style(dojo.byId('id"+idCounter+"'), 'background', 'LightBlue');\" " +
-                "onmouseout=\"dojo.style(dojo.byId('id"+idCounter+"'), 'background', 'white');\" " +
-                "onmousedown=\"replaceText(dojo.byId('query'),"+
-                    start + "," + end + "," + "\'" + (lPar?"(":"") + tempi +
-                    (rPar?")":"") + "\'" +"); displayed=false; dojo.byId('query').focus();curSelected=0;\">" +
-                    tempi.substring(0, index) + "<font color=\"blue\">" +
-                    tempi.substring(index, index + word.length()) + "</font>" +
-                    tempi.substring(index + word.length(), tempi.length()) + "</li>");
+        out.print("<li id=\"id"+ idCounter + "\" class=\"resultEntry\" " +
+                "onmouseover=\"dojo.query('.resultEntry').style('background', 'white'); " +
+                "highLightSelection("+ idCounter +",true); curSelected = "+ idCounter +";console.log('curSelected: '+" + idCounter +");\" " +
+                "onmouseout=\"highLightSelection("+ idCounter +",false);\" "+
+                "onmousedown=\"setSelection("+ idCounter +");dojo.byId('results').innerHTML='';"+
+                "dojo.byId('queryText').focus();displayed=false;\">" + tempi + "</li>");
         idCounter++;
     }
 
@@ -82,14 +83,12 @@ if (proOptions.size() != 0 || objOptions.size() != 0) {
         String tempi = (String) rit.next();
         index = tempi.toLowerCase().indexOf(word.toLowerCase());
 
-        out.print("<li id=\"id"+ idCounter + "\" class=\"link\" " +
-                "onmouseover=\"dojo.style(dojo.byId('id"+idCounter+"'), 'background', 'LightBlue');\" " +
-                "onmouseout=\"dojo.style(dojo.byId('id"+idCounter+"'), 'background', 'white');\" " +
-                "onmousedown=\"replaceText(dojo.byId('query'),"+
-                    start + "," + end + "," + "\'" + (lPar?"(":"") + tempi + (rPar?")":"") + "\'" +"); displayed=false; dojo.byId('query').focus();curSelected=0;\">" +
-                    tempi.substring(0, index) + "<font color=\"blue\">" +
-                    tempi.substring(index, index + word.length()) + "</font>" +
-                    tempi.substring(index + word.length(), tempi.length()) + "</li>");
+        out.print("<li id=\"id"+ idCounter + "\" class=\"resultEntry\" " +
+                "onmouseover=\"dojo.query('.resultEntry').style('background', 'white'); " +
+                "highLightSelection("+ idCounter +",true); curSelected = "+ idCounter +";console.log('curSelected: '+" + idCounter +");\" " +
+                "onmouseout=\"highLightSelection("+ idCounter +",false);\" "+
+                "onmousedown=\"setSelection("+ idCounter +");dojo.byId('results').innerHTML='';"+
+                "dojo.byId('queryText').focus();displayed=false;\">" + tempi + "</li>");
         idCounter++;
     }
     out.println("</ul>");
