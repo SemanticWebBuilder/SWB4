@@ -114,6 +114,17 @@ public class SWBUtils {
     private void init() {
         LOCALE_SERVICES = "locale_services";
     }
+    
+    public static long sizeOf(Iterator it) {
+        long size = 0;
+        while(it.hasNext()) {
+            it.next();
+            size++;
+        }        
+        return size;
+    }
+    
+    
 
     /*
      * Regresa ruta fisica de la Aplicacion WEB
