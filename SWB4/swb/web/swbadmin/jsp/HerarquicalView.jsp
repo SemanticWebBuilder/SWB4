@@ -19,7 +19,7 @@
         while(it2.hasNext())
         {
             SemanticProperty prop=it2.next();
-            out.println("--->Prop:"+prop.getPropId()+" "+prop.getDisplayName(lang));
+            out.println("--->Prop:(dt:"+prop.isDataTypeProperty()+", op:"+prop.isObjectProperty()+")"+prop.getPropId()+" "+prop.getDisplayName(lang));
         }
     }
 %>
