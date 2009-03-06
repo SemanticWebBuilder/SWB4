@@ -14,8 +14,8 @@ import org.semanticwb.xmlrpc.XmlRpcMethod;
 public interface IOfficeDocument
 {
 
-    @XmlRpcMethod(methodName = "OfficeDocument.publish")
-    public String publish(String title, String description, String repositoryName, String categoryID, String type, String nodeType, String file) throws Exception;
+    @XmlRpcMethod(methodName = "OfficeDocument.save")
+    public String save(String title, String description, String repositoryName, String categoryID, String type, String nodeType, String file) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.setTitle")
     public void setTitle(String repositoryName, String contentID, String title) throws Exception;
@@ -44,9 +44,6 @@ public interface IOfficeDocument
     @XmlRpcMethod(methodName = "OfficeDocument.updateContent")
     public String updateContent(String repositoryName, String contentId, String file) throws Exception;
 
-    @XmlRpcMethod(methodName = "OfficeDocument.setPagination")
-    public void setPagination(String contentId) throws Exception;
-
     @XmlRpcMethod(methodName = "OfficeDocument.getVersions")
     public VersionInfo[] getVersions(String repositoryName, String contentId) throws Exception;
 
@@ -56,14 +53,14 @@ public interface IOfficeDocument
     @XmlRpcMethod(methodName = "OfficeDocument.getPortletProperties")
     public PropertyInfo[] getPortletProperties(String repositoryName, String contentID) throws Exception;
 
-    @XmlRpcMethod(methodName = "OfficeDocument.getPropertyValue")
-    public String getPropertyValue(PortletInfo portletInfo, PropertyInfo propertyInfo) throws Exception;
+    @XmlRpcMethod(methodName = "OfficeDocument.getContentProperties")
+    public PropertyInfo[] getContentProperties(String repositoryName,String type) throws Exception;
 
-    @XmlRpcMethod(methodName = "OfficeDocument.setPropertyValue")
-    public void setPropertyValue(PortletInfo portletInfo, PropertyInfo propertyInfo, String value) throws Exception;
+    @XmlRpcMethod(methodName = "OfficeDocument.getViewPropertyValue")
+    public String getViewPropertyValue(PortletInfo portletInfo, PropertyInfo propertyInfo) throws Exception;
 
-    @XmlRpcMethod(methodName = "OfficeDocument.getContentPropeties")
-    public PropertyInfo[] getContentPropeties(String repositoryName, String contentid) throws Exception;
+    @XmlRpcMethod(methodName = "OfficeDocument.setViewPropertyValue")
+    public void setViewPropertyValue(PortletInfo portletInfo, PropertyInfo propertyInfo, String value) throws Exception;   
 
     @XmlRpcMethod(methodName = "OfficeDocument.setPortletProperties")
     public void setPortletProperties(PortletInfo portletInfo, PropertyInfo propertyInfo, String value) throws Exception;
@@ -105,16 +102,16 @@ public interface IOfficeDocument
     public CalendarInfo[] getCalendars(PortletInfo portletInfo) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.updateCalendar")
-    public void updateCalendar(PortletInfo portletInfo,CalendarInfo calendarInfo) throws Exception;
+    public void updateCalendar(PortletInfo portletInfo, CalendarInfo calendarInfo) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.insertCalendar")
-    public CalendarInfo insertCalendar(PortletInfo portletInfo,String title,String xml) throws Exception;
+    public CalendarInfo insertCalendar(PortletInfo portletInfo, String title, String xml) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.deleteCalendar")
-    public void deleteCalendar(PortletInfo portletInfo,CalendarInfo calendarInfo) throws Exception;
+    public void deleteCalendar(PortletInfo portletInfo, CalendarInfo calendarInfo) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.activeCalendar")
-    public void activeCalendar(PortletInfo portletInfo,CalendarInfo calendarInfo,boolean active) throws Exception;
+    public void activeCalendar(PortletInfo portletInfo, CalendarInfo calendarInfo, boolean active) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.updatePorlet")
     public void updatePorlet(PortletInfo portletInfo) throws Exception;
@@ -125,8 +122,15 @@ public interface IOfficeDocument
     @XmlRpcMethod(methodName = "OfficeDocument.allVersionsArePublished")
     public boolean allVersionsArePublished(String repositoryName, String contentId) throws Exception;
 
-    @XmlRpcMethod(methodName = "OfficeDocument.validateValue")
-    public void validateValue(String repositoryName, String contentID, PropertyInfo[] properties, Object[] values) throws Exception;
+    @XmlRpcMethod(methodName = "OfficeDocument.validateViewValues")
+    public void validateViewValues(String repositoryName, String contentID, PropertyInfo[] properties, Object[] values) throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeDocument.validateContentValues")
+    public void validateContentValues(String repositoryName, String contentID, PropertyInfo[] properties, Object[] values) throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeDocument.setContentPropertyValue")
+    public String setContentPropertyValue(String repositoryName, String contentID, PropertyInfo propertyInfo,String value) throws Exception;
+
 }
 
 
