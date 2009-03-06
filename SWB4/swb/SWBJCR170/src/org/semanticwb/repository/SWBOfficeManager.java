@@ -4,18 +4,22 @@
  */
 package org.semanticwb.repository;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.DisplayProperty;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.WebSite;
+import org.semanticwb.office.interfaces.PropertyInfo;
 import org.semanticwb.office.interfaces.RepositoryInfo;
 import org.semanticwb.office.interfaces.SiteInfo;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticIterator;
 import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.repository.office.OfficeCategory;
 import org.semanticwb.repository.office.OfficeContent;
 
@@ -112,7 +116,7 @@ public class SWBOfficeManager implements OfficeManager
                 SemanticObject model = models.next();
                 if (model.getSemanticClass().equals(Workspace.sclass) || model.getSemanticClass().isSubClass(Workspace.sclass))
                 {
-                    String name = model.getId()+"@"+manager.getName();
+                    String name = model.getId() + "@" + manager.getName();
                     RepositoryInfo info = new RepositoryInfo(name);
                     info.exclusive = true;
                     info.siteInfo = new SiteInfo();
@@ -126,7 +130,7 @@ public class SWBOfficeManager implements OfficeManager
         // Shared
         for (String repository : manager.getWorkspaces())
         {
-            String name = repository+"@"+manager.getName() ;
+            String name = repository + "@" + manager.getName();
             if (!workspaces.containsKey(name))
             {
                 RepositoryInfo info = new RepositoryInfo(name);
@@ -135,5 +139,107 @@ public class SWBOfficeManager implements OfficeManager
             }
         }
         return workspaces.values();
+    }
+
+    private SemanticClass getSemanticClass(String type)
+    {
+        SemanticClass getSemanticClass = null;
+        String stype = cm_content.getPrefix() + ":" + cm_content.getName();
+        if (stype.equals(type))
+        {
+            return cm_content;
+
+        }
+        else
+        {
+            Iterator<SemanticClass> classes = cm_content.listSubClasses();
+            while (classes.hasNext())
+            {
+                SemanticClass subclazz = classes.next();
+                stype = subclazz.getPrefix() + ":" + subclazz.getName();
+                if (stype.equals(type))
+                {
+                    return subclazz;
+                }
+            }
+        }
+        return null;
+    }
+
+    private boolean isSuperProperty(SemanticProperty prop, SemanticClass clazz)
+    {
+        Iterator<SemanticClass> classes = clazz.listSuperClasses();
+        while (classes.hasNext())
+        {
+            SemanticClass superClazz = classes.next();
+            if (superClazz.isSWBClass())
+            {
+                Iterator<SemanticProperty> propertiesClazz = superClazz.listProperties();
+                while (propertiesClazz.hasNext())
+                {
+                    SemanticProperty propSuperClazz = propertiesClazz.next();
+                    if (propSuperClazz.getURI().equals(prop.getURI()))
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        boolean res = isSuperProperty(prop, superClazz);
+                        if (res == true)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public PropertyInfo[] getContentProperties(String type)
+    {
+        ArrayList<PropertyInfo> properties = new ArrayList<PropertyInfo>();
+        SemanticClass clazz = getSemanticClass(type);
+        if (clazz != null)
+        {
+            Iterator<SemanticProperty> propertiesClazz = clazz.listProperties();
+            while (propertiesClazz.hasNext())
+            {
+                SemanticProperty prop = propertiesClazz.next();
+
+                if (prop.isDataTypeProperty() && !prop.isBinary() && prop.getPrefix() != null)
+                {
+
+                    SemanticObject displayObj = prop.getDisplayProperty();
+                    if (displayObj != null)
+                    {
+                        DisplayProperty propDisplay = new DisplayProperty(displayObj);
+                        if (!propDisplay.isHidden() && propDisplay.isEditable())
+                        {
+                            PropertyInfo info = new PropertyInfo();
+                            info.id = prop.getURI();
+                            info.isRequired = prop.isRequired();
+                            info.title = prop.getDisplayName();
+                            if (prop.isString())
+                            {
+                                info.type = "String";
+                                properties.add(info);
+                            }
+                            else if (prop.isBoolean())
+                            {
+                                info.type = "Boolean";
+                                properties.add(info);
+                            }
+                            else if (prop.isInt())
+                            {
+                                info.type = "Integer";
+                                properties.add(info);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return properties.toArray(new PropertyInfo[properties.size()]);
     }
 }
