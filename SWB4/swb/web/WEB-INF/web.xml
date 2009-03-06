@@ -42,6 +42,19 @@
         <servlet-class>org.chiba.web.flux.FluxHelperServlet</servlet-class>
     </servlet>
     <servlet>
+            <servlet-name>dwr-invoker</servlet-name>
+            <servlet-class>uk.ltd.getahead.dwr.DWRServlet</servlet-class>
+            <init-param>
+                <param-name>debug</param-name>
+                <param-value>true</param-value>
+            </init-param>
+            <init-param>
+                <param-name>scriptCompressed</param-name>
+                <param-value>true</param-value>
+            </init-param>
+            <load-on-startup>2</load-on-startup>
+    </servlet>
+    <servlet>
         <servlet-name>PlainHtml</servlet-name>
         <servlet-class>org.chiba.web.servlet.PlainHtmlServlet</servlet-class>
     </servlet>
@@ -72,6 +85,10 @@
     <servlet-mapping>
         <servlet-name>SubmissionResponse</servlet-name>
         <url-pattern>/SubmissionResponse</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+            <servlet-name>dwr-invoker</servlet-name>
+            <url-pattern>/dwr/*</url-pattern>
     </servlet-mapping>
     <!--WB-->
     <session-config>
