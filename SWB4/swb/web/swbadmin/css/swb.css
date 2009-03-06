@@ -394,26 +394,3 @@ div#sitesectiontree ul.treeres {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 12px;
 }
-
-.suggestions {
-    position: absolute;
-    padding: 0;
-    margin: 0;
-}
-.resultlist {
-    position:absolute;
-    background-color: white;
-    width: 300px;
-    max-height: 200px;
-    margin: 0;
-    padding: 0;
-    border-top: 1px solid #a0a0ff;
-    border-left: 1px solid #a0a0ff;
-    border-bottom: 1px solid #a0a0ff;
-    border-right: 1px solid #a0a0ff;
-    overflow: auto;
-    overflow-x: hidden;
-    overflow-y: auto;
-}
-
-.resultlist .link {cursor:hand;}
