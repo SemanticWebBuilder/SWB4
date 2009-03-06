@@ -15,6 +15,7 @@ import org.semanticwb.SWBException;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.jcr170.implementation.SWBCredentials;
 import org.semanticwb.model.User;
+import org.semanticwb.platform.SemanticProperty;
 
 /**
  *
@@ -67,4 +68,5 @@ public final class SWBRepositoryManager implements RepositoryManager
     {
         return repository.login(new SWBCredentials(principal), workspace);
     }
+    
 }
