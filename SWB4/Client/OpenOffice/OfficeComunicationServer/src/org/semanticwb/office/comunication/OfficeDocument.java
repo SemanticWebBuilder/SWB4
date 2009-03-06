@@ -984,7 +984,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             Method m = type.getMethod("validatePropertyValue", valuesToValidate.getClass());
             try
             {
-                m.invoke(obj, values);
+                m.invoke(obj, valuesToValidate);
             }
             catch (InvocationTargetException ite)
             {
