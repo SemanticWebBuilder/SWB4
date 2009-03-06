@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class PortletBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Priorityable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Traceable,org.semanticwb.model.Indexable,org.semanticwb.model.Viewable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Deleteable,org.semanticwb.model.XMLConfable,org.semanticwb.model.Versionable,org.semanticwb.model.Calendarable,org.semanticwb.model.Activeable,org.semanticwb.model.XMLable,org.semanticwb.model.Referensable,org.semanticwb.model.Hitable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Localeable,org.semanticwb.model.UserGroupRefable
+public class PortletBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Viewable,org.semanticwb.model.Deleteable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Priorityable,org.semanticwb.model.Calendarable,org.semanticwb.model.Hitable,org.semanticwb.model.Versionable,org.semanticwb.model.XMLable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Localeable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Activeable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Indexable,org.semanticwb.model.Referensable,org.semanticwb.model.XMLConfable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticClass swb_UserGroupRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserGroupRef");
     public static final org.semanticwb.platform.SemanticProperty swb_hasUserGroupRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasUserGroupRef");
@@ -34,6 +34,8 @@ public class PortletBase extends org.semanticwb.model.SWBClass implements org.se
     public static final org.semanticwb.platform.SemanticProperty swb_updated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#updated");
     public static final org.semanticwb.platform.SemanticClass swb_Calendar=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Calendar");
     public static final org.semanticwb.platform.SemanticProperty swb_hasCalendar=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasCalendar");
+    public static final org.semanticwb.platform.SemanticClass swb_PFlowInstance=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PFlowInstance");
+    public static final org.semanticwb.platform.SemanticProperty swb_pflowInstance=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#pflowInstance");
     public static final org.semanticwb.platform.SemanticProperty swb_indexable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#indexable");
     public static final org.semanticwb.platform.SemanticProperty swb_portletWindow=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#portletWindow");
     public static final org.semanticwb.platform.SemanticProperty swb_priority=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#priority");
@@ -469,6 +471,27 @@ public class PortletBase extends org.semanticwb.model.SWBClass implements org.se
          if(obj!=null)
          {
              ret=(org.semanticwb.model.Calendar)obj.getSemanticClass().newGenericInstance(obj);
+         }
+         return ret;
+    }
+
+    public void setPflowInstance(org.semanticwb.model.PFlowInstance pflowinstance)
+    {
+        getSemanticObject().setObjectProperty(swb_pflowInstance, pflowinstance.getSemanticObject());
+    }
+
+    public void removePflowInstance()
+    {
+        getSemanticObject().removeProperty(swb_pflowInstance);
+    }
+
+    public org.semanticwb.model.PFlowInstance getPflowInstance()
+    {
+         org.semanticwb.model.PFlowInstance ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_pflowInstance);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.PFlowInstance)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
