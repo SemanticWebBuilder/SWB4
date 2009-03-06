@@ -713,19 +713,6 @@ public class TestWebSite {
 
     }
 
-    @Test
-    public void writeAdmin()
-    {
-        WebSite site=SWBContext.getAdminWebSite();
-        File file=new File(SWBUtils.getApplicationPath()+"../web/swbadmin/rdf/SWBAdmin.rdf");
-        try
-        {
-            System.out.println("file:"+file.getCanonicalPath());
-            FileOutputStream out=new FileOutputStream(file);
-            site.getSemanticObject().getModel().write(out);
-        }catch(Exception e){e.printStackTrace();}
-    }
-      
     //@Test
     public void write()
     {

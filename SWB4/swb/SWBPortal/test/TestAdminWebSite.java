@@ -1,3 +1,5 @@
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.Iterator;
 import org.junit.*;
 
@@ -6,6 +8,7 @@ import org.junit.*;
  * and open the template in the editor.
  */
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Calendarable;
 import org.semanticwb.model.Language;
 import org.semanticwb.model.ObjectBehavior;
@@ -27,8 +30,7 @@ import org.semanticwb.model.VersionInfo;
 import org.semanticwb.model.Versionable;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
-import org.semanticwb.platform.SemanticObject;
-import org.semanticwb.platform.SemanticProperty;
+
 
 
 /**
@@ -96,7 +98,7 @@ public class TestAdminWebSite {
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     //
-    @Test
+    //@Test
     public void Admin()
     {
         WebSite site=SWBContext.getAdminWebSite();
@@ -411,6 +413,19 @@ public class TestAdminWebSite {
             obj.setParent(ob);
         }
 
+    }
+
+    @Test
+    public void writeAdmin()
+    {
+        WebSite site=SWBContext.getAdminWebSite();
+        File file=new File(SWBUtils.getApplicationPath()+"../web/swbadmin/rdf/SWBAdmin.rdf");
+        try
+        {
+            System.out.println("file:"+file.getCanonicalPath());
+            FileOutputStream out=new FileOutputStream(file);
+            site.getSemanticObject().getModel().write(out);
+        }catch(Exception e){e.printStackTrace();}
     }
 
 }
