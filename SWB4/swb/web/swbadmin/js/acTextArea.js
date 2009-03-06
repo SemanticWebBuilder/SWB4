@@ -50,7 +50,7 @@ function queryOnKeyDown (evt) {
 
     //Tecla CTRL+SPACE
     if (evt.ctrlKey && evt.keyCode == dojo.keys.SPACE) {
-        getSuggestions();
+        getSuggestions(true);
         dojo.stopEvent(evt);
     //Tecla ESCAPE
     } else if (displayed && evt.keyCode == dojo.keys.ESCAPE) {
@@ -60,7 +60,7 @@ function queryOnKeyDown (evt) {
     } else if (displayed && (evt.keyCode != dojo.keys.CTRL && evt.keyCode != dojo.keys.UP_ARROW &&
             evt.keyCode != dojo.keys.DOWN_ARROW && evt.keyCode != dojo.keys.ESC &&
             evt.keyCode != dojo.keys.ENTER)) {
-        getSuggestions();
+        getSuggestions(false);
         //dojo.stopEvent(evt);
         dojo.byId("queryText").focus();
     }
@@ -69,9 +69,11 @@ function queryOnKeyDown (evt) {
 /*
  * Crea la lista de sugerencias en base a la palabra en la posición del cursor.
 */
-function getSuggestions() {
+function getSuggestions(clear) {
     var word = getCurrentWord("queryText");
-    clearSuggestions();
+    if (clear) {
+        clearSuggestions();
+    }
     
     if(word.word == "") {
         return;
@@ -179,8 +181,10 @@ function clearSuggestions() {
 function setSelection(selected) {
     var word = getCurrentWord("queryText");
     var valText = dojo.byId("queryText").value;
+    
     dojo.byId("queryText").value = valText.substring(0, word.startP) +
-        dojo.byId("id"+selected).innerHTML + valText.substring(word.endP, valText.length);
+        dojo.byId("id" + selected).innerHTML.replace(/<(.|\n)+?>/g, "") +
+        valText.substring(word.endP, valText.length);
 }
 
 /**
@@ -208,12 +212,13 @@ function getHtml (url, tagid) {
       error: function(response, ioArgs)
       {
           if (dojo.byId(tagid)) {
-              dojo.byId(tagid).innerHTML = "<p>Ocurrió un error con respuesta:<br />" + response + "</p>";
+              dojo.byId(tagid).innerHTML = "<p style=\"background:white;color:red;\">Cannot load suggestions, try again<br /></p>";
           } else {
               alert("No existe ningún elemento con id " + tagid);
           }
           return response;
       },
-      handleAs: "text"
+      handleAs: "text",
+      timeout: 5000
   });
 }
