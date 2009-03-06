@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.semanticwb.portal.resources.office;
 
 import java.io.IOException;
@@ -23,23 +22,27 @@ import org.semanticwb.portlet.office.ExcelPortlet;
  *
  * @author victor.lorenzana
  */
-public class ExcelResource extends GenericAdmResource{
+public class ExcelResource extends GenericAdmResource
+{
 
     private static Logger log = SWBUtils.getLogger(ExcelResource.class);
-    public static final String WITH="100%"; // VALUE WIDTH  BY DEFAULT
-    public static final String HEIGHT="500"; // VALUE HEIGHT BY DEFAULT
+    
+
     protected void beforePrintDocument(ExcelPortlet porlet, PrintWriter out)
     {
+        porlet.beforePrintDocument(out);
     }
 
     protected void afterPrintDocument(ExcelPortlet porlet, PrintWriter out)
     {
+        porlet.afterPrintDocument(out);
     }
 
-    protected void printDocument(ExcelPortlet porlet, PrintWriter out, String html)
+    protected void printDocument(ExcelPortlet porlet, PrintWriter out, String path,String workpath,String html)
     {
-        out.write(html);
+        porlet.printDocument(out, path,workpath,html);
     }
+
     @Override
     public final void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramReq) throws SWBResourceException, IOException
     {
@@ -49,11 +52,11 @@ public class ExcelResource extends GenericAdmResource{
             String version = portlet.getVersionToShow();
             String contentId = portlet.getContent();
             String repositoryName = portlet.getRepositoryName();
-            OfficeDocument document = new OfficeDocument();            
+            OfficeDocument document = new OfficeDocument();
             try
-            {                
-                User user=paramReq.getUser();
-                String file = document.getContentFile(repositoryName, contentId, version,user);
+            {
+                User user = paramReq.getUser();
+                String file = document.getContentFile(repositoryName, contentId, version, user);
                 if (file != null)
                 {
 
@@ -67,16 +70,13 @@ public class ExcelResource extends GenericAdmResource{
                     else
                     {
                         path += getResourceBase().getWorkPath() + "/" + file;
-                    }
-
-                    String with=WITH;
-                    String height=HEIGHT;
+                    }                   
                     PrintWriter out = response.getWriter();
                     beforePrintDocument(portlet, out);
-                    printDocument(portlet, out, "<iframe frameborder=\"0\" src=\""+ path +"\" width=\""+with+"\" height=\""+height+"\">Este navegador no soporta iframe</iframe>");
+                    String workpath = SWBPlatform.getWebWorkPath() + getResourceBase().getWorkPath() + "/";
+                    printDocument(portlet, out, path,workpath,"");
                     afterPrintDocument(portlet, out);
                     out.close();
-                    
                 }
             }
             catch (Exception e)
@@ -85,5 +85,5 @@ public class ExcelResource extends GenericAdmResource{
             }
 
         }
-    }    
+    }
 }

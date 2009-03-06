@@ -26,20 +26,21 @@ public class PowerPointResource extends GenericAdmResource
 {
 
     private static Logger log = SWBUtils.getLogger(PowerPointResource.class);
-    public static final String WITH = "100%"; // VALUE WIDTH  BY DEFAULT
-    public static final String HEIGHT = "500"; // VALUE HEIGHT BY DEFAULT
+    
 
     protected void beforePrintDocument(PPTPortlet porlet, PrintWriter out)
     {
+        porlet.beforePrintDocument(out);
     }
 
     protected void afterPrintDocument(PPTPortlet porlet, PrintWriter out)
     {
+        porlet.afterPrintDocument(out);
     }
 
-    protected void printDocument(PPTPortlet porlet, PrintWriter out, String html)
+    protected void printDocument(PPTPortlet porlet, PrintWriter out, String path,String workpath,String html)
     {
-        out.write(html);
+        porlet.printDocument(out, path,workpath,html);
     }
 
     @Override
@@ -67,12 +68,11 @@ public class PowerPointResource extends GenericAdmResource
                     else
                     {
                         path += getResourceBase().getWorkPath() + "/" + "frame.html";
-                    }
-                    String with = WITH;
-                    String height = HEIGHT;
+                    }                    
                     PrintWriter out = response.getWriter();
                     beforePrintDocument(portlet, out);
-                    printDocument(portlet, out, "<iframe frameborder=\"0\" src=\"" + path + "\" width=\"" + with + "\" height=\"" + height + "\">Este navegador no soporta iframe</iframe>");
+                    String workpath = SWBPlatform.getWebWorkPath() + getResourceBase().getWorkPath() + "/";
+                    printDocument(portlet, out, path,workpath,"");
                     afterPrintDocument(portlet, out);
                     out.close();
                 }
