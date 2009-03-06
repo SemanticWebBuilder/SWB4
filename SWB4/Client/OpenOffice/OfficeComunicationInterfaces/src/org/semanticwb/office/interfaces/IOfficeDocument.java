@@ -129,7 +129,7 @@ public interface IOfficeDocument
     public void validateContentValues(String repositoryName, String contentID, PropertyInfo[] properties, Object[] values) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.setContentPropertyValue")
-    public String setContentPropertyValue(String repositoryName, String contentID, PropertyInfo propertyInfo,String value) throws Exception;
+    public void setContentPropertyValue(String repositoryName, String contentID, PropertyInfo propertyInfo,String value) throws Exception;
 
 }
 
