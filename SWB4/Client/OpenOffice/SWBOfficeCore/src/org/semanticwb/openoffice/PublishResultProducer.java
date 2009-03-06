@@ -59,12 +59,12 @@ public class PublishResultProducer implements WizardResultProducer
                 RepositoryInfo info=(RepositoryInfo)wizardData.get(SelectCategory.REPOSITORY_ID);
                 String nodeType = wizardData.get(TitleAndDescription.NODE_TYPE).toString();
                 String name = document.getLocalPath().getName().replace(document.getDefaultExtension(), document.getPublicationExtension());
-                String contentID = openOfficeDocument.publish(title, description, repositoryName, categoryID, document.getDocumentType().toString(), nodeType, name);
+                String contentID = openOfficeDocument.save(title, description, repositoryName, categoryID, document.getDocumentType().toString(), nodeType, name);
                 document.SaveContentId(contentID, repositoryName);                
-                if(openOfficeDocument.getContentPropeties(repositoryName, contentID).length>0)
+                if(openOfficeDocument.getContentProperties(repositoryName,nodeType).length>0)
                 {
-                    WizardPage[] pages={ new ContentProperties(repositoryName, contentID)};
-                    Wizard wizard=WizardPage.createWizard("Propiedades del documento",pages);
+                    WizardPage[] pages={ new ContentProperties(repositoryName, contentID,nodeType)};
+                    Wizard wizard=WizardPage.createWizard("Propiedades extendidas del documento",pages);
                     wizard.show();
                 }
                 int res = JOptionPane.showConfirmDialog(null, "¿Desea publicar este contenido en una página web?", "Publicación de contenido", JOptionPane.YES_NO_OPTION);
