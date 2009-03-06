@@ -62,8 +62,8 @@ if (proOptions.size() != 0 || objOptions.size() != 0) {
     int index;
     Iterator<String> rit = objOptions.iterator();
 
-    out.println("<ul id=\"resultlist\" class=\"resultlist\" style=\"list-style-type:none;" +
-                    "position:absolute;margin:0;padding:0;overflow:auto;height:300px;max-height:" +
+    out.println("<ul id=\"resultlist\" class=\"resultlist\" style=\"background:white;list-style-type:none;" +
+                    "position:absolute;margin:0;padding:0;overflow:auto;max-height:" +
                     "200px;width:300px;border:1px solid #a0a0ff;\">");
     while (rit.hasNext()) {
         String tempi = (String) rit.next();
@@ -71,10 +71,13 @@ if (proOptions.size() != 0 || objOptions.size() != 0) {
 
         out.print("<li id=\"id"+ idCounter + "\" class=\"resultEntry\" " +
                 "onmouseover=\"dojo.query('.resultEntry').style('background', 'white'); " +
-                "highLightSelection("+ idCounter +",true); curSelected = "+ idCounter +";console.log('curSelected: '+" + idCounter +");\" " +
+                "highLightSelection("+ idCounter +",true); curSelected = "+ idCounter +";\" " +
                 "onmouseout=\"highLightSelection("+ idCounter +",false);\" "+
                 "onmousedown=\"setSelection("+ idCounter +");dojo.byId('results').innerHTML='';"+
-                "dojo.byId('queryText').focus();displayed=false;\">" + tempi + "</li>");
+                "dojo.byId('queryText').focus();displayed=false;\">" + (lPar?"(":"") + 
+                tempi.substring(0, index) + "<font color=\"blue\">" +
+                    tempi.substring(index, index + word.length()) + "</font>" +
+                    tempi.substring(index + word.length(), tempi.length()) + (rPar?")":"") + "</li>");
         idCounter++;
     }
 
@@ -85,10 +88,13 @@ if (proOptions.size() != 0 || objOptions.size() != 0) {
 
         out.print("<li id=\"id"+ idCounter + "\" class=\"resultEntry\" " +
                 "onmouseover=\"dojo.query('.resultEntry').style('background', 'white'); " +
-                "highLightSelection("+ idCounter +",true); curSelected = "+ idCounter +";console.log('curSelected: '+" + idCounter +");\" " +
+                "highLightSelection("+ idCounter +",true); curSelected = "+ idCounter + ";\" " +
                 "onmouseout=\"highLightSelection("+ idCounter +",false);\" "+
                 "onmousedown=\"setSelection("+ idCounter +");dojo.byId('results').innerHTML='';"+
-                "dojo.byId('queryText').focus();displayed=false;\">" + tempi + "</li>");
+                "dojo.byId('queryText').focus();displayed=false;\">" + (lPar?"(":"") +
+                tempi.substring(0, index) + "<font color=\"blue\">" +
+                    tempi.substring(index, index + word.length()) + "</font>" +
+                    tempi.substring(index + word.length(), tempi.length()) + (rPar?")":"") + "</li>");
         idCounter++;
     }
     out.println("</ul>");
