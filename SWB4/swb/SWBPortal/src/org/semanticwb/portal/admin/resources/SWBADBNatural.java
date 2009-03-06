@@ -36,7 +36,7 @@ public class SWBADBNatural extends GenericResource {
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
-        String _query = request.getParameter("query");
+        String _query = request.getParameter("queryText");
         String lang = paramRequest.getUser().getLanguage();
 
         if (_query == null) {
@@ -50,16 +50,19 @@ public class SWBADBNatural extends GenericResource {
                 "dojo.require(\"dijit.form.Textarea\");" +
                 "dojo.require(\"dijit.form.Form\");" +
                 "dojo.require(\"dijit.form.Button\");" +
+                "</script>");
+        out.println("<script type=\"text/javascript\">" +
                 "dojo.addOnLoad(function () {" +
-                    "dojo.connect(dojo.byId(\"query\"), \"onkeyup\"," +
-                    "\"queryOnKeyUp\");" +
-                    "dojo.connect(dojo.byId(\"query\"), " +
-                    "\"onblur\", function () {" +
-                        "dojo.byId(\"suggestions\").innerHTML = \"\"; displayed=false;" +
-                "});" +
-            "});</script>");
+                    "dojo.connect(dojo.byId('queryText'), 'onkeydown', 'queryOnKeyDown');" +
+                    "dojo.connect(dojo.byId('queryText'), 'onkeydown', 'queryOnKeyUp');" +
+                    "dojo.connect(dojo.byId('queryText'), 'onblur', function () {" +
+                        "clearSuggestions();" +
+                    "});" +
+                "});" + "var lang=\"" + lang + "\"" +
+            "</script>");
+
         out.println("<div class=\"swbform\">");
-        out.println("<form dojoType=\"dijit.form.Form\" id=\""+getResourceBase().getId()+"/sparql\" action=\""+paramRequest.getRenderUrl()+"\" method=\"post\" onsubmit=\"submitForm('"+getResourceBase().getId()+"/sparql'); return false;\">");
+        out.println("<form dojoType=\"dijit.form.Form\" id=\""+getResourceBase().getId()+"/natsparql\" action=\""+paramRequest.getRenderUrl()+"\" method=\"post\" onsubmit=\"submitForm('"+getResourceBase().getId()+"/natsparql'); return false;\">");
         out.println("<fieldset>");
         out.println("<table border=\"0\" cellspacing=\"2\" cellpadding=\"0\" >");
         out.println("<tr><td >");
@@ -67,15 +70,15 @@ public class SWBADBNatural extends GenericResource {
         out.println("</td></tr>");
         out.println("<tr><td ><PRE >");
         out.println("10 User con Active=true, Primer Apellido ordenar (Primer Apellido)");
-        out.println("*Use CTRL + SPACE to show suggestions, ESC to hide suggestions.");
+        out.println("*Type a word and use CTRL + SPACE to show suggestions, ESC to hide suggestions.");
         out.println("</PRE></td></tr>");
         out.println("<tr><td class=\"tabla\">");
         out.println("Natural Language Query:");
         out.println("</td></tr>");
         out.println("<tr><td>");
-        out.print("<textarea id=\"query\" name=\"query\" rows=5 cols=70>");
+        out.print("<textarea id=\"queryText\" name=\"queryText\" rows=5 cols=70>");
         out.print(_query);
-        out.println("</textarea><div id=\"suggestions\"></div>");
+        out.println("</textarea><div id=\"results\"></div>");
         out.println("</td></tr>");
         out.println("</table>");
         out.println("</fieldset>");
@@ -207,7 +210,7 @@ public class SWBADBNatural extends GenericResource {
         {
             out.println("<fieldset>");
             out.println("Error: <BR>");
-            out.println("<textarea name=\"query\" rows=20 cols=80>");
+            out.println("<textarea name=\"queryText\" rows=20 cols=80>");
             e.printStackTrace(out);
             out.println("</textarea>");
             out.println("</fieldset>");
