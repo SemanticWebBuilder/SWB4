@@ -91,8 +91,9 @@ public class SWBExportWebSite extends GenericResource {
                 }
                 System.out.println("sitio exp:"+site.getId());
 
-                SemanticIterator <SemanticObject> sitSubModels=site.listSubModels();
-                while(sitSubModels.hasNext()){
+                Iterator<SemanticObject> sitSubModels=site.getSemanticObject().listObjectProperties(site.swb_hasSubModel);
+                while(sitSubModels.hasNext())
+                {
                     SemanticObject sObj=sitSubModels.next();
                     System.out.println("sObjSMOdel:"+sObj.getId());
                     File filesModel=new File(zipdirectory + "submodels/"+sObj.getId());
