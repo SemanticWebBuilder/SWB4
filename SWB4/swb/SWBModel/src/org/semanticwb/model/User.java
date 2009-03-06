@@ -293,9 +293,17 @@ public class User extends UserBase implements Principal, java.io.Serializable
 
     public void addUserType(String userType)
     {
-        if (!hasUserType(userType))
+        if (null!=userType && !"".equals(userType.trim()) && !hasUserType(userType))
         {
             getSemanticObject().addSemanticClass(getUserRepository().getUserType(userType));
+        }
+    }
+
+    public void removeUserType(String userType)
+    {
+        if (hasUserType(userType))
+        {
+            getSemanticObject().removeSemanticClass(getUserRepository().getUserType(userType));
         }
     }
 
