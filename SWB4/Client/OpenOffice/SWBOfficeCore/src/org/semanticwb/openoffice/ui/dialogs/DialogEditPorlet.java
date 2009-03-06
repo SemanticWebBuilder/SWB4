@@ -421,7 +421,7 @@ public class DialogEditPorlet extends javax.swing.JDialog
         {
             for (PropertyInfo info : OfficeApplication.getOfficeDocumentProxy().getPortletProperties(repositoryName, contentID))
             {
-                String value = OfficeApplication.getOfficeDocumentProxy().getPropertyValue(pageInformation, info);
+                String value = OfficeApplication.getOfficeDocumentProxy().getViewPropertyValue(pageInformation, info);
                 Object[] data =
                 {
                     info, value

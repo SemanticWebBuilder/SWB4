@@ -163,7 +163,7 @@ public class ViewProperties extends WizardPage
         }
         try
         {
-            OfficeApplication.getOfficeDocumentProxy().validateValue(repositoryName, contentID, props, values);
+            OfficeApplication.getOfficeDocumentProxy().validateViewValues(repositoryName, contentID, props, values);
         }
         catch (Exception e)
         {

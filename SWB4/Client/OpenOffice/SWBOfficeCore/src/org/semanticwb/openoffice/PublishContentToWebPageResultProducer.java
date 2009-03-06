@@ -74,7 +74,7 @@ public class PublishContentToWebPageResultProducer implements WizardResultProduc
                         if(prop!=null)
                         {
                             String value = properties.get(prop);
-                            openOfficeDocument.setPropertyValue(info, prop, value);
+                            openOfficeDocument.setViewPropertyValue(info, prop, value);
                         }
                     }
                 }
