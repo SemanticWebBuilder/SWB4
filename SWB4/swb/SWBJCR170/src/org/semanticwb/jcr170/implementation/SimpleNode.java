@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.UUID;
 import java.util.regex.Pattern;
 import javax.jcr.AccessDeniedException;
@@ -118,7 +119,7 @@ public class SimpleNode implements Node
         }
 
 
-        String[] supertypes = session.getRootBaseNode().getSuperTypes(clazz);
+        Set<String> supertypes = session.getRootBaseNode().getSuperTypes(clazz);
         for (String superType : supertypes)
         {
             try
