@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Set;
 import org.semanticwb.SWBException;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.repository.base.*;
@@ -824,7 +825,7 @@ public class BaseNode extends BaseNodeBase
         }
     }
 
-    public final String[] getSuperTypes(SemanticClass clazz)
+    public final Set<String> getSuperTypes(SemanticClass clazz)
     {
         HashSet<String> superTypes = new HashSet<String>();
         Iterator<SemanticLiteral> literals = listSemanticLiterals(clazz, ClassDefinition.jcr_supertypes);
@@ -836,8 +837,16 @@ public class BaseNode extends BaseNodeBase
                 superTypes.add(literal.getString());
             }
         }
-
-        return superTypes.toArray(new String[superTypes.size()]);
+        Iterator<SemanticClass> superClasses= clazz.listSuperClasses();
+        while(superClasses.hasNext())
+        {
+            SemanticClass superClazz=superClasses.next();
+            if(!(superClazz.isSWBInterface() || superClazz.isSWBModel()))
+            {
+                superTypes.addAll(getSuperTypes(superClazz));
+            }
+        }
+        return superTypes;
     }
 
     public final String[] getSuperTypes() throws SWBException
