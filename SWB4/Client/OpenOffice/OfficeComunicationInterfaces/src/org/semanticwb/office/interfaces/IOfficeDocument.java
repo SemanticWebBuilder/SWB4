@@ -131,6 +131,12 @@ public interface IOfficeDocument
     @XmlRpcMethod(methodName = "OfficeDocument.setContentPropertyValue")
     public void setContentPropertyValue(String repositoryName, String contentID, PropertyInfo propertyInfo,String value) throws Exception;
 
+    @XmlRpcMethod(methodName = "OfficeDocument.getNameOfContent")
+    public String getNameOfContent(String repositoryName, String contentID) throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeDocument.getContentProperty")
+    public String getContentProperty(PropertyInfo prop,String repositoryName,String contentID) throws Exception;
+
 }
 
 
