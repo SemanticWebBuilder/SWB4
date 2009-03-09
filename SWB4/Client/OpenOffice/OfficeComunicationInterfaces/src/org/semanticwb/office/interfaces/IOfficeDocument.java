@@ -15,7 +15,7 @@ public interface IOfficeDocument
 {
 
     @XmlRpcMethod(methodName = "OfficeDocument.save")
-    public String save(String title, String description, String repositoryName, String categoryID, String type, String nodeType, String file) throws Exception;
+    public String save(String title, String description, String repositoryName, String categoryID, String type, String nodeType, String file,PropertyInfo[] properties,String[] values) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.setTitle")
     public void setTitle(String repositoryName, String contentID, String title) throws Exception;
