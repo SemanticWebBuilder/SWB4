@@ -16,6 +16,7 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeCellRenderer;
+import javax.swing.tree.TreePath;
 import org.netbeans.spi.wizard.Wizard;
 import org.netbeans.spi.wizard.WizardPage;
 import org.netbeans.spi.wizard.WizardPanelNavResult;
@@ -54,8 +55,6 @@ public class SelectCategory extends WizardPage
         this.getWizardDataMap().remove(CATEGORY_ID);
         this.getWizardDataMap().remove(REPOSITORY_ID);
         loadTree();
-
-
     }
 
     private void addCategory(RepositoryInfo repository, CategoryNode parent)
@@ -69,8 +68,7 @@ public class SelectCategory extends WizardPage
                 if (category.childs > 0)
                 {
                     categoryNode.add(new DefaultMutableTreeNode(""));
-                }
-            //addCategory(repository, categoryNode);
+                }            
             }
         }
         catch (Exception e)
@@ -99,7 +97,7 @@ public class SelectCategory extends WizardPage
         }
     }
 
-    private void addRepositories(RepositoryNode parent)
+    private void addRepositories(RepositoryNode root)
     {
         try
         {
@@ -113,16 +111,9 @@ public class SelectCategory extends WizardPage
                 if (showRepository)
                 {
                     RepositoryNode repositoryNode = new RepositoryNode(repository);
-                    parent.add(repositoryNode);
-                    for (CategoryInfo category : OfficeApplication.getOfficeApplicationProxy().getCategories(repository.name))
-                    {
-                        CategoryNode categoryNode = new CategoryNode(category.UDDI, category.title, category.description, repository);
-                        repositoryNode.add(categoryNode);
-                        if (category.childs > 0)
-                        {
-                            categoryNode.add(new DefaultMutableTreeNode(""));
-                        }
-                    }
+                    root.add(repositoryNode);                    
+                    addCategory(repositoryNode);
+                    jTreeCategory.expandPath(new TreePath(repositoryNode.getPath()));
                 }
             }
         }
@@ -144,14 +135,13 @@ public class SelectCategory extends WizardPage
     {
         this.jTreeCategory.setCellRenderer(new TreeRender());
         this.jTreeCategory.setEditable(false);
-        RepositoryNode repositories = new RepositoryRootNode();
-        DefaultTreeModel model = new DefaultTreeModel(repositories);
+        RepositoryNode root = new RepositoryRootNode();
+        DefaultTreeModel model = new DefaultTreeModel(root);
+        model.setRoot(root);
         this.jTreeCategory.setModel(model);
-        addRepositories(repositories);
-        if (this.jTreeCategory.getRowCount() > 0)
-        {
-            this.jTreeCategory.expandRow(0);
-        }
+        addRepositories(root);        
+        jTreeCategory.setRootVisible(false);
+        jTreeCategory.expandPath(new TreePath(root.getPath()));
 
     }
 
@@ -178,7 +168,7 @@ public class SelectCategory extends WizardPage
             {
                 result = WizardPanelNavResult.REMAIN_ON_PAGE;
             }
-                       
+
         }
         else
         {
@@ -186,7 +176,7 @@ public class SelectCategory extends WizardPage
             if (res == JOptionPane.NO_OPTION)
             {
                 result = WizardPanelNavResult.REMAIN_ON_PAGE;
-            }            
+            }
         }
         SelectCategory.map = map;
         return result;
@@ -422,6 +412,13 @@ class RepositoryRootNode extends RepositoryNode
         component.setText(repositoryInfo.name);
         component.setOpaque(true);
     }
+
+    @Override
+    public boolean isRoot()
+    {
+        return true;
+    }
+
     @Override
     public String getToolTipText()
     {
@@ -435,13 +432,18 @@ class RepositoryNode extends DefaultMutableTreeNode implements ToolTipTreeNode
     protected JLabel component = new JLabel();
     protected RepositoryInfo repositoryInfo;
 
-    
     public RepositoryNode(RepositoryInfo repositoryInfo)
     {
-        this.repositoryInfo=repositoryInfo;
+        this.repositoryInfo = repositoryInfo;
         component.setText(repositoryInfo.name);
         component.setOpaque(true);
         component.setToolTipText(this.getToolTipText());
+    }
+
+    @Override
+    public boolean isRoot()
+    {
+        return false;
     }
 
     public String getToolTipText()
@@ -464,7 +466,7 @@ class RepositoryNode extends DefaultMutableTreeNode implements ToolTipTreeNode
     @Override
     public String toString()
     {
-        
+
         return repositoryInfo.name;
     }
 
@@ -509,6 +511,12 @@ class CategoryNode extends DefaultMutableTreeNode implements ToolTipTreeNode
         component.setText(title);
         component.setToolTipText(description);
         component.setOpaque(true);
+    }
+
+    @Override
+    public boolean isRoot()
+    {
+        return false;
     }
 
     public RepositoryInfo getRepository()
