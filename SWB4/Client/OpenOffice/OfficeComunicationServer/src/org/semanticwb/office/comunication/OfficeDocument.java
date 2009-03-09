@@ -110,10 +110,10 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 contentNode.setProperty(cm_user, this.user);
                 if (properties != null)
                 {
-                    int i=0;
+                    int i = 0;
                     for (PropertyInfo prop : properties)
                     {
-                        String value=values[i];
+                        String value = values[i];
                         contentNode.setProperty(prop.id, value);
                         i++;
                     }
@@ -1456,6 +1456,50 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 
     public void setContentPropertyValue(String repositoryName, String contentID, PropertyInfo propertyInfo, String value) throws Exception
     {
+    }
+
+    public String getNameOfContent(String repositoryName, String contentID) throws Exception
+    {
+        Session session = null;
+        try
+        {
+            session = loader.openSession(repositoryName, this.user, this.password);
+            Node nodeContent = session.getNodeByUUID(contentID);
+            return nodeContent.getName();
+        }
+        catch (ItemNotFoundException infe)
+        {
+            throw new Exception("El contenido no se encuentró en el repositorio.", infe);
+        }
+        finally
+        {
+            if (session != null)
+            {
+                session.logout();
+            }
+        }
+    }
+
+    public String getContentProperty(PropertyInfo prop, String repositoryName, String contentID) throws Exception
+    {
+        Session session = null;
+        try
+        {
+            session = loader.openSession(repositoryName, this.user, this.password);
+            Node nodeContent = session.getNodeByUUID(contentID);
+            return nodeContent.getProperty(prop.id).getString();
+        }
+        catch (ItemNotFoundException infe)
+        {
+            throw new Exception("El contenido no se encuentró en el repositorio.", infe);
+        }
+        finally
+        {
+            if (session != null)
+            {
+                session.logout();
+            }
+        }
     }
 }
 
