@@ -26,7 +26,7 @@ import org.semanticwb.openoffice.OfficeApplication;
 public class ContentProperties extends WizardPage
 {
 
-    public static final String PROPERTIES = "PROPERTIES";
+    //public static final String PROPERTIES = "PROPERTIES";
     private String repositoryName,  contentID,  type;
 
     /** Creates new form ContentProperties */
