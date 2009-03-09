@@ -132,9 +132,9 @@ public class ContentProperties extends WizardPage
                 e.printStackTrace();
             }
         }
-
         return result;
     }
+    
 
     /** This method is called from within the constructor to
      * initialize the form.
