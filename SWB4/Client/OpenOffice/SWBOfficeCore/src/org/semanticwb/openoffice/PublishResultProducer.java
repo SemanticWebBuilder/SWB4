@@ -6,15 +6,15 @@ package org.semanticwb.openoffice;
 
 import java.awt.EventQueue;
 import java.io.File;
+import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JOptionPane;
 import org.netbeans.spi.wizard.DeferredWizardResult;
 import org.netbeans.spi.wizard.ResultProgressHandle;
 import org.netbeans.spi.wizard.Summary;
-import org.netbeans.spi.wizard.Wizard;
 import org.netbeans.spi.wizard.WizardException;
-import org.netbeans.spi.wizard.WizardPage;
 import org.netbeans.spi.wizard.WizardPage.WizardResultProducer;
+import org.semanticwb.office.interfaces.PropertyInfo;
 import org.semanticwb.office.interfaces.RepositoryInfo;
 import org.semanticwb.openoffice.interfaces.IOpenOfficeDocument;
 import org.semanticwb.openoffice.ui.wizard.ContentProperties;
@@ -59,14 +59,11 @@ public class PublishResultProducer implements WizardResultProducer
                 RepositoryInfo info=(RepositoryInfo)wizardData.get(SelectCategory.REPOSITORY_ID);
                 String nodeType = wizardData.get(TitleAndDescription.NODE_TYPE).toString();
                 String name = document.getLocalPath().getName().replace(document.getDefaultExtension(), document.getPublicationExtension());
-                String contentID = openOfficeDocument.save(title, description, repositoryName, categoryID, document.getDocumentType().toString(), nodeType, name);
-                document.SaveContentId(contentID, repositoryName);                
-                if(openOfficeDocument.getContentProperties(repositoryName,nodeType).length>0)
-                {
-                    WizardPage[] pages={ new ContentProperties(repositoryName, contentID,nodeType)};
-                    Wizard wizard=WizardPage.createWizard("Propiedades extendidas del documento",pages);
-                    wizard.show();
-                }
+                HashMap<PropertyInfo, String> properties=(HashMap<PropertyInfo, String>)wizardData.get(ContentProperties.PROPERTIES);
+                PropertyInfo[] propsToSave=properties.keySet().toArray(new PropertyInfo[properties.keySet().size()]);
+                String[] values=properties.values().toArray(new String[properties.values().size()]);
+                String contentID = openOfficeDocument.save(title, description, repositoryName, categoryID, document.getDocumentType().toString(), nodeType, name,propsToSave,values);
+                document.SaveContentId(contentID, repositoryName);                               
                 int res = JOptionPane.showConfirmDialog(null, "¿Desea publicar este contenido en una página web?", "Publicación de contenido", JOptionPane.YES_NO_OPTION);
                 if (res == JOptionPane.YES_OPTION)
                 {
