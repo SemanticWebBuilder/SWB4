@@ -87,7 +87,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     private static final RepositoryManagerLoader loader = RepositoryManagerLoader.getInstance();
     private static final String NL = System.getProperty("line.separator");
 
-    public String save(String title, String description, String repositoryName, String categoryID, String type, String nodeType, String file) throws Exception
+    public String save(String title, String description, String repositoryName, String categoryID, String type, String nodeType, String file, PropertyInfo[] properties, String[] values) throws Exception
     {
         Session session = null;
         Node categoryNode = null;
@@ -108,6 +108,16 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 contentNode.setProperty(cm_description, description);
                 contentNode.setProperty(cm_file, file);
                 contentNode.setProperty(cm_user, this.user);
+                if (properties != null)
+                {
+                    int i=0;
+                    for (PropertyInfo prop : properties)
+                    {
+                        String value=values[i];
+                        contentNode.setProperty(prop.id, value);
+                        i++;
+                    }
+                }
                 for (Part part : requestParts)
                 {
                     String mimeType = DEFAULT_MIME_TYPE;
@@ -394,7 +404,6 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     public void sendToAuthorize()
     {
     }
-    
 
     public void setActive(String contentID, boolean active)
     {
@@ -1022,7 +1031,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     }
 
     public PropertyInfo[] getContentProperties(String repositoryName, String type) throws Exception
-    {        
+    {
         return loader.getOfficeManager(repositoryName).getContentProperties(type);
     }
 
@@ -1441,14 +1450,12 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         portlet.setVersionToShow(portletInfo.version);
     }
 
-    public void validateContentValues(String repositoryName,PropertyInfo[] properties, Object[] values) throws Exception
+    public void validateContentValues(String repositoryName, PropertyInfo[] properties, Object[] values) throws Exception
     {
-        
     }
 
     public void setContentPropertyValue(String repositoryName, String contentID, PropertyInfo propertyInfo, String value) throws Exception
     {
-        
     }
 }
 
