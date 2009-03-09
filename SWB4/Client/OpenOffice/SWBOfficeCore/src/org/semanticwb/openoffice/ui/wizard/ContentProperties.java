@@ -10,9 +10,13 @@
  */
 package org.semanticwb.openoffice.ui.wizard;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
 import org.netbeans.spi.wizard.Wizard;
 import org.netbeans.spi.wizard.WizardPage;
@@ -27,7 +31,7 @@ import org.semanticwb.openoffice.OfficeApplication;
 public class ContentProperties extends WizardPage
 {
 
-    public static final String PROPERTIES = "PROPERTIES";    
+    public static final String PROPERTIES = "PROPERTIES";
 
     public ContentProperties()
     {
@@ -36,16 +40,15 @@ public class ContentProperties extends WizardPage
 
     @Override
     protected void renderingPage()
-    {        
-        Map map=this.getWizardDataMap();
-        String repositoryName=map.get(SelectCategory.REPOSITORY_ID).toString();
-        String type=map.get(TitleAndDescription.NODE_TYPE).toString();
+    {
+        Map map = this.getWizardDataMap();
+        String repositoryName = map.get(SelectCategory.REPOSITORY_ID).toString();
+        String type = map.get(TitleAndDescription.NODE_TYPE).toString();
         loadProperties(repositoryName, type);
         super.renderingPage();
     }
-    
 
-    private void loadProperties(String repositoryName,String type)
+    private void loadProperties(String repositoryName, String type)
     {
         DefaultTableModel model = (DefaultTableModel) jTableProperties.getModel();
         int rows = model.getRowCount();
@@ -55,26 +58,40 @@ public class ContentProperties extends WizardPage
         }
         try
         {
-            for (PropertyInfo info : OfficeApplication.getOfficeDocumentProxy().getContentProperties(repositoryName, type))
+            PropertyInfo[] props = OfficeApplication.getOfficeDocumentProxy().getContentProperties(repositoryName, type);
+            if (props.length == 0)
             {
-                Object defaultValue = null;
-                if (info.type.equalsIgnoreCase("string"))
+                this.remove(this.jScrollPane1);
+                JPanel panel=new JPanel();
+                panel.setBackground(new Color(255,255,255));
+                panel.setLayout(new BorderLayout());
+                JLabel label=new JLabel("No se tienen propiedades para este tipo de contenido, puede continuar.");
+                panel.add(label,BorderLayout.NORTH);
+                this.add(panel);
+            }
+            else
+            {
+                for (PropertyInfo info : props)
                 {
-                    defaultValue = "";
+                    Object defaultValue = null;
+                    if (info.type.equalsIgnoreCase("string"))
+                    {
+                        defaultValue = "";
+                    }
+                    if (info.type.equalsIgnoreCase("integer"))
+                    {
+                        defaultValue = 0;
+                    }
+                    if (info.type.equalsIgnoreCase("boolean"))
+                    {
+                        defaultValue = false;
+                    }
+                    Object[] data =
+                    {
+                        info, defaultValue
+                    };
+                    model.addRow(data);
                 }
-                if (info.type.equalsIgnoreCase("integer"))
-                {
-                    defaultValue = 0;
-                }
-                if (info.type.equalsIgnoreCase("boolean"))
-                {
-                    defaultValue = false;
-                }
-                Object[] data =
-                {
-                    info, defaultValue
-                };
-                model.addRow(data);
             }
         }
         catch (Exception e)
@@ -115,14 +132,14 @@ public class ContentProperties extends WizardPage
             props[i] = prop;
             values[i] = value;
         }
-         for (int i = 0; i < rows; i++)
+        for (int i = 0; i < rows; i++)
         {
             PropertyInfo prop = (PropertyInfo) jTableProperties.getModel().getValueAt(i, 0);
             String value = jTableProperties.getModel().getValueAt(i, 1).toString();
             properties.put(prop, value);
         }
-        String repositoryName=map.get(SelectCategory.REPOSITORY_ID).toString();
-        String type=map.get(TitleAndDescription.NODE_TYPE).toString();
+        String repositoryName = map.get(SelectCategory.REPOSITORY_ID).toString();
+        String type = map.get(TitleAndDescription.NODE_TYPE).toString();
         loadProperties(repositoryName, type);
         try
         {
@@ -136,7 +153,6 @@ public class ContentProperties extends WizardPage
         map.put(PROPERTIES, properties);
         return result;
     }
-    
 
     /** This method is called from within the constructor to
      * initialize the form.
