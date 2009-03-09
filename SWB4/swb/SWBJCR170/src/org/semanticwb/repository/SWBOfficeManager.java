@@ -217,7 +217,7 @@ public class SWBOfficeManager implements OfficeManager
                         if (!propDisplay.isHidden() && propDisplay.isEditable())
                         {
                             PropertyInfo info = new PropertyInfo();
-                            info.id = prop.getURI();
+                            info.id = prop.getPrefix()+":"+prop.getName();
                             info.isRequired = prop.isRequired();
                             info.title = prop.getDisplayName();
                             if (prop.isString())
