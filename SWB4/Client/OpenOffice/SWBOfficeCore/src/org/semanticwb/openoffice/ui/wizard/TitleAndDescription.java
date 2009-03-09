@@ -68,7 +68,7 @@ public class TitleAndDescription extends WizardPage
 
     public static String getDescription()
     {
-        return "Información del contenido";
+        return "Título y descripción";
     }
 
     @Override
