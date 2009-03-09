@@ -277,7 +277,7 @@ public class WB4WriterTest
         }
     }
     @Test  
-    @Ignore
+    //@Ignore
     public void saveToSiteTest()
     {
         try
@@ -333,6 +333,7 @@ public class WB4WriterTest
         }
         catch ( Throwable wbe )
         {
+            wbe.printStackTrace();
             Assert.fail(wbe.getMessage());
         }
     }
@@ -382,7 +383,7 @@ public class WB4WriterTest
     }
 
     @Test
-    //@Ignore
+    @Ignore
     public void createWebPageTest()
     {
         try
