@@ -20,6 +20,9 @@ import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 public class WBAContentsReport extends GenericResource {
     private static Logger log = SWBUtils.getLogger(WBASectionReport.class);
     
@@ -42,7 +45,7 @@ public class WBAContentsReport extends GenericResource {
             strRscType = base.getPortletType().getPortletClassName();
         }catch (Exception e) {
             strRscType = "WBAContentsReport";
-        }
+        }        
     }
 
     /**
@@ -58,8 +61,6 @@ public class WBAContentsReport extends GenericResource {
             doRenderSectionTree(request,response,paramsRequest);
         }else if(paramsRequest.getMode().equalsIgnoreCase("fillgridmtr")) {
             doFillGridMaster(request,response,paramsRequest);
-        /*}else if(paramsRequest.getMode().equalsIgnoreCase("fillgriddet")) {
-            doFillGridDetail(request,response,paramsRequest);*/
         }else if(paramsRequest.getMode().equalsIgnoreCase("report_excel")) {
             doRepExcel(request,response,paramsRequest);
         }else if(paramsRequest.getMode().equalsIgnoreCase("report_xml")) {
@@ -130,7 +131,7 @@ public class WBAContentsReport extends GenericResource {
         }
         
         if(request.getParameter("sons")!=null && request.getParameter("sons").equalsIgnoreCase("1")) {
-            json.append(getContentInJson(webPage.listChilds(), webPage.getTitle(), first));
+            json.append(getContentInJson(webPage.listChilds(), first));
         }
         
         json.append("],");
@@ -139,7 +140,7 @@ public class WBAContentsReport extends GenericResource {
         out.flush();
     }
     
-    private String getContentInJson(Iterator<WebPage> childs, String sectionName, Bool first) {
+    private String getContentInJson(Iterator<WebPage> childs, Bool first) {
         StringBuilder json = new StringBuilder();        
         
         while(childs.hasNext()) {
@@ -167,29 +168,13 @@ public class WBAContentsReport extends GenericResource {
                 }
             }
             if(webPage.listChilds().hasNext()) {
-                json.append(getContentInJson(webPage.listChilds(), webPage.getTitle(), first));
+                json.append(getContentInJson(webPage.listChilds(), first));
             }
         }
         
         return json.toString();
-    }
-        
-    /*private void doFillGridDetail(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
-        response.setContentType("text/json;charset=iso-8859-1");
-        response.setHeader("Cache-Control", "no-cache");
-        response.setHeader("Pragma", "no-cache");
-        PrintWriter out = response.getWriter();
-        
-        String contentTypeTitle = request.getParameter("res");
-        System.out.println("contentTypeTitle="+contentTypeTitle);
-        
-        out.println("{ identifier: 'contentType',");
-        out.println("label: 'contentType',");        
-        out.println("items: [{ contentType:'recurso', total:1200, source:1, rating:3 }],");
-        out.println("source:1, rating:3 }");
-        out.flush();
-    }*/
-
+    }    
+     
     /**
      * @param request
      * @param response
@@ -306,44 +291,40 @@ public class WBAContentsReport extends GenericResource {
                 out.println("   }, 'gridMaster');");
                 out.println("   gridMaster.startup();");
                 //out.println("    dojo.connect(dijit.byId('gridMaster'), 'onRowDblClick', getResources);");
-
-                /*out.println("    gridResources = new dojox.grid.DataGrid({");
-                out.println("        id: 'gridResources',");
-                //out.println("        store: jStrResources,");
-                out.println("        structure: layout,");
-                out.println("        rowSelector: '20px',");
-                out.println("        rowsPerPage: '20'");
-                out.println("    }, 'gridResources');");
-                out.println("    gridResources.startup();");*/
                 out.println("});");
-                
-                out.println("function getParams(accion) { ");
-                out.println("   var params = \"?\";");
-                out.println("   params = params + \"wb_site=\" + window.document.frmrep.wb_site.value;");
-                out.println("   params = params + \"&wb_lang=\" + document.getElementById('wb_lang').options[document.getElementById('wb_lang').selectedIndex].value;");
-                /*out.println("   if(document.getElementById('wb_deletefilter').checked) { ");
-                out.println("       params = params + \"&wb_deletefilter=\" + document.getElementById('wb_deletefilter').value; ");
-                out.println("   } ");*/
-                out.println("   params = params + \"&wb_rtype=\" + document.getElementById('wb_rtype').value;");
-                out.println("   return params;");
-                out.println("} ");
 
-                out.println("function doXml(accion, size) { ");
-                out.println("   var params = getParams(accion);");
-                out.println("   window.open(\"" + paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_xml") + "\"+params,\"graphWindow\",size);");
+                out.println("function doXml(size) { ");                
+                out.println("   var params = '?site='+dojo.byId('wb_site').value;");                
+                out.println("   if(dojo.byId('section')) {");
+                out.println("      params += '&section=' + dojo.byId('section').value;");
+                out.println("      if(dojo.byId('wb_show_son').checked) {");
+                out.println("         params += '&sons=' + dojo.byId('wb_show_son').value;");
+                out.println("      }");
+                out.println("      window.open(\"" + paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_xml") + "\"+params,\"graphWindow\",size);");
+                out.println("   }else {");                
+                out.println("      alert('Para poder mostrarle el resumen de contenido, primero debe seleccionar una sección');");
+                out.println("   }");
                 out.println("}");
 
-                out.println("function doExcel(accion, size) { ");
-                out.println("   var params = getParams(accion);");
-                out.println("   window.open(\"" + paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_excel") + "\"+params,\"graphWindow\",size);");
+                out.println("function doExcel(size) { ");
+                out.println("   var params = '?site='+dojo.byId('wb_site').value;");                
+                out.println("   if(dojo.byId('section')) {");
+                out.println("      params += '&section=' + dojo.byId('section').value;");
+                out.println("      if(dojo.byId('wb_show_son').checked) {");
+                out.println("         params += '&sons=' + dojo.byId('wb_show_son').value;");
+                out.println("      }");
+                out.println("      window.open(\"" + paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_excel") + "\"+params,\"graphWindow\",size);");
+                out.println("   }else {");                
+                out.println("      alert('Para poder mostrarle el resumen de contenido, primero debe seleccionar una sección');");
+                out.println("   }");
                 out.println("}");
 
-                out.println("function doApply() {");
-                out.println("   dojo.byId('ctnerMaster').style.display = 'block';");
+                out.println("function doApply() {");                
                 out.println("   var grid = dijit.byId('gridMaster');");
                 out.println("   var params = 'site='+dojo.byId('wb_site').value;");                
                 
-                out.println("   if(dojo.byId('section')) {");                
+                out.println("   if(dojo.byId('section')) {");
+                out.println("      dojo.byId('ctnerMaster').style.display = 'block';");
                 out.println("      params += '&section=' + dojo.byId('section').value;");
                 out.println("      if(dojo.byId('wb_show_son').checked) {");
                 out.println("         params += '&sons=' + dojo.byId('wb_show_son').value;");
@@ -373,8 +354,8 @@ public class WBAContentsReport extends GenericResource {
                 out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
                 out.println("<tr>");
                 out.println(" <td colspan=\"4\">&nbsp;&nbsp;&nbsp;");
-                out.println("   <input type=\"button\" onClick=\"doXml('"+ rtype +"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\" value=\"XML\" name=\"btnXml\" />&nbsp;");
-                out.println("   <input type=\"button\" onClick=\"doExcel('"+ rtype +"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\" value=\"Excel\" name=\"btnExcel\" />&nbsp;");
+                out.println("   <input type=\"button\" onClick=\"doXml('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\" value=\"XML\" name=\"btnXml\" />&nbsp;");
+                out.println("   <input type=\"button\" onClick=\"doExcel('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\" value=\"Excel\" name=\"btnExcel\" />&nbsp;");
                 out.println("   <input type=\"button\" onClick=\"doApply()\" value=\"" + paramsRequest.getLocaleString("apply") + "\" name=\"btnApply\" />");
                 out.println("   <input type=\"hidden\" name=\"tp\" id=\"tp\" />");
                 out.println(" </td>");
@@ -441,7 +422,92 @@ public class WBAContentsReport extends GenericResource {
      * @throws IOException
      */    
     public void doRepExcel(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException{
+        response.setContentType("application/vnd.ms-excel");
+        response.setHeader("Content-Disposition", "inline; filename=\"ic.xls\"");
+        PrintWriter out = response.getWriter();
+        StringBuilder html = new StringBuilder();
         
+        
+        out.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
+        out.println("<html xmlns=\"http://www.w3.org/1999/xhtml\">");
+        out.println("<head>");
+        out.println("<title>"+paramsRequest.getLocaleString("contents_report")+"</title>");
+        out.println("</head>");
+        out.println("<body>");
+        
+        html.append("<table border=\"0\" width=\"95%\">");
+        html.append("<tr>");
+        html.append("  <th>Sección</th>");
+        html.append("  <th>Id</th>");
+        html.append("  <th>Tipo contenido</th>");
+        html.append("  <th>Contenido</th>");
+        html.append("  <th>Prioridad</th>");
+        html.append("  <th>Activo</th>");
+        html.append("  <th>Localidad</th>");
+        html.append("  <th>Uri</th>");
+        html.append("  <th>Liga rota</th>"); 
+        html.append("</tr>");
+        
+        String webSiteId = request.getParameter("site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("site");
+        WebSite webSite = SWBContext.getWebSite(webSiteId);
+        String webPageId = request.getParameter("section");        
+        WebPage webPage = webSite.getWebPage(webPageId);        
+        Iterator<Portlet> portlets = webPage.listPortlets();        
+        while(portlets.hasNext()) {
+            Portlet portlet = portlets.next();
+            if(portlet.getPortletType().getPortletMode()==1) {
+                html.append("<tr>");
+                html.append("  <td>"+webPage.getTitle()+"</td>");
+                html.append("  <td>"+portlet.getId()+"</td>");
+                html.append("  <td>"+portlet.getPortletType().getTitle()+"</td>");
+                html.append("  <td>"+portlet.getTitle()+"</td>");
+                html.append("  <td>"+portlet.getPriority()+"</td>");
+                html.append("  <td>"+(portlet.isActive()?"Si":"No")+"</td>");
+                html.append("  <td>"+portlet.getWorkPath()+"</td>");
+                html.append("  <td>"+portlet.getURI()+"</td>");
+                html.append("  <td>No</td>");
+                html.append("</tr>");
+                
+            }
+        }
+        
+        if(request.getParameter("sons")!=null && request.getParameter("sons").equalsIgnoreCase("1")) {
+            html.append(getContentInHtml(webPage.listChilds()));
+        }
+        
+        html.append("</table>");
+        out.print(html.toString());
+        out.println("</body>");
+        out.println("</html>");
+        out.flush();
+    }
+    
+    private String getContentInHtml(Iterator<WebPage> childs) {
+        StringBuilder html = new StringBuilder();        
+        while(childs.hasNext()) {
+            WebPage webPage = childs.next();
+            Iterator<Portlet> portlets = webPage.listPortlets();
+            while(portlets.hasNext()) {
+                Portlet portlet = portlets.next();
+                if(portlet.getPortletType().getPortletMode()==1) {
+                    html.append("<tr>");
+                    html.append("  <td>"+webPage.getTitle()+"</td>");
+                    html.append("  <td>"+portlet.getId()+"</td>");
+                    html.append("  <td>"+portlet.getPortletType().getTitle()+"</td>");
+                    html.append("  <td>"+portlet.getTitle()+"</td>");
+                    html.append("  <td>"+portlet.getPriority()+"</td>");
+                    html.append("  <td>"+(portlet.isActive()?"Si":"No")+"</td>");
+                    html.append("  <td>"+portlet.getWorkPath()+"</td>");
+                    html.append("  <td>"+portlet.getURI()+"</td>");
+                    html.append("  <td>No</td>");
+                    html.append("</tr>");
+                }
+            }
+            if(webPage.listChilds().hasNext()) {
+                html.append(getContentInHtml(webPage.listChilds()));
+            }
+        }        
+        return html.toString();
     }
 
     /**
@@ -452,7 +518,122 @@ public class WBAContentsReport extends GenericResource {
      * @throws IOException
      */    
     public void doRepXml(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException{
+        response.setContentType("text/xml;charset=iso-8859-1");
+        PrintWriter out = response.getWriter();
+        Document dom = SWBUtils.XML.getNewDocument();        
         
+        /*Element row = dom.createElement("row");
+        row.appendChild(dom.createTextNode(""));
+        row.setAttribute("id",Integer.toString(j+1));
+        report.appendChild(row);
+
+        Element site = dom.createElement("site");
+        site.appendChild(dom.createTextNode(s_site));
+        row.appendChild(site);
+
+        Element year = dom.createElement("year");
+        year.appendChild(dom.createTextNode(s_date.substring(0,4)));
+        row.appendChild(year);*/        
+                
+        Element report = dom.createElement("ContentReport");
+        dom.appendChild(report);        
+        
+        String webSiteId = request.getParameter("site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("site");
+        WebSite webSite = SWBContext.getWebSite(webSiteId);
+        String webPageId = request.getParameter("section");        
+        WebPage webPage = webSite.getWebPage(webPageId);        
+        Iterator<Portlet> portlets = webPage.listPortlets();        
+        while(portlets.hasNext()) {
+            Portlet portlet = portlets.next();
+            if(portlet.getPortletType().getPortletMode()==1) {
+                Element resource = dom.createElement("resource");
+                resource.appendChild(dom.createTextNode(""));
+                report.appendChild(resource);
+                
+                Element section = dom.createElement("section");
+                section.appendChild(dom.createTextNode(webPage.getTitle()));
+                resource.appendChild(section);
+                Element id = dom.createElement("id");
+                id.appendChild(dom.createTextNode(portlet.getId()));
+                resource.appendChild(id);
+                Element tipo = dom.createElement("type");
+                tipo.appendChild(dom.createTextNode(portlet.getPortletType().getTitle()));
+                resource.appendChild(tipo);
+                Element contenido = dom.createElement("content");
+                contenido.appendChild(dom.createTextNode(portlet.getTitle()));
+                resource.appendChild(contenido);
+                Element prior = dom.createElement("priority");
+                prior.appendChild(dom.createTextNode(Integer.toString(portlet.getPriority())));
+                resource.appendChild(prior);
+                Element active = dom.createElement("active");
+                active.appendChild(dom.createTextNode(portlet.isActive()?"Si":"No"));
+                resource.appendChild(active);
+                Element loc = dom.createElement("location");
+                loc.appendChild(dom.createTextNode(portlet.getWorkPath()));
+                resource.appendChild(loc);
+                Element uri = dom.createElement("uri");
+                uri.appendChild(dom.createTextNode(portlet.getURI()));
+                resource.appendChild(uri);
+                Element broke = dom.createElement("broke");
+                broke.appendChild(dom.createTextNode("No"));
+                resource.appendChild(broke);
+            }
+        }
+        
+        if(request.getParameter("sons")!=null && request.getParameter("sons").equalsIgnoreCase("1")) {
+            getContentInXml(dom, webPage.listChilds());
+        }       
+
+        //out.println(new String(AFUtils.getInstance().DomtoXml(dom)));
+        out.print(SWBUtils.XML.domToXml(dom));
+        out.flush();
+    }
+    
+    private void getContentInXml(Document dom, Iterator<WebPage> childs) {
+        Element report = dom.getDocumentElement();
+        while(childs.hasNext()) {
+            WebPage webPage = childs.next();
+            Iterator<Portlet> portlets = webPage.listPortlets();
+            while(portlets.hasNext()) {
+                Portlet portlet = portlets.next();
+                if(portlet.getPortletType().getPortletMode()==1) {                    
+                    Element resource = dom.createElement("resource");
+                    resource.appendChild(dom.createTextNode(""));
+                    report.appendChild(resource);
+
+                    Element section = dom.createElement("section");
+                    section.appendChild(dom.createTextNode(webPage.getTitle()));
+                    resource.appendChild(section);
+                    Element id = dom.createElement("id");
+                    id.appendChild(dom.createTextNode(portlet.getId()));
+                    resource.appendChild(id);
+                    Element tipo = dom.createElement("type");
+                    tipo.appendChild(dom.createTextNode(portlet.getPortletType().getTitle()));
+                    resource.appendChild(tipo);
+                    Element contenido = dom.createElement("content");
+                    contenido.appendChild(dom.createTextNode(portlet.getTitle()));
+                    resource.appendChild(contenido);
+                    Element prior = dom.createElement("priority");
+                    prior.appendChild(dom.createTextNode(Integer.toString(portlet.getPriority())));
+                    resource.appendChild(prior);
+                    Element active = dom.createElement("active");
+                    active.appendChild(dom.createTextNode(portlet.isActive()?"Si":"No"));
+                    resource.appendChild(active);
+                    Element loc = dom.createElement("location");
+                    loc.appendChild(dom.createTextNode(portlet.getWorkPath()));
+                    resource.appendChild(loc);
+                    Element uri = dom.createElement("uri");
+                    uri.appendChild(dom.createTextNode(portlet.getURI()));
+                    resource.appendChild(uri);
+                    Element broke = dom.createElement("broke");
+                    broke.appendChild(dom.createTextNode("No"));
+                    resource.appendChild(broke);
+                }
+            }
+            if(webPage.listChilds().hasNext()) {
+                getContentInXml(dom, webPage.listChilds());                
+            }
+        }
     }
 
 
@@ -483,255 +664,6 @@ public class WBAContentsReport extends GenericResource {
         }*/
         return b_return;
     }
-
-    /**
-     * @param tp
-     * @param paramsRequest
-     * @return
-     */    
-    public ArrayList getTotalContent(WebPage tp, SWBParamRequest paramsRequest, String p_showson, String p_content_type){
-        ArrayList al_pag = new ArrayList();
-        /*Iterator referencias = null;
-        RecResource recRes = null;
-        String str_path = null;
-        String tp_url=null;
-        String str_url = "";
-        String str_nombre = null;
-        String str_contentname = null;
-        String str_contentid = null;
-        String str_type = null;
-        String str_active = null;
-        int i_active = 0;
-
-        int i_priority = 0;
-        long l_dpp = 0;
-        boolean band = false;
-
-        try{
-
-            referencias = tp.getOccurrencesOfType("REC_WBContent");
-            while(referencias.hasNext()){
-                if(!band){
-                    HashMap arg=new HashMap();
-                    arg.put(new String("separator"),new String("\\"));
-                    arg.put(new String("links"),new String("false"));
-                    str_path = tp.getPath(arg);
-                    tp_url=tp.getUrl();
-                    band=true;
-                }
-                Occurrence contents=(Occurrence)referencias.next();
-
-                if(contents!=null) {
-                    l_dpp = Long.parseLong(contents.getResourceData());
-                    recRes=DBResource.getInstance().getResource(tp.getMap().getId(),l_dpp);
-                    if(recRes != null){
-                        RecResourceType recObj=DBResourceType.getInstance().getResourceType(recRes.getTypeMap(),recRes.getType());
-                        str_type = recObj.getName();
-                        if(str_type.equals(p_content_type)){
-                            if(str_type.equals("WBUrlContent") || str_type.equals("FrameContent")){
-                                Document domxmlRec = AFUtils.getInstance().XmltoDom(recRes.getXml());
-                                if(domxmlRec != null){
-                                    NodeList archivo = domxmlRec.getElementsByTagName("url");
-                                    if(archivo.getLength()>0){
-                                        str_url = archivo.item(0).getChildNodes().item(0).getNodeValue();
-                                    }
-                                }
-                            }
-
-                            str_nombre = recRes.getTitle();
-                            str_contentname = AFUtils.decode(str_nombre,"UTF-8");
-                            str_contentid = contents.getResourceData();
-                            i_priority = recRes.getPriority();
-                            i_active = contents.getDbdata().getActive();
-                            if(i_active == 1){
-                                str_active = paramsRequest.getLocaleString("yes");
-                            }
-                            else{
-                                str_active = paramsRequest.getLocaleString("no");
-                            }
-
-                            String[] arr_data = new String[8];
-                            arr_data[0] = str_contentid;
-                            arr_data[1] = str_contentname;
-                            arr_data[2] = Integer.toString(i_priority);
-                            arr_data[3] = str_active;
-                            arr_data[4] = str_type;
-                            arr_data[5] = str_path;
-                            arr_data[6] = tp_url;
-                            arr_data[7] = str_url;
-                            al_pag.add(arr_data);
-                        }
-                    }
-                }
-            }
-
-            if(p_showson.equals("1")){
-                // Shows contents of topic's child
-                Iterator iTp=tp.getChildAll().iterator();
-                while(iTp.hasNext()){
-                    band = false;
-                    Topic tp_child=(Topic)iTp.next();
-                    Iterator it_child = tp_child.getOccurrencesOfType("REC_WBContent");
-                    while(it_child.hasNext()){
-                        if(!band){
-                            HashMap arg=new HashMap();
-                            arg.put(new String("separator"),new String("\\"));
-                            arg.put(new String("links"),new String("false"));
-                            str_path = tp_child.getPath(arg);
-                            tp_url=tp_child.getUrl();
-                            band=true;
-                        }
-                        Occurrence oc_child = (Occurrence)it_child.next();
-
-                        if(oc_child!=null) {
-                            l_dpp = Long.parseLong(oc_child.getResourceData());
-                            recRes=DBResource.getInstance().getResource(tp.getMap().getId(),l_dpp);
-                            if(recRes != null){
-                                RecResourceType recObj=DBResourceType.getInstance().getResourceType(recRes.getTypeMap(),recRes.getType());
-                                str_type = recObj.getName();
-                                if(str_type.equals(p_content_type)){
-                                    if(str_type.equals("WBUrlContent") || str_type.equals("FrameContent")){
-                                        Document domxmlRec = AFUtils.getInstance().XmltoDom(recRes.getXml());
-                                        if(domxmlRec != null){
-                                            NodeList archivo = domxmlRec.getElementsByTagName("url");
-                                            if(archivo.getLength()>0){
-                                                str_url = archivo.item(0).getChildNodes().item(0).getNodeValue();
-                                            }
-                                        }
-                                    }
-
-
-                                    str_nombre = recRes.getTitle();
-                                    str_contentname = AFUtils.decode(str_nombre,"UTF-8");
-                                    str_contentid = oc_child.getResourceData();
-                                    i_priority = recRes.getPriority();
-                                    i_active = oc_child.getDbdata().getActive();
-                                    if(i_active == 1){
-                                        str_active = paramsRequest.getLocaleString("yes");
-                                    }
-                                    else{
-                                        str_active = paramsRequest.getLocaleString("no");
-                                    }
-
-                                    String[] arr_data = new String[8];
-                                    arr_data[0] = str_contentid;
-                                    arr_data[1] = str_contentname;
-                                    arr_data[2] = Integer.toString(i_priority);
-                                    arr_data[3] = str_active;
-                                    arr_data[4] = str_type;
-                                    arr_data[5] = str_path;
-                                    arr_data[6] = tp_url;
-                                    arr_data[7] = str_url;
-                                    al_pag.add(arr_data);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        catch (Exception e){
-            log.error("Error on method getTotalContent() resource " + strRscType + " with id " + getResourceBase().getId(), e);
-        }*/
-        return al_pag;
-    }
-
-
-    public ArrayList getGroupContent(WebPage tp, SWBParamRequest paramsRequest, String p_showson) {
-        ArrayList al_pag = new ArrayList();
-        /*Iterator referencias = null;
-        RecResource recRes = null;
-        //String str_path = null;
-        //String str_url = "";
-        //String str_nombre = null;
-        //String str_contentname = null;
-        String str_contentid = null;
-        String str_type = null;
-        //String str_active = null;
-        //int i_active = 0;
-        //int i_priority = 0;
-        long l_dpp = 0;
-        //boolean band = false;
-        try{
-
-            referencias = tp.getOccurrencesOfType("REC_WBContent");
-            while(referencias.hasNext()){
-                Occurrence contents=(Occurrence)referencias.next();
-                if(contents!=null) {
-                    l_dpp = Long.parseLong(contents.getResourceData());
-                    recRes=DBResource.getInstance().getResource(tp.getMap().getId(),l_dpp);
-                    if(recRes != null){
-                        str_contentid = contents.getResourceData();
-
-                        RecResourceType recObj=DBResourceType.getInstance().getResourceType(recRes.getTypeMap(),recRes.getType());
-                        if(recObj != null){
-                            str_type = recObj.getName();
-                        }
-                        else{
-                            str_type ="";
-                        }
-                        String[] arr_data = new String[2];
-                        arr_data[0] = str_contentid;
-                        arr_data[1] = str_type;
-                        al_pag.add(arr_data);
-                    }
-                }
-            }
-
-            if(p_showson.equals("1")){
-                // Shows contents of topic's child
-                Iterator iTp=tp.getChildAll().iterator();
-                while(iTp.hasNext()){
-                    Topic tp_child=(Topic)iTp.next();
-                    Iterator it_child = tp_child.getOccurrencesOfType("REC_WBContent");
-                    while(it_child.hasNext()){
-                        Occurrence oc_child = (Occurrence)it_child.next();
-                        if(oc_child!=null) {
-                            l_dpp = Long.parseLong(oc_child.getResourceData());
-                            recRes=DBResource.getInstance().getResource(tp.getMap().getId(),l_dpp);
-                            if(recRes != null){
-                                str_contentid = oc_child.getResourceData();
-                                RecResourceType recObj=DBResourceType.getInstance().getResourceType(recRes.getTypeMap(),recRes.getType());
-                                if(recObj != null){
-                                    str_type = recObj.getName();
-                                }
-                                else{
-                                    str_type ="";
-                                }
-                                String[] arr_data = new String[2];
-                                arr_data[0] = str_contentid;
-                                arr_data[1] = str_type;
-                                al_pag.add(arr_data);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        catch (Exception e){
-            AFUtils.log(e, "Error on method getGroupContent() resource" + " " + strRscType + " " + "with id" + " " + getResourceBase().getId(), true);
-        }*/
-        return al_pag;
-    }
-
-    public HashMap doPriorityValues(SWBParamRequest paramsRequest){
-        HashMap hm_values = new HashMap();
-        try{
-            hm_values.put("1",paramsRequest.getLocaleString("default"));
-            hm_values.put("2",paramsRequest.getLocaleString("low"));
-            hm_values.put("3",paramsRequest.getLocaleString("medium"));
-            hm_values.put("4",paramsRequest.getLocaleString("high"));
-            hm_values.put("5",paramsRequest.getLocaleString("priority"));
-        }
-        catch (Exception e){
-            log.error("Error on method doPriorityValues() resource " + strRscType + " with id " + getResourceBase().getId(), e);
-        }
-        return hm_values;
-    }
-
-
-    
-    
     
     private class Bool {
         private boolean first;
