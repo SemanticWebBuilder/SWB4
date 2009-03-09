@@ -10,6 +10,7 @@
  */
 package org.semanticwb.openoffice.ui.wizard;
 
+import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -26,20 +27,25 @@ import org.semanticwb.openoffice.OfficeApplication;
 public class ContentProperties extends WizardPage
 {
 
-    //public static final String PROPERTIES = "PROPERTIES";
-    private String repositoryName,  contentID,  type;
+    public static final String PROPERTIES = "PROPERTIES";    
 
-    /** Creates new form ContentProperties */
-    public ContentProperties(String repositoryName, String contentID, String type)
+    public ContentProperties()
     {
         initComponents();
-        this.repositoryName = repositoryName;
-        this.contentID = contentID;
-        this.type = type;
-        loadProperties();
     }
 
-    private void loadProperties()
+    @Override
+    protected void renderingPage()
+    {        
+        Map map=this.getWizardDataMap();
+        String repositoryName=map.get(SelectCategory.REPOSITORY_ID).toString();
+        String type=map.get(TitleAndDescription.NODE_TYPE).toString();
+        loadProperties(repositoryName, type);
+        super.renderingPage();
+    }
+    
+
+    private void loadProperties(String repositoryName,String type)
     {
         DefaultTableModel model = (DefaultTableModel) jTableProperties.getModel();
         int rows = model.getRowCount();
@@ -86,7 +92,8 @@ public class ContentProperties extends WizardPage
     @Override
     public WizardPanelNavResult allowFinish(String arg, Map map, Wizard wizard)
     {
-        WizardPanelNavResult result = WizardPanelNavResult.PROCEED;        
+        WizardPanelNavResult result = WizardPanelNavResult.PROCEED;
+        HashMap<PropertyInfo, String> properties = new HashMap<PropertyInfo, String>();
         int rows = jTableProperties.getRowCount();
         for (int i = 0; i < rows; i++)
         {
@@ -108,28 +115,25 @@ public class ContentProperties extends WizardPage
             props[i] = prop;
             values[i] = value;
         }
+         for (int i = 0; i < rows; i++)
+        {
+            PropertyInfo prop = (PropertyInfo) jTableProperties.getModel().getValueAt(i, 0);
+            String value = jTableProperties.getModel().getValueAt(i, 1).toString();
+            properties.put(prop, value);
+        }
+        String repositoryName=map.get(SelectCategory.REPOSITORY_ID).toString();
+        String type=map.get(TitleAndDescription.NODE_TYPE).toString();
+        loadProperties(repositoryName, type);
         try
         {
-            OfficeApplication.getOfficeDocumentProxy().validateContentValues(repositoryName, contentID, props, values);
+            OfficeApplication.getOfficeDocumentProxy().validateContentValues(repositoryName, props, values);
         }
         catch (Exception e)
         {
             JOptionPane.showMessageDialog(this, e.getMessage(), getDescription(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
             return WizardPanelNavResult.REMAIN_ON_PAGE;
         }
-        for (int i = 0; i < rows; i++)
-        {
-            PropertyInfo prop = (PropertyInfo) jTableProperties.getModel().getValueAt(i, 0);
-            String value = jTableProperties.getModel().getValueAt(i, 1).toString();
-            try
-            {
-                OfficeApplication.getOfficeDocumentProxy().setContentPropertyValue(repositoryName, contentID, prop, value);
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-        }
+        map.put(PROPERTIES, properties);
         return result;
     }
     
@@ -170,6 +174,6 @@ public class ContentProperties extends WizardPage
 
     public static String getDescription()
     {
-        return "Indicar propiedades de vista";
+        return "Indicar propiedades de contenido";
     }
 }
