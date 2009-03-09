@@ -36,6 +36,13 @@ public class TitleAndDescription extends WizardPage
 
     }
 
+    @Override
+    protected void renderingPage()
+    {   
+        super.renderingPage();
+        this.jTextFieldName.requestFocus();
+    }
+
     public TitleAndDescription()
     {
         initComponents();

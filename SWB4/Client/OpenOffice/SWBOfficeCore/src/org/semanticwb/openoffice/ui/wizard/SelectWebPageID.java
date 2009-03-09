@@ -52,11 +52,6 @@ public class SelectWebPageID extends WizardPage
         jLabel1.setText("Identificador de página:");
 
         jTextFieldWebPageID.setToolTipText("");
-        jTextFieldWebPageID.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                jTextFieldWebPageIDFocusGained(evt);
-            }
-        });
         jTextFieldWebPageID.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 jTextFieldWebPageIDKeyTyped(evt);
@@ -84,10 +79,7 @@ public class SelectWebPageID extends WizardPage
                 .addContainerGap(228, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
-    public void setId()
-    {
-        this.jTextFieldWebPageIDFocusGained(null);
-    }
+   
     private String getId(String titulo)
     {
         String newtitulo = "";
@@ -167,14 +159,17 @@ public class SelectWebPageID extends WizardPage
         return newtitulo;
     }
 
-    private void jTextFieldWebPageIDFocusGained(java.awt.event.FocusEvent evt)//GEN-FIRST:event_jTextFieldWebPageIDFocusGained
-    {//GEN-HEADEREND:event_jTextFieldWebPageIDFocusGained
-        if (this.jTextFieldWebPageID.getText().isEmpty())
-        {
-            String titulo = this.getWizardData(TitleAndDescription.TITLE).toString();
-            this.jTextFieldWebPageID.setText(getId(titulo));
-        }
-    }//GEN-LAST:event_jTextFieldWebPageIDFocusGained
+    @Override
+    protected void renderingPage()
+    {
+        
+        Map map=this.getWizardDataMap();
+        String titulo = map.get(TitleAndDescription.TITLE).toString();
+        this.jTextFieldWebPageID.setText(getId(titulo));        
+        this.jTextFieldWebPageID.requestFocus();
+        super.renderingPage();
+        
+    }
 
     private void jTextFieldWebPageIDKeyTyped(java.awt.event.KeyEvent evt)//GEN-FIRST:event_jTextFieldWebPageIDKeyTyped
     {//GEN-HEADEREND:event_jTextFieldWebPageIDKeyTyped
