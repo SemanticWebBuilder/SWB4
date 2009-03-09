@@ -27,6 +27,7 @@ import org.semanticwb.office.interfaces.VersionInfo;
 import org.semanticwb.openoffice.OfficeApplication;
 import org.semanticwb.openoffice.OfficeDocument;
 import org.semanticwb.openoffice.ui.icons.ImageLoader;
+import org.semanticwb.openoffice.ui.wizard.ContentProperties;
 
 /**
  *
@@ -37,7 +38,7 @@ public class DialogContentInformation extends javax.swing.JDialog
 
     private String contentId,  repository;
     private OfficeDocument document;
-
+    private ContentProperties contentProperties=new ContentProperties();
     /** Creates new form DialogContentInformation */
     public DialogContentInformation(String contentId, String repository, OfficeDocument document)
     {
@@ -48,6 +49,18 @@ public class DialogContentInformation extends javax.swing.JDialog
         this.contentId = contentId;
         this.repository = repository;
         this.document = document;
+        this.jPanelProperties.add(contentProperties);
+        contentProperties.setContentId(contentId);
+
+        try
+        {
+            String type=OfficeApplication.getOfficeDocumentProxy().getNameOfContent(repository,contentId);
+            contentProperties.loadProperties(repository, type);
+        }
+        catch(Exception e)
+        {
+            
+        }
         ListSelectionModel listSelectionModel = jTablePages.getSelectionModel();
         listSelectionModel.addListSelectionListener(new ListSelectionListener()
         {
@@ -285,6 +298,7 @@ public class DialogContentInformation extends javax.swing.JDialog
         jButtonUpdate = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JToolBar.Separator();
         jButtonViewVersion = new javax.swing.JButton();
+        jPanelProperties = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Información del Contenido");
@@ -312,7 +326,7 @@ public class DialogContentInformation extends javax.swing.JDialog
         jPanelButtonsLayout.setHorizontalGroup(
             jPanelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelButtonsLayout.createSequentialGroup()
-                .addContainerGap(309, Short.MAX_VALUE)
+                .addContainerGap(386, Short.MAX_VALUE)
                 .addComponent(jButtonAccept)
                 .addGap(18, 18, 18)
                 .addComponent(jButtonCancel)
@@ -330,7 +344,9 @@ public class DialogContentInformation extends javax.swing.JDialog
 
         getContentPane().add(jPanelButtons, java.awt.BorderLayout.SOUTH);
 
-        jTabbedPane1.setPreferredSize(new java.awt.Dimension(471, 250));
+        jTabbedPane1.setPreferredSize(new java.awt.Dimension(550, 250));
+
+        jPanelContentInformation.setPreferredSize(new java.awt.Dimension(650, 269));
 
         jLabel1.setText("Título:");
 
@@ -359,10 +375,10 @@ public class DialogContentInformation extends javax.swing.JDialog
                     .addComponent(jLabel4))
                 .addGap(30, 30, 30)
                 .addGroup(jPanelContentInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
-                    .addComponent(jTextFieldTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
-                    .addComponent(jLabel1DisplayDateOfModification, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
-                    .addComponent(jComboBoxCategory, 0, 276, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 353, Short.MAX_VALUE)
+                    .addComponent(jTextFieldTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 353, Short.MAX_VALUE)
+                    .addComponent(jLabel1DisplayDateOfModification, javax.swing.GroupLayout.DEFAULT_SIZE, 353, Short.MAX_VALUE)
+                    .addComponent(jComboBoxCategory, 0, 353, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanelContentInformationLayout.setVerticalGroup(
@@ -562,6 +578,9 @@ public class DialogContentInformation extends javax.swing.JDialog
         jPanelVersions.add(jPanel1, java.awt.BorderLayout.PAGE_START);
 
         jTabbedPane1.addTab("Versiones del contenido", jPanelVersions);
+
+        jPanelProperties.setLayout(new java.awt.BorderLayout());
+        jTabbedPane1.addTab("Propiedades de contenido", jPanelProperties);
 
         getContentPane().add(jTabbedPane1, java.awt.BorderLayout.CENTER);
 
@@ -826,6 +845,7 @@ public class DialogContentInformation extends javax.swing.JDialog
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanelButtons;
     private javax.swing.JPanel jPanelContentInformation;
+    private javax.swing.JPanel jPanelProperties;
     private javax.swing.JPanel jPanelPublishInformation;
     private javax.swing.JPanel jPanelVersions;
     private javax.swing.JScrollPane jScrollPane1;

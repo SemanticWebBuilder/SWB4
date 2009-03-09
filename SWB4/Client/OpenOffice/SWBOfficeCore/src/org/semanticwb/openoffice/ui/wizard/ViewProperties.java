@@ -439,7 +439,6 @@ public class ViewProperties extends WizardPage
                 "Propiedad", "Valor"
             }
         ));
-        jTableProperties.setCellSelectionEnabled(true);
         jTableProperties.setRowHeight(24);
         jTableProperties.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTableProperties);
