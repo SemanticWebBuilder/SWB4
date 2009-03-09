@@ -8,6 +8,7 @@ package org.semanticwb.openoffice.ui.wizard;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
+import java.util.Map;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -16,8 +17,12 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.DefaultTreeSelectionModel;
 import javax.swing.tree.TreeCellRenderer;
+import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
+import org.netbeans.spi.wizard.Wizard;
 import org.netbeans.spi.wizard.WizardPage;
+import org.netbeans.spi.wizard.WizardPanelNavResult;
 import org.semanticwb.office.interfaces.WebPageInfo;
 import org.semanticwb.office.interfaces.WebSiteInfo;
 import org.semanticwb.openoffice.OfficeApplication;
@@ -38,9 +43,31 @@ public class SelectPage extends WizardPage
         initComponents();
         DefaultTreeSelectionModel selectionModel = new DefaultTreeSelectionModel();
         selectionModel.setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-        jTreeSite.setSelectionModel(selectionModel);
+        jTreeSite.setSelectionModel(selectionModel);        
         loadTree();
+        jTreeSite.setRootVisible(false);
     }
+
+    @Override
+    public WizardPanelNavResult allowFinish(String stepName, Map map, Wizard wizard)
+    {
+        return this.allowNext(stepName, map, wizard);
+    }
+
+    @Override
+    public WizardPanelNavResult allowNext(String stepName, Map map, Wizard wizard)
+    {
+        WizardPanelNavResult res=WizardPanelNavResult.PROCEED;
+        if(map.get(WEBPAGE)==null)
+        {
+            res=WizardPanelNavResult.REMAIN_ON_PAGE;
+            JOptionPane.showMessageDialog(this, "¡Debe indicar una página web!", getDescription(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+            this.jTreeSite.requestFocus();
+        }
+        return res;
+    }
+
+   
 
     public SelectPage(String siteId)
     {
@@ -117,9 +144,11 @@ public class SelectPage extends WizardPage
     {
         this.jTreeSite.setCellRenderer(new TreeRender());
         this.jTreeSite.setEditable(false);
-        DefaultMutableTreeNode repositories = new Site("", "Sitios");
-        DefaultTreeModel model = new DefaultTreeModel(repositories);
+        Root root = new Root("", "Sitios");
+        DefaultTreeModel model = new DefaultTreeModel(root);
+        model.setRoot(root);
         this.jTreeSite.setModel(model);
+
 
         try
         {
@@ -127,31 +156,35 @@ public class SelectPage extends WizardPage
             {
                 if (siteId == null)
                 {
-                    Site repositoryNode = new Site(website.id, website.title);
-                    model.insertNodeInto(repositoryNode, repositories, 0);
+                    Site site = new Site(website.id, website.title);
+                    model.insertNodeInto(site, root, 0);                    
                     WebPageInfo home = OfficeApplication.getOfficeApplicationProxy().getHomePage(website);
                     HomeWebPage child = new HomeWebPage(home.id, home.title, home.description, website.id, home.url);
-                    repositoryNode.add(child);
+                    site.add(child);
                     if (home.childs > 0)
                     {
                         DefaultMutableTreeNode dummy = new DefaultMutableTreeNode();
                         child.add(dummy);
                     }
+                    TreeNode[] path=site.getPath();
+                    jTreeSite.expandPath(new TreePath(path));
                 }
                 else
                 {
                     if (siteId.equals(website.id))
                     {
-                        Site repositoryNode = new Site(website.id, website.title);
-                        model.insertNodeInto(repositoryNode, repositories, 0);
+                        Site site = new Site(website.id, website.title);
+                        model.insertNodeInto(site, root, 0);                        
                         WebPageInfo home = OfficeApplication.getOfficeApplicationProxy().getHomePage(website);
                         HomeWebPage child = new HomeWebPage(home.id, home.title, home.description, website.id, home.url);
-                        repositoryNode.add(child);
+                        site.add(child);
                         if (home.childs > 0)
                         {
                             DefaultMutableTreeNode dummy = new DefaultMutableTreeNode();
                             child.add(dummy);
                         }
+                        TreeNode[] path=site.getPath();
+                        jTreeSite.expandPath(new TreePath(path));
                     }
                 }
 
@@ -169,11 +202,7 @@ public class SelectPage extends WizardPage
             this.setProblem(message);
             return;
         }
-        if (this.jTreeSite.getRowCount() > 0)
-        {
-            this.jTreeSite.expandRow(0);
-        }
-
+        jTreeSite.expandPath(new TreePath(root.getPath()));
     }
 
     private void addWebPage(WebPage nodeParent)
@@ -269,7 +298,7 @@ private void jTreeSiteValueChanged(javax.swing.event.TreeSelectionEvent evt) {//
     this.getWizardDataMap().put(WEBPAGE, null);
     if (selected != null && selected instanceof Site)
     {
-        if (((Site) selected).toString().equals("Sitios"))
+        if (selected instanceof Root)
         {
             this.jButtonAddPage.setEnabled(false);
         }
@@ -342,10 +371,36 @@ private void jTreeSiteTreeWillExpand(javax.swing.event.TreeExpansionEvent evt)th
         public String getToolTipText();
     }
 
+    class Root extends Site
+    {
+
+        public Root(String id, String title)
+        {
+            super(id, title);
+        }
+        
+
+        @Override
+        public boolean isRoot()
+        {
+            return true;
+        }
+    }
+
+    
+
     class Site extends DefaultMutableTreeNode implements ToolTipTreeNode
     {
 
         private JLabel component = new JLabel();
+
+        @Override
+        public boolean isRoot()
+        {
+            return false;
+        }
+
+        
         private String id;
         private String title;
 
@@ -474,6 +529,14 @@ private void jTreeSiteTreeWillExpand(javax.swing.event.TreeExpansionEvent evt)th
         public JLabel getComponent()
         {
             return component;
+        }
+
+        
+
+        @Override
+        public boolean isRoot()
+        {
+            return false;
         }
     }
 }
