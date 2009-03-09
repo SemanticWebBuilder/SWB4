@@ -87,8 +87,7 @@ public class ContentProperties extends WizardPage
     @Override
     public WizardPanelNavResult allowFinish(String arg, Map map, Wizard wizard)
     {
-        WizardPanelNavResult result = WizardPanelNavResult.PROCEED;
-        HashMap<PropertyInfo, String> properties = new HashMap<PropertyInfo, String>();
+        WizardPanelNavResult result = WizardPanelNavResult.PROCEED;        
         int rows = jTableProperties.getRowCount();
         for (int i = 0; i < rows; i++)
         {
