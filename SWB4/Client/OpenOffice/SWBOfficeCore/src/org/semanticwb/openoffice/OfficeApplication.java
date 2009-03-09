@@ -263,14 +263,12 @@ public abstract class OfficeApplication
     {
         if (OfficeApplication.tryLogin())
         {
-            CreatePageResultProducer resultProducer = new CreatePageResultProducer();
-            SelectWebPageID selectWebPageID = new SelectWebPageID();
+            CreatePageResultProducer resultProducer = new CreatePageResultProducer();            
             WizardPage[] clazz = new WizardPage[]
             {
-                new SelectPage(), new TitleAndDescription(false), selectWebPageID
+                new SelectPage(), new TitleAndDescription(false), new SelectWebPageID()
             };
-            Wizard wiz = WizardPage.createWizard("Asistente de creación de página", clazz, resultProducer);
-            wiz.addWizardObserver(new CreatePageObserver(selectWebPageID));
+            Wizard wiz = WizardPage.createWizard("Asistente de creación de página", clazz, resultProducer);            
             wiz.show();
         }
     }
