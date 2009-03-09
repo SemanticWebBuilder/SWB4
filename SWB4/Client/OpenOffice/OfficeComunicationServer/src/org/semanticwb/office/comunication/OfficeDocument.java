@@ -1441,7 +1441,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         portlet.setVersionToShow(portletInfo.version);
     }
 
-    public void validateContentValues(String repositoryName, String contentID, PropertyInfo[] properties, Object[] values) throws Exception
+    public void validateContentValues(String repositoryName,PropertyInfo[] properties, Object[] values) throws Exception
     {
         
     }
