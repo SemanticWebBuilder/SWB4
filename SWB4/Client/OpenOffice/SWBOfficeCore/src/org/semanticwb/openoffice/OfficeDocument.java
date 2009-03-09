@@ -31,6 +31,7 @@ import org.semanticwb.openoffice.ui.dialogs.DialogContentInformation;
 import org.semanticwb.openoffice.ui.dialogs.DialogHistory;
 import org.semanticwb.openoffice.ui.dialogs.DialogSaveDocument;
 import org.semanticwb.openoffice.ui.dialogs.DialogUpdateContent;
+import org.semanticwb.openoffice.ui.wizard.ContentProperties;
 import org.semanticwb.openoffice.ui.wizard.PublishVersion;
 import org.semanticwb.openoffice.ui.wizard.SelectCategory;
 import org.semanticwb.openoffice.ui.wizard.SelectPage;
@@ -65,7 +66,7 @@ public abstract class OfficeDocument
     static
     {
         System.setProperty("wizard.sidebar.image", "org/semanticwb/openoffice/ui/icons/sidebar.png");
-        System.setProperty("WizardDisplayer.default","org.semanticwb.openoffice.util.WBWizardDisplayerImpl");
+        System.setProperty("WizardDisplayer.default", "org.semanticwb.openoffice.util.WBWizardDisplayerImpl");
         Locale.setDefault(new Locale("es"));
         try
         {
@@ -566,7 +567,7 @@ public abstract class OfficeDocument
         return result;
     }
 
-    public final void publish(String title, String description,String siteid)
+    public final void publish(String title, String description, String siteid)
     {
         if (isPublicated())
         {
@@ -651,38 +652,13 @@ public abstract class OfficeDocument
                         else
                         {
                             PublishResultProducer resultProducer = new PublishResultProducer(this);
-                            Class[] clazz;
-                            switch (getDocumentType())
+                            Class[] clazz = new Class[]
                             {
-                                case WORD:
-                                    clazz = new Class[]
-                                            {
-                                                //TitleAndDescription.class, SelectCategory.class, PagContenido.class, SelectTypeToShow.class
-                                                SelectCategory.class, TitleAndDescription.class
-                                            };
-                                    break;
-                                case EXCEL:
-                                    clazz = new Class[]
-                                            {
-                                                SelectCategory.class, TitleAndDescription.class
-                                            };
-                                    break;
-                                case PPT:
-                                    clazz = new Class[]
-                                            {
-                                                SelectCategory.class, TitleAndDescription.class
-                                            };
-                                    break;
-                                default:
-                                    clazz = new Class[]
-                                            {
-                                                TitleAndDescription.class, SelectCategory.class
-                                            };
-                                    break;
-
-                            }
+                                SelectCategory.class, TitleAndDescription.class,ContentProperties.class
+                            };
                             Wizard wiz = WizardPage.createWizard(TITLE_SAVE_CONTENT_SITE, clazz, resultProducer);
                             wiz.show();
+
                         }
                     }
                     catch (Exception e)
@@ -747,9 +723,9 @@ public abstract class OfficeDocument
     private void updateContent() throws Exception
     {
         String workspace = this.getCustomProperties().get(WORKSPACE_ID_NAME);
-        if (workspace!=null && OfficeApplication.tryLogin())
+        if (workspace != null && OfficeApplication.tryLogin())
         {
-            DialogUpdateContent summary = new DialogUpdateContent(workspace, contentID, this);            
+            DialogUpdateContent summary = new DialogUpdateContent(workspace, contentID, this);
             summary.setVisible(true);
         }
     }
@@ -760,9 +736,9 @@ public abstract class OfficeDocument
 
     public final void insertLink()
     {
-        if(this.isReadOnly())
+        if (this.isReadOnly())
         {
-            JOptionPane.showMessageDialog(null, "¡El documento es de sólo lectura!","Insertar liga a página",JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "¡El documento es de sólo lectura!", "Insertar liga a página", JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
             return;
         }
         if (OfficeApplication.tryLogin())
