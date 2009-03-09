@@ -43,7 +43,7 @@ public class WB4WriterTest
     XComponentContext xContext;
     XComponent xCompDest = null;
     XDesktop oDesktop = null;
-    File sUrlDestiny = new File("C:\\temp\\articulo.odt");
+    File sUrlDestiny = new File("C:\\temp\\demo8.odt");
     File tempDir = new File("c:/temp/demo/");
 
     public WB4WriterTest()
@@ -287,6 +287,7 @@ public class WB4WriterTest
         }
         catch ( Throwable wbe )
         {
+            wbe.printStackTrace();
             Assert.fail(wbe.getMessage());
         }
     }
@@ -322,7 +323,7 @@ public class WB4WriterTest
     }
 
     @Test
-    //@Ignore
+    @Ignore
     public void showDocumentInfoTest()
     {
         try
@@ -381,8 +382,8 @@ public class WB4WriterTest
     }
 
     @Test
-    @Ignore
-    public void createWebTest()
+    //@Ignore
+    public void createWebPageTest()
     {
         try
         {
@@ -390,6 +391,7 @@ public class WB4WriterTest
         }
         catch ( Throwable wbe )
         {
+            wbe.printStackTrace();
             Assert.fail(wbe.getMessage());
         }
     }
