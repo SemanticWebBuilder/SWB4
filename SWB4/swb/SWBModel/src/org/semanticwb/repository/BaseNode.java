@@ -1787,4 +1787,25 @@ public class BaseNode extends BaseNodeBase
     {
         return getSemanticObject().hashCode();
     }
+    @Override
+    public org.semanticwb.repository.BaseNode getParent()
+    {
+        try
+        {
+            return super.getParent();
+        }
+        catch(Throwable e)
+        {
+            org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swbrep_parentNode);
+            if(obj!=null)
+            {
+                return new BaseNode(obj);
+            }
+            else
+            {
+                return null;
+            }
+
+        }
+    }
 }
