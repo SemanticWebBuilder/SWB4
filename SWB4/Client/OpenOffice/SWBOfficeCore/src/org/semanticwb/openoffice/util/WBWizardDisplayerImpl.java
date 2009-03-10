@@ -25,7 +25,8 @@ public class WBWizardDisplayerImpl extends WizardDisplayerImpl {
     {
         JDialog dialog=new JDialog((Frame)null, ModalityType.TOOLKIT_MODAL);
         dialog.setIconImage(ImageLoader.images.get("semius").getImage());
-        dialog.setModal(true);        
+        dialog.setModal(true);
+        dialog.setResizable(false);
         dialog.setModalityType(ModalityType.TOOLKIT_MODAL);
         return dialog;
     }
