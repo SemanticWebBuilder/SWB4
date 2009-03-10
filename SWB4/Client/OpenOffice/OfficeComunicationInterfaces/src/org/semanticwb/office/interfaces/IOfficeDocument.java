@@ -29,8 +29,8 @@ public interface IOfficeDocument
     @XmlRpcMethod(methodName = "OfficeDocument.getCategory")
     public String getCategory(String repositoryName, String contentID) throws Exception;
 
-    @XmlRpcMethod(methodName = "OfficeDocument.getLasUpdate")
-    public Date getLasUpdate(String repositoryName, String contentID) throws Exception;
+    @XmlRpcMethod(methodName = "OfficeDocument.getLastUpdate")
+    public Date getLastUpdate(String repositoryName, String contentID) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.getDescription")
     public String getDescription(String repositoryName, String contentID) throws Exception;
