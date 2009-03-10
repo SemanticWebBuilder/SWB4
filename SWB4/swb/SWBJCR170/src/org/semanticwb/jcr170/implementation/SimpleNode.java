@@ -1663,11 +1663,7 @@ public class SimpleNode implements Node
     }
 
     public NodeIterator getNodes(String namePattern) throws RepositoryException
-    {
-        /*String statement = "SELECT ?x WHERE { ?x swbrep:name ?name FILTER regex(?name,\"" + namePattern + "\") }";
-        QueryImp query = new QueryImp(this.session, this.getSession().getWorkspace().getName(), statement, QueryImp.SPARQL);
-        QueryResult res = query.execute();
-        return res.getNodes();*/
+    {        
         ArrayList<SimpleNode> childsToReturn = new ArrayList<SimpleNode>();
         for (SimpleNode child : this.getSimpleNodes())
         {
