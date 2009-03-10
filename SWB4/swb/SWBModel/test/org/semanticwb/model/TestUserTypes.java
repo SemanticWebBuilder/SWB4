@@ -41,7 +41,7 @@ public class TestUserTypes {
     }
 
 
-    @Test
+    //@Test
     public void FillUsers(){
       UserRepository repository = null;
       String[] nombres = {"Sergio", "Javier", "Jorge", "Carlos", "Edgar", "Nohemi", "Victor", "Melissa", "Nancy", "Rogelio", "Jose", "Aura"};
@@ -70,7 +70,7 @@ public class TestUserTypes {
       }
     }
 
-    @Test
+    //@Test
     public void putRoles(){
         Iterator<Role> itro = SWBContext.getDefaultRepository().listRoles();
         ArrayList<Role> arliro = new ArrayList<Role>();
@@ -87,7 +87,7 @@ public class TestUserTypes {
         }
     }
 
-    @Test
+    //@Test
     public void putGroups(){
         Iterator<UserGroup> itro = SWBContext.getDefaultRepository().listUserGroups();
         ArrayList<UserGroup> arliro = new ArrayList<UserGroup>();
@@ -104,6 +104,13 @@ public class TestUserTypes {
         }
     }
 
+    //@Test
+    public void setValues(){
+        UserRepository repository = null;
+        repository = SWBContext.getDefaultRepository();
+        repository.setUserRepSecurityQuestionList("1:Pasaporte num|2:Licencia num|3:nombre de tu mascota");
+    }
+    
     @Test
     public void createUserTypes(){
         UserRepository repository = null;
@@ -123,7 +130,7 @@ public class TestUserTypes {
 
     }
 
-    @Test
+    //@Test
     public void setUserTypes() throws SWBException{
         String[] grados = {"primaria","secundaria","preparatoria","universidad","maestria","doctorado"};
         String[] escuela = {"Tec","UNAM","IPN","UVM","UNITEC","Valle"};
