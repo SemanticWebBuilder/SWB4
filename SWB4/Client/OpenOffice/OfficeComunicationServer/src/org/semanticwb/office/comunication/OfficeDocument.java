@@ -140,6 +140,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     resNode.setProperty(JCR_LASTMODIFIED, lastModified);
                     categoryNode.save();
                 }
+                
                 Version version = contentNode.checkin();
                 log.debug("Version created with number " + version.getName());
                 return contentNode.getUUID();
