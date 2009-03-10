@@ -268,7 +268,7 @@ public class SemanticMgr implements SWBInstanceObject
             try
             {
                 Model m = ModelFactory.createDefaultModel() ;
-                FileInputStream in=new FileInputStream(SWBUtils.getApplicationPath()+"/swbadmin/rdf/SWBAdmin.rdf");
+                FileInputStream in=new FileInputStream(SWBUtils.getApplicationPath()+SWBPlatform.getEnv("swb/adminFile", "/swbadmin/rdf/SWBAdmin.rdf"));
                 m.read(in, null);
                 omodel.addSubModel(m,true);
             }catch(Exception e){log.error(e);}

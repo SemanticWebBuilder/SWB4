@@ -54,6 +54,16 @@ public class UserRepositoryBase extends org.semanticwb.model.SWBModel implements
         return (getUserRepository(id, model)!=null);
     }
 
+    public String getUserRepSecurityQuestionList()
+    {
+        return getSemanticObject().getProperty(swb_userRepSecurityQuestionList);
+    }
+
+    public void setUserRepSecurityQuestionList(String userRepSecurityQuestionList)
+    {
+        getSemanticObject().setProperty(swb_userRepSecurityQuestionList, userRepSecurityQuestionList);
+    }
+
     public java.util.Date getCreated()
     {
         return getSemanticObject().getDateProperty(swb_created);

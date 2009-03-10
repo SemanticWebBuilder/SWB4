@@ -277,7 +277,13 @@ public class SemanticModel
      */
     public void write(OutputStream out)
     {
-        m_model.write(out);
+        if(m_model instanceof OntModel)
+        {
+            ((OntModel)m_model).writeAll(out, null, null);
+        }else
+        {
+            m_model.write(out);
+        }
     }
 
     /**
