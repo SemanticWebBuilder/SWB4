@@ -86,12 +86,12 @@ public class SWBPortal {
             site.setHomePage(home);
             home.setActive(true);
             //Create DNS
-            Dns dns = site.createDns("localhost");
-            dns.setTitle("localhost");
-            dns.setDescription("DNS por default", "es");
-            dns.setDescription("Default DNS", "en");
-            dns.setDefault(true);
-            dns.setWebPage(home);
+//            Dns dns = site.createDns("localhost");
+//            dns.setTitle("localhost");
+//            dns.setDescription("DNS por default", "es");
+//            dns.setDescription("Default DNS", "en");
+//            dns.setDefault(true);
+//            dns.setWebPage(home);
         }
         //Check for GlobalWebSite
         UserRepository urep = SWBContext.getDefaultRepository();

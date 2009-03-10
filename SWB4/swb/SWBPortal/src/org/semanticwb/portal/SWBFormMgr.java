@@ -7,8 +7,10 @@ import java.util.Map;
 import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.model.DisplayProperty;
 import org.semanticwb.model.FormElement;
 import org.semanticwb.model.FormView;
@@ -25,6 +27,8 @@ import org.semanticwb.platform.*;
  */
 public class SWBFormMgr 
 {
+    private static Logger log = SWBUtils.getLogger(SWBFormMgr.class);
+
     public static final String MODE_VIEW="view";
     public static final String MODE_EDIT="edit";
     public static final String MODE_CREATE="create";
@@ -241,15 +245,18 @@ public class SWBFormMgr
     {
         String label=null;
         String element=null;
-        if(m_propmap!=null)
+        try
         {
-            label=ele.renderLabel(m_obj, prop, m_type, m_propmap.get(prop), m_lang);
-            element=ele.renderElement(m_obj, prop, m_type, m_propmap.get(prop), m_lang);
-        }else
-        {
-            label=ele.renderLabel(m_obj, prop, m_type, m_mode, m_lang);
-            element=ele.renderElement(m_obj, prop, m_type, m_mode, m_lang);
-        }
+            if(m_propmap!=null)
+            {
+                label=ele.renderLabel(m_obj, prop, m_type, m_propmap.get(prop), m_lang);
+                element=ele.renderElement(m_obj, prop, m_type, m_propmap.get(prop), m_lang);
+            }else
+            {
+                label=ele.renderLabel(m_obj, prop, m_type, m_mode, m_lang);
+                element=ele.renderElement(m_obj, prop, m_type, m_mode, m_lang);
+            }
+        }catch(Exception e){log.error("Element:"+ele,e);}
         if(element!=null && element.length()>0)
         {
             if(!m_mode.equals(MODE_CREATE))
