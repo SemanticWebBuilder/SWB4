@@ -784,10 +784,10 @@
         <swb:hasClass rdf:resource="#RuleRef"/>
         <swb:hasHerarquicalNode>
           <swbxf:HerarquicalNode rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Templates">
+            <swb:title xml:lang="es">Plantillas</swb:title>
+            <swb:title xml:lang="en">Templates</swb:title>
             <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
             >swbIconTemplates</swb:iconClass>
-            <swb:title xml:lang="en">Templates</swb:title>
-            <swb:title xml:lang="es">Platillas</swb:title>
             <swbxf:heClass rdf:resource="#TemplateGroup"/>
             <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
             >10</swb:index>
@@ -827,6 +827,14 @@
             <rdfs:subClassOf rdf:resource="#UserGroupRefable"/>
             <rdfs:subClassOf rdf:resource="#RuleRefable"/>
             <rdfs:subClassOf rdf:resource="#Deleteable"/>
+            <rdfs:subClassOf>
+              <swb:Interface rdf:ID="Deviceable">
+                <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                >org.semanticwb.model.Deviceable</swb:className>
+                <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+              </swb:Interface>
+            </rdfs:subClassOf>
             <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
             >org.semanticwb.model.Template</swb:className>
             <rdfs:subClassOf rdf:resource="#RoleRefable"/>
@@ -1167,6 +1175,19 @@
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:about="#hasGroupedUser">
     <rdfs:label>hasUser</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="device">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_device">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModelWithBlank"/>
+        <rdfs:label xml:lang="en">Device</rdfs:label>
+        <rdfs:label xml:lang="es">Dispositivo</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >60</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="#Device"/>
+    <rdfs:domain rdf:resource="#Deviceable"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasPTPortlet">
     <rdfs:label>hasPortlet</rdfs:label>
