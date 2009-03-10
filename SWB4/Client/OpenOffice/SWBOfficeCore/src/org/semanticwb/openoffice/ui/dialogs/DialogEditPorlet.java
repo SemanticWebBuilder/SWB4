@@ -5,32 +5,14 @@
  */
 package org.semanticwb.openoffice.ui.dialogs;
 
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.Frame;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
-import javax.swing.AbstractCellEditor;
-import javax.swing.JCheckBox;
+import java.util.HashMap;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JSpinner;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.SpinnerModel;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
 import org.jdom.Document;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
@@ -56,7 +38,7 @@ public class DialogEditPorlet extends javax.swing.JDialog
     /** Creates new form DialogContentPublicationInformation */
     public DialogEditPorlet(PortletInfo pageInformation, String repositoryName, String contentID)
     {
-        super((Frame)null, ModalityType.TOOLKIT_MODAL);
+        super((Frame) null, ModalityType.TOOLKIT_MODAL);
         initComponents();
         this.setIconImage(ImageLoader.images.get("semius").getImage());
         this.setModal(true);
@@ -106,272 +88,6 @@ public class DialogEditPorlet extends javax.swing.JDialog
         }
     }
 
-    class PropertyRender implements TableCellRenderer
-    {
-
-        public Component getTableCellRendererComponent(JTable table, Object value,
-                boolean isSelected, boolean hasFocus, int row, int column)
-        {
-            Object prop = table.getModel().getValueAt(row, 0);
-            if (prop instanceof PropertyInfo)
-            {
-                PropertyInfo PropertyInfo = (PropertyInfo) prop;
-                if (PropertyInfo.type != null)
-                {
-                    if (PropertyInfo.type.equalsIgnoreCase("boolean"))
-                    {
-                        JCheckBox jCheckBox = new JCheckBox();
-                        jCheckBox.setBackground(new Color(255, 255, 255));
-                        JPanel panel = new JPanel();
-                        panel.add(jCheckBox);
-                        panel.setBackground(new Color(255, 255, 255));
-                        if (value == null)
-                        {
-                            jCheckBox.setSelected(false);
-                        }
-                        else
-                        {
-                            if (value instanceof Boolean)
-                            {
-                                jCheckBox.setSelected((Boolean) value);
-                            }
-                        }
-                        return panel;
-                    }
-                    if (PropertyInfo.type.equalsIgnoreCase("integer"))
-                    {
-                        IntegerEditor JTextField = new IntegerEditor(row, column);
-
-                        if (value == null)
-                        {
-                            JTextField.setValue(0);
-                        }
-                        else
-                        {
-                            int ivalue = 0;
-                            try
-                            {
-                                ivalue = Integer.parseInt(value.toString());
-
-                            }
-                            catch (NumberFormatException nfe)
-                            {
-                                nfe.printStackTrace();
-                            }
-                            JTextField.setValue(ivalue);
-                        }
-                        return JTextField;
-                    }
-                    if (PropertyInfo.type.equalsIgnoreCase("String"))
-                    {
-                        StringEditor JTextField = new StringEditor(row, column);
-                        if (value == null)
-                        {
-                            JTextField.setText("");
-                        }
-                        else
-                        {
-                            JTextField.setText(value.toString());
-                        }
-                        return JTextField;
-                    }
-                }
-            }
-            return null;
-        }
-    }
-
-    class PropertyEditor extends AbstractCellEditor implements TableCellEditor, ChangeListener, KeyListener
-    {
-
-        public PropertyEditor()
-        {
-        }
-
-        public Object getCellEditorValue()
-        {
-            int row = jTableProperties.getEditingRow();
-            int col = jTableProperties.getEditingColumn();
-            Object obj = jTableProperties.getModel().getValueAt(row, col);
-            return obj;
-        }
-
-        public Component getTableCellEditorComponent(JTable table, Object value,
-                boolean isSelected, int row, int column)
-        {
-
-            Object prop = table.getModel().getValueAt(row, 0);
-            if (prop instanceof PropertyInfo)
-            {
-                PropertyInfo PropertyInfo = (PropertyInfo) prop;
-                if (PropertyInfo.type.equalsIgnoreCase("boolean"))
-                {
-                    BooleanEditor jCheckBox = new BooleanEditor(row, column);
-                    jCheckBox.setBackground(new Color(255, 255, 255));
-                    JPanel panel = new JPanel();
-                    panel.add(jCheckBox);
-                    panel.setBackground(new Color(255, 255, 255));
-                    jCheckBox.addChangeListener(this);
-                    if (value == null)
-                    {
-                        jCheckBox.setSelected(false);
-                    }
-                    else
-                    {
-                        if (value instanceof Boolean)
-                        {
-                            jCheckBox.setSelected((Boolean) value);
-                        }
-                    }
-                    return panel;
-                }
-                if (PropertyInfo.type.equalsIgnoreCase("integer"))
-                {
-                    IntegerEditor integerEditor = new IntegerEditor(row, column);
-                    integerEditor.addChangeListener(this);
-                    integerEditor.addKeyListener(this);
-                    if (value == null)
-                    {
-                        integerEditor.setValue(0);
-                    }
-                    else
-                    {
-                        int ivalue = 0;
-                        try
-                        {
-                            ivalue = Integer.parseInt(value.toString());
-
-                        }
-                        catch (NumberFormatException nfe)
-                        {
-                            nfe.printStackTrace();
-                        }
-                        integerEditor.setValue(ivalue);
-                    }
-
-                    return integerEditor;
-                }
-                if (PropertyInfo.type.equalsIgnoreCase("string"))
-                {
-                    StringEditor stringEditor = new StringEditor(row, column);
-                    stringEditor.addKeyListener(this);
-                    stringEditor.addFocusListener(new FocusListener()
-                    {
-
-                        public void focusGained(FocusEvent e)
-                        {
-                            if (e.getSource() instanceof StringEditor)
-                            {
-                                StringEditor stringEditor = (StringEditor) e.getSource();
-                                stringEditor.setSelectionStart(0);
-                                stringEditor.setSelectionEnd(stringEditor.getText().length());
-                            }
-                        }
-
-                        public void focusLost(FocusEvent e)
-                        {
-                        }
-                    });
-
-                    if (value == null)
-                    {
-                        stringEditor.setText("");
-                    }
-                    else
-                    {
-                        stringEditor.setText(value.toString());
-                    }
-
-                    return stringEditor;
-                }
-            }
-            return null;
-        }
-
-        public void stateChanged(ChangeEvent e)
-        {
-            if (e.getSource() instanceof BooleanEditor)
-            {
-                BooleanEditor booleanEditor = (BooleanEditor) e.getSource();
-                jTableProperties.setValueAt(booleanEditor.isSelected(), booleanEditor.row, booleanEditor.col);
-            }
-            if (e.getSource() instanceof IntegerEditor)
-            {
-                IntegerEditor integerEditor = (IntegerEditor) e.getSource();
-                jTableProperties.setValueAt(integerEditor.getValue(), integerEditor.row, integerEditor.col);
-            }
-
-        }
-
-        public void keyTyped(KeyEvent e)
-        {
-        }
-
-        public void keyPressed(KeyEvent e)
-        {
-        }
-
-        public void keyReleased(KeyEvent e)
-        {
-            if (e.getSource() instanceof IntegerEditor)
-            {
-                IntegerEditor CellTextBox = (IntegerEditor) e.getSource();
-                if (CellTextBox.getValue() == null)
-                {
-                    jTableProperties.setValueAt(0, CellTextBox.row, CellTextBox.col);
-                }
-                else
-                {
-                    jTableProperties.setValueAt(CellTextBox.getValue(), CellTextBox.row, CellTextBox.col);
-                }
-            }
-            if (e.getSource() instanceof IntegerEditor)
-            {
-                IntegerEditor integerEditor = (IntegerEditor) e.getSource();
-                jTableProperties.setValueAt(integerEditor.getValue(), integerEditor.row, integerEditor.col);
-            }
-        }
-    }
-
-    class BooleanEditor extends JCheckBox
-    {
-
-        int row, col;
-
-        public BooleanEditor(int row, int col)
-        {
-            this.row = row;
-            this.col = col;
-        }
-    }
-
-    class IntegerEditor extends JSpinner
-    {
-
-        int row, col;
-
-        public IntegerEditor(int row, int col)
-        {
-            this.row = row;
-            this.col = col;
-            SpinnerModel model = new SpinnerNumberModel(0, 0, 9999, 1);
-            this.setModel(model);
-            this.setEditor(new JSpinner.NumberEditor(this, "####"));
-        }
-    }
-
-    class StringEditor extends JTextField
-    {
-
-        int row, col;
-
-        public StringEditor(int row, int col)
-        {
-            this.row = row;
-            this.col = col;
-        }
-    }
-
     private void loadCalendars()
     {
         DefaultTableModel model = (DefaultTableModel) jTableScheduler.getModel();
@@ -408,27 +124,15 @@ public class DialogEditPorlet extends javax.swing.JDialog
 
     private void loadProperties()
     {
-        DefaultTableModel model = (DefaultTableModel) jTableProperties.getModel();
-        TableColumn col = jTableProperties.getColumnModel().getColumn(1);
-        col.setCellEditor(new PropertyEditor());
-        col.setCellRenderer(new PropertyRender());
-        int rows = model.getRowCount();
-        for (int i = 1; i <= rows; i++)
-        {
-            model.removeRow(0);
-        }
         try
         {
+            HashMap<PropertyInfo, Object> properties = new HashMap<PropertyInfo, Object>();
             for (PropertyInfo info : OfficeApplication.getOfficeDocumentProxy().getPortletProperties(repositoryName, contentID))
             {
                 String value = OfficeApplication.getOfficeDocumentProxy().getViewPropertyValue(pageInformation, info);
-                Object[] data =
-                {
-                    info, value
-                };
-                model.addRow(data);
-
+                properties.put(info, value);
             }
+            this.panelPropertyEditor1.loadProperties(properties);
         }
         catch (Exception e)
         {
@@ -466,8 +170,7 @@ public class DialogEditPorlet extends javax.swing.JDialog
         jLabel8 = new javax.swing.JLabel();
         jComboBoxVersion = new javax.swing.JComboBox();
         jPanelInformation = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTableProperties = new javax.swing.JTable();
+        panelPropertyEditor1 = new org.semanticwb.openoffice.components.PanelPropertyEditor();
         jPanelSchedule = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTableScheduler = new javax.swing.JTable();
@@ -589,31 +292,7 @@ public class DialogEditPorlet extends javax.swing.JDialog
         jTabbedPane1.addTab("Información", jPanel2);
 
         jPanelInformation.setLayout(new java.awt.BorderLayout());
-
-        jTableProperties.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Propiedad", "Valor"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, true
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jTableProperties.setCellSelectionEnabled(true);
-        jTableProperties.setRowHeight(24);
-        jTableProperties.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jTableProperties.getTableHeader().setReorderingAllowed(false);
-        jScrollPane1.setViewportView(jTableProperties);
-        jTableProperties.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-
-        jPanelInformation.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+        jPanelInformation.add(panelPropertyEditor1, java.awt.BorderLayout.CENTER);
 
         jTabbedPane1.addTab("Propiedades de publicación", jPanelInformation);
 
@@ -737,14 +416,14 @@ private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
         try
         {
             OfficeApplication.getOfficeDocumentProxy().updatePorlet(pageInformation);
-            DefaultTableModel model=(DefaultTableModel)jTableScheduler.getModel();
-            for(int i=0;i<jTableScheduler.getRowCount();i++)
+            DefaultTableModel model = (DefaultTableModel) jTableScheduler.getModel();
+            for (int i = 0; i < jTableScheduler.getRowCount(); i++)
             {
-                CalendarInfo cal=(CalendarInfo)model.getValueAt(i,0);
-                if(cal.id==null)
+                CalendarInfo cal = (CalendarInfo) model.getValueAt(i, 0);
+                if (cal.id == null)
                 {
                     // insert
-                    OfficeApplication.getOfficeDocumentProxy().insertCalendar(pageInformation, cal.title,cal.xml);
+                    OfficeApplication.getOfficeDocumentProxy().insertCalendar(pageInformation, cal.title, cal.xml);
                 }
                 else
                 {
@@ -752,15 +431,15 @@ private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                     OfficeApplication.getOfficeDocumentProxy().updateCalendar(pageInformation, cal);
                 }
             }
-            model=(DefaultTableModel)jTableProperties.getModel();
-            for(int i=0;i<jTableProperties.getRowCount();i++)
+
+            for (PropertyInfo prop : this.panelPropertyEditor1.getProperties().keySet())
             {
-                PropertyInfo prop=(PropertyInfo)model.getValueAt(i, 0);
-                Object obj=model.getValueAt(i, 1);
-                String value=null;
-                if(obj!=null)
+
+                Object obj = this.panelPropertyEditor1.getProperties().get(prop);
+                String value = null;
+                if (obj != null)
                 {
-                    value=obj.toString();
+                    value = obj.toString();
                 }
                 OfficeApplication.getOfficeDocumentProxy().setPortletProperties(pageInformation, prop, value);
             }
@@ -880,16 +559,15 @@ private void jButtonDeleteSchedulerActionPerformed(java.awt.event.ActionEvent ev
     private javax.swing.JPanel jPanelInformation;
     private javax.swing.JPanel jPanelOptions;
     private javax.swing.JPanel jPanelSchedule;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTableProperties;
     private javax.swing.JTable jTableScheduler;
     private javax.swing.JTextArea jTextAreaDescription;
     private javax.swing.JTextField jTextFieldTitle;
     private javax.swing.JToolBar jToolBar1;
+    private org.semanticwb.openoffice.components.PanelPropertyEditor panelPropertyEditor1;
     // End of variables declaration//GEN-END:variables
 }
