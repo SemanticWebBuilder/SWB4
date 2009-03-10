@@ -340,7 +340,20 @@ public class DistributorParams
                 webpage=dns.getWebPage();
             }else
             {
-                webpage=SWBContext.getAdminWebSite().getHomePage();
+                Iterator<WebSite> it=SWBContext.listWebSites();
+                while(it.hasNext())
+                {
+                    WebSite site=it.next();
+                    if(!site.equals(SWBContext.getAdminWebSite())
+                       && !site.equals(SWBContext.getGlobalWebSite()))
+                    {
+                        webpage=site.getHomePage();
+                    }
+                }
+                if(webpage==null)
+                {
+                    webpage=SWBContext.getAdminWebSite().getHomePage();
+                }
             }
             smodel = webpage.getWebSite().getId();
             swebpage = webpage.getId();

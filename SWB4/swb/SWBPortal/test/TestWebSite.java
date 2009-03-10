@@ -62,13 +62,13 @@ public class TestWebSite {
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     //
-    //@Test
+    @Test
     public void Test1()
     {
         if(SWBContext.getWebSite("sep")==null)
         {
             WebSite site=SWBContext.createWebSite("sep", "http://www.sep.gob.mx");
-            site.setCreated(new java.util.Date(System.currentTimeMillis()));
+            //site.setCreated(new java.util.Date(System.currentTimeMillis()));
             site.setTitle("Sep");
             site.setDescription("Sep WebSite");
             site.setActive(true);
@@ -133,12 +133,27 @@ public class TestWebSite {
             home.addTemplateRef(tplref);
             site.setUpdated(new java.util.Date(System.currentTimeMillis()));
         }
+/*
+        if(SWBContext.getWebSite("sep2")==null)
+        {
+            WebSite site=SWBContext.createWebSite("sep2", "http://www.sep2.gob.mx");
+            site.setTitle("Sep2");
+            site.setDescription("Sep WebSite");
+            site.setActive(true);
+        }
+        if(SWBContext.getUserRepository("u_sep2")==null)
+        {
+            UserRepository site=SWBContext.createUserRepository("u_sep2", "http://www.u_sep2.gob.mx");
+            site.setTitle("u_Sep2");
+            site.setDescription("Sep WebSite");
+        }
+ */
     }
 
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     //
-    //@Test
+    @Test
     public void Test2()
     {
         WebSite site=SWBContext.getWebSite("sep");
@@ -176,7 +191,7 @@ public class TestWebSite {
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     //
-    //@Test
+    @Test
     public void Test3()
     {
         WebSite site=SWBContext.getWebSite("sep");

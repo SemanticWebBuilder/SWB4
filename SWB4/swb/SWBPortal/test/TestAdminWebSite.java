@@ -47,6 +47,7 @@ public class TestAdminWebSite {
     @BeforeClass
     public static void setUpClass() throws Exception
     {
+        //SWBUtils.createInstance("D:/programming/proys/SWB4/swb/build/web/");
         SWBPlatform.createInstance(null);
     }
 
@@ -419,7 +420,8 @@ public class TestAdminWebSite {
     public void writeAdmin()
     {
         WebSite site=SWBContext.getAdminWebSite();
-        File file=new File(SWBUtils.getApplicationPath()+"../web/swbadmin/rdf/SWBAdmin.rdf");
+        System.out.println("********"+SWBUtils.getApplicationPath());
+        File file=new File(SWBUtils.getApplicationPath()+"../web/swbadmin/rdf/SWBAdmin2.rdf");
         try
         {
             System.out.println("file:"+file.getCanonicalPath());
