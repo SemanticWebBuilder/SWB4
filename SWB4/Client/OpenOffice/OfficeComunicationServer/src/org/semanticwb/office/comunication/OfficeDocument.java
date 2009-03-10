@@ -715,7 +715,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
-    public Date getLasUpdate(String repositoryName, String contentID) throws Exception
+    public Date getLastUpdate(String repositoryName, String contentID) throws Exception
     {
         Session session = null;
         try
