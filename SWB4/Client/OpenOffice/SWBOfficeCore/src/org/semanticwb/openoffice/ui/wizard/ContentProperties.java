@@ -167,6 +167,6 @@ public class ContentProperties extends WizardPage
 
     public static String getDescription()
     {
-        return "Indicar propiedades de contenido";
+        return "Propiedades de contenido";
     }
 }
