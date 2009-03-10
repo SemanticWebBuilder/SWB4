@@ -1,8 +1,9 @@
 package org.semanticwb.portlet.office.base;
 
 
-public class PPTPortletBase extends org.semanticwb.portlet.office.OfficePortlet implements org.semanticwb.model.Viewable,org.semanticwb.model.Versionable,org.semanticwb.model.Deleteable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Priorityable,org.semanticwb.model.Calendarable,org.semanticwb.model.Hitable,org.semanticwb.model.RoleRefable,org.semanticwb.model.XMLable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Localeable,org.semanticwb.model.Activeable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Indexable,org.semanticwb.model.XMLConfable,org.semanticwb.model.Referensable,org.semanticwb.model.Traceable
+public class PPTPortletBase extends org.semanticwb.portlet.office.OfficePortlet implements org.semanticwb.model.RuleRefable,org.semanticwb.model.Versionable,org.semanticwb.model.Viewable,org.semanticwb.model.Calendarable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.RoleRefable,org.semanticwb.model.XMLConfable,org.semanticwb.model.Priorityable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.XMLable,org.semanticwb.model.Hitable,org.semanticwb.model.Localeable,org.semanticwb.model.Activeable,org.semanticwb.model.Deleteable,org.semanticwb.model.Referensable,org.semanticwb.model.Indexable,org.semanticwb.model.Traceable
 {
+    public static final org.semanticwb.platform.SemanticProperty swbrep_showDownload=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/repository#showDownload");
     public static final org.semanticwb.platform.SemanticClass swbrep_PPTPortlet=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/repository#PPTPortlet");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/repository#PPTPortlet");
 
@@ -41,5 +42,15 @@ public class PPTPortletBase extends org.semanticwb.portlet.office.OfficePortlet 
     public static boolean hasPPTPortlet(String id, org.semanticwb.model.SWBModel model)
     {
         return (getPPTPortlet(id, model)!=null);
+    }
+
+    public boolean isShowDownload()
+    {
+        return getSemanticObject().getBooleanProperty(swbrep_showDownload);
+    }
+
+    public void setShowDownload(boolean showDownload)
+    {
+        getSemanticObject().setBooleanProperty(swbrep_showDownload, showDownload);
     }
 }
