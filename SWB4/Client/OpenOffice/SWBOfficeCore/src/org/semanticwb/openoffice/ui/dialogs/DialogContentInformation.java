@@ -5,15 +5,20 @@
  */
 package org.semanticwb.openoffice.ui.dialogs;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Frame;
 import java.awt.event.KeyEvent;
 import java.net.URI;
 import java.net.URL;
+import java.util.HashMap;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
@@ -23,11 +28,11 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import org.semanticwb.office.interfaces.CategoryInfo;
 import org.semanticwb.office.interfaces.PortletInfo;
+import org.semanticwb.office.interfaces.PropertyInfo;
 import org.semanticwb.office.interfaces.VersionInfo;
 import org.semanticwb.openoffice.OfficeApplication;
 import org.semanticwb.openoffice.OfficeDocument;
 import org.semanticwb.openoffice.ui.icons.ImageLoader;
-import org.semanticwb.openoffice.ui.wizard.ContentProperties;
 
 /**
  *
@@ -38,28 +43,26 @@ public class DialogContentInformation extends javax.swing.JDialog
 
     private String contentId,  repository;
     private OfficeDocument document;
-    private ContentProperties contentProperties=new ContentProperties();
+
     /** Creates new form DialogContentInformation */
     public DialogContentInformation(String contentId, String repository, OfficeDocument document)
     {
-        super((Frame)null, ModalityType.TOOLKIT_MODAL);
+        super((Frame) null, ModalityType.TOOLKIT_MODAL);
         initComponents();
         this.setIconImage(ImageLoader.images.get("semius").getImage());
         this.setModal(true);
         this.contentId = contentId;
         this.repository = repository;
         this.document = document;
-        this.jPanelProperties.add(contentProperties);
-        contentProperties.setContentId(contentId);
+
 
         try
         {
-            String type=OfficeApplication.getOfficeDocumentProxy().getNameOfContent(repository,contentId);
-            contentProperties.loadProperties(repository, type);
+            String type = OfficeApplication.getOfficeDocumentProxy().getNameOfContent(repository, contentId);
+            loadProperties(repository, type);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
-            
         }
         ListSelectionModel listSelectionModel = jTablePages.getSelectionModel();
         listSelectionModel.addListSelectionListener(new ListSelectionListener()
@@ -98,7 +101,7 @@ public class DialogContentInformation extends javax.swing.JDialog
         {
             this.jTextFieldTitle.setText(OfficeApplication.getOfficeDocumentProxy().getTitle(repository, contentId));
             this.jTextAreaDescription.setText(OfficeApplication.getOfficeDocumentProxy().getDescription(repository, contentId));
-            String date = OfficeApplication.iso8601dateFormat.format(OfficeApplication.getOfficeDocumentProxy().getLasUpdate(repository, contentId));
+            String date = OfficeApplication.iso8601dateFormat.format(OfficeApplication.getOfficeDocumentProxy().getLastUpdate(repository, contentId));
             this.jLabel1DisplayDateOfModification.setText(date);
             loadCategories();
             CategoryInfo actualCategory = OfficeApplication.getOfficeDocumentProxy().getCategoryInfo(repository, contentId);
@@ -118,6 +121,55 @@ public class DialogContentInformation extends javax.swing.JDialog
         public VersionEditor(String repositoryName, String contentId)
         {
             super(new ComboVersiones(repositoryName, contentId, null));
+        }
+    }
+
+    public void loadProperties(String repositoryName, String type)
+    {
+
+        try
+        {
+            PropertyInfo[] props = OfficeApplication.getOfficeDocumentProxy().getContentProperties(repositoryName, type);
+            if (props.length == 0)
+            {
+                this.remove(this.panelPropertyEditor1);
+                JPanel panel = new JPanel();
+                panel.setBackground(new Color(255, 255, 255));
+                panel.setLayout(new BorderLayout());
+                JLabel label = new JLabel("No se tienen propiedades para este tipo de contenido, puede continuar.");
+                panel.add(label, BorderLayout.NORTH);
+                this.add(panel);
+            }
+            else
+            {
+                HashMap<PropertyInfo, Object> properties = new HashMap<PropertyInfo, Object>();
+                for (PropertyInfo info : props)
+                {
+                    Object defaultValue = null;
+                    if (info.type.equalsIgnoreCase("string"))
+                    {
+                        defaultValue = "";
+                    }
+                    if (info.type.equalsIgnoreCase("integer"))
+                    {
+                        defaultValue = 0;
+                    }
+                    if (info.type.equalsIgnoreCase("boolean"))
+                    {
+                        defaultValue = false;
+                    }
+                    if (contentId != null)
+                    {
+                        defaultValue = OfficeApplication.getOfficeDocumentProxy().getContentProperty(info, repositoryName, contentId);
+                    }
+                    properties.put(info, defaultValue);
+                    this.panelPropertyEditor1.loadProperties(properties);
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
         }
     }
 
@@ -299,6 +351,7 @@ public class DialogContentInformation extends javax.swing.JDialog
         jSeparator2 = new javax.swing.JToolBar.Separator();
         jButtonViewVersion = new javax.swing.JButton();
         jPanelProperties = new javax.swing.JPanel();
+        panelPropertyEditor1 = new org.semanticwb.openoffice.components.PanelPropertyEditor();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Información del Contenido");
@@ -580,6 +633,8 @@ public class DialogContentInformation extends javax.swing.JDialog
         jTabbedPane1.addTab("Versiones del contenido", jPanelVersions);
 
         jPanelProperties.setLayout(new java.awt.BorderLayout());
+        jPanelProperties.add(panelPropertyEditor1, java.awt.BorderLayout.CENTER);
+
         jTabbedPane1.addTab("Propiedades de contenido", jPanelProperties);
 
         getContentPane().add(jTabbedPane1, java.awt.BorderLayout.CENTER);
@@ -670,7 +725,7 @@ public class DialogContentInformation extends javax.swing.JDialog
 
 
             }
-            String date = OfficeApplication.iso8601dateFormat.format(OfficeApplication.getOfficeDocumentProxy().getLasUpdate(repository, contentId));
+            String date = OfficeApplication.iso8601dateFormat.format(OfficeApplication.getOfficeDocumentProxy().getLastUpdate(repository, contentId));
             this.jLabel1DisplayDateOfModification.setText(date);
             loadPorlets();
             loadVersions();
@@ -740,10 +795,10 @@ public class DialogContentInformation extends javax.swing.JDialog
             PortletInfo portletInfo = (PortletInfo) model.getValueAt(row, 0);
             try
             {
-                String title=portletInfo.title;
+                String title = portletInfo.title;
                 URI uri = document.getOfficeDocumentProxy().getWebAddress();
                 URL url = new URL(uri.getScheme() + "://" + uri.getHost() + ":" + uri.getPort() + portletInfo.page.url);
-                DialogPreview preview = new DialogPreview(url,title);
+                DialogPreview preview = new DialogPreview(url, title);
                 preview.setVisible(true);
             }
             catch (Exception e)
@@ -774,8 +829,8 @@ public class DialogContentInformation extends javax.swing.JDialog
                 }
                 name = OfficeApplication.getOfficeDocumentProxy().createPreview(repository, contentId, version);
                 URL url = new URL(urlproxy + "?contentId=" + contentId + "&versionName=" + version + "&repositoryName=" + repository + "&name=" + name);
-                String title=OfficeApplication.getOfficeDocumentProxy().getTitle(repository, contentId)+" ("+version+") ";
-                DialogPreview preview = new DialogPreview(url, false,title);
+                String title = OfficeApplication.getOfficeDocumentProxy().getTitle(repository, contentId) + " (" + version + ") ";
+                DialogPreview preview = new DialogPreview(url, false, title);
                 preview.setVisible(true);
             }
             catch (Exception e)
@@ -862,6 +917,7 @@ public class DialogContentInformation extends javax.swing.JDialog
     private javax.swing.JTextField jTextFieldTitle;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
+    private org.semanticwb.openoffice.components.PanelPropertyEditor panelPropertyEditor1;
     // End of variables declaration//GEN-END:variables
 }
 
