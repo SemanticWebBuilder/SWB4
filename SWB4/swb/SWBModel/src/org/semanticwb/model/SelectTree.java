@@ -15,6 +15,21 @@ public class SelectTree extends org.semanticwb.model.base.SelectTreeBase
         super(base);
     }
 
+    private String addPage(WebPage page, String selected, String lang, String separator)
+    {
+        String ret="<option value=\""+page.getURI()+"\" ";
+        if(page.getURI().equals(selected))ret+="selected";
+        ret+=">"+separator+page.getDisplayName(lang)+"</option>";
+
+        Iterator<WebPage> it=page.listVisibleChilds(lang);
+        while(it.hasNext())
+        {
+            WebPage child=it.next();
+            ret+=addPage(child,selected,lang,"--"+separator);
+        }
+        return ret;
+    }
+
     @Override
     public String renderXHTML(SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
     {
@@ -72,25 +87,36 @@ public class SelectTree extends org.semanticwb.model.base.SelectTreeBase
                 if(isBlankSuport())ret+="<option value=\"\"></option>";
                 SemanticClass cls=prop.getRangeClass();
                 Iterator<SemanticObject> it=null;
-                if(isGlobalScope())
+                if(cls!=WebPage.sclass)
                 {
-                    if(cls!=null)
+                    if(isGlobalScope())
                     {
-                        it=SWBComparator.sortSermanticObjects(cls.listInstances(),lang);
+                        if(cls!=null)
+                        {
+                            it=SWBComparator.sortSermanticObjects(cls.listInstances(),lang);
+                        }else
+                        {
+                            it=SWBComparator.sortSermanticObjects(SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClassesAsSemanticObjects(),lang);
+                        }
                     }else
                     {
-                        it=SWBComparator.sortSermanticObjects(SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClassesAsSemanticObjects(),lang);
+                        if(!obj.isVirtual())it=SWBComparator.sortSermanticObjects(obj.getModel().listInstancesOfClass(cls),lang);
+                    }
+                    while(it.hasNext())
+                    {
+                        SemanticObject sob=it.next();
+                        ret+="<option value=\""+sob.getURI()+"\" ";
+                        if(sob.getURI().equals(uri))ret+="selected";
+                        ret+=">"+sob.getDisplayName(lang)+"</option>";
                     }
                 }else
                 {
-                    if(!obj.isVirtual())it=SWBComparator.sortSermanticObjects(obj.getModel().listInstancesOfClass(cls),lang);
-                }
-                while(it.hasNext())
-                {
-                    SemanticObject sob=it.next();
-                    ret+="<option value=\""+sob.getURI()+"\" ";
-                    if(sob.getURI().equals(uri))ret+="selected";
-                    ret+=">"+sob.getDisplayName(lang)+"</option>";
+                    WebSite site=SWBContext.getWebSite(obj.getModel().getName());
+                    if(site!=null)
+                    {
+                        WebPage home=site.getHomePage();
+                        ret+=addPage(home, uri, lang, ">");
+                    }
                 }
                 ret+="</select>";
             }else if(mode.equals("view"))
