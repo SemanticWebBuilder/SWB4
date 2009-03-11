@@ -59,7 +59,7 @@ public class PublishResultProducer implements WizardResultProducer
                 RepositoryInfo info=(RepositoryInfo)wizardData.get(SelectCategory.REPOSITORY_ID);
                 String nodeType = wizardData.get(TitleAndDescription.NODE_TYPE).toString();
                 String name = document.getLocalPath().getName().replace(document.getDefaultExtension(), document.getPublicationExtension());
-                HashMap<PropertyInfo, String> properties=(HashMap<PropertyInfo, String>)wizardData.get(ContentProperties.PROPERTIES);
+                HashMap<PropertyInfo, String> properties=(HashMap<PropertyInfo, String>)wizardData.get(ContentProperties.CONTENT_PROPERTIES);
                 PropertyInfo[] propsToSave=properties.keySet().toArray(new PropertyInfo[properties.keySet().size()]);
                 String[] values=properties.values().toArray(new String[properties.values().size()]);
                 String contentID = openOfficeDocument.save(title, description, repositoryName, categoryID, document.getDocumentType().toString(), nodeType, name,propsToSave,values);

@@ -14,6 +14,7 @@ import java.awt.event.KeyEvent;
 import java.net.URI;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Map;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -101,7 +102,15 @@ public class DialogContentInformation extends javax.swing.JDialog
         {
             this.jTextFieldTitle.setText(OfficeApplication.getOfficeDocumentProxy().getTitle(repository, contentId));
             this.jTextAreaDescription.setText(OfficeApplication.getOfficeDocumentProxy().getDescription(repository, contentId));
-            String date = OfficeApplication.iso8601dateFormat.format(OfficeApplication.getOfficeDocumentProxy().getLastUpdate(repository, contentId));
+            String date = "";
+            try
+            {
+                date = OfficeApplication.iso8601dateFormat.format(OfficeApplication.getOfficeDocumentProxy().getLastUpdate(repository, contentId));
+            }
+            catch (Exception e)
+            {
+                date = "No fue posible obtener la fecha de actualización.";
+            }
             this.jLabel1DisplayDateOfModification.setText(date);
             loadCategories();
             CategoryInfo actualCategory = OfficeApplication.getOfficeDocumentProxy().getCategoryInfo(repository, contentId);
@@ -673,6 +682,27 @@ public class DialogContentInformation extends javax.swing.JDialog
         }
         try
         {
+            Map<PropertyInfo, String> properties = panelPropertyEditor1.getProperties();
+            PropertyInfo[] props = new PropertyInfo[properties.keySet().size()];
+            String[] values = new String[properties.keySet().size()];
+            int i = 0;
+            for (PropertyInfo prop : properties.keySet())
+            {
+                String value = properties.get(prop);
+                values[i] = value;
+                props[i] = prop;
+                i++;
+            }
+            String type = OfficeApplication.getOfficeDocumentProxy().getNameOfContent(repository, contentId);
+            OfficeApplication.getOfficeDocumentProxy().validateContentValues(repository, props, values, type);
+        }
+        catch (Exception e)
+        {
+            JOptionPane.showMessageDialog(this, e.getMessage(), this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        try
+        {
             this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
             String oldTitle = OfficeApplication.getOfficeDocumentProxy().getTitle(repository, contentId);
             if (!oldTitle.equals(jTextFieldTitle.getText()))
@@ -689,6 +719,14 @@ public class DialogContentInformation extends javax.swing.JDialog
             if (!oldCategory.equals(newCategory))
             {
                 OfficeApplication.getOfficeDocumentProxy().changeCategory(repository, contentId, newCategory.UDDI);
+            }
+            // update content properties
+            Map<PropertyInfo, String> properties = panelPropertyEditor1.getProperties();
+
+            for (PropertyInfo propertyInfo : properties.keySet())
+            {
+                String value = properties.get(propertyInfo);
+                OfficeApplication.getOfficeDocumentProxy().setContentPropertyValue(repository, contentId, propertyInfo, value);
             }
             //update porlets
             DefaultTableModel model = (DefaultTableModel) jTablePages.getModel();
@@ -722,8 +760,6 @@ public class DialogContentInformation extends javax.swing.JDialog
                         OfficeApplication.getOfficeDocumentProxy().changeVersionPorlet(portletInfo, newVersion);
                     }
                 }
-
-
             }
             String date = OfficeApplication.iso8601dateFormat.format(OfficeApplication.getOfficeDocumentProxy().getLastUpdate(repository, contentId));
             this.jLabel1DisplayDateOfModification.setText(date);
