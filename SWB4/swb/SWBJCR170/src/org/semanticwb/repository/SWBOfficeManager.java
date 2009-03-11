@@ -217,7 +217,7 @@ public class SWBOfficeManager implements OfficeManager
                         if (!propDisplay.isHidden() && propDisplay.isEditable())
                         {
                             PropertyInfo info = new PropertyInfo();
-                            info.id = prop.getPrefix()+":"+prop.getName();
+                            info.id = prop.getPrefix() + ":" + prop.getName();
                             info.isRequired = prop.isRequired();
                             info.title = prop.getDisplayName();
                             if (prop.isString())
@@ -241,5 +241,29 @@ public class SWBOfficeManager implements OfficeManager
             }
         }
         return properties.toArray(new PropertyInfo[properties.size()]);
+    }
+
+    public void validateContentValues(PropertyInfo[] properties, Object[] values, String type) throws Exception
+    {
+        SemanticClass clazz = getSemanticClass(type);
+        if (clazz != null)
+        {
+            for (PropertyInfo prop : properties)
+            {
+                Iterator<SemanticProperty> propertiesClazz = clazz.listProperties();
+                while (propertiesClazz.hasNext())
+                {
+                    SemanticProperty property = propertiesClazz.next();
+                    if (property.getPrefix() != null)
+                    {
+                        String name = property.getPrefix() + ":" + property.getName();
+                        if (name.equals(prop.id))
+                        {
+                        }
+                    }
+
+                }
+            }
+        }
     }
 }
