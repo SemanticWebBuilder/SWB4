@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package org.semanticwb.portal.resources;
 
@@ -20,15 +16,7 @@ import org.semanticwb.portal.api.*;
 import org.semanticwb.portal.util.FileUpload;
 import org.semanticwb.portal.admin.admresources.util.WBAdmResourceUtils;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import sun.security.krb5.internal.i;
 
-/**
- *
- * @author Administrador
- */
 public class ImageGallery extends GenericAdmResource {
     private static Logger log = SWBUtils.getLogger(ImageGallery.class);
     private WBAdmResourceUtils admResUtils=new WBAdmResourceUtils();
@@ -482,21 +470,5 @@ public class ImageGallery extends GenericAdmResource {
             log.error(e); 
         }
         return ret.toString();
-    }
-    
-    private void removeAllNodes(Document dom, short nodeType, String name)
-    {
-        NodeList list = dom.getElementsByTagName(name);
-        for (int i = 0; i < list.getLength(); i++)
-        {
-            Node node=list.item(i);
-            if (node.getNodeType() == nodeType)
-            {
-                node.getParentNode().removeChild(node);
-                if(node.hasChildNodes()) {
-                    removeAllNodes(dom, nodeType, name);
-                }
-            }
-        }
     }
 }
