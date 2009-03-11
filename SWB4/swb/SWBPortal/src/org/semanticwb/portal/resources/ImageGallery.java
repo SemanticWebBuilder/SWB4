@@ -8,6 +8,7 @@ package org.semanticwb.portal.resources;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -22,6 +23,7 @@ import org.semanticwb.portal.admin.admresources.util.WBAdmResourceUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import sun.security.krb5.internal.i;
 
 /**
  *
@@ -154,7 +156,14 @@ public class ImageGallery extends GenericAdmResource {
                 base.setAttribute("pause", value);
                 value = null!=fup.getValue("fadetime") && !"".equals(fup.getValue("fadetime").trim()) ? fup.getValue("fadetime").trim() : null;
                 base.setAttribute("fadetime", value);
-                                
+                          
+                
+                Iterator<String> it = base.getAttributeNames();
+                while(it.hasNext()) {
+                    System.out.println("attrib name " + it.next());
+                }
+                
+                
                 int i = 1;
                 String fileInput, filename, removeChk;
                 //do {
