@@ -53,12 +53,12 @@ public class SecurityQuestion extends org.semanticwb.model.base.SecurityQuestion
         String pmsg=null;
         String imsg=null;
         String selectValues=null;
-        System.out.println("name:"+name);
-        System.out.println("label:"+label);
-        System.out.println("sobj:"+sobj);
-        System.out.println("m_obj:"+obj.getModel().getName());
-        System.out.println("prop:"+prop);
-        System.out.println("DC:"+prop.getURI());
+//        System.out.println("name:"+name);
+//        System.out.println("label:"+label);
+//        System.out.println("sobj:"+sobj);
+//        System.out.println("m_obj:"+obj.getModel().getName());
+//        System.out.println("prop:"+prop);
+//        System.out.println("DC:"+prop.getURI());
         if(sobj!=null)
         {
             DisplayProperty dobj=new DisplayProperty(sobj);
@@ -128,6 +128,7 @@ public class SecurityQuestion extends org.semanticwb.model.base.SecurityQuestion
                 String value=obj.getProperty(prop);
                 ret="<select name=\""+name+"\" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\""+imsg+"\">";
                 StringTokenizer st=new StringTokenizer(selectValues,"|");
+                ret+="<option value=\"\"></option>";
                 while(st.hasMoreTokens())
                 {
                     String tok=st.nextToken();
